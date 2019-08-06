@@ -30,7 +30,7 @@ interface MembershipService {
      * This methods load all room members if it was done yet.
      * @return a [Cancelable]
      */
-    fun loadRoomMembersIfNeeded(matrixCallback: MatrixCallback<Boolean>): Cancelable
+    fun loadRoomMembersIfNeeded(matrixCallback: MatrixCallback<Unit>): Cancelable
 
     /**
      * Return the roomMember with userId or null.

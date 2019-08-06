@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.crypto.keysbackup.tasks
 
-import arrow.core.Try
 import im.vector.matrix.android.internal.crypto.keysbackup.api.RoomKeysApi
 import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.UpdateKeysBackupVersionBody
 import im.vector.matrix.android.internal.network.executeRequest
@@ -34,7 +33,7 @@ internal class DefaultUpdateKeysBackupVersionTask @Inject constructor(private va
     : UpdateKeysBackupVersionTask {
 
 
-    override suspend fun execute(params: UpdateKeysBackupVersionTask.Params): Try<Unit> {
+    override suspend fun execute(params: UpdateKeysBackupVersionTask.Params) {
         return executeRequest {
             apiCall = roomKeysApi.updateKeysBackupVersion(params.version, params.keysBackupVersionBody)
         }

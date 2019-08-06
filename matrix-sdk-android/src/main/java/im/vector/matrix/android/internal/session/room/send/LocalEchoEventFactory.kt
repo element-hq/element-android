@@ -36,7 +36,6 @@ import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.content.ThumbnailExtractor
 import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
 import im.vector.matrix.android.internal.util.StringProvider
-import im.vector.matrix.android.internal.util.tryTransactionAsync
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
 import java.util.*
@@ -380,9 +379,9 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
 
     fun saveLocalEcho(monarchy: Monarchy, event: Event) {
         if (event.roomId == null) throw IllegalStateException("Your event should have a roomId")
-        monarchy.tryTransactionAsync { realm ->
+        monarchy.writeAsync { realm ->
             val roomEntity = RoomEntity.where(realm, roomId = event.roomId).findFirst()
-                    ?: return@tryTransactionAsync
+                    ?: return@writeAsync
             roomEntity.addSendingEvent(event)
             roomSummaryUpdater.update(realm, event.roomId)
         }

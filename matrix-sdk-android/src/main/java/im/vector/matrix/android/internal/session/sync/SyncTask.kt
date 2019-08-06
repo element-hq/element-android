@@ -16,9 +16,6 @@
 
 package im.vector.matrix.android.internal.session.sync
 
-import arrow.core.Try
-import arrow.core.failure
-import arrow.core.recoverWith
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.R
 import im.vector.matrix.android.api.auth.data.Credentials
@@ -30,7 +27,6 @@ import im.vector.matrix.android.internal.session.DefaultInitialSyncProgressServi
 import im.vector.matrix.android.internal.session.filter.FilterRepository
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import im.vector.matrix.android.internal.task.Task
-import im.vector.matrix.android.internal.util.tryTransactionAsync
 import javax.inject.Inject
 
 internal interface SyncTask : Task<SyncTask.Params, Unit> {
@@ -50,7 +46,7 @@ internal class DefaultSyncTask @Inject constructor(private val syncAPI: SyncAPI,
 ) : SyncTask {
 
 
-    override suspend fun execute(params: SyncTask.Params): Try<Unit> {
+    override suspend fun execute(params: SyncTask.Params) {
         val requestParams = HashMap<String, String>()
         var timeout = 0L
         val token = syncTokenStore.getLastToken()
@@ -66,27 +62,22 @@ internal class DefaultSyncTask @Inject constructor(private val syncAPI: SyncAPI,
             initialSyncProgressService.endAll()
             initialSyncProgressService.startTask(R.string.initial_sync_start_importing_account, 100)
         }
-        return executeRequest<SyncResponse> {
-            apiCall = syncAPI.sync(requestParams)
-        }.recoverWith { throwable ->
+        val syncResponse = try {
+            executeRequest<SyncResponse> {
+                apiCall = syncAPI.sync(requestParams)
+            }
+        } catch (throwable: Throwable) {
             // Intercept 401
             if (throwable is Failure.ServerError
                     && throwable.error.code == MatrixError.UNKNOWN_TOKEN) {
                 sessionParamsStore.delete(credentials.userId)
             }
-
-            // Transmit the throwable
-            throwable.failure()
-        }.flatMap { syncResponse ->
-            syncResponseHandler.handleResponse(syncResponse, token, false).also {
-                if (isInitialSync) {
-                    monarchy.tryTransactionAsync {
-                        initialSyncProgressService.endAll()
-                    }
-                }
-            }
-        }.map {
-            syncTokenStore.saveToken(it.nextBatch)
+            throw throwable
+        }
+        syncResponseHandler.handleResponse(syncResponse, token, false)
+        syncTokenStore.saveToken(syncResponse.nextBatch)
+        if (isInitialSync) {
+            initialSyncProgressService.endAll()
         }
     }
 }

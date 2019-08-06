@@ -21,7 +21,6 @@ import dagger.Module
 import dagger.Provides
 import im.vector.matrix.android.api.session.user.UserService
 import im.vector.matrix.android.internal.session.SessionScope
-import im.vector.matrix.android.internal.session.sync.SyncAPI
 import im.vector.matrix.android.internal.session.user.model.DefaultSearchUserTask
 import im.vector.matrix.android.internal.session.user.model.SearchUserTask
 import retrofit2.Retrofit

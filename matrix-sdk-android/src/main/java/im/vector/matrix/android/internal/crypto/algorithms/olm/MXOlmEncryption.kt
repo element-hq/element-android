@@ -19,7 +19,6 @@
 package im.vector.matrix.android.internal.crypto.algorithms.olm
 
 import android.text.TextUtils
-import arrow.core.Try
 import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.toContent
 import im.vector.matrix.android.internal.crypto.DeviceListManager
@@ -40,37 +39,35 @@ internal class MXOlmEncryption(
         private val ensureOlmSessionsForUsersAction: EnsureOlmSessionsForUsersAction)
     : IMXEncrypting {
 
-    override suspend fun encryptEventContent(eventContent: Content, eventType: String, userIds: List<String>): Try<Content> {
+    override suspend fun encryptEventContent(eventContent: Content, eventType: String, userIds: List<String>): Content {
         // pick the list of recipients based on the membership list.
         //
         // TODO: there is a race condition here! What if a new user turns up
-        return ensureSession(userIds)
-                .map {
-                    val deviceInfos = ArrayList<MXDeviceInfo>()
-                    for (userId in userIds) {
-                        val devices = cryptoStore.getUserDevices(userId)?.values ?: emptyList()
-                        for (device in devices) {
-                            val key = device.identityKey()
-                            if (TextUtils.equals(key, olmDevice.deviceCurve25519Key)) {
-                                // Don't bother setting up session to ourself
-                                continue
-                            }
-                            if (device.isBlocked) {
-                                // Don't bother setting up sessions with blocked users
-                                continue
-                            }
-                            deviceInfos.add(device)
-                        }
-                    }
-
-                    val messageMap = HashMap<String, Any>()
-                    messageMap["room_id"] = roomId
-                    messageMap["type"] = eventType
-                    messageMap["content"] = eventContent
-
-                    messageEncrypter.encryptMessage(messageMap, deviceInfos)
-                    messageMap.toContent()!!
+        ensureSession(userIds)
+        val deviceInfos = ArrayList<MXDeviceInfo>()
+        for (userId in userIds) {
+            val devices = cryptoStore.getUserDevices(userId)?.values ?: emptyList()
+            for (device in devices) {
+                val key = device.identityKey()
+                if (TextUtils.equals(key, olmDevice.deviceCurve25519Key)) {
+                    // Don't bother setting up session to ourself
+                    continue
                 }
+                if (device.isBlocked) {
+                    // Don't bother setting up sessions with blocked users
+                    continue
+                }
+                deviceInfos.add(device)
+            }
+        }
+
+        val messageMap = HashMap<String, Any>()
+        messageMap["room_id"] = roomId
+        messageMap["type"] = eventType
+        messageMap["content"] = eventContent
+
+        messageEncrypter.encryptMessage(messageMap, deviceInfos)
+        return messageMap.toContent()!!
     }
 
 
@@ -78,13 +75,9 @@ internal class MXOlmEncryption(
      * Ensure that the session
      *
      * @param users    the user ids list
-     * @param callback the asynchronous callback
      */
-    private suspend fun ensureSession(users: List<String>): Try<Unit> {
-        return deviceListManager
-                .downloadKeys(users, false)
-                .flatMap { ensureOlmSessionsForUsersAction.handle(users) }
-                .map { Unit }
-
+    private suspend fun ensureSession(users: List<String>) {
+        deviceListManager.downloadKeys(users, false)
+        ensureOlmSessionsForUsersAction.handle(users)
     }
 }

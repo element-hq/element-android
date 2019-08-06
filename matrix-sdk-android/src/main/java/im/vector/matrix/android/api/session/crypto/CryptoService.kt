@@ -26,14 +26,12 @@ import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.internal.crypto.MXEventDecryptionResult
 import im.vector.matrix.android.internal.crypto.NewSessionListener
-import im.vector.matrix.android.internal.crypto.attachments.ElementToDecrypt
 import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXEncryptEventContentResult
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
-import java.io.File
 
 interface CryptoService {
 

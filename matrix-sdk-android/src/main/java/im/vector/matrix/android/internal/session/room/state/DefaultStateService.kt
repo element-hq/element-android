@@ -51,8 +51,10 @@ internal class DefaultStateService @Inject constructor(private val roomId: Strin
                 ))
 
 
-        sendStateTask.configureWith(params)
-                .dispatchTo(callback)
+        sendStateTask
+                .configureWith(params) {
+                    this.callback = callback
+                }
                 .executeBy(taskExecutor)
     }
 

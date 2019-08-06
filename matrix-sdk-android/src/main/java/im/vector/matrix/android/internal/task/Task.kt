@@ -16,11 +16,9 @@
 
 package im.vector.matrix.android.internal.task
 
-import arrow.core.Try
-
 internal interface Task<PARAMS, RESULT> {
 
-    suspend fun execute(params: PARAMS): Try<RESULT>
+    suspend fun execute(params: PARAMS): RESULT
 
 }
 

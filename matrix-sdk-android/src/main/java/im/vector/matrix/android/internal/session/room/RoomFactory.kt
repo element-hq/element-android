@@ -22,7 +22,6 @@ import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.internal.database.mapper.RoomSummaryMapper
-import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.session.room.membership.DefaultMembershipService
 import im.vector.matrix.android.internal.session.room.membership.LoadRoomMembersTask
 import im.vector.matrix.android.internal.session.room.membership.joining.InviteTask
@@ -41,7 +40,6 @@ import im.vector.matrix.android.internal.session.room.timeline.DefaultTimelineSe
 import im.vector.matrix.android.internal.session.room.timeline.GetContextOfEventTask
 import im.vector.matrix.android.internal.session.room.timeline.PaginationTask
 import im.vector.matrix.android.internal.task.TaskExecutor
-import io.realm.RealmConfiguration
 import javax.inject.Inject
 
 internal class RoomFactory @Inject constructor(private val context: Context,

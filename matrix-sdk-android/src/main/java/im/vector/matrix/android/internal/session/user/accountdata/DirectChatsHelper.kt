@@ -21,7 +21,6 @@ import im.vector.matrix.android.internal.database.query.getDirectRooms
 import im.vector.matrix.android.internal.di.SessionDatabase
 import io.realm.Realm
 import io.realm.RealmConfiguration
-import timber.log.Timber
 import javax.inject.Inject
 
 internal class DirectChatsHelper @Inject constructor(@SessionDatabase

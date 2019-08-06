@@ -17,23 +17,11 @@
 package im.vector.matrix.android.internal.session.sync
 
 import arrow.core.Try
-import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.R
-import im.vector.matrix.android.api.auth.data.Credentials
-import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.internal.crypto.CryptoManager
-import im.vector.matrix.android.internal.database.mapper.asDomain
-import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
-import im.vector.matrix.android.internal.database.query.isDirect
 import im.vector.matrix.android.internal.session.DefaultInitialSyncProgressService
 import im.vector.matrix.android.internal.session.reportSubtask
-import im.vector.matrix.android.internal.session.room.membership.RoomMembers
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
-import im.vector.matrix.android.internal.session.user.accountdata.DirectChatsHelper
-import im.vector.matrix.android.internal.session.user.accountdata.UpdateUserAccountDataTask
-import im.vector.matrix.android.internal.task.TaskExecutor
-import im.vector.matrix.android.internal.task.configureWith
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.system.measureTimeMillis

@@ -18,7 +18,6 @@
 package im.vector.matrix.android.internal.crypto
 
 import android.text.TextUtils
-import arrow.core.Try
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.util.JSON_DICT_PARAMETERIZED_TYPE
 import im.vector.matrix.android.api.util.JsonDict
@@ -506,25 +505,25 @@ internal class MXOlmDevice @Inject constructor(
                                keysClaimed: Map<String, String>,
                                exportFormat: Boolean): Boolean {
         val session = OlmInboundGroupSessionWrapper(sessionKey, exportFormat)
+        runCatching { getInboundGroupSession(sessionId, senderKey, roomId) }
+                .fold(
+                        {
+                            // If we already have this session, consider updating it
+                            Timber.e("## addInboundGroupSession() : Update for megolm session $senderKey/$sessionId")
 
-        getInboundGroupSession(sessionId, senderKey, roomId).fold(
-                {
-                    // Nothing to do in case of error
-                },
-                {
-                    // If we already have this session, consider updating it
-                    Timber.e("## addInboundGroupSession() : Update for megolm session $senderKey/$sessionId")
+                            val existingFirstKnown = it.firstKnownIndex!!
+                            val newKnownFirstIndex = session.firstKnownIndex
 
-                    val existingFirstKnown = it.firstKnownIndex!!
-                    val newKnownFirstIndex = session.firstKnownIndex
-
-                    //If our existing session is better we keep it
-                    if (newKnownFirstIndex != null && existingFirstKnown <= newKnownFirstIndex) {
-                        session.olmInboundGroupSession?.releaseSession()
-                        return false
-                    }
-                }
-        )
+                            //If our existing session is better we keep it
+                            if (newKnownFirstIndex != null && existingFirstKnown <= newKnownFirstIndex) {
+                                session.olmInboundGroupSession?.releaseSession()
+                                return false
+                            }
+                        },
+                        {
+                            // Nothing to do in case of error
+                        }
+                )
 
         // sanity check
         if (null == session.olmInboundGroupSession) {
@@ -595,12 +594,8 @@ internal class MXOlmDevice @Inject constructor(
                 continue
             }
 
-            getInboundGroupSession(sessionId, senderKey, roomId)
+            runCatching { getInboundGroupSession(sessionId, senderKey, roomId) }
                     .fold(
-                            {
-                                // Session does not already exist, add it
-                                sessions.add(session)
-                            },
                             {
                                 // If we already have this session, consider updating it
                                 Timber.e("## importInboundGroupSession() : Update for megolm session $senderKey/$sessionId")
@@ -613,7 +608,12 @@ internal class MXOlmDevice @Inject constructor(
                                     sessions.add(session)
                                 }
                                 Unit
+                            },
+                            {
+                                // Session does not already exist, add it
+                                sessions.add(session)
                             }
+
                     )
         }
 
@@ -648,61 +648,57 @@ internal class MXOlmDevice @Inject constructor(
                             roomId: String,
                             timeline: String?,
                             sessionId: String,
-                            senderKey: String): Try<OlmDecryptionResult> {
-        return getInboundGroupSession(sessionId, senderKey, roomId)
-                .flatMap { session ->
-                    // Check that the room id matches the original one for the session. This stops
-                    // the HS pretending a message was targeting a different room.
-                    if (roomId == session.roomId) {
-                        var decryptResult: OlmInboundGroupSession.DecryptMessageResult? = null
-                        try {
-                            decryptResult = session.olmInboundGroupSession!!.decryptMessage(body)
-                        } catch (e: OlmException) {
-                            Timber.e(e, "## decryptGroupMessage () : decryptMessage failed")
-                            return@flatMap Try.Failure(MXCryptoError.OlmError(e))
-                        }
+                            senderKey: String): OlmDecryptionResult {
+        val session = getInboundGroupSession(sessionId, senderKey, roomId)
+        // Check that the room id matches the original one for the session. This stops
+        // the HS pretending a message was targeting a different room.
+        if (roomId == session.roomId) {
+            var decryptResult: OlmInboundGroupSession.DecryptMessageResult? = null
+            try {
+                decryptResult = session.olmInboundGroupSession!!.decryptMessage(body)
+            } catch (e: OlmException) {
+                Timber.e(e, "## decryptGroupMessage () : decryptMessage failed")
+                throw MXCryptoError.OlmError(e)
+            }
 
-                        if (null != timeline) {
-                            if (!inboundGroupSessionMessageIndexes.containsKey(timeline)) {
-                                inboundGroupSessionMessageIndexes[timeline] = HashMap()
-                            }
-
-                            val messageIndexKey = senderKey + "|" + sessionId + "|" + decryptResult.mIndex
-
-                            if (inboundGroupSessionMessageIndexes[timeline]?.get(messageIndexKey) != null) {
-                                val reason = String.format(MXCryptoError.DUPLICATE_MESSAGE_INDEX_REASON, decryptResult.mIndex)
-                                Timber.e("## decryptGroupMessage() : $reason")
-                                return@flatMap Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.DUPLICATED_MESSAGE_INDEX, reason))
-                            }
-
-                            inboundGroupSessionMessageIndexes[timeline]!!.put(messageIndexKey, true)
-                        }
-
-                        store.storeInboundGroupSessions(listOf(session))
-                        val payload = try {
-                            val adapter = MoshiProvider.providesMoshi().adapter<JsonDict>(JSON_DICT_PARAMETERIZED_TYPE)
-                            val payloadString = convertFromUTF8(decryptResult.mDecryptedMessage)
-                            adapter.fromJson(payloadString)
-                        } catch (e: Exception) {
-                            Timber.e("## decryptGroupMessage() : fails to parse the payload")
-                            return@flatMap Try.Failure(
-                                    MXCryptoError.Base(MXCryptoError.ErrorType.BAD_DECRYPTED_FORMAT, MXCryptoError.BAD_DECRYPTED_FORMAT_TEXT_REASON))
-                        }
-
-                        return@flatMap Try.just(
-                                OlmDecryptionResult(
-                                        payload,
-                                        session.keysClaimed,
-                                        senderKey,
-                                        session.forwardingCurve25519KeyChain
-                                )
-                        )
-                    } else {
-                        val reason = String.format(MXCryptoError.INBOUND_SESSION_MISMATCH_ROOM_ID_REASON, roomId, session.roomId)
-                        Timber.e("## decryptGroupMessage() : $reason")
-                        return@flatMap Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.INBOUND_SESSION_MISMATCH_ROOM_ID, reason))
-                    }
+            if (null != timeline) {
+                if (!inboundGroupSessionMessageIndexes.containsKey(timeline)) {
+                    inboundGroupSessionMessageIndexes[timeline] = HashMap()
                 }
+
+                val messageIndexKey = senderKey + "|" + sessionId + "|" + decryptResult.mIndex
+
+                if (inboundGroupSessionMessageIndexes[timeline]?.get(messageIndexKey) != null) {
+                    val reason = String.format(MXCryptoError.DUPLICATE_MESSAGE_INDEX_REASON, decryptResult.mIndex)
+                    Timber.e("## decryptGroupMessage() : $reason")
+                    throw MXCryptoError.Base(MXCryptoError.ErrorType.DUPLICATED_MESSAGE_INDEX, reason)
+                }
+
+                inboundGroupSessionMessageIndexes[timeline]!!.put(messageIndexKey, true)
+            }
+
+            store.storeInboundGroupSessions(listOf(session))
+            val payload = try {
+                val adapter = MoshiProvider.providesMoshi().adapter<JsonDict>(JSON_DICT_PARAMETERIZED_TYPE)
+                val payloadString = convertFromUTF8(decryptResult.mDecryptedMessage)
+                adapter.fromJson(payloadString)
+            } catch (e: Exception) {
+                Timber.e("## decryptGroupMessage() : fails to parse the payload")
+                throw
+                MXCryptoError.Base(MXCryptoError.ErrorType.BAD_DECRYPTED_FORMAT, MXCryptoError.BAD_DECRYPTED_FORMAT_TEXT_REASON)
+            }
+
+            return OlmDecryptionResult(
+                    payload,
+                    session.keysClaimed,
+                    senderKey,
+                    session.forwardingCurve25519KeyChain
+            )
+        } else {
+            val reason = String.format(MXCryptoError.INBOUND_SESSION_MISMATCH_ROOM_ID_REASON, roomId, session.roomId)
+            Timber.e("## decryptGroupMessage() : $reason")
+            throw MXCryptoError.Base(MXCryptoError.ErrorType.INBOUND_SESSION_MISMATCH_ROOM_ID, reason)
+        }
     }
 
     /**
@@ -766,26 +762,26 @@ internal class MXOlmDevice @Inject constructor(
      * @param senderKey the base64-encoded curve25519 key of the sender.
      * @return the inbound group session.
      */
-    fun getInboundGroupSession(sessionId: String?, senderKey: String?, roomId: String?): Try<OlmInboundGroupSessionWrapper> {
+    fun getInboundGroupSession(sessionId: String?, senderKey: String?, roomId: String?): OlmInboundGroupSessionWrapper {
         if (sessionId.isNullOrBlank() || senderKey.isNullOrBlank()) {
-            return Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_SENDER_KEY, MXCryptoError.ERROR_MISSING_PROPERTY_REASON))
+            throw MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_SENDER_KEY, MXCryptoError.ERROR_MISSING_PROPERTY_REASON)
         }
 
         val session = store.getInboundGroupSession(sessionId, senderKey)
 
-        return if (null != session) {
+        if (session != null) {
             // Check that the room id matches the original one for the session. This stops
             // the HS pretending a message was targeting a different room.
             if (!TextUtils.equals(roomId, session.roomId)) {
                 val errorDescription = String.format(MXCryptoError.INBOUND_SESSION_MISMATCH_ROOM_ID_REASON, roomId, session.roomId)
                 Timber.e("## getInboundGroupSession() : $errorDescription")
-                Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.INBOUND_SESSION_MISMATCH_ROOM_ID, errorDescription))
+                throw MXCryptoError.Base(MXCryptoError.ErrorType.INBOUND_SESSION_MISMATCH_ROOM_ID, errorDescription)
             } else {
-                Try.just(session)
+                return session
             }
         } else {
             Timber.e("## getInboundGroupSession() : Cannot retrieve inbound group session $sessionId")
-            Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID, MXCryptoError.UNKNOWN_INBOUND_SESSION_ID_REASON))
+            throw MXCryptoError.Base(MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID, MXCryptoError.UNKNOWN_INBOUND_SESSION_ID_REASON)
         }
     }
 
@@ -798,6 +794,6 @@ internal class MXOlmDevice @Inject constructor(
      * @return true if the unbound session keys are known.
      */
     fun hasInboundSessionKeys(roomId: String, senderKey: String, sessionId: String): Boolean {
-        return getInboundGroupSession(sessionId, senderKey, roomId).isSuccess()
+        return runCatching { getInboundGroupSession(sessionId, senderKey, roomId) }.isSuccess
     }
 }

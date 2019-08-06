@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.session.user.model
 
-import arrow.core.Try
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.user.SearchUserAPI
@@ -34,13 +33,12 @@ internal interface SearchUserTask : Task<SearchUserTask.Params, List<User>> {
 
 internal class DefaultSearchUserTask @Inject constructor(private val searchUserAPI: SearchUserAPI) : SearchUserTask {
 
-    override suspend fun execute(params: SearchUserTask.Params): Try<List<User>> {
-        return executeRequest<SearchUsersRequestResponse> {
+    override suspend fun execute(params: SearchUserTask.Params): List<User> {
+        val response = executeRequest<SearchUsersRequestResponse> {
             apiCall = searchUserAPI.searchUsers(SearchUsersParams(params.search, params.limit))
-        }.map { response ->
-            response.users.map {
-                User(it.userId, it.displayName, it.avatarUrl)
-            }
+        }
+        return response.users.map {
+            User(it.userId, it.displayName, it.avatarUrl)
         }
     }
 

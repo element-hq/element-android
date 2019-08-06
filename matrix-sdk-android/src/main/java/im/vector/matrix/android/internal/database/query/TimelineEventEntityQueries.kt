@@ -16,12 +16,8 @@
 
 package im.vector.matrix.android.internal.database.query
 
-import im.vector.matrix.android.internal.database.model.ChunkEntity
-import im.vector.matrix.android.internal.database.model.EventEntity
+import im.vector.matrix.android.internal.database.model.*
 import im.vector.matrix.android.internal.database.model.EventEntity.LinkFilterMode.*
-import im.vector.matrix.android.internal.database.model.RoomEntity
-import im.vector.matrix.android.internal.database.model.TimelineEventEntity
-import im.vector.matrix.android.internal.database.model.TimelineEventEntityFields
 import io.realm.Realm
 import io.realm.RealmList
 import io.realm.RealmQuery

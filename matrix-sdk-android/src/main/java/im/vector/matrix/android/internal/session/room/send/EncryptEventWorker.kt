@@ -17,24 +17,23 @@
 package im.vector.matrix.android.internal.session.room.send
 
 import android.content.Context
-import androidx.work.Worker
+import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
-import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.crypto.model.MXEncryptEventContentResult
+import im.vector.matrix.android.internal.util.awaitCallback
 import im.vector.matrix.android.internal.worker.SessionWorkerParams
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import im.vector.matrix.android.internal.worker.getSessionComponent
 import timber.log.Timber
-import java.util.concurrent.CountDownLatch
 import javax.inject.Inject
 
 internal class EncryptEventWorker(context: Context, params: WorkerParameters)
-    : Worker(context, params) {
+    : CoroutineWorker(context, params) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
@@ -49,7 +48,7 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
     @Inject lateinit var crypto: CryptoService
     @Inject lateinit var localEchoUpdater: LocalEchoUpdater
 
-    override fun doWork(): Result {
+    override suspend fun doWork(): Result {
         Timber.v("Start Encrypt work")
         val params = WorkerParamsFactory.fromData<Params>(inputData)
                 ?: return Result.success().also {
@@ -71,44 +70,30 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
         }
         localEchoUpdater.updateSendState(localEvent.eventId, SendState.ENCRYPTING)
 
-        // TODO Better async handling
-        val latch = CountDownLatch(1)
-
-        var result: MXEncryptEventContentResult? = null
-        var error: Throwable? = null
 
         val localMutableContent = HashMap(localEvent.content)
         params.keepKeys?.forEach {
             localMutableContent.remove(it)
         }
 
+        var error: Throwable? = null
+        var result: MXEncryptEventContentResult? = null
         try {
-            crypto.encryptEventContent(localMutableContent, localEvent.type, params.roomId, object : MatrixCallback<MXEncryptEventContentResult> {
-                override fun onSuccess(data: MXEncryptEventContentResult) {
-                    result = data
-                    latch.countDown()
-                }
-
-                override fun onFailure(failure: Throwable) {
-                    error = failure
-                    latch.countDown()
-                }
-            })
-        } catch (e: Throwable) {
-            error = e
-            latch.countDown()
+            result = awaitCallback {
+                crypto.encryptEventContent(localMutableContent, localEvent.type, params.roomId, it)
+            }
+        } catch (throwable: Throwable) {
+            error = throwable
         }
-        latch.await()
-
         if (result != null) {
-            val modifiedContent = HashMap(result?.eventContent)
+            val modifiedContent = HashMap(result.eventContent)
             params.keepKeys?.forEach { toKeep ->
                 localEvent.content?.get(toKeep)?.let {
                     //put it back in the encrypted thing
                     modifiedContent[toKeep] = it
                 }
             }
-            val safeResult = result!!.copy(eventContent = modifiedContent)
+            val safeResult = result.copy(eventContent = modifiedContent)
             val encryptedEvent = localEvent.copy(
                     type = safeResult.eventType,
                     content = safeResult.eventContent
@@ -122,7 +107,8 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
             }
             localEchoUpdater.updateSendState(localEvent.eventId, sendState)
             //always return success, or the chain will be stuck for ever!
-            val nextWorkerParams = SendEventWorker.Params(params.userId, params.roomId, localEvent, error?.localizedMessage ?: "Error")
+            val nextWorkerParams = SendEventWorker.Params(params.userId, params.roomId, localEvent, error?.localizedMessage
+                    ?: "Error")
             return Result.success(WorkerParamsFactory.toData(nextWorkerParams))
         }
     }

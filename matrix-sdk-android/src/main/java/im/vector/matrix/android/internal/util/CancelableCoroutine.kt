@@ -22,7 +22,9 @@ import kotlinx.coroutines.Job
 internal class CancelableCoroutine(private val job: Job) : Cancelable {
 
     override fun cancel() {
-        job.cancel()
+        if (!job.isCancelled) {
+            job.cancel()
+        }
     }
 
 }

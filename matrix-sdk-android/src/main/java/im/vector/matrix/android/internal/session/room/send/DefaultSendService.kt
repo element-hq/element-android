@@ -41,7 +41,6 @@ import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.content.UploadContentWorker
 import im.vector.matrix.android.internal.session.room.timeline.TimelineSendEventWorkCommon
 import im.vector.matrix.android.internal.util.CancelableWork
-import im.vector.matrix.android.internal.util.tryTransactionAsync
 import im.vector.matrix.android.internal.worker.WorkManagerUtil
 import im.vector.matrix.android.internal.worker.WorkManagerUtil.matrixOneTimeWorkRequestBuilder
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
@@ -149,7 +148,7 @@ internal class DefaultSendService @Inject constructor(private val context: Conte
     }
 
     override fun deleteFailedEcho(localEcho: TimelineEvent) {
-        monarchy.tryTransactionAsync { realm ->
+        monarchy.writeAsync { realm ->
             TimelineEventEntity.where(realm, eventId = localEcho.root.eventId
                     ?: "").findFirst()?.let {
                 it.deleteFromRealm()
@@ -175,7 +174,7 @@ internal class DefaultSendService @Inject constructor(private val context: Conte
                             .enqueue()
                 }
 
-        monarchy.tryTransactionAsync { realm ->
+        monarchy.writeAsync { realm ->
             RoomEntity.where(realm, roomId).findFirst()?.let { room ->
                 room.sendingTimelineEvents.forEach {
                     it.root?.sendState = SendState.UNDELIVERED
@@ -186,7 +185,7 @@ internal class DefaultSendService @Inject constructor(private val context: Conte
     }
 
     override fun resendAllFailedMessages() {
-        monarchy.tryTransactionAsync { realm ->
+        monarchy.writeAsync { realm ->
             RoomEntity.where(realm, roomId).findFirst()?.let { room ->
                 room.sendingTimelineEvents.filter {
                     it.root?.sendState?.hasFailed() ?: false

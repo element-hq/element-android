@@ -16,30 +16,25 @@
 
 package im.vector.matrix.android.internal.util
 
-import arrow.core.Try
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.internal.database.awaitTransaction
 import io.realm.Realm
 import io.realm.RealmModel
 import java.util.concurrent.atomic.AtomicReference
 
-internal fun Monarchy.tryTransactionSync(transaction: (realm: Realm) -> Unit): Try<Unit> {
-    return Try {
-        this.runTransactionSync(transaction)
-    }
-}
-
-internal fun Monarchy.tryTransactionAsync(transaction: (realm: Realm) -> Unit): Try<Unit> {
-    return Try {
-        this.writeAsync(transaction)
-    }
-}
-
-fun <T : RealmModel> Monarchy.fetchManaged(query: (Realm) -> T?): T? {
-    return fetch(query, false)
+internal suspend fun Monarchy.awaitTransaction(transaction: suspend (realm: Realm) -> Unit) {
+    awaitTransaction(realmConfiguration, transaction)
 }
 
 fun <T : RealmModel> Monarchy.fetchCopied(query: (Realm) -> T?): T? {
-    return fetch(query, true)
+    val ref = AtomicReference<T>()
+    doWithRealm { realm ->
+        val result = query.invoke(realm)?.let {
+            realm.copyFromRealm(it)
+        }
+        ref.set(result)
+    }
+    return ref.get()
 }
 
 fun <U, T : RealmModel> Monarchy.fetchCopyMap(query: (Realm) -> T?, map: (T, realm: Realm) -> U): U? {
@@ -47,21 +42,6 @@ fun <U, T : RealmModel> Monarchy.fetchCopyMap(query: (Realm) -> T?, map: (T, rea
     doWithRealm { realm ->
         val result = query.invoke(realm)?.let {
             map(realm.copyFromRealm(it), realm)
-        }
-        ref.set(result)
-    }
-    return ref.get()
-}
-
-private fun <T : RealmModel> Monarchy.fetch(query: (Realm) -> T?, copyFromRealm: Boolean): T? {
-    val ref = AtomicReference<T>()
-    doWithRealm { realm ->
-        val result = query.invoke(realm)?.let {
-            if (copyFromRealm) {
-                realm.copyFromRealm(it)
-            } else {
-                it
-            }
         }
         ref.set(result)
     }

@@ -16,9 +16,9 @@
 
 package im.vector.matrix.android.internal.crypto.store.db.model
 
+import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.store.db.deserializeFromRealm
 import im.vector.matrix.android.internal.crypto.store.db.serializeForRealm
-import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import io.realm.RealmObject
 import io.realm.RealmResults
 import io.realm.annotations.LinkingObjects

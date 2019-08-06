@@ -72,7 +72,6 @@ import im.vector.matrix.android.internal.session.room.membership.RoomMembers
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
-import im.vector.matrix.android.internal.task.toConfigurableTask
 import im.vector.matrix.android.internal.util.JsonCanonicalizer
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import im.vector.matrix.android.internal.util.fetchCopied
@@ -167,22 +166,25 @@ internal class CryptoManager @Inject constructor(
 
     override fun setDeviceName(deviceId: String, deviceName: String, callback: MatrixCallback<Unit>) {
         setDeviceNameTask
-                .configureWith(SetDeviceNameTask.Params(deviceId, deviceName))
-                .dispatchTo(callback)
+                .configureWith(SetDeviceNameTask.Params(deviceId, deviceName)) {
+                    this.callback = callback
+                }
                 .executeBy(taskExecutor)
     }
 
     override fun deleteDevice(deviceId: String, callback: MatrixCallback<Unit>) {
         deleteDeviceTask
-                .configureWith(DeleteDeviceTask.Params(deviceId))
-                .dispatchTo(callback)
+                .configureWith(DeleteDeviceTask.Params(deviceId)) {
+                    this.callback = callback
+                }
                 .executeBy(taskExecutor)
     }
 
     override fun deleteDeviceWithUserPassword(deviceId: String, authSession: String?, password: String, callback: MatrixCallback<Unit>) {
         deleteDeviceWithUserPasswordTask
-                .configureWith(DeleteDeviceWithUserPasswordTask.Params(deviceId, authSession, password))
-                .dispatchTo(callback)
+                .configureWith(DeleteDeviceWithUserPasswordTask.Params(deviceId, authSession, password)) {
+                    this.callback = callback
+                }
                 .executeBy(taskExecutor)
     }
 
@@ -196,8 +198,9 @@ internal class CryptoManager @Inject constructor(
 
     override fun getDevicesList(callback: MatrixCallback<DevicesListResponse>) {
         getDevicesTask
-                .toConfigurableTask()
-                .dispatchTo(callback)
+                .configureWith {
+                    this.callback = callback
+                }
                 .executeBy(taskExecutor)
     }
 
@@ -254,35 +257,36 @@ internal class CryptoManager @Inject constructor(
     private suspend fun internalStart(isInitialSync: Boolean) {
         // Open the store
         cryptoStore.open()
-        uploadDeviceKeys()
-                .flatMap { oneTimeKeysUploader.maybeUploadOneTimeKeys() }
-                .fold(
-                        {
-                            Timber.e("Start failed: $it")
-                            delay(1000)
-                            isStarting.set(false)
-                            internalStart(isInitialSync)
-                        },
-                        {
-                            outgoingRoomKeyRequestManager.start()
-                            keysBackup.checkAndStartKeysBackup()
-                            if (isInitialSync) {
-                                // refresh the devices list for each known room members
-                                deviceListManager.invalidateAllDeviceLists()
-                                deviceListManager.refreshOutdatedDeviceLists()
-                            } else {
-                                incomingRoomKeyRequestManager.processReceivedRoomKeyRequests()
-                            }
-                            isStarting.set(false)
-                            isStarted.set(true)
-                        }
-                )
+        runCatching {
+            uploadDeviceKeys()
+            oneTimeKeysUploader.maybeUploadOneTimeKeys()
+            outgoingRoomKeyRequestManager.start()
+            keysBackup.checkAndStartKeysBackup()
+            if (isInitialSync) {
+                // refresh the devices list for each known room members
+                deviceListManager.invalidateAllDeviceLists()
+                deviceListManager.refreshOutdatedDeviceLists()
+            } else {
+                incomingRoomKeyRequestManager.processReceivedRoomKeyRequests()
+            }
+        }.fold(
+                {
+                    isStarting.set(false)
+                    isStarted.set(true)
+                },
+                {
+                    Timber.e("Start failed: $it")
+                    delay(1000)
+                    isStarting.set(false)
+                    internalStart(isInitialSync)
+                }
+        )
     }
 
     /**
      * Close the crypto
      */
-    fun close() {
+    fun close() = runBlocking(coroutineDispatchers.crypto) {
         olmDevice.release()
         cryptoStore.close()
         outgoingRoomKeyRequestManager.stop()
@@ -556,13 +560,16 @@ internal class CryptoManager @Inject constructor(
             if (safeAlgorithm != null) {
                 val t0 = System.currentTimeMillis()
                 Timber.v("## encryptEventContent() starts")
-                safeAlgorithm.encryptEventContent(eventContent, eventType, userIds)
+                runCatching {
+                    safeAlgorithm.encryptEventContent(eventContent, eventType, userIds)
+                }
                         .fold(
-                                { callback.onFailure(it) },
                                 {
                                     Timber.v("## encryptEventContent() : succeeds after ${System.currentTimeMillis() - t0} ms")
                                     callback.onSuccess(MXEncryptEventContentResult(it, EventType.ENCRYPTED))
-                                }
+                                },
+                                { callback.onFailure(it) }
+
                         )
             } else {
                 val algorithm = getEncryptionAlgorithm(roomId)
@@ -584,10 +591,7 @@ internal class CryptoManager @Inject constructor(
     @Throws(MXCryptoError::class)
     override fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
         return runBlocking {
-            internalDecryptEvent(event, timeline).fold(
-                    { throw it },
-                    { it }
-            )
+            internalDecryptEvent(event, timeline)
         }
     }
 
@@ -600,8 +604,10 @@ internal class CryptoManager @Inject constructor(
      */
     override fun decryptEventAsync(event: Event, timeline: String, callback: MatrixCallback<MXEventDecryptionResult>) {
         GlobalScope.launch {
-            val result = withContext(coroutineDispatchers.crypto) {
-                internalDecryptEvent(event, timeline)
+            val result = runCatching {
+                withContext(coroutineDispatchers.crypto) {
+                    internalDecryptEvent(event, timeline)
+                }
             }
             result.foldToCallback(callback)
         }
@@ -612,22 +618,22 @@ internal class CryptoManager @Inject constructor(
      *
      * @param event    the raw event.
      * @param timeline the id of the timeline where the event is decrypted. It is used to prevent replay attack.
-     * @return the MXEventDecryptionResult data, or null in case of error wrapped into [Try]
+     * @return the MXEventDecryptionResult data, or null in case of error
      */
-    private suspend fun internalDecryptEvent(event: Event, timeline: String): Try<MXEventDecryptionResult> {
+    private suspend fun internalDecryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
         val eventContent = event.content
-        return if (eventContent == null) {
+        if (eventContent == null) {
             Timber.e("## decryptEvent : empty event content")
-            Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.BAD_ENCRYPTED_MESSAGE, MXCryptoError.BAD_ENCRYPTED_MESSAGE_REASON))
+            throw MXCryptoError.Base(MXCryptoError.ErrorType.BAD_ENCRYPTED_MESSAGE, MXCryptoError.BAD_ENCRYPTED_MESSAGE_REASON)
         } else {
             val algorithm = eventContent["algorithm"]?.toString()
             val alg = roomDecryptorProvider.getOrCreateRoomDecryptor(event.roomId, algorithm)
             if (alg == null) {
                 val reason = String.format(MXCryptoError.UNABLE_TO_DECRYPT_REASON, event.eventId, algorithm)
                 Timber.e("## decryptEvent() : $reason")
-                Try.Failure(MXCryptoError.Base(MXCryptoError.ErrorType.UNABLE_TO_DECRYPT, reason))
+                throw MXCryptoError.Base(MXCryptoError.ErrorType.UNABLE_TO_DECRYPT, reason)
             } else {
-                alg.decryptEvent(event, timeline)
+                return alg.decryptEvent(event, timeline)
             }
         }
     }
@@ -689,12 +695,13 @@ internal class CryptoManager @Inject constructor(
     private fun onRoomEncryptionEvent(roomId: String, event: Event) {
         GlobalScope.launch(coroutineDispatchers.crypto) {
             val params = LoadRoomMembersTask.Params(roomId)
-            loadRoomMembersTask
-                    .execute(params)
-                    .map { _ ->
-                        val userIds = getRoomUserIds(roomId)
-                        setEncryptionInRoom(roomId, event.content?.get("algorithm")?.toString(), true, userIds)
-                    }
+            try {
+                loadRoomMembersTask.execute(params)
+                val userIds = getRoomUserIds(roomId)
+                setEncryptionInRoom(roomId, event.content?.get("algorithm")?.toString(), true, userIds)
+            } catch (throwable: Throwable) {
+                Timber.e(throwable)
+            }
         }
     }
 
@@ -761,7 +768,7 @@ internal class CryptoManager @Inject constructor(
     /**
      * Upload my user's device keys.
      */
-    private suspend fun uploadDeviceKeys(): Try<KeysUploadResponse> {
+    private suspend fun uploadDeviceKeys(): KeysUploadResponse {
         // Prepare the device keys data to send
         // Sign it
         val canonicalJson = JsonCanonicalizer.getCanonicalJson(Map::class.java, getMyDevice().signalableJSONDictionary())
@@ -868,10 +875,8 @@ internal class CryptoManager @Inject constructor(
     fun checkUnknownDevices(userIds: List<String>, callback: MatrixCallback<Unit>) {
         // force the refresh to ensure that the devices list is up-to-date
         GlobalScope.launch(coroutineDispatchers.crypto) {
-            deviceListManager
-                    .downloadKeys(userIds, true)
+            runCatching { deviceListManager.downloadKeys(userIds, true) }
                     .fold(
-                            { callback.onFailure(it) },
                             {
                                 val unknownDevices = getUnknownDevices(it)
                                 if (unknownDevices.map.isEmpty()) {
@@ -880,7 +885,8 @@ internal class CryptoManager @Inject constructor(
                                     // trigger an an unknown devices exception
                                     callback.onFailure(Failure.CryptoError(MXCryptoError.UnknownDevice(unknownDevices)))
                                 }
-                            }
+                            },
+                            { callback.onFailure(it) }
                     )
         }
     }
@@ -1035,16 +1041,17 @@ internal class CryptoManager @Inject constructor(
 
     override fun downloadKeys(userIds: List<String>, forceDownload: Boolean, callback: MatrixCallback<MXUsersDevicesMap<MXDeviceInfo>>) {
         GlobalScope.launch(coroutineDispatchers.crypto) {
-            deviceListManager
-                    .downloadKeys(userIds, forceDownload)
-                    .foldToCallback(callback)
+            runCatching {
+                deviceListManager.downloadKeys(userIds, forceDownload)
+            }.foldToCallback(callback)
         }
     }
 
     override fun clearCryptoCache(callback: MatrixCallback<Unit>) {
         clearCryptoDataTask
-                .toConfigurableTask()
-                .dispatchTo(callback)
+                .configureWith {
+                    this.callback = callback
+                }
                 .executeBy(taskExecutor)
     }
 

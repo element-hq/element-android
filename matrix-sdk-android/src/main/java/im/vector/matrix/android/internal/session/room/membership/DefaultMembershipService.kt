@@ -42,10 +42,12 @@ internal class DefaultMembershipService @Inject constructor(private val roomId: 
                                                             private val leaveRoomTask: LeaveRoomTask
 ) : MembershipService {
 
-    override fun loadRoomMembersIfNeeded(matrixCallback: MatrixCallback<Boolean>): Cancelable {
+    override fun loadRoomMembersIfNeeded(matrixCallback: MatrixCallback<Unit>): Cancelable {
         val params = LoadRoomMembersTask.Params(roomId, Membership.LEAVE)
-        return loadRoomMembersTask.configureWith(params)
-                .dispatchTo(matrixCallback)
+        return loadRoomMembersTask
+                .configureWith(params) {
+                    this.callback = matrixCallback
+                }
                 .executeBy(taskExecutor)
     }
 
@@ -77,22 +79,28 @@ internal class DefaultMembershipService @Inject constructor(private val roomId: 
 
     override fun invite(userId: String, callback: MatrixCallback<Unit>): Cancelable {
         val params = InviteTask.Params(roomId, userId)
-        return inviteTask.configureWith(params)
-                .dispatchTo(callback)
+        return inviteTask
+                .configureWith(params) {
+                    this.callback = callback
+                }
                 .executeBy(taskExecutor)
     }
 
     override fun join(viaServers: List<String>, callback: MatrixCallback<Unit>): Cancelable {
         val params = JoinRoomTask.Params(roomId, viaServers)
-        return joinTask.configureWith(params)
-                .dispatchTo(callback)
+        return joinTask
+                .configureWith(params) {
+                    this.callback = callback
+                }
                 .executeBy(taskExecutor)
     }
 
     override fun leave(callback: MatrixCallback<Unit>): Cancelable {
         val params = LeaveRoomTask.Params(roomId)
-        return leaveRoomTask.configureWith(params)
-                .dispatchTo(callback)
+        return leaveRoomTask
+                .configureWith(params) {
+                    this.callback = callback
+                }
                 .executeBy(taskExecutor)
     }
 }

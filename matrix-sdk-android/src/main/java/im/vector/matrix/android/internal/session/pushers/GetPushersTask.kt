@@ -15,7 +15,6 @@
  */
 package im.vector.matrix.android.internal.session.pushers
 
-import arrow.core.Try
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.session.pushers.PusherState
@@ -24,7 +23,7 @@ import im.vector.matrix.android.internal.database.model.PusherEntity
 import im.vector.matrix.android.internal.database.model.PusherEntityFields
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
-import im.vector.matrix.android.internal.util.tryTransactionSync
+import im.vector.matrix.android.internal.util.awaitTransaction
 import javax.inject.Inject
 
 internal interface GetPushersTask : Task<Unit, Unit>
@@ -33,20 +32,19 @@ internal class DefaultGetPusherTask @Inject constructor(private val pushersAPI: 
                                                         private val monarchy: Monarchy,
                                                         private val sessionParams: SessionParams) : GetPushersTask {
 
-    override suspend fun execute(params: Unit): Try<Unit> {
-        return executeRequest<GetPushersResponse> {
+    override suspend fun execute(params: Unit) {
+        val response = executeRequest<GetPushersResponse> {
             apiCall = pushersAPI.getPushers()
-        }.flatMap { response ->
-            monarchy.tryTransactionSync { realm ->
-                //clear existings?
-                realm.where(PusherEntity::class.java)
-                        .equalTo(PusherEntityFields.USER_ID, sessionParams.credentials.userId)
-                        .findAll().deleteAllFromRealm()
-                response.pushers?.forEach { jsonPusher ->
-                    jsonPusher.toEntity(sessionParams.credentials.userId).also {
-                        it.state = PusherState.REGISTERED
-                        realm.insertOrUpdate(it)
-                    }
+        }
+        monarchy.awaitTransaction { realm ->
+            //clear existings?
+            realm.where(PusherEntity::class.java)
+                    .equalTo(PusherEntityFields.USER_ID, sessionParams.credentials.userId)
+                    .findAll().deleteAllFromRealm()
+            response.pushers?.forEach { jsonPusher ->
+                jsonPusher.toEntity(sessionParams.credentials.userId).also {
+                    it.state = PusherState.REGISTERED
+                    realm.insertOrUpdate(it)
                 }
             }
         }

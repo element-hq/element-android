@@ -20,7 +20,6 @@ import android.content.Context
 import androidx.work.ListenableWorker
 import androidx.work.WorkerFactory
 import androidx.work.WorkerParameters
-import im.vector.matrix.android.internal.di.MatrixScope
 import javax.inject.Inject
 import javax.inject.Provider
 

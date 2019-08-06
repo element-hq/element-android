@@ -15,7 +15,6 @@
  */
 package im.vector.matrix.android.internal.session.room
 
-import arrow.core.Try
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
@@ -31,7 +30,7 @@ import im.vector.matrix.android.internal.database.query.create
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
 import im.vector.matrix.android.internal.task.Task
-import im.vector.matrix.android.internal.util.tryTransactionSync
+import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.Realm
 import timber.log.Timber
 import javax.inject.Inject
@@ -54,10 +53,10 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
     //OPT OUT serer aggregation until API mature enough
     private val SHOULD_HANDLE_SERVER_AGREGGATION = false
 
-    override suspend fun execute(params: EventRelationsAggregationTask.Params): Try<Unit> {
+    override suspend fun execute(params: EventRelationsAggregationTask.Params) {
         val events = params.events
         val userId = params.userId
-        return monarchy.tryTransactionSync { realm ->
+        monarchy.awaitTransaction { realm ->
             Timber.v(">>> DefaultEventRelationsAggregationTask[${params.hashCode()}] called with ${events.size} events")
             update(realm, events, userId)
             Timber.v("<<< DefaultEventRelationsAggregationTask[${params.hashCode()}] finished")

@@ -15,12 +15,10 @@
  */
 package im.vector.matrix.android.internal.session.room.prune
 
-import arrow.core.Try
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.UnsignedData
-import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.database.helper.updateSenderData
 import im.vector.matrix.android.internal.database.mapper.ContentMapper
 import im.vector.matrix.android.internal.database.mapper.EventMapper
@@ -31,7 +29,7 @@ import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
 import im.vector.matrix.android.internal.task.Task
-import im.vector.matrix.android.internal.util.tryTransactionSync
+import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.Realm
 import timber.log.Timber
 import javax.inject.Inject
@@ -48,8 +46,8 @@ internal interface PruneEventTask : Task<PruneEventTask.Params, Unit> {
 
 internal class DefaultPruneEventTask @Inject constructor(private val monarchy: Monarchy) : PruneEventTask {
 
-    override suspend fun execute(params: PruneEventTask.Params): Try<Unit> {
-        return monarchy.tryTransactionSync { realm ->
+    override suspend fun execute(params: PruneEventTask.Params) {
+        monarchy.awaitTransaction { realm ->
             params.redactionEvents.forEach { event ->
                 pruneEvent(realm, event, params.userId)
             }

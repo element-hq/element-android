@@ -20,15 +20,15 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.util.tryTransactionAsync
+import im.vector.matrix.android.internal.util.awaitTransaction
 import timber.log.Timber
 import javax.inject.Inject
 
 internal class LocalEchoUpdater @Inject constructor(private val monarchy: Monarchy) {
 
-    fun updateSendState(eventId: String, sendState: SendState) {
+    suspend fun updateSendState(eventId: String, sendState: SendState) {
         Timber.v("Update local state of $eventId to ${sendState.name}")
-        monarchy.tryTransactionAsync { realm ->
+        monarchy.awaitTransaction { realm ->
             val sendingEventEntity = EventEntity.where(realm, eventId).findFirst()
             if (sendingEventEntity != null) {
                 if (sendState == SendState.SENT && sendingEventEntity.sendState == SendState.SYNCED) {

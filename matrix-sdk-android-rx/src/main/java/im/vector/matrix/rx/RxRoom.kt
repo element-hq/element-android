@@ -41,7 +41,7 @@ class RxRoom(private val room: Room) {
         return room.liveTimeLineEvent(eventId).asObservable()
     }
 
-    fun loadRoomMembersIfNeeded(): Single<Boolean> = Single.create {
+    fun loadRoomMembersIfNeeded(): Single<Unit> = Single.create {
         room.loadRoomMembersIfNeeded(MatrixCallbackSingle(it)).toSingle(it)
     }
 
