@@ -19,7 +19,6 @@ package im.vector.matrix.android.internal.session.group
 import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import arrow.core.Try
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.internal.worker.SessionWorkerParams
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
@@ -43,16 +42,15 @@ internal class GetGroupDataWorker(context: Context, params: WorkerParameters) : 
 
         val sessionComponent = getSessionComponent(params.userId) ?: return Result.success()
         sessionComponent.inject(this)
-
         val results = params.groupIds.map { groupId ->
-            fetchGroupData(groupId)
+            runCatching { fetchGroupData(groupId) }
         }
-        val isSuccessful = results.none { it.isFailure() }
+        val isSuccessful = results.none { it.isFailure }
         return if (isSuccessful) Result.success() else Result.retry()
     }
 
-    private suspend fun fetchGroupData(groupId: String): Try<Unit> {
-        return getGroupDataTask.execute(GetGroupDataTask.Params(groupId))
+    private suspend fun fetchGroupData(groupId: String) {
+        getGroupDataTask.execute(GetGroupDataTask.Params(groupId))
     }
 
 }

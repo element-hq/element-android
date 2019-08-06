@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.crypto.tasks
 
-import arrow.core.Try
 import im.vector.matrix.android.internal.crypto.api.CryptoApi
 import im.vector.matrix.android.internal.crypto.model.MXKey
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
@@ -37,35 +36,30 @@ internal interface ClaimOneTimeKeysForUsersDeviceTask : Task<ClaimOneTimeKeysFor
 internal class DefaultClaimOneTimeKeysForUsersDevice @Inject constructor(private val cryptoApi: CryptoApi)
     : ClaimOneTimeKeysForUsersDeviceTask {
 
-    override suspend fun execute(params: ClaimOneTimeKeysForUsersDeviceTask.Params): Try<MXUsersDevicesMap<MXKey>> {
+    override suspend fun execute(params: ClaimOneTimeKeysForUsersDeviceTask.Params): MXUsersDevicesMap<MXKey> {
         val body = KeysClaimBody(oneTimeKeys = params.usersDevicesKeyTypesMap.map)
 
-        return executeRequest<KeysClaimResponse> {
+        val keysClaimResponse = executeRequest<KeysClaimResponse> {
             apiCall = cryptoApi.claimOneTimeKeysForUsersDevices(body)
-        }.flatMap { keysClaimResponse ->
-            Try {
-                val map = MXUsersDevicesMap<MXKey>()
+        }
+        val map = MXUsersDevicesMap<MXKey>()
+        keysClaimResponse.oneTimeKeys?.let { oneTimeKeys ->
+            for (userId in oneTimeKeys.keys) {
+                val mapByUserId = oneTimeKeys[userId]
 
-                keysClaimResponse.oneTimeKeys?.let { oneTimeKeys ->
-                    for (userId in oneTimeKeys.keys) {
-                        val mapByUserId = oneTimeKeys[userId]
+                if (mapByUserId != null) {
+                    for (deviceId in mapByUserId.keys) {
+                        val mxKey = MXKey.from(mapByUserId[deviceId])
 
-                        if (mapByUserId != null) {
-                            for (deviceId in mapByUserId.keys) {
-                                val mxKey = MXKey.from(mapByUserId[deviceId])
-
-                                if (mxKey != null) {
-                                    map.setObject(userId, deviceId, mxKey)
-                                } else {
-                                    Timber.e("## claimOneTimeKeysForUsersDevices : fail to create a MXKey")
-                                }
-                            }
+                        if (mxKey != null) {
+                            map.setObject(userId, deviceId, mxKey)
+                        } else {
+                            Timber.e("## claimOneTimeKeysForUsersDevices : fail to create a MXKey")
                         }
                     }
                 }
-
-                map
             }
         }
+        return map
     }
 }

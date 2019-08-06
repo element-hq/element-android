@@ -27,7 +27,6 @@ import im.vector.matrix.android.internal.session.room.directory.GetThirdPartyPro
 import im.vector.matrix.android.internal.session.room.membership.joining.JoinRoomTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
-import im.vector.matrix.android.internal.task.toConfigurableTask
 import javax.inject.Inject
 
 internal class DefaultRoomDirectoryService @Inject constructor(private val getPublicRoomTask: GetPublicRoomTask,
@@ -39,22 +38,25 @@ internal class DefaultRoomDirectoryService @Inject constructor(private val getPu
                                 publicRoomsParams: PublicRoomsParams,
                                 callback: MatrixCallback<PublicRoomsResponse>): Cancelable {
         return getPublicRoomTask
-                .configureWith(GetPublicRoomTask.Params(server, publicRoomsParams))
-                .dispatchTo(callback)
+                .configureWith(GetPublicRoomTask.Params(server, publicRoomsParams)) {
+                    this.callback = callback
+                }
                 .executeBy(taskExecutor)
     }
 
-    override fun joinRoom(roomId: String, callback: MatrixCallback<Unit>) {
-        joinRoomTask
-                .configureWith(JoinRoomTask.Params(roomId))
-                .dispatchTo(callback)
+    override fun joinRoom(roomId: String, callback: MatrixCallback<Unit>): Cancelable {
+        return joinRoomTask
+                .configureWith(JoinRoomTask.Params(roomId)) {
+                    this.callback = callback
+                }
                 .executeBy(taskExecutor)
     }
 
-    override fun getThirdPartyProtocol(callback: MatrixCallback<Map<String, ThirdPartyProtocol>>) {
-        getThirdPartyProtocolsTask
-                .toConfigurableTask()
-                .dispatchTo(callback)
+    override fun getThirdPartyProtocol(callback: MatrixCallback<Map<String, ThirdPartyProtocol>>): Cancelable {
+        return getThirdPartyProtocolsTask
+                .configureWith {
+                    this.callback = callback
+                }
                 .executeBy(taskExecutor)
     }
 }

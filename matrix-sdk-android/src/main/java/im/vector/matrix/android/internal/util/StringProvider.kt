@@ -20,9 +20,7 @@ import android.content.res.Resources
 import androidx.annotation.NonNull
 import androidx.annotation.StringRes
 import dagger.Reusable
-import im.vector.matrix.android.internal.di.MatrixScope
 import javax.inject.Inject
-import javax.inject.Singleton
 
 @Reusable
 internal class StringProvider @Inject constructor(private val resources: Resources) {

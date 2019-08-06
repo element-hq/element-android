@@ -39,7 +39,8 @@ object TimelineDisplayableEvents {
             EventType.ENCRYPTION,
             EventType.STATE_ROOM_THIRD_PARTY_INVITE,
             EventType.STICKER,
-            EventType.STATE_ROOM_CREATE
+            EventType.STATE_ROOM_CREATE,
+            EventType.STATE_ROOM_TOMBSTONE
     )
 
     val DEBUG_DISPLAYABLE_TYPES = DISPLAYABLE_TYPES + listOf(

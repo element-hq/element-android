@@ -15,7 +15,6 @@
  */
 package im.vector.matrix.android.internal.session.room.relation
 
-import arrow.core.Try
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.RelationType
@@ -39,16 +38,16 @@ internal class DefaultFetchEditHistoryTask @Inject constructor(
         private val roomAPI: RoomAPI
 ) : FetchEditHistoryTask {
 
-    override suspend fun execute(params: FetchEditHistoryTask.Params): Try<List<Event>> {
-        return executeRequest<RelationsResponse> {
+    override suspend fun execute(params: FetchEditHistoryTask.Params): List<Event> {
+        val response = executeRequest<RelationsResponse> {
             apiCall = roomAPI.getRelations(params.roomId,
                     params.eventId,
                     RelationType.REPLACE,
                     if (params.isRoomEncrypted) EventType.ENCRYPTED else EventType.MESSAGE)
-        }.map { resp ->
-            val events = resp.chunks.toMutableList()
-            resp.originalEvent?.let { events.add(it) }
-            events
         }
+
+        val events = response.chunks.toMutableList()
+        response.originalEvent?.let { events.add(it) }
+        return events
     }
 }

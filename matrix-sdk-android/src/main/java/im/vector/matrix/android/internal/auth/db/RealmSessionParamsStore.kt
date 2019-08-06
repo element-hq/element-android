@@ -62,7 +62,7 @@ internal class RealmSessionParamsStore @Inject constructor(private val mapper: S
         return sessionParams
     }
 
-    override fun save(sessionParams: SessionParams): Try<SessionParams> {
+    override fun save(sessionParams: SessionParams): Try<Unit> {
         return Try {
             val entity = mapper.map(sessionParams)
             if (entity != null) {
@@ -72,7 +72,6 @@ internal class RealmSessionParamsStore @Inject constructor(private val mapper: S
                 }
                 realm.close()
             }
-            sessionParams
         }
     }
 

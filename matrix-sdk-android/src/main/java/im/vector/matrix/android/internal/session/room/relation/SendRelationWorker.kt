@@ -66,18 +66,11 @@ internal class SendRelationWorker(context: Context, params: WorkerParameters) : 
         val relatedEventId = relationContent.relatesTo?.eventId ?: return Result.failure()
         val relationType = (relationContent.relatesTo as? ReactionInfo)?.type ?: params.relationType
         ?: return Result.failure()
-
-        val result = executeRequest<SendResponse> {
-            apiCall = roomAPI.sendRelation(
-                    roomId = params.roomId,
-                    parent_id = relatedEventId,
-                    relationType = relationType,
-                    eventType = localEvent.type,
-                    content = localEvent.content
-            )
-        }
-        return result.fold({
-            when (it) {
+        return try {
+            sendRelation(params.roomId, relationType, relatedEventId, localEvent)
+            Result.success()
+        } catch (exception: Throwable) {
+            when (exception) {
                 is Failure.NetworkConnection -> Result.retry()
                 else                         -> {
                     //TODO mark as failed to send?
@@ -85,7 +78,19 @@ internal class SendRelationWorker(context: Context, params: WorkerParameters) : 
                     Result.success()
                 }
             }
-        }, { Result.success() })
+        }
+    }
+
+    private suspend fun sendRelation(roomId: String, relationType: String, relatedEventId: String, localEvent: Event) {
+        executeRequest<SendResponse> {
+            apiCall = roomAPI.sendRelation(
+                    roomId = roomId,
+                    parent_id = relatedEventId,
+                    relationType = relationType,
+                    eventType = localEvent.type,
+                    content = localEvent.content
+            )
+        }
     }
 
 }

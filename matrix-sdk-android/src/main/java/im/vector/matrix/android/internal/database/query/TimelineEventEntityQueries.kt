@@ -16,12 +16,8 @@
 
 package im.vector.matrix.android.internal.database.query
 
-import im.vector.matrix.android.internal.database.model.ChunkEntity
-import im.vector.matrix.android.internal.database.model.EventEntity
+import im.vector.matrix.android.internal.database.model.*
 import im.vector.matrix.android.internal.database.model.EventEntity.LinkFilterMode.*
-import im.vector.matrix.android.internal.database.model.RoomEntity
-import im.vector.matrix.android.internal.database.model.TimelineEventEntity
-import im.vector.matrix.android.internal.database.model.TimelineEventEntityFields
 import io.realm.Realm
 import io.realm.RealmList
 import io.realm.RealmQuery
@@ -65,11 +61,12 @@ internal fun TimelineEventEntity.Companion.findWithSenderMembershipEvent(realm: 
 
 internal fun TimelineEventEntity.Companion.latestEvent(realm: Realm,
                                                        roomId: String,
+                                                       includesSending: Boolean,
                                                        includedTypes: List<String> = emptyList(),
                                                        excludedTypes: List<String> = emptyList()): TimelineEventEntity? {
 
     val roomEntity = RoomEntity.where(realm, roomId).findFirst() ?: return null
-    val eventList = if (roomEntity.sendingTimelineEvents.isNotEmpty()) {
+    val eventList = if (includesSending && roomEntity.sendingTimelineEvents.isNotEmpty()) {
         roomEntity.sendingTimelineEvents
     } else {
         ChunkEntity.findLastLiveChunkFromRoom(realm, roomId)?.timelineEvents

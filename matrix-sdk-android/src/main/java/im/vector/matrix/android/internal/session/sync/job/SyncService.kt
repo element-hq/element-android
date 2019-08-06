@@ -104,58 +104,57 @@ open class SyncService : Service() {
         } else {
             Timber.v("Execute sync request with timeout 0")
             val params = SyncTask.Params(TIME_OUT)
-            cancelableTask = syncTask.configureWith(params)
-                    .callbackOn(TaskThread.SYNC)
-                    .executeOn(TaskThread.SYNC)
-                    .dispatchTo(object : MatrixCallback<Unit> {
-                        override fun onSuccess(data: Unit) {
-                            cancelableTask = null
-                            if (!once) {
-                                timer.schedule(object : TimerTask() {
-                                    override fun run() {
-                                        doSync()
-                                    }
-                                }, NEXT_BATCH_DELAY)
-                            } else {
-                                //stop
-                                stopMe()
+            cancelableTask = syncTask
+                    .configureWith(params) {
+                        callbackThread = TaskThread.SYNC
+                        executionThread = TaskThread.SYNC
+                        callback = object : MatrixCallback<Unit> {
+                            override fun onSuccess(data: Unit) {
+                                cancelableTask = null
+                                if (!once) {
+                                    timer.schedule(object : TimerTask() {
+                                        override fun run() {
+                                            doSync()
+                                        }
+                                    }, NEXT_BATCH_DELAY)
+                                } else {
+                                    //stop
+                                    stopMe()
+                                }
+                            }
+
+                            override fun onFailure(failure: Throwable) {
+                                Timber.e(failure)
+                                cancelableTask = null
+                                if (failure is Failure.NetworkConnection
+                                        && failure.cause is SocketTimeoutException) {
+                                    // Timeout are not critical
+                                    timer.schedule(object : TimerTask() {
+                                        override fun run() {
+                                            doSync()
+                                        }
+                                    }, 5_000L)
+                                }
+
+                                if (failure !is Failure.NetworkConnection
+                                        || failure.cause is JsonEncodingException) {
+                                    // Wait 10s before retrying
+                                    timer.schedule(object : TimerTask() {
+                                        override fun run() {
+                                            doSync()
+                                        }
+                                    }, 5_000L)
+                                }
+
+                                if (failure is Failure.ServerError
+                                        && (failure.error.code == MatrixError.UNKNOWN_TOKEN || failure.error.code == MatrixError.MISSING_TOKEN)) {
+                                    // No token or invalid token, stop the thread
+                                    stopSelf()
+                                }
                             }
                         }
-
-                        override fun onFailure(failure: Throwable) {
-                            Timber.e(failure)
-                            cancelableTask = null
-                            if (failure is Failure.NetworkConnection
-                                    && failure.cause is SocketTimeoutException) {
-                                // Timeout are not critical
-                                timer.schedule(object : TimerTask() {
-                                    override fun run() {
-                                        doSync()
-                                    }
-                                }, 5_000L)
-                            }
-
-                            if (failure !is Failure.NetworkConnection
-                                    || failure.cause is JsonEncodingException) {
-                                // Wait 10s before retrying
-                                timer.schedule(object : TimerTask() {
-                                    override fun run() {
-                                        doSync()
-                                    }
-                                }, 5_000L)
-                            }
-
-                            if (failure is Failure.ServerError
-                                    && (failure.error.code == MatrixError.UNKNOWN_TOKEN || failure.error.code == MatrixError.MISSING_TOKEN)) {
-                                // No token or invalid token, stop the thread
-                                stopSelf()
-                            }
-
-                        }
-
-                    })
+                    }
                     .executeBy(taskExecutor)
-
         }
     }
 

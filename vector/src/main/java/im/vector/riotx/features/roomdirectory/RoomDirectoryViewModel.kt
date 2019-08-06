@@ -31,6 +31,7 @@ import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRooms
 import im.vector.matrix.android.api.session.room.model.thirdparty.RoomDirectoryData
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.rx.rx
+import im.vector.riotx.core.extensions.postLiveEvent
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.utils.LiveEvent
 import timber.log.Timber
@@ -199,7 +200,7 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
             )
         }
 
-        session.joinRoom(publicRoom.roomId, object : MatrixCallback<Unit> {
+        session.joinRoom(publicRoom.roomId, emptyList(), object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
                 // We do not update the joiningRoomsIds here, because, the room is not joined yet regarding the sync data.
                 // Instead, we wait for the room to be joined
@@ -207,7 +208,7 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
 
             override fun onFailure(failure: Throwable) {
                 // Notify the user
-                _joinRoomErrorLiveData.postValue(LiveEvent(failure))
+                _joinRoomErrorLiveData.postLiveEvent(failure)
 
                 setState {
                     copy(

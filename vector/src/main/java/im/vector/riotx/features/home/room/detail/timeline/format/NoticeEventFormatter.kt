@@ -22,6 +22,7 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.*
 import im.vector.matrix.android.api.session.room.model.call.CallInviteContent
+import im.vector.matrix.android.api.session.room.model.tombstone.RoomTombstoneContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotx.R
 import im.vector.riotx.core.resources.StringProvider
@@ -37,6 +38,7 @@ class NoticeEventFormatter @Inject constructor(private val stringProvider: Strin
             EventType.STATE_ROOM_TOPIC         -> formatRoomTopicEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
             EventType.STATE_ROOM_MEMBER        -> formatRoomMemberEvent(timelineEvent.root, timelineEvent.senderName())
             EventType.STATE_HISTORY_VISIBILITY -> formatRoomHistoryVisibilityEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
+            EventType.STATE_ROOM_TOMBSTONE     -> formatRoomTombstoneEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
             EventType.CALL_INVITE,
             EventType.CALL_HANGUP,
             EventType.CALL_ANSWER              -> formatCallEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
@@ -56,6 +58,7 @@ class NoticeEventFormatter @Inject constructor(private val stringProvider: Strin
             EventType.CALL_INVITE,
             EventType.CALL_HANGUP,
             EventType.CALL_ANSWER              -> formatCallEvent(event, senderName)
+            EventType.STATE_ROOM_TOMBSTONE     -> formatRoomTombstoneEvent(event, senderName)
             else                               -> {
                 Timber.v("Type $type not handled by this formatter")
                 null
@@ -70,6 +73,10 @@ class NoticeEventFormatter @Inject constructor(private val stringProvider: Strin
         } else {
             stringProvider.getString(R.string.notice_room_name_removed, senderName)
         }
+    }
+
+    private fun formatRoomTombstoneEvent(event: Event, senderName: String?): CharSequence? {
+        return stringProvider.getString(R.string.notice_room_update, senderName)
     }
 
     private fun formatRoomTopicEvent(event: Event, senderName: String?): CharSequence? {

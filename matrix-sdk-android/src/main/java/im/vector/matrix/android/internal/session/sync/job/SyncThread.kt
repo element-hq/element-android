@@ -102,39 +102,40 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
                 Timber.v("[$this] Execute sync request with timeout $DEFAULT_LONG_POOL_TIMEOUT")
                 val latch = CountDownLatch(1)
                 val params = SyncTask.Params(DEFAULT_LONG_POOL_TIMEOUT)
-                cancelableTask = syncTask.configureWith(params)
-                        .callbackOn(TaskThread.SYNC)
-                        .executeOn(TaskThread.SYNC)
-                        .dispatchTo(object : MatrixCallback<Unit> {
-                            override fun onSuccess(data: Unit) {
-                                latch.countDown()
+
+                cancelableTask = syncTask.configureWith(params) {
+                    this.callbackThread = TaskThread.SYNC
+                    this.executionThread = TaskThread.SYNC
+                    this.callback = object : MatrixCallback<Unit> {
+
+                        override fun onSuccess(data: Unit) {
+                            latch.countDown()
+                        }
+
+                        override fun onFailure(failure: Throwable) {
+                            if (failure is Failure.NetworkConnection
+                                    && failure.cause is SocketTimeoutException) {
+                                // Timeout are not critical
+                                Timber.v("Timeout")
+                            } else {
+                                Timber.e(failure)
                             }
 
-                            override fun onFailure(failure: Throwable) {
-                                if (failure is Failure.NetworkConnection
-                                        && failure.cause is SocketTimeoutException) {
-                                    // Timeout are not critical
-                                    Timber.v("Timeout")
-                                } else {
-                                    Timber.e(failure)
-                                }
-
-                                if (failure !is Failure.NetworkConnection
-                                        || failure.cause is JsonEncodingException) {
-                                    // Wait 10s before retrying
-                                    sleep(RETRY_WAIT_TIME_MS)
-                                }
-
-                                if (failure is Failure.ServerError
-                                        && (failure.error.code == MatrixError.UNKNOWN_TOKEN || failure.error.code == MatrixError.MISSING_TOKEN)) {
-                                    // No token or invalid token, stop the thread
-                                    updateStateTo(SyncState.KILLING)
-                                }
-
-                                latch.countDown()
+                            if (failure !is Failure.NetworkConnection
+                                    || failure.cause is JsonEncodingException) {
+                                // Wait 10s before retrying
+                                sleep(RETRY_WAIT_TIME_MS)
                             }
 
-                        })
+                            if (failure is Failure.ServerError
+                                    && (failure.error.code == MatrixError.UNKNOWN_TOKEN || failure.error.code == MatrixError.MISSING_TOKEN)) {
+                                // No token or invalid token, stop the thread
+                                updateStateTo(SyncState.KILLING)
+                            }
+                            latch.countDown()
+                        }
+                    }
+                }
                         .executeBy(taskExecutor)
 
                 latch.await()

@@ -18,6 +18,7 @@ package im.vector.riotx.core.extensions
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import im.vector.riotx.core.utils.FirstThrottler
 import im.vector.riotx.core.utils.EventObserver
@@ -43,4 +44,8 @@ inline fun <T> LiveData<LiveEvent<T>>.observeEventFirstThrottle(owner: Lifecycle
             it.run(observer)
         }
     })
+}
+
+fun <T> MutableLiveData<LiveEvent<T>>.postLiveEvent(content: T) {
+    this.postValue(LiveEvent(content))
 }

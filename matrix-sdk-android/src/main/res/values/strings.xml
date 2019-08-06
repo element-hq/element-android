@@ -31,6 +31,7 @@
     <string name="notice_room_visibility_world_readable">anyone.</string>
     <string name="notice_room_visibility_unknown">unknown (%s).</string>
     <string name="notice_end_to_end">%1$s turned on end-to-end encryption (%2$s)</string>
+    <string name="notice_room_update">%s upgraded this room.</string>
 
     <string name="notice_requested_voip_conference">%1$s requested a VoIP conference</string>
     <string name="notice_voip_started">VoIP conference started</string>

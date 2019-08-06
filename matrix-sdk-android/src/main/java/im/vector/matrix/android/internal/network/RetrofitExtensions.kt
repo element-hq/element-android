@@ -19,7 +19,9 @@
 package im.vector.matrix.android.internal.network
 
 import kotlinx.coroutines.suspendCancellableCoroutine
-import retrofit2.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 

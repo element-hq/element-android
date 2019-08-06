@@ -28,7 +28,7 @@ object MatrixPatterns {
     // regex pattern to find matrix user ids in a string.
     // See https://matrix.org/speculator/spec/HEAD/appendices.html#historical-user-ids
     private const val MATRIX_USER_IDENTIFIER_REGEX = "@[A-Z0-9\\x21-\\x39\\x3B-\\x7F]+$DOMAIN_REGEX"
-    private val PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER = MATRIX_USER_IDENTIFIER_REGEX.toRegex(RegexOption.IGNORE_CASE)
+    val PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER = MATRIX_USER_IDENTIFIER_REGEX.toRegex(RegexOption.IGNORE_CASE)
 
     // regex pattern to find room ids in a string.
     private const val MATRIX_ROOM_IDENTIFIER_REGEX = "![A-Z0-9]+$DOMAIN_REGEX"
@@ -123,9 +123,9 @@ object MatrixPatterns {
      */
     fun isEventId(str: String?): Boolean {
         return str != null
-                && (str matches PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER
-                || str matches PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER_V3
-                || str matches PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER_V4)
+               && (str matches PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER
+                   || str matches PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER_V3
+                   || str matches PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER_V4)
     }
 
     /**
@@ -136,5 +136,24 @@ object MatrixPatterns {
      */
     fun isGroupId(str: String?): Boolean {
         return str != null && str matches PATTERN_CONTAIN_MATRIX_GROUP_IDENTIFIER
+    }
+
+    /**
+     * Extract server name from a matrix id
+     *
+     * @param matrixId
+     * @return null if not found or if matrixId is null
+     */
+    fun extractServerNameFromId(matrixId: String?): String? {
+        if (matrixId == null) {
+            return null
+        }
+
+        val index = matrixId.indexOf(":")
+
+        return if (index == -1) {
+            null
+        } else matrixId.substring(index + 1)
+
     }
 }

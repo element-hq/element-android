@@ -36,6 +36,9 @@ import im.vector.riotx.features.home.HomeActivity
 import im.vector.riotx.features.home.HomeDetailFragment
 import im.vector.riotx.features.home.HomeDrawerFragment
 import im.vector.riotx.features.home.HomeModule
+import im.vector.riotx.features.home.createdirect.CreateDirectRoomActivity
+import im.vector.riotx.features.home.createdirect.CreateDirectRoomDirectoryUsersFragment
+import im.vector.riotx.features.home.createdirect.CreateDirectRoomKnownUsersFragment
 import im.vector.riotx.features.home.group.GroupListFragment
 import im.vector.riotx.features.home.room.detail.RoomDetailFragment
 import im.vector.riotx.features.home.room.detail.timeline.action.*
@@ -45,6 +48,7 @@ import im.vector.riotx.features.invite.VectorInviteView
 import im.vector.riotx.features.login.LoginActivity
 import im.vector.riotx.features.media.ImageMediaViewerActivity
 import im.vector.riotx.features.media.VideoMediaViewerActivity
+import im.vector.riotx.features.navigation.Navigator
 import im.vector.riotx.features.rageshake.BugReportActivity
 import im.vector.riotx.features.rageshake.BugReporter
 import im.vector.riotx.features.rageshake.RageShake
@@ -72,6 +76,8 @@ interface ScreenComponent {
     fun bugReporter(): BugReporter
 
     fun rageShake(): RageShake
+
+    fun navigator(): Navigator
 
     fun inject(activity: HomeActivity)
 
@@ -152,6 +158,12 @@ interface ScreenComponent {
     fun inject(vectorSettingsNotificationsTroubleshootFragment: VectorSettingsNotificationsTroubleshootFragment)
 
     fun inject(pushGatewaysFragment: PushGatewaysFragment)
+
+    fun inject(createDirectRoomKnownUsersFragment: CreateDirectRoomKnownUsersFragment)
+
+    fun inject(createDirectRoomDirectoryUsersFragment: CreateDirectRoomDirectoryUsersFragment)
+
+    fun inject(createDirectRoomActivity: CreateDirectRoomActivity)
 
     @Component.Factory
     interface Factory {

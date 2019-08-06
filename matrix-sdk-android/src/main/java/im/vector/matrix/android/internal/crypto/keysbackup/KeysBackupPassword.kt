@@ -142,12 +142,11 @@ private fun deriveKey(password: String,
  * Generate a 32 chars salt
  */
 private fun generateSalt(): String {
-    var salt = ""
-
-    do {
-        salt += UUID.randomUUID().toString()
-    } while (salt.length < SALT_LENGTH)
-
+    val salt = buildString {
+        do {
+            append(UUID.randomUUID().toString())
+        } while (length < SALT_LENGTH)
+    }
 
     return salt.substring(0, SALT_LENGTH)
 }

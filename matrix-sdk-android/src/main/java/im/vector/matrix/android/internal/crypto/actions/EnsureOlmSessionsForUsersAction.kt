@@ -17,14 +17,11 @@
 package im.vector.matrix.android.internal.crypto.actions
 
 import android.text.TextUtils
-import arrow.core.Try
-import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.internal.crypto.MXOlmDevice
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXOlmSessionResult
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
-import im.vector.matrix.android.internal.session.SessionScope
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
@@ -37,7 +34,7 @@ internal class EnsureOlmSessionsForUsersAction @Inject constructor(private val o
      * Try to make sure we have established olm sessions for the given users.
      * @param users    a list of user ids.
      */
-    suspend fun handle(users: List<String>) : Try<MXUsersDevicesMap<MXOlmSessionResult>> {
+    suspend fun handle(users: List<String>) : MXUsersDevicesMap<MXOlmSessionResult> {
         Timber.v("## ensureOlmSessionsForUsers() : ensureOlmSessionsForUsers $users")
         val devicesByUser = HashMap<String /* userId */, MutableList<MXDeviceInfo>>()
 

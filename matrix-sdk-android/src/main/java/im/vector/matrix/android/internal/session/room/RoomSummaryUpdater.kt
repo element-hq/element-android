@@ -85,7 +85,7 @@ internal class RoomSummaryUpdater @Inject constructor(private val credentials: C
             roomSummaryEntity.membership = membership
         }
 
-        val latestEvent = TimelineEventEntity.latestEvent(realm, roomId, includedTypes = PREVIEWABLE_TYPES)
+        val latestEvent = TimelineEventEntity.latestEvent(realm, roomId, includesSending = true, includedTypes = PREVIEWABLE_TYPES)
         val lastTopicEvent = EventEntity.where(realm, roomId, EventType.STATE_ROOM_TOPIC).prev()?.asDomain()
 
         val otherRoomMembers = RoomMembers(realm, roomId)

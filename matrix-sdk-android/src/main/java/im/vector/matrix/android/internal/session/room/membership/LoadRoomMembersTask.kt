@@ -16,8 +16,6 @@
 
 package im.vector.matrix.android.internal.session.room.membership
 
-import arrow.core.Try
-import com.squareup.moshi.JsonReader
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.internal.database.helper.addStateEvent
@@ -30,14 +28,12 @@ import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
 import im.vector.matrix.android.internal.session.sync.SyncTokenStore
 import im.vector.matrix.android.internal.session.user.UserEntityFactory
 import im.vector.matrix.android.internal.task.Task
-import im.vector.matrix.android.internal.util.tryTransactionSync
+import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.Realm
 import io.realm.kotlin.createObject
-import okhttp3.ResponseBody
-import okio.Okio
 import javax.inject.Inject
 
-internal interface LoadRoomMembersTask : Task<LoadRoomMembersTask.Params, Boolean> {
+internal interface LoadRoomMembersTask : Task<LoadRoomMembersTask.Params, Unit> {
 
     data class Params(
             val roomId: String,
@@ -51,39 +47,36 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(private val roomAP
                                                               private val roomSummaryUpdater: RoomSummaryUpdater
 ) : LoadRoomMembersTask {
 
-    override suspend fun execute(params: LoadRoomMembersTask.Params): Try<Boolean> {
-        return if (areAllMembersAlreadyLoaded(params.roomId)) {
-            Try.just(true)
-        } else {
-            val lastToken = syncTokenStore.getLastToken()
-            executeRequest<RoomMembersResponse> {
-                apiCall = roomAPI.getMembers(params.roomId, lastToken, null, params.excludeMembership?.value)
-            }.flatMap { response ->
-                insertInDb(response, params.roomId)
-            }.map { true }
+    override suspend fun execute(params: LoadRoomMembersTask.Params) {
+        if (areAllMembersAlreadyLoaded(params.roomId)) {
+            return
         }
+        val lastToken = syncTokenStore.getLastToken()
+        val response = executeRequest<RoomMembersResponse> {
+            apiCall = roomAPI.getMembers(params.roomId, lastToken, null, params.excludeMembership?.value)
+        }
+        insertInDb(response, params.roomId)
     }
 
-    private fun insertInDb(response: RoomMembersResponse, roomId: String): Try<Unit> {
-        return monarchy
-                .tryTransactionSync { realm ->
-                    // We ignore all the already known members
-                    val roomEntity = RoomEntity.where(realm, roomId).findFirst()
-                            ?: realm.createObject(roomId)
+    private suspend fun insertInDb(response: RoomMembersResponse, roomId: String) {
+        monarchy.awaitTransaction { realm ->
+            // We ignore all the already known members
+            val roomEntity = RoomEntity.where(realm, roomId).findFirst()
+                    ?: realm.createObject(roomId)
 
 
-                    for (roomMemberEvent in response.roomMemberEvents) {
-                        roomEntity.addStateEvent(roomMemberEvent)
-                        UserEntityFactory.createOrNull(roomMemberEvent)?.also {
-                            realm.insertOrUpdate(it)
-                        }
-                    }
-                    roomEntity.chunks.flatMap { it.timelineEvents }.forEach {
-                        it.updateSenderData()
-                    }
-                    roomEntity.areAllMembersLoaded = true
-                    roomSummaryUpdater.update(realm, roomId)
+            for (roomMemberEvent in response.roomMemberEvents) {
+                roomEntity.addStateEvent(roomMemberEvent)
+                UserEntityFactory.createOrNull(roomMemberEvent)?.also {
+                    realm.insertOrUpdate(it)
                 }
+            }
+            roomEntity.chunks.flatMap { it.timelineEvents }.forEach {
+                it.updateSenderData()
+            }
+            roomEntity.areAllMembersLoaded = true
+            roomSummaryUpdater.update(realm, roomId)
+        }
     }
 
     private fun areAllMembersAlreadyLoaded(roomId: String): Boolean {

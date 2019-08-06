@@ -43,6 +43,7 @@ class KeysBackupManageActivity : SimpleFragmentActivity() {
     @Inject lateinit var keysBackupSettingsViewModelFactory: KeysBackupSettingsViewModel.Factory
 
     override fun injectWith(injector: ScreenComponent) {
+        super.injectWith(injector)
         injector.inject(this)
     }
 

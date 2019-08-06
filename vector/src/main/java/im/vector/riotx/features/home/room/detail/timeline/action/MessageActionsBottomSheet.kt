@@ -89,7 +89,7 @@ class MessageActionsBottomSheet : VectorBaseBottomSheetDialogFragment() {
         }
         menuActionFragment.interactionListener = object : MessageMenuFragment.InteractionListener {
             override fun didSelectMenuAction(simpleAction: SimpleAction) {
-                actionHandlerModel.fireAction(simpleAction.uid, simpleAction.data)
+                actionHandlerModel.fireAction(simpleAction)
                 dismiss()
             }
         }
@@ -105,7 +105,7 @@ class MessageActionsBottomSheet : VectorBaseBottomSheetDialogFragment() {
         quickReactionFragment.interactionListener = object : QuickReactionFragment.InteractionListener {
 
             override fun didQuickReactWith(clickedOn: String, add: Boolean, eventId: String) {
-                actionHandlerModel.fireAction(MessageMenuViewModel.ACTION_QUICK_REACT, Triple(eventId, clickedOn, add))
+                actionHandlerModel.fireAction(SimpleAction.QuickReact(eventId, clickedOn, add))
                 dismiss()
             }
         }
@@ -138,6 +138,19 @@ class MessageActionsBottomSheet : VectorBaseBottomSheetDialogFragment() {
         }
         quickReactBottomDivider.isVisible = it.canReact()
         bottom_sheet_quick_reaction_container.isVisible = it.canReact()
+        if (it.informationData.sendState.isSending()) {
+            messageStatusInfo.isVisible = true
+            messageStatusProgress.isVisible = true
+            messageStatusText.text = getString(R.string.event_status_sending_message)
+            messageStatusText.setCompoundDrawables(null, null, null, null)
+        } else if (it.informationData.sendState.hasFailed()) {
+            messageStatusInfo.isVisible = true
+            messageStatusProgress.isVisible = false
+            messageStatusText.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_warning_small, 0, 0, 0)
+            messageStatusText.text = getString(R.string.unable_to_send_message)
+        } else {
+            messageStatusInfo.isVisible = false
+        }
         return@withState
     }
 

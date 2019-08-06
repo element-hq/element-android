@@ -17,7 +17,6 @@
 
 package im.vector.matrix.android.internal.crypto.algorithms
 
-import arrow.core.Try
 import im.vector.matrix.android.api.session.events.model.Content
 
 /**
@@ -31,7 +30,7 @@ internal interface IMXEncrypting {
      * @param eventContent the content of the event.
      * @param eventType    the type of the event.
      * @param userIds      the room members the event will be sent to.
-     * @return the encrypted content wrapped by [Try]
+     * @return the encrypted content
      */
-    suspend fun encryptEventContent(eventContent: Content, eventType: String, userIds: List<String>): Try<Content>
+    suspend fun encryptEventContent(eventContent: Content, eventType: String, userIds: List<String>): Content
 }

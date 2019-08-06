@@ -18,6 +18,7 @@ package im.vector.matrix.android.api.pushrules
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.pushrules.rest.PushRule
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.util.Cancelable
 
 interface PushRuleService {
 
@@ -31,7 +32,7 @@ interface PushRuleService {
 
     //TODO update rule
 
-    fun updatePushRuleEnableStatus(kind: String, pushRule: PushRule, enabled: Boolean, callback: MatrixCallback<Unit>)
+    fun updatePushRuleEnableStatus(kind: String, pushRule: PushRule, enabled: Boolean, callback: MatrixCallback<Unit>): Cancelable
 
     fun addPushRuleListener(listener: PushRuleListener)
 

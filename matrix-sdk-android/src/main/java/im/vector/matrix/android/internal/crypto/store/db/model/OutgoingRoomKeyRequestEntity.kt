@@ -17,9 +17,9 @@
 package im.vector.matrix.android.internal.crypto.store.db.model
 
 import im.vector.matrix.android.internal.crypto.OutgoingRoomKeyRequest
+import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
 import im.vector.matrix.android.internal.crypto.store.db.deserializeFromRealm
 import im.vector.matrix.android.internal.crypto.store.db.serializeForRealm
-import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 
