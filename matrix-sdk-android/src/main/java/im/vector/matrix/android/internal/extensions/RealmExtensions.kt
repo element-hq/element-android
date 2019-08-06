@@ -16,10 +16,42 @@
 
 package im.vector.matrix.android.internal.extensions
 
-import io.realm.RealmObject
+import io.realm.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.ReceiveChannel
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 internal fun RealmObject.assertIsManaged() {
     if (!isManaged) {
         throw IllegalStateException("${javaClass.simpleName} entity should be managed to use this function")
+    }
+}
+
+internal suspend fun <T> awaitQuery(config: RealmConfiguration, builder: (Realm) -> RealmQuery<T>) {
+    // Confine Realm interaction to a single thread with Looper.
+    withContext(Dispatchers.Main) {
+        val latch = CompletableDeferred<Unit>()
+
+        Realm.getInstance(config).use { realm ->
+            val result = builder(realm).findAllAsync()
+
+            val listener = object : RealmChangeListener<RealmResults<T>> {
+                override fun onChange(it: RealmResults<T>) {
+                    if (it.isNotEmpty()) {
+                        result.removeChangeListener(this)
+                        latch.complete(Unit)
+                    }
+                }
+            }
+
+            result.addChangeListener(listener)
+            try {
+                latch.await()
+            } catch (e: CancellationException) {
+                result.removeChangeListener(listener)
+                throw e
+            }
+        }
     }
 }

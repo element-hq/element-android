@@ -20,12 +20,12 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.room.failure.CreateRoomFailure
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomResponse
-import im.vector.matrix.android.internal.database.RealmQueryLatch
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomEntityFields
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.SessionDatabase
+import im.vector.matrix.android.internal.extensions.awaitQuery
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.session.room.read.SetReadMarkersTask
@@ -34,6 +34,8 @@ import im.vector.matrix.android.internal.session.user.accountdata.UpdateUserAcco
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.RealmConfiguration
+import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.withTimeout
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -54,13 +56,14 @@ internal class DefaultCreateRoomTask @Inject constructor(private val roomAPI: Ro
         }
         val roomId = createRoomResponse.roomId!!
         // Wait for room to come back from the sync (but it can maybe be in the DB is the sync response is received before)
-        val rql = RealmQueryLatch<RoomEntity>(realmConfiguration) { realm ->
-            realm.where(RoomEntity::class.java)
-                    .equalTo(RoomEntityFields.ROOM_ID, roomId)
-        }
         try {
-            rql.await(timeout = 1L, timeUnit = TimeUnit.MINUTES)
-        } catch (exception: Exception) {
+            withTimeout(TimeUnit.MINUTES.toMillis(1L)) {
+                awaitQuery(realmConfiguration) { realm ->
+                    realm.where(RoomEntity::class.java)
+                            .equalTo(RoomEntityFields.ROOM_ID, roomId)
+                }
+            }
+        } catch (exception: TimeoutCancellationException) {
             throw CreateRoomFailure.CreatedWithTimeout
         }
         if (params.isDirect()) {
