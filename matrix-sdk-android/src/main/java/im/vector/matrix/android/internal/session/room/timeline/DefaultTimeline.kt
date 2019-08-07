@@ -19,16 +19,14 @@ package im.vector.matrix.android.internal.session.room.timeline
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.util.CancelableBag
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.*
 import im.vector.matrix.android.internal.database.model.EventEntity
-import im.vector.matrix.android.internal.database.query.findIncludingEvent
-import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
-import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.database.query.whereInRoom
+import im.vector.matrix.android.internal.database.query.*
 import im.vector.matrix.android.internal.task.TaskConstraints
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
@@ -208,21 +206,15 @@ internal class DefaultTimeline(
     }
 
     override fun pendingEventCount(): Int {
-        var count = 0
-        Realm.getInstance(realmConfiguration).use {
-            count = RoomEntity.where(it, roomId).findFirst()?.sendingTimelineEvents?.count() ?: 0
+        return Realm.getInstance(realmConfiguration).use {
+            RoomEntity.where(it, roomId).findFirst()?.sendingTimelineEvents?.count() ?: 0
         }
-        return count
     }
 
     override fun failedToDeliverEventCount(): Int {
-        var count = 0
-        Realm.getInstance(realmConfiguration).use {
-            count = RoomEntity.where(it, roomId).findFirst()?.sendingTimelineEvents?.filter {
-                it.root?.sendState?.hasFailed() ?: false
-            }?.count() ?: 0
+        return Realm.getInstance(realmConfiguration).use {
+            TimelineEventEntity.findAllInRoomWithSendStates(it, roomId, SendState.HAS_FAILED_STATES).count()
         }
-        return count
     }
 
     override fun start() {

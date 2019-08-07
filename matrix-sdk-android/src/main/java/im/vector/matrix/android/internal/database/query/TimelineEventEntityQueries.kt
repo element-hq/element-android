@@ -16,12 +16,10 @@
 
 package im.vector.matrix.android.internal.database.query
 
+import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.database.model.*
 import im.vector.matrix.android.internal.database.model.EventEntity.LinkFilterMode.*
-import io.realm.Realm
-import io.realm.RealmList
-import io.realm.RealmQuery
-import io.realm.Sort
+import io.realm.*
 import io.realm.kotlin.where
 
 internal fun TimelineEventEntity.Companion.where(realm: Realm, eventId: String): RealmQuery<TimelineEventEntity> {
@@ -113,4 +111,16 @@ internal fun RealmList<TimelineEventEntity>.find(eventId: String): TimelineEvent
     return this.where()
             .equalTo(TimelineEventEntityFields.ROOT.EVENT_ID, eventId)
             .findFirst()
+}
+
+internal fun TimelineEventEntity.Companion.findAllInRoomWithSendStates(realm: Realm,
+                                                                       roomId: String,
+                                                                       sendStates: List<SendState>)
+        : RealmResults<TimelineEventEntity> {
+
+    val sendStatesStr = sendStates.map { it.name }.toTypedArray()
+    return realm.where<TimelineEventEntity>()
+            .equalTo(TimelineEventEntityFields.ROOM_ID, roomId)
+            .`in`(TimelineEventEntityFields.ROOT.SEND_STATE_STR,sendStatesStr)
+            .findAll()
 }
