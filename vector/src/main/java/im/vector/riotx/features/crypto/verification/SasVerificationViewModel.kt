@@ -29,7 +29,7 @@ import javax.inject.Inject
 
 
 class SasVerificationViewModel @Inject constructor() : ViewModel(),
-                                                       SasVerificationService.SasVerificationListener {
+        SasVerificationService.SasVerificationListener {
 
 
     companion object {
@@ -40,7 +40,7 @@ class SasVerificationViewModel @Inject constructor() : ViewModel(),
         const val NAVIGATE_CANCELLED = "NAVIGATE_CANCELLED"
     }
 
-    lateinit var sasVerificationService: SasVerificationService
+    private lateinit var sasVerificationService: SasVerificationService
 
     var otherUserId: String? = null
     var otherDeviceId: String? = null
@@ -154,8 +154,8 @@ class SasVerificationViewModel @Inject constructor() : ViewModel(),
 
     override fun onCleared() {
         super.onCleared()
-        sasVerificationService.removeListener(this)
+        if (::sasVerificationService.isInitialized) {
+            sasVerificationService.removeListener(this)
+        }
     }
-
-
 }
