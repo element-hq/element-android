@@ -19,7 +19,10 @@ package im.vector.riotx.features.media
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
+import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.platform.VectorBaseActivity
 import kotlinx.android.synthetic.main.activity_video_media_viewer.*
@@ -30,6 +33,10 @@ class VideoMediaViewerActivity : VectorBaseActivity() {
 
     @Inject lateinit var imageContentRenderer: ImageContentRenderer
     @Inject lateinit var videoContentRenderer: VideoContentRenderer
+    @Inject lateinit var mediaDownloadHelper: MediaDownloadHelper
+    lateinit var mediaData: VideoContentRenderer.Data
+
+    override fun getMenuRes() = R.menu.video_media_viewer
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
@@ -37,9 +44,12 @@ class VideoMediaViewerActivity : VectorBaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(im.vector.riotx.R.layout.activity_video_media_viewer)
-        val mediaData = intent.getParcelableExtra<VideoContentRenderer.Data>(EXTRA_MEDIA_DATA)
-
+        setContentView(R.layout.activity_video_media_viewer)
+        mediaData = intent.getParcelableExtra(EXTRA_MEDIA_DATA)
+        if (mediaData.url.isNullOrEmpty()) {
+            finish()
+            return
+        }
         configureToolbar(videoMediaViewerToolbar, mediaData)
         imageContentRenderer.render(mediaData.thumbnailMediaData, ImageContentRenderer.Mode.FULL_SIZE, videoMediaViewerThumbnailView)
         videoContentRenderer.render(mediaData, videoMediaViewerThumbnailView, videoMediaViewerLoading, videoMediaViewerVideoView, videoMediaViewerErrorView)
@@ -52,6 +62,28 @@ class VideoMediaViewerActivity : VectorBaseActivity() {
             setHomeButtonEnabled(true)
             setDisplayHomeAsUpEnabled(true)
         }
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        val downloadItem = menu.findItem(R.id.download_video)
+        downloadItem.isVisible = !mediaData.isLocalFile()
+        return super.onPrepareOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.download_video -> mediaDownloadHelper.checkPermissionAndDownload(
+                    mediaData.eventId,
+                    mediaData.filename,
+                    mediaData.url,
+                    mediaData.elementToDecrypt
+            )
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        mediaDownloadHelper.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
     companion object {

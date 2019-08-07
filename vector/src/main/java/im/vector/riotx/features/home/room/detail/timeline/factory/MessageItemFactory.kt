@@ -208,6 +208,7 @@ class MessageItemFactory @Inject constructor(
 
         val (maxWidth, maxHeight) = timelineMediaSizeProvider.getMaxSize()
         val data = ImageContentRenderer.Data(
+                eventId = informationData.eventId,
                 filename = messageContent.body,
                 url = messageContent.getFileUrl(),
                 elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt(),
@@ -251,6 +252,7 @@ class MessageItemFactory @Inject constructor(
 
         val (maxWidth, maxHeight) = timelineMediaSizeProvider.getMaxSize()
         val thumbnailData = ImageContentRenderer.Data(
+                eventId = informationData.eventId,
                 filename = messageContent.body,
                 url = messageContent.videoInfo?.thumbnailFile?.url
                         ?: messageContent.videoInfo?.thumbnailUrl,

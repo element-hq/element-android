@@ -43,7 +43,13 @@ class VideoContentRenderer @Inject constructor(private val activeSessionHolder: 
             val url: String?,
             val elementToDecrypt: ElementToDecrypt?,
             val thumbnailMediaData: ImageContentRenderer.Data
-    ) : Parcelable
+    ) : Parcelable {
+
+        fun isLocalFile(): Boolean {
+            return url != null && File(url).exists()
+        }
+
+    }
 
     fun render(data: Data,
                thumbnailView: ImageView,

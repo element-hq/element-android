@@ -21,6 +21,8 @@ import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewTreeObserver
 import androidx.annotation.RequiresApi
@@ -36,6 +38,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.github.piasy.biv.indicator.progresspie.ProgressPieIndicator
 import com.github.piasy.biv.view.GlideImageViewFactory
+import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.glide.GlideApp
 import im.vector.riotx.core.platform.VectorBaseActivity
@@ -47,8 +50,11 @@ import javax.inject.Inject
 class ImageMediaViewerActivity : VectorBaseActivity() {
 
     @Inject lateinit var imageContentRenderer: ImageContentRenderer
+    @Inject lateinit var mediaDownloadHelper: MediaDownloadHelper
 
     lateinit var mediaData: ImageContentRenderer.Data
+
+    override fun getMenuRes() = R.menu.image_media_viewer
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
@@ -56,8 +62,8 @@ class ImageMediaViewerActivity : VectorBaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(im.vector.riotx.R.layout.activity_image_media_viewer)
-        mediaData = intent.getParcelableExtra<ImageContentRenderer.Data>(EXTRA_MEDIA_DATA)
+        setContentView(R.layout.activity_image_media_viewer)
+        mediaData = intent.getParcelableExtra(EXTRA_MEDIA_DATA)
         intent.extras.getString(EXTRA_SHARED_TRANSITION_NAME)?.let {
             ViewCompat.setTransitionName(imageTransitionView, it)
         }
@@ -104,6 +110,29 @@ class ImageMediaViewerActivity : VectorBaseActivity() {
             }
         }
     }
+
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        val downloadItem = menu.findItem(R.id.download_image)
+        downloadItem.isVisible = !mediaData.isLocalFile()
+        return super.onPrepareOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.download_image -> mediaDownloadHelper.checkPermissionAndDownload(
+                    mediaData.eventId,
+                    mediaData.filename,
+                    mediaData.url,
+                    mediaData.elementToDecrypt
+            )
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        mediaDownloadHelper.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
 
     private fun configureToolbar(toolbar: Toolbar, mediaData: ImageContentRenderer.Data) {
         setSupportActionBar(toolbar)

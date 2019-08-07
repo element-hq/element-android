@@ -42,6 +42,7 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
 
     @Parcelize
     data class Data(
+            val eventId: String,
             val filename: String,
             val url: String?,
             val elementToDecrypt: ElementToDecrypt?,
