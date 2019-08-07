@@ -79,8 +79,7 @@ internal class MXOlmDevice @Inject constructor(
     //
     // The first level keys are timeline ids.
     // The second level keys are strings of form "<senderKey>|<session_id>|<message_index>"
-    // Values are true.
-    private val inboundGroupSessionMessageIndexes: MutableMap<String, MutableMap<String, Boolean>> = HashMap()
+    private val inboundGroupSessionMessageIndexes: MutableMap<String, MutableSet<String>> = HashMap()
 
     init {
         // Retrieve the account from the store
@@ -662,19 +661,17 @@ internal class MXOlmDevice @Inject constructor(
             }
 
             if (null != timeline) {
-                if (!inboundGroupSessionMessageIndexes.containsKey(timeline)) {
-                    inboundGroupSessionMessageIndexes[timeline] = HashMap()
-                }
+                val timelineSet = inboundGroupSessionMessageIndexes.getOrPut(timeline) { mutableSetOf() }
 
                 val messageIndexKey = senderKey + "|" + sessionId + "|" + decryptResult.mIndex
 
-                if (inboundGroupSessionMessageIndexes[timeline]?.get(messageIndexKey) != null) {
+                if (timelineSet.contains(messageIndexKey)) {
                     val reason = String.format(MXCryptoError.DUPLICATE_MESSAGE_INDEX_REASON, decryptResult.mIndex)
                     Timber.e("## decryptGroupMessage() : $reason")
                     throw MXCryptoError.Base(MXCryptoError.ErrorType.DUPLICATED_MESSAGE_INDEX, reason)
                 }
 
-                inboundGroupSessionMessageIndexes[timeline]!!.put(messageIndexKey, true)
+                timelineSet.add(messageIndexKey)
             }
 
             store.storeInboundGroupSessions(listOf(session))
