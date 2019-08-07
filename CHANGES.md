@@ -25,7 +25,7 @@ Translations:
  -
 
 Build:
- -
+ - Split APK: generate one APK per arch, to reduce APK size of about 30%
 
 
 Changes in RiotX 0.2.0 (2019-07-18)

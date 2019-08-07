@@ -19,7 +19,7 @@ package im.vector.riotx.features.version
 import im.vector.riotx.BuildConfig
 
 fun getVersion(longFormat: Boolean, useBuildNumber: Boolean): String {
-    var result = BuildConfig.VERSION_NAME
+    var result = "${BuildConfig.VERSION_NAME} [${BuildConfig.VERSION_CODE}]"
 
     var flavor = BuildConfig.SHORT_FLAVOR_DESCRIPTION
 

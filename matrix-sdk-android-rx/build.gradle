@@ -33,7 +33,6 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(":matrix-sdk-android")
     implementation 'androidx.appcompat:appcompat:1.1.0-beta01'
     implementation 'io.reactivex.rxjava2:rxkotlin:2.3.0'

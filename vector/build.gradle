@@ -1,3 +1,5 @@
+import com.android.build.OutputFile
+
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 apply plugin: 'kotlin-android'
@@ -52,6 +54,11 @@ project.android.buildTypes.all { buildType ->
             ]
 }
 
+// map for the version codes
+// x86 must have greater values than arm, see https://software.intel.com/en-us/android/articles/google-play-supports-cpu-architecture-filtering-for-multiple-apk
+// 64 bits have greater value than 32 bits
+ext.abiVersionCodes = ["armeabi-v7a": 1, "arm64-v8a": 2, "x86": 3, "x86_64": 4].withDefault { 0 }
+
 def buildNumber = System.getenv("BUILDKITE_BUILD_NUMBER") as Integer ?: 0
 
 android {
@@ -83,6 +90,39 @@ android {
         resValue "string", "build_number", "\"${buildNumber}\""
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        // Keep abiFilter for the universalApk
+        ndk {
+            abiFilters "armeabi-v7a", "x86", 'arm64-v8a', 'x86_64'
+        }
+
+        // Ref: https://developer.android.com/studio/build/configure-apk-splits.html
+        splits {
+            // Configures multiple APKs based on ABI.
+            abi {
+                // Enables building multiple APKs per ABI.
+                enable true
+
+                // By default all ABIs are included, so use reset() and include to specify that we only
+                // want APKs for armeabi-v7a, x86, arm64-v8a and x86_64.
+
+                // Resets the list of ABIs that Gradle should create APKs for to none.
+                reset()
+
+                // Specifies a list of ABIs that Gradle should create APKs for.
+                include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
+
+                // Generate a universal APK that includes all ABIs, so user who install from CI tool can use this one by default.
+                universalApk true
+            }
+        }
+
+        android.applicationVariants.all { variant ->
+            variant.outputs.each { output ->
+                def baseAbiVersionCode = project.ext.abiVersionCodes.get(output.getFilter(OutputFile.ABI))
+                output.versionCodeOverride = baseAbiVersionCode * 10_000_000 + variant.versionCode
+            }
+        }
     }
 
     signingConfigs {
