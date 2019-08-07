@@ -278,30 +278,32 @@ internal class DefaultTimeline(
 // Private methods *****************************************************************************
 
     private fun hasMoreInCache(direction: Timeline.Direction): Boolean {
-        val localRealm = Realm.getInstance(realmConfiguration)
-        val timelineEventEntity = buildEventQuery(localRealm).findFirst(direction) ?: return false
-        val hasMoreInCache = if (direction == Timeline.Direction.FORWARDS) {
-            val firstEvent = builtEvents.firstOrNull() ?: return true
-            firstEvent.displayIndex < timelineEventEntity.root!!.displayIndex
-        } else {
-            val lastEvent = builtEvents.lastOrNull() ?: return true
-            lastEvent.displayIndex > timelineEventEntity.root!!.displayIndex
+        return Realm.getInstance(realmConfiguration).use { localRealm ->
+            val timelineEventEntity = buildEventQuery(localRealm).findFirst(direction)
+                    ?: return false
+            if (direction == Timeline.Direction.FORWARDS) {
+                if (findCurrentChunk(localRealm)?.isLastForward == true) {
+                    return false
+                }
+                val firstEvent = builtEvents.firstOrNull() ?: return true
+                firstEvent.displayIndex < timelineEventEntity.root!!.displayIndex
+            } else {
+                val lastEvent = builtEvents.lastOrNull() ?: return true
+                lastEvent.displayIndex > timelineEventEntity.root!!.displayIndex
+            }
         }
-        localRealm.close()
-        return hasMoreInCache
     }
 
     private fun hasReachedEnd(direction: Timeline.Direction): Boolean {
-        val localRealm = Realm.getInstance(realmConfiguration)
-        val currentChunk = findCurrentChunk(localRealm) ?: return false
-        val hasReachedEnd = if (direction == Timeline.Direction.FORWARDS) {
-            currentChunk.isLastForward
-        } else {
-            val eventEntity = buildEventQuery(localRealm).findFirst(direction)
-            currentChunk.isLastBackward || eventEntity?.root?.type == EventType.STATE_ROOM_CREATE
+        return Realm.getInstance(realmConfiguration).use { localRealm ->
+            val currentChunk = findCurrentChunk(localRealm) ?: return false
+            if (direction == Timeline.Direction.FORWARDS) {
+                currentChunk.isLastForward
+            } else {
+                val eventEntity = buildEventQuery(localRealm).findFirst(direction)
+                currentChunk.isLastBackward || eventEntity?.root?.type == EventType.STATE_ROOM_CREATE
+            }
         }
-        localRealm.close()
-        return hasReachedEnd
     }
 
 
