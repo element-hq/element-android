@@ -1532,4 +1532,36 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 \n
 \n不是所有 Riot 的功能都已在 RiotX 中實作。主要缺少（會在稍後到來！）的功能：• 建立帳號 • 聊天室設定（列出聊天室成員等） • 直接聊天室建立 • 通話 • 小工具 • …</string>
 
+    <string name="bottom_action_people_x">直接訊息</string>
+
+    <string name="send_file_step_idle">正在等待……</string>
+    <string name="send_file_step_encrypting_thumbnail">正在加密縮圖……</string>
+    <string name="send_file_step_sending_thumbnail">正在傳送縮圖 (%1$s / %2$s)</string>
+    <string name="send_file_step_encrypting_file">正在加密檔案……</string>
+    <string name="send_file_step_sending_file">正在傳送檔案 (%1$s / %2$s)</string>
+
+    <string name="downloading_file">正在下載檔案 %1$s……</string>
+    <string name="downloaded_file">檔案 %1$s 已下載！</string>
+
+    <string name="edited_suffix">（已編輯）</string>
+
+    <string name="riotx_no_registration_notice">%1$s 以建立帳號。</string>
+    <string name="riotx_no_registration_notice_colored_part">使用舊的應用程式</string>
+
+
+    <string name="message_edits">訊息編輯</string>
+    <string name="no_message_edits_found">找不到編輯</string>
+
+    <string name="room_filtering_filter_hint">過濾對話……</string>
+    <string name="room_filtering_footer_title">找不到您要尋找的東西？</string>
+    <string name="room_filtering_footer_create_new_room">建立新聊天室</string>
+    <string name="room_filtering_footer_create_new_direct_message">傳送新直接訊息</string>
+    <string name="room_filtering_footer_open_room_directory">檢視聊天室目錄</string>
+
+    <string name="room_directory_search_hint">名稱或 ID (#example:matrix.org)</string>
+
+    <string name="labs_swipe_to_reply_in_timeline">啟用滑動以在時間軸上回覆</string>
+
+    <string name="link_copied_to_clipboard">連結已複製到剪貼簿</string>
+
 </resources>

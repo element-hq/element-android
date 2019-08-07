@@ -150,4 +150,21 @@
     <string name="verification_emoji_folder">Dossier</string>
     <string name="verification_emoji_pin">Épingle</string>
 
+    <string name="initial_sync_start_importing_account">Synchronisation initiale :
+\nImportation du compte…</string>
+    <string name="initial_sync_start_importing_account_crypto">Synchronisation initiale :
+\nImportation de la cryptographie</string>
+    <string name="initial_sync_start_importing_account_rooms">Synchronisation initiale :
+\nImportation des salons</string>
+    <string name="initial_sync_start_importing_account_joined_rooms">Synchronisation initiale :
+\nImportation des salons que vous avez rejoints</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">Synchronisation initiale :
+\nImportation des salons où vous avez été invités</string>
+    <string name="initial_sync_start_importing_account_left_rooms">Synchronisation initiale :
+\nImportation des salons que vous avez quittés</string>
+    <string name="initial_sync_start_importing_account_groups">Synchronisation initiale :
+\nImportation des communautés</string>
+    <string name="initial_sync_start_importing_account_data">Synchronisation initiale :
+\nImportation des données du compte</string>
+
 </resources>

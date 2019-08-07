@@ -665,7 +665,7 @@ Advertencia: este archivo puede ser eliminado si la aplicación se desinstala.</
 
     <string name="encryption_information_verify_device">Verificar dispositivo</string>
     <string name="encryption_information_verify_device_warning">Para verificar que este dispositivo es confiable, por favor contacta a su dueño por algún otro medio (ej. cara a cara o por teléfono) y pregúntale si la clave que ve en sus Ajustes de Usuario para este dispositivo coincide con la clave a continuación:</string>
-    <string name="encryption_information_verify_device_warning2">Si coincide, presione el botón de verificar a continuación. Si no coincide, entonces alguien más está interceptando este dispositivo y probablemente debería prohibirlo. En el futuro, este proceso de verificación será más sofisticado.</string>
+    <string name="encryption_information_verify_device_warning2">Si coincide, presione el botón de verificar a continuación. Si no coincide, entonces alguien está interceptando este dispositivo y probablemente debería prohibirlo. En el futuro, este proceso de verificación será más sofisticado.</string>
     <string name="encryption_information_verify_key_match">Verifico que las claves coinciden</string>
 
     <string name="e2e_enabling_on_app_update">Riot ahora admite cifrado de extremo a extremo pero debes volver a iniciar sesión para habilitarlo.
@@ -1568,4 +1568,12 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="keys_backup_unable_to_get_trust_info">Error obteniendo información de confiabilidad</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Error obteniendo claves para copias de respaldo</string>
 
+    <string name="room_list_catchup_empty_title">!Estás al día!</string>
+    <string name="alpha_disclaimer_content_line_1">Mientras RiotX esté en desarrollo, algunas características pueden faltar y existir fallas.</string>
+    <string name="settings_preferences">Preferencias</string>
+    <string name="settings_security_and_privacy">Seguridad &amp; Privacidad</string>
+    <string name="preference_voice_and_video">Voz &amp; Video</string>
+    <string name="send_suggestion">Haz una sugerencia</string>
+    <string name="send_suggestion_content">Por favor escriba su sugerencia a continuación.</string>
+    <string name="send_suggestion_report_placeholder">Describa su sugerencia aquí</string>
 </resources>

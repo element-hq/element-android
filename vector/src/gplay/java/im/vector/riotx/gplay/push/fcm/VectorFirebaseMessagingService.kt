@@ -153,7 +153,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
                 Timber.w("## Can't sync from push, no current session")
             } else {
                 if (isEventAlreadyKnown(eventId, roomId)) {
-                    Timber.i("Ignoring push, event already knwown")
+                    Timber.i("Ignoring push, event already known")
                 } else {
                     Timber.v("Requesting background sync")
                     session.requireBackgroundSync()

@@ -149,4 +149,21 @@
     <string name="verification_emoji_folder">Mappa</string>
     <string name="verification_emoji_pin">Tű</string>
 
+    <string name="initial_sync_start_importing_account">Induló szinkronizáció:
+\nFiók betöltése…</string>
+    <string name="initial_sync_start_importing_account_crypto">Induló szinkronizáció:
+\nTitkosítás betöltése</string>
+    <string name="initial_sync_start_importing_account_rooms">Induló szinkronizáció:
+\nSzobák betöltése</string>
+    <string name="initial_sync_start_importing_account_joined_rooms">Induló szinkronizáció:
+\nCsatlakozott szobák betöltése</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">Induló szinkronizáció:
+\nMeghívott szobák betöltése</string>
+    <string name="initial_sync_start_importing_account_left_rooms">Induló szinkronizáció:
+\nElhagyott szobák betöltése</string>
+    <string name="initial_sync_start_importing_account_groups">Induló szinkronizáció:
+\nKözösségek betöltése</string>
+    <string name="initial_sync_start_importing_account_data">Induló szinkronizáció:
+\nFiók adatok betöltése</string>
+
 </resources>

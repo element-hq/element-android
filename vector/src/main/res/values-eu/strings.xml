@@ -1575,4 +1575,36 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 \nEz dira oraindik Riot bezeroaren ezaugarri guztiak ezarri RiotX bezeroan. Falta diren (eta laster etorriko direnen) artean nabarmenak dira: • Kontua sortzea • Gelaren ezarpenak (gelako kideak zerrendatzea, eta abar.) • Txat zuzenerako gelak sortzea • Deiak • Trepetak • …</string>
 
     <string name="push_gateway_item_app_display_name">app_display_name:</string>
+    <string name="bottom_action_people_x">Mezu zuzenak</string>
+
+    <string name="send_file_step_idle">Itxaroten…</string>
+    <string name="send_file_step_encrypting_thumbnail">Iruditxoa zifratzen…</string>
+    <string name="send_file_step_sending_thumbnail">"Iruditxoa bidaltzen  (%1$s / %2$s)"</string>
+    <string name="send_file_step_encrypting_file">Fitxategia zifratzen…</string>
+    <string name="send_file_step_sending_file">"Fitxategia bidaltzen  (%1$s / %2$s)"</string>
+
+    <string name="downloading_file">%1$s fitxategia deskargatzen…</string>
+    <string name="downloaded_file">%1$s fitxategia deskargatu da!</string>
+
+    <string name="edited_suffix">(editatua)</string>
+
+    <string name="riotx_no_registration_notice">%1$s kontua sortzeko.</string>
+    <string name="riotx_no_registration_notice_colored_part">Erabili aplikazio zaharra</string>
+
+
+    <string name="message_edits">Mezuen edizioak</string>
+    <string name="no_message_edits_found">Ez da ediziorik aurkitu</string>
+
+    <string name="room_filtering_filter_hint">Iragazi elkarrizketak…</string>
+    <string name="room_filtering_footer_title">Ezin duzu bilatzen ari zarena aurkitu\?</string>
+    <string name="room_filtering_footer_create_new_room">Sortu gela berria</string>
+    <string name="room_filtering_footer_create_new_direct_message">Bidali mezu zuzen berri bat</string>
+    <string name="room_filtering_footer_open_room_directory">Ikusi gelen direktorioa</string>
+
+    <string name="room_directory_search_hint">Izena edo ID-a (#adibidea:matrix.org)</string>
+
+    <string name="labs_swipe_to_reply_in_timeline">Gaitu hatza pasatzea denbora-lerroan erantzuteko</string>
+
+    <string name="link_copied_to_clipboard">Esteka arbelera kopiatu da</string>
+
 </resources>

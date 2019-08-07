@@ -1580,4 +1580,36 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
 \n
 \nToutes les fonctionnalités de Riot ne sont pas encore implémentées dans RiotX. Principales fonctionnalités manquantes (et qui arrivent bientôt !) : • Création de compte • Réglages des salons (lister les membres du salon etc.) • Création de salons de discussion directe • Appels • Widgets • …</string>
 
+    <string name="bottom_action_people_x">Messages directs</string>
+
+    <string name="send_file_step_idle">Attente…</string>
+    <string name="send_file_step_encrypting_thumbnail">Chiffrement de la miniature…</string>
+    <string name="send_file_step_sending_thumbnail">Envoi de la miniature (%1$s / %2$s)</string>
+    <string name="send_file_step_encrypting_file">Chiffrement du fichier…</string>
+    <string name="send_file_step_sending_file">Envoi du fichier (%1$s / %2$s)</string>
+
+    <string name="downloading_file">Téléchargement du fichier %1$s…</string>
+    <string name="downloaded_file">Le fichier %1$s a été téléchargé !</string>
+
+    <string name="edited_suffix">(édité)</string>
+
+    <string name="riotx_no_registration_notice">%1$s pour créer un compte.</string>
+    <string name="riotx_no_registration_notice_colored_part">Utilisez l’ancienne application</string>
+
+
+    <string name="message_edits">Éditions de message</string>
+    <string name="no_message_edits_found">Aucune édition trouvée</string>
+
+    <string name="room_filtering_filter_hint">Filtrer les conversations…</string>
+    <string name="room_filtering_footer_title">Vous ne trouvez pas ce que vous cherchez \?</string>
+    <string name="room_filtering_footer_create_new_room">Créer un nouveau salon</string>
+    <string name="room_filtering_footer_create_new_direct_message">Envoyer un nouveau message direct</string>
+    <string name="room_filtering_footer_open_room_directory">Voir le répertoire des salons</string>
+
+    <string name="room_directory_search_hint">Nom ou identifiant (#exemple:matrix.org)</string>
+
+    <string name="labs_swipe_to_reply_in_timeline">Activer le balayement pour répondre dans l’historique</string>
+
+    <string name="link_copied_to_clipboard">Lien copié dans le presse-papiers</string>
+
 </resources>

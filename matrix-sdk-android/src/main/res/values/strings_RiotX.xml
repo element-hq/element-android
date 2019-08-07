@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="event_status_sending_message">Sending message…</string>
-    <string name="clear_timeline_send_queue">Clear sending queue</string>
+
+
+
 </resources>

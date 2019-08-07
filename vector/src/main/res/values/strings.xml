@@ -809,6 +809,7 @@
     <string name="settings_logged_in">Logged in as</string>
     <string name="settings_home_server">Home Server</string>
     <string name="settings_identity_server">Identity Server</string>
+    <string name="settings_integration_manager">Integration Manager</string>
 
     <string name="settings_user_interface">User interface</string>
     <string name="settings_interface_language">Language</string>
@@ -1091,6 +1092,7 @@
     <string name="widget_integration_room_not_visible">Room %s is not visible.</string>
     <string name="widget_integration_missing_parameter">A required parameter is missing.</string>
     <string name="widget_integration_invalid_parameter">A parameter is not valid.</string>
+    <string name="integration_manager_not_configured">No integration manager configured.</string>
     <string name="room_add_matrix_apps">Add Matrix apps</string>
     <string name="settings_labs_native_camera">Use native camera</string>
     <string name="settings_labs_native_camera_summary">Start the system camera instead of the custom camera screen.</string>
@@ -1627,5 +1629,15 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="labs_swipe_to_reply_in_timeline">Enable swipe to reply in timeline</string>
 
     <string name="link_copied_to_clipboard">Link copied to clipboard</string>
+
+    <string name="add_by_matrix_id">Add by matrix ID</string>
+    <string name="creating_direct_room">"Creating room…"</string>
+    <string name="direct_room_no_known_users">"No result found, use Add by matrix ID to search on server."</string>
+    <string name="direct_room_start_search">"Start typing to get results"</string>
+    <string name="direct_room_filter_hint">"Filter by username or ID…"</string>
+
+    <string name="joining_room">"Joining room…"</string>
+
+    <string name="message_view_edit_history">View Edit History</string>
 
 </resources>

@@ -1517,7 +1517,7 @@
 
     <string name="alpha_disclaimer_title">Добре дошли в beta версията!</string>
     <string name="alpha_disclaimer_content_line_1">Докато RiotX е в ранен стадий на разработка някои функции може да липсват или да има бъгове.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Play Store описание</string>
+    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Play Store описанието</string>
     <string name="alpha_disclaimer_content_line_2_fdroid">Ако намерите бъгове, моля докладвайте ги от най-горното ляво меню на началния екран и ще ги разрешим възможно най-бързо.</string>
 
     <string name="import_e2e_keys_from_file">Импортирай e2e ключове от файл \"%1$s\".</string>
@@ -1550,7 +1550,7 @@
 
     <string name="settings_troubleshoot_test_token_registration_quick_fix">Регистрирай токен</string>
 
-    <string name="send_suggestion">Направи предложение</string>
+    <string name="send_suggestion">Изпрати предложение</string>
     <string name="send_suggestion_content">Напишете предложението си долу.</string>
     <string name="send_suggestion_report_placeholder">Опишете предложението тук</string>
     <string name="send_suggestion_sent">Благодаря! Предложението ви беше изпратено</string>
@@ -1567,5 +1567,37 @@
 \nRiotX поддържа: • Вход в съществуващ акаунт • Създаване на стая и влизане в публични стаи • Приемане и отхвърляне на покани • Показване на списък със стаите • Преглеждане на информация за стая • Изпращане на текстови съобщения • Изпращане на прикачени файлове • Четене и писане на съобщения в шифровани стаи • Шифроване: резервни копия на E2E ключове, потвърждение на устройства, заявяване и отговаряне на заявки за споделяне на ключове • Уведомления • Светла, Тъмна и Черна тема
 \n
 \nЗасега не всички функции на Riot са налични в RiotX. Основни липсващи (и скоро пристигащи!) функции са: • Създаване на нов профил • Настройки на стаи (показване на членове и т.н.) • Създаване на директни чатове • Обаждания • Приспособления • …</string>
+
+    <string name="bottom_action_people_x">Директни съобщения</string>
+
+    <string name="send_file_step_idle">Изчакване…</string>
+    <string name="send_file_step_encrypting_thumbnail">Шифроване на малката снимка…</string>
+    <string name="send_file_step_sending_thumbnail">Изпращане на малка снимка (%1$s / %2$s)</string>
+    <string name="send_file_step_encrypting_file">Шифроване на файл…</string>
+    <string name="send_file_step_sending_file">Изпращане на файл (%1$s / %2$s)</string>
+
+    <string name="downloading_file">Изтегляне на файл %1$s…</string>
+    <string name="downloaded_file">Файлът %1$s беше изтеглен!</string>
+
+    <string name="edited_suffix">(редактирано)</string>
+
+    <string name="riotx_no_registration_notice">%1$s за да създадете профил.</string>
+    <string name="riotx_no_registration_notice_colored_part">Използвай старото приложение</string>
+
+
+    <string name="message_edits">Редакции на съобщението</string>
+    <string name="no_message_edits_found">Не са открити редакции</string>
+
+    <string name="room_filtering_filter_hint">Филтриране на чатове…</string>
+    <string name="room_filtering_footer_title">Не можете да намерите това, което търсите\?</string>
+    <string name="room_filtering_footer_create_new_room">Създай нова стая</string>
+    <string name="room_filtering_footer_create_new_direct_message">Изпрати ново директно съобщение</string>
+    <string name="room_filtering_footer_open_room_directory">Виж директорията със стаи</string>
+
+    <string name="room_directory_search_hint">Име или ID (#example:matrix.org)</string>
+
+    <string name="labs_swipe_to_reply_in_timeline">Активирай отговаряне от списъка с чатове при приплъзване</string>
+
+    <string name="link_copied_to_clipboard">Връзката беше копирана</string>
 
 </resources>

@@ -1579,4 +1579,36 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
 \n
 \nNem minden Riot funkció támogatott a RiotX-ben jelenleg. A fő hiányzó (és hamarosan elérhető!) funkciók: • Felhasználói fiók létrehozása • Szoba beállítások (szoba tagság mutatása, stb…) • Közvetlen beszélgetések indítása • Hívások • Kisalkalmazások • …</string>
 
+    <string name="bottom_action_people_x">Közvetlen beszélgetés</string>
+
+    <string name="send_file_step_idle">Várakozik…</string>
+    <string name="send_file_step_encrypting_thumbnail">Bélyegképek titkosítása…</string>
+    <string name="send_file_step_sending_thumbnail">Bélyegképek küldése (%1$s / %2$s)</string>
+    <string name="send_file_step_encrypting_file">Fájl titkosítása…</string>
+    <string name="send_file_step_sending_file">Fájl küldése (%1$s / %2$s)</string>
+
+    <string name="downloading_file">Fájl letöltése %1$s…</string>
+    <string name="downloaded_file">%1$s fájl letöltve!</string>
+
+    <string name="edited_suffix">(szerkesztve)</string>
+
+    <string name="riotx_no_registration_notice">%1$s fiók készítéshez.</string>
+    <string name="riotx_no_registration_notice_colored_part">Használd a régi alkalmazást</string>
+
+
+    <string name="message_edits">Üzenet szerkesztések</string>
+    <string name="no_message_edits_found">Szerkesztések nem találhatók</string>
+
+    <string name="room_filtering_filter_hint">Beszélgetések szűrése…</string>
+    <string name="room_filtering_footer_title">Nem találod amit keresel\?</string>
+    <string name="room_filtering_footer_create_new_room">Új szoba készítése</string>
+    <string name="room_filtering_footer_create_new_direct_message">Új közvetlen üzenet küldése</string>
+    <string name="room_filtering_footer_open_room_directory">Szoba lista megjelenítése</string>
+
+    <string name="room_directory_search_hint">Név vagy azonosító (#pelda:matrix.org)</string>
+
+    <string name="labs_swipe_to_reply_in_timeline">Válasz engedélyezése húzással az idővonalon</string>
+
+    <string name="link_copied_to_clipboard">Hivatkozás a vágólapra másolva</string>
+
 </resources>
