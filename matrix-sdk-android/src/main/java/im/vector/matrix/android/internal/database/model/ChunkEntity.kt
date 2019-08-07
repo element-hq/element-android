@@ -33,6 +33,8 @@ internal open class ChunkEntity(@Index var prevToken: String? = null,
                                 var forwardsStateIndex: Int? = null
 ) : RealmObject() {
 
+    fun identifier() = "${prevToken}_${nextToken}"
+
     @LinkingObjects("chunks")
     val room: RealmResults<RoomEntity>? = null
 

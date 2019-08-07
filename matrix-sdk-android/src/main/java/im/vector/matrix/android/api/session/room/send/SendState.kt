@@ -16,6 +16,7 @@
 
 package im.vector.matrix.android.api.session.room.send
 
+
 enum class SendState {
     UNKNOWN,
     // the event has not been sent
@@ -33,16 +34,19 @@ enum class SendState {
     // the event failed to be sent because some unknown devices have been found while encrypting it
     FAILED_UNKNOWN_DEVICES;
 
-    fun isSent(): Boolean {
-        return this == SENT || this == SYNCED
+    internal companion object {
+        val HAS_FAILED_STATES = listOf(UNDELIVERED, FAILED_UNKNOWN_DEVICES)
+        val IS_SENT_STATES = listOf(SENT, SYNCED)
+        val IS_SENDING_STATES = listOf(UNSENT, ENCRYPTING, SENDING)
+        val PENDING_STATES = IS_SENDING_STATES + HAS_FAILED_STATES
     }
 
-    fun hasFailed(): Boolean {
-        return this == UNDELIVERED || this == FAILED_UNKNOWN_DEVICES
-    }
+    fun isSent() = IS_SENT_STATES.contains(this)
 
-    fun isSending(): Boolean {
-        return this == UNSENT || this == ENCRYPTING || this == SENDING
-    }
+    fun hasFailed() = HAS_FAILED_STATES.contains(this)
+
+    fun isSending() = IS_SENDING_STATES.contains(this)
 
 }
+
+

@@ -34,6 +34,7 @@ import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
+import im.vector.matrix.android.internal.database.query.findAllInRoomWithSendStates
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.content.UploadContentWorker
 import im.vector.matrix.android.internal.session.room.timeline.TimelineSendEventWorkCommon
@@ -188,48 +189,47 @@ internal class DefaultSendService @Inject constructor(private val context: Conte
 
     override fun resendAllFailedMessages() {
         monarchy.writeAsync { realm ->
-            RoomEntity.where(realm, roomId).findFirst()?.let { room ->
-                room.sendingTimelineEvents.filter {
-                    it.root?.sendState?.hasFailed() ?: false
-                }.sortedBy { it.root?.originServerTs ?: 0 }.forEach { timelineEventEntity ->
-                    timelineEventEntity.root?.let {
-                        val event = it.asDomain()
-                        when (event.getClearType()) {
-                            EventType.MESSAGE,
-                            EventType.REDACTION,
-                            EventType.REACTION -> {
-                                val content = event.getClearContent().toModel<MessageContent>()
-                                if (content != null) {
-                                    when (content.type) {
-                                        MessageType.MSGTYPE_EMOTE,
-                                        MessageType.MSGTYPE_NOTICE,
-                                        MessageType.MSGTYPE_LOCATION,
-                                        MessageType.MSGTYPE_TEXT  -> {
-                                            it.sendState = SendState.UNSENT
-                                            sendEvent(event)
-                                        }
-                                        MessageType.MSGTYPE_FILE,
-                                        MessageType.MSGTYPE_VIDEO,
-                                        MessageType.MSGTYPE_IMAGE,
-                                        MessageType.MSGTYPE_AUDIO -> {
-                                            //need to resend the attachement
-                                        }
-                                        else                      -> {
-                                            Timber.e("Cannot resend message ${event.type} / ${content.type}")
-                                        }
+            TimelineEventEntity
+                    .findAllInRoomWithSendStates(realm, roomId, SendState.HAS_FAILED_STATES)
+                    .sortedBy { it.root?.originServerTs ?: 0 }
+                    .forEach { timelineEventEntity ->
+                        timelineEventEntity.root?.let {
+                            val event = it.asDomain()
+                            when (event.getClearType()) {
+                                EventType.MESSAGE,
+                                EventType.REDACTION,
+                                EventType.REACTION -> {
+                                    val content = event.getClearContent().toModel<MessageContent>()
+                                    if (content != null) {
+                                        when (content.type) {
+                                            MessageType.MSGTYPE_EMOTE,
+                                            MessageType.MSGTYPE_NOTICE,
+                                            MessageType.MSGTYPE_LOCATION,
+                                            MessageType.MSGTYPE_TEXT  -> {
+                                                it.sendState = SendState.UNSENT
+                                                sendEvent(event)
+                                            }
+                                            MessageType.MSGTYPE_FILE,
+                                            MessageType.MSGTYPE_VIDEO,
+                                            MessageType.MSGTYPE_IMAGE,
+                                            MessageType.MSGTYPE_AUDIO -> {
+                                                //need to resend the attachement
+                                            }
+                                            else                      -> {
+                                                Timber.e("Cannot resend message ${event.type} / ${content.type}")
+                                            }
 
+                                        }
+                                    } else {
+                                        Timber.e("Unsupported message to resend ${event.type}")
                                     }
-                                } else {
+                                }
+                                else               -> {
                                     Timber.e("Unsupported message to resend ${event.type}")
                                 }
                             }
-                            else               -> {
-                                Timber.e("Unsupported message to resend ${event.type}")
-                            }
                         }
                     }
-                }
-            }
         }
     }
 
