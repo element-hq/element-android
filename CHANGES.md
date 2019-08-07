@@ -19,7 +19,8 @@ Bugfix:
  - Close detail room screen when the room is left with another client (#256)
  - Clear notification for a room left on another client
  - Fix messages with empty `in_reply_to` not rendering (#447)
- - Fix clear cache (#408) and Logout (#205 )
+ - Fix clear cache (#408) and Logout (#205)
+ - Fix `(edited)` link can be copied to clipboard (#402)
 
 Translations:
  -
