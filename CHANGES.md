@@ -10,6 +10,7 @@ Improvements:
  - Basic support for resending failed messages (retry/remove)
  - Enable proper cancellation of suspending functions (including db transaction)
  - Enhances network connectivity checks in SDK
+ - Add "View Edit History" item in the message bottom sheet (#401)
 
 Other changes:
  -

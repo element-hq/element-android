@@ -28,7 +28,6 @@ import im.vector.matrix.android.api.permalinks.MatrixLinkify
 import im.vector.matrix.android.api.permalinks.MatrixPermalinkSpan
 import im.vector.matrix.android.api.session.events.model.RelationType
 import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.EditAggregatedSummary
 import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
@@ -118,13 +117,11 @@ class MessageItemFactory @Inject constructor(
         return when (messageContent) {
             is MessageEmoteContent  -> buildEmoteMessageItem(messageContent,
                     informationData,
-                    event.annotations?.editSummary,
                     highlight,
                     callback)
             is MessageTextContent   -> buildTextMessageItem(event.root.sendState,
                     messageContent,
                     informationData,
-                    event.annotations?.editSummary,
                     highlight,
                     callback
             )
@@ -298,7 +295,6 @@ class MessageItemFactory @Inject constructor(
     private fun buildTextMessageItem(sendState: SendState,
                                      messageContent: MessageTextContent,
                                      informationData: MessageInformationData,
-                                     editSummary: EditAggregatedSummary?,
                                      highlight: Boolean,
                                      callback: TimelineEventController.Callback?): MessageTextItem? {
 
@@ -311,7 +307,7 @@ class MessageItemFactory @Inject constructor(
         return MessageTextItem_()
                 .apply {
                     if (informationData.hasBeenEdited) {
-                        val spannable = annotateWithEdited(linkifiedBody, callback, informationData, editSummary)
+                        val spannable = annotateWithEdited(linkifiedBody, callback, informationData)
                         message(spannable)
                     } else {
                         message(linkifiedBody)
@@ -338,8 +334,7 @@ class MessageItemFactory @Inject constructor(
 
     private fun annotateWithEdited(linkifiedBody: CharSequence,
                                    callback: TimelineEventController.Callback?,
-                                   informationData: MessageInformationData,
-                                   editSummary: EditAggregatedSummary?): SpannableStringBuilder {
+                                   informationData: MessageInformationData): SpannableStringBuilder {
         val spannable = SpannableStringBuilder()
         spannable.append(linkifiedBody)
         val editedSuffix = stringProvider.getString(R.string.edited_suffix)
@@ -356,7 +351,7 @@ class MessageItemFactory @Inject constructor(
         spannable.setSpan(RelativeSizeSpan(.9f), editStart, editEnd, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
         spannable.setSpan(object : ClickableSpan() {
             override fun onClick(widget: View?) {
-                callback?.onEditedDecorationClicked(informationData, editSummary)
+                callback?.onEditedDecorationClicked(informationData)
             }
 
             override fun updateDrawState(ds: TextPaint?) {
@@ -408,7 +403,6 @@ class MessageItemFactory @Inject constructor(
 
     private fun buildEmoteMessageItem(messageContent: MessageEmoteContent,
                                       informationData: MessageInformationData,
-                                      editSummary: EditAggregatedSummary?,
                                       highlight: Boolean,
                                       callback: TimelineEventController.Callback?): MessageTextItem? {
 
@@ -419,7 +413,7 @@ class MessageItemFactory @Inject constructor(
         return MessageTextItem_()
                 .apply {
                     if (informationData.hasBeenEdited) {
-                        val spannable = annotateWithEdited(message, callback, informationData, editSummary)
+                        val spannable = annotateWithEdited(message, callback, informationData)
                         message(spannable)
                     } else {
                         message(message)

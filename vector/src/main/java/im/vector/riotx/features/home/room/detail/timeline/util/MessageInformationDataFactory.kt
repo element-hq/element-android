@@ -18,6 +18,7 @@ package im.vector.riotx.features.home.room.detail.timeline.util
 
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.matrix.android.api.session.room.timeline.hasBeenEdited
 import im.vector.riotx.core.extensions.localDateTime
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.utils.isSingleEmoji
@@ -59,8 +60,6 @@ class MessageInformationDataFactory @Inject constructor(private val timelineDate
                     ?: ""))
         }
 
-        val hasBeenEdited = event.annotations?.editSummary != null
-
         return MessageInformationData(
                 eventId = eventId,
                 senderId = event.root.senderId ?: "",
@@ -74,7 +73,7 @@ class MessageInformationDataFactory @Inject constructor(private val timelineDate
                         ?.map {
                             ReactionInfoData(it.key, it.count, it.addedByMe, it.localEchoEvents.isEmpty())
                         },
-                hasBeenEdited = hasBeenEdited,
+                hasBeenEdited = event.hasBeenEdited(),
                 hasPendingEdits = event.annotations?.editSummary?.localEchos?.any() ?: false
         )
     }

@@ -24,7 +24,6 @@ import androidx.recyclerview.widget.ListUpdateCallback
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyModel
-import im.vector.matrix.android.api.session.room.model.EditAggregatedSummary
 import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
@@ -60,7 +59,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Tim
         fun onVideoMessageClicked(messageVideoContent: MessageVideoContent, mediaData: VideoContentRenderer.Data, view: View)
         fun onFileMessageClicked(eventId: String, messageFileContent: MessageFileContent)
         fun onAudioMessageClicked(messageAudioContent: MessageAudioContent)
-        fun onEditedDecorationClicked(informationData: MessageInformationData, editAggregatedSummary: EditAggregatedSummary?)
+        fun onEditedDecorationClicked(informationData: MessageInformationData)
     }
 
     interface ReactionPillCallback {
@@ -159,7 +158,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Tim
             synchronized(modelCache) {
                 for (i in 0 until modelCache.size) {
                     if (modelCache[i]?.eventId == eventIdToHighlight
-                        || modelCache[i]?.eventId == this.eventIdToHighlight) {
+                            || modelCache[i]?.eventId == this.eventIdToHighlight) {
                         modelCache[i] = null
                     }
                 }
@@ -220,8 +219,8 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Tim
                 // Should be build if not cached or if cached but contains mergedHeader or formattedDay
                 // We then are sure we always have items up to date.
                 if (modelCache[position] == null
-                    || modelCache[position]?.mergedHeaderModel != null
-                    || modelCache[position]?.formattedDayModel != null) {
+                        || modelCache[position]?.mergedHeaderModel != null
+                        || modelCache[position]?.formattedDayModel != null) {
                     modelCache[position] = buildItemModels(position, currentSnapshot)
                 }
             }
@@ -294,8 +293,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Tim
                 // We try to find if one of the item id were used as mergeItemCollapseStates key
                 // => handle case where paginating from mergeable events and we get more
                 val previousCollapseStateKey = mergedEventIds.intersect(mergeItemCollapseStates.keys).firstOrNull()
-                val initialCollapseState = mergeItemCollapseStates.remove(previousCollapseStateKey)
-                                           ?: true
+                val initialCollapseState = mergeItemCollapseStates.remove(previousCollapseStateKey) ?: true
                 val isCollapsed = mergeItemCollapseStates.getOrPut(event.localId) { initialCollapseState }
                 if (isCollapsed) {
                     collapsedEventIds.addAll(mergedEventIds)

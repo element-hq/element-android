@@ -59,7 +59,6 @@ import com.otaliastudios.autocomplete.CharPolicy
 import im.vector.matrix.android.api.permalinks.PermalinkFactory
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.api.session.room.model.EditAggregatedSummary
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.send.SendState
@@ -803,7 +802,7 @@ class RoomDetailFragment :
                 .show(requireActivity().supportFragmentManager, "DISPLAY_REACTIONS")
     }
 
-    override fun onEditedDecorationClicked(informationData: MessageInformationData, editAggregatedSummary: EditAggregatedSummary?) {
+    override fun onEditedDecorationClicked(informationData: MessageInformationData) {
         ViewEditHistoryBottomSheet.newInstance(roomDetailArgs.roomId, informationData)
                 .show(requireActivity().supportFragmentManager, "DISPLAY_EDITS")
     }
@@ -868,6 +867,9 @@ class RoomDetailFragment :
 
                         }
                 )
+            }
+            is SimpleAction.ViewEditHistory     -> {
+                onEditedDecorationClicked(action.messageInformationData)
             }
             is SimpleAction.ViewSource          -> {
                 val view = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_event_content, null)
