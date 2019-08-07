@@ -21,8 +21,8 @@ import android.os.Build
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import im.vector.matrix.android.api.Matrix
-import im.vector.riotx.BuildConfig
-import im.vector.riotx.features.version.getVersion
+import im.vector.riotx.core.resources.VersionCodeProvider
+import im.vector.riotx.features.version.VersionProvider
 import timber.log.Timber
 import java.io.PrintWriter
 import java.io.StringWriter
@@ -30,15 +30,14 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class VectorUncaughtExceptionHandler @Inject constructor(private val bugReporter: BugReporter) : Thread.UncaughtExceptionHandler {
+class VectorUncaughtExceptionHandler @Inject constructor(private val bugReporter: BugReporter,
+                                                         private val versionProvider: VersionProvider,
+                                                         private val versionCodeProvider: VersionCodeProvider) : Thread.UncaughtExceptionHandler {
 
     // key to save the crash status
     companion object {
         private const val PREFS_CRASH_KEY = "PREFS_CRASH_KEY"
     }
-
-    private val vectorVersion = getVersion(longFormat = true, useBuildNumber = true)
-    private val matrixSdkVersion = Matrix.getSdkVersion()
 
     private var previousHandler: Thread.UncaughtExceptionHandler? = null
 
@@ -68,9 +67,9 @@ class VectorUncaughtExceptionHandler @Inject constructor(private val bugReporter
         val b = StringBuilder()
         val appName = "RiotX" // TODO Matrix.getApplicationName()
 
-        b.append(appName + " Build : " + BuildConfig.VERSION_CODE + "\n")
-        b.append("$appName Version : $vectorVersion\n")
-        b.append("SDK Version : $matrixSdkVersion\n")
+        b.append(appName + " Build : " + versionCodeProvider.getVersionCode() + "\n")
+        b.append("$appName Version : ${versionProvider.getVersion(longFormat = true, useBuildNumber = true)}\n")
+        b.append("SDK Version : ${Matrix.getSdkVersion()}\n")
         b.append("Phone : " + Build.MODEL.trim() + " (" + Build.VERSION.INCREMENTAL + " " + Build.VERSION.RELEASE + " " + Build.VERSION.CODENAME + ")\n")
 
         b.append("Memory statuses \n")
@@ -93,14 +92,6 @@ class VectorUncaughtExceptionHandler @Inject constructor(private val bugReporter
 
         b.append("Thread: ")
         b.append(thread.name)
-
-        /*
-        val a = VectorApp.getCurrentActivity()
-        if (a != null) {
-            b.append(", Activity:")
-            b.append(a.localClassName)
-        }
-        */
 
         b.append(", Exception: ")
 

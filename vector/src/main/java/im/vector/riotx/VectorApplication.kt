@@ -51,7 +51,7 @@ import im.vector.riotx.features.notifications.PushRuleTriggerListener
 import im.vector.riotx.features.rageshake.VectorFileLogger
 import im.vector.riotx.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.riotx.features.settings.VectorPreferences
-import im.vector.riotx.features.version.getVersion
+import im.vector.riotx.features.version.VersionProvider
 import im.vector.riotx.push.fcm.FcmHelper
 import timber.log.Timber
 import java.text.SimpleDateFormat
@@ -71,6 +71,7 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
     @Inject lateinit var pushRuleTriggerListener: PushRuleTriggerListener
     @Inject lateinit var vectorPreferences: VectorPreferences
+    @Inject lateinit var versionProvider: VersionProvider
     lateinit var vectorComponent: VectorComponent
     private var fontThreadHandler: Handler? = null
 
@@ -140,7 +141,7 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
     }
 
     private fun logInfo() {
-        val appVersion = getVersion(longFormat = true, useBuildNumber = true)
+        val appVersion = versionProvider.getVersion(longFormat = true, useBuildNumber = true)
         val sdkVersion = Matrix.getSdkVersion()
         val date = SimpleDateFormat("MM-dd HH:mm:ss.SSSZ", Locale.US).format(Date())
 

@@ -154,6 +154,8 @@ interface ScreenComponent {
 
     fun inject(vectorSettingsSecurityPrivacyFragment: VectorSettingsSecurityPrivacyFragment)
 
+    fun inject(vectorSettingsHelpAboutFragment: VectorSettingsHelpAboutFragment)
+
     fun inject(userAvatarPreference: UserAvatarPreference)
 
     fun inject(vectorSettingsNotificationsTroubleshootFragment: VectorSettingsNotificationsTroubleshootFragment)
