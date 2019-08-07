@@ -84,6 +84,12 @@ data class TimelineEvent(
     }
 }
 
+
+/**
+ * Tells if the event has been edited
+ */
+fun TimelineEvent.hasBeenEdited() = annotations?.editSummary != null
+
 /**
  * Get last MessageContent, after a possible edition
  */

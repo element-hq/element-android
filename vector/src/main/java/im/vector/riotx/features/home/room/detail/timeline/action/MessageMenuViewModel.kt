@@ -29,6 +29,7 @@ import im.vector.matrix.android.api.session.room.model.message.MessageImageConte
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.matrix.android.api.session.room.timeline.hasBeenEdited
 import im.vector.matrix.rx.RxRoom
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.canReact
@@ -55,6 +56,8 @@ sealed class SimpleAction(@StringRes val titleRes: Int, @DrawableRes val iconRes
     data class Flag(val eventId: String) : SimpleAction(R.string.report_content, R.drawable.ic_flag)
     data class QuickReact(val eventId: String, val clickedOn: String, val add: Boolean) : SimpleAction(0, 0)
     data class ViewReactions(val messageInformationData: MessageInformationData) : SimpleAction(R.string.message_view_reaction, R.drawable.ic_view_reactions)
+    data class ViewEditHistory(val messageInformationData: MessageInformationData) :
+            SimpleAction(R.string.message_view_edit_history, R.drawable.ic_view_edit_history)
 }
 
 data class MessageMenuState(
@@ -153,6 +156,10 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
 
                     if (canViewReactions(event)) {
                         add(SimpleAction.ViewReactions(informationData))
+                    }
+
+                    if (event.hasBeenEdited()) {
+                        add(SimpleAction.ViewEditHistory(informationData))
                     }
 
                     if (canShare(type)) {

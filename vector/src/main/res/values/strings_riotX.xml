@@ -9,4 +9,7 @@
     <string name="direct_room_filter_hint">"Filter by username or ID…"</string>
 
     <string name="joining_room">"Joining room…"</string>
+
+    <string name="message_view_edit_history">View Edit History</string>
+
 </resources>
