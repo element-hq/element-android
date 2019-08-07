@@ -119,6 +119,8 @@ abstract class VectorBaseActivity : BaseMvRxActivity(), HasScreenInjector {
             injectWith(screenComponent)
         }
         Timber.v("Injecting dependencies into ${javaClass.simpleName} took $timeForInjection ms")
+        ThemeUtils.setActivityTheme(this, getOtherThemes())
+
         super.onCreate(savedInstanceState)
         viewModelFactory = screenComponent.viewModelFactory()
         configurationViewModel = ViewModelProviders.of(this, viewModelFactory).get(ConfigurationViewModel::class.java)
@@ -134,8 +136,6 @@ abstract class VectorBaseActivity : BaseMvRxActivity(), HasScreenInjector {
         })
 
         // Shake detector
-
-        ThemeUtils.setActivityTheme(this, getOtherThemes())
 
         doBeforeSetContentView()
 
