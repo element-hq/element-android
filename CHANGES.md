@@ -14,7 +14,7 @@ Improvements:
  - Add "View Edit History" item in the message bottom sheet (#401)
 
 Other changes:
- -
+ - Show sync progress also in room detail screen (#403)
 
 Bugfix:
  - Edited message: link confusion when (edited) appears in body (#398)

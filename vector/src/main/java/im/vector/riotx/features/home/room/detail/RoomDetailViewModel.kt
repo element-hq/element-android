@@ -103,6 +103,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     init {
+        observeSyncState()
         observeRoomSummary()
         observeEventDisplayedActions()
         observeSummaryState()
@@ -628,6 +629,17 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                         room.setReadReceipt(eventId, callback = object : MatrixCallback<Unit> {})
                     }
                 })
+                .disposeOnClear()
+    }
+
+    private fun observeSyncState() {
+        session.rx()
+                .liveSyncState()
+                .subscribe { syncState ->
+                    setState {
+                        copy(syncState = syncState)
+                    }
+                }
                 .disposeOnClear()
     }
 
