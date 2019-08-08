@@ -47,6 +47,14 @@ static def gitBranchName() {
     return cmd.execute().text.trim()
 }
 
+static def getVersionSuffix() {
+    if (gitBranchName() == "master") {
+        return ""
+    } else {
+        return "-dev"
+    }
+}
+
 project.android.buildTypes.all { buildType ->
     buildType.javaCompileOptions.annotationProcessorOptions.arguments =
             [
@@ -73,7 +81,7 @@ android {
 
         // Note: versionCode is depending on the build variant
 
-        versionName "${versionMajor}.${versionMinor}.${versionPatch}-dev"
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}${getVersionSuffix()}"
 
         buildConfigField "String", "GIT_REVISION", "\"${gitRevision()}\""
         resValue "string", "git_revision", "\"${gitRevision()}\""
