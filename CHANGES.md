@@ -12,6 +12,7 @@ Improvements:
  - Enable proper cancellation of suspending functions (including db transaction)
  - Enhances network connectivity checks in SDK
  - Add "View Edit History" item in the message bottom sheet (#401)
+ - Cancel sync request on pause and timeout to 0 after pause (#404)
 
 Other changes:
  - Show sync progress also in room detail screen (#403)
