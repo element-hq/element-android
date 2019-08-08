@@ -66,7 +66,7 @@ internal class SyncResponseHandler @Inject constructor(private val roomSyncHandl
 
                     reportSubtask(reporter, R.string.initial_sync_start_importing_account_rooms, 100, 0.7f) {
                         if (syncResponse.rooms != null) {
-                            roomSyncHandler.handle(syncResponse.rooms, reporter)
+                            roomSyncHandler.handle(syncResponse.rooms, isInitialSync, reporter)
                         }
                     }
                 }.also {

@@ -62,11 +62,11 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
         data class LEFT(val data: Map<String, RoomSync>) : HandlingStrategy()
     }
 
-    fun handle(roomsSyncResponse: RoomsSyncResponse, reporter: DefaultInitialSyncProgressService? = null) {
+    fun handle(roomsSyncResponse: RoomsSyncResponse, isInitialSync: Boolean, reporter: DefaultInitialSyncProgressService? = null) {
         monarchy.runTransactionSync { realm ->
-            handleRoomSync(realm, HandlingStrategy.JOINED(roomsSyncResponse.join), reporter)
-            handleRoomSync(realm, HandlingStrategy.INVITED(roomsSyncResponse.invite), reporter)
-            handleRoomSync(realm, HandlingStrategy.LEFT(roomsSyncResponse.leave), reporter)
+            handleRoomSync(realm, HandlingStrategy.JOINED(roomsSyncResponse.join), isInitialSync, reporter)
+            handleRoomSync(realm, HandlingStrategy.INVITED(roomsSyncResponse.invite), isInitialSync, reporter)
+            handleRoomSync(realm, HandlingStrategy.LEFT(roomsSyncResponse.leave), isInitialSync, reporter)
         }
 
         //handle event for bing rule checks
@@ -89,12 +89,12 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
 
     // PRIVATE METHODS *****************************************************************************
 
-    private fun handleRoomSync(realm: Realm, handlingStrategy: HandlingStrategy, reporter: DefaultInitialSyncProgressService?) {
+    private fun handleRoomSync(realm: Realm, handlingStrategy: HandlingStrategy, isInitialSync: Boolean, reporter: DefaultInitialSyncProgressService?) {
 
         val rooms = when (handlingStrategy) {
             is HandlingStrategy.JOINED  ->
                 handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_joined_rooms, 0.6f) {
-                    handleJoinedRoom(realm, it.key, it.value)
+                    handleJoinedRoom(realm, it.key, it.value, isInitialSync)
                 }
             is HandlingStrategy.INVITED ->
                 handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_invited_rooms, 0.4f) {
@@ -112,7 +112,8 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
 
     private fun handleJoinedRoom(realm: Realm,
                                  roomId: String,
-                                 roomSync: RoomSync): RoomEntity {
+                                 roomSync: RoomSync,
+                                 isInitalSync: Boolean): RoomEntity {
 
         Timber.v("Handle join sync for room $roomId")
 
@@ -152,7 +153,7 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
         roomSummaryUpdater.update(realm, roomId, Membership.JOIN, roomSync.summary, roomSync.unreadNotifications)
 
         if (roomSync.ephemeral != null && roomSync.ephemeral.events.isNotEmpty()) {
-            handleEphemeral(realm, roomId, roomSync.ephemeral)
+            handleEphemeral(realm, roomId, roomSync.ephemeral, isInitalSync)
         }
 
         if (roomSync.accountData != null && roomSync.accountData.events.isNullOrEmpty().not()) {
@@ -236,11 +237,12 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
     @Suppress("UNCHECKED_CAST")
     private fun handleEphemeral(realm: Realm,
                                 roomId: String,
-                                ephemeral: RoomSyncEphemeral) {
+                                ephemeral: RoomSyncEphemeral,
+                                isInitalSync: Boolean) {
         for (event in ephemeral.events) {
             if (event.type != EventType.RECEIPT) continue
             val readReceiptContent = event.content as? ReadReceiptContent ?: continue
-            readReceiptHandler.handle(realm, roomId, readReceiptContent)
+            readReceiptHandler.handle(realm, roomId, readReceiptContent, isInitalSync)
         }
     }
 

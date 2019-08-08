@@ -31,27 +31,62 @@ import javax.inject.Inject
 //                    dict value ts value
 typealias ReadReceiptContent = Map<String, Map<String, Map<String, Map<String, Double>>>>
 
+private const val READ_KEY = "m.read"
+private const val TIMESTAMP_KEY = "ts"
+
 internal class ReadReceiptHandler @Inject constructor() {
 
-    fun handle(realm: Realm, roomId: String, content: ReadReceiptContent?) {
+    fun handle(realm: Realm, roomId: String, content: ReadReceiptContent?, isInitialSync: Boolean) {
         if (content == null) {
             return
         }
         try {
-            handleReadReceiptContent(realm, roomId, content)
+            handleReadReceiptContent(realm, roomId, content, isInitialSync)
         } catch (exception: Exception) {
             Timber.e("Fail to handle read receipt for room $roomId")
         }
     }
 
-    private fun handleReadReceiptContent(realm: Realm, roomId: String, content: ReadReceiptContent) {
+    private fun handleReadReceiptContent(realm: Realm, roomId: String, content: ReadReceiptContent, isInitialSync: Boolean) {
+        if (isInitialSync) {
+            initialSyncStrategy(realm, roomId, content)
+        } else {
+            incrementalSyncStrategy(realm, roomId, content)
+        }
+    }
+
+
+    private fun initialSyncStrategy(realm: Realm, roomId: String, content: ReadReceiptContent) {
+        val readReceiptSummaries = ArrayList<ReadReceiptsSummaryEntity>()
         for ((eventId, receiptDict) in content) {
-            val userIdsDict = receiptDict["m.read"] ?: continue
+            val userIdsDict = receiptDict[READ_KEY] ?: continue
+            val readReceiptsSummary = ReadReceiptsSummaryEntity(eventId = eventId)
+
+            for ((userId, paramsDict) in userIdsDict) {
+                val ts = paramsDict[TIMESTAMP_KEY] ?: 0.0
+                val primaryKey = "${roomId}_$userId"
+                val receiptEntity = ReadReceiptEntity().apply {
+                    this.primaryKey = primaryKey
+                    this.eventId = eventId
+                    this.roomId = roomId
+                    this.userId = userId
+                    this.originServerTs = ts
+                }
+                readReceiptsSummary.readReceipts.add(receiptEntity)
+            }
+            readReceiptSummaries.add(readReceiptsSummary)
+        }
+        realm.insertOrUpdate(readReceiptSummaries)
+    }
+
+    private fun incrementalSyncStrategy(realm: Realm, roomId: String, content: ReadReceiptContent) {
+        for ((eventId, receiptDict) in content) {
+            val userIdsDict = receiptDict[READ_KEY] ?: continue
             val readReceiptsSummary = ReadReceiptsSummaryEntity.where(realm, eventId).findFirst()
                                       ?: realm.createObject(ReadReceiptsSummaryEntity::class.java, eventId)
 
             for ((userId, paramsDict) in userIdsDict) {
-                val ts = paramsDict["ts"] ?: 0.0
+                val ts = paramsDict[TIMESTAMP_KEY] ?: 0.0
                 val primaryKey = "${roomId}_$userId"
                 val receiptEntity = ReadReceiptEntity.where(realm, roomId, userId).findFirst()
                                     ?: realm.createObject(ReadReceiptEntity::class.java, primaryKey)
@@ -69,4 +104,5 @@ internal class ReadReceiptHandler @Inject constructor() {
             }
         }
     }
+
 }
