@@ -18,6 +18,8 @@ package im.vector.matrix.android.internal.session.sync
 
 import im.vector.matrix.android.internal.database.model.ReadReceiptEntity
 import im.vector.matrix.android.internal.database.model.ReadReceiptsSummaryEntity
+import im.vector.matrix.android.internal.database.query.createUnmanaged
+import im.vector.matrix.android.internal.database.query.getOrCreate
 import im.vector.matrix.android.internal.database.query.where
 import io.realm.Realm
 import timber.log.Timber
@@ -64,14 +66,7 @@ internal class ReadReceiptHandler @Inject constructor() {
 
             for ((userId, paramsDict) in userIdsDict) {
                 val ts = paramsDict[TIMESTAMP_KEY] ?: 0.0
-                val primaryKey = "${roomId}_$userId"
-                val receiptEntity = ReadReceiptEntity().apply {
-                    this.primaryKey = primaryKey
-                    this.eventId = eventId
-                    this.roomId = roomId
-                    this.userId = userId
-                    this.originServerTs = ts
-                }
+                val receiptEntity = ReadReceiptEntity.createUnmanaged(roomId, eventId, userId, ts)
                 readReceiptsSummary.readReceipts.add(receiptEntity)
             }
             readReceiptSummaries.add(readReceiptsSummary)
@@ -87,22 +82,19 @@ internal class ReadReceiptHandler @Inject constructor() {
 
             for ((userId, paramsDict) in userIdsDict) {
                 val ts = paramsDict[TIMESTAMP_KEY] ?: 0.0
-                val primaryKey = "${roomId}_$userId"
-                val receiptEntity = ReadReceiptEntity.where(realm, roomId, userId).findFirst()
-                                    ?: realm.createObject(ReadReceiptEntity::class.java, primaryKey)
-
-                ReadReceiptsSummaryEntity.where(realm, receiptEntity.eventId).findFirst()?.also {
-                    it.readReceipts.remove(receiptEntity)
+                val receiptEntity = ReadReceiptEntity.getOrCreate(realm, roomId, userId)
+                // ensure new ts is superior to the previous one
+                if (ts > receiptEntity.originServerTs) {
+                    ReadReceiptsSummaryEntity.where(realm, receiptEntity.eventId).findFirst()?.also {
+                        it.readReceipts.remove(receiptEntity)
+                    }
+                    receiptEntity.eventId = eventId
+                    receiptEntity.originServerTs = ts
+                    readReceiptsSummary.readReceipts.add(receiptEntity)
                 }
-                receiptEntity.apply {
-                    this.eventId = eventId
-                    this.roomId = roomId
-                    this.userId = userId
-                    this.originServerTs = ts
-                }
-                readReceiptsSummary.readReceipts.add(receiptEntity)
             }
         }
     }
+
 
 }

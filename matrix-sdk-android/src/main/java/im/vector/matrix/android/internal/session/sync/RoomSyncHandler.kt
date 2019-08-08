@@ -117,6 +117,14 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
 
         Timber.v("Handle join sync for room $roomId")
 
+        if (roomSync.ephemeral != null && roomSync.ephemeral.events.isNotEmpty()) {
+            handleEphemeral(realm, roomId, roomSync.ephemeral, isInitalSync)
+        }
+
+        if (roomSync.accountData != null && roomSync.accountData.events.isNullOrEmpty().not()) {
+            handleRoomAccountDataEvents(realm, roomId, roomSync.accountData)
+        }
+
         val roomEntity = RoomEntity.where(realm, roomId).findFirst()
                          ?: realm.createObject(roomId)
 
@@ -151,14 +159,6 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
             roomEntity.addOrUpdate(chunkEntity)
         }
         roomSummaryUpdater.update(realm, roomId, Membership.JOIN, roomSync.summary, roomSync.unreadNotifications)
-
-        if (roomSync.ephemeral != null && roomSync.ephemeral.events.isNotEmpty()) {
-            handleEphemeral(realm, roomId, roomSync.ephemeral, isInitalSync)
-        }
-
-        if (roomSync.accountData != null && roomSync.accountData.events.isNullOrEmpty().not()) {
-            handleRoomAccountDataEvents(realm, roomId, roomSync.accountData)
-        }
         return roomEntity
     }
 
