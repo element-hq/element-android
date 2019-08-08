@@ -1,3 +1,24 @@
+Changes in RiotX 0.4.0 (2019-XX-XX)
+===================================================
+
+Features:
+ -
+
+Improvements:
+ -
+
+Other changes:
+ -
+
+Bugfix:
+ -
+
+Translations:
+ -
+
+Build:
+ -
+
 Changes in RiotX 0.3.0 (2019-08-08)
 ===================================================
 
