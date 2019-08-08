@@ -639,8 +639,12 @@ class RoomDetailFragment :
 
     private fun renderSendMessageResult(sendMessageResult: SendMessageResult) {
         when (sendMessageResult) {
-            is SendMessageResult.MessageSent,
+            is SendMessageResult.MessageSent                -> {
+                // Clear composer
+                composerLayout.composerEditText.text = null
+            }
             is SendMessageResult.SlashCommandHandled        -> {
+                sendMessageResult.messageRes?.let { showSnackWithMessage(getString(it)) }
                 // Clear composer
                 composerLayout.composerEditText.text = null
             }

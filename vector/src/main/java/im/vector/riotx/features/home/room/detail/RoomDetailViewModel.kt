@@ -56,6 +56,7 @@ import im.vector.riotx.core.utils.subscribeLogError
 import im.vector.riotx.features.command.CommandParser
 import im.vector.riotx.features.command.ParsedCommand
 import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineDisplayableEvents
+import im.vector.riotx.features.settings.VectorPreferences
 import io.reactivex.rxkotlin.subscribeBy
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
@@ -66,6 +67,7 @@ import java.util.concurrent.TimeUnit
 
 class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: RoomDetailViewState,
                                                       userPreferencesProvider: UserPreferencesProvider,
+                                                      private val vectorPreferences: VectorPreferences,
                                                       private val session: Session
 ) : VectorViewModel<RoomDetailViewState>(initialState) {
 
@@ -243,8 +245,9 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                             _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandNotImplemented)
                         }
                         is ParsedCommand.SetMarkdown              -> {
-                            // TODO
-                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandNotImplemented)
+                            vectorPreferences.setMarkdownEnabled(slashCommandResult.enable)
+                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled(
+                                    if (slashCommandResult.enable) R.string.markdown_has_been_enabled else R.string.markdown_has_been_disabled))
                         }
                         is ParsedCommand.UnbanUser                -> {
                             // TODO
@@ -268,7 +271,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                         }
                         is ParsedCommand.SendEmote                -> {
                             room.sendTextMessage(slashCommandResult.message, msgType = MessageType.MSGTYPE_EMOTE)
-                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled)
+                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled())
                         }
                         is ParsedCommand.ChangeTopic              -> {
                             handleChangeTopicSlashCommand(slashCommandResult)
@@ -348,8 +351,6 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 }
             }
         }
-        // Handle slash command
-
     }
 
     private fun legacyRiotQuoteText(quotedText: String?, myText: String): String {
@@ -371,7 +372,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun handleChangeTopicSlashCommand(changeTopic: ParsedCommand.ChangeTopic) {
-        _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled)
+        _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled())
 
         room.updateTopic(changeTopic.topic, object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
@@ -385,7 +386,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun handleInviteSlashCommand(invite: ParsedCommand.Invite) {
-        _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled)
+        _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled())
 
         room.invite(invite.userId, object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
