@@ -17,6 +17,7 @@
 package im.vector.matrix.android.internal.database.mapper
 
 import im.vector.matrix.android.api.session.room.model.ReadReceipt
+import im.vector.matrix.android.internal.database.model.ReadReceiptEntityFields
 import im.vector.matrix.android.internal.database.model.ReadReceiptsSummaryEntity
 import im.vector.matrix.android.internal.database.model.UserEntity
 import im.vector.matrix.android.internal.database.query.where
@@ -25,15 +26,20 @@ import io.realm.Realm
 import io.realm.RealmConfiguration
 import javax.inject.Inject
 
-internal class ReadReceiptsSummaryMapper @Inject constructor(@SessionDatabase private val realmConfiguration: RealmConfiguration){
+internal class ReadReceiptsSummaryMapper @Inject constructor(@SessionDatabase private val realmConfiguration: RealmConfiguration) {
 
     fun map(readReceiptsSummaryEntity: ReadReceiptsSummaryEntity): List<ReadReceipt> {
         return Realm.getInstance(realmConfiguration).use { realm ->
-            readReceiptsSummaryEntity.readReceipts.mapNotNull {
-                val user = UserEntity.where(realm, it.userId).findFirst()
-                           ?: return@mapNotNull null
-                ReadReceipt(user.asDomain(), it.originServerTs.toLong())
-            }
+            val readReceipts = readReceiptsSummaryEntity.readReceipts
+            readReceipts
+                    .mapNotNull {
+                        val user = UserEntity.where(realm, it.userId).findFirst()
+                                   ?: return@mapNotNull null
+                        ReadReceipt(user.asDomain(), it.originServerTs.toLong())
+                    }
+                    .sortedByDescending {
+                        it.originServerTs
+                    }
         }
     }
 
