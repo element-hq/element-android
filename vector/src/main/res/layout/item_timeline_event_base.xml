@@ -123,65 +123,14 @@
     </ViewStub>
 
 
-    <LinearLayout
+    <im.vector.riotx.core.ui.views.ReadReceiptsView
         android:id="@+id/readReceiptsView"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:orientation="horizontal"
+        android:layout_marginBottom="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <TextView
-            android:id="@+id/message_more_than_expected"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="8dp"
-            android:gravity="center"
-            android:textSize="12sp"
-            tools:text="999+" />
-
-        <ImageView
-            android:id="@+id/message_avatar_receipt_5"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
-            tools:src="@tools:sample/avatars" />
-
-        <ImageView
-            android:id="@+id/message_avatar_receipt_4"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
-            tools:src="@tools:sample/avatars" />
-
-        <ImageView
-            android:id="@+id/message_avatar_receipt_3"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
-            tools:src="@tools:sample/avatars" />
-
-        <ImageView
-            android:id="@+id/message_avatar_receipt_2"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
-            tools:src="@tools:sample/avatars" />
-
-        <ImageView
-            android:id="@+id/message_avatar_receipt_1"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
-            tools:src="@tools:sample/avatars" />
-
-    </LinearLayout>
+        app:layout_constraintEnd_toEndOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
