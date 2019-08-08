@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.riotx.features.home.room.detail.timeline.action
 
+package im.vector.riotx.features.home.room.detail.readreceipts
+
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -27,30 +29,29 @@ import com.airbnb.epoxy.EpoxyRecyclerView
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import im.vector.riotx.EmojiCompatFontProvider
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
+import im.vector.riotx.features.home.room.detail.timeline.action.TimelineEventFragmentArgs
+import im.vector.riotx.features.home.room.detail.timeline.action.VectorBaseBottomSheetDialogFragment
+import im.vector.riotx.features.home.room.detail.timeline.action.ViewReactionBottomSheet
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
-import im.vector.riotx.features.html.EventHtmlRenderer
 import kotlinx.android.synthetic.main.bottom_sheet_epoxylist_with_title.*
 import javax.inject.Inject
 
-
 /**
- * Bottom sheet displaying list of edits for a given event ordered by timestamp
+ * Bottom sheet displaying list of read receipts for a given event ordered by descending timestamp
  */
-class ViewEditHistoryBottomSheet : VectorBaseBottomSheetDialogFragment() {
+class DisplayReadReceiptsBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
-    private val viewModel: ViewEditHistoryViewModel by fragmentViewModel(ViewEditHistoryViewModel::class)
+    private val viewModel: DisplayReadReceiptsViewModel by fragmentViewModel()
 
-    @Inject lateinit var viewEditHistoryViewModelFactory: ViewEditHistoryViewModel.Factory
-    @Inject lateinit var eventHtmlRenderer: EventHtmlRenderer
+    @Inject lateinit var displayReadReceiptsViewModelFactory: DisplayReadReceiptsViewModel.Factory
+    @Inject lateinit var epoxyController: DisplayReadReceiptsController
 
     @BindView(R.id.bottom_sheet_display_reactions_list)
     lateinit var epoxyRecyclerView: EpoxyRecyclerView
 
-    private val epoxyController by lazy {
-        ViewEditHistoryEpoxyController(requireContext(), viewModel.dateFormatter, eventHtmlRenderer)
-    }
 
     override fun injectWith(screenComponent: ScreenComponent) {
         screenComponent.inject(this)
@@ -66,9 +67,9 @@ class ViewEditHistoryBottomSheet : VectorBaseBottomSheetDialogFragment() {
         super.onActivityCreated(savedInstanceState)
         epoxyRecyclerView.setController(epoxyController)
         val dividerItemDecoration = DividerItemDecoration(epoxyRecyclerView.context,
-                LinearLayout.VERTICAL)
+                                                          LinearLayout.VERTICAL)
         epoxyRecyclerView.addItemDecoration(dividerItemDecoration)
-        bottomSheetTitle.text = context?.getString(R.string.message_edits)
+        bottomSheetTitle.text = getString(R.string.read_receipts_list)
     }
 
 
@@ -77,7 +78,7 @@ class ViewEditHistoryBottomSheet : VectorBaseBottomSheetDialogFragment() {
     }
 
     companion object {
-        fun newInstance(roomId: String, informationData: MessageInformationData): ViewEditHistoryBottomSheet {
+        fun newInstance(roomId: String, informationData: MessageInformationData): DisplayReadReceiptsBottomSheet {
             val args = Bundle()
             val parcelableArgs = TimelineEventFragmentArgs(
                     informationData.eventId,
@@ -85,9 +86,8 @@ class ViewEditHistoryBottomSheet : VectorBaseBottomSheetDialogFragment() {
                     informationData
             )
             args.putParcelable(MvRx.KEY_ARG, parcelableArgs)
-            return ViewEditHistoryBottomSheet().apply { arguments = args }
+            return DisplayReadReceiptsBottomSheet().apply { arguments = args }
 
         }
     }
 }
-

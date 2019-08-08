@@ -23,6 +23,7 @@ import android.widget.LinearLayout
 import androidx.core.view.isVisible
 import butterknife.ButterKnife
 import im.vector.riotx.R
+import im.vector.riotx.core.utils.DebouncedClickListener
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.item.ReadReceiptData
 import kotlinx.android.synthetic.main.view_read_receipts.view.*
@@ -48,7 +49,8 @@ class ReadReceiptsView @JvmOverloads constructor(
         ButterKnife.bind(this)
     }
 
-    fun render(readReceipts: List<ReadReceiptData>, avatarRenderer: AvatarRenderer) {
+    fun render(readReceipts: List<ReadReceiptData>, avatarRenderer: AvatarRenderer, clickListener: OnClickListener) {
+        setOnClickListener(clickListener)
         if (readReceipts.isNotEmpty()) {
             isVisible = true
             for (index in 0 until MAX_RECEIPT_DISPLAYED) {

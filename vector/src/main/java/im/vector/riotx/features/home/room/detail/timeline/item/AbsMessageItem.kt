@@ -16,7 +16,6 @@
 
 package im.vector.riotx.features.home.room.detail.timeline.item
 
-import android.annotation.SuppressLint
 import android.graphics.Typeface
 import android.os.Build
 import android.view.View
@@ -70,6 +69,9 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
     @EpoxyAttribute
     var avatarCallback: TimelineEventController.AvatarCallback? = null
 
+    @EpoxyAttribute
+    var readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null
+
     private val _avatarClickListener = DebouncedClickListener(View.OnClickListener {
         avatarCallback?.onAvatarClicked(informationData)
     })
@@ -77,6 +79,9 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
         avatarCallback?.onMemberNameClicked(informationData)
     })
 
+    private val _readReceiptsClickListener = DebouncedClickListener(View.OnClickListener {
+        readReceiptsCallback?.onReadReceiptsClicked(informationData)
+    })
 
     var reactionClickListener: ReactionButton.ReactedListener = object : ReactionButton.ReactedListener {
         override fun onReacted(reactionButton: ReactionButton) {
@@ -124,7 +129,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
             holder.memberNameView.setOnLongClickListener(null)
         }
 
-        holder.readReceiptsView.render(informationData.readReceipts, avatarRenderer)
+        holder.readReceiptsView.render(informationData.readReceipts, avatarRenderer, _readReceiptsClickListener)
 
         if (!shouldShowReactionAtBottom() || informationData.orderedReactionList.isNullOrEmpty()) {
             holder.reactionWrapper?.isVisible = false

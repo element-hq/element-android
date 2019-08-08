@@ -161,6 +161,7 @@ class MessageItemFactory @Inject constructor(
                 .informationData(informationData)
                 .highlighted(highlight)
                 .avatarCallback(callback)
+                .readReceiptsCallback(callback)
                 .filename(messageContent.body)
                 .iconRes(R.drawable.filetype_audio)
                 .reactionPillCallback(callback)
@@ -191,6 +192,7 @@ class MessageItemFactory @Inject constructor(
                 .avatarCallback(callback)
                 .filename(messageContent.body)
                 .reactionPillCallback(callback)
+                .readReceiptsCallback(callback)
                 .emojiTypeFace(emojiCompatFontProvider.typeface)
                 .iconRes(R.drawable.filetype_attachment)
                 .cellClickListener(
@@ -205,10 +207,6 @@ class MessageItemFactory @Inject constructor(
                         DebouncedClickListener(View.OnClickListener { _ ->
                             callback?.onFileMessageClicked(informationData.eventId, messageContent)
                         }))
-                .longClickListener { view ->
-                    return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
-                                             ?: false
-                }
     }
 
     private fun buildNotHandledMessageItem(messageContent: MessageContent, highlight: Boolean): DefaultItem? {
@@ -246,6 +244,7 @@ class MessageItemFactory @Inject constructor(
                 .avatarCallback(callback)
                 .mediaData(data)
                 .reactionPillCallback(callback)
+                .readReceiptsCallback(callback)
                 .emojiTypeFace(emojiCompatFontProvider.typeface)
                 .clickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
@@ -297,6 +296,7 @@ class MessageItemFactory @Inject constructor(
                 .avatarCallback(callback)
                 .mediaData(thumbnailData)
                 .reactionPillCallback(callback)
+                .readReceiptsCallback(callback)
                 .emojiTypeFace(emojiCompatFontProvider.typeface)
                 .cellClickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
@@ -336,6 +336,7 @@ class MessageItemFactory @Inject constructor(
                 .avatarCallback(callback)
                 .urlClickCallback(callback)
                 .reactionPillCallback(callback)
+                .readReceiptsCallback(callback)
                 .emojiTypeFace(emojiCompatFontProvider.typeface)
                 //click on the text
                 .cellClickListener(
@@ -402,6 +403,7 @@ class MessageItemFactory @Inject constructor(
                 .avatarCallback(callback)
                 .reactionPillCallback(callback)
                 .urlClickCallback(callback)
+                .readReceiptsCallback(callback)
                 .emojiTypeFace(emojiCompatFontProvider.typeface)
                 .memberClickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
@@ -441,6 +443,7 @@ class MessageItemFactory @Inject constructor(
                 .highlighted(highlight)
                 .avatarCallback(callback)
                 .reactionPillCallback(callback)
+                .readReceiptsCallback(callback)
                 .urlClickCallback(callback)
                 .emojiTypeFace(emojiCompatFontProvider.typeface)
                 .cellClickListener(
@@ -462,6 +465,7 @@ class MessageItemFactory @Inject constructor(
                 .informationData(informationData)
                 .highlighted(highlight)
                 .avatarCallback(callback)
+                .readReceiptsCallback(callback)
                 .cellClickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
                             callback?.onEventCellClicked(informationData, null, view)

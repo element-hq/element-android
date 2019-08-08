@@ -44,6 +44,7 @@ class NoticeItemFactory @Inject constructor(private val eventFormatter: NoticeEv
                 .highlighted(highlight)
                 .informationData(informationData)
                 .baseCallback(callback)
+                .readReceiptsCallback(callback)
     }
 
 

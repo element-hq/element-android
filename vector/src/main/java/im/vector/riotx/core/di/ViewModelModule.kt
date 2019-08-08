@@ -29,7 +29,11 @@ import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupSettingsVie
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupSettingsViewModel_AssistedFactory
 import im.vector.riotx.features.crypto.keysbackup.setup.KeysBackupSetupSharedViewModel
 import im.vector.riotx.features.crypto.verification.SasVerificationViewModel
-import im.vector.riotx.features.home.*
+import im.vector.riotx.features.home.HomeActivityViewModel
+import im.vector.riotx.features.home.HomeActivityViewModel_AssistedFactory
+import im.vector.riotx.features.home.HomeDetailViewModel
+import im.vector.riotx.features.home.HomeDetailViewModel_AssistedFactory
+import im.vector.riotx.features.home.HomeNavigationViewModel
 import im.vector.riotx.features.home.createdirect.CreateDirectRoomNavigationViewModel
 import im.vector.riotx.features.home.createdirect.CreateDirectRoomViewModel
 import im.vector.riotx.features.home.createdirect.CreateDirectRoomViewModel_AssistedFactory
@@ -39,7 +43,18 @@ import im.vector.riotx.features.home.room.detail.RoomDetailViewModel
 import im.vector.riotx.features.home.room.detail.RoomDetailViewModel_AssistedFactory
 import im.vector.riotx.features.home.room.detail.composer.TextComposerViewModel
 import im.vector.riotx.features.home.room.detail.composer.TextComposerViewModel_AssistedFactory
-import im.vector.riotx.features.home.room.detail.timeline.action.*
+import im.vector.riotx.features.home.room.detail.readreceipts.DisplayReadReceiptsViewModel
+import im.vector.riotx.features.home.room.detail.readreceipts.DisplayReadReceiptsViewModel_AssistedFactory
+import im.vector.riotx.features.home.room.detail.timeline.action.MessageActionsViewModel
+import im.vector.riotx.features.home.room.detail.timeline.action.MessageActionsViewModel_AssistedFactory
+import im.vector.riotx.features.home.room.detail.timeline.action.MessageMenuViewModel
+import im.vector.riotx.features.home.room.detail.timeline.action.MessageMenuViewModel_AssistedFactory
+import im.vector.riotx.features.home.room.detail.timeline.action.QuickReactionViewModel
+import im.vector.riotx.features.home.room.detail.timeline.action.QuickReactionViewModel_AssistedFactory
+import im.vector.riotx.features.home.room.detail.timeline.action.ViewEditHistoryViewModel
+import im.vector.riotx.features.home.room.detail.timeline.action.ViewEditHistoryViewModel_AssistedFactory
+import im.vector.riotx.features.home.room.detail.timeline.action.ViewReactionViewModel
+import im.vector.riotx.features.home.room.detail.timeline.action.ViewReactionViewModel_AssistedFactory
 import im.vector.riotx.features.home.room.list.RoomListViewModel
 import im.vector.riotx.features.home.room.list.RoomListViewModel_AssistedFactory
 import im.vector.riotx.features.reactions.EmojiChooserViewModel
@@ -181,5 +196,9 @@ interface ViewModelModule {
 
     @Binds
     fun bindPushGatewaysViewModelFactory(factory: PushGatewaysViewModel_AssistedFactory): PushGatewaysViewModel.Factory
+
+
+    @Binds
+    fun bindDisplayReadReceiptsViewModel(factory: DisplayReadReceiptsViewModel_AssistedFactory): DisplayReadReceiptsViewModel.Factory
 
 }

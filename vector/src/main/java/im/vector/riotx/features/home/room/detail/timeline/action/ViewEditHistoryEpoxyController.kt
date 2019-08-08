@@ -33,7 +33,7 @@ import im.vector.riotx.core.ui.list.genericFooterItem
 import im.vector.riotx.core.ui.list.genericItem
 import im.vector.riotx.core.ui.list.genericItemHeader
 import im.vector.riotx.core.ui.list.genericLoaderItem
-import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineDateFormatter
+import im.vector.riotx.core.date.VectorDateFormatter
 import im.vector.riotx.features.html.EventHtmlRenderer
 import me.gujun.android.span.span
 import name.fraser.neil.plaintext.diff_match_patch
@@ -44,7 +44,7 @@ import java.util.*
  * Epoxy controller for reaction event list
  */
 class ViewEditHistoryEpoxyController(private val context: Context,
-                                     val timelineDateFormatter: TimelineDateFormatter,
+                                     val dateFormatter: VectorDateFormatter,
                                      val eventHtmlRenderer: EventHtmlRenderer) : TypedEpoxyController<ViewEditHistoryViewState>() {
 
     override fun buildModels(state: ViewEditHistoryViewState) {
@@ -84,7 +84,7 @@ class ViewEditHistoryEpoxyController(private val context: Context,
                 if (lastDate?.get(Calendar.DAY_OF_YEAR) != evDate.get(Calendar.DAY_OF_YEAR)) {
                     //need to display header with day
                     val dateString = if (DateUtils.isToday(evDate.timeInMillis)) context.getString(R.string.today)
-                    else timelineDateFormatter.formatMessageDay(timelineEvent.localDateTime())
+                    else dateFormatter.formatMessageDay(timelineEvent.localDateTime())
                     genericItemHeader {
                         id(evDate.hashCode())
                         text(dateString)
@@ -136,7 +136,7 @@ class ViewEditHistoryEpoxyController(private val context: Context,
                 }
                 genericItem {
                     id(timelineEvent.eventId)
-                    title(timelineDateFormatter.formatMessageHour(timelineEvent.localDateTime()))
+                    title(dateFormatter.formatMessageHour(timelineEvent.localDateTime()))
                     description(spannedDiff ?: body)
                 }
             }

@@ -24,7 +24,7 @@ import im.vector.riotx.core.extensions.localDateTime
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.utils.isSingleEmoji
 import im.vector.riotx.features.home.getColorFromUserId
-import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineDateFormatter
+import im.vector.riotx.core.date.VectorDateFormatter
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.riotx.features.home.room.detail.timeline.item.ReactionInfoData
 import im.vector.riotx.features.home.room.detail.timeline.item.ReadReceiptData
@@ -35,7 +35,7 @@ import javax.inject.Inject
  * This class compute if data of an event (such has avatar, display name, ...) should be displayed, depending on the previous event in the timeline
  */
 class MessageInformationDataFactory @Inject constructor(private val session: Session,
-                                                        private val timelineDateFormatter: TimelineDateFormatter,
+                                                        private val dateFormatter: VectorDateFormatter,
                                                         private val colorProvider: ColorProvider) {
 
     fun create(event: TimelineEvent, nextEvent: TimelineEvent?): MessageInformationData {
@@ -55,7 +55,7 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                 || (nextEvent?.root?.getClearType() != EventType.MESSAGE && nextEvent?.root?.getClearType() != EventType.ENCRYPTED)
                 || isNextMessageReceivedMoreThanOneHourAgo
 
-        val time = timelineDateFormatter.formatMessageHour(date)
+        val time = dateFormatter.formatMessageHour(date)
         val avatarUrl = event.senderAvatar
         val memberName = event.getDisambiguatedDisplayName()
         val formattedMemberName = span(memberName) {
@@ -79,12 +79,14 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                 hasBeenEdited = event.hasBeenEdited(),
                 hasPendingEdits = event.annotations?.editSummary?.localEchos?.any() ?: false,
                 readReceipts = event.readReceipts
+                        .asSequence()
                         .filter {
                             it.user.userId != session.myUserId
                         }
                         .map {
                             ReadReceiptData(it.user.userId, it.user.avatarUrl, it.user.displayName, it.originServerTs)
                         }
+                        .toList()
         )
     }
 }

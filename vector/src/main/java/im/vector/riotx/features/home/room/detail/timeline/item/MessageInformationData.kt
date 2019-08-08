@@ -17,7 +17,6 @@
 package im.vector.riotx.features.home.room.detail.timeline.item
 
 import android.os.Parcelable
-import im.vector.matrix.android.api.session.room.model.ReadReceipt
 import im.vector.matrix.android.api.session.room.send.SendState
 import kotlinx.android.parcel.Parcelize
 

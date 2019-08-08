@@ -27,6 +27,7 @@ import com.airbnb.epoxy.EpoxyModel
 import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.riotx.core.date.VectorDateFormatter
 import im.vector.riotx.core.epoxy.LoadingItem_
 import im.vector.riotx.core.extensions.localDateTime
 import im.vector.riotx.core.resources.UserPreferencesProvider
@@ -42,7 +43,7 @@ import im.vector.riotx.features.media.VideoContentRenderer
 import org.threeten.bp.LocalDateTime
 import javax.inject.Inject
 
-class TimelineEventController @Inject constructor(private val dateFormatter: TimelineDateFormatter,
+class TimelineEventController @Inject constructor(private val dateFormatter: VectorDateFormatter,
                                                   private val timelineItemFactory: TimelineItemFactory,
                                                   private val timelineMediaSizeProvider: TimelineMediaSizeProvider,
                                                   private val avatarRenderer: AvatarRenderer,
@@ -51,7 +52,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Tim
                                                   userPreferencesProvider: UserPreferencesProvider
 ) : EpoxyController(backgroundHandler, backgroundHandler), Timeline.Listener {
 
-    interface Callback : ReactionPillCallback, AvatarCallback, BaseCallback, UrlClickCallback {
+    interface Callback : BaseCallback, ReactionPillCallback, AvatarCallback, UrlClickCallback, ReadReceiptsCallback {
         fun onEventVisible(event: TimelineEvent)
         fun onRoomCreateLinkClicked(url: String)
         fun onEncryptedMessageClicked(informationData: MessageInformationData, view: View)
@@ -75,6 +76,10 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Tim
     interface AvatarCallback {
         fun onAvatarClicked(informationData: MessageInformationData)
         fun onMemberNameClicked(informationData: MessageInformationData)
+    }
+
+    interface ReadReceiptsCallback {
+        fun onReadReceiptsClicked(informationData: MessageInformationData)
     }
 
     interface UrlClickCallback {
@@ -158,7 +163,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Tim
             synchronized(modelCache) {
                 for (i in 0 until modelCache.size) {
                     if (modelCache[i]?.eventId == eventIdToHighlight
-                            || modelCache[i]?.eventId == this.eventIdToHighlight) {
+                        || modelCache[i]?.eventId == this.eventIdToHighlight) {
                         modelCache[i] = null
                     }
                 }
@@ -219,8 +224,8 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Tim
                 // Should be build if not cached or if cached but contains mergedHeader or formattedDay
                 // We then are sure we always have items up to date.
                 if (modelCache[position] == null
-                        || modelCache[position]?.mergedHeaderModel != null
-                        || modelCache[position]?.formattedDayModel != null) {
+                    || modelCache[position]?.mergedHeaderModel != null
+                    || modelCache[position]?.formattedDayModel != null) {
                     modelCache[position] = buildItemModels(position, currentSnapshot)
                 }
             }
@@ -293,7 +298,8 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Tim
                 // We try to find if one of the item id were used as mergeItemCollapseStates key
                 // => handle case where paginating from mergeable events and we get more
                 val previousCollapseStateKey = mergedEventIds.intersect(mergeItemCollapseStates.keys).firstOrNull()
-                val initialCollapseState = mergeItemCollapseStates.remove(previousCollapseStateKey) ?: true
+                val initialCollapseState = mergeItemCollapseStates.remove(previousCollapseStateKey)
+                                           ?: true
                 val isCollapsed = mergeItemCollapseStates.getOrPut(event.localId) { initialCollapseState }
                 if (isCollapsed) {
                     collapsedEventIds.addAll(mergedEventIds)

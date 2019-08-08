@@ -27,7 +27,7 @@ import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.isReply
 import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
 import im.vector.riotx.core.platform.VectorViewModel
-import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineDateFormatter
+import im.vector.riotx.core.date.VectorDateFormatter
 import timber.log.Timber
 import java.util.*
 
@@ -46,7 +46,7 @@ data class ViewEditHistoryViewState(
 class ViewEditHistoryViewModel @AssistedInject constructor(@Assisted
                                                            initialState: ViewEditHistoryViewState,
                                                            val session: Session,
-                                                           val timelineDateFormatter: TimelineDateFormatter
+                                                           val dateFormatter: VectorDateFormatter
 ) : VectorViewModel<ViewEditHistoryViewState>(initialState) {
 
     private val roomId = initialState.roomId

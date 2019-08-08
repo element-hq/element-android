@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.home.room.detail.timeline.helper
+package im.vector.riotx.core.date
 
+import android.content.Context
+import android.text.format.DateUtils
 import im.vector.riotx.core.resources.LocaleProvider
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import javax.inject.Inject
 
 
-class TimelineDateFormatter @Inject constructor (private val localeProvider: LocaleProvider) {
+class VectorDateFormatter @Inject constructor(private val context: Context,
+                                              private val localeProvider: LocaleProvider) {
 
     private val messageHourFormatter by lazy {
         DateTimeFormatter.ofPattern("H:mm", localeProvider.current())
@@ -37,6 +40,13 @@ class TimelineDateFormatter @Inject constructor (private val localeProvider: Loc
 
     fun formatMessageDay(localDateTime: LocalDateTime): String {
         return messageDayFormatter.format(localDateTime)
+    }
+
+    fun formatRelativeDateTime(time: Long?): String {
+        if (time == null) {
+            return ""
+        }
+        return DateUtils.getRelativeDateTimeString(context, time, DateUtils.DAY_IN_MILLIS, 2 * DateUtils.DAY_IN_MILLIS, DateUtils.FORMAT_SHOW_WEEKDAY).toString()
     }
 
 }

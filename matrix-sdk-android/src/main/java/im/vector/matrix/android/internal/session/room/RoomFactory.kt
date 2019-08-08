@@ -21,6 +21,7 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.room.Room
+import im.vector.matrix.android.internal.database.mapper.ReadReceiptsSummaryMapper
 import im.vector.matrix.android.internal.database.mapper.RoomSummaryMapper
 import im.vector.matrix.android.internal.database.mapper.TimelineEventMapper
 import im.vector.matrix.android.internal.session.room.membership.DefaultMembershipService
@@ -49,6 +50,7 @@ internal class RoomFactory @Inject constructor(private val context: Context,
                                                private val eventFactory: LocalEchoEventFactory,
                                                private val roomSummaryMapper: RoomSummaryMapper,
                                                private val timelineEventMapper: TimelineEventMapper,
+                                               private val readReceiptsSummaryMapper: ReadReceiptsSummaryMapper,
                                                private val taskExecutor: TaskExecutor,
                                                private val loadRoomMembersTask: LoadRoomMembersTask,
                                                private val inviteTask: InviteTask,
@@ -67,7 +69,7 @@ internal class RoomFactory @Inject constructor(private val context: Context,
         val sendService = DefaultSendService(context, credentials, roomId, eventFactory, cryptoService, monarchy)
         val stateService = DefaultStateService(roomId, monarchy.realmConfiguration, taskExecutor, sendStateTask)
         val roomMembersService = DefaultMembershipService(roomId, monarchy, taskExecutor, loadRoomMembersTask, inviteTask, joinRoomTask, leaveRoomTask)
-        val readService = DefaultReadService(roomId, monarchy, taskExecutor, setReadMarkersTask, credentials)
+        val readService = DefaultReadService(roomId, monarchy, taskExecutor, setReadMarkersTask, readReceiptsSummaryMapper, credentials)
         val relationService = DefaultRelationService(context,
                                                      credentials, roomId, eventFactory, cryptoService, findReactionEventForUndoTask, fetchEditHistoryTask, monarchy, taskExecutor)
 
