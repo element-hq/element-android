@@ -150,4 +150,21 @@
     <string name="verification_emoji_folder">Mappe</string>
     <string name="verification_emoji_pin">Pinne</string>
 
+    <string name="initial_sync_start_importing_account">Initiële synchronisoatie:
+\nAccount wor geïmporteerd…</string>
+    <string name="initial_sync_start_importing_account_crypto">Initiële synchronisoatie:
+\nCrypto wor geïmporteerd</string>
+    <string name="initial_sync_start_importing_account_rooms">Initiële synchronisoatie:
+\nGesprekkn wordn geïmporteerd</string>
+    <string name="initial_sync_start_importing_account_joined_rooms">Initiële synchronisoatie:
+\nDeelgenoomn gesprekken wordn geïmporteerd</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">Initiële synchronisoatie:
+\nUutgenodigde gesprekkn wordn geïmporteerd</string>
+    <string name="initial_sync_start_importing_account_left_rooms">Initiële synchronisoatie:
+\nVerloatn gesprekkn wordn geïmporteerd</string>
+    <string name="initial_sync_start_importing_account_groups">Initiële synchronisoatie:
+\nGemeenschappn wordn geïmporteerd</string>
+    <string name="initial_sync_start_importing_account_data">Initiële synchronisoatie:
+\nAccountgegeevns wordn geïmporteerd</string>
+
 </resources>

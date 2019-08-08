@@ -28,7 +28,6 @@ import im.vector.matrix.android.api.permalinks.MatrixLinkify
 import im.vector.matrix.android.api.permalinks.MatrixPermalinkSpan
 import im.vector.matrix.android.api.session.events.model.RelationType
 import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.EditAggregatedSummary
 import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
@@ -41,11 +40,13 @@ import im.vector.riotx.core.epoxy.VectorEpoxyModel
 import im.vector.riotx.core.linkify.VectorLinkify
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
+import im.vector.riotx.core.resources.UserPreferencesProvider
 import im.vector.riotx.core.utils.DebouncedClickListener
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
 import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
+import im.vector.riotx.features.home.room.detail.timeline.helper.senderAvatar
 import im.vector.riotx.features.home.room.detail.timeline.item.*
 import im.vector.riotx.features.home.room.detail.timeline.util.MessageInformationDataFactory
 import im.vector.riotx.features.html.EventHtmlRenderer
@@ -63,7 +64,8 @@ class MessageItemFactory @Inject constructor(
         private val emojiCompatFontProvider: EmojiCompatFontProvider,
         private val imageContentRenderer: ImageContentRenderer,
         private val messageInformationDataFactory: MessageInformationDataFactory,
-        private val contentUploadStateTrackerBinder: ContentUploadStateTrackerBinder) {
+        private val contentUploadStateTrackerBinder: ContentUploadStateTrackerBinder,
+        private val userPreferencesProvider: UserPreferencesProvider) {
 
 
     fun create(event: TimelineEvent,
@@ -89,20 +91,37 @@ class MessageItemFactory @Inject constructor(
                 || event.isEncrypted() && event.root.content.toModel<EncryptedEventContent>()?.relatesTo?.type == RelationType.REPLACE
         ) {
             // ignore replace event, the targeted id is already edited
-            return BlankItem_()
+            if (userPreferencesProvider.shouldShowHiddenEvents()) {
+                //These are just for debug to display hidden event, they should be filtered out in normal mode
+                val informationData = MessageInformationData(
+                        eventId = event.root.eventId ?: "?",
+                        senderId = event.root.senderId ?: "",
+                        sendState = event.root.sendState,
+                        time = "",
+                        avatarUrl = event.senderAvatar(),
+                        memberName = "",
+                        showInformation = false
+                )
+                return NoticeItem_()
+                        .avatarRenderer(avatarRenderer)
+                        .informationData(informationData)
+                        .noticeText("{ \"type\": ${event.root.getClearType()} }")
+                        .highlighted(highlight)
+                        .baseCallback(callback)
+            } else {
+                return BlankItem_()
+            }
         }
 //        val all = event.root.toContent()
 //        val ev = all.toModel<Event>()
         return when (messageContent) {
             is MessageEmoteContent  -> buildEmoteMessageItem(messageContent,
                     informationData,
-                    event.annotations?.editSummary,
                     highlight,
                     callback)
-            is MessageTextContent   -> buildTextMessageItem(event.sendState,
+            is MessageTextContent   -> buildTextMessageItem(event.root.sendState,
                     messageContent,
                     informationData,
-                    event.annotations?.editSummary,
                     highlight,
                     callback
             )
@@ -276,7 +295,6 @@ class MessageItemFactory @Inject constructor(
     private fun buildTextMessageItem(sendState: SendState,
                                      messageContent: MessageTextContent,
                                      informationData: MessageInformationData,
-                                     editSummary: EditAggregatedSummary?,
                                      highlight: Boolean,
                                      callback: TimelineEventController.Callback?): MessageTextItem? {
 
@@ -289,7 +307,7 @@ class MessageItemFactory @Inject constructor(
         return MessageTextItem_()
                 .apply {
                     if (informationData.hasBeenEdited) {
-                        val spannable = annotateWithEdited(linkifiedBody, callback, informationData, editSummary)
+                        val spannable = annotateWithEdited(linkifiedBody, callback, informationData)
                         message(spannable)
                     } else {
                         message(linkifiedBody)
@@ -316,14 +334,13 @@ class MessageItemFactory @Inject constructor(
 
     private fun annotateWithEdited(linkifiedBody: CharSequence,
                                    callback: TimelineEventController.Callback?,
-                                   informationData: MessageInformationData,
-                                   editSummary: EditAggregatedSummary?): SpannableStringBuilder {
+                                   informationData: MessageInformationData): SpannableStringBuilder {
         val spannable = SpannableStringBuilder()
         spannable.append(linkifiedBody)
         val editedSuffix = stringProvider.getString(R.string.edited_suffix)
         spannable.append(" ").append(editedSuffix)
         val color = colorProvider.getColorFromAttribute(R.attr.vctr_list_header_secondary_text_color)
-        val editStart = spannable.indexOf(editedSuffix)
+        val editStart = spannable.lastIndexOf(editedSuffix)
         val editEnd = editStart + editedSuffix.length
         spannable.setSpan(
                 ForegroundColorSpan(color),
@@ -334,7 +351,7 @@ class MessageItemFactory @Inject constructor(
         spannable.setSpan(RelativeSizeSpan(.9f), editStart, editEnd, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
         spannable.setSpan(object : ClickableSpan() {
             override fun onClick(widget: View?) {
-                callback?.onEditedDecorationClicked(informationData, editSummary)
+                callback?.onEditedDecorationClicked(informationData)
             }
 
             override fun updateDrawState(ds: TextPaint?) {
@@ -386,7 +403,6 @@ class MessageItemFactory @Inject constructor(
 
     private fun buildEmoteMessageItem(messageContent: MessageEmoteContent,
                                       informationData: MessageInformationData,
-                                      editSummary: EditAggregatedSummary?,
                                       highlight: Boolean,
                                       callback: TimelineEventController.Callback?): MessageTextItem? {
 
@@ -397,7 +413,7 @@ class MessageItemFactory @Inject constructor(
         return MessageTextItem_()
                 .apply {
                     if (informationData.hasBeenEdited) {
-                        val spannable = annotateWithEdited(message, callback, informationData, editSummary)
+                        val spannable = annotateWithEdited(message, callback, informationData)
                         message(spannable)
                     } else {
                         message(message)

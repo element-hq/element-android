@@ -16,10 +16,10 @@
 
 package im.vector.matrix.android;
 
+import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
-import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;

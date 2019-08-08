@@ -18,6 +18,7 @@ package im.vector.matrix.android.api.permalinks
 
 import android.text.style.ClickableSpan
 import android.view.View
+import im.vector.matrix.android.api.permalinks.MatrixPermalinkSpan.Callback
 
 /**
  * This MatrixPermalinkSpan is a clickable span which use a [Callback] to communicate back.

@@ -287,23 +287,25 @@ internal abstract class SASVerificationTransaction(
         val contentMap = MXUsersDevicesMap<Any>()
         contentMap.setObject(otherUserId, otherDeviceId, keyToDevice)
 
-        sendToDeviceTask.configureWith(SendToDeviceTask.Params(type, contentMap, transactionId))
-                .dispatchTo(object : MatrixCallback<Unit> {
-                    override fun onSuccess(data: Unit) {
-                        Timber.v("## SAS verification [$transactionId] toDevice type '$type' success.")
-                        if (onDone != null) {
-                            onDone()
-                        } else {
-                            state = nextState
+        sendToDeviceTask
+                .configureWith(SendToDeviceTask.Params(type, contentMap, transactionId)) {
+                    this.callback = object : MatrixCallback<Unit> {
+                        override fun onSuccess(data: Unit) {
+                            Timber.v("## SAS verification [$transactionId] toDevice type '$type' success.")
+                            if (onDone != null) {
+                                onDone()
+                            } else {
+                                state = nextState
+                            }
+                        }
+
+                        override fun onFailure(failure: Throwable) {
+                            Timber.e("## SAS verification [$transactionId] failed to send toDevice in state : $state")
+
+                            cancel(onErrorReason)
                         }
                     }
-
-                    override fun onFailure(failure: Throwable) {
-                        Timber.e("## SAS verification [$transactionId] failed to send toDevice in state : $state")
-
-                        cancel(onErrorReason)
-                    }
-                })
+                }
                 .executeBy(taskExecutor)
     }
 

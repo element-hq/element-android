@@ -17,33 +17,41 @@
 package im.vector.matrix.android.internal.task
 
 
-import arrow.core.Try
 import im.vector.matrix.android.api.util.Cancelable
+import im.vector.matrix.android.internal.di.MatrixScope
 import im.vector.matrix.android.internal.extensions.foldToCallback
-import im.vector.matrix.android.internal.extensions.onError
+import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
 import im.vector.matrix.android.internal.util.CancelableCoroutine
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.coroutines.EmptyCoroutineContext
 
-internal class TaskExecutor @Inject constructor(private val coroutineDispatchers: MatrixCoroutineDispatchers) {
+@MatrixScope
+internal class TaskExecutor @Inject constructor(private val coroutineDispatchers: MatrixCoroutineDispatchers,
+                                                private val networkConnectivityChecker: NetworkConnectivityChecker) {
+
+    private val executorScope = CoroutineScope(SupervisorJob())
 
     fun <PARAMS, RESULT> execute(task: ConfigurableTask<PARAMS, RESULT>): Cancelable {
 
-        val job = GlobalScope.launch(task.callbackThread.toDispatcher()) {
-            val resultOrFailure = withContext(task.executionThread.toDispatcher()) {
-                Timber.v("Executing $task on ${Thread.currentThread().name}")
-                retry(task.retryCount) {
-                    task.execute(task.params)
+        val job = executorScope.launch(task.callbackThread.toDispatcher()) {
+            val resultOrFailure = runCatching {
+                withContext(task.executionThread.toDispatcher()) {
+                    Timber.v("Enqueue task $task")
+                    retry(task.retryCount) {
+                        if (task.constraints.connectedToNetwork) {
+                            Timber.v("Waiting network for $task")
+                            networkConnectivityChecker.waitUntilConnected()
+                        }
+                        Timber.v("Execute task $task on ${Thread.currentThread().name}")
+                        task.execute(task.params)
+                    }
                 }
             }
             resultOrFailure
-                    .onError {
+                    .onFailure {
                         Timber.d(it, "Task failed")
                     }
                     .foldToCallback(task.callback)
@@ -51,19 +59,22 @@ internal class TaskExecutor @Inject constructor(private val coroutineDispatchers
         return CancelableCoroutine(job)
     }
 
+    fun cancelAll() = executorScope.coroutineContext.cancelChildren()
+
+
     private suspend fun <T> retry(
             times: Int = Int.MAX_VALUE,
             initialDelay: Long = 100, // 0.1 second
             maxDelay: Long = 10_000,    // 10 second
             factor: Double = 2.0,
-            block: suspend () -> Try<T>): Try<T> {
+            block: suspend () -> T): T {
 
         var currentDelay = initialDelay
         repeat(times - 1) {
-            val blockResult = block()
-            if (blockResult.isSuccess()) {
-                return blockResult
-            } else {
+            try {
+                return block()
+            } catch (e: Exception) {
+                Timber.v("Retry task after $currentDelay ms")
                 delay(currentDelay)
                 currentDelay = (currentDelay * factor).toLong().coerceAtMost(maxDelay)
             }

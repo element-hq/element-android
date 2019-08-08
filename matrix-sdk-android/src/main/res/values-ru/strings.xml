@@ -159,8 +159,25 @@
     <string name="verification_emoji_trumpet">Труба</string>
     <string name="verification_emoji_bell">Колокол</string>
     <string name="verification_emoji_anchor">Якорь</string>
-    <string name="verification_emoji_headphone">Гарнитура</string>
+    <string name="verification_emoji_headphone">Наушники</string>
     <string name="verification_emoji_folder">Папка</string>
     <string name="verification_emoji_pin">Булавка</string>
+
+    <string name="initial_sync_start_importing_account">Начальная синхронизация:
+\nИмпорт учетной записи…</string>
+    <string name="initial_sync_start_importing_account_crypto">Начальная синхронизация:
+\nИмпорт криптографии</string>
+    <string name="initial_sync_start_importing_account_rooms">Начальная синхронизация:
+\nИмпорт комнат</string>
+    <string name="initial_sync_start_importing_account_joined_rooms">Начальная синхронизация:
+\nИмпорт присоединенных комнат</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">Начальная синхронизация:
+\nИмпорт приглашенных комнат</string>
+    <string name="initial_sync_start_importing_account_left_rooms">Начальная синхронизация:
+\nИмпорт покинутых комнат</string>
+    <string name="initial_sync_start_importing_account_groups">Начальная синхронизация:
+\nИмпорт сообществ</string>
+    <string name="initial_sync_start_importing_account_data">Начальная синхронизация:
+\nИмпорт данных учетной записи</string>
 
 </resources>

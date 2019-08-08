@@ -1,3 +1,34 @@
+Changes in RiotX 0.3.0 (2019-08-08)
+===================================================
+
+Features:
+ - Create Direct Room flow
+ - Handle `/markdown` command
+
+Improvements:
+ - UI for pending edits (#193)
+ - UX image preview screen transition (#393)
+ - Basic support for resending failed messages (retry/remove)
+ - Enable proper cancellation of suspending functions (including db transaction)
+ - Enhances network connectivity checks in SDK
+ - Add "View Edit History" item in the message bottom sheet (#401)
+ - Cancel sync request on pause and timeout to 0 after pause (#404)
+
+Other changes:
+ - Show sync progress also in room detail screen (#403)
+
+Bugfix:
+ - Edited message: link confusion when (edited) appears in body (#398)
+ - Close detail room screen when the room is left with another client (#256)
+ - Clear notification for a room left on another client
+ - Fix messages with empty `in_reply_to` not rendering (#447)
+ - Fix clear cache (#408) and Logout (#205)
+ - Fix `(edited)` link can be copied to clipboard (#402)
+
+Build:
+ - Split APK: generate one APK per arch, to reduce APK size of about 30%
+
+
 Changes in RiotX 0.2.0 (2019-07-18)
 ===================================================
 
@@ -36,7 +67,7 @@ Mode details here: https://medium.com/@RiotChat/introducing-the-riotx-beta-for-a
 =======================================================
 
 
-Changes in RiotX 0.XX (2019-XX-XX)
+Changes in RiotX 0.0.0 (2019-XX-XX)
 ===================================================
 
 Features:

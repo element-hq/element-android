@@ -17,7 +17,6 @@
 package im.vector.matrix.android.internal.session.sync
 
 import im.vector.matrix.android.internal.database.model.ReadReceiptEntity
-import im.vector.matrix.android.internal.session.SessionScope
 import io.realm.Realm
 import timber.log.Timber
 import javax.inject.Inject

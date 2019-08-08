@@ -35,9 +35,9 @@ fun getFilenameFromUri(context: Context?, uri: Uri): String? {
     }
     if (result == null) {
         result = uri.path
-        val cut = result.lastIndexOf('/')
+        val cut = result?.lastIndexOf('/') ?: -1
         if (cut != -1) {
-            result = result.substring(cut + 1)
+            result = result?.substring(cut + 1)
         }
     }
     return result

@@ -18,12 +18,30 @@ package im.vector.matrix.android.internal.session.user
 
 import dagger.Binds
 import dagger.Module
+import dagger.Provides
 import im.vector.matrix.android.api.session.user.UserService
+import im.vector.matrix.android.internal.session.SessionScope
+import im.vector.matrix.android.internal.session.user.model.DefaultSearchUserTask
+import im.vector.matrix.android.internal.session.user.model.SearchUserTask
+import retrofit2.Retrofit
 
 @Module
 internal abstract class UserModule {
 
+    @Module
+    companion object {
+        @Provides
+        @JvmStatic
+        @SessionScope
+        fun providesSearchUserAPI(retrofit: Retrofit): SearchUserAPI {
+            return retrofit.create(SearchUserAPI::class.java)
+        }
+    }
+
     @Binds
     abstract fun bindUserService(userService: DefaultUserService): UserService
+
+    @Binds
+    abstract fun bindSearchUserTask(searchUserTask: DefaultSearchUserTask): SearchUserTask
 
 }

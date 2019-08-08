@@ -27,7 +27,7 @@ internal interface SessionParamsStore {
 
     fun getAll(): List<SessionParams>
 
-    fun save(sessionParams: SessionParams): Try<SessionParams>
+    fun save(sessionParams: SessionParams): Try<Unit>
 
     fun delete(userId: String): Try<Unit>
 

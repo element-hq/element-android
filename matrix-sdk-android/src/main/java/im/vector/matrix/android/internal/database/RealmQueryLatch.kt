@@ -16,38 +16,46 @@
 
 package im.vector.matrix.android.internal.database
 
-import android.os.Handler
-import android.os.HandlerThread
+import im.vector.matrix.android.internal.util.createBackgroundHandler
 import io.realm.*
 import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicReference
 
-private const val THREAD_NAME = "REALM_QUERY_LATCH"
 
 class RealmQueryLatch<E : RealmObject>(private val realmConfiguration: RealmConfiguration,
                                        private val realmQueryBuilder: (Realm) -> RealmQuery<E>) {
 
-    fun await() {
-        val latch = CountDownLatch(1)
-        val handlerThread = HandlerThread(THREAD_NAME + hashCode())
-        handlerThread.start()
-        val handler = Handler(handlerThread.looper)
-        val runnable = Runnable {
-            val realm = Realm.getInstance(realmConfiguration)
-            val result = realmQueryBuilder(realm).findAllAsync()
+    private companion object {
+        val QUERY_LATCH_HANDLER = createBackgroundHandler("REALM_QUERY_LATCH")
+    }
 
+    @Throws(InterruptedException::class)
+    fun await(timeout: Long, timeUnit: TimeUnit) {
+        val realmRef = AtomicReference<Realm>()
+        val latch = CountDownLatch(1)
+        QUERY_LATCH_HANDLER.post {
+            val realm = Realm.getInstance(realmConfiguration)
+            realmRef.set(realm)
+            val result = realmQueryBuilder(realm).findAllAsync()
             result.addChangeListener(object : RealmChangeListener<RealmResults<E>> {
                 override fun onChange(t: RealmResults<E>) {
                     if (t.isNotEmpty()) {
                         result.removeChangeListener(this)
-                        realm.close()
                         latch.countDown()
                     }
                 }
             })
         }
-        handler.post(runnable)
-        latch.await()
-        handlerThread.quit()
+        try {
+            latch.await(timeout, timeUnit)
+        } catch (exception: InterruptedException) {
+            throw exception
+        } finally {
+            QUERY_LATCH_HANDLER.post {
+                realmRef.getAndSet(null).close()
+            }
+        }
     }
 
 

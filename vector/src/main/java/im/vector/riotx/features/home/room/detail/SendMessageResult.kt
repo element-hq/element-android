@@ -16,13 +16,14 @@
 
 package im.vector.riotx.features.home.room.detail
 
+import androidx.annotation.StringRes
 import im.vector.riotx.features.command.Command
 
 sealed class SendMessageResult {
     object MessageSent : SendMessageResult()
     class SlashCommandError(val command: Command) : SendMessageResult()
     class SlashCommandUnknown(val command: String) : SendMessageResult()
-    object SlashCommandHandled : SendMessageResult()
+    data class SlashCommandHandled(@StringRes val messageRes: Int? = null) : SendMessageResult()
     object SlashCommandResultOk : SendMessageResult()
     class SlashCommandResultError(val throwable: Throwable) : SendMessageResult()
     // TODO Remove

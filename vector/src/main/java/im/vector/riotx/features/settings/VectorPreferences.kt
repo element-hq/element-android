@@ -31,187 +31,192 @@ import im.vector.riotx.features.themes.ThemeUtils
 import timber.log.Timber
 import java.io.File
 import java.util.*
+import javax.inject.Inject
 
-object VectorPreferences {
+class VectorPreferences @Inject constructor(private val context: Context) {
 
-    const val SETTINGS_MESSAGES_SENT_BY_BOT_PREFERENCE_KEY = "SETTINGS_MESSAGES_SENT_BY_BOT_PREFERENCE_KEY_2"
-    const val SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY = "SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY"
-    const val SETTINGS_VERSION_PREFERENCE_KEY = "SETTINGS_VERSION_PREFERENCE_KEY"
-    const val SETTINGS_SDK_VERSION_PREFERENCE_KEY = "SETTINGS_SDK_VERSION_PREFERENCE_KEY"
-    const val SETTINGS_OLM_VERSION_PREFERENCE_KEY = "SETTINGS_OLM_VERSION_PREFERENCE_KEY"
-    const val SETTINGS_LOGGED_IN_PREFERENCE_KEY = "SETTINGS_LOGGED_IN_PREFERENCE_KEY"
-    const val SETTINGS_HOME_SERVER_PREFERENCE_KEY = "SETTINGS_HOME_SERVER_PREFERENCE_KEY"
-    const val SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY = "SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY"
-    const val SETTINGS_APP_TERM_CONDITIONS_PREFERENCE_KEY = "SETTINGS_APP_TERM_CONDITIONS_PREFERENCE_KEY"
-    const val SETTINGS_PRIVACY_POLICY_PREFERENCE_KEY = "SETTINGS_PRIVACY_POLICY_PREFERENCE_KEY"
+    companion object {
+        const val SETTINGS_MESSAGES_SENT_BY_BOT_PREFERENCE_KEY = "SETTINGS_MESSAGES_SENT_BY_BOT_PREFERENCE_KEY_2"
+        const val SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY = "SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY"
+        const val SETTINGS_VERSION_PREFERENCE_KEY = "SETTINGS_VERSION_PREFERENCE_KEY"
+        const val SETTINGS_SDK_VERSION_PREFERENCE_KEY = "SETTINGS_SDK_VERSION_PREFERENCE_KEY"
+        const val SETTINGS_OLM_VERSION_PREFERENCE_KEY = "SETTINGS_OLM_VERSION_PREFERENCE_KEY"
+        const val SETTINGS_LOGGED_IN_PREFERENCE_KEY = "SETTINGS_LOGGED_IN_PREFERENCE_KEY"
+        const val SETTINGS_HOME_SERVER_PREFERENCE_KEY = "SETTINGS_HOME_SERVER_PREFERENCE_KEY"
+        const val SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY = "SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY"
+        const val SETTINGS_APP_TERM_CONDITIONS_PREFERENCE_KEY = "SETTINGS_APP_TERM_CONDITIONS_PREFERENCE_KEY"
+        const val SETTINGS_PRIVACY_POLICY_PREFERENCE_KEY = "SETTINGS_PRIVACY_POLICY_PREFERENCE_KEY"
 
-    const val SETTINGS_NOTIFICATION_TROUBLESHOOT_PREFERENCE_KEY = "SETTINGS_NOTIFICATION_TROUBLESHOOT_PREFERENCE_KEY"
-    const val SETTINGS_NOTIFICATION_ADVANCED_PREFERENCE_KEY = "SETTINGS_NOTIFICATION_ADVANCED_PREFERENCE_KEY"
-    const val SETTINGS_THIRD_PARTY_NOTICES_PREFERENCE_KEY = "SETTINGS_THIRD_PARTY_NOTICES_PREFERENCE_KEY"
-    const val SETTINGS_OTHER_THIRD_PARTY_NOTICES_PREFERENCE_KEY = "SETTINGS_OTHER_THIRD_PARTY_NOTICES_PREFERENCE_KEY"
-    const val SETTINGS_COPYRIGHT_PREFERENCE_KEY = "SETTINGS_COPYRIGHT_PREFERENCE_KEY"
-    const val SETTINGS_CLEAR_CACHE_PREFERENCE_KEY = "SETTINGS_CLEAR_CACHE_PREFERENCE_KEY"
-    const val SETTINGS_CLEAR_MEDIA_CACHE_PREFERENCE_KEY = "SETTINGS_CLEAR_MEDIA_CACHE_PREFERENCE_KEY"
-    const val SETTINGS_USER_SETTINGS_PREFERENCE_KEY = "SETTINGS_USER_SETTINGS_PREFERENCE_KEY"
-    const val SETTINGS_CONTACT_PREFERENCE_KEYS = "SETTINGS_CONTACT_PREFERENCE_KEYS"
-    const val SETTINGS_NOTIFICATIONS_TARGETS_PREFERENCE_KEY = "SETTINGS_NOTIFICATIONS_TARGETS_PREFERENCE_KEY"
-    const val SETTINGS_NOTIFICATIONS_TARGET_DIVIDER_PREFERENCE_KEY = "SETTINGS_NOTIFICATIONS_TARGET_DIVIDER_PREFERENCE_KEY"
-    const val SETTINGS_IGNORED_USERS_PREFERENCE_KEY = "SETTINGS_IGNORED_USERS_PREFERENCE_KEY"
-    const val SETTINGS_IGNORE_USERS_DIVIDER_PREFERENCE_KEY = "SETTINGS_IGNORE_USERS_DIVIDER_PREFERENCE_KEY"
-    const val SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY = "SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY"
-    const val SETTINGS_BACKGROUND_SYNC_DIVIDER_PREFERENCE_KEY = "SETTINGS_BACKGROUND_SYNC_DIVIDER_PREFERENCE_KEY"
-    const val SETTINGS_LABS_PREFERENCE_KEY = "SETTINGS_LABS_PREFERENCE_KEY"
-    const val SETTINGS_CRYPTOGRAPHY_PREFERENCE_KEY = "SETTINGS_CRYPTOGRAPHY_PREFERENCE_KEY"
-    const val SETTINGS_CRYPTOGRAPHY_DIVIDER_PREFERENCE_KEY = "SETTINGS_CRYPTOGRAPHY_DIVIDER_PREFERENCE_KEY"
-    const val SETTINGS_CRYPTOGRAPHY_MANAGE_PREFERENCE_KEY = "SETTINGS_CRYPTOGRAPHY_MANAGE_PREFERENCE_KEY"
-    const val SETTINGS_CRYPTOGRAPHY_MANAGE_DIVIDER_PREFERENCE_KEY = "SETTINGS_CRYPTOGRAPHY_MANAGE_DIVIDER_PREFERENCE_KEY"
-    const val SETTINGS_DEVICES_LIST_PREFERENCE_KEY = "SETTINGS_DEVICES_LIST_PREFERENCE_KEY"
-    const val SETTINGS_DEVICES_DIVIDER_PREFERENCE_KEY = "SETTINGS_DEVICES_DIVIDER_PREFERENCE_KEY"
-    const val SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_PREFERENCE_KEY = "SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_PREFERENCE_KEY"
-    const val SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_IS_ACTIVE_PREFERENCE_KEY = "SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_IS_ACTIVE_PREFERENCE_KEY"
-    const val SETTINGS_ENCRYPTION_INFORMATION_DEVICE_NAME_PREFERENCE_KEY = "SETTINGS_ENCRYPTION_INFORMATION_DEVICE_NAME_PREFERENCE_KEY"
-    const val SETTINGS_ENCRYPTION_INFORMATION_DEVICE_ID_PREFERENCE_KEY = "SETTINGS_ENCRYPTION_INFORMATION_DEVICE_ID_PREFERENCE_KEY"
-    const val SETTINGS_ENCRYPTION_EXPORT_E2E_ROOM_KEYS_PREFERENCE_KEY = "SETTINGS_ENCRYPTION_EXPORT_E2E_ROOM_KEYS_PREFERENCE_KEY"
-    const val SETTINGS_ENCRYPTION_IMPORT_E2E_ROOM_KEYS_PREFERENCE_KEY = "SETTINGS_ENCRYPTION_IMPORT_E2E_ROOM_KEYS_PREFERENCE_KEY"
-    const val SETTINGS_ENCRYPTION_NEVER_SENT_TO_PREFERENCE_KEY = "SETTINGS_ENCRYPTION_NEVER_SENT_TO_PREFERENCE_KEY"
-    const val SETTINGS_ENCRYPTION_INFORMATION_DEVICE_KEY_PREFERENCE_KEY = "SETTINGS_ENCRYPTION_INFORMATION_DEVICE_KEY_PREFERENCE_KEY"
+        const val SETTINGS_NOTIFICATION_TROUBLESHOOT_PREFERENCE_KEY = "SETTINGS_NOTIFICATION_TROUBLESHOOT_PREFERENCE_KEY"
+        const val SETTINGS_NOTIFICATION_ADVANCED_PREFERENCE_KEY = "SETTINGS_NOTIFICATION_ADVANCED_PREFERENCE_KEY"
+        const val SETTINGS_THIRD_PARTY_NOTICES_PREFERENCE_KEY = "SETTINGS_THIRD_PARTY_NOTICES_PREFERENCE_KEY"
+        const val SETTINGS_OTHER_THIRD_PARTY_NOTICES_PREFERENCE_KEY = "SETTINGS_OTHER_THIRD_PARTY_NOTICES_PREFERENCE_KEY"
+        const val SETTINGS_COPYRIGHT_PREFERENCE_KEY = "SETTINGS_COPYRIGHT_PREFERENCE_KEY"
+        const val SETTINGS_CLEAR_CACHE_PREFERENCE_KEY = "SETTINGS_CLEAR_CACHE_PREFERENCE_KEY"
+        const val SETTINGS_CLEAR_MEDIA_CACHE_PREFERENCE_KEY = "SETTINGS_CLEAR_MEDIA_CACHE_PREFERENCE_KEY"
+        const val SETTINGS_USER_SETTINGS_PREFERENCE_KEY = "SETTINGS_USER_SETTINGS_PREFERENCE_KEY"
+        const val SETTINGS_CONTACT_PREFERENCE_KEYS = "SETTINGS_CONTACT_PREFERENCE_KEYS"
+        const val SETTINGS_NOTIFICATIONS_TARGETS_PREFERENCE_KEY = "SETTINGS_NOTIFICATIONS_TARGETS_PREFERENCE_KEY"
+        const val SETTINGS_NOTIFICATIONS_TARGET_DIVIDER_PREFERENCE_KEY = "SETTINGS_NOTIFICATIONS_TARGET_DIVIDER_PREFERENCE_KEY"
+        const val SETTINGS_IGNORED_USERS_PREFERENCE_KEY = "SETTINGS_IGNORED_USERS_PREFERENCE_KEY"
+        const val SETTINGS_IGNORE_USERS_DIVIDER_PREFERENCE_KEY = "SETTINGS_IGNORE_USERS_DIVIDER_PREFERENCE_KEY"
+        const val SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY = "SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY"
+        const val SETTINGS_BACKGROUND_SYNC_DIVIDER_PREFERENCE_KEY = "SETTINGS_BACKGROUND_SYNC_DIVIDER_PREFERENCE_KEY"
+        const val SETTINGS_LABS_PREFERENCE_KEY = "SETTINGS_LABS_PREFERENCE_KEY"
+        const val SETTINGS_CRYPTOGRAPHY_PREFERENCE_KEY = "SETTINGS_CRYPTOGRAPHY_PREFERENCE_KEY"
+        const val SETTINGS_CRYPTOGRAPHY_DIVIDER_PREFERENCE_KEY = "SETTINGS_CRYPTOGRAPHY_DIVIDER_PREFERENCE_KEY"
+        const val SETTINGS_CRYPTOGRAPHY_MANAGE_PREFERENCE_KEY = "SETTINGS_CRYPTOGRAPHY_MANAGE_PREFERENCE_KEY"
+        const val SETTINGS_CRYPTOGRAPHY_MANAGE_DIVIDER_PREFERENCE_KEY = "SETTINGS_CRYPTOGRAPHY_MANAGE_DIVIDER_PREFERENCE_KEY"
+        const val SETTINGS_DEVICES_LIST_PREFERENCE_KEY = "SETTINGS_DEVICES_LIST_PREFERENCE_KEY"
+        const val SETTINGS_DEVICES_DIVIDER_PREFERENCE_KEY = "SETTINGS_DEVICES_DIVIDER_PREFERENCE_KEY"
+        const val SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_PREFERENCE_KEY = "SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_PREFERENCE_KEY"
+        const val SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_IS_ACTIVE_PREFERENCE_KEY = "SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_IS_ACTIVE_PREFERENCE_KEY"
+        const val SETTINGS_ENCRYPTION_INFORMATION_DEVICE_NAME_PREFERENCE_KEY = "SETTINGS_ENCRYPTION_INFORMATION_DEVICE_NAME_PREFERENCE_KEY"
+        const val SETTINGS_ENCRYPTION_INFORMATION_DEVICE_ID_PREFERENCE_KEY = "SETTINGS_ENCRYPTION_INFORMATION_DEVICE_ID_PREFERENCE_KEY"
+        const val SETTINGS_ENCRYPTION_EXPORT_E2E_ROOM_KEYS_PREFERENCE_KEY = "SETTINGS_ENCRYPTION_EXPORT_E2E_ROOM_KEYS_PREFERENCE_KEY"
+        const val SETTINGS_ENCRYPTION_IMPORT_E2E_ROOM_KEYS_PREFERENCE_KEY = "SETTINGS_ENCRYPTION_IMPORT_E2E_ROOM_KEYS_PREFERENCE_KEY"
+        const val SETTINGS_ENCRYPTION_NEVER_SENT_TO_PREFERENCE_KEY = "SETTINGS_ENCRYPTION_NEVER_SENT_TO_PREFERENCE_KEY"
+        const val SETTINGS_ENCRYPTION_INFORMATION_DEVICE_KEY_PREFERENCE_KEY = "SETTINGS_ENCRYPTION_INFORMATION_DEVICE_KEY_PREFERENCE_KEY"
 
-    const val SETTINGS_SECURE_MESSAGE_RECOVERY_PREFERENCE_KEY = "SETTINGS_SECURE_MESSAGE_RECOVERY_PREFERENCE_KEY"
+        const val SETTINGS_SECURE_MESSAGE_RECOVERY_PREFERENCE_KEY = "SETTINGS_SECURE_MESSAGE_RECOVERY_PREFERENCE_KEY"
 
-    // user
-    const val SETTINGS_DISPLAY_NAME_PREFERENCE_KEY = "SETTINGS_DISPLAY_NAME_PREFERENCE_KEY"
-    const val SETTINGS_PROFILE_PICTURE_PREFERENCE_KEY = "SETTINGS_PROFILE_PICTURE_PREFERENCE_KEY"
+        // user
+        const val SETTINGS_DISPLAY_NAME_PREFERENCE_KEY = "SETTINGS_DISPLAY_NAME_PREFERENCE_KEY"
+        const val SETTINGS_PROFILE_PICTURE_PREFERENCE_KEY = "SETTINGS_PROFILE_PICTURE_PREFERENCE_KEY"
 
-    // contacts
-    const val SETTINGS_CONTACTS_PHONEBOOK_COUNTRY_PREFERENCE_KEY = "SETTINGS_CONTACTS_PHONEBOOK_COUNTRY_PREFERENCE_KEY"
+        // contacts
+        const val SETTINGS_CONTACTS_PHONEBOOK_COUNTRY_PREFERENCE_KEY = "SETTINGS_CONTACTS_PHONEBOOK_COUNTRY_PREFERENCE_KEY"
 
-    // interface
-    const val SETTINGS_INTERFACE_LANGUAGE_PREFERENCE_KEY = "SETTINGS_INTERFACE_LANGUAGE_PREFERENCE_KEY"
-    const val SETTINGS_INTERFACE_TEXT_SIZE_KEY = "SETTINGS_INTERFACE_TEXT_SIZE_KEY"
-    const val SETTINGS_SHOW_URL_PREVIEW_KEY = "SETTINGS_SHOW_URL_PREVIEW_KEY"
-    private const val SETTINGS_SEND_TYPING_NOTIF_KEY = "SETTINGS_SEND_TYPING_NOTIF_KEY"
-    private const val SETTINGS_ENABLE_MARKDOWN_KEY = "SETTINGS_ENABLE_MARKDOWN_KEY"
-    private const val SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY = "SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY"
-    private const val SETTINGS_12_24_TIMESTAMPS_KEY = "SETTINGS_12_24_TIMESTAMPS_KEY"
-    private const val SETTINGS_SHOW_READ_RECEIPTS_KEY = "SETTINGS_SHOW_READ_RECEIPTS_KEY"
-    private const val SETTINGS_SHOW_JOIN_LEAVE_MESSAGES_KEY = "SETTINGS_SHOW_JOIN_LEAVE_MESSAGES_KEY"
-    private const val SETTINGS_SHOW_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY = "SETTINGS_SHOW_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY"
-    private const val SETTINGS_VIBRATE_ON_MENTION_KEY = "SETTINGS_VIBRATE_ON_MENTION_KEY"
-    private const val SETTINGS_SEND_MESSAGE_WITH_ENTER = "SETTINGS_SEND_MESSAGE_WITH_ENTER"
+        // interface
+        const val SETTINGS_INTERFACE_LANGUAGE_PREFERENCE_KEY = "SETTINGS_INTERFACE_LANGUAGE_PREFERENCE_KEY"
+        const val SETTINGS_INTERFACE_TEXT_SIZE_KEY = "SETTINGS_INTERFACE_TEXT_SIZE_KEY"
+        const val SETTINGS_SHOW_URL_PREVIEW_KEY = "SETTINGS_SHOW_URL_PREVIEW_KEY"
+        private const val SETTINGS_SEND_TYPING_NOTIF_KEY = "SETTINGS_SEND_TYPING_NOTIF_KEY"
+        private const val SETTINGS_ENABLE_MARKDOWN_KEY = "SETTINGS_ENABLE_MARKDOWN_KEY"
+        private const val SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY = "SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY"
+        private const val SETTINGS_12_24_TIMESTAMPS_KEY = "SETTINGS_12_24_TIMESTAMPS_KEY"
+        private const val SETTINGS_SHOW_READ_RECEIPTS_KEY = "SETTINGS_SHOW_READ_RECEIPTS_KEY"
+        private const val SETTINGS_SHOW_JOIN_LEAVE_MESSAGES_KEY = "SETTINGS_SHOW_JOIN_LEAVE_MESSAGES_KEY"
+        private const val SETTINGS_SHOW_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY = "SETTINGS_SHOW_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY"
+        private const val SETTINGS_VIBRATE_ON_MENTION_KEY = "SETTINGS_VIBRATE_ON_MENTION_KEY"
+        private const val SETTINGS_SEND_MESSAGE_WITH_ENTER = "SETTINGS_SEND_MESSAGE_WITH_ENTER"
 
-    // home
-    private const val SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY = "SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY"
-    private const val SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY = "SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY"
+        // home
+        private const val SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY = "SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY"
+        private const val SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY = "SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY"
 
-    // flair
-    const val SETTINGS_GROUPS_FLAIR_KEY = "SETTINGS_GROUPS_FLAIR_KEY"
+        // flair
+        const val SETTINGS_GROUPS_FLAIR_KEY = "SETTINGS_GROUPS_FLAIR_KEY"
 
-    // notifications
-    const val SETTINGS_NOTIFICATIONS_KEY = "SETTINGS_NOTIFICATIONS_KEY"
-    const val SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY = "SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY"
-    const val SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY = "SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY"
-    //    public static final String SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY = "SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY";
-    const val SETTINGS_SYSTEM_CALL_NOTIFICATION_PREFERENCE_KEY = "SETTINGS_SYSTEM_CALL_NOTIFICATION_PREFERENCE_KEY"
-    const val SETTINGS_SYSTEM_NOISY_NOTIFICATION_PREFERENCE_KEY = "SETTINGS_SYSTEM_NOISY_NOTIFICATION_PREFERENCE_KEY"
-    const val SETTINGS_SYSTEM_SILENT_NOTIFICATION_PREFERENCE_KEY = "SETTINGS_SYSTEM_SILENT_NOTIFICATION_PREFERENCE_KEY"
-    const val SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY = "SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY"
-    const val SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY = "SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY"
-    const val SETTINGS_CONTAINING_MY_DISPLAY_NAME_PREFERENCE_KEY = "SETTINGS_CONTAINING_MY_DISPLAY_NAME_PREFERENCE_KEY_2"
-    const val SETTINGS_CONTAINING_MY_USER_NAME_PREFERENCE_KEY = "SETTINGS_CONTAINING_MY_USER_NAME_PREFERENCE_KEY_2"
-    const val SETTINGS_MESSAGES_IN_ONE_TO_ONE_PREFERENCE_KEY = "SETTINGS_MESSAGES_IN_ONE_TO_ONE_PREFERENCE_KEY_2"
-    const val SETTINGS_MESSAGES_IN_GROUP_CHAT_PREFERENCE_KEY = "SETTINGS_MESSAGES_IN_GROUP_CHAT_PREFERENCE_KEY_2"
-    const val SETTINGS_INVITED_TO_ROOM_PREFERENCE_KEY = "SETTINGS_INVITED_TO_ROOM_PREFERENCE_KEY_2"
-    const val SETTINGS_CALL_INVITATIONS_PREFERENCE_KEY = "SETTINGS_CALL_INVITATIONS_PREFERENCE_KEY_2"
+        // notifications
+        const val SETTINGS_NOTIFICATIONS_KEY = "SETTINGS_NOTIFICATIONS_KEY"
+        const val SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY = "SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY"
+        const val SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY = "SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY"
+        //    public static final String SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY = "SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY";
+        const val SETTINGS_SYSTEM_CALL_NOTIFICATION_PREFERENCE_KEY = "SETTINGS_SYSTEM_CALL_NOTIFICATION_PREFERENCE_KEY"
+        const val SETTINGS_SYSTEM_NOISY_NOTIFICATION_PREFERENCE_KEY = "SETTINGS_SYSTEM_NOISY_NOTIFICATION_PREFERENCE_KEY"
+        const val SETTINGS_SYSTEM_SILENT_NOTIFICATION_PREFERENCE_KEY = "SETTINGS_SYSTEM_SILENT_NOTIFICATION_PREFERENCE_KEY"
+        const val SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY = "SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY"
+        const val SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY = "SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY"
+        const val SETTINGS_CONTAINING_MY_DISPLAY_NAME_PREFERENCE_KEY = "SETTINGS_CONTAINING_MY_DISPLAY_NAME_PREFERENCE_KEY_2"
+        const val SETTINGS_CONTAINING_MY_USER_NAME_PREFERENCE_KEY = "SETTINGS_CONTAINING_MY_USER_NAME_PREFERENCE_KEY_2"
+        const val SETTINGS_MESSAGES_IN_ONE_TO_ONE_PREFERENCE_KEY = "SETTINGS_MESSAGES_IN_ONE_TO_ONE_PREFERENCE_KEY_2"
+        const val SETTINGS_MESSAGES_IN_GROUP_CHAT_PREFERENCE_KEY = "SETTINGS_MESSAGES_IN_GROUP_CHAT_PREFERENCE_KEY_2"
+        const val SETTINGS_INVITED_TO_ROOM_PREFERENCE_KEY = "SETTINGS_INVITED_TO_ROOM_PREFERENCE_KEY_2"
+        const val SETTINGS_CALL_INVITATIONS_PREFERENCE_KEY = "SETTINGS_CALL_INVITATIONS_PREFERENCE_KEY_2"
 
-    // media
-    private const val SETTINGS_DEFAULT_MEDIA_COMPRESSION_KEY = "SETTINGS_DEFAULT_MEDIA_COMPRESSION_KEY"
-    private const val SETTINGS_DEFAULT_MEDIA_SOURCE_KEY = "SETTINGS_DEFAULT_MEDIA_SOURCE_KEY"
-    private const val SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY = "SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY"
-    private const val SETTINGS_PLAY_SHUTTER_SOUND_KEY = "SETTINGS_PLAY_SHUTTER_SOUND_KEY"
+        // media
+        private const val SETTINGS_DEFAULT_MEDIA_COMPRESSION_KEY = "SETTINGS_DEFAULT_MEDIA_COMPRESSION_KEY"
+        private const val SETTINGS_DEFAULT_MEDIA_SOURCE_KEY = "SETTINGS_DEFAULT_MEDIA_SOURCE_KEY"
+        private const val SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY = "SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY"
+        private const val SETTINGS_PLAY_SHUTTER_SOUND_KEY = "SETTINGS_PLAY_SHUTTER_SOUND_KEY"
 
-    // background sync
-    const val SETTINGS_START_ON_BOOT_PREFERENCE_KEY = "SETTINGS_START_ON_BOOT_PREFERENCE_KEY"
-    const val SETTINGS_ENABLE_BACKGROUND_SYNC_PREFERENCE_KEY = "SETTINGS_ENABLE_BACKGROUND_SYNC_PREFERENCE_KEY"
-    const val SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY = "SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY"
-    const val SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY = "SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY"
+        // background sync
+        const val SETTINGS_START_ON_BOOT_PREFERENCE_KEY = "SETTINGS_START_ON_BOOT_PREFERENCE_KEY"
+        const val SETTINGS_ENABLE_BACKGROUND_SYNC_PREFERENCE_KEY = "SETTINGS_ENABLE_BACKGROUND_SYNC_PREFERENCE_KEY"
+        const val SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY = "SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY"
+        const val SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY = "SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY"
 
-    // Calls
-    const val SETTINGS_CALL_RINGTONE_USE_RIOT_PREFERENCE_KEY = "SETTINGS_CALL_RINGTONE_USE_RIOT_PREFERENCE_KEY"
-    const val SETTINGS_CALL_RINGTONE_URI_PREFERENCE_KEY = "SETTINGS_CALL_RINGTONE_URI_PREFERENCE_KEY"
+        // Calls
+        const val SETTINGS_CALL_RINGTONE_USE_RIOT_PREFERENCE_KEY = "SETTINGS_CALL_RINGTONE_USE_RIOT_PREFERENCE_KEY"
+        const val SETTINGS_CALL_RINGTONE_URI_PREFERENCE_KEY = "SETTINGS_CALL_RINGTONE_URI_PREFERENCE_KEY"
 
-    // labs
-    const val SETTINGS_LAZY_LOADING_PREFERENCE_KEY = "SETTINGS_LAZY_LOADING_PREFERENCE_KEY"
-    const val SETTINGS_USER_REFUSED_LAZY_LOADING_PREFERENCE_KEY = "SETTINGS_USER_REFUSED_LAZY_LOADING_PREFERENCE_KEY"
-    const val SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY = "SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY"
-    private const val SETTINGS_USE_JITSI_CONF_PREFERENCE_KEY = "SETTINGS_USE_JITSI_CONF_PREFERENCE_KEY"
-    private const val SETTINGS_USE_NATIVE_CAMERA_PREFERENCE_KEY = "SETTINGS_USE_NATIVE_CAMERA_PREFERENCE_KEY"
-    private const val SETTINGS_ENABLE_SEND_VOICE_FEATURE_PREFERENCE_KEY = "SETTINGS_ENABLE_SEND_VOICE_FEATURE_PREFERENCE_KEY"
+        // labs
+        const val SETTINGS_LAZY_LOADING_PREFERENCE_KEY = "SETTINGS_LAZY_LOADING_PREFERENCE_KEY"
+        const val SETTINGS_USER_REFUSED_LAZY_LOADING_PREFERENCE_KEY = "SETTINGS_USER_REFUSED_LAZY_LOADING_PREFERENCE_KEY"
+        const val SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY = "SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY"
+        private const val SETTINGS_USE_JITSI_CONF_PREFERENCE_KEY = "SETTINGS_USE_JITSI_CONF_PREFERENCE_KEY"
+        private const val SETTINGS_USE_NATIVE_CAMERA_PREFERENCE_KEY = "SETTINGS_USE_NATIVE_CAMERA_PREFERENCE_KEY"
+        private const val SETTINGS_ENABLE_SEND_VOICE_FEATURE_PREFERENCE_KEY = "SETTINGS_ENABLE_SEND_VOICE_FEATURE_PREFERENCE_KEY"
 
-    private const val SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY = "SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY"
-    private const val SETTINGS_LABS_ENABLE_SWIPE_TO_REPLY = "SETTINGS_LABS_ENABLE_SWIPE_TO_REPLY"
+        private const val SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY = "SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY"
+        private const val SETTINGS_LABS_ENABLE_SWIPE_TO_REPLY = "SETTINGS_LABS_ENABLE_SWIPE_TO_REPLY"
 
-    // analytics
-    const val SETTINGS_USE_ANALYTICS_KEY = "SETTINGS_USE_ANALYTICS_KEY"
-    const val SETTINGS_USE_RAGE_SHAKE_KEY = "SETTINGS_USE_RAGE_SHAKE_KEY"
+        // analytics
+        const val SETTINGS_USE_ANALYTICS_KEY = "SETTINGS_USE_ANALYTICS_KEY"
+        const val SETTINGS_USE_RAGE_SHAKE_KEY = "SETTINGS_USE_RAGE_SHAKE_KEY"
 
-    // other
-    const val SETTINGS_MEDIA_SAVING_PERIOD_KEY = "SETTINGS_MEDIA_SAVING_PERIOD_KEY"
-    private const val SETTINGS_MEDIA_SAVING_PERIOD_SELECTED_KEY = "SETTINGS_MEDIA_SAVING_PERIOD_SELECTED_KEY"
-    private const val DID_ASK_TO_IGNORE_BATTERY_OPTIMIZATIONS_KEY = "DID_ASK_TO_IGNORE_BATTERY_OPTIMIZATIONS_KEY"
-    private const val DID_MIGRATE_TO_NOTIFICATION_REWORK = "DID_MIGRATE_TO_NOTIFICATION_REWORK"
-    private const val DID_ASK_TO_USE_ANALYTICS_TRACKING_KEY = "DID_ASK_TO_USE_ANALYTICS_TRACKING_KEY"
-    const val SETTINGS_DEACTIVATE_ACCOUNT_KEY = "SETTINGS_DEACTIVATE_ACCOUNT_KEY"
-    private const val SETTINGS_DISPLAY_ALL_EVENTS_KEY = "SETTINGS_DISPLAY_ALL_EVENTS_KEY"
+        // other
+        const val SETTINGS_MEDIA_SAVING_PERIOD_KEY = "SETTINGS_MEDIA_SAVING_PERIOD_KEY"
+        private const val SETTINGS_MEDIA_SAVING_PERIOD_SELECTED_KEY = "SETTINGS_MEDIA_SAVING_PERIOD_SELECTED_KEY"
+        private const val DID_ASK_TO_IGNORE_BATTERY_OPTIMIZATIONS_KEY = "DID_ASK_TO_IGNORE_BATTERY_OPTIMIZATIONS_KEY"
+        private const val DID_MIGRATE_TO_NOTIFICATION_REWORK = "DID_MIGRATE_TO_NOTIFICATION_REWORK"
+        private const val DID_ASK_TO_USE_ANALYTICS_TRACKING_KEY = "DID_ASK_TO_USE_ANALYTICS_TRACKING_KEY"
+        const val SETTINGS_DEACTIVATE_ACCOUNT_KEY = "SETTINGS_DEACTIVATE_ACCOUNT_KEY"
+        private const val SETTINGS_DISPLAY_ALL_EVENTS_KEY = "SETTINGS_DISPLAY_ALL_EVENTS_KEY"
 
-    private const val MEDIA_SAVING_3_DAYS = 0
-    private const val MEDIA_SAVING_1_WEEK = 1
-    private const val MEDIA_SAVING_1_MONTH = 2
-    private const val MEDIA_SAVING_FOREVER = 3
+        private const val MEDIA_SAVING_3_DAYS = 0
+        private const val MEDIA_SAVING_1_WEEK = 1
+        private const val MEDIA_SAVING_1_MONTH = 2
+        private const val MEDIA_SAVING_FOREVER = 3
 
-    // some preferences keys must be kept after a logout
-    private val mKeysToKeepAfterLogout = Arrays.asList(
-            SETTINGS_DEFAULT_MEDIA_COMPRESSION_KEY,
-            SETTINGS_DEFAULT_MEDIA_SOURCE_KEY,
-            SETTINGS_PLAY_SHUTTER_SOUND_KEY,
+        // some preferences keys must be kept after a logout
+        private val mKeysToKeepAfterLogout = Arrays.asList(
+                SETTINGS_DEFAULT_MEDIA_COMPRESSION_KEY,
+                SETTINGS_DEFAULT_MEDIA_SOURCE_KEY,
+                SETTINGS_PLAY_SHUTTER_SOUND_KEY,
 
-            SETTINGS_SEND_TYPING_NOTIF_KEY,
-            SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY,
-            SETTINGS_12_24_TIMESTAMPS_KEY,
-            SETTINGS_SHOW_READ_RECEIPTS_KEY,
-            SETTINGS_SHOW_JOIN_LEAVE_MESSAGES_KEY,
-            SETTINGS_SHOW_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY,
-            SETTINGS_MEDIA_SAVING_PERIOD_KEY,
-            SETTINGS_MEDIA_SAVING_PERIOD_SELECTED_KEY,
-            SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY,
-            SETTINGS_SEND_MESSAGE_WITH_ENTER,
+                SETTINGS_SEND_TYPING_NOTIF_KEY,
+                SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY,
+                SETTINGS_12_24_TIMESTAMPS_KEY,
+                SETTINGS_SHOW_READ_RECEIPTS_KEY,
+                SETTINGS_SHOW_JOIN_LEAVE_MESSAGES_KEY,
+                SETTINGS_SHOW_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY,
+                SETTINGS_MEDIA_SAVING_PERIOD_KEY,
+                SETTINGS_MEDIA_SAVING_PERIOD_SELECTED_KEY,
+                SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY,
+                SETTINGS_SEND_MESSAGE_WITH_ENTER,
 
-            SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY,
-            SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY,
-            // Do not keep SETTINGS_LAZY_LOADING_PREFERENCE_KEY because the user may log in on a server which does not support lazy loading
-            SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY,
-            SETTINGS_START_ON_BOOT_PREFERENCE_KEY,
-            SETTINGS_INTERFACE_TEXT_SIZE_KEY,
-            SETTINGS_USE_JITSI_CONF_PREFERENCE_KEY,
-            SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY,
-            SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY,
+                SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY,
+                SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY,
+                // Do not keep SETTINGS_LAZY_LOADING_PREFERENCE_KEY because the user may log in on a server which does not support lazy loading
+                SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY,
+                SETTINGS_START_ON_BOOT_PREFERENCE_KEY,
+                SETTINGS_INTERFACE_TEXT_SIZE_KEY,
+                SETTINGS_USE_JITSI_CONF_PREFERENCE_KEY,
+                SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY,
+                SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY,
 
-            SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_PREFERENCE_KEY,
-            SETTINGS_CONTACTS_PHONEBOOK_COUNTRY_PREFERENCE_KEY,
-            SETTINGS_INTERFACE_LANGUAGE_PREFERENCE_KEY,
-            SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY,
-            SETTINGS_ENABLE_BACKGROUND_SYNC_PREFERENCE_KEY,
-            SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY,
-            SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY,
+                SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_PREFERENCE_KEY,
+                SETTINGS_CONTACTS_PHONEBOOK_COUNTRY_PREFERENCE_KEY,
+                SETTINGS_INTERFACE_LANGUAGE_PREFERENCE_KEY,
+                SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY,
+                SETTINGS_ENABLE_BACKGROUND_SYNC_PREFERENCE_KEY,
+                SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY,
+                SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY,
 
-            SETTINGS_USE_RAGE_SHAKE_KEY
-    )
+                SETTINGS_USE_RAGE_SHAKE_KEY
+        )
+    }
+
+    private val defaultPrefs = PreferenceManager.getDefaultSharedPreferences(context)
 
     /**
      * Clear the preferences.
      *
      * @param context the context
      */
-    fun clearPreferences(context: Context) {
+    fun clearPreferences() {
         val keysToKeep = HashSet(mKeysToKeepAfterLogout)
 
         // home server urls
@@ -221,37 +226,35 @@ object VectorPreferences {
         // theme
         keysToKeep.add(ThemeUtils.APPLICATION_THEME_KEY)
 
-        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-        preferences.edit {
-            // get all the existing keys
-            val keys = preferences.all.keys
-            // remove the one to keep
+        // get all the existing keys
+        val keys = defaultPrefs.all.keys
 
-            keys.removeAll(keysToKeep)
+        // remove the one to keep
+        keys.removeAll(keysToKeep)
 
+        defaultPrefs.edit {
             for (key in keys) {
                 remove(key)
             }
         }
     }
 
-    fun areNotificationEnabledForDevice(context: Context): Boolean {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY, true)
+    fun areNotificationEnabledForDevice(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY, true)
     }
 
-    fun setNotificationEnabledForDevice(context: Context, enabled: Boolean?) {
-        PreferenceManager.getDefaultSharedPreferences(context)
-                .edit {
-                    putBoolean(SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY, enabled!!)
-                }
+    fun setNotificationEnabledForDevice(enabled: Boolean?) {
+        defaultPrefs.edit {
+            putBoolean(SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY, enabled!!)
+        }
     }
 
-    fun shouldShowHiddenEvents(context: Context): Boolean {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY, false)
+    fun shouldShowHiddenEvents(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY, false)
     }
 
-    fun swipeToReplyIsEnabled(context: Context): Boolean {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_LABS_ENABLE_SWIPE_TO_REPLY, true)
+    fun swipeToReplyIsEnabled(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_LABS_ENABLE_SWIPE_TO_REPLY, true)
     }
 
     /**
@@ -260,8 +263,8 @@ object VectorPreferences {
      * @param context the context
      * @return true if it was already requested
      */
-    fun didAskUserToIgnoreBatteryOptimizations(context: Context): Boolean {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(DID_ASK_TO_IGNORE_BATTERY_OPTIMIZATIONS_KEY, false)
+    fun didAskUserToIgnoreBatteryOptimizations(): Boolean {
+        return defaultPrefs.getBoolean(DID_ASK_TO_IGNORE_BATTERY_OPTIMIZATIONS_KEY, false)
     }
 
     /**
@@ -269,22 +272,20 @@ object VectorPreferences {
      *
      * @param context the context
      */
-    fun setDidAskUserToIgnoreBatteryOptimizations(context: Context) {
-        PreferenceManager.getDefaultSharedPreferences(context)
-                .edit {
-                    putBoolean(DID_ASK_TO_IGNORE_BATTERY_OPTIMIZATIONS_KEY, true)
-                }
+    fun setDidAskUserToIgnoreBatteryOptimizations() {
+        defaultPrefs.edit {
+            putBoolean(DID_ASK_TO_IGNORE_BATTERY_OPTIMIZATIONS_KEY, true)
+        }
     }
 
-    fun didMigrateToNotificationRework(context: Context): Boolean {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(DID_MIGRATE_TO_NOTIFICATION_REWORK, false)
+    fun didMigrateToNotificationRework(): Boolean {
+        return defaultPrefs.getBoolean(DID_MIGRATE_TO_NOTIFICATION_REWORK, false)
     }
 
-    fun setDidMigrateToNotificationRework(context: Context) {
-        PreferenceManager.getDefaultSharedPreferences(context)
-                .edit {
-                    putBoolean(DID_MIGRATE_TO_NOTIFICATION_REWORK, true)
-                }
+    fun setDidMigrateToNotificationRework() {
+        defaultPrefs.edit {
+            putBoolean(DID_MIGRATE_TO_NOTIFICATION_REWORK, true)
+        }
     }
 
     /**
@@ -293,8 +294,8 @@ object VectorPreferences {
      * @param context the context
      * @return true if the time must be displayed in 12h format
      */
-    fun displayTimeIn12hFormat(context: Context): Boolean {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_12_24_TIMESTAMPS_KEY, false)
+    fun displayTimeIn12hFormat(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_12_24_TIMESTAMPS_KEY, false)
     }
 
     /**
@@ -303,8 +304,8 @@ object VectorPreferences {
      * @param context the context
      * @return true if the join and leave membership events should be shown in the messages list
      */
-    fun showJoinLeaveMessages(context: Context): Boolean {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_SHOW_JOIN_LEAVE_MESSAGES_KEY, true)
+    fun showJoinLeaveMessages(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_SHOW_JOIN_LEAVE_MESSAGES_KEY, true)
     }
 
     /**
@@ -313,8 +314,8 @@ object VectorPreferences {
      * @param context the context
      * @return true true if the avatar and display name events should be shown in the messages list.
      */
-    fun showAvatarDisplayNameChangeMessages(context: Context): Boolean {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_SHOW_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY, true)
+    fun showAvatarDisplayNameChangeMessages(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_SHOW_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY, true)
     }
 
     /**
@@ -323,8 +324,8 @@ object VectorPreferences {
      * @param context the context
      * @return true to use the native camera app to record video or take photo.
      */
-    fun useNativeCamera(context: Context): Boolean {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_USE_NATIVE_CAMERA_PREFERENCE_KEY, false)
+    fun useNativeCamera(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_USE_NATIVE_CAMERA_PREFERENCE_KEY, false)
     }
 
     /**
@@ -333,8 +334,8 @@ object VectorPreferences {
      * @param context the context
      * @return true if the send voice feature is enabled.
      */
-    fun isSendVoiceFeatureEnabled(context: Context): Boolean {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_ENABLE_SEND_VOICE_FEATURE_PREFERENCE_KEY, false)
+    fun isSendVoiceFeatureEnabled(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_ENABLE_SEND_VOICE_FEATURE_PREFERENCE_KEY, false)
     }
 
     /**
@@ -343,8 +344,8 @@ object VectorPreferences {
      * @param context the context
      * @return the selected compression level
      */
-    fun getSelectedDefaultMediaCompressionLevel(context: Context): Int {
-        return Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context).getString(SETTINGS_DEFAULT_MEDIA_COMPRESSION_KEY, "0")!!)
+    fun getSelectedDefaultMediaCompressionLevel(): Int {
+        return Integer.parseInt(defaultPrefs.getString(SETTINGS_DEFAULT_MEDIA_COMPRESSION_KEY, "0")!!)
     }
 
     /**
@@ -353,8 +354,8 @@ object VectorPreferences {
      * @param context the context
      * @return the selected media source
      */
-    fun getSelectedDefaultMediaSource(context: Context): Int {
-        return Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context).getString(SETTINGS_DEFAULT_MEDIA_SOURCE_KEY, "0")!!)
+    fun getSelectedDefaultMediaSource(): Int {
+        return Integer.parseInt(defaultPrefs.getString(SETTINGS_DEFAULT_MEDIA_SOURCE_KEY, "0")!!)
     }
 
     /**
@@ -363,8 +364,8 @@ object VectorPreferences {
      * @param context the context
      * @return true if shutter sound should play
      */
-    fun useShutterSound(context: Context): Boolean {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_PLAY_SHUTTER_SOUND_KEY, true)
+    fun useShutterSound(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_PLAY_SHUTTER_SOUND_KEY, true)
     }
 
     /**
@@ -373,9 +374,8 @@ object VectorPreferences {
      * @param context the context
      * @param uri     the new notification ringtone, or null for no RingTone
      */
-    fun setNotificationRingTone(context: Context, uri: Uri?) {
-        PreferenceManager.getDefaultSharedPreferences(context).edit {
-
+    fun setNotificationRingTone(uri: Uri?) {
+        defaultPrefs.edit {
             var value = ""
 
             if (null != uri) {
@@ -399,8 +399,8 @@ object VectorPreferences {
      * @param context the context
      * @return the selected ring tone or null for no RingTone
      */
-    fun getNotificationRingTone(context: Context): Uri? {
-        val url = PreferenceManager.getDefaultSharedPreferences(context).getString(SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY, null)
+    fun getNotificationRingTone(): Uri? {
+        val url = defaultPrefs.getString(SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY, null)
 
         // the user selects "None"
         if (TextUtils.equals(url, "")) {
@@ -433,8 +433,8 @@ object VectorPreferences {
      * @param context the context
      * @return the filename or null if "None" is selected
      */
-    fun getNotificationRingToneName(context: Context): String? {
-        val toneUri = getNotificationRingTone(context) ?: return null
+    fun getNotificationRingToneName(): String? {
+        val toneUri = getNotificationRingTone() ?: return null
 
         var name: String? = null
 
@@ -467,11 +467,10 @@ object VectorPreferences {
      * @param context  the context
      * @param newValue true to enable lazy loading, false to disable it
      */
-    fun setUseLazyLoading(context: Context, newValue: Boolean) {
-        PreferenceManager.getDefaultSharedPreferences(context)
-                .edit {
-                    putBoolean(SETTINGS_LAZY_LOADING_PREFERENCE_KEY, newValue)
-                }
+    fun setUseLazyLoading(newValue: Boolean) {
+        defaultPrefs.edit {
+            putBoolean(SETTINGS_LAZY_LOADING_PREFERENCE_KEY, newValue)
+        }
     }
 
     /**
@@ -480,8 +479,8 @@ object VectorPreferences {
      * @param context the context
      * @return true if the lazy loading of room members is enabled
      */
-    fun useLazyLoading(context: Context): Boolean {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_LAZY_LOADING_PREFERENCE_KEY, false)
+    fun useLazyLoading(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_LAZY_LOADING_PREFERENCE_KEY, false)
     }
 
     /**
@@ -489,11 +488,10 @@ object VectorPreferences {
      *
      * @param context the context
      */
-    fun setUserRefuseLazyLoading(context: Context) {
-        PreferenceManager.getDefaultSharedPreferences(context)
-                .edit {
-                    putBoolean(SETTINGS_USER_REFUSED_LAZY_LOADING_PREFERENCE_KEY, true)
-                }
+    fun setUserRefuseLazyLoading() {
+        defaultPrefs.edit {
+            putBoolean(SETTINGS_USER_REFUSED_LAZY_LOADING_PREFERENCE_KEY, true)
+        }
     }
 
     /**
@@ -502,8 +500,8 @@ object VectorPreferences {
      * @param context the context
      * @return true if the user has explicitly refuse the lazy loading of room members
      */
-    fun hasUserRefusedLazyLoading(context: Context): Boolean {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_USER_REFUSED_LAZY_LOADING_PREFERENCE_KEY, false)
+    fun hasUserRefusedLazyLoading(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_USER_REFUSED_LAZY_LOADING_PREFERENCE_KEY, false)
     }
 
     /**
@@ -512,8 +510,8 @@ object VectorPreferences {
      * @param context the context
      * @return true if the data save mode is enabled
      */
-    fun useDataSaveMode(context: Context): Boolean {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY, false)
+    fun useDataSaveMode(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY, false)
     }
 
     /**
@@ -522,8 +520,8 @@ object VectorPreferences {
      * @param context the context
      * @return true if the conference call must be done with jitsi.
      */
-    fun useJitsiConfCall(context: Context): Boolean {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_USE_JITSI_CONF_PREFERENCE_KEY, true)
+    fun useJitsiConfCall(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_USE_JITSI_CONF_PREFERENCE_KEY, true)
     }
 
     /**
@@ -532,8 +530,8 @@ object VectorPreferences {
      * @param context the context
      * @return true if the application must be started on boot
      */
-    fun autoStartOnBoot(context: Context): Boolean {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_START_ON_BOOT_PREFERENCE_KEY, true)
+    fun autoStartOnBoot(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_START_ON_BOOT_PREFERENCE_KEY, true)
     }
 
     /**
@@ -542,11 +540,10 @@ object VectorPreferences {
      * @param context the context
      * @param value   true to start the application on boot
      */
-    fun setAutoStartOnBoot(context: Context, value: Boolean) {
-        PreferenceManager.getDefaultSharedPreferences(context)
-                .edit {
-                    putBoolean(SETTINGS_START_ON_BOOT_PREFERENCE_KEY, value)
-                }
+    fun setAutoStartOnBoot(value: Boolean) {
+        defaultPrefs.edit {
+            putBoolean(SETTINGS_START_ON_BOOT_PREFERENCE_KEY, value)
+        }
     }
 
     /**
@@ -555,8 +552,8 @@ object VectorPreferences {
      * @param context the context
      * @return the selected period
      */
-    fun getSelectedMediasSavingPeriod(context: Context): Int {
-        return PreferenceManager.getDefaultSharedPreferences(context).getInt(SETTINGS_MEDIA_SAVING_PERIOD_SELECTED_KEY, MEDIA_SAVING_1_WEEK)
+    fun getSelectedMediasSavingPeriod(): Int {
+        return defaultPrefs.getInt(SETTINGS_MEDIA_SAVING_PERIOD_SELECTED_KEY, MEDIA_SAVING_1_WEEK)
     }
 
     /**
@@ -565,11 +562,10 @@ object VectorPreferences {
      * @param context the context
      * @param index   the selected period index
      */
-    fun setSelectedMediasSavingPeriod(context: Context, index: Int) {
-        PreferenceManager.getDefaultSharedPreferences(context)
-                .edit {
-                    putInt(SETTINGS_MEDIA_SAVING_PERIOD_SELECTED_KEY, index)
-                }
+    fun setSelectedMediasSavingPeriod(index: Int) {
+        defaultPrefs.edit {
+            putInt(SETTINGS_MEDIA_SAVING_PERIOD_SELECTED_KEY, index)
+        }
     }
 
     /**
@@ -578,8 +574,8 @@ object VectorPreferences {
      * @param context the context
      * @return the min last access time (in seconds)
      */
-    fun getMinMediasLastAccessTime(context: Context): Long {
-        val selection = getSelectedMediasSavingPeriod(context)
+    fun getMinMediasLastAccessTime(): Long {
+        val selection = getSelectedMediasSavingPeriod()
 
         when (selection) {
             MEDIA_SAVING_3_DAYS  -> return System.currentTimeMillis() / 1000 - 3 * 24 * 60 * 60
@@ -597,8 +593,8 @@ object VectorPreferences {
      * @param context the context
      * @return the selected period
      */
-    fun getSelectedMediasSavingPeriodString(context: Context): String {
-        val selection = getSelectedMediasSavingPeriod(context)
+    fun getSelectedMediasSavingPeriodString(): String {
+        val selection = getSelectedMediasSavingPeriod()
 
         when (selection) {
             MEDIA_SAVING_3_DAYS  -> return context.getString(R.string.media_saving_period_3_days)
@@ -612,7 +608,7 @@ object VectorPreferences {
     /**
      * Fix some migration issues
      */
-    fun fixMigrationIssues(context: Context) {
+    fun fixMigrationIssues() {
         // Nothing to do for the moment
     }
 
@@ -622,8 +618,8 @@ object VectorPreferences {
      * @param context the context
      * @return true if the markdown is enabled
      */
-    fun isMarkdownEnabled(context: Context): Boolean {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_ENABLE_MARKDOWN_KEY, true)
+    fun isMarkdownEnabled(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_ENABLE_MARKDOWN_KEY, true)
     }
 
     /**
@@ -632,11 +628,10 @@ object VectorPreferences {
      * @param context   the context
      * @param isEnabled true to enable the markdown
      */
-    fun setMarkdownEnabled(context: Context, isEnabled: Boolean) {
-        PreferenceManager.getDefaultSharedPreferences(context)
-                .edit {
-                    putBoolean(SETTINGS_ENABLE_MARKDOWN_KEY, isEnabled)
-                }
+    fun setMarkdownEnabled(isEnabled: Boolean) {
+        defaultPrefs.edit {
+            putBoolean(SETTINGS_ENABLE_MARKDOWN_KEY, isEnabled)
+        }
     }
 
     /**
@@ -645,8 +640,8 @@ object VectorPreferences {
      * @param context the context
      * @return true if the read receipts should be shown
      */
-    fun showReadReceipts(context: Context): Boolean {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_SHOW_READ_RECEIPTS_KEY, true)
+    fun showReadReceipts(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_SHOW_READ_RECEIPTS_KEY, true)
     }
 
     /**
@@ -655,8 +650,8 @@ object VectorPreferences {
      * @param context the context
      * @return true if the message timestamps must be always shown
      */
-    fun alwaysShowTimeStamps(context: Context): Boolean {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY, false)
+    fun alwaysShowTimeStamps(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY, false)
     }
 
     /**
@@ -665,8 +660,8 @@ object VectorPreferences {
      * @param context the context
      * @return true to send the typing notifs
      */
-    fun sendTypingNotifs(context: Context): Boolean {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_SEND_TYPING_NOTIF_KEY, true)
+    fun sendTypingNotifs(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_SEND_TYPING_NOTIF_KEY, true)
     }
 
     /**
@@ -675,8 +670,8 @@ object VectorPreferences {
      * @param context the context
      * @return true to move the missed notifications to the left side
      */
-    fun pinMissedNotifications(context: Context): Boolean {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY, true)
+    fun pinMissedNotifications(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY, true)
     }
 
     /**
@@ -685,8 +680,8 @@ object VectorPreferences {
      * @param context the context
      * @return true to move the unread room to the left side
      */
-    fun pinUnreadMessages(context: Context): Boolean {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY, true)
+    fun pinUnreadMessages(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY, true)
     }
 
     /**
@@ -695,8 +690,8 @@ object VectorPreferences {
      * @param context the context
      * @return true
      */
-    fun vibrateWhenMentioning(context: Context): Boolean {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_VIBRATE_ON_MENTION_KEY, false)
+    fun vibrateWhenMentioning(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_VIBRATE_ON_MENTION_KEY, false)
     }
 
     /**
@@ -705,8 +700,8 @@ object VectorPreferences {
      * @param context the context
      * @return true if a dialog has been displayed to ask to use the analytics tracking
      */
-    fun didAskToUseAnalytics(context: Context): Boolean {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(DID_ASK_TO_USE_ANALYTICS_TRACKING_KEY, false)
+    fun didAskToUseAnalytics(): Boolean {
+        return defaultPrefs.getBoolean(DID_ASK_TO_USE_ANALYTICS_TRACKING_KEY, false)
     }
 
     /**
@@ -714,11 +709,10 @@ object VectorPreferences {
      *
      * @param context the context
      */
-    fun setDidAskToUseAnalytics(context: Context) {
-        PreferenceManager.getDefaultSharedPreferences(context)
-                .edit {
-                    putBoolean(DID_ASK_TO_USE_ANALYTICS_TRACKING_KEY, true)
-                }
+    fun setDidAskToUseAnalytics() {
+        defaultPrefs.edit {
+            putBoolean(DID_ASK_TO_USE_ANALYTICS_TRACKING_KEY, true)
+        }
     }
 
     /**
@@ -727,8 +721,8 @@ object VectorPreferences {
      * @param context the context
      * @return true if the analytics tracking is authorized
      */
-    fun useAnalytics(context: Context): Boolean {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_USE_ANALYTICS_KEY, false)
+    fun useAnalytics(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_USE_ANALYTICS_KEY, false)
     }
 
     /**
@@ -737,11 +731,10 @@ object VectorPreferences {
      * @param context      the context
      * @param useAnalytics true to enable the analytics tracking
      */
-    fun setUseAnalytics(context: Context, useAnalytics: Boolean) {
-        PreferenceManager.getDefaultSharedPreferences(context)
-                .edit {
-                    putBoolean(SETTINGS_USE_ANALYTICS_KEY, useAnalytics)
-                }
+    fun setUseAnalytics(useAnalytics: Boolean) {
+        defaultPrefs.edit {
+            putBoolean(SETTINGS_USE_ANALYTICS_KEY, useAnalytics)
+        }
     }
 
     /**
@@ -750,8 +743,8 @@ object VectorPreferences {
      * @param context the context
      * @return true to preview media
      */
-    fun previewMediaWhenSending(context: Context): Boolean {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY, false)
+    fun previewMediaWhenSending(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY, false)
     }
 
     /**
@@ -760,8 +753,8 @@ object VectorPreferences {
      * @param context the context
      * @return true to send message with enter
      */
-    fun sendMessageWithEnter(context: Context): Boolean {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_SEND_MESSAGE_WITH_ENTER, false)
+    fun sendMessageWithEnter(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_SEND_MESSAGE_WITH_ENTER, false)
     }
 
     /**
@@ -770,8 +763,8 @@ object VectorPreferences {
      * @param context the context
      * @return true if the rage shake is used
      */
-    fun useRageshake(context: Context): Boolean {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_USE_RAGE_SHAKE_KEY, true)
+    fun useRageshake(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_USE_RAGE_SHAKE_KEY, true)
     }
 
     /**
@@ -780,11 +773,10 @@ object VectorPreferences {
      * @param context   the context
      * @param isEnabled true to enable the rage shake
      */
-    fun setUseRageshake(context: Context, isEnabled: Boolean) {
-        PreferenceManager.getDefaultSharedPreferences(context)
-                .edit {
-                    putBoolean(SETTINGS_USE_RAGE_SHAKE_KEY, isEnabled)
-                }
+    fun setUseRageshake(isEnabled: Boolean) {
+        defaultPrefs.edit {
+            putBoolean(SETTINGS_USE_RAGE_SHAKE_KEY, isEnabled)
+        }
     }
 
     /**
@@ -793,7 +785,7 @@ object VectorPreferences {
      * @param context the context
      * @return true to display all the events even the redacted ones.
      */
-    fun displayAllEvents(context: Context): Boolean {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_DISPLAY_ALL_EVENTS_KEY, false)
+    fun displayAllEvents(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_DISPLAY_ALL_EVENTS_KEY, false)
     }
 }

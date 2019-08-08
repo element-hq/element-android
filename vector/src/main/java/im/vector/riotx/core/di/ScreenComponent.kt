@@ -36,6 +36,9 @@ import im.vector.riotx.features.home.HomeActivity
 import im.vector.riotx.features.home.HomeDetailFragment
 import im.vector.riotx.features.home.HomeDrawerFragment
 import im.vector.riotx.features.home.HomeModule
+import im.vector.riotx.features.home.createdirect.CreateDirectRoomActivity
+import im.vector.riotx.features.home.createdirect.CreateDirectRoomDirectoryUsersFragment
+import im.vector.riotx.features.home.createdirect.CreateDirectRoomKnownUsersFragment
 import im.vector.riotx.features.home.group.GroupListFragment
 import im.vector.riotx.features.home.room.detail.RoomDetailFragment
 import im.vector.riotx.features.home.room.detail.timeline.action.*
@@ -45,6 +48,7 @@ import im.vector.riotx.features.invite.VectorInviteView
 import im.vector.riotx.features.login.LoginActivity
 import im.vector.riotx.features.media.ImageMediaViewerActivity
 import im.vector.riotx.features.media.VideoMediaViewerActivity
+import im.vector.riotx.features.navigation.Navigator
 import im.vector.riotx.features.rageshake.BugReportActivity
 import im.vector.riotx.features.rageshake.BugReporter
 import im.vector.riotx.features.rageshake.RageShake
@@ -55,10 +59,7 @@ import im.vector.riotx.features.roomdirectory.createroom.CreateRoomActivity
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomFragment
 import im.vector.riotx.features.roomdirectory.picker.RoomDirectoryPickerFragment
 import im.vector.riotx.features.roomdirectory.roompreview.RoomPreviewNoPreviewFragment
-import im.vector.riotx.features.settings.VectorSettingsActivity
-import im.vector.riotx.features.settings.VectorSettingsNotificationPreferenceFragment
-import im.vector.riotx.features.settings.VectorSettingsNotificationsTroubleshootFragment
-import im.vector.riotx.features.settings.VectorSettingsPreferencesFragment
+import im.vector.riotx.features.settings.*
 import im.vector.riotx.features.settings.push.PushGatewaysFragment
 
 @Component(dependencies = [VectorComponent::class], modules = [ViewModelModule::class, HomeModule::class])
@@ -72,6 +73,8 @@ interface ScreenComponent {
     fun bugReporter(): BugReporter
 
     fun rageShake(): RageShake
+
+    fun navigator(): Navigator
 
     fun inject(activity: HomeActivity)
 
@@ -147,11 +150,23 @@ interface ScreenComponent {
 
     fun inject(vectorSettingsPreferencesFragment: VectorSettingsPreferencesFragment)
 
+    fun inject(vectorSettingsAdvancedNotificationPreferenceFragment: VectorSettingsAdvancedNotificationPreferenceFragment)
+
+    fun inject(vectorSettingsSecurityPrivacyFragment: VectorSettingsSecurityPrivacyFragment)
+
+    fun inject(vectorSettingsHelpAboutFragment: VectorSettingsHelpAboutFragment)
+
     fun inject(userAvatarPreference: UserAvatarPreference)
 
     fun inject(vectorSettingsNotificationsTroubleshootFragment: VectorSettingsNotificationsTroubleshootFragment)
 
     fun inject(pushGatewaysFragment: PushGatewaysFragment)
+
+    fun inject(createDirectRoomKnownUsersFragment: CreateDirectRoomKnownUsersFragment)
+
+    fun inject(createDirectRoomDirectoryUsersFragment: CreateDirectRoomDirectoryUsersFragment)
+
+    fun inject(createDirectRoomActivity: CreateDirectRoomActivity)
 
     @Component.Factory
     interface Factory {

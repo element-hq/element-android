@@ -16,16 +16,12 @@
 
 package im.vector.matrix.android.internal.crypto.tasks
 
-import arrow.core.Try
-import arrow.core.failure
-import arrow.core.recoverWith
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.internal.auth.registration.RegistrationFlowResponse
 import im.vector.matrix.android.internal.crypto.api.CryptoApi
 import im.vector.matrix.android.internal.crypto.model.rest.DeleteDeviceParams
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.network.executeRequest
-import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.Task
 import javax.inject.Inject
 
@@ -38,10 +34,12 @@ internal interface DeleteDeviceTask : Task<DeleteDeviceTask.Params, Unit> {
 internal class DefaultDeleteDeviceTask @Inject constructor(private val cryptoApi: CryptoApi)
     : DeleteDeviceTask {
 
-    override suspend fun execute(params: DeleteDeviceTask.Params): Try<Unit> {
-        return executeRequest<Unit> {
-            apiCall = cryptoApi.deleteDevice(params.deviceId, DeleteDeviceParams())
-        }.recoverWith { throwable ->
+    override suspend fun execute(params: DeleteDeviceTask.Params) {
+        try {
+            executeRequest<Unit> {
+                apiCall = cryptoApi.deleteDevice(params.deviceId, DeleteDeviceParams())
+            }
+        } catch (throwable: Throwable) {
             if (throwable is Failure.OtherServerError && throwable.httpCode == 401) {
                 // Parse to get a RegistrationFlowResponse
                 val registrationFlowResponse = try {
@@ -51,17 +49,16 @@ internal class DefaultDeleteDeviceTask @Inject constructor(private val cryptoApi
                 } catch (e: Exception) {
                     null
                 }
-
                 // check if the server response can be casted
                 if (registrationFlowResponse != null) {
-                    Failure.RegistrationFlowError(registrationFlowResponse).failure()
+                    throw Failure.RegistrationFlowError(registrationFlowResponse)
                 } else {
-                    throwable.failure()
+                    throw throwable
                 }
 
             } else {
                 // Other error
-                throwable.failure()
+                throw throwable
             }
         }
     }

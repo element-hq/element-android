@@ -33,8 +33,8 @@
     <string name="report_content">Reportar contenido</string>
     <string name="active_call">Llamada activa</string>
     <string name="ongoing_conference_call">Llamada de conferencia en proceso.\nUnirse con %1$s o %2$s.</string>
-    <string name="ongoing_conference_call_voice">voz</string>
-    <string name="ongoing_conference_call_video">video</string>
+    <string name="ongoing_conference_call_voice">Voz</string>
+    <string name="ongoing_conference_call_video">Video</string>
     <string name="cannot_start_call">No se puede iniciar la llamada, inténtalo más tarde</string>
     <string name="missing_permissions_warning">Debido a permisos que faltan, algunas características podrían estar ausentes…</string>
     <string name="missing_permissions_to_start_conf_call">Necesitas permiso para realizar una llamada de conferencia en esta sala</string>
@@ -69,10 +69,10 @@
     <string name="bottom_action_rooms">Salas</string>
 
     <!-- Home screen -->
-    <string name="home_filter_placeholder_home">Buscar salas</string>
-    <string name="home_filter_placeholder_favorites">Buscar favoritos</string>
-    <string name="home_filter_placeholder_people">Buscar personas</string>
-    <string name="home_filter_placeholder_rooms">Buscar salas</string>
+    <string name="home_filter_placeholder_home">Filtrar salas</string>
+    <string name="home_filter_placeholder_favorites">Filtrar favoritos</string>
+    <string name="home_filter_placeholder_people">Filtrar personas</string>
+    <string name="home_filter_placeholder_rooms">Filtrar salas</string>
 
     <!-- Home fragment -->
     <string name="invitations_header">Invitaciones</string>
@@ -103,7 +103,7 @@
     <string name="send_bug_report_description">Por favor describe el error. ¿Qué hiciste? ¿Qué esperabas que sucediera, qué sucedió realmente?</string>
     <string name="send_bug_report_placeholder">Describe tu problema aquí</string>
     <string name="send_bug_report_logs_description">Para diagnosticar problemas, informes de este cliente se enviarán junto a este reporte de error. Este informe, inclusive los registros y la captura de pantalla, no será visible públicamente. Si prefieres solamente enviar el texto de arriba, por favor desmarca:</string>
-    <string name="send_bug_report_alert_message">Pareces estar temblando de frustración. ¿Te gustaría enviar un reporte de error?</string>
+    <string name="send_bug_report_alert_message">Pareces estar temblando de frustración. ¿Te gustaría abrir un reporte de error\?</string>
     <string name="send_bug_report_sent">El reporte de error ha sido enviado</string>
     <string name="send_bug_report_failed">El reporte de error no se pudo enviar (%s)</string>
     <string name="send_bug_report_progress">Progreso (%s%%)</string>
@@ -114,7 +114,7 @@
 
     <string name="join_room">Entrar Sala</string>
     <string name="username">Nombre</string>
-    <string name="create_account">Registrar</string>
+    <string name="create_account">Crear Cuenta</string>
     <string name="login">Iniciar sesión</string>
     <string name="logout">Cerrar sesión</string>
     <string name="hs_url">Enlace de el Servidor</string>
@@ -184,7 +184,7 @@
     <string name="login_error_registration_network_error">Inscripción falló: error con la red</string>
     <string name="login_error_unable_register">Inscripción falló</string>
     <string name="login_error_unable_register_mail_ownership">Inscripción falló : el correo electrónico ya esta utilizado por otra cuenta</string>
-    <string name="login_error_invalid_home_server">Escribe enlace válido</string>
+    <string name="login_error_invalid_home_server">Escribe un enlace válido</string>
 
     <string name="login_error_forbidden">Nombre/Contraseña inválido</string>
     <string name="login_error_unknown_token">El token de acceso especificado no fue reconocido</string>
@@ -234,7 +234,7 @@ Disculpe por la inconveniencia.</string>
     <string name="incoming_call">Llamada Entrante</string>
     <string name="incoming_video_call">Llamada de Video Entrante</string>
     <string name="incoming_voice_call">Llamada de Voz Entrante</string>
-    <string name="call_in_progress">Llamada en Processo</string>
+    <string name="call_in_progress">Llamada en Curso…</string>
 
     <string name="call_error_user_not_responding">El lado remoto no pudo contestar.</string>
     <string name="call_error_ice_failed">Conexión de media falló</string>
@@ -258,11 +258,11 @@ Disculpe por la inconveniencia.</string>
 
 ¿Permitir el acceso a Riot para leer tus contactos ?</string>
 
-    <string name="permissions_action_not_performed_missing_permissions">Perdon.. Operación no realizada, debido a permisos faltantes</string>
+    <string name="permissions_action_not_performed_missing_permissions">Perdón. Operación no realizada debido a permisos faltantes</string>
 
     <!-- medias slider string -->
     <string name="media_slider_saved">Guardado</string>
-    <string name="media_slider_saved_message">Guardar en Descargas</string>
+    <string name="media_slider_saved_message">¿Guardar en Descargas\?</string>
     <string name="yes">SÍ</string>
     <string name="no">NO</string>
     <string name="_continue">Continuar</string>
@@ -370,7 +370,8 @@ Disculpe por la inconveniencia.</string>
 
     <!-- Room events -->
     <string name="room_event_action_report_prompt_reason">Razón por reportar este contenido</string>
-    <string name="room_event_action_report_prompt_ignore_user">¿Desea ocultar todos los mensajes de este usuario?</string>
+    <string name="room_event_action_report_prompt_ignore_user">¿Desea ocultar todos los mensajes de este usuario\?
+\nConsidere que esta acción reiniciará la aplicación y tardar un tiempo.</string>
     <string name="room_event_action_cancel_upload">Cancelar Subida</string>
     <string name="room_event_action_cancel_download">Cancelar Descarga</string>
 
@@ -398,7 +399,7 @@ Disculpe por la inconveniencia.</string>
 
     <!-- Directory -->
     <string name="directory_search_results_title">Buscar directorio</string>
-    <string name="directory_searching_title">Buscando directorio..</string>
+    <string name="directory_searching_title">Buscando directorio…</string>
 
     <!-- home room settings -->
     <string name="room_settings_favourite">Destacar</string>
@@ -440,7 +441,7 @@ Disculpe por la inconveniencia.</string>
     <string name="settings_background_sync">Sincronización interna</string>
     <string name="settings_enable_background_sync">Encender sincronización interna</string>
     <string name="settings_set_sync_timeout">Vencimiento de peticiones de sincronización</string>
-    <string name="settings_set_sync_delay">El tardar entre dos peticiones de sincronización</string>
+    <string name="settings_set_sync_delay">Demora entre cada petición de sincronización</string>
     <string name="settings_second">segundo</string>
     <string name="settings_seconds">segundos</string>
 
@@ -487,14 +488,14 @@ Disculpe por la inconveniencia.</string>
     <string name="account_email_validation_message">Por favor vea su correo electrónico y sigue el enlace que contiene. Una vez hecho, escoje Continuar.</string>
     <string name="account_email_validation_error">"No fue posible verificar su dirección de correo. Por favor revise su casilla y siga el enlace que contiene. Una vez hecho, haga clic en  continuar"</string>
 
-    <string name="account_email_already_used_error">This email address is already in use</string>
-    <string name="account_email_not_found_error">Failed to send email: This email address was not found</string>
-    <string name="account_phone_number_already_used_error">This phone number is already in use</string>
+    <string name="account_email_already_used_error">La dirección de correo electrónico ya está en uso.</string>
+    <string name="account_email_not_found_error">Esta dirección de correo electrónico no fue encontrada.</string>
+    <string name="account_phone_number_already_used_error">Este teléfono ya está en uso.</string>
 
     <string name="settings_change_password">Cambiar Contraseña</string>
-    <string name="settings_old_password">Contraseña anterior</string>
+    <string name="settings_old_password">Contraseña actual</string>
     <string name="settings_new_password">Contraseña nueva</string>
-    <string name="settings_confirm_password">confirmar contraseña</string>
+    <string name="settings_confirm_password">Confirmar nueva contraseña</string>
     <string name="settings_fail_to_update_password">La actualización de su contraseña falló</string>
     <string name="settings_password_updated">Su contraseña fue actualizada</string>
     <string name="settings_unignore_user">¿Mostrar todo los mensajes de %s?</string>
@@ -661,7 +662,7 @@ Dispositivos desconocidos:</string>
 
     <!-- historical -->
     <string name="historical_placeholder">Search for historical</string>
-    <string name="notification_sync_in_progress">Sincronizando</string>
+    <string name="notification_sync_in_progress">Sincronizando…</string>
     <string name="loading">Cargando…</string>
 
     <string name="download">Descargar</string>

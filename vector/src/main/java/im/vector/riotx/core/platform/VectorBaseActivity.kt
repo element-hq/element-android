@@ -26,6 +26,7 @@ import androidx.annotation.*
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -40,6 +41,7 @@ import im.vector.riotx.R
 import im.vector.riotx.core.di.*
 import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.configuration.VectorConfiguration
+import im.vector.riotx.features.navigation.Navigator
 import im.vector.riotx.features.rageshake.BugReportActivity
 import im.vector.riotx.features.rageshake.BugReporter
 import im.vector.riotx.features.rageshake.RageShake
@@ -70,6 +72,7 @@ abstract class VectorBaseActivity : BaseMvRxActivity(), HasScreenInjector {
     private lateinit var configurationViewModel: ConfigurationViewModel
     protected lateinit var bugReporter: BugReporter
     private lateinit var rageShake: RageShake
+    protected lateinit var navigator: Navigator
 
     private var unBinder: Unbinder? = null
 
@@ -116,11 +119,14 @@ abstract class VectorBaseActivity : BaseMvRxActivity(), HasScreenInjector {
             injectWith(screenComponent)
         }
         Timber.v("Injecting dependencies into ${javaClass.simpleName} took $timeForInjection ms")
+        ThemeUtils.setActivityTheme(this, getOtherThemes())
+
         super.onCreate(savedInstanceState)
         viewModelFactory = screenComponent.viewModelFactory()
         configurationViewModel = ViewModelProviders.of(this, viewModelFactory).get(ConfigurationViewModel::class.java)
         bugReporter = screenComponent.bugReporter()
         rageShake = screenComponent.rageShake()
+        navigator = screenComponent.navigator()
         configurationViewModel.activityRestarter.observe(this, Observer {
             if (!it.hasBeenHandled) {
                 // Recreate the Activity because configuration has changed
@@ -130,8 +136,6 @@ abstract class VectorBaseActivity : BaseMvRxActivity(), HasScreenInjector {
         })
 
         // Shake detector
-
-        ThemeUtils.setActivityTheme(this, getOtherThemes())
 
         doBeforeSetContentView()
 
@@ -260,6 +264,24 @@ abstract class VectorBaseActivity : BaseMvRxActivity(), HasScreenInjector {
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    protected fun recursivelyDispatchOnBackPressed(fm: FragmentManager): Boolean {
+        // if (fm.backStackEntryCount == 0)
+        //     return false
+
+        val reverseOrder = fm.fragments.filter { it is OnBackPressed }.reversed()
+        for (f in reverseOrder) {
+            val handledByChildFragments = recursivelyDispatchOnBackPressed(f.childFragmentManager)
+            if (handledByChildFragments) {
+                return true
+            }
+            val backPressable = f as OnBackPressed
+            if (backPressable.onBackPressed()) {
+                return true
+            }
+        }
+        return false
     }
 
     /* ==========================================================================================

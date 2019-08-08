@@ -1,3 +1,5 @@
+import com.android.build.OutputFile
+
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 apply plugin: 'kotlin-android'
@@ -13,7 +15,7 @@ androidExtensions {
 }
 
 ext.versionMajor = 0
-ext.versionMinor = 2
+ext.versionMinor = 3
 ext.versionPatch = 0
 
 static def getGitTimestamp() {
@@ -52,6 +54,11 @@ project.android.buildTypes.all { buildType ->
             ]
 }
 
+// map for the version codes
+// x86 must have greater values than arm, see https://software.intel.com/en-us/android/articles/google-play-supports-cpu-architecture-filtering-for-multiple-apk
+// 64 bits have greater value than 32 bits
+ext.abiVersionCodes = ["armeabi-v7a": 1, "arm64-v8a": 2, "x86": 3, "x86_64": 4].withDefault { 0 }
+
 def buildNumber = System.getenv("BUILDKITE_BUILD_NUMBER") as Integer ?: 0
 
 android {
@@ -64,9 +71,7 @@ android {
         targetSdkVersion 28
         multiDexEnabled true
 
-        // For release, use generateVersionCodeFromVersionName()
-        // versionCode generateVersionCodeFromTimestamp()
-        versionCode generateVersionCodeFromVersionName()
+        // Note: versionCode is depending on the build variant
 
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
 
@@ -83,6 +88,40 @@ android {
         resValue "string", "build_number", "\"${buildNumber}\""
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        // Keep abiFilter for the universalApk
+        ndk {
+            abiFilters "armeabi-v7a", "x86", 'arm64-v8a', 'x86_64'
+        }
+
+        // Ref: https://developer.android.com/studio/build/configure-apk-splits.html
+        splits {
+            // Configures multiple APKs based on ABI.
+            abi {
+                // Enables building multiple APKs per ABI.
+                enable true
+
+                // By default all ABIs are included, so use reset() and include to specify that we only
+                // want APKs for armeabi-v7a, x86, arm64-v8a and x86_64.
+
+                // Resets the list of ABIs that Gradle should create APKs for to none.
+                reset()
+
+                // Specifies a list of ABIs that Gradle should create APKs for.
+                include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
+
+                // Generate a universal APK that includes all ABIs, so user who install from CI tool can use this one by default.
+                universalApk true
+            }
+        }
+
+        applicationVariants.all { variant ->
+            variant.outputs.each { output ->
+                def baseAbiVersionCode = project.ext.abiVersionCodes.get(output.getFilter(OutputFile.ABI))
+                // Known limitation: it does not modify the value in the BuildConfig.java generated file
+                output.versionCodeOverride = baseAbiVersionCode * 10_000_000 + variant.versionCode
+            }
+        }
     }
 
     signingConfigs {
@@ -122,6 +161,8 @@ android {
         gplay {
             dimension "store"
 
+            versionCode = generateVersionCodeFromVersionName()
+
             buildConfigField "boolean", "ALLOW_FCM_USE", "true"
             buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"G\""
             buildConfigField "String", "FLAVOR_DESCRIPTION", "\"GooglePlay\""
@@ -129,6 +170,8 @@ android {
 
         fdroid {
             dimension "store"
+
+            versionCode = generateVersionCodeFromTimestamp()
 
             buildConfigField "boolean", "ALLOW_FCM_USE", "false"
             buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"F\""
@@ -148,7 +191,7 @@ android {
 
 dependencies {
 
-    def epoxy_version = "3.3.0"
+    def epoxy_version = "3.7.0"
     def arrow_version = "0.8.2"
     def coroutines_version = "1.0.1"
     def markwon_version = '3.0.0'
@@ -193,10 +236,14 @@ dependencies {
 
     implementation("com.airbnb.android:epoxy:$epoxy_version")
     kapt "com.airbnb.android:epoxy-processor:$epoxy_version"
+    implementation "com.airbnb.android:epoxy-paging:$epoxy_version"
     implementation 'com.airbnb.android:mvrx:1.0.1'
 
     // Work
     implementation "androidx.work:work-runtime-ktx:2.1.0-rc01"
+
+    // Paging
+    implementation "androidx.paging:paging-runtime-ktx:2.1.0"
 
     // Functional Programming
     implementation "io.arrow-kt:arrow-core:$arrow_version"
@@ -206,7 +253,7 @@ dependencies {
 
     // UI
     implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
-    implementation 'com.google.android.material:material:1.1.0-alpha07'
+    implementation 'com.google.android.material:material:1.1.0-alpha08'
     implementation 'me.gujun.android:span:1.7'
     implementation "ru.noties.markwon:core:$markwon_version"
     implementation "ru.noties.markwon:html:$markwon_version"

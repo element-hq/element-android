@@ -19,9 +19,11 @@ package im.vector.riotx.features.home.room.detail
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
+import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.matrix.android.api.session.user.model.User
 
 /**
@@ -46,7 +48,10 @@ data class RoomDetailViewState(
         val asyncInviter: Async<User> = Uninitialized,
         val asyncRoomSummary: Async<RoomSummary> = Uninitialized,
         val sendMode: SendMode = SendMode.REGULAR,
-        val isEncrypted: Boolean = false
+        val isEncrypted: Boolean = false,
+        val tombstoneEvent: Event? = null,
+        val tombstoneEventHandling: Async<String> = Uninitialized,
+        val syncState: SyncState = SyncState.IDLE
 ) : MvRxState {
 
     constructor(args: RoomDetailArgs) : this(roomId = args.roomId, eventId = args.eventId)

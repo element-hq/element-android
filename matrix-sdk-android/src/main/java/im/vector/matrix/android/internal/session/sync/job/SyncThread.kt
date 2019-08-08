@@ -30,6 +30,7 @@ import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.TaskThread
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
+import kotlinx.coroutines.CancellationException
 import timber.log.Timber
 import java.net.SocketTimeoutException
 import java.util.concurrent.CountDownLatch
@@ -70,6 +71,8 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
         if (state is SyncState.RUNNING) {
             Timber.v("Pause sync...")
             updateStateTo(SyncState.PAUSED)
+            cancelableTask?.cancel()
+            lock.notify()
         }
     }
 
@@ -90,56 +93,68 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
         backgroundDetectionObserver.register(this)
 
         while (state != SyncState.KILLING) {
+            Timber.v("Entering loop, state: $state")
+
             if (!networkConnectivityChecker.isConnected() || state == SyncState.PAUSED) {
-                Timber.v("Sync is Paused. Waiting...")
+                Timber.v("No network or sync is Paused. Waiting...")
                 synchronized(lock) {
                     lock.wait()
                 }
+                Timber.v("...unlocked")
             } else {
                 if (state !is SyncState.RUNNING) {
                     updateStateTo(SyncState.RUNNING(afterPause = true))
                 }
-                Timber.v("[$this] Execute sync request with timeout $DEFAULT_LONG_POOL_TIMEOUT")
+
+                // No timeout after a pause
+                val timeout = state.let { if (it is SyncState.RUNNING && it.afterPause) 0 else DEFAULT_LONG_POOL_TIMEOUT }
+
+                Timber.v("Execute sync request with timeout $timeout")
                 val latch = CountDownLatch(1)
-                val params = SyncTask.Params(DEFAULT_LONG_POOL_TIMEOUT)
-                cancelableTask = syncTask.configureWith(params)
-                        .callbackOn(TaskThread.SYNC)
-                        .executeOn(TaskThread.SYNC)
-                        .dispatchTo(object : MatrixCallback<Unit> {
-                            override fun onSuccess(data: Unit) {
-                                latch.countDown()
-                            }
+                val params = SyncTask.Params(timeout)
 
-                            override fun onFailure(failure: Throwable) {
-                                if (failure is Failure.NetworkConnection
-                                        && failure.cause is SocketTimeoutException) {
-                                    // Timeout are not critical
-                                    Timber.v("Timeout")
-                                } else {
-                                    Timber.e(failure)
-                                }
+                cancelableTask = syncTask.configureWith(params) {
+                    this.callbackThread = TaskThread.SYNC
+                    this.executionThread = TaskThread.SYNC
+                    this.callback = object : MatrixCallback<Unit> {
 
-                                if (failure !is Failure.NetworkConnection
-                                        || failure.cause is JsonEncodingException) {
+                        override fun onSuccess(data: Unit) {
+                            Timber.v("onSuccess")
+                            latch.countDown()
+                        }
+
+                        override fun onFailure(failure: Throwable) {
+                            if (failure is Failure.NetworkConnection && failure.cause is SocketTimeoutException) {
+                                // Timeout are not critical
+                                Timber.v("Timeout")
+                            } else if (failure is Failure.Unknown && failure.throwable is CancellationException) {
+                                Timber.v("Cancelled")
+                            } else if (failure is Failure.ServerError
+                                    && (failure.error.code == MatrixError.UNKNOWN_TOKEN || failure.error.code == MatrixError.MISSING_TOKEN)) {
+                                // No token or invalid token, stop the thread
+                                Timber.w(failure)
+                                updateStateTo(SyncState.KILLING)
+                            } else {
+                                Timber.e(failure)
+
+                                if (failure !is Failure.NetworkConnection || failure.cause is JsonEncodingException) {
                                     // Wait 10s before retrying
+                                    Timber.v("Wait 10s")
                                     sleep(RETRY_WAIT_TIME_MS)
                                 }
-
-                                if (failure is Failure.ServerError
-                                        && (failure.error.code == MatrixError.UNKNOWN_TOKEN || failure.error.code == MatrixError.MISSING_TOKEN)) {
-                                    // No token or invalid token, stop the thread
-                                    updateStateTo(SyncState.KILLING)
-                                }
-
-                                latch.countDown()
                             }
 
-                        })
+                            latch.countDown()
+                        }
+                    }
+                }
                         .executeBy(taskExecutor)
 
                 latch.await()
-                if (state is SyncState.RUNNING) {
-                    updateStateTo(SyncState.RUNNING(afterPause = false))
+                state.let {
+                    if (it is SyncState.RUNNING && it.afterPause) {
+                        updateStateTo(SyncState.RUNNING(afterPause = false))
+                    }
                 }
 
                 Timber.v("...Continue")

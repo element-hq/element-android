@@ -682,9 +682,9 @@
     <string name="widget_integration_failed_to_send_request">发送请求失败。</string>
     <string name="widget_integration_positive_power_level">特权级别必须是正整数。</string>
     <string name="widget_integration_must_be_in_room">您不在这个聊天室。</string>
-    <string name="widget_integration_no_permission_in_room">您没有在这个聊天室里执行此操作的权限。</string>
-    <string name="widget_integration_missing_room_id">请求中没有 room_id.</string>
-    <string name="widget_integration_missing_user_id">请求中没有 user_id.</string>
+    <string name="widget_integration_no_permission_in_room">您没有在当前聊天室中执行此操作的权限。</string>
+    <string name="widget_integration_missing_room_id">请求中缺失 room_id。</string>
+    <string name="widget_integration_missing_user_id">请求中缺失 user_id。</string>
     <string name="widget_integration_room_not_visible">聊天室 %s 不可见。</string>
     <string name="room_add_matrix_apps">添加 Matrix 应用</string>
     <string name="notification_sync_in_progress">正在同步…</string>
@@ -882,7 +882,7 @@ Matrix 中的消息可见性类似于电子邮件。我们忘记您的消息意�
     <string name="dialog_user_consent_content">要想继续使用主服务器 %1$s 您必须阅读并同意其服务条款。</string>
     <string name="dialog_user_consent_submit">现在阅读</string>
 
-    <string name="dialog_title_third_party_licences">第三方协议</string>
+    <string name="dialog_title_third_party_licences">第三方开源协议</string>
 
     <string name="download">下载</string>
     <string name="clear">清除</string>
@@ -913,7 +913,7 @@ Matrix 中的消息可见性类似于电子邮件。我们忘记您的消息意�
     <string name="room_message_placeholder_reply_to_not_encrypted">发送回复（未加密）…</string>
     <string name="settings_preview_media_before_sending">发送前预览媒体文件</string>
 
-    <string name="settings_labs_keyboard_options_to_send_message">使用键盘的回车键发送消息</string>
+    <string name="settings_labs_keyboard_options_to_send_message">使用回车键发送消息</string>
     <string name="command_description_emote">显示动作</string>
     <string name="command_description_ban_user">依照 ID 封禁用户</string>
     <string name="command_description_unban_user">依照 ID 解禁用户</string>
@@ -1058,7 +1058,7 @@ Matrix 中的消息可见性类似于电子邮件。我们忘记您的消息意�
 请尝试重启本应用程序。</string>
     <string name="settings_troubleshoot_test_foreground_service_started_quickfix">启动服务</string>
 
-    <string name="settings_labs_native_camera_summary">调用系统相机应用而不是打开 Riot 内置的相机界面。</string>
+    <string name="settings_labs_native_camera_summary">调用系统相机应用而非使用 Riot 内置的相机界面。</string>
     <string name="settings_labs_enable_send_voice_summary">此选项需要第三方应用程序来录制语音消息。</string>
 
     <string name="settings_troubleshoot_test_service_boot_title">开机时启动</string>
@@ -1159,7 +1159,7 @@ Riot 在后台时的工作将被显著的限制，这可能会影响消息通知
     <string name="title_activity_keys_backup_restore">使用备份密钥</string>
 
     <string name="keys_backup_is_not_finished_please_wait">密钥备份尚未完成，请等待…</string>
-    <string name="sign_out_bottom_sheet_warning_no_backup">如果您此时登出账号将会失去您的已加密信息</string>
+    <string name="sign_out_bottom_sheet_warning_no_backup">如果您此时登出账号，您将会失去您的已加密信息</string>
     <string name="sign_out_bottom_sheet_warning_backing_up">密钥备份进行中。如果您此时登出账号将无法再访问您的已加密信息。</string>
     <string name="sign_out_bottom_sheet_warning_backup_not_active">您的所有设备都应当启用安全密钥备份以确保您不会失去您的已加密信息的访问权。</string>
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">我不想要我的已加密信息</string>
@@ -1341,7 +1341,7 @@ Riot 在后台时的工作将被显著的限制，这可能会影响消息通知
 
     <string name="auth_login_sso">以单点登录方式登入</string>
     <string name="login_error_unknown_host">无法连接到此 URL，请检查</string>
-    <string name="login_error_ssl_handshake">您的设备因使用了过时的 TLS 安全协议而容易受到攻击，为了安全您将无法连接</string>
+    <string name="login_error_ssl_handshake">您的设备使用了过时的 TLS 安全协议，容易受到攻击，为保证安全，您将无法进行连接</string>
     <string name="settings_send_message_with_enter">按回车发送消息</string>
     <string name="settings_send_message_with_enter_summary">软键盘的 Enter 按钮将发送消息而不是添加换行符</string>
 
@@ -1379,6 +1379,104 @@ Riot 在后台时的工作将被显著的限制，这可能会影响消息通知
     <string name="notification_sender_me">我</string>
     <string name="notification_inline_reply_failed">** 发送失败 - 请打开聊天室</string>
 
-    <string name="error_jitsi_not_supported_on_old_device">抱歉，旧设备 （安卓系统版本低于 5.0）不支持使用 Jitsi 创建电话会议</string>
+    <string name="error_jitsi_not_supported_on_old_device">抱歉，旧设备 （Android 系统版本低于 5.0）不支持使用 Jitsi 创建电话会议</string>
+
+    <string name="title_activity_verify_device">验证设备</string>
+
+    <string name="encryption_information_unknown_ip">未知 IP</string>
+    <string name="you_added_a_new_device_with_info">一个新设备正在请求加密密钥。
+\n设备名称：%1$s
+\n最近上线于：%2$s
+\n若您未曾在另一个设备上登录，请忽略此请求。</string>
+    <string name="your_unverified_device_requesting_with_info">一个未验证的设备正在请求加密密钥。
+\n设备名称：%1$s
+\n最近上线于：%2$s
+\n若您未曾在另一个设备上登录，请忽略此请求。</string>
+
+    <string name="start_verification_short_label">验证</string>
+    <string name="share_without_verifying_short_label">分享</string>
+    <string name="key_share_request">密钥分享请求</string>
+    <string name="ignore_request_short_label">忽略</string>
+
+    <string name="keys_backup_setup_override_replace">替换</string>
+    <string name="keys_backup_setup_override_stop">终止</string>
+
+    <string name="keys_backup_settings_checking_backup_state">正在检查备份状态</string>
+    <string name="sas_verify_title">通过对比一段简短的文本字符串来验证设备。</string>
+    <string name="sas_security_advise">为保证尽可能高的安全性，我们建议您与对方当面交换，或使用另一种可信任的通讯方式。</string>
+    <string name="sas_verify_start_button_title">开始验证</string>
+    <string name="sas_incoming_request_title">传入的验证请求</string>
+    <string name="sas_view_request_action">查看请求</string>
+    <string name="sas_waiting_for_partner">正在等待对方确认…</string>
+
+    <string name="sas_verified">已验证！</string>
+    <string name="sas_verified_successful">您已成功验证此设备。</string>
+    <string name="sas_got_it">了解了</string>
+
+    <string name="sas_verifying_keys">什么都没有出现？并非所有的客户端都已支持交互式验证。使用旧版验证吧。</string>
+    <string name="sas_legacy_verification_button_title">使用旧版验证。</string>
+
+    <string name="sas_verification_request_notification_channel_title">密钥验证</string>
+    <string name="sas_cancelled_dialog_title">请求已取消</string>
+    <string name="sas_verification_request_notification_channel">交互式设备验证</string>
+    <string name="sas_incoming_request_notif_title">验证请求</string>
+    <string name="sas_incoming_request_notif_content">%s 想验证您的装置</string>
+
+    <string name="sas_error_unknown">未知错误</string>
+
+
+    <string name="edit">编辑</string>
+    <string name="reply">回复</string>
+
+    <string name="global_retry">重试</string>
+    <string name="send_you_invite">向您发送邀请</string>
+    <string name="invited_by">由 %s 邀请</string>
+
+    <string name="room_list_catchup_welcome_title">欢迎回家！</string>
+    <string name="room_list_people_empty_title">对话</string>
+    <string name="room_list_rooms_empty_title">聊天室</string>
+    <string name="title_activity_emoji_reaction_picker">响应</string>
+    <string name="reactions_agree">同意</string>
+    <string name="reactions_like">喜欢</string>
+    <string name="message_add_reaction">响应</string>
+    <string name="message_view_reaction">查看响应</string>
+    <string name="reactions">响应</string>
+
+    <string name="event_redacted_by_user_reason">由用户删除的事件</string>
+    <string name="create_new_room">创建新聊天室</string>
+    <string name="action_change">修改</string>
+    <string name="please_wait">请稍候…</string>
+    <string name="group_all_communities">所有社区</string>
+
+    <string name="room_preview_no_preview">无法预览此聊天室</string>
+    <string name="fab_menu_create_room">聊天室</string>
+    <string name="create_room_action_create">创建</string>
+    <string name="create_room_name_hint">聊天室名称</string>
+    <string name="create_room_directory_title">聊天室目录</string>
+    <string name="alpha_disclaimer_title">欢迎使用 测试版！</string>
+    <string name="settings_sdk_version">Matrix SDK 版本</string>
+    <string name="quick_reactions">快捷响应</string>
+
+    <string name="settings_general_title">通用</string>
+    <string name="settings_preferences">选项</string>
+    <string name="settings_security_and_privacy">安全与隐私</string>
+    <string name="settings_expert">高级</string>
+    <string name="settings_push_rules">推送规则</string>
+    <string name="settings_push_rules_no_rules">尚未定义任何推送规则</string>
+    <string name="settings_push_gateway_no_pushers">没有已注册的推送通道</string>
+
+    <string name="push_gateway_item_app_id">app_id：</string>
+    <string name="push_gateway_item_push_key">push_key：</string>
+    <string name="push_gateway_item_app_display_name">app_display_name：</string>
+    <string name="push_gateway_item_device_name">device_name：</string>
+    <string name="push_gateway_item_url">URL：</string>
+    <string name="push_gateway_item_format">格式：</string>
+
+    <string name="preference_voice_and_video">音频与视频</string>
+    <string name="preference_root_help_about">帮助和关于</string>
+
+
+    <string name="store_riotx_title">RiotX - -下一代 Matrix 客户端</string>
+    <string name="edited_suffix">（已编辑）</string>
 
 </resources>

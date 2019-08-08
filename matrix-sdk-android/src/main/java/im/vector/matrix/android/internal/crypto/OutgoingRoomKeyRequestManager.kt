@@ -299,10 +299,12 @@ internal class OutgoingRoomKeyRequestManager @Inject constructor(
             // TODO Change this two hard coded key to something better
             contentMap.setObject(recipient["userId"], recipient["deviceId"], message)
         }
-        sendToDeviceTask.configureWith(SendToDeviceTask.Params(EventType.ROOM_KEY_REQUEST, contentMap, transactionId))
-                .dispatchTo(callback)
-                .executeOn(TaskThread.CALLER)
-                .callbackOn(TaskThread.CALLER)
+        sendToDeviceTask
+                .configureWith(SendToDeviceTask.Params(EventType.ROOM_KEY_REQUEST, contentMap, transactionId)) {
+                    this.callback = callback
+                    this.callbackThread = TaskThread.CALLER
+                    this.executionThread = TaskThread.CALLER
+                }
                 .executeBy(taskExecutor)
     }
 

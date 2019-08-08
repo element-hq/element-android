@@ -63,9 +63,7 @@ data class MXKey(
     fun signatureForUserId(userId: String, signkey: String): String? {
         // sanity checks
         if (userId.isNotBlank() && signkey.isNotBlank()) {
-            if (signatures.containsKey(userId)) {
-                return signatures[userId]?.get(signkey)
-            }
+            return signatures[userId]?.get(signkey)
         }
 
         return null

@@ -19,6 +19,7 @@ package im.vector.riotx.features.home.room.detail.timeline.item
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.view.ViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
@@ -42,13 +43,16 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
     override fun bind(holder: Holder) {
         super.bind(holder)
         imageContentRenderer.render(mediaData, ImageContentRenderer.Mode.THUMBNAIL, holder.imageView)
-        contentUploadStateTrackerBinder.bind(informationData.eventId, mediaData, holder.progressLayout)
+        if (!informationData.sendState.hasFailed()) {
+            contentUploadStateTrackerBinder.bind(informationData.eventId, mediaData, holder.progressLayout)
+        }
         holder.imageView.setOnClickListener(clickListener)
         holder.imageView.setOnLongClickListener(longClickListener)
+        ViewCompat.setTransitionName(holder.imageView,"imagePreview_${id()}")
         holder.mediaContentView.setOnClickListener(cellClickListener)
         holder.mediaContentView.setOnLongClickListener(longClickListener)
         // The sending state color will be apply to the progress text
-        renderSendState(holder.imageView, null)
+        renderSendState(holder.imageView, null, holder.failedToSendIndicator)
         holder.playContentView.visibility = if (playable) View.VISIBLE else View.GONE
     }
 
@@ -65,6 +69,7 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
         val playContentView by bind<ImageView>(R.id.messageMediaPlayView)
 
         val mediaContentView by bind<ViewGroup>(R.id.messageContentMedia)
+        val failedToSendIndicator by bind<ImageView>(R.id.messageFailToSendIndicator)
     }
 
     companion object {

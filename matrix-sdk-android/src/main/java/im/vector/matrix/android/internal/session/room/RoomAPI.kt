@@ -218,6 +218,7 @@ internal interface RoomAPI {
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/join")
     fun join(@Path("roomId") roomId: String,
+             @Query("server_name") viaServers: List<String>,
              @Body params: Map<String, String>): Call<Unit>
 
     /**

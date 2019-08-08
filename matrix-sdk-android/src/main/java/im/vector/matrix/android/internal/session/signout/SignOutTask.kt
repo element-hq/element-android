@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.session.signout
 
-import arrow.core.Try
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.internal.SessionManager
 import im.vector.matrix.android.internal.auth.SessionParamsStore
@@ -31,15 +30,11 @@ internal class DefaultSignOutTask @Inject constructor(private val credentials: C
                                                       private val sessionManager: SessionManager,
                                                       private val sessionParamsStore: SessionParamsStore) : SignOutTask {
 
-    override suspend fun execute(params: Unit): Try<Unit> {
-        return executeRequest<Unit> {
+    override suspend fun execute(params: Unit) {
+        executeRequest<Unit> {
             apiCall = signOutAPI.signOut()
-        }.flatMap {
-            sessionParamsStore.delete(credentials.userId)
-        }.flatMap {
-            Try {
-                sessionManager.releaseSession(credentials.userId)
-            }
         }
+        sessionParamsStore.delete(credentials.userId)
+        sessionManager.releaseSession(credentials.userId)
     }
 }

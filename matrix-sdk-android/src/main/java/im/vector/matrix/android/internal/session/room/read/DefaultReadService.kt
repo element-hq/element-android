@@ -22,14 +22,11 @@ import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.room.read.ReadService
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.ReadReceiptEntity
-import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.query.find
 import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
-import im.vector.matrix.android.internal.database.query.latestEvent
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
-import im.vector.matrix.android.internal.util.fetchCopied
 import javax.inject.Inject
 
 internal class DefaultReadService @Inject constructor(private val roomId: String,
@@ -39,37 +36,44 @@ internal class DefaultReadService @Inject constructor(private val roomId: String
                                                       private val credentials: Credentials) : ReadService {
 
     override fun markAllAsRead(callback: MatrixCallback<Unit>) {
-        //TODO shouldn't it be latest synced event?
-        val latestEvent = getLatestEvent()
-        val params = SetReadMarkersTask.Params(roomId, fullyReadEventId = latestEvent?.eventId, readReceiptEventId = latestEvent?.eventId)
-        setReadMarkersTask.configureWith(params).dispatchTo(callback).executeBy(taskExecutor)
+        val params = SetReadMarkersTask.Params(roomId, markAllAsRead = true)
+        setReadMarkersTask
+                .configureWith(params) {
+                    this.callback = callback
+                }
+                .executeBy(taskExecutor)
     }
 
     override fun setReadReceipt(eventId: String, callback: MatrixCallback<Unit>) {
         val params = SetReadMarkersTask.Params(roomId, fullyReadEventId = null, readReceiptEventId = eventId)
-        setReadMarkersTask.configureWith(params).dispatchTo(callback).executeBy(taskExecutor)
+        setReadMarkersTask
+                .configureWith(params) {
+                    this.callback = callback
+                }
+                .executeBy(taskExecutor)
     }
 
     override fun setReadMarker(fullyReadEventId: String, callback: MatrixCallback<Unit>) {
         val params = SetReadMarkersTask.Params(roomId, fullyReadEventId = fullyReadEventId, readReceiptEventId = null)
-        setReadMarkersTask.configureWith(params).dispatchTo(callback).executeBy(taskExecutor)
+        setReadMarkersTask
+                .configureWith(params) {
+                    this.callback = callback
+                }
+                .executeBy(taskExecutor)
     }
 
-    private fun getLatestEvent(): TimelineEventEntity? {
-        return monarchy.fetchCopied { TimelineEventEntity.latestEvent(it, roomId) }
-    }
 
     override fun isEventRead(eventId: String): Boolean {
         var isEventRead = false
         monarchy.doWithRealm {
             val readReceipt = ReadReceiptEntity.where(it, roomId, credentials.userId).findFirst()
-                              ?: return@doWithRealm
+                    ?: return@doWithRealm
             val liveChunk = ChunkEntity.findLastLiveChunkFromRoom(it, roomId)
-                            ?: return@doWithRealm
+                    ?: return@doWithRealm
             val readReceiptIndex = liveChunk.timelineEvents.find(readReceipt.eventId)?.root?.displayIndex
-                                   ?: Int.MIN_VALUE
+                    ?: Int.MIN_VALUE
             val eventToCheckIndex = liveChunk.timelineEvents.find(eventId)?.root?.displayIndex
-                                    ?: Int.MAX_VALUE
+                    ?: Int.MAX_VALUE
             isEventRead = eventToCheckIndex <= readReceiptIndex
         }
         return isEventRead

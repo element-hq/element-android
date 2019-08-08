@@ -19,16 +19,15 @@ package im.vector.matrix.android.internal.session.room.timeline
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.util.CancelableBag
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.*
 import im.vector.matrix.android.internal.database.model.EventEntity
-import im.vector.matrix.android.internal.database.query.findIncludingEvent
-import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
-import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.database.query.whereInRoom
+import im.vector.matrix.android.internal.database.query.*
+import im.vector.matrix.android.internal.task.TaskConstraints
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.Debouncer
@@ -133,7 +132,7 @@ internal class DefaultTimeline(
                     builtEventsIdMap[eventId]?.let { builtIndex ->
                         //Update the relation of existing event
                         builtEvents[builtIndex]?.let { te ->
-                            builtEvents[builtIndex]  = eventEntity.asDomain()
+                            builtEvents[builtIndex] = eventEntity.asDomain()
                             hasChanged = true
                         }
                     }
@@ -206,6 +205,17 @@ internal class DefaultTimeline(
         }
     }
 
+    override fun pendingEventCount(): Int {
+        return Realm.getInstance(realmConfiguration).use {
+            RoomEntity.where(it, roomId).findFirst()?.sendingTimelineEvents?.count() ?: 0
+        }
+    }
+
+    override fun failedToDeliverEventCount(): Int {
+        return Realm.getInstance(realmConfiguration).use {
+            TimelineEventEntity.findAllInRoomWithSendStates(it, roomId, SendState.HAS_FAILED_STATES).count()
+        }
+    }
 
     override fun start() {
         if (isStarted.compareAndSet(false, true)) {
@@ -260,30 +270,32 @@ internal class DefaultTimeline(
 // Private methods *****************************************************************************
 
     private fun hasMoreInCache(direction: Timeline.Direction): Boolean {
-        val localRealm = Realm.getInstance(realmConfiguration)
-        val timelineEventEntity = buildEventQuery(localRealm).findFirst(direction) ?: return false
-        val hasMoreInCache = if (direction == Timeline.Direction.FORWARDS) {
-            val firstEvent = builtEvents.firstOrNull() ?: return true
-            firstEvent.displayIndex < timelineEventEntity.root!!.displayIndex
-        } else {
-            val lastEvent = builtEvents.lastOrNull() ?: return true
-            lastEvent.displayIndex > timelineEventEntity.root!!.displayIndex
+        return Realm.getInstance(realmConfiguration).use { localRealm ->
+            val timelineEventEntity = buildEventQuery(localRealm).findFirst(direction)
+                    ?: return false
+            if (direction == Timeline.Direction.FORWARDS) {
+                if (findCurrentChunk(localRealm)?.isLastForward == true) {
+                    return false
+                }
+                val firstEvent = builtEvents.firstOrNull() ?: return true
+                firstEvent.displayIndex < timelineEventEntity.root!!.displayIndex
+            } else {
+                val lastEvent = builtEvents.lastOrNull() ?: return true
+                lastEvent.displayIndex > timelineEventEntity.root!!.displayIndex
+            }
         }
-        localRealm.close()
-        return hasMoreInCache
     }
 
     private fun hasReachedEnd(direction: Timeline.Direction): Boolean {
-        val localRealm = Realm.getInstance(realmConfiguration)
-        val currentChunk = findCurrentChunk(localRealm) ?: return false
-        val hasReachedEnd = if (direction == Timeline.Direction.FORWARDS) {
-            currentChunk.isLastForward
-        } else {
-            val eventEntity = buildEventQuery(localRealm).findFirst(direction)
-            currentChunk.isLastBackward || eventEntity?.root?.type == EventType.STATE_ROOM_CREATE
+        return Realm.getInstance(realmConfiguration).use { localRealm ->
+            val currentChunk = findCurrentChunk(localRealm) ?: return false
+            if (direction == Timeline.Direction.FORWARDS) {
+                currentChunk.isLastForward
+            } else {
+                val eventEntity = buildEventQuery(localRealm).findFirst(direction)
+                currentChunk.isLastBackward || eventEntity?.root?.type == EventType.STATE_ROOM_CREATE
+            }
         }
-        localRealm.close()
-        return hasReachedEnd
     }
 
 
@@ -388,24 +400,27 @@ internal class DefaultTimeline(
                 limit = limit)
 
         Timber.v("Should fetch $limit items $direction")
-        cancelableBag += paginationTask.configureWith(params)
-                .enableRetry()
-                .dispatchTo(object : MatrixCallback<TokenChunkEventPersistor.Result> {
-                    override fun onSuccess(data: TokenChunkEventPersistor.Result) {
-                        if (data == TokenChunkEventPersistor.Result.SUCCESS) {
-                            Timber.v("Success fetching $limit items $direction from pagination request")
-                        } else {
-                            // Database won't be updated, so we force pagination request
-                            BACKGROUND_HANDLER.post {
-                                executePaginationTask(direction, limit)
+        cancelableBag += paginationTask
+                .configureWith(params) {
+                    this.retryCount = Int.MAX_VALUE
+                    this.constraints = TaskConstraints(connectedToNetwork = true)
+                    this.callback = object : MatrixCallback<TokenChunkEventPersistor.Result> {
+                        override fun onSuccess(data: TokenChunkEventPersistor.Result) {
+                            if (data == TokenChunkEventPersistor.Result.SUCCESS) {
+                                Timber.v("Success fetching $limit items $direction from pagination request")
+                            } else {
+                                // Database won't be updated, so we force pagination request
+                                BACKGROUND_HANDLER.post {
+                                    executePaginationTask(direction, limit)
+                                }
                             }
                         }
-                    }
 
-                    override fun onFailure(failure: Throwable) {
-                        Timber.v("Failure fetching $limit items $direction from pagination request")
+                        override fun onFailure(failure: Throwable) {
+                            Timber.v("Failure fetching $limit items $direction from pagination request")
+                        }
                     }
-                })
+                }
                 .executeBy(taskExecutor)
     }
 

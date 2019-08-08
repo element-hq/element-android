@@ -15,7 +15,6 @@
  */
 package im.vector.matrix.android.internal.session.room
 
-import arrow.core.Try
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
@@ -31,7 +30,7 @@ import im.vector.matrix.android.internal.database.query.create
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
 import im.vector.matrix.android.internal.task.Task
-import im.vector.matrix.android.internal.util.tryTransactionSync
+import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.Realm
 import timber.log.Timber
 import javax.inject.Inject
@@ -54,10 +53,10 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
     //OPT OUT serer aggregation until API mature enough
     private val SHOULD_HANDLE_SERVER_AGREGGATION = false
 
-    override suspend fun execute(params: EventRelationsAggregationTask.Params): Try<Unit> {
+    override suspend fun execute(params: EventRelationsAggregationTask.Params) {
         val events = params.events
         val userId = params.userId
-        return monarchy.tryTransactionSync { realm ->
+        monarchy.awaitTransaction { realm ->
             Timber.v(">>> DefaultEventRelationsAggregationTask[${params.hashCode()}] called with ${events.size} events")
             update(realm, events, userId)
             Timber.v("<<< DefaultEventRelationsAggregationTask[${params.hashCode()}] finished")
@@ -83,21 +82,21 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
                         if (event.unsignedData?.relations?.annotations != null) {
                             Timber.v("###REACTION Agreggation in room $roomId for event ${event.eventId}")
                             handleInitialAggregatedRelations(event, roomId, event.unsignedData.relations.annotations, realm)
-                        } else {
-                            val content: MessageContent? = event.content.toModel()
-                            if (content?.relatesTo?.type == RelationType.REPLACE) {
-                                Timber.v("###REPLACE in room $roomId for event ${event.eventId}")
-                                //A replace!
-                                handleReplace(realm, event, content, roomId, isLocalEcho)
+
+                            EventAnnotationsSummaryEntity.where(realm, event.eventId
+                                    ?: "").findFirst()?.let {
+                                TimelineEventEntity.where(realm, eventId = event.eventId
+                                        ?: "").findFirst()?.let { tet ->
+                                    tet.annotations = it
+                                }
                             }
                         }
 
-                        EventAnnotationsSummaryEntity.where(realm, event.eventId
-                                ?: "").findFirst()?.let {
-                            TimelineEventEntity.where(realm, eventId = event.eventId
-                                    ?: "").findFirst()?.let { tet ->
-                                tet.annotations = it
-                            }
+                        val content: MessageContent? = event.content.toModel()
+                        if (content?.relatesTo?.type == RelationType.REPLACE) {
+                            Timber.v("###REPLACE in room $roomId for event ${event.eventId}")
+                            //A replace!
+                            handleReplace(realm, event, content, roomId, isLocalEcho)
                         }
 
 
@@ -178,11 +177,12 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
             Timber.v("###REPLACE new edit summary for ${targetEventId}, creating one (localEcho:$isLocalEcho)")
             //create the edit summary
             val editSummary = realm.createObject(EditAggregatedSummaryEntity::class.java)
-            editSummary.lastEditTs = event.originServerTs ?: System.currentTimeMillis()
             editSummary.aggregatedContent = ContentMapper.map(newContent)
             if (isLocalEcho) {
+                editSummary.lastEditTs = 0
                 editSummary.sourceLocalEchoEvents.add(eventId)
             } else {
+                editSummary.lastEditTs = event.originServerTs ?: 0
                 editSummary.sourceEvents.add(eventId)
             }
 
@@ -200,13 +200,26 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
                 Timber.v("###REPLACE Receiving remote echo of edit (edit already done)")
                 existingSummary.sourceLocalEchoEvents.remove(txId)
                 existingSummary.sourceEvents.add(event.eventId)
-            } else if (event.originServerTs ?: 0 > existingSummary.lastEditTs) {
+            } else if (
+                    isLocalEcho // do not rely on ts for local echo, take it
+                    || event.originServerTs ?: 0 >= existingSummary.lastEditTs
+            ) {
                 Timber.v("###REPLACE Computing aggregated edit summary (isLocalEcho:$isLocalEcho)")
-                existingSummary.lastEditTs = event.originServerTs ?: System.currentTimeMillis()
+                if (!isLocalEcho) {
+                    //Do not take local echo originServerTs here, could mess up ordering (keep old ts)
+                    existingSummary.lastEditTs = event.originServerTs ?: System.currentTimeMillis()
+                }
                 existingSummary.aggregatedContent = ContentMapper.map(newContent)
-                existingSummary.sourceEvents.add(eventId)
+                if (isLocalEcho) {
+                    existingSummary.sourceLocalEchoEvents.add(eventId)
+                } else {
+                    existingSummary.sourceEvents.add(eventId)
+                }
             } else {
-                //ignore this event for the summary
+                //ignore this event for the summary (back paginate)
+                if (!isLocalEcho) {
+                    existingSummary.sourceEvents.add(eventId)
+                }
                 Timber.v("###REPLACE ignoring event for summary, it's to old $eventId")
             }
         }

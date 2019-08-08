@@ -21,24 +21,32 @@ import im.vector.matrix.android.api.session.room.model.EventAnnotationsSummary
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.Single
 
 class RxRoom(private val room: Room) {
 
     fun liveRoomSummary(): Observable<RoomSummary> {
-        return room.liveRoomSummary().asObservable().observeOn(Schedulers.computation())
+        return room.liveRoomSummary().asObservable()
     }
 
     fun liveRoomMemberIds(): Observable<List<String>> {
-        return room.getRoomMemberIdsLive().asObservable().observeOn(Schedulers.computation())
+        return room.getRoomMemberIdsLive().asObservable()
     }
 
     fun liveAnnotationSummary(eventId: String): Observable<EventAnnotationsSummary> {
-        return room.getEventSummaryLive(eventId).asObservable().observeOn(Schedulers.computation())
+        return room.getEventSummaryLive(eventId).asObservable()
     }
 
     fun liveTimelineEvent(eventId: String): Observable<TimelineEvent> {
-        return room.liveTimeLineEvent(eventId).asObservable().observeOn(Schedulers.computation())
+        return room.liveTimeLineEvent(eventId).asObservable()
+    }
+
+    fun loadRoomMembersIfNeeded(): Single<Unit> = Single.create {
+        room.loadRoomMembersIfNeeded(MatrixCallbackSingle(it)).toSingle(it)
+    }
+
+    fun joinRoom(viaServers: List<String> = emptyList()): Single<Unit> = Single.create {
+        room.join(viaServers, MatrixCallbackSingle(it)).toSingle(it)
     }
 
 }

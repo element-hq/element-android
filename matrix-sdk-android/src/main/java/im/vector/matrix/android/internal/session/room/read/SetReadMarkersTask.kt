@@ -16,11 +16,9 @@
 
 package im.vector.matrix.android.internal.session.room.read
 
-import arrow.core.Try
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.internal.database.model.ChunkEntity
-import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.ReadReceiptEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
@@ -32,7 +30,7 @@ import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
 import im.vector.matrix.android.internal.task.Task
-import im.vector.matrix.android.internal.util.tryTransactionAsync
+import io.realm.Realm
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -40,8 +38,9 @@ internal interface SetReadMarkersTask : Task<SetReadMarkersTask.Params, Unit> {
 
     data class Params(
             val roomId: String,
-            val fullyReadEventId: String?,
-            val readReceiptEventId: String?
+            val markAllAsRead: Boolean = false,
+            val fullyReadEventId: String? = null,
+            val readReceiptEventId: String? = null
     )
 }
 
@@ -53,40 +52,53 @@ internal class DefaultSetReadMarkersTask @Inject constructor(private val roomAPI
                                                              private val monarchy: Monarchy
 ) : SetReadMarkersTask {
 
-    override suspend fun execute(params: SetReadMarkersTask.Params): Try<Unit> {
+    override suspend fun execute(params: SetReadMarkersTask.Params) {
         val markers = HashMap<String, String>()
-        if (params.fullyReadEventId != null) {
-            if (LocalEchoEventFactory.isLocalEchoId(params.fullyReadEventId)) {
-                Timber.w("Can't set read marker for local event ${params.fullyReadEventId}")
-            } else {
-                markers[READ_MARKER] = params.fullyReadEventId
-            }
-        }
-        if (params.readReceiptEventId != null
-                && !isEventRead(params.roomId, params.readReceiptEventId)) {
+        val fullyReadEventId: String?
+        val readReceiptEventId: String?
 
-            if (LocalEchoEventFactory.isLocalEchoId(params.readReceiptEventId)) {
+        if (params.markAllAsRead) {
+            val latestSyncedEventId = Realm.getInstance(monarchy.realmConfiguration).use { realm ->
+                TimelineEventEntity.latestEvent(realm, roomId = params.roomId, includesSending = false)?.eventId
+            }
+            fullyReadEventId = latestSyncedEventId
+            readReceiptEventId = latestSyncedEventId
+        } else {
+            fullyReadEventId = params.fullyReadEventId
+            readReceiptEventId = params.readReceiptEventId
+        }
+
+        if (fullyReadEventId != null) {
+            if (LocalEchoEventFactory.isLocalEchoId(fullyReadEventId)) {
                 Timber.w("Can't set read marker for local event ${params.fullyReadEventId}")
             } else {
-                updateNotificationCountIfNecessary(params.roomId, params.readReceiptEventId)
-                markers[READ_RECEIPT] = params.readReceiptEventId
+                markers[READ_MARKER] = fullyReadEventId
             }
         }
-        return if (markers.isEmpty()) {
-            Try.just(Unit)
-        } else {
-            executeRequest {
-                apiCall = roomAPI.sendReadMarker(params.roomId, markers)
+        if (readReceiptEventId != null
+                && !isEventRead(params.roomId, readReceiptEventId)) {
+
+            if (LocalEchoEventFactory.isLocalEchoId(readReceiptEventId)) {
+                Timber.w("Can't set read receipt for local event ${params.fullyReadEventId}")
+            } else {
+                updateNotificationCountIfNecessary(params.roomId, readReceiptEventId)
+                markers[READ_RECEIPT] = readReceiptEventId
             }
+        }
+        if (markers.isEmpty()) {
+            return
+        }
+        executeRequest<Unit> {
+            apiCall = roomAPI.sendReadMarker(params.roomId, markers)
         }
     }
 
     private fun updateNotificationCountIfNecessary(roomId: String, eventId: String) {
-        monarchy.tryTransactionAsync { realm ->
-            val isLatestReceived = TimelineEventEntity.latestEvent(realm, roomId)?.eventId == eventId
+        monarchy.writeAsync { realm ->
+            val isLatestReceived = TimelineEventEntity.latestEvent(realm, roomId = roomId, includesSending = false)?.eventId == eventId
             if (isLatestReceived) {
                 val roomSummary = RoomSummaryEntity.where(realm, roomId).findFirst()
-                        ?: return@tryTransactionAsync
+                        ?: return@writeAsync
                 roomSummary.notificationCount = 0
                 roomSummary.highlightCount = 0
             }

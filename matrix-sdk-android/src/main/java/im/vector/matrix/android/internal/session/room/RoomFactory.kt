@@ -63,7 +63,7 @@ internal class RoomFactory @Inject constructor(private val context: Context,
     fun create(roomId: String): Room {
         val timelineService = DefaultTimelineService(roomId, monarchy, taskExecutor, contextOfEventTask, cryptoService, paginationTask)
         val sendService = DefaultSendService(context, credentials, roomId, eventFactory, cryptoService, monarchy)
-        val stateService = DefaultStateService(roomId, taskExecutor, sendStateTask)
+        val stateService = DefaultStateService(roomId, monarchy.realmConfiguration, taskExecutor, sendStateTask)
         val roomMembersService = DefaultMembershipService(roomId, monarchy, taskExecutor, loadRoomMembersTask, inviteTask, joinRoomTask, leaveRoomTask)
         val readService = DefaultReadService(roomId, monarchy, taskExecutor, setReadMarkersTask, credentials)
         val relationService = DefaultRelationService(context,

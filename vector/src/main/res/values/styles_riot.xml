@@ -4,11 +4,14 @@
     <!-- ************************ Common items ************************ -->
 
     <!-- toolbar styles-->
-    <style name="VectorToolbarStyle" parent="Widget.MaterialComponents.Toolbar">
+    <style name="VectorToolbarStyleWithPadding" parent="Widget.MaterialComponents.Toolbar">
         <!-- main text -->
         <item name="titleTextAppearance">@style/Vector.Toolbar.Title</item>
         <item name="subtitleTextAppearance">@style/Vector.Toolbar.SubTitle</item>
         <item name="android:background">?riotx_background</item>
+    </style>
+
+    <style name="VectorToolbarStyle" parent="VectorToolbarStyleWithPadding">
         <item name="contentInsetStartWithNavigation">0dp</item>
     </style>
 

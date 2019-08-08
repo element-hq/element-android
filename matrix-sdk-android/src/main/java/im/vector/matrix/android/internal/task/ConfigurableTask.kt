@@ -16,49 +16,54 @@
 
 package im.vector.matrix.android.internal.task
 
-import arrow.core.Try
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.util.Cancelable
+import java.util.*
 
-internal fun <PARAMS, RESULT> Task<PARAMS, RESULT>.configureWith(params: PARAMS): ConfigurableTask<PARAMS, RESULT> {
-    return ConfigurableTask(this, params)
+internal fun <PARAMS, RESULT> Task<PARAMS, RESULT>.configureWith(params: PARAMS,
+                                                                 init: (ConfigurableTask.Builder<PARAMS, RESULT>.() -> Unit) = {}
+): ConfigurableTask<PARAMS, RESULT> {
+    return ConfigurableTask.Builder(this, params).apply(init).build()
 }
 
-/**
- * Convert a Task to a ConfigurableTask without parameter
- */
-internal fun <RESULT> Task<Unit, RESULT>.toConfigurableTask(): ConfigurableTask<Unit, RESULT> {
-    return ConfigurableTask(this, Unit)
+internal fun <RESULT> Task<Unit, RESULT>.configureWith(init: (ConfigurableTask.Builder<Unit, RESULT>.() -> Unit) = {}): ConfigurableTask<Unit, RESULT> {
+    return configureWith(Unit, init)
 }
 
 internal data class ConfigurableTask<PARAMS, RESULT>(
         val task: Task<PARAMS, RESULT>,
         val params: PARAMS,
-        val callbackThread: TaskThread = TaskThread.MAIN,
-        val executionThread: TaskThread = TaskThread.IO,
-        val retryCount: Int = 0,
-        val callback: MatrixCallback<RESULT> = object : MatrixCallback<RESULT> {}
-) : Task<PARAMS, RESULT> {
+        val id: UUID,
+        val callbackThread: TaskThread,
+        val executionThread: TaskThread,
+        val constraints: TaskConstraints,
+        val retryCount: Int,
+        val callback: MatrixCallback<RESULT>
+
+) : Task<PARAMS, RESULT> by task {
 
 
-    override suspend fun execute(params: PARAMS): Try<RESULT> {
-        return task.execute(params)
-    }
+    class Builder<PARAMS, RESULT>(
+            private val task: Task<PARAMS, RESULT>,
+            private val params: PARAMS,
+            var id: UUID = UUID.randomUUID(),
+            var callbackThread: TaskThread = TaskThread.MAIN,
+            var executionThread: TaskThread = TaskThread.IO,
+            var constraints: TaskConstraints = TaskConstraints(),
+            var retryCount: Int = 0,
+            var callback: MatrixCallback<RESULT> = object : MatrixCallback<RESULT> {}
+    ) {
 
-    fun callbackOn(thread: TaskThread): ConfigurableTask<PARAMS, RESULT> {
-        return copy(callbackThread = thread)
-    }
-
-    fun executeOn(thread: TaskThread): ConfigurableTask<PARAMS, RESULT> {
-        return copy(executionThread = thread)
-    }
-
-    fun dispatchTo(matrixCallback: MatrixCallback<RESULT>): ConfigurableTask<PARAMS, RESULT> {
-        return copy(callback = matrixCallback)
-    }
-
-    fun enableRetry(retryCount: Int = Int.MAX_VALUE): ConfigurableTask<PARAMS, RESULT> {
-        return copy(retryCount = retryCount)
+        fun build() = ConfigurableTask(
+                task = task,
+                params = params,
+                id = id,
+                callbackThread = callbackThread,
+                executionThread = executionThread,
+                constraints = constraints,
+                retryCount = retryCount,
+                callback = callback
+        )
     }
 
     fun executeBy(taskExecutor: TaskExecutor): Cancelable {
@@ -66,7 +71,7 @@ internal data class ConfigurableTask<PARAMS, RESULT>(
     }
 
     override fun toString(): String {
-        return task.javaClass.name
+        return "${task.javaClass.name} with ID: $id"
     }
 
 }

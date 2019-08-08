@@ -19,6 +19,7 @@ package im.vector.riotx.core.platform
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import im.vector.riotx.core.extensions.postLiveEvent
 import im.vector.riotx.core.utils.LiveEvent
 import im.vector.riotx.features.configuration.VectorConfiguration
 import timber.log.Timber
@@ -46,7 +47,7 @@ class ConfigurationViewModel @Inject constructor(
             if (newHash != currentConfigurationValue) {
                 Timber.v("Configuration: recreate the Activity")
                 currentConfigurationValue = newHash
-                _activityRestarter.postValue(LiveEvent(Unit))
+                _activityRestarter.postLiveEvent(Unit)
             }
         }
     }

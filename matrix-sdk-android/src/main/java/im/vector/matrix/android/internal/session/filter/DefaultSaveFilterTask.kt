@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.session.filter
 
-import arrow.core.Try
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
@@ -39,15 +38,12 @@ internal class DefaultSaveFilterTask @Inject constructor(private val sessionPara
                                                          private val filterRepository: FilterRepository
 ) : SaveFilterTask {
 
-    override suspend fun execute(params: SaveFilterTask.Params): Try<Unit> {
-        return executeRequest<FilterResponse> {
+    override suspend fun execute(params: SaveFilterTask.Params) {
+        val filterResponse = executeRequest<FilterResponse> {
             // TODO auto retry
             apiCall = filterAPI.uploadFilter(sessionParams.credentials.userId, params.filter)
-        }.flatMap { filterResponse ->
-            Try {
-                filterRepository.storeFilterId(params.filter, filterResponse.filterId)
-            }
         }
+        filterRepository.storeFilterId(params.filter, filterResponse.filterId)
     }
 
 }

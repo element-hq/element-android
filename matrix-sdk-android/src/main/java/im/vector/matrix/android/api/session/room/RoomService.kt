@@ -20,6 +20,7 @@ import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
+import im.vector.matrix.android.api.util.Cancelable
 
 /**
  * This interface defines methods to get rooms. It's implemented at the session level.
@@ -27,10 +28,18 @@ import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 interface RoomService {
 
     /**
-     * Create a room
+     * Create a room asynchronously
      */
-    fun createRoom(createRoomParams: CreateRoomParams,
-                   callback: MatrixCallback<String>)
+    fun createRoom(createRoomParams: CreateRoomParams, callback: MatrixCallback<String>): Cancelable
+
+    /**
+     * Join a room by id
+     * @param roomId the roomId of the room to join
+     * @param viaServers the servers to attempt to join the room through. One of the servers must be participating in the room.
+     */
+    fun joinRoom(roomId: String,
+                 viaServers: List<String> = emptyList(),
+                 callback: MatrixCallback<Unit>): Cancelable
 
     /**
      * Get a room from a roomId

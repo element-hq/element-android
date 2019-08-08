@@ -88,9 +88,7 @@ internal class SyncResponseHandler @Inject constructor(private val roomSyncHandl
                 measureTimeMillis {
                     reportSubtask(reporter, R.string.initial_sync_start_importing_account_data, 100, 0.1f) {
                         Timber.v("Handle accountData")
-                        if (syncResponse.accountData != null) {
-                            userAccountDataSyncHandler.handle(syncResponse.accountData)
-                        }
+                        userAccountDataSyncHandler.handle(syncResponse.accountData, syncResponse.rooms?.invite)
                     }
                 }.also {
                     Timber.v("Finish handling accountData in $it ms")
@@ -98,7 +96,6 @@ internal class SyncResponseHandler @Inject constructor(private val roomSyncHandl
 
                 Timber.v("On sync completed")
                 cryptoSyncHandler.onSyncCompleted(syncResponse)
-
             }
             Timber.v("Finish handling sync in $measure ms")
             syncResponse

@@ -24,7 +24,6 @@ import androidx.recyclerview.widget.ListUpdateCallback
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyModel
-import im.vector.matrix.android.api.session.room.model.EditAggregatedSummary
 import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
@@ -54,12 +53,13 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Tim
 
     interface Callback : ReactionPillCallback, AvatarCallback, BaseCallback, UrlClickCallback {
         fun onEventVisible(event: TimelineEvent)
+        fun onRoomCreateLinkClicked(url: String)
         fun onEncryptedMessageClicked(informationData: MessageInformationData, view: View)
         fun onImageMessageClicked(messageImageContent: MessageImageContent, mediaData: ImageContentRenderer.Data, view: View)
         fun onVideoMessageClicked(messageVideoContent: MessageVideoContent, mediaData: VideoContentRenderer.Data, view: View)
         fun onFileMessageClicked(eventId: String, messageFileContent: MessageFileContent)
         fun onAudioMessageClicked(messageAudioContent: MessageAudioContent)
-        fun onEditedDecorationClicked(informationData: MessageInformationData, editAggregatedSummary: EditAggregatedSummary?)
+        fun onEditedDecorationClicked(informationData: MessageInformationData)
     }
 
     interface ReactionPillCallback {
@@ -293,8 +293,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Tim
                 // We try to find if one of the item id were used as mergeItemCollapseStates key
                 // => handle case where paginating from mergeable events and we get more
                 val previousCollapseStateKey = mergedEventIds.intersect(mergeItemCollapseStates.keys).firstOrNull()
-                val initialCollapseState = mergeItemCollapseStates.remove(previousCollapseStateKey)
-                        ?: true
+                val initialCollapseState = mergeItemCollapseStates.remove(previousCollapseStateKey) ?: true
                 val isCollapsed = mergeItemCollapseStates.getOrPut(event.localId) { initialCollapseState }
                 if (isCollapsed) {
                     collapsedEventIds.addAll(mergedEventIds)

@@ -21,7 +21,6 @@ import dagger.Module
 import dagger.Provides
 import im.vector.matrix.android.api.session.cache.CacheService
 import im.vector.matrix.android.internal.di.SessionDatabase
-import im.vector.matrix.android.internal.session.SessionScope
 import io.realm.RealmConfiguration
 
 @Module

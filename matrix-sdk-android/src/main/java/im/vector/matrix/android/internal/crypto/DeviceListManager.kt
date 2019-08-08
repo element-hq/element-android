@@ -18,14 +18,12 @@
 package im.vector.matrix.android.internal.crypto
 
 import android.text.TextUtils
-import arrow.core.Try
 import im.vector.matrix.android.api.MatrixPatterns
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.DownloadKeysForUsersTask
-import im.vector.matrix.android.internal.extensions.onError
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.sync.SyncTokenStore
 import timber.log.Timber
@@ -237,7 +235,7 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
      * @param forceDownload Always download the keys even if cached.
      * @param callback      the asynchronous callback
      */
-    suspend fun downloadKeys(userIds: List<String>?, forceDownload: Boolean): Try<MXUsersDevicesMap<MXDeviceInfo>> {
+    suspend fun downloadKeys(userIds: List<String>?, forceDownload: Boolean): MXUsersDevicesMap<MXDeviceInfo> {
         Timber.v("## downloadKeys() : forceDownload $forceDownload : $userIds")
         // Map from userId -> deviceId -> MXDeviceInfo
         val stored = MXUsersDevicesMap<MXDeviceInfo>()
@@ -268,16 +266,15 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
         }
         return if (downloadUsers.isEmpty()) {
             Timber.v("## downloadKeys() : no new user device")
-            Try.just(stored)
+            stored
         } else {
             Timber.v("## downloadKeys() : starts")
             val t0 = System.currentTimeMillis()
-            doKeyDownloadForUsers(downloadUsers)
-                    .map {
-                        Timber.v("## downloadKeys() : doKeyDownloadForUsers succeeds after " + (System.currentTimeMillis() - t0) + " ms")
-                        it.addEntriesFromMap(stored)
-                        it
-                    }
+            val result = doKeyDownloadForUsers(downloadUsers)
+            Timber.v("## downloadKeys() : doKeyDownloadForUsers succeeds after " + (System.currentTimeMillis() - t0) + " ms")
+            result.also {
+                it.addEntriesFromMap(stored)
+            }
         }
     }
 
@@ -286,60 +283,60 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
      *
      * @param downloadUsers the user ids list
      */
-    private suspend fun doKeyDownloadForUsers(downloadUsers: MutableList<String>): Try<MXUsersDevicesMap<MXDeviceInfo>> {
+    private suspend fun doKeyDownloadForUsers(downloadUsers: MutableList<String>): MXUsersDevicesMap<MXDeviceInfo> {
         Timber.v("## doKeyDownloadForUsers() : doKeyDownloadForUsers $downloadUsers")
         // get the user ids which did not already trigger a keys download
         val filteredUsers = downloadUsers.filter { MatrixPatterns.isUserId(it) }
         if (filteredUsers.isEmpty()) {
             // trigger nothing
-            return Try.just(MXUsersDevicesMap())
+            return MXUsersDevicesMap()
         }
         val params = DownloadKeysForUsersTask.Params(filteredUsers, syncTokenStore.getLastToken())
-        return downloadKeysForUsersTask.execute(params)
-                .map { response ->
-                    Timber.v("## doKeyDownloadForUsers() : Got keys for " + filteredUsers.size + " users")
-                    for (userId in filteredUsers) {
-                        val devices = response.deviceKeys?.get(userId)
-                        Timber.v("## doKeyDownloadForUsers() : Got keys for $userId : $devices")
-                        if (devices != null) {
-                            val mutableDevices = HashMap(devices)
-                            val deviceIds = ArrayList(mutableDevices.keys)
-                            for (deviceId in deviceIds) {
-                                // Get the potential previously store device keys for this device
-                                val previouslyStoredDeviceKeys = cryptoStore.getUserDevice(deviceId, userId)
-                                val deviceInfo = mutableDevices[deviceId]
+        val response = try {
+            downloadKeysForUsersTask.execute(params)
+        } catch (throwable: Throwable) {
+            Timber.e(throwable, "##doKeyDownloadForUsers(): error")
+            onKeysDownloadFailed(filteredUsers)
+            throw throwable
+        }
+        Timber.v("## doKeyDownloadForUsers() : Got keys for " + filteredUsers.size + " users")
+        for (userId in filteredUsers) {
+            val devices = response.deviceKeys?.get(userId)
+            Timber.v("## doKeyDownloadForUsers() : Got keys for $userId : $devices")
+            if (devices != null) {
+                val mutableDevices = HashMap(devices)
+                val deviceIds = ArrayList(mutableDevices.keys)
+                for (deviceId in deviceIds) {
+                    // Get the potential previously store device keys for this device
+                    val previouslyStoredDeviceKeys = cryptoStore.getUserDevice(deviceId, userId)
+                    val deviceInfo = mutableDevices[deviceId]
 
-                                // in some race conditions (like unit tests)
-                                // the self device must be seen as verified
-                                if (TextUtils.equals(deviceInfo!!.deviceId, credentials.deviceId) && TextUtils.equals(userId, credentials.userId)) {
-                                    deviceInfo.verified = MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED
-                                }
-                                // Validate received keys
-                                if (!validateDeviceKeys(deviceInfo, userId, deviceId, previouslyStoredDeviceKeys)) {
-                                    // New device keys are not valid. Do not store them
-                                    mutableDevices.remove(deviceId)
-                                    if (null != previouslyStoredDeviceKeys) {
-                                        // But keep old validated ones if any
-                                        mutableDevices[deviceId] = previouslyStoredDeviceKeys
-                                    }
-                                } else if (null != previouslyStoredDeviceKeys) {
-                                    // The verified status is not sync'ed with hs.
-                                    // This is a client side information, valid only for this client.
-                                    // So, transfer its previous value
-                                    mutableDevices[deviceId]!!.verified = previouslyStoredDeviceKeys.verified
-                                }
-                            }
-                            // Update the store
-                            // Note that devices which aren't in the response will be removed from the stores
-                            cryptoStore.storeUserDevices(userId, mutableDevices)
-                        }
+                    // in some race conditions (like unit tests)
+                    // the self device must be seen as verified
+                    if (TextUtils.equals(deviceInfo!!.deviceId, credentials.deviceId) && TextUtils.equals(userId, credentials.userId)) {
+                        deviceInfo.verified = MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED
                     }
-                    onKeysDownloadSucceed(filteredUsers, response.failures)
+                    // Validate received keys
+                    if (!validateDeviceKeys(deviceInfo, userId, deviceId, previouslyStoredDeviceKeys)) {
+                        // New device keys are not valid. Do not store them
+                        mutableDevices.remove(deviceId)
+                        if (null != previouslyStoredDeviceKeys) {
+                            // But keep old validated ones if any
+                            mutableDevices[deviceId] = previouslyStoredDeviceKeys
+                        }
+                    } else if (null != previouslyStoredDeviceKeys) {
+                        // The verified status is not sync'ed with hs.
+                        // This is a client side information, valid only for this client.
+                        // So, transfer its previous value
+                        mutableDevices[deviceId]!!.verified = previouslyStoredDeviceKeys.verified
+                    }
                 }
-                .onError {
-                    Timber.e(it, "##doKeyDownloadForUsers(): error")
-                    onKeysDownloadFailed(filteredUsers)
-                }
+                // Update the store
+                // Note that devices which aren't in the response will be removed from the stores
+                cryptoStore.storeUserDevices(userId, mutableDevices)
+            }
+        }
+        return onKeysDownloadSucceed(filteredUsers, response.failures)
     }
 
     /**
@@ -465,15 +462,16 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
         }
 
         cryptoStore.saveDeviceTrackingStatuses(deviceTrackingStatuses)
-        doKeyDownloadForUsers(users)
-                .fold(
-                        {
-                            Timber.e(it, "## refreshOutdatedDeviceLists() : ERROR updating device keys for users $users")
-                        },
-                        {
-                            Timber.v("## refreshOutdatedDeviceLists() : done")
-                        }
-                )
+        runCatching {
+            doKeyDownloadForUsers(users)
+        }.fold(
+                {
+                    Timber.v("## refreshOutdatedDeviceLists() : done")
+                },
+                {
+                    Timber.e(it, "## refreshOutdatedDeviceLists() : ERROR updating device keys for users $users")
+                }
+        )
     }
 
     companion object {

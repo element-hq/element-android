@@ -19,6 +19,7 @@ import android.content.Context
 import androidx.work.*
 import im.vector.matrix.android.internal.worker.WorkManagerUtil
 import im.vector.matrix.android.internal.worker.WorkManagerUtil.matrixOneTimeWorkRequestBuilder
+import im.vector.matrix.android.internal.worker.startChain
 import java.util.concurrent.TimeUnit
 
 
@@ -41,7 +42,7 @@ internal object TimelineSendEventWorkCommon {
             else                   -> {
                 val firstWork = workRequests.first()
                 var continuation = WorkManager.getInstance(context)
-                        .beginUniqueWork(buildWorkIdentifier(roomId), ExistingWorkPolicy.APPEND, firstWork)
+                        .beginUniqueWork(buildWorkName(roomId), ExistingWorkPolicy.APPEND, firstWork)
                 for (i in 1 until workRequests.size) {
                     val workRequest = workRequests[i]
                     continuation = continuation.then(workRequest)
@@ -51,21 +52,26 @@ internal object TimelineSendEventWorkCommon {
         }
     }
 
-    fun postWork(context: Context, roomId: String, workRequest: OneTimeWorkRequest) {
+    fun postWork(context: Context, roomId: String, workRequest: OneTimeWorkRequest, policy: ExistingWorkPolicy = ExistingWorkPolicy.APPEND) {
         WorkManager.getInstance(context)
-                .beginUniqueWork(buildWorkIdentifier(roomId), ExistingWorkPolicy.APPEND, workRequest)
+                .beginUniqueWork(buildWorkName(roomId), policy, workRequest)
                 .enqueue()
     }
 
-    inline fun <reified W : ListenableWorker> createWork(data: Data): OneTimeWorkRequest {
+    inline fun <reified W : ListenableWorker> createWork(data: Data, startChain: Boolean): OneTimeWorkRequest {
         return matrixOneTimeWorkRequestBuilder<W>()
                 .setConstraints(WorkManagerUtil.workConstraints)
+                .startChain(startChain)
                 .setInputData(data)
                 .setBackoffCriteria(BackoffPolicy.LINEAR, BACKOFF_DELAY, TimeUnit.MILLISECONDS)
                 .build()
     }
 
-    private fun buildWorkIdentifier(roomId: String): String {
+    private fun buildWorkName(roomId: String): String {
         return "${roomId}_$SEND_WORK"
+    }
+
+    fun cancelAllWorks(context: Context, roomId: String) {
+        WorkManager.getInstance(context).cancelUniqueWork(buildWorkName(roomId))
     }
 }

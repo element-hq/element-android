@@ -2,7 +2,7 @@
 <resources>
     <string name="summary_user_sent_image">%1$s lähetti kuvan.</string>
 
-    <string name="notice_room_invite_no_invitee">%s:n kutsu</string>
+    <string name="notice_room_invite_no_invitee">Käyttäjän %s kutsu</string>
     <string name="notice_room_invite">%1$s kutsui käyttäjän %2$s</string>
     <string name="notice_room_invite_you">%1$s kutsui sinut</string>
     <string name="notice_room_join">%1$s liittyi</string>
@@ -16,15 +16,15 @@
     <string name="notice_display_name_set">%1$s asetti näyttönimekseen %2$s</string>
     <string name="notice_display_name_changed_from">%1$s muutti näyttönimensä nimestä %2$s nimeen %3$s</string>
     <string name="notice_display_name_removed">%1$s poisti näyttönimensä (%2$s)</string>
-    <string name="notice_room_topic_changed">%1$s muutti aiheeksi %2$s</string>
-    <string name="notice_room_name_changed">%1$s muutti huoneen nimeksi %2$s</string>
+    <string name="notice_room_topic_changed">%1$s vaihtoi aiheeksi %2$s</string>
+    <string name="notice_room_name_changed">%1$s vaihtoi huoneen nimeksi %2$s</string>
     <string name="notice_placed_video_call">%s soitti videopuhelun.</string>
     <string name="notice_placed_voice_call">%s soitti äänipuhelun.</string>
     <string name="notice_answered_call">%s vastasi puheluun.</string>
     <string name="notice_ended_call">%s lopetti puhelun.</string>
     <string name="notice_made_future_room_visibility">%1$s muutti tulevan huonehistorian näkyväksi käyttäjälle %2$s</string>
-    <string name="notice_room_visibility_invited">kaikki huoneen jäsenet, heidän kutsumisestaan asti.</string>
-    <string name="notice_room_visibility_joined">kaikki huoneen jäsenet, heidän liittymisestään asti.</string>
+    <string name="notice_room_visibility_invited">kaikki huoneen jäsenet, kutsumisestaan asti.</string>
+    <string name="notice_room_visibility_joined">kaikki huoneen jäsenet, liittymisestään asti.</string>
     <string name="notice_room_visibility_shared">kaikki huoneen jäsenet.</string>
     <string name="notice_room_visibility_world_readable">kaikki.</string>
     <string name="notice_room_visibility_unknown">tuntematon (%s).</string>
@@ -34,7 +34,7 @@
     <string name="notice_voip_started">VoIP-konferenssi alkoi</string>
     <string name="notice_voip_finished">VoIP-konferenssi päättyi</string>
 
-    <string name="notice_avatar_changed_too">(profiilikuva muuttui myös)</string>
+    <string name="notice_avatar_changed_too">(myös profiilikuva vaihdettiin)</string>
     <string name="notice_room_name_removed">%1$s poisti huoneen nimen</string>
     <string name="notice_room_topic_removed">%1$s poisti huoneen aiheen</string>
     <string name="notice_profile_change_redacted">%1$s päivitti profiilinsa %2$s</string>
@@ -150,5 +150,22 @@
     <string name="verification_emoji_headphone">Kuulokkeet</string>
     <string name="verification_emoji_folder">Kansio</string>
     <string name="verification_emoji_pin">Nuppineula</string>
+
+    <string name="initial_sync_start_importing_account">Alkusynkronointi:
+\nTuodaan tiliä…</string>
+    <string name="initial_sync_start_importing_account_crypto">Alkusynkronointi:
+\nTuodaan kryptoa</string>
+    <string name="initial_sync_start_importing_account_rooms">Alkusynkronointi:
+\nTuodaan huoneita</string>
+    <string name="initial_sync_start_importing_account_joined_rooms">Alkusynkronointi:
+\nTuodaan liityttyjä huoneita</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">Alkusynkronointi:
+\nTuodaan kutsuttuja huoneita</string>
+    <string name="initial_sync_start_importing_account_left_rooms">Alkusynkronointi:
+\nTuodaan poistuttuja huoneita</string>
+    <string name="initial_sync_start_importing_account_groups">Alkusynkronointi:
+\nTuodaan yhteisöjä</string>
+    <string name="initial_sync_start_importing_account_data">Alkusynkronointi:
+\nTuodaan tilin tietoja</string>
 
 </resources>

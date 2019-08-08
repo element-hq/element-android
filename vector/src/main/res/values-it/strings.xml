@@ -1623,4 +1623,37 @@ Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi."</stri
 \n
 \nNon tutte le funzioni di Riot sono già implementate in RiotX. Principali funzioni mancanti (prossimamente!): • Creazione account • Impostazioni stanza (elenca membri stanza, ecc.) • Creazione di stanze di chat diretta • Chiamate • Widget • …</string>
 
+    <string name="room_list_catchup_empty_title">Non hai nulla di nuovo da vedere!</string>
+    <string name="bottom_action_people_x">Messaggi diretti</string>
+
+    <string name="send_file_step_idle">In attesa…</string>
+    <string name="send_file_step_encrypting_thumbnail">Criptazione miniatura…</string>
+    <string name="send_file_step_sending_thumbnail">Invio miniatura (%1$s / %2$s)</string>
+    <string name="send_file_step_encrypting_file">Criptazione file…</string>
+    <string name="send_file_step_sending_file">Invio file (%1$s / %2$s)</string>
+
+    <string name="downloading_file">Scaricamento file %1$s…</string>
+    <string name="downloaded_file">Il file %1$s è stato scaricato!</string>
+
+    <string name="edited_suffix">(modificato)</string>
+
+    <string name="riotx_no_registration_notice">%1$s per creare un account.</string>
+    <string name="riotx_no_registration_notice_colored_part">Usa la vecchia app</string>
+
+
+    <string name="message_edits">Modifiche messaggio</string>
+    <string name="no_message_edits_found">Nessuna modifica trovata</string>
+
+    <string name="room_filtering_filter_hint">Filtra conversazioni…</string>
+    <string name="room_filtering_footer_title">Non trovi quello che cerchi\?</string>
+    <string name="room_filtering_footer_create_new_room">Crea un nuova stanza</string>
+    <string name="room_filtering_footer_create_new_direct_message">Invia un nuovo messaggio diretto</string>
+    <string name="room_filtering_footer_open_room_directory">Vedi l\'elenco delle stanze</string>
+
+    <string name="room_directory_search_hint">Nome o ID (#esempio:matrix.org)</string>
+
+    <string name="labs_swipe_to_reply_in_timeline">Attiva swipe per rispondere nella timeline</string>
+
+    <string name="link_copied_to_clipboard">Collegamento copiato negli appunti</string>
+
 </resources>

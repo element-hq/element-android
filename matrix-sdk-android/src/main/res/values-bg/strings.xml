@@ -150,4 +150,21 @@
     <string name="verification_emoji_folder">Папка</string>
     <string name="verification_emoji_pin">Карфица</string>
 
+    <string name="initial_sync_start_importing_account">Начална синхронизация:
+\nИмпортиране на профил…</string>
+    <string name="initial_sync_start_importing_account_crypto">Начална синхронизация:
+\nИмпортиране на данни за шифроване</string>
+    <string name="initial_sync_start_importing_account_rooms">Начална синхронизация:
+\nИмпортиране на стаи</string>
+    <string name="initial_sync_start_importing_account_joined_rooms">Начална синхронизация:
+\nИмпортиране на стаи, от които съм част</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">Начална синхронизация:
+\nИмпортиране на стаи, към които съм поканен</string>
+    <string name="initial_sync_start_importing_account_left_rooms">Начална синхронизация:
+\nИмпортиране на стаи, които съм напуснал</string>
+    <string name="initial_sync_start_importing_account_groups">Начална синхронизация:
+\nИмпортиране на общности</string>
+    <string name="initial_sync_start_importing_account_data">Начална синхронизация:
+\nИмпортиране на данни за профила</string>
+
 </resources>

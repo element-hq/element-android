@@ -29,6 +29,8 @@ interface Navigator {
 
     fun openCreateRoom(context: Context, initialName: String = "")
 
+    fun openCreateDirectRoom(context: Context)
+
     fun openRoomDirectory(context: Context, initialFilter: String = "")
 
     fun openRoomsFiltering(context: Context)

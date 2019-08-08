@@ -21,6 +21,8 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.failure.Failure
+import im.vector.matrix.android.api.failure.MatrixError
+import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.network.executeRequest
@@ -59,30 +61,39 @@ internal class SendEventWorker constructor(context: Context, params: WorkerParam
 
         if (params.lastFailureMessage != null) {
             localEchoUpdater.updateSendState(event.eventId, SendState.UNDELIVERED)
-
             // Transmit the error
             return Result.success(inputData)
         }
+        return try {
+            sendEvent(event.eventId, event.type, event.content, params.roomId)
+            Result.success()
+        } catch (exception: Throwable) {
+            if (exception.shouldBeRetried()) {
+                Result.retry()
+            } else {
+                localEchoUpdater.updateSendState(event.eventId, SendState.UNDELIVERED)
+                //always return success, or the chain will be stuck for ever!
+                Result.success()
+            }
+        }
+    }
 
-        localEchoUpdater.updateSendState(event.eventId, SendState.SENDING)
-        val result = executeRequest<SendResponse> {
+    private fun Throwable.shouldBeRetried(): Boolean {
+        return this is Failure.NetworkConnection
+                || (this is Failure.ServerError && this.error.code == MatrixError.LIMIT_EXCEEDED)
+    }
+
+    private suspend fun sendEvent(eventId: String, eventType: String, content: Content?, roomId: String) {
+        localEchoUpdater.updateSendState(eventId, SendState.SENDING)
+        executeRequest<SendResponse> {
             apiCall = roomAPI.send(
-                    event.eventId,
-                    params.roomId,
-                    event.type,
-                    event.content
+                    eventId,
+                    roomId,
+                    eventType,
+                    content
             )
         }
-        return result.fold({
-            when (it) {
-                is Failure.NetworkConnection -> Result.retry()
-                else                         -> {
-                    localEchoUpdater.updateSendState(event.eventId, SendState.UNDELIVERED)
-                    //always return success, or the chain will be stuck for ever!
-                    Result.success()
-                }
-            }
-        }, { Result.success() })
+        localEchoUpdater.updateSendState(eventId, SendState.SENT)
     }
 
 }

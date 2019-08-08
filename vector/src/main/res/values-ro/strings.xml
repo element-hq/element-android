@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <string name="resources_language">ro</string>
+    <string name="resources_country_code">RO</string>
+
+    <string name="light_theme">Temă luminoasă</string>
+    <string name="dark_theme">Temă întunecată</string>
+    <string name="black_them">Temă Neagră</string>
+    <string name="status_theme">Tema Status.im</string>
+
+    <string name="notification_sync_init">Inițializează serviciu</string>
+    <string name="notification_sync_in_progress">Sincronizează…</string>
+    <string name="notification_listening_for_events">Așteaptă evenimente</string>
+    <string name="notification_noisy_notifications">Notificări zgomotoase</string>
+    <string name="notification_silent_notifications">Notificări liniștite</string>
+
+    <string name="title_activity_home">Mesaje</string>
+    <string name="title_activity_room">Cameră</string>
+    <string name="title_activity_settings">Setări</string>
+</resources>

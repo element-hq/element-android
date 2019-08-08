@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.session.room.timeline
 
-import arrow.core.Try
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.internal.database.helper.*
 import im.vector.matrix.android.internal.database.model.ChunkEntity
@@ -26,7 +25,7 @@ import im.vector.matrix.android.internal.database.query.find
 import im.vector.matrix.android.internal.database.query.findAllIncludingEvents
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.user.UserEntityFactory
-import im.vector.matrix.android.internal.util.tryTransactionSync
+import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.kotlin.createObject
 import timber.log.Timber
 import javax.inject.Inject
@@ -104,12 +103,12 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
         SUCCESS
     }
 
-    fun insertInDb(receivedChunk: TokenChunkEvent,
-                   roomId: String,
-                   direction: PaginationDirection): Try<Result> {
+    suspend fun insertInDb(receivedChunk: TokenChunkEvent,
+                           roomId: String,
+                           direction: PaginationDirection): Result {
 
-        return monarchy
-                .tryTransactionSync { realm ->
+        monarchy
+                .awaitTransaction { realm ->
                     Timber.v("Start persisting ${receivedChunk.events.size} events in $roomId towards $direction")
 
                     val roomEntity = RoomEntity.where(realm, roomId).findFirst()
@@ -127,7 +126,7 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
 
                     if (ChunkEntity.find(realm, roomId, nextToken = nextToken) != null || ChunkEntity.find(realm, roomId, prevToken = prevToken) != null) {
                         Timber.v("Already inserted - SKIP")
-                        return@tryTransactionSync
+                        return@awaitTransaction
                     }
 
                     val prevChunk = ChunkEntity.find(realm, roomId, nextToken = prevToken)
@@ -181,13 +180,11 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
                         currentChunk.updateSenderDataFor(eventIds)
                     }
                 }
-                .map {
-                    if (receivedChunk.events.isEmpty() && receivedChunk.stateEvents.isEmpty() && receivedChunk.start != receivedChunk.end) {
-                        Result.SHOULD_FETCH_MORE
-                    } else {
-                        Result.SUCCESS
-                    }
-                }
+        return if (receivedChunk.events.isEmpty() && receivedChunk.stateEvents.isEmpty() && receivedChunk.start != receivedChunk.end) {
+            Result.SHOULD_FETCH_MORE
+        } else {
+            Result.SUCCESS
+        }
     }
 
     private fun handleMerge(roomEntity: RoomEntity,

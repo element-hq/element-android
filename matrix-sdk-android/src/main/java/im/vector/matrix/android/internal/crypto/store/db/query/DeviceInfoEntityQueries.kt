@@ -16,11 +16,11 @@
 
 package im.vector.matrix.android.internal.crypto.store.db.query
 
-import io.realm.Realm
-import io.realm.kotlin.where
 import im.vector.matrix.android.internal.crypto.store.db.model.DeviceInfoEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.DeviceInfoEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.createPrimaryKey
+import io.realm.Realm
+import io.realm.kotlin.where
 
 /**
  * Get or create a device info

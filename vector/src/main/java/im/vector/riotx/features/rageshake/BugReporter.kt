@@ -35,7 +35,7 @@ import im.vector.riotx.core.extensions.toOnOff
 import im.vector.riotx.core.utils.getDeviceLocale
 import im.vector.riotx.features.settings.VectorLocale
 import im.vector.riotx.features.themes.ThemeUtils
-import im.vector.riotx.features.version.getVersion
+import im.vector.riotx.features.version.VersionProvider
 import okhttp3.*
 import org.json.JSONException
 import org.json.JSONObject
@@ -51,7 +51,8 @@ import javax.inject.Singleton
  * BugReporter creates and sends the bug reports.
  */
 @Singleton
-class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSessionHolder) {
+class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
+                                      private val versionProvider: VersionProvider) {
     var inMultiWindowMode = false
 
     companion object {
@@ -225,7 +226,7 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
                             .addFormDataPart("user_agent", Matrix.getInstance(context).getUserAgent())
                             .addFormDataPart("user_id", userId)
                             .addFormDataPart("device_id", deviceId)
-                            .addFormDataPart("version", getVersion(longFormat = true, useBuildNumber = false))
+                            .addFormDataPart("version", versionProvider.getVersion(longFormat = true, useBuildNumber = false))
                             .addFormDataPart("branch_name", context.getString(R.string.git_branch_name))
                             .addFormDataPart("matrix_sdk_version", Matrix.getSdkVersion())
                             .addFormDataPart("olm_version", olmVersion)

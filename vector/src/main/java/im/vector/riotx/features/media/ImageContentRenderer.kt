@@ -16,16 +16,22 @@
 
 package im.vector.riotx.features.media
 
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Parcelable
 import android.widget.ImageView
 import androidx.exifinterface.media.ExifInterface
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.github.piasy.biv.view.BigImageView
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.matrix.android.internal.crypto.attachments.ElementToDecrypt
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.glide.GlideApp
+import im.vector.riotx.core.glide.GlideRequest
 import im.vector.riotx.core.utils.DimensionUtils.dpToPx
 import kotlinx.android.parcel.Parcelize
 import timber.log.Timber
@@ -62,7 +68,43 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
         imageView.layoutParams.height = height
         imageView.layoutParams.width = width
 
-        val glideRequest = if (data.elementToDecrypt != null) {
+        createGlideRequest(data, mode, imageView, width, height)
+                .dontAnimate()
+                .transform(RoundedCorners(dpToPx(8, imageView.context)))
+                .thumbnail(0.3f)
+                .into(imageView)
+
+    }
+
+    fun renderFitTarget(data: Data, mode: Mode, imageView: ImageView, callback: ((Boolean) -> Unit)? = null) {
+        val (width, height) = processSize(data, mode)
+
+        createGlideRequest(data, mode, imageView, width, height)
+                .listener(object : RequestListener<Drawable> {
+                    override fun onLoadFailed(e: GlideException?,
+                                              model: Any?,
+                                              target: Target<Drawable>?,
+                                              isFirstResource: Boolean): Boolean {
+                        callback?.invoke(false)
+                        return false
+                    }
+
+                    override fun onResourceReady(resource: Drawable?,
+                                                 model: Any?,
+                                                 target: Target<Drawable>?,
+                                                 dataSource: DataSource?,
+                                                 isFirstResource: Boolean): Boolean {
+                        callback?.invoke(true)
+                        return false
+                    }
+
+                })
+                .fitCenter()
+                .into(imageView)
+    }
+
+    private fun createGlideRequest(data: Data, mode: Mode, imageView: ImageView, width: Int, height: Int): GlideRequest<Drawable> {
+        return if (data.elementToDecrypt != null) {
             // Encrypted image
             GlideApp
                     .with(imageView)
@@ -81,12 +123,6 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
                     .with(imageView)
                     .load(resolvedUrl)
         }
-
-        glideRequest
-                .dontAnimate()
-                .transform(RoundedCorners(dpToPx(8, imageView.context)))
-                .thumbnail(0.3f)
-                .into(imageView)
     }
 
     fun render(data: Data, imageView: BigImageView) {

@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.crypto.keysbackup.tasks
 
-import arrow.core.Try
 import im.vector.matrix.android.internal.crypto.keysbackup.api.RoomKeysApi
 import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.KeysVersionResult
 import im.vector.matrix.android.internal.network.executeRequest
@@ -29,7 +28,7 @@ internal class DefaultGetKeysBackupLastVersionTask @Inject constructor(private v
     : GetKeysBackupLastVersionTask {
 
 
-    override suspend fun execute(params: Unit): Try<KeysVersionResult> {
+    override suspend fun execute(params: Unit): KeysVersionResult {
         return executeRequest {
             apiCall = roomKeysApi.getKeysBackupLastVersion()
         }

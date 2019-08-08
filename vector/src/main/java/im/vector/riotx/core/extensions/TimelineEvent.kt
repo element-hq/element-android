@@ -21,5 +21,5 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 
 fun TimelineEvent.canReact(): Boolean {
     // Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
-    return root.getClearType() == EventType.MESSAGE && sendState.isSent() && !root.isRedacted()
+    return root.getClearType() == EventType.MESSAGE && root.sendState.isSent() && !root.isRedacted()
 }
