@@ -23,6 +23,7 @@ import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.util.CancelableBag
+import im.vector.matrix.android.internal.database.mapper.TimelineEventMapper
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.*
 import im.vector.matrix.android.internal.database.model.EventEntity
@@ -53,7 +54,8 @@ internal class DefaultTimeline(
         private val taskExecutor: TaskExecutor,
         private val contextOfEventTask: GetContextOfEventTask,
         private val paginationTask: PaginationTask,
-        cryptoService: CryptoService,
+        private val cryptoService: CryptoService,
+        private val timelineEventMapper: TimelineEventMapper,
         private val allowedTypes: List<String>?
 ) : Timeline {
 
@@ -132,7 +134,7 @@ internal class DefaultTimeline(
                     builtEventsIdMap[eventId]?.let { builtIndex ->
                         //Update the relation of existing event
                         builtEvents[builtIndex]?.let { te ->
-                            builtEvents[builtIndex] = eventEntity.asDomain()
+                            builtEvents[builtIndex] = timelineEventMapper.map(eventEntity)
                             hasChanged = true
                         }
                     }
@@ -331,7 +333,7 @@ internal class DefaultTimeline(
             roomEntity?.sendingTimelineEvents
                     ?.filter { allowedTypes?.contains(it.root?.type) ?: false }
                     ?.forEach {
-                        sendingEvents.add(it.asDomain())
+                        sendingEvents.add(timelineEventMapper.map(it))
                     }
         }
         return sendingEvents
@@ -463,7 +465,7 @@ internal class DefaultTimeline(
             nextDisplayIndex = offsetIndex + 1
         }
         offsetResults.forEach { eventEntity ->
-            val timelineEvent = eventEntity.asDomain()
+            val timelineEvent = timelineEventMapper.map(eventEntity)
 
             if (timelineEvent.isEncrypted()
                     && timelineEvent.root.mxDecryptionResult == null) {

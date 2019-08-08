@@ -17,29 +17,30 @@
 package im.vector.matrix.android.internal.database.mapper
 
 import im.vector.matrix.android.api.session.events.model.Event
+
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
+import javax.inject.Inject
 
-internal object TimelineEventMapper {
+internal class TimelineEventMapper @Inject constructor(private val readReceiptsSummaryMapper: ReadReceiptsSummaryMapper){
 
     fun map(timelineEventEntity: TimelineEventEntity): TimelineEvent {
 
         return TimelineEvent(
                 root = timelineEventEntity.root?.asDomain()
-                        ?: Event("", timelineEventEntity.eventId),
+                       ?: Event("", timelineEventEntity.eventId),
                 annotations = timelineEventEntity.annotations?.asDomain(),
                 localId = timelineEventEntity.localId,
                 displayIndex = timelineEventEntity.root?.displayIndex ?: 0,
                 senderName = timelineEventEntity.senderName,
                 isUniqueDisplayName = timelineEventEntity.isUniqueDisplayName,
-                senderAvatar = timelineEventEntity.senderAvatar
+                senderAvatar = timelineEventEntity.senderAvatar,
+                readReceipts = timelineEventEntity.readReceipts?.let {
+                    readReceiptsSummaryMapper.map(it)
+                } ?: emptyList()
         )
     }
 
-}
-
-internal fun TimelineEventEntity.asDomain(): TimelineEvent {
-    return TimelineEventMapper.map(this)
 }
 
 

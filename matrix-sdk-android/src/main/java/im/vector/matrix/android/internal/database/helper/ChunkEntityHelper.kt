@@ -23,6 +23,8 @@ import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.mapper.toEntity
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryEntity
+import im.vector.matrix.android.internal.database.model.ReadReceiptEntity
+import im.vector.matrix.android.internal.database.model.ReadReceiptsSummaryEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntityFields
 import im.vector.matrix.android.internal.database.query.find
@@ -133,6 +135,23 @@ internal fun ChunkEntity.add(roomId: String,
     }
 
     val localId = TimelineEventEntity.nextId(realm)
+    val eventId = event.eventId ?: ""
+    val senderId = event.senderId ?: ""
+
+    val currentReceiptsSummary = ReadReceiptsSummaryEntity.where(realm, eventId).findFirst()
+                                 ?: ReadReceiptsSummaryEntity(eventId)
+
+    // Update RR for the sender of a new message
+    if (direction == PaginationDirection.FORWARDS && !isUnlinked) {
+        ReadReceiptEntity.where(realm, roomId = roomId, userId = senderId).findFirst()?.also {
+            val previousEventId = it.eventId
+            val previousReceiptsSummary = ReadReceiptsSummaryEntity.where(realm, eventId = previousEventId).findFirst()
+            it.eventId = eventId
+            previousReceiptsSummary?.readReceipts?.remove(it)
+            currentReceiptsSummary.readReceipts.add(it)
+        }
+    }
+
     val eventEntity = TimelineEventEntity(localId).also {
         it.root = event.toEntity(roomId).apply {
             this.stateIndex = currentStateIndex
@@ -140,9 +159,10 @@ internal fun ChunkEntity.add(roomId: String,
             this.displayIndex = currentDisplayIndex
             this.sendState = SendState.SYNCED
         }
-        it.eventId = event.eventId ?: ""
+        it.eventId = eventId
         it.roomId = roomId
-        it.annotations = EventAnnotationsSummaryEntity.where(realm, it.eventId).findFirst()
+        it.annotations = EventAnnotationsSummaryEntity.where(realm, eventId).findFirst()
+        it.readReceipts = currentReceiptsSummary
     }
     val position = if (direction == PaginationDirection.FORWARDS) 0 else this.timelineEvents.size
     timelineEvents.add(position, eventEntity)
@@ -150,14 +170,14 @@ internal fun ChunkEntity.add(roomId: String,
 
 internal fun ChunkEntity.lastDisplayIndex(direction: PaginationDirection, defaultValue: Int = 0): Int {
     return when (direction) {
-        PaginationDirection.FORWARDS  -> forwardsDisplayIndex
-        PaginationDirection.BACKWARDS -> backwardsDisplayIndex
-    } ?: defaultValue
+               PaginationDirection.FORWARDS  -> forwardsDisplayIndex
+               PaginationDirection.BACKWARDS -> backwardsDisplayIndex
+           } ?: defaultValue
 }
 
 internal fun ChunkEntity.lastStateIndex(direction: PaginationDirection, defaultValue: Int = 0): Int {
     return when (direction) {
-        PaginationDirection.FORWARDS  -> forwardsStateIndex
-        PaginationDirection.BACKWARDS -> backwardsStateIndex
-    } ?: defaultValue
+               PaginationDirection.FORWARDS  -> forwardsStateIndex
+               PaginationDirection.BACKWARDS -> backwardsStateIndex
+           } ?: defaultValue
 }

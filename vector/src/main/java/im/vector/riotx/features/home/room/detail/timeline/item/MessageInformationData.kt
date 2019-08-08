@@ -17,6 +17,7 @@
 package im.vector.riotx.features.home.room.detail.timeline.item
 
 import android.os.Parcelable
+import im.vector.matrix.android.api.session.room.model.ReadReceipt
 import im.vector.matrix.android.api.session.room.send.SendState
 import kotlinx.android.parcel.Parcelize
 
@@ -32,7 +33,8 @@ data class MessageInformationData(
         /*List of reactions (emoji,count,isSelected)*/
         val orderedReactionList: List<ReactionInfoData>? = null,
         val hasBeenEdited: Boolean = false,
-        val hasPendingEdits: Boolean = false
+        val hasPendingEdits: Boolean = false,
+        val readReceipts: List<ReadReceiptData> = emptyList()
 ) : Parcelable
 
 
@@ -42,4 +44,12 @@ data class ReactionInfoData(
         val count: Int,
         val addedByMe: Boolean,
         val synced: Boolean
+) : Parcelable
+
+@Parcelize
+data class ReadReceiptData(
+        val userId: String,
+        val avatarUrl: String?,
+        val displayName: String?,
+        val timestamp: Long
 ) : Parcelable

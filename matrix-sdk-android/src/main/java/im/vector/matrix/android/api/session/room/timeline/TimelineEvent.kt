@@ -20,6 +20,7 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.EventAnnotationsSummary
+import im.vector.matrix.android.api.session.room.model.ReadReceipt
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.isReply
 import im.vector.matrix.android.api.util.ContentUtils.extractUsefulTextFromReply
@@ -37,7 +38,8 @@ data class TimelineEvent(
         val senderName: String?,
         val isUniqueDisplayName: Boolean,
         val senderAvatar: String?,
-        val annotations: EventAnnotationsSummary? = null
+        val annotations: EventAnnotationsSummary? = null,
+        val readReceipts: List<ReadReceipt> = emptyList()
 ) {
 
     val metadata = HashMap<String, Any>()
@@ -65,8 +67,8 @@ data class TimelineEvent(
                 "$name (${root.senderId})"
             }
         }
-                ?: root.senderId
-                ?: ""
+               ?: root.senderId
+               ?: ""
     }
 
     /**
@@ -94,7 +96,7 @@ fun TimelineEvent.hasBeenEdited() = annotations?.editSummary != null
  * Get last MessageContent, after a possible edition
  */
 fun TimelineEvent.getLastMessageContent(): MessageContent? = annotations?.editSummary?.aggregatedContent?.toModel()
-        ?: root.getClearContent().toModel()
+                                                             ?: root.getClearContent().toModel()
 
 
 fun TimelineEvent.getTextEditableContent(): String? {

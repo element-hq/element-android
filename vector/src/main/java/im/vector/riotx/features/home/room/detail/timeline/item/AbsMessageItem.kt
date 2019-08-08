@@ -16,6 +16,7 @@
 
 package im.vector.riotx.features.home.room.detail.timeline.item
 
+import android.annotation.SuppressLint
 import android.graphics.Typeface
 import android.os.Build
 import android.view.View
@@ -39,6 +40,7 @@ import im.vector.riotx.features.home.room.detail.timeline.TimelineEventControlle
 import im.vector.riotx.features.reactions.widget.ReactionButton
 import im.vector.riotx.features.ui.getMessageTextColor
 
+private const val MAX_RECEIPT_DISPLAYED = 5
 
 abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
 
@@ -123,6 +125,29 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
             holder.memberNameView.setOnLongClickListener(null)
         }
 
+        if (informationData.readReceipts.isNotEmpty()) {
+            holder.readReceiptsView.isVisible = true
+            for (index in 0 until MAX_RECEIPT_DISPLAYED) {
+                val receiptData = informationData.readReceipts.getOrNull(index)
+                if (receiptData == null) {
+                    holder.receiptAvatars[index].isVisible = false
+                } else {
+                    holder.receiptAvatars[index].isVisible = true
+                    avatarRenderer.render(receiptData.avatarUrl, receiptData.userId, receiptData.displayName, holder.receiptAvatars[index])
+                }
+            }
+            if (informationData.readReceipts.size > MAX_RECEIPT_DISPLAYED) {
+                holder.receiptMoreView.isVisible = true
+                holder.receiptMoreView.text = holder.view.context.getString(
+                        R.string.x_plus, informationData.readReceipts.size - MAX_RECEIPT_DISPLAYED
+                )
+            } else {
+                holder.receiptMoreView.isVisible = false
+            }
+        } else {
+            holder.readReceiptsView.isVisible = false
+        }
+
         if (!shouldShowReactionAtBottom() || informationData.orderedReactionList.isNullOrEmpty()) {
             holder.reactionWrapper?.isVisible = false
         } else {
@@ -173,6 +198,16 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
         val avatarImageView by bind<ImageView>(R.id.messageAvatarImageView)
         val memberNameView by bind<TextView>(R.id.messageMemberNameView)
         val timeView by bind<TextView>(R.id.messageTimeView)
+        val readReceiptsView by bind<ViewGroup>(R.id.readReceiptsView)
+        val receiptAvatar1 by bind<ImageView>(R.id.message_avatar_receipt_1)
+        val receiptAvatar2 by bind<ImageView>(R.id.message_avatar_receipt_2)
+        val receiptAvatar3 by bind<ImageView>(R.id.message_avatar_receipt_3)
+        val receiptAvatar4 by bind<ImageView>(R.id.message_avatar_receipt_4)
+        val receiptAvatar5 by bind<ImageView>(R.id.message_avatar_receipt_5)
+        val receiptMoreView by bind<TextView>(R.id.message_more_than_expected)
+        val receiptAvatars: List<ImageView> by lazy {
+            listOf(receiptAvatar1, receiptAvatar2, receiptAvatar3, receiptAvatar4, receiptAvatar5)
+        }
 
         var reactionWrapper: ViewGroup? = null
         var reactionFlowHelper: Flow? = null

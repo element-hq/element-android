@@ -28,8 +28,15 @@ import im.vector.matrix.android.api.permalinks.MatrixLinkify
 import im.vector.matrix.android.api.permalinks.MatrixPermalinkSpan
 import im.vector.matrix.android.api.session.events.model.RelationType
 import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.message.*
-import im.vector.matrix.android.api.session.room.send.SendState
+import im.vector.matrix.android.api.session.room.model.message.MessageAudioContent
+import im.vector.matrix.android.api.session.room.model.message.MessageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageEmoteContent
+import im.vector.matrix.android.api.session.room.model.message.MessageFileContent
+import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageNoticeContent
+import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
+import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
+import im.vector.matrix.android.api.session.room.model.message.getFileUrl
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
@@ -47,7 +54,19 @@ import im.vector.riotx.features.home.room.detail.timeline.TimelineEventControlle
 import im.vector.riotx.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
 import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
 import im.vector.riotx.features.home.room.detail.timeline.helper.senderAvatar
-import im.vector.riotx.features.home.room.detail.timeline.item.*
+import im.vector.riotx.features.home.room.detail.timeline.item.BlankItem_
+import im.vector.riotx.features.home.room.detail.timeline.item.DefaultItem
+import im.vector.riotx.features.home.room.detail.timeline.item.DefaultItem_
+import im.vector.riotx.features.home.room.detail.timeline.item.MessageFileItem
+import im.vector.riotx.features.home.room.detail.timeline.item.MessageFileItem_
+import im.vector.riotx.features.home.room.detail.timeline.item.MessageImageVideoItem
+import im.vector.riotx.features.home.room.detail.timeline.item.MessageImageVideoItem_
+import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
+import im.vector.riotx.features.home.room.detail.timeline.item.MessageTextItem
+import im.vector.riotx.features.home.room.detail.timeline.item.MessageTextItem_
+import im.vector.riotx.features.home.room.detail.timeline.item.NoticeItem_
+import im.vector.riotx.features.home.room.detail.timeline.item.RedactedMessageItem
+import im.vector.riotx.features.home.room.detail.timeline.item.RedactedMessageItem_
 import im.vector.riotx.features.home.room.detail.timeline.util.MessageInformationDataFactory
 import im.vector.riotx.features.html.EventHtmlRenderer
 import im.vector.riotx.features.media.ImageContentRenderer
@@ -84,11 +103,11 @@ class MessageItemFactory @Inject constructor(
 
         val messageContent: MessageContent =
                 event.getLastMessageContent()
-                        ?: //Malformed content, we should echo something on screen
-                        return DefaultItem_().text(stringProvider.getString(R.string.malformed_message))
+                ?: //Malformed content, we should echo something on screen
+                return DefaultItem_().text(stringProvider.getString(R.string.malformed_message))
 
         if (messageContent.relatesTo?.type == RelationType.REPLACE
-                || event.isEncrypted() && event.root.content.toModel<EncryptedEventContent>()?.relatesTo?.type == RelationType.REPLACE
+            || event.isEncrypted() && event.root.content.toModel<EncryptedEventContent>()?.relatesTo?.type == RelationType.REPLACE
         ) {
             // ignore replace event, the targeted id is already edited
             if (userPreferencesProvider.shouldShowHiddenEvents()) {
@@ -116,15 +135,13 @@ class MessageItemFactory @Inject constructor(
 //        val ev = all.toModel<Event>()
         return when (messageContent) {
             is MessageEmoteContent  -> buildEmoteMessageItem(messageContent,
-                    informationData,
-                    highlight,
-                    callback)
-            is MessageTextContent   -> buildTextMessageItem(event.root.sendState,
-                    messageContent,
-                    informationData,
-                    highlight,
-                    callback
-            )
+                                                             informationData,
+                                                             highlight,
+                                                             callback)
+            is MessageTextContent   -> buildTextMessageItem(messageContent,
+                                                            informationData,
+                                                            highlight,
+                                                            callback)
             is MessageImageContent  -> buildImageMessageItem(messageContent, informationData, highlight, callback)
             is MessageNoticeContent -> buildNoticeMessageItem(messageContent, informationData, highlight, callback)
             is MessageVideoContent  -> buildVideoMessageItem(messageContent, informationData, highlight, callback)
@@ -158,7 +175,7 @@ class MessageItemFactory @Inject constructor(
                         }))
                 .longClickListener { view ->
                     return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
-                            ?: false
+                                             ?: false
                 }
     }
 
@@ -182,7 +199,7 @@ class MessageItemFactory @Inject constructor(
                         }))
                 .longClickListener { view ->
                     return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
-                            ?: false
+                                             ?: false
                 }
                 .clickListener(
                         DebouncedClickListener(View.OnClickListener { _ ->
@@ -190,7 +207,7 @@ class MessageItemFactory @Inject constructor(
                         }))
                 .longClickListener { view ->
                     return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
-                            ?: false
+                                             ?: false
                 }
     }
 
@@ -240,7 +257,7 @@ class MessageItemFactory @Inject constructor(
                         }))
                 .longClickListener { view ->
                     return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
-                            ?: false
+                                             ?: false
                 }
     }
 
@@ -253,7 +270,7 @@ class MessageItemFactory @Inject constructor(
         val thumbnailData = ImageContentRenderer.Data(
                 filename = messageContent.body,
                 url = messageContent.videoInfo?.thumbnailFile?.url
-                        ?: messageContent.videoInfo?.thumbnailUrl,
+                      ?: messageContent.videoInfo?.thumbnailUrl,
                 elementToDecrypt = messageContent.videoInfo?.thumbnailFile?.toElementToDecrypt(),
                 height = messageContent.videoInfo?.height,
                 maxHeight = maxHeight,
@@ -288,12 +305,11 @@ class MessageItemFactory @Inject constructor(
                 .clickListener { view -> callback?.onVideoMessageClicked(messageContent, videoData, view) }
                 .longClickListener { view ->
                     return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
-                            ?: false
+                                             ?: false
                 }
     }
 
-    private fun buildTextMessageItem(sendState: SendState,
-                                     messageContent: MessageTextContent,
+    private fun buildTextMessageItem(messageContent: MessageTextContent,
                                      informationData: MessageInformationData,
                                      highlight: Boolean,
                                      callback: TimelineEventController.Callback?): MessageTextItem? {
@@ -328,7 +344,7 @@ class MessageItemFactory @Inject constructor(
                         }))
                 .longClickListener { view ->
                     return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
-                            ?: false
+                                             ?: false
                 }
     }
 
@@ -358,9 +374,9 @@ class MessageItemFactory @Inject constructor(
                 //nop
             }
         },
-                editStart,
-                editEnd,
-                Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+                          editStart,
+                          editEnd,
+                          Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
         return spannable
     }
 
@@ -397,7 +413,7 @@ class MessageItemFactory @Inject constructor(
                         }))
                 .longClickListener { view ->
                     return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
-                            ?: false
+                                             ?: false
                 }
     }
 
@@ -433,7 +449,7 @@ class MessageItemFactory @Inject constructor(
                         }))
                 .longClickListener { view ->
                     return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
-                            ?: false
+                                             ?: false
                 }
     }
 
@@ -452,7 +468,7 @@ class MessageItemFactory @Inject constructor(
                         }))
                 .longClickListener { view ->
                     return@longClickListener callback?.onEventLongClicked(informationData, null, view)
-                            ?: false
+                                             ?: false
                 }
     }
 

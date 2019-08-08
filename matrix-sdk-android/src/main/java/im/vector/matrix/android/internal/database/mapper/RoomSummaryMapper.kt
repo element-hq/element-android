@@ -26,7 +26,8 @@ import java.util.*
 import javax.inject.Inject
 
 internal class RoomSummaryMapper @Inject constructor(
-        val cryptoService: CryptoService
+        val cryptoService: CryptoService,
+        val timelineEventMapper: TimelineEventMapper
 ) {
 
     fun map(roomSummaryEntity: RoomSummaryEntity): RoomSummary {
@@ -34,7 +35,9 @@ internal class RoomSummaryMapper @Inject constructor(
             RoomTag(it.tagName, it.tagOrder)
         }
 
-        val latestEvent = roomSummaryEntity.latestEvent?.asDomain()
+        val latestEvent = roomSummaryEntity.latestEvent?.let {
+            timelineEventMapper.map(it)
+        }
         if (latestEvent?.root?.isEncrypted() == true && latestEvent.root.mxDecryptionResult == null) {
             //TODO use a global event decryptor? attache to session and that listen to new sessionId?
             //for now decrypt sync

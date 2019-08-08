@@ -161,7 +161,6 @@ abstract class VectorBaseActivity : BaseMvRxActivity(), HasScreenInjector {
 
     override fun onDestroy() {
         super.onDestroy()
-
         unBinder?.unbind()
         unBinder = null
 

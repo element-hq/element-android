@@ -14,11 +14,15 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.api.session.room.model
+package im.vector.matrix.android.internal.database.query
 
-import im.vector.matrix.android.api.session.user.model.User
+import im.vector.matrix.android.internal.database.model.ReadReceiptsSummaryEntity
+import im.vector.matrix.android.internal.database.model.ReadReceiptsSummaryEntityFields
+import io.realm.Realm
+import io.realm.RealmQuery
+import io.realm.kotlin.where
 
-data class ReadReceipt(
-        val user: User,
-        val originServerTs: Long
-)
+internal fun ReadReceiptsSummaryEntity.Companion.where(realm: Realm, eventId: String): RealmQuery<ReadReceiptsSummaryEntity> {
+    return realm.where<ReadReceiptsSummaryEntity>()
+            .equalTo(ReadReceiptsSummaryEntityFields.EVENT_ID, eventId)
+}
