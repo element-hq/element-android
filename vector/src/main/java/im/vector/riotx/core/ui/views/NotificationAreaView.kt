@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.core.platform
+package im.vector.riotx.core.ui.views
 
 import android.content.Context
 import android.graphics.Color
@@ -32,10 +32,7 @@ import androidx.core.content.ContextCompat
 import butterknife.BindView
 import butterknife.ButterKnife
 import im.vector.matrix.android.api.failure.MatrixError
-import im.vector.matrix.android.api.permalinks.PermalinkFactory
 import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.tombstone.RoomTombstoneContent
 import im.vector.riotx.R
 import im.vector.riotx.core.error.ResourceLimitErrorFormatter
 import im.vector.riotx.features.themes.ThemeUtils

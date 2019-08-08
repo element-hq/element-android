@@ -76,7 +76,7 @@ import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.core.files.addEntryToDownloadManager
 import im.vector.riotx.core.glide.GlideApp
-import im.vector.riotx.core.platform.NotificationAreaView
+import im.vector.riotx.core.ui.views.NotificationAreaView
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.utils.*
 import im.vector.riotx.features.autocomplete.command.AutocompleteCommandPresenter

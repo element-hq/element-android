@@ -98,7 +98,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <im.vector.riotx.core.platform.NotificationAreaView
+    <im.vector.riotx.core.ui.views.NotificationAreaView
         android:id="@+id/notificationAreaView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
