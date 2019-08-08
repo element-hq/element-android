@@ -41,6 +41,7 @@ import im.vector.riotx.features.notifications.NotificationDrawerManager
 import im.vector.riotx.features.notifications.PushRuleTriggerListener
 import im.vector.riotx.features.rageshake.BugReporter
 import im.vector.riotx.features.rageshake.VectorUncaughtExceptionHandler
+import im.vector.riotx.features.settings.VectorPreferences
 import javax.inject.Singleton
 
 @Component(modules = [VectorModule::class])
@@ -94,6 +95,8 @@ interface VectorComponent {
     fun pusherManager(): PushersManager
 
     fun notifiableEventResolver(): NotifiableEventResolver
+
+    fun vectorPreferences(): VectorPreferences
 
     @Component.Factory
     interface Factory {

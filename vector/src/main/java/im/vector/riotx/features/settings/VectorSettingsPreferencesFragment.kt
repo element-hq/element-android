@@ -44,6 +44,7 @@ class VectorSettingsPreferencesFragment : VectorSettingsBaseFragment() {
     }
 
     @Inject lateinit var vectorConfiguration: VectorConfiguration
+    @Inject lateinit var vectorPreferences: VectorPreferences
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
@@ -113,17 +114,17 @@ class VectorSettingsPreferencesFragment : VectorSettingsBaseFragment() {
 
         // update keep medias period
         findPreference(VectorPreferences.SETTINGS_MEDIA_SAVING_PERIOD_KEY).let {
-            it.summary = VectorPreferences.getSelectedMediasSavingPeriodString(requireContext())
+            it.summary = vectorPreferences.getSelectedMediasSavingPeriodString()
 
             it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 context?.let { context: Context ->
                     AlertDialog.Builder(context)
                             .setSingleChoiceItems(R.array.media_saving_choice,
-                                    VectorPreferences.getSelectedMediasSavingPeriod(context)) { d, n ->
-                                VectorPreferences.setSelectedMediasSavingPeriod(context, n)
+                                    vectorPreferences.getSelectedMediasSavingPeriod()) { d, n ->
+                                vectorPreferences.setSelectedMediasSavingPeriod(n)
                                 d.cancel()
 
-                                it.summary = VectorPreferences.getSelectedMediasSavingPeriodString(context)
+                                it.summary = vectorPreferences.getSelectedMediasSavingPeriodString()
                             }
                             .show()
                 }

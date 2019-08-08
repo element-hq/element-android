@@ -42,6 +42,7 @@ import im.vector.riotx.core.di.DaggerVectorComponent
 import im.vector.riotx.core.di.HasVectorInjector
 import im.vector.riotx.core.di.VectorComponent
 import im.vector.riotx.core.extensions.configureAndStart
+import im.vector.riotx.core.utils.initKnownEmojiHashSet
 import im.vector.riotx.features.configuration.VectorConfiguration
 import im.vector.riotx.features.lifecycle.VectorActivityLifecycleCallbacks
 import im.vector.riotx.features.notifications.NotificationDrawerManager
@@ -49,12 +50,12 @@ import im.vector.riotx.features.notifications.NotificationUtils
 import im.vector.riotx.features.notifications.PushRuleTriggerListener
 import im.vector.riotx.features.rageshake.VectorFileLogger
 import im.vector.riotx.features.rageshake.VectorUncaughtExceptionHandler
+import im.vector.riotx.features.settings.VectorPreferences
 import im.vector.riotx.features.version.getVersion
 import im.vector.riotx.push.fcm.FcmHelper
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
-import im.vector.riotx.core.utils.initKnownEmojiHashSet
 import javax.inject.Inject
 
 class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.Provider, androidx.work.Configuration.Provider {
@@ -69,6 +70,7 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
     @Inject lateinit var pushRuleTriggerListener: PushRuleTriggerListener
+    @Inject lateinit var vectorPreferences: VectorPreferences
     lateinit var vectorComponent: VectorComponent
     private var fontThreadHandler: Handler? = null
 
@@ -122,7 +124,7 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
             fun entersBackground() {
                 Timber.i("App entered background") // call persistInfo
                 notificationDrawerManager.persistInfo()
-                FcmHelper.onEnterBackground(appContext, activeSessionHolder)
+                FcmHelper.onEnterBackground(appContext, vectorPreferences, activeSessionHolder)
             }
         })
         //This should be done as early as possible

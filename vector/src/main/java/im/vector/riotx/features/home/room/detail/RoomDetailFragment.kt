@@ -184,6 +184,7 @@ class RoomDetailFragment :
     private lateinit var scrollOnNewMessageCallback: ScrollOnNewMessageCallback
     private lateinit var scrollOnHighlightedEventCallback: ScrollOnHighlightedEventCallback
     @Inject lateinit var eventHtmlRenderer: EventHtmlRenderer
+    @Inject lateinit var vectorPreferences: VectorPreferences
 
 
     override fun getLayoutResId() = R.layout.fragment_room_detail
@@ -389,7 +390,7 @@ class RoomDetailFragment :
         recyclerView.setController(timelineEventController)
         timelineEventController.callback = this
 
-        if (VectorPreferences.swipeToReplyIsEnabled(requireContext())) {
+        if (vectorPreferences.swipeToReplyIsEnabled()) {
             val swipeCallback = RoomMessageTouchHelperCallback(requireContext(),
                     R.drawable.ic_reply,
                     object : RoomMessageTouchHelperCallback.QuickReplayHandler {
@@ -482,7 +483,7 @@ class RoomDetailFragment :
         composerLayout.sendButton.setOnClickListener {
             val textMessage = composerLayout.composerEditText.text.toString()
             if (textMessage.isNotBlank()) {
-                roomDetailViewModel.process(RoomDetailActions.SendMessage(textMessage, VectorPreferences.isMarkdownEnabled(requireContext())))
+                roomDetailViewModel.process(RoomDetailActions.SendMessage(textMessage, vectorPreferences.isMarkdownEnabled()))
             }
         }
         composerLayout.composerRelatedMessageCloseButton.setOnClickListener {
@@ -507,7 +508,7 @@ class RoomDetailFragment :
             items.add(DialogListItem.SendFile)
             // Send voice
 
-            if (VectorPreferences.isSendVoiceFeatureEnabled(this)) {
+            if (vectorPreferences.isSendVoiceFeatureEnabled()) {
                 items.add(DialogListItem.SendVoice.INSTANCE)
             }
 
@@ -516,7 +517,7 @@ class RoomDetailFragment :
             //items.add(DialogListItem.SendSticker)
             // Camera
 
-            //if (VectorPreferences.useNativeCamera(this)) {
+            //if (vectorPreferences.useNativeCamera()) {
             items.add(DialogListItem.TakePhoto)
             items.add(DialogListItem.TakeVideo)
             //} else {
@@ -638,8 +639,12 @@ class RoomDetailFragment :
 
     private fun renderSendMessageResult(sendMessageResult: SendMessageResult) {
         when (sendMessageResult) {
-            is SendMessageResult.MessageSent,
+            is SendMessageResult.MessageSent                -> {
+                // Clear composer
+                composerLayout.composerEditText.text = null
+            }
             is SendMessageResult.SlashCommandHandled        -> {
+                sendMessageResult.messageRes?.let { showSnackWithMessage(getString(it)) }
                 // Clear composer
                 composerLayout.composerEditText.text = null
             }
@@ -959,7 +964,7 @@ class RoomDetailFragment :
 //                vibrate = true
             }
 
-//            if (vibrate && VectorPreferences.vibrateWhenMentioning(context)) {
+//            if (vibrate && vectorPreferences.vibrateWhenMentioning()) {
 //                val v= context.getSystemService(Context.VIBRATOR_SERVICE) as? Vibrator
 //                if (v?.hasVibrator() == true) {
 //                    v.vibrate(100)

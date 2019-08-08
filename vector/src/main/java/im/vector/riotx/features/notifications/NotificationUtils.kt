@@ -367,6 +367,7 @@ object NotificationUtils {
      * Build a notification for a Room
      */
     fun buildMessagesListNotification(context: Context,
+                                      vectorPreferences: VectorPreferences,
                                       messageStyle: NotificationCompat.MessagingStyle,
                                       roomInfo: RoomEventGroupInfo,
                                       largeIcon: Bitmap?,
@@ -420,7 +421,7 @@ object NotificationUtils {
                     priority = NotificationCompat.PRIORITY_DEFAULT
                     if (roomInfo.shouldBing) {
                         //Compat
-                        VectorPreferences.getNotificationRingTone(context)?.let {
+                        vectorPreferences.getNotificationRingTone()?.let {
                             setSound(it)
                         }
                         setLights(accentColor, 500, 500)
@@ -476,7 +477,11 @@ object NotificationUtils {
     }
 
 
-    fun buildSimpleEventNotification(context: Context, simpleNotifiableEvent: NotifiableEvent, largeIcon: Bitmap?, matrixId: String): Notification? {
+    fun buildSimpleEventNotification(context: Context,
+                                     vectorPreferences: VectorPreferences,
+                                     simpleNotifiableEvent: NotifiableEvent,
+                                     largeIcon: Bitmap?,
+                                     matrixId: String): Notification? {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
         // Build the pending intent for when the notification is clicked
         val smallIcon = R.drawable.ic_status_bar
@@ -534,7 +539,7 @@ object NotificationUtils {
                     if (simpleNotifiableEvent.noisy) {
                         //Compat
                         priority = NotificationCompat.PRIORITY_DEFAULT
-                        VectorPreferences.getNotificationRingTone(context)?.let {
+                        vectorPreferences.getNotificationRingTone()?.let {
                             setSound(it)
                         }
                         setLights(accentColor, 500, 500)
@@ -606,6 +611,7 @@ object NotificationUtils {
      * Build the summary notification
      */
     fun buildSummaryListNotification(context: Context,
+                                     vectorPreferences: VectorPreferences,
                                      style: NotificationCompat.InboxStyle,
                                      compatSummary: String,
                                      noisy: Boolean,
@@ -630,7 +636,7 @@ object NotificationUtils {
                     if (noisy) {
                         //Compat
                         priority = NotificationCompat.PRIORITY_DEFAULT
-                        VectorPreferences.getNotificationRingTone(context)?.let {
+                        vectorPreferences.getNotificationRingTone()?.let {
                             setSound(it)
                         }
                         setLights(accentColor, 500, 500)
