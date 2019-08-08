@@ -1,4 +1,4 @@
-Changes in RiotX 0.3.0 (2019-XX-XX)
+Changes in RiotX 0.3.0 (2019-08-08)
 ===================================================
 
 Features:
@@ -24,9 +24,6 @@ Bugfix:
  - Fix messages with empty `in_reply_to` not rendering (#447)
  - Fix clear cache (#408) and Logout (#205)
  - Fix `(edited)` link can be copied to clipboard (#402)
-
-Translations:
- -
 
 Build:
  - Split APK: generate one APK per arch, to reduce APK size of about 30%
