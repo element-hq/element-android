@@ -59,10 +59,7 @@ import im.vector.riotx.features.roomdirectory.createroom.CreateRoomActivity
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomFragment
 import im.vector.riotx.features.roomdirectory.picker.RoomDirectoryPickerFragment
 import im.vector.riotx.features.roomdirectory.roompreview.RoomPreviewNoPreviewFragment
-import im.vector.riotx.features.settings.VectorSettingsActivity
-import im.vector.riotx.features.settings.VectorSettingsNotificationPreferenceFragment
-import im.vector.riotx.features.settings.VectorSettingsNotificationsTroubleshootFragment
-import im.vector.riotx.features.settings.VectorSettingsPreferencesFragment
+import im.vector.riotx.features.settings.*
 import im.vector.riotx.features.settings.push.PushGatewaysFragment
 
 @Component(dependencies = [VectorComponent::class], modules = [ViewModelModule::class, HomeModule::class])
@@ -152,6 +149,10 @@ interface ScreenComponent {
     fun inject(vectorSettingsNotificationPreferenceFragment: VectorSettingsNotificationPreferenceFragment)
 
     fun inject(vectorSettingsPreferencesFragment: VectorSettingsPreferencesFragment)
+
+    fun inject(vectorSettingsAdvancedNotificationPreferenceFragment: VectorSettingsAdvancedNotificationPreferenceFragment)
+
+    fun inject(vectorSettingsSecurityPrivacyFragment: VectorSettingsSecurityPrivacyFragment)
 
     fun inject(userAvatarPreference: UserAvatarPreference)
 

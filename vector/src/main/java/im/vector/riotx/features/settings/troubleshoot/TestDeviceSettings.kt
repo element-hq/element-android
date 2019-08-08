@@ -15,7 +15,6 @@
  */
 package im.vector.riotx.features.settings.troubleshoot
 
-import androidx.appcompat.app.AppCompatActivity
 import im.vector.riotx.R
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.settings.VectorPreferences
@@ -24,20 +23,20 @@ import javax.inject.Inject
 /**
  * Checks if notifications are enable in the system settings for this app.
  */
-class TestDeviceSettings @Inject constructor(private val context: AppCompatActivity,
+class TestDeviceSettings @Inject constructor(private val vectorPreferences: VectorPreferences,
                                              private val stringProvider: StringProvider)
     : TroubleshootTest(R.string.settings_troubleshoot_test_device_settings_title) {
 
     override fun perform() {
 
-        if (VectorPreferences.areNotificationEnabledForDevice(context)) {
+        if (vectorPreferences.areNotificationEnabledForDevice()) {
             description = stringProvider.getString(R.string.settings_troubleshoot_test_device_settings_success)
             quickFix = null
             status = TestStatus.SUCCESS
         } else {
             quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_device_settings_quickfix) {
                 override fun doFix() {
-                    VectorPreferences.setNotificationEnabledForDevice(context, true)
+                    vectorPreferences.setNotificationEnabledForDevice(true)
                     manager?.retry()
                 }
             }

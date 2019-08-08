@@ -42,6 +42,7 @@ import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
 import im.vector.riotx.R
+import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.dialogs.ExportKeysDialog
 import im.vector.riotx.core.intent.ExternalIntentData
 import im.vector.riotx.core.intent.analyseIntent
@@ -57,6 +58,7 @@ import timber.log.Timber
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
 class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
 
@@ -127,6 +129,12 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
         findPreference(VectorPreferences.SETTINGS_ENCRYPTION_NEVER_SENT_TO_PREFERENCE_KEY) as SwitchPreference
     }
 
+    @Inject lateinit var vectorPreferences: VectorPreferences
+
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
+    }
+
     override fun bindPref() {
         // Push target
         refreshPushersList()
@@ -142,20 +150,20 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
         // Analytics tracking management
         (findPreference(VectorPreferences.SETTINGS_USE_ANALYTICS_KEY) as SwitchPreference).let {
             // On if the analytics tracking is activated
-            it.isChecked = VectorPreferences.useAnalytics(requireContext())
+            it.isChecked = vectorPreferences.useAnalytics()
 
             it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                VectorPreferences.setUseAnalytics(requireContext(), newValue as Boolean)
+                vectorPreferences.setUseAnalytics(newValue as Boolean)
                 true
             }
         }
 
         // Rageshake Management
         (findPreference(VectorPreferences.SETTINGS_USE_RAGE_SHAKE_KEY) as SwitchPreference).let {
-            it.isChecked = VectorPreferences.useRageshake(requireContext())
+            it.isChecked = vectorPreferences.useRageshake()
 
             it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                VectorPreferences.setUseRageshake(requireContext(), newValue as Boolean)
+                vectorPreferences.setUseRageshake(newValue as Boolean)
                 true
             }
         }

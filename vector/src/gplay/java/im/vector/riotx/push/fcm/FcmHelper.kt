@@ -27,6 +27,7 @@ import com.google.firebase.iid.FirebaseInstanceId
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.pushers.PushersManager
+import im.vector.riotx.features.settings.VectorPreferences
 import timber.log.Timber
 
 /**
@@ -105,7 +106,7 @@ object FcmHelper {
         // No op
     }
 
-    fun onEnterBackground(context: Context, activeSessionHolder: ActiveSessionHolder) {
+    fun onEnterBackground(context: Context, vectorPreferences: VectorPreferences, activeSessionHolder: ActiveSessionHolder) {
         // TODO FCM fallback
     }
 }

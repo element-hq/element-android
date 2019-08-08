@@ -16,13 +16,12 @@
 
 package im.vector.riotx.core.resources
 
-import android.content.Context
 import im.vector.riotx.features.settings.VectorPreferences
 import javax.inject.Inject
 
-class UserPreferencesProvider @Inject constructor(private val context: Context) {
+class UserPreferencesProvider @Inject constructor(private val vectorPreferences: VectorPreferences) {
 
     fun shouldShowHiddenEvents(): Boolean {
-        return VectorPreferences.shouldShowHiddenEvents(context)
+        return vectorPreferences.shouldShowHiddenEvents()
     }
 }

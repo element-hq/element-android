@@ -24,11 +24,13 @@ import androidx.core.content.edit
 import androidx.preference.Preference
 import androidx.preference.PreferenceManager
 import im.vector.riotx.R
+import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.withArgs
 import im.vector.riotx.core.preference.BingRule
 import im.vector.riotx.core.preference.BingRulePreference
 import im.vector.riotx.features.notifications.NotificationUtils
 import im.vector.riotx.features.notifications.supportNotificationChannels
+import javax.inject.Inject
 
 class VectorSettingsAdvancedNotificationPreferenceFragment : VectorSettingsBaseFragment() {
 
@@ -44,6 +46,13 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : VectorSettingsBaseF
     override var titleRes: Int = R.string.settings_notification_advanced
 
     override val preferenceXmlRes = R.xml.vector_settings_notification_advanced_preferences
+
+    @Inject lateinit var vectorPreferences: VectorPreferences
+
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
+    }
+
 
     override fun bindPref() {
         val callNotificationsSystemOptions = findPreference(VectorPreferences.SETTINGS_SYSTEM_CALL_NOTIFICATION_PREFERENCE_KEY)
@@ -83,13 +92,13 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : VectorSettingsBaseF
         if (supportNotificationChannels()) {
             ringtonePreference.isVisible = false
         } else {
-            ringtonePreference.summary = VectorPreferences.getNotificationRingToneName(requireContext())
+            ringtonePreference.summary = vectorPreferences.getNotificationRingToneName()
             ringtonePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 val intent = Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION)
 
-                if (null != VectorPreferences.getNotificationRingTone(requireContext())) {
-                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, VectorPreferences.getNotificationRingTone(requireContext()))
+                if (null != vectorPreferences.getNotificationRingTone()) {
+                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, vectorPreferences.getNotificationRingTone())
                 }
 
                 startActivityForResult(intent, REQUEST_NOTIFICATION_RINGTONE)
@@ -152,13 +161,12 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : VectorSettingsBaseF
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 REQUEST_NOTIFICATION_RINGTONE -> {
-                    VectorPreferences.setNotificationRingTone(requireContext(),
-                            data?.getParcelableExtra<Parcelable>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI) as Uri?)
+                    vectorPreferences.setNotificationRingTone(data?.getParcelableExtra<Parcelable>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI) as Uri?)
 
                     // test if the selected ring tone can be played
-                    val notificationRingToneName = VectorPreferences.getNotificationRingToneName(requireContext())
+                    val notificationRingToneName = vectorPreferences.getNotificationRingToneName()
                     if (null != notificationRingToneName) {
-                        VectorPreferences.setNotificationRingTone(requireContext(), VectorPreferences.getNotificationRingTone(requireContext()))
+                        vectorPreferences.setNotificationRingTone(vectorPreferences.getNotificationRingTone())
                         findPreference(VectorPreferences.SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY).summary = notificationRingToneName
                     }
                 }
