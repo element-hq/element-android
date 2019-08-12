@@ -140,7 +140,7 @@ internal fun ChunkEntity.add(roomId: String,
     val senderId = event.senderId ?: ""
 
     val readReceiptsSummaryEntity = ReadReceiptsSummaryEntity.where(realm, eventId).findFirst()
-                                    ?: ReadReceiptsSummaryEntity(eventId)
+                                    ?: ReadReceiptsSummaryEntity(eventId, roomId)
 
     // Update RR for the sender of a new message with a dummy one
 

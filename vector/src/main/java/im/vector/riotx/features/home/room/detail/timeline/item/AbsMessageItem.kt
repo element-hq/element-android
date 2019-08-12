@@ -80,7 +80,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
     })
 
     private val _readReceiptsClickListener = DebouncedClickListener(View.OnClickListener {
-        readReceiptsCallback?.onReadReceiptsClicked(informationData)
+        readReceiptsCallback?.onReadReceiptsClicked(informationData.readReceipts)
     })
 
     var reactionClickListener: ReactionButton.ReactedListener = object : ReactionButton.ReactedListener {

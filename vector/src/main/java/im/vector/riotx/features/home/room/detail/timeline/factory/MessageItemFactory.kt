@@ -84,7 +84,7 @@ class MessageItemFactory @Inject constructor(
         private val imageContentRenderer: ImageContentRenderer,
         private val messageInformationDataFactory: MessageInformationDataFactory,
         private val contentUploadStateTrackerBinder: ContentUploadStateTrackerBinder,
-        private val userPreferencesProvider: UserPreferencesProvider) {
+        private val noticeItemFactory: NoticeItemFactory) {
 
 
     fun create(event: TimelineEvent,
@@ -109,27 +109,8 @@ class MessageItemFactory @Inject constructor(
         if (messageContent.relatesTo?.type == RelationType.REPLACE
             || event.isEncrypted() && event.root.content.toModel<EncryptedEventContent>()?.relatesTo?.type == RelationType.REPLACE
         ) {
-            // ignore replace event, the targeted id is already edited
-            if (userPreferencesProvider.shouldShowHiddenEvents()) {
-                //These are just for debug to display hidden event, they should be filtered out in normal mode
-                val informationData = MessageInformationData(
-                        eventId = event.root.eventId ?: "?",
-                        senderId = event.root.senderId ?: "",
-                        sendState = event.root.sendState,
-                        time = "",
-                        avatarUrl = event.senderAvatar(),
-                        memberName = "",
-                        showInformation = false
-                )
-                return NoticeItem_()
-                        .avatarRenderer(avatarRenderer)
-                        .informationData(informationData)
-                        .noticeText("{ \"type\": ${event.root.getClearType()} }")
-                        .highlighted(highlight)
-                        .baseCallback(callback)
-            } else {
-                return BlankItem_()
-            }
+            // This is an edit event, we should it when debugging as a notice event
+            return noticeItemFactory.create(event, highlight, callback)
         }
 //        val all = event.root.toContent()
 //        val ev = all.toModel<Event>()

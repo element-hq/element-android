@@ -17,15 +17,18 @@
 package im.vector.matrix.android.internal.database.mapper
 
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.room.model.ReadReceipt
 
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import javax.inject.Inject
 
-internal class TimelineEventMapper @Inject constructor(private val readReceiptsSummaryMapper: ReadReceiptsSummaryMapper){
+internal class TimelineEventMapper @Inject constructor(private val readReceiptsSummaryMapper: ReadReceiptsSummaryMapper) {
 
-    fun map(timelineEventEntity: TimelineEventEntity): TimelineEvent {
-
+    fun map(timelineEventEntity: TimelineEventEntity, correctedReadReceipts: List<ReadReceipt>? = null): TimelineEvent {
+        val readReceipts = correctedReadReceipts ?: timelineEventEntity.readReceipts?.let {
+            readReceiptsSummaryMapper.map(it)
+        }
         return TimelineEvent(
                 root = timelineEventEntity.root?.asDomain()
                        ?: Event("", timelineEventEntity.eventId),
@@ -35,9 +38,7 @@ internal class TimelineEventMapper @Inject constructor(private val readReceiptsS
                 senderName = timelineEventEntity.senderName,
                 isUniqueDisplayName = timelineEventEntity.isUniqueDisplayName,
                 senderAvatar = timelineEventEntity.senderAvatar,
-                readReceipts = timelineEventEntity.readReceipts?.let {
-                    readReceiptsSummaryMapper.map(it)
-                } ?: emptyList()
+                readReceipts = readReceipts ?: emptyList()
         )
     }
 

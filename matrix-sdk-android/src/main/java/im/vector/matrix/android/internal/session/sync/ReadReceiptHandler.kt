@@ -62,7 +62,7 @@ internal class ReadReceiptHandler @Inject constructor() {
         val readReceiptSummaries = ArrayList<ReadReceiptsSummaryEntity>()
         for ((eventId, receiptDict) in content) {
             val userIdsDict = receiptDict[READ_KEY] ?: continue
-            val readReceiptsSummary = ReadReceiptsSummaryEntity(eventId = eventId)
+            val readReceiptsSummary = ReadReceiptsSummaryEntity(eventId = eventId, roomId = roomId)
 
             for ((userId, paramsDict) in userIdsDict) {
                 val ts = paramsDict[TIMESTAMP_KEY] ?: 0.0

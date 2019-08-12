@@ -16,8 +16,8 @@
 
 package im.vector.riotx.features.home.room.detail.readreceipts
 
-import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,31 +27,31 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.airbnb.epoxy.EpoxyRecyclerView
 import com.airbnb.mvrx.MvRx
-import com.airbnb.mvrx.fragmentViewModel
-import com.airbnb.mvrx.withState
-import im.vector.riotx.EmojiCompatFontProvider
+import com.airbnb.mvrx.args
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
-import im.vector.riotx.features.home.room.detail.timeline.action.TimelineEventFragmentArgs
 import im.vector.riotx.features.home.room.detail.timeline.action.VectorBaseBottomSheetDialogFragment
-import im.vector.riotx.features.home.room.detail.timeline.action.ViewReactionBottomSheet
-import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
+import im.vector.riotx.features.home.room.detail.timeline.item.ReadReceiptData
+import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.bottom_sheet_epoxylist_with_title.*
 import javax.inject.Inject
+
+@Parcelize
+data class DisplayReadReceiptArgs(
+        val readReceipts: List<ReadReceiptData>
+) : Parcelable
 
 /**
  * Bottom sheet displaying list of read receipts for a given event ordered by descending timestamp
  */
 class DisplayReadReceiptsBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
-    private val viewModel: DisplayReadReceiptsViewModel by fragmentViewModel()
-
-    @Inject lateinit var displayReadReceiptsViewModelFactory: DisplayReadReceiptsViewModel.Factory
     @Inject lateinit var epoxyController: DisplayReadReceiptsController
 
     @BindView(R.id.bottom_sheet_display_reactions_list)
     lateinit var epoxyRecyclerView: EpoxyRecyclerView
 
+    private val displayReadReceiptArgs: DisplayReadReceiptArgs by args()
 
     override fun injectWith(screenComponent: ScreenComponent) {
         screenComponent.inject(this)
@@ -70,20 +70,18 @@ class DisplayReadReceiptsBottomSheet : VectorBaseBottomSheetDialogFragment() {
                                                           LinearLayout.VERTICAL)
         epoxyRecyclerView.addItemDecoration(dividerItemDecoration)
         bottomSheetTitle.text = getString(R.string.read_receipts_list)
+        epoxyController.setData(displayReadReceiptArgs.readReceipts)
     }
 
-
-    override fun invalidate() = withState(viewModel) {
-        epoxyController.setData(it)
+    override fun invalidate() {
+        // we are not using state for this one as it's static
     }
 
     companion object {
-        fun newInstance(roomId: String, informationData: MessageInformationData): DisplayReadReceiptsBottomSheet {
+        fun newInstance(readReceipts: List<ReadReceiptData>): DisplayReadReceiptsBottomSheet {
             val args = Bundle()
-            val parcelableArgs = TimelineEventFragmentArgs(
-                    informationData.eventId,
-                    roomId,
-                    informationData
+            val parcelableArgs = DisplayReadReceiptArgs(
+                    readReceipts
             )
             args.putParcelable(MvRx.KEY_ARG, parcelableArgs)
             return DisplayReadReceiptsBottomSheet().apply { arguments = args }

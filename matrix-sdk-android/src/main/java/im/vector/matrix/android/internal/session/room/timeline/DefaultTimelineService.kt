@@ -23,7 +23,9 @@ import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.TimelineService
+import im.vector.matrix.android.api.session.room.timeline.TimelineSettings
 import im.vector.matrix.android.internal.database.RealmLiveData
+import im.vector.matrix.android.internal.database.mapper.ReadReceiptsSummaryMapper
 import im.vector.matrix.android.internal.database.mapper.TimelineEventMapper
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
@@ -38,10 +40,11 @@ internal class DefaultTimelineService @Inject constructor(private val roomId: St
                                                           private val contextOfEventTask: GetContextOfEventTask,
                                                           private val cryptoService: CryptoService,
                                                           private val paginationTask: PaginationTask,
-                                                          private val timelineEventMapper: TimelineEventMapper
+                                                          private val timelineEventMapper: TimelineEventMapper,
+                                                          private val readReceiptsSummaryMapper: ReadReceiptsSummaryMapper
 ) : TimelineService {
 
-    override fun createTimeline(eventId: String?, allowedTypes: List<String>?): Timeline {
+    override fun createTimeline(eventId: String?, settings: TimelineSettings): Timeline {
         return DefaultTimeline(roomId,
                                eventId,
                                monarchy.realmConfiguration,
@@ -50,7 +53,8 @@ internal class DefaultTimelineService @Inject constructor(private val roomId: St
                                paginationTask,
                                cryptoService,
                                timelineEventMapper,
-                               allowedTypes
+                               readReceiptsSummaryMapper,
+                               settings
         )
     }
 

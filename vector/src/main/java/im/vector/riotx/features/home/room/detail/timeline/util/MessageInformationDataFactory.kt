@@ -52,15 +52,14 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                 addDaySeparator
                 || event.senderAvatar != nextEvent?.senderAvatar
                 || event.getDisambiguatedDisplayName() != nextEvent?.getDisambiguatedDisplayName()
-                || (nextEvent?.root?.getClearType() != EventType.MESSAGE && nextEvent?.root?.getClearType() != EventType.ENCRYPTED)
+                || (nextEvent.root.getClearType() != EventType.MESSAGE && nextEvent.root.getClearType() != EventType.ENCRYPTED)
                 || isNextMessageReceivedMoreThanOneHourAgo
 
         val time = dateFormatter.formatMessageHour(date)
         val avatarUrl = event.senderAvatar
         val memberName = event.getDisambiguatedDisplayName()
         val formattedMemberName = span(memberName) {
-            textColor = colorProvider.getColor(getColorFromUserId(event.root.senderId
-                                                                  ?: ""))
+            textColor = colorProvider.getColor(getColorFromUserId(event.root.senderId ?: ""))
         }
 
         return MessageInformationData(

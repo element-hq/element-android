@@ -17,55 +17,32 @@
 package im.vector.riotx.features.home.room.detail.readreceipts
 
 import com.airbnb.epoxy.TypedEpoxyController
-import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Incomplete
-import com.airbnb.mvrx.Success
 import im.vector.matrix.android.api.session.Session
-import im.vector.riotx.R
 import im.vector.riotx.core.date.VectorDateFormatter
-import im.vector.riotx.core.resources.StringProvider
-import im.vector.riotx.core.ui.list.genericFooterItem
-import im.vector.riotx.core.ui.list.genericLoaderItem
 import im.vector.riotx.features.home.AvatarRenderer
+import im.vector.riotx.features.home.room.detail.timeline.item.ReadReceiptData
 import javax.inject.Inject
 
 /**
  * Epoxy controller for read receipt event list
  */
 class DisplayReadReceiptsController @Inject constructor(private val dateFormatter: VectorDateFormatter,
-                                                        private val stringProvider: StringProvider,
                                                         private val session: Session,
                                                         private val avatarRender: AvatarRenderer)
-    : TypedEpoxyController<DisplayReadReceiptsViewState>() {
+    : TypedEpoxyController<List<ReadReceiptData>>() {
 
 
-    override fun buildModels(state: DisplayReadReceiptsViewState) {
-        when (state.readReceipts) {
-            is Incomplete -> {
-                genericLoaderItem {
-                    id("loading")
-                }
-            }
-            is Fail       -> {
-                genericFooterItem {
-                    id("failure")
-                    text(stringProvider.getString(R.string.unknown_error))
-                }
-            }
-            is Success    -> {
-                state.readReceipts()?.forEach {
-                    val timestamp = dateFormatter.formatRelativeDateTime(it.originServerTs)
-                    DisplayReadReceiptItem_()
-                            .id(it.user.userId)
-                            .userId(it.user.userId)
-                            .avatarUrl(it.user.avatarUrl)
-                            .name(it.user.displayName)
-                            .avatarRenderer(avatarRender)
-                            .timestamp(timestamp)
-                            .addIf(session.myUserId != it.user.userId, this)
-                }
-            }
+    override fun buildModels(readReceipts: List<ReadReceiptData>) {
+        readReceipts.forEach {
+            val timestamp = dateFormatter.formatRelativeDateTime(it.timestamp)
+            DisplayReadReceiptItem_()
+                    .id(it.userId)
+                    .userId(it.userId)
+                    .avatarUrl(it.avatarUrl)
+                    .name(it.displayName)
+                    .avatarRenderer(avatarRender)
+                    .timestamp(timestamp)
+                    .addIf(session.myUserId != it.userId, this)
         }
     }
-
 }

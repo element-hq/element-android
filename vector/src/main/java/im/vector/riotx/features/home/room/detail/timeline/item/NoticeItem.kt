@@ -50,7 +50,7 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
     var readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null
 
     private val _readReceiptsClickListener = DebouncedClickListener(View.OnClickListener {
-        readReceiptsCallback?.onReadReceiptsClicked(informationData)
+        readReceiptsCallback?.onReadReceiptsClicked(informationData.readReceipts)
     })
 
     override fun bind(holder: Holder) {

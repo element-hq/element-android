@@ -38,6 +38,7 @@ import im.vector.riotx.features.home.room.detail.timeline.item.DaySeparatorItem
 import im.vector.riotx.features.home.room.detail.timeline.item.DaySeparatorItem_
 import im.vector.riotx.features.home.room.detail.timeline.item.MergedHeaderItem
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
+import im.vector.riotx.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.riotx.features.media.ImageContentRenderer
 import im.vector.riotx.features.media.VideoContentRenderer
 import org.threeten.bp.LocalDateTime
@@ -79,7 +80,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     }
 
     interface ReadReceiptsCallback {
-        fun onReadReceiptsClicked(informationData: MessageInformationData)
+        fun onReadReceiptsClicked(readReceipts: List<ReadReceiptData>)
     }
 
     interface UrlClickCallback {

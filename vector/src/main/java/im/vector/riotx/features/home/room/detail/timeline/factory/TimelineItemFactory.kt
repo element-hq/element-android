@@ -25,6 +25,7 @@ import im.vector.riotx.features.home.room.detail.timeline.TimelineEventControlle
 import im.vector.riotx.features.home.room.detail.timeline.helper.senderAvatar
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.riotx.features.home.room.detail.timeline.item.NoticeItem_
+import im.vector.riotx.features.home.room.detail.timeline.util.MessageInformationDataFactory
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -33,8 +34,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                                               private val encryptedItemFactory: EncryptedItemFactory,
                                               private val noticeItemFactory: NoticeItemFactory,
                                               private val defaultItemFactory: DefaultItemFactory,
-                                              private val roomCreateItemFactory: RoomCreateItemFactory,
-                                              private val avatarRenderer: AvatarRenderer) {
+                                              private val roomCreateItemFactory: RoomCreateItemFactory) {
 
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
@@ -53,7 +53,9 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 EventType.STATE_HISTORY_VISIBILITY,
                 EventType.CALL_INVITE,
                 EventType.CALL_HANGUP,
-                EventType.CALL_ANSWER       -> noticeItemFactory.create(event, highlight, callback)
+                EventType.CALL_ANSWER,
+                EventType.REACTION,
+                EventType.REDACTION         -> noticeItemFactory.create(event, highlight, callback)
                 // State room create
                 EventType.STATE_ROOM_CREATE -> roomCreateItemFactory.create(event, callback)
                 // Crypto
@@ -70,24 +72,9 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 // Unhandled event types (yet)
                 EventType.STATE_ROOM_THIRD_PARTY_INVITE,
                 EventType.STICKER           -> defaultItemFactory.create(event, highlight)
-
                 else                        -> {
-                    //These are just for debug to display hidden event, they should be filtered out in normal mode
-                    val informationData = MessageInformationData(
-                            eventId = event.root.eventId ?: "?",
-                            senderId = event.root.senderId ?: "",
-                            sendState = event.root.sendState,
-                            time = "",
-                            avatarUrl = event.senderAvatar(),
-                            memberName = "",
-                            showInformation = false
-                    )
-                    NoticeItem_()
-                            .avatarRenderer(avatarRenderer)
-                            .informationData(informationData)
-                            .noticeText("{ \"type\": ${event.root.getClearType()} }")
-                            .highlighted(highlight)
-                            .baseCallback(callback)
+                    Timber.v("Type ${event.root.getClearType()} not handled")
+                    null
                 }
             }
         } catch (e: Exception) {

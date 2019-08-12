@@ -43,8 +43,6 @@ import im.vector.riotx.features.home.room.detail.RoomDetailViewModel
 import im.vector.riotx.features.home.room.detail.RoomDetailViewModel_AssistedFactory
 import im.vector.riotx.features.home.room.detail.composer.TextComposerViewModel
 import im.vector.riotx.features.home.room.detail.composer.TextComposerViewModel_AssistedFactory
-import im.vector.riotx.features.home.room.detail.readreceipts.DisplayReadReceiptsViewModel
-import im.vector.riotx.features.home.room.detail.readreceipts.DisplayReadReceiptsViewModel_AssistedFactory
 import im.vector.riotx.features.home.room.detail.timeline.action.MessageActionsViewModel
 import im.vector.riotx.features.home.room.detail.timeline.action.MessageActionsViewModel_AssistedFactory
 import im.vector.riotx.features.home.room.detail.timeline.action.MessageMenuViewModel
@@ -196,9 +194,5 @@ interface ViewModelModule {
 
     @Binds
     fun bindPushGatewaysViewModelFactory(factory: PushGatewaysViewModel_AssistedFactory): PushGatewaysViewModel.Factory
-
-
-    @Binds
-    fun bindDisplayReadReceiptsViewModel(factory: DisplayReadReceiptsViewModel_AssistedFactory): DisplayReadReceiptsViewModel.Factory
 
 }

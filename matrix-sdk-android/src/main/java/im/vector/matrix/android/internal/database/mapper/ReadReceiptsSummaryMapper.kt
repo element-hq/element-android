@@ -28,7 +28,10 @@ import javax.inject.Inject
 
 internal class ReadReceiptsSummaryMapper @Inject constructor(@SessionDatabase private val realmConfiguration: RealmConfiguration) {
 
-    fun map(readReceiptsSummaryEntity: ReadReceiptsSummaryEntity): List<ReadReceipt> {
+    fun map(readReceiptsSummaryEntity: ReadReceiptsSummaryEntity?): List<ReadReceipt> {
+        if (readReceiptsSummaryEntity == null) {
+            return emptyList()
+        }
         return Realm.getInstance(realmConfiguration).use { realm ->
             val readReceipts = readReceiptsSummaryEntity.readReceipts
             readReceipts

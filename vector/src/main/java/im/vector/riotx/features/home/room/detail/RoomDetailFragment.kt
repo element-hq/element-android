@@ -817,8 +817,8 @@ class RoomDetailFragment :
         })
     }
 
-    override fun onReadReceiptsClicked(informationData: MessageInformationData) {
-        DisplayReadReceiptsBottomSheet.newInstance(roomDetailArgs.roomId, informationData)
+    override fun onReadReceiptsClicked(readReceipts: List<ReadReceiptData>) {
+        DisplayReadReceiptsBottomSheet.newInstance(readReceipts)
                 .show(requireActivity().supportFragmentManager, "DISPLAY_READ_RECEIPTS")
     }
 
