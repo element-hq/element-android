@@ -18,8 +18,10 @@ package im.vector.riotx.core.ui.views
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import butterknife.ButterKnife
 import im.vector.riotx.R
@@ -56,24 +58,23 @@ class ReadReceiptsView @JvmOverloads constructor(
             for (index in 0 until MAX_RECEIPT_DISPLAYED) {
                 val receiptData = readReceipts.getOrNull(index)
                 if (receiptData == null) {
-                    receiptAvatars[index].isVisible = false
+                    receiptAvatars[index].visibility = View.INVISIBLE
                 } else {
-                    receiptAvatars[index].isVisible = true
+                    receiptAvatars[index].visibility = View.VISIBLE
                     avatarRenderer.render(receiptData.avatarUrl, receiptData.userId, receiptData.displayName, receiptAvatars[index])
                 }
             }
             if (readReceipts.size > MAX_RECEIPT_DISPLAYED) {
-                receiptMore.isVisible = true
+                receiptMore.visibility = View.VISIBLE
                 receiptMore.text = context.getString(
                         R.string.x_plus, readReceipts.size - MAX_RECEIPT_DISPLAYED
                 )
             } else {
-                receiptMore.isVisible = false
+                receiptMore.visibility = View.GONE
             }
         } else {
             isVisible = false
         }
-
     }
 
 }
