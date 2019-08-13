@@ -52,6 +52,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
     private lateinit var notifiableEventResolver: NotifiableEventResolver
     private lateinit var pusherManager: PushersManager
     private lateinit var activeSessionHolder: ActiveSessionHolder
+    private lateinit var vectorPreferences: VectorPreferences
 
     // UI handler
     private val mUIHandler by lazy {
@@ -64,6 +65,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
         notifiableEventResolver = vectorComponent().notifiableEventResolver()
         pusherManager = vectorComponent().pusherManager()
         activeSessionHolder = vectorComponent().activeSessionHolder()
+        vectorPreferences = vectorComponent().vectorPreferences()
     }
 
     /**
@@ -72,7 +74,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
      * @param message the message
      */
     override fun onMessageReceived(message: RemoteMessage?) {
-        if (!VectorPreferences.areNotificationEnabledForDevice(applicationContext)) {
+        if (!vectorPreferences.areNotificationEnabledForDevice()) {
             Timber.i("Notification are disabled for this device")
             return
         }
@@ -107,7 +109,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
         if (refreshedToken == null) {
             Timber.w("onNewToken:received null token")
         } else {
-            if (VectorPreferences.areNotificationEnabledForDevice(applicationContext) && activeSessionHolder.hasActiveSession()) {
+            if (vectorPreferences.areNotificationEnabledForDevice() && activeSessionHolder.hasActiveSession()) {
                 pusherManager.registerPusherWithFcmKey(refreshedToken)
             }
         }

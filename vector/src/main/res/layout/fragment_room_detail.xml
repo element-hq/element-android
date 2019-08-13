@@ -11,8 +11,8 @@
         style="@style/VectorToolbarStyle"
         android:layout_width="0dp"
         android:layout_height="?actionBarSize"
-        android:transitionName="toolbar"
         android:elevation="4dp"
+        android:transitionName="toolbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -71,6 +71,29 @@
 
     </androidx.appcompat.widget.Toolbar>
 
+    <!-- Trick to remove surrounding padding (clip frome wrapping frame) -->
+    <FrameLayout
+        android:id="@+id/syncProgressBarWrap"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/roomToolbar"
+        tools:visibility="visible">
+
+        <ProgressBar
+            android:id="@+id/syncProgressBar"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="14dp"
+            android:layout_gravity="center"
+            android:background="?riotx_header_panel_background"
+            android:indeterminate="true"
+            android:visibility="gone"
+            tools:visibility="visible" />
+    </FrameLayout>
+
     <com.airbnb.epoxy.EpoxyRecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="0dp"
@@ -78,7 +101,7 @@
         app:layout_constraintBottom_toTopOf="@+id/recyclerViewBarrier"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/roomToolbar"
+        app:layout_constraintTop_toBottomOf="@id/syncProgressBarWrap"
         tools:listitem="@layout/item_timeline_event_base" />
 
     <androidx.constraintlayout.widget.Barrier

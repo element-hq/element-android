@@ -71,9 +71,7 @@ android {
         targetSdkVersion 28
         multiDexEnabled true
 
-        // For release, use generateVersionCodeFromVersionName()
-        versionCode generateVersionCodeFromTimestamp()
-        //versionCode generateVersionCodeFromVersionName()
+        // Note: versionCode is depending on the build variant
 
         versionName "${versionMajor}.${versionMinor}.${versionPatch}-dev"
 
@@ -117,9 +115,10 @@ android {
             }
         }
 
-        android.applicationVariants.all { variant ->
+        applicationVariants.all { variant ->
             variant.outputs.each { output ->
                 def baseAbiVersionCode = project.ext.abiVersionCodes.get(output.getFilter(OutputFile.ABI))
+                // Known limitation: it does not modify the value in the BuildConfig.java generated file
                 output.versionCodeOverride = baseAbiVersionCode * 10_000_000 + variant.versionCode
             }
         }
@@ -162,6 +161,8 @@ android {
         gplay {
             dimension "store"
 
+            versionCode = generateVersionCodeFromVersionName()
+
             buildConfigField "boolean", "ALLOW_FCM_USE", "true"
             buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"G\""
             buildConfigField "String", "FLAVOR_DESCRIPTION", "\"GooglePlay\""
@@ -169,6 +170,8 @@ android {
 
         fdroid {
             dimension "store"
+
+            versionCode = generateVersionCodeFromTimestamp()
 
             buildConfigField "boolean", "ALLOW_FCM_USE", "false"
             buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"F\""

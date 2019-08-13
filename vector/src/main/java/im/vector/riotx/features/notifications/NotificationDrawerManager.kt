@@ -44,6 +44,7 @@ import javax.inject.Singleton
  */
 @Singleton
 class NotificationDrawerManager @Inject constructor(private val context: Context,
+                                                    private val vectorPreferences: VectorPreferences,
                                                     private val activeSessionHolder: ActiveSessionHolder,
                                                     private val iconLoader: IconLoader,
                                                     private val bitmapLoader: BitmapLoader,
@@ -73,7 +74,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
     Events might be grouped and there might not be one notification per event!
      */
     fun onNotifiableEventReceived(notifiableEvent: NotifiableEvent) {
-        if (!VectorPreferences.areNotificationEnabledForDevice(context)) {
+        if (!vectorPreferences.areNotificationEnabledForDevice()) {
             Timber.i("Notification are disabled for this device")
             return
         }
@@ -326,7 +327,13 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                         globalLastMessageTimestamp = lastMessageTimestamp
                     }
 
-                    NotificationUtils.buildMessagesListNotification(context, style, roomEventGroupInfo, largeBitmap, lastMessageTimestamp, myUserDisplayName)
+                    NotificationUtils.buildMessagesListNotification(context,
+                            vectorPreferences,
+                            style,
+                            roomEventGroupInfo,
+                            largeBitmap,
+                            lastMessageTimestamp,
+                            myUserDisplayName)
                             ?.let {
                                 //is there an id for this room?
                                 notifications.add(it)
@@ -344,7 +351,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
             for (event in simpleEvents) {
                 //We build a simple event
                 if (firstTime || !event.hasBeenDisplayed) {
-                    NotificationUtils.buildSimpleEventNotification(context, event, null, session.myUserId)?.let {
+                    NotificationUtils.buildSimpleEventNotification(context, vectorPreferences, event, null, session.myUserId)?.let {
                         notifications.add(it)
                         NotificationUtils.showNotificationMessage(context, event.eventId, ROOM_EVENT_NOTIFICATION_ID, it)
                         event.hasBeenDisplayed = true //we can consider it as displayed
@@ -383,6 +390,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
 
                 NotificationUtils.buildSummaryListNotification(
                         context,
+                        vectorPreferences,
                         summaryInboxStyle,
                         sumTitle,
                         noisy = hasNewEvent && summaryIsNoisy,

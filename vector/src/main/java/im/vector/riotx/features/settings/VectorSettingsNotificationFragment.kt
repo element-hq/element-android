@@ -36,6 +36,7 @@ class VectorSettingsNotificationPreferenceFragment : VectorSettingsBaseFragment(
 
     @Inject lateinit var pushManager: PushersManager
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
+    @Inject lateinit var vectorPreferences: VectorPreferences
 
     override fun bindPref() {
         findPreference(VectorPreferences.SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY).let { pref ->
@@ -84,7 +85,7 @@ class VectorSettingsNotificationPreferenceFragment : VectorSettingsBaseFragment(
         val switchPref = preference as SwitchPreference
         if (switchPref.isChecked) {
             FcmHelper.getFcmToken(requireContext())?.let {
-                if (VectorPreferences.areNotificationEnabledForDevice(requireContext())) {
+                if (vectorPreferences.areNotificationEnabledForDevice()) {
                     pushManager.registerPusherWithFcmKey(it)
                 }
             }
