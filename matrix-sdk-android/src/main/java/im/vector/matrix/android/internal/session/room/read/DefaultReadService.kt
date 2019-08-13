@@ -96,6 +96,8 @@ internal class DefaultReadService @Inject constructor(private val roomId: String
         return Transformations.map(liveEntity) { realmResults ->
             realmResults.firstOrNull()?.let {
                 readReceiptsSummaryMapper.map(it)
+            }?.sortedByDescending {
+                it.originServerTs
             } ?: emptyList()
         }
     }

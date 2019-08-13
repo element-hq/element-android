@@ -17,7 +17,6 @@
 package im.vector.matrix.android.internal.database.mapper
 
 import im.vector.matrix.android.api.session.room.model.ReadReceipt
-import im.vector.matrix.android.internal.database.model.ReadReceiptEntityFields
 import im.vector.matrix.android.internal.database.model.ReadReceiptsSummaryEntity
 import im.vector.matrix.android.internal.database.model.UserEntity
 import im.vector.matrix.android.internal.database.query.where
@@ -39,9 +38,6 @@ internal class ReadReceiptsSummaryMapper @Inject constructor(@SessionDatabase pr
                         val user = UserEntity.where(realm, it.userId).findFirst()
                                    ?: return@mapNotNull null
                         ReadReceipt(user.asDomain(), it.originServerTs.toLong())
-                    }
-                    .sortedByDescending {
-                        it.originServerTs
                     }
         }
     }

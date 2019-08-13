@@ -26,9 +26,11 @@ import javax.inject.Inject
 internal class TimelineEventMapper @Inject constructor(private val readReceiptsSummaryMapper: ReadReceiptsSummaryMapper) {
 
     fun map(timelineEventEntity: TimelineEventEntity, correctedReadReceipts: List<ReadReceipt>? = null): TimelineEvent {
-        val readReceipts = correctedReadReceipts ?: timelineEventEntity.readReceipts?.let {
-            readReceiptsSummaryMapper.map(it)
-        }
+        val readReceipts = correctedReadReceipts ?: timelineEventEntity.readReceipts
+                ?.let {
+                    readReceiptsSummaryMapper.map(it)
+                }
+
         return TimelineEvent(
                 root = timelineEventEntity.root?.asDomain()
                        ?: Event("", timelineEventEntity.eventId),
@@ -38,7 +40,9 @@ internal class TimelineEventMapper @Inject constructor(private val readReceiptsS
                 senderName = timelineEventEntity.senderName,
                 isUniqueDisplayName = timelineEventEntity.isUniqueDisplayName,
                 senderAvatar = timelineEventEntity.senderAvatar,
-                readReceipts = readReceipts ?: emptyList()
+                readReceipts = readReceipts?.sortedByDescending {
+                    it.originServerTs
+                } ?: emptyList()
         )
     }
 

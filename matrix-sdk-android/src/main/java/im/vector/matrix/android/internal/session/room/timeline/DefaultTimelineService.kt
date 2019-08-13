@@ -53,8 +53,8 @@ internal class DefaultTimelineService @Inject constructor(private val roomId: St
                                paginationTask,
                                cryptoService,
                                timelineEventMapper,
-                               readReceiptsSummaryMapper,
-                               settings
+                               settings,
+                               TimelineHiddenReadReceipts(readReceiptsSummaryMapper, roomId, settings)
         )
     }
 

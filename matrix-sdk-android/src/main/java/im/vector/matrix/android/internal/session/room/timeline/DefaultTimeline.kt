@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.session.room.timeline
 
-import android.util.SparseArray
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.events.model.EventType
@@ -34,8 +33,6 @@ import im.vector.matrix.android.internal.database.model.ChunkEntityFields
 import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryEntity
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.EventEntityFields
-import im.vector.matrix.android.internal.database.model.ReadReceiptsSummaryEntity
-import im.vector.matrix.android.internal.database.model.ReadReceiptsSummaryEntityFields
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntityFields
@@ -68,7 +65,7 @@ import kotlin.collections.HashMap
 private const val MIN_FETCHING_COUNT = 30
 private const val DISPLAY_INDEX_UNKNOWN = Int.MIN_VALUE
 
-private const val EDIT_FILTER_LIKE = "{*\"m.relates_to\"*\"rel_type\":*\"m.replace\"*}"
+internal const val EDIT_FILTER_LIKE = "{*\"m.relates_to\"*\"rel_type\":*\"m.replace\"*}"
 
 internal class DefaultTimeline(
         private val roomId: String,
@@ -79,9 +76,9 @@ internal class DefaultTimeline(
         private val paginationTask: PaginationTask,
         private val cryptoService: CryptoService,
         private val timelineEventMapper: TimelineEventMapper,
-        private val readReceiptsSummaryMapper: ReadReceiptsSummaryMapper,
-        private val settings: TimelineSettings
-) : Timeline {
+        private val settings: TimelineSettings,
+        private val hiddenReadReceipts: TimelineHiddenReadReceipts
+) : Timeline, TimelineHiddenReadReceipts.Delegate {
 
     private companion object {
         val BACKGROUND_HANDLER = createBackgroundHandler("TIMELINE_DB_THREAD")
@@ -104,9 +101,6 @@ internal class DefaultTimeline(
 
     private lateinit var liveEvents: RealmResults<TimelineEventEntity>
     private lateinit var eventRelations: RealmResults<EventAnnotationsSummaryEntity>
-    private var hiddenReadReceipts: RealmResults<ReadReceiptsSummaryEntity>? = null
-    private val correctedReadReceiptsEventByIndex = SparseArray<String>()
-    private val correctedReadReceiptsByEvent = HashMap<String, MutableList<ReadReceipt>>()
 
     private var roomEntity: RoomEntity? = null
 
@@ -118,9 +112,7 @@ internal class DefaultTimeline(
     private val backwardsPaginationState = AtomicReference(PaginationState())
     private val forwardsPaginationState = AtomicReference(PaginationState())
 
-
     private val timelineID = UUID.randomUUID().toString()
-
 
     private val eventDecryptor = TimelineEventDecryptor(realmConfiguration, timelineID, cryptoService)
 
@@ -162,7 +154,7 @@ internal class DefaultTimeline(
                     builtEventsIdMap[eventId]?.let { builtIndex ->
                         //Update an existing event
                         builtEvents[builtIndex]?.let { te ->
-                            builtEvents[builtIndex] = timelineEventMapper.map(eventEntity, correctedReadReceiptsByEvent[te.root.eventId])
+                            builtEvents[builtIndex] = timelineEventMapper.map(eventEntity, hiddenReadReceipts.correctedReadReceipts(te.root.eventId))
                             hasChanged = true
                         }
                     }
@@ -192,56 +184,8 @@ internal class DefaultTimeline(
             postSnapshot()
     }
 
-    private val hiddenReadReceiptsListener = OrderedRealmCollectionChangeListener<RealmResults<ReadReceiptsSummaryEntity>> { collection, changeSet ->
-        var hasChange = false
-        changeSet.deletions.forEach {
-            val eventId = correctedReadReceiptsEventByIndex[it]
-            val timelineEvent = liveEvents.where().equalTo(TimelineEventEntityFields.EVENT_ID, eventId).findFirst()
-            builtEventsIdMap[eventId]?.let { builtIndex ->
-                builtEvents[builtIndex]?.let { te ->
-                    builtEvents[builtIndex] = te.copy(readReceipts = readReceiptsSummaryMapper.map(timelineEvent?.readReceipts))
-                    hasChange = true
-                }
-            }
-        }
-        correctedReadReceiptsEventByIndex.clear()
-        correctedReadReceiptsByEvent.clear()
-        val loadedReadReceipts = collection.where().greaterThan("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT}.${TimelineEventEntityFields.ROOT.DISPLAY_INDEX}", prevDisplayIndex).findAll()
-        loadedReadReceipts.forEachIndexed { index, summary ->
-            val timelineEvent = summary?.timelineEvent?.firstOrNull()
-            val displayIndex = timelineEvent?.root?.displayIndex
-            if (displayIndex != null) {
-                val firstDisplayedEvent = liveEvents.where()
-                        .sort(TimelineEventEntityFields.ROOT.DISPLAY_INDEX, Sort.DESCENDING)
-                        .lessThan(TimelineEventEntityFields.ROOT.DISPLAY_INDEX, displayIndex)
-                        .findFirst()
 
-                if (firstDisplayedEvent != null) {
-                    correctedReadReceiptsEventByIndex.put(index, firstDisplayedEvent.eventId)
-                    correctedReadReceiptsByEvent.getOrPut(firstDisplayedEvent.eventId, {
-                        readReceiptsSummaryMapper.map(firstDisplayedEvent.readReceipts).toMutableList()
-                    }).addAll(
-                            readReceiptsSummaryMapper.map(summary)
-                    )
-                }
-            }
-        }
-        if (correctedReadReceiptsByEvent.isNotEmpty()) {
-            correctedReadReceiptsByEvent.forEach { (eventId, correctedReadReceipts) ->
-                builtEventsIdMap[eventId]?.let { builtIndex ->
-                    builtEvents[builtIndex]?.let { te ->
-                        builtEvents[builtIndex] = te.copy(readReceipts = correctedReadReceipts)
-                        hasChange = true
-                    }
-                }
-            }
-        }
-        if (hasChange) {
-            postSnapshot()
-        }
-    }
-
-// Public methods ******************************************************************************
+    // Public methods ******************************************************************************
 
     override fun paginate(direction: Timeline.Direction, count: Int) {
         BACKGROUND_HANDLER.post {
@@ -295,12 +239,7 @@ internal class DefaultTimeline(
                         .findAllAsync()
                         .also { it.addChangeListener(relationsListener) }
 
-                hiddenReadReceipts = ReadReceiptsSummaryEntity.whereInRoom(realm, roomId)
-                        .isNotEmpty(ReadReceiptsSummaryEntityFields.TIMELINE_EVENT)
-                        .isNotEmpty(ReadReceiptsSummaryEntityFields.READ_RECEIPTS.`$`)
-                        .filterReceiptsWithSettings()
-                        .findAllAsync()
-                        .also { it.addChangeListener(hiddenReadReceiptsListener) }
+                hiddenReadReceipts.start(realm, liveEvents, this)
 
                 isReady.set(true)
             }
@@ -315,8 +254,8 @@ internal class DefaultTimeline(
                 cancelableBag.cancel()
                 roomEntity?.sendingTimelineEvents?.removeAllChangeListeners()
                 eventRelations.removeAllChangeListeners()
-                hiddenReadReceipts?.removeAllChangeListeners()
                 liveEvents.removeAllChangeListeners()
+                hiddenReadReceipts.dispose()
                 backgroundRealm.getAndSet(null).also {
                     it.close()
                 }
@@ -326,6 +265,22 @@ internal class DefaultTimeline(
 
     override fun hasMoreToLoad(direction: Timeline.Direction): Boolean {
         return hasMoreInCache(direction) || !hasReachedEnd(direction)
+    }
+
+    // TimelineHiddenReadReceipts.Delegate
+
+    override fun rebuildEvent(eventId: String, readReceipts: List<ReadReceipt>): Boolean {
+        return builtEventsIdMap[eventId]?.let { builtIndex ->
+            //Update the relation of existing event
+            builtEvents[builtIndex]?.let { te ->
+                builtEvents[builtIndex] = te.copy(readReceipts = readReceipts)
+                true
+            }
+        } ?: false
+    }
+
+    override fun onReadReceiptsUpdated() {
+        postSnapshot()
     }
 
 // Private methods *****************************************************************************
@@ -608,7 +563,7 @@ internal class DefaultTimeline(
         debouncer.debounce("post_snapshot", runnable, 50)
     }
 
-// Extension methods ***************************************************************************
+    // Extension methods ***************************************************************************
 
     private fun Timeline.Direction.toPaginationDirection(): PaginationDirection {
         return if (this == Timeline.Direction.BACKWARDS) PaginationDirection.BACKWARDS else PaginationDirection.FORWARDS
@@ -634,23 +589,6 @@ internal class DefaultTimeline(
         return this
     }
 
-    /**
-     * We are looking for receipts related to filtered events. So, it's the opposite of [filterEventsWithSettings] method.
-     */
-    private fun RealmQuery<ReadReceiptsSummaryEntity>.filterReceiptsWithSettings(): RealmQuery<ReadReceiptsSummaryEntity> {
-        beginGroup()
-        if (settings.filterTypes) {
-            not().`in`("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT}.${TimelineEventEntityFields.ROOT.TYPE}", settings.allowedTypes.toTypedArray())
-        }
-        if (settings.filterTypes && settings.filterEdits) {
-            or()
-        }
-        if (settings.filterEdits) {
-            like("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT}.${TimelineEventEntityFields.ROOT.CONTENT}", EDIT_FILTER_LIKE)
-        }
-        endGroup()
-        return this
-    }
 }
 
 private data class PaginationState(
