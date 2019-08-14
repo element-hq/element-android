@@ -121,7 +121,7 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, O
 
                         when (newState) {
                             RecyclerView.SCROLL_STATE_IDLE     -> {
-                                createChatFabMenu.postDelayed(showFabRunnable, 1000)
+                                createChatFabMenu.postDelayed(showFabRunnable, 250)
                             }
                             RecyclerView.SCROLL_STATE_DRAGGING,
                             RecyclerView.SCROLL_STATE_SETTLING -> {

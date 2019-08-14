@@ -10,7 +10,8 @@
     <com.airbnb.epoxy.EpoxyRecyclerView
         android:id="@+id/roomListEpoxyRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:overScrollMode="always" />
 
     <im.vector.riotx.features.home.room.list.widget.FabMenuView
         android:id="@+id/createChatFabMenu"
