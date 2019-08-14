@@ -35,5 +35,10 @@ data class TimelineSettings(
         /**
          * If [filterTypes] is true, the list of types allowed by the list.
          */
-        val allowedTypes: List<String> = emptyList()
+        val allowedTypes: List<String> = emptyList(),
+        /**
+         * If true, will build read receipts for each event.
+         */
+        val buildReadReceipts: Boolean = true
+
 )

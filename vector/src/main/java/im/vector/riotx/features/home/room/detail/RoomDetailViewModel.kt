@@ -67,7 +67,7 @@ import java.util.concurrent.TimeUnit
 
 
 class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: RoomDetailViewState,
-                                                      userPreferencesProvider: UserPreferencesProvider,
+                                                      private val userPreferencesProvider: UserPreferencesProvider,
                                                       private val vectorPreferences: VectorPreferences,
                                                       private val session: Session
 ) : VectorViewModel<RoomDetailViewState>(initialState) {
@@ -77,9 +77,9 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     private val eventId = initialState.eventId
     private val displayedEventsObservable = BehaviorRelay.create<RoomDetailActions.EventDisplayed>()
     private val timelineSettings = if (userPreferencesProvider.shouldShowHiddenEvents()) {
-        TimelineSettings(30, false, true, TimelineDisplayableEvents.DEBUG_DISPLAYABLE_TYPES)
+        TimelineSettings(30, false, true, TimelineDisplayableEvents.DEBUG_DISPLAYABLE_TYPES, userPreferencesProvider.shouldShowReadReceipts())
     } else {
-        TimelineSettings(30, true, true, TimelineDisplayableEvents.DISPLAYABLE_TYPES)
+        TimelineSettings(30, true, true, TimelineDisplayableEvents.DISPLAYABLE_TYPES, userPreferencesProvider.shouldShowReadReceipts())
     }
 
     private var timeline = room.createTimeline(eventId, timelineSettings)

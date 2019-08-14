@@ -14,19 +14,10 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.core.resources
+package im.vector.matrix.android.internal.database.query
 
-import im.vector.riotx.features.settings.VectorPreferences
-import javax.inject.Inject
+internal object FilterContent {
 
-class UserPreferencesProvider @Inject constructor(private val vectorPreferences: VectorPreferences) {
-
-    fun shouldShowHiddenEvents(): Boolean {
-        return vectorPreferences.shouldShowHiddenEvents()
-    }
-
-    fun shouldShowReadReceipts(): Boolean {
-        return vectorPreferences.showReadReceipts()
-    }
+    internal const val EDIT_TYPE = "{*\"m.relates_to\"*\"rel_type\":*\"m.replace\"*}"
 
 }

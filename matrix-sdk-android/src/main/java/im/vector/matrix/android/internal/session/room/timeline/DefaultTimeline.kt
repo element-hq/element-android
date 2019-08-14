@@ -25,7 +25,6 @@ import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.TimelineSettings
 import im.vector.matrix.android.api.util.CancelableBag
-import im.vector.matrix.android.internal.database.mapper.ReadReceiptsSummaryMapper
 import im.vector.matrix.android.internal.database.mapper.TimelineEventMapper
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.ChunkEntity
@@ -36,6 +35,7 @@ import im.vector.matrix.android.internal.database.model.EventEntityFields
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntityFields
+import im.vector.matrix.android.internal.database.query.FilterContent
 import im.vector.matrix.android.internal.database.query.findAllInRoomWithSendStates
 import im.vector.matrix.android.internal.database.query.findIncludingEvent
 import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
@@ -64,8 +64,6 @@ import kotlin.collections.HashMap
 
 private const val MIN_FETCHING_COUNT = 30
 private const val DISPLAY_INDEX_UNKNOWN = Int.MIN_VALUE
-
-internal const val EDIT_FILTER_LIKE = "{*\"m.relates_to\"*\"rel_type\":*\"m.replace\"*}"
 
 internal class DefaultTimeline(
         private val roomId: String,
@@ -154,7 +152,7 @@ internal class DefaultTimeline(
                     builtEventsIdMap[eventId]?.let { builtIndex ->
                         //Update an existing event
                         builtEvents[builtIndex]?.let { te ->
-                            builtEvents[builtIndex] = timelineEventMapper.map(eventEntity, hiddenReadReceipts.correctedReadReceipts(te.root.eventId))
+                            builtEvents[builtIndex] = buildTimelineEvent(eventEntity)
                             hasChanged = true
                         }
                     }
@@ -239,7 +237,9 @@ internal class DefaultTimeline(
                         .findAllAsync()
                         .also { it.addChangeListener(relationsListener) }
 
-                hiddenReadReceipts.start(realm, liveEvents, this)
+                if (settings.buildReadReceipts) {
+                    hiddenReadReceipts.start(realm, liveEvents, this)
+                }
 
                 isReady.set(true)
             }
@@ -255,7 +255,9 @@ internal class DefaultTimeline(
                 roomEntity?.sendingTimelineEvents?.removeAllChangeListeners()
                 eventRelations.removeAllChangeListeners()
                 liveEvents.removeAllChangeListeners()
-                hiddenReadReceipts.dispose()
+                if (settings.buildReadReceipts) {
+                    hiddenReadReceipts.dispose()
+                }
                 backgroundRealm.getAndSet(null).also {
                     it.close()
                 }
@@ -482,7 +484,7 @@ internal class DefaultTimeline(
         }
         offsetResults.forEach { eventEntity ->
 
-            val timelineEvent = timelineEventMapper.map(eventEntity)
+            val timelineEvent = buildTimelineEvent(eventEntity)
 
             if (timelineEvent.isEncrypted()
                 && timelineEvent.root.mxDecryptionResult == null) {
@@ -499,6 +501,12 @@ internal class DefaultTimeline(
         Timber.v("Built ${offsetResults.size} items from db in $time ms")
         return offsetResults.size
     }
+
+    private fun buildTimelineEvent(eventEntity: TimelineEventEntity) = timelineEventMapper.map(
+            timelineEventEntity = eventEntity,
+            buildReadReceipts = settings.buildReadReceipts,
+            correctedReadReceipts = hiddenReadReceipts.correctedReadReceipts(eventEntity.eventId)
+    )
 
     /**
      * This has to be called on TimelineThread as it access realm live results
@@ -584,7 +592,7 @@ internal class DefaultTimeline(
             `in`(TimelineEventEntityFields.ROOT.TYPE, settings.allowedTypes.toTypedArray())
         }
         if (settings.filterEdits) {
-            not().like(TimelineEventEntityFields.ROOT.CONTENT, EDIT_FILTER_LIKE)
+            not().like(TimelineEventEntityFields.ROOT.CONTENT, FilterContent.EDIT_TYPE)
         }
         return this
     }

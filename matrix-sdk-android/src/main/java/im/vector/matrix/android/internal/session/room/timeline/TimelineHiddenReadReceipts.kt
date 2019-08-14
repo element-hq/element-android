@@ -24,6 +24,7 @@ import im.vector.matrix.android.internal.database.model.ReadReceiptsSummaryEntit
 import im.vector.matrix.android.internal.database.model.ReadReceiptsSummaryEntityFields
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntityFields
+import im.vector.matrix.android.internal.database.query.FilterContent
 import im.vector.matrix.android.internal.database.query.whereInRoom
 import io.realm.OrderedRealmCollectionChangeListener
 import io.realm.Realm
@@ -48,11 +49,13 @@ internal class TimelineHiddenReadReceipts constructor(private val readReceiptsSu
 
     private val hiddenReadReceiptsListener = OrderedRealmCollectionChangeListener<RealmResults<ReadReceiptsSummaryEntity>> { collection, changeSet ->
         var hasChange = false
+        // Deletion here means we don't have any readReceipts for the given hidden events
         changeSet.deletions.forEach {
             val eventId = correctedReadReceiptsEventByIndex[it]
             val timelineEvent = liveEvents.where().equalTo(TimelineEventEntityFields.EVENT_ID, eventId).findFirst()
+            // We are rebuilding the corresponding event with only his own RR
             val readReceipts = readReceiptsSummaryMapper.map(timelineEvent?.readReceipts)
-            hasChange = hasChange || delegate.rebuildEvent(eventId, readReceipts)
+            hasChange = delegate.rebuildEvent(eventId, readReceipts) || hasChange
         }
         correctedReadReceiptsEventByIndex.clear()
         correctedReadReceiptsByEvent.clear()
@@ -60,10 +63,12 @@ internal class TimelineHiddenReadReceipts constructor(private val readReceiptsSu
             val timelineEvent = summary?.timelineEvent?.firstOrNull()
             val displayIndex = timelineEvent?.root?.displayIndex
             if (displayIndex != null) {
+                // Then we are looking for the first displayable event after the hidden one
                 val firstDisplayedEvent = liveEvents.where()
                         .lessThanOrEqualTo(TimelineEventEntityFields.ROOT.DISPLAY_INDEX, displayIndex)
                         .findFirst()
 
+                // If we find one, we should
                 if (firstDisplayedEvent != null) {
                     correctedReadReceiptsEventByIndex.put(index, firstDisplayedEvent.eventId)
                     correctedReadReceiptsByEvent.getOrPut(firstDisplayedEvent.eventId, {
@@ -79,7 +84,7 @@ internal class TimelineHiddenReadReceipts constructor(private val readReceiptsSu
                 val sortedReadReceipts = correctedReadReceipts.sortedByDescending {
                     it.originServerTs
                 }
-                hasChange = hasChange || delegate.rebuildEvent(eventId, sortedReadReceipts)
+                hasChange = delegate.rebuildEvent(eventId, sortedReadReceipts) || hasChange
             }
         }
         if (hasChange) {
@@ -91,6 +96,8 @@ internal class TimelineHiddenReadReceipts constructor(private val readReceiptsSu
     fun start(realm: Realm, liveEvents: RealmResults<TimelineEventEntity>, delegate: Delegate) {
         this.liveEvents = liveEvents
         this.delegate = delegate
+        // We are looking for read receipts set on hidden events.
+        // We only accept those with a timelineEvent (so coming from pagination/sync).
         this.hiddenReadReceipts = ReadReceiptsSummaryEntity.whereInRoom(realm, roomId)
                 .isNotEmpty(ReadReceiptsSummaryEntityFields.TIMELINE_EVENT)
                 .isNotEmpty(ReadReceiptsSummaryEntityFields.READ_RECEIPTS.`$`)
@@ -109,7 +116,7 @@ internal class TimelineHiddenReadReceipts constructor(private val readReceiptsSu
 
 
     /**
-     * We are looking for receipts related to filtered events. So, it's the opposite of [filterEventsWithSettings] method.
+     * We are looking for receipts related to filtered events. So, it's the opposite of [DefaultTimeline.filterEventsWithSettings] method.
      */
     private fun RealmQuery<ReadReceiptsSummaryEntity>.filterReceiptsWithSettings(): RealmQuery<ReadReceiptsSummaryEntity> {
         beginGroup()
@@ -120,7 +127,7 @@ internal class TimelineHiddenReadReceipts constructor(private val readReceiptsSu
             or()
         }
         if (settings.filterEdits) {
-            like("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT}.${TimelineEventEntityFields.ROOT.CONTENT}", EDIT_FILTER_LIKE)
+            like("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT}.${TimelineEventEntityFields.ROOT.CONTENT}", FilterContent.EDIT_TYPE)
         }
         endGroup()
         return this
