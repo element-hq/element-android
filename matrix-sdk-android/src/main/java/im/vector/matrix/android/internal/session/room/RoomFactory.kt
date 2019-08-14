@@ -65,13 +65,29 @@ internal class RoomFactory @Inject constructor(private val context: Context,
                                                private val leaveRoomTask: LeaveRoomTask) {
 
     fun create(roomId: String): Room {
-        val timelineService = DefaultTimelineService(roomId, monarchy, taskExecutor, contextOfEventTask, cryptoService, paginationTask, timelineEventMapper, readReceiptsSummaryMapper)
+        val timelineService = DefaultTimelineService(roomId,
+                                                     monarchy,
+                                                     taskExecutor,
+                                                     contextOfEventTask,
+                                                     cryptoService,
+                                                     paginationTask,
+                                                     timelineEventMapper,
+                                                     readReceiptsSummaryMapper
+        )
         val sendService = DefaultSendService(context, credentials, roomId, eventFactory, cryptoService, monarchy)
         val stateService = DefaultStateService(roomId, monarchy.realmConfiguration, taskExecutor, sendStateTask)
         val roomMembersService = DefaultMembershipService(roomId, monarchy, taskExecutor, loadRoomMembersTask, inviteTask, joinRoomTask, leaveRoomTask)
         val readService = DefaultReadService(roomId, monarchy, taskExecutor, setReadMarkersTask, readReceiptsSummaryMapper, credentials)
         val relationService = DefaultRelationService(context,
-                                                     credentials, roomId, eventFactory, cryptoService, findReactionEventForUndoTask, fetchEditHistoryTask, monarchy, taskExecutor)
+                                                     credentials,
+                                                     roomId,
+                                                     eventFactory,
+                                                     cryptoService,
+                                                     findReactionEventForUndoTask,
+                                                     fetchEditHistoryTask,
+                                                     monarchy,
+                                                     taskExecutor
+        )
 
         return DefaultRoom(
                 roomId,

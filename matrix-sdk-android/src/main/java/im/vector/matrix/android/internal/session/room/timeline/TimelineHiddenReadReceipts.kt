@@ -52,7 +52,10 @@ internal class TimelineHiddenReadReceipts constructor(private val readReceiptsSu
         // Deletion here means we don't have any readReceipts for the given hidden events
         changeSet.deletions.forEach {
             val eventId = correctedReadReceiptsEventByIndex[it]
-            val timelineEvent = liveEvents.where().equalTo(TimelineEventEntityFields.EVENT_ID, eventId).findFirst()
+            val timelineEvent = liveEvents.where()
+                    .equalTo(TimelineEventEntityFields.EVENT_ID, eventId)
+                    .findFirst()
+
             // We are rebuilding the corresponding event with only his own RR
             val readReceipts = readReceiptsSummaryMapper.map(timelineEvent?.readReceipts)
             hasChange = delegate.rebuildEvent(eventId, readReceipts) || hasChange
@@ -71,11 +74,11 @@ internal class TimelineHiddenReadReceipts constructor(private val readReceiptsSu
                 // If we find one, we should
                 if (firstDisplayedEvent != null) {
                     correctedReadReceiptsEventByIndex.put(index, firstDisplayedEvent.eventId)
-                    correctedReadReceiptsByEvent.getOrPut(firstDisplayedEvent.eventId, {
-                        readReceiptsSummaryMapper.map(firstDisplayedEvent.readReceipts).toMutableList()
-                    }).addAll(
-                            readReceiptsSummaryMapper.map(summary)
-                    )
+                    correctedReadReceiptsByEvent
+                            .getOrPut(firstDisplayedEvent.eventId, {
+                                ArrayList(readReceiptsSummaryMapper.map(firstDisplayedEvent.readReceipts))
+                            })
+                            .addAll(readReceiptsSummaryMapper.map(summary))
                 }
             }
         }
