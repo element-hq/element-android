@@ -60,7 +60,7 @@
         <item name="android:textColorLink">@color/riotx_links</item>
 
         <!-- Menu text color -->
-        <!--item name="android:actionMenuTextColor">#FFFFFFFF</item-->
+        <item name="android:actionMenuTextColor">?colorAccent</item>
 
         <!-- default background color -->
         <item name="vctr_bottom_nav_background_color">#FFF3F8FD</item>
