@@ -16,6 +16,8 @@
 
 package im.vector.matrix.android.internal.session.room.read
 
+import com.squareup.inject.assisted.Assisted
+import com.squareup.inject.assisted.AssistedInject
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.Credentials
@@ -27,13 +29,18 @@ import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoo
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
-import javax.inject.Inject
 
-internal class DefaultReadService @Inject constructor(private val roomId: String,
-                                                      private val monarchy: Monarchy,
-                                                      private val taskExecutor: TaskExecutor,
-                                                      private val setReadMarkersTask: SetReadMarkersTask,
-                                                      private val credentials: Credentials) : ReadService {
+internal class DefaultReadService @AssistedInject constructor(@Assisted private val roomId: String,
+                                                              private val monarchy: Monarchy,
+                                                              private val taskExecutor: TaskExecutor,
+                                                              private val setReadMarkersTask: SetReadMarkersTask,
+                                                              private val credentials: Credentials
+) : ReadService {
+
+    @AssistedInject.Factory
+    interface Factory {
+        fun create(roomId: String): ReadService
+    }
 
     override fun markAllAsRead(callback: MatrixCallback<Unit>) {
         val params = SetReadMarkersTask.Params(roomId, markAllAsRead = true)
@@ -67,13 +74,13 @@ internal class DefaultReadService @Inject constructor(private val roomId: String
         var isEventRead = false
         monarchy.doWithRealm {
             val readReceipt = ReadReceiptEntity.where(it, roomId, credentials.userId).findFirst()
-                    ?: return@doWithRealm
+                              ?: return@doWithRealm
             val liveChunk = ChunkEntity.findLastLiveChunkFromRoom(it, roomId)
-                    ?: return@doWithRealm
+                            ?: return@doWithRealm
             val readReceiptIndex = liveChunk.timelineEvents.find(readReceipt.eventId)?.root?.displayIndex
-                    ?: Int.MIN_VALUE
+                                   ?: Int.MIN_VALUE
             val eventToCheckIndex = liveChunk.timelineEvents.find(eventId)?.root?.displayIndex
-                    ?: Int.MAX_VALUE
+                                    ?: Int.MAX_VALUE
             isEventRead = eventToCheckIndex <= readReceiptIndex
         }
         return isEventRead

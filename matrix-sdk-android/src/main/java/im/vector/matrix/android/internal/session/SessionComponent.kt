@@ -22,6 +22,7 @@ import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.internal.crypto.CryptoModule
 import im.vector.matrix.android.internal.di.MatrixComponent
+import im.vector.matrix.android.internal.di.SessionAssistedInjectModule
 import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
 import im.vector.matrix.android.internal.session.cache.CacheModule
 import im.vector.matrix.android.internal.session.content.ContentModule
@@ -59,7 +60,8 @@ import im.vector.matrix.android.internal.task.TaskExecutor
                CacheModule::class,
                CryptoModule::class,
                PushersModule::class,
-               AccountDataModule::class
+               AccountDataModule::class,
+               SessionAssistedInjectModule::class
            ]
 )
 @SessionScope

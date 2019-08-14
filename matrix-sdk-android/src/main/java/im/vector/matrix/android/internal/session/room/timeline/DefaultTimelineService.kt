@@ -18,6 +18,8 @@ package im.vector.matrix.android.internal.session.room.timeline
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
+import com.squareup.inject.assisted.Assisted
+import com.squareup.inject.assisted.AssistedInject
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.room.timeline.Timeline
@@ -29,15 +31,19 @@ import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.util.fetchCopyMap
-import javax.inject.Inject
 
-internal class DefaultTimelineService @Inject constructor(private val roomId: String,
-                                                          private val monarchy: Monarchy,
-                                                          private val taskExecutor: TaskExecutor,
-                                                          private val contextOfEventTask: GetContextOfEventTask,
-                                                          private val cryptoService: CryptoService,
-                                                          private val paginationTask: PaginationTask
+internal class DefaultTimelineService @AssistedInject constructor(@Assisted private val roomId: String,
+                                                                  private val monarchy: Monarchy,
+                                                                  private val taskExecutor: TaskExecutor,
+                                                                  private val contextOfEventTask: GetContextOfEventTask,
+                                                                  private val cryptoService: CryptoService,
+                                                                  private val paginationTask: PaginationTask
 ) : TimelineService {
+
+    @AssistedInject.Factory
+    interface Factory {
+        fun create(roomId: String): TimelineService
+    }
 
     override fun createTimeline(eventId: String?, allowedTypes: List<String>?): Timeline {
         return DefaultTimeline(roomId,
