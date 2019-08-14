@@ -29,7 +29,15 @@ static def generateVersionCodeFromTimestamp() {
 }
 
 def generateVersionCodeFromVersionName() {
-    return versionMajor * 10000 + versionMinor * 100 + versionPatch
+    return versionMajor * 1_00_00 + versionMinor * 1_00 + versionPatch
+}
+
+def getVersionCode() {
+    if (gitBranchName() == "develop") {
+        return generateVersionCodeFromTimestamp()
+    } else {
+        return generateVersionCodeFromVersionName()
+    }
 }
 
 static def gitRevision() {
@@ -79,7 +87,9 @@ android {
         targetSdkVersion 28
         multiDexEnabled true
 
-        // Note: versionCode is depending on the build variant
+        // `develop` branch will have version code from timestamp, to ensure each build from CI has a incremented versionCode.
+        // Other branches (master, features, etc.) will have version code based on application version.
+        versionCode project.getVersionCode()
 
         versionName "${versionMajor}.${versionMinor}.${versionPatch}${getVersionSuffix()}"
 
@@ -169,8 +179,6 @@ android {
         gplay {
             dimension "store"
 
-            versionCode = generateVersionCodeFromVersionName()
-
             buildConfigField "boolean", "ALLOW_FCM_USE", "true"
             buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"G\""
             buildConfigField "String", "FLAVOR_DESCRIPTION", "\"GooglePlay\""
@@ -178,8 +186,6 @@ android {
 
         fdroid {
             dimension "store"
-
-            versionCode = generateVersionCodeFromTimestamp()
 
             buildConfigField "boolean", "ALLOW_FCM_USE", "false"
             buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"F\""
