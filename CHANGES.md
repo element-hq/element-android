@@ -11,7 +11,7 @@ Other changes:
  -
 
 Bugfix:
- -
+ - Slide-in reply icon is distorted (#423)
 
 Translations:
  -
