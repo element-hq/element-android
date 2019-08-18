@@ -11,7 +11,7 @@ Other changes:
  -
 
 Bugfix:
- -
+ - Fix text diff linebreak display (#441)
 
 Translations:
  -
