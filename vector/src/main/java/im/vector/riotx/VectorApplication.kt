@@ -19,10 +19,13 @@ package im.vector.riotx
 import android.app.Application
 import android.content.Context
 import android.content.res.Configuration
+import android.graphics.Color
 import android.os.Handler
 import android.os.HandlerThread
 import androidx.core.provider.FontRequest
 import androidx.core.provider.FontsContractCompat
+import androidx.emoji.text.EmojiCompat
+import androidx.emoji.text.FontRequestEmojiCompatConfig
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
@@ -105,6 +108,23 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
         )
         FontsContractCompat.requestFont(this, fontRequest, emojiCompatFontProvider, getFontThreadHandler())
         vectorConfiguration.initConfiguration()
+
+        //Use emoji compat for the benefit of emoji spans
+        val config = FontRequestEmojiCompatConfig(this, fontRequest)
+                .setReplaceAll(true) // we want to replace all emojis with selected font
+//                .setEmojiSpanIndicatorEnabled(true)
+//                .setEmojiSpanIndicatorColor(Color.GREEN)
+        EmojiCompat.init(config)
+                .registerInitCallback(object : EmojiCompat.InitCallback() {
+            override fun onInitialized() {
+                Timber.v("Emoji compat onInitialized success ")
+            }
+
+            override fun onFailed(throwable: Throwable?) {
+                Timber.e(throwable,"Failed to init EmojiCompat")
+            }
+        })
+
         NotificationUtils.createNotificationChannels(applicationContext)
         if (authenticator.hasAuthenticatedSessions() && !activeSessionHolder.hasActiveSession()) {
             val lastAuthenticatedSession = authenticator.getLastAuthenticatedSession()!!

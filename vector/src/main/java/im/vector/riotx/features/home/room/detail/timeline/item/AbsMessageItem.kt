@@ -151,7 +151,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
                     idToRefInFlow.add(reactionButton.id)
                     reactionButton.reactionString = reaction.key
                     reactionButton.reactionCount = reaction.count
-                    reactionButton.emojiTypeFace = emojiTypeFace
+                    //reactionButton.emojiTypeFace = emojiTypeFace
                     reactionButton.setChecked(reaction.addedByMe)
                     reactionButton.isEnabled = reaction.synced
                 }

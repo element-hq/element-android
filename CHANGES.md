@@ -5,10 +5,10 @@ Features:
  - Display read receipts in timeline (#81)
 
 Improvements:
- -
+ - Reactions: Reinstate the ability to react with non-unicode keys (#307)
 
 Other changes:
- -
+ - 
 
 Bugfix:
  - Fix text diff linebreak display (#441)

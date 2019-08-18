@@ -35,6 +35,7 @@ import android.widget.TextView
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
+import androidx.emoji.text.EmojiCompat
 import im.vector.riotx.R
 import im.vector.riotx.core.utils.TextUtils
 
@@ -58,12 +59,6 @@ class ReactionButton @JvmOverloads constructor(context: Context, attrs: Attribut
 
     private var reactionSelector: View? = null
 
-    var emojiTypeFace: Typeface? = null
-        set(value) {
-            field = value
-            emojiView?.typeface = value ?: Typeface.DEFAULT
-        }
-
     private var dotsView: DotsView
     private var circleView: CircleView
     var reactedListener: ReactedListener? = null
@@ -82,7 +77,9 @@ class ReactionButton @JvmOverloads constructor(context: Context, attrs: Attribut
     var reactionString = "😀"
         set(value) {
             field = value
-            emojiView?.text = field
+            //maybe cache this for performances?
+            val emojiSpanned = EmojiCompat.get().process(value)
+            emojiView?.text = emojiSpanned
         }
 
     private var animationScaleFactor: Float = 0.toFloat()
@@ -104,7 +101,7 @@ class ReactionButton @JvmOverloads constructor(context: Context, attrs: Attribut
 
         countTextView?.text = TextUtils.formatCountToShortDecimal(reactionCount)
 
-        emojiView?.typeface = this.emojiTypeFace ?: Typeface.DEFAULT
+//        emojiView?.typeface = this.emojiTypeFace ?: Typeface.DEFAULT
 
         val array = context.obtainStyledAttributes(attrs, R.styleable.ReactionButton, defStyleAttr, 0)
 
