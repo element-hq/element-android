@@ -11,7 +11,7 @@ Other changes:
  -
 
 Bugfix:
- -
+ - Date change message repeats for each redaction until a normal message (#358)
 
 Translations:
  -
