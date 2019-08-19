@@ -18,6 +18,7 @@ package im.vector.riotx.features.home.room.detail.timeline.action
 
 import android.content.Context
 import android.graphics.Typeface
+import android.text.format.DateUtils
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Incomplete

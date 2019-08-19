@@ -41,6 +41,7 @@ import im.vector.riotx.features.home.createdirect.CreateDirectRoomDirectoryUsers
 import im.vector.riotx.features.home.createdirect.CreateDirectRoomKnownUsersFragment
 import im.vector.riotx.features.home.group.GroupListFragment
 import im.vector.riotx.features.home.room.detail.RoomDetailFragment
+import im.vector.riotx.features.home.room.detail.readreceipts.DisplayReadReceiptsBottomSheet
 import im.vector.riotx.features.home.room.detail.timeline.action.MessageActionsBottomSheet
 import im.vector.riotx.features.home.room.detail.timeline.action.MessageMenuFragment
 import im.vector.riotx.features.home.room.detail.timeline.action.QuickReactionFragment
@@ -177,6 +178,8 @@ interface ScreenComponent {
     fun inject(createDirectRoomDirectoryUsersFragment: CreateDirectRoomDirectoryUsersFragment)
 
     fun inject(createDirectRoomActivity: CreateDirectRoomActivity)
+
+    fun inject(displayReadReceiptsBottomSheet: DisplayReadReceiptsBottomSheet)
 
     @Component.Factory
     interface Factory {

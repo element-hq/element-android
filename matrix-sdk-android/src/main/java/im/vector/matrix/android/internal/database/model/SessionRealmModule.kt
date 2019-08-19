@@ -22,26 +22,27 @@ import io.realm.annotations.RealmModule
  * Realm module for Session
  */
 @RealmModule(library = true,
-        classes = [
-            ChunkEntity::class,
-            EventEntity::class,
-            TimelineEventEntity::class,
-            FilterEntity::class,
-            GroupEntity::class,
-            GroupSummaryEntity::class,
-            ReadReceiptEntity::class,
-            RoomEntity::class,
-            RoomSummaryEntity::class,
-            RoomTagEntity::class,
-            SyncEntity::class,
-            UserEntity::class,
-            EventAnnotationsSummaryEntity::class,
-            ReactionAggregatedSummaryEntity::class,
-            EditAggregatedSummaryEntity::class,
-            PushRulesEntity::class,
-            PushRuleEntity::class,
-            PushConditionEntity::class,
-            PusherEntity::class,
-            PusherDataEntity::class
-        ])
+             classes = [
+                 ChunkEntity::class,
+                 EventEntity::class,
+                 TimelineEventEntity::class,
+                 FilterEntity::class,
+                 GroupEntity::class,
+                 GroupSummaryEntity::class,
+                 ReadReceiptEntity::class,
+                 RoomEntity::class,
+                 RoomSummaryEntity::class,
+                 RoomTagEntity::class,
+                 SyncEntity::class,
+                 UserEntity::class,
+                 EventAnnotationsSummaryEntity::class,
+                 ReactionAggregatedSummaryEntity::class,
+                 EditAggregatedSummaryEntity::class,
+                 PushRulesEntity::class,
+                 PushRuleEntity::class,
+                 PushConditionEntity::class,
+                 PusherEntity::class,
+                 PusherDataEntity::class,
+                 ReadReceiptsSummaryEntity::class
+             ])
 internal class SessionRealmModule

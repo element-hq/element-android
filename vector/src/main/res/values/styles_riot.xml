@@ -297,6 +297,7 @@
 
     <style name="TimelineContentStubNoInfoLayoutParams" parent="TimelineContentStubBaseParams">
         <item name="layout_constraintTop_toTopOf">parent</item>
+        <item name="layout_constraintBottom_toTopOf">@id/readReceiptsView</item>
     </style>
 
 

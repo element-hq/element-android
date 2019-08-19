@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,40 +9,34 @@
     android:paddingStart="8dp"
     android:paddingEnd="8dp">
 
-    <TextView
-        android:id="@+id/itemSimpleReactionInfoKey"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ImageView
+        android:id="@+id/readReceiptAvatar"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:gravity="center"
-        android:lines="1"
-        android:textColor="?android:textColorPrimary"
-        android:textSize="18sp"
-        tools:text="@sample/reactions.json/data/reaction" />
+        tools:src="@tools:sample/avatars" />
 
     <TextView
-        android:id="@+id/itemSimpleReactionInfoMemberName"
+        android:id="@+id/readReceiptName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
         android:layout_weight="1"
         android:ellipsize="end"
         android:lines="1"
-        android:textColor="?android:textColorPrimary"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:textColor="?riotx_text_primary"
         android:textSize="16sp"
         tools:text="@sample/matrix.json/data/displayName" />
 
     <TextView
-        android:id="@+id/itemSimpleReactionInfoTime"
+        android:id="@+id/readReceiptDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:lines="1"
-        android:textColor="?android:textColorSecondary"
+        android:textColor="?riotx_text_secondary"
         android:textSize="12sp"
         tools:text="10:44" />
-
 
 </LinearLayout>

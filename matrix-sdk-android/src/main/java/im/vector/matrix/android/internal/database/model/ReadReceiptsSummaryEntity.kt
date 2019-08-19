@@ -14,19 +14,24 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.core.resources
+package im.vector.matrix.android.internal.database.model
 
-import im.vector.riotx.features.settings.VectorPreferences
-import javax.inject.Inject
+import io.realm.RealmList
+import io.realm.RealmObject
+import io.realm.RealmResults
+import io.realm.annotations.LinkingObjects
+import io.realm.annotations.PrimaryKey
 
-class UserPreferencesProvider @Inject constructor(private val vectorPreferences: VectorPreferences) {
+internal open class ReadReceiptsSummaryEntity(
+        @PrimaryKey
+        var eventId: String = "",
+        var roomId: String = "",
+        var readReceipts: RealmList<ReadReceiptEntity> = RealmList()
+) : RealmObject() {
 
-    fun shouldShowHiddenEvents(): Boolean {
-        return vectorPreferences.shouldShowHiddenEvents()
-    }
+    @LinkingObjects("readReceipts")
+    val timelineEvent: RealmResults<TimelineEventEntity>? = null
 
-    fun shouldShowReadReceipts(): Boolean {
-        return vectorPreferences.showReadReceipts()
-    }
+    companion object
 
 }

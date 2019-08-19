@@ -13,9 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.riotx.features.home.room.detail.timeline.action
+
+package im.vector.riotx.features.home.room.detail.readreceipts
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,32 +27,31 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.airbnb.epoxy.EpoxyRecyclerView
 import com.airbnb.mvrx.MvRx
-import com.airbnb.mvrx.fragmentViewModel
-import com.airbnb.mvrx.withState
+import com.airbnb.mvrx.args
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
-import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
-import im.vector.riotx.features.html.EventHtmlRenderer
+import im.vector.riotx.features.home.room.detail.timeline.action.VectorBaseBottomSheetDialogFragment
+import im.vector.riotx.features.home.room.detail.timeline.item.ReadReceiptData
+import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.bottom_sheet_epoxylist_with_title.*
 import javax.inject.Inject
 
+@Parcelize
+data class DisplayReadReceiptArgs(
+        val readReceipts: List<ReadReceiptData>
+) : Parcelable
 
 /**
- * Bottom sheet displaying list of edits for a given event ordered by timestamp
+ * Bottom sheet displaying list of read receipts for a given event ordered by descending timestamp
  */
-class ViewEditHistoryBottomSheet : VectorBaseBottomSheetDialogFragment() {
+class DisplayReadReceiptsBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
-    private val viewModel: ViewEditHistoryViewModel by fragmentViewModel(ViewEditHistoryViewModel::class)
-
-    @Inject lateinit var viewEditHistoryViewModelFactory: ViewEditHistoryViewModel.Factory
-    @Inject lateinit var eventHtmlRenderer: EventHtmlRenderer
+    @Inject lateinit var epoxyController: DisplayReadReceiptsController
 
     @BindView(R.id.bottom_sheet_display_reactions_list)
     lateinit var epoxyRecyclerView: EpoxyRecyclerView
 
-    private val epoxyController by lazy {
-        ViewEditHistoryEpoxyController(requireContext(), viewModel.dateFormatter, eventHtmlRenderer)
-    }
+    private val displayReadReceiptArgs: DisplayReadReceiptArgs by args()
 
     override fun injectWith(screenComponent: ScreenComponent) {
         screenComponent.inject(this)
@@ -66,28 +67,25 @@ class ViewEditHistoryBottomSheet : VectorBaseBottomSheetDialogFragment() {
         super.onActivityCreated(savedInstanceState)
         epoxyRecyclerView.setController(epoxyController)
         val dividerItemDecoration = DividerItemDecoration(epoxyRecyclerView.context,
-                LinearLayout.VERTICAL)
+                                                          LinearLayout.VERTICAL)
         epoxyRecyclerView.addItemDecoration(dividerItemDecoration)
-        bottomSheetTitle.text = context?.getString(R.string.message_edits)
+        bottomSheetTitle.text = getString(R.string.read_receipts_list)
+        epoxyController.setData(displayReadReceiptArgs.readReceipts)
     }
 
-
-    override fun invalidate() = withState(viewModel) {
-        epoxyController.setData(it)
+    override fun invalidate() {
+        // we are not using state for this one as it's static
     }
 
     companion object {
-        fun newInstance(roomId: String, informationData: MessageInformationData): ViewEditHistoryBottomSheet {
+        fun newInstance(readReceipts: List<ReadReceiptData>): DisplayReadReceiptsBottomSheet {
             val args = Bundle()
-            val parcelableArgs = TimelineEventFragmentArgs(
-                    informationData.eventId,
-                    roomId,
-                    informationData
+            val parcelableArgs = DisplayReadReceiptArgs(
+                    readReceipts
             )
             args.putParcelable(MvRx.KEY_ARG, parcelableArgs)
-            return ViewEditHistoryBottomSheet().apply { arguments = args }
+            return DisplayReadReceiptsBottomSheet().apply { arguments = args }
 
         }
     }
 }
-

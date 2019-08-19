@@ -2,7 +2,7 @@ Changes in RiotX 0.4.0 (2019-XX-XX)
 ===================================================
 
 Features:
- -
+ - Display read receipts in timeline (#81)
 
 Improvements:
  -

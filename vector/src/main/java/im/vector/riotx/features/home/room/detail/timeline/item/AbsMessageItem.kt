@@ -32,13 +32,13 @@ import com.airbnb.epoxy.EpoxyAttribute
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.riotx.R
 import im.vector.riotx.core.resources.ColorProvider
+import im.vector.riotx.core.ui.views.ReadReceiptsView
 import im.vector.riotx.core.utils.DebouncedClickListener
 import im.vector.riotx.core.utils.DimensionUtils.dpToPx
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.reactions.widget.ReactionButton
 import im.vector.riotx.features.ui.getMessageTextColor
-
 
 abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
 
@@ -69,6 +69,9 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
     @EpoxyAttribute
     var avatarCallback: TimelineEventController.AvatarCallback? = null
 
+    @EpoxyAttribute
+    var readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null
+
     private val _avatarClickListener = DebouncedClickListener(View.OnClickListener {
         avatarCallback?.onAvatarClicked(informationData)
     })
@@ -76,6 +79,9 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
         avatarCallback?.onMemberNameClicked(informationData)
     })
 
+    private val _readReceiptsClickListener = DebouncedClickListener(View.OnClickListener {
+        readReceiptsCallback?.onReadReceiptsClicked(informationData.readReceipts)
+    })
 
     var reactionClickListener: ReactionButton.ReactedListener = object : ReactionButton.ReactedListener {
         override fun onReacted(reactionButton: ReactionButton) {
@@ -122,6 +128,8 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
             holder.avatarImageView.setOnLongClickListener(null)
             holder.memberNameView.setOnLongClickListener(null)
         }
+
+        holder.readReceiptsView.render(informationData.readReceipts, avatarRenderer, _readReceiptsClickListener)
 
         if (!shouldShowReactionAtBottom() || informationData.orderedReactionList.isNullOrEmpty()) {
             holder.reactionWrapper?.isVisible = false
@@ -173,7 +181,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
         val avatarImageView by bind<ImageView>(R.id.messageAvatarImageView)
         val memberNameView by bind<TextView>(R.id.messageMemberNameView)
         val timeView by bind<TextView>(R.id.messageTimeView)
-
+        val readReceiptsView by bind<ReadReceiptsView>(R.id.readReceiptsView)
         var reactionWrapper: ViewGroup? = null
         var reactionFlowHelper: Flow? = null
     }
