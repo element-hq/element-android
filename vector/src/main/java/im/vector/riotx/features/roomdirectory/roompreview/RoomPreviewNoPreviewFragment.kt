@@ -18,6 +18,7 @@ package im.vector.riotx.features.roomdirectory.roompreview
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.transition.TransitionManager
 import com.airbnb.mvrx.args
@@ -104,7 +105,12 @@ class RoomPreviewNoPreviewFragment : VectorBaseFragment() {
                 }
         )
 
-        roomPreviewNoPreviewError.setTextOrHide(errorFormatter.toHumanReadable(state.lastError))
+        if (state.lastError == null) {
+            roomPreviewNoPreviewError.isVisible = false
+        } else {
+            roomPreviewNoPreviewError.isVisible = true
+            roomPreviewNoPreviewError.text = errorFormatter.toHumanReadable(state.lastError)
+        }
 
         if (state.roomJoinState == JoinState.JOINED) {
             // Quit this screen
