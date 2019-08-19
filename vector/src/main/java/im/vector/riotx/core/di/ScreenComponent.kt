@@ -64,10 +64,16 @@ import im.vector.riotx.features.roomdirectory.createroom.CreateRoomActivity
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomFragment
 import im.vector.riotx.features.roomdirectory.picker.RoomDirectoryPickerFragment
 import im.vector.riotx.features.roomdirectory.roompreview.RoomPreviewNoPreviewFragment
-import im.vector.riotx.features.settings.*
+import im.vector.riotx.features.settings.VectorSettingsActivity
+import im.vector.riotx.features.settings.VectorSettingsAdvancedNotificationPreferenceFragment
+import im.vector.riotx.features.settings.VectorSettingsHelpAboutFragment
+import im.vector.riotx.features.settings.VectorSettingsNotificationPreferenceFragment
+import im.vector.riotx.features.settings.VectorSettingsNotificationsTroubleshootFragment
+import im.vector.riotx.features.settings.VectorSettingsPreferencesFragment
+import im.vector.riotx.features.settings.VectorSettingsSecurityPrivacyFragment
 import im.vector.riotx.features.settings.push.PushGatewaysFragment
 
-@Component(dependencies = [VectorComponent::class], modules = [ViewModelModule::class, HomeModule::class])
+@Component(dependencies = [VectorComponent::class], modules = [AssistedInjectModule::class, ViewModelModule::class, HomeModule::class])
 @ScreenScope
 interface ScreenComponent {
 

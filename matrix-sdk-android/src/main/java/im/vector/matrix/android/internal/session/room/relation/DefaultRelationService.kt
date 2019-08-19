@@ -19,6 +19,8 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import androidx.work.OneTimeWorkRequest
+import com.squareup.inject.assisted.Assisted
+import com.squareup.inject.assisted.AssistedInject
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.Credentials
@@ -45,18 +47,22 @@ import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.CancelableWork
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import timber.log.Timber
-import javax.inject.Inject
 
-internal class DefaultRelationService @Inject constructor(private val context: Context,
-                                                          private val credentials: Credentials,
-                                                          private val roomId: String,
-                                                          private val eventFactory: LocalEchoEventFactory,
-                                                          private val cryptoService: CryptoService,
-                                                          private val findReactionEventForUndoTask: FindReactionEventForUndoTask,
-                                                          private val fetchEditHistoryTask: FetchEditHistoryTask,
-                                                          private val monarchy: Monarchy,
-                                                          private val taskExecutor: TaskExecutor)
+internal class DefaultRelationService @AssistedInject constructor(@Assisted private val roomId: String,
+                                                                  private val context: Context,
+                                                                  private val credentials: Credentials,
+                                                                  private val eventFactory: LocalEchoEventFactory,
+                                                                  private val cryptoService: CryptoService,
+                                                                  private val findReactionEventForUndoTask: FindReactionEventForUndoTask,
+                                                                  private val fetchEditHistoryTask: FetchEditHistoryTask,
+                                                                  private val monarchy: Monarchy,
+                                                                  private val taskExecutor: TaskExecutor)
     : RelationService {
+
+    @AssistedInject.Factory
+    interface Factory {
+        fun create(roomId: String): RelationService
+    }
 
     override fun sendReaction(reaction: String, targetEventId: String): Cancelable {
         val event = eventFactory.createReactionEvent(roomId, targetEventId, reaction)
@@ -148,9 +154,9 @@ internal class DefaultRelationService @Inject constructor(private val context: C
                            compatibilityBodyText: String): Cancelable {
         val event = eventFactory
                 .createReplaceTextOfReply(roomId,
-                        replyToEdit,
-                        originalEvent,
-                        newBodyText, true, MessageType.MSGTYPE_TEXT, compatibilityBodyText)
+                                          replyToEdit,
+                                          originalEvent,
+                                          newBodyText, true, MessageType.MSGTYPE_TEXT, compatibilityBodyText)
                 .also {
                     saveLocalEcho(it)
                 }
@@ -214,7 +220,7 @@ internal class DefaultRelationService @Inject constructor(private val context: C
         }
         return Transformations.map(liveEntity) { realmResults ->
             realmResults.firstOrNull()?.asDomain()
-                    ?: EventAnnotationsSummary(eventId, emptyList(), null)
+            ?: EventAnnotationsSummary(eventId, emptyList(), null)
         }
     }
 
@@ -227,7 +233,7 @@ internal class DefaultRelationService @Inject constructor(private val context: C
     private fun saveLocalEcho(event: Event) {
         monarchy.writeAsync { realm ->
             val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst()
-                    ?: return@writeAsync
+                             ?: return@writeAsync
             roomEntity.addSendingEvent(event)
         }
     }

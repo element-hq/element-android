@@ -16,6 +16,8 @@
 
 package im.vector.matrix.android.internal.session.room.state
 
+import com.squareup.inject.assisted.Assisted
+import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
@@ -29,13 +31,18 @@ import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import io.realm.Realm
 import io.realm.RealmConfiguration
-import javax.inject.Inject
 
-internal class DefaultStateService @Inject constructor(private val roomId: String,
-                                                       @SessionDatabase
-                                                       private val realmConfiguration: RealmConfiguration,
-                                                       private val taskExecutor: TaskExecutor,
-                                                       private val sendStateTask: SendStateTask) : StateService {
+internal class DefaultStateService @AssistedInject constructor(@Assisted private val roomId: String,
+                                                               @SessionDatabase
+                                                               private val realmConfiguration: RealmConfiguration,
+                                                               private val taskExecutor: TaskExecutor,
+                                                               private val sendStateTask: SendStateTask
+) : StateService {
+
+    @AssistedInject.Factory
+    interface Factory {
+        fun create(roomId: String): StateService
+    }
 
     override fun getStateEvent(eventType: String): Event? {
         return Realm.getInstance(realmConfiguration).use { realm ->
@@ -45,10 +52,10 @@ internal class DefaultStateService @Inject constructor(private val roomId: Strin
 
     override fun updateTopic(topic: String, callback: MatrixCallback<Unit>) {
         val params = SendStateTask.Params(roomId,
-                EventType.STATE_ROOM_TOPIC,
-                mapOf(
-                        "topic" to topic
-                ))
+                                          EventType.STATE_ROOM_TOPIC,
+                                          mapOf(
+                                                  "topic" to topic
+                                          ))
 
 
         sendStateTask
