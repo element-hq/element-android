@@ -18,6 +18,6 @@ package im.vector.matrix.android.internal.database.query
 
 internal object FilterContent {
 
-    internal const val EDIT_TYPE = "{*\"m.relates_to\"*\"rel_type\":*\"m.replace\"*}"
+    internal const val EDIT_TYPE = """{*"m.relates_to"*"rel_type":*"m.replace"*}"""
 
 }

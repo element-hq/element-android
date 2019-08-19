@@ -31,6 +31,11 @@ import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.RealmResults
 
+/**
+ * This class is responsible for handling the read receipts for hidden events (check [TimelineSettings] to see filtering).
+ * When an hidden event has read receipts, we want to transfer these read receipts on the first older displayed event.
+ * It has to be used in [DefaultTimeline] and we should call the [start] and [dispose] methods to properly handle realm subscription.
+ */
 internal class TimelineHiddenReadReceipts constructor(private val readReceiptsSummaryMapper: ReadReceiptsSummaryMapper,
                                                       private val roomId: String,
                                                       private val settings: TimelineSettings) {
@@ -95,7 +100,9 @@ internal class TimelineHiddenReadReceipts constructor(private val readReceiptsSu
         }
     }
 
-
+    /**
+     * Start the realm query subscription. Has to be called on an HandlerThread
+     */
     fun start(realm: Realm, liveEvents: RealmResults<TimelineEventEntity>, delegate: Delegate) {
         this.liveEvents = liveEvents
         this.delegate = delegate
@@ -109,10 +116,16 @@ internal class TimelineHiddenReadReceipts constructor(private val readReceiptsSu
                 .also { it.addChangeListener(hiddenReadReceiptsListener) }
     }
 
+    /**
+     * Dispose the realm query subscription. Has to be called on an HandlerThread
+     */
     fun dispose() {
-        this.hiddenReadReceipts?.removeAllChangeListeners()
+        this.hiddenReadReceipts.removeAllChangeListeners()
     }
 
+    /**
+     * Return the current corrected [ReadReceipt] list for an event, or null
+     */
     fun correctedReadReceipts(eventId: String?): List<ReadReceipt>? {
         return correctedReadReceiptsByEvent[eventId]
     }

@@ -3,11 +3,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="44dp"
+    android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:orientation="horizontal"
     android:paddingStart="8dp"
-    android:paddingLeft="8dp"
     android:paddingEnd="8dp">
 
     <ImageView
@@ -22,11 +21,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
         android:layout_weight="1"
         android:ellipsize="end"
         android:lines="1"
-        android:textColor="?android:textColorPrimary"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:textColor="?riotx_text_primary"
         android:textSize="16sp"
         tools:text="@sample/matrix.json/data/displayName" />
 
@@ -35,9 +35,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:lines="1"
-        android:textColor="?android:textColorSecondary"
+        android:textColor="?riotx_text_secondary"
         android:textSize="12sp"
         tools:text="10:44" />
-
 
 </LinearLayout>
