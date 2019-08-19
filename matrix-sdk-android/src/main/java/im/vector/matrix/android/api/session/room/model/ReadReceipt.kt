@@ -16,8 +16,9 @@
 
 package im.vector.matrix.android.api.session.room.model
 
+import im.vector.matrix.android.api.session.user.model.User
+
 data class ReadReceipt(
-        val userId: String,
-        val eventId: String,
+        val user: User,
         val originServerTs: Long
 )

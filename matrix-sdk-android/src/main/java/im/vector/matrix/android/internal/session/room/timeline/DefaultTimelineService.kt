@@ -23,8 +23,10 @@ import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.TimelineService
+import im.vector.matrix.android.api.session.room.timeline.TimelineSettings
 import im.vector.matrix.android.internal.database.RealmLiveData
-import im.vector.matrix.android.internal.database.mapper.asDomain
+import im.vector.matrix.android.internal.database.mapper.ReadReceiptsSummaryMapper
+import im.vector.matrix.android.internal.database.mapper.TimelineEventMapper
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.task.TaskExecutor
@@ -36,10 +38,12 @@ internal class DefaultTimelineService @Inject constructor(private val roomId: St
                                                           private val taskExecutor: TaskExecutor,
                                                           private val contextOfEventTask: GetContextOfEventTask,
                                                           private val cryptoService: CryptoService,
-                                                          private val paginationTask: PaginationTask
+                                                          private val paginationTask: PaginationTask,
+                                                          private val timelineEventMapper: TimelineEventMapper,
+                                                          private val readReceiptsSummaryMapper: ReadReceiptsSummaryMapper
 ) : TimelineService {
 
-    override fun createTimeline(eventId: String?, allowedTypes: List<String>?): Timeline {
+    override fun createTimeline(eventId: String?, settings: TimelineSettings): Timeline {
         return DefaultTimeline(roomId,
                                eventId,
                                monarchy.realmConfiguration,
@@ -47,7 +51,10 @@ internal class DefaultTimelineService @Inject constructor(private val roomId: St
                                contextOfEventTask,
                                paginationTask,
                                cryptoService,
-                               allowedTypes)
+                               timelineEventMapper,
+                               settings,
+                               TimelineHiddenReadReceipts(readReceiptsSummaryMapper, roomId, settings)
+        )
     }
 
     override fun getTimeLineEvent(eventId: String): TimelineEvent? {
@@ -55,7 +62,7 @@ internal class DefaultTimelineService @Inject constructor(private val roomId: St
                 .fetchCopyMap({
                                   TimelineEventEntity.where(it, eventId = eventId).findFirst()
                               }, { entity, realm ->
-                                  entity.asDomain()
+                                  timelineEventMapper.map(entity)
                               })
     }
 
@@ -63,8 +70,8 @@ internal class DefaultTimelineService @Inject constructor(private val roomId: St
         val liveData = RealmLiveData(monarchy.realmConfiguration) {
             TimelineEventEntity.where(it, eventId = eventId)
         }
-        return Transformations.map(liveData) {
-            it.firstOrNull()?.asDomain()
+        return Transformations.map(liveData) { events ->
+            events.firstOrNull()?.let { timelineEventMapper.map(it) }
         }
     }
 

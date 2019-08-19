@@ -27,3 +27,21 @@ internal fun ReadReceiptEntity.Companion.where(realm: Realm, roomId: String, use
             .equalTo(ReadReceiptEntityFields.ROOM_ID, roomId)
             .equalTo(ReadReceiptEntityFields.USER_ID, userId)
 }
+
+internal fun ReadReceiptEntity.Companion.createUnmanaged(roomId: String, eventId: String, userId: String, originServerTs: Double): ReadReceiptEntity {
+    return ReadReceiptEntity().apply {
+        this.primaryKey = "${roomId}_$userId"
+        this.eventId = eventId
+        this.roomId = roomId
+        this.userId = userId
+        this.originServerTs = originServerTs
+    }
+}
+
+internal fun ReadReceiptEntity.Companion.getOrCreate(realm: Realm, roomId: String, userId: String): ReadReceiptEntity {
+    return ReadReceiptEntity.where(realm, roomId, userId).findFirst()
+           ?: realm.createObject(ReadReceiptEntity::class.java, "${roomId}_$userId").apply {
+               this.roomId = roomId
+               this.userId = userId
+           }
+}

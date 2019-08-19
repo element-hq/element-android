@@ -18,6 +18,7 @@ package im.vector.matrix.rx
 
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.model.EventAnnotationsSummary
+import im.vector.matrix.android.api.session.room.model.ReadReceipt
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import io.reactivex.Observable
@@ -47,6 +48,10 @@ class RxRoom(private val room: Room) {
 
     fun joinRoom(viaServers: List<String> = emptyList()): Single<Unit> = Single.create {
         room.join(viaServers, MatrixCallbackSingle(it)).toSingle(it)
+    }
+
+    fun liveEventReadReceipts(eventId: String): Observable<List<ReadReceipt>> {
+        return room.getEventReadReceiptsLive(eventId).asObservable()
     }
 
 }

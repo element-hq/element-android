@@ -22,6 +22,8 @@ import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
+import im.vector.riotx.core.ui.views.ReadReceiptsView
+import im.vector.riotx.core.utils.DebouncedClickListener
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 
@@ -44,6 +46,13 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
         return@OnLongClickListener baseCallback?.onEventLongClicked(informationData, null, it) == true
     }
 
+    @EpoxyAttribute
+    var readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null
+
+    private val _readReceiptsClickListener = DebouncedClickListener(View.OnClickListener {
+        readReceiptsCallback?.onReadReceiptsClicked(informationData.readReceipts)
+    })
+
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.noticeTextView.text = noticeText
@@ -55,6 +64,7 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
                 holder.avatarImageView
         )
         holder.view.setOnLongClickListener(longClickListener)
+        holder.readReceiptsView.render(informationData.readReceipts, avatarRenderer, _readReceiptsClickListener)
     }
 
     override fun getViewType() = STUB_ID
@@ -62,6 +72,7 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
     class Holder : BaseHolder(STUB_ID) {
         val avatarImageView by bind<ImageView>(R.id.itemNoticeAvatarView)
         val noticeTextView by bind<TextView>(R.id.itemNoticeTextView)
+        val readReceiptsView by bind<ReadReceiptsView>(R.id.readReceiptsView)
     }
 
     companion object {

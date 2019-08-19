@@ -77,7 +77,7 @@ import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.core.files.addEntryToDownloadManager
 import im.vector.riotx.core.glide.GlideApp
-import im.vector.riotx.core.platform.NotificationAreaView
+import im.vector.riotx.core.ui.views.NotificationAreaView
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.utils.*
 import im.vector.riotx.features.autocomplete.command.AutocompleteCommandPresenter
@@ -92,6 +92,7 @@ import im.vector.riotx.features.home.room.detail.composer.TextComposerActions
 import im.vector.riotx.features.home.room.detail.composer.TextComposerView
 import im.vector.riotx.features.home.room.detail.composer.TextComposerViewModel
 import im.vector.riotx.features.home.room.detail.composer.TextComposerViewState
+import im.vector.riotx.features.home.room.detail.readreceipts.DisplayReadReceiptsBottomSheet
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.home.room.detail.timeline.action.*
 import im.vector.riotx.features.home.room.detail.timeline.helper.EndlessRecyclerViewScrollListener
@@ -325,17 +326,17 @@ class RoomDetailFragment :
         if (messageContent is MessageTextContent && messageContent.format == MessageType.FORMAT_MATRIX_HTML) {
             val parser = Parser.builder().build()
             val document = parser.parse(messageContent.formattedBody
-                    ?: messageContent.body)
+                                        ?: messageContent.body)
             formattedBody = eventHtmlRenderer.render(document)
         }
         composerLayout.composerRelatedMessageContent.text = formattedBody
-                ?: nonFormattedBody
+                                                            ?: nonFormattedBody
 
         composerLayout.composerEditText.setText(if (useText) event.getTextEditableContent() else "")
         composerLayout.composerRelatedMessageActionIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), iconRes))
 
         avatarRenderer.render(event.senderAvatar, event.root.senderId
-                ?: "", event.senderName, composerLayout.composerRelatedMessageAvatar)
+                                                  ?: "", event.senderName, composerLayout.composerRelatedMessageAvatar)
 
         composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text.length)
         composerLayout.expand {
@@ -364,9 +365,9 @@ class RoomDetailFragment :
                 REQUEST_FILES_REQUEST_CODE, TAKE_IMAGE_REQUEST_CODE -> handleMediaIntent(data)
                 REACTION_SELECT_REQUEST_CODE                        -> {
                     val eventId = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_EVENT_ID)
-                            ?: return
+                                  ?: return
                     val reaction = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_REACTION_RESULT)
-                            ?: return
+                                   ?: return
                     //TODO check if already reacted with that?
                     roomDetailViewModel.process(RoomDetailActions.SendReaction(reaction, eventId))
                 }
@@ -401,26 +402,26 @@ class RoomDetailFragment :
 
         if (vectorPreferences.swipeToReplyIsEnabled()) {
             val swipeCallback = RoomMessageTouchHelperCallback(requireContext(),
-                    R.drawable.ic_reply,
-                    object : RoomMessageTouchHelperCallback.QuickReplayHandler {
-                        override fun performQuickReplyOnHolder(model: EpoxyModel<*>) {
-                            (model as? AbsMessageItem)?.informationData?.let {
-                                val eventId = it.eventId
-                                roomDetailViewModel.process(RoomDetailActions.EnterReplyMode(eventId))
-                            }
-                        }
+                                                               R.drawable.ic_reply,
+                                                               object : RoomMessageTouchHelperCallback.QuickReplayHandler {
+                                                                   override fun performQuickReplyOnHolder(model: EpoxyModel<*>) {
+                                                                       (model as? AbsMessageItem)?.informationData?.let {
+                                                                           val eventId = it.eventId
+                                                                           roomDetailViewModel.process(RoomDetailActions.EnterReplyMode(eventId))
+                                                                       }
+                                                                   }
 
-                        override fun canSwipeModel(model: EpoxyModel<*>): Boolean {
-                            return when (model) {
-                                is MessageFileItem,
-                                is MessageImageVideoItem,
-                                is MessageTextItem -> {
-                                    return (model as AbsMessageItem).informationData.sendState == SendState.SYNCED
-                                }
-                                else               -> false
-                            }
-                        }
-                    })
+                                                                   override fun canSwipeModel(model: EpoxyModel<*>): Boolean {
+                                                                       return when (model) {
+                                                                           is MessageFileItem,
+                                                                           is MessageImageVideoItem,
+                                                                           is MessageTextItem -> {
+                                                                               return (model as AbsMessageItem).informationData.sendState == SendState.SYNCED
+                                                                           }
+                                                                           else               -> false
+                                                                       }
+                                                                   }
+                                                               })
             val touchHelper = ItemTouchHelper(swipeCallback)
             touchHelper.attachToRecyclerView(recyclerView)
         }
@@ -828,6 +829,11 @@ class RoomDetailFragment :
                 return false
             }
         })
+    }
+
+    override fun onReadReceiptsClicked(readReceipts: List<ReadReceiptData>) {
+        DisplayReadReceiptsBottomSheet.newInstance(readReceipts)
+                .show(requireActivity().supportFragmentManager, "DISPLAY_READ_RECEIPTS")
     }
 
 // AutocompleteUserPresenter.Callback
