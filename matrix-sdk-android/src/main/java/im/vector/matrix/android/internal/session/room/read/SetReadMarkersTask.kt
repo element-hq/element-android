@@ -19,6 +19,7 @@ package im.vector.matrix.android.internal.session.room.read
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.internal.database.model.ChunkEntity
+import im.vector.matrix.android.internal.database.model.ReadMarkerEntity
 import im.vector.matrix.android.internal.database.model.ReadReceiptEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
@@ -57,6 +58,7 @@ internal class DefaultSetReadMarkersTask @Inject constructor(private val roomAPI
         val fullyReadEventId: String?
         val readReceiptEventId: String?
 
+        Timber.v("Execute set read marker with params: $params")
         if (params.markAllAsRead) {
             val latestSyncedEventId = Realm.getInstance(monarchy.realmConfiguration).use { realm ->
                 TimelineEventEntity.latestEvent(realm, roomId = params.roomId, includesSending = false)?.eventId
@@ -68,7 +70,7 @@ internal class DefaultSetReadMarkersTask @Inject constructor(private val roomAPI
             readReceiptEventId = params.readReceiptEventId
         }
 
-        if (fullyReadEventId != null) {
+        if (fullyReadEventId != null && isReadMarkerMoreRecent(params.roomId, fullyReadEventId)) {
             if (LocalEchoEventFactory.isLocalEchoId(fullyReadEventId)) {
                 Timber.w("Can't set read marker for local event ${params.fullyReadEventId}")
             } else {
@@ -76,7 +78,7 @@ internal class DefaultSetReadMarkersTask @Inject constructor(private val roomAPI
             }
         }
         if (readReceiptEventId != null
-                && !isEventRead(params.roomId, readReceiptEventId)) {
+            && !isEventRead(params.roomId, readReceiptEventId)) {
 
             if (LocalEchoEventFactory.isLocalEchoId(readReceiptEventId)) {
                 Timber.w("Can't set read receipt for local event ${params.fullyReadEventId}")
@@ -93,12 +95,23 @@ internal class DefaultSetReadMarkersTask @Inject constructor(private val roomAPI
         }
     }
 
+    private fun isReadMarkerMoreRecent(roomId: String, fullyReadEventId: String): Boolean {
+        return Realm.getInstance(monarchy.realmConfiguration).use { realm ->
+            val readMarkerEntity = ReadMarkerEntity.where(realm, roomId = roomId).findFirst()
+            val readMarkerEvent = readMarkerEntity?.timelineEvent?.firstOrNull()
+            val eventToCheck = TimelineEventEntity.where(realm, eventId = fullyReadEventId).findFirst()
+            val readReceiptIndex = readMarkerEvent?.root?.displayIndex ?: Int.MAX_VALUE
+            val eventToCheckIndex = eventToCheck?.root?.displayIndex ?: Int.MIN_VALUE
+            eventToCheckIndex > readReceiptIndex
+        }
+    }
+
     private fun updateNotificationCountIfNecessary(roomId: String, eventId: String) {
         monarchy.writeAsync { realm ->
             val isLatestReceived = TimelineEventEntity.latestEvent(realm, roomId = roomId, includesSending = false)?.eventId == eventId
             if (isLatestReceived) {
                 val roomSummary = RoomSummaryEntity.where(realm, roomId).findFirst()
-                        ?: return@writeAsync
+                                  ?: return@writeAsync
                 roomSummary.notificationCount = 0
                 roomSummary.highlightCount = 0
             }
@@ -106,19 +119,17 @@ internal class DefaultSetReadMarkersTask @Inject constructor(private val roomAPI
     }
 
     private fun isEventRead(roomId: String, eventId: String): Boolean {
-        var isEventRead = false
-        monarchy.doWithRealm {
-            val readReceipt = ReadReceiptEntity.where(it, roomId, credentials.userId).findFirst()
-                    ?: return@doWithRealm
-            val liveChunk = ChunkEntity.findLastLiveChunkFromRoom(it, roomId)
-                    ?: return@doWithRealm
+        return Realm.getInstance(monarchy.realmConfiguration).use { realm ->
+            val readReceipt = ReadReceiptEntity.where(realm, roomId, credentials.userId).findFirst()
+                              ?: return false
+            val liveChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId)
+                            ?: return false
             val readReceiptIndex = liveChunk.timelineEvents.find(readReceipt.eventId)?.root?.displayIndex
-                    ?: Int.MIN_VALUE
+                                   ?: Int.MIN_VALUE
             val eventToCheckIndex = liveChunk.timelineEvents.find(eventId)?.root?.displayIndex
-                    ?: Int.MAX_VALUE
-            isEventRead = eventToCheckIndex <= readReceiptIndex
+                                    ?: Int.MAX_VALUE
+            eventToCheckIndex <= readReceiptIndex
         }
-        return isEventRead
     }
 
 }

@@ -32,6 +32,7 @@ import im.vector.matrix.android.internal.database.model.ChunkEntityFields
 import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryEntity
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.EventEntityFields
+import im.vector.matrix.android.internal.database.model.ReadMarkerEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntityFields
@@ -47,10 +48,12 @@ import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.Debouncer
 import im.vector.matrix.android.internal.util.createBackgroundHandler
 import im.vector.matrix.android.internal.util.createUIHandler
+import io.realm.ObjectChangeSet
 import io.realm.OrderedCollectionChangeSet
 import io.realm.OrderedRealmCollectionChangeListener
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import io.realm.RealmObjectChangeListener
 import io.realm.RealmQuery
 import io.realm.RealmResults
 import io.realm.Sort
@@ -101,6 +104,7 @@ internal class DefaultTimeline(
     private lateinit var eventRelations: RealmResults<EventAnnotationsSummaryEntity>
 
     private var roomEntity: RoomEntity? = null
+    private var readMarkerEntity: ReadMarkerEntity? = null
 
     private var prevDisplayIndex: Int = DISPLAY_INDEX_UNKNOWN
     private var nextDisplayIndex: Int = DISPLAY_INDEX_UNKNOWN
@@ -149,13 +153,9 @@ internal class DefaultTimeline(
             changeSet.changes.forEach { index ->
                 val eventEntity = results[index]
                 eventEntity?.eventId?.let { eventId ->
-                    builtEventsIdMap[eventId]?.let { builtIndex ->
-                        //Update an existing event
-                        builtEvents[builtIndex]?.let { te ->
-                            builtEvents[builtIndex] = buildTimelineEvent(eventEntity)
-                            hasChanged = true
-                        }
-                    }
+                    hasChanged = rebuildEvent(eventId) {
+                        buildTimelineEvent(eventEntity)
+                    } || hasChanged
                 }
             }
             if (hasChanged) postSnapshot()
@@ -163,27 +163,44 @@ internal class DefaultTimeline(
     }
 
     private val relationsListener = OrderedRealmCollectionChangeListener<RealmResults<EventAnnotationsSummaryEntity>> { collection, changeSet ->
-
         var hasChange = false
 
         (changeSet.insertions + changeSet.changes).forEach {
             val eventRelations = collection[it]
             if (eventRelations != null) {
-                builtEventsIdMap[eventRelations.eventId]?.let { builtIndex ->
-                    //Update the relation of existing event
-                    builtEvents[builtIndex]?.let { te ->
-                        builtEvents[builtIndex] = te.copy(annotations = eventRelations.asDomain())
-                        hasChange = true
+                hasChange = rebuildEvent(eventRelations.eventId) { te ->
+                    te.copy(annotations = eventRelations.asDomain())
+                } || hasChange
+            }
+        }
+        if (hasChange) postSnapshot()
+    }
+
+    private val readMarkerListener = RealmObjectChangeListener { readMarkerEntity: ReadMarkerEntity, _: ObjectChangeSet? ->
+        val isEventHidden = liveEvents.where().equalTo(TimelineEventEntityFields.EVENT_ID, readMarkerEntity.eventId).findFirst() == null
+        var hasChange = false
+        if (isEventHidden) {
+            val hiddenEvent = readMarkerEntity.timelineEvent?.firstOrNull() ?: return@RealmObjectChangeListener
+            val displayIndex = hiddenEvent.root?.displayIndex
+            if (displayIndex != null) {
+                // Then we are looking for the first displayable event after the hidden one
+                val firstDisplayedEvent = liveEvents.where()
+                        .lessThanOrEqualTo(TimelineEventEntityFields.ROOT.DISPLAY_INDEX, displayIndex)
+                        .findFirst()
+
+                // If we find one, we should rebuild this one with marker
+                if (firstDisplayedEvent != null) {
+                    hasChange = rebuildEvent(firstDisplayedEvent.eventId) {
+                        it.copy(hasReadMarker = true)
                     }
                 }
             }
         }
-        if (hasChange)
-            postSnapshot()
+        if (hasChange) postSnapshot()
     }
 
 
-    // Public methods ******************************************************************************
+// Public methods ******************************************************************************
 
     override fun paginate(direction: Timeline.Direction, count: Int) {
         BACKGROUND_HANDLER.post {
@@ -237,6 +254,10 @@ internal class DefaultTimeline(
                         .findAllAsync()
                         .also { it.addChangeListener(relationsListener) }
 
+                readMarkerEntity = ReadMarkerEntity.where(realm, roomId = roomId)
+                        .findFirstAsync()
+                        .also { it.addChangeListener(readMarkerListener) }
+
                 if (settings.buildReadReceipts) {
                     hiddenReadReceipts.start(realm, liveEvents, this)
                 }
@@ -255,6 +276,7 @@ internal class DefaultTimeline(
                 roomEntity?.sendingTimelineEvents?.removeAllChangeListeners()
                 eventRelations.removeAllChangeListeners()
                 liveEvents.removeAllChangeListeners()
+                readMarkerEntity?.removeAllChangeListeners()
                 if (settings.buildReadReceipts) {
                     hiddenReadReceipts.dispose()
                 }
@@ -272,20 +294,26 @@ internal class DefaultTimeline(
     // TimelineHiddenReadReceipts.Delegate
 
     override fun rebuildEvent(eventId: String, readReceipts: List<ReadReceipt>): Boolean {
-        return builtEventsIdMap[eventId]?.let { builtIndex ->
-            //Update the relation of existing event
-            builtEvents[builtIndex]?.let { te ->
-                builtEvents[builtIndex] = te.copy(readReceipts = readReceipts)
-                true
-            }
-        } ?: false
+        return rebuildEvent(eventId) { te ->
+            te.copy(readReceipts = readReceipts)
+        }
     }
 
     override fun onReadReceiptsUpdated() {
         postSnapshot()
     }
 
-// Private methods *****************************************************************************
+    // Private methods *****************************************************************************
+
+    private fun rebuildEvent(eventId: String, builder: (TimelineEvent) -> TimelineEvent): Boolean {
+        return builtEventsIdMap[eventId]?.let { builtIndex ->
+            //Update the relation of existing event
+            builtEvents[builtIndex]?.let { te ->
+                builtEvents[builtIndex] = builder(te)
+                true
+            }
+        } ?: false
+    }
 
     private fun hasMoreInCache(direction: Timeline.Direction): Boolean {
         return Realm.getInstance(realmConfiguration).use { localRealm ->
@@ -571,7 +599,7 @@ internal class DefaultTimeline(
         debouncer.debounce("post_snapshot", runnable, 50)
     }
 
-    // Extension methods ***************************************************************************
+// Extension methods ***************************************************************************
 
     private fun Timeline.Direction.toPaginationDirection(): PaginationDirection {
         return if (this == Timeline.Direction.BACKWARDS) PaginationDirection.BACKWARDS else PaginationDirection.FORWARDS

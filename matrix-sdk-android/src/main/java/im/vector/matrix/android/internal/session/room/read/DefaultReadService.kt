@@ -28,8 +28,10 @@ import im.vector.matrix.android.api.session.room.read.ReadService
 import im.vector.matrix.android.internal.database.RealmLiveData
 import im.vector.matrix.android.internal.database.mapper.ReadReceiptsSummaryMapper
 import im.vector.matrix.android.internal.database.model.ChunkEntity
+import im.vector.matrix.android.internal.database.model.ReadMarkerEntity
 import im.vector.matrix.android.internal.database.model.ReadReceiptEntity
 import im.vector.matrix.android.internal.database.model.ReadReceiptsSummaryEntity
+import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.query.find
 import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
 import im.vector.matrix.android.internal.database.query.where
@@ -91,6 +93,15 @@ internal class DefaultReadService @AssistedInject constructor(@Assisted private 
             isEventRead = eventToCheckIndex <= readReceiptIndex
         }
         return isEventRead
+    }
+
+    override fun getReadMarkerLive(): LiveData<String?> {
+        val liveRealmData = RealmLiveData(monarchy.realmConfiguration) { realm ->
+            ReadMarkerEntity.where(realm, roomId)
+        }
+        return Transformations.map(liveRealmData) { results ->
+            results.firstOrNull()?.eventId
+        }
     }
 
     override fun getEventReadReceiptsLive(eventId: String): LiveData<List<ReadReceipt>> {

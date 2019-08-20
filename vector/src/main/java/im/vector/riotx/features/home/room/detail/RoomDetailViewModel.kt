@@ -626,9 +626,13 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 .buffer(1, TimeUnit.SECONDS)
                 .filter { it.isNotEmpty() }
                 .subscribeBy(onNext = { actions ->
+                    val readMarkerVisible = actions.find { it.event.hasReadMarker } != null
                     val mostRecentEvent = actions.maxBy { it.event.displayIndex }
                     mostRecentEvent?.event?.root?.eventId?.let { eventId ->
                         room.setReadReceipt(eventId, callback = object : MatrixCallback<Unit> {})
+                        if (readMarkerVisible) {
+                            room.setReadMarker(eventId, callback = object : MatrixCallback<Unit> {})
+                        }
                     }
                 })
                 .disposeOnClear()

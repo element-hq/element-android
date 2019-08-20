@@ -62,6 +62,8 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
             textColor = colorProvider.getColor(getColorFromUserId(event.root.senderId ?: ""))
         }
 
+        val displayReadMarker = event.hasReadMarker && event.readReceipts.find { it.user.userId == session.myUserId } == null
+
         return MessageInformationData(
                 eventId = eventId,
                 senderId = event.root.senderId ?: "",
@@ -85,7 +87,8 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                         .map {
                             ReadReceiptData(it.user.userId, it.user.avatarUrl, it.user.displayName, it.originServerTs)
                         }
-                        .toList()
+                        .toList(),
+                displayReadMarker = displayReadMarker
         )
     }
 }

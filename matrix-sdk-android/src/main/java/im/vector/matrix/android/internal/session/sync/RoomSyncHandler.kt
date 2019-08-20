@@ -23,8 +23,13 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.tag.RoomTagContent
+import im.vector.matrix.android.api.session.room.read.FullyReadContent
 import im.vector.matrix.android.internal.crypto.CryptoManager
-import im.vector.matrix.android.internal.database.helper.*
+import im.vector.matrix.android.internal.database.helper.add
+import im.vector.matrix.android.internal.database.helper.addOrUpdate
+import im.vector.matrix.android.internal.database.helper.addStateEvent
+import im.vector.matrix.android.internal.database.helper.lastStateIndex
+import im.vector.matrix.android.internal.database.helper.updateSenderDataFor
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.EventEntityFields
 import im.vector.matrix.android.internal.database.model.RoomEntity
@@ -37,7 +42,11 @@ import im.vector.matrix.android.internal.session.notification.DefaultPushRuleSer
 import im.vector.matrix.android.internal.session.notification.ProcessEventForPushTask
 import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
 import im.vector.matrix.android.internal.session.room.timeline.PaginationDirection
-import im.vector.matrix.android.internal.session.sync.model.*
+import im.vector.matrix.android.internal.session.sync.model.InvitedRoomSync
+import im.vector.matrix.android.internal.session.sync.model.RoomSync
+import im.vector.matrix.android.internal.session.sync.model.RoomSyncAccountData
+import im.vector.matrix.android.internal.session.sync.model.RoomSyncEphemeral
+import im.vector.matrix.android.internal.session.sync.model.RoomsSyncResponse
 import im.vector.matrix.android.internal.session.user.UserEntityFactory
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
@@ -50,6 +59,7 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
                                                    private val readReceiptHandler: ReadReceiptHandler,
                                                    private val roomSummaryUpdater: RoomSummaryUpdater,
                                                    private val roomTagHandler: RoomTagHandler,
+                                                   private val roomFullyReadHandler: RoomFullyReadHandler,
                                                    private val cryptoManager: CryptoManager,
                                                    private val tokenStore: SyncTokenStore,
                                                    private val pushRuleService: DefaultPushRuleService,
@@ -247,11 +257,16 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
     }
 
     private fun handleRoomAccountDataEvents(realm: Realm, roomId: String, accountData: RoomSyncAccountData) {
-        accountData.events
-                .asSequence()
-                .filter { it.getClearType() == EventType.TAG }
-                .map { it.content.toModel<RoomTagContent>() }
-                .forEach { roomTagHandler.handle(realm, roomId, it) }
+        for (event in accountData.events) {
+            val eventType = event.getClearType()
+            if (eventType == EventType.TAG) {
+                val content = event.getClearContent().toModel<RoomTagContent>()
+                roomTagHandler.handle(realm, roomId, content)
+            } else if (eventType == EventType.FULLY_READ) {
+                val content = event.getClearContent().toModel<FullyReadContent>()
+                roomFullyReadHandler.handle(realm, roomId, content)
+            }
+        }
     }
 
 }

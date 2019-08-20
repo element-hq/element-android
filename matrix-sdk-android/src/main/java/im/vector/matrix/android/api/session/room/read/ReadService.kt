@@ -42,5 +42,10 @@ interface ReadService {
 
     fun isEventRead(eventId: String): Boolean
 
+    /**
+     * Returns a nullable read marker for the room.
+     */
+    fun getReadMarkerLive(): LiveData<String?>
+
     fun getEventReadReceiptsLive(eventId: String): LiveData<List<ReadReceipt>>
 }

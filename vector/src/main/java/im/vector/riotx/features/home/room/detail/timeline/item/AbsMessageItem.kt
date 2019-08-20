@@ -129,6 +129,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
             holder.memberNameView.setOnLongClickListener(null)
         }
 
+        holder.readMarkerView.isVisible = informationData.displayReadMarker
         holder.readReceiptsView.render(informationData.readReceipts, avatarRenderer, _readReceiptsClickListener)
 
         if (!shouldShowReactionAtBottom() || informationData.orderedReactionList.isNullOrEmpty()) {
@@ -182,6 +183,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
         val memberNameView by bind<TextView>(R.id.messageMemberNameView)
         val timeView by bind<TextView>(R.id.messageTimeView)
         val readReceiptsView by bind<ReadReceiptsView>(R.id.readReceiptsView)
+        val readMarkerView by bind<View>(R.id.readMarkerView)
         var reactionWrapper: ViewGroup? = null
         var reactionFlowHelper: Flow? = null
     }

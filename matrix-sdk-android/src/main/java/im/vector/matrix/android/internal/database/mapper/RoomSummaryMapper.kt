@@ -26,8 +26,8 @@ import java.util.*
 import javax.inject.Inject
 
 internal class RoomSummaryMapper @Inject constructor(
-        val cryptoService: CryptoService,
-        val timelineEventMapper: TimelineEventMapper
+        private val cryptoService: CryptoService,
+        private val timelineEventMapper: TimelineEventMapper
 ) {
 
     fun map(roomSummaryEntity: RoomSummaryEntity): RoomSummary {
