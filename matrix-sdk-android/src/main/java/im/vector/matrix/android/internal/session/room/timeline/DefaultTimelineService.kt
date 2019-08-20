@@ -59,7 +59,8 @@ internal class DefaultTimelineService @AssistedInject constructor(@Assisted priv
                                cryptoService,
                                timelineEventMapper,
                                settings,
-                               TimelineHiddenReadReceipts(readReceiptsSummaryMapper, roomId, settings)
+                               TimelineHiddenReadReceipts(readReceiptsSummaryMapper, roomId, settings),
+                               TimelineHiddenReadMarker(roomId)
         )
     }
 

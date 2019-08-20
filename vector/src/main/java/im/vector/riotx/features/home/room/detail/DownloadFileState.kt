@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.di
+package im.vector.riotx.features.home.room.detail
 
-import javax.inject.Scope
+import java.io.File
 
-@Scope
-@MustBeDocumented
-@Retention(AnnotationRetention.RUNTIME)
-internal annotation class MatrixScope
+data class DownloadFileState(
+        val mimeType: String,
+        val file: File?,
+        val throwable: Throwable?
+    )

@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.session.sync
 
 import im.vector.matrix.android.api.session.room.read.FullyReadContent
 import im.vector.matrix.android.internal.database.model.ReadMarkerEntity
+import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.query.getOrCreate
 import im.vector.matrix.android.internal.database.query.where
@@ -32,9 +33,14 @@ internal class RoomFullyReadHandler @Inject constructor() {
             return
         }
         Timber.v("Handle for roomId: $roomId eventId: ${content.eventId}")
+
+        RoomSummaryEntity.getOrCreate(realm, roomId).apply {
+            readMarkerId = content.eventId
+        }
         val readMarkerEntity = ReadMarkerEntity.getOrCreate(realm, roomId).apply {
             eventId = content.eventId
         }
+
         // Remove the old marker if any
         readMarkerEntity.timelineEvent?.firstOrNull()?.readMarker = null
         // Attach to timelineEvent if known

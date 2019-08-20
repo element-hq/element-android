@@ -19,10 +19,10 @@ package im.vector.riotx.features.home.room.detail.timeline.item
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
+import im.vector.riotx.core.ui.views.ReadMarkerView
 import im.vector.riotx.core.ui.views.ReadReceiptsView
 import im.vector.riotx.core.utils.DebouncedClickListener
 import im.vector.riotx.features.home.AvatarRenderer
@@ -54,6 +54,12 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
         readReceiptsCallback?.onReadReceiptsClicked(informationData.readReceipts)
     })
 
+    private val _readMarkerCallback = object : ReadMarkerView.Callback {
+        override fun onReadMarkerDisplayed() {
+            readReceiptsCallback?.onReadMarkerLongDisplayed(informationData)
+        }
+    }
+
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.noticeTextView.text = noticeText
@@ -61,12 +67,17 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
                 informationData.avatarUrl,
                 informationData.senderId,
                 informationData.memberName?.toString()
-                        ?: informationData.senderId,
+                ?: informationData.senderId,
                 holder.avatarImageView
         )
         holder.view.setOnLongClickListener(longClickListener)
         holder.readReceiptsView.render(informationData.readReceipts, avatarRenderer, _readReceiptsClickListener)
-        holder.readMarkerView.isVisible = informationData.displayReadMarker
+        holder.readMarkerView.bindView(informationData, _readMarkerCallback)
+    }
+
+    override fun unbind(holder: Holder) {
+        holder.readMarkerView.unbind()
+        super.unbind(holder)
     }
 
     override fun getViewType() = STUB_ID
@@ -75,7 +86,7 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
         val avatarImageView by bind<ImageView>(R.id.itemNoticeAvatarView)
         val noticeTextView by bind<TextView>(R.id.itemNoticeTextView)
         val readReceiptsView by bind<ReadReceiptsView>(R.id.readReceiptsView)
-        val readMarkerView by bind<View>(R.id.readMarkerView)
+        val readMarkerView by bind<ReadMarkerView>(R.id.readMarkerView)
     }
 
     companion object {

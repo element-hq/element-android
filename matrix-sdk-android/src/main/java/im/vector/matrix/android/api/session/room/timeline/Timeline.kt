@@ -32,6 +32,8 @@ interface Timeline {
 
     var listener: Listener?
 
+    val isLive: Boolean
+
     /**
      * This should be called before any other method after creating the timeline. It ensures the underlying database is open
      */
@@ -42,12 +44,17 @@ interface Timeline {
      */
     fun dispose()
 
+
+    fun restartWithEventId(eventId: String)
+
+
     /**
      * Check if the timeline can be enriched by paginating.
      * @param the direction to check in
      * @return true if timeline can be enriched
      */
     fun hasMoreToLoad(direction: Direction): Boolean
+
 
     /**
      * This is the main method to enrich the timeline with new data.
@@ -56,9 +63,16 @@ interface Timeline {
      */
     fun paginate(direction: Direction, count: Int)
 
-    fun pendingEventCount() : Int
+    fun pendingEventCount(): Int
 
-    fun failedToDeliverEventCount() : Int
+    fun failedToDeliverEventCount(): Int
+
+    fun getIndexOfEvent(eventId: String?): Int?
+
+    fun getTimelineEventAtIndex(index: Int): TimelineEvent?
+
+    fun getTimelineEventWithId(eventId: String?): TimelineEvent?
+
 
     interface Listener {
         /**

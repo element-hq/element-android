@@ -6,6 +6,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <FrameLayout
+        android:id="@+id/syncProgressBarWrap"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/roomToolbar"
+        tools:visibility="visible">
+
+        <ProgressBar
+            android:id="@+id/syncProgressBar"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="14dp"
+            android:layout_gravity="center"
+            android:background="?riotx_header_panel_background"
+            android:indeterminate="true"
+            android:visibility="gone"
+            tools:visibility="visible" />
+    </FrameLayout>
+
+    <!-- Trick to remove surrounding padding (clip frome wrapping frame) -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/roomToolbar"
         style="@style/VectorToolbarStyle"
@@ -71,28 +94,12 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <!-- Trick to remove surrounding padding (clip frome wrapping frame) -->
-    <FrameLayout
-        android:id="@+id/syncProgressBarWrap"
-        android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/roomToolbar"
-        tools:visibility="visible">
-
-        <ProgressBar
-            android:id="@+id/syncProgressBar"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="14dp"
-            android:layout_gravity="center"
-            android:background="?riotx_header_panel_background"
-            android:indeterminate="true"
-            android:visibility="gone"
-            tools:visibility="visible" />
-    </FrameLayout>
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/recyclerViewBarrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="top"
+        app:constraint_referenced_ids="composerLayout,notificationAreaView" />
 
     <com.airbnb.epoxy.EpoxyRecyclerView
         android:id="@+id/recyclerView"
@@ -105,22 +112,14 @@
         app:layout_constraintTop_toBottomOf="@id/syncProgressBarWrap"
         tools:listitem="@layout/item_timeline_event_base" />
 
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/recyclerViewBarrier"
-        android:layout_width="wrap_content"
+    <im.vector.riotx.core.ui.views.JumpToReadMarkerView
+        android:id="@+id/jumpToReadMarkerView"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:barrierDirection="top"
-        app:constraint_referenced_ids="composerLayout,notificationAreaView" />
-
-    <im.vector.riotx.features.home.room.detail.composer.TextComposerView
-        android:id="@+id/composerLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?riotx_background"
-        android:transitionName="composer"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/syncProgressBarWrap" />
 
     <im.vector.riotx.core.ui.views.NotificationAreaView
         android:id="@+id/notificationAreaView"
@@ -128,6 +127,16 @@
         android:layout_height="wrap_content"
         android:paddingTop="16dp"
         android:paddingBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <im.vector.riotx.features.home.room.detail.composer.TextComposerView
+        android:id="@+id/composerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?riotx_background"
+        android:transitionName="composer"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -143,6 +152,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/roomToolbar"
         tools:visibility="visible" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

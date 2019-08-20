@@ -27,36 +27,15 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineSettings
 import im.vector.matrix.android.api.util.CancelableBag
 import im.vector.matrix.android.internal.database.mapper.TimelineEventMapper
 import im.vector.matrix.android.internal.database.mapper.asDomain
-import im.vector.matrix.android.internal.database.model.ChunkEntity
-import im.vector.matrix.android.internal.database.model.ChunkEntityFields
-import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryEntity
-import im.vector.matrix.android.internal.database.model.EventEntity
-import im.vector.matrix.android.internal.database.model.EventEntityFields
-import im.vector.matrix.android.internal.database.model.ReadMarkerEntity
-import im.vector.matrix.android.internal.database.model.RoomEntity
-import im.vector.matrix.android.internal.database.model.TimelineEventEntity
-import im.vector.matrix.android.internal.database.model.TimelineEventEntityFields
-import im.vector.matrix.android.internal.database.query.FilterContent
-import im.vector.matrix.android.internal.database.query.findAllInRoomWithSendStates
-import im.vector.matrix.android.internal.database.query.findIncludingEvent
-import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
-import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.database.query.whereInRoom
+import im.vector.matrix.android.internal.database.model.*
+import im.vector.matrix.android.internal.database.query.*
 import im.vector.matrix.android.internal.task.TaskConstraints
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.Debouncer
 import im.vector.matrix.android.internal.util.createBackgroundHandler
 import im.vector.matrix.android.internal.util.createUIHandler
-import io.realm.ObjectChangeSet
-import io.realm.OrderedCollectionChangeSet
-import io.realm.OrderedRealmCollectionChangeListener
-import io.realm.Realm
-import io.realm.RealmConfiguration
-import io.realm.RealmObjectChangeListener
-import io.realm.RealmQuery
-import io.realm.RealmResults
-import io.realm.Sort
+import io.realm.*
 import timber.log.Timber
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
@@ -70,7 +49,7 @@ private const val DISPLAY_INDEX_UNKNOWN = Int.MIN_VALUE
 
 internal class DefaultTimeline(
         private val roomId: String,
-        private val initialEventId: String? = null,
+        private var initialEventId: String? = null,
         private val realmConfiguration: RealmConfiguration,
         private val taskExecutor: TaskExecutor,
         private val contextOfEventTask: GetContextOfEventTask,
@@ -78,8 +57,9 @@ internal class DefaultTimeline(
         private val cryptoService: CryptoService,
         private val timelineEventMapper: TimelineEventMapper,
         private val settings: TimelineSettings,
-        private val hiddenReadReceipts: TimelineHiddenReadReceipts
-) : Timeline, TimelineHiddenReadReceipts.Delegate {
+        private val hiddenReadReceipts: TimelineHiddenReadReceipts,
+        private val hiddenReadMarker: TimelineHiddenReadMarker
+) : Timeline, TimelineHiddenReadReceipts.Delegate, TimelineHiddenReadMarker.Delegate {
 
     private companion object {
         val BACKGROUND_HANDLER = createBackgroundHandler("TIMELINE_DB_THREAD")
@@ -104,17 +84,18 @@ internal class DefaultTimeline(
     private lateinit var eventRelations: RealmResults<EventAnnotationsSummaryEntity>
 
     private var roomEntity: RoomEntity? = null
-    private var readMarkerEntity: ReadMarkerEntity? = null
 
     private var prevDisplayIndex: Int = DISPLAY_INDEX_UNKNOWN
     private var nextDisplayIndex: Int = DISPLAY_INDEX_UNKNOWN
-    private val isLive = initialEventId == null
     private val builtEvents = Collections.synchronizedList<TimelineEvent>(ArrayList())
     private val builtEventsIdMap = Collections.synchronizedMap(HashMap<String, Int>())
     private val backwardsPaginationState = AtomicReference(PaginationState())
     private val forwardsPaginationState = AtomicReference(PaginationState())
 
     private val timelineID = UUID.randomUUID().toString()
+
+    override val isLive
+        get() = initialEventId == null
 
     private val eventDecryptor = TimelineEventDecryptor(realmConfiguration, timelineID, cryptoService)
 
@@ -124,10 +105,7 @@ internal class DefaultTimeline(
         } else {
             // If changeSet has deletion we are having a gap, so we clear everything
             if (changeSet.deletionRanges.isNotEmpty()) {
-                prevDisplayIndex = DISPLAY_INDEX_UNKNOWN
-                nextDisplayIndex = DISPLAY_INDEX_UNKNOWN
-                builtEvents.clear()
-                builtEventsIdMap.clear()
+                clearAllValues()
             }
             changeSet.insertionRanges.forEach { range ->
                 val (startDisplayIndex, direction) = if (range.startIndex == 0) {
@@ -171,29 +149,6 @@ internal class DefaultTimeline(
                 hasChange = rebuildEvent(eventRelations.eventId) { te ->
                     te.copy(annotations = eventRelations.asDomain())
                 } || hasChange
-            }
-        }
-        if (hasChange) postSnapshot()
-    }
-
-    private val readMarkerListener = RealmObjectChangeListener { readMarkerEntity: ReadMarkerEntity, _: ObjectChangeSet? ->
-        val isEventHidden = liveEvents.where().equalTo(TimelineEventEntityFields.EVENT_ID, readMarkerEntity.eventId).findFirst() == null
-        var hasChange = false
-        if (isEventHidden) {
-            val hiddenEvent = readMarkerEntity.timelineEvent?.firstOrNull() ?: return@RealmObjectChangeListener
-            val displayIndex = hiddenEvent.root?.displayIndex
-            if (displayIndex != null) {
-                // Then we are looking for the first displayable event after the hidden one
-                val firstDisplayedEvent = liveEvents.where()
-                        .lessThanOrEqualTo(TimelineEventEntityFields.ROOT.DISPLAY_INDEX, displayIndex)
-                        .findFirst()
-
-                // If we find one, we should rebuild this one with marker
-                if (firstDisplayedEvent != null) {
-                    hasChange = rebuildEvent(firstDisplayedEvent.eventId) {
-                        it.copy(hasReadMarker = true)
-                    }
-                }
             }
         }
         if (hasChange) postSnapshot()
@@ -254,14 +209,10 @@ internal class DefaultTimeline(
                         .findAllAsync()
                         .also { it.addChangeListener(relationsListener) }
 
-                readMarkerEntity = ReadMarkerEntity.where(realm, roomId = roomId)
-                        .findFirstAsync()
-                        .also { it.addChangeListener(readMarkerListener) }
-
                 if (settings.buildReadReceipts) {
                     hiddenReadReceipts.start(realm, liveEvents, this)
                 }
-
+                hiddenReadMarker.start(realm, liveEvents, this)
                 isReady.set(true)
             }
         }
@@ -276,14 +227,36 @@ internal class DefaultTimeline(
                 roomEntity?.sendingTimelineEvents?.removeAllChangeListeners()
                 eventRelations.removeAllChangeListeners()
                 liveEvents.removeAllChangeListeners()
-                readMarkerEntity?.removeAllChangeListeners()
+                hiddenReadMarker.dispose()
                 if (settings.buildReadReceipts) {
                     hiddenReadReceipts.dispose()
                 }
+                clearAllValues()
                 backgroundRealm.getAndSet(null).also {
                     it.close()
                 }
             }
+        }
+    }
+
+    override fun restartWithEventId(eventId: String) {
+        dispose()
+        initialEventId = eventId
+        start()
+        postSnapshot()
+    }
+
+    override fun getIndexOfEvent(eventId: String?): Int? {
+        return builtEventsIdMap[eventId]
+    }
+
+    override fun getTimelineEventAtIndex(index: Int): TimelineEvent? {
+        return builtEvents.getOrNull(index)
+    }
+
+    override fun getTimelineEventWithId(eventId: String?): TimelineEvent? {
+        return builtEventsIdMap[eventId]?.let {
+            getTimelineEventAtIndex(it)
         }
     }
 
@@ -300,6 +273,18 @@ internal class DefaultTimeline(
     }
 
     override fun onReadReceiptsUpdated() {
+        postSnapshot()
+    }
+
+    // TimelineHiddenReadMarker.Delegate
+
+    override fun rebuildEvent(eventId: String, hasReadMarker: Boolean): Boolean {
+        return rebuildEvent(eventId) { te ->
+            te.copy(hasReadMarker = hasReadMarker)
+        }
+    }
+
+    override fun onReadMarkerUpdated() {
         postSnapshot()
     }
 
@@ -423,8 +408,9 @@ internal class DefaultTimeline(
 
         prevDisplayIndex = initialDisplayIndex
         nextDisplayIndex = initialDisplayIndex
-        if (initialEventId != null && shouldFetchInitialEvent) {
-            fetchEvent(initialEventId)
+        val currentInitialEventId = initialEventId
+        if (currentInitialEventId != null && shouldFetchInitialEvent) {
+            fetchEvent(currentInitialEventId)
         } else {
             val count = Math.min(settings.initialSize, liveEvents.size)
             if (isLive) {
@@ -571,10 +557,11 @@ internal class DefaultTimeline(
     }
 
     private fun findCurrentChunk(realm: Realm): ChunkEntity? {
-        return if (initialEventId == null) {
+        val currentInitialEventId = initialEventId
+        return if (currentInitialEventId == null) {
             ChunkEntity.findLastLiveChunkFromRoom(realm, roomId)
         } else {
-            ChunkEntity.findIncludingEvent(realm, initialEventId)
+            ChunkEntity.findIncludingEvent(realm, currentInitialEventId)
         }
     }
 
@@ -594,10 +581,22 @@ internal class DefaultTimeline(
     }
 
     private fun postSnapshot() {
-        val snapshot = createSnapshot()
-        val runnable = Runnable { listener?.onUpdated(snapshot) }
-        debouncer.debounce("post_snapshot", runnable, 50)
+        BACKGROUND_HANDLER.post {
+            val snapshot = createSnapshot()
+            val runnable = Runnable { listener?.onUpdated(snapshot) }
+            debouncer.debounce("post_snapshot", runnable, 50)
+        }
     }
+
+    private fun clearAllValues() {
+        prevDisplayIndex = DISPLAY_INDEX_UNKNOWN
+        nextDisplayIndex = DISPLAY_INDEX_UNKNOWN
+        builtEvents.clear()
+        builtEventsIdMap.clear()
+        backwardsPaginationState.set(PaginationState())
+        forwardsPaginationState.set(PaginationState())
+    }
+
 
 // Extension methods ***************************************************************************
 

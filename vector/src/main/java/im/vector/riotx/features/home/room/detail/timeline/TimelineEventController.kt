@@ -49,11 +49,11 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
                                                   private val timelineMediaSizeProvider: TimelineMediaSizeProvider,
                                                   private val avatarRenderer: AvatarRenderer,
                                                   @TimelineEventControllerHandler
-                                                  private val backgroundHandler: Handler,
-                                                  userPreferencesProvider: UserPreferencesProvider
+                                                  private val backgroundHandler: Handler
 ) : EpoxyController(backgroundHandler, backgroundHandler), Timeline.Listener {
 
     interface Callback : BaseCallback, ReactionPillCallback, AvatarCallback, UrlClickCallback, ReadReceiptsCallback {
+        fun onEventInvisible(event: TimelineEvent)
         fun onEventVisible(event: TimelineEvent)
         fun onRoomCreateLinkClicked(url: String)
         fun onEncryptedMessageClicked(informationData: MessageInformationData, view: View)
@@ -81,6 +81,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
 
     interface ReadReceiptsCallback {
         fun onReadReceiptsClicked(readReceipts: List<ReadReceiptData>)
+        fun onReadMarkerLongDisplayed(informationData: MessageInformationData)
     }
 
     interface UrlClickCallback {
@@ -139,8 +140,6 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             }
         }
     }
-
-    private val showHiddenEvents = userPreferencesProvider.shouldShowHiddenEvents()
 
     init {
         requestModelBuild()
@@ -247,7 +246,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
 
     private fun buildItemModels(currentPosition: Int, items: List<TimelineEvent>): CacheItemData {
         val event = items[currentPosition]
-        val nextEvent = items.nextDisplayableEvent(currentPosition, showHiddenEvents)
+        val nextEvent = items.nextOrNull(currentPosition)
         val date = event.root.localDateTime()
         val nextDate = nextEvent?.root?.localDateTime()
         val addDaySeparator = date.toLocalDate() != nextDate?.toLocalDate()
@@ -327,24 +326,50 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         return shouldAdd
     }
 
-    fun searchPositionOfEvent(eventId: String): Int? {
-        synchronized(modelCache) {
-            // Search in the cache
-            modelCache.forEachIndexed { idx, cacheItemData ->
-                if (cacheItemData?.eventId == eventId) {
-                    return idx
-                }
+    fun searchPositionOfEvent(eventId: String): Int? = synchronized(modelCache) {
+        // Search in the cache
+        var realPosition = 0
+        for (i in 0 until modelCache.size) {
+            val itemCache = modelCache[i]
+            if (itemCache?.eventId == eventId) {
+                return realPosition
             }
-
-            return null
+            if (itemCache?.eventModel != null) {
+                realPosition++
+            }
+            if (itemCache?.mergedHeaderModel != null) {
+                realPosition++
+            }
+            if (itemCache?.formattedDayModel != null) {
+                realPosition++
+            }
         }
+        return null
     }
-}
 
-private data class CacheItemData(
-        val localId: Long,
-        val eventId: String?,
-        val eventModel: EpoxyModel<*>? = null,
-        val mergedHeaderModel: MergedHeaderItem? = null,
-        val formattedDayModel: DaySeparatorItem? = null
-)
+    fun searchEventIdAtPosition(position: Int): String? = synchronized(modelCache) {
+        var offsetValue = 0
+        for (i in 0 until position) {
+            val itemCache = modelCache[i]
+            if (itemCache?.eventModel == null) {
+                offsetValue--
+            }
+            if (itemCache?.mergedHeaderModel != null) {
+                offsetValue++
+            }
+            if (itemCache?.formattedDayModel != null) {
+                offsetValue++
+            }
+        }
+        return modelCache.getOrNull(position - offsetValue)?.eventId
+    }
+
+    private data class CacheItemData(
+            val localId: Long,
+            val eventId: String?,
+            val eventModel: EpoxyModel<*>? = null,
+            val mergedHeaderModel: MergedHeaderItem? = null,
+            val formattedDayModel: DaySeparatorItem? = null
+    )
+
+}

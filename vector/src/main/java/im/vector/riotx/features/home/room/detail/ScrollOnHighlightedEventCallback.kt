@@ -38,7 +38,7 @@ class ScrollOnHighlightedEventCallback(private val layoutManager: LinearLayoutMa
             // Do not scroll it item is already visible
             if (positionToScroll !in firstVisibleItem..lastVisibleItem) {
                 // Note: Offset will be from the bottom, since the layoutManager is reversed
-                layoutManager.scrollToPositionWithOffset(positionToScroll, 120)
+                layoutManager.scrollToPosition(position)
             }
             scheduledEventId.set(null)
         }

@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.session.room.read
 
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.auth.data.Credentials
+import im.vector.matrix.android.api.session.room.read.FullyReadContent
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.ReadMarkerEntity
 import im.vector.matrix.android.internal.database.model.ReadReceiptEntity
@@ -25,13 +26,17 @@ import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.query.find
 import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
+import im.vector.matrix.android.internal.database.query.getOrCreate
 import im.vector.matrix.android.internal.database.query.latestEvent
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
+import im.vector.matrix.android.internal.session.sync.RoomFullyReadHandler
 import im.vector.matrix.android.internal.task.Task
+import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.Realm
+import io.realm.RealmConfiguration
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -50,7 +55,8 @@ private const val READ_RECEIPT = "m.read"
 
 internal class DefaultSetReadMarkersTask @Inject constructor(private val roomAPI: RoomAPI,
                                                              private val credentials: Credentials,
-                                                             private val monarchy: Monarchy
+                                                             private val monarchy: Monarchy,
+                                                             private val roomFullyReadHandler: RoomFullyReadHandler
 ) : SetReadMarkersTask {
 
     override suspend fun execute(params: SetReadMarkersTask.Params) {
@@ -74,12 +80,12 @@ internal class DefaultSetReadMarkersTask @Inject constructor(private val roomAPI
             if (LocalEchoEventFactory.isLocalEchoId(fullyReadEventId)) {
                 Timber.w("Can't set read marker for local event ${params.fullyReadEventId}")
             } else {
+                updateReadMarker(params.roomId, fullyReadEventId)
                 markers[READ_MARKER] = fullyReadEventId
             }
         }
         if (readReceiptEventId != null
             && !isEventRead(params.roomId, readReceiptEventId)) {
-
             if (LocalEchoEventFactory.isLocalEchoId(readReceiptEventId)) {
                 Timber.w("Can't set read receipt for local event ${params.fullyReadEventId}")
             } else {
@@ -95,6 +101,7 @@ internal class DefaultSetReadMarkersTask @Inject constructor(private val roomAPI
         }
     }
 
+
     private fun isReadMarkerMoreRecent(roomId: String, fullyReadEventId: String): Boolean {
         return Realm.getInstance(monarchy.realmConfiguration).use { realm ->
             val readMarkerEntity = ReadMarkerEntity.where(realm, roomId = roomId).findFirst()
@@ -106,12 +113,18 @@ internal class DefaultSetReadMarkersTask @Inject constructor(private val roomAPI
         }
     }
 
-    private fun updateNotificationCountIfNecessary(roomId: String, eventId: String) {
-        monarchy.writeAsync { realm ->
+    private suspend fun updateReadMarker(roomId: String, eventId: String) {
+        monarchy.awaitTransaction { realm ->
+            roomFullyReadHandler.handle(realm, roomId, FullyReadContent(eventId))
+        }
+    }
+
+    private suspend fun updateNotificationCountIfNecessary(roomId: String, eventId: String) {
+        monarchy.awaitTransaction { realm ->
             val isLatestReceived = TimelineEventEntity.latestEvent(realm, roomId = roomId, includesSending = false)?.eventId == eventId
             if (isLatestReceived) {
                 val roomSummary = RoomSummaryEntity.where(realm, roomId).findFirst()
-                                  ?: return@writeAsync
+                                  ?: return@awaitTransaction
                 roomSummary.notificationCount = 0
                 roomSummary.highlightCount = 0
             }

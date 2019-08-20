@@ -20,17 +20,11 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotx.core.epoxy.EmptyItem_
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
-import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
-import im.vector.riotx.features.home.room.detail.timeline.helper.senderAvatar
-import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
-import im.vector.riotx.features.home.room.detail.timeline.item.NoticeItem_
-import im.vector.riotx.features.home.room.detail.timeline.util.MessageInformationDataFactory
 import timber.log.Timber
 import javax.inject.Inject
 
 class TimelineItemFactory @Inject constructor(private val messageItemFactory: MessageItemFactory,
-                                              private val encryptionItemFactory: EncryptionItemFactory,
                                               private val encryptedItemFactory: EncryptedItemFactory,
                                               private val noticeItemFactory: NoticeItemFactory,
                                               private val defaultItemFactory: DefaultItemFactory,
@@ -40,6 +34,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                nextEvent: TimelineEvent?,
                eventIdToHighlight: String?,
                callback: TimelineEventController.Callback?): VectorEpoxyModel<*> {
+
         val highlight = event.root.eventId == eventIdToHighlight
 
         val computedModel = try {
@@ -55,11 +50,11 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 EventType.CALL_HANGUP,
                 EventType.CALL_ANSWER,
                 EventType.REACTION,
-                EventType.REDACTION         -> noticeItemFactory.create(event, highlight, callback)
+                EventType.REDACTION,
+                EventType.ENCRYPTION        -> noticeItemFactory.create(event, highlight, callback)
                 // State room create
                 EventType.STATE_ROOM_CREATE -> roomCreateItemFactory.create(event, callback)
                 // Crypto
-                EventType.ENCRYPTION        -> encryptionItemFactory.create(event, highlight, callback)
                 EventType.ENCRYPTED         -> {
                     if (event.root.isRedacted()) {
                         // Redacted event, let the MessageItemFactory handle it

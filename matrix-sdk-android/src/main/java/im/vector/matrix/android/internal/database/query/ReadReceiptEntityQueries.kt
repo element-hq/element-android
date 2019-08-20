@@ -20,6 +20,7 @@ import im.vector.matrix.android.internal.database.model.ReadReceiptEntity
 import im.vector.matrix.android.internal.database.model.ReadReceiptEntityFields
 import io.realm.Realm
 import io.realm.RealmQuery
+import io.realm.RealmResults
 import io.realm.kotlin.where
 
 internal fun ReadReceiptEntity.Companion.where(realm: Realm, roomId: String, userId: String): RealmQuery<ReadReceiptEntity> {
@@ -27,6 +28,12 @@ internal fun ReadReceiptEntity.Companion.where(realm: Realm, roomId: String, use
             .equalTo(ReadReceiptEntityFields.ROOM_ID, roomId)
             .equalTo(ReadReceiptEntityFields.USER_ID, userId)
 }
+
+internal fun ReadReceiptEntity.Companion.whereUserId(realm: Realm, userId: String): RealmQuery<ReadReceiptEntity> {
+    return realm.where<ReadReceiptEntity>()
+            .equalTo(ReadReceiptEntityFields.USER_ID, userId)
+}
+
 
 internal fun ReadReceiptEntity.Companion.createUnmanaged(roomId: String, eventId: String, userId: String, originServerTs: Double): ReadReceiptEntity {
     return ReadReceiptEntity().apply {
