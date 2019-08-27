@@ -19,6 +19,7 @@ package im.vector.riotx.features.home.room.detail.timeline.action
 import android.content.Context
 import android.graphics.Typeface
 import android.text.format.DateUtils
+import androidx.emoji.text.EmojiCompat
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Incomplete
@@ -30,7 +31,7 @@ import im.vector.riotx.core.ui.list.genericLoaderItem
 /**
  * Epoxy controller for reaction event list
  */
-class ViewReactionsEpoxyController(private val context: Context, private val emojiCompatTypeface: Typeface?)
+class ViewReactionsEpoxyController(private val context: Context)
     : TypedEpoxyController<DisplayReactionsViewState>() {
 
     override fun buildModels(state: DisplayReactionsViewState) {
@@ -50,9 +51,8 @@ class ViewReactionsEpoxyController(private val context: Context, private val emo
                 state.mapReactionKeyToMemberList()?.forEach {
                     reactionInfoSimpleItem {
                         id(it.eventId)
-                        emojiTypeFace(emojiCompatTypeface)
                         timeStamp(it.timestamp)
-                        reactionKey(it.reactionKey)
+                        reactionKey(EmojiCompat.get().process(it.reactionKey))
                         authorDisplayName(it.authorName ?: it.authorId)
                     }
                 }

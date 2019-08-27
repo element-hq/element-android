@@ -28,7 +28,6 @@ import com.airbnb.epoxy.EpoxyRecyclerView
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import im.vector.riotx.EmojiCompatFontProvider
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
@@ -43,13 +42,12 @@ class ViewReactionBottomSheet : VectorBaseBottomSheetDialogFragment() {
     private val viewModel: ViewReactionViewModel by fragmentViewModel(ViewReactionViewModel::class)
 
     @Inject lateinit var viewReactionViewModelFactory: ViewReactionViewModel.Factory
-    @Inject lateinit var emojiCompatFontProvider: EmojiCompatFontProvider
 
     @BindView(R.id.bottom_sheet_display_reactions_list)
     lateinit var epoxyRecyclerView: EpoxyRecyclerView
 
     private val epoxyController by lazy {
-        ViewReactionsEpoxyController(requireContext(), emojiCompatFontProvider.typeface)
+        ViewReactionsEpoxyController(requireContext())
     }
 
     override fun injectWith(screenComponent: ScreenComponent) {

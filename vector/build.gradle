@@ -318,6 +318,8 @@ dependencies {
 
     implementation 'diff_match_patch:diff_match_patch:current'
 
+    implementation "androidx.emoji:emoji-appcompat:1.0.0"
+
     // TESTS
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
