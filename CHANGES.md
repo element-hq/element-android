@@ -11,6 +11,7 @@ Other changes:
  -
 
 Bugfix:
+ - Fix text diff linebreak display (#441)
  - Date change message repeats for each redaction until a normal message (#358)
  - Slide-in reply icon is distorted (#423)
 

@@ -113,7 +113,7 @@ class ViewEditHistoryEpoxyController(private val context: Context,
                             when (it.operation) {
                                 diff_match_patch.Operation.DELETE -> {
                                     span {
-                                        text = it.text
+                                        text = it.text.replace("\n"," ")
                                         textColor = ContextCompat.getColor(context, R.color.vector_error_color)
                                         textDecorationLine = "line-through"
                                     }
