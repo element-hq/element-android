@@ -50,10 +50,10 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
 
         val showInformation =
                 addDaySeparator
-                || event.senderAvatar != nextEvent?.senderAvatar
-                || event.getDisambiguatedDisplayName() != nextEvent?.getDisambiguatedDisplayName()
-                || (nextEvent.root.getClearType() != EventType.MESSAGE && nextEvent.root.getClearType() != EventType.ENCRYPTED)
-                || isNextMessageReceivedMoreThanOneHourAgo
+                        || event.senderAvatar != nextEvent?.senderAvatar
+                        || event.getDisambiguatedDisplayName() != nextEvent?.getDisambiguatedDisplayName()
+                        || (nextEvent.root.getClearType() != EventType.MESSAGE && nextEvent.root.getClearType() != EventType.ENCRYPTED)
+                        || isNextMessageReceivedMoreThanOneHourAgo
 
         val time = dateFormatter.formatMessageHour(date)
         val avatarUrl = event.senderAvatar
