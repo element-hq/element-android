@@ -191,12 +191,13 @@ class RoomMessageTouchHelperCallback(private val context: Context,
         }
 
         val y = (itemView.top + itemView.measuredHeight / 2).toFloat()
-        //magic numbers?
+        val hw = imageDrawable.intrinsicWidth / 2f
+        val hh = imageDrawable.intrinsicHeight / 2f
         imageDrawable.setBounds(
-                (x - convertToPx(12) * scale).toInt(),
-                (y - convertToPx(11) * scale).toInt(),
-                (x + convertToPx(12) * scale).toInt(),
-                (y + convertToPx(10) * scale).toInt()
+                (x - hw * scale).toInt(),
+                (y - hh * scale).toInt(),
+                (x + hw * scale).toInt(),
+                (y + hh * scale).toInt()
         )
         imageDrawable.draw(canvas)
         imageDrawable.alpha = 255
