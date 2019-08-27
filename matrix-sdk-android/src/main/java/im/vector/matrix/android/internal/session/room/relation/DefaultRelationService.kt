@@ -136,7 +136,7 @@ internal class DefaultRelationService @AssistedInject constructor(@Assisted priv
                 }
         if (cryptoService.isRoomEncrypted(roomId)) {
             val encryptWork = createEncryptEventWork(event, listOf("m.relates_to"))
-            val workRequest = createSendEventWork(event)
+            val workRequest = createSendEventWork(event, false)
             TimelineSendEventWorkCommon.postSequentialWorks(context, roomId, encryptWork, workRequest)
             return CancelableWork(context, encryptWork.id)
 
@@ -162,7 +162,7 @@ internal class DefaultRelationService @AssistedInject constructor(@Assisted priv
                 }
         if (cryptoService.isRoomEncrypted(roomId)) {
             val encryptWork = createEncryptEventWork(event, listOf("m.relates_to"))
-            val workRequest = createSendEventWork(event)
+            val workRequest = createSendEventWork(event, false)
             TimelineSendEventWorkCommon.postSequentialWorks(context, roomId, encryptWork, workRequest)
             return CancelableWork(context, encryptWork.id)
 
@@ -189,7 +189,7 @@ internal class DefaultRelationService @AssistedInject constructor(@Assisted priv
 
         if (cryptoService.isRoomEncrypted(roomId)) {
             val encryptWork = createEncryptEventWork(event, listOf("m.relates_to"))
-            val workRequest = createSendEventWork(event)
+            val workRequest = createSendEventWork(event, false)
             TimelineSendEventWorkCommon.postSequentialWorks(context, roomId, encryptWork, workRequest)
             return CancelableWork(context, encryptWork.id)
 
@@ -208,10 +208,10 @@ internal class DefaultRelationService @AssistedInject constructor(@Assisted priv
         return TimelineSendEventWorkCommon.createWork<EncryptEventWorker>(sendWorkData, true)
     }
 
-    private fun createSendEventWork(event: Event): OneTimeWorkRequest {
+    private fun createSendEventWork(event: Event, startChain: Boolean = true): OneTimeWorkRequest {
         val sendContentWorkerParams = SendEventWorker.Params(credentials.userId, roomId, event)
         val sendWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
-        return TimelineSendEventWorkCommon.createWork<SendEventWorker>(sendWorkData, true)
+        return TimelineSendEventWorkCommon.createWork<SendEventWorker>(sendWorkData, startChain)
     }
 
     override fun getEventSummaryLive(eventId: String): LiveData<EventAnnotationsSummary> {
