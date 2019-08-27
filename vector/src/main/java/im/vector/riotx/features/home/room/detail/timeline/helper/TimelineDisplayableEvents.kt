@@ -56,7 +56,8 @@ fun TimelineEvent.isDisplayable(showHiddenEvent: Boolean): Boolean {
         return false
     }
     if (root.content.isNullOrEmpty()) {
-        return false
+        //redacted events have empty content but are displayable
+        return root.unsignedData?.redactedEvent != null
     }
     //Edits should be filtered out!
     if (EventType.MESSAGE == root.type
