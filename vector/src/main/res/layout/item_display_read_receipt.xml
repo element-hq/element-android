@@ -5,38 +5,26 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
+    android:minHeight="40dp"
     android:orientation="horizontal"
     android:paddingStart="8dp"
     android:paddingEnd="8dp">
 
     <ImageView
         android:id="@+id/readReceiptAvatar"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:layout_marginEnd="8dp"
         tools:src="@tools:sample/avatars" />
 
     <TextView
         android:id="@+id/readReceiptName"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_weight="1"
-        android:ellipsize="end"
-        android:lines="1"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:textColor="?riotx_text_primary"
-        android:textSize="16sp"
+        style="@style/BottomSheetItemTextMain"
         tools:text="@sample/matrix.json/data/displayName" />
 
     <TextView
         android:id="@+id/readReceiptDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:lines="1"
-        android:textColor="?riotx_text_secondary"
-        android:textSize="12sp"
+        style="@style/BottomSheetItemTime"
         tools:text="10:44" />
 
 </LinearLayout>
