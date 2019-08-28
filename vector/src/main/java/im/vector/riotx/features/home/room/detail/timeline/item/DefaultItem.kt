@@ -17,6 +17,7 @@
 package im.vector.riotx.features.home.room.detail.timeline.item
 
 import android.widget.TextView
+import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
@@ -29,6 +30,9 @@ abstract class DefaultItem : BaseEventItem<DefaultItem.Holder>() {
 
     override fun bind(holder: Holder) {
         holder.messageView.text = text
+
+        // TODO We should handle read receipt here as well
+        holder.readReceiptsView.isVisible = false
     }
 
     override fun getViewType() = STUB_ID
