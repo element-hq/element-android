@@ -6,6 +6,7 @@
     android:gravity="center_vertical"
     android:orientation="horizontal"
     android:paddingStart="8dp"
+    android:minHeight="40dp"
     android:paddingEnd="8dp">
 
     <TextView
@@ -22,25 +23,12 @@
 
     <TextView
         android:id="@+id/itemSimpleReactionInfoMemberName"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:layout_weight="1"
-        android:ellipsize="end"
-        android:lines="1"
-        android:textColor="?android:textColorPrimary"
-        android:textSize="16sp"
+        style="@style/BottomSheetItemTextMain"
         tools:text="@sample/matrix.json/data/displayName" />
 
     <TextView
         android:id="@+id/itemSimpleReactionInfoTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:lines="1"
-        android:textColor="?android:textColorSecondary"
-        android:textSize="12sp"
+        style="@style/BottomSheetItemTime"
         tools:text="10:44" />
 
 
