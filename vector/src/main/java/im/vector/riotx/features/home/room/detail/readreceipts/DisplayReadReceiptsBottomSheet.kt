@@ -69,7 +69,7 @@ class DisplayReadReceiptsBottomSheet : VectorBaseBottomSheetDialogFragment() {
         val dividerItemDecoration = DividerItemDecoration(epoxyRecyclerView.context,
                                                           LinearLayout.VERTICAL)
         epoxyRecyclerView.addItemDecoration(dividerItemDecoration)
-        bottomSheetTitle.text = getString(R.string.read_receipts_list)
+        bottomSheetTitle.text = getString(R.string.read_at)
         epoxyController.setData(displayReadReceiptArgs.readReceipts)
     }
 

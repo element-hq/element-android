@@ -2,5 +2,6 @@
 <resources>
 
     <!-- Strings not defined in Riot -->
+    <string name="read_at">Read at</string>
 
 </resources>

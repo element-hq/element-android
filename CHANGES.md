@@ -15,6 +15,7 @@ Bugfix:
  - Date change message repeats for each redaction until a normal message (#358)
  - Slide-in reply icon is distorted (#423)
  - Regression / e2e replies not encrypted
+ - Some video won't play
 
 Translations:
  -
