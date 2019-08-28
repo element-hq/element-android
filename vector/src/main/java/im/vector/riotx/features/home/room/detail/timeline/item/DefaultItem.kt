@@ -35,6 +35,13 @@ abstract class DefaultItem : BaseEventItem<DefaultItem.Holder>() {
     lateinit var avatarRenderer: AvatarRenderer
 
     @EpoxyAttribute
+    var baseCallback: TimelineEventController.BaseCallback? = null
+
+    private var longClickListener = View.OnLongClickListener {
+        return@OnLongClickListener baseCallback?.onEventLongClicked(informationData, null, it) == true
+    }
+
+    @EpoxyAttribute
     var readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null
 
     private val _readReceiptsClickListener = DebouncedClickListener(View.OnClickListener {
@@ -47,6 +54,7 @@ abstract class DefaultItem : BaseEventItem<DefaultItem.Holder>() {
     override fun bind(holder: Holder) {
         holder.messageView.text = text
 
+        holder.view.setOnLongClickListener(longClickListener)
         holder.readReceiptsView.render(informationData.readReceipts, avatarRenderer, _readReceiptsClickListener)
     }
 

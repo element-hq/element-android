@@ -44,6 +44,7 @@ class DefaultItemFactory @Inject constructor(private val avatarRenderer: AvatarR
                 .avatarRenderer(avatarRenderer)
                 .highlighted(highlight)
                 .informationData(informationData)
+                .baseCallback(callback)
                 .readReceiptsCallback(callback)
     }
 
