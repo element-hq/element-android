@@ -16,14 +16,30 @@
 
 package im.vector.riotx.features.home.room.detail.timeline.item
 
+import android.view.View
 import android.widget.TextView
-import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
+import im.vector.riotx.core.utils.DebouncedClickListener
+import im.vector.riotx.features.home.AvatarRenderer
+import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base_noinfo)
 abstract class DefaultItem : BaseEventItem<DefaultItem.Holder>() {
+
+    @EpoxyAttribute
+    lateinit var informationData: MessageInformationData
+
+    @EpoxyAttribute
+    lateinit var avatarRenderer: AvatarRenderer
+
+    @EpoxyAttribute
+    var readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null
+
+    private val _readReceiptsClickListener = DebouncedClickListener(View.OnClickListener {
+        readReceiptsCallback?.onReadReceiptsClicked(informationData.readReceipts)
+    })
 
     @EpoxyAttribute
     var text: CharSequence? = null
@@ -31,8 +47,7 @@ abstract class DefaultItem : BaseEventItem<DefaultItem.Holder>() {
     override fun bind(holder: Holder) {
         holder.messageView.text = text
 
-        // TODO We should handle read receipt here as well
-        holder.readReceiptsView.isVisible = false
+        holder.readReceiptsView.render(informationData.readReceipts, avatarRenderer, _readReceiptsClickListener)
     }
 
     override fun getViewType() = STUB_ID

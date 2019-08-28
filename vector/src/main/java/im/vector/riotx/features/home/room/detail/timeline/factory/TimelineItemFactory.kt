@@ -20,12 +20,7 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotx.core.epoxy.EmptyItem_
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
-import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
-import im.vector.riotx.features.home.room.detail.timeline.helper.senderAvatar
-import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
-import im.vector.riotx.features.home.room.detail.timeline.item.NoticeItem_
-import im.vector.riotx.features.home.room.detail.timeline.util.MessageInformationDataFactory
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -71,7 +66,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
 
                 // Unhandled event types (yet)
                 EventType.STATE_ROOM_THIRD_PARTY_INVITE,
-                EventType.STICKER           -> defaultItemFactory.create(event, highlight)
+                EventType.STICKER           -> defaultItemFactory.create(event, highlight, callback)
                 else                        -> {
                     Timber.v("Type ${event.root.getClearType()} not handled")
                     null
@@ -79,7 +74,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
             }
         } catch (e: Exception) {
             Timber.e(e, "failed to create message item")
-            defaultItemFactory.create(event, highlight, e)
+            defaultItemFactory.create(event, highlight, callback, e)
         }
         return (computedModel ?: EmptyItem_())
     }
