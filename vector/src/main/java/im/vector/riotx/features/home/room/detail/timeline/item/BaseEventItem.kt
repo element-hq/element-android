@@ -24,6 +24,7 @@ import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
 import im.vector.riotx.core.platform.CheckableView
+import im.vector.riotx.core.ui.views.ReadReceiptsView
 import im.vector.riotx.core.utils.DimensionUtils.dpToPx
 
 /**
@@ -49,6 +50,7 @@ abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>
     abstract class BaseHolder(@IdRes val stubId: Int) : VectorEpoxyHolder() {
         val leftGuideline by bind<Guideline>(R.id.messageStartGuideline)
         val checkableBackground by bind<CheckableView>(R.id.messageSelectedBackground)
+        val readReceiptsView by bind<ReadReceiptsView>(R.id.readReceiptsView)
 
         override fun bindView(itemView: View) {
             super.bindView(itemView)

@@ -21,11 +21,8 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
-import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
-import butterknife.ButterKnife
 import im.vector.riotx.R
-import im.vector.riotx.core.utils.DebouncedClickListener
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.item.ReadReceiptData
 import kotlinx.android.synthetic.main.view_read_receipts.view.*
@@ -48,7 +45,6 @@ class ReadReceiptsView @JvmOverloads constructor(
 
     private fun setupView() {
         inflate(context, R.layout.view_read_receipts, this)
-        ButterKnife.bind(this)
     }
 
     fun render(readReceipts: List<ReadReceiptData>, avatarRenderer: AvatarRenderer, clickListener: OnClickListener) {
