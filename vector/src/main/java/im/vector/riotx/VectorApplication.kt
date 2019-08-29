@@ -109,21 +109,7 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
         FontsContractCompat.requestFont(this, fontRequest, emojiCompatFontProvider, getFontThreadHandler())
         vectorConfiguration.initConfiguration()
 
-        //Use emoji compat for the benefit of emoji spans
-        val config = FontRequestEmojiCompatConfig(this, fontRequest)
-                .setReplaceAll(true) // we want to replace all emojis with selected font
-//                .setEmojiSpanIndicatorEnabled(true)
-//                .setEmojiSpanIndicatorColor(Color.GREEN)
-        EmojiCompat.init(config)
-                .registerInitCallback(object : EmojiCompat.InitCallback() {
-            override fun onInitialized() {
-                Timber.v("Emoji compat onInitialized success ")
-            }
-
-            override fun onFailed(throwable: Throwable?) {
-                Timber.e(throwable,"Failed to init EmojiCompat")
-            }
-        })
+        EmojiCompatHelper.init(this)
 
         NotificationUtils.createNotificationChannels(applicationContext)
         if (authenticator.hasAuthenticatedSessions() && !activeSessionHolder.hasActiveSession()) {

@@ -21,7 +21,6 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.res.TypedArray
-import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -35,7 +34,7 @@ import android.widget.TextView
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
-import androidx.emoji.text.EmojiCompat
+import im.vector.riotx.EmojiCompatHelper
 import im.vector.riotx.R
 import im.vector.riotx.core.utils.TextUtils
 
@@ -78,7 +77,7 @@ class ReactionButton @JvmOverloads constructor(context: Context, attrs: Attribut
         set(value) {
             field = value
             //maybe cache this for performances?
-            val emojiSpanned = EmojiCompat.get().process(value)
+            val emojiSpanned = EmojiCompatHelper.safeEmojiSpanify(value)
             emojiView?.text = emojiSpanned
         }
 

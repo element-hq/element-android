@@ -24,6 +24,7 @@ import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Success
+import im.vector.riotx.EmojiCompatHelper
 import im.vector.riotx.R
 import im.vector.riotx.core.ui.list.genericFooterItem
 import im.vector.riotx.core.ui.list.genericLoaderItem
@@ -52,7 +53,7 @@ class ViewReactionsEpoxyController(private val context: Context)
                     reactionInfoSimpleItem {
                         id(it.eventId)
                         timeStamp(it.timestamp)
-                        reactionKey(EmojiCompat.get().process(it.reactionKey))
+                        reactionKey(EmojiCompatHelper.safeEmojiSpanify(it.reactionKey))
                         authorDisplayName(it.authorName ?: it.authorId)
                     }
                 }
