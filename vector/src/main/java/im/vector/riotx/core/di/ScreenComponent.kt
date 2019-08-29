@@ -58,6 +58,7 @@ import im.vector.riotx.features.rageshake.BugReportActivity
 import im.vector.riotx.features.rageshake.BugReporter
 import im.vector.riotx.features.rageshake.RageShake
 import im.vector.riotx.features.reactions.EmojiReactionPickerActivity
+import im.vector.riotx.features.reactions.widget.ReactionButton
 import im.vector.riotx.features.roomdirectory.PublicRoomsFragment
 import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomActivity
@@ -180,6 +181,8 @@ interface ScreenComponent {
     fun inject(createDirectRoomActivity: CreateDirectRoomActivity)
 
     fun inject(displayReadReceiptsBottomSheet: DisplayReadReceiptsBottomSheet)
+
+    fun inject(reactionButton: ReactionButton)
 
     @Component.Factory
     interface Factory {

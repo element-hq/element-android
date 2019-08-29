@@ -46,9 +46,7 @@ class ViewReactionBottomSheet : VectorBaseBottomSheetDialogFragment() {
     @BindView(R.id.bottom_sheet_display_reactions_list)
     lateinit var epoxyRecyclerView: EpoxyRecyclerView
 
-    private val epoxyController by lazy {
-        ViewReactionsEpoxyController(requireContext())
-    }
+    @Inject lateinit var epoxyController: ViewReactionsEpoxyController
 
     override fun injectWith(screenComponent: ScreenComponent) {
         screenComponent.inject(this)
