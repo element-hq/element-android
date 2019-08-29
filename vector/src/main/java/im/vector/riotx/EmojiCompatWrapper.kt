@@ -16,22 +16,21 @@
 package im.vector.riotx
 
 import android.content.Context
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.provider.FontRequest
 import androidx.emoji.text.EmojiCompat
 import androidx.emoji.text.FontRequestEmojiCompatConfig
 import timber.log.Timber
+import javax.inject.Inject
+import javax.inject.Singleton
 
-object EmojiCompatHelper {
+@Singleton
+class EmojiCompatWrapper @Inject constructor(private val context: Context)  {
 
-    var initialized = false
+    private var initialized = false
 
-    fun init(context: Context) {
-        val fontRequest = FontRequest(
-                "com.google.android.gms.fonts",
-                "com.google.android.gms",
-                "Noto Color Emoji Compat",
-                R.array.com_google_android_gms_fonts_certs
-        )
+    fun init(fontRequest: FontRequest) {
+
         //Use emoji compat for the benefit of emoji spans
         val config = FontRequestEmojiCompatConfig(context, fontRequest)
                 // we want to replace all emojis with selected font

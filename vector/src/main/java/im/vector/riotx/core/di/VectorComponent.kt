@@ -24,6 +24,7 @@ import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.auth.Authenticator
 import im.vector.matrix.android.api.session.Session
 import im.vector.riotx.EmojiCompatFontProvider
+import im.vector.riotx.EmojiCompatWrapper
 import im.vector.riotx.VectorApplication
 import im.vector.riotx.core.pushers.PushersManager
 import im.vector.riotx.features.configuration.VectorConfiguration
@@ -69,6 +70,8 @@ interface VectorComponent {
     fun activeSessionHolder(): ActiveSessionHolder
 
     fun emojiCompatFontProvider(): EmojiCompatFontProvider
+
+    fun emojiCompatWrapper() : EmojiCompatWrapper
 
     fun eventHtmlRenderer(): EventHtmlRenderer
 
