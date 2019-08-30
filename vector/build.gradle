@@ -51,7 +51,7 @@ static def gitRevisionDate() {
 }
 
 static def gitBranchName() {
-    def cmd = "git name-rev --name-only HEAD"
+    def cmd = "git rev-parse --abbrev-ref HEAD"
     return cmd.execute().text.trim()
 }
 

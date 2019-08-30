@@ -17,7 +17,7 @@ Translations:
  -
 
 Build:
- -
+ - Fix issue with version name (#533)
 
 Changes in RiotX 0.4.0 (2019-XX-XX)
 ===================================================
