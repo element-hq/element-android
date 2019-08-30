@@ -1,3 +1,21 @@
+Changes in RiotX 0.4.0 (2019-XX-XX)
+===================================================
+
+Features:
+ - Display read receipts in timeline (#81)
+
+Improvements:
+ - Reactions: Reinstate the ability to react with non-unicode keys (#307)
+
+Bugfix:
+ - Fix text diff linebreak display (#441)
+ - Date change message repeats for each redaction until a normal message (#358)
+ - Slide-in reply icon is distorted (#423)
+ - Regression / e2e replies not encrypted
+ - Some video won't play
+ - Privacy: remove log of notifiable event (#519)
+ - Fix crash with EmojiCompat (#530)
+
 Changes in RiotX 0.3.0 (2019-08-08)
 ===================================================
 

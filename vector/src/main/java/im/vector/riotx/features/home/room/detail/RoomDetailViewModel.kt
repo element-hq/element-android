@@ -43,6 +43,7 @@ import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.model.message.getFileUrl
 import im.vector.matrix.android.api.session.room.model.tombstone.RoomTombstoneContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.matrix.android.api.session.room.timeline.TimelineSettings
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
 import im.vector.matrix.rx.rx
@@ -66,7 +67,7 @@ import java.util.concurrent.TimeUnit
 
 
 class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: RoomDetailViewState,
-                                                      userPreferencesProvider: UserPreferencesProvider,
+                                                      private val userPreferencesProvider: UserPreferencesProvider,
                                                       private val vectorPreferences: VectorPreferences,
                                                       private val session: Session
 ) : VectorViewModel<RoomDetailViewState>(initialState) {
@@ -75,12 +76,13 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     private val roomId = initialState.roomId
     private val eventId = initialState.eventId
     private val displayedEventsObservable = BehaviorRelay.create<RoomDetailActions.EventDisplayed>()
-    private val allowedTypes = if (userPreferencesProvider.shouldShowHiddenEvents()) {
-        TimelineDisplayableEvents.DEBUG_DISPLAYABLE_TYPES
+    private val timelineSettings = if (userPreferencesProvider.shouldShowHiddenEvents()) {
+        TimelineSettings(30, false, true, TimelineDisplayableEvents.DEBUG_DISPLAYABLE_TYPES, userPreferencesProvider.shouldShowReadReceipts())
     } else {
-        TimelineDisplayableEvents.DISPLAYABLE_TYPES
+        TimelineSettings(30, true, true, TimelineDisplayableEvents.DISPLAYABLE_TYPES, userPreferencesProvider.shouldShowReadReceipts())
     }
-    private var timeline = room.createTimeline(eventId, allowedTypes)
+
+    private var timeline = room.createTimeline(eventId, timelineSettings)
 
     // Slot to keep a pending action during permission request
     var pendingAction: RoomDetailActions? = null
@@ -140,7 +142,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
 
     private fun handleTombstoneEvent(action: RoomDetailActions.HandleTombstoneEvent) {
         val tombstoneContent = action.event.getClearContent().toModel<RoomTombstoneContent>()
-                ?: return
+                               ?: return
 
         val roomId = tombstoneContent.replacementRoom ?: ""
         val isRoomJoined = session.getRoom(roomId)?.roomSummary()?.membership == Membership.JOIN
@@ -287,7 +289,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
 
                     //is original event a reply?
                     val inReplyTo = state.sendMode.timelineEvent.root.getClearContent().toModel<MessageContent>()?.relatesTo?.inReplyTo?.eventId
-                            ?: state.sendMode.timelineEvent.root.content.toModel<EncryptedEventContent>()?.relatesTo?.inReplyTo?.eventId
+                                    ?: state.sendMode.timelineEvent.root.content.toModel<EncryptedEventContent>()?.relatesTo?.inReplyTo?.eventId
                     if (inReplyTo != null) {
                         //TODO check if same content?
                         room.getTimeLineEvent(inReplyTo)?.let {
@@ -296,12 +298,12 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                     } else {
                         val messageContent: MessageContent? =
                                 state.sendMode.timelineEvent.annotations?.editSummary?.aggregatedContent.toModel()
-                                        ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
+                                ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
                         val existingBody = messageContent?.body ?: ""
                         if (existingBody != action.text) {
                             room.editTextMessage(state.sendMode.timelineEvent.root.eventId
-                                    ?: "", messageContent?.type
-                                    ?: MessageType.MSGTYPE_TEXT, action.text, action.autoMarkdown)
+                                                 ?: "", messageContent?.type
+                                                        ?: MessageType.MSGTYPE_TEXT, action.text, action.autoMarkdown)
                         } else {
                             Timber.w("Same message content, do not send edition")
                         }
@@ -316,7 +318,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 is SendMode.QUOTE -> {
                     val messageContent: MessageContent? =
                             state.sendMode.timelineEvent.annotations?.editSummary?.aggregatedContent.toModel()
-                                    ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
+                            ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
                     val textMsg = messageContent?.body
 
                     val finalText = legacyRiotQuoteText(textMsg, action.text)
@@ -552,7 +554,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         } else {
             // change timeline
             timeline.dispose()
-            timeline = room.createTimeline(targetEventId, allowedTypes)
+            timeline = room.createTimeline(targetEventId, timelineSettings)
             timeline.start()
 
             withState {

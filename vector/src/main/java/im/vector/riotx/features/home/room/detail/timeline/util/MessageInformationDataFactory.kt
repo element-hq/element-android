@@ -16,6 +16,7 @@
 
 package im.vector.riotx.features.home.room.detail.timeline.util
 
+import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.hasBeenEdited
@@ -23,16 +24,18 @@ import im.vector.riotx.core.extensions.localDateTime
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.utils.isSingleEmoji
 import im.vector.riotx.features.home.getColorFromUserId
-import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineDateFormatter
+import im.vector.riotx.core.date.VectorDateFormatter
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.riotx.features.home.room.detail.timeline.item.ReactionInfoData
+import im.vector.riotx.features.home.room.detail.timeline.item.ReadReceiptData
 import me.gujun.android.span.span
 import javax.inject.Inject
 
 /**
  * This class compute if data of an event (such has avatar, display name, ...) should be displayed, depending on the previous event in the timeline
  */
-class MessageInformationDataFactory @Inject constructor(private val timelineDateFormatter: TimelineDateFormatter,
+class MessageInformationDataFactory @Inject constructor(private val session: Session,
+                                                        private val dateFormatter: VectorDateFormatter,
                                                         private val colorProvider: ColorProvider) {
 
     fun create(event: TimelineEvent, nextEvent: TimelineEvent?): MessageInformationData {
@@ -43,21 +46,20 @@ class MessageInformationDataFactory @Inject constructor(private val timelineDate
         val nextDate = nextEvent?.root?.localDateTime()
         val addDaySeparator = date.toLocalDate() != nextDate?.toLocalDate()
         val isNextMessageReceivedMoreThanOneHourAgo = nextDate?.isBefore(date.minusMinutes(60))
-                ?: false
+                                                      ?: false
 
         val showInformation =
                 addDaySeparator
                         || event.senderAvatar != nextEvent?.senderAvatar
                         || event.getDisambiguatedDisplayName() != nextEvent?.getDisambiguatedDisplayName()
-                        || (nextEvent?.root?.getClearType() != EventType.MESSAGE && nextEvent?.root?.getClearType() != EventType.ENCRYPTED)
+                        || (nextEvent.root.getClearType() != EventType.MESSAGE && nextEvent.root.getClearType() != EventType.ENCRYPTED)
                         || isNextMessageReceivedMoreThanOneHourAgo
 
-        val time = timelineDateFormatter.formatMessageHour(date)
+        val time = dateFormatter.formatMessageHour(date)
         val avatarUrl = event.senderAvatar
         val memberName = event.getDisambiguatedDisplayName()
         val formattedMemberName = span(memberName) {
-            textColor = colorProvider.getColor(getColorFromUserId(event.root.senderId
-                    ?: ""))
+            textColor = colorProvider.getColor(getColorFromUserId(event.root.senderId ?: ""))
         }
 
         return MessageInformationData(
@@ -69,12 +71,21 @@ class MessageInformationDataFactory @Inject constructor(private val timelineDate
                 memberName = formattedMemberName,
                 showInformation = showInformation,
                 orderedReactionList = event.annotations?.reactionsSummary
-                        ?.filter { isSingleEmoji(it.key) }
+                        //?.filter { isSingleEmoji(it.key) }
                         ?.map {
                             ReactionInfoData(it.key, it.count, it.addedByMe, it.localEchoEvents.isEmpty())
                         },
                 hasBeenEdited = event.hasBeenEdited(),
-                hasPendingEdits = event.annotations?.editSummary?.localEchos?.any() ?: false
+                hasPendingEdits = event.annotations?.editSummary?.localEchos?.any() ?: false,
+                readReceipts = event.readReceipts
+                        .asSequence()
+                        .filter {
+                            it.user.userId != session.myUserId
+                        }
+                        .map {
+                            ReadReceiptData(it.user.userId, it.user.avatarUrl, it.user.displayName, it.originServerTs)
+                        }
+                        .toList()
         )
     }
 }

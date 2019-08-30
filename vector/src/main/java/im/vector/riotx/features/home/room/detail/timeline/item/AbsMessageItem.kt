@@ -39,7 +39,6 @@ import im.vector.riotx.features.home.room.detail.timeline.TimelineEventControlle
 import im.vector.riotx.features.reactions.widget.ReactionButton
 import im.vector.riotx.features.ui.getMessageTextColor
 
-
 abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
 
     @EpoxyAttribute
@@ -69,6 +68,9 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
     @EpoxyAttribute
     var avatarCallback: TimelineEventController.AvatarCallback? = null
 
+    @EpoxyAttribute
+    var readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null
+
     private val _avatarClickListener = DebouncedClickListener(View.OnClickListener {
         avatarCallback?.onAvatarClicked(informationData)
     })
@@ -76,6 +78,9 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
         avatarCallback?.onMemberNameClicked(informationData)
     })
 
+    private val _readReceiptsClickListener = DebouncedClickListener(View.OnClickListener {
+        readReceiptsCallback?.onReadReceiptsClicked(informationData.readReceipts)
+    })
 
     var reactionClickListener: ReactionButton.ReactedListener = object : ReactionButton.ReactedListener {
         override fun onReacted(reactionButton: ReactionButton) {
@@ -123,6 +128,8 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
             holder.memberNameView.setOnLongClickListener(null)
         }
 
+        holder.readReceiptsView.render(informationData.readReceipts, avatarRenderer, _readReceiptsClickListener)
+
         if (!shouldShowReactionAtBottom() || informationData.orderedReactionList.isNullOrEmpty()) {
             holder.reactionWrapper?.isVisible = false
         } else {
@@ -143,7 +150,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
                     idToRefInFlow.add(reactionButton.id)
                     reactionButton.reactionString = reaction.key
                     reactionButton.reactionCount = reaction.count
-                    reactionButton.emojiTypeFace = emojiTypeFace
+                    //reactionButton.emojiTypeFace = emojiTypeFace
                     reactionButton.setChecked(reaction.addedByMe)
                     reactionButton.isEnabled = reaction.synced
                 }
@@ -173,7 +180,6 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
         val avatarImageView by bind<ImageView>(R.id.messageAvatarImageView)
         val memberNameView by bind<TextView>(R.id.messageMemberNameView)
         val timeView by bind<TextView>(R.id.messageTimeView)
-
         var reactionWrapper: ViewGroup? = null
         var reactionFlowHelper: Flow? = null
     }

@@ -38,12 +38,8 @@ abstract class ReactionInfoSimpleItem : EpoxyModelWithHolder<ReactionInfoSimpleI
     @EpoxyAttribute
     var timeStamp: CharSequence? = null
 
-    @EpoxyAttribute
-    var emojiTypeFace: Typeface? = null
-
     override fun bind(holder: Holder) {
         holder.emojiReactionView.text = reactionKey
-        holder.emojiReactionView.typeface = emojiTypeFace ?: Typeface.DEFAULT
         holder.displayNameView.text = authorDisplayName
         timeStamp?.let {
             holder.timeStampView.text = it

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:minHeight="40dp"
+    android:orientation="horizontal"
+    android:paddingStart="8dp"
+    android:paddingEnd="8dp">
+
+    <ImageView
+        android:id="@+id/readReceiptAvatar"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="8dp"
+        tools:src="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/readReceiptName"
+        style="@style/BottomSheetItemTextMain"
+        tools:text="@sample/matrix.json/data/displayName" />
+
+    <TextView
+        android:id="@+id/readReceiptDate"
+        style="@style/BottomSheetItemTime"
+        tools:text="10:44" />
+
+</LinearLayout>

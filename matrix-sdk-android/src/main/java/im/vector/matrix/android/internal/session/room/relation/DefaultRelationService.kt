@@ -19,6 +19,8 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import androidx.work.OneTimeWorkRequest
+import com.squareup.inject.assisted.Assisted
+import com.squareup.inject.assisted.AssistedInject
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.Credentials
@@ -45,31 +47,31 @@ import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.CancelableWork
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import timber.log.Timber
-import javax.inject.Inject
 
-internal class DefaultRelationService @Inject constructor(private val context: Context,
-                                                          private val credentials: Credentials,
-                                                          private val roomId: String,
-                                                          private val eventFactory: LocalEchoEventFactory,
-                                                          private val cryptoService: CryptoService,
-                                                          private val findReactionEventForUndoTask: FindReactionEventForUndoTask,
-                                                          private val fetchEditHistoryTask: FetchEditHistoryTask,
-                                                          private val monarchy: Monarchy,
-                                                          private val taskExecutor: TaskExecutor)
+internal class DefaultRelationService @AssistedInject constructor(@Assisted private val roomId: String,
+                                                                  private val context: Context,
+                                                                  private val credentials: Credentials,
+                                                                  private val eventFactory: LocalEchoEventFactory,
+                                                                  private val cryptoService: CryptoService,
+                                                                  private val findReactionEventForUndoTask: FindReactionEventForUndoTask,
+                                                                  private val fetchEditHistoryTask: FetchEditHistoryTask,
+                                                                  private val monarchy: Monarchy,
+                                                                  private val taskExecutor: TaskExecutor)
     : RelationService {
+
+    @AssistedInject.Factory
+    interface Factory {
+        fun create(roomId: String): RelationService
+    }
 
     override fun sendReaction(reaction: String, targetEventId: String): Cancelable {
         val event = eventFactory.createReactionEvent(roomId, targetEventId, reaction)
                 .also {
                     saveLocalEcho(it)
                 }
-        val sendRelationWork = createSendRelationWork(event)
+        val sendRelationWork = createSendEventWork(event, true)
         TimelineSendEventWorkCommon.postWork(context, roomId, sendRelationWork)
         return CancelableWork(context, sendRelationWork.id)
-    }
-
-    private fun createSendRelationWork(event: Event): OneTimeWorkRequest {
-        return createSendEventWork(event)
     }
 
     override fun undoReaction(reaction: String, targetEventId: String, myUserId: String)/*: Cancelable*/ {
@@ -128,42 +130,42 @@ internal class DefaultRelationService @Inject constructor(private val context: C
                 .also {
                     saveLocalEcho(it)
                 }
-        if (cryptoService.isRoomEncrypted(roomId)) {
+        return if (cryptoService.isRoomEncrypted(roomId)) {
             val encryptWork = createEncryptEventWork(event, listOf("m.relates_to"))
-            val workRequest = createSendEventWork(event)
+            val workRequest = createSendEventWork(event, false)
             TimelineSendEventWorkCommon.postSequentialWorks(context, roomId, encryptWork, workRequest)
-            return CancelableWork(context, encryptWork.id)
+            CancelableWork(context, encryptWork.id)
 
         } else {
-            val workRequest = createSendEventWork(event)
+            val workRequest = createSendEventWork(event, true)
             TimelineSendEventWorkCommon.postWork(context, roomId, workRequest)
-            return CancelableWork(context, workRequest.id)
+            CancelableWork(context, workRequest.id)
         }
 
     }
 
     override fun editReply(replyToEdit: TimelineEvent,
-                           originalEvent: TimelineEvent,
+                           originalTimelineEvent: TimelineEvent,
                            newBodyText: String,
                            compatibilityBodyText: String): Cancelable {
         val event = eventFactory
                 .createReplaceTextOfReply(roomId,
                         replyToEdit,
-                        originalEvent,
+                        originalTimelineEvent,
                         newBodyText, true, MessageType.MSGTYPE_TEXT, compatibilityBodyText)
                 .also {
                     saveLocalEcho(it)
                 }
-        if (cryptoService.isRoomEncrypted(roomId)) {
+        return if (cryptoService.isRoomEncrypted(roomId)) {
             val encryptWork = createEncryptEventWork(event, listOf("m.relates_to"))
-            val workRequest = createSendEventWork(event)
+            val workRequest = createSendEventWork(event, false)
             TimelineSendEventWorkCommon.postSequentialWorks(context, roomId, encryptWork, workRequest)
-            return CancelableWork(context, encryptWork.id)
+            CancelableWork(context, encryptWork.id)
 
         } else {
-            val workRequest = createSendEventWork(event)
+            val workRequest = createSendEventWork(event, true)
             TimelineSendEventWorkCommon.postWork(context, roomId, workRequest)
-            return CancelableWork(context, workRequest.id)
+            CancelableWork(context, workRequest.id)
         }
     }
 
@@ -181,16 +183,16 @@ internal class DefaultRelationService @Inject constructor(private val context: C
             saveLocalEcho(it)
         } ?: return null
 
-        if (cryptoService.isRoomEncrypted(roomId)) {
+        return if (cryptoService.isRoomEncrypted(roomId)) {
             val encryptWork = createEncryptEventWork(event, listOf("m.relates_to"))
-            val workRequest = createSendEventWork(event)
+            val workRequest = createSendEventWork(event, false)
             TimelineSendEventWorkCommon.postSequentialWorks(context, roomId, encryptWork, workRequest)
-            return CancelableWork(context, encryptWork.id)
+            CancelableWork(context, encryptWork.id)
 
         } else {
-            val workRequest = createSendEventWork(event)
+            val workRequest = createSendEventWork(event, true)
             TimelineSendEventWorkCommon.postWork(context, roomId, workRequest)
-            return CancelableWork(context, workRequest.id)
+            CancelableWork(context, workRequest.id)
         }
 
     }
@@ -202,10 +204,10 @@ internal class DefaultRelationService @Inject constructor(private val context: C
         return TimelineSendEventWorkCommon.createWork<EncryptEventWorker>(sendWorkData, true)
     }
 
-    private fun createSendEventWork(event: Event): OneTimeWorkRequest {
+    private fun createSendEventWork(event: Event, startChain: Boolean): OneTimeWorkRequest {
         val sendContentWorkerParams = SendEventWorker.Params(credentials.userId, roomId, event)
         val sendWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
-        return TimelineSendEventWorkCommon.createWork<SendEventWorker>(sendWorkData, true)
+        return TimelineSendEventWorkCommon.createWork<SendEventWorker>(sendWorkData, startChain)
     }
 
     override fun getEventSummaryLive(eventId: String): LiveData<EventAnnotationsSummary> {

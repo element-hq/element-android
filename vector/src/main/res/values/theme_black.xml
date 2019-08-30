@@ -59,7 +59,7 @@
         <item name="android:textColorLink">@color/riotx_links</item>
 
         <!-- Menu text color -->
-        <!--item name="android:actionMenuTextColor">#FFFFFFFF</item-->
+        <item name="android:actionMenuTextColor">?colorAccent</item>
 
         <!-- list colors -->
         <!--Header/Panel Background-->
@@ -74,6 +74,8 @@
         <item name="vctr_preference_divider_color">@color/list_divider_color_black</item>
 
         <item name="vctr_markdown_block_background_color">#FF4D4D4D</item>
+
+        <item name="vctr_pill_receipt">@drawable/pill_receipt_black</item>
 
         <!-- activities background -->
         <item name="android:windowBackground">@color/riot_primary_background_color_black</item>

@@ -25,23 +25,18 @@ import im.vector.riotx.features.home.room.detail.timeline.helper.senderName
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.riotx.features.home.room.detail.timeline.item.NoticeItem
 import im.vector.riotx.features.home.room.detail.timeline.item.NoticeItem_
+import im.vector.riotx.features.home.room.detail.timeline.util.MessageInformationDataFactory
 import javax.inject.Inject
 
 class NoticeItemFactory @Inject constructor(private val eventFormatter: NoticeEventFormatter,
-                                            private val avatarRenderer: AvatarRenderer) {
+                                            private val avatarRenderer: AvatarRenderer,
+                                            private val informationDataFactory: MessageInformationDataFactory) {
 
     fun create(event: TimelineEvent,
                highlight: Boolean,
                callback: TimelineEventController.Callback?): NoticeItem? {
         val formattedText = eventFormatter.format(event) ?: return null
-        val informationData = MessageInformationData(
-                eventId = event.root.eventId ?: "?",
-                senderId = event.root.senderId ?: "",
-                sendState = event.root.sendState,
-                avatarUrl = event.senderAvatar(),
-                memberName = event.senderName(),
-                showInformation = false
-        )
+        val informationData = informationDataFactory.create(event, null)
 
         return NoticeItem_()
                 .avatarRenderer(avatarRenderer)
@@ -49,6 +44,7 @@ class NoticeItemFactory @Inject constructor(private val eventFormatter: NoticeEv
                 .highlighted(highlight)
                 .informationData(informationData)
                 .baseCallback(callback)
+                .readReceiptsCallback(callback)
     }
 
 

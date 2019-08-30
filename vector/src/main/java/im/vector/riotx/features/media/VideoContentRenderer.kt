@@ -89,18 +89,44 @@ class VideoContentRenderer @Inject constructor(private val activeSessionHolder: 
                                 })
             }
         } else {
-            thumbnailView.isVisible = false
-            loadingView.isVisible = false
 
             val resolvedUrl = contentUrlResolver.resolveFullSize(data.url)
 
             if (resolvedUrl == null) {
+                thumbnailView.isVisible = false
+                loadingView.isVisible = false
                 errorView.isVisible = true
                 errorView.setText(R.string.unknown_error)
             } else {
-                videoView.isVisible = true
-                videoView.setVideoPath(resolvedUrl)
-                videoView.start()
+
+                //Temporary code, some remote videos are not played by videoview setVideoUri
+                //So for now we download them then play
+                thumbnailView.isVisible = true
+                loadingView.isVisible = true
+
+                activeSessionHolder.getActiveSession()
+                        .downloadFile(
+                                FileService.DownloadMode.FOR_INTERNAL_USE,
+                                data.eventId,
+                                data.filename,
+                                data.url,
+                                null,
+                                object : MatrixCallback<File> {
+                                    override fun onSuccess(data: File) {
+                                        thumbnailView.isVisible = false
+                                        loadingView.isVisible = false
+                                        videoView.isVisible = true
+
+                                        videoView.setVideoPath(data.path)
+                                        videoView.start()
+                                    }
+
+                                    override fun onFailure(failure: Throwable) {
+                                        loadingView.isVisible = false
+                                        errorView.isVisible = true
+                                        errorView.text = errorFormatter.toHumanReadable(failure)
+                                    }
+                                })
             }
         }
     }

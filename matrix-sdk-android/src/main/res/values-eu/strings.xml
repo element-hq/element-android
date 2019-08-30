@@ -167,4 +167,9 @@
     <string name="initial_sync_start_importing_account_data">Hasierako sinkronizazioa:
 \nKontuaren datuak inportatzen</string>
 
+    <string name="notice_room_update">%s erabiltzaileak gela hau eguneratu du.</string>
+
+    <string name="event_status_sending_message">Mezua bidaltzen…</string>
+    <string name="clear_timeline_send_queue">Garbitu bidalketa-ilara</string>
+
 </resources>

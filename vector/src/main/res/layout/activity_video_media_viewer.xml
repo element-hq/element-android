@@ -34,7 +34,9 @@
             android:id="@+id/videoMediaViewerThumbnailView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_gravity="center"
             android:visibility="gone"
+            android:scaleType="centerInside"
             tools:visibility="visible" />
 
         <ProgressBar
@@ -49,6 +51,7 @@
             android:id="@+id/videoMediaViewerVideoView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_gravity="center"
             android:visibility="gone" />
 
         <TextView

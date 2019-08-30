@@ -62,11 +62,11 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
         data class LEFT(val data: Map<String, RoomSync>) : HandlingStrategy()
     }
 
-    fun handle(roomsSyncResponse: RoomsSyncResponse, reporter: DefaultInitialSyncProgressService? = null) {
+    fun handle(roomsSyncResponse: RoomsSyncResponse, isInitialSync: Boolean, reporter: DefaultInitialSyncProgressService? = null) {
         monarchy.runTransactionSync { realm ->
-            handleRoomSync(realm, HandlingStrategy.JOINED(roomsSyncResponse.join), reporter)
-            handleRoomSync(realm, HandlingStrategy.INVITED(roomsSyncResponse.invite), reporter)
-            handleRoomSync(realm, HandlingStrategy.LEFT(roomsSyncResponse.leave), reporter)
+            handleRoomSync(realm, HandlingStrategy.JOINED(roomsSyncResponse.join), isInitialSync, reporter)
+            handleRoomSync(realm, HandlingStrategy.INVITED(roomsSyncResponse.invite), isInitialSync, reporter)
+            handleRoomSync(realm, HandlingStrategy.LEFT(roomsSyncResponse.leave), isInitialSync, reporter)
         }
 
         //handle event for bing rule checks
@@ -89,12 +89,12 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
 
     // PRIVATE METHODS *****************************************************************************
 
-    private fun handleRoomSync(realm: Realm, handlingStrategy: HandlingStrategy, reporter: DefaultInitialSyncProgressService?) {
+    private fun handleRoomSync(realm: Realm, handlingStrategy: HandlingStrategy, isInitialSync: Boolean, reporter: DefaultInitialSyncProgressService?) {
 
         val rooms = when (handlingStrategy) {
             is HandlingStrategy.JOINED  ->
                 handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_joined_rooms, 0.6f) {
-                    handleJoinedRoom(realm, it.key, it.value)
+                    handleJoinedRoom(realm, it.key, it.value, isInitialSync)
                 }
             is HandlingStrategy.INVITED ->
                 handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_invited_rooms, 0.4f) {
@@ -112,12 +112,21 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
 
     private fun handleJoinedRoom(realm: Realm,
                                  roomId: String,
-                                 roomSync: RoomSync): RoomEntity {
+                                 roomSync: RoomSync,
+                                 isInitalSync: Boolean): RoomEntity {
 
         Timber.v("Handle join sync for room $roomId")
 
+        if (roomSync.ephemeral != null && roomSync.ephemeral.events.isNotEmpty()) {
+            handleEphemeral(realm, roomId, roomSync.ephemeral, isInitalSync)
+        }
+
+        if (roomSync.accountData != null && roomSync.accountData.events.isNullOrEmpty().not()) {
+            handleRoomAccountDataEvents(realm, roomId, roomSync.accountData)
+        }
+
         val roomEntity = RoomEntity.where(realm, roomId).findFirst()
-                ?: realm.createObject(roomId)
+                         ?: realm.createObject(roomId)
 
         if (roomEntity.membership == Membership.INVITE) {
             roomEntity.chunks.deleteAllFromRealm()
@@ -127,7 +136,7 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
         // State event
         if (roomSync.state != null && roomSync.state.events.isNotEmpty()) {
             val minStateIndex = roomEntity.untimelinedStateEvents.where().min(EventEntityFields.STATE_INDEX)?.toInt()
-                    ?: Int.MIN_VALUE
+                                ?: Int.MIN_VALUE
             val untimelinedStateIndex = minStateIndex + 1
             roomSync.state.events.forEach { event ->
                 roomEntity.addStateEvent(event, filterDuplicates = true, stateIndex = untimelinedStateIndex)
@@ -150,14 +159,6 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
             roomEntity.addOrUpdate(chunkEntity)
         }
         roomSummaryUpdater.update(realm, roomId, Membership.JOIN, roomSync.summary, roomSync.unreadNotifications)
-
-        if (roomSync.ephemeral != null && roomSync.ephemeral.events.isNotEmpty()) {
-            handleEphemeral(realm, roomId, roomSync.ephemeral)
-        }
-
-        if (roomSync.accountData != null && roomSync.accountData.events.isNullOrEmpty().not()) {
-            handleRoomAccountDataEvents(realm, roomId, roomSync.accountData)
-        }
         return roomEntity
     }
 
@@ -167,7 +168,7 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
                                   InvitedRoomSync): RoomEntity {
         Timber.v("Handle invited sync for room $roomId")
         val roomEntity = RoomEntity.where(realm, roomId).findFirst()
-                ?: realm.createObject(roomId)
+                         ?: realm.createObject(roomId)
         roomEntity.membership = Membership.INVITE
         if (roomSync.inviteState != null && roomSync.inviteState.events.isNotEmpty()) {
             val chunkEntity = handleTimelineEvents(realm, roomEntity, roomSync.inviteState.events)
@@ -181,7 +182,7 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
                                roomId: String,
                                roomSync: RoomSync): RoomEntity {
         val roomEntity = RoomEntity.where(realm, roomId).findFirst()
-                ?: realm.createObject(roomId)
+                         ?: realm.createObject(roomId)
 
         roomEntity.membership = Membership.LEAVE
         roomEntity.chunks.deleteAllFromRealm()
@@ -233,17 +234,21 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
     }
 
 
+    @Suppress("UNCHECKED_CAST")
     private fun handleEphemeral(realm: Realm,
                                 roomId: String,
-                                ephemeral: RoomSyncEphemeral) {
-        ephemeral.events
-                .filter { it.getClearType() == EventType.RECEIPT }
-                .map { it.content.toModel<ReadReceiptContent>() }
-                .forEach { readReceiptHandler.handle(realm, roomId, it) }
+                                ephemeral: RoomSyncEphemeral,
+                                isInitalSync: Boolean) {
+        for (event in ephemeral.events) {
+            if (event.type != EventType.RECEIPT) continue
+            val readReceiptContent = event.content as? ReadReceiptContent ?: continue
+            readReceiptHandler.handle(realm, roomId, readReceiptContent, isInitalSync)
+        }
     }
 
     private fun handleRoomAccountDataEvents(realm: Realm, roomId: String, accountData: RoomSyncAccountData) {
         accountData.events
+                .asSequence()
                 .filter { it.getClearType() == EventType.TAG }
                 .map { it.content.toModel<RoomTagContent>() }
                 .forEach { roomTagHandler.handle(realm, roomId, it) }

@@ -297,6 +297,7 @@
 
     <style name="TimelineContentStubNoInfoLayoutParams" parent="TimelineContentStubBaseParams">
         <item name="layout_constraintTop_toTopOf">parent</item>
+        <item name="layout_constraintBottom_toTopOf">@id/readReceiptsView</item>
     </style>
 
 
@@ -316,6 +317,25 @@
         <item name="android:textColor">?riotx_fab_label_color</item>
         <!-- Note bg will be updated in the code -->
         <item name="android:background">@drawable/vector_label_background_light</item>
+    </style>
+
+    <style name="BottomSheetItemTextMain">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:lines">1</item>
+        <item name="android:textColor">?riotx_text_primary</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="BottomSheetItemTime">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:lines">1</item>
+        <item name="android:textColor">?riotx_text_secondary</item>
+        <item name="android:textSize">12sp</item>
     </style>
 
 </resources>

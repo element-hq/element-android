@@ -219,7 +219,7 @@
     <string name="room_message_placeholder_encrypted">Envoyer un message chiffré…</string>
     <string name="room_message_placeholder_not_encrypted">Envoyer un message (non chiffré)…</string>
     <string name="room_prompt_resend">Tout renvoyer</string>
-    <string name="room_prompt_cancel">tout annuler</string>
+    <string name="room_prompt_cancel">Tout annuler</string>
     <string name="room_resend_unsent_messages">Renvoyer les messages non envoyés</string>
     <string name="room_delete_unsent_messages">Supprimer les messages non envoyés</string>
     <string name="room_message_file_not_found">Fichier non trouvé</string>
@@ -1611,5 +1611,18 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="labs_swipe_to_reply_in_timeline">Activer le balayement pour répondre dans l’historique</string>
 
     <string name="link_copied_to_clipboard">Lien copié dans le presse-papiers</string>
+
+    <string name="settings_integration_manager">Gestionnaire d’intégrations</string>
+
+    <string name="integration_manager_not_configured">Aucun gestionnaire d’intégrations n’est configuré.</string>
+    <string name="add_by_matrix_id">Ajouter par identifiant matrix</string>
+    <string name="creating_direct_room">Création du salon…</string>
+    <string name="direct_room_no_known_users">Aucun résultat trouvé, utilisez Ajouter par identifiant matrix pour chercher sur le serveur.</string>
+    <string name="direct_room_start_search">Entrez du texte pour avoir des résultats</string>
+    <string name="direct_room_filter_hint">Filtrer par nom d’utilisateur ou identifiant…</string>
+
+    <string name="joining_room">En train de rejoindre le salon…</string>
+
+    <string name="message_view_edit_history">Voir l’historique des éditions</string>
 
 </resources>

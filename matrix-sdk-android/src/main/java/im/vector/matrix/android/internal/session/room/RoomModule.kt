@@ -22,12 +22,6 @@ import dagger.Provides
 import im.vector.matrix.android.api.session.file.FileService
 import im.vector.matrix.android.api.session.room.RoomDirectoryService
 import im.vector.matrix.android.api.session.room.RoomService
-import im.vector.matrix.android.api.session.room.members.MembershipService
-import im.vector.matrix.android.api.session.room.model.relation.RelationService
-import im.vector.matrix.android.api.session.room.read.ReadService
-import im.vector.matrix.android.api.session.room.send.SendService
-import im.vector.matrix.android.api.session.room.state.StateService
-import im.vector.matrix.android.api.session.room.timeline.TimelineService
 import im.vector.matrix.android.internal.session.DefaultFileService
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.room.create.CreateRoomTask
@@ -37,7 +31,6 @@ import im.vector.matrix.android.internal.session.room.directory.DefaultGetThirdP
 import im.vector.matrix.android.internal.session.room.directory.GetPublicRoomTask
 import im.vector.matrix.android.internal.session.room.directory.GetThirdPartyProtocolsTask
 import im.vector.matrix.android.internal.session.room.membership.DefaultLoadRoomMembersTask
-import im.vector.matrix.android.internal.session.room.membership.DefaultMembershipService
 import im.vector.matrix.android.internal.session.room.membership.LoadRoomMembersTask
 import im.vector.matrix.android.internal.session.room.membership.joining.DefaultInviteTask
 import im.vector.matrix.android.internal.session.room.membership.joining.DefaultJoinRoomTask
@@ -47,15 +40,20 @@ import im.vector.matrix.android.internal.session.room.membership.leaving.Default
 import im.vector.matrix.android.internal.session.room.membership.leaving.LeaveRoomTask
 import im.vector.matrix.android.internal.session.room.prune.DefaultPruneEventTask
 import im.vector.matrix.android.internal.session.room.prune.PruneEventTask
-import im.vector.matrix.android.internal.session.room.read.DefaultReadService
 import im.vector.matrix.android.internal.session.room.read.DefaultSetReadMarkersTask
 import im.vector.matrix.android.internal.session.room.read.SetReadMarkersTask
-import im.vector.matrix.android.internal.session.room.relation.*
-import im.vector.matrix.android.internal.session.room.send.DefaultSendService
+import im.vector.matrix.android.internal.session.room.relation.DefaultFetchEditHistoryTask
+import im.vector.matrix.android.internal.session.room.relation.DefaultFindReactionEventForUndoTask
+import im.vector.matrix.android.internal.session.room.relation.DefaultUpdateQuickReactionTask
+import im.vector.matrix.android.internal.session.room.relation.FetchEditHistoryTask
+import im.vector.matrix.android.internal.session.room.relation.FindReactionEventForUndoTask
+import im.vector.matrix.android.internal.session.room.relation.UpdateQuickReactionTask
 import im.vector.matrix.android.internal.session.room.state.DefaultSendStateTask
-import im.vector.matrix.android.internal.session.room.state.DefaultStateService
 import im.vector.matrix.android.internal.session.room.state.SendStateTask
-import im.vector.matrix.android.internal.session.room.timeline.*
+import im.vector.matrix.android.internal.session.room.timeline.DefaultGetContextOfEventTask
+import im.vector.matrix.android.internal.session.room.timeline.DefaultPaginationTask
+import im.vector.matrix.android.internal.session.room.timeline.GetContextOfEventTask
+import im.vector.matrix.android.internal.session.room.timeline.PaginationTask
 import retrofit2.Retrofit
 
 @Module
@@ -70,6 +68,9 @@ internal abstract class RoomModule {
             return retrofit.create(RoomAPI::class.java)
         }
     }
+
+    @Binds
+    abstract fun bindRoomFactory(roomFactory: DefaultRoomFactory): RoomFactory
 
     @Binds
     abstract fun bindRoomService(roomService: DefaultRoomService): RoomService
@@ -99,22 +100,13 @@ internal abstract class RoomModule {
     abstract fun bindLeaveRoomTask(leaveRoomTask: DefaultLeaveRoomTask): LeaveRoomTask
 
     @Binds
-    abstract fun bindMembershipService(membershipService: DefaultMembershipService): MembershipService
-
-    @Binds
     abstract fun bindLoadRoomMembersTask(loadRoomMembersTask: DefaultLoadRoomMembersTask): LoadRoomMembersTask
 
     @Binds
     abstract fun bindPruneEventTask(pruneEventTask: DefaultPruneEventTask): PruneEventTask
 
     @Binds
-    abstract fun bindReadService(readService: DefaultReadService): ReadService
-
-    @Binds
     abstract fun bindSetReadMarkersTask(setReadMarkersTask: DefaultSetReadMarkersTask): SetReadMarkersTask
-
-    @Binds
-    abstract fun bindRelationService(relationService: DefaultRelationService): RelationService
 
     @Binds
     abstract fun bindFindReactionEventForUndoTask(findReactionEventForUndoTask: DefaultFindReactionEventForUndoTask): FindReactionEventForUndoTask
@@ -126,19 +118,10 @@ internal abstract class RoomModule {
     abstract fun bindSendStateTask(sendStateTask: DefaultSendStateTask): SendStateTask
 
     @Binds
-    abstract fun bindSendService(sendService: DefaultSendService): SendService
-
-    @Binds
-    abstract fun bindStateService(stateService: DefaultStateService): StateService
-
-    @Binds
     abstract fun bindGetContextOfEventTask(getContextOfEventTask: DefaultGetContextOfEventTask): GetContextOfEventTask
 
     @Binds
     abstract fun bindPaginationTask(paginationTask: DefaultPaginationTask): PaginationTask
-
-    @Binds
-    abstract fun bindTimelineService(timelineService: DefaultTimelineService): TimelineService
 
     @Binds
     abstract fun bindFileService(fileService: DefaultFileService): FileService

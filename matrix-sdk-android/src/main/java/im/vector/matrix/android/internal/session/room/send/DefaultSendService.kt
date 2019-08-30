@@ -17,12 +17,22 @@
 package im.vector.matrix.android.internal.session.room.send
 
 import android.content.Context
-import androidx.work.*
+import androidx.work.BackoffPolicy
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequest
+import androidx.work.Operation
+import androidx.work.WorkManager
+import com.squareup.inject.assisted.Assisted
+import com.squareup.inject.assisted.AssistedInject
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.crypto.CryptoService
-import im.vector.matrix.android.api.session.events.model.*
+import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.isImageMessage
+import im.vector.matrix.android.api.session.events.model.isTextMessage
+import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.send.SendService
@@ -47,18 +57,22 @@ import im.vector.matrix.android.internal.worker.startChain
 import timber.log.Timber
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
 private const val UPLOAD_WORK = "UPLOAD_WORK"
 private const val BACKOFF_DELAY = 10_000L
 
-internal class DefaultSendService @Inject constructor(private val context: Context,
-                                                      private val credentials: Credentials,
-                                                      private val roomId: String,
-                                                      private val localEchoEventFactory: LocalEchoEventFactory,
-                                                      private val cryptoService: CryptoService,
-                                                      private val monarchy: Monarchy)
-    : SendService {
+internal class DefaultSendService @AssistedInject constructor(@Assisted private val roomId: String,
+                                                              private val context: Context,
+                                                              private val credentials: Credentials,
+                                                              private val localEchoEventFactory: LocalEchoEventFactory,
+                                                              private val cryptoService: CryptoService,
+                                                              private val monarchy: Monarchy
+) : SendService {
+
+    @AssistedInject.Factory
+    interface Factory {
+        fun create(roomId: String): SendService
+    }
 
     private val workerFutureListenerExecutor = Executors.newSingleThreadExecutor()
     override fun sendTextMessage(text: String, msgType: String, autoMarkdown: Boolean): Cancelable {
@@ -152,11 +166,11 @@ internal class DefaultSendService @Inject constructor(private val context: Conte
     override fun deleteFailedEcho(localEcho: TimelineEvent) {
         monarchy.writeAsync { realm ->
             TimelineEventEntity.where(realm, eventId = localEcho.root.eventId
-                    ?: "").findFirst()?.let {
+                                                       ?: "").findFirst()?.let {
                 it.deleteFromRealm()
             }
             EventEntity.where(realm, eventId = localEcho.root.eventId
-                    ?: "").findFirst()?.let {
+                                               ?: "").findFirst()?.let {
                 it.deleteFromRealm()
             }
         }

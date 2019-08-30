@@ -25,12 +25,12 @@ interface TimelineService {
 
     /**
      * Instantiate a [Timeline] with an optional initial eventId, to be used with permalink.
-     * You can filter the type you want to grab with the allowedTypes param.
+     * You can also configure some settings with the [settings] param.
      * @param eventId the optional initial eventId.
-     * @param allowedTypes the optional filter types
+     * @param settings settings to configure the timeline.
      * @return the instantiated timeline
      */
-    fun createTimeline(eventId: String?, allowedTypes: List<String>? = null): Timeline
+    fun createTimeline(eventId: String?, settings: TimelineSettings): Timeline
 
 
     fun getTimeLineEvent(eventId: String): TimelineEvent?

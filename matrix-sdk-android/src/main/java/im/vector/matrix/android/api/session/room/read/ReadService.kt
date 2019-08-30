@@ -16,7 +16,9 @@
 
 package im.vector.matrix.android.api.session.room.read
 
+import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.session.room.model.ReadReceipt
 
 /**
  * This interface defines methods to handle read receipts and read marker in a room. It's implemented at the room level.
@@ -39,4 +41,6 @@ interface ReadService {
     fun setReadMarker(fullyReadEventId: String, callback: MatrixCallback<Unit>)
 
     fun isEventRead(eventId: String): Boolean
+
+    fun getEventReadReceiptsLive(eventId: String): LiveData<List<ReadReceipt>>
 }

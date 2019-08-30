@@ -314,7 +314,7 @@
     <string name="room_message_placeholder_reply_to_not_encrypted">Dërgoni një përgjigje (të pafshehtëzuar)…</string>
     <string name="room_offline_notification">Humbi lidhja me shërbyesin.</string>
     <string name="room_prompt_resend">Ridërgoji krejt</string>
-    <string name="room_prompt_cancel">anuloji krejt</string>
+    <string name="room_prompt_cancel">Anuloji krejt</string>
     <string name="room_resend_unsent_messages">Ridërgo mesazhet e padërguara</string>
     <string name="room_delete_unsent_messages">Fshi mesazhet e padërguar</string>
     <string name="room_message_file_not_found">S’u gjet kartelë</string>
@@ -1530,5 +1530,52 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
 \nRiotX-i mbulon: • Hyrje në një llogari ekzistuese • Krijim dhome dhe pjesëmarrje në dhoma publike • Pranim dhe hedhje poshtë ftesash • Njohje të dhomave të përdoruesve • Parje hollësish dhome • Dërgim mesazhesh tekst • Dërgim bashkëngjitjesh • Lexim dhe shkrim mesazhesh në dhoma të fshehtëzuara • Kriptografi: kopjeruajtje kyçesh E2E, verifikim i thelluar pajisjesh, kërkesa dhe përgjigje për ndarje kyçesh • Njoftime push • Tema të Çelëta, të Errëta dhe të Zeza
 \n
 \nNë RiotX s’janë sendërtuar ende krejt veçoritë e Riot-it. Veçori kryesore që mungojnë (dhe që do të vijnë së shpejti!): • Krijim llogarish • Rregullime dhome (shfaqje anëtarësh dhome, etj.) • Krijim dhomash fjalosjeje të drejtpërdrejtë • Thirrje • Widget-es • …</string>
+
+    <string name="settings_integration_manager">Përgjegjës Integrimesh</string>
+
+    <string name="integration_manager_not_configured">Pa përgjegjës Integrimesh të formësuar.</string>
+    <string name="push_gateway_item_app_id">app_id:</string>
+    <string name="push_gateway_item_push_key">push_key:</string>
+    <string name="push_gateway_item_app_display_name">app_display_name:</string>
+    <string name="push_gateway_item_device_name">device_name:</string>
+    <string name="bottom_action_people_x">Mesazhe të Drejtpërdrejtë</string>
+
+    <string name="send_file_step_idle">Po pritet…</string>
+    <string name="send_file_step_encrypting_thumbnail">Po fshehtëzohet miniatura…</string>
+    <string name="send_file_step_sending_thumbnail">Po dërgohet miniaturë (%1$s / %2$s)</string>
+    <string name="send_file_step_encrypting_file">Po fshehtëzohet kartelë…</string>
+    <string name="send_file_step_sending_file">Po dërgohet kartelë (%1$s / %2$s)</string>
+
+    <string name="downloading_file">Po shkarkohet kartelë %1$s…</string>
+    <string name="downloaded_file">Kartela %1$s u shkarkua!</string>
+
+    <string name="edited_suffix">(u përpunua)</string>
+
+    <string name="riotx_no_registration_notice">%1$s që të krijohet një llogari.</string>
+    <string name="riotx_no_registration_notice_colored_part">Përdor aplikacionin e dikurshëm</string>
+
+
+    <string name="message_edits">Përpunime Mesazhi</string>
+    <string name="no_message_edits_found">S’u gjetën përpunime</string>
+
+    <string name="room_filtering_filter_hint">Filtroni biseda…</string>
+    <string name="room_filtering_footer_title">S’gjeni dot ç’po kërkoni\?</string>
+    <string name="room_filtering_footer_create_new_room">Krijoni dhomë të re</string>
+    <string name="room_filtering_footer_create_new_direct_message">Dërgoni një mesazh të drejtpërdrejtë</string>
+    <string name="room_filtering_footer_open_room_directory">Shihni drejtori dhomash</string>
+
+    <string name="room_directory_search_hint">Emër ose ID (#example:matrix.org)</string>
+
+    <string name="link_copied_to_clipboard">Lidhja u kopjua në të papastër</string>
+
+    <string name="add_by_matrix_id">Shtoni sipas ID-je matrix</string>
+    <string name="creating_direct_room">Po krijohet dhomë…</string>
+    <string name="direct_room_no_known_users">S’u gjetën përfundime, përdorni “Shtoni sipas ID-je matrix” që të kërkohet në shërbyes.</string>
+    <string name="direct_room_start_search">Filloni të shtypni që të merrni përfundime</string>
+    <string name="direct_room_filter_hint">Filtrojini sipas emrash përdoruesish ose ID-sh…</string>
+
+    <string name="joining_room">Po hyhet në dhomë…</string>
+
+    <string name="message_view_edit_history">Shihni Historik Përpunimesh</string>
 
 </resources>

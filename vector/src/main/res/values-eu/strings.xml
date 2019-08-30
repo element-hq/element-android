@@ -331,7 +331,7 @@ Ziur zaude?</string>
     <string name="room_unsent_messages_notification">Bidali gabeko mezuak daude. %1$s edo %2$s orain?</string>
     <string name="room_unknown_devices_messages_notification">Mezuak ez dira bidali gailu ezezagunak daudelako. %1$s edo %2$s orain?</string>
     <string name="room_prompt_resend">Birbidali dena</string>
-    <string name="room_prompt_cancel">utzi dena</string>
+    <string name="room_prompt_cancel">Utzi dena</string>
     <string name="room_resend_unsent_messages">Birbidali bidali gabeko mezuak</string>
     <string name="room_delete_unsent_messages">Ezabatu bidali gabeko mezuak</string>
     <string name="room_message_file_not_found">Ez da fitxategia aurkitu</string>
@@ -1606,5 +1606,18 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="labs_swipe_to_reply_in_timeline">Gaitu hatza pasatzea denbora-lerroan erantzuteko</string>
 
     <string name="link_copied_to_clipboard">Esteka arbelera kopiatu da</string>
+
+    <string name="settings_integration_manager">Integrazio kudeatzailea</string>
+
+    <string name="integration_manager_not_configured">Ez da integrazio kudeatzailerik konfiguratu.</string>
+    <string name="add_by_matrix_id">Gehitu matrix ID bidez</string>
+    <string name="creating_direct_room">Gela sortzen…</string>
+    <string name="direct_room_no_known_users">Ez da emaitzarik aurkitu, erabili gehitu matrix ID bidez zerbitzarian bilatzeko.</string>
+    <string name="direct_room_start_search">Hasi idazten emaitzak jasotzeko</string>
+    <string name="direct_room_filter_hint">Iragazi erabiltzaile-izena edo ID-a erabiliz…</string>
+
+    <string name="joining_room">Gelara elkartzen…</string>
+
+    <string name="message_view_edit_history">Ikusi edizioen historiala</string>
 
 </resources>

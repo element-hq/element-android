@@ -48,7 +48,7 @@ class PushRuleTriggerListener @Inject constructor(
                 //TODO
             } else {
                 notifiableEvent.noisy = !notificationAction.soundName.isNullOrBlank()
-                Timber.v("New event to notify $notifiableEvent tweaks:$notificationAction")
+                Timber.v("New event to notify")
                 notificationDrawerManager.onNotifiableEventReceived(notifiableEvent)
             }
         } else {

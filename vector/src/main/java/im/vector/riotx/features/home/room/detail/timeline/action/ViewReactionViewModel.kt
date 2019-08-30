@@ -16,16 +16,20 @@
 
 package im.vector.riotx.features.home.room.detail.timeline.action
 
-import com.airbnb.mvrx.*
+import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.FragmentViewModelContext
+import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.Uninitialized
+import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.ReactionAggregatedSummary
 import im.vector.matrix.rx.RxRoom
-import im.vector.riotx.core.extensions.localDateTime
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.utils.isSingleEmoji
-import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineDateFormatter
+import im.vector.riotx.core.date.VectorDateFormatter
 import io.reactivex.Observable
 import io.reactivex.Single
 
@@ -54,13 +58,13 @@ data class ReactionInfo(
 class ViewReactionViewModel @AssistedInject constructor(@Assisted
                                                         initialState: DisplayReactionsViewState,
                                                         private val session: Session,
-                                                        private val timelineDateFormatter: TimelineDateFormatter
+                                                        private val dateFormatter: VectorDateFormatter
 ) : VectorViewModel<DisplayReactionsViewState>(initialState) {
 
     private val roomId = initialState.roomId
     private val eventId = initialState.eventId
     private val room = session.getRoom(roomId)
-            ?: throw IllegalStateException("Shouldn't use this ViewModel without a room")
+                       ?: throw IllegalStateException("Shouldn't use this ViewModel without a room")
 
     @AssistedInject.Factory
     interface Factory {
@@ -86,7 +90,7 @@ class ViewReactionViewModel @AssistedInject constructor(@Assisted
                 .flatMapSingle { summaries ->
                     Observable
                             .fromIterable(summaries.reactionsSummary)
-                            .filter { reactionAggregatedSummary -> isSingleEmoji(reactionAggregatedSummary.key) }
+                            //.filter { reactionAggregatedSummary -> isSingleEmoji(reactionAggregatedSummary.key) }
                             .toReactionInfoList()
                 }
                 .execute {
@@ -100,14 +104,14 @@ class ViewReactionViewModel @AssistedInject constructor(@Assisted
                     .fromIterable(summary.sourceEvents)
                     .map {
                         val event = room.getTimeLineEvent(it)
-                                ?: throw RuntimeException("Your eventId is not valid")
-                        val localDate = event.root.localDateTime()
+                                    ?: throw RuntimeException("Your eventId is not valid")
                         ReactionInfo(
                                 event.root.eventId!!,
                                 summary.key,
                                 event.root.senderId ?: "",
                                 event.getDisambiguatedDisplayName(),
-                                timelineDateFormatter.formatMessageHour(localDate)
+                                dateFormatter.formatRelativeDateTime(event.root.originServerTs)
+
                         )
                     }
         }.toList()

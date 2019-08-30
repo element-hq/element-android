@@ -15,7 +15,7 @@ androidExtensions {
 }
 
 ext.versionMajor = 0
-ext.versionMinor = 3
+ext.versionMinor = 4
 ext.versionPatch = 0
 
 static def getGitTimestamp() {
@@ -29,7 +29,15 @@ static def generateVersionCodeFromTimestamp() {
 }
 
 def generateVersionCodeFromVersionName() {
-    return versionMajor * 10000 + versionMinor * 100 + versionPatch
+    return versionMajor * 1_00_00 + versionMinor * 1_00 + versionPatch
+}
+
+def getVersionCode() {
+    if (gitBranchName() == "develop") {
+        return generateVersionCodeFromTimestamp()
+    } else {
+        return generateVersionCodeFromVersionName()
+    }
 }
 
 static def gitRevision() {
@@ -45,6 +53,14 @@ static def gitRevisionDate() {
 static def gitBranchName() {
     def cmd = "git name-rev --name-only HEAD"
     return cmd.execute().text.trim()
+}
+
+static def getVersionSuffix() {
+    if (gitBranchName() == "master") {
+        return ""
+    } else {
+        return "-dev"
+    }
 }
 
 project.android.buildTypes.all { buildType ->
@@ -71,9 +87,11 @@ android {
         targetSdkVersion 28
         multiDexEnabled true
 
-        // Note: versionCode is depending on the build variant
+        // `develop` branch will have version code from timestamp, to ensure each build from CI has a incremented versionCode.
+        // Other branches (master, features, etc.) will have version code based on application version.
+        versionCode project.getVersionCode()
 
-        versionName "${versionMajor}.${versionMinor}.${versionPatch}"
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}${getVersionSuffix()}"
 
         buildConfigField "String", "GIT_REVISION", "\"${gitRevision()}\""
         resValue "string", "git_revision", "\"${gitRevision()}\""
@@ -161,8 +179,6 @@ android {
         gplay {
             dimension "store"
 
-            versionCode = generateVersionCodeFromVersionName()
-
             buildConfigField "boolean", "ALLOW_FCM_USE", "true"
             buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"G\""
             buildConfigField "String", "FLAVOR_DESCRIPTION", "\"GooglePlay\""
@@ -170,8 +186,6 @@ android {
 
         fdroid {
             dimension "store"
-
-            versionCode = generateVersionCodeFromTimestamp()
 
             buildConfigField "boolean", "ALLOW_FCM_USE", "false"
             buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"F\""
@@ -303,6 +317,8 @@ dependencies {
     }
 
     implementation 'diff_match_patch:diff_match_patch:current'
+
+    implementation "androidx.emoji:emoji-appcompat:1.0.0"
 
     // TESTS
     testImplementation 'junit:junit:4.12'

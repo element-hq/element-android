@@ -98,6 +98,7 @@
         android:id="@+id/recyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:overScrollMode="always"
         app:layout_constraintBottom_toTopOf="@+id/recyclerViewBarrier"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -121,7 +122,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <im.vector.riotx.core.platform.NotificationAreaView
+    <im.vector.riotx.core.ui.views.NotificationAreaView
         android:id="@+id/notificationAreaView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

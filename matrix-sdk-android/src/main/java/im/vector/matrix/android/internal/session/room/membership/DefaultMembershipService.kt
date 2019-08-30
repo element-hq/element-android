@@ -17,6 +17,8 @@
 package im.vector.matrix.android.internal.session.room.membership
 
 import androidx.lifecycle.LiveData
+import com.squareup.inject.assisted.Assisted
+import com.squareup.inject.assisted.AssistedInject
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.events.model.toModel
@@ -31,16 +33,20 @@ import im.vector.matrix.android.internal.session.room.membership.leaving.LeaveRo
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.fetchCopied
-import javax.inject.Inject
 
-internal class DefaultMembershipService @Inject constructor(private val roomId: String,
-                                                            private val monarchy: Monarchy,
-                                                            private val taskExecutor: TaskExecutor,
-                                                            private val loadRoomMembersTask: LoadRoomMembersTask,
-                                                            private val inviteTask: InviteTask,
-                                                            private val joinTask: JoinRoomTask,
-                                                            private val leaveRoomTask: LeaveRoomTask
+internal class DefaultMembershipService @AssistedInject constructor(@Assisted private val roomId: String,
+                                                                    private val monarchy: Monarchy,
+                                                                    private val taskExecutor: TaskExecutor,
+                                                                    private val loadRoomMembersTask: LoadRoomMembersTask,
+                                                                    private val inviteTask: InviteTask,
+                                                                    private val joinTask: JoinRoomTask,
+                                                                    private val leaveRoomTask: LeaveRoomTask
 ) : MembershipService {
+
+    @AssistedInject.Factory
+    interface Factory {
+        fun create(roomId: String): MembershipService
+    }
 
     override fun loadRoomMembersIfNeeded(matrixCallback: MatrixCallback<Unit>): Cancelable {
         val params = LoadRoomMembersTask.Params(roomId, Membership.LEAVE)

@@ -21,7 +21,6 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.res.TypedArray
-import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -35,8 +34,11 @@ import android.widget.TextView
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
+import im.vector.riotx.EmojiCompatWrapper
 import im.vector.riotx.R
+import im.vector.riotx.core.di.HasScreenInjector
 import im.vector.riotx.core.utils.TextUtils
+import javax.inject.Inject
 
 /**
  * An animated reaction button.
@@ -46,6 +48,12 @@ class ReactionButton @JvmOverloads constructor(context: Context, attrs: Attribut
                                                defStyleAttr: Int = 0)
     : FrameLayout(context, attrs, defStyleAttr), View.OnClickListener, View.OnLongClickListener {
 
+    init {
+        if (context is HasScreenInjector) {
+            context.injector().inject(this)
+        }
+    }
+
     companion object {
         private val DECCELERATE_INTERPOLATOR = DecelerateInterpolator()
         private val ACCELERATE_DECELERATE_INTERPOLATOR = AccelerateDecelerateInterpolator()
@@ -53,16 +61,12 @@ class ReactionButton @JvmOverloads constructor(context: Context, attrs: Attribut
 
     }
 
+    @Inject lateinit var emojiCompatWrapper: EmojiCompatWrapper
+
     private var emojiView: TextView? = null
     private var countTextView: TextView? = null
 
     private var reactionSelector: View? = null
-
-    var emojiTypeFace: Typeface? = null
-        set(value) {
-            field = value
-            emojiView?.typeface = value ?: Typeface.DEFAULT
-        }
 
     private var dotsView: DotsView
     private var circleView: CircleView
@@ -82,7 +86,9 @@ class ReactionButton @JvmOverloads constructor(context: Context, attrs: Attribut
     var reactionString = "😀"
         set(value) {
             field = value
-            emojiView?.text = field
+            //maybe cache this for performances?
+            val emojiSpanned = emojiCompatWrapper.safeEmojiSpanify(value)
+            emojiView?.text = emojiSpanned
         }
 
     private var animationScaleFactor: Float = 0.toFloat()
@@ -104,7 +110,7 @@ class ReactionButton @JvmOverloads constructor(context: Context, attrs: Attribut
 
         countTextView?.text = TextUtils.formatCountToShortDecimal(reactionCount)
 
-        emojiView?.typeface = this.emojiTypeFace ?: Typeface.DEFAULT
+//        emojiView?.typeface = this.emojiTypeFace ?: Typeface.DEFAULT
 
         val array = context.obtainStyledAttributes(attrs, R.styleable.ReactionButton, defStyleAttr, 0)
 

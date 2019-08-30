@@ -166,4 +166,9 @@
     <string name="initial_sync_start_importing_account_data">Induló szinkronizáció:
 \nFiók adatok betöltése</string>
 
+    <string name="notice_room_update">%s frissítette ezt a szobát.</string>
+
+    <string name="event_status_sending_message">Üzenet küldése…</string>
+    <string name="clear_timeline_send_queue">Küldő sor ürítése</string>
+
 </resources>

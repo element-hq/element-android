@@ -210,7 +210,7 @@ Du wurdest auf allen Geräten abgemeldet und wirst keine Push-Benachrichtigungen
     <!-- accounts list Screen -->
 
     <!-- image size selection -->
-    <string name="compression_options">"Sende als "</string>
+    <string name="compression_options">Sende als</string>
     <string name="compression_opt_list_original">Original</string>
     <string name="compression_opt_list_large">Groß</string>
     <string name="compression_opt_list_medium">Mittel</string>
@@ -1550,5 +1550,114 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="create_room_public_description">Jeder wird diesem Raum beitreten können</string>
     <string name="create_room_directory_title">Raumverzeichnis</string>
     <string name="create_room_directory_description">Veröffentliche diesen Raum ins Raumverzeichnis</string>
+
+    <string name="settings_integration_manager">Integrationsmanager</string>
+
+    <string name="integration_manager_not_configured">Kein Integrationsmanager konfiguriert.</string>
+    <string name="key_share_request">Schlüsselfreigabe Anfordern</string>
+    <string name="keys_backup_setup_override_backup_prompt_description">Es sieht so aus, als hätten Sie bereits ein Setup-Schlüssel-Backup von einem anderen Gerät. Möchten Sie es durch das ersetzen, das Sie gerade erstellen\?</string>
+    <string name="sas_security_advise">Für maximale Sicherheit empfehlen wir, dies persönlich zu tun oder ein anderes vertrauenswürdiges Kommunikationsmittel zu verwenden.</string>
+    <string name="sas_incoming_request_description">Überprüfen Sie dieses Gerät, um es als vertrauenswürdig zu markieren. Das Vertrauen auf Geräte von Partnern gibt Ihnen zusätzliche Sicherheit, wenn Sie verschlüsselte End-to-End-Nachrichten verwenden.</string>
+    <string name="sas_incoming_request_description_2">Das Verifizieren dieses Benutzers wird seine Geräte als \"vertraut\" markieren und dein Gerät bei ihnen als \"vertraut\" markieren.</string>
+
+    <string name="sas_emoji_description">Verifizieren Sie diesen Benutzer, indem Sie bestätigen, dass folgendes Emoji auf dessen Bildschirm erscheint.</string>
+    <string name="sas_decimal_description">Verifizieren Sie diesen Benutzer, indem Sie bestätigen, dass die folgende Nummer auf dessen Bildschirm erscheint.</string>
+
+    <string name="sas_verifying_keys">Es ist nichts aufgetaucht\? Noch nicht alle Clients unterstützen die interaktive Verifikation. <button>Nutze alte Verifikation</button>.</string>
+    <string name="sas_legacy_verification_button_title">Verwenden Sie die Alte-Überprüfung</string>
+
+    <string name="sas_error_m_unknown_transaction">Das Gerät kennt diese Transaktion nicht</string>
+    <string name="sas_error_m_mismatched_commitment">Die Hash-Verpflichtung stimmte nicht überein</string>
+    <string name="sas_error_m_mismatched_sas">Die SAS stimmte nicht überein</string>
+    <string name="sas_error_m_key_mismatch">Wiederherstellungsschlüssel passt nicht</string>
+    <string name="sas_error_m_user_error">Der Benutzer Wiederherstellungsschlüssel passt nicht</string>
+    <string name="room_list_catchup_welcome_body">Informieren Sie sich hier über ungelesene Nachrichten</string>
+    <string name="room_list_people_empty_body">Ihre direkte Konversation wird hier angezeigt</string>
+    <string name="malformed_message">Fehlerhaftes Ereignis, kann nicht angezeigt werden</string>
+    <string name="keys_backup_unable_to_get_trust_info">Beim Abrufen der Vertrauensinformationen ist ein Fehler aufgetreten</string>
+    <string name="keys_backup_unable_to_get_keys_backup_data">Beim Abrufen der Schlüsselsicherungsdaten ist ein Fehler aufgetreten</string>
+
+    <string name="alpha_disclaimer_title">Willkommen in der Beta!</string>
+    <string name="alpha_disclaimer_content_line_1">Während sich RiotX in der frühen Entwicklung befindet, fehlen möglicherweise einige Funktionen und es können Fehler auftreten.</string>
+    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Play Store Beschreibung</string>
+    <string name="settings_sdk_version">Matrix SDK Version</string>
+    <string name="settings_other_third_party_notices">Sonstige Hinweise Dritter</string>
+    <string name="navigate_to_room_when_already_in_the_room">Sie sehen diesen Raum bereits!</string>
+
+    <string name="quick_reactions">Schnelle Reaktionen</string>
+
+    <string name="settings_general_title">Allgemein</string>
+    <string name="settings_preferences">Einstellungen</string>
+    <string name="settings_security_and_privacy">Sicherheit &amp; Privatsphäre</string>
+    <string name="settings_expert">Experte</string>
+    <string name="settings_push_rules">Push-Regeln</string>
+    <string name="settings_push_rules_no_rules">Keine Push-Regeln definiert</string>
+    <string name="settings_push_gateway_no_pushers">Keine registrierten Push-Gateways</string>
+
+    <string name="preference_voice_and_video">Sprache &amp; Video</string>
+    <string name="preference_root_help_about">Hilfe &amp; Über</string>
+
+
+    <string name="settings_troubleshoot_test_token_registration_quick_fix">Token registrieren</string>
+
+    <string name="send_suggestion">Mache einen Vorschlag</string>
+    <string name="send_suggestion_content">Bitte schreiben Sie Ihren Vorschlag unten.</string>
+    <string name="send_suggestion_report_placeholder">Beschreiben Sie hier Ihren Vorschlag</string>
+    <string name="settings_labs_show_hidden_events_in_timeline">Versteckte Ereignisse in der Zeitleiste anzeigen</string>
+
+    <string name="bottom_action_people_x">Direkte Nachrichten</string>
+
+    <string name="send_file_step_idle">Warten…</string>
+    <string name="send_file_step_encrypting_thumbnail">Miniaturbild wird verschlüsselt…</string>
+    <string name="send_file_step_encrypting_file">Datei wird verschlüsselt…</string>
+    <string name="edited_suffix">(bearbeitet)</string>
+
+    <string name="message_edits">Nachrichtenbearbeitung</string>
+    <string name="no_message_edits_found">Keine Änderungen gefunden</string>
+
+    <string name="room_filtering_filter_hint">Gespräche filtern…</string>
+    <string name="room_filtering_footer_create_new_direct_message">Senden Sie eine neue Direktnachricht</string>
+    <string name="room_filtering_footer_open_room_directory">Das Raumverzeichnis anzeigen</string>
+
+    <string name="link_copied_to_clipboard">Link in die Zwischenablage kopiert</string>
+
+    <string name="add_by_matrix_id">Nach Matrix-ID hinzufügen</string>
+    <string name="creating_direct_room">Raum erstellen…</string>
+    <string name="message_view_edit_history">Bearbeitungsverlauf anzeigen</string>
+
+    <string name="sas_cancelled_by_other">Die andere Partei hat die Überprüfung abgebrochen.
+\n%s</string>
+    <string name="sas_error_m_unknown_method">Das Gerät kann sich nicht auf eine Schlüsselvereinbarung, eine Hash-, eine MAC- oder eine SAS-Methode einigen</string>
+    <string name="alpha_disclaimer_content_line_2_gplay">Die neueste Featureliste befindet sich immer in %1$s. Wenn Sie Fehler finden, senden Sie uns bitte einen Bericht im Menü oben links von \"Startseite\". Wir werden den Fehler so schnell wie möglich beheben.</string>
+    <string name="alpha_disclaimer_content_line_2_fdroid">Wenn Sie Fehler finden, senden Sie uns bitte einen Bericht im Menü oben links von \"Startseite\". Wir werden diese so schnell wie möglich beheben.</string>
+
+    <string name="import_e2e_keys_from_file">Importieren Sie e2e-Schlüssel aus der Datei \"%1$s\".</string>
+
+    <string name="send_suggestion_sent">Vielen Dank, der Vorschlag wurde erfolgreich gesendet</string>
+    <string name="send_suggestion_failed">Der Vorschlag konnte nicht gesendet werden (%s)</string>
+
+    <string name="store_riotx_title">RiotX - Matrix Client der nächsten Generation</string>
+    <string name="store_riotx_short_description">Ein schnellerer und leichterer Client für Matrix mit den neuesten Android-Frameworks</string>
+    <string name="send_file_step_sending_thumbnail">Miniaturbild wird gesendet (%1$s / %2$s)</string>
+    <string name="send_file_step_sending_file">Datei wird gesendet (%1$s / %2$s)</string>
+
+    <string name="downloading_file">Datei %1$s wird heruntergeladen …</string>
+    <string name="downloaded_file">Die Datei %1$s wurde heruntergeladen!</string>
+
+    <string name="riotx_no_registration_notice">%1$s , um ein Konto zu erstellen.</string>
+    <string name="riotx_no_registration_notice_colored_part">Benutze die alte App</string>
+
+
+    <string name="room_filtering_footer_title">Können Sie nicht finden, wonach Sie suchen\?</string>
+    <string name="room_filtering_footer_create_new_room">Erstelle einen neuen Raum</string>
+    <string name="room_directory_search_hint">Name oder ID (#Beispiel: matrix.org)</string>
+
+    <string name="labs_swipe_to_reply_in_timeline">Aktivieren Sie das Streichen, um in der Zeitleiste zu antworten</string>
+
+    <string name="direct_room_no_known_users">Kein Ergebnis gefunden. Verwenden Sie Nach Matrix-ID hinzufügen, um auf dem Server zu suchen.</string>
+    <string name="direct_room_start_search">Beginnen Sie mit der Eingabe, um Ergebnisse zu erhalten</string>
+    <string name="direct_room_filter_hint">Filtern nach Benutzername oder ID…</string>
+
+    <string name="joining_room">Raum betreten…</string>
 
 </resources>

@@ -21,6 +21,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.children
+import androidx.core.view.isVisible
 import im.vector.riotx.R
 import im.vector.riotx.features.home.AvatarRenderer
 
@@ -75,6 +76,9 @@ data class MergedHeaderItem(private val isCollapsed: Boolean,
             holder.separatorView.visibility = View.VISIBLE
             holder.expandView.setText(R.string.merged_events_collapse)
         }
+
+        // No read receipt for this item
+        holder.readReceiptsView.isVisible = false
     }
 
     data class Data(

@@ -12,7 +12,7 @@
     <string name="black_them">Tema negre</string>
 
     <!-- permanent notification subtitle -->
-    <string name="notification_sync_in_progress">Sincronitzant</string>
+    <string name="notification_sync_in_progress">S\'està sincronitzant…</string>
     <string name="notification_listening_for_events">Escolta esdeveniments</string>
     <string name="notification_noisy_notifications">Notificacions sorolloses</string>
     <string name="notification_silent_notifications">Notificacions silencioses</string>
@@ -46,9 +46,10 @@
     <string name="rename">Reanomena</string>
     <string name="report_content">Informa del contingut</string>
     <string name="active_call">Trucada activa</string>
-    <string name="ongoing_conference_call">" Conferència en curs.\nUniu-vos hi per %1$s o %2$s."</string>
-    <string name="ongoing_conference_call_voice">veu</string>
-    <string name="ongoing_conference_call_video">vídeo</string>
+    <string name="ongoing_conference_call">Conferència en curs.
+\nUniu-vos hi per %1$s o %2$s.</string>
+    <string name="ongoing_conference_call_voice">Veu</string>
+    <string name="ongoing_conference_call_video">Vídeo</string>
     <string name="cannot_start_call">La trucada no es pot iniciar, prova-ho més tard</string>
     <string name="missing_permissions_warning">Pot ser que algunes funcions no apareguin per manca de permisos…</string>
     <string name="missing_permissions_to_start_conf_call">Es necessiten permisos per convidar a iniciar una conferència en aquesta sala</string>
@@ -84,11 +85,11 @@
     <string name="bottom_action_rooms">Sales</string>
 
     <!-- Home screen -->
-    <string name="home_filter_placeholder_home">Cerca sales</string>
-    <string name="home_filter_placeholder_favorites">Cerca preferits</string>
-    <string name="home_filter_placeholder_people">Cerca persones</string>
-    <string name="home_filter_placeholder_rooms">Cerca sales</string>
-    <string name="home_filter_placeholder_groups">Cerca comunitats</string>
+    <string name="home_filter_placeholder_home">Filtrar noms de sales</string>
+    <string name="home_filter_placeholder_favorites">Filtrar preferits</string>
+    <string name="home_filter_placeholder_people">Filtrar persones</string>
+    <string name="home_filter_placeholder_rooms">Filtrar per noms de sala</string>
+    <string name="home_filter_placeholder_groups">Filtrar per nom de comunitats</string>
 
     <!-- Home fragment -->
     <string name="invitations_header">Convida</string>
@@ -137,7 +138,7 @@
 
     <string name="join_room">Uneix-te a la sala</string>
     <string name="username">Nom d\'usuari</string>
-    <string name="create_account">Registra\'m</string>
+    <string name="create_account">Crear un compte</string>
     <string name="login">Entra</string>
     <string name="logout">Desconnecta</string>
     <string name="hs_url">URL del servidor</string>
@@ -235,7 +236,7 @@
     <!-- accounts list Screen -->
 
     <!-- image size selection -->
-    <string name="compression_options">"Envia com "</string>
+    <string name="compression_options">Envia com</string>
     <string name="compression_opt_list_original">Original</string>
     <string name="compression_opt_list_large">Gran</string>
     <string name="compression_opt_list_medium">Mitjana</string>
@@ -283,7 +284,9 @@
     <string name="permissions_rationale_msg_record_audio">Per tal de fer trucades de veu, el Riot necessita permís d\'accés al microfon.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">\n\nA la següent finestra emergent, doneu permís d\'accés per tal de poder fer la trucada.</string>
     <string name="permissions_rationale_msg_camera_and_audio">Per tal de fer vídeotrucades, el Riot necessita permís d\'accés a la càmera i al microfon.\n\nA la següent finestra emergent, doneu permís d\'accés per tal de poder fer la trucada.</string>
-    <string name="permissions_rationale_msg_contacts">Per tal de trobar altres usuaris de Matrix a partir dels seus correus electrònics o dels seus números de telefon, el Riot necessita permís d\'accés a l\'agenda de contactes.\n\nA la següent finestra emergent, doneu permís d\'accés per trobar amb quins contactes de la teva agenda pots contactar a partir de Riot.</string>
+    <string name="permissions_rationale_msg_contacts">Riot pot comprovar la vostra agenda de contactes per tal de trobar altres usuaris de Matrix basant-se en les seves adreces de correu i números de telèfon.
+\n
+\nSi accepteu compartir la vostra agenda de contactes amb aquesta finalitat, si us plau permeteu l\'accés de la següent finestra emergent.</string>
     <string name="permissions_msg_contacts_warning_other_androids">Per tal de trobar altres usuaris de Matrix a partir dels seus correus electrònics o dels seus números de telefon, el Riot necessita permís d\'accés a l\'agenda de contactes.\n\nPermeteu que Riot accedeixi als vostres contactes?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">No s\'ha realitzat l\'acció per falta de permisos</string>
@@ -370,7 +373,7 @@
     <string name="room_unsent_messages_notification">Els missatges no s\'han enviat. %1$s o %2$s ara?</string>
     <string name="room_unknown_devices_messages_notification">Els missatges no s\'han enviat perquè hi ha disposistius desconeguts. %1$s o %2$s ara?</string>
     <string name="room_prompt_resend">Reenvia-ho tot</string>
-    <string name="room_prompt_cancel">cancel·la-ho tot</string>
+    <string name="room_prompt_cancel">Cancel·la-ho tot</string>
     <string name="room_resend_unsent_messages">Reenvia els missatges no enviats</string>
     <string name="room_delete_unsent_messages">Elimina els missatges no enviats</string>
     <string name="room_message_file_not_found">No s\'ha trobat el fitxer</string>
@@ -542,9 +545,9 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i que pot trigar 
     <string name="account_phone_number_already_used_error">Aquest número de telèfon ja està en ús.</string>
 
     <string name="settings_change_password">Canvia la contrasenya</string>
-    <string name="settings_old_password">Contrasenya antiga</string>
+    <string name="settings_old_password">Contrasenya actual</string>
     <string name="settings_new_password">Contrasenya nova</string>
-    <string name="settings_confirm_password">Confirmeu la contrasenya</string>
+    <string name="settings_confirm_password">Confirmeu la nova contrasenya</string>
     <string name="settings_fail_to_update_password">No s\'ha pogut actualitzar la contrasenya</string>
     <string name="settings_password_updated">La contrasenya s\'ha actualitzat</string>
     <string name="settings_unignore_user">Mostra tots els missatges des de %s?
@@ -889,7 +892,7 @@ Atenció: es podria eliminar aquest fitxer si es desinstal·la l\'aplicació.</s
     <string name="e2e_re_request_encryption_key_dialog_content">Si us plau, engega Riot a un altre dispositiu que pugui desencriptar el missatge de manera que pugui enviar la clau a aquest dispositiu.</string>
 
     <string name="settings_notification_privacy_normal">Normal</string>
-    <string name="status_theme">Motiu Status.im</string>
+    <string name="status_theme">Tema Status.im</string>
 
     <string name="missing_permissions_error">Manquen permisos per a dur a terme aquesta acció.</string>
     <string name="dialog_title_error">Error</string>
@@ -924,7 +927,7 @@ En voleu afegir algun?</string>
     <string name="room_participants_action_unignore_prompt">Mostrar tots els missatges d\'aquest usuari?
 
 Tingueu en compte que aquesta acció reiniciarà l\'aplicació i pot trigar una estona.</string>
-    <string name="room_participants_invite_join_names">"%1$s, "</string>
+    <string name="room_participants_invite_join_names">"%1$s,· "</string>
     <string name="room_participants_invite_join_names_and">%1$s i %2$s</string>
     <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
 
@@ -938,7 +941,7 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i pot trigar una 
     <string name="settings_notification_privacy">Notificació de privacitat</string>
     <string name="settings_notification_privacy_reduced">Privacitat reduïda</string>
     <string name="settings_notification_privacy_need_permission">L\'aplicació necessita permisos per funcionar en segon pla</string>
-    <string name="settings_notification_privacy_fcm">• Les notificacions s\'envien via Google Cloud Messaging</string>
+    <string name="settings_notification_privacy_fcm">• Les notificacions s\'envien via Firebase Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Les notificacions contenen només meta dades</string>
     <string name="settings_notification_privacy_secure_message_content">• El contingut dels missatges de les notificacions s\'obté <b>de forma segura des del servidor de Matrix</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• Les notificacions contenen <b>meta dades i dades de missatges</b></string>
@@ -1246,7 +1249,7 @@ Aquest error és fora del control del Riot. No hi ha cap compte de Google al tel
     <string name="settings_troubleshoot_test_bg_restricted_failed">Les restriccions de rerefons són habilitades per al Riot.
 Les tasques que l\'aplicació intenta fer estaran restringides agressivament mentre estigui al rerefons, i això pot afectar les notificacions.
 %1$s</string>
-    <string name="settings_troubleshoot_test_battery_failed">"Si un usuari deixa un dispositiu sense endollar i immòbil durant un període de temps, amb la pantalla apagada, el dispositiu entra en el mode Doze. Això impedeix les aplicacions d\'accedir a la xarxa i ajorna les seves tasques, sincronitzacions i alarmes estàndard. "</string>
+    <string name="settings_troubleshoot_test_battery_failed">Si un usuari deixa un dispositiu sense endollar i immòbil durant un període de temps, amb la pantalla apagada, el dispositiu entra en el mode d\'estalvi d\'energia. Això impedeix les aplicacions d\'accedir a la xarxa i ajorna les seves tasques, sincronitzacions i alarmes estàndard.</string>
     <string name="store_full_description">"Una aplicació de xat, sota el vostre control i totalment flexible. El Riot us permet comunicar-vos de la manera que preferiu. Fet per al [matrix] - l’estàndard per a la comunicació oberta i descentralitzada.
 
 Obteniu un compte gratuït de matrix.org, executeu el vostre servidor propi a https://modular.im, o empreu un altre servidor de Matrix.
@@ -1385,7 +1388,7 @@ Per què triar Riot.im?
     <string name="notification_sync_init">Inicialitzar servei</string>
     <string name="ignore">Ignorar</string>
 
-    <string name="auth_login_sso">Registrar-se amb Single Sign-on</string>
+    <string name="auth_login_sso">Iniciar sessió amb Single Sign-on</string>
     <string name="login_error_unknown_host">Aquesta URL no està disponible , si us plau verifiqueu-la</string>
     <string name="login_error_ssl_handshake">El vostre dispositiu està usant una versió obsoleta del protocol de seguretat TLS, vulnerable a atacs. Per a la vostra seguretat no us podreu connectar</string>
     <string name="settings_send_message_with_enter">Envieu un missatge amb Enter</string>
@@ -1403,4 +1406,174 @@ Per què triar Riot.im?
     <string name="autodiscover_invalid_response">Resposta no vàlida en descobrir homeservers</string>
     <string name="autodiscover_well_known_autofill_confirm">Usar Config</string>
 
+    <string name="title_activity_verify_device">Verificar dispositiu</string>
+
+    <string name="action_mark_room_read">Marcar com a llegit</string>
+    <string name="settings_notification_privacy_no_background_sync">Les app <b>no</b> necessita connectar-se al HomeServer en segon pla, hauria de reduir el consum de bateria</string>
+    <string name="settings_integration_manager">Administrador d\'integracions</string>
+
+    <string name="settings_play_shutter_sound">Reproduir el so de disparador</string>
+
+    <string name="encryption_information_unknown_ip">IP desconeguda</string>
+    <plurals name="notification_compat_summary_line_for_room">
+        <item quantity="one">%1$s: 1 missatge</item>
+        <item quantity="other">%1$s: %2$d missatges</item>
+    </plurals>
+    <plurals name="notification_compat_summary_title">
+        <item quantity="one">%d notificacion</item>
+        <item quantity="other">%d notificacions</item>
+    </plurals>
+
+    <string name="notification_unknown_new_event">Nou esdeveniment</string>
+    <string name="notification_unknown_room_name">Sala</string>
+    <string name="notification_new_messages">Missatges nous</string>
+    <string name="notification_new_invitation">Nova invitació</string>
+    <string name="notification_sender_me">Jo</string>
+    <string name="notification_inline_reply_failed">** Error en enviar - Si us plau obriu la sala</string>
+
+    <string name="error_jitsi_not_supported_on_old_device">Ho sentim, els dispositius amb SO Android inferior a 5.0 no suporten trucades multi-usuari amb Jitsi</string>
+
+    <string name="integration_manager_not_configured">No heu configurat cap administrador d\'integracions.</string>
+    <string name="you_added_a_new_device_with_info">Un nou dispositiu està sol·licitant claus d\'encriptació.
+\nNom del dispositiu: %1$s
+\nVist per última vegada: %s$s
+\nSi no heu iniciat sessió en un altre dispositiu, ignoreu la sol·licitud.</string>
+    <string name="your_unverified_device_requesting_with_info">Un dispositiu no verificat està sol·licitant claus d\'encriptació.
+\nNom del dispositiu: %1$s
+\nVist per última vegada: %s$s
+\nSi no heu iniciat sessió en un altre dispositiu, ignoreu la sol·licitud.</string>
+
+    <string name="start_verification_short_label">Verificar</string>
+    <string name="share_without_verifying_short_label">Compartir</string>
+    <string name="key_share_request">Sol·licitud de compartició de clau</string>
+    <string name="ignore_request_short_label">Ignorar</string>
+
+    <string name="keys_backup_setup_override_backup_prompt_tile">Ja existeix una còpia de seguretat al vostre HomeServer</string>
+    <string name="keys_backup_setup_override_backup_prompt_description">Sembla que ja heu configurat una còpia de seguretat de claus des d\'un altre dispositiu. Voleu reemplaçar-la amb la que esteu creant\?</string>
+    <string name="keys_backup_setup_override_replace">Reemplaçar</string>
+    <string name="keys_backup_setup_override_stop">Aturar</string>
+
+    <string name="keys_backup_settings_checking_backup_state">Comprovant l\'estat de la còpia de seguretat</string>
+    <string name="autodiscover_well_known_autofill_dialog_title">Opcions d\'autocompleció del servidor</string>
+    <string name="autodiscover_well_known_autofill_dialog_message">Riot ha detectat una configuració de servidor personalitzat pel domini del seu identificador d\'usuari \"%1$s\":
+\n%2$s</string>
+    <string name="invalid_or_expired_credentials">Us heu desconnectat a causa de credencials incorrectes o caducades.</string>
+
+    <string name="sas_verify_title">Verificar comparant una cadena de text curta.</string>
+    <string name="sas_security_advise">Per la màxima seguretat us recomanem fer això en persona o usar un altre medi de comunicació confiable.</string>
+    <string name="sas_verify_start_button_title">Començar la verificació</string>
+    <string name="sas_incoming_request_title">Sol·licitud de verificació entrant</string>
+    <string name="sas_incoming_request_description">Verificar aquest dispositiu per marcar-lo com a confiable. Confiar en dispositius d\'amistats us dona un alleujament addicional quan useu missatges encriptats end-to-end.</string>
+    <string name="sas_incoming_request_description_2">Verificant aquest dispositiu el marcareu com a confiable, i també marcareu el vostre dispositiu com a confiable pel vostre company.</string>
+
+    <string name="sas_emoji_description">Verificar aquest dispositiu confirmant els següents emojis que apareguin a la pantalla del vostre company</string>
+    <string name="sas_decimal_description">Verificar aquest dispositiu confirmant els següents números que sortiran a la pantalla del vostre company</string>
+
+    <string name="sas_incoming_verification_request_dialog">Heu rebut una sol·licitud de verificació entrant.</string>
+    <string name="sas_view_request_action">Veure sol·licitud</string>
+    <string name="sas_waiting_for_partner">Esperant que el vostre company confirmi…</string>
+
+    <string name="sas_verified">Verificat!</string>
+    <string name="sas_verified_successful">Heu verificat aquest dispositiu amb èxit.</string>
+    <string name="sas_verified_successful_description">Els missatges segurs amb aquest usuari estan encriptats end-to-end i no serà possible llegir-los per tercers.</string>
+    <string name="sas_got_it">Entesos</string>
+
+    <string name="sas_verifying_keys">No surt res\? Encara no tots els clients suporten la verificació interactiva. Useu el mètode de verificació antic.</string>
+    <string name="sas_legacy_verification_button_title">Useu el mètode antic de verificació.</string>
+
+    <string name="sas_verification_request_notification_channel_title">Verificació de clau</string>
+    <string name="sas_cancelled_dialog_title">Sol·licitud cancel·lada</string>
+    <string name="sas_cancelled_by_other">L\'altre part ha cancel·lat la verificació.
+\n%s</string>
+    <string name="sas_cancelled_by_me">S\'ha cancel·lat la verificació.
+\nMotiu: %s</string>
+
+    <string name="sas_verification_request_notification_channel">Verificació de dispositiu interactiva</string>
+    <string name="sas_incoming_request_notif_title">Sol·licitud de verificació</string>
+    <string name="sas_incoming_request_notif_content">%s vol verificar el vostre dispositiu</string>
+
+    <string name="sas_error_m_user">L\'usuari ha cancel·lat la verificació</string>
+    <string name="sas_error_m_timeout">El marge de temps pel procés de verificació ha expirat</string>
+    <string name="sas_error_m_unknown_transaction">El dispositiu no coneix la transacció</string>
+    <string name="sas_error_m_unknown_method">El dispositiu no pot acceptar un acord de claus amb mètodes hash, MAC o SAS</string>
+    <string name="sas_error_m_mismatched_commitment">El compromís del hash no ha coincidit</string>
+    <string name="sas_error_m_mismatched_sas">El SAS no ha coincidit</string>
+    <string name="sas_error_m_unexpected_message">El dispositiu ha rebut un missatge inesperat</string>
+    <string name="sas_error_m_invalid_message">S\'ha rebut un missatge invàlid</string>
+    <string name="sas_error_m_key_mismatch">La clau no coincideix</string>
+    <string name="sas_error_m_user_error">L\'usuari no coincideix</string>
+    <string name="sas_error_unknown">Error desconegut</string>
+
+
+    <string name="edit">Editar</string>
+    <string name="reply">Respondre</string>
+
+    <string name="global_retry">Tornar-ho a provar</string>
+    <string name="room_list_empty">Unir-se a una sala per començar usant l\'app.</string>
+    <string name="send_you_invite">Se t\'ha enviat una invitació</string>
+    <string name="invited_by">Convidat per %s</string>
+
+    <string name="room_list_catchup_empty_title">Esteu al dia!</string>
+    <string name="room_list_catchup_empty_body">No teniu més missatges sense llegir</string>
+    <string name="room_list_catchup_welcome_title">Benvingut a casa!</string>
+    <string name="room_list_catchup_welcome_body">Posar-se al dia dels missatges sense llegir</string>
+    <string name="room_list_people_empty_title">Converses</string>
+    <string name="room_list_people_empty_body">Els vostres missatges directes es mostraran aquí</string>
+    <string name="room_list_rooms_empty_title">Sales</string>
+    <string name="room_list_rooms_empty_body">Les vostres sales es mostraran aquí</string>
+
+    <string name="title_activity_emoji_reaction_picker">Reaccions</string>
+    <string name="reactions_agree">Confirmar</string>
+    <string name="reactions_like">M\'agrada</string>
+    <string name="message_add_reaction">Afegir reacció</string>
+    <string name="message_view_reaction">Veure reaccions</string>
+    <string name="reactions">Reaccions</string>
+
+    <string name="event_redacted_by_user_reason">Esdeveniment eliminat per l\'usuari</string>
+    <string name="event_redacted_by_admin_reason">Esdeveniment moderat per l\'administrador de la sala</string>
+    <string name="last_edited_info_message">Última edició per %s el %s</string>
+
+
+    <string name="malformed_message">Esdeveniment mal format, no es pot mostrar</string>
+    <string name="create_new_room">Crear sala nova</string>
+    <string name="error_no_network">No hi ha xarxa. Si us plau comproveu la vostra connexió a internet.</string>
+    <string name="action_change">Canviar</string>
+    <string name="change_room_directory_network">Canviar de xarxa</string>
+    <string name="please_wait">Espereu, si us plau…</string>
+    <string name="group_all_communities">Totes les comunitats</string>
+
+    <string name="room_preview_no_preview">Aquesta sala no es pot pre-visualitzar</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">RiotX encara no suporta la pre-visualització de sales llegibles per tothom</string>
+
+    <string name="fab_menu_create_room">Sales</string>
+    <string name="fab_menu_create_chat">Missatges directes</string>
+
+    <string name="create_room_title">Sala nova</string>
+    <string name="create_room_action_create">CREAR</string>
+    <string name="create_room_name_hint">Nom de la sala</string>
+    <string name="create_room_public_title">Públic</string>
+    <string name="create_room_public_description">Qualsevol podrà unir-se a aquesta sala</string>
+    <string name="create_room_directory_title">Directori de sales</string>
+    <string name="create_room_directory_description">Publicar aquesta sala al directori de sales</string>
+
+    <string name="keys_backup_unable_to_get_trust_info">Hi ha hagut un error rebent informació de confança</string>
+    <string name="keys_backup_unable_to_get_keys_backup_data">Hi ha hagut un error rebent dades de la còpia de seguretat de les claus</string>
+
+    <string name="alpha_disclaimer_title">Benvinguts a la beta!</string>
+    <string name="alpha_disclaimer_content_line_1">Mentre RiotX estigui en les primeres etapes de desenvolupament, faltaran algunes funcions i podríeu experimentar alguns errors.</string>
+    <string name="alpha_disclaimer_content_line_2_gplay">L\'última llista de característiques està sempre a %1$s, i si trobeu errors si us plau reporteu informe des de la part superior esquerra del menú d\'Inici, i el resoldrem tan aviat com puguem.</string>
+    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Descripció de la Play Store</string>
+    <string name="alpha_disclaimer_content_line_2_fdroid">Si trobeu errors si us plau envieu un informe d\'errors des de la part superior esquerra del menú d\'Inici, i el resoldrem tan aviat com puguem.</string>
+
+    <string name="import_e2e_keys_from_file">Importar claus e2e des del fitxer \"%1$s\".</string>
+
+    <string name="settings_sdk_version">Versió de l\'SDK de Matrix</string>
+    <string name="navigate_to_room_when_already_in_the_room">Ja esteu veient aquesta sala!</string>
+
+    <string name="quick_reactions">Reaccions ràpides</string>
+
+    <string name="settings_general_title">General</string>
+    <string name="settings_preferences">Preferències</string>
+    <string name="settings_security_and_privacy">Seguretat i privadesa</string>
+    <string name="settings_expert">Expert</string>
 </resources>

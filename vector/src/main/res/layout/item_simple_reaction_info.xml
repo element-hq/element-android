@@ -2,11 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="44dp"
+    android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:orientation="horizontal"
     android:paddingStart="8dp"
-    android:paddingLeft="8dp"
+    android:minHeight="40dp"
     android:paddingEnd="8dp">
 
     <TextView
@@ -23,24 +23,12 @@
 
     <TextView
         android:id="@+id/itemSimpleReactionInfoMemberName"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_weight="1"
-        android:ellipsize="end"
-        android:lines="1"
-        android:textColor="?android:textColorPrimary"
-        android:textSize="16sp"
+        style="@style/BottomSheetItemTextMain"
         tools:text="@sample/matrix.json/data/displayName" />
 
     <TextView
         android:id="@+id/itemSimpleReactionInfoTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:lines="1"
-        android:textColor="?android:textColorSecondary"
-        android:textSize="12sp"
+        style="@style/BottomSheetItemTime"
         tools:text="10:44" />
 
 

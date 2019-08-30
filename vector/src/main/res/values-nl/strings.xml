@@ -155,7 +155,7 @@
     <string name="auth_repeat_password_placeholder">Wachtwoord herhalen</string>
     <string name="auth_repeat_new_password_placeholder">Nieuw wachtwoord bevestigen</string>
     <string name="auth_invalid_login_param">Verkeerde gebruikersnaam en/of wachtwoord</string>
-    <string name="auth_invalid_user_name">Gebruikersnamen mogen alleen letters, cijfers, punten en afbreek- en lage streepjes bevatten</string>
+    <string name="auth_invalid_user_name">Gebruikersnamen mogen alleen letters, cijfers, punten, koppeltekens en underscores bevatten</string>
     <string name="auth_invalid_password">Wachtwoord te kort (min 6)</string>
     <string name="auth_missing_password">Wachtwoord ontbreekt</string>
     <string name="auth_invalid_email">Dit is geen geldig e-mailadres</string>
@@ -292,7 +292,7 @@
     <string name="reject">Afwijzen</string>
 
     <!-- Room -->
-    <string name="room_jump_to_first_unread">Spring naar het eerste ongelezen bericht.</string>
+    <string name="room_jump_to_first_unread">Ga naar het eerste ongelezen bericht.</string>
 
     <!-- Room Preview -->
     <string name="room_preview_invitation_format">%s heeft u uitgenodigd in dit gesprek</string>
@@ -484,7 +484,7 @@
     <string name="settings_cryptography">Cryptografie</string>
     <string name="settings_notifications_targets">Meldingsdoelen</string>
     <string name="settings_contact">Lokale contacten</string>
-    <string name="settings_contacts_app_permission">Contacten-toestemming</string>
+    <string name="settings_contacts_app_permission">Toegang geven tot lokale contacten</string>
     <string name="settings_contacts_phonebook_country">Land voor telefoonboek</string>
     <string name="settings_home_display">Startscherm</string>
     <string name="settings_pin_missed_notifications">Gesprekken met gemiste meldingen vastprikken</string>
@@ -689,7 +689,7 @@
     <string name="directory_server_native_rooms">Alle lokale gesprekken op %s</string>
 
     <!-- historical -->
-    <string name="historical_placeholder">Zoeken naar historische</string>
+    <string name="historical_placeholder">Zoeken in de historiek</string>
     <string name="offline">Offline</string>
 
     <string name="user_directory_header">Gebruikerscatalogus</string>
@@ -903,8 +903,8 @@
     <string name="avatar">Avatar</string>
 
     <plurals name="notification_unread_notified_messages">
-        <item quantity="one">1 ongelezen bericht waarin u vermeld staat</item>
-        <item quantity="other">%d ongelezen berichten waarin u vermeld staat</item>
+        <item quantity="one">1 ongelezen bericht waarin u vermeld bent</item>
+        <item quantity="other">%d ongelezen berichten waarin u vermeld bent</item>
     </plurals>
     <string name="notice_avatar">Vermeldingsavatar</string>
     <string name="title_activity_choose_sticker">Verstuur een sticker</string>
@@ -1208,7 +1208,7 @@
     <string name="settings_troubleshoot_test_battery_failed">Als een gebruiker een apparaat los van de oplader een tijd laat stilliggen, met het scherm uitgeschakeld, gaat het apparaat in slaapmodus. Dit verhindert apps de toegang tot het netwerk, en stelt hun taken, synchronisaties en standaardalarmen uit.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Optimalisatie negeren</string>
 
-    <string name="settings_notification_privacy_no_background_sync">De app heeft <b>geen</b> verbinding met de homeserver nodig in de achtergrond, dit zou accuverbruik moeten verlagen</string>
+    <string name="settings_notification_privacy_no_background_sync">De app heeft <b>geen</b> verbinding met de homeserver nodig in de achtergrond, dit zou het gebruik van de batterij moeten verlagen</string>
     <string name="settings_noisy_notifications_preferences">Lawaaiierige meldingen configureren</string>
     <string name="settings_call_notifications_preferences">Oproepmeldingen configureren</string>
     <string name="settings_silent_notifications_preferences">Stille meldingen configureren</string>

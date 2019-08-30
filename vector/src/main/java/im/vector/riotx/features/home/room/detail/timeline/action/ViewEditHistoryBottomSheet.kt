@@ -49,7 +49,7 @@ class ViewEditHistoryBottomSheet : VectorBaseBottomSheetDialogFragment() {
     lateinit var epoxyRecyclerView: EpoxyRecyclerView
 
     private val epoxyController by lazy {
-        ViewEditHistoryEpoxyController(requireContext(), viewModel.timelineDateFormatter, eventHtmlRenderer)
+        ViewEditHistoryEpoxyController(requireContext(), viewModel.dateFormatter, eventHtmlRenderer)
     }
 
     override fun injectWith(screenComponent: ScreenComponent) {

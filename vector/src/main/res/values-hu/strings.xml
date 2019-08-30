@@ -329,7 +329,7 @@ Kérlek engedélyezd a hozzáférést a következő felugró ablakban, hogy tudj
     <string name="room_unsent_messages_notification">Üzenetek nem kerültek elküldésre. %1$s vagy %2$s most?</string>
     <string name="room_unknown_devices_messages_notification">Üzenetek nem kerültek elküldésre mert egy ismeretlen eszköz van jelen. %1$s vagy %2$s most?</string>
     <string name="room_prompt_resend">Összes újraküldése</string>
-    <string name="room_prompt_cancel">Összes megszüntetése</string>
+    <string name="room_prompt_cancel">Összes elvetése</string>
     <string name="room_resend_unsent_messages">El nem küldött üzenetek újraküldése</string>
     <string name="room_delete_unsent_messages">El nem küldött üzenetek törlése</string>
     <string name="room_message_file_not_found">Fájl nem található</string>
@@ -1610,5 +1610,18 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="labs_swipe_to_reply_in_timeline">Válasz engedélyezése húzással az idővonalon</string>
 
     <string name="link_copied_to_clipboard">Hivatkozás a vágólapra másolva</string>
+
+    <string name="settings_integration_manager">Integrációs Menedzser</string>
+
+    <string name="integration_manager_not_configured">Integrációs Menedzser nincs beállítva.</string>
+    <string name="add_by_matrix_id">Hozzáadás matrix ID-vel</string>
+    <string name="creating_direct_room">Szoba létrehozása…</string>
+    <string name="direct_room_no_known_users">Nincs találat, használd a „Hozzáadás matrix ID-vel”-t a szerveren való kereséshez.</string>
+    <string name="direct_room_start_search">A találatokhoz kezdj gépelni</string>
+    <string name="direct_room_filter_hint">Szűrés felhasználói névre vagy azonosítóra…</string>
+
+    <string name="joining_room">Szobába belépés…</string>
+
+    <string name="message_view_edit_history">Szerkesztési napló megtekintése</string>
 
 </resources>

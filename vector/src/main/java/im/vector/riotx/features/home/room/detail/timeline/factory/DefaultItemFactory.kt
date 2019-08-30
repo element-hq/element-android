@@ -17,21 +17,35 @@
 package im.vector.riotx.features.home.room.detail.timeline.factory
 
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.riotx.features.home.AvatarRenderer
+import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.home.room.detail.timeline.item.DefaultItem
 import im.vector.riotx.features.home.room.detail.timeline.item.DefaultItem_
+import im.vector.riotx.features.home.room.detail.timeline.util.MessageInformationDataFactory
 import javax.inject.Inject
 
-class DefaultItemFactory @Inject constructor(){
+class DefaultItemFactory @Inject constructor(private val avatarRenderer: AvatarRenderer,
+                                             private val informationDataFactory: MessageInformationDataFactory) {
 
-    fun create(event: TimelineEvent, highlight: Boolean, exception: Exception? = null): DefaultItem? {
+    fun create(event: TimelineEvent,
+               highlight: Boolean,
+               callback: TimelineEventController.Callback?,
+               exception: Exception? = null): DefaultItem? {
         val text = if (exception == null) {
             "${event.root.getClearType()} events are not yet handled"
         } else {
             "an exception occurred when rendering the event ${event.root.eventId}"
         }
+
+        val informationData = informationDataFactory.create(event, null)
+
         return DefaultItem_()
                 .text(text)
+                .avatarRenderer(avatarRenderer)
                 .highlighted(highlight)
+                .informationData(informationData)
+                .baseCallback(callback)
+                .readReceiptsCallback(callback)
     }
 
 }
