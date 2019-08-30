@@ -78,4 +78,10 @@
     <string name="room_displayname_empty_room">Sala vazia</string>
 
 
+    <string name="summary_user_sent_sticker">%1$s enviou um sticker.</string>
+
+    <string name="notice_room_update">%s fez o upgrade da sala.</string>
+
+    <string name="notice_event_redacted">Mensagem removida</string>
+    <string name="notice_event_redacted_by">Mensagem removida por %1$s</string>
 </resources>

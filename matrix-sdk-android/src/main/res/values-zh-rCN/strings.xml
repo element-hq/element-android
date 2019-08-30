@@ -162,4 +162,9 @@
     <string name="initial_sync_start_importing_account_data">初始化同步：
 \n正在导入账号数据</string>
 
+    <string name="notice_room_update">%s 升级了聊天室。</string>
+
+    <string name="event_status_sending_message">正在发送消息…</string>
+    <string name="clear_timeline_send_queue">清除正在发送队列</string>
+
 </resources>

@@ -362,7 +362,7 @@ Sicuro di procedere?</string>
     <string name="room_unsent_messages_notification">Messaggi non inviati. %1$s o %2$s ora?</string>
     <string name="room_unknown_devices_messages_notification">Messaggi non inviati a causa di dispositivi sconosciuti qui presenti. %1$s o %2$s ora?</string>
     <string name="room_prompt_resend">Rispedisci tutto</string>
-    <string name="room_prompt_cancel">annulla tutto</string>
+    <string name="room_prompt_cancel">Annulla tutto</string>
     <string name="room_resend_unsent_messages">Rinvia messaggi non spediti</string>
     <string name="room_delete_unsent_messages">Elimina messaggi non spediti</string>
     <string name="room_message_file_not_found">File non trovato</string>
@@ -1655,5 +1655,18 @@ Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi."</stri
     <string name="labs_swipe_to_reply_in_timeline">Attiva swipe per rispondere nella timeline</string>
 
     <string name="link_copied_to_clipboard">Collegamento copiato negli appunti</string>
+
+    <string name="settings_integration_manager">Gestore dell\'integrazione</string>
+
+    <string name="integration_manager_not_configured">Nessun gestore integrazione configurato.</string>
+    <string name="add_by_matrix_id">Aggiungi per ID matrix</string>
+    <string name="creating_direct_room">Creare una stanza …</string>
+    <string name="direct_room_no_known_users">Nessun risultato trovato, usa \"Aggiungi per ID matrix\" per cercare sul server.</string>
+    <string name="direct_room_start_search">Inizia a digitare per ottenere risultati</string>
+    <string name="direct_room_filter_hint">Filtra per nome utente o ID …</string>
+
+    <string name="joining_room">Sto entrando nella stanza …</string>
+
+    <string name="message_view_edit_history">Visualizza Modifica cronologia</string>
 
 </resources>

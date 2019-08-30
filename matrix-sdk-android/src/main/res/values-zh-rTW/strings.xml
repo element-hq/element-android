@@ -165,4 +165,9 @@
     <string name="initial_sync_start_importing_account_data">初始化同步：
 \n正在匯入帳號資料</string>
 
+    <string name="notice_room_update">%s 已升級此聊天室。</string>
+
+    <string name="event_status_sending_message">正在傳送訊息……</string>
+    <string name="clear_timeline_send_queue">清除傳送佇列</string>
+
 </resources>

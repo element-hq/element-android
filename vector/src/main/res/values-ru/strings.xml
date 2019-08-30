@@ -264,7 +264,7 @@ Email также позволит вам при необходимости во�
     <string name="permissions_rationale_msg_camera_and_audio">Riot необходимы разрешения на доступ к камере и микрофону для видеовызовов.
 
 Пожалуйста дайте разрешение в следующем окне для звонка.</string>
-    <string name="permissions_rationale_msg_contacts">Riot необходимы разрешения на доступ к контактам, чтобы найти других пользователей сети по email или телефонному номеру. Пожалуйста разрешите доступ в следующем окне, чтобы ваши контакты были доступны в приложении.</string>
+    <string name="permissions_rationale_msg_contacts">Riot может проверить вашу адресную книгу, чтобы найти других пользователей Matrix по их электронной почте и номерам телефонов. Если вы согласны поделиться своей адресной книгой для этой цели, пожалуйста, откройте доступ на следующем всплывающем окне.</string>
     <string name="permissions_msg_contacts_warning_other_androids">Riot может проверить Вашу адресную книгу, чтобы найти других пользователей сети по email или телефонному номеру. 
 \n
 \nСогласны ли вы поделиться своей адресной книгой для этой цели\?</string>
@@ -352,7 +352,7 @@ Email также позволит вам при необходимости во�
     <string name="room_unsent_messages_notification">Сообщения не отправлены. %1$s или %2$s сейчас?</string>
     <string name="room_unknown_devices_messages_notification">Сообщения, не отправлены из-за присутствия неизвестных устройств. %1$s или %2$s сейчас?</string>
     <string name="room_prompt_resend">Повторить отправку</string>
-    <string name="room_prompt_cancel">удалить все</string>
+    <string name="room_prompt_cancel">Удалить все</string>
     <string name="room_resend_unsent_messages">Отправить неотправленные сообщения</string>
     <string name="room_delete_unsent_messages">Удалить неотправленные сообщения</string>
     <string name="room_message_file_not_found">Файл не найден</string>
@@ -917,9 +917,9 @@ Email также позволит вам при необходимости во�
     </plurals>
     <string name="receipt_avatar">Получить аватар</string>
     <string name="notice_avatar">Заметка аватара</string>
-    <string name="settings_flair">Лычки</string>
+    <string name="settings_flair">Флэр</string>
 
-    <string name="room_settings_no_flair">Эта комната не показывает лычки сообществ</string>
+    <string name="room_settings_no_flair">Эта комната не показывает флэр сообществ</string>
     <string name="settings_notification_privacy">Конфиденциальность уведомлений</string>
     <string name="settings_notification_privacy_normal">Нормальный</string>
     <string name="settings_notification_privacy_need_permission">Приложение нуждается в разрешении на работу в фоновом режиме</string>
@@ -1584,6 +1584,133 @@ Email также позволит вам при необходимости во�
     <string name="title_activity_emoji_reaction_picker">Реакция</string>
     <string name="reactions_agree">Соглашаться</string>
     <string name="reactions_like">Нравиться</string>
-    <string name="message_add_reaction">Добавить реакцию</string>
+    <string name="message_add_reaction">Добавить действие</string>
     <string name="message_view_reaction">Посмотреть реакции</string>
+    <string name="settings_integration_manager">Менеджер интеграции</string>
+
+    <string name="integration_manager_not_configured">Менеджер интеграции не настроен.</string>
+    <string name="reactions">Реакции</string>
+
+    <string name="event_redacted_by_user_reason">Удаленное пользователем событие</string>
+    <string name="event_redacted_by_admin_reason">Мероприятие, модерируемое администратором помещения</string>
+    <string name="last_edited_info_message">Последний раз редактировался %s на %s</string>
+
+
+    <string name="malformed_message">Некорректное событие, не может быть отображено</string>
+    <string name="create_new_room">Создать новую комнату</string>
+    <string name="error_no_network">Сети нет. Пожалуйста, проверьте подключение к Интернету.</string>
+    <string name="action_change">Изменить</string>
+    <string name="change_room_directory_network">Изменить сеть</string>
+    <string name="please_wait">Пожалуйста, подождите…</string>
+    <string name="group_all_communities">Все сообщества</string>
+
+    <string name="room_preview_no_preview">Эту комнату нельзя предварительно просмотреть</string>
+    <string name="fab_menu_create_room">Комнаты</string>
+    <string name="fab_menu_create_chat">Прямые сообщения</string>
+
+    <string name="create_room_title">Новая комната</string>
+    <string name="create_room_action_create">СОЗДАТЬ</string>
+    <string name="create_room_name_hint">Имя комнаты</string>
+    <string name="create_room_public_title">Публичные</string>
+    <string name="create_room_public_description">Любой сможет присоединиться к этой комнате</string>
+    <string name="create_room_directory_title">Каталог номеров</string>
+    <string name="create_room_directory_description">Опубликовать эту комнату в каталоге номеров</string>
+
+    <string name="keys_backup_unable_to_get_trust_info">Произошла ошибка при получении информации о доверии</string>
+    <string name="keys_backup_unable_to_get_keys_backup_data">Произошла ошибка при получении ключей резервного копирования данных</string>
+
+    <string name="alpha_disclaimer_title">Добро пожаловать в бету!</string>
+    <string name="alpha_disclaimer_content_line_1">Пока RiotX находится в ранней стадии разработки, некоторые функции могут отсутствовать и вы можете столкнуться с ошибками.</string>
+    <string name="alpha_disclaimer_content_line_2_gplay">Последний список функций всегда находится в %1$s, и если вы найдете ошибку, пожалуйста, отправьте отчет в верхнее левое меню Home, и мы исправим их так быстро, как только сможем.</string>
+    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Описание магазина</string>
+    <string name="alpha_disclaimer_content_line_2_fdroid">Если вы обнаружите ошибку, пожалуйста, отправьте сообщение в верхнее левое меню Home, и мы исправим ее так быстро, как только сможем.</string>
+
+    <string name="import_e2e_keys_from_file">Импорт ключей e2e из файла \"%1$s\".</string>
+
+    <string name="settings_sdk_version">Версия Matrix SDK</string>
+    <string name="settings_other_third_party_notices">Другие уведомления третьих сторон</string>
+    <string name="navigate_to_room_when_already_in_the_room">Вы уже просмотрели эту комнату!</string>
+
+    <string name="quick_reactions">Быстрое реагирование</string>
+
+    <string name="settings_general_title">Общее</string>
+    <string name="settings_preferences">Установки</string>
+    <string name="settings_security_and_privacy">Безопасность &amp; Конфиденциальность</string>
+    <string name="settings_expert">Профессионал</string>
+    <string name="settings_push_rules">Нажать Правила</string>
+    <string name="push_gateway_item_app_id">app_id:</string>
+    <string name="push_gateway_item_push_key">push_key:</string>
+    <string name="push_gateway_item_app_display_name">app_display_name:</string>
+    <string name="push_gateway_item_device_name">device_name:</string>
+    <string name="push_gateway_item_url">Url:</string>
+    <string name="push_gateway_item_format">Формат:</string>
+
+    <string name="preference_voice_and_video">Голос &amp; Видио</string>
+    <string name="preference_root_help_about">Помощь и информация</string>
+
+
+    <string name="settings_troubleshoot_test_token_registration_quick_fix">Регистрационный токен</string>
+
+    <string name="send_suggestion">Сделайте предложение</string>
+    <string name="send_suggestion_content">Пожалуйста, напишите ваше предложение ниже.</string>
+    <string name="send_suggestion_report_placeholder">Опишите ваше предложение здесь</string>
+    <string name="send_suggestion_sent">Спасибо, предложение было успешно отправлено</string>
+    <string name="send_suggestion_failed">Предложение не было отправлено (%s)</string>
+
+    <string name="settings_labs_show_hidden_events_in_timeline">Показать скрытые события в временной шкале</string>
+
+    <string name="store_riotx_title">RiotX - Matrix клиент следующего поколения</string>
+    <string name="store_riotx_short_description">Быстрый и легкий клиент для Matrix с новейшими фреймворками Android</string>
+    <string name="store_riotx_full_description">RiotX - это новый клиент для матричного протокола (Matrix.org): открытой сети для безопасной децентрализованной связи. RiotX - это полная перезапись Riot Android клиента, основанная на полной перезаписи Matrix Android SDK.
+\n
+\nОговорка: Это бета-версия. В настоящее время RiotX находится в активной разработке и содержит ограничения и (надеемся, не слишком много) ошибки. Мы будем рады любым отзывам!
+\n
+\nПоддержка RiotX: - Войти в существующую учетную запись - Создать комнату и присоединиться к общей комнате - Принять и отклонить приглашения - Список комнат пользователей - Просмотр сведений о комнате - Отправить текстовые сообщения - Отправить вложение - Читать и писать сообщения в зашифрованных комнатах - Криптографически: Резервное копирование клавиш E2E, предварительная проверка устройства, запрос и ответ на общий доступ к ключам - Нажмите уведомление - Светлые, темные и черные темы
+\n
+\nНе все функции RiotX пока реализованы в RiotX. Основные отсутствующие (и скоро появятся!) особенности: - Создание учетной записи - Настройки комнат (список членов комнат и т.д.) - Создание прямых чатов - Вызовы - Виджеты - .…</string>
+
+    <string name="room_preview_world_readable_room_not_supported_yet">Предварительный просмотр открытой комнаты в RiotX пока не поддерживается.</string>
+
+    <string name="bottom_action_people_x">Прямые сообщения</string>
+
+    <string name="send_file_step_idle">Ждите…</string>
+    <string name="send_file_step_encrypting_thumbnail">Шифрование миниатюры…</string>
+    <string name="send_file_step_sending_thumbnail">Отправка миниатюр (%1$s / %2$s)</string>
+    <string name="send_file_step_encrypting_file">Файл шифруется…</string>
+    <string name="send_file_step_sending_file">Файл отправляется (%1$s / %2$s)</string>
+
+    <string name="downloading_file">Файл %1$s загружается…</string>
+    <string name="downloaded_file">Файл %1$s был загружен!</string>
+
+    <string name="edited_suffix">(отредактированный)</string>
+
+    <string name="riotx_no_registration_notice">%1$s для создания учетной записи.</string>
+    <string name="riotx_no_registration_notice_colored_part">Используйте старое приложение</string>
+
+
+    <string name="message_edits">Редактирование сообщений</string>
+    <string name="no_message_edits_found">Редактирование не найдено</string>
+
+    <string name="room_filtering_filter_hint">Отфильтровывать разговоры…</string>
+    <string name="room_filtering_footer_title">Не можете найти то, что ищете\?</string>
+    <string name="room_filtering_footer_create_new_room">Создать новую комнату</string>
+    <string name="room_filtering_footer_create_new_direct_message">Отправить новое прямое сообщение</string>
+    <string name="room_filtering_footer_open_room_directory">Просмотр список комнат</string>
+
+    <string name="room_directory_search_hint">Имя или ID (#example:matrix.org)</string>
+
+    <string name="labs_swipe_to_reply_in_timeline">Включить свайп, для ответа в хронологии</string>
+
+    <string name="link_copied_to_clipboard">Ссылка скопирована в буфер обмена</string>
+
+    <string name="add_by_matrix_id">Добавить по matrix ID</string>
+    <string name="creating_direct_room">Создание комнаты…</string>
+    <string name="direct_room_no_known_users">"Результат не найден, используйте добавить matrix ID  для поиска на сервере."</string>
+    <string name="direct_room_start_search">Начните печатать, чтобы получить результат</string>
+    <string name="direct_room_filter_hint">Фильтр по имени пользователя или ID…</string>
+
+    <string name="joining_room">Присоединение к комнате…</string>
+
+    <string name="message_view_edit_history">Просмотреть историю изменений</string>
+
 </resources>

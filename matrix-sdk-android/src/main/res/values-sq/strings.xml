@@ -146,4 +146,26 @@
     <string name="verification_emoji_anchor">Spirancë</string>
     <string name="verification_emoji_headphone">Kufje</string>
     <string name="verification_emoji_folder">Dosje</string>
+    <string name="notice_room_update">%s e përmirësoi këtë dhomë.</string>
+
+    <string name="initial_sync_start_importing_account">Njëkohësimi Fillestar:
+\nPo importohet llogaria…</string>
+    <string name="initial_sync_start_importing_account_crypto">Njëkohësimi Fillestar:
+\nPo importohet kriptografi</string>
+    <string name="initial_sync_start_importing_account_rooms">Njëkohësimi Fillestar:
+\nPo importohen Dhoma</string>
+    <string name="initial_sync_start_importing_account_joined_rooms">Njëkohësimi Fillestar:
+\nPo importohen Dhoma Ku Është Bërë Hyrje</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">Njëkohësimi Fillestar:
+\nPo importohen Dhoma Me Ftesë</string>
+    <string name="initial_sync_start_importing_account_left_rooms">Njëkohësimi Fillestar:
+\nPo importohen Dhoma të Braktisura</string>
+    <string name="initial_sync_start_importing_account_groups">Njëkohësimi Fillestar:
+\nPo importohen Bashkësi</string>
+    <string name="initial_sync_start_importing_account_data">Njëkohësimi Fillestar:
+\nPo importohet të Dhëna Llogarie</string>
+
+    <string name="event_status_sending_message">Po dërgohet mesazh…</string>
+    <string name="clear_timeline_send_queue">Spastro radhë pritjeje</string>
+
 </resources>
