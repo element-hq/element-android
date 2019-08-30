@@ -17,6 +17,7 @@ Bugfix:
  - Regression / e2e replies not encrypted
  - Some video won't play
  - Privacy: remove log of notifiable event (#519)
+ - Fix crash with EmojiCompat (#530)
 
 Translations:
  -
