@@ -7,9 +7,6 @@ Features:
 Improvements:
  - Reactions: Reinstate the ability to react with non-unicode keys (#307)
 
-Other changes:
- - 
-
 Bugfix:
  - Fix text diff linebreak display (#441)
  - Date change message repeats for each redaction until a normal message (#358)
@@ -18,12 +15,6 @@ Bugfix:
  - Some video won't play
  - Privacy: remove log of notifiable event (#519)
  - Fix crash with EmojiCompat (#530)
-
-Translations:
- -
-
-Build:
- -
 
 Changes in RiotX 0.3.0 (2019-08-08)
 ===================================================
