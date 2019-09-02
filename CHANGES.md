@@ -11,7 +11,7 @@ Other changes:
  -
 
 Bugfix:
- -
+ - Fix crash due to missing informationData (#535)
 
 Translations:
  -
