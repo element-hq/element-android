@@ -5,7 +5,7 @@ Features:
  -
 
 Improvements:
- -
+ - Reduce default release build log level, and lab option to enable more logs.
 
 Other changes:
  -

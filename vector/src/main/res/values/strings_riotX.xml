@@ -2,5 +2,6 @@
 <resources>
 
     <!-- Strings not defined in Riot -->
+    <string name="labs_allow_extended_logging">Help developers by allowing extended logging.</string>
 
 </resources>

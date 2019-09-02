@@ -45,6 +45,12 @@
         android:key="SETTINGS_LABS_ENABLE_SWIPE_TO_REPLY"
         android:title="@string/labs_swipe_to_reply_in_timeline" />
 
+
+    <im.vector.riotx.core.preference.VectorSwitchPreference
+        android:defaultValue="false"
+        android:key="SETTINGS_LABS_ALLOW_EXTENDED_LOGS"
+        android:title="@string/labs_allow_extended_logging" />
+
     <!--</im.vector.riotx.core.preference.VectorPreferenceCategory>-->
 
 </androidx.preference.PreferenceScreen>

@@ -52,7 +52,8 @@ import javax.inject.Singleton
  */
 @Singleton
 class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
-                                      private val versionProvider: VersionProvider) {
+                                      private val versionProvider: VersionProvider,
+                                      private val vectorFileLogger : VectorFileLogger) {
     var inMultiWindowMode = false
 
     companion object {
@@ -162,7 +163,7 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
                 val gzippedFiles = ArrayList<File>()
 
                 if (withDevicesLogs) {
-                    val files = VectorFileLogger.getLogFiles()
+                    val files = vectorFileLogger.getLogFiles()
 
                     for (f in files) {
                         if (!mIsCancelled) {

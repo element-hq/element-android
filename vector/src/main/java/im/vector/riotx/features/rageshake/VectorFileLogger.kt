@@ -17,43 +17,74 @@
 package im.vector.riotx.features.rageshake
 
 import android.content.Context
-import android.text.TextUtils
+import android.util.Log
+import im.vector.riotx.features.settings.VectorPreferences
 import timber.log.Timber
 import java.io.File
-import java.io.IOException
 import java.io.PrintWriter
 import java.io.StringWriter
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.logging.*
 import java.util.logging.Formatter
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.collections.ArrayList
 
-object VectorFileLogger : Timber.DebugTree() {
+private const val LOG_SIZE_BYTES = 20 * 1024 * 1024 // 20MB
 
-    private const val LOG_SIZE_BYTES = 50 * 1024 * 1024 // 50MB
+private const val LOG_ROTATION_COUNT = 3
 
-    // relatively large rotation count because closing > opening the app rotates the log (!)
-    private const val LOG_ROTATION_COUNT = 15
+
+@Singleton
+class VectorFileLogger @Inject constructor(val context: Context, private val vectorPreferences: VectorPreferences) : Timber.DebugTree() {
+
 
     private val sLogger = Logger.getLogger("im.vector.riotx")
-    private lateinit var sFileHandler: FileHandler
-    private lateinit var sCacheDirectory: File
-    private var sFileName = "riotx"
+    private var sFileHandler: FileHandler? = null
+    private var sCacheDirectory: File? = null
+    private var sFileName = "riotxlogs"
 
-    fun init(context: Context) {
+    private val prioPrefixes = mapOf(
+            Log.VERBOSE to "V/ ",
+            Log.DEBUG to "D/ ",
+            Log.INFO to "I/ ",
+            Log.WARN to "W/ ",
+            Log.ERROR to "E/ ",
+            Log.ASSERT to "WTF/ "
+    )
+
+    init {
         val logsDirectoryFile = context.cacheDir.absolutePath + "/logs"
-
         setLogDirectory(File(logsDirectoryFile))
-        init("RiotXLog")
+        try {
+            if (sCacheDirectory != null) {
+                sFileHandler = FileHandler(sCacheDirectory!!.absolutePath + "/" + sFileName + ".%g.txt", LOG_SIZE_BYTES, LOG_ROTATION_COUNT)
+                sFileHandler?.formatter = LogFormatter()
+                sLogger.useParentHandlers = false
+                sLogger.level = Level.ALL
+                sLogger.addHandler(sFileHandler)
+            }
+        } catch (e: Throwable) {
+            Timber.e(e, "Failed to initialize FileLogger")
+        }
     }
 
     override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
+        if (sFileHandler == null) return
+        if (skipLog(priority)) return
         if (t != null) {
             logToFile(t)
         }
+        logToFile(prioPrefixes[priority] ?: "$priority ", tag ?: "Tag", message)
+    }
 
-        logToFile("$priority ", tag ?: "Tag", message)
+    private fun skipLog(priority: Int): Boolean {
+        return if (vectorPreferences.labAllowedExtendedLogging()) {
+            false
+        } else {
+            priority < Log.ERROR
+        }
     }
 
     /**
@@ -68,24 +99,6 @@ object VectorFileLogger : Timber.DebugTree() {
         sCacheDirectory = cacheDir
     }
 
-    /**
-     * Initialises the logger. Should be called AFTER [Log.setLogDirectory].
-     *
-     * @param fileName the base file name
-     */
-    private fun init(fileName: String) {
-        try {
-            if (!TextUtils.isEmpty(fileName)) {
-                sFileName = fileName
-            }
-            sFileHandler = FileHandler(sCacheDirectory.absolutePath + "/" + sFileName + ".%g.txt", LOG_SIZE_BYTES, LOG_ROTATION_COUNT)
-            sFileHandler.formatter = LogFormatter()
-            sLogger.useParentHandlers = false
-            sLogger.level = Level.ALL
-            sLogger.addHandler(sFileHandler)
-        } catch (e: IOException) {
-        }
-    }
 
     /**
      * Adds our own log files to the provided list of files.
@@ -99,8 +112,8 @@ object VectorFileLogger : Timber.DebugTree() {
         try {
             // reported by GA
             if (null != sFileHandler) {
-                sFileHandler.flush()
-                val absPath = sCacheDirectory.absolutePath
+                sFileHandler!!.flush()
+                val absPath = sCacheDirectory?.absolutePath ?: return emptyList()
 
                 for (i in 0..LOG_ROTATION_COUNT) {
                     val filepath = "$absPath/$sFileName.$i.txt"
@@ -111,7 +124,7 @@ object VectorFileLogger : Timber.DebugTree() {
                 }
             }
         } catch (e: Exception) {
-            Timber.e(e, "## addLogFiles() failed : " + e.message)
+            Timber.e(e, "## addLogFiles() failed : %s", e.message)
         }
 
         return files
