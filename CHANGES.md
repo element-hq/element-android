@@ -12,6 +12,7 @@ Other changes:
 
 Bugfix:
  - Fix crash due to missing informationData (#535)
+ - Progress in initial sync dialog is decreasing for a step and should not (#532)
 
 Translations:
  -

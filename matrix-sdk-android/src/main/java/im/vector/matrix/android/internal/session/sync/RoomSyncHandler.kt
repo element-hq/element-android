@@ -97,12 +97,12 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
                     handleJoinedRoom(realm, it.key, it.value, isInitialSync)
                 }
             is HandlingStrategy.INVITED ->
-                handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_invited_rooms, 0.4f) {
+                handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_invited_rooms, 0.1f) {
                     handleInvitedRoom(realm, it.key, it.value)
                 }
 
             is HandlingStrategy.LEFT    -> {
-                handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_left_rooms, 0.2f) {
+                handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_left_rooms, 0.3f) {
                     handleLeftRoom(realm, it.key, it.value)
                 }
             }
@@ -125,8 +125,7 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
             handleRoomAccountDataEvents(realm, roomId, roomSync.accountData)
         }
 
-        val roomEntity = RoomEntity.where(realm, roomId).findFirst()
-                         ?: realm.createObject(roomId)
+        val roomEntity = RoomEntity.where(realm, roomId).findFirst() ?: realm.createObject(roomId)
 
         if (roomEntity.membership == Membership.INVITE) {
             roomEntity.chunks.deleteAllFromRealm()
@@ -135,8 +134,7 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
 
         // State event
         if (roomSync.state != null && roomSync.state.events.isNotEmpty()) {
-            val minStateIndex = roomEntity.untimelinedStateEvents.where().min(EventEntityFields.STATE_INDEX)?.toInt()
-                                ?: Int.MIN_VALUE
+            val minStateIndex = roomEntity.untimelinedStateEvents.where().min(EventEntityFields.STATE_INDEX)?.toInt() ?: Int.MIN_VALUE
             val untimelinedStateIndex = minStateIndex + 1
             roomSync.state.events.forEach { event ->
                 roomEntity.addStateEvent(event, filterDuplicates = true, stateIndex = untimelinedStateIndex)
@@ -167,8 +165,7 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
                                   roomSync:
                                   InvitedRoomSync): RoomEntity {
         Timber.v("Handle invited sync for room $roomId")
-        val roomEntity = RoomEntity.where(realm, roomId).findFirst()
-                         ?: realm.createObject(roomId)
+        val roomEntity = RoomEntity.where(realm, roomId).findFirst() ?: realm.createObject(roomId)
         roomEntity.membership = Membership.INVITE
         if (roomSync.inviteState != null && roomSync.inviteState.events.isNotEmpty()) {
             val chunkEntity = handleTimelineEvents(realm, roomEntity, roomSync.inviteState.events)
@@ -181,8 +178,7 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
     private fun handleLeftRoom(realm: Realm,
                                roomId: String,
                                roomSync: RoomSync): RoomEntity {
-        val roomEntity = RoomEntity.where(realm, roomId).findFirst()
-                         ?: realm.createObject(roomId)
+        val roomEntity = RoomEntity.where(realm, roomId).findFirst() ?: realm.createObject(roomId)
 
         roomEntity.membership = Membership.LEAVE
         roomEntity.chunks.deleteAllFromRealm()

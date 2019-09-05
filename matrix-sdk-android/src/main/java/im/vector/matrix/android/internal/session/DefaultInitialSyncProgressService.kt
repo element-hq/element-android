@@ -128,11 +128,11 @@ inline fun <K, V, R> Map<out K, V>.mapWithProgress(reporter: DefaultInitialSyncP
                                                    taskId: Int,
                                                    weight: Float,
                                                    transform: (Map.Entry<K, V>) -> R): List<R> {
-    val total = count()
+    val total = count().toFloat()
     var current = 0
     reporter?.startTask(taskId, 100, weight)
-    return this.map {
-        reporter?.reportProgress((current / total.toFloat() * 100).toInt())
+    return map {
+        reporter?.reportProgress((current / total * 100).toInt())
         current++
         transform.invoke(it)
     }.also {
