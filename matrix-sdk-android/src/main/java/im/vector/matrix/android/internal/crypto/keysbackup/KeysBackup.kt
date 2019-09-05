@@ -66,9 +66,9 @@ import org.matrix.olm.OlmPkEncryption
 import org.matrix.olm.OlmPkMessage
 import timber.log.Timber
 import java.security.InvalidParameterException
-import java.util.*
 import javax.inject.Inject
 import kotlin.collections.HashMap
+import kotlin.random.Random
 
 /**
  * A KeysBackup class instance manage incremental backup of e2e keys (megolm keys)
@@ -113,8 +113,6 @@ internal class KeysBackup @Inject constructor(
 
     // The backup key being used.
     private var backupOlmPkEncryption: OlmPkEncryption? = null
-
-    private val random = Random()
 
     private var backupAllGroupSessionsCallback: MatrixCallback<Unit>? = null
 
@@ -848,7 +846,7 @@ internal class KeysBackup @Inject constructor(
                 // Wait between 0 and 10 seconds, to avoid backup requests from
                 // different clients hitting the server all at the same time when a
                 // new key is sent
-                val delayInMs = random.nextInt(KEY_BACKUP_WAITING_TIME_TO_SEND_KEY_BACKUP_MILLIS).toLong()
+                val delayInMs = Random.nextInt(KEY_BACKUP_WAITING_TIME_TO_SEND_KEY_BACKUP_MILLIS).toLong()
 
                 uiHandler.postDelayed({ backupKeys() }, delayInMs)
             }

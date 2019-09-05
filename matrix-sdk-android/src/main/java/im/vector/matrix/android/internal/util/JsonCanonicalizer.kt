@@ -22,7 +22,7 @@ import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import timber.log.Timber
-import java.util.*
+import java.util.TreeSet
 
 /**
  * Build canonical Json

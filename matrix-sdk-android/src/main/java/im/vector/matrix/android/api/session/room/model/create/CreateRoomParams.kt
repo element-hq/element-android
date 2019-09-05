@@ -29,7 +29,6 @@ import im.vector.matrix.android.api.session.room.model.PowerLevels
 import im.vector.matrix.android.api.session.room.model.RoomDirectoryVisibility
 import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibility
 import im.vector.matrix.android.internal.auth.data.ThreePidMedium
-import java.util.*
 
 /**
  * Parameter to create a room, with facilities functions to configure it
@@ -133,7 +132,7 @@ class CreateRoomParams {
             )
 
             if (null == initialStates) {
-                initialStates = Arrays.asList<Event>(algoEvent)
+                initialStates = mutableListOf(algoEvent)
             } else {
                 initialStates!!.add(algoEvent)
             }
@@ -166,7 +165,7 @@ class CreateRoomParams {
                                                content = contentMap.toContent())
 
             if (null == initialStates) {
-                initialStates = Arrays.asList<Event>(historyVisibilityEvent)
+                initialStates = mutableListOf(historyVisibilityEvent)
             } else {
                 initialStates!!.add(historyVisibilityEvent)
             }

@@ -22,7 +22,7 @@ package im.vector.matrix.android.internal.crypto.keysbackup
 import androidx.annotation.WorkerThread
 import im.vector.matrix.android.api.listeners.ProgressListener
 import timber.log.Timber
-import java.util.*
+import java.util.UUID
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 import kotlin.experimental.xor

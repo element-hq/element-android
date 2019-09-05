@@ -31,7 +31,6 @@ import im.vector.matrix.android.internal.crypto.model.event.OlmPayloadContent
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.util.convertFromUTF8
 import timber.log.Timber
-import java.util.*
 
 internal class MXOlmDecryption(
         // The olm device interface

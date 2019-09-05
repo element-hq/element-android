@@ -18,9 +18,8 @@ package im.vector.matrix.android.api.pushrules
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.RoomService
 import timber.log.Timber
-import java.util.regex.Pattern
 
-private val regex = Pattern.compile("^(==|<=|>=|<|>)?(\\d*)$")
+private val regex = Regex("^(==|<=|>=|<|>)?(\\d*)$")
 
 class RoomMemberCountCondition(val `is`: String) : Condition(Kind.room_member_count) {
 
@@ -56,12 +55,9 @@ class RoomMemberCountCondition(val `is`: String) : Condition(Kind.room_member_co
      */
     private fun parseIsField(): Pair<String?, Int>? {
         try {
-            val match = regex.matcher(`is`)
-            if (match.find()) {
-                val prefix = match.group(1)
-                val count = match.group(2).toInt()
-                return prefix to count
-            }
+            val match = regex.find(`is`) ?: return null
+            val (prefix, count) = match.destructured
+            return prefix to count.toInt()
         } catch (t: Throwable) {
             Timber.d(t)
         }
