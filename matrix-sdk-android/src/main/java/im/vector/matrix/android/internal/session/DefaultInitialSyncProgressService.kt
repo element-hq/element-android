@@ -30,7 +30,7 @@ class DefaultInitialSyncProgressService @Inject constructor() : InitialSyncProgr
 
     private var rootTask: TaskInfo? = null
 
-    override fun getLiveStatus(): LiveData<InitialSyncProgressService.Status?> {
+    override fun getInitialSyncProgressStatus(): LiveData<InitialSyncProgressService.Status?> {
         return status
     }
 
