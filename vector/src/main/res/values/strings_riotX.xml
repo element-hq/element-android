@@ -2,5 +2,7 @@
 <resources>
 
     <!-- Strings not defined in Riot -->
+    <string name="labs_allow_extended_logging">Enable verbose logs.</string>
+    <string name="labs_allow_extended_logging_summary">Verbose logs will help developers by providing more logs when you send a RageShake. Even when enabled, the application does not log message contents or any other private data.</string>
 
 </resources>

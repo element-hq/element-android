@@ -86,9 +86,12 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
         vectorComponent = DaggerVectorComponent.factory().create(this)
         vectorComponent.inject(this)
         vectorUncaughtExceptionHandler.activate(this)
-        // Log
-        VectorFileLogger.init(this)
-        Timber.plant(Timber.DebugTree(), VectorFileLogger)
+
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        }
+        Timber.plant(vectorComponent.vectorFileLogger())
+
         if (BuildConfig.DEBUG) {
             Stetho.initializeWithDefaults(this)
         }
