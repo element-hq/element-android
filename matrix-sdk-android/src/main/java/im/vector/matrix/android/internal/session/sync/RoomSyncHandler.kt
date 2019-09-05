@@ -23,7 +23,7 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.tag.RoomTagContent
-import im.vector.matrix.android.internal.crypto.CryptoManager
+import im.vector.matrix.android.internal.crypto.DefaultCryptoService
 import im.vector.matrix.android.internal.database.helper.*
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.EventEntityFields
@@ -50,7 +50,7 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
                                                    private val readReceiptHandler: ReadReceiptHandler,
                                                    private val roomSummaryUpdater: RoomSummaryUpdater,
                                                    private val roomTagHandler: RoomTagHandler,
-                                                   private val cryptoManager: CryptoManager,
+                                                   private val cryptoService: DefaultCryptoService,
                                                    private val tokenStore: SyncTokenStore,
                                                    private val pushRuleService: DefaultPushRuleService,
                                                    private val processForPushTask: ProcessEventForPushTask,
@@ -141,7 +141,7 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
             roomSync.state.events.forEach { event ->
                 roomEntity.addStateEvent(event, filterDuplicates = true, stateIndex = untimelinedStateIndex)
                 // Give info to crypto module
-                cryptoManager.onStateEvent(roomId, event)
+                cryptoService.onStateEvent(roomId, event)
                 UserEntityFactory.createOrNull(event)?.also {
                     realm.insertOrUpdate(it)
                 }
@@ -214,7 +214,7 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
             event.eventId?.also { eventIds.add(it) }
             chunkEntity.add(roomEntity.roomId, event, PaginationDirection.FORWARDS, stateIndexOffset)
             // Give info to crypto module
-            cryptoManager.onLiveEvent(roomEntity.roomId, event)
+            cryptoService.onLiveEvent(roomEntity.roomId, event)
             // Try to remove local echo
             event.unsignedData?.transactionId?.also {
                 val sendingEventEntity = roomEntity.sendingTimelineEvents.find(it)

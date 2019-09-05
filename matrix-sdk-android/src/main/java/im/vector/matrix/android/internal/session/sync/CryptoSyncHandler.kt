@@ -22,7 +22,7 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
-import im.vector.matrix.android.internal.crypto.CryptoManager
+import im.vector.matrix.android.internal.crypto.DefaultCryptoService
 import im.vector.matrix.android.internal.crypto.MXEventDecryptionResult
 import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
 import im.vector.matrix.android.internal.crypto.verification.DefaultSasVerificationService
@@ -33,7 +33,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 
-internal class CryptoSyncHandler @Inject constructor(private val cryptoManager: CryptoManager,
+internal class CryptoSyncHandler @Inject constructor(private val cryptoService: DefaultCryptoService,
                                                      private val sasVerificationService: DefaultSasVerificationService) {
 
     fun handleToDevice(toDevice: ToDeviceSyncResponse, initialSyncProgressService: DefaultInitialSyncProgressService? = null) {
@@ -47,13 +47,13 @@ internal class CryptoSyncHandler @Inject constructor(private val cryptoManager: 
                 Timber.e("## handleToDeviceEvent() : Warning: Unable to decrypt to-device event : " + event.content)
             } else {
                 sasVerificationService.onToDeviceEvent(event)
-                cryptoManager.onToDeviceEvent(event)
+                cryptoService.onToDeviceEvent(event)
             }
         }
     }
 
     fun onSyncCompleted(syncResponse: SyncResponse) {
-        cryptoManager.onSyncCompleted(syncResponse)
+        cryptoService.onSyncCompleted(syncResponse)
     }
 
 
@@ -68,7 +68,7 @@ internal class CryptoSyncHandler @Inject constructor(private val cryptoManager: 
         if (event.getClearType() == EventType.ENCRYPTED) {
             var result: MXEventDecryptionResult? = null
             try {
-                result = cryptoManager.decryptEvent(event, timelineId ?: "")
+                result = cryptoService.decryptEvent(event, timelineId ?: "")
             } catch (exception: MXCryptoError) {
                 event.mCryptoError = (exception as? MXCryptoError.Base)?.errorType //setCryptoError(exception.cryptoError)
             }

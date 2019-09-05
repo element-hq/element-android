@@ -40,7 +40,7 @@ import im.vector.matrix.android.api.session.sync.FilterService
 import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.matrix.android.api.session.user.UserService
 import im.vector.matrix.android.api.util.MatrixCallbackDelegate
-import im.vector.matrix.android.internal.crypto.CryptoManager
+import im.vector.matrix.android.internal.crypto.DefaultCryptoService
 import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.session.sync.job.SyncThread
 import im.vector.matrix.android.internal.session.sync.job.SyncWorker
@@ -63,7 +63,7 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
                                                   private val signOutService: Lazy<SignOutService>,
                                                   private val pushRuleService: Lazy<PushRuleService>,
                                                   private val pushersService: Lazy<PushersService>,
-                                                  private val cryptoService: Lazy<CryptoManager>,
+                                                  private val cryptoService: Lazy<DefaultCryptoService>,
                                                   private val fileService: Lazy<FileService>,
                                                   private val syncThreadProvider: Provider<SyncThread>,
                                                   private val contentUrlResolver: ContentUrlResolver,
