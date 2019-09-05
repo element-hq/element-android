@@ -21,14 +21,14 @@ import timber.log.Timber
 
 private val regex = Regex("^(==|<=|>=|<|>)?(\\d*)$")
 
-class RoomMemberCountCondition(val `is`: String) : Condition(Kind.room_member_count) {
+class RoomMemberCountCondition(val iz: String) : Condition(Kind.room_member_count) {
 
     override fun isSatisfied(conditionResolver: ConditionResolver): Boolean {
         return conditionResolver.resolveRoomMemberCountCondition(this)
     }
 
     override fun technicalDescription(): String {
-        return "Room member count is $`is`"
+        return "Room member count is $iz"
     }
 
     fun isSatisfied(event: Event, session: RoomService?): Boolean {
@@ -55,7 +55,7 @@ class RoomMemberCountCondition(val `is`: String) : Condition(Kind.room_member_co
      */
     private fun parseIsField(): Pair<String?, Int>? {
         try {
-            val match = regex.find(`is`) ?: return null
+            val match = regex.find(iz) ?: return null
             val (prefix, count) = match.destructured
             return prefix to count.toInt()
         } catch (t: Throwable) {
