@@ -29,16 +29,8 @@ internal class RoomTagHandler @Inject constructor() {
         if (content == null) {
             return
         }
-        val tags = ArrayList<RoomTagEntity>()
-        for (tagName in content.tags.keys) {
-            val params = content.tags[tagName]
-            val order = params?.get("order")
-            val tag = if (order is Double) {
-                RoomTagEntity(tagName, order)
-            } else {
-                RoomTagEntity(tagName, null)
-            }
-            tags.add(tag)
+        val tags = content.tags.entries.map { (tagName, params) ->
+            RoomTagEntity(tagName, params["order"] as? Double)
         }
         val roomSummaryEntity = RoomSummaryEntity.where(realm, roomId).findFirst()
                                 ?: RoomSummaryEntity(roomId)

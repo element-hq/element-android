@@ -26,7 +26,7 @@ class MXUsersDevicesMap<E> {
      * @return the user Ids
      */
     val userIds: List<String>
-        get() = ArrayList(map.keys)
+        get() = map.keys.toList()
 
     val isEmpty: Boolean
         get() = map.isEmpty()
@@ -39,7 +39,7 @@ class MXUsersDevicesMap<E> {
      * @return the device ids list
      */
     fun getUserDeviceIds(userId: String?): List<String>? {
-        return if (userId?.isNotBlank() == true && map.containsKey(userId)) {
+        return if (!userId.isNullOrBlank() && map.containsKey(userId)) {
             map[userId]!!.keys.toList()
         } else null
     }
@@ -52,7 +52,7 @@ class MXUsersDevicesMap<E> {
      * @return the object
      */
     fun getObject(userId: String?, deviceId: String?): E? {
-        return if (userId?.isNotBlank() == true && deviceId?.isNotBlank() == true && map.containsKey(userId)) {
+        return if (!userId.isNullOrBlank() && !deviceId.isNullOrBlank()) {
             map[userId]?.get(deviceId)
         } else null
     }
@@ -66,11 +66,8 @@ class MXUsersDevicesMap<E> {
      */
     fun setObject(userId: String?, deviceId: String?, o: E?) {
         if (null != o && userId?.isNotBlank() == true && deviceId?.isNotBlank() == true) {
-            if (map[userId] == null) {
-                map[userId] = HashMap()
-            }
-
-            map[userId]?.put(deviceId, o)
+            val devices = map.getOrPut(userId) { HashMap() }
+            devices[deviceId] = o
         }
     }
 
@@ -81,7 +78,7 @@ class MXUsersDevicesMap<E> {
      * @param userId            the user id
      */
     fun setObjects(userId: String?, objectsPerDevices: Map<String, E>?) {
-        if (userId?.isNotBlank() == true) {
+        if (!userId.isNullOrBlank()) {
             if (null == objectsPerDevices) {
                 map.remove(userId)
             } else {
@@ -96,7 +93,7 @@ class MXUsersDevicesMap<E> {
      * @param userId the user id.
      */
     fun removeUserObjects(userId: String?) {
-        if (userId?.isNotBlank() == true) {
+        if (!userId.isNullOrBlank()) {
             map.remove(userId)
         }
     }

@@ -304,17 +304,22 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
     }
 
     private fun buildReplyFallback(body: TextContent, originalSenderId: String?, newBodyText: String): String {
-        val lines = body.text.split("\n")
-        val replyFallback = StringBuffer("> <$originalSenderId>")
-        lines.forEachIndexed { index, s ->
-            if (index == 0) {
-                replyFallback.append(" $s")
-            } else {
-                replyFallback.append("\n> $s")
+        return buildString {
+            append("> <")
+            append(originalSenderId)
+            append(">")
+
+            val lines = body.text.split("\n")
+            lines.forEachIndexed { index, s ->
+                if (index == 0) {
+                    append(" $s")
+                } else {
+                    append("\n> $s")
+                }
             }
+            append("\n\n")
+            append(newBodyText)
         }
-        replyFallback.append("\n\n").append(newBodyText)
-        return replyFallback.toString()
     }
 
     /**
