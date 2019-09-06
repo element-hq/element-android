@@ -93,7 +93,7 @@ import kotlin.math.max
  * Specially, it tracks all room membership changes events in order to do keys updates.
  */
 @SessionScope
-internal class CryptoManager @Inject constructor(
+internal class DefaultCryptoService @Inject constructor(
         // Olm Manager
         private val olmManager: OlmManager,
         // The credentials,
@@ -1067,6 +1067,6 @@ internal class CryptoManager @Inject constructor(
      * ========================================================================================== */
 
     override fun toString(): String {
-        return "CryptoManager of " + credentials.userId + " (" + credentials.deviceId + ")"
+        return "DefaultCryptoService of " + credentials.userId + " (" + credentials.deviceId + ")"
     }
 }

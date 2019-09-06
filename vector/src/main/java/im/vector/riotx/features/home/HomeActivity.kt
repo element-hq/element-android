@@ -26,7 +26,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.airbnb.mvrx.viewModel
@@ -36,12 +35,10 @@ import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.extensions.replaceFragment
-import im.vector.riotx.core.platform.OnBackPressed
 import im.vector.riotx.core.platform.ToolbarConfigurable
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.pushers.PushersManager
 import im.vector.riotx.features.disclaimer.showDisclaimerDialog
-import im.vector.riotx.features.navigation.Navigator
 import im.vector.riotx.features.notifications.NotificationDrawerManager
 import im.vector.riotx.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.riotx.features.workers.signout.SignOutViewModel
@@ -119,22 +116,22 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
             intent.removeExtra(EXTRA_CLEAR_EXISTING_NOTIFICATION)
         }
 
-        activeSessionHolder.getSafeActiveSession()?.getLiveStatus()?.observe(this, Observer { sprogress ->
-            Timber.e("${sprogress?.statusText?.let { getString(it) }} ${sprogress?.percentProgress}")
-            if (sprogress == null) {
+        activeSessionHolder.getSafeActiveSession()?.getInitialSyncProgressStatus()?.observe(this, Observer { status ->
+            if (status == null) {
                 waiting_view.isVisible = false
             } else {
+                Timber.e("${getString(status.statusText)} ${status.percentProgress}")
                 waiting_view.setOnClickListener {
                     //block interactions
                 }
                 waiting_view_status_horizontal_progress.apply {
                     isIndeterminate = false
                     max = 100
-                    progress = sprogress.percentProgress
+                    progress = status.percentProgress
                     isVisible = true
                 }
                 waiting_view_status_text.apply {
-                    text = sprogress.statusText?.let { getString(it) }
+                    text = getString(status.statusText)
                     isVisible = true
                 }
                 waiting_view.isVisible = true
@@ -211,8 +208,6 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
             }
         }
     }
-
-
 
 
     companion object {

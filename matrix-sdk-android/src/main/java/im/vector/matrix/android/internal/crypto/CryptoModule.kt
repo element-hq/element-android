@@ -105,7 +105,7 @@ internal abstract class CryptoModule {
     }
 
     @Binds
-    abstract fun bindCryptoService(cryptoManager: CryptoManager): CryptoService
+    abstract fun bindCryptoService(cryptoService: DefaultCryptoService): CryptoService
 
     @Binds
     abstract fun bindDeleteDeviceTask(deleteDeviceTask: DefaultDeleteDeviceTask): DeleteDeviceTask
