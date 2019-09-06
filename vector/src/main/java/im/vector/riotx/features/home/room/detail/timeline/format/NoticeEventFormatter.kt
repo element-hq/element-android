@@ -95,8 +95,7 @@ class NoticeEventFormatter @Inject constructor(private val stringProvider: Strin
     }
 
     private fun formatRoomHistoryVisibilityEvent(event: Event, senderName: String?): CharSequence? {
-        val historyVisibility = event.getClearContent().toModel<RoomHistoryVisibilityContent>()?.historyVisibility
-                                ?: return null
+        val historyVisibility = event.getClearContent().toModel<RoomHistoryVisibilityContent>()?.historyVisibility ?: return null
 
         val formattedVisibility = when (historyVisibility) {
             RoomHistoryVisibility.SHARED         -> stringProvider.getString(R.string.notice_room_visibility_shared)
@@ -146,7 +145,7 @@ class NoticeEventFormatter @Inject constructor(private val stringProvider: Strin
                     stringProvider.getString(R.string.notice_display_name_removed, event.senderId, prevEventContent?.displayName)
                 else                                          ->
                     stringProvider.getString(R.string.notice_display_name_changed_from,
-                                             event.senderId, prevEventContent?.displayName, eventContent?.displayName)
+                            event.senderId, prevEventContent?.displayName, eventContent?.displayName)
             }
             displayText.append(displayNameText)
         }
@@ -171,9 +170,11 @@ class NoticeEventFormatter @Inject constructor(private val stringProvider: Strin
                 // TODO get userId
                 val selfUserId = ""
                 when {
-                    eventContent.thirdPartyInvite != null        ->
+                    eventContent.thirdPartyInvite != null        -> {
+                        val userWhoHasAccepted = eventContent.thirdPartyInvite?.signed?.mxid ?: event.stateKey
                         stringProvider.getString(R.string.notice_room_third_party_registered_invite,
-                                                 targetDisplayName, eventContent.thirdPartyInvite?.displayName)
+                                userWhoHasAccepted, eventContent.thirdPartyInvite?.displayName)
+                    }
                     TextUtils.equals(event.stateKey, selfUserId) ->
                         stringProvider.getString(R.string.notice_room_invite_you, senderDisplayName)
                     event.stateKey.isNullOrEmpty()               ->
