@@ -16,7 +16,6 @@
 
 package im.vector.riotx.features.home.room.detail.timeline.format
 
-import android.text.TextUtils
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
@@ -24,12 +23,14 @@ import im.vector.matrix.android.api.session.room.model.*
 import im.vector.matrix.android.api.session.room.model.call.CallInviteContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotx.R
+import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.home.room.detail.timeline.helper.senderName
 import timber.log.Timber
 import javax.inject.Inject
 
-class NoticeEventFormatter @Inject constructor(private val stringProvider: StringProvider) {
+class NoticeEventFormatter @Inject constructor(private val sessionHolder: ActiveSessionHolder,
+                                               private val stringProvider: StringProvider) {
 
     fun format(timelineEvent: TimelineEvent): CharSequence? {
         return when (val type = timelineEvent.root.getClearType()) {
@@ -74,10 +75,10 @@ class NoticeEventFormatter @Inject constructor(private val stringProvider: Strin
 
     private fun formatRoomNameEvent(event: Event, senderName: String?): CharSequence? {
         val content = event.getClearContent().toModel<RoomNameContent>() ?: return null
-        return if (!TextUtils.isEmpty(content.name)) {
-            stringProvider.getString(R.string.notice_room_name_changed, senderName, content.name)
-        } else {
+        return if (content.name.isNullOrBlank()) {
             stringProvider.getString(R.string.notice_room_name_removed, senderName)
+        } else {
+            stringProvider.getString(R.string.notice_room_name_changed, senderName, content.name)
         }
     }
 
@@ -95,8 +96,7 @@ class NoticeEventFormatter @Inject constructor(private val stringProvider: Strin
     }
 
     private fun formatRoomHistoryVisibilityEvent(event: Event, senderName: String?): CharSequence? {
-        val historyVisibility = event.getClearContent().toModel<RoomHistoryVisibilityContent>()?.historyVisibility
-                                ?: return null
+        val historyVisibility = event.getClearContent().toModel<RoomHistoryVisibilityContent>()?.historyVisibility ?: return null
 
         val formattedVisibility = when (historyVisibility) {
             RoomHistoryVisibility.SHARED         -> stringProvider.getString(R.string.notice_room_visibility_shared)
@@ -138,7 +138,7 @@ class NoticeEventFormatter @Inject constructor(private val stringProvider: Strin
     private fun buildProfileNotice(event: Event, senderName: String?, eventContent: RoomMember?, prevEventContent: RoomMember?): String? {
         val displayText = StringBuilder()
         // Check display name has been changed
-        if (!TextUtils.equals(eventContent?.displayName, prevEventContent?.displayName)) {
+        if (eventContent?.displayName != prevEventContent?.displayName) {
             val displayNameText = when {
                 prevEventContent?.displayName.isNullOrEmpty() ->
                     stringProvider.getString(R.string.notice_display_name_set, event.senderId, eventContent?.displayName)
@@ -146,12 +146,12 @@ class NoticeEventFormatter @Inject constructor(private val stringProvider: Strin
                     stringProvider.getString(R.string.notice_display_name_removed, event.senderId, prevEventContent?.displayName)
                 else                                          ->
                     stringProvider.getString(R.string.notice_display_name_changed_from,
-                                             event.senderId, prevEventContent?.displayName, eventContent?.displayName)
+                            event.senderId, prevEventContent?.displayName, eventContent?.displayName)
             }
             displayText.append(displayNameText)
         }
         // Check whether the avatar has been changed
-        if (!TextUtils.equals(eventContent?.avatarUrl, prevEventContent?.avatarUrl)) {
+        if (eventContent?.avatarUrl != prevEventContent?.avatarUrl) {
             val displayAvatarText = if (displayText.isNotEmpty()) {
                 displayText.append(" ")
                 stringProvider.getString(R.string.notice_avatar_changed_too)
@@ -168,17 +168,18 @@ class NoticeEventFormatter @Inject constructor(private val stringProvider: Strin
         val targetDisplayName = eventContent?.displayName ?: prevEventContent?.displayName ?: ""
         return when {
             Membership.INVITE == eventContent?.membership -> {
-                // TODO get userId
-                val selfUserId = ""
+                val selfUserId = sessionHolder.getSafeActiveSession()?.myUserId
                 when {
-                    eventContent.thirdPartyInvite != null        ->
+                    eventContent.thirdPartyInvite != null -> {
+                        val userWhoHasAccepted = eventContent.thirdPartyInvite?.signed?.mxid ?: event.stateKey
                         stringProvider.getString(R.string.notice_room_third_party_registered_invite,
-                                                 targetDisplayName, eventContent.thirdPartyInvite?.displayName)
-                    TextUtils.equals(event.stateKey, selfUserId) ->
+                                userWhoHasAccepted, eventContent.thirdPartyInvite?.displayName)
+                    }
+                    event.stateKey == selfUserId          ->
                         stringProvider.getString(R.string.notice_room_invite_you, senderDisplayName)
-                    event.stateKey.isNullOrEmpty()               ->
+                    event.stateKey.isNullOrEmpty()        ->
                         stringProvider.getString(R.string.notice_room_invite_no_invitee, senderDisplayName)
-                    else                                         ->
+                    else                                  ->
                         stringProvider.getString(R.string.notice_room_invite, senderDisplayName, targetDisplayName)
                 }
             }
@@ -186,7 +187,7 @@ class NoticeEventFormatter @Inject constructor(private val stringProvider: Strin
                 stringProvider.getString(R.string.notice_room_join, senderDisplayName)
             Membership.LEAVE == eventContent?.membership  ->
                 // 2 cases here: this member may have left voluntarily or they may have been "left" by someone else ie. kicked
-                return if (TextUtils.equals(event.senderId, event.stateKey)) {
+                return if (event.senderId == event.stateKey) {
                     if (prevEventContent?.membership == Membership.INVITE) {
                         stringProvider.getString(R.string.notice_room_reject, senderDisplayName)
                     } else {
