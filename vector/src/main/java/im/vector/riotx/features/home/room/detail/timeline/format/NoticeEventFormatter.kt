@@ -24,12 +24,14 @@ import im.vector.matrix.android.api.session.room.model.*
 import im.vector.matrix.android.api.session.room.model.call.CallInviteContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotx.R
+import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.home.room.detail.timeline.helper.senderName
 import timber.log.Timber
 import javax.inject.Inject
 
-class NoticeEventFormatter @Inject constructor(private val stringProvider: StringProvider) {
+class NoticeEventFormatter @Inject constructor(private val sessionHolder: ActiveSessionHolder,
+                                               private val stringProvider: StringProvider) {
 
     fun format(timelineEvent: TimelineEvent): CharSequence? {
         return when (val type = timelineEvent.root.getClearType()) {
@@ -167,8 +169,7 @@ class NoticeEventFormatter @Inject constructor(private val stringProvider: Strin
         val targetDisplayName = eventContent?.displayName ?: prevEventContent?.displayName ?: ""
         return when {
             Membership.INVITE == eventContent?.membership -> {
-                // TODO get userId
-                val selfUserId = ""
+                val selfUserId = sessionHolder.getSafeActiveSession()?.myUserId
                 when {
                     eventContent.thirdPartyInvite != null        -> {
                         val userWhoHasAccepted = eventContent.thirdPartyInvite?.signed?.mxid ?: event.stateKey
