@@ -32,47 +32,38 @@ import im.vector.riotx.features.home.room.detail.timeline.TimelineEventControlle
 abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
 
     @EpoxyAttribute
-    lateinit var avatarRenderer: AvatarRenderer
-
-    @EpoxyAttribute
-    var noticeText: CharSequence? = null
-
-    @EpoxyAttribute
-    lateinit var informationData: MessageInformationData
-
-    @EpoxyAttribute
-    var baseCallback: TimelineEventController.BaseCallback? = null
+    lateinit var attributes: Attributes
 
     private var longClickListener = View.OnLongClickListener {
-        return@OnLongClickListener baseCallback?.onEventLongClicked(informationData, null, it) == true
+        return@OnLongClickListener attributes.callback?.onEventLongClicked(attributes.informationData, null, it) == true
     }
 
     @EpoxyAttribute
     var readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null
 
     private val _readReceiptsClickListener = DebouncedClickListener(View.OnClickListener {
-        readReceiptsCallback?.onReadReceiptsClicked(informationData.readReceipts)
+        readReceiptsCallback?.onReadReceiptsClicked(attributes.informationData.readReceipts)
     })
 
     private val _readMarkerCallback = object : ReadMarkerView.Callback {
         override fun onReadMarkerDisplayed() {
-            readReceiptsCallback?.onReadMarkerLongDisplayed(informationData)
+            readReceiptsCallback?.onReadMarkerLongDisplayed(attributes.informationData)
         }
     }
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.noticeTextView.text = noticeText
-        avatarRenderer.render(
-                informationData.avatarUrl,
-                informationData.senderId,
-                informationData.memberName?.toString()
-                ?: informationData.senderId,
+        holder.noticeTextView.text = attributes.noticeText
+        attributes.avatarRenderer.render(
+                attributes.informationData.avatarUrl,
+                attributes.informationData.senderId,
+                attributes.informationData.memberName?.toString()
+                ?: attributes.informationData.senderId,
                 holder.avatarImageView
         )
         holder.view.setOnLongClickListener(longClickListener)
-        holder.readReceiptsView.render(informationData.readReceipts, avatarRenderer, _readReceiptsClickListener)
-        holder.readMarkerView.bindView(informationData, _readMarkerCallback)
+        holder.readReceiptsView.render(attributes.informationData.readReceipts, attributes.avatarRenderer, _readReceiptsClickListener)
+        holder.readMarkerView.bindView(attributes.informationData, _readMarkerCallback)
     }
 
     override fun unbind(holder: Holder) {
@@ -88,6 +79,13 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
         val readReceiptsView by bind<ReadReceiptsView>(R.id.readReceiptsView)
         val readMarkerView by bind<ReadMarkerView>(R.id.readMarkerView)
     }
+
+    data class Attributes(
+            val avatarRenderer: AvatarRenderer,
+            val informationData: MessageInformationData,
+            val noticeText: CharSequence,
+            val callback: TimelineEventController.BaseCallback? = null
+    )
 
     companion object {
         private const val STUB_ID = R.id.messageContentNoticeStub

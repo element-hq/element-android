@@ -81,9 +81,8 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
         super.bind(holder)
         if (attributes.informationData.showInformation) {
             holder.avatarImageView.layoutParams = holder.avatarImageView.layoutParams?.apply {
-                val size = dpToPx(avatarStyle.avatarSizeDP, holder.view.context)
-                height = size
-                width = size
+                height = attributes.avatarSize
+                width = attributes.avatarSize
             }
             holder.avatarImageView.visibility = View.VISIBLE
             holder.avatarImageView.setOnClickListener(_avatarClickListener)
@@ -162,10 +161,21 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
         failureIndicator?.isVisible = attributes.informationData.sendState.hasFailed()
     }
 
+    abstract class Holder(@IdRes stubId: Int) : BaseHolder(stubId) {
+        val avatarImageView by bind<ImageView>(R.id.messageAvatarImageView)
+        val memberNameView by bind<TextView>(R.id.messageMemberNameView)
+        val timeView by bind<TextView>(R.id.messageTimeView)
+        val readReceiptsView by bind<ReadReceiptsView>(R.id.readReceiptsView)
+        val readMarkerView by bind<ReadMarkerView>(R.id.readMarkerView)
+        var reactionWrapper: ViewGroup? = null
+        var reactionFlowHelper: Flow? = null
+    }
+
     /**
-     * This class holds all the common attributes for message items.
+     * This class holds all the common attributes for timeline items.
      */
     data class Attributes(
+            val avatarSize: Int,
             val informationData: MessageInformationData,
             val avatarRenderer: AvatarRenderer,
             val colorProvider: ColorProvider,
@@ -177,15 +187,5 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
             val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null,
             val emojiTypeFace: Typeface? = null
     )
-
-    abstract class Holder(@IdRes stubId: Int) : BaseHolder(stubId) {
-        val avatarImageView by bind<ImageView>(R.id.messageAvatarImageView)
-        val memberNameView by bind<TextView>(R.id.messageMemberNameView)
-        val timeView by bind<TextView>(R.id.messageTimeView)
-        val readReceiptsView by bind<ReadReceiptsView>(R.id.readReceiptsView)
-        val readMarkerView by bind<ReadMarkerView>(R.id.readMarkerView)
-        var reactionWrapper: ViewGroup? = null
-        var reactionFlowHelper: Flow? = null
-    }
 
 }

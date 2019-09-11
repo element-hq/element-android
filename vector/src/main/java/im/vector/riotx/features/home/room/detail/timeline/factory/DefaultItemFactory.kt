@@ -17,11 +17,12 @@
 package im.vector.riotx.features.home.room.detail.timeline.factory
 
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.riotx.features.home.room.detail.timeline.helper.AvatarSizeProvider
 import im.vector.riotx.features.home.room.detail.timeline.item.DefaultItem
 import im.vector.riotx.features.home.room.detail.timeline.item.DefaultItem_
 import javax.inject.Inject
 
-class DefaultItemFactory @Inject constructor(){
+class DefaultItemFactory @Inject constructor(private val avatarSizeProvider: AvatarSizeProvider) {
 
     fun create(event: TimelineEvent, highlight: Boolean, exception: Exception? = null): DefaultItem? {
         val text = if (exception == null) {
@@ -30,8 +31,10 @@ class DefaultItemFactory @Inject constructor(){
             "an exception occurred when rendering the event ${event.root.eventId}"
         }
         return DefaultItem_()
-                .text(text)
+                .leftGuideline(avatarSizeProvider.leftGuideline)
                 .highlighted(highlight)
+                .text(text)
+
     }
 
 }

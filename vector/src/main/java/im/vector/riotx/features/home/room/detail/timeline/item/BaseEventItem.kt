@@ -24,28 +24,23 @@ import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
 import im.vector.riotx.core.platform.CheckableView
-import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.utils.DimensionUtils.dpToPx
-import im.vector.riotx.features.home.AvatarRenderer
-import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
+import org.w3c.dom.Attr
 
 /**
  * Children must override getViewType()
  */
 abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>() {
 
-    var avatarStyle: AvatarStyle = AvatarStyle.SMALL
-
     // To use for instance when opening a permalink with an eventId
     @EpoxyAttribute
     var highlighted: Boolean = false
+    @EpoxyAttribute
+    open var leftGuideline: Int = 0
 
     override fun bind(holder: H) {
         super.bind(holder)
-        //optimize?
-        val px = dpToPx(avatarStyle.avatarSizeDP + 8, holder.view.context)
-        holder.leftGuideline.setGuidelineBegin(px)
-
+        holder.leftGuideline.setGuidelineBegin(leftGuideline)
         holder.checkableBackground.isChecked = highlighted
     }
 
@@ -63,13 +58,4 @@ abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>
         }
     }
 
-    companion object {
-
-        enum class AvatarStyle(val avatarSizeDP: Int) {
-            BIG(50),
-            MEDIUM(40),
-            SMALL(30),
-            NONE(0)
-        }
-    }
 }

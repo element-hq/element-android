@@ -20,28 +20,34 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.home.room.detail.timeline.format.NoticeEventFormatter
+import im.vector.riotx.features.home.room.detail.timeline.helper.AvatarSizeProvider
 import im.vector.riotx.features.home.room.detail.timeline.helper.MessageInformationDataFactory
 import im.vector.riotx.features.home.room.detail.timeline.item.NoticeItem
 import im.vector.riotx.features.home.room.detail.timeline.item.NoticeItem_
 import javax.inject.Inject
 
-class NoticeItemFactory @Inject constructor(private val eventFormatter: NoticeEventFormatter,
-                                            private val avatarRenderer: AvatarRenderer,
-                                            private val informationDataFactory: MessageInformationDataFactory) {
+class NoticeItemFactory @Inject constructor(
+        private val eventFormatter: NoticeEventFormatter,
+        private val avatarRenderer: AvatarRenderer,
+        private val informationDataFactory: MessageInformationDataFactory,
+        private val avatarSizeProvider: AvatarSizeProvider
+) {
 
     fun create(event: TimelineEvent,
                highlight: Boolean,
                callback: TimelineEventController.Callback?): NoticeItem? {
         val formattedText = eventFormatter.format(event) ?: return null
         val informationData = informationDataFactory.create(event, null)
-
+        val attributes = NoticeItem.Attributes(
+                avatarRenderer = avatarRenderer,
+                informationData = informationData,
+                noticeText = formattedText,
+                callback = callback
+        )
         return NoticeItem_()
-                .avatarRenderer(avatarRenderer)
-                .noticeText(formattedText)
+                .leftGuideline(avatarSizeProvider.leftGuideline)
                 .highlighted(highlight)
-                .informationData(informationData)
-                .baseCallback(callback)
-                .readReceiptsCallback(callback)
+                .attributes(attributes)
     }
 
 

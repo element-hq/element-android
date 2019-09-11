@@ -32,11 +32,13 @@ import im.vector.riotx.core.epoxy.LoadingItem_
 import im.vector.riotx.core.extensions.localDateTime
 import im.vector.riotx.core.resources.UserPreferencesProvider
 import im.vector.riotx.features.home.AvatarRenderer
+import im.vector.riotx.features.home.room.detail.timeline.factory.MergedHeaderItemFactory
 import im.vector.riotx.features.home.room.detail.timeline.factory.TimelineItemFactory
 import im.vector.riotx.features.home.room.detail.timeline.helper.*
 import im.vector.riotx.features.home.room.detail.timeline.item.DaySeparatorItem
 import im.vector.riotx.features.home.room.detail.timeline.item.DaySeparatorItem_
 import im.vector.riotx.features.home.room.detail.timeline.item.MergedHeaderItem
+import im.vector.riotx.features.home.room.detail.timeline.item.MergedHeaderItem_
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.riotx.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.riotx.features.media.ImageContentRenderer
@@ -47,7 +49,7 @@ import javax.inject.Inject
 class TimelineEventController @Inject constructor(private val dateFormatter: VectorDateFormatter,
                                                   private val timelineItemFactory: TimelineItemFactory,
                                                   private val timelineMediaSizeProvider: TimelineMediaSizeProvider,
-                                                  private val avatarRenderer: AvatarRenderer,
+                                                  private val mergedHeaderItemFactory: MergedHeaderItemFactory,
                                                   @TimelineEventControllerHandler
                                                   private val backgroundHandler: Handler
 ) : EpoxyController(backgroundHandler, backgroundHandler), Timeline.Listener {
@@ -89,8 +91,6 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         fun onUrlLongClicked(url: String): Boolean
     }
 
-    private val collapsedEventIds = linkedSetOf<Long>()
-    private val mergeItemCollapseStates = HashMap<Long, Boolean>()
     private val modelCache = arrayListOf<CacheItemData?>()
 
     private var currentSnapshot: List<TimelineEvent> = emptyList()
@@ -231,7 +231,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             }
             return modelCache
                     .map {
-                        val eventModel = if (it == null || collapsedEventIds.contains(it.localId)) {
+                        val eventModel = if (it == null || mergedHeaderItemFactory.isCollapsed(it.localId)) {
                             null
                         } else {
                             it.eventModel
@@ -255,7 +255,9 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             it.id(event.localId)
             it.setOnVisibilityStateChanged(TimelineEventVisibilityStateChangedListener(callback, event))
         }
-        val mergedHeaderModel = buildMergedHeaderItem(event, nextEvent, items, addDaySeparator, currentPosition)
+        val mergedHeaderModel = mergedHeaderItemFactory.create(event, nextEvent, items, addDaySeparator, currentPosition, callback){
+            requestModelBuild()
+        }
         val daySeparatorItem = buildDaySeparatorItem(addDaySeparator, date)
 
         return CacheItemData(event.localId, event.root.eventId, eventModel, mergedHeaderModel, daySeparatorItem)
@@ -267,53 +269,6 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             DaySeparatorItem_().formattedDay(formattedDay).id(formattedDay)
         } else {
             null
-        }
-    }
-
-    // TODO Phase 3 Handle the case where the eventId we have to highlight is merged
-    private fun buildMergedHeaderItem(event: TimelineEvent,
-                                      nextEvent: TimelineEvent?,
-                                      items: List<TimelineEvent>,
-                                      addDaySeparator: Boolean,
-                                      currentPosition: Int): MergedHeaderItem? {
-        return if (!event.canBeMerged() || (nextEvent?.root?.getClearType() == event.root.getClearType() && !addDaySeparator)) {
-            null
-        } else {
-            val prevSameTypeEvents = items.prevSameTypeEvents(currentPosition, 2)
-            if (prevSameTypeEvents.isEmpty()) {
-                null
-            } else {
-                val mergedEvents = (prevSameTypeEvents + listOf(event)).asReversed()
-                val mergedData = mergedEvents.map { mergedEvent ->
-                    val senderAvatar = mergedEvent.senderAvatar()
-                    val senderName = mergedEvent.senderName()
-                    MergedHeaderItem.Data(
-                            userId = mergedEvent.root.senderId ?: "",
-                            avatarUrl = senderAvatar,
-                            memberName = senderName ?: "",
-                            eventId = mergedEvent.localId
-                    )
-                }
-                val mergedEventIds = mergedEvents.map { it.localId }
-                // We try to find if one of the item id were used as mergeItemCollapseStates key
-                // => handle case where paginating from mergeable events and we get more
-                val previousCollapseStateKey = mergedEventIds.intersect(mergeItemCollapseStates.keys).firstOrNull()
-                val initialCollapseState = mergeItemCollapseStates.remove(previousCollapseStateKey)
-                                           ?: true
-                val isCollapsed = mergeItemCollapseStates.getOrPut(event.localId) { initialCollapseState }
-                if (isCollapsed) {
-                    collapsedEventIds.addAll(mergedEventIds)
-                } else {
-                    collapsedEventIds.removeAll(mergedEventIds)
-                }
-                val mergeId = mergedEventIds.joinToString(separator = "_") { it.toString() }
-                MergedHeaderItem(isCollapsed, mergeId, mergedData, avatarRenderer) {
-                    mergeItemCollapseStates[event.localId] = it
-                    requestModelBuild()
-                }.also {
-                    it.setOnVisibilityStateChanged(MergedTimelineEventVisibilityStateChangedListener(callback, mergedEvents))
-                }
-            }
         }
     }
 

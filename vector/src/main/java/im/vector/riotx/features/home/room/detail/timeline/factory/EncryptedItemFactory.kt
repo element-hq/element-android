@@ -23,7 +23,6 @@ import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
-import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageTextItem_
 import im.vector.riotx.features.home.room.detail.timeline.helper.MessageInformationDataFactory
@@ -55,7 +54,7 @@ class EncryptedItemFactory @Inject constructor(private val messageInformationDat
                         }
 
                 val message = stringProvider.getString(R.string.encrypted_message).takeIf { cryptoError == null }
-                        ?: stringProvider.getString(R.string.notice_crypto_unable_to_decrypt, errorDescription)
+                              ?: stringProvider.getString(R.string.notice_crypto_unable_to_decrypt, errorDescription)
                 val spannableStr = span(message) {
                     textStyle = "italic"
                     textColor = colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
@@ -66,11 +65,10 @@ class EncryptedItemFactory @Inject constructor(private val messageInformationDat
                 val informationData = messageInformationDataFactory.create(event, nextEvent)
                 val attributes = attributesFactory.create(null, informationData, callback)
                 return MessageTextItem_()
+                        .highlighted(highlight)
                         .attributes(attributes)
                         .message(spannableStr)
-                        .highlighted(highlight)
                         .urlClickCallback(callback)
-
             }
             else                                             -> null
         }

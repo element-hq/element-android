@@ -21,29 +21,20 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.children
+import com.airbnb.epoxy.EpoxyAttribute
+import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
 import im.vector.riotx.features.home.AvatarRenderer
+import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 
+@EpoxyModelClass(layout = R.layout.item_timeline_event_base_noinfo)
+abstract class MergedHeaderItem : BaseEventItem<MergedHeaderItem.Holder>() {
 
-data class MergedHeaderItem(private val isCollapsed: Boolean,
-                            private val mergeId: String,
-                            private val mergeData: List<Data>,
-                            private val avatarRenderer: AvatarRenderer,
-                            private val onCollapsedStateChanged: (Boolean) -> Unit
-) : BaseEventItem<MergedHeaderItem.Holder>() {
+    @EpoxyAttribute
+    lateinit var attributes: Attributes
 
-    private val distinctMergeData = mergeData.distinctBy { it.userId }
-
-    init {
-        id(mergeId)
-    }
-
-    override fun getDefaultLayout(): Int {
-        return R.layout.item_timeline_event_base_noinfo
-    }
-
-    override fun createNewHolder(): Holder {
-        return Holder()
+    private val distinctMergeData by lazy {
+        attributes.mergeData.distinctBy { it.userId }
     }
 
     override fun getViewType() = STUB_ID
@@ -51,10 +42,10 @@ data class MergedHeaderItem(private val isCollapsed: Boolean,
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.expandView.setOnClickListener {
-            onCollapsedStateChanged(!isCollapsed)
+            attributes.onCollapsedStateChanged(!attributes.isCollapsed)
         }
-        if (isCollapsed) {
-            val summary = holder.expandView.resources.getQuantityString(R.plurals.membership_changes, mergeData.size, mergeData.size)
+        if (attributes.isCollapsed) {
+            val summary = holder.expandView.resources.getQuantityString(R.plurals.membership_changes, attributes.mergeData.size, attributes.mergeData.size)
             holder.summaryView.text = summary
             holder.summaryView.visibility = View.VISIBLE
             holder.avatarListView.visibility = View.VISIBLE
@@ -62,7 +53,7 @@ data class MergedHeaderItem(private val isCollapsed: Boolean,
                 val data = distinctMergeData.getOrNull(index)
                 if (data != null && view is ImageView) {
                     view.visibility = View.VISIBLE
-                    avatarRenderer.render(data.avatarUrl, data.userId, data.memberName, view)
+                    attributes.avatarRenderer.render(data.avatarUrl, data.userId, data.memberName, view)
                 } else {
                     view.visibility = View.GONE
                 }
@@ -82,6 +73,13 @@ data class MergedHeaderItem(private val isCollapsed: Boolean,
             val userId: String,
             val memberName: String,
             val avatarUrl: String?
+    )
+
+    data class Attributes(
+            val isCollapsed: Boolean,
+            val mergeData: List<Data>,
+            val avatarRenderer: AvatarRenderer,
+            val onCollapsedStateChanged: (Boolean) -> Unit
     )
 
     class Holder : BaseHolder(STUB_ID) {

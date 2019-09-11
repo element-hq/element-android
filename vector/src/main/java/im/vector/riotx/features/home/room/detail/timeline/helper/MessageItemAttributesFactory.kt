@@ -31,10 +31,15 @@ import javax.inject.Inject
 class MessageItemAttributesFactory @Inject constructor(
         private val avatarRenderer: AvatarRenderer,
         private val colorProvider: ColorProvider,
+        private val avatarSizeProvider: AvatarSizeProvider,
         private val emojiCompatFontProvider: EmojiCompatFontProvider) {
 
-    fun create(messageContent: MessageContent?, informationData: MessageInformationData, callback: TimelineEventController.Callback?): AbsMessageItem.Attributes {
+    fun create(messageContent: MessageContent?,
+               informationData: MessageInformationData,
+               callback: TimelineEventController.Callback?): AbsMessageItem.Attributes {
+
         return AbsMessageItem.Attributes(
+                avatarSize = avatarSizeProvider.avatarSize,
                 informationData = informationData,
                 avatarRenderer = avatarRenderer,
                 colorProvider = colorProvider,

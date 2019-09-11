@@ -41,16 +41,15 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
-import im.vector.riotx.EmojiCompatFontProvider
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
 import im.vector.riotx.core.linkify.VectorLinkify
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.utils.DebouncedClickListener
-import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
+import im.vector.riotx.features.home.room.detail.timeline.helper.AvatarSizeProvider
 import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
 import im.vector.riotx.features.home.room.detail.timeline.item.*
 import im.vector.riotx.features.home.room.detail.timeline.helper.MessageInformationDataFactory
@@ -70,7 +69,8 @@ class MessageItemFactory @Inject constructor(
         private val messageInformationDataFactory: MessageInformationDataFactory,
         private val messageItemAttributesFactory: MessageItemAttributesFactory,
         private val contentUploadStateTrackerBinder: ContentUploadStateTrackerBinder,
-        private val noticeItemFactory: NoticeItemFactory) {
+        private val noticeItemFactory: NoticeItemFactory,
+        private val avatarSizeProvider: AvatarSizeProvider) {
 
 
     fun create(event: TimelineEvent,
@@ -90,11 +90,11 @@ class MessageItemFactory @Inject constructor(
 
         val messageContent: MessageContent =
                 event.getLastMessageContent()
-                        ?: //Malformed content, we should echo something on screen
-                        return DefaultItem_().text(stringProvider.getString(R.string.malformed_message))
+                ?: //Malformed content, we should echo something on screen
+                return DefaultItem_().text(stringProvider.getString(R.string.malformed_message))
 
         if (messageContent.relatesTo?.type == RelationType.REPLACE
-                || event.isEncrypted() && event.root.content.toModel<EncryptedEventContent>()?.relatesTo?.type == RelationType.REPLACE
+            || event.isEncrypted() && event.root.content.toModel<EncryptedEventContent>()?.relatesTo?.type == RelationType.REPLACE
         ) {
             // This is an edit event, we should it when debugging as a notice event
             return noticeItemFactory.create(event, highlight, callback)
@@ -105,15 +105,15 @@ class MessageItemFactory @Inject constructor(
 //        val ev = all.toModel<Event>()
         return when (messageContent) {
             is MessageEmoteContent  -> buildEmoteMessageItem(messageContent,
-                    informationData,
-                    highlight,
-                    callback,
-                    attributes)
+                                                             informationData,
+                                                             highlight,
+                                                             callback,
+                                                             attributes)
             is MessageTextContent   -> buildTextMessageItem(messageContent,
-                    informationData,
-                    highlight,
-                    callback,
-                    attributes)
+                                                            informationData,
+                                                            highlight,
+                                                            callback,
+                                                            attributes)
             is MessageImageContent  -> buildImageMessageItem(messageContent, informationData, highlight, callback, attributes)
             is MessageNoticeContent -> buildNoticeMessageItem(messageContent, informationData, highlight, callback, attributes)
             is MessageVideoContent  -> buildVideoMessageItem(messageContent, informationData, highlight, callback, attributes)
@@ -131,6 +131,7 @@ class MessageItemFactory @Inject constructor(
         return MessageFileItem_()
                 .attributes(attributes)
                 .highlighted(highlight)
+                .leftGuideline(avatarSizeProvider.leftGuideline)
                 .filename(messageContent.body)
                 .iconRes(R.drawable.filetype_audio)
                 .clickListener(
@@ -146,6 +147,7 @@ class MessageItemFactory @Inject constructor(
                                      attributes: AbsMessageItem.Attributes): MessageFileItem? {
         return MessageFileItem_()
                 .attributes(attributes)
+                .leftGuideline(avatarSizeProvider.leftGuideline)
                 .highlighted(highlight)
                 .filename(messageContent.body)
                 .iconRes(R.drawable.filetype_attachment)
@@ -158,6 +160,7 @@ class MessageItemFactory @Inject constructor(
     private fun buildNotHandledMessageItem(messageContent: MessageContent, highlight: Boolean): DefaultItem? {
         val text = "${messageContent.type} message events are not yet handled"
         return DefaultItem_()
+                .leftGuideline(avatarSizeProvider.leftGuideline)
                 .text(text)
                 .highlighted(highlight)
     }
@@ -182,6 +185,7 @@ class MessageItemFactory @Inject constructor(
         )
         return MessageImageVideoItem_()
                 .attributes(attributes)
+                .leftGuideline(avatarSizeProvider.leftGuideline)
                 .imageContentRenderer(imageContentRenderer)
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
                 .playable(messageContent.info?.mimeType == "image/gif")
@@ -203,7 +207,7 @@ class MessageItemFactory @Inject constructor(
         val thumbnailData = ImageContentRenderer.Data(
                 filename = messageContent.body,
                 url = messageContent.videoInfo?.thumbnailFile?.url
-                        ?: messageContent.videoInfo?.thumbnailUrl,
+                      ?: messageContent.videoInfo?.thumbnailUrl,
                 elementToDecrypt = messageContent.videoInfo?.thumbnailFile?.toElementToDecrypt(),
                 height = messageContent.videoInfo?.height,
                 maxHeight = maxHeight,
@@ -220,6 +224,7 @@ class MessageItemFactory @Inject constructor(
         )
 
         return MessageImageVideoItem_()
+                .leftGuideline(avatarSizeProvider.leftGuideline)
                 .attributes(attributes)
                 .imageContentRenderer(imageContentRenderer)
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
@@ -250,6 +255,7 @@ class MessageItemFactory @Inject constructor(
                         message(linkifiedBody)
                     }
                 }
+                .leftGuideline(avatarSizeProvider.leftGuideline)
                 .attributes(attributes)
                 .highlighted(highlight)
                 .urlClickCallback(callback)
@@ -282,9 +288,9 @@ class MessageItemFactory @Inject constructor(
                 //nop
             }
         },
-                editStart,
-                editEnd,
-                Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+                          editStart,
+                          editEnd,
+                          Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
         return spannable
     }
 
@@ -303,6 +309,7 @@ class MessageItemFactory @Inject constructor(
             linkifyBody(formattedBody, callback)
         }
         return MessageTextItem_()
+                .leftGuideline(avatarSizeProvider.leftGuideline)
                 .attributes(attributes)
                 .message(message)
                 .highlighted(highlight)
@@ -328,6 +335,7 @@ class MessageItemFactory @Inject constructor(
                         message(message)
                     }
                 }
+                .leftGuideline(avatarSizeProvider.leftGuideline)
                 .attributes(attributes)
                 .highlighted(highlight)
                 .urlClickCallback(callback)
@@ -336,6 +344,7 @@ class MessageItemFactory @Inject constructor(
     private fun buildRedactedItem(attributes: AbsMessageItem.Attributes,
                                   highlight: Boolean): RedactedMessageItem? {
         return RedactedMessageItem_()
+                .leftGuideline(avatarSizeProvider.leftGuideline)
                 .attributes(attributes)
                 .highlighted(highlight)
     }
