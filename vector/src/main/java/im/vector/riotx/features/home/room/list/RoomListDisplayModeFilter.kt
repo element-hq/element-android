@@ -27,7 +27,8 @@ class RoomListDisplayModeFilter(private val displayMode: RoomListFragment.Displa
             return false
         }
         return when (displayMode) {
-            RoomListFragment.DisplayMode.HOME     -> roomSummary.notificationCount > 0 || roomSummary.membership == Membership.INVITE
+            RoomListFragment.DisplayMode.HOME     ->
+                roomSummary.notificationCount > 0 || roomSummary.membership == Membership.INVITE || roomSummary.userDrafts.isNotEmpty()
             RoomListFragment.DisplayMode.PEOPLE   -> roomSummary.isDirect && roomSummary.membership == Membership.JOIN
             RoomListFragment.DisplayMode.ROOMS    -> !roomSummary.isDirect && roomSummary.membership == Membership.JOIN
             RoomListFragment.DisplayMode.FILTERED -> roomSummary.membership == Membership.JOIN
