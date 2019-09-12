@@ -226,4 +226,9 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
         })
     }
 
+    override fun onCleared() {
+        super.onCleared()
+
+        currentTask?.cancel()
+    }
 }
