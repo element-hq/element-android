@@ -19,6 +19,7 @@ package im.vector.riotx.features.home.room.list
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
@@ -37,6 +38,7 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
     @EpoxyAttribute lateinit var lastEventTime: CharSequence
     @EpoxyAttribute var avatarUrl: String? = null
     @EpoxyAttribute var unreadCount: Int = 0
+    @EpoxyAttribute var hasDraft: Boolean = false
     @EpoxyAttribute var showHighlighted: Boolean = false
     @EpoxyAttribute var listener: (() -> Unit)? = null
 
@@ -47,6 +49,7 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         holder.titleView.text = roomName
         holder.lastEventTimeView.text = lastEventTime
         holder.lastEventView.text = lastFormattedEvent
+        holder.draftView.isVisible = hasDraft
         holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadCount, showHighlighted))
         avatarRenderer.render(avatarUrl, roomId, roomName.toString(), holder.avatarImageView)
     }
@@ -55,6 +58,7 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         val titleView by bind<TextView>(R.id.roomNameView)
         val unreadCounterBadgeView by bind<UnreadCounterBadgeView>(R.id.roomUnreadCounterBadgeView)
         val lastEventView by bind<TextView>(R.id.roomLastEventView)
+        val draftView by bind<ImageView>(R.id.roomDraftBadge)
         val lastEventTimeView by bind<TextView>(R.id.roomLastEventTimeView)
         val avatarImageView by bind<ImageView>(R.id.roomAvatarImageView)
         val rootView by bind<ViewGroup>(R.id.itemRoomLayout)

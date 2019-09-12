@@ -2,7 +2,7 @@ Changes in RiotX 0.5.0 (2019-XX-XX)
 ===================================================
 
 Features:
- -
+ - Save draft of a message when exiting a room with non empty composer (#329)
 
 Improvements:
  - Reduce default release build log level, and lab option to enable more logs.
