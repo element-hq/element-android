@@ -33,9 +33,7 @@ import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.riotx.R
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.ui.views.ReadMarkerView
-import im.vector.riotx.core.ui.views.ReadReceiptsView
 import im.vector.riotx.core.utils.DebouncedClickListener
-import im.vector.riotx.core.utils.DimensionUtils.dpToPx
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.reactions.widget.ReactionButton
@@ -130,7 +128,6 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
                     idToRefInFlow.add(reactionButton.id)
                     reactionButton.reactionString = reaction.key
                     reactionButton.reactionCount = reaction.count
-                    reactionButton.emojiTypeFace = attributes.emojiTypeFace
                     reactionButton.setChecked(reaction.addedByMe)
                     reactionButton.isEnabled = reaction.synced
                 }
@@ -165,7 +162,6 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
         val avatarImageView by bind<ImageView>(R.id.messageAvatarImageView)
         val memberNameView by bind<TextView>(R.id.messageMemberNameView)
         val timeView by bind<TextView>(R.id.messageTimeView)
-        val readReceiptsView by bind<ReadReceiptsView>(R.id.readReceiptsView)
         val readMarkerView by bind<ReadMarkerView>(R.id.readMarkerView)
         var reactionWrapper: ViewGroup? = null
         var reactionFlowHelper: Flow? = null

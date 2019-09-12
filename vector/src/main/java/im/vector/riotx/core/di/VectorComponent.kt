@@ -24,6 +24,7 @@ import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.auth.Authenticator
 import im.vector.matrix.android.api.session.Session
 import im.vector.riotx.EmojiCompatFontProvider
+import im.vector.riotx.EmojiCompatWrapper
 import im.vector.riotx.VectorApplication
 import im.vector.riotx.core.pushers.PushersManager
 import im.vector.riotx.features.configuration.VectorConfiguration
@@ -40,6 +41,7 @@ import im.vector.riotx.features.notifications.NotificationBroadcastReceiver
 import im.vector.riotx.features.notifications.NotificationDrawerManager
 import im.vector.riotx.features.notifications.PushRuleTriggerListener
 import im.vector.riotx.features.rageshake.BugReporter
+import im.vector.riotx.features.rageshake.VectorFileLogger
 import im.vector.riotx.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.riotx.features.settings.VectorPreferences
 import javax.inject.Singleton
@@ -70,6 +72,8 @@ interface VectorComponent {
 
     fun emojiCompatFontProvider(): EmojiCompatFontProvider
 
+    fun emojiCompatWrapper() : EmojiCompatWrapper
+
     fun eventHtmlRenderer(): EventHtmlRenderer
 
     fun navigator(): Navigator
@@ -97,6 +101,8 @@ interface VectorComponent {
     fun notifiableEventResolver(): NotifiableEventResolver
 
     fun vectorPreferences(): VectorPreferences
+
+    fun vectorFileLogger(): VectorFileLogger
 
     @Component.Factory
     interface Factory {

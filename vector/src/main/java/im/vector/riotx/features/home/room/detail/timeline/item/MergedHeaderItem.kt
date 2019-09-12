@@ -21,11 +21,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.children
+import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
 import im.vector.riotx.features.home.AvatarRenderer
-import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base_noinfo)
 abstract class MergedHeaderItem : BaseEventItem<MergedHeaderItem.Holder>() {
@@ -66,6 +66,8 @@ abstract class MergedHeaderItem : BaseEventItem<MergedHeaderItem.Holder>() {
             holder.separatorView.visibility = View.VISIBLE
             holder.expandView.setText(R.string.merged_events_collapse)
         }
+        // No read receipt for this item
+        holder.readReceiptsView.isVisible = false
     }
 
     data class Data(
@@ -83,12 +85,10 @@ abstract class MergedHeaderItem : BaseEventItem<MergedHeaderItem.Holder>() {
     )
 
     class Holder : BaseHolder(STUB_ID) {
-
         val expandView by bind<TextView>(R.id.itemMergedExpandTextView)
         val summaryView by bind<TextView>(R.id.itemMergedSummaryTextView)
         val separatorView by bind<View>(R.id.itemMergedSeparatorView)
         val avatarListView by bind<ViewGroup>(R.id.itemMergedAvatarListView)
-
     }
 
     companion object {

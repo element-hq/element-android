@@ -1,3 +1,26 @@
+Changes in RiotX 0.5.0 (2019-XX-XX)
+===================================================
+
+Features:
+ -
+
+Improvements:
+ - Reduce default release build log level, and lab option to enable more logs.
+
+Other changes:
+ -
+
+Bugfix:
+ - Fix crash due to missing informationData (#535)
+ - Progress in initial sync dialog is decreasing for a step and should not (#532)
+
+Translations:
+ -
+
+Build:
+ - Fix issue with version name (#533)
+ - Fix rendering issue of accepted third party invitation event
+
 Changes in RiotX 0.4.0 (2019-XX-XX)
 ===================================================
 
@@ -5,19 +28,16 @@ Features:
  - Display read receipts in timeline (#81)
 
 Improvements:
- -
-
-Other changes:
- -
+ - Reactions: Reinstate the ability to react with non-unicode keys (#307)
 
 Bugfix:
- -
-
-Translations:
- -
-
-Build:
- -
+ - Fix text diff linebreak display (#441)
+ - Date change message repeats for each redaction until a normal message (#358)
+ - Slide-in reply icon is distorted (#423)
+ - Regression / e2e replies not encrypted
+ - Some video won't play
+ - Privacy: remove log of notifiable event (#519)
+ - Fix crash with EmojiCompat (#530)
 
 Changes in RiotX 0.3.0 (2019-08-08)
 ===================================================

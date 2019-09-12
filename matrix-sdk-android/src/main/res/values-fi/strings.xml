@@ -168,4 +168,9 @@
     <string name="initial_sync_start_importing_account_data">Alkusynkronointi:
 \nTuodaan tilin tietoja</string>
 
+    <string name="notice_room_update">%s päivitti tämän huoneen.</string>
+
+    <string name="event_status_sending_message">Lähetetään viestiä…</string>
+    <string name="clear_timeline_send_queue">Tyhjennä lähetysjono</string>
+
 </resources>

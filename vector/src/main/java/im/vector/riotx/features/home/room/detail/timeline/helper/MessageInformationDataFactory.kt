@@ -52,10 +52,10 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
 
         val showInformation =
                 addDaySeparator
-                || event.senderAvatar != nextEvent?.senderAvatar
-                || event.getDisambiguatedDisplayName() != nextEvent?.getDisambiguatedDisplayName()
-                || (nextEvent.root.getClearType() != EventType.MESSAGE && nextEvent.root.getClearType() != EventType.ENCRYPTED)
-                || isNextMessageReceivedMoreThanOneHourAgo
+                        || event.senderAvatar != nextEvent?.senderAvatar
+                        || event.getDisambiguatedDisplayName() != nextEvent?.getDisambiguatedDisplayName()
+                        || (nextEvent.root.getClearType() != EventType.MESSAGE && nextEvent.root.getClearType() != EventType.ENCRYPTED)
+                        || isNextMessageReceivedMoreThanOneHourAgo
 
         val time = dateFormatter.formatMessageHour(date)
         val avatarUrl = event.senderAvatar
@@ -76,7 +76,7 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                 memberName = formattedMemberName,
                 showInformation = showInformation,
                 orderedReactionList = event.annotations?.reactionsSummary
-                        ?.filter { isSingleEmoji(it.key) }
+                        //?.filter { isSingleEmoji(it.key) }
                         ?.map {
                             ReactionInfoData(it.key, it.count, it.addedByMe, it.localEchoEvents.isEmpty())
                         },

@@ -48,7 +48,7 @@
     <string name="notice_room_third_party_registered_invite">%1$s èt d’uutnodigienge vo %2$s anveird</string>
 
     <string name="notice_crypto_unable_to_decrypt">** Kun nie ountsleuteln: %s **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">’t Toestel van den afzender èt geen sleutels vo dit bericht gesteurd.</string>
+    <string name="notice_crypto_error_unkwown_inbound_session_id">’t Toestel van den afzender èt geen sleutels vo da bericht hier gesteurd.</string>
 
     <string name="message_reply_to_prefix">Als antwoord ip</string>
 
@@ -150,21 +150,26 @@
     <string name="verification_emoji_folder">Mappe</string>
     <string name="verification_emoji_pin">Pinne</string>
 
-    <string name="initial_sync_start_importing_account">Initiële synchronisoatie:
+    <string name="initial_sync_start_importing_account">Initiële synchronisoasje: 
 \nAccount wor geïmporteerd…</string>
-    <string name="initial_sync_start_importing_account_crypto">Initiële synchronisoatie:
+    <string name="initial_sync_start_importing_account_crypto">Initiële synchronisoasje: 
 \nCrypto wor geïmporteerd</string>
-    <string name="initial_sync_start_importing_account_rooms">Initiële synchronisoatie:
+    <string name="initial_sync_start_importing_account_rooms">Initiële synchronisoasje: 
 \nGesprekkn wordn geïmporteerd</string>
-    <string name="initial_sync_start_importing_account_joined_rooms">Initiële synchronisoatie:
+    <string name="initial_sync_start_importing_account_joined_rooms">Initiële synchronisoasje: 
 \nDeelgenoomn gesprekken wordn geïmporteerd</string>
-    <string name="initial_sync_start_importing_account_invited_rooms">Initiële synchronisoatie:
+    <string name="initial_sync_start_importing_account_invited_rooms">Initiële synchronisoasje: 
 \nUutgenodigde gesprekkn wordn geïmporteerd</string>
-    <string name="initial_sync_start_importing_account_left_rooms">Initiële synchronisoatie:
+    <string name="initial_sync_start_importing_account_left_rooms">Initiële synchronisoasje: 
 \nVerloatn gesprekkn wordn geïmporteerd</string>
-    <string name="initial_sync_start_importing_account_groups">Initiële synchronisoatie:
+    <string name="initial_sync_start_importing_account_groups">Initiële synchronisoasje: 
 \nGemeenschappn wordn geïmporteerd</string>
-    <string name="initial_sync_start_importing_account_data">Initiële synchronisoatie:
+    <string name="initial_sync_start_importing_account_data">Initiële synchronisoasje: 
 \nAccountgegeevns wordn geïmporteerd</string>
+
+    <string name="notice_room_update">%s èt da gesprek hier ipgewoardeerd.</string>
+
+    <string name="event_status_sending_message">Bericht wor verstuurd…</string>
+    <string name="clear_timeline_send_queue">Uutgoande wachtreeke leegn</string>
 
 </resources>

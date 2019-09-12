@@ -66,9 +66,8 @@ import org.matrix.olm.OlmPkEncryption
 import org.matrix.olm.OlmPkMessage
 import timber.log.Timber
 import java.security.InvalidParameterException
-import java.util.*
 import javax.inject.Inject
-import kotlin.collections.HashMap
+import kotlin.random.Random
 
 /**
  * A KeysBackup class instance manage incremental backup of e2e keys (megolm keys)
@@ -113,8 +112,6 @@ internal class KeysBackup @Inject constructor(
 
     // The backup key being used.
     private var backupOlmPkEncryption: OlmPkEncryption? = null
-
-    private val random = Random()
 
     private var backupAllGroupSessionsCallback: MatrixCallback<Unit>? = null
 
@@ -848,7 +845,7 @@ internal class KeysBackup @Inject constructor(
                 // Wait between 0 and 10 seconds, to avoid backup requests from
                 // different clients hitting the server all at the same time when a
                 // new key is sent
-                val delayInMs = random.nextInt(KEY_BACKUP_WAITING_TIME_TO_SEND_KEY_BACKUP_MILLIS).toLong()
+                val delayInMs = Random.nextLong(KEY_BACKUP_WAITING_TIME_TO_SEND_KEY_BACKUP_MILLIS)
 
                 uiHandler.postDelayed({ backupKeys() }, delayInMs)
             }
@@ -1307,7 +1304,7 @@ internal class KeysBackup @Inject constructor(
 
                 // Make the request
                 storeSessionDataTask
-                        .configureWith(StoreSessionsDataTask.Params(keysBackupVersion!!.version!!, keysBackupData)){
+                        .configureWith(StoreSessionsDataTask.Params(keysBackupVersion!!.version!!, keysBackupData)) {
                             this.callback = sendingRequestCallback
                         }
                         .executeBy(taskExecutor)
@@ -1405,7 +1402,7 @@ internal class KeysBackup @Inject constructor(
 
     companion object {
         // Maximum delay in ms in {@link maybeBackupKeys}
-        private const val KEY_BACKUP_WAITING_TIME_TO_SEND_KEY_BACKUP_MILLIS = 10000
+        private const val KEY_BACKUP_WAITING_TIME_TO_SEND_KEY_BACKUP_MILLIS = 10_000L
 
         // Maximum number of keys to send at a time to the homeserver.
         private const val KEY_BACKUP_SEND_KEYS_MAX_COUNT = 100

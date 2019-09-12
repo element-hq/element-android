@@ -15,7 +15,7 @@ androidExtensions {
 }
 
 ext.versionMajor = 0
-ext.versionMinor = 3
+ext.versionMinor = 5
 ext.versionPatch = 0
 
 static def getGitTimestamp() {
@@ -51,7 +51,7 @@ static def gitRevisionDate() {
 }
 
 static def gitBranchName() {
-    def cmd = "git name-rev --name-only HEAD"
+    def cmd = "git rev-parse --abbrev-ref HEAD"
     return cmd.execute().text.trim()
 }
 
@@ -317,6 +317,8 @@ dependencies {
     }
 
     implementation 'diff_match_patch:diff_match_patch:current'
+
+    implementation "androidx.emoji:emoji-appcompat:1.0.0"
 
     // TESTS
     testImplementation 'junit:junit:4.12'

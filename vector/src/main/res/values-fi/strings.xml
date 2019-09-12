@@ -111,7 +111,7 @@
     <string name="send_bug_report_sent">Virheraportti lähetettiin</string>
     <string name="send_bug_report_failed">Virheraporttia ei voitu lähettää (%s)</string>
     <string name="send_bug_report_progress">Lähetetään (%s%%)</string>
-    <string name="send_bug_report_app_crashed">Sovellus kaatui viime kerralla. Haluaisitko tehdä kaatumisesta virheilmoituksen\?</string>
+    <string name="send_bug_report_app_crashed">Sovellus kaatui viime kerralla. Haluatko tehdä kaatumisesta virheilmoituksen\?</string>
 
     <string name="send_files_in">Lähetä</string>
     <string name="read_receipt">Luettu</string>
@@ -1533,4 +1533,83 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
 
     <string name="settings_preferences">Asetukset</string>
     <string name="settings_security_and_privacy">Tietoturva ja yksityisyys</string>
+    <string name="room_list_catchup_empty_title">Olet ajan tasalla!</string>
+    <string name="last_edited_info_message">Viimeksi muokannut %s %s</string>
+
+
+    <string name="change_room_directory_network">Vaihda verkkoa</string>
+    <string name="navigate_to_room_when_already_in_the_room">Katselet jo tätä huonetta!</string>
+
+    <string name="settings_general_title">Yleiset</string>
+    <string name="preference_voice_and_video">Ääni ja video</string>
+    <string name="preference_root_help_about">Ohje ja tietoa</string>
+
+
+    <string name="send_suggestion">Tee ehdotus</string>
+    <string name="send_suggestion_content">Kirjoita ehdotuksesi alle.</string>
+    <string name="send_suggestion_report_placeholder">Kuvaile ehdotuksesi tässä</string>
+    <string name="send_suggestion_sent">Kiitos, ehdotus on lähetetty</string>
+    <string name="send_suggestion_failed">Ehdotuksen lähettäminen epäonnistui (%s)</string>
+
+    <string name="settings_labs_show_hidden_events_in_timeline">Näytä piilotetut tapahtumat aikajanalla</string>
+
+    <string name="store_riotx_title">RiotX - seuraavan sukupolven Matrix-asiakasohjelma</string>
+    <string name="store_riotx_short_description">Nopeampi ja kevyempi Matrix-asiakasohjelma</string>
+    <string name="bottom_action_people_x">Yksityisviestit</string>
+
+    <string name="send_file_step_idle">Odotetaan…</string>
+    <string name="send_file_step_encrypting_file">Salataan tiedostoa…</string>
+    <string name="send_file_step_sending_file">Lähetetään tiedostoa (%1$s / %2$s)</string>
+
+    <string name="downloading_file">Ladataan tiedostoa %1$s…</string>
+    <string name="downloaded_file">Tiedosto %1$s ladattu!</string>
+
+    <string name="edited_suffix">(muokattu)</string>
+
+    <string name="riotx_no_registration_notice_colored_part">Käytä vanhaa sovellusta</string>
+
+
+    <string name="no_message_edits_found">Muokkauksia ei löytynyt</string>
+
+    <string name="room_filtering_filter_hint">Suodata keskusteluja…</string>
+    <string name="room_filtering_footer_title">Etkö löydä, mitä etsit\?</string>
+    <string name="room_filtering_footer_create_new_room">Luo uusi huone</string>
+    <string name="room_filtering_footer_create_new_direct_message">Lähetä uusi yksityisviesti</string>
+    <string name="room_filtering_footer_open_room_directory">Näytä huoneluettelo</string>
+
+    <string name="link_copied_to_clipboard">Linkki kopioitu leikepöydälle</string>
+
+    <string name="creating_direct_room">Luodaan huonetta…</string>
+    <string name="direct_room_start_search">Näet tuloksia kirjoittamalla jotain</string>
+    <string name="joining_room">Liitytään huoneeseen…</string>
+
+    <string name="message_view_edit_history">Näytä muokkaushistoria</string>
+
+    <string name="title_activity_verify_device">Vahvista laite</string>
+
+    <string name="start_verification_short_label">Vahvista</string>
+    <string name="key_share_request">Avaimen jakopyyntö</string>
+    <string name="sas_verify_start_button_title">Aloita vahvistaminen</string>
+    <string name="sas_incoming_request_title">Saapuva vahvistuspyyntö</string>
+    <string name="sas_incoming_verification_request_dialog">Vastaanotit saapuvan vahvistuspyynnön.</string>
+    <string name="sas_verified">Vahvistettu!</string>
+    <string name="sas_verified_successful">Vahvistit tämän laitteen onnistuneesti.</string>
+    <string name="sas_verification_request_notification_channel_title">Avaimen vahvistus</string>
+    <string name="sas_cancelled_by_other">Toinen osapuoli perui vahvistuksen.
+\n%s</string>
+    <string name="sas_cancelled_by_me">Vahvistus on peruttu.
+\nSyy: %s</string>
+
+    <string name="sas_verification_request_notification_channel">Vuorovaikutteinen laitteen vahvistus</string>
+    <string name="sas_incoming_request_notif_title">Vahvistuspyyntö</string>
+    <string name="sas_incoming_request_notif_content">%s haluaa vahvistaa laitteesi</string>
+
+    <string name="sas_error_m_user">Käyttäjä perui vahvistuksen</string>
+    <string name="sas_error_m_timeout">Vahvistustoimenpide aikakatkaistiin</string>
+    <string name="create_room_directory_title">Huoneluettelo</string>
+    <string name="create_room_directory_description">Julkaise tämä huone huoneluettelossa</string>
+
+    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Play Storen kuvaus</string>
+    <string name="settings_push_rules">Push-säännöt</string>
+    <string name="riotx_no_registration_notice">%1$s luodaksesi tilin.</string>
 </resources>

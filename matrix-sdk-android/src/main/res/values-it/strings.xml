@@ -167,4 +167,9 @@
     <string name="initial_sync_start_importing_account_data">Sync iniziale:
 \nImportazione dati account</string>
 
+    <string name="notice_room_update">%s ha aggiornato questa stanza.</string>
+
+    <string name="event_status_sending_message">Invio messaggio in corso …</string>
+    <string name="clear_timeline_send_queue">Cancella la coda di invio</string>
+
 </resources>

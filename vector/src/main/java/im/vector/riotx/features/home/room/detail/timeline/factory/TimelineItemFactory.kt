@@ -66,7 +66,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
 
                 // Unhandled event types (yet)
                 EventType.STATE_ROOM_THIRD_PARTY_INVITE,
-                EventType.STICKER           -> defaultItemFactory.create(event, highlight)
+                EventType.STICKER           -> defaultItemFactory.create(event, highlight, callback)
                 else                        -> {
                     Timber.v("Type ${event.root.getClearType()} not handled")
                     null
@@ -74,7 +74,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
             }
         } catch (e: Exception) {
             Timber.e(e, "failed to create message item")
-            defaultItemFactory.create(event, highlight, e)
+            defaultItemFactory.create(event, highlight, callback, e)
         }
         return (computedModel ?: EmptyItem_())
     }

@@ -7,7 +7,7 @@
     <string name="notice_room_invite">%1$s zaprosił(a) %2$s</string>
     <string name="notice_room_invite_you">%1$s zaprosił(a) Cię</string>
     <string name="notice_room_join">%1$s dołączył(a)</string>
-    <string name="notice_room_leave">%1$s wyszedł(-ła)</string>
+    <string name="notice_room_leave">%1$s opuścił(a)</string>
     <string name="notice_room_reject">%1$s odrzucił(a) zaproszenie</string>
     <string name="notice_room_kick">%1$s wyrzucił(a) %2$s</string>
     <string name="notice_room_unban">%1$s odblokował(a) %2$s</string>
@@ -17,11 +17,11 @@
     <string name="notice_display_name_changed_from">%1$s zmienił(a) wyświetlaną nazwę z %2$s na %3$s</string>
     <string name="notice_display_name_removed">%1$s usunął(-ęła) swoją wyświetlaną nazwę (%2$s)</string>
     <string name="notice_room_topic_changed">%1$s zmienił(a) temat na: %2$s</string>
-    <string name="unable_to_send_message">Nie udało się wysłać wiadomości</string>
+    <string name="unable_to_send_message">Nie można wysłać wiadomości</string>
 
-    <string name="message_failed_to_upload">Nie udało się wysłać zdjęcia</string>
+    <string name="message_failed_to_upload">Przesyłanie zdjęcia nie powiodło się</string>
 
-    <string name="network_error">ogólne błędy</string>
+    <string name="network_error">Błąd sieci</string>
     <string name="matrix_error">Błąd Matrixa</string>
 
     <string name="encrypted_message">Wiadomość zaszyfrowana</string>
@@ -31,7 +31,7 @@
 
     <string name="notice_room_visibility_shared">wszyscy członkowie pokoju.</string>
     <string name="notice_room_visibility_world_readable">wszyscy.</string>
-    <string name="notice_room_name_changed">%1$s zmienił(a) znawę pokoju na: %2$s</string>
+    <string name="notice_room_name_changed">%1$s zmienił(a) nazwę pokoju na: %2$s</string>
     <string name="notice_ended_call">%s zakończył(a) rozmowę.</string>
     <string name="notice_room_name_removed">%1$s usunął(-ęła) nazwę pokoju</string>
     <string name="notice_room_topic_removed">%1$s usunął(-ęła) temat pokoju</string>
@@ -57,9 +57,9 @@
     </plurals>
 
     <string name="notice_crypto_unable_to_decrypt">** Nie można odszyfrować: %s **</string>
-    <string name="notice_placed_video_call">%s umieścił wideo rozmowe.</string>
-    <string name="notice_placed_voice_call">%s umieścił połączenie głosowe.</string>
-    <string name="notice_made_future_room_visibility">%1$s uczynił historię pokoju widoczną do %2$s</string>
+    <string name="notice_placed_video_call">%s wykonał(a) rozmowę wideo.</string>
+    <string name="notice_placed_voice_call">%s wykonał(a) połączenie głosowe.</string>
+    <string name="notice_made_future_room_visibility">%1$s uczynił(a) przyszłą historię pokoju widoczną dla %2$s</string>
     <string name="notice_room_visibility_invited">wszyscy członkowie pokoju, od momentu w którym zostali zaproszeni.</string>
     <string name="notice_room_visibility_joined">wszyscy członkowie pokoju, od momentu w którym dołączyli.</string>
     <string name="notice_room_visibility_unknown">nieznane (%s).</string>
@@ -147,4 +147,29 @@
     <string name="verification_emoji_santa">Mikołaj</string>
     <string name="verification_emoji_gift">Prezent</string>
     <string name="verification_emoji_hammer">Młotek</string>
+    <string name="notice_room_update">%s zakutalizował(a) ten pokój.</string>
+
+    <string name="verification_emoji_thumbsup">Kciuk w górę</string>
+    <string name="verification_emoji_lock">Zamek</string>
+    <string name="verification_emoji_ball">Piłka</string>
+    <string name="initial_sync_start_importing_account">Synchronizacja początkowa:
+\nImportowanie konta…</string>
+    <string name="initial_sync_start_importing_account_crypto">Synchronizacja początkowa:
+\nImportowanie kryptografii</string>
+    <string name="initial_sync_start_importing_account_rooms">Synchronizacja początkowa:
+\nImportowanie Pokoi</string>
+    <string name="initial_sync_start_importing_account_joined_rooms">Synchronizacja początkowa:
+\nImportowanie dołączonych Pokoi</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">Synchronizacja początkowa:
+\nImportowanie zaproszonych Pokoi</string>
+    <string name="initial_sync_start_importing_account_left_rooms">Synchronizacja początkowa:
+\nImportowanie opuszczonych Pokoi</string>
+    <string name="initial_sync_start_importing_account_groups">Synchronizacja początkowa:
+\nImportowanie Społeczności</string>
+    <string name="initial_sync_start_importing_account_data">Synchronizacja początkowa:
+\nImportowanie danych Konta</string>
+
+    <string name="event_status_sending_message">Wysyłanie wiadomości…</string>
+    <string name="clear_timeline_send_queue">Wyczyść kolejkę wysyłania</string>
+
 </resources>

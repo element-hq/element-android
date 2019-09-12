@@ -176,4 +176,9 @@
     <string name="initial_sync_start_importing_account_data">Initiële synchronisatie:
 \nAccountgegevens worden geïmporteerd</string>
 
+    <string name="notice_room_update">%s heeft dit gesprek opgewaardeerd.</string>
+
+    <string name="event_status_sending_message">Bericht wordt verstuurd…</string>
+    <string name="clear_timeline_send_queue">Uitgaande wachtrij legen</string>
+
 </resources>

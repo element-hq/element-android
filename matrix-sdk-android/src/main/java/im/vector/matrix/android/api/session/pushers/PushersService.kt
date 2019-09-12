@@ -17,7 +17,7 @@ package im.vector.matrix.android.api.session.pushers
 
 import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.MatrixCallback
-import java.util.*
+import java.util.UUID
 
 
 interface PushersService {

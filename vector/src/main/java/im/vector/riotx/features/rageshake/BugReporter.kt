@@ -52,7 +52,8 @@ import javax.inject.Singleton
  */
 @Singleton
 class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
-                                      private val versionProvider: VersionProvider) {
+                                      private val versionProvider: VersionProvider,
+                                      private val vectorFileLogger : VectorFileLogger) {
     var inMultiWindowMode = false
 
     companion object {
@@ -162,7 +163,7 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
                 val gzippedFiles = ArrayList<File>()
 
                 if (withDevicesLogs) {
-                    val files = VectorFileLogger.getLogFiles()
+                    val files = vectorFileLogger.getLogFiles()
 
                     for (f in files) {
                         if (!mIsCancelled) {
@@ -348,20 +349,20 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
                         } else if (null == response || null == response.body()) {
                             serverError = "Failed with error $responseCode"
                         } else {
-                            var `is`: InputStream? = null
+                            var inputStream: InputStream? = null
 
                             try {
-                                `is` = response.body()!!.byteStream()
+                                inputStream = response.body()!!.byteStream()
 
-                                if (null != `is`) {
-                                    var ch = `is`.read()
+                                if (null != inputStream) {
+                                    var ch = inputStream.read()
                                     val b = StringBuilder()
                                     while (ch != -1) {
                                         b.append(ch.toChar())
-                                        ch = `is`.read()
+                                        ch = inputStream.read()
                                     }
                                     serverError = b.toString()
-                                    `is`.close()
+                                    inputStream.close()
 
                                     // check if the error message
                                     try {
@@ -380,7 +381,7 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
                                 Timber.e(e, "## sendBugReport() : failed to parse error " + e.message)
                             } finally {
                                 try {
-                                    `is`?.close()
+                                    inputStream?.close()
                                 } catch (e: Exception) {
                                     Timber.e(e, "## sendBugReport() : failed to close the error stream " + e.message)
                                 }

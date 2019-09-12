@@ -24,12 +24,12 @@ import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.tag.RoomTagContent
 import im.vector.matrix.android.api.session.room.read.FullyReadContent
-import im.vector.matrix.android.internal.crypto.CryptoManager
 import im.vector.matrix.android.internal.database.helper.add
 import im.vector.matrix.android.internal.database.helper.addOrUpdate
 import im.vector.matrix.android.internal.database.helper.addStateEvent
 import im.vector.matrix.android.internal.database.helper.lastStateIndex
 import im.vector.matrix.android.internal.database.helper.updateSenderDataFor
+import im.vector.matrix.android.internal.crypto.DefaultCryptoService
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.EventEntityFields
 import im.vector.matrix.android.internal.database.model.RoomEntity
@@ -60,7 +60,7 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
                                                    private val roomSummaryUpdater: RoomSummaryUpdater,
                                                    private val roomTagHandler: RoomTagHandler,
                                                    private val roomFullyReadHandler: RoomFullyReadHandler,
-                                                   private val cryptoManager: CryptoManager,
+                                                   private val cryptoService: DefaultCryptoService,
                                                    private val tokenStore: SyncTokenStore,
                                                    private val pushRuleService: DefaultPushRuleService,
                                                    private val processForPushTask: ProcessEventForPushTask,
@@ -107,12 +107,12 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
                     handleJoinedRoom(realm, it.key, it.value, isInitialSync)
                 }
             is HandlingStrategy.INVITED ->
-                handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_invited_rooms, 0.4f) {
+                handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_invited_rooms, 0.1f) {
                     handleInvitedRoom(realm, it.key, it.value)
                 }
 
             is HandlingStrategy.LEFT    -> {
-                handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_left_rooms, 0.2f) {
+                handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_left_rooms, 0.3f) {
                     handleLeftRoom(realm, it.key, it.value)
                 }
             }
@@ -135,8 +135,7 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
             handleRoomAccountDataEvents(realm, roomId, roomSync.accountData)
         }
 
-        val roomEntity = RoomEntity.where(realm, roomId).findFirst()
-                         ?: realm.createObject(roomId)
+        val roomEntity = RoomEntity.where(realm, roomId).findFirst() ?: realm.createObject(roomId)
 
         if (roomEntity.membership == Membership.INVITE) {
             roomEntity.chunks.deleteAllFromRealm()
@@ -151,7 +150,7 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
             roomSync.state.events.forEach { event ->
                 roomEntity.addStateEvent(event, filterDuplicates = true, stateIndex = untimelinedStateIndex)
                 // Give info to crypto module
-                cryptoManager.onStateEvent(roomId, event)
+                cryptoService.onStateEvent(roomId, event)
                 UserEntityFactory.createOrNull(event)?.also {
                     realm.insertOrUpdate(it)
                 }
@@ -177,8 +176,7 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
                                   roomSync:
                                   InvitedRoomSync): RoomEntity {
         Timber.v("Handle invited sync for room $roomId")
-        val roomEntity = RoomEntity.where(realm, roomId).findFirst()
-                         ?: realm.createObject(roomId)
+        val roomEntity = RoomEntity.where(realm, roomId).findFirst() ?: realm.createObject(roomId)
         roomEntity.membership = Membership.INVITE
         if (roomSync.inviteState != null && roomSync.inviteState.events.isNotEmpty()) {
             val chunkEntity = handleTimelineEvents(realm, roomEntity, roomSync.inviteState.events)
@@ -191,8 +189,7 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
     private fun handleLeftRoom(realm: Realm,
                                roomId: String,
                                roomSync: RoomSync): RoomEntity {
-        val roomEntity = RoomEntity.where(realm, roomId).findFirst()
-                         ?: realm.createObject(roomId)
+        val roomEntity = RoomEntity.where(realm, roomId).findFirst() ?: realm.createObject(roomId)
 
         roomEntity.membership = Membership.LEAVE
         roomEntity.chunks.deleteAllFromRealm()
@@ -224,7 +221,7 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
             event.eventId?.also { eventIds.add(it) }
             chunkEntity.add(roomEntity.roomId, event, PaginationDirection.FORWARDS, stateIndexOffset)
             // Give info to crypto module
-            cryptoManager.onLiveEvent(roomEntity.roomId, event)
+            cryptoService.onLiveEvent(roomEntity.roomId, event)
             // Try to remove local echo
             event.unsignedData?.transactionId?.also {
                 val sendingEventEntity = roomEntity.sendingTimelineEvents.find(it)

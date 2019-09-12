@@ -95,6 +95,8 @@
     <string name="done">Done</string>
     <string name="abort">Abort</string>
     <string name="ignore">Ignore</string>
+    <string name="review">Review</string>
+    <string name="decline">Decline</string>
 
     <!-- actions -->
     <string name="action_exit">Exit</string>
@@ -1099,6 +1101,7 @@
     <string name="settings_labs_keyboard_options_to_send_message">Use keyboard enter key to send message</string>
     <string name="settings_labs_enable_send_voice">Send voice messages</string>
     <string name="settings_labs_enable_send_voice_summary">This option requires a third party application to record the messages.</string>
+    <string name="widget_integration_review_terms">To continue you need to accept the Terms of this service.</string>
 
     <!-- share keys -->
     <string name="you_added_a_new_device">You added a new device \'%s\', which is requesting encryption keys.</string>
@@ -1467,6 +1470,8 @@ Why choose Riot.im?
     <string name="sas_error_unknown">Unknown Error</string>
 
 
+    <string name="security_warning_identity_server">"Previous versions of Riot had a security bug which could give your Identity Server (%1$s) access to your account. If you trust %2$s, you can ignore this; otherwise please logout and login again.\n\nRead more details here:\nhttps://medium.com/@RiotChat/36b4792ea0d6"</string>
+
     <!-- String for RiotX -->
     <string name="edit">Edit</string>
     <string name="reply">Reply</string>
@@ -1639,5 +1644,13 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="joining_room">"Joining room…"</string>
 
     <string name="message_view_edit_history">View Edit History</string>
+
+    <!-- Terms -->
+    <string name="terms_of_service">Terms of Service</string>
+    <string name="review_terms">Review Terms</string>
+    <string name="terms_description_for_identity_server">Be discoverable by others</string>
+    <string name="terms_description_for_integration_manager">Use Bots, bridges, widgets and sticker packs</string>
+
+    <string name="read_at">Read at</string>
 
 </resources>

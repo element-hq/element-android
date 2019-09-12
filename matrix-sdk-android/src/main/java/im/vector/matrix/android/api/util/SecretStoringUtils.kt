@@ -27,7 +27,7 @@ import java.math.BigInteger
 import java.security.KeyPairGenerator
 import java.security.KeyStore
 import java.security.SecureRandom
-import java.util.*
+import java.util.Calendar
 import javax.crypto.*
 import javax.crypto.spec.GCMParameterSpec
 import javax.crypto.spec.IvParameterSpec
@@ -479,12 +479,7 @@ object SecretStoringUtils {
         val output = Cipher.getInstance(RSA_MODE)
         output.init(Cipher.DECRYPT_MODE, privateKeyEntry.privateKey)
 
-        val bos = ByteArrayOutputStream()
-        CipherInputStream(encrypted, output).use {
-            it.copyTo(bos)
-        }
-
-        return bos.toByteArray()
+        return CipherInputStream(encrypted, output).use { it.readBytes() }
     }
 
     private fun formatMExtract(bis: InputStream): Pair<ByteArray, ByteArray> {
@@ -495,14 +490,7 @@ object SecretStoringUtils {
         val iv = ByteArray(ivSize)
         bis.read(iv, 0, ivSize)
 
-
-        val bos = ByteArrayOutputStream()
-        var next = bis.read()
-        while (next != -1) {
-            bos.write(next)
-            next = bis.read()
-        }
-        val encrypted = bos.toByteArray()
+        val encrypted = bis.readBytes()
         return Pair(iv, encrypted)
     }
 
@@ -530,14 +518,7 @@ object SecretStoringUtils {
         val iv = ByteArray(ivSize)
         bis.read(iv)
 
-        val bos = ByteArrayOutputStream()
-
-        var next = bis.read()
-        while (next != -1) {
-            bos.write(next)
-            next = bis.read()
-        }
-        val encrypted = bos.toByteArray()
+        val encrypted = bis.readBytes()
         return Triple(encryptedKey, iv, encrypted)
     }
 
@@ -579,14 +560,7 @@ object SecretStoringUtils {
         val iv = ByteArray(ivSize)
         bis.read(iv)
 
-        val bos = ByteArrayOutputStream()
-
-        var next = bis.read()
-        while (next != -1) {
-            bos.write(next)
-            next = bis.read()
-        }
-        val encrypted = bos.toByteArray()
+        val encrypted = bis.readBytes()
         return Triple(salt, iv, encrypted)
     }
 }

@@ -18,23 +18,37 @@ package im.vector.riotx.features.home.room.detail.timeline.factory
 
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotx.features.home.room.detail.timeline.helper.AvatarSizeProvider
+import im.vector.riotx.features.home.AvatarRenderer
+import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
+import im.vector.riotx.features.home.room.detail.timeline.helper.MessageInformationDataFactory
 import im.vector.riotx.features.home.room.detail.timeline.item.DefaultItem
 import im.vector.riotx.features.home.room.detail.timeline.item.DefaultItem_
 import javax.inject.Inject
 
-class DefaultItemFactory @Inject constructor(private val avatarSizeProvider: AvatarSizeProvider) {
+class DefaultItemFactory @Inject constructor(private val avatarSizeProvider: AvatarSizeProvider,
+                                             private val avatarRenderer: AvatarRenderer,
+                                             private val informationDataFactory: MessageInformationDataFactory) {
 
-    fun create(event: TimelineEvent, highlight: Boolean, exception: Exception? = null): DefaultItem? {
+    fun create(event: TimelineEvent,
+               highlight: Boolean,
+               callback: TimelineEventController.Callback?,
+               exception: Exception? = null): DefaultItem? {
         val text = if (exception == null) {
             "${event.root.getClearType()} events are not yet handled"
         } else {
             "an exception occurred when rendering the event ${event.root.eventId}"
         }
+
+        val informationData = informationDataFactory.create(event, null)
+
         return DefaultItem_()
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .highlighted(highlight)
                 .text(text)
-
+                .avatarRenderer(avatarRenderer)
+                .informationData(informationData)
+                .baseCallback(callback)
+                .readReceiptsCallback(callback)
     }
 
 }

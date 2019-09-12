@@ -88,6 +88,7 @@
         <attr name="vctr_pill_background_room_alias" format="reference" />
         <attr name="vctr_pill_text_color_user_id" format="reference" />
         <attr name="vctr_pill_text_color_room_alias" format="reference" />
+        <attr name="vctr_pill_receipt" format="reference" />
 
         <!-- Widget banner background -->
         <attr name="vctr_widget_banner_background" format="color" />

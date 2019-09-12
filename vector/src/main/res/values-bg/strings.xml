@@ -326,7 +326,7 @@
     <string name="room_unsent_messages_notification">Съобщенията не са изпратени. %1$s или %2$s?</string>
     <string name="room_unknown_devices_messages_notification">Съобщението не е изпратено поради наличието на непознати устройства. %1$s или %2$s?</string>
     <string name="room_prompt_resend">Изпрати всички отново</string>
-    <string name="room_prompt_cancel">откажи всички</string>
+    <string name="room_prompt_cancel">Откажи всички</string>
     <string name="room_resend_unsent_messages">Изпрати отново неизпратените съобщения</string>
     <string name="room_delete_unsent_messages">Изтрий неизпратените съобщения</string>
     <string name="room_message_file_not_found">Файлът не е намерен</string>
@@ -1599,5 +1599,18 @@
     <string name="labs_swipe_to_reply_in_timeline">Активирай отговаряне от списъка с чатове при приплъзване</string>
 
     <string name="link_copied_to_clipboard">Връзката беше копирана</string>
+
+    <string name="settings_integration_manager">Мениджър на интеграции</string>
+
+    <string name="integration_manager_not_configured">Не е конфигуриран мениджър на интеграции.</string>
+    <string name="add_by_matrix_id">Добави по Matrix идентификатор</string>
+    <string name="creating_direct_room">Създаване на стая…</string>
+    <string name="direct_room_no_known_users">Не са намерени резултати, използва \"Добави по Matrix идентификатор\" за търсене на сървъра.</string>
+    <string name="direct_room_start_search">Започнете да пишете, за да получите резултати</string>
+    <string name="direct_room_filter_hint">Филтрирай по потребител или ID…</string>
+
+    <string name="joining_room">Присъединяване в стая…</string>
+
+    <string name="message_view_edit_history">Виж историята на редакциите</string>
 
 </resources>

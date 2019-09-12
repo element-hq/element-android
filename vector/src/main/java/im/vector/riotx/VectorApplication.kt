@@ -66,6 +66,7 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
     @Inject lateinit var authenticator: Authenticator
     @Inject lateinit var vectorConfiguration: VectorConfiguration
     @Inject lateinit var emojiCompatFontProvider: EmojiCompatFontProvider
+    @Inject lateinit var emojiCompatWrapper: EmojiCompatWrapper
     @Inject lateinit var vectorUncaughtExceptionHandler: VectorUncaughtExceptionHandler
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
@@ -85,9 +86,12 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
         vectorComponent = DaggerVectorComponent.factory().create(this)
         vectorComponent.inject(this)
         vectorUncaughtExceptionHandler.activate(this)
-        // Log
-        VectorFileLogger.init(this)
-        Timber.plant(Timber.DebugTree(), VectorFileLogger)
+
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        }
+        Timber.plant(vectorComponent.vectorFileLogger())
+
         if (BuildConfig.DEBUG) {
             Stetho.initializeWithDefaults(this)
         }
@@ -105,6 +109,9 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
         )
         FontsContractCompat.requestFont(this, fontRequest, emojiCompatFontProvider, getFontThreadHandler())
         vectorConfiguration.initConfiguration()
+
+        emojiCompatWrapper.init(fontRequest)
+
         NotificationUtils.createNotificationChannels(applicationContext)
         if (authenticator.hasAuthenticatedSessions() && !activeSessionHolder.hasActiveSession()) {
             val lastAuthenticatedSession = authenticator.getLastAuthenticatedSession()!!

@@ -167,4 +167,9 @@
     <string name="initial_sync_start_importing_account_data">Начална синхронизация:
 \nИмпортиране на данни за профила</string>
 
+    <string name="notice_room_update">%s обнови тази стая.</string>
+
+    <string name="event_status_sending_message">Изпращане на съобщение…</string>
+    <string name="clear_timeline_send_queue">Изчисти опашката за изпращане</string>
+
 </resources>
