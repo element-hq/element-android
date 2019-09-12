@@ -17,6 +17,7 @@
 package im.vector.matrix.android.api.session.room.model
 
 import im.vector.matrix.android.api.session.room.model.tag.RoomTag
+import im.vector.matrix.android.api.session.room.send.UserDraft
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 
 /**
@@ -36,7 +37,8 @@ data class RoomSummary(
         val hasUnreadMessages: Boolean = false,
         val tags: List<RoomTag> = emptyList(),
         val membership: Membership = Membership.NONE,
-        val versioningState: VersioningState = VersioningState.NONE
+        val versioningState: VersioningState = VersioningState.NONE,
+        val userDrafts: List<UserDraft> = emptyList()
 ) {
 
     val isVersioned: Boolean

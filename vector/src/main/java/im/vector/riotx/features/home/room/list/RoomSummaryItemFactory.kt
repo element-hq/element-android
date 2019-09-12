@@ -133,6 +133,7 @@ class RoomSummaryItemFactory @Inject constructor(private val noticeEventFormatte
                 .showHighlighted(showHighlighted)
                 .unreadNotificationCount(unreadCount)
                 .hasUnreadMessage(roomSummary.hasUnreadMessages)
+                .hasDraft(roomSummary.userDrafts.isNotEmpty())
                 .listener { listener?.onRoomSelected(roomSummary) }
     }
 

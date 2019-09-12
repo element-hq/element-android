@@ -22,7 +22,7 @@ import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.tag.RoomTag
 import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
-import java.util.UUID
+import java.util.*
 import javax.inject.Inject
 
 internal class RoomSummaryMapper @Inject constructor(
@@ -67,7 +67,8 @@ internal class RoomSummaryMapper @Inject constructor(
                 hasUnreadMessages = roomSummaryEntity.hasUnreadMessages,
                 tags = tags,
                 membership = roomSummaryEntity.membership,
-                versioningState = roomSummaryEntity.versioningState
+                versioningState = roomSummaryEntity.versioningState,
+                userDrafts = roomSummaryEntity.userDrafts?.userDrafts?.map { DraftMapper.map(it) } ?: emptyList()
         )
     }
 }

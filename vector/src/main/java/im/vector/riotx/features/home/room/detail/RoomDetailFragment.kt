@@ -53,6 +53,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.jaiselrahman.filepicker.activity.FilePickerActivity
 import com.jaiselrahman.filepicker.config.Configurations
 import com.jaiselrahman.filepicker.model.MediaFile
+import com.jakewharton.rxbinding3.widget.afterTextChangeEvents
 import com.otaliastudios.autocomplete.Autocomplete
 import com.otaliastudios.autocomplete.AutocompleteCallback
 import com.otaliastudios.autocomplete.CharPolicy
@@ -64,7 +65,6 @@ import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
-import im.vector.matrix.android.api.session.room.timeline.getTextEditableContent
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
@@ -107,6 +107,7 @@ import im.vector.riotx.features.notifications.NotificationDrawerManager
 import im.vector.riotx.features.reactions.EmojiReactionPickerActivity
 import im.vector.riotx.features.settings.VectorPreferences
 import im.vector.riotx.features.themes.ThemeUtils
+import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_detail.*
 import kotlinx.android.synthetic.main.merge_composer_layout.view.*
@@ -114,6 +115,7 @@ import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
 import org.commonmark.parser.Parser
 import timber.log.Timber
 import java.io.File
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
@@ -242,10 +244,10 @@ class RoomDetailFragment :
 
         roomDetailViewModel.selectSubscribe(RoomDetailViewState::sendMode) { mode ->
             when (mode) {
-                SendMode.REGULAR  -> exitSpecialMode()
-                is SendMode.EDIT  -> enterSpecialMode(mode.timelineEvent, R.drawable.ic_edit, true)
-                is SendMode.QUOTE -> enterSpecialMode(mode.timelineEvent, R.drawable.ic_quote, false)
-                is SendMode.REPLY -> enterSpecialMode(mode.timelineEvent, R.drawable.ic_reply, false)
+                is SendMode.REGULAR -> renderRegularMode(mode.text)
+                is SendMode.EDIT    -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_edit, mode.text)
+                is SendMode.QUOTE   -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_quote, mode.text)
+                is SendMode.REPLY   -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_reply, mode.text)
             }
         }
 
@@ -300,14 +302,16 @@ class RoomDetailFragment :
         return super.onOptionsItemSelected(item)
     }
 
-    private fun exitSpecialMode() {
+    private fun renderRegularMode(text: String) {
         commandAutocompletePolicy.enabled = true
         composerLayout.collapse()
+
+        updateComposerText(text)
     }
 
-    private fun enterSpecialMode(event: TimelineEvent,
-                                 @DrawableRes iconRes: Int,
-                                 useText: Boolean) {
+    private fun renderSpecialMode(event: TimelineEvent,
+                                  @DrawableRes iconRes: Int,
+                                  defaultContent: String) {
         commandAutocompletePolicy.enabled = false
         //switch to expanded bar
         composerLayout.composerRelatedMessageTitle.apply {
@@ -321,24 +325,35 @@ class RoomDetailFragment :
         if (messageContent is MessageTextContent && messageContent.format == MessageType.FORMAT_MATRIX_HTML) {
             val parser = Parser.builder().build()
             val document = parser.parse(messageContent.formattedBody
-                                        ?: messageContent.body)
+                    ?: messageContent.body)
             formattedBody = eventHtmlRenderer.render(document)
         }
-        composerLayout.composerRelatedMessageContent.text = formattedBody
-                                                            ?: nonFormattedBody
+        composerLayout.composerRelatedMessageContent.text = formattedBody ?: nonFormattedBody
 
-        composerLayout.composerEditText.setText(if (useText) event.getTextEditableContent() else "")
+        updateComposerText(defaultContent)
+
         composerLayout.composerRelatedMessageActionIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), iconRes))
 
-        avatarRenderer.render(event.senderAvatar, event.root.senderId
-                                                  ?: "", event.senderName, composerLayout.composerRelatedMessageAvatar)
+        avatarRenderer.render(event.senderAvatar,
+                event.root.senderId ?: "",
+                event.senderName,
+                composerLayout.composerRelatedMessageAvatar)
 
-        composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text.length)
         composerLayout.expand {
             //need to do it here also when not using quick reply
             focusComposerAndShowKeyboard()
         }
         focusComposerAndShowKeyboard()
+    }
+
+    private fun updateComposerText(text: String) {
+        // Do not update if this is the same text to avoid the cursor to move
+        if (text != composerLayout.composerEditText.text.toString()) {
+            // Ignore update to avoid saving a draft
+            filterComposerTextChange = true
+            composerLayout.composerEditText.setText(text)
+            composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text.length)
+        }
     }
 
     override fun onResume() {
@@ -360,9 +375,9 @@ class RoomDetailFragment :
                 REQUEST_FILES_REQUEST_CODE, TAKE_IMAGE_REQUEST_CODE -> handleMediaIntent(data)
                 REACTION_SELECT_REQUEST_CODE                        -> {
                     val eventId = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_EVENT_ID)
-                                  ?: return
+                            ?: return
                     val reaction = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_REACTION_RESULT)
-                                   ?: return
+                            ?: return
                     //TODO check if already reacted with that?
                     roomDetailViewModel.process(RoomDetailActions.SendReaction(reaction, eventId))
                 }
@@ -397,32 +412,46 @@ class RoomDetailFragment :
 
         if (vectorPreferences.swipeToReplyIsEnabled()) {
             val swipeCallback = RoomMessageTouchHelperCallback(requireContext(),
-                                                               R.drawable.ic_reply,
-                                                               object : RoomMessageTouchHelperCallback.QuickReplayHandler {
-                                                                   override fun performQuickReplyOnHolder(model: EpoxyModel<*>) {
-                                                                       (model as? AbsMessageItem)?.informationData?.let {
-                                                                           val eventId = it.eventId
-                                                                           roomDetailViewModel.process(RoomDetailActions.EnterReplyMode(eventId))
-                                                                       }
-                                                                   }
+                    R.drawable.ic_reply,
+                    object : RoomMessageTouchHelperCallback.QuickReplayHandler {
+                        override fun performQuickReplyOnHolder(model: EpoxyModel<*>) {
+                            (model as? AbsMessageItem)?.informationData?.let {
+                                val eventId = it.eventId
+                                roomDetailViewModel.process(RoomDetailActions.EnterReplyMode(eventId, composerLayout.composerEditText.text.toString()))
+                            }
+                        }
 
-                                                                   override fun canSwipeModel(model: EpoxyModel<*>): Boolean {
-                                                                       return when (model) {
-                                                                           is MessageFileItem,
-                                                                           is MessageImageVideoItem,
-                                                                           is MessageTextItem -> {
-                                                                               return (model as AbsMessageItem).informationData.sendState == SendState.SYNCED
-                                                                           }
-                                                                           else               -> false
-                                                                       }
-                                                                   }
-                                                               })
+                        override fun canSwipeModel(model: EpoxyModel<*>): Boolean {
+                            return when (model) {
+                                is MessageFileItem,
+                                is MessageImageVideoItem,
+                                is MessageTextItem -> {
+                                    return (model as AbsMessageItem).informationData.sendState == SendState.SYNCED
+                                }
+                                else               -> false
+                            }
+                        }
+                    })
             val touchHelper = ItemTouchHelper(swipeCallback)
             touchHelper.attachToRecyclerView(recyclerView)
         }
     }
 
+    private var filterComposerTextChange = true
+
     private fun setupComposer() {
+        composerLayout.composerEditText.afterTextChangeEvents()
+                .debounce(100, TimeUnit.MILLISECONDS)
+                .subscribeBy {
+                    if (filterComposerTextChange) {
+                        Timber.d("Draft: ignore text update")
+                        filterComposerTextChange = false
+                        return@subscribeBy
+                    }
+                    roomDetailViewModel.process(RoomDetailActions.SaveDraft(it.editable.toString()))
+                }
+                .disposeOnDestroy()
+
         val elevation = 6f
         val backgroundDrawable = ColorDrawable(ThemeUtils.getColor(requireContext(), R.attr.riotx_background))
         Autocomplete.on<Command>(composerLayout.composerEditText)
@@ -492,8 +521,7 @@ class RoomDetailFragment :
             }
         }
         composerLayout.composerRelatedMessageCloseButton.setOnClickListener {
-            composerLayout.composerEditText.setText("")
-            roomDetailViewModel.resetSendMode()
+            roomDetailViewModel.process(RoomDetailActions.ExitSpecialMode(composerLayout.composerEditText.text.toString()))
         }
     }
 
@@ -645,13 +673,11 @@ class RoomDetailFragment :
     private fun renderSendMessageResult(sendMessageResult: SendMessageResult) {
         when (sendMessageResult) {
             is SendMessageResult.MessageSent                -> {
-                // Clear composer
-                composerLayout.composerEditText.text = null
+                // Nothing to do, the composer will be cleared with the draft update
             }
             is SendMessageResult.SlashCommandHandled        -> {
                 sendMessageResult.messageRes?.let { showSnackWithMessage(getString(it)) }
-                // Clear composer
-                composerLayout.composerEditText.text = null
+                // The composer will be cleared with the draft update
             }
             is SendMessageResult.SlashCommandError          -> {
                 displayCommandError(getString(R.string.command_problem_with_parameters, sendMessageResult.command.command))
@@ -916,10 +942,10 @@ class RoomDetailFragment :
                 roomDetailViewModel.process(RoomDetailActions.EnterEditMode(action.eventId))
             }
             is SimpleAction.Quote               -> {
-                roomDetailViewModel.process(RoomDetailActions.EnterQuoteMode(action.eventId))
+                roomDetailViewModel.process(RoomDetailActions.EnterQuoteMode(action.eventId, composerLayout.composerEditText.text.toString()))
             }
             is SimpleAction.Reply               -> {
-                roomDetailViewModel.process(RoomDetailActions.EnterReplyMode(action.eventId))
+                roomDetailViewModel.process(RoomDetailActions.EnterReplyMode(action.eventId, composerLayout.composerEditText.text.toString()))
             }
             is SimpleAction.CopyPermalink       -> {
                 val permalink = PermalinkFactory.createPermalink(roomDetailArgs.roomId, action.eventId)

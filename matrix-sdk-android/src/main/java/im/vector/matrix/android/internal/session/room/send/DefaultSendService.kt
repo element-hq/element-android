@@ -17,33 +17,29 @@
 package im.vector.matrix.android.internal.session.room.send
 
 import android.content.Context
-import androidx.work.BackoffPolicy
-import androidx.work.ExistingWorkPolicy
-import androidx.work.OneTimeWorkRequest
-import androidx.work.Operation
-import androidx.work.WorkManager
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
+import androidx.work.*
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.BuildConfig
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.crypto.CryptoService
-import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.api.session.events.model.EventType
-import im.vector.matrix.android.api.session.events.model.isImageMessage
-import im.vector.matrix.android.api.session.events.model.isTextMessage
-import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.events.model.*
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.send.SendService
 import im.vector.matrix.android.api.session.room.send.SendState
+import im.vector.matrix.android.api.session.room.send.UserDraft
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.CancelableBag
+import im.vector.matrix.android.internal.database.RealmLiveData
+import im.vector.matrix.android.internal.database.mapper.DraftMapper
 import im.vector.matrix.android.internal.database.mapper.asDomain
-import im.vector.matrix.android.internal.database.model.EventEntity
-import im.vector.matrix.android.internal.database.model.RoomEntity
-import im.vector.matrix.android.internal.database.model.TimelineEventEntity
+import im.vector.matrix.android.internal.database.model.*
 import im.vector.matrix.android.internal.database.query.findAllInRoomWithSendStates
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.content.UploadContentWorker
@@ -75,6 +71,7 @@ internal class DefaultSendService @AssistedInject constructor(@Assisted private 
     }
 
     private val workerFutureListenerExecutor = Executors.newSingleThreadExecutor()
+
     override fun sendTextMessage(text: String, msgType: String, autoMarkdown: Boolean): Cancelable {
         val event = localEchoEventFactory.createTextEvent(roomId, msgType, text, autoMarkdown).also {
             saveLocalEcho(it)
@@ -165,12 +162,10 @@ internal class DefaultSendService @AssistedInject constructor(@Assisted private 
 
     override fun deleteFailedEcho(localEcho: TimelineEvent) {
         monarchy.writeAsync { realm ->
-            TimelineEventEntity.where(realm, eventId = localEcho.root.eventId
-                                                       ?: "").findFirst()?.let {
+            TimelineEventEntity.where(realm, eventId = localEcho.root.eventId ?: "").findFirst()?.let {
                 it.deleteFromRealm()
             }
-            EventEntity.where(realm, eventId = localEcho.root.eventId
-                                               ?: "").findFirst()?.let {
+            EventEntity.where(realm, eventId = localEcho.root.eventId ?: "").findFirst()?.let {
                 it.deleteFromRealm()
             }
         }
