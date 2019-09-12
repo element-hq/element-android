@@ -51,8 +51,15 @@ static def gitRevisionDate() {
 }
 
 static def gitBranchName() {
-    def cmd = "git rev-parse --abbrev-ref HEAD"
-    return cmd.execute().text.trim()
+    def fromEnv = System.env.BUILDKITE_BRANCH as String ?: ""
+
+    if (!fromEnv.isEmpty()) {
+        return fromEnv
+    } else {
+        // Note: this command return "HEAD" on Buildkite, so use the system env 'BUILDKITE_BRANCH' content first
+        def cmd = "git rev-parse --abbrev-ref HEAD"
+        return cmd.execute().text.trim()
+    }
 }
 
 static def getVersionSuffix() {
@@ -75,7 +82,7 @@ project.android.buildTypes.all { buildType ->
 // 64 bits have greater value than 32 bits
 ext.abiVersionCodes = ["armeabi-v7a": 1, "arm64-v8a": 2, "x86": 3, "x86_64": 4].withDefault { 0 }
 
-def buildNumber = System.getenv("BUILDKITE_BUILD_NUMBER") as Integer ?: 0
+def buildNumber = System.env.BUILDKITE_BUILD_NUMBER as Integer ?: 0
 
 android {
     compileSdkVersion 28
