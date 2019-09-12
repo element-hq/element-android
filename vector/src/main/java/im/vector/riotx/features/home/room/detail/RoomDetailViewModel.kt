@@ -637,7 +637,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 .combineLatest(
                         room.rx().liveRoomSummary(),
                         visibleEventsObservable.distinctUntilChanged(),
-                        isEventVisibleObservable { it.hasReadMarker }.startWith(false),
+                        isEventVisibleObservable { it.hasReadMarker }.startWith(false).takeUntil { it },
                         Function3<RoomSummary, RoomDetailActions.TimelineEventTurnsVisible, Boolean, Boolean> { roomSummary, currentVisibleEvent, isReadMarkerViewVisible ->
                             val readMarkerId = roomSummary.readMarkerId
                             if (readMarkerId == null || isReadMarkerViewVisible || !timeline.isLive) {
@@ -646,7 +646,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                                 val readMarkerPosition = timeline.getIndexOfEvent(readMarkerId)
                                                          ?: Int.MAX_VALUE
                                 val currentVisibleEventPosition = timeline.getIndexOfEvent(currentVisibleEvent.event.root.eventId)
-                                                                  ?: Int.MIN_VALUE
+                                                                  ?: Int.MAX_VALUE
                                 readMarkerPosition > currentVisibleEventPosition
                             }
                         }

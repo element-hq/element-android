@@ -24,6 +24,7 @@ import im.vector.riotx.core.epoxy.VectorEpoxyModel
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
+import im.vector.riotx.features.home.room.detail.timeline.helper.AvatarSizeProvider
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageTextItem_
 import im.vector.riotx.features.home.room.detail.timeline.helper.MessageInformationDataFactory
 import im.vector.riotx.features.home.room.detail.timeline.helper.MessageItemAttributesFactory
@@ -34,6 +35,7 @@ import javax.inject.Inject
 class EncryptedItemFactory @Inject constructor(private val messageInformationDataFactory: MessageInformationDataFactory,
                                                private val colorProvider: ColorProvider,
                                                private val stringProvider: StringProvider,
+                                               private val avatarSizeProvider: AvatarSizeProvider,
                                                private val attributesFactory: MessageItemAttributesFactory) {
 
     fun create(event: TimelineEvent,
@@ -65,6 +67,7 @@ class EncryptedItemFactory @Inject constructor(private val messageInformationDat
                 val informationData = messageInformationDataFactory.create(event, nextEvent)
                 val attributes = attributesFactory.create(null, informationData, callback)
                 return MessageTextItem_()
+                        .leftGuideline(avatarSizeProvider.leftGuideline)
                         .highlighted(highlight)
                         .attributes(attributes)
                         .message(spannableStr)

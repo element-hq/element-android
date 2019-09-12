@@ -16,6 +16,7 @@
 
 package im.vector.riotx.features.home.room.detail.timeline.factory
 
+import android.view.View
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
@@ -42,7 +43,10 @@ class NoticeItemFactory @Inject constructor(
                 avatarRenderer = avatarRenderer,
                 informationData = informationData,
                 noticeText = formattedText,
-                callback = callback
+                itemLongClickListener = View.OnLongClickListener { view ->
+                    callback?.onEventLongClicked(informationData, null, view) ?: false
+                },
+                readReceiptsCallback = callback
         )
         return NoticeItem_()
                 .leftGuideline(avatarSizeProvider.leftGuideline)

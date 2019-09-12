@@ -34,20 +34,13 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
     @EpoxyAttribute
     lateinit var attributes: Attributes
 
-    private var longClickListener = View.OnLongClickListener {
-        return@OnLongClickListener attributes.callback?.onEventLongClicked(attributes.informationData, null, it) == true
-    }
-
-    @EpoxyAttribute
-    var readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null
-
     private val _readReceiptsClickListener = DebouncedClickListener(View.OnClickListener {
-        readReceiptsCallback?.onReadReceiptsClicked(attributes.informationData.readReceipts)
+        attributes.readReceiptsCallback?.onReadReceiptsClicked(attributes.informationData.readReceipts)
     })
 
     private val _readMarkerCallback = object : ReadMarkerView.Callback {
         override fun onReadMarkerDisplayed() {
-            readReceiptsCallback?.onReadMarkerLongDisplayed(attributes.informationData)
+            attributes.readReceiptsCallback?.onReadMarkerLongDisplayed(attributes.informationData)
         }
     }
 
@@ -61,7 +54,7 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
                 ?: attributes.informationData.senderId,
                 holder.avatarImageView
         )
-        holder.view.setOnLongClickListener(longClickListener)
+        holder.view.setOnLongClickListener(attributes.itemLongClickListener)
         holder.readReceiptsView.render(attributes.informationData.readReceipts, attributes.avatarRenderer, _readReceiptsClickListener)
         holder.readMarkerView.bindView(attributes.informationData, _readMarkerCallback)
     }
@@ -84,7 +77,8 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
             val avatarRenderer: AvatarRenderer,
             val informationData: MessageInformationData,
             val noticeText: CharSequence,
-            val callback: TimelineEventController.BaseCallback? = null
+            val itemLongClickListener: View.OnLongClickListener? = null,
+            val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null
     )
 
     companion object {
