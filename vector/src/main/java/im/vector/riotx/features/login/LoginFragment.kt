@@ -128,6 +128,28 @@ class LoginFragment : VectorBaseFragment() {
     }
 
     override fun invalidate() = withState(viewModel) { state ->
+        when (state.asyncHomeServerLoginFlowRequest) {
+            is Loading -> {
+                progressBar.isVisible = true
+                touchArea.isVisible = true
+
+                passwordShown = false
+                renderPasswordField()
+            }
+            is Fail    -> {
+                progressBar.isVisible = false
+                touchArea.isVisible = false
+                Toast.makeText(requireActivity(), "Authenticate failure: ${state.asyncHomeServerLoginFlowRequest.error}", Toast.LENGTH_LONG).show()
+            }
+            is Success -> {
+                progressBar.isVisible = false
+                touchArea.isVisible = false
+
+                // Check login flow
+                // TODO
+            }
+        }
+
         when (state.asyncLoginAction) {
             is Loading -> {
                 progressBar.isVisible = true

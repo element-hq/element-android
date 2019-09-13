@@ -25,6 +25,7 @@ import im.vector.matrix.android.api.auth.Authenticator
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.util.Cancelable
+import im.vector.matrix.android.internal.auth.data.LoginFlowResponse
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.extensions.configureAndStart
 import im.vector.riotx.core.platform.VectorViewModel
@@ -104,6 +105,8 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
     }
 
     private fun handleUpdateHomeserver(action: LoginActions.UpdateHomeServer) {
+        currentTask?.cancel()
+
         Try {
             val homeServerUri = action.homeServerUrl
             homeServerConnectionConfig = HomeServerConnectionConfig.Builder()
@@ -111,22 +114,49 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                     .build()
         }
 
+        val homeServerConnectionConfigFinal = homeServerConnectionConfig
 
-        // TODO Do request
+        if (homeServerConnectionConfigFinal == null) {
+            // This is invalid
+            setState {
+                copy(
+                        asyncHomeServerLoginFlowRequest = Fail(Throwable("Baf format"))
+                )
+            }
+        } else {
 
-        /*
-        currentTask?.cancel()
+            setState {
+                copy(
+                        asyncHomeServerLoginFlowRequest = Loading()
+                )
+            }
 
-        setState {
-            copy(
-                    asyncHomeServerLoginFlowRequest = Loading()
-            )
+
+            currentTask = authenticator.getLoginFlow(homeServerConnectionConfigFinal, object : MatrixCallback<LoginFlowResponse> {
+                override fun onFailure(failure: Throwable) {
+                    setState {
+                        copy(
+                                asyncHomeServerLoginFlowRequest = Fail(failure)
+                        )
+                    }
+                }
+
+                override fun onSuccess(data: LoginFlowResponse) {
+                    setState {
+                        copy(
+                                asyncHomeServerLoginFlowRequest = Success(data)
+                        )
+                    }
+
+                    handleLoginFlowResponse(data)
+                }
+            })
+
         }
+    }
 
+    private fun handleLoginFlowResponse(loginFlowResponse: LoginFlowResponse) {
 
-        // TODO currentTask =
-
-         */
     }
 
 

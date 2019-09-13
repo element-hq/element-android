@@ -25,6 +25,7 @@ import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.SessionManager
+import im.vector.matrix.android.internal.auth.data.LoginFlowResponse
 import im.vector.matrix.android.internal.auth.data.PasswordLoginParams
 import im.vector.matrix.android.internal.auth.data.ThreePidMedium
 import im.vector.matrix.android.internal.di.Unauthenticated
@@ -62,11 +63,20 @@ internal class DefaultAuthenticator @Inject constructor(@Unauthenticated
         return sessionManager.getOrCreateSession(sessionParams)
     }
 
+    override fun getLoginFlow(homeServerConnectionConfig: HomeServerConnectionConfig, callback: MatrixCallback<LoginFlowResponse>): Cancelable {
+        val job = GlobalScope.launch(coroutineDispatchers.main) {
+            val result = runCatching {
+                getLoginFlowInternal(homeServerConnectionConfig)
+            }
+            result.foldToCallback(callback)
+        }
+        return CancelableCoroutine(job)
+    }
+
     override fun authenticate(homeServerConnectionConfig: HomeServerConnectionConfig,
                               login: String,
                               password: String,
                               callback: MatrixCallback<Session>): Cancelable {
-
         val job = GlobalScope.launch(coroutineDispatchers.main) {
             val sessionOrFailure = runCatching {
                 authenticate(homeServerConnectionConfig, login, password)
@@ -74,7 +84,14 @@ internal class DefaultAuthenticator @Inject constructor(@Unauthenticated
             sessionOrFailure.foldToCallback(callback)
         }
         return CancelableCoroutine(job)
+    }
 
+    private suspend fun getLoginFlowInternal(homeServerConnectionConfig: HomeServerConnectionConfig) = withContext(coroutineDispatchers.io) {
+        val authAPI = buildAuthAPI(homeServerConnectionConfig)
+
+        executeRequest<LoginFlowResponse> {
+            apiCall = authAPI.getLoginFlows()
+        }
     }
 
     private suspend fun authenticate(homeServerConnectionConfig: HomeServerConnectionConfig,
