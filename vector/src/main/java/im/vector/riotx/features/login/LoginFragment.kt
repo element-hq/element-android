@@ -112,7 +112,7 @@ class LoginFragment : VectorBaseFragment() {
     }
 
     private fun openSso() {
-        viewModel.openSso()
+        viewModel.handle(LoginActions.NavigateTo(LoginActivity.Navigation.OpenSsoLoginFallback))
     }
 
     private fun setupPasswordReveal() {

@@ -67,7 +67,7 @@ class LoginSsoFallbackFragment : VectorBaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupToolbar(login_sso_fallback_toolbar)
-        requireActivity().setTitle(R.string.login)
+        login_sso_fallback_toolbar.title = getString(R.string.login)
 
         setupWebview()
     }
@@ -143,8 +143,8 @@ class LoginSsoFallbackFragment : VectorBaseFragment() {
             override fun onReceivedError(view: WebView, errorCode: Int, description: String, failingUrl: String) {
                 super.onReceivedError(view, errorCode, description, failingUrl)
 
-                // on error case, close this activity
-                viewModel.goBack()
+                // on error case, close this fragment
+                viewModel.handle(LoginActions.NavigateTo(LoginActivity.Navigation.GoBack))
             }
 
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {

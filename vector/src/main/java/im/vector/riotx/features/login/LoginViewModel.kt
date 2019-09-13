@@ -36,9 +36,10 @@ import im.vector.riotx.core.utils.LiveEvent
 import im.vector.riotx.features.notifications.PushRuleTriggerListener
 
 class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginViewState,
-                                                 val authenticator: Authenticator,
-                                                 val activeSessionHolder: ActiveSessionHolder,
-                                                 val pushRuleTriggerListener: PushRuleTriggerListener) : VectorViewModel<LoginViewState>(initialState) {
+                                                 private val authenticator: Authenticator,
+                                                 private val activeSessionHolder: ActiveSessionHolder,
+                                                 private val pushRuleTriggerListener: PushRuleTriggerListener)
+    : VectorViewModel<LoginViewState>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -58,7 +59,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
     val navigationLiveData: LiveData<LiveEvent<LoginActivity.Navigation>>
         get() = _navigationLiveData
 
-    var homeServerConnectionConfig: HomeServerConnectionConfig? = null
+    private var homeServerConnectionConfig: HomeServerConnectionConfig? = null
     private var currentTask: Cancelable? = null
 
 
@@ -67,6 +68,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
             is LoginActions.UpdateHomeServer -> handleUpdateHomeserver(action)
             is LoginActions.Login            -> handleLogin(action)
             is LoginActions.SsoLoginSuccess  -> handleSsoLoginSuccess(action)
+            is LoginActions.NavigateTo       -> handleNavigation(action)
         }
     }
 
@@ -174,20 +176,14 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
         }
     }
 
+    private fun handleNavigation(action: LoginActions.NavigateTo) {
+        _navigationLiveData.postValue(LiveEvent(action.target))
+    }
+
     override fun onCleared() {
         super.onCleared()
 
         currentTask?.cancel()
-    }
-
-    fun openSso() {
-        // Navigate to SSO
-        _navigationLiveData.postValue(LiveEvent(LoginActivity.Navigation.OpenSsoLoginFallback))
-    }
-
-    fun goBack() {
-        // Navigate back
-        _navigationLiveData.postValue(LiveEvent(LoginActivity.Navigation.GoBack))
     }
 
     fun getHomeServerUrl(): String {

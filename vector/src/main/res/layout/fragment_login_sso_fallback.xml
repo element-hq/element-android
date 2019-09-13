@@ -10,6 +10,7 @@
         style="@style/VectorToolbarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:elevation="4dp"
         tools:subtitle="https://www.example.org"
         tools:title="@string/auth_login" />
 
