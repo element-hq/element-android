@@ -202,10 +202,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START)
         } else {
-            val handled = recursivelyDispatchOnBackPressed(supportFragmentManager)
-            if (!handled) {
-                super.onBackPressed()
-            }
+            super.onBackPressed()
         }
     }
 

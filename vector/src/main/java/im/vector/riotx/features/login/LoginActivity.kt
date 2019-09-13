@@ -79,7 +79,6 @@ class LoginActivity : VectorBaseActivity() {
         showDisclaimerDialog(this)
     }
 
-
     companion object {
         fun newIntent(context: Context): Intent {
             return Intent(context, LoginActivity::class.java)

@@ -265,18 +265,21 @@ abstract class VectorBaseActivity : BaseMvRxActivity(), HasScreenInjector {
         return super.onOptionsItemSelected(item)
     }
 
-    protected fun recursivelyDispatchOnBackPressed(fm: FragmentManager): Boolean {
-        // if (fm.backStackEntryCount == 0)
-        //     return false
+    override fun onBackPressed() {
+        val handled = recursivelyDispatchOnBackPressed(supportFragmentManager)
+        if (!handled) {
+            super.onBackPressed()
+        }
+    }
 
-        val reverseOrder = fm.fragments.filter { it is OnBackPressed }.reversed()
+    private fun recursivelyDispatchOnBackPressed(fm: FragmentManager): Boolean {
+        val reverseOrder = fm.fragments.filter { it is VectorBaseFragment }.reversed()
         for (f in reverseOrder) {
             val handledByChildFragments = recursivelyDispatchOnBackPressed(f.childFragmentManager)
             if (handledByChildFragments) {
                 return true
             }
-            val backPressable = f as OnBackPressed
-            if (backPressable.onBackPressed()) {
+            if (f is OnBackPressed && f.onBackPressed()) {
                 return true
             }
         }

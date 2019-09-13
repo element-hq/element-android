@@ -33,6 +33,7 @@ import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
+import im.vector.riotx.core.platform.OnBackPressed
 import im.vector.riotx.core.platform.VectorBaseFragment
 import kotlinx.android.synthetic.main.fragment_login_sso_fallback.*
 import timber.log.Timber
@@ -42,7 +43,7 @@ import java.net.URLDecoder
 /**
  * Only login is supported for the moment
  */
-class LoginSsoFallbackFragment : VectorBaseFragment() {
+class LoginSsoFallbackFragment : VectorBaseFragment(), OnBackPressed {
 
     private val viewModel: LoginViewModel by activityViewModel()
 
