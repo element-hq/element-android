@@ -42,15 +42,12 @@ import im.vector.riotx.features.home.createdirect.CreateDirectRoomKnownUsersFrag
 import im.vector.riotx.features.home.group.GroupListFragment
 import im.vector.riotx.features.home.room.detail.RoomDetailFragment
 import im.vector.riotx.features.home.room.detail.readreceipts.DisplayReadReceiptsBottomSheet
-import im.vector.riotx.features.home.room.detail.timeline.action.MessageActionsBottomSheet
-import im.vector.riotx.features.home.room.detail.timeline.action.MessageMenuFragment
-import im.vector.riotx.features.home.room.detail.timeline.action.QuickReactionFragment
-import im.vector.riotx.features.home.room.detail.timeline.action.ViewEditHistoryBottomSheet
-import im.vector.riotx.features.home.room.detail.timeline.action.ViewReactionBottomSheet
+import im.vector.riotx.features.home.room.detail.timeline.action.*
 import im.vector.riotx.features.home.room.filtered.FilteredRoomsActivity
 import im.vector.riotx.features.home.room.list.RoomListFragment
 import im.vector.riotx.features.invite.VectorInviteView
 import im.vector.riotx.features.login.LoginActivity
+import im.vector.riotx.features.login.LoginFragment
 import im.vector.riotx.features.media.ImageMediaViewerActivity
 import im.vector.riotx.features.media.VideoMediaViewerActivity
 import im.vector.riotx.features.navigation.Navigator
@@ -65,13 +62,7 @@ import im.vector.riotx.features.roomdirectory.createroom.CreateRoomActivity
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomFragment
 import im.vector.riotx.features.roomdirectory.picker.RoomDirectoryPickerFragment
 import im.vector.riotx.features.roomdirectory.roompreview.RoomPreviewNoPreviewFragment
-import im.vector.riotx.features.settings.VectorSettingsActivity
-import im.vector.riotx.features.settings.VectorSettingsAdvancedNotificationPreferenceFragment
-import im.vector.riotx.features.settings.VectorSettingsHelpAboutFragment
-import im.vector.riotx.features.settings.VectorSettingsNotificationPreferenceFragment
-import im.vector.riotx.features.settings.VectorSettingsNotificationsTroubleshootFragment
-import im.vector.riotx.features.settings.VectorSettingsPreferencesFragment
-import im.vector.riotx.features.settings.VectorSettingsSecurityPrivacyFragment
+import im.vector.riotx.features.settings.*
 import im.vector.riotx.features.settings.push.PushGatewaysFragment
 
 @Component(dependencies = [VectorComponent::class], modules = [AssistedInjectModule::class, ViewModelModule::class, HomeModule::class])
@@ -133,6 +124,8 @@ interface ScreenComponent {
     fun inject(keysBackupSetupStep3Fragment: KeysBackupSetupStep3Fragment)
 
     fun inject(publicRoomsFragment: PublicRoomsFragment)
+
+    fun inject(loginFragment: LoginFragment)
 
     fun inject(sasVerificationIncomingFragment: SASVerificationIncomingFragment)
 
