@@ -6,6 +6,7 @@ Features:
 
 Improvements:
  - Add unread indent on room list (#485)
+ - Message Editing: Update notifications (#128)
 
 Other changes:
  -

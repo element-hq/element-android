@@ -21,6 +21,7 @@ import androidx.core.app.NotificationCompat
 data class InviteNotifiableEvent(
         override var matrixID: String?,
         override val eventId: String,
+        override val editedEventId: String?,
         var roomId: String,
         override var noisy: Boolean,
         override val title: String,

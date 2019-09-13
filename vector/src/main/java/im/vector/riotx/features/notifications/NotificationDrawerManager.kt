@@ -101,7 +101,28 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                     //keep the existing one, do not replace
                 }
             } else {
-                eventList.add(notifiableEvent)
+                // Check if this is an edit
+                if (notifiableEvent.editedEventId != null) {
+                    // This is an edition
+                    val eventBeforeEdition = eventList.firstOrNull {
+                        // Edition of an event
+                        it.eventId == notifiableEvent.editedEventId
+                                // or edition of an edition
+                                || it.editedEventId == notifiableEvent.editedEventId
+                    }
+
+                    if (eventBeforeEdition != null) {
+                        // Replace the existing notification with the new content
+                        eventList.remove(eventBeforeEdition)
+
+                        eventList.add(notifiableEvent)
+                    } else {
+                        // Ignore an edit of a not displayed event in the notification drawer
+                    }
+                } else {
+                    // Not an edit
+                    eventList.add(notifiableEvent)
+                }
             }
         }
     }
