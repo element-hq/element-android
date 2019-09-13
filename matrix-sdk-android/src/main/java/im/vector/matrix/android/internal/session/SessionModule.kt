@@ -35,16 +35,16 @@ import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.di.Unauthenticated
 import im.vector.matrix.android.internal.network.AccessTokenInterceptor
 import im.vector.matrix.android.internal.network.RetrofitFactory
+import im.vector.matrix.android.internal.network.interceptors.CurlLoggingInterceptor
 import im.vector.matrix.android.internal.session.group.GroupSummaryUpdater
-import im.vector.matrix.android.internal.session.room.DefaultRoomFactory
 import im.vector.matrix.android.internal.session.room.EventRelationsAggregationUpdater
-import im.vector.matrix.android.internal.session.room.RoomFactory
 import im.vector.matrix.android.internal.session.room.create.RoomCreateEventLiveObserver
 import im.vector.matrix.android.internal.session.room.prune.EventsPruner
 import im.vector.matrix.android.internal.session.room.tombstone.RoomTombstoneEventLiveObserver
 import im.vector.matrix.android.internal.util.md5
 import io.realm.RealmConfiguration
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import java.io.File
 
@@ -94,14 +94,29 @@ internal abstract class SessionModule {
                     .build()
         }
 
+        // TODO Check with Ganfra, I do not want to add this, I want to use the CurlLoggingInterceptor of @MatrixScope
+        @Provides
+        @JvmStatic
+        fun providesCurlLoggingInterceptor(): CurlLoggingInterceptor {
+            return CurlLoggingInterceptor(HttpLoggingInterceptor.Logger.DEFAULT)
+        }
+
+
         @JvmStatic
         @Provides
         @SessionScope
         @Authenticated
         fun providesOkHttpClient(@Unauthenticated okHttpClient: OkHttpClient,
-                                 accessTokenInterceptor: AccessTokenInterceptor): OkHttpClient {
+                                 accessTokenInterceptor: AccessTokenInterceptor,
+                                 curlLoggingInterceptor: CurlLoggingInterceptor): OkHttpClient {
             return okHttpClient.newBuilder()
+                    .apply {
+                        // Remove the previous CurlLoggingInterceptor, to add it after the accessTokenInterceptor
+                        val existingCurlInterceptors = interceptors().filterIsInstance<CurlLoggingInterceptor>()
+                        interceptors().removeAll(existingCurlInterceptors)
+                    }
                     .addInterceptor(accessTokenInterceptor)
+                    .addInterceptor(curlLoggingInterceptor)
                     .build()
         }
 
