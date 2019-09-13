@@ -65,6 +65,7 @@
         <activity android:name=".features.home.room.detail.RoomDetailActivity" />
         <activity android:name=".features.debug.DebugMenuActivity" />
         <activity android:name=".features.home.createdirect.CreateDirectRoomActivity" />
+        <activity android:name=".features.webview.VectorWebViewActivity" />
 
         <!-- Services -->
 
