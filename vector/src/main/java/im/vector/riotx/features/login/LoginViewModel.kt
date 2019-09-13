@@ -16,6 +16,8 @@
 
 package im.vector.riotx.features.login
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import arrow.core.Try
 import com.airbnb.mvrx.*
 import com.squareup.inject.assisted.Assisted
@@ -25,10 +27,12 @@ import im.vector.matrix.android.api.auth.Authenticator
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.util.Cancelable
+import im.vector.matrix.android.internal.auth.data.InteractiveAuthenticationFlow
 import im.vector.matrix.android.internal.auth.data.LoginFlowResponse
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.extensions.configureAndStart
 import im.vector.riotx.core.platform.VectorViewModel
+import im.vector.riotx.core.utils.LiveEvent
 import im.vector.riotx.features.notifications.PushRuleTriggerListener
 
 class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginViewState,
@@ -50,9 +54,9 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
         }
     }
 
-    init {
-
-    }
+    private val _navigationLiveData = MutableLiveData<LiveEvent<LoginActivity.Navigation>>()
+    val navigationLiveData: LiveData<LiveEvent<LoginActivity.Navigation>>
+        get() = _navigationLiveData
 
     var homeServerConnectionConfig: HomeServerConnectionConfig? = null
     private var currentTask: Cancelable? = null
@@ -62,6 +66,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
         when (action) {
             is LoginActions.UpdateHomeServer -> handleUpdateHomeserver(action)
             is LoginActions.Login            -> handleLogin(action)
+            is LoginActions.SsoLoginSuccess  -> handleSsoLoginSuccess(action)
         }
     }
 
@@ -83,14 +88,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
 
             authenticator.authenticate(homeServerConnectionConfigFinal, action.login, action.password, object : MatrixCallback<Session> {
                 override fun onSuccess(data: Session) {
-                    activeSessionHolder.setActiveSession(data)
-                    data.configureAndStart(pushRuleTriggerListener)
-
-                    setState {
-                        copy(
-                                asyncLoginAction = Success(Unit)
-                        )
-                    }
+                    onSessionCreated(data)
                 }
 
                 override fun onFailure(failure: Throwable) {
@@ -103,6 +101,24 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
             })
         }
     }
+
+    private fun onSessionCreated(session: Session) {
+        activeSessionHolder.setActiveSession(session)
+        session.configureAndStart(pushRuleTriggerListener)
+
+        setState {
+            copy(
+                    asyncLoginAction = Success(Unit)
+            )
+        }
+    }
+
+    private fun handleSsoLoginSuccess(action: LoginActions.SsoLoginSuccess) {
+        val session = authenticator.createSessionFromSso(action.credentials, homeServerConnectionConfig!!)
+
+        onSessionCreated(session)
+    }
+
 
     private fun handleUpdateHomeserver(action: LoginActions.UpdateHomeServer) {
         currentTask?.cancel()
@@ -120,17 +136,15 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
             // This is invalid
             setState {
                 copy(
-                        asyncHomeServerLoginFlowRequest = Fail(Throwable("Baf format"))
+                        asyncHomeServerLoginFlowRequest = Fail(Throwable("Bad format"))
                 )
             }
         } else {
-
             setState {
                 copy(
                         asyncHomeServerLoginFlowRequest = Loading()
                 )
             }
-
 
             currentTask = authenticator.getLoginFlow(homeServerConnectionConfigFinal, object : MatrixCallback<LoginFlowResponse> {
                 override fun onFailure(failure: Throwable) {
@@ -142,23 +156,23 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                 }
 
                 override fun onSuccess(data: LoginFlowResponse) {
-                    setState {
-                        copy(
-                                asyncHomeServerLoginFlowRequest = Success(data)
-                        )
+                    val loginMode = when {
+                        // SSO login is taken first
+                        data.flows.any { it.type == InteractiveAuthenticationFlow.TYPE_LOGIN_SSO }      -> LoginMode.Sso
+                        data.flows.any { it.type == InteractiveAuthenticationFlow.TYPE_LOGIN_PASSWORD } -> LoginMode.Password
+                        else                                                                            -> LoginMode.Unsupported
                     }
 
-                    handleLoginFlowResponse(data)
+                    setState {
+                        copy(
+                                asyncHomeServerLoginFlowRequest = Success(loginMode)
+                        )
+                    }
                 }
             })
 
         }
     }
-
-    private fun handleLoginFlowResponse(loginFlowResponse: LoginFlowResponse) {
-
-    }
-
 
     override fun onCleared() {
         super.onCleared()
@@ -166,4 +180,17 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
         currentTask?.cancel()
     }
 
+    fun openSso() {
+        // Navigate to SSO
+        _navigationLiveData.postValue(LiveEvent(LoginActivity.Navigation.OpenSsoLoginFallback))
+    }
+
+    fun goBack() {
+        // Navigate back
+        _navigationLiveData.postValue(LiveEvent(LoginActivity.Navigation.GoBack))
+    }
+
+    fun getHomeServerUrl(): String {
+        return homeServerConnectionConfig?.homeServerUri?.toString() ?: ""
+    }
 }

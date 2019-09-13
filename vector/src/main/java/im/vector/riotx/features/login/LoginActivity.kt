@@ -18,15 +18,29 @@ package im.vector.riotx.features.login
 
 import android.content.Context
 import android.content.Intent
+import androidx.fragment.app.FragmentManager
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.viewModel
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.addFragment
+import im.vector.riotx.core.extensions.addFragmentToBackstack
+import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.features.disclaimer.showDisclaimerDialog
+import im.vector.riotx.features.home.HomeActivity
 import javax.inject.Inject
 
 
 class LoginActivity : VectorBaseActivity() {
+
+    // Supported navigation actions for this Activity
+    sealed class Navigation {
+        object OpenSsoLoginFallback : Navigation()
+        object GoBack : Navigation()
+    }
+
+    private val loginViewModel: LoginViewModel by viewModel()
 
     @Inject lateinit var loginViewModelFactory: LoginViewModel.Factory
 
@@ -40,6 +54,21 @@ class LoginActivity : VectorBaseActivity() {
     override fun initUiAndData() {
         if (isFirstCreation()) {
             addFragment(LoginFragment(), R.id.simpleFragmentContainer)
+        }
+
+        loginViewModel.navigationLiveData.observeEvent(this) {
+            when (it) {
+                is Navigation.OpenSsoLoginFallback -> addFragmentToBackstack(LoginSsoFallbackFragment(), R.id.simpleFragmentContainer)
+                is Navigation.GoBack               -> supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            }
+        }
+
+        loginViewModel.selectSubscribe(this, LoginViewState::asyncLoginAction) {
+            if (it is Success) {
+                val intent = HomeActivity.newIntent(this)
+                startActivity(intent)
+                finish()
+            }
         }
     }
 

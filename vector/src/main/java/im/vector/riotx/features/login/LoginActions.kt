@@ -16,9 +16,12 @@
 
 package im.vector.riotx.features.login
 
+import im.vector.matrix.android.api.auth.data.Credentials
+
 sealed class LoginActions {
 
     data class UpdateHomeServer(val homeServerUrl: String) : LoginActions()
     data class Login(val login: String, val password: String) : LoginActions()
+    data class SsoLoginSuccess(val credentials: Credentials) : LoginActions()
 
 }

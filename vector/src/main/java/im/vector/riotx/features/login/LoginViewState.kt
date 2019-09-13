@@ -19,9 +19,15 @@ package im.vector.riotx.features.login
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
-import im.vector.matrix.android.internal.auth.data.LoginFlowResponse
 
 data class LoginViewState(
         val asyncLoginAction: Async<Unit> = Uninitialized,
-        val asyncHomeServerLoginFlowRequest: Async<LoginFlowResponse> = Uninitialized
+        val asyncHomeServerLoginFlowRequest: Async<LoginMode> = Uninitialized
 ) : MvRxState
+
+
+enum class LoginMode {
+    Password,
+    Sso,
+    Unsupported
+}

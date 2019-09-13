@@ -30,4 +30,12 @@ data class InteractiveAuthenticationFlow(
 
         @Json(name = "stages")
         val stages: List<String>? = null
-)
+) {
+
+    companion object {
+        // Possible values for type
+        const val TYPE_LOGIN_SSO = "m.login.sso"
+        const val TYPE_LOGIN_TOKEN = "m.login.token"
+        const val TYPE_LOGIN_PASSWORD = "m.login.password"
+    }
+}

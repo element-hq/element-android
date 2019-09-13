@@ -48,6 +48,7 @@ import im.vector.riotx.features.home.room.list.RoomListFragment
 import im.vector.riotx.features.invite.VectorInviteView
 import im.vector.riotx.features.login.LoginActivity
 import im.vector.riotx.features.login.LoginFragment
+import im.vector.riotx.features.login.LoginSsoFallbackFragment
 import im.vector.riotx.features.media.ImageMediaViewerActivity
 import im.vector.riotx.features.media.VideoMediaViewerActivity
 import im.vector.riotx.features.navigation.Navigator
@@ -126,6 +127,8 @@ interface ScreenComponent {
     fun inject(publicRoomsFragment: PublicRoomsFragment)
 
     fun inject(loginFragment: LoginFragment)
+
+    fun inject(loginSsoFallbackFragment: LoginSsoFallbackFragment)
 
     fun inject(sasVerificationIncomingFragment: SASVerificationIncomingFragment)
 

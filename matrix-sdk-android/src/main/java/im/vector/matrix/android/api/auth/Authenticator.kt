@@ -17,6 +17,7 @@
 package im.vector.matrix.android.api.auth
 
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.session.Session
@@ -62,4 +63,9 @@ interface Authenticator {
      * @return the associated session if any, or null
      */
     fun getSession(sessionParams: SessionParams): Session?
+
+    /**
+     * Create a session after a SSO successful login
+     */
+    fun createSessionFromSso(credentials: Credentials, homeServerConnectionConfig: HomeServerConnectionConfig): Session
 }

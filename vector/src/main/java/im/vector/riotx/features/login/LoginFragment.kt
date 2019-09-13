@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.transition.TransitionManager
 import com.airbnb.mvrx.*
 import com.jakewharton.rxbinding3.view.focusChanges
 import com.jakewharton.rxbinding3.widget.textChanges
@@ -30,12 +31,11 @@ import im.vector.riotx.core.extensions.setTextWithColoredPart
 import im.vector.riotx.core.extensions.showPassword
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.utils.openUrlInExternalBrowser
-import im.vector.riotx.features.home.HomeActivity
 import im.vector.riotx.features.homeserver.ServerUrlsRepository
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
 import io.reactivex.rxkotlin.subscribeBy
-import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.fragment_login.*
 import javax.inject.Inject
 
 
@@ -51,7 +51,7 @@ class LoginFragment : VectorBaseFragment() {
 
     @Inject lateinit var errorFormatter: ErrorFormatter
 
-    override fun getLayoutResId() = R.layout.activity_login
+    override fun getLayoutResId() = R.layout.fragment_login
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
@@ -107,6 +107,12 @@ class LoginFragment : VectorBaseFragment() {
                 .subscribeBy { authenticateButton.isEnabled = it }
                 .disposeOnDestroy()
         authenticateButton.setOnClickListener { authenticate() }
+
+        authenticateButtonSso.setOnClickListener { openSso() }
+    }
+
+    private fun openSso() {
+        viewModel.openSso()
     }
 
     private fun setupPasswordReveal() {
@@ -128,25 +134,53 @@ class LoginFragment : VectorBaseFragment() {
     }
 
     override fun invalidate() = withState(viewModel) { state ->
+        TransitionManager.beginDelayedTransition(login_fragment)
+
         when (state.asyncHomeServerLoginFlowRequest) {
-            is Loading -> {
+            is Incomplete -> {
                 progressBar.isVisible = true
                 touchArea.isVisible = true
-
+                loginField.isVisible = false
+                passwordContainer.isVisible = false
+                authenticateButton.isVisible = false
+                authenticateButtonSso.isVisible = false
                 passwordShown = false
                 renderPasswordField()
             }
-            is Fail    -> {
+            is Fail       -> {
                 progressBar.isVisible = false
                 touchArea.isVisible = false
+                loginField.isVisible = false
+                passwordContainer.isVisible = false
+                authenticateButton.isVisible = false
+                authenticateButtonSso.isVisible = false
                 Toast.makeText(requireActivity(), "Authenticate failure: ${state.asyncHomeServerLoginFlowRequest.error}", Toast.LENGTH_LONG).show()
             }
-            is Success -> {
+            is Success    -> {
                 progressBar.isVisible = false
                 touchArea.isVisible = false
 
-                // Check login flow
-                // TODO
+                when (state.asyncHomeServerLoginFlowRequest()) {
+                    LoginMode.Password    -> {
+                        loginField.isVisible = true
+                        passwordContainer.isVisible = true
+                        authenticateButton.isVisible = true
+                        authenticateButtonSso.isVisible = false
+                    }
+                    LoginMode.Sso         -> {
+                        loginField.isVisible = false
+                        passwordContainer.isVisible = false
+                        authenticateButton.isVisible = false
+                        authenticateButtonSso.isVisible = true
+                    }
+                    LoginMode.Unsupported -> {
+                        loginField.isVisible = false
+                        passwordContainer.isVisible = false
+                        authenticateButton.isVisible = false
+                        authenticateButtonSso.isVisible = false
+                        Toast.makeText(requireActivity(), "None of the homeserver login mode is supported by RiotX", Toast.LENGTH_LONG).show()
+                    }
+                }
             }
         }
 
@@ -163,11 +197,8 @@ class LoginFragment : VectorBaseFragment() {
                 touchArea.isVisible = false
                 Toast.makeText(requireActivity(), "Authenticate failure: ${state.asyncLoginAction.error}", Toast.LENGTH_LONG).show()
             }
-            is Success -> {
-                val intent = HomeActivity.newIntent(requireActivity())
-                startActivity(intent)
-                requireActivity().finish()
-            }
+            // Success is handled by the LoginActivity
+            is Success -> Unit
         }
     }
 }

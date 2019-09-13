@@ -112,6 +112,12 @@ internal class DefaultAuthenticator @Inject constructor(@Unauthenticated
         sessionManager.getOrCreateSession(sessionParams)
     }
 
+    override fun createSessionFromSso(credentials: Credentials, homeServerConnectionConfig: HomeServerConnectionConfig): Session {
+        val sessionParams = SessionParams(credentials, homeServerConnectionConfig)
+        sessionParamsStore.save(sessionParams)
+        return sessionManager.getOrCreateSession(sessionParams)
+    }
+
     private fun buildAuthAPI(homeServerConnectionConfig: HomeServerConnectionConfig): AuthAPI {
         val retrofit = retrofitFactory.create(okHttpClient, homeServerConnectionConfig.homeServerUri.toString())
         return retrofit.create(AuthAPI::class.java)
