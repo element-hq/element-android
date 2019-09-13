@@ -20,26 +20,18 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.core.view.isVisible
-import arrow.core.Try
-import com.airbnb.mvrx.activityViewModel
-import com.airbnb.mvrx.withState
+import com.airbnb.mvrx.*
+import com.jakewharton.rxbinding3.view.focusChanges
 import com.jakewharton.rxbinding3.widget.textChanges
-import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.auth.Authenticator
-import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
-import im.vector.matrix.android.api.session.Session
 import im.vector.riotx.R
-import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.error.ErrorFormatter
-import im.vector.riotx.core.extensions.configureAndStart
 import im.vector.riotx.core.extensions.setTextWithColoredPart
 import im.vector.riotx.core.extensions.showPassword
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.utils.openUrlInExternalBrowser
 import im.vector.riotx.features.home.HomeActivity
 import im.vector.riotx.features.homeserver.ServerUrlsRepository
-import im.vector.riotx.features.notifications.PushRuleTriggerListener
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
 import io.reactivex.rxkotlin.subscribeBy
@@ -55,9 +47,6 @@ class LoginFragment : VectorBaseFragment() {
 
     private val viewModel: LoginViewModel by activityViewModel()
 
-    @Inject lateinit var authenticator: Authenticator
-    @Inject lateinit var activeSessionHolder: ActiveSessionHolder
-    @Inject lateinit var pushRuleTriggerListener: PushRuleTriggerListener
     private var passwordShown = false
 
     @Inject lateinit var errorFormatter: ErrorFormatter
@@ -75,13 +64,19 @@ class LoginFragment : VectorBaseFragment() {
         setupNotice()
         setupAuthButton()
         setupPasswordReveal()
+
+        homeServerField.focusChanges()
+                .subscribe {
+                    if (!it) {
+                        // TODO Also when clicking on button?
+                        viewModel.handle(LoginActions.UpdateHomeServer(homeServerField.text.toString()))
+                    }
+                }
+                .disposeOnDestroy()
+
+
         homeServerField.setText(ServerUrlsRepository.getDefaultHomeServerUrl(requireContext()))
-
-
-//        viewModel.joinRoomErrorLiveData.observeEvent(this) { throwable ->
-//            Snackbar.make(publicRoomsCoordinator, errorFormatter.toHumanReadable(throwable), Snackbar.LENGTH_SHORT)
-//                    .show()
-//        }
+        viewModel.handle(LoginActions.UpdateHomeServer(homeServerField.text.toString()))
     }
 
     private fun setupNotice() {
@@ -93,42 +88,10 @@ class LoginFragment : VectorBaseFragment() {
     }
 
     private fun authenticate() {
-        passwordShown = false
-        renderPasswordField()
-
         val login = loginField.text?.trim().toString()
         val password = passwordField.text?.trim().toString()
-        buildHomeServerConnectionConfig().fold(
-                { Toast.makeText(requireActivity(), "Authenticate failure: $it", Toast.LENGTH_LONG).show() },
-                { authenticateWith(it, login, password) }
-        )
-    }
 
-    private fun authenticateWith(homeServerConnectionConfig: HomeServerConnectionConfig, login: String, password: String) {
-        progressBar.isVisible = true
-        touchArea.isVisible = true
-        authenticator.authenticate(homeServerConnectionConfig, login, password, object : MatrixCallback<Session> {
-            override fun onSuccess(data: Session) {
-                activeSessionHolder.setActiveSession(data)
-                data.configureAndStart(pushRuleTriggerListener)
-                goToHome()
-            }
-
-            override fun onFailure(failure: Throwable) {
-                progressBar.isVisible = false
-                touchArea.isVisible = false
-                Toast.makeText(requireActivity(), "Authenticate failure: $failure", Toast.LENGTH_LONG).show()
-            }
-        })
-    }
-
-    private fun buildHomeServerConnectionConfig(): Try<HomeServerConnectionConfig> {
-        return Try {
-            val homeServerUri = homeServerField.text?.trim().toString()
-            HomeServerConnectionConfig.Builder()
-                    .withHomeServerUri(homeServerUri)
-                    .build()
-        }
+        viewModel.handle(LoginActions.Login(login, password))
     }
 
     private fun setupAuthButton() {
@@ -164,14 +127,25 @@ class LoginFragment : VectorBaseFragment() {
         passwordReveal.setImageResource(if (passwordShown) R.drawable.ic_eye_closed_black else R.drawable.ic_eye_black)
     }
 
-    private fun goToHome() {
-        val intent = HomeActivity.newIntent(requireActivity())
-        startActivity(intent)
-        requireActivity().finish()
-    }
-
-
     override fun invalidate() = withState(viewModel) { state ->
+        when (state.asyncLoginAction) {
+            is Loading -> {
+                progressBar.isVisible = true
+                touchArea.isVisible = true
 
+                passwordShown = false
+                renderPasswordField()
+            }
+            is Fail    -> {
+                progressBar.isVisible = false
+                touchArea.isVisible = false
+                Toast.makeText(requireActivity(), "Authenticate failure: ${state.asyncLoginAction.error}", Toast.LENGTH_LONG).show()
+            }
+            is Success -> {
+                val intent = HomeActivity.newIntent(requireActivity())
+                startActivity(intent)
+                requireActivity().finish()
+            }
+        }
     }
 }

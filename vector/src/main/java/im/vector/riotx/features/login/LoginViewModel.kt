@@ -16,14 +16,24 @@
 
 package im.vector.riotx.features.login
 
-import com.airbnb.mvrx.ActivityViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
+import arrow.core.Try
+import com.airbnb.mvrx.*
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.auth.Authenticator
+import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
+import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.util.Cancelable
+import im.vector.riotx.core.di.ActiveSessionHolder
+import im.vector.riotx.core.extensions.configureAndStart
 import im.vector.riotx.core.platform.VectorViewModel
+import im.vector.riotx.features.notifications.PushRuleTriggerListener
 
-class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginViewState) : VectorViewModel<LoginViewState>(initialState) {
+class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginViewState,
+                                                 val authenticator: Authenticator,
+                                                 val activeSessionHolder: ActiveSessionHolder,
+                                                 val pushRuleTriggerListener: PushRuleTriggerListener) : VectorViewModel<LoginViewState>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -43,5 +53,87 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
 
     }
 
+    var homeServerConnectionConfig: HomeServerConnectionConfig? = null
+    private var currentTask: Cancelable? = null
+
+
+    fun handle(action: LoginActions) {
+        when (action) {
+            is LoginActions.UpdateHomeServer -> handleUpdateHomeserver(action)
+            is LoginActions.Login            -> handleLogin(action)
+        }
+    }
+
+    private fun handleLogin(action: LoginActions.Login) {
+        val homeServerConnectionConfigFinal = homeServerConnectionConfig
+
+        if (homeServerConnectionConfigFinal == null) {
+            setState {
+                copy(
+                        asyncLoginAction = Fail(Throwable("Bad configuration"))
+                )
+            }
+        } else {
+            setState {
+                copy(
+                        asyncLoginAction = Loading()
+                )
+            }
+
+            authenticator.authenticate(homeServerConnectionConfigFinal, action.login, action.password, object : MatrixCallback<Session> {
+                override fun onSuccess(data: Session) {
+                    activeSessionHolder.setActiveSession(data)
+                    data.configureAndStart(pushRuleTriggerListener)
+
+                    setState {
+                        copy(
+                                asyncLoginAction = Success(Unit)
+                        )
+                    }
+                }
+
+                override fun onFailure(failure: Throwable) {
+                    setState {
+                        copy(
+                                asyncLoginAction = Fail(failure)
+                        )
+                    }
+                }
+            })
+        }
+    }
+
+    private fun handleUpdateHomeserver(action: LoginActions.UpdateHomeServer) {
+        Try {
+            val homeServerUri = action.homeServerUrl
+            homeServerConnectionConfig = HomeServerConnectionConfig.Builder()
+                    .withHomeServerUri(homeServerUri)
+                    .build()
+        }
+
+
+        // TODO Do request
+
+        /*
+        currentTask?.cancel()
+
+        setState {
+            copy(
+                    asyncHomeServerLoginFlowRequest = Loading()
+            )
+        }
+
+
+        // TODO currentTask =
+
+         */
+    }
+
+
+    override fun onCleared() {
+        super.onCleared()
+
+        currentTask?.cancel()
+    }
 
 }
