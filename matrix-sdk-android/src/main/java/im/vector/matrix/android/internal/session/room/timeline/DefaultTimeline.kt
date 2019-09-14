@@ -42,10 +42,11 @@ import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
+import kotlin.math.max
+import kotlin.math.min
 
 
 private const val MIN_FETCHING_COUNT = 30
-private const val DISPLAY_INDEX_UNKNOWN = Int.MIN_VALUE
 
 internal class DefaultTimeline(
         private val roomId: String,
@@ -85,8 +86,8 @@ internal class DefaultTimeline(
 
     private var roomEntity: RoomEntity? = null
 
-    private var prevDisplayIndex: Int = DISPLAY_INDEX_UNKNOWN
-    private var nextDisplayIndex: Int = DISPLAY_INDEX_UNKNOWN
+    private var prevDisplayIndex: Int? = null
+    private var nextDisplayIndex: Int? = null
     private val builtEvents = Collections.synchronizedList<TimelineEvent>(ArrayList())
     private val builtEventsIdMap = Collections.synchronizedMap(HashMap<String, Int>())
     private val backwardsPaginationState = AtomicReference(PaginationState())
@@ -222,6 +223,7 @@ internal class DefaultTimeline(
         if (isStarted.compareAndSet(true, false)) {
             eventDecryptor.destroy()
             Timber.v("Dispose timeline for roomId: $roomId and eventId: $initialEventId")
+            BACKGROUND_HANDLER.removeCallbacksAndMessages(null)
             BACKGROUND_HANDLER.post {
                 cancelableBag.cancel()
                 roomEntity?.sendingTimelineEvents?.removeAllChangeListeners()
@@ -303,11 +305,8 @@ internal class DefaultTimeline(
     private fun hasMoreInCache(direction: Timeline.Direction): Boolean {
         return Realm.getInstance(realmConfiguration).use { localRealm ->
             val timelineEventEntity = buildEventQuery(localRealm).findFirst(direction)
-                                      ?: return false
+                    ?: return false
             if (direction == Timeline.Direction.FORWARDS) {
-                if (findCurrentChunk(localRealm)?.isLastForward == true) {
-                    return false
-                }
                 val firstEvent = builtEvents.firstOrNull() ?: return true
                 firstEvent.displayIndex < timelineEventEntity.root!!.displayIndex
             } else {
@@ -334,16 +333,17 @@ internal class DefaultTimeline(
      * This has to be called on TimelineThread as it access realm live results
      * @return true if createSnapshot should be posted
      */
-    private fun paginateInternal(startDisplayIndex: Int,
+    private fun paginateInternal(startDisplayIndex: Int?,
                                  direction: Timeline.Direction,
-                                 count: Int): Boolean {
+                                 count: Int,
+                                 strict: Boolean = false): Boolean {
         updatePaginationState(direction) { it.copy(requestedCount = count, isPaginating = true) }
-        val builtCount = buildTimelineEvents(startDisplayIndex, direction, count.toLong())
+        val builtCount = buildTimelineEvents(startDisplayIndex, direction, count.toLong(), strict)
         val shouldFetchMore = builtCount < count && !hasReachedEnd(direction)
         if (shouldFetchMore) {
             val newRequestedCount = count - builtCount
             updatePaginationState(direction) { it.copy(requestedCount = newRequestedCount) }
-            val fetchingCount = Math.max(MIN_FETCHING_COUNT, newRequestedCount)
+            val fetchingCount = max(MIN_FETCHING_COUNT, newRequestedCount)
             executePaginationTask(direction, fetchingCount)
         } else {
             updatePaginationState(direction) { it.copy(isPaginating = false, requestedCount = 0) }
@@ -404,20 +404,19 @@ internal class DefaultTimeline(
                     .findFirst()
             shouldFetchInitialEvent = initialEvent == null
             initialEvent?.root?.displayIndex
-        } ?: DISPLAY_INDEX_UNKNOWN
-
+        }
         prevDisplayIndex = initialDisplayIndex
         nextDisplayIndex = initialDisplayIndex
         val currentInitialEventId = initialEventId
         if (currentInitialEventId != null && shouldFetchInitialEvent) {
             fetchEvent(currentInitialEventId)
         } else {
-            val count = Math.min(settings.initialSize, liveEvents.size)
+            val count = min(settings.initialSize, liveEvents.size)
             if (isLive) {
-                paginateInternal(initialDisplayIndex, Timeline.Direction.BACKWARDS, count)
+                paginateInternal(initialDisplayIndex, Timeline.Direction.BACKWARDS, count, strict = false)
             } else {
-                paginateInternal(initialDisplayIndex, Timeline.Direction.FORWARDS, count / 2)
-                paginateInternal(initialDisplayIndex, Timeline.Direction.BACKWARDS, count / 2)
+                paginateInternal(initialDisplayIndex, Timeline.Direction.FORWARDS, count / 2, strict = false)
+                paginateInternal(initialDisplayIndex, Timeline.Direction.BACKWARDS, count / 2, strict = true)
             }
         }
         postSnapshot()
@@ -429,9 +428,9 @@ internal class DefaultTimeline(
     private fun executePaginationTask(direction: Timeline.Direction, limit: Int) {
         val token = getTokenLive(direction) ?: return
         val params = PaginationTask.Params(roomId = roomId,
-                                           from = token,
-                                           direction = direction.toPaginationDirection(),
-                                           limit = limit)
+                from = token,
+                direction = direction.toPaginationDirection(),
+                limit = limit)
 
         Timber.v("Should fetch $limit items $direction")
         cancelableBag += paginationTask
@@ -479,14 +478,15 @@ internal class DefaultTimeline(
      * This has to be called on TimelineThread as it access realm live results
      * @return number of items who have been added
      */
-    private fun buildTimelineEvents(startDisplayIndex: Int,
+    private fun buildTimelineEvents(startDisplayIndex: Int?,
                                     direction: Timeline.Direction,
-                                    count: Long): Int {
-        if (count < 1) {
+                                    count: Long,
+                                    strict: Boolean = false): Int {
+        if (count < 1 || startDisplayIndex == null) {
             return 0
         }
         val start = System.currentTimeMillis()
-        val offsetResults = getOffsetResults(startDisplayIndex, direction, count)
+        val offsetResults = getOffsetResults(startDisplayIndex, direction, count, strict)
         if (offsetResults.isEmpty()) {
             return 0
         }
@@ -501,7 +501,7 @@ internal class DefaultTimeline(
             val timelineEvent = buildTimelineEvent(eventEntity)
 
             if (timelineEvent.isEncrypted()
-                && timelineEvent.root.mxDecryptionResult == null) {
+                    && timelineEvent.root.mxDecryptionResult == null) {
                 timelineEvent.root.eventId?.let { eventDecryptor.requestDecryption(it) }
             }
 
@@ -527,16 +527,23 @@ internal class DefaultTimeline(
      */
     private fun getOffsetResults(startDisplayIndex: Int,
                                  direction: Timeline.Direction,
-                                 count: Long): RealmResults<TimelineEventEntity> {
+                                 count: Long,
+                                 strict: Boolean): RealmResults<TimelineEventEntity> {
         val offsetQuery = liveEvents.where()
         if (direction == Timeline.Direction.BACKWARDS) {
-            offsetQuery
-                    .sort(TimelineEventEntityFields.ROOT.DISPLAY_INDEX, Sort.DESCENDING)
-                    .lessThanOrEqualTo(TimelineEventEntityFields.ROOT.DISPLAY_INDEX, startDisplayIndex)
+            offsetQuery.sort(TimelineEventEntityFields.ROOT.DISPLAY_INDEX, Sort.DESCENDING)
+            if (strict) {
+                offsetQuery.lessThan(TimelineEventEntityFields.ROOT.DISPLAY_INDEX, startDisplayIndex)
+            } else {
+                offsetQuery.lessThanOrEqualTo(TimelineEventEntityFields.ROOT.DISPLAY_INDEX, startDisplayIndex)
+            }
         } else {
-            offsetQuery
-                    .sort(TimelineEventEntityFields.ROOT.DISPLAY_INDEX, Sort.ASCENDING)
-                    .greaterThanOrEqualTo(TimelineEventEntityFields.ROOT.DISPLAY_INDEX, startDisplayIndex)
+            offsetQuery.sort(TimelineEventEntityFields.ROOT.DISPLAY_INDEX, Sort.ASCENDING)
+            if (strict) {
+                offsetQuery.greaterThan(TimelineEventEntityFields.ROOT.DISPLAY_INDEX, startDisplayIndex)
+            } else {
+                offsetQuery.greaterThanOrEqualTo(TimelineEventEntityFields.ROOT.DISPLAY_INDEX, startDisplayIndex)
+            }
         }
         return offsetQuery
                 .limit(count)
@@ -589,8 +596,8 @@ internal class DefaultTimeline(
     }
 
     private fun clearAllValues() {
-        prevDisplayIndex = DISPLAY_INDEX_UNKNOWN
-        nextDisplayIndex = DISPLAY_INDEX_UNKNOWN
+        prevDisplayIndex = null
+        nextDisplayIndex = null
         builtEvents.clear()
         builtEventsIdMap.clear()
         backwardsPaginationState.set(PaginationState())

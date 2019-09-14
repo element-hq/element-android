@@ -35,12 +35,7 @@ import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.factory.MergedHeaderItemFactory
 import im.vector.riotx.features.home.room.detail.timeline.factory.TimelineItemFactory
 import im.vector.riotx.features.home.room.detail.timeline.helper.*
-import im.vector.riotx.features.home.room.detail.timeline.item.DaySeparatorItem
-import im.vector.riotx.features.home.room.detail.timeline.item.DaySeparatorItem_
-import im.vector.riotx.features.home.room.detail.timeline.item.MergedHeaderItem
-import im.vector.riotx.features.home.room.detail.timeline.item.MergedHeaderItem_
-import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
-import im.vector.riotx.features.home.room.detail.timeline.item.ReadReceiptData
+import im.vector.riotx.features.home.room.detail.timeline.item.*
 import im.vector.riotx.features.media.ImageContentRenderer
 import im.vector.riotx.features.media.VideoContentRenderer
 import org.threeten.bp.LocalDateTime
@@ -91,8 +86,8 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         fun onUrlLongClicked(url: String): Boolean
     }
 
+    private var showingForwardLoader = false
     private val modelCache = arrayListOf<CacheItemData?>()
-
     private var currentSnapshot: List<TimelineEvent> = emptyList()
     private var inSubmitList: Boolean = false
     private var timeline: Timeline? = null
@@ -163,7 +158,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             synchronized(modelCache) {
                 for (i in 0 until modelCache.size) {
                     if (modelCache[i]?.eventId == eventIdToHighlight
-                        || modelCache[i]?.eventId == this.eventIdToHighlight) {
+                            || modelCache[i]?.eventId == this.eventIdToHighlight) {
                         modelCache[i] = null
                     }
                 }
@@ -182,17 +177,18 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     }
 
     override fun buildModels() {
-        val loaderAdded = LoadingItem_()
-                .id("forward_loading_item")
+        val timestamp = System.currentTimeMillis()
+        showingForwardLoader = LoadingItem_()
+                .id("forward_loading_item_$timestamp")
                 .addWhen(Timeline.Direction.FORWARDS)
 
         val timelineModels = getModels()
         add(timelineModels)
 
         // Avoid displaying two loaders if there is no elements between them
-        if (!loaderAdded || timelineModels.isNotEmpty()) {
+        if (!showingForwardLoader || timelineModels.isNotEmpty()) {
             LoadingItem_()
-                    .id("backward_loading_item")
+                    .id("backward_loading_item_$timestamp")
                     .addWhen(Timeline.Direction.BACKWARDS)
         }
     }
@@ -224,8 +220,8 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
                 // Should be build if not cached or if cached but contains mergedHeader or formattedDay
                 // We then are sure we always have items up to date.
                 if (modelCache[position] == null
-                    || modelCache[position]?.mergedHeaderModel != null
-                    || modelCache[position]?.formattedDayModel != null) {
+                        || modelCache[position]?.mergedHeaderModel != null
+                        || modelCache[position]?.formattedDayModel != null) {
                     modelCache[position] = buildItemModels(position, currentSnapshot)
                 }
             }
@@ -255,7 +251,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             it.id(event.localId)
             it.setOnVisibilityStateChanged(TimelineEventVisibilityStateChangedListener(callback, event))
         }
-        val mergedHeaderModel = mergedHeaderItemFactory.create(event, nextEvent, items, addDaySeparator, currentPosition, callback){
+        val mergedHeaderModel = mergedHeaderItemFactory.create(event, nextEvent, items, addDaySeparator, currentPosition, callback) {
             requestModelBuild()
         }
         val daySeparatorItem = buildDaySeparatorItem(addDaySeparator, date)
@@ -284,6 +280,9 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     fun searchPositionOfEvent(eventId: String): Int? = synchronized(modelCache) {
         // Search in the cache
         var realPosition = 0
+        if (showingForwardLoader) {
+            realPosition++
+        }
         for (i in 0 until modelCache.size) {
             val itemCache = modelCache[i]
             if (itemCache?.eventId == eventId) {
@@ -318,6 +317,8 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         }
         return modelCache.getOrNull(position - offsetValue)?.eventId
     }
+
+    fun isLoadingForward() = showingForwardLoader
 
     private data class CacheItemData(
             val localId: Long,

@@ -202,6 +202,7 @@ class RoomDetailFragment :
         }
     }
 
+
     private val roomDetailArgs: RoomDetailArgs by args()
     private val glideRequests by lazy {
         GlideApp.with(this)
@@ -221,10 +222,12 @@ class RoomDetailFragment :
     @Inject lateinit var roomDetailViewModelFactory: RoomDetailViewModel.Factory
     @Inject lateinit var textComposerViewModelFactory: TextComposerViewModel.Factory
     @Inject lateinit var errorFormatter: ErrorFormatter
-    private lateinit var scrollOnNewMessageCallback: ScrollOnNewMessageCallback
-    private lateinit var scrollOnHighlightedEventCallback: ScrollOnHighlightedEventCallback
     @Inject lateinit var eventHtmlRenderer: EventHtmlRenderer
     @Inject lateinit var vectorPreferences: VectorPreferences
+
+    private lateinit var scrollOnNewMessageCallback: ScrollOnNewMessageCallback
+    private lateinit var scrollOnHighlightedEventCallback: ScrollOnHighlightedEventCallback
+    private lateinit var endlessScrollListener: EndlessRecyclerViewScrollListener
 
 
     override fun getLayoutResId() = R.layout.fragment_room_detail
@@ -374,17 +377,17 @@ class RoomDetailFragment :
         if (messageContent is MessageTextContent && messageContent.format == MessageType.FORMAT_MATRIX_HTML) {
             val parser = Parser.builder().build()
             val document = parser.parse(messageContent.formattedBody
-                                        ?: messageContent.body)
+                    ?: messageContent.body)
             formattedBody = eventHtmlRenderer.render(document)
         }
         composerLayout.composerRelatedMessageContent.text = formattedBody
-                                                            ?: nonFormattedBody
+                ?: nonFormattedBody
 
         composerLayout.composerEditText.setText(if (useText) event.getTextEditableContent() else "")
         composerLayout.composerRelatedMessageActionIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), iconRes))
 
         avatarRenderer.render(event.senderAvatar, event.root.senderId
-                                                  ?: "", event.senderName, composerLayout.composerRelatedMessageAvatar)
+                ?: "", event.senderName, composerLayout.composerRelatedMessageAvatar)
 
         composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text.length)
         composerLayout.expand {
@@ -413,9 +416,9 @@ class RoomDetailFragment :
                 REQUEST_FILES_REQUEST_CODE, TAKE_IMAGE_REQUEST_CODE -> handleMediaIntent(data)
                 REACTION_SELECT_REQUEST_CODE                        -> {
                     val eventId = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_EVENT_ID)
-                                  ?: return
+                            ?: return
                     val reaction = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_REACTION_RESULT)
-                                   ?: return
+                            ?: return
                     //TODO check if already reacted with that?
                     roomDetailViewModel.process(RoomDetailActions.SendReaction(reaction, eventId))
                 }
@@ -430,7 +433,10 @@ class RoomDetailFragment :
         epoxyVisibilityTracker.attach(recyclerView)
         layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, true)
         val stateRestorer = LayoutManagerStateRestorer(layoutManager).register()
-        scrollOnNewMessageCallback = ScrollOnNewMessageCallback(layoutManager)
+        endlessScrollListener = EndlessRecyclerViewScrollListener(layoutManager, RoomDetailViewModel.PAGINATION_COUNT) { direction ->
+            roomDetailViewModel.process(RoomDetailActions.LoadMoreTimelineEvents(direction))
+        }
+        scrollOnNewMessageCallback = ScrollOnNewMessageCallback(layoutManager, timelineEventController)
         scrollOnHighlightedEventCallback = ScrollOnHighlightedEventCallback(layoutManager, timelineEventController)
         recyclerView.layoutManager = layoutManager
         recyclerView.itemAnimator = null
@@ -441,35 +447,32 @@ class RoomDetailFragment :
             it.dispatchTo(scrollOnHighlightedEventCallback)
         }
 
-        recyclerView.addOnScrollListener(
-                EndlessRecyclerViewScrollListener(layoutManager, RoomDetailViewModel.PAGINATION_COUNT) { direction ->
-                    roomDetailViewModel.process(RoomDetailActions.LoadMoreTimelineEvents(direction))
-                })
+        recyclerView.addOnScrollListener(endlessScrollListener)
         recyclerView.setController(timelineEventController)
         timelineEventController.callback = this
 
         if (vectorPreferences.swipeToReplyIsEnabled()) {
             val swipeCallback = RoomMessageTouchHelperCallback(requireContext(),
-                                                               R.drawable.ic_reply,
-                                                               object : RoomMessageTouchHelperCallback.QuickReplayHandler {
-                                                                   override fun performQuickReplyOnHolder(model: EpoxyModel<*>) {
-                                                                       (model as? AbsMessageItem)?.attributes?.informationData?.let {
-                                                                           val eventId = it.eventId
-                                                                           roomDetailViewModel.process(RoomDetailActions.EnterReplyMode(eventId))
-                                                                       }
-                                                                   }
+                    R.drawable.ic_reply,
+                    object : RoomMessageTouchHelperCallback.QuickReplayHandler {
+                        override fun performQuickReplyOnHolder(model: EpoxyModel<*>) {
+                            (model as? AbsMessageItem)?.attributes?.informationData?.let {
+                                val eventId = it.eventId
+                                roomDetailViewModel.process(RoomDetailActions.EnterReplyMode(eventId))
+                            }
+                        }
 
-                                                                   override fun canSwipeModel(model: EpoxyModel<*>): Boolean {
-                                                                       return when (model) {
-                                                                           is MessageFileItem,
-                                                                           is MessageImageVideoItem,
-                                                                           is MessageTextItem -> {
-                                                                               return (model as AbsMessageItem).attributes.informationData.sendState == SendState.SYNCED
-                                                                           }
-                                                                           else               -> false
-                                                                       }
-                                                                   }
-                                                               })
+                        override fun canSwipeModel(model: EpoxyModel<*>): Boolean {
+                            return when (model) {
+                                is MessageFileItem,
+                                is MessageImageVideoItem,
+                                is MessageTextItem -> {
+                                    return (model as AbsMessageItem).attributes.informationData.sendState == SendState.SYNCED
+                                }
+                                else               -> false
+                            }
+                        }
+                    })
             val touchHelper = ItemTouchHelper(swipeCallback)
             touchHelper.attachToRecyclerView(recyclerView)
         }

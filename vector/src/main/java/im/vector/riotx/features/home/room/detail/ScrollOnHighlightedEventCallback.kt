@@ -19,6 +19,7 @@ package im.vector.riotx.features.home.room.detail
 import androidx.recyclerview.widget.LinearLayoutManager
 import im.vector.riotx.core.platform.DefaultListUpdateCallback
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
+import timber.log.Timber
 import java.util.concurrent.atomic.AtomicReference
 
 class ScrollOnHighlightedEventCallback(private val layoutManager: LinearLayoutManager,
@@ -28,17 +29,16 @@ class ScrollOnHighlightedEventCallback(private val layoutManager: LinearLayoutMa
 
     override fun onChanged(position: Int, count: Int, tag: Any?) {
         val eventId = scheduledEventId.get() ?: return
-
         val positionToScroll = timelineEventController.searchPositionOfEvent(eventId)
-
         if (positionToScroll != null) {
             val firstVisibleItem = layoutManager.findFirstCompletelyVisibleItemPosition()
             val lastVisibleItem = layoutManager.findLastCompletelyVisibleItemPosition()
 
             // Do not scroll it item is already visible
             if (positionToScroll !in firstVisibleItem..lastVisibleItem) {
+                Timber.v("Scroll to $positionToScroll")
                 // Note: Offset will be from the bottom, since the layoutManager is reversed
-                layoutManager.scrollToPosition(position)
+                layoutManager.scrollToPosition(positionToScroll)
             }
             scheduledEventId.set(null)
         }
