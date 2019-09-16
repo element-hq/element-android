@@ -31,7 +31,7 @@ class PushRulesViewModel(initialState: PushRulesViewState) : VectorViewModel<Pus
     companion object : MvRxViewModelFactory<PushRulesViewModel, PushRulesViewState> {
 
         override fun initialState(viewModelContext: ViewModelContext): PushRulesViewState? {
-            val session = (viewModelContext.activity as HasScreenInjector).injector().session()
+            val session = (viewModelContext.activity as HasScreenInjector).injector().activeSessionHolder().getActiveSession()
             val rules = session.getPushRules()
             return PushRulesViewState(rules)
         }

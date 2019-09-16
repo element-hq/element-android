@@ -49,7 +49,7 @@ abstract class SimpleFragmentActivity : VectorBaseActivity() {
 
     @CallSuper
     override fun injectWith(injector: ScreenComponent) {
-        session = injector.session()
+        session = injector.activeSessionHolder().getActiveSession()
     }
 
     override fun initUiAndData() {

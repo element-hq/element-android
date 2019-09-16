@@ -86,7 +86,7 @@ class LoginActivity : VectorBaseActivity() {
     }
 
     companion object {
-        private val EXTRA_CONFIG = "EXTRA_CONFIG"
+        private const val EXTRA_CONFIG = "EXTRA_CONFIG"
 
         fun newIntent(context: Context, loginConfig: LoginConfig?): Intent {
             return Intent(context, LoginActivity::class.java).apply {

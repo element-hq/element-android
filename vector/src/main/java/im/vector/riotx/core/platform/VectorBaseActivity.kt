@@ -79,6 +79,7 @@ abstract class VectorBaseActivity : BaseMvRxActivity(), HasScreenInjector {
     protected lateinit var bugReporter: BugReporter
     private lateinit var rageShake: RageShake
     protected lateinit var navigator: Navigator
+    private lateinit var activeSessionHolder: ActiveSessionHolder
 
     private var unBinder: Unbinder? = null
 
@@ -133,6 +134,7 @@ abstract class VectorBaseActivity : BaseMvRxActivity(), HasScreenInjector {
         bugReporter = screenComponent.bugReporter()
         rageShake = screenComponent.rageShake()
         navigator = screenComponent.navigator()
+        activeSessionHolder = screenComponent.activeSessionHolder()
         configurationViewModel.activityRestarter.observe(this, Observer {
             if (!it.hasBeenHandled) {
                 // Recreate the Activity because configuration has changed
@@ -181,7 +183,7 @@ abstract class VectorBaseActivity : BaseMvRxActivity(), HasScreenInjector {
         configurationViewModel.onActivityResumed()
 
         if (this !is BugReportActivity) {
-            rageShake?.start()
+            rageShake.start()
         }
 
         DebugReceiver
@@ -196,7 +198,7 @@ abstract class VectorBaseActivity : BaseMvRxActivity(), HasScreenInjector {
     override fun onPause() {
         super.onPause()
 
-        rageShake?.stop()
+        rageShake.stop()
 
         debugReceiver?.let {
             unregisterReceiver(debugReceiver)
@@ -419,7 +421,7 @@ abstract class VectorBaseActivity : BaseMvRxActivity(), HasScreenInjector {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onConsentNotGivenError(consentNotGivenError: ConsentNotGivenError) {
         consentNotGivenHelper.displayDialog(consentNotGivenError.consentUri,
-                screenComponent.session().sessionParams.homeServerConnectionConfig.homeServerUri.host ?: "")
+                activeSessionHolder.getActiveSession().sessionParams.homeServerConnectionConfig.homeServerUri.host ?: "")
     }
 
     /* ==========================================================================================

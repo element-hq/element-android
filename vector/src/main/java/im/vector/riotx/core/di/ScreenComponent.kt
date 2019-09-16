@@ -21,7 +21,6 @@ import androidx.lifecycle.ViewModelProvider
 import dagger.BindsInstance
 import dagger.Component
 import im.vector.fragments.keysbackup.restore.KeysBackupRestoreFromPassphraseFragment
-import im.vector.matrix.android.api.session.Session
 import im.vector.riotx.core.preference.UserAvatarPreference
 import im.vector.riotx.features.MainActivity
 import im.vector.riotx.features.crypto.keysbackup.restore.KeysBackupRestoreFromKeyFragment
@@ -71,7 +70,7 @@ import im.vector.riotx.features.settings.push.PushGatewaysFragment
 @ScreenScope
 interface ScreenComponent {
 
-    fun session(): Session
+    fun activeSessionHolder(): ActiveSessionHolder
 
     fun viewModelFactory(): ViewModelProvider.Factory
 
