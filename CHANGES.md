@@ -15,6 +15,7 @@ Bugfix:
  - Fix crash due to missing informationData (#535)
  - Progress in initial sync dialog is decreasing for a step and should not (#532)
  - Fix rendering issue of accepted third party invitation event
+ - All current notifications were dismissed by mistake when the app is launched from the launcher
 
 Translations:
  -

@@ -111,7 +111,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
             }
         }
 
-        if (intent.hasExtra(EXTRA_CLEAR_EXISTING_NOTIFICATION)) {
+        if (intent.getBooleanExtra(EXTRA_CLEAR_EXISTING_NOTIFICATION, false)) {
             notificationDrawerManager.clearAllEvents()
             intent.removeExtra(EXTRA_CLEAR_EXISTING_NOTIFICATION)
         }
