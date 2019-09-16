@@ -17,9 +17,9 @@
 package im.vector.riotx.features
 
 import android.app.Activity
-import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
 import com.bumptech.glide.Glide
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.MatrixCallback
