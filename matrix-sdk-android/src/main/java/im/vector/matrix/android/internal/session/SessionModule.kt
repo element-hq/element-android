@@ -44,7 +44,6 @@ import im.vector.matrix.android.internal.session.room.tombstone.RoomTombstoneEve
 import im.vector.matrix.android.internal.util.md5
 import io.realm.RealmConfiguration
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import java.io.File
 
@@ -94,29 +93,25 @@ internal abstract class SessionModule {
                     .build()
         }
 
-        // TODO Check with Ganfra, I do not want to add this, I want to use the CurlLoggingInterceptor of @MatrixScope
-        @Provides
-        @JvmStatic
-        fun providesCurlLoggingInterceptor(): CurlLoggingInterceptor {
-            return CurlLoggingInterceptor(HttpLoggingInterceptor.Logger.DEFAULT)
-        }
-
-
         @JvmStatic
         @Provides
         @SessionScope
         @Authenticated
         fun providesOkHttpClient(@Unauthenticated okHttpClient: OkHttpClient,
-                                 accessTokenInterceptor: AccessTokenInterceptor,
-                                 curlLoggingInterceptor: CurlLoggingInterceptor): OkHttpClient {
+                                 accessTokenInterceptor: AccessTokenInterceptor): OkHttpClient {
             return okHttpClient.newBuilder()
                     .apply {
                         // Remove the previous CurlLoggingInterceptor, to add it after the accessTokenInterceptor
                         val existingCurlInterceptors = interceptors().filterIsInstance<CurlLoggingInterceptor>()
                         interceptors().removeAll(existingCurlInterceptors)
+
+                        addInterceptor(accessTokenInterceptor)
+
+                        // Re add eventually the curl logging interceptors
+                        existingCurlInterceptors.forEach {
+                            addInterceptor(it)
+                        }
                     }
-                    .addInterceptor(accessTokenInterceptor)
-                    .addInterceptor(curlLoggingInterceptor)
                     .build()
         }
 
