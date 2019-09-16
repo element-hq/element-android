@@ -28,7 +28,7 @@ import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.session.InitialSyncProgressService
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.internal.database.LiveEntityObserver
-import im.vector.matrix.android.internal.database.configureEncryption
+import im.vector.matrix.android.internal.database.RealmKeysUtils
 import im.vector.matrix.android.internal.database.model.SessionRealmModule
 import im.vector.matrix.android.internal.di.Authenticated
 import im.vector.matrix.android.internal.di.SessionDatabase
@@ -70,14 +70,16 @@ internal abstract class SessionModule {
         @Provides
         @SessionDatabase
         @SessionScope
-        fun providesRealmConfiguration(sessionParams: SessionParams, context: Context): RealmConfiguration {
+        fun providesRealmConfiguration(sessionParams: SessionParams, realmKeysUtils: RealmKeysUtils, context: Context): RealmConfiguration {
             val childPath = sessionParams.credentials.userId.md5()
             val directory = File(context.filesDir, childPath)
 
             return RealmConfiguration.Builder()
                     .directory(directory)
                     .name("disk_store.realm")
-                    .configureEncryption("session_db_$childPath", context)
+                    .apply {
+                        realmKeysUtils.configureEncryption(this, "session_db_$childPath")
+                    }
                     .modules(SessionRealmModule())
                     .deleteRealmIfMigrationNeeded()
                     .build()

@@ -30,7 +30,7 @@ import im.vector.matrix.android.internal.crypto.store.db.RealmCryptoStore
 import im.vector.matrix.android.internal.crypto.store.db.RealmCryptoStoreMigration
 import im.vector.matrix.android.internal.crypto.store.db.RealmCryptoStoreModule
 import im.vector.matrix.android.internal.crypto.tasks.*
-import im.vector.matrix.android.internal.database.configureEncryption
+import im.vector.matrix.android.internal.database.RealmKeysUtils
 import im.vector.matrix.android.internal.di.CryptoDatabase
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.cache.ClearCacheTask
@@ -50,12 +50,14 @@ internal abstract class CryptoModule {
         @Provides
         @CryptoDatabase
         @SessionScope
-        fun providesRealmConfiguration(context: Context, credentials: Credentials): RealmConfiguration {
+        fun providesRealmConfiguration(context: Context, credentials: Credentials, realmKeysUtils: RealmKeysUtils): RealmConfiguration {
             val userIDHash = credentials.userId.md5()
 
             return RealmConfiguration.Builder()
                     .directory(File(context.filesDir, userIDHash))
-                    .configureEncryption("crypto_module_$userIDHash", context)
+                    .apply {
+                        realmKeysUtils.configureEncryption(this, "crypto_module_$userIDHash")
+                    }
                     .name("crypto_store.realm")
                     .modules(RealmCryptoStoreModule())
                     .schemaVersion(RealmCryptoStoreMigration.CRYPTO_STORE_SCHEMA_VERSION)
