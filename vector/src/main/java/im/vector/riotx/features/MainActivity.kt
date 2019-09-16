@@ -17,14 +17,17 @@
 package im.vector.riotx.features
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import com.bumptech.glide.Glide
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.Authenticator
+import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.di.ScreenComponent
+import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.utils.deleteAllFiles
 import im.vector.riotx.features.home.HomeActivity
@@ -57,6 +60,7 @@ class MainActivity : VectorBaseActivity() {
     @Inject lateinit var matrix: Matrix
     @Inject lateinit var authenticator: Authenticator
     @Inject lateinit var sessionHolder: ActiveSessionHolder
+    @Inject lateinit var errorFormatter: ErrorFormatter
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
@@ -89,15 +93,31 @@ class MainActivity : VectorBaseActivity() {
                     sessionHolder.clearActiveSession()
                     start()
                 }
+
+                override fun onFailure(failure: Throwable) {
+                    displayErrorAndStart(failure)
+                }
             })
             clearCache       -> sessionHolder.getActiveSession().clearCache(object : MatrixCallback<Unit> {
                 override fun onSuccess(data: Unit) {
                     start()
                 }
+
+                override fun onFailure(failure: Throwable) {
+                    displayErrorAndStart(failure)
+                }
             })
             else             -> start()
-
         }
+    }
+
+    private fun displayErrorAndStart(failure: Throwable) {
+        AlertDialog.Builder(this)
+                .setTitle(R.string.dialog_title_error)
+                .setMessage(errorFormatter.toHumanReadable(failure))
+                .setPositiveButton(R.string.ok) { _, _ -> start() }
+                .setCancelable(false)
+                .show()
     }
 
     private fun start() {

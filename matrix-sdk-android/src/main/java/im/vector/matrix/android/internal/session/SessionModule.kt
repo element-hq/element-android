@@ -30,9 +30,7 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.database.RealmKeysUtils
 import im.vector.matrix.android.internal.database.model.SessionRealmModule
-import im.vector.matrix.android.internal.di.Authenticated
-import im.vector.matrix.android.internal.di.SessionDatabase
-import im.vector.matrix.android.internal.di.Unauthenticated
+import im.vector.matrix.android.internal.di.*
 import im.vector.matrix.android.internal.network.AccessTokenInterceptor
 import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.network.interceptors.CurlLoggingInterceptor
@@ -67,18 +65,31 @@ internal abstract class SessionModule {
         }
 
         @JvmStatic
+        @UserMd5
+        @Provides
+        fun providesUserMd5(sessionParams: SessionParams): String {
+            return sessionParams.credentials.userId.md5()
+        }
+
+        @JvmStatic
+        @Provides
+        @UserCacheDirectory
+        fun providesFilesDir(@UserMd5 userMd5: String, context: Context): File {
+            return File(context.filesDir, userMd5)
+        }
+
+        @JvmStatic
         @Provides
         @SessionDatabase
         @SessionScope
-        fun providesRealmConfiguration(sessionParams: SessionParams, realmKeysUtils: RealmKeysUtils, context: Context): RealmConfiguration {
-            val childPath = sessionParams.credentials.userId.md5()
-            val directory = File(context.filesDir, childPath)
-
+        fun providesRealmConfiguration(realmKeysUtils: RealmKeysUtils,
+                                       @UserCacheDirectory directory: File,
+                                       @UserMd5 userMd5: String): RealmConfiguration {
             return RealmConfiguration.Builder()
                     .directory(directory)
                     .name("disk_store.realm")
                     .apply {
-                        realmKeysUtils.configureEncryption(this, "session_db_$childPath")
+                        realmKeysUtils.configureEncryption(this, "session_db_$userMd5")
                     }
                     .modules(SessionRealmModule())
                     .deleteRealmIfMigrationNeeded()
