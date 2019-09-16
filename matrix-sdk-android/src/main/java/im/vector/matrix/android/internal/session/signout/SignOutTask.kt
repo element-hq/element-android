@@ -20,10 +20,14 @@ import android.content.Context
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.internal.SessionManager
 import im.vector.matrix.android.internal.auth.SessionParamsStore
+import im.vector.matrix.android.internal.crypto.CryptoModule
+import im.vector.matrix.android.internal.database.RealmKeysUtils
 import im.vector.matrix.android.internal.di.CryptoDatabase
 import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.di.UserCacheDirectory
+import im.vector.matrix.android.internal.di.UserMd5
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.session.SessionModule
 import im.vector.matrix.android.internal.session.cache.ClearCacheTask
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.worker.WorkManagerUtil
@@ -40,7 +44,9 @@ internal class DefaultSignOutTask @Inject constructor(private val context: Conte
                                                       private val sessionParamsStore: SessionParamsStore,
                                                       @SessionDatabase private val clearSessionDataTask: ClearCacheTask,
                                                       @CryptoDatabase private val clearCryptoDataTask: ClearCacheTask,
-                                                      @UserCacheDirectory private val userFile: File) : SignOutTask {
+                                                      @UserCacheDirectory private val userFile: File,
+                                                      private val realmKeysUtils: RealmKeysUtils,
+                                                      @UserMd5 private val userMd5: String) : SignOutTask {
 
     override suspend fun execute(params: Unit) {
         Timber.d("SignOut: send request...")
@@ -65,5 +71,9 @@ internal class DefaultSignOutTask @Inject constructor(private val context: Conte
 
         Timber.d("SignOut: clear file system")
         userFile.deleteRecursively()
+
+        Timber.d("SignOut: clear the database keys")
+        realmKeysUtils.clear(SessionModule.DB_ALIAS_PREFIX + userMd5)
+        realmKeysUtils.clear(CryptoModule.DB_ALIAS_PREFIX + userMd5)
     }
 }

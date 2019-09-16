@@ -101,6 +101,18 @@ internal class RealmKeysUtils @Inject constructor(private val context: Context) 
         realmConfigurationBuilder.encryptionKey(key)
     }
 
+    // Delete elements related to the alias
+    fun clear(alias: String) {
+        if (hasKeyForDatabase(alias)) {
+            SecretStoringUtils.safeDeleteKey(alias)
+
+            sharedPreferences
+                    .edit()
+                    .remove("${ENCRYPTED_KEY_PREFIX}_$alias")
+                    .apply()
+        }
+    }
+
     companion object {
         private const val ENCRYPTED_KEY_PREFIX = "REALM_ENCRYPTED_KEY"
     }

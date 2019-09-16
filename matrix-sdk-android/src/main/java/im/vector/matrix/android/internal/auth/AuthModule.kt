@@ -33,6 +33,8 @@ internal abstract class AuthModule {
 
     @Module
     companion object {
+        private const val DB_ALIAS = "matrix-sdk-auth"
+
         @JvmStatic
         @Provides
         @AuthDatabase
@@ -44,7 +46,7 @@ internal abstract class AuthModule {
 
             return RealmConfiguration.Builder()
                     .apply {
-                        realmKeysUtils.configureEncryption(this, "matrix-sdk-auth")
+                        realmKeysUtils.configureEncryption(this, DB_ALIAS)
                     }
                     .name("matrix-sdk-auth.realm")
                     .modules(AuthRealmModule())

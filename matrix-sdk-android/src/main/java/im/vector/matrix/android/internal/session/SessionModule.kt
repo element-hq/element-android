@@ -50,6 +50,7 @@ internal abstract class SessionModule {
 
     @Module
     companion object {
+        internal const val DB_ALIAS_PREFIX = "session_db_"
 
         @JvmStatic
         @Provides
@@ -89,7 +90,7 @@ internal abstract class SessionModule {
                     .directory(directory)
                     .name("disk_store.realm")
                     .apply {
-                        realmKeysUtils.configureEncryption(this, "session_db_$userMd5")
+                        realmKeysUtils.configureEncryption(this, "$DB_ALIAS_PREFIX$userMd5")
                     }
                     .modules(SessionRealmModule())
                     .deleteRealmIfMigrationNeeded()
