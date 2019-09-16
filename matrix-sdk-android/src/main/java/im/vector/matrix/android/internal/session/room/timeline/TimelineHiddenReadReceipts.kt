@@ -56,7 +56,7 @@ internal class TimelineHiddenReadReceipts constructor(private val readReceiptsSu
         var hasChange = false
         // Deletion here means we don't have any readReceipts for the given hidden events
         changeSet.deletions.forEach {
-            val eventId = correctedReadReceiptsEventByIndex[it]
+            val eventId = correctedReadReceiptsEventByIndex.get(it, "")
             val timelineEvent = liveEvents.where()
                     .equalTo(TimelineEventEntityFields.EVENT_ID, eventId)
                     .findFirst()

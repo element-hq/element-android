@@ -27,15 +27,33 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineSettings
 import im.vector.matrix.android.api.util.CancelableBag
 import im.vector.matrix.android.internal.database.mapper.TimelineEventMapper
 import im.vector.matrix.android.internal.database.mapper.asDomain
-import im.vector.matrix.android.internal.database.model.*
-import im.vector.matrix.android.internal.database.query.*
+import im.vector.matrix.android.internal.database.model.ChunkEntity
+import im.vector.matrix.android.internal.database.model.ChunkEntityFields
+import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryEntity
+import im.vector.matrix.android.internal.database.model.EventEntity
+import im.vector.matrix.android.internal.database.model.EventEntityFields
+import im.vector.matrix.android.internal.database.model.RoomEntity
+import im.vector.matrix.android.internal.database.model.TimelineEventEntity
+import im.vector.matrix.android.internal.database.model.TimelineEventEntityFields
+import im.vector.matrix.android.internal.database.query.FilterContent
+import im.vector.matrix.android.internal.database.query.findAllInRoomWithSendStates
+import im.vector.matrix.android.internal.database.query.findIncludingEvent
+import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
+import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.database.query.whereInRoom
 import im.vector.matrix.android.internal.task.TaskConstraints
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.Debouncer
 import im.vector.matrix.android.internal.util.createBackgroundHandler
 import im.vector.matrix.android.internal.util.createUIHandler
-import io.realm.*
+import io.realm.OrderedCollectionChangeSet
+import io.realm.OrderedRealmCollectionChangeListener
+import io.realm.Realm
+import io.realm.RealmConfiguration
+import io.realm.RealmQuery
+import io.realm.RealmResults
+import io.realm.Sort
 import timber.log.Timber
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
@@ -221,11 +239,11 @@ internal class DefaultTimeline(
 
     override fun dispose() {
         if (isStarted.compareAndSet(true, false)) {
-            eventDecryptor.destroy()
+            isReady.set(false)
             Timber.v("Dispose timeline for roomId: $roomId and eventId: $initialEventId")
+            cancelableBag.cancel()
             BACKGROUND_HANDLER.removeCallbacksAndMessages(null)
             BACKGROUND_HANDLER.post {
-                cancelableBag.cancel()
                 roomEntity?.sendingTimelineEvents?.removeAllChangeListeners()
                 eventRelations.removeAllChangeListeners()
                 liveEvents.removeAllChangeListeners()
@@ -238,6 +256,7 @@ internal class DefaultTimeline(
                     it.close()
                 }
             }
+            eventDecryptor.destroy()
         }
     }
 
@@ -305,7 +324,7 @@ internal class DefaultTimeline(
     private fun hasMoreInCache(direction: Timeline.Direction): Boolean {
         return Realm.getInstance(realmConfiguration).use { localRealm ->
             val timelineEventEntity = buildEventQuery(localRealm).findFirst(direction)
-                    ?: return false
+                                      ?: return false
             if (direction == Timeline.Direction.FORWARDS) {
                 val firstEvent = builtEvents.firstOrNull() ?: return true
                 firstEvent.displayIndex < timelineEventEntity.root!!.displayIndex
@@ -426,11 +445,15 @@ internal class DefaultTimeline(
      * This has to be called on TimelineThread as it access realm live results
      */
     private fun executePaginationTask(direction: Timeline.Direction, limit: Int) {
-        val token = getTokenLive(direction) ?: return
+        val token = getTokenLive(direction)
+        if (token == null) {
+            updatePaginationState(direction) { it.copy(isPaginating = false, requestedCount = 0) }
+            return
+        }
         val params = PaginationTask.Params(roomId = roomId,
-                from = token,
-                direction = direction.toPaginationDirection(),
-                limit = limit)
+                                           from = token,
+                                           direction = direction.toPaginationDirection(),
+                                           limit = limit)
 
         Timber.v("Should fetch $limit items $direction")
         cancelableBag += paginationTask
@@ -501,7 +524,7 @@ internal class DefaultTimeline(
             val timelineEvent = buildTimelineEvent(eventEntity)
 
             if (timelineEvent.isEncrypted()
-                    && timelineEvent.root.mxDecryptionResult == null) {
+                && timelineEvent.root.mxDecryptionResult == null) {
                 timelineEvent.root.eventId?.let { eventDecryptor.requestDecryption(it) }
             }
 
@@ -584,11 +607,14 @@ internal class DefaultTimeline(
 
     private fun fetchEvent(eventId: String) {
         val params = GetContextOfEventTask.Params(roomId, eventId)
-        contextOfEventTask.configureWith(params).executeBy(taskExecutor)
+        cancelableBag += contextOfEventTask.configureWith(params).executeBy(taskExecutor)
     }
 
     private fun postSnapshot() {
         BACKGROUND_HANDLER.post {
+            if (isReady.get().not()) {
+                return@post
+            }
             val snapshot = createSnapshot()
             val runnable = Runnable { listener?.onUpdated(snapshot) }
             debouncer.debounce("post_snapshot", runnable, 50)

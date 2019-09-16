@@ -643,11 +643,10 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                             if (readMarkerId == null || isReadMarkerViewVisible || !timeline.isLive) {
                                 false
                             } else {
-                                val readMarkerPosition = timeline.getIndexOfEvent(readMarkerId)
-                                                         ?: Int.MAX_VALUE
-                                val currentVisibleEventPosition = timeline.getIndexOfEvent(currentVisibleEvent.event.root.eventId)
-                                                                  ?: Int.MAX_VALUE
-                                readMarkerPosition > currentVisibleEventPosition
+                                val readMarkerPosition = timeline.getTimelineEventWithId(readMarkerId)?.displayIndex
+                                                         ?: Int.MIN_VALUE
+                                val currentVisibleEventPosition = currentVisibleEvent.event.displayIndex
+                                readMarkerPosition < currentVisibleEventPosition
                             }
                         }
                 )
