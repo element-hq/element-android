@@ -35,6 +35,7 @@ import im.vector.matrix.android.api.session.group.GroupService
 import im.vector.matrix.android.api.session.pushers.PushersService
 import im.vector.matrix.android.api.session.room.RoomDirectoryService
 import im.vector.matrix.android.api.session.room.RoomService
+import im.vector.matrix.android.api.session.securestorage.SecureStorageService
 import im.vector.matrix.android.api.session.signout.SignOutService
 import im.vector.matrix.android.api.session.sync.FilterService
 import im.vector.matrix.android.api.session.sync.SyncState
@@ -63,6 +64,7 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
                                                   private val pushersService: Lazy<PushersService>,
                                                   private val cryptoService: Lazy<DefaultCryptoService>,
                                                   private val fileService: Lazy<FileService>,
+                                                  private val secureStorageService: Lazy<SecureStorageService>,
                                                   private val syncThreadProvider: Provider<SyncThread>,
                                                   private val contentUrlResolver: ContentUrlResolver,
                                                   private val contentUploadProgressTracker: ContentUploadStateTracker,
@@ -78,7 +80,8 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
         PushRuleService by pushRuleService.get(),
         PushersService by pushersService.get(),
         FileService by fileService.get(),
-        InitialSyncProgressService by initialSyncProgressService.get() {
+        InitialSyncProgressService by initialSyncProgressService.get(),
+        SecureStorageService by secureStorageService.get() {
 
     private var isOpen = false
 

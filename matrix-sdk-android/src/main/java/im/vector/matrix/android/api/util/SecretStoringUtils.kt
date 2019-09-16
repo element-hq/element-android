@@ -35,6 +35,7 @@ import javax.crypto.spec.GCMParameterSpec
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.PBEKeySpec
 import javax.crypto.spec.SecretKeySpec
+import javax.inject.Inject
 import javax.security.auth.x500.X500Principal
 
 
@@ -72,15 +73,17 @@ import javax.security.auth.x500.X500Principal
  * Important: Keys stored in the keystore can be wiped out (depends of the OS version, like for example if you
  * add a pin or change the schema); So you might and with a useless pile of bytes.
  */
-object SecretStoringUtils {
+internal class SecretStoringUtils @Inject constructor(private val context: Context) {
 
-    private const val ANDROID_KEY_STORE = "AndroidKeyStore"
-    private const val AES_MODE = "AES/GCM/NoPadding";
-    private const val RSA_MODE = "RSA/ECB/PKCS1Padding"
+    companion object {
+        private const val ANDROID_KEY_STORE = "AndroidKeyStore"
+        private const val AES_MODE = "AES/GCM/NoPadding"
+        private const val RSA_MODE = "RSA/ECB/PKCS1Padding"
 
-    private const val FORMAT_API_M: Byte = 0
-    private const val FORMAT_1: Byte = 1
-    private const val FORMAT_2: Byte = 2
+        private const val FORMAT_API_M: Byte = 0
+        private const val FORMAT_1: Byte = 1
+        private const val FORMAT_2: Byte = 2
+    }
 
     private val keyStore: KeyStore by lazy {
         KeyStore.getInstance(ANDROID_KEY_STORE).apply {
@@ -109,13 +112,11 @@ object SecretStoringUtils {
      * The secret is encrypted using the following method: AES/GCM/NoPadding
      */
     @Throws(Exception::class)
-    fun securelyStoreString(secret: String, keyAlias: String, context: Context): ByteArray? {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            return encryptStringM(secret, keyAlias)
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            return encryptStringK(secret, keyAlias, context)
-        } else {
-            return encryptForOldDevicesNotGood(secret, keyAlias)
+    fun securelyStoreString(secret: String, keyAlias: String): ByteArray? {
+        return when {
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.M      -> encryptStringM(secret, keyAlias)
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT -> encryptStringK(secret, keyAlias)
+            else                                                -> encryptForOldDevicesNotGood(secret, keyAlias)
         }
     }
 
@@ -123,33 +124,27 @@ object SecretStoringUtils {
      * Decrypt a secret that was encrypted by #securelyStoreString()
      */
     @Throws(Exception::class)
-    fun loadSecureSecret(encrypted: ByteArray, keyAlias: String, context: Context): String? {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            return decryptStringM(encrypted, keyAlias)
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            return decryptStringK(encrypted, keyAlias, context)
-        } else {
-            return decryptForOldDevicesNotGood(encrypted, keyAlias)
+    fun loadSecureSecret(encrypted: ByteArray, keyAlias: String): String? {
+        return when {
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.M      -> decryptStringM(encrypted, keyAlias)
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT -> decryptStringK(encrypted, keyAlias)
+            else                                                -> decryptForOldDevicesNotGood(encrypted, keyAlias)
         }
     }
 
-    fun securelyStoreObject(any: Any, keyAlias: String, output: OutputStream, context: Context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            saveSecureObjectM(keyAlias, output, any)
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            return saveSecureObjectK(keyAlias, output, any, context)
-        } else {
-            return saveSecureObjectOldNotGood(keyAlias, output, any)
+    fun securelyStoreObject(any: Any, keyAlias: String, output: OutputStream) {
+        when {
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.M      -> saveSecureObjectM(keyAlias, output, any)
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT -> saveSecureObjectK(keyAlias, output, any)
+            else                                                -> saveSecureObjectOldNotGood(keyAlias, output, any)
         }
     }
 
-    fun <T> loadSecureSecret(inputStream: InputStream, keyAlias: String, context: Context): T? {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            return loadSecureObjectM(keyAlias, inputStream)
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            return loadSecureObjectK(keyAlias, inputStream, context)
-        } else {
-            return loadSecureObjectOldNotGood(keyAlias, inputStream)
+    fun <T> loadSecureSecret(inputStream: InputStream, keyAlias: String): T? {
+        return when {
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.M      -> loadSecureObjectM(keyAlias, inputStream)
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT -> loadSecureObjectK(keyAlias, inputStream)
+            else                                                -> loadSecureObjectOldNotGood(keyAlias, inputStream)
         }
     }
 
@@ -182,7 +177,7 @@ object SecretStoringUtils {
      Generate a key pair for encryption
      */
     @RequiresApi(Build.VERSION_CODES.KITKAT)
-    fun getOrGenerateKeyPairForAlias(alias: String, context: Context): KeyStore.PrivateKeyEntry {
+    fun getOrGenerateKeyPairForAlias(alias: String): KeyStore.PrivateKeyEntry {
         val privateKeyEntry = (keyStore.getEntry(alias, null) as? KeyStore.PrivateKeyEntry)
 
         if (privateKeyEntry != null) return privateKeyEntry
@@ -234,14 +229,14 @@ object SecretStoringUtils {
     }
 
     @RequiresApi(Build.VERSION_CODES.KITKAT)
-    private fun encryptStringK(text: String, keyAlias: String, context: Context): ByteArray? {
+    private fun encryptStringK(text: String, keyAlias: String): ByteArray? {
         //we generate a random symetric key
         val key = ByteArray(16)
         secureRandom.nextBytes(key)
         val sKey = SecretKeySpec(key, "AES")
 
         //we encrypt this key thanks to the key store
-        val encryptedKey = rsaEncrypt(keyAlias, key, context)
+        val encryptedKey = rsaEncrypt(keyAlias, key)
 
         val cipher = Cipher.getInstance(AES_MODE)
         cipher.init(Cipher.ENCRYPT_MODE, sKey)
@@ -286,12 +281,12 @@ object SecretStoringUtils {
     }
 
     @RequiresApi(Build.VERSION_CODES.KITKAT)
-    private fun decryptStringK(data: ByteArray, keyAlias: String, context: Context): String? {
+    private fun decryptStringK(data: ByteArray, keyAlias: String): String? {
 
         val (encryptedKey, iv, encrypted) = format1Extract(ByteArrayInputStream(data))
 
         //we need to decrypt the key
-        val sKeyBytes = rsaDecrypt(keyAlias, ByteArrayInputStream(encryptedKey), context)
+        val sKeyBytes = rsaDecrypt(keyAlias, ByteArrayInputStream(encryptedKey))
         val cipher = Cipher.getInstance(AES_MODE)
         val spec = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) IvParameterSpec(iv) else GCMParameterSpec(128, iv)
         cipher.init(Cipher.DECRYPT_MODE, SecretKeySpec(sKeyBytes, "AES"), spec)
@@ -321,14 +316,14 @@ object SecretStoringUtils {
     }
 
     @RequiresApi(Build.VERSION_CODES.KITKAT)
-    private fun saveSecureObjectK(keyAlias: String, output: OutputStream, writeObject: Any, context: Context) {
+    private fun saveSecureObjectK(keyAlias: String, output: OutputStream, writeObject: Any) {
         //we generate a random symetric key
         val key = ByteArray(16)
         secureRandom.nextBytes(key)
         val sKey = SecretKeySpec(key, "AES")
 
         //we encrypt this key thanks to the key store
-        val encryptedKey = rsaEncrypt(keyAlias, key, context)
+        val encryptedKey = rsaEncrypt(keyAlias, key)
 
         val cipher = Cipher.getInstance(AES_MODE)
         cipher.init(Cipher.ENCRYPT_MODE, sKey)
@@ -418,12 +413,12 @@ object SecretStoringUtils {
 
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     @Throws(IOException::class)
-    private fun <T> loadSecureObjectK(keyAlias: String, inputStream: InputStream, context: Context): T? {
+    private fun <T> loadSecureObjectK(keyAlias: String, inputStream: InputStream): T? {
 
         val (encryptedKey, iv, encrypted) = format1Extract(inputStream)
 
         //we need to decrypt the key
-        val sKeyBytes = rsaDecrypt(keyAlias, ByteArrayInputStream(encryptedKey), context)
+        val sKeyBytes = rsaDecrypt(keyAlias, ByteArrayInputStream(encryptedKey))
         val cipher = Cipher.getInstance(AES_MODE)
         val spec = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) IvParameterSpec(iv) else GCMParameterSpec(128, iv)
         cipher.init(Cipher.DECRYPT_MODE, SecretKeySpec(sKeyBytes, "AES"), spec)
@@ -464,8 +459,8 @@ object SecretStoringUtils {
 
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     @Throws(Exception::class)
-    private fun rsaEncrypt(alias: String, secret: ByteArray, context: Context): ByteArray {
-        val privateKeyEntry = getOrGenerateKeyPairForAlias(alias, context)
+    private fun rsaEncrypt(alias: String, secret: ByteArray): ByteArray {
+        val privateKeyEntry = getOrGenerateKeyPairForAlias(alias)
         // Encrypt the text
         val inputCipher = Cipher.getInstance(RSA_MODE)
         inputCipher.init(Cipher.ENCRYPT_MODE, privateKeyEntry.certificate.publicKey)
@@ -480,8 +475,8 @@ object SecretStoringUtils {
 
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     @Throws(Exception::class)
-    private fun rsaDecrypt(alias: String, encrypted: InputStream, context: Context): ByteArray {
-        val privateKeyEntry = getOrGenerateKeyPairForAlias(alias, context)
+    private fun rsaDecrypt(alias: String, encrypted: InputStream): ByteArray {
+        val privateKeyEntry = getOrGenerateKeyPairForAlias(alias)
         val output = Cipher.getInstance(RSA_MODE)
         output.init(Cipher.DECRYPT_MODE, privateKeyEntry.privateKey)
 
