@@ -56,6 +56,12 @@ class LoginActivity : VectorBaseActivity() {
             addFragment(LoginFragment(), R.id.simpleFragmentContainer)
         }
 
+        // Get config extra
+        val loginConfig = intent.getParcelableExtra<LoginConfig?>(EXTRA_CONFIG)
+        if (loginConfig != null && isFirstCreation()) {
+            loginViewModel.handle(LoginActions.InitWith(loginConfig))
+        }
+
         loginViewModel.navigationLiveData.observeEvent(this) {
             when (it) {
                 is Navigation.OpenSsoLoginFallback -> addFragmentToBackstack(LoginSsoFallbackFragment(), R.id.simpleFragmentContainer)
@@ -80,8 +86,12 @@ class LoginActivity : VectorBaseActivity() {
     }
 
     companion object {
-        fun newIntent(context: Context): Intent {
-            return Intent(context, LoginActivity::class.java)
+        private val EXTRA_CONFIG = "EXTRA_CONFIG"
+
+        fun newIntent(context: Context, loginConfig: LoginConfig?): Intent {
+            return Intent(context, LoginActivity::class.java).apply {
+                putExtra(EXTRA_CONFIG, loginConfig)
+            }
         }
 
     }

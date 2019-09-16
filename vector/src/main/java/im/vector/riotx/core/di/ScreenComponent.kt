@@ -46,6 +46,7 @@ import im.vector.riotx.features.home.room.detail.timeline.action.*
 import im.vector.riotx.features.home.room.filtered.FilteredRoomsActivity
 import im.vector.riotx.features.home.room.list.RoomListFragment
 import im.vector.riotx.features.invite.VectorInviteView
+import im.vector.riotx.features.link.LinkHandlerActivity
 import im.vector.riotx.features.login.LoginActivity
 import im.vector.riotx.features.login.LoginFragment
 import im.vector.riotx.features.login.LoginSsoFallbackFragment
@@ -137,6 +138,8 @@ interface ScreenComponent {
     fun inject(emojiReactionPickerActivity: EmojiReactionPickerActivity)
 
     fun inject(loginActivity: LoginActivity)
+
+    fun inject(linkHandlerActivity: LinkHandlerActivity)
 
     fun inject(mainActivity: MainActivity)
 

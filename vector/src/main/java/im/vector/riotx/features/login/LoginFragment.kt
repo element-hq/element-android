@@ -74,8 +74,12 @@ class LoginFragment : VectorBaseFragment() {
                 }
                 .disposeOnDestroy()
 
-
-        homeServerField.setText(ServerUrlsRepository.getDefaultHomeServerUrl(requireContext()))
+        val initHsUrl = viewModel.getInitialHomeServerUrl()
+        if (initHsUrl != null) {
+            homeServerField.setText(initHsUrl)
+        } else {
+            homeServerField.setText(ServerUrlsRepository.getDefaultHomeServerUrl(requireContext()))
+        }
         viewModel.handle(LoginActions.UpdateHomeServer(homeServerField.text.toString()))
     }
 

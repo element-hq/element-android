@@ -3,6 +3,7 @@ Changes in RiotX 0.5.0 (2019-XX-XX)
 
 Features:
  - Handle M_CONSENT_NOT_GIVEN error (#64)
+ - Auto configure homeserver and identity server URLs of LoginActivity with a magic link
 
 Improvements:
  - Reduce default release build log level, and lab option to enable more logs.

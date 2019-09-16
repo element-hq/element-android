@@ -104,7 +104,7 @@ class MainActivity : VectorBaseActivity() {
         val intent = if (sessionHolder.hasActiveSession()) {
             HomeActivity.newIntent(this)
         } else {
-            LoginActivity.newIntent(this)
+            LoginActivity.newIntent(this, null)
         }
         startActivity(intent)
         finish()

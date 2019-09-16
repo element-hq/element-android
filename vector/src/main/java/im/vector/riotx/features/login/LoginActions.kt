@@ -24,5 +24,6 @@ sealed class LoginActions {
     data class Login(val login: String, val password: String) : LoginActions()
     data class SsoLoginSuccess(val credentials: Credentials) : LoginActions()
     data class NavigateTo(val target: LoginActivity.Navigation) : LoginActions()
+    data class InitWith(val loginConfig: LoginConfig) : LoginActions()
 
 }

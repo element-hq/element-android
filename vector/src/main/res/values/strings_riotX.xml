@@ -8,4 +8,8 @@
 
     <string name="error_terms_not_accepted">Please retry once you have accepted the terms and conditions of your homeserver.</string>
 
+    <!-- This one is already defined in Riot, but not yet synced-->
+    <string name="error_user_already_logged_in">It looks like you’re trying to connect to another homeserver. Do you want to sign out?</string>
+
+
 </resources>

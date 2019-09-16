@@ -55,6 +55,8 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
         }
     }
 
+    private var loginConfig: LoginConfig? = null
+
     private val _navigationLiveData = MutableLiveData<LiveEvent<LoginActivity.Navigation>>()
     val navigationLiveData: LiveData<LiveEvent<LoginActivity.Navigation>>
         get() = _navigationLiveData
@@ -65,11 +67,16 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
 
     fun handle(action: LoginActions) {
         when (action) {
+            is LoginActions.InitWith         -> handleInitWith(action)
             is LoginActions.UpdateHomeServer -> handleUpdateHomeserver(action)
             is LoginActions.Login            -> handleLogin(action)
             is LoginActions.SsoLoginSuccess  -> handleSsoLoginSuccess(action)
             is LoginActions.NavigateTo       -> handleNavigation(action)
         }
+    }
+
+    private fun handleInitWith(action: LoginActions.InitWith) {
+        loginConfig = action.loginConfig
     }
 
     private fun handleLogin(action: LoginActions.Login) {
@@ -184,6 +191,10 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
         super.onCleared()
 
         currentTask?.cancel()
+    }
+
+    fun getInitialHomeServerUrl(): String? {
+        return loginConfig?.homeServerUrl
     }
 
     fun getHomeServerUrl(): String {

@@ -66,6 +66,18 @@
         <activity android:name=".features.debug.DebugMenuActivity" />
         <activity android:name=".features.home.createdirect.CreateDirectRoomActivity" />
         <activity android:name=".features.webview.VectorWebViewActivity" />
+        <activity android:name=".features.link.LinkHandlerActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:host="riot.im" />
+                <data android:pathPrefix="/config/" />
+            </intent-filter>
+        </activity>
 
         <!-- Services -->
 
