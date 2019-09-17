@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.ListUpdateCallback
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyModel
+import com.airbnb.epoxy.VisibilityState
 import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
@@ -50,6 +51,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
 ) : EpoxyController(backgroundHandler, backgroundHandler), Timeline.Listener {
 
     interface Callback : BaseCallback, ReactionPillCallback, AvatarCallback, UrlClickCallback, ReadReceiptsCallback {
+        fun onLoadMore(direction: Timeline.Direction)
         fun onEventInvisible(event: TimelineEvent)
         fun onEventVisible(event: TimelineEvent)
         fun onRoomCreateLinkClicked(url: String)
@@ -158,7 +160,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             synchronized(modelCache) {
                 for (i in 0 until modelCache.size) {
                     if (modelCache[i]?.eventId == eventIdToHighlight
-                            || modelCache[i]?.eventId == this.eventIdToHighlight) {
+                        || modelCache[i]?.eventId == this.eventIdToHighlight) {
                         modelCache[i] = null
                     }
                 }
@@ -180,6 +182,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         val timestamp = System.currentTimeMillis()
         showingForwardLoader = LoadingItem_()
                 .id("forward_loading_item_$timestamp")
+                .setVisibilityStateChangedListener(Timeline.Direction.FORWARDS)
                 .addWhen(Timeline.Direction.FORWARDS)
 
         val timelineModels = getModels()
@@ -189,6 +192,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         if (!showingForwardLoader || timelineModels.isNotEmpty()) {
             LoadingItem_()
                     .id("backward_loading_item_$timestamp")
+                    .setVisibilityStateChangedListener(Timeline.Direction.BACKWARDS)
                     .addWhen(Timeline.Direction.BACKWARDS)
         }
     }
@@ -220,8 +224,8 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
                 // Should be build if not cached or if cached but contains mergedHeader or formattedDay
                 // We then are sure we always have items up to date.
                 if (modelCache[position] == null
-                        || modelCache[position]?.mergedHeaderModel != null
-                        || modelCache[position]?.formattedDayModel != null) {
+                    || modelCache[position]?.mergedHeaderModel != null
+                    || modelCache[position]?.formattedDayModel != null) {
                     modelCache[position] = buildItemModels(position, currentSnapshot)
                 }
             }
@@ -251,7 +255,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             it.id(event.localId)
             it.setOnVisibilityStateChanged(TimelineEventVisibilityStateChangedListener(callback, event))
         }
-        val mergedHeaderModel = mergedHeaderItemFactory.create(event, nextEvent, items, addDaySeparator, currentPosition, callback) {
+        val mergedHeaderModel = mergedHeaderItemFactory.create(event, nextEvent, items, addDaySeparator, currentPosition, eventIdToHighlight, callback) {
             requestModelBuild()
         }
         val daySeparatorItem = buildDaySeparatorItem(addDaySeparator, date)
@@ -276,6 +280,18 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         addIf(shouldAdd, this@TimelineEventController)
         return shouldAdd
     }
+
+    /**
+     * Return true if added
+     */
+    private fun LoadingItem_.setVisibilityStateChangedListener(direction: Timeline.Direction): LoadingItem_ {
+        return onVisibilityStateChanged { model, view, visibilityState ->
+            if (visibilityState == VisibilityState.VISIBLE) {
+                callback?.onLoadMore(direction)
+            }
+        }
+    }
+
 
     fun searchPositionOfEvent(eventId: String): Int? = synchronized(modelCache) {
         // Search in the cache

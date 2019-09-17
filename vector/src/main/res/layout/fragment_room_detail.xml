@@ -153,4 +153,17 @@
         app:layout_constraintTop_toBottomOf="@+id/roomToolbar"
         tools:visibility="visible" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/jumpToBottomView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:src="@drawable/chevron_down"
+        app:backgroundTint="#FFFFFF"
+        app:layout_constraintBottom_toTopOf="@id/composerLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:maxImageSize="16dp"
+        app:tint="@color/black" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

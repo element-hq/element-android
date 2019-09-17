@@ -42,9 +42,9 @@ class ReadMarkerView @JvmOverloads constructor(
     private var callback: Callback? = null
     private var callbackDispatcherJob: Job? = null
 
-    fun bindView(informationData: MessageInformationData, readMarkerCallback: Callback) {
+    fun bindView(displayReadMarker: Boolean, readMarkerCallback: Callback) {
         this.callback = readMarkerCallback
-        if (informationData.displayReadMarker) {
+        if (displayReadMarker) {
             visibility = VISIBLE
             callbackDispatcherJob = GlobalScope.launch(Dispatchers.Main) {
                 delay(DELAY_IN_MS)

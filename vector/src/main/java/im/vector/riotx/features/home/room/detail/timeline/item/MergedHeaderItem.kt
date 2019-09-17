@@ -79,6 +79,7 @@ abstract class MergedHeaderItem : BaseEventItem<MergedHeaderItem.Holder>() {
 
     data class Attributes(
             val isCollapsed: Boolean,
+            val showReadMarker: Boolean,
             val mergeData: List<Data>,
             val avatarRenderer: AvatarRenderer,
             val onCollapsedStateChanged: (Boolean) -> Unit

@@ -27,6 +27,7 @@ import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.utils.isSingleEmoji
 import im.vector.riotx.features.home.getColorFromUserId
 import im.vector.riotx.core.date.VectorDateFormatter
+import im.vector.riotx.core.extensions.displayReadMarker
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.riotx.features.home.room.detail.timeline.item.ReactionInfoData
 import im.vector.riotx.features.home.room.detail.timeline.item.ReadReceiptData
@@ -64,8 +65,7 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
             textColor = colorProvider.getColor(getColorFromUserId(event.root.senderId ?: ""))
         }
 
-        val displayReadMarker = event.hasReadMarker
-                && event.readReceipts.find { it.user.userId == session.myUserId } == null
+        val displayReadMarker = event.displayReadMarker(session.myUserId)
 
         return MessageInformationData(
                 eventId = eventId,

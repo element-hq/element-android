@@ -44,6 +44,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
 import androidx.core.view.forEach
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -57,6 +58,7 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
+import com.airbnb.mvrx.withState
 import com.github.piasy.biv.BigImageViewer
 import com.github.piasy.biv.loader.ImageLoader
 import com.google.android.material.snackbar.Snackbar
@@ -78,6 +80,7 @@ import im.vector.matrix.android.api.session.room.model.message.MessageTextConten
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
 import im.vector.matrix.android.api.session.room.send.SendState
+import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.matrix.android.api.session.room.timeline.getTextEditableContent
@@ -96,6 +99,7 @@ import im.vector.riotx.core.glide.GlideApp
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.ui.views.JumpToReadMarkerView
 import im.vector.riotx.core.ui.views.NotificationAreaView
+import im.vector.riotx.core.utils.Debouncer
 import im.vector.riotx.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
 import im.vector.riotx.core.utils.PERMISSIONS_FOR_WRITING_FILES
 import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_DOWNLOAD_FILE
@@ -105,6 +109,7 @@ import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_VIDEO_CA
 import im.vector.riotx.core.utils.allGranted
 import im.vector.riotx.core.utils.checkPermissions
 import im.vector.riotx.core.utils.copyToClipboard
+import im.vector.riotx.core.utils.createUIHandler
 import im.vector.riotx.core.utils.openCamera
 import im.vector.riotx.core.utils.shareMedia
 import im.vector.riotx.core.utils.toast
@@ -127,7 +132,6 @@ import im.vector.riotx.features.home.room.detail.timeline.action.MessageActionsB
 import im.vector.riotx.features.home.room.detail.timeline.action.SimpleAction
 import im.vector.riotx.features.home.room.detail.timeline.action.ViewEditHistoryBottomSheet
 import im.vector.riotx.features.home.room.detail.timeline.action.ViewReactionBottomSheet
-import im.vector.riotx.features.home.room.detail.timeline.helper.EndlessRecyclerViewScrollListener
 import im.vector.riotx.features.home.room.detail.timeline.item.AbsMessageItem
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageFileItem
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageImageVideoItem
@@ -211,6 +215,8 @@ class RoomDetailFragment :
     private val roomDetailViewModel: RoomDetailViewModel by fragmentViewModel()
     private val textComposerViewModel: TextComposerViewModel by fragmentViewModel()
 
+    private val debouncer = Debouncer(createUIHandler())
+
     @Inject lateinit var session: Session
     @Inject lateinit var avatarRenderer: AvatarRenderer
     @Inject lateinit var timelineEventController: TimelineEventController
@@ -227,7 +233,6 @@ class RoomDetailFragment :
 
     private lateinit var scrollOnNewMessageCallback: ScrollOnNewMessageCallback
     private lateinit var scrollOnHighlightedEventCallback: ScrollOnHighlightedEventCallback
-    private lateinit var endlessScrollListener: EndlessRecyclerViewScrollListener
 
 
     override fun getLayoutResId() = R.layout.fragment_room_detail
@@ -254,6 +259,7 @@ class RoomDetailFragment :
         setupInviteView()
         setupNotificationView()
         setupJumpToReadMarkerView()
+        setupJumpToBottomView()
         roomDetailViewModel.subscribe { renderState(it) }
         textComposerViewModel.subscribe { renderTextComposerState(it) }
         roomDetailViewModel.sendMessageResultLiveData.observeEvent(this) { renderSendMessageResult(it) }
@@ -303,6 +309,21 @@ class RoomDetailFragment :
                 else                 -> View.GONE
             }
             syncProgressBarWrap.visibility = syncProgressBar.visibility
+        }
+    }
+
+    private fun setupJumpToBottomView() {
+        jumpToBottomView.isVisible = false
+        jumpToBottomView.setOnClickListener {
+            withState(roomDetailViewModel) { state ->
+                recyclerView.stopScroll()
+                if (state.timeline?.isLive == false) {
+                    state.timeline.restartWithEventId(null)
+                } else {
+                    layoutManager.scrollToPosition(0)
+                }
+                jumpToBottomView.isVisible = false
+            }
         }
     }
 
@@ -377,17 +398,17 @@ class RoomDetailFragment :
         if (messageContent is MessageTextContent && messageContent.format == MessageType.FORMAT_MATRIX_HTML) {
             val parser = Parser.builder().build()
             val document = parser.parse(messageContent.formattedBody
-                    ?: messageContent.body)
+                                        ?: messageContent.body)
             formattedBody = eventHtmlRenderer.render(document)
         }
         composerLayout.composerRelatedMessageContent.text = formattedBody
-                ?: nonFormattedBody
+                                                            ?: nonFormattedBody
 
         composerLayout.composerEditText.setText(if (useText) event.getTextEditableContent() else "")
         composerLayout.composerRelatedMessageActionIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), iconRes))
 
         avatarRenderer.render(event.senderAvatar, event.root.senderId
-                ?: "", event.senderName, composerLayout.composerRelatedMessageAvatar)
+                                                  ?: "", event.senderName, composerLayout.composerRelatedMessageAvatar)
 
         composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text.length)
         composerLayout.expand {
@@ -416,9 +437,9 @@ class RoomDetailFragment :
                 REQUEST_FILES_REQUEST_CODE, TAKE_IMAGE_REQUEST_CODE -> handleMediaIntent(data)
                 REACTION_SELECT_REQUEST_CODE                        -> {
                     val eventId = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_EVENT_ID)
-                            ?: return
+                                  ?: return
                     val reaction = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_REACTION_RESULT)
-                            ?: return
+                                   ?: return
                     //TODO check if already reacted with that?
                     roomDetailViewModel.process(RoomDetailActions.SendReaction(reaction, eventId))
                 }
@@ -428,14 +449,12 @@ class RoomDetailFragment :
 
 // PRIVATE METHODS *****************************************************************************
 
+
     private fun setupRecyclerView() {
         val epoxyVisibilityTracker = EpoxyVisibilityTracker()
         epoxyVisibilityTracker.attach(recyclerView)
         layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, true)
         val stateRestorer = LayoutManagerStateRestorer(layoutManager).register()
-        endlessScrollListener = EndlessRecyclerViewScrollListener(layoutManager, RoomDetailViewModel.PAGINATION_COUNT) { direction ->
-            roomDetailViewModel.process(RoomDetailActions.LoadMoreTimelineEvents(direction))
-        }
         scrollOnNewMessageCallback = ScrollOnNewMessageCallback(layoutManager, timelineEventController)
         scrollOnHighlightedEventCallback = ScrollOnHighlightedEventCallback(layoutManager, timelineEventController)
         recyclerView.layoutManager = layoutManager
@@ -446,36 +465,65 @@ class RoomDetailFragment :
             it.dispatchTo(scrollOnNewMessageCallback)
             it.dispatchTo(scrollOnHighlightedEventCallback)
         }
-
-        recyclerView.addOnScrollListener(endlessScrollListener)
         recyclerView.setController(timelineEventController)
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (recyclerView.scrollState == RecyclerView.SCROLL_STATE_IDLE) {
+                    updateJumpToBottomViewVisibility()
+                }
+            }
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                when (newState) {
+                    RecyclerView.SCROLL_STATE_IDLE     -> {
+                        updateJumpToBottomViewVisibility()
+                    }
+                    RecyclerView.SCROLL_STATE_DRAGGING,
+                    RecyclerView.SCROLL_STATE_SETTLING -> {
+                        jumpToBottomView.hide()
+                    }
+                }
+            }
+        })
         timelineEventController.callback = this
 
         if (vectorPreferences.swipeToReplyIsEnabled()) {
             val swipeCallback = RoomMessageTouchHelperCallback(requireContext(),
-                    R.drawable.ic_reply,
-                    object : RoomMessageTouchHelperCallback.QuickReplayHandler {
-                        override fun performQuickReplyOnHolder(model: EpoxyModel<*>) {
-                            (model as? AbsMessageItem)?.attributes?.informationData?.let {
-                                val eventId = it.eventId
-                                roomDetailViewModel.process(RoomDetailActions.EnterReplyMode(eventId))
-                            }
-                        }
+                                                               R.drawable.ic_reply,
+                                                               object : RoomMessageTouchHelperCallback.QuickReplayHandler {
+                                                                   override fun performQuickReplyOnHolder(model: EpoxyModel<*>) {
+                                                                       (model as? AbsMessageItem)?.attributes?.informationData?.let {
+                                                                           val eventId = it.eventId
+                                                                           roomDetailViewModel.process(RoomDetailActions.EnterReplyMode(eventId))
+                                                                       }
+                                                                   }
 
-                        override fun canSwipeModel(model: EpoxyModel<*>): Boolean {
-                            return when (model) {
-                                is MessageFileItem,
-                                is MessageImageVideoItem,
-                                is MessageTextItem -> {
-                                    return (model as AbsMessageItem).attributes.informationData.sendState == SendState.SYNCED
-                                }
-                                else               -> false
-                            }
-                        }
-                    })
+                                                                   override fun canSwipeModel(model: EpoxyModel<*>): Boolean {
+                                                                       return when (model) {
+                                                                           is MessageFileItem,
+                                                                           is MessageImageVideoItem,
+                                                                           is MessageTextItem -> {
+                                                                               return (model as AbsMessageItem).attributes.informationData.sendState == SendState.SYNCED
+                                                                           }
+                                                                           else               -> false
+                                                                       }
+                                                                   }
+                                                               })
             val touchHelper = ItemTouchHelper(swipeCallback)
             touchHelper.attachToRecyclerView(recyclerView)
         }
+    }
+
+    private fun updateJumpToBottomViewVisibility() {
+        debouncer.debounce("jump_to_bottom_visibility", 100, Runnable {
+            Timber.v("First visible: ${layoutManager.findFirstCompletelyVisibleItemPosition()}")
+            if (layoutManager.findFirstCompletelyVisibleItemPosition() != 0) {
+                jumpToBottomView.show()
+            } else {
+                jumpToBottomView.hide()
+            }
+        })
     }
 
     private fun setupComposer() {
@@ -737,7 +785,7 @@ class RoomDetailFragment :
                 .show()
     }
 
-    // TimelineEventController.Callback ************************************************************
+// TimelineEventController.Callback ************************************************************
 
     override fun onUrlClicked(url: String): Boolean {
         return permalinkHandler.launch(requireActivity(), url, object : NavigateToRoomInterceptor {
@@ -835,6 +883,10 @@ class RoomDetailFragment :
         vectorBaseActivity.notImplemented("open audio file")
     }
 
+    override fun onLoadMore(direction: Timeline.Direction) {
+        roomDetailViewModel.process(RoomDetailActions.LoadMoreTimelineEvents(direction))
+    }
+
     override fun onEventCellClicked(informationData: MessageInformationData, messageContent: MessageContent?, view: View) {
 
     }
@@ -901,7 +953,7 @@ class RoomDetailFragment :
         }
     }
 
-    // AutocompleteUserPresenter.Callback
+// AutocompleteUserPresenter.Callback
 
     override fun onQueryUsers(query: CharSequence?) {
         textComposerViewModel.process(TextComposerActions.QueryUsers(query))
@@ -1066,6 +1118,7 @@ class RoomDetailFragment :
         snack.show()
     }
 
+
     // VectorInviteView.Callback
 
     override fun onAcceptInvite() {
@@ -1078,7 +1131,7 @@ class RoomDetailFragment :
         roomDetailViewModel.process(RoomDetailActions.RejectInvite)
     }
 
-    // JumpToReadMarkerView.Callback
+// JumpToReadMarkerView.Callback
 
     override fun onJumpToReadMarkerClicked(readMarkerId: String) {
         roomDetailViewModel.process(RoomDetailActions.NavigateToEvent(readMarkerId, false))

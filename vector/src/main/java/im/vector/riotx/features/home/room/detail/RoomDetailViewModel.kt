@@ -21,6 +21,8 @@ import android.text.TextUtils
 import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import arrow.core.Option
+import arrow.core.getOrElse
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
@@ -635,16 +637,22 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     private fun observeJumpToReadMarkerViewVisibility() {
         Observable
                 .combineLatest(
-                        room.rx().liveRoomSummary(),
+                        room.rx().liveRoomSummary().map {
+                            val readMarkerId = it.readMarkerId
+                            if (readMarkerId == null) {
+                                Option.empty()
+                            } else {
+                                val timelineEvent = room.getTimeLineEvent(readMarkerId)
+                                Option.fromNullable(timelineEvent)
+                            }
+                        }.distinctUntilChanged(),
                         visibleEventsObservable.distinctUntilChanged(),
-                        isEventVisibleObservable { it.hasReadMarker }.startWith(false).takeUntil { it },
-                        Function3<RoomSummary, RoomDetailActions.TimelineEventTurnsVisible, Boolean, Boolean> { roomSummary, currentVisibleEvent, isReadMarkerViewVisible ->
-                            val readMarkerId = roomSummary.readMarkerId
-                            if (readMarkerId == null || isReadMarkerViewVisible || !timeline.isLive) {
+                        isEventVisibleObservable { it.hasReadMarker }.startWith(false),
+                        Function3<Option<TimelineEvent>, RoomDetailActions.TimelineEventTurnsVisible, Boolean, Boolean> { readMarkerEvent, currentVisibleEvent, isReadMarkerViewVisible ->
+                            if (readMarkerEvent.isEmpty() || isReadMarkerViewVisible) {
                                 false
                             } else {
-                                val readMarkerPosition = timeline.getTimelineEventWithId(readMarkerId)?.displayIndex
-                                                         ?: Int.MIN_VALUE
+                                val readMarkerPosition = readMarkerEvent.map { it.displayIndex }.getOrElse { Int.MIN_VALUE }
                                 val currentVisibleEventPosition = currentVisibleEvent.event.displayIndex
                                 readMarkerPosition < currentVisibleEventPosition
                             }

@@ -45,7 +45,7 @@ interface Timeline {
     fun dispose()
 
 
-    fun restartWithEventId(eventId: String)
+    fun restartWithEventId(eventId: String?)
 
 
     /**

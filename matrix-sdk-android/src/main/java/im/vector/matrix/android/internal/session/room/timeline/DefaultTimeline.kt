@@ -114,7 +114,7 @@ internal class DefaultTimeline(
     private val timelineID = UUID.randomUUID().toString()
 
     override val isLive
-        get() = initialEventId == null
+        get() = !hasMoreToLoad(Timeline.Direction.FORWARDS)
 
     private val eventDecryptor = TimelineEventDecryptor(realmConfiguration, timelineID, cryptoService)
 
@@ -260,7 +260,7 @@ internal class DefaultTimeline(
         }
     }
 
-    override fun restartWithEventId(eventId: String) {
+    override fun restartWithEventId(eventId: String?) {
         dispose()
         initialEventId = eventId
         start()
@@ -415,7 +415,7 @@ internal class DefaultTimeline(
      */
     private fun handleInitialLoad() {
         var shouldFetchInitialEvent = false
-        val initialDisplayIndex = if (isLive) {
+        val initialDisplayIndex = if (initialEventId == null) {
             liveEvents.firstOrNull()?.root?.displayIndex
         } else {
             val initialEvent = liveEvents.where()
@@ -431,7 +431,7 @@ internal class DefaultTimeline(
             fetchEvent(currentInitialEventId)
         } else {
             val count = min(settings.initialSize, liveEvents.size)
-            if (isLive) {
+            if (initialEventId == null) {
                 paginateInternal(initialDisplayIndex, Timeline.Direction.BACKWARDS, count, strict = false)
             } else {
                 paginateInternal(initialDisplayIndex, Timeline.Direction.FORWARDS, count / 2, strict = false)

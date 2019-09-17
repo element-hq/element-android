@@ -26,7 +26,6 @@ import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.query.find
 import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
-import im.vector.matrix.android.internal.database.query.getOrCreate
 import im.vector.matrix.android.internal.database.query.latestEvent
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.network.executeRequest
@@ -36,7 +35,6 @@ import im.vector.matrix.android.internal.session.sync.RoomFullyReadHandler
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.Realm
-import io.realm.RealmConfiguration
 import timber.log.Timber
 import javax.inject.Inject
 

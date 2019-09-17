@@ -55,7 +55,7 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
         )
         holder.view.setOnLongClickListener(attributes.itemLongClickListener)
         holder.readReceiptsView.render(attributes.informationData.readReceipts, attributes.avatarRenderer, _readReceiptsClickListener)
-        holder.readMarkerView.bindView(attributes.informationData, _readMarkerCallback)
+        holder.readMarkerView.bindView(attributes.informationData.displayReadMarker, _readMarkerCallback)
     }
 
     override fun unbind(holder: Holder) {
@@ -68,7 +68,6 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
     class Holder : BaseHolder(STUB_ID) {
         val avatarImageView by bind<ImageView>(R.id.itemNoticeAvatarView)
         val noticeTextView by bind<TextView>(R.id.itemNoticeTextView)
-        val readMarkerView by bind<ReadMarkerView>(R.id.readMarkerView)
     }
 
     data class Attributes(

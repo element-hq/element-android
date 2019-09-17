@@ -17,6 +17,8 @@
 package im.vector.riotx.features.home.room.detail.timeline.factory
 
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.riotx.core.di.ActiveSessionHolder
+import im.vector.riotx.core.extensions.displayReadMarker
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.home.room.detail.timeline.helper.AvatarSizeProvider
@@ -29,7 +31,8 @@ import im.vector.riotx.features.home.room.detail.timeline.item.MergedHeaderItem
 import im.vector.riotx.features.home.room.detail.timeline.item.MergedHeaderItem_
 import javax.inject.Inject
 
-class MergedHeaderItemFactory @Inject constructor(private val avatarRenderer: AvatarRenderer,
+class MergedHeaderItemFactory @Inject constructor(private val sessionHolder: ActiveSessionHolder,
+                                                  private val avatarRenderer: AvatarRenderer,
                                                   private val avatarSizeProvider: AvatarSizeProvider) {
 
     private val collapsedEventIds = linkedSetOf<Long>()
@@ -40,6 +43,7 @@ class MergedHeaderItemFactory @Inject constructor(private val avatarRenderer: Av
                items: List<TimelineEvent>,
                addDaySeparator: Boolean,
                currentPosition: Int,
+               eventIdToHighlight: String?,
                callback: TimelineEventController.Callback?,
                requestModelBuild: () -> Unit)
             : MergedHeaderItem? {
@@ -47,20 +51,30 @@ class MergedHeaderItemFactory @Inject constructor(private val avatarRenderer: Av
         return if (!event.canBeMerged() || (nextEvent?.root?.getClearType() == event.root.getClearType() && !addDaySeparator)) {
             null
         } else {
+            var highlighted = false
+            var showReadMarker = false
             val prevSameTypeEvents = items.prevSameTypeEvents(currentPosition, 2)
             if (prevSameTypeEvents.isEmpty()) {
                 null
             } else {
                 val mergedEvents = (prevSameTypeEvents + listOf(event)).asReversed()
-                val mergedData = mergedEvents.map { mergedEvent ->
+                val mergedData = ArrayList<MergedHeaderItem.Data>(mergedEvents.size)
+                mergedEvents.forEach { mergedEvent ->
+                    if (!highlighted && mergedEvent.root.eventId == eventIdToHighlight) {
+                        highlighted = true
+                    }
+                    if (!showReadMarker && mergedEvent.displayReadMarker(sessionHolder.getActiveSession().myUserId)) {
+                        showReadMarker = true
+                    }
                     val senderAvatar = mergedEvent.senderAvatar()
                     val senderName = mergedEvent.senderName()
-                    MergedHeaderItem.Data(
+                    val data = MergedHeaderItem.Data(
                             userId = mergedEvent.root.senderId ?: "",
                             avatarUrl = senderAvatar,
                             memberName = senderName ?: "",
                             eventId = mergedEvent.localId
                     )
+                    mergedData.add(data)
                 }
                 val mergedEventIds = mergedEvents.map { it.localId }
                 // We try to find if one of the item id were used as mergeItemCollapseStates key
@@ -82,11 +96,13 @@ class MergedHeaderItemFactory @Inject constructor(private val avatarRenderer: Av
                         onCollapsedStateChanged = {
                             mergeItemCollapseStates[event.localId] = it
                             requestModelBuild()
-                        }
+                        },
+                        showReadMarker = showReadMarker
                 )
                 MergedHeaderItem_()
                         .id(mergeId)
                         .leftGuideline(avatarSizeProvider.leftGuideline)
+                        .highlighted(highlighted)
                         .attributes(attributes)
                         .also {
                             it.setOnVisibilityStateChanged(MergedTimelineEventVisibilityStateChangedListener(callback, mergedEvents))

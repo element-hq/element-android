@@ -17,6 +17,7 @@
 package im.vector.matrix.android.internal.session.sync
 
 import im.vector.matrix.android.api.session.room.read.FullyReadContent
+import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.ReadMarkerEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
@@ -37,12 +38,13 @@ internal class RoomFullyReadHandler @Inject constructor() {
         RoomSummaryEntity.getOrCreate(realm, roomId).apply {
             readMarkerId = content.eventId
         }
-        val readMarkerEntity = ReadMarkerEntity.getOrCreate(realm, roomId).apply {
-            eventId = content.eventId
-        }
-
+        val readMarkerEntity = ReadMarkerEntity.getOrCreate(realm, roomId)
         // Remove the old marker if any
-        readMarkerEntity.timelineEvent?.firstOrNull()?.readMarker = null
+        if (readMarkerEntity.eventId.isNotEmpty()) {
+            val oldReadMarkerEvent = TimelineEventEntity.where(realm, eventId = readMarkerEntity.eventId).findFirst()
+            oldReadMarkerEvent?.readMarker = null
+        }
+        readMarkerEntity.eventId = content.eventId
         // Attach to timelineEvent if known
         val timelineEventEntity = TimelineEventEntity.where(realm, eventId = content.eventId).findFirst()
         timelineEventEntity?.readMarker = readMarkerEntity
