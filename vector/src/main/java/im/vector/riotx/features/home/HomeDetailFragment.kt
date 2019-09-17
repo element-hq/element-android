@@ -21,6 +21,7 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import androidx.core.view.forEachIndexed
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.airbnb.mvrx.args
@@ -208,11 +209,12 @@ class HomeDetailFragment : VectorBaseFragment(), KeysBackupBanner.Delegate {
         unreadCounterBadgeViews[INDEX_CATCHUP].render(UnreadCounterBadgeView.State(it.notificationCountCatchup, it.notificationHighlightCatchup))
         unreadCounterBadgeViews[INDEX_PEOPLE].render(UnreadCounterBadgeView.State(it.notificationCountPeople, it.notificationHighlightPeople))
         unreadCounterBadgeViews[INDEX_ROOMS].render(UnreadCounterBadgeView.State(it.notificationCountRooms, it.notificationHighlightRooms))
-        syncProgressBar.visibility = when (it.syncState) {
+        syncProgressBarWrap.visibility = when (it.syncState) {
             is SyncState.RUNNING -> if (it.syncState.afterPause) View.VISIBLE else View.GONE
             else                 -> View.GONE
         }
-        syncProgressBarWrap.visibility = syncProgressBar.visibility
+        // TODO Create a View
+        noNetworkBanner.isVisible = it.syncState is SyncState.NO_NETWORK
     }
 
     companion object {

@@ -97,6 +97,8 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
 
             if (!networkConnectivityChecker.isConnected() || state == SyncState.PAUSED) {
                 Timber.v("No network or sync is Paused. Waiting...")
+                updateStateTo(SyncState.NO_NETWORK)
+
                 synchronized(lock) {
                     lock.wait()
                 }

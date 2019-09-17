@@ -71,7 +71,7 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <!-- Trick to remove surrounding padding (clip frome wrapping frame) -->
+    <!-- Trick to remove surrounding padding (clip from wrapping frame) -->
     <FrameLayout
         android:id="@+id/syncProgressBarWrap"
         android:layout_width="match_parent"
@@ -83,16 +83,28 @@
         tools:visibility="visible">
 
         <ProgressBar
-            android:id="@+id/syncProgressBar"
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="match_parent"
             android:layout_height="14dp"
             android:layout_gravity="center"
             android:background="?riotx_header_panel_background"
-            android:indeterminate="true"
-            android:visibility="gone"
-            tools:visibility="visible" />
+            android:indeterminate="true" />
+
     </FrameLayout>
+
+    <TextView
+        android:id="@+id/noNetworkBanner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/vector_warning_color"
+        android:gravity="center"
+        android:text="@string/no_network_indicator"
+        android:textColor="@color/white"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/syncProgressBarWrap"
+        tools:visibility="visible" />
 
     <com.airbnb.epoxy.EpoxyRecyclerView
         android:id="@+id/recyclerView"
@@ -102,7 +114,7 @@
         app:layout_constraintBottom_toTopOf="@+id/recyclerViewBarrier"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/syncProgressBarWrap"
+        app:layout_constraintTop_toBottomOf="@id/noNetworkBanner"
         tools:listitem="@layout/item_timeline_event_base" />
 
     <androidx.constraintlayout.widget.Barrier

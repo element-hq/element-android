@@ -39,6 +39,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
 import androidx.core.view.forEach
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -77,8 +78,8 @@ import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.core.files.addEntryToDownloadManager
 import im.vector.riotx.core.glide.GlideApp
-import im.vector.riotx.core.ui.views.NotificationAreaView
 import im.vector.riotx.core.platform.VectorBaseFragment
+import im.vector.riotx.core.ui.views.NotificationAreaView
 import im.vector.riotx.core.utils.*
 import im.vector.riotx.features.autocomplete.command.AutocompleteCommandPresenter
 import im.vector.riotx.features.autocomplete.command.CommandAutocompletePolicy
@@ -251,11 +252,12 @@ class RoomDetailFragment :
         }
 
         roomDetailViewModel.selectSubscribe(RoomDetailViewState::syncState) { syncState ->
-            syncProgressBar.visibility = when (syncState) {
+            syncProgressBarWrap.visibility = when (syncState) {
                 is SyncState.RUNNING -> if (syncState.afterPause) View.VISIBLE else View.GONE
                 else                 -> View.GONE
             }
-            syncProgressBarWrap.visibility = syncProgressBar.visibility
+            // TODO Create a View
+            noNetworkBanner.isVisible = syncState is SyncState.NO_NETWORK
         }
     }
 
