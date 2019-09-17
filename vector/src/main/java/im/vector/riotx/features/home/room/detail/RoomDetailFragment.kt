@@ -65,7 +65,6 @@ import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.matrix.android.api.session.room.timeline.getTextEditableContent
-import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
@@ -77,8 +76,8 @@ import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.core.files.addEntryToDownloadManager
 import im.vector.riotx.core.glide.GlideApp
-import im.vector.riotx.core.ui.views.NotificationAreaView
 import im.vector.riotx.core.platform.VectorBaseFragment
+import im.vector.riotx.core.ui.views.NotificationAreaView
 import im.vector.riotx.core.utils.*
 import im.vector.riotx.features.autocomplete.command.AutocompleteCommandPresenter
 import im.vector.riotx.features.autocomplete.command.CommandAutocompletePolicy
@@ -251,11 +250,7 @@ class RoomDetailFragment :
         }
 
         roomDetailViewModel.selectSubscribe(RoomDetailViewState::syncState) { syncState ->
-            syncProgressBar.visibility = when (syncState) {
-                is SyncState.RUNNING -> if (syncState.afterPause) View.VISIBLE else View.GONE
-                else                 -> View.GONE
-            }
-            syncProgressBarWrap.visibility = syncProgressBar.visibility
+            syncStateView.render(syncState)
         }
     }
 

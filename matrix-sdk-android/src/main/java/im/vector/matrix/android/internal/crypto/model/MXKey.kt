@@ -18,7 +18,6 @@ package im.vector.matrix.android.internal.crypto.model
 
 import im.vector.matrix.android.api.util.JsonDict
 import timber.log.Timber
-import java.util.*
 
 data class MXKey(
         /**
@@ -46,11 +45,7 @@ data class MXKey(
      * @return the signed data map
      */
     fun signalableJSONDictionary(): Map<String, Any> {
-        val map = HashMap<String, Any>()
-
-        map["key"] = value
-
-        return map
+        return mapOf("key" to value)
     }
 
     /**

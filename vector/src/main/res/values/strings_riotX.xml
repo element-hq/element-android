@@ -2,5 +2,14 @@
 <resources>
 
     <!-- Strings not defined in Riot -->
+    <string name="labs_allow_extended_logging">Enable verbose logs.</string>
+    <string name="labs_allow_extended_logging_summary">Verbose logs will help developers by providing more logs when you send a RageShake. Even when enabled, the application does not log message contents or any other private data.</string>
+
+
+    <string name="error_terms_not_accepted">Please retry once you have accepted the terms and conditions of your homeserver.</string>
+
+    <!-- This one is already defined in Riot, but not yet synced-->
+    <string name="error_user_already_logged_in">It looks like you’re trying to connect to another homeserver. Do you want to sign out?</string>
+
 
 </resources>

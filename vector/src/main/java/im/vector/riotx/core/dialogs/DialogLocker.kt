@@ -26,9 +26,9 @@ private const val KEY_DIALOG_IS_DISPLAYED = "DialogLocker.KEY_DIALOG_IS_DISPLAYE
 /**
  * Class to avoid displaying twice the same dialog
  */
-class DialogLocker() : Restorable {
+class DialogLocker(savedInstanceState: Bundle?) : Restorable {
 
-    private var isDialogDisplayed: Boolean = false
+    private var isDialogDisplayed = savedInstanceState?.getBoolean(KEY_DIALOG_IS_DISPLAYED, false) == true
 
     private fun unlock() {
         isDialogDisplayed = false

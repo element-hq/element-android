@@ -17,15 +17,22 @@
 package im.vector.matrix.android.api.auth
 
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.util.Cancelable
+import im.vector.matrix.android.internal.auth.data.LoginFlowResponse
 
 /**
  * This interface defines methods to authenticate to a matrix server.
  */
 interface Authenticator {
+
+    /**
+     * Request the supported login flows for this homeserver
+     */
+    fun getLoginFlow(homeServerConnectionConfig: HomeServerConnectionConfig, callback: MatrixCallback<LoginFlowResponse>): Cancelable
 
     /**
      * @param homeServerConnectionConfig this param is used to configure the Homeserver
@@ -56,4 +63,9 @@ interface Authenticator {
      * @return the associated session if any, or null
      */
     fun getSession(sessionParams: SessionParams): Session?
+
+    /**
+     * Create a session after a SSO successful login
+     */
+    fun createSessionFromSso(credentials: Credentials, homeServerConnectionConfig: HomeServerConnectionConfig): Session
 }

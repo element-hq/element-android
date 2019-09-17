@@ -22,7 +22,7 @@ import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import timber.log.Timber
-import java.util.*
+import java.util.TreeSet
 
 /**
  * Build canonical Json
@@ -60,43 +60,33 @@ object JsonCanonicalizer {
         when (any) {
             is JSONArray  -> {
                 // Canonicalize each element of the array
-                val result = StringBuilder("[")
-
-                for (i in 0 until any.length()) {
-                    result.append(canonicalizeRecursive(any.get(i)))
-                    if (i < any.length() - 1) {
-                        result.append(",")
-                    }
+                return (0 until any.length()).joinToString(separator = ",", prefix = "[", postfix = "]") {
+                    canonicalizeRecursive(any.get(it))
                 }
-
-                result.append("]")
-
-                return result.toString()
             }
             is JSONObject -> {
                 // Sort the attributes by name, and the canonicalize each element of the JSONObject
-                val result = StringBuilder("{")
 
                 val attributes = TreeSet<String>()
                 for (entry in any.keys()) {
                     attributes.add(entry)
                 }
 
-                for (attribute in attributes.withIndex()) {
-                    result.append("\"")
-                            .append(attribute.value)
-                            .append("\"")
-                            .append(":")
-                            .append(canonicalizeRecursive(any[attribute.value]))
+                return buildString {
+                    append("{")
+                    for ((index, value) in attributes.withIndex()) {
+                        append("\"")
+                        append(value)
+                        append("\"")
+                        append(":")
+                        append(canonicalizeRecursive(any[value]))
 
-                    if (attribute.index < attributes.size - 1) {
-                        result.append(",")
+                        if (index < attributes.size - 1) {
+                            append(",")
+                        }
                     }
+                    append("}")
                 }
-
-                result.append("}")
-
-                return result.toString()
             }
             is String     -> return JSONObject.quote(any)
             else          -> return any.toString()

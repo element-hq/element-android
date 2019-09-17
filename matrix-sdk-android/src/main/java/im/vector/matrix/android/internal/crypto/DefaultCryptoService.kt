@@ -62,11 +62,9 @@ import im.vector.matrix.android.internal.crypto.tasks.*
 import im.vector.matrix.android.internal.crypto.verification.DefaultSasVerificationService
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.di.CryptoDatabase
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.extensions.foldToCallback
 import im.vector.matrix.android.internal.session.SessionScope
-import im.vector.matrix.android.internal.session.cache.ClearCacheTask
 import im.vector.matrix.android.internal.session.room.membership.LoadRoomMembersTask
 import im.vector.matrix.android.internal.session.room.membership.RoomMembers
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
@@ -93,7 +91,7 @@ import kotlin.math.max
  * Specially, it tracks all room membership changes events in order to do keys updates.
  */
 @SessionScope
-internal class CryptoManager @Inject constructor(
+internal class DefaultCryptoService @Inject constructor(
         // Olm Manager
         private val olmManager: OlmManager,
         // The credentials,
@@ -135,7 +133,6 @@ internal class CryptoManager @Inject constructor(
         private val setDeviceNameTask: SetDeviceNameTask,
         private val uploadKeysTask: UploadKeysTask,
         private val loadRoomMembersTask: LoadRoomMembersTask,
-        @CryptoDatabase private val clearCryptoDataTask: ClearCacheTask,
         private val monarchy: Monarchy,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val taskExecutor: TaskExecutor
@@ -1047,14 +1044,6 @@ internal class CryptoManager @Inject constructor(
         }
     }
 
-    override fun clearCryptoCache(callback: MatrixCallback<Unit>) {
-        clearCryptoDataTask
-                .configureWith {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
-    }
-
     override fun addNewSessionListener(newSessionListener: NewSessionListener) {
         roomDecryptorProvider.addNewSessionListener(newSessionListener)
     }
@@ -1067,6 +1056,6 @@ internal class CryptoManager @Inject constructor(
      * ========================================================================================== */
 
     override fun toString(): String {
-        return "CryptoManager of " + credentials.userId + " (" + credentials.deviceId + ")"
+        return "DefaultCryptoService of " + credentials.userId + " (" + credentials.deviceId + ")"
     }
 }

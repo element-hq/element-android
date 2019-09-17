@@ -24,7 +24,6 @@ import java.security.KeyStore
 import java.security.MessageDigest
 import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
-import java.util.*
 import javax.net.ssl.*
 import kotlin.experimental.and
 

@@ -23,7 +23,6 @@ import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceKeys
 import java.io.Serializable
-import java.util.*
 
 @JsonClass(generateAdapter = true)
 data class MXDeviceInfo(

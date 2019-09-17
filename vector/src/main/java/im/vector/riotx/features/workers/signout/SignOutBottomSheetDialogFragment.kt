@@ -106,7 +106,7 @@ class SignOutBottomSheetDialogFragment : BottomSheetDialogFragment() {
         val vectorBaseActivity = activity as VectorBaseActivity
         val screenComponent = DaggerScreenComponent.factory().create(vectorBaseActivity.getVectorComponent(), vectorBaseActivity)
         viewModelFactory = screenComponent.viewModelFactory()
-        session = screenComponent.session()
+        session = screenComponent.activeSessionHolder().getActiveSession()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

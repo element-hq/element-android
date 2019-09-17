@@ -17,7 +17,6 @@
 package im.vector.matrix.android.api.comparators
 
 import im.vector.matrix.android.api.interfaces.DatedObject
-import java.util.*
 
 object DatedObjectComparators {
 

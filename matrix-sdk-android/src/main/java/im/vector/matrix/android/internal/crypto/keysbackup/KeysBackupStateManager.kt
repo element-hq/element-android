@@ -20,7 +20,6 @@ import android.os.Handler
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupStateListener
 import timber.log.Timber
-import java.util.*
 
 internal class KeysBackupStateManager(private val uiHandler: Handler) {
 

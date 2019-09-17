@@ -23,7 +23,7 @@ import dagger.Provides
 import im.vector.matrix.android.api.auth.Authenticator
 import im.vector.matrix.android.internal.auth.db.AuthRealmModule
 import im.vector.matrix.android.internal.auth.db.RealmSessionParamsStore
-import im.vector.matrix.android.internal.database.configureEncryption
+import im.vector.matrix.android.internal.database.RealmKeysUtils
 import im.vector.matrix.android.internal.di.AuthDatabase
 import io.realm.RealmConfiguration
 import java.io.File
@@ -33,16 +33,21 @@ internal abstract class AuthModule {
 
     @Module
     companion object {
+        private const val DB_ALIAS = "matrix-sdk-auth"
+
         @JvmStatic
         @Provides
         @AuthDatabase
-        fun providesRealmConfiguration(context: Context): RealmConfiguration {
+        fun providesRealmConfiguration(context: Context, realmKeysUtils: RealmKeysUtils): RealmConfiguration {
             val old = File(context.filesDir, "matrix-sdk-auth")
             if (old.exists()) {
                 old.renameTo(File(context.filesDir, "matrix-sdk-auth.realm"))
             }
+
             return RealmConfiguration.Builder()
-                    .configureEncryption("matrix-sdk-auth", context)
+                    .apply {
+                        realmKeysUtils.configureEncryption(this, DB_ALIAS)
+                    }
                     .name("matrix-sdk-auth.realm")
                     .modules(AuthRealmModule())
                     .deleteRealmIfMigrationNeeded()

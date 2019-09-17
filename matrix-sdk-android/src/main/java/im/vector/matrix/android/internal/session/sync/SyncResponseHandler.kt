@@ -18,7 +18,7 @@ package im.vector.matrix.android.internal.session.sync
 
 import arrow.core.Try
 import im.vector.matrix.android.R
-import im.vector.matrix.android.internal.crypto.CryptoManager
+import im.vector.matrix.android.internal.crypto.DefaultCryptoService
 import im.vector.matrix.android.internal.session.DefaultInitialSyncProgressService
 import im.vector.matrix.android.internal.session.reportSubtask
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
@@ -30,7 +30,7 @@ internal class SyncResponseHandler @Inject constructor(private val roomSyncHandl
                                                        private val userAccountDataSyncHandler: UserAccountDataSyncHandler,
                                                        private val groupSyncHandler: GroupSyncHandler,
                                                        private val cryptoSyncHandler: CryptoSyncHandler,
-                                                       private val cryptoManager: CryptoManager,
+                                                       private val cryptoService: DefaultCryptoService,
                                                        private val initialSyncProgressService: DefaultInitialSyncProgressService) {
 
     fun handleResponse(syncResponse: SyncResponse, fromToken: String?, isCatchingUp: Boolean): Try<SyncResponse> {
@@ -40,12 +40,12 @@ internal class SyncResponseHandler @Inject constructor(private val roomSyncHandl
             val reporter = initialSyncProgressService.takeIf { isInitialSync }
 
             measureTimeMillis {
-                if (!cryptoManager.isStarted()) {
-                    Timber.v("Should start cryptoManager")
-                    cryptoManager.start(isInitialSync)
+                if (!cryptoService.isStarted()) {
+                    Timber.v("Should start cryptoService")
+                    cryptoService.start(isInitialSync)
                 }
             }.also {
-                Timber.v("Finish handling start cryptoManager in $it ms")
+                Timber.v("Finish handling start cryptoService in $it ms")
             }
             val measure = measureTimeMillis {
                 // Handle the to device events before the room ones

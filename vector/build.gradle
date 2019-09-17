@@ -15,7 +15,7 @@ androidExtensions {
 }
 
 ext.versionMajor = 0
-ext.versionMinor = 4
+ext.versionMinor = 5
 ext.versionPatch = 0
 
 static def getGitTimestamp() {
@@ -51,8 +51,15 @@ static def gitRevisionDate() {
 }
 
 static def gitBranchName() {
-    def cmd = "git name-rev --name-only HEAD"
-    return cmd.execute().text.trim()
+    def fromEnv = System.env.BUILDKITE_BRANCH as String ?: ""
+
+    if (!fromEnv.isEmpty()) {
+        return fromEnv
+    } else {
+        // Note: this command return "HEAD" on Buildkite, so use the system env 'BUILDKITE_BRANCH' content first
+        def cmd = "git rev-parse --abbrev-ref HEAD"
+        return cmd.execute().text.trim()
+    }
 }
 
 static def getVersionSuffix() {
@@ -75,7 +82,7 @@ project.android.buildTypes.all { buildType ->
 // 64 bits have greater value than 32 bits
 ext.abiVersionCodes = ["armeabi-v7a": 1, "arm64-v8a": 2, "x86": 3, "x86_64": 4].withDefault { 0 }
 
-def buildNumber = System.getenv("BUILDKITE_BUILD_NUMBER") as Integer ?: 0
+def buildNumber = System.env.BUILDKITE_BUILD_NUMBER as Integer ?: 0
 
 android {
     compileSdkVersion 28
@@ -272,6 +279,9 @@ dependencies {
     implementation "ru.noties.markwon:core:$markwon_version"
     implementation "ru.noties.markwon:html:$markwon_version"
     implementation 'me.saket:better-link-movement-method:2.2.0'
+
+    // Bus
+    implementation 'org.greenrobot:eventbus:3.1.1'
 
     // Passphrase strength helper
     implementation 'com.nulab-inc:zxcvbn:1.2.5'

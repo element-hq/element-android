@@ -20,10 +20,10 @@ import androidx.lifecycle.LiveData
 
 interface InitialSyncProgressService {
 
-    fun getLiveStatus() : LiveData<Status?>
+    fun getInitialSyncProgressStatus() : LiveData<Status?>
 
     data class Status(
-            @StringRes val statusText: Int?,
+            @StringRes val statusText: Int,
             val percentProgress: Int = 0
     )
 }

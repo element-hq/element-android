@@ -44,7 +44,7 @@ import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.util.*
+import java.util.UUID
 import javax.inject.Inject
 import kotlin.collections.HashMap
 
@@ -161,7 +161,7 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
                 cancelTransaction(
                         startReq.transactionID!!,
                         otherUserId!!,
-                        startReq?.fromDevice ?: event.getSenderKey()!!,
+                        startReq.fromDevice ?: event.getSenderKey()!!,
                         CancelCode.UnknownMethod
                 )
             }
@@ -388,14 +388,13 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
      * This string must be unique for the pair of users performing verification for the duration that the transaction is valid
      */
     private fun createUniqueIDForTransaction(userId: String, deviceID: String): String {
-        val buff = StringBuffer()
-        buff
-                .append(credentials.userId).append("|")
-                .append(credentials.deviceId).append("|")
-                .append(userId).append("|")
-                .append(deviceID).append("|")
-                .append(UUID.randomUUID().toString())
-        return buff.toString()
+        return buildString {
+            append(credentials.userId).append("|")
+            append(credentials.deviceId).append("|")
+            append(userId).append("|")
+            append(deviceID).append("|")
+            append(UUID.randomUUID().toString())
+        }
     }
 
 
