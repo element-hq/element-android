@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.api.util
+package im.vector.matrix.android.internal.session.securestorage
 
 import android.content.Context
 import android.os.Build

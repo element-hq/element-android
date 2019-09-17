@@ -17,7 +17,6 @@
 package im.vector.matrix.android.internal.session.securestorage
 
 import im.vector.matrix.android.api.session.securestorage.SecureStorageService
-import im.vector.matrix.android.api.util.SecretStoringUtils
 import java.io.InputStream
 import java.io.OutputStream
 import javax.inject.Inject

@@ -18,7 +18,7 @@ package im.vector.matrix.android.internal.database
 import android.content.Context
 import android.util.Base64
 import im.vector.matrix.android.BuildConfig
-import im.vector.matrix.android.api.util.SecretStoringUtils
+import im.vector.matrix.android.internal.session.securestorage.SecretStoringUtils
 import io.realm.RealmConfiguration
 import timber.log.Timber
 import java.security.SecureRandom
