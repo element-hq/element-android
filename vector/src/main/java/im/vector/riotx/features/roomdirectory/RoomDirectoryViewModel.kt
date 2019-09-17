@@ -22,6 +22,7 @@ import com.airbnb.mvrx.*
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
@@ -176,6 +177,11 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
                     }
 
                     override fun onFailure(failure: Throwable) {
+                        if (failure is Failure.Cancelled) {
+                            // Ignore, another request should be already started
+                            return
+                        }
+
                         currentTask = null
 
                         setState {
@@ -220,4 +226,9 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
         })
     }
 
+    override fun onCleared() {
+        super.onCleared()
+
+        currentTask?.cancel()
+    }
 }

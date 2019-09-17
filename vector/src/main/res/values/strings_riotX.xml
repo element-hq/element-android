@@ -11,5 +11,6 @@
     <!-- This one is already defined in Riot, but not yet synced-->
     <string name="error_user_already_logged_in">It looks like you’re trying to connect to another homeserver. Do you want to sign out?</string>
 
+    <string name="error_network_timeout">Looks like the server is taking to long to respond, this can be caused by either poor connectivity or an error with our servers. Please try again in a while.</string>
 
 </resources>

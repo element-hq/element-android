@@ -11,7 +11,7 @@ Other changes:
  -
 
 Bugfix:
- -
+ - Fix characters erased from the Search field when the result are coming (#545)
 
 Translations:
  -
