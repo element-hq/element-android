@@ -50,6 +50,8 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
     private val lock = Object()
     private var cancelableTask: Cancelable? = null
 
+    private var isStarted = false
+
     init {
         updateStateTo(SyncState.IDLE)
     }
@@ -60,19 +62,18 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
     }
 
     fun restart() = synchronized(lock) {
-        if (state is SyncState.PAUSED) {
+        if (!isStarted) {
             Timber.v("Resume sync...")
-            updateStateTo(SyncState.RUNNING(afterPause = true))
+            isStarted = true
             lock.notify()
         }
     }
 
     fun pause() = synchronized(lock) {
-        if (state is SyncState.RUNNING) {
+        if (isStarted) {
             Timber.v("Pause sync...")
-            updateStateTo(SyncState.PAUSED)
+            isStarted = false
             cancelableTask?.cancel()
-            lock.notify()
         }
     }
 
@@ -87,21 +88,31 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
         return liveState
     }
 
+    override fun onConnect() {
+        Timber.v("Network is back")
+        synchronized(lock) {
+            lock.notify()
+        }
+    }
+
     override fun run() {
         Timber.v("Start syncing...")
+        isStarted = true
         networkConnectivityChecker.register(this)
         backgroundDetectionObserver.register(this)
 
         while (state != SyncState.KILLING) {
             Timber.v("Entering loop, state: $state")
 
-            if (!networkConnectivityChecker.isConnected() || state == SyncState.PAUSED) {
-                Timber.v("No network or sync is Paused. Waiting...")
+            if (!networkConnectivityChecker.hasInternetAccess) {
+                Timber.v("No network. Waiting...")
                 updateStateTo(SyncState.NO_NETWORK)
-
-                synchronized(lock) {
-                    lock.wait()
-                }
+                synchronized(lock) { lock.wait() }
+                Timber.v("...unlocked")
+            } else if (!isStarted) {
+                Timber.v("Sync is Paused. Waiting...")
+                updateStateTo(SyncState.PAUSED)
+                synchronized(lock) { lock.wait() }
                 Timber.v("...unlocked")
             } else {
                 if (state !is SyncState.RUNNING) {
@@ -169,16 +180,11 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
     }
 
     private fun updateStateTo(newState: SyncState) {
-        Timber.v("Update state to $newState")
+        Timber.v("Update state from $state to $newState")
         state = newState
         liveState.postValue(newState)
     }
 
-    override fun onConnect() {
-        synchronized(lock) {
-            lock.notify()
-        }
-    }
 
     override fun onMoveToForeground() {
         restart()

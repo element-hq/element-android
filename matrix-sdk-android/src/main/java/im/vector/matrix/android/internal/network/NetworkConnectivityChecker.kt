@@ -36,7 +36,8 @@ internal class NetworkConnectivityChecker @Inject constructor(context: Context) 
     private val listeners = Collections.synchronizedSet(LinkedHashSet<Listener>())
 
     // True when internet is available
-    private var hasInternetAccess = false
+    var hasInternetAccess = false
+        private set
 
     init {
         merlin.bind()
@@ -63,7 +64,7 @@ internal class NetworkConnectivityChecker @Inject constructor(context: Context) 
     }
 
     suspend fun waitUntilConnected() {
-        if (isConnected()) {
+        if (hasInternetAccess) {
             return
         } else {
             suspendCoroutine<Unit> { continuation ->
@@ -83,10 +84,6 @@ internal class NetworkConnectivityChecker @Inject constructor(context: Context) 
 
     fun unregister(listener: Listener) {
         listeners.remove(listener)
-    }
-
-    fun isConnected(): Boolean {
-        return hasInternetAccess
     }
 
     interface Listener {

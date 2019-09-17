@@ -38,6 +38,6 @@ class SyncStateView @JvmOverloads constructor(context: Context, attrs: Attribute
             is SyncState.RUNNING -> if (newState.afterPause) View.VISIBLE else View.GONE
             else                 -> View.GONE
         }
-        syncStateNoNetwork.isVisible = newState is SyncState.NO_NETWORK
+        syncStateNoNetwork.isVisible = newState == SyncState.NO_NETWORK
     }
 }
