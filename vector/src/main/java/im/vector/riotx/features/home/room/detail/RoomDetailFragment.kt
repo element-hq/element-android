@@ -39,7 +39,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
 import androidx.core.view.forEach
-import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -66,7 +65,6 @@ import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.matrix.android.api.session.room.timeline.getTextEditableContent
-import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
@@ -252,12 +250,7 @@ class RoomDetailFragment :
         }
 
         roomDetailViewModel.selectSubscribe(RoomDetailViewState::syncState) { syncState ->
-            syncProgressBarWrap.visibility = when (syncState) {
-                is SyncState.RUNNING -> if (syncState.afterPause) View.VISIBLE else View.GONE
-                else                 -> View.GONE
-            }
-            // TODO Create a View
-            noNetworkBanner.isVisible = syncState is SyncState.NO_NETWORK
+            syncStateView.render(syncState)
         }
     }
 

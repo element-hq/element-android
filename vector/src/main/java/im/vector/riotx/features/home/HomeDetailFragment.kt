@@ -19,9 +19,7 @@ package im.vector.riotx.features.home
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
-import android.view.View
 import androidx.core.view.forEachIndexed
-import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.airbnb.mvrx.args
@@ -31,7 +29,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
-import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.platform.ToolbarConfigurable
@@ -209,12 +206,7 @@ class HomeDetailFragment : VectorBaseFragment(), KeysBackupBanner.Delegate {
         unreadCounterBadgeViews[INDEX_CATCHUP].render(UnreadCounterBadgeView.State(it.notificationCountCatchup, it.notificationHighlightCatchup))
         unreadCounterBadgeViews[INDEX_PEOPLE].render(UnreadCounterBadgeView.State(it.notificationCountPeople, it.notificationHighlightPeople))
         unreadCounterBadgeViews[INDEX_ROOMS].render(UnreadCounterBadgeView.State(it.notificationCountRooms, it.notificationHighlightRooms))
-        syncProgressBarWrap.visibility = when (it.syncState) {
-            is SyncState.RUNNING -> if (it.syncState.afterPause) View.VISIBLE else View.GONE
-            else                 -> View.GONE
-        }
-        // TODO Create a View
-        noNetworkBanner.isVisible = it.syncState is SyncState.NO_NETWORK
+        syncStateView.render(it.syncState)
     }
 
     companion object {
