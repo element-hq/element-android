@@ -33,7 +33,7 @@ internal class BackgroundDetectionObserver @Inject constructor() : LifecycleObse
         private set
 
     private
-    val listeners = ArrayList<Listener>()
+    val listeners = LinkedHashSet<Listener>()
 
     fun register(listener: Listener) {
         listeners.add(listener)
