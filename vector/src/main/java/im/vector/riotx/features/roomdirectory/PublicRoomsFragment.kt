@@ -143,10 +143,15 @@ class PublicRoomsFragment : VectorBaseFragment(), PublicRoomsController.Callback
         viewModel.loadMore()
     }
 
+    var initialValueSet = false
+
     override fun invalidate() = withState(viewModel) { state ->
-        if (publicRoomsFilter.query.toString() != state.currentFilter) {
-            // For initial filter
-            publicRoomsFilter.setQuery(state.currentFilter, false)
+        if (!initialValueSet) {
+            initialValueSet = true
+            if (publicRoomsFilter.query.toString() != state.currentFilter) {
+                // For initial filter
+                publicRoomsFilter.setQuery(state.currentFilter, false)
+            }
         }
 
         // Populate list with Epoxy
