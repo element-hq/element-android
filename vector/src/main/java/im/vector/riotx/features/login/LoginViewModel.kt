@@ -34,6 +34,7 @@ import im.vector.riotx.core.extensions.configureAndStart
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.utils.LiveEvent
 import im.vector.riotx.features.notifications.PushRuleTriggerListener
+import timber.log.Timber
 
 class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginViewState,
                                                  private val authenticator: Authenticator,
@@ -123,9 +124,16 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
     }
 
     private fun handleSsoLoginSuccess(action: LoginActions.SsoLoginSuccess) {
-        val session = authenticator.createSessionFromSso(action.credentials, homeServerConnectionConfig!!)
+        val homeServerConnectionConfigFinal = homeServerConnectionConfig
 
-        onSessionCreated(session)
+        if (homeServerConnectionConfigFinal == null) {
+            // Should not happen
+            Timber.w("homeServerConnectionConfig is null")
+        } else {
+            val session = authenticator.createSessionFromSso(action.credentials, homeServerConnectionConfigFinal)
+
+            onSessionCreated(session)
+        }
     }
 
 

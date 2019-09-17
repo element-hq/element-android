@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/listView_spinner_views"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/vctr_waiting_background_color">
 
     <ProgressBar
-        android:id="@+id/listView_spinner"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_gravity="center"
-        android:visibility="visible" />
+        android:layout_gravity="center" />
 
 </FrameLayout>
