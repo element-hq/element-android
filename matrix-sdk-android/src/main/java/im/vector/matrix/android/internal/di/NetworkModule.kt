@@ -35,7 +35,7 @@ internal object NetworkModule {
 
     @Provides
     @JvmStatic
-    fun providesHttpLogingInterceptor(): HttpLoggingInterceptor {
+    fun providesHttpLoggingInterceptor(): HttpLoggingInterceptor {
         val logger = FormattedJsonHttpLogger()
         val interceptor = HttpLoggingInterceptor(logger)
         interceptor.level = BuildConfig.OKHTTP_LOGGING_LEVEL

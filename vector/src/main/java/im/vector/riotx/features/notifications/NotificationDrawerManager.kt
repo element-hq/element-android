@@ -24,7 +24,6 @@ import androidx.annotation.WorkerThread
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
-import im.vector.matrix.android.api.util.SecretStoringUtils
 import im.vector.riotx.BuildConfig
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
@@ -448,7 +447,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                 val file = File(context.applicationContext.cacheDir, ROOMS_NOTIFICATIONS_FILE_NAME)
                 if (!file.exists()) file.createNewFile()
                 FileOutputStream(file).use {
-                    SecretStoringUtils.securelyStoreObject(eventList, "notificationMgr", it, this.context)
+                    activeSessionHolder.getSafeActiveSession()?.securelyStoreObject(eventList, KEY_ALIAS_SECRET_STORAGE, it)
                 }
             } catch (e: Throwable) {
                 Timber.e(e, "## Failed to save cached notification info")
@@ -461,7 +460,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
             val file = File(context.applicationContext.cacheDir, ROOMS_NOTIFICATIONS_FILE_NAME)
             if (file.exists()) {
                 FileInputStream(file).use {
-                    val events: ArrayList<NotifiableEvent>? = SecretStoringUtils.loadSecureSecret(it, "notificationMgr", this.context)
+                    val events: ArrayList<NotifiableEvent>? = activeSessionHolder.getSafeActiveSession()?.loadSecureSecret(it, KEY_ALIAS_SECRET_STORAGE)
                     if (events != null) {
                         return ArrayList(events.mapNotNull { it as? NotifiableEvent })
                     }
@@ -485,6 +484,9 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
         private const val ROOM_MESSAGES_NOTIFICATION_ID = 1
         private const val ROOM_EVENT_NOTIFICATION_ID = 2
 
+        // TODO Mutliaccount
         private const val ROOMS_NOTIFICATIONS_FILE_NAME = "im.vector.notifications.cache"
+
+        private const val KEY_ALIAS_SECRET_STORAGE = "notificationMgr"
     }
 }

@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class LoginFlowResponse(
+data class LoginFlowResponse(
         @Json(name = "flows")
         val flows: List<InteractiveAuthenticationFlow>
 )

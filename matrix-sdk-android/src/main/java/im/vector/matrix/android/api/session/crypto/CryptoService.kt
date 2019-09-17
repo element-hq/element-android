@@ -109,8 +109,6 @@ interface CryptoService {
 
     fun downloadKeys(userIds: List<String>, forceDownload: Boolean, callback: MatrixCallback<MXUsersDevicesMap<MXDeviceInfo>>)
 
-    fun clearCryptoCache(callback: MatrixCallback<Unit>)
-
     fun addNewSessionListener(newSessionListener: NewSessionListener)
 
     fun removeSessionListener(listener: NewSessionListener)

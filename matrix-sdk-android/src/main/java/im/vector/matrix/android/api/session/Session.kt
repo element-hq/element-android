@@ -29,6 +29,7 @@ import im.vector.matrix.android.api.session.group.GroupService
 import im.vector.matrix.android.api.session.pushers.PushersService
 import im.vector.matrix.android.api.session.room.RoomDirectoryService
 import im.vector.matrix.android.api.session.room.RoomService
+import im.vector.matrix.android.api.session.securestorage.SecureStorageService
 import im.vector.matrix.android.api.session.signout.SignOutService
 import im.vector.matrix.android.api.session.sync.FilterService
 import im.vector.matrix.android.api.session.sync.SyncState
@@ -50,7 +51,8 @@ interface Session :
         FileService,
         PushRuleService,
         PushersService,
-        InitialSyncProgressService {
+        InitialSyncProgressService,
+        SecureStorageService {
 
     /**
      * The params associated to the session
@@ -87,7 +89,7 @@ interface Session :
     /**
      * This method start the sync thread.
      */
-    fun startSync(fromForeground : Boolean)
+    fun startSync(fromForeground: Boolean)
 
     /**
      * This method stop the sync thread.

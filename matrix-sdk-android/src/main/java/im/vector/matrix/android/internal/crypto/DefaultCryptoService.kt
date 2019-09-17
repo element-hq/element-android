@@ -62,11 +62,9 @@ import im.vector.matrix.android.internal.crypto.tasks.*
 import im.vector.matrix.android.internal.crypto.verification.DefaultSasVerificationService
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.di.CryptoDatabase
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.extensions.foldToCallback
 import im.vector.matrix.android.internal.session.SessionScope
-import im.vector.matrix.android.internal.session.cache.ClearCacheTask
 import im.vector.matrix.android.internal.session.room.membership.LoadRoomMembersTask
 import im.vector.matrix.android.internal.session.room.membership.RoomMembers
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
@@ -135,7 +133,6 @@ internal class DefaultCryptoService @Inject constructor(
         private val setDeviceNameTask: SetDeviceNameTask,
         private val uploadKeysTask: UploadKeysTask,
         private val loadRoomMembersTask: LoadRoomMembersTask,
-        @CryptoDatabase private val clearCryptoDataTask: ClearCacheTask,
         private val monarchy: Monarchy,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val taskExecutor: TaskExecutor
@@ -1045,14 +1042,6 @@ internal class DefaultCryptoService @Inject constructor(
                 deviceListManager.downloadKeys(userIds, forceDownload)
             }.foldToCallback(callback)
         }
-    }
-
-    override fun clearCryptoCache(callback: MatrixCallback<Unit>) {
-        clearCryptoDataTask
-                .configureWith {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
     }
 
     override fun addNewSessionListener(newSessionListener: NewSessionListener) {

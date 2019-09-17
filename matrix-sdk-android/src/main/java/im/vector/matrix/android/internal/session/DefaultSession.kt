@@ -35,16 +35,15 @@ import im.vector.matrix.android.api.session.group.GroupService
 import im.vector.matrix.android.api.session.pushers.PushersService
 import im.vector.matrix.android.api.session.room.RoomDirectoryService
 import im.vector.matrix.android.api.session.room.RoomService
+import im.vector.matrix.android.api.session.securestorage.SecureStorageService
 import im.vector.matrix.android.api.session.signout.SignOutService
 import im.vector.matrix.android.api.session.sync.FilterService
 import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.matrix.android.api.session.user.UserService
-import im.vector.matrix.android.api.util.MatrixCallbackDelegate
 import im.vector.matrix.android.internal.crypto.DefaultCryptoService
 import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.session.sync.job.SyncThread
 import im.vector.matrix.android.internal.session.sync.job.SyncWorker
-import im.vector.matrix.android.internal.worker.WorkManagerUtil
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Provider
@@ -65,6 +64,7 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
                                                   private val pushersService: Lazy<PushersService>,
                                                   private val cryptoService: Lazy<DefaultCryptoService>,
                                                   private val fileService: Lazy<FileService>,
+                                                  private val secureStorageService: Lazy<SecureStorageService>,
                                                   private val syncThreadProvider: Provider<SyncThread>,
                                                   private val contentUrlResolver: ContentUrlResolver,
                                                   private val contentUploadProgressTracker: ContentUploadStateTracker,
@@ -75,13 +75,13 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
         GroupService by groupService.get(),
         UserService by userService.get(),
         CryptoService by cryptoService.get(),
-        CacheService by cacheService.get(),
         SignOutService by signOutService.get(),
         FilterService by filterService.get(),
         PushRuleService by pushRuleService.get(),
         PushersService by pushersService.get(),
         FileService by fileService.get(),
-        InitialSyncProgressService by initialSyncProgressService.get() {
+        InitialSyncProgressService by initialSyncProgressService.get(),
+        SecureStorageService by secureStorageService.get() {
 
     private var isOpen = false
 
@@ -142,43 +142,6 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
         return syncThread ?: syncThreadProvider.get().also {
             syncThread = it
         }
-    }
-
-    @MainThread
-    override fun signOut(callback: MatrixCallback<Unit>) {
-        Timber.w("SIGN_OUT: start")
-
-        assert(isOpen)
-
-        Timber.w("SIGN_OUT: call webservice")
-        return signOutService.get().signOut(object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
-                Timber.w("SIGN_OUT: call webservice -> SUCCESS: clear cache")
-                stopSync()
-                stopAnyBackgroundSync()
-                // Clear the cache
-                cacheService.get().clearCache(object : MatrixCallback<Unit> {
-                    override fun onSuccess(data: Unit) {
-                        Timber.w("SIGN_OUT: clear cache -> SUCCESS: clear crypto cache")
-                        cryptoService.get().clearCryptoCache(MatrixCallbackDelegate(callback))
-                        WorkManagerUtil.cancelAllWorks(context)
-                        callback.onSuccess(Unit)
-                    }
-
-                    override fun onFailure(failure: Throwable) {
-                        // ignore error
-                        Timber.e("SIGN_OUT: clear cache -> ERROR: ignoring")
-                        onSuccess(Unit)
-                    }
-                })
-            }
-
-            override fun onFailure(failure: Throwable) {
-                // Ignore failure
-                Timber.e("SIGN_OUT: call webservice -> ERROR: ignoring")
-                onSuccess(Unit)
-            }
-        })
     }
 
     override fun clearCache(callback: MatrixCallback<Unit>) {

@@ -19,12 +19,15 @@ package im.vector.riotx.features
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
 import com.bumptech.glide.Glide
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.Authenticator
+import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.di.ScreenComponent
+import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.utils.deleteAllFiles
 import im.vector.riotx.features.home.HomeActivity
@@ -57,6 +60,7 @@ class MainActivity : VectorBaseActivity() {
     @Inject lateinit var matrix: Matrix
     @Inject lateinit var authenticator: Authenticator
     @Inject lateinit var sessionHolder: ActiveSessionHolder
+    @Inject lateinit var errorFormatter: ErrorFormatter
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
@@ -69,42 +73,68 @@ class MainActivity : VectorBaseActivity() {
 
         // Handle some wanted cleanup
         if (clearCache || clearCredentials) {
-            GlobalScope.launch(Dispatchers.Main) {
-                // On UI Thread
-                Glide.get(this@MainActivity).clearMemory()
-                withContext(Dispatchers.IO) {
-                    // On BG thread
-                    Glide.get(this@MainActivity).clearDiskCache()
-
-                    // Also clear cache (Logs, etc...)
-                    deleteAllFiles(this@MainActivity.cacheDir)
-                }
-            }
+            doCleanUp(clearCache, clearCredentials)
+        } else {
+            start()
         }
+    }
 
+    private fun doCleanUp(clearCache: Boolean, clearCredentials: Boolean) {
         when {
             clearCredentials -> sessionHolder.getActiveSession().signOut(object : MatrixCallback<Unit> {
                 override fun onSuccess(data: Unit) {
                     Timber.w("SIGN_OUT: success, start app")
                     sessionHolder.clearActiveSession()
-                    start()
+                    doLocalCleanupAndStart()
+                }
+
+                override fun onFailure(failure: Throwable) {
+                    displayError(failure, clearCache, clearCredentials)
                 }
             })
             clearCache       -> sessionHolder.getActiveSession().clearCache(object : MatrixCallback<Unit> {
                 override fun onSuccess(data: Unit) {
-                    start()
+                    doLocalCleanupAndStart()
+                }
+
+                override fun onFailure(failure: Throwable) {
+                    displayError(failure, clearCache, clearCredentials)
                 }
             })
-            else             -> start()
-
         }
+    }
+
+    private fun doLocalCleanupAndStart() {
+        GlobalScope.launch(Dispatchers.Main) {
+            // On UI Thread
+            Glide.get(this@MainActivity).clearMemory()
+            withContext(Dispatchers.IO) {
+                // On BG thread
+                Glide.get(this@MainActivity).clearDiskCache()
+
+                // Also clear cache (Logs, etc...)
+                deleteAllFiles(this@MainActivity.cacheDir)
+            }
+        }
+
+        start()
+    }
+
+    private fun displayError(failure: Throwable, clearCache: Boolean, clearCredentials: Boolean) {
+        AlertDialog.Builder(this)
+                .setTitle(R.string.dialog_title_error)
+                .setMessage(errorFormatter.toHumanReadable(failure))
+                .setPositiveButton(R.string.global_retry) { _, _ -> doCleanUp(clearCache, clearCredentials) }
+                .setNegativeButton(R.string.cancel) { _, _ -> start() }
+                .setCancelable(false)
+                .show()
     }
 
     private fun start() {
         val intent = if (sessionHolder.hasActiveSession()) {
             HomeActivity.newIntent(this)
         } else {
-            LoginActivity.newIntent(this)
+            LoginActivity.newIntent(this, null)
         }
         startActivity(intent)
         finish()

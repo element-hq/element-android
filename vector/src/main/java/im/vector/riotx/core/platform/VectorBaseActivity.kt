@@ -36,11 +36,14 @@ import butterknife.Unbinder
 import com.airbnb.mvrx.BaseMvRxActivity
 import com.bumptech.glide.util.Util
 import com.google.android.material.snackbar.Snackbar
+import im.vector.matrix.android.api.failure.ConsentNotGivenError
 import im.vector.riotx.BuildConfig
 import im.vector.riotx.R
 import im.vector.riotx.core.di.*
+import im.vector.riotx.core.dialogs.DialogLocker
 import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.configuration.VectorConfiguration
+import im.vector.riotx.features.consent.ConsentNotGivenHelper
 import im.vector.riotx.features.navigation.Navigator
 import im.vector.riotx.features.rageshake.BugReportActivity
 import im.vector.riotx.features.rageshake.BugReporter
@@ -50,6 +53,9 @@ import im.vector.riotx.features.themes.ThemeUtils
 import im.vector.riotx.receivers.DebugReceiver
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import timber.log.Timber
 import kotlin.system.measureTimeMillis
 
@@ -73,6 +79,7 @@ abstract class VectorBaseActivity : BaseMvRxActivity(), HasScreenInjector {
     protected lateinit var bugReporter: BugReporter
     private lateinit var rageShake: RageShake
     protected lateinit var navigator: Navigator
+    private lateinit var activeSessionHolder: ActiveSessionHolder
 
     private var unBinder: Unbinder? = null
 
@@ -127,6 +134,7 @@ abstract class VectorBaseActivity : BaseMvRxActivity(), HasScreenInjector {
         bugReporter = screenComponent.bugReporter()
         rageShake = screenComponent.rageShake()
         navigator = screenComponent.navigator()
+        activeSessionHolder = screenComponent.activeSessionHolder()
         configurationViewModel.activityRestarter.observe(this, Observer {
             if (!it.hasBeenHandled) {
                 // Recreate the Activity because configuration has changed
@@ -175,7 +183,7 @@ abstract class VectorBaseActivity : BaseMvRxActivity(), HasScreenInjector {
         configurationViewModel.onActivityResumed()
 
         if (this !is BugReportActivity) {
-            rageShake?.start()
+            rageShake.start()
         }
 
         DebugReceiver
@@ -190,7 +198,7 @@ abstract class VectorBaseActivity : BaseMvRxActivity(), HasScreenInjector {
     override fun onPause() {
         super.onPause()
 
-        rageShake?.stop()
+        rageShake.stop()
 
         debugReceiver?.let {
             unregisterReceiver(debugReceiver)
@@ -265,18 +273,21 @@ abstract class VectorBaseActivity : BaseMvRxActivity(), HasScreenInjector {
         return super.onOptionsItemSelected(item)
     }
 
-    protected fun recursivelyDispatchOnBackPressed(fm: FragmentManager): Boolean {
-        // if (fm.backStackEntryCount == 0)
-        //     return false
+    override fun onBackPressed() {
+        val handled = recursivelyDispatchOnBackPressed(supportFragmentManager)
+        if (!handled) {
+            super.onBackPressed()
+        }
+    }
 
-        val reverseOrder = fm.fragments.filter { it is OnBackPressed }.reversed()
+    private fun recursivelyDispatchOnBackPressed(fm: FragmentManager): Boolean {
+        val reverseOrder = fm.fragments.filter { it is VectorBaseFragment }.reversed()
         for (f in reverseOrder) {
             val handledByChildFragments = recursivelyDispatchOnBackPressed(f.childFragmentManager)
             if (handledByChildFragments) {
                 return true
             }
-            val backPressable = f as OnBackPressed
-            if (backPressable.onBackPressed()) {
+            if (f is OnBackPressed && f.onBackPressed()) {
                 return true
             }
         }
@@ -389,6 +400,31 @@ abstract class VectorBaseActivity : BaseMvRxActivity(), HasScreenInjector {
     }
 
     /* ==========================================================================================
+     * User Consent
+     * ========================================================================================== */
+
+    private val consentNotGivenHelper by lazy {
+        ConsentNotGivenHelper(this, DialogLocker(savedInstanceState))
+                .apply { restorables.add(this) }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        EventBus.getDefault().unregister(this)
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onConsentNotGivenError(consentNotGivenError: ConsentNotGivenError) {
+        consentNotGivenHelper.displayDialog(consentNotGivenError.consentUri,
+                activeSessionHolder.getActiveSession().sessionParams.homeServerConnectionConfig.homeServerUri.host ?: "")
+    }
+
+    /* ==========================================================================================
      * Temporary method
      * ========================================================================================== */
 
@@ -399,5 +435,4 @@ abstract class VectorBaseActivity : BaseMvRxActivity(), HasScreenInjector {
             toast(getString(R.string.not_implemented))
         }
     }
-
 }
