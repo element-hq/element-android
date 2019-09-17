@@ -18,19 +18,17 @@ package im.vector.matrix.android.internal.session.securestorage
 
 import im.vector.matrix.android.api.session.securestorage.SecureStorageService
 import im.vector.matrix.android.api.util.SecretStoringUtils
-import im.vector.matrix.android.internal.di.UserMd5
 import java.io.InputStream
 import java.io.OutputStream
 import javax.inject.Inject
 
-internal class DefaultSecureStorageService @Inject constructor(@UserMd5 private val userMd5: String,
-                                                               private val secretStoringUtils: SecretStoringUtils) : SecureStorageService {
+internal class DefaultSecureStorageService @Inject constructor(private val secretStoringUtils: SecretStoringUtils) : SecureStorageService {
 
     override fun securelyStoreObject(any: Any, keyAlias: String, outputStream: OutputStream) {
-        secretStoringUtils.securelyStoreObject(any, "${userMd5}_$keyAlias", outputStream)
+        secretStoringUtils.securelyStoreObject(any, keyAlias, outputStream)
     }
 
     override fun <T> loadSecureSecret(inputStream: InputStream, keyAlias: String): T? {
-        return secretStoringUtils.loadSecureSecret(inputStream, "${userMd5}_$keyAlias")
+        return secretStoringUtils.loadSecureSecret(inputStream, keyAlias)
     }
 }
