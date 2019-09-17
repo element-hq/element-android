@@ -53,7 +53,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.jaiselrahman.filepicker.activity.FilePickerActivity
 import com.jaiselrahman.filepicker.config.Configurations
 import com.jaiselrahman.filepicker.model.MediaFile
-import com.jakewharton.rxbinding3.widget.afterTextChangeEvents
 import com.otaliastudios.autocomplete.Autocomplete
 import com.otaliastudios.autocomplete.AutocompleteCallback
 import com.otaliastudios.autocomplete.CharPolicy
@@ -107,7 +106,6 @@ import im.vector.riotx.features.notifications.NotificationDrawerManager
 import im.vector.riotx.features.reactions.EmojiReactionPickerActivity
 import im.vector.riotx.features.settings.VectorPreferences
 import im.vector.riotx.features.themes.ThemeUtils
-import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_detail.*
 import kotlinx.android.synthetic.main.merge_composer_layout.view.*
@@ -115,7 +113,6 @@ import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
 import org.commonmark.parser.Parser
 import timber.log.Timber
 import java.io.File
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
@@ -189,7 +186,6 @@ class RoomDetailFragment :
     @Inject lateinit var eventHtmlRenderer: EventHtmlRenderer
     @Inject lateinit var vectorPreferences: VectorPreferences
 
-
     override fun getLayoutResId() = R.layout.fragment_room_detail
 
     override fun getMenuRes() = R.menu.menu_timeline
@@ -198,6 +194,8 @@ class RoomDetailFragment :
 
     @BindView(R.id.composerLayout)
     lateinit var composerLayout: TextComposerView
+
+    private var lockSendButton = false
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
@@ -350,7 +348,6 @@ class RoomDetailFragment :
         // Do not update if this is the same text to avoid the cursor to move
         if (text != composerLayout.composerEditText.text.toString()) {
             // Ignore update to avoid saving a draft
-            filterComposerTextChange = true
             composerLayout.composerEditText.setText(text)
             composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text.length)
         }
@@ -366,6 +363,8 @@ class RoomDetailFragment :
         super.onPause()
 
         notificationDrawerManager.setCurrentRoom(null)
+
+        roomDetailViewModel.process(RoomDetailActions.SaveDraft(composerLayout.composerEditText.text.toString()))
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -437,21 +436,7 @@ class RoomDetailFragment :
         }
     }
 
-    private var filterComposerTextChange = true
-
     private fun setupComposer() {
-        composerLayout.composerEditText.afterTextChangeEvents()
-                .debounce(100, TimeUnit.MILLISECONDS)
-                .subscribeBy {
-                    if (filterComposerTextChange) {
-                        Timber.d("Draft: ignore text update")
-                        filterComposerTextChange = false
-                        return@subscribeBy
-                    }
-                    roomDetailViewModel.process(RoomDetailActions.SaveDraft(it.editable.toString()))
-                }
-                .disposeOnDestroy()
-
         val elevation = 6f
         val backgroundDrawable = ColorDrawable(ThemeUtils.getColor(requireContext(), R.attr.riotx_background))
         Autocomplete.on<Command>(composerLayout.composerEditText)
@@ -515,8 +500,13 @@ class RoomDetailFragment :
                 .build()
 
         composerLayout.sendButton.setOnClickListener {
+            if (lockSendButton) {
+                Timber.w("Send button is locked")
+                return@setOnClickListener
+            }
             val textMessage = composerLayout.composerEditText.text.toString()
             if (textMessage.isNotBlank()) {
+                lockSendButton = true
                 roomDetailViewModel.process(RoomDetailActions.SendMessage(textMessage, vectorPreferences.isMarkdownEnabled()))
             }
         }
@@ -673,11 +663,11 @@ class RoomDetailFragment :
     private fun renderSendMessageResult(sendMessageResult: SendMessageResult) {
         when (sendMessageResult) {
             is SendMessageResult.MessageSent                -> {
-                // Nothing to do, the composer will be cleared with the draft update
+                updateComposerText("")
             }
             is SendMessageResult.SlashCommandHandled        -> {
                 sendMessageResult.messageRes?.let { showSnackWithMessage(getString(it)) }
-                // The composer will be cleared with the draft update
+                updateComposerText("")
             }
             is SendMessageResult.SlashCommandError          -> {
                 displayCommandError(getString(R.string.command_problem_with_parameters, sendMessageResult.command.command))
@@ -686,7 +676,7 @@ class RoomDetailFragment :
                 displayCommandError(getString(R.string.unrecognized_command, sendMessageResult.command))
             }
             is SendMessageResult.SlashCommandResultOk       -> {
-                // Ignore
+                updateComposerText("")
             }
             is SendMessageResult.SlashCommandResultError    -> {
                 displayCommandError(sendMessageResult.throwable.localizedMessage)
@@ -695,6 +685,8 @@ class RoomDetailFragment :
                 displayCommandError(getString(R.string.not_implemented))
             }
         }
+
+        lockSendButton = false
     }
 
     private fun displayCommandError(message: String) {
@@ -939,7 +931,7 @@ class RoomDetailFragment :
                 roomDetailViewModel.process(RoomDetailActions.UpdateQuickReactAction(action.eventId, action.clickedOn, action.add))
             }
             is SimpleAction.Edit                -> {
-                roomDetailViewModel.process(RoomDetailActions.EnterEditMode(action.eventId))
+                roomDetailViewModel.process(RoomDetailActions.EnterEditMode(action.eventId, composerLayout.composerEditText.text.toString()))
             }
             is SimpleAction.Quote               -> {
                 roomDetailViewModel.process(RoomDetailActions.EnterQuoteMode(action.eventId, composerLayout.composerEditText.text.toString()))

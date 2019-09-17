@@ -85,9 +85,6 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
 
     private var timeline = room.createTimeline(eventId, timelineSettings)
 
-    // Filter to avoid infinite loop when user enter text in the composer and call SaveDraft
-    private var filterDraftUpdate = false
-
     // Slot to keep a pending action during permission request
     var pendingAction: RoomDetailActions? = null
 
@@ -151,9 +148,6 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
      * Convert a send mode to a draft and save the draft
      */
     private fun handleSaveDraft(action: RoomDetailActions.SaveDraft) {
-        // The text is changed, ignore the next update from DB
-        filterDraftUpdate = true
-
         withState {
             when (it.sendMode) {
                 is SendMode.REGULAR -> room.saveDraft(UserDraft.REGULAR(action.draft))
@@ -167,14 +161,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     private fun observeDrafts() {
         room.rx().liveDrafts()
                 .subscribe {
-                    Timber.d("Draft update!")
-                    if (filterDraftUpdate) {
-                        Timber.d(" --> Ignore")
-                        return@subscribe
-                    }
-
-                    Timber.d(" --> SetState")
-
+                    Timber.d("Draft update --> SetState")
                     setState {
                         val draft = it.lastOrNull() ?: UserDraft.REGULAR("")
                         copy(
@@ -337,7 +324,6 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                     }
                 }
                 is SendMode.EDIT    -> {
-
                     //is original event a reply?
                     val inReplyTo = state.sendMode.timelineEvent.root.getClearContent().toModel<MessageContent>()?.relatesTo?.inReplyTo?.eventId
                             ?: state.sendMode.timelineEvent.root.content.toModel<EncryptedEventContent>()?.relatesTo?.inReplyTo?.eventId
@@ -396,7 +382,6 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun popDraft() {
-        filterDraftUpdate = false
         room.deleteDraft()
     }
 
@@ -513,20 +498,22 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun handleEditAction(action: RoomDetailActions.EnterEditMode) {
+        saveCurrentDraft(action.draft)
+
         room.getTimeLineEvent(action.eventId)?.let { timelineEvent ->
             timelineEvent.root.eventId?.let {
-                filterDraftUpdate = false
                 room.saveDraft(UserDraft.EDIT(it, timelineEvent.getTextEditableContent() ?: ""))
             }
         }
     }
 
     private fun handleQuoteAction(action: RoomDetailActions.EnterQuoteMode) {
+        saveCurrentDraft(action.draft)
+
         room.getTimeLineEvent(action.eventId)?.let { timelineEvent ->
             withState { state ->
                 // Save a new draft and keep the previously entered text, if it was not an edit
                 timelineEvent.root.eventId?.let {
-                    filterDraftUpdate = false
                     if (state.sendMode is SendMode.EDIT) {
                         room.saveDraft(UserDraft.QUOTE(it, ""))
                     } else {
@@ -538,11 +525,12 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun handleReplyAction(action: RoomDetailActions.EnterReplyMode) {
+        saveCurrentDraft(action.draft)
+
         room.getTimeLineEvent(action.eventId)?.let { timelineEvent ->
             withState { state ->
                 // Save a new draft and keep the previously entered text, if it was not an edit
                 timelineEvent.root.eventId?.let {
-                    filterDraftUpdate = false
                     if (state.sendMode is SendMode.EDIT) {
                         room.saveDraft(UserDraft.REPLY(it, ""))
                     } else {
@@ -553,11 +541,23 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         }
     }
 
+    private fun saveCurrentDraft(draft: String) {
+        // Save the draft with the current text if any
+        withState {
+            if (draft.isNotBlank()) {
+                when (it.sendMode) {
+                    is SendMode.REGULAR -> room.saveDraft(UserDraft.REGULAR(draft))
+                    is SendMode.REPLY   -> room.saveDraft(UserDraft.REPLY(it.sendMode.timelineEvent.root.eventId!!, draft))
+                    is SendMode.QUOTE   -> room.saveDraft(UserDraft.QUOTE(it.sendMode.timelineEvent.root.eventId!!, draft))
+                    is SendMode.EDIT    -> room.saveDraft(UserDraft.EDIT(it.sendMode.timelineEvent.root.eventId!!, draft))
+                }
+            }
+        }
+    }
+
     private fun handleExitSpecialMode(action: RoomDetailActions.ExitSpecialMode) {
         withState { state ->
             // For edit, just delete the current draft
-            filterDraftUpdate = false
-
             if (state.sendMode is SendMode.EDIT) {
                 room.deleteDraft()
             } else {
