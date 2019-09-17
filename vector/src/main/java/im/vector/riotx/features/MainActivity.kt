@@ -73,49 +73,59 @@ class MainActivity : VectorBaseActivity() {
 
         // Handle some wanted cleanup
         if (clearCache || clearCredentials) {
-            GlobalScope.launch(Dispatchers.Main) {
-                // On UI Thread
-                Glide.get(this@MainActivity).clearMemory()
-                withContext(Dispatchers.IO) {
-                    // On BG thread
-                    Glide.get(this@MainActivity).clearDiskCache()
-
-                    // Also clear cache (Logs, etc...)
-                    deleteAllFiles(this@MainActivity.cacheDir)
-                }
-            }
+            doCleanUp(clearCache, clearCredentials)
+        } else {
+            start()
         }
+    }
 
+    private fun doCleanUp(clearCache: Boolean, clearCredentials: Boolean) {
         when {
             clearCredentials -> sessionHolder.getActiveSession().signOut(object : MatrixCallback<Unit> {
                 override fun onSuccess(data: Unit) {
                     Timber.w("SIGN_OUT: success, start app")
                     sessionHolder.clearActiveSession()
-                    start()
+                    doLocalCleanupAndStart()
                 }
 
                 override fun onFailure(failure: Throwable) {
-                    displayErrorAndStart(failure)
+                    displayError(failure, clearCache, clearCredentials)
                 }
             })
             clearCache       -> sessionHolder.getActiveSession().clearCache(object : MatrixCallback<Unit> {
                 override fun onSuccess(data: Unit) {
-                    start()
+                    doLocalCleanupAndStart()
                 }
 
                 override fun onFailure(failure: Throwable) {
-                    displayErrorAndStart(failure)
+                    displayError(failure, clearCache, clearCredentials)
                 }
             })
-            else             -> start()
         }
     }
 
-    private fun displayErrorAndStart(failure: Throwable) {
+    private fun doLocalCleanupAndStart() {
+        GlobalScope.launch(Dispatchers.Main) {
+            // On UI Thread
+            Glide.get(this@MainActivity).clearMemory()
+            withContext(Dispatchers.IO) {
+                // On BG thread
+                Glide.get(this@MainActivity).clearDiskCache()
+
+                // Also clear cache (Logs, etc...)
+                deleteAllFiles(this@MainActivity.cacheDir)
+            }
+        }
+
+        start()
+    }
+
+    private fun displayError(failure: Throwable, clearCache: Boolean, clearCredentials: Boolean) {
         AlertDialog.Builder(this)
                 .setTitle(R.string.dialog_title_error)
                 .setMessage(errorFormatter.toHumanReadable(failure))
-                .setPositiveButton(R.string.ok) { _, _ -> start() }
+                .setPositiveButton(R.string.global_retry) { _, _ -> doCleanUp(clearCache, clearCredentials) }
+                .setNegativeButton(R.string.cancel) { _, _ -> start() }
                 .setCancelable(false)
                 .show()
     }
