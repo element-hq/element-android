@@ -1,7 +1,29 @@
+Changes in RiotX 0.6.0 (2019-XX-XX)
+===================================================
+
+Features:
+ -
+
+Improvements:
+ -
+
+Other changes:
+ -
+
+Bugfix:
+ -
+
+Translations:
+ -
+
+Build:
+ -
+
 Changes in RiotX 0.5.0 (2019-09-17)
 ===================================================
 
 Features:
+ - Implementation of login to homeerver with SSO
  - Handle M_CONSENT_NOT_GIVEN error (#64)
  - Auto configure homeserver and identity server URLs of LoginActivity with a magic link
 
