@@ -18,12 +18,10 @@ package im.vector.matrix.android.internal.network
 
 import android.content.Context
 import com.novoda.merlin.Merlin
-import com.novoda.merlin.MerlinsBeard
 import im.vector.matrix.android.internal.di.MatrixScope
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
-import kotlin.collections.ArrayList
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -35,23 +33,31 @@ internal class NetworkConnectivityChecker @Inject constructor(context: Context) 
             .withDisconnectableCallbacks()
             .build(context)
 
-    private val merlinsBeard = MerlinsBeard.Builder().build(context)
-    private val listeners = Collections.synchronizedList(ArrayList<Listener>())
+    private val listeners = Collections.synchronizedSet(LinkedHashSet<Listener>())
+
+    // True when internet is available
+    private var hasInternetAccess = false
 
     init {
         merlin.bind()
         merlin.registerDisconnectable {
-            Timber.v("On Disconnect")
-            val localListeners = listeners.toList()
-            localListeners.forEach {
-                it.onDisconnect()
+            if (hasInternetAccess) {
+                Timber.v("On Disconnect")
+                hasInternetAccess = false
+                val localListeners = listeners.toList()
+                localListeners.forEach {
+                    it.onDisconnect()
+                }
             }
         }
         merlin.registerConnectable {
-            Timber.v("On Connect")
-            val localListeners = listeners.toList()
-            localListeners.forEach {
-                it.onConnect()
+            if (!hasInternetAccess) {
+                Timber.v("On Connect")
+                hasInternetAccess = true
+                val localListeners = listeners.toList()
+                localListeners.forEach {
+                    it.onConnect()
+                }
             }
         }
     }
@@ -80,7 +86,7 @@ internal class NetworkConnectivityChecker @Inject constructor(context: Context) 
     }
 
     fun isConnected(): Boolean {
-        return merlinsBeard.isConnected
+        return hasInternetAccess
     }
 
     interface Listener {
