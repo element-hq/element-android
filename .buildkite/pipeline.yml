@@ -1,6 +1,7 @@
 # Use Docker file from https://hub.docker.com/r/runmymind/docker-android-sdk
 # Last docker plugin version can be found here:
 # https://github.com/buildkite-plugins/docker-buildkite-plugin/releases
+# We propagate the environment to the container (sse https://github.com/buildkite-plugins/docker-buildkite-plugin#propagate-environment-optional-boolean)
 
 # Build debug version of the RiotX application, from the develop branch and the features branches
 
@@ -11,14 +12,14 @@ steps:
       # gradle build is long
       queue: "medium"
     commands:
-      # Workaround to set env variables from Buildkite. If we do not do that, the gradle script does not see the Buildkite env variables
-      - "BUILDKITE_BRANCH=\"$BUILDKITE_BRANCH\" BUILDKITE_BUILD_NUMBER=\"$BUILDKITE_BUILD_NUMBER\" ./gradlew clean lintGplayRelease assembleGplayDebug --stacktrace"
+      - "./gradlew clean lintGplayRelease assembleGplayDebug --stacktrace"
     artifact_paths:
       - "vector/build/outputs/apk/gplay/debug/*.apk"
     branches: "!master"
     plugins:
       - docker#v3.1.0:
           image: "runmymind/docker-android-sdk"
+          propagate-environment: true
 
   - label: "Assemble FDroid Debug version"
     agents:
@@ -26,14 +27,14 @@ steps:
       # gradle build is long
       queue: "medium"
     commands:
-      # Workaround to set env variables from Buildkite. If we do not do that, the gradle script does not see the Buildkite env variables
-      - "BUILDKITE_BRANCH=\"$BUILDKITE_BRANCH\" BUILDKITE_BUILD_NUMBER=\"$BUILDKITE_BUILD_NUMBER\" ./gradlew clean lintFdroidRelease assembleFdroidDebug --stacktrace"
+      - "./gradlew clean lintFdroidRelease assembleFdroidDebug --stacktrace"
     artifact_paths:
       - "vector/build/outputs/apk/fdroid/debug/*.apk"
     branches: "!master"
     plugins:
       - docker#v3.1.0:
           image: "runmymind/docker-android-sdk"
+          propagate-environment: true
 
   - label: "Build Google Play unsigned APK"
     agents:
@@ -41,14 +42,14 @@ steps:
       # gradle build is long
       queue: "medium"
     commands:
-      # Workaround to set env variables from Buildkite. If we do not do that, the gradle script does not see the Buildkite env variables
-      - "BUILDKITE_BRANCH=\"$BUILDKITE_BRANCH\" BUILDKITE_BUILD_NUMBER=\"$BUILDKITE_BUILD_NUMBER\" ./gradlew clean assembleGplayRelease --stacktrace"
+      - "./gradlew clean assembleGplayRelease --stacktrace"
     artifact_paths:
       - "vector/build/outputs/apk/gplay/release/*.apk"
     branches: "master"
     plugins:
       - docker#v3.1.0:
           image: "runmymind/docker-android-sdk"
+          propagate-environment: true
 
   # Code quality
 
