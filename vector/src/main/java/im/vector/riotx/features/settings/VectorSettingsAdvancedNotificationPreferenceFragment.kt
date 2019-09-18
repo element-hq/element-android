@@ -29,7 +29,6 @@ import im.vector.riotx.core.extensions.withArgs
 import im.vector.riotx.core.preference.BingRule
 import im.vector.riotx.core.preference.BingRulePreference
 import im.vector.riotx.features.notifications.NotificationUtils
-import im.vector.riotx.features.notifications.supportNotificationChannels
 import javax.inject.Inject
 
 class VectorSettingsAdvancedNotificationPreferenceFragment : VectorSettingsBaseFragment() {
@@ -56,7 +55,7 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : VectorSettingsBaseF
 
     override fun bindPref() {
         val callNotificationsSystemOptions = findPreference(VectorPreferences.SETTINGS_SYSTEM_CALL_NOTIFICATION_PREFERENCE_KEY)
-        if (supportNotificationChannels()) {
+        if (NotificationUtils.supportNotificationChannels()) {
             callNotificationsSystemOptions.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 NotificationUtils.openSystemSettingsForCallCategory(this)
                 false
@@ -66,7 +65,7 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : VectorSettingsBaseF
         }
 
         val noisyNotificationsSystemOptions = findPreference(VectorPreferences.SETTINGS_SYSTEM_NOISY_NOTIFICATION_PREFERENCE_KEY)
-        if (supportNotificationChannels()) {
+        if (NotificationUtils.supportNotificationChannels()) {
             noisyNotificationsSystemOptions.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 NotificationUtils.openSystemSettingsForNoisyCategory(this)
                 false
@@ -76,7 +75,7 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : VectorSettingsBaseF
         }
 
         val silentNotificationsSystemOptions = findPreference(VectorPreferences.SETTINGS_SYSTEM_SILENT_NOTIFICATION_PREFERENCE_KEY)
-        if (supportNotificationChannels()) {
+        if (NotificationUtils.supportNotificationChannels()) {
             silentNotificationsSystemOptions.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 NotificationUtils.openSystemSettingsForSilentCategory(this)
                 false
@@ -89,7 +88,7 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : VectorSettingsBaseF
         // Ringtone
         val ringtonePreference = findPreference(VectorPreferences.SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY)
 
-        if (supportNotificationChannels()) {
+        if (NotificationUtils.supportNotificationChannels()) {
             ringtonePreference.isVisible = false
         } else {
             ringtonePreference.summary = vectorPreferences.getNotificationRingToneName()

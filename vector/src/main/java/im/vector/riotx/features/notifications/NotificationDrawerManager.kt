@@ -26,6 +26,7 @@ import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.riotx.BuildConfig
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
+import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.settings.VectorPreferences
 import me.gujun.android.span.span
 import timber.log.Timber
@@ -42,7 +43,9 @@ import javax.inject.Singleton
  */
 @Singleton
 class NotificationDrawerManager @Inject constructor(private val context: Context,
+                                                    private val notificationUtils: NotificationUtils,
                                                     private val vectorPreferences: VectorPreferences,
+                                                    private val stringProvider: StringProvider,
                                                     private val activeSessionHolder: ActiveSessionHolder,
                                                     private val iconLoader: IconLoader,
                                                     private val bitmapLoader: BitmapLoader,
@@ -154,7 +157,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                     e is NotifiableMessageEvent && e.roomId == roomId
                 }
             }
-            NotificationUtils.cancelNotificationMessage(context, roomId, ROOM_MESSAGES_NOTIFICATION_ID)
+            notificationUtils.cancelNotificationMessage(roomId, ROOM_MESSAGES_NOTIFICATION_ID)
         }
         refreshNotificationDrawer()
     }
@@ -254,7 +257,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                 if (events.isEmpty() || events.all { it.isRedacted }) {
                     //Just clear this notification
                     Timber.v("%%%%%%%% REFRESH NOTIFICATION DRAWER $roomId has no more events")
-                    NotificationUtils.cancelNotificationMessage(context, roomId, ROOM_MESSAGES_NOTIFICATION_ID)
+                    notificationUtils.cancelNotificationMessage(roomId, ROOM_MESSAGES_NOTIFICATION_ID)
                     continue
                 }
 
@@ -295,7 +298,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                             .build()
 
                     if (event.outGoingMessage && event.outGoingMessageFailed) {
-                        style.addMessage(context.getString(R.string.notification_inline_reply_failed), event.timestamp, senderPerson)
+                        style.addMessage(stringProvider.getString(R.string.notification_inline_reply_failed), event.timestamp, senderPerson)
                         roomEventGroupInfo.hasSmartReplyError = true
                     } else {
                         if (!event.isRedacted) {
@@ -306,7 +309,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
 
                     //It is possible that this event was previously shown as an 'anonymous' simple notif.
                     //And now it will be merged in a single MessageStyle notif, so we can clean to be sure
-                    NotificationUtils.cancelNotificationMessage(context, event.eventId, ROOM_EVENT_NOTIFICATION_ID)
+                    notificationUtils.cancelNotificationMessage(event.eventId, ROOM_EVENT_NOTIFICATION_ID)
                 }
 
                 try {
@@ -332,7 +335,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                             summaryInboxStyle.addLine(line)
                         }
                     } else {
-                        val summaryLine = context.resources.getQuantityString(
+                        val summaryLine = stringProvider.getQuantityString(
                                 R.plurals.notification_compat_summary_line_for_room, events.size, roomName, events.size)
                         summaryInboxStyle.addLine(summaryLine)
                     }
@@ -351,17 +354,16 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                         globalLastMessageTimestamp = lastMessageTimestamp
                     }
 
-                    NotificationUtils.buildMessagesListNotification(context,
-                            vectorPreferences,
+                    val notification = notificationUtils.buildMessagesListNotification(
                             style,
                             roomEventGroupInfo,
                             largeBitmap,
                             lastMessageTimestamp,
                             myUserDisplayName)
-                            ?.let {
-                                //is there an id for this room?
-                                NotificationUtils.showNotificationMessage(context, roomId, ROOM_MESSAGES_NOTIFICATION_ID, it)
-                            }
+
+                    //is there an id for this room?
+                    notificationUtils.showNotificationMessage(roomId, ROOM_MESSAGES_NOTIFICATION_ID, notification)
+
                     hasNewEvent = true
                     summaryIsNoisy = summaryIsNoisy || roomEventGroupInfo.shouldBing
                 } else {
@@ -374,13 +376,12 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
             for (event in simpleEvents) {
                 //We build a simple event
                 if (firstTime || !event.hasBeenDisplayed) {
-                    NotificationUtils.buildSimpleEventNotification(context, vectorPreferences, event, null, session.myUserId)?.let {
-                        NotificationUtils.showNotificationMessage(context, event.eventId, ROOM_EVENT_NOTIFICATION_ID, it)
-                        event.hasBeenDisplayed = true //we can consider it as displayed
-                        hasNewEvent = true
-                        summaryIsNoisy = summaryIsNoisy || event.noisy
-                        summaryInboxStyle.addLine(event.description)
-                    }
+                    val notification = notificationUtils.buildSimpleEventNotification(event, null, session.myUserId)
+                    notificationUtils.showNotificationMessage(event.eventId, ROOM_EVENT_NOTIFICATION_ID, notification)
+                    event.hasBeenDisplayed = true //we can consider it as displayed
+                    hasNewEvent = true
+                    summaryIsNoisy = summaryIsNoisy || event.noisy
+                    summaryInboxStyle.addLine(event.description)
                 }
             }
 
@@ -399,27 +400,21 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
             // https://developer.android.com/training/notify-user/group
 
             if (eventList.isEmpty() || eventList.all { it.isRedacted }) {
-                NotificationUtils.cancelNotificationMessage(context, null, SUMMARY_NOTIFICATION_ID)
+                notificationUtils.cancelNotificationMessage(null, SUMMARY_NOTIFICATION_ID)
             } else {
                 val nbEvents = roomIdToEventMap.size + simpleEvents.size
-                val sumTitle = context.resources.getQuantityString(
-                        R.plurals.notification_compat_summary_title, nbEvents, nbEvents)
+                val sumTitle = stringProvider.getQuantityString(R.plurals.notification_compat_summary_title, nbEvents, nbEvents)
                 summaryInboxStyle.setBigContentTitle(sumTitle)
                         //TODO get latest event?
-                        .setSummaryText(
-                                context.resources
-                                        .getQuantityString(R.plurals.notification_unread_notified_messages, nbEvents, nbEvents))
+                        .setSummaryText(stringProvider.getQuantityString(R.plurals.notification_unread_notified_messages, nbEvents, nbEvents))
 
-                NotificationUtils.buildSummaryListNotification(
-                        context,
-                        vectorPreferences,
+                val notification = notificationUtils.buildSummaryListNotification(
                         summaryInboxStyle,
                         sumTitle,
                         noisy = hasNewEvent && summaryIsNoisy,
-                        lastMessageTimestamp = globalLastMessageTimestamp
-                )?.let {
-                    NotificationUtils.showNotificationMessage(context, null, SUMMARY_NOTIFICATION_ID, it)
-                }
+                        lastMessageTimestamp = globalLastMessageTimestamp)
+
+                notificationUtils.showNotificationMessage(null, SUMMARY_NOTIFICATION_ID, notification)
 
                 if (hasNewEvent && summaryIsNoisy) {
                     try {
@@ -462,7 +457,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
     fun persistInfo() {
         synchronized(eventList) {
             if (eventList.isEmpty()) {
-                deleteCachedRoomNotifications(context)
+                deleteCachedRoomNotifications()
                 return
             }
             try {
@@ -494,7 +489,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
         return ArrayList()
     }
 
-    private fun deleteCachedRoomNotifications(context: Context) {
+    private fun deleteCachedRoomNotifications() {
         val file = File(context.applicationContext.cacheDir, ROOMS_NOTIFICATIONS_FILE_NAME)
         if (file.exists()) {
             file.delete()

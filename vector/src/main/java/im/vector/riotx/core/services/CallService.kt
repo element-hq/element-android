@@ -19,6 +19,7 @@ package im.vector.riotx.core.services
 import android.content.Context
 import android.content.Intent
 import androidx.core.content.ContextCompat
+import im.vector.riotx.core.extensions.vectorComponent
 import im.vector.riotx.features.notifications.NotificationUtils
 import timber.log.Timber
 
@@ -32,10 +33,17 @@ class CallService : VectorService() {
      */
     private var mCallIdInProgress: String? = null
 
+    private lateinit var notificationUtils: NotificationUtils
+
     /**
      * incoming (foreground notification)
      */
     private var mIncomingCallId: String? = null
+
+    override fun onCreate() {
+        super.onCreate()
+        notificationUtils = vectorComponent().notificationUtils()
+    }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent == null) {
@@ -120,7 +128,7 @@ class CallService : VectorService() {
     private fun displayCallInProgressNotification(intent: Intent) {
         val callId = intent.getStringExtra(EXTRA_CALL_ID)
 
-        val notification = NotificationUtils.buildPendingCallNotification(applicationContext,
+        val notification = notificationUtils.buildPendingCallNotification(
                 intent.getBooleanExtra(EXTRA_IS_VIDEO, false),
                 intent.getStringExtra(EXTRA_ROOM_NAME),
                 intent.getStringExtra(EXTRA_ROOM_ID),
@@ -136,7 +144,7 @@ class CallService : VectorService() {
      * Hide the permanent call notifications
      */
     private fun hideCallNotifications() {
-        val notification = NotificationUtils.buildCallEndedNotification(applicationContext)
+        val notification = notificationUtils.buildCallEndedNotification()
 
         // It's mandatory to startForeground to avoid crash
         startForeground(NOTIFICATION_ID, notification)

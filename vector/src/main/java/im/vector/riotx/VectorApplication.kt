@@ -48,7 +48,6 @@ import im.vector.riotx.features.lifecycle.VectorActivityLifecycleCallbacks
 import im.vector.riotx.features.notifications.NotificationDrawerManager
 import im.vector.riotx.features.notifications.NotificationUtils
 import im.vector.riotx.features.notifications.PushRuleTriggerListener
-import im.vector.riotx.features.rageshake.VectorFileLogger
 import im.vector.riotx.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.riotx.features.settings.VectorPreferences
 import im.vector.riotx.features.version.VersionProvider
@@ -73,6 +72,7 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
     @Inject lateinit var pushRuleTriggerListener: PushRuleTriggerListener
     @Inject lateinit var vectorPreferences: VectorPreferences
     @Inject lateinit var versionProvider: VersionProvider
+    @Inject lateinit var notificationUtils: NotificationUtils
     lateinit var vectorComponent: VectorComponent
     private var fontThreadHandler: Handler? = null
 
@@ -112,7 +112,7 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
 
         emojiCompatWrapper.init(fontRequest)
 
-        NotificationUtils.createNotificationChannels(applicationContext)
+        notificationUtils.createNotificationChannels()
         if (authenticator.hasAuthenticatedSessions() && !activeSessionHolder.hasActiveSession()) {
             val lastAuthenticatedSession = authenticator.getLastAuthenticatedSession()!!
             activeSessionHolder.setActiveSession(lastAuthenticatedSession)
