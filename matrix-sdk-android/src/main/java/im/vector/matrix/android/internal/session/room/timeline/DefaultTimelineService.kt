@@ -73,7 +73,7 @@ internal class DefaultTimelineService @AssistedInject constructor(@Assisted priv
                               })
     }
 
-    override fun liveTimeLineEvent(eventId: String): LiveData<TimelineEvent> {
+    override fun getTimeLineEventLive(eventId: String): LiveData<TimelineEvent> {
         val liveData = RealmLiveData(monarchy.realmConfiguration) {
             TimelineEventEntity.where(it, eventId = eventId)
         }

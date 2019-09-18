@@ -33,6 +33,10 @@ internal class Debouncer(private val handler: Handler) {
         return true
     }
 
+    fun cancelAll() {
+        handler.removeCallbacksAndMessages(null)
+    }
+
     private fun insertRunnable(identifier: String, r: Runnable, millis: Long) {
         val chained = Runnable {
             handler.post(r)
@@ -41,4 +45,6 @@ internal class Debouncer(private val handler: Handler) {
         runnables[identifier] = chained
         handler.postDelayed(chained, millis)
     }
+
+
 }

@@ -16,8 +16,7 @@
 
 package im.vector.matrix.android.internal.session.sync
 
-import im.vector.matrix.android.api.session.room.read.FullyReadContent
-import im.vector.matrix.android.internal.database.model.EventEntity
+import im.vector.matrix.android.internal.session.room.read.FullyReadContent
 import im.vector.matrix.android.internal.database.model.ReadMarkerEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity

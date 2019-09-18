@@ -53,7 +53,7 @@ internal class DefaultRoom @Inject constructor(override val roomId: String,
     RelationService by relationService,
     MembershipService by roomMembersService {
 
-    override fun liveRoomSummary(): LiveData<RoomSummary> {
+    override fun getRoomSummaryLive(): LiveData<RoomSummary> {
         val liveRealmData = RealmLiveData<RoomSummaryEntity>(monarchy.realmConfiguration) { realm ->
             RoomSummaryEntity.where(realm, roomId).isNotEmpty(RoomSummaryEntityFields.DISPLAY_NAME)
         }

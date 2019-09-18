@@ -184,7 +184,7 @@ class PushrulesConditionTest {
     }
 
     class MockRoom(override val roomId: String, val _numberOfJoinedMembers: Int) : Room {
-        override fun liveTimeLineEvent(eventId: String): LiveData<TimelineEvent> {
+        override fun getTimeLineEventLive(eventId: String): LiveData<TimelineEvent> {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
@@ -193,7 +193,7 @@ class PushrulesConditionTest {
             return _numberOfJoinedMembers
         }
 
-        override fun liveRoomSummary(): LiveData<RoomSummary> {
+        override fun getRoomSummaryLive(): LiveData<RoomSummary> {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 

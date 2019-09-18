@@ -40,13 +40,13 @@ import im.vector.matrix.android.api.session.events.model.isTextMessage
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.file.FileService
 import im.vector.matrix.android.api.session.room.model.Membership
-import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.model.message.getFileUrl
 import im.vector.matrix.android.api.session.room.model.tombstone.RoomTombstoneContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.TimelineSettings
+import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
 import im.vector.matrix.rx.rx
@@ -62,6 +62,7 @@ import im.vector.riotx.features.command.ParsedCommand
 import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineDisplayableEvents
 import im.vector.riotx.features.settings.VectorPreferences
 import io.reactivex.Observable
+import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function3
 import io.reactivex.rxkotlin.subscribeBy
 import org.commonmark.parser.Parser
@@ -116,6 +117,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         observeEventDisplayedActions()
         observeSummaryState()
         observeJumpToReadMarkerViewVisibility()
+        observeReadMarkerVisibility()
         room.rx().loadRoomMembersIfNeeded().subscribeLogError().disposeOnClear()
         timeline.start()
         setState { copy(timeline = this@RoomDetailViewModel.timeline) }
@@ -156,7 +158,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
 
     private fun handleTombstoneEvent(action: RoomDetailActions.HandleTombstoneEvent) {
         val tombstoneContent = action.event.getClearContent().toModel<RoomTombstoneContent>()
-                               ?: return
+                ?: return
 
         val roomId = tombstoneContent.replacementRoom ?: ""
         val isRoomJoined = session.getRoom(roomId)?.roomSummary()?.membership == Membership.JOIN
@@ -303,7 +305,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
 
                     //is original event a reply?
                     val inReplyTo = state.sendMode.timelineEvent.root.getClearContent().toModel<MessageContent>()?.relatesTo?.inReplyTo?.eventId
-                                    ?: state.sendMode.timelineEvent.root.content.toModel<EncryptedEventContent>()?.relatesTo?.inReplyTo?.eventId
+                            ?: state.sendMode.timelineEvent.root.content.toModel<EncryptedEventContent>()?.relatesTo?.inReplyTo?.eventId
                     if (inReplyTo != null) {
                         //TODO check if same content?
                         room.getTimeLineEvent(inReplyTo)?.let {
@@ -312,12 +314,12 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                     } else {
                         val messageContent: MessageContent? =
                                 state.sendMode.timelineEvent.annotations?.editSummary?.aggregatedContent.toModel()
-                                ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
+                                        ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
                         val existingBody = messageContent?.body ?: ""
                         if (existingBody != action.text) {
                             room.editTextMessage(state.sendMode.timelineEvent.root.eventId
-                                                 ?: "", messageContent?.type
-                                                        ?: MessageType.MSGTYPE_TEXT, action.text, action.autoMarkdown)
+                                    ?: "", messageContent?.type
+                                    ?: MessageType.MSGTYPE_TEXT, action.text, action.autoMarkdown)
                         } else {
                             Timber.w("Same message content, do not send edition")
                         }
@@ -332,7 +334,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 is SendMode.QUOTE -> {
                     val messageContent: MessageContent? =
                             state.sendMode.timelineEvent.annotations?.editSummary?.aggregatedContent.toModel()
-                            ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
+                                    ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
                     val textMsg = messageContent?.body
 
                     val finalText = legacyRiotQuoteText(textMsg, action.text)
@@ -635,29 +637,30 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun observeJumpToReadMarkerViewVisibility() {
-        Observable
-                .combineLatest(
-                        room.rx().liveRoomSummary().map {
+        Observable.combineLatest(
+                room.rx().liveRoomSummary()
+                        .map {
                             val readMarkerId = it.readMarkerId
                             if (readMarkerId == null) {
                                 Option.empty()
                             } else {
-                                val timelineEvent = room.getTimeLineEvent(readMarkerId)
-                                Option.fromNullable(timelineEvent)
-                            }
-                        }.distinctUntilChanged(),
-                        visibleEventsObservable.distinctUntilChanged(),
-                        isEventVisibleObservable { it.hasReadMarker }.startWith(false),
-                        Function3<Option<TimelineEvent>, RoomDetailActions.TimelineEventTurnsVisible, Boolean, Boolean> { readMarkerEvent, currentVisibleEvent, isReadMarkerViewVisible ->
-                            if (readMarkerEvent.isEmpty() || isReadMarkerViewVisible) {
-                                false
-                            } else {
-                                val readMarkerPosition = readMarkerEvent.map { it.displayIndex }.getOrElse { Int.MIN_VALUE }
-                                val currentVisibleEventPosition = currentVisibleEvent.event.displayIndex
-                                readMarkerPosition < currentVisibleEventPosition
+                                val readMarkerIndex = room.getTimeLineEvent(readMarkerId)?.displayIndex
+                                        ?: Int.MIN_VALUE
+                                Option.just(readMarkerIndex)
                             }
                         }
-                )
+                        .distinctUntilChanged(),
+                visibleEventsObservable.distinctUntilChanged(),
+                isEventVisibleObservable { it.hasReadMarker }.startWith(false).takeUntil { it },
+                Function3<Option<Int>, RoomDetailActions.TimelineEventTurnsVisible, Boolean, Boolean> { readMarkerIndex, currentVisibleEvent, isReadMarkerViewVisible ->
+                    if (readMarkerIndex.isEmpty() || isReadMarkerViewVisible) {
+                        false
+                    } else {
+                        val currentVisibleEventPosition = currentVisibleEvent.event.displayIndex
+                        readMarkerIndex.getOrElse { Int.MIN_VALUE } < currentVisibleEventPosition
+                    }
+                }
+        )
                 .distinctUntilChanged()
                 .subscribe {
                     setState { copy(showJumpToReadMarker = it) }
@@ -681,6 +684,25 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                     )
                 }
     }
+
+    private fun observeReadMarkerVisibility() {
+        Observable
+                .combineLatest(
+                        room.rx().liveReadMarker(),
+                        room.rx().liveReadReceipt(),
+                        BiFunction<Optional<String>, Optional<String>, Boolean> { readMarker, readReceipt ->
+                            readMarker.getOrNull() == readReceipt.getOrNull()
+                        }
+                )
+                .throttleLast(250, TimeUnit.MILLISECONDS)
+                .distinctUntilChanged()
+                .startWith(false)
+                .subscribe {
+                    setState { copy(hideReadMarker = it) }
+                }
+                .disposeOnClear()
+    }
+
 
     private fun observeSummaryState() {
         asyncSubscribe(RoomDetailViewState::asyncRoomSummary) { summary ->

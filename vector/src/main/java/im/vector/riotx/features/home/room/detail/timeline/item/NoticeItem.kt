@@ -38,8 +38,8 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
     })
 
     private val _readMarkerCallback = object : ReadMarkerView.Callback {
-        override fun onReadMarkerDisplayed() {
-            attributes.readReceiptsCallback?.onReadMarkerLongDisplayed(attributes.informationData)
+        override fun onReadMarkerLongBound() {
+            attributes.readReceiptsCallback?.onReadMarkerLongDisplayed()
         }
     }
 
@@ -50,12 +50,17 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
                 attributes.informationData.avatarUrl,
                 attributes.informationData.senderId,
                 attributes.informationData.memberName?.toString()
-                ?: attributes.informationData.senderId,
+                        ?: attributes.informationData.senderId,
                 holder.avatarImageView
         )
         holder.view.setOnLongClickListener(attributes.itemLongClickListener)
         holder.readReceiptsView.render(attributes.informationData.readReceipts, attributes.avatarRenderer, _readReceiptsClickListener)
-        holder.readMarkerView.bindView(attributes.informationData.displayReadMarker, _readMarkerCallback)
+        holder.readMarkerView.bindView(
+                attributes.informationData.eventId,
+                attributes.informationData.hasReadMarker,
+                attributes.informationData.displayReadMarker,
+                _readMarkerCallback
+        )
     }
 
     override fun unbind(holder: Holder) {

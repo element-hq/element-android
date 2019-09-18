@@ -36,5 +36,5 @@ interface TimelineService {
     fun getTimeLineEvent(eventId: String): TimelineEvent?
 
 
-    fun liveTimeLineEvent(eventId: String): LiveData<TimelineEvent>
+    fun getTimeLineEventLive(eventId: String): LiveData<TimelineEvent>
 }

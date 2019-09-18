@@ -25,7 +25,9 @@ import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
+import im.vector.riotx.core.ui.views.ReadMarkerView
 import im.vector.riotx.features.home.AvatarRenderer
+import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base_noinfo)
 abstract class MergedHeaderItem : BaseEventItem<MergedHeaderItem.Holder>() {
@@ -35,6 +37,13 @@ abstract class MergedHeaderItem : BaseEventItem<MergedHeaderItem.Holder>() {
 
     private val distinctMergeData by lazy {
         attributes.mergeData.distinctBy { it.userId }
+    }
+
+    private val _readMarkerCallback = object : ReadMarkerView.Callback {
+
+        override fun onReadMarkerLongBound() {
+            attributes.readReceiptsCallback?.onReadMarkerLongDisplayed()
+        }
     }
 
     override fun getViewType() = STUB_ID
@@ -68,6 +77,16 @@ abstract class MergedHeaderItem : BaseEventItem<MergedHeaderItem.Holder>() {
         }
         // No read receipt for this item
         holder.readReceiptsView.isVisible = false
+        holder.readMarkerView.bindView(
+                attributes.readMarkerId,
+                !attributes.readMarkerId.isNullOrEmpty(),
+                attributes.showReadMarker,
+                _readMarkerCallback)
+    }
+
+    override fun unbind(holder: Holder) {
+        holder.readMarkerView.unbind()
+        super.unbind(holder)
     }
 
     data class Data(
@@ -78,10 +97,12 @@ abstract class MergedHeaderItem : BaseEventItem<MergedHeaderItem.Holder>() {
     )
 
     data class Attributes(
+            val readMarkerId: String?,
             val isCollapsed: Boolean,
             val showReadMarker: Boolean,
             val mergeData: List<Data>,
             val avatarRenderer: AvatarRenderer,
+            val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null,
             val onCollapsedStateChanged: (Boolean) -> Unit
     )
 

@@ -56,8 +56,9 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
     })
 
     private val _readMarkerCallback = object : ReadMarkerView.Callback {
-        override fun onReadMarkerDisplayed() {
-            attributes.readReceiptsCallback?.onReadMarkerLongDisplayed(attributes.informationData)
+
+        override fun onReadMarkerLongBound() {
+            attributes.readReceiptsCallback?.onReadMarkerLongDisplayed()
         }
     }
 
@@ -106,7 +107,12 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
             holder.memberNameView.setOnLongClickListener(null)
         }
         holder.readReceiptsView.render(attributes.informationData.readReceipts, attributes.avatarRenderer, _readReceiptsClickListener)
-        holder.readMarkerView.bindView(attributes.informationData.displayReadMarker, _readMarkerCallback)
+        holder.readMarkerView.bindView(
+                attributes.informationData.eventId,
+                attributes.informationData.hasReadMarker,
+                attributes.informationData.displayReadMarker,
+                _readMarkerCallback
+        )
 
         if (!shouldShowReactionAtBottom() || attributes.informationData.orderedReactionList.isNullOrEmpty()) {
             holder.reactionWrapper?.isVisible = false

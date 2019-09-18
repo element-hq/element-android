@@ -23,8 +23,8 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import androidx.core.view.isInvisible
 import im.vector.riotx.R
-import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
 import kotlinx.coroutines.*
 
 private const val DELAY_IN_MS = 1_500L
@@ -36,30 +36,34 @@ class ReadMarkerView @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr) {
 
     interface Callback {
-        fun onReadMarkerDisplayed()
+        fun onReadMarkerLongBound()
     }
 
+    private var eventId: String? = null
     private var callback: Callback? = null
     private var callbackDispatcherJob: Job? = null
 
-    fun bindView(displayReadMarker: Boolean, readMarkerCallback: Callback) {
+    fun bindView(eventId: String?, hasReadMarker: Boolean, displayReadMarker: Boolean, readMarkerCallback: Callback) {
+        this.eventId = eventId
         this.callback = readMarkerCallback
         if (displayReadMarker) {
-            visibility = VISIBLE
-            callbackDispatcherJob = GlobalScope.launch(Dispatchers.Main) {
-                delay(DELAY_IN_MS)
-                callback?.onReadMarkerDisplayed()
-            }
             startAnimation()
         } else {
-            visibility = INVISIBLE
+            this.animation?.cancel()
+            this.visibility = INVISIBLE
         }
-
+        if (hasReadMarker) {
+            callbackDispatcherJob = GlobalScope.launch(Dispatchers.Main) {
+                delay(DELAY_IN_MS)
+                callback?.onReadMarkerLongBound()
+            }
+        }
     }
 
     fun unbind() {
         this.callbackDispatcherJob?.cancel()
         this.callback = null
+        this.eventId = null
         this.animation?.cancel()
         this.visibility = INVISIBLE
     }
@@ -80,6 +84,7 @@ class ReadMarkerView @JvmOverloads constructor(
                 override fun onAnimationRepeat(animation: Animation) {}
             })
         }
+        visibility = VISIBLE
         animation.start()
     }
 

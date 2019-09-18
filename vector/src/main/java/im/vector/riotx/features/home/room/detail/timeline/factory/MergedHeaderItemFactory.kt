@@ -51,17 +51,21 @@ class MergedHeaderItemFactory @Inject constructor(private val sessionHolder: Act
         return if (!event.canBeMerged() || (nextEvent?.root?.getClearType() == event.root.getClearType() && !addDaySeparator)) {
             null
         } else {
-            var highlighted = false
-            var showReadMarker = false
             val prevSameTypeEvents = items.prevSameTypeEvents(currentPosition, 2)
             if (prevSameTypeEvents.isEmpty()) {
                 null
             } else {
+                var highlighted = false
+                var readMarkerId: String? = null
+                var showReadMarker = false
                 val mergedEvents = (prevSameTypeEvents + listOf(event)).asReversed()
                 val mergedData = ArrayList<MergedHeaderItem.Data>(mergedEvents.size)
                 mergedEvents.forEach { mergedEvent ->
                     if (!highlighted && mergedEvent.root.eventId == eventIdToHighlight) {
                         highlighted = true
+                    }
+                    if (readMarkerId == null && mergedEvent.hasReadMarker) {
+                        readMarkerId = mergedEvent.root.eventId
                     }
                     if (!showReadMarker && mergedEvent.displayReadMarker(sessionHolder.getActiveSession().myUserId)) {
                         showReadMarker = true
@@ -81,7 +85,7 @@ class MergedHeaderItemFactory @Inject constructor(private val sessionHolder: Act
                 // => handle case where paginating from mergeable events and we get more
                 val previousCollapseStateKey = mergedEventIds.intersect(mergeItemCollapseStates.keys).firstOrNull()
                 val initialCollapseState = mergeItemCollapseStates.remove(previousCollapseStateKey)
-                                           ?: true
+                        ?: true
                 val isCollapsed = mergeItemCollapseStates.getOrPut(event.localId) { initialCollapseState }
                 if (isCollapsed) {
                     collapsedEventIds.addAll(mergedEventIds)
@@ -97,12 +101,14 @@ class MergedHeaderItemFactory @Inject constructor(private val sessionHolder: Act
                             mergeItemCollapseStates[event.localId] = it
                             requestModelBuild()
                         },
-                        showReadMarker = showReadMarker
+                        readMarkerId = readMarkerId,
+                        showReadMarker = isCollapsed && showReadMarker,
+                        readReceiptsCallback = callback
                 )
                 MergedHeaderItem_()
                         .id(mergeId)
                         .leftGuideline(avatarSizeProvider.leftGuideline)
-                        .highlighted(highlighted)
+                        .highlighted(isCollapsed && highlighted)
                         .attributes(attributes)
                         .also {
                             it.setOnVisibilityStateChanged(MergedTimelineEventVisibilityStateChangedListener(callback, mergedEvents))

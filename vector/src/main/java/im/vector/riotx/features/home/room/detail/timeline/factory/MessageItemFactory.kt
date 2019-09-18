@@ -76,11 +76,12 @@ class MessageItemFactory @Inject constructor(
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
                highlight: Boolean,
+               hideReadMarker: Boolean,
                callback: TimelineEventController.Callback?
     ): VectorEpoxyModel<*>? {
         event.root.eventId ?: return null
 
-        val informationData = messageInformationDataFactory.create(event, nextEvent)
+        val informationData = messageInformationDataFactory.create(event, nextEvent, hideReadMarker)
 
         if (event.root.isRedacted()) {
             //message is redacted
@@ -97,7 +98,7 @@ class MessageItemFactory @Inject constructor(
             || event.isEncrypted() && event.root.content.toModel<EncryptedEventContent>()?.relatesTo?.type == RelationType.REPLACE
         ) {
             // This is an edit event, we should it when debugging as a notice event
-            return noticeItemFactory.create(event, highlight, callback)
+            return noticeItemFactory.create(event, highlight, hideReadMarker, callback)
         }
         val attributes = messageItemAttributesFactory.create(messageContent, informationData, callback)
 

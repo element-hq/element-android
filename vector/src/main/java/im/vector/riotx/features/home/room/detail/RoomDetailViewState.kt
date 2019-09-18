@@ -53,7 +53,8 @@ data class RoomDetailViewState(
         val tombstoneEventHandling: Async<String> = Uninitialized,
         val syncState: SyncState = SyncState.IDLE,
         val showJumpToReadMarker: Boolean = false,
-        val highlightedEventId: String? = null
+        val highlightedEventId: String? = null,
+        val hideReadMarker: Boolean = false
 ) : MvRxState {
 
     constructor(args: RoomDetailArgs) : this(roomId = args.roomId, eventId = args.eventId)

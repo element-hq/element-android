@@ -31,8 +31,6 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotx.core.date.VectorDateFormatter
 import im.vector.riotx.core.epoxy.LoadingItem_
 import im.vector.riotx.core.extensions.localDateTime
-import im.vector.riotx.core.resources.UserPreferencesProvider
-import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.factory.MergedHeaderItemFactory
 import im.vector.riotx.features.home.room.detail.timeline.factory.TimelineItemFactory
 import im.vector.riotx.features.home.room.detail.timeline.helper.*
@@ -80,7 +78,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
 
     interface ReadReceiptsCallback {
         fun onReadReceiptsClicked(readReceipts: List<ReadReceiptData>)
-        fun onReadMarkerLongDisplayed(informationData: MessageInformationData)
+        fun onReadMarkerLongDisplayed()
     }
 
     interface UrlClickCallback {
@@ -142,7 +140,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         requestModelBuild()
     }
 
-    fun setTimeline(timeline: Timeline?, eventIdToHighlight: String?) {
+    fun update(timeline: Timeline?, eventIdToHighlight: String?, hideReadMarker: Boolean) {
         if (this.timeline != timeline) {
             this.timeline = timeline
             this.timeline?.listener = this
@@ -155,22 +153,30 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             }
         }
 
+        var requestModelBuild = false
         if (this.eventIdToHighlight != eventIdToHighlight) {
             // Clear cache to force a refresh
             synchronized(modelCache) {
                 for (i in 0 until modelCache.size) {
                     if (modelCache[i]?.eventId == eventIdToHighlight
-                        || modelCache[i]?.eventId == this.eventIdToHighlight) {
+                            || modelCache[i]?.eventId == this.eventIdToHighlight) {
                         modelCache[i] = null
                     }
                 }
             }
             this.eventIdToHighlight = eventIdToHighlight
-
+            requestModelBuild = true
+        }
+        if (this.hideReadMarker != hideReadMarker) {
+            this.hideReadMarker = hideReadMarker
+            requestModelBuild = true
+        }
+        if (requestModelBuild) {
             requestModelBuild()
         }
     }
 
+    private var hideReadMarker: Boolean = false
     private var eventIdToHighlight: String? = null
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
@@ -224,8 +230,8 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
                 // Should be build if not cached or if cached but contains mergedHeader or formattedDay
                 // We then are sure we always have items up to date.
                 if (modelCache[position] == null
-                    || modelCache[position]?.mergedHeaderModel != null
-                    || modelCache[position]?.formattedDayModel != null) {
+                        || modelCache[position]?.mergedHeaderModel != null
+                        || modelCache[position]?.formattedDayModel != null) {
                     modelCache[position] = buildItemModels(position, currentSnapshot)
                 }
             }
@@ -251,7 +257,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         val nextDate = nextEvent?.root?.localDateTime()
         val addDaySeparator = date.toLocalDate() != nextDate?.toLocalDate()
 
-        val eventModel = timelineItemFactory.create(event, nextEvent, eventIdToHighlight, callback).also {
+        val eventModel = timelineItemFactory.create(event, nextEvent, eventIdToHighlight, hideReadMarker, callback).also {
             it.id(event.localId)
             it.setOnVisibilityStateChanged(TimelineEventVisibilityStateChangedListener(callback, event))
         }

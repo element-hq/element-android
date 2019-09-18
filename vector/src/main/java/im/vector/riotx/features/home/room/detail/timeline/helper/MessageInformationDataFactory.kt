@@ -41,7 +41,7 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                                                         private val dateFormatter: VectorDateFormatter,
                                                         private val colorProvider: ColorProvider) {
 
-    fun create(event: TimelineEvent, nextEvent: TimelineEvent?): MessageInformationData {
+    fun create(event: TimelineEvent, nextEvent: TimelineEvent?, hideReadMarker: Boolean): MessageInformationData {
         // Non nullability has been tested before
         val eventId = event.root.eventId!!
 
@@ -65,7 +65,7 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
             textColor = colorProvider.getColor(getColorFromUserId(event.root.senderId ?: ""))
         }
 
-        val displayReadMarker = event.displayReadMarker(session.myUserId)
+        val displayReadMarker = !hideReadMarker && event.displayReadMarker(session.myUserId)
 
         return MessageInformationData(
                 eventId = eventId,
@@ -91,6 +91,7 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                             ReadReceiptData(it.user.userId, it.user.avatarUrl, it.user.displayName, it.originServerTs)
                         }
                         .toList(),
+                hasReadMarker = event.hasReadMarker,
                 displayReadMarker = displayReadMarker
         )
     }
