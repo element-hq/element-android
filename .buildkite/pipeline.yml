@@ -11,6 +11,9 @@ steps:
       # gradle build is long
       queue: "medium"
     commands:
+      # Workaround to set env variables from Buildkite. If we do not do that, the gradle script does not see the Buildkite env variables
+      - "export BUILDKITE_BRANCH=$BUILDKITE_BRANCH"
+      - "export BUILDKITE_BUILD_NUMBER=$BUILDKITE_BUILD_NUMBER"
       - "./gradlew clean lintGplayRelease assembleGplayDebug --stacktrace"
     artifact_paths:
       - "vector/build/outputs/apk/gplay/debug/*.apk"
@@ -25,6 +28,9 @@ steps:
       # gradle build is long
       queue: "medium"
     commands:
+      # Workaround to set env variables from Buildkite. If we do not do that, the gradle script does not see the Buildkite env variables
+      - "export BUILDKITE_BRANCH=$BUILDKITE_BRANCH"
+      - "export BUILDKITE_BUILD_NUMBER=$BUILDKITE_BUILD_NUMBER"
       - "./gradlew clean lintFdroidRelease assembleFdroidDebug --stacktrace"
     artifact_paths:
       - "vector/build/outputs/apk/fdroid/debug/*.apk"
@@ -39,6 +45,9 @@ steps:
       # gradle build is long
       queue: "medium"
     commands:
+      # Workaround to set env variables from Buildkite. If we do not do that, the gradle script does not see the Buildkite env variables
+      - "export BUILDKITE_BRANCH=$BUILDKITE_BRANCH"
+      - "export BUILDKITE_BUILD_NUMBER=$BUILDKITE_BUILD_NUMBER"
       - "./gradlew clean assembleGplayRelease --stacktrace"
     artifact_paths:
       - "vector/build/outputs/apk/gplay/release/*.apk"
