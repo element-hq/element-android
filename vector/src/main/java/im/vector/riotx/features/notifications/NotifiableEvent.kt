@@ -31,6 +31,7 @@ interface NotifiableEvent : Serializable {
     // Compat: Only for android <7, for newer version the sound is defined in the channel
     var soundName: String?
     var hasBeenDisplayed: Boolean
+    var isRedacted: Boolean
     //Used to know if event should be replaced with the one coming from eventstream
     var isPushGatewayEvent: Boolean
 }

@@ -60,6 +60,10 @@ class PushRuleTriggerListener @Inject constructor(
         notificationDrawerManager.clearMessageEventOfRoom(roomId)
     }
 
+    override fun onEventRedacted(redactedEventId: String) {
+        notificationDrawerManager.onEventRedacted(redactedEventId)
+    }
+
     override fun batchFinish() {
         notificationDrawerManager.refreshNotificationDrawer()
     }

@@ -7,6 +7,7 @@ Features:
 Improvements:
  - Add unread indent on room list (#485)
  - Message Editing: Update notifications (#128)
+ - Remove any notification of a redacted event (#563)
 
 Other changes:
  -

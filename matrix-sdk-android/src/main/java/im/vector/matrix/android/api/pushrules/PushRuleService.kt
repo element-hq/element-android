@@ -43,6 +43,7 @@ interface PushRuleService {
     interface PushRuleListener {
         fun onMatchRule(event: Event, actions: List<Action>)
         fun onRoomLeft(roomId: String)
+        fun onEventRedacted(redactedEventId: String)
         fun batchFinish()
     }
 }

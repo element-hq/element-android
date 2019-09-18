@@ -32,6 +32,7 @@ data class InviteNotifiableEvent(
         override var isPushGatewayEvent: Boolean = false) : NotifiableEvent {
 
     override var hasBeenDisplayed: Boolean = false
+    override var isRedacted: Boolean = false
     override var lockScreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
 
 }

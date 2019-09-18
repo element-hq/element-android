@@ -36,6 +36,7 @@ data class NotifiableMessageEvent(
     override var soundName: String? = null
     override var lockScreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
     override var hasBeenDisplayed: Boolean = false
+    override var isRedacted: Boolean = false
 
     var roomAvatarPath: String? = null
     var senderAvatarPath: String? = null
