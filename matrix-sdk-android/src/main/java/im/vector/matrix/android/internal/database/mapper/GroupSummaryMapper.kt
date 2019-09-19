@@ -25,6 +25,7 @@ internal object GroupSummaryMapper {
     fun map(roomSummaryEntity: GroupSummaryEntity): GroupSummary {
         return GroupSummary(
                 roomSummaryEntity.groupId,
+                roomSummaryEntity.membership,
                 roomSummaryEntity.displayName,
                 roomSummaryEntity.shortDescription,
                 roomSummaryEntity.avatarUrl,

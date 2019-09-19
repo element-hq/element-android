@@ -21,15 +21,15 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.WorkManager
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.auth.data.Credentials
+import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.internal.database.RealmLiveEntityObserver
 import im.vector.matrix.android.internal.database.model.GroupEntity
+import im.vector.matrix.android.internal.database.model.GroupSummaryEntity
 import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.worker.WorkManagerUtil
 import im.vector.matrix.android.internal.worker.WorkManagerUtil.matrixOneTimeWorkRequestBuilder
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import io.realm.OrderedCollectionChangeSet
-import io.realm.RealmConfiguration
 import io.realm.RealmResults
 import javax.inject.Inject
 
@@ -37,18 +37,29 @@ private const val GET_GROUP_DATA_WORKER = "GET_GROUP_DATA_WORKER"
 
 internal class GroupSummaryUpdater @Inject constructor(private val context: Context,
                                                        private val credentials: Credentials,
-                                                       @SessionDatabase realmConfiguration: RealmConfiguration)
-    : RealmLiveEntityObserver<GroupEntity>(realmConfiguration) {
+                                                       private val monarchy: Monarchy)
+    : RealmLiveEntityObserver<GroupEntity>(monarchy.realmConfiguration) {
 
-    override val query = Monarchy.Query<GroupEntity> { GroupEntity.where(it) }
+    override val query = Monarchy.Query { GroupEntity.where(it) }
 
     override fun onChange(results: RealmResults<GroupEntity>, changeSet: OrderedCollectionChangeSet) {
-        val newGroupIds = changeSet.insertions
+        // `insertions` for new groups and `changes` to handle left groups
+        val modifiedGroupEntity = (changeSet.insertions + changeSet.changes)
                 .asSequence()
-                .mapNotNull { results[it]?.groupId}
+                .mapNotNull { results[it] }
                 .toList()
 
-        val getGroupDataWorkerParams = GetGroupDataWorker.Params(credentials.userId, newGroupIds)
+        fetchGroupsData(modifiedGroupEntity
+                .filter { it.membership == Membership.JOIN || it.membership == Membership.INVITE }
+                .map { it.groupId })
+
+        deleteGroups(modifiedGroupEntity
+                .filter { it.membership == Membership.LEAVE }
+                .map { it.groupId })
+    }
+
+    private fun fetchGroupsData(groupIds: List<String>) {
+        val getGroupDataWorkerParams = GetGroupDataWorker.Params(credentials.userId, groupIds)
         val workData = WorkerParamsFactory.toData(getGroupDataWorkerParams)
 
         val sendWork = matrixOneTimeWorkRequestBuilder<GetGroupDataWorker>()
@@ -61,4 +72,15 @@ internal class GroupSummaryUpdater @Inject constructor(private val context: Cont
                 .enqueue()
     }
 
+    /**
+     * Delete the GroupSummaryEntity of left groups
+     */
+    private fun deleteGroups(groupIds: List<String>) {
+        monarchy
+                .writeAsync { realm ->
+                    GroupSummaryEntity.where(realm, groupIds)
+                            .findAll()
+                            .deleteAllFromRealm()
+                }
+    }
 }

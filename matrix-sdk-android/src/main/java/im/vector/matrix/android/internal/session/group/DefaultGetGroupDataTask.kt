@@ -17,6 +17,7 @@
 package im.vector.matrix.android.internal.session.group
 
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.internal.database.model.GroupSummaryEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.network.executeRequest
@@ -64,8 +65,7 @@ internal class DefaultGetGroupDataTask @Inject constructor(
                     groupSummaryEntity.avatarUrl = groupSummary.profile?.avatarUrl ?: ""
                     val name = groupSummary.profile?.name
                     groupSummaryEntity.displayName = if (name.isNullOrEmpty()) groupId else name
-                    groupSummaryEntity.shortDescription = groupSummary.profile?.shortDescription
-                            ?: ""
+                    groupSummaryEntity.shortDescription = groupSummary.profile?.shortDescription ?: ""
 
                     val roomIds = groupRooms.rooms.map { it.roomId }
                     groupSummaryEntity.roomIds.clear()
@@ -74,8 +74,12 @@ internal class DefaultGetGroupDataTask @Inject constructor(
                     val userIds = groupUsers.users.map { it.userId }
                     groupSummaryEntity.userIds.clear()
                     groupSummaryEntity.userIds.addAll(userIds)
+
+                    groupSummaryEntity.membership = when (groupSummary.user?.membership) {
+                        Membership.JOIN.value   -> Membership.JOIN
+                        Membership.INVITE.value -> Membership.INVITE
+                        else                    -> Membership.LEAVE
+                    }
                 }
     }
-
-
 }
