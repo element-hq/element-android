@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.network
 
 import android.content.Context
 import com.novoda.merlin.Merlin
+import com.novoda.merlin.MerlinsBeard
 import im.vector.matrix.android.internal.di.MatrixScope
 import timber.log.Timber
 import java.util.*
@@ -36,7 +37,7 @@ internal class NetworkConnectivityChecker @Inject constructor(context: Context) 
     private val listeners = Collections.synchronizedSet(LinkedHashSet<Listener>())
 
     // True when internet is available
-    var hasInternetAccess = false
+    var hasInternetAccess = MerlinsBeard.Builder().build(context).isConnected
         private set
 
     init {

@@ -12,6 +12,7 @@ Other changes:
 
 Bugfix:
  - Fix characters erased from the Search field when the result are coming (#545)
+ - "No connection" banner was displayed by mistake
 
 Translations:
  -
@@ -23,7 +24,7 @@ Changes in RiotX 0.5.0 (2019-09-17)
 ===================================================
 
 Features:
- - Implementation of login to homeerver with SSO
+ - Implementation of login to homeserver with SSO
  - Handle M_CONSENT_NOT_GIVEN error (#64)
  - Auto configure homeserver and identity server URLs of LoginActivity with a magic link
 
