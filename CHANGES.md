@@ -5,7 +5,7 @@ Features:
  -
 
 Improvements:
- -
+ - Add unread indent on room list (#485)
 
 Other changes:
  -

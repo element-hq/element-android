@@ -35,7 +35,7 @@ internal class RoomSummaryMapper @Inject constructor(
             RoomTag(it.tagName, it.tagOrder)
         }
 
-        val latestEvent = roomSummaryEntity.latestEvent?.let {
+        val latestEvent = roomSummaryEntity.latestPreviewableEvent?.let {
             timelineEventMapper.map(it)
         }
         if (latestEvent?.root?.isEncrypted() == true && latestEvent.root.mxDecryptionResult == null) {
@@ -43,26 +43,28 @@ internal class RoomSummaryMapper @Inject constructor(
             //for now decrypt sync
             try {
                 val result = cryptoService.decryptEvent(latestEvent.root, latestEvent.root.roomId + UUID.randomUUID().toString())
-                    latestEvent.root.mxDecryptionResult =  OlmDecryptionResult(
-                            payload = result.clearEvent,
-                            senderKey = result.senderCurve25519Key,
-                            keysClaimed = result.claimedEd25519Key?.let { mapOf("ed25519" to it) },
-                            forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
-                    )
+                latestEvent.root.mxDecryptionResult = OlmDecryptionResult(
+                        payload = result.clearEvent,
+                        senderKey = result.senderCurve25519Key,
+                        keysClaimed = result.claimedEd25519Key?.let { mapOf("ed25519" to it) },
+                        forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
+                )
             } catch (e: MXCryptoError) {
 
             }
         }
+
         return RoomSummary(
                 roomId = roomSummaryEntity.roomId,
                 displayName = roomSummaryEntity.displayName ?: "",
                 topic = roomSummaryEntity.topic ?: "",
                 avatarUrl = roomSummaryEntity.avatarUrl ?: "",
                 isDirect = roomSummaryEntity.isDirect,
-                latestEvent = latestEvent,
+                latestPreviewableEvent = latestEvent,
                 otherMemberIds = roomSummaryEntity.otherMemberIds.toList(),
                 highlightCount = roomSummaryEntity.highlightCount,
                 notificationCount = roomSummaryEntity.notificationCount,
+                hasUnreadMessages = roomSummaryEntity.hasUnreadMessages,
                 tags = tags,
                 membership = roomSummaryEntity.membership,
                 versioningState = roomSummaryEntity.versioningState

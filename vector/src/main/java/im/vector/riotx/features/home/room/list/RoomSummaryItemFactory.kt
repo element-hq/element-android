@@ -16,6 +16,7 @@
 
 package im.vector.riotx.features.home.room.list
 
+import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.Membership
@@ -38,7 +39,8 @@ class RoomSummaryItemFactory @Inject constructor(private val noticeEventFormatte
                                                  private val dateFormatter: VectorDateFormatter,
                                                  private val colorProvider: ColorProvider,
                                                  private val stringProvider: StringProvider,
-                                                 private val avatarRenderer: AvatarRenderer) {
+                                                 private val avatarRenderer: AvatarRenderer,
+                                                 private val session: Session) {
 
     fun create(roomSummary: RoomSummary,
                joiningRoomsIds: Set<String>,
@@ -59,9 +61,9 @@ class RoomSummaryItemFactory @Inject constructor(private val noticeEventFormatte
                                      rejectingErrorRoomsIds: Set<String>,
                                      listener: RoomSummaryController.Listener?): VectorEpoxyModel<*> {
         val secondLine = if (roomSummary.isDirect) {
-            roomSummary.latestEvent?.root?.senderId
+            roomSummary.latestPreviewableEvent?.root?.senderId
         } else {
-            roomSummary.latestEvent?.root?.senderId?.let {
+            roomSummary.latestPreviewableEvent?.root?.senderId?.let {
                 stringProvider.getString(R.string.invited_by, it)
             }
         }
@@ -88,7 +90,7 @@ class RoomSummaryItemFactory @Inject constructor(private val noticeEventFormatte
 
         var latestFormattedEvent: CharSequence = ""
         var latestEventTime: CharSequence = ""
-        val latestEvent = roomSummary.latestEvent
+        val latestEvent = roomSummary.latestPreviewableEvent
         if (latestEvent != null) {
             val date = latestEvent.root.localDateTime()
             val currentDate = DateProvider.currentLocalDateTime()
@@ -131,7 +133,8 @@ class RoomSummaryItemFactory @Inject constructor(private val noticeEventFormatte
                 .roomName(roomSummary.displayName)
                 .avatarUrl(roomSummary.avatarUrl)
                 .showHighlighted(showHighlighted)
-                .unreadCount(unreadCount)
+                .unreadNotificationCount(unreadCount)
+                .hasUnreadMessage(roomSummary.hasUnreadMessages)
                 .listener { listener?.onRoomSelected(roomSummary) }
     }
 

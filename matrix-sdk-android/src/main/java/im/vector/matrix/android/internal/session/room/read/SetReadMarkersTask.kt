@@ -101,6 +101,7 @@ internal class DefaultSetReadMarkersTask @Inject constructor(private val roomAPI
                         ?: return@writeAsync
                 roomSummary.notificationCount = 0
                 roomSummary.highlightCount = 0
+                roomSummary.hasUnreadMessages = false
             }
         }
     }

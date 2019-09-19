@@ -16,6 +16,7 @@
 
 package im.vector.matrix.android.internal.session.room
 
+import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
@@ -26,6 +27,7 @@ import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.EventEntityFields
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
+import im.vector.matrix.android.internal.database.query.isEventRead
 import im.vector.matrix.android.internal.database.query.latestEvent
 import im.vector.matrix.android.internal.database.query.prev
 import im.vector.matrix.android.internal.database.query.where
@@ -39,7 +41,8 @@ import javax.inject.Inject
 
 internal class RoomSummaryUpdater @Inject constructor(private val credentials: Credentials,
                                                       private val roomDisplayNameResolver: RoomDisplayNameResolver,
-                                                      private val roomAvatarResolver: RoomAvatarResolver) {
+                                                      private val roomAvatarResolver: RoomAvatarResolver,
+                                                      private val monarchy: Monarchy) {
 
     // TODO: maybe allow user of SDK to give that list
     private val PREVIEWABLE_TYPES = listOf(
@@ -63,8 +66,7 @@ internal class RoomSummaryUpdater @Inject constructor(private val credentials: C
                membership: Membership? = null,
                roomSummary: RoomSyncSummary? = null,
                unreadNotifications: RoomSyncUnreadNotifications? = null) {
-        val roomSummaryEntity = RoomSummaryEntity.where(realm, roomId).findFirst()
-                                ?: realm.createObject(roomId)
+        val roomSummaryEntity = RoomSummaryEntity.where(realm, roomId).findFirst() ?: realm.createObject(roomId)
 
         if (roomSummary != null) {
             if (roomSummary.heroes.isNotEmpty()) {
@@ -85,8 +87,12 @@ internal class RoomSummaryUpdater @Inject constructor(private val credentials: C
             roomSummaryEntity.membership = membership
         }
 
-        val latestEvent = TimelineEventEntity.latestEvent(realm, roomId, includesSending = true, includedTypes = PREVIEWABLE_TYPES)
+        val latestPreviewableEvent = TimelineEventEntity.latestEvent(realm, roomId, includesSending = true, includedTypes = PREVIEWABLE_TYPES)
         val lastTopicEvent = EventEntity.where(realm, roomId, EventType.STATE_ROOM_TOPIC).prev()?.asDomain()
+
+        roomSummaryEntity.hasUnreadMessages = roomSummaryEntity.notificationCount > 0
+                //avoid this call if we are sure there are unread events
+                || !isEventRead(monarchy, credentials.userId, roomId, latestPreviewableEvent?.eventId)
 
         val otherRoomMembers = RoomMembers(realm, roomId)
                 .queryRoomMembersEvent()
@@ -98,9 +104,8 @@ internal class RoomSummaryUpdater @Inject constructor(private val credentials: C
         roomSummaryEntity.displayName = roomDisplayNameResolver.resolve(roomId).toString()
         roomSummaryEntity.avatarUrl = roomAvatarResolver.resolve(roomId)
         roomSummaryEntity.topic = lastTopicEvent?.content.toModel<RoomTopicContent>()?.topic
-        roomSummaryEntity.latestEvent = latestEvent
+        roomSummaryEntity.latestPreviewableEvent = latestPreviewableEvent
         roomSummaryEntity.otherMemberIds.clear()
         roomSummaryEntity.otherMemberIds.addAll(otherRoomMembers)
-
     }
 }
