@@ -18,11 +18,7 @@ package im.vector.riotx.core.utils
 
 import android.annotation.TargetApi
 import android.app.Activity
-import android.content.ActivityNotFoundException
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
-import android.content.Intent
+import android.content.*
 import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
@@ -32,7 +28,7 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import im.vector.riotx.R
-import im.vector.riotx.features.notifications.supportNotificationChannels
+import im.vector.riotx.features.notifications.NotificationUtils
 import im.vector.riotx.features.settings.VectorLocale
 import timber.log.Timber
 import java.util.*
@@ -138,7 +134,7 @@ fun startNotificationSettingsIntent(activity: AppCompatActivity, requestCode: In
  */
 @TargetApi(Build.VERSION_CODES.O)
 fun startNotificationChannelSettingsIntent(fragment: Fragment, channelID: String) {
-    if (!supportNotificationChannels()) return
+    if (!NotificationUtils.supportNotificationChannels()) return
     val intent = Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS).apply {
         putExtra(Settings.EXTRA_APP_PACKAGE, fragment.context?.packageName)
         putExtra(Settings.EXTRA_CHANNEL_ID, channelID)
