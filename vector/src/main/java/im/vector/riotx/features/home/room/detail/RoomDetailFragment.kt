@@ -739,6 +739,8 @@ class RoomDetailFragment :
                     avatarRenderer.render(it, roomToolbarAvatarImageView)
                     roomToolbarSubtitleView.setTextOrHide(it.topic)
                 }
+
+                jumpToBottomView.count = it.notificationCount
             }
         }
 

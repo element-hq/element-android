@@ -161,13 +161,17 @@
         app:layout_constraintTop_toBottomOf="@+id/roomToolbar"
         tools:visibility="visible" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <im.vector.riotx.core.platform.BadgeFloatingActionButton
         android:id="@+id/jumpToBottomView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:src="@drawable/chevron_down"
         app:backgroundTint="#FFFFFF"
+        app:badgeBackgroundColor="@color/riotx_accent"
+        app:badgeTextColor="@color/white"
+        app:badgeTextPadding="2dp"
+        app:badgeTextSize="10sp"
         app:layout_constraintBottom_toTopOf="@id/composerLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:maxImageSize="16dp"
