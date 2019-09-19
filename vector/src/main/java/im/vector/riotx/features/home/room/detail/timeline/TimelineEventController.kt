@@ -31,6 +31,7 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotx.core.date.VectorDateFormatter
 import im.vector.riotx.core.epoxy.LoadingItem_
 import im.vector.riotx.core.extensions.localDateTime
+import im.vector.riotx.features.home.room.detail.RoomDetailViewState
 import im.vector.riotx.features.home.room.detail.timeline.factory.MergedHeaderItemFactory
 import im.vector.riotx.features.home.room.detail.timeline.factory.TimelineItemFactory
 import im.vector.riotx.features.home.room.detail.timeline.helper.*
@@ -140,11 +141,10 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         requestModelBuild()
     }
 
-    fun update(timeline: Timeline?, eventIdToHighlight: String?, hideReadMarker: Boolean) {
-        if (this.timeline != timeline) {
-            this.timeline = timeline
-            this.timeline?.listener = this
-
+    fun update(viewState: RoomDetailViewState) {
+        if (timeline != viewState.timeline) {
+            timeline = viewState.timeline
+            timeline?.listener = this
             // Clear cache
             synchronized(modelCache) {
                 for (i in 0 until modelCache.size) {
@@ -152,23 +152,22 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
                 }
             }
         }
-
         var requestModelBuild = false
-        if (this.eventIdToHighlight != eventIdToHighlight) {
+        if (eventIdToHighlight != viewState.highlightedEventId) {
             // Clear cache to force a refresh
             synchronized(modelCache) {
                 for (i in 0 until modelCache.size) {
-                    if (modelCache[i]?.eventId == eventIdToHighlight
-                            || modelCache[i]?.eventId == this.eventIdToHighlight) {
+                    if (modelCache[i]?.eventId == viewState.highlightedEventId
+                        || modelCache[i]?.eventId == eventIdToHighlight) {
                         modelCache[i] = null
                     }
                 }
             }
-            this.eventIdToHighlight = eventIdToHighlight
+            eventIdToHighlight = viewState.highlightedEventId
             requestModelBuild = true
         }
-        if (this.hideReadMarker != hideReadMarker) {
-            this.hideReadMarker = hideReadMarker
+        if (hideReadMarker != viewState.hideReadMarker) {
+            hideReadMarker = viewState.hideReadMarker
             requestModelBuild = true
         }
         if (requestModelBuild) {
@@ -230,8 +229,8 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
                 // Should be build if not cached or if cached but contains mergedHeader or formattedDay
                 // We then are sure we always have items up to date.
                 if (modelCache[position] == null
-                        || modelCache[position]?.mergedHeaderModel != null
-                        || modelCache[position]?.formattedDayModel != null) {
+                    || modelCache[position]?.mergedHeaderModel != null
+                    || modelCache[position]?.formattedDayModel != null) {
                     modelCache[position] = buildItemModels(position, currentSnapshot)
                 }
             }
@@ -256,7 +255,6 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         val date = event.root.localDateTime()
         val nextDate = nextEvent?.root?.localDateTime()
         val addDaySeparator = date.toLocalDate() != nextDate?.toLocalDate()
-
         val eventModel = timelineItemFactory.create(event, nextEvent, eventIdToHighlight, hideReadMarker, callback).also {
             it.id(event.localId)
             it.setOnVisibilityStateChanged(TimelineEventVisibilityStateChangedListener(callback, event))
@@ -297,7 +295,6 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             }
         }
     }
-
 
     fun searchPositionOfEvent(eventId: String): Int? = synchronized(modelCache) {
         // Search in the cache

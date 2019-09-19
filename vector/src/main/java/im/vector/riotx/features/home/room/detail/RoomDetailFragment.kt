@@ -687,7 +687,7 @@ class RoomDetailFragment :
         val summary = state.asyncRoomSummary()
         val inviter = state.asyncInviter()
         if (summary?.membership == Membership.JOIN) {
-            timelineEventController.update(state.timeline, state.highlightedEventId, state.hideReadMarker)
+            timelineEventController.update(state)
             inviteView.visibility = View.GONE
             val uid = session.myUserId
             val meMember = session.getRoom(state.roomId)?.getRoomMember(uid)

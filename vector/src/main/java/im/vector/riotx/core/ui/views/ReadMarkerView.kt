@@ -26,6 +26,7 @@ import android.view.animation.AnimationUtils
 import androidx.core.view.isInvisible
 import im.vector.riotx.R
 import kotlinx.coroutines.*
+import timber.log.Timber
 
 private const val DELAY_IN_MS = 1_500L
 
@@ -44,6 +45,7 @@ class ReadMarkerView @JvmOverloads constructor(
     private var callbackDispatcherJob: Job? = null
 
     fun bindView(eventId: String?, hasReadMarker: Boolean, displayReadMarker: Boolean, readMarkerCallback: Callback) {
+        Timber.v("Bind event $eventId - hasReadMarker: $hasReadMarker - displayReadMarker: $displayReadMarker")
         this.eventId = eventId
         this.callback = readMarkerCallback
         if (displayReadMarker) {
