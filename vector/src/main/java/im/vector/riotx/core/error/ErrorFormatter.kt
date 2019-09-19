@@ -23,7 +23,7 @@ import im.vector.riotx.core.resources.StringProvider
 import java.net.SocketTimeoutException
 import javax.inject.Inject
 
-class ErrorFormatter @Inject constructor(val stringProvider: StringProvider) {
+class ErrorFormatter @Inject constructor(private val stringProvider: StringProvider) {
 
 
     fun toHumanReadable(failure: Failure): String {

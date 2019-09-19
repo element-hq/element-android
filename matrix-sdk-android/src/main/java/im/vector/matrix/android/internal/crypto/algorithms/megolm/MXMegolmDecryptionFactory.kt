@@ -28,14 +28,14 @@ import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import javax.inject.Inject
 
 internal class MXMegolmDecryptionFactory @Inject constructor(private val credentials: Credentials,
-                                         private val olmDevice: MXOlmDevice,
-                                         private val deviceListManager: DeviceListManager,
-                                         private val outgoingRoomKeyRequestManager: OutgoingRoomKeyRequestManager,
-                                         private val messageEncrypter: MessageEncrypter,
-                                         private val ensureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction,
-                                         private val cryptoStore: IMXCryptoStore,
-                                         private val sendToDeviceTask: SendToDeviceTask,
-                                         private val coroutineDispatchers: MatrixCoroutineDispatchers) {
+                                                             private val olmDevice: MXOlmDevice,
+                                                             private val deviceListManager: DeviceListManager,
+                                                             private val outgoingRoomKeyRequestManager: OutgoingRoomKeyRequestManager,
+                                                             private val messageEncrypter: MessageEncrypter,
+                                                             private val ensureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction,
+                                                             private val cryptoStore: IMXCryptoStore,
+                                                             private val sendToDeviceTask: SendToDeviceTask,
+                                                             private val coroutineDispatchers: MatrixCoroutineDispatchers) {
 
     fun create(): MXMegolmDecryption {
         return MXMegolmDecryption(

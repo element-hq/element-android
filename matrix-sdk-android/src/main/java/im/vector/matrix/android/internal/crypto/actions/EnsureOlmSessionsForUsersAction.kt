@@ -27,14 +27,14 @@ import java.util.*
 import javax.inject.Inject
 
 internal class EnsureOlmSessionsForUsersAction @Inject constructor(private val olmDevice: MXOlmDevice,
-                                               private val cryptoStore: IMXCryptoStore,
-                                               private val ensureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction) {
+                                                                   private val cryptoStore: IMXCryptoStore,
+                                                                   private val ensureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction) {
 
     /**
      * Try to make sure we have established olm sessions for the given users.
      * @param users    a list of user ids.
      */
-    suspend fun handle(users: List<String>) : MXUsersDevicesMap<MXOlmSessionResult> {
+    suspend fun handle(users: List<String>): MXUsersDevicesMap<MXOlmSessionResult> {
         Timber.v("## ensureOlmSessionsForUsers() : ensureOlmSessionsForUsers $users")
         val devicesByUser = HashMap<String /* userId */, MutableList<MXDeviceInfo>>()
 

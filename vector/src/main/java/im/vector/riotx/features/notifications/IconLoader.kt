@@ -28,7 +28,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class IconLoader @Inject constructor(val context: Context) {
+class IconLoader @Inject constructor(private val context: Context) {
 
     /**
      * Avatar Url -> IconCompat

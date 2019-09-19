@@ -101,7 +101,7 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
             id(titleRes)
             title(stringProvider.getString(titleRes).toUpperCase())
             expanded(isExpanded)
-            unreadCount(unreadCount)
+            unreadNotificationCount(unreadCount)
             showHighlighted(showHighlighted)
             listener {
                 mutateExpandedState()

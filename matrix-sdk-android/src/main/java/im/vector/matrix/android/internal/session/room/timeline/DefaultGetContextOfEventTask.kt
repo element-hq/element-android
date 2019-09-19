@@ -32,8 +32,8 @@ internal interface GetContextOfEventTask : Task<GetContextOfEventTask.Params, To
 }
 
 internal class DefaultGetContextOfEventTask @Inject constructor(private val roomAPI: RoomAPI,
-                                            private val filterRepository: FilterRepository,
-                                            private val tokenChunkEventPersistor: TokenChunkEventPersistor
+                                                                private val filterRepository: FilterRepository,
+                                                                private val tokenChunkEventPersistor: TokenChunkEventPersistor
 ) : GetContextOfEventTask {
 
     override suspend fun execute(params: GetContextOfEventTask.Params): TokenChunkEventPersistor.Result {
