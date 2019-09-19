@@ -82,8 +82,6 @@ import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
-import im.vector.matrix.android.api.session.room.timeline.getTextEditableContent
-import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
@@ -233,7 +231,6 @@ class RoomDetailFragment :
     private lateinit var scrollOnNewMessageCallback: ScrollOnNewMessageCallback
     private lateinit var scrollOnHighlightedEventCallback: ScrollOnHighlightedEventCallback
 
-
     override fun getLayoutResId() = R.layout.fragment_room_detail
 
     override fun getMenuRes() = R.menu.menu_timeline
@@ -243,6 +240,8 @@ class RoomDetailFragment :
 
     @BindView(R.id.composerLayout)
     lateinit var composerLayout: TextComposerView
+
+    private var lockSendButton = false
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
@@ -295,19 +294,15 @@ class RoomDetailFragment :
 
         roomDetailViewModel.selectSubscribe(RoomDetailViewState::sendMode) { mode ->
             when (mode) {
-                SendMode.REGULAR  -> exitSpecialMode()
-                is SendMode.EDIT  -> enterSpecialMode(mode.timelineEvent, R.drawable.ic_edit, true)
-                is SendMode.QUOTE -> enterSpecialMode(mode.timelineEvent, R.drawable.ic_quote, false)
-                is SendMode.REPLY -> enterSpecialMode(mode.timelineEvent, R.drawable.ic_reply, false)
+                is SendMode.REGULAR -> renderRegularMode(mode.text)
+                is SendMode.EDIT    -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_edit, mode.text)
+                is SendMode.QUOTE   -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_quote, mode.text)
+                is SendMode.REPLY   -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_reply, mode.text)
             }
         }
 
         roomDetailViewModel.selectSubscribe(RoomDetailViewState::syncState) { syncState ->
-            syncProgressBar.visibility = when (syncState) {
-                is SyncState.RUNNING -> if (syncState.afterPause) View.VISIBLE else View.GONE
-                else                 -> View.GONE
-            }
-            syncProgressBarWrap.visibility = syncProgressBar.visibility
+            syncStateView.render(syncState)
         }
     }
 
@@ -380,14 +375,16 @@ class RoomDetailFragment :
         return super.onOptionsItemSelected(item)
     }
 
-    private fun exitSpecialMode() {
+    private fun renderRegularMode(text: String) {
         commandAutocompletePolicy.enabled = true
         composerLayout.collapse()
+
+        updateComposerText(text)
     }
 
-    private fun enterSpecialMode(event: TimelineEvent,
-                                 @DrawableRes iconRes: Int,
-                                 useText: Boolean) {
+    private fun renderSpecialMode(event: TimelineEvent,
+                                  @DrawableRes iconRes: Int,
+                                  defaultContent: String) {
         commandAutocompletePolicy.enabled = false
         //switch to expanded bar
         composerLayout.composerRelatedMessageTitle.apply {
@@ -401,24 +398,36 @@ class RoomDetailFragment :
         if (messageContent is MessageTextContent && messageContent.format == MessageType.FORMAT_MATRIX_HTML) {
             val parser = Parser.builder().build()
             val document = parser.parse(messageContent.formattedBody
-                    ?: messageContent.body)
+                                        ?: messageContent.body)
             formattedBody = eventHtmlRenderer.render(document)
         }
         composerLayout.composerRelatedMessageContent.text = formattedBody
-                ?: nonFormattedBody
+                                                            ?: nonFormattedBody
 
-        composerLayout.composerEditText.setText(if (useText) event.getTextEditableContent() else "")
+        updateComposerText(defaultContent)
+
         composerLayout.composerRelatedMessageActionIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), iconRes))
 
         avatarRenderer.render(event.senderAvatar, event.root.senderId
-                ?: "", event.senderName, composerLayout.composerRelatedMessageAvatar)
-
-        composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text.length)
+                                                  ?: "", event.senderName, composerLayout.composerRelatedMessageAvatar)
+        avatarRenderer.render(event.senderAvatar,
+                              event.root.senderId ?: "",
+                              event.senderName,
+                              composerLayout.composerRelatedMessageAvatar)
         composerLayout.expand {
             //need to do it here also when not using quick reply
             focusComposerAndShowKeyboard()
         }
         focusComposerAndShowKeyboard()
+    }
+
+    private fun updateComposerText(text: String) {
+        // Do not update if this is the same text to avoid the cursor to move
+        if (text != composerLayout.composerEditText.text.toString()) {
+            // Ignore update to avoid saving a draft
+            composerLayout.composerEditText.setText(text)
+            composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text.length)
+        }
     }
 
     override fun onResume() {
@@ -431,6 +440,8 @@ class RoomDetailFragment :
         super.onPause()
 
         notificationDrawerManager.setCurrentRoom(null)
+
+        roomDetailViewModel.process(RoomDetailActions.SaveDraft(composerLayout.composerEditText.text.toString()))
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -440,9 +451,9 @@ class RoomDetailFragment :
                 REQUEST_FILES_REQUEST_CODE, TAKE_IMAGE_REQUEST_CODE -> handleMediaIntent(data)
                 REACTION_SELECT_REQUEST_CODE                        -> {
                     val eventId = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_EVENT_ID)
-                            ?: return
+                                  ?: return
                     val reaction = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_REACTION_RESULT)
-                            ?: return
+                                   ?: return
                     //TODO check if already reacted with that?
                     roomDetailViewModel.process(RoomDetailActions.SendReaction(reaction, eventId))
                 }
@@ -493,610 +504,614 @@ class RoomDetailFragment :
 
         if (vectorPreferences.swipeToReplyIsEnabled()) {
             val swipeCallback = RoomMessageTouchHelperCallback(requireContext(),
-                    R.drawable.ic_reply,
-                    object : RoomMessageTouchHelperCallback.QuickReplayHandler {
-                        override fun performQuickReplyOnHolder(model: EpoxyModel<*>) {
-                            (model as? AbsMessageItem)?.attributes?.informationData?.let {
-                                val eventId = it.eventId
-                                roomDetailViewModel.process(RoomDetailActions.EnterReplyMode(eventId))
-                            }
+                                                               R.drawable.ic_reply,
+                                                               object : RoomMessageTouchHelperCallback.QuickReplayHandler {
+                                                                   override fun performQuickReplyOnHolder(model: EpoxyModel<*>) {
+                                                                           (model as? AbsMessageItem)?.attributes?.informationData?.let {
+                                                                               val eventId = it.eventId
+                                                                               roomDetailViewModel.process(RoomDetailActions.EnterReplyMode(eventId, composerLayout.composerEditText.text.toString()))
+                                                                           }
+                                                                       }
+
+                                                                       override fun canSwipeModel(model: EpoxyModel<*>): Boolean {
+                                                                           return when (model) {
+                                                                               is MessageFileItem,
+                                                                               is MessageImageVideoItem,
+                                                                               is MessageTextItem -> {
+                                                                                   return (model as AbsMessageItem).attributes.informationData.sendState == SendState.SYNCED
+                                                                               }
+                                                                               else               -> false
+                                                                           }
+                                                                       }
+                                                                   })
+                                                                   val touchHelper = ItemTouchHelper(swipeCallback)
+                                                                   touchHelper.attachToRecyclerView(recyclerView)
+                                                               }
+        }
+
+        private fun updateJumpToBottomViewVisibility() {
+            debouncer.debounce("jump_to_bottom_visibility", 250, Runnable {
+                Timber.v("First visible: ${layoutManager.findFirstCompletelyVisibleItemPosition()}")
+                if (layoutManager.findFirstCompletelyVisibleItemPosition() != 0) {
+                    jumpToBottomView.show()
+                } else {
+                    jumpToBottomView.hide()
+                }
+            })
+        }
+
+        private fun setupComposer() {
+            val elevation = 6f
+            val backgroundDrawable = ColorDrawable(ThemeUtils.getColor(requireContext(), R.attr.riotx_background))
+            Autocomplete.on<Command>(composerLayout.composerEditText)
+                    .with(commandAutocompletePolicy)
+                    .with(autocompleteCommandPresenter)
+                    .with(elevation)
+                    .with(backgroundDrawable)
+                    .with(object : AutocompleteCallback<Command> {
+                        override fun onPopupItemClicked(editable: Editable, item: Command): Boolean {
+                            editable.clear()
+                            editable
+                                    .append(item.command)
+                                    .append(" ")
+                            return true
                         }
 
-                        override fun canSwipeModel(model: EpoxyModel<*>): Boolean {
-                            return when (model) {
-                                is MessageFileItem,
-                                is MessageImageVideoItem,
-                                is MessageTextItem -> {
-                                    return (model as AbsMessageItem).attributes.informationData.sendState == SendState.SYNCED
-                                }
-                                else               -> false
-                            }
+                        override fun onPopupVisibilityChanged(shown: Boolean) {
                         }
                     })
-            val touchHelper = ItemTouchHelper(swipeCallback)
-            touchHelper.attachToRecyclerView(recyclerView)
-        }
-    }
+                    .build()
 
-    private fun updateJumpToBottomViewVisibility() {
-        debouncer.debounce("jump_to_bottom_visibility", 250, Runnable {
-            Timber.v("First visible: ${layoutManager.findFirstCompletelyVisibleItemPosition()}")
-            if (layoutManager.findFirstCompletelyVisibleItemPosition() != 0) {
-                jumpToBottomView.show()
-            } else {
-                jumpToBottomView.hide()
-            }
-        })
-    }
+            autocompleteUserPresenter.callback = this
+            Autocomplete.on<User>(composerLayout.composerEditText)
+                    .with(CharPolicy('@', true))
+                    .with(autocompleteUserPresenter)
+                    .with(elevation)
+                    .with(backgroundDrawable)
+                    .with(object : AutocompleteCallback<User> {
+                        override fun onPopupItemClicked(editable: Editable, item: User): Boolean {
+                            // Detect last '@' and remove it
+                            var startIndex = editable.lastIndexOf("@")
+                            if (startIndex == -1) {
+                                startIndex = 0
+                            }
 
-    private fun setupComposer() {
-        val elevation = 6f
-        val backgroundDrawable = ColorDrawable(ThemeUtils.getColor(requireContext(), R.attr.riotx_background))
-        Autocomplete.on<Command>(composerLayout.composerEditText)
-                .with(commandAutocompletePolicy)
-                .with(autocompleteCommandPresenter)
-                .with(elevation)
-                .with(backgroundDrawable)
-                .with(object : AutocompleteCallback<Command> {
-                    override fun onPopupItemClicked(editable: Editable, item: Command): Boolean {
-                        editable.clear()
-                        editable
-                                .append(item.command)
-                                .append(" ")
-                        return true
-                    }
+                            // Detect next word separator
+                            var endIndex = editable.indexOf(" ", startIndex)
+                            if (endIndex == -1) {
+                                endIndex = editable.length
+                            }
 
-                    override fun onPopupVisibilityChanged(shown: Boolean) {
-                    }
-                })
-                .build()
+                            // Replace the word by its completion
+                            val displayName = item.displayName ?: item.userId
 
-        autocompleteUserPresenter.callback = this
-        Autocomplete.on<User>(composerLayout.composerEditText)
-                .with(CharPolicy('@', true))
-                .with(autocompleteUserPresenter)
-                .with(elevation)
-                .with(backgroundDrawable)
-                .with(object : AutocompleteCallback<User> {
-                    override fun onPopupItemClicked(editable: Editable, item: User): Boolean {
-                        // Detect last '@' and remove it
-                        var startIndex = editable.lastIndexOf("@")
-                        if (startIndex == -1) {
-                            startIndex = 0
+                            // with a trailing space
+                            editable.replace(startIndex, endIndex, "$displayName ")
+
+                            // Add the span
+                            val user = session.getUser(item.userId)
+                            val span = PillImageSpan(glideRequests, avatarRenderer, requireContext(), item.userId, user)
+                            span.bind(composerLayout.composerEditText)
+
+                            editable.setSpan(span, startIndex, startIndex + displayName.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+                            return true
                         }
 
-                        // Detect next word separator
-                        var endIndex = editable.indexOf(" ", startIndex)
-                        if (endIndex == -1) {
-                            endIndex = editable.length
+                        override fun onPopupVisibilityChanged(shown: Boolean) {
                         }
+                    })
+                    .build()
 
-                        // Replace the word by its completion
-                        val displayName = item.displayName ?: item.userId
-
-                        // with a trailing space
-                        editable.replace(startIndex, endIndex, "$displayName ")
-
-                        // Add the span
-                        val user = session.getUser(item.userId)
-                        val span = PillImageSpan(glideRequests, avatarRenderer, requireContext(), item.userId, user)
-                        span.bind(composerLayout.composerEditText)
-
-                        editable.setSpan(span, startIndex, startIndex + displayName.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-
-                        return true
-                    }
-
-                    override fun onPopupVisibilityChanged(shown: Boolean) {
-                    }
-                })
-                .build()
-
-        composerLayout.sendButton.setOnClickListener {
-            val textMessage = composerLayout.composerEditText.text.toString()
-            if (textMessage.isNotBlank()) {
-                roomDetailViewModel.process(RoomDetailActions.SendMessage(textMessage, vectorPreferences.isMarkdownEnabled()))
-            }
-        }
-        composerLayout.composerRelatedMessageCloseButton.setOnClickListener {
-            composerLayout.composerEditText.setText("")
-            roomDetailViewModel.resetSendMode()
-        }
-    }
-
-    private fun setupAttachmentButton() {
-        composerLayout.attachmentButton.setOnClickListener {
-            val intent = Intent(requireContext(), FilePickerActivity::class.java)
-            intent.putExtra(FilePickerActivity.CONFIGS, Configurations.Builder()
-                    .setCheckPermission(true)
-                    .setShowFiles(true)
-                    .setShowAudios(true)
-                    .setSkipZeroSizeFiles(true)
-                    .build())
-            startActivityForResult(intent, REQUEST_FILES_REQUEST_CODE)
-            /*
-            val items = ArrayList<DialogListItem>()
-            // Send file
-            items.add(DialogListItem.SendFile)
-            // Send voice
-
-            if (vectorPreferences.isSendVoiceFeatureEnabled()) {
-                items.add(DialogListItem.SendVoice.INSTANCE)
-            }
-
-
-            // Send sticker
-            //items.add(DialogListItem.SendSticker)
-            // Camera
-
-            //if (vectorPreferences.useNativeCamera()) {
-            items.add(DialogListItem.TakePhoto)
-            items.add(DialogListItem.TakeVideo)
-            //} else {
-    //                items.add(DialogListItem.TakePhotoVideo.INSTANCE)
-            //          }
-            val adapter = DialogSendItemAdapter(requireContext(), items)
-            AlertDialog.Builder(requireContext())
-                    .setAdapter(adapter) { _, position ->
-                        onSendChoiceClicked(items[position])
-                    }
-                    .setNegativeButton(R.string.cancel, null)
-                    .show()
-                    */
-        }
-    }
-
-    private fun setupInviteView() {
-        inviteView.callback = this
-    }
-
-    private fun onSendChoiceClicked(dialogListItem: DialogListItem) {
-        Timber.v("On send choice clicked: $dialogListItem")
-        when (dialogListItem) {
-            is DialogListItem.SendFile       -> {
-                // launchFileIntent
-            }
-            is DialogListItem.SendVoice      -> {
-                //launchAudioRecorderIntent()
-            }
-            is DialogListItem.SendSticker    -> {
-                //startStickerPickerActivity()
-            }
-            is DialogListItem.TakePhotoVideo ->
-                if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
-                    //    launchCamera()
+            composerLayout.sendButton.setOnClickListener {
+                if (lockSendButton) {
+                    Timber.w("Send button is locked")
+                    return@setOnClickListener
                 }
-            is DialogListItem.TakePhoto      ->
-                if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_CAMERA)) {
-                    openCamera(requireActivity(), CAMERA_VALUE_TITLE, TAKE_IMAGE_REQUEST_CODE)
+                val textMessage = composerLayout.composerEditText.text.toString()
+                if (textMessage.isNotBlank()) {
+                    lockSendButton = true
+                    roomDetailViewModel.process(RoomDetailActions.SendMessage(textMessage, vectorPreferences.isMarkdownEnabled()))
                 }
-            is DialogListItem.TakeVideo      ->
-                if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_VIDEO_CAMERA)) {
-                    //  launchNativeVideoRecorder()
-                }
-        }
-    }
-
-    private fun handleMediaIntent(data: Intent) {
-        val files: ArrayList<MediaFile> = data.getParcelableArrayListExtra(FilePickerActivity.MEDIA_FILES)
-        roomDetailViewModel.process(RoomDetailActions.SendMedia(files))
-    }
-
-    private fun renderState(state: RoomDetailViewState) {
-        renderRoomSummary(state)
-        val summary = state.asyncRoomSummary()
-        val inviter = state.asyncInviter()
-        if (summary?.membership == Membership.JOIN) {
-            timelineEventController.update(state)
-            inviteView.visibility = View.GONE
-            val uid = session.myUserId
-            val meMember = session.getRoom(state.roomId)?.getRoomMember(uid)
-            avatarRenderer.render(meMember?.avatarUrl, uid, meMember?.displayName, composerLayout.composerAvatarImageView)
-
-        } else if (summary?.membership == Membership.INVITE && inviter != null) {
-            inviteView.visibility = View.VISIBLE
-            inviteView.render(inviter, VectorInviteView.Mode.LARGE)
-
-            // Intercept click event
-            inviteView.setOnClickListener { }
-        } else if (state.asyncInviter.complete) {
-            vectorBaseActivity.finish()
-        }
-        if (state.tombstoneEvent == null) {
-            composerLayout.visibility = View.VISIBLE
-            composerLayout.setRoomEncrypted(state.isEncrypted)
-            notificationAreaView.render(NotificationAreaView.State.Hidden)
-        } else {
-            composerLayout.visibility = View.GONE
-            notificationAreaView.render(NotificationAreaView.State.Tombstone(state.tombstoneEvent))
-        }
-        jumpToReadMarkerView.render(state.showJumpToReadMarker, summary?.readMarkerId)
-    }
-
-    private fun renderRoomSummary(state: RoomDetailViewState) {
-        state.asyncRoomSummary()?.let {
-
-            if (it.membership.isLeft()) {
-                Timber.w("The room has been left")
-                activity?.finish()
-            } else {
-                roomToolbarTitleView.text = it.displayName
-                avatarRenderer.render(it, roomToolbarAvatarImageView)
-                roomToolbarSubtitleView.setTextOrHide(it.topic)
+            }
+            composerLayout.composerRelatedMessageCloseButton.setOnClickListener {
+                roomDetailViewModel.process(RoomDetailActions.ExitSpecialMode(composerLayout.composerEditText.text.toString()))
             }
         }
-    }
 
-    private fun renderTextComposerState(state: TextComposerViewState) {
-        autocompleteUserPresenter.render(state.asyncUsers)
-    }
+        private fun setupAttachmentButton() {
+            composerLayout.attachmentButton.setOnClickListener {
+                val intent = Intent(requireContext(), FilePickerActivity::class.java)
+                intent.putExtra(FilePickerActivity.CONFIGS, Configurations.Builder()
+                        .setCheckPermission(true)
+                        .setShowFiles(true)
+                        .setShowAudios(true)
+                        .setSkipZeroSizeFiles(true)
+                        .build())
+                startActivityForResult(intent, REQUEST_FILES_REQUEST_CODE)
+                /*
+                val items = ArrayList<DialogListItem>()
+                // Send file
+                items.add(DialogListItem.SendFile)
+                // Send voice
 
-    private fun renderTombstoneEventHandling(async: Async<String>) {
-        when (async) {
-            is Loading -> {
-                // TODO Better handling progress
-                vectorBaseActivity.showWaitingView()
-                vectorBaseActivity.waiting_view_status_text.visibility = View.VISIBLE
-                vectorBaseActivity.waiting_view_status_text.text = getString(R.string.joining_room)
+                if (vectorPreferences.isSendVoiceFeatureEnabled()) {
+                    items.add(DialogListItem.SendVoice.INSTANCE)
+                }
+
+
+                // Send sticker
+                //items.add(DialogListItem.SendSticker)
+                // Camera
+
+                //if (vectorPreferences.useNativeCamera()) {
+                items.add(DialogListItem.TakePhoto)
+                items.add(DialogListItem.TakeVideo)
+                //} else {
+        //                items.add(DialogListItem.TakePhotoVideo.INSTANCE)
+                //          }
+                val adapter = DialogSendItemAdapter(requireContext(), items)
+                AlertDialog.Builder(requireContext())
+                        .setAdapter(adapter) { _, position ->
+                            onSendChoiceClicked(items[position])
+                        }
+                        .setNegativeButton(R.string.cancel, null)
+                        .show()
+                        */
             }
-            is Success -> {
-                navigator.openRoom(vectorBaseActivity, async())
+        }
+
+        private fun setupInviteView() {
+            inviteView.callback = this
+        }
+
+        private fun onSendChoiceClicked(dialogListItem: DialogListItem) {
+            Timber.v("On send choice clicked: $dialogListItem")
+            when (dialogListItem) {
+                is DialogListItem.SendFile       -> {
+                    // launchFileIntent
+                }
+                is DialogListItem.SendVoice      -> {
+                    //launchAudioRecorderIntent()
+                }
+                is DialogListItem.SendSticker    -> {
+                    //startStickerPickerActivity()
+                }
+                is DialogListItem.TakePhotoVideo ->
+                    if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
+                        //    launchCamera()
+                    }
+                is DialogListItem.TakePhoto      ->
+                    if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_CAMERA)) {
+                        openCamera(requireActivity(), CAMERA_VALUE_TITLE, TAKE_IMAGE_REQUEST_CODE)
+                    }
+                is DialogListItem.TakeVideo      ->
+                    if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_VIDEO_CAMERA)) {
+                        //  launchNativeVideoRecorder()
+                    }
+            }
+        }
+
+        private fun handleMediaIntent(data: Intent) {
+            val files: ArrayList<MediaFile> = data.getParcelableArrayListExtra(FilePickerActivity.MEDIA_FILES)
+            roomDetailViewModel.process(RoomDetailActions.SendMedia(files))
+        }
+
+        private fun renderState(state: RoomDetailViewState) {
+            renderRoomSummary(state)
+            val summary = state.asyncRoomSummary()
+            val inviter = state.asyncInviter()
+            if (summary?.membership == Membership.JOIN) {
+                timelineEventController.update(state)
+                inviteView.visibility = View.GONE
+                val uid = session.myUserId
+                val meMember = session.getRoom(state.roomId)?.getRoomMember(uid)
+                avatarRenderer.render(meMember?.avatarUrl, uid, meMember?.displayName, composerLayout.composerAvatarImageView)
+
+            } else if (summary?.membership == Membership.INVITE && inviter != null) {
+                inviteView.visibility = View.VISIBLE
+                inviteView.render(inviter, VectorInviteView.Mode.LARGE)
+
+                // Intercept click event
+                inviteView.setOnClickListener { }
+            } else if (state.asyncInviter.complete) {
                 vectorBaseActivity.finish()
             }
-            is Fail    -> {
-                vectorBaseActivity.hideWaitingView()
-                vectorBaseActivity.toast(errorFormatter.toHumanReadable(async.error))
+            if (state.tombstoneEvent == null) {
+                composerLayout.visibility = View.VISIBLE
+                composerLayout.setRoomEncrypted(state.isEncrypted)
+                notificationAreaView.render(NotificationAreaView.State.Hidden)
+            } else {
+                composerLayout.visibility = View.GONE
+                notificationAreaView.render(NotificationAreaView.State.Tombstone(state.tombstoneEvent))
+            }
+            jumpToReadMarkerView.render(state.showJumpToReadMarker, summary?.readMarkerId)
+        }
+
+        private fun renderRoomSummary(state: RoomDetailViewState) {
+            state.asyncRoomSummary()?.let {
+
+                if (it.membership.isLeft()) {
+                    Timber.w("The room has been left")
+                    activity?.finish()
+                } else {
+                    roomToolbarTitleView.text = it.displayName
+                    avatarRenderer.render(it, roomToolbarAvatarImageView)
+                    roomToolbarSubtitleView.setTextOrHide(it.topic)
+                }
             }
         }
-    }
 
-    private fun renderSendMessageResult(sendMessageResult: SendMessageResult) {
-        when (sendMessageResult) {
-            is SendMessageResult.MessageSent                -> {
-                // Clear composer
-                composerLayout.composerEditText.text = null
-            }
-            is SendMessageResult.SlashCommandHandled        -> {
-                sendMessageResult.messageRes?.let { showSnackWithMessage(getString(it)) }
-                // Clear composer
-                composerLayout.composerEditText.text = null
-            }
-            is SendMessageResult.SlashCommandError          -> {
-                displayCommandError(getString(R.string.command_problem_with_parameters, sendMessageResult.command.command))
-            }
-            is SendMessageResult.SlashCommandUnknown        -> {
-                displayCommandError(getString(R.string.unrecognized_command, sendMessageResult.command))
-            }
-            is SendMessageResult.SlashCommandResultOk       -> {
-                // Ignore
-            }
-            is SendMessageResult.SlashCommandResultError    -> {
-                displayCommandError(sendMessageResult.throwable.localizedMessage)
-            }
-            is SendMessageResult.SlashCommandNotImplemented -> {
-                displayCommandError(getString(R.string.not_implemented))
+        private fun renderTextComposerState(state: TextComposerViewState) {
+            autocompleteUserPresenter.render(state.asyncUsers)
+        }
+
+        private fun renderTombstoneEventHandling(async: Async<String>) {
+            when (async) {
+                is Loading -> {
+                    // TODO Better handling progress
+                    vectorBaseActivity.showWaitingView()
+                    vectorBaseActivity.waiting_view_status_text.visibility = View.VISIBLE
+                    vectorBaseActivity.waiting_view_status_text.text = getString(R.string.joining_room)
+                }
+                is Success -> {
+                    navigator.openRoom(vectorBaseActivity, async())
+                    vectorBaseActivity.finish()
+                }
+                is Fail    -> {
+                    vectorBaseActivity.hideWaitingView()
+                    vectorBaseActivity.toast(errorFormatter.toHumanReadable(async.error))
+                }
             }
         }
-    }
 
-    private fun displayCommandError(message: String) {
-        AlertDialog.Builder(activity!!)
-                .setTitle(R.string.command_error)
-                .setMessage(message)
-                .setPositiveButton(R.string.ok, null)
-                .show()
-    }
+        private fun renderSendMessageResult(sendMessageResult: SendMessageResult) {
+            when (sendMessageResult) {
+                is SendMessageResult.MessageSent                -> {
+                    updateComposerText("")
+                }
+                is SendMessageResult.SlashCommandHandled        -> {
+                    sendMessageResult.messageRes?.let { showSnackWithMessage(getString(it)) }
+                    updateComposerText("")
+                }
+                is SendMessageResult.SlashCommandError          -> {
+                    displayCommandError(getString(R.string.command_problem_with_parameters, sendMessageResult.command.command))
+                }
+                is SendMessageResult.SlashCommandUnknown        -> {
+                    displayCommandError(getString(R.string.unrecognized_command, sendMessageResult.command))
+                }
+                is SendMessageResult.SlashCommandResultOk       -> {
+                    updateComposerText("")
+                }
+                is SendMessageResult.SlashCommandResultError    -> {
+                    displayCommandError(sendMessageResult.throwable.localizedMessage)
+                }
+                is SendMessageResult.SlashCommandNotImplemented -> {
+                    displayCommandError(getString(R.string.not_implemented))
+                }
+            }
+
+            lockSendButton = false
+        }
+
+        private fun displayCommandError(message: String) {
+            AlertDialog.Builder(activity!!)
+                    .setTitle(R.string.command_error)
+                    .setMessage(message)
+                    .setPositiveButton(R.string.ok, null)
+                    .show()
+        }
 
 // TimelineEventController.Callback ************************************************************
 
-    override fun onUrlClicked(url: String): Boolean {
-        return permalinkHandler.launch(requireActivity(), url, object : NavigateToRoomInterceptor {
-            override fun navToRoom(roomId: String, eventId: String?): Boolean {
-                // Same room?
-                if (roomId == roomDetailArgs.roomId) {
-                    // Navigation to same room
-                    if (eventId == null) {
-                        showSnackWithMessage(getString(R.string.navigate_to_room_when_already_in_the_room))
-                    } else {
-                        // Highlight and scroll to this event
-                        roomDetailViewModel.process(RoomDetailActions.NavigateToEvent(eventId, true))
-                    }
-                    return true
-                }
-
-                // Not handled
-                return false
-            }
-        })
-    }
-
-    override fun onUrlLongClicked(url: String): Boolean {
-        if (url != getString(R.string.edited_suffix)) {
-            // Copy the url to the clipboard
-            copyToClipboard(requireContext(), url, true, R.string.link_copied_to_clipboard)
-        }
-        return true
-    }
-
-    override fun onEventVisible(event: TimelineEvent) {
-        roomDetailViewModel.process(RoomDetailActions.TimelineEventTurnsVisible(event))
-    }
-
-    override fun onEventInvisible(event: TimelineEvent) {
-        roomDetailViewModel.process(RoomDetailActions.TimelineEventTurnsInvisible(event))
-    }
-
-    override fun onEncryptedMessageClicked(informationData: MessageInformationData, view: View) {
-        vectorBaseActivity.notImplemented("encrypted message click")
-    }
-
-    override fun onImageMessageClicked(messageImageContent: MessageImageContent, mediaData: ImageContentRenderer.Data, view: View) {
-        // TODO Use navigator
-
-        val intent = ImageMediaViewerActivity.newIntent(vectorBaseActivity, mediaData, ViewCompat.getTransitionName(view))
-        val pairs = ArrayList<Pair<View, String>>()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            requireActivity().window.decorView.findViewById<View>(android.R.id.statusBarBackground)?.let {
-                pairs.add(Pair(it, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME))
-            }
-            requireActivity().window.decorView.findViewById<View>(android.R.id.navigationBarBackground)?.let {
-                pairs.add(Pair(it, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME))
-            }
-        }
-        pairs.add(Pair(view, ViewCompat.getTransitionName(view) ?: ""))
-        pairs.add(Pair(roomToolbar, ViewCompat.getTransitionName(roomToolbar) ?: ""))
-        pairs.add(Pair(composerLayout, ViewCompat.getTransitionName(composerLayout) ?: ""))
-
-        val bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                requireActivity(), *pairs.toTypedArray()).toBundle()
-        startActivity(intent, bundle)
-    }
-
-    override fun onVideoMessageClicked(messageVideoContent: MessageVideoContent, mediaData: VideoContentRenderer.Data, view: View) {
-        // TODO Use navigator
-        val intent = VideoMediaViewerActivity.newIntent(vectorBaseActivity, mediaData)
-        startActivity(intent)
-    }
-
-    override fun onFileMessageClicked(eventId: String, messageFileContent: MessageFileContent) {
-        val action = RoomDetailActions.DownloadFile(eventId, messageFileContent)
-        // We need WRITE_EXTERNAL permission
-        if (checkPermissions(PERMISSIONS_FOR_WRITING_FILES, this, PERMISSION_REQUEST_CODE_DOWNLOAD_FILE)) {
-            roomDetailViewModel.process(action)
-        } else {
-            roomDetailViewModel.pendingAction = action
-        }
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        if (allGranted(grantResults)) {
-            if (requestCode == PERMISSION_REQUEST_CODE_DOWNLOAD_FILE) {
-                val action = roomDetailViewModel.pendingAction
-
-                if (action != null) {
-                    roomDetailViewModel.pendingAction = null
-                    roomDetailViewModel.process(action)
-                }
-            }
-        }
-    }
-
-    override fun onAudioMessageClicked(messageAudioContent: MessageAudioContent) {
-        vectorBaseActivity.notImplemented("open audio file")
-    }
-
-    override fun onLoadMore(direction: Timeline.Direction) {
-        roomDetailViewModel.process(RoomDetailActions.LoadMoreTimelineEvents(direction))
-    }
-
-    override fun onEventCellClicked(informationData: MessageInformationData, messageContent: MessageContent?, view: View) {
-
-    }
-
-    override fun onEventLongClicked(informationData: MessageInformationData, messageContent: MessageContent?, view: View): Boolean {
-        view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-        val roomId = roomDetailArgs.roomId
-
-        this.view?.hideKeyboard()
-        MessageActionsBottomSheet
-                .newInstance(roomId, informationData)
-                .show(requireActivity().supportFragmentManager, "MESSAGE_CONTEXTUAL_ACTIONS")
-        return true
-    }
-
-    override fun onAvatarClicked(informationData: MessageInformationData) {
-        vectorBaseActivity.notImplemented("Click on user avatar")
-    }
-
-    @SuppressLint("SetTextI18n")
-    override fun onMemberNameClicked(informationData: MessageInformationData) {
-        insertUserDisplayNameInTextEditor(informationData.memberName?.toString())
-    }
-
-    override fun onClickOnReactionPill(informationData: MessageInformationData, reaction: String, on: Boolean) {
-        if (on) {
-            //we should test the current real state of reaction on this event
-            roomDetailViewModel.process(RoomDetailActions.SendReaction(reaction, informationData.eventId))
-        } else {
-            //I need to redact a reaction
-            roomDetailViewModel.process(RoomDetailActions.UndoReaction(informationData.eventId, reaction))
-        }
-    }
-
-    override fun onLongClickOnReactionPill(informationData: MessageInformationData, reaction: String) {
-        ViewReactionBottomSheet.newInstance(roomDetailArgs.roomId, informationData)
-                .show(requireActivity().supportFragmentManager, "DISPLAY_REACTIONS")
-    }
-
-    override fun onEditedDecorationClicked(informationData: MessageInformationData) {
-        ViewEditHistoryBottomSheet.newInstance(roomDetailArgs.roomId, informationData)
-                .show(requireActivity().supportFragmentManager, "DISPLAY_EDITS")
-    }
-
-    override fun onRoomCreateLinkClicked(url: String) {
-        permalinkHandler.launch(requireContext(), url, object : NavigateToRoomInterceptor {
-            override fun navToRoom(roomId: String, eventId: String?): Boolean {
-                requireActivity().finish()
-                return false
-            }
-        })
-    }
-
-    override fun onReadReceiptsClicked(readReceipts: List<ReadReceiptData>) {
-        DisplayReadReceiptsBottomSheet.newInstance(readReceipts)
-                .show(requireActivity().supportFragmentManager, "DISPLAY_READ_RECEIPTS")
-    }
-
-    override fun onReadMarkerLongDisplayed() = withState(roomDetailViewModel) { state ->
-        val firstVisibleItem = layoutManager.findFirstVisibleItemPosition()
-        val nextReadMarkerId = timelineEventController.searchEventIdAtPosition(firstVisibleItem)
-        if (nextReadMarkerId != null) {
-            roomDetailViewModel.process(RoomDetailActions.SetReadMarkerAction(nextReadMarkerId))
-        }
-    }
-
-    // AutocompleteUserPresenter.Callback
-
-    override fun onQueryUsers(query: CharSequence?) {
-        textComposerViewModel.process(TextComposerActions.QueryUsers(query))
-    }
-
-    private fun handleActions(action: SimpleAction) {
-        when (action) {
-            is SimpleAction.AddReaction         -> {
-                startActivityForResult(EmojiReactionPickerActivity.intent(requireContext(), action.eventId), REACTION_SELECT_REQUEST_CODE)
-            }
-            is SimpleAction.ViewReactions       -> {
-                ViewReactionBottomSheet.newInstance(roomDetailArgs.roomId, action.messageInformationData)
-                        .show(requireActivity().supportFragmentManager, "DISPLAY_REACTIONS")
-            }
-            is SimpleAction.Copy                -> {
-                //I need info about the current selected message :/
-                copyToClipboard(requireContext(), action.content, false)
-                val msg = requireContext().getString(R.string.copied_to_clipboard)
-                showSnackWithMessage(msg, Snackbar.LENGTH_SHORT)
-            }
-            is SimpleAction.Delete              -> {
-                roomDetailViewModel.process(RoomDetailActions.RedactAction(action.eventId, context?.getString(R.string.event_redacted_by_user_reason)))
-            }
-            is SimpleAction.Share               -> {
-                //TODO current data communication is too limited
-                //Need to now the media type
-                //TODO bad, just POC
-                BigImageViewer.imageLoader().loadImage(
-                        action.hashCode(),
-                        Uri.parse(action.imageUrl),
-                        object : ImageLoader.Callback {
-                            override fun onFinish() {}
-
-                            override fun onSuccess(image: File?) {
-                                if (image != null)
-                                    shareMedia(requireContext(), image, "image/*")
-                            }
-
-                            override fun onFail(error: Exception?) {}
-
-                            override fun onCacheHit(imageType: Int, image: File?) {}
-
-                            override fun onCacheMiss(imageType: Int, image: File?) {}
-
-                            override fun onProgress(progress: Int) {}
-
-                            override fun onStart() {}
-
+        override fun onUrlClicked(url: String): Boolean {
+            return permalinkHandler.launch(requireActivity(), url, object : NavigateToRoomInterceptor {
+                override fun navToRoom(roomId: String, eventId: String?): Boolean {
+                    // Same room?
+                    if (roomId == roomDetailArgs.roomId) {
+                        // Navigation to same room
+                        if (eventId == null) {
+                            showSnackWithMessage(getString(R.string.navigate_to_room_when_already_in_the_room))
+                        } else {
+                            // Highlight and scroll to this event
+                            roomDetailViewModel.process(RoomDetailActions.NavigateToEvent(eventId, true))
                         }
-                )
-            }
-            is SimpleAction.ViewEditHistory     -> {
-                onEditedDecorationClicked(action.messageInformationData)
-            }
-            is SimpleAction.ViewSource          -> {
-                val view = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_event_content, null)
-                view.findViewById<TextView>(R.id.event_content_text_view)?.let {
-                    it.text = action.content
+                        return true
+                    }
+
+                    // Not handled
+                    return false
                 }
+            })
+        }
 
-                AlertDialog.Builder(requireActivity())
-                        .setView(view)
-                        .setPositiveButton(R.string.ok, null)
-                        .show()
+        override fun onUrlLongClicked(url: String): Boolean {
+            if (url != getString(R.string.edited_suffix)) {
+                // Copy the url to the clipboard
+                copyToClipboard(requireContext(), url, true, R.string.link_copied_to_clipboard)
             }
-            is SimpleAction.ViewDecryptedSource -> {
-                val view = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_event_content, null)
-                view.findViewById<TextView>(R.id.event_content_text_view)?.let {
-                    it.text = action.content
+            return true
+        }
+
+        override fun onEventVisible(event: TimelineEvent) {
+            roomDetailViewModel.process(RoomDetailActions.TimelineEventTurnsVisible(event))
+        }
+
+        override fun onEventInvisible(event: TimelineEvent) {
+            roomDetailViewModel.process(RoomDetailActions.TimelineEventTurnsInvisible(event))
+        }
+
+        override fun onEncryptedMessageClicked(informationData: MessageInformationData, view: View) {
+            vectorBaseActivity.notImplemented("encrypted message click")
+        }
+
+        override fun onImageMessageClicked(messageImageContent: MessageImageContent, mediaData: ImageContentRenderer.Data, view: View) {
+            // TODO Use navigator
+
+            val intent = ImageMediaViewerActivity.newIntent(vectorBaseActivity, mediaData, ViewCompat.getTransitionName(view))
+            val pairs = ArrayList<Pair<View, String>>()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                requireActivity().window.decorView.findViewById<View>(android.R.id.statusBarBackground)?.let {
+                    pairs.add(Pair(it, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME))
                 }
+                requireActivity().window.decorView.findViewById<View>(android.R.id.navigationBarBackground)?.let {
+                    pairs.add(Pair(it, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME))
+                }
+            }
+            pairs.add(Pair(view, ViewCompat.getTransitionName(view) ?: ""))
+            pairs.add(Pair(roomToolbar, ViewCompat.getTransitionName(roomToolbar) ?: ""))
+            pairs.add(Pair(composerLayout, ViewCompat.getTransitionName(composerLayout) ?: ""))
 
-                AlertDialog.Builder(requireActivity())
-                        .setView(view)
-                        .setPositiveButton(R.string.ok, null)
-                        .show()
-            }
-            is SimpleAction.QuickReact          -> {
-                //eventId,ClickedOn,Add
-                roomDetailViewModel.process(RoomDetailActions.UpdateQuickReactAction(action.eventId, action.clickedOn, action.add))
-            }
-            is SimpleAction.Edit                -> {
-                roomDetailViewModel.process(RoomDetailActions.EnterEditMode(action.eventId))
-            }
-            is SimpleAction.Quote               -> {
-                roomDetailViewModel.process(RoomDetailActions.EnterQuoteMode(action.eventId))
-            }
-            is SimpleAction.Reply               -> {
-                roomDetailViewModel.process(RoomDetailActions.EnterReplyMode(action.eventId))
-            }
-            is SimpleAction.CopyPermalink       -> {
-                val permalink = PermalinkFactory.createPermalink(roomDetailArgs.roomId, action.eventId)
-                copyToClipboard(requireContext(), permalink, false)
-                showSnackWithMessage(requireContext().getString(R.string.copied_to_clipboard), Snackbar.LENGTH_SHORT)
+            val bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                    requireActivity(), *pairs.toTypedArray()).toBundle()
+            startActivity(intent, bundle)
+        }
 
-            }
-            is SimpleAction.Resend              -> {
-                roomDetailViewModel.process(RoomDetailActions.ResendMessage(action.eventId))
-            }
-            is SimpleAction.Remove              -> {
-                roomDetailViewModel.process(RoomDetailActions.RemoveFailedEcho(action.eventId))
-            }
-            else                                -> {
-                Toast.makeText(context, "Action $action is not implemented yet", Toast.LENGTH_LONG).show()
+        override fun onVideoMessageClicked(messageVideoContent: MessageVideoContent, mediaData: VideoContentRenderer.Data, view: View) {
+            // TODO Use navigator
+            val intent = VideoMediaViewerActivity.newIntent(vectorBaseActivity, mediaData)
+            startActivity(intent)
+        }
+
+        override fun onFileMessageClicked(eventId: String, messageFileContent: MessageFileContent) {
+            val action = RoomDetailActions.DownloadFile(eventId, messageFileContent)
+            // We need WRITE_EXTERNAL permission
+            if (checkPermissions(PERMISSIONS_FOR_WRITING_FILES, this, PERMISSION_REQUEST_CODE_DOWNLOAD_FILE)) {
+                roomDetailViewModel.process(action)
+            } else {
+                roomDetailViewModel.pendingAction = action
             }
         }
-    }
+
+        override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+            if (allGranted(grantResults)) {
+                if (requestCode == PERMISSION_REQUEST_CODE_DOWNLOAD_FILE) {
+                    val action = roomDetailViewModel.pendingAction
+
+                    if (action != null) {
+                        roomDetailViewModel.pendingAction = null
+                        roomDetailViewModel.process(action)
+                    }
+                }
+            }
+        }
+
+        override fun onAudioMessageClicked(messageAudioContent: MessageAudioContent) {
+            vectorBaseActivity.notImplemented("open audio file")
+        }
+
+        override fun onLoadMore(direction: Timeline.Direction) {
+            roomDetailViewModel.process(RoomDetailActions.LoadMoreTimelineEvents(direction))
+        }
+
+        override fun onEventCellClicked(informationData: MessageInformationData, messageContent: MessageContent?, view: View) {
+
+        }
+
+        override fun onEventLongClicked(informationData: MessageInformationData, messageContent: MessageContent?, view: View): Boolean {
+            view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+            val roomId = roomDetailArgs.roomId
+
+            this.view?.hideKeyboard()
+            MessageActionsBottomSheet
+                    .newInstance(roomId, informationData)
+                    .show(requireActivity().supportFragmentManager, "MESSAGE_CONTEXTUAL_ACTIONS")
+            return true
+        }
+
+        override fun onAvatarClicked(informationData: MessageInformationData) {
+            vectorBaseActivity.notImplemented("Click on user avatar")
+        }
+
+        @SuppressLint("SetTextI18n")
+        override fun onMemberNameClicked(informationData: MessageInformationData) {
+            insertUserDisplayNameInTextEditor(informationData.memberName?.toString())
+        }
+
+        override fun onClickOnReactionPill(informationData: MessageInformationData, reaction: String, on: Boolean) {
+            if (on) {
+                //we should test the current real state of reaction on this event
+                roomDetailViewModel.process(RoomDetailActions.SendReaction(reaction, informationData.eventId))
+            } else {
+                //I need to redact a reaction
+                roomDetailViewModel.process(RoomDetailActions.UndoReaction(informationData.eventId, reaction))
+            }
+        }
+
+        override fun onLongClickOnReactionPill(informationData: MessageInformationData, reaction: String) {
+            ViewReactionBottomSheet.newInstance(roomDetailArgs.roomId, informationData)
+                    .show(requireActivity().supportFragmentManager, "DISPLAY_REACTIONS")
+        }
+
+        override fun onEditedDecorationClicked(informationData: MessageInformationData) {
+            ViewEditHistoryBottomSheet.newInstance(roomDetailArgs.roomId, informationData)
+                    .show(requireActivity().supportFragmentManager, "DISPLAY_EDITS")
+        }
+
+        override fun onRoomCreateLinkClicked(url: String) {
+            permalinkHandler.launch(requireContext(), url, object : NavigateToRoomInterceptor {
+                override fun navToRoom(roomId: String, eventId: String?): Boolean {
+                    requireActivity().finish()
+                    return false
+                }
+            })
+        }
+
+        override fun onReadReceiptsClicked(readReceipts: List<ReadReceiptData>) {
+            DisplayReadReceiptsBottomSheet.newInstance(readReceipts)
+                    .show(requireActivity().supportFragmentManager, "DISPLAY_READ_RECEIPTS")
+        }
+
+        override fun onReadMarkerLongDisplayed() = withState(roomDetailViewModel) { state ->
+            val firstVisibleItem = layoutManager.findFirstVisibleItemPosition()
+            val nextReadMarkerId = timelineEventController.searchEventIdAtPosition(firstVisibleItem)
+            if (nextReadMarkerId != null) {
+                roomDetailViewModel.process(RoomDetailActions.SetReadMarkerAction(nextReadMarkerId))
+            }
+        }
+
+        // AutocompleteUserPresenter.Callback
+
+        override fun onQueryUsers(query: CharSequence?) {
+            textComposerViewModel.process(TextComposerActions.QueryUsers(query))
+        }
+
+        private fun handleActions(action: SimpleAction) {
+            when (action) {
+                is SimpleAction.AddReaction         -> {
+                    startActivityForResult(EmojiReactionPickerActivity.intent(requireContext(), action.eventId), REACTION_SELECT_REQUEST_CODE)
+                }
+                is SimpleAction.ViewReactions       -> {
+                    ViewReactionBottomSheet.newInstance(roomDetailArgs.roomId, action.messageInformationData)
+                            .show(requireActivity().supportFragmentManager, "DISPLAY_REACTIONS")
+                }
+                is SimpleAction.Copy                -> {
+                    //I need info about the current selected message :/
+                    copyToClipboard(requireContext(), action.content, false)
+                    val msg = requireContext().getString(R.string.copied_to_clipboard)
+                    showSnackWithMessage(msg, Snackbar.LENGTH_SHORT)
+                }
+                is SimpleAction.Delete              -> {
+                    roomDetailViewModel.process(RoomDetailActions.RedactAction(action.eventId, context?.getString(R.string.event_redacted_by_user_reason)))
+                }
+                is SimpleAction.Share               -> {
+                    //TODO current data communication is too limited
+                    //Need to now the media type
+                    //TODO bad, just POC
+                    BigImageViewer.imageLoader().loadImage(
+                            action.hashCode(),
+                            Uri.parse(action.imageUrl),
+                            object : ImageLoader.Callback {
+                                override fun onFinish() {}
+
+                                override fun onSuccess(image: File?) {
+                                    if (image != null)
+                                        shareMedia(requireContext(), image, "image/*")
+                                }
+
+                                override fun onFail(error: Exception?) {}
+
+                                override fun onCacheHit(imageType: Int, image: File?) {}
+
+                                override fun onCacheMiss(imageType: Int, image: File?) {}
+
+                                override fun onProgress(progress: Int) {}
+
+                                override fun onStart() {}
+
+                            }
+                    )
+                }
+                is SimpleAction.ViewEditHistory     -> {
+                    onEditedDecorationClicked(action.messageInformationData)
+                }
+                is SimpleAction.ViewSource          -> {
+                    val view = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_event_content, null)
+                    view.findViewById<TextView>(R.id.event_content_text_view)?.let {
+                        it.text = action.content
+                    }
+
+                    AlertDialog.Builder(requireActivity())
+                            .setView(view)
+                            .setPositiveButton(R.string.ok, null)
+                            .show()
+                }
+                is SimpleAction.ViewDecryptedSource -> {
+                    val view = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_event_content, null)
+                    view.findViewById<TextView>(R.id.event_content_text_view)?.let {
+                        it.text = action.content
+                    }
+
+                    AlertDialog.Builder(requireActivity())
+                            .setView(view)
+                            .setPositiveButton(R.string.ok, null)
+                            .show()
+                }
+                is SimpleAction.QuickReact          -> {
+                    //eventId,ClickedOn,Add
+                    roomDetailViewModel.process(RoomDetailActions.UpdateQuickReactAction(action.eventId, action.clickedOn, action.add))
+                }
+                is SimpleAction.Edit                -> {
+                    roomDetailViewModel.process(RoomDetailActions.EnterEditMode(action.eventId, composerLayout.composerEditText.text.toString()))
+                }
+                is SimpleAction.Quote               -> {
+                    roomDetailViewModel.process(RoomDetailActions.EnterQuoteMode(action.eventId, composerLayout.composerEditText.text.toString()))
+                }
+                is SimpleAction.Reply               -> {
+                    roomDetailViewModel.process(RoomDetailActions.EnterReplyMode(action.eventId, composerLayout.composerEditText.text.toString()))
+                }
+                is SimpleAction.CopyPermalink       -> {
+                    val permalink = PermalinkFactory.createPermalink(roomDetailArgs.roomId, action.eventId)
+                    copyToClipboard(requireContext(), permalink, false)
+                    showSnackWithMessage(requireContext().getString(R.string.copied_to_clipboard), Snackbar.LENGTH_SHORT)
+
+                }
+                is SimpleAction.Resend              -> {
+                    roomDetailViewModel.process(RoomDetailActions.ResendMessage(action.eventId))
+                }
+                is SimpleAction.Remove              -> {
+                    roomDetailViewModel.process(RoomDetailActions.RemoveFailedEcho(action.eventId))
+                }
+                else                                -> {
+                    Toast.makeText(context, "Action $action is not implemented yet", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
 
 //utils
-    /**
-     * Insert an user displayname  in the message editor.
-     *
-     * @param text the text to insert.
-     */
+        /**
+         * Insert an user displayname  in the message editor.
+         *
+         * @param text the text to insert.
+         */
 //TODO legacy, refactor
-    private fun insertUserDisplayNameInTextEditor(text: String?) {
-        //TODO move logic outside of fragment
-        if (null != text) {
+        private fun insertUserDisplayNameInTextEditor(text: String?) {
+            //TODO move logic outside of fragment
+            if (null != text) {
 //            var vibrate = false
 
-            val myDisplayName = session.getUser(session.myUserId)?.displayName
-            if (TextUtils.equals(myDisplayName, text)) {
-                // current user
-                if (TextUtils.isEmpty(composerLayout.composerEditText.text)) {
-                    composerLayout.composerEditText.append(Command.EMOTE.command + " ")
-                    composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text.length)
+                val myDisplayName = session.getUser(session.myUserId)?.displayName
+                if (TextUtils.equals(myDisplayName, text)) {
+                    // current user
+                    if (TextUtils.isEmpty(composerLayout.composerEditText.text)) {
+                        composerLayout.composerEditText.append(Command.EMOTE.command + " ")
+                        composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text.length)
 //                    vibrate = true
-                }
-            } else {
-                // another user
-                if (TextUtils.isEmpty(composerLayout.composerEditText.text)) {
-                    // Ensure displayName will not be interpreted as a Slash command
-                    if (text.startsWith("/")) {
-                        composerLayout.composerEditText.append("\\")
                     }
-                    composerLayout.composerEditText.append(sanitizeDisplayname(text)!! + ": ")
                 } else {
-                    composerLayout.composerEditText.text.insert(composerLayout.composerEditText.selectionStart, sanitizeDisplayname(text)!! + " ")
-                }
+                    // another user
+                    if (TextUtils.isEmpty(composerLayout.composerEditText.text)) {
+                        // Ensure displayName will not be interpreted as a Slash command
+                        if (text.startsWith("/")) {
+                            composerLayout.composerEditText.append("\\")
+                        }
+                        composerLayout.composerEditText.append(sanitizeDisplayname(text)!! + ": ")
+                    } else {
+                        composerLayout.composerEditText.text.insert(composerLayout.composerEditText.selectionStart, sanitizeDisplayname(text)!! + " ")
+                    }
 
 //                vibrate = true
-            }
+                }
 
 //            if (vibrate && vectorPreferences.vibrateWhenMentioning()) {
 //                val v= context.getSystemService(Context.VIBRATOR_SERVICE) as? Vibrator
@@ -1104,44 +1119,44 @@ class RoomDetailFragment :
 //                    v.vibrate(100)
 //                }
 //            }
-            focusComposerAndShowKeyboard()
+                focusComposerAndShowKeyboard()
+            }
         }
-    }
 
-    private fun focusComposerAndShowKeyboard() {
-        composerLayout.composerEditText.requestFocus()
-        val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-        imm?.showSoftInput(composerLayout.composerEditText, InputMethodManager.SHOW_IMPLICIT)
-    }
+        private fun focusComposerAndShowKeyboard() {
+            composerLayout.composerEditText.requestFocus()
+            val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            imm?.showSoftInput(composerLayout.composerEditText, InputMethodManager.SHOW_IMPLICIT)
+        }
 
-    private fun showSnackWithMessage(message: String, duration: Int = Snackbar.LENGTH_SHORT) {
-        val snack = Snackbar.make(view!!, message, duration)
-        snack.view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.notification_accent_color))
-        snack.show()
-    }
+        private fun showSnackWithMessage(message: String, duration: Int = Snackbar.LENGTH_SHORT) {
+            val snack = Snackbar.make(view!!, message, duration)
+            snack.view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.notification_accent_color))
+            snack.show()
+        }
 
 
-    // VectorInviteView.Callback
+        // VectorInviteView.Callback
 
-    override fun onAcceptInvite() {
-        notificationDrawerManager.clearMemberShipNotificationForRoom(roomDetailArgs.roomId)
-        roomDetailViewModel.process(RoomDetailActions.AcceptInvite)
-    }
+        override fun onAcceptInvite() {
+            notificationDrawerManager.clearMemberShipNotificationForRoom(roomDetailArgs.roomId)
+            roomDetailViewModel.process(RoomDetailActions.AcceptInvite)
+        }
 
-    override fun onRejectInvite() {
-        notificationDrawerManager.clearMemberShipNotificationForRoom(roomDetailArgs.roomId)
-        roomDetailViewModel.process(RoomDetailActions.RejectInvite)
-    }
+        override fun onRejectInvite() {
+            notificationDrawerManager.clearMemberShipNotificationForRoom(roomDetailArgs.roomId)
+            roomDetailViewModel.process(RoomDetailActions.RejectInvite)
+        }
 
 // JumpToReadMarkerView.Callback
 
-    override fun onJumpToReadMarkerClicked(readMarkerId: String) {
-        roomDetailViewModel.process(RoomDetailActions.NavigateToEvent(readMarkerId, false))
+        override fun onJumpToReadMarkerClicked(readMarkerId: String) {
+            roomDetailViewModel.process(RoomDetailActions.NavigateToEvent(readMarkerId, false))
+        }
+
+        override fun onClearReadMarkerClicked() {
+            roomDetailViewModel.process(RoomDetailActions.MarkAllAsRead)
+        }
+
+
     }
-
-    override fun onClearReadMarkerClicked() {
-        roomDetailViewModel.process(RoomDetailActions.MarkAllAsRead)
-    }
-
-
-}

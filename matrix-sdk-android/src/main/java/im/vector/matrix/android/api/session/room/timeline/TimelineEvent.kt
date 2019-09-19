@@ -18,6 +18,7 @@ package im.vector.matrix.android.api.session.room.timeline
 
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.RelationType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.EventAnnotationsSummary
 import im.vector.matrix.android.api.session.room.model.ReadReceipt
@@ -94,10 +95,31 @@ data class TimelineEvent(
 fun TimelineEvent.hasBeenEdited() = annotations?.editSummary != null
 
 /**
+ * Get the eventId which was edited by this event if any
+ */
+fun TimelineEvent.getEditedEventId(): String? {
+    return root.getClearContent().toModel<MessageContent>()?.relatesTo?.takeIf { it.type == RelationType.REPLACE }?.eventId
+}
+
+/**
  * Get last MessageContent, after a possible edition
  */
 fun TimelineEvent.getLastMessageContent(): MessageContent? = annotations?.editSummary?.aggregatedContent?.toModel()
                                                              ?: root.getClearContent().toModel()
+
+
+/**
+ * Get last Message body, after a possible edition
+ */
+fun TimelineEvent.getLastMessageBody(): String? {
+    val lastMessageContent = getLastMessageContent()
+
+    if (lastMessageContent != null) {
+        return lastMessageContent.newContent?.toModel<MessageContent>()?.body ?: lastMessageContent.body
+    }
+
+    return null
+}
 
 
 fun TimelineEvent.getTextEditableContent(): String? {

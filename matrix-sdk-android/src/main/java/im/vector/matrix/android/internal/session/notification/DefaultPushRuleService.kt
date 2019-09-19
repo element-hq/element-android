@@ -132,6 +132,16 @@ internal class DefaultPushRuleService @Inject constructor(
         }
     }
 
+    fun dispatchRedactedEventId(redactedEventId: String) {
+        try {
+            listeners.forEach {
+                it.onEventRedacted(redactedEventId)
+            }
+        } catch (e: Throwable) {
+            Timber.e(e, "Error while dispatching room left")
+        }
+    }
+
     fun dispatchFinish() {
         try {
             listeners.forEach {

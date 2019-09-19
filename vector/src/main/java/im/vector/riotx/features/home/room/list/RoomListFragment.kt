@@ -250,7 +250,7 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, O
             return true
         }
 
-        return super.onBackPressed()
+        return false
     }
 
     // RoomSummaryController.Callback **************************************************************

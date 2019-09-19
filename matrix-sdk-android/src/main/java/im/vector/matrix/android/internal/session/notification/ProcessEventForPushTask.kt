@@ -78,6 +78,25 @@ internal class DefaultProcessEventForPushTask @Inject constructor(
                 defaultPushRuleService.dispatchBing(event, it)
             }
         }
+
+        val allRedactedEvents = params.syncResponse.join
+                .map { entries ->
+                    entries.value.timeline?.events?.filter {
+                        it.type == EventType.REDACTION
+                    }
+                            .orEmpty()
+                            .mapNotNull { it.redacts }
+                }
+                .fold(emptyList<String>(), { acc, next ->
+                    acc + next
+                })
+
+        Timber.v("[PushRules] Found ${allRedactedEvents.size} redacted events")
+
+        allRedactedEvents.forEach { redactedEventId ->
+            defaultPushRuleService.dispatchRedactedEventId(redactedEventId)
+        }
+
         defaultPushRuleService.dispatchFinish()
     }
 

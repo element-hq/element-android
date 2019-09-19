@@ -20,6 +20,7 @@ import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.model.EventAnnotationsSummary
 import im.vector.matrix.android.api.session.room.model.ReadReceipt
 import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.matrix.android.api.session.room.send.UserDraft
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.util.Optional
 import io.reactivex.Observable
@@ -61,6 +62,10 @@ class RxRoom(private val room: Room) {
 
     fun liveEventReadReceipts(eventId: String): Observable<List<ReadReceipt>> {
         return room.getEventReadReceiptsLive(eventId).asObservable()
+    }
+
+    fun liveDrafts(): Observable<List<UserDraft>> {
+        return room.getDraftsLive().asObservable()
     }
 
 }

@@ -18,10 +18,13 @@ package im.vector.matrix.android.internal.network
 
 import com.squareup.moshi.JsonDataException
 import com.squareup.moshi.Moshi
+import im.vector.matrix.android.api.failure.ConsentNotGivenError
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.internal.di.MoshiProvider
+import kotlinx.coroutines.CancellationException
 import okhttp3.ResponseBody
+import org.greenrobot.eventbus.EventBus
 import retrofit2.Call
 import timber.log.Timber
 import java.io.IOException
@@ -47,6 +50,7 @@ internal class Request<DATA> {
                 is IOException              -> Failure.NetworkConnection(exception)
                 is Failure.ServerError,
                 is Failure.OtherServerError -> exception
+                is CancellationException    -> Failure.Cancelled(exception)
                 else                        -> Failure.Unknown(exception)
             }
         }
@@ -65,6 +69,11 @@ internal class Request<DATA> {
             val matrixError = matrixErrorAdapter.fromJson(errorBodyStr)
 
             if (matrixError != null) {
+                if (matrixError.code == MatrixError.M_CONSENT_NOT_GIVEN && !matrixError.consentUri.isNullOrBlank()) {
+                    // Also send this error to the bus, for a global management
+                    EventBus.getDefault().post(ConsentNotGivenError(matrixError.consentUri))
+                }
+
                 return Failure.ServerError(matrixError, httpCode)
             }
         } catch (ex: JsonDataException) {

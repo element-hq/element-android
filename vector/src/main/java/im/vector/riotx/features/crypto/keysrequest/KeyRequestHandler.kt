@@ -54,7 +54,7 @@ import kotlin.collections.HashMap
  */
 
 @Singleton
-class KeyRequestHandler @Inject constructor(val context: Context)
+class KeyRequestHandler @Inject constructor(private val context: Context)
     : RoomKeysRequestListener,
         SasVerificationService.SasVerificationListener {
 

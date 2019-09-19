@@ -40,7 +40,7 @@ import javax.inject.Singleton
 
 @Singleton
 class EventHtmlRenderer @Inject constructor(context: Context,
-                                            val avatarRenderer: AvatarRenderer,
+                                            avatarRenderer: AvatarRenderer,
                                             sessionHolder: ActiveSessionHolder) {
     private val markwon = Markwon.builder(context)
             .usePlugin(MatrixPlugin.create(GlideApp.with(context), context, avatarRenderer, sessionHolder))

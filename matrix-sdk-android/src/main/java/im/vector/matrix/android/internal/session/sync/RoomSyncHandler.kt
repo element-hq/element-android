@@ -123,12 +123,12 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
     private fun handleJoinedRoom(realm: Realm,
                                  roomId: String,
                                  roomSync: RoomSync,
-                                 isInitalSync: Boolean): RoomEntity {
+                                 isInitialSync: Boolean): RoomEntity {
 
         Timber.v("Handle join sync for room $roomId")
 
         if (roomSync.ephemeral != null && roomSync.ephemeral.events.isNotEmpty()) {
-            handleEphemeral(realm, roomId, roomSync.ephemeral, isInitalSync)
+            handleEphemeral(realm, roomId, roomSync.ephemeral, isInitialSync)
         }
 
         if (roomSync.accountData != null && roomSync.accountData.events.isNullOrEmpty().not()) {

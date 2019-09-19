@@ -22,4 +22,5 @@ sealed class SyncState {
     object PAUSED : SyncState()
     object KILLING : SyncState()
     object KILLED : SyncState()
+    object NO_NETWORK : SyncState()
 }

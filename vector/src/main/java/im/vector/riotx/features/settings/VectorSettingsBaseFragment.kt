@@ -54,7 +54,7 @@ abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat(), HasScree
     override fun onAttach(context: Context) {
         screenComponent = DaggerScreenComponent.factory().create(vectorActivity.getVectorComponent(), vectorActivity)
         super.onAttach(context)
-        session = screenComponent.session()
+        session = screenComponent.activeSessionHolder().getActiveSession()
         injectWith(injector())
     }
 

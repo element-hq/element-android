@@ -119,6 +119,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
         val notifiableMessageEvent = NotifiableMessageEvent(
                 // Generate a Fake event id
                 UUID.randomUUID().toString(),
+                null,
                 false,
                 System.currentTimeMillis(),
                 session.getUser(session.myUserId)?.displayName

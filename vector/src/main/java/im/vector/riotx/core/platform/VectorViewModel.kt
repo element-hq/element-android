@@ -17,11 +17,8 @@
 package im.vector.riotx.core.platform
 
 import com.airbnb.mvrx.*
-import im.vector.matrix.android.api.util.CancelableBag
-import im.vector.riotx.BuildConfig
 import io.reactivex.Observable
 import io.reactivex.Single
-import io.reactivex.disposables.Disposable
 
 abstract class VectorViewModel<S : MvRxState>(initialState: S)
     : BaseMvRxViewModel<S>(initialState, false) {

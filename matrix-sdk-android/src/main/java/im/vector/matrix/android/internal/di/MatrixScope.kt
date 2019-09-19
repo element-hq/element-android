@@ -18,6 +18,9 @@ package im.vector.matrix.android.internal.di
 
 import javax.inject.Scope
 
+/**
+ * Use the annotation @MatrixScope to annotate classes we want the SDK to instantiate only once
+ */
 @Scope
 @MustBeDocumented
 @Retention(AnnotationRetention.RUNTIME)

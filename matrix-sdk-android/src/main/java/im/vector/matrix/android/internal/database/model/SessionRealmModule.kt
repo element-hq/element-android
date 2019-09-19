@@ -44,6 +44,8 @@ import io.realm.annotations.RealmModule
                  PusherEntity::class,
                  PusherDataEntity::class,
                  ReadReceiptsSummaryEntity::class,
-                 ReadMarkerEntity::class
+                 ReadMarkerEntity::class,
+                 UserDraftsEntity::class,
+                 DraftEntity::class
              ])
 internal class SessionRealmModule

@@ -36,10 +36,7 @@ import im.vector.riotx.features.home.HomeRoomListObservableStore
 import im.vector.riotx.features.home.group.SelectedGroupStore
 import im.vector.riotx.features.html.EventHtmlRenderer
 import im.vector.riotx.features.navigation.Navigator
-import im.vector.riotx.features.notifications.NotifiableEventResolver
-import im.vector.riotx.features.notifications.NotificationBroadcastReceiver
-import im.vector.riotx.features.notifications.NotificationDrawerManager
-import im.vector.riotx.features.notifications.PushRuleTriggerListener
+import im.vector.riotx.features.notifications.*
 import im.vector.riotx.features.rageshake.BugReporter
 import im.vector.riotx.features.rageshake.VectorFileLogger
 import im.vector.riotx.features.rageshake.VectorUncaughtExceptionHandler
@@ -58,6 +55,8 @@ interface VectorComponent {
 
     fun currentSession(): Session
 
+    fun notificationUtils(): NotificationUtils
+
     fun notificationDrawerManager(): NotificationDrawerManager
 
     fun appContext(): Context
@@ -72,7 +71,7 @@ interface VectorComponent {
 
     fun emojiCompatFontProvider(): EmojiCompatFontProvider
 
-    fun emojiCompatWrapper() : EmojiCompatWrapper
+    fun emojiCompatWrapper(): EmojiCompatWrapper
 
     fun eventHtmlRenderer(): EventHtmlRenderer
 

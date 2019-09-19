@@ -31,6 +31,7 @@ import java.io.IOException
  */
 sealed class Failure(cause: Throwable? = null) : Throwable(cause = cause) {
     data class Unknown(val throwable: Throwable? = null) : Failure(throwable)
+    data class Cancelled(val throwable: Throwable? = null) : Failure(throwable)
     data class NetworkConnection(val ioException: IOException? = null) : Failure(ioException)
     data class ServerError(val error: MatrixError, val httpCode: Int) : Failure(RuntimeException(error.toString()))
     // When server send an error, but it cannot be interpreted as a MatrixError

@@ -34,8 +34,8 @@ import im.vector.riotx.core.ui.list.genericItem
 import java.util.*
 import javax.inject.Inject
 
-class KeysBackupSettingsRecyclerViewController @Inject constructor(val stringProvider: StringProvider,
-                                                                   val session: Session) : TypedEpoxyController<KeysBackupSettingViewState>() {
+class KeysBackupSettingsRecyclerViewController @Inject constructor(private val stringProvider: StringProvider,
+                                                                   private val session: Session) : TypedEpoxyController<KeysBackupSettingViewState>() {
 
     var listener: Listener? = null
 

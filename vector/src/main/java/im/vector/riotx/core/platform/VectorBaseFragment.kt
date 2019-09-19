@@ -19,11 +19,7 @@ package im.vector.riotx.core.platform
 import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.annotation.MainThread
@@ -42,7 +38,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import timber.log.Timber
 
-abstract class VectorBaseFragment : BaseMvRxFragment(), OnBackPressed, HasScreenInjector {
+abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
 
     // Butterknife unbinder
     private var mUnBinder: Unbinder? = null
@@ -130,10 +126,6 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), OnBackPressed, HasScreen
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         restorables.forEach { it.onRestoreInstanceState(savedInstanceState) }
         super.onViewStateRestored(savedInstanceState)
-    }
-
-    override fun onBackPressed(): Boolean {
-        return false
     }
 
     override fun invalidate() {

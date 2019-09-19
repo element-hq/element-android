@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.crypto
 
-import android.content.Context
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -30,12 +29,13 @@ import im.vector.matrix.android.internal.crypto.store.db.RealmCryptoStore
 import im.vector.matrix.android.internal.crypto.store.db.RealmCryptoStoreMigration
 import im.vector.matrix.android.internal.crypto.store.db.RealmCryptoStoreModule
 import im.vector.matrix.android.internal.crypto.tasks.*
-import im.vector.matrix.android.internal.database.configureEncryption
+import im.vector.matrix.android.internal.database.RealmKeysUtils
 import im.vector.matrix.android.internal.di.CryptoDatabase
+import im.vector.matrix.android.internal.di.UserCacheDirectory
+import im.vector.matrix.android.internal.di.UserMd5
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.cache.ClearCacheTask
 import im.vector.matrix.android.internal.session.cache.RealmClearCacheTask
-import im.vector.matrix.android.internal.util.md5
 import io.realm.RealmConfiguration
 import retrofit2.Retrofit
 import java.io.File
@@ -45,17 +45,20 @@ internal abstract class CryptoModule {
 
     @Module
     companion object {
+        internal const val DB_ALIAS_PREFIX = "crypto_module_"
 
         @JvmStatic
         @Provides
         @CryptoDatabase
         @SessionScope
-        fun providesRealmConfiguration(context: Context, credentials: Credentials): RealmConfiguration {
-            val userIDHash = credentials.userId.md5()
-
+        fun providesRealmConfiguration(@UserCacheDirectory directory: File,
+                                       @UserMd5 userMd5: String,
+                                       realmKeysUtils: RealmKeysUtils): RealmConfiguration {
             return RealmConfiguration.Builder()
-                    .directory(File(context.filesDir, userIDHash))
-                    .configureEncryption("crypto_module_$userIDHash", context)
+                    .directory(directory)
+                    .apply {
+                        realmKeysUtils.configureEncryption(this, "$DB_ALIAS_PREFIX$userMd5")
+                    }
                     .name("crypto_store.realm")
                     .modules(RealmCryptoStoreModule())
                     .schemaVersion(RealmCryptoStoreMigration.CRYPTO_STORE_SCHEMA_VERSION)

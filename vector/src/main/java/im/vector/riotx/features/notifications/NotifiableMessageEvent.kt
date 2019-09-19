@@ -20,6 +20,7 @@ import im.vector.matrix.android.api.session.events.model.EventType
 
 data class NotifiableMessageEvent(
         override val eventId: String,
+        override val editedEventId: String?,
         override var noisy: Boolean,
         override val timestamp: Long,
         var senderName: String?,
@@ -35,6 +36,7 @@ data class NotifiableMessageEvent(
     override var soundName: String? = null
     override var lockScreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
     override var hasBeenDisplayed: Boolean = false
+    override var isRedacted: Boolean = false
 
     var roomAvatarPath: String? = null
     var senderAvatarPath: String? = null

@@ -17,10 +17,12 @@
 package im.vector.matrix.android.internal.auth
 
 import im.vector.matrix.android.api.auth.data.Credentials
+import im.vector.matrix.android.internal.auth.data.LoginFlowResponse
 import im.vector.matrix.android.internal.auth.data.PasswordLoginParams
 import im.vector.matrix.android.internal.network.NetworkConstants
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.POST
 
@@ -28,6 +30,13 @@ import retrofit2.http.POST
  * The login REST API.
  */
 internal interface AuthAPI {
+
+    /**
+     * Get the supported login flow
+     * Ref: https://matrix.org/docs/spec/client_server/latest#get-matrix-client-r0-login
+     */
+    @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "login")
+    fun getLoginFlows(): Call<LoginFlowResponse>
 
     /**
      * Pass params to the server for the current login phase.

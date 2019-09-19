@@ -25,6 +25,7 @@ import im.vector.matrix.android.api.session.room.members.MembershipService
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.relation.RelationService
 import im.vector.matrix.android.api.session.room.read.ReadService
+import im.vector.matrix.android.api.session.room.send.DraftService
 import im.vector.matrix.android.api.session.room.send.SendService
 import im.vector.matrix.android.api.session.room.state.StateService
 import im.vector.matrix.android.api.session.room.timeline.TimelineService
@@ -40,6 +41,7 @@ internal class DefaultRoom @Inject constructor(override val roomId: String,
                                                private val roomSummaryMapper: RoomSummaryMapper,
                                                private val timelineService: TimelineService,
                                                private val sendService: SendService,
+                                               private val draftService: DraftService,
                                                private val stateService: StateService,
                                                private val readService: ReadService,
                                                private val cryptoService: CryptoService,
@@ -48,6 +50,7 @@ internal class DefaultRoom @Inject constructor(override val roomId: String,
 ) : Room,
     TimelineService by timelineService,
     SendService by sendService,
+    DraftService by draftService,
     StateService by stateService,
     ReadService by readService,
     RelationService by relationService,

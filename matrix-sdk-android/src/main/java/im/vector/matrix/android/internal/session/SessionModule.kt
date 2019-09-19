@@ -27,19 +27,20 @@ import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.session.InitialSyncProgressService
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.securestorage.SecureStorageService
 import im.vector.matrix.android.internal.database.LiveEntityObserver
-import im.vector.matrix.android.internal.database.configureEncryption
+import im.vector.matrix.android.internal.database.RealmKeysUtils
 import im.vector.matrix.android.internal.database.model.SessionRealmModule
-import im.vector.matrix.android.internal.di.Authenticated
-import im.vector.matrix.android.internal.di.SessionDatabase
-import im.vector.matrix.android.internal.di.Unauthenticated
+import im.vector.matrix.android.internal.di.*
 import im.vector.matrix.android.internal.network.AccessTokenInterceptor
 import im.vector.matrix.android.internal.network.RetrofitFactory
+import im.vector.matrix.android.internal.network.interceptors.CurlLoggingInterceptor
 import im.vector.matrix.android.internal.session.group.GroupSummaryUpdater
 import im.vector.matrix.android.internal.session.room.EventRelationsAggregationUpdater
 import im.vector.matrix.android.internal.session.room.create.RoomCreateEventLiveObserver
 import im.vector.matrix.android.internal.session.room.prune.EventsPruner
 import im.vector.matrix.android.internal.session.room.tombstone.RoomTombstoneEventLiveObserver
+import im.vector.matrix.android.internal.session.securestorage.DefaultSecureStorageService
 import im.vector.matrix.android.internal.util.md5
 import io.realm.RealmConfiguration
 import okhttp3.OkHttpClient
@@ -51,6 +52,7 @@ internal abstract class SessionModule {
 
     @Module
     companion object {
+        internal const val DB_ALIAS_PREFIX = "session_db_"
 
         @JvmStatic
         @Provides
@@ -66,17 +68,32 @@ internal abstract class SessionModule {
         }
 
         @JvmStatic
+        @UserMd5
+        @Provides
+        fun providesUserMd5(sessionParams: SessionParams): String {
+            return sessionParams.credentials.userId.md5()
+        }
+
+        @JvmStatic
+        @Provides
+        @UserCacheDirectory
+        fun providesFilesDir(@UserMd5 userMd5: String, context: Context): File {
+            return File(context.filesDir, userMd5)
+        }
+
+        @JvmStatic
         @Provides
         @SessionDatabase
         @SessionScope
-        fun providesRealmConfiguration(sessionParams: SessionParams, context: Context): RealmConfiguration {
-            val childPath = sessionParams.credentials.userId.md5()
-            val directory = File(context.filesDir, childPath)
-
+        fun providesRealmConfiguration(realmKeysUtils: RealmKeysUtils,
+                                       @UserCacheDirectory directory: File,
+                                       @UserMd5 userMd5: String): RealmConfiguration {
             return RealmConfiguration.Builder()
                     .directory(directory)
                     .name("disk_store.realm")
-                    .configureEncryption("session_db_$childPath", context)
+                    .apply {
+                        realmKeysUtils.configureEncryption(this, "$DB_ALIAS_PREFIX$userMd5")
+                    }
                     .modules(SessionRealmModule())
                     .deleteRealmIfMigrationNeeded()
                     .build()
@@ -99,7 +116,18 @@ internal abstract class SessionModule {
         fun providesOkHttpClient(@Unauthenticated okHttpClient: OkHttpClient,
                                  accessTokenInterceptor: AccessTokenInterceptor): OkHttpClient {
             return okHttpClient.newBuilder()
-                    .addInterceptor(accessTokenInterceptor)
+                    .apply {
+                        // Remove the previous CurlLoggingInterceptor, to add it after the accessTokenInterceptor
+                        val existingCurlInterceptors = interceptors().filterIsInstance<CurlLoggingInterceptor>()
+                        interceptors().removeAll(existingCurlInterceptors)
+
+                        addInterceptor(accessTokenInterceptor)
+
+                        // Re add eventually the curl logging interceptors
+                        existingCurlInterceptors.forEach {
+                            addInterceptor(it)
+                        }
+                    }
                     .build()
         }
 
@@ -139,5 +167,8 @@ internal abstract class SessionModule {
 
     @Binds
     abstract fun bindInitialSyncProgressService(initialSyncProgressService: DefaultInitialSyncProgressService): InitialSyncProgressService
+
+    @Binds
+    abstract fun bindSecureStorageService(secureStorageService: DefaultSecureStorageService): SecureStorageService
 
 }

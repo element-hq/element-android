@@ -101,6 +101,14 @@
         app:barrierDirection="top"
         app:constraint_referenced_ids="composerLayout,notificationAreaView" />
 
+    <im.vector.riotx.features.sync.widget.SyncStateView
+        android:id="@+id/syncStateView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/roomToolbar" />
+
     <com.airbnb.epoxy.EpoxyRecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="0dp"
@@ -109,7 +117,7 @@
         app:layout_constraintBottom_toTopOf="@+id/recyclerViewBarrier"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/syncProgressBarWrap"
+        app:layout_constraintTop_toBottomOf="@id/syncStateView"
         tools:listitem="@layout/item_timeline_event_base" />
 
     <im.vector.riotx.core.ui.views.JumpToReadMarkerView

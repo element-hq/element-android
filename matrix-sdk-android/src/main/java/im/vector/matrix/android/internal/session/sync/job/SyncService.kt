@@ -93,8 +93,8 @@ open class SyncService : Service() {
     }
 
     fun doSync(once: Boolean = false) {
-        if (!networkConnectivityChecker.isConnected()) {
-            Timber.v("Sync is Paused. Waiting...")
+        if (!networkConnectivityChecker.hasInternetAccess) {
+            Timber.v("No internet access. Waiting...")
             //TODO Retry in ?
             timer.schedule(object : TimerTask() {
                 override fun run() {

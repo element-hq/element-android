@@ -24,6 +24,7 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 
 sealed class RoomDetailActions {
 
+    data class SaveDraft(val draft: String) : RoomDetailActions()
     data class SendMessage(val text: String, val autoMarkdown: Boolean) : RoomDetailActions()
     data class SendMedia(val mediaFiles: List<MediaFile>) : RoomDetailActions()
     data class TimelineEventTurnsVisible(val event: TimelineEvent) : RoomDetailActions()
@@ -41,9 +42,11 @@ sealed class RoomDetailActions {
     object AcceptInvite : RoomDetailActions()
     object RejectInvite : RoomDetailActions()
 
-    data class EnterEditMode(val eventId: String) : RoomDetailActions()
-    data class EnterQuoteMode(val eventId: String) : RoomDetailActions()
-    data class EnterReplyMode(val eventId: String) : RoomDetailActions()
+    data class EnterEditMode(val eventId: String, val draft: String) : RoomDetailActions()
+    data class EnterQuoteMode(val eventId: String, val draft: String) : RoomDetailActions()
+    data class EnterReplyMode(val eventId: String, val draft: String) : RoomDetailActions()
+    data class ExitSpecialMode(val draft: String) : RoomDetailActions()
+
     data class ResendMessage(val eventId: String) : RoomDetailActions()
     data class RemoveFailedEcho(val eventId: String) : RoomDetailActions()
     object ClearSendQueue : RoomDetailActions()
