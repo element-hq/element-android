@@ -203,6 +203,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
             val simpleNotifiableEvent = SimpleNotifiableEvent(
                     session.myUserId,
                     eventId,
+                    null,
                     true, //It's an issue in this case, all event will bing even if expected to be silent.
                     title = getString(R.string.notification_unknown_new_event),
                     description = "",

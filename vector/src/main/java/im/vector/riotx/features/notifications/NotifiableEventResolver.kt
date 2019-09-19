@@ -25,7 +25,8 @@ import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
-import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
+import im.vector.matrix.android.api.session.room.timeline.getEditedEventId
+import im.vector.matrix.android.api.session.room.timeline.getLastMessageBody
 import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
 import im.vector.riotx.BuildConfig
 import im.vector.riotx.R
@@ -72,6 +73,7 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
                 return SimpleNotifiableEvent(
                         session.myUserId,
                         eventId = event.eventId!!,
+                        editedEventId = timelineEvent.getEditedEventId(),
                         noisy = false,//will be updated
                         timestamp = event.originServerTs ?: System.currentTimeMillis(),
                         description = bodyPreview,
@@ -81,7 +83,6 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
             }
         }
     }
-
 
     private fun resolveMessageEvent(event: TimelineEvent, session: Session): NotifiableEvent? {
 
@@ -93,14 +94,14 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
             Timber.e("## Unable to resolve room for eventId [${event}]")
             // Ok room is not known in store, but we can still display something
             val body =
-                    event.getLastMessageContent()
-                            ?.body
+                    event.getLastMessageBody()
                             ?: stringProvider.getString(R.string.notification_unknown_new_event)
             val roomName = stringProvider.getString(R.string.notification_unknown_room_name)
             val senderDisplayName = event.senderName ?: event.root.senderId
 
             val notifiableEvent = NotifiableMessageEvent(
                     eventId = event.root.eventId!!,
+                    editedEventId = event.getEditedEventId(),
                     timestamp = event.root.originServerTs ?: 0,
                     noisy = false,//will be updated
                     senderName = senderDisplayName,
@@ -128,14 +129,14 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
                 }
             }
 
-            val body = event.getLastMessageContent()
-                    ?.body
+            val body = event.getLastMessageBody()
                     ?: stringProvider.getString(R.string.notification_unknown_new_event)
             val roomName = room.roomSummary()?.displayName ?: ""
             val senderDisplayName = event.senderName ?: event.root.senderId
 
             val notifiableEvent = NotifiableMessageEvent(
                     eventId = event.root.eventId!!,
+                    editedEventId = event.getEditedEventId(),
                     timestamp = event.root.originServerTs ?: 0,
                     noisy = false,//will be updated
                     senderName = senderDisplayName,
@@ -177,6 +178,7 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
             return InviteNotifiableEvent(
                     session.myUserId,
                     eventId = event.eventId!!,
+                    editedEventId = null,
                     roomId = roomId,
                     timestamp = event.originServerTs ?: 0,
                     noisy = false,//will be set later

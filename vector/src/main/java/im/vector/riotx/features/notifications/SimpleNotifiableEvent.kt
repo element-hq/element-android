@@ -20,6 +20,7 @@ import androidx.core.app.NotificationCompat
 data class SimpleNotifiableEvent(
         override var matrixID: String?,
         override val eventId: String,
+        override val editedEventId: String?,
         override var noisy: Boolean,
         override val title: String,
         override val description: String,

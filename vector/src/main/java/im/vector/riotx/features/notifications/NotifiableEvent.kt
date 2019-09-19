@@ -20,6 +20,7 @@ import java.io.Serializable
 interface NotifiableEvent : Serializable {
     var matrixID: String?
     val eventId: String
+    val editedEventId: String?
     var noisy: Boolean
     val title: String
     val description: String?
