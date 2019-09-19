@@ -2,7 +2,7 @@ Changes in RiotX 0.6.0 (2019-XX-XX)
 ===================================================
 
 Features:
- -
+ - Save draft of a message when exiting a room with non empty composer (#329)
 
 Improvements:
  - Add unread indent on room list (#485)
