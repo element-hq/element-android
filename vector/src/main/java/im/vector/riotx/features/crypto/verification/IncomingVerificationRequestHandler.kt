@@ -29,7 +29,7 @@ import javax.inject.Singleton
  * Listens to the VerificationManager and add a new notification when an incoming request is detected.
  */
 @Singleton
-class IncomingVerificationRequestHandler @Inject constructor(val context: Context) : SasVerificationService.SasVerificationListener {
+class IncomingVerificationRequestHandler @Inject constructor(private val context: Context) : SasVerificationService.SasVerificationListener {
 
     private var session: Session? = null
 

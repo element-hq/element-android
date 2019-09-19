@@ -33,7 +33,7 @@ import javax.inject.Inject
 
 class PublicRoomsController @Inject constructor(private val stringProvider: StringProvider,
                                                 private val avatarRenderer: AvatarRenderer,
-                            private val errorFormatter: ErrorFormatter) : TypedEpoxyController<PublicRoomsViewState>() {
+                                                private val errorFormatter: ErrorFormatter) : TypedEpoxyController<PublicRoomsViewState>() {
 
     var callback: Callback? = null
 

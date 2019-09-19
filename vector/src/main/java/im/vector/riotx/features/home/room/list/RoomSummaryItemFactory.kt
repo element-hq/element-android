@@ -16,13 +16,13 @@
 
 package im.vector.riotx.features.home.room.list
 
-import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.riotx.R
+import im.vector.riotx.core.date.VectorDateFormatter
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
 import im.vector.riotx.core.extensions.localDateTime
 import im.vector.riotx.core.resources.ColorProvider
@@ -30,7 +30,6 @@ import im.vector.riotx.core.resources.DateProvider
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.format.NoticeEventFormatter
-import im.vector.riotx.core.date.VectorDateFormatter
 import im.vector.riotx.features.home.room.detail.timeline.helper.senderName
 import me.gujun.android.span.span
 import javax.inject.Inject
@@ -39,8 +38,7 @@ class RoomSummaryItemFactory @Inject constructor(private val noticeEventFormatte
                                                  private val dateFormatter: VectorDateFormatter,
                                                  private val colorProvider: ColorProvider,
                                                  private val stringProvider: StringProvider,
-                                                 private val avatarRenderer: AvatarRenderer,
-                                                 private val session: Session) {
+                                                 private val avatarRenderer: AvatarRenderer) {
 
     fun create(roomSummary: RoomSummary,
                joiningRoomsIds: Set<String>,
@@ -96,7 +94,7 @@ class RoomSummaryItemFactory @Inject constructor(private val noticeEventFormatte
             val currentDate = DateProvider.currentLocalDateTime()
             val isSameDay = date.toLocalDate() == currentDate.toLocalDate()
             latestFormattedEvent = if (latestEvent.root.isEncrypted()
-                                       && latestEvent.root.mxDecryptionResult == null) {
+                    && latestEvent.root.mxDecryptionResult == null) {
                 stringProvider.getString(R.string.encrypted_message)
             } else if (latestEvent.root.getClearType() == EventType.MESSAGE) {
                 val senderName = latestEvent.senderName() ?: latestEvent.root.senderId
