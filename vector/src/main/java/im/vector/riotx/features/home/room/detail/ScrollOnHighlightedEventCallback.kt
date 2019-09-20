@@ -17,6 +17,7 @@
 package im.vector.riotx.features.home.room.detail
 
 import androidx.recyclerview.widget.LinearLayoutManager
+import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.riotx.core.platform.DefaultListUpdateCallback
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import timber.log.Timber
@@ -27,9 +28,13 @@ class ScrollOnHighlightedEventCallback(private val layoutManager: LinearLayoutMa
 
     private val scheduledEventId = AtomicReference<String?>()
 
+    var timeline: Timeline? = null
+
     override fun onChanged(position: Int, count: Int, tag: Any?) {
         val eventId = scheduledEventId.get() ?: return
-        val positionToScroll = timelineEventController.searchPositionOfEvent(eventId)
+        val nonNullTimeline = timeline ?: return
+        val correctedEventId = nonNullTimeline.getFirstDisplayableEventId(eventId)
+        val positionToScroll = timelineEventController.searchPositionOfEvent(correctedEventId)
         if (positionToScroll != null) {
             val firstVisibleItem = layoutManager.findFirstCompletelyVisibleItemPosition()
             val lastVisibleItem = layoutManager.findLastCompletelyVisibleItemPosition()

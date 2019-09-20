@@ -702,6 +702,7 @@ class RoomDetailFragment :
             val summary = state.asyncRoomSummary()
             val inviter = state.asyncInviter()
             if (summary?.membership == Membership.JOIN) {
+                scrollOnHighlightedEventCallback.timeline = state.timeline
                 timelineEventController.update(state)
                 inviteView.visibility = View.GONE
                 val uid = session.myUserId

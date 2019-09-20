@@ -112,7 +112,7 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
                     Timber.v("Start persisting ${receivedChunk.events.size} events in $roomId towards $direction")
 
                     val roomEntity = RoomEntity.where(realm, roomId).findFirst()
-                            ?: realm.createObject(roomId)
+                                     ?: realm.createObject(roomId)
 
                     val nextToken: String?
                     val prevToken: String?
@@ -141,7 +141,7 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
                     } else {
                         nextChunk?.apply { this.prevToken = prevToken }
                     }
-                            ?: ChunkEntity.create(realm, prevToken, nextToken)
+                                       ?: ChunkEntity.create(realm, prevToken, nextToken)
 
                     if (receivedChunk.events.isEmpty() && receivedChunk.end == receivedChunk.start) {
                         Timber.v("Reach end of $roomId")
@@ -163,8 +163,8 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
                             currentChunk = handleMerge(roomEntity, direction, currentChunk, nextChunk)
                         } else {
                             val newEventIds = receivedChunk.events.mapNotNull { it.eventId }
-                            ChunkEntity
-                                    .findAllIncludingEvents(realm, newEventIds)
+                            val overlappedChunks = ChunkEntity.findAllIncludingEvents(realm, newEventIds)
+                            overlappedChunks
                                     .filter { it != currentChunk }
                                     .forEach { overlapped ->
                                         currentChunk = handleMerge(roomEntity, direction, currentChunk, overlapped)
@@ -194,7 +194,7 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
 
         // We always merge the bottom chunk into top chunk, so we are always merging backwards
         Timber.v("Merge ${currentChunk.prevToken} | ${currentChunk.nextToken} with ${otherChunk.prevToken} | ${otherChunk.nextToken}")
-        return if (direction == PaginationDirection.BACKWARDS) {
+        return if (direction == PaginationDirection.BACKWARDS && !otherChunk.isLastForward) {
             currentChunk.merge(roomEntity.roomId, otherChunk, PaginationDirection.BACKWARDS)
             roomEntity.deleteOnCascade(otherChunk)
             currentChunk

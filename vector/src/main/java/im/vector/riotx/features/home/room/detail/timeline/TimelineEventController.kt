@@ -296,8 +296,11 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         }
     }
 
-    fun searchPositionOfEvent(eventId: String): Int? = synchronized(modelCache) {
+    fun searchPositionOfEvent(eventId: String?): Int? = synchronized(modelCache) {
         // Search in the cache
+        if (eventId == null) {
+            return null
+        }
         var realPosition = 0
         if (showingForwardLoader) {
             realPosition++

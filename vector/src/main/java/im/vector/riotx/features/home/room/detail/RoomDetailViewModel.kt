@@ -43,6 +43,7 @@ import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.model.message.getFileUrl
+import im.vector.matrix.android.api.session.room.model.relation.ReactionContent
 import im.vector.matrix.android.api.session.room.model.tombstone.RoomTombstoneContent
 import im.vector.matrix.android.api.session.room.send.UserDraft
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
@@ -613,18 +614,18 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
 
     }
 
-
     private fun handleNavigateToEvent(action: RoomDetailActions.NavigateToEvent) {
-        val targetEventId = action.eventId
-        val indexOfEvent = timeline.getIndexOfEvent(targetEventId)
+        val targetEventId: String = action.eventId
+        val correctedEventId = timeline.getFirstDisplayableEventId(targetEventId) ?: targetEventId
+        val indexOfEvent = timeline.getIndexOfEvent(correctedEventId)
         if (indexOfEvent == null) {
             // Event is not already in RAM
             timeline.restartWithEventId(targetEventId)
         }
         if (action.highlight) {
-            setState { copy(highlightedEventId = targetEventId) }
+            setState { copy(highlightedEventId = correctedEventId) }
         }
-        _navigateToEvent.postLiveEvent(targetEventId)
+        _navigateToEvent.postLiveEvent(correctedEventId)
     }
 
     private fun handleResendEvent(action: RoomDetailActions.ResendMessage) {
@@ -683,17 +684,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun handleSetReadMarkerAction(action: RoomDetailActions.SetReadMarkerAction) = withState { state ->
-        var readMarkerId = action.eventId
-        if (readMarkerId == state.asyncRoomSummary()?.readMarkerId) {
-            val indexOfEvent = timeline.getIndexOfEvent(action.eventId)
-            // force to set the read marker on the next event
-            if (indexOfEvent != null) {
-                timeline.getTimelineEventAtIndex(indexOfEvent - 1)?.root?.eventId?.also { eventIdOfNext ->
-                    readMarkerId = eventIdOfNext
-                }
-            }
-        }
-        room.setReadMarker(readMarkerId, callback = object : MatrixCallback<Unit> {})
+        room.setReadMarker(action.eventId, callback = object : MatrixCallback<Unit> {})
     }
 
     private fun handleMarkAllAsRead() {

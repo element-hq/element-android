@@ -44,7 +44,6 @@ interface Timeline {
      */
     fun dispose()
 
-
     fun restartWithEventId(eventId: String?)
 
 
@@ -73,8 +72,9 @@ interface Timeline {
 
     fun getTimelineEventWithId(eventId: String?): TimelineEvent?
 
+    fun getFirstDisplayableEventId(eventId: String): String?
 
-    interface Listener {
+        interface Listener {
         /**
          * Call when the timeline has been updated through pagination or sync.
          * @param snapshot the most uptodate snapshot
