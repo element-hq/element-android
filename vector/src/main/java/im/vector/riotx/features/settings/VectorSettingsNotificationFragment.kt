@@ -21,6 +21,7 @@ import androidx.preference.Preference
 import androidx.preference.SwitchPreference
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.pushrules.RuleIds
+import im.vector.matrix.android.api.pushrules.RuleKind
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.di.ScreenComponent
@@ -45,12 +46,13 @@ class VectorSettingsNotificationPreferenceFragment : VectorSettingsBaseFragment(
                     .find { it.ruleId == RuleIds.RULE_ID_DISABLE_ALL }
 
             if (mRuleMaster == null) {
+                // The home server does not support RULE_ID_DISABLE_ALL, so hide the preference
                 pref.isVisible = false
                 return
             }
 
-            val areNotifEnabledAtAccountLevelt = !mRuleMaster.enabled
-            (pref as SwitchPreference).isChecked = areNotifEnabledAtAccountLevelt
+            val areNotifEnabledAtAccountLevel = !mRuleMaster.enabled
+            (pref as SwitchPreference).isChecked = areNotifEnabledAtAccountLevel
         }
     }
 
@@ -114,19 +116,21 @@ class VectorSettingsNotificationPreferenceFragment : VectorSettingsBaseFragment(
                 .find { it.ruleId == RuleIds.RULE_ID_DISABLE_ALL }
                 ?.let {
                     //Trick, we must enable this room to disable notifications
-                    pushRuleService.updatePushRuleEnableStatus("override", it, !switchPref.isChecked,
-                                                               object : MatrixCallback<Unit> {
+                    pushRuleService.updatePushRuleEnableStatus(RuleKind.OVERRIDE,
+                            it,
+                            !switchPref.isChecked,
+                            object : MatrixCallback<Unit> {
 
-                                                                   override fun onSuccess(data: Unit) {
-                                                                       pushRuleService.fetchPushRules()
-                                                                   }
+                                override fun onSuccess(data: Unit) {
+                                    pushRuleService.fetchPushRules()
+                                }
 
-                                                                   override fun onFailure(failure: Throwable) {
-                                                                       //revert the check box
-                                                                       switchPref.isChecked = !switchPref.isChecked
-                                                                       Toast.makeText(activity, R.string.unknown_error, Toast.LENGTH_SHORT).show()
-                                                                   }
-                                                               })
+                                override fun onFailure(failure: Throwable) {
+                                    //revert the check box
+                                    switchPref.isChecked = !switchPref.isChecked
+                                    Toast.makeText(activity, R.string.unknown_error, Toast.LENGTH_SHORT).show()
+                                }
+                            })
                 }
 
     }

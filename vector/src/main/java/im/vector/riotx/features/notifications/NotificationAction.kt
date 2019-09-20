@@ -28,6 +28,7 @@ data class NotificationAction(
             var highlight = false
             var sound: String? = null
             ruleActions.forEach {
+                // TODO When
                 if (it.type == Action.Type.NOTIFY) shouldNotify = true
                 if (it.type == Action.Type.DONT_NOTIFY) shouldNotify = false
                 if (it.type == Action.Type.SET_TWEAK) {

@@ -15,6 +15,7 @@
  */
 package im.vector.matrix.android.internal.session.pushers
 
+import im.vector.matrix.android.api.pushrules.RuleKind
 import im.vector.matrix.android.api.pushrules.rest.GetPushRulesResponse
 import im.vector.matrix.android.api.pushrules.rest.PushRule
 import im.vector.matrix.android.internal.network.NetworkConstants
@@ -37,7 +38,7 @@ internal interface PushRulesApi {
      * @param enable the new enable status
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "pushrules/global/{kind}/{ruleId}/enabled")
-    fun updateEnableRuleStatus(@Path("kind") kind: String,
+    fun updateEnableRuleStatus(@Path("kind") kind: RuleKind,
                                @Path("ruleId") ruleId: String,
                                @Body enable: Boolean?)
             : Call<Unit>
@@ -51,7 +52,7 @@ internal interface PushRulesApi {
      * @param actions the actions
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "pushrules/global/{kind}/{ruleId}/actions")
-    fun updateRuleActions(@Path("kind") kind: String,
+    fun updateRuleActions(@Path("kind") kind: RuleKind,
                           @Path("ruleId") ruleId: String,
                           @Body actions: Any)
             : Call<Unit>
@@ -64,7 +65,7 @@ internal interface PushRulesApi {
      * @param ruleId the ruleId
      */
     @DELETE(NetworkConstants.URI_API_PREFIX_PATH_R0 + "pushrules/global/{kind}/{ruleId}")
-    fun deleteRule(@Path("kind") kind: String,
+    fun deleteRule(@Path("kind") kind: RuleKind,
                    @Path("ruleId") ruleId: String)
             : Call<Unit>
 
@@ -76,7 +77,7 @@ internal interface PushRulesApi {
      * @param rule   the rule to add.
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "pushrules/global/{kind}/{ruleId}")
-    fun addRule(@Path("kind") kind: String,
+    fun addRule(@Path("kind") kind: RuleKind,
                 @Path("ruleId") ruleId: String,
                 @Body rule: PushRule)
             : Call<Unit>

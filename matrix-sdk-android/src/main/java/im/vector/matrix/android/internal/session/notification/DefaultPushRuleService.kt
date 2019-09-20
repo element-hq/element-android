@@ -19,6 +19,8 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.pushrules.Action
 import im.vector.matrix.android.api.pushrules.PushRuleService
+import im.vector.matrix.android.api.pushrules.RuleKind
+import im.vector.matrix.android.api.pushrules.RuleSetKey
 import im.vector.matrix.android.api.pushrules.rest.PushRule
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.util.Cancelable
@@ -53,36 +55,46 @@ internal class DefaultPushRuleService @Inject constructor(
     }
 
     override fun getPushRules(scope: String): List<PushRule> {
-
         var contentRules: List<PushRule> = emptyList()
         var overrideRules: List<PushRule> = emptyList()
         var roomRules: List<PushRule> = emptyList()
         var senderRules: List<PushRule> = emptyList()
         var underrideRules: List<PushRule> = emptyList()
 
-        // TODO Create const for ruleSetKey
         monarchy.doWithRealm { realm ->
-            PushRulesEntity.where(realm, userId, scope, "content").findFirst()?.let { re ->
-                contentRules = re.pushRules.map { PushRulesMapper.mapContentRule(it) }
-            }
-            PushRulesEntity.where(realm, userId, scope, "override").findFirst()?.let { re ->
-                overrideRules = re.pushRules.map { PushRulesMapper.map(it) }
-            }
-            PushRulesEntity.where(realm, userId, scope, "room").findFirst()?.let { re ->
-                roomRules = re.pushRules.map { PushRulesMapper.mapRoomRule(it) }
-            }
-            PushRulesEntity.where(realm, userId, scope, "sender").findFirst()?.let { re ->
-                senderRules = re.pushRules.map { PushRulesMapper.mapSenderRule(it) }
-            }
-            PushRulesEntity.where(realm, userId, scope, "underride").findFirst()?.let { re ->
-                underrideRules = re.pushRules.map { PushRulesMapper.map(it) }
-            }
+            // FIXME PushRulesEntity are not always created here...
+            // FIWME Get the push rules from the sync
+            PushRulesEntity.where(realm, userId, scope, RuleSetKey.CONTENT)
+                    .findFirst()
+                    ?.let { pushRulesEntity ->
+                        contentRules = pushRulesEntity.pushRules.map { PushRulesMapper.mapContentRule(it) }
+                    }
+            PushRulesEntity.where(realm, userId, scope, RuleSetKey.OVERRIDE)
+                    .findFirst()
+                    ?.let { pushRulesEntity ->
+                        overrideRules = pushRulesEntity.pushRules.map { PushRulesMapper.map(it) }
+                    }
+            PushRulesEntity.where(realm, userId, scope, RuleSetKey.ROOM)
+                    .findFirst()
+                    ?.let { pushRulesEntity ->
+                        roomRules = pushRulesEntity.pushRules.map { PushRulesMapper.mapRoomRule(it) }
+                    }
+            PushRulesEntity.where(realm, userId, scope, RuleSetKey.SENDER)
+                    .findFirst()
+                    ?.let { pushRulesEntity ->
+                        senderRules = pushRulesEntity.pushRules.map { PushRulesMapper.mapSenderRule(it) }
+                    }
+            PushRulesEntity.where(realm, userId, scope, RuleSetKey.UNDERRIDE)
+                    .findFirst()
+                    ?.let { pushRulesEntity ->
+                        underrideRules = pushRulesEntity.pushRules.map { PushRulesMapper.map(it) }
+                    }
         }
 
         return contentRules + overrideRules + roomRules + senderRules + underrideRules
     }
 
-    override fun updatePushRuleEnableStatus(kind: String, pushRule: PushRule, enabled: Boolean, callback: MatrixCallback<Unit>): Cancelable {
+    override fun updatePushRuleEnableStatus(kind: RuleKind, pushRule: PushRule, enabled: Boolean, callback: MatrixCallback<Unit>): Cancelable {
         return updatePushRuleEnableStatusTask
                 .configureWith(UpdatePushRuleEnableStatusTask.Params(kind, pushRule, enabled)) {
                     this.callback = callback

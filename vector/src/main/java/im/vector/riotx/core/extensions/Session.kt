@@ -32,6 +32,9 @@ fun Session.configureAndStart(pushRuleTriggerListener: PushRuleTriggerListener) 
     startSync(isAtLeastStarted)
     refreshPushers()
     pushRuleTriggerListener.startWithSession(this)
+
+    // TODO After a clear cache, this is not done.
+    // TODO Push rule should be parsed from the sync
     fetchPushRules()
 
     // TODO P1 From HomeActivity

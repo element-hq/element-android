@@ -16,6 +16,7 @@
 package im.vector.matrix.android.internal.session.pushers
 
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.api.pushrules.RuleSetKey
 import im.vector.matrix.android.api.pushrules.rest.GetPushRulesResponse
 import im.vector.matrix.android.internal.database.mapper.PushRulesMapper
 import im.vector.matrix.android.internal.database.model.PushRulesEntity
@@ -28,11 +29,8 @@ import javax.inject.Inject
 
 
 internal interface GetPushRulesTask : Task<GetPushRulesTask.Params, Unit> {
-
     data class Params(val scope: String)
-
 }
-
 
 internal class DefaultGetPushRulesTask @Inject constructor(private val pushRulesApi: PushRulesApi,
                                                            private val monarchy: Monarchy,
@@ -49,17 +47,16 @@ internal class DefaultGetPushRulesTask @Inject constructor(private val pushRules
             //TODO
             realm.where(PushRulesEntity::class.java)
                     .equalTo(PusherEntityFields.USER_ID, userId)
-                    .findAll().deleteAllFromRealm()
+                    .findAll()
+                    .deleteAllFromRealm()
 
-            val content = PushRulesEntity(userId, scope, "content")
+            val content = PushRulesEntity(userId, scope).apply { kind = RuleSetKey.CONTENT }
             response.global.content?.forEach { rule ->
-                PushRulesMapper.map(rule).also {
-                    content.pushRules.add(it)
-                }
+                content.pushRules.add(PushRulesMapper.map(rule))
             }
             realm.insertOrUpdate(content)
 
-            val override = PushRulesEntity(userId, scope, "override")
+            val override = PushRulesEntity(userId, scope).apply { kind = RuleSetKey.OVERRIDE }
             response.global.override?.forEach { rule ->
                 PushRulesMapper.map(rule).also {
                     override.pushRules.add(it)
@@ -67,27 +64,21 @@ internal class DefaultGetPushRulesTask @Inject constructor(private val pushRules
             }
             realm.insertOrUpdate(override)
 
-            val rooms = PushRulesEntity(userId, scope, "room")
+            val rooms = PushRulesEntity(userId, scope).apply { kind = RuleSetKey.ROOM }
             response.global.room?.forEach { rule ->
-                PushRulesMapper.map(rule).also {
-                    rooms.pushRules.add(it)
-                }
+                rooms.pushRules.add(PushRulesMapper.map(rule))
             }
             realm.insertOrUpdate(rooms)
 
-            val senders = PushRulesEntity(userId, scope, "sender")
+            val senders = PushRulesEntity(userId, scope).apply { kind = RuleSetKey.SENDER }
             response.global.sender?.forEach { rule ->
-                PushRulesMapper.map(rule).also {
-                    senders.pushRules.add(it)
-                }
+                senders.pushRules.add(PushRulesMapper.map(rule))
             }
             realm.insertOrUpdate(senders)
 
-            val underrides = PushRulesEntity(userId, scope, "underride")
+            val underrides = PushRulesEntity(userId, scope).apply { kind = RuleSetKey.UNDERRIDE }
             response.global.underride?.forEach { rule ->
-                PushRulesMapper.map(rule).also {
-                    underrides.pushRules.add(it)
-                }
+                underrides.pushRules.add(PushRulesMapper.map(rule))
             }
             realm.insertOrUpdate(underrides)
         }

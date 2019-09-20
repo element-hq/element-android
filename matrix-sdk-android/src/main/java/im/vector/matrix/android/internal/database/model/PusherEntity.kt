@@ -29,6 +29,7 @@ import io.realm.annotations.Index
 //        at im.vector.matrix.android.internal.session.pushers.AddHttpPusherWorker$doWork$$inlined$fold$lambda$2.execute(AddHttpPusherWorker.kt:70)
 //        at io.realm.Realm.executeTransaction(Realm.java:1493)
 internal open class PusherEntity(
+        // TODO Remove userId
         @Index var userId: String = "",
         var pushKey: String = "",
         var kind: String? = null,

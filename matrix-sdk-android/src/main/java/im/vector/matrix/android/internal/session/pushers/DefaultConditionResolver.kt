@@ -21,6 +21,7 @@ import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.internal.di.UserId
 import timber.log.Timber
 
+// TODO Inject constructor
 internal class DefaultConditionResolver(private val event: Event,
                                         private val roomService: RoomService,
                                         @UserId

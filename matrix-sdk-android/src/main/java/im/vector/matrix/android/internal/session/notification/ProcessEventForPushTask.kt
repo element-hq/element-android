@@ -102,6 +102,7 @@ internal class DefaultProcessEventForPushTask @Inject constructor(
     }
 
     private fun fulfilledBingRule(event: Event, rules: List<PushRule>): PushRule? {
+        // TODO This should be injected
         val conditionResolver = DefaultConditionResolver(event, roomService, userId)
         rules.filter { it.enabled }.forEach { rule ->
             val isFullfilled = rule.conditions?.map {

@@ -24,14 +24,13 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.toContent
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.RoomService
-import im.vector.matrix.android.api.session.room.model.EventAnnotationsSummary
-import im.vector.matrix.android.api.session.room.model.Membership
-import im.vector.matrix.android.api.session.room.model.RoomMember
-import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.matrix.android.api.session.room.model.*
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
+import im.vector.matrix.android.api.session.room.send.UserDraft
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.matrix.android.api.session.room.timeline.TimelineSettings
 import im.vector.matrix.android.api.util.Cancelable
 import org.junit.Assert
 import org.junit.Test
@@ -164,10 +163,29 @@ class PushrulesConditionTest {
     }
 
 
+    @Test
+    fun test_notice_condition() {
+        val conditionEqual = EventMatchCondition("content.msgtype", "m.notice")
+
+        Event(
+                type = "m.room.message",
+                eventId = "mx0",
+                content = MessageTextContent("m.notice", "A").toContent(),
+                originServerTs = 0,
+                roomId = "2joined").also {
+            Assert.assertTrue("Notice", conditionEqual.isSatisfied(it))
+        }
+    }
+
+
     class MockRoomService() : RoomService {
 
-        override fun createRoom(createRoomParams: CreateRoomParams, callback: MatrixCallback<String>) {
+        override fun createRoom(createRoomParams: CreateRoomParams, callback: MatrixCallback<String>): Cancelable {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
 
+        override fun joinRoom(roomId: String, viaServers: List<String>, callback: MatrixCallback<Unit>): Cancelable {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
         override fun getRoom(roomId: String): Room? {
@@ -184,6 +202,53 @@ class PushrulesConditionTest {
     }
 
     class MockRoom(override val roomId: String, val _numberOfJoinedMembers: Int) : Room {
+        override fun resendTextMessage(localEcho: TimelineEvent): Cancelable? {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun resendMediaMessage(localEcho: TimelineEvent): Cancelable? {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun deleteFailedEcho(localEcho: TimelineEvent) {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun clearSendingQueue() {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun resendAllFailedMessages() {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun saveDraft(draft: UserDraft) {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun deleteDraft() {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun getDraftsLive(): LiveData<List<UserDraft>> {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun getEventReadReceiptsLive(eventId: String): LiveData<List<ReadReceipt>> {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun getStateEvent(eventType: String): Event? {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun editReply(replyToEdit: TimelineEvent, originalTimelineEvent: TimelineEvent, newBodyText: String, compatibilityBodyText: String): Cancelable {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun fetchEditHistory(eventId: String, callback: MatrixCallback<List<Event>>) {
+        }
+
         override fun liveTimeLineEvent(eventId: String): LiveData<TimelineEvent> {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
@@ -201,7 +266,7 @@ class PushrulesConditionTest {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
-        override fun createTimeline(eventId: String?, allowedTypes: List<String>?): Timeline {
+        override fun createTimeline(eventId: String?, settings: TimelineSettings): Timeline {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
@@ -245,7 +310,7 @@ class PushrulesConditionTest {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
-        override fun loadRoomMembersIfNeeded(): Cancelable {
+        override fun loadRoomMembersIfNeeded(matrixCallback: MatrixCallback<Unit>): Cancelable {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
@@ -257,15 +322,15 @@ class PushrulesConditionTest {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
-        override fun invite(userId: String, callback: MatrixCallback<Unit>) {
+        override fun invite(userId: String, callback: MatrixCallback<Unit>): Cancelable {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
-        override fun join(callback: MatrixCallback<Unit>) {
+        override fun join(viaServers: List<String>, callback: MatrixCallback<Unit>): Cancelable {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
-        override fun leave(callback: MatrixCallback<Unit>) {
+        override fun leave(callback: MatrixCallback<Unit>): Cancelable {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 

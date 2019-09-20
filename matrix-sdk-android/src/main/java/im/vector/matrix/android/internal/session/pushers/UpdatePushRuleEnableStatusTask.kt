@@ -15,6 +15,7 @@
  */
 package im.vector.matrix.android.internal.session.pushers
 
+import im.vector.matrix.android.api.pushrules.RuleKind
 import im.vector.matrix.android.api.pushrules.rest.PushRule
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
@@ -22,7 +23,7 @@ import javax.inject.Inject
 
 
 internal interface UpdatePushRuleEnableStatusTask : Task<UpdatePushRuleEnableStatusTask.Params, Unit> {
-    data class Params(val kind: String,
+    data class Params(val kind: RuleKind,
                       val pushRule: PushRule,
                       val enabled: Boolean)
 }
