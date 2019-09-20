@@ -64,12 +64,13 @@ internal class GroupSyncHandler @Inject constructor(private val monarchy: Monarc
                 }
 
         }
+
+        /** Note: [im.vector.matrix.android.internal.session.group.GroupSummaryUpdater] is observing changes */
         realm.insertOrUpdate(groups)
     }
 
     private fun handleJoinedGroup(realm: Realm,
                                   groupId: String): GroupEntity {
-
         val groupEntity = GroupEntity.where(realm, groupId).findFirst() ?: GroupEntity(groupId)
         groupEntity.membership = Membership.JOIN
         return groupEntity
@@ -77,21 +78,16 @@ internal class GroupSyncHandler @Inject constructor(private val monarchy: Monarc
 
     private fun handleInvitedGroup(realm: Realm,
                                    groupId: String): GroupEntity {
-
         val groupEntity = GroupEntity.where(realm, groupId).findFirst() ?: GroupEntity(groupId)
         groupEntity.membership = Membership.INVITE
         return groupEntity
 
     }
 
-    // TODO : handle it
     private fun handleLeftGroup(realm: Realm,
                                 groupId: String): GroupEntity {
-
         val groupEntity = GroupEntity.where(realm, groupId).findFirst() ?: GroupEntity(groupId)
         groupEntity.membership = Membership.LEAVE
         return groupEntity
     }
-
-
 }

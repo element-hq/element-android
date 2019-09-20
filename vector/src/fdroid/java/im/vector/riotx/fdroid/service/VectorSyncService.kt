@@ -21,10 +21,18 @@ import android.content.Intent
 import android.os.Build
 import im.vector.matrix.android.internal.session.sync.job.SyncService
 import im.vector.riotx.R
+import im.vector.riotx.core.extensions.vectorComponent
 import im.vector.riotx.features.notifications.NotificationUtils
 import timber.log.Timber
 
 class VectorSyncService : SyncService() {
+
+    private lateinit var notificationUtils: NotificationUtils
+
+    override fun onCreate() {
+        super.onCreate()
+        notificationUtils = vectorComponent().notificationUtils()
+    }
 
     override fun onDestroy() {
         removeForegroundNotif()
@@ -43,7 +51,7 @@ class VectorSyncService : SyncService() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Timber.v("VectorSyncService - onStartCommand ")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val notification = NotificationUtils.buildForegroundServiceNotification(applicationContext, R.string.notification_listening_for_events, false)
+            val notification = notificationUtils.buildForegroundServiceNotification(R.string.notification_listening_for_events, false)
             startForeground(NotificationUtils.NOTIFICATION_ID_FOREGROUND_SERVICE, notification)
         }
         return super.onStartCommand(intent, flags, startId)

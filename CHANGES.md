@@ -15,6 +15,7 @@ Other changes:
 Bugfix:
  - Fix characters erased from the Search field when the result are coming (#545)
  - "No connection" banner was displayed by mistake
+ - Leaving community (from another client) has no effect on RiotX (#497)
 
 Translations:
  -
