@@ -25,6 +25,7 @@ import im.vector.riotx.core.epoxy.VectorEpoxyModel
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.utils.DebouncedClickListener
+import im.vector.riotx.core.utils.DimensionUtils
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageTextItem_
@@ -36,7 +37,8 @@ import javax.inject.Inject
 class EncryptedItemFactory @Inject constructor(private val messageInformationDataFactory: MessageInformationDataFactory,
                                                private val colorProvider: ColorProvider,
                                                private val stringProvider: StringProvider,
-                                               private val avatarRenderer: AvatarRenderer) {
+                                               private val avatarRenderer: AvatarRenderer,
+                                               private val dimensionUtils: DimensionUtils) {
 
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
@@ -69,6 +71,7 @@ class EncryptedItemFactory @Inject constructor(private val messageInformationDat
                         .message(spannableStr)
                         .avatarRenderer(avatarRenderer)
                         .colorProvider(colorProvider)
+                        .dimensionUtils(dimensionUtils)
                         .informationData(informationData)
                         .highlighted(highlight)
                         .avatarCallback(callback)

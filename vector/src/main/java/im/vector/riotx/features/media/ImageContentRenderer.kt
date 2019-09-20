@@ -32,13 +32,14 @@ import im.vector.matrix.android.internal.crypto.attachments.ElementToDecrypt
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.glide.GlideApp
 import im.vector.riotx.core.glide.GlideRequest
-import im.vector.riotx.core.utils.DimensionUtils.dpToPx
+import im.vector.riotx.core.utils.DimensionUtils
 import kotlinx.android.parcel.Parcelize
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 
-class ImageContentRenderer @Inject constructor(private val activeSessionHolder: ActiveSessionHolder) {
+class ImageContentRenderer @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
+                                               private val dimensionUtils: DimensionUtils) {
 
     @Parcelize
     data class Data(
@@ -70,7 +71,7 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
 
         createGlideRequest(data, mode, imageView, width, height)
                 .dontAnimate()
-                .transform(RoundedCorners(dpToPx(8, imageView.context)))
+                .transform(RoundedCorners(dimensionUtils.dpToPx(8)))
                 .thumbnail(0.3f)
                 .into(imageView)
 

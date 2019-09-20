@@ -27,6 +27,7 @@ import im.vector.riotx.EmojiCompatFontProvider
 import im.vector.riotx.EmojiCompatWrapper
 import im.vector.riotx.VectorApplication
 import im.vector.riotx.core.pushers.PushersManager
+import im.vector.riotx.core.utils.DimensionUtils
 import im.vector.riotx.features.configuration.VectorConfiguration
 import im.vector.riotx.features.crypto.keysrequest.KeyRequestHandler
 import im.vector.riotx.features.crypto.verification.IncomingVerificationRequestHandler
@@ -62,6 +63,8 @@ interface VectorComponent {
     fun appContext(): Context
 
     fun resources(): Resources
+
+    fun dimensionUtils(): DimensionUtils
 
     fun vectorConfiguration(): VectorConfiguration
 

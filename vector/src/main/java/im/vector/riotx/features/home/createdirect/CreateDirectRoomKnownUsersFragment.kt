@@ -51,6 +51,7 @@ class CreateDirectRoomKnownUsersFragment : VectorBaseFragment(), KnownUsersContr
 
     @Inject lateinit var directRoomController: KnownUsersController
     @Inject lateinit var avatarRenderer: AvatarRenderer
+    @Inject lateinit var dimensionUtils: DimensionUtils
     private lateinit var navigationViewModel: CreateDirectRoomNavigationViewModel
 
     override fun injectWith(injector: ScreenComponent) {
@@ -156,7 +157,7 @@ class CreateDirectRoomKnownUsersFragment : VectorBaseFragment(), KnownUsersContr
     private fun addChipToGroup(user: User, chipGroup: ChipGroup) {
         val chip = Chip(requireContext())
         chip.setChipBackgroundColorResource(android.R.color.transparent)
-        chip.chipStrokeWidth = DimensionUtils.dpToPx(1, requireContext()).toFloat()
+        chip.chipStrokeWidth = dimensionUtils.dpToPx(1).toFloat()
         chip.text = if (user.displayName.isNullOrBlank()) user.userId else user.displayName
         chip.isClickable = true
         chip.isCheckable = false

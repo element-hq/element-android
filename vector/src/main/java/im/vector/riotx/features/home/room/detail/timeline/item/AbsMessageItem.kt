@@ -33,7 +33,6 @@ import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.riotx.R
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.utils.DebouncedClickListener
-import im.vector.riotx.core.utils.DimensionUtils.dpToPx
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.reactions.widget.ReactionButton
@@ -100,7 +99,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
         super.bind(holder)
         if (informationData.showInformation) {
             holder.avatarImageView.layoutParams = holder.avatarImageView.layoutParams?.apply {
-                val size = dpToPx(avatarStyle.avatarSizeDP, holder.view.context)
+                val size = dimensionUtils.dpToPx(avatarStyle.avatarSizeDP)
                 height = size
                 width = size
             }

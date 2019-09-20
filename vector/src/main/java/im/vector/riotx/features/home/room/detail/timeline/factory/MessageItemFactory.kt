@@ -19,9 +19,9 @@ package im.vector.riotx.features.home.room.detail.timeline.factory
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.TextPaint
+import android.text.style.AbsoluteSizeSpan
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
-import android.text.style.RelativeSizeSpan
 import android.view.View
 import dagger.Lazy
 import im.vector.matrix.android.api.permalinks.MatrixLinkify
@@ -40,6 +40,8 @@ import im.vector.riotx.core.linkify.VectorLinkify
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.utils.DebouncedClickListener
+import im.vector.riotx.core.utils.DimensionUtils
+import im.vector.riotx.core.utils.containsOnlyEmojis
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
@@ -62,7 +64,8 @@ class MessageItemFactory @Inject constructor(
         private val imageContentRenderer: ImageContentRenderer,
         private val messageInformationDataFactory: MessageInformationDataFactory,
         private val contentUploadStateTrackerBinder: ContentUploadStateTrackerBinder,
-        private val noticeItemFactory: NoticeItemFactory) {
+        private val noticeItemFactory: NoticeItemFactory,
+        private val dimensionUtils: DimensionUtils) {
 
 
     fun create(event: TimelineEvent,
@@ -113,6 +116,7 @@ class MessageItemFactory @Inject constructor(
         return MessageFileItem_()
                 .avatarRenderer(avatarRenderer)
                 .colorProvider(colorProvider)
+                .dimensionUtils(dimensionUtils)
                 .informationData(informationData)
                 .highlighted(highlight)
                 .avatarCallback(callback)
@@ -142,6 +146,7 @@ class MessageItemFactory @Inject constructor(
         return MessageFileItem_()
                 .avatarRenderer(avatarRenderer)
                 .colorProvider(colorProvider)
+                .dimensionUtils(dimensionUtils)
                 .informationData(informationData)
                 .highlighted(highlight)
                 .avatarCallback(callback)
@@ -171,6 +176,7 @@ class MessageItemFactory @Inject constructor(
         return DefaultItem_()
                 .text(text)
                 .avatarRenderer(avatarRenderer)
+                .dimensionUtils(dimensionUtils)
                 .highlighted(highlight)
                 .informationData(informationData)
                 .baseCallback(callback)
@@ -197,6 +203,7 @@ class MessageItemFactory @Inject constructor(
         return MessageImageVideoItem_()
                 .avatarRenderer(avatarRenderer)
                 .colorProvider(colorProvider)
+                .dimensionUtils(dimensionUtils)
                 .imageContentRenderer(imageContentRenderer)
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
                 .playable(messageContent.info?.mimeType == "image/gif")
@@ -251,6 +258,7 @@ class MessageItemFactory @Inject constructor(
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
                 .avatarRenderer(avatarRenderer)
                 .colorProvider(colorProvider)
+                .dimensionUtils(dimensionUtils)
                 .playable(true)
                 .informationData(informationData)
                 .highlighted(highlight)
@@ -290,9 +298,11 @@ class MessageItemFactory @Inject constructor(
                         message(linkifiedBody)
                     }
                 }
+                .useBigFont(linkifiedBody.length <= MAX_NUMBER_OF_EMOJI_FOR_BIG_FONT * 2 && containsOnlyEmojis(linkifiedBody.toString()))
                 .avatarRenderer(avatarRenderer)
                 .informationData(informationData)
                 .colorProvider(colorProvider)
+                .dimensionUtils(dimensionUtils)
                 .highlighted(highlight)
                 .avatarCallback(callback)
                 .urlClickCallback(callback)
@@ -326,7 +336,8 @@ class MessageItemFactory @Inject constructor(
                 editEnd,
                 Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
 
-        spannable.setSpan(RelativeSizeSpan(.9f), editStart, editEnd, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+        // Note: text size is set to 14sp
+        spannable.setSpan(AbsoluteSizeSpan(dimensionUtils.spToPx(13)), editStart, editEnd, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
         spannable.setSpan(object : ClickableSpan() {
             override fun onClick(widget: View?) {
                 callback?.onEditedDecorationClicked(informationData)
@@ -359,6 +370,7 @@ class MessageItemFactory @Inject constructor(
                 .avatarRenderer(avatarRenderer)
                 .message(message)
                 .colorProvider(colorProvider)
+                .dimensionUtils(dimensionUtils)
                 .informationData(informationData)
                 .highlighted(highlight)
                 .avatarCallback(callback)
@@ -400,6 +412,7 @@ class MessageItemFactory @Inject constructor(
                 }
                 .avatarRenderer(avatarRenderer)
                 .colorProvider(colorProvider)
+                .dimensionUtils(dimensionUtils)
                 .informationData(informationData)
                 .highlighted(highlight)
                 .avatarCallback(callback)
@@ -423,6 +436,7 @@ class MessageItemFactory @Inject constructor(
         return RedactedMessageItem_()
                 .avatarRenderer(avatarRenderer)
                 .colorProvider(colorProvider)
+                .dimensionUtils(dimensionUtils)
                 .informationData(informationData)
                 .highlighted(highlight)
                 .avatarCallback(callback)
@@ -446,5 +460,9 @@ class MessageItemFactory @Inject constructor(
         })
         VectorLinkify.addLinks(spannable, true)
         return spannable
+    }
+
+    companion object {
+        private const val MAX_NUMBER_OF_EMOJI_FOR_BIG_FONT = 5
     }
 }
