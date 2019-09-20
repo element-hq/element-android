@@ -37,8 +37,7 @@ internal class DefaultSavePushRulesTask @Inject constructor(private val monarchy
 
     override suspend fun execute(params: SavePushRulesTask.Params) {
         monarchy.awaitTransaction { realm ->
-            //clear existings?
-            //TODO
+            // clear current push rules
             realm.where(PushRulesEntity::class.java)
                     .findAll()
                     .deleteAllFromRealm()

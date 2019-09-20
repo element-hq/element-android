@@ -58,8 +58,6 @@ internal class DefaultPushRuleService @Inject constructor(private val getPushRul
         var underrideRules: List<PushRule> = emptyList()
 
         monarchy.doWithRealm { realm ->
-            // FIXME PushRulesEntity are not always created here...
-            // FIWME Get the push rules from the sync
             PushRulesEntity.where(realm, scope, RuleSetKey.CONTENT)
                     .findFirst()
                     ?.let { pushRulesEntity ->
