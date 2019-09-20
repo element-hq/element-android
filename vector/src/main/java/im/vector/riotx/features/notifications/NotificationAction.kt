@@ -19,24 +19,21 @@ import im.vector.matrix.android.api.pushrules.Action
 
 data class NotificationAction(
         val shouldNotify: Boolean,
-        val highlight: Boolean = false,
-        val soundName: String? = null
-) {
-    companion object {
-        fun extractFrom(ruleActions: List<Action>): NotificationAction {
-            var shouldNotify = false
-            var highlight = false
-            var sound: String? = null
-            ruleActions.forEach {
-                // TODO When
-                if (it.type == Action.Type.NOTIFY) shouldNotify = true
-                if (it.type == Action.Type.DONT_NOTIFY) shouldNotify = false
-                if (it.type == Action.Type.SET_TWEAK) {
-                    if (it.tweak_action == "highlight") highlight = it.boolValue ?: false
-                    if (it.tweak_action == "sound") sound = it.stringValue
-                }
-            }
-            return NotificationAction(shouldNotify, highlight, sound)
+        val highlight: Boolean,
+        val soundName: String?
+)
+
+fun List<Action>.toNotificationAction(): NotificationAction {
+    var shouldNotify = false
+    var highlight = false
+    var sound: String? = null
+    forEach { action ->
+        when (action) {
+            is Action.Notify      -> shouldNotify = true
+            is Action.DoNotNotify -> shouldNotify = false
+            is Action.Highlight   -> highlight = action.highlight
+            is Action.Sound       -> sound = action.sound
         }
     }
+    return NotificationAction(shouldNotify, highlight, sound)
 }

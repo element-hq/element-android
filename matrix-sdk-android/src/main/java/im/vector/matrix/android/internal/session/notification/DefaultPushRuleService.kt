@@ -17,10 +17,10 @@ package im.vector.matrix.android.internal.session.notification
 
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.pushrules.Action
 import im.vector.matrix.android.api.pushrules.PushRuleService
 import im.vector.matrix.android.api.pushrules.RuleKind
 import im.vector.matrix.android.api.pushrules.RuleSetKey
+import im.vector.matrix.android.api.pushrules.getActions
 import im.vector.matrix.android.api.pushrules.rest.PushRule
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.util.Cancelable
@@ -123,8 +123,9 @@ internal class DefaultPushRuleService @Inject constructor(private val getPushRul
 
     fun dispatchBing(event: Event, rule: PushRule) {
         try {
+            val actionsList = rule.getActions()
             listeners.forEach {
-                it.onMatchRule(event, Action.mapFrom(rule) ?: emptyList())
+                it.onMatchRule(event, actionsList)
             }
         } catch (e: Throwable) {
             Timber.e(e, "Error while dispatching bing")
