@@ -17,13 +17,13 @@
 package im.vector.matrix.android.internal.session.sync
 
 import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.query.getDirectRooms
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.room.membership.RoomMembers
 import im.vector.matrix.android.internal.session.sync.model.InvitedRoomSync
 import im.vector.matrix.android.internal.session.sync.model.UserAccountDataDirectMessages
@@ -37,7 +37,8 @@ import timber.log.Timber
 import javax.inject.Inject
 
 internal class UserAccountDataSyncHandler @Inject constructor(private val monarchy: Monarchy,
-                                                              private val credentials: Credentials,
+                                                              @UserId
+                                                              private val userId: String,
                                                               private val directChatsHelper: DirectChatsHelper,
                                                               private val updateUserAccountDataTask: UpdateUserAccountDataTask,
                                                               private val taskExecutor: TaskExecutor) {
@@ -81,11 +82,11 @@ internal class UserAccountDataSyncHandler @Inject constructor(private val monarc
         val directChats = directChatsHelper.getLocalUserAccount()
         var hasUpdate = false
         invites.forEach { (roomId, _) ->
-            val myUserStateEvent = RoomMembers(realm, roomId).getStateEvent(credentials.userId)
+            val myUserStateEvent = RoomMembers(realm, roomId).getStateEvent(userId)
             val inviterId = myUserStateEvent?.sender
             val myUserRoomMember: RoomMember? = myUserStateEvent?.let { it.asDomain().content?.toModel() }
             val isDirect = myUserRoomMember?.isDirect
-            if (inviterId != null && inviterId != credentials.userId && isDirect == true) {
+            if (inviterId != null && inviterId != userId && isDirect == true) {
                 directChats
                         .getOrPut(inviterId, { arrayListOf() })
                         .apply {

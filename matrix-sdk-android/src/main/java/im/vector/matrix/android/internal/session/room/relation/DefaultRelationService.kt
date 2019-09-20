@@ -23,7 +23,6 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.model.EventAnnotationsSummary
@@ -37,6 +36,7 @@ import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.room.send.EncryptEventWorker
 import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
 import im.vector.matrix.android.internal.session.room.send.RedactEventWorker
@@ -50,7 +50,8 @@ import timber.log.Timber
 
 internal class DefaultRelationService @AssistedInject constructor(@Assisted private val roomId: String,
                                                                   private val context: Context,
-                                                                  private val credentials: Credentials,
+                                                                  @UserId
+                                                                  private val userId: String,
                                                                   private val eventFactory: LocalEchoEventFactory,
                                                                   private val cryptoService: CryptoService,
                                                                   private val findReactionEventForUndoTask: FindReactionEventForUndoTask,
@@ -111,7 +112,7 @@ internal class DefaultRelationService @AssistedInject constructor(@Assisted priv
     //TODO duplicate with send service?
     private fun createRedactEventWork(localEvent: Event, eventId: String, reason: String?): OneTimeWorkRequest {
         val sendContentWorkerParams = RedactEventWorker.Params(
-                credentials.userId,
+                userId,
                 localEvent.eventId!!,
                 roomId,
                 eventId,
@@ -199,13 +200,13 @@ internal class DefaultRelationService @AssistedInject constructor(@Assisted priv
 
     private fun createEncryptEventWork(event: Event, keepKeys: List<String>?): OneTimeWorkRequest {
         // Same parameter
-        val params = EncryptEventWorker.Params(credentials.userId, roomId, event, keepKeys)
+        val params = EncryptEventWorker.Params(userId, roomId, event, keepKeys)
         val sendWorkData = WorkerParamsFactory.toData(params)
         return TimelineSendEventWorkCommon.createWork<EncryptEventWorker>(sendWorkData, true)
     }
 
     private fun createSendEventWork(event: Event, startChain: Boolean): OneTimeWorkRequest {
-        val sendContentWorkerParams = SendEventWorker.Params(credentials.userId, roomId, event)
+        val sendContentWorkerParams = SendEventWorker.Params(userId, roomId, event)
         val sendWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
         return TimelineSendEventWorkCommon.createWork<SendEventWorker>(sendWorkData, startChain)
     }

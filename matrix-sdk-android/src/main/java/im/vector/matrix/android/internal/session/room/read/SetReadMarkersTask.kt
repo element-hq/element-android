@@ -17,7 +17,6 @@
 package im.vector.matrix.android.internal.session.room.read
 
 import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.ReadReceiptEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
@@ -26,6 +25,7 @@ import im.vector.matrix.android.internal.database.query.find
 import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
 import im.vector.matrix.android.internal.database.query.latestEvent
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
@@ -48,7 +48,8 @@ private const val READ_MARKER = "m.fully_read"
 private const val READ_RECEIPT = "m.read"
 
 internal class DefaultSetReadMarkersTask @Inject constructor(private val roomAPI: RoomAPI,
-                                                             private val credentials: Credentials,
+                                                             @UserId
+                                                             private val userId: String,
                                                              private val monarchy: Monarchy
 ) : SetReadMarkersTask {
 
@@ -109,7 +110,7 @@ internal class DefaultSetReadMarkersTask @Inject constructor(private val roomAPI
     private fun isEventRead(roomId: String, eventId: String): Boolean {
         var isEventRead = false
         monarchy.doWithRealm {
-            val readReceipt = ReadReceiptEntity.where(it, roomId, credentials.userId).findFirst()
+            val readReceipt = ReadReceiptEntity.where(it, roomId, userId).findFirst()
                     ?: return@doWithRealm
             val liveChunk = ChunkEntity.findLastLiveChunkFromRoom(it, roomId)
                     ?: return@doWithRealm

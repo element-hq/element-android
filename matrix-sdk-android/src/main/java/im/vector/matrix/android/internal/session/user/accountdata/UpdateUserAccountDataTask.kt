@@ -16,7 +16,7 @@
 
 package im.vector.matrix.android.internal.session.user.accountdata
 
-import im.vector.matrix.android.api.auth.data.Credentials
+import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.sync.model.UserAccountData
 import im.vector.matrix.android.internal.task.Task
@@ -42,11 +42,12 @@ internal interface UpdateUserAccountDataTask : Task<UpdateUserAccountDataTask.Pa
 }
 
 internal class DefaultUpdateUserAccountDataTask @Inject constructor(private val accountDataApi: AccountDataAPI,
-                                                                    private val credentials: Credentials) : UpdateUserAccountDataTask {
+                                                                    @UserId
+                                                                    private val userId: String) : UpdateUserAccountDataTask {
 
     override suspend fun execute(params: UpdateUserAccountDataTask.Params) {
         return executeRequest {
-            apiCall = accountDataApi.setAccountData(credentials.userId, params.type, params.getData())
+            apiCall = accountDataApi.setAccountData(userId, params.type, params.getData())
         }
     }
 

@@ -19,7 +19,6 @@ package im.vector.matrix.android.internal.session.room.send
 import android.media.MediaMetadataRetriever
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.R
-import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.permalinks.PermalinkFactory
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.events.model.*
@@ -33,12 +32,13 @@ import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.matrix.android.internal.database.helper.addSendingEvent
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.content.ThumbnailExtractor
 import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
 import im.vector.matrix.android.internal.util.StringProvider
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
-import java.util.UUID
+import java.util.*
 import javax.inject.Inject
 
 /**
@@ -50,7 +50,8 @@ import javax.inject.Inject
  *
  * The transactionID is used as loc
  */
-internal class LocalEchoEventFactory @Inject constructor(private val credentials: Credentials,
+internal class LocalEchoEventFactory @Inject constructor(@UserId
+                                                         private val userId: String,
                                                          private val stringProvider: StringProvider,
                                                          private val roomSummaryUpdater: RoomSummaryUpdater) {
     // TODO Inject
@@ -163,7 +164,7 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
         return Event(
                 roomId = roomId,
                 originServerTs = dummyOriginServerTs(),
-                senderId = credentials.userId,
+                senderId = userId,
                 eventId = localId,
                 type = EventType.REACTION,
                 content = content.toContent(),
@@ -255,7 +256,7 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
         return Event(
                 roomId = roomId,
                 originServerTs = dummyOriginServerTs(),
-                senderId = credentials.userId,
+                senderId = userId,
                 eventId = localID,
                 type = EventType.MESSAGE,
                 content = content.toContent(),
@@ -373,7 +374,7 @@ internal class LocalEchoEventFactory @Inject constructor(private val credentials
         return Event(
                 roomId = roomId,
                 originServerTs = dummyOriginServerTs(),
-                senderId = credentials.userId,
+                senderId = userId,
                 eventId = localID,
                 type = EventType.REDACTION,
                 redacts = eventId,

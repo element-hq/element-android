@@ -16,11 +16,11 @@
 
 package im.vector.matrix.android.internal.session.notification
 
-import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.pushrules.rest.PushRule
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.RoomService
+import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.pushers.DefaultConditionResolver
 import im.vector.matrix.android.internal.session.sync.model.RoomsSyncResponse
 import im.vector.matrix.android.internal.task.Task
@@ -37,7 +37,8 @@ internal interface ProcessEventForPushTask : Task<ProcessEventForPushTask.Params
 internal class DefaultProcessEventForPushTask @Inject constructor(
         private val defaultPushRuleService: DefaultPushRuleService,
         private val roomService: RoomService,
-        private val sessionParams: SessionParams
+        @UserId
+        private val userId: String
 ) : ProcessEventForPushTask {
 
     override suspend fun execute(params: ProcessEventForPushTask.Params) {
@@ -68,7 +69,7 @@ internal class DefaultProcessEventForPushTask @Inject constructor(
                 else                        -> false
             }
         }.filter {
-            it.senderId != sessionParams.credentials.userId
+            it.senderId != userId
         }
         Timber.v("[PushRules] Found ${allEvents.size} out of ${(newJoinEvents + inviteEvents).size}" +
                 " to check for push rules with ${params.rules.size} rules")
@@ -101,7 +102,7 @@ internal class DefaultProcessEventForPushTask @Inject constructor(
     }
 
     private fun fulfilledBingRule(event: Event, rules: List<PushRule>): PushRule? {
-        val conditionResolver = DefaultConditionResolver(event, roomService, sessionParams)
+        val conditionResolver = DefaultConditionResolver(event, roomService, userId)
         rules.filter { it.enabled }.forEach { rule ->
             val isFullfilled = rule.conditions?.map {
                 it.asExecutableCondition()?.isSatisfied(conditionResolver) ?: false

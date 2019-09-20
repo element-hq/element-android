@@ -17,7 +17,6 @@ package im.vector.matrix.android.internal.session.notification
 
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.pushrules.Action
 import im.vector.matrix.android.api.pushrules.PushRuleService
 import im.vector.matrix.android.api.pushrules.rest.PushRule
@@ -26,6 +25,7 @@ import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.database.mapper.PushRulesMapper
 import im.vector.matrix.android.internal.database.model.PushRulesEntity
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.pushers.GetPushRulesTask
 import im.vector.matrix.android.internal.session.pushers.UpdatePushRuleEnableStatusTask
@@ -36,8 +36,9 @@ import javax.inject.Inject
 
 @SessionScope
 internal class DefaultPushRuleService @Inject constructor(
-        private val sessionParams: SessionParams,
-        private val pushRulesTask: GetPushRulesTask,
+        @UserId
+        private val userId: String,
+        private val getPushRulesTask: GetPushRulesTask,
         private val updatePushRuleEnableStatusTask: UpdatePushRuleEnableStatusTask,
         private val taskExecutor: TaskExecutor,
         private val monarchy: Monarchy
@@ -46,7 +47,7 @@ internal class DefaultPushRuleService @Inject constructor(
     private var listeners = ArrayList<PushRuleService.PushRuleListener>()
 
     override fun fetchPushRules(scope: String) {
-        pushRulesTask
+        getPushRulesTask
                 .configureWith(GetPushRulesTask.Params(scope))
                 .executeBy(taskExecutor)
     }
@@ -61,19 +62,19 @@ internal class DefaultPushRuleService @Inject constructor(
 
         // TODO Create const for ruleSetKey
         monarchy.doWithRealm { realm ->
-            PushRulesEntity.where(realm, sessionParams.credentials.userId, scope, "content").findFirst()?.let { re ->
+            PushRulesEntity.where(realm, userId, scope, "content").findFirst()?.let { re ->
                 contentRules = re.pushRules.map { PushRulesMapper.mapContentRule(it) }
             }
-            PushRulesEntity.where(realm, sessionParams.credentials.userId, scope, "override").findFirst()?.let { re ->
+            PushRulesEntity.where(realm, userId, scope, "override").findFirst()?.let { re ->
                 overrideRules = re.pushRules.map { PushRulesMapper.map(it) }
             }
-            PushRulesEntity.where(realm, sessionParams.credentials.userId, scope, "room").findFirst()?.let { re ->
+            PushRulesEntity.where(realm, userId, scope, "room").findFirst()?.let { re ->
                 roomRules = re.pushRules.map { PushRulesMapper.mapRoomRule(it) }
             }
-            PushRulesEntity.where(realm, sessionParams.credentials.userId, scope, "sender").findFirst()?.let { re ->
+            PushRulesEntity.where(realm, userId, scope, "sender").findFirst()?.let { re ->
                 senderRules = re.pushRules.map { PushRulesMapper.mapSenderRule(it) }
             }
-            PushRulesEntity.where(realm, sessionParams.credentials.userId, scope, "underride").findFirst()?.let { re ->
+            PushRulesEntity.where(realm, userId, scope, "underride").findFirst()?.let { re ->
                 underrideRules = re.pushRules.map { PushRulesMapper.map(it) }
             }
         }

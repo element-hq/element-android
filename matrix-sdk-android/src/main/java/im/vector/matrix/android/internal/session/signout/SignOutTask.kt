@@ -17,15 +17,11 @@
 package im.vector.matrix.android.internal.session.signout
 
 import android.content.Context
-import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.internal.SessionManager
 import im.vector.matrix.android.internal.auth.SessionParamsStore
 import im.vector.matrix.android.internal.crypto.CryptoModule
 import im.vector.matrix.android.internal.database.RealmKeysUtils
-import im.vector.matrix.android.internal.di.CryptoDatabase
-import im.vector.matrix.android.internal.di.SessionDatabase
-import im.vector.matrix.android.internal.di.UserCacheDirectory
-import im.vector.matrix.android.internal.di.UserMd5
+import im.vector.matrix.android.internal.di.*
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.SessionModule
 import im.vector.matrix.android.internal.session.cache.ClearCacheTask
@@ -38,7 +34,8 @@ import javax.inject.Inject
 internal interface SignOutTask : Task<Unit, Unit>
 
 internal class DefaultSignOutTask @Inject constructor(private val context: Context,
-                                                      private val credentials: Credentials,
+                                                      @UserId
+                                                      private val userId: String,
                                                       private val signOutAPI: SignOutAPI,
                                                       private val sessionManager: SessionManager,
                                                       private val sessionParamsStore: SessionParamsStore,
@@ -55,13 +52,13 @@ internal class DefaultSignOutTask @Inject constructor(private val context: Conte
         }
 
         Timber.d("SignOut: release session...")
-        sessionManager.releaseSession(credentials.userId)
+        sessionManager.releaseSession(userId)
 
         Timber.d("SignOut: cancel pending works...")
         WorkManagerUtil.cancelAllWorks(context)
 
         Timber.d("SignOut: delete session params...")
-        sessionParamsStore.delete(credentials.userId)
+        sessionParamsStore.delete(userId)
 
         Timber.d("SignOut: clear session data...")
         clearSessionDataTask.execute(Unit)

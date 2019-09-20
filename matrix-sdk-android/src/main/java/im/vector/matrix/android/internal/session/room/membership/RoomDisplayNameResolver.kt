@@ -19,7 +19,6 @@ package im.vector.matrix.android.internal.session.room.membership
 import android.content.Context
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.R
-import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.*
@@ -30,6 +29,7 @@ import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.query.prev
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.UserId
 import javax.inject.Inject
 
 /**
@@ -37,7 +37,8 @@ import javax.inject.Inject
  */
 internal class RoomDisplayNameResolver @Inject constructor(private val context: Context,
                                                            private val monarchy: Monarchy,
-                                                           private val credentials: Credentials
+                                                           @UserId
+                                                           private val userId: String
 ) {
 
     /**
@@ -79,7 +80,7 @@ internal class RoomDisplayNameResolver @Inject constructor(private val context: 
 
 
             if (roomEntity?.membership == Membership.INVITE) {
-                val inviteMeEvent = roomMembers.queryRoomMemberEvent(credentials.userId).findFirst()
+                val inviteMeEvent = roomMembers.queryRoomMemberEvent(userId).findFirst()
                 val inviterId = inviteMeEvent?.sender
                 name = if (inviterId != null) {
                     val inviterMemberEvent = loadedMembers.where()
@@ -97,7 +98,7 @@ internal class RoomDisplayNameResolver @Inject constructor(private val context: 
                     }
                 } else {
                     loadedMembers.where()
-                            .notEqualTo(EventEntityFields.STATE_KEY, credentials.userId)
+                            .notEqualTo(EventEntityFields.STATE_KEY, userId)
                             .limit(3)
                             .findAll()
                 }

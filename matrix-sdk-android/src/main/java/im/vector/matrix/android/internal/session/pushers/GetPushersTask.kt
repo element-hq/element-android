@@ -16,11 +16,11 @@
 package im.vector.matrix.android.internal.session.pushers
 
 import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.session.pushers.PusherState
 import im.vector.matrix.android.internal.database.mapper.toEntity
 import im.vector.matrix.android.internal.database.model.PusherEntity
 import im.vector.matrix.android.internal.database.model.PusherEntityFields
+import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.awaitTransaction
@@ -30,7 +30,8 @@ internal interface GetPushersTask : Task<Unit, Unit>
 
 internal class DefaultGetPusherTask @Inject constructor(private val pushersAPI: PushersAPI,
                                                         private val monarchy: Monarchy,
-                                                        private val sessionParams: SessionParams) : GetPushersTask {
+                                                        @UserId
+                                                        private val userId: String) : GetPushersTask {
 
     override suspend fun execute(params: Unit) {
         val response = executeRequest<GetPushersResponse> {
@@ -39,10 +40,10 @@ internal class DefaultGetPusherTask @Inject constructor(private val pushersAPI: 
         monarchy.awaitTransaction { realm ->
             //clear existings?
             realm.where(PusherEntity::class.java)
-                    .equalTo(PusherEntityFields.USER_ID, sessionParams.credentials.userId)
+                    .equalTo(PusherEntityFields.USER_ID, userId)
                     .findAll().deleteAllFromRealm()
             response.pushers?.forEach { jsonPusher ->
-                jsonPusher.toEntity(sessionParams.credentials.userId).also {
+                jsonPusher.toEntity(userId).also {
                     it.state = PusherState.REGISTERED
                     realm.insertOrUpdate(it)
                 }

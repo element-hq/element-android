@@ -18,10 +18,10 @@ package im.vector.matrix.android.internal.session.sync
 
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.R
-import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.internal.auth.SessionParamsStore
+import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.DefaultInitialSyncProgressService
 import im.vector.matrix.android.internal.session.filter.FilterRepository
@@ -36,7 +36,8 @@ internal interface SyncTask : Task<SyncTask.Params, Unit> {
 }
 
 internal class DefaultSyncTask @Inject constructor(private val syncAPI: SyncAPI,
-                                                   private val credentials: Credentials,
+                                                   @UserId
+                                                   private val userId: String,
                                                    private val filterRepository: FilterRepository,
                                                    private val syncResponseHandler: SyncResponseHandler,
                                                    private val sessionParamsStore: SessionParamsStore,
@@ -70,7 +71,7 @@ internal class DefaultSyncTask @Inject constructor(private val syncAPI: SyncAPI,
             // Intercept 401
             if (throwable is Failure.ServerError
                     && throwable.error.code == MatrixError.UNKNOWN_TOKEN) {
-                sessionParamsStore.delete(credentials.userId)
+                sessionParamsStore.delete(userId)
             }
             throw throwable
         }

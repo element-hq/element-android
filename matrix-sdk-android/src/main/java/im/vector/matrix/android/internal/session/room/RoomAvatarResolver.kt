@@ -17,7 +17,6 @@
 package im.vector.matrix.android.internal.session.room
 
 import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.RoomAvatarContent
@@ -27,11 +26,13 @@ import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.EventEntityFields
 import im.vector.matrix.android.internal.database.query.prev
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.room.membership.RoomMembers
 import javax.inject.Inject
 
 internal class RoomAvatarResolver @Inject constructor(private val monarchy: Monarchy,
-                                                      private val credentials: Credentials) {
+                                                      @UserId
+                                                      private val userId: String) {
 
     /**
      * Compute the room avatar url
@@ -52,7 +53,7 @@ internal class RoomAvatarResolver @Inject constructor(private val monarchy: Mona
             if (members.size == 1) {
                 res = members.firstOrNull()?.toRoomMember()?.avatarUrl
             } else if (members.size == 2) {
-                val firstOtherMember = members.where().notEqualTo(EventEntityFields.STATE_KEY, credentials.userId).findFirst()
+                val firstOtherMember = members.where().notEqualTo(EventEntityFields.STATE_KEY, userId).findFirst()
                 res = firstOtherMember?.toRoomMember()?.avatarUrl
             }
         }
