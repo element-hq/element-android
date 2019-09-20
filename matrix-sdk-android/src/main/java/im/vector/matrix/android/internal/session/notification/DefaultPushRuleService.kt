@@ -87,7 +87,8 @@ internal class DefaultPushRuleService @Inject constructor(private val getPushRul
                     }
         }
 
-        return contentRules + overrideRules + roomRules + senderRules + underrideRules
+        // Ref. for the order: https://matrix.org/docs/spec/client_server/latest#push-rules
+        return overrideRules + contentRules + roomRules + senderRules + underrideRules
     }
 
     override fun updatePushRuleEnableStatus(kind: RuleKind, pushRule: PushRule, enabled: Boolean, callback: MatrixCallback<Unit>): Cancelable {

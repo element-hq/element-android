@@ -106,7 +106,7 @@ internal class TimelineEventDecryptor(
             Timber.v("Successfully decrypted event ${eventId}")
             eventEntity.setDecryptionResult(result)
         } catch (e: MXCryptoError) {
-            Timber.v("Failed to decrypte event ${eventId} ${e}")
+            Timber.v("Failed to decrypt event ${eventId} ${e}")
             if (e is MXCryptoError.Base && e.errorType == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID) {
                 //Keep track of unknown sessions to automatically try to decrypt on new session
                 eventEntity.decryptionErrorCode = e.errorType.name
