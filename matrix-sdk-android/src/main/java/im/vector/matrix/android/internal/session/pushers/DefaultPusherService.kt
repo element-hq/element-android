@@ -82,7 +82,7 @@ internal class DefaultPusherService @Inject constructor(private val context: Con
     }
 
     override fun removeHttpPusher(pushkey: String, appId: String, callback: MatrixCallback<Unit>) {
-        val params = RemovePusherTask.Params(userId, pushkey, appId)
+        val params = RemovePusherTask.Params(pushkey, appId)
         removePusherTask
                 .configureWith(params) {
                     this.callback = callback
@@ -93,12 +93,12 @@ internal class DefaultPusherService @Inject constructor(private val context: Con
 
     override fun livePushers(): LiveData<List<Pusher>> {
         return monarchy.findAllMappedWithChanges(
-                { realm -> PusherEntity.where(realm, userId) },
+                { realm -> PusherEntity.where(realm) },
                 { it.asDomain() }
         )
     }
 
     override fun pushers(): List<Pusher> {
-        return monarchy.fetchAllCopiedSync { PusherEntity.where(it, userId) }.map { it.asDomain() }
+        return monarchy.fetchAllCopiedSync { PusherEntity.where(it) }.map { it.asDomain() }
     }
 }

@@ -18,12 +18,9 @@ package im.vector.matrix.android.internal.database.model
 import im.vector.matrix.android.api.pushrules.RuleKind
 import io.realm.RealmList
 import io.realm.RealmObject
-import io.realm.annotations.Index
 
 
 internal open class PushRulesEntity(
-        // TODO Remove userId
-        @Index var userId: String = "",
         var scope: String = "",
         var pushRules: RealmList<PushRuleEntity> = RealmList()
 ) : RealmObject() {

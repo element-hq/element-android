@@ -27,7 +27,6 @@ import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.database.mapper.PushRulesMapper
 import im.vector.matrix.android.internal.database.model.PushRulesEntity
 import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.pushers.GetPushRulesTask
 import im.vector.matrix.android.internal.session.pushers.UpdatePushRuleEnableStatusTask
@@ -37,13 +36,10 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @SessionScope
-internal class DefaultPushRuleService @Inject constructor(
-        @UserId
-        private val userId: String,
-        private val getPushRulesTask: GetPushRulesTask,
-        private val updatePushRuleEnableStatusTask: UpdatePushRuleEnableStatusTask,
-        private val taskExecutor: TaskExecutor,
-        private val monarchy: Monarchy
+internal class DefaultPushRuleService @Inject constructor(private val getPushRulesTask: GetPushRulesTask,
+                                                          private val updatePushRuleEnableStatusTask: UpdatePushRuleEnableStatusTask,
+                                                          private val taskExecutor: TaskExecutor,
+                                                          private val monarchy: Monarchy
 ) : PushRuleService {
 
     private var listeners = ArrayList<PushRuleService.PushRuleListener>()
@@ -64,27 +60,27 @@ internal class DefaultPushRuleService @Inject constructor(
         monarchy.doWithRealm { realm ->
             // FIXME PushRulesEntity are not always created here...
             // FIWME Get the push rules from the sync
-            PushRulesEntity.where(realm, userId, scope, RuleSetKey.CONTENT)
+            PushRulesEntity.where(realm, scope, RuleSetKey.CONTENT)
                     .findFirst()
                     ?.let { pushRulesEntity ->
                         contentRules = pushRulesEntity.pushRules.map { PushRulesMapper.mapContentRule(it) }
                     }
-            PushRulesEntity.where(realm, userId, scope, RuleSetKey.OVERRIDE)
+            PushRulesEntity.where(realm, scope, RuleSetKey.OVERRIDE)
                     .findFirst()
                     ?.let { pushRulesEntity ->
                         overrideRules = pushRulesEntity.pushRules.map { PushRulesMapper.map(it) }
                     }
-            PushRulesEntity.where(realm, userId, scope, RuleSetKey.ROOM)
+            PushRulesEntity.where(realm, scope, RuleSetKey.ROOM)
                     .findFirst()
                     ?.let { pushRulesEntity ->
                         roomRules = pushRulesEntity.pushRules.map { PushRulesMapper.mapRoomRule(it) }
                     }
-            PushRulesEntity.where(realm, userId, scope, RuleSetKey.SENDER)
+            PushRulesEntity.where(realm, scope, RuleSetKey.SENDER)
                     .findFirst()
                     ?.let { pushRulesEntity ->
                         senderRules = pushRulesEntity.pushRules.map { PushRulesMapper.mapSenderRule(it) }
                     }
-            PushRulesEntity.where(realm, userId, scope, RuleSetKey.UNDERRIDE)
+            PushRulesEntity.where(realm, scope, RuleSetKey.UNDERRIDE)
                     .findFirst()
                     ?.let { pushRulesEntity ->
                         underrideRules = pushRulesEntity.pushRules.map { PushRulesMapper.map(it) }

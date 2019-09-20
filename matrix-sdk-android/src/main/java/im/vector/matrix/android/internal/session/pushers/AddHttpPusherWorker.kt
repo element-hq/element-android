@@ -57,14 +57,14 @@ internal class AddHttpPusherWorker(context: Context, params: WorkerParameters)
             return Result.failure()
         }
         return try {
-            setPusher(pusher, params.userId)
+            setPusher(pusher)
             Result.success()
         } catch (exception: Throwable) {
             when (exception) {
                 is Failure.NetworkConnection -> Result.retry()
                 else                         -> {
                     monarchy.awaitTransaction { realm ->
-                        PusherEntity.where(realm, params.userId, pusher.pushKey).findFirst()?.let {
+                        PusherEntity.where(realm, pusher.pushKey).findFirst()?.let {
                             //update it
                             it.state = PusherState.FAILED_TO_REGISTER
                         }
@@ -76,12 +76,12 @@ internal class AddHttpPusherWorker(context: Context, params: WorkerParameters)
         }
     }
 
-    private suspend fun setPusher(pusher: JsonPusher, userId: String) {
+    private suspend fun setPusher(pusher: JsonPusher) {
         executeRequest<Unit> {
             apiCall = pushersAPI.setPusher(pusher)
         }
         monarchy.awaitTransaction { realm ->
-            val echo = PusherEntity.where(realm, userId, pusher.pushKey).findFirst()
+            val echo = PusherEntity.where(realm, pusher.pushKey).findFirst()
             if (echo != null) {
                 //update it
                 echo.appDisplayName = pusher.appDisplayName
@@ -93,7 +93,7 @@ internal class AddHttpPusherWorker(context: Context, params: WorkerParameters)
                 echo.data?.url = pusher.data?.url
                 echo.state = PusherState.REGISTERED
             } else {
-                pusher.toEntity(userId).also {
+                pusher.toEntity().also {
                     it.state = PusherState.REGISTERED
                     realm.insertOrUpdate(it)
                 }
