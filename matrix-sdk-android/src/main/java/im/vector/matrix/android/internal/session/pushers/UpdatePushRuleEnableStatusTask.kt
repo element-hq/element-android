@@ -33,7 +33,7 @@ internal class DefaultUpdatePushRuleEnableStatusTask @Inject constructor(private
 
     override suspend fun execute(params: UpdatePushRuleEnableStatusTask.Params) {
         return executeRequest {
-            apiCall = pushRulesApi.updateEnableRuleStatus(params.kind, params.pushRule.ruleId, params.enabled)
+            apiCall = pushRulesApi.updateEnableRuleStatus(params.kind.value, params.pushRule.ruleId, params.enabled)
         }
     }
 }
