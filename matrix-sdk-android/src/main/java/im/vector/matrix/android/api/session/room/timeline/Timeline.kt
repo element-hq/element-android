@@ -44,6 +44,10 @@ interface Timeline {
      */
     fun dispose()
 
+    /**
+     * This method restarts the timeline, erases all built events and pagination states.
+     * It then loads events around the eventId. If eventId is null, it does restart the live timeline.
+     */
     fun restartWithEventId(eventId: String?)
 
 
@@ -62,19 +66,39 @@ interface Timeline {
      */
     fun paginate(direction: Direction, count: Int)
 
+    /**
+     * Returns the number of sending events
+     */
     fun pendingEventCount(): Int
 
+    /**
+     * Returns the number of failed sending events.
+     */
     fun failedToDeliverEventCount(): Int
 
+    /**
+     * Returns the index of a built event or null.
+     */
     fun getIndexOfEvent(eventId: String?): Int?
 
+    /**
+     * Returns the built [TimelineEvent] at index or null
+     */
     fun getTimelineEventAtIndex(index: Int): TimelineEvent?
 
+    /**
+     * Returns the built [TimelineEvent] with eventId or null
+     */
     fun getTimelineEventWithId(eventId: String?): TimelineEvent?
 
+    /**
+     * Returns the first displayable events starting from eventId.
+     * It does depend on the provided [TimelineSettings].
+     */
     fun getFirstDisplayableEventId(eventId: String): String?
 
-        interface Listener {
+
+    interface Listener {
         /**
          * Call when the timeline has been updated through pagination or sync.
          * @param snapshot the most uptodate snapshot

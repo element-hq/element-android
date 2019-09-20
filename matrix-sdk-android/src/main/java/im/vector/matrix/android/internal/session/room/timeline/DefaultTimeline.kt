@@ -120,6 +120,9 @@ internal class DefaultTimeline(
     private val eventDecryptor = TimelineEventDecryptor(realmConfiguration, timelineID, cryptoService)
 
     private val eventsChangeListener = OrderedRealmCollectionChangeListener<RealmResults<TimelineEventEntity>> { results, changeSet ->
+        if (!results.isLoaded || !results.isValid) {
+            return@OrderedRealmCollectionChangeListener
+        }
         if (changeSet.state == OrderedCollectionChangeSet.State.INITIAL) {
             handleInitialLoad()
         } else {

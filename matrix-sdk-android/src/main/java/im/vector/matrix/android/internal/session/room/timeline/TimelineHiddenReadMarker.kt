@@ -45,6 +45,9 @@ internal class TimelineHiddenReadMarker constructor(private val roomId: String) 
     private lateinit var delegate: Delegate
 
     private val readMarkerListener = RealmObjectChangeListener<ReadMarkerEntity> { readMarker, _ ->
+        if (!readMarker.isLoaded || !readMarker.isValid) {
+            return@RealmObjectChangeListener
+        }
         var hasChange = false
         previousDisplayedEventId?.also {
             hasChange = delegate.rebuildEvent(it, false)
@@ -53,7 +56,7 @@ internal class TimelineHiddenReadMarker constructor(private val roomId: String) 
         val isEventHidden = liveEvents.where().equalTo(TimelineEventEntityFields.EVENT_ID, readMarker.eventId).findFirst() == null
         if (isEventHidden) {
             val hiddenEvent = readMarker.timelineEvent?.firstOrNull()
-                    ?: return@RealmObjectChangeListener
+                              ?: return@RealmObjectChangeListener
             val displayIndex = hiddenEvent.root?.displayIndex
             if (displayIndex != null) {
                 // Then we are looking for the first displayable event after the hidden one

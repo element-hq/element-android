@@ -53,6 +53,9 @@ internal class TimelineHiddenReadReceipts constructor(private val readReceiptsSu
     private lateinit var delegate: Delegate
 
     private val hiddenReadReceiptsListener = OrderedRealmCollectionChangeListener<RealmResults<ReadReceiptsSummaryEntity>> { collection, changeSet ->
+        if (!collection.isLoaded || !collection.isValid) {
+            return@OrderedRealmCollectionChangeListener
+        }
         var hasChange = false
         // Deletion here means we don't have any readReceipts for the given hidden events
         changeSet.deletions.forEach {

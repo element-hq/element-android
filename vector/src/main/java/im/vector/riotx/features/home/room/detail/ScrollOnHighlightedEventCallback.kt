@@ -20,9 +20,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.riotx.core.platform.DefaultListUpdateCallback
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicReference
 
+/**
+ * This handles scrolling to an event which wasn't yet loaded when scheduled.
+ */
 class ScrollOnHighlightedEventCallback(private val layoutManager: LinearLayoutManager,
                                        private val timelineEventController: TimelineEventController) : DefaultListUpdateCallback {
 
@@ -30,7 +36,15 @@ class ScrollOnHighlightedEventCallback(private val layoutManager: LinearLayoutMa
 
     var timeline: Timeline? = null
 
+    override fun onInserted(position: Int, count: Int) {
+        scrollIfNeeded()
+    }
+
     override fun onChanged(position: Int, count: Int, tag: Any?) {
+        scrollIfNeeded()
+    }
+
+    private fun scrollIfNeeded() {
         val eventId = scheduledEventId.get() ?: return
         val nonNullTimeline = timeline ?: return
         val correctedEventId = nonNullTimeline.getFirstDisplayableEventId(eventId)
