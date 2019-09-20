@@ -47,15 +47,16 @@ internal class GroupSummaryUpdater @Inject constructor(private val context: Cont
         val modifiedGroupEntity = (changeSet.insertions + changeSet.changes)
                 .asSequence()
                 .mapNotNull { results[it] }
-                .toList()
 
         fetchGroupsData(modifiedGroupEntity
                 .filter { it.membership == Membership.JOIN || it.membership == Membership.INVITE }
-                .map { it.groupId })
+                .map { it.groupId }
+                .toList())
 
         deleteGroups(modifiedGroupEntity
                 .filter { it.membership == Membership.LEAVE }
-                .map { it.groupId })
+                .map { it.groupId }
+                .toList())
     }
 
     private fun fetchGroupsData(groupIds: List<String>) {
