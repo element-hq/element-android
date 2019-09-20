@@ -114,6 +114,14 @@ class BadgeFloatingActionButton @JvmOverloads constructor(
             }
         }
 
+    var drawBadge: Boolean = false
+        set(value) {
+            if (field != value) {
+                field = value
+                invalidate()
+            }
+        }
+
     init {
         countStr = countStr(count)
         textPaint.getTextBounds(countStr, 0, countStr.length, counterTextBounds)
@@ -139,10 +147,10 @@ class BadgeFloatingActionButton @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-
-        if (count > 0) {
+        if (count > 0 || drawBadge) {
             canvas.drawCircle(counterBounds.centerX(), counterBounds.centerY(), counterBounds.width() / 2f, tintPaint)
-
+        }
+        if (count > 0) {
             val textX = counterBounds.centerX() - counterTextBounds.width() / 2f - counterTextBounds.left
             val textY = counterBounds.centerY() + counterTextBounds.height() / 2f - counterTextBounds.bottom
             canvas.drawText(countStr, textX, textY, textPaint)
