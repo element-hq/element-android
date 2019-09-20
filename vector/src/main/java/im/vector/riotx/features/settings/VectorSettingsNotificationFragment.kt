@@ -122,7 +122,7 @@ class VectorSettingsNotificationPreferenceFragment : VectorSettingsBaseFragment(
                             object : MatrixCallback<Unit> {
 
                                 override fun onSuccess(data: Unit) {
-                                    pushRuleService.fetchPushRules()
+                                    // Push rules will be updated form the sync
                                 }
 
                                 override fun onFailure(failure: Throwable) {

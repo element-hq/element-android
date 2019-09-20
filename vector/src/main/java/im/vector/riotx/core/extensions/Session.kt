@@ -33,10 +33,6 @@ fun Session.configureAndStart(pushRuleTriggerListener: PushRuleTriggerListener) 
     refreshPushers()
     pushRuleTriggerListener.startWithSession(this)
 
-    // TODO After a clear cache, this is not done.
-    // TODO Push rule should be parsed from the sync
-    fetchPushRules()
-
     // TODO P1 From HomeActivity
     // @Inject lateinit var incomingVerificationRequestHandler: IncomingVerificationRequestHandler
     // @Inject lateinit var keyRequestHandler: KeyRequestHandler

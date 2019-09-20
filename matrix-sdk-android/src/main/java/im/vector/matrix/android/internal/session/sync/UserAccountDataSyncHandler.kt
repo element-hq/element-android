@@ -24,9 +24,11 @@ import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.query.getDirectRooms
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.UserId
+import im.vector.matrix.android.internal.session.pushers.SavePushRulesTask
 import im.vector.matrix.android.internal.session.room.membership.RoomMembers
 import im.vector.matrix.android.internal.session.sync.model.InvitedRoomSync
 import im.vector.matrix.android.internal.session.sync.model.UserAccountDataDirectMessages
+import im.vector.matrix.android.internal.session.sync.model.UserAccountDataPushRules
 import im.vector.matrix.android.internal.session.sync.model.UserAccountDataSync
 import im.vector.matrix.android.internal.session.user.accountdata.DirectChatsHelper
 import im.vector.matrix.android.internal.session.user.accountdata.UpdateUserAccountDataTask
@@ -41,18 +43,24 @@ internal class UserAccountDataSyncHandler @Inject constructor(private val monarc
                                                               private val userId: String,
                                                               private val directChatsHelper: DirectChatsHelper,
                                                               private val updateUserAccountDataTask: UpdateUserAccountDataTask,
+                                                              private val savePushRulesTask: SavePushRulesTask,
                                                               private val taskExecutor: TaskExecutor) {
 
-    fun handle(accountData: UserAccountDataSync?, invites: Map<String, InvitedRoomSync>?) {
+    suspend fun handle(accountData: UserAccountDataSync?, invites: Map<String, InvitedRoomSync>?) {
         accountData?.list?.forEach {
             when (it) {
                 is UserAccountDataDirectMessages -> handleDirectChatRooms(it)
+                is UserAccountDataPushRules      -> handlePushRules(it)
                 else                             -> return@forEach
             }
         }
         monarchy.doWithRealm { realm ->
             synchronizeWithServerIfNeeded(realm, invites)
         }
+    }
+
+    private suspend fun handlePushRules(userAccountDataPushRules: UserAccountDataPushRules) {
+        savePushRulesTask.execute(SavePushRulesTask.Params(userAccountDataPushRules.content))
     }
 
     private fun handleDirectChatRooms(directMessages: UserAccountDataDirectMessages) {
