@@ -137,15 +137,22 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
     }
 
 
-    private fun handleUpdateHomeserver(action: LoginActions.UpdateHomeServer) {
-        currentTask?.cancel()
+    private fun handleUpdateHomeserver(action: LoginActions.UpdateHomeServer) = withState { state ->
 
+        var newConfig : HomeServerConnectionConfig? = null
         Try {
             val homeServerUri = action.homeServerUrl
-            homeServerConnectionConfig = HomeServerConnectionConfig.Builder()
+            newConfig = HomeServerConnectionConfig.Builder()
                     .withHomeServerUri(homeServerUri)
                     .build()
         }
+
+        //Do not retry if we already have flows for this config -> causes infinite focus loop
+        if (newConfig?.homeServerUri?.toString() == homeServerConnectionConfig?.homeServerUri?.toString()
+                && state.asyncHomeServerLoginFlowRequest is Success) return@withState
+
+        currentTask?.cancel()
+        homeServerConnectionConfig = newConfig
 
         val homeServerConnectionConfigFinal = homeServerConnectionConfig
 
