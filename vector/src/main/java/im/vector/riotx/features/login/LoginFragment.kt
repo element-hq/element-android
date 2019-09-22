@@ -18,6 +18,7 @@ package im.vector.riotx.features.login
 
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.transition.TransitionManager
@@ -68,11 +69,18 @@ class LoginFragment : VectorBaseFragment() {
         homeServerField.focusChanges()
                 .subscribe {
                     if (!it) {
-                        // TODO Also when clicking on button?
                         viewModel.handle(LoginActions.UpdateHomeServer(homeServerField.text.toString()))
                     }
                 }
                 .disposeOnDestroy()
+
+        homeServerField.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                viewModel.handle(LoginActions.UpdateHomeServer(homeServerField.text.toString()))
+                return@setOnEditorActionListener true
+            }
+            return@setOnEditorActionListener false
+        }
 
         val initHsUrl = viewModel.getInitialHomeServerUrl()
         if (initHsUrl != null) {
@@ -170,6 +178,10 @@ class LoginFragment : VectorBaseFragment() {
                         passwordContainer.isVisible = true
                         authenticateButton.isVisible = true
                         authenticateButtonSso.isVisible = false
+                        if (loginField.text.isNullOrBlank() && passwordField.text.isNullOrBlank()) {
+                            //Jump focus to login
+                            loginField.requestFocus()
+                        }
                     }
                     LoginMode.Sso         -> {
                         loginField.isVisible = false
