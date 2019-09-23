@@ -18,7 +18,6 @@
 package im.vector.matrix.android.internal.crypto.algorithms.megolm
 
 import android.text.TextUtils
-import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
@@ -40,7 +39,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-internal class MXMegolmDecryption(private val credentials: Credentials,
+internal class MXMegolmDecryption(private val userId: String,
                                   private val olmDevice: MXOlmDevice,
                                   private val deviceListManager: DeviceListManager,
                                   private val outgoingRoomKeyRequestManager: OutgoingRoomKeyRequestManager,
@@ -146,11 +145,11 @@ internal class MXMegolmDecryption(private val credentials: Credentials,
 
         val selfMap = HashMap<String, String>()
         // TODO Replace this hard coded keys (see OutgoingRoomKeyRequestManager)
-        selfMap["userId"] = credentials.userId
+        selfMap["userId"] = userId
         selfMap["deviceId"] = "*"
         recipients.add(selfMap)
 
-        if (!TextUtils.equals(sender, credentials.userId)) {
+        if (!TextUtils.equals(sender, userId)) {
             val senderMap = HashMap<String, String>()
             senderMap["userId"] = sender
             senderMap["deviceId"] = encryptedEventContent.deviceId!!

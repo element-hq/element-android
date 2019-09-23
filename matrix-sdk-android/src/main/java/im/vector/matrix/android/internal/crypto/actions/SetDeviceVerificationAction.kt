@@ -16,14 +16,14 @@
 
 package im.vector.matrix.android.internal.crypto.actions
 
-import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.internal.crypto.keysbackup.KeysBackup
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
+import im.vector.matrix.android.internal.di.UserId
 import timber.log.Timber
 import javax.inject.Inject
 
 internal class SetDeviceVerificationAction @Inject constructor(private val cryptoStore: IMXCryptoStore,
-                                                               private val credentials: Credentials,
+                                                               @UserId private val userId: String,
                                                                private val keysBackup: KeysBackup) {
 
     fun handle(verificationStatus: Int, deviceId: String, userId: String) {
@@ -39,7 +39,7 @@ internal class SetDeviceVerificationAction @Inject constructor(private val crypt
             device.verified = verificationStatus
             cryptoStore.storeUserDevice(userId, device)
 
-            if (userId == credentials.userId) {
+            if (userId == this.userId) {
                 // If one of the user's own devices is being marked as verified / unverified,
                 // check the key backup status, since whether or not we use this depends on
                 // whether it has a signature from a verified device

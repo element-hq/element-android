@@ -204,7 +204,7 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
                 Runnable {
                     alert.weakCurrentActivity?.get()?.let {
                         val intent = SASVerificationActivity.outgoingIntent(it,
-                                session?.sessionParams?.credentials?.userId ?: "",
+                                session?.myUserId ?: "",
                                 userId, deviceId)
                         it.startActivity(intent)
                     }

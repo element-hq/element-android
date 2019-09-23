@@ -40,7 +40,7 @@ class PushRuleTriggerListener @Inject constructor(
             Timber.e("Called without active session")
             return
         }
-        val notificationAction = NotificationAction.extractFrom(actions)
+        val notificationAction = actions.toNotificationAction()
         if (notificationAction.shouldNotify) {
             val notifiableEvent = resolver.resolveEvent(event, session!!)
             if (notifiableEvent == null) {

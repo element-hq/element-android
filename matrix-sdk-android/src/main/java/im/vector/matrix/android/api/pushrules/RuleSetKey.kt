@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.di
-
-import javax.inject.Qualifier
+package im.vector.matrix.android.api.pushrules
 
 /**
- * Used to inject the userId
+ * Ref: https://matrix.org/docs/spec/client_server/latest#get-matrix-client-r0-pushrules
  */
-@Qualifier
-@Retention(AnnotationRetention.RUNTIME)
-internal annotation class UserId
+enum class RuleSetKey(val value: String) {
+    CONTENT("content"),
+    OVERRIDE("override"),
+    ROOM("room"),
+    SENDER("sender"),
+    UNDERRIDE("underride")
+}
 
 /**
- * Used to inject the md5 of the userId
+ * Ref: https://matrix.org/docs/spec/client_server/latest#get-matrix-client-r0-pushrules-scope-kind-ruleid
  */
-@Qualifier
-@Retention(AnnotationRetention.RUNTIME)
-internal annotation class UserMd5
+typealias RuleKind = RuleSetKey

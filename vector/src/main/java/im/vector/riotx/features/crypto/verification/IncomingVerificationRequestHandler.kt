@@ -60,7 +60,7 @@ class IncomingVerificationRequestHandler @Inject constructor(private val context
                         .apply {
                             contentAction = Runnable {
                                 val intent = SASVerificationActivity.incomingIntent(context,
-                                        session?.sessionParams?.credentials?.userId ?: "",
+                                        session?.myUserId  ?: "",
                                         tx.otherUserId,
                                         tx.transactionId)
                                 weakCurrentActivity?.get()?.startActivity(intent)
@@ -78,7 +78,7 @@ class IncomingVerificationRequestHandler @Inject constructor(private val context
                                     context.getString(R.string.action_open),
                                     Runnable {
                                         val intent = SASVerificationActivity.incomingIntent(context,
-                                                session?.sessionParams?.credentials?.userId ?: "",
+                                                session?.myUserId ?: "",
                                                 tx.otherUserId,
                                                 tx.transactionId)
                                         weakCurrentActivity?.get()?.startActivity(intent)

@@ -14,20 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.di
+package im.vector.matrix.android.internal.session.sync.model
 
-import javax.inject.Qualifier
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+import im.vector.matrix.android.api.pushrules.rest.GetPushRulesResponse
 
-/**
- * Used to inject the userId
- */
-@Qualifier
-@Retention(AnnotationRetention.RUNTIME)
-internal annotation class UserId
+@JsonClass(generateAdapter = true)
+internal data class UserAccountDataPushRules(
+        @Json(name = "content") val content: GetPushRulesResponse
+) : UserAccountData
 
-/**
- * Used to inject the md5 of the userId
- */
-@Qualifier
-@Retention(AnnotationRetention.RUNTIME)
-internal annotation class UserMd5

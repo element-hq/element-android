@@ -16,11 +16,11 @@
 
 package im.vector.matrix.android.internal.crypto.tasks
 
-import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.internal.auth.data.LoginFlowTypes
 import im.vector.matrix.android.internal.crypto.api.CryptoApi
 import im.vector.matrix.android.internal.crypto.model.rest.DeleteDeviceAuth
 import im.vector.matrix.android.internal.crypto.model.rest.DeleteDeviceParams
+import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
 import javax.inject.Inject
@@ -34,7 +34,7 @@ internal interface DeleteDeviceWithUserPasswordTask : Task<DeleteDeviceWithUserP
 }
 
 internal class DefaultDeleteDeviceWithUserPasswordTask @Inject constructor(private val cryptoApi: CryptoApi,
-                                                                           private val credentials: Credentials)
+                                                                           @UserId private val userId: String)
     : DeleteDeviceWithUserPasswordTask {
 
     override suspend fun execute(params: DeleteDeviceWithUserPasswordTask.Params) {
@@ -45,7 +45,7 @@ internal class DefaultDeleteDeviceWithUserPasswordTask @Inject constructor(priva
                                 .apply {
                                     type = LoginFlowTypes.PASSWORD
                                     session = params.authSession
-                                    user = credentials.userId
+                                    user = userId
                                     password = params.password
                                 }
                     })

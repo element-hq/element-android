@@ -15,6 +15,7 @@
  */
 package im.vector.matrix.android.internal.database.query
 
+import im.vector.matrix.android.api.pushrules.RuleKind
 import im.vector.matrix.android.internal.database.model.PushRulesEntity
 import im.vector.matrix.android.internal.database.model.PushRulesEntityFields
 import im.vector.matrix.android.internal.database.model.PusherEntity
@@ -24,10 +25,8 @@ import io.realm.RealmQuery
 import io.realm.kotlin.where
 
 internal fun PusherEntity.Companion.where(realm: Realm,
-                                          userId: String,
                                           pushKey: String? = null): RealmQuery<PusherEntity> {
     return realm.where<PusherEntity>()
-            .equalTo(PusherEntityFields.USER_ID, userId)
             .apply {
                 if (pushKey != null) {
                     equalTo(PusherEntityFields.PUSH_KEY, pushKey)
@@ -36,11 +35,9 @@ internal fun PusherEntity.Companion.where(realm: Realm,
 }
 
 internal fun PushRulesEntity.Companion.where(realm: Realm,
-                                             userId: String,
                                              scope: String,
-                                             ruleSetKey: String): RealmQuery<PushRulesEntity> {
+                                             kind: RuleKind): RealmQuery<PushRulesEntity> {
     return realm.where<PushRulesEntity>()
-            .equalTo(PushRulesEntityFields.USER_ID, userId)
             .equalTo(PushRulesEntityFields.SCOPE, scope)
-            .equalTo(PushRulesEntityFields.RULESET_KEY, ruleSetKey)
+            .equalTo(PushRulesEntityFields.KIND_STR, kind.name)
 }

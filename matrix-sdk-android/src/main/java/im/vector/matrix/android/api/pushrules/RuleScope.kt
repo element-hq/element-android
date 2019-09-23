@@ -15,12 +15,6 @@
  */
 package im.vector.matrix.android.api.pushrules
 
-
-enum class RulesetKey(val value: String) {
-    CONTENT("content"),
-    OVERRIDE("override"),
-    ROOM("room"),
-    SENDER("sender"),
-    UNDERRIDE("underride"),
-    UNKNOWN("")
+object RuleScope {
+    const val GLOBAL = "global"
 }

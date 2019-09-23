@@ -17,7 +17,6 @@
 package im.vector.matrix.android.internal.session.room
 
 import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.Membership
@@ -31,6 +30,7 @@ import im.vector.matrix.android.internal.database.query.isEventRead
 import im.vector.matrix.android.internal.database.query.latestEvent
 import im.vector.matrix.android.internal.database.query.prev
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.room.membership.RoomDisplayNameResolver
 import im.vector.matrix.android.internal.session.room.membership.RoomMembers
 import im.vector.matrix.android.internal.session.sync.model.RoomSyncSummary
@@ -39,7 +39,7 @@ import io.realm.Realm
 import io.realm.kotlin.createObject
 import javax.inject.Inject
 
-internal class RoomSummaryUpdater @Inject constructor(private val credentials: Credentials,
+internal class RoomSummaryUpdater @Inject constructor(@UserId private val userId: String,
                                                       private val roomDisplayNameResolver: RoomDisplayNameResolver,
                                                       private val roomAvatarResolver: RoomAvatarResolver,
                                                       private val monarchy: Monarchy) {
@@ -92,11 +92,11 @@ internal class RoomSummaryUpdater @Inject constructor(private val credentials: C
 
         roomSummaryEntity.hasUnreadMessages = roomSummaryEntity.notificationCount > 0
                 //avoid this call if we are sure there are unread events
-                || !isEventRead(monarchy, credentials.userId, roomId, latestPreviewableEvent?.eventId)
+                || !isEventRead(monarchy, userId, roomId, latestPreviewableEvent?.eventId)
 
         val otherRoomMembers = RoomMembers(realm, roomId)
                 .queryRoomMembersEvent()
-                .notEqualTo(EventEntityFields.STATE_KEY, credentials.userId)
+                .notEqualTo(EventEntityFields.STATE_KEY, userId)
                 .findAll()
                 .asSequence()
                 .map { it.stateKey }

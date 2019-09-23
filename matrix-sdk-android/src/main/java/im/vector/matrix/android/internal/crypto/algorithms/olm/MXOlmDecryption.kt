@@ -17,7 +17,6 @@
 
 package im.vector.matrix.android.internal.crypto.algorithms.olm
 
-import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.toModel
@@ -35,8 +34,8 @@ import timber.log.Timber
 internal class MXOlmDecryption(
         // The olm device interface
         private val olmDevice: MXOlmDevice,
-        // the matrix credentials
-        private val credentials: Credentials)
+        // the matrix userId
+        private val userId: String)
     : IMXDecrypting {
 
     override suspend fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
@@ -97,9 +96,9 @@ internal class MXOlmDecryption(
             throw MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_PROPERTY, reason)
         }
 
-        if (olmPayloadContent.recipient != credentials.userId) {
+        if (olmPayloadContent.recipient != userId) {
             Timber.e("## decryptEvent() : Event ${event.eventId}:" +
-                    " Intended recipient ${olmPayloadContent.recipient} does not match our id ${credentials.userId}")
+                    " Intended recipient ${olmPayloadContent.recipient} does not match our id $userId")
             throw MXCryptoError.Base(MXCryptoError.ErrorType.BAD_RECIPIENT,
                     String.format(MXCryptoError.BAD_RECIPIENT_REASON, olmPayloadContent.recipient))
         }

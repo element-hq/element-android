@@ -28,8 +28,7 @@ import io.realm.Realm
 import javax.inject.Inject
 
 internal interface RemovePusherTask : Task<RemovePusherTask.Params, Unit> {
-    data class Params(val userId: String,
-                      val pushKey: String,
+    data class Params(val pushKey: String,
                       val pushAppId: String)
 }
 
@@ -40,12 +39,12 @@ internal class DefaultRemovePusherTask @Inject constructor(
 
     override suspend fun execute(params: RemovePusherTask.Params) {
         monarchy.awaitTransaction { realm ->
-            val existingEntity = PusherEntity.where(realm, params.userId, params.pushKey).findFirst()
+            val existingEntity = PusherEntity.where(realm, params.pushKey).findFirst()
             existingEntity?.state = PusherState.UNREGISTERING
         }
 
         val existing = Realm.getInstance(monarchy.realmConfiguration).use { realm ->
-            PusherEntity.where(realm, params.userId, params.pushKey).findFirst()?.asDomain()
+            PusherEntity.where(realm, params.pushKey).findFirst()?.asDomain()
         } ?: throw Exception("No existing pusher")
 
         val deleteBody = JsonPusher(
@@ -64,7 +63,7 @@ internal class DefaultRemovePusherTask @Inject constructor(
             apiCall = pushersAPI.setPusher(deleteBody)
         }
         monarchy.awaitTransaction {
-            PusherEntity.where(it, params.userId, params.pushKey).findFirst()?.deleteFromRealm()
+            PusherEntity.where(it, params.pushKey).findFirst()?.deleteFromRealm()
         }
     }
 }

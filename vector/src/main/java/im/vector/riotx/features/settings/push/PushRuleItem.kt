@@ -26,11 +26,11 @@ import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
-import im.vector.matrix.android.api.pushrules.Action
+import im.vector.matrix.android.api.pushrules.getActions
 import im.vector.matrix.android.api.pushrules.rest.PushRule
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
-import im.vector.riotx.features.notifications.NotificationAction
+import im.vector.riotx.features.notifications.toNotificationAction
 
 
 @EpoxyModelClass(layout = R.layout.item_pushrule_raw)
@@ -50,12 +50,12 @@ abstract class PushRuleItem : EpoxyModelWithHolder<PushRuleItem.Holder>() {
             holder.view.setBackgroundColor(ContextCompat.getColor(context, R.color.vector_silver_color))
             holder.ruleId.text = "[Disabled] ${pushRule.ruleId}"
         }
-        val actions = Action.mapFrom(pushRule)
-        if (actions.isNullOrEmpty()) {
+        val actions = pushRule.getActions()
+        if (actions.isEmpty()) {
             holder.actionIcon.isInvisible = true
         } else {
             holder.actionIcon.isVisible = true
-            val notifAction = NotificationAction.extractFrom(actions)
+            val notifAction = actions.toNotificationAction()
 
             if (notifAction.shouldNotify && !notifAction.soundName.isNullOrBlank()) {
                 holder.actionIcon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_action_notify_noisy))
