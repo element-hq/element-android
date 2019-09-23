@@ -16,6 +16,7 @@ Bugfix:
  - Fix characters erased from the Search field when the result are coming (#545)
  - "No connection" banner was displayed by mistake
  - Leaving community (from another client) has no effect on RiotX (#497)
+ - Embiggen messages with multiple emojis also for edited messages (#458)
 
 Translations:
  -
