@@ -18,6 +18,7 @@ Bugfix:
  - Leaving community (from another client) has no effect on RiotX (#497)
  - Push rules was not retrieved after a clear cache
  - m.notice messages trigger push notifications (#238)
+ - Embiggen messages with multiple emojis also for edited messages (#458)
 
 Translations:
  -
