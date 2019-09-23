@@ -42,8 +42,7 @@ internal interface UpdateUserAccountDataTask : Task<UpdateUserAccountDataTask.Pa
 }
 
 internal class DefaultUpdateUserAccountDataTask @Inject constructor(private val accountDataApi: AccountDataAPI,
-                                                                    @UserId
-                                                                    private val userId: String) : UpdateUserAccountDataTask {
+                                                                    @UserId private val userId: String) : UpdateUserAccountDataTask {
 
     override suspend fun execute(params: UpdateUserAccountDataTask.Params) {
         return executeRequest {

@@ -50,8 +50,7 @@ import timber.log.Timber
 
 internal class DefaultRelationService @AssistedInject constructor(@Assisted private val roomId: String,
                                                                   private val context: Context,
-                                                                  @UserId
-                                                                  private val userId: String,
+                                                                  @UserId private val userId: String,
                                                                   private val eventFactory: LocalEchoEventFactory,
                                                                   private val cryptoService: CryptoService,
                                                                   private val findReactionEventForUndoTask: FindReactionEventForUndoTask,

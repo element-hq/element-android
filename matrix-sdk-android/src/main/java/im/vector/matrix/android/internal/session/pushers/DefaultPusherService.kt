@@ -39,8 +39,7 @@ import javax.inject.Inject
 
 internal class DefaultPusherService @Inject constructor(private val context: Context,
                                                         private val monarchy: Monarchy,
-                                                        @UserId
-                                                        private val userId: String,
+                                                        @UserId private val userId: String,
                                                         private val getPusherTask: GetPushersTask,
                                                         private val removePusherTask: RemovePusherTask,
                                                         private val taskExecutor: TaskExecutor

@@ -24,8 +24,7 @@ import timber.log.Timber
 // TODO Inject constructor
 internal class DefaultConditionResolver(private val event: Event,
                                         private val roomService: RoomService,
-                                        @UserId
-                                        private val userId: String) : ConditionResolver {
+                                        @UserId private val userId: String) : ConditionResolver {
 
 
     override fun resolveEventMatchCondition(eventMatchCondition: EventMatchCondition): Boolean {

@@ -36,8 +36,7 @@ internal interface SyncTask : Task<SyncTask.Params, Unit> {
 }
 
 internal class DefaultSyncTask @Inject constructor(private val syncAPI: SyncAPI,
-                                                   @UserId
-                                                   private val userId: String,
+                                                   @UserId private val userId: String,
                                                    private val filterRepository: FilterRepository,
                                                    private val syncResponseHandler: SyncResponseHandler,
                                                    private val sessionParamsStore: SessionParamsStore,

@@ -37,8 +37,7 @@ internal interface ProcessEventForPushTask : Task<ProcessEventForPushTask.Params
 internal class DefaultProcessEventForPushTask @Inject constructor(
         private val defaultPushRuleService: DefaultPushRuleService,
         private val roomService: RoomService,
-        @UserId
-        private val userId: String
+        @UserId private val userId: String
 ) : ProcessEventForPushTask {
 
     override suspend fun execute(params: ProcessEventForPushTask.Params) {

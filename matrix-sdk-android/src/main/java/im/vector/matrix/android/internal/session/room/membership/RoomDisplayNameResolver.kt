@@ -37,8 +37,7 @@ import javax.inject.Inject
  */
 internal class RoomDisplayNameResolver @Inject constructor(private val context: Context,
                                                            private val monarchy: Monarchy,
-                                                           @UserId
-                                                           private val userId: String
+                                                           @UserId private val userId: String
 ) {
 
     /**

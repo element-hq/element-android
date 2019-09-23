@@ -27,8 +27,7 @@ import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import javax.inject.Inject
 
-internal class MXMegolmDecryptionFactory @Inject constructor(@UserId
-                                                             private val userId: String,
+internal class MXMegolmDecryptionFactory @Inject constructor(@UserId private val userId: String,
                                                              private val olmDevice: MXOlmDevice,
                                                              private val deviceListManager: DeviceListManager,
                                                              private val outgoingRoomKeyRequestManager: OutgoingRoomKeyRequestManager,

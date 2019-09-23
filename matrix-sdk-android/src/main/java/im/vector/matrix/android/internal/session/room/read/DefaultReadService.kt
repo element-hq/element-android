@@ -38,8 +38,7 @@ internal class DefaultReadService @AssistedInject constructor(@Assisted private 
                                                               private val taskExecutor: TaskExecutor,
                                                               private val setReadMarkersTask: SetReadMarkersTask,
                                                               private val readReceiptsSummaryMapper: ReadReceiptsSummaryMapper,
-                                                              @UserId
-                                                              private val userId: String
+                                                              @UserId private val userId: String
 ) : ReadService {
 
     @AssistedInject.Factory

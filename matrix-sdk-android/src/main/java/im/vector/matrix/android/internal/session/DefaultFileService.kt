@@ -40,8 +40,7 @@ import java.io.IOException
 import javax.inject.Inject
 
 internal class DefaultFileService @Inject constructor(private val context: Context,
-                                                      @UserMd5
-                                                      private val userMd5: String,
+                                                      @UserMd5 private val userMd5: String,
                                                       private val contentUrlResolver: ContentUrlResolver,
                                                       private val coroutineDispatchers: MatrixCoroutineDispatchers) : FileService {
 

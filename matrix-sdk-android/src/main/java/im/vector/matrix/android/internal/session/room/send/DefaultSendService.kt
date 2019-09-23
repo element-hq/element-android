@@ -55,8 +55,7 @@ private const val BACKOFF_DELAY = 10_000L
 
 internal class DefaultSendService @AssistedInject constructor(@Assisted private val roomId: String,
                                                               private val context: Context,
-                                                              @UserId
-                                                              private val userId: String,
+                                                              @UserId private val userId: String,
                                                               private val localEchoEventFactory: LocalEchoEventFactory,
                                                               private val cryptoService: CryptoService,
                                                               private val monarchy: Monarchy

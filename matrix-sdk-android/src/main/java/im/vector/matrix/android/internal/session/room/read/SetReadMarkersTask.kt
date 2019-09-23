@@ -48,8 +48,7 @@ private const val READ_MARKER = "m.fully_read"
 private const val READ_RECEIPT = "m.read"
 
 internal class DefaultSetReadMarkersTask @Inject constructor(private val roomAPI: RoomAPI,
-                                                             @UserId
-                                                             private val userId: String,
+                                                             @UserId private val userId: String,
                                                              private val monarchy: Monarchy
 ) : SetReadMarkersTask {
 

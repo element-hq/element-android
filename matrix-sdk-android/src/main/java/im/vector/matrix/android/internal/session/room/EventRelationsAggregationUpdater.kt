@@ -38,8 +38,7 @@ import javax.inject.Inject
  */
 
 internal class EventRelationsAggregationUpdater @Inject constructor(@SessionDatabase realmConfiguration: RealmConfiguration,
-                                                                    @UserId
-                                                                    private val userId: String,
+                                                                    @UserId private val userId: String,
                                                                     private val task: EventRelationsAggregationTask,
                                                                     private val taskExecutor: TaskExecutor) :
         RealmLiveEntityObserver<EventEntity>(realmConfiguration) {

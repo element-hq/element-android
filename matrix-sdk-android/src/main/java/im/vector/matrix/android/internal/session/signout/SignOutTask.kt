@@ -34,8 +34,7 @@ import javax.inject.Inject
 internal interface SignOutTask : Task<Unit, Unit>
 
 internal class DefaultSignOutTask @Inject constructor(private val context: Context,
-                                                      @UserId
-                                                      private val userId: String,
+                                                      @UserId private val userId: String,
                                                       private val signOutAPI: SignOutAPI,
                                                       private val sessionManager: SessionManager,
                                                       private val sessionParamsStore: SessionParamsStore,

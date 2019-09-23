@@ -50,8 +50,7 @@ import javax.inject.Inject
  *
  * The transactionID is used as loc
  */
-internal class LocalEchoEventFactory @Inject constructor(@UserId
-                                                         private val userId: String,
+internal class LocalEchoEventFactory @Inject constructor(@UserId private val userId: String,
                                                          private val stringProvider: StringProvider,
                                                          private val roomSummaryUpdater: RoomSummaryUpdater) {
     // TODO Inject

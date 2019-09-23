@@ -39,8 +39,7 @@ import io.realm.Realm
 import io.realm.kotlin.createObject
 import javax.inject.Inject
 
-internal class RoomSummaryUpdater @Inject constructor(@UserId
-                                                      private val userId: String,
+internal class RoomSummaryUpdater @Inject constructor(@UserId private val userId: String,
                                                       private val roomDisplayNameResolver: RoomDisplayNameResolver,
                                                       private val roomAvatarResolver: RoomAvatarResolver,
                                                       private val monarchy: Monarchy) {

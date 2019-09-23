@@ -37,8 +37,7 @@ import javax.inject.Inject
  * As it will actually delete the content, it should be called last in the list of listener.
  */
 internal class EventsPruner @Inject constructor(@SessionDatabase realmConfiguration: RealmConfiguration,
-                                                @UserId
-                                                private val userId: String,
+                                                @UserId private val userId: String,
                                                 private val pruneEventTask: PruneEventTask,
                                                 private val taskExecutor: TaskExecutor) :
         RealmLiveEntityObserver<EventEntity>(realmConfiguration) {

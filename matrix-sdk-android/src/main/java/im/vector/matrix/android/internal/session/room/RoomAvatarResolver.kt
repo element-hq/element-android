@@ -31,8 +31,7 @@ import im.vector.matrix.android.internal.session.room.membership.RoomMembers
 import javax.inject.Inject
 
 internal class RoomAvatarResolver @Inject constructor(private val monarchy: Monarchy,
-                                                      @UserId
-                                                      private val userId: String) {
+                                                      @UserId private val userId: String) {
 
     /**
      * Compute the room avatar url

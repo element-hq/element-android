@@ -34,8 +34,7 @@ internal interface DeleteDeviceWithUserPasswordTask : Task<DeleteDeviceWithUserP
 }
 
 internal class DefaultDeleteDeviceWithUserPasswordTask @Inject constructor(private val cryptoApi: CryptoApi,
-                                                                           @UserId
-                                                                           private val userId: String)
+                                                                           @UserId private val userId: String)
     : DeleteDeviceWithUserPasswordTask {
 
     override suspend fun execute(params: DeleteDeviceWithUserPasswordTask.Params) {

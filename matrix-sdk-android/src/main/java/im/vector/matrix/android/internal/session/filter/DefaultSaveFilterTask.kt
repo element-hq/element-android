@@ -33,8 +33,7 @@ internal interface SaveFilterTask : Task<SaveFilterTask.Params, Unit> {
 
 }
 
-internal class DefaultSaveFilterTask @Inject constructor(@UserId
-                                                         private val userId: String,
+internal class DefaultSaveFilterTask @Inject constructor(@UserId private val userId: String,
                                                          private val filterAPI: FilterApi,
                                                          private val filterRepository: FilterRepository
 ) : SaveFilterTask {

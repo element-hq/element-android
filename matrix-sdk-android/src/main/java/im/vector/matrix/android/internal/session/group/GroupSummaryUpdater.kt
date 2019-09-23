@@ -36,8 +36,7 @@ import javax.inject.Inject
 private const val GET_GROUP_DATA_WORKER = "GET_GROUP_DATA_WORKER"
 
 internal class GroupSummaryUpdater @Inject constructor(private val context: Context,
-                                                       @UserId
-                                                       private val userId: String,
+                                                       @UserId private val userId: String,
                                                        private val monarchy: Monarchy)
     : RealmLiveEntityObserver<GroupEntity>(monarchy.realmConfiguration) {
 
