@@ -26,7 +26,7 @@ class ScrollOnNewMessageCallback(private val layoutManager: LinearLayoutManager,
 
     override fun onInserted(position: Int, count: Int) {
         Timber.v("On inserted $count count at position: $position")
-        if (position == 0 && layoutManager.findFirstCompletelyVisibleItemPosition() == 0 && !timelineEventController.isLoadingForward()) {
+        if (position == 0 && layoutManager.findFirstVisibleItemPosition() == 0 && !timelineEventController.isLoadingForward()) {
             layoutManager.scrollToPosition(0)
         }
     }

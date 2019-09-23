@@ -532,7 +532,7 @@ class RoomDetailFragment :
     private fun updateJumpToBottomViewVisibility() {
         debouncer.debounce("jump_to_bottom_visibility", 250, Runnable {
             Timber.v("First visible: ${layoutManager.findFirstCompletelyVisibleItemPosition()}")
-            if (layoutManager.findFirstCompletelyVisibleItemPosition() != 0) {
+            if (layoutManager.findFirstVisibleItemPosition() != 0) {
                 jumpToBottomView.show()
             } else {
                 jumpToBottomView.hide()
