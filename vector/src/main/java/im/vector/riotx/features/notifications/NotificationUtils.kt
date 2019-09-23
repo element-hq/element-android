@@ -484,8 +484,70 @@ class NotificationUtils @Inject constructor(private val context: Context,
     }
 
 
-    fun buildSimpleEventNotification(simpleNotifiableEvent: NotifiableEvent,
-                                     largeIcon: Bitmap?,
+    fun buildRoomInvitationNotification(inviteNotifiableEvent: InviteNotifiableEvent,
+                                        matrixId: String): Notification {
+        val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
+        // Build the pending intent for when the notification is clicked
+        val smallIcon = R.drawable.ic_status_bar
+
+        val channelID = if (inviteNotifiableEvent.noisy) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID
+
+        return NotificationCompat.Builder(context, channelID)
+                .setContentTitle(stringProvider.getString(R.string.app_name))
+                .setContentText(inviteNotifiableEvent.description)
+                .setGroup(stringProvider.getString(R.string.app_name))
+                .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_SUMMARY)
+                .setSmallIcon(smallIcon)
+                .setColor(accentColor)
+                .apply {
+                    val roomId = inviteNotifiableEvent.roomId
+                    // offer to type a quick reject button
+                    val rejectIntent = Intent(context, NotificationBroadcastReceiver::class.java)
+                    rejectIntent.action = REJECT_ACTION
+                    rejectIntent.data = Uri.parse("foobar://$roomId&$matrixId")
+                    rejectIntent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomId)
+                    val rejectIntentPendingIntent = PendingIntent.getBroadcast(context, System.currentTimeMillis().toInt(), rejectIntent,
+                            PendingIntent.FLAG_UPDATE_CURRENT)
+
+                    addAction(
+                            R.drawable.vector_notification_reject_invitation,
+                            stringProvider.getString(R.string.reject),
+                            rejectIntentPendingIntent)
+
+                    // offer to type a quick accept button
+                    val joinIntent = Intent(context, NotificationBroadcastReceiver::class.java)
+                    joinIntent.action = JOIN_ACTION
+                    joinIntent.data = Uri.parse("foobar://$roomId&$matrixId")
+                    rejectIntent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomId)
+                    val joinIntentPendingIntent = PendingIntent.getBroadcast(context, System.currentTimeMillis().toInt(), joinIntent,
+                            PendingIntent.FLAG_UPDATE_CURRENT)
+                    addAction(
+                            R.drawable.vector_notification_accept_invitation,
+                            stringProvider.getString(R.string.join),
+                            joinIntentPendingIntent)
+
+                    val contentIntent = Intent(context, HomeActivity::class.java)
+                    contentIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                    //pending intent get reused by system, this will mess up the extra params, so put unique info to avoid that
+                    contentIntent.data = Uri.parse("foobar://" + inviteNotifiableEvent.eventId)
+                    setContentIntent(PendingIntent.getActivity(context, 0, contentIntent, 0))
+
+                    if (inviteNotifiableEvent.noisy) {
+                        //Compat
+                        priority = NotificationCompat.PRIORITY_DEFAULT
+                        vectorPreferences.getNotificationRingTone()?.let {
+                            setSound(it)
+                        }
+                        setLights(accentColor, 500, 500)
+                    } else {
+                        priority = NotificationCompat.PRIORITY_LOW
+                    }
+                    setAutoCancel(true)
+                }
+                .build()
+    }
+
+    fun buildSimpleEventNotification(simpleNotifiableEvent: SimpleNotifiableEvent,
                                      matrixId: String): Notification {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
         // Build the pending intent for when the notification is clicked
@@ -500,46 +562,13 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_SUMMARY)
                 .setSmallIcon(smallIcon)
                 .setColor(accentColor)
+                .setAutoCancel(true)
                 .apply {
-                    if (simpleNotifiableEvent is InviteNotifiableEvent) {
-                        val roomId = simpleNotifiableEvent.roomId
-                        // offer to type a quick reject button
-                        val rejectIntent = Intent(context, NotificationBroadcastReceiver::class.java)
-                        rejectIntent.action = REJECT_ACTION
-                        rejectIntent.data = Uri.parse("foobar://$roomId&$matrixId")
-                        rejectIntent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomId)
-                        val rejectIntentPendingIntent = PendingIntent.getBroadcast(context, System.currentTimeMillis().toInt(), rejectIntent,
-                                PendingIntent.FLAG_UPDATE_CURRENT)
-
-                        addAction(
-                                R.drawable.vector_notification_reject_invitation,
-                                stringProvider.getString(R.string.reject),
-                                rejectIntentPendingIntent)
-
-                        // offer to type a quick accept button
-                        val joinIntent = Intent(context, NotificationBroadcastReceiver::class.java)
-                        joinIntent.action = JOIN_ACTION
-                        joinIntent.data = Uri.parse("foobar://$roomId&$matrixId")
-                        rejectIntent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomId)
-                        val joinIntentPendingIntent = PendingIntent.getBroadcast(context, System.currentTimeMillis().toInt(), joinIntent,
-                                PendingIntent.FLAG_UPDATE_CURRENT)
-                        addAction(
-                                R.drawable.vector_notification_accept_invitation,
-                                stringProvider.getString(R.string.join),
-                                joinIntentPendingIntent)
-                    } else {
-                        setAutoCancel(true)
-                    }
-
                     val contentIntent = Intent(context, HomeActivity::class.java)
                     contentIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
                     //pending intent get reused by system, this will mess up the extra params, so put unique info to avoid that
                     contentIntent.data = Uri.parse("foobar://" + simpleNotifiableEvent.eventId)
                     setContentIntent(PendingIntent.getActivity(context, 0, contentIntent, 0))
-
-                    if (largeIcon != null) {
-                        setLargeIcon(largeIcon)
-                    }
 
                     if (simpleNotifiableEvent.noisy) {
                         //Compat

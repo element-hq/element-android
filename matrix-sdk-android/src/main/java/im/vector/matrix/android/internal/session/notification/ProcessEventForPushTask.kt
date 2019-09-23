@@ -45,6 +45,10 @@ internal class DefaultProcessEventForPushTask @Inject constructor(
         params.syncResponse.leave.keys.forEach {
             defaultPushRuleService.dispatchRoomLeft(it)
         }
+        // Handle joined rooms
+        params.syncResponse.join.keys.forEach {
+            defaultPushRuleService.dispatchRoomJoined(it)
+        }
         val newJoinEvents = params.syncResponse.join
                 .map { entries ->
                     entries.value.timeline?.events?.map { it.copy(roomId = entries.key) }

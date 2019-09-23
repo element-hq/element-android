@@ -131,10 +131,20 @@ internal class DefaultPushRuleService @Inject constructor(private val getPushRul
         }
     }
 
-    fun dispatchRoomLeft(roomid: String) {
+    fun dispatchRoomJoined(roomId: String) {
         try {
             listeners.forEach {
-                it.onRoomLeft(roomid)
+                it.onRoomJoined(roomId)
+            }
+        } catch (e: Throwable) {
+            Timber.e(e, "Error while dispatching room left")
+        }
+    }
+
+    fun dispatchRoomLeft(roomId: String) {
+        try {
+            listeners.forEach {
+                it.onRoomLeft(roomId)
             }
         } catch (e: Throwable) {
             Timber.e(e, "Error while dispatching room left")

@@ -138,7 +138,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
     }
 
     /**
-    Clear all known events and refresh the notification drawer
+     * Clear all known events and refresh the notification drawer
      */
     fun clearAllEvents() {
         synchronized(eventList) {
@@ -147,7 +147,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
         refreshNotificationDrawer()
     }
 
-    /** Clear all known message events for this room and refresh the notification drawer */
+    /** Clear all known message events for this room */
     fun clearMessageEventOfRoom(roomId: String?) {
         Timber.v("clearMessageEventOfRoom $roomId")
 
@@ -159,7 +159,6 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
             }
             notificationUtils.cancelNotificationMessage(roomId, ROOM_MESSAGES_NOTIFICATION_ID)
         }
-        refreshNotificationDrawer()
     }
 
     /**
@@ -177,21 +176,14 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
         }
     }
 
-    fun homeActivityDidResume(matrixID: String?) {
-        synchronized(eventList) {
-            eventList.removeAll { e ->
-                // messages are cleared when entering room
-                e !is NotifiableMessageEvent
-            }
-        }
-    }
-
     fun clearMemberShipNotificationForRoom(roomId: String) {
         synchronized(eventList) {
             eventList.removeAll { e ->
                 e is InviteNotifiableEvent && e.roomId == roomId
             }
         }
+
+        notificationUtils.cancelNotificationMessage(roomId, ROOM_INVITATION_NOTIFICATION_ID)
     }
 
 
@@ -226,23 +218,26 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
 
             //group events by room to create a single MessagingStyle notif
             val roomIdToEventMap: MutableMap<String, MutableList<NotifiableMessageEvent>> = LinkedHashMap()
-            val simpleEvents: MutableList<NotifiableEvent> = ArrayList()
+            val simpleEvents: MutableList<SimpleNotifiableEvent> = ArrayList()
+            val invitationEvents: MutableList<InviteNotifiableEvent> = ArrayList()
 
             val eventIterator = eventList.listIterator()
             while (eventIterator.hasNext()) {
-                val event = eventIterator.next()
-                if (event is NotifiableMessageEvent) {
-                    val roomId = event.roomId
-                    val roomEvents = roomIdToEventMap.getOrPut(roomId) { ArrayList() }
+                when (val event = eventIterator.next()) {
+                    is NotifiableMessageEvent -> {
+                        val roomId = event.roomId
+                        val roomEvents = roomIdToEventMap.getOrPut(roomId) { ArrayList() }
 
-                    if (shouldIgnoreMessageEventInRoom(roomId) || outdatedDetector?.isMessageOutdated(event) == true) {
-                        //forget this event
-                        eventIterator.remove()
-                    } else {
-                        roomEvents.add(event)
+                        if (shouldIgnoreMessageEventInRoom(roomId) || outdatedDetector?.isMessageOutdated(event) == true) {
+                            //forget this event
+                            eventIterator.remove()
+                        } else {
+                            roomEvents.add(event)
+                        }
                     }
-                } else {
-                    simpleEvents.add(event)
+                    is InviteNotifiableEvent  -> invitationEvents.add(event)
+                    is SimpleNotifiableEvent  -> simpleEvents.add(event)
+                    else                      -> Timber.w("Type not handled")
                 }
             }
 
@@ -251,7 +246,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
 
             var globalLastMessageTimestamp = 0L
 
-            //events have been grouped by roomId
+            // events have been grouped by roomId
             for ((roomId, events) in roomIdToEventMap) {
                 // Build the notification for the room
                 if (events.isEmpty() || events.all { it.isRedacted }) {
@@ -372,11 +367,24 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
             }
 
 
-            //Handle simple events
-            for (event in simpleEvents) {
-                //We build a simple event
+            // Handle invitation events
+            for (event in invitationEvents) {
+                //We build a invitation notification
                 if (firstTime || !event.hasBeenDisplayed) {
-                    val notification = notificationUtils.buildSimpleEventNotification(event, null, session.myUserId)
+                    val notification = notificationUtils.buildRoomInvitationNotification(event, session.myUserId)
+                    notificationUtils.showNotificationMessage(event.roomId, ROOM_INVITATION_NOTIFICATION_ID, notification)
+                    event.hasBeenDisplayed = true //we can consider it as displayed
+                    hasNewEvent = true
+                    summaryIsNoisy = summaryIsNoisy || event.noisy
+                    summaryInboxStyle.addLine(event.description)
+                }
+            }
+
+            // Handle simple events
+            for (event in simpleEvents) {
+                //We build a simple notification
+                if (firstTime || !event.hasBeenDisplayed) {
+                    val notification = notificationUtils.buildSimpleEventNotification(event, session.myUserId)
                     notificationUtils.showNotificationMessage(event.eventId, ROOM_EVENT_NOTIFICATION_ID, notification)
                     event.hasBeenDisplayed = true //we can consider it as displayed
                     hasNewEvent = true
@@ -499,7 +507,8 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
     companion object {
         private const val SUMMARY_NOTIFICATION_ID = 0
         private const val ROOM_MESSAGES_NOTIFICATION_ID = 1
-        private const val ROOM_EVENT_NOTIFICATION_ID = 2
+        private const val ROOM_INVITATION_NOTIFICATION_ID = 2
+        private const val ROOM_EVENT_NOTIFICATION_ID = 3
 
         // TODO Mutliaccount
         private const val ROOMS_NOTIFICATIONS_FILE_NAME = "im.vector.notifications.cache"
