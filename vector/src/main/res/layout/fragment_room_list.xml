@@ -17,7 +17,6 @@
         android:id="@+id/createChatFabMenu"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:accessibilityTraversalBefore="@+id/roomListEpoxyRecyclerView"
         android:visibility="gone"
         app:layoutDescription="@xml/motion_scene_fab_menu"
         tools:showPaths="true"
