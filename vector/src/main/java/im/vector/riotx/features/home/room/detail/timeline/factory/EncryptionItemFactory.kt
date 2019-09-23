@@ -23,7 +23,7 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.internal.crypto.model.event.EncryptionEventContent
 import im.vector.riotx.R
 import im.vector.riotx.core.resources.StringProvider
-import im.vector.riotx.core.utils.DimensionUtils
+import im.vector.riotx.core.utils.DimensionConverter
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.home.room.detail.timeline.helper.senderAvatar
@@ -35,7 +35,7 @@ import javax.inject.Inject
 
 class EncryptionItemFactory @Inject constructor(private val stringProvider: StringProvider,
                                                 private val avatarRenderer: AvatarRenderer,
-                                                private val dimensionUtils: DimensionUtils) {
+                                                private val dimensionConverter: DimensionConverter) {
 
     fun create(event: TimelineEvent,
                highlight: Boolean,
@@ -52,7 +52,7 @@ class EncryptionItemFactory @Inject constructor(private val stringProvider: Stri
         )
         return NoticeItem_()
                 .avatarRenderer(avatarRenderer)
-                .dimensionUtils(dimensionUtils)
+                .dimensionConverter(dimensionConverter)
                 .noticeText(text)
                 .informationData(informationData)
                 .highlighted(highlight)

@@ -36,7 +36,7 @@ import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.extensions.setupAsSearch
 import im.vector.riotx.core.platform.VectorBaseFragment
-import im.vector.riotx.core.utils.DimensionUtils
+import im.vector.riotx.core.utils.DimensionConverter
 import im.vector.riotx.features.home.AvatarRenderer
 import kotlinx.android.synthetic.main.fragment_create_direct_room.*
 import javax.inject.Inject
@@ -51,7 +51,7 @@ class CreateDirectRoomKnownUsersFragment : VectorBaseFragment(), KnownUsersContr
 
     @Inject lateinit var directRoomController: KnownUsersController
     @Inject lateinit var avatarRenderer: AvatarRenderer
-    @Inject lateinit var dimensionUtils: DimensionUtils
+    @Inject lateinit var dimensionConverter: DimensionConverter
     private lateinit var navigationViewModel: CreateDirectRoomNavigationViewModel
 
     override fun injectWith(injector: ScreenComponent) {
@@ -157,7 +157,7 @@ class CreateDirectRoomKnownUsersFragment : VectorBaseFragment(), KnownUsersContr
     private fun addChipToGroup(user: User, chipGroup: ChipGroup) {
         val chip = Chip(requireContext())
         chip.setChipBackgroundColorResource(android.R.color.transparent)
-        chip.chipStrokeWidth = dimensionUtils.dpToPx(1).toFloat()
+        chip.chipStrokeWidth = dimensionConverter.dpToPx(1).toFloat()
         chip.text = if (user.displayName.isNullOrBlank()) user.userId else user.displayName
         chip.isClickable = true
         chip.isCheckable = false

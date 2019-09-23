@@ -40,7 +40,7 @@ import im.vector.riotx.core.linkify.VectorLinkify
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.utils.DebouncedClickListener
-import im.vector.riotx.core.utils.DimensionUtils
+import im.vector.riotx.core.utils.DimensionConverter
 import im.vector.riotx.core.utils.containsOnlyEmojis
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
@@ -65,7 +65,7 @@ class MessageItemFactory @Inject constructor(
         private val messageInformationDataFactory: MessageInformationDataFactory,
         private val contentUploadStateTrackerBinder: ContentUploadStateTrackerBinder,
         private val noticeItemFactory: NoticeItemFactory,
-        private val dimensionUtils: DimensionUtils) {
+        private val dimensionConverter: DimensionConverter) {
 
 
     fun create(event: TimelineEvent,
@@ -116,7 +116,7 @@ class MessageItemFactory @Inject constructor(
         return MessageFileItem_()
                 .avatarRenderer(avatarRenderer)
                 .colorProvider(colorProvider)
-                .dimensionUtils(dimensionUtils)
+                .dimensionConverter(dimensionConverter)
                 .informationData(informationData)
                 .highlighted(highlight)
                 .avatarCallback(callback)
@@ -146,7 +146,7 @@ class MessageItemFactory @Inject constructor(
         return MessageFileItem_()
                 .avatarRenderer(avatarRenderer)
                 .colorProvider(colorProvider)
-                .dimensionUtils(dimensionUtils)
+                .dimensionConverter(dimensionConverter)
                 .informationData(informationData)
                 .highlighted(highlight)
                 .avatarCallback(callback)
@@ -176,7 +176,7 @@ class MessageItemFactory @Inject constructor(
         return DefaultItem_()
                 .text(text)
                 .avatarRenderer(avatarRenderer)
-                .dimensionUtils(dimensionUtils)
+                .dimensionConverter(dimensionConverter)
                 .highlighted(highlight)
                 .informationData(informationData)
                 .baseCallback(callback)
@@ -203,7 +203,7 @@ class MessageItemFactory @Inject constructor(
         return MessageImageVideoItem_()
                 .avatarRenderer(avatarRenderer)
                 .colorProvider(colorProvider)
-                .dimensionUtils(dimensionUtils)
+                .dimensionConverter(dimensionConverter)
                 .imageContentRenderer(imageContentRenderer)
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
                 .playable(messageContent.info?.mimeType == "image/gif")
@@ -258,7 +258,7 @@ class MessageItemFactory @Inject constructor(
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
                 .avatarRenderer(avatarRenderer)
                 .colorProvider(colorProvider)
-                .dimensionUtils(dimensionUtils)
+                .dimensionConverter(dimensionConverter)
                 .playable(true)
                 .informationData(informationData)
                 .highlighted(highlight)
@@ -302,7 +302,7 @@ class MessageItemFactory @Inject constructor(
                 .avatarRenderer(avatarRenderer)
                 .informationData(informationData)
                 .colorProvider(colorProvider)
-                .dimensionUtils(dimensionUtils)
+                .dimensionConverter(dimensionConverter)
                 .highlighted(highlight)
                 .avatarCallback(callback)
                 .urlClickCallback(callback)
@@ -337,7 +337,7 @@ class MessageItemFactory @Inject constructor(
                 Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
 
         // Note: text size is set to 14sp
-        spannable.setSpan(AbsoluteSizeSpan(dimensionUtils.spToPx(13)), editStart, editEnd, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+        spannable.setSpan(AbsoluteSizeSpan(dimensionConverter.spToPx(13)), editStart, editEnd, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
         spannable.setSpan(object : ClickableSpan() {
             override fun onClick(widget: View?) {
                 callback?.onEditedDecorationClicked(informationData)
@@ -370,7 +370,7 @@ class MessageItemFactory @Inject constructor(
                 .avatarRenderer(avatarRenderer)
                 .message(message)
                 .colorProvider(colorProvider)
-                .dimensionUtils(dimensionUtils)
+                .dimensionConverter(dimensionConverter)
                 .informationData(informationData)
                 .highlighted(highlight)
                 .avatarCallback(callback)
@@ -412,7 +412,7 @@ class MessageItemFactory @Inject constructor(
                 }
                 .avatarRenderer(avatarRenderer)
                 .colorProvider(colorProvider)
-                .dimensionUtils(dimensionUtils)
+                .dimensionConverter(dimensionConverter)
                 .informationData(informationData)
                 .highlighted(highlight)
                 .avatarCallback(callback)
@@ -436,7 +436,7 @@ class MessageItemFactory @Inject constructor(
         return RedactedMessageItem_()
                 .avatarRenderer(avatarRenderer)
                 .colorProvider(colorProvider)
-                .dimensionUtils(dimensionUtils)
+                .dimensionConverter(dimensionConverter)
                 .informationData(informationData)
                 .highlighted(highlight)
                 .avatarCallback(callback)

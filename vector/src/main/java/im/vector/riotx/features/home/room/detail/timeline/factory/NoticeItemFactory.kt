@@ -17,7 +17,7 @@
 package im.vector.riotx.features.home.room.detail.timeline.factory
 
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
-import im.vector.riotx.core.utils.DimensionUtils
+import im.vector.riotx.core.utils.DimensionConverter
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.home.room.detail.timeline.format.NoticeEventFormatter
@@ -29,7 +29,7 @@ import javax.inject.Inject
 class NoticeItemFactory @Inject constructor(private val eventFormatter: NoticeEventFormatter,
                                             private val avatarRenderer: AvatarRenderer,
                                             private val informationDataFactory: MessageInformationDataFactory,
-                                            private val dimensionUtils: DimensionUtils) {
+                                            private val dimensionConverter: DimensionConverter) {
 
     fun create(event: TimelineEvent,
                highlight: Boolean,
@@ -39,7 +39,7 @@ class NoticeItemFactory @Inject constructor(private val eventFormatter: NoticeEv
 
         return NoticeItem_()
                 .avatarRenderer(avatarRenderer)
-                .dimensionUtils(dimensionUtils)
+                .dimensionConverter(dimensionConverter)
                 .noticeText(formattedText)
                 .highlighted(highlight)
                 .informationData(informationData)

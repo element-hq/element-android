@@ -25,7 +25,7 @@ import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
 import im.vector.riotx.core.platform.CheckableView
 import im.vector.riotx.core.ui.views.ReadReceiptsView
-import im.vector.riotx.core.utils.DimensionUtils
+import im.vector.riotx.core.utils.DimensionConverter
 
 /**
  * Children must override getViewType()
@@ -39,12 +39,12 @@ abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>
     var highlighted: Boolean = false
 
     @EpoxyAttribute
-    lateinit var dimensionUtils: DimensionUtils
+    lateinit var dimensionConverter: DimensionConverter
 
     override fun bind(holder: H) {
         super.bind(holder)
         //optimize?
-        val px = dimensionUtils.dpToPx(avatarStyle.avatarSizeDP + 8)
+        val px = dimensionConverter.dpToPx(avatarStyle.avatarSizeDP + 8)
         holder.leftGuideline.setGuidelineBegin(px)
 
         holder.checkableBackground.isChecked = highlighted

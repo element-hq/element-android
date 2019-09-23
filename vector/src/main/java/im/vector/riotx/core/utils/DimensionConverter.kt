@@ -15,18 +15,18 @@
  */
 package im.vector.riotx.core.utils
 
-import android.content.Context
+import android.content.res.Resources
 import android.util.TypedValue
 import javax.inject.Inject
 
 
-class DimensionUtils @Inject constructor(val context: Context) {
+class DimensionConverter @Inject constructor(val resources: Resources) {
 
     fun dpToPx(dp: Int): Int {
         return TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP,
                 dp.toFloat(),
-                context.resources.displayMetrics
+                resources.displayMetrics
         ).toInt()
     }
 
@@ -34,7 +34,7 @@ class DimensionUtils @Inject constructor(val context: Context) {
         return TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_SP,
                 sp.toFloat(),
-                context.resources.displayMetrics
+                resources.displayMetrics
         ).toInt()
     }
 }

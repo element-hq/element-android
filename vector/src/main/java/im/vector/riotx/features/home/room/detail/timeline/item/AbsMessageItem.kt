@@ -99,7 +99,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
         super.bind(holder)
         if (informationData.showInformation) {
             holder.avatarImageView.layoutParams = holder.avatarImageView.layoutParams?.apply {
-                val size = dimensionUtils.dpToPx(avatarStyle.avatarSizeDP)
+                val size = dimensionConverter.dpToPx(avatarStyle.avatarSizeDP)
                 height = size
                 width = size
             }
