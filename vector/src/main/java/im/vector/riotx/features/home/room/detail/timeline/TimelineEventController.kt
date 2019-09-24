@@ -31,14 +31,11 @@ import im.vector.riotx.core.date.VectorDateFormatter
 import im.vector.riotx.core.epoxy.LoadingItem_
 import im.vector.riotx.core.extensions.localDateTime
 import im.vector.riotx.core.resources.UserPreferencesProvider
+import im.vector.riotx.core.utils.DimensionConverter
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.factory.TimelineItemFactory
 import im.vector.riotx.features.home.room.detail.timeline.helper.*
-import im.vector.riotx.features.home.room.detail.timeline.item.DaySeparatorItem
-import im.vector.riotx.features.home.room.detail.timeline.item.DaySeparatorItem_
-import im.vector.riotx.features.home.room.detail.timeline.item.MergedHeaderItem
-import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
-import im.vector.riotx.features.home.room.detail.timeline.item.ReadReceiptData
+import im.vector.riotx.features.home.room.detail.timeline.item.*
 import im.vector.riotx.features.media.ImageContentRenderer
 import im.vector.riotx.features.media.VideoContentRenderer
 import org.threeten.bp.LocalDateTime
@@ -48,6 +45,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
                                                   private val timelineItemFactory: TimelineItemFactory,
                                                   private val timelineMediaSizeProvider: TimelineMediaSizeProvider,
                                                   private val avatarRenderer: AvatarRenderer,
+                                                  private val dimensionConverter: DimensionConverter,
                                                   @TimelineEventControllerHandler
                                                   private val backgroundHandler: Handler,
                                                   userPreferencesProvider: UserPreferencesProvider
@@ -312,6 +310,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
                     mergeItemCollapseStates[event.localId] = it
                     requestModelBuild()
                 }.also {
+                    it.dimensionConverter = dimensionConverter
                     it.setOnVisibilityStateChanged(MergedTimelineEventVisibilityStateChangedListener(callback, mergedEvents))
                 }
             }
