@@ -65,6 +65,7 @@ import im.vector.riotx.features.roomdirectory.picker.RoomDirectoryPickerFragment
 import im.vector.riotx.features.roomdirectory.roompreview.RoomPreviewNoPreviewFragment
 import im.vector.riotx.features.settings.*
 import im.vector.riotx.features.settings.push.PushGatewaysFragment
+import im.vector.riotx.features.ui.UiStateRepository
 
 @Component(dependencies = [VectorComponent::class], modules = [AssistedInjectModule::class, ViewModelModule::class, HomeModule::class])
 @ScreenScope
@@ -79,6 +80,8 @@ interface ScreenComponent {
     fun rageShake(): RageShake
 
     fun navigator(): Navigator
+
+    fun uiStateRepository(): UiStateRepository
 
     fun inject(activity: HomeActivity)
 

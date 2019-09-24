@@ -42,6 +42,7 @@ import im.vector.riotx.features.rageshake.BugReporter
 import im.vector.riotx.features.rageshake.VectorFileLogger
 import im.vector.riotx.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.riotx.features.settings.VectorPreferences
+import im.vector.riotx.features.ui.UiStateRepository
 import javax.inject.Singleton
 
 @Component(modules = [VectorModule::class])
@@ -105,6 +106,8 @@ interface VectorComponent {
     fun vectorPreferences(): VectorPreferences
 
     fun vectorFileLogger(): VectorFileLogger
+
+    fun uiStateRepository(): UiStateRepository
 
     @Component.Factory
     interface Factory {

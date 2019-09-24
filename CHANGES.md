@@ -5,7 +5,7 @@ Features:
  -
 
 Improvements:
- -
+ - Persist active tab between sessions (#503)
 
 Other changes:
  -

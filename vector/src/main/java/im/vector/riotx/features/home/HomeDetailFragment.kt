@@ -166,6 +166,12 @@ class HomeDetailFragment : VectorBaseFragment(), KeysBackupBanner.Delegate {
     private fun switchDisplayMode(displayMode: RoomListFragment.DisplayMode) {
         groupToolbarTitleView.setText(displayMode.titleRes)
         updateSelectedFragment(displayMode)
+        // Update the navigation view (for when we restore the tabs)
+        bottomNavigationView.selectedItemId = when (displayMode) {
+            RoomListFragment.DisplayMode.PEOPLE -> R.id.bottom_action_people
+            RoomListFragment.DisplayMode.ROOMS  -> R.id.bottom_action_rooms
+            else                                -> R.id.bottom_action_home
+        }
     }
 
     private fun updateSelectedFragment(displayMode: RoomListFragment.DisplayMode) {
