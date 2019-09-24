@@ -29,7 +29,7 @@ import javax.inject.Singleton
  * Listens to the VerificationManager and add a new notification when an incoming request is detected.
  */
 @Singleton
-class IncomingVerificationRequestHandler @Inject constructor(val context: Context) : SasVerificationService.SasVerificationListener {
+class IncomingVerificationRequestHandler @Inject constructor(private val context: Context) : SasVerificationService.SasVerificationListener {
 
     private var session: Session? = null
 
@@ -60,7 +60,7 @@ class IncomingVerificationRequestHandler @Inject constructor(val context: Contex
                         .apply {
                             contentAction = Runnable {
                                 val intent = SASVerificationActivity.incomingIntent(context,
-                                        session?.sessionParams?.credentials?.userId ?: "",
+                                        session?.myUserId  ?: "",
                                         tx.otherUserId,
                                         tx.transactionId)
                                 weakCurrentActivity?.get()?.startActivity(intent)
@@ -78,7 +78,7 @@ class IncomingVerificationRequestHandler @Inject constructor(val context: Contex
                                     context.getString(R.string.action_open),
                                     Runnable {
                                         val intent = SASVerificationActivity.incomingIntent(context,
-                                                session?.sessionParams?.credentials?.userId ?: "",
+                                                session?.myUserId ?: "",
                                                 tx.otherUserId,
                                                 tx.transactionId)
                                         weakCurrentActivity?.get()?.startActivity(intent)

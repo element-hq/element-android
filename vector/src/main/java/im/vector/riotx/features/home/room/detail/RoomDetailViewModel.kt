@@ -42,8 +42,9 @@ import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.model.message.getFileUrl
 import im.vector.matrix.android.api.session.room.model.tombstone.RoomTombstoneContent
-import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.matrix.android.api.session.room.send.UserDraft
 import im.vector.matrix.android.api.session.room.timeline.TimelineSettings
+import im.vector.matrix.android.api.session.room.timeline.getTextEditableContent
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
 import im.vector.matrix.rx.rx
@@ -109,6 +110,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         observeRoomSummary()
         observeEventDisplayedActions()
         observeSummaryState()
+        observeDrafts()
         room.rx().loadRoomMembersIfNeeded().subscribeLogError().disposeOnClear()
         timeline.start()
         setState { copy(timeline = this@RoomDetailViewModel.timeline) }
@@ -116,6 +118,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
 
     fun process(action: RoomDetailActions) {
         when (action) {
+            is RoomDetailActions.SaveDraft              -> handleSaveDraft(action)
             is RoomDetailActions.SendMessage            -> handleSendMessage(action)
             is RoomDetailActions.SendMedia              -> handleSendMedia(action)
             is RoomDetailActions.EventDisplayed         -> handleEventDisplayed(action)
@@ -129,6 +132,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
             is RoomDetailActions.EnterEditMode          -> handleEditAction(action)
             is RoomDetailActions.EnterQuoteMode         -> handleQuoteAction(action)
             is RoomDetailActions.EnterReplyMode         -> handleReplyAction(action)
+            is RoomDetailActions.ExitSpecialMode        -> handleExitSpecialMode(action)
             is RoomDetailActions.DownloadFile           -> handleDownloadFile(action)
             is RoomDetailActions.NavigateToEvent        -> handleNavigateToEvent(action)
             is RoomDetailActions.HandleTombstoneEvent   -> handleTombstoneEvent(action)
@@ -140,9 +144,54 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         }
     }
 
+    /**
+     * Convert a send mode to a draft and save the draft
+     */
+    private fun handleSaveDraft(action: RoomDetailActions.SaveDraft) {
+        withState {
+            when (it.sendMode) {
+                is SendMode.REGULAR -> room.saveDraft(UserDraft.REGULAR(action.draft))
+                is SendMode.REPLY   -> room.saveDraft(UserDraft.REPLY(it.sendMode.timelineEvent.root.eventId!!, action.draft))
+                is SendMode.QUOTE   -> room.saveDraft(UserDraft.QUOTE(it.sendMode.timelineEvent.root.eventId!!, action.draft))
+                is SendMode.EDIT    -> room.saveDraft(UserDraft.EDIT(it.sendMode.timelineEvent.root.eventId!!, action.draft))
+            }
+        }
+    }
+
+    private fun observeDrafts() {
+        room.rx().liveDrafts()
+                .subscribe {
+                    Timber.d("Draft update --> SetState")
+                    setState {
+                        val draft = it.lastOrNull() ?: UserDraft.REGULAR("")
+                        copy(
+                                // Create a sendMode from a draft and retrieve the TimelineEvent
+                                sendMode = when (draft) {
+                                    is UserDraft.REGULAR -> SendMode.REGULAR(draft.text)
+                                    is UserDraft.QUOTE   -> {
+                                        room.getTimeLineEvent(draft.linkedEventId)?.let { timelineEvent ->
+                                            SendMode.QUOTE(timelineEvent, draft.text)
+                                        }
+                                    }
+                                    is UserDraft.REPLY   -> {
+                                        room.getTimeLineEvent(draft.linkedEventId)?.let { timelineEvent ->
+                                            SendMode.REPLY(timelineEvent, draft.text)
+                                        }
+                                    }
+                                    is UserDraft.EDIT    -> {
+                                        room.getTimeLineEvent(draft.linkedEventId)?.let { timelineEvent ->
+                                            SendMode.EDIT(timelineEvent, draft.text)
+                                        }
+                                    }
+                                } ?: SendMode.REGULAR("")
+                        )
+                    }
+                }
+                .disposeOnClear()
+    }
+
     private fun handleTombstoneEvent(action: RoomDetailActions.HandleTombstoneEvent) {
-        val tombstoneContent = action.event.getClearContent().toModel<RoomTombstoneContent>()
-                               ?: return
+        val tombstoneContent = action.event.getClearContent().toModel<RoomTombstoneContent>() ?: return
 
         val roomId = tombstoneContent.replacementRoom ?: ""
         val isRoomJoined = session.getRoom(roomId)?.roomSummary()?.membership == Membership.JOIN
@@ -164,22 +213,6 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                     }
         }
 
-    }
-
-    private fun enterEditMode(event: TimelineEvent) {
-        setState {
-            copy(
-                    sendMode = SendMode.EDIT(event)
-            )
-        }
-    }
-
-    fun resetSendMode() {
-        setState {
-            copy(
-                    sendMode = SendMode.REGULAR
-            )
-        }
     }
 
     private val _nonBlockingPopAlert = MutableLiveData<LiveEvent<Pair<Int, List<Any>>>>()
@@ -218,7 +251,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     private fun handleSendMessage(action: RoomDetailActions.SendMessage) {
         withState { state ->
             when (state.sendMode) {
-                SendMode.REGULAR  -> {
+                is SendMode.REGULAR -> {
                     val slashCommandResult = CommandParser.parseSplashCommand(action.text)
 
                     when (slashCommandResult) {
@@ -226,6 +259,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                             // Send the text message to the room
                             room.sendTextMessage(action.text, autoMarkdown = action.autoMarkdown)
                             _sendMessageResultLiveData.postLiveEvent(SendMessageResult.MessageSent)
+                            popDraft()
                         }
                         is ParsedCommand.ErrorSyntax              -> {
                             _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandError(slashCommandResult.command))
@@ -238,6 +272,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                         }
                         is ParsedCommand.Invite                   -> {
                             handleInviteSlashCommand(slashCommandResult)
+                            popDraft()
                         }
                         is ParsedCommand.SetUserPowerLevel        -> {
                             // TODO
@@ -251,6 +286,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                             vectorPreferences.setMarkdownEnabled(slashCommandResult.enable)
                             _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled(
                                     if (slashCommandResult.enable) R.string.markdown_has_been_enabled else R.string.markdown_has_been_disabled))
+                            popDraft()
                         }
                         is ParsedCommand.UnbanUser                -> {
                             // TODO
@@ -275,9 +311,11 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                         is ParsedCommand.SendEmote                -> {
                             room.sendTextMessage(slashCommandResult.message, msgType = MessageType.MSGTYPE_EMOTE)
                             _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled())
+                            popDraft()
                         }
                         is ParsedCommand.ChangeTopic              -> {
                             handleChangeTopicSlashCommand(slashCommandResult)
+                            popDraft()
                         }
                         is ParsedCommand.ChangeDisplayName        -> {
                             // TODO
@@ -285,11 +323,10 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                         }
                     }
                 }
-                is SendMode.EDIT  -> {
-
+                is SendMode.EDIT    -> {
                     //is original event a reply?
                     val inReplyTo = state.sendMode.timelineEvent.root.getClearContent().toModel<MessageContent>()?.relatesTo?.inReplyTo?.eventId
-                                    ?: state.sendMode.timelineEvent.root.content.toModel<EncryptedEventContent>()?.relatesTo?.inReplyTo?.eventId
+                            ?: state.sendMode.timelineEvent.root.content.toModel<EncryptedEventContent>()?.relatesTo?.inReplyTo?.eventId
                     if (inReplyTo != null) {
                         //TODO check if same content?
                         room.getTimeLineEvent(inReplyTo)?.let {
@@ -298,27 +335,24 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                     } else {
                         val messageContent: MessageContent? =
                                 state.sendMode.timelineEvent.annotations?.editSummary?.aggregatedContent.toModel()
-                                ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
+                                        ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
                         val existingBody = messageContent?.body ?: ""
                         if (existingBody != action.text) {
-                            room.editTextMessage(state.sendMode.timelineEvent.root.eventId
-                                                 ?: "", messageContent?.type
-                                                        ?: MessageType.MSGTYPE_TEXT, action.text, action.autoMarkdown)
+                            room.editTextMessage(state.sendMode.timelineEvent.root.eventId ?: "",
+                                    messageContent?.type ?: MessageType.MSGTYPE_TEXT,
+                                    action.text,
+                                    action.autoMarkdown)
                         } else {
                             Timber.w("Same message content, do not send edition")
                         }
                     }
-                    setState {
-                        copy(
-                                sendMode = SendMode.REGULAR
-                        )
-                    }
                     _sendMessageResultLiveData.postLiveEvent(SendMessageResult.MessageSent)
+                    popDraft()
                 }
-                is SendMode.QUOTE -> {
+                is SendMode.QUOTE   -> {
                     val messageContent: MessageContent? =
                             state.sendMode.timelineEvent.annotations?.editSummary?.aggregatedContent.toModel()
-                            ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
+                                    ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
                     val textMsg = messageContent?.body
 
                     val finalText = legacyRiotQuoteText(textMsg, action.text)
@@ -333,27 +367,22 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                     } else {
                         room.sendFormattedTextMessage(finalText, htmlText)
                     }
-                    setState {
-                        copy(
-                                sendMode = SendMode.REGULAR
-                        )
-                    }
                     _sendMessageResultLiveData.postLiveEvent(SendMessageResult.MessageSent)
+                    popDraft()
                 }
-                is SendMode.REPLY -> {
+                is SendMode.REPLY   -> {
                     state.sendMode.timelineEvent.let {
                         room.replyToMessage(it, action.text, action.autoMarkdown)
-                        setState {
-                            copy(
-                                    sendMode = SendMode.REGULAR
-                            )
-                        }
                         _sendMessageResultLiveData.postLiveEvent(SendMessageResult.MessageSent)
+                        popDraft()
                     }
-
                 }
             }
         }
+    }
+
+    private fun popDraft() {
+        room.deleteDraft()
     }
 
     private fun legacyRiotQuoteText(quotedText: String?, myText: String): String {
@@ -469,27 +498,71 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun handleEditAction(action: RoomDetailActions.EnterEditMode) {
-        room.getTimeLineEvent(action.eventId)?.let {
-            enterEditMode(it)
+        saveCurrentDraft(action.draft)
+
+        room.getTimeLineEvent(action.eventId)?.let { timelineEvent ->
+            timelineEvent.root.eventId?.let {
+                room.saveDraft(UserDraft.EDIT(it, timelineEvent.getTextEditableContent() ?: ""))
+            }
         }
     }
 
     private fun handleQuoteAction(action: RoomDetailActions.EnterQuoteMode) {
-        room.getTimeLineEvent(action.eventId)?.let {
-            setState {
-                copy(
-                        sendMode = SendMode.QUOTE(it)
-                )
+        saveCurrentDraft(action.draft)
+
+        room.getTimeLineEvent(action.eventId)?.let { timelineEvent ->
+            withState { state ->
+                // Save a new draft and keep the previously entered text, if it was not an edit
+                timelineEvent.root.eventId?.let {
+                    if (state.sendMode is SendMode.EDIT) {
+                        room.saveDraft(UserDraft.QUOTE(it, ""))
+                    } else {
+                        room.saveDraft(UserDraft.QUOTE(it, action.draft))
+                    }
+                }
             }
         }
     }
 
     private fun handleReplyAction(action: RoomDetailActions.EnterReplyMode) {
-        room.getTimeLineEvent(action.eventId)?.let {
-            setState {
-                copy(
-                        sendMode = SendMode.REPLY(it)
-                )
+        saveCurrentDraft(action.draft)
+
+        room.getTimeLineEvent(action.eventId)?.let { timelineEvent ->
+            withState { state ->
+                // Save a new draft and keep the previously entered text, if it was not an edit
+                timelineEvent.root.eventId?.let {
+                    if (state.sendMode is SendMode.EDIT) {
+                        room.saveDraft(UserDraft.REPLY(it, ""))
+                    } else {
+                        room.saveDraft(UserDraft.REPLY(it, action.draft))
+                    }
+                }
+            }
+        }
+    }
+
+    private fun saveCurrentDraft(draft: String) {
+        // Save the draft with the current text if any
+        withState {
+            if (draft.isNotBlank()) {
+                when (it.sendMode) {
+                    is SendMode.REGULAR -> room.saveDraft(UserDraft.REGULAR(draft))
+                    is SendMode.REPLY   -> room.saveDraft(UserDraft.REPLY(it.sendMode.timelineEvent.root.eventId!!, draft))
+                    is SendMode.QUOTE   -> room.saveDraft(UserDraft.QUOTE(it.sendMode.timelineEvent.root.eventId!!, draft))
+                    is SendMode.EDIT    -> room.saveDraft(UserDraft.EDIT(it.sendMode.timelineEvent.root.eventId!!, draft))
+                }
+            }
+        }
+    }
+
+    private fun handleExitSpecialMode(action: RoomDetailActions.ExitSpecialMode) {
+        withState { state ->
+            // For edit, just delete the current draft
+            if (state.sendMode is SendMode.EDIT) {
+                room.deleteDraft()
+            } else {
+                // Save a new draft and keep the previously entered text
+                room.saveDraft(UserDraft.REGULAR(action.draft))
             }
         }
     }
@@ -658,7 +731,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     private fun observeSummaryState() {
         asyncSubscribe(RoomDetailViewState::asyncRoomSummary) { summary ->
             if (summary.membership == Membership.INVITE) {
-                summary.latestEvent?.root?.senderId?.let { senderId ->
+                summary.latestPreviewableEvent?.root?.senderId?.let { senderId ->
                     session.getUser(senderId)
                 }?.also {
                     setState { copy(asyncInviter = Success(it)) }

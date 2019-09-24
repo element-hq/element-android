@@ -18,6 +18,16 @@ package im.vector.matrix.android.internal.di
 
 import javax.inject.Qualifier
 
+/**
+ * Used to inject the userId
+ */
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
-annotation class UserMd5
+internal annotation class UserId
+
+/**
+ * Used to inject the md5 of the userId
+ */
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+internal annotation class UserMd5

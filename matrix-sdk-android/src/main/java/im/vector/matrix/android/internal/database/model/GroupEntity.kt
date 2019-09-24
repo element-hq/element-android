@@ -20,9 +20,13 @@ import im.vector.matrix.android.api.session.room.model.Membership
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 
-internal open class GroupEntity(@PrimaryKey var groupId: String = ""
-
-) : RealmObject() {
+/**
+ * This class is used to store group info (groupId and membership) from the sync response.
+ * Then [im.vector.matrix.android.internal.session.group.GroupSummaryUpdater] observes change and
+ * makes requests to fetch group information from the homeserver
+ */
+internal open class GroupEntity(@PrimaryKey var groupId: String = "")
+    : RealmObject() {
 
     private var membershipStr: String = Membership.NONE.name
     var membership: Membership

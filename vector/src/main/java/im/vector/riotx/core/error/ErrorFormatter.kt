@@ -20,9 +20,10 @@ import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.riotx.R
 import im.vector.riotx.core.resources.StringProvider
+import java.net.SocketTimeoutException
 import javax.inject.Inject
 
-class ErrorFormatter @Inject constructor(val stringProvider: StringProvider) {
+class ErrorFormatter @Inject constructor(private val stringProvider: StringProvider) {
 
 
     fun toHumanReadable(failure: Failure): String {
@@ -33,7 +34,13 @@ class ErrorFormatter @Inject constructor(val stringProvider: StringProvider) {
     fun toHumanReadable(throwable: Throwable?): String {
         return when (throwable) {
             null                         -> null
-            is Failure.NetworkConnection -> stringProvider.getString(R.string.error_no_network)
+            is Failure.NetworkConnection -> {
+                if (throwable.ioException is SocketTimeoutException) {
+                    stringProvider.getString(R.string.error_network_timeout)
+                } else {
+                    stringProvider.getString(R.string.error_no_network)
+                }
+            }
             is Failure.ServerError       -> {
                 if (throwable.error.code == MatrixError.M_CONSENT_NOT_GIVEN) {
                     // Special case for terms and conditions

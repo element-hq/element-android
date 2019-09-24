@@ -22,6 +22,7 @@ import im.vector.matrix.android.api.failure.ConsentNotGivenError
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.internal.di.MoshiProvider
+import kotlinx.coroutines.CancellationException
 import okhttp3.ResponseBody
 import org.greenrobot.eventbus.EventBus
 import retrofit2.Call
@@ -49,6 +50,7 @@ internal class Request<DATA> {
                 is IOException              -> Failure.NetworkConnection(exception)
                 is Failure.ServerError,
                 is Failure.OtherServerError -> exception
+                is CancellationException    -> Failure.Cancelled(exception)
                 else                        -> Failure.Unknown(exception)
             }
         }

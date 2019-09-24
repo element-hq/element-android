@@ -32,13 +32,14 @@ import im.vector.matrix.android.internal.crypto.attachments.ElementToDecrypt
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.glide.GlideApp
 import im.vector.riotx.core.glide.GlideRequest
-import im.vector.riotx.core.utils.DimensionUtils.dpToPx
+import im.vector.riotx.core.utils.DimensionConverter
 import kotlinx.android.parcel.Parcelize
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 
-class ImageContentRenderer @Inject constructor(private val activeSessionHolder: ActiveSessionHolder) {
+class ImageContentRenderer @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
+                                               private val dimensionConverter: DimensionConverter) {
 
     @Parcelize
     data class Data(
@@ -67,10 +68,12 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
         val (width, height) = processSize(data, mode)
         imageView.layoutParams.height = height
         imageView.layoutParams.width = width
+        // a11y
+        imageView.contentDescription = data.filename
 
         createGlideRequest(data, mode, imageView, width, height)
                 .dontAnimate()
-                .transform(RoundedCorners(dpToPx(8, imageView.context)))
+                .transform(RoundedCorners(dimensionConverter.dpToPx(8)))
                 .thumbnail(0.3f)
                 .into(imageView)
 
@@ -78,6 +81,9 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
 
     fun renderFitTarget(data: Data, mode: Mode, imageView: ImageView, callback: ((Boolean) -> Unit)? = null) {
         val (width, height) = processSize(data, mode)
+
+        // a11y
+        imageView.contentDescription = data.filename
 
         createGlideRequest(data, mode, imageView, width, height)
                 .listener(object : RequestListener<Drawable> {
@@ -126,6 +132,9 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
     }
 
     fun render(data: Data, imageView: BigImageView) {
+        // a11y
+        imageView.contentDescription = data.filename
+
         val (width, height) = processSize(data, Mode.THUMBNAIL)
         val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()
         val fullSize = contentUrlResolver.resolveFullSize(data.url)

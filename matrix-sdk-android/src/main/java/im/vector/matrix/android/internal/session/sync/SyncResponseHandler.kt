@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.session.sync
 
-import arrow.core.Try
 import im.vector.matrix.android.R
 import im.vector.matrix.android.internal.crypto.DefaultCryptoService
 import im.vector.matrix.android.internal.session.DefaultInitialSyncProgressService
@@ -33,73 +32,70 @@ internal class SyncResponseHandler @Inject constructor(private val roomSyncHandl
                                                        private val cryptoService: DefaultCryptoService,
                                                        private val initialSyncProgressService: DefaultInitialSyncProgressService) {
 
-    fun handleResponse(syncResponse: SyncResponse, fromToken: String?, isCatchingUp: Boolean): Try<SyncResponse> {
-        return Try {
-            val isInitialSync = fromToken == null
-            Timber.v("Start handling sync, is InitialSync: $isInitialSync")
-            val reporter = initialSyncProgressService.takeIf { isInitialSync }
+    suspend fun handleResponse(syncResponse: SyncResponse, fromToken: String?, isCatchingUp: Boolean) {
+        val isInitialSync = fromToken == null
+        Timber.v("Start handling sync, is InitialSync: $isInitialSync")
+        val reporter = initialSyncProgressService.takeIf { isInitialSync }
 
+        measureTimeMillis {
+            if (!cryptoService.isStarted()) {
+                Timber.v("Should start cryptoService")
+                cryptoService.start(isInitialSync)
+            }
+        }.also {
+            Timber.v("Finish handling start cryptoService in $it ms")
+        }
+        val measure = measureTimeMillis {
+            // Handle the to device events before the room ones
+            // to ensure to decrypt them properly
             measureTimeMillis {
-                if (!cryptoService.isStarted()) {
-                    Timber.v("Should start cryptoService")
-                    cryptoService.start(isInitialSync)
+                Timber.v("Handle toDevice")
+                reportSubtask(reporter, R.string.initial_sync_start_importing_account_crypto, 100, 0.1f) {
+                    if (syncResponse.toDevice != null) {
+                        cryptoSyncHandler.handleToDevice(syncResponse.toDevice, reporter)
+                    }
                 }
             }.also {
-                Timber.v("Finish handling start cryptoService in $it ms")
+                Timber.v("Finish handling toDevice in $it ms")
             }
-            val measure = measureTimeMillis {
-                // Handle the to device events before the room ones
-                // to ensure to decrypt them properly
-                measureTimeMillis {
-                    Timber.v("Handle toDevice")
-                    reportSubtask(reporter, R.string.initial_sync_start_importing_account_crypto, 100, 0.1f) {
-                        if (syncResponse.toDevice != null) {
-                            cryptoSyncHandler.handleToDevice(syncResponse.toDevice, reporter)
-                        }
+
+            measureTimeMillis {
+                Timber.v("Handle rooms")
+
+                reportSubtask(reporter, R.string.initial_sync_start_importing_account_rooms, 100, 0.7f) {
+                    if (syncResponse.rooms != null) {
+                        roomSyncHandler.handle(syncResponse.rooms, isInitialSync, reporter)
                     }
-                }.also {
-                    Timber.v("Finish handling toDevice in $it ms")
                 }
-
-                measureTimeMillis {
-                    Timber.v("Handle rooms")
-
-                    reportSubtask(reporter, R.string.initial_sync_start_importing_account_rooms, 100, 0.7f) {
-                        if (syncResponse.rooms != null) {
-                            roomSyncHandler.handle(syncResponse.rooms, isInitialSync, reporter)
-                        }
-                    }
-                }.also {
-                    Timber.v("Finish handling rooms in $it ms")
-                }
-
-
-                measureTimeMillis {
-                    reportSubtask(reporter, R.string.initial_sync_start_importing_account_groups, 100, 0.1f) {
-                        Timber.v("Handle groups")
-                        if (syncResponse.groups != null) {
-                            groupSyncHandler.handle(syncResponse.groups, reporter)
-                        }
-                    }
-                }.also {
-                    Timber.v("Finish handling groups in $it ms")
-                }
-
-                measureTimeMillis {
-                    reportSubtask(reporter, R.string.initial_sync_start_importing_account_data, 100, 0.1f) {
-                        Timber.v("Handle accountData")
-                        userAccountDataSyncHandler.handle(syncResponse.accountData, syncResponse.rooms?.invite)
-                    }
-                }.also {
-                    Timber.v("Finish handling accountData in $it ms")
-                }
-
-                Timber.v("On sync completed")
-                cryptoSyncHandler.onSyncCompleted(syncResponse)
+            }.also {
+                Timber.v("Finish handling rooms in $it ms")
             }
-            Timber.v("Finish handling sync in $measure ms")
-            syncResponse
+
+
+            measureTimeMillis {
+                reportSubtask(reporter, R.string.initial_sync_start_importing_account_groups, 100, 0.1f) {
+                    Timber.v("Handle groups")
+                    if (syncResponse.groups != null) {
+                        groupSyncHandler.handle(syncResponse.groups, reporter)
+                    }
+                }
+            }.also {
+                Timber.v("Finish handling groups in $it ms")
+            }
+
+            measureTimeMillis {
+                reportSubtask(reporter, R.string.initial_sync_start_importing_account_data, 100, 0.1f) {
+                    Timber.v("Handle accountData")
+                    userAccountDataSyncHandler.handle(syncResponse.accountData, syncResponse.rooms?.invite)
+                }
+            }.also {
+                Timber.v("Finish handling accountData in $it ms")
+            }
+
+            Timber.v("On sync completed")
+            cryptoSyncHandler.onSyncCompleted(syncResponse)
         }
+        Timber.v("Finish handling sync in $measure ms")
     }
 
 }

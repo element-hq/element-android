@@ -18,7 +18,9 @@ package im.vector.matrix.android.internal.network
 
 import android.content.Context
 import com.novoda.merlin.Merlin
+import com.novoda.merlin.MerlinsBeard
 import im.vector.matrix.android.internal.di.MatrixScope
+import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
@@ -26,7 +28,9 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 @MatrixScope
-internal class NetworkConnectivityChecker @Inject constructor(context: Context) {
+internal class NetworkConnectivityChecker @Inject constructor(context: Context,
+                                                              backgroundDetectionObserver: BackgroundDetectionObserver)
+    : BackgroundDetectionObserver.Listener {
 
     private val merlin = Merlin.Builder()
             .withConnectableCallbacks()
@@ -36,11 +40,16 @@ internal class NetworkConnectivityChecker @Inject constructor(context: Context) 
     private val listeners = Collections.synchronizedSet(LinkedHashSet<Listener>())
 
     // True when internet is available
-    var hasInternetAccess = false
+    var hasInternetAccess = MerlinsBeard.Builder().build(context).isConnected
         private set
 
     init {
+        backgroundDetectionObserver.register(this)
+    }
+
+    override fun onMoveToForeground() {
         merlin.bind()
+
         merlin.registerDisconnectable {
             if (hasInternetAccess) {
                 Timber.v("On Disconnect")
@@ -61,6 +70,10 @@ internal class NetworkConnectivityChecker @Inject constructor(context: Context) 
                 }
             }
         }
+    }
+
+    override fun onMoveToBackground() {
+        merlin.unbind()
     }
 
     suspend fun waitUntilConnected() {

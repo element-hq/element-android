@@ -27,6 +27,7 @@ import im.vector.riotx.EmojiCompatFontProvider
 import im.vector.riotx.EmojiCompatWrapper
 import im.vector.riotx.VectorApplication
 import im.vector.riotx.core.pushers.PushersManager
+import im.vector.riotx.core.utils.DimensionConverter
 import im.vector.riotx.features.configuration.VectorConfiguration
 import im.vector.riotx.features.crypto.keysrequest.KeyRequestHandler
 import im.vector.riotx.features.crypto.verification.IncomingVerificationRequestHandler
@@ -36,10 +37,7 @@ import im.vector.riotx.features.home.HomeRoomListObservableStore
 import im.vector.riotx.features.home.group.SelectedGroupStore
 import im.vector.riotx.features.html.EventHtmlRenderer
 import im.vector.riotx.features.navigation.Navigator
-import im.vector.riotx.features.notifications.NotifiableEventResolver
-import im.vector.riotx.features.notifications.NotificationBroadcastReceiver
-import im.vector.riotx.features.notifications.NotificationDrawerManager
-import im.vector.riotx.features.notifications.PushRuleTriggerListener
+import im.vector.riotx.features.notifications.*
 import im.vector.riotx.features.rageshake.BugReporter
 import im.vector.riotx.features.rageshake.VectorFileLogger
 import im.vector.riotx.features.rageshake.VectorUncaughtExceptionHandler
@@ -58,11 +56,15 @@ interface VectorComponent {
 
     fun currentSession(): Session
 
+    fun notificationUtils(): NotificationUtils
+
     fun notificationDrawerManager(): NotificationDrawerManager
 
     fun appContext(): Context
 
     fun resources(): Resources
+
+    fun dimensionUtils(): DimensionConverter
 
     fun vectorConfiguration(): VectorConfiguration
 
@@ -72,7 +74,7 @@ interface VectorComponent {
 
     fun emojiCompatFontProvider(): EmojiCompatFontProvider
 
-    fun emojiCompatWrapper() : EmojiCompatWrapper
+    fun emojiCompatWrapper(): EmojiCompatWrapper
 
     fun eventHtmlRenderer(): EventHtmlRenderer
 

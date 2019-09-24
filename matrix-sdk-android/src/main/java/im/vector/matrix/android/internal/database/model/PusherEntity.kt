@@ -17,7 +17,6 @@ package im.vector.matrix.android.internal.database.model
 
 import im.vector.matrix.android.api.session.pushers.PusherState
 import io.realm.RealmObject
-import io.realm.annotations.Index
 
 //TODO
 //        at java.lang.Thread.run(Thread.java:764)
@@ -29,7 +28,6 @@ import io.realm.annotations.Index
 //        at im.vector.matrix.android.internal.session.pushers.AddHttpPusherWorker$doWork$$inlined$fold$lambda$2.execute(AddHttpPusherWorker.kt:70)
 //        at io.realm.Realm.executeTransaction(Realm.java:1493)
 internal open class PusherEntity(
-        @Index var userId: String = "",
         var pushKey: String = "",
         var kind: String? = null,
         var appId: String = "",

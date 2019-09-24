@@ -20,7 +20,7 @@ import im.vector.matrix.android.api.auth.data.Credentials
 import javax.inject.Inject
 
 internal class ObjectSigner @Inject constructor(private val credentials: Credentials,
-                            private val olmDevice: MXOlmDevice) {
+                                                private val olmDevice: MXOlmDevice) {
 
     /**
      * Sign Object

@@ -1,6 +1,7 @@
 # Use Docker file from https://hub.docker.com/r/runmymind/docker-android-sdk
 # Last docker plugin version can be found here:
 # https://github.com/buildkite-plugins/docker-buildkite-plugin/releases
+# We propagate the environment to the container (sse https://github.com/buildkite-plugins/docker-buildkite-plugin#propagate-environment-optional-boolean)
 
 # Build debug version of the RiotX application, from the develop branch and the features branches
 
@@ -18,6 +19,7 @@ steps:
     plugins:
       - docker#v3.1.0:
           image: "runmymind/docker-android-sdk"
+          propagate-environment: true
 
   - label: "Assemble FDroid Debug version"
     agents:
@@ -32,6 +34,7 @@ steps:
     plugins:
       - docker#v3.1.0:
           image: "runmymind/docker-android-sdk"
+          propagate-environment: true
 
   - label: "Build Google Play unsigned APK"
     agents:
@@ -46,6 +49,7 @@ steps:
     plugins:
       - docker#v3.1.0:
           image: "runmymind/docker-android-sdk"
+          propagate-environment: true
 
   # Code quality
 

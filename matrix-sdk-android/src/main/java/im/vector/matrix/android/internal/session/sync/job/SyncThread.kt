@@ -30,7 +30,6 @@ import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.TaskThread
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
-import kotlinx.coroutines.CancellationException
 import timber.log.Timber
 import java.net.SocketTimeoutException
 import java.util.concurrent.CountDownLatch
@@ -140,7 +139,7 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
                             if (failure is Failure.NetworkConnection && failure.cause is SocketTimeoutException) {
                                 // Timeout are not critical
                                 Timber.v("Timeout")
-                            } else if (failure is Failure.Unknown && failure.throwable is CancellationException) {
+                            } else if (failure is Failure.Cancelled) {
                                 Timber.v("Cancelled")
                             } else if (failure is Failure.ServerError
                                     && (failure.error.code == MatrixError.UNKNOWN_TOKEN || failure.error.code == MatrixError.MISSING_TOKEN)) {

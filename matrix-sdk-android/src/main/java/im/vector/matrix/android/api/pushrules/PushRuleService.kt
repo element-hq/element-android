@@ -25,14 +25,14 @@ interface PushRuleService {
     /**
      * Fetch the push rules from the server
      */
-    fun fetchPushRules(scope: String = "global")
+    fun fetchPushRules(scope: String = RuleScope.GLOBAL)
 
     //TODO get push rule set
-    fun getPushRules(scope: String = "global"): List<PushRule>
+    fun getPushRules(scope: String = RuleScope.GLOBAL): List<PushRule>
 
     //TODO update rule
 
-    fun updatePushRuleEnableStatus(kind: String, pushRule: PushRule, enabled: Boolean, callback: MatrixCallback<Unit>): Cancelable
+    fun updatePushRuleEnableStatus(kind: RuleKind, pushRule: PushRule, enabled: Boolean, callback: MatrixCallback<Unit>): Cancelable
 
     fun addPushRuleListener(listener: PushRuleListener)
 
@@ -43,6 +43,7 @@ interface PushRuleService {
     interface PushRuleListener {
         fun onMatchRule(event: Event, actions: List<Action>)
         fun onRoomLeft(roomId: String)
+        fun onEventRedacted(redactedEventId: String)
         fun batchFinish()
     }
 }

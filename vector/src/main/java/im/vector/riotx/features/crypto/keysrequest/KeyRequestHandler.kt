@@ -54,7 +54,7 @@ import kotlin.collections.HashMap
  */
 
 @Singleton
-class KeyRequestHandler @Inject constructor(val context: Context)
+class KeyRequestHandler @Inject constructor(private val context: Context)
     : RoomKeysRequestListener,
         SasVerificationService.SasVerificationListener {
 
@@ -204,7 +204,7 @@ class KeyRequestHandler @Inject constructor(val context: Context)
                 Runnable {
                     alert.weakCurrentActivity?.get()?.let {
                         val intent = SASVerificationActivity.outgoingIntent(it,
-                                session?.sessionParams?.credentials?.userId ?: "",
+                                session?.myUserId ?: "",
                                 userId, deviceId)
                         it.startActivity(intent)
                     }

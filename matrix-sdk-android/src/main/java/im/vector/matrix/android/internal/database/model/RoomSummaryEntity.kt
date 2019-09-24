@@ -26,7 +26,7 @@ internal open class RoomSummaryEntity(@PrimaryKey var roomId: String = "",
                                       var displayName: String? = "",
                                       var avatarUrl: String? = "",
                                       var topic: String? = "",
-                                      var latestEvent: TimelineEventEntity? = null,
+                                      var latestPreviewableEvent: TimelineEventEntity? = null,
                                       var heroes: RealmList<String> = RealmList(),
                                       var joinedMembersCount: Int? = 0,
                                       var invitedMembersCount: Int? = 0,
@@ -35,7 +35,9 @@ internal open class RoomSummaryEntity(@PrimaryKey var roomId: String = "",
                                       var otherMemberIds: RealmList<String> = RealmList(),
                                       var notificationCount: Int = 0,
                                       var highlightCount: Int = 0,
-                                      var tags: RealmList<RoomTagEntity> = RealmList()
+                                      var hasUnreadMessages: Boolean = false,
+                                      var tags: RealmList<RoomTagEntity> = RealmList(),
+                                      var userDrafts: UserDraftsEntity? = null
 ) : RealmObject() {
 
     private var membershipStr: String = Membership.NONE.name

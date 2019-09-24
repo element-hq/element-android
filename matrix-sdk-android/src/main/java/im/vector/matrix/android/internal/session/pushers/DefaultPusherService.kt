@@ -21,29 +21,28 @@ import androidx.work.BackoffPolicy
 import androidx.work.WorkManager
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.session.pushers.Pusher
 import im.vector.matrix.android.api.session.pushers.PushersService
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.PusherEntity
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.worker.WorkManagerUtil
 import im.vector.matrix.android.internal.worker.WorkManagerUtil.matrixOneTimeWorkRequestBuilder
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
-import java.util.UUID
+import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
-internal class DefaultPusherService @Inject constructor(
-        private val context: Context,
-        private val monarchy: Monarchy,
-        private val sessionParam: SessionParams,
-        private val getPusherTask: GetPushersTask,
-        private val removePusherTask: RemovePusherTask,
-        private val taskExecutor: TaskExecutor
+internal class DefaultPusherService @Inject constructor(private val context: Context,
+                                                        private val monarchy: Monarchy,
+                                                        @UserId private val userId: String,
+                                                        private val getPusherTask: GetPushersTask,
+                                                        private val removePusherTask: RemovePusherTask,
+                                                        private val taskExecutor: TaskExecutor
 ) : PushersService {
 
 
@@ -70,7 +69,7 @@ internal class DefaultPusherService @Inject constructor(
                 append = append)
 
 
-        val params = AddHttpPusherWorker.Params(pusher, sessionParam.credentials.userId)
+        val params = AddHttpPusherWorker.Params(pusher, userId)
 
         val request = matrixOneTimeWorkRequestBuilder<AddHttpPusherWorker>()
                 .setConstraints(WorkManagerUtil.workConstraints)
@@ -82,7 +81,7 @@ internal class DefaultPusherService @Inject constructor(
     }
 
     override fun removeHttpPusher(pushkey: String, appId: String, callback: MatrixCallback<Unit>) {
-        val params = RemovePusherTask.Params(sessionParam.credentials.userId, pushkey, appId)
+        val params = RemovePusherTask.Params(pushkey, appId)
         removePusherTask
                 .configureWith(params) {
                     this.callback = callback
@@ -93,12 +92,12 @@ internal class DefaultPusherService @Inject constructor(
 
     override fun livePushers(): LiveData<List<Pusher>> {
         return monarchy.findAllMappedWithChanges(
-                { realm -> PusherEntity.where(realm, sessionParam.credentials.userId) },
+                { realm -> PusherEntity.where(realm) },
                 { it.asDomain() }
         )
     }
 
     override fun pushers(): List<Pusher> {
-        return monarchy.fetchAllCopiedSync { PusherEntity.where(it, sessionParam.credentials.userId) }.map { it.asDomain() }
+        return monarchy.fetchAllCopiedSync { PusherEntity.where(it) }.map { it.asDomain() }
     }
 }

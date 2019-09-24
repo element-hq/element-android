@@ -15,15 +15,16 @@
  */
 package im.vector.matrix.android.internal.session.pushers
 
-import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.pushrules.*
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.RoomService
+import im.vector.matrix.android.internal.di.UserId
 import timber.log.Timber
 
+// TODO Inject constructor
 internal class DefaultConditionResolver(private val event: Event,
                                         private val roomService: RoomService,
-                                        private val sessionParams: SessionParams) : ConditionResolver {
+                                        @UserId private val userId: String) : ConditionResolver {
 
 
     override fun resolveEventMatchCondition(eventMatchCondition: EventMatchCondition): Boolean {
@@ -45,8 +46,7 @@ internal class DefaultConditionResolver(private val event: Event,
     override fun resolveContainsDisplayNameCondition(containsDisplayNameCondition: ContainsDisplayNameCondition): Boolean {
         val roomId = event.roomId ?: return false
         val room = roomService.getRoom(roomId) ?: return false
-        val myDisplayName = room.getRoomMember(sessionParams.credentials.userId)?.displayName
-                ?: return false
+        val myDisplayName = room.getRoomMember(userId)?.displayName ?: return false
         return containsDisplayNameCondition.isSatisfied(event, myDisplayName)
     }
 }

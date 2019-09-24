@@ -31,7 +31,7 @@ import im.vector.riotx.features.form.formSwitchItem
 import javax.inject.Inject
 
 class CreateRoomController @Inject constructor(private val stringProvider: StringProvider,
-                           private val errorFormatter: ErrorFormatter
+                                               private val errorFormatter: ErrorFormatter
 ) : TypedEpoxyController<CreateRoomViewState>() {
 
     var listener: Listener? = null

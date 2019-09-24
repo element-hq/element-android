@@ -21,6 +21,7 @@ import androidx.core.app.NotificationCompat
 data class InviteNotifiableEvent(
         override var matrixID: String?,
         override val eventId: String,
+        override val editedEventId: String?,
         var roomId: String,
         override var noisy: Boolean,
         override val title: String,
@@ -31,6 +32,7 @@ data class InviteNotifiableEvent(
         override var isPushGatewayEvent: Boolean = false) : NotifiableEvent {
 
     override var hasBeenDisplayed: Boolean = false
+    override var isRedacted: Boolean = false
     override var lockScreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
 
 }

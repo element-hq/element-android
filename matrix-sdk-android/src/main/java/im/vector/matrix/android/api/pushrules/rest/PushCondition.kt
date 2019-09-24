@@ -71,7 +71,7 @@ data class PushCondition(
                 this.key?.let { SenderNotificationPermissionCondition(it) }
             }
             Condition.Kind.UNRECOGNIZE                    -> {
-                Timber.e("Unknwon kind $kind")
+                Timber.e("Unknown kind $kind")
                 null
             }
         }

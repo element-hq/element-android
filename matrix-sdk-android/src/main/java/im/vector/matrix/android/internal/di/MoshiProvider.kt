@@ -23,6 +23,7 @@ import im.vector.matrix.android.internal.network.parsing.UriMoshiAdapter
 import im.vector.matrix.android.internal.session.sync.model.UserAccountData
 import im.vector.matrix.android.internal.session.sync.model.UserAccountDataDirectMessages
 import im.vector.matrix.android.internal.session.sync.model.UserAccountDataFallback
+import im.vector.matrix.android.internal.session.sync.model.UserAccountDataPushRules
 
 
 object MoshiProvider {
@@ -31,6 +32,7 @@ object MoshiProvider {
             .add(UriMoshiAdapter())
             .add(RuntimeJsonAdapterFactory.of(UserAccountData::class.java, "type", UserAccountDataFallback::class.java)
                     .registerSubtype(UserAccountDataDirectMessages::class.java, UserAccountData.TYPE_DIRECT_MESSAGES)
+                    .registerSubtype(UserAccountDataPushRules::class.java, UserAccountData.TYPE_PUSH_RULES)
             )
             .add(RuntimeJsonAdapterFactory.of(MessageContent::class.java, "msgtype", MessageDefaultContent::class.java)
                     .registerSubtype(MessageTextContent::class.java, MessageType.MSGTYPE_TEXT)

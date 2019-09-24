@@ -196,13 +196,13 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
         // This ID can and should be used to detect duplicate notification requests.
         val eventId = data["event_id"] ?: return //Just ignore
 
-
         val eventType = data["type"]
         if (eventType == null) {
             //Just add a generic unknown event
             val simpleNotifiableEvent = SimpleNotifiableEvent(
                     session.myUserId,
                     eventId,
+                    null,
                     true, //It's an issue in this case, all event will bing even if expected to be silent.
                     title = getString(R.string.notification_unknown_new_event),
                     description = "",
@@ -213,10 +213,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
             )
             notificationDrawerManager.onNotifiableEventReceived(simpleNotifiableEvent)
             notificationDrawerManager.refreshNotificationDrawer()
-
-            return
         } else {
-
             val event = parseEvent(data) ?: return
 
             val notifiableEvent = notifiableEventResolver.resolveEvent(event, session)
@@ -227,8 +224,6 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
                     Timber.e("--> ${event}")
                 }
             } else {
-
-
                 if (notifiableEvent is NotifiableMessageEvent) {
                     if (TextUtils.isEmpty(notifiableEvent.senderName)) {
                         notifiableEvent.senderName = data["sender_display_name"]
@@ -245,7 +240,6 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
                 notificationDrawerManager.refreshNotificationDrawer()
             }
         }
-
     }
 
     private fun findRoomNameBestEffort(data: Map<String, String>, session: Session?): String? {

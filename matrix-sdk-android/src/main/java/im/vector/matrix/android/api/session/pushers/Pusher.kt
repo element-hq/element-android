@@ -16,9 +16,6 @@
 package im.vector.matrix.android.api.session.pushers
 
 data class Pusher(
-
-        val userId: String,
-
         val pushKey: String,
         val kind: String,
         val appId: String,

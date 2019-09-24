@@ -26,7 +26,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class BitmapLoader @Inject constructor(val context: Context) {
+class BitmapLoader @Inject constructor(private val context: Context) {
 
     /**
      * Avatar Url -> Bitmap

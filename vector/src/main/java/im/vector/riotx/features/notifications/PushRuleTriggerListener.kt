@@ -40,7 +40,7 @@ class PushRuleTriggerListener @Inject constructor(
             Timber.e("Called without active session")
             return
         }
-        val notificationAction = NotificationAction.extractFrom(actions)
+        val notificationAction = actions.toNotificationAction()
         if (notificationAction.shouldNotify) {
             val notifiableEvent = resolver.resolveEvent(event, session!!)
             if (notifiableEvent == null) {
@@ -58,6 +58,10 @@ class PushRuleTriggerListener @Inject constructor(
 
     override fun onRoomLeft(roomId: String) {
         notificationDrawerManager.clearMessageEventOfRoom(roomId)
+    }
+
+    override fun onEventRedacted(redactedEventId: String) {
+        notificationDrawerManager.onEventRedacted(redactedEventId)
     }
 
     override fun batchFinish() {

@@ -19,77 +19,92 @@ import im.vector.matrix.android.api.pushrules.rest.PushRule
 import timber.log.Timber
 
 
-class Action(val type: Type) {
+sealed class Action {
+    object Notify : Action()
+    object DoNotNotify : Action()
+    data class Sound(val sound: String) : Action()
+    data class Highlight(val highlight: Boolean) : Action()
+}
 
-    enum class Type(val value: String) {
-        NOTIFY("notify"),
-        DONT_NOTIFY("dont_notify"),
-        COALESCE("coalesce"),
-        SET_TWEAK("set_tweak");
 
-        companion object {
+private const val ACTION_NOTIFY = "notify"
+private const val ACTION_DONT_NOTIFY = "dont_notify"
+private const val ACTION_COALESCE = "coalesce"
 
-            fun safeValueOf(value: String): Type? {
-                try {
-                    return valueOf(value)
-                } catch (e: IllegalArgumentException) {
-                    return null
+// Ref: https://matrix.org/docs/spec/client_server/latest#tweaks
+private const val ACTION_OBJECT_SET_TWEAK_KEY = "set_tweak"
+
+private const val ACTION_OBJECT_SET_TWEAK_VALUE_SOUND = "sound"
+private const val ACTION_OBJECT_SET_TWEAK_VALUE_HIGHLIGHT = "highlight"
+
+private const val ACTION_OBJECT_VALUE_KEY = "value"
+private const val ACTION_OBJECT_VALUE_VALUE_DEFAULT = "default"
+
+/**
+ * Ref: https://matrix.org/docs/spec/client_server/latest#actions
+ *
+ * Convert
+ * <pre>
+ * "actions": [
+ *     "notify",
+ *     {
+ *         "set_tweak": "sound",
+ *         "value": "default"
+ *     },
+ *     {
+ *         "set_tweak": "highlight"
+ *     }
+ *   ]
+ *
+ * To
+ * [
+ *     Action.Notify,
+ *     Action.Sound("default"),
+ *     Action.Highlight(true)
+ * ]
+ *
+ * </pre>
+ */
+fun PushRule.getActions(): List<Action> {
+    val result = ArrayList<Action>()
+
+    actions.forEach { actionStrOrObj ->
+        when (actionStrOrObj) {
+            ACTION_NOTIFY      -> Action.Notify
+            ACTION_DONT_NOTIFY -> Action.DoNotNotify
+            is Map<*, *>       -> {
+                when (actionStrOrObj[ACTION_OBJECT_SET_TWEAK_KEY]) {
+                    ACTION_OBJECT_SET_TWEAK_VALUE_SOUND     -> {
+                        (actionStrOrObj[ACTION_OBJECT_VALUE_KEY] as? String)?.let { stringValue ->
+                            Action.Sound(stringValue)
+                        }
+                        // When the value is not there, default sound (not specified by the spec)
+                                ?: Action.Sound(ACTION_OBJECT_VALUE_VALUE_DEFAULT)
+
+                    }
+                    ACTION_OBJECT_SET_TWEAK_VALUE_HIGHLIGHT -> {
+                        (actionStrOrObj[ACTION_OBJECT_VALUE_KEY] as? Boolean)?.let { boolValue ->
+                            Action.Highlight(boolValue)
+                        }
+                        // When the value is not there, default is true, says the spec
+                                ?: Action.Highlight(true)
+                    }
+                    else                                    -> {
+                        Timber.w("Unsupported set_tweak value ${actionStrOrObj[ACTION_OBJECT_SET_TWEAK_KEY]}")
+                        null
+                    }
                 }
             }
+            else               -> {
+                Timber.w("Unsupported action type $actionStrOrObj")
+                null
+            }
+        }?.let {
+            result.add(it)
         }
     }
 
-    var tweak_action: String? = null
-    var stringValue: String? = null
-    var boolValue: Boolean? = null
 
-    companion object {
-        fun mapFrom(pushRule: PushRule): List<Action>? {
-            val actions = ArrayList<Action>()
-            pushRule.actions.forEach { actionStrOrObj ->
-                if (actionStrOrObj is String) {
-                    when (actionStrOrObj) {
-                        Action.Type.NOTIFY.value      -> Action(Action.Type.NOTIFY)
-                        Action.Type.DONT_NOTIFY.value -> Action(Action.Type.DONT_NOTIFY)
-                        else                          -> {
-                            Timber.w("Unsupported action type ${actionStrOrObj}")
-                            null
-                        }
-                    }?.let {
-                        actions.add(it)
-                    }
-                } else if (actionStrOrObj is Map<*, *>) {
-                    val tweakAction = actionStrOrObj["set_tweak"] as? String
-                    when (tweakAction) {
-                        "sound"     -> {
-                            (actionStrOrObj["value"] as? String)?.let { stringValue ->
-                                Action(Action.Type.SET_TWEAK).also {
-                                    it.tweak_action = "sound"
-                                    it.stringValue = stringValue
-                                    actions.add(it)
-                                }
-                            }
-                        }
-                        "highlight" -> {
-                            (actionStrOrObj["value"] as? Boolean)?.let { boolValue ->
-                                Action(Action.Type.SET_TWEAK).also {
-                                    it.tweak_action = "highlight"
-                                    it.boolValue = boolValue
-                                    actions.add(it)
-                                }
-                            }
-                        }
-                        else        -> {
-                            Timber.w("Unsupported action type ${actionStrOrObj}")
-                        }
-                    }
-                } else {
-                    Timber.w("Unsupported action type ${actionStrOrObj}")
-                    return null
-                }
-            }
-            return if (actions.isEmpty()) null else actions
-        }
-    }
+    return result
 }
 

@@ -32,7 +32,6 @@ fun Session.configureAndStart(pushRuleTriggerListener: PushRuleTriggerListener) 
     startSync(isAtLeastStarted)
     refreshPushers()
     pushRuleTriggerListener.startWithSession(this)
-    fetchPushRules()
 
     // TODO P1 From HomeActivity
     // @Inject lateinit var incomingVerificationRequestHandler: IncomingVerificationRequestHandler

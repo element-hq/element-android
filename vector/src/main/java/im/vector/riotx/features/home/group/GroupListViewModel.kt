@@ -26,6 +26,7 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.group.model.GroupSummary
+import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.rx.rx
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.postLiveEvent
@@ -93,20 +94,20 @@ class GroupListViewModel @AssistedInject constructor(@Assisted initialState: Gro
         session
                 .rx()
                 .liveGroupSummaries()
+                // Keep only joined groups. Group invitations will be managed later
+                .map { it.filter { groupSummary -> groupSummary.membership == Membership.JOIN } }
                 .map {
                     val myUser = session.getUser(session.myUserId)
                     val allCommunityGroup = GroupSummary(
                             groupId = ALL_COMMUNITIES_GROUP_ID,
+                            membership = Membership.JOIN,
                             displayName = stringProvider.getString(R.string.group_all_communities),
                             avatarUrl = myUser?.avatarUrl ?: "")
                     listOf(allCommunityGroup) + it
                 }
                 .execute { async ->
-                    // TODO Phase2 Handle the case where the selected group is deleted on another client
                     val newSelectedGroup = selectedGroup ?: async()?.firstOrNull()
                     copy(asyncGroups = async, selectedGroup = newSelectedGroup)
                 }
     }
-
-
 }
