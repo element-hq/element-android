@@ -158,7 +158,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             synchronized(modelCache) {
                 for (i in 0 until modelCache.size) {
                     if (modelCache[i]?.eventId == viewState.highlightedEventId
-                        || modelCache[i]?.eventId == eventIdToHighlight) {
+                            || modelCache[i]?.eventId == eventIdToHighlight) {
                         modelCache[i] = null
                     }
                 }
@@ -229,8 +229,8 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
                 // Should be build if not cached or if cached but contains mergedHeader or formattedDay
                 // We then are sure we always have items up to date.
                 if (modelCache[position] == null
-                    || modelCache[position]?.mergedHeaderModel != null
-                    || modelCache[position]?.formattedDayModel != null) {
+                        || modelCache[position]?.mergedHeaderModel != null
+                        || modelCache[position]?.formattedDayModel != null) {
                     modelCache[position] = buildItemModels(position, currentSnapshot)
                 }
             }

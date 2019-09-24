@@ -52,7 +52,6 @@ data class RoomDetailViewState(
         val tombstoneEvent: Event? = null,
         val tombstoneEventHandling: Async<String> = Uninitialized,
         val syncState: SyncState = SyncState.IDLE,
-        val showJumpToReadMarker: Boolean = false,
         val highlightedEventId: String? = null,
         val hideReadMarker: Boolean = false
 ) : MvRxState {

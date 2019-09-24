@@ -56,7 +56,6 @@ class ScrollOnHighlightedEventCallback(private val layoutManager: LinearLayoutMa
             // Do not scroll it item is already visible
             if (positionToScroll !in firstVisibleItem..lastVisibleItem) {
                 Timber.v("Scroll to $positionToScroll")
-                // Note: Offset will be from the bottom, since the layoutManager is reversed
                 layoutManager.scrollToPosition(positionToScroll)
             }
             scheduledEventId.set(null)
