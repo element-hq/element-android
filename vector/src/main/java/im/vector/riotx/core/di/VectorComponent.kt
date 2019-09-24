@@ -65,7 +65,7 @@ interface VectorComponent {
 
     fun resources(): Resources
 
-    fun dimensionUtils(): DimensionConverter
+    fun dimensionConverter(): DimensionConverter
 
     fun vectorConfiguration(): VectorConfiguration
 
