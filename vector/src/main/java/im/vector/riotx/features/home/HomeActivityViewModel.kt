@@ -16,8 +16,6 @@
 
 package im.vector.riotx.features.home
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import arrow.core.Option
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.MvRxState
@@ -25,11 +23,9 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.android.api.session.room.model.RoomSummary
-import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.rx.rx
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.features.home.group.ALL_COMMUNITIES_GROUP_ID
@@ -61,10 +57,6 @@ class HomeActivityViewModel @AssistedInject constructor(@Assisted initialState: 
     }
 
 
-    private val _isLoading = MutableLiveData<Boolean>()
-    val isLoading: LiveData<Boolean>
-        get() = _isLoading
-
     init {
         session.addListener(this)
         observeRoomAndGroup()
@@ -93,7 +85,7 @@ class HomeActivityViewModel @AssistedInject constructor(@Assisted initialState: 
                                     .filter { !it.isDirect }
                                     .filter {
                                         selectedGroup?.groupId == ALL_COMMUNITIES_GROUP_ID
-                                        || selectedGroup?.roomIds?.contains(it.roomId) ?: true
+                                                || selectedGroup?.roomIds?.contains(it.roomId) ?: true
                                     }
                             filteredDirectRooms + filteredGroupRooms
                         }
@@ -102,21 +94,6 @@ class HomeActivityViewModel @AssistedInject constructor(@Assisted initialState: 
                     homeRoomListStore.post(it)
                 }
                 .disposeOnClear()
-    }
-
-    fun createRoom(createRoomParams: CreateRoomParams = CreateRoomParams()) {
-        _isLoading.value = true
-
-        session.createRoom(createRoomParams, object : MatrixCallback<String> {
-            override fun onSuccess(data: String) {
-                _isLoading.value = false
-            }
-
-            override fun onFailure(failure: Throwable) {
-                _isLoading.value = false
-                super.onFailure(failure)
-            }
-        })
     }
 
     override fun onCleared() {
