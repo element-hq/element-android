@@ -30,12 +30,18 @@ internal fun isEventRead(monarchy: Monarchy,
     var isEventRead = false
 
     monarchy.doWithRealm { realm ->
-        val readReceipt = ReadReceiptEntity.where(realm, roomId, userId).findFirst() ?: return@doWithRealm
         val liveChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId) ?: return@doWithRealm
-        val readReceiptIndex = liveChunk.timelineEvents.find(readReceipt.eventId)?.root?.displayIndex ?: Int.MIN_VALUE
-        val eventToCheckIndex = liveChunk.timelineEvents.find(eventId)?.root?.displayIndex ?: Int.MAX_VALUE
+        val eventToCheck = liveChunk.timelineEvents.find(eventId)?.root
 
-        isEventRead = eventToCheckIndex <= readReceiptIndex
+        isEventRead = if (eventToCheck?.sender == userId) {
+            true
+        } else {
+            val readReceipt = ReadReceiptEntity.where(realm, roomId, userId).findFirst() ?: return@doWithRealm
+            val readReceiptIndex = liveChunk.timelineEvents.find(readReceipt.eventId)?.root?.displayIndex ?: Int.MIN_VALUE
+            val eventToCheckIndex = eventToCheck?.displayIndex ?: Int.MAX_VALUE
+
+            eventToCheckIndex <= readReceiptIndex
+        }
     }
 
     return isEventRead
