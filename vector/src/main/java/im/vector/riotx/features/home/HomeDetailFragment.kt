@@ -51,8 +51,6 @@ data class HomeDetailParams(
 ) : Parcelable
 
 
-private const val CURRENT_DISPLAY_MODE = "CURRENT_DISPLAY_MODE"
-
 private const val INDEX_CATCHUP = 0
 private const val INDEX_PEOPLE = 1
 private const val INDEX_ROOMS = 2
@@ -61,7 +59,6 @@ class HomeDetailFragment : VectorBaseFragment(), KeysBackupBanner.Delegate {
 
     private val params: HomeDetailParams by args()
     private val unreadCounterBadgeViews = arrayListOf<UnreadCounterBadgeView>()
-    private lateinit var currentDisplayMode: RoomListFragment.DisplayMode
 
     private val viewModel: HomeDetailViewModel by fragmentViewModel()
     private lateinit var navigationViewModel: HomeNavigationViewModel
@@ -80,15 +77,16 @@ class HomeDetailFragment : VectorBaseFragment(), KeysBackupBanner.Delegate {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        currentDisplayMode = savedInstanceState?.getSerializable(CURRENT_DISPLAY_MODE) as? RoomListFragment.DisplayMode
-                             ?: RoomListFragment.DisplayMode.HOME
 
         navigationViewModel = ViewModelProviders.of(requireActivity()).get(HomeNavigationViewModel::class.java)
 
-        switchDisplayMode(currentDisplayMode)
         setupBottomNavigationView()
         setupToolbar()
         setupKeysBackupBanner()
+
+        viewModel.selectSubscribe(this, HomeDetailViewState::displayMode) { displayMode ->
+            switchDisplayMode(displayMode)
+        }
     }
 
     private fun setupKeysBackupBanner() {
@@ -126,11 +124,6 @@ class HomeDetailFragment : VectorBaseFragment(), KeysBackupBanner.Delegate {
     }
 
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        outState.putSerializable(CURRENT_DISPLAY_MODE, currentDisplayMode)
-        super.onSaveInstanceState(outState)
-    }
-
     private fun setupToolbar() {
         val parentActivity = vectorBaseActivity
         if (parentActivity is ToolbarConfigurable) {
@@ -156,10 +149,7 @@ class HomeDetailFragment : VectorBaseFragment(), KeysBackupBanner.Delegate {
                 R.id.bottom_action_rooms  -> RoomListFragment.DisplayMode.ROOMS
                 else                      -> RoomListFragment.DisplayMode.HOME
             }
-            if (currentDisplayMode != displayMode) {
-                currentDisplayMode = displayMode
-                switchDisplayMode(displayMode)
-            }
+            viewModel.switchDisplayMode(displayMode)
             true
         }
 

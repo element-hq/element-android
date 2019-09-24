@@ -24,10 +24,12 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.rx.rx
 import im.vector.riotx.core.platform.VectorViewModel
+import im.vector.riotx.features.home.room.list.RoomListFragment
 import io.reactivex.schedulers.Schedulers
 
 /**
- * View model used to update the home bottom bar notification counts
+ * View model used to update the home bottom bar notification counts, observe the sync state and
+ * change the selected room list view
  */
 class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: HomeDetailViewState,
                                                       private val session: Session,
@@ -51,6 +53,14 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
     init {
         observeSyncState()
         observeRoomSummaries()
+    }
+
+    fun switchDisplayMode(displayMode: RoomListFragment.DisplayMode) = withState { state ->
+        if (state.displayMode != displayMode) {
+            setState {
+                copy(displayMode = displayMode)
+            }
+        }
     }
 
     // PRIVATE METHODS *****************************************************************************

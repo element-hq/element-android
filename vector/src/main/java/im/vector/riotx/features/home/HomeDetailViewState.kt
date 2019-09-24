@@ -18,8 +18,10 @@ package im.vector.riotx.features.home
 
 import com.airbnb.mvrx.MvRxState
 import im.vector.matrix.android.api.session.sync.SyncState
+import im.vector.riotx.features.home.room.list.RoomListFragment
 
 data class HomeDetailViewState(
+        val displayMode: RoomListFragment.DisplayMode = RoomListFragment.DisplayMode.HOME,
         val notificationCountCatchup: Int = 0,
         val notificationHighlightCatchup: Boolean = false,
         val notificationCountPeople: Int = 0,
