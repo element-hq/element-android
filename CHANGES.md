@@ -1,3 +1,9 @@
+Changes in RiotX 0.6.1 (2019-09-24)
+===================================================
+
+Bugfix:
+ - Fix crash: MergedHeaderItem was missing dimensionConverter
+
 Changes in RiotX 0.6.0 (2019-09-24)
 ===================================================
 
