@@ -62,7 +62,7 @@ abstract class VectorModule {
 
         @Provides
         @JvmStatic
-        fun providesAuthenticator(matrix: Matrix): Authenticator{
+        fun providesAuthenticator(matrix: Matrix): Authenticator {
             return matrix.authenticator()
         }
     }

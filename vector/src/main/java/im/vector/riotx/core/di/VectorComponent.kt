@@ -49,7 +49,7 @@ import javax.inject.Singleton
 @Singleton
 interface VectorComponent {
 
-    fun inject(vectorApplication: NotificationBroadcastReceiver)
+    fun inject(notificationBroadcastReceiver: NotificationBroadcastReceiver)
 
     fun inject(vectorApplication: VectorApplication)
 

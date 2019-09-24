@@ -117,13 +117,13 @@ internal abstract class CryptoModule {
     abstract fun bindGetDevicesTask(getDevicesTask: DefaultGetDevicesTask): GetDevicesTask
 
     @Binds
-    abstract fun bindSetDeviceNameTask(getDevicesTask: DefaultSetDeviceNameTask): SetDeviceNameTask
+    abstract fun bindSetDeviceNameTask(setDeviceNameTask: DefaultSetDeviceNameTask): SetDeviceNameTask
 
     @Binds
-    abstract fun bindUploadKeysTask(getDevicesTask: DefaultUploadKeysTask): UploadKeysTask
+    abstract fun bindUploadKeysTask(uploadKeysTask: DefaultUploadKeysTask): UploadKeysTask
 
     @Binds
-    abstract fun bindDownloadKeysForUsersTask(downloadKeysForUsers: DefaultDownloadKeysForUsers): DownloadKeysForUsersTask
+    abstract fun bindDownloadKeysForUsersTask(downloadKeysForUsersTask: DefaultDownloadKeysForUsers): DownloadKeysForUsersTask
 
     @Binds
     abstract fun bindCreateKeysBackupVersionTask(createKeysBackupVersionTask: DefaultCreateKeysBackupVersionTask): CreateKeysBackupVersionTask
@@ -135,10 +135,10 @@ internal abstract class CryptoModule {
     abstract fun bindDeleteRoomSessionDataTask(deleteRoomSessionDataTask: DefaultDeleteRoomSessionDataTask): DeleteRoomSessionDataTask
 
     @Binds
-    abstract fun bindDeleteRoomSessionsDataTask(deleteRoomSessionDataTask: DefaultDeleteRoomSessionsDataTask): DeleteRoomSessionsDataTask
+    abstract fun bindDeleteRoomSessionsDataTask(deleteRoomSessionsDataTask: DefaultDeleteRoomSessionsDataTask): DeleteRoomSessionsDataTask
 
     @Binds
-    abstract fun bindDeleteSessionsDataTask(deleteRoomSessionDataTask: DefaultDeleteSessionsDataTask): DeleteSessionsDataTask
+    abstract fun bindDeleteSessionsDataTask(deleteSessionsDataTask: DefaultDeleteSessionsDataTask): DeleteSessionsDataTask
 
     @Binds
     abstract fun bindGetKeysBackupLastVersionTask(getKeysBackupLastVersionTask: DefaultGetKeysBackupLastVersionTask): GetKeysBackupLastVersionTask
@@ -150,19 +150,19 @@ internal abstract class CryptoModule {
     abstract fun bindGetRoomSessionDataTask(getRoomSessionDataTask: DefaultGetRoomSessionDataTask): GetRoomSessionDataTask
 
     @Binds
-    abstract fun bindGetRoomSessionsDataTask(getRoomSessionDataTask: DefaultGetRoomSessionsDataTask): GetRoomSessionsDataTask
+    abstract fun bindGetRoomSessionsDataTask(getRoomSessionsDataTask: DefaultGetRoomSessionsDataTask): GetRoomSessionsDataTask
 
     @Binds
-    abstract fun bindGetSessionsDataTask(getRoomSessionDataTask: DefaultGetSessionsDataTask): GetSessionsDataTask
+    abstract fun bindGetSessionsDataTask(getSessionsDataTask: DefaultGetSessionsDataTask): GetSessionsDataTask
 
     @Binds
     abstract fun bindStoreRoomSessionDataTask(storeRoomSessionDataTask: DefaultStoreRoomSessionDataTask): StoreRoomSessionDataTask
 
     @Binds
-    abstract fun bindStoreRoomSessionsDataTask(storeRoomSessionDataTask: DefaultStoreRoomSessionsDataTask): StoreRoomSessionsDataTask
+    abstract fun bindStoreRoomSessionsDataTask(storeRoomSessionsDataTask: DefaultStoreRoomSessionsDataTask): StoreRoomSessionsDataTask
 
     @Binds
-    abstract fun bindStoreSessionsDataTask(storeRoomSessionDataTask: DefaultStoreSessionsDataTask): StoreSessionsDataTask
+    abstract fun bindStoreSessionsDataTask(storeSessionsDataTask: DefaultStoreSessionsDataTask): StoreSessionsDataTask
 
     @Binds
     abstract fun bindUpdateKeysBackupVersionTask(updateKeysBackupVersionTask: DefaultUpdateKeysBackupVersionTask): UpdateKeysBackupVersionTask
