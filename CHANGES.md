@@ -10,7 +10,7 @@ Improvements:
  - Remove any notification of a redacted event (#563)
 
 Other changes:
- -
+ - Fix a few accessibility issues
 
 Bugfix:
  - Fix characters erased from the Search field when the result are coming (#545)

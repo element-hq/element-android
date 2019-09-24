@@ -3,23 +3,20 @@
 
     <item
         android:id="@+id/bottom_action_home"
-        android:contentDescription="@string/bottom_action_home"
         android:enabled="true"
         android:icon="@drawable/ic_home_bottom_catchup"
-        android:title="" />
+        android:title="@string/bottom_action_home" />
 
     <item
         android:id="@+id/bottom_action_people"
-        android:contentDescription="@string/bottom_action_people_x"
         android:enabled="true"
         android:icon="@drawable/ic_home_bottom_chat"
-        android:title="" />
+        android:title="@string/bottom_action_people_x" />
 
     <item
         android:id="@+id/bottom_action_rooms"
-        android:contentDescription="@string/bottom_action_rooms"
         android:enabled="true"
         android:icon="@drawable/ic_home_bottom_group"
-        android:title="" />
+        android:title="@string/bottom_action_rooms" />
 
 </menu>

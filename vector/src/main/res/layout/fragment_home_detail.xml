@@ -25,6 +25,7 @@
                 android:id="@+id/groupToolbarAvatarImageView"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
+                android:contentDescription="@string/a11y_open_drawer"
                 tools:src="@tools:sample/avatars" />
 
             <TextView

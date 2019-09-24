@@ -68,6 +68,8 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
         val (width, height) = processSize(data, mode)
         imageView.layoutParams.height = height
         imageView.layoutParams.width = width
+        // a11y
+        imageView.contentDescription = data.filename
 
         createGlideRequest(data, mode, imageView, width, height)
                 .dontAnimate()
@@ -79,6 +81,9 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
 
     fun renderFitTarget(data: Data, mode: Mode, imageView: ImageView, callback: ((Boolean) -> Unit)? = null) {
         val (width, height) = processSize(data, mode)
+
+        // a11y
+        imageView.contentDescription = data.filename
 
         createGlideRequest(data, mode, imageView, width, height)
                 .listener(object : RequestListener<Drawable> {
@@ -127,6 +132,9 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
     }
 
     fun render(data: Data, imageView: BigImageView) {
+        // a11y
+        imageView.contentDescription = data.filename
+
         val (width, height) = processSize(data, Mode.THUMBNAIL)
         val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()
         val fullSize = contentUrlResolver.resolveFullSize(data.url)

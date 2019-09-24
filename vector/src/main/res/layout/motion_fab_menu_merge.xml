@@ -13,7 +13,10 @@
         android:id="@+id/createRoomTouchGuard"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?riotx_touch_guard_bg" />
+        android:background="?riotx_touch_guard_bg"
+        android:clickable="true"
+        android:contentDescription="@string/a11y_create_menu_close"
+        android:focusable="true" />
 
     <!-- Sub menu item 2 -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -21,6 +24,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
+        android:accessibilityTraversalBefore="@+id/roomListEpoxyRecyclerView"
+        android:contentDescription="@string/a11y_create_room"
         android:src="@drawable/ic_fab_add_room"
         app:backgroundTint="#FFFFFF"
         app:fabCustomSize="48dp"
@@ -35,6 +40,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:ellipsize="end"
+        android:importantForAccessibility="no"
         android:text="@string/fab_menu_create_room" />
 
     <!-- Sub menu item 1 -->
@@ -43,6 +49,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
+        android:accessibilityTraversalBefore="@+id/createRoomItemGroup"
+        android:contentDescription="@string/a11y_create_direct_message"
         android:src="@drawable/ic_fab_add_chat"
         app:backgroundTint="#FFFFFF"
         app:fabCustomSize="48dp"
@@ -57,6 +65,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:ellipsize="end"
+        android:importantForAccessibility="no"
         android:text="@string/fab_menu_create_chat" />
 
     <!-- Menu -->
@@ -64,6 +73,8 @@
         android:id="@+id/createRoomButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:accessibilityTraversalBefore="@+id/createRoomItemChat"
+        android:contentDescription="@string/a11y_create_menu_open"
         android:src="@drawable/ic_fab_add"
         app:maxImageSize="14dp" />
 
