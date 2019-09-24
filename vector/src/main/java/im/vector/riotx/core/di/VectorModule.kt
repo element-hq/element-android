@@ -28,6 +28,8 @@ import im.vector.matrix.android.api.auth.Authenticator
 import im.vector.matrix.android.api.session.Session
 import im.vector.riotx.features.navigation.DefaultNavigator
 import im.vector.riotx.features.navigation.Navigator
+import im.vector.riotx.features.ui.SharedPreferencesUiStateRepository
+import im.vector.riotx.features.ui.UiStateRepository
 
 @Module
 abstract class VectorModule {
@@ -70,5 +72,7 @@ abstract class VectorModule {
     @Binds
     abstract fun bindNavigator(navigator: DefaultNavigator): Navigator
 
+    @Binds
+    abstract fun bindUiStateRepository(uiStateRepository: SharedPreferencesUiStateRepository): UiStateRepository
 
 }

@@ -16,41 +16,15 @@
 
 package im.vector.riotx.features.ui
 
-import android.content.SharedPreferences
-import androidx.core.content.edit
 import im.vector.riotx.features.home.room.list.RoomListFragment
-import javax.inject.Inject
 
 
 /**
- * This class is used to persist UI state across application restart
+ * This interface is used to persist UI state across application restart
  */
-class UiStateRepository @Inject constructor(private val sharedPreferences: SharedPreferences) {
+interface UiStateRepository {
 
-    fun getDisplayMode(): RoomListFragment.DisplayMode {
-        return when (sharedPreferences.getInt(KEY_DISPLAY_MODE, VALUE_DISPLAY_MODE_CATCHUP)) {
-            VALUE_DISPLAY_MODE_PEOPLE -> RoomListFragment.DisplayMode.PEOPLE
-            VALUE_DISPLAY_MODE_ROOMS  -> RoomListFragment.DisplayMode.ROOMS
-            else                      -> RoomListFragment.DisplayMode.HOME
-        }
-    }
+    fun getDisplayMode(): RoomListFragment.DisplayMode
 
-    fun storeDisplayMode(displayMode: RoomListFragment.DisplayMode) {
-        sharedPreferences.edit {
-            putInt(KEY_DISPLAY_MODE,
-                    when (displayMode) {
-                        RoomListFragment.DisplayMode.PEOPLE -> VALUE_DISPLAY_MODE_PEOPLE
-                        RoomListFragment.DisplayMode.ROOMS  -> VALUE_DISPLAY_MODE_ROOMS
-                        else                                -> VALUE_DISPLAY_MODE_CATCHUP
-                    })
-        }
-    }
-
-
-    companion object {
-        private const val KEY_DISPLAY_MODE = "UI_STATE_DISPLAY_MODE"
-        private const val VALUE_DISPLAY_MODE_CATCHUP = 0
-        private const val VALUE_DISPLAY_MODE_PEOPLE = 1
-        private const val VALUE_DISPLAY_MODE_ROOMS = 2
-    }
+    fun storeDisplayMode(displayMode: RoomListFragment.DisplayMode)
 }
