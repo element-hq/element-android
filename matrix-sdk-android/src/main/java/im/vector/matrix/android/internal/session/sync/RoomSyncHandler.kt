@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.session.sync
 
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.R
+import im.vector.matrix.android.api.pushrules.RuleScope
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
@@ -87,11 +88,11 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
     private fun checkPushRules(roomsSyncResponse: RoomsSyncResponse) {
         Timber.v("[PushRules] --> checkPushRules")
         if (tokenStore.getLastToken() == null) {
-            Timber.v("[PushRules] <-- No push tule check on initial sync")
+            Timber.v("[PushRules] <-- No push rule check on initial sync")
             return
         } //nothing on initial sync
 
-        val rules = pushRuleService.getPushRules("global")
+        val rules = pushRuleService.getPushRules(RuleScope.GLOBAL)
         processForPushTask.configureWith(ProcessEventForPushTask.Params(roomsSyncResponse, rules))
                 .executeBy(taskExecutor)
         Timber.v("[PushRules] <-- Push task scheduled")

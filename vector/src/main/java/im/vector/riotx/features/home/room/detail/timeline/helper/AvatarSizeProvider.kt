@@ -16,20 +16,19 @@
 
 package im.vector.riotx.features.home.room.detail.timeline.helper
 
-import androidx.appcompat.app.AppCompatActivity
-import im.vector.riotx.core.utils.DimensionUtils.dpToPx
+import im.vector.riotx.core.utils.DimensionConverter
 import javax.inject.Inject
 
-class AvatarSizeProvider @Inject constructor(private val context: AppCompatActivity) {
+class AvatarSizeProvider @Inject constructor(private val dimensionConverter: DimensionConverter) {
 
     private val avatarStyle = AvatarStyle.SMALL
 
     val leftGuideline: Int by lazy {
-        dpToPx(avatarStyle.avatarSizeDP + 8, context)
+        dimensionConverter.dpToPx(avatarStyle.avatarSizeDP + 8)
     }
 
     val avatarSize: Int by lazy {
-        dpToPx(avatarStyle.avatarSizeDP, context)
+        dimensionConverter.dpToPx(avatarStyle.avatarSizeDP)
     }
 
     companion object {

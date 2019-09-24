@@ -17,32 +17,45 @@
 package im.vector.riotx.features.home.room.detail.timeline.factory
 
 import android.view.View
+import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.matrix.android.internal.crypto.model.event.EncryptionEventContent
+import im.vector.riotx.R
+import im.vector.riotx.core.resources.StringProvider
+import im.vector.riotx.core.utils.DimensionConverter
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
-import im.vector.riotx.features.home.room.detail.timeline.format.NoticeEventFormatter
 import im.vector.riotx.features.home.room.detail.timeline.helper.AvatarSizeProvider
-import im.vector.riotx.features.home.room.detail.timeline.helper.MessageInformationDataFactory
+import im.vector.riotx.features.home.room.detail.timeline.helper.senderAvatar
+import im.vector.riotx.features.home.room.detail.timeline.helper.senderName
+import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.riotx.features.home.room.detail.timeline.item.NoticeItem
 import im.vector.riotx.features.home.room.detail.timeline.item.NoticeItem_
 import javax.inject.Inject
 
-class NoticeItemFactory @Inject constructor(private val eventFormatter: NoticeEventFormatter,
-                                            private val avatarRenderer: AvatarRenderer,
-                                            private val informationDataFactory: MessageInformationDataFactory,
-                                            private val avatarSizeProvider: AvatarSizeProvider) {
+class EncryptionItemFactory @Inject constructor(private val stringProvider: StringProvider,
+                                                private val avatarRenderer: AvatarRenderer,
+                                                private val avatarSizeProvider: AvatarSizeProvider) {
 
     fun create(event: TimelineEvent,
                highlight: Boolean,
-               hideReadMarker: Boolean,
                callback: TimelineEventController.Callback?): NoticeItem? {
 
-        val formattedText = eventFormatter.format(event) ?: return null
-        val informationData = informationDataFactory.create(event, null, hideReadMarker)
+        val text = buildNoticeText(event.root, event.senderName) ?: return null
+        val informationData = MessageInformationData(
+                eventId = event.root.eventId ?: "?",
+                senderId = event.root.senderId ?: "",
+                sendState = event.root.sendState,
+                avatarUrl = event.senderAvatar(),
+                memberName = event.senderName(),
+                showInformation = false
+        )
         val attributes = NoticeItem.Attributes(
                 avatarRenderer = avatarRenderer,
                 informationData = informationData,
-                noticeText = formattedText,
+                noticeText = text,
                 itemLongClickListener = View.OnLongClickListener { view ->
                     callback?.onEventLongClicked(informationData, null, view) ?: false
                 },
@@ -52,6 +65,17 @@ class NoticeItemFactory @Inject constructor(private val eventFormatter: NoticeEv
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .highlighted(highlight)
                 .attributes(attributes)
+    }
+
+    private fun buildNoticeText(event: Event, senderName: String?): CharSequence? {
+        return when {
+            EventType.ENCRYPTION == event.getClearType() -> {
+                val content = event.content.toModel<EncryptionEventContent>() ?: return null
+                stringProvider.getString(R.string.notice_end_to_end, senderName, content.algorithm)
+            }
+            else                                         -> null
+        }
+
     }
 
 

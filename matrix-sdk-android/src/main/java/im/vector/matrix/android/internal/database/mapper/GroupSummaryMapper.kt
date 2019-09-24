@@ -22,14 +22,15 @@ import im.vector.matrix.android.internal.database.model.GroupSummaryEntity
 
 internal object GroupSummaryMapper {
 
-    fun map(roomSummaryEntity: GroupSummaryEntity): GroupSummary {
+    fun map(groupSummaryEntity: GroupSummaryEntity): GroupSummary {
         return GroupSummary(
-                roomSummaryEntity.groupId,
-                roomSummaryEntity.displayName,
-                roomSummaryEntity.shortDescription,
-                roomSummaryEntity.avatarUrl,
-                roomSummaryEntity.roomIds.toList(),
-                roomSummaryEntity.userIds.toList()
+                groupSummaryEntity.groupId,
+                groupSummaryEntity.membership,
+                groupSummaryEntity.displayName,
+                groupSummaryEntity.shortDescription,
+                groupSummaryEntity.avatarUrl,
+                groupSummaryEntity.roomIds.toList(),
+                groupSummaryEntity.userIds.toList()
         )
     }
 }

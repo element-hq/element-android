@@ -26,7 +26,6 @@ internal object PushersMapper {
     fun map(pushEntity: PusherEntity): Pusher {
 
         return Pusher(
-                userId = pushEntity.userId,
                 pushKey = pushEntity.pushKey,
                 kind = pushEntity.kind ?: "",
                 appId = pushEntity.appId,
@@ -39,9 +38,8 @@ internal object PushersMapper {
         )
     }
 
-    fun map(pusher: JsonPusher, userId: String): PusherEntity {
+    fun map(pusher: JsonPusher): PusherEntity {
         return PusherEntity(
-                userId = userId,
                 pushKey = pusher.pushKey,
                 kind = pusher.kind,
                 appId = pusher.appId,
@@ -58,6 +56,6 @@ internal fun PusherEntity.asDomain(): Pusher {
     return PushersMapper.map(this)
 }
 
-internal fun JsonPusher.toEntity(userId: String): PusherEntity {
-    return PushersMapper.map(this, userId)
+internal fun JsonPusher.toEntity(): PusherEntity {
+    return PushersMapper.map(this)
 }

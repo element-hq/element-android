@@ -16,17 +16,27 @@
 
 package im.vector.matrix.android.internal.database.model
 
+import im.vector.matrix.android.api.session.room.model.Membership
 import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 
 internal open class GroupSummaryEntity(@PrimaryKey var groupId: String = "",
-                              var displayName: String = "",
-                              var shortDescription: String = "",
-                              var avatarUrl: String = "",
-                              var roomIds: RealmList<String> = RealmList(),
-                              var userIds: RealmList<String> = RealmList()
+                                       var displayName: String = "",
+                                       var shortDescription: String = "",
+                                       var avatarUrl: String = "",
+                                       var roomIds: RealmList<String> = RealmList(),
+                                       var userIds: RealmList<String> = RealmList()
 ) : RealmObject() {
+
+    private var membershipStr: String = Membership.NONE.name
+    var membership: Membership
+        get() {
+            return Membership.valueOf(membershipStr)
+        }
+        set(value) {
+            membershipStr = value.name
+        }
 
     companion object
 

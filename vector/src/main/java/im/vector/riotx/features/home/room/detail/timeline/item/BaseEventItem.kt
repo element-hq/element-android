@@ -26,8 +26,7 @@ import im.vector.riotx.core.epoxy.VectorEpoxyModel
 import im.vector.riotx.core.platform.CheckableView
 import im.vector.riotx.core.ui.views.ReadMarkerView
 import im.vector.riotx.core.ui.views.ReadReceiptsView
-import im.vector.riotx.core.utils.DimensionUtils.dpToPx
-import org.w3c.dom.Attr
+import im.vector.riotx.core.utils.DimensionConverter
 
 /**
  * Children must override getViewType()
@@ -39,6 +38,9 @@ abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>
     var highlighted: Boolean = false
     @EpoxyAttribute
     open var leftGuideline: Int = 0
+
+    @EpoxyAttribute
+    lateinit var dimensionConverter: DimensionConverter
 
     override fun bind(holder: H) {
         super.bind(holder)

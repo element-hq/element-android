@@ -17,14 +17,10 @@
 package im.vector.matrix.android.internal.session.room.send
 
 import android.content.Context
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
 import androidx.work.*
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.BuildConfig
-import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.events.model.*
@@ -32,16 +28,16 @@ import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.send.SendService
 import im.vector.matrix.android.api.session.room.send.SendState
-import im.vector.matrix.android.api.session.room.send.UserDraft
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.CancelableBag
-import im.vector.matrix.android.internal.database.RealmLiveData
-import im.vector.matrix.android.internal.database.mapper.DraftMapper
 import im.vector.matrix.android.internal.database.mapper.asDomain
-import im.vector.matrix.android.internal.database.model.*
+import im.vector.matrix.android.internal.database.model.EventEntity
+import im.vector.matrix.android.internal.database.model.RoomEntity
+import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.query.findAllInRoomWithSendStates
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.content.UploadContentWorker
 import im.vector.matrix.android.internal.session.room.timeline.TimelineSendEventWorkCommon
 import im.vector.matrix.android.internal.util.CancelableWork
@@ -59,7 +55,7 @@ private const val BACKOFF_DELAY = 10_000L
 
 internal class DefaultSendService @AssistedInject constructor(@Assisted private val roomId: String,
                                                               private val context: Context,
-                                                              private val credentials: Credentials,
+                                                              @UserId private val userId: String,
                                                               private val localEchoEventFactory: LocalEchoEventFactory,
                                                               private val cryptoService: CryptoService,
                                                               private val monarchy: Monarchy
@@ -292,7 +288,7 @@ internal class DefaultSendService @AssistedInject constructor(@Assisted private 
 
     private fun createEncryptEventWork(event: Event, startChain: Boolean): OneTimeWorkRequest {
         // Same parameter
-        val params = EncryptEventWorker.Params(credentials.userId, roomId, event)
+        val params = EncryptEventWorker.Params(userId, roomId, event)
         val sendWorkData = WorkerParamsFactory.toData(params)
 
         return matrixOneTimeWorkRequestBuilder<EncryptEventWorker>()
@@ -304,7 +300,7 @@ internal class DefaultSendService @AssistedInject constructor(@Assisted private 
     }
 
     private fun createSendEventWork(event: Event, startChain: Boolean): OneTimeWorkRequest {
-        val sendContentWorkerParams = SendEventWorker.Params(credentials.userId, roomId, event)
+        val sendContentWorkerParams = SendEventWorker.Params(userId, roomId, event)
         val sendWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
 
         return TimelineSendEventWorkCommon.createWork<SendEventWorker>(sendWorkData, startChain)
@@ -314,7 +310,7 @@ internal class DefaultSendService @AssistedInject constructor(@Assisted private 
         val redactEvent = localEchoEventFactory.createRedactEvent(roomId, event.eventId!!, reason).also {
             saveLocalEcho(it)
         }
-        val sendContentWorkerParams = RedactEventWorker.Params(credentials.userId, redactEvent.eventId!!, roomId, event.eventId, reason)
+        val sendContentWorkerParams = RedactEventWorker.Params(userId, redactEvent.eventId!!, roomId, event.eventId, reason)
         val redactWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
         return TimelineSendEventWorkCommon.createWork<RedactEventWorker>(redactWorkData, true)
     }
@@ -323,7 +319,7 @@ internal class DefaultSendService @AssistedInject constructor(@Assisted private 
                                       attachment: ContentAttachmentData,
                                       isRoomEncrypted: Boolean,
                                       startChain: Boolean): OneTimeWorkRequest {
-        val uploadMediaWorkerParams = UploadContentWorker.Params(credentials.userId, roomId, event, attachment, isRoomEncrypted)
+        val uploadMediaWorkerParams = UploadContentWorker.Params(userId, roomId, event, attachment, isRoomEncrypted)
         val uploadWorkData = WorkerParamsFactory.toData(uploadMediaWorkerParams)
 
         return matrixOneTimeWorkRequestBuilder<UploadContentWorker>()

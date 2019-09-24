@@ -17,6 +17,7 @@ package im.vector.riotx.features.settings.troubleshoot
 
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.pushrules.RuleIds
+import im.vector.matrix.android.api.pushrules.RuleKind
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.resources.StringProvider
@@ -45,8 +46,7 @@ class TestAccountSettings @Inject constructor(private val stringProvider: String
                     override fun doFix() {
                         if (manager?.diagStatus == TestStatus.RUNNING) return //wait before all is finished
 
-                        // TODO Use constant for kind
-                        session.updatePushRuleEnableStatus("override", defaultRule, !defaultRule.enabled,
+                        session.updatePushRuleEnableStatus(RuleKind.OVERRIDE, defaultRule, !defaultRule.enabled,
                                                            object : MatrixCallback<Unit> {
 
                                                                override fun onSuccess(data: Unit) {

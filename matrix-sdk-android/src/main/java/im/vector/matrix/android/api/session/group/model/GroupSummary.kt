@@ -16,12 +16,15 @@
 
 package im.vector.matrix.android.api.session.group.model
 
+import im.vector.matrix.android.api.session.room.model.Membership
+
 /**
  * This class holds some data of a group.
  * It can be retrieved through [im.vector.matrix.android.api.session.group.GroupService]
  */
 data class GroupSummary(
         val groupId: String,
+        val membership: Membership,
         val displayName: String = "",
         val shortDescription: String = "",
         val avatarUrl: String = "",

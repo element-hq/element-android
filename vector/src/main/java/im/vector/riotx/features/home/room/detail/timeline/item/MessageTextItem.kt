@@ -24,7 +24,6 @@ import androidx.core.widget.TextViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
-import im.vector.riotx.core.utils.containsOnlyEmojis
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.html.PillImageSpan
 import kotlinx.coroutines.Dispatchers
@@ -38,6 +37,8 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
 
     @EpoxyAttribute
     var message: CharSequence? = null
+    @EpoxyAttribute
+    var useBigFont: Boolean = false
     @EpoxyAttribute
     var urlClickCallback: TimelineEventController.UrlClickCallback? = null
 
@@ -65,9 +66,7 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
         super.bind(holder)
         holder.messageView.movementMethod = mvmtMethod
 
-
-        val msg = message ?: ""
-        if (msg.length <= 4 && containsOnlyEmojis(msg.toString())) {
+        if (useBigFont) {
             holder.messageView.textSize = 44F
         } else {
             holder.messageView.textSize = 14F

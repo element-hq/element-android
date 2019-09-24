@@ -20,7 +20,6 @@ import android.util.Patterns
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.MatrixPatterns.isUserId
-import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
@@ -219,7 +218,7 @@ class CreateRoomParams {
      * @param ids the participant ids to add.
      */
     fun addParticipantIds(hsConfig: HomeServerConnectionConfig,
-                          credentials: Credentials,
+                          userId: String,
                           ids: List<String>) {
         for (id in ids) {
             if (Patterns.EMAIL_ADDRESS.matcher(id).matches() && hsConfig.identityServerUri != null) {
@@ -233,7 +232,7 @@ class CreateRoomParams {
                 invite3pids!!.add(pid)
             } else if (isUserId(id)) {
                 // do not invite oneself
-                if (credentials.userId != id) {
+                if (userId != id) {
                     if (null == invitedUserIds) {
                         invitedUserIds = ArrayList()
                     }

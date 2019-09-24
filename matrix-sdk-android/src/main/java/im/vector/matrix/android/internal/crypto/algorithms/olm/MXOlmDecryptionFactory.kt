@@ -16,16 +16,16 @@
 
 package im.vector.matrix.android.internal.crypto.algorithms.olm
 
-import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.internal.crypto.MXOlmDevice
+import im.vector.matrix.android.internal.di.UserId
 import javax.inject.Inject
 
 internal class MXOlmDecryptionFactory @Inject constructor(private val olmDevice: MXOlmDevice,
-                                                          private val credentials: Credentials) {
+                                                          @UserId private val userId: String) {
 
     fun create(): MXOlmDecryption {
         return MXOlmDecryption(
                 olmDevice,
-                credentials)
+                userId)
     }
 }

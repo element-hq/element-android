@@ -23,5 +23,6 @@ internal interface UserAccountData {
         const val TYPE_DIRECT_MESSAGES = "m.direct"
         const val TYPE_PREVIEW_URLS = "org.matrix.preview_urls"
         const val TYPE_WIDGETS = "m.widgets"
+        const val TYPE_PUSH_RULES = "m.push_rules"
     }
 }

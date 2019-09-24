@@ -30,3 +30,7 @@ internal fun GroupSummaryEntity.Companion.where(realm: Realm, groupId: String? =
     return query
 }
 
+internal fun GroupSummaryEntity.Companion.where(realm: Realm, groupIds: List<String>): RealmQuery<GroupSummaryEntity> {
+    return realm.where<GroupSummaryEntity>()
+            .`in`(GroupSummaryEntityFields.GROUP_ID, groupIds.toTypedArray())
+}

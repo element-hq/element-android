@@ -63,6 +63,18 @@ class FabMenuView @JvmOverloads constructor(context: Context, attrs: AttributeSe
         }
     }
 
+    override fun transitionToEnd() {
+        super.transitionToEnd()
+
+        createRoomButton.contentDescription = context.getString(R.string.a11y_create_menu_close)
+    }
+
+    override fun transitionToStart() {
+        super.transitionToStart()
+
+        createRoomButton.contentDescription = context.getString(R.string.a11y_create_menu_open)
+    }
+
     fun show() {
         isVisible = true
         createRoomButton.show()

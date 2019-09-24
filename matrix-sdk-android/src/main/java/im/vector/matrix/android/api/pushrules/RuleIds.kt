@@ -37,7 +37,7 @@ object RuleIds {
 
     // Default Underride Rules
     const val RULE_ID_CALL = ".m.rule.call"
-    const val RULE_ID_one_to_one_encrypted_room = ".m.rule.encrypted_room_one_to_one"
+    const val RULE_ID_ONE_TO_ONE_ENCRYPTED_ROOM = ".m.rule.encrypted_room_one_to_one"
     const val RULE_ID_ONE_TO_ONE_ROOM = ".m.rule.room_one_to_one"
     const val RULE_ID_ALL_OTHER_MESSAGES_ROOMS = ".m.rule.message"
     const val RULE_ID_ENCRYPTED = ".m.rule.encrypted"

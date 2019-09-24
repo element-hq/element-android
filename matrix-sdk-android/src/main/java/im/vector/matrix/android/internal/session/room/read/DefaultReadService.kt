@@ -22,7 +22,6 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.room.model.ReadReceipt
 import im.vector.matrix.android.api.session.room.read.ReadService
 import im.vector.matrix.android.api.util.Optional
@@ -33,6 +32,7 @@ import im.vector.matrix.android.internal.database.model.ReadReceiptEntity
 import im.vector.matrix.android.internal.database.model.ReadReceiptsSummaryEntity
 import im.vector.matrix.android.internal.database.query.isEventRead
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 
@@ -41,7 +41,7 @@ internal class DefaultReadService @AssistedInject constructor(@Assisted private 
                                                               private val taskExecutor: TaskExecutor,
                                                               private val setReadMarkersTask: SetReadMarkersTask,
                                                               private val readReceiptsSummaryMapper: ReadReceiptsSummaryMapper,
-                                                              private val credentials: Credentials
+                                                              @UserId private val userId: String
 ) : ReadService {
 
     @AssistedInject.Factory
@@ -78,7 +78,7 @@ internal class DefaultReadService @AssistedInject constructor(@Assisted private 
 
 
     override fun isEventRead(eventId: String): Boolean {
-        return isEventRead(monarchy, credentials.userId, roomId, eventId)
+        return isEventRead(monarchy, userId, roomId, eventId)
     }
 
     override fun getReadMarkerLive(): LiveData<Optional<String>> {
@@ -92,7 +92,7 @@ internal class DefaultReadService @AssistedInject constructor(@Assisted private 
 
     override fun getMyReadReceiptLive(): LiveData<Optional<String>> {
         val liveRealmData = RealmLiveData(monarchy.realmConfiguration) { realm ->
-            ReadReceiptEntity.where(realm, roomId = roomId, userId = credentials.userId)
+            ReadReceiptEntity.where(realm, roomId = roomId, userId = userId)
         }
         return Transformations.map(liveRealmData) { results ->
             Optional.from(results.firstOrNull()?.eventId)

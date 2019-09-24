@@ -68,10 +68,17 @@ internal abstract class SessionModule {
         }
 
         @JvmStatic
+        @UserId
+        @Provides
+        fun providesUserId(credentials: Credentials): String {
+            return credentials.userId
+        }
+
+        @JvmStatic
         @UserMd5
         @Provides
-        fun providesUserMd5(sessionParams: SessionParams): String {
-            return sessionParams.credentials.userId.md5()
+        fun providesUserMd5(@UserId userId: String): String {
+            return userId.md5()
         }
 
         @JvmStatic
