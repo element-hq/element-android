@@ -31,7 +31,7 @@ class DefaultItemFactory @Inject constructor(private val avatarSizeProvider: Ava
 
     fun create(event: TimelineEvent,
                highlight: Boolean,
-               hideReadMarker: Boolean,
+               readMarkerVisible: Boolean,
                callback: TimelineEventController.Callback?,
                exception: Exception? = null): DefaultItem? {
         val text = if (exception == null) {
@@ -40,7 +40,7 @@ class DefaultItemFactory @Inject constructor(private val avatarSizeProvider: Ava
             "an exception occurred when rendering the event ${event.root.eventId}"
         }
 
-        val informationData = informationDataFactory.create(event, null, hideReadMarker)
+        val informationData = informationDataFactory.create(event, null, readMarkerVisible)
 
         return DefaultItem_()
                 .leftGuideline(avatarSizeProvider.leftGuideline)

@@ -34,7 +34,10 @@ import im.vector.riotx.core.extensions.localDateTime
 import im.vector.riotx.features.home.room.detail.RoomDetailViewState
 import im.vector.riotx.features.home.room.detail.timeline.factory.MergedHeaderItemFactory
 import im.vector.riotx.features.home.room.detail.timeline.factory.TimelineItemFactory
-import im.vector.riotx.features.home.room.detail.timeline.helper.*
+import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineEventDiffUtilCallback
+import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineEventVisibilityStateChangedListener
+import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
+import im.vector.riotx.features.home.room.detail.timeline.helper.nextOrNull
 import im.vector.riotx.features.home.room.detail.timeline.item.*
 import im.vector.riotx.features.media.ImageContentRenderer
 import im.vector.riotx.features.media.VideoContentRenderer
@@ -79,7 +82,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
 
     interface ReadReceiptsCallback {
         fun onReadReceiptsClicked(readReceipts: List<ReadReceiptData>)
-        fun onReadMarkerLongDisplayed()
+        fun onReadMarkerLongBound(isDisplayed: Boolean)
     }
 
     interface UrlClickCallback {
@@ -141,7 +144,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         requestModelBuild()
     }
 
-    fun update(viewState: RoomDetailViewState) {
+    fun update(viewState: RoomDetailViewState, readMarkerVisible: Boolean) {
         if (timeline != viewState.timeline) {
             timeline = viewState.timeline
             timeline?.listener = this
@@ -166,8 +169,8 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             eventIdToHighlight = viewState.highlightedEventId
             requestModelBuild = true
         }
-        if (hideReadMarker != viewState.hideReadMarker) {
-            hideReadMarker = viewState.hideReadMarker
+        if (this.readMarkerVisible != readMarkerVisible) {
+            this.readMarkerVisible = readMarkerVisible
             requestModelBuild = true
         }
         if (requestModelBuild) {
@@ -175,7 +178,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         }
     }
 
-    private var hideReadMarker: Boolean = false
+    private var readMarkerVisible: Boolean = false
     private var eventIdToHighlight: String? = null
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
@@ -255,11 +258,19 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         val date = event.root.localDateTime()
         val nextDate = nextEvent?.root?.localDateTime()
         val addDaySeparator = date.toLocalDate() != nextDate?.toLocalDate()
-        val eventModel = timelineItemFactory.create(event, nextEvent, eventIdToHighlight, hideReadMarker, callback).also {
+        val eventModel = timelineItemFactory.create(event, nextEvent, eventIdToHighlight, readMarkerVisible, callback).also {
             it.id(event.localId)
             it.setOnVisibilityStateChanged(TimelineEventVisibilityStateChangedListener(callback, event))
         }
-        val mergedHeaderModel = mergedHeaderItemFactory.create(event, nextEvent, items, addDaySeparator, currentPosition, eventIdToHighlight, callback) {
+        val mergedHeaderModel = mergedHeaderItemFactory.create(event,
+                nextEvent = nextEvent,
+                items = items,
+                addDaySeparator = addDaySeparator,
+                readMarkerVisible = readMarkerVisible,
+                currentPosition = currentPosition,
+                eventIdToHighlight = eventIdToHighlight,
+                callback = callback
+        ) {
             requestModelBuild()
         }
         val daySeparatorItem = buildDaySeparatorItem(addDaySeparator, date)

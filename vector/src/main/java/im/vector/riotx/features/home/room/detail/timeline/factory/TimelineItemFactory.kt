@@ -33,14 +33,14 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
                eventIdToHighlight: String?,
-               hideReadMarker: Boolean,
+               readMarkerVisible: Boolean,
                callback: TimelineEventController.Callback?): VectorEpoxyModel<*> {
 
         val highlight = event.root.eventId == eventIdToHighlight
 
         val computedModel = try {
             when (event.root.getClearType()) {
-                EventType.MESSAGE           -> messageItemFactory.create(event, nextEvent, highlight, hideReadMarker, callback)
+                EventType.MESSAGE           -> messageItemFactory.create(event, nextEvent, highlight, readMarkerVisible, callback)
                 // State and call
                 EventType.STATE_ROOM_TOMBSTONE,
                 EventType.STATE_ROOM_NAME,
@@ -52,22 +52,22 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 EventType.CALL_ANSWER,
                 EventType.REACTION,
                 EventType.REDACTION,
-                EventType.ENCRYPTION        -> noticeItemFactory.create(event, highlight, hideReadMarker, callback)
+                EventType.ENCRYPTION        -> noticeItemFactory.create(event, highlight, readMarkerVisible, callback)
                 // State room create
                 EventType.STATE_ROOM_CREATE -> roomCreateItemFactory.create(event, callback)
                 // Crypto
                 EventType.ENCRYPTED         -> {
                     if (event.root.isRedacted()) {
                         // Redacted event, let the MessageItemFactory handle it
-                        messageItemFactory.create(event, nextEvent, highlight, hideReadMarker, callback)
+                        messageItemFactory.create(event, nextEvent, highlight, readMarkerVisible, callback)
                     } else {
-                        encryptedItemFactory.create(event, nextEvent, highlight, hideReadMarker, callback)
+                        encryptedItemFactory.create(event, nextEvent, highlight, readMarkerVisible, callback)
                     }
                 }
 
                 // Unhandled event types (yet)
                 EventType.STATE_ROOM_THIRD_PARTY_INVITE,
-                EventType.STICKER           -> defaultItemFactory.create(event, highlight, hideReadMarker, callback)
+                EventType.STICKER           -> defaultItemFactory.create(event, highlight, readMarkerVisible, callback)
                 else                        -> {
                     Timber.v("Type ${event.root.getClearType()} not handled")
                     null
@@ -75,7 +75,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
             }
         } catch (e: Exception) {
             Timber.e(e, "failed to create message item")
-            defaultItemFactory.create(event, highlight, hideReadMarker, callback, e)
+            defaultItemFactory.create(event, highlight, readMarkerVisible, callback, e)
         }
         return (computedModel ?: EmptyItem_())
     }

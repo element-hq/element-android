@@ -30,10 +30,25 @@ class ReadMarkerHelper @Inject constructor() {
     lateinit var layoutManager: LinearLayoutManager
     var callback: Callback? = null
 
+    private var onReadMarkerLongDisplayed = false
+    private var readMarkerVisible: Boolean = true
     private var state: RoomDetailViewState? = null
 
-    fun updateState(state: RoomDetailViewState) {
-        this.state = state
+    fun readMarkerVisible(): Boolean {
+        return readMarkerVisible
+    }
+
+    fun onResume() {
+        onReadMarkerLongDisplayed = false
+    }
+
+    fun onReadMarkerLongDisplayed() {
+        onReadMarkerLongDisplayed = true
+    }
+
+    fun updateWith(newState: RoomDetailViewState) {
+        state = newState
+        checkReadMarkerVisibility()
         checkJumpToReadMarkerVisibility()
     }
 
@@ -41,34 +56,47 @@ class ReadMarkerHelper @Inject constructor() {
         checkJumpToReadMarkerVisibility()
     }
 
+    private fun checkReadMarkerVisibility() {
+        val nonNullState = this.state ?: return
+        val firstVisibleItem = layoutManager.findFirstVisibleItemPosition()
+        val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
+        readMarkerVisible = if (!onReadMarkerLongDisplayed) {
+            true
+        } else {
+            if (nonNullState.timeline?.isLive == false) {
+                true
+            } else {
+                !(firstVisibleItem == 0 && lastVisibleItem > 0)
+            }
+        }
+    }
+
     private fun checkJumpToReadMarkerVisibility() {
         val nonNullState = this.state ?: return
         val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
         val readMarkerId = nonNullState.asyncRoomSummary()?.readMarkerId
         if (readMarkerId == null) {
-            callback?.onVisibilityUpdated(false, null)
+            callback?.onJumpToReadMarkerVisibilityUpdate(false, null)
         }
         val positionOfReadMarker = timelineEventController.searchPositionOfEvent(readMarkerId)
-        Timber.v("Position of readMarker: $positionOfReadMarker")
-        Timber.v("Position of lastVisibleItem: $lastVisibleItem")
         if (positionOfReadMarker == null) {
             if (nonNullState.timeline?.isLive == true && lastVisibleItem > 0) {
-                callback?.onVisibilityUpdated(true, readMarkerId)
+                callback?.onJumpToReadMarkerVisibilityUpdate(true, readMarkerId)
             } else {
-                callback?.onVisibilityUpdated(false, readMarkerId)
+                callback?.onJumpToReadMarkerVisibilityUpdate(false, readMarkerId)
             }
         } else {
             if (positionOfReadMarker > lastVisibleItem) {
-                callback?.onVisibilityUpdated(true, readMarkerId)
+                callback?.onJumpToReadMarkerVisibilityUpdate(true, readMarkerId)
             } else {
-                callback?.onVisibilityUpdated(false, readMarkerId)
+                callback?.onJumpToReadMarkerVisibilityUpdate(false, readMarkerId)
             }
         }
     }
 
 
     interface Callback {
-        fun onVisibilityUpdated(show: Boolean, readMarkerId: String?)
+        fun onJumpToReadMarkerVisibilityUpdate(show: Boolean, readMarkerId: String?)
     }
 
 

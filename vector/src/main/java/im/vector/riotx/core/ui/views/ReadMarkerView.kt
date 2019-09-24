@@ -37,7 +37,7 @@ class ReadMarkerView @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr) {
 
     interface Callback {
-        fun onReadMarkerLongBound()
+        fun onReadMarkerLongBound(isDisplayed: Boolean)
     }
 
     private var eventId: String? = null
@@ -57,7 +57,7 @@ class ReadMarkerView @JvmOverloads constructor(
         if (hasReadMarker) {
             callbackDispatcherJob = GlobalScope.launch(Dispatchers.Main) {
                 delay(DELAY_IN_MS)
-                callback?.onReadMarkerLongBound()
+                callback?.onReadMarkerLongBound(displayReadMarker)
             }
         }
     }

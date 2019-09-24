@@ -21,8 +21,6 @@ import android.text.TextUtils
 import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import arrow.core.Option
-import arrow.core.getOrElse
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
@@ -43,13 +41,11 @@ import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.model.message.getFileUrl
-import im.vector.matrix.android.api.session.room.model.relation.ReactionContent
 import im.vector.matrix.android.api.session.room.model.tombstone.RoomTombstoneContent
 import im.vector.matrix.android.api.session.room.send.UserDraft
-import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.TimelineSettings
-import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.api.session.room.timeline.getTextEditableContent
+import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
 import im.vector.matrix.rx.rx
@@ -62,11 +58,11 @@ import im.vector.riotx.core.utils.LiveEvent
 import im.vector.riotx.core.utils.subscribeLogError
 import im.vector.riotx.features.command.CommandParser
 import im.vector.riotx.features.command.ParsedCommand
+import im.vector.riotx.features.home.room.detail.timeline.TimelineLayoutManagerHolder
 import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineDisplayableEvents
 import im.vector.riotx.features.settings.VectorPreferences
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
-import io.reactivex.functions.Function3
 import io.reactivex.rxkotlin.subscribeBy
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
@@ -76,6 +72,7 @@ import java.util.concurrent.TimeUnit
 
 
 class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: RoomDetailViewState,
+                                                      private val timelineLayoutManagerHolder: TimelineLayoutManagerHolder,
                                                       private val userPreferencesProvider: UserPreferencesProvider,
                                                       private val vectorPreferences: VectorPreferences,
                                                       private val session: Session
@@ -119,8 +116,9 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         observeRoomSummary()
         observeEventDisplayedActions()
         observeSummaryState()
-        observeReadMarkerVisibility()
         observeDrafts()
+        observeReadMarkerVisibility()
+        observeOwnState()
         room.rx().loadRoomMembersIfNeeded().subscribeLogError().disposeOnClear()
         timeline.start()
         setState { copy(timeline = this@RoomDetailViewModel.timeline) }
@@ -711,23 +709,6 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 }
     }
 
-    private fun observeReadMarkerVisibility() {
-        Observable
-                .combineLatest(
-                        room.rx().liveReadMarker(),
-                        room.rx().liveReadReceipt(),
-                        BiFunction<Optional<String>, Optional<String>, Boolean> { readMarker, readReceipt ->
-                            readMarker.getOrNull() == readReceipt.getOrNull()
-                        }
-                )
-                .startWith(false)
-                .subscribe {
-                    setState { copy(hideReadMarker = it) }
-                }
-                .disposeOnClear()
-    }
-
-
     private fun observeSummaryState() {
         asyncSubscribe(RoomDetailViewState::asyncRoomSummary) { summary ->
             if (summary.membership == Membership.INVITE) {
@@ -742,6 +723,22 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
             }
         }
     }
+
+    private fun observeReadMarkerVisibility() {
+        Observable
+                .combineLatest(
+                        room.rx().liveReadMarker(),
+                        room.rx().liveReadReceipt(),
+                        BiFunction<Optional<String>, Optional<String>, Boolean> { readMarker, readReceipt ->
+                            readMarker.getOrNull() != readReceipt.getOrNull()
+                        }
+                )
+                .subscribe {
+                    setState { copy(readMarkerVisible = it) }
+                }
+                .disposeOnClear()
+    }
+
 
     override fun onCleared() {
         timeline.dispose()

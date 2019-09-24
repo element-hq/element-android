@@ -18,15 +18,9 @@ package im.vector.riotx.features.home.room.detail.timeline.factory
 
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotx.core.di.ActiveSessionHolder
-import im.vector.riotx.core.extensions.displayReadMarker
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
-import im.vector.riotx.features.home.room.detail.timeline.helper.AvatarSizeProvider
-import im.vector.riotx.features.home.room.detail.timeline.helper.MergedTimelineEventVisibilityStateChangedListener
-import im.vector.riotx.features.home.room.detail.timeline.helper.canBeMerged
-import im.vector.riotx.features.home.room.detail.timeline.helper.prevSameTypeEvents
-import im.vector.riotx.features.home.room.detail.timeline.helper.senderAvatar
-import im.vector.riotx.features.home.room.detail.timeline.helper.senderName
+import im.vector.riotx.features.home.room.detail.timeline.helper.*
 import im.vector.riotx.features.home.room.detail.timeline.item.MergedHeaderItem
 import im.vector.riotx.features.home.room.detail.timeline.item.MergedHeaderItem_
 import javax.inject.Inject
@@ -42,6 +36,7 @@ class MergedHeaderItemFactory @Inject constructor(private val sessionHolder: Act
                nextEvent: TimelineEvent?,
                items: List<TimelineEvent>,
                addDaySeparator: Boolean,
+               readMarkerVisible: Boolean,
                currentPosition: Int,
                eventIdToHighlight: String?,
                callback: TimelineEventController.Callback?,
@@ -67,7 +62,7 @@ class MergedHeaderItemFactory @Inject constructor(private val sessionHolder: Act
                     if (readMarkerId == null && mergedEvent.hasReadMarker) {
                         readMarkerId = mergedEvent.root.eventId
                     }
-                    if (!showReadMarker && mergedEvent.displayReadMarker(sessionHolder.getActiveSession().myUserId)) {
+                    if (!showReadMarker && mergedEvent.hasReadMarker && readMarkerVisible) {
                         showReadMarker = true
                     }
                     val senderAvatar = mergedEvent.senderAvatar()

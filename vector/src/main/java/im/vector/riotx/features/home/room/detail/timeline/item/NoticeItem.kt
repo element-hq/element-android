@@ -38,8 +38,9 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
     })
 
     private val _readMarkerCallback = object : ReadMarkerView.Callback {
-        override fun onReadMarkerLongBound() {
-            attributes.readReceiptsCallback?.onReadMarkerLongDisplayed()
+
+        override fun onReadMarkerLongBound(isDisplayed: Boolean) {
+            attributes.readReceiptsCallback?.onReadMarkerLongBound(isDisplayed)
         }
     }
 
