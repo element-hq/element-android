@@ -43,7 +43,7 @@ internal abstract class FilterModule {
     abstract fun bindFilterService(filterService: DefaultFilterService): FilterService
 
     @Binds
-    abstract fun bindSaveFilterTask(saveFilterTask_Factory: DefaultSaveFilterTask): SaveFilterTask
+    abstract fun bindSaveFilterTask(saveFilterTask: DefaultSaveFilterTask): SaveFilterTask
 
 
 }

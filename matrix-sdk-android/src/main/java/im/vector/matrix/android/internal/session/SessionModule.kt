@@ -162,7 +162,7 @@ internal abstract class SessionModule {
 
     @Binds
     @IntoSet
-    abstract fun bindEventRelationsAggregationUpdater(groupSummaryUpdater: EventRelationsAggregationUpdater): LiveEntityObserver
+    abstract fun bindEventRelationsAggregationUpdater(eventRelationsAggregationUpdater: EventRelationsAggregationUpdater): LiveEntityObserver
 
     @Binds
     @IntoSet

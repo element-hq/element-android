@@ -16,7 +16,6 @@
 
 package im.vector.riotx.features.home
 
-import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -66,8 +65,6 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
     @Inject lateinit var pushManager: PushersManager
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
 
-    private var progress: ProgressDialog? = null
-
     private val drawerListener = object : DrawerLayout.SimpleDrawerListener() {
         override fun onDrawerStateChanged(newState: Int) {
             hideKeyboard()
@@ -92,18 +89,6 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
             replaceFragment(loadingDetail, R.id.homeDetailFragmentContainer)
             replaceFragment(homeDrawerFragment, R.id.homeDrawerFragmentContainer)
         }
-
-        homeActivityViewModel.isLoading.observe(this, Observer<Boolean> {
-            // TODO better UI
-            if (it) {
-                progress?.dismiss()
-                progress = ProgressDialog(this)
-                progress?.setMessage(getString(R.string.room_recents_create_room))
-                progress?.show()
-            } else {
-                progress?.dismiss()
-            }
-        })
 
         navigationViewModel.navigateTo.observeEvent(this) { navigation ->
             when (navigation) {

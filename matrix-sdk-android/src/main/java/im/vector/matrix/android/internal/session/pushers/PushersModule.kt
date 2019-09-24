@@ -54,7 +54,7 @@ internal abstract class PushersModule {
     abstract fun bindConditionResolver(conditionResolver: DefaultConditionResolver): ConditionResolver
 
     @Binds
-    abstract fun bindGetPushersTask(getPusherTask: DefaultGetPusherTask): GetPushersTask
+    abstract fun bindGetPushersTask(getPushersTask: DefaultGetPushersTask): GetPushersTask
 
     @Binds
     abstract fun bindGetPushRulesTask(getPushRulesTask: DefaultGetPushRulesTask): GetPushRulesTask
