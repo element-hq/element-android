@@ -22,6 +22,7 @@ import com.squareup.moshi.Moshi
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.internal.di.Authenticated
 import im.vector.matrix.android.internal.network.ProgressRequestBody
+import im.vector.matrix.android.internal.network.toFailure
 import okhttp3.*
 import java.io.File
 import java.io.IOException
@@ -74,7 +75,7 @@ internal class FileUploader @Inject constructor(@Authenticated
         return Try {
             okHttpClient.newCall(request).execute().use { response ->
                 if (!response.isSuccessful) {
-                    throw IOException()
+                    throw response.toFailure()
                 } else {
                     response.body()?.source()?.let {
                         responseAdapter.fromJson(it)
