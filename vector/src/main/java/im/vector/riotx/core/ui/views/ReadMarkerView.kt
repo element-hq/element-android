@@ -45,7 +45,6 @@ class ReadMarkerView @JvmOverloads constructor(
     private var callbackDispatcherJob: Job? = null
 
     fun bindView(eventId: String?, hasReadMarker: Boolean, displayReadMarker: Boolean, readMarkerCallback: Callback) {
-        Timber.v("Bind event $eventId - hasReadMarker: $hasReadMarker - displayReadMarker: $displayReadMarker")
         this.eventId = eventId
         this.callback = readMarkerCallback
         if (displayReadMarker) {

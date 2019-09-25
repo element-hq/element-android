@@ -55,6 +55,10 @@ abstract class DefaultItem : BaseEventItem<DefaultItem.Holder>() {
         holder.readReceiptsView.render(informationData.readReceipts, avatarRenderer, _readReceiptsClickListener)
     }
 
+    override fun getEventId(): String? {
+        return informationData.eventId
+    }
+
     override fun getViewType() = STUB_ID
 
     class Holder : BaseHolder(STUB_ID) {

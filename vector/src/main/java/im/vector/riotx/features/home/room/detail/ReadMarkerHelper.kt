@@ -19,6 +19,7 @@ package im.vector.riotx.features.home.room.detail
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import im.vector.riotx.core.di.ScreenScope
+import im.vector.riotx.core.utils.createBackgroundHandler
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import timber.log.Timber
 import javax.inject.Inject
@@ -31,6 +32,7 @@ class ReadMarkerHelper @Inject constructor() {
     var callback: Callback? = null
 
     private var onReadMarkerLongDisplayed = false
+    private var jumpToReadMarkerVisible = false
     private var readMarkerVisible: Boolean = true
     private var state: RoomDetailViewState? = null
 
@@ -75,22 +77,19 @@ class ReadMarkerHelper @Inject constructor() {
         val nonNullState = this.state ?: return
         val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
         val readMarkerId = nonNullState.asyncRoomSummary()?.readMarkerId
-        if (readMarkerId == null) {
-            callback?.onJumpToReadMarkerVisibilityUpdate(false, null)
-        }
-        val positionOfReadMarker = timelineEventController.searchPositionOfEvent(readMarkerId)
-        if (positionOfReadMarker == null) {
-            if (nonNullState.timeline?.isLive == true && lastVisibleItem > 0) {
-                callback?.onJumpToReadMarkerVisibilityUpdate(true, readMarkerId)
-            } else {
-                callback?.onJumpToReadMarkerVisibilityUpdate(false, readMarkerId)
-            }
+        val newJumpToReadMarkerVisible = if (readMarkerId == null) {
+            false
         } else {
-            if (positionOfReadMarker > lastVisibleItem) {
-                callback?.onJumpToReadMarkerVisibilityUpdate(true, readMarkerId)
+            val positionOfReadMarker = timelineEventController.searchPositionOfEvent(readMarkerId)
+            if (positionOfReadMarker == null) {
+                nonNullState.timeline?.isLive == true && lastVisibleItem > 0
             } else {
-                callback?.onJumpToReadMarkerVisibilityUpdate(false, readMarkerId)
+                positionOfReadMarker > lastVisibleItem
             }
+        }
+        if (newJumpToReadMarkerVisible != jumpToReadMarkerVisible) {
+            jumpToReadMarkerVisible = newJumpToReadMarkerVisible
+            callback?.onJumpToReadMarkerVisibilityUpdate(jumpToReadMarkerVisible, readMarkerId)
         }
     }
 

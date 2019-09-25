@@ -157,7 +157,7 @@ class RoomDetailFragment :
             }
         }
 
-        /**
+        /**x
          * Sanitize the display name.
          *
          * @param displayName the display name to sanitize
@@ -373,22 +373,22 @@ class RoomDetailFragment :
         if (messageContent is MessageTextContent && messageContent.format == MessageType.FORMAT_MATRIX_HTML) {
             val parser = Parser.builder().build()
             val document = parser.parse(messageContent.formattedBody
-                    ?: messageContent.body)
+                                        ?: messageContent.body)
             formattedBody = eventHtmlRenderer.render(document)
         }
         composerLayout.composerRelatedMessageContent.text = formattedBody
-                ?: nonFormattedBody
+                                                            ?: nonFormattedBody
 
         updateComposerText(defaultContent)
 
         composerLayout.composerRelatedMessageActionIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), iconRes))
 
         avatarRenderer.render(event.senderAvatar, event.root.senderId
-                ?: "", event.senderName, composerLayout.composerRelatedMessageAvatar)
+                                                  ?: "", event.senderName, composerLayout.composerRelatedMessageAvatar)
         avatarRenderer.render(event.senderAvatar,
-                event.root.senderId ?: "",
-                event.senderName,
-                composerLayout.composerRelatedMessageAvatar)
+                              event.root.senderId ?: "",
+                              event.senderName,
+                              composerLayout.composerRelatedMessageAvatar)
         composerLayout.expand {
             //need to do it here also when not using quick reply
             focusComposerAndShowKeyboard()
@@ -426,9 +426,9 @@ class RoomDetailFragment :
                 REQUEST_FILES_REQUEST_CODE, TAKE_IMAGE_REQUEST_CODE -> handleMediaIntent(data)
                 REACTION_SELECT_REQUEST_CODE                        -> {
                     val eventId = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_EVENT_ID)
-                            ?: return
+                                  ?: return
                     val reaction = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_REACTION_RESULT)
-                            ?: return
+                                   ?: return
                     //TODO check if already reacted with that?
                     roomDetailViewModel.process(RoomDetailActions.SendReaction(reaction, eventId))
                 }
@@ -487,26 +487,26 @@ class RoomDetailFragment :
 
         if (vectorPreferences.swipeToReplyIsEnabled()) {
             val swipeCallback = RoomMessageTouchHelperCallback(requireContext(),
-                    R.drawable.ic_reply,
-                    object : RoomMessageTouchHelperCallback.QuickReplayHandler {
-                        override fun performQuickReplyOnHolder(model: EpoxyModel<*>) {
-                            (model as? AbsMessageItem)?.attributes?.informationData?.let {
-                                val eventId = it.eventId
-                                roomDetailViewModel.process(RoomDetailActions.EnterReplyMode(eventId, composerLayout.composerEditText.text.toString()))
-                            }
-                        }
+                                                               R.drawable.ic_reply,
+                                                               object : RoomMessageTouchHelperCallback.QuickReplayHandler {
+                                                                   override fun performQuickReplyOnHolder(model: EpoxyModel<*>) {
+                                                                       (model as? AbsMessageItem)?.attributes?.informationData?.let {
+                                                                           val eventId = it.eventId
+                                                                           roomDetailViewModel.process(RoomDetailActions.EnterReplyMode(eventId, composerLayout.composerEditText.text.toString()))
+                                                                       }
+                                                                   }
 
-                        override fun canSwipeModel(model: EpoxyModel<*>): Boolean {
-                            return when (model) {
-                                is MessageFileItem,
-                                is MessageImageVideoItem,
-                                is MessageTextItem -> {
-                                    return (model as AbsMessageItem).attributes.informationData.sendState == SendState.SYNCED
-                                }
-                                else               -> false
-                            }
-                        }
-                    })
+                                                                   override fun canSwipeModel(model: EpoxyModel<*>): Boolean {
+                                                                       return when (model) {
+                                                                           is MessageFileItem,
+                                                                           is MessageImageVideoItem,
+                                                                           is MessageTextItem -> {
+                                                                               return (model as AbsMessageItem).attributes.informationData.sendState == SendState.SYNCED
+                                                                           }
+                                                                           else               -> false
+                                                                       }
+                                                                   }
+                                                               })
             val touchHelper = ItemTouchHelper(swipeCallback)
             touchHelper.attachToRecyclerView(recyclerView)
         }
@@ -948,12 +948,19 @@ class RoomDetailFragment :
                 .show(requireActivity().supportFragmentManager, "DISPLAY_READ_RECEIPTS")
     }
 
-    override fun onReadMarkerLongBound(isDisplayed: Boolean) {
-        if (isDisplayed) {
-            readMarkerHelper.onReadMarkerLongDisplayed()
+    override fun onReadMarkerLongBound(readMarkerId: String, isDisplayed: Boolean) {
+        readMarkerHelper.onReadMarkerLongDisplayed()
+        val readMarkerIndex = timelineEventController.searchPositionOfEvent(readMarkerId) ?: return
+        val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+        if (readMarkerIndex > lastVisibleItemPosition) {
+            return
         }
-        val firstVisibleItem = layoutManager.findFirstVisibleItemPosition()
-        val nextReadMarkerId = timelineEventController.searchEventIdAtPosition(firstVisibleItem)
+        val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+        val firstVisibleItem = timelineEventController.adapter.getModelAtPosition(firstVisibleItemPosition)
+        val nextReadMarkerId = when (firstVisibleItem) {
+            is BaseEventItem -> firstVisibleItem.getEventId()
+            else             -> null
+        }
         if (nextReadMarkerId != null) {
             roomDetailViewModel.process(RoomDetailActions.SetReadMarkerAction(nextReadMarkerId))
         }

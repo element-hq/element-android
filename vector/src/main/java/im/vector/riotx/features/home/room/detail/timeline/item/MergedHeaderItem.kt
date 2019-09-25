@@ -42,7 +42,7 @@ abstract class MergedHeaderItem : BaseEventItem<MergedHeaderItem.Holder>() {
     private val _readMarkerCallback = object : ReadMarkerView.Callback {
 
         override fun onReadMarkerLongBound(isDisplayed: Boolean) {
-            attributes.readReceiptsCallback?.onReadMarkerLongBound(isDisplayed)
+            attributes.readReceiptsCallback?.onReadMarkerLongBound(attributes.readMarkerId ?: "", isDisplayed)
         }
     }
 
@@ -89,8 +89,14 @@ abstract class MergedHeaderItem : BaseEventItem<MergedHeaderItem.Holder>() {
         super.unbind(holder)
     }
 
+
+    override fun getEventId(): String? {
+        return attributes.mergeData.firstOrNull()?.eventId
+    }
+
     data class Data(
-            val eventId: Long,
+            val localId: Long,
+            val eventId: String,
             val userId: String,
             val memberName: String,
             val avatarUrl: String?

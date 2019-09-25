@@ -29,6 +29,7 @@ import androidx.core.view.children
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
+import com.airbnb.epoxy.VisibilityState
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.riotx.R
 import im.vector.riotx.core.resources.ColorProvider
@@ -58,7 +59,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
     private val _readMarkerCallback = object : ReadMarkerView.Callback {
 
         override fun onReadMarkerLongBound(isDisplayed: Boolean) {
-            attributes.readReceiptsCallback?.onReadMarkerLongBound(isDisplayed)
+            attributes.readReceiptsCallback?.onReadMarkerLongBound(attributes.informationData.eventId, isDisplayed)
         }
     }
 
@@ -155,6 +156,10 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
 
     open fun shouldShowReactionAtBottom(): Boolean {
         return true
+    }
+
+    override fun getEventId(): String? {
+        return attributes.informationData.eventId
     }
 
     protected open fun renderSendState(root: View, textView: TextView?, failureIndicator: ImageView? = null) {

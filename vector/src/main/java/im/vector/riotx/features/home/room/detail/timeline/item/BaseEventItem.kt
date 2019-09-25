@@ -44,9 +44,12 @@ abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>
 
     override fun bind(holder: H) {
         super.bind(holder)
+        holder
         holder.leftGuideline.setGuidelineBegin(leftGuideline)
         holder.checkableBackground.isChecked = highlighted
     }
+
+    abstract fun getEventId(): String?
 
     abstract class BaseHolder(@IdRes val stubId: Int) : VectorEpoxyHolder() {
         val leftGuideline by bind<Guideline>(R.id.messageStartGuideline)

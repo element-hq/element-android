@@ -82,7 +82,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
 
     interface ReadReceiptsCallback {
         fun onReadReceiptsClicked(readReceipts: List<ReadReceiptData>)
-        fun onReadMarkerLongBound(isDisplayed: Boolean)
+        fun onReadMarkerLongBound(readMarkerId: String, isDisplayed: Boolean)
     }
 
     interface UrlClickCallback {
@@ -161,7 +161,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             synchronized(modelCache) {
                 for (i in 0 until modelCache.size) {
                     if (modelCache[i]?.eventId == viewState.highlightedEventId
-                            || modelCache[i]?.eventId == eventIdToHighlight) {
+                        || modelCache[i]?.eventId == eventIdToHighlight) {
                         modelCache[i] = null
                     }
                 }
@@ -232,8 +232,8 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
                 // Should be build if not cached or if cached but contains mergedHeader or formattedDay
                 // We then are sure we always have items up to date.
                 if (modelCache[position] == null
-                        || modelCache[position]?.mergedHeaderModel != null
-                        || modelCache[position]?.formattedDayModel != null) {
+                    || modelCache[position]?.mergedHeaderModel != null
+                    || modelCache[position]?.formattedDayModel != null) {
                     modelCache[position] = buildItemModels(position, currentSnapshot)
                 }
             }
@@ -258,18 +258,24 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         val date = event.root.localDateTime()
         val nextDate = nextEvent?.root?.localDateTime()
         val addDaySeparator = date.toLocalDate() != nextDate?.toLocalDate()
-        val eventModel = timelineItemFactory.create(event, nextEvent, eventIdToHighlight, readMarkerVisible, callback).also {
+        // Don't show read marker if it's on first item
+        val showReadMarker = if (currentPosition == 0 && event.hasReadMarker) {
+            false
+        } else {
+            readMarkerVisible
+        }
+        val eventModel = timelineItemFactory.create(event, nextEvent, eventIdToHighlight, showReadMarker, callback).also {
             it.id(event.localId)
             it.setOnVisibilityStateChanged(TimelineEventVisibilityStateChangedListener(callback, event))
         }
         val mergedHeaderModel = mergedHeaderItemFactory.create(event,
-                nextEvent = nextEvent,
-                items = items,
-                addDaySeparator = addDaySeparator,
-                readMarkerVisible = readMarkerVisible,
-                currentPosition = currentPosition,
-                eventIdToHighlight = eventIdToHighlight,
-                callback = callback
+                                                               nextEvent = nextEvent,
+                                                               items = items,
+                                                               addDaySeparator = addDaySeparator,
+                                                               readMarkerVisible = readMarkerVisible,
+                                                               currentPosition = currentPosition,
+                                                               eventIdToHighlight = eventIdToHighlight,
+                                                               callback = callback
         ) {
             requestModelBuild()
         }
@@ -317,38 +323,21 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             realPosition++
         }
         for (i in 0 until modelCache.size) {
-            val itemCache = modelCache[i]
-            if (itemCache?.eventId == eventId) {
+            val itemCache = modelCache[i] ?: continue
+            if (itemCache.eventId == eventId) {
                 return realPosition
             }
-            if (itemCache?.eventModel != null) {
+            if (itemCache.eventModel != null && !mergedHeaderItemFactory.isCollapsed(itemCache.localId)) {
                 realPosition++
             }
-            if (itemCache?.mergedHeaderModel != null) {
+            if (itemCache.mergedHeaderModel != null) {
                 realPosition++
             }
-            if (itemCache?.formattedDayModel != null) {
+            if (itemCache.formattedDayModel != null) {
                 realPosition++
             }
         }
         return null
-    }
-
-    fun searchEventIdAtPosition(position: Int): String? = synchronized(modelCache) {
-        var offsetValue = 0
-        for (i in 0 until position) {
-            val itemCache = modelCache[i]
-            if (itemCache?.eventModel == null) {
-                offsetValue--
-            }
-            if (itemCache?.mergedHeaderModel != null) {
-                offsetValue++
-            }
-            if (itemCache?.formattedDayModel != null) {
-                offsetValue++
-            }
-        }
-        return modelCache.getOrNull(position - offsetValue)?.eventId
     }
 
     fun isLoadingForward() = showingForwardLoader

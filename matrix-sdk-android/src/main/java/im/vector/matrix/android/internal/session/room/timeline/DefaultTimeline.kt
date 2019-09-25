@@ -24,6 +24,7 @@ import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.TimelineSettings
 import im.vector.matrix.android.api.util.CancelableBag
+import im.vector.matrix.android.internal.database.helper.deleteOnCascade
 import im.vector.matrix.android.internal.database.mapper.TimelineEventMapper
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.ChunkEntity
@@ -625,12 +626,14 @@ internal class DefaultTimeline(
     }
 
     private fun clearUnlinkedEvents(realm: Realm) {
-        realm.executeTransaction {
+        realm.executeTransaction { localRealm ->
             val unlinkedChunks = ChunkEntity
-                    .where(it, roomId = roomId)
+                    .where(localRealm, roomId = roomId)
                     .equalTo("${ChunkEntityFields.TIMELINE_EVENTS.ROOT}.${EventEntityFields.IS_UNLINKED}", true)
                     .findAll()
-            unlinkedChunks.deleteAllFromRealm()
+            unlinkedChunks.forEach {
+                it.deleteOnCascade()
+            }
         }
     }
 

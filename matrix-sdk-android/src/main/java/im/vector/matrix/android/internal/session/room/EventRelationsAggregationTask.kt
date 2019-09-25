@@ -85,7 +85,7 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
 
                             EventAnnotationsSummaryEntity.where(realm, event.eventId
                                     ?: "").findFirst()?.let {
-                                TimelineEventEntity.where(realm, eventId = event.eventId
+                                TimelineEventEntity.where(realm, roomId = roomId, eventId = event.eventId
                                         ?: "").findFirst()?.let { tet ->
                                     tet.annotations = it
                                 }
@@ -167,8 +167,7 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
         var existing = EventAnnotationsSummaryEntity.where(realm, targetEventId).findFirst()
         if (existing == null) {
             Timber.v("###REPLACE creating new relation summary for $targetEventId")
-            existing = EventAnnotationsSummaryEntity.create(realm, targetEventId)
-            existing.roomId = roomId
+            existing = EventAnnotationsSummaryEntity.create(realm, roomId, targetEventId)
         }
 
         //we have it
@@ -233,8 +232,7 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
                     val eventId = event.eventId ?: ""
                     val existing = EventAnnotationsSummaryEntity.where(realm, eventId).findFirst()
                     if (existing == null) {
-                        val eventSummary = EventAnnotationsSummaryEntity.create(realm, eventId)
-                        eventSummary.roomId = roomId
+                        val eventSummary = EventAnnotationsSummaryEntity.create(realm, roomId, eventId)
                         val sum = realm.createObject(ReactionAggregatedSummaryEntity::class.java)
                         sum.key = it.key
                         sum.firstTimestamp = event.originServerTs ?: 0 //TODO how to maintain order?
@@ -261,7 +259,7 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
             val reactionEventId = event.eventId
             Timber.v("Reaction $reactionEventId relates to $relatedEventID")
             val eventSummary = EventAnnotationsSummaryEntity.where(realm, relatedEventID).findFirst()
-                    ?: EventAnnotationsSummaryEntity.create(realm, relatedEventID).apply { this.roomId = roomId }
+                    ?: EventAnnotationsSummaryEntity.create(realm, roomId, relatedEventID).apply { this.roomId = roomId }
 
             var sum = eventSummary.reactionsSummary.find { it.key == reaction }
             val txId = event.unsignedData?.transactionId

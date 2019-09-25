@@ -71,7 +71,8 @@ class MergedHeaderItemFactory @Inject constructor(private val sessionHolder: Act
                             userId = mergedEvent.root.senderId ?: "",
                             avatarUrl = senderAvatar,
                             memberName = senderName ?: "",
-                            eventId = mergedEvent.localId
+                            localId = mergedEvent.localId,
+                            eventId = mergedEvent.root.eventId ?: ""
                     )
                     mergedData.add(data)
                 }

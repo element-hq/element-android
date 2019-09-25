@@ -58,7 +58,6 @@ import im.vector.riotx.core.utils.LiveEvent
 import im.vector.riotx.core.utils.subscribeLogError
 import im.vector.riotx.features.command.CommandParser
 import im.vector.riotx.features.command.ParsedCommand
-import im.vector.riotx.features.home.room.detail.timeline.TimelineLayoutManagerHolder
 import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineDisplayableEvents
 import im.vector.riotx.features.settings.VectorPreferences
 import io.reactivex.Observable
@@ -72,7 +71,6 @@ import java.util.concurrent.TimeUnit
 
 
 class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: RoomDetailViewState,
-                                                      private val timelineLayoutManagerHolder: TimelineLayoutManagerHolder,
                                                       private val userPreferencesProvider: UserPreferencesProvider,
                                                       private val vectorPreferences: VectorPreferences,
                                                       private val session: Session
@@ -117,8 +115,6 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         observeEventDisplayedActions()
         observeSummaryState()
         observeDrafts()
-        observeReadMarkerVisibility()
-        observeOwnState()
         room.rx().loadRoomMembersIfNeeded().subscribeLogError().disposeOnClear()
         timeline.start()
         setState { copy(timeline = this@RoomDetailViewModel.timeline) }
@@ -182,23 +178,23 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                         copy(
                                 // Create a sendMode from a draft and retrieve the TimelineEvent
                                 sendMode = when (draft) {
-                                    is UserDraft.REGULAR -> SendMode.REGULAR(draft.text)
-                                    is UserDraft.QUOTE   -> {
-                                        room.getTimeLineEvent(draft.linkedEventId)?.let { timelineEvent ->
-                                            SendMode.QUOTE(timelineEvent, draft.text)
-                                        }
-                                    }
-                                    is UserDraft.REPLY   -> {
-                                        room.getTimeLineEvent(draft.linkedEventId)?.let { timelineEvent ->
-                                            SendMode.REPLY(timelineEvent, draft.text)
-                                        }
-                                    }
-                                    is UserDraft.EDIT    -> {
-                                        room.getTimeLineEvent(draft.linkedEventId)?.let { timelineEvent ->
-                                            SendMode.EDIT(timelineEvent, draft.text)
-                                        }
-                                    }
-                                } ?: SendMode.REGULAR("")
+                                               is UserDraft.REGULAR -> SendMode.REGULAR(draft.text)
+                                               is UserDraft.QUOTE   -> {
+                                                   room.getTimeLineEvent(draft.linkedEventId)?.let { timelineEvent ->
+                                                       SendMode.QUOTE(timelineEvent, draft.text)
+                                                   }
+                                               }
+                                               is UserDraft.REPLY   -> {
+                                                   room.getTimeLineEvent(draft.linkedEventId)?.let { timelineEvent ->
+                                                       SendMode.REPLY(timelineEvent, draft.text)
+                                                   }
+                                               }
+                                               is UserDraft.EDIT    -> {
+                                                   room.getTimeLineEvent(draft.linkedEventId)?.let { timelineEvent ->
+                                                       SendMode.EDIT(timelineEvent, draft.text)
+                                                   }
+                                               }
+                                           } ?: SendMode.REGULAR("")
                         )
                     }
                 }
@@ -207,7 +203,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
 
     private fun handleTombstoneEvent(action: RoomDetailActions.HandleTombstoneEvent) {
         val tombstoneContent = action.event.getClearContent().toModel<RoomTombstoneContent>()
-                ?: return
+                               ?: return
 
         val roomId = tombstoneContent.replacementRoom ?: ""
         val isRoomJoined = session.getRoom(roomId)?.roomSummary()?.membership == Membership.JOIN
@@ -342,7 +338,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 is SendMode.EDIT    -> {
                     //is original event a reply?
                     val inReplyTo = state.sendMode.timelineEvent.root.getClearContent().toModel<MessageContent>()?.relatesTo?.inReplyTo?.eventId
-                            ?: state.sendMode.timelineEvent.root.content.toModel<EncryptedEventContent>()?.relatesTo?.inReplyTo?.eventId
+                                    ?: state.sendMode.timelineEvent.root.content.toModel<EncryptedEventContent>()?.relatesTo?.inReplyTo?.eventId
                     if (inReplyTo != null) {
                         //TODO check if same content?
                         room.getTimeLineEvent(inReplyTo)?.let {
@@ -351,13 +347,13 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                     } else {
                         val messageContent: MessageContent? =
                                 state.sendMode.timelineEvent.annotations?.editSummary?.aggregatedContent.toModel()
-                                        ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
+                                ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
                         val existingBody = messageContent?.body ?: ""
                         if (existingBody != action.text) {
                             room.editTextMessage(state.sendMode.timelineEvent.root.eventId ?: "",
-                                    messageContent?.type ?: MessageType.MSGTYPE_TEXT,
-                                    action.text,
-                                    action.autoMarkdown)
+                                                 messageContent?.type ?: MessageType.MSGTYPE_TEXT,
+                                                 action.text,
+                                                 action.autoMarkdown)
                         } else {
                             Timber.w("Same message content, do not send edition")
                         }
@@ -368,7 +364,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 is SendMode.QUOTE   -> {
                     val messageContent: MessageContent? =
                             state.sendMode.timelineEvent.annotations?.editSummary?.aggregatedContent.toModel()
-                                    ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
+                            ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
                     val textMsg = messageContent?.body
 
                     val finalText = legacyRiotQuoteText(textMsg, action.text)
@@ -681,7 +677,15 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun handleSetReadMarkerAction(action: RoomDetailActions.SetReadMarkerAction) = withState { state ->
-        room.setReadMarker(action.eventId, callback = object : MatrixCallback<Unit> {})
+        var readMarkerId = action.eventId
+        val indexOfEvent = timeline.getIndexOfEvent(readMarkerId)
+        // force to set the read marker on the next event
+        if (indexOfEvent != null) {
+            timeline.getTimelineEventAtIndex(indexOfEvent - 1)?.root?.eventId?.also { eventIdOfNext ->
+                readMarkerId = eventIdOfNext
+            }
+        }
+        room.setReadMarker(readMarkerId, callback = object : MatrixCallback<Unit> {})
     }
 
     private fun handleMarkAllAsRead() {
@@ -723,22 +727,6 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
             }
         }
     }
-
-    private fun observeReadMarkerVisibility() {
-        Observable
-                .combineLatest(
-                        room.rx().liveReadMarker(),
-                        room.rx().liveReadReceipt(),
-                        BiFunction<Optional<String>, Optional<String>, Boolean> { readMarker, readReceipt ->
-                            readMarker.getOrNull() != readReceipt.getOrNull()
-                        }
-                )
-                .subscribe {
-                    setState { copy(readMarkerVisible = it) }
-                }
-                .disposeOnClear()
-    }
-
 
     override fun onCleared() {
         timeline.dispose()

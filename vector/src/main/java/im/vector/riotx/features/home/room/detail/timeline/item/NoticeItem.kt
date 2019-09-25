@@ -40,7 +40,7 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
     private val _readMarkerCallback = object : ReadMarkerView.Callback {
 
         override fun onReadMarkerLongBound(isDisplayed: Boolean) {
-            attributes.readReceiptsCallback?.onReadMarkerLongBound(isDisplayed)
+            attributes.readReceiptsCallback?.onReadMarkerLongBound(attributes.informationData.eventId, isDisplayed)
         }
     }
 
@@ -67,6 +67,11 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
     override fun unbind(holder: Holder) {
         holder.readMarkerView.unbind()
         super.unbind(holder)
+    }
+
+
+    override fun getEventId(): String? {
+        return attributes.informationData.eventId
     }
 
     override fun getViewType() = STUB_ID

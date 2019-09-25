@@ -21,16 +21,21 @@ package im.vector.riotx.core.ui.views
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
+import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
 import butterknife.ButterKnife
+import com.airbnb.epoxy.VisibilityState
+import com.google.android.material.internal.ViewUtils.dpToPx
 import im.vector.riotx.R
 import im.vector.riotx.features.themes.ThemeUtils
 import kotlinx.android.synthetic.main.view_jump_to_read_marker.view.*
 import me.gujun.android.span.span
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
+import timber.log.Timber
 
 class JumpToReadMarkerView @JvmOverloads constructor(
         context: Context,
@@ -49,26 +54,34 @@ class JumpToReadMarkerView @JvmOverloads constructor(
         setupView()
     }
 
+    private var readMarkerId: String? = null
+
     private fun setupView() {
-        LinearLayout.inflate(context, R.layout.view_jump_to_read_marker, this)
+        inflate(context, R.layout.view_jump_to_read_marker, this)
         setBackgroundColor(ContextCompat.getColor(context, R.color.notification_accent_color))
         jumpToReadMarkerLabelView.movementMethod = BetterLinkMovementMethod.getInstance()
         isClickable = true
+        jumpToReadMarkerLabelView.text = span(resources.getString(R.string.room_jump_to_first_unread)) {
+            textDecorationLine = "underline"
+            onClick = {
+                readMarkerId?.also {
+                    callback?.onJumpToReadMarkerClicked(it)
+                }
+            }
+        }
         closeJumpToReadMarkerView.setOnClickListener {
-            visibility = View.GONE
+            visibility = View.INVISIBLE
             callback?.onClearReadMarkerClicked()
         }
     }
 
     fun render(show: Boolean, readMarkerId: String?) {
-        isVisible = show
-        if (readMarkerId != null) {
-            jumpToReadMarkerLabelView.text = span(resources.getString(R.string.room_jump_to_first_unread)) {
-                textDecorationLine = "underline"
-                onClick = { callback?.onJumpToReadMarkerClicked(readMarkerId) }
-            }
+        this.readMarkerId = readMarkerId
+        visibility = if(show){
+            View.VISIBLE
+        }else {
+            View.INVISIBLE
         }
-
     }
 
 
