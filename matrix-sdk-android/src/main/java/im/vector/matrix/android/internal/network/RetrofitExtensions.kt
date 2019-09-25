@@ -30,6 +30,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
+import java.io.IOException
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
@@ -45,6 +46,24 @@ internal suspend fun <T> Call<T>.awaitResponse(): Response<T> {
 
             override fun onFailure(call: Call<T>, t: Throwable) {
                 continuation.resumeWithException(t)
+            }
+        })
+    }
+}
+
+internal suspend fun okhttp3.Call.awaitResponse(): okhttp3.Response {
+    return suspendCancellableCoroutine { continuation ->
+        continuation.invokeOnCancellation {
+            cancel()
+        }
+
+        enqueue(object : okhttp3.Callback {
+            override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
+                continuation.resume(response)
+            }
+
+            override fun onFailure(call: okhttp3.Call, e: IOException) {
+                continuation.resumeWithException(e)
             }
         })
     }
