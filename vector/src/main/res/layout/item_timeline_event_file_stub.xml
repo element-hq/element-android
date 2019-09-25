@@ -51,7 +51,7 @@
     </LinearLayout>
 
     <include
-        android:id="@+id/messageMediaUploadProgressLayout"
+        android:id="@+id/messageFileUploadProgressLayout"
         layout="@layout/media_upload_download_progress_layout"
         android:layout_width="0dp"
         android:layout_height="46dp"

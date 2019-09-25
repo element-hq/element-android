@@ -20,6 +20,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.view.ViewCompat
+import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
@@ -44,11 +45,13 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
         super.bind(holder)
         imageContentRenderer.render(mediaData, ImageContentRenderer.Mode.THUMBNAIL, holder.imageView)
         if (!informationData.sendState.hasFailed()) {
-            contentUploadStateTrackerBinder.bind(informationData.eventId, mediaData, holder.progressLayout)
+            contentUploadStateTrackerBinder.bind(informationData.eventId, mediaData.isLocalFile(), holder.progressLayout)
+        } else {
+            holder.progressLayout.isVisible = false
         }
         holder.imageView.setOnClickListener(clickListener)
         holder.imageView.setOnLongClickListener(longClickListener)
-        ViewCompat.setTransitionName(holder.imageView,"imagePreview_${id()}")
+        ViewCompat.setTransitionName(holder.imageView, "imagePreview_${id()}")
         holder.mediaContentView.setOnClickListener(cellClickListener)
         holder.mediaContentView.setOnLongClickListener(longClickListener)
         // The sending state color will be apply to the progress text

@@ -27,7 +27,6 @@ import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.resources.ColorProvider
-import im.vector.riotx.features.media.ImageContentRenderer
 import im.vector.riotx.features.ui.getMessageTextColor
 import javax.inject.Inject
 
@@ -37,12 +36,12 @@ class ContentUploadStateTrackerBinder @Inject constructor(private val activeSess
     private val updateListeners = mutableMapOf<String, ContentUploadStateTracker.UpdateListener>()
 
     fun bind(eventId: String,
-             mediaData: ImageContentRenderer.Data,
+             isLocalFile: Boolean,
              progressLayout: ViewGroup) {
 
         activeSessionHolder.getActiveSession().also { session ->
             val uploadStateTracker = session.contentUploadProgressTracker()
-            val updateListener = ContentMediaProgressUpdater(progressLayout, mediaData, colorProvider)
+            val updateListener = ContentMediaProgressUpdater(progressLayout, isLocalFile, colorProvider)
             updateListeners[eventId] = updateListener
             uploadStateTracker.track(eventId, updateListener)
         }
@@ -60,7 +59,7 @@ class ContentUploadStateTrackerBinder @Inject constructor(private val activeSess
 }
 
 private class ContentMediaProgressUpdater(private val progressLayout: ViewGroup,
-                                          private val mediaData: ImageContentRenderer.Data,
+                                          private val isLocalFile: Boolean,
                                           private val colorProvider: ColorProvider) : ContentUploadStateTracker.UpdateListener {
 
     override fun onUpdate(state: ContentUploadStateTracker.State) {
@@ -76,7 +75,7 @@ private class ContentMediaProgressUpdater(private val progressLayout: ViewGroup,
     }
 
     private fun handleIdle(state: ContentUploadStateTracker.State.Idle) {
-        if (mediaData.isLocalFile()) {
+        if (isLocalFile) {
             progressLayout.isVisible = true
             val progressBar = progressLayout.findViewById<ProgressBar>(R.id.mediaProgressBar)
             val progressTextView = progressLayout.findViewById<TextView>(R.id.mediaProgressTextView)
