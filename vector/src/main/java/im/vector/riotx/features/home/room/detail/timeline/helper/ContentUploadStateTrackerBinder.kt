@@ -26,12 +26,14 @@ import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
+import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.features.ui.getMessageTextColor
 import javax.inject.Inject
 
 class ContentUploadStateTrackerBinder @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
-                                                          private val colorProvider: ColorProvider) {
+                                                          private val colorProvider: ColorProvider,
+                                                          private val errorFormatter: ErrorFormatter) {
 
     private val updateListeners = mutableMapOf<String, ContentUploadStateTracker.UpdateListener>()
 
@@ -41,7 +43,7 @@ class ContentUploadStateTrackerBinder @Inject constructor(private val activeSess
 
         activeSessionHolder.getActiveSession().also { session ->
             val uploadStateTracker = session.contentUploadProgressTracker()
-            val updateListener = ContentMediaProgressUpdater(progressLayout, isLocalFile, colorProvider)
+            val updateListener = ContentMediaProgressUpdater(progressLayout, isLocalFile, colorProvider, errorFormatter)
             updateListeners[eventId] = updateListener
             uploadStateTracker.track(eventId, updateListener)
         }
@@ -60,7 +62,8 @@ class ContentUploadStateTrackerBinder @Inject constructor(private val activeSess
 
 private class ContentMediaProgressUpdater(private val progressLayout: ViewGroup,
                                           private val isLocalFile: Boolean,
-                                          private val colorProvider: ColorProvider) : ContentUploadStateTracker.UpdateListener {
+                                          private val colorProvider: ColorProvider,
+                                          private val errorFormatter: ErrorFormatter) : ContentUploadStateTracker.UpdateListener {
 
     override fun onUpdate(state: ContentUploadStateTracker.State) {
         when (state) {
@@ -133,7 +136,7 @@ private class ContentMediaProgressUpdater(private val progressLayout: ViewGroup,
         val progressBar = progressLayout.findViewById<ProgressBar>(R.id.mediaProgressBar)
         val progressTextView = progressLayout.findViewById<TextView>(R.id.mediaProgressTextView)
         progressBar?.isVisible = false
-        progressTextView?.text = state.throwable.localizedMessage
+        progressTextView?.text = errorFormatter.toHumanReadable(state.throwable)
         progressTextView?.setTextColor(colorProvider.getMessageTextColor(SendState.UNDELIVERED))
     }
 
