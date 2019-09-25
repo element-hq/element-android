@@ -23,9 +23,9 @@ import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.internal.di.MoshiProvider
 import kotlinx.coroutines.CancellationException
-import okhttp3.ResponseBody
 import org.greenrobot.eventbus.EventBus
 import retrofit2.Call
+import retrofit2.Response
 import timber.log.Timber
 import java.io.IOException
 
@@ -43,7 +43,7 @@ internal class Request<DATA> {
                 response.body()
                         ?: throw IllegalStateException("The request returned a null body")
             } else {
-                throw manageFailure(response.errorBody(), response.code())
+                throw response.toFailure()
             }
         } catch (exception: Throwable) {
             throw when (exception) {
@@ -56,10 +56,8 @@ internal class Request<DATA> {
         }
     }
 
-    private fun manageFailure(errorBody: ResponseBody?, httpCode: Int): Throwable {
-        if (errorBody == null) {
-            return RuntimeException("Error body should not be null")
-        }
+    private fun <T> Response<T>.toFailure(): Failure {
+        val errorBody = errorBody() ?: return Failure.Unknown(RuntimeException("errorBody() should not be null"))
 
         val errorBodyStr = errorBody.string()
 
@@ -74,13 +72,13 @@ internal class Request<DATA> {
                     EventBus.getDefault().post(ConsentNotGivenError(matrixError.consentUri))
                 }
 
-                return Failure.ServerError(matrixError, httpCode)
+                return Failure.ServerError(matrixError, code())
             }
         } catch (ex: JsonDataException) {
             // This is not a MatrixError
             Timber.w("The error returned by the server is not a MatrixError")
         }
 
-        return Failure.OtherServerError(errorBodyStr, httpCode)
+        return Failure.OtherServerError(errorBodyStr, code())
     }
 }
