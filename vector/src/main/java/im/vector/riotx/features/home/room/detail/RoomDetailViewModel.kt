@@ -48,6 +48,7 @@ import im.vector.matrix.android.api.session.room.timeline.getTextEditableContent
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
 import im.vector.matrix.rx.rx
+import im.vector.riotx.BuildConfig
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.postLiveEvent
 import im.vector.riotx.core.intent.getFilenameFromUri
@@ -232,18 +233,13 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         get() = _downloadedFileEvent
 
 
-    fun isMenuItemVisible(@IdRes itemId: Int): Boolean {
-        if (itemId == R.id.clear_message_queue) {
-            //For now always disable, woker cancellation is not working properly
-            return false//timeline.pendingEventCount() > 0
-        }
-        if (itemId == R.id.resend_all) {
-            return timeline.failedToDeliverEventCount() > 0
-        }
-        if (itemId == R.id.clear_all) {
-            return timeline.failedToDeliverEventCount() > 0
-        }
-        return false
+    fun isMenuItemVisible(@IdRes itemId: Int) = when (itemId) {
+        R.id.clear_message_queue ->
+            /* For now always disable on production, worker cancellation is not working properly */
+            timeline.pendingEventCount() > 0 && BuildConfig.DEBUG
+        R.id.resend_all          -> timeline.failedToDeliverEventCount() > 0
+        R.id.clear_all           -> timeline.failedToDeliverEventCount() > 0
+        else                     -> false
     }
 
     // PRIVATE METHODS *****************************************************************************
