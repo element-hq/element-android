@@ -6,7 +6,7 @@ Features:
 
 Improvements:
  - Persist active tab between sessions (#503)
- - Do not upload file to big for the homeserver (#587)
+ - Do not upload file too big for the homeserver (#587)
 
 Other changes:
  -

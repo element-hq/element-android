@@ -17,7 +17,7 @@
 package im.vector.matrix.android.api.session.homeserver
 
 /**
- * This interface defines a method to sign out. It's implemented at the session level.
+ * This interface defines a method to retrieve the homeserver capabilities.
  */
 interface HomeServerCapabilitiesService {
 
