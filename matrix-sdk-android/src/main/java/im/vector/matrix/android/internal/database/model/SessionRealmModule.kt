@@ -45,6 +45,7 @@ import io.realm.annotations.RealmModule
                  PusherDataEntity::class,
                  ReadReceiptsSummaryEntity::class,
                  UserDraftsEntity::class,
-                 DraftEntity::class
+                 DraftEntity::class,
+                 HomeServerCapabilitiesEntity::class
              ])
 internal class SessionRealmModule

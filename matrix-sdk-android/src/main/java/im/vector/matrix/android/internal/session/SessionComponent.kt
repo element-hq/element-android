@@ -30,6 +30,7 @@ import im.vector.matrix.android.internal.session.content.UploadContentWorker
 import im.vector.matrix.android.internal.session.filter.FilterModule
 import im.vector.matrix.android.internal.session.group.GetGroupDataWorker
 import im.vector.matrix.android.internal.session.group.GroupModule
+import im.vector.matrix.android.internal.session.homeserver.HomeServerCapabilitiesModule
 import im.vector.matrix.android.internal.session.pushers.AddHttpPusherWorker
 import im.vector.matrix.android.internal.session.pushers.PushersModule
 import im.vector.matrix.android.internal.session.room.RoomModule
@@ -51,6 +52,7 @@ import im.vector.matrix.android.internal.task.TaskExecutor
                SessionModule::class,
                RoomModule::class,
                SyncModule::class,
+               HomeServerCapabilitiesModule::class,
                SignOutModule::class,
                GroupModule::class,
                UserModule::class,

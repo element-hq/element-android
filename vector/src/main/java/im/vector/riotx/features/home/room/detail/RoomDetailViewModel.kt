@@ -37,6 +37,7 @@ import im.vector.matrix.android.api.session.events.model.isImageMessage
 import im.vector.matrix.android.api.session.events.model.isTextMessage
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.file.FileService
+import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilities
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
@@ -227,6 +228,10 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     private val _navigateToEvent = MutableLiveData<LiveEvent<String>>()
     val navigateToEvent: LiveData<LiveEvent<String>>
         get() = _navigateToEvent
+
+    private val _fileTooBigEvent = MutableLiveData<LiveEvent<FileTooBigError>>()
+    val fileTooBigEvent: LiveData<LiveEvent<FileTooBigError>>
+        get() = _fileTooBigEvent
 
     private val _downloadedFileEvent = MutableLiveData<LiveEvent<DownloadFileState>>()
     val downloadedFileEvent: LiveData<LiveEvent<DownloadFileState>>
@@ -466,7 +471,20 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                     type = ContentAttachmentData.Type.values()[it.mediaType]
             )
         }
-        room.sendMedias(attachments)
+
+        val homeServerCapabilities = session.getHomeServerCapabilities()
+
+        val maxUploadFileSize = homeServerCapabilities.maxUploadFileSize
+
+        if (maxUploadFileSize == HomeServerCapabilities.MAX_UPLOAD_FILE_SIZE_UNKNOWN) {
+            // Unknown limitation
+            room.sendMedias(attachments)
+        } else {
+            attachments.find { it.size > maxUploadFileSize }
+                    ?.let {
+                        _fileTooBigEvent.postValue(LiveEvent(FileTooBigError(it.name ?: it.path, it.size, maxUploadFileSize)))
+                    } ?: run { room.sendMedias(attachments) }
+        }
     }
 
     private fun handleEventDisplayed(action: RoomDetailActions.EventDisplayed) {

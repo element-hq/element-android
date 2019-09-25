@@ -28,6 +28,7 @@ import android.os.Parcelable
 import android.text.Editable
 import android.text.Spannable
 import android.text.TextUtils
+import android.text.format.Formatter
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
@@ -227,6 +228,10 @@ class RoomDetailFragment :
             scrollOnHighlightedEventCallback.scheduleScrollTo(it)
         }
 
+        roomDetailViewModel.fileTooBigEvent.observeEvent(this) {
+            displayFileTooBigWarning(it)
+        }
+
         roomDetailViewModel.selectSubscribe(this, RoomDetailViewState::tombstoneEventHandling, uniqueOnly("tombstoneEventHandling")) {
             renderTombstoneEventHandling(it)
         }
@@ -252,6 +257,18 @@ class RoomDetailFragment :
         roomDetailViewModel.selectSubscribe(RoomDetailViewState::syncState) { syncState ->
             syncStateView.render(syncState)
         }
+    }
+
+    private fun displayFileTooBigWarning(error: FileTooBigError) {
+        AlertDialog.Builder(requireActivity())
+                .setTitle(R.string.dialog_title_error)
+                .setMessage(getString(R.string.error_file_too_big,
+                        error.filename,
+                        Formatter.formatFileSize(requireContext(), error.homeServerLimitInBytes),
+                        Formatter.formatFileSize(requireContext(), error.fileSizeInBytes)
+                ))
+                .setPositiveButton(R.string.ok, null)
+                .show()
     }
 
     private fun setupNotificationView() {
