@@ -21,6 +21,7 @@ import androidx.paging.PagedList
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.matrix.android.api.util.Cancelable
+import im.vector.matrix.android.api.util.Optional
 
 /**
  * This interface defines methods to get users. It's implemented at the session level.
@@ -47,9 +48,9 @@ interface UserService {
     /**
      * Observe a live user from a userId
      * @param userId the userId to look for.
-     * @return a Livedata of user with userId
+     * @return a LiveData of user with userId
      */
-    fun liveUser(userId: String): LiveData<User?>
+    fun liveUser(userId: String): LiveData<Optional<User>>
 
     /**
      * Observe a live list of users sorted alphabetically

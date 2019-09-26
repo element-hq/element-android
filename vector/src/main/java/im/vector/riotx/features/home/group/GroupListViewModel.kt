@@ -33,6 +33,8 @@ import im.vector.riotx.core.extensions.postLiveEvent
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.utils.LiveEvent
+import io.reactivex.Observable
+import io.reactivex.functions.BiFunction
 
 const val ALL_COMMUNITIES_GROUP_ID = "ALL_COMMUNITIES_GROUP_ID"
 
@@ -91,20 +93,26 @@ class GroupListViewModel @AssistedInject constructor(@Assisted initialState: Gro
     }
 
     private fun observeGroupSummaries() {
-        session
-                .rx()
-                .liveGroupSummaries()
-                // Keep only joined groups. Group invitations will be managed later
-                .map { it.filter { groupSummary -> groupSummary.membership == Membership.JOIN } }
-                .map {
-                    val myUser = session.getUser(session.myUserId)
-                    val allCommunityGroup = GroupSummary(
-                            groupId = ALL_COMMUNITIES_GROUP_ID,
-                            membership = Membership.JOIN,
-                            displayName = stringProvider.getString(R.string.group_all_communities),
-                            avatarUrl = myUser?.avatarUrl ?: "")
-                    listOf(allCommunityGroup) + it
+        Observable.combineLatest<GroupSummary, List<GroupSummary>, List<GroupSummary>>(
+                session
+                        .rx()
+                        .liveUser(session.myUserId)
+                        .map { optionalUser ->
+                            GroupSummary(
+                                    groupId = ALL_COMMUNITIES_GROUP_ID,
+                                    membership = Membership.JOIN,
+                                    displayName = stringProvider.getString(R.string.group_all_communities),
+                                    avatarUrl = optionalUser.getOrNull()?.avatarUrl ?: "")
+                        },
+                session
+                        .rx()
+                        .liveGroupSummaries()
+                        // Keep only joined groups. Group invitations will be managed later
+                        .map { it.filter { groupSummary -> groupSummary.membership == Membership.JOIN } },
+                BiFunction { allCommunityGroup, communityGroups ->
+                    listOf(allCommunityGroup) + communityGroups
                 }
+        )
                 .execute { async ->
                     val newSelectedGroup = selectedGroup ?: async()?.firstOrNull()
                     copy(asyncGroups = async, selectedGroup = newSelectedGroup)
