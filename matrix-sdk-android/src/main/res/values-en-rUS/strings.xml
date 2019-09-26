@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Note to translator: please add here only the string which are different than default version (which is en-rGB) -->
+
+    <string name="verification_emoji_wrench">Wrench</string>
+    <string name="verification_emoji_airplane">Airplane</string>
+
+</resources>
+
+
