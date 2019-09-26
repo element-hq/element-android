@@ -56,16 +56,15 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
     }
 
 
-    private fun insertInDb(getUploadCapabilitiesResult: GetUploadCapabilitiesResult) {
-        monarchy
-                .writeAsync { realm ->
-                    val homeServerCapabilitiesEntity = HomeServerCapabilitiesEntity.getOrCreate(realm)
+    private suspend fun insertInDb(getUploadCapabilitiesResult: GetUploadCapabilitiesResult) {
+        monarchy.awaitTransaction { realm ->
+            val homeServerCapabilitiesEntity = HomeServerCapabilitiesEntity.getOrCreate(realm)
 
-                    homeServerCapabilitiesEntity.maxUploadFileSize = getUploadCapabilitiesResult.maxUploadSize
-                            ?: HomeServerCapabilities.MAX_UPLOAD_FILE_SIZE_UNKNOWN
+            homeServerCapabilitiesEntity.maxUploadFileSize = getUploadCapabilitiesResult.maxUploadSize
+                    ?: HomeServerCapabilities.MAX_UPLOAD_FILE_SIZE_UNKNOWN
 
-                    homeServerCapabilitiesEntity.lastUpdatedTimestamp = Date().time
-                }
+            homeServerCapabilitiesEntity.lastUpdatedTimestamp = Date().time
+        }
     }
 
     companion object {

@@ -21,24 +21,18 @@ import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilities
 import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilitiesService
 import im.vector.matrix.android.internal.database.mapper.HomeServerCapabilitiesMapper
 import im.vector.matrix.android.internal.database.model.HomeServerCapabilitiesEntity
-import im.vector.matrix.android.internal.database.query.getOrCreate
+import im.vector.matrix.android.internal.database.query.get
+import io.realm.Realm
 import javax.inject.Inject
 
 internal class DefaultHomeServerCapabilitiesService @Inject constructor(private val monarchy: Monarchy) : HomeServerCapabilitiesService {
 
     override fun getHomeServerCapabilities(): HomeServerCapabilities {
-        var entity: HomeServerCapabilitiesEntity? = null
-        monarchy.doWithRealm { realm ->
-            entity = HomeServerCapabilitiesEntity.getOrCreate(realm)
-        }
-
-        return with(entity) {
-            if (this != null) {
-                HomeServerCapabilitiesMapper.map(this)
-            } else {
-                // Should not happen
-                HomeServerCapabilities(HomeServerCapabilities.MAX_UPLOAD_FILE_SIZE_UNKNOWN)
+        return Realm.getInstance(monarchy.realmConfiguration).use { realm ->
+            HomeServerCapabilitiesEntity.get(realm)?.let {
+                HomeServerCapabilitiesMapper.map(it)
             }
         }
+                ?: HomeServerCapabilities()
     }
 }
