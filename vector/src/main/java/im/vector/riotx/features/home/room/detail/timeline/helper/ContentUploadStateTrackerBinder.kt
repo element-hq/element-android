@@ -16,7 +16,6 @@
 
 package im.vector.riotx.features.home.room.detail.timeline.helper
 
-import android.text.format.Formatter
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
@@ -28,6 +27,7 @@ import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.resources.ColorProvider
+import im.vector.riotx.core.utils.TextUtils
 import im.vector.riotx.features.ui.getMessageTextColor
 import javax.inject.Inject
 
@@ -126,8 +126,8 @@ private class ContentMediaProgressUpdater(private val progressLayout: ViewGroup,
         progressBar?.isIndeterminate = false
         progressBar?.progress = percent.toInt()
         progressTextView?.text = progressLayout.context.getString(resId,
-                Formatter.formatShortFileSize(progressLayout.context, current),
-                Formatter.formatShortFileSize(progressLayout.context, total))
+                TextUtils.formatFileSize(progressLayout.context, current, true),
+                TextUtils.formatFileSize(progressLayout.context, total, true))
         progressTextView?.setTextColor(colorProvider.getMessageTextColor(SendState.SENDING))
     }
 
