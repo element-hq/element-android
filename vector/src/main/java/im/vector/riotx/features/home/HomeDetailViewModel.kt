@@ -16,7 +16,8 @@
 
 package im.vector.riotx.features.home
 
-import arrow.core.Option
+import arrow.core.None
+import arrow.core.firstOrNone
 import arrow.core.toOption
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
@@ -111,7 +112,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                     val group = optionGroupSummary.orNull()
                     when {
                         group == null                             ->
-                            Observable.just(Option.empty())
+                            Observable.just(None)
                         group.groupId == ALL_COMMUNITIES_GROUP_ID ->
                             session
                                     .rx()
@@ -122,16 +123,14 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                                                 membership = Membership.JOIN,
                                                 displayName = stringProvider.getString(R.string.group_all_communities),
                                                 avatarUrl = optionalUser.getOrNull()?.avatarUrl ?: "")
-                                                .toOption()
                                     }
+                                    .map { it.toOption() }
                         else                                      ->
                             session
                                     .rx()
                                     .liveGroupSummaries()
                                     .map { it.filter { groupSummary -> groupSummary.groupId == group.groupId } }
-                                    .map {
-                                        it.firstOrNull().toOption()
-                                    }
+                                    .map { it.firstOrNone() }
                     }
                 }
                 .observeOn(Schedulers.computation())
@@ -147,38 +146,33 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
         homeRoomListStore
                 .observe()
                 .observeOn(Schedulers.computation())
-                .subscribe { list ->
-                    list.let { summaries ->
-                        val peopleNotifications = summaries
-                                .filter { it.isDirect }
-                                .map { it.notificationCount }
-                                .takeIf { it.isNotEmpty() }
-                                ?.sumBy { i -> i }
-                                ?: 0
-                        val peopleHasHighlight = summaries
-                                .filter { it.isDirect }
-                                .any { it.highlightCount > 0 }
+                .map { it.asSequence() }
+                .subscribe { summaries ->
+                    val peopleNotifications = summaries
+                            .filter { it.isDirect }
+                            .map { it.notificationCount }
+                            .sumBy { i -> i }
+                    val peopleHasHighlight = summaries
+                            .filter { it.isDirect }
+                            .any { it.highlightCount > 0 }
 
-                        val roomsNotifications = summaries
-                                .filter { !it.isDirect }
-                                .map { it.notificationCount }
-                                .takeIf { it.isNotEmpty() }
-                                ?.sumBy { i -> i }
-                                ?: 0
-                        val roomsHasHighlight = summaries
-                                .filter { !it.isDirect }
-                                .any { it.highlightCount > 0 }
+                    val roomsNotifications = summaries
+                            .filter { !it.isDirect }
+                            .map { it.notificationCount }
+                            .sumBy { i -> i }
+                    val roomsHasHighlight = summaries
+                            .filter { !it.isDirect }
+                            .any { it.highlightCount > 0 }
 
-                        setState {
-                            copy(
-                                    notificationCountCatchup = peopleNotifications + roomsNotifications,
-                                    notificationHighlightCatchup = peopleHasHighlight || roomsHasHighlight,
-                                    notificationCountPeople = peopleNotifications,
-                                    notificationHighlightPeople = peopleHasHighlight,
-                                    notificationCountRooms = roomsNotifications,
-                                    notificationHighlightRooms = roomsHasHighlight
-                            )
-                        }
+                    setState {
+                        copy(
+                                notificationCountCatchup = peopleNotifications + roomsNotifications,
+                                notificationHighlightCatchup = peopleHasHighlight || roomsHasHighlight,
+                                notificationCountPeople = peopleNotifications,
+                                notificationHighlightPeople = peopleHasHighlight,
+                                notificationCountRooms = roomsNotifications,
+                                notificationHighlightRooms = roomsHasHighlight
+                        )
                     }
                 }
                 .disposeOnClear()
