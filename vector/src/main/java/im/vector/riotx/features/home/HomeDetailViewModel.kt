@@ -16,18 +16,27 @@
 
 package im.vector.riotx.features.home
 
+import arrow.core.Option
+import arrow.core.toOption
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.group.model.GroupSummary
+import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.rx.rx
+import im.vector.riotx.R
 import im.vector.riotx.core.di.HasScreenInjector
 import im.vector.riotx.core.platform.VectorViewModel
+import im.vector.riotx.core.resources.StringProvider
+import im.vector.riotx.features.home.group.ALL_COMMUNITIES_GROUP_ID
 import im.vector.riotx.features.home.group.SelectedGroupStore
 import im.vector.riotx.features.home.room.list.RoomListFragment
 import im.vector.riotx.features.ui.UiStateRepository
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 /**
@@ -38,7 +47,8 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                                                       private val session: Session,
                                                       private val uiStateRepository: UiStateRepository,
                                                       private val selectedGroupStore: SelectedGroupStore,
-                                                      private val homeRoomListStore: HomeRoomListObservableStore)
+                                                      private val homeRoomListStore: HomeRoomListObservableStore,
+                                                      private val stringProvider: StringProvider)
     : VectorViewModel<HomeDetailViewState>(initialState) {
 
     @AssistedInject.Factory
@@ -94,6 +104,37 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
     private fun observeSelectedGroupStore() {
         selectedGroupStore
                 .observe()
+                // TODO I do not like that, but it crashes with
+                // Thread: RxComputationThreadPool-2, Exception: java.lang.IllegalStateException: Cannot invoke observeForever on a background thread
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMap { optionGroupSummary ->
+                    val group = optionGroupSummary.orNull()
+                    when {
+                        group == null                             ->
+                            Observable.just(Option.empty())
+                        group.groupId == ALL_COMMUNITIES_GROUP_ID ->
+                            session
+                                    .rx()
+                                    .liveUser(session.myUserId)
+                                    .map { optionalUser ->
+                                        GroupSummary(
+                                                groupId = ALL_COMMUNITIES_GROUP_ID,
+                                                membership = Membership.JOIN,
+                                                displayName = stringProvider.getString(R.string.group_all_communities),
+                                                avatarUrl = optionalUser.getOrNull()?.avatarUrl ?: "")
+                                                .toOption()
+                                    }
+                        else                                      ->
+                            session
+                                    .rx()
+                                    .liveGroupSummaries()
+                                    .map { it.filter { groupSummary -> groupSummary.groupId == group.groupId } }
+                                    .map {
+                                        it.firstOrNull().toOption()
+                                    }
+                    }
+                }
+                .observeOn(Schedulers.computation())
                 .subscribe {
                     setState {
                         copy(groupSummary = it)
