@@ -22,16 +22,15 @@ import io.realm.kotlin.createObject
 import io.realm.kotlin.where
 
 /**
+ * Get the current HomeServerCapabilitiesEntity, return null if it does not exist
+ */
+internal fun HomeServerCapabilitiesEntity.Companion.get(realm: Realm): HomeServerCapabilitiesEntity? {
+    return realm.where<HomeServerCapabilitiesEntity>().findFirst()
+}
+
+/**
  * Get the current HomeServerCapabilitiesEntity, create one if it does not exist
  */
 internal fun HomeServerCapabilitiesEntity.Companion.getOrCreate(realm: Realm): HomeServerCapabilitiesEntity {
-    var homeServerCapabilitiesEntity = realm.where<HomeServerCapabilitiesEntity>().findFirst()
-    if (homeServerCapabilitiesEntity == null) {
-        realm.executeTransaction {
-            realm.createObject<HomeServerCapabilitiesEntity>()
-        }
-        homeServerCapabilitiesEntity = realm.where<HomeServerCapabilitiesEntity>().findFirst()!!
-    }
-
-    return homeServerCapabilitiesEntity
+    return get(realm) ?: realm.createObject()
 }

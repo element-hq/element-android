@@ -26,13 +26,13 @@ internal object HomeServerCapabilitiesMapper {
 
     fun map(entity: HomeServerCapabilitiesEntity): HomeServerCapabilities {
         return HomeServerCapabilities(
-                entity.maxUploadFileSize
+                maxUploadFileSize = entity.maxUploadFileSize
         )
     }
 
     fun map(domain: HomeServerCapabilities): HomeServerCapabilitiesEntity {
         return HomeServerCapabilitiesEntity(
-                domain.maxUploadFileSize
+                maxUploadFileSize = domain.maxUploadFileSize
         )
     }
 }
