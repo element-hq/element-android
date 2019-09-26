@@ -91,8 +91,6 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
             holder.timeView.text = attributes.informationData.time
             holder.memberNameView.text = attributes.informationData.memberName
             attributes.avatarRenderer.render(attributes.informationData.avatarUrl, attributes.informationData.senderId, attributes.informationData.memberName?.toString(), holder.avatarImageView)
-            holder.view.setOnClickListener(attributes.itemClickListener)
-            holder.view.setOnLongClickListener(attributes.itemLongClickListener)
             holder.avatarImageView.setOnLongClickListener(attributes.itemLongClickListener)
             holder.memberNameView.setOnLongClickListener(attributes.itemLongClickListener)
         } else {
@@ -101,11 +99,12 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
             holder.avatarImageView.visibility = View.GONE
             holder.memberNameView.visibility = View.GONE
             holder.timeView.visibility = View.GONE
-            holder.view.setOnClickListener(null)
-            holder.view.setOnLongClickListener(null)
             holder.avatarImageView.setOnLongClickListener(null)
             holder.memberNameView.setOnLongClickListener(null)
         }
+        holder.view.setOnClickListener(attributes.itemClickListener)
+        holder.view.setOnLongClickListener(attributes.itemLongClickListener)
+        
         holder.readReceiptsView.render(attributes.informationData.readReceipts, attributes.avatarRenderer, _readReceiptsClickListener)
         holder.readMarkerView.bindView(
                 attributes.informationData.eventId,
