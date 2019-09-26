@@ -17,6 +17,7 @@
 package im.vector.matrix.android.internal.session.room.send
 
 import android.media.MediaMetadataRetriever
+import androidx.exifinterface.media.ExifInterface
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.R
 import im.vector.matrix.android.api.permalinks.PermalinkFactory
@@ -173,14 +174,27 @@ internal class LocalEchoEventFactory @Inject constructor(@UserId private val use
 
 
     private fun createImageEvent(roomId: String, attachment: ContentAttachmentData): Event {
+        var width = attachment.width
+        var height = attachment.height
+
+        when (attachment.exifOrientation) {
+            ExifInterface.ORIENTATION_ROTATE_90,
+            ExifInterface.ORIENTATION_TRANSVERSE,
+            ExifInterface.ORIENTATION_ROTATE_270,
+            ExifInterface.ORIENTATION_TRANSPOSE -> {
+                val tmp = width
+                width = height
+                height = tmp
+            }
+        }
+
         val content = MessageImageContent(
                 type = MessageType.MSGTYPE_IMAGE,
                 body = attachment.name ?: "image",
                 info = ImageInfo(
                         mimeType = attachment.mimeType,
-                        width = attachment.width?.toInt() ?: 0,
-                        height = attachment.height?.toInt() ?: 0,
-                        orientation = attachment.exifOrientation,
+                        width = width?.toInt() ?: 0,
+                        height = height?.toInt() ?: 0,
                         size = attachment.size.toInt()
                 ),
                 url = attachment.path
