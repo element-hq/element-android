@@ -26,8 +26,8 @@ import javax.inject.Inject
 
 internal interface GetPushersTask : Task<Unit, Unit>
 
-internal class DefaultGetPusherTask @Inject constructor(private val pushersAPI: PushersAPI,
-                                                        private val monarchy: Monarchy) : GetPushersTask {
+internal class DefaultGetPushersTask @Inject constructor(private val pushersAPI: PushersAPI,
+                                                         private val monarchy: Monarchy) : GetPushersTask {
 
     override suspend fun execute(params: Unit) {
         val response = executeRequest<GetPushersResponse> {

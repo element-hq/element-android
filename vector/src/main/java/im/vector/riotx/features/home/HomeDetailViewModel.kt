@@ -23,14 +23,19 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.rx.rx
+import im.vector.riotx.core.di.HasScreenInjector
 import im.vector.riotx.core.platform.VectorViewModel
+import im.vector.riotx.features.home.room.list.RoomListFragment
+import im.vector.riotx.features.ui.UiStateRepository
 import io.reactivex.schedulers.Schedulers
 
 /**
- * View model used to update the home bottom bar notification counts
+ * View model used to update the home bottom bar notification counts, observe the sync state and
+ * change the selected room list view
  */
 class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: HomeDetailViewState,
                                                       private val session: Session,
+                                                      private val uiStateRepository: UiStateRepository,
                                                       private val homeRoomListStore: HomeRoomListObservableStore)
     : VectorViewModel<HomeDetailViewState>(initialState) {
 
@@ -40,6 +45,13 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
     }
 
     companion object : MvRxViewModelFactory<HomeDetailViewModel, HomeDetailViewState> {
+
+        override fun initialState(viewModelContext: ViewModelContext): HomeDetailViewState? {
+            val uiStateRepository = (viewModelContext.activity as HasScreenInjector).injector().uiStateRepository()
+            return HomeDetailViewState(
+                    displayMode = uiStateRepository.getDisplayMode()
+            )
+        }
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: HomeDetailViewState): HomeDetailViewModel? {
@@ -51,6 +63,16 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
     init {
         observeSyncState()
         observeRoomSummaries()
+    }
+
+    fun switchDisplayMode(displayMode: RoomListFragment.DisplayMode) = withState { state ->
+        if (state.displayMode != displayMode) {
+            setState {
+                copy(displayMode = displayMode)
+            }
+
+            uiStateRepository.storeDisplayMode(displayMode)
+        }
     }
 
     // PRIVATE METHODS *****************************************************************************

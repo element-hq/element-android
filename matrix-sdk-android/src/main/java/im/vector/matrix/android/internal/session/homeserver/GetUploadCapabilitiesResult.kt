@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.network
+package im.vector.matrix.android.internal.session.homeserver
 
-internal object NetworkConstants {
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-    private const val URI_API_PREFIX_PATH = "_matrix/client"
-    const val URI_API_PREFIX_PATH_R0 = "$URI_API_PREFIX_PATH/r0/"
-    const val URI_API_PREFIX_PATH_UNSTABLE = "$URI_API_PREFIX_PATH/unstable/"
-
-
-    // Media
-    private const val URI_API_MEDIA_PREFIX_PATH = "_matrix/media"
-    const val URI_API_MEDIA_PREFIX_PATH_R0 = "$URI_API_MEDIA_PREFIX_PATH/r0/"
-
-}
+@JsonClass(generateAdapter = true)
+data class GetUploadCapabilitiesResult(
+        /**
+         * The maximum size an upload can be in bytes. Clients SHOULD use this as a guide when uploading content.
+         * If not listed or null, the size limit should be treated as unknown.
+         */
+        @Json(name = "m.upload.size")
+        val maxUploadSize: Long? = null
+)

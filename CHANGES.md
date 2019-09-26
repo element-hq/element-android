@@ -5,19 +5,26 @@ Features:
  -
 
 Improvements:
- -
+ - Persist active tab between sessions (#503)
+ - Do not upload file too big for the homeserver (#587)
 
 Other changes:
  -
 
 Bugfix:
- -
+ - Fix issue on upload error in loop (#587)
 
 Translations:
  -
 
 Build:
  -
+
+Changes in RiotX 0.6.1 (2019-09-24)
+===================================================
+
+Bugfix:
+ - Fix crash: MergedHeaderItem was missing dimensionConverter
 
 Changes in RiotX 0.6.0 (2019-09-24)
 ===================================================

@@ -46,6 +46,7 @@ import io.realm.annotations.RealmModule
                  ReadReceiptsSummaryEntity::class,
                  ReadMarkerEntity::class,
                  UserDraftsEntity::class,
-                 DraftEntity::class
+                 DraftEntity::class,
+                 HomeServerCapabilitiesEntity::class
              ])
 internal class SessionRealmModule

@@ -20,7 +20,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.text.Editable
-import android.text.TextUtils
+import android.util.Patterns
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
@@ -171,7 +171,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
             MXSession.getApplicationSizeCaches(activity, object : SimpleApiCallback<Long>() {
                 override fun onSuccess(size: Long) {
                     if (null != activity) {
-                        it.summary = android.text.format.Formatter.formatFileSize(activity, size)
+                        it.summary = TextUtils.formatFileSize(activity, size)
                     }
                 }
             })
@@ -189,7 +189,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
             val size = getSizeOfFiles(requireContext(),
                     File(requireContext().cacheDir, DiskCache.Factory.DEFAULT_DISK_CACHE_DIR))
 
-            it.summary = android.text.format.Formatter.formatFileSize(activity, size.toLong())
+            it.summary = TextUtils.formatFileSize(requireContext(), size.toLong())
 
             it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 GlobalScope.launch(Dispatchers.Main) {
@@ -208,7 +208,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
                                 File(requireContext().cacheDir, DiskCache.Factory.DEFAULT_DISK_CACHE_DIR))
                     }
 
-                    it.summary = android.text.format.Formatter.formatFileSize(activity, newSize.toLong())
+                    it.summary = TextUtils.formatFileSize(requireContext(), newSize.toLong())
 
                     hideLoadingView()
                 }
@@ -534,7 +534,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
     private fun addEmail(email: String) {
         // check first if the email syntax is valid
         // if email is null , then also its invalid email
-        if (TextUtils.isEmpty(email) || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        if (email.isBlank() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             activity?.toast(R.string.auth_invalid_email)
             return
         }
@@ -719,9 +719,9 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
                     val newPwd = newPasswordText.text.toString().trim()
                     val newConfirmPwd = confirmNewPasswordText.text.toString().trim()
 
-                    updateButton.isEnabled = oldPwd.isNotEmpty() && newPwd.isNotEmpty() && TextUtils.equals(newPwd, newConfirmPwd)
+                    updateButton.isEnabled = oldPwd.isNotEmpty() && newPwd.isNotEmpty() && newPwd == newConfirmPwd
 
-                    if (newPwd.isNotEmpty() && newConfirmPwd.isNotEmpty() && !TextUtils.equals(newPwd, newConfirmPwd)) {
+                    if (newPwd.isNotEmpty() && newConfirmPwd.isNotEmpty() && newPwd != newConfirmPwd) {
                         confirmNewPasswordTil.error = getString(R.string.passwords_do_not_match)
                     }
                 }

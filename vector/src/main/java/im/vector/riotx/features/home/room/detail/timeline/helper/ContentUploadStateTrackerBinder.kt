@@ -16,7 +16,6 @@
 
 package im.vector.riotx.features.home.room.detail.timeline.helper
 
-import android.text.format.Formatter
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
@@ -26,23 +25,25 @@ import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
+import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.resources.ColorProvider
-import im.vector.riotx.features.media.ImageContentRenderer
+import im.vector.riotx.core.utils.TextUtils
 import im.vector.riotx.features.ui.getMessageTextColor
 import javax.inject.Inject
 
 class ContentUploadStateTrackerBinder @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
-                                                          private val colorProvider: ColorProvider) {
+                                                          private val colorProvider: ColorProvider,
+                                                          private val errorFormatter: ErrorFormatter) {
 
     private val updateListeners = mutableMapOf<String, ContentUploadStateTracker.UpdateListener>()
 
     fun bind(eventId: String,
-             mediaData: ImageContentRenderer.Data,
+             isLocalFile: Boolean,
              progressLayout: ViewGroup) {
 
         activeSessionHolder.getActiveSession().also { session ->
             val uploadStateTracker = session.contentUploadProgressTracker()
-            val updateListener = ContentMediaProgressUpdater(progressLayout, mediaData, colorProvider)
+            val updateListener = ContentMediaProgressUpdater(progressLayout, isLocalFile, colorProvider, errorFormatter)
             updateListeners[eventId] = updateListener
             uploadStateTracker.track(eventId, updateListener)
         }
@@ -60,8 +61,9 @@ class ContentUploadStateTrackerBinder @Inject constructor(private val activeSess
 }
 
 private class ContentMediaProgressUpdater(private val progressLayout: ViewGroup,
-                                          private val mediaData: ImageContentRenderer.Data,
-                                          private val colorProvider: ColorProvider) : ContentUploadStateTracker.UpdateListener {
+                                          private val isLocalFile: Boolean,
+                                          private val colorProvider: ColorProvider,
+                                          private val errorFormatter: ErrorFormatter) : ContentUploadStateTracker.UpdateListener {
 
     override fun onUpdate(state: ContentUploadStateTracker.State) {
         when (state) {
@@ -76,7 +78,7 @@ private class ContentMediaProgressUpdater(private val progressLayout: ViewGroup,
     }
 
     private fun handleIdle(state: ContentUploadStateTracker.State.Idle) {
-        if (mediaData.isLocalFile()) {
+        if (isLocalFile) {
             progressLayout.isVisible = true
             val progressBar = progressLayout.findViewById<ProgressBar>(R.id.mediaProgressBar)
             val progressTextView = progressLayout.findViewById<TextView>(R.id.mediaProgressTextView)
@@ -124,8 +126,8 @@ private class ContentMediaProgressUpdater(private val progressLayout: ViewGroup,
         progressBar?.isIndeterminate = false
         progressBar?.progress = percent.toInt()
         progressTextView?.text = progressLayout.context.getString(resId,
-                Formatter.formatShortFileSize(progressLayout.context, current),
-                Formatter.formatShortFileSize(progressLayout.context, total))
+                TextUtils.formatFileSize(progressLayout.context, current, true),
+                TextUtils.formatFileSize(progressLayout.context, total, true))
         progressTextView?.setTextColor(colorProvider.getMessageTextColor(SendState.SENDING))
     }
 
@@ -134,7 +136,7 @@ private class ContentMediaProgressUpdater(private val progressLayout: ViewGroup,
         val progressBar = progressLayout.findViewById<ProgressBar>(R.id.mediaProgressBar)
         val progressTextView = progressLayout.findViewById<TextView>(R.id.mediaProgressTextView)
         progressBar?.isVisible = false
-        progressTextView?.text = state.throwable.localizedMessage
+        progressTextView?.text = errorFormatter.toHumanReadable(state.throwable)
         progressTextView?.setTextColor(colorProvider.getMessageTextColor(SendState.UNDELIVERED))
     }
 

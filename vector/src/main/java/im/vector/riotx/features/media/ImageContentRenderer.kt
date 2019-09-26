@@ -33,9 +33,9 @@ import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.glide.GlideApp
 import im.vector.riotx.core.glide.GlideRequest
 import im.vector.riotx.core.utils.DimensionConverter
+import im.vector.riotx.core.utils.isLocalFile
 import kotlinx.android.parcel.Parcelize
 import timber.log.Timber
-import java.io.File
 import javax.inject.Inject
 
 class ImageContentRenderer @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
@@ -54,9 +54,7 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
             val rotation: Int? = null
     ) : Parcelable {
 
-        fun isLocalFile(): Boolean {
-            return url != null && File(url).exists()
-        }
+        fun isLocalFile() = url.isLocalFile()
     }
 
     enum class Mode {

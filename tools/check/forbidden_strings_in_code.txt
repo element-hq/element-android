@@ -150,3 +150,9 @@ new Gson\(\)
 
 ### Use matrixOneTimeWorkRequestBuilder
 import androidx.work.OneTimeWorkRequestBuilder===1
+
+### Use TextUtils.formatFileSize
+Formatter\.formatFileSize===1
+
+### Use TextUtils.formatFileSize with short format param to true
+Formatter\.formatShortFileSize===1

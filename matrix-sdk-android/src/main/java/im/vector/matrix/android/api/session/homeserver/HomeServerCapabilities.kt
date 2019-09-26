@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.network
+package im.vector.matrix.android.api.session.homeserver
 
-internal object NetworkConstants {
-
-    private const val URI_API_PREFIX_PATH = "_matrix/client"
-    const val URI_API_PREFIX_PATH_R0 = "$URI_API_PREFIX_PATH/r0/"
-    const val URI_API_PREFIX_PATH_UNSTABLE = "$URI_API_PREFIX_PATH/unstable/"
-
-
-    // Media
-    private const val URI_API_MEDIA_PREFIX_PATH = "_matrix/media"
-    const val URI_API_MEDIA_PREFIX_PATH_R0 = "$URI_API_MEDIA_PREFIX_PATH/r0/"
-
+data class HomeServerCapabilities(
+        /**
+         * Max size of file which can be uploaded to the homeserver in bytes. [MAX_UPLOAD_FILE_SIZE_UNKNOWN] if unknown or not retrieved yet
+         */
+        val maxUploadFileSize: Long
+) {
+    companion object {
+        const val MAX_UPLOAD_FILE_SIZE_UNKNOWN = -1L
+    }
 }

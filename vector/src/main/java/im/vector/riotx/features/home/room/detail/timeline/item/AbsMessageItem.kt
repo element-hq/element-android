@@ -116,6 +116,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
 
         if (!shouldShowReactionAtBottom() || attributes.informationData.orderedReactionList.isNullOrEmpty()) {
             holder.reactionWrapper?.isVisible = false
+
         } else {
             //inflate if needed
             if (holder.reactionFlowHelper == null) {

@@ -47,6 +47,10 @@ import im.vector.riotx.core.linkify.VectorLinkify
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.utils.DebouncedClickListener
+import im.vector.riotx.core.utils.DimensionConverter
+import im.vector.riotx.core.utils.containsOnlyEmojis
+import im.vector.riotx.core.utils.isLocalFile
+import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
 import im.vector.riotx.features.home.room.detail.timeline.helper.AvatarSizeProvider
@@ -131,6 +135,8 @@ class MessageItemFactory @Inject constructor(
                                       attributes: AbsMessageItem.Attributes): MessageFileItem? {
         return MessageFileItem_()
                 .attributes(attributes)
+                .izLocalFile(messageContent.getFileUrl().isLocalFile())
+                .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
                 .highlighted(highlight)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .filename(messageContent.body)
@@ -149,6 +155,8 @@ class MessageItemFactory @Inject constructor(
         return MessageFileItem_()
                 .attributes(attributes)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
+                .izLocalFile(messageContent.getFileUrl().isLocalFile())
+                .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
                 .highlighted(highlight)
                 .filename(messageContent.body)
                 .iconRes(R.drawable.filetype_attachment)

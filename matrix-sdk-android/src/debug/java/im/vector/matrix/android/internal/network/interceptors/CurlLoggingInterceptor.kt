@@ -22,6 +22,7 @@ import okhttp3.Interceptor
 import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import okio.Buffer
+import timber.log.Timber
 import java.io.IOException
 import java.nio.charset.Charset
 import javax.inject.Inject
@@ -58,15 +59,21 @@ internal class CurlLoggingInterceptor @Inject constructor(private val logger: Ht
 
         val requestBody = request.body()
         if (requestBody != null) {
-            val buffer = Buffer()
-            requestBody.writeTo(buffer)
-            var charset: Charset? = UTF8
-            val contentType = requestBody.contentType()
-            if (contentType != null) {
-                charset = contentType.charset(UTF8)
+            if (requestBody.contentLength() > 100_000) {
+                Timber.w("Unable to log curl command data, size is too big (${requestBody.contentLength()})")
+                // Ensure the curl command will failed
+                curlCmd += "DATA IS TOO BIG"
+            } else {
+                val buffer = Buffer()
+                requestBody.writeTo(buffer)
+                var charset: Charset? = UTF8
+                val contentType = requestBody.contentType()
+                if (contentType != null) {
+                    charset = contentType.charset(UTF8)
+                }
+                // try to keep to a single line and use a subshell to preserve any line breaks
+                curlCmd += " --data $'" + buffer.readString(charset!!).replace("\n", "\\n") + "'"
             }
-            // try to keep to a single line and use a subshell to preserve any line breaks
-            curlCmd += " --data $'" + buffer.readString(charset!!).replace("\n", "\\n") + "'"
         }
 
         val headers = request.headers()

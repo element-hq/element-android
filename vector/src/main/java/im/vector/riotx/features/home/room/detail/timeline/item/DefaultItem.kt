@@ -56,7 +56,7 @@ abstract class DefaultItem : BaseEventItem<DefaultItem.Holder>() {
     }
 
     override fun getEventIds(): List<String> {
-        return informationData.eventId
+        return listOf(informationData.eventId)
     }
 
     override fun getViewType() = STUB_ID

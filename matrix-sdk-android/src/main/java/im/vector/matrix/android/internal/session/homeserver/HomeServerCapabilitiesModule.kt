@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,36 +14,28 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.session.filter
+package im.vector.matrix.android.internal.session.homeserver
 
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
-import im.vector.matrix.android.api.session.sync.FilterService
 import im.vector.matrix.android.internal.session.SessionScope
 import retrofit2.Retrofit
 
 @Module
-internal abstract class FilterModule {
+internal abstract class HomeServerCapabilitiesModule {
 
     @Module
     companion object {
         @Provides
         @JvmStatic
         @SessionScope
-        fun providesFilterApi(retrofit: Retrofit): FilterApi {
-            return retrofit.create(FilterApi::class.java)
+        fun providesCapabilitiesAPI(retrofit: Retrofit): CapabilitiesAPI {
+            return retrofit.create(CapabilitiesAPI::class.java)
         }
     }
 
     @Binds
-    abstract fun bindFilterRepository(filterRepository: DefaultFilterRepository): FilterRepository
-
-    @Binds
-    abstract fun bindFilterService(filterService: DefaultFilterService): FilterService
-
-    @Binds
-    abstract fun bindSaveFilterTask(saveFilterTask: DefaultSaveFilterTask): SaveFilterTask
-
+    abstract fun bindGetHomeServerCapabilitiesTask(getHomeServerCapabilitiesTask: DefaultGetHomeServerCapabilitiesTask): GetHomeServerCapabilitiesTask
 
 }

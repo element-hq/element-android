@@ -38,6 +38,8 @@ import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineEventDi
 import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineEventVisibilityStateChangedListener
 import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
 import im.vector.riotx.features.home.room.detail.timeline.helper.nextOrNull
+import im.vector.riotx.core.utils.DimensionConverter
+import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.item.*
 import im.vector.riotx.features.media.ImageContentRenderer
 import im.vector.riotx.features.media.VideoContentRenderer
@@ -48,6 +50,8 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
                                                   private val timelineItemFactory: TimelineItemFactory,
                                                   private val timelineMediaSizeProvider: TimelineMediaSizeProvider,
                                                   private val mergedHeaderItemFactory: MergedHeaderItemFactory,
+                                                  private val avatarRenderer: AvatarRenderer,
+                                                  private val dimensionConverter: DimensionConverter,
                                                   @TimelineEventControllerHandler
                                                   private val backgroundHandler: Handler
 ) : EpoxyController(backgroundHandler, backgroundHandler), Timeline.Listener, EpoxyController.Interceptor {

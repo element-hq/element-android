@@ -27,7 +27,6 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.text.Editable
 import android.text.Spannable
-import android.text.TextUtils
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
@@ -79,20 +78,9 @@ import im.vector.riotx.core.glide.GlideApp
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.ui.views.JumpToReadMarkerView
 import im.vector.riotx.core.ui.views.NotificationAreaView
+import im.vector.riotx.core.utils.*
 import im.vector.riotx.core.utils.Debouncer
-import im.vector.riotx.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
-import im.vector.riotx.core.utils.PERMISSIONS_FOR_WRITING_FILES
-import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_DOWNLOAD_FILE
-import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
-import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_CAMERA
-import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_VIDEO_CAMERA
-import im.vector.riotx.core.utils.allGranted
-import im.vector.riotx.core.utils.checkPermissions
-import im.vector.riotx.core.utils.copyToClipboard
 import im.vector.riotx.core.utils.createUIHandler
-import im.vector.riotx.core.utils.openCamera
-import im.vector.riotx.core.utils.shareMedia
-import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.autocomplete.command.AutocompleteCommandPresenter
 import im.vector.riotx.features.autocomplete.command.CommandAutocompletePolicy
 import im.vector.riotx.features.autocomplete.user.AutocompleteUserPresenter
@@ -163,18 +151,15 @@ class RoomDetailFragment :
          * @param displayName the display name to sanitize
          * @return the sanitized display name
          */
-        fun sanitizeDisplayname(displayName: String): String? {
-            // sanity checks
-            if (!TextUtils.isEmpty(displayName)) {
-                val ircPattern = " (IRC)"
-
-                if (displayName.endsWith(ircPattern)) {
-                    return displayName.substring(0, displayName.length - ircPattern.length)
-                }
+        private fun sanitizeDisplayName(displayName: String): String {
+            if (displayName.endsWith(ircPattern)) {
+                return displayName.substring(0, displayName.length - ircPattern.length)
             }
 
             return displayName
         }
+
+        private const val ircPattern = " (IRC)"
     }
 
 
@@ -255,6 +240,10 @@ class RoomDetailFragment :
             }
         }
 
+        roomDetailViewModel.fileTooBigEvent.observeEvent(this) {
+            displayFileTooBigWarning(it)
+        }
+
         roomDetailViewModel.selectSubscribe(this, RoomDetailViewState::tombstoneEventHandling, uniqueOnly("tombstoneEventHandling")) {
             renderTombstoneEventHandling(it)
         }
@@ -303,6 +292,18 @@ class RoomDetailFragment :
 
     private fun setupJumpToReadMarkerView() {
         jumpToReadMarkerView.callback = this
+    }
+
+    private fun displayFileTooBigWarning(error: FileTooBigError) {
+        AlertDialog.Builder(requireActivity())
+                .setTitle(R.string.dialog_title_error)
+                .setMessage(getString(R.string.error_file_too_big,
+                        error.filename,
+                        TextUtils.formatFileSize(requireContext(), error.fileSizeInBytes),
+                        TextUtils.formatFileSize(requireContext(), error.homeServerLimitInBytes)
+                ))
+                .setPositiveButton(R.string.ok, null)
+                .show()
     }
 
     private fun setupNotificationView() {
@@ -1089,23 +1090,23 @@ class RoomDetailFragment :
 //            var vibrate = false
 
             val myDisplayName = session.getUser(session.myUserId)?.displayName
-            if (TextUtils.equals(myDisplayName, text)) {
+            if (myDisplayName == text) {
                 // current user
-                if (TextUtils.isEmpty(composerLayout.composerEditText.text)) {
+                if (composerLayout.composerEditText.text.isBlank()) {
                     composerLayout.composerEditText.append(Command.EMOTE.command + " ")
                     composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text.length)
 //                    vibrate = true
                 }
             } else {
                 // another user
-                if (TextUtils.isEmpty(composerLayout.composerEditText.text)) {
+                if (composerLayout.composerEditText.text.isBlank()) {
                     // Ensure displayName will not be interpreted as a Slash command
                     if (text.startsWith("/")) {
                         composerLayout.composerEditText.append("\\")
                     }
-                    composerLayout.composerEditText.append(sanitizeDisplayname(text)!! + ": ")
+                    composerLayout.composerEditText.append(sanitizeDisplayName(text) + ": ")
                 } else {
-                    composerLayout.composerEditText.text.insert(composerLayout.composerEditText.selectionStart, sanitizeDisplayname(text)!! + " ")
+                    composerLayout.composerEditText.text.insert(composerLayout.composerEditText.selectionStart, sanitizeDisplayName(text) + " ")
                 }
 
 //                vibrate = true
@@ -1155,6 +1156,5 @@ class RoomDetailFragment :
     override fun onClearReadMarkerClicked() {
         roomDetailViewModel.process(RoomDetailActions.MarkAllAsRead)
     }
-
 
 }

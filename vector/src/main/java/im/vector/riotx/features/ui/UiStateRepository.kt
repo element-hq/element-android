@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.network
+package im.vector.riotx.features.ui
 
-internal object NetworkConstants {
-
-    private const val URI_API_PREFIX_PATH = "_matrix/client"
-    const val URI_API_PREFIX_PATH_R0 = "$URI_API_PREFIX_PATH/r0/"
-    const val URI_API_PREFIX_PATH_UNSTABLE = "$URI_API_PREFIX_PATH/unstable/"
+import im.vector.riotx.features.home.room.list.RoomListFragment
 
 
-    // Media
-    private const val URI_API_MEDIA_PREFIX_PATH = "_matrix/media"
-    const val URI_API_MEDIA_PREFIX_PATH_R0 = "$URI_API_MEDIA_PREFIX_PATH/r0/"
+/**
+ * This interface is used to persist UI state across application restart
+ */
+interface UiStateRepository {
 
+    fun getDisplayMode(): RoomListFragment.DisplayMode
+
+    fun storeDisplayMode(displayMode: RoomListFragment.DisplayMode)
 }

@@ -26,6 +26,7 @@ import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.file.FileService
 import im.vector.matrix.android.api.session.group.GroupService
+import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilitiesService
 import im.vector.matrix.android.api.session.pushers.PushersService
 import im.vector.matrix.android.api.session.room.RoomDirectoryService
 import im.vector.matrix.android.api.session.room.RoomService
@@ -52,6 +53,7 @@ interface Session :
         PushRuleService,
         PushersService,
         InitialSyncProgressService,
+        HomeServerCapabilitiesService,
         SecureStorageService {
 
     /**

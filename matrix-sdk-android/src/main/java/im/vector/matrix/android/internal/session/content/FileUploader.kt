@@ -16,12 +16,12 @@
 
 package im.vector.matrix.android.internal.session.content
 
-import arrow.core.Try
-import arrow.core.Try.Companion.raise
 import com.squareup.moshi.Moshi
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.internal.di.Authenticated
 import im.vector.matrix.android.internal.network.ProgressRequestBody
+import im.vector.matrix.android.internal.network.awaitResponse
+import im.vector.matrix.android.internal.network.toFailure
 import okhttp3.*
 import java.io.File
 import java.io.IOException
@@ -37,28 +37,26 @@ internal class FileUploader @Inject constructor(@Authenticated
     private val responseAdapter = moshi.adapter(ContentUploadResponse::class.java)
 
 
-    fun uploadFile(file: File,
-                   filename: String?,
-                   mimeType: String,
-                   progressListener: ProgressRequestBody.Listener? = null): Try<ContentUploadResponse> {
-
+    suspend fun uploadFile(file: File,
+                           filename: String?,
+                           mimeType: String,
+                           progressListener: ProgressRequestBody.Listener? = null): ContentUploadResponse {
         val uploadBody = RequestBody.create(MediaType.parse(mimeType), file)
         return upload(uploadBody, filename, progressListener)
 
     }
 
-    fun uploadByteArray(byteArray: ByteArray,
-                        filename: String?,
-                        mimeType: String,
-                        progressListener: ProgressRequestBody.Listener? = null): Try<ContentUploadResponse> {
-
+    suspend fun uploadByteArray(byteArray: ByteArray,
+                                filename: String?,
+                                mimeType: String,
+                                progressListener: ProgressRequestBody.Listener? = null): ContentUploadResponse {
         val uploadBody = RequestBody.create(MediaType.parse(mimeType), byteArray)
         return upload(uploadBody, filename, progressListener)
     }
 
 
-    private fun upload(uploadBody: RequestBody, filename: String?, progressListener: ProgressRequestBody.Listener?): Try<ContentUploadResponse> {
-        val urlBuilder = HttpUrl.parse(uploadUrl)?.newBuilder() ?: return raise(RuntimeException())
+    private suspend fun upload(uploadBody: RequestBody, filename: String?, progressListener: ProgressRequestBody.Listener?): ContentUploadResponse {
+        val urlBuilder = HttpUrl.parse(uploadUrl)?.newBuilder() ?: throw RuntimeException()
 
         val httpUrl = urlBuilder
                 .addQueryParameter("filename", filename)
@@ -71,19 +69,15 @@ internal class FileUploader @Inject constructor(@Authenticated
                 .post(requestBody)
                 .build()
 
-        return Try {
-            okHttpClient.newCall(request).execute().use { response ->
-                if (!response.isSuccessful) {
-                    throw IOException()
-                } else {
-                    response.body()?.source()?.let {
-                        responseAdapter.fromJson(it)
-                    }
-                            ?: throw IOException()
+        return okHttpClient.newCall(request).awaitResponse().use { response ->
+            if (!response.isSuccessful) {
+                throw response.toFailure()
+            } else {
+                response.body()?.source()?.let {
+                    responseAdapter.fromJson(it)
                 }
+                        ?: throw IOException()
             }
         }
-
     }
-
 }
