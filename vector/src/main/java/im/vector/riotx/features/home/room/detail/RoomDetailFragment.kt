@@ -264,8 +264,8 @@ class RoomDetailFragment :
                 .setTitle(R.string.dialog_title_error)
                 .setMessage(getString(R.string.error_file_too_big,
                         error.filename,
-                        Formatter.formatFileSize(requireContext(), error.homeServerLimitInBytes),
-                        Formatter.formatFileSize(requireContext(), error.fileSizeInBytes)
+                        Formatter.formatFileSize(requireContext(), error.fileSizeInBytes),
+                        Formatter.formatFileSize(requireContext(), error.homeServerLimitInBytes)
                 ))
                 .setPositiveButton(R.string.ok, null)
                 .show()

@@ -32,6 +32,13 @@ internal class DefaultHomeServerCapabilitiesService @Inject constructor(private 
             entity = HomeServerCapabilitiesEntity.getOrCreate(realm)
         }
 
-        return entity?.let { HomeServerCapabilitiesMapper.map(it) } ?: HomeServerCapabilities(HomeServerCapabilities.MAX_UPLOAD_FILE_SIZE_UNKNOWN)
+        return with(entity) {
+            if (this != null) {
+                HomeServerCapabilitiesMapper.map(this)
+            } else {
+                // Should not happen
+                HomeServerCapabilities(HomeServerCapabilities.MAX_UPLOAD_FILE_SIZE_UNKNOWN)
+            }
+        }
     }
 }

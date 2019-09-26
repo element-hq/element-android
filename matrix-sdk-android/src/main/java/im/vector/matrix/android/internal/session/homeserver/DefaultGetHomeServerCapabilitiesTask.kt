@@ -22,6 +22,7 @@ import im.vector.matrix.android.internal.database.model.HomeServerCapabilitiesEn
 import im.vector.matrix.android.internal.database.query.getOrCreate
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
+import im.vector.matrix.android.internal.util.awaitTransaction
 import java.util.*
 import javax.inject.Inject
 
@@ -35,7 +36,7 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
 
     override suspend fun execute(params: Unit) {
         var doRequest = false
-        monarchy.doWithRealm { realm ->
+        monarchy.awaitTransaction { realm ->
             val homeServerCapabilitiesEntity = HomeServerCapabilitiesEntity.getOrCreate(realm)
 
             doRequest = homeServerCapabilitiesEntity.lastUpdatedTimestamp + MIN_DELAY_BETWEEN_TWO_REQUEST_MILLIS < Date().time
