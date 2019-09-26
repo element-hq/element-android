@@ -45,7 +45,7 @@ sealed class SimpleAction(@StringRes val titleRes: Int, @DrawableRes val iconRes
     data class Edit(val eventId: String) : SimpleAction(R.string.edit, R.drawable.ic_edit)
     data class Quote(val eventId: String) : SimpleAction(R.string.quote, R.drawable.ic_quote)
     data class Reply(val eventId: String) : SimpleAction(R.string.reply, R.drawable.ic_reply)
-    data class Share(val imageUrl: String?) : SimpleAction(R.string.share, R.drawable.ic_share)
+    data class Share(val imageUrl: String) : SimpleAction(R.string.share, R.drawable.ic_share)
     data class Resend(val eventId: String) : SimpleAction(R.string.global_retry, R.drawable.ic_refresh_cw)
     data class Remove(val eventId: String) : SimpleAction(R.string.remove, R.drawable.ic_trash)
     data class Delete(val eventId: String) : SimpleAction(R.string.delete, R.drawable.ic_delete)
@@ -166,7 +166,9 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
 
                     if (canShare(type)) {
                         if (messageContent is MessageImageContent) {
-                            add(SimpleAction.Share(session.contentUrlResolver().resolveFullSize(messageContent.url)))
+                            session.contentUrlResolver().resolveFullSize(messageContent.url)?.let { url ->
+                                add(SimpleAction.Share(url))
+                            }
                         }
                         //TODO
                     }
