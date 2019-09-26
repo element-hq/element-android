@@ -39,7 +39,7 @@ import io.reactivex.functions.BiFunction
 const val ALL_COMMUNITIES_GROUP_ID = "ALL_COMMUNITIES_GROUP_ID"
 
 class GroupListViewModel @AssistedInject constructor(@Assisted initialState: GroupListViewState,
-                                                     private val selectedGroupHolder: SelectedGroupStore,
+                                                     private val selectedGroupStore: SelectedGroupStore,
                                                      private val session: Session,
                                                      private val stringProvider: StringProvider
 ) : VectorViewModel<GroupListViewState>(initialState) {
@@ -73,7 +73,7 @@ class GroupListViewModel @AssistedInject constructor(@Assisted initialState: Gro
             if (it != null) {
                 _openGroupLiveData.postLiveEvent(it)
                 val optionGroup = Option.fromNullable(it)
-                selectedGroupHolder.post(optionGroup)
+                selectedGroupStore.post(optionGroup)
             }
         }
     }

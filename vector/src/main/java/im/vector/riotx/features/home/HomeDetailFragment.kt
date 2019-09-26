@@ -17,18 +17,17 @@
 package im.vector.riotx.features.home
 
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.LayoutInflater
 import androidx.core.view.forEachIndexed
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
+import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.platform.ToolbarConfigurable
@@ -38,17 +37,8 @@ import im.vector.riotx.features.home.room.list.RoomListFragment
 import im.vector.riotx.features.home.room.list.RoomListParams
 import im.vector.riotx.features.home.room.list.UnreadCounterBadgeView
 import im.vector.riotx.features.workers.signout.SignOutViewModel
-import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_home_detail.*
 import javax.inject.Inject
-
-
-@Parcelize
-data class HomeDetailParams(
-        val groupId: String,
-        val groupName: String,
-        val groupAvatar: String
-) : Parcelable
 
 
 private const val INDEX_CATCHUP = 0
@@ -57,7 +47,6 @@ private const val INDEX_ROOMS = 2
 
 class HomeDetailFragment : VectorBaseFragment(), KeysBackupBanner.Delegate {
 
-    private val params: HomeDetailParams by args()
     private val unreadCounterBadgeViews = arrayListOf<UnreadCounterBadgeView>()
 
     private val viewModel: HomeDetailViewModel by fragmentViewModel()
@@ -84,8 +73,22 @@ class HomeDetailFragment : VectorBaseFragment(), KeysBackupBanner.Delegate {
         setupToolbar()
         setupKeysBackupBanner()
 
+        viewModel.selectSubscribe(this, HomeDetailViewState::groupSummary) { groupSummary ->
+            onGroupChange(groupSummary.orNull())
+        }
         viewModel.selectSubscribe(this, HomeDetailViewState::displayMode) { displayMode ->
             switchDisplayMode(displayMode)
+        }
+    }
+
+    private fun onGroupChange(groupSummary: GroupSummary?) {
+        groupSummary?.let {
+            avatarRenderer.render(
+                    it.avatarUrl,
+                    it.groupId,
+                    it.displayName,
+                    groupToolbarAvatarImageView
+            )
         }
     }
 
@@ -130,12 +133,6 @@ class HomeDetailFragment : VectorBaseFragment(), KeysBackupBanner.Delegate {
             parentActivity.configure(groupToolbar)
         }
         groupToolbar.title = ""
-        avatarRenderer.render(
-                params.groupAvatar,
-                params.groupId,
-                params.groupName,
-                groupToolbarAvatarImageView
-        )
         groupToolbarAvatarImageView.setOnClickListener {
             navigationViewModel.goTo(HomeActivity.Navigation.OpenDrawer)
         }
@@ -207,10 +204,8 @@ class HomeDetailFragment : VectorBaseFragment(), KeysBackupBanner.Delegate {
 
     companion object {
 
-        fun newInstance(args: HomeDetailParams): HomeDetailFragment {
-            return HomeDetailFragment().apply {
-                setArguments(args)
-            }
+        fun newInstance(): HomeDetailFragment {
+            return HomeDetailFragment()
         }
 
     }

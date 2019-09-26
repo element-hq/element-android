@@ -25,6 +25,7 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.rx.rx
 import im.vector.riotx.core.di.HasScreenInjector
 import im.vector.riotx.core.platform.VectorViewModel
+import im.vector.riotx.features.home.group.SelectedGroupStore
 import im.vector.riotx.features.home.room.list.RoomListFragment
 import im.vector.riotx.features.ui.UiStateRepository
 import io.reactivex.schedulers.Schedulers
@@ -36,6 +37,7 @@ import io.reactivex.schedulers.Schedulers
 class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: HomeDetailViewState,
                                                       private val session: Session,
                                                       private val uiStateRepository: UiStateRepository,
+                                                      private val selectedGroupStore: SelectedGroupStore,
                                                       private val homeRoomListStore: HomeRoomListObservableStore)
     : VectorViewModel<HomeDetailViewState>(initialState) {
 
@@ -62,6 +64,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
 
     init {
         observeSyncState()
+        observeSelectedGroupStore()
         observeRoomSummaries()
     }
 
@@ -83,6 +86,17 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                 .subscribe { syncState ->
                     setState {
                         copy(syncState = syncState)
+                    }
+                }
+                .disposeOnClear()
+    }
+
+    private fun observeSelectedGroupStore() {
+        selectedGroupStore
+                .observe()
+                .subscribe {
+                    setState {
+                        copy(groupSummary = it)
                     }
                 }
                 .disposeOnClear()

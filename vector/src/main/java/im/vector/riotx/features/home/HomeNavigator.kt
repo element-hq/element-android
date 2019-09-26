@@ -36,8 +36,7 @@ class HomeNavigator @Inject constructor() {
         activity?.let {
             it.drawerLayout?.closeDrawer(GravityCompat.START)
 
-            val args = HomeDetailParams(groupSummary.groupId, groupSummary.displayName, groupSummary.avatarUrl)
-            val homeDetailFragment = HomeDetailFragment.newInstance(args)
+            val homeDetailFragment = HomeDetailFragment.newInstance()
             it.replaceFragment(homeDetailFragment, R.id.homeDetailFragmentContainer)
         }
     }
