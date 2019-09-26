@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.network
+package im.vector.matrix.android.internal.session.homeserver
 
-internal object NetworkConstants {
+import im.vector.matrix.android.internal.network.NetworkConstants
+import retrofit2.Call
+import retrofit2.http.GET
 
-    private const val URI_API_PREFIX_PATH = "_matrix/client"
-    const val URI_API_PREFIX_PATH_R0 = "$URI_API_PREFIX_PATH/r0/"
-    const val URI_API_PREFIX_PATH_UNSTABLE = "$URI_API_PREFIX_PATH/unstable/"
+internal interface CapabilitiesAPI {
 
-
-    // Media
-    private const val URI_API_MEDIA_PREFIX_PATH = "_matrix/media"
-    const val URI_API_MEDIA_PREFIX_PATH_R0 = "$URI_API_MEDIA_PREFIX_PATH/r0/"
+    /**
+     * Request the upload capabilities
+     */
+    @GET(NetworkConstants.URI_API_MEDIA_PREFIX_PATH_R0 + "config")
+    fun getUploadCapabilities(): Call<GetUploadCapabilitiesResult>
 
 }

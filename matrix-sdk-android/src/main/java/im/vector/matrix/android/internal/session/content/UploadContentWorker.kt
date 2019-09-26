@@ -93,32 +93,28 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
                 }
             }
 
-            val contentUploadResponse = if (params.isRoomEncrypted) {
-                Timber.v("Encrypt thumbnail")
-                contentUploadStateTracker.setEncryptingThumbnail(eventId)
-                MXEncryptedAttachments.encryptAttachment(ByteArrayInputStream(thumbnailData.bytes), thumbnailData.mimeType)
-                        .flatMap { encryptionResult ->
-                            uploadedThumbnailEncryptedFileInfo = encryptionResult.encryptedFileInfo
+            try {
+                val contentUploadResponse = if (params.isRoomEncrypted) {
+                    Timber.v("Encrypt thumbnail")
+                    contentUploadStateTracker.setEncryptingThumbnail(eventId)
+                    val encryptionResult = MXEncryptedAttachments.encryptAttachment(ByteArrayInputStream(thumbnailData.bytes), thumbnailData.mimeType)
+                    uploadedThumbnailEncryptedFileInfo = encryptionResult.encryptedFileInfo
+                    fileUploader.uploadByteArray(encryptionResult.encryptedByteArray,
+                            "thumb_${attachment.name}",
+                            "application/octet-stream",
+                            thumbnailProgressListener)
+                } else {
+                    fileUploader.uploadByteArray(thumbnailData.bytes,
+                            "thumb_${attachment.name}",
+                            thumbnailData.mimeType,
+                            thumbnailProgressListener)
+                }
 
-                            fileUploader
-                                    .uploadByteArray(encryptionResult.encryptedByteArray,
-                                            "thumb_${attachment.name}",
-                                            "application/octet-stream",
-                                            thumbnailProgressListener)
-                        }
-            } else {
-                fileUploader
-                        .uploadByteArray(thumbnailData.bytes,
-                                "thumb_${attachment.name}",
-                                thumbnailData.mimeType,
-                                thumbnailProgressListener)
+                uploadedThumbnailUrl = contentUploadResponse.contentUri
+            } catch (t: Throwable) {
+                Timber.e(t)
+                return handleFailure(params, t)
             }
-
-            contentUploadResponse
-                    .fold(
-                            { Timber.e(it) },
-                            { uploadedThumbnailUrl = it.contentUri }
-                    )
         }
 
         val progressListener = object : ProgressRequestBody.Listener {
@@ -133,27 +129,26 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
 
         var uploadedFileEncryptedFileInfo: EncryptedFileInfo? = null
 
-        val contentUploadResponse = if (params.isRoomEncrypted) {
-            Timber.v("Encrypt file")
-            contentUploadStateTracker.setEncrypting(eventId)
+        return try {
+            val contentUploadResponse = if (params.isRoomEncrypted) {
+                Timber.v("Encrypt file")
+                contentUploadStateTracker.setEncrypting(eventId)
 
-            MXEncryptedAttachments.encryptAttachment(FileInputStream(attachmentFile), attachment.mimeType)
-                    .flatMap { encryptionResult ->
-                        uploadedFileEncryptedFileInfo = encryptionResult.encryptedFileInfo
+                val encryptionResult = MXEncryptedAttachments.encryptAttachment(FileInputStream(attachmentFile), attachment.mimeType)
+                uploadedFileEncryptedFileInfo = encryptionResult.encryptedFileInfo
 
-                        fileUploader
-                                .uploadByteArray(encryptionResult.encryptedByteArray, attachment.name, "application/octet-stream", progressListener)
-                    }
-        } else {
-            fileUploader
-                    .uploadFile(attachmentFile, attachment.name, attachment.mimeType, progressListener)
+                fileUploader
+                        .uploadByteArray(encryptionResult.encryptedByteArray, attachment.name, "application/octet-stream", progressListener)
+            } else {
+                fileUploader
+                        .uploadFile(attachmentFile, attachment.name, attachment.mimeType, progressListener)
+            }
+
+            handleSuccess(params, contentUploadResponse.contentUri, uploadedFileEncryptedFileInfo, uploadedThumbnailUrl, uploadedThumbnailEncryptedFileInfo)
+        } catch (t: Throwable) {
+            Timber.e(t)
+            handleFailure(params, t)
         }
-
-        return contentUploadResponse
-                .fold(
-                        { handleFailure(params, it) },
-                        { handleSuccess(params, it.contentUri, uploadedFileEncryptedFileInfo, uploadedThumbnailUrl, uploadedThumbnailEncryptedFileInfo) }
-                )
     }
 
     private fun handleFailure(params: Params, failure: Throwable): Result {

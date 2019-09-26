@@ -14,17 +14,16 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.network
+package im.vector.matrix.android.internal.database.model
 
-internal object NetworkConstants {
+import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilities
+import io.realm.RealmObject
 
-    private const val URI_API_PREFIX_PATH = "_matrix/client"
-    const val URI_API_PREFIX_PATH_R0 = "$URI_API_PREFIX_PATH/r0/"
-    const val URI_API_PREFIX_PATH_UNSTABLE = "$URI_API_PREFIX_PATH/unstable/"
+internal open class HomeServerCapabilitiesEntity(
+        var maxUploadFileSize: Long = HomeServerCapabilities.MAX_UPLOAD_FILE_SIZE_UNKNOWN,
+        var lastUpdatedTimestamp: Long = 0L
+) : RealmObject() {
 
-
-    // Media
-    private const val URI_API_MEDIA_PREFIX_PATH = "_matrix/media"
-    const val URI_API_MEDIA_PREFIX_PATH_R0 = "$URI_API_MEDIA_PREFIX_PATH/r0/"
+    companion object
 
 }

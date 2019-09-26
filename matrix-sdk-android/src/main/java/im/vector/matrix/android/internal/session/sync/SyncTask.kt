@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.session.sync
 
-import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.R
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.failure.MatrixError
@@ -25,6 +24,7 @@ import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.DefaultInitialSyncProgressService
 import im.vector.matrix.android.internal.session.filter.FilterRepository
+import im.vector.matrix.android.internal.session.homeserver.GetHomeServerCapabilitiesTask
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import im.vector.matrix.android.internal.task.Task
 import javax.inject.Inject
@@ -42,11 +42,14 @@ internal class DefaultSyncTask @Inject constructor(private val syncAPI: SyncAPI,
                                                    private val sessionParamsStore: SessionParamsStore,
                                                    private val initialSyncProgressService: DefaultInitialSyncProgressService,
                                                    private val syncTokenStore: SyncTokenStore,
-                                                   private val monarchy: Monarchy
+                                                   private val getHomeServerCapabilitiesTask: GetHomeServerCapabilitiesTask
 ) : SyncTask {
 
 
     override suspend fun execute(params: SyncTask.Params) {
+        // Maybe refresh the home server capabilities data we know
+        getHomeServerCapabilitiesTask.execute(Unit)
+
         val requestParams = HashMap<String, String>()
         var timeout = 0L
         val token = syncTokenStore.getLastToken()

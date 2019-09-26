@@ -27,7 +27,6 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.text.Editable
 import android.text.Spannable
-import android.text.TextUtils
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
@@ -148,18 +147,15 @@ class RoomDetailFragment :
          * @param displayName the display name to sanitize
          * @return the sanitized display name
          */
-        fun sanitizeDisplayname(displayName: String): String? {
-            // sanity checks
-            if (!TextUtils.isEmpty(displayName)) {
-                val ircPattern = " (IRC)"
-
-                if (displayName.endsWith(ircPattern)) {
-                    return displayName.substring(0, displayName.length - ircPattern.length)
-                }
+        private fun sanitizeDisplayName(displayName: String): String {
+            if (displayName.endsWith(ircPattern)) {
+                return displayName.substring(0, displayName.length - ircPattern.length)
             }
 
             return displayName
         }
+
+        private const val ircPattern = " (IRC)"
     }
 
     private val roomDetailArgs: RoomDetailArgs by args()
@@ -227,6 +223,10 @@ class RoomDetailFragment :
             scrollOnHighlightedEventCallback.scheduleScrollTo(it)
         }
 
+        roomDetailViewModel.fileTooBigEvent.observeEvent(this) {
+            displayFileTooBigWarning(it)
+        }
+
         roomDetailViewModel.selectSubscribe(this, RoomDetailViewState::tombstoneEventHandling, uniqueOnly("tombstoneEventHandling")) {
             renderTombstoneEventHandling(it)
         }
@@ -252,6 +252,18 @@ class RoomDetailFragment :
         roomDetailViewModel.selectSubscribe(RoomDetailViewState::syncState) { syncState ->
             syncStateView.render(syncState)
         }
+    }
+
+    private fun displayFileTooBigWarning(error: FileTooBigError) {
+        AlertDialog.Builder(requireActivity())
+                .setTitle(R.string.dialog_title_error)
+                .setMessage(getString(R.string.error_file_too_big,
+                        error.filename,
+                        TextUtils.formatFileSize(requireContext(), error.fileSizeInBytes),
+                        TextUtils.formatFileSize(requireContext(), error.homeServerLimitInBytes)
+                ))
+                .setPositiveButton(R.string.ok, null)
+                .show()
     }
 
     private fun setupNotificationView() {
@@ -970,23 +982,23 @@ class RoomDetailFragment :
 //            var vibrate = false
 
             val myDisplayName = session.getUser(session.myUserId)?.displayName
-            if (TextUtils.equals(myDisplayName, text)) {
+            if (myDisplayName == text) {
                 // current user
-                if (TextUtils.isEmpty(composerLayout.composerEditText.text)) {
+                if (composerLayout.composerEditText.text.isBlank()) {
                     composerLayout.composerEditText.append(Command.EMOTE.command + " ")
                     composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text.length)
 //                    vibrate = true
                 }
             } else {
                 // another user
-                if (TextUtils.isEmpty(composerLayout.composerEditText.text)) {
+                if (composerLayout.composerEditText.text.isBlank()) {
                     // Ensure displayName will not be interpreted as a Slash command
                     if (text.startsWith("/")) {
                         composerLayout.composerEditText.append("\\")
                     }
-                    composerLayout.composerEditText.append(sanitizeDisplayname(text)!! + ": ")
+                    composerLayout.composerEditText.append(sanitizeDisplayName(text) + ": ")
                 } else {
-                    composerLayout.composerEditText.text.insert(composerLayout.composerEditText.selectionStart, sanitizeDisplayname(text)!! + " ")
+                    composerLayout.composerEditText.text.insert(composerLayout.composerEditText.selectionStart, sanitizeDisplayName(text) + " ")
                 }
 
 //                vibrate = true

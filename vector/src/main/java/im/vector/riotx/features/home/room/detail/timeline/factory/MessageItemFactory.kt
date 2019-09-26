@@ -42,6 +42,7 @@ import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.utils.DebouncedClickListener
 import im.vector.riotx.core.utils.DimensionConverter
 import im.vector.riotx.core.utils.containsOnlyEmojis
+import im.vector.riotx.core.utils.isLocalFile
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
@@ -117,6 +118,8 @@ class MessageItemFactory @Inject constructor(
                 .avatarRenderer(avatarRenderer)
                 .colorProvider(colorProvider)
                 .dimensionConverter(dimensionConverter)
+                .izLocalFile(messageContent.getFileUrl().isLocalFile())
+                .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
                 .informationData(informationData)
                 .highlighted(highlight)
                 .avatarCallback(callback)
@@ -147,6 +150,8 @@ class MessageItemFactory @Inject constructor(
                 .avatarRenderer(avatarRenderer)
                 .colorProvider(colorProvider)
                 .dimensionConverter(dimensionConverter)
+                .izLocalFile(messageContent.getFileUrl().isLocalFile())
+                .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
                 .informationData(informationData)
                 .highlighted(highlight)
                 .avatarCallback(callback)

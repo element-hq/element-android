@@ -37,6 +37,7 @@ import im.vector.matrix.android.api.session.events.model.isImageMessage
 import im.vector.matrix.android.api.session.events.model.isTextMessage
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.file.FileService
+import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilities
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
@@ -48,6 +49,7 @@ import im.vector.matrix.android.api.session.room.timeline.getTextEditableContent
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
 import im.vector.matrix.rx.rx
+import im.vector.riotx.BuildConfig
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.postLiveEvent
 import im.vector.riotx.core.intent.getFilenameFromUri
@@ -227,23 +229,22 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     val navigateToEvent: LiveData<LiveEvent<String>>
         get() = _navigateToEvent
 
+    private val _fileTooBigEvent = MutableLiveData<LiveEvent<FileTooBigError>>()
+    val fileTooBigEvent: LiveData<LiveEvent<FileTooBigError>>
+        get() = _fileTooBigEvent
+
     private val _downloadedFileEvent = MutableLiveData<LiveEvent<DownloadFileState>>()
     val downloadedFileEvent: LiveData<LiveEvent<DownloadFileState>>
         get() = _downloadedFileEvent
 
 
-    fun isMenuItemVisible(@IdRes itemId: Int): Boolean {
-        if (itemId == R.id.clear_message_queue) {
-            //For now always disable, woker cancellation is not working properly
-            return false//timeline.pendingEventCount() > 0
-        }
-        if (itemId == R.id.resend_all) {
-            return timeline.failedToDeliverEventCount() > 0
-        }
-        if (itemId == R.id.clear_all) {
-            return timeline.failedToDeliverEventCount() > 0
-        }
-        return false
+    fun isMenuItemVisible(@IdRes itemId: Int) = when (itemId) {
+        R.id.clear_message_queue ->
+            /* For now always disable on production, worker cancellation is not working properly */
+            timeline.pendingEventCount() > 0 && BuildConfig.DEBUG
+        R.id.resend_all          -> timeline.failedToDeliverEventCount() > 0
+        R.id.clear_all           -> timeline.failedToDeliverEventCount() > 0
+        else                     -> false
     }
 
     // PRIVATE METHODS *****************************************************************************
@@ -470,7 +471,20 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                     type = ContentAttachmentData.Type.values()[it.mediaType]
             )
         }
-        room.sendMedias(attachments)
+
+        val homeServerCapabilities = session.getHomeServerCapabilities()
+
+        val maxUploadFileSize = homeServerCapabilities.maxUploadFileSize
+
+        if (maxUploadFileSize == HomeServerCapabilities.MAX_UPLOAD_FILE_SIZE_UNKNOWN) {
+            // Unknown limitation
+            room.sendMedias(attachments)
+        } else {
+            when (val tooBigFile = attachments.find { it.size > maxUploadFileSize }) {
+                null -> room.sendMedias(attachments)
+                else -> _fileTooBigEvent.postValue(LiveEvent(FileTooBigError(tooBigFile.name ?: tooBigFile.path, tooBigFile.size, maxUploadFileSize)))
+            }
+        }
     }
 
     private fun handleEventDisplayed(action: RoomDetailActions.EventDisplayed) {
