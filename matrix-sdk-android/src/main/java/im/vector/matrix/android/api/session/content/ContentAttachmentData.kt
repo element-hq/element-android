@@ -17,6 +17,7 @@
 package im.vector.matrix.android.api.session.content
 
 import android.os.Parcelable
+import androidx.exifinterface.media.ExifInterface
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -26,6 +27,7 @@ data class ContentAttachmentData(
         val date: Long = 0,
         val height: Long? = 0,
         val width: Long? = 0,
+        val exifOrientation: Int = ExifInterface.ORIENTATION_UNDEFINED,
         val name: String? = null,
         val path: String,
         val mimeType: String,

@@ -180,6 +180,7 @@ internal class LocalEchoEventFactory @Inject constructor(@UserId private val use
                         mimeType = attachment.mimeType,
                         width = attachment.width?.toInt() ?: 0,
                         height = attachment.height?.toInt() ?: 0,
+                        orientation = attachment.exifOrientation,
                         size = attachment.size.toInt()
                 ),
                 url = attachment.path
