@@ -17,9 +17,11 @@
 package im.vector.riotx.features.home.room.detail
 
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.riotx.core.platform.DefaultListUpdateCallback
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
+import kotlinx.android.synthetic.main.fragment_room_detail.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -29,7 +31,8 @@ import java.util.concurrent.atomic.AtomicReference
 /**
  * This handles scrolling to an event which wasn't yet loaded when scheduled.
  */
-class ScrollOnHighlightedEventCallback(private val layoutManager: LinearLayoutManager,
+class ScrollOnHighlightedEventCallback(private val recyclerView: RecyclerView,
+                                       private val layoutManager: LinearLayoutManager,
                                        private val timelineEventController: TimelineEventController) : DefaultListUpdateCallback {
 
     private val scheduledEventId = AtomicReference<String?>()
@@ -56,6 +59,7 @@ class ScrollOnHighlightedEventCallback(private val layoutManager: LinearLayoutMa
             // Do not scroll it item is already visible
             if (positionToScroll !in firstVisibleItem..lastVisibleItem) {
                 Timber.v("Scroll to $positionToScroll")
+                recyclerView.stopScroll()
                 layoutManager.scrollToPosition(positionToScroll)
             }
             scheduledEventId.set(null)

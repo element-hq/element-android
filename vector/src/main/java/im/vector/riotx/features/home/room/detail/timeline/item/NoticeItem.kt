@@ -70,8 +70,8 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
     }
 
 
-    override fun getEventId(): String? {
-        return attributes.informationData.eventId
+    override fun getEventIds(): List<String> {
+        return listOf(attributes.informationData.eventId)
     }
 
     override fun getViewType() = STUB_ID

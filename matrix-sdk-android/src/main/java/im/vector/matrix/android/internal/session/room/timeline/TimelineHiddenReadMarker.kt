@@ -46,7 +46,8 @@ internal class TimelineHiddenReadMarker constructor(private val roomId: String,
     private var previousDisplayedEventId: String? = null
     private var hiddenReadMarker: RealmResults<ReadMarkerEntity>? = null
 
-    private lateinit var liveEvents: RealmResults<TimelineEventEntity>
+    private lateinit var filteredEvents: RealmResults<TimelineEventEntity>
+    private lateinit var nonFilteredEvents: RealmResults<TimelineEventEntity>
     private lateinit var delegate: Delegate
 
     private val readMarkerListener = OrderedRealmCollectionChangeListener<RealmResults<ReadMarkerEntity>> { readMarkers, changeSet ->
@@ -62,12 +63,13 @@ internal class TimelineHiddenReadMarker constructor(private val roomId: String,
         }
         val readMarker = readMarkers.firstOrNull() ?: return@OrderedRealmCollectionChangeListener
         val hiddenEvent = readMarker.timelineEvent?.firstOrNull()
-                          ?: return@OrderedRealmCollectionChangeListener
+                ?: return@OrderedRealmCollectionChangeListener
 
+        val isLoaded = nonFilteredEvents.where().equalTo(TimelineEventEntityFields.EVENT_ID, hiddenEvent.eventId).findFirst() != null
         val displayIndex = hiddenEvent.root?.displayIndex
-        if (displayIndex != null) {
+        if (isLoaded && displayIndex != null) {
             // Then we are looking for the first displayable event after the hidden one
-            val firstDisplayedEvent = liveEvents.where()
+            val firstDisplayedEvent = filteredEvents.where()
                     .lessThanOrEqualTo(TimelineEventEntityFields.ROOT.DISPLAY_INDEX, displayIndex)
                     .findFirst()
 
@@ -86,8 +88,12 @@ internal class TimelineHiddenReadMarker constructor(private val roomId: String,
     /**
      * Start the realm query subscription. Has to be called on an HandlerThread
      */
-    fun start(realm: Realm, liveEvents: RealmResults<TimelineEventEntity>, delegate: Delegate) {
-        this.liveEvents = liveEvents
+    fun start(realm: Realm,
+              filteredEvents: RealmResults<TimelineEventEntity>,
+              nonFilteredEvents: RealmResults<TimelineEventEntity>,
+              delegate: Delegate) {
+        this.filteredEvents = filteredEvents
+        this.nonFilteredEvents = nonFilteredEvents
         this.delegate = delegate
         // We are looking for read receipts set on hidden events.
         // We only accept those with a timelineEvent (so coming from pagination/sync).

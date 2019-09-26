@@ -250,6 +250,7 @@ class RoomDetailFragment :
             if (scrollPosition == null) {
                 scrollOnHighlightedEventCallback.scheduleScrollTo(it)
             } else {
+                recyclerView.stopScroll()
                 layoutManager.scrollToPosition(scrollPosition)
             }
         }
@@ -445,7 +446,7 @@ class RoomDetailFragment :
         layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, true)
         val stateRestorer = LayoutManagerStateRestorer(layoutManager).register()
         scrollOnNewMessageCallback = ScrollOnNewMessageCallback(layoutManager, timelineEventController)
-        scrollOnHighlightedEventCallback = ScrollOnHighlightedEventCallback(layoutManager, timelineEventController)
+        scrollOnHighlightedEventCallback = ScrollOnHighlightedEventCallback(recyclerView, layoutManager, timelineEventController)
         recyclerView.layoutManager = layoutManager
         recyclerView.itemAnimator = null
         recyclerView.setHasFixedSize(true)
@@ -958,7 +959,7 @@ class RoomDetailFragment :
         val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
         val firstVisibleItem = timelineEventController.adapter.getModelAtPosition(firstVisibleItemPosition)
         val nextReadMarkerId = when (firstVisibleItem) {
-            is BaseEventItem -> firstVisibleItem.getEventId()
+            is BaseEventItem -> firstVisibleItem.getEventIds().firstOrNull()
             else             -> null
         }
         if (nextReadMarkerId != null) {

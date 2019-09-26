@@ -55,7 +55,7 @@ abstract class DefaultItem : BaseEventItem<DefaultItem.Holder>() {
         holder.readReceiptsView.render(informationData.readReceipts, avatarRenderer, _readReceiptsClickListener)
     }
 
-    override fun getEventId(): String? {
+    override fun getEventIds(): List<String> {
         return informationData.eventId
     }
 

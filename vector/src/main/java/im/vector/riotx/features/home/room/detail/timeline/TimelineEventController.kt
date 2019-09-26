@@ -50,7 +50,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
                                                   private val mergedHeaderItemFactory: MergedHeaderItemFactory,
                                                   @TimelineEventControllerHandler
                                                   private val backgroundHandler: Handler
-) : EpoxyController(backgroundHandler, backgroundHandler), Timeline.Listener {
+) : EpoxyController(backgroundHandler, backgroundHandler), Timeline.Listener, EpoxyController.Interceptor {
 
     interface Callback : BaseCallback, ReactionPillCallback, AvatarCallback, UrlClickCallback, ReadReceiptsCallback {
         fun onLoadMore(direction: Timeline.Direction)
@@ -91,12 +91,15 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     }
 
     private var showingForwardLoader = false
+    // Map eventId to adapter position
+    private val adapterPositionMapping = HashMap<String, Int>()
     private val modelCache = arrayListOf<CacheItemData?>()
     private var currentSnapshot: List<TimelineEvent> = emptyList()
     private var inSubmitList: Boolean = false
     private var timeline: Timeline? = null
 
     var callback: Callback? = null
+
 
     private val listUpdateCallback = object : ListUpdateCallback {
 
@@ -141,7 +144,20 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     }
 
     init {
+        addInterceptor(this)
         requestModelBuild()
+    }
+
+    // Update position when we are building new items
+    override fun intercept(models: MutableList<EpoxyModel<*>>) {
+        adapterPositionMapping.clear()
+        models.forEachIndexed { index, epoxyModel ->
+            if (epoxyModel is BaseEventItem) {
+                epoxyModel.getEventIds().forEach {
+                    adapterPositionMapping[it] = index
+                }
+            }
+        }
     }
 
     fun update(viewState: RoomDetailViewState, readMarkerVisible: Boolean) {
@@ -161,7 +177,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             synchronized(modelCache) {
                 for (i in 0 until modelCache.size) {
                     if (modelCache[i]?.eventId == viewState.highlightedEventId
-                        || modelCache[i]?.eventId == eventIdToHighlight) {
+                            || modelCache[i]?.eventId == eventIdToHighlight) {
                         modelCache[i] = null
                     }
                 }
@@ -185,6 +201,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         super.onAttachedToRecyclerView(recyclerView)
         timelineMediaSizeProvider.recyclerView = recyclerView
     }
+
 
     override fun buildModels() {
         val timestamp = System.currentTimeMillis()
@@ -232,8 +249,8 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
                 // Should be build if not cached or if cached but contains mergedHeader or formattedDay
                 // We then are sure we always have items up to date.
                 if (modelCache[position] == null
-                    || modelCache[position]?.mergedHeaderModel != null
-                    || modelCache[position]?.formattedDayModel != null) {
+                        || modelCache[position]?.mergedHeaderModel != null
+                        || modelCache[position]?.formattedDayModel != null) {
                     modelCache[position] = buildItemModels(position, currentSnapshot)
                 }
             }
@@ -269,13 +286,13 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             it.setOnVisibilityStateChanged(TimelineEventVisibilityStateChangedListener(callback, event))
         }
         val mergedHeaderModel = mergedHeaderItemFactory.create(event,
-                                                               nextEvent = nextEvent,
-                                                               items = items,
-                                                               addDaySeparator = addDaySeparator,
-                                                               readMarkerVisible = readMarkerVisible,
-                                                               currentPosition = currentPosition,
-                                                               eventIdToHighlight = eventIdToHighlight,
-                                                               callback = callback
+                nextEvent = nextEvent,
+                items = items,
+                addDaySeparator = addDaySeparator,
+                readMarkerVisible = readMarkerVisible,
+                currentPosition = currentPosition,
+                eventIdToHighlight = eventIdToHighlight,
+                callback = callback
         ) {
             requestModelBuild()
         }
@@ -314,30 +331,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     }
 
     fun searchPositionOfEvent(eventId: String?): Int? = synchronized(modelCache) {
-        // Search in the cache
-        if (eventId == null) {
-            return null
-        }
-        var realPosition = 0
-        if (showingForwardLoader) {
-            realPosition++
-        }
-        for (i in 0 until modelCache.size) {
-            val itemCache = modelCache[i] ?: continue
-            if (itemCache.eventId == eventId) {
-                return realPosition
-            }
-            if (itemCache.eventModel != null && !mergedHeaderItemFactory.isCollapsed(itemCache.localId)) {
-                realPosition++
-            }
-            if (itemCache.mergedHeaderModel != null) {
-                realPosition++
-            }
-            if (itemCache.formattedDayModel != null) {
-                realPosition++
-            }
-        }
-        return null
+        return adapterPositionMapping[eventId]
     }
 
     fun isLoadingForward() = showingForwardLoader

@@ -40,14 +40,18 @@ internal class RoomFullyReadHandler @Inject constructor() {
             readMarkerId = content.eventId
         }
         // Remove the old markers if any
-        val oldReadMarkerEvents = TimelineEventEntity.where(realm, roomId = roomId, linkFilterMode = EventEntity.LinkFilterMode.BOTH).isNotNull(TimelineEventEntityFields.READ_MARKER.`$`).findAll()
+        val oldReadMarkerEvents = TimelineEventEntity
+                .where(realm, roomId = roomId, linkFilterMode = EventEntity.LinkFilterMode.BOTH)
+                .isNotNull(TimelineEventEntityFields.READ_MARKER.`$`)
+                .findAll()
+
         oldReadMarkerEvents.forEach { it.readMarker = null }
         val readMarkerEntity = ReadMarkerEntity.getOrCreate(realm, roomId).apply {
             this.eventId = content.eventId
         }
         // Attach to timelineEvent if known
-        val timelineEventEntity = TimelineEventEntity.where(realm, roomId = roomId, eventId = content.eventId).findFirst()
-        timelineEventEntity?.readMarker = readMarkerEntity
+        val timelineEventEntities = TimelineEventEntity.where(realm, roomId = roomId, eventId = content.eventId).findAll()
+        timelineEventEntities.forEach { it.readMarker = readMarkerEntity }
     }
 
 }

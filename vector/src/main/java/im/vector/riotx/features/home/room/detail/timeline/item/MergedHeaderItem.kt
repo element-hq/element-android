@@ -90,8 +90,8 @@ abstract class MergedHeaderItem : BaseEventItem<MergedHeaderItem.Holder>() {
     }
 
 
-    override fun getEventId(): String? {
-        return attributes.mergeData.firstOrNull()?.eventId
+    override fun getEventIds(): List<String> {
+        return attributes.mergeData.map { it.eventId }
     }
 
     data class Data(

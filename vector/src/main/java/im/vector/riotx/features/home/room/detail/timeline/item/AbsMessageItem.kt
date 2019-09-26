@@ -29,7 +29,6 @@ import androidx.core.view.children
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
-import com.airbnb.epoxy.VisibilityState
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.riotx.R
 import im.vector.riotx.core.resources.ColorProvider
@@ -158,8 +157,8 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
         return true
     }
 
-    override fun getEventId(): String? {
-        return attributes.informationData.eventId
+    override fun getEventIds(): List<String> {
+        return listOf(attributes.informationData.eventId)
     }
 
     protected open fun renderSendState(root: View, textView: TextView?, failureIndicator: ImageView? = null) {

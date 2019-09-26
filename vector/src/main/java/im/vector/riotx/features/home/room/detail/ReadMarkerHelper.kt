@@ -80,7 +80,9 @@ class ReadMarkerHelper @Inject constructor() {
         val newJumpToReadMarkerVisible = if (readMarkerId == null) {
             false
         } else {
-            val positionOfReadMarker = timelineEventController.searchPositionOfEvent(readMarkerId)
+            val correctedReadMarkerId = nonNullState.timeline?.getFirstDisplayableEventId(readMarkerId)
+                    ?: readMarkerId
+            val positionOfReadMarker = timelineEventController.searchPositionOfEvent(correctedReadMarkerId)
             if (positionOfReadMarker == null) {
                 nonNullState.timeline?.isLive == true && lastVisibleItem > 0
             } else {

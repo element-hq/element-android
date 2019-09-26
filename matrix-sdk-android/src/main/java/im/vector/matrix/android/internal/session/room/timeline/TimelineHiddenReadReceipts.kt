@@ -49,7 +49,8 @@ internal class TimelineHiddenReadReceipts constructor(private val readReceiptsSu
     private val correctedReadReceiptsByEvent = HashMap<String, MutableList<ReadReceipt>>()
 
     private lateinit var hiddenReadReceipts: RealmResults<ReadReceiptsSummaryEntity>
-    private lateinit var liveEvents: RealmResults<TimelineEventEntity>
+    private lateinit var nonFilteredEvents: RealmResults<TimelineEventEntity>
+    private lateinit var filteredEvents: RealmResults<TimelineEventEntity>
     private lateinit var delegate: Delegate
 
     private val hiddenReadReceiptsListener = OrderedRealmCollectionChangeListener<RealmResults<ReadReceiptsSummaryEntity>> { collection, changeSet ->
@@ -60,7 +61,7 @@ internal class TimelineHiddenReadReceipts constructor(private val readReceiptsSu
         // Deletion here means we don't have any readReceipts for the given hidden events
         changeSet.deletions.forEach {
             val eventId = correctedReadReceiptsEventByIndex.get(it, "")
-            val timelineEvent = liveEvents.where()
+            val timelineEvent = filteredEvents.where()
                     .equalTo(TimelineEventEntityFields.EVENT_ID, eventId)
                     .findFirst()
 
@@ -70,12 +71,14 @@ internal class TimelineHiddenReadReceipts constructor(private val readReceiptsSu
         }
         correctedReadReceiptsEventByIndex.clear()
         correctedReadReceiptsByEvent.clear()
-        hiddenReadReceipts.forEachIndexed { index, summary ->
-            val timelineEvent = summary?.timelineEvent?.firstOrNull()
-            val displayIndex = timelineEvent?.root?.displayIndex
-            if (displayIndex != null) {
+        for (index in 0 until hiddenReadReceipts.size) {
+            val summary = hiddenReadReceipts[index] ?: continue
+            val timelineEvent = summary.timelineEvent?.firstOrNull() ?: continue
+            val isLoaded = nonFilteredEvents.where().equalTo(TimelineEventEntityFields.EVENT_ID, timelineEvent.eventId).findFirst() != null
+            val displayIndex = timelineEvent.root?.displayIndex
+            if (isLoaded && displayIndex != null) {
                 // Then we are looking for the first displayable event after the hidden one
-                val firstDisplayedEvent = liveEvents.where()
+                val firstDisplayedEvent = filteredEvents.where()
                         .lessThanOrEqualTo(TimelineEventEntityFields.ROOT.DISPLAY_INDEX, displayIndex)
                         .findFirst()
 
@@ -106,8 +109,12 @@ internal class TimelineHiddenReadReceipts constructor(private val readReceiptsSu
     /**
      * Start the realm query subscription. Has to be called on an HandlerThread
      */
-    fun start(realm: Realm, liveEvents: RealmResults<TimelineEventEntity>, delegate: Delegate) {
-        this.liveEvents = liveEvents
+    fun start(realm: Realm,
+              filteredEvents: RealmResults<TimelineEventEntity>,
+              nonFilteredEvents: RealmResults<TimelineEventEntity>,
+              delegate: Delegate) {
+        this.filteredEvents = filteredEvents
+        this.nonFilteredEvents = nonFilteredEvents
         this.delegate = delegate
         // We are looking for read receipts set on hidden events.
         // We only accept those with a timelineEvent (so coming from pagination/sync).
