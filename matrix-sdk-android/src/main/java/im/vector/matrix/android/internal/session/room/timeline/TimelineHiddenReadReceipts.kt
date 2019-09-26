@@ -74,8 +74,10 @@ internal class TimelineHiddenReadReceipts constructor(private val readReceiptsSu
         for (index in 0 until hiddenReadReceipts.size) {
             val summary = hiddenReadReceipts[index] ?: continue
             val timelineEvent = summary.timelineEvent?.firstOrNull() ?: continue
-            val isLoaded = nonFilteredEvents.where().equalTo(TimelineEventEntityFields.EVENT_ID, timelineEvent.eventId).findFirst() != null
+            val isLoaded = nonFilteredEvents.where()
+                    .equalTo(TimelineEventEntityFields.EVENT_ID, timelineEvent.eventId).findFirst() != null
             val displayIndex = timelineEvent.root?.displayIndex
+
             if (isLoaded && displayIndex != null) {
                 // Then we are looking for the first displayable event after the hidden one
                 val firstDisplayedEvent = filteredEvents.where()

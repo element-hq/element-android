@@ -25,6 +25,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import androidx.core.content.ContextCompat
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import butterknife.ButterKnife
@@ -77,11 +78,7 @@ class JumpToReadMarkerView @JvmOverloads constructor(
 
     fun render(show: Boolean, readMarkerId: String?) {
         this.readMarkerId = readMarkerId
-        visibility = if(show){
-            View.VISIBLE
-        }else {
-            View.INVISIBLE
-        }
+        isInvisible = !show
     }
 
 

@@ -258,12 +258,21 @@ internal class DefaultTimeline(
         }
         // Otherwise, we should check if the event is in the db, but is hidden because of filters
         return Realm.getInstance(realmConfiguration).use { localRealm ->
-            val nonFilteredEvents = buildEventQuery(localRealm).sort(TimelineEventEntityFields.ROOT.DISPLAY_INDEX, Sort.DESCENDING).findAll()
-            val nonFilteredEvent = nonFilteredEvents.where().equalTo(TimelineEventEntityFields.EVENT_ID, eventId).findFirst()
+            val nonFilteredEvents = buildEventQuery(localRealm)
+                    .sort(TimelineEventEntityFields.ROOT.DISPLAY_INDEX, Sort.DESCENDING)
+                    .findAll()
+
+            val nonFilteredEvent = nonFilteredEvents.where()
+                    .equalTo(TimelineEventEntityFields.EVENT_ID, eventId)
+                    .findFirst()
+
             val filteredEvents = nonFilteredEvents.where().filterEventsWithSettings().findAll()
             val isEventInDb = nonFilteredEvent != null
 
-            val isHidden = isEventInDb && filteredEvents.where().equalTo(TimelineEventEntityFields.EVENT_ID, eventId).findFirst() == null
+            val isHidden = isEventInDb && filteredEvents.where()
+                    .equalTo(TimelineEventEntityFields.EVENT_ID, eventId)
+                    .findFirst() == null
+
             if (isHidden) {
                 val displayIndex = nonFilteredEvent?.root?.displayIndex
                 if (displayIndex != null) {

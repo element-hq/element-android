@@ -488,27 +488,26 @@ class RoomDetailFragment :
         timelineEventController.callback = this
 
         if (vectorPreferences.swipeToReplyIsEnabled()) {
-            val swipeCallback = RoomMessageTouchHelperCallback(requireContext(),
-                                                               R.drawable.ic_reply,
-                                                               object : RoomMessageTouchHelperCallback.QuickReplayHandler {
-                                                                   override fun performQuickReplyOnHolder(model: EpoxyModel<*>) {
-                                                                       (model as? AbsMessageItem)?.attributes?.informationData?.let {
-                                                                           val eventId = it.eventId
-                                                                           roomDetailViewModel.process(RoomDetailActions.EnterReplyMode(eventId, composerLayout.composerEditText.text.toString()))
-                                                                       }
-                                                                   }
+            val quickReplyHandler = object : RoomMessageTouchHelperCallback.QuickReplayHandler {
+                override fun performQuickReplyOnHolder(model: EpoxyModel<*>) {
+                    (model as? AbsMessageItem)?.attributes?.informationData?.let {
+                        val eventId = it.eventId
+                        roomDetailViewModel.process(RoomDetailActions.EnterReplyMode(eventId, composerLayout.composerEditText.text.toString()))
+                    }
+                }
 
-                                                                   override fun canSwipeModel(model: EpoxyModel<*>): Boolean {
-                                                                       return when (model) {
-                                                                           is MessageFileItem,
-                                                                           is MessageImageVideoItem,
-                                                                           is MessageTextItem -> {
-                                                                               return (model as AbsMessageItem).attributes.informationData.sendState == SendState.SYNCED
-                                                                           }
-                                                                           else               -> false
-                                                                       }
-                                                                   }
-                                                               })
+                override fun canSwipeModel(model: EpoxyModel<*>): Boolean {
+                    return when (model) {
+                        is MessageFileItem,
+                        is MessageImageVideoItem,
+                        is MessageTextItem -> {
+                            return (model as AbsMessageItem).attributes.informationData.sendState == SendState.SYNCED
+                        }
+                        else               -> false
+                    }
+                }
+            }
+            val swipeCallback = RoomMessageTouchHelperCallback(requireContext(), R.drawable.ic_reply, quickReplyHandler)
             val touchHelper = ItemTouchHelper(swipeCallback)
             touchHelper.attachToRecyclerView(recyclerView)
         }

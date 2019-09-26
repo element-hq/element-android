@@ -65,7 +65,10 @@ internal class TimelineHiddenReadMarker constructor(private val roomId: String,
         val hiddenEvent = readMarker.timelineEvent?.firstOrNull()
                 ?: return@OrderedRealmCollectionChangeListener
 
-        val isLoaded = nonFilteredEvents.where().equalTo(TimelineEventEntityFields.EVENT_ID, hiddenEvent.eventId).findFirst() != null
+        val isLoaded = nonFilteredEvents.where()
+                .equalTo(TimelineEventEntityFields.EVENT_ID, hiddenEvent.eventId)
+                .findFirst() != null
+
         val displayIndex = hiddenEvent.root?.displayIndex
         if (isLoaded && displayIndex != null) {
             // Then we are looking for the first displayable event after the hidden one
