@@ -12,11 +12,11 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.1'
+        classpath 'com.android.tools.build:gradle:3.5.0'
         classpath 'com.google.gms:google-services:4.3.2'
-        classpath "com.airbnb.okreplay:gradle-plugin:1.4.0"
+        classpath "com.airbnb.okreplay:gradle-plugin:1.5.0"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.6.2'
+        classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.7.1'
         classpath 'com.google.android.gms:oss-licenses-plugin:0.9.5'
 
         // NOTE: Do not place your application dependencies here; they belong
