@@ -27,6 +27,8 @@ import androidx.preference.Preference
 import androidx.preference.SwitchPreference
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
+import im.vector.riotx.core.preference.VectorListPreference
+import im.vector.riotx.core.preference.VectorPreference
 import im.vector.riotx.features.configuration.VectorConfiguration
 import im.vector.riotx.features.themes.ThemeUtils
 import javax.inject.Inject
@@ -37,10 +39,10 @@ class VectorSettingsPreferencesFragment : VectorSettingsBaseFragment() {
     override val preferenceXmlRes = R.xml.vector_settings_preferences
 
     private val selectedLanguagePreference by lazy {
-        findPreference(VectorPreferences.SETTINGS_INTERFACE_LANGUAGE_PREFERENCE_KEY)
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_INTERFACE_LANGUAGE_PREFERENCE_KEY)!!
     }
     private val textSizePreference by lazy {
-        findPreference(VectorPreferences.SETTINGS_INTERFACE_TEXT_SIZE_KEY)
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_INTERFACE_TEXT_SIZE_KEY)!!
     }
 
     @Inject lateinit var vectorConfiguration: VectorConfiguration
@@ -56,7 +58,7 @@ class VectorSettingsPreferencesFragment : VectorSettingsBaseFragment() {
         setUserInterfacePreferences()
 
         // Themes
-        findPreference(ThemeUtils.APPLICATION_THEME_KEY)
+        findPreference<VectorListPreference>(ThemeUtils.APPLICATION_THEME_KEY)!!
                 .onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
             if (newValue is String) {
                 vectorConfiguration.updateApplicationTheme(newValue)
@@ -73,7 +75,7 @@ class VectorSettingsPreferencesFragment : VectorSettingsBaseFragment() {
         }
 
         // Url preview
-        (findPreference(VectorPreferences.SETTINGS_SHOW_URL_PREVIEW_KEY) as SwitchPreference).let {
+        findPreference<SwitchPreference>(VectorPreferences.SETTINGS_SHOW_URL_PREVIEW_KEY)!!.let {
             /*
             TODO
             it.isChecked = session.isURLPreviewEnabled
@@ -113,7 +115,7 @@ class VectorSettingsPreferencesFragment : VectorSettingsBaseFragment() {
         }
 
         // update keep medias period
-        findPreference(VectorPreferences.SETTINGS_MEDIA_SAVING_PERIOD_KEY).let {
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_MEDIA_SAVING_PERIOD_KEY)!!.let {
             it.summary = vectorPreferences.getSelectedMediasSavingPeriodString()
 
             it.onPreferenceClickListener = Preference.OnPreferenceClickListener {

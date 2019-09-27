@@ -28,6 +28,7 @@ import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.withArgs
 import im.vector.riotx.core.preference.BingRule
 import im.vector.riotx.core.preference.BingRulePreference
+import im.vector.riotx.core.preference.VectorPreference
 import im.vector.riotx.features.notifications.NotificationUtils
 import javax.inject.Inject
 
@@ -54,7 +55,7 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : VectorSettingsBaseF
 
 
     override fun bindPref() {
-        val callNotificationsSystemOptions = findPreference(VectorPreferences.SETTINGS_SYSTEM_CALL_NOTIFICATION_PREFERENCE_KEY)
+        val callNotificationsSystemOptions = findPreference<VectorPreference>(VectorPreferences.SETTINGS_SYSTEM_CALL_NOTIFICATION_PREFERENCE_KEY)!!
         if (NotificationUtils.supportNotificationChannels()) {
             callNotificationsSystemOptions.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 NotificationUtils.openSystemSettingsForCallCategory(this)
@@ -64,7 +65,7 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : VectorSettingsBaseF
             callNotificationsSystemOptions.isVisible = false
         }
 
-        val noisyNotificationsSystemOptions = findPreference(VectorPreferences.SETTINGS_SYSTEM_NOISY_NOTIFICATION_PREFERENCE_KEY)
+        val noisyNotificationsSystemOptions = findPreference<VectorPreference>(VectorPreferences.SETTINGS_SYSTEM_NOISY_NOTIFICATION_PREFERENCE_KEY)!!
         if (NotificationUtils.supportNotificationChannels()) {
             noisyNotificationsSystemOptions.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 NotificationUtils.openSystemSettingsForNoisyCategory(this)
@@ -74,7 +75,7 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : VectorSettingsBaseF
             noisyNotificationsSystemOptions.isVisible = false
         }
 
-        val silentNotificationsSystemOptions = findPreference(VectorPreferences.SETTINGS_SYSTEM_SILENT_NOTIFICATION_PREFERENCE_KEY)
+        val silentNotificationsSystemOptions = findPreference<VectorPreference>(VectorPreferences.SETTINGS_SYSTEM_SILENT_NOTIFICATION_PREFERENCE_KEY)!!
         if (NotificationUtils.supportNotificationChannels()) {
             silentNotificationsSystemOptions.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 NotificationUtils.openSystemSettingsForSilentCategory(this)
@@ -86,7 +87,7 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : VectorSettingsBaseF
 
 
         // Ringtone
-        val ringtonePreference = findPreference(VectorPreferences.SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY)
+        val ringtonePreference = findPreference<VectorPreference>(VectorPreferences.SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY)!!
 
         if (NotificationUtils.supportNotificationChannels()) {
             ringtonePreference.isVisible = false
@@ -106,45 +107,43 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : VectorSettingsBaseF
         }
 
         for (preferenceKey in mPrefKeyToBingRuleId.keys) {
-            val preference = findPreference(preferenceKey)
-            if (null != preference) {
-                if (preference is BingRulePreference) {
-                    //preference.isEnabled = null != rules && isConnected && pushManager.areDeviceNotificationsAllowed()
-                    val rule: BingRule? = null // TODO session.dataHandler.pushRules()?.findDefaultRule(mPrefKeyToBingRuleId[preferenceKey])
+            val preference = findPreference<VectorPreference>(preferenceKey)
+            if (preference is BingRulePreference) {
+                //preference.isEnabled = null != rules && isConnected && pushManager.areDeviceNotificationsAllowed()
+                val rule: BingRule? = null // TODO session.dataHandler.pushRules()?.findDefaultRule(mPrefKeyToBingRuleId[preferenceKey])
 
-                    if (rule == null) {
-                        // The rule is not defined, hide the preference
-                        preference.isVisible = false
-                    } else {
-                        preference.isVisible = true
-                        preference.setBingRule(rule)
-                        preference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                            val rule = preference.createRule(newValue as Int)
-                            if (null != rule) {
-                                /*
-                                  TODO
-                               displayLoadingView()
-                                session.dataHandler.bingRulesManager.updateRule(preference.rule,
-                                        rule,
-                                        object : BingRulesManager.onBingRuleUpdateListener {
-                                            private fun onDone() {
-                                                refreshDisplay()
-                                                hideLoadingView()
-                                            }
+                if (rule == null) {
+                    // The rule is not defined, hide the preference
+                    preference.isVisible = false
+                } else {
+                    preference.isVisible = true
+                    preference.setBingRule(rule)
+                    preference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+                        val rule = preference.createRule(newValue as Int)
+                        if (null != rule) {
+                            /*
+                              TODO
+                           displayLoadingView()
+                            session.dataHandler.bingRulesManager.updateRule(preference.rule,
+                                    rule,
+                                    object : BingRulesManager.onBingRuleUpdateListener {
+                                        private fun onDone() {
+                                            refreshDisplay()
+                                            hideLoadingView()
+                                        }
 
-                                            override fun onBingRuleUpdateSuccess() {
-                                                onDone()
-                                            }
+                                        override fun onBingRuleUpdateSuccess() {
+                                            onDone()
+                                        }
 
-                                            override fun onBingRuleUpdateFailure(errorMessage: String) {
-                                                activity?.toast(errorMessage)
-                                                onDone()
-                                            }
-                                        })
-                                        */
-                            }
-                            false
+                                        override fun onBingRuleUpdateFailure(errorMessage: String) {
+                                            activity?.toast(errorMessage)
+                                            onDone()
+                                        }
+                                    })
+                                    */
                         }
+                        false
                     }
                 }
             }
@@ -166,7 +165,7 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : VectorSettingsBaseF
                     val notificationRingToneName = vectorPreferences.getNotificationRingToneName()
                     if (null != notificationRingToneName) {
                         vectorPreferences.setNotificationRingTone(vectorPreferences.getNotificationRingTone())
-                        findPreference(VectorPreferences.SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY).summary = notificationRingToneName
+                        findPreference<VectorPreference>(VectorPreferences.SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY)!!.summary = notificationRingToneName
                     }
                 }
             }

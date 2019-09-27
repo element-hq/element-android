@@ -20,12 +20,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import im.vector.riotx.R
+import im.vector.riotx.core.preference.VectorPreference
 import java.util.ArrayList
 import kotlin.Comparator
-import kotlin.String
-import kotlin.getValue
-import kotlin.lazy
-import kotlin.let
 
 class VectorSettingsIgnoredUsersFragment : VectorSettingsBaseFragment() {
 
@@ -34,10 +31,10 @@ class VectorSettingsIgnoredUsersFragment : VectorSettingsBaseFragment() {
 
     // displayed the ignored users list
     private val mIgnoredUserSettingsCategoryDivider by lazy {
-        findPreference(VectorPreferences.SETTINGS_IGNORE_USERS_DIVIDER_PREFERENCE_KEY)
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_IGNORE_USERS_DIVIDER_PREFERENCE_KEY)!!
     }
     private val mIgnoredUserSettingsCategory by lazy {
-        findPreference(VectorPreferences.SETTINGS_IGNORED_USERS_PREFERENCE_KEY) as PreferenceCategory
+        findPreference<PreferenceCategory>(VectorPreferences.SETTINGS_IGNORED_USERS_PREFERENCE_KEY)!!
     }
 
     override fun bindPref() {

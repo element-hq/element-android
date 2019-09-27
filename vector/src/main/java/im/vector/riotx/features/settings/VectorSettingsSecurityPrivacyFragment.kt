@@ -50,6 +50,7 @@ import im.vector.riotx.core.intent.getFilenameFromUri
 import im.vector.riotx.core.platform.SimpleTextWatcher
 import im.vector.riotx.core.preference.ProgressBarPreference
 import im.vector.riotx.core.preference.VectorPreference
+import im.vector.riotx.core.preference.VectorPreferenceDivider
 import im.vector.riotx.core.utils.*
 import im.vector.riotx.features.crypto.keys.KeysExporter
 import im.vector.riotx.features.crypto.keys.KeysImporter
@@ -76,57 +77,57 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
 
     // cryptography
     private val mCryptographyCategory by lazy {
-        findPreference(VectorPreferences.SETTINGS_CRYPTOGRAPHY_PREFERENCE_KEY) as PreferenceCategory
+        findPreference<PreferenceCategory>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_PREFERENCE_KEY)!!
     }
     private val mCryptographyCategoryDivider by lazy {
-        findPreference(VectorPreferences.SETTINGS_CRYPTOGRAPHY_DIVIDER_PREFERENCE_KEY)
+        findPreference<VectorPreferenceDivider>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_DIVIDER_PREFERENCE_KEY)!!
     }
     // cryptography manage
     private val mCryptographyManageCategory by lazy {
-        findPreference(VectorPreferences.SETTINGS_CRYPTOGRAPHY_MANAGE_PREFERENCE_KEY) as PreferenceCategory
+        findPreference<PreferenceCategory>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_MANAGE_PREFERENCE_KEY)!!
     }
     private val mCryptographyManageCategoryDivider by lazy {
-        findPreference(VectorPreferences.SETTINGS_CRYPTOGRAPHY_MANAGE_DIVIDER_PREFERENCE_KEY)
+        findPreference<VectorPreferenceDivider>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_MANAGE_DIVIDER_PREFERENCE_KEY)!!
     }
     // displayed pushers
     private val mPushersSettingsDivider by lazy {
-        findPreference(VectorPreferences.SETTINGS_NOTIFICATIONS_TARGET_DIVIDER_PREFERENCE_KEY)
+        findPreference<VectorPreferenceDivider>(VectorPreferences.SETTINGS_NOTIFICATIONS_TARGET_DIVIDER_PREFERENCE_KEY)!!
     }
     private val mPushersSettingsCategory by lazy {
-        findPreference(VectorPreferences.SETTINGS_NOTIFICATIONS_TARGETS_PREFERENCE_KEY) as PreferenceCategory
+        findPreference<PreferenceCategory>(VectorPreferences.SETTINGS_NOTIFICATIONS_TARGETS_PREFERENCE_KEY)!!
     }
     private val mDevicesListSettingsCategory by lazy {
-        findPreference(VectorPreferences.SETTINGS_DEVICES_LIST_PREFERENCE_KEY) as PreferenceCategory
+        findPreference<PreferenceCategory>(VectorPreferences.SETTINGS_DEVICES_LIST_PREFERENCE_KEY)!!
     }
     private val mDevicesListSettingsCategoryDivider by lazy {
-        findPreference(VectorPreferences.SETTINGS_DEVICES_DIVIDER_PREFERENCE_KEY)
+        findPreference<VectorPreferenceDivider>(VectorPreferences.SETTINGS_DEVICES_DIVIDER_PREFERENCE_KEY)!!
     }
     private val cryptoInfoDeviceNamePreference by lazy {
-        findPreference(VectorPreferences.SETTINGS_ENCRYPTION_INFORMATION_DEVICE_NAME_PREFERENCE_KEY) as VectorPreference
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_ENCRYPTION_INFORMATION_DEVICE_NAME_PREFERENCE_KEY)!!
     }
 
     private val cryptoInfoDeviceIdPreference by lazy {
-        findPreference(VectorPreferences.SETTINGS_ENCRYPTION_INFORMATION_DEVICE_ID_PREFERENCE_KEY)
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_ENCRYPTION_INFORMATION_DEVICE_ID_PREFERENCE_KEY)!!
     }
 
     private val manageBackupPref by lazy {
-        findPreference(VectorPreferences.SETTINGS_SECURE_MESSAGE_RECOVERY_PREFERENCE_KEY)
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_SECURE_MESSAGE_RECOVERY_PREFERENCE_KEY)!!
     }
 
     private val exportPref by lazy {
-        findPreference(VectorPreferences.SETTINGS_ENCRYPTION_EXPORT_E2E_ROOM_KEYS_PREFERENCE_KEY)
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_ENCRYPTION_EXPORT_E2E_ROOM_KEYS_PREFERENCE_KEY)!!
     }
 
     private val importPref by lazy {
-        findPreference(VectorPreferences.SETTINGS_ENCRYPTION_IMPORT_E2E_ROOM_KEYS_PREFERENCE_KEY)
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_ENCRYPTION_IMPORT_E2E_ROOM_KEYS_PREFERENCE_KEY)!!
     }
 
     private val cryptoInfoTextPreference by lazy {
-        findPreference(VectorPreferences.SETTINGS_ENCRYPTION_INFORMATION_DEVICE_KEY_PREFERENCE_KEY)
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_ENCRYPTION_INFORMATION_DEVICE_KEY_PREFERENCE_KEY)!!
     }
     // encrypt to unverified devices
     private val sendToUnverifiedDevicesPref by lazy {
-        findPreference(VectorPreferences.SETTINGS_ENCRYPTION_NEVER_SENT_TO_PREFERENCE_KEY) as SwitchPreference
+        findPreference<SwitchPreference>(VectorPreferences.SETTINGS_ENCRYPTION_NEVER_SENT_TO_PREFERENCE_KEY)!!
     }
 
     @Inject lateinit var vectorPreferences: VectorPreferences
@@ -148,7 +149,7 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
         // Analytics
 
         // Analytics tracking management
-        (findPreference(VectorPreferences.SETTINGS_USE_ANALYTICS_KEY) as SwitchPreference).let {
+        findPreference<SwitchPreference>(VectorPreferences.SETTINGS_USE_ANALYTICS_KEY)!!.let {
             // On if the analytics tracking is activated
             it.isChecked = vectorPreferences.useAnalytics()
 
@@ -159,7 +160,7 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
         }
 
         // Rageshake Management
-        (findPreference(VectorPreferences.SETTINGS_USE_RAGE_SHAKE_KEY) as SwitchPreference).let {
+        findPreference<SwitchPreference>(VectorPreferences.SETTINGS_USE_RAGE_SHAKE_KEY)!!.let {
             it.isChecked = vectorPreferences.useRageshake()
 
             it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->

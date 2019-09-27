@@ -67,6 +67,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
 static def gitRevision() {
@@ -86,11 +90,10 @@ static def gitRevisionDate() {
 
 dependencies {
 
-    def arrow_version = "0.8.0"
-    def support_version = '1.1.0-beta01'
+    def arrow_version = "0.8.2"
     def moshi_version = '1.8.0'
-    def lifecycle_version = '2.0.0'
-    def coroutines_version = "1.0.1"
+    def lifecycle_version = '2.1.0'
+    def coroutines_version = "1.1.1"
     def markwon_version = '3.0.0'
     def daggerVersion = '2.23.1'
 
@@ -98,8 +101,8 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
 
-    implementation "androidx.appcompat:appcompat:1.1.0-rc01"
-    implementation "androidx.recyclerview:recyclerview:1.1.0-beta01"
+    implementation "androidx.appcompat:appcompat:1.1.0"
+    implementation "androidx.recyclerview:recyclerview:1.1.0-beta04"
 
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
     kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
@@ -120,7 +123,7 @@ dependencies {
     kapt 'dk.ilios:realmfieldnameshelper:1.1.1'
 
     // Work
-    implementation "androidx.work:work-runtime-ktx:2.1.0-rc01"
+    implementation "androidx.work:work-runtime-ktx:2.3.0-alpha01"
 
     // FP
     implementation "io.arrow-kt:arrow-core:$arrow_version"

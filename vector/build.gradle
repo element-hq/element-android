@@ -208,6 +208,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
 dependencies {
@@ -229,10 +233,10 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
 
-    implementation 'androidx.appcompat:appcompat:1.1.0-beta01'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
     //Do not use beta2 at the moment, as it breaks things
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta1'
-    implementation 'androidx.core:core-ktx:1.0.2'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta2'
+    implementation 'androidx.core:core-ktx:1.1.0'
 
     implementation "org.threeten:threetenbp:1.4.0:no-tzdb"
     implementation "com.gabrielittner.threetenbp:lazythreetenbp:0.7.0"
@@ -251,7 +255,7 @@ dependencies {
 
     // rx
     implementation 'io.reactivex.rxjava2:rxkotlin:2.3.0'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     implementation 'com.jakewharton.rxrelay2:rxrelay:2.1.0'
     // RXBinding
     implementation 'com.jakewharton.rxbinding3:rxbinding:3.0.0'
@@ -264,7 +268,7 @@ dependencies {
     implementation 'com.airbnb.android:mvrx:1.0.1'
 
     // Work
-    implementation "androidx.work:work-runtime-ktx:2.1.0-rc01"
+    implementation "androidx.work:work-runtime-ktx:2.3.0-alpha01"
 
     // Paging
     implementation "androidx.paging:paging-runtime-ktx:2.1.0"
@@ -273,11 +277,11 @@ dependencies {
     implementation "io.arrow-kt:arrow-core:$arrow_version"
 
     // Pref
-    implementation 'androidx.preference:preference:1.0.0'
+    implementation 'androidx.preference:preference:1.1.0'
 
     // UI
     implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
-    implementation 'com.google.android.material:material:1.1.0-alpha08'
+    implementation 'com.google.android.material:material:1.1.0-alpha10'
     implementation 'me.gujun.android:span:1.7'
     implementation "ru.noties.markwon:core:$markwon_version"
     implementation "ru.noties.markwon:html:$markwon_version"
@@ -324,7 +328,9 @@ dependencies {
     kapt 'com.squareup.inject:assisted-inject-processor-dagger2:0.4.0'
 
     // gplay flavor only
-    gplayImplementation('com.google.firebase:firebase-messaging:19.0.1') {
+    // Warning: due to the exclude, Android Studio does not propose to upgrade. Uncomment next line to be proposed to upgrade
+    // implementation 'com.google.firebase:firebase-messaging:20.0.0'
+    gplayImplementation('com.google.firebase:firebase-messaging:20.0.0') {
         exclude group: 'com.google.firebase', module: 'firebase-core'
         exclude group: 'com.google.firebase', module: 'firebase-analytics'
         exclude group: 'com.google.firebase', module: 'firebase-measurement-connector'

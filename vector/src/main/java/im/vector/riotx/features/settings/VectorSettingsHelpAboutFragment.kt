@@ -24,6 +24,7 @@ import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import im.vector.matrix.android.api.Matrix
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
+import im.vector.riotx.core.preference.VectorPreference
 import im.vector.riotx.core.utils.copyToClipboard
 import im.vector.riotx.core.utils.displayInWebView
 import im.vector.riotx.features.version.VersionProvider
@@ -42,7 +43,7 @@ class VectorSettingsHelpAboutFragment : VectorSettingsBaseFragment() {
 
     override fun bindPref() {
         // preference to start the App info screen, to facilitate App permissions access
-        findPreference(APP_INFO_LINK_PREFERENCE_KEY)
+        findPreference<VectorPreference>(APP_INFO_LINK_PREFERENCE_KEY)!!
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
 
             activity?.let {
@@ -61,7 +62,7 @@ class VectorSettingsHelpAboutFragment : VectorSettingsBaseFragment() {
         }
 
         // application version
-        (findPreference(VectorPreferences.SETTINGS_VERSION_PREFERENCE_KEY)).let {
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_VERSION_PREFERENCE_KEY)!!.let {
             it.summary = versionProvider.getVersion(longFormat = false, useBuildNumber = true)
 
             it.setOnPreferenceClickListener { pref ->
@@ -71,7 +72,7 @@ class VectorSettingsHelpAboutFragment : VectorSettingsBaseFragment() {
         }
 
         // SDK version
-        (findPreference(VectorPreferences.SETTINGS_SDK_VERSION_PREFERENCE_KEY)).let {
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_SDK_VERSION_PREFERENCE_KEY)!!.let {
             it.summary = Matrix.getSdkVersion()
 
             it.setOnPreferenceClickListener { pref ->
@@ -81,38 +82,38 @@ class VectorSettingsHelpAboutFragment : VectorSettingsBaseFragment() {
         }
 
         // olm version
-        findPreference(VectorPreferences.SETTINGS_OLM_VERSION_PREFERENCE_KEY)
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_OLM_VERSION_PREFERENCE_KEY)!!
                 .summary = session.getCryptoVersion(requireContext(), false)
 
         // copyright
-        findPreference(VectorPreferences.SETTINGS_COPYRIGHT_PREFERENCE_KEY)
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_COPYRIGHT_PREFERENCE_KEY)!!
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
             activity?.displayInWebView(VectorSettingsUrls.COPYRIGHT)
             false
         }
 
         // terms & conditions
-        findPreference(VectorPreferences.SETTINGS_APP_TERM_CONDITIONS_PREFERENCE_KEY)
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_APP_TERM_CONDITIONS_PREFERENCE_KEY)!!
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
             activity?.displayInWebView(VectorSettingsUrls.TAC)
             false
         }
 
         // privacy policy
-        findPreference(VectorPreferences.SETTINGS_PRIVACY_POLICY_PREFERENCE_KEY)
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_PRIVACY_POLICY_PREFERENCE_KEY)!!
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
             activity?.displayInWebView(VectorSettingsUrls.PRIVACY_POLICY)
             false
         }
 
         // third party notice
-        findPreference(VectorPreferences.SETTINGS_THIRD_PARTY_NOTICES_PREFERENCE_KEY)
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_THIRD_PARTY_NOTICES_PREFERENCE_KEY)!!
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
             activity?.displayInWebView(VectorSettingsUrls.THIRD_PARTY_LICENSES)
             false
         }
 
-        findPreference(VectorPreferences.SETTINGS_OTHER_THIRD_PARTY_NOTICES_PREFERENCE_KEY)
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_OTHER_THIRD_PARTY_NOTICES_PREFERENCE_KEY)!!
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
             // See https://developers.google.com/android/guides/opensource
             startActivity(Intent(requireActivity(), OssLicensesMenuActivity::class.java))

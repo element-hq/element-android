@@ -73,16 +73,12 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
      *
      * @param message the message
      */
-    override fun onMessageReceived(message: RemoteMessage?) {
+    override fun onMessageReceived(message: RemoteMessage) {
         if (!vectorPreferences.areNotificationEnabledForDevice()) {
             Timber.i("Notification are disabled for this device")
             return
         }
 
-        if (message == null || message.data == null) {
-            Timber.e("## onMessageReceived() : received a null message or message with no data")
-            return
-        }
         if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
             Timber.i("## onMessageReceived() %s", message.data.toString())
             Timber.i("## onMessageReceived() from FCM with priority %s", message.priority)
@@ -103,15 +99,11 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
      * when the InstanceID token is initially generated, so this is where
      * you retrieve the token.
      */
-    override fun onNewToken(refreshedToken: String?) {
+    override fun onNewToken(refreshedToken: String) {
         Timber.i("onNewToken: FCM Token has been updated")
         FcmHelper.storeFcmToken(this, refreshedToken)
-        if (refreshedToken == null) {
-            Timber.w("onNewToken:received null token")
-        } else {
-            if (vectorPreferences.areNotificationEnabledForDevice() && activeSessionHolder.hasActiveSession()) {
-                pusherManager.registerPusherWithFcmKey(refreshedToken)
-            }
+        if (vectorPreferences.areNotificationEnabledForDevice() && activeSessionHolder.hasActiveSession()) {
+            pusherManager.registerPusherWithFcmKey(refreshedToken)
         }
     }
 
@@ -226,8 +218,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
             } else {
                 if (notifiableEvent is NotifiableMessageEvent) {
                     if (TextUtils.isEmpty(notifiableEvent.senderName)) {
-                        notifiableEvent.senderName = data["sender_display_name"]
-                                                     ?: data["sender"] ?: ""
+                        notifiableEvent.senderName = data["sender_display_name"] ?: data["sender"] ?: ""
                     }
                     if (TextUtils.isEmpty(notifiableEvent.roomName)) {
                         notifiableEvent.roomName = findRoomNameBestEffort(data, session) ?: ""
@@ -272,11 +263,11 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
 
         try {
             return Event(eventId = data["event_id"],
-                         senderId = data["sender"],
-                         roomId = data["room_id"],
-                         type = data.getValue("type"),
+                    senderId = data["sender"],
+                    roomId = data["room_id"],
+                    type = data.getValue("type"),
                     // TODO content = data.getValue("content"),
-                         originServerTs = System.currentTimeMillis())
+                    originServerTs = System.currentTimeMillis())
         } catch (e: Exception) {
             Timber.e(e, "buildEvent fails ")
         }
