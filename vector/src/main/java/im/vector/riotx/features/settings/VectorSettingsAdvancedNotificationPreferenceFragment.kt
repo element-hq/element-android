@@ -165,7 +165,8 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : VectorSettingsBaseF
                     val notificationRingToneName = vectorPreferences.getNotificationRingToneName()
                     if (null != notificationRingToneName) {
                         vectorPreferences.setNotificationRingTone(vectorPreferences.getNotificationRingTone())
-                        findPreference<VectorPreference>(VectorPreferences.SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY)!!.summary = notificationRingToneName
+                        findPreference<VectorPreference>(VectorPreferences.SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY)!!
+                                .summary = notificationRingToneName
                     }
                 }
             }
