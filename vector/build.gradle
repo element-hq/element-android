@@ -216,14 +216,14 @@ android {
 
 dependencies {
 
-    def epoxy_version = "3.7.0"
+    def epoxy_version = '3.8.0'
     def arrow_version = "0.8.2"
-    def coroutines_version = "1.0.1"
-    def markwon_version = '3.0.0'
+    def coroutines_version = "1.1.1"
+    def markwon_version = '3.1.0'
     def big_image_viewer_version = '1.5.6'
-    def glide_version = '4.9.0'
+    def glide_version = '4.10.0'
     def moshi_version = '1.8.0'
-    def daggerVersion = '2.23.1'
+    def daggerVersion = '2.24'
 
     implementation project(":matrix-sdk-android")
     implementation project(":matrix-sdk-android-rx")
@@ -235,7 +235,7 @@ dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.1.0'
     //Do not use beta2 at the moment, as it breaks things
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta2'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta1'
     implementation 'androidx.core:core-ktx:1.1.0'
 
     implementation "org.threeten:threetenbp:1.4.0:no-tzdb"
@@ -251,12 +251,12 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
     // Debug
-    implementation 'com.facebook.stetho:stetho:1.5.0'
+    implementation 'com.facebook.stetho:stetho:1.5.1'
 
     // rx
     implementation 'io.reactivex.rxjava2:rxkotlin:2.3.0'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
-    implementation 'com.jakewharton.rxrelay2:rxrelay:2.1.0'
+    implementation 'com.jakewharton.rxrelay2:rxrelay:2.1.1'
     // RXBinding
     implementation 'com.jakewharton.rxbinding3:rxbinding:3.0.0'
     implementation 'com.jakewharton.rxbinding3:rxbinding-appcompat:3.0.0'
@@ -265,7 +265,7 @@ dependencies {
     implementation("com.airbnb.android:epoxy:$epoxy_version")
     kapt "com.airbnb.android:epoxy-processor:$epoxy_version"
     implementation "com.airbnb.android:epoxy-paging:$epoxy_version"
-    implementation 'com.airbnb.android:mvrx:1.0.1'
+    implementation 'com.airbnb.android:mvrx:1.1.0'
 
     // Work
     implementation "androidx.work:work-runtime-ktx:2.3.0-alpha01"
@@ -292,7 +292,7 @@ dependencies {
     implementation 'org.greenrobot:eventbus:3.1.1'
 
     // Passphrase strength helper
-    implementation 'com.nulab-inc:zxcvbn:1.2.5'
+    implementation 'com.nulab-inc:zxcvbn:1.2.7'
 
     //Alerter
     implementation 'com.tapadoo.android:alerter:4.0.3'
@@ -300,8 +300,8 @@ dependencies {
     implementation 'com.otaliastudios:autocomplete:1.1.0'
 
     // Butterknife
-    implementation 'com.jakewharton:butterknife:10.1.0'
-    kapt 'com.jakewharton:butterknife-compiler:10.1.0'
+    implementation 'com.jakewharton:butterknife:10.2.0'
+    kapt 'com.jakewharton:butterknife-compiler:10.2.0'
 
     // Shake detection
     implementation 'com.squareup:seismic:1.0.2'
@@ -316,7 +316,7 @@ dependencies {
     implementation 'com.danikula:videocache:2.7.1'
 
     // Badge for compatibility
-    implementation 'me.leolin:ShortcutBadger:1.1.2@aar'
+    implementation 'me.leolin:ShortcutBadger:1.1.22@aar'
 
     // File picker
     implementation 'com.github.jaiselrahman:FilePicker:1.2.2'
@@ -324,8 +324,8 @@ dependencies {
     // DI
     implementation "com.google.dagger:dagger:$daggerVersion"
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
-    compileOnly 'com.squareup.inject:assisted-inject-annotations-dagger2:0.4.0'
-    kapt 'com.squareup.inject:assisted-inject-processor-dagger2:0.4.0'
+    compileOnly 'com.squareup.inject:assisted-inject-annotations-dagger2:0.5.0'
+    kapt 'com.squareup.inject:assisted-inject-processor-dagger2:0.5.0'
 
     // gplay flavor only
     // Warning: due to the exclude, Android Studio does not propose to upgrade. Uncomment next line to be proposed to upgrade

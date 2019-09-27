@@ -57,7 +57,7 @@ constructor(trustPinned: Array<TrustManager>, acceptedTlsVersions: List<TlsVersi
         context.init(null, trustPinned, SecureRandom())
         internalSSLSocketFactory = context.socketFactory
         enabledProtocols = Array(acceptedTlsVersions.size) {
-            acceptedTlsVersions[it].javaName()
+            acceptedTlsVersions[it].javaName
         }
     }
 

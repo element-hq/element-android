@@ -94,8 +94,8 @@ dependencies {
     def moshi_version = '1.8.0'
     def lifecycle_version = '2.1.0'
     def coroutines_version = "1.1.1"
-    def markwon_version = '3.0.0'
-    def daggerVersion = '2.23.1'
+    def markwon_version = '3.1.0'
+    def daggerVersion = '2.24'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
@@ -108,10 +108,10 @@ dependencies {
     kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
 
     // Network
-    implementation 'com.squareup.retrofit2:retrofit:2.6.0'
-    implementation 'com.squareup.retrofit2:converter-moshi:2.4.0'
-    implementation 'com.squareup.okhttp3:okhttp:3.14.1'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.6.2'
+    implementation 'com.squareup.retrofit2:converter-moshi:2.6.2'
+    implementation 'com.squareup.okhttp3:okhttp:4.2.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.2.0'
     implementation 'com.novoda:merlin:1.2.0'
     implementation "com.squareup.moshi:moshi-adapters:$moshi_version"
     kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
@@ -135,24 +135,24 @@ dependencies {
     // DI
     implementation "com.google.dagger:dagger:$daggerVersion"
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
-    compileOnly 'com.squareup.inject:assisted-inject-annotations-dagger2:0.4.0'
-    kapt 'com.squareup.inject:assisted-inject-processor-dagger2:0.4.0'
+    compileOnly 'com.squareup.inject:assisted-inject-annotations-dagger2:0.5.0'
+    kapt 'com.squareup.inject:assisted-inject-processor-dagger2:0.5.0'
 
     // Logging
     implementation 'com.jakewharton.timber:timber:4.7.1'
-    implementation 'com.facebook.stetho:stetho-okhttp3:1.5.0'
+    implementation 'com.facebook.stetho:stetho-okhttp3:1.5.1'
 
     // Bus
     implementation 'org.greenrobot:eventbus:3.1.1'
 
-    debugImplementation 'com.airbnb.okreplay:okreplay:1.4.0'
-    releaseImplementation 'com.airbnb.okreplay:noop:1.4.0'
-    androidTestImplementation 'com.airbnb.okreplay:espresso:1.4.0'
+    debugImplementation 'com.airbnb.okreplay:okreplay:1.5.0'
+    releaseImplementation 'com.airbnb.okreplay:noop:1.5.0'
+    androidTestImplementation 'com.airbnb.okreplay:espresso:1.5.0'
 
     testImplementation 'junit:junit:4.12'
-    testImplementation 'org.robolectric:robolectric:4.0.2'
+    testImplementation 'org.robolectric:robolectric:4.3'
     //testImplementation 'org.robolectric:shadows-support-v4:3.0'
-    testImplementation "io.mockk:mockk:1.8.13.kotlin13"
+    testImplementation 'io.mockk:mockk:1.9.3.kotlin12'
     testImplementation 'org.amshove.kluent:kluent-android:1.44'
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
 
@@ -162,7 +162,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     androidTestImplementation 'org.amshove.kluent:kluent-android:1.44'
-    androidTestImplementation "io.mockk:mockk-android:1.8.13.kotlin13"
+    androidTestImplementation 'io.mockk:mockk-android:1.9.3.kotlin12'
     androidTestImplementation "androidx.arch.core:core-testing:$lifecycle_version"
     androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
 
