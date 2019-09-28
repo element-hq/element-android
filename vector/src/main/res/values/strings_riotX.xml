@@ -21,6 +21,8 @@
     <string name="a11y_create_direct_message">Create a new direct conversation</string>
     <string name="a11y_create_room">Create a new room</string>
     <string name="a11y_close_keys_backup_banner">Close keys backup banner</string>
+    <string name="a11y_show_password">Show password</string>
+    <string name="a11y_hide_password">Hide password</string>
 
     <!-- Read receipts list a11y -->
     <string name="two_and_some_others_read">%s, %s and %d others read</string>
