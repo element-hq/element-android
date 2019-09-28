@@ -10,7 +10,7 @@ Improvements:
  - Handle read markers (#84)
 
 Other changes:
- -
+ - Accessibility improvements to read receipts in the room timeline and reactions emoji chooser
 
 Bugfix:
  - Fix issue on upload error in loop (#587)
