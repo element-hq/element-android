@@ -38,6 +38,7 @@ import im.vector.riotx.features.home.room.list.RoomListParams
 import im.vector.riotx.features.home.room.list.UnreadCounterBadgeView
 import im.vector.riotx.features.workers.signout.SignOutViewModel
 import kotlinx.android.synthetic.main.fragment_home_detail.*
+import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -196,6 +197,7 @@ class HomeDetailFragment : VectorBaseFragment(), KeysBackupBanner.Delegate {
     }
 
     override fun invalidate() = withState(viewModel) {
+        Timber.v(it.toString())
         unreadCounterBadgeViews[INDEX_CATCHUP].render(UnreadCounterBadgeView.State(it.notificationCountCatchup, it.notificationHighlightCatchup))
         unreadCounterBadgeViews[INDEX_PEOPLE].render(UnreadCounterBadgeView.State(it.notificationCountPeople, it.notificationHighlightPeople))
         unreadCounterBadgeViews[INDEX_ROOMS].render(UnreadCounterBadgeView.State(it.notificationCountRooms, it.notificationHighlightRooms))

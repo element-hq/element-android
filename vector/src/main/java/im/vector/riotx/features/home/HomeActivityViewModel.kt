@@ -98,7 +98,8 @@ class HomeActivityViewModel @AssistedInject constructor(@Assisted initialState: 
 
     override fun onCleared() {
         super.onCleared()
-
+        selectedGroupStore.clear()
+        homeRoomListStore.clear()
         session.removeListener(this)
     }
 

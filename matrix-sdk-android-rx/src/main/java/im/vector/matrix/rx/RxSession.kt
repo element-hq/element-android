@@ -47,7 +47,7 @@ class RxSession(private val session: Session) {
     }
 
     fun liveUser(userId: String): Observable<Optional<User>> {
-        return session.liveUser(userId).asObservable()
+        return session.liveUser(userId).asObservable().distinctUntilChanged()
     }
 
     fun liveUsers(): Observable<List<User>> {

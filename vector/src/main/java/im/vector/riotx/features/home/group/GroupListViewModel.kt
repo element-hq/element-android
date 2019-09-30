@@ -71,7 +71,11 @@ class GroupListViewModel @AssistedInject constructor(@Assisted initialState: Gro
     private fun observeSelectionState() {
         selectSubscribe(GroupListViewState::selectedGroup) {
             if (it != null) {
-                _openGroupLiveData.postLiveEvent(it)
+                val selectedGroup = selectedGroupStore.get()?.orNull()
+                // We only wan to open group if the updated selectedGroup is a different one.
+                if (selectedGroup?.groupId != it.groupId) {
+                    _openGroupLiveData.postLiveEvent(it)
+                }
                 val optionGroup = Option.fromNullable(it)
                 selectedGroupStore.post(optionGroup)
             }
@@ -114,7 +118,12 @@ class GroupListViewModel @AssistedInject constructor(@Assisted initialState: Gro
                 }
         )
                 .execute { async ->
-                    val newSelectedGroup = selectedGroup ?: async()?.firstOrNull()
+                    val currentSelectedGroupId = selectedGroup?.groupId
+                    val newSelectedGroup = if (currentSelectedGroupId != null) {
+                        async()?.find { it.groupId == currentSelectedGroupId }
+                    } else {
+                        async()?.firstOrNull()
+                    }
                     copy(asyncGroups = async, selectedGroup = newSelectedGroup)
                 }
     }

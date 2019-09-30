@@ -20,19 +20,31 @@ import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 
-open class RxStore<T>(defaultValue: T? = null) {
+open class RxStore<T>(private val defaultValue: T? = null) {
 
-    private val storeSubject: BehaviorRelay<T> = if (defaultValue == null) {
-        BehaviorRelay.create<T>()
-    } else {
-        BehaviorRelay.createDefault(defaultValue)
+    var storeRelay = createRelay()
+
+    fun clear() {
+        storeRelay = createRelay()
+    }
+
+    fun get(): T? {
+        return storeRelay.value
     }
 
     fun observe(): Observable<T> {
-        return storeSubject.hide().observeOn(Schedulers.computation())
+        return storeRelay.hide().observeOn(Schedulers.computation())
     }
 
     fun post(value: T) {
-        storeSubject.accept(value)
+        storeRelay.accept(value)
+    }
+
+    private fun createRelay(): BehaviorRelay<T> {
+        return if (defaultValue == null) {
+            BehaviorRelay.create<T>()
+        } else {
+            BehaviorRelay.createDefault(defaultValue)
+        }
     }
 }
