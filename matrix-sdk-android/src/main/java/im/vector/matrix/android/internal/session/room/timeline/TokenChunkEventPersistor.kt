@@ -100,6 +100,7 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
 
     enum class Result {
         SHOULD_FETCH_MORE,
+        REACHED_END,
         SUCCESS
     }
 
@@ -124,10 +125,8 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
                         prevToken = receivedChunk.end
                     }
 
-                    if (ChunkEntity.find(realm, roomId, nextToken = nextToken) != null || ChunkEntity.find(realm, roomId, prevToken = prevToken) != null) {
-                        Timber.v("Already inserted - SKIP")
-                        return@awaitTransaction
-                    }
+                    val shouldSkip = ChunkEntity.find(realm, roomId, nextToken = nextToken) != null
+                                     || ChunkEntity.find(realm, roomId, prevToken = prevToken) != null
 
                     val prevChunk = ChunkEntity.find(realm, roomId, nextToken = prevToken)
                     val nextChunk = ChunkEntity.find(realm, roomId, prevToken = nextToken)
@@ -146,7 +145,7 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
                     if (receivedChunk.events.isEmpty() && receivedChunk.end == receivedChunk.start) {
                         Timber.v("Reach end of $roomId")
                         currentChunk.isLastBackward = true
-                    } else {
+                    } else if (!shouldSkip) {
                         Timber.v("Add ${receivedChunk.events.size} events in chunk(${currentChunk.nextToken} | ${currentChunk.prevToken}")
                         val eventIds = ArrayList<String>(receivedChunk.events.size)
                         for (event in receivedChunk.events) {
@@ -180,8 +179,12 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
                         currentChunk.updateSenderDataFor(eventIds)
                     }
                 }
-        return if (receivedChunk.events.isEmpty() && receivedChunk.stateEvents.isEmpty() && receivedChunk.start != receivedChunk.end) {
-            Result.SHOULD_FETCH_MORE
+        return if (receivedChunk.events.isEmpty()) {
+            if (receivedChunk.start != receivedChunk.end) {
+                Result.SHOULD_FETCH_MORE
+            } else {
+                Result.REACHED_END
+            }
         } else {
             Result.SUCCESS
         }

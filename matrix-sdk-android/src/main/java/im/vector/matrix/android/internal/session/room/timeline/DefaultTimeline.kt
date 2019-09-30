@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.session.room.timeline
 
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.crypto.CryptoService
+import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.model.ReadReceipt
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.Timeline
@@ -351,7 +352,7 @@ internal class DefaultTimeline(
         updateState(Timeline.Direction.BACKWARDS) {
             it.copy(
                     hasMoreInCache = lastBuiltEvent == null || lastBuiltEvent.displayIndex > lastCacheEvent?.root?.displayIndex ?: Int.MAX_VALUE,
-                    hasReachedEnd = chunkEntity?.isLastBackward ?: false
+                    hasReachedEnd = chunkEntity?.isLastBackward ?: false || lastCacheEvent?.root?.type == EventType.STATE_ROOM_CREATE
             )
         }
     }
@@ -499,9 +500,9 @@ internal class DefaultTimeline(
             return
         }
         val params = PaginationTask.Params(roomId = roomId,
-                from = token,
-                direction = direction.toPaginationDirection(),
-                limit = limit)
+                                           from = token,
+                                           direction = direction.toPaginationDirection(),
+                                           limit = limit)
 
         Timber.v("Should fetch $limit items $direction")
         cancelableBag += paginationTask
@@ -510,13 +511,18 @@ internal class DefaultTimeline(
                     this.constraints = TaskConstraints(connectedToNetwork = true)
                     this.callback = object : MatrixCallback<TokenChunkEventPersistor.Result> {
                         override fun onSuccess(data: TokenChunkEventPersistor.Result) {
-                            if (data == TokenChunkEventPersistor.Result.SUCCESS) {
-                                Timber.v("Success fetching $limit items $direction from pagination request")
-                            } else {
-                                // Database won't be updated, so we force pagination request
-                                BACKGROUND_HANDLER.post {
-                                    executePaginationTask(direction, limit)
+                            when (data) {
+                                TokenChunkEventPersistor.Result.SUCCESS           -> {
+                                    Timber.v("Success fetching $limit items $direction from pagination request")
                                 }
+                                TokenChunkEventPersistor.Result.REACHED_END       -> {
+                                    postSnapshot()
+                                }
+                                TokenChunkEventPersistor.Result.SHOULD_FETCH_MORE ->
+                                    // Database won't be updated, so we force pagination request
+                                    BACKGROUND_HANDLER.post {
+                                        executePaginationTask(direction, limit)
+                                    }
                             }
                         }
 
@@ -572,7 +578,7 @@ internal class DefaultTimeline(
             val timelineEvent = buildTimelineEvent(eventEntity)
 
             if (timelineEvent.isEncrypted()
-                    && timelineEvent.root.mxDecryptionResult == null) {
+                && timelineEvent.root.mxDecryptionResult == null) {
                 timelineEvent.root.eventId?.let { eventDecryptor.requestDecryption(it) }
             }
 
