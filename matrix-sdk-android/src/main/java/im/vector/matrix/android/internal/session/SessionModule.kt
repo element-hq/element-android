@@ -30,7 +30,7 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilitiesService
 import im.vector.matrix.android.api.session.securestorage.SecureStorageService
 import im.vector.matrix.android.internal.database.LiveEntityObserver
-import im.vector.matrix.android.internal.database.RealmKeysUtils
+import im.vector.matrix.android.internal.database.SessionRealmConfigurationFactory
 import im.vector.matrix.android.internal.database.model.SessionRealmModule
 import im.vector.matrix.android.internal.di.*
 import im.vector.matrix.android.internal.network.AccessTokenInterceptor
@@ -54,6 +54,7 @@ internal abstract class SessionModule {
 
     @Module
     companion object {
+
         internal const val DB_ALIAS_PREFIX = "session_db_"
 
         @JvmStatic
@@ -94,18 +95,10 @@ internal abstract class SessionModule {
         @Provides
         @SessionDatabase
         @SessionScope
-        fun providesRealmConfiguration(realmKeysUtils: RealmKeysUtils,
+        fun providesRealmConfiguration(realmConfigurationFactory: SessionRealmConfigurationFactory,
                                        @UserCacheDirectory directory: File,
                                        @UserMd5 userMd5: String): RealmConfiguration {
-            return RealmConfiguration.Builder()
-                    .directory(directory)
-                    .name("disk_store.realm")
-                    .apply {
-                        realmKeysUtils.configureEncryption(this, "$DB_ALIAS_PREFIX$userMd5")
-                    }
-                    .modules(SessionRealmModule())
-                    .deleteRealmIfMigrationNeeded()
-                    .build()
+            return realmConfigurationFactory.create(directory, userMd5)
         }
 
         @JvmStatic
