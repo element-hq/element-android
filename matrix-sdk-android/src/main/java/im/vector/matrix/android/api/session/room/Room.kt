@@ -49,7 +49,7 @@ interface Room :
      * A live [RoomSummary] associated with the room
      * You can observe this summary to get dynamic data from this room.
      */
-    fun liveRoomSummary(): LiveData<RoomSummary>
+    fun getRoomSummaryLive(): LiveData<RoomSummary>
 
     fun roomSummary(): RoomSummary?
 

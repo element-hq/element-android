@@ -38,10 +38,12 @@ internal fun EventAnnotationsSummaryEntity.Companion.whereInRoom(realm: Realm, r
 }
 
 
-internal fun EventAnnotationsSummaryEntity.Companion.create(realm: Realm, eventId: String): EventAnnotationsSummaryEntity {
-    val obj = realm.createObject(EventAnnotationsSummaryEntity::class.java, eventId)
+internal fun EventAnnotationsSummaryEntity.Companion.create(realm: Realm, roomId: String, eventId: String): EventAnnotationsSummaryEntity {
+    val obj = realm.createObject(EventAnnotationsSummaryEntity::class.java, eventId).apply {
+        this.roomId = roomId
+    }
     //Denormalization
-    TimelineEventEntity.where(realm, eventId = eventId).findFirst()?.let {
+    TimelineEventEntity.where(realm, roomId = roomId, eventId = eventId).findFirst()?.let {
         it.annotations = obj
     }
     return obj

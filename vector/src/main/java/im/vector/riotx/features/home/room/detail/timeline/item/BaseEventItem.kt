@@ -24,6 +24,7 @@ import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
 import im.vector.riotx.core.platform.CheckableView
+import im.vector.riotx.core.ui.views.ReadMarkerView
 import im.vector.riotx.core.ui.views.ReadReceiptsView
 import im.vector.riotx.core.utils.DimensionConverter
 
@@ -32,28 +33,32 @@ import im.vector.riotx.core.utils.DimensionConverter
  */
 abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>() {
 
-    var avatarStyle: AvatarStyle = AvatarStyle.SMALL
-
     // To use for instance when opening a permalink with an eventId
     @EpoxyAttribute
     var highlighted: Boolean = false
+    @EpoxyAttribute
+    open var leftGuideline: Int = 0
 
     @EpoxyAttribute
     lateinit var dimensionConverter: DimensionConverter
 
     override fun bind(holder: H) {
         super.bind(holder)
-        //optimize?
-        val px = dimensionConverter.dpToPx(avatarStyle.avatarSizeDP + 8)
-        holder.leftGuideline.setGuidelineBegin(px)
-
+        holder.leftGuideline.setGuidelineBegin(leftGuideline)
         holder.checkableBackground.isChecked = highlighted
     }
+
+    /**
+     * Returns the eventIds associated with the EventItem.
+     * Will generally get only one, but it handles the merging items.
+     */
+    abstract fun getEventIds(): List<String>
 
     abstract class BaseHolder(@IdRes val stubId: Int) : VectorEpoxyHolder() {
         val leftGuideline by bind<Guideline>(R.id.messageStartGuideline)
         val checkableBackground by bind<CheckableView>(R.id.messageSelectedBackground)
         val readReceiptsView by bind<ReadReceiptsView>(R.id.readReceiptsView)
+        val readMarkerView by bind<ReadMarkerView>(R.id.readMarkerView)
 
         override fun bindView(itemView: View) {
             super.bindView(itemView)
@@ -65,13 +70,4 @@ abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>
         }
     }
 
-    companion object {
-
-        enum class AvatarStyle(val avatarSizeDP: Int) {
-            BIG(50),
-            MEDIUM(40),
-            SMALL(30),
-            NONE(0)
-        }
-    }
 }

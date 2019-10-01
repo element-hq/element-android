@@ -59,22 +59,23 @@ internal class DefaultTimelineService @AssistedInject constructor(@Assisted priv
                                cryptoService,
                                timelineEventMapper,
                                settings,
-                               TimelineHiddenReadReceipts(readReceiptsSummaryMapper, roomId, settings)
+                               TimelineHiddenReadReceipts(readReceiptsSummaryMapper, roomId, settings),
+                               TimelineHiddenReadMarker(roomId, settings)
         )
     }
 
     override fun getTimeLineEvent(eventId: String): TimelineEvent? {
         return monarchy
                 .fetchCopyMap({
-                                  TimelineEventEntity.where(it, eventId = eventId).findFirst()
+                                  TimelineEventEntity.where(it, roomId = roomId, eventId = eventId).findFirst()
                               }, { entity, realm ->
                                   timelineEventMapper.map(entity)
                               })
     }
 
-    override fun liveTimeLineEvent(eventId: String): LiveData<TimelineEvent> {
+    override fun getTimeLineEventLive(eventId: String): LiveData<TimelineEvent> {
         val liveData = RealmLiveData(monarchy.realmConfiguration) {
-            TimelineEventEntity.where(it, eventId = eventId)
+            TimelineEventEntity.where(it, roomId = roomId, eventId = eventId)
         }
         return Transformations.map(liveData) { events ->
             events.firstOrNull()?.let { timelineEventMapper.map(it) }

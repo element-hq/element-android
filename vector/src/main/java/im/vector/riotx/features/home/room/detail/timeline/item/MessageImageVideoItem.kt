@@ -44,23 +44,23 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
     override fun bind(holder: Holder) {
         super.bind(holder)
         imageContentRenderer.render(mediaData, ImageContentRenderer.Mode.THUMBNAIL, holder.imageView)
-        if (!informationData.sendState.hasFailed()) {
-            contentUploadStateTrackerBinder.bind(informationData.eventId, mediaData.isLocalFile(), holder.progressLayout)
+        if (!attributes.informationData.sendState.hasFailed()) {
+            contentUploadStateTrackerBinder.bind(attributes.informationData.eventId, mediaData.isLocalFile(), holder.progressLayout)
         } else {
             holder.progressLayout.isVisible = false
         }
         holder.imageView.setOnClickListener(clickListener)
-        holder.imageView.setOnLongClickListener(longClickListener)
+        holder.imageView.setOnLongClickListener(attributes.itemLongClickListener)
         ViewCompat.setTransitionName(holder.imageView, "imagePreview_${id()}")
-        holder.mediaContentView.setOnClickListener(cellClickListener)
-        holder.mediaContentView.setOnLongClickListener(longClickListener)
+        holder.mediaContentView.setOnClickListener(attributes.itemClickListener)
+        holder.mediaContentView.setOnLongClickListener(attributes.itemLongClickListener)
         // The sending state color will be apply to the progress text
         renderSendState(holder.imageView, null, holder.failedToSendIndicator)
         holder.playContentView.visibility = if (playable) View.VISIBLE else View.GONE
     }
 
     override fun unbind(holder: Holder) {
-        contentUploadStateTrackerBinder.unbind(informationData.eventId)
+        contentUploadStateTrackerBinder.unbind(attributes.informationData.eventId)
         super.unbind(holder)
     }
 

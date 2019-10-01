@@ -6,6 +6,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <FrameLayout
+        android:id="@+id/syncProgressBarWrap"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/roomToolbar"
+        tools:visibility="visible">
+
+        <ProgressBar
+            android:id="@+id/syncProgressBar"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="14dp"
+            android:layout_gravity="center"
+            android:background="?riotx_header_panel_background"
+            android:indeterminate="true"
+            android:visibility="gone"
+            tools:visibility="visible" />
+    </FrameLayout>
+
+    <!-- Trick to remove surrounding padding (clip frome wrapping frame) -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/roomToolbar"
         style="@style/VectorToolbarStyle"
@@ -71,6 +94,13 @@
 
     </androidx.appcompat.widget.Toolbar>
 
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/recyclerViewBarrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="top"
+        app:constraint_referenced_ids="composerLayout,notificationAreaView" />
+
     <im.vector.riotx.features.sync.widget.SyncStateView
         android:id="@+id/syncStateView"
         android:layout_width="match_parent"
@@ -90,22 +120,14 @@
         app:layout_constraintTop_toBottomOf="@id/syncStateView"
         tools:listitem="@layout/item_timeline_event_base" />
 
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/recyclerViewBarrier"
-        android:layout_width="wrap_content"
+    <im.vector.riotx.core.ui.views.JumpToReadMarkerView
+        android:id="@+id/jumpToReadMarkerView"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:barrierDirection="top"
-        app:constraint_referenced_ids="composerLayout,notificationAreaView" />
-
-    <im.vector.riotx.features.home.room.detail.composer.TextComposerView
-        android:id="@+id/composerLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?riotx_background"
-        android:transitionName="composer"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/syncStateView" />
 
     <im.vector.riotx.core.ui.views.NotificationAreaView
         android:id="@+id/notificationAreaView"
@@ -113,6 +135,16 @@
         android:layout_height="wrap_content"
         android:paddingTop="16dp"
         android:paddingBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <im.vector.riotx.features.home.room.detail.composer.TextComposerView
+        android:id="@+id/composerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?riotx_background"
+        android:transitionName="composer"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -128,6 +160,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/roomToolbar"
         tools:visibility="visible" />
+
+    <im.vector.riotx.core.platform.BadgeFloatingActionButton
+        android:id="@+id/jumpToBottomView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:src="@drawable/chevron_down"
+        app:backgroundTint="#FFFFFF"
+        app:badgeBackgroundColor="@color/riotx_accent"
+        app:badgeTextColor="@color/white"
+        app:badgeTextPadding="2dp"
+        app:badgeTextSize="10sp"
+        app:layout_constraintBottom_toTopOf="@id/composerLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:maxImageSize="16dp"
+        app:tint="@color/black" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

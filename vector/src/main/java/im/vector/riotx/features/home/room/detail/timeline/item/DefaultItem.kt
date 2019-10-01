@@ -30,10 +30,8 @@ abstract class DefaultItem : BaseEventItem<DefaultItem.Holder>() {
 
     @EpoxyAttribute
     lateinit var informationData: MessageInformationData
-
     @EpoxyAttribute
     lateinit var avatarRenderer: AvatarRenderer
-
     @EpoxyAttribute
     var baseCallback: TimelineEventController.BaseCallback? = null
 
@@ -53,9 +51,12 @@ abstract class DefaultItem : BaseEventItem<DefaultItem.Holder>() {
 
     override fun bind(holder: Holder) {
         holder.messageView.text = text
-
         holder.view.setOnLongClickListener(longClickListener)
         holder.readReceiptsView.render(informationData.readReceipts, avatarRenderer, _readReceiptsClickListener)
+    }
+
+    override fun getEventIds(): List<String> {
+        return listOf(informationData.eventId)
     }
 
     override fun getViewType() = STUB_ID

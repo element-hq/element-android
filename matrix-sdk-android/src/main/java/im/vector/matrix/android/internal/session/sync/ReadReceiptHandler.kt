@@ -38,6 +38,22 @@ private const val TIMESTAMP_KEY = "ts"
 
 internal class ReadReceiptHandler @Inject constructor() {
 
+    companion object {
+
+        fun createContent(userId: String, eventId: String): ReadReceiptContent {
+            return mapOf(
+                    eventId to mapOf(
+                            READ_KEY to mapOf(
+                                    userId to mapOf(
+                                            TIMESTAMP_KEY to System.currentTimeMillis().toDouble()
+                                    )
+                            )
+                    )
+            )
+        }
+
+    }
+
     fun handle(realm: Realm, roomId: String, content: ReadReceiptContent?, isInitialSync: Boolean) {
         if (content == null) {
             return

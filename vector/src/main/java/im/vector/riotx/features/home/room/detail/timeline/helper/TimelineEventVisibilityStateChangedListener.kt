@@ -28,9 +28,10 @@ class TimelineEventVisibilityStateChangedListener(private val callback: Timeline
     override fun onVisibilityStateChanged(visibilityState: Int) {
         if (visibilityState == VisibilityState.VISIBLE) {
             callback?.onEventVisible(event)
+        } else if (visibilityState == VisibilityState.INVISIBLE) {
+            callback?.onEventInvisible(event)
         }
     }
-
 }
 
 
@@ -40,9 +41,9 @@ class MergedTimelineEventVisibilityStateChangedListener(private val callback: Ti
 
     override fun onVisibilityStateChanged(visibilityState: Int) {
         if (visibilityState == VisibilityState.VISIBLE) {
-            events.forEach {
-                callback?.onEventVisible(it)
-            }
+            events.forEach { callback?.onEventVisible(it) }
+        } else if (visibilityState == VisibilityState.INVISIBLE) {
+            events.forEach { callback?.onEventInvisible(it) }
         }
     }
 

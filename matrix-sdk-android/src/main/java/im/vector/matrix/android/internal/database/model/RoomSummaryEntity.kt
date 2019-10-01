@@ -35,6 +35,7 @@ internal open class RoomSummaryEntity(@PrimaryKey var roomId: String = "",
                                       var otherMemberIds: RealmList<String> = RealmList(),
                                       var notificationCount: Int = 0,
                                       var highlightCount: Int = 0,
+                                      var readMarkerId: String? = null,
                                       var hasUnreadMessages: Boolean = false,
                                       var tags: RealmList<RoomTagEntity> = RealmList(),
                                       var userDrafts: UserDraftsEntity? = null

@@ -16,7 +16,6 @@
 
 package im.vector.riotx.features.home.room.detail.timeline.factory
 
-import android.view.View
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
@@ -24,12 +23,11 @@ import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
-import im.vector.riotx.core.utils.DebouncedClickListener
-import im.vector.riotx.core.utils.DimensionConverter
-import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
+import im.vector.riotx.features.home.room.detail.timeline.helper.AvatarSizeProvider
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageTextItem_
-import im.vector.riotx.features.home.room.detail.timeline.util.MessageInformationDataFactory
+import im.vector.riotx.features.home.room.detail.timeline.helper.MessageInformationDataFactory
+import im.vector.riotx.features.home.room.detail.timeline.helper.MessageItemAttributesFactory
 import me.gujun.android.span.span
 import javax.inject.Inject
 
@@ -37,12 +35,13 @@ import javax.inject.Inject
 class EncryptedItemFactory @Inject constructor(private val messageInformationDataFactory: MessageInformationDataFactory,
                                                private val colorProvider: ColorProvider,
                                                private val stringProvider: StringProvider,
-                                               private val avatarRenderer: AvatarRenderer,
-                                               private val dimensionConverter: DimensionConverter) {
+                                               private val avatarSizeProvider: AvatarSizeProvider,
+                                               private val attributesFactory: MessageItemAttributesFactory) {
 
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
                highlight: Boolean,
+               readMarkerVisible: Boolean,
                callback: TimelineEventController.Callback?): VectorEpoxyModel<*>? {
         event.root.eventId ?: return null
 
@@ -58,7 +57,7 @@ class EncryptedItemFactory @Inject constructor(private val messageInformationDat
                         }
 
                 val message = stringProvider.getString(R.string.encrypted_message).takeIf { cryptoError == null }
-                        ?: stringProvider.getString(R.string.notice_crypto_unable_to_decrypt, errorDescription)
+                              ?: stringProvider.getString(R.string.notice_crypto_unable_to_decrypt, errorDescription)
                 val spannableStr = span(message) {
                     textStyle = "italic"
                     textColor = colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
@@ -66,24 +65,14 @@ class EncryptedItemFactory @Inject constructor(private val messageInformationDat
 
                 // TODO This is not correct format for error, change it
 
-                val informationData = messageInformationDataFactory.create(event, nextEvent)
+                val informationData = messageInformationDataFactory.create(event, nextEvent, readMarkerVisible)
+                val attributes = attributesFactory.create(null, informationData, callback)
                 return MessageTextItem_()
-                        .message(spannableStr)
-                        .avatarRenderer(avatarRenderer)
-                        .colorProvider(colorProvider)
-                        .dimensionConverter(dimensionConverter)
-                        .informationData(informationData)
+                        .leftGuideline(avatarSizeProvider.leftGuideline)
                         .highlighted(highlight)
-                        .avatarCallback(callback)
+                        .attributes(attributes)
+                        .message(spannableStr)
                         .urlClickCallback(callback)
-                        .cellClickListener(
-                                DebouncedClickListener(View.OnClickListener { view ->
-                                    callback?.onEncryptedMessageClicked(informationData, view)
-                                }))
-                        .longClickListener { view ->
-                            return@longClickListener callback?.onEventLongClicked(informationData, null, view)
-                                    ?: false
-                        }
             }
             else                                             -> null
         }

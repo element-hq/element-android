@@ -58,10 +58,21 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="4dp"
-        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/readMarkerView"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <im.vector.riotx.core.ui.views.ReadMarkerView
+        android:id="@+id/readMarkerView"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="2dp"
+        android:background="?attr/vctr_unread_marker_line_color"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:visibility="visible" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

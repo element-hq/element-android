@@ -24,8 +24,11 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.room.model.ReadReceipt
 import im.vector.matrix.android.api.session.room.read.ReadService
+import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.internal.database.RealmLiveData
 import im.vector.matrix.android.internal.database.mapper.ReadReceiptsSummaryMapper
+import im.vector.matrix.android.internal.database.model.ReadMarkerEntity
+import im.vector.matrix.android.internal.database.model.ReadReceiptEntity
 import im.vector.matrix.android.internal.database.model.ReadReceiptsSummaryEntity
 import im.vector.matrix.android.internal.database.query.isEventRead
 import im.vector.matrix.android.internal.database.query.where
@@ -76,6 +79,24 @@ internal class DefaultReadService @AssistedInject constructor(@Assisted private 
 
     override fun isEventRead(eventId: String): Boolean {
         return isEventRead(monarchy, userId, roomId, eventId)
+    }
+
+    override fun getReadMarkerLive(): LiveData<Optional<String>> {
+        val liveRealmData = RealmLiveData(monarchy.realmConfiguration) { realm ->
+            ReadMarkerEntity.where(realm, roomId)
+        }
+        return Transformations.map(liveRealmData) { results ->
+            Optional.from(results.firstOrNull()?.eventId)
+        }
+    }
+
+    override fun getMyReadReceiptLive(): LiveData<Optional<String>> {
+        val liveRealmData = RealmLiveData(monarchy.realmConfiguration) { realm ->
+            ReadReceiptEntity.where(realm, roomId = roomId, userId = userId)
+        }
+        return Transformations.map(liveRealmData) { results ->
+            Optional.from(results.firstOrNull()?.eventId)
+        }
     }
 
     override fun getEventReadReceiptsLive(eventId: String): LiveData<List<ReadReceipt>> {

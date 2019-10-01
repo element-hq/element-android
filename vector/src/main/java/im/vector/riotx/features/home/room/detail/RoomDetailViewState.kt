@@ -51,7 +51,8 @@ data class RoomDetailViewState(
         val isEncrypted: Boolean = false,
         val tombstoneEvent: Event? = null,
         val tombstoneEventHandling: Async<String> = Uninitialized,
-        val syncState: SyncState = SyncState.IDLE
+        val syncState: SyncState = SyncState.IDLE,
+        val highlightedEventId: String? = null
 ) : MvRxState {
 
     constructor(args: RoomDetailArgs) : this(roomId = args.roomId, eventId = args.eventId)

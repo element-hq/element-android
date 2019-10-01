@@ -18,11 +18,15 @@ package im.vector.riotx.features.home.room.detail
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import im.vector.riotx.core.platform.DefaultListUpdateCallback
+import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
+import timber.log.Timber
 
-class ScrollOnNewMessageCallback(private val layoutManager: LinearLayoutManager) : DefaultListUpdateCallback {
+class ScrollOnNewMessageCallback(private val layoutManager: LinearLayoutManager,
+                                 private val timelineEventController: TimelineEventController) : DefaultListUpdateCallback {
 
     override fun onInserted(position: Int, count: Int) {
-        if (position == 0 && layoutManager.findFirstVisibleItemPosition() == 0) {
+        Timber.v("On inserted $count count at position: $position")
+        if (position == 0 && layoutManager.findFirstVisibleItemPosition() == 0 && !timelineEventController.isLoadingForward()) {
             layoutManager.scrollToPosition(0)
         }
     }

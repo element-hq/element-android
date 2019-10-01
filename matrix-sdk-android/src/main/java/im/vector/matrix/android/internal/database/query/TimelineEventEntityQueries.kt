@@ -22,13 +22,15 @@ import im.vector.matrix.android.internal.database.model.EventEntity.LinkFilterMo
 import io.realm.*
 import io.realm.kotlin.where
 
-internal fun TimelineEventEntity.Companion.where(realm: Realm, eventId: String): RealmQuery<TimelineEventEntity> {
+internal fun TimelineEventEntity.Companion.where(realm: Realm, roomId: String, eventId: String): RealmQuery<TimelineEventEntity> {
     return realm.where<TimelineEventEntity>()
+            .equalTo(TimelineEventEntityFields.ROOM_ID, roomId)
             .equalTo(TimelineEventEntityFields.EVENT_ID, eventId)
 }
 
-internal fun TimelineEventEntity.Companion.where(realm: Realm, eventIds: List<String>): RealmQuery<TimelineEventEntity> {
+internal fun TimelineEventEntity.Companion.where(realm: Realm, roomId: String, eventIds: List<String>): RealmQuery<TimelineEventEntity> {
     return realm.where<TimelineEventEntity>()
+            .equalTo(TimelineEventEntityFields.ROOM_ID, roomId)
             .`in`(TimelineEventEntityFields.EVENT_ID, eventIds.toTypedArray())
 }
 
@@ -121,6 +123,6 @@ internal fun TimelineEventEntity.Companion.findAllInRoomWithSendStates(realm: Re
     val sendStatesStr = sendStates.map { it.name }.toTypedArray()
     return realm.where<TimelineEventEntity>()
             .equalTo(TimelineEventEntityFields.ROOM_ID, roomId)
-            .`in`(TimelineEventEntityFields.ROOT.SEND_STATE_STR,sendStatesStr)
+            .`in`(TimelineEventEntityFields.ROOT.SEND_STATE_STR, sendStatesStr)
             .findAll()
 }

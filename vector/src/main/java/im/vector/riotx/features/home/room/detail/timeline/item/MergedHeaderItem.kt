@@ -22,29 +22,28 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.children
 import androidx.core.view.isVisible
+import com.airbnb.epoxy.EpoxyAttribute
+import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
+import im.vector.riotx.core.ui.views.ReadMarkerView
 import im.vector.riotx.features.home.AvatarRenderer
+import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 
+@EpoxyModelClass(layout = R.layout.item_timeline_event_base_noinfo)
+abstract class MergedHeaderItem : BaseEventItem<MergedHeaderItem.Holder>() {
 
-data class MergedHeaderItem(private val isCollapsed: Boolean,
-                            private val mergeId: String,
-                            private val mergeData: List<Data>,
-                            private val avatarRenderer: AvatarRenderer,
-                            private val onCollapsedStateChanged: (Boolean) -> Unit
-) : BaseEventItem<MergedHeaderItem.Holder>() {
+    @EpoxyAttribute
+    lateinit var attributes: Attributes
 
-    private val distinctMergeData = mergeData.distinctBy { it.userId }
-
-    init {
-        id(mergeId)
+    private val distinctMergeData by lazy {
+        attributes.mergeData.distinctBy { it.userId }
     }
 
-    override fun getDefaultLayout(): Int {
-        return R.layout.item_timeline_event_base_noinfo
-    }
+    private val _readMarkerCallback = object : ReadMarkerView.Callback {
 
-    override fun createNewHolder(): Holder {
-        return Holder()
+        override fun onReadMarkerLongBound(isDisplayed: Boolean) {
+            attributes.readReceiptsCallback?.onReadMarkerLongBound(attributes.readMarkerId ?: "", isDisplayed)
+        }
     }
 
     override fun getViewType() = STUB_ID
@@ -52,10 +51,10 @@ data class MergedHeaderItem(private val isCollapsed: Boolean,
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.expandView.setOnClickListener {
-            onCollapsedStateChanged(!isCollapsed)
+            attributes.onCollapsedStateChanged(!attributes.isCollapsed)
         }
-        if (isCollapsed) {
-            val summary = holder.expandView.resources.getQuantityString(R.plurals.membership_changes, mergeData.size, mergeData.size)
+        if (attributes.isCollapsed) {
+            val summary = holder.expandView.resources.getQuantityString(R.plurals.membership_changes, attributes.mergeData.size, attributes.mergeData.size)
             holder.summaryView.text = summary
             holder.summaryView.visibility = View.VISIBLE
             holder.avatarListView.visibility = View.VISIBLE
@@ -63,7 +62,7 @@ data class MergedHeaderItem(private val isCollapsed: Boolean,
                 val data = distinctMergeData.getOrNull(index)
                 if (data != null && view is ImageView) {
                     view.visibility = View.VISIBLE
-                    avatarRenderer.render(data.avatarUrl, data.userId, data.memberName, view)
+                    attributes.avatarRenderer.render(data.avatarUrl, data.userId, data.memberName, view)
                 } else {
                     view.visibility = View.GONE
                 }
@@ -76,25 +75,48 @@ data class MergedHeaderItem(private val isCollapsed: Boolean,
             holder.separatorView.visibility = View.VISIBLE
             holder.expandView.setText(R.string.merged_events_collapse)
         }
-
         // No read receipt for this item
         holder.readReceiptsView.isVisible = false
+        holder.readMarkerView.bindView(
+                attributes.readMarkerId,
+                !attributes.readMarkerId.isNullOrEmpty(),
+                attributes.showReadMarker,
+                _readMarkerCallback)
+    }
+
+    override fun unbind(holder: Holder) {
+        holder.readMarkerView.unbind()
+        super.unbind(holder)
+    }
+
+
+    override fun getEventIds(): List<String> {
+        return attributes.mergeData.map { it.eventId }
     }
 
     data class Data(
-            val eventId: Long,
+            val localId: Long,
+            val eventId: String,
             val userId: String,
             val memberName: String,
             val avatarUrl: String?
     )
 
-    class Holder : BaseHolder(STUB_ID) {
+    data class Attributes(
+            val readMarkerId: String?,
+            val isCollapsed: Boolean,
+            val showReadMarker: Boolean,
+            val mergeData: List<Data>,
+            val avatarRenderer: AvatarRenderer,
+            val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null,
+            val onCollapsedStateChanged: (Boolean) -> Unit
+    )
 
+    class Holder : BaseHolder(STUB_ID) {
         val expandView by bind<TextView>(R.id.itemMergedExpandTextView)
         val summaryView by bind<TextView>(R.id.itemMergedSummaryTextView)
         val separatorView by bind<View>(R.id.itemMergedSeparatorView)
         val avatarListView by bind<ViewGroup>(R.id.itemMergedAvatarListView)
-
     }
 
     companion object {

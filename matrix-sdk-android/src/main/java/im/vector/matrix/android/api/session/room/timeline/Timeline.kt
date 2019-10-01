@@ -32,6 +32,8 @@ interface Timeline {
 
     var listener: Listener?
 
+    val isLive: Boolean
+
     /**
      * This should be called before any other method after creating the timeline. It ensures the underlying database is open
      */
@@ -43,11 +45,19 @@ interface Timeline {
     fun dispose()
 
     /**
+     * This method restarts the timeline, erases all built events and pagination states.
+     * It then loads events around the eventId. If eventId is null, it does restart the live timeline.
+     */
+    fun restartWithEventId(eventId: String?)
+
+
+    /**
      * Check if the timeline can be enriched by paginating.
      * @param the direction to check in
      * @return true if timeline can be enriched
      */
     fun hasMoreToLoad(direction: Direction): Boolean
+
 
     /**
      * This is the main method to enrich the timeline with new data.
@@ -56,9 +66,37 @@ interface Timeline {
      */
     fun paginate(direction: Direction, count: Int)
 
-    fun pendingEventCount() : Int
+    /**
+     * Returns the number of sending events
+     */
+    fun pendingEventCount(): Int
 
-    fun failedToDeliverEventCount() : Int
+    /**
+     * Returns the number of failed sending events.
+     */
+    fun failedToDeliverEventCount(): Int
+
+    /**
+     * Returns the index of a built event or null.
+     */
+    fun getIndexOfEvent(eventId: String?): Int?
+
+    /**
+     * Returns the built [TimelineEvent] at index or null
+     */
+    fun getTimelineEventAtIndex(index: Int): TimelineEvent?
+
+    /**
+     * Returns the built [TimelineEvent] with eventId or null
+     */
+    fun getTimelineEventWithId(eventId: String?): TimelineEvent?
+
+    /**
+     * Returns the first displayable events starting from eventId.
+     * It does depend on the provided [TimelineSettings].
+     */
+    fun getFirstDisplayableEventId(eventId: String): String?
+
 
     interface Listener {
         /**

@@ -16,35 +16,42 @@
 
 package im.vector.riotx.features.home.room.detail.timeline.factory
 
+import android.view.View
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
-import im.vector.riotx.core.utils.DimensionConverter
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.home.room.detail.timeline.format.NoticeEventFormatter
+import im.vector.riotx.features.home.room.detail.timeline.helper.AvatarSizeProvider
+import im.vector.riotx.features.home.room.detail.timeline.helper.MessageInformationDataFactory
 import im.vector.riotx.features.home.room.detail.timeline.item.NoticeItem
 import im.vector.riotx.features.home.room.detail.timeline.item.NoticeItem_
-import im.vector.riotx.features.home.room.detail.timeline.util.MessageInformationDataFactory
 import javax.inject.Inject
 
 class NoticeItemFactory @Inject constructor(private val eventFormatter: NoticeEventFormatter,
                                             private val avatarRenderer: AvatarRenderer,
                                             private val informationDataFactory: MessageInformationDataFactory,
-                                            private val dimensionConverter: DimensionConverter) {
+                                            private val avatarSizeProvider: AvatarSizeProvider) {
 
     fun create(event: TimelineEvent,
                highlight: Boolean,
+               readMarkerVisible: Boolean,
                callback: TimelineEventController.Callback?): NoticeItem? {
-        val formattedText = eventFormatter.format(event) ?: return null
-        val informationData = informationDataFactory.create(event, null)
 
+        val formattedText = eventFormatter.format(event) ?: return null
+        val informationData = informationDataFactory.create(event, null, readMarkerVisible)
+        val attributes = NoticeItem.Attributes(
+                avatarRenderer = avatarRenderer,
+                informationData = informationData,
+                noticeText = formattedText,
+                itemLongClickListener = View.OnLongClickListener { view ->
+                    callback?.onEventLongClicked(informationData, null, view) ?: false
+                },
+                readReceiptsCallback = callback
+        )
         return NoticeItem_()
-                .avatarRenderer(avatarRenderer)
-                .dimensionConverter(dimensionConverter)
-                .noticeText(formattedText)
+                .leftGuideline(avatarSizeProvider.leftGuideline)
                 .highlighted(highlight)
-                .informationData(informationData)
-                .baseCallback(callback)
-                .readReceiptsCallback(callback)
+                .attributes(attributes)
     }
 
 

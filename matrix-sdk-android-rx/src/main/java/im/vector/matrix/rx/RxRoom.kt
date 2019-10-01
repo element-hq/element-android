@@ -22,13 +22,14 @@ import im.vector.matrix.android.api.session.room.model.ReadReceipt
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.send.UserDraft
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.matrix.android.api.util.Optional
 import io.reactivex.Observable
 import io.reactivex.Single
 
 class RxRoom(private val room: Room) {
 
     fun liveRoomSummary(): Observable<RoomSummary> {
-        return room.liveRoomSummary().asObservable()
+        return room.getRoomSummaryLive().asObservable()
     }
 
     fun liveRoomMemberIds(): Observable<List<String>> {
@@ -40,7 +41,15 @@ class RxRoom(private val room: Room) {
     }
 
     fun liveTimelineEvent(eventId: String): Observable<TimelineEvent> {
-        return room.liveTimeLineEvent(eventId).asObservable()
+        return room.getTimeLineEventLive(eventId).asObservable()
+    }
+
+    fun liveReadMarker(): Observable<Optional<String>> {
+        return room.getReadMarkerLive().asObservable()
+    }
+
+    fun liveReadReceipt(): Observable<Optional<String>> {
+        return room.getMyReadReceiptLive().asObservable()
     }
 
     fun loadRoomMembersIfNeeded(): Single<Unit> = Single.create {

@@ -22,6 +22,7 @@ import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
+import im.vector.riotx.core.ui.views.ReadMarkerView
 import im.vector.riotx.core.utils.DebouncedClickListener
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
@@ -30,40 +31,47 @@ import im.vector.riotx.features.home.room.detail.timeline.TimelineEventControlle
 abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
 
     @EpoxyAttribute
-    lateinit var avatarRenderer: AvatarRenderer
-
-    @EpoxyAttribute
-    var noticeText: CharSequence? = null
-
-    @EpoxyAttribute
-    lateinit var informationData: MessageInformationData
-
-    @EpoxyAttribute
-    var baseCallback: TimelineEventController.BaseCallback? = null
-
-    private var longClickListener = View.OnLongClickListener {
-        return@OnLongClickListener baseCallback?.onEventLongClicked(informationData, null, it) == true
-    }
-
-    @EpoxyAttribute
-    var readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null
+    lateinit var attributes: Attributes
 
     private val _readReceiptsClickListener = DebouncedClickListener(View.OnClickListener {
-        readReceiptsCallback?.onReadReceiptsClicked(informationData.readReceipts)
+        attributes.readReceiptsCallback?.onReadReceiptsClicked(attributes.informationData.readReceipts)
     })
+
+    private val _readMarkerCallback = object : ReadMarkerView.Callback {
+
+        override fun onReadMarkerLongBound(isDisplayed: Boolean) {
+            attributes.readReceiptsCallback?.onReadMarkerLongBound(attributes.informationData.eventId, isDisplayed)
+        }
+    }
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.noticeTextView.text = noticeText
-        avatarRenderer.render(
-                informationData.avatarUrl,
-                informationData.senderId,
-                informationData.memberName?.toString()
-                        ?: informationData.senderId,
+        holder.noticeTextView.text = attributes.noticeText
+        attributes.avatarRenderer.render(
+                attributes.informationData.avatarUrl,
+                attributes.informationData.senderId,
+                attributes.informationData.memberName?.toString()
+                        ?: attributes.informationData.senderId,
                 holder.avatarImageView
         )
-        holder.view.setOnLongClickListener(longClickListener)
-        holder.readReceiptsView.render(informationData.readReceipts, avatarRenderer, _readReceiptsClickListener)
+        holder.view.setOnLongClickListener(attributes.itemLongClickListener)
+        holder.readReceiptsView.render(attributes.informationData.readReceipts, attributes.avatarRenderer, _readReceiptsClickListener)
+        holder.readMarkerView.bindView(
+                attributes.informationData.eventId,
+                attributes.informationData.hasReadMarker,
+                attributes.informationData.displayReadMarker,
+                _readMarkerCallback
+        )
+    }
+
+    override fun unbind(holder: Holder) {
+        holder.readMarkerView.unbind()
+        super.unbind(holder)
+    }
+
+
+    override fun getEventIds(): List<String> {
+        return listOf(attributes.informationData.eventId)
     }
 
     override fun getViewType() = STUB_ID
@@ -72,6 +80,14 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
         val avatarImageView by bind<ImageView>(R.id.itemNoticeAvatarView)
         val noticeTextView by bind<TextView>(R.id.itemNoticeTextView)
     }
+
+    data class Attributes(
+            val avatarRenderer: AvatarRenderer,
+            val informationData: MessageInformationData,
+            val noticeText: CharSequence,
+            val itemLongClickListener: View.OnLongClickListener? = null,
+            val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null
+    )
 
     companion object {
         private const val STUB_ID = R.id.messageContentNoticeStub

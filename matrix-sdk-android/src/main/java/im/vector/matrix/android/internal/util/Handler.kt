@@ -20,10 +20,10 @@ import android.os.Handler
 import android.os.HandlerThread
 import android.os.Looper
 
-fun createBackgroundHandler(name: String): Handler = Handler(
+internal fun createBackgroundHandler(name: String): Handler = Handler(
         HandlerThread(name).apply { start() }.looper
 )
 
-fun createUIHandler(): Handler = Handler(
+internal fun createUIHandler(): Handler = Handler(
         Looper.getMainLooper()
 )

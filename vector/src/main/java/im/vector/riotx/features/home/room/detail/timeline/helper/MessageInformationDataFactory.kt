@@ -1,20 +1,22 @@
 /*
- * Copyright 2019 New Vector Ltd
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+
+  * Copyright 2019 New Vector Ltd
+  *
+  * Licensed under the Apache License, Version 2.0 (the "License");
+  * you may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at
+  *
+  *     http://www.apache.org/licenses/LICENSE-2.0
+  *
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
+  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
+
  */
 
-package im.vector.riotx.features.home.room.detail.timeline.util
+package im.vector.riotx.features.home.room.detail.timeline.helper
 
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.EventType
@@ -22,7 +24,6 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.hasBeenEdited
 import im.vector.riotx.core.extensions.localDateTime
 import im.vector.riotx.core.resources.ColorProvider
-import im.vector.riotx.core.utils.isSingleEmoji
 import im.vector.riotx.features.home.getColorFromUserId
 import im.vector.riotx.core.date.VectorDateFormatter
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
@@ -38,7 +39,7 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                                                         private val dateFormatter: VectorDateFormatter,
                                                         private val colorProvider: ColorProvider) {
 
-    fun create(event: TimelineEvent, nextEvent: TimelineEvent?): MessageInformationData {
+    fun create(event: TimelineEvent, nextEvent: TimelineEvent?, readMarkerVisible: Boolean): MessageInformationData {
         // Non nullability has been tested before
         val eventId = event.root.eventId!!
 
@@ -61,6 +62,8 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
         val formattedMemberName = span(memberName) {
             textColor = colorProvider.getColor(getColorFromUserId(event.root.senderId ?: ""))
         }
+
+        val displayReadMarker = readMarkerVisible && event.hasReadMarker
 
         return MessageInformationData(
                 eventId = eventId,
@@ -85,7 +88,9 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                         .map {
                             ReadReceiptData(it.user.userId, it.user.avatarUrl, it.user.displayName, it.originServerTs)
                         }
-                        .toList()
+                        .toList(),
+                hasReadMarker = event.hasReadMarker,
+                displayReadMarker = displayReadMarker
         )
     }
 }
