@@ -60,14 +60,9 @@ class JumpToReadMarkerView @JvmOverloads constructor(
     private fun setupView() {
         inflate(context, R.layout.view_jump_to_read_marker, this)
         setBackgroundColor(ContextCompat.getColor(context, R.color.notification_accent_color))
-        jumpToReadMarkerLabelView.movementMethod = BetterLinkMovementMethod.getInstance()
-        isClickable = true
-        jumpToReadMarkerLabelView.text = span(resources.getString(R.string.room_jump_to_first_unread)) {
-            textDecorationLine = "underline"
-            onClick = {
-                readMarkerId?.also {
-                    callback?.onJumpToReadMarkerClicked(it)
-                }
+        jumpToReadMarkerLabelView.setOnClickListener {
+            readMarkerId?.also {
+                callback?.onJumpToReadMarkerClicked(it)
             }
         }
         closeJumpToReadMarkerView.setOnClickListener {
