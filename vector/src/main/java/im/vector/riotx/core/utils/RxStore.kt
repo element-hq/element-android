@@ -22,15 +22,7 @@ import io.reactivex.schedulers.Schedulers
 
 open class RxStore<T>(private val defaultValue: T? = null) {
 
-    var storeRelay = createRelay()
-
-    fun clear() {
-        storeRelay = createRelay()
-    }
-
-    fun get(): T? {
-        return storeRelay.value
-    }
+    private val storeRelay = createRelay()
 
     fun observe(): Observable<T> {
         return storeRelay.hide().observeOn(Schedulers.computation())

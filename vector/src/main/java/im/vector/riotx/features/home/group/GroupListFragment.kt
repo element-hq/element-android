@@ -17,8 +17,10 @@
 package im.vector.riotx.features.home.group
 
 import android.os.Bundle
+import androidx.lifecycle.ViewModelProviders
 import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.riotx.R
@@ -26,7 +28,8 @@ import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.platform.StateView
 import im.vector.riotx.core.platform.VectorBaseFragment
-import im.vector.riotx.features.home.HomeNavigator
+import im.vector.riotx.features.home.HomeActivity
+import im.vector.riotx.features.home.HomeNavigationViewModel
 import kotlinx.android.synthetic.main.fragment_group_list.*
 import javax.inject.Inject
 
@@ -38,10 +41,10 @@ class GroupListFragment : VectorBaseFragment(), GroupSummaryController.Callback 
         }
     }
 
+    private lateinit var navigationViewModel: HomeNavigationViewModel
     private val viewModel: GroupListViewModel by fragmentViewModel()
 
     @Inject lateinit var groupListViewModelFactory: GroupListViewModel.Factory
-    @Inject lateinit var homeNavigator: HomeNavigator
     @Inject lateinit var groupController: GroupSummaryController
 
     override fun getLayoutResId() = R.layout.fragment_group_list
@@ -52,12 +55,13 @@ class GroupListFragment : VectorBaseFragment(), GroupSummaryController.Callback 
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        navigationViewModel = ViewModelProviders.of(requireActivity()).get(HomeNavigationViewModel::class.java)
         groupController.callback = this
         stateView.contentView = groupListEpoxyRecyclerView
         groupListEpoxyRecyclerView.setController(groupController)
         viewModel.subscribe { renderState(it) }
         viewModel.openGroupLiveData.observeEvent(this) {
-            homeNavigator.openSelectedGroup(it)
+            navigationViewModel.goTo(HomeActivity.Navigation.OpenGroup)
         }
     }
 

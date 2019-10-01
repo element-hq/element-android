@@ -32,7 +32,6 @@ import im.vector.riotx.features.configuration.VectorConfiguration
 import im.vector.riotx.features.crypto.keysrequest.KeyRequestHandler
 import im.vector.riotx.features.crypto.verification.IncomingVerificationRequestHandler
 import im.vector.riotx.features.home.AvatarRenderer
-import im.vector.riotx.features.home.HomeNavigator
 import im.vector.riotx.features.home.HomeRoomListObservableStore
 import im.vector.riotx.features.home.group.SelectedGroupStore
 import im.vector.riotx.features.html.EventHtmlRenderer
@@ -80,8 +79,6 @@ interface VectorComponent {
     fun eventHtmlRenderer(): EventHtmlRenderer
 
     fun navigator(): Navigator
-
-    fun homeNavigator(): HomeNavigator
 
     fun homeRoomListObservableStore(): HomeRoomListObservableStore
 

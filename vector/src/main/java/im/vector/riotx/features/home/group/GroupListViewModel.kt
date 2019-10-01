@@ -71,7 +71,7 @@ class GroupListViewModel @AssistedInject constructor(@Assisted initialState: Gro
     private fun observeSelectionState() {
         selectSubscribe(GroupListViewState::selectedGroup) {
             if (it != null) {
-                val selectedGroup = selectedGroupStore.get()?.orNull()
+                val selectedGroup = _openGroupLiveData.value?.peekContent()
                 // We only wan to open group if the updated selectedGroup is a different one.
                 if (selectedGroup?.groupId != it.groupId) {
                     _openGroupLiveData.postLiveEvent(it)

@@ -53,6 +53,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
     // Supported navigation actions for this Activity
     sealed class Navigation {
         object OpenDrawer : Navigation()
+        object OpenGroup : Navigation()
     }
 
     private val homeActivityViewModel: HomeActivityViewModel by viewModel()
@@ -60,7 +61,6 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var homeActivityViewModelFactory: HomeActivityViewModel.Factory
-    @Inject lateinit var homeNavigator: HomeNavigator
     @Inject lateinit var vectorUncaughtExceptionHandler: VectorUncaughtExceptionHandler
     @Inject lateinit var pushManager: PushersManager
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
@@ -79,7 +79,6 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        homeNavigator.activity = this
         FcmHelper.ensureFcmTokenIsRetrieved(this, pushManager)
         navigationViewModel = ViewModelProviders.of(this).get(HomeNavigationViewModel::class.java)
         drawerLayout.addDrawerListener(drawerListener)
@@ -93,6 +92,11 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
         navigationViewModel.navigateTo.observeEvent(this) { navigation ->
             when (navigation) {
                 is Navigation.OpenDrawer -> drawerLayout.openDrawer(GravityCompat.START)
+                is Navigation.OpenGroup  -> {
+                    drawerLayout.closeDrawer(GravityCompat.START)
+                    val homeDetailFragment = HomeDetailFragment.newInstance()
+                    replaceFragment(homeDetailFragment, R.id.homeDetailFragmentContainer)
+                }
             }
         }
 
@@ -134,7 +138,6 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     override fun onDestroy() {
         drawerLayout.removeDrawerListener(drawerListener)
-        homeNavigator.activity = null
         super.onDestroy()
     }
 
