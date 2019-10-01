@@ -41,6 +41,7 @@ import im.vector.riotx.features.home.room.list.widget.FabMenuView
 import im.vector.riotx.features.notifications.NotificationDrawerManager
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_list.*
+import timber.log.Timber
 import javax.inject.Inject
 
 @Parcelize
@@ -180,7 +181,7 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, O
             is Success    -> renderSuccess(state)
             is Fail       -> renderFailure(state.asyncFilteredRooms.error)
         }
-        roomController.setData(state)
+        roomController.update(state)
     }
 
     private fun renderSuccess(state: RoomListViewState) {

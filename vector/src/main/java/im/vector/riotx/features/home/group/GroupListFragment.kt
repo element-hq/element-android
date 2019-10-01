@@ -70,7 +70,7 @@ class GroupListFragment : VectorBaseFragment(), GroupSummaryController.Callback 
             is Incomplete -> stateView.state = StateView.State.Loading
             is Success    -> stateView.state = StateView.State.Content
         }
-        groupController.setData(state)
+        groupController.update(state)
     }
 
     override fun onGroupSelected(groupSummary: GroupSummary) {

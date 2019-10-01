@@ -17,40 +17,54 @@
 package im.vector.riotx.features.home.room.list
 
 import androidx.annotation.StringRes
+import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.home.room.filtered.FilteredRoomFooterItem
 import im.vector.riotx.features.home.room.filtered.filteredRoomFooterItem
+import timber.log.Timber
 import javax.inject.Inject
 
 class RoomSummaryController @Inject constructor(private val stringProvider: StringProvider,
                                                 private val roomSummaryItemFactory: RoomSummaryItemFactory,
                                                 private val roomListNameFilter: RoomListNameFilter
-) : TypedEpoxyController<RoomListViewState>() {
+) : EpoxyController() {
 
     var listener: Listener? = null
 
-    override fun buildModels(viewState: RoomListViewState) {
-        if (viewState.displayMode == RoomListFragment.DisplayMode.FILTERED) {
-            buildFilteredRooms(viewState)
+    private var viewState: RoomListViewState? = null
+
+    init {
+        requestModelBuild()
+    }
+
+    fun update(viewState: RoomListViewState) {
+        this.viewState = viewState
+        requestModelBuild()
+    }
+
+    override fun buildModels() {
+        val nonNullViewState = viewState ?: return
+        if (nonNullViewState.displayMode == RoomListFragment.DisplayMode.FILTERED) {
+            buildFilteredRooms(nonNullViewState)
         } else {
-            val roomSummaries = viewState.asyncFilteredRooms()
+            val roomSummaries = nonNullViewState.asyncFilteredRooms()
             roomSummaries?.forEach { (category, summaries) ->
                 if (summaries.isEmpty()) {
                     return@forEach
                 } else {
-                    val isExpanded = viewState.isCategoryExpanded(category)
-                    buildRoomCategory(viewState, summaries, category.titleRes, viewState.isCategoryExpanded(category)) {
+                    val isExpanded = nonNullViewState.isCategoryExpanded(category)
+                    buildRoomCategory(nonNullViewState, summaries, category.titleRes, nonNullViewState.isCategoryExpanded(category)) {
                         listener?.onToggleRoomCategory(category)
                     }
                     if (isExpanded) {
                         buildRoomModels(summaries,
-                                viewState.joiningRoomsIds,
-                                viewState.joiningErrorRoomsIds,
-                                viewState.rejectingRoomsIds,
-                                viewState.rejectingErrorRoomsIds)
+                                        nonNullViewState.joiningRoomsIds,
+                                        nonNullViewState.joiningErrorRoomsIds,
+                                        nonNullViewState.rejectingRoomsIds,
+                                        nonNullViewState.rejectingErrorRoomsIds)
                     }
                 }
             }
@@ -66,10 +80,10 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
                 .filter { it.membership == Membership.JOIN && roomListNameFilter.test(it) }
 
         buildRoomModels(filteredSummaries,
-                viewState.joiningRoomsIds,
-                viewState.joiningErrorRoomsIds,
-                viewState.rejectingRoomsIds,
-                viewState.rejectingErrorRoomsIds)
+                        viewState.joiningRoomsIds,
+                        viewState.joiningErrorRoomsIds,
+                        viewState.rejectingRoomsIds,
+                        viewState.rejectingErrorRoomsIds)
 
         addFilterFooter(viewState)
     }
@@ -105,7 +119,7 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
             showHighlighted(showHighlighted)
             listener {
                 mutateExpandedState()
-                setData(viewState)
+                update(viewState)
             }
         }
     }
