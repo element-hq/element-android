@@ -13,6 +13,7 @@ Other changes:
 
 Bugfix:
  - Fix issue on upload error in loop (#587)
+ - after login, the icon in the top left is a green 'A' for (all communities) rather than my avatar (#267)
 
 Translations:
  -

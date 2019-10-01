@@ -24,6 +24,7 @@ import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.matrix.android.api.session.user.model.User
+import im.vector.matrix.android.api.util.Optional
 import io.reactivex.Observable
 import io.reactivex.Single
 
@@ -43,6 +44,10 @@ class RxSession(private val session: Session) {
 
     fun livePushers(): Observable<List<Pusher>> {
         return session.livePushers().asObservable()
+    }
+
+    fun liveUser(userId: String): Observable<Optional<User>> {
+        return session.liveUser(userId).asObservable().distinctUntilChanged()
     }
 
     fun liveUsers(): Observable<List<User>> {
