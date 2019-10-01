@@ -39,9 +39,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import javax.inject.Inject
+import javax.inject.Provider
 
 internal class DefaultAuthenticator @Inject constructor(@Unauthenticated
-                                                        private val okHttpClient: OkHttpClient,
+                                                        private val okHttpClient: Provider<OkHttpClient>,
                                                         private val retrofitFactory: RetrofitFactory,
                                                         private val coroutineDispatchers: MatrixCoroutineDispatchers,
                                                         private val sessionParamsStore: SessionParamsStore,
@@ -119,7 +120,7 @@ internal class DefaultAuthenticator @Inject constructor(@Unauthenticated
     }
 
     private fun buildAuthAPI(homeServerConnectionConfig: HomeServerConnectionConfig): AuthAPI {
-        val retrofit = retrofitFactory.create(okHttpClient, homeServerConnectionConfig.homeServerUri.toString())
+        val retrofit = retrofitFactory.create(okHttpClient.get(), homeServerConnectionConfig.homeServerUri.toString())
         return retrofit.create(AuthAPI::class.java)
     }
 
