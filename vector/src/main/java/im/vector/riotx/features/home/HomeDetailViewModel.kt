@@ -25,6 +25,8 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.rx.rx
 import im.vector.riotx.core.di.HasScreenInjector
 import im.vector.riotx.core.platform.VectorViewModel
+import im.vector.riotx.core.resources.StringProvider
+import im.vector.riotx.features.home.group.SelectedGroupStore
 import im.vector.riotx.features.home.room.list.RoomListFragment
 import im.vector.riotx.features.ui.UiStateRepository
 import io.reactivex.schedulers.Schedulers
@@ -36,7 +38,9 @@ import io.reactivex.schedulers.Schedulers
 class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: HomeDetailViewState,
                                                       private val session: Session,
                                                       private val uiStateRepository: UiStateRepository,
-                                                      private val homeRoomListStore: HomeRoomListObservableStore)
+                                                      private val selectedGroupStore: SelectedGroupStore,
+                                                      private val homeRoomListStore: HomeRoomListObservableStore,
+                                                      private val stringProvider: StringProvider)
     : VectorViewModel<HomeDetailViewState>(initialState) {
 
     @AssistedInject.Factory
@@ -62,6 +66,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
 
     init {
         observeSyncState()
+        observeSelectedGroupStore()
         observeRoomSummaries()
     }
 
@@ -88,42 +93,48 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                 .disposeOnClear()
     }
 
+    private fun observeSelectedGroupStore() {
+        selectedGroupStore
+                .observe()
+                .subscribe {
+                    setState {
+                        copy(groupSummary = it)
+                    }
+                }
+                .disposeOnClear()
+    }
+
     private fun observeRoomSummaries() {
         homeRoomListStore
                 .observe()
                 .observeOn(Schedulers.computation())
-                .subscribe { list ->
-                    list.let { summaries ->
-                        val peopleNotifications = summaries
-                                .filter { it.isDirect }
-                                .map { it.notificationCount }
-                                .takeIf { it.isNotEmpty() }
-                                ?.sumBy { i -> i }
-                                ?: 0
-                        val peopleHasHighlight = summaries
-                                .filter { it.isDirect }
-                                .any { it.highlightCount > 0 }
+                .map { it.asSequence() }
+                .subscribe { summaries ->
+                    val peopleNotifications = summaries
+                            .filter { it.isDirect }
+                            .map { it.notificationCount }
+                            .sumBy { i -> i }
+                    val peopleHasHighlight = summaries
+                            .filter { it.isDirect }
+                            .any { it.highlightCount > 0 }
 
-                        val roomsNotifications = summaries
-                                .filter { !it.isDirect }
-                                .map { it.notificationCount }
-                                .takeIf { it.isNotEmpty() }
-                                ?.sumBy { i -> i }
-                                ?: 0
-                        val roomsHasHighlight = summaries
-                                .filter { !it.isDirect }
-                                .any { it.highlightCount > 0 }
+                    val roomsNotifications = summaries
+                            .filter { !it.isDirect }
+                            .map { it.notificationCount }
+                            .sumBy { i -> i }
+                    val roomsHasHighlight = summaries
+                            .filter { !it.isDirect }
+                            .any { it.highlightCount > 0 }
 
-                        setState {
-                            copy(
-                                    notificationCountCatchup = peopleNotifications + roomsNotifications,
-                                    notificationHighlightCatchup = peopleHasHighlight || roomsHasHighlight,
-                                    notificationCountPeople = peopleNotifications,
-                                    notificationHighlightPeople = peopleHasHighlight,
-                                    notificationCountRooms = roomsNotifications,
-                                    notificationHighlightRooms = roomsHasHighlight
-                            )
-                        }
+                    setState {
+                        copy(
+                                notificationCountCatchup = peopleNotifications + roomsNotifications,
+                                notificationHighlightCatchup = peopleHasHighlight || roomsHasHighlight,
+                                notificationCountPeople = peopleNotifications,
+                                notificationHighlightPeople = peopleHasHighlight,
+                                notificationCountRooms = roomsNotifications,
+                                notificationHighlightRooms = roomsHasHighlight
+                        )
                     }
                 }
                 .disposeOnClear()

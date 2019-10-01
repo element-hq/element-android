@@ -38,3 +38,5 @@ data class Optional<T : Any> constructor(private val value: T?) {
     }
 
 }
+
+fun <T : Any> T?.toOptional() = Optional(this)

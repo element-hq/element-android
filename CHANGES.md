@@ -16,6 +16,7 @@ Bugfix:
  - Fix issue on upload error in loop (#587)
  - Fix opening a permalink: the targeted event is displayed twice (#556)
  - Fix opening a permalink paginates all the history up to the last event (#282)
+ - after login, the icon in the top left is a green 'A' for (all communities) rather than my avatar (#267)
 
 Translations:
  -
