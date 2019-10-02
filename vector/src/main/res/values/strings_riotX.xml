@@ -23,6 +23,7 @@
     <string name="a11y_close_keys_backup_banner">Close keys backup banner</string>
     <string name="a11y_show_password">Show password</string>
     <string name="a11y_hide_password">Hide password</string>
+    <string name="a11y_jump_to_bottom">Jump to bottom</string>
 
     <!-- Read receipts list a11y -->
     <string name="two_and_some_others_read">%s, %s and %d others read</string>
