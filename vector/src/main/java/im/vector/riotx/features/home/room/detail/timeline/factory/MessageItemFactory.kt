@@ -249,6 +249,7 @@ class MessageItemFactory @Inject constructor(
                                      callback: TimelineEventController.Callback?,
                                      attributes: AbsMessageItem.Attributes): MessageTextItem? {
 
+        val isFormatted = messageContent.formattedBody.isNullOrBlank().not()
         val bodyToUse = messageContent.formattedBody?.let {
             htmlRenderer.get().render(it.trim())
         } ?: messageContent.body
@@ -264,6 +265,7 @@ class MessageItemFactory @Inject constructor(
                         message(linkifiedBody)
                     }
                 }
+                .searchForPills(isFormatted)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .attributes(attributes)
                 .highlighted(highlight)
@@ -318,6 +320,7 @@ class MessageItemFactory @Inject constructor(
             linkifyBody(formattedBody, callback)
         }
         return MessageTextItem_()
+                .searchForPills(false)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .attributes(attributes)
                 .message(message)
@@ -344,6 +347,7 @@ class MessageItemFactory @Inject constructor(
                         message(message)
                     }
                 }
+                .searchForPills(false)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .attributes(attributes)
                 .highlighted(highlight)
