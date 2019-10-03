@@ -25,7 +25,7 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.room.model.ReadReceipt
 import im.vector.matrix.android.api.session.room.read.ReadService
 import im.vector.matrix.android.api.util.Optional
-import im.vector.matrix.android.internal.database.RealmLiveData
+import im.vector.matrix.android.api.util.toOptional
 import im.vector.matrix.android.internal.database.mapper.ReadReceiptsSummaryMapper
 import im.vector.matrix.android.internal.database.model.ReadMarkerEntity
 import im.vector.matrix.android.internal.database.model.ReadReceiptEntity
@@ -82,33 +82,33 @@ internal class DefaultReadService @AssistedInject constructor(@Assisted private 
     }
 
     override fun getReadMarkerLive(): LiveData<Optional<String>> {
-        val liveRealmData = RealmLiveData(monarchy.realmConfiguration) { realm ->
-            ReadMarkerEntity.where(realm, roomId)
-        }
-        return Transformations.map(liveRealmData) { results ->
-            Optional.from(results.firstOrNull()?.eventId)
+        val liveRealmData = monarchy.findAllMappedWithChanges(
+                { ReadMarkerEntity.where(it, roomId) },
+                { it.eventId }
+        )
+        return Transformations.map(liveRealmData) {
+            it.firstOrNull().toOptional()
         }
     }
 
     override fun getMyReadReceiptLive(): LiveData<Optional<String>> {
-        val liveRealmData = RealmLiveData(monarchy.realmConfiguration) { realm ->
-            ReadReceiptEntity.where(realm, roomId = roomId, userId = userId)
-        }
-        return Transformations.map(liveRealmData) { results ->
-            Optional.from(results.firstOrNull()?.eventId)
+        val liveRealmData = monarchy.findAllMappedWithChanges(
+                { ReadReceiptEntity.where(it, roomId = roomId, userId = userId) },
+                { it.eventId }
+        )
+        return Transformations.map(liveRealmData) {
+            it.firstOrNull().toOptional()
         }
     }
 
     override fun getEventReadReceiptsLive(eventId: String): LiveData<List<ReadReceipt>> {
-        val liveEntity = RealmLiveData(monarchy.realmConfiguration) { realm ->
-            ReadReceiptsSummaryEntity.where(realm, eventId)
-        }
-        return Transformations.map(liveEntity) { realmResults ->
-            realmResults.firstOrNull()?.let {
-                readReceiptsSummaryMapper.map(it)
-            }?.sortedByDescending {
-                it.originServerTs
-            } ?: emptyList()
+
+        val liveRealmData = monarchy.findAllMappedWithChanges(
+                { ReadReceiptsSummaryEntity.where(it, eventId) },
+                { readReceiptsSummaryMapper.map(it) }
+        )
+        return Transformations.map(liveRealmData) {
+            it.firstOrNull() ?: emptyList()
         }
     }
 }

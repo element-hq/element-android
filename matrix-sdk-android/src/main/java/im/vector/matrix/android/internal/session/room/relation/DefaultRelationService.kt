@@ -30,7 +30,8 @@ import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.model.relation.RelationService
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.util.Cancelable
-import im.vector.matrix.android.internal.database.RealmLiveData
+import im.vector.matrix.android.api.util.Optional
+import im.vector.matrix.android.api.util.toOptional
 import im.vector.matrix.android.internal.database.helper.addSendingEvent
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryEntity
@@ -210,13 +211,13 @@ internal class DefaultRelationService @AssistedInject constructor(@Assisted priv
         return TimelineSendEventWorkCommon.createWork<SendEventWorker>(sendWorkData, startChain)
     }
 
-    override fun getEventSummaryLive(eventId: String): LiveData<EventAnnotationsSummary> {
-        val liveEntity = RealmLiveData(monarchy.realmConfiguration) { realm ->
-            EventAnnotationsSummaryEntity.where(realm, eventId)
-        }
-        return Transformations.map(liveEntity) { realmResults ->
-            realmResults.firstOrNull()?.asDomain()
-                    ?: EventAnnotationsSummary(eventId, emptyList(), null)
+    override fun getEventSummaryLive(eventId: String): LiveData<Optional<EventAnnotationsSummary>> {
+        val liveData = monarchy.findAllMappedWithChanges(
+                { EventAnnotationsSummaryEntity.where(it, eventId)},
+                { it.asDomain() }
+        )
+        return Transformations.map(liveData) { results ->
+            results.firstOrNull().toOptional()
         }
     }
 

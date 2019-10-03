@@ -31,6 +31,10 @@ data class Optional<T : Any> constructor(private val value: T?) {
         return value ?: fn()
     }
 
+    fun hasValue(): Boolean{
+        return value != null
+    }
+
     companion object {
         fun <T : Any> from(value: T?): Optional<T> {
             return Optional(value)

@@ -24,7 +24,6 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.BuildConfig
 import im.vector.matrix.android.api.session.room.send.DraftService
 import im.vector.matrix.android.api.session.room.send.UserDraft
-import im.vector.matrix.android.internal.database.RealmLiveData
 import im.vector.matrix.android.internal.database.mapper.DraftMapper
 import im.vector.matrix.android.internal.database.model.DraftEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
@@ -51,12 +50,13 @@ internal class DefaultDraftService @AssistedInject constructor(@Assisted private
 
         monarchy.writeAsync { realm ->
 
-            val roomSummaryEntity = RoomSummaryEntity.where(realm, roomId).findFirst() ?: realm.createObject(roomId)
+            val roomSummaryEntity = RoomSummaryEntity.where(realm, roomId).findFirst()
+                                    ?: realm.createObject(roomId)
 
             val userDraftsEntity = roomSummaryEntity.userDrafts
-                    ?: realm.createObject<UserDraftsEntity>().also {
-                        roomSummaryEntity.userDrafts = it
-                    }
+                                   ?: realm.createObject<UserDraftsEntity>().also {
+                                       roomSummaryEntity.userDrafts = it
+                                   }
 
             userDraftsEntity.let { userDraftEntity ->
                 // Save only valid draft
@@ -150,16 +150,16 @@ internal class DefaultDraftService @AssistedInject constructor(@Assisted private
     }
 
     override fun getDraftsLive(): LiveData<List<UserDraft>> {
-        val liveData = RealmLiveData(monarchy.realmConfiguration) {
-            UserDraftsEntity.where(it, roomId)
-        }
-
-        return Transformations.map(liveData) { userDraftsEntities ->
-            userDraftsEntities.firstOrNull()?.let { userDraftEntity ->
-                userDraftEntity.userDrafts.map { draftEntity ->
-                    DraftMapper.map(draftEntity)
+        val liveData = monarchy.findAllMappedWithChanges(
+                { UserDraftsEntity.where(it, roomId) },
+                {
+                    it.userDrafts.map { draft ->
+                        DraftMapper.map(draft)
+                    }
                 }
-            } ?: emptyList()
+        )
+        return Transformations.map(liveData) {
+            it.firstOrNull() ?: emptyList()
         }
     }
 }

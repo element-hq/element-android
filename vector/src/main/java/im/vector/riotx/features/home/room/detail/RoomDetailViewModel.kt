@@ -50,6 +50,7 @@ import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
 import im.vector.matrix.rx.rx
+import im.vector.matrix.rx.unwrap
 import im.vector.riotx.BuildConfig
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.postLiveEvent
@@ -719,6 +720,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
 
     private fun observeRoomSummary() {
         room.rx().liveRoomSummary()
+                .unwrap()
                 .execute { async ->
                     copy(
                             asyncRoomSummary = async,

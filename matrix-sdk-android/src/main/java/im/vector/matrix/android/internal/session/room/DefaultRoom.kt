@@ -29,7 +29,8 @@ import im.vector.matrix.android.api.session.room.send.DraftService
 import im.vector.matrix.android.api.session.room.send.SendService
 import im.vector.matrix.android.api.session.room.state.StateService
 import im.vector.matrix.android.api.session.room.timeline.TimelineService
-import im.vector.matrix.android.internal.database.RealmLiveData
+import im.vector.matrix.android.api.util.Optional
+import im.vector.matrix.android.api.util.toOptional
 import im.vector.matrix.android.internal.database.mapper.RoomSummaryMapper
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
@@ -56,19 +57,13 @@ internal class DefaultRoom @Inject constructor(override val roomId: String,
     RelationService by relationService,
     MembershipService by roomMembersService {
 
-    override fun getRoomSummaryLive(): LiveData<RoomSummary> {
-        val liveRealmData = RealmLiveData<RoomSummaryEntity>(monarchy.realmConfiguration) { realm ->
-            RoomSummaryEntity.where(realm, roomId).isNotEmpty(RoomSummaryEntityFields.DISPLAY_NAME)
-        }
-        return Transformations.map(liveRealmData) { results ->
-            val roomSummaries = results.map { roomSummaryMapper.map(it) }
-
-            if (roomSummaries.isEmpty()) {
-                // Create a dummy RoomSummary to avoid Crash during Sign Out or clear cache
-                RoomSummary(roomId)
-            } else {
-                roomSummaries.first()
-            }
+    override fun getRoomSummaryLive(): LiveData<Optional<RoomSummary>> {
+        val liveData = monarchy.findAllMappedWithChanges(
+                { realm -> RoomSummaryEntity.where(realm, roomId).isNotEmpty(RoomSummaryEntityFields.DISPLAY_NAME) },
+                { roomSummaryMapper.map(it) }
+        )
+        return Transformations.map(liveData) { results ->
+            results.firstOrNull().toOptional()
         }
     }
 

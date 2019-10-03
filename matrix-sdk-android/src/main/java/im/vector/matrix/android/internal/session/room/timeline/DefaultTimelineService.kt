@@ -26,7 +26,8 @@ import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.TimelineService
 import im.vector.matrix.android.api.session.room.timeline.TimelineSettings
-import im.vector.matrix.android.internal.database.RealmLiveData
+import im.vector.matrix.android.api.util.Optional
+import im.vector.matrix.android.api.util.toOptional
 import im.vector.matrix.android.internal.database.mapper.ReadReceiptsSummaryMapper
 import im.vector.matrix.android.internal.database.mapper.TimelineEventMapper
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
@@ -73,12 +74,13 @@ internal class DefaultTimelineService @AssistedInject constructor(@Assisted priv
                               })
     }
 
-    override fun getTimeLineEventLive(eventId: String): LiveData<TimelineEvent> {
-        val liveData = RealmLiveData(monarchy.realmConfiguration) {
-            TimelineEventEntity.where(it, roomId = roomId, eventId = eventId)
-        }
+    override fun getTimeLineEventLive(eventId: String): LiveData<Optional<TimelineEvent>> {
+        val liveData = monarchy.findAllMappedWithChanges(
+                { TimelineEventEntity.where(it, roomId = roomId, eventId = eventId) },
+                { timelineEventMapper.map(it) }
+        )
         return Transformations.map(liveData) { events ->
-            events.firstOrNull()?.let { timelineEventMapper.map(it) }
+            events.firstOrNull().toOptional()
         }
     }
 
