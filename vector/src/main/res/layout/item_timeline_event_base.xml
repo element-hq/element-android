@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -10,8 +11,8 @@
         android:id="@+id/messageSelectedBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
         android:layout_alignBottom="@+id/readMarkerView"
+        android:layout_alignParentTop="true"
         android:background="?riotx_highlighted_message_background" />
 
     <ImageView
@@ -45,8 +46,8 @@
         android:id="@+id/messageTimeView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
         android:layout_alignBaseline="@+id/messageMemberNameView"
+        android:layout_alignParentEnd="true"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
@@ -59,66 +60,65 @@
         android:id="@+id/messageStartGuideline"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        tools:layout_marginStart="52dp"
-        android:orientation="vertical" />
+        android:orientation="vertical"
+        tools:layout_marginStart="52dp" />
 
     <FrameLayout
         android:id="@+id/viewStubContainer"
-        android:addStatesFromChildren="true"
         android:layout_width="match_parent"
-        android:layout_toEndOf="@id/messageStartGuideline"
+        android:layout_height="wrap_content"
         android:layout_below="@id/messageMemberNameView"
-        android:layout_height="wrap_content">
+        android:layout_toEndOf="@id/messageStartGuideline"
+        android:addStatesFromChildren="true">
 
-    <ViewStub
-        android:id="@+id/messageContentTextStub"
-        android:layout_height="wrap_content"
-        style="@style/TimelineContentStubBaseParams"
-        android:inflatedId="@id/messageTextView"
-        android:layout="@layout/item_timeline_event_text_message_stub"
-        tools:visibility="visible" />
+        <ViewStub
+            android:id="@+id/messageContentTextStub"
+            style="@style/TimelineContentStubBaseParams"
+            android:layout_height="wrap_content"
+            android:inflatedId="@id/messageTextView"
+            android:layout="@layout/item_timeline_event_text_message_stub"
+            tools:visibility="visible" />
 
-    <ViewStub
-        android:id="@+id/messageContentMediaStub"
-        android:layout_height="wrap_content"
-        style="@style/TimelineContentStubBaseParams"
-        android:inflatedId="@+id/messageContentMedia"
-        android:layout="@layout/item_timeline_event_media_message_stub" />
+        <ViewStub
+            android:id="@+id/messageContentMediaStub"
+            style="@style/TimelineContentStubBaseParams"
+            android:layout_height="wrap_content"
+            android:inflatedId="@+id/messageContentMedia"
+            android:layout="@layout/item_timeline_event_media_message_stub" />
 
-    <ViewStub
-        android:id="@+id/messageContentFileStub"
-        android:layout_height="wrap_content"
-        style="@style/TimelineContentStubBaseParams"
-        android:layout="@layout/item_timeline_event_file_stub" />
+        <ViewStub
+            android:id="@+id/messageContentFileStub"
+            style="@style/TimelineContentStubBaseParams"
+            android:layout_height="wrap_content"
+            android:layout="@layout/item_timeline_event_file_stub" />
 
-    <ViewStub
-        android:id="@+id/messageContentRedactedStub"
-        style="@style/TimelineContentStubBaseParams"
-        android:layout_height="20dp"
-        android:layout_marginEnd="56dp"
-        android:layout="@layout/item_timeline_event_redacted_stub" />
+        <ViewStub
+            android:id="@+id/messageContentRedactedStub"
+            style="@style/TimelineContentStubBaseParams"
+            android:layout_height="20dp"
+            android:layout_marginEnd="56dp"
+            android:layout="@layout/item_timeline_event_redacted_stub" />
 
     </FrameLayout>
 
     <LinearLayout
         android:id="@+id/informationBottom"
         android:layout_width="match_parent"
+        android:addStatesFromChildren="true"
         android:layout_height="wrap_content"
         android:layout_below="@+id/viewStubContainer"
         android:layout_toEndOf="@+id/messageStartGuideline"
         android:orientation="vertical">
 
-        <!-- TODO: For now we show 8 reactions maximum, this will need rework when needed-->
-
-        <ViewStub
-            android:id="@+id/messageBottomInfo"
+        <com.google.android.flexbox.FlexboxLayout
+            android:id="@+id/reactionsContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:layout_marginBottom="4dp"
-            android:inflatedId="@+id/messageBottomInfo"
-            android:layout="@layout/item_timeline_event_bottom_reactions_stub"
-            android:visibility="gone"
-            tools:visibility="visible"/>
+            app:dividerDrawable="@drawable/reaction_divider"
+            app:flexWrap="wrap"
+            app:showDivider="middle" />
 
         <im.vector.riotx.core.ui.views.ReadReceiptsView
             android:id="@+id/readReceiptsView"
@@ -133,8 +133,8 @@
     <im.vector.riotx.core.ui.views.ReadMarkerView
         android:id="@+id/readMarkerView"
         android:layout_width="match_parent"
-        android:layout_below="@+id/informationBottom"
         android:layout_height="2dp"
+        android:layout_below="@+id/informationBottom"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="2dp"
