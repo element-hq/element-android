@@ -78,7 +78,8 @@ class ReadReceiptsView @JvmOverloads constructor(
                 1 -> setContentDescription(context.getString(R.string.one_user_read, displayNames.get(0)))
                 2 -> setContentDescription(context.getString(R.string.two_users_read, displayNames.get(0), displayNames.get(1)))
                 3 -> setContentDescription(context.getString(R.string.three_users_read, displayNames.get(0), displayNames.get(1), displayNames.get(2)))
-                else -> setContentDescription(context.getString(R.string.two_and_some_others_read, displayNames.get(0), displayNames.get(1), (readReceipts.size -2)))
+                else -> setContentDescription(context.getString(R.string.two_and_some_others_read,
+                    displayNames.get(0), displayNames.get(1), (readReceipts.size -2)))
             }
         } else {
             isVisible = false
