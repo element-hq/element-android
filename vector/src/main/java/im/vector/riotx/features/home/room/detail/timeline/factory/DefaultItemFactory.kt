@@ -23,11 +23,27 @@ import im.vector.riotx.features.home.room.detail.timeline.TimelineEventControlle
 import im.vector.riotx.features.home.room.detail.timeline.helper.MessageInformationDataFactory
 import im.vector.riotx.features.home.room.detail.timeline.item.DefaultItem
 import im.vector.riotx.features.home.room.detail.timeline.item.DefaultItem_
+import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
 import javax.inject.Inject
 
 class DefaultItemFactory @Inject constructor(private val avatarSizeProvider: AvatarSizeProvider,
                                              private val avatarRenderer: AvatarRenderer,
                                              private val informationDataFactory: MessageInformationDataFactory) {
+
+    fun create(text: String,
+               informationData: MessageInformationData,
+               highlight: Boolean,
+               callback: TimelineEventController.Callback?): DefaultItem? {
+
+        return DefaultItem_()
+                .leftGuideline(avatarSizeProvider.leftGuideline)
+                .highlighted(highlight)
+                .text(text)
+                .avatarRenderer(avatarRenderer)
+                .informationData(informationData)
+                .baseCallback(callback)
+                .readReceiptsCallback(callback)
+    }
 
     fun create(event: TimelineEvent,
                highlight: Boolean,
@@ -39,17 +55,8 @@ class DefaultItemFactory @Inject constructor(private val avatarSizeProvider: Ava
         } else {
             "an exception occurred when rendering the event ${event.root.eventId}"
         }
-
         val informationData = informationDataFactory.create(event, null, readMarkerVisible)
-
-        return DefaultItem_()
-                .leftGuideline(avatarSizeProvider.leftGuideline)
-                .highlighted(highlight)
-                .text(text)
-                .avatarRenderer(avatarRenderer)
-                .informationData(informationData)
-                .baseCallback(callback)
-                .readReceiptsCallback(callback)
+        return create(text, informationData, highlight, callback)
     }
 
 }

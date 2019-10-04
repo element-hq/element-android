@@ -176,8 +176,8 @@ internal class DefaultTimeline(
     override fun start() {
         if (isStarted.compareAndSet(false, true)) {
             Timber.v("Start timeline for roomId: $roomId and eventId: $initialEventId")
-            eventDecryptor.start()
             BACKGROUND_HANDLER.post {
+                eventDecryptor.start()
                 val realm = Realm.getInstance(realmConfiguration)
                 backgroundRealm.set(realm)
                 clearUnlinkedEvents(realm)
@@ -212,7 +212,6 @@ internal class DefaultTimeline(
             isReady.set(false)
             Timber.v("Dispose timeline for roomId: $roomId and eventId: $initialEventId")
             cancelableBag.cancel()
-            BACKGROUND_HANDLER.removeCallbacksAndMessages(null)
             BACKGROUND_HANDLER.post {
                 roomEntity?.sendingTimelineEvents?.removeAllChangeListeners()
                 eventRelations.removeAllChangeListeners()
@@ -225,8 +224,8 @@ internal class DefaultTimeline(
                 backgroundRealm.getAndSet(null).also {
                     it.close()
                 }
+                eventDecryptor.destroy()
             }
-            eventDecryptor.destroy()
         }
     }
 
