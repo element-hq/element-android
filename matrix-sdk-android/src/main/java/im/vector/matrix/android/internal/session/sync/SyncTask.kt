@@ -77,7 +77,7 @@ internal class DefaultSyncTask @Inject constructor(private val syncAPI: SyncAPI,
             }
             throw throwable
         }
-        syncResponseHandler.handleResponse(syncResponse, token, false)
+        syncResponseHandler.handleResponse(syncResponse, token)
         syncTokenStore.saveToken(syncResponse.nextBatch)
         if (isInitialSync) {
             initialSyncProgressService.endAll()

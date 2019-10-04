@@ -51,6 +51,7 @@ import im.vector.matrix.android.internal.session.sync.model.RoomsSyncResponse
 import im.vector.matrix.android.internal.session.user.UserEntityFactory
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
+import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.Realm
 import io.realm.kotlin.createObject
 import timber.log.Timber
@@ -73,13 +74,12 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
         data class LEFT(val data: Map<String, RoomSync>) : HandlingStrategy()
     }
 
-    fun handle(roomsSyncResponse: RoomsSyncResponse, isInitialSync: Boolean, reporter: DefaultInitialSyncProgressService? = null) {
-        monarchy.runTransactionSync { realm ->
+    suspend fun handle(roomsSyncResponse: RoomsSyncResponse, isInitialSync: Boolean, reporter: DefaultInitialSyncProgressService? = null) {
+        monarchy.awaitTransaction { realm ->
             handleRoomSync(realm, HandlingStrategy.JOINED(roomsSyncResponse.join), isInitialSync, reporter)
             handleRoomSync(realm, HandlingStrategy.INVITED(roomsSyncResponse.invite), isInitialSync, reporter)
             handleRoomSync(realm, HandlingStrategy.LEFT(roomsSyncResponse.leave), isInitialSync, reporter)
         }
-
         //handle event for bing rule checks
         checkPushRules(roomsSyncResponse)
 
@@ -125,6 +125,7 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
                                  roomId: String,
                                  roomSync: RoomSync,
                                  isInitialSync: Boolean): RoomEntity {
+
 
         Timber.v("Handle join sync for room $roomId")
 
