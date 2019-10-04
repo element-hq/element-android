@@ -26,10 +26,11 @@ import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyShareRequest
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
 import im.vector.matrix.android.internal.session.SessionScope
+import im.vector.matrix.android.internal.task.CoroutineSequencer
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.TaskThread
 import im.vector.matrix.android.internal.task.configureWith
-import im.vector.matrix.android.internal.util.createBackgroundHandler
+import kotlinx.coroutines.*
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
@@ -102,7 +103,7 @@ internal class OutgoingRoomKeyRequestManager @Inject constructor(
      * @param requestBody requestBody
      */
     fun cancelRoomKeyRequest(requestBody: RoomKeyRequestBody) {
-        BACKGROUND_HANDLER.post {
+        BACKGROUND_SCOPE.launch {
             cancelRoomKeyRequest(requestBody, false)
         }
     }
@@ -113,7 +114,7 @@ internal class OutgoingRoomKeyRequestManager @Inject constructor(
      * @param requestBody requestBody
      */
     fun resendRoomKeyRequest(requestBody: RoomKeyRequestBody) {
-        BACKGROUND_HANDLER.post {
+        BACKGROUND_SCOPE.launch {
             cancelRoomKeyRequest(requestBody, true)
         }
     }
@@ -161,19 +162,21 @@ internal class OutgoingRoomKeyRequestManager @Inject constructor(
         if (sendOutgoingRoomKeyRequestsRunning.get()) {
             return
         }
-        BACKGROUND_HANDLER.postDelayed(Runnable {
+        BACKGROUND_SCOPE.launch {
+            delay(SEND_KEY_REQUESTS_DELAY_MS.toLong())
+
             if (sendOutgoingRoomKeyRequestsRunning.get()) {
                 Timber.v("## startTimer() : RoomKeyRequestSend already in progress!")
-                return@Runnable
+                return@launch
             }
 
             sendOutgoingRoomKeyRequestsRunning.set(true)
             sendOutgoingRoomKeyRequests()
-        }, SEND_KEY_REQUESTS_DELAY_MS.toLong())
+        }
     }
 
     private fun stopTimer() {
-        BACKGROUND_HANDLER.removeCallbacksAndMessages(null)
+        BACKGROUND_SCOPE.coroutineContext.cancelChildren()
     }
 
     // look for and send any queued requests. Runs itself recursively until
@@ -313,6 +316,6 @@ internal class OutgoingRoomKeyRequestManager @Inject constructor(
     companion object {
         private const val SEND_KEY_REQUESTS_DELAY_MS = 500
 
-        private val BACKGROUND_HANDLER = createBackgroundHandler("OutgoingRoomKeyRequest")
+        private val BACKGROUND_SCOPE = CoroutineScope(CoroutineName("OutgoingRoomKeyRequest") + SupervisorJob())
     }
 }

@@ -16,16 +16,16 @@
 
 package im.vector.matrix.android.internal.session.content
 
-import android.os.Handler
-import android.os.Looper
 import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
 import im.vector.matrix.android.internal.session.SessionScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @SessionScope
 internal class DefaultContentUploadStateTracker @Inject constructor() : ContentUploadStateTracker {
 
-    private val mainHandler = Handler(Looper.getMainLooper())
     private val states = mutableMapOf<String, ContentUploadStateTracker.State>()
     private val listeners = mutableMapOf<String, MutableList<ContentUploadStateTracker.UpdateListener>>()
 
@@ -33,7 +33,7 @@ internal class DefaultContentUploadStateTracker @Inject constructor() : ContentU
         val listeners = listeners.getOrPut(key) { ArrayList() }
         listeners.add(updateListener)
         val currentState = states[key] ?: ContentUploadStateTracker.State.Idle
-        mainHandler.post { updateListener.onUpdate(currentState) }
+        GlobalScope.launch(Dispatchers.Main) { updateListener.onUpdate(currentState) }
     }
 
     override fun untrack(key: String, updateListener: ContentUploadStateTracker.UpdateListener) {
@@ -78,7 +78,7 @@ internal class DefaultContentUploadStateTracker @Inject constructor() : ContentU
 
     private fun updateState(key: String, state: ContentUploadStateTracker.State) {
         states[key] = state
-        mainHandler.post {
+        GlobalScope.launch(Dispatchers.Main) {
             listeners[key]?.forEach { it.onUpdate(state) }
         }
     }

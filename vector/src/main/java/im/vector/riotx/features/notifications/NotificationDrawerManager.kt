@@ -17,8 +17,6 @@ package im.vector.riotx.features.notifications
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.os.Handler
-import android.os.HandlerThread
 import androidx.annotation.WorkerThread
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
@@ -28,6 +26,7 @@ import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.settings.VectorPreferences
+import kotlinx.coroutines.*
 import me.gujun.android.span.span
 import timber.log.Timber
 import java.io.File
@@ -51,13 +50,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                                                     private val bitmapLoader: BitmapLoader,
                                                     private val outdatedDetector: OutdatedEventDetector?) {
 
-    private val handlerThread: HandlerThread = HandlerThread("NotificationDrawerManager", Thread.MIN_PRIORITY)
-    private var backgroundHandler: Handler
-
-    init {
-        handlerThread.start()
-        backgroundHandler = Handler(handlerThread.looper)
-    }
+    private val managerScope = CoroutineScope(SupervisorJob() + CoroutineName("NotificationDrawerManager"))
 
     // The first time the notification drawer is refreshed, we force re-render of all notifications
     private var firstTime = true
@@ -189,11 +182,11 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
     fun refreshNotificationDrawer() {
         // Implement last throttler
         Timber.w("refreshNotificationDrawer()")
-        backgroundHandler.removeCallbacksAndMessages(null)
-        backgroundHandler.postDelayed(
-                {
-                    refreshNotificationDrawerBg()
-                }, 200)
+        managerScope.coroutineContext.cancelChildren()
+        managerScope.launch(Dispatchers.IO) {
+            delay(200)
+            refreshNotificationDrawerBg()
+        }
     }
 
     @WorkerThread

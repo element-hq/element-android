@@ -16,8 +16,6 @@
 
 package im.vector.matrix.android.internal.crypto.verification
 
-import android.os.Handler
-import android.os.Looper
 import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.Credentials
@@ -65,8 +63,6 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
                                                                  private val taskExecutor: TaskExecutor)
     : VerificationTransaction.Listener, SasVerificationService {
 
-    private val uiHandler = Handler(Looper.getMainLooper())
-
     // map [sender : [transaction]]
     private val txMap = HashMap<String, HashMap<String, VerificationTransaction>>()
 
@@ -99,7 +95,7 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
     private var listeners = ArrayList<SasVerificationService.SasVerificationListener>()
 
     override fun addListener(listener: SasVerificationService.SasVerificationListener) {
-        uiHandler.post {
+        GlobalScope.launch(coroutineDispatchers.main) {
             if (!listeners.contains(listener)) {
                 listeners.add(listener)
             }
@@ -107,13 +103,13 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
     }
 
     override fun removeListener(listener: SasVerificationService.SasVerificationListener) {
-        uiHandler.post {
+        GlobalScope.launch(coroutineDispatchers.main) {
             listeners.remove(listener)
         }
     }
 
     private fun dispatchTxAdded(tx: VerificationTransaction) {
-        uiHandler.post {
+        GlobalScope.launch(coroutineDispatchers.main) {
             listeners.forEach {
                 try {
                     it.transactionCreated(tx)
@@ -125,7 +121,7 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
     }
 
     private fun dispatchTxUpdated(tx: VerificationTransaction) {
-        uiHandler.post {
+        GlobalScope.launch(coroutineDispatchers.main) {
             listeners.forEach {
                 try {
                     it.transactionUpdated(tx)

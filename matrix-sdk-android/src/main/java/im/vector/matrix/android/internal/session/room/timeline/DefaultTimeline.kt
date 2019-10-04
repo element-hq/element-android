@@ -36,10 +36,11 @@ import im.vector.matrix.android.internal.task.TaskConstraints
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.Debouncer
-import im.vector.matrix.android.internal.util.createBackgroundHandler
 import im.vector.matrix.android.internal.util.createUIHandler
 import io.realm.*
+import kotlinx.coroutines.*
 import timber.log.Timber
+import java.lang.Runnable
 import java.util.*
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicBoolean
@@ -66,13 +67,14 @@ internal class DefaultTimeline(
 ) : Timeline, TimelineHiddenReadReceipts.Delegate {
 
     companion object {
-        val BACKGROUND_HANDLER = createBackgroundHandler("TIMELINE_DB_THREAD")
+        val BACKGROUND_CONTEXT = CoroutineName("TIMELINE_DB_THREAD")
     }
 
     private val listeners = CopyOnWriteArrayList<Timeline.Listener>()
     private val isStarted = AtomicBoolean(false)
     private val isReady = AtomicBoolean(false)
     private val mainHandler = createUIHandler()
+    private val scope = CoroutineScope(SupervisorJob() + BACKGROUND_CONTEXT)
     private val backgroundRealm = AtomicReference<Realm>()
     private val cancelableBag = CancelableBag()
     private val debouncer = Debouncer(mainHandler)
@@ -121,9 +123,9 @@ internal class DefaultTimeline(
 // Public methods ******************************************************************************
 
     override fun paginate(direction: Timeline.Direction, count: Int) {
-        BACKGROUND_HANDLER.post {
+        scope.launch {
             if (!canPaginate(direction)) {
-                return@post
+                return@launch
             }
             Timber.v("Paginate $direction of $count items")
             val startDisplayIndex = if (direction == Timeline.Direction.BACKWARDS) prevDisplayIndex else nextDisplayIndex
@@ -149,7 +151,7 @@ internal class DefaultTimeline(
     override fun start() {
         if (isStarted.compareAndSet(false, true)) {
             Timber.v("Start timeline for roomId: $roomId and eventId: $initialEventId")
-            BACKGROUND_HANDLER.post {
+            scope.launch {
                 eventDecryptor.start()
                 val realm = Realm.getInstance(realmConfiguration)
                 backgroundRealm.set(realm)
@@ -172,7 +174,7 @@ internal class DefaultTimeline(
                         .also { it.addChangeListener(relationsListener) }
 
                 if (settings.buildReadReceipts) {
-                    hiddenReadReceipts.start(realm, filteredEvents, nonFilteredEvents, this)
+                    hiddenReadReceipts.start(realm, filteredEvents, nonFilteredEvents, this@DefaultTimeline)
                 }
                 isReady.set(true)
             }
@@ -184,8 +186,8 @@ internal class DefaultTimeline(
             isReady.set(false)
             Timber.v("Dispose timeline for roomId: $roomId and eventId: $initialEventId")
             cancelableBag.cancel()
-            BACKGROUND_HANDLER.removeCallbacksAndMessages(null)
-            BACKGROUND_HANDLER.post {
+            scope.coroutineContext.cancelChildren()
+            scope.launch {
                 roomEntity?.sendingTimelineEvents?.removeAllChangeListeners()
                 if (this::eventRelations.isInitialized) {
                     eventRelations.removeAllChangeListeners()
@@ -501,7 +503,7 @@ internal class DefaultTimeline(
                                 }
                                 TokenChunkEventPersistor.Result.SHOULD_FETCH_MORE ->
                                     // Database won't be updated, so we force pagination request
-                                    BACKGROUND_HANDLER.post {
+                                    scope.launch {
                                         executePaginationTask(direction, limit)
                                     }
                             }
@@ -634,9 +636,9 @@ internal class DefaultTimeline(
     }
 
     private fun postSnapshot() {
-        BACKGROUND_HANDLER.post {
+        scope.launch {
             if (isReady.get().not()) {
-                return@post
+                return@launch
             }
             updateLoadingStates(filteredEvents)
             val snapshot = createSnapshot()
