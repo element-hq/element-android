@@ -41,6 +41,10 @@ internal class SessionRealmConfigurationFactory @Inject constructor(private val 
     fun create(directory: File, userMd5: String): RealmConfiguration {
         val shouldClearRealm = sharedPreferences.getBoolean("$REALM_SHOULD_CLEAR_FLAG_$userMd5", false)
         if (shouldClearRealm) {
+            Timber.v("************************************************************")
+            Timber.v("The realm file session was corrupted and couldn't be loaded. ")
+            Timber.v("The file has been deleted to recover. ")
+            Timber.v("************************************************************")
             directory.deleteRecursively()
         }
         sharedPreferences
