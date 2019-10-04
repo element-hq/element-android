@@ -50,6 +50,8 @@ import im.vector.matrix.android.internal.session.room.relation.FindReactionEvent
 import im.vector.matrix.android.internal.session.room.relation.UpdateQuickReactionTask
 import im.vector.matrix.android.internal.session.room.state.DefaultSendStateTask
 import im.vector.matrix.android.internal.session.room.state.SendStateTask
+import im.vector.matrix.android.internal.session.room.timeline.*
+import im.vector.matrix.android.internal.session.room.timeline.ClearUnlinkedEventsTask
 import im.vector.matrix.android.internal.session.room.timeline.DefaultGetContextOfEventTask
 import im.vector.matrix.android.internal.session.room.timeline.DefaultPaginationTask
 import im.vector.matrix.android.internal.session.room.timeline.GetContextOfEventTask
@@ -119,6 +121,9 @@ internal abstract class RoomModule {
 
     @Binds
     abstract fun bindGetContextOfEventTask(getContextOfEventTask: DefaultGetContextOfEventTask): GetContextOfEventTask
+
+    @Binds
+    abstract fun bindClearUnlinkedEventsTask(clearUnlinkedEventsTask: DefaultClearUnlinkedEventsTask): ClearUnlinkedEventsTask
 
     @Binds
     abstract fun bindPaginationTask(paginationTask: DefaultPaginationTask): PaginationTask

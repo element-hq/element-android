@@ -132,7 +132,9 @@ internal class TimelineHiddenReadReceipts constructor(private val readReceiptsSu
      * Dispose the realm query subscription. Has to be called on an HandlerThread
      */
     fun dispose() {
-        this.hiddenReadReceipts.removeAllChangeListeners()
+        if (this::hiddenReadReceipts.isInitialized) {
+            this.hiddenReadReceipts.removeAllChangeListeners()
+        }
     }
 
     /**
