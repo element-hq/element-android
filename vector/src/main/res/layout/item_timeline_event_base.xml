@@ -60,7 +60,6 @@
         android:id="@+id/messageStartGuideline"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:orientation="vertical"
         tools:layout_marginStart="52dp" />
 
     <FrameLayout
@@ -104,10 +103,10 @@
     <LinearLayout
         android:id="@+id/informationBottom"
         android:layout_width="match_parent"
-        android:addStatesFromChildren="true"
         android:layout_height="wrap_content"
         android:layout_below="@+id/viewStubContainer"
         android:layout_toEndOf="@+id/messageStartGuideline"
+        android:addStatesFromChildren="true"
         android:orientation="vertical">
 
         <com.google.android.flexbox.FlexboxLayout

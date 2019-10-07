@@ -320,7 +320,6 @@ class MessageItemFactory @Inject constructor(
             linkifyBody(formattedBody, callback)
         }
         return MessageTextItem_()
-                .searchForPills(false)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .attributes(attributes)
                 .message(message)
@@ -347,7 +346,6 @@ class MessageItemFactory @Inject constructor(
                         message(message)
                     }
                 }
-                .searchForPills(false)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .attributes(attributes)
                 .highlighted(highlight)

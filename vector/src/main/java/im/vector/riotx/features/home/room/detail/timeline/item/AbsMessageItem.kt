@@ -17,16 +17,11 @@
 package im.vector.riotx.features.home.room.detail.timeline.item
 
 import android.graphics.Typeface
-import android.os.Build
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewStub
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.IdRes
-import androidx.constraintlayout.helper.widget.Flow
-import androidx.core.view.children
-import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import im.vector.matrix.android.api.session.room.send.SendState
@@ -124,10 +119,10 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
 
         val reactions = attributes.informationData.orderedReactionList
         if (!shouldShowReactionAtBottom() || reactions.isNullOrEmpty()) {
-            holder.reactionWrapper.isVisible = false
+            holder.reactionsContainer.isVisible = false
         } else {
-            holder.reactionWrapper.isVisible = true
-            holder.reactionWrapper.removeAllViews()
+            holder.reactionsContainer.isVisible = true
+            holder.reactionsContainer.removeAllViews()
             reactions.take(8).forEach { reaction ->
                 val reactionButton = ReactionButton(holder.view.context)
                 reactionButton.reactedListener = reactionClickListener
@@ -136,9 +131,9 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
                 reactionButton.reactionCount = reaction.count
                 reactionButton.setChecked(reaction.addedByMe)
                 reactionButton.isEnabled = reaction.synced
-                holder.reactionWrapper.addView(reactionButton)
+                holder.reactionsContainer.addView(reactionButton)
             }
-            holder.reactionWrapper.setOnLongClickListener(attributes.itemLongClickListener)
+            holder.reactionsContainer.setOnLongClickListener(attributes.itemLongClickListener)
         }
     }
 
@@ -166,7 +161,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
         val avatarImageView by bind<ImageView>(R.id.messageAvatarImageView)
         val memberNameView by bind<TextView>(R.id.messageMemberNameView)
         val timeView by bind<TextView>(R.id.messageTimeView)
-        val reactionWrapper by bind<ViewGroup>(R.id.reactionsContainer)
+        val reactionsContainer by bind<ViewGroup>(R.id.reactionsContainer)
     }
 
     /**

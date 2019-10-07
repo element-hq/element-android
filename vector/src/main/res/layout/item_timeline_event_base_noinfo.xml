@@ -10,47 +10,46 @@
         android:id="@+id/messageSelectedBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
         android:layout_alignBottom="@+id/informationBottom"
+        android:layout_alignParentTop="true"
         android:background="?riotx_highlighted_message_background" />
 
     <View
         android:id="@+id/messageStartGuideline"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="52dp"
-        android:orientation="vertical" />
+        android:layout_marginStart="52dp" />
 
     <FrameLayout
         android:id="@+id/viewStubContainer"
         android:layout_width="match_parent"
-        android:layout_toEndOf="@id/messageStartGuideline"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_height="wrap_content">
+        android:layout_toEndOf="@id/messageStartGuideline">
 
-    <ViewStub
-        android:id="@+id/messageContentNoticeStub"
-        style="@style/TimelineContentStubBaseParams"
-        android:layout="@layout/item_timeline_event_notice_stub"
-        tools:visibility="visible" />
+        <ViewStub
+            android:id="@+id/messageContentNoticeStub"
+            style="@style/TimelineContentStubBaseParams"
+            android:layout="@layout/item_timeline_event_notice_stub"
+            tools:visibility="visible" />
 
-    <ViewStub
-        android:id="@+id/messageContentDefaultStub"
-        style="@style/TimelineContentStubBaseParams"
-        android:inflatedId="@+id/stateMessageView"
-        android:layout="@layout/item_timeline_event_default_stub" />
+        <ViewStub
+            android:id="@+id/messageContentDefaultStub"
+            style="@style/TimelineContentStubBaseParams"
+            android:inflatedId="@+id/stateMessageView"
+            android:layout="@layout/item_timeline_event_default_stub" />
 
-    <ViewStub
-        android:id="@+id/messageContentBlankStub"
-        style="@style/TimelineContentStubBaseParams"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout="@layout/item_timeline_event_blank_stub" />
+        <ViewStub
+            android:id="@+id/messageContentBlankStub"
+            style="@style/TimelineContentStubBaseParams"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout="@layout/item_timeline_event_blank_stub" />
 
-    <ViewStub
-        android:id="@+id/messageContentMergedheaderStub"
-        style="@style/TimelineContentStubBaseParams"
-        android:layout="@layout/item_timeline_event_merged_header_stub" />
+        <ViewStub
+            android:id="@+id/messageContentMergedheaderStub"
+            style="@style/TimelineContentStubBaseParams"
+            android:layout="@layout/item_timeline_event_merged_header_stub" />
 
     </FrameLayout>
 
