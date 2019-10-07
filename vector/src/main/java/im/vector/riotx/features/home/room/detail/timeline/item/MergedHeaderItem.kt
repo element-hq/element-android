@@ -30,7 +30,7 @@ import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base_noinfo)
-abstract class MergedHeaderItem : BaseEventItem<MergedHeaderItem.Holder>() {
+abstract class MergedHeaderItem(useBubble : Boolean = false) : BaseEventItem<MergedHeaderItem.Holder>(useBubble) {
 
     @EpoxyAttribute
     lateinit var attributes: Attributes

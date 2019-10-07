@@ -16,7 +16,9 @@
 
 package im.vector.riotx.features.home.room.detail.timeline.item
 
+import android.graphics.Color
 import android.view.MotionEvent
+import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.text.PrecomputedTextCompat
 import androidx.core.text.toSpannable
@@ -32,8 +34,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
 
-@EpoxyModelClass(layout = R.layout.item_timeline_event_base)
-abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
+@EpoxyModelClass
+abstract class MessageTextItem(useBubble: Boolean) : AbsMessageItem<MessageTextItem.Holder>(useBubble) {
 
     @EpoxyAttribute
     var searchForPills: Boolean = false
@@ -43,6 +45,16 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
     var useBigFont: Boolean = false
     @EpoxyAttribute
     var urlClickCallback: TimelineEventController.UrlClickCallback? = null
+
+    override fun getDefaultLayout(): Int {
+        return if (useBubble) {
+            if (outgoing) {
+                R.layout.item_timeline_event_bubbled_base
+            } else {
+                R.layout.item_timeline_event_bubbled_base_incoming
+            }
+        } else R.layout.item_timeline_event_base
+    }
 
     // Better link movement methods fixes the issue when
     // long pressing to open the context menu on a TextView also triggers an autoLink click.
@@ -95,7 +107,10 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
         }
     }
 
-    override fun getViewType() = STUB_ID
+    override fun getViewType(): Int {
+        //mmm how to do that
+        return STUB_ID + if(outgoing) 1000 else 0
+    }
 
     class Holder : AbsMessageItem.Holder(STUB_ID) {
         val messageView by bind<AppCompatTextView>(R.id.messageTextView)

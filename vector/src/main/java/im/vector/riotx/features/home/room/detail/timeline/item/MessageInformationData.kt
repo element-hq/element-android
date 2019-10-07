@@ -35,7 +35,9 @@ data class MessageInformationData(
         val hasPendingEdits: Boolean = false,
         val readReceipts: List<ReadReceiptData> = emptyList(),
         val hasReadMarker: Boolean = false,
-        val displayReadMarker: Boolean = false
+        val displayReadMarker: Boolean = false,
+        val isFromMe: Boolean = false,
+        val directRoom: Boolean = false
 ) : Parcelable
 
 @Parcelize

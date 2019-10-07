@@ -28,4 +28,8 @@ class UserPreferencesProvider @Inject constructor(private val vectorPreferences:
     fun shouldShowReadReceipts(): Boolean {
         return vectorPreferences.showReadReceipts()
     }
+    fun labBubbleStyleForDM(): Boolean {
+        return vectorPreferences.labBubbleStyleForDM()
+    }
+
 }

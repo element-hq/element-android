@@ -19,14 +19,27 @@ package im.vector.riotx.features.home.room.detail.timeline.item
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
 
-@EpoxyModelClass(layout = R.layout.item_timeline_event_base)
-abstract class RedactedMessageItem : AbsMessageItem<RedactedMessageItem.Holder>() {
+@EpoxyModelClass
+abstract class RedactedMessageItem(useBubble: Boolean) : AbsMessageItem<RedactedMessageItem.Holder>(useBubble) {
 
-    override fun getViewType() = STUB_ID
+    override fun getDefaultLayout(): Int {
+        return if (useBubble) {
+            if (outgoing) {
+                R.layout.item_timeline_event_bubbled_base
+            } else {
+                R.layout.item_timeline_event_bubbled_base_incoming
+            }
+        } else R.layout.item_timeline_event_base
+    }
 
     override fun shouldShowReactionAtBottom() = false
 
     class Holder : AbsMessageItem.Holder(STUB_ID)
+
+    override fun getViewType(): Int {
+        //mmm how to do that
+        return STUB_ID + if(outgoing) 1000 else 0
+    }
 
     companion object {
         private const val STUB_ID = R.id.messageContentRedactedStub

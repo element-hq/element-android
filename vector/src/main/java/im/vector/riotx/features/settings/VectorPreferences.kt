@@ -150,6 +150,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val SETTINGS_ENABLE_SEND_VOICE_FEATURE_PREFERENCE_KEY = "SETTINGS_ENABLE_SEND_VOICE_FEATURE_PREFERENCE_KEY"
 
         const val SETTINGS_LABS_ALLOW_EXTENDED_LOGS = "SETTINGS_LABS_ALLOW_EXTENDED_LOGS"
+        const val SETTINGS_LABS_BUBBLES_DM = "SETTINGS_LABS_BUBBLES_DM"
 
         private const val SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY = "SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY"
         private const val SETTINGS_LABS_ENABLE_SWIPE_TO_REPLY = "SETTINGS_LABS_ENABLE_SWIPE_TO_REPLY"
@@ -261,6 +262,10 @@ class VectorPreferences @Inject constructor(private val context: Context) {
 
     fun labAllowedExtendedLogging(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_LABS_ALLOW_EXTENDED_LOGS, false)
+    }
+
+    fun labBubbleStyleForDM(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_LABS_BUBBLES_DM, false)
     }
 
     /**

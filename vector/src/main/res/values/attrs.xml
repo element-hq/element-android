@@ -95,5 +95,8 @@
 
         <attr name="riotx_highlighted_message_background" format="reference" />
 
+        <attr name="vctr_bubble_left_color" format="color" />
+        <attr name="vctr_bubble_right_color" format="color" />
+
     </declare-styleable>
 </resources>

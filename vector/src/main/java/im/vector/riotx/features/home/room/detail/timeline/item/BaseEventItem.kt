@@ -19,6 +19,7 @@ import android.view.View
 import android.view.ViewStub
 import android.widget.RelativeLayout
 import androidx.annotation.IdRes
+import androidx.constraintlayout.widget.Guideline
 import androidx.core.view.marginStart
 import androidx.core.view.updateLayoutParams
 import com.airbnb.epoxy.EpoxyAttribute
@@ -33,7 +34,7 @@ import im.vector.riotx.core.utils.DimensionConverter
 /**
  * Children must override getViewType()
  */
-abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>() {
+abstract class BaseEventItem<H : BaseEventItem.BaseHolder>(val useBubble: Boolean) : VectorEpoxyModel<H>() {
 
     // To use for instance when opening a permalink with an eventId
     @EpoxyAttribute
@@ -44,10 +45,21 @@ abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>
     @EpoxyAttribute
     lateinit var dimensionConverter: DimensionConverter
 
+    @EpoxyAttribute
+    var outgoing: Boolean = false
+
     override fun bind(holder: H) {
         super.bind(holder)
-        holder.leftGuideline.updateLayoutParams<RelativeLayout.LayoutParams> {
-            this.marginStart = leftGuideline
+        if (useBubble) {
+            if (outgoing) {
+                (holder.leftGuideline as? Guideline)?.setGuidelineBegin(leftGuideline)
+            } else {
+                (holder.leftGuideline as? Guideline)?.setGuidelineEnd(leftGuideline)
+            }
+        } else {
+            holder.leftGuideline.updateLayoutParams<RelativeLayout.LayoutParams> {
+                this.marginStart = leftGuideline
+            }
         }
         holder.checkableBackground.isChecked = highlighted
     }
@@ -63,10 +75,12 @@ abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>
         val checkableBackground by bind<CheckableView>(R.id.messageSelectedBackground)
         val readReceiptsView by bind<ReadReceiptsView>(R.id.readReceiptsView)
         val readMarkerView by bind<ReadMarkerView>(R.id.readMarkerView)
+        var bubbleContainer: View? = null
 
         override fun bindView(itemView: View) {
             super.bindView(itemView)
             inflateStub()
+            bubbleContainer = itemView.findViewById(R.id.messageBubbleContainer)
         }
 
         private fun inflateStub() {

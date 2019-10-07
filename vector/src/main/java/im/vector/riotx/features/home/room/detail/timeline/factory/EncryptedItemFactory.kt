@@ -23,6 +23,7 @@ import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
+import im.vector.riotx.core.resources.UserPreferencesProvider
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.home.room.detail.timeline.helper.AvatarSizeProvider
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageTextItem_
@@ -36,12 +37,14 @@ class EncryptedItemFactory @Inject constructor(private val messageInformationDat
                                                private val colorProvider: ColorProvider,
                                                private val stringProvider: StringProvider,
                                                private val avatarSizeProvider: AvatarSizeProvider,
-                                               private val attributesFactory: MessageItemAttributesFactory) {
+                                               private val attributesFactory: MessageItemAttributesFactory,
+                                               private val userPreferencesProvider: UserPreferencesProvider) {
 
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
                highlight: Boolean,
                readMarkerVisible: Boolean,
+               isDirectRoom: Boolean,
                callback: TimelineEventController.Callback?): VectorEpoxyModel<*>? {
         event.root.eventId ?: return null
 
@@ -65,10 +68,11 @@ class EncryptedItemFactory @Inject constructor(private val messageInformationDat
 
                 // TODO This is not correct format for error, change it
 
-                val informationData = messageInformationDataFactory.create(event, nextEvent, readMarkerVisible)
+                val informationData = messageInformationDataFactory.create(event, nextEvent, readMarkerVisible, isDirectRoom)
                 val attributes = attributesFactory.create(null, informationData, callback)
-                return MessageTextItem_()
+                return MessageTextItem_(informationData.directRoom && userPreferencesProvider.labBubbleStyleForDM())
                         .leftGuideline(avatarSizeProvider.leftGuideline)
+                        .outgoing(informationData.isFromMe.not())
                         .highlighted(highlight)
                         .attributes(attributes)
                         .message(spannableStr)

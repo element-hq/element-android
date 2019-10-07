@@ -28,7 +28,7 @@ import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base_noinfo)
-abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
+abstract class NoticeItem(useBubble: Boolean = false) : BaseEventItem<NoticeItem.Holder>(useBubble) {
 
     @EpoxyAttribute
     lateinit var attributes: Attributes

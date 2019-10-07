@@ -206,6 +206,9 @@
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
 
         <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.Dark</item>
+
+        <item name="vctr_bubble_left_color">#313131</item>
+        <item name="vctr_bubble_right_color">#1F1F1F</item>
     </style>
 
     <style name="AppTheme.Dark" parent="AppTheme.Base.Dark" />

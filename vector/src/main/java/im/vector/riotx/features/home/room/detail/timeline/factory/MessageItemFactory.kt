@@ -38,6 +38,7 @@ import im.vector.riotx.core.epoxy.VectorEpoxyModel
 import im.vector.riotx.core.linkify.VectorLinkify
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
+import im.vector.riotx.core.resources.UserPreferencesProvider
 import im.vector.riotx.core.utils.DebouncedClickListener
 import im.vector.riotx.core.utils.isLocalFile
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
@@ -60,22 +61,24 @@ class MessageItemFactory @Inject constructor(
         private val contentUploadStateTrackerBinder: ContentUploadStateTrackerBinder,
         private val defaultItemFactory: DefaultItemFactory,
         private val noticeItemFactory: NoticeItemFactory,
+        private val userPreferencesProvider: UserPreferencesProvider,
         private val avatarSizeProvider: AvatarSizeProvider) {
 
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
                highlight: Boolean,
                readMarkerVisible: Boolean,
+               isDirectRoom: Boolean,
                callback: TimelineEventController.Callback?
     ): VectorEpoxyModel<*>? {
         event.root.eventId ?: return null
 
-        val informationData = messageInformationDataFactory.create(event, nextEvent, readMarkerVisible)
+        val informationData = messageInformationDataFactory.create(event, nextEvent, readMarkerVisible, isDirectRoom)
 
         if (event.root.isRedacted()) {
             // message is redacted
             val attributes = messageItemAttributesFactory.create(null, informationData, callback)
-            return buildRedactedItem(attributes, highlight)
+            return buildRedactedItem(informationData, attributes, highlight)
         }
 
         val messageContent = event.getLastMessageContent()
@@ -87,7 +90,7 @@ class MessageItemFactory @Inject constructor(
                 || event.isEncrypted() && event.root.content.toModel<EncryptedEventContent>()?.relatesTo?.type == RelationType.REPLACE
         ) {
             // This is an edit event, we should it when debugging as a notice event
-            return noticeItemFactory.create(event, highlight, readMarkerVisible, callback)
+            return noticeItemFactory.create(event, highlight, readMarkerVisible, isDirectRoom, callback)
         }
         val attributes = messageItemAttributesFactory.create(messageContent, informationData, callback)
 
@@ -176,7 +179,7 @@ class MessageItemFactory @Inject constructor(
                 width = messageContent.info?.width,
                 maxWidth = maxWidth
         )
-        return MessageImageVideoItem_()
+        return MessageImageVideoItem_(informationData.directRoom && userPreferencesProvider.labBubbleStyleForDM())
                 .attributes(attributes)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .imageContentRenderer(imageContentRenderer)
@@ -215,7 +218,7 @@ class MessageItemFactory @Inject constructor(
                 thumbnailMediaData = thumbnailData
         )
 
-        return MessageImageVideoItem_()
+        return MessageImageVideoItem_(informationData.directRoom && userPreferencesProvider.labBubbleStyleForDM())
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .attributes(attributes)
                 .imageContentRenderer(imageContentRenderer)
@@ -238,7 +241,7 @@ class MessageItemFactory @Inject constructor(
 
         val linkifiedBody = linkifyBody(bodyToUse, callback)
 
-        return MessageTextItem_()
+        return MessageTextItem_(informationData.directRoom && userPreferencesProvider.labBubbleStyleForDM())
                 .apply {
                     if (informationData.hasBeenEdited) {
                         val spannable = annotateWithEdited(linkifiedBody, callback, informationData)
@@ -248,6 +251,7 @@ class MessageItemFactory @Inject constructor(
                     }
                 }
                 .searchForPills(isFormatted)
+                .outgoing(informationData.isFromMe.not())
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .attributes(attributes)
                 .highlighted(highlight)
@@ -301,11 +305,12 @@ class MessageItemFactory @Inject constructor(
             }
             linkifyBody(formattedBody, callback)
         }
-        return MessageTextItem_()
+        return MessageTextItem_(informationData.directRoom && userPreferencesProvider.labBubbleStyleForDM())
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .attributes(attributes)
                 .message(message)
                 .highlighted(highlight)
+                .outgoing(informationData.isFromMe.not())
                 .urlClickCallback(callback)
     }
 
@@ -318,7 +323,7 @@ class MessageItemFactory @Inject constructor(
             val formattedBody = "* ${informationData.memberName} $it"
             linkifyBody(formattedBody, callback)
         }
-        return MessageTextItem_()
+        return MessageTextItem_(informationData.directRoom && userPreferencesProvider.labBubbleStyleForDM())
                 .apply {
                     if (informationData.hasBeenEdited) {
                         val spannable = annotateWithEdited(message, callback, informationData)
@@ -329,13 +334,14 @@ class MessageItemFactory @Inject constructor(
                 }
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .attributes(attributes)
+                .outgoing(informationData.isFromMe.not())
                 .highlighted(highlight)
                 .urlClickCallback(callback)
     }
 
-    private fun buildRedactedItem(attributes: AbsMessageItem.Attributes,
+    private fun buildRedactedItem(informationData: MessageInformationData, attributes: AbsMessageItem.Attributes,
                                   highlight: Boolean): RedactedMessageItem? {
-        return RedactedMessageItem_()
+        return RedactedMessageItem_(informationData.directRoom && userPreferencesProvider.labBubbleStyleForDM())
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .attributes(attributes)
                 .highlighted(highlight)

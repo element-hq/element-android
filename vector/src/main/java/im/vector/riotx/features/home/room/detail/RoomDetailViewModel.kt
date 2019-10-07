@@ -162,6 +162,9 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         invisibleEventsObservable.accept(action)
     }
 
+    fun isDirectRoom() : Boolean {
+        return room.roomSummary()?.isDirect ?: false
+    }
     /**
      * Convert a send mode to a draft and save the draft
      */

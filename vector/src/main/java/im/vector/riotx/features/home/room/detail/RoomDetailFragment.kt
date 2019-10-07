@@ -20,7 +20,9 @@ import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.ShapeDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -40,6 +42,7 @@ import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
 import androidx.core.view.forEach
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -438,6 +441,7 @@ class RoomDetailFragment :
         recyclerView.layoutManager = layoutManager
         recyclerView.itemAnimator = null
         recyclerView.setHasFixedSize(true)
+        timelineEventController.isDirectRoom = roomDetailViewModel.isDirectRoom()
         timelineEventController.addModelBuildListener {
             it.dispatchTo(stateRestorer)
             it.dispatchTo(scrollOnNewMessageCallback)
@@ -496,6 +500,17 @@ class RoomDetailFragment :
             val swipeCallback = RoomMessageTouchHelperCallback(requireContext(), R.drawable.ic_reply, quickReplyHandler)
             val touchHelper = ItemTouchHelper(swipeCallback)
             touchHelper.attachToRecyclerView(recyclerView)
+        }
+
+        if (vectorPreferences.labBubbleStyleForDM()) {
+            val divider = DividerItemDecoration(context,
+                    DividerItemDecoration.VERTICAL)
+
+            divider.setDrawable(ShapeDrawable().apply {
+                intrinsicHeight = resources.getDimensionPixelOffset(R.dimen.bubble_spacing_dp)
+                paint.color = Color.TRANSPARENT
+            })
+            recyclerView.addItemDecoration(divider)
         }
     }
 

@@ -47,6 +47,7 @@ class DefaultItemFactory @Inject constructor(private val avatarSizeProvider: Ava
     fun create(event: TimelineEvent,
                highlight: Boolean,
                readMarkerVisible: Boolean,
+               isDirectRoom: Boolean,
                callback: TimelineEventController.Callback?,
                exception: Exception? = null): DefaultItem {
         val text = if (exception == null) {
@@ -54,7 +55,7 @@ class DefaultItemFactory @Inject constructor(private val avatarSizeProvider: Ava
         } else {
             "an exception occurred when rendering the event ${event.root.eventId}"
         }
-        val informationData = informationDataFactory.create(event, null, readMarkerVisible)
+        val informationData = informationDataFactory.create(event, null, readMarkerVisible, isDirectRoom)
         return create(text, informationData, highlight, callback)
     }
 }

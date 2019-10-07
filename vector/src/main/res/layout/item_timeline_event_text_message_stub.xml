@@ -6,4 +6,4 @@
     android:layout_height="wrap_content"
     android:textColor="?riotx_text_primary"
     android:textSize="14sp"
-    tools:text="@sample/matrix.json/data/message" />
+    tools:text="Short Message" />

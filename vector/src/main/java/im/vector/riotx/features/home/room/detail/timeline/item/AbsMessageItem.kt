@@ -16,7 +16,10 @@
 
 package im.vector.riotx.features.home.room.detail.timeline.item
 
+import android.content.Context
 import android.graphics.Typeface
+import android.graphics.drawable.NinePatchDrawable
+import android.os.Build
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -32,9 +35,10 @@ import im.vector.riotx.core.utils.DebouncedClickListener
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.reactions.widget.ReactionButton
+import im.vector.riotx.features.themes.ThemeUtils
 import im.vector.riotx.features.ui.getMessageTextColor
 
-abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
+abstract class AbsMessageItem<H : AbsMessageItem.Holder>(useBubble: Boolean) : BaseEventItem<H>(useBubble) {
 
     @EpoxyAttribute
     lateinit var attributes: Attributes
@@ -93,7 +97,28 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
             )
             holder.avatarImageView.setOnLongClickListener(attributes.itemLongClickListener)
             holder.memberNameView.setOnLongClickListener(attributes.itemLongClickListener)
+            if (useBubble) {
+                holder.bubbleContainer?.let { layout ->
+                    layout.background = if (outgoing) {
+                        getNinePatch(holder.view.context, R.drawable.bubble_right,
+                                ThemeUtils.getColor(holder.view.context, R.attr.vctr_bubble_left_color))
+                    } else {
+                        getNinePatch(holder.view.context, R.drawable.bubble_outgoing)
+                    }
+                }
+            }
         } else {
+            if (useBubble) {
+                holder.bubbleContainer?.let { layout ->
+                    layout.background = if (outgoing) {
+                        getNinePatch(holder.view.context, R.drawable.bubblenotail,
+                                ThemeUtils.getColor(holder.view.context, R.attr.vctr_bubble_left_color))
+                    } else {
+                        getNinePatch(holder.view.context, R.drawable.bubblenotailright)
+                    }
+                }
+            }
+
             holder.avatarImageView.setOnClickListener(null)
             holder.memberNameView.setOnClickListener(null)
             holder.avatarImageView.visibility = View.GONE
@@ -162,6 +187,11 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
         val memberNameView by bind<TextView>(R.id.messageMemberNameView)
         val timeView by bind<TextView>(R.id.messageTimeView)
         val reactionsContainer by bind<ViewGroup>(R.id.reactionsContainer)
+    }
+
+
+    private fun getNinePatch(context: Context, resId: Int, color: Int? = ThemeUtils.getColor(context, R.attr.vctr_bubble_right_color)): NinePatchDrawable? {
+        return NinePatchChunk.getNinePatch(context, resId, color)
     }
 
     /**

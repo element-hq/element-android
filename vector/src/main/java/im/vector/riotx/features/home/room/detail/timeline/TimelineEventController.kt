@@ -104,6 +104,8 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
 
     var callback: Callback? = null
 
+    var isDirectRoom = false
+
     private val listUpdateCallback = object : ListUpdateCallback {
 
         override fun onChanged(position: Int, count: Int, payload: Any?) {
@@ -282,7 +284,9 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         } else {
             readMarkerVisible
         }
-        val eventModel = timelineItemFactory.create(event, nextEvent, eventIdToHighlight, showReadMarker, callback).also {
+        val eventModel = timelineItemFactory.create(event, nextEvent, eventIdToHighlight, showReadMarker,
+                isDirectRoom,
+                callback).also {
             it.id(event.localId)
             it.setOnVisibilityStateChanged(TimelineEventVisibilityStateChangedListener(callback, event))
         }

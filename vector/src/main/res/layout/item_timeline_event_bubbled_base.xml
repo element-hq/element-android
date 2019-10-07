@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:addStatesFromChildren="true"
+    android:background="?attr/selectableItemBackground">
+
+    <im.vector.riotx.core.platform.CheckableView
+        android:id="@+id/messageSelectedBackground"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="?riotx_highlighted_message_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/messageAvatarImageView"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@tools:sample/avatars" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/messageStartGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:layout_constraintGuide_begin="52dp" />
+
+
+    <LinearLayout
+        android:id="@+id/messageBubbleContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bubble_right"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:layout_marginEnd="60dp"
+        android:orientation="vertical"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintBottom_toBottomOf="@id/messageBottomInfo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/messageStartGuideline"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/messageMemberNameView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="2dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="?riotx_text_primary"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_weight="1"
+                tools:text="Bobby"
+                tools:ignore="RtlHardcoded" />
+
+
+            <TextView
+                android:id="@+id/messageTimeView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginRight="8dp"
+                android:textColor="?riotx_text_secondary"
+                android:textSize="12sp"
+                tools:text="@tools:sample/date/hhmm" />
+
+
+        </LinearLayout>
+
+        <ViewStub
+            android:id="@+id/messageContentTextStub"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inflatedId="@id/messageTextView"
+            android:layout="@layout/item_timeline_event_text_message_stub"
+            tools:visibility="visible" />
+
+        <ViewStub
+            android:id="@+id/messageContentMediaStub"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inflatedId="@+id/messageContentMedia"
+            android:layout="@layout/item_timeline_event_media_message_stub" />
+
+        <ViewStub
+            android:id="@+id/messageContentFileStub"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout="@layout/item_timeline_event_file_stub"
+            tools:ignore="MissingConstraints" />
+
+        <ViewStub
+            android:id="@+id/messageContentRedactedStub"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_marginEnd="56dp"
+            android:layout_marginRight="56dp"
+            android:layout="@layout/item_timeline_event_redacted_stub"
+            tools:ignore="MissingConstraints" />
+
+    </LinearLayout>
+
+
+    <!-- TODO: For now we show 8 reactions maximum, this will need rework when needed-->
+    <ViewStub
+        android:id="@+id/messageBottomInfo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:inflatedId="@+id/messageBottomInfo"
+        android:layout="@layout/item_timeline_event_bottom_reactions_stub"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/readReceiptsView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/messageStartGuideline"
+        app:layout_constraintTop_toBottomOf="@id/messageBubbleContainer"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:visibility="visible">
+
+    </ViewStub>
+
+
+    <im.vector.riotx.core.ui.views.ReadReceiptsView
+        android:id="@+id/readReceiptsView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="4dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:visibility="visible" />
+
+    <im.vector.riotx.core.ui.views.ReadMarkerView
+        android:id="@+id/readMarkerView"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:background="?attr/vctr_unread_marker_line_color"
+        android:layout_marginBottom="2dp"
+        android:visibility="invisible"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        tools:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

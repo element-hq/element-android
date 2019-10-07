@@ -27,8 +27,8 @@ import im.vector.riotx.R
 import im.vector.riotx.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
 import im.vector.riotx.features.media.ImageContentRenderer
 
-@EpoxyModelClass(layout = R.layout.item_timeline_event_base)
-abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Holder>() {
+@EpoxyModelClass
+abstract class MessageImageVideoItem(useBubble: Boolean) : AbsMessageItem<MessageImageVideoItem.Holder>(useBubble) {
 
     @EpoxyAttribute
     lateinit var mediaData: ImageContentRenderer.Data
@@ -40,6 +40,16 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
     lateinit var imageContentRenderer: ImageContentRenderer
     @EpoxyAttribute
     lateinit var contentUploadStateTrackerBinder: ContentUploadStateTrackerBinder
+
+    override fun getDefaultLayout(): Int {
+        return if (useBubble) {
+            if (outgoing) {
+                R.layout.item_timeline_event_bubbled_base
+            } else {
+                R.layout.item_timeline_event_bubbled_base_incoming
+            }
+        } else R.layout.item_timeline_event_base
+    }
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -64,7 +74,15 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
         super.unbind(holder)
     }
 
-    override fun getViewType() = STUB_ID
+    override fun getViewType(): Int {
+        //mmm how to do that
+        if (useBubble) {
+            return STUB_ID + if (outgoing) 1000 else 0
+        } else {
+            return STUB_ID
+        }
+    }
+
 
     class Holder : AbsMessageItem.Holder(STUB_ID) {
         val progressLayout by bind<ViewGroup>(R.id.messageMediaUploadProgressLayout)

@@ -39,7 +39,7 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                                                         private val dateFormatter: VectorDateFormatter,
                                                         private val colorProvider: ColorProvider) {
 
-    fun create(event: TimelineEvent, nextEvent: TimelineEvent?, readMarkerVisible: Boolean): MessageInformationData {
+    fun create(event: TimelineEvent, nextEvent: TimelineEvent?, readMarkerVisible: Boolean, isDirectRoom: Boolean): MessageInformationData {
         // Non nullability has been tested before
         val eventId = event.root.eventId!!
 
@@ -90,7 +90,9 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                         }
                         .toList(),
                 hasReadMarker = event.hasReadMarker,
-                displayReadMarker = displayReadMarker
+                displayReadMarker = displayReadMarker,
+                isFromMe = event.root.senderId == session.myUserId,
+                directRoom = isDirectRoom
         )
     }
 }
