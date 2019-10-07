@@ -28,6 +28,7 @@ import java.io.File
 import javax.inject.Inject
 
 private const val REALM_SHOULD_CLEAR_FLAG_ = "REALM_SHOULD_CLEAR_FLAG_"
+private const val REALM_NAME = "disk_store.realm"
 
 /**
  * This class is handling creation of RealmConfiguration for a session.
@@ -49,7 +50,7 @@ internal class SessionRealmConfigurationFactory @Inject constructor(private val 
             Timber.v("The realm file session was corrupted and couldn't be loaded.")
             Timber.v("The file has been deleted to recover.")
             Timber.v("************************************************************")
-            directory.deleteRecursively()
+            deleteRealmFiles()
         }
         sharedPreferences
                 .edit()
@@ -58,7 +59,7 @@ internal class SessionRealmConfigurationFactory @Inject constructor(private val 
 
         val realmConfiguration = RealmConfiguration.Builder()
                 .directory(directory)
-                .name("disk_store.realm")
+                .name(REALM_NAME)
                 .apply {
                     realmKeysUtils.configureEncryption(this, "${SessionModule.DB_ALIAS_PREFIX}$userMd5")
                 }
@@ -77,5 +78,14 @@ internal class SessionRealmConfigurationFactory @Inject constructor(private val 
         return realmConfiguration
     }
 
-
+    // Delete all the realm files of the session
+    private fun deleteRealmFiles() {
+        listOf(REALM_NAME, "$REALM_NAME.lock", "$REALM_NAME.note", "$REALM_NAME.management").forEach { file ->
+            try {
+                File(directory, file).deleteRecursively()
+            } catch (e: Exception) {
+                Timber.e(e, "Unable to move files")
+            }
+        }
+    }
 }
