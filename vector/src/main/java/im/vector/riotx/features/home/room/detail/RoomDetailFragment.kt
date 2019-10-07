@@ -32,6 +32,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
@@ -79,8 +80,6 @@ import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.ui.views.JumpToReadMarkerView
 import im.vector.riotx.core.ui.views.NotificationAreaView
 import im.vector.riotx.core.utils.*
-import im.vector.riotx.core.utils.Debouncer
-import im.vector.riotx.core.utils.createUIHandler
 import im.vector.riotx.features.autocomplete.command.AutocompleteCommandPresenter
 import im.vector.riotx.features.autocomplete.command.CommandAutocompletePolicy
 import im.vector.riotx.features.autocomplete.user.AutocompleteUserPresenter
@@ -362,7 +361,7 @@ class RoomDetailFragment :
 
     private fun renderSpecialMode(event: TimelineEvent,
                                   @DrawableRes iconRes: Int,
-                                 descriptionRes: Int,
+                                  @StringRes descriptionRes: Int,
                                   defaultContent: String) {
         commandAutocompletePolicy.enabled = false
         //switch to expanded bar
@@ -376,25 +375,17 @@ class RoomDetailFragment :
         var formattedBody: CharSequence? = null
         if (messageContent is MessageTextContent && messageContent.format == MessageType.FORMAT_MATRIX_HTML) {
             val parser = Parser.builder().build()
-            val document = parser.parse(messageContent.formattedBody
-                                        ?: messageContent.body)
+            val document = parser.parse(messageContent.formattedBody ?: messageContent.body)
             formattedBody = eventHtmlRenderer.render(document)
         }
-        composerLayout.composerRelatedMessageContent.text = formattedBody
-                                                            ?: nonFormattedBody
+        composerLayout.composerRelatedMessageContent.text = formattedBody ?: nonFormattedBody
 
         updateComposerText(defaultContent)
 
         composerLayout.composerRelatedMessageActionIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), iconRes))
         composerLayout.sendButton.setContentDescription(getString(descriptionRes))
 
-
-        avatarRenderer.render(event.senderAvatar, event.root.senderId
-                                                  ?: "", event.senderName, composerLayout.composerRelatedMessageAvatar)
-        avatarRenderer.render(event.senderAvatar,
-                              event.root.senderId ?: "",
-                              event.senderName,
-                              composerLayout.composerRelatedMessageAvatar)
+        avatarRenderer.render(event.senderAvatar, event.root.senderId ?: "", event.senderName, composerLayout.composerRelatedMessageAvatar)
         composerLayout.expand {
             //need to do it here also when not using quick reply
             focusComposerAndShowKeyboard()
@@ -431,10 +422,8 @@ class RoomDetailFragment :
             when (requestCode) {
                 REQUEST_FILES_REQUEST_CODE, TAKE_IMAGE_REQUEST_CODE -> handleMediaIntent(data)
                 REACTION_SELECT_REQUEST_CODE                        -> {
-                    val eventId = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_EVENT_ID)
-                                  ?: return
-                    val reaction = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_REACTION_RESULT)
-                                   ?: return
+                    val eventId = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_EVENT_ID) ?: return
+                    val reaction = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_REACTION_RESULT) ?: return
                     //TODO check if already reacted with that?
                     roomDetailViewModel.process(RoomDetailActions.SendReaction(reaction, eventId))
                 }
@@ -596,7 +585,6 @@ class RoomDetailFragment :
                 Timber.w("Send button is locked")
                 return@setOnClickListener
             }
-            composerLayout.sendButton.setContentDescription(getString(R.string.send))
             val textMessage = composerLayout.composerEditText.text.toString()
             if (textMessage.isNotBlank()) {
                 lockSendButton = true

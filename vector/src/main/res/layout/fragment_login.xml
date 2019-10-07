@@ -87,9 +87,9 @@
                     android:layout_marginTop="8dp"
                     android:background="?attr/selectableItemBackground"
                     android:scaleType="center"
-                    android:contentDescription="@string/a11y_show_password"
                     android:src="@drawable/ic_eye_black"
-                    android:tint="?attr/colorAccent" />
+                    android:tint="?attr/colorAccent"
+                    tools:contentDescription="@string/a11y_show_password" />
 
             </FrameLayout>
 
@@ -104,8 +104,8 @@
                     android:id="@+id/homeServerField"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textUri"
                     android:imeOptions="actionDone"
+                    android:inputType="textUri"
                     android:maxLines="1" />
 
             </com.google.android.material.textfield.TextInputLayout>

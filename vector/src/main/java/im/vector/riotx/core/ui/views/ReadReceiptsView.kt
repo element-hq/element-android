@@ -28,7 +28,7 @@ import im.vector.riotx.features.home.room.detail.timeline.item.ReadReceiptData
 import kotlinx.android.synthetic.main.view_read_receipts.view.*
 
 private const val MAX_RECEIPT_DISPLAYED = 5
-private const val MAX_RECEIPT_DESCRIBED = 4
+private const val MAX_RECEIPT_DESCRIBED = 3
 
 class ReadReceiptsView @JvmOverloads constructor(
         context: Context,
@@ -52,7 +52,6 @@ class ReadReceiptsView @JvmOverloads constructor(
         setOnClickListener(clickListener)
         if (readReceipts.isNotEmpty()) {
             isVisible = true
-            val displayNames = arrayListOf<String>()
             for (index in 0 until MAX_RECEIPT_DISPLAYED) {
                 val receiptData = readReceipts.getOrNull(index)
                 if (receiptData == null) {
@@ -60,11 +59,14 @@ class ReadReceiptsView @JvmOverloads constructor(
                 } else {
                     receiptAvatars[index].visibility = View.VISIBLE
                     avatarRenderer.render(receiptData.avatarUrl, receiptData.userId, receiptData.displayName, receiptAvatars[index])
-                    if (null !=receiptData.displayName && displayNames.size <MAX_RECEIPT_DESCRIBED) {
-                        displayNames.add(receiptData.displayName);
-                    }
                 }
             }
+
+            val displayNames = readReceipts
+                    .mapNotNull { it.displayName }
+                    .filter { it.isNotBlank() }
+                    .take(MAX_RECEIPT_DESCRIBED)
+
             if (readReceipts.size > MAX_RECEIPT_DISPLAYED) {
                 receiptMore.visibility = View.VISIBLE
                 receiptMore.text = context.getString(
@@ -73,13 +75,31 @@ class ReadReceiptsView @JvmOverloads constructor(
             } else {
                 receiptMore.visibility = View.GONE
             }
-            when (displayNames.size) {
-                0 -> setContentDescription(context.getResources().getQuantityString(R.plurals.fallback_users_read, readReceipts.size))
-                1 -> setContentDescription(context.getString(R.string.one_user_read, displayNames.get(0)))
-                2 -> setContentDescription(context.getString(R.string.two_users_read, displayNames.get(0), displayNames.get(1)))
-                3 -> setContentDescription(context.getString(R.string.three_users_read, displayNames.get(0), displayNames.get(1), displayNames.get(2)))
-                else -> setContentDescription(context.getString(R.string.two_and_some_others_read,
-                    displayNames.get(0), displayNames.get(1), (readReceipts.size -2)))
+            contentDescription = when (readReceipts.size) {
+                1    ->
+                    if (displayNames.size == 1) {
+                        context.getString(R.string.one_user_read, displayNames[0])
+                    } else {
+                        context.resources.getQuantityString(R.plurals.fallback_users_read, readReceipts.size)
+                    }
+                2    ->
+                    if (displayNames.size == 2) {
+                        context.getString(R.string.two_users_read, displayNames[0], displayNames[1])
+                    } else {
+                        context.resources.getQuantityString(R.plurals.fallback_users_read, readReceipts.size)
+                    }
+                3    ->
+                    if (displayNames.size == 3) {
+                        context.getString(R.string.three_users_read, displayNames[0], displayNames[1], displayNames[2])
+                    } else {
+                        context.resources.getQuantityString(R.plurals.fallback_users_read, readReceipts.size)
+                    }
+                else ->
+                    if (displayNames.size >= 2) {
+                        context.getString(R.string.two_and_some_others_read, displayNames[0], displayNames[1], (readReceipts.size - 2))
+                    } else {
+                        context.resources.getQuantityString(R.plurals.fallback_users_read, readReceipts.size)
+                    }
             }
         } else {
             isVisible = false

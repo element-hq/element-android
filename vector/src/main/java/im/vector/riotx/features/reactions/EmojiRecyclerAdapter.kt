@@ -132,7 +132,7 @@ class EmojiRecyclerAdapter(val dataSource: EmojiDataSource? = null, var reaction
         itemView.setOnClickListener(itemClickListener)
         val viewHolder = when (viewType) {
             R.layout.grid_section_header -> SectionViewHolder(itemView)
-            else -> EmojiViewHolder(itemView)
+            else                         -> EmojiViewHolder(itemView)
         }
         endTraceSession()
         return viewHolder
@@ -200,7 +200,7 @@ class EmojiRecyclerAdapter(val dataSource: EmojiDataSource? = null, var reaction
                 val sectionMojis = categories[sectionNumber].emojis
                 val sectionOffset = getSectionOffset(sectionNumber)
                 val emoji = sectionMojis[position - sectionOffset]
-                val item = dataSource!!.rawData!!.emojis[emoji]!!.emojiString()
+                val item = dataSource.rawData!!.emojis[emoji]!!.emojiString()
                 (holder as EmojiViewHolder).data = item
                 if (scrollState != ScrollState.SETTLING || !isFastScroll) {
 //                    Log.i("PERF","Bind with draw at position:$position")
@@ -232,13 +232,13 @@ class EmojiRecyclerAdapter(val dataSource: EmojiDataSource? = null, var reaction
 
 
     override fun getItemCount(): Int {
-        dataSource?.rawData?.categories?.let {
+        return dataSource?.rawData?.categories?.let {
             var count = /*number of sections*/ it.size
             for (ad in it) {
                 count += ad.emojis.size
             }
-            return count
-        } ?: kotlin.run { return 0 }
+            count
+        } ?: 0
     }
 
 
@@ -258,7 +258,7 @@ class EmojiRecyclerAdapter(val dataSource: EmojiDataSource? = null, var reaction
             emojiView.emoji = s
             if (s != null) {
                 emojiView.mLayout = getStaticLayoutForEmoji(s)
-                emojiView.setContentDescription(s)
+                emojiView.contentDescription = s
                 placeHolder.visibility = View.GONE
 //                emojiView.visibility = View.VISIBLE
             } else {
@@ -298,11 +298,10 @@ class EmojiRecyclerAdapter(val dataSource: EmojiDataSource? = null, var reaction
             var cachedLayout = staticLayoutCache[emoji]
             if (cachedLayout == null) {
                 cachedLayout = StaticLayout(emoji, EmojiDrawView.tPaint, EmojiDrawView.emojiSize, Layout.Alignment.ALIGN_CENTER, 1f, 0f, true)
-                staticLayoutCache[emoji] = cachedLayout!!
+                staticLayoutCache[emoji] = cachedLayout
             }
-            return cachedLayout!!
+            return cachedLayout
         }
-
     }
 
     interface InteractionListener {
@@ -315,10 +314,10 @@ class EmojiRecyclerAdapter(val dataSource: EmojiDataSource? = null, var reaction
         override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
             super.onScrollStateChanged(recyclerView, newState)
             scrollState = when (newState) {
-                RecyclerView.SCROLL_STATE_IDLE -> ScrollState.IDLE
+                RecyclerView.SCROLL_STATE_IDLE     -> ScrollState.IDLE
                 RecyclerView.SCROLL_STATE_SETTLING -> ScrollState.SETTLING
                 RecyclerView.SCROLL_STATE_DRAGGING -> ScrollState.DRAGGING
-                else -> ScrollState.UNKNWON
+                else                               -> ScrollState.UNKNWON
             }
 
             //TODO better

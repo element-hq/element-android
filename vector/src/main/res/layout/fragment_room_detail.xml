@@ -6,29 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <FrameLayout
-        android:id="@+id/syncProgressBarWrap"
-        android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/roomToolbar"
-        tools:visibility="visible">
-
-        <ProgressBar
-            android:id="@+id/syncProgressBar"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="14dp"
-            android:layout_gravity="center"
-            android:background="?riotx_header_panel_background"
-            android:indeterminate="true"
-            android:visibility="gone"
-            tools:visibility="visible" />
-    </FrameLayout>
-
-    <!-- Trick to remove surrounding padding (clip frome wrapping frame) -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/roomToolbar"
         style="@style/VectorToolbarStyle"
@@ -127,7 +104,8 @@
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/syncStateView" />
+        app:layout_constraintTop_toBottomOf="@id/syncStateView"
+        tools:visibility="visible" />
 
     <im.vector.riotx.core.ui.views.NotificationAreaView
         android:id="@+id/notificationAreaView"
