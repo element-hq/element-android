@@ -30,6 +30,7 @@ import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.hasBeenEdited
+import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.rx.RxRoom
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.canReact
@@ -110,7 +111,9 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
                 }
     }
 
-    private fun actionsForEvent(event: TimelineEvent): List<SimpleAction> {
+    private fun actionsForEvent(optionalEvent: Optional<TimelineEvent>): List<SimpleAction> {
+        val event = optionalEvent.getOrNull() ?: return emptyList()
+
         val messageContent: MessageContent? = event.annotations?.editSummary?.aggregatedContent.toModel()
                 ?: event.root.getClearContent().toModel()
         val type = messageContent?.type

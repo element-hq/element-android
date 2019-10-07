@@ -27,6 +27,7 @@ import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.matrix.rx.RxRoom
+import im.vector.matrix.rx.unwrap
 import im.vector.riotx.core.extensions.canReact
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.features.home.room.detail.timeline.format.NoticeEventFormatter
@@ -51,7 +52,7 @@ data class MessageActionState(
     fun senderName(): String = informationData.memberName?.toString() ?: ""
 
     fun time(): String? = timelineEvent()?.root?.originServerTs?.let { dateFormat.format(Date(it)) }
-            ?: ""
+                          ?: ""
 
     fun canReact() = timelineEvent()?.canReact() == true
 
@@ -61,7 +62,7 @@ data class MessageActionState(
                 val messageContent: MessageContent? = timelineEvent()?.getLastMessageContent()
                 if (messageContent is MessageTextContent && messageContent.format == MessageType.FORMAT_MATRIX_HTML) {
                     eventHtmlRenderer?.render(messageContent.formattedBody
-                            ?: messageContent.body)
+                                              ?: messageContent.body)
                 } else {
                     messageContent?.body
                 }
@@ -116,6 +117,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         if (room == null) return
         RxRoom(room)
                 .liveTimelineEvent(eventId)
+                .unwrap()
                 .execute {
                     copy(timelineEvent = it)
                 }

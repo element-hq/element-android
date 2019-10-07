@@ -36,6 +36,8 @@ import me.saket.bettermovementmethod.BetterLinkMovementMethod
 abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
 
     @EpoxyAttribute
+    var searchForPills: Boolean = false
+    @EpoxyAttribute
     var message: CharSequence? = null
     @EpoxyAttribute
     var useBigFont: Boolean = false
@@ -65,22 +67,22 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.messageView.movementMethod = mvmtMethod
-
         if (useBigFont) {
             holder.messageView.textSize = 44F
         } else {
             holder.messageView.textSize = 14F
         }
-
-        val textFuture = PrecomputedTextCompat.getTextFuture(message ?: "",
-                TextViewCompat.getTextMetricsParams(holder.messageView),
-                null)
-
-        holder.messageView.setTextFuture(textFuture)
         renderSendState(holder.messageView, holder.messageView)
         holder.messageView.setOnClickListener(attributes.itemClickListener)
         holder.messageView.setOnLongClickListener(attributes.itemLongClickListener)
-        findPillsAndProcess { it.bind(holder.messageView) }
+        if (searchForPills) {
+            findPillsAndProcess { it.bind(holder.messageView) }
+        }
+        val textFuture = PrecomputedTextCompat.getTextFuture(
+                message ?: "",
+                TextViewCompat.getTextMetricsParams(holder.messageView),
+                null)
+        holder.messageView.setTextFuture(textFuture)
     }
 
     private fun findPillsAndProcess(processBlock: (span: PillImageSpan) -> Unit) {

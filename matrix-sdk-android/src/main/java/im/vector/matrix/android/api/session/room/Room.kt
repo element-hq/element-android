@@ -26,6 +26,7 @@ import im.vector.matrix.android.api.session.room.send.DraftService
 import im.vector.matrix.android.api.session.room.send.SendService
 import im.vector.matrix.android.api.session.room.state.StateService
 import im.vector.matrix.android.api.session.room.timeline.TimelineService
+import im.vector.matrix.android.api.util.Optional
 
 /**
  * This interface defines methods to interact within a room.
@@ -49,7 +50,7 @@ interface Room :
      * A live [RoomSummary] associated with the room
      * You can observe this summary to get dynamic data from this room.
      */
-    fun getRoomSummaryLive(): LiveData<RoomSummary>
+    fun getRoomSummaryLive(): LiveData<Optional<RoomSummary>>
 
     fun roomSummary(): RoomSummary?
 

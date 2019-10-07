@@ -21,6 +21,7 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.model.EventAnnotationsSummary
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.util.Cancelable
+import im.vector.matrix.android.api.util.Optional
 
 /**
  * In some cases, events may wish to reference other events.
@@ -111,7 +112,7 @@ interface RelationService {
                        replyText: String,
                        autoMarkdown: Boolean = false): Cancelable?
 
-    fun getEventSummaryLive(eventId: String): LiveData<EventAnnotationsSummary>
+    fun getEventSummaryLive(eventId: String): LiveData<Optional<EventAnnotationsSummary>>
 
 
 }

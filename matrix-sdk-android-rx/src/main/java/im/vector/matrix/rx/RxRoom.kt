@@ -28,7 +28,7 @@ import io.reactivex.Single
 
 class RxRoom(private val room: Room) {
 
-    fun liveRoomSummary(): Observable<RoomSummary> {
+    fun liveRoomSummary(): Observable<Optional<RoomSummary>> {
         return room.getRoomSummaryLive().asObservable()
     }
 
@@ -36,11 +36,11 @@ class RxRoom(private val room: Room) {
         return room.getRoomMemberIdsLive().asObservable()
     }
 
-    fun liveAnnotationSummary(eventId: String): Observable<EventAnnotationsSummary> {
+    fun liveAnnotationSummary(eventId: String): Observable<Optional<EventAnnotationsSummary>> {
         return room.getEventSummaryLive(eventId).asObservable()
     }
 
-    fun liveTimelineEvent(eventId: String): Observable<TimelineEvent> {
+    fun liveTimelineEvent(eventId: String): Observable<Optional<TimelineEvent>> {
         return room.getTimeLineEventLive(eventId).asObservable()
     }
 

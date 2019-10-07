@@ -250,6 +250,7 @@ class MessageItemFactory @Inject constructor(
                                      callback: TimelineEventController.Callback?,
                                      attributes: AbsMessageItem.Attributes): MessageTextItem? {
 
+        val isFormatted = messageContent.formattedBody.isNullOrBlank().not()
         val bodyToUse = messageContent.formattedBody?.let {
             htmlRenderer.get().render(it.trim())
         } ?: messageContent.body
@@ -265,6 +266,7 @@ class MessageItemFactory @Inject constructor(
                         message(linkifiedBody)
                     }
                 }
+                .searchForPills(isFormatted)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .attributes(attributes)
                 .highlighted(highlight)

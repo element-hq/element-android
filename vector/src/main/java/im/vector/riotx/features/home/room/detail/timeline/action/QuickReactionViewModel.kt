@@ -77,7 +77,7 @@ class QuickReactionViewModel @AssistedInject constructor(@Assisted initialState:
                 .liveAnnotationSummary(eventId)
                 .map { annotations ->
                     quickEmojis.map { emoji ->
-                        ToggleState(emoji, annotations.reactionsSummary.firstOrNull { it.key == emoji }?.addedByMe
+                        ToggleState(emoji, annotations.getOrNull()?.reactionsSummary?.firstOrNull { it.key == emoji }?.addedByMe
                                 ?: false)
                     }
                 }

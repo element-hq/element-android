@@ -1,61 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-    <include
-        android:id="@+id/itemMergedAvatarListView"
-        layout="@layout/vector_message_merge_avatar_list"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        app:layout_constraintEnd_toStartOf="@+id/itemMergedExpandTextView"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/itemMergedExpandTextView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:paddingRight="8dp"
-        android:layout_marginTop="2dp"
-        android:paddingLeft="8dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:text="@string/merged_events_expand"
-        android:textColor="?attr/colorAccent"
-        android:textSize="14sp"
-        android:textStyle="italic"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <include
+            android:id="@+id/itemMergedAvatarListView"
+            layout="@layout/vector_message_merge_avatar_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_alignParentStart="true"
+            android:layout_toLeftOf="@+id/itemMergedExpandTextView"
+            android:layout_marginEnd="16dp" />
+
+        <TextView
+            android:id="@+id/itemMergedExpandTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:paddingLeft="8dp"
+            android:paddingTop="4dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="4dp"
+            android:layout_alignParentEnd="true"
+            android:text="@string/merged_events_expand"
+            android:textColor="?attr/colorAccent"
+            android:textSize="14sp"
+            android:textStyle="italic" />
+
+    </RelativeLayout>
 
     <View
         android:id="@+id/itemMergedSeparatorView"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="4dp"
-        android:background="?attr/riotx_header_panel_background"
-        app:layout_constraintEnd_toEndOf="@id/itemMergedExpandTextView"
-        app:layout_constraintStart_toStartOf="@id/itemMergedAvatarListView"
-        app:layout_constraintTop_toBottomOf="@id/itemMergedExpandTextView" />
+        android:background="?attr/riotx_header_panel_background"/>
+
 
     <TextView
         android:id="@+id/itemMergedSummaryTextView"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:textColor="?riotx_text_secondary"
         android:textIsSelectable="false"
         android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/itemMergedAvatarListView"
-        app:layout_constraintTop_toBottomOf="@id/itemMergedSeparatorView"
         tools:text="3 membership changes" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

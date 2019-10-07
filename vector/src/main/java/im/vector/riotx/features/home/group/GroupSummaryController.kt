@@ -16,17 +16,29 @@
 
 package im.vector.riotx.features.home.group
 
+import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.riotx.features.home.AvatarRenderer
 import javax.inject.Inject
 
-class GroupSummaryController @Inject constructor(private val avatarRenderer: AvatarRenderer): TypedEpoxyController<GroupListViewState>() {
+class GroupSummaryController @Inject constructor(private val avatarRenderer: AvatarRenderer) : EpoxyController() {
 
     var callback: Callback? = null
+    private var viewState: GroupListViewState? = null
 
-    override fun buildModels(viewState: GroupListViewState) {
-        buildGroupModels(viewState.asyncGroups(), viewState.selectedGroup)
+    init {
+        requestModelBuild()
+    }
+
+    fun update(viewState: GroupListViewState) {
+        this.viewState = viewState
+        requestModelBuild()
+    }
+
+    override fun buildModels() {
+        val nonNullViewState = viewState ?: return
+        buildGroupModels(nonNullViewState.asyncGroups(), nonNullViewState.selectedGroup)
     }
 
     private fun buildGroupModels(summaries: List<GroupSummary>?, selected: GroupSummary?) {

@@ -27,6 +27,7 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.ReactionAggregatedSummary
 import im.vector.matrix.rx.RxRoom
+import im.vector.matrix.rx.unwrap
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.utils.isSingleEmoji
 import im.vector.riotx.core.date.VectorDateFormatter
@@ -87,6 +88,7 @@ class ViewReactionViewModel @AssistedInject constructor(@Assisted
     private fun observeEventAnnotationSummaries() {
         RxRoom(room)
                 .liveAnnotationSummary(eventId)
+                .unwrap()
                 .flatMapSingle { summaries ->
                     Observable
                             .fromIterable(summaries.reactionsSummary)

@@ -17,8 +17,11 @@ package im.vector.riotx.features.home.room.detail.timeline.item
 
 import android.view.View
 import android.view.ViewStub
+import android.widget.RelativeLayout
 import androidx.annotation.IdRes
 import androidx.constraintlayout.widget.Guideline
+import androidx.core.view.marginStart
+import androidx.core.view.updateLayoutParams
 import com.airbnb.epoxy.EpoxyAttribute
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
@@ -44,7 +47,9 @@ abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>
 
     override fun bind(holder: H) {
         super.bind(holder)
-        holder.leftGuideline.setGuidelineBegin(leftGuideline)
+        holder.leftGuideline.updateLayoutParams<RelativeLayout.LayoutParams> {
+            this.marginStart = leftGuideline
+        }
         holder.checkableBackground.isChecked = highlighted
     }
 
@@ -55,7 +60,7 @@ abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>
     abstract fun getEventIds(): List<String>
 
     abstract class BaseHolder(@IdRes val stubId: Int) : VectorEpoxyHolder() {
-        val leftGuideline by bind<Guideline>(R.id.messageStartGuideline)
+        val leftGuideline by bind<View>(R.id.messageStartGuideline)
         val checkableBackground by bind<CheckableView>(R.id.messageSelectedBackground)
         val readReceiptsView by bind<ReadReceiptsView>(R.id.readReceiptsView)
         val readMarkerView by bind<ReadMarkerView>(R.id.readMarkerView)
