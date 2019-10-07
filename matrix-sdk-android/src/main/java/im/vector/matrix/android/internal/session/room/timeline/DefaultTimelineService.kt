@@ -41,7 +41,8 @@ internal class DefaultTimelineService @AssistedInject constructor(@Assisted priv
                                                                   private val cryptoService: CryptoService,
                                                                   private val paginationTask: PaginationTask,
                                                                   private val timelineEventMapper: TimelineEventMapper,
-                                                                  private val readReceiptsSummaryMapper: ReadReceiptsSummaryMapper
+                                                                  private val readReceiptsSummaryMapper: ReadReceiptsSummaryMapper,
+                                                                  private val clearUnlinkedEventsTask: ClearUnlinkedEventsTask
 ) : TimelineService {
 
     @AssistedInject.Factory
@@ -55,6 +56,7 @@ internal class DefaultTimelineService @AssistedInject constructor(@Assisted priv
                                monarchy.realmConfiguration,
                                taskExecutor,
                                contextOfEventTask,
+                               clearUnlinkedEventsTask,
                                paginationTask,
                                cryptoService,
                                timelineEventMapper,

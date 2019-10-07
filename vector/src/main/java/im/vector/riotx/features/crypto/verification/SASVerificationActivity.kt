@@ -97,8 +97,9 @@ class SASVerificationActivity : SimpleFragmentActivity() {
             }
 
             if (isIncoming) {
-                val incoming = viewModel.transaction as IncomingSasVerificationTransaction
-                when (incoming.uxState) {
+                val incoming = viewModel.transaction as? IncomingSasVerificationTransaction
+                when (incoming?.uxState) {
+                    null,
                     IncomingSasVerificationTransaction.UxState.UNKNOWN,
                     IncomingSasVerificationTransaction.UxState.SHOW_ACCEPT,
                     IncomingSasVerificationTransaction.UxState.WAIT_FOR_KEY_AGREEMENT -> {

@@ -23,24 +23,17 @@ import im.vector.riotx.features.home.room.detail.timeline.TimelineEventControlle
 import im.vector.riotx.features.home.room.detail.timeline.helper.MessageInformationDataFactory
 import im.vector.riotx.features.home.room.detail.timeline.item.DefaultItem
 import im.vector.riotx.features.home.room.detail.timeline.item.DefaultItem_
+import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
 import javax.inject.Inject
 
 class DefaultItemFactory @Inject constructor(private val avatarSizeProvider: AvatarSizeProvider,
                                              private val avatarRenderer: AvatarRenderer,
                                              private val informationDataFactory: MessageInformationDataFactory) {
 
-    fun create(event: TimelineEvent,
+    fun create(text: String,
+               informationData: MessageInformationData,
                highlight: Boolean,
-               readMarkerVisible: Boolean,
-               callback: TimelineEventController.Callback?,
-               exception: Exception? = null): DefaultItem? {
-        val text = if (exception == null) {
-            "${event.root.getClearType()} events are not yet handled"
-        } else {
-            "an exception occurred when rendering the event ${event.root.eventId}"
-        }
-
-        val informationData = informationDataFactory.create(event, null, readMarkerVisible)
+               callback: TimelineEventController.Callback?): DefaultItem {
 
         return DefaultItem_()
                 .leftGuideline(avatarSizeProvider.leftGuideline)
@@ -50,6 +43,20 @@ class DefaultItemFactory @Inject constructor(private val avatarSizeProvider: Ava
                 .informationData(informationData)
                 .baseCallback(callback)
                 .readReceiptsCallback(callback)
+    }
+
+    fun create(event: TimelineEvent,
+               highlight: Boolean,
+               readMarkerVisible: Boolean,
+               callback: TimelineEventController.Callback?,
+               exception: Exception? = null): DefaultItem {
+        val text = if (exception == null) {
+            "${event.root.getClearType()} events are not yet handled"
+        } else {
+            "an exception occurred when rendering the event ${event.root.eventId}"
+        }
+        val informationData = informationDataFactory.create(event, null, readMarkerVisible)
+        return create(text, informationData, highlight, callback)
     }
 
 }

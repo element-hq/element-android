@@ -32,7 +32,7 @@ internal class SyncResponseHandler @Inject constructor(private val roomSyncHandl
                                                        private val cryptoService: DefaultCryptoService,
                                                        private val initialSyncProgressService: DefaultInitialSyncProgressService) {
 
-    suspend fun handleResponse(syncResponse: SyncResponse, fromToken: String?, isCatchingUp: Boolean) {
+    suspend fun handleResponse(syncResponse: SyncResponse, fromToken: String?) {
         val isInitialSync = fromToken == null
         Timber.v("Start handling sync, is InitialSync: $isInitialSync")
         val reporter = initialSyncProgressService.takeIf { isInitialSync }

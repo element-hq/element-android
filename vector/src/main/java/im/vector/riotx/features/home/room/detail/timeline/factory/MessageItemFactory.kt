@@ -73,6 +73,7 @@ class MessageItemFactory @Inject constructor(
         private val messageInformationDataFactory: MessageInformationDataFactory,
         private val messageItemAttributesFactory: MessageItemAttributesFactory,
         private val contentUploadStateTrackerBinder: ContentUploadStateTrackerBinder,
+        private val defaultItemFactory: DefaultItemFactory,
         private val noticeItemFactory: NoticeItemFactory,
         private val avatarSizeProvider: AvatarSizeProvider) {
 
@@ -93,13 +94,13 @@ class MessageItemFactory @Inject constructor(
             return buildRedactedItem(attributes, highlight)
         }
 
-        val messageContent: MessageContent =
-                event.getLastMessageContent()
-                ?: //Malformed content, we should echo something on screen
-                return DefaultItem_().text(stringProvider.getString(R.string.malformed_message))
-
+        val messageContent = event.getLastMessageContent()
+        if (messageContent == null) {
+            val malformedText = stringProvider.getString(R.string.malformed_message)
+            return defaultItemFactory.create(malformedText, informationData, highlight, callback)
+        }
         if (messageContent.relatesTo?.type == RelationType.REPLACE
-            || event.isEncrypted() && event.root.content.toModel<EncryptedEventContent>()?.relatesTo?.type == RelationType.REPLACE
+                || event.isEncrypted() && event.root.content.toModel<EncryptedEventContent>()?.relatesTo?.type == RelationType.REPLACE
         ) {
             // This is an edit event, we should it when debugging as a notice event
             return noticeItemFactory.create(event, highlight, readMarkerVisible, callback)
@@ -110,21 +111,21 @@ class MessageItemFactory @Inject constructor(
 //        val ev = all.toModel<Event>()
         return when (messageContent) {
             is MessageEmoteContent  -> buildEmoteMessageItem(messageContent,
-                                                             informationData,
-                                                             highlight,
-                                                             callback,
-                                                             attributes)
+                    informationData,
+                    highlight,
+                    callback,
+                    attributes)
             is MessageTextContent   -> buildTextMessageItem(messageContent,
-                                                            informationData,
-                                                            highlight,
-                                                            callback,
-                                                            attributes)
+                    informationData,
+                    highlight,
+                    callback,
+                    attributes)
             is MessageImageContent  -> buildImageMessageItem(messageContent, informationData, highlight, callback, attributes)
             is MessageNoticeContent -> buildNoticeMessageItem(messageContent, informationData, highlight, callback, attributes)
             is MessageVideoContent  -> buildVideoMessageItem(messageContent, informationData, highlight, callback, attributes)
             is MessageFileContent   -> buildFileMessageItem(messageContent, informationData, highlight, callback, attributes)
             is MessageAudioContent  -> buildAudioMessageItem(messageContent, informationData, highlight, callback, attributes)
-            else                    -> buildNotHandledMessageItem(messageContent, highlight)
+            else                    -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback)
         }
     }
 
@@ -166,12 +167,12 @@ class MessageItemFactory @Inject constructor(
                         }))
     }
 
-    private fun buildNotHandledMessageItem(messageContent: MessageContent, highlight: Boolean): DefaultItem? {
+    private fun buildNotHandledMessageItem(messageContent: MessageContent,
+                                           informationData: MessageInformationData,
+                                           highlight: Boolean,
+                                           callback: TimelineEventController.Callback?): DefaultItem? {
         val text = "${messageContent.type} message events are not yet handled"
-        return DefaultItem_()
-                .leftGuideline(avatarSizeProvider.leftGuideline)
-                .text(text)
-                .highlighted(highlight)
+        return defaultItemFactory.create(text, informationData, highlight, callback)
     }
 
     private fun buildImageMessageItem(messageContent: MessageImageContent,
@@ -216,7 +217,7 @@ class MessageItemFactory @Inject constructor(
         val thumbnailData = ImageContentRenderer.Data(
                 filename = messageContent.body,
                 url = messageContent.videoInfo?.thumbnailFile?.url
-                      ?: messageContent.videoInfo?.thumbnailUrl,
+                        ?: messageContent.videoInfo?.thumbnailUrl,
                 elementToDecrypt = messageContent.videoInfo?.thumbnailFile?.toElementToDecrypt(),
                 height = messageContent.videoInfo?.height,
                 maxHeight = maxHeight,
@@ -297,9 +298,9 @@ class MessageItemFactory @Inject constructor(
                 //nop
             }
         },
-                          editStart,
-                          editEnd,
-                          Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+                editStart,
+                editEnd,
+                Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
         return spannable
     }
 

@@ -53,6 +53,8 @@ import io.realm.RealmConfiguration
 import io.realm.RealmQuery
 import io.realm.RealmResults
 import io.realm.Sort
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
@@ -71,6 +73,7 @@ internal class DefaultTimeline(
         private val realmConfiguration: RealmConfiguration,
         private val taskExecutor: TaskExecutor,
         private val contextOfEventTask: GetContextOfEventTask,
+        private val clearUnlinkedEventsTask: ClearUnlinkedEventsTask,
         private val paginationTask: PaginationTask,
         private val cryptoService: CryptoService,
         private val timelineEventMapper: TimelineEventMapper,
@@ -176,11 +179,10 @@ internal class DefaultTimeline(
     override fun start() {
         if (isStarted.compareAndSet(false, true)) {
             Timber.v("Start timeline for roomId: $roomId and eventId: $initialEventId")
-            eventDecryptor.start()
             BACKGROUND_HANDLER.post {
+                eventDecryptor.start()
                 val realm = Realm.getInstance(realmConfiguration)
                 backgroundRealm.set(realm)
-                clearUnlinkedEvents(realm)
 
                 roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst()?.also {
                     it.sendingTimelineEvents.addChangeListener { _ ->
@@ -215,18 +217,25 @@ internal class DefaultTimeline(
             BACKGROUND_HANDLER.removeCallbacksAndMessages(null)
             BACKGROUND_HANDLER.post {
                 roomEntity?.sendingTimelineEvents?.removeAllChangeListeners()
-                eventRelations.removeAllChangeListeners()
-                filteredEvents.removeAllChangeListeners()
+                if (this::eventRelations.isInitialized) {
+                    eventRelations.removeAllChangeListeners()
+                }
+                if (this::filteredEvents.isInitialized) {
+                    filteredEvents.removeAllChangeListeners()
+                }
                 hiddenReadMarker.dispose()
                 if (settings.buildReadReceipts) {
                     hiddenReadReceipts.dispose()
                 }
                 clearAllValues()
                 backgroundRealm.getAndSet(null).also {
-                    it.close()
+                    it?.close()
                 }
+                eventDecryptor.destroy()
             }
-            eventDecryptor.destroy()
+            clearUnlinkedEventsTask
+                    .configureWith(ClearUnlinkedEventsTask.Params(roomId))
+                    .executeBy(taskExecutor)
         }
     }
 
@@ -500,9 +509,9 @@ internal class DefaultTimeline(
             return
         }
         val params = PaginationTask.Params(roomId = roomId,
-                                           from = token,
-                                           direction = direction.toPaginationDirection(),
-                                           limit = limit)
+                from = token,
+                direction = direction.toPaginationDirection(),
+                limit = limit)
 
         Timber.v("Should fetch $limit items $direction")
         cancelableBag += paginationTask
@@ -578,7 +587,7 @@ internal class DefaultTimeline(
             val timelineEvent = buildTimelineEvent(eventEntity)
 
             if (timelineEvent.isEncrypted()
-                && timelineEvent.root.mxDecryptionResult == null) {
+                    && timelineEvent.root.mxDecryptionResult == null) {
                 timelineEvent.root.eventId?.let { eventDecryptor.requestDecryption(it) }
             }
 
@@ -637,18 +646,6 @@ internal class DefaultTimeline(
             TimelineEventEntity
                     .where(realm, roomId = roomId, linkFilterMode = EventEntity.LinkFilterMode.BOTH)
                     .`in`("${TimelineEventEntityFields.CHUNK}.${ChunkEntityFields.TIMELINE_EVENTS.EVENT_ID}", arrayOf(initialEventId))
-        }
-    }
-
-    private fun clearUnlinkedEvents(realm: Realm) {
-        realm.executeTransaction { localRealm ->
-            val unlinkedChunks = ChunkEntity
-                    .where(localRealm, roomId = roomId)
-                    .equalTo("${ChunkEntityFields.TIMELINE_EVENTS.ROOT}.${EventEntityFields.IS_UNLINKED}", true)
-                    .findAll()
-            unlinkedChunks.forEach {
-                it.deleteOnCascade()
-            }
         }
     }
 

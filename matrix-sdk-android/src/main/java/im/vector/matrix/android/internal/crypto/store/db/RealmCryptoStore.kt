@@ -360,7 +360,7 @@ internal class RealmCryptoStore(private val realmConfiguration: RealmConfigurati
             return
         }
 
-        doRealmTransaction(realmConfiguration) {
+        doRealmTransaction(realmConfiguration) { realm ->
             sessions.forEach { session ->
                 var sessionIdentifier: String? = null
 
@@ -387,7 +387,7 @@ internal class RealmCryptoStore(private val realmConfiguration: RealmConfigurati
                         putInboundGroupSession(session)
                     }
 
-                    it.insertOrUpdate(realmOlmInboundGroupSession)
+                    realm.insertOrUpdate(realmOlmInboundGroupSession)
                 }
             }
         }

@@ -26,6 +26,7 @@ import im.vector.matrix.android.internal.database.query.where
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import timber.log.Timber
+import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 
@@ -53,18 +54,20 @@ internal class TimelineEventDecryptor(
 
     }
 
-    private val executor = Executors.newSingleThreadExecutor()
+    private var executor: ExecutorService? = null
 
     private val existingRequests = HashSet<String>()
     private val unknownSessionsFailure = HashMap<String, MutableList<String>>()
 
     fun start() {
+        executor = Executors.newSingleThreadExecutor()
         cryptoService.addNewSessionListener(newSessionListener)
     }
 
     fun destroy() {
         cryptoService.removeSessionListener(newSessionListener)
-        executor.shutdownNow()
+        executor?.shutdownNow()
+        executor = null
         unknownSessionsFailure.clear()
         existingRequests.clear()
     }
@@ -85,11 +88,9 @@ internal class TimelineEventDecryptor(
                 }
             }
         }
-        executor.execute {
+        executor?.execute {
             Realm.getInstance(realmConfiguration).use { realm ->
-                realm.executeTransaction {
-                    processDecryptRequest(eventId, it)
-                }
+                processDecryptRequest(eventId, realm)
             }
         }
     }
@@ -104,12 +105,16 @@ internal class TimelineEventDecryptor(
         try {
             val result = cryptoService.decryptEvent(event, timelineId)
             Timber.v("Successfully decrypted event ${eventId}")
-            eventEntity.setDecryptionResult(result)
+            realm.executeTransaction {
+                eventEntity.setDecryptionResult(result)
+            }
         } catch (e: MXCryptoError) {
             Timber.v("Failed to decrypt event ${eventId} ${e}")
             if (e is MXCryptoError.Base && e.errorType == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID) {
                 //Keep track of unknown sessions to automatically try to decrypt on new session
-                eventEntity.decryptionErrorCode = e.errorType.name
+                realm.executeTransaction {
+                    eventEntity.decryptionErrorCode = e.errorType.name
+                }
                 event.content?.toModel<EncryptedEventContent>()?.let { content ->
                     content.sessionId?.let { sessionId ->
                         synchronized(unknownSessionsFailure) {

@@ -34,6 +34,7 @@ import im.vector.matrix.android.internal.session.user.accountdata.DirectChatsHel
 import im.vector.matrix.android.internal.session.user.accountdata.UpdateUserAccountDataTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
+import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.Realm
 import timber.log.Timber
 import javax.inject.Inject
@@ -62,8 +63,8 @@ internal class UserAccountDataSyncHandler @Inject constructor(private val monarc
         savePushRulesTask.execute(SavePushRulesTask.Params(userAccountDataPushRules.content))
     }
 
-    private fun handleDirectChatRooms(directMessages: UserAccountDataDirectMessages) {
-        monarchy.runTransactionSync { realm ->
+    private suspend fun handleDirectChatRooms(directMessages: UserAccountDataDirectMessages) {
+        monarchy.awaitTransaction { realm ->
             val oldDirectRooms = RoomSummaryEntity.getDirectRooms(realm)
             oldDirectRooms.forEach {
                 it.isDirect = false
