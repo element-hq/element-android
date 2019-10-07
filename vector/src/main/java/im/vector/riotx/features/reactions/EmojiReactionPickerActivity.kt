@@ -92,7 +92,10 @@ class EmojiReactionPickerActivity : VectorBaseActivity(), EmojiCompatFontProvide
             it.rawData?.categories?.let { categories ->
                 for (category in categories) {
                     val s = category.emojis[0]
-                    tabLayout.addTab(tabLayout.newTab().setText(it.rawData!!.emojis[s]!!.emojiString()))
+                    val newTab =tabLayout.newTab()
+                    newTab.setText(it.rawData!!.emojis[s]!!.emojiString())
+                    newTab.setContentDescription(category.name)
+                    tabLayout.addTab(newTab)
                 }
                 tabLayout.addOnTabSelectedListener(tabLayoutSelectionListener)
             }

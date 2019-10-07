@@ -260,9 +260,9 @@ class RoomDetailFragment :
         roomDetailViewModel.selectSubscribe(RoomDetailViewState::sendMode) { mode ->
             when (mode) {
                 is SendMode.REGULAR -> renderRegularMode(mode.text)
-                is SendMode.EDIT    -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_edit, mode.text)
-                is SendMode.QUOTE   -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_quote, mode.text)
-                is SendMode.REPLY   -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_reply, mode.text)
+                is SendMode.EDIT    -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_edit, R.string.edit, mode.text)
+                is SendMode.QUOTE   -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_quote, R.string.quote, mode.text)
+                is SendMode.REPLY   -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_reply, R.string.reply, mode.text)
             }
         }
 
@@ -357,10 +357,12 @@ class RoomDetailFragment :
         composerLayout.collapse()
 
         updateComposerText(text)
+        composerLayout.sendButton.setContentDescription(getString(R.string.send))
     }
 
     private fun renderSpecialMode(event: TimelineEvent,
                                   @DrawableRes iconRes: Int,
+                                 descriptionRes: Int,
                                   defaultContent: String) {
         commandAutocompletePolicy.enabled = false
         //switch to expanded bar
@@ -384,6 +386,8 @@ class RoomDetailFragment :
         updateComposerText(defaultContent)
 
         composerLayout.composerRelatedMessageActionIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), iconRes))
+        composerLayout.sendButton.setContentDescription(getString(descriptionRes))
+
 
         avatarRenderer.render(event.senderAvatar, event.root.senderId
                                                   ?: "", event.senderName, composerLayout.composerRelatedMessageAvatar)
@@ -592,6 +596,7 @@ class RoomDetailFragment :
                 Timber.w("Send button is locked")
                 return@setOnClickListener
             }
+            composerLayout.sendButton.setContentDescription(getString(R.string.send))
             val textMessage = composerLayout.composerEditText.text.toString()
             if (textMessage.isNotBlank()) {
                 lockSendButton = true

@@ -87,6 +87,7 @@
                     android:layout_marginTop="8dp"
                     android:background="?attr/selectableItemBackground"
                     android:scaleType="center"
+                    android:contentDescription="@string/a11y_show_password"
                     android:src="@drawable/ic_eye_black"
                     android:tint="?attr/colorAccent" />
 

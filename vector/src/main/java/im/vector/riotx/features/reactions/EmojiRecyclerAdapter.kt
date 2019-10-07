@@ -258,6 +258,7 @@ class EmojiRecyclerAdapter(val dataSource: EmojiDataSource? = null, var reaction
             emojiView.emoji = s
             if (s != null) {
                 emojiView.mLayout = getStaticLayoutForEmoji(s)
+                emojiView.setContentDescription(s)
                 placeHolder.visibility = View.GONE
 //                emojiView.visibility = View.VISIBLE
             } else {

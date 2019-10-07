@@ -166,6 +166,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
+        android:contentDescription="@string/a11y_jump_to_bottom"
         android:src="@drawable/chevron_down"
         app:backgroundTint="#FFFFFF"
         app:badgeBackgroundColor="@color/riotx_accent"
