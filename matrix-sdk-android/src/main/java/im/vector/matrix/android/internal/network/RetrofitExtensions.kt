@@ -80,7 +80,7 @@ internal fun <T> Response<T>.toFailure(): Failure {
  * Convert a okhttp3 Response to a Failure, and eventually parse errorBody to convert it to a MatrixError
  */
 internal fun okhttp3.Response.toFailure(): Failure {
-    return toFailure(body(), code())
+    return toFailure(body, code)
 }
 
 private fun toFailure(errorBody: ResponseBody?, httpCode: Int): Failure {

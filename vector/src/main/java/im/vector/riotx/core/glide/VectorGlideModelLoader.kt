@@ -34,7 +34,6 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
 import java.io.InputStream
-import com.bumptech.glide.load.engine.Resource as Resource1
 
 
 class VectorGlideModelLoaderFactory(private val activeSessionHolder: ActiveSessionHolder)
@@ -112,8 +111,8 @@ class VectorGlideDataFetcher(private val activeSessionHolder: ActiveSessionHolde
                 .build()
 
         val response = client.newCall(request).execute()
-        val inputStream = response.body()?.byteStream()
-        Timber.v("Response size ${response.body()?.contentLength()} - Stream available: ${inputStream?.available()}")
+        val inputStream = response.body?.byteStream()
+        Timber.v("Response size ${response.body?.contentLength()} - Stream available: ${inputStream?.available()}")
         if (!response.isSuccessful) {
             callback.onLoadFailed(IOException("Unexpected code $response"))
             return

@@ -23,6 +23,8 @@ import im.vector.matrix.android.internal.network.ProgressRequestBody
 import im.vector.matrix.android.internal.network.awaitResponse
 import im.vector.matrix.android.internal.network.toFailure
 import okhttp3.*
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import java.io.File
 import java.io.IOException
 import javax.inject.Inject
@@ -41,7 +43,7 @@ internal class FileUploader @Inject constructor(@Authenticated
                            filename: String?,
                            mimeType: String,
                            progressListener: ProgressRequestBody.Listener? = null): ContentUploadResponse {
-        val uploadBody = RequestBody.create(MediaType.parse(mimeType), file)
+        val uploadBody = RequestBody.create(mimeType.toMediaTypeOrNull(), file)
         return upload(uploadBody, filename, progressListener)
 
     }
@@ -50,13 +52,13 @@ internal class FileUploader @Inject constructor(@Authenticated
                                 filename: String?,
                                 mimeType: String,
                                 progressListener: ProgressRequestBody.Listener? = null): ContentUploadResponse {
-        val uploadBody = RequestBody.create(MediaType.parse(mimeType), byteArray)
+        val uploadBody = RequestBody.create(mimeType.toMediaTypeOrNull(), byteArray)
         return upload(uploadBody, filename, progressListener)
     }
 
 
     private suspend fun upload(uploadBody: RequestBody, filename: String?, progressListener: ProgressRequestBody.Listener?): ContentUploadResponse {
-        val urlBuilder = HttpUrl.parse(uploadUrl)?.newBuilder() ?: throw RuntimeException()
+        val urlBuilder = uploadUrl.toHttpUrlOrNull()?.newBuilder() ?: throw RuntimeException()
 
         val httpUrl = urlBuilder
                 .addQueryParameter("filename", filename)
@@ -73,7 +75,7 @@ internal class FileUploader @Inject constructor(@Authenticated
             if (!response.isSuccessful) {
                 throw response.toFailure()
             } else {
-                response.body()?.source()?.let {
+                response.body?.source()?.let {
                     responseAdapter.fromJson(it)
                 }
                         ?: throw IOException()

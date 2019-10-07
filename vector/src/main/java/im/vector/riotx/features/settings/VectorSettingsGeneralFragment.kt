@@ -61,25 +61,25 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
     private var mDisplayedPhoneNumber = ArrayList<String>()
 
     private val mUserSettingsCategory by lazy {
-        findPreference(VectorPreferences.SETTINGS_USER_SETTINGS_PREFERENCE_KEY) as PreferenceCategory
+        findPreference<PreferenceCategory>(VectorPreferences.SETTINGS_USER_SETTINGS_PREFERENCE_KEY)!!
     }
     private val mUserAvatarPreference by lazy {
-        findPreference(VectorPreferences.SETTINGS_PROFILE_PICTURE_PREFERENCE_KEY) as UserAvatarPreference
+        findPreference<UserAvatarPreference>(VectorPreferences.SETTINGS_PROFILE_PICTURE_PREFERENCE_KEY)!!
     }
     private val mDisplayNamePreference by lazy {
-        findPreference(VectorPreferences.SETTINGS_DISPLAY_NAME_PREFERENCE_KEY) as EditTextPreference
+        findPreference<EditTextPreference>(VectorPreferences.SETTINGS_DISPLAY_NAME_PREFERENCE_KEY)!!
     }
     private val mPasswordPreference by lazy {
-        findPreference(VectorPreferences.SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY)
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY)!!
     }
 
     // Local contacts
     private val mContactSettingsCategory by lazy {
-        findPreference(VectorPreferences.SETTINGS_CONTACT_PREFERENCE_KEYS) as PreferenceCategory
+        findPreference<PreferenceCategory>(VectorPreferences.SETTINGS_CONTACT_PREFERENCE_KEYS)!!
     }
 
     private val mContactPhonebookCountryPreference by lazy {
-        findPreference(VectorPreferences.SETTINGS_CONTACTS_PHONEBOOK_COUNTRY_PREFERENCE_KEY)
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_CONTACTS_PHONEBOOK_COUNTRY_PREFERENCE_KEY)!!
     }
 
 
@@ -111,7 +111,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         }
 
         // Add Email
-        (findPreference(ADD_EMAIL_PREFERENCE_KEY) as EditTextPreference).let {
+        findPreference<EditTextPreference>(ADD_EMAIL_PREFERENCE_KEY)!!.let {
             // It does not work on XML, do it here
             it.icon = activity?.let {
                 ThemeUtils.tintDrawable(it,
@@ -129,7 +129,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         }
 
         // Add phone number
-        findPreference(ADD_PHONE_NUMBER_PREFERENCE_KEY).let {
+        findPreference<VectorPreference>(ADD_PHONE_NUMBER_PREFERENCE_KEY)!!.let {
             // It does not work on XML, do it here
             it.icon = activity?.let {
                 ThemeUtils.tintDrawable(it,
@@ -147,15 +147,15 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         // Advanced settings
 
         // user account
-        findPreference(VectorPreferences.SETTINGS_LOGGED_IN_PREFERENCE_KEY)
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_LOGGED_IN_PREFERENCE_KEY)!!
                 .summary = session.myUserId
 
         // home server
-        findPreference(VectorPreferences.SETTINGS_HOME_SERVER_PREFERENCE_KEY)
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_HOME_SERVER_PREFERENCE_KEY)!!
                 .summary = session.sessionParams.homeServerConnectionConfig.homeServerUri.toString()
 
         // identity server
-        findPreference(VectorPreferences.SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY)
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY)!!
                 .summary = session.sessionParams.homeServerConnectionConfig.identityServerUri.toString()
 
 
@@ -165,7 +165,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         setContactsPreferences()
 
         // clear cache
-        findPreference(VectorPreferences.SETTINGS_CLEAR_CACHE_PREFERENCE_KEY).let {
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_CLEAR_CACHE_PREFERENCE_KEY)!!.let {
             /*
             TODO
             MXSession.getApplicationSizeCaches(activity, object : SimpleApiCallback<Long>() {
@@ -185,7 +185,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         }
 
         // clear medias cache
-        findPreference(VectorPreferences.SETTINGS_CLEAR_MEDIA_CACHE_PREFERENCE_KEY).let {
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_CLEAR_MEDIA_CACHE_PREFERENCE_KEY)!!.let {
             val size = getSizeOfFiles(requireContext(),
                     File(requireContext().cacheDir, DiskCache.Factory.DEFAULT_DISK_CACHE_DIR))
 
@@ -218,7 +218,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         }
 
         // Sign out
-        findPreference("SETTINGS_SIGN_OUT_KEY")
+        findPreference<VectorPreference>("SETTINGS_SIGN_OUT_KEY")!!
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
             activity?.let {
                 SignOutUiWorker(requireActivity())
@@ -232,7 +232,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         // Deactivate account section
 
         // deactivate account
-        findPreference(VectorPreferences.SETTINGS_DEACTIVATE_ACCOUNT_KEY)
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_DEACTIVATE_ACCOUNT_KEY)!!
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
             activity?.let {
                 notImplemented()
@@ -478,7 +478,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
             run {
                 var index = 0
                 while (true) {
-                    val preference = mUserSettingsCategory.findPreference(EMAIL_PREFERENCE_KEY_BASE + index)
+                    val preference = mUserSettingsCategory.findPreference<VectorPreference>(EMAIL_PREFERENCE_KEY_BASE + index)
 
                     if (null != preference) {
                         mUserSettingsCategory.removePreference(preference)
@@ -492,8 +492,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
             // add new emails list
             mDisplayedEmails = newEmailsList
 
-            val addEmailBtn = mUserSettingsCategory.findPreference(ADD_EMAIL_PREFERENCE_KEY)
-                    ?: return
+            val addEmailBtn = mUserSettingsCategory.findPreference<VectorPreference>(ADD_EMAIL_PREFERENCE_KEY) ?: return
 
             var order = addEmailBtn.order
 

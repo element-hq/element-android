@@ -33,9 +33,8 @@ class TestBackgroundRestrictions @Inject constructor(private val context: AppCom
             // Checks if the device is on a metered network
             if (isActiveNetworkMetered) {
                 // Checks user’s Data Saver settings.
-                val restrictBackgroundStatus = ConnectivityManagerCompat.getRestrictBackgroundStatus(this)
-                when (restrictBackgroundStatus) {
-                    ConnectivityManager.RESTRICT_BACKGROUND_STATUS_ENABLED     -> {
+                when (ConnectivityManagerCompat.getRestrictBackgroundStatus(this)) {
+                    ConnectivityManagerCompat.RESTRICT_BACKGROUND_STATUS_ENABLED     -> {
                         // Background data usage is blocked for this app. Wherever possible,
                         // the app should also use less data in the foreground.
                         description = stringProvider.getString(R.string.settings_troubleshoot_test_bg_restricted_failed,
@@ -43,7 +42,7 @@ class TestBackgroundRestrictions @Inject constructor(private val context: AppCom
                         status = TestStatus.FAILED
                         quickFix = null
                     }
-                    ConnectivityManager.RESTRICT_BACKGROUND_STATUS_WHITELISTED -> {
+                    ConnectivityManagerCompat.RESTRICT_BACKGROUND_STATUS_WHITELISTED -> {
                         // The app is whitelisted. Wherever possible,
                         // the app should use less data in the foreground and background.
                         description = stringProvider.getString(R.string.settings_troubleshoot_test_bg_restricted_success,
@@ -51,7 +50,7 @@ class TestBackgroundRestrictions @Inject constructor(private val context: AppCom
                         status = TestStatus.SUCCESS
                         quickFix = null
                     }
-                    ConnectivityManager.RESTRICT_BACKGROUND_STATUS_DISABLED    -> {
+                    ConnectivityManagerCompat.RESTRICT_BACKGROUND_STATUS_DISABLED    -> {
                         // Data Saver is disabled. Since the device is connected to a
                         // metered network, the app should use less data wherever possible.
                         description = stringProvider.getString(R.string.settings_troubleshoot_test_bg_restricted_success,

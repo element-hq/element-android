@@ -30,7 +30,7 @@ class VectorSettingsFlairFragment : VectorSettingsBaseFragment() {
 
     // Group Flairs
     private val mGroupsFlairCategory by lazy {
-        findPreference(VectorPreferences.SETTINGS_GROUPS_FLAIR_KEY) as PreferenceCategory
+        findPreference<PreferenceCategory>(VectorPreferences.SETTINGS_GROUPS_FLAIR_KEY)!!
     }
 
     override fun bindPref() {

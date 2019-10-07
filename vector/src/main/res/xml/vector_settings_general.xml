@@ -79,7 +79,7 @@
         <im.vector.riotx.core.preference.VectorPreference
             android:key="SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY"
             android:title="@string/settings_identity_server"
-            tools:summary="@string/default_identity_server_url" />
+            tools:summary="https://identity.server.url" />
 
         <im.vector.riotx.core.preference.VectorPreference
             android:key="SETTINGS_CLEAR_MEDIA_CACHE_PREFERENCE_KEY"

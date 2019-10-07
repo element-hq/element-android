@@ -25,6 +25,7 @@ import im.vector.matrix.android.api.pushrules.RuleKind
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.di.ScreenComponent
+import im.vector.riotx.core.preference.VectorSwitchPreference
 import im.vector.riotx.core.pushers.PushersManager
 import im.vector.riotx.push.fcm.FcmHelper
 import javax.inject.Inject
@@ -40,7 +41,7 @@ class VectorSettingsNotificationPreferenceFragment : VectorSettingsBaseFragment(
     @Inject lateinit var vectorPreferences: VectorPreferences
 
     override fun bindPref() {
-        findPreference(VectorPreferences.SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY).let { pref ->
+        findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY)!!.let { pref ->
             val pushRuleService = session
             val mRuleMaster = pushRuleService.getPushRules()
                     .find { it.ruleId == RuleIds.RULE_ID_DISABLE_ALL }

@@ -66,7 +66,7 @@ public class BugReporterMultipartBody extends RequestBody {
     private BugReporterMultipartBody(ByteString boundary, List<Part> parts) {
         mBoundary = boundary;
         mContentType = MediaType.parse(FORM + "; boundary=" + boundary.utf8());
-        mParts = Util.immutableList(parts);
+        mParts = Util.toImmutableList(parts);
     }
 
     @Override

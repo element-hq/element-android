@@ -23,6 +23,7 @@ import android.net.Uri
 import androidx.preference.Preference
 import androidx.preference.SwitchPreference
 import im.vector.riotx.R
+import im.vector.riotx.core.preference.VectorPreference
 import im.vector.riotx.core.utils.getCallRingtoneName
 import im.vector.riotx.core.utils.getCallRingtoneUri
 import im.vector.riotx.core.utils.setCallRingtoneUri
@@ -34,10 +35,10 @@ class VectorSettingsVoiceVideoFragment : VectorSettingsBaseFragment() {
     override val preferenceXmlRes = R.xml.vector_settings_voice_video
 
     private val mUseRiotCallRingtonePreference by lazy {
-        findPreference(VectorPreferences.SETTINGS_CALL_RINGTONE_USE_RIOT_PREFERENCE_KEY) as SwitchPreference
+        findPreference<SwitchPreference>(VectorPreferences.SETTINGS_CALL_RINGTONE_USE_RIOT_PREFERENCE_KEY)!!
     }
     private val mCallRingtonePreference by lazy {
-        findPreference(VectorPreferences.SETTINGS_CALL_RINGTONE_URI_PREFERENCE_KEY)
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_CALL_RINGTONE_URI_PREFERENCE_KEY)!!
     }
 
     override fun bindPref() {
