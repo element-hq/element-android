@@ -43,7 +43,7 @@ fun <T> doWithRealm(realmConfiguration: RealmConfiguration, action: (Realm) -> T
 fun <T : RealmObject> doRealmQueryAndCopy(realmConfiguration: RealmConfiguration, action: (Realm) -> T?): T? {
     return Realm.getInstance(realmConfiguration).use { realm ->
         val result = action.invoke(realm)
-        result?.let { realm.copyFromRealm(result) }
+        result?.let { realm.copyFromRealm(it) }
     }
 }
 
@@ -53,7 +53,7 @@ fun <T : RealmObject> doRealmQueryAndCopy(realmConfiguration: RealmConfiguration
 fun <T : RealmObject> doRealmQueryAndCopyList(realmConfiguration: RealmConfiguration, action: (Realm) -> Iterable<T>): Iterable<T> {
     return Realm.getInstance(realmConfiguration).use { realm ->
         val result = action.invoke(realm)
-        return realm.copyFromRealm(result)
+        realm.copyFromRealm(result)
     }
 }
 

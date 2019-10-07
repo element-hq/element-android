@@ -33,7 +33,7 @@ class DefaultItemFactory @Inject constructor(private val avatarSizeProvider: Ava
     fun create(text: String,
                informationData: MessageInformationData,
                highlight: Boolean,
-               callback: TimelineEventController.Callback?): DefaultItem? {
+               callback: TimelineEventController.Callback?): DefaultItem {
 
         return DefaultItem_()
                 .leftGuideline(avatarSizeProvider.leftGuideline)
@@ -49,7 +49,7 @@ class DefaultItemFactory @Inject constructor(private val avatarSizeProvider: Ava
                highlight: Boolean,
                readMarkerVisible: Boolean,
                callback: TimelineEventController.Callback?,
-               exception: Exception? = null): DefaultItem? {
+               exception: Exception? = null): DefaultItem {
         val text = if (exception == null) {
             "${event.root.getClearType()} events are not yet handled"
         } else {
