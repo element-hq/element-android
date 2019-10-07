@@ -31,7 +31,6 @@ import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilitiesSer
 import im.vector.matrix.android.api.session.securestorage.SecureStorageService
 import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.database.SessionRealmConfigurationFactory
-import im.vector.matrix.android.internal.database.model.SessionRealmModule
 import im.vector.matrix.android.internal.di.*
 import im.vector.matrix.android.internal.network.AccessTokenInterceptor
 import im.vector.matrix.android.internal.network.RetrofitFactory
@@ -95,10 +94,8 @@ internal abstract class SessionModule {
         @Provides
         @SessionDatabase
         @SessionScope
-        fun providesRealmConfiguration(realmConfigurationFactory: SessionRealmConfigurationFactory,
-                                       @UserCacheDirectory directory: File,
-                                       @UserMd5 userMd5: String): RealmConfiguration {
-            return realmConfigurationFactory.create(directory, userMd5)
+        fun providesRealmConfiguration(realmConfigurationFactory: SessionRealmConfigurationFactory): RealmConfiguration {
+            return realmConfigurationFactory.create()
         }
 
         @JvmStatic

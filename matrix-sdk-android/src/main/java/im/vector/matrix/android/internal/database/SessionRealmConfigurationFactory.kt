@@ -18,6 +18,8 @@ package im.vector.matrix.android.internal.database
 
 import android.content.Context
 import im.vector.matrix.android.internal.database.model.SessionRealmModule
+import im.vector.matrix.android.internal.di.UserCacheDirectory
+import im.vector.matrix.android.internal.di.UserMd5
 import im.vector.matrix.android.internal.session.SessionModule
 import io.realm.Realm
 import io.realm.RealmConfiguration
@@ -33,17 +35,19 @@ private const val REALM_SHOULD_CLEAR_FLAG_ = "REALM_SHOULD_CLEAR_FLAG_"
  * It's clearly not perfect but there is no way to catch the native crash.
  */
 internal class SessionRealmConfigurationFactory @Inject constructor(private val realmKeysUtils: RealmKeysUtils,
+                                                                    @UserCacheDirectory val directory: File,
+                                                                    @UserMd5 val userMd5: String,
                                                                     context: Context) {
 
     private val sharedPreferences = context.getSharedPreferences("im.vector.matrix.android.realm", Context.MODE_PRIVATE)
 
 
-    fun create(directory: File, userMd5: String): RealmConfiguration {
+    fun create(): RealmConfiguration {
         val shouldClearRealm = sharedPreferences.getBoolean("$REALM_SHOULD_CLEAR_FLAG_$userMd5", false)
         if (shouldClearRealm) {
             Timber.v("************************************************************")
-            Timber.v("The realm file session was corrupted and couldn't be loaded. ")
-            Timber.v("The file has been deleted to recover. ")
+            Timber.v("The realm file session was corrupted and couldn't be loaded.")
+            Timber.v("The file has been deleted to recover.")
             Timber.v("************************************************************")
             directory.deleteRecursively()
         }
