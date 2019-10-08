@@ -42,7 +42,7 @@ internal class DefaultPushRuleService @Inject constructor(private val getPushRul
                                                           private val monarchy: Monarchy
 ) : PushRuleService {
 
-    private var listeners = ArrayList<PushRuleService.PushRuleListener>()
+    private var listeners = mutableSetOf<PushRuleService.PushRuleListener>()
 
     override fun fetchPushRules(scope: String) {
         getPushRulesTask
@@ -99,13 +99,16 @@ internal class DefaultPushRuleService @Inject constructor(private val getPushRul
     }
 
     override fun removePushRuleListener(listener: PushRuleService.PushRuleListener) {
-        listeners.remove(listener)
+        synchronized(listeners) {
+            listeners.remove(listener)
+        }
     }
 
 
     override fun addPushRuleListener(listener: PushRuleService.PushRuleListener) {
-        if (!listeners.contains(listener))
+        synchronized(listeners) {
             listeners.add(listener)
+        }
     }
 
 //    fun processEvents(events: List<Event>) {
@@ -121,53 +124,63 @@ internal class DefaultPushRuleService @Inject constructor(private val getPushRul
 //    }
 
     fun dispatchBing(event: Event, rule: PushRule) {
-        try {
-            val actionsList = rule.getActions()
-            listeners.forEach {
-                it.onMatchRule(event, actionsList)
+        synchronized(listeners) {
+            try {
+                val actionsList = rule.getActions()
+                listeners.forEach {
+                    it.onMatchRule(event, actionsList)
+                }
+            } catch (e: Throwable) {
+                Timber.e(e, "Error while dispatching bing")
             }
-        } catch (e: Throwable) {
-            Timber.e(e, "Error while dispatching bing")
         }
     }
 
     fun dispatchRoomJoined(roomId: String) {
-        try {
-            listeners.forEach {
-                it.onRoomJoined(roomId)
+        synchronized(listeners) {
+            try {
+                listeners.forEach {
+                    it.onRoomJoined(roomId)
+                }
+            } catch (e: Throwable) {
+                Timber.e(e, "Error while dispatching room joined")
             }
-        } catch (e: Throwable) {
-            Timber.e(e, "Error while dispatching room left")
         }
     }
 
     fun dispatchRoomLeft(roomId: String) {
-        try {
-            listeners.forEach {
-                it.onRoomLeft(roomId)
+        synchronized(listeners) {
+            try {
+                listeners.forEach {
+                    it.onRoomLeft(roomId)
+                }
+            } catch (e: Throwable) {
+                Timber.e(e, "Error while dispatching room left")
             }
-        } catch (e: Throwable) {
-            Timber.e(e, "Error while dispatching room left")
         }
     }
 
     fun dispatchRedactedEventId(redactedEventId: String) {
-        try {
-            listeners.forEach {
-                it.onEventRedacted(redactedEventId)
+        synchronized(listeners) {
+            try {
+                listeners.forEach {
+                    it.onEventRedacted(redactedEventId)
+                }
+            } catch (e: Throwable) {
+                Timber.e(e, "Error while dispatching redacted event")
             }
-        } catch (e: Throwable) {
-            Timber.e(e, "Error while dispatching room left")
         }
     }
 
     fun dispatchFinish() {
-        try {
-            listeners.forEach {
-                it.batchFinish()
+        synchronized(listeners) {
+            try {
+                listeners.forEach {
+                    it.batchFinish()
+                }
+            } catch (e: Throwable) {
+                Timber.e(e, "Error while dispatching finish")
             }
-        } catch (e: Throwable) {
-            Timber.e(e, "Error while dispatching finish")
         }
     }
 }
