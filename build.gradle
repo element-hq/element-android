@@ -59,6 +59,11 @@ allprojects {
         ]
     }
 
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+        // Warnings are potential errors, so stop ignoring them
+        kotlinOptions.allWarningsAsErrors = true
+    }
+
     afterEvaluate {
         extensions.findByName("kapt")?.arguments {
             arg("dagger.gradle.incremental", "enabled")
