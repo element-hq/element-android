@@ -142,8 +142,13 @@ class LoginFragment : VectorBaseFragment() {
     private fun renderPasswordField() {
         passwordField.showPassword(passwordShown)
 
-        passwordReveal.setImageResource(if (passwordShown) R.drawable.ic_eye_closed_black else R.drawable.ic_eye_black)
-        passwordReveal.setContentDescription(if (passwordShown) getString(R.string.a11y_hide_password) else getString(R.string.a11y_show_password))
+        if (passwordShown) {
+            passwordReveal.setImageResource(R.drawable.ic_eye_closed_black)
+            passwordReveal.contentDescription = getString(R.string.a11y_hide_password)
+        } else {
+            passwordReveal.setImageResource(R.drawable.ic_eye_black)
+            passwordReveal.contentDescription = getString(R.string.a11y_show_password)
+        }
     }
 
     override fun invalidate() = withState(viewModel) { state ->

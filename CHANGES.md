@@ -168,21 +168,21 @@ Mode details here: https://medium.com/@RiotChat/introducing-the-riotx-beta-for-a
 Changes in RiotX 0.0.0 (2019-XX-XX)
 ===================================================
 
-Features:
+Features ✨:
  -
 
-Improvements:
+Improvements 🙌:
  -
 
 Other changes:
  -
 
-Bugfix:
+Bugfix 🐛:
  -
 
-Translations:
+Translations 🗣:
  -
 
-Build:
+Build 🧱:
  -
 
