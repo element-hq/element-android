@@ -118,6 +118,9 @@ dependencies {
 
     implementation "ru.noties.markwon:core:$markwon_version"
 
+    // Image
+    implementation 'androidx.exifinterface:exifinterface:1.0.0'
+
     // Database
     implementation 'com.github.Zhuinden:realm-monarchy:0.5.1'
     kapt 'dk.ilios:realmfieldnameshelper:1.1.1'

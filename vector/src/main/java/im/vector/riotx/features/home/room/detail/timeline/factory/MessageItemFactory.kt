@@ -189,9 +189,7 @@ class MessageItemFactory @Inject constructor(
                 height = messageContent.info?.height,
                 maxHeight = maxHeight,
                 width = messageContent.info?.width,
-                maxWidth = maxWidth,
-                orientation = messageContent.info?.orientation,
-                rotation = messageContent.info?.rotation
+                maxWidth = maxWidth
         )
         return MessageImageVideoItem_()
                 .attributes(attributes)
