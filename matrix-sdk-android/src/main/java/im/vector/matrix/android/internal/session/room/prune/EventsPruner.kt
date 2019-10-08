@@ -23,7 +23,6 @@ import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.query.types
 import im.vector.matrix.android.internal.di.SessionDatabase
-import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import io.realm.OrderedCollectionChangeSet
@@ -37,7 +36,6 @@ import javax.inject.Inject
  * As it will actually delete the content, it should be called last in the list of listener.
  */
 internal class EventsPruner @Inject constructor(@SessionDatabase realmConfiguration: RealmConfiguration,
-                                                @UserId private val userId: String,
                                                 private val pruneEventTask: PruneEventTask,
                                                 private val taskExecutor: TaskExecutor) :
         RealmLiveEntityObserver<EventEntity>(realmConfiguration) {
@@ -52,10 +50,7 @@ internal class EventsPruner @Inject constructor(@SessionDatabase realmConfigurat
                 .mapNotNull { results[it]?.asDomain() }
                 .toList()
 
-        val params = PruneEventTask.Params(
-                insertedDomains,
-                userId
-        )
+        val params = PruneEventTask.Params(insertedDomains)
         pruneEventTask.configureWith(params).executeBy(taskExecutor)
     }
 

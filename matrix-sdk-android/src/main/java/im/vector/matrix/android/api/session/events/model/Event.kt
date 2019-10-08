@@ -136,6 +136,7 @@ data class Event(
      * @return the event content
      */
     fun getClearContent(): Content? {
+        @Suppress("UNCHECKED_CAST")
         return mxDecryptionResult?.payload?.get("content") as? Content ?: content
     }
 

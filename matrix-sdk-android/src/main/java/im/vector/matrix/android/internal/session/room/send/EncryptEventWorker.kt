@@ -71,7 +71,7 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
         localEchoUpdater.updateSendState(localEvent.eventId, SendState.ENCRYPTING)
 
 
-        val localMutableContent = HashMap(localEvent.content)
+        val localMutableContent = localEvent.content?.toMutableMap() ?: mutableMapOf()
         params.keepKeys?.forEach {
             localMutableContent.remove(it)
         }

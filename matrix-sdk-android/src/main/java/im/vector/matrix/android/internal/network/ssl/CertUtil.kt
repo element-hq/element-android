@@ -104,11 +104,11 @@ internal object CertUtil {
      * Recursively checks the exception to see if it was caused by an
      * UnrecognizedCertificateException
      *
-     * @param e the throwable.
+     * @param root the throwable.
      * @return The UnrecognizedCertificateException if exists, else null.
      */
-    fun getCertificateException(e: Throwable?): UnrecognizedCertificateException? {
-        var e = e
+    fun getCertificateException(root: Throwable?): UnrecognizedCertificateException? {
+        var e = root
         var i = 0 // Just in case there is a getCause loop
         while (e != null && i < 10) {
             if (e is UnrecognizedCertificateException) {
@@ -140,7 +140,7 @@ internal object CertUtil {
                 try {
                     tf = TrustManagerFactory.getInstance("PKIX")
                 } catch (e: Exception) {
-                    Timber.e(e, "## newPinnedSSLSocketFactory() : TrustManagerFactory.getInstance failed " + e.message)
+                    Timber.e(e, "## newPinnedSSLSocketFactory() : TrustManagerFactory.getInstance failed")
                 }
 
                 // it doesn't exist, use the default one.
@@ -148,7 +148,7 @@ internal object CertUtil {
                     try {
                         tf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
                     } catch (e: Exception) {
-                        Timber.e(e, "## addRule : onBingRuleUpdateFailure failed " + e.message)
+                        Timber.e(e, "## addRule : onBingRuleUpdateFailure failed")
                     }
 
                 }
@@ -202,7 +202,7 @@ internal object CertUtil {
             try {
                 for (cert in session.peerCertificates) {
                     for (allowedFingerprint in trustedFingerprints) {
-                        if (allowedFingerprint != null && cert is X509Certificate && allowedFingerprint.matchesCert(cert)) {
+                        if (cert is X509Certificate && allowedFingerprint.matchesCert(cert)) {
                             return@HostnameVerifier true
                         }
                     }
@@ -235,6 +235,7 @@ internal object CertUtil {
             builder.cipherSuites(*tlsCipherSuites.toTypedArray())
         }
 
+        @Suppress("DEPRECATION")
         builder.supportsTlsExtensions(hsConfig.shouldAcceptTlsExtensions)
         val list = ArrayList<ConnectionSpec>()
         list.add(builder.build())

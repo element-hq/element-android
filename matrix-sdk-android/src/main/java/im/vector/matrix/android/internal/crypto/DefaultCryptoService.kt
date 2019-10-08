@@ -31,9 +31,7 @@ import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.listeners.ProgressListener
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
-import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupService
 import im.vector.matrix.android.api.session.crypto.keyshare.RoomKeysRequestListener
-import im.vector.matrix.android.api.session.crypto.sas.SasVerificationService
 import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
@@ -289,24 +287,18 @@ internal class DefaultCryptoService @Inject constructor(
         outgoingRoomKeyRequestManager.stop()
     }
 
-    override fun isCryptoEnabled(): Boolean {
-        // TODO Check that this test is correct
-        return olmDevice != null
-    }
+    // Aways enabled on RiotX
+    override fun isCryptoEnabled() = true
 
     /**
      * @return the Keys backup Service
      */
-    override fun getKeysBackupService(): KeysBackupService {
-        return keysBackup
-    }
+    override fun getKeysBackupService() = keysBackup
 
     /**
      * @return the SasVerificationService
      */
-    override fun getSasVerificationService(): SasVerificationService {
-        return sasVerificationService
-    }
+    override fun getSasVerificationService() = sasVerificationService
 
     /**
      * A sync response has been received

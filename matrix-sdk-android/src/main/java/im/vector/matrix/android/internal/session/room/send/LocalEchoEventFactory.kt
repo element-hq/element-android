@@ -160,7 +160,7 @@ internal class LocalEchoEventFactory @Inject constructor(@UserId private val use
                         reaction
                 )
         )
-        val localId = dummyEventId(roomId)
+        val localId = dummyEventId()
         return Event(
                 roomId = roomId,
                 originServerTs = dummyOriginServerTs(),
@@ -266,7 +266,7 @@ internal class LocalEchoEventFactory @Inject constructor(@UserId private val use
     }
 
     private fun createEvent(roomId: String, content: Any? = null): Event {
-        val localID = dummyEventId(roomId)
+        val localID = dummyEventId()
         return Event(
                 roomId = roomId,
                 originServerTs = dummyOriginServerTs(),
@@ -282,7 +282,7 @@ internal class LocalEchoEventFactory @Inject constructor(@UserId private val use
         return System.currentTimeMillis()
     }
 
-    private fun dummyEventId(roomId: String): String {
+    private fun dummyEventId(): String {
         return "$LOCAL_ID_PREFIX${UUID.randomUUID()}"
     }
 
@@ -384,7 +384,7 @@ internal class LocalEchoEventFactory @Inject constructor(@UserId private val use
     }
      */
     fun createRedactEvent(roomId: String, eventId: String, reason: String?): Event {
-        val localID = dummyEventId(roomId)
+        val localID = dummyEventId()
         return Event(
                 roomId = roomId,
                 originServerTs = dummyOriginServerTs(),
@@ -398,7 +398,7 @@ internal class LocalEchoEventFactory @Inject constructor(@UserId private val use
     }
 
     fun saveLocalEcho(monarchy: Monarchy, event: Event) {
-        if (event.roomId == null) throw IllegalStateException("Your event should have a roomId")
+        checkNotNull(event.roomId) { "Your event should have a roomId" }
         monarchy.writeAsync { realm ->
             val roomEntity = RoomEntity.where(realm, roomId = event.roomId).findFirst()
                     ?: return@writeAsync

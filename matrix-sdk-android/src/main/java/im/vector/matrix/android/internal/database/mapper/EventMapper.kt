@@ -48,16 +48,17 @@ internal object EventMapper {
     }
 
     fun map(eventEntity: EventEntity): Event {
-        val ud = if (eventEntity.unsignedData.isNullOrBlank()) {
-            null
-        } else {
-            try {
-                MoshiProvider.providesMoshi().adapter(UnsignedData::class.java).fromJson(eventEntity.unsignedData)
-            } catch (t: JsonDataException) {
-                null
-            }
+        val ud = eventEntity.unsignedData
+                ?.takeIf { it.isNotBlank() }
+                ?.let {
+                    try {
+                        MoshiProvider.providesMoshi().adapter(UnsignedData::class.java).fromJson(it)
+                    } catch (t: JsonDataException) {
+                        Timber.e(t, "Failed to parse UnsignedData")
+                        null
+                    }
+                }
 
-        }
         return Event(
                 type = eventEntity.type,
                 eventId = eventEntity.eventId,
@@ -79,7 +80,9 @@ internal object EventMapper {
                 }
             }
             //TODO get the full crypto error object
-            it.mCryptoError = eventEntity.decryptionErrorCode?.let { MXCryptoError.ErrorType.valueOf(it) }
+            it.mCryptoError = eventEntity.decryptionErrorCode?.let { errorCode ->
+                MXCryptoError.ErrorType.valueOf(errorCode)
+            }
         }
     }
 

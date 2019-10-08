@@ -250,7 +250,7 @@ internal class MXOlmDevice @Inject constructor(
                 return null
             }
 
-            Timber.v("## createInboundSession() : sessionId: " + olmSession.sessionIdentifier())
+            Timber.v("## createInboundSession() : sessionId: ${olmSession.sessionIdentifier()}")
 
             try {
                 olmAccount!!.removeOneTimeKeys(olmSession)
@@ -262,7 +262,7 @@ internal class MXOlmDevice @Inject constructor(
             Timber.v("## createInboundSession() : ciphertext: $ciphertext")
             try {
                 val sha256 = olmUtility!!.sha256(URLEncoder.encode(ciphertext, "utf-8"))
-                Timber.v("## createInboundSession() :ciphertext: SHA256:" + sha256)
+                Timber.v("## createInboundSession() :ciphertext: SHA256: $sha256")
             } catch (e: Exception) {
                 Timber.e(e, "## createInboundSession() :ciphertext: cannot encode ciphertext")
             }
@@ -352,7 +352,7 @@ internal class MXOlmDevice @Inject constructor(
                 res["body"] = olmMessage.mCipherText
                 res["type"] = olmMessage.mType
             } catch (e: Exception) {
-                Timber.e(e, "## encryptMessage() : failed " + e.message)
+                Timber.e(e, "## encryptMessage() : failed")
             }
 
         }
@@ -384,7 +384,7 @@ internal class MXOlmDevice @Inject constructor(
                 olmSessionWrapper.onMessageReceived()
                 store.storeSession(olmSessionWrapper, theirDeviceIdentityKey)
             } catch (e: Exception) {
-                Timber.e(e, "## decryptMessage() : decryptMessage failed " + e.message)
+                Timber.e(e, "## decryptMessage() : decryptMessage failed")
             }
 
         }
@@ -425,7 +425,7 @@ internal class MXOlmDevice @Inject constructor(
             outboundGroupSessionStore[session.sessionIdentifier()] = session
             return session.sessionIdentifier()
         } catch (e: Exception) {
-            Timber.e(e, "createOutboundGroupSession " + e.message)
+            Timber.e(e, "createOutboundGroupSession")
 
             session?.releaseSession()
         }
@@ -444,7 +444,7 @@ internal class MXOlmDevice @Inject constructor(
             try {
                 return outboundGroupSessionStore[sessionId]!!.sessionKey()
             } catch (e: Exception) {
-                Timber.e(e, "## getSessionKey() : failed " + e.message)
+                Timber.e(e, "## getSessionKey() : failed")
             }
 
         }
@@ -475,7 +475,7 @@ internal class MXOlmDevice @Inject constructor(
             try {
                 return outboundGroupSessionStore[sessionId]!!.encryptMessage(payloadString)
             } catch (e: Exception) {
-                Timber.e(e, "## encryptGroupMessage() : failed " + e.message)
+                Timber.e(e, "## encryptGroupMessage() : failed")
             }
 
         }
@@ -583,7 +583,7 @@ internal class MXOlmDevice @Inject constructor(
 
             try {
                 if (!TextUtils.equals(session.olmInboundGroupSession?.sessionIdentifier(), sessionId)) {
-                    Timber.e("## importInboundGroupSession : ERROR: Mismatched group session ID from senderKey: " + senderKey!!)
+                    Timber.e("## importInboundGroupSession : ERROR: Mismatched group session ID from senderKey: $senderKey")
                     if (session.olmInboundGroupSession != null) session.olmInboundGroupSession!!.releaseSession()
                     continue
                 }
@@ -652,9 +652,8 @@ internal class MXOlmDevice @Inject constructor(
         // Check that the room id matches the original one for the session. This stops
         // the HS pretending a message was targeting a different room.
         if (roomId == session.roomId) {
-            var decryptResult: OlmInboundGroupSession.DecryptMessageResult? = null
-            try {
-                decryptResult = session.olmInboundGroupSession!!.decryptMessage(body)
+            val decryptResult = try {
+                session.olmInboundGroupSession!!.decryptMessage(body)
             } catch (e: OlmException) {
                 Timber.e(e, "## decryptGroupMessage () : decryptMessage failed")
                 throw MXCryptoError.OlmError(e)

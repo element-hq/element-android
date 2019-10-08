@@ -61,7 +61,7 @@ internal object EventAnnotationsSummaryMapper {
                     it.lastEditTs
             )
         }
-        eventAnnotationsSummaryEntity.reactionsSummary = annotationsSummary.reactionsSummary?.let {
+        eventAnnotationsSummaryEntity.reactionsSummary = annotationsSummary.reactionsSummary.let {
             RealmList<ReactionAggregatedSummaryEntity>().apply {
                 addAll(it.map {
                     ReactionAggregatedSummaryEntity(

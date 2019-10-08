@@ -24,13 +24,8 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.tag.RoomTagContent
-import im.vector.matrix.android.internal.session.room.read.FullyReadContent
-import im.vector.matrix.android.internal.database.helper.add
-import im.vector.matrix.android.internal.database.helper.addOrUpdate
-import im.vector.matrix.android.internal.database.helper.addStateEvent
-import im.vector.matrix.android.internal.database.helper.lastStateIndex
-import im.vector.matrix.android.internal.database.helper.updateSenderDataFor
 import im.vector.matrix.android.internal.crypto.DefaultCryptoService
+import im.vector.matrix.android.internal.database.helper.*
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.EventEntityFields
 import im.vector.matrix.android.internal.database.model.RoomEntity
@@ -42,12 +37,9 @@ import im.vector.matrix.android.internal.session.mapWithProgress
 import im.vector.matrix.android.internal.session.notification.DefaultPushRuleService
 import im.vector.matrix.android.internal.session.notification.ProcessEventForPushTask
 import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
+import im.vector.matrix.android.internal.session.room.read.FullyReadContent
 import im.vector.matrix.android.internal.session.room.timeline.PaginationDirection
-import im.vector.matrix.android.internal.session.sync.model.InvitedRoomSync
-import im.vector.matrix.android.internal.session.sync.model.RoomSync
-import im.vector.matrix.android.internal.session.sync.model.RoomSyncAccountData
-import im.vector.matrix.android.internal.session.sync.model.RoomSyncEphemeral
-import im.vector.matrix.android.internal.session.sync.model.RoomsSyncResponse
+import im.vector.matrix.android.internal.session.sync.model.*
 import im.vector.matrix.android.internal.session.user.UserEntityFactory
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
@@ -247,11 +239,11 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
     private fun handleEphemeral(realm: Realm,
                                 roomId: String,
                                 ephemeral: RoomSyncEphemeral,
-                                isInitalSync: Boolean) {
+                                isInitialSync: Boolean) {
         for (event in ephemeral.events) {
             if (event.type != EventType.RECEIPT) continue
             val readReceiptContent = event.content as? ReadReceiptContent ?: continue
-            readReceiptHandler.handle(realm, roomId, readReceiptContent, isInitalSync)
+            readReceiptHandler.handle(realm, roomId, readReceiptContent, isInitialSync)
         }
     }
 

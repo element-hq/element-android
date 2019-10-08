@@ -81,7 +81,7 @@ internal class MessageEncrypter @Inject constructor(private val credentials: Cre
                 payloadJson["recipient_keys"] = recipientsKeysMap
 
                 val payloadString = convertToUTF8(JsonCanonicalizer.getCanonicalJson(Map::class.java, payloadJson))
-                ciphertext[deviceKey] = olmDevice.encryptMessage(deviceKey, sessionId!!, payloadString!!)!!
+                ciphertext[deviceKey] = olmDevice.encryptMessage(deviceKey, sessionId!!, payloadString)!!
             }
         }
 

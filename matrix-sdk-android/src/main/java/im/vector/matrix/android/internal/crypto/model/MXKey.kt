@@ -103,6 +103,7 @@ data class MXKey(
                     val params = map[firstKey]
                     if (params != null) {
                         if (params["key"] is String) {
+                            @Suppress("UNCHECKED_CAST")
                             return MXKey(
                                     type = components[0],
                                     keyId = components[1],

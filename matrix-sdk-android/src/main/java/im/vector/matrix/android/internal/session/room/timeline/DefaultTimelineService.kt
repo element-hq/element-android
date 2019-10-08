@@ -71,7 +71,7 @@ internal class DefaultTimelineService @AssistedInject constructor(@Assisted priv
         return monarchy
                 .fetchCopyMap({
                                   TimelineEventEntity.where(it, roomId = roomId, eventId = eventId).findFirst()
-                              }, { entity, realm ->
+                              }, { entity, _ ->
                                   timelineEventMapper.map(entity)
                               })
     }

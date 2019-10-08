@@ -38,8 +38,7 @@ import javax.inject.Inject
 internal interface PruneEventTask : Task<PruneEventTask.Params, Unit> {
 
     data class Params(
-            val redactionEvents: List<Event>,
-            val userId: String
+            val redactionEvents: List<Event>
     )
 
 }
@@ -49,19 +48,19 @@ internal class DefaultPruneEventTask @Inject constructor(private val monarchy: M
     override suspend fun execute(params: PruneEventTask.Params) {
         monarchy.awaitTransaction { realm ->
             params.redactionEvents.forEach { event ->
-                pruneEvent(realm, event, params.userId)
+                pruneEvent(realm, event)
             }
         }
     }
 
-    private fun pruneEvent(realm: Realm, redactionEvent: Event, userId: String) {
+    private fun pruneEvent(realm: Realm, redactionEvent: Event) {
         if (redactionEvent.redacts.isNullOrBlank()) {
             return
         }
 
-        val redactionEventEntity = EventEntity.where(realm, eventId = redactionEvent.eventId
-                ?: "").findFirst()
-                ?: return
+        // Check that we know this event
+        EventEntity.where(realm, eventId = redactionEvent.eventId ?: "").findFirst() ?: return
+
         val isLocalEcho = LocalEchoEventFactory.isLocalEchoId(redactionEvent.eventId ?: "")
         Timber.v("Redact event for ${redactionEvent.redacts} localEcho=$isLocalEcho")
 

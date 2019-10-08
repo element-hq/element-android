@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("DEPRECATION")
+
 package im.vector.matrix.android.internal.session.securestorage
 
 import android.content.Context
@@ -65,7 +67,7 @@ import javax.security.auth.x500.X500Principal
  *     //This can be stored anywhere e.g. encoded in b64 and stored in preference for example
  *
  *     //to get back the secret, just call
- *     val kDecripted = SecretStoringUtils.loadSecureSecret(KEncrypted!!, "myAlias", context)
+ *     val kDecrypted = SecretStoringUtils.loadSecureSecret(KEncrypted!!, "myAlias", context)
  * </code>
  *
  * You can also just use this utility to store a secret key, and use any encryption algorithm that you want.
@@ -169,7 +171,7 @@ internal class SecretStoringUtils @Inject constructor(private val context: Conte
     }
 
     /*
-    Symetric Key Generation is only available in M, so before M the idea is to:
+    Symmetric Key Generation is only available in M, so before M the idea is to:
         - Generate a pair of RSA keys;
         - Generate a random AES key;
         - Encrypt the AES key using the RSA public key;
@@ -194,7 +196,7 @@ internal class SecretStoringUtils @Inject constructor(private val context: Conte
                 .setStartDate(start.time)
                 .setEndDate(end.time)
                 .build()
-        KeyPairGenerator.getInstance(KeyProperties.KEY_ALGORITHM_RSA, ANDROID_KEY_STORE).run {
+        KeyPairGenerator.getInstance("RSA" /*KeyProperties.KEY_ALGORITHM_RSA*/, ANDROID_KEY_STORE).run {
             initialize(spec)
             generateKeyPair()
         }
@@ -230,7 +232,7 @@ internal class SecretStoringUtils @Inject constructor(private val context: Conte
 
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     private fun encryptStringK(text: String, keyAlias: String): ByteArray? {
-        //we generate a random symetric key
+        //we generate a random symmetric key
         val key = ByteArray(16)
         secureRandom.nextBytes(key)
         val sKey = SecretKeySpec(key, "AES")
@@ -307,7 +309,7 @@ internal class SecretStoringUtils @Inject constructor(private val context: Conte
         ObjectOutputStream(bos1).use {
             it.writeObject(writeObject)
         }
-        //Have to do it like that if i encapsulate the outputstream, the cipher could fail saying reuse IV
+        //Have to do it like that if i encapsulate the output stream, the cipher could fail saying reuse IV
         val doFinal = cipher.doFinal(bos1.toByteArray())
         output.write(FORMAT_API_M.toInt())
         output.write(iv.size)
@@ -317,7 +319,7 @@ internal class SecretStoringUtils @Inject constructor(private val context: Conte
 
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     private fun saveSecureObjectK(keyAlias: String, output: OutputStream, writeObject: Any) {
-        //we generate a random symetric key
+        //we generate a random symmetric key
         val key = ByteArray(16)
         secureRandom.nextBytes(key)
         val sKey = SecretKeySpec(key, "AES")
@@ -360,7 +362,7 @@ internal class SecretStoringUtils @Inject constructor(private val context: Conte
         ObjectOutputStream(bos1).use {
             it.writeObject(writeObject)
         }
-        //Have to do it like that if i encapsulate the outputstream, the cipher could fail saying reuse IV
+        //Have to do it like that if i encapsulate the output stream, the cipher could fail saying reuse IV
         val doFinal = cipher.doFinal(bos1.toByteArray())
 
         output.write(FORMAT_2.toInt())
@@ -405,6 +407,7 @@ internal class SecretStoringUtils @Inject constructor(private val context: Conte
         CipherInputStream(inputStream, cipher).use { cipherInputStream ->
             ObjectInputStream(cipherInputStream).use {
                 val readObject = it.readObject()
+                @Suppress("UNCHECKED_CAST")
                 return readObject as? T
             }
         }
@@ -428,6 +431,7 @@ internal class SecretStoringUtils @Inject constructor(private val context: Conte
         CipherInputStream(encIS, cipher).use { cipherInputStream ->
             ObjectInputStream(cipherInputStream).use {
                 val readObject = it.readObject()
+                @Suppress("UNCHECKED_CAST")
                 return readObject as? T
             }
         }
@@ -449,8 +453,9 @@ internal class SecretStoringUtils @Inject constructor(private val context: Conte
         val encIS = ByteArrayInputStream(encrypted)
 
         CipherInputStream(encIS, cipher).use {
-            ObjectInputStream(it).use {
-                val readObject = it.readObject()
+            ObjectInputStream(it).use { ois ->
+                val readObject = ois.readObject()
+                @Suppress("UNCHECKED_CAST")
                 return readObject as? T
             }
         }

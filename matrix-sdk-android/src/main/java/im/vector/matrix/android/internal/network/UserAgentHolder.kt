@@ -58,7 +58,7 @@ internal class UserAgentHolder @Inject constructor(private val context: Context)
                 appName = appPackageName
             }
         } catch (e: Exception) {
-            Timber.e(e, "## initUserAgent() : failed " + e.message)
+            Timber.e(e, "## initUserAgent() : failed")
         }
 
         var systemUserAgent = System.getProperty("http.agent")

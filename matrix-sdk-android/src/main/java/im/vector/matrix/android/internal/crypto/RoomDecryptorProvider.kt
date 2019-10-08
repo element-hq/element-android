@@ -76,7 +76,8 @@ internal class RoomDecryptorProvider @Inject constructor(
             val alg = when (algorithm) {
                 MXCRYPTO_ALGORITHM_MEGOLM -> megolmDecryptionFactory.create().apply {
                     this.newSessionListener = object : NewSessionListener {
-                        override fun onNewSession(rid: String?, senderKey: String, sessionId: String) {
+                        override fun onNewSession(roomId: String?, senderKey: String, sessionId: String) {
+                            // PR reviewer: the parameter has been renamed so is now in conflict with the parameter of getOrCreateRoomDecryptor
                             newSessionListeners.forEach {
                                 try {
                                     it.onNewSession(roomId, senderKey, sessionId)

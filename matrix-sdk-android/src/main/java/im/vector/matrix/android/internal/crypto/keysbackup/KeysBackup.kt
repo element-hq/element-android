@@ -31,6 +31,7 @@ import im.vector.matrix.android.api.listeners.StepProgressListener
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupService
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupStateListener
+import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP
 import im.vector.matrix.android.internal.crypto.MXOlmDevice
 import im.vector.matrix.android.internal.crypto.MegolmSessionData
@@ -194,22 +195,23 @@ internal class KeysBackup @Inject constructor(
                                          callback: MatrixCallback<KeysVersion>) {
         val createKeysBackupVersionBody = CreateKeysBackupVersionBody()
         createKeysBackupVersionBody.algorithm = keysBackupCreationInfo.algorithm
+        @Suppress("UNCHECKED_CAST")
         createKeysBackupVersionBody.authData = MoshiProvider.providesMoshi().adapter(Map::class.java)
-                .fromJson(keysBackupCreationInfo.authData?.toJsonString()) as Map<String, Any>?
+                .fromJson(keysBackupCreationInfo.authData?.toJsonString() ?: "") as JsonDict?
 
         keysBackupStateManager.state = KeysBackupState.Enabling
 
         createKeysBackupVersionTask
                 .configureWith(createKeysBackupVersionBody) {
                     this.callback = object : MatrixCallback<KeysVersion> {
-                        override fun onSuccess(info: KeysVersion) {
+                        override fun onSuccess(data: KeysVersion) {
                             // Reset backup markers.
                             cryptoStore.resetBackupMarkers()
 
                             val keyBackupVersion = KeysVersionResult()
                             keyBackupVersion.algorithm = createKeysBackupVersionBody.algorithm
                             keyBackupVersion.authData = createKeysBackupVersionBody.authData
-                            keyBackupVersion.version = info.version
+                            keyBackupVersion.version = data.version
 
                             // We can consider that the server does not have keys yet
                             keyBackupVersion.count = 0
@@ -217,7 +219,7 @@ internal class KeysBackup @Inject constructor(
 
                             enableKeysBackup(keyBackupVersion)
 
-                            callback.onSuccess(info)
+                            callback.onSuccess(data)
                         }
 
                         override fun onFailure(failure: Throwable) {
@@ -275,7 +277,8 @@ internal class KeysBackup @Inject constructor(
         val keysBackupData = cryptoStore.getKeysBackupData()
 
         val totalNumberOfKeysServer = keysBackupData?.backupLastServerNumberOfKeys ?: -1
-        val hashServer = keysBackupData?.backupLastServerHash
+        // Not used for the moment
+        // val hashServer = keysBackupData?.backupLastServerHash
 
         return when {
             totalNumberOfKeysLocally < totalNumberOfKeysServer  -> {
@@ -414,7 +417,7 @@ internal class KeysBackup @Inject constructor(
                             olmDevice.verifySignature(fingerprint, authData.signalableJSONDictionary(), mySigs[keyId] as String)
                             isSignatureValid = true
                         } catch (e: OlmException) {
-                            Timber.v("getKeysBackupTrust: Bad signature from device " + device.deviceId + " " + e.localizedMessage)
+                            Timber.v(e, "getKeysBackupTrust: Bad signature from device ${device.deviceId}")
                         }
                     }
 
@@ -484,6 +487,7 @@ internal class KeysBackup @Inject constructor(
                     val moshi = MoshiProvider.providesMoshi()
                     val adapter = moshi.adapter(Map::class.java)
 
+                    @Suppress("UNCHECKED_CAST")
                     updateKeysBackupVersionBody.authData = adapter.fromJson(newMegolmBackupAuthData.toJsonString()) as Map<String, Any>?
 
                     updateKeysBackupVersionBody
@@ -616,7 +620,7 @@ internal class KeysBackup @Inject constructor(
 
         GlobalScope.launch(coroutineDispatchers.main) {
             withContext(coroutineDispatchers.crypto) {
-                Try {
+                Try<OlmPkDecryption> {
                     // Check if the recovery is valid before going any further
                     if (!isValidRecoveryKeyForKeysBackupVersion(recoveryKey, keysVersionResult)) {
                         Timber.e("restoreKeysWithRecoveryKey: Invalid recovery key for this keys version")
@@ -631,7 +635,7 @@ internal class KeysBackup @Inject constructor(
                         throw InvalidParameterException("Invalid recovery key")
                     }
 
-                    decryption!!
+                    decryption
                 }
             }.fold(
                     {
@@ -661,14 +665,12 @@ internal class KeysBackup @Inject constructor(
                                                 }
                                             }
                                         }
-                                        Timber.v("restoreKeysWithRecoveryKey: Decrypted " + sessionsData.size + " keys out of "
-                                                + sessionsFromHsCount + " from the backup store on the homeserver")
+                                        Timber.v("restoreKeysWithRecoveryKey: Decrypted ${sessionsData.size} keys out of $sessionsFromHsCount from the backup store on the homeserver")
 
                                         // Do not trigger a backup for them if they come from the backup version we are using
                                         val backUp = keysVersionResult.version != keysBackupVersion?.version
                                         if (backUp) {
-                                            Timber.v("restoreKeysWithRecoveryKey: Those keys will be backed up to backup version: "
-                                                    + keysBackupVersion?.version)
+                                            Timber.v("restoreKeysWithRecoveryKey: Those keys will be backed up to backup version: ${keysBackupVersion?.version}")
                                         }
 
                                         // Import them into the crypto store
@@ -986,7 +988,7 @@ internal class KeysBackup @Inject constructor(
                     val versionInStore = cryptoStore.getKeyBackupVersion()
 
                     if (data.usable) {
-                        Timber.v("checkAndStartWithKeysBackupVersion: Found usable key backup. version: " + keyBackupVersion.version)
+                        Timber.v("checkAndStartWithKeysBackupVersion: Found usable key backup. version: ${keyBackupVersion.version}")
                         // Check the version we used at the previous app run
                         if (versionInStore != null && versionInStore != keyBackupVersion.version) {
                             Timber.v(" -> clean the previously used version $versionInStore")
@@ -996,7 +998,7 @@ internal class KeysBackup @Inject constructor(
                         Timber.v("   -> enabling key backups")
                         enableKeysBackup(keyBackupVersion)
                     } else {
-                        Timber.v("checkAndStartWithKeysBackupVersion: No usable key backup. version: " + keyBackupVersion.version)
+                        Timber.v("checkAndStartWithKeysBackupVersion: No usable key backup. version: ${keyBackupVersion.version}")
                         if (versionInStore != null) {
                             Timber.v("   -> disabling key backup")
                             resetKeysBackupData()
@@ -1201,7 +1203,7 @@ internal class KeysBackup @Inject constructor(
         // Get a chunk of keys to backup
         val olmInboundGroupSessionWrappers = cryptoStore.inboundGroupSessionsToBackup(KEY_BACKUP_SEND_KEYS_MAX_COUNT)
 
-        Timber.v("backupKeys: 1 - " + olmInboundGroupSessionWrappers.size + " sessions to back up")
+        Timber.v("backupKeys: 1 - ${olmInboundGroupSessionWrappers.size} sessions to back up")
 
         if (olmInboundGroupSessionWrappers.isEmpty()) {
             // Backup is up to date

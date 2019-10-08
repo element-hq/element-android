@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("DEPRECATION")
+
 package im.vector.matrix.android.internal.util
 
 import android.content.Context
@@ -34,7 +36,7 @@ import java.security.*
 import java.security.cert.CertificateException
 import java.security.spec.AlgorithmParameterSpec
 import java.security.spec.RSAKeyGenParameterSpec
-import java.util.Calendar
+import java.util.*
 import java.util.zip.GZIPOutputStream
 import javax.crypto.*
 import javax.crypto.spec.GCMParameterSpec
@@ -244,9 +246,6 @@ object CompatUtil {
         }
 
         val keyAndVersion = getAesGcmLocalProtectionKey(context)
-        if (keyAndVersion == null || keyAndVersion.secretKey == null) {
-            throw KeyStoreException()
-        }
 
         val cipher = Cipher.getInstance(AES_GCM_CIPHER_TYPE)
         val iv: ByteArray
@@ -261,7 +260,7 @@ object CompatUtil {
         }
 
         if (iv.size != AES_GCM_IV_LENGTH) {
-            Timber.e(TAG, "Invalid IV length " + iv.size)
+            Timber.e(TAG, "Invalid IV length ${iv.size}")
             return null
         }
 
@@ -307,16 +306,11 @@ object CompatUtil {
         val cipher = Cipher.getInstance(AES_GCM_CIPHER_TYPE)
 
         val keyAndVersion = getAesGcmLocalProtectionKey(context)
-        if (keyAndVersion == null || keyAndVersion.secretKey == null) {
-            throw KeyStoreException()
-        }
 
-        val spec: AlgorithmParameterSpec
-
-        if (keyAndVersion.androidVersionWhenTheKeyHasBeenGenerated >= Build.VERSION_CODES.M) {
-            spec = GCMParameterSpec(AES_GCM_KEY_SIZE_IN_BITS, iv)
+        val spec: AlgorithmParameterSpec = if (keyAndVersion.androidVersionWhenTheKeyHasBeenGenerated >= Build.VERSION_CODES.M) {
+            GCMParameterSpec(AES_GCM_KEY_SIZE_IN_BITS, iv)
         } else {
-            spec = IvParameterSpec(iv)
+            IvParameterSpec(iv)
         }
 
         cipher.init(Cipher.DECRYPT_MODE, keyAndVersion.secretKey, spec)
