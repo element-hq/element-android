@@ -23,9 +23,7 @@ import android.provider.MediaStore
 import androidx.exifinterface.media.ExifInterface
 import timber.log.Timber
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 class ImageTools @Inject constructor(private val context: Context) {
 
 

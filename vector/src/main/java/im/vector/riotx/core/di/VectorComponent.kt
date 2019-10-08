@@ -26,7 +26,6 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.riotx.EmojiCompatFontProvider
 import im.vector.riotx.EmojiCompatWrapper
 import im.vector.riotx.VectorApplication
-import im.vector.riotx.core.images.ImageTools
 import im.vector.riotx.core.pushers.PushersManager
 import im.vector.riotx.core.utils.DimensionConverter
 import im.vector.riotx.features.configuration.VectorConfiguration
@@ -66,8 +65,6 @@ interface VectorComponent {
     fun resources(): Resources
 
     fun dimensionConverter(): DimensionConverter
-
-    fun imageTools(): ImageTools
 
     fun vectorConfiguration(): VectorConfiguration
 
