@@ -50,7 +50,6 @@ import com.github.piasy.biv.BigImageViewer
 import com.github.piasy.biv.loader.ImageLoader
 import com.google.android.material.snackbar.Snackbar
 import com.jaiselrahman.filepicker.activity.FilePickerActivity
-import com.jaiselrahman.filepicker.config.Configurations
 import com.jaiselrahman.filepicker.model.MediaFile
 import com.otaliastudios.autocomplete.Autocomplete
 import com.otaliastudios.autocomplete.AutocompleteCallback
@@ -67,7 +66,6 @@ import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
-import im.vector.riotx.core.dialogs.DialogListItem
 import im.vector.riotx.core.epoxy.LayoutManagerStateRestorer
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.hideKeyboard
@@ -81,6 +79,8 @@ import im.vector.riotx.core.ui.views.NotificationAreaView
 import im.vector.riotx.core.utils.*
 import im.vector.riotx.core.utils.Debouncer
 import im.vector.riotx.core.utils.createUIHandler
+import im.vector.riotx.features.attachments.AttachmentTypeSelectorView
+import im.vector.riotx.features.attachments.AttachmentsHelper
 import im.vector.riotx.features.autocomplete.command.AutocompleteCommandPresenter
 import im.vector.riotx.features.autocomplete.command.CommandAutocompletePolicy
 import im.vector.riotx.features.autocomplete.user.AutocompleteUserPresenter
@@ -125,17 +125,18 @@ data class RoomDetailArgs(
 ) : Parcelable
 
 
-private const val CAMERA_VALUE_TITLE = "attachment"
-private const val REQUEST_FILES_REQUEST_CODE = 0
-private const val TAKE_IMAGE_REQUEST_CODE = 1
-private const val REACTION_SELECT_REQUEST_CODE = 2
+private const val REQUEST_CODE_SELECT_FILE = 1
+private const val REQUEST_CODE_SELECT_GALLERY = 2
+private const val REQUEST_CODE_OPEN_CAMERA = 3
+private const val REACTION_SELECT_REQUEST_CODE = 4
 
 class RoomDetailFragment :
         VectorBaseFragment(),
         TimelineEventController.Callback,
         AutocompleteUserPresenter.Callback,
         VectorInviteView.Callback,
-        JumpToReadMarkerView.Callback {
+        JumpToReadMarkerView.Callback,
+        AttachmentTypeSelectorView.Callback {
 
     companion object {
 
@@ -197,9 +198,11 @@ class RoomDetailFragment :
 
     private lateinit var actionViewModel: ActionsHandler
     private lateinit var layoutManager: LinearLayoutManager
+    private lateinit var attachmentsHelper: AttachmentsHelper
 
     @BindView(R.id.composerLayout)
     lateinit var composerLayout: TextComposerView
+    private lateinit var attachmentTypeSelector: AttachmentTypeSelectorView
 
     private var lockSendButton = false
 
@@ -210,6 +213,7 @@ class RoomDetailFragment :
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         actionViewModel = ViewModelProviders.of(requireActivity()).get(ActionsHandler::class.java)
+        attachmentsHelper = AttachmentsHelper((requireActivity()))
         setupToolbar(roomToolbar)
         setupRecyclerView()
         setupComposer()
@@ -298,9 +302,9 @@ class RoomDetailFragment :
         AlertDialog.Builder(requireActivity())
                 .setTitle(R.string.dialog_title_error)
                 .setMessage(getString(R.string.error_file_too_big,
-                        error.filename,
-                        TextUtils.formatFileSize(requireContext(), error.fileSizeInBytes),
-                        TextUtils.formatFileSize(requireContext(), error.homeServerLimitInBytes)
+                                      error.filename,
+                                      TextUtils.formatFileSize(requireContext(), error.fileSizeInBytes),
+                                      TextUtils.formatFileSize(requireContext(), error.homeServerLimitInBytes)
                 ))
                 .setPositiveButton(R.string.ok, null)
                 .show()
@@ -362,7 +366,7 @@ class RoomDetailFragment :
 
     private fun renderSpecialMode(event: TimelineEvent,
                                   @DrawableRes iconRes: Int,
-                                 descriptionRes: Int,
+                                  descriptionRes: Int,
                                   defaultContent: String) {
         commandAutocompletePolicy.enabled = false
         //switch to expanded bar
@@ -426,23 +430,31 @@ class RoomDetailFragment :
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == RESULT_OK && data != null) {
-            when (requestCode) {
-                REQUEST_FILES_REQUEST_CODE, TAKE_IMAGE_REQUEST_CODE -> handleMediaIntent(data)
-                REACTION_SELECT_REQUEST_CODE                        -> {
-                    val eventId = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_EVENT_ID)
-                                  ?: return
-                    val reaction = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_REACTION_RESULT)
-                                   ?: return
-                    //TODO check if already reacted with that?
-                    roomDetailViewModel.process(RoomDetailActions.SendReaction(reaction, eventId))
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_CODE_OPEN_CAMERA) {
+                val attachments = attachmentsHelper.handleOpenCameraResult()
+                roomDetailViewModel.process(RoomDetailActions.SendMedia(attachments))
+            } else if (data != null) {
+                when (requestCode) {
+                    REQUEST_CODE_SELECT_FILE,
+                    REQUEST_CODE_SELECT_GALLERY  -> {
+                        val attachments = attachmentsHelper.handleSelectResult(data)
+                        roomDetailViewModel.process(RoomDetailActions.SendMedia(attachments))
+                    }
+                    REACTION_SELECT_REQUEST_CODE -> {
+                        val eventId = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_EVENT_ID)
+                                      ?: return
+                        val reaction = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_REACTION_RESULT)
+                                       ?: return
+                        //TODO check if already reacted with that?
+                        roomDetailViewModel.process(RoomDetailActions.SendReaction(reaction, eventId))
+                    }
                 }
             }
         }
     }
 
-// PRIVATE METHODS *****************************************************************************
+    // PRIVATE METHODS *****************************************************************************
 
 
     private fun setupRecyclerView() {
@@ -610,80 +622,15 @@ class RoomDetailFragment :
 
     private fun setupAttachmentButton() {
         composerLayout.attachmentButton.setOnClickListener {
-            val intent = Intent(requireContext(), FilePickerActivity::class.java)
-            intent.putExtra(FilePickerActivity.CONFIGS, Configurations.Builder()
-                    .setCheckPermission(true)
-                    .setShowFiles(true)
-                    .setShowAudios(true)
-                    .setSkipZeroSizeFiles(true)
-                    .build())
-            startActivityForResult(intent, REQUEST_FILES_REQUEST_CODE)
-            /*
-            val items = ArrayList<DialogListItem>()
-            // Send file
-            items.add(DialogListItem.SendFile)
-            // Send voice
-
-            if (vectorPreferences.isSendVoiceFeatureEnabled()) {
-                items.add(DialogListItem.SendVoice.INSTANCE)
+            if (!::attachmentTypeSelector.isInitialized) {
+                attachmentTypeSelector = AttachmentTypeSelectorView(requireContext(), this)
             }
-
-
-            // Send sticker
-            //items.add(DialogListItem.SendSticker)
-            // Camera
-
-            //if (vectorPreferences.useNativeCamera()) {
-            items.add(DialogListItem.TakePhoto)
-            items.add(DialogListItem.TakeVideo)
-            //} else {
-    //                items.add(DialogListItem.TakePhotoVideo.INSTANCE)
-            //          }
-            val adapter = DialogSendItemAdapter(requireContext(), items)
-            AlertDialog.Builder(requireContext())
-                    .setAdapter(adapter) { _, position ->
-                        onSendChoiceClicked(items[position])
-                    }
-                    .setNegativeButton(R.string.cancel, null)
-                    .show()
-                    */
+            attachmentTypeSelector.show(it)
         }
     }
 
     private fun setupInviteView() {
         inviteView.callback = this
-    }
-
-    private fun onSendChoiceClicked(dialogListItem: DialogListItem) {
-        Timber.v("On send choice clicked: $dialogListItem")
-        when (dialogListItem) {
-            is DialogListItem.SendFile       -> {
-                // launchFileIntent
-            }
-            is DialogListItem.SendVoice      -> {
-                //launchAudioRecorderIntent()
-            }
-            is DialogListItem.SendSticker    -> {
-                //startStickerPickerActivity()
-            }
-            is DialogListItem.TakePhotoVideo ->
-                if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
-                    //    launchCamera()
-                }
-            is DialogListItem.TakePhoto      ->
-                if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_CAMERA)) {
-                    openCamera(requireActivity(), CAMERA_VALUE_TITLE, TAKE_IMAGE_REQUEST_CODE)
-                }
-            is DialogListItem.TakeVideo      ->
-                if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_VIDEO_CAMERA)) {
-                    //  launchNativeVideoRecorder()
-                }
-        }
-    }
-
-    private fun handleMediaIntent(data: Intent) {
-        val files: ArrayList<MediaFile> = data.getParcelableArrayListExtra(FilePickerActivity.MEDIA_FILES)
-        roomDetailViewModel.process(RoomDetailActions.SendMedia(files))
     }
 
     private fun renderState(state: RoomDetailViewState) {
@@ -973,7 +920,7 @@ class RoomDetailFragment :
     }
 
 
-    // AutocompleteUserPresenter.Callback
+// AutocompleteUserPresenter.Callback
 
     override fun onQueryUsers(query: CharSequence?) {
         textComposerViewModel.process(TextComposerActions.QueryUsers(query))
@@ -1139,7 +1086,7 @@ class RoomDetailFragment :
     }
 
 
-    // VectorInviteView.Callback
+// VectorInviteView.Callback
 
     override fun onAcceptInvite() {
         notificationDrawerManager.clearMemberShipNotificationForRoom(roomDetailArgs.roomId)
@@ -1151,7 +1098,7 @@ class RoomDetailFragment :
         roomDetailViewModel.process(RoomDetailActions.RejectInvite)
     }
 
-    // JumpToReadMarkerView.Callback
+// JumpToReadMarkerView.Callback
 
     override fun onJumpToReadMarkerClicked(readMarkerId: String) {
         roomDetailViewModel.process(RoomDetailActions.NavigateToEvent(readMarkerId, false))
@@ -1161,4 +1108,14 @@ class RoomDetailFragment :
         roomDetailViewModel.process(RoomDetailActions.MarkAllAsRead)
     }
 
+// AttachmentTypeSelectorView.Callback *********************************************************
+
+    override fun onTypeSelected(type: Int) {
+        when (type) {
+            AttachmentTypeSelectorView.TYPE_CAMERA  -> attachmentsHelper.openCamera(this, REQUEST_CODE_OPEN_CAMERA)
+            AttachmentTypeSelectorView.TYPE_FILE    -> attachmentsHelper.selectFile(this, REQUEST_CODE_SELECT_FILE)
+            AttachmentTypeSelectorView.TYPE_GALLERY -> attachmentsHelper.selectGallery(this, REQUEST_CODE_SELECT_GALLERY)
+            AttachmentTypeSelectorView.TYPE_STICKER -> vectorBaseActivity.notImplemented("Adding stickers")
+        }
+    }
 }

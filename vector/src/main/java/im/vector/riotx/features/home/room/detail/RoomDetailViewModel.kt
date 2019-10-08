@@ -46,7 +46,6 @@ import im.vector.matrix.android.api.session.room.model.tombstone.RoomTombstoneCo
 import im.vector.matrix.android.api.session.room.send.UserDraft
 import im.vector.matrix.android.api.session.room.timeline.TimelineSettings
 import im.vector.matrix.android.api.session.room.timeline.getTextEditableContent
-import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
 import im.vector.matrix.rx.rx
@@ -63,8 +62,6 @@ import im.vector.riotx.features.command.CommandParser
 import im.vector.riotx.features.command.ParsedCommand
 import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineDisplayableEvents
 import im.vector.riotx.features.settings.VectorPreferences
-import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.subscribeBy
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
@@ -469,7 +466,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun handleSendMedia(action: RoomDetailActions.SendMedia) {
-        val attachments = action.mediaFiles.map {
+        val attachments = action.attachments.map {
             val nameWithExtension = getFilenameFromUri(null, Uri.parse(it.path))
 
             ContentAttachmentData(
@@ -481,7 +478,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                     name = nameWithExtension ?: it.name,
                     path = it.path,
                     mimeType = it.mimeType,
-                    type = ContentAttachmentData.Type.values()[it.mediaType]
+                    type = ContentAttachmentData.Type.values()[it.type]
             )
         }
 
@@ -495,7 +492,8 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         } else {
             when (val tooBigFile = attachments.find { it.size > maxUploadFileSize }) {
                 null -> room.sendMedias(attachments)
-                else -> _fileTooBigEvent.postValue(LiveEvent(FileTooBigError(tooBigFile.name ?: tooBigFile.path, tooBigFile.size, maxUploadFileSize)))
+                else -> _fileTooBigEvent.postValue(LiveEvent(FileTooBigError(tooBigFile.name
+                                                                             ?: tooBigFile.path, tooBigFile.size, maxUploadFileSize)))
             }
         }
     }
