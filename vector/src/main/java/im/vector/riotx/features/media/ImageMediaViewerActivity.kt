@@ -48,7 +48,7 @@ class ImageMediaViewerActivity : VectorBaseActivity() {
 
     @Inject lateinit var imageContentRenderer: ImageContentRenderer
 
-    lateinit var mediaData: ImageContentRenderer.Data
+    private lateinit var mediaData: ImageContentRenderer.Data
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
@@ -57,8 +57,8 @@ class ImageMediaViewerActivity : VectorBaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(im.vector.riotx.R.layout.activity_image_media_viewer)
-        mediaData = intent.getParcelableExtra<ImageContentRenderer.Data>(EXTRA_MEDIA_DATA)
-        intent.extras.getString(EXTRA_SHARED_TRANSITION_NAME)?.let {
+        mediaData = intent.getParcelableExtra(EXTRA_MEDIA_DATA)
+        intent.extras?.getString(EXTRA_SHARED_TRANSITION_NAME)?.let {
             ViewCompat.setTransitionName(imageTransitionView, it)
         }
         if (mediaData.url.isNullOrEmpty()) {

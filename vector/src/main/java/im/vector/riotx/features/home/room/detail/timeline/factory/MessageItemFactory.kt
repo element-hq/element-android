@@ -28,15 +28,7 @@ import im.vector.matrix.android.api.permalinks.MatrixLinkify
 import im.vector.matrix.android.api.permalinks.MatrixPermalinkSpan
 import im.vector.matrix.android.api.session.events.model.RelationType
 import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.message.MessageAudioContent
-import im.vector.matrix.android.api.session.room.model.message.MessageContent
-import im.vector.matrix.android.api.session.room.model.message.MessageEmoteContent
-import im.vector.matrix.android.api.session.room.model.message.MessageFileContent
-import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
-import im.vector.matrix.android.api.session.room.model.message.MessageNoticeContent
-import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
-import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
-import im.vector.matrix.android.api.session.room.model.message.getFileUrl
+import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
@@ -47,17 +39,10 @@ import im.vector.riotx.core.linkify.VectorLinkify
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.utils.DebouncedClickListener
-import im.vector.riotx.core.utils.DimensionConverter
-import im.vector.riotx.core.utils.containsOnlyEmojis
 import im.vector.riotx.core.utils.isLocalFile
-import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
-import im.vector.riotx.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
-import im.vector.riotx.features.home.room.detail.timeline.helper.AvatarSizeProvider
-import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
+import im.vector.riotx.features.home.room.detail.timeline.helper.*
 import im.vector.riotx.features.home.room.detail.timeline.item.*
-import im.vector.riotx.features.home.room.detail.timeline.helper.MessageInformationDataFactory
-import im.vector.riotx.features.home.room.detail.timeline.helper.MessageItemAttributesFactory
 import im.vector.riotx.features.html.EventHtmlRenderer
 import im.vector.riotx.features.media.ImageContentRenderer
 import im.vector.riotx.features.media.VideoContentRenderer
@@ -130,6 +115,7 @@ class MessageItemFactory @Inject constructor(
     }
 
     private fun buildAudioMessageItem(messageContent: MessageAudioContent,
+                                      @Suppress("UNUSED_PARAMETER")
                                       informationData: MessageInformationData,
                                       highlight: Boolean,
                                       callback: TimelineEventController.Callback?,
@@ -162,7 +148,7 @@ class MessageItemFactory @Inject constructor(
                 .filename(messageContent.body)
                 .iconRes(R.drawable.filetype_attachment)
                 .clickListener(
-                        DebouncedClickListener(View.OnClickListener { _ ->
+                        DebouncedClickListener(View.OnClickListener {
                             callback?.onFileMessageClicked(informationData.eventId, messageContent)
                         }))
     }
@@ -176,6 +162,7 @@ class MessageItemFactory @Inject constructor(
     }
 
     private fun buildImageMessageItem(messageContent: MessageImageContent,
+                                      @Suppress("UNUSED_PARAMETER")
                                       informationData: MessageInformationData,
                                       highlight: Boolean,
                                       callback: TimelineEventController.Callback?,
@@ -305,6 +292,7 @@ class MessageItemFactory @Inject constructor(
     }
 
     private fun buildNoticeMessageItem(messageContent: MessageNoticeContent,
+                                       @Suppress("UNUSED_PARAMETER")
                                        informationData: MessageInformationData,
                                        highlight: Boolean,
                                        callback: TimelineEventController.Callback?,

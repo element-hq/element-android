@@ -90,7 +90,7 @@ class SignOutBottomSheetDialogFragment : BottomSheetDialogFragment() {
     var onSignOut: Runnable? = null
 
     companion object {
-        fun newInstance(userId: String) = SignOutBottomSheetDialogFragment()
+        fun newInstance() = SignOutBottomSheetDialogFragment()
 
         private const val EXPORT_REQ = 0
     }

@@ -124,7 +124,7 @@ class VectorFileLogger @Inject constructor(val context: Context, private val vec
                 }
             }
         } catch (e: Exception) {
-            Timber.e(e, "## addLogFiles() failed : %s", e.message)
+            Timber.e(e, "## addLogFiles() failed")
         }
 
         return files

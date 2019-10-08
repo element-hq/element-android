@@ -171,7 +171,7 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
 
     override fun onConfigurationChanged(newConfig: Configuration?) {
         super.onConfigurationChanged(newConfig)
-        vectorConfiguration.onConfigurationChanged(newConfig)
+        vectorConfiguration.onConfigurationChanged()
     }
 
     private fun getFontThreadHandler(): Handler {

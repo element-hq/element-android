@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("DEPRECATION")
+
 package im.vector.riotx.features.login
 
 import android.annotation.SuppressLint
@@ -30,6 +32,7 @@ import android.webkit.WebViewClient
 import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.activityViewModel
 import im.vector.matrix.android.api.auth.data.Credentials
+import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
@@ -128,8 +131,8 @@ class LoginSsoFallbackFragment : VectorBaseFragment(), OnBackPressed {
                                             error: SslError) {
                 AlertDialog.Builder(requireActivity())
                         .setMessage(R.string.ssl_could_not_verify)
-                        .setPositiveButton(R.string.ssl_trust) { dialog, which -> handler.proceed() }
-                        .setNegativeButton(R.string.ssl_do_not_trust) { dialog, which -> handler.cancel() }
+                        .setPositiveButton(R.string.ssl_trust) { _, _ -> handler.proceed() }
+                        .setNegativeButton(R.string.ssl_do_not_trust) { _, _ -> handler.cancel() }
                         .setOnKeyListener(DialogInterface.OnKeyListener { dialog, keyCode, event ->
                             if (event.action == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
                                 handler.cancel()
@@ -224,7 +227,8 @@ class LoginSsoFallbackFragment : VectorBaseFragment(), OnBackPressed {
 
                         val adapter = MoshiProvider.providesMoshi().adapter(Map::class.java)
 
-                        parameters = adapter.fromJson(json) as Map<String, Any>?
+                        @Suppress("UNCHECKED_CAST")
+                        parameters = adapter.fromJson(json) as JsonDict?
                     } catch (e: Exception) {
                         Timber.e(e, "## shouldOverrideUrlLoading() : fromJson failed")
                     }
@@ -236,6 +240,7 @@ class LoginSsoFallbackFragment : VectorBaseFragment(), OnBackPressed {
                         if (mMode == Mode.MODE_LOGIN) {
                             try {
                                 if (action == "onLogin") {
+                                    @Suppress("UNCHECKED_CAST")
                                     val credentials = parameters["credentials"] as Map<String, String>
 
                                     val userId = credentials["user_id"]
@@ -245,7 +250,7 @@ class LoginSsoFallbackFragment : VectorBaseFragment(), OnBackPressed {
 
                                     // check if the parameters are defined
                                     if (null != homeServer && null != userId && null != accessToken) {
-                                        val credentials = Credentials(
+                                        val safeCredentials = Credentials(
                                                 userId = userId,
                                                 accessToken = accessToken,
                                                 homeServer = homeServer,
@@ -253,7 +258,7 @@ class LoginSsoFallbackFragment : VectorBaseFragment(), OnBackPressed {
                                                 refreshToken = null
                                         )
 
-                                        viewModel.handle(LoginActions.SsoLoginSuccess(credentials))
+                                        viewModel.handle(LoginActions.SsoLoginSuccess(safeCredentials))
                                     }
                                 }
                             } catch (e: Exception) {

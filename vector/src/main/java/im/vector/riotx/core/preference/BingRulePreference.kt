@@ -26,6 +26,7 @@ import androidx.preference.PreferenceViewHolder
 import im.vector.riotx.R
 
 // TODO Replace by real Bingrule class, then delete
+@Suppress("UNUSED_PARAMETER")
 class BingRule(rule: BingRule) {
     fun shouldNotNotify() = false
     fun shouldNotify() = false
@@ -216,7 +217,7 @@ class BingRulePreference : VectorPreference {
             }
         }
 
-        radioGroup?.setOnCheckedChangeListener { group, checkedId ->
+        radioGroup?.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 R.id.bingPreferenceRadioBingRuleOff -> {
                     onPreferenceChangeListener?.onPreferenceChange(this, NOTIFICATION_OFF_INDEX)

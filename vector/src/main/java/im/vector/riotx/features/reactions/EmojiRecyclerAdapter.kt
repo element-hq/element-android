@@ -152,7 +152,7 @@ class EmojiRecyclerAdapter(private val dataSource: EmojiDataSource? = null,
     private fun isSection(position: Int): Boolean {
         dataSource?.rawData?.categories?.let { categories ->
             var sectionOffset = 1
-            var lastItemInSection = 0
+            var lastItemInSection: Int
             for (category in categories) {
                 lastItemInSection = sectionOffset + category.emojis.size - 1
                 if (position == sectionOffset - 1) return true
@@ -164,7 +164,7 @@ class EmojiRecyclerAdapter(private val dataSource: EmojiDataSource? = null,
 
     private fun getSectionForAbsoluteIndex(position: Int): Int {
         var sectionOffset = 1
-        var lastItemInSection = 0
+        var lastItemInSection: Int
         var index = 0
         dataSource?.rawData?.categories?.let {
             for (category in it) {
@@ -180,7 +180,7 @@ class EmojiRecyclerAdapter(private val dataSource: EmojiDataSource? = null,
     private fun getSectionOffset(section: Int): Int {
         //Todo cache this for fast access
         var sectionOffset = 1
-        var lastItemInSection = 0
+        var lastItemInSection: Int
         dataSource?.rawData?.categories?.let {
             for ((index, category) in it.withIndex()) {
                 lastItemInSection = sectionOffset + category.emojis.size - 1
@@ -296,12 +296,18 @@ class EmojiRecyclerAdapter(private val dataSource: EmojiDataSource? = null,
         private val staticLayoutCache = HashMap<String, StaticLayout>()
 
         private fun getStaticLayoutForEmoji(emoji: String): StaticLayout {
-            var cachedLayout = staticLayoutCache[emoji]
-            if (cachedLayout == null) {
-                cachedLayout = StaticLayout(emoji, EmojiDrawView.tPaint, EmojiDrawView.emojiSize, Layout.Alignment.ALIGN_CENTER, 1f, 0f, true)
-                staticLayoutCache[emoji] = cachedLayout
+            return staticLayoutCache.getOrPut(emoji) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    StaticLayout.Builder.obtain(emoji, 0, emoji.length, EmojiDrawView.tPaint, EmojiDrawView.emojiSize)
+                            .setAlignment(Layout.Alignment.ALIGN_CENTER)
+                            .setLineSpacing(0f, 1f)
+                            .setIncludePad(true)
+                            .build()
+                } else {
+                    @Suppress("DEPRECATION")
+                    StaticLayout(emoji, EmojiDrawView.tPaint, EmojiDrawView.emojiSize, Layout.Alignment.ALIGN_CENTER, 1f, 0f, true)
+                }
             }
-            return cachedLayout
         }
     }
 
@@ -324,6 +330,7 @@ class EmojiRecyclerAdapter(private val dataSource: EmojiDataSource? = null,
             //TODO better
             if (scrollState == ScrollState.IDLE) {
                 //
+                @Suppress("UNCHECKED_CAST")
                 val toUpdate = toUpdateWhenNotBusy.clone() as ArrayList<Pair<String, EmojiViewHolder>>
                 toUpdateWhenNotBusy.clear()
                 toUpdate.chunked(8).forEach {

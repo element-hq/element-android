@@ -49,7 +49,7 @@ object CommandParser {
             try {
                 messageParts = textMessage.split("\\s+".toRegex()).dropLastWhile { it.isEmpty() }
             } catch (e: Exception) {
-                Timber.e(e, "## manageSplashCommand() : split failed " + e.message)
+                Timber.e(e, "## manageSplashCommand() : split failed")
             }
 
             // test if the string cut fails

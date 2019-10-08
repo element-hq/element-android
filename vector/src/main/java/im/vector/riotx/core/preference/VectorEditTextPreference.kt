@@ -47,7 +47,7 @@ class VectorEditTextPreference : EditTextPreference {
         try {
             holder.itemView.findViewById<TextView>(android.R.id.title)?.setSingleLine(false)
         } catch (e: Exception) {
-            Timber.e(e, "onBindView " + e.message)
+            Timber.e(e, "onBindView")
         }
 
         super.onBindViewHolder(holder)

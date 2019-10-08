@@ -155,7 +155,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
             }
 
         } catch (e: Exception) {
-            Timber.e(e, "## onMessageReceivedInternal() failed : " + e.message)
+            Timber.e(e, "## onMessageReceivedInternal() failed")
         }
     }
 
@@ -234,17 +234,11 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     private fun findRoomNameBestEffort(data: Map<String, String>, session: Session?): String? {
-        val roomName: String? = data["room_name"]
+        var roomName: String? = data["room_name"]
         val roomId = data["room_id"]
         if (null == roomName && null != roomId) {
             // Try to get the room name from our store
-            /*
-            TODO
-            if (session?.dataHandler?.store?.isReady == true) {
-                val room = session.getRoom(roomId)
-                roomName = room?.getRoomDisplayName(this)
-            }
-            */
+            roomName = session?.getRoom(roomId)?.roomSummary()?.displayName
         }
         return roomName
     }

@@ -67,17 +67,17 @@ private class ContentMediaProgressUpdater(private val progressLayout: ViewGroup,
 
     override fun onUpdate(state: ContentUploadStateTracker.State) {
         when (state) {
-            is ContentUploadStateTracker.State.Idle                -> handleIdle(state)
-            is ContentUploadStateTracker.State.EncryptingThumbnail -> handleEncryptingThumbnail(state)
+            is ContentUploadStateTracker.State.Idle                -> handleIdle()
+            is ContentUploadStateTracker.State.EncryptingThumbnail -> handleEncryptingThumbnail()
             is ContentUploadStateTracker.State.UploadingThumbnail  -> handleProgressThumbnail(state)
-            is ContentUploadStateTracker.State.Encrypting          -> handleEncrypting(state)
+            is ContentUploadStateTracker.State.Encrypting          -> handleEncrypting()
             is ContentUploadStateTracker.State.Uploading           -> handleProgress(state)
             is ContentUploadStateTracker.State.Failure             -> handleFailure(state)
-            is ContentUploadStateTracker.State.Success             -> handleSuccess(state)
+            is ContentUploadStateTracker.State.Success             -> handleSuccess()
         }
     }
 
-    private fun handleIdle(state: ContentUploadStateTracker.State.Idle) {
+    private fun handleIdle() {
         if (isLocalFile) {
             progressLayout.isVisible = true
             val progressBar = progressLayout.findViewById<ProgressBar>(R.id.mediaProgressBar)
@@ -92,7 +92,7 @@ private class ContentMediaProgressUpdater(private val progressLayout: ViewGroup,
         }
     }
 
-    private fun handleEncryptingThumbnail(state: ContentUploadStateTracker.State.EncryptingThumbnail) {
+    private fun handleEncryptingThumbnail() {
         doHandleEncrypting(R.string.send_file_step_encrypting_thumbnail)
     }
 
@@ -100,7 +100,7 @@ private class ContentMediaProgressUpdater(private val progressLayout: ViewGroup,
         doHandleProgress(R.string.send_file_step_sending_thumbnail, state.current, state.total)
     }
 
-    private fun handleEncrypting(state: ContentUploadStateTracker.State.Encrypting) {
+    private fun handleEncrypting() {
         doHandleEncrypting(R.string.send_file_step_encrypting_file)
     }
 
@@ -140,7 +140,7 @@ private class ContentMediaProgressUpdater(private val progressLayout: ViewGroup,
         progressTextView?.setTextColor(colorProvider.getMessageTextColor(SendState.UNDELIVERED))
     }
 
-    private fun handleSuccess(state: ContentUploadStateTracker.State.Success) {
+    private fun handleSuccess() {
         progressLayout.visibility = View.GONE
     }
 }

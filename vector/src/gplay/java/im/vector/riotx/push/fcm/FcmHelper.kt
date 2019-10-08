@@ -80,9 +80,9 @@ object FcmHelper {
                             storeFcmToken(activity, instanceIdResult.token)
                             pushersManager.registerPusherWithFcmKey(instanceIdResult.token)
                         }
-                        .addOnFailureListener(activity) { e -> Timber.e(e, "## ensureFcmTokenIsRetrieved() : failed " + e.message) }
+                        .addOnFailureListener(activity) { e -> Timber.e(e, "## ensureFcmTokenIsRetrieved() : failed") }
             } catch (e: Throwable) {
-                Timber.e(e, "## ensureFcmTokenIsRetrieved() : failed " + e.message)
+                Timber.e(e, "## ensureFcmTokenIsRetrieved() : failed")
             }
 
         } else {
@@ -102,10 +102,12 @@ object FcmHelper {
         return resultCode == ConnectionResult.SUCCESS
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun onEnterForeground(context: Context) {
         // No op
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun onEnterBackground(context: Context, vectorPreferences: VectorPreferences, activeSessionHolder: ActiveSessionHolder) {
         // TODO FCM fallback
     }

@@ -68,7 +68,6 @@ import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
-import im.vector.riotx.core.dialogs.DialogListItem
 import im.vector.riotx.core.epoxy.LayoutManagerStateRestorer
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.hideKeyboard
@@ -642,6 +641,7 @@ class RoomDetailFragment :
         inviteView.callback = this
     }
 
+    /*
     private fun onSendChoiceClicked(dialogListItem: DialogListItem) {
         Timber.v("On send choice clicked: $dialogListItem")
         when (dialogListItem) {
@@ -668,7 +668,7 @@ class RoomDetailFragment :
                 }
         }
     }
-
+    */
     private fun handleMediaIntent(data: Intent) {
         val files: ArrayList<MediaFile> = data.getParcelableArrayListExtra(FilePickerActivity.MEDIA_FILES)
         roomDetailViewModel.process(RoomDetailActions.SendMedia(files))

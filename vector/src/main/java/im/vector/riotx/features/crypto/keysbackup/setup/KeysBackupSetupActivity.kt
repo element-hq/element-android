@@ -148,7 +148,7 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
                                             AlertDialog.Builder(this@KeysBackupSetupActivity)
                                                     .setMessage(getString(R.string.encryption_export_saved_as, data))
                                                     .setCancelable(false)
-                                                    .setPositiveButton(R.string.ok) { dialog, which ->
+                                                    .setPositiveButton(R.string.ok) { _, _ ->
                                                         val resultIntent = Intent()
                                                         resultIntent.putExtra(MANUAL_EXPORT, true)
                                                         setResult(RESULT_OK, resultIntent)

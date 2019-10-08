@@ -31,7 +31,6 @@ import butterknife.BindView
 import im.vector.matrix.android.api.session.Session
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
-import im.vector.riotx.core.extensions.withArgs
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.rageshake.BugReporter
@@ -175,9 +174,6 @@ class VectorSettingsNotificationsTroubleshootFragment : VectorBaseFragment() {
 
     companion object {
         // static constructor
-        fun newInstance(matrixId: String) = VectorSettingsNotificationsTroubleshootFragment()
-                .withArgs {
-                    // TODO putString(MXCActionBarActivity.EXTRA_MATRIX_ID, matrixId)
-                }
+        fun newInstance() = VectorSettingsNotificationsTroubleshootFragment()
     }
 }

@@ -46,7 +46,7 @@ import java.util.*
 fun isIgnoringBatteryOptimizations(context: Context): Boolean {
     // no issue before Android M, battery optimisations did not exist
     return Build.VERSION.SDK_INT < Build.VERSION_CODES.M
-           || (context.getSystemService(Context.POWER_SERVICE) as PowerManager?)?.isIgnoringBatteryOptimizations(context.packageName) == true
+            || (context.getSystemService(Context.POWER_SERVICE) as PowerManager?)?.isIgnoringBatteryOptimizations(context.packageName) == true
 }
 
 /**
@@ -78,7 +78,7 @@ fun requestDisablingBatteryOptimization(activity: Activity, fragment: Fragment?,
  * @param context the context
  * @param text    the text to copy
  */
-fun copyToClipboard(context: Context, text: CharSequence, showToast: Boolean = true, @StringRes toastMessage : Int = R.string.copied_to_clipboard) {
+fun copyToClipboard(context: Context, text: CharSequence, showToast: Boolean = true, @StringRes toastMessage: Int = R.string.copied_to_clipboard) {
     val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     clipboard.primaryClip = ClipData.newPlainText("", text)
     if (showToast) {
@@ -92,19 +92,16 @@ fun copyToClipboard(context: Context, text: CharSequence, showToast: Boolean = t
  * @return the device locale
  */
 fun getDeviceLocale(context: Context): Locale {
-    var locale: Locale
-
-    locale = try {
+    return try {
         val packageManager = context.packageManager
         val resources = packageManager.getResourcesForApplication("android")
+        @Suppress("DEPRECATION")
         resources.configuration.locale
     } catch (e: Exception) {
-        Timber.e(e, "## getDeviceLocale() failed " + e.message)
+        Timber.e(e, "## getDeviceLocale() failed")
         // Fallback to application locale
         VectorLocale.applicationLocale
     }
-
-    return locale
 }
 
 /**

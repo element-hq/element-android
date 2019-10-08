@@ -75,13 +75,13 @@ class VectorWebViewActivity : VectorBaseActivity() {
             cookieManager.setAcceptThirdPartyCookies(simple_webview, true)
         }
 
-        val url = intent.extras.getString(EXTRA_URL)
-        val title = intent.extras.getString(EXTRA_TITLE, USE_TITLE_FROM_WEB_PAGE)
+        val url = intent.extras?.getString(EXTRA_URL)
+        val title = intent.extras?.getString(EXTRA_TITLE, USE_TITLE_FROM_WEB_PAGE)
         if (title != USE_TITLE_FROM_WEB_PAGE) {
             setTitle(title)
         }
 
-        val webViewMode = intent.extras.getSerializable(EXTRA_MODE) as WebViewMode
+        val webViewMode = intent.extras?.getSerializable(EXTRA_MODE) as WebViewMode
         val eventListener = webViewMode.eventListener(this, session)
         simple_webview.webViewClient = VectorWebViewClient(eventListener)
         simple_webview.webChromeClient = object : WebChromeClient() {

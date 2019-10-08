@@ -133,6 +133,7 @@ object FontScale {
 
         val config = Configuration(context.resources.configuration)
         config.fontScale = getFontScale(context)
+        @Suppress("DEPRECATION")
         context.resources.updateConfiguration(config, context.resources.displayMetrics)
     }
 

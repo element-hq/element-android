@@ -84,9 +84,9 @@ class KeysBackupRestoreFromKeyViewModel @Inject constructor() : ViewModel() {
                     }
                 },
                 object : MatrixCallback<ImportRoomKeysResult> {
-                    override fun onSuccess(info: ImportRoomKeysResult) {
+                    override fun onSuccess(data: ImportRoomKeysResult) {
                         sharedViewModel.loadingEvent.value = null
-                        sharedViewModel.didRecoverSucceed(info)
+                        sharedViewModel.didRecoverSucceed(data)
 
                         KeysBackupBanner.onRecoverDoneForVersion(context, keysVersionResult.version!!)
                         trustOnDecrypt(keysBackup, keysVersionResult)

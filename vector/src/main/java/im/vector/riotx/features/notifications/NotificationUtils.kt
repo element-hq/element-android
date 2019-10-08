@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("UNUSED_PARAMETER")
+
 package im.vector.riotx.features.notifications
 
 import android.annotation.SuppressLint
@@ -713,7 +715,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
         try {
             notificationManager.cancelAll()
         } catch (e: Exception) {
-            Timber.e(e, "## cancelAllNotifications() failed " + e.message)
+            Timber.e(e, "## cancelAllNotifications() failed")
         }
     }
 

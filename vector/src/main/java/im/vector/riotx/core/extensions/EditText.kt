@@ -39,7 +39,7 @@ fun EditText.setupAsSearch(@DrawableRes searchIconRes: Int = R.drawable.ic_filte
     maxLines = 1
     inputType = InputType.TYPE_CLASS_TEXT
     imeOptions = EditorInfo.IME_ACTION_SEARCH
-    setOnEditorActionListener { _, actionId, event ->
+    setOnEditorActionListener { _, actionId, _ ->
         var consumed = false
         if (actionId == EditorInfo.IME_ACTION_SEARCH) {
             hideKeyboard()

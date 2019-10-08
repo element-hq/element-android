@@ -49,7 +49,7 @@ class MessageItemAttributesFactory @Inject constructor(
                 itemClickListener = DebouncedClickListener(View.OnClickListener { view ->
                     callback?.onEventCellClicked(informationData, messageContent, view)
                 }),
-                memberClickListener = DebouncedClickListener(View.OnClickListener { view ->
+                memberClickListener = DebouncedClickListener(View.OnClickListener {
                     callback?.onMemberNameClicked(informationData)
                 }),
                 reactionPillCallback = callback,

@@ -39,7 +39,7 @@ import javax.inject.Inject
 /**
  *
  * TODO: Loading indicator while getting emoji data source?
- * TODO: migrate to maverick
+ * TODO: migrate to MvRx
  * TODO: Finish Refactor to vector base activity
  * TODO: Move font request to app
  */
@@ -58,15 +58,15 @@ class EmojiReactionPickerActivity : VectorBaseActivity(), EmojiCompatFontProvide
 
     @Inject lateinit var emojiCompatFontProvider: EmojiCompatFontProvider
 
-    private var tabLayoutSelectionListener = object : TabLayout.BaseOnTabSelectedListener<TabLayout.Tab> {
-        override fun onTabReselected(p0: TabLayout.Tab) {
+    private var tabLayoutSelectionListener = object : TabLayout.OnTabSelectedListener {
+        override fun onTabReselected(tab: TabLayout.Tab) {
         }
 
-        override fun onTabUnselected(p0: TabLayout.Tab) {
+        override fun onTabUnselected(tab: TabLayout.Tab) {
         }
 
-        override fun onTabSelected(p0: TabLayout.Tab) {
-            viewModel.scrollToSection(p0.position)
+        override fun onTabSelected(tab: TabLayout.Tab) {
+            viewModel.scrollToSection(tab.position)
         }
 
     }

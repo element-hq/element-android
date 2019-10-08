@@ -139,7 +139,7 @@ class KeysBackupSetupSharedViewModel @Inject constructor() : ViewModel() {
                             loadingStatus.value = null
 
                             isCreatingBackupVersion.value = false
-                            prepareRecoverFailError.value = failure ?: Exception()
+                            prepareRecoverFailError.value = failure
                         }
                     })
         }

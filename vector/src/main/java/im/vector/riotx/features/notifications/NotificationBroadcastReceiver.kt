@@ -102,7 +102,6 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
             //Can this happen? should we update notification?
             return
         }
-        val matrixId = intent.getStringExtra(EXTRA_MATRIX_ID)
         activeSessionHolder.getActiveSession().let { session ->
             session.getRoom(roomId)?.let { room ->
                 sendMatrixEvent(message, session, room, context)
@@ -203,6 +202,5 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
     companion object {
         const val KEY_ROOM_ID = "roomID"
         const val KEY_TEXT_REPLY = "key_text_reply"
-        const val EXTRA_MATRIX_ID = "EXTRA_MATRIX_ID"
     }
 }

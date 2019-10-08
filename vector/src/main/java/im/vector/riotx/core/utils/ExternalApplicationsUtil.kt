@@ -243,7 +243,7 @@ fun shareMedia(context: Context, file: File, mediaMimeType: String?) {
     try {
         mediaUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileProvider", file)
     } catch (e: Exception) {
-        Timber.e("onMediaAction Selected File cannot be shared " + e.message)
+        Timber.e(e, "onMediaAction Selected File cannot be shared")
     }
 
 

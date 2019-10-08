@@ -70,7 +70,7 @@ object ServerUrlsRepository {
 
         return prefs.getString(HOME_SERVER_URL_PREF,
                                prefs.getString(DEFAULT_REFERRER_HOME_SERVER_URL_PREF,
-                                               getDefaultHomeServerUrl(context)))
+                                               getDefaultHomeServerUrl(context))!!)!!
     }
 
 

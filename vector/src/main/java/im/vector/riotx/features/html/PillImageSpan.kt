@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("DEPRECATION")
+
 package im.vector.riotx.features.html
 
 import android.content.Context
@@ -101,7 +103,7 @@ class PillImageSpan(private val glideRequests: GlideRequests,
     private fun createChipDrawable(): ChipDrawable {
         val textPadding = context.resources.getDimension(R.dimen.pill_text_padding)
         return ChipDrawable.createFromResource(context, R.xml.pill_view).apply {
-            setText(displayName)
+            text = displayName
             textEndPadding = textPadding
             textStartPadding = textPadding
             setChipMinHeightResource(R.dimen.pill_min_height)

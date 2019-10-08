@@ -41,16 +41,8 @@ open class VectorPreference : Preference {
 
     var mTypeface = Typeface.NORMAL
 
-    // long press listener
     /**
-     * Returns the callback to be invoked when this Preference is long clicked.
-     *
-     * @return The callback to be invoked.
-     */
-    /**
-     * Sets the callback to be invoked when this Preference is long clicked.
-     *
-     * @param onPreferenceLongClickListener The callback to be invoked.
+     * Callback to be invoked when this Preference is long clicked.
      */
     var onPreferenceLongClickListener: OnPreferenceLongClickListener? = null
 
@@ -112,13 +104,13 @@ open class VectorPreference : Preference {
                 currentHighlightAnimator = ValueAnimator.ofObject(ArgbEvaluator(), colorFrom, colorTo).apply {
                     duration = 250 // milliseconds
                     addUpdateListener { animator ->
-                        itemView?.setBackgroundColor(animator.animatedValue as Int)
+                        itemView.setBackgroundColor(animator.animatedValue as Int)
                     }
                     doOnEnd {
                         currentHighlightAnimator = ValueAnimator.ofObject(ArgbEvaluator(), colorTo, colorFrom).apply {
                             duration = 250 // milliseconds
                             addUpdateListener { animator ->
-                                itemView?.setBackgroundColor(animator.animatedValue as Int)
+                                itemView.setBackgroundColor(animator.animatedValue as Int)
                             }
                             doOnEnd {
                                 isHighlighted = false

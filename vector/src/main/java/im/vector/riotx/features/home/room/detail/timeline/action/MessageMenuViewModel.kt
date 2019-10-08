@@ -198,7 +198,7 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
         }
     }
 
-    private fun canCancel(event: TimelineEvent): Boolean {
+    private fun canCancel(@Suppress("UNUSED_PARAMETER") event: TimelineEvent): Boolean {
         return false
     }
 

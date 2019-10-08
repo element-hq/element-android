@@ -36,9 +36,12 @@ import im.vector.riotx.core.utils.getDeviceLocale
 import im.vector.riotx.features.settings.VectorLocale
 import im.vector.riotx.features.themes.ThemeUtils
 import im.vector.riotx.features.version.VersionProvider
-import okhttp3.*
+import okhttp3.Call
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.Response
 import org.json.JSONException
 import org.json.JSONObject
 import timber.log.Timber
@@ -555,10 +558,13 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
             return null
         }
         // refresh it
+        @Suppress("DEPRECATION")
         rootView.isDrawingCacheEnabled = false
+        @Suppress("DEPRECATION")
         rootView.isDrawingCacheEnabled = true
 
         try {
+            @Suppress("DEPRECATION")
             var bitmap = rootView.drawingCache
 
             // Make a copy, because if Activity is destroyed, the bitmap will be recycled

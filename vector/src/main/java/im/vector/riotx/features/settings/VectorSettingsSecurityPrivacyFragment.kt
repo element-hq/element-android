@@ -23,7 +23,6 @@ import android.content.Intent
 import android.graphics.Typeface
 import android.text.TextUtils
 import android.view.KeyEvent
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -318,7 +317,7 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
 
             val importDialog = builder.show()
 
-            importButton.setOnClickListener(View.OnClickListener {
+            importButton.setOnClickListener {
                 val password = passPhraseEditText.text.toString()
 
                 displayLoadingView()
@@ -351,7 +350,7 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
                                 })
 
                 importDialog.dismiss()
-            })
+            }
         }
     }
 
@@ -586,7 +585,7 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
             val lastSeenIp = aDeviceInfo.lastSeenIp?.takeIf { ip -> ip.isNotBlank() } ?: "-"
 
             val lastSeenTime = aDeviceInfo.lastSeenTs?.let { ts ->
-                val dateFormatTime = SimpleDateFormat("HH:mm:ss")
+                val dateFormatTime = SimpleDateFormat("HH:mm:ss", Locale.ROOT)
                 val date = Date(ts)
 
                 val time = dateFormatTime.format(date)
@@ -605,7 +604,7 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
                     .setPositiveButton(R.string.rename) { _, _ -> displayDeviceRenameDialog(aDeviceInfo) }
 
             // disable the deletion for our own device
-            if (!TextUtils.equals(session.getMyDevice()?.deviceId, aDeviceInfo.deviceId)) {
+            if (!TextUtils.equals(session.getMyDevice().deviceId, aDeviceInfo.deviceId)) {
                 builder.setNegativeButton(R.string.delete) { _, _ -> deleteDevice(aDeviceInfo) }
             }
 
@@ -784,7 +783,7 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
      * Refresh the pushers list
      */
     private fun refreshPushersList() {
-        activity?.let { activity ->
+        activity?.let { _ ->
             /* TODO
             val pushManager = Matrix.getInstance(activity).pushManager
             val pushersList = ArrayList(pushManager.mPushersList)

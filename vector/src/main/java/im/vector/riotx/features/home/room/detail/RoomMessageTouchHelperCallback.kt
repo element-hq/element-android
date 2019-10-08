@@ -32,6 +32,7 @@ import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.EpoxyTouchHelperCallback
 import com.airbnb.epoxy.EpoxyViewHolder
 import timber.log.Timber
+import kotlin.math.abs
 
 
 class RoomMessageTouchHelperCallback(private val context: Context,
@@ -104,6 +105,7 @@ class RoomMessageTouchHelperCallback(private val context: Context,
     }
 
 
+    @Suppress("UNUSED_PARAMETER")
     @SuppressLint("ClickableViewAccessibility")
     private fun setTouchListener(c: Canvas,
                                  recyclerView: RecyclerView,
@@ -112,11 +114,11 @@ class RoomMessageTouchHelperCallback(private val context: Context,
                                  dY: Float,
                                  actionState: Int,
                                  isCurrentlyActive: Boolean) {
-        //TODO can this interfer with other interactions? should i remove it
-        recyclerView.setOnTouchListener { v, event ->
+        //TODO can this interfere with other interactions? should i remove it
+        recyclerView.setOnTouchListener { _, event ->
             swipeBack = event.action == MotionEvent.ACTION_CANCEL || event.action == MotionEvent.ACTION_UP
             if (swipeBack) {
-                if (Math.abs(dX) >= triggerDistance) {
+                if (abs(dX) >= triggerDistance) {
                     try {
                         viewHolder.model?.let { handler.performQuickReplyOnHolder(it) }
                     } catch (e: IllegalStateException) {

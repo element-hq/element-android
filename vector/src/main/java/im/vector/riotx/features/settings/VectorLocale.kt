@@ -23,8 +23,8 @@ import android.preference.PreferenceManager
 import android.text.TextUtils
 import android.util.Pair
 import androidx.core.content.edit
-import kotlinx.coroutines.Dispatchers
 import im.vector.riotx.R
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -128,22 +128,27 @@ object VectorLocale {
             try {
                 result = context.createConfigurationContext(config).getText(resourceId).toString()
             } catch (e: Exception) {
-                Timber.e(e, "## getString() failed : " + e.message)
+                Timber.e(e, "## getString() failed")
                 // use the default one
                 result = context.getString(resourceId)
             }
         } else {
             val resources = context.resources
             val conf = resources.configuration
+            @Suppress("DEPRECATION")
             val savedLocale = conf.locale
+            @Suppress("DEPRECATION")
             conf.locale = locale
+            @Suppress("DEPRECATION")
             resources.updateConfiguration(conf, null)
 
             // retrieve resources from desired locale
             result = resources.getString(resourceId)
 
             // restore original locale
+            @Suppress("DEPRECATION")
             conf.locale = savedLocale
+            @Suppress("DEPRECATION")
             resources.updateConfiguration(conf, null)
         }
 
@@ -166,7 +171,7 @@ object VectorLocale {
                         getString(context, locale, R.string.resources_country_code)))
             }
         } catch (e: Exception) {
-            Timber.e(e, "## getApplicationLocales() : failed " + e.message)
+            Timber.e(e, "## getApplicationLocales() : failed")
             knownLocalesSet.add(Pair(context.getString(R.string.resources_language), context.getString(R.string.resources_country_code)))
         }
 

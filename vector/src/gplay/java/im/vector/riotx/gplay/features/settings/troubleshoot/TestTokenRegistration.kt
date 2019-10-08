@@ -56,7 +56,7 @@ class TestTokenRegistration @Inject constructor(private val context: AppCompatAc
             quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_token_registration_quick_fix) {
                 override fun doFix() {
                     val workId = pushersManager.registerPusherWithFcmKey(fcmToken)
-                    WorkManager.getInstance().getWorkInfoByIdLiveData(workId).observe(context, Observer { workInfo ->
+                    WorkManager.getInstance(context).getWorkInfoByIdLiveData(workId).observe(context, Observer { workInfo ->
                         if (workInfo != null) {
                             if (workInfo.state == WorkInfo.State.SUCCEEDED) {
                                 manager?.retry()

@@ -42,32 +42,28 @@ class TestBingRulesSettings @Inject constructor(private val activeSessionHolder:
     override fun perform() {
         val session = activeSessionHolder.getSafeActiveSession() ?: return
         val pushRules = session.getPushRules()
-        if (pushRules == null) {
-            description = stringProvider.getString(R.string.settings_troubleshoot_test_bing_settings_failed_to_load_rules)
-            status = TestStatus.FAILED
-        } else {
-            var oneOrMoreRuleIsOff = false
-            var oneOrMoreRuleAreSilent = false
-            for ((index, ruleId) in testedRules.withIndex()) {
-                pushRules.find { it.ruleId == ruleId }?.let { rule ->
-                    val actions = rule.getActions()
-                    val notifAction = actions.toNotificationAction()
-                    if (!rule.enabled || !notifAction.shouldNotify) {
-                        //off
-                        oneOrMoreRuleIsOff = true
-                    } else if (notifAction.soundName == null) {
-                        //silent
-                        oneOrMoreRuleAreSilent = true
-                    } else {
-                        //noisy
-                    }
+        var oneOrMoreRuleIsOff = false
+        var oneOrMoreRuleAreSilent = false
+        testedRules.forEach { ruleId ->
+            pushRules.find { it.ruleId == ruleId }?.let { rule ->
+                val actions = rule.getActions()
+                val notifAction = actions.toNotificationAction()
+                if (!rule.enabled || !notifAction.shouldNotify) {
+                    //off
+                    oneOrMoreRuleIsOff = true
+                } else if (notifAction.soundName == null) {
+                    //silent
+                    oneOrMoreRuleAreSilent = true
+                } else {
+                    //noisy
                 }
-
             }
 
-            if (oneOrMoreRuleIsOff) {
-                description = stringProvider.getString(R.string.settings_troubleshoot_test_bing_settings_failed)
-                //TODO
+        }
+
+        if (oneOrMoreRuleIsOff) {
+            description = stringProvider.getString(R.string.settings_troubleshoot_test_bing_settings_failed)
+            //TODO
 //                quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_bing_settings_quickfix) {
 //                    override fun doFix() {
 //                        val activity = fragment.activity
@@ -77,15 +73,14 @@ class TestBingRulesSettings @Inject constructor(private val activeSessionHolder:
 //                        activity?.supportFragmentManager?.popBackStack()
 //                    }
 //                }
-                status = TestStatus.FAILED
+            status = TestStatus.FAILED
+        } else {
+            description = if (oneOrMoreRuleAreSilent) {
+                stringProvider.getString(R.string.settings_troubleshoot_test_bing_settings_success_with_warn)
             } else {
-                if (oneOrMoreRuleAreSilent) {
-                    description = stringProvider.getString(R.string.settings_troubleshoot_test_bing_settings_success_with_warn)
-                } else {
-                    description = null
-                }
-                status = TestStatus.SUCCESS
+                null
             }
+            status = TestStatus.SUCCESS
         }
     }
 }
