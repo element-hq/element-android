@@ -40,7 +40,7 @@ class HomeActivityViewModel @AssistedInject constructor(@Assisted initialState: 
                                                         private val session: Session,
                                                         private val selectedGroupStore: SelectedGroupStore,
                                                         private val homeRoomListStore: HomeRoomListObservableStore
-) : VectorViewModel<EmptyState>(initialState), Session.Listener {
+) : VectorViewModel<EmptyState>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -58,7 +58,6 @@ class HomeActivityViewModel @AssistedInject constructor(@Assisted initialState: 
 
 
     init {
-        session.addListener(this)
         observeRoomAndGroup()
     }
 
@@ -94,19 +93,6 @@ class HomeActivityViewModel @AssistedInject constructor(@Assisted initialState: 
                     homeRoomListStore.post(it)
                 }
                 .disposeOnClear()
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        session.removeListener(this)
-    }
-
-    /* ==========================================================================================
-     * Session listener
-     * ========================================================================================== */
-
-    override fun onInvalidToken() {
-
     }
 
 }

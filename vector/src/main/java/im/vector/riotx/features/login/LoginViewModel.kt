@@ -34,12 +34,14 @@ import im.vector.riotx.core.extensions.configureAndStart
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.utils.LiveEvent
 import im.vector.riotx.features.notifications.PushRuleTriggerListener
+import im.vector.riotx.features.session.SessionListener
 import timber.log.Timber
 
 class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginViewState,
                                                  private val authenticator: Authenticator,
                                                  private val activeSessionHolder: ActiveSessionHolder,
-                                                 private val pushRuleTriggerListener: PushRuleTriggerListener)
+                                                 private val pushRuleTriggerListener: PushRuleTriggerListener,
+                                                 private val sessionListener: SessionListener)
     : VectorViewModel<LoginViewState>(initialState) {
 
     @AssistedInject.Factory
@@ -114,7 +116,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
 
     private fun onSessionCreated(session: Session) {
         activeSessionHolder.setActiveSession(session)
-        session.configureAndStart(pushRuleTriggerListener)
+        session.configureAndStart(pushRuleTriggerListener, sessionListener)
 
         setState {
             copy(
@@ -139,7 +141,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
 
     private fun handleUpdateHomeserver(action: LoginActions.UpdateHomeServer) = withState { state ->
 
-        var newConfig : HomeServerConnectionConfig? = null
+        var newConfig: HomeServerConnectionConfig? = null
         Try {
             val homeServerUri = action.homeServerUrl
             newConfig = HomeServerConnectionConfig.Builder()

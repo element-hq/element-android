@@ -49,6 +49,7 @@ import im.vector.riotx.features.notifications.NotificationDrawerManager
 import im.vector.riotx.features.notifications.NotificationUtils
 import im.vector.riotx.features.notifications.PushRuleTriggerListener
 import im.vector.riotx.features.rageshake.VectorUncaughtExceptionHandler
+import im.vector.riotx.features.session.SessionListener
 import im.vector.riotx.features.settings.VectorPreferences
 import im.vector.riotx.features.version.VersionProvider
 import im.vector.riotx.push.fcm.FcmHelper
@@ -68,6 +69,7 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
     @Inject lateinit var emojiCompatWrapper: EmojiCompatWrapper
     @Inject lateinit var vectorUncaughtExceptionHandler: VectorUncaughtExceptionHandler
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
+    @Inject lateinit var sessionListener: SessionListener
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
     @Inject lateinit var pushRuleTriggerListener: PushRuleTriggerListener
     @Inject lateinit var vectorPreferences: VectorPreferences
@@ -117,7 +119,7 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
         if (authenticator.hasAuthenticatedSessions() && !activeSessionHolder.hasActiveSession()) {
             val lastAuthenticatedSession = authenticator.getLastAuthenticatedSession()!!
             activeSessionHolder.setActiveSession(lastAuthenticatedSession)
-            lastAuthenticatedSession.configureAndStart(pushRuleTriggerListener)
+            lastAuthenticatedSession.configureAndStart(pushRuleTriggerListener, sessionListener)
         }
         ProcessLifecycleOwner.get().lifecycle.addObserver(object : LifecycleObserver {
 
