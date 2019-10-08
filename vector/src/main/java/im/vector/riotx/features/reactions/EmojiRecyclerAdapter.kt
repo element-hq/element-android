@@ -280,7 +280,7 @@ class EmojiRecyclerAdapter(private val dataSource: EmojiDataSource? = null,
 
     }
 
-    private companion object {
+    companion object {
         fun endTraceSession() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
                 Trace.endSection()
@@ -295,7 +295,7 @@ class EmojiRecyclerAdapter(private val dataSource: EmojiDataSource? = null,
 
         private val staticLayoutCache = HashMap<String, StaticLayout>()
 
-        fun getStaticLayoutForEmoji(emoji: String): StaticLayout {
+        private fun getStaticLayoutForEmoji(emoji: String): StaticLayout {
             var cachedLayout = staticLayoutCache[emoji]
             if (cachedLayout == null) {
                 cachedLayout = StaticLayout(emoji, EmojiDrawView.tPaint, EmojiDrawView.emojiSize, Layout.Alignment.ALIGN_CENTER, 1f, 0f, true)
