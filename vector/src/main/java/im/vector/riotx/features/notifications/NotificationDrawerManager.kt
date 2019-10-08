@@ -507,8 +507,8 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
     companion object {
         private const val SUMMARY_NOTIFICATION_ID = 0
         private const val ROOM_MESSAGES_NOTIFICATION_ID = 1
-        private const val ROOM_INVITATION_NOTIFICATION_ID = 2
-        private const val ROOM_EVENT_NOTIFICATION_ID = 3
+        private const val ROOM_EVENT_NOTIFICATION_ID = 2
+        private const val ROOM_INVITATION_NOTIFICATION_ID = 3
 
         // TODO Mutliaccount
         private const val ROOMS_NOTIFICATIONS_FILE_NAME = "im.vector.notifications.cache"
