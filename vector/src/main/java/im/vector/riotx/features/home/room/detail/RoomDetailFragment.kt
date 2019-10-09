@@ -785,7 +785,7 @@ class RoomDetailFragment :
 // TimelineEventController.Callback ************************************************************
 
     override fun onUrlClicked(url: String): Boolean {
-        return permalinkHandler.launch(requireActivity(), url, object : NavigateToRoomInterceptor {
+        val managed = permalinkHandler.launch(requireActivity(), url, object : NavigateToRoomInterceptor {
             override fun navToRoom(roomId: String, eventId: String?): Boolean {
                 // Same room?
                 if (roomId == roomDetailArgs.roomId) {
@@ -803,6 +803,14 @@ class RoomDetailFragment :
                 return false
             }
         })
+
+        if (!managed) {
+            // Open in external browser, in a new Tab
+            openUrlInExternalBrowser(requireContext(), url)
+        }
+
+        // In fact it is always managed
+        return true
     }
 
     override fun onUrlLongClicked(url: String): Boolean {

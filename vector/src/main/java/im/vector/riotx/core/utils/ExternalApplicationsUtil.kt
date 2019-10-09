@@ -50,6 +50,7 @@ fun openUrlInExternalBrowser(context: Context, uri: Uri?) {
     uri?.let {
         val browserIntent = Intent(Intent.ACTION_VIEW, it).apply {
             putExtra(Browser.EXTRA_APPLICATION_ID, context.packageName)
+            putExtra(Browser.EXTRA_CREATE_NEW_TAB, true)
         }
 
         try {
