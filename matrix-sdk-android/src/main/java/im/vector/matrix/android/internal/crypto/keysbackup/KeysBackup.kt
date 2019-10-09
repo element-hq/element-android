@@ -665,12 +665,14 @@ internal class KeysBackup @Inject constructor(
                                                 }
                                             }
                                         }
-                                        Timber.v("restoreKeysWithRecoveryKey: Decrypted ${sessionsData.size} keys out of $sessionsFromHsCount from the backup store on the homeserver")
+                                        Timber.v("restoreKeysWithRecoveryKey: Decrypted ${sessionsData.size} keys out" +
+                                                " of $sessionsFromHsCount from the backup store on the homeserver")
 
                                         // Do not trigger a backup for them if they come from the backup version we are using
                                         val backUp = keysVersionResult.version != keysBackupVersion?.version
                                         if (backUp) {
-                                            Timber.v("restoreKeysWithRecoveryKey: Those keys will be backed up to backup version: ${keysBackupVersion?.version}")
+                                            Timber.v("restoreKeysWithRecoveryKey: Those keys will be backed up" +
+                                                    " to backup version: ${keysBackupVersion?.version}")
                                         }
 
                                         // Import them into the crypto store

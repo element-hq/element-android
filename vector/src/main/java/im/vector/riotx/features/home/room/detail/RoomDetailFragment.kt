@@ -641,8 +641,7 @@ class RoomDetailFragment :
         inviteView.callback = this
     }
 
-    /*
-    private fun onSendChoiceClicked(dialogListItem: DialogListItem) {
+    /* private fun onSendChoiceClicked(dialogListItem: DialogListItem) {
         Timber.v("On send choice clicked: $dialogListItem")
         when (dialogListItem) {
             is DialogListItem.SendFile       -> {
@@ -667,8 +666,8 @@ class RoomDetailFragment :
                     //  launchNativeVideoRecorder()
                 }
         }
-    }
-    */
+    } */
+
     private fun handleMediaIntent(data: Intent) {
         val files: ArrayList<MediaFile> = data.getParcelableArrayListExtra(FilePickerActivity.MEDIA_FILES)
         roomDetailViewModel.process(RoomDetailActions.SendMedia(files))

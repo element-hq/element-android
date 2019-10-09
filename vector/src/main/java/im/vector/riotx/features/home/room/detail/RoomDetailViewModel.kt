@@ -407,7 +407,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         val quotedTextMsg = StringBuilder()
         if (messageParagraphs != null) {
             for (i in messageParagraphs.indices) {
-                if (messageParagraphs[i].trim { it <= ' ' } != "") {
+                if (messageParagraphs[i].trim() != "") {
                     quotedTextMsg.append("> ").append(messageParagraphs[i])
                 }
 
