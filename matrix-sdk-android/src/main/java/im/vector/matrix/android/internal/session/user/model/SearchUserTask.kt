@@ -34,7 +34,7 @@ internal interface SearchUserTask : Task<SearchUserTask.Params, List<User>> {
 internal class DefaultSearchUserTask @Inject constructor(private val searchUserAPI: SearchUserAPI) : SearchUserTask {
 
     override suspend fun execute(params: SearchUserTask.Params): List<User> {
-        val response = executeRequest<SearchUsersRequestResponse> {
+        val response = executeRequest<SearchUsersResponse> {
             apiCall = searchUserAPI.searchUsers(SearchUsersParams(params.search, params.limit))
         }
         return response.users.map {

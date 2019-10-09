@@ -14,6 +14,12 @@
  * limitations under the License.
  */
 
+/*
+ * Unfortunatly "ktlint-disable filename" this does not work so this file is renamed to UserCacheDirectory.kt
+ * If a new qualifier is added, please rename this file ti FileQualifiers.kt...
+ */
+/* ktlint-disable filename */
+
 package im.vector.matrix.android.internal.di
 
 import javax.inject.Qualifier
