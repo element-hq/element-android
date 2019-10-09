@@ -12,7 +12,7 @@ max_line_length=off
 # Comma-separated list of rules to disable (Since 0.34.0)
 # Note that rules in any ruleset other than the standard ruleset will need to be prefixed
 # by the ruleset identifier.
-disabled_rules=no-wildcard-imports,no-multi-spaces,colon-spacing,chain-wrapping,import-ordering
+disabled_rules=no-wildcard-imports,no-multi-spaces,colon-spacing,chain-wrapping,import-ordering,experimental:annotation
 
 # The following (so far identified) rules are kept:
 # no-blank-line-before-rbrace
