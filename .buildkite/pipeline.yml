@@ -61,3 +61,6 @@ steps:
     command:
       - "curl -sSLO https://github.com/pinterest/ktlint/releases/download/0.34.2/ktlint && chmod a+x ktlint"
       - "./ktlint --android -v"
+    plugins:
+      - docker#v3.1.0:
+          image: "openjdk"
