@@ -54,4 +54,7 @@ steps:
   # Code quality
 
   - label: "Code quality"
-    command: "./tools/check/check_code_quality.sh"
+    command:
+      - "./tools/check/check_code_quality.sh"
+      - "curl -sSLO https://github.com/pinterest/ktlint/releases/download/0.34.2/ktlint && chmod a+x ktlint"
+      - "./ktlint --android -v"

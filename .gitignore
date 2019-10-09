@@ -12,3 +12,5 @@
 .externalNativeBuild
 
 /tmp
+
+ktlint
