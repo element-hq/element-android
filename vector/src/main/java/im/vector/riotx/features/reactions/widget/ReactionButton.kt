@@ -117,13 +117,15 @@ class ReactionButton @JvmOverloads constructor(context: Context, attrs: Attribut
 
         circleStartColor = array.getColor(R.styleable.ReactionButton_circle_start_color, 0)
 
-        if (circleStartColor != 0)
+        if (circleStartColor != 0) {
             circleView.startColor = circleStartColor
+        }
 
         circleEndColor = array.getColor(R.styleable.ReactionButton_circle_end_color, 0)
 
-        if (circleEndColor != 0)
+        if (circleEndColor != 0) {
             circleView.endColor = circleEndColor
+        }
 
         dotPrimaryColor = array.getColor(R.styleable.ReactionButton_dots_primary_color, 0)
         dotSecondaryColor = array.getColor(R.styleable.ReactionButton_dots_secondary_color, 0)
@@ -159,8 +161,9 @@ class ReactionButton @JvmOverloads constructor(context: Context, attrs: Attribut
      */
     override fun onClick(v: View) {
 
-        if (!isEnabled)
+        if (!isEnabled) {
             return
+        }
 
         isChecked = !isChecked
 

@@ -28,3 +28,4 @@ disabled_rules=no-wildcard-imports,no-multi-spaces,colon-spacing,chain-wrapping,
 # curly-spacing
 # no-semi
 # no-empty-class-body
+# experimental:multiline-if-else

@@ -352,10 +352,11 @@ internal class LocalEchoEventFactory @Inject constructor(@UserId private val use
                     }
                 }
                 val isReply = content.isReply() || originalContent.isReply()
-                return if (isReply)
+                return if (isReply) {
                     TextContent(content.body, formattedText).removeInReplyFallbacks()
-                else
+                } else {
                     TextContent(content.body, formattedText)
+                }
             }
             MessageType.MSGTYPE_FILE   -> return TextContent(stringProvider.getString(R.string.reply_to_a_file))
             MessageType.MSGTYPE_AUDIO  -> return TextContent(stringProvider.getString(R.string.reply_to_an_audio_file))

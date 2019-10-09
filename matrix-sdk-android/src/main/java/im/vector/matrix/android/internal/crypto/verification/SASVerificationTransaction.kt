@@ -68,10 +68,11 @@ internal abstract class SASVerificationTransaction(
 
         // older devices have limited support of emoji, so reply with decimal
         val KNOWN_SHORT_CODES =
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     listOf(SasMode.EMOJI, SasMode.DECIMAL)
-                else
+                } else {
                     listOf(SasMode.DECIMAL)
+                }
     }
 
     override var state by Delegates.observable(SasVerificationTxState.None) { _, _, new ->

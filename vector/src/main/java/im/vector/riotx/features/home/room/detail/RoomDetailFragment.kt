@@ -988,8 +988,9 @@ class RoomDetailFragment :
                             override fun onFinish() {}
 
                             override fun onSuccess(image: File?) {
-                                if (image != null)
+                                if (image != null) {
                                     shareMedia(requireContext(), image, "image/*")
+                                }
                             }
 
                             override fun onFail(error: Exception?) {}
