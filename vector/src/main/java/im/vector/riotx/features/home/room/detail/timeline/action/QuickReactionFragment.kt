@@ -59,7 +59,6 @@ class QuickReactionFragment : VectorBaseFragment() {
                 viewModel.didSelect(index)
             }
         }
-
     }
 
     override fun invalidate() = withState(viewModel) {
@@ -72,7 +71,6 @@ class QuickReactionFragment : VectorBaseFragment() {
         if (it.result != null) {
             interactionListener?.didQuickReactWith(it.result.reaction, it.result.isSelected, it.eventId)
         }
-
     }
 
     interface InteractionListener {

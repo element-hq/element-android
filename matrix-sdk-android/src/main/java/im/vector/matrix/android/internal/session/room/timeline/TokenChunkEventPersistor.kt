@@ -207,5 +207,4 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
             otherChunk
         }
     }
-
 }

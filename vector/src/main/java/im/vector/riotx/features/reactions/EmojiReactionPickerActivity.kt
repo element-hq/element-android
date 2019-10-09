@@ -45,7 +45,6 @@ import javax.inject.Inject
  */
 class EmojiReactionPickerActivity : VectorBaseActivity(), EmojiCompatFontProvider.FontProviderListener {
 
-
     private lateinit var tabLayout: TabLayout
 
     lateinit var viewModel: EmojiChooserViewModel
@@ -68,7 +67,6 @@ class EmojiReactionPickerActivity : VectorBaseActivity(), EmojiCompatFontProvide
         override fun onTabSelected(tab: TabLayout.Tab) {
             viewModel.scrollToSection(tab.position)
         }
-
     }
 
     override fun injectWith(injector: ScreenComponent) {
@@ -103,7 +101,6 @@ class EmojiReactionPickerActivity : VectorBaseActivity(), EmojiCompatFontProvide
                 }
                 tabLayout.addOnTabSelectedListener(tabLayoutSelectionListener)
             }
-
         })
 
         viewModel.currentSection.observe(this, Observer { section ->
@@ -116,7 +113,7 @@ class EmojiReactionPickerActivity : VectorBaseActivity(), EmojiCompatFontProvide
 
         viewModel.navigateEvent.observeEvent(this) {
             if (it == EmojiChooserViewModel.NAVIGATE_FINISH) {
-                //finish with result
+                // finish with result
                 val dataResult = Intent()
                 dataResult.putExtra(EXTRA_REACTION_RESULT, viewModel.selectedReaction)
                 dataResult.putExtra(EXTRA_EVENT_ID, viewModel.eventId)
@@ -146,7 +143,7 @@ class EmojiReactionPickerActivity : VectorBaseActivity(), EmojiCompatFontProvide
                 override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
                     it.isIconified = false
                     it.requestFocusFromTouch()
-                    //we want to force the tool bar as visible even if hidden with scroll flags
+                    // we want to force the tool bar as visible even if hidden with scroll flags
                     findViewById<Toolbar>(R.id.toolbar)?.minimumHeight = getActionBarSize()
                     return true
                 }
@@ -163,14 +160,14 @@ class EmojiReactionPickerActivity : VectorBaseActivity(), EmojiCompatFontProvide
         return true
     }
 
-    //TODO move to ThemeUtils when core module is created
+    // TODO move to ThemeUtils when core module is created
     private fun getActionBarSize(): Int {
         return try {
             val typedValue = TypedValue()
             theme.resolveAttribute(R.attr.actionBarSize, typedValue, true)
             TypedValue.complexToDimensionPixelSize(typedValue.data, resources.displayMetrics)
         } catch (e: Exception) {
-            //Timber.e(e, "Unable to get color")
+            // Timber.e(e, "Unable to get color")
             TypedValue.complexToDimensionPixelSize(56, resources.displayMetrics)
         }
     }

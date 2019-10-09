@@ -184,7 +184,6 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
         liveState.postValue(newState)
     }
 
-
     override fun onMoveToForeground() {
         restart()
     }
@@ -192,7 +191,4 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
     override fun onMoveToBackground() {
         pause()
     }
-
 }
-
-

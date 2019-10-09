@@ -42,7 +42,6 @@ class RoomDirectoryActivity : VectorBaseActivity() {
         object ChangeProtocol : Navigation()
     }
 
-
     @Inject lateinit var createRoomViewModelFactory: CreateRoomViewModel.Factory
     @Inject lateinit var roomDirectoryViewModelFactory: RoomDirectoryViewModel.Factory
     private val roomDirectoryViewModel: RoomDirectoryViewModel by viewModel()

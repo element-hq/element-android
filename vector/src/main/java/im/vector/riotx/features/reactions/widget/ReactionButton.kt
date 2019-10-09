@@ -58,7 +58,6 @@ class ReactionButton @JvmOverloads constructor(context: Context, attrs: Attribut
         private val DECCELERATE_INTERPOLATOR = DecelerateInterpolator()
         private val ACCELERATE_DECELERATE_INTERPOLATOR = AccelerateDecelerateInterpolator()
         private val OVERSHOOT_INTERPOLATOR = OvershootInterpolator(4f)
-
     }
 
     @Inject lateinit var emojiCompatWrapper: EmojiCompatWrapper
@@ -82,11 +81,10 @@ class ReactionButton @JvmOverloads constructor(context: Context, attrs: Attribut
             countTextView?.text = TextUtils.formatCountToShortDecimal(value)
         }
 
-
     var reactionString = "😀"
         set(value) {
             field = value
-            //maybe cache this for performances?
+            // maybe cache this for performances?
             val emojiSpanned = emojiCompatWrapper.safeEmojiSpanify(value)
             emojiView?.text = emojiSpanned
         }
@@ -166,7 +164,7 @@ class ReactionButton @JvmOverloads constructor(context: Context, attrs: Attribut
 
         isChecked = !isChecked
 
-        //icon!!.setImageDrawable(if (isChecked) likeDrawable else unLikeDrawable)
+        // icon!!.setImageDrawable(if (isChecked) likeDrawable else unLikeDrawable)
         reactionSelector?.background = if (isChecked) onDrawable else offDrawable
 
         if (isChecked) {
@@ -174,7 +172,6 @@ class ReactionButton @JvmOverloads constructor(context: Context, attrs: Attribut
         } else {
             reactedListener?.onUnReacted(this)
         }
-
 
         if (animatorSet != null) {
             animatorSet!!.cancel()
@@ -210,7 +207,7 @@ class ReactionButton @JvmOverloads constructor(context: Context, attrs: Attribut
             starScaleXAnimator.startDelay = 250
             starScaleXAnimator.interpolator = OVERSHOOT_INTERPOLATOR
 
-            val dotsAnimator = ObjectAnimator.ofFloat(dotsView, DotsView.DOTS_PROGRESS, 0f, 1f)//.ofFloat<DotsView>(dotsView, DotsView.DOTS_PROGRESS, 0, 1f)
+            val dotsAnimator = ObjectAnimator.ofFloat(dotsView, DotsView.DOTS_PROGRESS, 0f, 1f) // .ofFloat<DotsView>(dotsView, DotsView.DOTS_PROGRESS, 0, 1f)
             dotsAnimator.duration = 900
             dotsAnimator.startDelay = 50
             dotsAnimator.interpolator = ACCELERATE_DECELERATE_INTERPOLATOR
@@ -343,7 +340,6 @@ class ReactionButton @JvmOverloads constructor(context: Context, attrs: Attribut
     fun setAnimationScaleFactor(animationScaleFactor: Float) {
         this.animationScaleFactor = animationScaleFactor
     }
-
 
     interface ReactedListener {
         fun onReacted(reactionButton: ReactionButton)

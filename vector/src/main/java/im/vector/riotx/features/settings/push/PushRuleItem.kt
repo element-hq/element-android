@@ -32,7 +32,6 @@ import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.features.notifications.toNotificationAction
 
-
 @EpoxyModelClass(layout = R.layout.item_pushrule_raw)
 abstract class PushRuleItem : EpoxyModelWithHolder<PushRuleItem.Holder>() {
 
@@ -76,7 +75,6 @@ abstract class PushRuleItem : EpoxyModelWithHolder<PushRuleItem.Holder>() {
             } else {
                 holder.description.text = description
             }
-
         }
     }
 

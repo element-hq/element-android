@@ -123,6 +123,4 @@ internal class DefaultAuthenticator @Inject constructor(@Unauthenticated
         val retrofit = retrofitFactory.create(okHttpClient.get(), homeServerConnectionConfig.homeServerUri.toString())
         return retrofit.create(AuthAPI::class.java)
     }
-
-
 }

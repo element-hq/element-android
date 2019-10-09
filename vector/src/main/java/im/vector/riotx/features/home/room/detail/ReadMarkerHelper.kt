@@ -19,9 +19,7 @@ package im.vector.riotx.features.home.room.detail
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import im.vector.riotx.core.di.ScreenScope
-import im.vector.riotx.core.utils.createBackgroundHandler
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
-import timber.log.Timber
 import javax.inject.Inject
 
 @ScreenScope
@@ -95,10 +93,7 @@ class ReadMarkerHelper @Inject constructor() {
         }
     }
 
-
     interface Callback {
         fun onJumpToReadMarkerVisibilityUpdate(show: Boolean, readMarkerId: String?)
     }
-
-
 }

@@ -35,7 +35,6 @@ import java.io.FileInputStream
 import java.io.IOException
 import java.io.InputStream
 
-
 class VectorGlideModelLoaderFactory(private val activeSessionHolder: ActiveSessionHolder)
     : ModelLoaderFactory<ImageContentRenderer.Data, InputStream> {
 
@@ -46,7 +45,6 @@ class VectorGlideModelLoaderFactory(private val activeSessionHolder: ActiveSessi
     override fun teardown() {
         // Is there something to do here?
     }
-
 }
 
 class VectorGlideModelLoader(private val activeSessionHolder: ActiveSessionHolder)

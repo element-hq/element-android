@@ -72,9 +72,7 @@ class MessageMenuFragment : VectorBaseFragment() {
                 }
             }
         }
-
     }
-
 
     private fun inflateActionView(action: SimpleAction, inflater: LayoutInflater, container: ViewGroup?): View? {
         return inflater.inflate(R.layout.adapter_item_action, container, false)?.apply {
@@ -88,13 +86,11 @@ class MessageMenuFragment : VectorBaseFragment() {
         frame.setBackgroundColor(ThemeUtils.getColor(requireContext(), R.attr.vctr_list_divider_color))
         frame.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, requireContext().resources.displayMetrics.density.toInt())
         return frame
-
     }
 
     interface InteractionListener {
         fun didSelectMenuAction(simpleAction: SimpleAction)
     }
-
 
     companion object {
         fun newInstance(pa: TimelineEventFragmentArgs): MessageMenuFragment {

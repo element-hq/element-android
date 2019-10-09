@@ -28,7 +28,6 @@ internal interface CreateKeysBackupVersionTask : Task<CreateKeysBackupVersionBod
 internal class DefaultCreateKeysBackupVersionTask @Inject constructor(private val roomKeysApi: RoomKeysApi)
     : CreateKeysBackupVersionTask {
 
-
     override suspend fun execute(params: CreateKeysBackupVersionBody): KeysVersion {
         return executeRequest {
             apiCall = roomKeysApi.createKeysBackupVersion(params)

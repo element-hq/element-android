@@ -41,5 +41,4 @@ internal class DefaultSearchUserTask @Inject constructor(private val searchUserA
             User(it.userId, it.displayName, it.avatarUrl)
         }
     }
-
 }

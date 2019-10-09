@@ -33,7 +33,6 @@ class TestBingRulesSettings @Inject constructor(private val activeSessionHolder:
                     RuleIds.RULE_ID_ONE_TO_ONE_ROOM,
                     RuleIds.RULE_ID_ALL_OTHER_MESSAGES_ROOMS)
 
-
     val ruleSettingsName = arrayOf(R.string.settings_containing_my_display_name,
             R.string.settings_containing_my_user_name,
             R.string.settings_messages_in_one_to_one,
@@ -49,21 +48,20 @@ class TestBingRulesSettings @Inject constructor(private val activeSessionHolder:
                 val actions = rule.getActions()
                 val notifAction = actions.toNotificationAction()
                 if (!rule.enabled || !notifAction.shouldNotify) {
-                    //off
+                    // off
                     oneOrMoreRuleIsOff = true
                 } else if (notifAction.soundName == null) {
-                    //silent
+                    // silent
                     oneOrMoreRuleAreSilent = true
                 } else {
-                    //noisy
+                    // noisy
                 }
             }
-
         }
 
         if (oneOrMoreRuleIsOff) {
             description = stringProvider.getString(R.string.settings_troubleshoot_test_bing_settings_failed)
-            //TODO
+            // TODO
 //                quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_bing_settings_quickfix) {
 //                    override fun doFix() {
 //                        val activity = fragment.activity

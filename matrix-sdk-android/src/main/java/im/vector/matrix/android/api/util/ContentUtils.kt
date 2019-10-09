@@ -15,7 +15,6 @@
  */
 package im.vector.matrix.android.api.util
 
-
 object ContentUtils {
     fun extractUsefulTextFromReply(repliedBody: String): String {
         val lines = repliedBody.lines()

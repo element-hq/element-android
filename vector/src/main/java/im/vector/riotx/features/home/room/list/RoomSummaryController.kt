@@ -18,13 +18,11 @@ package im.vector.riotx.features.home.room.list
 
 import androidx.annotation.StringRes
 import com.airbnb.epoxy.EpoxyController
-import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.home.room.filtered.FilteredRoomFooterItem
 import im.vector.riotx.features.home.room.filtered.filteredRoomFooterItem
-import timber.log.Timber
 import javax.inject.Inject
 
 class RoomSummaryController @Inject constructor(private val stringProvider: StringProvider,
@@ -106,7 +104,7 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
         if (summaries.isEmpty()) {
             return
         }
-        //TODO should add some business logic later
+        // TODO should add some business logic later
         val unreadCount = if (summaries.isEmpty()) {
             0
         } else {
@@ -144,5 +142,4 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
         fun onRejectRoomInvitation(room: RoomSummary)
         fun onAcceptRoomInvitation(room: RoomSummary)
     }
-
 }

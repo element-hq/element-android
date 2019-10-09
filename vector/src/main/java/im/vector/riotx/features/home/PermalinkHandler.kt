@@ -84,5 +84,4 @@ interface NavigateToRoomInterceptor {
      * Return true if the navigation has been intercepted
      */
     fun navToRoom(roomId: String, eventId: String? = null): Boolean
-
 }

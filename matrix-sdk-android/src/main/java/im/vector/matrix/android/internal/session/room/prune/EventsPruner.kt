@@ -53,5 +53,4 @@ internal class EventsPruner @Inject constructor(@SessionDatabase realmConfigurat
         val params = PruneEventTask.Params(insertedDomains)
         pruneEventTask.configureWith(params).executeBy(taskExecutor)
     }
-
 }

@@ -39,7 +39,7 @@ class TestFirebaseToken @Inject constructor(private val context: AppCompatActivi
                     .addOnCompleteListener(context) { task ->
                         if (!task.isSuccessful) {
                             val errorMsg = if (task.exception == null) "Unknown" else task.exception!!.localizedMessage
-                            //Can't find where this constant is (not documented -or deprecated in docs- and all obfuscated)
+                            // Can't find where this constant is (not documented -or deprecated in docs- and all obfuscated)
                             if ("SERVICE_NOT_AVAILABLE".equals(errorMsg)) {
                                 description = stringProvider.getString(R.string.settings_troubleshoot_test_fcm_failed_service_not_available, errorMsg)
                             } else if ("TOO_MANY_REGISTRATIONS".equals(errorMsg)) {
@@ -56,7 +56,7 @@ class TestFirebaseToken @Inject constructor(private val context: AppCompatActivi
                             }
                             status = TestStatus.FAILED
                         } else {
-                            task.result?.token?.let {token ->
+                            task.result?.token?.let { token ->
                                 val tok = token.substring(0, Math.min(8, token.length)) + "********************"
                                 description = stringProvider.getString(R.string.settings_troubleshoot_test_fcm_success, tok)
                                 Timber.e("Retrieved FCM token success [$tok].")
@@ -71,5 +71,4 @@ class TestFirebaseToken @Inject constructor(private val context: AppCompatActivi
             status = TestStatus.FAILED
         }
     }
-
 }

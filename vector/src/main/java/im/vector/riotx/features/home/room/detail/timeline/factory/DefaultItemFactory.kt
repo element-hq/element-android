@@ -58,5 +58,4 @@ class DefaultItemFactory @Inject constructor(private val avatarSizeProvider: Ava
         val informationData = informationDataFactory.create(event, null, readMarkerVisible)
         return create(text, informationData, highlight, callback)
     }
-
 }

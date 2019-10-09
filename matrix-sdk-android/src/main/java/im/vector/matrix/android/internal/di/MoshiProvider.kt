@@ -25,7 +25,6 @@ import im.vector.matrix.android.internal.session.sync.model.UserAccountDataDirec
 import im.vector.matrix.android.internal.session.sync.model.UserAccountDataFallback
 import im.vector.matrix.android.internal.session.sync.model.UserAccountDataPushRules
 
-
 object MoshiProvider {
 
     private val moshi: Moshi = Moshi.Builder()
@@ -50,7 +49,4 @@ object MoshiProvider {
     fun providesMoshi(): Moshi {
         return moshi
     }
-
 }
-
-

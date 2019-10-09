@@ -41,14 +41,12 @@ import im.vector.riotx.features.home.room.list.widget.FabMenuView
 import im.vector.riotx.features.notifications.NotificationDrawerManager
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_list.*
-import timber.log.Timber
 import javax.inject.Inject
 
 @Parcelize
 data class RoomListParams(
         val displayMode: RoomListFragment.DisplayMode
 ) : Parcelable
-
 
 class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, OnBackPressed, FabMenuView.Listener {
 
@@ -277,5 +275,4 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, O
     override fun createRoom(initialName: String) {
         navigator.openCreateRoom(requireActivity(), initialName)
     }
-
 }

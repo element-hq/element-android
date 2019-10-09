@@ -21,7 +21,6 @@ import com.squareup.moshi.JsonClass
 import com.squareup.moshi.Moshi
 import im.vector.riotx.R
 
-
 class EmojiDataSource(val context: Context) {
 
     var rawData: EmojiData? = null
@@ -54,7 +53,7 @@ class EmojiDataSource(val context: Context) {
 
         fun emojiString() : String {
             if (_emojiText == null) {
-                val utf8Text = unicode.split("-").joinToString("") { "\\u${it}" }//"\u0048\u0065\u006C\u006C\u006F World"
+                val utf8Text = unicode.split("-").joinToString("") { "\\u$it" } // "\u0048\u0065\u006C\u006C\u006F World"
                _emojiText = fromUnicode(utf8Text)
             }
             return _emojiText!!
@@ -73,7 +72,6 @@ class EmojiDataSource(val context: Context) {
             return text.toString()
         }
     }
-
 
 //    name: 'a',
 //    unified: 'b',

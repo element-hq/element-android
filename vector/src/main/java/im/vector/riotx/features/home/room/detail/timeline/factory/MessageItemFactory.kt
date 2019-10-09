@@ -62,7 +62,6 @@ class MessageItemFactory @Inject constructor(
         private val noticeItemFactory: NoticeItemFactory,
         private val avatarSizeProvider: AvatarSizeProvider) {
 
-
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
                highlight: Boolean,
@@ -74,7 +73,7 @@ class MessageItemFactory @Inject constructor(
         val informationData = messageInformationDataFactory.create(event, nextEvent, readMarkerVisible)
 
         if (event.root.isRedacted()) {
-            //message is redacted
+            // message is redacted
             val attributes = messageItemAttributesFactory.create(null, informationData, callback)
             return buildRedactedItem(attributes, highlight)
         }
@@ -256,7 +255,7 @@ class MessageItemFactory @Inject constructor(
                 .attributes(attributes)
                 .highlighted(highlight)
                 .urlClickCallback(callback)
-        //click on the text
+        // click on the text
     }
 
     private fun annotateWithEdited(linkifiedBody: CharSequence,
@@ -282,7 +281,7 @@ class MessageItemFactory @Inject constructor(
             }
 
             override fun updateDrawState(ds: TextPaint?) {
-                //nop
+                // nop
             }
         },
                 editStart,

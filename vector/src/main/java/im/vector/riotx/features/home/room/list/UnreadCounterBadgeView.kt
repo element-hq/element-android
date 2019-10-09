@@ -49,5 +49,4 @@ class UnreadCounterBadgeView : AppCompatTextView {
             val count: Int,
             val highlighted: Boolean
     )
-
 }

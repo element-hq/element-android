@@ -42,7 +42,6 @@ import kotlinx.android.synthetic.main.fragment_login_sso_fallback.*
 import timber.log.Timber
 import java.net.URLDecoder
 
-
 /**
  * Only login is supported for the moment
  */
@@ -264,7 +263,6 @@ class LoginSsoFallbackFragment : VectorBaseFragment(), OnBackPressed {
                             } catch (e: Exception) {
                                 Timber.e(e, "## shouldOverrideUrlLoading() : failed")
                             }
-
                         } else {
                             // MODE_REGISTER
                             // check the required parameters

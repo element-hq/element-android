@@ -30,7 +30,6 @@ import im.vector.riotx.features.login.LoginConfig
 import timber.log.Timber
 import javax.inject.Inject
 
-
 /**
  * Dummy activity used to dispatch the vector URL links.
  */
@@ -116,5 +115,4 @@ class LinkHandlerActivity : VectorBaseActivity() {
     companion object {
         private const val PATH_CONFIG = "/config/config"
     }
-
 }

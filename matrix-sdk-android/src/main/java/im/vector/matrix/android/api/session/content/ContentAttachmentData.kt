@@ -40,5 +40,4 @@ data class ContentAttachmentData(
         AUDIO,
         VIDEO
     }
-
 }

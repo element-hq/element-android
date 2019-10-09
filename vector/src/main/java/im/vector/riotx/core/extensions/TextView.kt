@@ -27,7 +27,6 @@ import androidx.core.view.isVisible
 import im.vector.riotx.R
 import im.vector.riotx.features.themes.ThemeUtils
 
-
 /**
  * Set a text in the TextView, or set visibility to GONE if the text is null
  */

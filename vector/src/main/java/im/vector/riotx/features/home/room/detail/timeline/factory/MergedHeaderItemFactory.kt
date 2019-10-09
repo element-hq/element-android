@@ -116,6 +116,4 @@ class MergedHeaderItemFactory @Inject constructor(private val sessionHolder: Act
     fun isCollapsed(localId: Long): Boolean {
         return collapsedEventIds.contains(localId)
     }
-
-
 }

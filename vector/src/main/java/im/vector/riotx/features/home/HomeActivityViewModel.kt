@@ -56,7 +56,6 @@ class HomeActivityViewModel @AssistedInject constructor(@Assisted initialState: 
         }
     }
 
-
     init {
         observeRoomAndGroup()
     }
@@ -94,5 +93,4 @@ class HomeActivityViewModel @AssistedInject constructor(@Assisted initialState: 
                 }
                 .disposeOnClear()
     }
-
 }

@@ -88,6 +88,4 @@ object RoomDataHelper {
             roomEntity.addOrUpdate(chunkEntity)
         }
     }
-
-
 }

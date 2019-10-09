@@ -41,7 +41,6 @@ import kotlinx.android.synthetic.main.fragment_home_detail.*
 import timber.log.Timber
 import javax.inject.Inject
 
-
 private const val INDEX_CATCHUP = 0
 private const val INDEX_PEOPLE = 1
 private const val INDEX_ROOMS = 2
@@ -127,7 +126,6 @@ class HomeDetailFragment : VectorBaseFragment(), KeysBackupBanner.Delegate {
         homeKeysBackupBanner.delegate = this
     }
 
-
     private fun setupToolbar() {
         val parentActivity = vectorBaseActivity
         if (parentActivity is ToolbarConfigurable) {
@@ -209,6 +207,5 @@ class HomeDetailFragment : VectorBaseFragment(), KeysBackupBanner.Delegate {
         fun newInstance(): HomeDetailFragment {
             return HomeDetailFragment()
         }
-
     }
 }

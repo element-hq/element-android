@@ -38,5 +38,4 @@ class NotificationTroubleshootTestManagerFactory @Inject constructor(private val
         mgr.addTest(testBackgroundRestrictions)
         return mgr
     }
-
 }

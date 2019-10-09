@@ -42,6 +42,4 @@ class LoadingFragment : VectorBaseFragment() {
             background.start()
         }
     }
-
-
 }

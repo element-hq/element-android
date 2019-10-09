@@ -21,7 +21,6 @@ import androidx.core.content.edit
 import im.vector.riotx.features.home.room.list.RoomListFragment
 import javax.inject.Inject
 
-
 /**
  * This class is used to persist UI state across application restart
  */
@@ -45,7 +44,6 @@ class SharedPreferencesUiStateRepository @Inject constructor(private val sharedP
                     })
         }
     }
-
 
     companion object {
         private const val KEY_DISPLAY_MODE = "UI_STATE_DISPLAY_MODE"

@@ -36,7 +36,6 @@ class VectorSettingsActivity : VectorBaseActivity(),
         FragmentManager.OnBackStackChangedListener,
         VectorSettingsFragmentInteractionListener {
 
-
     override fun getLayoutRes() = R.layout.activity_vector_settings
 
     override fun getTitleRes() = R.string.title_activity_settings
@@ -104,7 +103,6 @@ class VectorSettingsActivity : VectorBaseActivity(),
         }
         return false
     }
-
 
     override fun requestHighlightPreferenceKeyOnResume(key: String?) {
         keyToHighlight = key

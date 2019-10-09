@@ -85,7 +85,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
         }
         mUIHandler.post {
             if (ProcessLifecycleOwner.get().lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
-                //we are in foreground, let the sync do the things?
+                // we are in foreground, let the sync do the things?
                 Timber.v("PUSH received in a foreground state, ignore")
             } else {
                 onMessageReceivedInternal(message.data)
@@ -153,7 +153,6 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
                     session.requireBackgroundSync()
                 }
             }
-
         } catch (e: Exception) {
             Timber.e(e, "## onMessageReceivedInternal() failed")
         }
@@ -170,7 +169,6 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
             } catch (e: Exception) {
                 Timber.e(e, "## isEventAlreadyKnown() : failed to check if the event was already defined")
             }
-
         }
         return false
     }
@@ -186,16 +184,16 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
         // This is required if the notification is about a particular Matrix event.
         // It may be omitted for notifications that only contain updated badge counts.
         // This ID can and should be used to detect duplicate notification requests.
-        val eventId = data["event_id"] ?: return //Just ignore
+        val eventId = data["event_id"] ?: return // Just ignore
 
         val eventType = data["type"]
         if (eventType == null) {
-            //Just add a generic unknown event
+            // Just add a generic unknown event
             val simpleNotifiableEvent = SimpleNotifiableEvent(
                     session.myUserId,
                     eventId,
                     null,
-                    true, //It's an issue in this case, all event will bing even if expected to be silent.
+                    true, // It's an issue in this case, all event will bing even if expected to be silent.
                     title = getString(R.string.notification_unknown_new_event),
                     description = "",
                     type = null,
@@ -211,9 +209,9 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
             val notifiableEvent = notifiableEventResolver.resolveEvent(event, session)
 
             if (notifiableEvent == null) {
-                Timber.e("Unsupported notifiable event ${eventId}")
+                Timber.e("Unsupported notifiable event $eventId")
                 if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
-                    Timber.e("--> ${event}")
+                    Timber.e("--> $event")
                 }
             } else {
                 if (notifiableEvent is NotifiableMessageEvent) {

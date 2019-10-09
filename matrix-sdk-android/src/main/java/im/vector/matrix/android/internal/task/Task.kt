@@ -19,6 +19,4 @@ package im.vector.matrix.android.internal.task
 internal interface Task<PARAMS, RESULT> {
 
     suspend fun execute(params: PARAMS): RESULT
-
 }
-

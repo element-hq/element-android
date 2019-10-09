@@ -68,9 +68,9 @@ fun requestDisablingBatteryOptimization(activity: Activity, fragment: Fragment?,
     }
 }
 
-//==============================================================================================================
+// ==============================================================================================================
 // Clipboard helper
-//==============================================================================================================
+// ==============================================================================================================
 
 /**
  * Copy a text to the clipboard, and display a Toast when done
@@ -119,7 +119,7 @@ fun startNotificationSettingsIntent(activity: AppCompatActivity, requestCode: In
         intent.putExtra("app_uid", activity.applicationInfo?.uid)
     } else {
         intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-        intent.addCategory(Intent.CATEGORY_DEFAULT);
+        intent.addCategory(Intent.CATEGORY_DEFAULT)
         val uri = Uri.fromParts("package", activity.packageName, null)
         intent.data = uri
     }

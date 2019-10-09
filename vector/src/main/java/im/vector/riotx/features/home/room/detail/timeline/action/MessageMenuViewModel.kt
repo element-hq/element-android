@@ -38,7 +38,6 @@ import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
 
-
 sealed class SimpleAction(@StringRes val titleRes: Int, @DrawableRes val iconResId: Int) {
     data class AddReaction(val eventId: String) : SimpleAction(R.string.message_add_reaction, R.drawable.ic_add_reaction)
     data class Copy(val content: String) : SimpleAction(R.string.copy, R.drawable.ic_copy)
@@ -68,7 +67,6 @@ data class MessageMenuState(
 ) : MvRxState {
 
     constructor(args: TimelineEventFragmentArgs) : this(roomId = args.roomId, eventId = args.eventId, informationData = args.informationData)
-
 }
 
 /**
@@ -125,7 +123,7 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
                 }
                 add(SimpleAction.Remove(eventId))
             } else if (event.root.sendState.isSending()) {
-                //TODO is uploading attachment?
+                // TODO is uploading attachment?
                 if (canCancel(event)) {
                     add(SimpleAction.Cancel(eventId))
                 }
@@ -144,7 +142,7 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
                     }
 
                     if (canCopy(type)) {
-                        //TODO copy images? html? see ClipBoard
+                        // TODO copy images? html? see ClipBoard
                         add(SimpleAction.Copy(messageContent!!.body))
                     }
 
@@ -170,15 +168,14 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
                                 add(SimpleAction.Share(url))
                             }
                         }
-                        //TODO
+                        // TODO
                     }
-
 
                     if (event.root.sendState == SendState.SENT) {
 
-                        //TODO Can be redacted
+                        // TODO Can be redacted
 
-                        //TODO sent by me or sufficient power level
+                        // TODO sent by me or sufficient power level
                     }
                 }
 
@@ -191,7 +188,7 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
                 add(SimpleAction.CopyPermalink(eventId))
 
                 if (session.myUserId != event.root.senderId && event.root.getClearType() == EventType.MESSAGE) {
-                    //not sent by me
+                    // not sent by me
                     add(SimpleAction.Flag(eventId))
                 }
             }
@@ -203,7 +200,7 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
     }
 
     private fun canReply(event: TimelineEvent, messageContent: MessageContent?): Boolean {
-        //Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
+        // Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
         if (event.root.getClearType() != EventType.MESSAGE) return false
         return when (messageContent?.type) {
             MessageType.MSGTYPE_TEXT,
@@ -218,7 +215,7 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
     }
 
     private fun canQuote(event: TimelineEvent, messageContent: MessageContent?): Boolean {
-        //Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
+        // Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
         if (event.root.getClearType() != EventType.MESSAGE) return false
         return when (messageContent?.type) {
             MessageType.MSGTYPE_TEXT,
@@ -233,9 +230,9 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
     }
 
     private fun canRedact(event: TimelineEvent, myUserId: String): Boolean {
-        //Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
+        // Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
         if (event.root.getClearType() != EventType.MESSAGE) return false
-        //TODO if user is admin or moderator
+        // TODO if user is admin or moderator
         return event.root.senderId == myUserId
     }
 
@@ -243,26 +240,23 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
         return event.root.sendState.hasFailed() && event.root.isTextMessage()
     }
 
-
     private fun canViewReactions(event: TimelineEvent): Boolean {
-        //Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
+        // Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
         if (event.root.getClearType() != EventType.MESSAGE) return false
-        //TODO if user is admin or moderator
+        // TODO if user is admin or moderator
         return event.annotations?.reactionsSummary?.isNotEmpty() ?: false
     }
 
-
     private fun canEdit(event: TimelineEvent, myUserId: String): Boolean {
-        //Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
+        // Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
         if (event.root.getClearType() != EventType.MESSAGE) return false
-        //TODO if user is admin or moderator
+        // TODO if user is admin or moderator
         val messageContent = event.root.getClearContent().toModel<MessageContent>()
         return event.root.senderId == myUserId && (
                 messageContent?.type == MessageType.MSGTYPE_TEXT
                         || messageContent?.type == MessageType.MSGTYPE_EMOTE
                 )
     }
-
 
     private fun canCopy(type: String?): Boolean {
         return when (type) {
@@ -274,7 +268,6 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
             else                         -> false
         }
     }
-
 
     private fun canShare(type: String?): Boolean {
         return when (type) {

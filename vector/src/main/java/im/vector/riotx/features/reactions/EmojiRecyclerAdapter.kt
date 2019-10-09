@@ -35,7 +35,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 
-
 /**
  *
  * TODO: Configure Span using available width and emoji size
@@ -49,7 +48,6 @@ class EmojiRecyclerAdapter(private val dataSource: EmojiDataSource? = null,
 
     var interactionListener: InteractionListener? = null
     private var mRecyclerView: RecyclerView? = null
-
 
     private var currentFirstVisibleSection = 0
 
@@ -81,7 +79,6 @@ class EmojiRecyclerAdapter(private val dataSource: EmojiDataSource? = null,
         }
     }
 
-
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         this.mRecyclerView = recyclerView
@@ -101,7 +98,7 @@ class EmojiRecyclerAdapter(private val dataSource: EmojiDataSource? = null,
         }
 
         recyclerView.setHasFixedSize(true)
-        //Default is 5 but we have lots of views for emojis
+        // Default is 5 but we have lots of views for emojis
         recyclerView.recycledViewPool
                 .setMaxRecycledViews(R.layout.grid_item_emoji, 300)
 
@@ -117,14 +114,13 @@ class EmojiRecyclerAdapter(private val dataSource: EmojiDataSource? = null,
 
     fun scrollToSection(section: Int) {
         if (section < 0 || section >= dataSource?.rawData?.categories?.size ?: 0) {
-            //ignore
+            // ignore
             return
         }
-        //mRecyclerView?.smoothScrollToPosition(getSectionOffset(section) - 1)
-        //TODO Snap section header to top
+        // mRecyclerView?.smoothScrollToPosition(getSectionOffset(section) - 1)
+        // TODO Snap section header to top
         mRecyclerView?.scrollToPosition(getSectionOffset(section) - 1)
     }
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         beginTraceSession("MyAdapter.onCreateViewHolder")
@@ -137,7 +133,6 @@ class EmojiRecyclerAdapter(private val dataSource: EmojiDataSource? = null,
         }
         endTraceSession()
         return viewHolder
-
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -178,7 +173,7 @@ class EmojiRecyclerAdapter(private val dataSource: EmojiDataSource? = null,
     }
 
     private fun getSectionOffset(section: Int): Int {
-        //Todo cache this for fast access
+        // Todo cache this for fast access
         var sectionOffset = 1
         var lastItemInSection: Int
         dataSource?.rawData?.categories?.let {
@@ -231,7 +226,6 @@ class EmojiRecyclerAdapter(private val dataSource: EmojiDataSource? = null,
         super.onViewRecycled(holder)
     }
 
-
     override fun getItemCount(): Int {
         return dataSource?.rawData?.categories?.let {
             var count = /*number of sections*/ it.size
@@ -242,11 +236,9 @@ class EmojiRecyclerAdapter(private val dataSource: EmojiDataSource? = null,
         } ?: 0
     }
 
-
     abstract class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         abstract fun bind(s: String?)
     }
-
 
     private class EmojiViewHolder(itemView: View) : ViewHolder(itemView) {
 
@@ -277,7 +269,6 @@ class EmojiRecyclerAdapter(private val dataSource: EmojiDataSource? = null,
         override fun bind(s: String?) {
             textView.text = s
         }
-
     }
 
     companion object {
@@ -315,7 +306,7 @@ class EmojiRecyclerAdapter(private val dataSource: EmojiDataSource? = null,
         fun firstVisibleSectionChange(section: Int)
     }
 
-    //privates
+    // privates
 
     private val scrollListener = object : RecyclerView.OnScrollListener() {
         override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -327,7 +318,7 @@ class EmojiRecyclerAdapter(private val dataSource: EmojiDataSource? = null,
                 else                               -> ScrollState.UNKNOWN
             }
 
-            //TODO better
+            // TODO better
             if (scrollState == ScrollState.IDLE) {
                 //
                 @Suppress("UNCHECKED_CAST")
@@ -349,13 +340,12 @@ class EmojiRecyclerAdapter(private val dataSource: EmojiDataSource? = null,
                         toUpdateWhenNotBusy.clear()
                     }
                 }
-
             }
         }
 
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
-            //Log.i("SCROLL SPEED","scroll speed $dy")
+            // Log.i("SCROLL SPEED","scroll speed $dy")
             isFastScroll = abs(dy) > 50
             val visible = (recyclerView.layoutManager as GridLayoutManager).findFirstCompletelyVisibleItemPosition()
             GlobalScope.launch {

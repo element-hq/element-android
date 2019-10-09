@@ -99,5 +99,4 @@ internal class RealmSessionParamsStore @Inject constructor(private val mapper: S
             realm.close()
         }
     }
-
 }

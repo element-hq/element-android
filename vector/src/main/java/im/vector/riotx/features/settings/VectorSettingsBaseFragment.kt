@@ -139,6 +139,4 @@ abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat(), HasScree
             hideLoadingView()
         }
     }
-
-
 }

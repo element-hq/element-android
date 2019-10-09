@@ -136,5 +136,4 @@ class RoomSummaryItemFactory @Inject constructor(private val noticeEventFormatte
                 .hasDraft(roomSummary.userDrafts.isNotEmpty())
                 .listener { listener?.onRoomSelected(roomSummary) }
     }
-
 }

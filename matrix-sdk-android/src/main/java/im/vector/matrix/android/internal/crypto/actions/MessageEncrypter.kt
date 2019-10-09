@@ -93,5 +93,4 @@ internal class MessageEncrypter @Inject constructor(private val credentials: Cre
 
         return res
     }
-
 }

@@ -105,12 +105,9 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
         finish()
     }
 
-
     companion object {
         fun getIntent(context: Context): Intent {
             return Intent(context, CreateDirectRoomActivity::class.java)
         }
     }
-
-
 }

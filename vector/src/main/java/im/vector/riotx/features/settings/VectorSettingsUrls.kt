@@ -22,5 +22,4 @@ object VectorSettingsUrls {
     const val TAC = "https://riot.im/tac"
     const val PRIVACY_POLICY = "https://riot.im/privacy"
     const val THIRD_PARTY_LICENSES = "file:///android_asset/open_source_licenses.html"
-
 }

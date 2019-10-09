@@ -73,7 +73,6 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
 
     private var mMyDeviceInfo: DeviceInfo? = null
 
-
     // cryptography
     private val mCryptographyCategory by lazy {
         findPreference<PreferenceCategory>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_PREFERENCE_KEY)!!
@@ -142,7 +141,7 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
         // Device list
         refreshDevicesList()
 
-        //Refresh Key Management section
+        // Refresh Key Management section
         refreshKeysManagementSection()
 
         // Analytics
@@ -187,10 +186,9 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
         }
     }
 
-
     private fun refreshKeysManagementSection() {
-        //If crypto is not enabled parent section will be removed
-        //TODO notice that this will not work when no network
+        // If crypto is not enabled parent section will be removed
+        // TODO notice that this will not work when no network
         manageBackupPref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             context?.let {
                 startActivity(KeysBackupManageActivity.intent(it))
@@ -239,7 +237,6 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
                                             override fun onFailure(failure: Throwable) {
                                                 onCommonDone(failure.localizedMessage)
                                             }
-
                                         })
                     }
                 })
@@ -354,9 +351,9 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
         }
     }
 
-    //==============================================================================================================
+    // ==============================================================================================================
     // Cryptography
-    //==============================================================================================================
+    // ==============================================================================================================
 
     private fun removeCryptographyPreference() {
         preferenceScreen.let {
@@ -432,10 +429,9 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
         }
     }
 
-
-    //==============================================================================================================
+    // ==============================================================================================================
     // devices list
-    //==============================================================================================================
+    // ==============================================================================================================
 
     private fun removeDevicesPreference() {
         preferenceScreen.let {
@@ -708,7 +704,6 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
                     if (isPasswordRequestFound) {
                         maybeShowDeleteDeviceWithPasswordDialog(deviceId, failure.registrationFlowResponse.session)
                     }
-
                 }
 
                 if (!isPasswordRequestFound) {
@@ -775,9 +770,9 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
         })
     }
 
-    //==============================================================================================================
+    // ==============================================================================================================
     // pushers list management
-    //==============================================================================================================
+    // ==============================================================================================================
 
     /**
      * Refresh the pushers list

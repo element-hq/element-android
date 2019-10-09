@@ -32,7 +32,6 @@ class SyncStateView @JvmOverloads constructor(context: Context, attrs: Attribute
         View.inflate(context, R.layout.view_sync_state, this)
     }
 
-
     fun render(newState: SyncState) {
         syncStateProgressBar.visibility = when (newState) {
             is SyncState.RUNNING -> if (newState.afterPause) View.VISIBLE else View.GONE

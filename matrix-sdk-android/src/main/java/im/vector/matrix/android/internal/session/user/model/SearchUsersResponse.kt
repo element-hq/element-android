@@ -11,4 +11,3 @@ internal data class SearchUsersRequestResponse(
         @Json(name = "limited") val limited: Boolean = false,
         @Json(name = "results") val users: List<SearchUser> = emptyList()
 )
-

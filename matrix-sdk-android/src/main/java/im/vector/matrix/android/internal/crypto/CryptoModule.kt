@@ -74,7 +74,6 @@ internal abstract class CryptoModule {
             return RealmClearCacheTask(realmConfiguration)
         }
 
-
         @JvmStatic
         @Provides
         fun providesCryptoStore(@CryptoDatabase
@@ -104,7 +103,6 @@ internal abstract class CryptoModule {
         fun providesCryptoConfig(): MXCryptoConfig {
             return MXCryptoConfig()
         }
-
     }
 
     @Binds

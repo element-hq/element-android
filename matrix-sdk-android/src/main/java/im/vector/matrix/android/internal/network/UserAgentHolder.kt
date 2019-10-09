@@ -33,7 +33,6 @@ internal class UserAgentHolder @Inject constructor(private val context: Context)
         setApplicationFlavor("NoFlavor")
     }
 
-
     /**
      * Create an user agent with the application version.
      * Ex: RiotX/1.0.0 (Linux; U; Android 6.0.1; SM-A510F Build/MMB29; Flavour GPlay; MatrixAndroidSDK_X 1.0)

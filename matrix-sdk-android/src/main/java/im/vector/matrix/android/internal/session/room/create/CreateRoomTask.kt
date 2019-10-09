@@ -47,7 +47,6 @@ internal class DefaultCreateRoomTask @Inject constructor(private val roomAPI: Ro
                                                          @SessionDatabase
                                                          private val realmConfiguration: RealmConfiguration) : CreateRoomTask {
 
-
     override suspend fun execute(params: CreateRoomParams): String {
         val createRoomResponse = executeRequest<CreateRoomResponse> {
             apiCall = roomAPI.createRoom(params)
@@ -88,5 +87,4 @@ internal class DefaultCreateRoomTask @Inject constructor(private val roomAPI: Ro
         val setReadMarkerParams = SetReadMarkersTask.Params(roomId, markAllAsRead = true)
         return readMarkersTask.execute(setReadMarkerParams)
     }
-
 }

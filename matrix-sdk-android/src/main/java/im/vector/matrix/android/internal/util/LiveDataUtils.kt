@@ -38,7 +38,6 @@ object LiveDataUtils {
                 }
             }
 
-
             addSource(firstSource) {
                 firstValue = it
                 valueDispatcher()
@@ -50,5 +49,4 @@ object LiveDataUtils {
             }
         }
     }
-
 }

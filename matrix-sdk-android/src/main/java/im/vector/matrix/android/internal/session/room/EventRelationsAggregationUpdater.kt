@@ -65,6 +65,4 @@ internal class EventRelationsAggregationUpdater @Inject constructor(@SessionData
         )
         task.configureWith(params).executeBy(taskExecutor)
     }
-
 }
-

@@ -19,7 +19,6 @@ import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.MatrixCallback
 import java.util.UUID
 
-
 interface PushersService {
 
     /**
@@ -52,7 +51,6 @@ interface PushersService {
                       url: String,
                       append: Boolean,
                       withEventIdOnly: Boolean): UUID
-
 
     fun removeHttpPusher(pushkey: String, appId: String, callback: MatrixCallback<Unit>)
 

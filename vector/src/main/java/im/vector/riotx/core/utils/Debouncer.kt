@@ -45,6 +45,4 @@ internal class Debouncer(private val handler: Handler) {
         runnables[identifier] = chained
         handler.postDelayed(chained, millis)
     }
-
-
 }

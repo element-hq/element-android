@@ -42,7 +42,6 @@ internal interface GroupAPI {
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "groups/{groupId}/rooms")
     fun getRooms(@Path("groupId") groupId: String): Call<GroupRooms>
 
-
     /**
      * Request the users list.
      *
@@ -50,6 +49,4 @@ internal interface GroupAPI {
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "groups/{groupId}/users")
     fun getUsers(@Path("groupId") groupId: String): Call<GroupUsers>
-
-
 }

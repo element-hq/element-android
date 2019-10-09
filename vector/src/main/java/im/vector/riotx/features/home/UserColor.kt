@@ -20,7 +20,6 @@ import androidx.annotation.ColorRes
 import im.vector.riotx.R
 import kotlin.math.abs
 
-
 @ColorRes
 fun getColorFromUserId(userId: String?): Int {
     if (userId.isNullOrBlank()) {

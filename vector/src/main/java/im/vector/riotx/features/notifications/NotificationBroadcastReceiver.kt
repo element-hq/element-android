@@ -38,7 +38,6 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
 
-
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent == null || context == null) return
         Timber.v("NotificationBroadcastReceiver received : $intent")
@@ -98,8 +97,8 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
         val roomId = intent.getStringExtra(KEY_ROOM_ID)
 
         if (message.isNullOrBlank() || roomId.isBlank()) {
-            //ignore this event
-            //Can this happen? should we update notification?
+            // ignore this event
+            // Can this happen? should we update notification?
             return
         }
         activeSessionHolder.getActiveSession().let { session ->
@@ -187,7 +186,6 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
         })
         */
     }
-
 
     private fun getReplyMessage(intent: Intent?): String? {
         if (intent != null) {

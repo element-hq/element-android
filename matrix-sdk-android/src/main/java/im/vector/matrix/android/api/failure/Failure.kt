@@ -42,5 +42,4 @@ sealed class Failure(cause: Throwable? = null) : Throwable(cause = cause) {
     data class CryptoError(val error: MXCryptoError) : Failure(error)
 
     abstract class FeatureFailure : Failure()
-
 }

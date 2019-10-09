@@ -113,5 +113,4 @@ interface VectorComponent {
     interface Factory {
         fun create(@BindsInstance context: Context): VectorComponent
     }
-
 }

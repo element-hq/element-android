@@ -137,5 +137,4 @@ internal class RoomMembers(private val realm: Realm,
                 .keys
                 .toList()
     }
-
 }

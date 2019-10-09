@@ -201,4 +201,3 @@ object VectorLocale {
         return res
     }
 }
-

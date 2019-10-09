@@ -27,7 +27,7 @@ interface MatrixCallback<in T> {
      * @param data the data successfully returned from the async function
      */
     fun onSuccess(data: T) {
-        //no-op
+        // no-op
     }
 
     /**
@@ -35,7 +35,6 @@ interface MatrixCallback<in T> {
      * @param failure the failure data returned from the async function
      */
     fun onFailure(failure: Throwable) {
-        //no-op
+        // no-op
     }
-
 }

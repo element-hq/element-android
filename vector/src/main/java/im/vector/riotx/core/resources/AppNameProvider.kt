@@ -20,7 +20,6 @@ import android.content.Context
 import timber.log.Timber
 import javax.inject.Inject
 
-
 class AppNameProvider @Inject constructor(private val context: Context) {
 
     fun getAppName(): String {

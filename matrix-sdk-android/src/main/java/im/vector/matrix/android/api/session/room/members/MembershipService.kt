@@ -64,5 +64,4 @@ interface MembershipService {
      * Leave the room, or reject an invitation.
      */
     fun leave(callback: MatrixCallback<Unit>): Cancelable
-
 }

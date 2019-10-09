@@ -58,7 +58,6 @@ internal fun TimelineEventEntity.Companion.findWithSenderMembershipEvent(realm: 
             .findAll()
 }
 
-
 internal fun TimelineEventEntity.Companion.latestEvent(realm: Realm,
                                                        roomId: String,
                                                        includesSending: Boolean,
@@ -107,7 +106,6 @@ internal fun RealmQuery<TimelineEventEntity>.prev(since: Int? = null, strict: Bo
             .sort(TimelineEventEntityFields.ROOT.STATE_INDEX, Sort.DESCENDING)
             .findFirst()
 }
-
 
 internal fun RealmList<TimelineEventEntity>.find(eventId: String): TimelineEventEntity? {
     return this.where()

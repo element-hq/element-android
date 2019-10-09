@@ -26,7 +26,6 @@ interface Cancelable {
      * The cancel method, it does nothing by default.
      */
     fun cancel() {
-        //no-op
+        // no-op
     }
 }
-

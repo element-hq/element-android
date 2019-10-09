@@ -49,4 +49,3 @@ abstract class FilteredRoomFooterItem : VectorEpoxyModel<FilteredRoomFooterItem.
         fun createRoom(initialName: String)
     }
 }
-

@@ -26,5 +26,4 @@ sealed class CreateDirectRoomActions {
     object ClearFilterKnownUsers : CreateDirectRoomActions()
     data class SelectUser(val user: User) : CreateDirectRoomActions()
     data class RemoveSelectedUser(val user: User) : CreateDirectRoomActions()
-
 }

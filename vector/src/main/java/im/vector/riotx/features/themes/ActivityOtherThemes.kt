@@ -32,5 +32,4 @@ sealed class ActivityOtherThemes(@StyleRes val dark: Int,
             R.style.AppTheme_Black,
             R.style.AppTheme_Status
     )
-
 }

@@ -23,7 +23,6 @@ import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.task.Task
 import javax.inject.Inject
 
-
 internal interface FetchEditHistoryTask : Task<FetchEditHistoryTask.Params, List<Event>> {
 
     data class Params(
@@ -32,7 +31,6 @@ internal interface FetchEditHistoryTask : Task<FetchEditHistoryTask.Params, List
             val eventId: String
     )
 }
-
 
 internal class DefaultFetchEditHistoryTask @Inject constructor(
         private val roomAPI: RoomAPI

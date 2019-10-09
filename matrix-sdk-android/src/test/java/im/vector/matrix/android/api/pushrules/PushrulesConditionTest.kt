@@ -88,7 +88,6 @@ class PushrulesConditionTest {
         ).apply {
             assert(EventMatchCondition("content.membership", "invite").isSatisfied(this))
         }
-
     }
 
     @Test
@@ -112,7 +111,6 @@ class PushrulesConditionTest {
         ).apply {
             assert(condition.isSatisfied(this))
         }
-
     }
 
     @Test
@@ -128,10 +126,8 @@ class PushrulesConditionTest {
         assert(condition.isSatisfied(simpleTextEvent))
     }
 
-
     @Test
     fun test_roommember_condition() {
-
 
         val conditionEqual3 = RoomMemberCountCondition("3")
         val conditionEqual3Bis = RoomMemberCountCondition("==3")
@@ -162,7 +158,6 @@ class PushrulesConditionTest {
         }
     }
 
-
     @Test
     fun test_notice_condition() {
         val conditionEqual = EventMatchCondition("content.msgtype", "m.notice")
@@ -177,15 +172,14 @@ class PushrulesConditionTest {
         }
     }
 
-
     class MockRoomService() : RoomService {
 
         override fun createRoom(createRoomParams: CreateRoomParams, callback: MatrixCallback<String>): Cancelable {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 
         override fun joinRoom(roomId: String, viaServers: List<String>, callback: MatrixCallback<Unit>): Cancelable {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 
         override fun getRoom(roomId: String): Room? {
@@ -203,174 +197,171 @@ class PushrulesConditionTest {
 
     class MockRoom(override val roomId: String, val _numberOfJoinedMembers: Int) : Room {
         override fun resendTextMessage(localEcho: TimelineEvent): Cancelable? {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 
         override fun resendMediaMessage(localEcho: TimelineEvent): Cancelable? {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 
         override fun deleteFailedEcho(localEcho: TimelineEvent) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 
         override fun clearSendingQueue() {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 
         override fun resendAllFailedMessages() {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 
         override fun saveDraft(draft: UserDraft) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 
         override fun deleteDraft() {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 
         override fun getDraftsLive(): LiveData<List<UserDraft>> {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 
         override fun getEventReadReceiptsLive(eventId: String): LiveData<List<ReadReceipt>> {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 
         override fun getStateEvent(eventType: String): Event? {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 
         override fun editReply(replyToEdit: TimelineEvent, originalTimelineEvent: TimelineEvent, newBodyText: String, compatibilityBodyText: String): Cancelable {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 
         override fun fetchEditHistory(eventId: String, callback: MatrixCallback<List<Event>>) {
         }
 
         override fun liveTimeLineEvent(eventId: String): LiveData<TimelineEvent> {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
-
 
         override fun getNumberOfJoinedMembers(): Int {
             return _numberOfJoinedMembers
         }
 
         override fun liveRoomSummary(): LiveData<RoomSummary> {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 
         override fun roomSummary(): RoomSummary? {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 
         override fun createTimeline(eventId: String?, settings: TimelineSettings): Timeline {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 
         override fun getTimeLineEvent(eventId: String): TimelineEvent? {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 
         override fun sendTextMessage(text: String, msgType: String, autoMarkdown: Boolean): Cancelable {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 
         override fun sendFormattedTextMessage(text: String, formattedText: String): Cancelable {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 
         override fun sendMedia(attachment: ContentAttachmentData): Cancelable {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 
         override fun sendMedias(attachments: List<ContentAttachmentData>): Cancelable {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 
         override fun redactEvent(event: Event, reason: String?): Cancelable {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 
         override fun markAllAsRead(callback: MatrixCallback<Unit>) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 
         override fun setReadReceipt(eventId: String, callback: MatrixCallback<Unit>) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 
         override fun setReadMarker(fullyReadEventId: String, callback: MatrixCallback<Unit>) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 
         override fun isEventRead(eventId: String): Boolean {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 
         override fun loadRoomMembersIfNeeded(matrixCallback: MatrixCallback<Unit>): Cancelable {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 
         override fun getRoomMember(userId: String): RoomMember? {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 
         override fun getRoomMemberIdsLive(): LiveData<List<String>> {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 
         override fun invite(userId: String, callback: MatrixCallback<Unit>): Cancelable {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 
         override fun join(viaServers: List<String>, callback: MatrixCallback<Unit>): Cancelable {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 
         override fun leave(callback: MatrixCallback<Unit>): Cancelable {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 
         override fun updateTopic(topic: String, callback: MatrixCallback<Unit>) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 
         override fun sendReaction(reaction: String, targetEventId: String): Cancelable {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 
         override fun undoReaction(reaction: String, targetEventId: String, myUserId: String) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 
         override fun editTextMessage(targetEventId: String, msgType: String, newBodyText: String,
                                      newBodyAutoMarkdown: Boolean, compatibilityBodyText: String): Cancelable {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 
         override fun replyToMessage(eventReplied: TimelineEvent, replyText: String, autoMarkdown: Boolean): Cancelable? {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 
         override fun getEventSummaryLive(eventId: String): LiveData<EventAnnotationsSummary> {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 
         override fun isEncrypted(): Boolean {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 
         override fun encryptionAlgorithm(): String? {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 
         override fun shouldEncryptForInvitedMembers(): Boolean {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
-
     }
-
 }

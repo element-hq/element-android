@@ -65,11 +65,11 @@ internal class AddHttpPusherWorker(context: Context, params: WorkerParameters)
                 else                         -> {
                     monarchy.awaitTransaction { realm ->
                         PusherEntity.where(realm, pusher.pushKey).findFirst()?.let {
-                            //update it
+                            // update it
                             it.state = PusherState.FAILED_TO_REGISTER
                         }
                     }
-                    //always return success, or the chain will be stuck for ever!
+                    // always return success, or the chain will be stuck for ever!
                     Result.failure()
                 }
             }
@@ -83,7 +83,7 @@ internal class AddHttpPusherWorker(context: Context, params: WorkerParameters)
         monarchy.awaitTransaction { realm ->
             val echo = PusherEntity.where(realm, pusher.pushKey).findFirst()
             if (echo != null) {
-                //update it
+                // update it
                 echo.appDisplayName = pusher.appDisplayName
                 echo.appId = pusher.appId
                 echo.kind = pusher.kind

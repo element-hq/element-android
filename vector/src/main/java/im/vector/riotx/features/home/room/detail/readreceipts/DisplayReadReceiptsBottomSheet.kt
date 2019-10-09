@@ -85,7 +85,6 @@ class DisplayReadReceiptsBottomSheet : VectorBaseBottomSheetDialogFragment() {
             )
             args.putParcelable(MvRx.KEY_ARG, parcelableArgs)
             return DisplayReadReceiptsBottomSheet().apply { arguments = args }
-
         }
     }
 }

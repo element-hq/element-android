@@ -72,9 +72,8 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
             handleRoomSync(realm, HandlingStrategy.INVITED(roomsSyncResponse.invite), isInitialSync, reporter)
             handleRoomSync(realm, HandlingStrategy.LEFT(roomsSyncResponse.leave), isInitialSync, reporter)
         }
-        //handle event for bing rule checks
+        // handle event for bing rule checks
         checkPushRules(roomsSyncResponse)
-
     }
 
     private fun checkPushRules(roomsSyncResponse: RoomsSyncResponse) {
@@ -82,7 +81,7 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
         if (tokenStore.getLastToken() == null) {
             Timber.v("[PushRules] <-- No push rule check on initial sync")
             return
-        } //nothing on initial sync
+        } // nothing on initial sync
 
         val rules = pushRuleService.getPushRules(RuleScope.GLOBAL)
         processForPushTask.configureWith(ProcessEventForPushTask.Params(roomsSyncResponse, rules))
@@ -117,7 +116,6 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
                                  roomId: String,
                                  roomSync: RoomSync,
                                  isInitialSync: Boolean): RoomEntity {
-
 
         Timber.v("Handle join sync for room $roomId")
 
@@ -234,7 +232,6 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
         return chunkEntity
     }
 
-
     @Suppress("UNCHECKED_CAST")
     private fun handleEphemeral(realm: Realm,
                                 roomId: String,
@@ -259,5 +256,4 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
             }
         }
     }
-
 }

@@ -48,12 +48,10 @@ import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.riotx.features.crypto.keysbackup.setup.KeysBackupSetupActivity
 
-
 class SignOutBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
     lateinit var session: Session
     lateinit var viewModelFactory: ViewModelProvider.Factory
-
 
     @BindView(R.id.bottom_sheet_signout_warning_text)
     lateinit var sheetTitle: TextView
@@ -82,10 +80,8 @@ class SignOutBottomSheetDialogFragment : BottomSheetDialogFragment() {
     @BindView(R.id.bottom_sheet_signout_button)
     lateinit var signoutClickableView: View
 
-
     @BindView(R.id.root_layout)
     lateinit var rootLayout: ViewGroup
-
 
     var onSignOut: Runnable? = null
 
@@ -151,11 +147,11 @@ class SignOutBottomSheetDialogFragment : BottomSheetDialogFragment() {
                                 }
                                 KeysBackupState.BackingUp,
                                 KeysBackupState.WillBackUp -> {
-                                    //keys are already backing up please wait
+                                    // keys are already backing up please wait
                                     context?.toast(R.string.keys_backup_is_not_finished_please_wait)
                                 }
                                 else                       -> {
-                                    //nop
+                                    // nop
                                 }
                             }
                         }
@@ -164,13 +160,12 @@ class SignOutBottomSheetDialogFragment : BottomSheetDialogFragment() {
                         }
                         .show()
             }
-
         }
 
         viewModel.keysExportedToFile.observe(this, Observer {
             val hasExportedToFile = it ?: false
             if (hasExportedToFile) {
-                //We can allow to sign out
+                // We can allow to sign out
 
                 sheetTitle.text = getString(R.string.action_sign_out_confirmation_simple)
 
@@ -184,7 +179,7 @@ class SignOutBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
         viewModel.keysBackupState.observe(this, Observer {
             if (viewModel.keysExportedToFile.value == true) {
-                //ignore this
+                // ignore this
                 return@Observer
             }
             TransitionManager.beginDelayedTransition(rootLayout)
@@ -213,7 +208,6 @@ class SignOutBottomSheetDialogFragment : BottomSheetDialogFragment() {
                     backupProgress.isVisible = true
                     backupCompleteImage.isVisible = false
                     backupStatusTex.text = getString(R.string.sign_out_bottom_sheet_backing_up_keys)
-
                 }
                 KeysBackupState.NotTrusted    -> {
                     backingUpStatusGroup.isVisible = false
@@ -243,7 +237,7 @@ class SignOutBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
-        //We want to force the bottom sheet initial state to expanded
+        // We want to force the bottom sheet initial state to expanded
         (dialog as? BottomSheetDialog)?.let { bottomSheetDialog ->
             bottomSheetDialog.setOnShowListener { dialog ->
                 val d = dialog as BottomSheetDialog
@@ -265,5 +259,4 @@ class SignOutBottomSheetDialogFragment : BottomSheetDialogFragment() {
             }
         }
     }
-
 }

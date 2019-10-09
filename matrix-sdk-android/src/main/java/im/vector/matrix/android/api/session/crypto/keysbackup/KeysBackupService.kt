@@ -210,5 +210,4 @@ interface KeysBackupService {
     val isEnabled: Boolean
     val isStucked: Boolean
     val state: KeysBackupState
-
 }

@@ -71,7 +71,6 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
                 .transform(RoundedCorners(dimensionConverter.dpToPx(8)))
                 .thumbnail(0.3f)
                 .into(imageView)
-
     }
 
     fun renderFitTarget(data: Data, mode: Mode, imageView: ImageView, callback: ((Boolean) -> Unit)? = null) {
@@ -98,7 +97,6 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
                         callback?.invoke(true)
                         return false
                     }
-
                 })
                 .fitCenter()
                 .into(imageView)
@@ -117,7 +115,7 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
                 Mode.FULL_SIZE -> contentUrlResolver.resolveFullSize(data.url)
                 Mode.THUMBNAIL -> contentUrlResolver.resolveThumbnail(data.url, width, height, ContentUrlResolver.ThumbnailMethod.SCALE)
             }
-            //Fallback to base url
+            // Fallback to base url
                     ?: data.url
 
             GlideApp

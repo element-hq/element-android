@@ -53,7 +53,6 @@ class EventHtmlRenderer @Inject constructor(context: Context,
     fun render(node: Node) : CharSequence {
         return markwon.render(node)
     }
-
 }
 
 private class MatrixPlugin private constructor(private val glideRequests: GlideRequests,
@@ -105,7 +104,6 @@ private class MatrixPlugin private constructor(private val glideRequests: GlideR
                         HeadingHandler())
                 .setHandler("mx-reply",
                             MxReplyTagHandler())
-
     }
 
     override fun afterRender(node: Node, visitor: MarkwonVisitor) {
@@ -154,7 +152,7 @@ private class MxLinkHandler(private val glideRequests: GlideRequests,
                             tag.start(),
                             tag.end()
                     )
-                    //also add clickable span
+                    // also add clickable span
                     SpannableBuilder.setSpans(
                             visitor.builder(),
                             URLSpan(link),
@@ -168,7 +166,6 @@ private class MxLinkHandler(private val glideRequests: GlideRequests,
             linkHandler.handle(visitor, renderer, tag)
         }
     }
-
 }
 
 private class MxReplyTagHandler : TagHandler() {
@@ -187,5 +184,4 @@ private class MxReplyTagHandler : TagHandler() {
             visitor.builder().append("\n\n").append(replyText)
         }
     }
-
 }

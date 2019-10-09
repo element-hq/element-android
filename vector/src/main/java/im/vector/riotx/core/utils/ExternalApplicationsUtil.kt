@@ -154,7 +154,6 @@ fun openCamera(activity: Activity, titlePrefix: String, requestCode: Int): Strin
             if (null == dummyUri) {
                 Timber.e("Cannot use the internal storage to save media to save image")
             }
-
         } catch (e: Exception) {
             Timber.e(e, "Unable to insert camera URI into internal storage. Giving up. $e")
         }
@@ -245,7 +244,6 @@ fun shareMedia(context: Context, file: File, mediaMimeType: String?) {
     } catch (e: Exception) {
         Timber.e(e, "onMediaAction Selected File cannot be shared")
     }
-
 
     if (null != mediaUri) {
         val sendIntent = Intent()

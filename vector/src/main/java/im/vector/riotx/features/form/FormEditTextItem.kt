@@ -74,4 +74,3 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
         val textInputEditText by bind<TextInputEditText>(R.id.formTextInputTextInputEditText)
     }
 }
-

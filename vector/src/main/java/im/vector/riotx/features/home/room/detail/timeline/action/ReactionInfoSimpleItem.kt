@@ -16,7 +16,6 @@
 
 package im.vector.riotx.features.home.room.detail.timeline.action
 
-import android.graphics.Typeface
 import android.widget.TextView
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
@@ -54,5 +53,4 @@ abstract class ReactionInfoSimpleItem : EpoxyModelWithHolder<ReactionInfoSimpleI
         val displayNameView by bind<TextView>(R.id.itemSimpleReactionInfoMemberName)
         val timeStampView by bind<TextView>(R.id.itemSimpleReactionInfoTime)
     }
-
 }

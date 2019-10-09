@@ -52,7 +52,6 @@ class VectorSettingsPreferencesFragment : VectorSettingsBaseFragment() {
         injector.inject(this)
     }
 
-
     override fun bindPref() {
         // user interface preferences
         setUserInterfacePreferences()
@@ -151,10 +150,9 @@ class VectorSettingsPreferencesFragment : VectorSettingsBaseFragment() {
         }
     }
 
-
-    //==============================================================================================================
+    // ==============================================================================================================
     // user interface management
-    //==============================================================================================================
+    // ==============================================================================================================
 
     private fun setUserInterfacePreferences() {
         // Selected language
@@ -211,5 +209,4 @@ class VectorSettingsPreferencesFragment : VectorSettingsBaseFragment() {
     companion object {
         private const val REQUEST_LOCALE = 777
     }
-
 }

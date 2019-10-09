@@ -59,20 +59,19 @@ internal abstract class SASVerificationTransaction(
         const val SAS_MAC_SHA256_LONGKDF = "hmac-sha256"
         const val SAS_MAC_SHA256 = "hkdf-hmac-sha256"
 
-        //ordered by preferred order
+        // ordered by preferred order
         val KNOWN_AGREEMENT_PROTOCOLS = listOf(MXKey.KEY_CURVE_25519_TYPE)
-        //ordered by preferred order
+        // ordered by preferred order
         val KNOWN_HASHES = listOf("sha256")
-        //ordered by preferred order
+        // ordered by preferred order
         val KNOWN_MACS = listOf(SAS_MAC_SHA256, SAS_MAC_SHA256_LONGKDF)
 
-        //older devices have limited support of emoji, so reply with decimal
+        // older devices have limited support of emoji, so reply with decimal
         val KNOWN_SHORT_CODES =
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
                     listOf(SasMode.EMOJI, SasMode.DECIMAL)
                 else
                     listOf(SasMode.DECIMAL)
-
     }
 
     override var state by Delegates.observable(SasVerificationTxState.None) { _, _, new ->
@@ -108,7 +107,7 @@ internal abstract class SASVerificationTransaction(
         return olmSas!!
     }
 
-    //To override finalize(), all you need to do is simply declare it, without using the override keyword:
+    // To override finalize(), all you need to do is simply declare it, without using the override keyword:
     protected fun finalize() {
         releaseSAS()
     }
@@ -119,7 +118,6 @@ internal abstract class SASVerificationTransaction(
         olmSas = null
     }
 
-
     /**
      * To be called by the client when the user has verified that
      * both short codes do match
@@ -127,16 +125,16 @@ internal abstract class SASVerificationTransaction(
     override fun userHasVerifiedShortCode() {
         Timber.v("## SAS short code verified by user for id:$transactionId")
         if (state != SasVerificationTxState.ShortCodeReady) {
-            //ignore and cancel?
+            // ignore and cancel?
             Timber.e("## Accepted short code from invalid state $state")
             cancel(CancelCode.UnexpectedMessage)
             return
         }
 
         state = SasVerificationTxState.ShortCodeAccepted
-        //Alice and Bob’ devices calculate the HMAC of their own device keys and a comma-separated,
+        // Alice and Bob’ devices calculate the HMAC of their own device keys and a comma-separated,
         // sorted list of the key IDs that they wish the other user to verify,
-        //the shared secret as the input keying material, no salt, and with the input parameter set to the concatenation of:
+        // the shared secret as the input keying material, no salt, and with the input parameter set to the concatenation of:
         // - the string “MATRIX_KEY_VERIFICATION_MAC”,
         // - the Matrix ID of the user whose key is being MAC-ed,
         // - the device ID of the device sending the MAC,
@@ -155,7 +153,7 @@ internal abstract class SASVerificationTransaction(
         val keyStrings = macUsingAgreedMethod(keyId, baseInfo + "KEY_IDS")
 
         if (macString.isNullOrBlank() || keyStrings.isNullOrBlank()) {
-            //Should not happen
+            // Should not happen
             Timber.e("## SAS verification [$transactionId] failed to send KeyMac, empty key hashes.")
             cancel(CancelCode.UnexpectedMessage)
             return
@@ -166,16 +164,15 @@ internal abstract class SASVerificationTransaction(
         state = SasVerificationTxState.SendingMac
         sendToOther(EventType.KEY_VERIFICATION_MAC, macMsg, SasVerificationTxState.MacSent, CancelCode.User) {
             if (state == SasVerificationTxState.SendingMac) {
-                //It is possible that we receive the next event before this one :/, in this case we should keep state
+                // It is possible that we receive the next event before this one :/, in this case we should keep state
                 state = SasVerificationTxState.MacSent
             }
         }
 
-        //Do I already have their Mac?
+        // Do I already have their Mac?
         if (theirMac != null) {
             verifyMacs()
-        } //if not wait for it
-
+        } // if not wait for it
     }
 
     override fun acceptToDeviceEvent(senderId: String, event: SendToDeviceObject) {
@@ -185,7 +182,7 @@ internal abstract class SASVerificationTransaction(
             is KeyVerificationKey    -> onKeyVerificationKey(senderId, event)
             is KeyVerificationMac    -> onKeyVerificationMac(event)
             else                     -> {
-                //nop
+                // nop
             }
         }
     }
@@ -202,7 +199,7 @@ internal abstract class SASVerificationTransaction(
         Timber.v("## SAS verifying macs for id:$transactionId")
         state = SasVerificationTxState.Verifying
 
-        //Keys have been downloaded earlier in process
+        // Keys have been downloaded earlier in process
         val otherUserKnownDevices = cryptoStore.getUserDevices(otherUserId)
 
         // Bob’s device calculates the HMAC (as above) of its copies of Alice’s keys given in the message (as identified by their key ID),
@@ -219,25 +216,25 @@ internal abstract class SASVerificationTransaction(
 
         val keyStrings = macUsingAgreedMethod(commaSeparatedListOfKeyIds, baseInfo + "KEY_IDS")
         if (theirMac!!.keys != keyStrings) {
-            //WRONG!
+            // WRONG!
             cancel(CancelCode.MismatchedKeys)
             return
         }
 
         val verifiedDevices = ArrayList<String>()
 
-        //cannot be empty because it has been validated
+        // cannot be empty because it has been validated
         theirMac!!.mac!!.keys.forEach {
             val keyIDNoPrefix = if (it.startsWith("ed25519:")) it.substring("ed25519:".length) else it
             val otherDeviceKey = otherUserKnownDevices?.get(keyIDNoPrefix)?.fingerprint()
             if (otherDeviceKey == null) {
                 Timber.e("Verification: Could not find device $keyIDNoPrefix to verify")
-                //just ignore and continue
+                // just ignore and continue
                 return@forEach
             }
             val mac = macUsingAgreedMethod(otherDeviceKey, baseInfo + it)
             if (mac != theirMac?.mac?.get(it)) {
-                //WRONG!
+                // WRONG!
                 cancel(CancelCode.MismatchedKeys)
                 return
             }
@@ -252,7 +249,7 @@ internal abstract class SASVerificationTransaction(
             return
         }
 
-        //TODO what if the otherDevice is not in this list? and should we
+        // TODO what if the otherDevice is not in this list? and should we
         verifiedDevices.forEach {
             setDeviceVerified(it, otherUserId)
         }
@@ -370,16 +367,16 @@ internal abstract class SASVerificationTransaction(
      * or with the three numbers on separate lines.
      */
     fun getDecimalCodeRepresentation(byteArray: ByteArray): String {
-        val b0 = byteArray[0].toUnsignedInt() //need unsigned byte
-        val b1 = byteArray[1].toUnsignedInt() //need unsigned byte
-        val b2 = byteArray[2].toUnsignedInt() //need unsigned byte
-        val b3 = byteArray[3].toUnsignedInt() //need unsigned byte
-        val b4 = byteArray[4].toUnsignedInt() //need unsigned byte
-        //(B0 << 5 | B1 >> 3) + 1000
+        val b0 = byteArray[0].toUnsignedInt() // need unsigned byte
+        val b1 = byteArray[1].toUnsignedInt() // need unsigned byte
+        val b2 = byteArray[2].toUnsignedInt() // need unsigned byte
+        val b3 = byteArray[3].toUnsignedInt() // need unsigned byte
+        val b4 = byteArray[4].toUnsignedInt() // need unsigned byte
+        // (B0 << 5 | B1 >> 3) + 1000
         val first = (b0.shl(5) or b1.shr(3)) + 1000
-        //((B1 & 0x7) << 10 | B2 << 2 | B3 >> 6) + 1000
+        // ((B1 & 0x7) << 10 | B2 << 2 | B3 >> 6) + 1000
         val second = ((b1 and 0x7).shl(10) or b2.shl(2) or b3.shr(6)) + 1000
-        //((B3 & 0x3f) << 7 | B4 >> 1) + 1000
+        // ((B3 & 0x3f) << 7 | B4 >> 1) + 1000
         val third = ((b3 and 0x3f).shl(7) or b4.shr(1)) + 1000
         return "$first $second $third"
     }
@@ -411,5 +408,4 @@ internal abstract class SASVerificationTransaction(
                 getEmojiForCode((b4 and 0xF).shl(2) or (b5 and 0xC0).shr(6))
         )
     }
-
 }

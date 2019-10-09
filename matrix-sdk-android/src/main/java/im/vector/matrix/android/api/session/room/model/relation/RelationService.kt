@@ -48,7 +48,6 @@ import im.vector.matrix.android.api.util.Optional
  */
 interface RelationService {
 
-
     /**
      * Sends a reaction (emoji) to the targetedEvent.
      * @param reaction the reaction (preferably emoji)
@@ -56,7 +55,6 @@ interface RelationService {
      */
     fun sendReaction(reaction: String,
                      targetEventId: String): Cancelable
-
 
     /**
      * Undo a reaction (emoji) to the targetedEvent.
@@ -66,8 +64,7 @@ interface RelationService {
      */
     fun undoReaction(reaction: String,
                      targetEventId: String,
-                     myUserId: String)//: Cancelable
-
+                     myUserId: String) // : Cancelable
 
     /**
      * Edit a text message body. Limited to "m.text" contentType
@@ -80,7 +77,6 @@ interface RelationService {
                         newBodyText: String,
                         newBodyAutoMarkdown: Boolean,
                         compatibilityBodyText: String = "* $newBodyText"): Cancelable
-
 
     /**
      * Edit a reply. This is a special case because replies contains fallback text as a prefix.
@@ -100,7 +96,6 @@ interface RelationService {
      */
     fun fetchEditHistory(eventId: String, callback: MatrixCallback<List<Event>>)
 
-
     /**
      * Reply to an event in the timeline (must be in same room)
      * https://matrix.org/docs/spec/client_server/r0.4.0.html#id350
@@ -113,6 +108,4 @@ interface RelationService {
                        autoMarkdown: Boolean = false): Cancelable?
 
     fun getEventSummaryLive(eventId: String): LiveData<Optional<EventAnnotationsSummary>>
-
-
 }

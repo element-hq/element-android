@@ -25,7 +25,6 @@ import io.realm.Realm
 import timber.log.Timber
 import javax.inject.Inject
 
-
 // the receipts dictionnaries
 // key   : $EventId
 // value : dict key $UserId
@@ -51,7 +50,6 @@ internal class ReadReceiptHandler @Inject constructor() {
                     )
             )
         }
-
     }
 
     fun handle(realm: Realm, roomId: String, content: ReadReceiptContent?, isInitialSync: Boolean) {
@@ -72,7 +70,6 @@ internal class ReadReceiptHandler @Inject constructor() {
             incrementalSyncStrategy(realm, roomId, content)
         }
     }
-
 
     private fun initialSyncStrategy(realm: Realm, roomId: String, content: ReadReceiptContent) {
         val readReceiptSummaries = ArrayList<ReadReceiptsSummaryEntity>()
@@ -113,6 +110,4 @@ internal class ReadReceiptHandler @Inject constructor() {
             }
         }
     }
-
-
 }

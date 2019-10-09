@@ -70,7 +70,6 @@ internal class MXOlmEncryption(
         return messageMap.toContent()!!
     }
 
-
     /**
      * Ensure that the session
      *

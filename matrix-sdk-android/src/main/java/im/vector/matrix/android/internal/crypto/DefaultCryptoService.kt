@@ -398,7 +398,6 @@ internal class DefaultCryptoService @Inject constructor(
             }
         }
 
-
         callback?.onSuccess(Unit)
     }
 
@@ -438,7 +437,7 @@ internal class DefaultCryptoService @Inject constructor(
         val encryptingClass = MXCryptoAlgorithms.hasEncryptorClassForAlgorithm(algorithm)
 
         if (!encryptingClass) {
-            Timber.e("## setEncryptionInRoom() : Unable to encrypt room ${roomId} with $algorithm")
+            Timber.e("## setEncryptionInRoom() : Unable to encrypt room $roomId with $algorithm")
             return false
         }
 
@@ -651,7 +650,7 @@ internal class DefaultCryptoService @Inject constructor(
                     incomingRoomKeyRequestManager.onRoomKeyRequestEvent(event)
                 }
                 else                                             -> {
-                    //ignore
+                    // ignore
                 }
             }
         }
@@ -706,7 +705,6 @@ internal class DefaultCryptoService @Inject constructor(
             } else {
                 RoomMembers(realm, roomId).getJoinedRoomMemberIds()
             }
-
         }
         return userIds
     }
@@ -752,7 +750,6 @@ internal class DefaultCryptoService @Inject constructor(
             cryptoStore.setShouldEncryptForInvitedMembers(roomId, it != RoomHistoryVisibility.JOINED)
         }
     }
-
 
     /**
      * Upload my user's device keys.
@@ -936,7 +933,6 @@ internal class DefaultCryptoService @Inject constructor(
 
         cryptoStore.setRoomsListBlacklistUnverifiedDevices(roomIds)
     }
-
 
     /**
      * Add this room to the ones which don't encrypt messages to unverified devices.

@@ -22,11 +22,9 @@ import com.airbnb.mvrx.Uninitialized
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotx.features.home.room.detail.RoomDetailArgs
 
-
 data class TextComposerViewState(val roomId: String,
                                  val asyncUsers: Async<List<User>> = Uninitialized
 ) : MvRxState {
 
     constructor(args: RoomDetailArgs) : this(roomId = args.roomId)
-
 }

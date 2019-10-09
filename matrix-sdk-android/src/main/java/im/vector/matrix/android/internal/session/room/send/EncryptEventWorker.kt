@@ -70,7 +70,6 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
         }
         localEchoUpdater.updateSendState(localEvent.eventId, SendState.ENCRYPTING)
 
-
         val localMutableContent = localEvent.content?.toMutableMap() ?: mutableMapOf()
         params.keepKeys?.forEach {
             localMutableContent.remove(it)
@@ -89,7 +88,7 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
             val modifiedContent = HashMap(result.eventContent)
             params.keepKeys?.forEach { toKeep ->
                 localEvent.content?.get(toKeep)?.let {
-                    //put it back in the encrypted thing
+                    // put it back in the encrypted thing
                     modifiedContent[toKeep] = it
                 }
             }
@@ -106,7 +105,7 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
                 else                   -> SendState.UNDELIVERED
             }
             localEchoUpdater.updateSendState(localEvent.eventId, sendState)
-            //always return success, or the chain will be stuck for ever!
+            // always return success, or the chain will be stuck for ever!
             val nextWorkerParams = SendEventWorker.Params(params.userId, params.roomId, localEvent, error?.localizedMessage
                     ?: "Error")
             return Result.success(WorkerParamsFactory.toData(nextWorkerParams))

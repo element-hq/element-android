@@ -27,7 +27,6 @@ import timber.log.Timber
 
 internal object EventMapper {
 
-
     fun map(event: Event, roomId: String): EventEntity {
         val uds = if (event.unsignedData == null) null
         else MoshiProvider.providesMoshi().adapter(UnsignedData::class.java).toJson(event.unsignedData)
@@ -79,13 +78,12 @@ internal object EventMapper {
                     Timber.e(t, "Failed to parse decryption result")
                 }
             }
-            //TODO get the full crypto error object
+            // TODO get the full crypto error object
             it.mCryptoError = eventEntity.decryptionErrorCode?.let { errorCode ->
                 MXCryptoError.ErrorType.valueOf(errorCode)
             }
         }
     }
-
 }
 
 internal fun EventEntity.asDomain(): Event {
@@ -95,4 +93,3 @@ internal fun EventEntity.asDomain(): Event {
 internal fun Event.toEntity(roomId: String): EventEntity {
     return EventMapper.map(this, roomId)
 }
-

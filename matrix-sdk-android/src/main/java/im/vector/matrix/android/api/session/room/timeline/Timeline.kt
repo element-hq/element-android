@@ -50,14 +50,12 @@ interface Timeline {
      */
     fun restartWithEventId(eventId: String?)
 
-
     /**
      * Check if the timeline can be enriched by paginating.
      * @param the direction to check in
      * @return true if timeline can be enriched
      */
     fun hasMoreToLoad(direction: Direction): Boolean
-
 
     /**
      * This is the main method to enrich the timeline with new data.
@@ -97,7 +95,6 @@ interface Timeline {
      */
     fun getFirstDisplayableEventId(eventId: String): String?
 
-
     interface Listener {
         /**
          * Call when the timeline has been updated through pagination or sync.
@@ -119,5 +116,4 @@ interface Timeline {
          */
         BACKWARDS
     }
-
 }

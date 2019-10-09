@@ -32,5 +32,4 @@ data class EventContextResponse(
 
     override val events: List<Event>
         get() = listOf(event)
-
 }

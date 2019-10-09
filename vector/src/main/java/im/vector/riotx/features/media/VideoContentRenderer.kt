@@ -99,8 +99,8 @@ class VideoContentRenderer @Inject constructor(private val activeSessionHolder: 
                 errorView.setText(R.string.unknown_error)
             } else {
 
-                //Temporary code, some remote videos are not played by videoview setVideoUri
-                //So for now we download them then play
+                // Temporary code, some remote videos are not played by videoview setVideoUri
+                // So for now we download them then play
                 thumbnailView.isVisible = true
                 loadingView.isVisible = true
 
@@ -130,5 +130,4 @@ class VideoContentRenderer @Inject constructor(private val activeSessionHolder: 
             }
         }
     }
-
 }

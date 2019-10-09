@@ -38,5 +38,4 @@ internal abstract class CacheModule {
 
     @Binds
     abstract fun bindCacheService(cacheService: DefaultCacheService): CacheService
-
 }

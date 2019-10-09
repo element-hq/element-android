@@ -74,7 +74,6 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
             } catch (e: Exception) {
                 Timber.e(e, "## canRetryKeysDownload() failed")
             }
-
         }
 
         return res

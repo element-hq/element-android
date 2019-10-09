@@ -68,9 +68,7 @@ internal class RoomTombstoneEventLiveObserver @Inject constructor(@SessionDataba
                     predecessorRoomSummary.versioningState = VersioningState.UPGRADED_ROOM_NOT_JOINED
                 }
                 realm.insertOrUpdate(predecessorRoomSummary)
-
             }
         }
     }
-
 }

@@ -33,7 +33,6 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
         private val monarchy: Monarchy
 ) : GetHomeServerCapabilitiesTask {
 
-
     override suspend fun execute(params: Unit) {
         var doRequest = false
         monarchy.awaitTransaction { realm ->
@@ -54,7 +53,6 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
 
         insertInDb(uploadCapabilities)
     }
-
 
     private suspend fun insertInDb(getUploadCapabilitiesResult: GetUploadCapabilitiesResult) {
         monarchy.awaitTransaction { realm ->

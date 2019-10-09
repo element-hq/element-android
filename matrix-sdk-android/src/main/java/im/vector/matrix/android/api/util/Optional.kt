@@ -31,7 +31,7 @@ data class Optional<T : Any> constructor(private val value: T?) {
         return value ?: fn()
     }
 
-    fun hasValue(): Boolean{
+    fun hasValue(): Boolean {
         return value != null
     }
 
@@ -40,7 +40,6 @@ data class Optional<T : Any> constructor(private val value: T?) {
             return Optional(value)
         }
     }
-
 }
 
 fun <T : Any> T?.toOptional() = Optional(this)

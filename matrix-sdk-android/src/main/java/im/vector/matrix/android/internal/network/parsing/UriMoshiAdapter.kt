@@ -31,5 +31,4 @@ internal class UriMoshiAdapter {
     fun fromJson(uriString: String): Uri {
         return Uri.parse(uriString)
     }
-
 }

@@ -48,19 +48,18 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
     // long pressing to open the context menu on a TextView also triggers an autoLink click.
     private val mvmtMethod = BetterLinkMovementMethod.newInstance().also {
         it.setOnLinkClickListener { _, url ->
-            //Return false to let android manage the click on the link, or true if the link is handled by the application
+            // Return false to let android manage the click on the link, or true if the link is handled by the application
             urlClickCallback?.onUrlClicked(url) == true
         }
-        //We need also to fix the case when long click on link will trigger long click on cell
+        // We need also to fix the case when long click on link will trigger long click on cell
         it.setOnLinkLongClickListener { tv, url ->
-            //Long clicks are handled by parent, return true to block android to do something with url
+            // Long clicks are handled by parent, return true to block android to do something with url
             if (urlClickCallback?.onUrlLongClicked(url) == true) {
                 tv.dispatchTouchEvent(MotionEvent.obtain(0, 0, MotionEvent.ACTION_CANCEL, 0f, 0f, 0))
                 true
             } else {
                 false
             }
-
         }
     }
 

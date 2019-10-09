@@ -179,7 +179,6 @@ internal class KeysBackup @Inject constructor(
 
                     megolmBackupAuthData.signatures = objectSigner.signObject(canonicalJson)
 
-
                     val megolmBackupCreationInfo = MegolmBackupCreationInfo()
                     megolmBackupCreationInfo.algorithm = MXCRYPTO_ALGORITHM_MEGOLM_BACKUP
                     megolmBackupCreationInfo.authData = megolmBackupAuthData
@@ -296,7 +295,6 @@ internal class KeysBackup @Inject constructor(
 
     override fun getTotalNumbersOfKeys(): Int {
         return cryptoStore.inboundGroupSessionsCount(false)
-
     }
 
     override fun getTotalNumbersOfBackedUpKeys(): Int {
@@ -827,7 +825,6 @@ internal class KeysBackup @Inject constructor(
             } catch (e: OlmException) {
                 Timber.e(e, "OlmException")
             }
-
         }
 
         return decryption
@@ -1013,7 +1010,6 @@ internal class KeysBackup @Inject constructor(
                 override fun onFailure(failure: Throwable) {
                     // Cannot happen
                 }
-
             })
         }
     }

@@ -72,5 +72,4 @@ object PermalinkParser {
             else                                 -> PermalinkData.FallbackLink(uri)
         }
     }
-
 }

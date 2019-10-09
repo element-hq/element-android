@@ -53,6 +53,4 @@ class NoticeItemFactory @Inject constructor(private val eventFormatter: NoticeEv
                 .highlighted(highlight)
                 .attributes(attributes)
     }
-
-
 }

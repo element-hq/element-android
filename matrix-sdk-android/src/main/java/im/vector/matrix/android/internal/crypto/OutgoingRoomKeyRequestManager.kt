@@ -90,7 +90,6 @@ internal class OutgoingRoomKeyRequestManager @Inject constructor(
         val req = cryptoStore.getOrAddOutgoingRoomKeyRequest(
                 OutgoingRoomKeyRequest(requestBody, recipients, makeTxnId(), OutgoingRoomKeyRequest.RequestState.UNSENT))
 
-
         if (req?.state == OutgoingRoomKeyRequest.RequestState.UNSENT) {
             startTimer()
         }
@@ -153,7 +152,6 @@ internal class OutgoingRoomKeyRequestManager @Inject constructor(
             }
         }
     }
-
 
     /**
      * Start the background timer to send queued requests, if the timer isn't already running.
@@ -261,7 +259,6 @@ internal class OutgoingRoomKeyRequestManager @Inject constructor(
                 startTimer()
             }
 
-
             override fun onSuccess(data: Unit) {
                 Timber.v("## sendOutgoingRoomKeyRequestCancellation() : done")
                 val resend = request.state === OutgoingRoomKeyRequest.RequestState.CANCELLATION_PENDING_AND_WILL_RESEND
@@ -312,6 +309,5 @@ internal class OutgoingRoomKeyRequestManager @Inject constructor(
         private const val SEND_KEY_REQUESTS_DELAY_MS = 500
 
         private val BACKGROUND_HANDLER = createBackgroundHandler("OutgoingRoomKeyRequest")
-
     }
 }

@@ -82,7 +82,6 @@ internal class RoomDecryptorProvider @Inject constructor(
                                 try {
                                     it.onNewSession(roomId, senderKey, sessionId)
                                 } catch (e: Throwable) {
-
                                 }
                             }
                         }

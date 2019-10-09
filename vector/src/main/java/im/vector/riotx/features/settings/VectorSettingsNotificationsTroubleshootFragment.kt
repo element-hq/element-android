@@ -58,7 +58,6 @@ class VectorSettingsNotificationsTroubleshootFragment : VectorBaseFragment() {
     @Inject lateinit var bugReporter: BugReporter
     @Inject lateinit var testManagerFactory: NotificationTroubleshootTestManagerFactory
 
-
     override fun getLayoutResId() = R.layout.fragment_settings_notifications_troubleshoot
 
     private var interactionListener: VectorSettingsFragmentInteractionListener? = null
@@ -76,7 +75,6 @@ class VectorSettingsNotificationsTroubleshootFragment : VectorBaseFragment() {
         val dividerItemDecoration = DividerItemDecoration(mRecyclerView.context,
                                                           layoutManager.orientation)
         mRecyclerView.addItemDecoration(dividerItemDecoration)
-
 
         mSummaryButton.setOnClickListener {
             bugReporter.openBugReportScreen(activity!!)
@@ -103,7 +101,7 @@ class VectorSettingsNotificationsTroubleshootFragment : VectorBaseFragment() {
                         mRunButton.visibility = View.VISIBLE
                     }
                     TroubleshootTest.TestStatus.RUNNING     -> {
-                        //Forces int type because it's breaking lint
+                        // Forces int type because it's breaking lint
                         val size: Int = troubleshootTestManager.testList.size
                         val currentTestIndex: Int = troubleshootTestManager.currentTestIndex
                         mSummaryDescription.text = getString(
@@ -115,7 +113,7 @@ class VectorSettingsNotificationsTroubleshootFragment : VectorBaseFragment() {
                         mRunButton.visibility = View.GONE
                     }
                     TroubleshootTest.TestStatus.FAILED      -> {
-                        //check if there are quick fixes
+                        // check if there are quick fixes
                         var hasQuickFix = false
                         testManager?.testList?.let {
                             for (test in it) {
@@ -140,7 +138,6 @@ class VectorSettingsNotificationsTroubleshootFragment : VectorBaseFragment() {
                     }
                 }
             }
-
         }
         mRecyclerView.adapter = testManager?.adapter
         testManager?.runDiagnostic()

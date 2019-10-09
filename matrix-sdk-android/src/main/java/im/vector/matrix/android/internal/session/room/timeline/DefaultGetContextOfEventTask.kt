@@ -28,7 +28,6 @@ internal interface GetContextOfEventTask : Task<GetContextOfEventTask.Params, To
             val roomId: String,
             val eventId: String
     )
-
 }
 
 internal class DefaultGetContextOfEventTask @Inject constructor(private val roomAPI: RoomAPI,
@@ -43,5 +42,4 @@ internal class DefaultGetContextOfEventTask @Inject constructor(private val room
         }
         return tokenChunkEventPersistor.insertInDb(response, params.roomId, PaginationDirection.BACKWARDS)
     }
-
 }

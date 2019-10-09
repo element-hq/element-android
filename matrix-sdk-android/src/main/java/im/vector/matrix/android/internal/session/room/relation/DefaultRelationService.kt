@@ -87,7 +87,7 @@ internal class DefaultRelationService @AssistedInject constructor(@Assisted priv
             override fun onSuccess(data: FindReactionEventForUndoTask.Result) {
                 if (data.redactEventId == null) {
                     Timber.w("Cannot find reaction to undo (not yet synced?)")
-                    //TODO?
+                    // TODO?
                 }
                 data.redactEventId?.let { toRedact ->
 
@@ -97,7 +97,6 @@ internal class DefaultRelationService @AssistedInject constructor(@Assisted priv
                     val redactWork = createRedactEventWork(redactEvent, toRedact, null)
 
                     TimelineSendEventWorkCommon.postWork(context, roomId, redactWork)
-
                 }
             }
         }
@@ -109,7 +108,7 @@ internal class DefaultRelationService @AssistedInject constructor(@Assisted priv
                 .executeBy(taskExecutor)
     }
 
-    //TODO duplicate with send service?
+    // TODO duplicate with send service?
     private fun createRedactEventWork(localEvent: Event, eventId: String, reason: String?): OneTimeWorkRequest {
         val sendContentWorkerParams = RedactEventWorker.Params(
                 userId,
@@ -136,13 +135,11 @@ internal class DefaultRelationService @AssistedInject constructor(@Assisted priv
             val workRequest = createSendEventWork(event, false)
             TimelineSendEventWorkCommon.postSequentialWorks(context, roomId, encryptWork, workRequest)
             CancelableWork(context, encryptWork.id)
-
         } else {
             val workRequest = createSendEventWork(event, true)
             TimelineSendEventWorkCommon.postWork(context, roomId, workRequest)
             CancelableWork(context, workRequest.id)
         }
-
     }
 
     override fun editReply(replyToEdit: TimelineEvent,
@@ -162,7 +159,6 @@ internal class DefaultRelationService @AssistedInject constructor(@Assisted priv
             val workRequest = createSendEventWork(event, false)
             TimelineSendEventWorkCommon.postSequentialWorks(context, roomId, encryptWork, workRequest)
             CancelableWork(context, encryptWork.id)
-
         } else {
             val workRequest = createSendEventWork(event, true)
             TimelineSendEventWorkCommon.postWork(context, roomId, workRequest)
@@ -189,13 +185,11 @@ internal class DefaultRelationService @AssistedInject constructor(@Assisted priv
             val workRequest = createSendEventWork(event, false)
             TimelineSendEventWorkCommon.postSequentialWorks(context, roomId, encryptWork, workRequest)
             CancelableWork(context, encryptWork.id)
-
         } else {
             val workRequest = createSendEventWork(event, true)
             TimelineSendEventWorkCommon.postWork(context, roomId, workRequest)
             CancelableWork(context, workRequest.id)
         }
-
     }
 
     private fun createEncryptEventWork(event: Event, keepKeys: List<String>?): OneTimeWorkRequest {
@@ -213,7 +207,7 @@ internal class DefaultRelationService @AssistedInject constructor(@Assisted priv
 
     override fun getEventSummaryLive(eventId: String): LiveData<Optional<EventAnnotationsSummary>> {
         val liveData = monarchy.findAllMappedWithChanges(
-                { EventAnnotationsSummaryEntity.where(it, eventId)},
+                { EventAnnotationsSummaryEntity.where(it, eventId) },
                 { it.asDomain() }
         )
         return Transformations.map(liveData) { results ->

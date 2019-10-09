@@ -20,5 +20,4 @@ interface VectorSettingsFragmentInteractionListener {
     fun requestHighlightPreferenceKeyOnResume(key: String?)
 
     fun requestedKeyToHighlight(): String?
-
 }

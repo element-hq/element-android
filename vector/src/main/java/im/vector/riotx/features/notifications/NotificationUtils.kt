@@ -49,7 +49,6 @@ import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
-
 /**
  * Util class for creating notifications.
  * Note: Cannot inject ColorProvider in the constructor, because it requires an Activity
@@ -129,10 +128,10 @@ class NotificationUtils @Inject constructor(private val context: Context,
 
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
 
-        //Migration - the noisy channel was deleted and recreated when sound preference was changed (id was DEFAULT_NOISY_NOTIFICATION_CHANNEL_ID_BASE
+        // Migration - the noisy channel was deleted and recreated when sound preference was changed (id was DEFAULT_NOISY_NOTIFICATION_CHANNEL_ID_BASE
         // + currentTimeMillis).
-        //Now the sound can only be change directly in system settings, so for app upgrading we are deleting this former channel
-        //Starting from this version the channel will not be dynamic
+        // Now the sound can only be change directly in system settings, so for app upgrading we are deleting this former channel
+        // Starting from this version the channel will not be dynamic
         for (channel in notificationManager.notificationChannels) {
             val channelId = channel.id
             val legacyBaseName = "DEFAULT_NOISY_NOTIFICATION_CHANNEL_ID_BASE"
@@ -140,7 +139,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 notificationManager.deleteNotificationChannel(channelId)
             }
         }
-        //Migration - Remove deprecated channels
+        // Migration - Remove deprecated channels
         for (channelId in listOf("DEFAULT_SILENT_NOTIFICATION_CHANNEL_ID", "CALL_NOTIFICATION_CHANNEL_ID")) {
             notificationManager.getNotificationChannel(channelId)?.let {
                 notificationManager.deleteNotificationChannel(channelId)
@@ -248,7 +247,6 @@ class NotificationUtils @Inject constructor(private val context: Context,
             } catch (ex: Exception) {
                 Timber.e(ex, "## buildNotification(): Exception - setLatestEventInfo() Msg=")
             }
-
         }
         return notification
     }
@@ -283,7 +281,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 .setCategory(NotificationCompat.CATEGORY_CALL)
                 .setLights(accentColor, 500, 500)
 
-        //Compat: Display the incoming call notification on the lock screen
+        // Compat: Display the incoming call notification on the lock screen
         builder.priority = NotificationCompat.PRIORITY_MAX
 
         // clear the activity stack to home activity
@@ -296,7 +294,6 @@ class NotificationUtils @Inject constructor(private val context: Context,
         val stackBuilder = TaskStackBuilder.create(context)
                 .addParentStack(HomeActivity::class.java)
                 .addNextIntent(intent)
-
 
         // android 4.3 issue
         // use a generator for the private requestCode.
@@ -415,7 +412,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 // TODO Group should be current user display name
                 .setGroup(stringProvider.getString(R.string.app_name))
 
-                //In order to avoid notification making sound twice (due to the summary notification)
+                // In order to avoid notification making sound twice (due to the summary notification)
                 .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_SUMMARY)
 
                 .setSmallIcon(smallIcon)
@@ -429,7 +426,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 .apply {
                     priority = NotificationCompat.PRIORITY_DEFAULT
                     if (roomInfo.shouldBing) {
-                        //Compat
+                        // Compat
                         vectorPreferences.getNotificationRingTone()?.let {
                             setSound(it)
                         }
@@ -438,7 +435,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
                         priority = NotificationCompat.PRIORITY_LOW
                     }
 
-                    //Add actions and notification intents
+                    // Add actions and notification intents
                     // Mark room as read
                     val markRoomReadIntent = Intent(context, NotificationBroadcastReceiver::class.java)
                     markRoomReadIntent.action = MARK_ROOM_READ_ACTION
@@ -485,7 +482,6 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 .build()
     }
 
-
     fun buildRoomInvitationNotification(inviteNotifiableEvent: InviteNotifiableEvent,
                                         matrixId: String): Notification {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
@@ -530,12 +526,12 @@ class NotificationUtils @Inject constructor(private val context: Context,
 
                     val contentIntent = Intent(context, HomeActivity::class.java)
                     contentIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-                    //pending intent get reused by system, this will mess up the extra params, so put unique info to avoid that
+                    // pending intent get reused by system, this will mess up the extra params, so put unique info to avoid that
                     contentIntent.data = Uri.parse("foobar://" + inviteNotifiableEvent.eventId)
                     setContentIntent(PendingIntent.getActivity(context, 0, contentIntent, 0))
 
                     if (inviteNotifiableEvent.noisy) {
-                        //Compat
+                        // Compat
                         priority = NotificationCompat.PRIORITY_DEFAULT
                         vectorPreferences.getNotificationRingTone()?.let {
                             setSound(it)
@@ -568,12 +564,12 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 .apply {
                     val contentIntent = Intent(context, HomeActivity::class.java)
                     contentIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-                    //pending intent get reused by system, this will mess up the extra params, so put unique info to avoid that
+                    // pending intent get reused by system, this will mess up the extra params, so put unique info to avoid that
                     contentIntent.data = Uri.parse("foobar://" + simpleNotifiableEvent.eventId)
                     setContentIntent(PendingIntent.getActivity(context, 0, contentIntent, 0))
 
                     if (simpleNotifiableEvent.noisy) {
-                        //Compat
+                        // Compat
                         priority = NotificationCompat.PRIORITY_DEFAULT
                         vectorPreferences.getNotificationRingTone()?.let {
                             setSound(it)
@@ -590,7 +586,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
     private fun buildOpenRoomIntent(roomId: String): PendingIntent? {
         val roomIntentTap = RoomDetailActivity.newIntent(context, RoomDetailArgs(roomId))
         roomIntentTap.action = TAP_TO_VIEW_ACTION
-        //pending intent get reused by system, this will mess up the extra params, so put unique info to avoid that
+        // pending intent get reused by system, this will mess up the extra params, so put unique info to avoid that
         roomIntentTap.data = Uri.parse("foobar://openRoom?$roomId")
 
         // Recreate the back stack
@@ -642,7 +638,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
         return null
     }
 
-    //// Number of new notifications for API <24 (M and below) devices.
+    // // Number of new notifications for API <24 (M and below) devices.
     /**
      * Build the summary notification
      */
@@ -660,22 +656,22 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 .setContentTitle(stringProvider.getString(R.string.app_name))
                 .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                 .setSmallIcon(smallIcon)
-                //set content text to support devices running API level < 24
+                // set content text to support devices running API level < 24
                 .setContentText(compatSummary)
                 .setGroup(stringProvider.getString(R.string.app_name))
-                //set this notification as the summary for the group
+                // set this notification as the summary for the group
                 .setGroupSummary(true)
                 .setColor(accentColor)
                 .apply {
                     if (noisy) {
-                        //Compat
+                        // Compat
                         priority = NotificationCompat.PRIORITY_DEFAULT
                         vectorPreferences.getNotificationRingTone()?.let {
                             setSound(it)
                         }
                         setLights(accentColor, 500, 500)
                     } else {
-                        //compat
+                        // compat
                         priority = NotificationCompat.PRIORITY_LOW
                     }
                 }

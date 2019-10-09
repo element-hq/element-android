@@ -28,7 +28,6 @@ abstract class NavigationViewModel<NavigationClass> : ViewModel() {
     val navigateTo: LiveData<LiveEvent<NavigationClass>>
         get() = _navigateTo
 
-
     fun goTo(navigation: NavigationClass) {
         _navigateTo.postLiveEvent(navigation)
     }

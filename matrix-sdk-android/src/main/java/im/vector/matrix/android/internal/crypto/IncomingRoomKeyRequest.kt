@@ -17,7 +17,6 @@
 
 package im.vector.matrix.android.internal.crypto
 
-
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
@@ -77,4 +76,3 @@ open class IncomingRoomKeyRequest {
      */
     constructor()
 }
-

@@ -193,5 +193,4 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
             throw IllegalStateException("This method can only be called on the main thread!")
         }
     }
-
 }

@@ -45,6 +45,4 @@ internal class DirectChatsHelper @Inject constructor(@SessionDatabase
             directChatsMap
         }
     }
-
-
 }

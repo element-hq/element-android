@@ -19,7 +19,6 @@ import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 
-
 internal open class EventAnnotationsSummaryEntity(
         @PrimaryKey
         var eventId: String = "",
@@ -29,5 +28,4 @@ internal open class EventAnnotationsSummaryEntity(
 ) : RealmObject() {
 
     companion object
-
 }

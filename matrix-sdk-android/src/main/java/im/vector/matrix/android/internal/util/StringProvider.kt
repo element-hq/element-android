@@ -53,6 +53,4 @@ internal class StringProvider @Inject constructor(private val resources: Resourc
     fun getString(@StringRes resId: Int, vararg formatArgs: Any?): String {
         return resources.getString(resId, *formatArgs)
     }
-
-
 }

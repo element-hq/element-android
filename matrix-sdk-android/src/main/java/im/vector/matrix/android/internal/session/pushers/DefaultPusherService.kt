@@ -36,7 +36,6 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-
 internal class DefaultPusherService @Inject constructor(private val context: Context,
                                                         private val monarchy: Monarchy,
                                                         @UserId private val userId: String,
@@ -44,7 +43,6 @@ internal class DefaultPusherService @Inject constructor(private val context: Con
                                                         private val removePusherTask: RemovePusherTask,
                                                         private val taskExecutor: TaskExecutor
 ) : PushersService {
-
 
     override fun refreshPushers() {
         getPusherTask
@@ -68,7 +66,6 @@ internal class DefaultPusherService @Inject constructor(private val context: Con
                 data = JsonPusherData(url, if (withEventIdOnly) PushersService.EVENT_ID_ONLY else null),
                 append = append)
 
-
         val params = AddHttpPusherWorker.Params(pusher, userId)
 
         val request = matrixOneTimeWorkRequestBuilder<AddHttpPusherWorker>()
@@ -86,7 +83,7 @@ internal class DefaultPusherService @Inject constructor(private val context: Con
                 .configureWith(params) {
                     this.callback = callback
                 }
-                //.enableRetry() ??
+                // .enableRetry() ??
                 .executeBy(taskExecutor)
     }
 

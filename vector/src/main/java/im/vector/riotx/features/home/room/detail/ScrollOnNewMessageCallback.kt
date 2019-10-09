@@ -30,5 +30,4 @@ class ScrollOnNewMessageCallback(private val layoutManager: LinearLayoutManager,
             layoutManager.scrollToPosition(0)
         }
     }
-
 }

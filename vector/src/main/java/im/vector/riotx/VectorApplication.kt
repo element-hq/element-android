@@ -60,9 +60,8 @@ import javax.inject.Inject
 
 class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.Provider, androidx.work.Configuration.Provider {
 
-
     lateinit var appContext: Context
-    //font thread handler
+    // font thread handler
     @Inject lateinit var authenticator: Authenticator
     @Inject lateinit var vectorConfiguration: VectorConfiguration
     @Inject lateinit var emojiCompatFontProvider: EmojiCompatFontProvider
@@ -78,9 +77,7 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
     lateinit var vectorComponent: VectorComponent
     private var fontThreadHandler: Handler? = null
 
-
 //    var slowMode = false
-
 
     override fun onCreate() {
         super.onCreate()
@@ -138,7 +135,7 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
                 FcmHelper.onEnterBackground(appContext, vectorPreferences, activeSessionHolder)
             }
         })
-        //This should be done as early as possible
+        // This should be done as early as possible
         initKnownEmojiHashSet(appContext)
     }
 
@@ -185,5 +182,4 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
         handlerThread.start()
         return Handler(handlerThread.looper)
     }
-
 }

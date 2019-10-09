@@ -32,5 +32,4 @@ class KeyBackupVersionTrustSignature {
      *Flag to indicate the signature from this device is valid.
      */
     var valid = false
-
 }

@@ -22,7 +22,6 @@ import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.task.Task
 import javax.inject.Inject
 
-
 internal interface PaginationTask : Task<PaginationTask.Params, TokenChunkEventPersistor.Result> {
 
     data class Params(
@@ -31,7 +30,6 @@ internal interface PaginationTask : Task<PaginationTask.Params, TokenChunkEventP
             val direction: PaginationDirection,
             val limit: Int
     )
-
 }
 
 internal class DefaultPaginationTask @Inject constructor(private val roomAPI: RoomAPI,
@@ -46,5 +44,4 @@ internal class DefaultPaginationTask @Inject constructor(private val roomAPI: Ro
         }
         return tokenChunkEventPersistor.insertInDb(chunk, params.roomId, params.direction)
     }
-
 }

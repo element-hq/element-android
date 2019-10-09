@@ -31,7 +31,6 @@ import im.vector.riotx.R
 import timber.log.Timber
 import java.util.*
 
-
 private const val LOG_TAG = "PermissionUtils"
 
 // Android M permission request code management
@@ -90,7 +89,6 @@ fun logPermissionStatuses(context: Context) {
         }
     }
 }
-
 
 /**
  * See [.checkPermissions]
@@ -311,7 +309,6 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
 
     return isPermissionGranted
 }
-
 
 /**
  * Helper method used in [.checkPermissions] to populate the list of the

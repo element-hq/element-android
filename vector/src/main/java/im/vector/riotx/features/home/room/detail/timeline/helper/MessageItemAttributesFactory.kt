@@ -57,7 +57,5 @@ class MessageItemAttributesFactory @Inject constructor(
                 readReceiptsCallback = callback,
                 emojiTypeFace = emojiCompatFontProvider.typeface
         )
-
     }
-
 }

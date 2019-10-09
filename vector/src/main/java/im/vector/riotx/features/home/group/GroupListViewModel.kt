@@ -44,7 +44,6 @@ class GroupListViewModel @AssistedInject constructor(@Assisted initialState: Gro
                                                      private val stringProvider: StringProvider
 ) : VectorViewModel<GroupListViewState>(initialState) {
 
-
     @AssistedInject.Factory
     interface Factory {
         fun create(initialState: GroupListViewState): GroupListViewModel

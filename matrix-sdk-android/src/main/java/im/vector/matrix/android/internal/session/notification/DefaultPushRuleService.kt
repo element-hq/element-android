@@ -104,7 +104,6 @@ internal class DefaultPushRuleService @Inject constructor(private val getPushRul
         }
     }
 
-
     override fun addPushRuleListener(listener: PushRuleService.PushRuleListener) {
         synchronized(listeners) {
             listeners.add(listener)

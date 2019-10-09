@@ -24,7 +24,6 @@ import im.vector.matrix.android.internal.task.Task
 import io.realm.Realm
 import javax.inject.Inject
 
-
 internal interface FindReactionEventForUndoTask : Task<FindReactionEventForUndoTask.Params, FindReactionEventForUndoTask.Result> {
 
     data class Params(
@@ -37,7 +36,6 @@ internal interface FindReactionEventForUndoTask : Task<FindReactionEventForUndoT
     data class Result(
             val redactEventId: String?
     )
-
 }
 
 internal class DefaultFindReactionEventForUndoTask @Inject constructor(private val monarchy: Monarchy) : FindReactionEventForUndoTask {
@@ -55,11 +53,11 @@ internal class DefaultFindReactionEventForUndoTask @Inject constructor(private v
             summary.reactionsSummary.where()
                     .equalTo(ReactionAggregatedSummaryEntityFields.KEY, reaction)
                     .findFirst()?.let {
-                        //want to find the event orignated by me!
+                        // want to find the event orignated by me!
                         it.sourceEvents.forEach {
-                            //find source event
+                            // find source event
                             EventEntity.where(realm, it).findFirst()?.let { eventEntity ->
-                                //is it mine?
+                                // is it mine?
                                 if (eventEntity.sender == userId) {
                                     return eventEntity
                                 }

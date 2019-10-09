@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.session.sync.model
 
-
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.session.events.model.Event
 

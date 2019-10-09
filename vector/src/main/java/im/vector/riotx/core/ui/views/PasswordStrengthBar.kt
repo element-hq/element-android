@@ -53,7 +53,6 @@ class PasswordStrengthBar @JvmOverloads constructor(
     @BindView(R.id.password_strength_bar_4)
     lateinit var bar4: View
 
-
     @BindColor(R.color.password_strength_bar_undefined)
     @JvmField
     var colorBackground: Int = 0

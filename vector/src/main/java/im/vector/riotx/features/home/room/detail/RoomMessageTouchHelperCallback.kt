@@ -34,7 +34,6 @@ import com.airbnb.epoxy.EpoxyViewHolder
 import timber.log.Timber
 import kotlin.math.abs
 
-
 class RoomMessageTouchHelperCallback(private val context: Context,
                                      @DrawableRes actionIcon: Int,
                                      private val handler: QuickReplayHandler) : EpoxyTouchHelperCallback() {
@@ -54,13 +53,11 @@ class RoomMessageTouchHelperCallback(private val context: Context,
 
     private var imageDrawable: Drawable = ContextCompat.getDrawable(context, actionIcon)!!
 
-
     private val triggerDistance = convertToPx(100)
     private val minShowDistance = convertToPx(20)
     private val triggerDelta = convertToPx(20)
 
     override fun onSwiped(viewHolder: EpoxyViewHolder?, direction: Int) {
-
     }
 
     override fun onMove(recyclerView: RecyclerView?, viewHolder: EpoxyViewHolder?, target: EpoxyViewHolder?): Boolean {
@@ -69,14 +66,13 @@ class RoomMessageTouchHelperCallback(private val context: Context,
 
     override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: EpoxyViewHolder): Int {
         if (handler.canSwipeModel(viewHolder.model)) {
-            return ItemTouchHelper.Callback.makeMovementFlags(0, ItemTouchHelper.START) //Should we use Left?
+            return ItemTouchHelper.Callback.makeMovementFlags(0, ItemTouchHelper.START) // Should we use Left?
         } else {
             return 0
         }
     }
 
-
-    //We never let items completely go out
+    // We never let items completely go out
     override fun convertToAbsoluteDirection(flags: Int, layoutDirection: Int): Int {
         if (swipeBack) {
             swipeBack = false
@@ -104,7 +100,6 @@ class RoomMessageTouchHelperCallback(private val context: Context,
         drawReplyButton(c, viewHolder.itemView)
     }
 
-
     @Suppress("UNUSED_PARAMETER")
     @SuppressLint("ClickableViewAccessibility")
     private fun setTouchListener(c: Canvas,
@@ -114,7 +109,7 @@ class RoomMessageTouchHelperCallback(private val context: Context,
                                  dY: Float,
                                  actionState: Int,
                                  isCurrentlyActive: Boolean) {
-        //TODO can this interfere with other interactions? should i remove it
+        // TODO can this interfere with other interactions? should i remove it
         recyclerView.setOnTouchListener { _, event ->
             swipeBack = event.action == MotionEvent.ACTION_CANCEL || event.action == MotionEvent.ACTION_UP
             if (swipeBack) {
@@ -130,9 +125,8 @@ class RoomMessageTouchHelperCallback(private val context: Context,
         }
     }
 
-
     private fun drawReplyButton(canvas: Canvas, itemView: View) {
-        //Timber.v("drawReplyButton")
+        // Timber.v("drawReplyButton")
         val translationX = Math.abs(itemView.translationX)
         val newTime = System.currentTimeMillis()
         val dt = Math.min(17, newTime - lastReplyButtonAnimationTime)
@@ -212,5 +206,4 @@ class RoomMessageTouchHelperCallback(private val context: Context,
                 context.resources.displayMetrics
         )
     }
-
 }

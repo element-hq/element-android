@@ -81,5 +81,4 @@ class VectorWebViewClient(private val eventListener: WebViewEventListener) : Web
         }
         return shouldOverrideUrlLoading
     }
-
 }

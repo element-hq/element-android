@@ -24,7 +24,6 @@ import android.view.View
 import kotlin.math.max
 import kotlin.math.min
 
-
 /**
  * This view is responsible for drawing big circle that will pulse when clicked
  * As describe in http://frogermcs.github.io/twitters-like-animation-in-android-alternative/
@@ -102,7 +101,6 @@ class CircleView @JvmOverloads constructor(context: Context, attrs: AttributeSet
 //        return outerCircleRadiusProgress
 //    }
 
-
     companion object {
 
         val INNER_CIRCLE_RADIUS_PROGRESS: Property<CircleView, Float> = object : Property<CircleView, Float>(Float::class.java, "innerCircleRadiusProgress") {
@@ -126,10 +124,8 @@ class CircleView @JvmOverloads constructor(context: Context, attrs: AttributeSet
                 value?.let {
                     `object`.outerCircleRadiusProgress = it
                 }
-
             }
         }
-
 
         fun mapValueFromRangeToRange(value: Float, fromLow: Float, fromHigh: Float, toLow: Float, toHigh: Float): Float {
             return toLow + (value - fromLow) / (fromHigh - fromLow) * (toHigh - toLow)

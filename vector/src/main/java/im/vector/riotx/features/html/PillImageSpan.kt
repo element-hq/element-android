@@ -112,7 +112,6 @@ class PillImageSpan(private val glideRequests: GlideRequests,
             setBounds(0, 0, intrinsicWidth, intrinsicHeight)
         }
     }
-
 }
 
 /**

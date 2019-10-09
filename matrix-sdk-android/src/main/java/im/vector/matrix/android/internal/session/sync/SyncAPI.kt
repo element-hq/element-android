@@ -31,5 +31,4 @@ internal interface SyncAPI {
     @Headers("CONNECT_TIMEOUT:60000", "READ_TIMEOUT:60000", "WRITE_TIMEOUT:60000")
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "sync")
     fun sync(@QueryMap params: Map<String, String>): Call<SyncResponse>
-
 }

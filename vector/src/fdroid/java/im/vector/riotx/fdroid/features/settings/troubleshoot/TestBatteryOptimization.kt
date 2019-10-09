@@ -43,5 +43,4 @@ class TestBatteryOptimization(val fragment: Fragment) : TroubleshootTest(R.strin
             status = TestStatus.FAILED
         }
     }
-
 }

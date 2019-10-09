@@ -34,7 +34,6 @@ import timber.log.Timber
  */
 class BugReportActivity : VectorBaseActivity() {
 
-
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
     }
@@ -98,7 +97,6 @@ class BugReportActivity : VectorBaseActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
-
 
     /**
      * Send the bug report

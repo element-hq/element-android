@@ -44,7 +44,6 @@ class VectorConfiguration @Inject constructor(private val context: Context) {
         }
     }
 
-
     private fun updateApplicationSettings(locale: Locale, textSize: String, theme: String) {
         VectorLocale.saveApplicationLocale(context, locale)
         FontScale.saveFontScale(context, textSize)

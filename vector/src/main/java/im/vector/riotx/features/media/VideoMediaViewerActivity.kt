@@ -25,7 +25,6 @@ import im.vector.riotx.core.platform.VectorBaseActivity
 import kotlinx.android.synthetic.main.activity_video_media_viewer.*
 import javax.inject.Inject
 
-
 class VideoMediaViewerActivity : VectorBaseActivity() {
 
     @Inject lateinit var imageContentRenderer: ImageContentRenderer
@@ -64,6 +63,4 @@ class VideoMediaViewerActivity : VectorBaseActivity() {
             }
         }
     }
-
-
 }

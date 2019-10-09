@@ -30,10 +30,9 @@ import timber.log.Timber
 
 class AlarmSyncBroadcastReceiver : BroadcastReceiver() {
 
-
     override fun onReceive(context: Context, intent: Intent) {
 
-        //Aquire a lock to give enough time for the sync :/
+        // Aquire a lock to give enough time for the sync :/
         (context.getSystemService(Context.POWER_SERVICE) as PowerManager).run {
             newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "riotx:fdroidSynclock").apply {
                 acquire((10_000).toLong())
@@ -52,7 +51,7 @@ class AlarmSyncBroadcastReceiver : BroadcastReceiver() {
                     context.startService(it)
                 }
             } catch (ex: Throwable) {
-                //TODO
+                // TODO
                 Timber.e(ex)
             }
         }
@@ -66,7 +65,7 @@ class AlarmSyncBroadcastReceiver : BroadcastReceiver() {
         private const val REQUEST_CODE = 0
 
         fun scheduleAlarm(context: Context, userId: String, delay: Long) {
-            //Reschedule
+            // Reschedule
             val intent = Intent(context, AlarmSyncBroadcastReceiver::class.java).apply {
                 putExtra(SyncService.EXTRA_USER_ID, userId)
             }

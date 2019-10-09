@@ -23,4 +23,3 @@ import com.squareup.moshi.JsonClass
 internal data class UserAccountDataDirectMessages(
         @Json(name = "content") val content: Map<String, List<String>>
 ) : UserAccountData
-

@@ -51,6 +51,4 @@ data class RoomEventFilter(
                 || containsUrl != null
                 || lazyLoadMembers != null)
     }
-
 }
-

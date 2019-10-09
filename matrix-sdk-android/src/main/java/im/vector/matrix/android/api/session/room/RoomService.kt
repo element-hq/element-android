@@ -53,5 +53,4 @@ interface RoomService {
      * @return the [LiveData] of [RoomSummary]
      */
     fun liveRoomSummaries(): LiveData<List<RoomSummary>>
-
 }

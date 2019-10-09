@@ -35,10 +35,8 @@ private const val LOG_SIZE_BYTES = 20 * 1024 * 1024 // 20MB
 
 private const val LOG_ROTATION_COUNT = 3
 
-
 @Singleton
 class VectorFileLogger @Inject constructor(val context: Context, private val vectorPreferences: VectorPreferences) : Timber.DebugTree() {
-
 
     private val sLogger = Logger.getLogger("im.vector.riotx")
     private var sFileHandler: FileHandler? = null
@@ -98,7 +96,6 @@ class VectorFileLogger @Inject constructor(val context: Context, private val vec
         }
         sCacheDirectory = cacheDir
     }
-
 
     /**
      * Adds our own log files to the provided list of files.

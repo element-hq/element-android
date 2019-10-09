@@ -79,5 +79,4 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
         }
         return (computedModel ?: EmptyItem_())
     }
-
 }

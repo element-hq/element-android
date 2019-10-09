@@ -85,5 +85,4 @@ internal class DefaultTimelineService @AssistedInject constructor(@Assisted priv
             events.firstOrNull().toOptional()
         }
     }
-
 }

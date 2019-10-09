@@ -19,7 +19,6 @@ import im.vector.matrix.android.api.pushrules.RuleKind
 import io.realm.RealmList
 import io.realm.RealmObject
 
-
 internal open class PushRulesEntity(
         var scope: String = "",
         var pushRules: RealmList<PushRuleEntity> = RealmList()

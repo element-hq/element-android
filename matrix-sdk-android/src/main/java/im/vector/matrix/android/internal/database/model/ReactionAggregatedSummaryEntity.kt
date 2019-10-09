@@ -38,5 +38,4 @@ internal open class ReactionAggregatedSummaryEntity(
 ) : RealmObject() {
 
     companion object
-
 }

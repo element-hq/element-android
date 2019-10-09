@@ -62,5 +62,4 @@ class DialogLocker(savedInstanceState: Bundle?) : Restorable {
     override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
         isDialogDisplayed = savedInstanceState?.getBoolean(KEY_DIALOG_IS_DISPLAYED, false) == true
     }
-
 }

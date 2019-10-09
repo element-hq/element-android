@@ -33,7 +33,6 @@ data class MatrixError(
         @Json(name = "limit_type") val limitType: String? = null,
         @Json(name = "admin_contact") val adminUri: String? = null) {
 
-
     companion object {
         const val FORBIDDEN = "M_FORBIDDEN"
         const val UNKNOWN = "M_UNKNOWN"

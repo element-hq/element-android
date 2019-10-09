@@ -32,7 +32,6 @@ import im.vector.riotx.R
 import im.vector.riotx.features.themes.ThemeUtils
 import timber.log.Timber
 
-
 /**
  * create a Preference with a dedicated click/long click methods.
  * It also allow the title to be displayed on several lines
@@ -96,7 +95,7 @@ open class VectorPreference : Preference {
                 summary.setTypeface(null, mTypeface)
             }
 
-            //cancel existing animation (find a way to resume if happens during anim?)
+            // cancel existing animation (find a way to resume if happens during anim?)
             currentHighlightAnimator?.cancel()
             if (isHighlighted) {
                 val colorFrom = Color.TRANSPARENT
@@ -124,7 +123,6 @@ open class VectorPreference : Preference {
             } else {
                 itemView.setBackgroundColor(Color.TRANSPARENT)
             }
-
         } catch (e: Exception) {
             Timber.e(e, "onBindView")
         }

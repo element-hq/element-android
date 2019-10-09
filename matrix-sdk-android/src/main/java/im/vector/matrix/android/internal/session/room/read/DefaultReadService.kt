@@ -76,7 +76,6 @@ internal class DefaultReadService @AssistedInject constructor(@Assisted private 
                 .executeBy(taskExecutor)
     }
 
-
     override fun isEventRead(eventId: String): Boolean {
         return isEventRead(monarchy, userId, roomId, eventId)
     }

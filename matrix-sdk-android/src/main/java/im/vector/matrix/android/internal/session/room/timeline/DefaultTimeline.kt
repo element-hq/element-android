@@ -25,14 +25,12 @@ import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.TimelineSettings
 import im.vector.matrix.android.api.util.CancelableBag
-import im.vector.matrix.android.internal.database.helper.deleteOnCascade
 import im.vector.matrix.android.internal.database.mapper.TimelineEventMapper
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.ChunkEntityFields
 import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryEntity
 import im.vector.matrix.android.internal.database.model.EventEntity
-import im.vector.matrix.android.internal.database.model.EventEntityFields
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntityFields
@@ -53,8 +51,6 @@ import io.realm.RealmConfiguration
 import io.realm.RealmQuery
 import io.realm.RealmResults
 import io.realm.Sort
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
@@ -63,7 +59,6 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 import kotlin.math.max
 import kotlin.math.min
-
 
 private const val MIN_FETCHING_COUNT = 30
 
@@ -132,7 +127,6 @@ internal class DefaultTimeline(
         }
     }
 
-
     private val relationsListener = OrderedRealmCollectionChangeListener<RealmResults<EventAnnotationsSummaryEntity>> { collection, changeSet ->
         var hasChange = false
 
@@ -146,7 +140,6 @@ internal class DefaultTimeline(
         }
         if (hasChange) postSnapshot()
     }
-
 
 // Public methods ******************************************************************************
 
@@ -332,7 +325,7 @@ internal class DefaultTimeline(
 
     private fun rebuildEvent(eventId: String, builder: (TimelineEvent) -> TimelineEvent): Boolean {
         return builtEventsIdMap[eventId]?.let { builtIndex ->
-            //Update the relation of existing event
+            // Update the relation of existing event
             builtEvents[builtIndex]?.let { te ->
                 builtEvents[builtIndex] = builder(te)
                 true
@@ -365,7 +358,6 @@ internal class DefaultTimeline(
             )
         }
     }
-
 
     /**
      * This has to be called on TimelineThread as it access realm live results
@@ -552,7 +544,6 @@ internal class DefaultTimeline(
         return if (direction == Timeline.Direction.BACKWARDS) chunkEntity.prevToken else chunkEntity.nextToken
     }
 
-
     /**
      * This has to be called on TimelineThread as it access realm live results
      */
@@ -593,7 +584,7 @@ internal class DefaultTimeline(
 
             val position = if (direction == Timeline.Direction.FORWARDS) 0 else builtEvents.size
             builtEvents.add(position, timelineEvent)
-            //Need to shift :/
+            // Need to shift :/
             builtEventsIdMap.entries.filter { it.value >= position }.forEach { it.setValue(it.value + 1) }
             builtEventsIdMap[eventEntity.eventId] = position
         }
@@ -636,7 +627,6 @@ internal class DefaultTimeline(
                 .findAll()
     }
 
-
     private fun buildEventQuery(realm: Realm): RealmQuery<TimelineEventEntity> {
         return if (initialEventId == null) {
             TimelineEventEntity
@@ -675,7 +665,6 @@ internal class DefaultTimeline(
         forwardsState.set(State())
     }
 
-
     // Extension methods ***************************************************************************
 
     private fun Timeline.Direction.toPaginationDirection(): PaginationDirection {
@@ -698,7 +687,4 @@ internal class DefaultTimeline(
             val isPaginating: Boolean = false,
             val requestedPaginationCount: Int = 0
     )
-
 }
-
-

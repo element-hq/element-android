@@ -58,7 +58,6 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
     override var titleRes = R.string.settings_general_title
     override val preferenceXmlRes = R.xml.vector_settings_general
 
-
     private var mDisplayedEmails = ArrayList<String>()
     private var mDisplayedPhoneNumber = ArrayList<String>()
 
@@ -83,7 +82,6 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
     private val mContactPhonebookCountryPreference by lazy {
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_CONTACTS_PHONEBOOK_COUNTRY_PREFERENCE_KEY)!!
     }
-
 
     override fun bindPref() {
         // Avatar
@@ -125,7 +123,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
 
             it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 notImplemented()
-                //addEmail((newValue as String).trim())
+                // addEmail((newValue as String).trim())
                 false
             }
         }
@@ -159,7 +157,6 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         // identity server
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY)!!
                 .summary = session.sessionParams.homeServerConnectionConfig.identityServerUri.toString()
-
 
         refreshEmailsList()
         refreshPhoneNumbersList()
@@ -229,7 +226,6 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
 
             false
         }
-
 
         // Deactivate account section
 
@@ -335,10 +331,9 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         */
     }
 
-
-    //==============================================================================================================
+    // ==============================================================================================================
     // contacts management
-    //==============================================================================================================
+    // ==============================================================================================================
 
     private fun setContactsPreferences() {
         /* TODO
@@ -371,9 +366,9 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         */
     }
 
-    //==============================================================================================================
+    // ==============================================================================================================
     // Phone number management
-    //==============================================================================================================
+    // ==============================================================================================================
 
     /**
      * Refresh phone number list
@@ -454,9 +449,9 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         }    */
     }
 
-    //==============================================================================================================
+    // ==============================================================================================================
     // Email management
-    //==============================================================================================================
+    // ==============================================================================================================
 
     /**
      * Refresh the emails list
@@ -513,7 +508,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
 
                 preference.onPreferenceLongClickListener = object : VectorPreference.OnPreferenceLongClickListener {
                     override fun onPreferenceLongClick(preference: Preference): Boolean {
-                        activity?.let { copyToClipboard(it, "TODO") } //email3PID.address) }
+                        activity?.let { copyToClipboard(it, "TODO") } // email3PID.address) }
                         return true
                     }
                 }
@@ -623,7 +618,6 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         }
     }    */
 
-
     /**
      * Display a dialog which asks confirmation for the deletion of a 3pid
      *
@@ -670,7 +664,6 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
                     .show()
         }
     }
-
 
     /**
      * Update the password.

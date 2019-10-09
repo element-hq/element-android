@@ -82,15 +82,13 @@ internal class IncomingSASVerificationTransaction(
         Timber.v("## SAS received verification request from state $state")
         if (state != SasVerificationTxState.None) {
             Timber.e("## received verification request from invalid state")
-            //should I cancel??
+            // should I cancel??
             throw IllegalStateException("Interactive Key verification already started")
         }
         this.startReq = startReq
         state = SasVerificationTxState.OnStarted
         this.otherDeviceId = startReq.fromDevice
-
     }
-
 
     override fun performAccept() {
         if (state != SasVerificationTxState.OnStarted) {
@@ -105,29 +103,29 @@ internal class IncomingSASVerificationTransaction(
         val agreedMac = startReq!!.messageAuthenticationCodes?.firstOrNull { KNOWN_MACS.contains(it) }
         val agreedShortCode = startReq!!.shortAuthenticationStrings?.filter { KNOWN_SHORT_CODES.contains(it) }
 
-        //No common key sharing/hashing/hmac/SAS methods.
-        //If a device is unable to complete the verification because the devices are unable to find a common key sharing,
+        // No common key sharing/hashing/hmac/SAS methods.
+        // If a device is unable to complete the verification because the devices are unable to find a common key sharing,
         // hashing, hmac, or SAS method, then it should send a m.key.verification.cancel message
         if (listOf(agreedProtocol, agreedHash, agreedMac).any { it.isNullOrBlank() }
                 || agreedShortCode.isNullOrEmpty()) {
-            //Failed to find agreement
+            // Failed to find agreement
             Timber.e("## Failed to find agreement ")
             cancel(CancelCode.UnknownMethod)
             return
         }
 
-        //Bob’s device ensures that it has a copy of Alice’s device key.
+        // Bob’s device ensures that it has a copy of Alice’s device key.
         val mxDeviceInfo = cryptoStore.getUserDevice(deviceId = otherDeviceId!!, userId = otherUserId)
 
         if (mxDeviceInfo?.fingerprint() == null) {
             Timber.e("## Failed to find device key ")
-            //TODO force download keys!!
-            //would be probably better to download the keys
-            //for now I cancel
+            // TODO force download keys!!
+            // would be probably better to download the keys
+            // for now I cancel
             cancel(CancelCode.User)
         } else {
             //                    val otherKey = info.identityKey()
-            //need to jump back to correct thread
+            // need to jump back to correct thread
             val accept = KeyVerificationAccept.create(
                     tid = transactionId,
                     keyAgreementProtocol = agreedProtocol!!,
@@ -140,25 +138,23 @@ internal class IncomingSASVerificationTransaction(
         }
     }
 
-
     private fun doAccept(accept: KeyVerificationAccept) {
         this.accepted = accept
         Timber.v("## SAS accept request id:$transactionId")
 
-        //The hash commitment is the hash (using the selected hash algorithm) of the unpadded base64 representation of QB,
+        // The hash commitment is the hash (using the selected hash algorithm) of the unpadded base64 representation of QB,
         // concatenated with the canonical JSON representation of the content of the m.key.verification.start message
         val concat = getSAS().publicKey + JsonCanonicalizer.getCanonicalJson(KeyVerificationStart::class.java, startReq!!)
         accept.commitment = hashUsingAgreedHashMethod(concat) ?: ""
-        //we need to send this to other device now
+        // we need to send this to other device now
         state = SasVerificationTxState.SendingAccept
         sendToOther(EventType.KEY_VERIFICATION_ACCEPT, accept, SasVerificationTxState.Accepted, CancelCode.User) {
             if (state == SasVerificationTxState.SendingAccept) {
-                //It is possible that we receive the next event before this one :/, in this case we should keep state
+                // It is possible that we receive the next event before this one :/, in this case we should keep state
                 state = SasVerificationTxState.Accepted
             }
         }
     }
-
 
     override fun onVerificationAccept(accept: KeyVerificationAccept) {
         Timber.v("## SAS invalid message for incoming request id:$transactionId")
@@ -180,11 +176,11 @@ internal class IncomingSASVerificationTransaction(
         val pubKey = getSAS().publicKey
 
         val keyToDevice = KeyVerificationKey.create(transactionId, pubKey)
-        //we need to send this to other device now
+        // we need to send this to other device now
         state = SasVerificationTxState.SendingKey
         this.sendToOther(EventType.KEY_VERIFICATION_KEY, keyToDevice, SasVerificationTxState.KeySent, CancelCode.User) {
             if (state == SasVerificationTxState.SendingKey) {
-                //It is possible that we receive the next event before this one :/, in this case we should keep state
+                // It is possible that we receive the next event before this one :/, in this case we should keep state
                 state = SasVerificationTxState.KeySent
             }
         }
@@ -194,7 +190,7 @@ internal class IncomingSASVerificationTransaction(
         // using the result as the shared secret.
 
         getSAS().setTheirPublicKey(otherKey)
-        //(Note: In all of the following HKDF is as defined in RFC 5869, and uses the previously agreed-on hash function as the hash function,
+        // (Note: In all of the following HKDF is as defined in RFC 5869, and uses the previously agreed-on hash function as the hash function,
         // the shared secret as the input keying material, no salt, and with the input parameter set to the concatenation of:
         // - the string “MATRIX_KEY_VERIFICATION_SAS”,
         // - the Matrix ID of the user who sent the m.key.verification.start message,
@@ -206,8 +202,8 @@ internal class IncomingSASVerificationTransaction(
                 "$otherUserId$otherDeviceId" +
                 "${credentials.userId}${credentials.deviceId}" +
                 transactionId
-        //decimal: generate five bytes by using HKDF.
-        //emoji: generate six bytes by using HKDF.
+        // decimal: generate five bytes by using HKDF.
+        // emoji: generate six bytes by using HKDF.
         shortCodeBytes = getSAS().generateShortCode(sasInfo, 6)
 
         Timber.e("************  BOB CODE ${getDecimalCodeRepresentation(shortCodeBytes!!)}")
@@ -218,7 +214,7 @@ internal class IncomingSASVerificationTransaction(
 
     override fun onKeyVerificationMac(vKey: KeyVerificationMac) {
         Timber.v("## SAS received mac for request id:$transactionId")
-        //Check for state?
+        // Check for state?
         if (state != SasVerificationTxState.SendingKey
                 && state != SasVerificationTxState.KeySent
                 && state != SasVerificationTxState.ShortCodeReady
@@ -231,11 +227,11 @@ internal class IncomingSASVerificationTransaction(
         }
         theirMac = vKey
 
-        //Do I have my Mac?
+        // Do I have my Mac?
         if (myMac != null) {
-            //I can check
+            // I can check
             verifyMacs()
         }
-        //Wait for ShortCode Accepted
+        // Wait for ShortCode Accepted
     }
 }

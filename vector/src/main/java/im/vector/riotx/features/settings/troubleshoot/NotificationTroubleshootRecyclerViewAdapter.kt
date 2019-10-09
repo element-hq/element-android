@@ -82,7 +82,6 @@ class NotificationTroubleshootRecyclerViewAdapter(val tests: ArrayList<Troublesh
                 TroubleshootTest.TestStatus.RUNNING     -> {
                     progressBar.visibility = View.VISIBLE
                     statusIconImage.visibility = View.INVISIBLE
-
                 }
                 TroubleshootTest.TestStatus.FAILED      -> {
                     progressBar.visibility = View.INVISIBLE
@@ -122,6 +121,5 @@ class NotificationTroubleshootRecyclerViewAdapter(val tests: ArrayList<Troublesh
                 descriptionText.text = description
             }
         }
-
     }
 }

@@ -48,7 +48,6 @@ data class Resource(
         } catch (e: Exception) {
             Timber.e(e, "Resource.close failed")
         }
-
     }
 
     /**
@@ -87,7 +86,6 @@ fun openResource(context: Context, uri: Uri, providedMimetype: String?): Resourc
         }
 
         return Resource(context.contentResolver.openInputStream(uri), mimetype)
-
     } catch (e: Exception) {
         Timber.e(e, "Failed to open resource input stream")
     }

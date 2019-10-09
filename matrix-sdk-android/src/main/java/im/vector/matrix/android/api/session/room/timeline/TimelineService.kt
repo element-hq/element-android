@@ -33,9 +33,7 @@ interface TimelineService {
      */
     fun createTimeline(eventId: String?, settings: TimelineSettings): Timeline
 
-
     fun getTimeLineEvent(eventId: String): TimelineEvent?
-
 
     fun getTimeLineEventLive(eventId: String): LiveData<Optional<TimelineEvent>>
 }

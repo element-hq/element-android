@@ -60,7 +60,6 @@ internal class RealmCryptoStore(private val realmConfiguration: RealmConfigurati
     // Cache for InboundGroupSession, to release them properly
     private val inboundGroupSessionToRelease = HashMap<String, OlmInboundGroupSessionWrapper>()
 
-
     private val newSessionListeners = ArrayList<NewSessionListener>()
 
     override fun addNewSessionListener(listener: NewSessionListener) {
@@ -734,5 +733,4 @@ internal class RealmCryptoStore(private val realmConfiguration: RealmConfigurati
                 }
                 .toMutableList()
     }
-
 }

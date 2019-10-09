@@ -31,15 +31,12 @@ class BingRule(rule: BingRule) {
     fun shouldNotNotify() = false
     fun shouldNotify() = false
     fun setNotify(b: Boolean) {
-
     }
 
     fun setHighlight(b: Boolean) {
-
     }
 
     fun removeNotificationSound() {
-
     }
 
     val ruleId: CharSequence? = null
@@ -61,7 +58,6 @@ class BingRule(rule: BingRule) {
         const val RULE_ID_ONE_TO_ONE_ROOM = "TODO"
         const val RULE_ID_ALL_OTHER_MESSAGES_ROOMS = "TODO"
     }
-
 }
 
 class BingRulePreference : VectorPreference {
@@ -167,7 +163,6 @@ class BingRulePreference : VectorPreference {
                 return rule
             }
 
-
             if (NOTIFICATION_OFF_INDEX == index) {
                 if (TextUtils.equals(this.rule!!.kind, BingRule.KIND_UNDERRIDE)
                         || TextUtils.equals(rule.ruleId, BingRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS)) {
@@ -230,9 +225,7 @@ class BingRulePreference : VectorPreference {
                 }
             }
         }
-
     }
-
 
     companion object {
 

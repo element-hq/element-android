@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.crypto.model
 
-
 class MXUsersDevicesMap<E> {
 
     // A map of maps (userId -> (deviceId -> Object)).

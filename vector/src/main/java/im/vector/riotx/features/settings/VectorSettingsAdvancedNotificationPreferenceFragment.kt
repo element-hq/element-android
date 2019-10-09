@@ -52,7 +52,6 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : VectorSettingsBaseF
         injector.inject(this)
     }
 
-
     override fun bindPref() {
         val callNotificationsSystemOptions = findPreference<VectorPreference>(VectorPreferences.SETTINGS_SYSTEM_CALL_NOTIFICATION_PREFERENCE_KEY)!!
         if (NotificationUtils.supportNotificationChannels()) {
@@ -84,7 +83,6 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : VectorSettingsBaseF
             silentNotificationsSystemOptions.isVisible = false
         }
 
-
         // Ringtone
         val ringtonePreference = findPreference<VectorPreference>(VectorPreferences.SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY)!!
 
@@ -108,7 +106,7 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : VectorSettingsBaseF
         for (preferenceKey in mPrefKeyToBingRuleId.keys) {
             val preference = findPreference<VectorPreference>(preferenceKey)
             if (preference is BingRulePreference) {
-                //preference.isEnabled = null != rules && isConnected && pushManager.areDeviceNotificationsAllowed()
+                // preference.isEnabled = null != rules && isConnected && pushManager.areDeviceNotificationsAllowed()
                 val rule: BingRule? = null // TODO session.dataHandler.pushRules()?.findDefaultRule(mPrefKeyToBingRuleId[preferenceKey])
 
                 if (rule == null) {

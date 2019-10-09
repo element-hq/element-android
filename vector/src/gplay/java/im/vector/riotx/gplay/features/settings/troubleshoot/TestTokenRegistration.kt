@@ -38,7 +38,7 @@ class TestTokenRegistration @Inject constructor(private val context: AppCompatAc
     : TroubleshootTest(R.string.settings_troubleshoot_test_token_registration_title) {
 
     override fun perform() {
-        //Check if we have a registered pusher for this token
+        // Check if we have a registered pusher for this token
         val fcmToken = FcmHelper.getFcmToken(context) ?: run {
             status = TestStatus.FAILED
             return
@@ -66,16 +66,12 @@ class TestTokenRegistration @Inject constructor(private val context: AppCompatAc
                         }
                     })
                 }
-
             }
 
             status = TestStatus.FAILED
-
         } else {
             description = stringProvider.getString(R.string.settings_troubleshoot_test_token_registration_success)
             status = TestStatus.SUCCESS
         }
-
     }
-
 }

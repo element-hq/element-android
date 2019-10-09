@@ -112,5 +112,4 @@ interface CryptoService {
     fun addNewSessionListener(newSessionListener: NewSessionListener)
 
     fun removeSessionListener(listener: NewSessionListener)
-
 }

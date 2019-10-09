@@ -48,7 +48,6 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
         viewModel.showManualExport.value = intent.getBooleanExtra(EXTRA_SHOW_MANUAL_EXPORT, false)
         viewModel.initSession(session)
 
-
         viewModel.isCreatingBackupVersion.observe(this, Observer {
             val isCreating = it ?: false
             if (isCreating) {
@@ -103,14 +102,13 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
             }
         }
 
-
         viewModel.prepareRecoverFailError.observe(this, Observer { error ->
             if (error != null) {
                 AlertDialog.Builder(this)
                         .setTitle(R.string.unknown_error)
                         .setMessage(error.localizedMessage)
                         .setPositiveButton(R.string.ok) { _, _ ->
-                            //nop
+                            // nop
                             viewModel.prepareRecoverFailError.value = null
                         }
                         .show()
@@ -123,7 +121,7 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
                         .setTitle(R.string.unexpected_error)
                         .setMessage(error.localizedMessage)
                         .setPositiveButton(R.string.ok) { _, _ ->
-                            //nop
+                            // nop
                             viewModel.creatingBackupError.value = null
                         }
                         .show()
@@ -202,7 +200,6 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
 //
 //        return super.onOptionsItemSelected(item)
 //    }
-
 
     companion object {
         const val KEYS_VERSION = "KEYS_VERSION"

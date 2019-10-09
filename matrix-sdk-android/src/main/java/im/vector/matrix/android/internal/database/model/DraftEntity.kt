@@ -31,4 +31,3 @@ internal open class DraftEntity(var content: String = "",
         const val MODE_QUOTE = "QUOTE"
     }
 }
-

@@ -39,7 +39,5 @@ class AvatarSizeProvider @Inject constructor(private val dimensionConverter: Dim
             SMALL(30),
             NONE(0)
         }
-
     }
-
 }

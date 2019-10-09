@@ -33,7 +33,6 @@ import java.io.File
 import java.io.IOException
 import javax.inject.Inject
 
-
 internal class FileUploader @Inject constructor(@Authenticated
                                                 private val okHttpClient: OkHttpClient,
                                                 sessionParams: SessionParams,
@@ -42,14 +41,12 @@ internal class FileUploader @Inject constructor(@Authenticated
     private val uploadUrl = DefaultContentUrlResolver.getUploadUrl(sessionParams.homeServerConnectionConfig)
     private val responseAdapter = moshi.adapter(ContentUploadResponse::class.java)
 
-
     suspend fun uploadFile(file: File,
                            filename: String?,
                            mimeType: String,
                            progressListener: ProgressRequestBody.Listener? = null): ContentUploadResponse {
         val uploadBody = file.asRequestBody(mimeType.toMediaTypeOrNull())
         return upload(uploadBody, filename, progressListener)
-
     }
 
     suspend fun uploadByteArray(byteArray: ByteArray,
@@ -59,7 +56,6 @@ internal class FileUploader @Inject constructor(@Authenticated
         val uploadBody = byteArray.toRequestBody(mimeType.toMediaTypeOrNull())
         return upload(uploadBody, filename, progressListener)
     }
-
 
     private suspend fun upload(uploadBody: RequestBody, filename: String?, progressListener: ProgressRequestBody.Listener?): ContentUploadResponse {
         val urlBuilder = uploadUrl.toHttpUrlOrNull()?.newBuilder() ?: throw RuntimeException()

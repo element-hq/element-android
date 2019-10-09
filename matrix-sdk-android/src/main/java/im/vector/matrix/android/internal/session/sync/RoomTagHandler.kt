@@ -39,5 +39,4 @@ internal class RoomTagHandler @Inject constructor() {
         roomSummaryEntity.tags.addAll(tags)
         realm.insertOrUpdate(roomSummaryEntity)
     }
-
 }

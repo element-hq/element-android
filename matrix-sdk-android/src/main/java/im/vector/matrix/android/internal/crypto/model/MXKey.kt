@@ -64,7 +64,6 @@ data class MXKey(
         return null
     }
 
-
     companion object {
         /**
          * Key types.

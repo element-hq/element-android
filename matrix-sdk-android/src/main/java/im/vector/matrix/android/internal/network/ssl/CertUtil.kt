@@ -150,7 +150,6 @@ internal object CertUtil {
                     } catch (e: Exception) {
                         Timber.e(e, "## addRule : onBingRuleUpdateFailure failed")
                     }
-
                 }
 
                 tf!!.init(null as KeyStore?)
@@ -181,7 +180,6 @@ internal object CertUtil {
         } catch (e: Exception) {
             throw RuntimeException(e)
         }
-
     }
 
     /**

@@ -27,5 +27,4 @@ interface StateService {
     fun updateTopic(topic: String, callback: MatrixCallback<Unit>)
 
     fun getStateEvent(eventType: String): Event?
-
 }

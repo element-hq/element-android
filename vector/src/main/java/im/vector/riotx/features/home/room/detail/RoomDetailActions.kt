@@ -51,5 +51,4 @@ sealed class RoomDetailActions {
     data class RemoveFailedEcho(val eventId: String) : RoomDetailActions()
     object ClearSendQueue : RoomDetailActions()
     object ResendAll : RoomDetailActions()
-
 }

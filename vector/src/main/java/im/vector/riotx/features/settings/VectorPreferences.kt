@@ -422,7 +422,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
             } catch (e: Exception) {
                 Timber.e(e, "## getNotificationRingTone() : Uri.parse failed")
             }
-
         }
 
         if (null == uri) {

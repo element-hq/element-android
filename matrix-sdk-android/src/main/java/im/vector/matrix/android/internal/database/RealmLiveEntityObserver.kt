@@ -66,5 +66,4 @@ internal abstract class RealmLiveEntityObserver<T : RealmObject>(protected val r
     override fun isStarted(): Boolean {
         return isStarted.get()
     }
-
 }

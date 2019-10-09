@@ -39,8 +39,8 @@ internal class RoomSummaryMapper @Inject constructor(
             timelineEventMapper.map(it)
         }
         if (latestEvent?.root?.isEncrypted() == true && latestEvent.root.mxDecryptionResult == null) {
-            //TODO use a global event decryptor? attache to session and that listen to new sessionId?
-            //for now decrypt sync
+            // TODO use a global event decryptor? attache to session and that listen to new sessionId?
+            // for now decrypt sync
             try {
                 val result = cryptoService.decryptEvent(latestEvent.root, latestEvent.root.roomId + UUID.randomUUID().toString())
                 latestEvent.root.mxDecryptionResult = OlmDecryptionResult(
@@ -50,7 +50,6 @@ internal class RoomSummaryMapper @Inject constructor(
                         forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
                 )
             } catch (e: MXCryptoError) {
-
             }
         }
 

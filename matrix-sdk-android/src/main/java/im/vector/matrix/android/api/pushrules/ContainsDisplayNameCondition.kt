@@ -38,7 +38,7 @@ class ContainsDisplayNameCondition : Condition(Kind.contains_display_name) {
             EventType.MESSAGE -> {
                 event.content.toModel<MessageContent>()
             }
-            //TODO the spec says:
+            // TODO the spec says:
             // Matches any message whose content is unencrypted and contains the user's current display name
             // EventType.ENCRYPTED -> {
             //     event.root.getClearContent()?.toModel<MessageContent>()
@@ -48,7 +48,6 @@ class ContainsDisplayNameCondition : Condition(Kind.contains_display_name) {
 
         return caseInsensitiveFind(displayName, message.body)
     }
-
 
     companion object {
         /**

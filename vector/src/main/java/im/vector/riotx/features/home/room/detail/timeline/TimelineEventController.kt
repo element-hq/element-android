@@ -104,7 +104,6 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
 
     var callback: Callback? = null
 
-
     private val listUpdateCallback = object : ListUpdateCallback {
 
         override fun onChanged(position: Int, count: Int, payload: Any?) {
@@ -206,7 +205,6 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         timelineMediaSizeProvider.recyclerView = recyclerView
     }
 
-
     override fun buildModels() {
         val timestamp = System.currentTimeMillis()
         showingForwardLoader = LoadingItem_()
@@ -271,7 +269,6 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
                     .filterNotNull()
         }
     }
-
 
     private fun buildItemModels(currentPosition: Int, items: List<TimelineEvent>): CacheItemData {
         val event = items[currentPosition]
@@ -347,5 +344,4 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             val mergedHeaderModel: MergedHeaderItem? = null,
             val formattedDayModel: DaySeparatorItem? = null
     )
-
 }

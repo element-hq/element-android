@@ -37,4 +37,3 @@ data class KeysClaimBody(
         @Json(name = "one_time_keys")
         var oneTimeKeys: Map<String, Map<String, String>>
 )
-

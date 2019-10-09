@@ -26,7 +26,6 @@ import android.util.AttributeSet
 import android.view.View
 import kotlin.math.abs
 
-
 /**
  * We want to use a custom view for rendering an emoji.
  * With generic textview, the performance in the recycler view are very bad
@@ -72,5 +71,4 @@ class EmojiDrawView @JvmOverloads constructor(
             emojiSize = tPaint.measureText("😅").toInt()
         }
     }
-
 }

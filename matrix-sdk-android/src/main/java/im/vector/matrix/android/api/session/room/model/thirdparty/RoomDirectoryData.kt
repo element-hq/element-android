@@ -51,5 +51,4 @@ data class RoomDirectoryData(
     companion object {
         const val DEFAULT_HOME_SERVER_NAME = "Matrix"
     }
-
 }

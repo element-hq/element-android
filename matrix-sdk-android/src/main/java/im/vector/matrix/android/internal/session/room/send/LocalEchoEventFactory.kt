@@ -169,9 +169,7 @@ internal class LocalEchoEventFactory @Inject constructor(@UserId private val use
                 type = EventType.REACTION,
                 content = content.toContent(),
                 unsignedData = UnsignedData(age = null, transactionId = localId))
-
     }
-
 
     private fun createImageEvent(roomId: String, attachment: ContentAttachmentData): Event {
         var width = attachment.width
@@ -287,8 +285,8 @@ internal class LocalEchoEventFactory @Inject constructor(@UserId private val use
     }
 
     fun createReplyTextEvent(roomId: String, eventReplied: TimelineEvent, replyText: String, autoMarkdown: Boolean): Event? {
-        //Fallbacks and event representation
-        //TODO Add error/warning logs when any of this is null
+        // Fallbacks and event representation
+        // TODO Add error/warning logs when any of this is null
         val permalink = PermalinkFactory.createPermalink(eventReplied.root) ?: return null
         val userId = eventReplied.root.senderId ?: return null
         val userLink = PermalinkFactory.createPermalink(userId) ?: return null
@@ -409,7 +407,6 @@ internal class LocalEchoEventFactory @Inject constructor(@UserId private val use
 
     companion object {
         const val LOCAL_ID_PREFIX = "local."
-
 
         // <mx-reply>
         //     <blockquote>

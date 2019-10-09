@@ -36,7 +36,6 @@ internal fun RoomSummaryEntity.Companion.getOrCreate(realm: Realm, roomId: Strin
            ?: realm.createObject(RoomSummaryEntity::class.java, roomId)
 }
 
-
 internal fun RoomSummaryEntity.Companion.getDirectRooms(realm: Realm): RealmResults<RoomSummaryEntity> {
     return RoomSummaryEntity.where(realm)
             .equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
@@ -50,6 +49,3 @@ internal fun RoomSummaryEntity.Companion.isDirect(realm: Realm, roomId: String):
             .findAll()
             .isNotEmpty()
 }
-
-
-

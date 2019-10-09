@@ -58,7 +58,7 @@ abstract class VectorModule {
         @Provides
         @JvmStatic
         fun providesCurrentSession(activeSessionHolder: ActiveSessionHolder): Session {
-            //TODO: handle session injection better
+            // TODO: handle session injection better
             return activeSessionHolder.getActiveSession()
         }
 
@@ -74,5 +74,4 @@ abstract class VectorModule {
 
     @Binds
     abstract fun bindUiStateRepository(uiStateRepository: SharedPreferencesUiStateRepository): UiStateRepository
-
 }

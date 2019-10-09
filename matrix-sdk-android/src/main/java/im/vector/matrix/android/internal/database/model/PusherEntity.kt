@@ -18,7 +18,7 @@ package im.vector.matrix.android.internal.database.model
 import im.vector.matrix.android.api.session.pushers.PusherState
 import io.realm.RealmObject
 
-//TODO
+// TODO
 //        at java.lang.Thread.run(Thread.java:764)
 //     Caused by: java.lang.IllegalArgumentException: 'value' is not a valid managed object.
 //        at io.realm.ProxyState.checkValidObject(ProxyState.java:213)
@@ -44,10 +44,9 @@ internal open class PusherEntity(
             try {
                 return PusherState.valueOf(stateStr)
             } catch (e: Exception) {
-                //can this happen?
+                // can this happen?
                 return PusherState.UNREGISTERED
             }
-
         }
         set(value) {
             stateStr = value.name

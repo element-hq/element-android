@@ -129,9 +129,7 @@ class DotsView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
             this.currentDotSize2 = CircleView.mapValueFromRangeToRange(
                     currentProgress, 0.5f, 1f, maxDotSize * 0.3f, 0f)
         }
-
     }
-
 
     fun setColors(primary: Int, secondary: Int) {
         COLOR_1 = primary
@@ -179,7 +177,6 @@ class DotsView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
                 ?: 0
         circlePaints.forEach { it.alpha = alpha }
     }
-
 
     companion object {
 

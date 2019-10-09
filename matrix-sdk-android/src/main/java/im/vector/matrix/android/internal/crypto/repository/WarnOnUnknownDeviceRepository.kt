@@ -41,5 +41,4 @@ internal class WarnOnUnknownDeviceRepository @Inject constructor() {
     fun setWarnOnUnknownDevices(warn: Boolean) {
         warnOnUnknownDevices = warn
     }
-
 }

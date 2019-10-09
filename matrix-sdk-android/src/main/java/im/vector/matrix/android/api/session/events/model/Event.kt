@@ -81,7 +81,6 @@ data class Event(
         @Json(name = "redacts") val redacts: String? = null
 ) {
 
-
     @Transient
     var mxDecryptionResult: OlmDecryptionResult? = null
 
@@ -91,7 +90,6 @@ data class Event(
     @Transient
     var sendState: SendState = SendState.UNKNOWN
 
-
     /**
      * Check if event is a state event.
      * @return true if event is state event.
@@ -100,9 +98,9 @@ data class Event(
         return EventType.isStateEvent(getClearType())
     }
 
-    //==============================================================================================================
+    // ==============================================================================================================
     // Crypto
-    //==============================================================================================================
+    // ==============================================================================================================
 
     /**
      * @return true if this event is encrypted.
@@ -195,9 +193,7 @@ data class Event(
         result = 31 * result + sendState.hashCode()
         return result
     }
-
 }
-
 
 fun Event.isTextMessage(): Boolean {
     return getClearType() == EventType.MESSAGE

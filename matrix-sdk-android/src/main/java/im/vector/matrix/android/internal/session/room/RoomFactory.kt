@@ -29,7 +29,6 @@ import im.vector.matrix.android.internal.session.room.state.DefaultStateService
 import im.vector.matrix.android.internal.session.room.timeline.DefaultTimelineService
 import javax.inject.Inject
 
-
 internal interface RoomFactory {
     fun create(roomId: String): Room
 }
@@ -61,5 +60,4 @@ internal class DefaultRoomFactory @Inject constructor(private val monarchy: Mona
                 membershipServiceFactory.create(roomId)
         )
     }
-
 }

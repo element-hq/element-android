@@ -105,6 +105,4 @@ class CreateRoomFragment : VectorBaseFragment(), CreateRoomController.Listener {
             createRoomController.setData(state)
         }
     }
-
-
 }

@@ -25,7 +25,6 @@ data class LoginViewState(
         val asyncHomeServerLoginFlowRequest: Async<LoginMode> = Uninitialized
 ) : MvRxState
 
-
 enum class LoginMode {
     Password,
     Sso,

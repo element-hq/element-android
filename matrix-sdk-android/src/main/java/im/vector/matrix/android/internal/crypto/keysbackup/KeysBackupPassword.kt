@@ -27,7 +27,6 @@ import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 import kotlin.experimental.xor
 
-
 private const val SALT_LENGTH = 32
 private const val DEFAULT_ITERATION = 500_000
 

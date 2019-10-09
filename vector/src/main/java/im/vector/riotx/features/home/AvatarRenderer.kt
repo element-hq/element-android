@@ -103,7 +103,6 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
 
     // PRIVATE API *********************************************************************************
 
-
 //    private fun getAvatarColor(text: String? = null): Int {
 //        var colorIndex: Long = 0
 //        if (!text.isNullOrEmpty()) {

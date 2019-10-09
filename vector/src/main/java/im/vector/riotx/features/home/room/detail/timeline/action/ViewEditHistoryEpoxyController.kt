@@ -63,7 +63,6 @@ class ViewEditHistoryEpoxyController(private val context: Context,
             is Success    -> {
                 state.editList()?.let { renderEvents(it, state.isOriginalAReply) }
             }
-
         }
     }
 
@@ -82,7 +81,7 @@ class ViewEditHistoryEpoxyController(private val context: Context,
                             ?: System.currentTimeMillis()
                 }
                 if (lastDate?.get(Calendar.DAY_OF_YEAR) != evDate.get(Calendar.DAY_OF_YEAR)) {
-                    //need to display header with day
+                    // need to display header with day
                     val dateString = if (DateUtils.isToday(evDate.timeInMillis)) context.getString(R.string.today)
                     else dateFormatter.formatMessageDay(timelineEvent.localDateTime())
                     genericItemHeader {
@@ -99,7 +98,7 @@ class ViewEditHistoryEpoxyController(private val context: Context,
 
                 var spannedDiff: Spannable? = null
                 if (nextEvent != null && cContent.second == null /*No diff for html*/) {
-                    //compares the body
+                    // compares the body
                     val nContent = getCorrectContent(nextEvent, isOriginalReply)
                     val nextBody = nContent.second?.let { eventHtmlRenderer.render(it) }
                             ?: nContent.first
@@ -113,7 +112,7 @@ class ViewEditHistoryEpoxyController(private val context: Context,
                             when (it.operation) {
                                 diff_match_patch.Operation.DELETE -> {
                                     span {
-                                        text = it.text.replace("\n"," ")
+                                        text = it.text.replace("\n", " ")
                                         textColor = ContextCompat.getColor(context, R.color.vector_error_color)
                                         textDecorationLine = "line-through"
                                     }
@@ -131,7 +130,6 @@ class ViewEditHistoryEpoxyController(private val context: Context,
                                 }
                             }
                         }
-
                     }
                 }
                 genericItem {

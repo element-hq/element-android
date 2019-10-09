@@ -40,7 +40,6 @@ import javax.crypto.spec.SecretKeySpec
 import javax.inject.Inject
 import javax.security.auth.x500.X500Principal
 
-
 /**
  * Offers simple methods to securely store secrets in an Android Application.
  * The encryption keys are randomly generated and securely managed by the key store, thus your secrets
@@ -150,13 +149,12 @@ internal class SecretStoringUtils @Inject constructor(private val context: Conte
         }
     }
 
-
     @RequiresApi(Build.VERSION_CODES.M)
     private fun getOrGenerateSymmetricKeyForAliasM(alias: String): SecretKey {
         val secretKeyEntry = (keyStore.getEntry(alias, null) as? KeyStore.SecretKeyEntry)
                 ?.secretKey
         if (secretKeyEntry == null) {
-            //we generate it
+            // we generate it
             val generator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore")
             val keyGenSpec = KeyGenParameterSpec.Builder(alias,
                     KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
@@ -192,7 +190,7 @@ internal class SecretStoringUtils @Inject constructor(private val context: Conte
                 .setAlias(alias)
                 .setSubject(X500Principal("CN=$alias"))
                 .setSerialNumber(BigInteger.TEN)
-                //.setEncryptionRequired() requires that the phone as a pin/schema
+                // .setEncryptionRequired() requires that the phone as a pin/schema
                 .setStartDate(start.time)
                 .setEndDate(end.time)
                 .build()
@@ -201,9 +199,7 @@ internal class SecretStoringUtils @Inject constructor(private val context: Conte
             generateKeyPair()
         }
         return (keyStore.getEntry(alias, null) as KeyStore.PrivateKeyEntry)
-
     }
-
 
     @RequiresApi(Build.VERSION_CODES.M)
     fun encryptStringM(text: String, keyAlias: String): ByteArray? {
@@ -212,7 +208,7 @@ internal class SecretStoringUtils @Inject constructor(private val context: Conte
         val cipher = Cipher.getInstance(AES_MODE)
         cipher.init(Cipher.ENCRYPT_MODE, secretKey)
         val iv = cipher.iv
-        //we happen the iv to the final result
+        // we happen the iv to the final result
         val encryptedBytes: ByteArray = cipher.doFinal(text.toByteArray(Charsets.UTF_8))
         return formatMMake(iv, encryptedBytes)
     }
@@ -232,12 +228,12 @@ internal class SecretStoringUtils @Inject constructor(private val context: Conte
 
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     private fun encryptStringK(text: String, keyAlias: String): ByteArray? {
-        //we generate a random symmetric key
+        // we generate a random symmetric key
         val key = ByteArray(16)
         secureRandom.nextBytes(key)
         val sKey = SecretKeySpec(key, "AES")
 
-        //we encrypt this key thanks to the key store
+        // we encrypt this key thanks to the key store
         val encryptedKey = rsaEncrypt(keyAlias, key)
 
         val cipher = Cipher.getInstance(AES_MODE)
@@ -287,7 +283,7 @@ internal class SecretStoringUtils @Inject constructor(private val context: Conte
 
         val (encryptedKey, iv, encrypted) = format1Extract(ByteArrayInputStream(data))
 
-        //we need to decrypt the key
+        // we need to decrypt the key
         val sKeyBytes = rsaDecrypt(keyAlias, ByteArrayInputStream(encryptedKey))
         val cipher = Cipher.getInstance(AES_MODE)
         val spec = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) IvParameterSpec(iv) else GCMParameterSpec(128, iv)
@@ -309,7 +305,7 @@ internal class SecretStoringUtils @Inject constructor(private val context: Conte
         ObjectOutputStream(bos1).use {
             it.writeObject(writeObject)
         }
-        //Have to do it like that if i encapsulate the output stream, the cipher could fail saying reuse IV
+        // Have to do it like that if i encapsulate the output stream, the cipher could fail saying reuse IV
         val doFinal = cipher.doFinal(bos1.toByteArray())
         output.write(FORMAT_API_M.toInt())
         output.write(iv.size)
@@ -319,12 +315,12 @@ internal class SecretStoringUtils @Inject constructor(private val context: Conte
 
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     private fun saveSecureObjectK(keyAlias: String, output: OutputStream, writeObject: Any) {
-        //we generate a random symmetric key
+        // we generate a random symmetric key
         val key = ByteArray(16)
         secureRandom.nextBytes(key)
         val sKey = SecretKeySpec(key, "AES")
 
-        //we encrypt this key thanks to the key store
+        // we encrypt this key thanks to the key store
         val encryptedKey = rsaEncrypt(keyAlias, key)
 
         val cipher = Cipher.getInstance(AES_MODE)
@@ -353,7 +349,6 @@ internal class SecretStoringUtils @Inject constructor(private val context: Conte
         val tmp = factory.generateSecret(PBEKeySpec(keyAlias.toCharArray(), salt, 10000, 128))
         val secretKey = SecretKeySpec(tmp.encoded, "AES")
 
-
         val cipher = Cipher.getInstance(AES_MODE)
         cipher.init(Cipher.ENCRYPT_MODE, secretKey)
         val iv = cipher.iv
@@ -362,7 +357,7 @@ internal class SecretStoringUtils @Inject constructor(private val context: Conte
         ObjectOutputStream(bos1).use {
             it.writeObject(writeObject)
         }
-        //Have to do it like that if i encapsulate the output stream, the cipher could fail saying reuse IV
+        // Have to do it like that if i encapsulate the output stream, the cipher could fail saying reuse IV
         val doFinal = cipher.doFinal(bos1.toByteArray())
 
         output.write(FORMAT_2.toInt())
@@ -411,7 +406,6 @@ internal class SecretStoringUtils @Inject constructor(private val context: Conte
                 return readObject as? T
             }
         }
-
     }
 
     @RequiresApi(Build.VERSION_CODES.KITKAT)
@@ -420,7 +414,7 @@ internal class SecretStoringUtils @Inject constructor(private val context: Conte
 
         val (encryptedKey, iv, encrypted) = format1Extract(inputStream)
 
-        //we need to decrypt the key
+        // we need to decrypt the key
         val sKeyBytes = rsaDecrypt(keyAlias, ByteArrayInputStream(encryptedKey))
         val cipher = Cipher.getInstance(AES_MODE)
         val spec = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) IvParameterSpec(iv) else GCMParameterSpec(128, iv)
@@ -444,7 +438,7 @@ internal class SecretStoringUtils @Inject constructor(private val context: Conte
         val factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256")
         val tmp = factory.generateSecret(PBEKeySpec(keyAlias.toCharArray(), salt, 10000, 128))
         val sKey = SecretKeySpec(tmp.encoded, "AES")
-        //we need to decrypt the key
+        // we need to decrypt the key
 
         val cipher = Cipher.getInstance(AES_MODE)
         val spec = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) IvParameterSpec(iv) else GCMParameterSpec(128, iv)
@@ -460,7 +454,6 @@ internal class SecretStoringUtils @Inject constructor(private val context: Conte
             }
         }
     }
-
 
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     @Throws(Exception::class)

@@ -23,5 +23,4 @@ import androidx.work.WorkerParameters
 interface DelegateWorkerFactory {
 
     fun create(context: Context, params: WorkerParameters): ListenableWorker
-
 }
