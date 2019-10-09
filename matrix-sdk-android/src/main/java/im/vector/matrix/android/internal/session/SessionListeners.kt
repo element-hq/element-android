@@ -16,19 +16,32 @@
 
 package im.vector.matrix.android.internal.session
 
+import im.vector.matrix.android.api.failure.ConsentNotGivenError
 import im.vector.matrix.android.api.session.Session
 import javax.inject.Inject
 
-internal class SessionListeners @Inject constructor(){
+internal class SessionListeners @Inject constructor() {
 
     private val listeners = ArrayList<Session.Listener>()
 
     fun addListener(listener: Session.Listener) {
-        listeners.add(listener)
+        synchronized(listeners) {
+            listeners.add(listener)
+        }
     }
 
     fun removeListener(listener: Session.Listener) {
-        listeners.remove(listener)
+        synchronized(listeners) {
+            listeners.remove(listener)
+        }
+    }
+
+    fun dispatchConsentNotGiven(consentNotGivenError: ConsentNotGivenError) {
+        synchronized(listeners) {
+            listeners.forEach {
+                it.onConsentNotGivenError(consentNotGivenError)
+            }
+        }
     }
 
 }
