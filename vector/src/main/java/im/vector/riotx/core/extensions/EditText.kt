@@ -28,7 +28,6 @@ import im.vector.riotx.core.platform.SimpleTextWatcher
 
 fun EditText.setupAsSearch(@DrawableRes searchIconRes: Int = R.drawable.ic_filter,
                            @DrawableRes clearIconRes: Int = R.drawable.ic_x_green) {
-
     addTextChangedListener(object : SimpleTextWatcher() {
         override fun afterTextChanged(s: Editable) {
             val clearIcon = if (s.isNotEmpty()) clearIconRes else 0

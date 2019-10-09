@@ -172,7 +172,6 @@ class MessageMenuViewModel @AssistedInject constructor(@Assisted initialState: M
                     }
 
                     if (event.root.sendState == SendState.SENT) {
-
                         // TODO Can be redacted
 
                         // TODO sent by me or sufficient power level

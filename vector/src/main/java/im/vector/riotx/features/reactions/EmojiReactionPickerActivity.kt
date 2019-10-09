@@ -138,7 +138,6 @@ class EmojiReactionPickerActivity : VectorBaseActivity(), EmojiCompatFontProvide
 
         val searchItem = menu.findItem(R.id.search)
         (searchItem.actionView as? SearchView)?.let {
-
             searchItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
                 override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
                     it.isIconified = false

@@ -111,7 +111,6 @@ internal fun ChunkEntity.add(roomId: String,
                              direction: PaginationDirection,
                              stateIndexOffset: Int = 0,
                              isUnlinked: Boolean = false) {
-
     assertIsManaged()
     if (event.eventId != null && timelineEvents.find(event.eventId) != null) {
         return

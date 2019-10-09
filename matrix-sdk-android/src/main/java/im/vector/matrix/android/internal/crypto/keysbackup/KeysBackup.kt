@@ -982,7 +982,6 @@ internal class KeysBackup @Inject constructor(
             keysBackupStateManager.state = KeysBackupState.Disabled
         } else {
             getKeysBackupTrust(keyBackupVersion, object : MatrixCallback<KeysBackupVersionTrust> {
-
                 override fun onSuccess(data: KeysBackupVersionTrust) {
                     val versionInStore = cryptoStore.getKeyBackupVersion()
 

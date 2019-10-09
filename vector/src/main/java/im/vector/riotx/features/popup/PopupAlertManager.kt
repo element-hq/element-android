@@ -166,7 +166,6 @@ object PopupAlertManager {
                 .setTitle(alert.title)
                 .setText(alert.description)
                 .apply {
-
                     if (!animate) {
                         setEnterAnimation(R.anim.anim_alerter_no_anim)
                     }

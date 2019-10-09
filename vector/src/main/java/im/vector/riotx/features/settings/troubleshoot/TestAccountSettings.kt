@@ -48,7 +48,6 @@ class TestAccountSettings @Inject constructor(private val stringProvider: String
 
                         session.updatePushRuleEnableStatus(RuleKind.OVERRIDE, defaultRule, !defaultRule.enabled,
                                                            object : MatrixCallback<Unit> {
-
                                                                override fun onSuccess(data: Unit) {
                                                                    manager?.retry()
                                                                }

@@ -240,7 +240,6 @@ object CompatUtil {
             KeyStoreException::class,
             IllegalBlockSizeException::class)
     fun createCipherOutputStream(out: OutputStream, context: Context): OutputStream? {
-
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             return out
         }

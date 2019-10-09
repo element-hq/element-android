@@ -139,7 +139,6 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
                             .export(this@KeysBackupSetupActivity,
                                     passphrase,
                                     object : MatrixCallback<String> {
-
                                         override fun onSuccess(data: String) {
                                             hideWaitingView()
 

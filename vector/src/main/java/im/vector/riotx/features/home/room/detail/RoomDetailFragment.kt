@@ -303,7 +303,6 @@ class RoomDetailFragment :
 
     private fun setupNotificationView() {
         notificationAreaView.delegate = object : NotificationAreaView.Delegate {
-
             override fun onTombstoneEventClicked(tombstoneEvent: Event) {
                 roomDetailViewModel.process(RoomDetailActions.HandleTombstoneEvent(tombstoneEvent))
             }
@@ -453,7 +452,6 @@ class RoomDetailFragment :
         }
         recyclerView.setController(timelineEventController)
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 if (recyclerView.scrollState == RecyclerView.SCROLL_STATE_IDLE) {
                     updateJumpToBottomViewVisibility()
@@ -702,7 +700,6 @@ class RoomDetailFragment :
 
     private fun renderRoomSummary(state: RoomDetailViewState) {
         state.asyncRoomSummary()?.let {
-
             if (it.membership.isLeft()) {
                 Timber.w("The room has been left")
                 activity?.finish()

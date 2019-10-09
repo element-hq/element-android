@@ -119,7 +119,6 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
             lastAuthenticatedSession.configureAndStart(pushRuleTriggerListener, sessionListener)
         }
         ProcessLifecycleOwner.get().lifecycle.addObserver(object : LifecycleObserver {
-
             @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
             fun entersForeground() {
                 FcmHelper.onEnterForeground(appContext)

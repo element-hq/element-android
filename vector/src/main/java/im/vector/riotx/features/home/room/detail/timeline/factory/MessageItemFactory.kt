@@ -166,7 +166,6 @@ class MessageItemFactory @Inject constructor(
                                       highlight: Boolean,
                                       callback: TimelineEventController.Callback?,
                                       attributes: AbsMessageItem.Attributes): MessageImageVideoItem? {
-
         val (maxWidth, maxHeight) = timelineMediaSizeProvider.getMaxSize()
         val data = ImageContentRenderer.Data(
                 filename = messageContent.body,
@@ -196,7 +195,6 @@ class MessageItemFactory @Inject constructor(
                                       highlight: Boolean,
                                       callback: TimelineEventController.Callback?,
                                       attributes: AbsMessageItem.Attributes): MessageImageVideoItem? {
-
         val (maxWidth, maxHeight) = timelineMediaSizeProvider.getMaxSize()
         val thumbnailData = ImageContentRenderer.Data(
                 filename = messageContent.body,
@@ -233,7 +231,6 @@ class MessageItemFactory @Inject constructor(
                                      highlight: Boolean,
                                      callback: TimelineEventController.Callback?,
                                      attributes: AbsMessageItem.Attributes): MessageTextItem? {
-
         val isFormatted = messageContent.formattedBody.isNullOrBlank().not()
         val bodyToUse = messageContent.formattedBody?.let {
             htmlRenderer.get().render(it.trim())
@@ -296,7 +293,6 @@ class MessageItemFactory @Inject constructor(
                                        highlight: Boolean,
                                        callback: TimelineEventController.Callback?,
                                        attributes: AbsMessageItem.Attributes): MessageTextItem? {
-
         val message = messageContent.body.let {
             val formattedBody = span {
                 text = it
@@ -318,7 +314,6 @@ class MessageItemFactory @Inject constructor(
                                       highlight: Boolean,
                                       callback: TimelineEventController.Callback?,
                                       attributes: AbsMessageItem.Attributes): MessageTextItem? {
-
         val message = messageContent.body.let {
             val formattedBody = "* ${informationData.memberName} $it"
             linkifyBody(formattedBody, callback)

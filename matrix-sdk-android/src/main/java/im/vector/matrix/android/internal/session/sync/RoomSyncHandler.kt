@@ -92,7 +92,6 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
     // PRIVATE METHODS *****************************************************************************
 
     private fun handleRoomSync(realm: Realm, handlingStrategy: HandlingStrategy, isInitialSync: Boolean, reporter: DefaultInitialSyncProgressService?) {
-
         val rooms = when (handlingStrategy) {
             is HandlingStrategy.JOINED  ->
                 handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_joined_rooms, 0.6f) {
@@ -116,7 +115,6 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
                                  roomId: String,
                                  roomSync: RoomSync,
                                  isInitialSync: Boolean): RoomEntity {
-
         Timber.v("Handle join sync for room $roomId")
 
         if (roomSync.ephemeral != null && roomSync.ephemeral.events.isNotEmpty()) {
@@ -194,7 +192,6 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
                                      eventList: List<Event>,
                                      prevToken: String? = null,
                                      isLimited: Boolean = true): ChunkEntity {
-
         val lastChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomEntity.roomId)
         var stateIndexOffset = 0
         val chunkEntity = if (!isLimited && lastChunk != null) {

@@ -322,7 +322,6 @@ class NotificationUtils @Inject constructor(private val context: Context,
                                      roomId: String,
                                      matrixId: String,
                                      callId: String): Notification {
-
         val builder = NotificationCompat.Builder(context, CALL_NOTIFICATION_CHANNEL_ID)
                 .setContentTitle(ensureTitleNotEmpty(roomName))
                 .apply {

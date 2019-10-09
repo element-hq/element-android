@@ -109,7 +109,6 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
     }
 
     private fun sendMatrixEvent(message: String, session: Session, room: Room, context: Context?) {
-
         room.sendTextMessage(message)
 
         // Create a new event to be displayed in the notification drawer, right now

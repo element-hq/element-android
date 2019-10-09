@@ -560,9 +560,7 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
      * @param aDeviceInfo the device information
      */
     private fun displayDeviceDetailsDialog(aDeviceInfo: DeviceInfo) {
-
         activity?.let {
-
             val builder = AlertDialog.Builder(it)
             val inflater = it.layoutInflater
             val layout = inflater.inflate(R.layout.dialog_device_details, null)

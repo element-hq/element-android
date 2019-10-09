@@ -31,7 +31,6 @@ import timber.log.Timber
 class AlarmSyncBroadcastReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
-
         // Aquire a lock to give enough time for the sync :/
         (context.getSystemService(Context.POWER_SERVICE) as PowerManager).run {
             newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "riotx:fdroidSynclock").apply {

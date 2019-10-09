@@ -237,7 +237,6 @@ fun openMedia(activity: Activity, savedMediaPath: String, mimeType: String) {
 }
 
 fun shareMedia(context: Context, file: File, mediaMimeType: String?) {
-
     var mediaUri: Uri? = null
     try {
         mediaUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileProvider", file)

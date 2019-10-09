@@ -87,7 +87,6 @@ class VectorSettingsNotificationsTroubleshootFragment : VectorBaseFragment() {
     }
 
     private fun startUI() {
-
         mSummaryDescription.text = getString(R.string.settings_troubleshoot_diagnostic_running_status,
                                              0, 0)
         testManager = testManagerFactory.create(this)

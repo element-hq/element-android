@@ -36,7 +36,6 @@ class NoticeItemFactory @Inject constructor(private val eventFormatter: NoticeEv
                highlight: Boolean,
                readMarkerVisible: Boolean,
                callback: TimelineEventController.Callback?): NoticeItem? {
-
         val formattedText = eventFormatter.format(event) ?: return null
         val informationData = informationDataFactory.create(event, null, readMarkerVisible)
         val attributes = NoticeItem.Attributes(

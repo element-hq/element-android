@@ -24,7 +24,6 @@ import im.vector.matrix.android.internal.session.pushers.JsonPusher
 internal object PushersMapper {
 
     fun map(pushEntity: PusherEntity): Pusher {
-
         return Pusher(
                 pushKey = pushEntity.pushKey,
                 kind = pushEntity.kind ?: "",

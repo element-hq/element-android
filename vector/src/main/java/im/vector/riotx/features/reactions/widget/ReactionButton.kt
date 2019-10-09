@@ -160,7 +160,6 @@ class ReactionButton @JvmOverloads constructor(context: Context, attrs: Attribut
      * @param v
      */
     override fun onClick(v: View) {
-
         if (!isEnabled) {
             return
         }

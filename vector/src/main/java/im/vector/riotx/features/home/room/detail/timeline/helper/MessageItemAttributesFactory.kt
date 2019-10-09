@@ -37,7 +37,6 @@ class MessageItemAttributesFactory @Inject constructor(
     fun create(messageContent: MessageContent?,
                informationData: MessageInformationData,
                callback: TimelineEventController.Callback?): AbsMessageItem.Attributes {
-
         return AbsMessageItem.Attributes(
                 avatarSize = avatarSizeProvider.avatarSize,
                 informationData = informationData,

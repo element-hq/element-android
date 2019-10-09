@@ -64,7 +64,6 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
                 return resolveStateRoomEvent(event, session)
             }
             else                        -> {
-
                 // If the event can be displayed, display it as is
                 Timber.w("NotifiableEventResolver Received an unsupported event matching a bing rule")
                 // TODO Better event text display
@@ -85,7 +84,6 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
     }
 
     private fun resolveMessageEvent(event: TimelineEvent, session: Session): NotifiableEvent? {
-
         // The event only contains an eventId, and roomId (type is m.room.*) , we need to get the displayable content (names, avatar, text, etc...)
         val room = session.getRoom(event.root.roomId!! /*roomID cannot be null*/)
 

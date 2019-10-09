@@ -45,7 +45,6 @@ class VectorSettingsHelpAboutFragment : VectorSettingsBaseFragment() {
         // preference to start the App info screen, to facilitate App permissions access
         findPreference<VectorPreference>(APP_INFO_LINK_PREFERENCE_KEY)!!
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
-
             activity?.let {
                 val intent = Intent().apply {
                     action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS

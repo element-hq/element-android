@@ -41,7 +41,6 @@ class EncryptionItemFactory @Inject constructor(private val stringProvider: Stri
     fun create(event: TimelineEvent,
                highlight: Boolean,
                callback: TimelineEventController.Callback?): NoticeItem? {
-
         val text = buildNoticeText(event.root, event.senderName) ?: return null
         val informationData = MessageInformationData(
                 eventId = event.root.eventId ?: "?",

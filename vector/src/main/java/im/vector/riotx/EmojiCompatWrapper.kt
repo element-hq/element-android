@@ -29,7 +29,6 @@ class EmojiCompatWrapper @Inject constructor(private val context: Context)  {
     private var initialized = false
 
     fun init(fontRequest: FontRequest) {
-
         // Use emoji compat for the benefit of emoji spans
         val config = FontRequestEmojiCompatConfig(context, fontRequest)
                 // we want to replace all emojis with selected font

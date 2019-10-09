@@ -76,7 +76,6 @@ internal class DefaultRelationService @AssistedInject constructor(@Assisted priv
     }
 
     override fun undoReaction(reaction: String, targetEventId: String, myUserId: String)/*: Cancelable*/ {
-
         val params = FindReactionEventForUndoTask.Params(
                 roomId,
                 targetEventId,

@@ -74,7 +74,6 @@ class TextComposerView @JvmOverloads constructor(context: Context, attrs: Attrib
             val transition = AutoTransition()
             transition.duration = animationDuration
             transition.addListener(object : Transition.TransitionListener {
-
                 override fun onTransitionEnd(transition: Transition) {
                     transitionComplete?.invoke()
                 }
@@ -106,7 +105,6 @@ class TextComposerView @JvmOverloads constructor(context: Context, attrs: Attrib
             val transition = AutoTransition()
             transition.duration = animationDuration
             transition.addListener(object : Transition.TransitionListener {
-
                 override fun onTransitionEnd(transition: Transition) {
                     transitionComplete?.invoke()
                 }

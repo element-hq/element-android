@@ -107,7 +107,6 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
     suspend fun insertInDb(receivedChunk: TokenChunkEvent,
                            roomId: String,
                            direction: PaginationDirection): Result {
-
         monarchy
                 .awaitTransaction { realm ->
                     Timber.v("Start persisting ${receivedChunk.events.size} events in $roomId towards $direction")
@@ -194,7 +193,6 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
                             direction: PaginationDirection,
                             currentChunk: ChunkEntity,
                             otherChunk: ChunkEntity): ChunkEntity {
-
         // We always merge the bottom chunk into top chunk, so we are always merging backwards
         Timber.v("Merge ${currentChunk.prevToken} | ${currentChunk.nextToken} with ${otherChunk.prevToken} | ${otherChunk.nextToken}")
         return if (direction == PaginationDirection.BACKWARDS && !otherChunk.isLastForward) {

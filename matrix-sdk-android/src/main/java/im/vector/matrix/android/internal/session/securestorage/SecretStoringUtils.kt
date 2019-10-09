@@ -261,7 +261,6 @@ internal class SecretStoringUtils @Inject constructor(private val context: Conte
     }
 
     private fun decryptForOldDevicesNotGood(data: ByteArray, keyAlias: String): String? {
-
         val (salt, iv, encrypted) = format2Extract(ByteArrayInputStream(data))
         val factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256")
         val spec = PBEKeySpec(keyAlias.toCharArray(), salt, 10_000, 128)
@@ -280,7 +279,6 @@ internal class SecretStoringUtils @Inject constructor(private val context: Conte
 
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     private fun decryptStringK(data: ByteArray, keyAlias: String): String? {
-
         val (encryptedKey, iv, encrypted) = format1Extract(ByteArrayInputStream(data))
 
         // we need to decrypt the key
@@ -411,7 +409,6 @@ internal class SecretStoringUtils @Inject constructor(private val context: Conte
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     @Throws(IOException::class)
     private fun <T> loadSecureObjectK(keyAlias: String, inputStream: InputStream): T? {
-
         val (encryptedKey, iv, encrypted) = format1Extract(inputStream)
 
         // we need to decrypt the key

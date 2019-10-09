@@ -54,7 +54,6 @@ internal class DefaultPusherService @Inject constructor(private val context: Con
                                lang: String, appDisplayName: String, deviceDisplayName: String,
                                url: String, append: Boolean, withEventIdOnly: Boolean)
             : UUID {
-
         val pusher = JsonPusher(
                 pushKey = pushkey,
                 kind = "http",

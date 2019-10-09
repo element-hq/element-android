@@ -271,7 +271,6 @@ class LoginSsoFallbackFragment : VectorBaseFragment(), OnBackPressed {
                                 if (parameters.containsKey("homeServer")
                                         && parameters.containsKey("userId")
                                         && parameters.containsKey("accessToken")) {
-
                                     // We cannot parse Credentials here because of https://github.com/matrix-org/synapse/issues/4756
                                     // Build on object manually
                                     val credentials = Credentials(

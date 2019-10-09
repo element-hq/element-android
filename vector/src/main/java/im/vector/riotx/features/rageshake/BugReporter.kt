@@ -149,7 +149,6 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
                       theBugDescription: String,
                       listener: IMXBugReportListener?) {
         object : AsyncTask<Void, Int, String>() {
-
             // enumerate files to delete
             val mBugReportFiles: MutableList<File> = ArrayList()
 

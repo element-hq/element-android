@@ -128,7 +128,6 @@ class PushrulesConditionTest {
 
     @Test
     fun test_roommember_condition() {
-
         val conditionEqual3 = RoomMemberCountCondition("3")
         val conditionEqual3Bis = RoomMemberCountCondition("==3")
         val conditionLessThan3 = RoomMemberCountCondition("<3")

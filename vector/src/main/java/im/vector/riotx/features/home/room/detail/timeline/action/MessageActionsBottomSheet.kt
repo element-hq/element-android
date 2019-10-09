@@ -102,7 +102,6 @@ class MessageActionsBottomSheet : VectorBaseBottomSheetDialogFragment() {
                     .commit()
         }
         quickReactionFragment.interactionListener = object : QuickReactionFragment.InteractionListener {
-
             override fun didQuickReactWith(clickedOn: String, add: Boolean, eventId: String) {
                 actionHandlerModel.fireAction(SimpleAction.QuickReact(eventId, clickedOn, add))
                 dismiss()

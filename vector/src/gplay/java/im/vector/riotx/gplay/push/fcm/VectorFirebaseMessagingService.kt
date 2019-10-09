@@ -174,7 +174,6 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     private fun handleNotificationWithoutSyncingMode(data: Map<String, String>, session: Session?) {
-
         if (session == null) {
             Timber.e("## handleNotificationWithoutSyncingMode cannot find session")
             return

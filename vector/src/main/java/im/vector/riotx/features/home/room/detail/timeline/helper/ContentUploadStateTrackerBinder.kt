@@ -40,7 +40,6 @@ class ContentUploadStateTrackerBinder @Inject constructor(private val activeSess
     fun bind(eventId: String,
              isLocalFile: Boolean,
              progressLayout: ViewGroup) {
-
         activeSessionHolder.getActiveSession().also { session ->
             val uploadStateTracker = session.contentUploadProgressTracker()
             val updateListener = ContentMediaProgressUpdater(progressLayout, isLocalFile, colorProvider, errorFormatter)

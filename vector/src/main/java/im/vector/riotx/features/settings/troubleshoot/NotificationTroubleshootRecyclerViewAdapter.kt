@@ -66,7 +66,6 @@ class NotificationTroubleshootRecyclerViewAdapter(val tests: ArrayList<Troublesh
         }
 
         fun bind(test: TroubleshootTest) {
-
             val context = itemView.context
             titleText.setTextColor(ThemeUtils.getColor(context, R.attr.riotx_text_primary))
             descriptionText.setTextColor(ThemeUtils.getColor(context, R.attr.riotx_text_secondary))

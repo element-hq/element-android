@@ -89,7 +89,6 @@ class VideoContentRenderer @Inject constructor(private val activeSessionHolder: 
                                 })
             }
         } else {
-
             val resolvedUrl = contentUrlResolver.resolveFullSize(data.url)
 
             if (resolvedUrl == null) {
@@ -98,7 +97,6 @@ class VideoContentRenderer @Inject constructor(private val activeSessionHolder: 
                 errorView.isVisible = true
                 errorView.setText(R.string.unknown_error)
             } else {
-
                 // Temporary code, some remote videos are not played by videoview setVideoUri
                 // So for now we download them then play
                 thumbnailView.isVisible = true

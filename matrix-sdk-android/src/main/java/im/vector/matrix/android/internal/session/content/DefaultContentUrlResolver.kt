@@ -58,7 +58,6 @@ internal class DefaultContentUrlResolver @Inject constructor(private val homeSer
                         contentUrl: String,
                         prefix: String,
                         params: String? = null): String? {
-
         var serverAndMediaId = contentUrl.removePrefix(MATRIX_CONTENT_URI_SCHEME)
         val fragmentOffset = serverAndMediaId.indexOf("#")
         var fragment = ""

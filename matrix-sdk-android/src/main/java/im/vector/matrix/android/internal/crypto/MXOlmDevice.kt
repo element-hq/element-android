@@ -234,7 +234,6 @@ internal class MXOlmDevice @Inject constructor(
      * @return {{payload: string, session_id: string}} decrypted payload, and session id of new session.
      */
     fun createInboundSession(theirDeviceIdentityKey: String, messageType: Int, ciphertext: String): Map<String, String>? {
-
         Timber.v("## createInboundSession() : theirIdentityKey: $theirDeviceIdentityKey")
 
         var olmSession: OlmSession? = null
@@ -555,7 +554,6 @@ internal class MXOlmDevice @Inject constructor(
         val sessions = ArrayList<OlmInboundGroupSessionWrapper>(megolmSessionsData.size)
 
         for (megolmSessionData in megolmSessionsData) {
-
             val sessionId = megolmSessionData.sessionId
             val senderKey = megolmSessionData.senderKey
             val roomId = megolmSessionData.roomId

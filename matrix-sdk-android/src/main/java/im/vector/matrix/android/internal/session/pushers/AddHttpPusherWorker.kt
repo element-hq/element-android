@@ -44,7 +44,6 @@ internal class AddHttpPusherWorker(context: Context, params: WorkerParameters)
     @Inject lateinit var monarchy: Monarchy
 
     override suspend fun doWork(): Result {
-
         val params = WorkerParamsFactory.fromData<Params>(inputData)
                 ?: return Result.failure()
 

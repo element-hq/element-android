@@ -35,7 +35,6 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                eventIdToHighlight: String?,
                readMarkerVisible: Boolean,
                callback: TimelineEventController.Callback?): VectorEpoxyModel<*> {
-
         val highlight = event.root.eventId == eventIdToHighlight
 
         val computedModel = try {

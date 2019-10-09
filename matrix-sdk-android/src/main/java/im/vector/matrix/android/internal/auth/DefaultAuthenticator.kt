@@ -98,7 +98,6 @@ internal class DefaultAuthenticator @Inject constructor(@Unauthenticated
     private suspend fun authenticate(homeServerConnectionConfig: HomeServerConnectionConfig,
                                      login: String,
                                      password: String) = withContext(coroutineDispatchers.io) {
-
         val authAPI = buildAuthAPI(homeServerConnectionConfig)
         val loginParams = if (Patterns.EMAIL_ADDRESS.matcher(login).matches()) {
             PasswordLoginParams.thirdPartyIdentifier(ThreePidMedium.EMAIL, login, password, "Mobile")

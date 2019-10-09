@@ -102,7 +102,6 @@ class KeysBackupRestoreFromKeyViewModel @Inject constructor() : ViewModel() {
     private fun trustOnDecrypt(keysBackup: KeysBackupService, keysVersionResult: KeysVersionResult) {
         keysBackup.trustKeysBackupVersion(keysVersionResult, true,
                 object : MatrixCallback<Unit> {
-
                     override fun onSuccess(data: Unit) {
                         Timber.v("##### trustKeysBackupVersion onSuccess")
                     }

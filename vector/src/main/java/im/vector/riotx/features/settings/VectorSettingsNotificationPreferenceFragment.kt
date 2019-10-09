@@ -67,7 +67,6 @@ class VectorSettingsNotificationPreferenceFragment : VectorSettingsBaseFragment(
     }
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {
-
         return when (preference?.key) {
             VectorPreferences.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY -> {
                 updateEnabledForDevice(preference)
@@ -119,7 +118,6 @@ class VectorSettingsNotificationPreferenceFragment : VectorSettingsBaseFragment(
                             it,
                             !switchPref.isChecked,
                             object : MatrixCallback<Unit> {
-
                                 override fun onSuccess(data: Unit) {
                                     // Push rules will be updated form the sync
                                 }

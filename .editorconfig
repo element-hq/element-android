@@ -29,3 +29,4 @@ disabled_rules=no-wildcard-imports,no-multi-spaces,colon-spacing,chain-wrapping,
 # no-semi
 # no-empty-class-body
 # experimental:multiline-if-else
+# experimental:no-empty-first-line-in-method-block
