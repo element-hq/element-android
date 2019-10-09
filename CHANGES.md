@@ -18,6 +18,7 @@ Bugfix:
  - Fix opening a permalink paginates all the history up to the last event (#282)
  - after login, the icon in the top left is a green 'A' for (all communities) rather than my avatar (#267)
  - Picture uploads are unreliable, pictures are shown in wrong aspect ratio on desktop client (#517)
+ - Invitation notifications are not dismissed automatically if room is joined from another client (#347)
 
 Translations:
  -

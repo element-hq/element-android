@@ -58,6 +58,11 @@ class PushRuleTriggerListener @Inject constructor(
 
     override fun onRoomLeft(roomId: String) {
         notificationDrawerManager.clearMessageEventOfRoom(roomId)
+        notificationDrawerManager.clearMemberShipNotificationForRoom(roomId)
+    }
+
+    override fun onRoomJoined(roomId: String) {
+        notificationDrawerManager.clearMemberShipNotificationForRoom(roomId)
     }
 
     override fun onEventRedacted(redactedEventId: String) {

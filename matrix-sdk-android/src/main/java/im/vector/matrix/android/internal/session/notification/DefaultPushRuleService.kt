@@ -42,7 +42,7 @@ internal class DefaultPushRuleService @Inject constructor(private val getPushRul
                                                           private val monarchy: Monarchy
 ) : PushRuleService {
 
-    private var listeners = ArrayList<PushRuleService.PushRuleListener>()
+    private var listeners = mutableSetOf<PushRuleService.PushRuleListener>()
 
     override fun fetchPushRules(scope: String) {
         getPushRulesTask
@@ -90,22 +90,25 @@ internal class DefaultPushRuleService @Inject constructor(private val getPushRul
     }
 
     override fun updatePushRuleEnableStatus(kind: RuleKind, pushRule: PushRule, enabled: Boolean, callback: MatrixCallback<Unit>): Cancelable {
+        // The rules will be updated, and will come back from the next sync response
         return updatePushRuleEnableStatusTask
                 .configureWith(UpdatePushRuleEnableStatusTask.Params(kind, pushRule, enabled)) {
                     this.callback = callback
                 }
-                // TODO Fetch the rules
                 .executeBy(taskExecutor)
     }
 
     override fun removePushRuleListener(listener: PushRuleService.PushRuleListener) {
-        listeners.remove(listener)
+        synchronized(listeners) {
+            listeners.remove(listener)
+        }
     }
 
 
     override fun addPushRuleListener(listener: PushRuleService.PushRuleListener) {
-        if (!listeners.contains(listener))
+        synchronized(listeners) {
             listeners.add(listener)
+        }
     }
 
 //    fun processEvents(events: List<Event>) {
@@ -121,43 +124,63 @@ internal class DefaultPushRuleService @Inject constructor(private val getPushRul
 //    }
 
     fun dispatchBing(event: Event, rule: PushRule) {
-        try {
+        synchronized(listeners) {
             val actionsList = rule.getActions()
             listeners.forEach {
-                it.onMatchRule(event, actionsList)
+                try {
+                    it.onMatchRule(event, actionsList)
+                } catch (e: Throwable) {
+                    Timber.e(e, "Error while dispatching bing")
+                }
             }
-        } catch (e: Throwable) {
-            Timber.e(e, "Error while dispatching bing")
         }
     }
 
-    fun dispatchRoomLeft(roomid: String) {
-        try {
+    fun dispatchRoomJoined(roomId: String) {
+        synchronized(listeners) {
             listeners.forEach {
-                it.onRoomLeft(roomid)
+                try {
+                    it.onRoomJoined(roomId)
+                } catch (e: Throwable) {
+                    Timber.e(e, "Error while dispatching room joined")
+                }
             }
-        } catch (e: Throwable) {
-            Timber.e(e, "Error while dispatching room left")
+        }
+    }
+
+    fun dispatchRoomLeft(roomId: String) {
+        synchronized(listeners) {
+            listeners.forEach {
+                try {
+                    it.onRoomLeft(roomId)
+                } catch (e: Throwable) {
+                    Timber.e(e, "Error while dispatching room left")
+                }
+            }
         }
     }
 
     fun dispatchRedactedEventId(redactedEventId: String) {
-        try {
+        synchronized(listeners) {
             listeners.forEach {
-                it.onEventRedacted(redactedEventId)
+                try {
+                    it.onEventRedacted(redactedEventId)
+                } catch (e: Throwable) {
+                    Timber.e(e, "Error while dispatching redacted event")
+                }
             }
-        } catch (e: Throwable) {
-            Timber.e(e, "Error while dispatching room left")
         }
     }
 
     fun dispatchFinish() {
-        try {
+        synchronized(listeners) {
             listeners.forEach {
-                it.batchFinish()
+                try {
+                    it.batchFinish()
+                } catch (e: Throwable) {
+                    Timber.e(e, "Error while dispatching finish")
+                }
             }
-        } catch (e: Throwable) {
-            Timber.e(e, "Error while dispatching finish")
         }
     }
 }

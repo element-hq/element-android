@@ -150,7 +150,6 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
             notifiableEvent.soundName = null
 
             // Get the avatars URL
-            // TODO They will be not displayed the first time (known limitation)
             notifiableEvent.roomAvatarPath = session.contentUrlResolver()
                     .resolveThumbnail(room.roomSummary()?.avatarUrl,
                             250,

@@ -17,6 +17,9 @@ package im.vector.riotx.features.notifications
 
 import java.io.Serializable
 
+/**
+ * Parent interface for all events which can be displayed as a Notification
+ */
 interface NotifiableEvent : Serializable {
     var matrixID: String?
     val eventId: String
