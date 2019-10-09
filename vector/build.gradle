@@ -320,6 +320,7 @@ dependencies {
 
     // File picker
     implementation 'com.github.jaiselrahman:FilePicker:1.2.2'
+    implementation 'com.kbeanie:multipicker:1.6@aar'
 
     // DI
     implementation "com.google.dagger:dagger:$daggerVersion"

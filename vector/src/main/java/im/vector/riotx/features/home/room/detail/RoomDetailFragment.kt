@@ -49,13 +49,12 @@ import com.airbnb.mvrx.*
 import com.github.piasy.biv.BigImageViewer
 import com.github.piasy.biv.loader.ImageLoader
 import com.google.android.material.snackbar.Snackbar
-import com.jaiselrahman.filepicker.activity.FilePickerActivity
-import com.jaiselrahman.filepicker.model.MediaFile
 import com.otaliastudios.autocomplete.Autocomplete
 import com.otaliastudios.autocomplete.AutocompleteCallback
 import com.otaliastudios.autocomplete.CharPolicy
 import im.vector.matrix.android.api.permalinks.PermalinkFactory
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.message.*
@@ -125,10 +124,7 @@ data class RoomDetailArgs(
 ) : Parcelable
 
 
-private const val REQUEST_CODE_SELECT_FILE = 1
-private const val REQUEST_CODE_SELECT_GALLERY = 2
-private const val REQUEST_CODE_OPEN_CAMERA = 3
-private const val REACTION_SELECT_REQUEST_CODE = 4
+private const val REACTION_SELECT_REQUEST_CODE = 0
 
 class RoomDetailFragment :
         VectorBaseFragment(),
@@ -136,7 +132,8 @@ class RoomDetailFragment :
         AutocompleteUserPresenter.Callback,
         VectorInviteView.Callback,
         JumpToReadMarkerView.Callback,
-        AttachmentTypeSelectorView.Callback {
+        AttachmentTypeSelectorView.Callback,
+        AttachmentsHelper.Callback {
 
     companion object {
 
@@ -198,7 +195,15 @@ class RoomDetailFragment :
 
     private lateinit var actionViewModel: ActionsHandler
     private lateinit var layoutManager: LinearLayoutManager
-    private lateinit var attachmentsHelper: AttachmentsHelper
+
+    private lateinit var _attachmentsHelper: AttachmentsHelper
+    private val attachmentsHelper: AttachmentsHelper
+        get() {
+            if (::_attachmentsHelper.isInitialized.not()) {
+                _attachmentsHelper = AttachmentsHelper(this, this).register()
+            }
+            return _attachmentsHelper
+        }
 
     @BindView(R.id.composerLayout)
     lateinit var composerLayout: TextComposerView
@@ -213,7 +218,6 @@ class RoomDetailFragment :
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         actionViewModel = ViewModelProviders.of(requireActivity()).get(ActionsHandler::class.java)
-        attachmentsHelper = AttachmentsHelper((requireActivity()))
         setupToolbar(roomToolbar)
         setupRecyclerView()
         setupComposer()
@@ -302,9 +306,9 @@ class RoomDetailFragment :
         AlertDialog.Builder(requireActivity())
                 .setTitle(R.string.dialog_title_error)
                 .setMessage(getString(R.string.error_file_too_big,
-                                      error.filename,
-                                      TextUtils.formatFileSize(requireContext(), error.fileSizeInBytes),
-                                      TextUtils.formatFileSize(requireContext(), error.homeServerLimitInBytes)
+                        error.filename,
+                        TextUtils.formatFileSize(requireContext(), error.fileSizeInBytes),
+                        TextUtils.formatFileSize(requireContext(), error.homeServerLimitInBytes)
                 ))
                 .setPositiveButton(R.string.ok, null)
                 .show()
@@ -381,11 +385,11 @@ class RoomDetailFragment :
         if (messageContent is MessageTextContent && messageContent.format == MessageType.FORMAT_MATRIX_HTML) {
             val parser = Parser.builder().build()
             val document = parser.parse(messageContent.formattedBody
-                                        ?: messageContent.body)
+                    ?: messageContent.body)
             formattedBody = eventHtmlRenderer.render(document)
         }
         composerLayout.composerRelatedMessageContent.text = formattedBody
-                                                            ?: nonFormattedBody
+                ?: nonFormattedBody
 
         updateComposerText(defaultContent)
 
@@ -394,11 +398,11 @@ class RoomDetailFragment :
 
 
         avatarRenderer.render(event.senderAvatar, event.root.senderId
-                                                  ?: "", event.senderName, composerLayout.composerRelatedMessageAvatar)
+                ?: "", event.senderName, composerLayout.composerRelatedMessageAvatar)
         avatarRenderer.render(event.senderAvatar,
-                              event.root.senderId ?: "",
-                              event.senderName,
-                              composerLayout.composerRelatedMessageAvatar)
+                event.root.senderId ?: "",
+                event.senderName,
+                composerLayout.composerRelatedMessageAvatar)
         composerLayout.expand {
             //need to do it here also when not using quick reply
             focusComposerAndShowKeyboard()
@@ -430,31 +434,22 @@ class RoomDetailFragment :
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == RESULT_OK) {
-            if (requestCode == REQUEST_CODE_OPEN_CAMERA) {
-                val attachments = attachmentsHelper.handleOpenCameraResult()
-                roomDetailViewModel.process(RoomDetailActions.SendMedia(attachments))
-            } else if (data != null) {
-                when (requestCode) {
-                    REQUEST_CODE_SELECT_FILE,
-                    REQUEST_CODE_SELECT_GALLERY  -> {
-                        val attachments = attachmentsHelper.handleSelectResult(data)
-                        roomDetailViewModel.process(RoomDetailActions.SendMedia(attachments))
-                    }
-                    REACTION_SELECT_REQUEST_CODE -> {
-                        val eventId = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_EVENT_ID)
-                                      ?: return
-                        val reaction = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_REACTION_RESULT)
-                                       ?: return
-                        //TODO check if already reacted with that?
-                        roomDetailViewModel.process(RoomDetailActions.SendReaction(reaction, eventId))
-                    }
+        val hasBeenHandled = attachmentsHelper.onActivityResult(requestCode, resultCode, data)
+        if (!hasBeenHandled && resultCode == RESULT_OK && data != null) {
+            when (requestCode) {
+                REACTION_SELECT_REQUEST_CODE -> {
+                    val eventId = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_EVENT_ID)
+                            ?: return
+                    val reaction = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_REACTION_RESULT)
+                            ?: return
+                    //TODO check if already reacted with that?
+                    roomDetailViewModel.process(RoomDetailActions.SendReaction(reaction, eventId))
                 }
             }
         }
     }
 
-    // PRIVATE METHODS *****************************************************************************
+// PRIVATE METHODS *****************************************************************************
 
 
     private fun setupRecyclerView() {
@@ -1086,7 +1081,7 @@ class RoomDetailFragment :
     }
 
 
-// VectorInviteView.Callback
+    // VectorInviteView.Callback
 
     override fun onAcceptInvite() {
         notificationDrawerManager.clearMemberShipNotificationForRoom(roomDetailArgs.roomId)
@@ -1098,7 +1093,7 @@ class RoomDetailFragment :
         roomDetailViewModel.process(RoomDetailActions.RejectInvite)
     }
 
-// JumpToReadMarkerView.Callback
+    // JumpToReadMarkerView.Callback
 
     override fun onJumpToReadMarkerClicked(readMarkerId: String) {
         roomDetailViewModel.process(RoomDetailActions.NavigateToEvent(readMarkerId, false))
@@ -1108,14 +1103,25 @@ class RoomDetailFragment :
         roomDetailViewModel.process(RoomDetailActions.MarkAllAsRead)
     }
 
-// AttachmentTypeSelectorView.Callback *********************************************************
+    // AttachmentTypeSelectorView.Callback
 
     override fun onTypeSelected(type: Int) {
         when (type) {
-            AttachmentTypeSelectorView.TYPE_CAMERA  -> attachmentsHelper.openCamera(this, REQUEST_CODE_OPEN_CAMERA)
-            AttachmentTypeSelectorView.TYPE_FILE    -> attachmentsHelper.selectFile(this, REQUEST_CODE_SELECT_FILE)
-            AttachmentTypeSelectorView.TYPE_GALLERY -> attachmentsHelper.selectGallery(this, REQUEST_CODE_SELECT_GALLERY)
+            AttachmentTypeSelectorView.TYPE_CAMERA  -> attachmentsHelper.openCamera()
+            AttachmentTypeSelectorView.TYPE_FILE    -> attachmentsHelper.selectFile()
+            AttachmentTypeSelectorView.TYPE_GALLERY -> attachmentsHelper.selectGallery()
             AttachmentTypeSelectorView.TYPE_STICKER -> vectorBaseActivity.notImplemented("Adding stickers")
         }
+    }
+
+    // AttachmentsHelper.Callback
+
+    override fun onAttachmentsReady(attachments: List<ContentAttachmentData>) {
+        Timber.v("onAttachmentsReady")
+        roomDetailViewModel.process(RoomDetailActions.SendMedia(attachments))
+    }
+
+    override fun onAttachmentsProcessFailed() {
+        Timber.v("onAttachmentsProcessFailed")
     }
 }

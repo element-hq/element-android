@@ -15,138 +15,174 @@
  */
 package im.vector.riotx.features.attachments
 
-import android.content.ActivityNotFoundException
-import android.content.Context
+import android.app.Activity
 import android.content.Intent
-import android.net.Uri
-import android.os.Environment
-import android.provider.MediaStore
-import android.provider.OpenableColumns
-import androidx.core.content.FileProvider
+import android.os.Bundle
 import androidx.fragment.app.Fragment
-import im.vector.riotx.BuildConfig
-import im.vector.riotx.core.resources.MIME_TYPE_ALL_CONTENT
-import timber.log.Timber
-import java.io.File
-import java.io.IOException
-import java.text.SimpleDateFormat
-import java.util.*
+import com.kbeanie.multipicker.api.CameraImagePicker
+import com.kbeanie.multipicker.api.FilePicker
+import com.kbeanie.multipicker.api.ImagePicker
+import com.kbeanie.multipicker.api.Picker.*
+import com.kbeanie.multipicker.api.callbacks.FilePickerCallback
+import com.kbeanie.multipicker.api.callbacks.ImagePickerCallback
+import com.kbeanie.multipicker.api.entity.ChosenFile
+import com.kbeanie.multipicker.api.entity.ChosenImage
+import com.kbeanie.multipicker.api.entity.ChosenVideo
+import com.kbeanie.multipicker.core.PickerManager
+import im.vector.matrix.android.api.session.content.ContentAttachmentData
+import im.vector.riotx.core.platform.Restorable
 
+private const val CAPTURE_PATH_KEY = "CAPTURE_PATH_KEY"
 
-class AttachmentsHelper(private val context: Context) {
+class AttachmentsHelper(private val fragment: Fragment, private val callback: Callback) : Restorable {
 
-    private var capturePath: String? = null
-
-    fun selectFile(fragment: Fragment, requestCode: Int) {
-        selectMediaType(fragment, "*/*", null, requestCode)
+    interface Callback {
+        fun onAttachmentsReady(attachments: List<ContentAttachmentData>)
+        fun onAttachmentsProcessFailed()
     }
 
-    fun selectGallery(fragment: Fragment, requestCode: Int) {
-        selectMediaType(fragment, "image/*", arrayOf("image/*", "video/*"), requestCode)
-    }
+    private val attachmentsPickerCallback = AttachmentsPickerCallback(callback)
 
-    fun openCamera(fragment: Fragment, requestCode: Int) {
-        dispatchTakePictureIntent(fragment, requestCode)
-    }
-
-
-    fun handleOpenCameraResult(): List<Attachment> {
-        val attachment = getAttachmentFromContentResolver(Uri.parse(capturePath))
-        return if (attachment == null) {
-            emptyList()
-        } else {
-            listOf(attachment)
+    private val imagePicker by lazy {
+        ImagePicker(fragment).also {
+            it.setImagePickerCallback(attachmentsPickerCallback)
+            it.allowMultiple()
         }
     }
 
-    fun handleSelectResult(data: Intent?): List<Attachment> {
-        val clipData = data?.clipData
-        if (clipData != null) {
-            return (0 until clipData.itemCount).map {
-                clipData.getItemAt(it)
-            }.mapNotNull {
-                getAttachmentFromContentResolver(it.uri)
+    private val cameraImagePicker by lazy {
+        CameraImagePicker(fragment).also {
+            it.setImagePickerCallback(attachmentsPickerCallback)
+        }
+    }
+
+    private val filePicker by lazy {
+        FilePicker(fragment).also {
+            it.allowMultiple()
+            it.setFilePickerCallback(attachmentsPickerCallback)
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        capturePath?.also {
+            outState.putString(CAPTURE_PATH_KEY, it)
+        }
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+        capturePath = savedInstanceState?.getString(CAPTURE_PATH_KEY)
+    }
+
+    var capturePath: String? = null
+        private set
+
+    fun selectFile() {
+        filePicker.pickFile()
+    }
+
+    fun selectGallery() {
+        imagePicker.pickImage()
+    }
+
+    fun openCamera() {
+        capturePath = cameraImagePicker.pickImage()
+    }
+
+    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
+        if (resultCode == Activity.RESULT_OK) {
+            val pickerManager = getPickerManager(requestCode)
+            if (pickerManager != null) {
+                pickerManager.submit(data)
+                return true
             }
-        } else {
-            val uri = data?.data ?: return emptyList()
-            val attachment = getAttachmentFromContentResolver(uri)
-            return if (attachment == null) {
-                emptyList()
+        }
+        return false
+    }
+
+    private fun getPickerManager(requestCode: Int): PickerManager? {
+        return when (requestCode) {
+            PICK_IMAGE_DEVICE -> imagePicker
+            PICK_IMAGE_CAMERA -> cameraImagePicker
+            PICK_FILE         -> filePicker
+            else              -> null
+        }
+    }
+
+    private inner class AttachmentsPickerCallback(private val callback: Callback) : ImagePickerCallback, FilePickerCallback {
+
+        override fun onFilesChosen(files: MutableList<ChosenFile>?) {
+            if (files.isNullOrEmpty()) {
+                callback.onAttachmentsProcessFailed()
             } else {
-                listOf(attachment)
+                val attachments = files.map {
+                    it.toContentAttachmentData()
+                }
+                callback.onAttachmentsReady(attachments)
             }
         }
-    }
 
-    private fun selectMediaType(fragment: Fragment, type: String, extraMimeType: Array<String>?, requestCode: Int) {
-        val intent = Intent()
-        intent.type = type
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-        if (extraMimeType != null) {
-            intent.putExtra(Intent.EXTRA_MIME_TYPES, extraMimeType)
-        }
-        intent.action = Intent.ACTION_OPEN_DOCUMENT
-        try {
-            fragment.startActivityForResult(intent, requestCode)
-            return
-        } catch (exception: ActivityNotFoundException) {
-            Timber.e(exception)
-        }
-        intent.action = Intent.ACTION_GET_CONTENT
-        try {
-            fragment.startActivityForResult(intent, requestCode)
-        } catch (exception: ActivityNotFoundException) {
-            Timber.e(exception)
-        }
-    }
-
-    private fun getAttachmentFromContentResolver(uri: Uri): Attachment? {
-        return context.contentResolver.query(uri, null, null, null, null)?.use {
-            if (it.moveToFirst()) {
-                val fileName = it.getString(it.getColumnIndex(OpenableColumns.DISPLAY_NAME))
-                val fileSize = it.getLong(it.getColumnIndex(OpenableColumns.SIZE))
-                val mimeType = context.contentResolver.getType(uri) ?: MIME_TYPE_ALL_CONTENT
-                Attachment(uri.toString(), mimeType, fileName, fileSize)
+        override fun onImagesChosen(images: MutableList<ChosenImage>?) {
+            if (images.isNullOrEmpty()) {
+                callback.onAttachmentsProcessFailed()
             } else {
-                null
+                val attachments = images.map {
+                    it.toContentAttachmentData()
+                }
+                callback.onAttachmentsReady(attachments)
             }
+        }
+
+        override fun onError(error: String?) {
+            callback.onAttachmentsProcessFailed()
         }
     }
 
 
-    @Throws(IOException::class)
-    private fun createImageFile(context: Context): File {
-        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        val imageFileName = "JPEG_" + timeStamp + "_"
-        val storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        val image = File.createTempFile(
-                imageFileName, /* prefix */
-                ".jpg", /* suffix */
-                storageDir      /* directory */
+    private fun ChosenFile.toContentAttachmentData(): ContentAttachmentData {
+        return ContentAttachmentData(
+                path = originalPath,
+                mimeType = mimeType,
+                type = mapType(),
+                size = size,
+                date = createdAt.time,
+                name = displayName
         )
-        // Save a file: path for use with ACTION_VIEW intents
-        capturePath = image.absolutePath
-        return image
     }
 
-    private fun dispatchTakePictureIntent(fragment: Fragment, requestCode: Int) {
-        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        // Ensure that there's a camera activity to handle the intent
-        if (takePictureIntent.resolveActivity(fragment.requireActivity().packageManager) != null) {
-            // Create the File where the photo should go
-            var photoFile: File? = null
-            try {
-                photoFile = createImageFile(fragment.requireContext())
-            } catch (ex: IOException) {
-                Timber.e(ex, "Couldn't create image file")
-            }
-            // Continue only if the File was successfully created
-            if (photoFile != null) {
-                val photoURI = FileProvider.getUriForFile(fragment.requireContext(), BuildConfig.APPLICATION_ID + ".fileProvider", photoFile)
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                fragment.startActivityForResult(takePictureIntent, requestCode)
-            }
+    private fun ChosenFile.mapType(): ContentAttachmentData.Type {
+        return when {
+            mimeType.startsWith("image/") -> ContentAttachmentData.Type.IMAGE
+            mimeType.startsWith("video/") -> ContentAttachmentData.Type.VIDEO
+            mimeType.startsWith("audio/") -> ContentAttachmentData.Type.AUDIO
+            else                          -> ContentAttachmentData.Type.FILE
         }
+    }
+
+    private fun ChosenImage.toContentAttachmentData(): ContentAttachmentData {
+        return ContentAttachmentData(
+                path = originalPath,
+                mimeType = mimeType,
+                type = mapType(),
+                name = displayName,
+                size = size,
+                height = height.toLong(),
+                width = width.toLong(),
+                date = createdAt.time
+        )
+    }
+
+    private fun ChosenVideo.toContentAttachmentData(): ContentAttachmentData {
+        return ContentAttachmentData(
+                path = originalPath,
+                mimeType = mimeType,
+                type = ContentAttachmentData.Type.VIDEO,
+                size = size,
+                date = createdAt.time,
+                height = height.toLong(),
+                width = width.toLong(),
+                duration = duration,
+                name = displayName
+        )
     }
 
 }
