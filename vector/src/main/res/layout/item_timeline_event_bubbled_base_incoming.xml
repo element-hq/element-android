@@ -48,7 +48,6 @@
         android:orientation="vertical"
         app:layout_constrainedWidth="true"
         app:layout_constraintHorizontal_bias="1"
-        app:layout_constraintBottom_toBottomOf="@id/messageBottomInfo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/messageStartGuideline"
         app:layout_constraintTop_toTopOf="parent">
@@ -81,7 +80,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="4dp"
                 android:layout_marginEnd="4dp"
-                android:layout_marginRight="8dp"
+                android:layout_marginRight="4dp"
                 android:textColor="?riotx_text_secondary"
                 android:textSize="12sp"
                 tools:text="@tools:sample/date/hhmm" />
@@ -117,7 +116,7 @@
             android:layout_height="20dp"
             android:layout_marginStart="56dp"
             android:layout_marginLeft="56dp"
-            tools:visibility="visible"
+            tools:visibility="gone"
             android:layout="@layout/item_timeline_event_redacted_stub"
             tools:ignore="MissingConstraints" />
 
@@ -125,34 +124,65 @@
 
 
     <!-- TODO: For now we show 8 reactions maximum, this will need rework when needed-->
-    <ViewStub
-        android:id="@+id/messageBottomInfo"
-        android:layout_width="wrap_content"
+<!--    <ViewStub-->
+<!--        android:id="@+id/messageBottomInfo"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginBottom="4dp"-->
+<!--        android:inflatedId="@+id/messageBottomInfo"-->
+<!--        android:layout="@layout/item_timeline_event_bottom_reactions_stub"-->
+<!--        android:visibility="gone"-->
+<!--        app:layout_constraintHorizontal_bias="1"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/readReceiptsView"-->
+<!--        app:layout_constraintEnd_toStartOf="@id/messageStartGuideline"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/messageBubbleContainer"-->
+<!--        app:layout_constraintVertical_chainStyle="packed"-->
+<!--        tools:visibility="visible">-->
+
+<!--    </ViewStub>-->
+
+    <LinearLayout
+        android:id="@+id/informationBottom"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-        android:inflatedId="@+id/messageBottomInfo"
-        android:layout="@layout/item_timeline_event_bottom_reactions_stub"
-        android:visibility="gone"
         app:layout_constraintHorizontal_bias="1"
         app:layout_constraintBottom_toTopOf="@+id/readReceiptsView"
         app:layout_constraintEnd_toStartOf="@id/messageStartGuideline"
         app:layout_constraintTop_toBottomOf="@id/messageBubbleContainer"
         app:layout_constraintVertical_chainStyle="packed"
-        tools:visibility="visible">
+        android:addStatesFromChildren="true"
+        android:orientation="vertical">
 
-    </ViewStub>
+        <com.google.android.flexbox.FlexboxLayout
+            android:id="@+id/reactionsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="4dp"
+            app:dividerDrawable="@drawable/reaction_divider"
+            app:flexWrap="wrap"
+            app:showDivider="middle" />
 
+        <im.vector.riotx.core.ui.views.ReadReceiptsView
+            android:id="@+id/readReceiptsView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="4dp" />
 
-    <im.vector.riotx.core.ui.views.ReadReceiptsView
-        android:id="@+id/readReceiptsView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="4dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:visibility="visible" />
+    </LinearLayout>
+
+<!--    <im.vector.riotx.core.ui.views.ReadReceiptsView-->
+<!--        android:id="@+id/readReceiptsView"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginEnd="8dp"-->
+<!--        android:layout_marginBottom="4dp"-->
+<!--        android:visibility="gone"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        tools:visibility="visible" />-->
 
     <im.vector.riotx.core.ui.views.ReadMarkerView
         android:id="@+id/readMarkerView"
