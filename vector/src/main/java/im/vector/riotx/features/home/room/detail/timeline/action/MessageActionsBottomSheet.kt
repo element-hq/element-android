@@ -57,8 +57,13 @@ class MessageActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), Message
     }
 
     override fun didSelectMenuAction(simpleAction: SimpleAction) {
-        actionHandlerModel.fireAction(simpleAction)
-        dismiss()
+        if (simpleAction is SimpleAction.ReportContent) {
+            // Toggle report menu
+            viewModel.toggleReportMenu()
+        } else {
+            actionHandlerModel.fireAction(simpleAction)
+            dismiss()
+        }
     }
 
     override fun invalidate() = withState(viewModel) {

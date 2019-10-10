@@ -61,7 +61,8 @@ data class MessageActionState(
         // For quick reactions
         val quickStates: Async<List<ToggleState>> = Uninitialized,
         // For actions
-        val actions: Async<List<SimpleAction>> = Uninitialized
+        val actions: Async<List<SimpleAction>> = Uninitialized,
+        val expendedReportContentMenu: Boolean = false
 ) : MvRxState {
 
     constructor(args: TimelineEventFragmentArgs) : this(roomId = args.roomId, eventId = args.eventId, informationData = args.informationData)
@@ -109,6 +110,14 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         observeEvent()
         observeReactions()
         observeEventAction()
+    }
+
+    fun toggleReportMenu() = withState {
+        setState {
+            copy(
+                    expendedReportContentMenu = it.expendedReportContentMenu.not()
+            )
+        }
     }
 
     private fun observeEvent() {
@@ -253,7 +262,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
 
                 if (session.myUserId != event.root.senderId && event.root.getClearType() == EventType.MESSAGE) {
                     // not sent by me
-                    add(SimpleAction.Flag(eventId))
+                    add(SimpleAction.ReportContent(eventId))
                 }
             }
         }

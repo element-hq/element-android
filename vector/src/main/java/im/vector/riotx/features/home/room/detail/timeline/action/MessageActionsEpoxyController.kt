@@ -94,7 +94,26 @@ class MessageActionsEpoxyController @Inject constructor(private val stringProvid
                 id("action_$index")
                 iconRes(action.iconResId)
                 textRes(action.titleRes)
+                showExpand(action is SimpleAction.ReportContent)
+                expanded(state.expendedReportContentMenu)
                 listener(View.OnClickListener { listener?.didSelectMenuAction(action) })
+            }
+
+            if (action is SimpleAction.ReportContent && state.expendedReportContentMenu) {
+                // Special case for report content menu: add the submenu
+                listOf(
+                        SimpleAction.ReportContentSpam(action.eventId),
+                        SimpleAction.ReportContentInappropriate(action.eventId),
+                        SimpleAction.ReportContentCustom(action.eventId)
+                ).forEachIndexed { indexReport, actionReport ->
+                    bottomSheetItemAction {
+                        id("actionReport_$indexReport")
+                        subMenuItem(true)
+                        iconRes(actionReport.iconResId)
+                        textRes(actionReport.titleRes)
+                        listener(View.OnClickListener { listener?.didSelectMenuAction(actionReport) })
+                    }
+                }
             }
         }
     }

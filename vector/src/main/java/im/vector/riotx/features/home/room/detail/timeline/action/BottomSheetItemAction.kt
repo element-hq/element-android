@@ -19,6 +19,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.DrawableRes
+import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
@@ -37,6 +38,12 @@ abstract class BottomSheetItemAction : VectorEpoxyModel<BottomSheetItemAction.Ho
     @EpoxyAttribute
     var textRes: Int = 0
     @EpoxyAttribute
+    var showExpand = false
+    @EpoxyAttribute
+    var expanded = false
+    @EpoxyAttribute
+    var subMenuItem = false
+    @EpoxyAttribute
     lateinit var listener: View.OnClickListener
 
     override fun bind(holder: Holder) {
@@ -44,12 +51,19 @@ abstract class BottomSheetItemAction : VectorEpoxyModel<BottomSheetItemAction.Ho
             listener.onClick(it)
         }
 
+        holder.startSpace.isVisible = subMenuItem
         holder.icon.setImageResource(iconRes)
         holder.text.setText(textRes)
+        holder.expand.isVisible = showExpand
+        if (showExpand) {
+            holder.expand.setImageResource(if (expanded) R.drawable.ic_material_expand_less_black else R.drawable.ic_material_expand_more_black)
+        }
     }
 
     class Holder : VectorEpoxyHolder() {
+        val startSpace by bind<View>(R.id.action_start_space)
         val icon by bind<ImageView>(R.id.action_icon)
         val text by bind<TextView>(R.id.action_title)
+        val expand by bind<ImageView>(R.id.action_expand)
     }
 }
