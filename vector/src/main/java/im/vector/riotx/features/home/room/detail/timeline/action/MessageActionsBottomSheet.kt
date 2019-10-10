@@ -15,22 +15,16 @@
  */
 package im.vector.riotx.features.home.room.detail.timeline.action
 
-import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import androidx.lifecycle.ViewModelProviders
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import im.vector.riotx.EmojiCompatFontProvider
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.platform.VectorBaseBottomSheetDialogFragment
-import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
 import kotlinx.android.synthetic.main.bottom_sheet_generic_recycler_epoxy.*
 import javax.inject.Inject
@@ -40,12 +34,10 @@ import javax.inject.Inject
  */
 class MessageActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), MessageActionsEpoxyController.MessageActionsEpoxyControllerListener {
     @Inject lateinit var messageActionViewModelFactory: MessageActionsViewModel.Factory
-    @Inject lateinit var avatarRenderer: AvatarRenderer
-    @Inject lateinit var fontProvider: EmojiCompatFontProvider
+    @Inject lateinit var messageActionsEpoxyController: MessageActionsEpoxyController
 
     private val viewModel: MessageActionsViewModel by fragmentViewModel(MessageActionsViewModel::class)
 
-    private lateinit var messageActionsEpoxyController: MessageActionsEpoxyController
     private lateinit var actionHandlerModel: ActionsHandler
 
     override fun injectWith(screenComponent: ScreenComponent) {
@@ -60,7 +52,6 @@ class MessageActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), Message
         super.onActivityCreated(savedInstanceState)
         actionHandlerModel = ViewModelProviders.of(requireActivity()).get(ActionsHandler::class.java)
 
-        messageActionsEpoxyController = MessageActionsEpoxyController(requireContext(), avatarRenderer, fontProvider)
         bottomSheetEpoxyRecyclerView.setController(messageActionsEpoxyController)
         messageActionsEpoxyController.listener = this
     }
@@ -68,20 +59,6 @@ class MessageActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), Message
     override fun didSelectMenuAction(simpleAction: SimpleAction) {
         actionHandlerModel.fireAction(simpleAction)
         dismiss()
-    }
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = super.onCreateDialog(savedInstanceState)
-        // We want to force the bottom sheet initial state to expanded
-        (dialog as? BottomSheetDialog)?.let { bottomSheetDialog ->
-            bottomSheetDialog.setOnShowListener { dialog ->
-                val d = dialog as BottomSheetDialog
-                (d.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as? FrameLayout)?.let {
-                    BottomSheetBehavior.from(it).state = BottomSheetBehavior.STATE_COLLAPSED
-                }
-            }
-        }
-        return dialog
     }
 
     override fun invalidate() = withState(viewModel) {

@@ -11,8 +11,7 @@
     android:paddingLeft="@dimen/layout_horizontal_margin"
     android:paddingTop="8dp"
     android:paddingRight="@dimen/layout_horizontal_margin"
-    android:paddingBottom="8dp"
-    tools:layout_height="50dp">
+    android:paddingBottom="8dp">
 
     <ImageView
         android:id="@+id/action_icon"

@@ -15,20 +15,21 @@
  */
 package im.vector.riotx.features.home.room.detail.timeline.action
 
-import android.content.Context
 import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Success
 import im.vector.riotx.EmojiCompatFontProvider
 import im.vector.riotx.R
+import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.home.AvatarRenderer
+import javax.inject.Inject
 
 /**
  * Epoxy controller for message action list
  */
-class MessageActionsEpoxyController(private val context: Context,
-                                    private val avatarRenderer: AvatarRenderer,
-                                    private val fontProvider: EmojiCompatFontProvider) : TypedEpoxyController<MessageActionState>() {
+class MessageActionsEpoxyController @Inject constructor(private val stringProvider: StringProvider,
+                                                        private val avatarRenderer: AvatarRenderer,
+                                                        private val fontProvider: EmojiCompatFontProvider) : TypedEpoxyController<MessageActionState>() {
 
     var listener: MessageActionsEpoxyControllerListener? = null
 
@@ -51,13 +52,13 @@ class MessageActionsEpoxyController(private val context: Context,
             bottomSheetItemSendState {
                 id("send_state")
                 showProgress(true)
-                text(context.getString(R.string.event_status_sending_message))
+                text(stringProvider.getString(R.string.event_status_sending_message))
             }
         } else if (state.informationData.sendState.hasFailed()) {
             bottomSheetItemSendState {
                 id("send_state")
                 showProgress(false)
-                text(context.getString(R.string.unable_to_send_message))
+                text(stringProvider.getString(R.string.unable_to_send_message))
                 drawableStart(R.drawable.ic_warning_small)
             }
         }
@@ -73,7 +74,7 @@ class MessageActionsEpoxyController(private val context: Context,
                 id("quick_reaction")
                 fontProvider(fontProvider)
                 texts(state.quickStates()?.map { it.reaction }.orEmpty())
-                selecteds(state.quickStates()?.map { it.isSelected }.orEmpty())
+                selecteds(state.quickStates.invoke().map { it.isSelected })
                 listener(object : BottomSheetItemQuickReactions.Listener {
                     override fun didSelect(emoji: String, selected: Boolean) {
                         listener?.didSelectMenuAction(SimpleAction.QuickReact(state.eventId, emoji, selected))
