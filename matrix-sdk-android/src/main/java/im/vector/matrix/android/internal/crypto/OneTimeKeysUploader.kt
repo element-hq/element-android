@@ -53,7 +53,6 @@ internal class OneTimeKeysUploader @Inject constructor(
         oneTimeKeyCount = currentCount
     }
 
-
     /**
      * Check if the OTK must be uploaded.
      */

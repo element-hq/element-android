@@ -35,5 +35,4 @@ abstract class CreateDirectRoomLetterHeaderItem : VectorEpoxyModel<CreateDirectR
     class Holder : VectorEpoxyHolder() {
         val letterView by bind<TextView>(R.id.createDirectRoomLetterView)
     }
-
 }

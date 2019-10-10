@@ -15,7 +15,6 @@
  */
 package im.vector.matrix.android.api.util
 
-
 object ContentUtils {
     fun extractUsefulTextFromReply(repliedBody: String): String {
         val lines = repliedBody.lines()
@@ -39,8 +38,9 @@ object ContentUtils {
     fun extractUsefulTextFromHtmlReply(repliedBody: String): String {
         if (repliedBody.startsWith("<mx-reply>")) {
             val closingTagIndex = repliedBody.lastIndexOf("</mx-reply>")
-            if (closingTagIndex != -1)
+            if (closingTagIndex != -1) {
                 return repliedBody.substring(closingTagIndex + "</mx-reply>".length).trim()
+            }
         }
         return repliedBody
     }

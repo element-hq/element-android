@@ -60,7 +60,6 @@ internal class RealmCryptoStore(private val realmConfiguration: RealmConfigurati
     // Cache for InboundGroupSession, to release them properly
     private val inboundGroupSessionToRelease = HashMap<String, OlmInboundGroupSessionWrapper>()
 
-
     private val newSessionListeners = ArrayList<NewSessionListener>()
 
     override fun addNewSessionListener(listener: NewSessionListener) {
@@ -209,10 +208,7 @@ internal class RealmCryptoStore(private val realmConfiguration: RealmConfigurati
                 ?.getDeviceInfo()
     }
 
-    override fun storeUserDevices(userId: String, devices: Map<String, MXDeviceInfo>) {
-        if (userId == null) {
-            return
-        }
+    override fun storeUserDevices(userId: String, devices: Map<String, MXDeviceInfo>?) {
         doRealmTransaction(realmConfiguration) { realm ->
             if (devices == null) {
                 // Remove the user
@@ -281,7 +277,7 @@ internal class RealmCryptoStore(private val realmConfiguration: RealmConfigurati
         try {
             sessionIdentifier = olmSessionWrapper.olmSession.sessionIdentifier()
         } catch (e: OlmException) {
-            Timber.e(e, "## storeSession() : sessionIdentifier failed " + e.message)
+            Timber.e(e, "## storeSession() : sessionIdentifier failed")
         }
 
         if (sessionIdentifier != null) {
@@ -367,7 +363,7 @@ internal class RealmCryptoStore(private val realmConfiguration: RealmConfigurati
                 try {
                     sessionIdentifier = session.olmInboundGroupSession?.sessionIdentifier()
                 } catch (e: OlmException) {
-                    Timber.e(e, "## storeInboundGroupSession() : sessionIdentifier failed " + e.message)
+                    Timber.e(e, "## storeInboundGroupSession() : sessionIdentifier failed")
                 }
 
                 if (sessionIdentifier != null) {
@@ -737,5 +733,4 @@ internal class RealmCryptoStore(private val realmConfiguration: RealmConfigurati
                 }
                 .toMutableList()
     }
-
 }

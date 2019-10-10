@@ -68,7 +68,6 @@ interface Session :
     val myUserId: String
         get() = sessionParams.credentials.userId
 
-
     /**
      * This method allow to open a session. It does start some service on the background.
      */
@@ -145,7 +144,5 @@ interface Session :
          * A M_CONSENT_NOT_GIVEN error has been received from the homeserver
          */
         fun onConsentNotGivenError(consentNotGivenError: ConsentNotGivenError)
-
     }
-
 }

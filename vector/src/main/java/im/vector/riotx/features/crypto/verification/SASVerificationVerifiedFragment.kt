@@ -37,7 +37,6 @@ class SASVerificationVerifiedFragment : VectorBaseFragment() {
         viewModel = activity?.run {
             ViewModelProviders.of(this, viewModelFactory).get(SasVerificationViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
-
     }
 
     @OnClick(R.id.sas_verification_verified_done_button)

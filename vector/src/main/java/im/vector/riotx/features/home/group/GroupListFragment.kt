@@ -20,7 +20,6 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModelProviders
 import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.riotx.R
@@ -76,5 +75,4 @@ class GroupListFragment : VectorBaseFragment(), GroupSummaryController.Callback 
     override fun onGroupSelected(groupSummary: GroupSummary) {
         viewModel.accept(GroupListActions.SelectGroup(groupSummary))
     }
-
 }

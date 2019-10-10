@@ -92,5 +92,4 @@ class RoomDirectoryPickerController @Inject constructor(private val stringProvid
         fun onRoomDirectoryClicked(roomDirectoryData: RoomDirectoryData)
         fun retry()
     }
-
 }

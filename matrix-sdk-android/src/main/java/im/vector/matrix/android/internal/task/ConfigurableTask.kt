@@ -42,7 +42,6 @@ internal data class ConfigurableTask<PARAMS, RESULT>(
 
 ) : Task<PARAMS, RESULT> by task {
 
-
     class Builder<PARAMS, RESULT>(
             private val task: Task<PARAMS, RESULT>,
             private val params: PARAMS,
@@ -73,7 +72,4 @@ internal data class ConfigurableTask<PARAMS, RESULT>(
     override fun toString(): String {
         return "${task.javaClass.name} with ID: $id"
     }
-
 }
-
-

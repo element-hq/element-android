@@ -58,13 +58,11 @@ internal fun TimelineEventEntity.Companion.findWithSenderMembershipEvent(realm: 
             .findAll()
 }
 
-
 internal fun TimelineEventEntity.Companion.latestEvent(realm: Realm,
                                                        roomId: String,
                                                        includesSending: Boolean,
                                                        includedTypes: List<String> = emptyList(),
                                                        excludedTypes: List<String> = emptyList()): TimelineEventEntity? {
-
     val roomEntity = RoomEntity.where(realm, roomId).findFirst() ?: return null
     val eventList = if (includesSending && roomEntity.sendingTimelineEvents.isNotEmpty()) {
         roomEntity.sendingTimelineEvents
@@ -108,7 +106,6 @@ internal fun RealmQuery<TimelineEventEntity>.prev(since: Int? = null, strict: Bo
             .findFirst()
 }
 
-
 internal fun RealmList<TimelineEventEntity>.find(eventId: String): TimelineEventEntity? {
     return this.where()
             .equalTo(TimelineEventEntityFields.ROOT.EVENT_ID, eventId)
@@ -119,7 +116,6 @@ internal fun TimelineEventEntity.Companion.findAllInRoomWithSendStates(realm: Re
                                                                        roomId: String,
                                                                        sendStates: List<SendState>)
         : RealmResults<TimelineEventEntity> {
-
     val sendStatesStr = sendStates.map { it.name }.toTypedArray()
     return realm.where<TimelineEventEntity>()
             .equalTo(TimelineEventEntityFields.ROOM_ID, roomId)

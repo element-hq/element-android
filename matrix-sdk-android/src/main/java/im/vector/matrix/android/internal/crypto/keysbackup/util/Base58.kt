@@ -52,10 +52,11 @@ fun base58encode(input: ByteArray): String {
     s.insert(0, ALPHABET[bi.toInt()])
     // Convert leading zeros too.
     for (anInput in input) {
-        if (anInput.toInt() == 0)
+        if (anInput.toInt() == 0) {
             s.insert(0, ALPHABET[0])
-        else
+        } else {
             break
+        }
     }
     return s.toString()
 }

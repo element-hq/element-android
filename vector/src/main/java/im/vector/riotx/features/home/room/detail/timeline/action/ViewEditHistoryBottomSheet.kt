@@ -34,7 +34,6 @@ import im.vector.riotx.features.html.EventHtmlRenderer
 import kotlinx.android.synthetic.main.bottom_sheet_epoxylist_with_title.*
 import javax.inject.Inject
 
-
 /**
  * Bottom sheet displaying list of edits for a given event ordered by timestamp
  */
@@ -71,7 +70,6 @@ class ViewEditHistoryBottomSheet : VectorBaseBottomSheetDialogFragment() {
         bottomSheetTitle.text = context?.getString(R.string.message_edits)
     }
 
-
     override fun invalidate() = withState(viewModel) {
         epoxyController.setData(it)
     }
@@ -86,8 +84,6 @@ class ViewEditHistoryBottomSheet : VectorBaseBottomSheetDialogFragment() {
             )
             args.putParcelable(MvRx.KEY_ARG, parcelableArgs)
             return ViewEditHistoryBottomSheet().apply { arguments = args }
-
         }
     }
 }
-

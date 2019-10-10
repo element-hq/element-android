@@ -32,10 +32,8 @@ internal abstract class AccountDataModule {
         fun providesAccountDataAPI(retrofit: Retrofit): AccountDataAPI {
             return retrofit.create(AccountDataAPI::class.java)
         }
-
     }
 
     @Binds
     abstract fun bindUpdateUserAccountDataTask(updateUserAccountDataTask: DefaultUpdateUserAccountDataTask): UpdateUserAccountDataTask
-
 }

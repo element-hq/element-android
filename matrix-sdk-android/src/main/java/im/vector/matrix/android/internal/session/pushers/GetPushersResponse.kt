@@ -18,7 +18,6 @@ package im.vector.matrix.android.internal.session.pushers
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
-
 @JsonClass(generateAdapter = true)
 internal class GetPushersResponse(
         @Json(name = "pushers")

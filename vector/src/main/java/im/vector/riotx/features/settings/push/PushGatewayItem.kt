@@ -24,7 +24,6 @@ import im.vector.matrix.android.api.session.pushers.Pusher
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 
-
 @EpoxyModelClass(layout = R.layout.item_pushgateway)
 abstract class PushGatewayItem : EpoxyModelWithHolder<PushGatewayItem.Holder>() {
 
@@ -47,7 +46,6 @@ abstract class PushGatewayItem : EpoxyModelWithHolder<PushGatewayItem.Holder>() 
         holder.deviceName.text = pusher.deviceDisplayName
     }
 
-
     class Holder : VectorEpoxyHolder() {
         val kind by bind<TextView>(R.id.pushGatewayKind)
         val pushKey by bind<TextView>(R.id.pushGatewayKeyValue)
@@ -60,4 +58,4 @@ abstract class PushGatewayItem : EpoxyModelWithHolder<PushGatewayItem.Holder>() 
 }
 
 //
-//abstract class ReactionInfoSimpleItem : EpoxyModelWithHolder<ReactionInfoSimpleItem.Holder>() {
+// abstract class ReactionInfoSimpleItem : EpoxyModelWithHolder<ReactionInfoSimpleItem.Holder>() {

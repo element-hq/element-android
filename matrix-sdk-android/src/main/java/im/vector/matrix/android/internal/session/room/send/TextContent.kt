@@ -32,7 +32,6 @@ data class TextContent(
     fun takeFormatted() = formattedText ?: text
 }
 
-
 fun TextContent.toMessageTextContent(msgType: String = MessageType.MSGTYPE_TEXT): MessageTextContent {
     return MessageTextContent(
             type = msgType,
@@ -48,5 +47,3 @@ fun TextContent.removeInReplyFallbacks(): TextContent {
             formattedText = this.formattedText?.let { extractUsefulTextFromHtmlReply(it) }
     )
 }
-
-

@@ -28,7 +28,6 @@ import im.vector.riotx.core.platform.SimpleTextWatcher
 
 fun EditText.setupAsSearch(@DrawableRes searchIconRes: Int = R.drawable.ic_filter,
                            @DrawableRes clearIconRes: Int = R.drawable.ic_x_green) {
-
     addTextChangedListener(object : SimpleTextWatcher() {
         override fun afterTextChanged(s: Editable) {
             val clearIcon = if (s.isNotEmpty()) clearIconRes else 0
@@ -39,7 +38,7 @@ fun EditText.setupAsSearch(@DrawableRes searchIconRes: Int = R.drawable.ic_filte
     maxLines = 1
     inputType = InputType.TYPE_CLASS_TEXT
     imeOptions = EditorInfo.IME_ACTION_SEARCH
-    setOnEditorActionListener { _, actionId, event ->
+    setOnEditorActionListener { _, actionId, _ ->
         var consumed = false
         if (actionId == EditorInfo.IME_ACTION_SEARCH) {
             hideKeyboard()

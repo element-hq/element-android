@@ -29,7 +29,6 @@ import im.vector.riotx.features.crypto.verification.SASVerificationActivity
 import timber.log.Timber
 import java.lang.ref.WeakReference
 
-
 /**
  * Responsible of displaying important popup alerts on top of the screen.
  * Alerts are stacked and will be displayed sequentially
@@ -62,7 +61,7 @@ object PopupAlertManager {
             }
         }
 
-        //it could also be the current one
+        // it could also be the current one
         if (currentAlerter?.uid == uid) {
             weakCurrentActivity?.get()?.runOnUiThread {
                 Alerter.hide()
@@ -71,9 +70,8 @@ object PopupAlertManager {
         }
     }
 
-
     fun onNewActivityDisplayed(activity: Activity) {
-        //we want to remove existing popup on previous activity and display it on new one
+        // we want to remove existing popup on previous activity and display it on new one
         if (currentAlerter != null) {
             weakCurrentActivity?.get()?.let {
                 Alerter.clearCurrent(it)
@@ -89,8 +87,8 @@ object PopupAlertManager {
 
         if (currentAlerter != null) {
             if (currentAlerter!!.expirationTimestamp != null && System.currentTimeMillis() > currentAlerter!!.expirationTimestamp!!) {
-                //this alert has expired, remove it
-                //perform dismiss
+                // this alert has expired, remove it
+                // perform dismiss
                 try {
                     currentAlerter?.dismissedAction?.run()
                 } catch (e: Exception) {
@@ -112,11 +110,10 @@ object PopupAlertManager {
 
     private fun shouldIgnoreActivity(activity: Activity) = activity is SASVerificationActivity
 
-
     private fun displayNextIfPossible() {
         val currentActivity = weakCurrentActivity?.get()
         if (Alerter.isShowing || currentActivity == null) {
-            //will retry later
+            // will retry later
             return
         }
         val next: VectorAlert?
@@ -128,7 +125,7 @@ object PopupAlertManager {
         next?.let {
             val currentTime = System.currentTimeMillis()
             if (next.expirationTimestamp != null && currentTime > next.expirationTimestamp!!) {
-                //skip
+                // skip
                 try {
                     next.dismissedAction?.run()
                 } catch (e: java.lang.Exception) {
@@ -169,7 +166,6 @@ object PopupAlertManager {
                 .setTitle(alert.title)
                 .setText(alert.description)
                 .apply {
-
                     if (!animate) {
                         setEnterAnimation(R.anim.anim_alerter_no_anim)
                     }
@@ -188,7 +184,6 @@ object PopupAlertManager {
                             } catch (e: java.lang.Exception) {
                                 Timber.e("## failed to perform action")
                             }
-
                         })
                     }
                     setOnClickListener(View.OnClickListener { _ ->
@@ -202,10 +197,9 @@ object PopupAlertManager {
                             }
                         }
                     })
-
                 }
                 .setOnHideListener(OnHideAlertListener {
-                    //called when dismissed on swipe
+                    // called when dismissed on swipe
                     try {
                         alert.dismissedAction?.run()
                     } catch (e: java.lang.Exception) {
@@ -220,7 +214,7 @@ object PopupAlertManager {
     }
 
     private fun currentIsDismissed() {
-        //current alert has been hidden
+        // current alert has been hidden
         setLightStatusBar()
 
         currentAlerter = null
@@ -239,7 +233,7 @@ object PopupAlertManager {
 
         data class Button(val title: String, val action: Runnable, val autoClose: Boolean)
 
-        //will be set by manager, and accessible by actions at runtime
+        // will be set by manager, and accessible by actions at runtime
         var weakCurrentActivity: WeakReference<Activity>? = null
 
         val actions = ArrayList<Button>()

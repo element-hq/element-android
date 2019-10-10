@@ -31,6 +31,4 @@ internal class AccessTokenInterceptor @Inject constructor(private val credential
         request = newRequestBuilder.build()
         return chain.proceed(request)
     }
-
-
 }

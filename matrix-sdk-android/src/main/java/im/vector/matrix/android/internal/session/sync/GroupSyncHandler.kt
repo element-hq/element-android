@@ -63,7 +63,6 @@ internal class GroupSyncHandler @Inject constructor(private val monarchy: Monarc
                 handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_groups, 0.1f) {
                     handleLeftGroup(realm, it.key)
                 }
-
         }
 
         /** Note: [im.vector.matrix.android.internal.session.group.GroupSummaryUpdater] is observing changes */
@@ -82,7 +81,6 @@ internal class GroupSyncHandler @Inject constructor(private val monarchy: Monarc
         val groupEntity = GroupEntity.where(realm, groupId).findFirst() ?: GroupEntity(groupId)
         groupEntity.membership = Membership.INVITE
         return groupEntity
-
     }
 
     private fun handleLeftGroup(realm: Realm,

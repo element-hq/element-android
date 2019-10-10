@@ -63,7 +63,6 @@ open class UserAvatarPreference : Preference {
         } ?: run {
             avatarRenderer.render(null, session.myUserId, null, view)
         }
-
     }
 
     fun setSession(session: Session) {

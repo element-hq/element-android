@@ -36,9 +36,12 @@ import im.vector.riotx.core.utils.getDeviceLocale
 import im.vector.riotx.features.settings.VectorLocale
 import im.vector.riotx.features.themes.ThemeUtils
 import im.vector.riotx.features.version.VersionProvider
-import okhttp3.*
+import okhttp3.Call
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.Response
 import org.json.JSONException
 import org.json.JSONObject
 import timber.log.Timber
@@ -66,7 +69,6 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
         private const val CRASH_FILENAME = "crash.log"
 
         private const val BUFFER_SIZE = 1024 * 1024 * 50
-
     }
 
     // the http client
@@ -74,7 +76,6 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
 
     // the pending bug report call
     private var mBugReportCall: Call? = null
-
 
     // boolean to cancel the bug report
     private val mIsCancelled = false
@@ -87,14 +88,14 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
     var screenshot: Bitmap? = null
         private set
 
-    private val LOGCAT_CMD_ERROR = arrayOf("logcat", ///< Run 'logcat' command
-            "-d", ///< Dump the log rather than continue outputting it
+    private val LOGCAT_CMD_ERROR = arrayOf("logcat", // /< Run 'logcat' command
+            "-d", // /< Dump the log rather than continue outputting it
             "-v", // formatting
             "threadtime", // include timestamps
-            "AndroidRuntime:E " + ///< Pick all AndroidRuntime errors (such as uncaught exceptions)"communicatorjni:V " + ///< All communicatorjni logging
-                    "libcommunicator:V " + ///< All libcommunicator logging
-                    "DEBUG:V " + ///< All DEBUG logging - which includes native land crashes (seg faults, etc)
-                    "*:S" ///< Everything else silent, so don't pick it..
+            "AndroidRuntime:E " + // /< Pick all AndroidRuntime errors (such as uncaught exceptions)"communicatorjni:V " + ///< All communicatorjni logging
+                    "libcommunicator:V " + // /< All libcommunicator logging
+                    "DEBUG:V " + // /< All DEBUG logging - which includes native land crashes (seg faults, etc)
+                    "*:S" // /< Everything else silent, so don't pick it..
     )
 
     private val LOGCAT_CMD_DEBUG = arrayOf("logcat", "-d", "-v", "threadtime", "*:*")
@@ -148,7 +149,6 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
                       theBugDescription: String,
                       listener: IMXBugReportListener?) {
         object : AsyncTask<Void, Int, String>() {
-
             // enumerate files to delete
             val mBugReportFiles: MutableList<File> = ArrayList()
 
@@ -276,7 +276,6 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
                             } catch (e: Exception) {
                                 Timber.e(e, "## sendBugReport() : fail to write screenshot$e")
                             }
-
                         }
                     }
 
@@ -385,7 +384,6 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
                                 } catch (e: Exception) {
                                     Timber.e(e, "## sendBugReport() : failed to close the error stream")
                                 }
-
                             }
                         }
                     }
@@ -394,7 +392,6 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
                 return serverError
             }
 
-
             override fun onProgressUpdate(vararg progress: Int?) {
                 if (null != listener) {
                     try {
@@ -402,7 +399,6 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
                     } catch (e: Exception) {
                         Timber.e(e, "## onProgress() : failed")
                     }
-
                 }
             }
 
@@ -426,7 +422,6 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
                     } catch (e: Exception) {
                         Timber.e(e, "## onPostExecute() : failed")
                     }
-
                 }
             }
         }.execute()
@@ -443,9 +438,9 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
         activity.startActivity(intent)
     }
 
-    //==============================================================================================================
+    // ==============================================================================================================
     // crash report management
-    //==============================================================================================================
+    // ==============================================================================================================
 
     /**
      * Provides the crash file
@@ -498,7 +493,6 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
             } catch (e: Exception) {
                 Timber.e(e, "## saveCrashReport() : fail to write $e")
             }
-
         }
     }
 
@@ -525,15 +519,14 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
             } catch (e: Exception) {
                 Timber.e(e, "## getCrashDescription() : fail to read $e")
             }
-
         }
 
         return crashDescription
     }
 
-    //==============================================================================================================
+    // ==============================================================================================================
     // Screenshot management
-    //==============================================================================================================
+    // ==============================================================================================================
 
     /**
      * Take a screenshot of the display.
@@ -555,10 +548,13 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
             return null
         }
         // refresh it
+        @Suppress("DEPRECATION")
         rootView.isDrawingCacheEnabled = false
+        @Suppress("DEPRECATION")
         rootView.isDrawingCacheEnabled = true
 
         try {
+            @Suppress("DEPRECATION")
             var bitmap = rootView.drawingCache
 
             // Make a copy, because if Activity is destroyed, the bitmap will be recycled
@@ -574,9 +570,9 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
         return null
     }
 
-    //==============================================================================================================
+    // ==============================================================================================================
     // Logcat management
-    //==============================================================================================================
+    // ==============================================================================================================
 
     /**
      * Save the logcat
@@ -645,14 +641,13 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
                 } catch (e: IOException) {
                     Timber.e(e, "getLog fails with")
                 }
-
             }
         }
     }
 
-    //==============================================================================================================
+    // ==============================================================================================================
     // File compression management
-    //==============================================================================================================
+    // ==============================================================================================================
 
     /**
      * GZip a file
@@ -702,7 +697,6 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
             } catch (e: Exception) {
                 Timber.e(e, "## compressFile() failed to close inputStream")
             }
-
         }
 
         return null

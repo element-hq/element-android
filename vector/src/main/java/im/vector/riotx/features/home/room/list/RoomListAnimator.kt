@@ -28,5 +28,4 @@ class RoomListAnimator : DefaultItemAnimator() {
         moveDuration = 0
         changeDuration = 0
     }
-
 }

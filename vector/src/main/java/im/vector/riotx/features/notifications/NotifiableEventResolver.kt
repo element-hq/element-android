@@ -45,7 +45,7 @@ import javax.inject.Inject
 class NotifiableEventResolver @Inject constructor(private val stringProvider: StringProvider,
                                                   private val noticeEventFormatter: NoticeEventFormatter) {
 
-    //private val eventDisplay = RiotEventDisplay(context)
+    // private val eventDisplay = RiotEventDisplay(context)
 
     fun resolveEvent(event: Event/*, roomState: RoomState?, bingRule: PushRule?*/, session: Session): NotifiableEvent? {
         val roomID = event.roomId ?: return null
@@ -64,17 +64,16 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
                 return resolveStateRoomEvent(event, session)
             }
             else                        -> {
-
-                //If the event can be displayed, display it as is
+                // If the event can be displayed, display it as is
                 Timber.w("NotifiableEventResolver Received an unsupported event matching a bing rule")
-                //TODO Better event text display
+                // TODO Better event text display
                 val bodyPreview = event.type
 
                 return SimpleNotifiableEvent(
                         session.myUserId,
                         eventId = event.eventId!!,
                         editedEventId = timelineEvent.getEditedEventId(),
-                        noisy = false,//will be updated
+                        noisy = false, // will be updated
                         timestamp = event.originServerTs ?: System.currentTimeMillis(),
                         description = bodyPreview,
                         title = stringProvider.getString(R.string.notification_unknown_new_event),
@@ -85,13 +84,11 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
     }
 
     private fun resolveMessageEvent(event: TimelineEvent, session: Session): NotifiableEvent? {
-
-        //The event only contains an eventId, and roomId (type is m.room.*) , we need to get the displayable content (names, avatar, text, etc...)
+        // The event only contains an eventId, and roomId (type is m.room.*) , we need to get the displayable content (names, avatar, text, etc...)
         val room = session.getRoom(event.root.roomId!! /*roomID cannot be null*/)
 
-
         if (room == null) {
-            Timber.e("## Unable to resolve room for eventId [${event}]")
+            Timber.e("## Unable to resolve room for eventId [$event]")
             // Ok room is not known in store, but we can still display something
             val body =
                     event.getLastMessageBody()
@@ -103,7 +100,7 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
                     eventId = event.root.eventId!!,
                     editedEventId = event.getEditedEventId(),
                     timestamp = event.root.originServerTs ?: 0,
-                    noisy = false,//will be updated
+                    noisy = false, // will be updated
                     senderName = senderDisplayName,
                     senderId = event.root.senderId,
                     body = body,
@@ -114,8 +111,8 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
             return notifiableEvent
         } else {
             if (event.root.isEncrypted() && event.root.mxDecryptionResult == null) {
-                //TODO use a global event decryptor? attache to session and that listen to new sessionId?
-                //for now decrypt sync
+                // TODO use a global event decryptor? attache to session and that listen to new sessionId?
+                // for now decrypt sync
                 try {
                     val result = session.decryptEvent(event.root, event.root.roomId + UUID.randomUUID().toString())
                     event.root.mxDecryptionResult = OlmDecryptionResult(
@@ -125,7 +122,6 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
                             forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
                     )
                 } catch (e: MXCryptoError) {
-
                 }
             }
 
@@ -138,7 +134,7 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
                     eventId = event.root.eventId!!,
                     editedEventId = event.getEditedEventId(),
                     timestamp = event.root.originServerTs ?: 0,
-                    noisy = false,//will be updated
+                    noisy = false, // will be updated
                     senderName = senderDisplayName,
                     senderId = event.root.senderId,
                     body = body,
@@ -166,7 +162,6 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
         }
     }
 
-
     private fun resolveStateRoomEvent(event: Event, session: Session): NotifiableEvent? {
         val content = event.content?.toModel<RoomMember>() ?: return null
         val roomId = event.roomId ?: return null
@@ -180,20 +175,19 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
                     editedEventId = null,
                     roomId = roomId,
                     timestamp = event.originServerTs ?: 0,
-                    noisy = false,//will be set later
+                    noisy = false, // will be set later
                     title = stringProvider.getString(R.string.notification_new_invitation),
                     description = body.toString(),
-                    soundName = null, //will be set later
+                    soundName = null, // will be set later
                     type = event.getClearType(),
                     isPushGatewayEvent = false)
         } else {
             Timber.e("## unsupported notifiable event for eventId [${event.eventId}]")
             if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
-                Timber.e("## unsupported notifiable event for event [${event}]")
+                Timber.e("## unsupported notifiable event for event [$event]")
             }
-            //TODO generic handling?
+            // TODO generic handling?
         }
         return null
     }
 }
-

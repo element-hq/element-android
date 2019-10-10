@@ -19,7 +19,6 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.internal.di.MoshiProvider
 
-
 /**
  * Class which can be parsed to a filter json string. Used for POST and GET
  * Have a look here for further information:

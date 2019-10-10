@@ -28,7 +28,6 @@ class TestDeviceSettings @Inject constructor(private val vectorPreferences: Vect
     : TroubleshootTest(R.string.settings_troubleshoot_test_device_settings_title) {
 
     override fun perform() {
-
         if (vectorPreferences.areNotificationEnabledForDevice()) {
             description = stringProvider.getString(R.string.settings_troubleshoot_test_device_settings_success)
             quickFix = null

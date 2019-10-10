@@ -106,5 +106,4 @@ class FabMenuView @JvmOverloads constructor(context: Context, attrs: AttributeSe
         fun createDirectChat()
         fun openRoomDirectory(initialFilter: String = "")
     }
-
 }

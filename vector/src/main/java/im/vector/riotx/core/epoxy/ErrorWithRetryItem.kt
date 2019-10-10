@@ -36,7 +36,6 @@ abstract class ErrorWithRetryItem : VectorEpoxyModel<ErrorWithRetryItem.Holder>(
         holder.buttonView.setOnClickListener { listener?.invoke() }
     }
 
-
     class Holder : VectorEpoxyHolder() {
         val textView by bind<TextView>(R.id.itemErrorRetryText)
         val buttonView by bind<Button>(R.id.itemErrorRetryButton)

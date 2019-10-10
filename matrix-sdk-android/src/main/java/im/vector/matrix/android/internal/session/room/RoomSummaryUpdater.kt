@@ -91,7 +91,7 @@ internal class RoomSummaryUpdater @Inject constructor(@UserId private val userId
         val lastTopicEvent = EventEntity.where(realm, roomId, EventType.STATE_ROOM_TOPIC).prev()?.asDomain()
 
         roomSummaryEntity.hasUnreadMessages = roomSummaryEntity.notificationCount > 0
-                //avoid this call if we are sure there are unread events
+                // avoid this call if we are sure there are unread events
                 || !isEventRead(monarchy, userId, roomId, latestPreviewableEvent?.eventId)
 
         val otherRoomMembers = RoomMembers(realm, roomId)

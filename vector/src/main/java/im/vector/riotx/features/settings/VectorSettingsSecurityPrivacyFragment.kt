@@ -23,7 +23,6 @@ import android.content.Intent
 import android.graphics.Typeface
 import android.text.TextUtils
 import android.view.KeyEvent
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -73,7 +72,6 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
     private var mDevicesNameList: List<DeviceInfo> = ArrayList()
 
     private var mMyDeviceInfo: DeviceInfo? = null
-
 
     // cryptography
     private val mCryptographyCategory by lazy {
@@ -143,7 +141,7 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
         // Device list
         refreshDevicesList()
 
-        //Refresh Key Management section
+        // Refresh Key Management section
         refreshKeysManagementSection()
 
         // Analytics
@@ -188,10 +186,9 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
         }
     }
 
-
     private fun refreshKeysManagementSection() {
-        //If crypto is not enabled parent section will be removed
-        //TODO notice that this will not work when no network
+        // If crypto is not enabled parent section will be removed
+        // TODO notice that this will not work when no network
         manageBackupPref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             context?.let {
                 startActivity(KeysBackupManageActivity.intent(it))
@@ -240,7 +237,6 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
                                             override fun onFailure(failure: Throwable) {
                                                 onCommonDone(failure.localizedMessage)
                                             }
-
                                         })
                     }
                 })
@@ -318,7 +314,7 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
 
             val importDialog = builder.show()
 
-            importButton.setOnClickListener(View.OnClickListener {
+            importButton.setOnClickListener {
                 val password = passPhraseEditText.text.toString()
 
                 displayLoadingView()
@@ -351,13 +347,13 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
                                 })
 
                 importDialog.dismiss()
-            })
+            }
         }
     }
 
-    //==============================================================================================================
+    // ==============================================================================================================
     // Cryptography
-    //==============================================================================================================
+    // ==============================================================================================================
 
     private fun removeCryptographyPreference() {
         preferenceScreen.let {
@@ -433,10 +429,9 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
         }
     }
 
-
-    //==============================================================================================================
+    // ==============================================================================================================
     // devices list
-    //==============================================================================================================
+    // ==============================================================================================================
 
     private fun removeDevicesPreference() {
         preferenceScreen.let {
@@ -565,9 +560,7 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
      * @param aDeviceInfo the device information
      */
     private fun displayDeviceDetailsDialog(aDeviceInfo: DeviceInfo) {
-
         activity?.let {
-
             val builder = AlertDialog.Builder(it)
             val inflater = it.layoutInflater
             val layout = inflater.inflate(R.layout.dialog_device_details, null)
@@ -586,7 +579,7 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
             val lastSeenIp = aDeviceInfo.lastSeenIp?.takeIf { ip -> ip.isNotBlank() } ?: "-"
 
             val lastSeenTime = aDeviceInfo.lastSeenTs?.let { ts ->
-                val dateFormatTime = SimpleDateFormat("HH:mm:ss")
+                val dateFormatTime = SimpleDateFormat("HH:mm:ss", Locale.ROOT)
                 val date = Date(ts)
 
                 val time = dateFormatTime.format(date)
@@ -605,7 +598,7 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
                     .setPositiveButton(R.string.rename) { _, _ -> displayDeviceRenameDialog(aDeviceInfo) }
 
             // disable the deletion for our own device
-            if (!TextUtils.equals(session.getMyDevice()?.deviceId, aDeviceInfo.deviceId)) {
+            if (!TextUtils.equals(session.getMyDevice().deviceId, aDeviceInfo.deviceId)) {
                 builder.setNegativeButton(R.string.delete) { _, _ -> deleteDevice(aDeviceInfo) }
             }
 
@@ -709,7 +702,6 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
                     if (isPasswordRequestFound) {
                         maybeShowDeleteDeviceWithPasswordDialog(deviceId, failure.registrationFlowResponse.session)
                     }
-
                 }
 
                 if (!isPasswordRequestFound) {
@@ -776,15 +768,15 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
         })
     }
 
-    //==============================================================================================================
+    // ==============================================================================================================
     // pushers list management
-    //==============================================================================================================
+    // ==============================================================================================================
 
     /**
      * Refresh the pushers list
      */
     private fun refreshPushersList() {
-        activity?.let { activity ->
+        activity?.let { _ ->
             /* TODO
             val pushManager = Matrix.getInstance(activity).pushManager
             val pushersList = ArrayList(pushManager.mPushersList)

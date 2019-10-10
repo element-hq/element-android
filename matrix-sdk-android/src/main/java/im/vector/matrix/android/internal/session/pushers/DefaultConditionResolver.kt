@@ -26,7 +26,6 @@ internal class DefaultConditionResolver(private val event: Event,
                                         private val roomService: RoomService,
                                         @UserId private val userId: String) : ConditionResolver {
 
-
     override fun resolveEventMatchCondition(eventMatchCondition: EventMatchCondition): Boolean {
         return eventMatchCondition.isSatisfied(event)
     }
@@ -38,9 +37,9 @@ internal class DefaultConditionResolver(private val event: Event,
     override fun resolveSenderNotificationPermissionCondition(senderNotificationPermissionCondition: SenderNotificationPermissionCondition): Boolean {
 //        val roomId = event.roomId ?: return false
 //        val room = roomService.getRoom(roomId) ?: return false
-        //TODO RoomState not yet managed
+        // TODO RoomState not yet managed
         Timber.e("POWER LEVELS STATE NOT YET MANAGED BY RIOTX")
-        return false //senderNotificationPermissionCondition.isSatisfied(event, )
+        return false // senderNotificationPermissionCondition.isSatisfied(event, )
     }
 
     override fun resolveContainsDisplayNameCondition(containsDisplayNameCondition: ContainsDisplayNameCondition): Boolean {

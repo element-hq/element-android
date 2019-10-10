@@ -34,7 +34,7 @@ import javax.inject.Inject
 class VectorConfiguration @Inject constructor(private val context: Context) {
 
     // TODO Import mLanguageReceiver From Riot?
-    fun onConfigurationChanged(newConfig: Configuration?) {
+    fun onConfigurationChanged() {
         if (Locale.getDefault().toString() != VectorLocale.applicationLocale.toString()) {
             Timber.v("## onConfigurationChanged() : the locale has been updated to " + Locale.getDefault().toString()
                      + ", restore the expected value " + VectorLocale.applicationLocale.toString())
@@ -44,15 +44,16 @@ class VectorConfiguration @Inject constructor(private val context: Context) {
         }
     }
 
-
     private fun updateApplicationSettings(locale: Locale, textSize: String, theme: String) {
         VectorLocale.saveApplicationLocale(context, locale)
         FontScale.saveFontScale(context, textSize)
         Locale.setDefault(locale)
 
         val config = Configuration(context.resources.configuration)
+        @Suppress("DEPRECATION")
         config.locale = locale
         config.fontScale = FontScale.getFontScale(context)
+        @Suppress("DEPRECATION")
         context.resources.updateConfiguration(config, context.resources.displayMetrics)
 
         ThemeUtils.setApplicationTheme(context, theme)
@@ -82,8 +83,10 @@ class VectorConfiguration @Inject constructor(private val context: Context) {
 
         Locale.setDefault(locale)
         val config = Configuration(context.resources.configuration)
+        @Suppress("DEPRECATION")
         config.locale = locale
         config.fontScale = fontScale
+        @Suppress("DEPRECATION")
         context.resources.updateConfiguration(config, context.resources.displayMetrics)
 
         // init the theme
@@ -119,10 +122,12 @@ class VectorConfiguration @Inject constructor(private val context: Context) {
                 configuration.setLayoutDirection(locale)
                 return context.createConfigurationContext(configuration)
             } else {
+                @Suppress("DEPRECATION")
                 configuration.locale = locale
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                     configuration.setLayoutDirection(locale)
                 }
+                @Suppress("DEPRECATION")
                 resources.updateConfiguration(configuration, resources.displayMetrics)
                 return context
             }
@@ -135,7 +140,6 @@ class VectorConfiguration @Inject constructor(private val context: Context) {
 
     /**
      * Compute the locale status value
-     * @param activity the activity
      * @return the local status value
      */
     // TODO Create data class for this

@@ -48,12 +48,9 @@ abstract class RoomCategoryItem : VectorEpoxyModel<RoomCategoryItem.Holder>() {
         holder.rootView.setOnClickListener { listener?.invoke() }
     }
 
-
     class Holder : VectorEpoxyHolder() {
         val unreadCounterBadgeView by bind<UnreadCounterBadgeView>(R.id.roomCategoryUnreadCounterBadgeView)
         val titleView by bind<TextView>(R.id.roomCategoryTitleView)
         val rootView by bind<ViewGroup>(R.id.roomCategoryRootView)
     }
-
 }
-

@@ -22,9 +22,7 @@ internal object NetworkConstants {
     const val URI_API_PREFIX_PATH_R0 = "$URI_API_PREFIX_PATH/r0/"
     const val URI_API_PREFIX_PATH_UNSTABLE = "$URI_API_PREFIX_PATH/unstable/"
 
-
     // Media
     private const val URI_API_MEDIA_PREFIX_PATH = "_matrix/media"
     const val URI_API_MEDIA_PREFIX_PATH_R0 = "$URI_API_MEDIA_PREFIX_PATH/r0/"
-
 }

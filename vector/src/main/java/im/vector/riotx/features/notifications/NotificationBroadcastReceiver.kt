@@ -38,7 +38,6 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
 
-
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent == null || context == null) return
         Timber.v("NotificationBroadcastReceiver received : $intent")
@@ -98,11 +97,10 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
         val roomId = intent.getStringExtra(KEY_ROOM_ID)
 
         if (message.isNullOrBlank() || roomId.isBlank()) {
-            //ignore this event
-            //Can this happen? should we update notification?
+            // ignore this event
+            // Can this happen? should we update notification?
             return
         }
-        val matrixId = intent.getStringExtra(EXTRA_MATRIX_ID)
         activeSessionHolder.getActiveSession().let { session ->
             session.getRoom(roomId)?.let { room ->
                 sendMatrixEvent(message, session, room, context)
@@ -111,7 +109,6 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
     }
 
     private fun sendMatrixEvent(message: String, session: Session, room: Room, context: Context?) {
-
         room.sendTextMessage(message)
 
         // Create a new event to be displayed in the notification drawer, right now
@@ -189,7 +186,6 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
         */
     }
 
-
     private fun getReplyMessage(intent: Intent?): String? {
         if (intent != null) {
             val remoteInput = RemoteInput.getResultsFromIntent(intent)
@@ -203,6 +199,5 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
     companion object {
         const val KEY_ROOM_ID = "roomID"
         const val KEY_TEXT_REPLY = "key_text_reply"
-        const val EXTRA_MATRIX_ID = "EXTRA_MATRIX_ID"
     }
 }

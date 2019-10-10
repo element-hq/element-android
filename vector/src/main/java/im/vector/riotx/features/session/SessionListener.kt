@@ -41,5 +41,4 @@ class SessionListener @Inject constructor() : Session.Listener {
     override fun onConsentNotGivenError(consentNotGivenError: ConsentNotGivenError) {
         _consentNotGivenLiveData.postLiveEvent(consentNotGivenError)
     }
-
 }

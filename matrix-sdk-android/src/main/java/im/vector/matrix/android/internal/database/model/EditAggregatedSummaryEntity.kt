@@ -30,5 +30,4 @@ internal open class EditAggregatedSummaryEntity(
 ) : RealmObject() {
 
     companion object
-
 }

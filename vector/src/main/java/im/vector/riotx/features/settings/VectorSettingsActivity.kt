@@ -36,7 +36,6 @@ class VectorSettingsActivity : VectorBaseActivity(),
         FragmentManager.OnBackStackChangedListener,
         VectorSettingsFragmentInteractionListener {
 
-
     override fun getLayoutRes() = R.layout.activity_vector_settings
 
     override fun getTitleRes() = R.string.title_activity_settings
@@ -77,9 +76,9 @@ class VectorSettingsActivity : VectorBaseActivity(),
     override fun onPreferenceStartFragment(caller: PreferenceFragmentCompat, pref: Preference): Boolean {
         val oFragment = when {
             VectorPreferences.SETTINGS_NOTIFICATION_TROUBLESHOOT_PREFERENCE_KEY == pref.key ->
-                VectorSettingsNotificationsTroubleshootFragment.newInstance(session.myUserId)
+                VectorSettingsNotificationsTroubleshootFragment.newInstance()
             VectorPreferences.SETTINGS_NOTIFICATION_ADVANCED_PREFERENCE_KEY == pref.key     ->
-                VectorSettingsAdvancedNotificationPreferenceFragment.newInstance(session.myUserId)
+                VectorSettingsAdvancedNotificationPreferenceFragment.newInstance()
             else                                                                            ->
                 try {
                     pref.fragment?.let {
@@ -105,7 +104,6 @@ class VectorSettingsActivity : VectorBaseActivity(),
         return false
     }
 
-
     override fun requestHighlightPreferenceKeyOnResume(key: String?) {
         keyToHighlight = key
     }
@@ -115,10 +113,7 @@ class VectorSettingsActivity : VectorBaseActivity(),
     }
 
     companion object {
-        fun getIntent(context: Context, userId: String) = Intent(context, VectorSettingsActivity::class.java)
-                .apply {
-                    //putExtra(MXCActionBarActivity.EXTRA_MATRIX_ID, userId)
-                }
+        fun getIntent(context: Context) = Intent(context, VectorSettingsActivity::class.java)
 
         private const val FRAGMENT_TAG = "VectorSettingsPreferencesFragment"
     }

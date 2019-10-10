@@ -27,7 +27,6 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import im.vector.riotx.R
 
-
 class TestLinkifyActivity : AppCompatActivity() {
 
     @BindView(R.id.test_linkify_content_view)
@@ -35,7 +34,6 @@ class TestLinkifyActivity : AppCompatActivity() {
 
     @BindView(R.id.test_linkify_coordinator)
     lateinit var coordinatorLayout: CoordinatorLayout
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

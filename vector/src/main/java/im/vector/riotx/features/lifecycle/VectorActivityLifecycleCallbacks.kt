@@ -44,5 +44,4 @@ class VectorActivityLifecycleCallbacks @Inject constructor() : Application.Activ
 
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
     }
-
 }

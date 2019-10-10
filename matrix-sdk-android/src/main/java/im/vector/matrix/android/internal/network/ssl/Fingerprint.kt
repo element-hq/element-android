@@ -80,5 +80,4 @@ data class Fingerprint(
         @Json(name = "sha-1") SHA1,
         @Json(name = "sha-256")SHA256
     }
-
 }

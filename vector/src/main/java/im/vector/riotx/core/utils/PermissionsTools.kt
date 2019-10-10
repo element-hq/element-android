@@ -31,7 +31,6 @@ import im.vector.riotx.R
 import timber.log.Timber
 import java.util.*
 
-
 private const val LOG_TAG = "PermissionUtils"
 
 // Android M permission request code management
@@ -83,14 +82,14 @@ fun logPermissionStatuses(context: Context) {
 
         for (permission in permissions) {
             Timber.v(("Status of [$permission] : " +
-                      if (PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(context, permission))
-                          "PERMISSION_GRANTED"
-                      else
-                          "PERMISSION_DENIED"))
+                    if (PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(context, permission)) {
+                        "PERMISSION_GRANTED"
+                    } else {
+                        "PERMISSION_DENIED"
+                    }))
         }
     }
 }
-
 
 /**
  * See [.checkPermissions]
@@ -149,13 +148,13 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
     } else if (PERMISSIONS_EMPTY == permissionsToBeGrantedBitMap) {
         isPermissionGranted = true
     } else if (PERMISSIONS_FOR_AUDIO_IP_CALL != permissionsToBeGrantedBitMap
-               && PERMISSIONS_FOR_VIDEO_IP_CALL != permissionsToBeGrantedBitMap
-               && PERMISSIONS_FOR_TAKING_PHOTO != permissionsToBeGrantedBitMap
-               && PERMISSIONS_FOR_MEMBERS_SEARCH != permissionsToBeGrantedBitMap
-               && PERMISSIONS_FOR_MEMBER_DETAILS != permissionsToBeGrantedBitMap
-               && PERMISSIONS_FOR_ROOM_AVATAR != permissionsToBeGrantedBitMap
-               && PERMISSIONS_FOR_VIDEO_RECORDING != permissionsToBeGrantedBitMap
-               && PERMISSIONS_FOR_WRITING_FILES != permissionsToBeGrantedBitMap) {
+            && PERMISSIONS_FOR_VIDEO_IP_CALL != permissionsToBeGrantedBitMap
+            && PERMISSIONS_FOR_TAKING_PHOTO != permissionsToBeGrantedBitMap
+            && PERMISSIONS_FOR_MEMBERS_SEARCH != permissionsToBeGrantedBitMap
+            && PERMISSIONS_FOR_MEMBER_DETAILS != permissionsToBeGrantedBitMap
+            && PERMISSIONS_FOR_ROOM_AVATAR != permissionsToBeGrantedBitMap
+            && PERMISSIONS_FOR_VIDEO_RECORDING != permissionsToBeGrantedBitMap
+            && PERMISSIONS_FOR_WRITING_FILES != permissionsToBeGrantedBitMap) {
         Timber.w("## checkPermissions(): permissions to be granted are not supported")
         isPermissionGranted = false
     } else {
@@ -206,7 +205,7 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
             if (permissionsToBeGrantedBitMap == PERMISSIONS_FOR_VIDEO_IP_CALL || permissionsToBeGrantedBitMap == PERMISSIONS_FOR_AUDIO_IP_CALL) {
                 // Permission request for VOIP call
                 if (permissionListAlreadyDenied.contains(Manifest.permission.CAMERA)
-                    && permissionListAlreadyDenied.contains(Manifest.permission.RECORD_AUDIO)) {
+                        && permissionListAlreadyDenied.contains(Manifest.permission.RECORD_AUDIO)) {
                     // Both missing
                     explanationMessage += activity.getString(R.string.permissions_rationale_msg_camera_and_audio)
                 } else if (permissionListAlreadyDenied.contains(Manifest.permission.RECORD_AUDIO)) {
@@ -258,9 +257,9 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
                     .setPositiveButton(R.string.ok) { _, _ ->
                         if (!permissionsListToBeGranted.isEmpty()) {
                             fragment?.requestPermissions(permissionsListToBeGranted.toTypedArray(), requestCode)
-                            ?: run {
-                                ActivityCompat.requestPermissions(activity, permissionsListToBeGranted.toTypedArray(), requestCode)
-                            }
+                                    ?: run {
+                                        ActivityCompat.requestPermissions(activity, permissionsListToBeGranted.toTypedArray(), requestCode)
+                                    }
                         }
                     }
                     .show()
@@ -311,7 +310,6 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
 
     return isPermissionGranted
 }
-
 
 /**
  * Helper method used in [.checkPermissions] to populate the list of the

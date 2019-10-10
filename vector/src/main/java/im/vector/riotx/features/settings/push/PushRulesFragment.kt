@@ -38,7 +38,6 @@ class PushRulesFragment : VectorBaseFragment() {
 
     private val epoxyController by lazy { PushRulesController(StringProvider(requireContext().resources)) }
 
-
     override fun onResume() {
         super.onResume()
         (activity as? VectorBaseActivity)?.supportActionBar?.setTitle(R.string.settings_push_rules)
@@ -75,6 +74,5 @@ class PushRulesFragment : VectorBaseFragment() {
                 }
             }
         }
-
     }
 }

@@ -144,7 +144,6 @@ internal class TimelineHiddenReadReceipts constructor(private val readReceiptsSu
         return correctedReadReceiptsByEvent[eventId]
     }
 
-
     /**
      * We are looking for receipts related to filtered events. So, it's the opposite of [DefaultTimeline.filterEventsWithSettings] method.
      */
@@ -162,6 +161,4 @@ internal class TimelineHiddenReadReceipts constructor(private val readReceiptsSu
         endGroup()
         return this
     }
-
-
 }

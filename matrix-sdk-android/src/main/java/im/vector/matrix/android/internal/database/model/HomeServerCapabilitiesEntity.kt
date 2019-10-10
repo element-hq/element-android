@@ -25,5 +25,4 @@ internal open class HomeServerCapabilitiesEntity(
 ) : RealmObject() {
 
     companion object
-
 }

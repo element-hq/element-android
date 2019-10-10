@@ -30,5 +30,5 @@ internal data class GroupSummaryRoomsSection(
         @Json(name = "rooms") val rooms: List<String> = emptyList()
 
         // @TODO: Check the meaning and the usage of these categories. This dictionary is empty FTM.
-        //public Map<Object, Object> categories;
+        // public Map<Object, Object> categories;
 )

@@ -28,7 +28,6 @@ class VectorSettingsLabsFragment : VectorSettingsBaseFragment() {
 //        val useCryptoPref = findPreference(VectorPreferences.SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_PREFERENCE_KEY) as SwitchPreference
 //        val cryptoIsEnabledPref = findPreference(VectorPreferences.SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_IS_ACTIVE_PREFERENCE_KEY)
 
-
         if (session.isCryptoEnabled()) {
 //            mLabsCategory.removePreference(useCryptoPref)
 //
@@ -115,5 +114,4 @@ class VectorSettingsLabsFragment : VectorSettingsBaseFragment() {
 //            true
 //        }
     }
-
 }

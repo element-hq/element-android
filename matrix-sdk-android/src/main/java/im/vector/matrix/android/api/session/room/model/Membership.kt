@@ -43,5 +43,4 @@ enum class Membership(val value: String) {
     fun isLeft(): Boolean {
         return this == KNOCK || this == LEAVE || this == BAN
     }
-
 }

@@ -56,5 +56,4 @@ data class RoomDetailViewState(
 ) : MvRxState {
 
     constructor(args: RoomDetailArgs) : this(roomId = args.roomId, eventId = args.eventId)
-
 }

@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.task
 
-
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.di.MatrixScope
 import im.vector.matrix.android.internal.extensions.foldToCallback
@@ -35,7 +34,6 @@ internal class TaskExecutor @Inject constructor(private val coroutineDispatchers
     private val executorScope = CoroutineScope(SupervisorJob())
 
     fun <PARAMS, RESULT> execute(task: ConfigurableTask<PARAMS, RESULT>): Cancelable {
-
         val job = executorScope.launch(task.callbackThread.toDispatcher()) {
             val resultOrFailure = runCatching {
                 withContext(task.executionThread.toDispatcher()) {
@@ -61,14 +59,12 @@ internal class TaskExecutor @Inject constructor(private val coroutineDispatchers
 
     fun cancelAll() = executorScope.coroutineContext.cancelChildren()
 
-
     private suspend fun <T> retry(
             times: Int = Int.MAX_VALUE,
             initialDelay: Long = 100, // 0.1 second
             maxDelay: Long = 10_000,    // 10 second
             factor: Double = 2.0,
             block: suspend () -> T): T {
-
         var currentDelay = initialDelay
         repeat(times - 1) {
             try {
@@ -90,6 +86,4 @@ internal class TaskExecutor @Inject constructor(private val coroutineDispatchers
         TaskThread.CRYPTO      -> coroutineDispatchers.crypto
         TaskThread.SYNC        -> coroutineDispatchers.sync
     }
-
-
 }

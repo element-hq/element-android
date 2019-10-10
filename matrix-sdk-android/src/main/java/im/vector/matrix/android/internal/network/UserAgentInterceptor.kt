@@ -34,5 +34,4 @@ internal class UserAgentInterceptor @Inject constructor(private val userAgentHol
         request = newRequestBuilder.build()
         return chain.proceed(request)
     }
-
 }

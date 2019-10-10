@@ -28,15 +28,7 @@ import im.vector.matrix.android.api.permalinks.MatrixLinkify
 import im.vector.matrix.android.api.permalinks.MatrixPermalinkSpan
 import im.vector.matrix.android.api.session.events.model.RelationType
 import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.message.MessageAudioContent
-import im.vector.matrix.android.api.session.room.model.message.MessageContent
-import im.vector.matrix.android.api.session.room.model.message.MessageEmoteContent
-import im.vector.matrix.android.api.session.room.model.message.MessageFileContent
-import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
-import im.vector.matrix.android.api.session.room.model.message.MessageNoticeContent
-import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
-import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
-import im.vector.matrix.android.api.session.room.model.message.getFileUrl
+import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
@@ -47,17 +39,10 @@ import im.vector.riotx.core.linkify.VectorLinkify
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.utils.DebouncedClickListener
-import im.vector.riotx.core.utils.DimensionConverter
-import im.vector.riotx.core.utils.containsOnlyEmojis
 import im.vector.riotx.core.utils.isLocalFile
-import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
-import im.vector.riotx.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
-import im.vector.riotx.features.home.room.detail.timeline.helper.AvatarSizeProvider
-import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
+import im.vector.riotx.features.home.room.detail.timeline.helper.*
 import im.vector.riotx.features.home.room.detail.timeline.item.*
-import im.vector.riotx.features.home.room.detail.timeline.helper.MessageInformationDataFactory
-import im.vector.riotx.features.home.room.detail.timeline.helper.MessageItemAttributesFactory
 import im.vector.riotx.features.html.EventHtmlRenderer
 import im.vector.riotx.features.media.ImageContentRenderer
 import im.vector.riotx.features.media.VideoContentRenderer
@@ -77,7 +62,6 @@ class MessageItemFactory @Inject constructor(
         private val noticeItemFactory: NoticeItemFactory,
         private val avatarSizeProvider: AvatarSizeProvider) {
 
-
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
                highlight: Boolean,
@@ -89,7 +73,7 @@ class MessageItemFactory @Inject constructor(
         val informationData = messageInformationDataFactory.create(event, nextEvent, readMarkerVisible)
 
         if (event.root.isRedacted()) {
-            //message is redacted
+            // message is redacted
             val attributes = messageItemAttributesFactory.create(null, informationData, callback)
             return buildRedactedItem(attributes, highlight)
         }
@@ -130,6 +114,7 @@ class MessageItemFactory @Inject constructor(
     }
 
     private fun buildAudioMessageItem(messageContent: MessageAudioContent,
+                                      @Suppress("UNUSED_PARAMETER")
                                       informationData: MessageInformationData,
                                       highlight: Boolean,
                                       callback: TimelineEventController.Callback?,
@@ -162,7 +147,7 @@ class MessageItemFactory @Inject constructor(
                 .filename(messageContent.body)
                 .iconRes(R.drawable.filetype_attachment)
                 .clickListener(
-                        DebouncedClickListener(View.OnClickListener { _ ->
+                        DebouncedClickListener(View.OnClickListener {
                             callback?.onFileMessageClicked(informationData.eventId, messageContent)
                         }))
     }
@@ -176,11 +161,11 @@ class MessageItemFactory @Inject constructor(
     }
 
     private fun buildImageMessageItem(messageContent: MessageImageContent,
+                                      @Suppress("UNUSED_PARAMETER")
                                       informationData: MessageInformationData,
                                       highlight: Boolean,
                                       callback: TimelineEventController.Callback?,
                                       attributes: AbsMessageItem.Attributes): MessageImageVideoItem? {
-
         val (maxWidth, maxHeight) = timelineMediaSizeProvider.getMaxSize()
         val data = ImageContentRenderer.Data(
                 filename = messageContent.body,
@@ -210,7 +195,6 @@ class MessageItemFactory @Inject constructor(
                                       highlight: Boolean,
                                       callback: TimelineEventController.Callback?,
                                       attributes: AbsMessageItem.Attributes): MessageImageVideoItem? {
-
         val (maxWidth, maxHeight) = timelineMediaSizeProvider.getMaxSize()
         val thumbnailData = ImageContentRenderer.Data(
                 filename = messageContent.body,
@@ -247,7 +231,6 @@ class MessageItemFactory @Inject constructor(
                                      highlight: Boolean,
                                      callback: TimelineEventController.Callback?,
                                      attributes: AbsMessageItem.Attributes): MessageTextItem? {
-
         val isFormatted = messageContent.formattedBody.isNullOrBlank().not()
         val bodyToUse = messageContent.formattedBody?.let {
             htmlRenderer.get().render(it.trim())
@@ -269,7 +252,7 @@ class MessageItemFactory @Inject constructor(
                 .attributes(attributes)
                 .highlighted(highlight)
                 .urlClickCallback(callback)
-        //click on the text
+        // click on the text
     }
 
     private fun annotateWithEdited(linkifiedBody: CharSequence,
@@ -295,7 +278,7 @@ class MessageItemFactory @Inject constructor(
             }
 
             override fun updateDrawState(ds: TextPaint?) {
-                //nop
+                // nop
             }
         },
                 editStart,
@@ -305,11 +288,11 @@ class MessageItemFactory @Inject constructor(
     }
 
     private fun buildNoticeMessageItem(messageContent: MessageNoticeContent,
+                                       @Suppress("UNUSED_PARAMETER")
                                        informationData: MessageInformationData,
                                        highlight: Boolean,
                                        callback: TimelineEventController.Callback?,
                                        attributes: AbsMessageItem.Attributes): MessageTextItem? {
-
         val message = messageContent.body.let {
             val formattedBody = span {
                 text = it
@@ -331,7 +314,6 @@ class MessageItemFactory @Inject constructor(
                                       highlight: Boolean,
                                       callback: TimelineEventController.Callback?,
                                       attributes: AbsMessageItem.Attributes): MessageTextItem? {
-
         val message = messageContent.body.let {
             val formattedBody = "* ${informationData.memberName} $it"
             linkifyBody(formattedBody, callback)

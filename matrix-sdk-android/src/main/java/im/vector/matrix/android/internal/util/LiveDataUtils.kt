@@ -24,7 +24,6 @@ object LiveDataUtils {
     fun <FIRST, SECOND, OUT> combine(firstSource: LiveData<FIRST>,
                                      secondSource: LiveData<SECOND>,
                                      mapper: (FIRST, SECOND) -> OUT): LiveData<OUT> {
-
         return MediatorLiveData<OUT>().apply {
             var firstValue: FIRST? = null
             var secondValue: SECOND? = null
@@ -38,7 +37,6 @@ object LiveDataUtils {
                 }
             }
 
-
             addSource(firstSource) {
                 firstValue = it
                 valueDispatcher()
@@ -50,5 +48,4 @@ object LiveDataUtils {
             }
         }
     }
-
 }

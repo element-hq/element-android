@@ -21,7 +21,6 @@ import im.vector.matrix.android.internal.network.NetworkConstants
 import retrofit2.Call
 import retrofit2.http.*
 
-
 internal interface PushRulesApi {
     /**
      * Get all push rules
@@ -42,7 +41,6 @@ internal interface PushRulesApi {
                                @Body enable: Boolean?)
             : Call<Unit>
 
-
     /**
      * Update the ruleID action
      *
@@ -55,7 +53,6 @@ internal interface PushRulesApi {
                           @Path("ruleId") ruleId: String,
                           @Body actions: Any)
             : Call<Unit>
-
 
     /**
      * Delete a rule

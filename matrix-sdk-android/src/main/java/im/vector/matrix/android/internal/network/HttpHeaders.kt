@@ -20,5 +20,4 @@ object HttpHeaders {
 
     const val Authorization = "Authorization"
     const val UserAgent = "User-Agent"
-
 }

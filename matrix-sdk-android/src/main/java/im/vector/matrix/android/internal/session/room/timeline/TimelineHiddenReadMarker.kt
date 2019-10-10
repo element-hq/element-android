@@ -87,7 +87,6 @@ internal class TimelineHiddenReadMarker constructor(private val roomId: String,
         }
     }
 
-
     /**
      * Start the realm query subscription. Has to be called on an HandlerThread
      */
@@ -105,7 +104,6 @@ internal class TimelineHiddenReadMarker constructor(private val roomId: String,
                 .filterReceiptsWithSettings()
                 .findAllAsync()
                 .also { it.addChangeListener(readMarkerListener) }
-
     }
 
     /**
@@ -132,6 +130,4 @@ internal class TimelineHiddenReadMarker constructor(private val roomId: String,
         endGroup()
         return this
     }
-
-
 }

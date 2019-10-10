@@ -40,7 +40,7 @@ class EmojiChooserViewModel @Inject constructor() : ViewModel() {
     }
 
     fun initWithContect(context: Context) {
-        //TODO load async
+        // TODO load async
         val emojiDataSource = EmojiDataSource(context)
         emojiSourceLiveData.value = emojiDataSource
         adapter = EmojiRecyclerAdapter(emojiDataSource, reactionClickListener)
@@ -48,7 +48,6 @@ class EmojiChooserViewModel @Inject constructor() : ViewModel() {
             override fun firstVisibleSectionChange(section: Int) {
                 currentSection.value = section
             }
-
         }
     }
 

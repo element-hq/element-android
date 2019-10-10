@@ -48,4 +48,3 @@ data class RoomSummary(
     val hasNewMessages: Boolean
         get() = notificationCount != 0
 }
-

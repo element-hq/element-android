@@ -39,6 +39,4 @@ abstract class VectorEpoxyModel<H : VectorEpoxyHolder> : EpoxyModelWithHolder<H>
     interface OnVisibilityStateChangedListener {
         fun onVisibilityStateChanged(@VisibilityState.Visibility visibilityState: Int)
     }
-
-
 }

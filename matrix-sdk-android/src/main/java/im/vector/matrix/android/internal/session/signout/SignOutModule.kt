@@ -41,5 +41,4 @@ internal abstract class SignOutModule {
 
     @Binds
     abstract fun bindSignOutService(signOutService: DefaultSignOutService): SignOutService
-
 }

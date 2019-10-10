@@ -31,5 +31,4 @@ internal open class ReadMarkerEntity(
     val timelineEvent: RealmResults<TimelineEventEntity>? = null
 
     companion object
-
 }

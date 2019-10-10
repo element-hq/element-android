@@ -32,7 +32,6 @@ import im.vector.riotx.R
 import im.vector.riotx.features.themes.ThemeUtils
 import timber.log.Timber
 
-
 /**
  * create a Preference with a dedicated click/long click methods.
  * It also allow the title to be displayed on several lines
@@ -41,16 +40,8 @@ open class VectorPreference : Preference {
 
     var mTypeface = Typeface.NORMAL
 
-    // long press listener
     /**
-     * Returns the callback to be invoked when this Preference is long clicked.
-     *
-     * @return The callback to be invoked.
-     */
-    /**
-     * Sets the callback to be invoked when this Preference is long clicked.
-     *
-     * @param onPreferenceLongClickListener The callback to be invoked.
+     * Callback to be invoked when this Preference is long clicked.
      */
     var onPreferenceLongClickListener: OnPreferenceLongClickListener? = null
 
@@ -104,7 +95,7 @@ open class VectorPreference : Preference {
                 summary.setTypeface(null, mTypeface)
             }
 
-            //cancel existing animation (find a way to resume if happens during anim?)
+            // cancel existing animation (find a way to resume if happens during anim?)
             currentHighlightAnimator?.cancel()
             if (isHighlighted) {
                 val colorFrom = Color.TRANSPARENT
@@ -112,13 +103,13 @@ open class VectorPreference : Preference {
                 currentHighlightAnimator = ValueAnimator.ofObject(ArgbEvaluator(), colorFrom, colorTo).apply {
                     duration = 250 // milliseconds
                     addUpdateListener { animator ->
-                        itemView?.setBackgroundColor(animator.animatedValue as Int)
+                        itemView.setBackgroundColor(animator.animatedValue as Int)
                     }
                     doOnEnd {
                         currentHighlightAnimator = ValueAnimator.ofObject(ArgbEvaluator(), colorTo, colorFrom).apply {
                             duration = 250 // milliseconds
                             addUpdateListener { animator ->
-                                itemView?.setBackgroundColor(animator.animatedValue as Int)
+                                itemView.setBackgroundColor(animator.animatedValue as Int)
                             }
                             doOnEnd {
                                 isHighlighted = false
@@ -132,7 +123,6 @@ open class VectorPreference : Preference {
             } else {
                 itemView.setBackgroundColor(Color.TRANSPARENT)
             }
-
         } catch (e: Exception) {
             Timber.e(e, "onBindView")
         }

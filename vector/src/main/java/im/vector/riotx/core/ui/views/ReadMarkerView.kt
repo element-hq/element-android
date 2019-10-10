@@ -23,10 +23,8 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import androidx.core.view.isInvisible
 import im.vector.riotx.R
 import kotlinx.coroutines.*
-import timber.log.Timber
 
 private const val DELAY_IN_MS = 1_500L
 
@@ -88,5 +86,4 @@ class ReadMarkerView @JvmOverloads constructor(
         visibility = VISIBLE
         animation.start()
     }
-
 }

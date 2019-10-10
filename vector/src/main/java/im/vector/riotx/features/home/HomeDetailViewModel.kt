@@ -139,5 +139,4 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                 }
                 .disposeOnClear()
     }
-
 }

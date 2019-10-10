@@ -62,6 +62,5 @@ class RoomMemberCountCondition(val iz: String) : Condition(Kind.room_member_coun
             Timber.d(t)
         }
         return null
-
     }
 }

@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("UNUSED_PARAMETER")
+
 package im.vector.riotx.core.services
 
 import android.content.Context
@@ -65,9 +67,9 @@ class CallService : VectorService() {
         return START_STICKY
     }
 
-    //================================================================================
+    // ================================================================================
     // Call notification management
-    //================================================================================
+    // ================================================================================
 
     /**
      * Display a permanent notification when there is an incoming call.

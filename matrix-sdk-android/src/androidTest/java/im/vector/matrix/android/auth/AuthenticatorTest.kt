@@ -28,7 +28,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
-
 @RunWith(AndroidJUnit4::class)
 internal class AuthenticatorTest : InstrumentedTest {
 
@@ -50,7 +49,6 @@ internal class AuthenticatorTest : InstrumentedTest {
     @UiThreadTest
     @OkReplay(tape = "auth", mode = TapeMode.READ_WRITE)
     fun auth() {
-
     }
 
     companion object {
@@ -59,6 +57,4 @@ internal class AuthenticatorTest : InstrumentedTest {
         val grantExternalStoragePermissionRule: GrantPermissionRule =
                 GrantPermissionRule.grant(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
     }
-
-
 }

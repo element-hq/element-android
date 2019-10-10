@@ -30,7 +30,6 @@ import javax.inject.Inject
 internal interface ClearUnlinkedEventsTask : Task<ClearUnlinkedEventsTask.Params, Unit> {
 
     data class Params(val roomId: String)
-
 }
 
 internal class DefaultClearUnlinkedEventsTask @Inject constructor(private val monarchy: Monarchy) : ClearUnlinkedEventsTask {
@@ -46,5 +45,4 @@ internal class DefaultClearUnlinkedEventsTask @Inject constructor(private val mo
             }
         }
     }
-
 }

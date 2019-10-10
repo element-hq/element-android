@@ -16,7 +16,6 @@
 package im.vector.riotx
 
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.provider.FontRequest
 import androidx.emoji.text.EmojiCompat
 import androidx.emoji.text.FontRequestEmojiCompatConfig
@@ -30,12 +29,11 @@ class EmojiCompatWrapper @Inject constructor(private val context: Context)  {
     private var initialized = false
 
     fun init(fontRequest: FontRequest) {
-
-        //Use emoji compat for the benefit of emoji spans
+        // Use emoji compat for the benefit of emoji spans
         val config = FontRequestEmojiCompatConfig(context, fontRequest)
                 // we want to replace all emojis with selected font
                 .setReplaceAll(true)
-        //Debug options
+        // Debug options
 //                .setEmojiSpanIndicatorEnabled(true)
 //                .setEmojiSpanIndicatorColor(Color.GREEN)
         EmojiCompat.init(config)
@@ -56,7 +54,7 @@ class EmojiCompatWrapper @Inject constructor(private val context: Context)  {
             try {
                 return EmojiCompat.get().process(sequence)
             } catch (throwable: Throwable) {
-                //Defensive coding against error (should not happend as it is initialized)
+                // Defensive coding against error (should not happend as it is initialized)
                 Timber.e(throwable, "Failed to init EmojiCompat")
                 return sequence
             }

@@ -42,7 +42,6 @@ class MergedHeaderItemFactory @Inject constructor(private val sessionHolder: Act
                callback: TimelineEventController.Callback?,
                requestModelBuild: () -> Unit)
             : MergedHeaderItem? {
-
         return if (!event.canBeMerged() || (nextEvent?.root?.getClearType() == event.root.getClearType() && !addDaySeparator)) {
             null
         } else {
@@ -116,6 +115,4 @@ class MergedHeaderItemFactory @Inject constructor(private val sessionHolder: Act
     fun isCollapsed(localId: Long): Boolean {
         return collapsedEventIds.contains(localId)
     }
-
-
 }

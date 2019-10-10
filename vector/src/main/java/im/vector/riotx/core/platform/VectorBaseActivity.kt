@@ -57,7 +57,6 @@ import io.reactivex.disposables.Disposable
 import timber.log.Timber
 import kotlin.system.measureTimeMillis
 
-
 abstract class VectorBaseActivity : BaseMvRxActivity(), HasScreenInjector {
     /* ==========================================================================================
      * UI
@@ -225,7 +224,6 @@ abstract class VectorBaseActivity : BaseMvRxActivity(), HasScreenInjector {
         bugReporter.inMultiWindowMode = isInMultiWindowMode
     }
 
-
     override fun injector(): ScreenComponent {
         return screenComponent
     }
@@ -333,9 +331,9 @@ abstract class VectorBaseActivity : BaseMvRxActivity(), HasScreenInjector {
         }
     }
 
-    //==============================================================================================
+    // ==============================================================================================
     // Handle loading view (also called waiting view or spinner view)
-    //==============================================================================================
+    // ==============================================================================================
 
     var waitingView: View? = null
         set(value) {

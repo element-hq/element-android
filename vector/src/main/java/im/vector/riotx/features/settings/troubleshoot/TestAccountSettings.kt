@@ -44,11 +44,10 @@ class TestAccountSettings @Inject constructor(private val stringProvider: String
                 description = stringProvider.getString(R.string.settings_troubleshoot_test_account_settings_failed)
                 quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_account_settings_quickfix) {
                     override fun doFix() {
-                        if (manager?.diagStatus == TestStatus.RUNNING) return //wait before all is finished
+                        if (manager?.diagStatus == TestStatus.RUNNING) return // wait before all is finished
 
                         session.updatePushRuleEnableStatus(RuleKind.OVERRIDE, defaultRule, !defaultRule.enabled,
                                                            object : MatrixCallback<Unit> {
-
                                                                override fun onSuccess(data: Unit) {
                                                                    manager?.retry()
                                                                }
@@ -62,7 +61,7 @@ class TestAccountSettings @Inject constructor(private val stringProvider: String
                 status = TestStatus.FAILED
             }
         } else {
-            //should not happen?
+            // should not happen?
             status = TestStatus.FAILED
         }
     }

@@ -36,7 +36,6 @@ import im.vector.riotx.features.html.EventHtmlRenderer
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 data class MessageActionState(
         val roomId: String,
         val eventId: String,
@@ -45,7 +44,6 @@ data class MessageActionState(
 ) : MvRxState {
 
     constructor(args: TimelineEventFragmentArgs) : this(roomId = args.roomId, eventId = args.eventId, informationData = args.informationData)
-
 
     private val dateFormat = SimpleDateFormat("EEE, d MMM yyyy HH:mm", Locale.getDefault())
 
@@ -91,7 +89,6 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                                                           private val noticeEventFormatter: NoticeEventFormatter
 ) : VectorViewModel<MessageActionState>(initialState) {
 
-
     private val eventId = initialState.eventId
     private val room = session.getRoom(initialState.roomId)
 
@@ -106,7 +103,6 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
             val fragment: MessageActionsBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()
             return fragment.messageActionViewModelFactory.create(state)
         }
-
     }
 
     init {
@@ -126,5 +122,4 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     fun resolveBody(state: MessageActionState): CharSequence? {
         return state.messageBody(eventHtmlRenderer.get(), noticeEventFormatter)
     }
-
 }

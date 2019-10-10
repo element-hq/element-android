@@ -130,5 +130,4 @@ internal class DefaultSetReadMarkersTask @Inject constructor(private val roomAPI
             newReadMarkerIndex > currentReadMarkerIndex
         }
     }
-
 }

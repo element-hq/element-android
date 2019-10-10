@@ -111,7 +111,7 @@ internal class DefaultProcessEventForPushTask @Inject constructor(
             val isFullfilled = rule.conditions?.map {
                 it.asExecutableCondition()?.isSatisfied(conditionResolver) ?: false
             }?.fold(true/*A rule with no conditions always matches*/, { acc, next ->
-                //All conditions must hold true for an event in order to apply the action for the event.
+                // All conditions must hold true for an event in order to apply the action for the event.
                 acc && next
             }) ?: false
 
@@ -121,5 +121,4 @@ internal class DefaultProcessEventForPushTask @Inject constructor(
         }
         return null
     }
-
 }

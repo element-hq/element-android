@@ -28,5 +28,4 @@ class TimelineItemAnimator : DefaultItemAnimator() {
         moveDuration = 0
         changeDuration = 0
     }
-
 }

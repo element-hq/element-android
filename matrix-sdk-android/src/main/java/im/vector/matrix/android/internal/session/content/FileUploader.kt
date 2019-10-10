@@ -22,40 +22,40 @@ import im.vector.matrix.android.internal.di.Authenticated
 import im.vector.matrix.android.internal.network.ProgressRequestBody
 import im.vector.matrix.android.internal.network.awaitResponse
 import im.vector.matrix.android.internal.network.toFailure
-import okhttp3.*
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 import java.io.IOException
 import javax.inject.Inject
 
-
 internal class FileUploader @Inject constructor(@Authenticated
                                                 private val okHttpClient: OkHttpClient,
-                                                private val sessionParams: SessionParams,
-                                                private val moshi: Moshi) {
+                                                sessionParams: SessionParams,
+                                                moshi: Moshi) {
 
     private val uploadUrl = DefaultContentUrlResolver.getUploadUrl(sessionParams.homeServerConnectionConfig)
     private val responseAdapter = moshi.adapter(ContentUploadResponse::class.java)
-
 
     suspend fun uploadFile(file: File,
                            filename: String?,
                            mimeType: String,
                            progressListener: ProgressRequestBody.Listener? = null): ContentUploadResponse {
-        val uploadBody = RequestBody.create(mimeType.toMediaTypeOrNull(), file)
+        val uploadBody = file.asRequestBody(mimeType.toMediaTypeOrNull())
         return upload(uploadBody, filename, progressListener)
-
     }
 
     suspend fun uploadByteArray(byteArray: ByteArray,
                                 filename: String?,
                                 mimeType: String,
                                 progressListener: ProgressRequestBody.Listener? = null): ContentUploadResponse {
-        val uploadBody = RequestBody.create(mimeType.toMediaTypeOrNull(), byteArray)
+        val uploadBody = byteArray.toRequestBody(mimeType.toMediaTypeOrNull())
         return upload(uploadBody, filename, progressListener)
     }
-
 
     private suspend fun upload(uploadBody: RequestBody, filename: String?, progressListener: ProgressRequestBody.Listener?): ContentUploadResponse {
         val urlBuilder = uploadUrl.toHttpUrlOrNull()?.newBuilder() ?: throw RuntimeException()

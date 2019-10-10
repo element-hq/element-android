@@ -36,5 +36,4 @@ internal object ContentMapper {
             adapter.toJson(it)
         }
     }
-
 }

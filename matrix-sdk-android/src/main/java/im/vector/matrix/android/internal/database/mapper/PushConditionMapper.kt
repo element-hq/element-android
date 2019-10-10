@@ -19,7 +19,6 @@ package im.vector.matrix.android.internal.database.mapper
 import im.vector.matrix.android.api.pushrules.rest.PushCondition
 import im.vector.matrix.android.internal.database.model.PushConditionEntity
 
-
 internal object PushConditionMapper {
 
     fun map(entity: PushConditionEntity): PushCondition {

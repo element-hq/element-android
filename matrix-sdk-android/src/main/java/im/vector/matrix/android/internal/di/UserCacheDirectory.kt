@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.core.dialogs
+/*
+ * Unfortunatly "ktlint-disable filename" this does not work so this file is renamed to UserCacheDirectory.kt
+ * If a new qualifier is added, please rename this file ti FileQualifiers.kt...
+ */
+/* ktlint-disable filename */
 
-import android.content.Context
+package im.vector.matrix.android.internal.di
 
-internal class DialogCallAdapter(context: Context) : DialogAdapter(context) {
+import javax.inject.Qualifier
 
-    init {
-        add(DialogListItem.StartVoiceCall)
-        add(DialogListItem.StartVideoCall)
-    }
-}
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+annotation class UserCacheDirectory

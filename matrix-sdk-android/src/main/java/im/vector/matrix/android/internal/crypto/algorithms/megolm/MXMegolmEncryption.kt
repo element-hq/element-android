@@ -54,7 +54,6 @@ internal class MXMegolmEncryption(
         private val warnOnUnknownDevicesRepository: WarnOnUnknownDeviceRepository
 ) : IMXEncrypting {
 
-
     // OutboundSessionInfo. Null if we haven't yet started setting one up. Note
     // that even if this is non-null, it may not be ready for use (in which
     // case outboundSession.shareOperation will be non-null.)
@@ -253,7 +252,7 @@ internal class MXMegolmEncryption(
         // Get canonical Json from
 
         val payloadString = convertToUTF8(JsonCanonicalizer.getCanonicalJson(Map::class.java, payloadJson))
-        val ciphertext = olmDevice.encryptGroupMessage(session.sessionId, payloadString!!)
+        val ciphertext = olmDevice.encryptGroupMessage(session.sessionId, payloadString)
 
         val map = HashMap<String, Any>()
         map["algorithm"] = MXCRYPTO_ALGORITHM_MEGOLM

@@ -15,7 +15,6 @@
  */
 package im.vector.matrix.android.internal.crypto
 
-
 interface NewSessionListener {
     fun onNewSession(roomId: String?, senderKey: String, sessionId: String)
 }

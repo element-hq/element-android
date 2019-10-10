@@ -116,4 +116,3 @@ fun setUseRiotDefaultRingtone(context: Context, useRiotDefault: Boolean) {
                 putBoolean(VectorPreferences.SETTINGS_CALL_RINGTONE_USE_RIOT_PREFERENCE_KEY, useRiotDefault)
             }
 }
-

@@ -51,5 +51,4 @@ abstract class DisplayReadReceiptItem : EpoxyModelWithHolder<DisplayReadReceiptI
         val displayNameView by bind<TextView>(R.id.readReceiptName)
         val timestampView by bind<TextView>(R.id.readReceiptDate)
     }
-
 }

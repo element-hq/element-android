@@ -59,7 +59,6 @@ class EmojiCompatFontProvider @Inject constructor(): FontsContractCompat.FontReq
         listeners.remove(listener)
     }
 
-
     interface FontProviderListener {
         fun compatibilityFontUpdate(typeface: Typeface?)
     }

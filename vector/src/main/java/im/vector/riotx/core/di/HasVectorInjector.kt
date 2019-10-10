@@ -19,5 +19,4 @@ package im.vector.riotx.core.di
 interface HasVectorInjector {
 
     fun injector(): VectorComponent
-
 }

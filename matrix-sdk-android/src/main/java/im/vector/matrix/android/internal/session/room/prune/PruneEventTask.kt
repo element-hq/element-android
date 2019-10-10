@@ -34,14 +34,11 @@ import io.realm.Realm
 import timber.log.Timber
 import javax.inject.Inject
 
-
 internal interface PruneEventTask : Task<PruneEventTask.Params, Unit> {
 
     data class Params(
-            val redactionEvents: List<Event>,
-            val userId: String
+            val redactionEvents: List<Event>
     )
-
 }
 
 internal class DefaultPruneEventTask @Inject constructor(private val monarchy: Monarchy) : PruneEventTask {
@@ -49,19 +46,19 @@ internal class DefaultPruneEventTask @Inject constructor(private val monarchy: M
     override suspend fun execute(params: PruneEventTask.Params) {
         monarchy.awaitTransaction { realm ->
             params.redactionEvents.forEach { event ->
-                pruneEvent(realm, event, params.userId)
+                pruneEvent(realm, event)
             }
         }
     }
 
-    private fun pruneEvent(realm: Realm, redactionEvent: Event, userId: String) {
+    private fun pruneEvent(realm: Realm, redactionEvent: Event) {
         if (redactionEvent.redacts.isNullOrBlank()) {
             return
         }
 
-        val redactionEventEntity = EventEntity.where(realm, eventId = redactionEvent.eventId
-                ?: "").findFirst()
-                ?: return
+        // Check that we know this event
+        EventEntity.where(realm, eventId = redactionEvent.eventId ?: "").findFirst() ?: return
+
         val isLocalEcho = LocalEchoEventFactory.isLocalEchoId(redactionEvent.eventId ?: "")
         Timber.v("Redact event for ${redactionEvent.redacts} localEcho=$isLocalEcho")
 
@@ -80,7 +77,7 @@ internal class DefaultPruneEventTask @Inject constructor(private val monarchy: M
                     val unsignedData = EventMapper.map(eventToPrune).unsignedData
                             ?: UnsignedData(null, null)
 
-                    //was this event a m.replace
+                    // was this event a m.replace
 //                    val contentModel = ContentMapper.map(eventToPrune.content)?.toModel<MessageContent>()
 //                    if (RelationType.REPLACE == contentModel?.relatesTo?.type && contentModel.relatesTo?.eventId != null) {
 //                        eventRelationsAggregationUpdater.handleRedactionOfReplace(eventToPrune, contentModel.relatesTo!!.eventId!!, realm)
@@ -91,7 +88,6 @@ internal class DefaultPruneEventTask @Inject constructor(private val monarchy: M
                     eventToPrune.unsignedData = MoshiProvider.providesMoshi().adapter(UnsignedData::class.java).toJson(modified)
                     eventToPrune.decryptionResultJson = null
                     eventToPrune.decryptionErrorCode = null
-
                 }
 //                EventType.REACTION -> {
 //                    eventRelationsAggregationUpdater.handleReactionRedact(eventToPrune, realm, userId)
@@ -105,7 +101,6 @@ internal class DefaultPruneEventTask @Inject constructor(private val monarchy: M
             }
         }
     }
-
 
     private fun computeAllowedKeys(type: String): List<String> {
         // Add filtered content, allowed keys in content depends on the event type

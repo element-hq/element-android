@@ -31,7 +31,6 @@ data class NotifiableMessageEvent(
         var roomIsDirect: Boolean = false
 ) : NotifiableEvent {
 
-
     override var matrixID: String? = null
     override var soundName: String? = null
     override var lockScreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
@@ -52,8 +51,7 @@ data class NotifiableMessageEvent(
     override val title: String
         get() = senderName ?: ""
 
-    //This is used for >N notification, as the result of a smart reply
+    // This is used for >N notification, as the result of a smart reply
     var outGoingMessage = false
     var outGoingMessageFailed = false
-
 }

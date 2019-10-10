@@ -106,7 +106,6 @@ internal class DefaultUserService @Inject constructor(private val monarchy: Mona
         return monarchy.findAllPagedWithChanges(realmDataSourceFactory, livePagedListBuilder)
     }
 
-
     override fun searchUsersDirectory(search: String,
                                       limit: Int,
                                       excludedUserIds: Set<String>,

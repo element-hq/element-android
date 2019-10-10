@@ -26,19 +26,17 @@ import androidx.preference.PreferenceViewHolder
 import im.vector.riotx.R
 
 // TODO Replace by real Bingrule class, then delete
+@Suppress("UNUSED_PARAMETER")
 class BingRule(rule: BingRule) {
     fun shouldNotNotify() = false
     fun shouldNotify() = false
     fun setNotify(b: Boolean) {
-
     }
 
     fun setHighlight(b: Boolean) {
-
     }
 
     fun removeNotificationSound() {
-
     }
 
     val ruleId: CharSequence? = null
@@ -60,7 +58,6 @@ class BingRule(rule: BingRule) {
         const val RULE_ID_ONE_TO_ONE_ROOM = "TODO"
         const val RULE_ID_ALL_OTHER_MESSAGES_ROOMS = "TODO"
     }
-
 }
 
 class BingRulePreference : VectorPreference {
@@ -128,9 +125,9 @@ class BingRulePreference : VectorPreference {
      */
     private fun refreshSummary() {
         summary = context.getString(when (ruleStatusIndex) {
-            NOTIFICATION_OFF_INDEX -> R.string.notification_off
+            NOTIFICATION_OFF_INDEX    -> R.string.notification_off
             NOTIFICATION_SILENT_INDEX -> R.string.notification_silent
-            else -> R.string.notification_noisy
+            else                      -> R.string.notification_noisy
         })
     }
 
@@ -148,7 +145,7 @@ class BingRulePreference : VectorPreference {
 
             if (TextUtils.equals(rule.ruleId, BingRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS)) {
                 when (index) {
-                    NOTIFICATION_OFF_INDEX -> {
+                    NOTIFICATION_OFF_INDEX    -> {
                         rule.isEnabled = true
                         rule.setNotify(false)
                     }
@@ -156,7 +153,7 @@ class BingRulePreference : VectorPreference {
                         rule.isEnabled = false
                         rule.setNotify(false)
                     }
-                    NOTIFICATION_NOISY_INDEX -> {
+                    NOTIFICATION_NOISY_INDEX  -> {
                         rule.isEnabled = true
                         rule.setNotify(true)
                         rule.notificationSound = BingRule.ACTION_VALUE_DEFAULT
@@ -165,7 +162,6 @@ class BingRulePreference : VectorPreference {
 
                 return rule
             }
-
 
             if (NOTIFICATION_OFF_INDEX == index) {
                 if (TextUtils.equals(this.rule!!.kind, BingRule.KIND_UNDERRIDE)
@@ -181,10 +177,11 @@ class BingRulePreference : VectorPreference {
                         && !TextUtils.equals(rule.ruleId, BingRule.RULE_ID_INVITE_ME)
                         && NOTIFICATION_NOISY_INDEX == index)
                 if (NOTIFICATION_NOISY_INDEX == index) {
-                    rule.notificationSound = if (TextUtils.equals(rule.ruleId, BingRule.RULE_ID_CALL))
+                    rule.notificationSound = if (TextUtils.equals(rule.ruleId, BingRule.RULE_ID_CALL)) {
                         BingRule.ACTION_VALUE_RING
-                    else
+                    } else {
                         BingRule.ACTION_VALUE_DEFAULT
+                    }
                 } else {
                     rule.removeNotificationSound()
                 }
@@ -205,33 +202,31 @@ class BingRulePreference : VectorPreference {
         radioGroup?.setOnCheckedChangeListener(null)
 
         when (ruleStatusIndex) {
-            NOTIFICATION_OFF_INDEX -> {
+            NOTIFICATION_OFF_INDEX    -> {
                 radioGroup?.check(R.id.bingPreferenceRadioBingRuleOff)
             }
             NOTIFICATION_SILENT_INDEX -> {
                 radioGroup?.check(R.id.bingPreferenceRadioBingRuleSilent)
             }
-            else -> {
+            else                      -> {
                 radioGroup?.check(R.id.bingPreferenceRadioBingRuleNoisy)
             }
         }
 
-        radioGroup?.setOnCheckedChangeListener { group, checkedId ->
+        radioGroup?.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
-                R.id.bingPreferenceRadioBingRuleOff -> {
+                R.id.bingPreferenceRadioBingRuleOff    -> {
                     onPreferenceChangeListener?.onPreferenceChange(this, NOTIFICATION_OFF_INDEX)
                 }
                 R.id.bingPreferenceRadioBingRuleSilent -> {
                     onPreferenceChangeListener?.onPreferenceChange(this, NOTIFICATION_SILENT_INDEX)
                 }
-                R.id.bingPreferenceRadioBingRuleNoisy -> {
+                R.id.bingPreferenceRadioBingRuleNoisy  -> {
                     onPreferenceChangeListener?.onPreferenceChange(this, NOTIFICATION_NOISY_INDEX)
                 }
             }
         }
-
     }
-
 
     companion object {
 

@@ -34,7 +34,7 @@ internal class DefaultGetPushersTask @Inject constructor(private val pushersAPI:
             apiCall = pushersAPI.getPushers()
         }
         monarchy.awaitTransaction { realm ->
-            //clear existings?
+            // clear existings?
             realm.where(PusherEntity::class.java)
                     .findAll().deleteAllFromRealm()
             response.pushers?.forEach { jsonPusher ->

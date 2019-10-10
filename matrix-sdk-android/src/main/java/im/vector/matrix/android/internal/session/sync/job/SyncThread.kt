@@ -129,7 +129,6 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
                     this.callbackThread = TaskThread.SYNC
                     this.executionThread = TaskThread.SYNC
                     this.callback = object : MatrixCallback<Unit> {
-
                         override fun onSuccess(data: Unit) {
                             Timber.v("onSuccess")
                             latch.countDown()
@@ -184,7 +183,6 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
         liveState.postValue(newState)
     }
 
-
     override fun onMoveToForeground() {
         restart()
     }
@@ -192,7 +190,4 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
     override fun onMoveToBackground() {
         pause()
     }
-
 }
-
-

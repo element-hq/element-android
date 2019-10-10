@@ -43,17 +43,14 @@ class KeysBackupRestoreSharedViewModel @Inject constructor() : ViewModel() {
     val keyVersionResultError: LiveData<LiveEvent<String>>
         get() = _keyVersionResultError
 
-
     private var _navigateEvent: MutableLiveData<LiveEvent<String>> = MutableLiveData()
     val navigateEvent: LiveData<LiveEvent<String>>
         get() = _navigateEvent
 
     var loadingEvent: MutableLiveData<WaitingViewData> = MutableLiveData()
 
-
     var importKeyResult: ImportRoomKeysResult? = null
     var importRoomKeysFinishWithResult: MutableLiveData<LiveEvent<ImportRoomKeysResult>> = MutableLiveData()
-
 
     init {
         keyVersionResult.value = null
@@ -65,7 +62,6 @@ class KeysBackupRestoreSharedViewModel @Inject constructor() : ViewModel() {
         this.session = session
     }
 
-
     fun getLatestVersion(context: Context) {
         val keysBackup = session.getKeysBackupService()
 
@@ -75,7 +71,7 @@ class KeysBackupRestoreSharedViewModel @Inject constructor() : ViewModel() {
             override fun onSuccess(data: KeysVersionResult?) {
                 loadingEvent.value = null
                 if (data?.version.isNullOrBlank()) {
-                    //should not happen
+                    // should not happen
                     _keyVersionResultError.value = LiveEvent(context.getString(R.string.keys_backup_get_version_error, ""))
                 } else {
                     keyVersionResult.value = data

@@ -121,5 +121,4 @@ class KnownUsersController @Inject constructor(private val session: Session,
     interface Callback {
         fun onItemClick(user: User)
     }
-
 }

@@ -67,7 +67,6 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
     private var homeServerConnectionConfig: HomeServerConnectionConfig? = null
     private var currentTask: Cancelable? = null
 
-
     fun handle(action: LoginActions) {
         when (action) {
             is LoginActions.InitWith         -> handleInitWith(action)
@@ -138,7 +137,6 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
         }
     }
 
-
     private fun handleUpdateHomeserver(action: LoginActions.UpdateHomeServer) = withState { state ->
 
         var newConfig: HomeServerConnectionConfig? = null
@@ -149,7 +147,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                     .build()
         }
 
-        //Do not retry if we already have flows for this config -> causes infinite focus loop
+        // Do not retry if we already have flows for this config -> causes infinite focus loop
         if (newConfig?.homeServerUri?.toString() == homeServerConnectionConfig?.homeServerUri?.toString()
                 && state.asyncHomeServerLoginFlowRequest is Success) return@withState
 
@@ -196,7 +194,6 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                     }
                 }
             })
-
         }
     }
 

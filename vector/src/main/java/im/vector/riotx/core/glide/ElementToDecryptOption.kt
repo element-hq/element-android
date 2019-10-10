@@ -21,7 +21,5 @@ import im.vector.matrix.android.internal.crypto.attachments.ElementToDecrypt
 
 const val ElementToDecryptOptionKey = "im.vector.riotx.core.glide.ElementToDecrypt"
 
-
 val ELEMENT_TO_DECRYPT = Option.memory(
         ElementToDecryptOptionKey, ElementToDecrypt("", "", ""))
-

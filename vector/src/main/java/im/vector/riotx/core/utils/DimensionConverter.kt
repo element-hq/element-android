@@ -19,7 +19,6 @@ import android.content.res.Resources
 import android.util.TypedValue
 import javax.inject.Inject
 
-
 class DimensionConverter @Inject constructor(val resources: Resources) {
 
     fun dpToPx(dp: Int): Int {

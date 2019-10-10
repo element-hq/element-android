@@ -32,5 +32,4 @@ internal class DefaultSignOutService @Inject constructor(private val signOutTask
                 }
                 .executeBy(taskExecutor)
     }
-
 }

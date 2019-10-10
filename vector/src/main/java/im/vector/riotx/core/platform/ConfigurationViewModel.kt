@@ -35,7 +35,6 @@ class ConfigurationViewModel @Inject constructor(
     val activityRestarter: LiveData<LiveEvent<Unit>>
         get() = _activityRestarter
 
-
     fun onActivityResumed() {
         if (currentConfigurationValue == null) {
             currentConfigurationValue = vectorConfiguration.getHash()

@@ -31,8 +31,7 @@ class VectorSettingsRootFragment : VectorSettingsBaseFragment() {
     companion object {
         fun newInstance() = VectorSettingsRootFragment()
                 .withArgs {
-                    //putString(ARG_MATRIX_ID, matrixId)
+                    // putString(ARG_MATRIX_ID, matrixId)
                 }
     }
-
 }

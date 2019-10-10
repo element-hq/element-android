@@ -72,33 +72,25 @@ class MessageMenuFragment : VectorBaseFragment() {
                 }
             }
         }
-
     }
-
 
     private fun inflateActionView(action: SimpleAction, inflater: LayoutInflater, container: ViewGroup?): View? {
         return inflater.inflate(R.layout.adapter_item_action, container, false)?.apply {
-            if (action.iconResId != null) {
-                findViewById<ImageView>(R.id.action_icon)?.setImageResource(action.iconResId)
-            } else {
-                findViewById<ImageView>(R.id.action_icon)?.setImageDrawable(null)
-            }
+            findViewById<ImageView>(R.id.action_icon)?.setImageResource(action.iconResId)
             findViewById<TextView>(R.id.action_title)?.setText(action.titleRes)
         }
     }
 
     private fun inflateSeparatorView(): View {
-        val frame = FrameLayout(context)
+        val frame = FrameLayout(requireContext())
         frame.setBackgroundColor(ThemeUtils.getColor(requireContext(), R.attr.vctr_list_divider_color))
         frame.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, requireContext().resources.displayMetrics.density.toInt())
         return frame
-
     }
 
     interface InteractionListener {
         fun didSelectMenuAction(simpleAction: SimpleAction)
     }
-
 
     companion object {
         fun newInstance(pa: TimelineEventFragmentArgs): MessageMenuFragment {

@@ -21,5 +21,4 @@ import im.vector.matrix.android.api.failure.Failure
 sealed class CreateRoomFailure : Failure.FeatureFailure() {
 
     object CreatedWithTimeout: CreateRoomFailure()
-
 }

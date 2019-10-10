@@ -55,7 +55,6 @@ internal class DefaultDeleteDeviceTask @Inject constructor(private val cryptoApi
                 } else {
                     throw throwable
                 }
-
             } else {
                 // Other error
                 throw throwable

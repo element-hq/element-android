@@ -19,7 +19,6 @@ package im.vector.matrix.android.internal.session.group.model
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
-
 /**
  * This class represents the community members in a group summary response.
  */
@@ -32,5 +31,5 @@ internal data class GroupSummaryUsersSection(
         @Json(name = "users") val users: List<String> = emptyList()
 
         // @TODO: Check the meaning and the usage of these roles. This dictionary is empty FTM.
-        //public Map<Object, Object> roles;
+        // public Map<Object, Object> roles;
 )

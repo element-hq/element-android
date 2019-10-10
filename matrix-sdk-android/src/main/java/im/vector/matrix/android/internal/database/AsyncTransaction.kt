@@ -21,7 +21,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
 
-
 suspend fun awaitTransaction(config: RealmConfiguration, transaction: suspend (realm: Realm) -> Unit) = withContext(Dispatchers.IO) {
     Realm.getInstance(config).use { bgRealm ->
         bgRealm.beginTransaction()

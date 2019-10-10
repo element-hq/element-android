@@ -49,5 +49,4 @@ abstract class GroupSummaryItem : VectorEpoxyModel<GroupSummaryItem.Holder>() {
         val groupNameView by bind<TextView>(R.id.groupNameView)
         val rootView by bind<CheckableConstraintLayout>(R.id.itemGroupLayout)
     }
-
 }

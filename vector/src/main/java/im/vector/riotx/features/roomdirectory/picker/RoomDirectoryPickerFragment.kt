@@ -90,7 +90,6 @@ class RoomDirectoryPickerFragment : VectorBaseFragment(), RoomDirectoryPickerCon
         roomDirectoryPickerList.setController(roomDirectoryPickerController)
     }
 
-
     override fun onRoomDirectoryClicked(roomDirectoryData: RoomDirectoryData) {
         Timber.v("onRoomDirectoryClicked: $roomDirectoryData")
         viewModel.setRoomDirectoryData(roomDirectoryData)

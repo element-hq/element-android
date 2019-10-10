@@ -15,7 +15,6 @@
  */
 package im.vector.riotx.core.utils
 
-
 /**
  * Simple ThrottleFirst
  * See https://raw.githubusercontent.com/wiki/ReactiveX/RxJava/images/rx-operators/throttleFirst.png

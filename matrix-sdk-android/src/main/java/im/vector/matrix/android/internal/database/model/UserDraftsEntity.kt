@@ -32,5 +32,4 @@ internal open class UserDraftsEntity(var userDrafts: RealmList<DraftEntity> = Re
     val roomSummaryEntity: RealmResults<RoomSummaryEntity>? = null
 
     companion object
-
 }

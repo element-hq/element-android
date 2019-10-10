@@ -45,6 +45,4 @@ class TimelineMediaSizeProvider @Inject constructor() {
         }
         return Pair(maxImageWidth, maxImageHeight)
     }
-
-
 }

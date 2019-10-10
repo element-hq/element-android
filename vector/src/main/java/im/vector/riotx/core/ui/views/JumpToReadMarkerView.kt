@@ -64,6 +64,4 @@ class JumpToReadMarkerView @JvmOverloads constructor(
         this.readMarkerId = readMarkerId
         isInvisible = !show
     }
-
-
 }

@@ -26,7 +26,6 @@ import im.vector.riotx.features.settings.troubleshoot.TroubleshootTest
 class TestBatteryOptimization(val fragment: Fragment) : TroubleshootTest(R.string.settings_troubleshoot_test_battery_title) {
 
     override fun perform() {
-
         if (fragment.context != null && isIgnoringBatteryOptimizations(fragment.context!!)) {
             description = fragment.getString(R.string.settings_troubleshoot_test_battery_success)
             status = TestStatus.SUCCESS
@@ -43,5 +42,4 @@ class TestBatteryOptimization(val fragment: Fragment) : TroubleshootTest(R.strin
             status = TestStatus.FAILED
         }
     }
-
 }

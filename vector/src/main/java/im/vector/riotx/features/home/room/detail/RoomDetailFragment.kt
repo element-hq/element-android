@@ -68,7 +68,6 @@ import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
-import im.vector.riotx.core.dialogs.DialogListItem
 import im.vector.riotx.core.epoxy.LayoutManagerStateRestorer
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.hideKeyboard
@@ -116,13 +115,11 @@ import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 
-
 @Parcelize
 data class RoomDetailArgs(
         val roomId: String,
         val eventId: String? = null
 ) : Parcelable
-
 
 private const val CAMERA_VALUE_TITLE = "attachment"
 private const val REQUEST_FILES_REQUEST_CODE = 0
@@ -160,7 +157,6 @@ class RoomDetailFragment :
 
         private const val ircPattern = " (IRC)"
     }
-
 
     private val roomDetailArgs: RoomDetailArgs by args()
     private val glideRequests by lazy {
@@ -307,7 +303,6 @@ class RoomDetailFragment :
 
     private fun setupNotificationView() {
         notificationAreaView.delegate = object : NotificationAreaView.Delegate {
-
             override fun onTombstoneEventClicked(tombstoneEvent: Event) {
                 roomDetailViewModel.process(RoomDetailActions.HandleTombstoneEvent(tombstoneEvent))
             }
@@ -338,9 +333,9 @@ class RoomDetailFragment :
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.clear_message_queue) {
-            //This a temporary option during dev as it is not super stable
-            //Cancel all pending actions in room queue and post a dummy
-            //Then mark all sending events as undelivered
+            // This a temporary option during dev as it is not super stable
+            // Cancel all pending actions in room queue and post a dummy
+            // Then mark all sending events as undelivered
             roomDetailViewModel.process(RoomDetailActions.ClearSendQueue)
             return true
         }
@@ -364,7 +359,7 @@ class RoomDetailFragment :
                                   @StringRes descriptionRes: Int,
                                   defaultContent: String) {
         commandAutocompletePolicy.enabled = false
-        //switch to expanded bar
+        // switch to expanded bar
         composerLayout.composerRelatedMessageTitle.apply {
             text = event.getDisambiguatedDisplayName()
             setTextColor(ContextCompat.getColor(requireContext(), getColorFromUserId(event.root.senderId)))
@@ -387,7 +382,7 @@ class RoomDetailFragment :
 
         avatarRenderer.render(event.senderAvatar, event.root.senderId ?: "", event.senderName, composerLayout.composerRelatedMessageAvatar)
         composerLayout.expand {
-            //need to do it here also when not using quick reply
+            // need to do it here also when not using quick reply
             focusComposerAndShowKeyboard()
         }
         focusComposerAndShowKeyboard()
@@ -424,7 +419,7 @@ class RoomDetailFragment :
                 REACTION_SELECT_REQUEST_CODE                        -> {
                     val eventId = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_EVENT_ID) ?: return
                     val reaction = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_REACTION_RESULT) ?: return
-                    //TODO check if already reacted with that?
+                    // TODO check if already reacted with that?
                     roomDetailViewModel.process(RoomDetailActions.SendReaction(reaction, eventId))
                 }
             }
@@ -432,7 +427,6 @@ class RoomDetailFragment :
     }
 
 // PRIVATE METHODS *****************************************************************************
-
 
     private fun setupRecyclerView() {
         val epoxyVisibilityTracker = EpoxyVisibilityTracker()
@@ -458,7 +452,6 @@ class RoomDetailFragment :
         }
         recyclerView.setController(timelineEventController)
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 if (recyclerView.scrollState == RecyclerView.SCROLL_STATE_IDLE) {
                     updateJumpToBottomViewVisibility()
@@ -642,7 +635,7 @@ class RoomDetailFragment :
         inviteView.callback = this
     }
 
-    private fun onSendChoiceClicked(dialogListItem: DialogListItem) {
+    /* private fun onSendChoiceClicked(dialogListItem: DialogListItem) {
         Timber.v("On send choice clicked: $dialogListItem")
         when (dialogListItem) {
             is DialogListItem.SendFile       -> {
@@ -667,7 +660,7 @@ class RoomDetailFragment :
                     //  launchNativeVideoRecorder()
                 }
         }
-    }
+    } */
 
     private fun handleMediaIntent(data: Intent) {
         val files: ArrayList<MediaFile> = data.getParcelableArrayListExtra(FilePickerActivity.MEDIA_FILES)
@@ -686,7 +679,6 @@ class RoomDetailFragment :
             val uid = session.myUserId
             val meMember = session.getRoom(state.roomId)?.getRoomMember(uid)
             avatarRenderer.render(meMember?.avatarUrl, uid, meMember?.displayName, composerLayout.composerAvatarImageView)
-
         } else if (summary?.membership == Membership.INVITE && inviter != null) {
             inviteView.visibility = View.VISIBLE
             inviteView.render(inviter, VectorInviteView.Mode.LARGE)
@@ -708,7 +700,6 @@ class RoomDetailFragment :
 
     private fun renderRoomSummary(state: RoomDetailViewState) {
         state.asyncRoomSummary()?.let {
-
             if (it.membership.isLeft()) {
                 Timber.w("The room has been left")
                 activity?.finish()
@@ -885,7 +876,6 @@ class RoomDetailFragment :
     }
 
     override fun onEventCellClicked(informationData: MessageInformationData, messageContent: MessageContent?, view: View) {
-
     }
 
     override fun onEventLongClicked(informationData: MessageInformationData, messageContent: MessageContent?, view: View): Boolean {
@@ -910,10 +900,10 @@ class RoomDetailFragment :
 
     override fun onClickOnReactionPill(informationData: MessageInformationData, reaction: String, on: Boolean) {
         if (on) {
-            //we should test the current real state of reaction on this event
+            // we should test the current real state of reaction on this event
             roomDetailViewModel.process(RoomDetailActions.SendReaction(reaction, informationData.eventId))
         } else {
-            //I need to redact a reaction
+            // I need to redact a reaction
             roomDetailViewModel.process(RoomDetailActions.UndoReaction(informationData.eventId, reaction))
         }
     }
@@ -960,7 +950,6 @@ class RoomDetailFragment :
         }
     }
 
-
     // AutocompleteUserPresenter.Callback
 
     override fun onQueryUsers(query: CharSequence?) {
@@ -977,7 +966,7 @@ class RoomDetailFragment :
                         .show(requireActivity().supportFragmentManager, "DISPLAY_REACTIONS")
             }
             is SimpleAction.Copy                -> {
-                //I need info about the current selected message :/
+                // I need info about the current selected message :/
                 copyToClipboard(requireContext(), action.content, false)
                 val msg = requireContext().getString(R.string.copied_to_clipboard)
                 showSnackWithMessage(msg, Snackbar.LENGTH_SHORT)
@@ -986,9 +975,9 @@ class RoomDetailFragment :
                 roomDetailViewModel.process(RoomDetailActions.RedactAction(action.eventId, context?.getString(R.string.event_redacted_by_user_reason)))
             }
             is SimpleAction.Share               -> {
-                //TODO current data communication is too limited
-                //Need to now the media type
-                //TODO bad, just POC
+                // TODO current data communication is too limited
+                // Need to now the media type
+                // TODO bad, just POC
                 BigImageViewer.imageLoader().loadImage(
                         action.hashCode(),
                         Uri.parse(action.imageUrl),
@@ -996,8 +985,9 @@ class RoomDetailFragment :
                             override fun onFinish() {}
 
                             override fun onSuccess(image: File?) {
-                                if (image != null)
+                                if (image != null) {
                                     shareMedia(requireContext(), image, "image/*")
+                                }
                             }
 
                             override fun onFail(error: Exception?) {}
@@ -1009,7 +999,6 @@ class RoomDetailFragment :
                             override fun onProgress(progress: Int) {}
 
                             override fun onStart() {}
-
                         }
                 )
             }
@@ -1039,7 +1028,7 @@ class RoomDetailFragment :
                         .show()
             }
             is SimpleAction.QuickReact          -> {
-                //eventId,ClickedOn,Add
+                // eventId,ClickedOn,Add
                 roomDetailViewModel.process(RoomDetailActions.UpdateQuickReactAction(action.eventId, action.clickedOn, action.add))
             }
             is SimpleAction.Edit                -> {
@@ -1055,7 +1044,6 @@ class RoomDetailFragment :
                 val permalink = PermalinkFactory.createPermalink(roomDetailArgs.roomId, action.eventId)
                 copyToClipboard(requireContext(), permalink, false)
                 showSnackWithMessage(requireContext().getString(R.string.copied_to_clipboard), Snackbar.LENGTH_SHORT)
-
             }
             is SimpleAction.Resend              -> {
                 roomDetailViewModel.process(RoomDetailActions.ResendMessage(action.eventId))
@@ -1069,15 +1057,15 @@ class RoomDetailFragment :
         }
     }
 
-//utils
+// utils
     /**
      * Insert an user displayname  in the message editor.
      *
      * @param text the text to insert.
      */
-//TODO legacy, refactor
+// TODO legacy, refactor
     private fun insertUserDisplayNameInTextEditor(text: String?) {
-        //TODO move logic outside of fragment
+        // TODO move logic outside of fragment
         if (null != text) {
 //            var vibrate = false
 
@@ -1126,7 +1114,6 @@ class RoomDetailFragment :
         snack.show()
     }
 
-
     // VectorInviteView.Callback
 
     override fun onAcceptInvite() {
@@ -1148,5 +1135,4 @@ class RoomDetailFragment :
     override fun onClearReadMarkerClicked() {
         roomDetailViewModel.process(RoomDetailActions.MarkAllAsRead)
     }
-
 }

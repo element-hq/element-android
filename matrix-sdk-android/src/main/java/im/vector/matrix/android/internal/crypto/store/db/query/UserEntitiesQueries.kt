@@ -42,4 +42,3 @@ internal fun UserEntity.Companion.delete(realm: Realm, userId: String) {
             .findFirst()
             ?.deleteFromRealm()
 }
-

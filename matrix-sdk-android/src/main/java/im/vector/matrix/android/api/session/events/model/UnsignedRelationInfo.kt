@@ -15,7 +15,6 @@
  */
 package im.vector.matrix.android.api.session.events.model
 
-
 interface UnsignedRelationInfo {
     val limited : Boolean?
     val count: Int?

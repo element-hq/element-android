@@ -39,7 +39,6 @@ import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.fragment_login.*
 import javax.inject.Inject
 
-
 /**
  * What can be improved:
  * - When filtering more (when entering new chars), we could filter on result we already have, during the new server request, to avoid empty screen effect
@@ -57,7 +56,6 @@ class LoginFragment : VectorBaseFragment() {
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -185,7 +183,7 @@ class LoginFragment : VectorBaseFragment() {
                         authenticateButton.isVisible = true
                         authenticateButtonSso.isVisible = false
                         if (loginField.text.isNullOrBlank() && passwordField.text.isNullOrBlank()) {
-                            //Jump focus to login
+                            // Jump focus to login
                             loginField.requestFocus()
                         }
                     }

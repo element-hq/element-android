@@ -30,4 +30,3 @@ internal fun UserDraftsEntity.Companion.where(realm: Realm, roomId: String? = nu
     }
     return query
 }
-

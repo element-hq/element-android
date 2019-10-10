@@ -31,54 +31,50 @@ import javax.net.ssl.X509TrustManager
  * @param defaultTrustManager Optional trust manager to fall back on if cert does not match
  * any of the fingerprints. Can be null.
  */
-internal class PinnedTrustManager(private val mFingerprints: List<Fingerprint>?,
-                         private val mDefaultTrustManager: X509TrustManager?) : X509TrustManager {
+internal class PinnedTrustManager(private val fingerprints: List<Fingerprint>?,
+                                  private val defaultTrustManager: X509TrustManager?) : X509TrustManager {
 
     @Throws(CertificateException::class)
     override fun checkClientTrusted(chain: Array<X509Certificate>, s: String) {
         try {
-            if (mDefaultTrustManager != null) {
-                mDefaultTrustManager.checkClientTrusted(
-                        chain, s
-                )
+            if (defaultTrustManager != null) {
+                defaultTrustManager.checkClientTrusted(chain, s)
                 return
             }
         } catch (e: CertificateException) {
             // If there is an exception we fall back to checking fingerprints
-            if (mFingerprints == null || mFingerprints.isEmpty()) {
+            if (fingerprints == null || fingerprints.isEmpty()) {
                 throw UnrecognizedCertificateException(chain[0], Fingerprint.newSha256Fingerprint(chain[0]), e.cause)
             }
         }
 
-        checkTrusted("client", chain)
+        checkTrusted(chain)
     }
 
     @Throws(CertificateException::class)
     override fun checkServerTrusted(chain: Array<X509Certificate>, s: String) {
         try {
-            if (mDefaultTrustManager != null) {
-                mDefaultTrustManager.checkServerTrusted(
-                        chain, s
-                )
+            if (defaultTrustManager != null) {
+                defaultTrustManager.checkServerTrusted(chain, s)
                 return
             }
         } catch (e: CertificateException) {
             // If there is an exception we fall back to checking fingerprints
-            if (mFingerprints == null || mFingerprints.isEmpty()) {
+            if (fingerprints == null || fingerprints.isEmpty()) {
                 throw UnrecognizedCertificateException(chain[0], Fingerprint.newSha256Fingerprint(chain[0]), e.cause)
             }
         }
 
-        checkTrusted("server", chain)
+        checkTrusted(chain)
     }
 
     @Throws(CertificateException::class)
-    private fun checkTrusted(type: String, chain: Array<X509Certificate>) {
+    private fun checkTrusted(chain: Array<X509Certificate>) {
         val cert = chain[0]
 
         var found = false
-        if (mFingerprints != null) {
-            for (allowedFingerprint in mFingerprints) {
+        if (fingerprints != null) {
+            for (allowedFingerprint in fingerprints) {
                 if (allowedFingerprint.matchesCert(cert)) {
                     found = true
                     break

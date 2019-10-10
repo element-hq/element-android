@@ -42,14 +42,12 @@ class KeysBackupSetupStep1Fragment : VectorBaseFragment() {
     @BindView(R.id.keys_backup_setup_step1_advanced)
     lateinit var advancedOptionText: TextView
 
-
     @BindView(R.id.keys_backup_setup_step1_manualExport)
     lateinit var manualExportButton: Button
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
     }
-
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -60,11 +58,10 @@ class KeysBackupSetupStep1Fragment : VectorBaseFragment() {
 
         viewModel.showManualExport.observe(this, Observer {
             val showOption = it ?: false
-            //Can't use isVisible because the kotlin compiler will crash with  Back-end (JVM) Internal error: wrong code generated
+            // Can't use isVisible because the kotlin compiler will crash with  Back-end (JVM) Internal error: wrong code generated
             advancedOptionText.visibility = if (showOption) View.VISIBLE else View.GONE
             manualExportButton.visibility = if (showOption) View.VISIBLE else View.GONE
         })
-
     }
 
     @OnClick(R.id.keys_backup_setup_step1_button)

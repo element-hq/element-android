@@ -34,7 +34,6 @@ class DefaultItemFactory @Inject constructor(private val avatarSizeProvider: Ava
                informationData: MessageInformationData,
                highlight: Boolean,
                callback: TimelineEventController.Callback?): DefaultItem {
-
         return DefaultItem_()
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .highlighted(highlight)
@@ -58,5 +57,4 @@ class DefaultItemFactory @Inject constructor(private val avatarSizeProvider: Ava
         val informationData = informationDataFactory.create(event, null, readMarkerVisible)
         return create(text, informationData, highlight, callback)
     }
-
 }

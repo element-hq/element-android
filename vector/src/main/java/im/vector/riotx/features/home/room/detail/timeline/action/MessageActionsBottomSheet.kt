@@ -94,7 +94,6 @@ class MessageActionsBottomSheet : VectorBaseBottomSheetDialogFragment() {
             }
         }
 
-
         var quickReactionFragment = cfm.findFragmentByTag("QuickReaction") as? QuickReactionFragment
         if (quickReactionFragment == null) {
             quickReactionFragment = QuickReactionFragment.newInstance(arguments!!.get(MvRx.KEY_ARG) as TimelineEventFragmentArgs)
@@ -103,7 +102,6 @@ class MessageActionsBottomSheet : VectorBaseBottomSheetDialogFragment() {
                     .commit()
         }
         quickReactionFragment.interactionListener = object : QuickReactionFragment.InteractionListener {
-
             override fun didQuickReactWith(clickedOn: String, add: Boolean, eventId: String) {
                 actionHandlerModel.fireAction(SimpleAction.QuickReact(eventId, clickedOn, add))
                 dismiss()
@@ -113,7 +111,7 @@ class MessageActionsBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
-        //We want to force the bottom sheet initial state to expanded
+        // We want to force the bottom sheet initial state to expanded
         (dialog as? BottomSheetDialog)?.let { bottomSheetDialog ->
             bottomSheetDialog.setOnShowListener { dialog ->
                 val d = dialog as BottomSheetDialog
@@ -153,7 +151,6 @@ class MessageActionsBottomSheet : VectorBaseBottomSheetDialogFragment() {
         }
         return@withState
     }
-
 
     companion object {
         fun newInstance(roomId: String, informationData: MessageInformationData): MessageActionsBottomSheet {

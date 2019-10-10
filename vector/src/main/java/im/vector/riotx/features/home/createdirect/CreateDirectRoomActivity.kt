@@ -90,11 +90,12 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
         hideWaitingView()
         if (error is CreateRoomFailure.CreatedWithTimeout) {
             finish()
-        } else
+        } else {
             AlertDialog.Builder(this)
                     .setMessage(errorFormatter.toHumanReadable(error))
                     .setPositiveButton(R.string.ok, null)
                     .show()
+        }
     }
 
     private fun renderCreationSuccess(roomId: String?) {
@@ -105,12 +106,9 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
         finish()
     }
 
-
     companion object {
         fun getIntent(context: Context): Intent {
             return Intent(context, CreateDirectRoomActivity::class.java)
         }
     }
-
-
 }

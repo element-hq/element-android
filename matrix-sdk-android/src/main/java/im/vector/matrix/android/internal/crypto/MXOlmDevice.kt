@@ -94,7 +94,6 @@ internal class MXOlmDevice @Inject constructor(
             } catch (e: Exception) {
                 Timber.e(e, "MXOlmDevice : cannot initialize olmAccount")
             }
-
         } else {
             Timber.v("MXOlmDevice : use an existing account")
         }
@@ -217,7 +216,6 @@ internal class MXOlmDevice @Inject constructor(
 
             Timber.v("## createOutboundSession() ;  olmSession.sessionIdentifier: $sessionIdentifier")
             return sessionIdentifier
-
         } catch (e: Exception) {
             Timber.e(e, "## createOutboundSession() failed")
 
@@ -236,7 +234,6 @@ internal class MXOlmDevice @Inject constructor(
      * @return {{payload: string, session_id: string}} decrypted payload, and session id of new session.
      */
     fun createInboundSession(theirDeviceIdentityKey: String, messageType: Int, ciphertext: String): Map<String, String>? {
-
         Timber.v("## createInboundSession() : theirIdentityKey: $theirDeviceIdentityKey")
 
         var olmSession: OlmSession? = null
@@ -250,7 +247,7 @@ internal class MXOlmDevice @Inject constructor(
                 return null
             }
 
-            Timber.v("## createInboundSession() : sessionId: " + olmSession.sessionIdentifier())
+            Timber.v("## createInboundSession() : sessionId: ${olmSession.sessionIdentifier()}")
 
             try {
                 olmAccount!!.removeOneTimeKeys(olmSession)
@@ -262,7 +259,7 @@ internal class MXOlmDevice @Inject constructor(
             Timber.v("## createInboundSession() : ciphertext: $ciphertext")
             try {
                 val sha256 = olmUtility!!.sha256(URLEncoder.encode(ciphertext, "utf-8"))
-                Timber.v("## createInboundSession() :ciphertext: SHA256:" + sha256)
+                Timber.v("## createInboundSession() :ciphertext: SHA256: $sha256")
             } catch (e: Exception) {
                 Timber.e(e, "## createInboundSession() :ciphertext: cannot encode ciphertext")
             }
@@ -343,7 +340,7 @@ internal class MXOlmDevice @Inject constructor(
         if (olmSessionWrapper != null) {
             try {
                 Timber.v("## encryptMessage() : olmSession.sessionIdentifier: $sessionId")
-                //Timber.v("## encryptMessage() : payloadString: " + payloadString);
+                // Timber.v("## encryptMessage() : payloadString: " + payloadString);
 
                 olmMessage = olmSessionWrapper.olmSession.encryptMessage(payloadString)
                 store.storeSession(olmSessionWrapper, theirDeviceIdentityKey)
@@ -352,9 +349,8 @@ internal class MXOlmDevice @Inject constructor(
                 res["body"] = olmMessage.mCipherText
                 res["type"] = olmMessage.mType
             } catch (e: Exception) {
-                Timber.e(e, "## encryptMessage() : failed " + e.message)
+                Timber.e(e, "## encryptMessage() : failed")
             }
-
         }
 
         return res
@@ -384,9 +380,8 @@ internal class MXOlmDevice @Inject constructor(
                 olmSessionWrapper.onMessageReceived()
                 store.storeSession(olmSessionWrapper, theirDeviceIdentityKey)
             } catch (e: Exception) {
-                Timber.e(e, "## decryptMessage() : decryptMessage failed " + e.message)
+                Timber.e(e, "## decryptMessage() : decryptMessage failed")
             }
-
         }
 
         return payloadString
@@ -410,7 +405,6 @@ internal class MXOlmDevice @Inject constructor(
         return null != olmSessionWrapper && olmSessionWrapper.olmSession.matchesInboundSession(ciphertext)
     }
 
-
     // Outbound group session
 
     /**
@@ -425,7 +419,7 @@ internal class MXOlmDevice @Inject constructor(
             outboundGroupSessionStore[session.sessionIdentifier()] = session
             return session.sessionIdentifier()
         } catch (e: Exception) {
-            Timber.e(e, "createOutboundGroupSession " + e.message)
+            Timber.e(e, "createOutboundGroupSession")
 
             session?.releaseSession()
         }
@@ -444,9 +438,8 @@ internal class MXOlmDevice @Inject constructor(
             try {
                 return outboundGroupSessionStore[sessionId]!!.sessionKey()
             } catch (e: Exception) {
-                Timber.e(e, "## getSessionKey() : failed " + e.message)
+                Timber.e(e, "## getSessionKey() : failed")
             }
-
         }
         return null
     }
@@ -475,9 +468,8 @@ internal class MXOlmDevice @Inject constructor(
             try {
                 return outboundGroupSessionStore[sessionId]!!.encryptMessage(payloadString)
             } catch (e: Exception) {
-                Timber.e(e, "## encryptGroupMessage() : failed " + e.message)
+                Timber.e(e, "## encryptGroupMessage() : failed")
             }
-
         }
         return null
     }
@@ -513,7 +505,7 @@ internal class MXOlmDevice @Inject constructor(
                             val existingFirstKnown = it.firstKnownIndex!!
                             val newKnownFirstIndex = session.firstKnownIndex
 
-                            //If our existing session is better we keep it
+                            // If our existing session is better we keep it
                             if (newKnownFirstIndex != null && existingFirstKnown <= newKnownFirstIndex) {
                                 session.olmInboundGroupSession?.releaseSession()
                                 return false
@@ -562,7 +554,6 @@ internal class MXOlmDevice @Inject constructor(
         val sessions = ArrayList<OlmInboundGroupSessionWrapper>(megolmSessionsData.size)
 
         for (megolmSessionData in megolmSessionsData) {
-
             val sessionId = megolmSessionData.sessionId
             val senderKey = megolmSessionData.senderKey
             val roomId = megolmSessionData.roomId
@@ -583,7 +574,7 @@ internal class MXOlmDevice @Inject constructor(
 
             try {
                 if (!TextUtils.equals(session.olmInboundGroupSession?.sessionIdentifier(), sessionId)) {
-                    Timber.e("## importInboundGroupSession : ERROR: Mismatched group session ID from senderKey: " + senderKey!!)
+                    Timber.e("## importInboundGroupSession : ERROR: Mismatched group session ID from senderKey: $senderKey")
                     if (session.olmInboundGroupSession != null) session.olmInboundGroupSession!!.releaseSession()
                     continue
                 }
@@ -601,7 +592,7 @@ internal class MXOlmDevice @Inject constructor(
 
                                 // For now we just ignore updates. TODO: implement something here
                                 if (it.firstKnownIndex!! <= session.firstKnownIndex!!) {
-                                    //Ignore this, keep existing
+                                    // Ignore this, keep existing
                                     session.olmInboundGroupSession!!.releaseSession()
                                 } else {
                                     sessions.add(session)
@@ -652,9 +643,8 @@ internal class MXOlmDevice @Inject constructor(
         // Check that the room id matches the original one for the session. This stops
         // the HS pretending a message was targeting a different room.
         if (roomId == session.roomId) {
-            var decryptResult: OlmInboundGroupSession.DecryptMessageResult? = null
-            try {
-                decryptResult = session.olmInboundGroupSession!!.decryptMessage(body)
+            val decryptResult = try {
+                session.olmInboundGroupSession!!.decryptMessage(body)
             } catch (e: OlmException) {
                 Timber.e(e, "## decryptGroupMessage () : decryptMessage failed")
                 throw MXCryptoError.OlmError(e)
@@ -747,7 +737,6 @@ internal class MXOlmDevice @Inject constructor(
         return if (theirDeviceIdentityKey.isEmpty() || sessionId.isEmpty()) null else {
             store.getDeviceSession(sessionId, theirDeviceIdentityKey)
         }
-
     }
 
     /**

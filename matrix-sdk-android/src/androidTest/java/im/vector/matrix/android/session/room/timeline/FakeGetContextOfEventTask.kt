@@ -32,6 +32,4 @@ internal class FakeGetContextOfEventTask constructor(private val tokenChunkEvent
         )
         return tokenChunkEventPersistor.insertInDb(tokenChunkEvent, params.roomId, PaginationDirection.BACKWARDS)
     }
-
-
 }

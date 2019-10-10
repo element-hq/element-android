@@ -32,7 +32,6 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import im.vector.riotx.R
 
-
 /**
  * Encapsulate the timeline composer UX.
  *
@@ -65,10 +64,9 @@ class TextComposerView @JvmOverloads constructor(context: Context, attrs: Attrib
         collapse(false)
     }
 
-
     fun collapse(animate: Boolean = true, transitionComplete: (() -> Unit)? = null) {
         if (currentConstraintSetId == R.layout.constraint_set_composer_layout_compact) {
-            //ignore we good
+            // ignore we good
             return
         }
         currentConstraintSetId = R.layout.constraint_set_composer_layout_compact
@@ -76,7 +74,6 @@ class TextComposerView @JvmOverloads constructor(context: Context, attrs: Attrib
             val transition = AutoTransition()
             transition.duration = animationDuration
             transition.addListener(object : Transition.TransitionListener {
-
                 override fun onTransitionEnd(transition: Transition) {
                     transitionComplete?.invoke()
                 }
@@ -100,7 +97,7 @@ class TextComposerView @JvmOverloads constructor(context: Context, attrs: Attrib
 
     fun expand(animate: Boolean = true, transitionComplete: (() -> Unit)? = null) {
         if (currentConstraintSetId == R.layout.constraint_set_composer_layout_expanded) {
-            //ignore we good
+            // ignore we good
             return
         }
         currentConstraintSetId = R.layout.constraint_set_composer_layout_expanded
@@ -108,7 +105,6 @@ class TextComposerView @JvmOverloads constructor(context: Context, attrs: Attrib
             val transition = AutoTransition()
             transition.duration = animationDuration
             transition.addListener(object : Transition.TransitionListener {
-
                 override fun onTransitionEnd(transition: Transition) {
                     transitionComplete?.invoke()
                 }

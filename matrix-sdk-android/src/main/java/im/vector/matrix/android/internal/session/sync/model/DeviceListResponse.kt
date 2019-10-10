@@ -27,4 +27,3 @@ internal data class DeviceListResponse(
         //  List of user ids who are no more tracked.
         val left: List<String> = emptyList()
 )
-

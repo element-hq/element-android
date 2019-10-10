@@ -58,5 +58,3 @@ data class OlmPayloadContent(
         }
     }
 }
-
-

@@ -80,5 +80,4 @@ internal class DefaultContentUploadStateTracker @Inject constructor() : ContentU
             }
         }
     }
-
 }

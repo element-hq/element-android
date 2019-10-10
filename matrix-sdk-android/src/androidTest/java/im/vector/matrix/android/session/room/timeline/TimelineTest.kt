@@ -81,6 +81,4 @@ internal class TimelineTest : InstrumentedTest {
 //        timelineEvents.size shouldEqual initialLoad + paginationCount
 //        timeline.dispose()
 //    }
-
-
 }

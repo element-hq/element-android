@@ -179,7 +179,7 @@ internal interface IMXCryptoStore {
      * @param userId  The user's id.
      * @param devices A map from device id to 'MXDevice' object for the device.
      */
-    fun storeUserDevices(userId: String, devices: Map<String, MXDeviceInfo>)
+    fun storeUserDevices(userId: String, devices: Map<String, MXDeviceInfo>?)
 
     /**
      * Retrieve the known devices for a user.

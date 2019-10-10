@@ -74,7 +74,6 @@ class VectorSettingsVoiceVideoFragment : VectorSettingsBaseFragment() {
         }
     }
 
-
     private fun displayRingtonePicker() {
         val intent = Intent(RingtoneManager.ACTION_RINGTONE_PICKER).apply {
             putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, getString(R.string.settings_call_ringtone_dialog_title))
@@ -89,5 +88,4 @@ class VectorSettingsVoiceVideoFragment : VectorSettingsBaseFragment() {
     companion object {
         private const val REQUEST_CALL_RINGTONE = 999
     }
-
 }

@@ -18,7 +18,6 @@ package im.vector.matrix.android.api.pushrules
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.model.PowerLevels
 
-
 class SenderNotificationPermissionCondition(val key: String) : Condition(Kind.sender_notification_permission) {
 
     override fun isSatisfied(conditionResolver: ConditionResolver): Boolean {
@@ -28,7 +27,6 @@ class SenderNotificationPermissionCondition(val key: String) : Condition(Kind.se
     override fun technicalDescription(): String {
         return "User power level <$key>"
     }
-
 
     fun isSatisfied(event: Event, powerLevels: PowerLevels): Boolean {
         return event.senderId != null && powerLevels.getUserPowerLevel(event.senderId) >= powerLevels.notificationLevel(key)

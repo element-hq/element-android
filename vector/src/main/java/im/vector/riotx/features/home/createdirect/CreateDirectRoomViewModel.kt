@@ -113,7 +113,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun handleSelectUser(action: CreateDirectRoomActions.SelectUser) = withState { state ->
-        //Reset the filter asap
+        // Reset the filter asap
         directoryUsersSearch.accept("")
         val isAddOperation: Boolean
         val selectedUsers: Set<User>
@@ -167,5 +167,4 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
                     )
                 }
     }
-
 }

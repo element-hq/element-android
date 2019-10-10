@@ -32,7 +32,6 @@ import javax.inject.Inject
 internal interface SyncTask : Task<SyncTask.Params, Unit> {
 
     data class Params(var timeout: Long = 30_000L)
-
 }
 
 internal class DefaultSyncTask @Inject constructor(private val syncAPI: SyncAPI,
@@ -44,7 +43,6 @@ internal class DefaultSyncTask @Inject constructor(private val syncAPI: SyncAPI,
                                                    private val syncTokenStore: SyncTokenStore,
                                                    private val getHomeServerCapabilitiesTask: GetHomeServerCapabilitiesTask
 ) : SyncTask {
-
 
     override suspend fun execute(params: SyncTask.Params) {
         // Maybe refresh the home server capabilities data we know

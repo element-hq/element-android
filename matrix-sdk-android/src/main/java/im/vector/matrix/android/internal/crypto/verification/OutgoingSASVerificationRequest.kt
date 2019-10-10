@@ -56,7 +56,6 @@ internal class OutgoingSASVerificationRequest(
         isIncoming = false),
         OutgoingSasVerificationRequest {
 
-
     override val uxState: OutgoingSasVerificationRequest.UxState
         get() {
             return when (state) {
@@ -87,7 +86,7 @@ internal class OutgoingSASVerificationRequest(
     fun start() {
         if (state != SasVerificationTxState.None) {
             Timber.e("## start verification from invalid state")
-            //should I cancel??
+            // should I cancel??
             throw IllegalStateException("Interactive Key verification already started")
         }
 
@@ -119,7 +118,7 @@ internal class OutgoingSASVerificationRequest(
             cancel(CancelCode.UnexpectedMessage)
             return
         }
-        //Check that the agreement is correct
+        // Check that the agreement is correct
         if (!KNOWN_AGREEMENT_PROTOCOLS.contains(accept.keyAgreementProtocol)
                 || !KNOWN_HASHES.contains(accept.hash)
                 || !KNOWN_MACS.contains(accept.messageAuthenticationCode)
@@ -129,7 +128,7 @@ internal class OutgoingSASVerificationRequest(
             return
         }
 
-        //Upon receipt of the m.key.verification.accept message from Bob’s device,
+        // Upon receipt of the m.key.verification.accept message from Bob’s device,
         // Alice’s device stores the commitment value for later use.
         accepted = accept
         state = SasVerificationTxState.OnAccepted
@@ -139,10 +138,10 @@ internal class OutgoingSASVerificationRequest(
         val pubKey = getSAS().publicKey
 
         val keyToDevice = KeyVerificationKey.create(transactionId, pubKey)
-        //we need to send this to other device now
+        // we need to send this to other device now
         state = SasVerificationTxState.SendingKey
         sendToOther(EventType.KEY_VERIFICATION_KEY, keyToDevice, SasVerificationTxState.KeySent, CancelCode.User) {
-            //It is possible that we receive the next event before this one :/, in this case we should keep state
+            // It is possible that we receive the next event before this one :/, in this case we should keep state
             if (state == SasVerificationTxState.SendingKey) {
                 state = SasVerificationTxState.KeySent
             }
@@ -163,13 +162,13 @@ internal class OutgoingSASVerificationRequest(
         // message is the same as the expected value based on the value of the key property received
         // in Bob’s m.key.verification.key and the content of Alice’s m.key.verification.start message.
 
-        //check commitment
+        // check commitment
         val concat = vKey.key + JsonCanonicalizer.getCanonicalJson(KeyVerificationStart::class.java, startReq!!)
         val otherCommitment = hashUsingAgreedHashMethod(concat) ?: ""
 
         if (accepted!!.commitment.equals(otherCommitment)) {
             getSAS().setTheirPublicKey(otherKey)
-            //(Note: In all of the following HKDF is as defined in RFC 5869, and uses the previously agreed-on hash function as the hash function,
+            // (Note: In all of the following HKDF is as defined in RFC 5869, and uses the previously agreed-on hash function as the hash function,
             // the shared secret as the input keying material, no salt, and with the input parameter set to the concatenation of:
             // - the string “MATRIX_KEY_VERIFICATION_SAS”,
             // - the Matrix ID of the user who sent the m.key.verification.start message,
@@ -181,12 +180,12 @@ internal class OutgoingSASVerificationRequest(
                     "${credentials.userId}${credentials.deviceId}" +
                     "$otherUserId$otherDeviceId" +
                     transactionId
-            //decimal: generate five bytes by using HKDF.
-            //emoji: generate six bytes by using HKDF.
+            // decimal: generate five bytes by using HKDF.
+            // emoji: generate six bytes by using HKDF.
             shortCodeBytes = getSAS().generateShortCode(sasInfo, 6)
             state = SasVerificationTxState.ShortCodeReady
         } else {
-            //bad commitement
+            // bad commitement
             cancel(CancelCode.MismatchedCommitment)
         }
     }
@@ -205,11 +204,11 @@ internal class OutgoingSASVerificationRequest(
 
         theirMac = vKey
 
-        //Do I have my Mac?
+        // Do I have my Mac?
         if (myMac != null) {
-            //I can check
+            // I can check
             verifyMacs()
         }
-        //Wait for ShortCode Accepted
+        // Wait for ShortCode Accepted
     }
 }

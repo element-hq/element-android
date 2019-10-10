@@ -66,7 +66,6 @@ class NotificationTroubleshootRecyclerViewAdapter(val tests: ArrayList<Troublesh
         }
 
         fun bind(test: TroubleshootTest) {
-
             val context = itemView.context
             titleText.setTextColor(ThemeUtils.getColor(context, R.attr.riotx_text_primary))
             descriptionText.setTextColor(ThemeUtils.getColor(context, R.attr.riotx_text_secondary))
@@ -82,7 +81,6 @@ class NotificationTroubleshootRecyclerViewAdapter(val tests: ArrayList<Troublesh
                 TroubleshootTest.TestStatus.RUNNING     -> {
                     progressBar.visibility = View.VISIBLE
                     statusIconImage.visibility = View.INVISIBLE
-
                 }
                 TroubleshootTest.TestStatus.FAILED      -> {
                     progressBar.visibility = View.INVISIBLE
@@ -122,6 +120,5 @@ class NotificationTroubleshootRecyclerViewAdapter(val tests: ArrayList<Troublesh
                 descriptionText.text = description
             }
         }
-
     }
 }

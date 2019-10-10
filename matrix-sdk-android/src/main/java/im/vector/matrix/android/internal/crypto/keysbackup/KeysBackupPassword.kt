@@ -27,7 +27,6 @@ import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 import kotlin.experimental.xor
 
-
 private const val SALT_LENGTH = 32
 private const val DEFAULT_ITERATION = 500_000
 
@@ -133,7 +132,7 @@ private fun deriveKey(password: String,
         }
     }
 
-    Timber.v("KeysBackupPassword", "## deriveKeys() : " + iterations + " in " + (System.currentTimeMillis() - t0) + " ms")
+    Timber.v("KeysBackupPassword: deriveKeys() : " + iterations + " in " + (System.currentTimeMillis() - t0) + " ms")
 
     return dk
 }

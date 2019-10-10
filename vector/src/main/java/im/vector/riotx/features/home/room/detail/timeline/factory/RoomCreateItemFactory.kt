@@ -48,6 +48,4 @@ class RoomCreateItemFactory @Inject constructor(private val colorProvider: Color
         return RoomCreateItem_()
                 .text(text)
     }
-
-
 }

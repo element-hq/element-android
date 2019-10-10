@@ -93,7 +93,6 @@ class BadgeFloatingActionButton @JvmOverloads constructor(
             }
         }
 
-
     var maxCount: Int = 99
         set(value) {
             if (field != value) {
@@ -190,5 +189,4 @@ class BadgeFloatingActionButton @JvmOverloads constructor(
     companion object {
         val TEXT_APPEARANCE_SUPPORTED_ATTRS = intArrayOf(android.R.attr.textSize, android.R.attr.textColor)
     }
-
 }

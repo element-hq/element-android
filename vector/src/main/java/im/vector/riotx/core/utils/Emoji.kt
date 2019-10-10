@@ -49,7 +49,7 @@ private val emojisPattern = Pattern.compile("((?:[\uD83C\uDF00-\uD83D\uDDFF]" +
         "|\uD83C\uDCCF\uFE0F?" +
         "|[\u231A\u231B\u2328\u23CF\u23E9-\u23F3\u23F8-\u23FA]\uFE0F?))")
 
-//A hashset from all supported emoji
+// A hashset from all supported emoji
 private var knownEmojiSet: HashSet<String>? = null
 
 fun initKnownEmojiHashSet(context: Context, done: (() -> Unit)? = null) {
@@ -71,7 +71,7 @@ fun initKnownEmojiHashSet(context: Context, done: (() -> Unit)? = null) {
 fun isSingleEmoji(string: String): Boolean {
     if (knownEmojiSet == null) {
         Timber.e("Known Emoji Hashset not initialized")
-        //use fallback regexp
+        // use fallback regexp
         return containsOnlyEmojis(string)
     }
     return knownEmojiSet?.contains(string) ?: false

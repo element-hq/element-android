@@ -19,7 +19,6 @@ import android.view.View
 import android.view.ViewStub
 import android.widget.RelativeLayout
 import androidx.annotation.IdRes
-import androidx.constraintlayout.widget.Guideline
 import androidx.core.view.marginStart
 import androidx.core.view.updateLayoutParams
 import com.airbnb.epoxy.EpoxyAttribute
@@ -74,5 +73,4 @@ abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>
             view.findViewById<ViewStub>(stubId).inflate()
         }
     }
-
 }

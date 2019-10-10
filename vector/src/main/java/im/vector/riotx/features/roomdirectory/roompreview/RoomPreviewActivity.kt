@@ -36,7 +36,6 @@ data class RoomPreviewData(
         val avatarUrl: String?
 ) : Parcelable
 
-
 class RoomPreviewActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     companion object {
@@ -74,5 +73,4 @@ class RoomPreviewActivity : VectorBaseActivity(), ToolbarConfigurable {
             }
         }
     }
-
 }

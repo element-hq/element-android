@@ -38,7 +38,7 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
             EventType.STATE_ROOM_TOPIC         -> formatRoomTopicEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
             EventType.STATE_ROOM_MEMBER        -> formatRoomMemberEvent(timelineEvent.root, timelineEvent.senderName())
             EventType.STATE_HISTORY_VISIBILITY -> formatRoomHistoryVisibilityEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
-            EventType.STATE_ROOM_TOMBSTONE     -> formatRoomTombstoneEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
+            EventType.STATE_ROOM_TOMBSTONE     -> formatRoomTombstoneEvent(timelineEvent.getDisambiguatedDisplayName())
             EventType.CALL_INVITE,
             EventType.CALL_HANGUP,
             EventType.CALL_ANSWER              -> formatCallEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
@@ -61,7 +61,7 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
             EventType.CALL_INVITE,
             EventType.CALL_HANGUP,
             EventType.CALL_ANSWER              -> formatCallEvent(event, senderName)
-            EventType.STATE_ROOM_TOMBSTONE     -> formatRoomTombstoneEvent(event, senderName)
+            EventType.STATE_ROOM_TOMBSTONE     -> formatRoomTombstoneEvent(senderName)
             else                               -> {
                 Timber.v("Type $type not handled by this formatter")
                 null
@@ -82,7 +82,7 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
         }
     }
 
-    private fun formatRoomTombstoneEvent(event: Event, senderName: String?): CharSequence? {
+    private fun formatRoomTombstoneEvent(senderName: String?): CharSequence? {
         return stringProvider.getString(R.string.notice_room_update, senderName)
     }
 
@@ -209,5 +209,4 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
             else                                          -> null
         }
     }
-
 }

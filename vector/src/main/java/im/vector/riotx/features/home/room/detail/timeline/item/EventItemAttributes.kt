@@ -15,4 +15,3 @@
  */
 
 package im.vector.riotx.features.home.room.detail.timeline.item
-

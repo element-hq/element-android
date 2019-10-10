@@ -53,5 +53,4 @@ internal class RoomFullyReadHandler @Inject constructor() {
         val timelineEventEntities = TimelineEventEntity.where(realm, roomId = roomId, eventId = content.eventId).findAll()
         timelineEventEntities.forEach { it.readMarker = readMarkerEntity }
     }
-
 }

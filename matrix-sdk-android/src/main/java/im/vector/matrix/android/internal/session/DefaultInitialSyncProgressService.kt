@@ -22,7 +22,6 @@ import im.vector.matrix.android.api.session.InitialSyncProgressService
 import timber.log.Timber
 import javax.inject.Inject
 
-
 @SessionScope
 class DefaultInitialSyncProgressService @Inject constructor() : InitialSyncProgressService {
 
@@ -58,7 +57,7 @@ class DefaultInitialSyncProgressService @Inject constructor() : InitialSyncProgr
     fun endTask(nameRes: Int) {
         val endedTask = rootTask?.leaf()
         if (endedTask?.nameRes == nameRes) {
-            //close it
+            // close it
             val parent = endedTask.parent
             parent?.child = null
             parent?.setProgress(endedTask.offset + (endedTask.totalProgress * endedTask.parentWeight).toInt())
@@ -72,7 +71,6 @@ class DefaultInitialSyncProgressService @Inject constructor() : InitialSyncProgr
         rootTask = null
         status.postValue(null)
     }
-
 
     private inner class TaskInfo(@StringRes var nameRes: Int,
                                  var totalProgress: Int,
@@ -123,7 +121,6 @@ inline fun <T> reportSubtask(reporter: DefaultInitialSyncProgressService?,
     }
 }
 
-
 inline fun <K, V, R> Map<out K, V>.mapWithProgress(reporter: DefaultInitialSyncProgressService?,
                                                    taskId: Int,
                                                    weight: Float,
@@ -139,4 +136,3 @@ inline fun <K, V, R> Map<out K, V>.mapWithProgress(reporter: DefaultInitialSyncP
         reporter?.endTask(taskId)
     }
 }
-

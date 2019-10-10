@@ -43,5 +43,4 @@ internal abstract class UserModule {
 
     @Binds
     abstract fun bindSearchUserTask(searchUserTask: DefaultSearchUserTask): SearchUserTask
-
 }

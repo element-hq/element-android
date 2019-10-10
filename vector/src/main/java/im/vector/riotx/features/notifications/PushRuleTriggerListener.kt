@@ -24,13 +24,11 @@ import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
-
 @Singleton
 class PushRuleTriggerListener @Inject constructor(
         private val resolver: NotifiableEventResolver,
         private val notificationDrawerManager: NotificationDrawerManager
 ) : PushRuleService.PushRuleListener {
-
 
     var session: Session? = null
 
@@ -45,7 +43,7 @@ class PushRuleTriggerListener @Inject constructor(
             val notifiableEvent = resolver.resolveEvent(event, session!!)
             if (notifiableEvent == null) {
                 Timber.v("## Failed to resolve event")
-                //TODO
+                // TODO
             } else {
                 notifiableEvent.noisy = !notificationAction.soundName.isNullOrBlank()
                 Timber.v("New event to notify")
@@ -86,5 +84,4 @@ class PushRuleTriggerListener @Inject constructor(
         session = null
         notificationDrawerManager.clearAllEvents()
     }
-
 }

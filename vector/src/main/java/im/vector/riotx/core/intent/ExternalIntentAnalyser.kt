@@ -64,10 +64,8 @@ sealed class ExternalIntentData {
     ) : ExternalIntentData()
 }
 
-
 fun analyseIntent(intent: Intent): List<ExternalIntentData> {
     val externalIntentDataList = ArrayList<ExternalIntentData>()
-
 
     // chrome adds many items when sharing an web page link
     // so, test first the type

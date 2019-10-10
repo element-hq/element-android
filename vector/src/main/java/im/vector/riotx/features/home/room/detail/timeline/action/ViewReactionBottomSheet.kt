@@ -67,7 +67,6 @@ class ViewReactionBottomSheet : VectorBaseBottomSheetDialogFragment() {
         bottomSheetTitle.text = context?.getString(R.string.reactions)
     }
 
-
     override fun invalidate() = withState(viewModel) {
         epoxyController.setData(it)
     }
@@ -82,7 +81,6 @@ class ViewReactionBottomSheet : VectorBaseBottomSheetDialogFragment() {
             )
             args.putParcelable(MvRx.KEY_ARG, parcelableArgs)
             return ViewReactionBottomSheet().apply { arguments = args }
-
         }
     }
 }

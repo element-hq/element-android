@@ -103,10 +103,10 @@ object MXEncryptedAttachments {
                                     ext = true,
                                     key_ops = listOf("encrypt", "decrypt"),
                                     kty = "oct",
-                                    k = base64ToBase64Url(Base64.encodeToString(key, Base64.DEFAULT))!!
+                                    k = base64ToBase64Url(Base64.encodeToString(key, Base64.DEFAULT))
                             ),
                             iv = Base64.encodeToString(initVectorBytes, Base64.DEFAULT).replace("\n", "").replace("=", ""),
-                            hashes = mapOf("sha256" to base64ToUnpaddedBase64(Base64.encodeToString(messageDigest.digest(), Base64.DEFAULT))!!),
+                            hashes = mapOf("sha256" to base64ToUnpaddedBase64(Base64.encodeToString(messageDigest.digest(), Base64.DEFAULT))),
                             v = "v2"
                     ),
                     encryptedByteArray = outStream.toByteArray()

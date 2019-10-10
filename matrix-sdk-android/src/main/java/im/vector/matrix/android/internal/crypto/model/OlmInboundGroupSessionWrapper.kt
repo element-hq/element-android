@@ -57,7 +57,6 @@ class OlmInboundGroupSessionWrapper : Serializable {
                 } catch (e: Exception) {
                     Timber.e(e, "## getFirstKnownIndex() : getFirstKnownIndex failed")
                 }
-
             }
 
             return null
@@ -79,7 +78,6 @@ class OlmInboundGroupSessionWrapper : Serializable {
         } catch (e: Exception) {
             Timber.e(e, "Cannot create")
         }
-
     }
 
     /**
@@ -149,7 +147,6 @@ class OlmInboundGroupSessionWrapper : Serializable {
             } catch (e: Exception) {
                 Timber.e(e, "## exportSession() : export failed")
             }
-
         }
 
         return null

@@ -35,6 +35,5 @@ class PushRulesViewModel(initialState: PushRulesViewState) : VectorViewModel<Pus
             val rules = session.getPushRules()
             return PushRulesViewState(rules)
         }
-
     }
 }

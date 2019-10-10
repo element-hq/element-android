@@ -27,5 +27,4 @@ interface CacheService {
      * Clear the whole cached data, except credentials. Once done, the session is closed and has to be opened again
      */
     fun clearCache(callback: MatrixCallback<Unit>)
-
 }

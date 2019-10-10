@@ -253,13 +253,5 @@ data class HomeServerConnectionConfig(
                     forceUsageTlsVersions
             )
         }
-
     }
-
-
 }
-
-
-
-
-

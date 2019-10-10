@@ -31,7 +31,6 @@ abstract class NoResultItem : VectorEpoxyModel<NoResultItem.Holder>() {
         holder.textView.text = text
     }
 
-
     class Holder : VectorEpoxyHolder() {
         val textView by bind<TextView>(R.id.itemNoResultText)
     }

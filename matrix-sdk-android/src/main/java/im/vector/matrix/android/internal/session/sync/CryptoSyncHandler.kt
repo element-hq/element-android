@@ -32,7 +32,6 @@ import im.vector.matrix.android.internal.session.sync.model.ToDeviceSyncResponse
 import timber.log.Timber
 import javax.inject.Inject
 
-
 internal class CryptoSyncHandler @Inject constructor(private val cryptoService: DefaultCryptoService,
                                                      private val sasVerificationService: DefaultSasVerificationService) {
 
@@ -56,7 +55,6 @@ internal class CryptoSyncHandler @Inject constructor(private val cryptoService: 
         cryptoService.onSyncCompleted(syncResponse)
     }
 
-
     /**
      * Decrypt an encrypted event
      *
@@ -70,7 +68,7 @@ internal class CryptoSyncHandler @Inject constructor(private val cryptoService: 
             try {
                 result = cryptoService.decryptEvent(event, timelineId ?: "")
             } catch (exception: MXCryptoError) {
-                event.mCryptoError = (exception as? MXCryptoError.Base)?.errorType //setCryptoError(exception.cryptoError)
+                event.mCryptoError = (exception as? MXCryptoError.Base)?.errorType // setCryptoError(exception.cryptoError)
             }
 
             if (null != result) {
@@ -78,7 +76,7 @@ internal class CryptoSyncHandler @Inject constructor(private val cryptoService: 
 //                        payload = result.clearEvent,
 //                        keysClaimed = map
 //                )
-                //TODO persist that?
+                // TODO persist that?
                 event.mxDecryptionResult = OlmDecryptionResult(
                         payload = result.clearEvent,
                         senderKey = result.senderCurve25519Key,

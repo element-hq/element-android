@@ -136,7 +136,7 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(private val s
         }
 
         if (isBackupAlreadySetup) {
-            //Add infos
+            // Add infos
             genericItem {
                 id("version")
                 title(stringProvider.getString(R.string.keys_backup_info_title_version))
@@ -206,7 +206,7 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(private val s
                                     }
                                 }
                             } else {
-                                //Invalid signature
+                                // Invalid signature
                                 endIconResourceId(R.drawable.e2e_warning)
                                 if (isDeviceVerified) {
                                     description(stringProvider.getString(R.string.keys_backup_settings_invalid_signature_from_verified_device, deviceId))
@@ -216,7 +216,7 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(private val s
                             }
                         }
                     }
-                } //end for each
+                } // end for each
             }
             is Fail          -> {
                 errorWithRetryItem {

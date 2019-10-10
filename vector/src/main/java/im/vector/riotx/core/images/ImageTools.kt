@@ -26,7 +26,6 @@ import javax.inject.Inject
 
 class ImageTools @Inject constructor(private val context: Context) {
 
-
     /**
      * Gets the [ExifInterface] value for the orientation for this local bitmap Uri.
      *
@@ -61,12 +60,14 @@ class ImageTools @Inject constructor(private val context: Context) {
             }
         } else if (uri.scheme == "file") {
             try {
-                val exif = ExifInterface(uri.path)
-                orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED)
+                val path = uri.path
+                if (path != null) {
+                    val exif = ExifInterface(path)
+                    orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED)
+                }
             } catch (e: Exception) {
                 Timber.e(e, "Cannot get EXIF for file uri $uri")
             }
-
         }
 
         return orientation

@@ -27,5 +27,4 @@ internal class CancelableWork(private val context: Context,
     override fun cancel() {
         WorkManager.getInstance(context).cancelWorkById(workId)
     }
-
 }
