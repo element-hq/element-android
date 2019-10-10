@@ -18,7 +18,9 @@ package im.vector.riotx.features.attachments
 
 import android.app.Activity
 import androidx.fragment.app.Fragment
+import com.kbeanie.multipicker.api.AudioPicker
 import com.kbeanie.multipicker.api.CameraImagePicker
+import com.kbeanie.multipicker.api.ContactPicker
 import com.kbeanie.multipicker.api.FilePicker
 import com.kbeanie.multipicker.api.ImagePicker
 import com.kbeanie.multipicker.api.VideoPicker
@@ -33,6 +35,7 @@ interface PickerManagerFactory {
 
     fun createFilePicker(): FilePicker
 
+    fun createAudioPicker(): AudioPicker
 
 }
 
@@ -67,6 +70,12 @@ class ActivityPickerManagerFactory(private val activity: Activity, callback: Att
         }
     }
 
+    override fun createAudioPicker(): AudioPicker {
+        return AudioPicker(activity).also {
+            it.allowMultiple()
+            it.setAudioPickerCallback(attachmentsPickerCallback)
+        }
+    }
 }
 
 class FragmentPickerManagerFactory(private val fragment: Fragment, callback: AttachmentsHelper.Callback) : PickerManagerFactory {
@@ -97,6 +106,13 @@ class FragmentPickerManagerFactory(private val fragment: Fragment, callback: Att
         return FilePicker(fragment).also {
             it.allowMultiple()
             it.setFilePickerCallback(attachmentsPickerCallback)
+        }
+    }
+
+    override fun createAudioPicker(): AudioPicker {
+        return AudioPicker(fragment).also {
+            it.allowMultiple()
+            it.setAudioPickerCallback(attachmentsPickerCallback)
         }
     }
 

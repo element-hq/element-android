@@ -16,9 +16,12 @@
 
 package im.vector.riotx.features.attachments
 
+import com.kbeanie.multipicker.api.callbacks.AudioPickerCallback
+import com.kbeanie.multipicker.api.callbacks.ContactPickerCallback
 import com.kbeanie.multipicker.api.callbacks.FilePickerCallback
 import com.kbeanie.multipicker.api.callbacks.ImagePickerCallback
 import com.kbeanie.multipicker.api.callbacks.VideoPickerCallback
+import com.kbeanie.multipicker.api.entity.ChosenAudio
 import com.kbeanie.multipicker.api.entity.ChosenFile
 import com.kbeanie.multipicker.api.entity.ChosenImage
 import com.kbeanie.multipicker.api.entity.ChosenVideo
@@ -26,7 +29,18 @@ import com.kbeanie.multipicker.api.entity.ChosenVideo
 /**
  * This class delegates the PickerManager callbacks to an [AttachmentsHelper.Callback]
  */
-class AttachmentsPickerCallback(private val callback: AttachmentsHelper.Callback) : ImagePickerCallback, FilePickerCallback, VideoPickerCallback {
+class AttachmentsPickerCallback(private val callback: AttachmentsHelper.Callback) : ImagePickerCallback, FilePickerCallback, VideoPickerCallback, AudioPickerCallback {
+
+    override fun onAudiosChosen(audios: MutableList<ChosenAudio>?) {
+        if (audios.isNullOrEmpty()) {
+            callback.onAttachmentsProcessFailed()
+        } else {
+            val attachments = audios.map {
+                it.toContentAttachmentData()
+            }
+            callback.onAttachmentsReady(attachments)
+        }
+    }
 
     override fun onFilesChosen(files: MutableList<ChosenFile>?) {
         if (files.isNullOrEmpty()) {

@@ -16,6 +16,7 @@
 
 package im.vector.riotx.features.attachments
 
+import com.kbeanie.multipicker.api.entity.ChosenAudio
 import com.kbeanie.multipicker.api.entity.ChosenFile
 import com.kbeanie.multipicker.api.entity.ChosenImage
 import com.kbeanie.multipicker.api.entity.ChosenVideo
@@ -29,6 +30,18 @@ fun ChosenFile.toContentAttachmentData(): ContentAttachmentData {
             size = size,
             date = createdAt.time,
             name = displayName
+    )
+}
+
+fun ChosenAudio.toContentAttachmentData(): ContentAttachmentData {
+    return ContentAttachmentData(
+            path = originalPath,
+            mimeType = mimeType,
+            type = mapType(),
+            size = size,
+            date = createdAt.time,
+            name = displayName,
+            duration = duration
     )
 }
 

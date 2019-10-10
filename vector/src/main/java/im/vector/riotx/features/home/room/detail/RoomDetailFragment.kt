@@ -622,9 +622,9 @@ class RoomDetailFragment :
     private fun setupAttachmentButton() {
         composerLayout.attachmentButton.setOnClickListener {
             if (!::attachmentTypeSelector.isInitialized) {
-                attachmentTypeSelector = AttachmentTypeSelectorView(requireContext(), this)
+                attachmentTypeSelector = AttachmentTypeSelectorView(vectorBaseActivity, vectorBaseActivity.layoutInflater, this)
             }
-            attachmentTypeSelector.show(it)
+            attachmentTypeSelector.show(composerLayout.attachmentButton)
         }
     }
 
@@ -1114,7 +1114,10 @@ class RoomDetailFragment :
             AttachmentTypeSelectorView.TYPE_CAMERA  -> attachmentsHelper.openCamera()
             AttachmentTypeSelectorView.TYPE_FILE    -> attachmentsHelper.selectFile()
             AttachmentTypeSelectorView.TYPE_GALLERY -> attachmentsHelper.selectGallery()
+            AttachmentTypeSelectorView.TYPE_AUDIO   -> attachmentsHelper.selectAudio()
+            AttachmentTypeSelectorView.TYPE_CONTACT -> vectorBaseActivity.notImplemented("Picking contacts")
             AttachmentTypeSelectorView.TYPE_STICKER -> vectorBaseActivity.notImplemented("Adding stickers")
+
         }
     }
 

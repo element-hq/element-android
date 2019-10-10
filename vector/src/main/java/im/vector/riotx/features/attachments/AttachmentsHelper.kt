@@ -66,6 +66,10 @@ class AttachmentsHelper private constructor(private val pickerManagerFactory: Pi
         pickerManagerFactory.createFilePicker()
     }
 
+    private val audioPicker by lazy {
+        pickerManagerFactory.createAudioPicker()
+    }
+
     // Restorable
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -95,6 +99,13 @@ class AttachmentsHelper private constructor(private val pickerManagerFactory: Pi
      */
     fun selectGallery() {
         imagePicker.pickImage()
+    }
+
+    /**
+     * Starts the process for handling audio picking
+     */
+    fun selectAudio() {
+        audioPicker.pickAudio()
     }
 
     /**
