@@ -21,92 +21,53 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProviders
-import butterknife.BindView
-import butterknife.ButterKnife
-import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import im.vector.riotx.EmojiCompatFontProvider
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
+import im.vector.riotx.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
-import kotlinx.android.synthetic.main.bottom_sheet_message_actions.*
+import kotlinx.android.synthetic.main.bottom_sheet_generic_recycler_epoxy.*
 import javax.inject.Inject
 
 /**
  * Bottom sheet fragment that shows a message preview with list of contextual actions
- * (Includes fragments for quick reactions and list of actions)
  */
-class MessageActionsBottomSheet : VectorBaseBottomSheetDialogFragment() {
+class MessageActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), MessageActionsEpoxyController.MessageActionsEpoxyControllerListener {
+    @Inject lateinit var messageActionViewModelFactory: MessageActionsViewModel.Factory
+    @Inject lateinit var avatarRenderer: AvatarRenderer
+    @Inject lateinit var fontProvider: EmojiCompatFontProvider
 
-    @Inject
-    lateinit var messageActionViewModelFactory: MessageActionsViewModel.Factory
-    @Inject
-    lateinit var avatarRenderer: AvatarRenderer
     private val viewModel: MessageActionsViewModel by fragmentViewModel(MessageActionsViewModel::class)
 
+    private lateinit var messageActionsEpoxyController: MessageActionsEpoxyController
     private lateinit var actionHandlerModel: ActionsHandler
-
-    @BindView(R.id.bottom_sheet_message_preview_avatar)
-    lateinit var senderAvatarImageView: ImageView
-
-    @BindView(R.id.bottom_sheet_message_preview_sender)
-    lateinit var senderNameTextView: TextView
-
-    @BindView(R.id.bottom_sheet_message_preview_timestamp)
-    lateinit var messageTimestampText: TextView
-
-    @BindView(R.id.bottom_sheet_message_preview_body)
-    lateinit var messageBodyTextView: TextView
 
     override fun injectWith(screenComponent: ScreenComponent) {
         screenComponent.inject(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.bottom_sheet_message_actions, container, false)
-        ButterKnife.bind(this, view)
-        return view
+        return inflater.inflate(R.layout.bottom_sheet_generic_recycler_epoxy, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         actionHandlerModel = ViewModelProviders.of(requireActivity()).get(ActionsHandler::class.java)
 
-        val cfm = childFragmentManager
-        var menuActionFragment = cfm.findFragmentByTag("MenuActionFragment") as? MessageMenuFragment
-        if (menuActionFragment == null) {
-            menuActionFragment = MessageMenuFragment.newInstance(arguments!!.get(MvRx.KEY_ARG) as TimelineEventFragmentArgs)
-            cfm.beginTransaction()
-                    .replace(R.id.bottom_sheet_menu_container, menuActionFragment, "MenuActionFragment")
-                    .commit()
-        }
-        menuActionFragment.interactionListener = object : MessageMenuFragment.InteractionListener {
-            override fun didSelectMenuAction(simpleAction: SimpleAction) {
-                actionHandlerModel.fireAction(simpleAction)
-                dismiss()
-            }
-        }
+        messageActionsEpoxyController = MessageActionsEpoxyController(requireContext(), avatarRenderer, fontProvider)
+        bottomSheetEpoxyRecyclerView.setController(messageActionsEpoxyController)
+        messageActionsEpoxyController.listener = this
+    }
 
-        var quickReactionFragment = cfm.findFragmentByTag("QuickReaction") as? QuickReactionFragment
-        if (quickReactionFragment == null) {
-            quickReactionFragment = QuickReactionFragment.newInstance(arguments!!.get(MvRx.KEY_ARG) as TimelineEventFragmentArgs)
-            cfm.beginTransaction()
-                    .replace(R.id.bottom_sheet_quick_reaction_container, quickReactionFragment, "QuickReaction")
-                    .commit()
-        }
-        quickReactionFragment.interactionListener = object : QuickReactionFragment.InteractionListener {
-            override fun didQuickReactWith(clickedOn: String, add: Boolean, eventId: String) {
-                actionHandlerModel.fireAction(SimpleAction.QuickReact(eventId, clickedOn, add))
-                dismiss()
-            }
-        }
+    override fun didSelectMenuAction(simpleAction: SimpleAction) {
+        actionHandlerModel.fireAction(simpleAction)
+        dismiss()
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -124,32 +85,7 @@ class MessageActionsBottomSheet : VectorBaseBottomSheetDialogFragment() {
     }
 
     override fun invalidate() = withState(viewModel) {
-        val body = viewModel.resolveBody(it)
-        if (body != null) {
-            bottom_sheet_message_preview.isVisible = true
-            senderNameTextView.text = it.senderName()
-            messageBodyTextView.text = body
-            messageTimestampText.text = it.time()
-            avatarRenderer.render(it.informationData.avatarUrl, it.informationData.senderId, it.senderName(), senderAvatarImageView)
-        } else {
-            bottom_sheet_message_preview.isVisible = false
-        }
-        quickReactBottomDivider.isVisible = it.canReact()
-        bottom_sheet_quick_reaction_container.isVisible = it.canReact()
-        if (it.informationData.sendState.isSending()) {
-            messageStatusInfo.isVisible = true
-            messageStatusProgress.isVisible = true
-            messageStatusText.text = getString(R.string.event_status_sending_message)
-            messageStatusText.setCompoundDrawables(null, null, null, null)
-        } else if (it.informationData.sendState.hasFailed()) {
-            messageStatusInfo.isVisible = true
-            messageStatusProgress.isVisible = false
-            messageStatusText.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_warning_small, 0, 0, 0)
-            messageStatusText.text = getString(R.string.unable_to_send_message)
-        } else {
-            messageStatusInfo.isVisible = false
-        }
-        return@withState
+        messageActionsEpoxyController.setData(it)
     }
 
     companion object {

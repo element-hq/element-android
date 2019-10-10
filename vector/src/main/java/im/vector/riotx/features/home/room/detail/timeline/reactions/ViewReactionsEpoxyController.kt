@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.home.room.detail.timeline.action
+package im.vector.riotx.features.home.room.detail.timeline.reactions
 
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Fail

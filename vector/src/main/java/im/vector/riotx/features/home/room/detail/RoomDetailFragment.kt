@@ -94,7 +94,9 @@ import im.vector.riotx.features.home.room.detail.composer.TextComposerViewState
 import im.vector.riotx.features.home.room.detail.readreceipts.DisplayReadReceiptsBottomSheet
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.home.room.detail.timeline.action.*
+import im.vector.riotx.features.home.room.detail.timeline.edithistory.ViewEditHistoryBottomSheet
 import im.vector.riotx.features.home.room.detail.timeline.item.*
+import im.vector.riotx.features.home.room.detail.timeline.reactions.ViewReactionsBottomSheet
 import im.vector.riotx.features.html.EventHtmlRenderer
 import im.vector.riotx.features.html.PillImageSpan
 import im.vector.riotx.features.invite.VectorInviteView
@@ -917,7 +919,7 @@ class RoomDetailFragment :
     }
 
     override fun onLongClickOnReactionPill(informationData: MessageInformationData, reaction: String) {
-        ViewReactionBottomSheet.newInstance(roomDetailArgs.roomId, informationData)
+        ViewReactionsBottomSheet.newInstance(roomDetailArgs.roomId, informationData)
                 .show(requireActivity().supportFragmentManager, "DISPLAY_REACTIONS")
     }
 
@@ -970,7 +972,7 @@ class RoomDetailFragment :
                 startActivityForResult(EmojiReactionPickerActivity.intent(requireContext(), action.eventId), REACTION_SELECT_REQUEST_CODE)
             }
             is SimpleAction.ViewReactions       -> {
-                ViewReactionBottomSheet.newInstance(roomDetailArgs.roomId, action.messageInformationData)
+                ViewReactionsBottomSheet.newInstance(roomDetailArgs.roomId, action.messageInformationData)
                         .show(requireActivity().supportFragmentManager, "DISPLAY_REACTIONS")
             }
             is SimpleAction.Copy                -> {

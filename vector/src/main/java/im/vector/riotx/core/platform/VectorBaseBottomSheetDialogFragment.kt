@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.riotx.features.home.room.detail.timeline.action
+package im.vector.riotx.core.platform
 
 import android.content.Context
 import android.os.Bundle
@@ -24,7 +24,6 @@ import com.airbnb.mvrx.MvRxViewModelStore
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import im.vector.riotx.core.di.DaggerScreenComponent
 import im.vector.riotx.core.di.ScreenComponent
-import im.vector.riotx.core.platform.VectorBaseActivity
 import java.util.*
 
 /**

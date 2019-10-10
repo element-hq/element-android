@@ -30,7 +30,7 @@ import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.args
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
-import im.vector.riotx.features.home.room.detail.timeline.action.VectorBaseBottomSheetDialogFragment
+import im.vector.riotx.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.riotx.features.home.room.detail.timeline.item.ReadReceiptData
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.bottom_sheet_epoxylist_with_title.*

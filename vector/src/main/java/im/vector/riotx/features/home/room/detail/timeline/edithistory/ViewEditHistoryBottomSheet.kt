@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.riotx.features.home.room.detail.timeline.action
+package im.vector.riotx.features.home.room.detail.timeline.edithistory
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -29,6 +29,8 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
+import im.vector.riotx.core.platform.VectorBaseBottomSheetDialogFragment
+import im.vector.riotx.features.home.room.detail.timeline.action.TimelineEventFragmentArgs
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.riotx.features.html.EventHtmlRenderer
 import kotlinx.android.synthetic.main.bottom_sheet_epoxylist_with_title.*

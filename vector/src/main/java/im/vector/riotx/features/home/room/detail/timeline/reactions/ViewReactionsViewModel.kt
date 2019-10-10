@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.home.room.detail.timeline.action
+package im.vector.riotx.features.home.room.detail.timeline.reactions
 
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.FragmentViewModelContext
@@ -30,6 +30,7 @@ import im.vector.matrix.rx.RxRoom
 import im.vector.matrix.rx.unwrap
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.date.VectorDateFormatter
+import im.vector.riotx.features.home.room.detail.timeline.action.TimelineEventFragmentArgs
 import io.reactivex.Observable
 import io.reactivex.Single
 
@@ -53,10 +54,10 @@ data class ReactionInfo(
 /**
  * Used to display the list of members that reacted to a given event
  */
-class ViewReactionViewModel @AssistedInject constructor(@Assisted
+class ViewReactionsViewModel @AssistedInject constructor(@Assisted
                                                         initialState: DisplayReactionsViewState,
-                                                        private val session: Session,
-                                                        private val dateFormatter: VectorDateFormatter
+                                                         private val session: Session,
+                                                         private val dateFormatter: VectorDateFormatter
 ) : VectorViewModel<DisplayReactionsViewState>(initialState) {
 
     private val roomId = initialState.roomId
@@ -66,14 +67,14 @@ class ViewReactionViewModel @AssistedInject constructor(@Assisted
 
     @AssistedInject.Factory
     interface Factory {
-        fun create(initialState: DisplayReactionsViewState): ViewReactionViewModel
+        fun create(initialState: DisplayReactionsViewState): ViewReactionsViewModel
     }
 
-    companion object : MvRxViewModelFactory<ViewReactionViewModel, DisplayReactionsViewState> {
+    companion object : MvRxViewModelFactory<ViewReactionsViewModel, DisplayReactionsViewState> {
 
-        override fun create(viewModelContext: ViewModelContext, state: DisplayReactionsViewState): ViewReactionViewModel? {
-            val fragment: ViewReactionBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.viewReactionViewModelFactory.create(state)
+        override fun create(viewModelContext: ViewModelContext, state: DisplayReactionsViewState): ViewReactionsViewModel? {
+            val fragment: ViewReactionsBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()
+            return fragment.viewReactionsViewModelFactory.create(state)
         }
     }
 
