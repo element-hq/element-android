@@ -50,7 +50,7 @@ sealed class RoomDetailActions {
     data class ResendMessage(val eventId: String) : RoomDetailActions()
     data class RemoveFailedEcho(val eventId: String) : RoomDetailActions()
 
-    data class ReportContent(val eventId: String, val reason: String) : RoomDetailActions()
+    data class ReportContent(val eventId: String, val reason: String, val spam: Boolean = false, val inappropriate: Boolean = false) : RoomDetailActions()
 
     object ClearSendQueue : RoomDetailActions()
     object ResendAll : RoomDetailActions()

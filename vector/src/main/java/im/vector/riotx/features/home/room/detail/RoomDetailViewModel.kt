@@ -94,6 +94,11 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
 
     private var timeline = room.createTimeline(eventId, timelineSettings)
 
+    // Can be used for several actions, for a one shot result
+    private val _requestLiveData = MutableLiveData<LiveEvent<Async<RoomDetailActions>>>()
+    val requestLiveData: LiveData<LiveEvent<Async<RoomDetailActions>>>
+        get() = _requestLiveData
+
     // Slot to keep a pending action during permission request
     var pendingAction: RoomDetailActions? = null
 
@@ -707,27 +712,13 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun handleReportContent(action: RoomDetailActions.ReportContent) {
-        setState {
-            copy(
-                    reportContentRequest = Loading()
-            )
-        }
-
         room.reportContent(action.eventId, -100, action.reason, object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
-                setState {
-                    copy(
-                            reportContentRequest = Success(Unit)
-                    )
-                }
+                _requestLiveData.postValue(LiveEvent(Success(action)))
             }
 
             override fun onFailure(failure: Throwable) {
-                setState {
-                    copy(
-                            reportContentRequest = Fail(failure)
-                    )
-                }
+                _requestLiveData.postValue(LiveEvent(Fail(failure)))
             }
         })
     }

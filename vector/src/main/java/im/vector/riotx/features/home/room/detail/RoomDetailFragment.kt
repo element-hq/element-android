@@ -268,6 +268,10 @@ class RoomDetailFragment :
         roomDetailViewModel.selectSubscribe(RoomDetailViewState::syncState) { syncState ->
             syncStateView.render(syncState)
         }
+
+        roomDetailViewModel.requestLiveData.observeEvent(this) {
+            displayRoomDetailActionResult(it)
+        }
     }
 
     override fun onDestroy() {
@@ -777,6 +781,51 @@ class RoomDetailFragment :
                 .show()
     }
 
+    private fun displayRoomDetailActionResult(result: Async<RoomDetailActions>) {
+        when (result) {
+            is Fail    -> {
+                AlertDialog.Builder(activity!!)
+                        .setTitle(R.string.dialog_title_error)
+                        .setMessage(errorFormatter.toHumanReadable(result.error))
+                        .setPositiveButton(R.string.ok, null)
+                        .show()
+            }
+            is Success -> {
+                when (val data = result.invoke()) {
+                    is RoomDetailActions.ReportContent -> {
+                        when {
+                            data.spam          -> {
+                                AlertDialog.Builder(activity!!)
+                                        .setTitle(R.string.content_reported_as_spam_title)
+                                        .setMessage(R.string.content_reported_as_spam_content)
+                                        .setPositiveButton(R.string.ok, null)
+                                        .setNegativeButton(R.string.block_user) { _, _ -> vectorBaseActivity.notImplemented("block user") }
+                                        .show()
+                            }
+                            data.inappropriate -> {
+                                AlertDialog.Builder(activity!!)
+                                        .setTitle(R.string.content_reported_as_inappropriate_title)
+                                        .setMessage(R.string.content_reported_as_inappropriate_content)
+                                        .setPositiveButton(R.string.ok, null)
+                                        .setNegativeButton(R.string.block_user) { _, _ -> vectorBaseActivity.notImplemented("block user") }
+                                        .show()
+                            }
+                            else               -> {
+                                AlertDialog.Builder(activity!!)
+                                        .setTitle(R.string.content_reported_title)
+                                        .setMessage(R.string.content_reported_content)
+                                        .setPositiveButton(R.string.ok, null)
+                                        .setNegativeButton(R.string.block_user) { _, _ -> vectorBaseActivity.notImplemented("block user") }
+                                        .show()
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
 // TimelineEventController.Callback ************************************************************
 
     override fun onUrlClicked(url: String): Boolean {
@@ -1064,10 +1113,10 @@ class RoomDetailFragment :
                 roomDetailViewModel.process(RoomDetailActions.RemoveFailedEcho(action.eventId))
             }
             is SimpleAction.ReportContentSpam          -> {
-                roomDetailViewModel.process(RoomDetailActions.ReportContent(action.eventId, "This message is spam"))
+                roomDetailViewModel.process(RoomDetailActions.ReportContent(action.eventId, "This message is spam", spam = true))
             }
             is SimpleAction.ReportContentInappropriate -> {
-                roomDetailViewModel.process(RoomDetailActions.ReportContent(action.eventId, "This message is inappropriate"))
+                roomDetailViewModel.process(RoomDetailActions.ReportContent(action.eventId, "This message is inappropriate", inappropriate = true))
             }
             // TODO Custom
             else                                       -> {
