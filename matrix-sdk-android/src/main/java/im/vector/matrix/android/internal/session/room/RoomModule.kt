@@ -45,6 +45,8 @@ import im.vector.matrix.android.internal.session.room.read.DefaultSetReadMarkers
 import im.vector.matrix.android.internal.session.room.read.MarkAllRoomsReadTask
 import im.vector.matrix.android.internal.session.room.read.SetReadMarkersTask
 import im.vector.matrix.android.internal.session.room.relation.*
+import im.vector.matrix.android.internal.session.room.reporting.DefaultReportContentTask
+import im.vector.matrix.android.internal.session.room.reporting.ReportContentTask
 import im.vector.matrix.android.internal.session.room.state.DefaultSendStateTask
 import im.vector.matrix.android.internal.session.room.state.SendStateTask
 import im.vector.matrix.android.internal.session.room.timeline.*
@@ -113,6 +115,9 @@ internal abstract class RoomModule {
 
     @Binds
     abstract fun bindSendStateTask(sendStateTask: DefaultSendStateTask): SendStateTask
+
+    @Binds
+    abstract fun bindReportContentTask(reportContentTask: DefaultReportContentTask): ReportContentTask
 
     @Binds
     abstract fun bindGetContextOfEventTask(getContextOfEventTask: DefaultGetContextOfEventTask): GetContextOfEventTask

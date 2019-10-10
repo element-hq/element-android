@@ -93,7 +93,9 @@ import im.vector.riotx.features.home.room.detail.composer.TextComposerViewModel
 import im.vector.riotx.features.home.room.detail.composer.TextComposerViewState
 import im.vector.riotx.features.home.room.detail.readreceipts.DisplayReadReceiptsBottomSheet
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
-import im.vector.riotx.features.home.room.detail.timeline.action.*
+import im.vector.riotx.features.home.room.detail.timeline.action.ActionsHandler
+import im.vector.riotx.features.home.room.detail.timeline.action.MessageActionsBottomSheet
+import im.vector.riotx.features.home.room.detail.timeline.action.SimpleAction
 import im.vector.riotx.features.home.room.detail.timeline.edithistory.ViewEditHistoryBottomSheet
 import im.vector.riotx.features.home.room.detail.timeline.item.*
 import im.vector.riotx.features.home.room.detail.timeline.reactions.ViewReactionsBottomSheet
@@ -968,23 +970,23 @@ class RoomDetailFragment :
 
     private fun handleActions(action: SimpleAction) {
         when (action) {
-            is SimpleAction.AddReaction         -> {
+            is SimpleAction.AddReaction                -> {
                 startActivityForResult(EmojiReactionPickerActivity.intent(requireContext(), action.eventId), REACTION_SELECT_REQUEST_CODE)
             }
-            is SimpleAction.ViewReactions       -> {
+            is SimpleAction.ViewReactions              -> {
                 ViewReactionsBottomSheet.newInstance(roomDetailArgs.roomId, action.messageInformationData)
                         .show(requireActivity().supportFragmentManager, "DISPLAY_REACTIONS")
             }
-            is SimpleAction.Copy                -> {
+            is SimpleAction.Copy                       -> {
                 // I need info about the current selected message :/
                 copyToClipboard(requireContext(), action.content, false)
                 val msg = requireContext().getString(R.string.copied_to_clipboard)
                 showSnackWithMessage(msg, Snackbar.LENGTH_SHORT)
             }
-            is SimpleAction.Delete              -> {
+            is SimpleAction.Delete                     -> {
                 roomDetailViewModel.process(RoomDetailActions.RedactAction(action.eventId, context?.getString(R.string.event_redacted_by_user_reason)))
             }
-            is SimpleAction.Share               -> {
+            is SimpleAction.Share                      -> {
                 // TODO current data communication is too limited
                 // Need to now the media type
                 // TODO bad, just POC
@@ -1012,10 +1014,10 @@ class RoomDetailFragment :
                         }
                 )
             }
-            is SimpleAction.ViewEditHistory     -> {
+            is SimpleAction.ViewEditHistory            -> {
                 onEditedDecorationClicked(action.messageInformationData)
             }
-            is SimpleAction.ViewSource          -> {
+            is SimpleAction.ViewSource                 -> {
                 val view = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_event_content, null)
                 view.findViewById<TextView>(R.id.event_content_text_view)?.let {
                     it.text = action.content
@@ -1026,7 +1028,7 @@ class RoomDetailFragment :
                         .setPositiveButton(R.string.ok, null)
                         .show()
             }
-            is SimpleAction.ViewDecryptedSource -> {
+            is SimpleAction.ViewDecryptedSource        -> {
                 val view = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_event_content, null)
                 view.findViewById<TextView>(R.id.event_content_text_view)?.let {
                     it.text = action.content
@@ -1037,31 +1039,38 @@ class RoomDetailFragment :
                         .setPositiveButton(R.string.ok, null)
                         .show()
             }
-            is SimpleAction.QuickReact          -> {
+            is SimpleAction.QuickReact                 -> {
                 // eventId,ClickedOn,Add
                 roomDetailViewModel.process(RoomDetailActions.UpdateQuickReactAction(action.eventId, action.clickedOn, action.add))
             }
-            is SimpleAction.Edit                -> {
+            is SimpleAction.Edit                       -> {
                 roomDetailViewModel.process(RoomDetailActions.EnterEditMode(action.eventId, composerLayout.composerEditText.text.toString()))
             }
-            is SimpleAction.Quote               -> {
+            is SimpleAction.Quote                      -> {
                 roomDetailViewModel.process(RoomDetailActions.EnterQuoteMode(action.eventId, composerLayout.composerEditText.text.toString()))
             }
-            is SimpleAction.Reply               -> {
+            is SimpleAction.Reply                      -> {
                 roomDetailViewModel.process(RoomDetailActions.EnterReplyMode(action.eventId, composerLayout.composerEditText.text.toString()))
             }
-            is SimpleAction.CopyPermalink       -> {
+            is SimpleAction.CopyPermalink              -> {
                 val permalink = PermalinkFactory.createPermalink(roomDetailArgs.roomId, action.eventId)
                 copyToClipboard(requireContext(), permalink, false)
                 showSnackWithMessage(requireContext().getString(R.string.copied_to_clipboard), Snackbar.LENGTH_SHORT)
             }
-            is SimpleAction.Resend              -> {
+            is SimpleAction.Resend                     -> {
                 roomDetailViewModel.process(RoomDetailActions.ResendMessage(action.eventId))
             }
-            is SimpleAction.Remove              -> {
+            is SimpleAction.Remove                     -> {
                 roomDetailViewModel.process(RoomDetailActions.RemoveFailedEcho(action.eventId))
             }
-            else                                -> {
+            is SimpleAction.ReportContentSpam          -> {
+                roomDetailViewModel.process(RoomDetailActions.ReportContent(action.eventId, "This message is spam"))
+            }
+            is SimpleAction.ReportContentInappropriate -> {
+                roomDetailViewModel.process(RoomDetailActions.ReportContent(action.eventId, "This message is inappropriate"))
+            }
+            // TODO Custom
+            else                                       -> {
                 Toast.makeText(context, "Action $action is not implemented yet", Toast.LENGTH_LONG).show()
             }
         }

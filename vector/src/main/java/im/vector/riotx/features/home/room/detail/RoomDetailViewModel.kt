@@ -21,10 +21,7 @@ import android.text.TextUtils
 import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.ViewModelContext
+import com.airbnb.mvrx.*
 import com.jakewharton.rxrelay2.BehaviorRelay
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
@@ -155,6 +152,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
             is RoomDetailActions.ResendAll                   -> handleResendAll()
             is RoomDetailActions.SetReadMarkerAction         -> handleSetReadMarkerAction(action)
             is RoomDetailActions.MarkAllAsRead               -> handleMarkAllAsRead()
+            is RoomDetailActions.ReportContent               -> handleReportContent(action)
         }
     }
 
@@ -706,6 +704,32 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
 
     private fun handleMarkAllAsRead() {
         room.markAllAsRead(object : MatrixCallback<Any> {})
+    }
+
+    private fun handleReportContent(action: RoomDetailActions.ReportContent) {
+        setState {
+            copy(
+                    reportContentRequest = Loading()
+            )
+        }
+
+        room.reportContent(action.eventId, -100, action.reason, object : MatrixCallback<Unit> {
+            override fun onSuccess(data: Unit) {
+                setState {
+                    copy(
+                            reportContentRequest = Success(Unit)
+                    )
+                }
+            }
+
+            override fun onFailure(failure: Throwable) {
+                setState {
+                    copy(
+                            reportContentRequest = Fail(failure)
+                    )
+                }
+            }
+        })
     }
 
     private fun observeSyncState() {
