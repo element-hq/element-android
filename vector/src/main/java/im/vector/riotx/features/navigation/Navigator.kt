@@ -16,12 +16,17 @@
 
 package im.vector.riotx.features.navigation
 
+import android.app.Activity
 import android.content.Context
+import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
+import im.vector.riotx.features.share.SharedData
 
 interface Navigator {
 
     fun openRoom(context: Context, roomId: String, eventId: String? = null)
+
+    fun openRoomForSharing(activity: Activity, roomId: String, sharedData: SharedData)
 
     fun openNotJoinedRoom(context: Context, roomIdOrAlias: String, eventId: String? = null)
 

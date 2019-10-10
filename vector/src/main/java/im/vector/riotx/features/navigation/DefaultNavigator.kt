@@ -16,8 +16,10 @@
 
 package im.vector.riotx.features.navigation
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseActivity
@@ -33,6 +35,7 @@ import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomActivity
 import im.vector.riotx.features.roomdirectory.roompreview.RoomPreviewActivity
 import im.vector.riotx.features.settings.VectorSettingsActivity
+import im.vector.riotx.features.share.SharedData
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -44,6 +47,13 @@ class DefaultNavigator @Inject constructor() : Navigator {
         val args = RoomDetailArgs(roomId, eventId)
         val intent = RoomDetailActivity.newIntent(context, args)
         context.startActivity(intent)
+    }
+
+    override fun openRoomForSharing(activity: Activity, roomId: String, sharedData: SharedData) {
+        val args = RoomDetailArgs(roomId, null, sharedData)
+        val intent = RoomDetailActivity.newIntent(activity, args)
+        activity.startActivity(intent)
+        activity.finish()
     }
 
     override fun openNotJoinedRoom(context: Context, roomIdOrAlias: String, eventId: String?) {

@@ -106,6 +106,7 @@ import im.vector.riotx.features.media.VideoMediaViewerActivity
 import im.vector.riotx.features.notifications.NotificationDrawerManager
 import im.vector.riotx.features.reactions.EmojiReactionPickerActivity
 import im.vector.riotx.features.settings.VectorPreferences
+import im.vector.riotx.features.share.SharedData
 import im.vector.riotx.features.themes.ThemeUtils
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_detail.*
@@ -120,7 +121,8 @@ import javax.inject.Inject
 @Parcelize
 data class RoomDetailArgs(
         val roomId: String,
-        val eventId: String? = null
+        val eventId: String? = null,
+        val sharedData: SharedData? = null
 ) : Parcelable
 
 
@@ -195,15 +197,7 @@ class RoomDetailFragment :
 
     private lateinit var actionViewModel: ActionsHandler
     private lateinit var layoutManager: LinearLayoutManager
-
-    private lateinit var _attachmentsHelper: AttachmentsHelper
-    private val attachmentsHelper: AttachmentsHelper
-        get() {
-            if (::_attachmentsHelper.isInitialized.not()) {
-                _attachmentsHelper = AttachmentsHelper(this, this).register()
-            }
-            return _attachmentsHelper
-        }
+    private lateinit var attachmentsHelper: AttachmentsHelper
 
     @BindView(R.id.composerLayout)
     lateinit var composerLayout: TextComposerView
@@ -218,6 +212,7 @@ class RoomDetailFragment :
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         actionViewModel = ViewModelProviders.of(requireActivity()).get(ActionsHandler::class.java)
+        attachmentsHelper = AttachmentsHelper.create(this, this).register()
         setupToolbar(roomToolbar)
         setupRecyclerView()
         setupComposer()
@@ -277,6 +272,15 @@ class RoomDetailFragment :
         roomDetailViewModel.selectSubscribe(RoomDetailViewState::syncState) { syncState ->
             syncStateView.render(syncState)
         }
+
+        if (savedInstanceState == null) {
+            when (val sharedData = roomDetailArgs.sharedData) {
+                is SharedData.Text        -> roomDetailViewModel.process(RoomDetailActions.SendMessage(sharedData.text, false))
+                is SharedData.Attachments -> roomDetailViewModel.process(RoomDetailActions.SendMedia(sharedData.attachmentData))
+                null                      -> Timber.v("No share data to process")
+            }
+        }
+
     }
 
     override fun onDestroy() {
@@ -306,9 +310,9 @@ class RoomDetailFragment :
         AlertDialog.Builder(requireActivity())
                 .setTitle(R.string.dialog_title_error)
                 .setMessage(getString(R.string.error_file_too_big,
-                        error.filename,
-                        TextUtils.formatFileSize(requireContext(), error.fileSizeInBytes),
-                        TextUtils.formatFileSize(requireContext(), error.homeServerLimitInBytes)
+                                      error.filename,
+                                      TextUtils.formatFileSize(requireContext(), error.fileSizeInBytes),
+                                      TextUtils.formatFileSize(requireContext(), error.homeServerLimitInBytes)
                 ))
                 .setPositiveButton(R.string.ok, null)
                 .show()
@@ -385,11 +389,11 @@ class RoomDetailFragment :
         if (messageContent is MessageTextContent && messageContent.format == MessageType.FORMAT_MATRIX_HTML) {
             val parser = Parser.builder().build()
             val document = parser.parse(messageContent.formattedBody
-                    ?: messageContent.body)
+                                        ?: messageContent.body)
             formattedBody = eventHtmlRenderer.render(document)
         }
         composerLayout.composerRelatedMessageContent.text = formattedBody
-                ?: nonFormattedBody
+                                                            ?: nonFormattedBody
 
         updateComposerText(defaultContent)
 
@@ -398,11 +402,11 @@ class RoomDetailFragment :
 
 
         avatarRenderer.render(event.senderAvatar, event.root.senderId
-                ?: "", event.senderName, composerLayout.composerRelatedMessageAvatar)
+                                                  ?: "", event.senderName, composerLayout.composerRelatedMessageAvatar)
         avatarRenderer.render(event.senderAvatar,
-                event.root.senderId ?: "",
-                event.senderName,
-                composerLayout.composerRelatedMessageAvatar)
+                              event.root.senderId ?: "",
+                              event.senderName,
+                              composerLayout.composerRelatedMessageAvatar)
         composerLayout.expand {
             //need to do it here also when not using quick reply
             focusComposerAndShowKeyboard()
@@ -439,9 +443,9 @@ class RoomDetailFragment :
             when (requestCode) {
                 REACTION_SELECT_REQUEST_CODE -> {
                     val eventId = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_EVENT_ID)
-                            ?: return
+                                  ?: return
                     val reaction = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_REACTION_RESULT)
-                            ?: return
+                                   ?: return
                     //TODO check if already reacted with that?
                     roomDetailViewModel.process(RoomDetailActions.SendReaction(reaction, eventId))
                 }

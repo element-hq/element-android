@@ -32,6 +32,7 @@ class RoomListDisplayModeFilter(private val displayMode: RoomListFragment.Displa
             RoomListFragment.DisplayMode.PEOPLE   -> roomSummary.isDirect && roomSummary.membership == Membership.JOIN
             RoomListFragment.DisplayMode.ROOMS    -> !roomSummary.isDirect && roomSummary.membership == Membership.JOIN
             RoomListFragment.DisplayMode.FILTERED -> roomSummary.membership == Membership.JOIN
+            RoomListFragment.DisplayMode.SHARE    -> roomSummary.membership == Membership.JOIN
         }
     }
 }

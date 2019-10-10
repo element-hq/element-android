@@ -19,49 +19,54 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import com.kbeanie.multipicker.api.CameraImagePicker
-import com.kbeanie.multipicker.api.FilePicker
-import com.kbeanie.multipicker.api.ImagePicker
 import com.kbeanie.multipicker.api.Picker.*
-import com.kbeanie.multipicker.api.callbacks.FilePickerCallback
-import com.kbeanie.multipicker.api.callbacks.ImagePickerCallback
-import com.kbeanie.multipicker.api.entity.ChosenFile
-import com.kbeanie.multipicker.api.entity.ChosenImage
-import com.kbeanie.multipicker.api.entity.ChosenVideo
 import com.kbeanie.multipicker.core.PickerManager
+import com.kbeanie.multipicker.utils.IntentUtils
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.riotx.core.platform.Restorable
 
 private const val CAPTURE_PATH_KEY = "CAPTURE_PATH_KEY"
 
-class AttachmentsHelper(private val fragment: Fragment, private val callback: Callback) : Restorable {
+/**
+ * This class helps to handle attachments by providing simple methods.
+ * The process is asynchronous and you must implement [Callback] methods to get the data or a failure.
+ */
+class AttachmentsHelper private constructor(private val pickerManagerFactory: PickerManagerFactory) : Restorable {
+
+    companion object {
+        fun create(fragment: Fragment, callback: Callback): AttachmentsHelper {
+            return AttachmentsHelper(FragmentPickerManagerFactory(fragment, callback))
+        }
+
+        fun create(activity: Activity, callback: Callback): AttachmentsHelper {
+            return AttachmentsHelper(ActivityPickerManagerFactory(activity, callback))
+        }
+    }
 
     interface Callback {
         fun onAttachmentsReady(attachments: List<ContentAttachmentData>)
         fun onAttachmentsProcessFailed()
     }
 
-    private val attachmentsPickerCallback = AttachmentsPickerCallback(callback)
+    private var capturePath: String? = null
 
     private val imagePicker by lazy {
-        ImagePicker(fragment).also {
-            it.setImagePickerCallback(attachmentsPickerCallback)
-            it.allowMultiple()
-        }
+        pickerManagerFactory.createImagePicker()
+    }
+
+    private val videoPicker by lazy {
+        pickerManagerFactory.createVideoPicker()
     }
 
     private val cameraImagePicker by lazy {
-        CameraImagePicker(fragment).also {
-            it.setImagePickerCallback(attachmentsPickerCallback)
-        }
+        pickerManagerFactory.createCameraImagePicker()
     }
 
     private val filePicker by lazy {
-        FilePicker(fragment).also {
-            it.allowMultiple()
-            it.setFilePickerCallback(attachmentsPickerCallback)
-        }
+        pickerManagerFactory.createFilePicker()
     }
+
+    // Restorable
 
     override fun onSaveInstanceState(outState: Bundle) {
         capturePath?.also {
@@ -71,26 +76,42 @@ class AttachmentsHelper(private val fragment: Fragment, private val callback: Ca
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
         capturePath = savedInstanceState?.getString(CAPTURE_PATH_KEY)
+        if (capturePath != null) {
+            cameraImagePicker.reinitialize(capturePath)
+        }
     }
 
-    var capturePath: String? = null
-        private set
+    // Public Methods
 
+    /**
+     * Starts the process for handling file picking
+     */
     fun selectFile() {
         filePicker.pickFile()
     }
 
+    /**
+     * Starts the process for handling image picking
+     */
     fun selectGallery() {
         imagePicker.pickImage()
     }
 
+    /**
+     * Starts the process for handling capture image picking
+     */
     fun openCamera() {
         capturePath = cameraImagePicker.pickImage()
     }
 
+    /**
+     * This methods aims to handle on activity result data.
+     *
+     * @return true if it can handle the data, false otherwise
+     */
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
         if (resultCode == Activity.RESULT_OK) {
-            val pickerManager = getPickerManager(requestCode)
+            val pickerManager = getPickerManagerForRequestCode(requestCode)
             if (pickerManager != null) {
                 pickerManager.submit(data)
                 return true
@@ -99,90 +120,32 @@ class AttachmentsHelper(private val fragment: Fragment, private val callback: Ca
         return false
     }
 
-    private fun getPickerManager(requestCode: Int): PickerManager? {
+    /**
+     * This methods aims to handle share intent.
+     *
+     * @return true if it can handle the intent data, false otherwise
+     */
+    fun handleShare(intent: Intent): Boolean {
+        val type = intent.type ?: return false
+        if (type.startsWith("image")) {
+            imagePicker.submit(IntentUtils.getPickerIntentForSharing(intent))
+        } else if (type.startsWith("video")) {
+            videoPicker.submit(IntentUtils.getPickerIntentForSharing(intent))
+        } else if (type.startsWith("application") || type.startsWith("file") || type.startsWith("*")) {
+            filePicker.submit(IntentUtils.getPickerIntentForSharing(intent))
+        } else {
+            return false
+        }
+        return true
+    }
+
+    private fun getPickerManagerForRequestCode(requestCode: Int): PickerManager? {
         return when (requestCode) {
             PICK_IMAGE_DEVICE -> imagePicker
             PICK_IMAGE_CAMERA -> cameraImagePicker
             PICK_FILE         -> filePicker
             else              -> null
         }
-    }
-
-    private inner class AttachmentsPickerCallback(private val callback: Callback) : ImagePickerCallback, FilePickerCallback {
-
-        override fun onFilesChosen(files: MutableList<ChosenFile>?) {
-            if (files.isNullOrEmpty()) {
-                callback.onAttachmentsProcessFailed()
-            } else {
-                val attachments = files.map {
-                    it.toContentAttachmentData()
-                }
-                callback.onAttachmentsReady(attachments)
-            }
-        }
-
-        override fun onImagesChosen(images: MutableList<ChosenImage>?) {
-            if (images.isNullOrEmpty()) {
-                callback.onAttachmentsProcessFailed()
-            } else {
-                val attachments = images.map {
-                    it.toContentAttachmentData()
-                }
-                callback.onAttachmentsReady(attachments)
-            }
-        }
-
-        override fun onError(error: String?) {
-            callback.onAttachmentsProcessFailed()
-        }
-    }
-
-
-    private fun ChosenFile.toContentAttachmentData(): ContentAttachmentData {
-        return ContentAttachmentData(
-                path = originalPath,
-                mimeType = mimeType,
-                type = mapType(),
-                size = size,
-                date = createdAt.time,
-                name = displayName
-        )
-    }
-
-    private fun ChosenFile.mapType(): ContentAttachmentData.Type {
-        return when {
-            mimeType.startsWith("image/") -> ContentAttachmentData.Type.IMAGE
-            mimeType.startsWith("video/") -> ContentAttachmentData.Type.VIDEO
-            mimeType.startsWith("audio/") -> ContentAttachmentData.Type.AUDIO
-            else                          -> ContentAttachmentData.Type.FILE
-        }
-    }
-
-    private fun ChosenImage.toContentAttachmentData(): ContentAttachmentData {
-        return ContentAttachmentData(
-                path = originalPath,
-                mimeType = mimeType,
-                type = mapType(),
-                name = displayName,
-                size = size,
-                height = height.toLong(),
-                width = width.toLong(),
-                date = createdAt.time
-        )
-    }
-
-    private fun ChosenVideo.toContentAttachmentData(): ContentAttachmentData {
-        return ContentAttachmentData(
-                path = originalPath,
-                mimeType = mimeType,
-                type = ContentAttachmentData.Type.VIDEO,
-                size = size,
-                date = createdAt.time,
-                height = height.toLong(),
-                width = width.toLong(),
-                duration = duration,
-                name = displayName
-        )
     }
 
 }

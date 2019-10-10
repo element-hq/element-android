@@ -1,85 +1,105 @@
 package im.vector.riotx.features.share
 
+import android.content.ClipDescription
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import com.kbeanie.multipicker.api.AudioPicker
-import com.kbeanie.multipicker.api.FilePicker
-import com.kbeanie.multipicker.api.ImagePicker
-import com.kbeanie.multipicker.api.VideoPicker
-import com.kbeanie.multipicker.api.callbacks.AudioPickerCallback
-import com.kbeanie.multipicker.api.callbacks.FilePickerCallback
-import com.kbeanie.multipicker.api.callbacks.ImagePickerCallback
-import com.kbeanie.multipicker.api.callbacks.VideoPickerCallback
-import com.kbeanie.multipicker.api.entity.ChosenAudio
-import com.kbeanie.multipicker.api.entity.ChosenFile
-import com.kbeanie.multipicker.api.entity.ChosenImage
-import com.kbeanie.multipicker.api.entity.ChosenVideo
-import com.kbeanie.multipicker.utils.IntentUtils
+import android.widget.Toast
+import im.vector.matrix.android.api.session.content.ContentAttachmentData
+import im.vector.riotx.R
+import im.vector.riotx.core.di.ActiveSessionHolder
+import im.vector.riotx.core.di.ScreenComponent
+import im.vector.riotx.core.extensions.replaceFragment
 import im.vector.riotx.core.platform.VectorBaseActivity
-import timber.log.Timber
+import im.vector.riotx.features.attachments.AttachmentsHelper
+import im.vector.riotx.features.home.HomeActivity
+import im.vector.riotx.features.home.LoadingFragment
+import im.vector.riotx.features.home.room.list.RoomListFragment
+import im.vector.riotx.features.home.room.list.RoomListParams
+import im.vector.riotx.features.login.LoginActivity
+import im.vector.riotx.features.login.LoginConfig
+import kotlinx.android.synthetic.main.activity_incoming_share.*
+import javax.inject.Inject
 
 
 class IncomingShareActivity :
-        VectorBaseActivity(),
-        ImagePickerCallback,
-        VideoPickerCallback,
-        FilePickerCallback,
-        AudioPickerCallback {
+        VectorBaseActivity(), AttachmentsHelper.Callback {
+
+
+    @Inject lateinit var sessionHolder: ActiveSessionHolder
+    private lateinit var roomListFragment: RoomListFragment
+    private lateinit var attachmentsHelper: AttachmentsHelper
+
+    override fun getLayoutRes(): Int {
+        return R.layout.activity_incoming_share
+    }
+
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (!sessionHolder.hasActiveSession()) {
+            startLoginActivity()
+            return
+        }
+        configureToolbar(incomingShareToolbar)
+        if (isFirstCreation()) {
+            val loadingDetail = LoadingFragment.newInstance()
+            replaceFragment(loadingDetail, R.id.shareRoomListFragmentContainer)
+        }
+        attachmentsHelper = AttachmentsHelper.create(this, this).register()
         if (intent?.action == Intent.ACTION_SEND || intent?.action == Intent.ACTION_SEND_MULTIPLE) {
-            val handled = handleShare(intent)
-            if (!handled) {
-                finish()
+            var isShareManaged = attachmentsHelper.handleShare(intent)
+            if (!isShareManaged) {
+                isShareManaged = handleTextShare(intent)
+            }
+            if (!isShareManaged) {
+                cantManageShare()
             }
         } else {
-            finish()
+            cantManageShare()
         }
     }
 
-    private fun handleShare(intent: Intent): Boolean {
-        val type = intent.type ?: return false
-        if (type.startsWith("image")) {
-            val picker = ImagePicker(this)
-            picker.setImagePickerCallback(this)
-            picker.submit(IntentUtils.getPickerIntentForSharing(intent))
-        } else if (type.startsWith("video")) {
-            val picker = VideoPicker(this)
-            picker.setVideoPickerCallback(this)
-            picker.submit(IntentUtils.getPickerIntentForSharing(intent))
-        } else if (type.startsWith("application") || type.startsWith("file") || type.startsWith("*")) {
-            val picker = FilePicker(this)
-            picker.setFilePickerCallback(this)
-            picker.submit(IntentUtils.getPickerIntentForSharing(intent))
-        } else if (type.startsWith("audio")) {
-            val picker = AudioPicker(this)
-            picker.setAudioPickerCallback(this)
-            picker.submit(IntentUtils.getPickerIntentForSharing(intent))
-        } else {
-            return false
+    override fun onAttachmentsReady(attachments: List<ContentAttachmentData>) {
+        val roomListParams = RoomListParams(RoomListFragment.DisplayMode.SHARE, sharedData = SharedData.Attachments(attachments))
+        roomListFragment = RoomListFragment.newInstance(roomListParams)
+        replaceFragment(roomListFragment, R.id.shareRoomListFragmentContainer)
+    }
+
+    override fun onAttachmentsProcessFailed() {
+        cantManageShare()
+    }
+
+    private fun cantManageShare() {
+        Toast.makeText(this, "Couldn't handle share data", Toast.LENGTH_LONG).show()
+        finish()
+    }
+
+    private fun handleTextShare(intent: Intent): Boolean {
+        if (intent.type == ClipDescription.MIMETYPE_TEXT_PLAIN) {
+            val sharedText = intent.getCharSequenceExtra(Intent.EXTRA_TEXT)?.toString()
+            return if (sharedText.isNullOrEmpty()) {
+                false
+            } else {
+                val roomListParams = RoomListParams(RoomListFragment.DisplayMode.SHARE, sharedData = SharedData.Text(sharedText))
+                roomListFragment = RoomListFragment.newInstance(roomListParams)
+                replaceFragment(roomListFragment, R.id.shareRoomListFragmentContainer)
+                true
+            }
         }
-        return true
+        return false
     }
 
-    override fun onAudiosChosen(p0: MutableList<ChosenAudio>?) {
-        Timber.v("On audios chosen $p0")
+    /**
+     * Start the login screen with identity server and home server pre-filled
+     */
+    private fun startLoginActivity() {
+        val intent = LoginActivity.newIntent(this, null)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+        finish()
     }
-
-    override fun onFilesChosen(p0: MutableList<ChosenFile>?) {
-        Timber.v("On files chosen $p0")
-    }
-
-    override fun onImagesChosen(p0: MutableList<ChosenImage>?) {
-        Timber.v("On images chosen $p0")
-    }
-
-    override fun onError(p0: String?) {
-        Timber.v("On error")
-    }
-
-    override fun onVideosChosen(p0: MutableList<ChosenVideo>?) {
-        Timber.v("On videos chosen $p0")
-    }
-
 }
