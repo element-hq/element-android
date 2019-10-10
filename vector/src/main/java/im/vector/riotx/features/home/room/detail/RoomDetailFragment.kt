@@ -50,6 +50,7 @@ import com.airbnb.mvrx.*
 import com.github.piasy.biv.BigImageViewer
 import com.github.piasy.biv.loader.ImageLoader
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputEditText
 import com.jaiselrahman.filepicker.activity.FilePickerActivity
 import com.jaiselrahman.filepicker.config.Configurations
 import com.jaiselrahman.filepicker.model.MediaFile
@@ -774,17 +775,34 @@ class RoomDetailFragment :
     }
 
     private fun displayCommandError(message: String) {
-        AlertDialog.Builder(activity!!)
+        AlertDialog.Builder(requireActivity())
                 .setTitle(R.string.command_error)
                 .setMessage(message)
                 .setPositiveButton(R.string.ok, null)
                 .show()
     }
 
+    private fun promptReasonToReportContent(action: SimpleAction.ReportContentCustom) {
+        val inflater = requireActivity().layoutInflater
+        val layout = inflater.inflate(R.layout.dialog_report_content, null)
+
+        val input = layout.findViewById<TextInputEditText>(R.id.dialog_report_content_input)
+
+        AlertDialog.Builder(requireActivity())
+                .setTitle(R.string.report_content_custom_title)
+                .setView(layout)
+                .setPositiveButton(R.string.report_content_custom_submit) { _, _ ->
+                    val reason = input.text.toString()
+                    roomDetailViewModel.process(RoomDetailActions.ReportContent(action.eventId, reason))
+                }
+                .setNegativeButton(R.string.cancel, null)
+                .show()
+    }
+
     private fun displayRoomDetailActionResult(result: Async<RoomDetailActions>) {
         when (result) {
             is Fail    -> {
-                AlertDialog.Builder(activity!!)
+                AlertDialog.Builder(requireActivity())
                         .setTitle(R.string.dialog_title_error)
                         .setMessage(errorFormatter.toHumanReadable(result.error))
                         .setPositiveButton(R.string.ok, null)
@@ -795,7 +813,7 @@ class RoomDetailFragment :
                     is RoomDetailActions.ReportContent -> {
                         when {
                             data.spam          -> {
-                                AlertDialog.Builder(activity!!)
+                                AlertDialog.Builder(requireActivity())
                                         .setTitle(R.string.content_reported_as_spam_title)
                                         .setMessage(R.string.content_reported_as_spam_content)
                                         .setPositiveButton(R.string.ok, null)
@@ -803,7 +821,7 @@ class RoomDetailFragment :
                                         .show()
                             }
                             data.inappropriate -> {
-                                AlertDialog.Builder(activity!!)
+                                AlertDialog.Builder(requireActivity())
                                         .setTitle(R.string.content_reported_as_inappropriate_title)
                                         .setMessage(R.string.content_reported_as_inappropriate_content)
                                         .setPositiveButton(R.string.ok, null)
@@ -811,7 +829,7 @@ class RoomDetailFragment :
                                         .show()
                             }
                             else               -> {
-                                AlertDialog.Builder(activity!!)
+                                AlertDialog.Builder(requireActivity())
                                         .setTitle(R.string.content_reported_title)
                                         .setMessage(R.string.content_reported_content)
                                         .setPositiveButton(R.string.ok, null)
@@ -1118,7 +1136,9 @@ class RoomDetailFragment :
             is SimpleAction.ReportContentInappropriate -> {
                 roomDetailViewModel.process(RoomDetailActions.ReportContent(action.eventId, "This message is inappropriate", inappropriate = true))
             }
-            // TODO Custom
+            is SimpleAction.ReportContentCustom        -> {
+                promptReasonToReportContent(action)
+            }
             else                                       -> {
                 Toast.makeText(context, "Action $action is not implemented yet", Toast.LENGTH_LONG).show()
             }
