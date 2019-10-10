@@ -75,14 +75,13 @@ abstract class MessageImageVideoItem(useBubble: Boolean) : AbsMessageItem<Messag
     }
 
     override fun getViewType(): Int {
-        //mmm how to do that
+        // mmm how to do that
         if (useBubble) {
             return STUB_ID + if (outgoing) 1000 else 0
         } else {
             return STUB_ID
         }
     }
-
 
     class Holder : AbsMessageItem.Holder(STUB_ID) {
         val progressLayout by bind<ViewGroup>(R.id.messageMediaUploadProgressLayout)

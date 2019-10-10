@@ -146,7 +146,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintHorizontal_bias="1"
-        app:layout_constraintBottom_toTopOf="@+id/readReceiptsView"
+        app:layout_constraintBottom_toTopOf="@+id/readMarkerView"
         app:layout_constraintEnd_toStartOf="@id/messageStartGuideline"
         app:layout_constraintTop_toBottomOf="@id/messageBubbleContainer"
         app:layout_constraintVertical_chainStyle="packed"

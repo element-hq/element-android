@@ -19,7 +19,6 @@ package im.vector.riotx.features.home.room.detail.timeline.item
 import android.content.Context
 import android.graphics.Typeface
 import android.graphics.drawable.NinePatchDrawable
-import android.os.Build
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -188,7 +187,6 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder>(useBubble: Boolean) : B
         val timeView by bind<TextView>(R.id.messageTimeView)
         val reactionsContainer by bind<ViewGroup>(R.id.reactionsContainer)
     }
-
 
     private fun getNinePatch(context: Context, resId: Int, color: Int? = ThemeUtils.getColor(context, R.attr.vctr_bubble_right_color)): NinePatchDrawable? {
         return NinePatchChunk.getNinePatch(context, resId, color)

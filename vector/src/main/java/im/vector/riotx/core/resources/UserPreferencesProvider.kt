@@ -31,5 +31,4 @@ class UserPreferencesProvider @Inject constructor(private val vectorPreferences:
     fun labBubbleStyleForDM(): Boolean {
         return vectorPreferences.labBubbleStyleForDM()
     }
-
 }

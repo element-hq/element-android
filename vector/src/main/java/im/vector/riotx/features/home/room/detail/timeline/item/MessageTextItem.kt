@@ -16,9 +16,7 @@
 
 package im.vector.riotx.features.home.room.detail.timeline.item
 
-import android.graphics.Color
 import android.view.MotionEvent
-import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.text.PrecomputedTextCompat
 import androidx.core.text.toSpannable
@@ -108,8 +106,8 @@ abstract class MessageTextItem(useBubble: Boolean) : AbsMessageItem<MessageTextI
     }
 
     override fun getViewType(): Int {
-        //mmm how to do that
-        return STUB_ID + if(outgoing) 1000 else 0
+        // mmm how to do that
+        return STUB_ID + if (outgoing) 1000 else 0
     }
 
     class Holder : AbsMessageItem.Holder(STUB_ID) {

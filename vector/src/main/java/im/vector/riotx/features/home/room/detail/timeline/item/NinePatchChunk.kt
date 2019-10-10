@@ -23,6 +23,7 @@ import android.graphics.Rect
 import android.graphics.drawable.NinePatchDrawable
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
+import timber.log.Timber
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
@@ -44,12 +45,15 @@ class NinePatchChunk {
             }
         }
 
+        @Throws(RuntimeException::class)
         private fun checkDivCount(length: Int) {
-            if (length == 0 || length and 0x01 != 0)
+            if (length == 0 || length and 0x01 != 0) {
                 throw RuntimeException("invalid nine-patch: $length")
+            }
         }
 
-        fun deserialize(data: ByteArray): NinePatchChunk? {
+        @Throws(RuntimeException::class)
+        private fun deserialize(data: ByteArray): NinePatchChunk? {
             val byteBuffer = ByteBuffer.wrap(data).order(ByteOrder.nativeOrder())
 
             if (byteBuffer.get().toInt() == 0) return null // is not serialized
@@ -81,13 +85,17 @@ class NinePatchChunk {
             return chunk
         }
 
-
         fun getNinePatch(context: Context, @DrawableRes resId: Int, @ColorInt color: Int?): NinePatchDrawable? {
-            val myBitmap = BitmapFactory.decodeResource(context.resources, resId)
-            val chunk = myBitmap.ninePatchChunk
-            val padding = deserialize(chunk)?.padding ?: return null
-            return NinePatchDrawable(context.resources, myBitmap, chunk, padding, null).apply {
-                colorFilter = color?.let { PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN) }
+            try {
+                val myBitmap = BitmapFactory.decodeResource(context.resources, resId)
+                val chunk = myBitmap.ninePatchChunk
+                val padding = deserialize(chunk)?.padding ?: return null
+                return NinePatchDrawable(context.resources, myBitmap, chunk, padding, null).apply {
+                    colorFilter = color?.let { PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN) }
+                }
+            } catch (t: Throwable) {
+                Timber.e(t, "Failed to get nine patch ")
+                return null
             }
         }
     }

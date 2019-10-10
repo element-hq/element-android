@@ -37,8 +37,8 @@ abstract class RedactedMessageItem(useBubble: Boolean) : AbsMessageItem<Redacted
     class Holder : AbsMessageItem.Holder(STUB_ID)
 
     override fun getViewType(): Int {
-        //mmm how to do that
-        return STUB_ID + if(outgoing) 1000 else 0
+        // mmm how to do that
+        return STUB_ID + if (outgoing) 1000 else 0
     }
 
     companion object {
