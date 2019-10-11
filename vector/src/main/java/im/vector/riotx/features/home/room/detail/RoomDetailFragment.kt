@@ -848,7 +848,6 @@ class RoomDetailFragment :
         }
     }
 
-
 // TimelineEventController.Callback ************************************************************
 
     override fun onUrlClicked(url: String): Boolean {

@@ -29,5 +29,4 @@ interface ReportingService {
      * Ref: https://matrix.org/docs/spec/client_server/latest#post-matrix-client-r0-rooms-roomid-report-eventid
      */
     fun reportContent(eventId: String, score: Int, reason: String, callback: MatrixCallback<Unit>): Cancelable
-
 }
