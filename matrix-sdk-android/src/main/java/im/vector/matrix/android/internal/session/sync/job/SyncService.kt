@@ -48,11 +48,10 @@ open class SyncService : Service() {
     private lateinit var networkConnectivityChecker: NetworkConnectivityChecker
     private lateinit var taskExecutor: TaskExecutor
 
-
     var timer = Timer()
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        Timber.i("onStartCommand ${intent}")
+        Timber.i("onStartCommand $intent")
         intent?.let {
             val userId = it.getStringExtra(EXTRA_USER_ID)
             val sessionComponent = Matrix.getInstance(applicationContext).sessionManager.getSessionComponent(userId)
@@ -65,11 +64,11 @@ open class SyncService : Service() {
                 timer = Timer()
                 doSync(true)
             } else {
-                //Already syncing ignore
+                // Already syncing ignore
                 Timber.i("Received a start while was already syncking... ignore")
             }
         }
-        //No intent just start the service, an alarm will should call with intent
+        // No intent just start the service, an alarm will should call with intent
         return START_STICKY
     }
 
@@ -95,7 +94,7 @@ open class SyncService : Service() {
     fun doSync(once: Boolean = false) {
         if (!networkConnectivityChecker.hasInternetAccess) {
             Timber.v("No internet access. Waiting...")
-            //TODO Retry in ?
+            // TODO Retry in ?
             timer.schedule(object : TimerTask() {
                 override fun run() {
                     doSync()
@@ -118,7 +117,7 @@ open class SyncService : Service() {
                                         }
                                     }, NEXT_BATCH_DELAY)
                                 } else {
-                                    //stop
+                                    // stop
                                     stopMe()
                                 }
                             }
@@ -169,5 +168,4 @@ open class SyncService : Service() {
         const val NEXT_BATCH_DELAY = 60_000L
         const val NO_NETWORK_DELAY = 5_000L
     }
-
 }

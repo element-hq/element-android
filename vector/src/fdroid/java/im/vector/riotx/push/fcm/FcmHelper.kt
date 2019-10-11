@@ -14,6 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("UNUSED_PARAMETER")
+
 package im.vector.riotx.push.fcm
 
 import android.app.Activity
@@ -64,7 +66,7 @@ object FcmHelper {
     }
 
     fun onEnterBackground(context: Context, vectorPreferences: VectorPreferences, activeSessionHolder: ActiveSessionHolder) {
-        //We need to use alarm in this mode
+        // We need to use alarm in this mode
         if (vectorPreferences.areNotificationEnabledForDevice() && activeSessionHolder.hasActiveSession()) {
             val currentSession = activeSessionHolder.getActiveSession()
             AlarmSyncBroadcastReceiver.scheduleAlarm(context, currentSession.myUserId, 4_000L)

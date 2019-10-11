@@ -38,5 +38,4 @@ data class CreateDirectRoomViewState(
         KNOWN_USERS,
         DIRECTORY_USERS
     }
-
 }

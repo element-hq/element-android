@@ -51,5 +51,4 @@ object MatrixLinkify {
         }
         return hasMatch
     }
-
 }

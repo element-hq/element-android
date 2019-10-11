@@ -81,7 +81,6 @@ class ExportKeysDialog {
         }
     }
 
-
     interface ExportKeyDialogListener {
         fun onPassphrase(passphrase: String)
     }

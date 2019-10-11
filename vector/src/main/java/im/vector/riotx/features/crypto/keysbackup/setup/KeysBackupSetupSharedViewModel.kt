@@ -74,7 +74,6 @@ class KeysBackupSetupSharedViewModel @Inject constructor() : ViewModel() {
     var creatingBackupError: MutableLiveData<Throwable> = MutableLiveData()
     var keysVersion: MutableLiveData<KeysVersion> = MutableLiveData()
 
-
     var loadingStatus: MutableLiveData<WaitingViewData> = MutableLiveData()
 
     init {
@@ -107,7 +106,7 @@ class KeysBackupSetupSharedViewModel @Inject constructor() : ViewModel() {
                     object : ProgressListener {
                         override fun onProgress(progress: Int, total: Int) {
                             if (requestedId != currentRequestId.value) {
-                                //this is an old request, we can't cancel but we can ignore
+                                // this is an old request, we can't cancel but we can ignore
                                 return
                             }
 
@@ -119,7 +118,7 @@ class KeysBackupSetupSharedViewModel @Inject constructor() : ViewModel() {
                     object : MatrixCallback<MegolmBackupCreationInfo> {
                         override fun onSuccess(data: MegolmBackupCreationInfo) {
                             if (requestedId != currentRequestId.value) {
-                                //this is an old request, we can't cancel but we can ignore
+                                // this is an old request, we can't cancel but we can ignore
                                 return
                             }
                             recoveryKey.value = data.recoveryKey
@@ -132,14 +131,14 @@ class KeysBackupSetupSharedViewModel @Inject constructor() : ViewModel() {
 
                         override fun onFailure(failure: Throwable) {
                             if (requestedId != currentRequestId.value) {
-                                //this is an old request, we can't cancel but we can ignore
+                                // this is an old request, we can't cancel but we can ignore
                                 return
                             }
 
                             loadingStatus.value = null
 
                             isCreatingBackupVersion.value = false
-                            prepareRecoverFailError.value = failure ?: Exception()
+                            prepareRecoverFailError.value = failure
                         }
                     })
         }

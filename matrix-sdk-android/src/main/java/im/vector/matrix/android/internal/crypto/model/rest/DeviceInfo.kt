@@ -59,5 +59,4 @@ data class DeviceInfo(
 
     override val date: Long
         get() = lastSeenTs ?: 0
-
 }

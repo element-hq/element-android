@@ -22,7 +22,6 @@ import im.vector.matrix.android.internal.worker.WorkManagerUtil.matrixOneTimeWor
 import im.vector.matrix.android.internal.worker.startChain
 import java.util.concurrent.TimeUnit
 
-
 private const val SEND_WORK = "SEND_WORK"
 private const val BACKOFF_DELAY = 10_000L
 

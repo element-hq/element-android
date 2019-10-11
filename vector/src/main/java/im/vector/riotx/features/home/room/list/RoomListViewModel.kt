@@ -173,8 +173,10 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
 
         session.getRoom(roomId)?.leave(object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
-                // We do not update the joiningRoomsIds here, because, the room is not joined yet regarding the sync data.
-                // Instead, we wait for the room to be joined
+                // We do not update the rejectingRoomsIds here, because, the room is not rejected yet regarding the sync data.
+                // Instead, we wait for the room to be rejected
+                // Known bug: if the user is invited again (after rejecting the first invitation), the loading will be displayed instead of the buttons.
+                // If we update the state, the button will be displayed again, so it's not ideal...
             }
 
             override fun onFailure(failure: Throwable) {

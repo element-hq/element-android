@@ -62,7 +62,6 @@ internal abstract class SessionModule {
             return sessionParams.homeServerConnectionConfig
         }
 
-
         @JvmStatic
         @Provides
         fun providesCredentials(sessionParams: SessionParams): Credentials {
@@ -172,5 +171,4 @@ internal abstract class SessionModule {
 
     @Binds
     abstract fun bindHomeServerCapabilitiesService(homeServerCapabilitiesService: DefaultHomeServerCapabilitiesService): HomeServerCapabilitiesService
-
 }

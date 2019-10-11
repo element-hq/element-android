@@ -35,7 +35,7 @@ class FontTagHandler : SimpleTagHandler() {
         try {
             return Color.parseColor(color_name)
         } catch (e: Exception) {
-            //try other w3c colors?
+            // try other w3c colors?
             return when (color_name) {
                 "white" -> Color.WHITE
                 "yellow" -> Color.YELLOW

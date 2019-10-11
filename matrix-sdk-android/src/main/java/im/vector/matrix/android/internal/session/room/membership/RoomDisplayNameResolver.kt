@@ -77,7 +77,6 @@ internal class RoomDisplayNameResolver @Inject constructor(private val context: 
             val roomMembers = RoomMembers(realm, roomId)
             val loadedMembers = roomMembers.queryRoomMembersEvent().findAll()
 
-
             if (roomEntity?.membership == Membership.INVITE) {
                 val inviteMeEvent = roomMembers.queryRoomMemberEvent(userId).findFirst()
                 val inviterId = inviteMeEvent?.sender

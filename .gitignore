@@ -1,14 +1,16 @@
 *.iml
 .gradle
 /local.properties
-.idea/*
-/.idea/*
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
+# idea files: exclude everything except dictionnaries
+.idea/caches
+.idea/codeStyles
+.idea/libraries
+.idea/*.xml
 .DS_Store
 /build
 /captures
 .externalNativeBuild
 
 /tmp
+
+ktlint

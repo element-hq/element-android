@@ -32,6 +32,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
@@ -119,7 +120,6 @@ import java.io.File
 import java.security.Key
 import javax.inject.Inject
 
-
 @Parcelize
 data class RoomDetailArgs(
         val roomId: String,
@@ -163,7 +163,6 @@ class RoomDetailFragment :
 
         private const val ircPattern = " (IRC)"
     }
-
 
     private val roomDetailArgs: RoomDetailArgs by args()
     private val glideRequests by lazy {
@@ -325,7 +324,6 @@ class RoomDetailFragment :
 
     private fun setupNotificationView() {
         notificationAreaView.delegate = object : NotificationAreaView.Delegate {
-
             override fun onTombstoneEventClicked(tombstoneEvent: Event) {
                 roomDetailViewModel.process(RoomDetailActions.HandleTombstoneEvent(tombstoneEvent))
             }
@@ -356,9 +354,9 @@ class RoomDetailFragment :
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.clear_message_queue) {
-            //This a temporary option during dev as it is not super stable
-            //Cancel all pending actions in room queue and post a dummy
-            //Then mark all sending events as undelivered
+            // This a temporary option during dev as it is not super stable
+            // Cancel all pending actions in room queue and post a dummy
+            // Then mark all sending events as undelivered
             roomDetailViewModel.process(RoomDetailActions.ClearSendQueue)
             return true
         }
@@ -379,10 +377,10 @@ class RoomDetailFragment :
 
     private fun renderSpecialMode(event: TimelineEvent,
                                   @DrawableRes iconRes: Int,
-                                  descriptionRes: Int,
+                                  @StringRes descriptionRes: Int,
                                   defaultContent: String) {
         commandAutocompletePolicy.enabled = false
-        //switch to expanded bar
+        // switch to expanded bar
         composerLayout.composerRelatedMessageTitle.apply {
             text = event.getDisambiguatedDisplayName()
             setTextColor(ContextCompat.getColor(requireContext(), getColorFromUserId(event.root.senderId)))
@@ -393,27 +391,19 @@ class RoomDetailFragment :
         var formattedBody: CharSequence? = null
         if (messageContent is MessageTextContent && messageContent.format == MessageType.FORMAT_MATRIX_HTML) {
             val parser = Parser.builder().build()
-            val document = parser.parse(messageContent.formattedBody
-                    ?: messageContent.body)
+            val document = parser.parse(messageContent.formattedBody ?: messageContent.body)
             formattedBody = eventHtmlRenderer.render(document)
         }
-        composerLayout.composerRelatedMessageContent.text = formattedBody
-                ?: nonFormattedBody
+        composerLayout.composerRelatedMessageContent.text = formattedBody ?: nonFormattedBody
 
         updateComposerText(defaultContent)
 
         composerLayout.composerRelatedMessageActionIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), iconRes))
         composerLayout.sendButton.setContentDescription(getString(descriptionRes))
 
-
-        avatarRenderer.render(event.senderAvatar, event.root.senderId
-                ?: "", event.senderName, composerLayout.composerRelatedMessageAvatar)
-        avatarRenderer.render(event.senderAvatar,
-                event.root.senderId ?: "",
-                event.senderName,
-                composerLayout.composerRelatedMessageAvatar)
+        avatarRenderer.render(event.senderAvatar, event.root.senderId ?: "", event.senderName, composerLayout.composerRelatedMessageAvatar)
         composerLayout.expand {
-            //need to do it here also when not using quick reply
+            // need to do it here also when not using quick reply
             focusComposerAndShowKeyboard()
         }
         focusComposerAndShowKeyboard()
@@ -461,7 +451,6 @@ class RoomDetailFragment :
 
 // PRIVATE METHODS *****************************************************************************
 
-
     private fun setupRecyclerView() {
         val epoxyVisibilityTracker = EpoxyVisibilityTracker()
         epoxyVisibilityTracker.attach(recyclerView)
@@ -486,7 +475,6 @@ class RoomDetailFragment :
         }
         recyclerView.setController(timelineEventController)
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 if (recyclerView.scrollState == RecyclerView.SCROLL_STATE_IDLE) {
                     updateJumpToBottomViewVisibility()
@@ -613,7 +601,6 @@ class RoomDetailFragment :
                 Timber.w("Send button is locked")
                 return@setOnClickListener
             }
-            composerLayout.sendButton.setContentDescription(getString(R.string.send))
             val textMessage = composerLayout.composerEditText.text.toString()
             if (textMessage.isNotBlank()) {
                 lockSendButton = true
@@ -650,7 +637,6 @@ class RoomDetailFragment :
             val uid = session.myUserId
             val meMember = session.getRoom(state.roomId)?.getRoomMember(uid)
             avatarRenderer.render(meMember?.avatarUrl, uid, meMember?.displayName, composerLayout.composerAvatarImageView)
-
         } else if (summary?.membership == Membership.INVITE && inviter != null) {
             inviteView.visibility = View.VISIBLE
             inviteView.render(inviter, VectorInviteView.Mode.LARGE)
@@ -672,7 +658,6 @@ class RoomDetailFragment :
 
     private fun renderRoomSummary(state: RoomDetailViewState) {
         state.asyncRoomSummary()?.let {
-
             if (it.membership.isLeft()) {
                 Timber.w("The room has been left")
                 activity?.finish()
@@ -854,7 +839,6 @@ class RoomDetailFragment :
     }
 
     override fun onEventCellClicked(informationData: MessageInformationData, messageContent: MessageContent?, view: View) {
-
     }
 
     override fun onEventLongClicked(informationData: MessageInformationData, messageContent: MessageContent?, view: View): Boolean {
@@ -879,10 +863,10 @@ class RoomDetailFragment :
 
     override fun onClickOnReactionPill(informationData: MessageInformationData, reaction: String, on: Boolean) {
         if (on) {
-            //we should test the current real state of reaction on this event
+            // we should test the current real state of reaction on this event
             roomDetailViewModel.process(RoomDetailActions.SendReaction(reaction, informationData.eventId))
         } else {
-            //I need to redact a reaction
+            // I need to redact a reaction
             roomDetailViewModel.process(RoomDetailActions.UndoReaction(informationData.eventId, reaction))
         }
     }
@@ -929,8 +913,7 @@ class RoomDetailFragment :
         }
     }
 
-
-// AutocompleteUserPresenter.Callback
+    // AutocompleteUserPresenter.Callback
 
     override fun onQueryUsers(query: CharSequence?) {
         textComposerViewModel.process(TextComposerActions.QueryUsers(query))
@@ -946,7 +929,7 @@ class RoomDetailFragment :
                         .show(requireActivity().supportFragmentManager, "DISPLAY_REACTIONS")
             }
             is SimpleAction.Copy                -> {
-                //I need info about the current selected message :/
+                // I need info about the current selected message :/
                 copyToClipboard(requireContext(), action.content, false)
                 val msg = requireContext().getString(R.string.copied_to_clipboard)
                 showSnackWithMessage(msg, Snackbar.LENGTH_SHORT)
@@ -955,9 +938,9 @@ class RoomDetailFragment :
                 roomDetailViewModel.process(RoomDetailActions.RedactAction(action.eventId, context?.getString(R.string.event_redacted_by_user_reason)))
             }
             is SimpleAction.Share               -> {
-                //TODO current data communication is too limited
-                //Need to now the media type
-                //TODO bad, just POC
+                // TODO current data communication is too limited
+                // Need to now the media type
+                // TODO bad, just POC
                 BigImageViewer.imageLoader().loadImage(
                         action.hashCode(),
                         Uri.parse(action.imageUrl),
@@ -965,8 +948,9 @@ class RoomDetailFragment :
                             override fun onFinish() {}
 
                             override fun onSuccess(image: File?) {
-                                if (image != null)
+                                if (image != null) {
                                     shareMedia(requireContext(), image, "image/*")
+                                }
                             }
 
                             override fun onFail(error: Exception?) {}
@@ -978,7 +962,6 @@ class RoomDetailFragment :
                             override fun onProgress(progress: Int) {}
 
                             override fun onStart() {}
-
                         }
                 )
             }
@@ -1008,7 +991,7 @@ class RoomDetailFragment :
                         .show()
             }
             is SimpleAction.QuickReact          -> {
-                //eventId,ClickedOn,Add
+                // eventId,ClickedOn,Add
                 roomDetailViewModel.process(RoomDetailActions.UpdateQuickReactAction(action.eventId, action.clickedOn, action.add))
             }
             is SimpleAction.Edit                -> {
@@ -1024,7 +1007,6 @@ class RoomDetailFragment :
                 val permalink = PermalinkFactory.createPermalink(roomDetailArgs.roomId, action.eventId)
                 copyToClipboard(requireContext(), permalink, false)
                 showSnackWithMessage(requireContext().getString(R.string.copied_to_clipboard), Snackbar.LENGTH_SHORT)
-
             }
             is SimpleAction.Resend              -> {
                 roomDetailViewModel.process(RoomDetailActions.ResendMessage(action.eventId))
@@ -1038,15 +1020,15 @@ class RoomDetailFragment :
         }
     }
 
-//utils
+// utils
     /**
      * Insert an user displayname  in the message editor.
      *
      * @param text the text to insert.
      */
-//TODO legacy, refactor
+// TODO legacy, refactor
     private fun insertUserDisplayNameInTextEditor(text: String?) {
-        //TODO move logic outside of fragment
+        // TODO move logic outside of fragment
         if (null != text) {
 //            var vibrate = false
 
@@ -1094,7 +1076,6 @@ class RoomDetailFragment :
         snack.view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.notification_accent_color))
         snack.show()
     }
-
 
     // VectorInviteView.Callback
 

@@ -63,5 +63,4 @@ internal class DefaultJoinRoomTask @Inject constructor(private val roomAPI: Room
         val setReadMarkerParams = SetReadMarkersTask.Params(roomId, markAllAsRead = true)
         readMarkersTask.execute(setReadMarkerParams)
     }
-
 }

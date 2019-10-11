@@ -27,7 +27,6 @@ import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import java.util.zip.GZIPInputStream
 
-
 /**
  * Get realm, invoke the action, close realm, and return the result of the action
  */
@@ -98,6 +97,7 @@ fun <T> deserializeFromRealm(string: String?): T? {
     val gzis = GZIPInputStream(bais)
     val ois = ObjectInputStream(gzis)
 
+    @Suppress("UNCHECKED_CAST")
     val result = ois.readObject() as T
 
     ois.close()

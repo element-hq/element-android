@@ -34,5 +34,4 @@ enum class WebViewMode : WebViewEventListenerFactory {
             return ConsentWebViewEventListener(activity, session, DefaultWebViewEventListener())
         }
     };
-
 }

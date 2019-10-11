@@ -42,5 +42,4 @@ data class RoomFilter(
                 || timeline != null
                 || accountData != null)
     }
-
 }

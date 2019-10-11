@@ -35,5 +35,4 @@ class StringArrayProvider @Inject constructor(private val resources: Resources) 
     fun getStringArray(@ArrayRes resId: Int): Array<String> {
         return resources.getStringArray(resId)
     }
-
 }

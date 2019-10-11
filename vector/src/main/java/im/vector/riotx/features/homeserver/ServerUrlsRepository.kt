@@ -70,9 +70,8 @@ object ServerUrlsRepository {
 
         return prefs.getString(HOME_SERVER_URL_PREF,
                                prefs.getString(DEFAULT_REFERRER_HOME_SERVER_URL_PREF,
-                                               getDefaultHomeServerUrl(context)))
+                                               getDefaultHomeServerUrl(context))!!)!!
     }
-
 
     /**
      * Return true if url is the default home server url form resources
@@ -83,5 +82,4 @@ object ServerUrlsRepository {
      * Return default home server url from resources
      */
     fun getDefaultHomeServerUrl(context: Context): String = context.getString(R.string.default_hs_server_url)
-
 }

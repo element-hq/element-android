@@ -44,5 +44,4 @@ class LayoutManagerStateRestorer(private val layoutManager: RecyclerView.LayoutM
             layoutManager.onRestoreInstanceState(it)
         }
     }
-
 }

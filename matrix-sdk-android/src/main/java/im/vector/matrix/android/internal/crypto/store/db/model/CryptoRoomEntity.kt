@@ -27,5 +27,4 @@ internal open class CryptoRoomEntity(
     : RealmObject() {
 
     companion object
-
 }

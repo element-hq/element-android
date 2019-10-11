@@ -34,7 +34,6 @@ class KeysBackupRestoreSuccessFragment : VectorBaseFragment() {
     @BindView(R.id.keys_backup_restore_success_info)
     lateinit var mSuccessDetailsText: TextView
 
-
     private lateinit var sharedViewModel: KeysBackupRestoreSharedViewModel
 
     override fun injectWith(injector: ScreenComponent) {
@@ -55,7 +54,7 @@ class KeysBackupRestoreSuccessFragment : VectorBaseFragment() {
             mSuccessDetailsText.text = String.format("%s\n%s", part1, part2)
         }
 
-        //We don't put emoji in string xml as it will crash on old devices
+        // We don't put emoji in string xml as it will crash on old devices
         mSuccessText.text = context?.getString(R.string.keys_backup_restore_success_title, "🎉")
     }
 

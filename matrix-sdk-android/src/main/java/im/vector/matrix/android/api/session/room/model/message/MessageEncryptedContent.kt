@@ -18,7 +18,6 @@ package im.vector.matrix.android.api.session.room.model.message
 
 import im.vector.matrix.android.internal.crypto.model.rest.EncryptedFileInfo
 
-
 /**
  * Interface for message which can contains an encrypted file
  */

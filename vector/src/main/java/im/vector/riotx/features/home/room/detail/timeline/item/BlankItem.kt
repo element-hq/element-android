@@ -20,7 +20,6 @@ import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
 
-
 @EpoxyModelClass(layout = R.layout.item_timeline_event_blank_stub)
 abstract class BlankItem : VectorEpoxyModel<BlankItem.BlankHolder>() {
     class BlankHolder : VectorEpoxyHolder()

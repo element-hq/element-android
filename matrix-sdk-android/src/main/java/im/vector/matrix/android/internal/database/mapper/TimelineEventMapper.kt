@@ -49,7 +49,4 @@ internal class TimelineEventMapper @Inject constructor(private val readReceiptsS
                 hasReadMarker = timelineEventEntity.readMarker?.eventId?.isNotEmpty() == true
         )
     }
-
 }
-
-

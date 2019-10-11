@@ -24,7 +24,6 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.internal.crypto.model.event.EncryptionEventContent
 import im.vector.riotx.R
 import im.vector.riotx.core.resources.StringProvider
-import im.vector.riotx.core.utils.DimensionConverter
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.home.room.detail.timeline.helper.AvatarSizeProvider
@@ -42,7 +41,6 @@ class EncryptionItemFactory @Inject constructor(private val stringProvider: Stri
     fun create(event: TimelineEvent,
                highlight: Boolean,
                callback: TimelineEventController.Callback?): NoticeItem? {
-
         val text = buildNoticeText(event.root, event.senderName) ?: return null
         val informationData = MessageInformationData(
                 eventId = event.root.eventId ?: "?",
@@ -75,8 +73,5 @@ class EncryptionItemFactory @Inject constructor(private val stringProvider: Stri
             }
             else                                         -> null
         }
-
     }
-
-
 }

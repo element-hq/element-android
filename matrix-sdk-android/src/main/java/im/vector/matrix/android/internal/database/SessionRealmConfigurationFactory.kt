@@ -42,7 +42,6 @@ internal class SessionRealmConfigurationFactory @Inject constructor(private val 
 
     private val sharedPreferences = context.getSharedPreferences("im.vector.matrix.android.realm", Context.MODE_PRIVATE)
 
-
     fun create(): RealmConfiguration {
         val shouldClearRealm = sharedPreferences.getBoolean("$REALM_SHOULD_CLEAR_FLAG_$userMd5", false)
         if (shouldClearRealm) {

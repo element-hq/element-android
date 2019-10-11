@@ -29,7 +29,6 @@ import im.vector.matrix.android.api.session.pushers.Pusher
 import im.vector.matrix.rx.RxSession
 import im.vector.riotx.core.platform.VectorViewModel
 
-
 data class PushGatewayViewState(
         val pushGateways: Async<List<Pusher>> = Uninitialized
 ) : MvRxState
@@ -61,5 +60,4 @@ class PushGatewaysViewModel @AssistedInject constructor(@Assisted initialState: 
                     copy(pushGateways = it)
                 }
     }
-
 }

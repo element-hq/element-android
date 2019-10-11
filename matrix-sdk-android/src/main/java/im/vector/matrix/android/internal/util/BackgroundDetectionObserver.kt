@@ -61,5 +61,4 @@ internal class BackgroundDetectionObserver @Inject constructor() : LifecycleObse
         fun onMoveToForeground()
         fun onMoveToBackground()
     }
-
 }

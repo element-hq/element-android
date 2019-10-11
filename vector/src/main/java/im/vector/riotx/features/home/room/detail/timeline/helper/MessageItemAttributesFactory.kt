@@ -37,7 +37,6 @@ class MessageItemAttributesFactory @Inject constructor(
     fun create(messageContent: MessageContent?,
                informationData: MessageInformationData,
                callback: TimelineEventController.Callback?): AbsMessageItem.Attributes {
-
         return AbsMessageItem.Attributes(
                 avatarSize = avatarSizeProvider.avatarSize,
                 informationData = informationData,
@@ -49,7 +48,7 @@ class MessageItemAttributesFactory @Inject constructor(
                 itemClickListener = DebouncedClickListener(View.OnClickListener { view ->
                     callback?.onEventCellClicked(informationData, messageContent, view)
                 }),
-                memberClickListener = DebouncedClickListener(View.OnClickListener { view ->
+                memberClickListener = DebouncedClickListener(View.OnClickListener {
                     callback?.onMemberNameClicked(informationData)
                 }),
                 reactionPillCallback = callback,
@@ -57,7 +56,5 @@ class MessageItemAttributesFactory @Inject constructor(
                 readReceiptsCallback = callback,
                 emojiTypeFace = emojiCompatFontProvider.typeface
         )
-
     }
-
 }

@@ -33,7 +33,6 @@ import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import okhttp3.OkHttpClient
 import org.matrix.olm.OlmManager
 
-
 @Component(modules = [MatrixModule::class, NetworkModule::class, AuthModule::class])
 @MatrixScope
 internal interface MatrixComponent {
@@ -69,5 +68,4 @@ internal interface MatrixComponent {
     interface Factory {
         fun create(@BindsInstance context: Context): MatrixComponent
     }
-
 }

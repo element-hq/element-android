@@ -100,5 +100,4 @@ interface ViewModelModule {
     @IntoMap
     @ViewModelKey(CreateDirectRoomNavigationViewModel::class)
     fun bindCreateDirectRoomNavigationViewModel(viewModel: CreateDirectRoomNavigationViewModel): ViewModel
-
 }

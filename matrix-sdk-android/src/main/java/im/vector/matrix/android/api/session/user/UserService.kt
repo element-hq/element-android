@@ -64,5 +64,4 @@ interface UserService {
      * @return a Livedata of users
      */
     fun livePagedUsers(filter: String? = null): LiveData<PagedList<User>>
-
 }

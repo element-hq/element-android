@@ -20,7 +20,6 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.internal.crypto.attachments.ElementToDecrypt
 import java.io.File
 
-
 /**
  * This interface defines methods to get files.
  */

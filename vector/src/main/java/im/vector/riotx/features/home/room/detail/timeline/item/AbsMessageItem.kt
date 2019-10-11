@@ -180,5 +180,4 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
             val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null,
             val emojiTypeFace: Typeface? = null
     )
-
 }

@@ -24,7 +24,6 @@ import im.vector.matrix.android.internal.task.Task
 import io.realm.Realm
 import javax.inject.Inject
 
-
 internal interface UpdateQuickReactionTask : Task<UpdateQuickReactionTask.Params, UpdateQuickReactionTask.Result> {
 
     data class Params(
@@ -51,13 +50,12 @@ internal class DefaultUpdateQuickReactionTask @Inject constructor(private val mo
         return UpdateQuickReactionTask.Result(res?.first, res?.second ?: emptyList())
     }
 
-
     private fun updateQuickReaction(realm: Realm, reaction: String, oppositeReaction: String, eventId: String, myUserId: String): Pair<String?, List<String>?> {
-        //the emoji reaction has been selected, we need to check if we have reacted it or not
+        // the emoji reaction has been selected, we need to check if we have reacted it or not
         val existingSummary = EventAnnotationsSummaryEntity.where(realm, eventId).findFirst()
                 ?: return Pair(reaction, null)
 
-        //Ok there is already reactions on this event, have we reacted to it
+        // Ok there is already reactions on this event, have we reacted to it
         val aggregationForReaction = existingSummary.reactionsSummary.where()
                 .equalTo(ReactionAggregatedSummaryEntityFields.KEY, reaction)
                 .findFirst()
@@ -66,23 +64,22 @@ internal class DefaultUpdateQuickReactionTask @Inject constructor(private val mo
                 .findFirst()
 
         if (aggregationForReaction == null || !aggregationForReaction.addedByMe) {
-            //i haven't yet reacted to it, so need to add it, but do I need to redact the opposite?
+            // i haven't yet reacted to it, so need to add it, but do I need to redact the opposite?
             val toRedact = aggregationForOppositeReaction?.sourceEvents?.mapNotNull {
-                //find source event
+                // find source event
                 val entity = EventEntity.where(realm, it).findFirst()
                 if (entity?.sender == myUserId) entity.eventId else null
             }
             return Pair(reaction, toRedact)
         } else {
-            //I already added it, so i need to undo it (like a toggle)
+            // I already added it, so i need to undo it (like a toggle)
             // find all m.redaction coming from me to readact them
             val toRedact = aggregationForReaction.sourceEvents.mapNotNull {
-                //find source event
+                // find source event
                 val entity = EventEntity.where(realm, it).findFirst()
                 if (entity?.sender == myUserId) entity.eventId else null
             }
             return Pair(null, toRedact)
         }
-
     }
 }

@@ -32,5 +32,4 @@ data class CallCandidatesContent(
             @Json(name = "sdpMLineIndex") val sdpMLineIndex: String,
             @Json(name = "candidate") val candidate: String
     )
-
 }

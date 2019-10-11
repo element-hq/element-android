@@ -60,5 +60,4 @@ internal open class RoomSummaryEntity(@PrimaryKey var roomId: String = "",
         }
 
     companion object
-
 }

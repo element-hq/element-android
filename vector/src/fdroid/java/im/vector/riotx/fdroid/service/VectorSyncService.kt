@@ -56,5 +56,4 @@ class VectorSyncService : SyncService() {
         }
         return super.onStartCommand(intent, flags, startId)
     }
-
 }

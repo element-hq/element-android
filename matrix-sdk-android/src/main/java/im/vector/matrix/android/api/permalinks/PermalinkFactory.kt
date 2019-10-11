@@ -51,7 +51,6 @@ object PermalinkFactory {
         return if (TextUtils.isEmpty(id)) {
             null
         } else MATRIX_TO_URL_BASE + escape(id)
-
     }
 
     /**
@@ -78,9 +77,7 @@ object PermalinkFactory {
         return if (isSupported) {
             url!!.substring(MATRIX_TO_URL_BASE.length)
         } else null
-
     }
-
 
     /**
      * Escape '/' in id, because it is used as a separator

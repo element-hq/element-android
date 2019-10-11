@@ -19,7 +19,6 @@ package im.vector.riotx.core.platform
 import android.text.Editable
 import android.text.TextWatcher
 
-
 /**
  * TextWatcher with default no op implementation
  */

@@ -35,7 +35,6 @@ internal class IncomingRoomKeyRequestManager @Inject constructor(
         private val cryptoStore: IMXCryptoStore,
         private val roomDecryptorProvider: RoomDecryptorProvider) {
 
-
     // list of IncomingRoomKeyRequests/IncomingRoomKeyRequestCancellations
     // we received in the current sync.
     private val receivedRoomKeyRequests = ArrayList<IncomingRoomKeyRequest>()
@@ -166,11 +165,9 @@ internal class IncomingRoomKeyRequestManager @Inject constructor(
                 } catch (e: Exception) {
                     Timber.e(e, "## onRoomKeyRequest() failed")
                 }
-
             }
         }
     }
-
 
     /**
      * A room key request cancellation has been received.
@@ -185,7 +182,6 @@ internal class IncomingRoomKeyRequestManager @Inject constructor(
                 } catch (e: Exception) {
                     Timber.e(e, "## onRoomKeyRequestCancellation() failed")
                 }
-
             }
         }
     }
@@ -201,5 +197,4 @@ internal class IncomingRoomKeyRequestManager @Inject constructor(
             roomKeysRequestListeners.remove(listener)
         }
     }
-
 }

@@ -33,7 +33,6 @@ abstract class LoadingItem : VectorEpoxyModel<LoadingItem.Holder>() {
         holder.textView.setTextOrHide(loadingText)
     }
 
-
     class Holder : VectorEpoxyHolder() {
         val textView by bind<TextView>(R.id.loadingText)
     }

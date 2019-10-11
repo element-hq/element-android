@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("DEPRECATION")
+
 package im.vector.riotx.features.webview
 
 import android.annotation.TargetApi
@@ -79,5 +81,4 @@ class VectorWebViewClient(private val eventListener: WebViewEventListener) : Web
         }
         return shouldOverrideUrlLoading
     }
-
 }

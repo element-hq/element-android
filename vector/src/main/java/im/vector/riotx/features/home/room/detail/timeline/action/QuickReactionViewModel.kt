@@ -86,7 +86,6 @@ class QuickReactionViewModel @AssistedInject constructor(@Assisted initialState:
                 }
     }
 
-
     fun didSelect(index: Int) = withState {
         val selectedReaction = it.quickStates()?.get(index) ?: return@withState
         val isSelected = selectedReaction.isSelected
@@ -94,5 +93,4 @@ class QuickReactionViewModel @AssistedInject constructor(@Assisted initialState:
             copy(result = ToggleState(selectedReaction.reaction, !isSelected))
         }
     }
-
 }

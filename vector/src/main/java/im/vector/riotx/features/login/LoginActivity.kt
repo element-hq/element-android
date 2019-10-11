@@ -31,7 +31,6 @@ import im.vector.riotx.features.disclaimer.showDisclaimerDialog
 import im.vector.riotx.features.home.HomeActivity
 import javax.inject.Inject
 
-
 class LoginActivity : VectorBaseActivity() {
 
     // Supported navigation actions for this Activity
@@ -43,7 +42,6 @@ class LoginActivity : VectorBaseActivity() {
     private val loginViewModel: LoginViewModel by viewModel()
 
     @Inject lateinit var loginViewModelFactory: LoginViewModel.Factory
-
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
@@ -78,7 +76,6 @@ class LoginActivity : VectorBaseActivity() {
         }
     }
 
-
     override fun onResume() {
         super.onResume()
 
@@ -93,7 +90,5 @@ class LoginActivity : VectorBaseActivity() {
                 putExtra(EXTRA_CONFIG, loginConfig)
             }
         }
-
     }
-
 }

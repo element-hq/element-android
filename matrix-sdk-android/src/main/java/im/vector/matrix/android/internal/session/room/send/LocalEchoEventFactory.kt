@@ -17,6 +17,7 @@
 package im.vector.matrix.android.internal.session.room.send
 
 import android.media.MediaMetadataRetriever
+import androidx.exifinterface.media.ExifInterface
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.R
 import im.vector.matrix.android.api.permalinks.PermalinkFactory
@@ -159,7 +160,7 @@ internal class LocalEchoEventFactory @Inject constructor(@UserId private val use
                         reaction
                 )
         )
-        val localId = dummyEventId(roomId)
+        val localId = dummyEventId()
         return Event(
                 roomId = roomId,
                 originServerTs = dummyOriginServerTs(),
@@ -168,18 +169,30 @@ internal class LocalEchoEventFactory @Inject constructor(@UserId private val use
                 type = EventType.REACTION,
                 content = content.toContent(),
                 unsignedData = UnsignedData(age = null, transactionId = localId))
-
     }
 
-
     private fun createImageEvent(roomId: String, attachment: ContentAttachmentData): Event {
+        var width = attachment.width
+        var height = attachment.height
+
+        when (attachment.exifOrientation) {
+            ExifInterface.ORIENTATION_ROTATE_90,
+            ExifInterface.ORIENTATION_TRANSVERSE,
+            ExifInterface.ORIENTATION_ROTATE_270,
+            ExifInterface.ORIENTATION_TRANSPOSE -> {
+                val tmp = width
+                width = height
+                height = tmp
+            }
+        }
+
         val content = MessageImageContent(
                 type = MessageType.MSGTYPE_IMAGE,
                 body = attachment.name ?: "image",
                 info = ImageInfo(
                         mimeType = attachment.mimeType,
-                        width = attachment.width?.toInt() ?: 0,
-                        height = attachment.height?.toInt() ?: 0,
+                        width = width?.toInt() ?: 0,
+                        height = height?.toInt() ?: 0,
                         size = attachment.size.toInt()
                 ),
                 url = attachment.path
@@ -251,7 +264,7 @@ internal class LocalEchoEventFactory @Inject constructor(@UserId private val use
     }
 
     private fun createEvent(roomId: String, content: Any? = null): Event {
-        val localID = dummyEventId(roomId)
+        val localID = dummyEventId()
         return Event(
                 roomId = roomId,
                 originServerTs = dummyOriginServerTs(),
@@ -267,13 +280,13 @@ internal class LocalEchoEventFactory @Inject constructor(@UserId private val use
         return System.currentTimeMillis()
     }
 
-    private fun dummyEventId(roomId: String): String {
+    private fun dummyEventId(): String {
         return "$LOCAL_ID_PREFIX${UUID.randomUUID()}"
     }
 
     fun createReplyTextEvent(roomId: String, eventReplied: TimelineEvent, replyText: String, autoMarkdown: Boolean): Event? {
-        //Fallbacks and event representation
-        //TODO Add error/warning logs when any of this is null
+        // Fallbacks and event representation
+        // TODO Add error/warning logs when any of this is null
         val permalink = PermalinkFactory.createPermalink(eventReplied.root) ?: return null
         val userId = eventReplied.root.senderId ?: return null
         val userLink = PermalinkFactory.createPermalink(userId) ?: return null
@@ -339,10 +352,11 @@ internal class LocalEchoEventFactory @Inject constructor(@UserId private val use
                     }
                 }
                 val isReply = content.isReply() || originalContent.isReply()
-                return if (isReply)
+                return if (isReply) {
                     TextContent(content.body, formattedText).removeInReplyFallbacks()
-                else
+                } else {
                     TextContent(content.body, formattedText)
+                }
             }
             MessageType.MSGTYPE_FILE   -> return TextContent(stringProvider.getString(R.string.reply_to_a_file))
             MessageType.MSGTYPE_AUDIO  -> return TextContent(stringProvider.getString(R.string.reply_to_an_audio_file))
@@ -369,7 +383,7 @@ internal class LocalEchoEventFactory @Inject constructor(@UserId private val use
     }
      */
     fun createRedactEvent(roomId: String, eventId: String, reason: String?): Event {
-        val localID = dummyEventId(roomId)
+        val localID = dummyEventId()
         return Event(
                 roomId = roomId,
                 originServerTs = dummyOriginServerTs(),
@@ -383,7 +397,7 @@ internal class LocalEchoEventFactory @Inject constructor(@UserId private val use
     }
 
     fun saveLocalEcho(monarchy: Monarchy, event: Event) {
-        if (event.roomId == null) throw IllegalStateException("Your event should have a roomId")
+        checkNotNull(event.roomId) { "Your event should have a roomId" }
         monarchy.writeAsync { realm ->
             val roomEntity = RoomEntity.where(realm, roomId = event.roomId).findFirst()
                     ?: return@writeAsync
@@ -394,7 +408,6 @@ internal class LocalEchoEventFactory @Inject constructor(@UserId private val use
 
     companion object {
         const val LOCAL_ID_PREFIX = "local."
-
 
         // <mx-reply>
         //     <blockquote>

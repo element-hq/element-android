@@ -69,6 +69,7 @@ fun ChosenImage.toContentAttachmentData(): ContentAttachmentData {
             size = size,
             height = height.toLong(),
             width = width.toLong(),
+            exifOrientation = orientation,
             date = createdAt?.time ?: System.currentTimeMillis()
     )
 }

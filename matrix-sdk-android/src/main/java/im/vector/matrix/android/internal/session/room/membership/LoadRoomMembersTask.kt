@@ -64,7 +64,6 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(private val roomAP
             val roomEntity = RoomEntity.where(realm, roomId).findFirst()
                     ?: realm.createObject(roomId)
 
-
             for (roomMemberEvent in response.roomMemberEvents) {
                 roomEntity.addStateEvent(roomMemberEvent)
                 UserEntityFactory.createOrNull(roomMemberEvent)?.also {
@@ -84,5 +83,4 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(private val roomAP
             RoomEntity.where(it, roomId).findFirst()?.areAllMembersLoaded ?: false
         }
     }
-
 }

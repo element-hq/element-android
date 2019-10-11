@@ -66,12 +66,9 @@ abstract class FormSwitchItem : VectorEpoxyModel<FormSwitchItem.Holder>() {
         holder.switchView.setOnCheckedChangeListener(null)
     }
 
-
     class Holder : VectorEpoxyHolder() {
         val titleView by bind<TextView>(R.id.formSwitchTitle)
         val summaryView by bind<TextView>(R.id.formSwitchSummary)
         val switchView by bind<SwitchMaterial>(R.id.formSwitchSwitch)
     }
-
 }
-

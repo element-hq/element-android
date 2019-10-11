@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.api.session.events.model
 
-
 /**
  * Constants defining known event types from Matrix specifications.
  */
@@ -92,7 +91,6 @@ object EventType {
             STATE_RELATED_GROUPS,
             STATE_PINNED_EVENT
     )
-
 
     fun isStateEvent(type: String): Boolean {
         return STATE_EVENTS.contains(type)

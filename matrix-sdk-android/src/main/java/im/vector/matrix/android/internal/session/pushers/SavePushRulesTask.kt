@@ -25,7 +25,6 @@ import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.awaitTransaction
 import javax.inject.Inject
 
-
 /**
  * Save the push rules in DB
  */

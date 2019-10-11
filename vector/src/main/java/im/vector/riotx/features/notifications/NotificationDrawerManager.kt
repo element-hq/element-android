@@ -59,7 +59,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
         backgroundHandler = Handler(handlerThread.looper)
     }
 
-    //The first time the notification drawer is refreshed, we force re-render of all notifications
+    // The first time the notification drawer is refreshed, we force re-render of all notifications
     private var firstTime = true
 
     private val eventList = loadEventInfo()
@@ -79,8 +79,8 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
             Timber.i("Notification are disabled for this device")
             return
         }
-        //If we support multi session, event list should be per userId
-        //Currently only manage single session
+        // If we support multi session, event list should be per userId
+        // Currently only manage single session
         if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
             Timber.v("%%%%%%%% onNotifiableEventReceived $notifiableEvent")
         }
@@ -88,8 +88,8 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
             val existing = eventList.firstOrNull { it.eventId == notifiableEvent.eventId }
             if (existing != null) {
                 if (existing.isPushGatewayEvent) {
-                    //Use the event coming from the event stream as it may contains more info than
-                    //the fcm one (like type/content/clear text)
+                    // Use the event coming from the event stream as it may contains more info than
+                    // the fcm one (like type/content/clear text)
                     // In this case the message has already been notified, and might have done some noise
                     // So we want the notification to be updated even if it has already been displayed
                     // But it should make no noise (e.g when an encrypted message from FCM should be
@@ -99,7 +99,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                     eventList.remove(existing)
                     eventList.add(notifiableEvent)
                 } else {
-                    //keep the existing one, do not replace
+                    // keep the existing one, do not replace
                 }
             } else {
                 // Check if this is an edit
@@ -138,7 +138,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
     }
 
     /**
-    Clear all known events and refresh the notification drawer
+     * Clear all known events and refresh the notification drawer
      */
     fun clearAllEvents() {
         synchronized(eventList) {
@@ -147,7 +147,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
         refreshNotificationDrawer()
     }
 
-    /** Clear all known message events for this room and refresh the notification drawer */
+    /** Clear all known message events for this room */
     fun clearMessageEventOfRoom(roomId: String?) {
         Timber.v("clearMessageEventOfRoom $roomId")
 
@@ -159,7 +159,6 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
             }
             notificationUtils.cancelNotificationMessage(roomId, ROOM_MESSAGES_NOTIFICATION_ID)
         }
-        refreshNotificationDrawer()
     }
 
     /**
@@ -177,23 +176,15 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
         }
     }
 
-    fun homeActivityDidResume(matrixID: String?) {
-        synchronized(eventList) {
-            eventList.removeAll { e ->
-                // messages are cleared when entering room
-                e !is NotifiableMessageEvent
-            }
-        }
-    }
-
     fun clearMemberShipNotificationForRoom(roomId: String) {
         synchronized(eventList) {
             eventList.removeAll { e ->
                 e is InviteNotifiableEvent && e.roomId == roomId
             }
         }
-    }
 
+        notificationUtils.cancelNotificationMessage(roomId, ROOM_INVITATION_NOTIFICATION_ID)
+    }
 
     fun refreshNotificationDrawer() {
         // Implement last throttler
@@ -202,8 +193,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
         backgroundHandler.postDelayed(
                 {
                     refreshNotificationDrawerBg()
-                }
-                , 200)
+                }, 200)
     }
 
     @WorkerThread
@@ -217,45 +207,46 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
         val myUserDisplayName = user?.displayName?.takeIf { it.isNotBlank() } ?: session.myUserId
         val myUserAvatarUrl = session.contentUrlResolver().resolveThumbnail(user?.avatarUrl, avatarSize, avatarSize, ContentUrlResolver.ThumbnailMethod.SCALE)
         synchronized(eventList) {
-
             Timber.v("%%%%%%%% REFRESH NOTIFICATION DRAWER ")
-            //TMP code
+            // TMP code
             var hasNewEvent = false
             var summaryIsNoisy = false
             val summaryInboxStyle = NotificationCompat.InboxStyle()
 
-            //group events by room to create a single MessagingStyle notif
+            // group events by room to create a single MessagingStyle notif
             val roomIdToEventMap: MutableMap<String, MutableList<NotifiableMessageEvent>> = LinkedHashMap()
-            val simpleEvents: MutableList<NotifiableEvent> = ArrayList()
+            val simpleEvents: MutableList<SimpleNotifiableEvent> = ArrayList()
+            val invitationEvents: MutableList<InviteNotifiableEvent> = ArrayList()
 
             val eventIterator = eventList.listIterator()
             while (eventIterator.hasNext()) {
-                val event = eventIterator.next()
-                if (event is NotifiableMessageEvent) {
-                    val roomId = event.roomId
-                    val roomEvents = roomIdToEventMap.getOrPut(roomId) { ArrayList() }
+                when (val event = eventIterator.next()) {
+                    is NotifiableMessageEvent -> {
+                        val roomId = event.roomId
+                        val roomEvents = roomIdToEventMap.getOrPut(roomId) { ArrayList() }
 
-                    if (shouldIgnoreMessageEventInRoom(roomId) || outdatedDetector?.isMessageOutdated(event) == true) {
-                        //forget this event
-                        eventIterator.remove()
-                    } else {
-                        roomEvents.add(event)
+                        if (shouldIgnoreMessageEventInRoom(roomId) || outdatedDetector?.isMessageOutdated(event) == true) {
+                            // forget this event
+                            eventIterator.remove()
+                        } else {
+                            roomEvents.add(event)
+                        }
                     }
-                } else {
-                    simpleEvents.add(event)
+                    is InviteNotifiableEvent  -> invitationEvents.add(event)
+                    is SimpleNotifiableEvent  -> simpleEvents.add(event)
+                    else                      -> Timber.w("Type not handled")
                 }
             }
-
 
             Timber.v("%%%%%%%% REFRESH NOTIFICATION DRAWER ${roomIdToEventMap.size} room groups")
 
             var globalLastMessageTimestamp = 0L
 
-            //events have been grouped by roomId
+            // events have been grouped by roomId
             for ((roomId, events) in roomIdToEventMap) {
                 // Build the notification for the room
                 if (events.isEmpty() || events.all { it.isRedacted }) {
-                    //Just clear this notification
+                    // Just clear this notification
                     Timber.v("%%%%%%%% REFRESH NOTIFICATION DRAWER $roomId has no more events")
                     notificationUtils.cancelNotificationMessage(roomId, ROOM_MESSAGES_NOTIFICATION_ID)
                     continue
@@ -282,9 +273,8 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
 
                 val largeBitmap = getRoomBitmap(events)
 
-
                 for (event in events) {
-                    //if all events in this room have already been displayed there is no need to update it
+                    // if all events in this room have already been displayed there is no need to update it
                     if (!event.hasBeenDisplayed && !event.isRedacted) {
                         roomEventGroupInfo.shouldBing = roomEventGroupInfo.shouldBing || event.noisy
                         roomEventGroupInfo.customSound = event.soundName
@@ -305,10 +295,10 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                             style.addMessage(event.body, event.timestamp, senderPerson)
                         }
                     }
-                    event.hasBeenDisplayed = true //we can consider it as displayed
+                    event.hasBeenDisplayed = true // we can consider it as displayed
 
-                    //It is possible that this event was previously shown as an 'anonymous' simple notif.
-                    //And now it will be merged in a single MessageStyle notif, so we can clean to be sure
+                    // It is possible that this event was previously shown as an 'anonymous' simple notif.
+                    // And now it will be merged in a single MessageStyle notif, so we can clean to be sure
                     notificationUtils.cancelNotificationMessage(event.eventId, ROOM_EVENT_NOTIFICATION_ID)
                 }
 
@@ -340,13 +330,13 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                         summaryInboxStyle.addLine(summaryLine)
                     }
                 } catch (e: Throwable) {
-                    //String not found or bad format
+                    // String not found or bad format
                     Timber.v("%%%%%%%% REFRESH NOTIFICATION DRAWER failed to resolve string")
                     summaryInboxStyle.addLine(roomName)
                 }
 
                 if (firstTime || roomEventGroupInfo.hasNewEvent) {
-                    //Should update displayed notification
+                    // Should update displayed notification
                     Timber.v("%%%%%%%% REFRESH NOTIFICATION DRAWER $roomId need refresh")
                     val lastMessageTimestamp = events.last().timestamp
 
@@ -361,7 +351,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                             lastMessageTimestamp,
                             myUserDisplayName)
 
-                    //is there an id for this room?
+                    // is there an id for this room?
                     notificationUtils.showNotificationMessage(roomId, ROOM_MESSAGES_NOTIFICATION_ID, notification)
 
                     hasNewEvent = true
@@ -371,23 +361,34 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                 }
             }
 
-
-            //Handle simple events
-            for (event in simpleEvents) {
-                //We build a simple event
+            // Handle invitation events
+            for (event in invitationEvents) {
+                // We build a invitation notification
                 if (firstTime || !event.hasBeenDisplayed) {
-                    val notification = notificationUtils.buildSimpleEventNotification(event, null, session.myUserId)
-                    notificationUtils.showNotificationMessage(event.eventId, ROOM_EVENT_NOTIFICATION_ID, notification)
-                    event.hasBeenDisplayed = true //we can consider it as displayed
+                    val notification = notificationUtils.buildRoomInvitationNotification(event, session.myUserId)
+                    notificationUtils.showNotificationMessage(event.roomId, ROOM_INVITATION_NOTIFICATION_ID, notification)
+                    event.hasBeenDisplayed = true // we can consider it as displayed
                     hasNewEvent = true
                     summaryIsNoisy = summaryIsNoisy || event.noisy
                     summaryInboxStyle.addLine(event.description)
                 }
             }
 
+            // Handle simple events
+            for (event in simpleEvents) {
+                // We build a simple notification
+                if (firstTime || !event.hasBeenDisplayed) {
+                    val notification = notificationUtils.buildSimpleEventNotification(event, session.myUserId)
+                    notificationUtils.showNotificationMessage(event.eventId, ROOM_EVENT_NOTIFICATION_ID, notification)
+                    event.hasBeenDisplayed = true // we can consider it as displayed
+                    hasNewEvent = true
+                    summaryIsNoisy = summaryIsNoisy || event.noisy
+                    summaryInboxStyle.addLine(event.description)
+                }
+            }
 
-            //======== Build summary notification =========
-            //On Android 7.0 (API level 24) and higher, the system automatically builds a summary for
+            // ======== Build summary notification =========
+            // On Android 7.0 (API level 24) and higher, the system automatically builds a summary for
             // your group using snippets of text from each notification. The user can expand this
             // notification to see each separate notification.
             // To support older versions, which cannot show a nested group of notifications,
@@ -405,7 +406,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                 val nbEvents = roomIdToEventMap.size + simpleEvents.size
                 val sumTitle = stringProvider.getQuantityString(R.plurals.notification_compat_summary_title, nbEvents, nbEvents)
                 summaryInboxStyle.setBigContentTitle(sumTitle)
-                        //TODO get latest event?
+                        // TODO get latest event?
                         .setSummaryText(stringProvider.getQuantityString(R.plurals.notification_unread_notified_messages, nbEvents, nbEvents))
 
                 val notification = notificationUtils.buildSummaryListNotification(
@@ -432,10 +433,9 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                     } catch (e: Throwable) {
                         Timber.e(e, "## Failed to turn screen on")
                     }
-
                 }
             }
-            //notice that we can get bit out of sync with actual display but not a big issue
+            // notice that we can get bit out of sync with actual display but not a big issue
             firstTime = false
         }
     }
@@ -443,7 +443,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
     private fun getRoomBitmap(events: List<NotifiableMessageEvent>): Bitmap? {
         if (events.isEmpty()) return null
 
-        //Use the last event (most recent?)
+        // Use the last event (most recent?)
         val roomAvatarPath = events.last().roomAvatarPath ?: events.last().senderAvatarPath
 
         return bitmapLoader.getRoomBitmap(roomAvatarPath)
@@ -452,7 +452,6 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
     private fun shouldIgnoreMessageEventInRoom(roomId: String?): Boolean {
         return currentRoomId != null && roomId == currentRoomId
     }
-
 
     fun persistInfo() {
         synchronized(eventList) {
@@ -500,6 +499,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
         private const val SUMMARY_NOTIFICATION_ID = 0
         private const val ROOM_MESSAGES_NOTIFICATION_ID = 1
         private const val ROOM_EVENT_NOTIFICATION_ID = 2
+        private const val ROOM_INVITATION_NOTIFICATION_ID = 3
 
         // TODO Mutliaccount
         private const val ROOMS_NOTIFICATIONS_FILE_NAME = "im.vector.notifications.cache"

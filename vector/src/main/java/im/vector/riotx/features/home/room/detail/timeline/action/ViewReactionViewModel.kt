@@ -29,11 +29,9 @@ import im.vector.matrix.android.api.session.room.model.ReactionAggregatedSummary
 import im.vector.matrix.rx.RxRoom
 import im.vector.matrix.rx.unwrap
 import im.vector.riotx.core.platform.VectorViewModel
-import im.vector.riotx.core.utils.isSingleEmoji
 import im.vector.riotx.core.date.VectorDateFormatter
 import io.reactivex.Observable
 import io.reactivex.Single
-
 
 data class DisplayReactionsViewState(
         val eventId: String,
@@ -42,7 +40,6 @@ data class DisplayReactionsViewState(
     : MvRxState {
 
     constructor(args: TimelineEventFragmentArgs) : this(roomId = args.roomId, eventId = args.eventId)
-
 }
 
 data class ReactionInfo(
@@ -78,7 +75,6 @@ class ViewReactionViewModel @AssistedInject constructor(@Assisted
             val fragment: ViewReactionBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()
             return fragment.viewReactionViewModelFactory.create(state)
         }
-
     }
 
     init {
@@ -92,7 +88,7 @@ class ViewReactionViewModel @AssistedInject constructor(@Assisted
                 .flatMapSingle { summaries ->
                     Observable
                             .fromIterable(summaries.reactionsSummary)
-                            //.filter { reactionAggregatedSummary -> isSingleEmoji(reactionAggregatedSummary.key) }
+                            // .filter { reactionAggregatedSummary -> isSingleEmoji(reactionAggregatedSummary.key) }
                             .toReactionInfoList()
                 }
                 .execute {

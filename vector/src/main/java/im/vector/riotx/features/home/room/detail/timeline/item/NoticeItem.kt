@@ -69,7 +69,6 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
         super.unbind(holder)
     }
 
-
     override fun getEventIds(): List<String> {
         return listOf(attributes.informationData.eventId)
     }

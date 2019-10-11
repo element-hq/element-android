@@ -27,5 +27,4 @@ data class RoomTag(
         val ROOM_TAG_NO_TAG = "m.recent"
         val ROOM_TAG_SERVER_NOTICE = "m.server_notice"
     }
-
 }

@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.api.session.room.send
 
-
 enum class SendState {
     UNKNOWN,
     // the event has not been sent
@@ -46,7 +45,4 @@ enum class SendState {
     fun hasFailed() = HAS_FAILED_STATES.contains(this)
 
     fun isSending() = IS_SENDING_STATES.contains(this)
-
 }
-
-

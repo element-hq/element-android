@@ -39,6 +39,4 @@ internal class SyncTokenStore @Inject constructor(@SessionDatabase private val r
         }
         realm.close()
     }
-
-
 }

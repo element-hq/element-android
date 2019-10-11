@@ -37,7 +37,6 @@ import javax.net.ssl.TrustManager
 
 internal class TLSSocketFactory
 
-
 /**
  * Constructor
  *

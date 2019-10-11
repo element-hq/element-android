@@ -129,7 +129,7 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
     }
 
     override fun invalidate() {
-        //no-ops by default
+        // no-ops by default
         Timber.w("invalidate() method has not been implemented")
     }
 
@@ -182,5 +182,4 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
             inflater.inflate(menuRes, menu)
         }
     }
-
 }

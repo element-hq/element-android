@@ -55,5 +55,4 @@ internal object MatrixModule {
     fun providesOlmManager(): OlmManager {
         return OlmManager()
     }
-
 }

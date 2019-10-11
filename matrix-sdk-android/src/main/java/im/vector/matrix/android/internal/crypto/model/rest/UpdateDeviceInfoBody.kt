@@ -29,4 +29,3 @@ data class UpdateDeviceInfoBody(
         var displayName: String? = null
 
 )
-

@@ -74,7 +74,6 @@ class KeyVerificationStart : SendToDeviceObject {
     @Json(name = "short_authentication_string")
     var shortAuthenticationStrings: List<String>? = null
 
-
     companion object {
         const val VERIF_METHOD_SAS = "m.sas.v1"
     }

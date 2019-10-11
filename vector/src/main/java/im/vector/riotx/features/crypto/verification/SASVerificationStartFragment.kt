@@ -42,7 +42,6 @@ class SASVerificationStartFragment : VectorBaseFragment() {
 
     private lateinit var viewModel: SasVerificationViewModel
 
-
     @BindView(R.id.rootLayout)
     lateinit var rootLayout: ViewGroup
 
@@ -55,7 +54,6 @@ class SASVerificationStartFragment : VectorBaseFragment() {
     @BindView(R.id.sas_verifying_keys)
     lateinit var loadingText: TextView
 
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(vectorBaseActivity, viewModelFactory).get(SasVerificationViewModel::class.java)
@@ -63,13 +61,12 @@ class SASVerificationStartFragment : VectorBaseFragment() {
             val uxState = (viewModel.transaction as? OutgoingSasVerificationRequest)?.uxState
             when (uxState) {
                 OutgoingSasVerificationRequest.UxState.WAIT_FOR_KEY_AGREEMENT -> {
-                    //display loading
+                    // display loading
                     TransitionManager.beginDelayedTransition(this.rootLayout)
                     this.loadingText.isVisible = true
                     this.startButton.isInvisible = true
                     this.startButtonLoading.isVisible = true
                     this.startButtonLoading.animate()
-
                 }
                 OutgoingSasVerificationRequest.UxState.SHOW_SAS               -> {
                     viewModel.shortCodeReady()
@@ -86,7 +83,6 @@ class SASVerificationStartFragment : VectorBaseFragment() {
                 }
             }
         })
-
     }
 
     @OnClick(R.id.sas_start_button)
@@ -124,6 +120,4 @@ class SASVerificationStartFragment : VectorBaseFragment() {
         // Transaction may be started, or not
         viewModel.cancelTransaction()
     }
-
-
 }

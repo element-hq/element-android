@@ -52,6 +52,4 @@ class TestPlayServices @Inject constructor(private val context: AppCompatActivit
             status = TestStatus.FAILED
         }
     }
-
 }
-

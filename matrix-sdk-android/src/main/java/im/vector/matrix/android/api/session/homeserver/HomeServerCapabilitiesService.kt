@@ -25,5 +25,4 @@ interface HomeServerCapabilitiesService {
      * Get the HomeServer capabilities
      */
     fun getHomeServerCapabilities(): HomeServerCapabilities
-
 }

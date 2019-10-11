@@ -30,7 +30,6 @@ import io.realm.Realm
 import io.realm.RealmList
 import io.realm.RealmQuery
 
-
 internal fun TimelineEventEntity.updateSenderData() {
     assertIsManaged()
     val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst() ?: return
@@ -67,7 +66,7 @@ internal fun TimelineEventEntity.updateSenderData() {
     this.senderMembershipEvent = senderMembershipEvent
 }
 
-internal fun TimelineEventEntity.Companion.nextId(realm: Realm): Long{
+internal fun TimelineEventEntity.Companion.nextId(realm: Realm): Long {
     val currentIdNum = realm.where(TimelineEventEntity::class.java).max(TimelineEventEntityFields.LOCAL_ID)
     return if (currentIdNum == null) {
         1
@@ -82,4 +81,3 @@ private fun RealmList<TimelineEventEntity>.buildQuery(sender: String, isUnlinked
             .equalTo(TimelineEventEntityFields.ROOT.TYPE, EventType.STATE_ROOM_MEMBER)
             .equalTo(TimelineEventEntityFields.ROOT.IS_UNLINKED, isUnlinked)
 }
-

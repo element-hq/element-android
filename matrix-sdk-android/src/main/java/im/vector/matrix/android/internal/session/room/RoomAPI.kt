@@ -80,7 +80,6 @@ internal interface RoomAPI {
                             @Query("filter") filter: String?
     ): Call<PaginationResponse>
 
-
     /**
      * Get all members of a room
      *
@@ -95,7 +94,6 @@ internal interface RoomAPI {
                    @Query("membership") membership: String?,
                    @Query("not_membership") notMembership: String?
     ): Call<RoomMembersResponse>
-
 
     /**
      * Send an event to a room.
@@ -195,7 +193,6 @@ internal interface RoomAPI {
                      @Path("eventType") eventType: String,
                      @Body content: Content?
     ): Call<SendResponse>
-
 
     /**
      * Paginate relations for event based in normal topological order

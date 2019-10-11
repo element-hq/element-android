@@ -67,7 +67,6 @@ class RxRoom(private val room: Room) {
     fun liveDrafts(): Observable<List<UserDraft>> {
         return room.getDraftsLive().asObservable()
     }
-
 }
 
 fun Room.rx(): RxRoom {

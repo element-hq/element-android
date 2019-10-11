@@ -78,7 +78,6 @@ data class PowerLevels(
         return if (!TextUtils.isEmpty(eventTypeString) && !TextUtils.isEmpty(userId)) {
             getUserPowerLevel(userId) >= minimumPowerLevelForSendingEventAsMessage(eventTypeString)
         } else false
-
     }
 
     /**
@@ -112,7 +111,6 @@ data class PowerLevels(
      fun minimumPowerLevelForSendingEventAsStateEvent(eventTypeString: String?): Int {
         return events[eventTypeString] ?: stateDefault
     }
-
 
     /**
      * Get the notification level for a dedicated key.

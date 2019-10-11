@@ -87,7 +87,6 @@ private fun recursiveActionOnFile(file: File, action: ActionOnFile): Boolean {
     return action.invoke(file)
 }
 
-
 /**
  * Get the file extension of a fileUri or a filename
  *

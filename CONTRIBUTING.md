@@ -42,6 +42,15 @@ Make sure the following commands execute without any error:
 
 > ./tools/check/check_code_quality.sh
 
+> curl -sSLO https://github.com/pinterest/ktlint/releases/download/0.34.2/ktlint && chmod a+x ktlint
+> ./ktlint --android -v
+
+Note that you can run
+
+> ./ktlint --android -v -F
+
+For ktlint to fix some detected errors for you
+
 > ./gradlew lintGplayRelease
 
 ### Unit tests

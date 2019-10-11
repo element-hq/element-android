@@ -109,5 +109,4 @@ class CreateRoomController @Inject constructor(private val stringProvider: Strin
         fun setIsInRoomDirectory(isInRoomDirectory: Boolean)
         fun retry()
     }
-
 }

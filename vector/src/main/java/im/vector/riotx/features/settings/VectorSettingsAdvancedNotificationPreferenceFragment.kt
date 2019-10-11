@@ -25,7 +25,6 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceManager
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
-import im.vector.riotx.core.extensions.withArgs
 import im.vector.riotx.core.preference.BingRule
 import im.vector.riotx.core.preference.BingRulePreference
 import im.vector.riotx.core.preference.VectorPreference
@@ -52,7 +51,6 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : VectorSettingsBaseF
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
     }
-
 
     override fun bindPref() {
         val callNotificationsSystemOptions = findPreference<VectorPreference>(VectorPreferences.SETTINGS_SYSTEM_CALL_NOTIFICATION_PREFERENCE_KEY)!!
@@ -85,7 +83,6 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : VectorSettingsBaseF
             silentNotificationsSystemOptions.isVisible = false
         }
 
-
         // Ringtone
         val ringtonePreference = findPreference<VectorPreference>(VectorPreferences.SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY)!!
 
@@ -109,7 +106,7 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : VectorSettingsBaseF
         for (preferenceKey in mPrefKeyToBingRuleId.keys) {
             val preference = findPreference<VectorPreference>(preferenceKey)
             if (preference is BingRulePreference) {
-                //preference.isEnabled = null != rules && isConnected && pushManager.areDeviceNotificationsAllowed()
+                // preference.isEnabled = null != rules && isConnected && pushManager.areDeviceNotificationsAllowed()
                 val rule: BingRule? = null // TODO session.dataHandler.pushRules()?.findDefaultRule(mPrefKeyToBingRuleId[preferenceKey])
 
                 if (rule == null) {
@@ -119,8 +116,8 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : VectorSettingsBaseF
                     preference.isVisible = true
                     preference.setBingRule(rule)
                     preference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                        val rule = preference.createRule(newValue as Int)
-                        if (null != rule) {
+                        val rule2 = preference.createRule(newValue as Int)
+                        if (null != rule2) {
                             /*
                               TODO
                            displayLoadingView()
@@ -233,9 +230,6 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : VectorSettingsBaseF
                 VectorPreferences.SETTINGS_MESSAGES_SENT_BY_BOT_PREFERENCE_KEY to BingRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS
         )
 
-        fun newInstance(matrixId: String) = VectorSettingsAdvancedNotificationPreferenceFragment()
-                .withArgs {
-                    // putString(MXCActionBarActivity.EXTRA_MATRIX_ID, matrixId)
-                }
+        fun newInstance() = VectorSettingsAdvancedNotificationPreferenceFragment()
     }
 }

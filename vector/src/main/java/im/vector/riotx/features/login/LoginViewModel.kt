@@ -34,12 +34,14 @@ import im.vector.riotx.core.extensions.configureAndStart
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.utils.LiveEvent
 import im.vector.riotx.features.notifications.PushRuleTriggerListener
+import im.vector.riotx.features.session.SessionListener
 import timber.log.Timber
 
 class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginViewState,
                                                  private val authenticator: Authenticator,
                                                  private val activeSessionHolder: ActiveSessionHolder,
-                                                 private val pushRuleTriggerListener: PushRuleTriggerListener)
+                                                 private val pushRuleTriggerListener: PushRuleTriggerListener,
+                                                 private val sessionListener: SessionListener)
     : VectorViewModel<LoginViewState>(initialState) {
 
     @AssistedInject.Factory
@@ -64,7 +66,6 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
 
     private var homeServerConnectionConfig: HomeServerConnectionConfig? = null
     private var currentTask: Cancelable? = null
-
 
     fun handle(action: LoginActions) {
         when (action) {
@@ -114,7 +115,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
 
     private fun onSessionCreated(session: Session) {
         activeSessionHolder.setActiveSession(session)
-        session.configureAndStart(pushRuleTriggerListener)
+        session.configureAndStart(pushRuleTriggerListener, sessionListener)
 
         setState {
             copy(
@@ -136,10 +137,9 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
         }
     }
 
-
     private fun handleUpdateHomeserver(action: LoginActions.UpdateHomeServer) = withState { state ->
 
-        var newConfig : HomeServerConnectionConfig? = null
+        var newConfig: HomeServerConnectionConfig? = null
         Try {
             val homeServerUri = action.homeServerUrl
             newConfig = HomeServerConnectionConfig.Builder()
@@ -147,7 +147,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                     .build()
         }
 
-        //Do not retry if we already have flows for this config -> causes infinite focus loop
+        // Do not retry if we already have flows for this config -> causes infinite focus loop
         if (newConfig?.homeServerUri?.toString() == homeServerConnectionConfig?.homeServerUri?.toString()
                 && state.asyncHomeServerLoginFlowRequest is Success) return@withState
 
@@ -194,7 +194,6 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                     }
                 }
             })
-
         }
     }
 

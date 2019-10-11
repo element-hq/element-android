@@ -49,5 +49,4 @@ abstract class AutocompleteCommandItem : VectorEpoxyModel<AutocompleteCommandIte
         val parametersView by bind<TextView>(R.id.commandParameter)
         val descriptionView by bind<TextView>(R.id.commandDescription)
     }
-
 }

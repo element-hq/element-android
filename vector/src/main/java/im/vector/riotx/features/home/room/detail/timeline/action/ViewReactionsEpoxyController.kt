@@ -16,7 +16,6 @@
 
 package im.vector.riotx.features.home.room.detail.timeline.action
 
-import android.content.Context
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Incomplete
@@ -33,7 +32,7 @@ import javax.inject.Inject
  */
 class ViewReactionsEpoxyController @Inject constructor(
         private val stringProvider: StringProvider,
-        private val emojiCompatWrapper: EmojiCompatWrapper )
+        private val emojiCompatWrapper: EmojiCompatWrapper)
     : TypedEpoxyController<DisplayReactionsViewState>() {
 
     override fun buildModels(state: DisplayReactionsViewState) {
@@ -60,6 +59,5 @@ class ViewReactionsEpoxyController @Inject constructor(
                 }
             }
         }
-
     }
 }

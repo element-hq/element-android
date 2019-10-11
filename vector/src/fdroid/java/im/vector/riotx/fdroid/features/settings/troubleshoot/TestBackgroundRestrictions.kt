@@ -58,9 +58,7 @@ class TestBackgroundRestrictions @Inject constructor(private val context: AppCom
                         status = TestStatus.SUCCESS
                         quickFix = null
                     }
-
                 }
-
             } else {
                 // The device is not on a metered network.
                 // Use data as required to perform syncs, downloads, and updates.
@@ -70,5 +68,4 @@ class TestBackgroundRestrictions @Inject constructor(private val context: AppCom
             }
         }
     }
-
 }

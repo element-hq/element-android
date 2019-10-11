@@ -34,5 +34,4 @@ internal class DefaultLeaveRoomTask @Inject constructor(private val roomAPI: Roo
             apiCall = roomAPI.leave(params.roomId, HashMap())
         }
     }
-
 }

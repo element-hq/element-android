@@ -40,6 +40,7 @@ import im.vector.riotx.features.notifications.*
 import im.vector.riotx.features.rageshake.BugReporter
 import im.vector.riotx.features.rageshake.VectorFileLogger
 import im.vector.riotx.features.rageshake.VectorUncaughtExceptionHandler
+import im.vector.riotx.features.session.SessionListener
 import im.vector.riotx.features.settings.VectorPreferences
 import im.vector.riotx.features.ui.UiStateRepository
 import javax.inject.Singleton
@@ -53,6 +54,8 @@ interface VectorComponent {
     fun inject(vectorApplication: VectorApplication)
 
     fun matrix(): Matrix
+
+    fun sessionListener(): SessionListener
 
     fun currentSession(): Session
 
@@ -110,5 +113,4 @@ interface VectorComponent {
     interface Factory {
         fun create(@BindsInstance context: Context): VectorComponent
     }
-
 }

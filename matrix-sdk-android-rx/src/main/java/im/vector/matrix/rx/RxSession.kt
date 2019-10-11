@@ -71,7 +71,6 @@ class RxSession(private val session: Session) {
     fun joinRoom(roomId: String, viaServers: List<String> = emptyList()): Single<Unit> = Single.create {
         session.joinRoom(roomId, viaServers, MatrixCallbackSingle(it)).toSingle(it)
     }
-
 }
 
 fun Session.rx(): RxSession {

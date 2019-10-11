@@ -101,8 +101,4 @@ internal interface SessionComponent {
                 matrixComponent: MatrixComponent,
                 @BindsInstance sessionParams: SessionParams): SessionComponent
     }
-
-
 }
-
-

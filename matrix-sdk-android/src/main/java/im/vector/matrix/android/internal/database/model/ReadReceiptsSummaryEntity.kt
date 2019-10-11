@@ -33,5 +33,4 @@ internal open class ReadReceiptsSummaryEntity(
     val timelineEvent: RealmResults<TimelineEventEntity>? = null
 
     companion object
-
 }

@@ -104,4 +104,3 @@ abstract class PublicRoomItem : VectorEpoxyModel<PublicRoomItem.Holder>() {
         val buttonState by bind<ButtonStateView>(R.id.itemPublicRoomButtonState)
     }
 }
-

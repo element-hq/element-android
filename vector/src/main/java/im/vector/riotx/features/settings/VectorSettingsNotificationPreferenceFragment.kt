@@ -67,7 +67,6 @@ class VectorSettingsNotificationPreferenceFragment : VectorSettingsBaseFragment(
     }
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {
-
         return when (preference?.key) {
             VectorPreferences.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY -> {
                 updateEnabledForDevice(preference)
@@ -81,7 +80,6 @@ class VectorSettingsNotificationPreferenceFragment : VectorSettingsBaseFragment(
                 return super.onPreferenceTreeClick(preference)
             }
         }
-
     }
 
     private fun updateEnabledForDevice(preference: Preference?) {
@@ -109,30 +107,27 @@ class VectorSettingsNotificationPreferenceFragment : VectorSettingsBaseFragment(
         }
     }
 
-
     private fun updateEnabledForAccount(preference: Preference?) {
         val pushRuleService = session
         val switchPref = preference as SwitchPreference
         pushRuleService.getPushRules()
                 .find { it.ruleId == RuleIds.RULE_ID_DISABLE_ALL }
                 ?.let {
-                    //Trick, we must enable this room to disable notifications
+                    // Trick, we must enable this room to disable notifications
                     pushRuleService.updatePushRuleEnableStatus(RuleKind.OVERRIDE,
                             it,
                             !switchPref.isChecked,
                             object : MatrixCallback<Unit> {
-
                                 override fun onSuccess(data: Unit) {
                                     // Push rules will be updated form the sync
                                 }
 
                                 override fun onFailure(failure: Throwable) {
-                                    //revert the check box
+                                    // revert the check box
                                     switchPref.isChecked = !switchPref.isChecked
                                     Toast.makeText(activity, R.string.unknown_error, Toast.LENGTH_SHORT).show()
                                 }
                             })
                 }
-
     }
 }

@@ -76,7 +76,6 @@ internal class DefaultReadService @AssistedInject constructor(@Assisted private 
                 .executeBy(taskExecutor)
     }
 
-
     override fun isEventRead(eventId: String): Boolean {
         return isEventRead(monarchy, userId, roomId, eventId)
     }
@@ -102,7 +101,6 @@ internal class DefaultReadService @AssistedInject constructor(@Assisted private 
     }
 
     override fun getEventReadReceiptsLive(eventId: String): LiveData<List<ReadReceipt>> {
-
         val liveRealmData = monarchy.findAllMappedWithChanges(
                 { ReadReceiptsSummaryEntity.where(it, eventId) },
                 { readReceiptsSummaryMapper.map(it) }

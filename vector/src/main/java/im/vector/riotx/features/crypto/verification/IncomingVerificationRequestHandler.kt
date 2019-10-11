@@ -48,7 +48,7 @@ class IncomingVerificationRequestHandler @Inject constructor(private val context
     override fun transactionUpdated(tx: SasVerificationTransaction) {
         when (tx.state) {
             SasVerificationTxState.OnStarted -> {
-                //Add a notification for every incoming request
+                // Add a notification for every incoming request
                 val name = session?.getUser(tx.otherUserId)?.displayName
                         ?: tx.otherUserId
 
@@ -84,16 +84,15 @@ class IncomingVerificationRequestHandler @Inject constructor(private val context
                                         weakCurrentActivity?.get()?.startActivity(intent)
                                     }
                             )
-                            //10mn expiration
+                            // 10mn expiration
                             expirationTimestamp = System.currentTimeMillis() + (10 * 60 * 1000L)
-
                         }
                 PopupAlertManager.postVectorAlert(alert)
             }
             SasVerificationTxState.Cancelled,
             SasVerificationTxState.OnCancelled,
             SasVerificationTxState.Verified  -> {
-                //cancel related notification
+                // cancel related notification
                 PopupAlertManager.cancelAlert("kvr_${tx.transactionId}")
             }
             else                             -> Unit
@@ -101,6 +100,5 @@ class IncomingVerificationRequestHandler @Inject constructor(private val context
     }
 
     override fun markedAsManuallyVerified(userId: String, deviceId: String) {
-
     }
 }

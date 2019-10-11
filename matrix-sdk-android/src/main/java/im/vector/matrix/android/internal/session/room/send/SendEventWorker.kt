@@ -32,7 +32,6 @@ import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import im.vector.matrix.android.internal.worker.getSessionComponent
 import javax.inject.Inject
 
-
 internal class SendEventWorker constructor(context: Context, params: WorkerParameters)
     : CoroutineWorker(context, params) {
 
@@ -72,7 +71,7 @@ internal class SendEventWorker constructor(context: Context, params: WorkerParam
                 Result.retry()
             } else {
                 localEchoUpdater.updateSendState(event.eventId, SendState.UNDELIVERED)
-                //always return success, or the chain will be stuck for ever!
+                // always return success, or the chain will be stuck for ever!
                 Result.success()
             }
         }
@@ -95,5 +94,4 @@ internal class SendEventWorker constructor(context: Context, params: WorkerParam
         }
         localEchoUpdater.updateSendState(eventId, SendState.SENT)
     }
-
 }

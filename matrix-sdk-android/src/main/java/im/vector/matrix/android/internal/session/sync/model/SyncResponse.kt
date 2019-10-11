@@ -58,11 +58,9 @@ internal data class SyncResponse(
         @Json(name = "device_one_time_keys_count")
         val deviceOneTimeKeysCount: DeviceOneTimeKeysCountSyncResponse? = null,
 
-
         /**
          * List of groups.
          */
         @Json(name = "groups") val groups: GroupsSyncResponse? = null
-
 
 )

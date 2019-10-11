@@ -47,5 +47,4 @@ internal interface AuthAPI {
     @Headers("CONNECT_TIMEOUT:60000", "READ_TIMEOUT:60000", "WRITE_TIMEOUT:60000")
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "login")
     fun login(@Body loginParams: PasswordLoginParams): Call<Credentials>
-
 }

@@ -43,16 +43,6 @@ data class ImageInfo(
         @Json(name = "size") val size: Int = 0,
 
         /**
-         * Not documented
-         */
-        @Json(name = "rotation") val rotation: Int = 0,
-
-        /**
-         * Not documented
-         */
-        @Json(name = "orientation") val orientation: Int = 0,
-
-        /**
          * Metadata about the image referred to in thumbnail_url.
          */
         @Json(name = "thumbnail_info") val thumbnailInfo: ThumbnailInfo? = null,

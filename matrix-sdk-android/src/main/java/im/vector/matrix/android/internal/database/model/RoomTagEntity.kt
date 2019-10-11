@@ -24,5 +24,4 @@ internal open class RoomTagEntity(
 ) : RealmObject() {
 
     companion object
-
 }

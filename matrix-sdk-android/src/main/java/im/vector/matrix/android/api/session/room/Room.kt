@@ -53,5 +53,4 @@ interface Room :
     fun getRoomSummaryLive(): LiveData<Optional<RoomSummary>>
 
     fun roomSummary(): RoomSummary?
-
 }

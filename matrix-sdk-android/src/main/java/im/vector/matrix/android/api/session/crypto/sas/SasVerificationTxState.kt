@@ -43,7 +43,7 @@ enum class SasVerificationTxState {
     Verifying,
     Verified,
 
-    //Global: The verification has been cancelled (by me or other), see cancelReason for details
+    // Global: The verification has been cancelled (by me or other), see cancelReason for details
     Cancelled,
     OnCancelled
 }

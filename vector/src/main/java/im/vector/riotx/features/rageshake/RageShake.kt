@@ -39,7 +39,6 @@ class RageShake @Inject constructor(private val activity: AppCompatActivity,
             return
         }
 
-
         val sensorManager = activity.getSystemService(AppCompatActivity.SENSOR_SERVICE) as? SensorManager
 
         if (sensorManager == null) {

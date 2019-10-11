@@ -29,27 +29,24 @@ class EventMatchCondition(val key: String, val pattern: String) : Condition(Kind
         return "'$key' Matches '$pattern'"
     }
 
-
     fun isSatisfied(event: Event): Boolean {
-        //TODO encrypted events?
+        // TODO encrypted events?
         val rawJson = MoshiProvider.providesMoshi().adapter(Event::class.java).toJsonValue(event) as? Map<*, *>
                 ?: return false
         val value = extractField(rawJson, key) ?: return false
 
-        //Patterns with no special glob characters should be treated as having asterisks prepended
+        // Patterns with no special glob characters should be treated as having asterisks prepended
         // and appended when testing the condition.
         try {
             val modPattern = if (hasSpecialGlobChar(pattern)) simpleGlobToRegExp(pattern) else simpleGlobToRegExp("*$pattern*")
             val regex = Regex(modPattern, RegexOption.DOT_MATCHES_ALL)
             return regex.containsMatchIn(value)
         } catch (e: Throwable) {
-            //e.g PatternSyntaxException
+            // e.g PatternSyntaxException
             Timber.e(e, "Failed to evaluate push condition")
             return false
         }
-
     }
-
 
     private fun extractField(jsonObject: Map<*, *>, fieldPath: String): String? {
         val fieldParts = fieldPath.split(".")
@@ -77,9 +74,9 @@ class EventMatchCondition(val key: String, val pattern: String) : Condition(Kind
             return glob.contains("*") || glob.contains("?")
         }
 
-        //Very simple glob to regexp converter
+        // Very simple glob to regexp converter
         private fun simpleGlobToRegExp(glob: String): String {
-            var out = ""//"^"
+            var out = "" // "^"
             for (i in 0 until glob.length) {
                 val c = glob[i]
                 when (c) {
@@ -90,7 +87,7 @@ class EventMatchCondition(val key: String, val pattern: String) : Condition(Kind
                     else -> out += c
                 }
             }
-            out += ""//'$'.toString()
+            out += "" // '$'.toString()
             return out
         }
     }

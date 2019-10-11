@@ -23,7 +23,6 @@ import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import javax.inject.Inject
 
-
 class VectorDateFormatter @Inject constructor(private val context: Context,
                                               private val localeProvider: LocaleProvider) {
 
@@ -53,5 +52,4 @@ class VectorDateFormatter @Inject constructor(private val context: Context,
                                                    DateUtils.FORMAT_SHOW_WEEKDAY
         ).toString()
     }
-
 }

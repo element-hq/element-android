@@ -44,6 +44,4 @@ internal abstract class FilterModule {
 
     @Binds
     abstract fun bindSaveFilterTask(saveFilterTask: DefaultSaveFilterTask): SaveFilterTask
-
-
 }

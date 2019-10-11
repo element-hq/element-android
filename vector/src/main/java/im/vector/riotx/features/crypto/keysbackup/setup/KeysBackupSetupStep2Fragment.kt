@@ -37,7 +37,6 @@ import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.ui.views.PasswordStrengthBar
 import im.vector.riotx.features.settings.VectorLocale
 
-
 class KeysBackupSetupStep2Fragment : VectorBaseFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_keys_backup_setup_step2
@@ -116,11 +115,9 @@ class KeysBackupSetupStep2Fragment : VectorBaseFragment() {
                     if (suggestions != null) {
                         mPassphraseInputLayout.error = suggestions.firstOrNull()
                     }
-
                 } else {
                     mPassphraseInputLayout.error = null
                 }
-
             }
         })
 
@@ -135,7 +132,6 @@ class KeysBackupSetupStep2Fragment : VectorBaseFragment() {
                     }
                 }
             }
-
         })
 
         mPassphraseTextEdit.setText(viewModel.passphrase.value)
@@ -166,7 +162,6 @@ class KeysBackupSetupStep2Fragment : VectorBaseFragment() {
             }
             return@setOnEditorActionListener false
         }
-
     }
 
     @OnClick(R.id.keys_backup_view_show_password)

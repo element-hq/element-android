@@ -28,5 +28,3 @@ data class RoomCreateContent(
         @Json(name = "room_version") val roomVersion: String? = null,
         @Json(name = "predecessor") val predecessor: Predecessor? = null
 )
-
-

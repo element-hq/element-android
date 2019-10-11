@@ -101,14 +101,9 @@ internal class NetworkConnectivityChecker @Inject constructor(context: Context,
 
     interface Listener {
         fun onConnect() {
-
         }
 
         fun onDisconnect() {
-
         }
     }
-
-
 }
-

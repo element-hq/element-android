@@ -38,7 +38,6 @@ data class MessageInformationData(
         val displayReadMarker: Boolean = false
 ) : Parcelable
 
-
 @Parcelize
 data class ReactionInfoData(
         val key: String,

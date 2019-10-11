@@ -31,5 +31,4 @@ object HomeModule {
     fun providesTimelineBackgroundHandler(): Handler {
         return TimelineAsyncHelper.getBackgroundHandler()
     }
-
 }

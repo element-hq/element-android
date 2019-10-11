@@ -47,7 +47,6 @@ import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
 import timber.log.Timber
 import javax.inject.Inject
 
-
 class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     // Supported navigation actions for this Activity
@@ -111,7 +110,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
             } else {
                 Timber.e("${getString(status.statusText)} ${status.percentProgress}")
                 waiting_view.setOnClickListener {
-                    //block interactions
+                    // block interactions
                 }
                 waiting_view_status_horizontal_progress.apply {
                     isIndeterminate = false
@@ -157,7 +156,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
             showDisclaimerDialog(this)
         }
 
-        //Force remote backup state update to update the banner if needed
+        // Force remote backup state update to update the banner if needed
         ViewModelProviders.of(this).get(SignOutViewModel::class.java).refreshRemoteStateIfNeeded()
     }
 
@@ -194,7 +193,6 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
         }
     }
 
-
     companion object {
         private const val EXTRA_CLEAR_EXISTING_NOTIFICATION = "EXTRA_CLEAR_EXISTING_NOTIFICATION"
 
@@ -205,5 +203,4 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
                     }
         }
     }
-
 }

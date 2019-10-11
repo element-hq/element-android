@@ -31,7 +31,6 @@ import im.vector.riotx.core.date.VectorDateFormatter
 import timber.log.Timber
 import java.util.*
 
-
 data class ViewEditHistoryViewState(
         val eventId: String,
         val roomId: String,
@@ -40,7 +39,6 @@ data class ViewEditHistoryViewState(
     : MvRxState {
 
     constructor(args: TimelineEventFragmentArgs) : this(roomId = args.roomId, eventId = args.eventId)
-
 }
 
 class ViewEditHistoryViewModel @AssistedInject constructor(@Assisted
@@ -59,14 +57,12 @@ class ViewEditHistoryViewModel @AssistedInject constructor(@Assisted
         fun create(initialState: ViewEditHistoryViewState): ViewEditHistoryViewModel
     }
 
-
     companion object : MvRxViewModelFactory<ViewEditHistoryViewModel, ViewEditHistoryViewState> {
 
         override fun create(viewModelContext: ViewModelContext, state: ViewEditHistoryViewState): ViewEditHistoryViewModel? {
             val fragment: ViewEditHistoryBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()
             return fragment.viewEditHistoryViewModelFactory.create(state)
         }
-
     }
 
     init {
@@ -88,9 +84,9 @@ class ViewEditHistoryViewModel @AssistedInject constructor(@Assisted
                 val events = data.map { event ->
                     val timelineID = event.roomId + UUID.randomUUID().toString()
                     event.also {
-                        //We need to check encryption
+                        // We need to check encryption
                         if (it.isEncrypted() && it.mxDecryptionResult == null) {
-                            //for now decrypt sync
+                            // for now decrypt sync
                             try {
                                 val result = session.decryptEvent(it, timelineID)
                                 it.mxDecryptionResult = OlmDecryptionResult(
@@ -108,7 +104,6 @@ class ViewEditHistoryViewModel @AssistedInject constructor(@Assisted
                             originalIsReply = it.getClearContent().toModel<MessageContent>().isReply()
                         }
                     }
-
                 }
                 setState {
                     copy(
@@ -119,5 +114,4 @@ class ViewEditHistoryViewModel @AssistedInject constructor(@Assisted
             }
         })
     }
-
 }

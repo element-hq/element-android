@@ -21,22 +21,11 @@ package im.vector.riotx.core.ui.views
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
-import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.isInvisible
-import androidx.core.view.isVisible
-import androidx.core.view.updateLayoutParams
-import butterknife.ButterKnife
-import com.airbnb.epoxy.VisibilityState
-import com.google.android.material.internal.ViewUtils.dpToPx
 import im.vector.riotx.R
-import im.vector.riotx.features.themes.ThemeUtils
 import kotlinx.android.synthetic.main.view_jump_to_read_marker.view.*
-import me.gujun.android.span.span
-import me.saket.bettermovementmethod.BetterLinkMovementMethod
-import timber.log.Timber
 
 class JumpToReadMarkerView @JvmOverloads constructor(
         context: Context,
@@ -75,6 +64,4 @@ class JumpToReadMarkerView @JvmOverloads constructor(
         this.readMarkerId = readMarkerId
         isInvisible = !show
     }
-
-
 }

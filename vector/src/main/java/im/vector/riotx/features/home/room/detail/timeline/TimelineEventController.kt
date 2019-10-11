@@ -31,6 +31,8 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotx.core.date.VectorDateFormatter
 import im.vector.riotx.core.epoxy.LoadingItem_
 import im.vector.riotx.core.extensions.localDateTime
+import im.vector.riotx.core.utils.DimensionConverter
+import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.RoomDetailViewState
 import im.vector.riotx.features.home.room.detail.timeline.factory.MergedHeaderItemFactory
 import im.vector.riotx.features.home.room.detail.timeline.factory.TimelineItemFactory
@@ -38,8 +40,6 @@ import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineEventDi
 import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineEventVisibilityStateChangedListener
 import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
 import im.vector.riotx.features.home.room.detail.timeline.helper.nextOrNull
-import im.vector.riotx.core.utils.DimensionConverter
-import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.item.*
 import im.vector.riotx.features.media.ImageContentRenderer
 import im.vector.riotx.features.media.VideoContentRenderer
@@ -103,7 +103,6 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     private var timeline: Timeline? = null
 
     var callback: Callback? = null
-
 
     private val listUpdateCallback = object : ListUpdateCallback {
 
@@ -206,7 +205,6 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         timelineMediaSizeProvider.recyclerView = recyclerView
     }
 
-
     override fun buildModels() {
         val timestamp = System.currentTimeMillis()
         showingForwardLoader = LoadingItem_()
@@ -272,7 +270,6 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         }
     }
 
-
     private fun buildItemModels(currentPosition: Int, items: List<TimelineEvent>): CacheItemData {
         val event = items[currentPosition]
         val nextEvent = items.nextOrNull(currentPosition)
@@ -327,7 +324,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
      * Return true if added
      */
     private fun LoadingItem_.setVisibilityStateChangedListener(direction: Timeline.Direction): LoadingItem_ {
-        return onVisibilityStateChanged { model, view, visibilityState ->
+        return onVisibilityStateChanged { _, _, visibilityState ->
             if (visibilityState == VisibilityState.VISIBLE) {
                 callback?.onLoadMore(direction)
             }
@@ -347,5 +344,4 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             val mergedHeaderModel: MergedHeaderItem? = null,
             val formattedDayModel: DaySeparatorItem? = null
     )
-
 }

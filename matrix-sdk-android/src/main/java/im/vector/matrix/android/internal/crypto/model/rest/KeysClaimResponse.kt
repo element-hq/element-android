@@ -32,4 +32,3 @@ data class KeysClaimResponse(
         @Json(name = "one_time_keys")
         var oneTimeKeys: Map<String, Map<String, Map<String, Map<String, Any>>>>? = null
 )
-

@@ -35,5 +35,4 @@ interface DraftService {
      * The draft list can contain one draft for {regular, reply, quote} and an arbitrary number of {edit} drafts
      */
     fun getDraftsLive(): LiveData<List<UserDraft>>
-
 }

@@ -39,6 +39,4 @@ internal object UserEntityFactory {
                 roomMember.avatarUrl ?: ""
         )
     }
-
-
 }

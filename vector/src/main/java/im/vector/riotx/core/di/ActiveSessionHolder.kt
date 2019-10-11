@@ -57,10 +57,9 @@ class ActiveSessionHolder @Inject constructor(private val authenticator: Authent
                 ?: throw IllegalStateException("You should authenticate before using this")
     }
 
-    //TODO: Stop sync ?
+    // TODO: Stop sync ?
 //    fun switchToSession(sessionParams: SessionParams) {
 //        val newActiveSession = authenticator.getSession(sessionParams)
 //        activeSession.set(newActiveSession)
 //    }
-
 }

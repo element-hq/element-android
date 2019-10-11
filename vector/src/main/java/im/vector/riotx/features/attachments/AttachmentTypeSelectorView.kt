@@ -85,6 +85,7 @@ class AttachmentTypeSelectorView(context: Context,
         width = LinearLayout.LayoutParams.MATCH_PARENT
         height = LinearLayout.LayoutParams.WRAP_CONTENT
         animationStyle = 0
+        @Suppress("DEPRECATION")
         setBackgroundDrawable(BitmapDrawable())
         inputMethodMode = INPUT_METHOD_NOT_NEEDED
         isFocusable = true

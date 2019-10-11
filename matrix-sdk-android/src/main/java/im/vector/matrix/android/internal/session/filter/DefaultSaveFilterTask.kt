@@ -21,7 +21,6 @@ import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
 import javax.inject.Inject
 
-
 /**
  * Save a filter to the server
  */
@@ -30,7 +29,6 @@ internal interface SaveFilterTask : Task<SaveFilterTask.Params, Unit> {
     data class Params(
             val filter: FilterBody
     )
-
 }
 
 internal class DefaultSaveFilterTask @Inject constructor(@UserId private val userId: String,
@@ -45,5 +43,4 @@ internal class DefaultSaveFilterTask @Inject constructor(@UserId private val use
         }
         filterRepository.storeFilterId(params.filter, filterResponse.filterId)
     }
-
 }

@@ -43,12 +43,11 @@ import kotlinx.android.synthetic.main.activity_image_media_viewer.*
 import timber.log.Timber
 import javax.inject.Inject
 
-
 class ImageMediaViewerActivity : VectorBaseActivity() {
 
     @Inject lateinit var imageContentRenderer: ImageContentRenderer
 
-    lateinit var mediaData: ImageContentRenderer.Data
+    private lateinit var mediaData: ImageContentRenderer.Data
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
@@ -57,8 +56,8 @@ class ImageMediaViewerActivity : VectorBaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(im.vector.riotx.R.layout.activity_image_media_viewer)
-        mediaData = intent.getParcelableExtra<ImageContentRenderer.Data>(EXTRA_MEDIA_DATA)
-        intent.extras.getString(EXTRA_SHARED_TRANSITION_NAME)?.let {
+        mediaData = intent.getParcelableExtra(EXTRA_MEDIA_DATA)
+        intent.extras?.getString(EXTRA_SHARED_TRANSITION_NAME)?.let {
             ViewCompat.setTransitionName(imageTransitionView, it)
         }
         if (mediaData.url.isNullOrEmpty()) {
@@ -73,13 +72,12 @@ class ImageMediaViewerActivity : VectorBaseActivity() {
             imageTransitionView.isVisible = true
             imageMediaViewerImageView.isVisible = false
             encryptedImageView.isVisible = false
-            //Postpone transaction a bit until thumbnail is loaded
+            // Postpone transaction a bit until thumbnail is loaded
             supportPostponeEnterTransition()
             imageContentRenderer.renderFitTarget(mediaData, ImageContentRenderer.Mode.THUMBNAIL, imageTransitionView) {
-                //Proceed with transaction
+                // Proceed with transaction
                 scheduleStartPostponedTransition(imageTransitionView)
             }
-
         } else {
             imageTransitionView.isVisible = false
 
@@ -115,7 +113,7 @@ class ImageMediaViewerActivity : VectorBaseActivity() {
     }
 
     override fun onBackPressed() {
-        //show again for exit animation
+        // show again for exit animation
         imageTransitionView.isVisible = true
         super.onBackPressed()
     }
@@ -157,7 +155,7 @@ class ImageMediaViewerActivity : VectorBaseActivity() {
                                                                   model: Any?,
                                                                   target: Target<Drawable>?,
                                                                   isFirstResource: Boolean): Boolean {
-                                            //TODO ?
+                                            // TODO ?
                                             Timber.e("TRANSITION onLoadFailed")
                                             imageMediaViewerImageView.isVisible = false
                                             encryptedImageView.isVisible = true
@@ -175,7 +173,6 @@ class ImageMediaViewerActivity : VectorBaseActivity() {
                                             encryptedImageView.isVisible = true
                                             return false
                                         }
-
                                     })
                                     .into(encryptedImageView)
                         } else {
@@ -190,7 +187,7 @@ class ImageMediaViewerActivity : VectorBaseActivity() {
                         }
                     },
                     onCancel = {
-                        //Something to do?
+                        // Something to do?
                     }
             )
             return true
@@ -212,6 +209,4 @@ class ImageMediaViewerActivity : VectorBaseActivity() {
             }
         }
     }
-
-
 }

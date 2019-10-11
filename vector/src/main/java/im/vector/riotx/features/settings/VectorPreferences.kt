@@ -422,7 +422,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
             } catch (e: Exception) {
                 Timber.e(e, "## getNotificationRingTone() : Uri.parse failed")
             }
-
         }
 
         if (null == uri) {
@@ -459,7 +458,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
                 name = name.substring(0, name.lastIndexOf("."))
             }
         } catch (e: Exception) {
-            Timber.e(e, "## getNotificationRingToneName() failed() : " + e.message)
+            Timber.e(e, "## getNotificationRingToneName() failed")
         } finally {
             cursor?.close()
         }

@@ -51,7 +51,6 @@ class FormattedJsonHttpLogger : HttpLoggingInterceptor.Logger {
                     // Finally this is not a JSON string...
                     Timber.e(e)
                 }
-
             } else if (message.startsWith("[")) {
                 // JSON Array detected
                 try {
@@ -61,7 +60,6 @@ class FormattedJsonHttpLogger : HttpLoggingInterceptor.Logger {
                     // Finally not JSON...
                     Timber.e(e)
                 }
-
             }
             // Else not a json string to log
         }

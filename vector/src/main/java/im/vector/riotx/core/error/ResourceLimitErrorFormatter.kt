@@ -17,8 +17,8 @@
 package im.vector.riotx.core.error
 
 import android.content.Context
-import android.text.Html
 import androidx.annotation.StringRes
+import androidx.core.text.HtmlCompat
 import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.riotx.R
 import me.gujun.android.span.span
@@ -46,7 +46,7 @@ class ResourceLimitErrorFormatter(private val context: Context) {
         val contact = if (clickable && matrixError.adminUri != null) {
             val contactSubString = uriAsLink(matrixError.adminUri!!)
             val contactFullString = context.getString(mode.contactRes, contactSubString)
-            Html.fromHtml(contactFullString)
+            HtmlCompat.fromHtml(contactFullString, HtmlCompat.FROM_HTML_MODE_LEGACY)
         } else {
             val contactSubString = context.getString(R.string.resource_limit_contact_admin)
             context.getString(mode.contactRes, contactSubString)

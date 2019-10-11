@@ -26,7 +26,6 @@ internal data class PasswordLoginParams(@Json(name = "identifier") val identifie
                                @Json(name = "initial_device_display_name") val deviceDisplayName: String?,
                                @Json(name = "device_id") val deviceId: String?) : LoginParams {
 
-
     companion object {
 
         val IDENTIFIER_KEY_TYPE_USER = "m.id.user"
@@ -40,7 +39,6 @@ internal data class PasswordLoginParams(@Json(name = "identifier") val identifie
         val IDENTIFIER_KEY_COUNTRY = "country"
         val IDENTIFIER_KEY_NUMBER = "number"
 
-
         fun userIdentifier(user: String,
                            password: String,
                            deviceDisplayName: String? = null,
@@ -49,7 +47,6 @@ internal data class PasswordLoginParams(@Json(name = "identifier") val identifie
             identifier[IDENTIFIER_KEY_TYPE] = IDENTIFIER_KEY_TYPE_USER
             identifier[IDENTIFIER_KEY_USER] = user
             return PasswordLoginParams(identifier, password, LoginFlowTypes.PASSWORD, deviceDisplayName, deviceId)
-
         }
 
         fun thirdPartyIdentifier(medium: String,
@@ -62,7 +59,6 @@ internal data class PasswordLoginParams(@Json(name = "identifier") val identifie
             identifier[IDENTIFIER_KEY_MEDIUM] = medium
             identifier[IDENTIFIER_KEY_ADDRESS] = address
             return PasswordLoginParams(identifier, password, LoginFlowTypes.PASSWORD, deviceDisplayName, deviceId)
-
         }
     }
 }

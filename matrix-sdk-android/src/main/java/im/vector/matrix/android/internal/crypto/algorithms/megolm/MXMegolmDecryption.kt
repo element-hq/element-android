@@ -129,7 +129,6 @@ internal class MXMegolmDecryption(private val userId: String,
                 )
     }
 
-
     /**
      * Helper for the real decryptEvent and for _retryDecryption. If
      * requestKeysOnFail is true, we'll send an m.room_key_request when we fail
@@ -176,7 +175,6 @@ internal class MXMegolmDecryption(private val userId: String,
     private fun addEventToPendingList(event: Event, timelineId: String) {
         val encryptedEventContent = event.content.toModel<EncryptedEventContent>() ?: return
         val pendingEventsKey = "${encryptedEventContent.senderKey}|${encryptedEventContent.sessionId}"
-
 
         if (!pendingEvents.containsKey(pendingEventsKey)) {
             pendingEvents[pendingEventsKey] = HashMap()
@@ -352,4 +350,3 @@ internal class MXMegolmDecryption(private val userId: String,
         }
     }
 }
-

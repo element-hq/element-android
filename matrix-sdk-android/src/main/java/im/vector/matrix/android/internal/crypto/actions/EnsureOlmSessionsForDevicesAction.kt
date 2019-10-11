@@ -30,7 +30,6 @@ import javax.inject.Inject
 internal class EnsureOlmSessionsForDevicesAction @Inject constructor(private val olmDevice: MXOlmDevice,
                                                                      private val oneTimeKeysForUsersDeviceTask: ClaimOneTimeKeysForUsersDeviceTask) {
 
-
     suspend fun handle(devicesByUser: Map<String, List<MXDeviceInfo>>): MXUsersDevicesMap<MXOlmSessionResult> {
         val devicesWithoutSession = ArrayList<MXDeviceInfo>()
 
@@ -149,5 +148,4 @@ internal class EnsureOlmSessionsForDevicesAction @Inject constructor(private val
 
         return sessionId
     }
-
 }

@@ -60,7 +60,6 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
     val joinRoomErrorLiveData: LiveData<LiveEvent<Throwable>>
         get() = _joinRoomErrorLiveData
 
-
     private var since: String? = null
 
     private var currentTask: Cancelable? = null

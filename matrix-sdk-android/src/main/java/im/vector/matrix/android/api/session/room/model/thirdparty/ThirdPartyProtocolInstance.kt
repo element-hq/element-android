@@ -51,7 +51,6 @@ data class ThirdPartyProtocolInstance(
         @Json(name = "instance_id")
         var instanceId: String? = null,
 
-
         /**
          * FIXDOC Not documented on matrix.org doc
          */

@@ -27,7 +27,6 @@ import timber.log.Timber
 
 internal object EventMapper {
 
-
     fun map(event: Event, roomId: String): EventEntity {
         val uds = if (event.unsignedData == null) null
         else MoshiProvider.providesMoshi().adapter(UnsignedData::class.java).toJson(event.unsignedData)
@@ -48,16 +47,17 @@ internal object EventMapper {
     }
 
     fun map(eventEntity: EventEntity): Event {
-        val ud = if (eventEntity.unsignedData.isNullOrBlank()) {
-            null
-        } else {
-            try {
-                MoshiProvider.providesMoshi().adapter(UnsignedData::class.java).fromJson(eventEntity.unsignedData)
-            } catch (t: JsonDataException) {
-                null
-            }
+        val ud = eventEntity.unsignedData
+                ?.takeIf { it.isNotBlank() }
+                ?.let {
+                    try {
+                        MoshiProvider.providesMoshi().adapter(UnsignedData::class.java).fromJson(it)
+                    } catch (t: JsonDataException) {
+                        Timber.e(t, "Failed to parse UnsignedData")
+                        null
+                    }
+                }
 
-        }
         return Event(
                 type = eventEntity.type,
                 eventId = eventEntity.eventId,
@@ -78,11 +78,12 @@ internal object EventMapper {
                     Timber.e(t, "Failed to parse decryption result")
                 }
             }
-            //TODO get the full crypto error object
-            it.mCryptoError = eventEntity.decryptionErrorCode?.let { MXCryptoError.ErrorType.valueOf(it) }
+            // TODO get the full crypto error object
+            it.mCryptoError = eventEntity.decryptionErrorCode?.let { errorCode ->
+                MXCryptoError.ErrorType.valueOf(errorCode)
+            }
         }
     }
-
 }
 
 internal fun EventEntity.asDomain(): Event {
@@ -92,4 +93,3 @@ internal fun EventEntity.asDomain(): Event {
 internal fun Event.toEntity(roomId: String): EventEntity {
     return EventMapper.map(this, roomId)
 }
-

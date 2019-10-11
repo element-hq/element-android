@@ -24,13 +24,8 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.tag.RoomTagContent
-import im.vector.matrix.android.internal.session.room.read.FullyReadContent
-import im.vector.matrix.android.internal.database.helper.add
-import im.vector.matrix.android.internal.database.helper.addOrUpdate
-import im.vector.matrix.android.internal.database.helper.addStateEvent
-import im.vector.matrix.android.internal.database.helper.lastStateIndex
-import im.vector.matrix.android.internal.database.helper.updateSenderDataFor
 import im.vector.matrix.android.internal.crypto.DefaultCryptoService
+import im.vector.matrix.android.internal.database.helper.*
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.EventEntityFields
 import im.vector.matrix.android.internal.database.model.RoomEntity
@@ -42,12 +37,9 @@ import im.vector.matrix.android.internal.session.mapWithProgress
 import im.vector.matrix.android.internal.session.notification.DefaultPushRuleService
 import im.vector.matrix.android.internal.session.notification.ProcessEventForPushTask
 import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
+import im.vector.matrix.android.internal.session.room.read.FullyReadContent
 import im.vector.matrix.android.internal.session.room.timeline.PaginationDirection
-import im.vector.matrix.android.internal.session.sync.model.InvitedRoomSync
-import im.vector.matrix.android.internal.session.sync.model.RoomSync
-import im.vector.matrix.android.internal.session.sync.model.RoomSyncAccountData
-import im.vector.matrix.android.internal.session.sync.model.RoomSyncEphemeral
-import im.vector.matrix.android.internal.session.sync.model.RoomsSyncResponse
+import im.vector.matrix.android.internal.session.sync.model.*
 import im.vector.matrix.android.internal.session.user.UserEntityFactory
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
@@ -80,9 +72,8 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
             handleRoomSync(realm, HandlingStrategy.INVITED(roomsSyncResponse.invite), isInitialSync, reporter)
             handleRoomSync(realm, HandlingStrategy.LEFT(roomsSyncResponse.leave), isInitialSync, reporter)
         }
-        //handle event for bing rule checks
+        // handle event for bing rule checks
         checkPushRules(roomsSyncResponse)
-
     }
 
     private fun checkPushRules(roomsSyncResponse: RoomsSyncResponse) {
@@ -90,7 +81,7 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
         if (tokenStore.getLastToken() == null) {
             Timber.v("[PushRules] <-- No push rule check on initial sync")
             return
-        } //nothing on initial sync
+        } // nothing on initial sync
 
         val rules = pushRuleService.getPushRules(RuleScope.GLOBAL)
         processForPushTask.configureWith(ProcessEventForPushTask.Params(roomsSyncResponse, rules))
@@ -101,7 +92,6 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
     // PRIVATE METHODS *****************************************************************************
 
     private fun handleRoomSync(realm: Realm, handlingStrategy: HandlingStrategy, isInitialSync: Boolean, reporter: DefaultInitialSyncProgressService?) {
-
         val rooms = when (handlingStrategy) {
             is HandlingStrategy.JOINED  ->
                 handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_joined_rooms, 0.6f) {
@@ -125,8 +115,6 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
                                  roomId: String,
                                  roomSync: RoomSync,
                                  isInitialSync: Boolean): RoomEntity {
-
-
         Timber.v("Handle join sync for room $roomId")
 
         if (roomSync.ephemeral != null && roomSync.ephemeral.events.isNotEmpty()) {
@@ -204,7 +192,6 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
                                      eventList: List<Event>,
                                      prevToken: String? = null,
                                      isLimited: Boolean = true): ChunkEntity {
-
         val lastChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomEntity.roomId)
         var stateIndexOffset = 0
         val chunkEntity = if (!isLimited && lastChunk != null) {
@@ -242,16 +229,15 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
         return chunkEntity
     }
 
-
     @Suppress("UNCHECKED_CAST")
     private fun handleEphemeral(realm: Realm,
                                 roomId: String,
                                 ephemeral: RoomSyncEphemeral,
-                                isInitalSync: Boolean) {
+                                isInitialSync: Boolean) {
         for (event in ephemeral.events) {
             if (event.type != EventType.RECEIPT) continue
             val readReceiptContent = event.content as? ReadReceiptContent ?: continue
-            readReceiptHandler.handle(realm, roomId, readReceiptContent, isInitalSync)
+            readReceiptHandler.handle(realm, roomId, readReceiptContent, isInitialSync)
         }
     }
 
@@ -267,5 +253,4 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
             }
         }
     }
-
 }

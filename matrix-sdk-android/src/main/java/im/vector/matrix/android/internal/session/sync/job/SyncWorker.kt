@@ -30,7 +30,6 @@ import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-
 private const val DEFAULT_LONG_POOL_TIMEOUT = 0L
 
 internal class SyncWorker(context: Context,
@@ -88,5 +87,4 @@ internal class SyncWorker(context: Context,
             WorkManager.getInstance(context).cancelUniqueWork("BG_SYNCP")
         }
     }
-
 }

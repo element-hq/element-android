@@ -90,7 +90,7 @@ class DefaultNavigator @Inject constructor() : Navigator {
     }
 
     override fun openSettings(context: Context) {
-        val intent = VectorSettingsActivity.getIntent(context, "TODO")
+        val intent = VectorSettingsActivity.getIntent(context)
         context.startActivity(intent)
     }
 

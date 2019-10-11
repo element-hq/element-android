@@ -45,5 +45,4 @@ abstract class AutocompleteUserItem : VectorEpoxyModel<AutocompleteUserItem.Hold
         val nameView by bind<TextView>(R.id.userAutocompleteName)
         val avatarImageView by bind<ImageView>(R.id.userAutocompleteAvatar)
     }
-
 }

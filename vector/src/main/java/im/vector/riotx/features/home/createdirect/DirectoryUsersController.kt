@@ -22,7 +22,6 @@ import com.airbnb.epoxy.EpoxyController
 import com.airbnb.mvrx.*
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.user.model.User
-import im.vector.matrix.android.internal.util.firstLetterOfDisplayName
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.errorWithRetryItem
 import im.vector.riotx.core.epoxy.loadingItem
@@ -49,7 +48,6 @@ class DirectoryUsersController @Inject constructor(private val session: Session,
         this.state = state
         requestModelBuild()
     }
-
 
     override fun buildModels() {
         val currentState = state ?: return
@@ -123,5 +121,4 @@ class DirectoryUsersController @Inject constructor(private val session: Session,
         fun onItemClick(user: User)
         fun retryDirectoryUsersRequest()
     }
-
 }

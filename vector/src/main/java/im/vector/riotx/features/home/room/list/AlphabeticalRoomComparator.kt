@@ -27,6 +27,5 @@ class AlphabeticalRoomComparator @Inject constructor() : Comparator<RoomSummary>
             leftRoomSummary?.displayName == null  -> 1
             else                                  -> leftRoomSummary.displayName.compareTo(rightRoomSummary.displayName)
         }
-
     }
 }

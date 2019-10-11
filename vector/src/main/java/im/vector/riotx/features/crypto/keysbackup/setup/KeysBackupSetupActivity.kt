@@ -48,7 +48,6 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
         viewModel.showManualExport.value = intent.getBooleanExtra(EXTRA_SHOW_MANUAL_EXPORT, false)
         viewModel.initSession(session)
 
-
         viewModel.isCreatingBackupVersion.observe(this, Observer {
             val isCreating = it ?: false
             if (isCreating) {
@@ -103,14 +102,13 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
             }
         }
 
-
         viewModel.prepareRecoverFailError.observe(this, Observer { error ->
             if (error != null) {
                 AlertDialog.Builder(this)
                         .setTitle(R.string.unknown_error)
                         .setMessage(error.localizedMessage)
                         .setPositiveButton(R.string.ok) { _, _ ->
-                            //nop
+                            // nop
                             viewModel.prepareRecoverFailError.value = null
                         }
                         .show()
@@ -123,7 +121,7 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
                         .setTitle(R.string.unexpected_error)
                         .setMessage(error.localizedMessage)
                         .setPositiveButton(R.string.ok) { _, _ ->
-                            //nop
+                            // nop
                             viewModel.creatingBackupError.value = null
                         }
                         .show()
@@ -141,14 +139,13 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
                             .export(this@KeysBackupSetupActivity,
                                     passphrase,
                                     object : MatrixCallback<String> {
-
                                         override fun onSuccess(data: String) {
                                             hideWaitingView()
 
                                             AlertDialog.Builder(this@KeysBackupSetupActivity)
                                                     .setMessage(getString(R.string.encryption_export_saved_as, data))
                                                     .setCancelable(false)
-                                                    .setPositiveButton(R.string.ok) { dialog, which ->
+                                                    .setPositiveButton(R.string.ok) { _, _ ->
                                                         val resultIntent = Intent()
                                                         resultIntent.putExtra(MANUAL_EXPORT, true)
                                                         setResult(RESULT_OK, resultIntent)
@@ -202,7 +199,6 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
 //
 //        return super.onOptionsItemSelected(item)
 //    }
-
 
     companion object {
         const val KEYS_VERSION = "KEYS_VERSION"

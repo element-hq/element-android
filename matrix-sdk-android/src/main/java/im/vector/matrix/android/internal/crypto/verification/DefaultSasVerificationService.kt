@@ -37,7 +37,6 @@ import im.vector.matrix.android.internal.crypto.model.rest.*
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
 import im.vector.matrix.android.internal.session.SessionScope
-import im.vector.matrix.android.internal.task.TaskConstraints
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
@@ -90,7 +89,7 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
                     onMacReceived(event)
                 }
                 else                              -> {
-                    //ignore
+                    // ignore
                 }
             }
         }
@@ -120,7 +119,6 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
                 } catch (e: Throwable) {
                     Timber.e(e, "## Error while notifying listeners")
                 }
-
             }
         }
     }
@@ -167,7 +165,7 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
             }
             return
         }
-        //Download device keys prior to everything
+        // Download device keys prior to everything
         checkKeysAreDownloaded(
                 otherUserId!!,
                 startReq,
@@ -177,19 +175,19 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
                     val existing = getExistingTransaction(otherUserId, tid)
                     val existingTxs = getExistingTransactionsForUser(otherUserId)
                     if (existing != null) {
-                        //should cancel both!
+                        // should cancel both!
                         Timber.v("## SAS onStartRequestReceived - Request exist with same if ${startReq.transactionID!!}")
                         existing.cancel(CancelCode.UnexpectedMessage)
                         cancelTransaction(tid, otherUserId, startReq.fromDevice!!, CancelCode.UnexpectedMessage)
                     } else if (existingTxs?.isEmpty() == false) {
                         Timber.v("## SAS onStartRequestReceived - There is already a transaction with this user ${startReq.transactionID!!}")
-                        //Multiple keyshares between two devices: any two devices may only have at most one key verification in flight at a time.
+                        // Multiple keyshares between two devices: any two devices may only have at most one key verification in flight at a time.
                         existingTxs.forEach {
                             it.cancel(CancelCode.UnexpectedMessage)
                         }
                         cancelTransaction(tid, otherUserId, startReq.fromDevice!!, CancelCode.UnexpectedMessage)
                     } else {
-                        //Ok we can create
+                        // Ok we can create
                         if (KeyVerificationStart.VERIF_METHOD_SAS == startReq.method) {
                             Timber.v("## SAS onStartRequestReceived - request accepted ${startReq.transactionID!!}")
                             val tx = IncomingSASVerificationTransaction(
@@ -241,7 +239,7 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
         val cancelReq = event.getClearContent().toModel<KeyVerificationCancel>()!!
 
         if (!cancelReq.isValid()) {
-            //ignore
+            // ignore
             Timber.e("## Received invalid accept request")
             return
         }
@@ -263,7 +261,7 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
         val acceptReq = event.getClearContent().toModel<KeyVerificationAccept>()!!
 
         if (!acceptReq.isValid()) {
-            //ignore
+            // ignore
             Timber.e("## Received invalid accept request")
             return
         }
@@ -272,22 +270,20 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
         if (existing == null) {
             Timber.e("## Received invalid accept request")
             return
-
         }
 
         if (existing is SASVerificationTransaction) {
             existing.acceptToDeviceEvent(otherUserId, acceptReq)
         } else {
-            //not other types now
+            // not other types now
         }
     }
-
 
     private suspend fun onKeyReceived(event: Event) {
         val keyReq = event.getClearContent().toModel<KeyVerificationKey>()!!
 
         if (!keyReq.isValid()) {
-            //ignore
+            // ignore
             Timber.e("## Received invalid key request")
             return
         }
@@ -300,7 +296,7 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
         if (existing is SASVerificationTransaction) {
             existing.acceptToDeviceEvent(otherUserId, keyReq)
         } else {
-            //not other types now
+            // not other types now
         }
     }
 
@@ -308,7 +304,7 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
         val macReq = event.getClearContent().toModel<KeyVerificationMac>()!!
 
         if (!macReq.isValid()) {
-            //ignore
+            // ignore
             Timber.e("## Received invalid key request")
             return
         }
@@ -321,7 +317,7 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
         if (existing is SASVerificationTransaction) {
             existing.acceptToDeviceEvent(otherUserId, macReq)
         } else {
-            //not other types known for now
+            // not other types known for now
         }
     }
 
@@ -362,7 +358,7 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
 
     override fun beginKeyVerification(method: String, userId: String, deviceID: String): String? {
         val txID = createUniqueIDForTransaction(userId, deviceID)
-        //should check if already one (and cancel it)
+        // should check if already one (and cancel it)
         if (KeyVerificationStart.VERIF_METHOD_SAS == method) {
             val tx = OutgoingSASVerificationRequest(
                     this,
@@ -397,7 +393,6 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
         }
     }
 
-
     override fun transactionUpdated(tx: VerificationTransaction) {
         dispatchTxUpdated(tx)
         if (tx is SASVerificationTransaction
@@ -405,7 +400,7 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
                         || tx.state == SasVerificationTxState.OnCancelled
                         || tx.state == SasVerificationTxState.Verified)
         ) {
-            //remove
+            // remove
             this.removeTransaction(tx.otherUserId, tx.transactionId)
         }
     }

@@ -29,7 +29,6 @@ fun MXDeviceInfo.getFingerprintHumanReadable() = fingerprint()
         ?.chunked(4)
         ?.joinToString(separator = " ")
 
-
 fun List<DeviceInfo>.sortByLastSeen() {
     Collections.sort(this, DatedObjectComparators.descComparator)
 }

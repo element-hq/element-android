@@ -85,5 +85,4 @@ internal class DefaultRoom @Inject constructor(override val roomId: String,
     override fun shouldEncryptForInvitedMembers(): Boolean {
         return cryptoService.shouldEncryptForInvitedMembers(roomId)
     }
-
 }

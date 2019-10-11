@@ -27,5 +27,4 @@ object ScreenModule {
     @Provides
     @JvmStatic
     fun providesGlideRequests(context: AppCompatActivity) = GlideApp.with(context)
-
 }

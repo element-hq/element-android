@@ -38,7 +38,6 @@ import java.io.File
 import java.io.FileInputStream
 import javax.inject.Inject
 
-
 internal class UploadContentWorker(context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
 
     @JsonClass(generateAdapter = true)
@@ -212,7 +211,6 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
         )
     }
 
-
     private fun MessageFileContent.update(url: String,
                                           encryptedFileInfo: EncryptedFileInfo?): MessageFileContent {
         return copy(
@@ -228,6 +226,4 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
                 encryptedFileInfo = encryptedFileInfo?.copy(url = url)
         )
     }
-
 }
-

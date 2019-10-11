@@ -50,7 +50,6 @@ data class RoomListParams(
         val sharedData: SharedData? = null
 ) : Parcelable
 
-
 class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, OnBackPressed, FabMenuView.Listener {
 
     enum class DisplayMode(@StringRes val titleRes: Int) {
@@ -284,5 +283,4 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, O
     override fun createRoom(initialName: String) {
         navigator.openCreateRoom(requireActivity(), initialName)
     }
-
 }

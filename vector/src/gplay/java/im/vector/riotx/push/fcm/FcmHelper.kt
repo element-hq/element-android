@@ -37,7 +37,6 @@ import timber.log.Timber
 object FcmHelper {
     private val PREFS_KEY_FCM_TOKEN = "FCM_TOKEN"
 
-
     fun isPushSupported(): Boolean = true
 
     /**
@@ -62,7 +61,6 @@ object FcmHelper {
                 .edit()
                 .putString(PREFS_KEY_FCM_TOKEN, token)
                 .apply()
-
     }
 
     /**
@@ -72,7 +70,7 @@ object FcmHelper {
      */
     fun ensureFcmTokenIsRetrieved(activity: Activity, pushersManager: PushersManager) {
         //        if (TextUtils.isEmpty(getFcmToken(activity))) {
-        //'app should always check the device for a compatible Google Play services APK before accessing Google Play services features'
+        // 'app should always check the device for a compatible Google Play services APK before accessing Google Play services features'
         if (checkPlayServices(activity)) {
             try {
                 FirebaseInstanceId.getInstance().instanceId
@@ -80,11 +78,10 @@ object FcmHelper {
                             storeFcmToken(activity, instanceIdResult.token)
                             pushersManager.registerPusherWithFcmKey(instanceIdResult.token)
                         }
-                        .addOnFailureListener(activity) { e -> Timber.e(e, "## ensureFcmTokenIsRetrieved() : failed " + e.message) }
+                        .addOnFailureListener(activity) { e -> Timber.e(e, "## ensureFcmTokenIsRetrieved() : failed") }
             } catch (e: Throwable) {
-                Timber.e(e, "## ensureFcmTokenIsRetrieved() : failed " + e.message)
+                Timber.e(e, "## ensureFcmTokenIsRetrieved() : failed")
             }
-
         } else {
             Toast.makeText(activity, R.string.no_valid_google_play_services_apk, Toast.LENGTH_SHORT).show()
             Timber.e("No valid Google Play Services found. Cannot use FCM.")
@@ -102,10 +99,12 @@ object FcmHelper {
         return resultCode == ConnectionResult.SUCCESS
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun onEnterForeground(context: Context) {
         // No op
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun onEnterBackground(context: Context, vectorPreferences: VectorPreferences, activeSessionHolder: ActiveSessionHolder) {
         // TODO FCM fallback
     }

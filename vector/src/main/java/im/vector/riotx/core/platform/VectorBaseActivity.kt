@@ -36,11 +36,11 @@ import butterknife.Unbinder
 import com.airbnb.mvrx.BaseMvRxActivity
 import com.bumptech.glide.util.Util
 import com.google.android.material.snackbar.Snackbar
-import im.vector.matrix.android.api.failure.ConsentNotGivenError
 import im.vector.riotx.BuildConfig
 import im.vector.riotx.R
 import im.vector.riotx.core.di.*
 import im.vector.riotx.core.dialogs.DialogLocker
+import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.configuration.VectorConfiguration
 import im.vector.riotx.features.consent.ConsentNotGivenHelper
@@ -48,17 +48,14 @@ import im.vector.riotx.features.navigation.Navigator
 import im.vector.riotx.features.rageshake.BugReportActivity
 import im.vector.riotx.features.rageshake.BugReporter
 import im.vector.riotx.features.rageshake.RageShake
+import im.vector.riotx.features.session.SessionListener
 import im.vector.riotx.features.themes.ActivityOtherThemes
 import im.vector.riotx.features.themes.ThemeUtils
 import im.vector.riotx.receivers.DebugReceiver
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 import timber.log.Timber
 import kotlin.system.measureTimeMillis
-
 
 abstract class VectorBaseActivity : BaseMvRxActivity(), HasScreenInjector {
     /* ==========================================================================================
@@ -76,6 +73,7 @@ abstract class VectorBaseActivity : BaseMvRxActivity(), HasScreenInjector {
 
     protected lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var configurationViewModel: ConfigurationViewModel
+    private lateinit var sessionListener: SessionListener
     protected lateinit var bugReporter: BugReporter
     private lateinit var rageShake: RageShake
     protected lateinit var navigator: Navigator
@@ -132,6 +130,7 @@ abstract class VectorBaseActivity : BaseMvRxActivity(), HasScreenInjector {
         viewModelFactory = screenComponent.viewModelFactory()
         configurationViewModel = ViewModelProviders.of(this, viewModelFactory).get(ConfigurationViewModel::class.java)
         bugReporter = screenComponent.bugReporter()
+        // Shake detector
         rageShake = screenComponent.rageShake()
         navigator = screenComponent.navigator()
         activeSessionHolder = screenComponent.activeSessionHolder()
@@ -143,7 +142,11 @@ abstract class VectorBaseActivity : BaseMvRxActivity(), HasScreenInjector {
             }
         })
 
-        // Shake detector
+        sessionListener = getVectorComponent().sessionListener()
+        sessionListener.consentNotGivenLiveData.observeEvent(this) {
+            consentNotGivenHelper.displayDialog(it.consentUri,
+                    activeSessionHolder.getActiveSession().sessionParams.homeServerConnectionConfig.homeServerUri.host ?: "")
+        }
 
         doBeforeSetContentView()
 
@@ -220,7 +223,6 @@ abstract class VectorBaseActivity : BaseMvRxActivity(), HasScreenInjector {
         Timber.w("onMultiWindowModeChanged. isInMultiWindowMode: $isInMultiWindowMode")
         bugReporter.inMultiWindowMode = isInMultiWindowMode
     }
-
 
     override fun injector(): ScreenComponent {
         return screenComponent
@@ -329,9 +331,9 @@ abstract class VectorBaseActivity : BaseMvRxActivity(), HasScreenInjector {
         }
     }
 
-    //==============================================================================================
+    // ==============================================================================================
     // Handle loading view (also called waiting view or spinner view)
-    //==============================================================================================
+    // ==============================================================================================
 
     var waitingView: View? = null
         set(value) {
@@ -406,22 +408,6 @@ abstract class VectorBaseActivity : BaseMvRxActivity(), HasScreenInjector {
     private val consentNotGivenHelper by lazy {
         ConsentNotGivenHelper(this, DialogLocker(savedInstanceState))
                 .apply { restorables.add(this) }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        EventBus.getDefault().register(this)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        EventBus.getDefault().unregister(this)
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onConsentNotGivenError(consentNotGivenError: ConsentNotGivenError) {
-        consentNotGivenHelper.displayDialog(consentNotGivenError.consentUri,
-                activeSessionHolder.getActiveSession().sessionParams.homeServerConnectionConfig.homeServerUri.host ?: "")
     }
 
     /* ==========================================================================================

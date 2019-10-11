@@ -25,7 +25,6 @@ import javax.inject.Inject
 
 class ErrorFormatter @Inject constructor(private val stringProvider: StringProvider) {
 
-
     fun toHumanReadable(failure: Failure): String {
         // Default
         return failure.localizedMessage

@@ -25,5 +25,4 @@ internal open class PushConditionEntity(
 ) : RealmObject() {
 
     companion object
-
 }

@@ -18,7 +18,6 @@ package im.vector.riotx.core.utils
 import android.view.View
 import java.util.*
 
-
 /**
  * Simple Debounced OnClickListener
  * Safe to use in different views

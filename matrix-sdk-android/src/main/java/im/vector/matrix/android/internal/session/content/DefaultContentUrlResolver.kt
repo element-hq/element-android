@@ -20,7 +20,6 @@ import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import javax.inject.Inject
 
-
 private const val MATRIX_CONTENT_URI_SCHEME = "mxc://"
 private const val URI_PREFIX_CONTENT_API = "_matrix/media/v1/"
 
@@ -59,7 +58,6 @@ internal class DefaultContentUrlResolver @Inject constructor(private val homeSer
                         contentUrl: String,
                         prefix: String,
                         params: String? = null): String? {
-
         var serverAndMediaId = contentUrl.removePrefix(MATRIX_CONTENT_URI_SCHEME)
         val fragmentOffset = serverAndMediaId.indexOf("#")
         var fragment = ""
@@ -76,5 +74,4 @@ internal class DefaultContentUrlResolver @Inject constructor(private val homeSer
     private fun String.isValidMatrixContentUrl(): Boolean {
         return startsWith(MATRIX_CONTENT_URI_SCHEME)
     }
-
 }

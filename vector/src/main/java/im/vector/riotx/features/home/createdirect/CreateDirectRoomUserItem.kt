@@ -40,7 +40,6 @@ abstract class CreateDirectRoomUserItem : VectorEpoxyModel<CreateDirectRoomUserI
     @EpoxyAttribute var clickListener: View.OnClickListener? = null
     @EpoxyAttribute var selected: Boolean = false
 
-
     override fun bind(holder: Holder) {
         holder.view.setOnClickListener(clickListener)
         // If name is empty, use userId as name and force it being centered
@@ -73,5 +72,4 @@ abstract class CreateDirectRoomUserItem : VectorEpoxyModel<CreateDirectRoomUserI
         val avatarImageView by bind<ImageView>(R.id.createDirectRoomUserAvatar)
         val avatarCheckedImageView by bind<ImageView>(R.id.createDirectRoomUserAvatarChecked)
     }
-
 }

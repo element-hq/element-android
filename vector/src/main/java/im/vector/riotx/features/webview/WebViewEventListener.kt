@@ -55,5 +55,4 @@ interface WebViewEventListener {
      * @return true if the method needs to manage some custom handling
      */
     fun shouldOverrideUrlLoading(url: String): Boolean
-
 }

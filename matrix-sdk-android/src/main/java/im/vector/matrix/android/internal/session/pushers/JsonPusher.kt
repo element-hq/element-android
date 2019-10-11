@@ -100,4 +100,3 @@ internal data class JsonPusher(
         @Json(name = "append")
         val append: Boolean? = false
 )
-

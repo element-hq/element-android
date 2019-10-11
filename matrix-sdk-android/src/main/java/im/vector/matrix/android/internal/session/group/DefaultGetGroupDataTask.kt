@@ -30,7 +30,6 @@ import javax.inject.Inject
 internal interface GetGroupDataTask : Task<GetGroupDataTask.Params, Unit> {
 
     data class Params(val groupId: String)
-
 }
 
 internal class DefaultGetGroupDataTask @Inject constructor(
@@ -51,7 +50,6 @@ internal class DefaultGetGroupDataTask @Inject constructor(
         }
         insertInDb(groupSummary, groupRooms, groupUsers, groupId)
     }
-
 
     private fun insertInDb(groupSummary: GroupSummaryResponse,
                            groupRooms: GroupRooms,

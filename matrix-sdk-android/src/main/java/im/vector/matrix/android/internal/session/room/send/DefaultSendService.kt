@@ -106,7 +106,7 @@ internal class DefaultSendService @AssistedInject constructor(@Assisted private 
     }
 
     override fun redactEvent(event: Event, reason: String?): Cancelable {
-        //TODO manage media/attachements?
+        // TODO manage media/attachements?
         val redactWork = createRedactEventWork(event, reason)
         TimelineSendEventWorkCommon.postWork(context, roomId, redactWork)
         return CancelableWork(context, redactWork.id)
@@ -117,12 +117,11 @@ internal class DefaultSendService @AssistedInject constructor(@Assisted private 
             return sendEvent(localEcho.root)
         }
         return null
-
     }
 
     override fun resendMediaMessage(localEcho: TimelineEvent): Cancelable? {
         if (localEcho.root.isImageMessage() && localEcho.root.sendState.hasFailed()) {
-            //TODO this need a refactoring of attachement sending
+            // TODO this need a refactoring of attachement sending
 //        val clearContent = localEcho.root.getClearContent()
 //        val messageContent = clearContent?.toModel<MessageContent>() ?: return null
 //        when (messageContent.type) {
@@ -176,7 +175,7 @@ internal class DefaultSendService @AssistedInject constructor(@Assisted private 
                 .build().let {
                     TimelineSendEventWorkCommon.postWork(context, roomId, it, ExistingWorkPolicy.REPLACE)
 
-                    //need to clear also image sending queue
+                    // need to clear also image sending queue
                     WorkManager.getInstance(context)
                             .beginUniqueWork(buildWorkName(UPLOAD_WORK), ExistingWorkPolicy.REPLACE, it)
                             .enqueue()
@@ -189,7 +188,6 @@ internal class DefaultSendService @AssistedInject constructor(@Assisted private 
                 }
             }
         }
-
     }
 
     override fun resendAllFailedMessages() {
@@ -218,12 +216,11 @@ internal class DefaultSendService @AssistedInject constructor(@Assisted private 
                                             MessageType.MSGTYPE_VIDEO,
                                             MessageType.MSGTYPE_IMAGE,
                                             MessageType.MSGTYPE_AUDIO -> {
-                                                //need to resend the attachement
+                                                // need to resend the attachement
                                             }
                                             else                      -> {
                                                 Timber.e("Cannot resend message ${event.type} / ${content.type}")
                                             }
-
                                         }
                                     } else {
                                         Timber.e("Unsupported message to resend ${event.type}")
@@ -329,6 +326,4 @@ internal class DefaultSendService @AssistedInject constructor(@Assisted private 
                 .setBackoffCriteria(BackoffPolicy.LINEAR, BACKOFF_DELAY, TimeUnit.MILLISECONDS)
                 .build()
     }
-
 }
-

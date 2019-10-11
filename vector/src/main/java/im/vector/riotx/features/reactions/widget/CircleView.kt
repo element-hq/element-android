@@ -21,7 +21,8 @@ import android.graphics.*
 import android.util.AttributeSet
 import android.util.Property
 import android.view.View
-
+import kotlin.math.max
+import kotlin.math.min
 
 /**
  * This view is responsible for drawing big circle that will pulse when clicked
@@ -38,8 +39,8 @@ class CircleView @JvmOverloads constructor(context: Context, attrs: AttributeSet
     private val circlePaint = Paint()
     private val maskPaint = Paint()
 
-    private var tempBitmap: Bitmap? = null
-    private var tempCanvas: Canvas? = null
+    private lateinit var tempBitmap: Bitmap
+    private lateinit var tempCanvas: Canvas
 
     var outerCircleRadiusProgress = 0f
         set(value) {
@@ -69,9 +70,9 @@ class CircleView @JvmOverloads constructor(context: Context, attrs: AttributeSet
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        tempCanvas!!.drawColor(0xffffff, PorterDuff.Mode.CLEAR)
-        tempCanvas!!.drawCircle(width / 2f, height / 2f, outerCircleRadiusProgress * maxCircleSize, circlePaint)
-        tempCanvas!!.drawCircle(width / 2f, height / 2f, innerCircleRadiusProgress * maxCircleSize, maskPaint)
+        tempCanvas.drawColor(0xffffff, PorterDuff.Mode.CLEAR)
+        tempCanvas.drawCircle(width / 2f, height / 2f, outerCircleRadiusProgress * maxCircleSize, circlePaint)
+        tempCanvas.drawCircle(width / 2f, height / 2f, innerCircleRadiusProgress * maxCircleSize, maskPaint)
         canvas.drawBitmap(tempBitmap, 0f, 0f, null)
     }
 
@@ -91,7 +92,7 @@ class CircleView @JvmOverloads constructor(context: Context, attrs: AttributeSet
 //    }
 
     private fun updateCircleColor() {
-        var colorProgress = clamp(outerCircleRadiusProgress, 0.5f, 1f) as Float
+        var colorProgress = clamp(outerCircleRadiusProgress, 0.5f, 1f)
         colorProgress = mapValueFromRangeToRange(colorProgress, 0.5f, 1f, 0f, 1f)
         this.circlePaint.color = argbEvaluator.evaluate(colorProgress, startColor, endColor) as Int
     }
@@ -99,7 +100,6 @@ class CircleView @JvmOverloads constructor(context: Context, attrs: AttributeSet
 //    fun getOuterCircleRadiusProgress(): Float {
 //        return outerCircleRadiusProgress
 //    }
-
 
     companion object {
 
@@ -124,17 +124,15 @@ class CircleView @JvmOverloads constructor(context: Context, attrs: AttributeSet
                 value?.let {
                     `object`.outerCircleRadiusProgress = it
                 }
-
             }
         }
-
 
         fun mapValueFromRangeToRange(value: Float, fromLow: Float, fromHigh: Float, toLow: Float, toHigh: Float): Float {
             return toLow + (value - fromLow) / (fromHigh - fromLow) * (toHigh - toLow)
         }
 
         fun clamp(value: Float, low: Float, high: Float): Float {
-            return Math.min(Math.max(value, low), high)
+            return min(max(value, low), high)
         }
     }
 }

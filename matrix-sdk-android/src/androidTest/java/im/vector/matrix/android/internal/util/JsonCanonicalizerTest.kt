@@ -62,8 +62,6 @@ internal class JsonCanonicalizerTest : InstrumentedTest {
                 JsonCanonicalizer.canonicalize("{\"a\":\"\\\"\"}"))
     }
 
-
-
     /* ==========================================================================================
      * Test from https://matrix.org/docs/spec/appendices.html#examples
      * ========================================================================================== */
@@ -74,7 +72,6 @@ internal class JsonCanonicalizerTest : InstrumentedTest {
                 JsonCanonicalizer.canonicalize("""{}"""))
     }
 
-
     @Test
     fun matrixOrg002Test() {
         assertEquals("""{"one":1,"two":"Two"}""",
@@ -83,7 +80,6 @@ internal class JsonCanonicalizerTest : InstrumentedTest {
     "two": "Two"
 }"""))
     }
-
 
     @Test
     fun matrixOrg003Test() {
@@ -94,13 +90,11 @@ internal class JsonCanonicalizerTest : InstrumentedTest {
 }"""))
     }
 
-
     @Test
     fun matrixOrg004Test() {
         assertEquals("""{"a":"1","b":"2"}""",
                 JsonCanonicalizer.canonicalize("""{"b":"2","a":"1"}"""))
     }
-
 
     @Test
     fun matrixOrg005Test() {
@@ -126,7 +120,6 @@ internal class JsonCanonicalizerTest : InstrumentedTest {
 }"""))
     }
 
-
     @Test
     fun matrixOrg006Test() {
         assertEquals("""{"a":"日本語"}""",
@@ -134,7 +127,6 @@ internal class JsonCanonicalizerTest : InstrumentedTest {
     "a": "日本語"
 }"""))
     }
-
 
     @Test
     fun matrixOrg007Test() {
@@ -144,7 +136,6 @@ internal class JsonCanonicalizerTest : InstrumentedTest {
     "日": 1
 }"""))
     }
-
 
     @Test
     fun matrixOrg008Test() {
