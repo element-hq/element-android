@@ -42,29 +42,39 @@ Make sure the following commands execute without any error:
 
 #### Internal tool
 
-> ./tools/check/check_code_quality.sh
+<pre>
+./tools/check/check_code_quality.sh
+</pre>
 
 #### ktlint
 
-> curl -sSLO https://github.com/pinterest/ktlint/releases/download/0.34.2/ktlint && chmod a+x ktlint
-> ./ktlint --android --experimental -v
+<pre>
+curl -sSLO https://github.com/pinterest/ktlint/releases/download/0.34.2/ktlint && chmod a+x ktlint
+./ktlint --android --experimental -v
+</pre>
 
 Note that you can run
 
-> ./ktlint --android --experimental -v -F
+<pre>
+./ktlint --android --experimental -v -F
+</pre>
 
 For ktlint to fix some detected errors for you (you still have to check and commit the fix of course)
 
 #### lint
 
-> ./gradlew lintGplayRelease
-> ./gradlew lintFdroidRelease
+<pre>
+./gradlew lintGplayRelease
+./gradlew lintFdroidRelease
+</pre>
 
 ### Unit tests
 
 Make sure the following commands execute without any error:
 
-> ./gradlew testGplayReleaseUnitTest
+<pre>
+./gradlew testGplayReleaseUnitTest
+</pre>
 
 ### Tests
 
