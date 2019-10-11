@@ -18,6 +18,7 @@ package im.vector.riotx.features.home.room.list
 
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.MenuItem
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -76,6 +77,19 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, O
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
+    }
+
+    override fun getMenuRes() = R.menu.room_list
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_home_mark_all_as_read -> {
+                roomListViewModel.accept(RoomListActions.MarkAllRoomsRead)
+                return true
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
