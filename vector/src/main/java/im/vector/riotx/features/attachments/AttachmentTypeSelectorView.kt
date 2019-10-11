@@ -40,8 +40,10 @@ import androidx.core.view.doOnNextLayout
 import com.amulyakhare.textdrawable.TextDrawable
 import com.amulyakhare.textdrawable.util.ColorGenerator
 import im.vector.riotx.R
-import im.vector.riotx.core.utils.DimensionConverter
+import im.vector.riotx.core.extensions.getMeasurements
 import kotlin.math.max
+
+private const val ANIMATION_DURATION = 250
 
 class AttachmentTypeSelectorView(context: Context,
                                  inflater: LayoutInflater,
@@ -49,7 +51,7 @@ class AttachmentTypeSelectorView(context: Context,
     : PopupWindow(context) {
 
     interface Callback {
-        fun onTypeSelected(type: Int)
+        fun onTypeSelected(type: Type)
     }
 
     private val iconColorGenerator = ColorGenerator.MATERIAL
@@ -66,12 +68,12 @@ class AttachmentTypeSelectorView(context: Context,
     init {
         val root = FrameLayout(context)
         val layout = inflater.inflate(R.layout.view_attachment_type_selector, root, true)
-        galleryButton = layout.findViewById<ImageButton>(R.id.attachmentGalleryButton).configure(TYPE_GALLERY)
-        cameraButton = layout.findViewById<ImageButton>(R.id.attachmentCameraButton).configure(TYPE_CAMERA)
-        fileButton = layout.findViewById<ImageButton>(R.id.attachmentFileButton).configure(TYPE_FILE)
-        stickersButton = layout.findViewById<ImageButton>(R.id.attachmentStickersButton).configure(TYPE_STICKER)
-        audioButton = layout.findViewById<ImageButton>(R.id.attachmentAudioButton).configure(TYPE_AUDIO)
-        contactButton = layout.findViewById<ImageButton>(R.id.attachmentContactButton).configure(TYPE_CONTACT)
+        galleryButton = layout.findViewById<ImageButton>(R.id.attachmentGalleryButton).configure(Type.GALLERY)
+        cameraButton = layout.findViewById<ImageButton>(R.id.attachmentCameraButton).configure(Type.CAMERA)
+        fileButton = layout.findViewById<ImageButton>(R.id.attachmentFileButton).configure(Type.FILE)
+        stickersButton = layout.findViewById<ImageButton>(R.id.attachmentStickersButton).configure(Type.STICKER)
+        audioButton = layout.findViewById<ImageButton>(R.id.attachmentAudioButton).configure(Type.AUDIO)
+        contactButton = layout.findViewById<ImageButton>(R.id.attachmentContactButton).configure(Type.CONTACT)
         contentView = layout
         width = LinearLayout.LayoutParams.MATCH_PARENT
         height = LinearLayout.LayoutParams.WRAP_CONTENT
@@ -82,8 +84,20 @@ class AttachmentTypeSelectorView(context: Context,
         isTouchable = true
     }
 
-    fun show(anchor: View) {
-        showAtLocation(anchor, Gravity.BOTTOM, 0, 0)
+    fun show(anchor: View, isKeyboardOpen: Boolean) {
+        this.anchor = anchor
+        val anchorCoordinates = IntArray(2)
+        anchor.getLocationOnScreen(anchorCoordinates)
+        if (isKeyboardOpen) {
+            showAtLocation(anchor, Gravity.NO_GRAVITY, 0, anchorCoordinates[1] + anchor.height)
+        } else {
+            val contentViewHeight = if (contentView.height == 0) {
+                contentView.getMeasurements().second
+            } else {
+                contentView.height
+            }
+            showAtLocation(anchor, Gravity.NO_GRAVITY, 0, anchorCoordinates[1] - contentViewHeight)
+        }
         contentView.doOnNextLayout {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 animateWindowInCircular(anchor, contentView)
@@ -124,10 +138,10 @@ class AttachmentTypeSelectorView(context: Context,
     private fun animateWindowInCircular(anchor: View?, contentView: View) {
         val coordinates = getClickCoordinates(anchor, contentView)
         val animator = ViewAnimationUtils.createCircularReveal(contentView,
-                                                               coordinates.first,
-                                                               coordinates.second,
-                                                               0f,
-                                                               max(contentView.width, contentView.height).toFloat())
+                coordinates.first,
+                coordinates.second,
+                0f,
+                max(contentView.width, contentView.height).toFloat())
         animator.duration = ANIMATION_DURATION.toLong()
         animator.start()
     }
@@ -142,10 +156,10 @@ class AttachmentTypeSelectorView(context: Context,
     private fun animateWindowOutCircular(anchor: View?, contentView: View) {
         val coordinates = getClickCoordinates(anchor, contentView)
         val animator = ViewAnimationUtils.createCircularReveal(getContentView(),
-                                                               coordinates.first,
-                                                               coordinates.second,
-                                                               max(getContentView().width, getContentView().height).toFloat(),
-                                                               0f)
+                coordinates.first,
+                coordinates.second,
+                max(getContentView().width, getContentView().height).toFloat(),
+                0f)
 
         animator.duration = ANIMATION_DURATION.toLong()
         animator.addListener(object : AnimatorListenerAdapter() {
@@ -182,13 +196,13 @@ class AttachmentTypeSelectorView(context: Context,
         return Pair(x, y)
     }
 
-    private fun ImageButton.configure(type: Int): ImageButton {
+    private fun ImageButton.configure(type: Type): ImageButton {
         this.background = TextDrawable.builder().buildRound("", iconColorGenerator.getColor(type))
         this.setOnClickListener(TypeClickListener(type))
         return this
     }
 
-    private inner class TypeClickListener(private val type: Int) : View.OnClickListener {
+    private inner class TypeClickListener(private val type: Type) : View.OnClickListener {
 
         override fun onClick(v: View) {
             dismiss()
@@ -197,16 +211,21 @@ class AttachmentTypeSelectorView(context: Context,
 
     }
 
-    companion object {
+    enum class Type {
 
-        const val TYPE_CAMERA = 0
-        const val TYPE_GALLERY = 1
-        const val TYPE_FILE = 2
-        const val TYPE_STICKER = 3
-        const val TYPE_AUDIO = 4
-        const val TYPE_CONTACT = 5
+        CAMERA,
+        GALLERY,
+        FILE,
+        STICKER,
+        AUDIO,
+        CONTACT;
 
-        private const val ANIMATION_DURATION = 250
+        fun requirePermission(): Boolean {
+            return this != CAMERA && this != STICKER
+        }
+
+
     }
+
 
 }

@@ -28,7 +28,7 @@ fun ChosenFile.toContentAttachmentData(): ContentAttachmentData {
             mimeType = mimeType,
             type = mapType(),
             size = size,
-            date = createdAt.time,
+            date = createdAt?.time ?: System.currentTimeMillis(),
             name = displayName
     )
 }
@@ -39,7 +39,7 @@ fun ChosenAudio.toContentAttachmentData(): ContentAttachmentData {
             mimeType = mimeType,
             type = mapType(),
             size = size,
-            date = createdAt.time,
+            date = createdAt?.time ?: System.currentTimeMillis(),
             name = displayName,
             duration = duration
     )
@@ -61,9 +61,9 @@ fun ChosenImage.toContentAttachmentData(): ContentAttachmentData {
             type = mapType(),
             name = displayName,
             size = size,
-            height = height.toLong(),
-            width = width.toLong(),
-            date = createdAt.time
+            height = height?.toLong(),
+            width = width?.toLong(),
+            date = createdAt?.time ?: System.currentTimeMillis()
     )
 }
 
@@ -73,9 +73,9 @@ fun ChosenVideo.toContentAttachmentData(): ContentAttachmentData {
             mimeType = mimeType,
             type = ContentAttachmentData.Type.VIDEO,
             size = size,
-            date = createdAt.time,
-            height = height.toLong(),
-            width = width.toLong(),
+            date = createdAt?.time ?: System.currentTimeMillis(),
+            height = height?.toLong(),
+            width = width?.toLong(),
             duration = duration,
             name = displayName
     )

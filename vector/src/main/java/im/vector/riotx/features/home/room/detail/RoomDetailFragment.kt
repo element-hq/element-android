@@ -115,6 +115,7 @@ import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
 import org.commonmark.parser.Parser
 import timber.log.Timber
 import java.io.File
+import java.security.Key
 import javax.inject.Inject
 
 
@@ -198,12 +199,14 @@ class RoomDetailFragment :
     private lateinit var actionViewModel: ActionsHandler
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var attachmentsHelper: AttachmentsHelper
+    private lateinit var keyboardStateUtils: KeyboardStateUtils
 
     @BindView(R.id.composerLayout)
     lateinit var composerLayout: TextComposerView
     private lateinit var attachmentTypeSelector: AttachmentTypeSelectorView
 
     private var lockSendButton = false
+
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
@@ -213,6 +216,7 @@ class RoomDetailFragment :
         super.onActivityCreated(savedInstanceState)
         actionViewModel = ViewModelProviders.of(requireActivity()).get(ActionsHandler::class.java)
         attachmentsHelper = AttachmentsHelper.create(this, this).register()
+        keyboardStateUtils = KeyboardStateUtils(requireActivity())
         setupToolbar(roomToolbar)
         setupRecyclerView()
         setupComposer()
@@ -310,9 +314,9 @@ class RoomDetailFragment :
         AlertDialog.Builder(requireActivity())
                 .setTitle(R.string.dialog_title_error)
                 .setMessage(getString(R.string.error_file_too_big,
-                                      error.filename,
-                                      TextUtils.formatFileSize(requireContext(), error.fileSizeInBytes),
-                                      TextUtils.formatFileSize(requireContext(), error.homeServerLimitInBytes)
+                        error.filename,
+                        TextUtils.formatFileSize(requireContext(), error.fileSizeInBytes),
+                        TextUtils.formatFileSize(requireContext(), error.homeServerLimitInBytes)
                 ))
                 .setPositiveButton(R.string.ok, null)
                 .show()
@@ -389,11 +393,11 @@ class RoomDetailFragment :
         if (messageContent is MessageTextContent && messageContent.format == MessageType.FORMAT_MATRIX_HTML) {
             val parser = Parser.builder().build()
             val document = parser.parse(messageContent.formattedBody
-                                        ?: messageContent.body)
+                    ?: messageContent.body)
             formattedBody = eventHtmlRenderer.render(document)
         }
         composerLayout.composerRelatedMessageContent.text = formattedBody
-                                                            ?: nonFormattedBody
+                ?: nonFormattedBody
 
         updateComposerText(defaultContent)
 
@@ -402,11 +406,11 @@ class RoomDetailFragment :
 
 
         avatarRenderer.render(event.senderAvatar, event.root.senderId
-                                                  ?: "", event.senderName, composerLayout.composerRelatedMessageAvatar)
+                ?: "", event.senderName, composerLayout.composerRelatedMessageAvatar)
         avatarRenderer.render(event.senderAvatar,
-                              event.root.senderId ?: "",
-                              event.senderName,
-                              composerLayout.composerRelatedMessageAvatar)
+                event.root.senderId ?: "",
+                event.senderName,
+                composerLayout.composerRelatedMessageAvatar)
         composerLayout.expand {
             //need to do it here also when not using quick reply
             focusComposerAndShowKeyboard()
@@ -443,15 +447,16 @@ class RoomDetailFragment :
             when (requestCode) {
                 REACTION_SELECT_REQUEST_CODE -> {
                     val eventId = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_EVENT_ID)
-                                  ?: return
+                            ?: return
                     val reaction = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_REACTION_RESULT)
-                                   ?: return
+                            ?: return
                     //TODO check if already reacted with that?
                     roomDetailViewModel.process(RoomDetailActions.SendReaction(reaction, eventId))
                 }
             }
         }
     }
+
 
 // PRIVATE METHODS *****************************************************************************
 
@@ -624,7 +629,7 @@ class RoomDetailFragment :
             if (!::attachmentTypeSelector.isInitialized) {
                 attachmentTypeSelector = AttachmentTypeSelectorView(vectorBaseActivity, vectorBaseActivity.layoutInflater, this)
             }
-            attachmentTypeSelector.show(composerLayout.attachmentButton)
+            attachmentTypeSelector.show(composerLayout.attachmentButton, keyboardStateUtils.isKeyboardShowing)
         }
     }
 
@@ -825,10 +830,15 @@ class RoomDetailFragment :
         if (allGranted(grantResults)) {
             if (requestCode == PERMISSION_REQUEST_CODE_DOWNLOAD_FILE) {
                 val action = roomDetailViewModel.pendingAction
-
                 if (action != null) {
                     roomDetailViewModel.pendingAction = null
                     roomDetailViewModel.process(action)
+                }
+            } else if (requestCode == PERMISSION_REQUEST_CODE_PICK_ATTACHMENT) {
+                val pendingType = attachmentsHelper.pendingType
+                if (pendingType != null) {
+                    attachmentsHelper.pendingType = null
+                    launchAttachmentProcess(pendingType)
                 }
             }
         }
@@ -1109,15 +1119,22 @@ class RoomDetailFragment :
 
     // AttachmentTypeSelectorView.Callback
 
-    override fun onTypeSelected(type: Int) {
-        when (type) {
-            AttachmentTypeSelectorView.TYPE_CAMERA  -> attachmentsHelper.openCamera()
-            AttachmentTypeSelectorView.TYPE_FILE    -> attachmentsHelper.selectFile()
-            AttachmentTypeSelectorView.TYPE_GALLERY -> attachmentsHelper.selectGallery()
-            AttachmentTypeSelectorView.TYPE_AUDIO   -> attachmentsHelper.selectAudio()
-            AttachmentTypeSelectorView.TYPE_CONTACT -> vectorBaseActivity.notImplemented("Picking contacts")
-            AttachmentTypeSelectorView.TYPE_STICKER -> vectorBaseActivity.notImplemented("Adding stickers")
+    override fun onTypeSelected(type: AttachmentTypeSelectorView.Type) {
+        if (!type.requirePermission() || checkPermissions(PERMISSIONS_FOR_WRITING_FILES, this, PERMISSION_REQUEST_CODE_PICK_ATTACHMENT)) {
+            launchAttachmentProcess(type)
+        } else {
+            attachmentsHelper.pendingType = type
+        }
+    }
 
+    private fun launchAttachmentProcess(type: AttachmentTypeSelectorView.Type) {
+        when (type) {
+            AttachmentTypeSelectorView.Type.CAMERA  -> attachmentsHelper.openCamera()
+            AttachmentTypeSelectorView.Type.FILE    -> attachmentsHelper.selectFile()
+            AttachmentTypeSelectorView.Type.GALLERY -> attachmentsHelper.selectGallery()
+            AttachmentTypeSelectorView.Type.AUDIO   -> attachmentsHelper.selectAudio()
+            AttachmentTypeSelectorView.Type.CONTACT -> vectorBaseActivity.notImplemented("Picking contacts")
+            AttachmentTypeSelectorView.Type.STICKER -> vectorBaseActivity.notImplemented("Adding stickers")
         }
     }
 

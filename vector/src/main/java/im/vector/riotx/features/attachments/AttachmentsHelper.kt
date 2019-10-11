@@ -26,6 +26,7 @@ import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.riotx.core.platform.Restorable
 
 private const val CAPTURE_PATH_KEY = "CAPTURE_PATH_KEY"
+private const val PENDING_TYPE_KEY = "PENDING_TYPE_KEY"
 
 /**
  * This class helps to handle attachments by providing simple methods.
@@ -49,6 +50,7 @@ class AttachmentsHelper private constructor(private val pickerManagerFactory: Pi
     }
 
     private var capturePath: String? = null
+    var pendingType: AttachmentTypeSelectorView.Type? = null
 
     private val imagePicker by lazy {
         pickerManagerFactory.createImagePicker()
@@ -76,6 +78,9 @@ class AttachmentsHelper private constructor(private val pickerManagerFactory: Pi
         capturePath?.also {
             outState.putString(CAPTURE_PATH_KEY, it)
         }
+        pendingType?.also {
+            outState.putSerializable(PENDING_TYPE_KEY, it)
+        }
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
@@ -83,6 +88,7 @@ class AttachmentsHelper private constructor(private val pickerManagerFactory: Pi
         if (capturePath != null) {
             cameraImagePicker.reinitialize(capturePath)
         }
+        pendingType = savedInstanceState?.getSerializable(PENDING_TYPE_KEY) as? AttachmentTypeSelectorView.Type
     }
 
     // Public Methods
