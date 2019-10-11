@@ -26,7 +26,12 @@ import com.kbeanie.multipicker.api.entity.*
 /**
  * This class delegates the PickerManager callbacks to an [AttachmentsHelper.Callback]
  */
-class AttachmentsPickerCallback(private val callback: AttachmentsHelper.Callback) : ImagePickerCallback, FilePickerCallback, VideoPickerCallback, AudioPickerCallback, ContactPickerCallback {
+class AttachmentsPickerCallback(private val callback: AttachmentsHelper.Callback)
+    : ImagePickerCallback,
+        FilePickerCallback,
+        VideoPickerCallback,
+        AudioPickerCallback,
+        ContactPickerCallback {
 
     override fun onContactChosen(contact: ChosenContact?) {
         if (contact == null) {
