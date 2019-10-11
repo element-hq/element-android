@@ -24,6 +24,7 @@ import com.kbeanie.multipicker.core.PickerManager
 import com.kbeanie.multipicker.utils.IntentUtils
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.riotx.core.platform.Restorable
+import timber.log.Timber
 
 private const val CAPTURE_PATH_KEY = "CAPTURE_PATH_KEY"
 private const val PENDING_TYPE_KEY = "PENDING_TYPE_KEY"
@@ -45,11 +46,17 @@ class AttachmentsHelper private constructor(private val pickerManagerFactory: Pi
     }
 
     interface Callback {
-        fun onAttachmentsReady(attachments: List<ContentAttachmentData>)
+        fun onContactAttachmentReady(contactAttachment: ContactAttachment) {
+            Timber.v("On contact attachment ready: $contactAttachment")
+        }
+
+        fun onContentAttachmentsReady(attachments: List<ContentAttachmentData>)
         fun onAttachmentsProcessFailed()
     }
 
+    // Capture path allows to handle camera image picking. It must be restored if the activity gets killed.
     private var capturePath: String? = null
+    // The pending type is set if we have to handle permission request. It must be restored if the activity gets killed.
     var pendingType: AttachmentTypeSelectorView.Type? = null
 
     private val imagePicker by lazy {
@@ -70,6 +77,10 @@ class AttachmentsHelper private constructor(private val pickerManagerFactory: Pi
 
     private val audioPicker by lazy {
         pickerManagerFactory.createAudioPicker()
+    }
+
+    private val contactPicker by lazy {
+        pickerManagerFactory.createContactPicker()
     }
 
     // Restorable
@@ -122,6 +133,13 @@ class AttachmentsHelper private constructor(private val pickerManagerFactory: Pi
     }
 
     /**
+     * Starts the process for handling contact picking
+     */
+    fun selectContact() {
+        contactPicker.pickContact()
+    }
+
+    /**
      * This methods aims to handle on activity result data.
      *
      * @return true if it can handle the data, false otherwise
@@ -148,6 +166,8 @@ class AttachmentsHelper private constructor(private val pickerManagerFactory: Pi
             imagePicker.submit(IntentUtils.getPickerIntentForSharing(intent))
         } else if (type.startsWith("video")) {
             videoPicker.submit(IntentUtils.getPickerIntentForSharing(intent))
+        } else if (type.startsWith("audio")) {
+            videoPicker.submit(IntentUtils.getPickerIntentForSharing(intent))
         } else if (type.startsWith("application") || type.startsWith("file") || type.startsWith("*")) {
             filePicker.submit(IntentUtils.getPickerIntentForSharing(intent))
         } else {
@@ -161,6 +181,8 @@ class AttachmentsHelper private constructor(private val pickerManagerFactory: Pi
             PICK_IMAGE_DEVICE -> imagePicker
             PICK_IMAGE_CAMERA -> cameraImagePicker
             PICK_FILE         -> filePicker
+            PICK_CONTACT      -> contactPicker
+            PICK_AUDIO        -> audioPicker
             else              -> null
         }
     }

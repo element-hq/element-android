@@ -2,7 +2,6 @@ package im.vector.riotx.features.share
 
 import android.content.ClipDescription
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
@@ -12,19 +11,16 @@ import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.replaceFragment
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.features.attachments.AttachmentsHelper
-import im.vector.riotx.features.home.HomeActivity
 import im.vector.riotx.features.home.LoadingFragment
 import im.vector.riotx.features.home.room.list.RoomListFragment
 import im.vector.riotx.features.home.room.list.RoomListParams
 import im.vector.riotx.features.login.LoginActivity
-import im.vector.riotx.features.login.LoginConfig
 import kotlinx.android.synthetic.main.activity_incoming_share.*
 import javax.inject.Inject
 
 
 class IncomingShareActivity :
         VectorBaseActivity(), AttachmentsHelper.Callback {
-
 
     @Inject lateinit var sessionHolder: ActiveSessionHolder
     private lateinit var roomListFragment: RoomListFragment
@@ -40,6 +36,8 @@ class IncomingShareActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // If we are not logged in, stop the sharing process and open login screen.
+        // In the future, we might want to relaunch the sharing process after login.
         if (!sessionHolder.hasActiveSession()) {
             startLoginActivity()
             return
@@ -63,7 +61,7 @@ class IncomingShareActivity :
         }
     }
 
-    override fun onAttachmentsReady(attachments: List<ContentAttachmentData>) {
+    override fun onContentAttachmentsReady(attachments: List<ContentAttachmentData>) {
         val roomListParams = RoomListParams(RoomListFragment.DisplayMode.SHARE, sharedData = SharedData.Attachments(attachments))
         roomListFragment = RoomListFragment.newInstance(roomListParams)
         replaceFragment(roomListFragment, R.id.shareRoomListFragmentContainer)
@@ -74,7 +72,7 @@ class IncomingShareActivity :
     }
 
     private fun cantManageShare() {
-        Toast.makeText(this, "Couldn't handle share data", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, R.string.error_handling_incoming_share, Toast.LENGTH_LONG).show()
         finish()
     }
 
@@ -93,9 +91,6 @@ class IncomingShareActivity :
         return false
     }
 
-    /**
-     * Start the login screen with identity server and home server pre-filled
-     */
     private fun startLoginActivity() {
         val intent = LoginActivity.newIntent(this, null)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)

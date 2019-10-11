@@ -21,15 +21,22 @@ import com.kbeanie.multipicker.api.callbacks.ContactPickerCallback
 import com.kbeanie.multipicker.api.callbacks.FilePickerCallback
 import com.kbeanie.multipicker.api.callbacks.ImagePickerCallback
 import com.kbeanie.multipicker.api.callbacks.VideoPickerCallback
-import com.kbeanie.multipicker.api.entity.ChosenAudio
-import com.kbeanie.multipicker.api.entity.ChosenFile
-import com.kbeanie.multipicker.api.entity.ChosenImage
-import com.kbeanie.multipicker.api.entity.ChosenVideo
+import com.kbeanie.multipicker.api.entity.*
+import timber.log.Timber
 
 /**
  * This class delegates the PickerManager callbacks to an [AttachmentsHelper.Callback]
  */
-class AttachmentsPickerCallback(private val callback: AttachmentsHelper.Callback) : ImagePickerCallback, FilePickerCallback, VideoPickerCallback, AudioPickerCallback {
+class AttachmentsPickerCallback(private val callback: AttachmentsHelper.Callback) : ImagePickerCallback, FilePickerCallback, VideoPickerCallback, AudioPickerCallback, ContactPickerCallback {
+
+    override fun onContactChosen(contact: ChosenContact?) {
+        if (contact == null) {
+            callback.onAttachmentsProcessFailed()
+        } else {
+            val contactAttachment = contact.toContactAttachment()
+            callback.onContactAttachmentReady(contactAttachment)
+        }
+    }
 
     override fun onAudiosChosen(audios: MutableList<ChosenAudio>?) {
         if (audios.isNullOrEmpty()) {
@@ -38,7 +45,7 @@ class AttachmentsPickerCallback(private val callback: AttachmentsHelper.Callback
             val attachments = audios.map {
                 it.toContentAttachmentData()
             }
-            callback.onAttachmentsReady(attachments)
+            callback.onContentAttachmentsReady(attachments)
         }
     }
 
@@ -49,7 +56,7 @@ class AttachmentsPickerCallback(private val callback: AttachmentsHelper.Callback
             val attachments = files.map {
                 it.toContentAttachmentData()
             }
-            callback.onAttachmentsReady(attachments)
+            callback.onContentAttachmentsReady(attachments)
         }
     }
 
@@ -60,7 +67,7 @@ class AttachmentsPickerCallback(private val callback: AttachmentsHelper.Callback
             val attachments = images.map {
                 it.toContentAttachmentData()
             }
-            callback.onAttachmentsReady(attachments)
+            callback.onContentAttachmentsReady(attachments)
         }
     }
 
@@ -71,7 +78,7 @@ class AttachmentsPickerCallback(private val callback: AttachmentsHelper.Callback
             val attachments = videos.map {
                 it.toContentAttachmentData()
             }
-            callback.onAttachmentsReady(attachments)
+            callback.onContentAttachmentsReady(attachments)
         }
     }
 

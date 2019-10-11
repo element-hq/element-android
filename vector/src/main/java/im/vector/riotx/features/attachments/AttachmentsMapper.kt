@@ -16,11 +16,17 @@
 
 package im.vector.riotx.features.attachments
 
-import com.kbeanie.multipicker.api.entity.ChosenAudio
-import com.kbeanie.multipicker.api.entity.ChosenFile
-import com.kbeanie.multipicker.api.entity.ChosenImage
-import com.kbeanie.multipicker.api.entity.ChosenVideo
+import com.kbeanie.multipicker.api.entity.*
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
+
+fun ChosenContact.toContactAttachment(): ContactAttachment {
+    return ContactAttachment(
+            displayName = displayName,
+            photoUri = photoUri,
+            emails = emails.toList(),
+            phones = phones.toList()
+    )
+}
 
 fun ChosenFile.toContentAttachmentData(): ContentAttachmentData {
     return ContentAttachmentData(
@@ -61,8 +67,8 @@ fun ChosenImage.toContentAttachmentData(): ContentAttachmentData {
             type = mapType(),
             name = displayName,
             size = size,
-            height = height?.toLong(),
-            width = width?.toLong(),
+            height = height.toLong(),
+            width = width.toLong(),
             date = createdAt?.time ?: System.currentTimeMillis()
     )
 }
@@ -74,8 +80,8 @@ fun ChosenVideo.toContentAttachmentData(): ContentAttachmentData {
             type = ContentAttachmentData.Type.VIDEO,
             size = size,
             date = createdAt?.time ?: System.currentTimeMillis(),
-            height = height?.toLong(),
-            width = width?.toLong(),
+            height = height.toLong(),
+            width = width.toLong(),
             duration = duration,
             name = displayName
     )

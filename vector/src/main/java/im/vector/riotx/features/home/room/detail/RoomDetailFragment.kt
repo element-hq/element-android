@@ -80,6 +80,7 @@ import im.vector.riotx.core.utils.Debouncer
 import im.vector.riotx.core.utils.createUIHandler
 import im.vector.riotx.features.attachments.AttachmentTypeSelectorView
 import im.vector.riotx.features.attachments.AttachmentsHelper
+import im.vector.riotx.features.attachments.ContactAttachment
 import im.vector.riotx.features.autocomplete.command.AutocompleteCommandPresenter
 import im.vector.riotx.features.autocomplete.command.CommandAutocompletePolicy
 import im.vector.riotx.features.autocomplete.user.AutocompleteUserPresenter
@@ -1120,7 +1121,7 @@ class RoomDetailFragment :
     // AttachmentTypeSelectorView.Callback
 
     override fun onTypeSelected(type: AttachmentTypeSelectorView.Type) {
-        if (!type.requirePermission() || checkPermissions(PERMISSIONS_FOR_WRITING_FILES, this, PERMISSION_REQUEST_CODE_PICK_ATTACHMENT)) {
+        if (checkPermissions(type.permissionsBit, this, PERMISSION_REQUEST_CODE_PICK_ATTACHMENT)) {
             launchAttachmentProcess(type)
         } else {
             attachmentsHelper.pendingType = type
@@ -1133,19 +1134,23 @@ class RoomDetailFragment :
             AttachmentTypeSelectorView.Type.FILE    -> attachmentsHelper.selectFile()
             AttachmentTypeSelectorView.Type.GALLERY -> attachmentsHelper.selectGallery()
             AttachmentTypeSelectorView.Type.AUDIO   -> attachmentsHelper.selectAudio()
-            AttachmentTypeSelectorView.Type.CONTACT -> vectorBaseActivity.notImplemented("Picking contacts")
+            AttachmentTypeSelectorView.Type.CONTACT -> attachmentsHelper.selectContact()
             AttachmentTypeSelectorView.Type.STICKER -> vectorBaseActivity.notImplemented("Adding stickers")
         }
     }
 
     // AttachmentsHelper.Callback
 
-    override fun onAttachmentsReady(attachments: List<ContentAttachmentData>) {
-        Timber.v("onAttachmentsReady")
+    override fun onContentAttachmentsReady(attachments: List<ContentAttachmentData>) {
         roomDetailViewModel.process(RoomDetailActions.SendMedia(attachments))
     }
 
     override fun onAttachmentsProcessFailed() {
-        Timber.v("onAttachmentsProcessFailed")
+        Toast.makeText(requireContext(), R.string.error_attachment, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onContactAttachmentReady(contactAttachment: ContactAttachment) {
+        val formattedContact = contactAttachment.toHumanReadable()
+        roomDetailViewModel.process(RoomDetailActions.SendMessage(formattedContact, false))
     }
 }

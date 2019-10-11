@@ -41,10 +41,17 @@ import com.amulyakhare.textdrawable.TextDrawable
 import com.amulyakhare.textdrawable.util.ColorGenerator
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.getMeasurements
+import im.vector.riotx.core.utils.PERMISSIONS_EMPTY
+import im.vector.riotx.core.utils.PERMISSIONS_FOR_PICKING_CONTACT
+import im.vector.riotx.core.utils.PERMISSIONS_FOR_WRITING_FILES
 import kotlin.math.max
 
 private const val ANIMATION_DURATION = 250
 
+/**
+ * This class is the view presenting choices for picking attachments.
+ * It will return result through [Callback].
+ */
 class AttachmentTypeSelectorView(context: Context,
                                  inflater: LayoutInflater,
                                  var callback: Callback?)
@@ -74,7 +81,7 @@ class AttachmentTypeSelectorView(context: Context,
         stickersButton = layout.findViewById<ImageButton>(R.id.attachmentStickersButton).configure(Type.STICKER)
         audioButton = layout.findViewById<ImageButton>(R.id.attachmentAudioButton).configure(Type.AUDIO)
         contactButton = layout.findViewById<ImageButton>(R.id.attachmentContactButton).configure(Type.CONTACT)
-        contentView = layout
+        contentView = root
         width = LinearLayout.LayoutParams.MATCH_PARENT
         height = LinearLayout.LayoutParams.WRAP_CONTENT
         animationStyle = 0
@@ -197,7 +204,7 @@ class AttachmentTypeSelectorView(context: Context,
     }
 
     private fun ImageButton.configure(type: Type): ImageButton {
-        this.background = TextDrawable.builder().buildRound("", iconColorGenerator.getColor(type))
+        this.background = TextDrawable.builder().buildRound("", iconColorGenerator.getColor(type.ordinal))
         this.setOnClickListener(TypeClickListener(type))
         return this
     }
@@ -211,19 +218,17 @@ class AttachmentTypeSelectorView(context: Context,
 
     }
 
-    enum class Type {
+    /**
+     * The all possible types to pick with their required permissions.
+     */
+    enum class Type(val permissionsBit: Int) {
 
-        CAMERA,
-        GALLERY,
-        FILE,
-        STICKER,
-        AUDIO,
-        CONTACT;
-
-        fun requirePermission(): Boolean {
-            return this != CAMERA && this != STICKER
-        }
-
+        CAMERA(PERMISSIONS_EMPTY),
+        GALLERY(PERMISSIONS_FOR_WRITING_FILES),
+        FILE(PERMISSIONS_FOR_WRITING_FILES),
+        STICKER(PERMISSIONS_EMPTY),
+        AUDIO(PERMISSIONS_FOR_WRITING_FILES),
+        CONTACT(PERMISSIONS_FOR_PICKING_CONTACT)
 
     }
 

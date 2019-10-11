@@ -25,6 +25,9 @@ import com.kbeanie.multipicker.api.FilePicker
 import com.kbeanie.multipicker.api.ImagePicker
 import com.kbeanie.multipicker.api.VideoPicker
 
+/**
+ * Factory for creating different pickers. It allows to use with fragment or activity builders.
+ */
 interface PickerManagerFactory {
 
     fun createImagePicker(): ImagePicker
@@ -36,6 +39,8 @@ interface PickerManagerFactory {
     fun createFilePicker(): FilePicker
 
     fun createAudioPicker(): AudioPicker
+
+    fun createContactPicker(): ContactPicker
 
 }
 
@@ -76,6 +81,12 @@ class ActivityPickerManagerFactory(private val activity: Activity, callback: Att
             it.setAudioPickerCallback(attachmentsPickerCallback)
         }
     }
+
+    override fun createContactPicker(): ContactPicker {
+        return ContactPicker(activity).also {
+            it.setContactPickerCallback(attachmentsPickerCallback)
+        }
+    }
 }
 
 class FragmentPickerManagerFactory(private val fragment: Fragment, callback: AttachmentsHelper.Callback) : PickerManagerFactory {
@@ -113,6 +124,12 @@ class FragmentPickerManagerFactory(private val fragment: Fragment, callback: Att
         return AudioPicker(fragment).also {
             it.allowMultiple()
             it.setAudioPickerCallback(attachmentsPickerCallback)
+        }
+    }
+
+    override fun createContactPicker(): ContactPicker {
+        return ContactPicker(fragment).also {
+            it.setContactPickerCallback(attachmentsPickerCallback)
         }
     }
 

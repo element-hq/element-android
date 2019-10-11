@@ -34,7 +34,7 @@
 
             <TextView
                 style="@style/AttachmentTypeSelectorLabel"
-                android:text="Camera" />
+                android:text="@string/attachment_type_camera" />
 
         </LinearLayout>
 
@@ -54,7 +54,7 @@
 
             <TextView
                 style="@style/AttachmentTypeSelectorLabel"
-                android:text="Gallery" />
+                android:text="@string/attachment_type_gallery" />
 
         </LinearLayout>
 
@@ -74,7 +74,7 @@
 
             <TextView
                 style="@style/AttachmentTypeSelectorLabel"
-                android:text="File" />
+                android:text="@string/attachment_type_file" />
 
         </LinearLayout>
 
@@ -103,7 +103,7 @@
 
             <TextView
                 style="@style/AttachmentTypeSelectorLabel"
-                android:text="Audio" />
+                android:text="@string/attachment_type_audio" />
 
         </LinearLayout>
 
@@ -123,7 +123,7 @@
 
             <TextView
                 style="@style/AttachmentTypeSelectorLabel"
-                android:text="Contact" />
+                android:text="@string/attachment_type_contact" />
 
         </LinearLayout>
 
@@ -143,7 +143,7 @@
 
             <TextView
                 style="@style/AttachmentTypeSelectorLabel"
-                android:text="Stickers" />
+                android:text="@string/attachment_type_sticker" />
 
         </LinearLayout>
     </LinearLayout>
