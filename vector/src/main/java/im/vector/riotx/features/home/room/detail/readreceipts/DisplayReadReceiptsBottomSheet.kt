@@ -73,9 +73,7 @@ class DisplayReadReceiptsBottomSheet : VectorBaseBottomSheetDialogFragment() {
         epoxyController.setData(displayReadReceiptArgs.readReceipts)
     }
 
-    override fun invalidate() {
-        // we are not using state for this one as it's static
-    }
+    // we are not using state for this one as it's static, so no need to override invalidate()
 
     companion object {
         fun newInstance(readReceipts: List<ReadReceiptData>): DisplayReadReceiptsBottomSheet {

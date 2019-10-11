@@ -21,6 +21,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
 import android.widget.FrameLayout
+import androidx.annotation.CallSuper
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.MvRxView
 import com.airbnb.mvrx.MvRxViewModelStore
@@ -40,6 +41,8 @@ abstract class VectorBaseBottomSheetDialogFragment : BottomSheetDialogFragment()
     private lateinit var mvrxPersistedViewId: String
     private lateinit var screenComponent: ScreenComponent
     final override val mvrxViewId: String by lazy { mvrxPersistedViewId }
+
+    private var bottomSheetBehavior: BottomSheetBehavior<FrameLayout>? = null
 
     val vectorBaseActivity: VectorBaseActivity by lazy {
         activity as VectorBaseActivity
@@ -70,7 +73,8 @@ abstract class VectorBaseBottomSheetDialogFragment : BottomSheetDialogFragment()
                     val d = dialog as BottomSheetDialog
 
                     val bottomSheet = d.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout?
-                    BottomSheetBehavior.from(bottomSheet!!).state = BottomSheetBehavior.STATE_EXPANDED
+                    bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet!!)
+                    bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
                 }
             }
         }
@@ -87,6 +91,14 @@ abstract class VectorBaseBottomSheetDialogFragment : BottomSheetDialogFragment()
         // This ensures that invalidate() is called for static screens that don't
         // subscribe to a ViewModel.
         postInvalidate()
+    }
+
+    @CallSuper
+    override fun invalidate() {
+        if (showExpanded) {
+            // Force the bottom sheet to be expanded
+            bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
+        }
     }
 
     protected fun setArguments(args: Parcelable? = null) {

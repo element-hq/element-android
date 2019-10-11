@@ -71,6 +71,7 @@ class ViewReactionsBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
     override fun invalidate() = withState(viewModel) {
         epoxyController.setData(it)
+        super.invalidate()
     }
 
     companion object {

@@ -70,6 +70,7 @@ class MessageActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), Message
 
     override fun invalidate() = withState(viewModel) {
         messageActionsEpoxyController.setData(it)
+        super.invalidate()
     }
 
     companion object {
