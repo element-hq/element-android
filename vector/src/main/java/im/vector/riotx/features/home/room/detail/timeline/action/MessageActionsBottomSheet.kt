@@ -38,6 +38,8 @@ class MessageActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), Message
 
     private val viewModel: MessageActionsViewModel by fragmentViewModel(MessageActionsViewModel::class)
 
+    override val showExpanded = true
+
     private lateinit var actionHandlerModel: ActionsHandler
 
     override fun injectWith(screenComponent: ScreenComponent) {

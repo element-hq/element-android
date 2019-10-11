@@ -15,12 +15,17 @@
  */
 package im.vector.riotx.core.platform
 
+import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.View
+import android.widget.FrameLayout
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.MvRxView
 import com.airbnb.mvrx.MvRxViewModelStore
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import im.vector.riotx.core.di.DaggerScreenComponent
 import im.vector.riotx.core.di.ScreenComponent
@@ -40,6 +45,8 @@ abstract class VectorBaseBottomSheetDialogFragment : BottomSheetDialogFragment()
         activity as VectorBaseActivity
     }
 
+    open val showExpanded = false
+
     override fun onAttach(context: Context) {
         screenComponent = DaggerScreenComponent.factory().create(vectorBaseActivity.getVectorComponent(), vectorBaseActivity)
         super.onAttach(context)
@@ -54,6 +61,19 @@ abstract class VectorBaseBottomSheetDialogFragment : BottomSheetDialogFragment()
                 ?: this::class.java.simpleName + "_" + UUID.randomUUID().toString()
 
         super.onCreate(savedInstanceState)
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return super.onCreateDialog(savedInstanceState).apply {
+            if (showExpanded) {
+                setOnShowListener { dialog ->
+                    val d = dialog as BottomSheetDialog
+
+                    val bottomSheet = d.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout?
+                    BottomSheetBehavior.from(bottomSheet!!).state = BottomSheetBehavior.STATE_EXPANDED
+                }
+            }
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
