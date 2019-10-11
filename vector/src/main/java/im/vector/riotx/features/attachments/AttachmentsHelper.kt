@@ -186,5 +186,4 @@ class AttachmentsHelper private constructor(private val pickerManagerFactory: Pi
             else              -> null
         }
     }
-
 }

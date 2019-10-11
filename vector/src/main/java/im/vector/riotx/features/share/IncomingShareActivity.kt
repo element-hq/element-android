@@ -18,7 +18,6 @@ import im.vector.riotx.features.login.LoginActivity
 import kotlinx.android.synthetic.main.activity_incoming_share.*
 import javax.inject.Inject
 
-
 class IncomingShareActivity :
         VectorBaseActivity(), AttachmentsHelper.Callback {
 

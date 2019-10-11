@@ -41,7 +41,6 @@ interface PickerManagerFactory {
     fun createAudioPicker(): AudioPicker
 
     fun createContactPicker(): ContactPicker
-
 }
 
 class ActivityPickerManagerFactory(private val activity: Activity, callback: AttachmentsHelper.Callback) : PickerManagerFactory {
@@ -132,6 +131,4 @@ class FragmentPickerManagerFactory(private val fragment: Fragment, callback: Att
             it.setContactPickerCallback(attachmentsPickerCallback)
         }
     }
-
 }
-

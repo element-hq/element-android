@@ -27,5 +27,4 @@ sealed class SharedData: Parcelable {
 
     @Parcelize
     data class Attachments(val attachmentData: List<ContentAttachmentData>): SharedData()
-
 }

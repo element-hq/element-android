@@ -28,5 +28,4 @@ data class ContactAttachment(
             stringBuilder.append(last())
         }
     }
-
 }

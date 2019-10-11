@@ -117,7 +117,6 @@ import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
 import org.commonmark.parser.Parser
 import timber.log.Timber
 import java.io.File
-import java.security.Key
 import javax.inject.Inject
 
 @Parcelize
@@ -126,7 +125,6 @@ data class RoomDetailArgs(
         val eventId: String? = null,
         val sharedData: SharedData? = null
 ) : Parcelable
-
 
 private const val REACTION_SELECT_REQUEST_CODE = 0
 
@@ -207,7 +205,6 @@ class RoomDetailFragment :
 
     private var lockSendButton = false
 
-
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
     }
@@ -284,7 +281,6 @@ class RoomDetailFragment :
                 null                      -> Timber.v("No share data to process")
             }
         }
-
     }
 
     override fun onDestroy() {
@@ -441,13 +437,12 @@ class RoomDetailFragment :
                             ?: return
                     val reaction = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_REACTION_RESULT)
                             ?: return
-                    //TODO check if already reacted with that?
+                    // TODO check if already reacted with that?
                     roomDetailViewModel.process(RoomDetailActions.SendReaction(reaction, eventId))
                 }
             }
         }
     }
-
 
 // PRIVATE METHODS *****************************************************************************
 

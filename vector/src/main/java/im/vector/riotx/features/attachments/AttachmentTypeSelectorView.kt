@@ -141,7 +141,6 @@ class AttachmentTypeSelectorView(context: Context,
         button.startAnimation(animation)
     }
 
-
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private fun animateWindowInCircular(anchor: View?, contentView: View) {
         val coordinates = getClickCoordinates(anchor, contentView)
@@ -216,7 +215,6 @@ class AttachmentTypeSelectorView(context: Context,
             dismiss()
             callback?.onTypeSelected(type)
         }
-
     }
 
     /**
@@ -230,8 +228,5 @@ class AttachmentTypeSelectorView(context: Context,
         STICKER(PERMISSIONS_EMPTY),
         AUDIO(PERMISSIONS_FOR_WRITING_FILES),
         CONTACT(PERMISSIONS_FOR_PICKING_CONTACT)
-
     }
-
-
 }

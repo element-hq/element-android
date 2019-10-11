@@ -22,7 +22,6 @@ import com.kbeanie.multipicker.api.callbacks.FilePickerCallback
 import com.kbeanie.multipicker.api.callbacks.ImagePickerCallback
 import com.kbeanie.multipicker.api.callbacks.VideoPickerCallback
 import com.kbeanie.multipicker.api.entity.*
-import timber.log.Timber
 
 /**
  * This class delegates the PickerManager callbacks to an [AttachmentsHelper.Callback]
@@ -85,5 +84,4 @@ class AttachmentsPickerCallback(private val callback: AttachmentsHelper.Callback
     override fun onError(error: String?) {
         callback.onAttachmentsProcessFailed()
     }
-
 }
