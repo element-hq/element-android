@@ -19,6 +19,7 @@ package im.vector.riotx.features.home.room.detail
 import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -69,6 +70,7 @@ import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
+import im.vector.riotx.core.dialogs.withColoredButton
 import im.vector.riotx.core.epoxy.LayoutManagerStateRestorer
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.hideKeyboard
@@ -819,6 +821,7 @@ class RoomDetailFragment :
                                         .setPositiveButton(R.string.ok, null)
                                         .setNegativeButton(R.string.block_user) { _, _ -> vectorBaseActivity.notImplemented("block user") }
                                         .show()
+                                        .withColoredButton(DialogInterface.BUTTON_NEGATIVE)
                             }
                             data.inappropriate -> {
                                 AlertDialog.Builder(requireActivity())
@@ -827,6 +830,7 @@ class RoomDetailFragment :
                                         .setPositiveButton(R.string.ok, null)
                                         .setNegativeButton(R.string.block_user) { _, _ -> vectorBaseActivity.notImplemented("block user") }
                                         .show()
+                                        .withColoredButton(DialogInterface.BUTTON_NEGATIVE)
                             }
                             else               -> {
                                 AlertDialog.Builder(requireActivity())
@@ -835,6 +839,7 @@ class RoomDetailFragment :
                                         .setPositiveButton(R.string.ok, null)
                                         .setNegativeButton(R.string.block_user) { _, _ -> vectorBaseActivity.notImplemented("block user") }
                                         .show()
+                                        .withColoredButton(DialogInterface.BUTTON_NEGATIVE)
                             }
                         }
                     }
