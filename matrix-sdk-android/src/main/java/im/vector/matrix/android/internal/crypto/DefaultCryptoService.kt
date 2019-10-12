@@ -785,7 +785,6 @@ internal class DefaultCryptoService @Inject constructor(
      *
      * @param password         the password
      * @param anIterationCount the encryption iteration count (0 means no encryption)
-     * @param callback         the exported keys
      */
     private suspend fun exportRoomKeys(password: String, anIterationCount: Int): ByteArray {
         return withContext(coroutineDispatchers.crypto) {
