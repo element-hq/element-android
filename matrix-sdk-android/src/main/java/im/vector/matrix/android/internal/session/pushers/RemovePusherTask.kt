@@ -24,7 +24,9 @@ import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.awaitTransaction
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import io.realm.Realm
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 internal interface RemovePusherTask : Task<RemovePusherTask.Params, Unit> {
@@ -34,7 +36,8 @@ internal interface RemovePusherTask : Task<RemovePusherTask.Params, Unit> {
 
 internal class DefaultRemovePusherTask @Inject constructor(
         private val pushersAPI: PushersAPI,
-        private val monarchy: Monarchy
+        private val monarchy: Monarchy,
+        private val dispatchers: MatrixCoroutineDispatchers
 ) : RemovePusherTask {
 
     override suspend fun execute(params: RemovePusherTask.Params) {
@@ -43,9 +46,11 @@ internal class DefaultRemovePusherTask @Inject constructor(
             existingEntity?.state = PusherState.UNREGISTERING
         }
 
-        val existing = Realm.getInstance(monarchy.realmConfiguration).use { realm ->
-            PusherEntity.where(realm, params.pushKey).findFirst()?.asDomain()
-        } ?: throw Exception("No existing pusher")
+        val existing = withContext(dispatchers.io) {
+            Realm.getInstance(monarchy.realmConfiguration).use { realm ->
+                PusherEntity.where(realm, params.pushKey).findFirst()?.asDomain()
+            } ?: throw Exception("No existing pusher")
+        }
 
         val deleteBody = JsonPusher(
                 pushKey = params.pushKey,

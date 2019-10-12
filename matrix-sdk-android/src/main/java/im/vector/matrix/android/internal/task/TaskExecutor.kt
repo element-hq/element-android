@@ -36,7 +36,7 @@ internal class TaskExecutor @Inject constructor(private val coroutineDispatchers
     fun <PARAMS, RESULT> execute(task: ConfigurableTask<PARAMS, RESULT>): Cancelable {
         val job = executorScope.launch(task.callbackThread.toDispatcher()) {
             val resultOrFailure = runCatching {
-                withContext(task.executionThread.toDispatcher()) {
+                withContext(coroutineDispatchers.computation) {
                     Timber.v("Enqueue task $task")
                     retry(task.retryCount) {
                         if (task.constraints.connectedToNetwork) {

@@ -106,7 +106,6 @@ open class SyncService : Service() {
             cancelableTask = syncTask
                     .configureWith(params) {
                         callbackThread = TaskThread.SYNC
-                        executionThread = TaskThread.SYNC
                         callback = object : MatrixCallback<Unit> {
                             override fun onSuccess(data: Unit) {
                                 cancelableTask = null

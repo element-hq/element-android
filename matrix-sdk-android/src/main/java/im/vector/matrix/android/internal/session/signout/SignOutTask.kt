@@ -26,6 +26,8 @@ import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.SessionModule
 import im.vector.matrix.android.internal.session.cache.ClearCacheTask
 import im.vector.matrix.android.internal.task.Task
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import kotlinx.coroutines.withContext
 import im.vector.matrix.android.internal.worker.WorkManagerUtil
 import timber.log.Timber
 import java.io.File
@@ -42,7 +44,8 @@ internal class DefaultSignOutTask @Inject constructor(private val context: Conte
                                                       @CryptoDatabase private val clearCryptoDataTask: ClearCacheTask,
                                                       @UserCacheDirectory private val userFile: File,
                                                       private val realmKeysUtils: RealmKeysUtils,
-                                                      @UserMd5 private val userMd5: String) : SignOutTask {
+                                                      @UserMd5 private val userMd5: String,
+                                                      private val dispatchers: MatrixCoroutineDispatchers) : SignOutTask {
 
     override suspend fun execute(params: Unit) {
         Timber.d("SignOut: send request...")
@@ -51,13 +54,17 @@ internal class DefaultSignOutTask @Inject constructor(private val context: Conte
         }
 
         Timber.d("SignOut: release session...")
-        sessionManager.releaseSession(userId)
+        withContext(dispatchers.io) {
+            sessionManager.releaseSession(userId)
+        }
 
         Timber.d("SignOut: cancel pending works...")
         WorkManagerUtil.cancelAllWorks(context)
 
         Timber.d("SignOut: delete session params...")
-        sessionParamsStore.delete(userId)
+        withContext(dispatchers.io) {
+            sessionParamsStore.delete(userId)
+        }
 
         Timber.d("SignOut: clear session data...")
         clearSessionDataTask.execute(Unit)

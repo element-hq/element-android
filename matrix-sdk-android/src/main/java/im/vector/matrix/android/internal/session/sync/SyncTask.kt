@@ -27,6 +27,8 @@ import im.vector.matrix.android.internal.session.filter.FilterRepository
 import im.vector.matrix.android.internal.session.homeserver.GetHomeServerCapabilitiesTask
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import im.vector.matrix.android.internal.task.Task
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 internal interface SyncTask : Task<SyncTask.Params, Unit> {
@@ -41,16 +43,17 @@ internal class DefaultSyncTask @Inject constructor(private val syncAPI: SyncAPI,
                                                    private val sessionParamsStore: SessionParamsStore,
                                                    private val initialSyncProgressService: DefaultInitialSyncProgressService,
                                                    private val syncTokenStore: SyncTokenStore,
+                                                   private val dispatchers: MatrixCoroutineDispatchers,
                                                    private val getHomeServerCapabilitiesTask: GetHomeServerCapabilitiesTask
 ) : SyncTask {
 
-    override suspend fun execute(params: SyncTask.Params) {
+    override suspend fun execute(params: SyncTask.Params): Unit = withContext(dispatchers.sync) {
         // Maybe refresh the home server capabilities data we know
         getHomeServerCapabilitiesTask.execute(Unit)
 
         val requestParams = HashMap<String, String>()
         var timeout = 0L
-        val token = syncTokenStore.getLastToken()
+        val token = withContext(dispatchers.io) { syncTokenStore.getLastToken() }
         if (token != null) {
             requestParams["since"] = token
             timeout = params.timeout
@@ -71,12 +74,16 @@ internal class DefaultSyncTask @Inject constructor(private val syncAPI: SyncAPI,
             // Intercept 401
             if (throwable is Failure.ServerError
                     && throwable.error.code == MatrixError.UNKNOWN_TOKEN) {
-                sessionParamsStore.delete(userId)
+                withContext(dispatchers.io) {
+                    sessionParamsStore.delete(userId)
+                }
             }
             throw throwable
         }
         syncResponseHandler.handleResponse(syncResponse, token)
-        syncTokenStore.saveToken(syncResponse.nextBatch)
+        withContext(dispatchers.io) {
+            syncTokenStore.saveToken(syncResponse.nextBatch)
+        }
         if (isInitialSync) {
             initialSyncProgressService.endAll()
         }

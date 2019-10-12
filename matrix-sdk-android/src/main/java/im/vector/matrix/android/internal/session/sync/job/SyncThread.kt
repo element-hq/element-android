@@ -127,7 +127,6 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
 
                 cancelableTask = syncTask.configureWith(params) {
                     this.callbackThread = TaskThread.SYNC
-                    this.executionThread = TaskThread.SYNC
                     this.callback = object : MatrixCallback<Unit> {
                         override fun onSuccess(data: Unit) {
                             Timber.v("onSuccess")

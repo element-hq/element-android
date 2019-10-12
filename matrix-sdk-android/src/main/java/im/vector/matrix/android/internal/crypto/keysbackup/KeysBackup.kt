@@ -356,12 +356,13 @@ internal class KeysBackup @Inject constructor(
         // TODO Validate with François that this is correct
         object : Task<KeysVersionResult, KeysBackupVersionTrust> {
             override suspend fun execute(params: KeysVersionResult): KeysBackupVersionTrust {
-                return getKeysBackupTrustBg(params)
+                return withContext(coroutineDispatchers.computation) {
+                    getKeysBackupTrustBg(params)
+                }
             }
         }
                 .configureWith(keysBackupVersion) {
                     this.callback = callback
-                    this.executionThread = TaskThread.COMPUTATION
                 }
                 .executeBy(taskExecutor)
     }

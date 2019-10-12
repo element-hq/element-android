@@ -20,6 +20,8 @@ import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.filter.FilterRepository
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.task.Task
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 internal interface PaginationTask : Task<PaginationTask.Params, TokenChunkEventPersistor.Result> {
@@ -34,14 +36,18 @@ internal interface PaginationTask : Task<PaginationTask.Params, TokenChunkEventP
 
 internal class DefaultPaginationTask @Inject constructor(private val roomAPI: RoomAPI,
                                                          private val filterRepository: FilterRepository,
-                                                         private val tokenChunkEventPersistor: TokenChunkEventPersistor
+                                                         private val tokenChunkEventPersistor: TokenChunkEventPersistor,
+                                                         private val dispatchers: MatrixCoroutineDispatchers
 ) : PaginationTask {
 
     override suspend fun execute(params: PaginationTask.Params): TokenChunkEventPersistor.Result {
-        val filter = filterRepository.getRoomFilter()
+        val filter = withContext(dispatchers.io) { filterRepository.getRoomFilter() }
         val chunk = executeRequest<PaginationResponse> {
             apiCall = roomAPI.getRoomMessagesFrom(params.roomId, params.from, params.direction.value, params.limit, filter)
         }
-        return tokenChunkEventPersistor.insertInDb(chunk, params.roomId, params.direction)
+
+        return withContext(dispatchers.io) {
+            tokenChunkEventPersistor.insertInDb(chunk, params.roomId, params.direction)
+        }
     }
 }

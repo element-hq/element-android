@@ -28,9 +28,11 @@ import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
 import im.vector.matrix.android.internal.session.sync.SyncTokenStore
 import im.vector.matrix.android.internal.session.user.UserEntityFactory
 import im.vector.matrix.android.internal.task.Task
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.Realm
 import io.realm.kotlin.createObject
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 internal interface LoadRoomMembersTask : Task<LoadRoomMembersTask.Params, Unit> {
@@ -44,7 +46,8 @@ internal interface LoadRoomMembersTask : Task<LoadRoomMembersTask.Params, Unit> 
 internal class DefaultLoadRoomMembersTask @Inject constructor(private val roomAPI: RoomAPI,
                                                               private val monarchy: Monarchy,
                                                               private val syncTokenStore: SyncTokenStore,
-                                                              private val roomSummaryUpdater: RoomSummaryUpdater
+                                                              private val roomSummaryUpdater: RoomSummaryUpdater,
+                                                              private val dispatchers: MatrixCoroutineDispatchers
 ) : LoadRoomMembersTask {
 
     override suspend fun execute(params: LoadRoomMembersTask.Params) {
@@ -78,8 +81,8 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(private val roomAP
         }
     }
 
-    private fun areAllMembersAlreadyLoaded(roomId: String): Boolean {
-        return Realm.getInstance(monarchy.realmConfiguration).use {
+    private suspend fun areAllMembersAlreadyLoaded(roomId: String): Boolean = withContext(dispatchers.io) {
+        Realm.getInstance(monarchy.realmConfiguration).use {
             RoomEntity.where(it, roomId).findFirst()?.areAllMembersLoaded ?: false
         }
     }

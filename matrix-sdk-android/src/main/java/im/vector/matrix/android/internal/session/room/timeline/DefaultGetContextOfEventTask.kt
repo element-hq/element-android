@@ -20,6 +20,8 @@ import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.filter.FilterRepository
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.task.Task
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 internal interface GetContextOfEventTask : Task<GetContextOfEventTask.Params, TokenChunkEventPersistor.Result> {
@@ -32,14 +34,17 @@ internal interface GetContextOfEventTask : Task<GetContextOfEventTask.Params, To
 
 internal class DefaultGetContextOfEventTask @Inject constructor(private val roomAPI: RoomAPI,
                                                                 private val filterRepository: FilterRepository,
-                                                                private val tokenChunkEventPersistor: TokenChunkEventPersistor
+                                                                private val tokenChunkEventPersistor: TokenChunkEventPersistor,
+                                            private val dispatchers: MatrixCoroutineDispatchers
 ) : GetContextOfEventTask {
 
     override suspend fun execute(params: GetContextOfEventTask.Params): TokenChunkEventPersistor.Result {
-        val filter = filterRepository.getRoomFilter()
+        val filter = withContext(dispatchers.io) { filterRepository.getRoomFilter() }
         val response = executeRequest<EventContextResponse> {
             apiCall = roomAPI.getContextOfEvent(params.roomId, params.eventId, 0, filter)
         }
-        return tokenChunkEventPersistor.insertInDb(response, params.roomId, PaginationDirection.BACKWARDS)
+        return withContext(dispatchers.io) {
+            tokenChunkEventPersistor.insertInDb(response, params.roomId, PaginationDirection.BACKWARDS)
+        }
     }
 }

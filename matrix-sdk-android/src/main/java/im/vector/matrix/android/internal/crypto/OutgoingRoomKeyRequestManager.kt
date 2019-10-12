@@ -300,7 +300,6 @@ internal class OutgoingRoomKeyRequestManager @Inject constructor(
                 .configureWith(SendToDeviceTask.Params(EventType.ROOM_KEY_REQUEST, contentMap, transactionId)) {
                     this.callback = callback
                     this.callbackThread = TaskThread.CALLER
-                    this.executionThread = TaskThread.CALLER
                 }
                 .executeBy(taskExecutor)
     }

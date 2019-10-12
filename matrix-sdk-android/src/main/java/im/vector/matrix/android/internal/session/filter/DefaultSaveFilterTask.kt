@@ -19,6 +19,8 @@ package im.vector.matrix.android.internal.session.filter
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 /**
@@ -33,7 +35,8 @@ internal interface SaveFilterTask : Task<SaveFilterTask.Params, Unit> {
 
 internal class DefaultSaveFilterTask @Inject constructor(@UserId private val userId: String,
                                                          private val filterAPI: FilterApi,
-                                                         private val filterRepository: FilterRepository
+                                                         private val filterRepository: FilterRepository,
+                                                         private val dispatchers: MatrixCoroutineDispatchers
 ) : SaveFilterTask {
 
     override suspend fun execute(params: SaveFilterTask.Params) {
@@ -41,6 +44,8 @@ internal class DefaultSaveFilterTask @Inject constructor(@UserId private val use
             // TODO auto retry
             apiCall = filterAPI.uploadFilter(userId, params.filter)
         }
-        filterRepository.storeFilterId(params.filter, filterResponse.filterId)
+        withContext(dispatchers.io) {
+            filterRepository.storeFilterId(params.filter, filterResponse.filterId)
+        }
     }
 }

@@ -21,7 +21,9 @@ import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.ReactionAggregatedSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.task.Task
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import io.realm.Realm
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 internal interface FindReactionEventForUndoTask : Task<FindReactionEventForUndoTask.Params, FindReactionEventForUndoTask.Result> {
@@ -38,11 +40,15 @@ internal interface FindReactionEventForUndoTask : Task<FindReactionEventForUndoT
     )
 }
 
-internal class DefaultFindReactionEventForUndoTask @Inject constructor(private val monarchy: Monarchy) : FindReactionEventForUndoTask {
+internal class DefaultFindReactionEventForUndoTask @Inject constructor(private val monarchy: Monarchy,
+                                                                       private val dispatchers: MatrixCoroutineDispatchers
+) : FindReactionEventForUndoTask {
 
     override suspend fun execute(params: FindReactionEventForUndoTask.Params): FindReactionEventForUndoTask.Result {
-        val eventId = Realm.getInstance(monarchy.realmConfiguration).use { realm ->
-            getReactionToRedact(realm, params.reaction, params.eventId, params.myUserId)?.eventId
+        val eventId = withContext(dispatchers.io) {
+            Realm.getInstance(monarchy.realmConfiguration).use { realm ->
+                getReactionToRedact(realm, params.reaction, params.eventId, params.myUserId)?.eventId
+            }
         }
         return FindReactionEventForUndoTask.Result(eventId)
     }

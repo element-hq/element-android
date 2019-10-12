@@ -21,7 +21,9 @@ import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.ReactionAggregatedSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.task.Task
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import io.realm.Realm
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 internal interface UpdateQuickReactionTask : Task<UpdateQuickReactionTask.Params, UpdateQuickReactionTask.Result> {
@@ -40,12 +42,15 @@ internal interface UpdateQuickReactionTask : Task<UpdateQuickReactionTask.Params
     )
 }
 
-internal class DefaultUpdateQuickReactionTask @Inject constructor(private val monarchy: Monarchy) : UpdateQuickReactionTask {
-
+internal class DefaultUpdateQuickReactionTask @Inject constructor(private val monarchy: Monarchy,
+                                                                  private val dispatchers: MatrixCoroutineDispatchers
+) : UpdateQuickReactionTask {
     override suspend fun execute(params: UpdateQuickReactionTask.Params): UpdateQuickReactionTask.Result {
         var res: Pair<String?, List<String>?>? = null
-        monarchy.doWithRealm { realm ->
-            res = updateQuickReaction(realm, params.reaction, params.oppositeReaction, params.eventId, params.myUserId)
+        withContext(dispatchers.io) {
+            monarchy.doWithRealm { realm ->
+                res = updateQuickReaction(realm, params.reaction, params.oppositeReaction, params.eventId, params.myUserId)
+            }
         }
         return UpdateQuickReactionTask.Result(res?.first, res?.second ?: emptyList())
     }
