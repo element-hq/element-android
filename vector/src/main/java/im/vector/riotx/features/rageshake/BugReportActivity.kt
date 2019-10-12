@@ -16,7 +16,6 @@
 
 package im.vector.riotx.features.rageshake
 
-import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -122,7 +121,7 @@ class BugReportActivity : VectorBaseActivity() {
                 object : BugReporter.IMXBugReportListener {
                     override fun onUploadFailed(reason: String?) {
                         try {
-                            if (!TextUtils.isEmpty(reason)) {
+                            if (!reason.isNullOrEmpty()) {
                                 if (forSuggestion) {
                                     Toast.makeText(this@BugReportActivity,
                                             getString(R.string.send_suggestion_failed, reason), Toast.LENGTH_LONG).show()

@@ -17,7 +17,6 @@
 package im.vector.matrix.android.internal.network
 
 import android.content.Context
-import android.text.TextUtils
 import im.vector.matrix.android.BuildConfig
 import im.vector.matrix.android.internal.di.MatrixScope
 import timber.log.Timber
@@ -60,10 +59,10 @@ internal class UserAgentHolder @Inject constructor(private val context: Context)
             Timber.e(e, "## initUserAgent() : failed")
         }
 
-        var systemUserAgent = System.getProperty("http.agent")
+        val systemUserAgent = System.getProperty("http.agent")
 
         // cannot retrieve the application version
-        if (TextUtils.isEmpty(appName) || TextUtils.isEmpty(appVersion)) {
+        if (appName.isEmpty() || appVersion.isEmpty()) {
             if (null == systemUserAgent) {
                 userAgent = "Java" + System.getProperty("java.version")
             }

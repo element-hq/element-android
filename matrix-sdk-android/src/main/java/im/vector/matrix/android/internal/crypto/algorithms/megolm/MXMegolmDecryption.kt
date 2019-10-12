@@ -17,7 +17,6 @@
 
 package im.vector.matrix.android.internal.crypto.algorithms.megolm
 
-import android.text.TextUtils
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
@@ -148,7 +147,7 @@ internal class MXMegolmDecryption(private val userId: String,
         selfMap["deviceId"] = "*"
         recipients.add(selfMap)
 
-        if (!TextUtils.equals(sender, userId)) {
+        if (sender != userId) {
             val senderMap = HashMap<String, String>()
             senderMap["userId"] = sender
             senderMap["deviceId"] = encryptedEventContent.deviceId!!
@@ -176,17 +175,12 @@ internal class MXMegolmDecryption(private val userId: String,
         val encryptedEventContent = event.content.toModel<EncryptedEventContent>() ?: return
         val pendingEventsKey = "${encryptedEventContent.senderKey}|${encryptedEventContent.sessionId}"
 
-        if (!pendingEvents.containsKey(pendingEventsKey)) {
-            pendingEvents[pendingEventsKey] = HashMap()
-        }
+        val timeline = pendingEvents.getOrPut(pendingEventsKey) { HashMap() }
+        val events = timeline.getOrPut(timelineId) { ArrayList() }
 
-        if (pendingEvents[pendingEventsKey]?.containsKey(timelineId) == false) {
-            pendingEvents[pendingEventsKey]?.put(timelineId, ArrayList())
-        }
-
-        if (pendingEvents[pendingEventsKey]?.get(timelineId)?.contains(event) == false) {
-            Timber.v("## addEventToPendingList() : add Event " + event.eventId + " in room id " + event.roomId)
-            pendingEvents[pendingEventsKey]?.get(timelineId)?.add(event)
+        if (event !in events) {
+            Timber.v("## addEventToPendingList() : add Event ${event.eventId} in room id ${event.roomId}")
+            events.add(event)
         }
     }
 
@@ -203,7 +197,7 @@ internal class MXMegolmDecryption(private val userId: String,
         var keysClaimed: MutableMap<String, String> = HashMap()
         val forwardingCurve25519KeyChain: MutableList<String> = ArrayList()
 
-        if (TextUtils.isEmpty(roomKeyContent.roomId) || TextUtils.isEmpty(roomKeyContent.sessionId) || TextUtils.isEmpty(roomKeyContent.sessionKey)) {
+        if (roomKeyContent.roomId.isNullOrEmpty() || roomKeyContent.sessionId.isNullOrEmpty() || roomKeyContent.sessionKey.isNullOrEmpty()) {
             Timber.e("## onRoomKeyEvent() :  Key event is missing fields")
             return
         }

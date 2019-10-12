@@ -58,6 +58,7 @@ import im.vector.matrix.android.internal.task.TaskThread
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.JsonCanonicalizer
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import im.vector.matrix.android.internal.util.awaitCallback
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -68,6 +69,9 @@ import org.matrix.olm.OlmPkMessage
 import timber.log.Timber
 import java.security.InvalidParameterException
 import javax.inject.Inject
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 import kotlin.random.Random
 
 /**
@@ -142,8 +146,8 @@ internal class KeysBackup @Inject constructor(
                                           progressListener: ProgressListener?,
                                           callback: MatrixCallback<MegolmBackupCreationInfo>) {
         GlobalScope.launch(coroutineDispatchers.main) {
-            withContext(coroutineDispatchers.crypto) {
-                Try {
+            runCatching {
+                withContext(coroutineDispatchers.crypto) {
                     val olmPkDecryption = OlmPkDecryption()
                     val megolmBackupAuthData = MegolmBackupAuthData()
 
@@ -394,7 +398,7 @@ internal class KeysBackup @Inject constructor(
             return keysBackupVersionTrust
         }
 
-        for (keyId in mySigs.keys) {
+        for ((keyId, mySignature) in mySigs) {
             // XXX: is this how we're supposed to get the device id?
             var deviceId: String? = null
             val components = keyId.split(":")
@@ -412,7 +416,7 @@ internal class KeysBackup @Inject constructor(
                     val fingerprint = device.fingerprint()
                     if (fingerprint != null) {
                         try {
-                            olmDevice.verifySignature(fingerprint, authData.signalableJSONDictionary(), mySigs[keyId] as String)
+                            olmDevice.verifySignature(fingerprint, authData.signalableJSONDictionary(), mySignature)
                             isSignatureValid = true
                         } catch (e: OlmException) {
                             Timber.v(e, "getKeysBackupTrust: Bad signature from device ${device.deviceId}")
@@ -617,8 +621,8 @@ internal class KeysBackup @Inject constructor(
         Timber.v("restoreKeysWithRecoveryKey: From backup version: ${keysVersionResult.version}")
 
         GlobalScope.launch(coroutineDispatchers.main) {
-            withContext(coroutineDispatchers.crypto) {
-                Try<OlmPkDecryption> {
+            runCatching {
+                val decryption = withContext(coroutineDispatchers.crypto) {
                     // Check if the recovery is valid before going any further
                     if (!isValidRecoveryKeyForKeysBackupVersion(recoveryKey, keysVersionResult)) {
                         Timber.e("restoreKeysWithRecoveryKey: Invalid recovery key for this keys version")
@@ -635,76 +639,59 @@ internal class KeysBackup @Inject constructor(
 
                     decryption
                 }
-            }.fold(
-                    {
-                        callback.onFailure(it)
-                    },
-                    { decryption ->
-                        stepProgressListener?.onStepProgress(StepProgressListener.Step.DownloadingKey)
 
-                        // Get backed up keys from the homeserver
-                        getKeys(sessionId, roomId, keysVersionResult.version!!, object : MatrixCallback<KeysBackupData> {
-                            override fun onSuccess(data: KeysBackupData) {
-                                GlobalScope.launch(coroutineDispatchers.main) {
-                                    val importRoomKeysResult = withContext(coroutineDispatchers.crypto) {
-                                        val sessionsData = ArrayList<MegolmSessionData>()
-                                        // Restore that data
-                                        var sessionsFromHsCount = 0
-                                        for (roomIdLoop in data.roomIdToRoomKeysBackupData.keys) {
-                                            for (sessionIdLoop in data.roomIdToRoomKeysBackupData[roomIdLoop]!!.sessionIdToKeyBackupData.keys) {
-                                                sessionsFromHsCount++
+                stepProgressListener?.onStepProgress(StepProgressListener.Step.DownloadingKey)
 
-                                                val keyBackupData = data.roomIdToRoomKeysBackupData[roomIdLoop]!!.sessionIdToKeyBackupData[sessionIdLoop]!!
+                // Get backed up keys from the homeserver
+                val data = getKeys(sessionId, roomId, keysVersionResult.version!!)
 
-                                                val sessionData = decryptKeyBackupData(keyBackupData, sessionIdLoop, roomIdLoop, decryption)
+                withContext(coroutineDispatchers.crypto) {
+                    val sessionsData = ArrayList<MegolmSessionData>()
+                    // Restore that data
+                    var sessionsFromHsCount = 0
+                    for ((roomIdLoop, backupData) in data.roomIdToRoomKeysBackupData) {
+                        for ((sessionIdLoop, keyBackupData) in backupData.sessionIdToKeyBackupData) {
+                            sessionsFromHsCount++
 
-                                                sessionData?.let {
-                                                    sessionsData.add(it)
-                                                }
-                                            }
-                                        }
-                                        Timber.v("restoreKeysWithRecoveryKey: Decrypted ${sessionsData.size} keys out" +
-                                                " of $sessionsFromHsCount from the backup store on the homeserver")
+                            val sessionData = decryptKeyBackupData(keyBackupData, sessionIdLoop, roomIdLoop, decryption)
 
-                                        // Do not trigger a backup for them if they come from the backup version we are using
-                                        val backUp = keysVersionResult.version != keysBackupVersion?.version
-                                        if (backUp) {
-                                            Timber.v("restoreKeysWithRecoveryKey: Those keys will be backed up" +
-                                                    " to backup version: ${keysBackupVersion?.version}")
-                                        }
-
-                                        // Import them into the crypto store
-                                        val progressListener = if (stepProgressListener != null) {
-                                            object : ProgressListener {
-                                                override fun onProgress(progress: Int, total: Int) {
-                                                    // Note: no need to post to UI thread, importMegolmSessionsData() will do it
-                                                    stepProgressListener.onStepProgress(StepProgressListener.Step.ImportingKey(progress, total))
-                                                }
-                                            }
-                                        } else {
-                                            null
-                                        }
-
-                                        val result = megolmSessionDataImporter.handle(sessionsData, !backUp, uiHandler, progressListener)
-
-                                        // Do not back up the key if it comes from a backup recovery
-                                        if (backUp) {
-                                            maybeBackupKeys()
-                                        }
-
-                                        result
-                                    }
-
-                                    callback.onSuccess(importRoomKeysResult)
-                                }
+                            sessionData?.let {
+                                sessionsData.add(it)
                             }
-
-                            override fun onFailure(failure: Throwable) {
-                                callback.onFailure(failure)
-                            }
-                        })
+                        }
                     }
-            )
+                    Timber.v("restoreKeysWithRecoveryKey: Decrypted ${sessionsData.size} keys out" +
+                            " of $sessionsFromHsCount from the backup store on the homeserver")
+
+                    // Do not trigger a backup for them if they come from the backup version we are using
+                    val backUp = keysVersionResult.version != keysBackupVersion?.version
+                    if (backUp) {
+                        Timber.v("restoreKeysWithRecoveryKey: Those keys will be backed up" +
+                                " to backup version: ${keysBackupVersion?.version}")
+                    }
+
+                    // Import them into the crypto store
+                    val progressListener = if (stepProgressListener != null) {
+                        object : ProgressListener {
+                            override fun onProgress(progress: Int, total: Int) {
+                                // Note: no need to post to UI thread, importMegolmSessionsData() will do it
+                                stepProgressListener.onStepProgress(StepProgressListener.Step.ImportingKey(progress, total))
+                            }
+                        }
+                    } else {
+                        null
+                    }
+
+                    val result = megolmSessionDataImporter.handle(sessionsData, !backUp, uiHandler, progressListener)
+
+                    // Do not back up the key if it comes from a backup recovery
+                    if (backUp) {
+                        maybeBackupKeys()
+                    }
+
+                    result
+                }
+            }.foldToCallback(callback)
         }
     }
 
@@ -717,7 +704,7 @@ internal class KeysBackup @Inject constructor(
         Timber.v("[MXKeyBackup] restoreKeyBackup with password: From backup version: ${keysBackupVersion.version}")
 
         GlobalScope.launch(coroutineDispatchers.main) {
-            withContext(coroutineDispatchers.crypto) {
+            runCatching {
                 val progressListener = if (stepProgressListener != null) {
                     object : ProgressListener {
                         override fun onProgress(progress: Int, total: Int) {
@@ -730,22 +717,18 @@ internal class KeysBackup @Inject constructor(
                     null
                 }
 
-                Try {
+                val recoveryKey = withContext(coroutineDispatchers.crypto) {
                     recoveryKeyFromPassword(password, keysBackupVersion, progressListener)
                 }
-            }.fold(
-                    {
-                        callback.onFailure(it)
-                    },
-                    { recoveryKey ->
-                        if (recoveryKey == null) {
-                            Timber.v("backupKeys: Invalid configuration")
-                            callback.onFailure(IllegalStateException("Invalid configuration"))
-                        } else {
-                            restoreKeysWithRecoveryKey(keysBackupVersion, recoveryKey, roomId, sessionId, stepProgressListener, callback)
-                        }
+                if (recoveryKey == null) {
+                    Timber.v("backupKeys: Invalid configuration")
+                    throw IllegalStateException("Invalid configuration")
+                } else {
+                    awaitCallback<ImportRoomKeysResult> {
+                        restoreKeysWithRecoveryKey(keysBackupVersion, recoveryKey, roomId, sessionId, stepProgressListener, it)
                     }
-            )
+                }
+            }.foldToCallback(callback)
         }
     }
 
@@ -753,60 +736,26 @@ internal class KeysBackup @Inject constructor(
      * Same method as [RoomKeysRestClient.getRoomKey] except that it accepts nullable
      * parameters and always returns a KeysBackupData object through the Callback
      */
-    private fun getKeys(sessionId: String?,
+    private suspend fun getKeys(sessionId: String?,
                         roomId: String?,
-                        version: String,
-                        callback: MatrixCallback<KeysBackupData>) {
-        if (roomId != null && sessionId != null) {
+                        version: String): KeysBackupData {
+        return if (roomId != null && sessionId != null) {
             // Get key for the room and for the session
-            getRoomSessionDataTask
-                    .configureWith(GetRoomSessionDataTask.Params(roomId, sessionId, version)) {
-                        this.callback = object : MatrixCallback<KeyBackupData> {
-                            override fun onSuccess(data: KeyBackupData) {
-                                // Convert to KeysBackupData
-                                val keysBackupData = KeysBackupData()
-                                keysBackupData.roomIdToRoomKeysBackupData = HashMap()
-                                val roomKeysBackupData = RoomKeysBackupData()
-                                roomKeysBackupData.sessionIdToKeyBackupData = HashMap()
-                                roomKeysBackupData.sessionIdToKeyBackupData[sessionId] = data
-                                keysBackupData.roomIdToRoomKeysBackupData[roomId] = roomKeysBackupData
-
-                                callback.onSuccess(keysBackupData)
-                            }
-
-                            override fun onFailure(failure: Throwable) {
-                                callback.onFailure(failure)
-                            }
-                        }
-                    }
-                    .executeBy(taskExecutor)
+            val data = getRoomSessionDataTask.execute(GetRoomSessionDataTask.Params(roomId, sessionId, version))
+            // Convert to KeysBackupData
+            KeysBackupData(mutableMapOf(
+                    roomId to RoomKeysBackupData(mutableMapOf(
+                            sessionId to data
+                    ))
+            ))
         } else if (roomId != null) {
             // Get all keys for the room
-            getRoomSessionsDataTask
-                    .configureWith(GetRoomSessionsDataTask.Params(roomId, version)) {
-                        this.callback = object : MatrixCallback<RoomKeysBackupData> {
-                            override fun onSuccess(data: RoomKeysBackupData) {
-                                // Convert to KeysBackupData
-                                val keysBackupData = KeysBackupData()
-                                keysBackupData.roomIdToRoomKeysBackupData = HashMap()
-                                keysBackupData.roomIdToRoomKeysBackupData[roomId] = data
-
-                                callback.onSuccess(keysBackupData)
-                            }
-
-                            override fun onFailure(failure: Throwable) {
-                                callback.onFailure(failure)
-                            }
-                        }
-                    }
-                    .executeBy(taskExecutor)
+            val data = getRoomSessionsDataTask.execute(GetRoomSessionsDataTask.Params(roomId, version))
+            // Convert to KeysBackupData
+            KeysBackupData(mutableMapOf(roomId to data))
         } else {
             // Get all keys
-            getSessionsDataTask
-                    .configureWith(GetSessionsDataTask.Params(version)) {
-                        this.callback = callback
-                    }
-                    .executeBy(taskExecutor)
+            getSessionsDataTask.execute(GetSessionsDataTask.Params(version))
         }
     }
 

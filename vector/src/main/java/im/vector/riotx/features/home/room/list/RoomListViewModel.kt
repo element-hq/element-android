@@ -130,8 +130,8 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
 
         setState {
             copy(
-                    joiningRoomsIds = joiningRoomsIds.toMutableSet().apply { add(roomId) },
-                    rejectingErrorRoomsIds = rejectingErrorRoomsIds.toMutableSet().apply { remove(roomId) }
+                    joiningRoomsIds = joiningRoomsIds + roomId,
+                    rejectingErrorRoomsIds = rejectingErrorRoomsIds - roomId
             )
         }
 
@@ -147,8 +147,8 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
 
                 setState {
                     copy(
-                            joiningRoomsIds = joiningRoomsIds.toMutableSet().apply { remove(roomId) },
-                            joiningErrorRoomsIds = joiningErrorRoomsIds.toMutableSet().apply { add(roomId) }
+                            joiningRoomsIds = joiningRoomsIds - roomId,
+                            joiningErrorRoomsIds = joiningErrorRoomsIds - roomId
                     )
                 }
             }
@@ -166,8 +166,8 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
 
         setState {
             copy(
-                    rejectingRoomsIds = rejectingRoomsIds.toMutableSet().apply { add(roomId) },
-                    joiningErrorRoomsIds = joiningErrorRoomsIds.toMutableSet().apply { remove(roomId) }
+                    rejectingRoomsIds = rejectingRoomsIds + roomId,
+                    joiningErrorRoomsIds = joiningErrorRoomsIds - roomId
             )
         }
 
@@ -185,8 +185,8 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
 
                 setState {
                     copy(
-                            rejectingRoomsIds = rejectingRoomsIds.toMutableSet().apply { remove(roomId) },
-                            rejectingErrorRoomsIds = rejectingErrorRoomsIds.toMutableSet().apply { add(roomId) }
+                            rejectingRoomsIds = rejectingRoomsIds - roomId,
+                            rejectingErrorRoomsIds = rejectingErrorRoomsIds + roomId
                     )
                 }
             }

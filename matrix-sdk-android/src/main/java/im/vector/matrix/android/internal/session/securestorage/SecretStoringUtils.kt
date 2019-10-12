@@ -461,9 +461,9 @@ internal class SecretStoringUtils @Inject constructor(private val context: Conte
         inputCipher.init(Cipher.ENCRYPT_MODE, privateKeyEntry.certificate.publicKey)
 
         val outputStream = ByteArrayOutputStream()
-        val cipherOutputStream = CipherOutputStream(outputStream, inputCipher)
-        cipherOutputStream.write(secret)
-        cipherOutputStream.close()
+        CipherOutputStream(outputStream, inputCipher).use {
+            it.write(secret)
+        }
 
         return outputStream.toByteArray()
     }

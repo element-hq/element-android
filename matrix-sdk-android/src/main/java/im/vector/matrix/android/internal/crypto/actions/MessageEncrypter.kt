@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.crypto.actions
 
-import android.text.TextUtils
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_OLM
 import im.vector.matrix.android.internal.crypto.MXOlmDevice
@@ -25,7 +24,6 @@ import im.vector.matrix.android.internal.crypto.model.rest.EncryptedMessage
 import im.vector.matrix.android.internal.util.JsonCanonicalizer
 import im.vector.matrix.android.internal.util.convertToUTF8
 import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
 
 internal class MessageEncrypter @Inject constructor(private val credentials: Credentials,
@@ -40,18 +38,12 @@ internal class MessageEncrypter @Inject constructor(private val credentials: Cre
      * @return the content for an m.room.encrypted event.
      */
     fun encryptMessage(payloadFields: Map<String, Any>, deviceInfos: List<MXDeviceInfo>): EncryptedMessage {
-        val deviceInfoParticipantKey = HashMap<String, MXDeviceInfo>()
-        val participantKeys = ArrayList<String>()
+        val deviceInfoParticipantKey = deviceInfos.associateBy { it.identityKey()!! }
 
-        for (di in deviceInfos) {
-            participantKeys.add(di.identityKey()!!)
-            deviceInfoParticipantKey[di.identityKey()!!] = di
-        }
-
-        val payloadJson = HashMap(payloadFields)
+        val payloadJson = payloadFields.toMutableMap()
 
         payloadJson["sender"] = credentials.userId
-        payloadJson["sender_device"] = credentials.deviceId
+        payloadJson["sender_device"] = credentials.deviceId!!
 
         // Include the Ed25519 key so that the recipient knows what
         // device this message came from.
@@ -67,30 +59,24 @@ internal class MessageEncrypter @Inject constructor(private val credentials: Cre
 
         val ciphertext = HashMap<String, Any>()
 
-        for (deviceKey in participantKeys) {
+        for ((deviceKey, deviceInfo) in deviceInfoParticipantKey) {
             val sessionId = olmDevice.getSessionId(deviceKey)
 
-            if (!TextUtils.isEmpty(sessionId)) {
+            if (!sessionId.isNullOrEmpty()) {
                 Timber.v("Using sessionid $sessionId for device $deviceKey")
-                val deviceInfo = deviceInfoParticipantKey[deviceKey]
 
-                payloadJson["recipient"] = deviceInfo!!.userId
-
-                val recipientsKeysMap = HashMap<String, String>()
-                recipientsKeysMap["ed25519"] = deviceInfo.fingerprint()!!
-                payloadJson["recipient_keys"] = recipientsKeysMap
+                payloadJson["recipient"] = deviceInfo.userId
+                payloadJson["recipient_keys"] = mapOf("ed25519" to deviceInfo.fingerprint()!!)
 
                 val payloadString = convertToUTF8(JsonCanonicalizer.getCanonicalJson(Map::class.java, payloadJson))
-                ciphertext[deviceKey] = olmDevice.encryptMessage(deviceKey, sessionId!!, payloadString)!!
+                ciphertext[deviceKey] = olmDevice.encryptMessage(deviceKey, sessionId, payloadString)!!
             }
         }
 
-        val res = EncryptedMessage()
-
-        res.algorithm = MXCRYPTO_ALGORITHM_OLM
-        res.senderKey = olmDevice.deviceCurve25519Key
-        res.cipherText = ciphertext
-
-        return res
+        return EncryptedMessage(
+                algorithm = MXCRYPTO_ALGORITHM_OLM,
+                senderKey = olmDevice.deviceCurve25519Key,
+                cipherText = ciphertext
+        )
     }
 }

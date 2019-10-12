@@ -17,13 +17,11 @@
 
 package im.vector.matrix.android.internal.crypto.model
 
-import android.text.TextUtils
 import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import im.vector.matrix.android.internal.crypto.MegolmSessionData
 import org.matrix.olm.OlmInboundGroupSession
 import timber.log.Timber
 import java.io.Serializable
-import java.util.*
 
 /**
  * This class adds more context to a OlmInboundGroupSession object.
@@ -91,7 +89,7 @@ class OlmInboundGroupSessionWrapper : Serializable {
         try {
             olmInboundGroupSession = OlmInboundGroupSession.importSession(megolmSessionData.sessionKey!!)
 
-            if (!TextUtils.equals(olmInboundGroupSession!!.sessionIdentifier(), megolmSessionData.sessionId)) {
+            if (olmInboundGroupSession!!.sessionIdentifier() != megolmSessionData.sessionId) {
                 throw Exception("Mismatched group session Id")
             }
 

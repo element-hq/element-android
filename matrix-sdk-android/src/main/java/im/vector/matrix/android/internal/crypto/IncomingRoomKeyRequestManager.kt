@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.crypto
 
-import android.text.TextUtils
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.crypto.keyshare.RoomKeysRequestListener
 import im.vector.matrix.android.api.session.events.model.Event
@@ -25,7 +24,6 @@ import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyShare
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.session.SessionScope
 import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
@@ -58,7 +56,7 @@ internal class IncomingRoomKeyRequestManager @Inject constructor(
         when (roomKeyShare?.action) {
             RoomKeyShare.ACTION_SHARE_REQUEST      -> receivedRoomKeyRequests.add(IncomingRoomKeyRequest(event))
             RoomKeyShare.ACTION_SHARE_CANCELLATION -> receivedRoomKeyRequestCancellations.add(IncomingRoomKeyRequestCancellation(event))
-            else                                   -> Timber.e("## onRoomKeyRequestEvent() : unsupported action " + roomKeyShare?.action)
+            else                                   -> Timber.e("## onRoomKeyRequestEvent() : unsupported action ${roomKeyShare?.action}")
         }
     }
 
@@ -68,7 +66,7 @@ internal class IncomingRoomKeyRequestManager @Inject constructor(
      * It must be called on CryptoThread
      */
     fun processReceivedRoomKeyRequests() {
-        val roomKeyRequestsToProcess = ArrayList(receivedRoomKeyRequests)
+        val roomKeyRequestsToProcess = receivedRoomKeyRequests.toList()
         receivedRoomKeyRequests.clear()
         for (request in roomKeyRequestsToProcess) {
             val userId = request.userId
@@ -77,7 +75,7 @@ internal class IncomingRoomKeyRequestManager @Inject constructor(
             val roomId = body!!.roomId
             val alg = body.algorithm
 
-            Timber.v("m.room_key_request from " + userId + ":" + deviceId + " for " + roomId + " / " + body.sessionId + " id " + request.requestId)
+            Timber.v("m.room_key_request from $userId:$deviceId for $roomId / ${body.sessionId} id ${request.requestId}")
             if (userId == null || credentials.userId != userId) {
                 // TODO: determine if we sent this device the keys already: in
                 Timber.e("## processReceivedRoomKeyRequests() : Ignoring room key request from other user for now")
@@ -92,12 +90,12 @@ internal class IncomingRoomKeyRequestManager @Inject constructor(
                 continue
             }
             if (!decryptor.hasKeysForKeyRequest(request)) {
-                Timber.e("## processReceivedRoomKeyRequests() : room key request for unknown session " + body.sessionId!!)
+                Timber.e("## processReceivedRoomKeyRequests() : room key request for unknown session ${body.sessionId!!}")
                 cryptoStore.deleteIncomingRoomKeyRequest(request)
                 continue
             }
 
-            if (TextUtils.equals(deviceId, credentials.deviceId) && TextUtils.equals(credentials.userId, userId)) {
+            if (deviceId == credentials.deviceId && credentials.userId == userId) {
                 Timber.v("## processReceivedRoomKeyRequests() : oneself device - ignored")
                 cryptoStore.deleteIncomingRoomKeyRequest(request)
                 continue
@@ -132,7 +130,7 @@ internal class IncomingRoomKeyRequestManager @Inject constructor(
         var receivedRoomKeyRequestCancellations: List<IncomingRoomKeyRequestCancellation>? = null
 
         synchronized(this.receivedRoomKeyRequestCancellations) {
-            if (!this.receivedRoomKeyRequestCancellations.isEmpty()) {
+            if (this.receivedRoomKeyRequestCancellations.isNotEmpty()) {
                 receivedRoomKeyRequestCancellations = this.receivedRoomKeyRequestCancellations.toList()
                 this.receivedRoomKeyRequestCancellations.clear()
             }

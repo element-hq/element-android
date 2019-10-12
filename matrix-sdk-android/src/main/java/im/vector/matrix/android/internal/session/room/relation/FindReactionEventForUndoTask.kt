@@ -48,23 +48,22 @@ internal class DefaultFindReactionEventForUndoTask @Inject constructor(private v
     }
 
     private fun getReactionToRedact(realm: Realm, reaction: String, eventId: String, userId: String): EventEntity? {
-        val summary = EventAnnotationsSummaryEntity.where(realm, eventId).findFirst()
-        if (summary != null) {
-            summary.reactionsSummary.where()
-                    .equalTo(ReactionAggregatedSummaryEntityFields.KEY, reaction)
-                    .findFirst()?.let {
-                        // want to find the event orignated by me!
-                        it.sourceEvents.forEach {
-                            // find source event
-                            EventEntity.where(realm, it).findFirst()?.let { eventEntity ->
-                                // is it mine?
-                                if (eventEntity.sender == userId) {
-                                    return eventEntity
-                                }
-                            }
-                        }
-                    }
-        }
-        return null
+        val summary = EventAnnotationsSummaryEntity.where(realm, eventId).findFirst() ?: return null
+
+        val rase = summary.reactionsSummary.where()
+                .equalTo(ReactionAggregatedSummaryEntityFields.KEY, reaction)
+                .findFirst() ?: return null
+
+        // want to find the event orignated by me!
+        return rase.sourceEvents
+                .asSequence()
+                .mapNotNull {
+                    // find source event
+                    EventEntity.where(realm, it).findFirst()
+                }
+                .firstOrNull { eventEntity ->
+                    // is it mine?
+                    eventEntity.sender == userId
+                }
     }
 }

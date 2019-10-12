@@ -39,11 +39,10 @@ internal class TimelineEventDecryptor(
         override fun onNewSession(roomId: String?, senderKey: String, sessionId: String) {
             synchronized(unknownSessionsFailure) {
                 val toDecryptAgain = ArrayList<String>()
-                unknownSessionsFailure[sessionId]?.let { eventIds ->
-                    toDecryptAgain.addAll(eventIds)
-                }
+                val eventIds = unknownSessionsFailure[sessionId]
+                if (eventIds != null) toDecryptAgain.addAll(eventIds)
                 if (toDecryptAgain.isNotEmpty()) {
-                    unknownSessionsFailure[sessionId]?.clear()
+                    eventIds?.clear()
                     toDecryptAgain.forEach {
                         requestDecryption(it)
                     }
@@ -72,16 +71,15 @@ internal class TimelineEventDecryptor(
 
     fun requestDecryption(eventId: String) {
         synchronized(existingRequests) {
-            if (existingRequests.contains(eventId)) {
-                return Unit.also {
-                    Timber.d("Skip Decryption request for event $eventId, already requested")
-                }
+            if (eventId in existingRequests) {
+                Timber.d("Skip Decryption request for event $eventId, already requested")
+                return
             }
             existingRequests.add(eventId)
         }
         synchronized(unknownSessionsFailure) {
             unknownSessionsFailure.values.forEach {
-                if (it.contains(eventId)) return@synchronized Unit.also {
+                if (eventId in it) {
                     Timber.d("Skip Decryption request for event $eventId, unknown session")
                 }
             }
@@ -116,10 +114,7 @@ internal class TimelineEventDecryptor(
                 event.content?.toModel<EncryptedEventContent>()?.let { content ->
                     content.sessionId?.let { sessionId ->
                         synchronized(unknownSessionsFailure) {
-                            val list = unknownSessionsFailure[sessionId]
-                                    ?: ArrayList<String>().also {
-                                        unknownSessionsFailure[sessionId] = it
-                                    }
+                            val list = unknownSessionsFailure.getOrPut(sessionId) { ArrayList() }
                             list.add(eventId)
                         }
                     }

@@ -21,9 +21,7 @@ import android.content.ClipDescription
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
-import android.text.TextUtils
 import androidx.core.util.PatternsCompat.WEB_URL
-import java.util.*
 
 /**
  * Inspired from Riot code: RoomMediaMessage.java
@@ -69,34 +67,28 @@ fun analyseIntent(intent: Intent): List<ExternalIntentData> {
 
     // chrome adds many items when sharing an web page link
     // so, test first the type
-    if (TextUtils.equals(intent.type, ClipDescription.MIMETYPE_TEXT_PLAIN)) {
+    if (intent.type == ClipDescription.MIMETYPE_TEXT_PLAIN) {
         var message: String? = intent.getStringExtra(Intent.EXTRA_TEXT)
-
-        if (null == message) {
-            val sequence = intent.getCharSequenceExtra(Intent.EXTRA_TEXT)
-            if (null != sequence) {
-                message = sequence.toString()
-            }
-        }
+                ?: intent.getCharSequenceExtra(Intent.EXTRA_TEXT)?.toString()
 
         val subject = intent.getStringExtra(Intent.EXTRA_SUBJECT)
 
-        if (!TextUtils.isEmpty(subject)) {
-            if (TextUtils.isEmpty(message)) {
+        if (!subject.isNullOrEmpty()) {
+            if (message.isNullOrEmpty()) {
                 message = subject
-            } else if (WEB_URL.matcher(message!!).matches()) {
+            } else if (WEB_URL.matcher(message).matches()) {
                 message = subject + "\n" + message
             }
         }
 
-        if (!TextUtils.isEmpty(message)) {
-            externalIntentDataList.add(ExternalIntentData.IntentDataText(message!!, null, intent.type))
+        if (!message.isNullOrEmpty()) {
+            externalIntentDataList.add(ExternalIntentData.IntentDataText(message, null, intent.type))
             return externalIntentDataList
         }
     }
 
     var clipData: ClipData? = null
-    var mimetypes: MutableList<String>? = null
+    var mimeTypes: List<String>? = null
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
         clipData = intent.clipData
@@ -106,41 +98,26 @@ fun analyseIntent(intent: Intent): List<ExternalIntentData> {
     if (null != clipData) {
         if (null != clipData.description) {
             if (0 != clipData.description.mimeTypeCount) {
-                mimetypes = ArrayList()
-
-                for (i in 0 until clipData.description.mimeTypeCount) {
-                    mimetypes.add(clipData.description.getMimeType(i))
+                mimeTypes = with(clipData.description) {
+                    List(mimeTypeCount) { getMimeType(it) }
                 }
 
                 // if the filter is "accept anything" the mimetype does not make sense
-                if (1 == mimetypes.size) {
-                    if (mimetypes[0].endsWith("/*")) {
-                        mimetypes = null
+                if (1 == mimeTypes.size) {
+                    if (mimeTypes[0].endsWith("/*")) {
+                        mimeTypes = null
                     }
                 }
             }
         }
 
-        val count = clipData.itemCount
-
-        for (i in 0 until count) {
+        for (i in 0 until clipData.itemCount) {
             val item = clipData.getItemAt(i)
-            var mimetype: String? = null
+            val mimeType = mimeTypes?.getOrElse(i) { mimeTypes[0] }
+                        // uris list is not a valid mimetype
+                    .takeUnless { it == ClipDescription.MIMETYPE_TEXT_URILIST }
 
-            if (null != mimetypes) {
-                if (i < mimetypes.size) {
-                    mimetype = mimetypes[i]
-                } else {
-                    mimetype = mimetypes[0]
-                }
-
-                // uris list is not a valid mimetype
-                if (TextUtils.equals(mimetype, ClipDescription.MIMETYPE_TEXT_URILIST)) {
-                    mimetype = null
-                }
-            }
-
-            externalIntentDataList.add(ExternalIntentData.IntentDataClipData(item, mimetype))
+            externalIntentDataList.add(ExternalIntentData.IntentDataClipData(item, mimeType))
         }
     } else if (null != intent.data) {
         externalIntentDataList.add(ExternalIntentData.IntentDataUri(intent.data!!))

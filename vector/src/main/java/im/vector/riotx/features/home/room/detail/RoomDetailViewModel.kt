@@ -17,7 +17,6 @@
 package im.vector.riotx.features.home.room.detail
 
 import android.net.Uri
-import android.text.TextUtils
 import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -376,7 +375,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                     val document = parser.parse(finalText)
                     val renderer = HtmlRenderer.builder().build()
                     val htmlText = renderer.render(document)
-                    if (TextUtils.equals(finalText, htmlText)) {
+                    if (finalText == htmlText) {
                         room.sendTextMessage(finalText)
                     } else {
                         room.sendFormattedTextMessage(finalText, htmlText)
@@ -401,19 +400,22 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
 
     private fun legacyRiotQuoteText(quotedText: String?, myText: String): String {
         val messageParagraphs = quotedText?.split("\n\n".toRegex())?.dropLastWhile { it.isEmpty() }?.toTypedArray()
-        val quotedTextMsg = StringBuilder()
-        if (messageParagraphs != null) {
-            for (i in messageParagraphs.indices) {
-                if (messageParagraphs[i].trim() != "") {
-                    quotedTextMsg.append("> ").append(messageParagraphs[i])
-                }
+        return buildString {
+            if (messageParagraphs != null) {
+                for (i in messageParagraphs.indices) {
+                    if (messageParagraphs[i].isNotBlank()) {
+                        append("> ")
+                        append(messageParagraphs[i])
+                    }
 
-                if (i + 1 != messageParagraphs.size) {
-                    quotedTextMsg.append("\n\n")
+                    if (i != messageParagraphs.lastIndex) {
+                        append("\n\n")
+                    }
                 }
             }
+            append("\n\n")
+            append(myText)
         }
-        return "$quotedTextMsg\n\n$myText"
     }
 
     private fun handleChangeTopicSlashCommand(changeTopic: ParsedCommand.ChangeTopic) {

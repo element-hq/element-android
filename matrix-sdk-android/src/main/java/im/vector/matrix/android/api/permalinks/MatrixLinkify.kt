@@ -30,9 +30,9 @@ object MatrixLinkify {
      *
      * @param spannable the text in which the matrix items has to be clickable.
      */
-    fun addLinks(spannable: Spannable?, callback: MatrixPermalinkSpan.Callback?): Boolean {
+    fun addLinks(spannable: Spannable, callback: MatrixPermalinkSpan.Callback?): Boolean {
         // sanity checks
-        if (spannable.isNullOrEmpty()) {
+        if (spannable.isEmpty()) {
             return false
         }
         val text = spannable.toString()

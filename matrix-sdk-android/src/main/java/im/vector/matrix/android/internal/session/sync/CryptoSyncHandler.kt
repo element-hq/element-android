@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.session.sync
 
-import android.text.TextUtils
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
@@ -41,9 +40,9 @@ internal class CryptoSyncHandler @Inject constructor(private val cryptoService: 
             initialSyncProgressService?.reportProgress(((index / total.toFloat()) * 100).toInt())
             // Decrypt event if necessary
             decryptEvent(event, null)
-            if (TextUtils.equals(event.getClearType(), EventType.MESSAGE)
+            if (event.getClearType() == EventType.MESSAGE
                     && event.getClearContent()?.toModel<MessageContent>()?.type == "m.bad.encrypted") {
-                Timber.e("## handleToDeviceEvent() : Warning: Unable to decrypt to-device event : " + event.content)
+                Timber.e("## handleToDeviceEvent() : Warning: Unable to decrypt to-device event : ${event.content}")
             } else {
                 sasVerificationService.onToDeviceEvent(event)
                 cryptoService.onToDeviceEvent(event)

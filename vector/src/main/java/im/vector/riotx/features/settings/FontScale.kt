@@ -18,7 +18,6 @@ package im.vector.riotx.features.settings
 
 import android.content.Context
 import android.content.res.Configuration
-import android.text.TextUtils
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import im.vector.riotx.R
@@ -68,7 +67,7 @@ object FontScale {
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         var scalePreferenceValue: String
 
-        if (!preferences.contains(APPLICATION_FONT_SCALE_KEY)) {
+        if (APPLICATION_FONT_SCALE_KEY !in preferences) {
             val fontScale = context.resources.configuration.fontScale
 
             scalePreferenceValue = FONT_SCALE_NORMAL
@@ -96,9 +95,9 @@ object FontScale {
         val fontScale = getFontScalePrefValue(context)
 
         if (fontScaleToPrefValue.containsValue(fontScale)) {
-            for (entry in fontScaleToPrefValue) {
-                if (TextUtils.equals(entry.value, fontScale)) {
-                    return entry.key
+            for ((key, value) in fontScaleToPrefValue) {
+                if (value == fontScale) {
+                    return key
                 }
             }
         }
@@ -125,9 +124,9 @@ object FontScale {
      * @param fontScaleDescription the font scale description
      */
     fun updateFontScale(context: Context, fontScaleDescription: String) {
-        for (entry in prefValueToNameResId) {
-            if (TextUtils.equals(context.getString(entry.value), fontScaleDescription)) {
-                saveFontScale(context, entry.key)
+        for ((key, value) in prefValueToNameResId) {
+            if (context.getString(value) == fontScaleDescription) {
+                saveFontScale(context, key)
             }
         }
 
@@ -143,7 +142,7 @@ object FontScale {
      * @param scaleValue the text scale
      */
     fun saveFontScale(context: Context, scaleValue: String) {
-        if (!TextUtils.isEmpty(scaleValue)) {
+        if (scaleValue.isNotEmpty()) {
             PreferenceManager.getDefaultSharedPreferences(context)
                     .edit {
                         putString(APPLICATION_FONT_SCALE_KEY, scaleValue)

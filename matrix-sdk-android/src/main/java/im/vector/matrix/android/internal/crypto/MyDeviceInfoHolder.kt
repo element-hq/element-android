@@ -16,12 +16,10 @@
 
 package im.vector.matrix.android.internal.crypto
 
-import android.text.TextUtils
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.session.SessionScope
-import java.util.*
 import javax.inject.Inject
 
 @SessionScope
@@ -42,11 +40,11 @@ internal class MyDeviceInfoHolder @Inject constructor(
     init {
         val keys = HashMap<String, String>()
 
-        if (!TextUtils.isEmpty(olmDevice.deviceEd25519Key)) {
+        if (!olmDevice.deviceEd25519Key.isNullOrEmpty()) {
             keys["ed25519:" + credentials.deviceId] = olmDevice.deviceEd25519Key!!
         }
 
-        if (!TextUtils.isEmpty(olmDevice.deviceCurve25519Key)) {
+        if (!olmDevice.deviceCurve25519Key.isNullOrEmpty()) {
             keys["curve25519:" + credentials.deviceId] = olmDevice.deviceCurve25519Key!!
         }
 
@@ -58,13 +56,7 @@ internal class MyDeviceInfoHolder @Inject constructor(
         // Add our own deviceinfo to the store
         val endToEndDevicesForUser = cryptoStore.getUserDevices(credentials.userId)
 
-        val myDevices: MutableMap<String, MXDeviceInfo>
-
-        if (null != endToEndDevicesForUser) {
-            myDevices = HashMap(endToEndDevicesForUser)
-        } else {
-            myDevices = HashMap()
-        }
+        val myDevices = endToEndDevicesForUser.orEmpty().toMutableMap()
 
         myDevices[myDevice.deviceId] = myDevice
 

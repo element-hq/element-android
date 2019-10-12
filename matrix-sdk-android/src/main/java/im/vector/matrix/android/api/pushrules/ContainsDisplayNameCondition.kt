@@ -15,13 +15,11 @@
  */
 package im.vector.matrix.android.api.pushrules
 
-import android.text.TextUtils
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import timber.log.Timber
-import java.util.regex.Pattern
 
 class ContainsDisplayNameCondition : Condition(Kind.contains_display_name) {
 
@@ -34,7 +32,7 @@ class ContainsDisplayNameCondition : Condition(Kind.contains_display_name) {
     }
 
     fun isSatisfied(event: Event, displayName: String): Boolean {
-        var message = when (event.type) {
+        val message = when (event.type) {
             EventType.MESSAGE -> {
                 event.content.toModel<MessageContent>()
             }
@@ -59,20 +57,18 @@ class ContainsDisplayNameCondition : Condition(Kind.contains_display_name) {
          */
         fun caseInsensitiveFind(subString: String, longString: String): Boolean {
             // add sanity checks
-            if (TextUtils.isEmpty(subString) || TextUtils.isEmpty(longString)) {
+            if (subString.isEmpty() || longString.isEmpty()) {
                 return false
             }
 
-            var res = false
-
             try {
-                val pattern = Pattern.compile("(\\W|^)" + Pattern.quote(subString) + "(\\W|$)", Pattern.CASE_INSENSITIVE)
-                res = pattern.matcher(longString).find()
+                val regex = Regex("(\\W|^)" + Regex.escape(subString) + "(\\W|$)", RegexOption.IGNORE_CASE)
+                return regex.containsMatchIn(longString)
             } catch (e: Exception) {
                 Timber.e(e, "## caseInsensitiveFind() : failed")
             }
 
-            return res
+            return false
         }
     }
 }
