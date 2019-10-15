@@ -55,11 +55,9 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
         object OpenGroup : Navigation()
     }
 
-    private val homeActivityViewModel: HomeActivityViewModel by viewModel()
     private lateinit var navigationViewModel: HomeNavigationViewModel
 
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
-    @Inject lateinit var homeActivityViewModelFactory: HomeActivityViewModel.Factory
     @Inject lateinit var vectorUncaughtExceptionHandler: VectorUncaughtExceptionHandler
     @Inject lateinit var pushManager: PushersManager
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
