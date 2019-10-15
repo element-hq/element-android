@@ -18,6 +18,7 @@ package im.vector.riotx.features.home.room.list
 
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.Menu
 import android.view.MenuItem
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
@@ -79,6 +80,8 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, O
         injector.inject(this)
     }
 
+    private var hasUnreadRooms = false
+
     override fun getMenuRes() = R.menu.room_list
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -90,6 +93,11 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, O
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        menu.findItem(R.id.menu_home_mark_all_as_read).isVisible = hasUnreadRooms
+        super.onPrepareOptionsMenu(menu)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -194,6 +202,20 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, O
             is Fail       -> renderFailure(state.asyncFilteredRooms.error)
         }
         roomController.update(state)
+
+        // Mark all as read menu
+        when (roomListParams.displayMode) {
+            DisplayMode.HOME,
+            DisplayMode.PEOPLE,
+            DisplayMode.ROOMS -> {
+                val newValue = state.hasUnread
+                if (hasUnreadRooms != newValue) {
+                    hasUnreadRooms = newValue
+                    requireActivity().invalidateOptionsMenu()
+                }
+            }
+            else              -> Unit
+        }
     }
 
     private fun renderSuccess(state: RoomListViewState) {

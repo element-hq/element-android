@@ -203,7 +203,6 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
                 ?.let { session.markAllAsRead(it, object : MatrixCallback<Unit> {}) }
     }
 
-
     private fun buildRoomSummaries(rooms: List<RoomSummary>): RoomSummaries {
         val invites = ArrayList<RoomSummary>()
         val favourites = ArrayList<RoomSummary>()
