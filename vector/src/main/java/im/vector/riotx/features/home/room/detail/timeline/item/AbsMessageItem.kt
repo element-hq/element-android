@@ -29,7 +29,6 @@ import im.vector.riotx.R
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.ui.views.ReadMarkerView
 import im.vector.riotx.core.utils.DebouncedClickListener
-import im.vector.riotx.core.utils.DimensionConverter
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.reactions.widget.ReactionButton
@@ -173,7 +172,6 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
             val informationData: MessageInformationData,
             val avatarRenderer: AvatarRenderer,
             val colorProvider: ColorProvider,
-            val dimensionConverter: DimensionConverter,
             val itemLongClickListener: View.OnLongClickListener? = null,
             val itemClickListener: View.OnClickListener? = null,
             val memberClickListener: View.OnClickListener? = null,

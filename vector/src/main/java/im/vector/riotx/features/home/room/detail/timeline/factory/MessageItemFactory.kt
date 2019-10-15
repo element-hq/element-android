@@ -53,6 +53,7 @@ import javax.inject.Inject
 
 class MessageItemFactory @Inject constructor(
         private val colorProvider: ColorProvider,
+        private val dimensionConverter: DimensionConverter,
         private val timelineMediaSizeProvider: TimelineMediaSizeProvider,
         private val htmlRenderer: Lazy<EventHtmlRenderer>,
         private val stringProvider: StringProvider,
@@ -243,7 +244,7 @@ class MessageItemFactory @Inject constructor(
         return MessageTextItem_()
                 .apply {
                     if (informationData.hasBeenEdited) {
-                        val spannable = annotateWithEdited(linkifiedBody, callback, attributes.dimensionConverter, informationData)
+                        val spannable = annotateWithEdited(linkifiedBody, callback, informationData)
                         message(spannable)
                     } else {
                         message(linkifiedBody)
@@ -260,7 +261,6 @@ class MessageItemFactory @Inject constructor(
 
     private fun annotateWithEdited(linkifiedBody: CharSequence,
                                    callback: TimelineEventController.Callback?,
-                                   dimensionConverter: DimensionConverter,
                                    informationData: MessageInformationData): SpannableStringBuilder {
         val spannable = SpannableStringBuilder()
         spannable.append(linkifiedBody)
@@ -276,7 +276,12 @@ class MessageItemFactory @Inject constructor(
                 Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
 
         // Note: text size is set to 14sp
-        spannable.setSpan(AbsoluteSizeSpan(dimensionConverter.spToPx(13)), editStart, editEnd, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+        spannable.setSpan(
+                AbsoluteSizeSpan(dimensionConverter.spToPx(13)),
+                editStart,
+                editEnd,
+                Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+
         spannable.setSpan(object : ClickableSpan() {
             override fun onClick(widget: View?) {
                 callback?.onEditedDecorationClicked(informationData)
@@ -326,7 +331,7 @@ class MessageItemFactory @Inject constructor(
         return MessageTextItem_()
                 .apply {
                     if (informationData.hasBeenEdited) {
-                        val spannable = annotateWithEdited(message, callback, attributes.dimensionConverter, informationData)
+                        val spannable = annotateWithEdited(message, callback, informationData)
                         message(spannable)
                     } else {
                         message(message)

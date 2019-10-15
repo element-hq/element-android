@@ -22,7 +22,6 @@ import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.riotx.EmojiCompatFontProvider
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.utils.DebouncedClickListener
-import im.vector.riotx.core.utils.DimensionConverter
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.home.room.detail.timeline.item.AbsMessageItem
@@ -33,7 +32,6 @@ class MessageItemAttributesFactory @Inject constructor(
         private val avatarRenderer: AvatarRenderer,
         private val colorProvider: ColorProvider,
         private val avatarSizeProvider: AvatarSizeProvider,
-        private val dimensionConverter: DimensionConverter,
         private val emojiCompatFontProvider: EmojiCompatFontProvider) {
 
     fun create(messageContent: MessageContent?,
@@ -44,7 +42,6 @@ class MessageItemAttributesFactory @Inject constructor(
                 informationData = informationData,
                 avatarRenderer = avatarRenderer,
                 colorProvider = colorProvider,
-                dimensionConverter = dimensionConverter,
                 itemLongClickListener = View.OnLongClickListener { view ->
                     callback?.onEventLongClicked(informationData, messageContent, view) ?: false
                 },
