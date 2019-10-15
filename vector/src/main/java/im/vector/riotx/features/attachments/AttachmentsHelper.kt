@@ -22,6 +22,7 @@ import androidx.fragment.app.Fragment
 import com.kbeanie.multipicker.api.Picker.*
 import com.kbeanie.multipicker.core.PickerManager
 import com.kbeanie.multipicker.utils.IntentUtils
+import im.vector.matrix.android.BuildConfig
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.riotx.core.platform.Restorable
 import timber.log.Timber
@@ -47,7 +48,9 @@ class AttachmentsHelper private constructor(private val pickerManagerFactory: Pi
 
     interface Callback {
         fun onContactAttachmentReady(contactAttachment: ContactAttachment) {
-            Timber.v("On contact attachment ready: $contactAttachment")
+            if (BuildConfig.LOG_PRIVATE_DATA) {
+                Timber.v("On contact attachment ready: $contactAttachment")
+            }
         }
 
         fun onContentAttachmentsReady(attachments: List<ContentAttachmentData>)
