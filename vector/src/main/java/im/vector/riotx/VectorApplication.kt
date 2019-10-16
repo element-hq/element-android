@@ -136,7 +136,7 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
             }
         })
         ProcessLifecycleOwner.get().lifecycle.addObserver(appStateHandler)
-        //This should be done as early as possible
+        // This should be done as early as possible
         initKnownEmojiHashSet(appContext)
     }
 
