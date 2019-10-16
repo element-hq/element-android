@@ -124,8 +124,9 @@ class AttachmentTypeSelectorView(context: Context,
     }
 
     override fun dismiss() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            animateWindowOutCircular(anchor, contentView)
+        val capturedAnchor = anchor
+        if (capturedAnchor != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            animateWindowOutCircular(capturedAnchor, contentView)
         } else {
             animateWindowOutTranslate(contentView)
         }
@@ -142,13 +143,13 @@ class AttachmentTypeSelectorView(context: Context,
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private fun animateWindowInCircular(anchor: View?, contentView: View) {
+    private fun animateWindowInCircular(anchor: View, contentView: View) {
         val coordinates = getClickCoordinates(anchor, contentView)
         val animator = ViewAnimationUtils.createCircularReveal(contentView,
-                coordinates.first,
-                coordinates.second,
-                0f,
-                max(contentView.width, contentView.height).toFloat())
+                                                               coordinates.first,
+                                                               coordinates.second,
+                                                               0f,
+                                                               max(contentView.width, contentView.height).toFloat())
         animator.duration = ANIMATION_DURATION.toLong()
         animator.start()
     }
@@ -160,13 +161,13 @@ class AttachmentTypeSelectorView(context: Context,
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private fun animateWindowOutCircular(anchor: View?, contentView: View) {
+    private fun animateWindowOutCircular(anchor: View, contentView: View) {
         val coordinates = getClickCoordinates(anchor, contentView)
         val animator = ViewAnimationUtils.createCircularReveal(getContentView(),
-                coordinates.first,
-                coordinates.second,
-                max(getContentView().width, getContentView().height).toFloat(),
-                0f)
+                                                               coordinates.first,
+                                                               coordinates.second,
+                                                               max(getContentView().width, getContentView().height).toFloat(),
+                                                               0f)
 
         animator.duration = ANIMATION_DURATION.toLong()
         animator.addListener(object : AnimatorListenerAdapter() {
@@ -193,12 +194,12 @@ class AttachmentTypeSelectorView(context: Context,
         getContentView().startAnimation(animation)
     }
 
-    private fun getClickCoordinates(anchor: View?, contentView: View): Pair<Int, Int> {
+    private fun getClickCoordinates(anchor: View, contentView: View): Pair<Int, Int> {
         val anchorCoordinates = IntArray(2)
-        anchor?.getLocationOnScreen(anchorCoordinates)
+        anchor.getLocationOnScreen(anchorCoordinates)
         val contentCoordinates = IntArray(2)
         contentView.getLocationOnScreen(contentCoordinates)
-        val x = anchorCoordinates[0] - contentCoordinates[0]
+        val x = anchorCoordinates[0] - contentCoordinates[0] + anchor.width / 2
         val y = anchorCoordinates[1] - contentCoordinates[1]
         return Pair(x, y)
     }

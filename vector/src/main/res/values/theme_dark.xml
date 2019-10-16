@@ -28,6 +28,8 @@
         <item name="riotx_fab_label_bg">@color/riotx_fab_label_bg_dark</item>
         <item name="riotx_fab_label_color">@color/riotx_fab_label_color_dark</item>
         <item name="riotx_touch_guard_bg">@color/riotx_touch_guard_bg_dark</item>
+        <item name="riotx_attachment_selector_background">@color/riotx_attachment_selector_background_dark</item>
+        <item name="riotx_attachment_selector_border">@color/riotx_attachment_selector_border_dark</item>
 
         <item name="riotx_keys_backup_banner_accent_color">@color/riotx_keys_backup_banner_accent_color_dark</item>
 
