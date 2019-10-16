@@ -34,25 +34,25 @@ internal class TaskExecutor @Inject constructor(private val coroutineDispatchers
     private val executorScope = CoroutineScope(SupervisorJob())
 
     fun <PARAMS, RESULT> execute(task: ConfigurableTask<PARAMS, RESULT>): Cancelable {
-        val job = executorScope.launch(task.callbackThread.toDispatcher()) {
+        val job = executorScope.launch {
             val resultOrFailure = runCatching {
-                withContext(coroutineDispatchers.computation) {
-                    Timber.v("Enqueue task $task")
-                    retry(task.retryCount) {
-                        if (task.constraints.connectedToNetwork) {
-                            Timber.v("Waiting network for $task")
-                            networkConnectivityChecker.waitUntilConnected()
-                        }
-                        Timber.v("Execute task $task on ${Thread.currentThread().name}")
-                        task.execute(task.params)
+                Timber.v("Enqueue task $task")
+                retry(task.retryCount) {
+                    if (task.constraints.connectedToNetwork) {
+                        Timber.v("Waiting network for $task")
+                        networkConnectivityChecker.waitUntilConnected()
                     }
+                    Timber.v("Execute task $task on ${Thread.currentThread().name}")
+                    task.execute(task.params)
                 }
             }
-            resultOrFailure
-                    .onFailure {
-                        Timber.d(it, "Task failed")
-                    }
-                    .foldToCallback(task.callback)
+            withContext(task.callbackThread.toDispatcher()) {
+                resultOrFailure
+                        .onFailure {
+                            Timber.d(it, "Task failed")
+                        }
+                        .foldToCallback(task.callback)
+            }
         }
         return CancelableCoroutine(job)
     }
