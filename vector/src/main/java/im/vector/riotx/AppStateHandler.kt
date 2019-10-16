@@ -23,26 +23,27 @@ import arrow.core.Option
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.rx.rx
-import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.features.home.HomeRoomListObservableStore
 import im.vector.riotx.features.home.group.ALL_COMMUNITIES_GROUP_ID
 import im.vector.riotx.features.home.group.SelectedGroupStore
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.addTo
+import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 
 
 /**
- * This class handles the main room list at the moment. It will dispatch the results to the store.
- * It requires to be added with ProcessLifecycleOwner.get().lifecycle.addObserver
+ * This class handles the global app state. At the moment, it only manages room list.
+ * It requires to be added to ProcessLifecycleOwner.get().lifecycle
  */
 @Singleton
 class AppStateHandler @Inject constructor(
-        private val activeSessionHolder: ActiveSessionHolder,
+        private val sessionObservableStore: ActiveSessionObservableStore,
         private val homeRoomListStore: HomeRoomListObservableStore,
         private val selectedGroupStore: SelectedGroupStore) : LifecycleObserver {
 
@@ -61,9 +62,12 @@ class AppStateHandler @Inject constructor(
     private fun observeRoomsAndGroup() {
         Observable
                 .combineLatest<List<RoomSummary>, Option<GroupSummary>, List<RoomSummary>>(
-                        activeSessionHolder.getActiveSession()
-                                .rx()
-                                .liveRoomSummaries()
+                        sessionObservableStore.observe()
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .switchMap {
+                                    it.orNull()?.rx()?.liveRoomSummaries()
+                                    ?: Observable.just(emptyList())
+                                }
                                 .throttleLast(300, TimeUnit.MILLISECONDS),
                         selectedGroupStore.observe(),
                         BiFunction { rooms, selectedGroupOption ->

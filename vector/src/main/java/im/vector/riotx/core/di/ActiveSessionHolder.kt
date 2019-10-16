@@ -16,8 +16,10 @@
 
 package im.vector.riotx.core.di
 
+import arrow.core.Option
 import im.vector.matrix.android.api.auth.Authenticator
 import im.vector.matrix.android.api.session.Session
+import im.vector.riotx.ActiveSessionObservableStore
 import im.vector.riotx.features.crypto.keysrequest.KeyRequestHandler
 import im.vector.riotx.features.crypto.verification.IncomingVerificationRequestHandler
 import java.util.concurrent.atomic.AtomicReference
@@ -26,6 +28,7 @@ import javax.inject.Singleton
 
 @Singleton
 class ActiveSessionHolder @Inject constructor(private val authenticator: Authenticator,
+                                              private val sessionObservableStore: ActiveSessionObservableStore,
                                               private val keyRequestHandler: KeyRequestHandler,
                                               private val incomingVerificationRequestHandler: IncomingVerificationRequestHandler
 ) {
@@ -34,12 +37,14 @@ class ActiveSessionHolder @Inject constructor(private val authenticator: Authent
 
     fun setActiveSession(session: Session) {
         activeSession.set(session)
+        sessionObservableStore.post(Option.fromNullable(session))
         keyRequestHandler.start(session)
         incomingVerificationRequestHandler.start(session)
     }
 
     fun clearActiveSession() {
         activeSession.set(null)
+        sessionObservableStore.post(Option.empty())
         keyRequestHandler.stop()
         incomingVerificationRequestHandler.stop()
     }
