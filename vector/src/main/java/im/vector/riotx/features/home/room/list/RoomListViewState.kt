@@ -20,6 +20,7 @@ import androidx.annotation.StringRes
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
+import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotx.R
 
@@ -67,6 +68,13 @@ data class RoomListViewState(
             RoomCategory.SERVER_NOTICE -> copy(isServerNoticeRoomsExpanded = !isServerNoticeRoomsExpanded)
         }
     }
+
+    val hasUnread: Boolean
+        get() = asyncFilteredRooms.invoke()
+                ?.flatMap { it.value }
+                ?.filter { it.membership == Membership.JOIN }
+                ?.any { it.hasUnreadMessages }
+                ?: false
 }
 
 typealias RoomSummaries = LinkedHashMap<RoomCategory, List<RoomSummary>>

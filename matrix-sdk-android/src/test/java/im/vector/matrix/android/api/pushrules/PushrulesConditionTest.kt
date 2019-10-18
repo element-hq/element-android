@@ -32,6 +32,7 @@ import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.TimelineSettings
 import im.vector.matrix.android.api.util.Cancelable
+import im.vector.matrix.android.api.util.Optional
 import org.junit.Assert
 import org.junit.Test
 
@@ -172,7 +173,6 @@ class PushrulesConditionTest {
     }
 
     class MockRoomService() : RoomService {
-
         override fun createRoom(createRoomParams: CreateRoomParams, callback: MatrixCallback<String>): Cancelable {
             TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
@@ -192,9 +192,21 @@ class PushrulesConditionTest {
         override fun liveRoomSummaries(): LiveData<List<RoomSummary>> {
             return MutableLiveData()
         }
+
+        override fun markAllAsRead(roomIds: List<String>, callback: MatrixCallback<Unit>): Cancelable {
+            TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
+        }
     }
 
     class MockRoom(override val roomId: String, val _numberOfJoinedMembers: Int) : Room {
+        override fun getReadMarkerLive(): LiveData<Optional<String>> {
+            TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun getMyReadReceiptLive(): LiveData<Optional<String>> {
+            TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
+        }
+
         override fun resendTextMessage(localEcho: TimelineEvent): Cancelable? {
             TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
@@ -242,7 +254,7 @@ class PushrulesConditionTest {
         override fun fetchEditHistory(eventId: String, callback: MatrixCallback<List<Event>>) {
         }
 
-        override fun liveTimeLineEvent(eventId: String): LiveData<TimelineEvent> {
+        override fun getTimeLineEventLive(eventId: String): LiveData<Optional<TimelineEvent>> {
             TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 
@@ -250,7 +262,7 @@ class PushrulesConditionTest {
             return _numberOfJoinedMembers
         }
 
-        override fun liveRoomSummary(): LiveData<RoomSummary> {
+        override fun getRoomSummaryLive(): LiveData<Optional<RoomSummary>> {
             TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 
@@ -347,7 +359,7 @@ class PushrulesConditionTest {
             TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 
-        override fun getEventSummaryLive(eventId: String): LiveData<EventAnnotationsSummary> {
+        override fun getEventSummaryLive(eventId: String): LiveData<Optional<EventAnnotationsSummary>> {
             TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 

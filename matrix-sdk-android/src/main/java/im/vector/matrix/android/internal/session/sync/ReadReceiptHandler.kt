@@ -25,7 +25,7 @@ import io.realm.Realm
 import timber.log.Timber
 import javax.inject.Inject
 
-// the receipts dictionnaries
+// the receipts dictionaries
 // key   : $EventId
 // value : dict key $UserId
 //              value dict key ts

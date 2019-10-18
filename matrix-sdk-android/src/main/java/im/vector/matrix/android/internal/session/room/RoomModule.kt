@@ -40,22 +40,14 @@ import im.vector.matrix.android.internal.session.room.membership.leaving.Default
 import im.vector.matrix.android.internal.session.room.membership.leaving.LeaveRoomTask
 import im.vector.matrix.android.internal.session.room.prune.DefaultPruneEventTask
 import im.vector.matrix.android.internal.session.room.prune.PruneEventTask
+import im.vector.matrix.android.internal.session.room.read.DefaultMarkAllRoomsReadTask
 import im.vector.matrix.android.internal.session.room.read.DefaultSetReadMarkersTask
+import im.vector.matrix.android.internal.session.room.read.MarkAllRoomsReadTask
 import im.vector.matrix.android.internal.session.room.read.SetReadMarkersTask
-import im.vector.matrix.android.internal.session.room.relation.DefaultFetchEditHistoryTask
-import im.vector.matrix.android.internal.session.room.relation.DefaultFindReactionEventForUndoTask
-import im.vector.matrix.android.internal.session.room.relation.DefaultUpdateQuickReactionTask
-import im.vector.matrix.android.internal.session.room.relation.FetchEditHistoryTask
-import im.vector.matrix.android.internal.session.room.relation.FindReactionEventForUndoTask
-import im.vector.matrix.android.internal.session.room.relation.UpdateQuickReactionTask
+import im.vector.matrix.android.internal.session.room.relation.*
 import im.vector.matrix.android.internal.session.room.state.DefaultSendStateTask
 import im.vector.matrix.android.internal.session.room.state.SendStateTask
 import im.vector.matrix.android.internal.session.room.timeline.*
-import im.vector.matrix.android.internal.session.room.timeline.ClearUnlinkedEventsTask
-import im.vector.matrix.android.internal.session.room.timeline.DefaultGetContextOfEventTask
-import im.vector.matrix.android.internal.session.room.timeline.DefaultPaginationTask
-import im.vector.matrix.android.internal.session.room.timeline.GetContextOfEventTask
-import im.vector.matrix.android.internal.session.room.timeline.PaginationTask
 import retrofit2.Retrofit
 
 @Module
@@ -109,6 +101,9 @@ internal abstract class RoomModule {
 
     @Binds
     abstract fun bindSetReadMarkersTask(setReadMarkersTask: DefaultSetReadMarkersTask): SetReadMarkersTask
+
+    @Binds
+    abstract fun bindMarkAllRoomsReadTask(markAllRoomsReadTask: DefaultMarkAllRoomsReadTask): MarkAllRoomsReadTask
 
     @Binds
     abstract fun bindFindReactionEventForUndoTask(findReactionEventForUndoTask: DefaultFindReactionEventForUndoTask): FindReactionEventForUndoTask

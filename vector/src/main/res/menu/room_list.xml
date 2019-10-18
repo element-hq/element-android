@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_home_mark_all_as_read"
+        android:icon="@drawable/ic_material_done"
+        android:title="@string/action_mark_all_as_read" />
+
+</menu>
