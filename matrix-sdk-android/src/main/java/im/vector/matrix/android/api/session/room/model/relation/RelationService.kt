@@ -60,11 +60,9 @@ interface RelationService {
      * Undo a reaction (emoji) to the targetedEvent.
      * @param reaction the reaction (preferably emoji)
      * @param targetEventId the id of the event being reacted
-     * @param myUserId used to know if a reaction event was made by the user
      */
     fun undoReaction(reaction: String,
-                     targetEventId: String,
-                     myUserId: String) // : Cancelable
+                     targetEventId: String) : Cancelable
 
     /**
      * Edit a text message body. Limited to "m.text" contentType
@@ -92,7 +90,7 @@ interface RelationService {
                   compatibilityBodyText: String = "* $newBodyText"): Cancelable
 
     /**
-     * Get's the edit history of the given event
+     * Get the edit history of the given event
      */
     fun fetchEditHistory(eventId: String, callback: MatrixCallback<List<Event>>)
 

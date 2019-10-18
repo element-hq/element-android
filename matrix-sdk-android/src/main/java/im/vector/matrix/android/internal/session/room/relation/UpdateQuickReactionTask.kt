@@ -20,6 +20,7 @@ import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryE
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.ReactionAggregatedSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.task.Task
 import io.realm.Realm
 import javax.inject.Inject
@@ -30,8 +31,7 @@ internal interface UpdateQuickReactionTask : Task<UpdateQuickReactionTask.Params
             val roomId: String,
             val eventId: String,
             val reaction: String,
-            val oppositeReaction: String,
-            val myUserId: String
+            val oppositeReaction: String
     )
 
     data class Result(
@@ -40,17 +40,18 @@ internal interface UpdateQuickReactionTask : Task<UpdateQuickReactionTask.Params
     )
 }
 
-internal class DefaultUpdateQuickReactionTask @Inject constructor(private val monarchy: Monarchy) : UpdateQuickReactionTask {
+internal class DefaultUpdateQuickReactionTask @Inject constructor(private val monarchy: Monarchy,
+                                                                  @UserId private val userId: String) : UpdateQuickReactionTask {
 
     override suspend fun execute(params: UpdateQuickReactionTask.Params): UpdateQuickReactionTask.Result {
         var res: Pair<String?, List<String>?>? = null
         monarchy.doWithRealm { realm ->
-            res = updateQuickReaction(realm, params.reaction, params.oppositeReaction, params.eventId, params.myUserId)
+            res = updateQuickReaction(realm, params.reaction, params.oppositeReaction, params.eventId)
         }
         return UpdateQuickReactionTask.Result(res?.first, res?.second ?: emptyList())
     }
 
-    private fun updateQuickReaction(realm: Realm, reaction: String, oppositeReaction: String, eventId: String, myUserId: String): Pair<String?, List<String>?> {
+    private fun updateQuickReaction(realm: Realm, reaction: String, oppositeReaction: String, eventId: String): Pair<String?, List<String>?> {
         // the emoji reaction has been selected, we need to check if we have reacted it or not
         val existingSummary = EventAnnotationsSummaryEntity.where(realm, eventId).findFirst()
                 ?: return Pair(reaction, null)
@@ -68,7 +69,7 @@ internal class DefaultUpdateQuickReactionTask @Inject constructor(private val mo
             val toRedact = aggregationForOppositeReaction?.sourceEvents?.mapNotNull {
                 // find source event
                 val entity = EventEntity.where(realm, it).findFirst()
-                if (entity?.sender == myUserId) entity.eventId else null
+                if (entity?.sender == userId) entity.eventId else null
             }
             return Pair(reaction, toRedact)
         } else {
@@ -77,7 +78,7 @@ internal class DefaultUpdateQuickReactionTask @Inject constructor(private val mo
             val toRedact = aggregationForReaction.sourceEvents.mapNotNull {
                 // find source event
                 val entity = EventEntity.where(realm, it).findFirst()
-                if (entity?.sender == myUserId) entity.eventId else null
+                if (entity?.sender == userId) entity.eventId else null
             }
             return Pair(null, toRedact)
         }

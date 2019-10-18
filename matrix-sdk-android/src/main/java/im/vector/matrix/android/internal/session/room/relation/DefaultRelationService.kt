@@ -75,13 +75,13 @@ internal class DefaultRelationService @AssistedInject constructor(@Assisted priv
         return CancelableWork(context, sendRelationWork.id)
     }
 
-    override fun undoReaction(reaction: String, targetEventId: String, myUserId: String)/*: Cancelable*/ {
+    override fun undoReaction(reaction: String, targetEventId: String): Cancelable {
         val params = FindReactionEventForUndoTask.Params(
                 roomId,
                 targetEventId,
-                reaction,
-                myUserId
+                reaction
         )
+        // TODO We should avoid using MatrixCallback internally
         val callback = object : MatrixCallback<FindReactionEventForUndoTask.Result> {
             override fun onSuccess(data: FindReactionEventForUndoTask.Result) {
                 if (data.redactEventId == null) {
@@ -89,7 +89,6 @@ internal class DefaultRelationService @AssistedInject constructor(@Assisted priv
                     // TODO?
                 }
                 data.redactEventId?.let { toRedact ->
-
                     val redactEvent = eventFactory.createRedactEvent(roomId, toRedact, null).also {
                         saveLocalEcho(it)
                     }
@@ -99,7 +98,7 @@ internal class DefaultRelationService @AssistedInject constructor(@Assisted priv
                 }
             }
         }
-        findReactionEventForUndoTask
+        return findReactionEventForUndoTask
                 .configureWith(params) {
                     this.retryCount = Int.MAX_VALUE
                     this.callback = callback
