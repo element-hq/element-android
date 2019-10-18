@@ -420,7 +420,7 @@ class RoomDetailFragment :
                     val eventId = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_EVENT_ID) ?: return
                     val reaction = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_REACTION_RESULT) ?: return
                     // TODO check if already reacted with that?
-                    roomDetailViewModel.process(RoomDetailActions.SendReaction(reaction, eventId))
+                    roomDetailViewModel.process(RoomDetailActions.SendReaction(eventId, reaction))
                 }
             }
         }
@@ -909,7 +909,7 @@ class RoomDetailFragment :
     override fun onClickOnReactionPill(informationData: MessageInformationData, reaction: String, on: Boolean) {
         if (on) {
             // we should test the current real state of reaction on this event
-            roomDetailViewModel.process(RoomDetailActions.SendReaction(reaction, informationData.eventId))
+            roomDetailViewModel.process(RoomDetailActions.SendReaction(informationData.eventId, reaction))
         } else {
             // I need to redact a reaction
             roomDetailViewModel.process(RoomDetailActions.UndoReaction(informationData.eventId, reaction))
