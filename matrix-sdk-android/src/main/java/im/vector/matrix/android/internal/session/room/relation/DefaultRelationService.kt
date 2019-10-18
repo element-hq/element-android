@@ -65,7 +65,7 @@ internal class DefaultRelationService @AssistedInject constructor(@Assisted priv
         fun create(roomId: String): RelationService
     }
 
-    override fun sendReaction(reaction: String, targetEventId: String): Cancelable {
+    override fun sendReaction(targetEventId: String, reaction: String): Cancelable {
         val event = eventFactory.createReactionEvent(roomId, targetEventId, reaction)
                 .also {
                     saveLocalEcho(it)
@@ -75,7 +75,7 @@ internal class DefaultRelationService @AssistedInject constructor(@Assisted priv
         return CancelableWork(context, sendRelationWork.id)
     }
 
-    override fun undoReaction(reaction: String, targetEventId: String): Cancelable {
+    override fun undoReaction(targetEventId: String, reaction: String): Cancelable {
         val params = FindReactionEventForUndoTask.Params(
                 roomId,
                 targetEventId,

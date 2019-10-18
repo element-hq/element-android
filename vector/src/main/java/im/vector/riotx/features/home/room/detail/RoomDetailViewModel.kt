@@ -445,7 +445,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun handleSendReaction(action: RoomDetailActions.SendReaction) {
-        room.sendReaction(action.reaction, action.targetEventId)
+        room.sendReaction(action.targetEventId, action.reaction)
     }
 
     private fun handleRedactEvent(action: RoomDetailActions.RedactAction) {
@@ -454,14 +454,14 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun handleUndoReact(action: RoomDetailActions.UndoReaction) {
-        room.undoReaction(action.reaction, action.targetEventId)
+        room.undoReaction(action.targetEventId, action.reaction)
     }
 
     private fun handleUpdateQuickReaction(action: RoomDetailActions.UpdateQuickReactAction) {
         if (action.add) {
-            room.sendReaction(action.selectedReaction, action.targetEventId)
+            room.sendReaction(action.targetEventId, action.selectedReaction)
         } else {
-            room.undoReaction(action.selectedReaction, action.targetEventId)
+            room.undoReaction(action.targetEventId, action.selectedReaction)
         }
     }
 

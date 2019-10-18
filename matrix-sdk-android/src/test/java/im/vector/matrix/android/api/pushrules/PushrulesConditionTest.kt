@@ -330,7 +330,7 @@ class PushrulesConditionTest {
             TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 
-        override fun sendReaction(reaction: String, targetEventId: String): Cancelable {
+        override fun sendReaction(targetEventId: String, reaction: String): Cancelable {
             TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 

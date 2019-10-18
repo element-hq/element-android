@@ -50,19 +50,19 @@ interface RelationService {
 
     /**
      * Sends a reaction (emoji) to the targetedEvent.
-     * @param reaction the reaction (preferably emoji)
      * @param targetEventId the id of the event being reacted
+     * @param reaction the reaction (preferably emoji)
      */
-    fun sendReaction(reaction: String,
-                     targetEventId: String): Cancelable
+    fun sendReaction(targetEventId: String,
+                     reaction: String): Cancelable
 
     /**
      * Undo a reaction (emoji) to the targetedEvent.
-     * @param reaction the reaction (preferably emoji)
      * @param targetEventId the id of the event being reacted
+     * @param reaction the reaction (preferably emoji)
      */
-    fun undoReaction(reaction: String,
-                     targetEventId: String) : Cancelable
+    fun undoReaction(targetEventId: String,
+                     reaction: String): Cancelable
 
     /**
      * Edit a text message body. Limited to "m.text" contentType
