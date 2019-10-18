@@ -19,26 +19,34 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import butterknife.BindView
+import butterknife.ButterKnife
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
-import kotlinx.android.synthetic.main.bottom_sheet_generic_recycler_epoxy.*
+import kotlinx.android.synthetic.main.bottom_sheet_generic_list_with_title.*
 import javax.inject.Inject
 
 /**
  * Bottom sheet fragment that shows a message preview with list of contextual actions
  */
 class MessageActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), MessageActionsEpoxyController.MessageActionsEpoxyControllerListener {
+
     @Inject lateinit var messageActionViewModelFactory: MessageActionsViewModel.Factory
     @Inject lateinit var messageActionsEpoxyController: MessageActionsEpoxyController
 
-    private val viewModel: MessageActionsViewModel by fragmentViewModel(MessageActionsViewModel::class)
+    @BindView(R.id.bottomSheetRecyclerView)
+    lateinit var recyclerView: RecyclerView
 
-    override val showExpanded = true
+    private val viewModel: MessageActionsViewModel by fragmentViewModel(MessageActionsViewModel::class)
 
     private lateinit var actionHandlerModel: ActionsHandler
 
@@ -47,14 +55,16 @@ class MessageActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), Message
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.bottom_sheet_generic_recycler_epoxy, container, false)
+        val view = inflater.inflate(R.layout.bottom_sheet_generic_list, container, false)
+        ButterKnife.bind(this, view)
+        return view
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         actionHandlerModel = ViewModelProviders.of(requireActivity()).get(ActionsHandler::class.java)
-
-        bottomSheetEpoxyRecyclerView.setController(messageActionsEpoxyController)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+        recyclerView.adapter = messageActionsEpoxyController.adapter
         messageActionsEpoxyController.listener = this
     }
 

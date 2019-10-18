@@ -3,24 +3,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="400dp"
     android:orientation="vertical">
 
     <TextView
         android:id="@+id/bottomSheetTitle"
         android:layout_width="match_parent"
-        android:layout_height="44dp"
+        android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:padding="8dp"
         android:textColor="?android:textColorSecondary"
         android:textSize="16sp"
         tools:text="@string/reactions" />
 
-    <com.airbnb.epoxy.EpoxyRecyclerView
-        android:id="@+id/bottom_sheet_display_reactions_list"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/bottomSheetRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="match_parent"
         android:fadeScrollbars="false"
         android:scrollbars="vertical"
         tools:itemCount="15"

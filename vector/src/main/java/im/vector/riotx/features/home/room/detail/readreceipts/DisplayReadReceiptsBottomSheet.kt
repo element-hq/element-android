@@ -23,9 +23,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
-import com.airbnb.epoxy.EpoxyRecyclerView
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.args
 import im.vector.riotx.R
@@ -33,7 +34,7 @@ import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.riotx.features.home.room.detail.timeline.item.ReadReceiptData
 import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.bottom_sheet_epoxylist_with_title.*
+import kotlinx.android.synthetic.main.bottom_sheet_generic_list_with_title.*
 import javax.inject.Inject
 
 @Parcelize
@@ -48,8 +49,8 @@ class DisplayReadReceiptsBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
     @Inject lateinit var epoxyController: DisplayReadReceiptsController
 
-    @BindView(R.id.bottom_sheet_display_reactions_list)
-    lateinit var epoxyRecyclerView: EpoxyRecyclerView
+    @BindView(R.id.bottomSheetRecyclerView)
+    lateinit var recyclerView: RecyclerView
 
     private val displayReadReceiptArgs: DisplayReadReceiptArgs by args()
 
@@ -58,17 +59,15 @@ class DisplayReadReceiptsBottomSheet : VectorBaseBottomSheetDialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.bottom_sheet_epoxylist_with_title, container, false)
+        val view = inflater.inflate(R.layout.bottom_sheet_generic_list_with_title, container, false)
         ButterKnife.bind(this, view)
         return view
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        epoxyRecyclerView.setController(epoxyController)
-        val dividerItemDecoration = DividerItemDecoration(epoxyRecyclerView.context,
-                                                          LinearLayout.VERTICAL)
-        epoxyRecyclerView.addItemDecoration(dividerItemDecoration)
+        recyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        recyclerView.adapter = epoxyController.adapter
         bottomSheetTitle.text = getString(R.string.read_at)
         epoxyController.setData(displayReadReceiptArgs.readReceipts)
     }

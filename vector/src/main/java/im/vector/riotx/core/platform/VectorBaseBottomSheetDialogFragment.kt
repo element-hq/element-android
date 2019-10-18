@@ -30,6 +30,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import im.vector.riotx.core.di.DaggerScreenComponent
 import im.vector.riotx.core.di.ScreenComponent
+import im.vector.riotx.core.utils.DimensionConverter
 import java.util.*
 
 /**
@@ -68,14 +69,11 @@ abstract class VectorBaseBottomSheetDialogFragment : BottomSheetDialogFragment()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return super.onCreateDialog(savedInstanceState).apply {
+            val dialog = this as? BottomSheetDialog
+            bottomSheetBehavior = dialog?.behavior
+            bottomSheetBehavior?.setPeekHeight(DimensionConverter(resources).dpToPx(400), false)
             if (showExpanded) {
-                setOnShowListener { dialog ->
-                    val d = dialog as BottomSheetDialog
-
-                    val bottomSheet = d.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout?
-                    bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet!!)
-                    bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
-                }
+                bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
             }
         }
     }
