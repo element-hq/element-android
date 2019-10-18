@@ -334,7 +334,7 @@ class PushrulesConditionTest {
             TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 
-        override fun undoReaction(reaction: String, targetEventId: String, myUserId: String) {
+        override fun undoReaction(targetEventId: String, reaction: String): Cancelable {
             TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
 
