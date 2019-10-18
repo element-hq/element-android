@@ -31,7 +31,7 @@ sealed class RoomDetailActions {
     data class TimelineEventTurnsInvisible(val event: TimelineEvent) : RoomDetailActions()
     data class LoadMoreTimelineEvents(val direction: Timeline.Direction) : RoomDetailActions()
     data class SendReaction(val targetEventId: String, val reaction: String) : RoomDetailActions()
-    data class UndoReaction(val targetEventId: String, val key: String, val reason: String? = "") : RoomDetailActions()
+    data class UndoReaction(val targetEventId: String, val reaction: String, val reason: String? = "") : RoomDetailActions()
     data class RedactAction(val targetEventId: String, val reason: String? = "") : RoomDetailActions()
     data class UpdateQuickReactAction(val targetEventId: String, val selectedReaction: String, val add: Boolean) : RoomDetailActions()
     data class NavigateToEvent(val eventId: String, val highlight: Boolean) : RoomDetailActions()

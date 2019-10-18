@@ -454,7 +454,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun handleUndoReact(action: RoomDetailActions.UndoReaction) {
-        room.undoReaction(action.key, action.targetEventId)
+        room.undoReaction(action.reaction, action.targetEventId)
     }
 
     private fun handleUpdateQuickReaction(action: RoomDetailActions.UpdateQuickReactAction) {
