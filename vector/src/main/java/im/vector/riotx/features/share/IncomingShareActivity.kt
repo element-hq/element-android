@@ -69,10 +69,10 @@ class IncomingShareActivity :
                 isShareManaged = handleTextShare(intent)
             }
             if (!isShareManaged) {
-                cannottManageShare()
+                cannotManageShare()
             }
         } else {
-            cannottManageShare()
+            cannotManageShare()
         }
     }
 
@@ -83,10 +83,10 @@ class IncomingShareActivity :
     }
 
     override fun onAttachmentsProcessFailed() {
-        cannottManageShare()
+        cannotManageShare()
     }
 
-    private fun cannottManageShare() {
+    private fun cannotManageShare() {
         Toast.makeText(this, R.string.error_handling_incoming_share, Toast.LENGTH_LONG).show()
         finish()
     }

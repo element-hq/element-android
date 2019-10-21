@@ -28,10 +28,11 @@ data class ContactAttachment(
 ) {
 
     fun toHumanReadable(): String {
-        val stringBuilder = StringBuilder(displayName)
-        phones.concatIn(stringBuilder)
-        emails.concatIn(stringBuilder)
-        return stringBuilder.toString()
+        return buildString {
+            append(displayName)
+            phones.concatIn(this)
+            emails.concatIn(this)
+        }
     }
 
     private fun List<String>.concatIn(stringBuilder: StringBuilder) {

@@ -80,18 +80,18 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".features.share.IncomingShareActivity"
-            android:screenOrientation="portrait">
+        <activity android:name=".features.share.IncomingShareActivity">
             <intent-filter>
-                <action android:name="android.intent.action.SEND"/>
-                <data android:mimeType="*/*"/>
+                <action android:name="android.intent.action.SEND" />
+                <data android:mimeType="*/*" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.OPENABLE" />
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.SEND_MULTIPLE"/>
-                <data android:mimeType="*/*"/>
+                <action android:name="android.intent.action.SEND_MULTIPLE" />
+                <data android:mimeType="*/*" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.OPENABLE" />
             </intent-filter>

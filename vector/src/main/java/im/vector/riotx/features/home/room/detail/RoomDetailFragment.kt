@@ -1126,6 +1126,7 @@ class RoomDetailFragment :
     }
 
     override fun onContactAttachmentReady(contactAttachment: ContactAttachment) {
+        super.onContactAttachmentReady(contactAttachment)
         val formattedContact = contactAttachment.toHumanReadable()
         roomDetailViewModel.process(RoomDetailActions.SendMessage(formattedContact, false))
     }
