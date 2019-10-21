@@ -117,7 +117,16 @@
             android:layout_marginBottom="4dp"
             app:dividerDrawable="@drawable/reaction_divider"
             app:flexWrap="wrap"
-            app:showDivider="middle" />
+            app:showDivider="middle"
+            tools:background="#F0E0F0"
+            tools:layout_height="40dp">
+
+            <!-- ReactionButtons will be added here in the code -->
+            <!--im.vector.riotx.features.reactions.widget.ReactionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" /-->
+
+        </com.google.android.flexbox.FlexboxLayout>
 
         <im.vector.riotx.core.ui.views.ReadReceiptsView
             android:id="@+id/readReceiptsView"
