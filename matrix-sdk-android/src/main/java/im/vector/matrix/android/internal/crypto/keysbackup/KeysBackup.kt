@@ -50,6 +50,7 @@ import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrap
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.store.db.model.KeysBackupDataEntity
 import im.vector.matrix.android.internal.di.MoshiProvider
+import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.extensions.foldToCallback
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.Task
@@ -77,6 +78,7 @@ import kotlin.random.Random
 
 @SessionScope
 internal class KeysBackup @Inject constructor(
+        @UserId private val userId: String,
         private val credentials: Credentials,
         private val cryptoStore: IMXCryptoStore,
         private val olmDevice: MXOlmDevice,
@@ -375,8 +377,6 @@ internal class KeysBackup @Inject constructor(
      */
     @WorkerThread
     private fun getKeysBackupTrustBg(keysBackupVersion: KeysVersionResult): KeysBackupVersionTrust {
-        val myUserId = credentials.userId
-
         val keysBackupVersionTrust = KeysBackupVersionTrust()
         val authData = keysBackupVersion.getAuthDataAsMegolmBackupAuthData()
 
@@ -388,7 +388,7 @@ internal class KeysBackup @Inject constructor(
             return keysBackupVersionTrust
         }
 
-        val mySigs = authData.signatures?.get(myUserId)
+        val mySigs = authData.signatures?.get(userId)
         if (mySigs.isNullOrEmpty()) {
             Timber.v("getKeysBackupTrust: Ignoring key backup because it lacks any signatures from this user")
             return keysBackupVersionTrust
@@ -403,7 +403,7 @@ internal class KeysBackup @Inject constructor(
             }
 
             if (deviceId != null) {
-                val device = cryptoStore.getUserDevice(deviceId, myUserId)
+                val device = cryptoStore.getUserDevice(deviceId, userId)
                 var isSignatureValid = false
 
                 if (device == null) {
@@ -450,10 +450,8 @@ internal class KeysBackup @Inject constructor(
         } else {
             GlobalScope.launch(coroutineDispatchers.main) {
                 val updateKeysBackupVersionBody = withContext(coroutineDispatchers.crypto) {
-                    val myUserId = credentials.userId
-
                     // Get current signatures, or create an empty set
-                    val myUserSignatures = authData.signatures?.get(myUserId)?.toMutableMap()
+                    val myUserSignatures = authData.signatures?.get(userId)?.toMutableMap()
                             ?: HashMap()
 
                     if (trust) {
@@ -462,7 +460,7 @@ internal class KeysBackup @Inject constructor(
 
                         val deviceSignatures = objectSigner.signObject(canonicalJson)
 
-                        deviceSignatures[myUserId]?.forEach { entry ->
+                        deviceSignatures[userId]?.forEach { entry ->
                             myUserSignatures[entry.key] = entry.value
                         }
                     } else {
@@ -478,7 +476,7 @@ internal class KeysBackup @Inject constructor(
                     val newMegolmBackupAuthData = authData.copy()
 
                     val newSignatures = newMegolmBackupAuthData.signatures!!.toMutableMap()
-                    newSignatures[myUserId] = myUserSignatures
+                    newSignatures[userId] = myUserSignatures
 
                     newMegolmBackupAuthData.signatures = newSignatures
 
@@ -1411,5 +1409,5 @@ internal class KeysBackup @Inject constructor(
  * DEBUG INFO
  * ========================================================================================== */
 
-    override fun toString() = "KeysBackup for ${credentials.userId}"
+    override fun toString() = "KeysBackup for $userId"
 }
