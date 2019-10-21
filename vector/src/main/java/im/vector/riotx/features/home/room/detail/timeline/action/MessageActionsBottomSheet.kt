@@ -64,6 +64,8 @@ class MessageActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), Message
         actionHandlerModel = ViewModelProviders.of(requireActivity()).get(ActionsHandler::class.java)
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         recyclerView.adapter = messageActionsEpoxyController.adapter
+        // Disable item animation
+        recyclerView.itemAnimator = null
         messageActionsEpoxyController.listener = this
     }
 
