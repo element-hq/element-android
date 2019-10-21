@@ -63,7 +63,7 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
     private fun canRetryKeysDownload(userId: String): Boolean {
         var res = false
 
-        if (userId.isNotEmpty() && userId.contains(":")) {
+        if (':' in userId) {
             try {
                 synchronized(notReadyToRetryHS) {
                     res = !notReadyToRetryHS.contains(userId.substring(userId.lastIndexOf(":") + 1))

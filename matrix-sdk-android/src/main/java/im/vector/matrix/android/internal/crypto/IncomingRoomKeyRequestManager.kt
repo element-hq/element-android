@@ -95,7 +95,7 @@ internal class IncomingRoomKeyRequestManager @Inject constructor(
                 continue
             }
 
-            if (deviceId == credentials.deviceId && credentials.userId == userId) {
+            if (credentials.deviceId == deviceId && credentials.userId == userId) {
                 Timber.v("## processReceivedRoomKeyRequests() : oneself device - ignored")
                 cryptoStore.deleteIncomingRoomKeyRequest(request)
                 continue

@@ -148,7 +148,7 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
                 setState {
                     copy(
                             joiningRoomsIds = joiningRoomsIds - roomId,
-                            joiningErrorRoomsIds = joiningErrorRoomsIds - roomId
+                            joiningErrorRoomsIds = joiningErrorRoomsIds + roomId
                     )
                 }
             }
