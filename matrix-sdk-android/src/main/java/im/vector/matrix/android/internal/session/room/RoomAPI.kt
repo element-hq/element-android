@@ -27,6 +27,7 @@ import im.vector.matrix.android.internal.network.NetworkConstants
 import im.vector.matrix.android.internal.session.room.membership.RoomMembersResponse
 import im.vector.matrix.android.internal.session.room.membership.joining.InviteBody
 import im.vector.matrix.android.internal.session.room.relation.RelationsResponse
+import im.vector.matrix.android.internal.session.room.reporting.ReportContentBody
 import im.vector.matrix.android.internal.session.room.send.SendResponse
 import im.vector.matrix.android.internal.session.room.timeline.EventContextResponse
 import im.vector.matrix.android.internal.session.room.timeline.PaginationResponse
@@ -245,4 +246,16 @@ internal interface RoomAPI {
             @Path("eventId") parent_id: String,
             @Body reason: Map<String, String>
     ): Call<SendResponse>
+
+    /**
+     * Reports an event as inappropriate to the server, which may then notify the appropriate people.
+     *
+     * @param roomId  the room id
+     * @param eventId the event to report content
+     * @param body    body containing score and reason
+     */
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/report/{eventId}")
+    fun reportContent(@Path("roomId") roomId: String,
+                      @Path("eventId") eventId: String,
+                      @Body body: ReportContentBody): Call<Unit>
 }
