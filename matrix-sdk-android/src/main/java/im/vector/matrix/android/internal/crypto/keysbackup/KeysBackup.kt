@@ -630,14 +630,12 @@ internal class KeysBackup @Inject constructor(
                     }
 
                     // Get a PK decryption instance
-                    val decryption = pkDecryptionFromRecoveryKey(recoveryKey)
-                    if (decryption == null) {
-                        // This should not happen anymore
-                        Timber.e("restoreKeysWithRecoveryKey: Invalid recovery key. Error")
-                        throw InvalidParameterException("Invalid recovery key")
-                    }
-
-                    decryption
+                    pkDecryptionFromRecoveryKey(recoveryKey)
+                }
+                if (decryption == null) {
+                    // This should not happen anymore
+                    Timber.e("restoreKeysWithRecoveryKey: Invalid recovery key. Error")
+                    throw InvalidParameterException("Invalid recovery key")
                 }
 
                 stepProgressListener?.onStepProgress(StepProgressListener.Step.DownloadingKey)
