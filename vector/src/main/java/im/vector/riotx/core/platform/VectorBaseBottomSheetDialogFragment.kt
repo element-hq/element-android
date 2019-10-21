@@ -19,7 +19,6 @@ import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
-import android.view.View
 import android.widget.FrameLayout
 import androidx.annotation.CallSuper
 import com.airbnb.mvrx.MvRx
