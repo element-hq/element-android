@@ -19,7 +19,5 @@ package im.vector.matrix.android.internal.extensions
 import io.realm.RealmObject
 
 internal fun RealmObject.assertIsManaged() {
-    if (!isManaged) {
-        throw IllegalStateException("${javaClass.simpleName} entity should be managed to use this function")
-    }
+    check(isManaged) { "${javaClass.simpleName} entity should be managed to use this function" }
 }
