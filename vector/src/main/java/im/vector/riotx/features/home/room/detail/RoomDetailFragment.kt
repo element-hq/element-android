@@ -605,6 +605,19 @@ class RoomDetailFragment :
         composerLayout.composerRelatedMessageCloseButton.setOnClickListener {
             roomDetailViewModel.process(RoomDetailActions.ExitSpecialMode(composerLayout.composerEditText.text.toString()))
         }
+        composerLayout.callback = object : TextComposerView.Callback {
+            override fun onRichContentSelected(contentUri: Uri): Boolean {
+                val shareIntent = Intent().apply {
+                    action = Intent.ACTION_SEND
+                    data = contentUri
+                }
+                val isHandled = attachmentsHelper.handleShareIntent(shareIntent)
+                if (!isHandled) {
+                    Toast.makeText(requireContext(), R.string.error_handling_incoming_share, Toast.LENGTH_SHORT).show()
+                }
+                return isHandled
+            }
+        }
     }
 
     private fun setupAttachmentButton() {

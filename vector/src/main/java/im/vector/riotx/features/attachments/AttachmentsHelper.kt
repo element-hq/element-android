@@ -16,12 +16,12 @@
 package im.vector.riotx.features.attachments
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.kbeanie.multipicker.api.Picker.*
 import com.kbeanie.multipicker.core.PickerManager
-import com.kbeanie.multipicker.utils.IntentUtils
 import im.vector.matrix.android.BuildConfig
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.riotx.core.platform.Restorable
@@ -34,15 +34,16 @@ private const val PENDING_TYPE_KEY = "PENDING_TYPE_KEY"
  * This class helps to handle attachments by providing simple methods.
  * The process is asynchronous and you must implement [Callback] methods to get the data or a failure.
  */
-class AttachmentsHelper private constructor(private val pickerManagerFactory: PickerManagerFactory) : Restorable {
+class AttachmentsHelper private constructor(private val context: Context,
+                                            private val pickerManagerFactory: PickerManagerFactory) : Restorable {
 
     companion object {
         fun create(fragment: Fragment, callback: Callback): AttachmentsHelper {
-            return AttachmentsHelper(FragmentPickerManagerFactory(fragment, callback))
+            return AttachmentsHelper(fragment.requireContext(), FragmentPickerManagerFactory(fragment, callback))
         }
 
         fun create(activity: Activity, callback: Callback): AttachmentsHelper {
-            return AttachmentsHelper(ActivityPickerManagerFactory(activity, callback))
+            return AttachmentsHelper(activity, ActivityPickerManagerFactory(activity, callback))
         }
     }
 
@@ -163,16 +164,16 @@ class AttachmentsHelper private constructor(private val pickerManagerFactory: Pi
      *
      * @return true if it can handle the intent data, false otherwise
      */
-    fun handleShare(intent: Intent): Boolean {
-        val type = intent.type ?: return false
+    fun handleShareIntent(intent: Intent): Boolean {
+        val type = intent.resolveType(context) ?: return false
         if (type.startsWith("image")) {
-            imagePicker.submit(IntentUtils.getPickerIntentForSharing(intent))
+            imagePicker.submit(intent)
         } else if (type.startsWith("video")) {
-            videoPicker.submit(IntentUtils.getPickerIntentForSharing(intent))
+            videoPicker.submit(intent)
         } else if (type.startsWith("audio")) {
-            videoPicker.submit(IntentUtils.getPickerIntentForSharing(intent))
+            videoPicker.submit(intent)
         } else if (type.startsWith("application") || type.startsWith("file") || type.startsWith("*")) {
-            filePicker.submit(IntentUtils.getPickerIntentForSharing(intent))
+            filePicker.submit(intent)
         } else {
             return false
         }

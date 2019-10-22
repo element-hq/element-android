@@ -20,6 +20,7 @@ import android.content.ClipDescription
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import com.kbeanie.multipicker.utils.IntentUtils
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
@@ -64,7 +65,9 @@ class IncomingShareActivity :
         }
         attachmentsHelper = AttachmentsHelper.create(this, this).register()
         if (intent?.action == Intent.ACTION_SEND || intent?.action == Intent.ACTION_SEND_MULTIPLE) {
-            var isShareManaged = attachmentsHelper.handleShare(intent)
+            var isShareManaged = attachmentsHelper.handleShareIntent(
+                    IntentUtils.getPickerIntentForSharing(intent)
+            )
             if (!isShareManaged) {
                 isShareManaged = handleTextShare(intent)
             }
