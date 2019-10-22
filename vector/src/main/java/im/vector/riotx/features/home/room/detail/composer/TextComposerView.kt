@@ -39,9 +39,7 @@ import im.vector.riotx.R
 class TextComposerView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null,
                                                  defStyleAttr: Int = 0) : ConstraintLayout(context, attrs, defStyleAttr) {
 
-    interface Callback {
-        fun onRichContentSelected(contentUri: Uri): Boolean
-    }
+    interface Callback : ComposerEditText.Callback
 
     var callback: Callback? = null
 
@@ -60,7 +58,7 @@ class TextComposerView @JvmOverloads constructor(context: Context, attrs: Attrib
     @BindView(R.id.composer_avatar_view)
     lateinit var composerAvatarImageView: ImageView
 
-    var currentConstraintSetId: Int = -1
+    private var currentConstraintSetId: Int = -1
 
     private val animationDuration = 100L
 
