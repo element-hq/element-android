@@ -213,10 +213,10 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
                 }
             } else {
                 if (notifiableEvent is NotifiableMessageEvent) {
-                    if (notifiableEvent.senderName.isEmpty()) {
+                    if (notifiableEvent.senderName.isNullOrEmpty()) {
                         notifiableEvent.senderName = data["sender_display_name"] ?: data["sender"] ?: ""
                     }
-                    if (notifiableEvent.roomName.isEmpty()) {
+                    if (notifiableEvent.roomName.isNullOrEmpty()) {
                         notifiableEvent.roomName = findRoomNameBestEffort(data, session) ?: ""
                     }
                 }

@@ -66,7 +66,7 @@ internal class MXOlmEncryption(
         )
 
         messageEncrypter.encryptMessage(messageMap, deviceInfos)
-        return messageMap.toContent()!!
+        return messageMap.toContent()
     }
 
     /**

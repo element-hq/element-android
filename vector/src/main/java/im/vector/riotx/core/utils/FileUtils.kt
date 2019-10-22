@@ -126,7 +126,7 @@ fun getFileExtension(fileUri: String): String? {
  * Size
  * ========================================================================================== */
 
-fun getSizeOfFiles(context: Context, root: File): Int {
+fun getSizeOfFiles(root: File): Int {
     return root.walkTopDown()
             .onEnter {
                 Timber.v("Get size of ${it.absolutePath}")

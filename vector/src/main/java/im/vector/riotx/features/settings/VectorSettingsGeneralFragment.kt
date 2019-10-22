@@ -185,8 +185,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
 
         // clear medias cache
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_CLEAR_MEDIA_CACHE_PREFERENCE_KEY)!!.let {
-            val size = getSizeOfFiles(requireContext(),
-                    File(requireContext().cacheDir, DiskCache.Factory.DEFAULT_DISK_CACHE_DIR))
+            val size = getSizeOfFiles(File(requireContext().cacheDir, DiskCache.Factory.DEFAULT_DISK_CACHE_DIR))
 
             it.summary = TextUtils.formatFileSize(requireContext(), size.toLong())
 
@@ -203,8 +202,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
                         // On BG thread
                         Glide.get(requireContext()).clearDiskCache()
 
-                        newSize = getSizeOfFiles(requireContext(),
-                                File(requireContext().cacheDir, DiskCache.Factory.DEFAULT_DISK_CACHE_DIR))
+                        newSize = getSizeOfFiles(File(requireContext().cacheDir, DiskCache.Factory.DEFAULT_DISK_CACHE_DIR))
                     }
 
                     it.summary = TextUtils.formatFileSize(requireContext(), newSize.toLong())

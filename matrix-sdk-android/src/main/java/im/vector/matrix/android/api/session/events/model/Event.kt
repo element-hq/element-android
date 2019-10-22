@@ -134,7 +134,7 @@ data class Event(
     }
 
     fun toContentStringWithIndent(): String {
-        val contentMap = toContent()?.toMutableMap() ?: HashMap()
+        val contentMap = toContent().toMutableMap()
         return JSONObject(contentMap).toString(4)
     }
 

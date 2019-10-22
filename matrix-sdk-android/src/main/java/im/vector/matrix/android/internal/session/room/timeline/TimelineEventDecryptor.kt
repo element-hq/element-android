@@ -38,23 +38,24 @@ internal class TimelineEventDecryptor(
     private val newSessionListener = object : NewSessionListener {
         override fun onNewSession(roomId: String?, senderKey: String, sessionId: String) {
             synchronized(unknownSessionsFailure) {
-                val toDecryptAgain = ArrayList<String>()
-                val eventIds = unknownSessionsFailure[sessionId]
-                if (eventIds != null) toDecryptAgain.addAll(eventIds)
-                if (toDecryptAgain.isNotEmpty()) {
-                    eventIds?.clear()
-                    toDecryptAgain.forEach {
-                        requestDecryption(it)
-                    }
-                }
+                unknownSessionsFailure[sessionId]
+                        .orEmpty()
+                        .toList()
+                        .also {
+                            unknownSessionsFailure[sessionId]?.clear()
+                        }
+            }.forEach {
+                requestDecryption(it)
             }
         }
     }
 
     private var executor: ExecutorService? = null
 
-    private val existingRequests = HashSet<String>()
-    private val unknownSessionsFailure = HashMap<String, MutableList<String>>()
+    // Set of eventIds which are currently decrypting
+    private val existingRequests = mutableSetOf<String>()
+    // sessionId -> list of eventIds
+    private val unknownSessionsFailure = mutableMapOf<String, MutableList<String>>()
 
     fun start() {
         executor = Executors.newSingleThreadExecutor()
@@ -65,25 +66,29 @@ internal class TimelineEventDecryptor(
         cryptoService.removeSessionListener(newSessionListener)
         executor?.shutdownNow()
         executor = null
-        unknownSessionsFailure.clear()
-        existingRequests.clear()
+        synchronized(unknownSessionsFailure) {
+            unknownSessionsFailure.clear()
+        }
+        synchronized(existingRequests) {
+            existingRequests.clear()
+        }
     }
 
     fun requestDecryption(eventId: String) {
+        synchronized(unknownSessionsFailure) {
+            for (eventIds in unknownSessionsFailure.values) {
+                if (eventId in eventIds) {
+                    Timber.d("Skip Decryption request for event $eventId, unknown session")
+                    return
+                }
+            }
+        }
         synchronized(existingRequests) {
             if (eventId in existingRequests) {
                 Timber.d("Skip Decryption request for event $eventId, already requested")
                 return
             }
             existingRequests.add(eventId)
-        }
-        synchronized(unknownSessionsFailure) {
-            for (it in unknownSessionsFailure.values) {
-                if (eventId in it) {
-                    Timber.d("Skip Decryption request for event $eventId, unknown session")
-                    break
-                }
-            }
         }
         executor?.execute {
             Realm.getInstance(realmConfiguration).use { realm ->
@@ -106,7 +111,7 @@ internal class TimelineEventDecryptor(
                 eventEntity.setDecryptionResult(result)
             }
         } catch (e: MXCryptoError) {
-            Timber.v("Failed to decrypt event $eventId $e")
+            Timber.v(e, "Failed to decrypt event $eventId")
             if (e is MXCryptoError.Base && e.errorType == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID) {
                 // Keep track of unknown sessions to automatically try to decrypt on new session
                 realm.executeTransaction {
