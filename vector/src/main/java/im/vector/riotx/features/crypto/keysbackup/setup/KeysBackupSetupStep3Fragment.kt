@@ -135,7 +135,13 @@ class KeysBackupSetupStep3Fragment : VectorBaseFragment() {
         }
 
         dialog.findViewById<View>(R.id.keys_backup_setup_save)?.setOnClickListener {
-            if (checkPermissions(PERMISSIONS_FOR_WRITING_FILES, this, PERMISSION_REQUEST_CODE_EXPORT_KEYS)) {
+            val permissionsChecked = checkPermissions(
+                    PERMISSIONS_FOR_WRITING_FILES,
+                    this,
+                    PERMISSION_REQUEST_CODE_EXPORT_KEYS,
+                    R.string.permissions_rationale_msg_keys_backup_export
+            )
+            if (permissionsChecked) {
                 exportRecoveryKeyToFile(recoveryKey)
             }
             dialog.dismiss()

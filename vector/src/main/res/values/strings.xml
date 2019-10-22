@@ -368,6 +368,9 @@
     <string name="permissions_rationale_msg_camera_and_audio">Riot needs permission to access your camera and your microphone to perform video calls.\n\nPlease allow access on the next pop-ups to be able to make the call.</string>
     <string name="permissions_rationale_msg_contacts">Riot can check your address book to find other Matrix users based on their email and phone numbers. If you agree to share your address book for this purpose, please allow access on the next pop-up.</string>
     <string name="permissions_msg_contacts_warning_other_androids">Riot can check your address book to find other Matrix users based on their email and phone numbers.\n\nDo you agree to share your address book for this purpose?</string>
+    <string name="permissions_rationale_msg_keys_backup_export">Riot needs permission to save your E2E keys on disk.\n\nPlease allow access on the next pop-up to be able to export your keys manually.</string>
+
+
 
     <string name="permissions_action_not_performed_missing_permissions">Sorry. Action not performed, due to missing permissions</string>
 

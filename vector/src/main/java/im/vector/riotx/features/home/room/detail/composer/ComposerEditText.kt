@@ -52,7 +52,6 @@ class ComposerEditText @JvmOverloads constructor(context: Context, attrs: Attrib
                         }
                     }
                     callback?.onRichContentSelected(inputContentInfo.contentUri) ?: false
-
                 }
         return InputConnectionCompat.createWrapper(ic, editorInfo, callback)
     }
