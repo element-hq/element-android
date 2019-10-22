@@ -244,13 +244,6 @@ internal class MXMegolmDecryption(private val userId: String,
             keysClaimed = event.getKeysClaimed().toMutableMap()
         }
 
-        if (roomKeyContent.sessionId == null
-                || roomKeyContent.sessionKey == null
-                || roomKeyContent.roomId == null) {
-            Timber.e("## invalid roomKeyContent")
-            return
-        }
-
         val added = olmDevice.addInboundGroupSession(roomKeyContent.sessionId,
                 roomKeyContent.sessionKey,
                 roomKeyContent.roomId,
