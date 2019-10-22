@@ -124,7 +124,7 @@ internal fun ChunkEntity.add(roomId: String,
         backwardsDisplayIndex = currentDisplayIndex
     }
     var currentStateIndex = lastStateIndex(direction, defaultValue = stateIndexOffset)
-    if (direction == PaginationDirection.FORWARDS && EventType.isStateEvent(event.getClearType())) {
+    if (direction == PaginationDirection.FORWARDS && EventType.isStateEvent(event.type)) {
         currentStateIndex += 1
         forwardsStateIndex = currentStateIndex
     } else if (direction == PaginationDirection.BACKWARDS && timelineEvents.isNotEmpty()) {
