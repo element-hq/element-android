@@ -16,14 +16,10 @@
 
 package im.vector.riotx.features.home.room.detail
 
-import android.text.TextUtils
 import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.ViewModelContext
+import com.airbnb.mvrx.*
 import com.jakewharton.rxrelay2.BehaviorRelay
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
@@ -92,6 +88,11 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
 
     private var timeline = room.createTimeline(eventId, timelineSettings)
 
+    // Can be used for several actions, for a one shot result
+    private val _requestLiveData = MutableLiveData<LiveEvent<Async<RoomDetailActions>>>()
+    val requestLiveData: LiveData<LiveEvent<Async<RoomDetailActions>>>
+        get() = _requestLiveData
+
     // Slot to keep a pending action during permission request
     var pendingAction: RoomDetailActions? = null
 
@@ -150,6 +151,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
             is RoomDetailActions.ResendAll                   -> handleResendAll()
             is RoomDetailActions.SetReadMarkerAction         -> handleSetReadMarkerAction(action)
             is RoomDetailActions.MarkAllAsRead               -> handleMarkAllAsRead()
+            is RoomDetailActions.ReportContent               -> handleReportContent(action)
         }
     }
 
@@ -371,7 +373,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                     val document = parser.parse(finalText)
                     val renderer = HtmlRenderer.builder().build()
                     val htmlText = renderer.render(document)
-                    if (TextUtils.equals(finalText, htmlText)) {
+                    if (finalText == htmlText) {
                         room.sendTextMessage(finalText)
                     } else {
                         room.sendFormattedTextMessage(finalText, htmlText)
@@ -396,19 +398,22 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
 
     private fun legacyRiotQuoteText(quotedText: String?, myText: String): String {
         val messageParagraphs = quotedText?.split("\n\n".toRegex())?.dropLastWhile { it.isEmpty() }?.toTypedArray()
-        val quotedTextMsg = StringBuilder()
-        if (messageParagraphs != null) {
-            for (i in messageParagraphs.indices) {
-                if (messageParagraphs[i].trim() != "") {
-                    quotedTextMsg.append("> ").append(messageParagraphs[i])
-                }
+        return buildString {
+            if (messageParagraphs != null) {
+                for (i in messageParagraphs.indices) {
+                    if (messageParagraphs[i].isNotBlank()) {
+                        append("> ")
+                        append(messageParagraphs[i])
+                    }
 
-                if (i + 1 != messageParagraphs.size) {
-                    quotedTextMsg.append("\n\n")
+                    if (i != messageParagraphs.lastIndex) {
+                        append("\n\n")
+                    }
                 }
             }
+            append("\n\n")
+            append(myText)
         }
-        return "$quotedTextMsg\n\n$myText"
     }
 
     private fun handleChangeTopicSlashCommand(changeTopic: ParsedCommand.ChangeTopic) {
@@ -440,7 +445,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun handleSendReaction(action: RoomDetailActions.SendReaction) {
-        room.sendReaction(action.reaction, action.targetEventId)
+        room.sendReaction(action.targetEventId, action.reaction)
     }
 
     private fun handleRedactEvent(action: RoomDetailActions.RedactAction) {
@@ -449,14 +454,14 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun handleUndoReact(action: RoomDetailActions.UndoReaction) {
-        room.undoReaction(action.key, action.targetEventId, session.myUserId)
+        room.undoReaction(action.targetEventId, action.reaction)
     }
 
     private fun handleUpdateQuickReaction(action: RoomDetailActions.UpdateQuickReactAction) {
         if (action.add) {
-            room.sendReaction(action.selectedReaction, action.targetEventId)
+            room.sendReaction(action.targetEventId, action.selectedReaction)
         } else {
-            room.undoReaction(action.selectedReaction, action.targetEventId, session.myUserId)
+            room.undoReaction(action.targetEventId, action.selectedReaction)
         }
     }
 
@@ -678,6 +683,18 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
 
     private fun handleMarkAllAsRead() {
         room.markAllAsRead(object : MatrixCallback<Any> {})
+    }
+
+    private fun handleReportContent(action: RoomDetailActions.ReportContent) {
+        room.reportContent(action.eventId, -100, action.reason, object : MatrixCallback<Unit> {
+            override fun onSuccess(data: Unit) {
+                _requestLiveData.postValue(LiveEvent(Success(action)))
+            }
+
+            override fun onFailure(failure: Throwable) {
+                _requestLiveData.postValue(LiveEvent(Fail(failure)))
+            }
+        })
     }
 
     private fun observeSyncState() {

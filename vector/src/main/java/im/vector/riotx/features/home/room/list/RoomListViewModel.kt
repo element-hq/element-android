@@ -78,6 +78,7 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
             is RoomListActions.AcceptInvitation -> handleAcceptInvitation(action)
             is RoomListActions.RejectInvitation -> handleRejectInvitation(action)
             is RoomListActions.FilterWith       -> handleFilter(action)
+            is RoomListActions.MarkAllRoomsRead -> handleMarkAllRoomsRead()
         }
     }
 
@@ -130,8 +131,8 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
 
         setState {
             copy(
-                    joiningRoomsIds = joiningRoomsIds.toMutableSet().apply { add(roomId) },
-                    rejectingErrorRoomsIds = rejectingErrorRoomsIds.toMutableSet().apply { remove(roomId) }
+                    joiningRoomsIds = joiningRoomsIds + roomId,
+                    rejectingErrorRoomsIds = rejectingErrorRoomsIds - roomId
             )
         }
 
@@ -147,8 +148,8 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
 
                 setState {
                     copy(
-                            joiningRoomsIds = joiningRoomsIds.toMutableSet().apply { remove(roomId) },
-                            joiningErrorRoomsIds = joiningErrorRoomsIds.toMutableSet().apply { add(roomId) }
+                            joiningRoomsIds = joiningRoomsIds - roomId,
+                            joiningErrorRoomsIds = joiningErrorRoomsIds + roomId
                     )
                 }
             }
@@ -166,8 +167,8 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
 
         setState {
             copy(
-                    rejectingRoomsIds = rejectingRoomsIds.toMutableSet().apply { add(roomId) },
-                    joiningErrorRoomsIds = joiningErrorRoomsIds.toMutableSet().apply { remove(roomId) }
+                    rejectingRoomsIds = rejectingRoomsIds + roomId,
+                    joiningErrorRoomsIds = joiningErrorRoomsIds - roomId
             )
         }
 
@@ -185,12 +186,21 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
 
                 setState {
                     copy(
-                            rejectingRoomsIds = rejectingRoomsIds.toMutableSet().apply { remove(roomId) },
-                            rejectingErrorRoomsIds = rejectingErrorRoomsIds.toMutableSet().apply { add(roomId) }
+                            rejectingRoomsIds = rejectingRoomsIds - roomId,
+                            rejectingErrorRoomsIds = rejectingErrorRoomsIds + roomId
                     )
                 }
             }
         })
+    }
+
+    private fun handleMarkAllRoomsRead() = withState { state ->
+        state.asyncFilteredRooms.invoke()
+                ?.flatMap { it.value }
+                ?.filter { it.membership == Membership.JOIN }
+                ?.map { it.roomId }
+                ?.toList()
+                ?.let { session.markAllAsRead(it, object : MatrixCallback<Unit> {}) }
     }
 
     private fun buildRoomSummaries(rooms: List<RoomSummary>): RoomSummaries {

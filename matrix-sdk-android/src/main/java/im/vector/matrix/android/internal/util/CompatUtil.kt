@@ -59,19 +59,11 @@ object CompatUtil {
     private const val SHARED_KEY_ANDROID_VERSION_WHEN_KEY_HAS_BEEN_GENERATED = "android_version_when_key_has_been_generated"
 
     private var sSecretKeyAndVersion: SecretKeyAndVersion? = null
-    private var sPrng: SecureRandom? = null
 
     /**
      * Returns the unique SecureRandom instance shared for all local storage encryption operations.
      */
-    private val prng: SecureRandom
-        get() {
-            if (sPrng == null) {
-                sPrng = SecureRandom()
-            }
-
-            return sPrng!!
-        }
+    private val prng: SecureRandom by lazy(LazyThreadSafetyMode.NONE) { SecureRandom() }
 
     /**
      * Create a GZIPOutputStream instance

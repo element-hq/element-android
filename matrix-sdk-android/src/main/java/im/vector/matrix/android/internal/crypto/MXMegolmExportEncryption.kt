@@ -16,20 +16,19 @@
 
 package im.vector.matrix.android.internal.crypto
 
-import android.text.TextUtils
 import android.util.Base64
 import im.vector.matrix.android.internal.extensions.toUnsignedInt
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
 import java.nio.charset.Charset
 import java.security.SecureRandom
-import java.util.*
 import javax.crypto.Cipher
 import javax.crypto.Mac
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
 import kotlin.experimental.and
 import kotlin.experimental.xor
+import kotlin.math.min
 
 /**
  * Utility class to import/export the crypto data
@@ -51,7 +50,7 @@ object MXMegolmExportEncryption {
      * @return the AES key
      */
     private fun getAesKey(keyBits: ByteArray): ByteArray {
-        return Arrays.copyOfRange(keyBits, 0, 32)
+        return keyBits.copyOfRange(0, 32)
     }
 
     /**
@@ -61,7 +60,7 @@ object MXMegolmExportEncryption {
      * @return the Hmac key.
      */
     private fun getHmacKey(keyBits: ByteArray): ByteArray {
-        return Arrays.copyOfRange(keyBits, 32, keyBits.size)
+        return keyBits.copyOfRange(32, keyBits.size)
     }
 
     /**
@@ -77,7 +76,7 @@ object MXMegolmExportEncryption {
         val body = unpackMegolmKeyFile(data)
 
         // check we have a version byte
-        if (null == body || body.size == 0) {
+        if (null == body || body.isEmpty()) {
             Timber.e("## decryptMegolmKeyFile() : Invalid file: too short")
             throw Exception("Invalid file: too short")
         }
@@ -93,27 +92,27 @@ object MXMegolmExportEncryption {
             throw Exception("Invalid file: too short")
         }
 
-        if (TextUtils.isEmpty(password)) {
+        if (password.isEmpty()) {
             throw Exception("Empty password is not supported")
         }
 
-        val salt = Arrays.copyOfRange(body, 1, 1 + 16)
-        val iv = Arrays.copyOfRange(body, 17, 17 + 16)
+        val salt = body.copyOfRange(1, 1 + 16)
+        val iv = body.copyOfRange(17, 17 + 16)
         val iterations =
                 (body[33].toUnsignedInt() shl 24) or (body[34].toUnsignedInt() shl 16) or (body[35].toUnsignedInt() shl 8) or body[36].toUnsignedInt()
-        val ciphertext = Arrays.copyOfRange(body, 37, 37 + ciphertextLength)
-        val hmac = Arrays.copyOfRange(body, body.size - 32, body.size)
+        val ciphertext = body.copyOfRange(37, 37 + ciphertextLength)
+        val hmac = body.copyOfRange(body.size - 32, body.size)
 
         val deriveKey = deriveKeys(salt, iterations, password)
 
-        val toVerify = Arrays.copyOfRange(body, 0, body.size - 32)
+        val toVerify = body.copyOfRange(0, body.size - 32)
 
         val macKey = SecretKeySpec(getHmacKey(deriveKey), "HmacSHA256")
         val mac = Mac.getInstance("HmacSHA256")
         mac.init(macKey)
         val digest = mac.doFinal(toVerify)
 
-        if (!Arrays.equals(hmac, digest)) {
+        if (!hmac.contentEquals(digest)) {
             Timber.e("## decryptMegolmKeyFile() : Authentication check failed: incorrect password?")
             throw Exception("Authentication check failed: incorrect password?")
         }
@@ -146,7 +145,7 @@ object MXMegolmExportEncryption {
     @Throws(Exception::class)
     @JvmOverloads
     fun encryptMegolmKeyFile(data: String, password: String, kdf_rounds: Int = DEFAULT_ITERATION_COUNT): ByteArray {
-        if (TextUtils.isEmpty(password)) {
+        if (password.isEmpty()) {
             throw Exception("Empty password is not supported")
         }
 
@@ -196,7 +195,7 @@ object MXMegolmExportEncryption {
         System.arraycopy(cipherArray, 0, resultBuffer, idx, cipherArray.size)
         idx += cipherArray.size
 
-        val toSign = Arrays.copyOfRange(resultBuffer, 0, idx)
+        val toSign = resultBuffer.copyOfRange(0, idx)
 
         val macKey = SecretKeySpec(getHmacKey(deriveKey), "HmacSHA256")
         val mac = Mac.getInstance("HmacSHA256")
@@ -234,7 +233,7 @@ object MXMegolmExportEncryption {
             // start the next line after the newline
             lineStart = lineEnd + 1
 
-            if (TextUtils.equals(line, HEADER_LINE)) {
+            if (line == HEADER_LINE) {
                 break
             }
         }
@@ -244,15 +243,13 @@ object MXMegolmExportEncryption {
         // look for the end line
         while (true) {
             val lineEnd = fileStr.indexOf('\n', lineStart)
-            val line: String
-
-            if (lineEnd < 0) {
-                line = fileStr.substring(lineStart).trim()
+            val line = if (lineEnd < 0) {
+                fileStr.substring(lineStart)
             } else {
-                line = fileStr.substring(lineStart, lineEnd).trim()
-            }
+                fileStr.substring(lineStart, lineEnd)
+            }.trim()
 
-            if (TextUtils.equals(line, TRAILER_LINE)) {
+            if (line == TRAILER_LINE) {
                 break
             }
 
@@ -290,7 +287,7 @@ object MXMegolmExportEncryption {
         for (i in 1..nLines) {
             outStream.write("\n".toByteArray())
 
-            val len = Math.min(LINE_LENGTH, data.size - o)
+            val len = min(LINE_LENGTH, data.size - o)
             outStream.write(Base64.encode(data, o, len, Base64.DEFAULT))
             o += LINE_LENGTH
         }
@@ -318,7 +315,7 @@ object MXMegolmExportEncryption {
         // it is simpler than the generic algorithm because the expected key length is equal to the mac key length.
         // noticed as dklen/hlen
         val prf = Mac.getInstance("HmacSHA512")
-        prf.init(SecretKeySpec(password.toByteArray(charset("UTF-8")), "HmacSHA512"))
+        prf.init(SecretKeySpec(password.toByteArray(Charsets.UTF_8), "HmacSHA512"))
 
         // 512 bits key length
         val key = ByteArray(64)
@@ -326,8 +323,7 @@ object MXMegolmExportEncryption {
 
         // U1 = PRF(Password, Salt || INT_32_BE(i))
         prf.update(salt)
-        val int32BE = ByteArray(4)
-        Arrays.fill(int32BE, 0.toByte())
+        val int32BE = ByteArray(4) { 0.toByte() }
         int32BE[3] = 1.toByte()
         prf.update(int32BE)
         prf.doFinal(Uc, 0)
@@ -346,7 +342,7 @@ object MXMegolmExportEncryption {
             }
         }
 
-        Timber.v("## deriveKeys() : " + iterations + " in " + (System.currentTimeMillis() - t0) + " ms")
+        Timber.v("## deriveKeys() : $iterations in ${System.currentTimeMillis() - t0} ms")
 
         return key
     }

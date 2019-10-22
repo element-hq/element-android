@@ -42,6 +42,8 @@ import im.vector.riotx.features.home.group.GroupListFragment
 import im.vector.riotx.features.home.room.detail.RoomDetailFragment
 import im.vector.riotx.features.home.room.detail.readreceipts.DisplayReadReceiptsBottomSheet
 import im.vector.riotx.features.home.room.detail.timeline.action.*
+import im.vector.riotx.features.home.room.detail.timeline.edithistory.ViewEditHistoryBottomSheet
+import im.vector.riotx.features.home.room.detail.timeline.reactions.ViewReactionsBottomSheet
 import im.vector.riotx.features.home.room.filtered.FilteredRoomsActivity
 import im.vector.riotx.features.home.room.list.RoomListFragment
 import im.vector.riotx.features.invite.VectorInviteView
@@ -104,11 +106,9 @@ interface ScreenComponent {
 
     fun inject(messageActionsBottomSheet: MessageActionsBottomSheet)
 
-    fun inject(viewReactionBottomSheet: ViewReactionBottomSheet)
+    fun inject(viewReactionsBottomSheet: ViewReactionsBottomSheet)
 
     fun inject(viewEditHistoryBottomSheet: ViewEditHistoryBottomSheet)
-
-    fun inject(messageMenuFragment: MessageMenuFragment)
 
     fun inject(vectorSettingsActivity: VectorSettingsActivity)
 
@@ -135,8 +135,6 @@ interface ScreenComponent {
     fun inject(loginSsoFallbackFragment: LoginSsoFallbackFragment)
 
     fun inject(sasVerificationIncomingFragment: SASVerificationIncomingFragment)
-
-    fun inject(quickReactionFragment: QuickReactionFragment)
 
     fun inject(emojiReactionPickerActivity: EmojiReactionPickerActivity)
 

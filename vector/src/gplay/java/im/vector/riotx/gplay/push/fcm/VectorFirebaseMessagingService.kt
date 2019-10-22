@@ -21,7 +21,6 @@ package im.vector.riotx.gplay.push.fcm
 
 import android.os.Handler
 import android.os.Looper
-import android.text.TextUtils
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.google.firebase.messaging.FirebaseMessagingService
@@ -214,10 +213,10 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
                 }
             } else {
                 if (notifiableEvent is NotifiableMessageEvent) {
-                    if (TextUtils.isEmpty(notifiableEvent.senderName)) {
+                    if (notifiableEvent.senderName.isNullOrEmpty()) {
                         notifiableEvent.senderName = data["sender_display_name"] ?: data["sender"] ?: ""
                     }
-                    if (TextUtils.isEmpty(notifiableEvent.roomName)) {
+                    if (notifiableEvent.roomName.isNullOrEmpty()) {
                         notifiableEvent.roomName = findRoomNameBestEffort(data, session) ?: ""
                     }
                 }

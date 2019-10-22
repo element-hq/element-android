@@ -65,13 +65,11 @@ internal class DefaultGetGroupDataTask @Inject constructor(
                     groupSummaryEntity.displayName = if (name.isNullOrEmpty()) groupId else name
                     groupSummaryEntity.shortDescription = groupSummary.profile?.shortDescription ?: ""
 
-                    val roomIds = groupRooms.rooms.map { it.roomId }
                     groupSummaryEntity.roomIds.clear()
-                    groupSummaryEntity.roomIds.addAll(roomIds)
+                    groupRooms.rooms.mapTo(groupSummaryEntity.roomIds) { it.roomId }
 
-                    val userIds = groupUsers.users.map { it.userId }
                     groupSummaryEntity.userIds.clear()
-                    groupSummaryEntity.userIds.addAll(userIds)
+                    groupUsers.users.mapTo(groupSummaryEntity.userIds) { it.userId }
 
                     groupSummaryEntity.membership = when (groupSummary.user?.membership) {
                         Membership.JOIN.value   -> Membership.JOIN

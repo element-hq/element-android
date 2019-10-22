@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.crypto.actions
 
-import android.text.TextUtils
 import im.vector.matrix.android.internal.crypto.MXOlmDevice
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXKey
@@ -24,7 +23,6 @@ import im.vector.matrix.android.internal.crypto.model.MXOlmSessionResult
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.tasks.ClaimOneTimeKeysForUsersDeviceTask
 import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
 
 internal class EnsureOlmSessionsForDevicesAction @Inject constructor(private val olmDevice: MXOlmDevice,
@@ -35,18 +33,14 @@ internal class EnsureOlmSessionsForDevicesAction @Inject constructor(private val
 
         val results = MXUsersDevicesMap<MXOlmSessionResult>()
 
-        val userIds = devicesByUser.keys
-
-        for (userId in userIds) {
-            val deviceInfos = devicesByUser[userId]
-
-            for (deviceInfo in deviceInfos!!) {
+        for ((userId, deviceInfos) in devicesByUser) {
+            for (deviceInfo in deviceInfos) {
                 val deviceId = deviceInfo.deviceId
                 val key = deviceInfo.identityKey()
 
                 val sessionId = olmDevice.getSessionId(key!!)
 
-                if (TextUtils.isEmpty(sessionId)) {
+                if (sessionId.isNullOrEmpty()) {
                     devicesWithoutSession.add(deviceInfo)
                 }
 
@@ -79,9 +73,8 @@ internal class EnsureOlmSessionsForDevicesAction @Inject constructor(private val
         val claimParams = ClaimOneTimeKeysForUsersDeviceTask.Params(usersDevicesToClaim)
         val oneTimeKeys = oneTimeKeysForUsersDeviceTask.execute(claimParams)
         Timber.v("## claimOneTimeKeysForUsersDevices() : keysClaimResponse.oneTimeKeys: $oneTimeKeys")
-        for (userId in userIds) {
-            val deviceInfos = devicesByUser[userId]
-            for (deviceInfo in deviceInfos!!) {
+        for ((userId, deviceInfos) in devicesByUser) {
+            for (deviceInfo in deviceInfos) {
                 var oneTimeKey: MXKey? = null
                 val deviceIds = oneTimeKeys.getUserDeviceIds(userId)
                 if (null != deviceIds) {
@@ -116,24 +109,22 @@ internal class EnsureOlmSessionsForDevicesAction @Inject constructor(private val
         val signKeyId = "ed25519:$deviceId"
         val signature = oneTimeKey.signatureForUserId(userId, signKeyId)
 
-        if (!TextUtils.isEmpty(signature) && !TextUtils.isEmpty(deviceInfo.fingerprint())) {
+        if (!signature.isNullOrEmpty() && !deviceInfo.fingerprint().isNullOrEmpty()) {
             var isVerified = false
             var errorMessage: String? = null
 
-            if (signature != null) {
-                try {
-                    olmDevice.verifySignature(deviceInfo.fingerprint()!!, oneTimeKey.signalableJSONDictionary(), signature)
-                    isVerified = true
-                } catch (e: Exception) {
-                    errorMessage = e.message
-                }
+            try {
+                olmDevice.verifySignature(deviceInfo.fingerprint()!!, oneTimeKey.signalableJSONDictionary(), signature)
+                isVerified = true
+            } catch (e: Exception) {
+                errorMessage = e.message
             }
 
             // Check one-time key signature
             if (isVerified) {
                 sessionId = olmDevice.createOutboundSession(deviceInfo.identityKey()!!, oneTimeKey.value)
 
-                if (!TextUtils.isEmpty(sessionId)) {
+                if (!sessionId.isNullOrEmpty()) {
                     Timber.v("## verifyKeyAndStartSession() : Started new sessionid " + sessionId
                             + " for device " + deviceInfo + "(theirOneTimeKey: " + oneTimeKey.value + ")")
                 } else {

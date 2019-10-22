@@ -179,7 +179,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
             }
         }
 
-        return true
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onBackPressed() {

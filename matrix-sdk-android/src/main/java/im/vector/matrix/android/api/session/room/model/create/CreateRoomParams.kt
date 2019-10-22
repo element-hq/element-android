@@ -145,15 +145,7 @@ class CreateRoomParams {
      */
     fun setHistoryVisibility(historyVisibility: RoomHistoryVisibility?) {
         // Remove the existing value if any.
-        if (initialStates != null && !initialStates!!.isEmpty()) {
-            val newInitialStates = ArrayList<Event>()
-            for (event in initialStates!!) {
-                if (event.getClearType() != EventType.STATE_HISTORY_VISIBILITY) {
-                    newInitialStates.add(event)
-                }
-            }
-            initialStates = newInitialStates
-        }
+        initialStates?.removeAll { it.getClearType() == EventType.STATE_HISTORY_VISIBILITY }
 
         if (historyVisibility != null) {
             val contentMap = HashMap<String, RoomHistoryVisibility>()

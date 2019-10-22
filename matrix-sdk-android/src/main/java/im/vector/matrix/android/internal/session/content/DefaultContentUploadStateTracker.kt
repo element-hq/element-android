@@ -75,9 +75,7 @@ internal class DefaultContentUploadStateTracker @Inject constructor() : ContentU
     private fun updateState(key: String, state: ContentUploadStateTracker.State) {
         states[key] = state
         mainHandler.post {
-            listeners[key]?.also { listeners ->
-                listeners.forEach { it.onUpdate(state) }
-            }
+            listeners[key]?.forEach { it.onUpdate(state) }
         }
     }
 }

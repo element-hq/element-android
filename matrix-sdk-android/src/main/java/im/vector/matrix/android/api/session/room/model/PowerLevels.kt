@@ -16,11 +16,9 @@
 
 package im.vector.matrix.android.api.session.room.model
 
-import android.text.TextUtils
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.session.events.model.EventType
-import java.util.*
 
 /**
  * Class representing the EventType.EVENT_TYPE_STATE_ROOM_POWER_LEVELS state event content.
@@ -45,14 +43,8 @@ data class PowerLevels(
      * @param userId the user id
      * @return the power level
      */
-     fun getUserPowerLevel(userId: String): Int {
-        // sanity check
-        if (!TextUtils.isEmpty(userId)) {
-            val powerLevel = users[userId]
-            return powerLevel ?: usersDefault
-        }
-
-        return usersDefault
+    fun getUserPowerLevel(userId: String): Int {
+        return users.getOrElse(userId) { usersDefault }
     }
 
     /**
@@ -61,10 +53,8 @@ data class PowerLevels(
      * @param userId     the user
      * @param powerLevel the new power level
      */
-     fun setUserPowerLevel(userId: String?, powerLevel: Int) {
-        if (null != userId) {
-            users[userId] = Integer.valueOf(powerLevel)
-        }
+    fun setUserPowerLevel(userId: String, powerLevel: Int) {
+        users[userId] = powerLevel
     }
 
     /**
@@ -74,8 +64,8 @@ data class PowerLevels(
      * @param userId          the user id
      * @return true if the user can send the event
      */
-     fun maySendEventOfType(eventTypeString: String, userId: String): Boolean {
-        return if (!TextUtils.isEmpty(eventTypeString) && !TextUtils.isEmpty(userId)) {
+    fun maySendEventOfType(eventTypeString: String, userId: String): Boolean {
+        return if (eventTypeString.isNotEmpty() && userId.isNotEmpty()) {
             getUserPowerLevel(userId) >= minimumPowerLevelForSendingEventAsMessage(eventTypeString)
         } else false
     }
@@ -86,8 +76,8 @@ data class PowerLevels(
      * @param userId the user id
      * @return true if the user can send a room message
      */
-     fun maySendMessage(userId: String): Boolean {
-        return maySendEventOfType(EventType.MESSAGE, userId)
+    fun maySendMessage(userId: String): Boolean {
+       return maySendEventOfType(EventType.MESSAGE, userId)
     }
 
     /**
@@ -97,7 +87,7 @@ data class PowerLevels(
      * @param eventTypeString the type of event (in Event.EVENT_TYPE_XXX values)
      * @return the required minimum power level.
      */
-     fun minimumPowerLevelForSendingEventAsMessage(eventTypeString: String?): Int {
+    fun minimumPowerLevelForSendingEventAsMessage(eventTypeString: String?): Int {
         return events[eventTypeString] ?: eventsDefault
     }
 
@@ -108,7 +98,7 @@ data class PowerLevels(
      * @param eventTypeString the type of event (in Event.EVENT_TYPE_STATE_ values).
      * @return the required minimum power level.
      */
-     fun minimumPowerLevelForSendingEventAsStateEvent(eventTypeString: String?): Int {
+    fun minimumPowerLevelForSendingEventAsStateEvent(eventTypeString: String?): Int {
         return events[eventTypeString] ?: stateDefault
     }
 
@@ -118,18 +108,14 @@ data class PowerLevels(
      * @param key the notification key
      * @return the level
      */
-     fun notificationLevel(key: String?): Int {
-        if (null != key && notifications.containsKey(key)) {
-            val valAsVoid = notifications[key]
+    fun notificationLevel(key: String): Int {
+        val valAsVoid = notifications[key] ?: return 50
 
-            // the first implementation was a string value
-            return if (valAsVoid is String) {
-                Integer.parseInt(valAsVoid)
-            } else {
-                valAsVoid as Int
-            }
+        // the first implementation was a string value
+        return if (valAsVoid is String) {
+            valAsVoid.toInt()
+        } else {
+            valAsVoid as Int
         }
-
-        return 50
     }
 }

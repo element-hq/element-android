@@ -24,6 +24,7 @@ import im.vector.matrix.android.internal.session.room.draft.DefaultDraftService
 import im.vector.matrix.android.internal.session.room.membership.DefaultMembershipService
 import im.vector.matrix.android.internal.session.room.read.DefaultReadService
 import im.vector.matrix.android.internal.session.room.relation.DefaultRelationService
+import im.vector.matrix.android.internal.session.room.reporting.DefaultReportingService
 import im.vector.matrix.android.internal.session.room.send.DefaultSendService
 import im.vector.matrix.android.internal.session.room.state.DefaultStateService
 import im.vector.matrix.android.internal.session.room.timeline.DefaultTimelineService
@@ -40,6 +41,7 @@ internal class DefaultRoomFactory @Inject constructor(private val monarchy: Mona
                                                       private val sendServiceFactory: DefaultSendService.Factory,
                                                       private val draftServiceFactory: DefaultDraftService.Factory,
                                                       private val stateServiceFactory: DefaultStateService.Factory,
+                                                      private val reportingServiceFactory: DefaultReportingService.Factory,
                                                       private val readServiceFactory: DefaultReadService.Factory,
                                                       private val relationServiceFactory: DefaultRelationService.Factory,
                                                       private val membershipServiceFactory: DefaultMembershipService.Factory) :
@@ -54,6 +56,7 @@ internal class DefaultRoomFactory @Inject constructor(private val monarchy: Mona
                 sendServiceFactory.create(roomId),
                 draftServiceFactory.create(roomId),
                 stateServiceFactory.create(roomId),
+                reportingServiceFactory.create(roomId),
                 readServiceFactory.create(roomId),
                 cryptoService,
                 relationServiceFactory.create(roomId),

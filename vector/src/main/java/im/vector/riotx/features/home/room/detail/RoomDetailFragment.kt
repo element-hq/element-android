@@ -19,6 +19,7 @@ package im.vector.riotx.features.home.room.detail
 import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -50,6 +51,7 @@ import com.airbnb.mvrx.*
 import com.github.piasy.biv.BigImageViewer
 import com.github.piasy.biv.loader.ImageLoader
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputEditText
 import com.otaliastudios.autocomplete.Autocomplete
 import com.otaliastudios.autocomplete.AutocompleteCallback
 import com.otaliastudios.autocomplete.CharPolicy
@@ -66,6 +68,7 @@ import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
+import im.vector.riotx.core.dialogs.withColoredButton
 import im.vector.riotx.core.epoxy.LayoutManagerStateRestorer
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.hideKeyboard
@@ -96,8 +99,12 @@ import im.vector.riotx.features.home.room.detail.composer.TextComposerViewModel
 import im.vector.riotx.features.home.room.detail.composer.TextComposerViewState
 import im.vector.riotx.features.home.room.detail.readreceipts.DisplayReadReceiptsBottomSheet
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
-import im.vector.riotx.features.home.room.detail.timeline.action.*
+import im.vector.riotx.features.home.room.detail.timeline.action.ActionsHandler
+import im.vector.riotx.features.home.room.detail.timeline.action.MessageActionsBottomSheet
+import im.vector.riotx.features.home.room.detail.timeline.action.SimpleAction
+import im.vector.riotx.features.home.room.detail.timeline.edithistory.ViewEditHistoryBottomSheet
 import im.vector.riotx.features.home.room.detail.timeline.item.*
+import im.vector.riotx.features.home.room.detail.timeline.reactions.ViewReactionsBottomSheet
 import im.vector.riotx.features.html.EventHtmlRenderer
 import im.vector.riotx.features.html.PillImageSpan
 import im.vector.riotx.features.invite.VectorInviteView
@@ -274,6 +281,10 @@ class RoomDetailFragment :
             syncStateView.render(syncState)
         }
 
+        roomDetailViewModel.requestLiveData.observeEvent(this) {
+            displayRoomDetailActionResult(it)
+        }
+
         if (savedInstanceState == null) {
             when (val sharedData = roomDetailArgs.sharedData) {
                 is SharedData.Text        -> roomDetailViewModel.process(RoomDetailActions.SendMessage(sharedData.text, false))
@@ -281,6 +292,7 @@ class RoomDetailFragment :
                 null                      -> Timber.v("No share data to process")
             }
         }
+
     }
 
     override fun onDestroy() {
@@ -438,7 +450,7 @@ class RoomDetailFragment :
                     val reaction = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_REACTION_RESULT)
                             ?: return
                     // TODO check if already reacted with that?
-                    roomDetailViewModel.process(RoomDetailActions.SendReaction(reaction, eventId))
+                    roomDetailViewModel.process(RoomDetailActions.SendReaction(eventId, reaction))
                 }
             }
         }
@@ -732,17 +744,81 @@ class RoomDetailFragment :
     }
 
     private fun displayCommandError(message: String) {
-        AlertDialog.Builder(activity!!)
+        AlertDialog.Builder(requireActivity())
                 .setTitle(R.string.command_error)
                 .setMessage(message)
                 .setPositiveButton(R.string.ok, null)
                 .show()
     }
 
+    private fun promptReasonToReportContent(action: SimpleAction.ReportContentCustom) {
+        val inflater = requireActivity().layoutInflater
+        val layout = inflater.inflate(R.layout.dialog_report_content, null)
+
+        val input = layout.findViewById<TextInputEditText>(R.id.dialog_report_content_input)
+
+        AlertDialog.Builder(requireActivity())
+                .setTitle(R.string.report_content_custom_title)
+                .setView(layout)
+                .setPositiveButton(R.string.report_content_custom_submit) { _, _ ->
+                    val reason = input.text.toString()
+                    roomDetailViewModel.process(RoomDetailActions.ReportContent(action.eventId, reason))
+                }
+                .setNegativeButton(R.string.cancel, null)
+                .show()
+    }
+
+    private fun displayRoomDetailActionResult(result: Async<RoomDetailActions>) {
+        when (result) {
+            is Fail    -> {
+                AlertDialog.Builder(requireActivity())
+                        .setTitle(R.string.dialog_title_error)
+                        .setMessage(errorFormatter.toHumanReadable(result.error))
+                        .setPositiveButton(R.string.ok, null)
+                        .show()
+            }
+            is Success -> {
+                when (val data = result.invoke()) {
+                    is RoomDetailActions.ReportContent -> {
+                        when {
+                            data.spam          -> {
+                                AlertDialog.Builder(requireActivity())
+                                        .setTitle(R.string.content_reported_as_spam_title)
+                                        .setMessage(R.string.content_reported_as_spam_content)
+                                        .setPositiveButton(R.string.ok, null)
+                                        .setNegativeButton(R.string.block_user) { _, _ -> vectorBaseActivity.notImplemented("block user") }
+                                        .show()
+                                        .withColoredButton(DialogInterface.BUTTON_NEGATIVE)
+                            }
+                            data.inappropriate -> {
+                                AlertDialog.Builder(requireActivity())
+                                        .setTitle(R.string.content_reported_as_inappropriate_title)
+                                        .setMessage(R.string.content_reported_as_inappropriate_content)
+                                        .setPositiveButton(R.string.ok, null)
+                                        .setNegativeButton(R.string.block_user) { _, _ -> vectorBaseActivity.notImplemented("block user") }
+                                        .show()
+                                        .withColoredButton(DialogInterface.BUTTON_NEGATIVE)
+                            }
+                            else               -> {
+                                AlertDialog.Builder(requireActivity())
+                                        .setTitle(R.string.content_reported_title)
+                                        .setMessage(R.string.content_reported_content)
+                                        .setPositiveButton(R.string.ok, null)
+                                        .setNegativeButton(R.string.block_user) { _, _ -> vectorBaseActivity.notImplemented("block user") }
+                                        .show()
+                                        .withColoredButton(DialogInterface.BUTTON_NEGATIVE)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 // TimelineEventController.Callback ************************************************************
 
     override fun onUrlClicked(url: String): Boolean {
-        return permalinkHandler.launch(requireActivity(), url, object : NavigateToRoomInterceptor {
+        val managed = permalinkHandler.launch(requireActivity(), url, object : NavigateToRoomInterceptor {
             override fun navToRoom(roomId: String, eventId: String?): Boolean {
                 // Same room?
                 if (roomId == roomDetailArgs.roomId) {
@@ -760,6 +836,14 @@ class RoomDetailFragment :
                 return false
             }
         })
+
+        if (!managed) {
+            // Open in external browser, in a new Tab
+            openUrlInExternalBrowser(requireContext(), url)
+        }
+
+        // In fact it is always managed
+        return true
     }
 
     override fun onUrlLongClicked(url: String): Boolean {
@@ -872,7 +956,7 @@ class RoomDetailFragment :
     override fun onClickOnReactionPill(informationData: MessageInformationData, reaction: String, on: Boolean) {
         if (on) {
             // we should test the current real state of reaction on this event
-            roomDetailViewModel.process(RoomDetailActions.SendReaction(reaction, informationData.eventId))
+            roomDetailViewModel.process(RoomDetailActions.SendReaction(informationData.eventId, reaction))
         } else {
             // I need to redact a reaction
             roomDetailViewModel.process(RoomDetailActions.UndoReaction(informationData.eventId, reaction))
@@ -880,7 +964,7 @@ class RoomDetailFragment :
     }
 
     override fun onLongClickOnReactionPill(informationData: MessageInformationData, reaction: String) {
-        ViewReactionBottomSheet.newInstance(roomDetailArgs.roomId, informationData)
+        ViewReactionsBottomSheet.newInstance(roomDetailArgs.roomId, informationData)
                 .show(requireActivity().supportFragmentManager, "DISPLAY_REACTIONS")
     }
 
@@ -929,23 +1013,23 @@ class RoomDetailFragment :
 
     private fun handleActions(action: SimpleAction) {
         when (action) {
-            is SimpleAction.AddReaction         -> {
+            is SimpleAction.AddReaction                -> {
                 startActivityForResult(EmojiReactionPickerActivity.intent(requireContext(), action.eventId), REACTION_SELECT_REQUEST_CODE)
             }
-            is SimpleAction.ViewReactions       -> {
-                ViewReactionBottomSheet.newInstance(roomDetailArgs.roomId, action.messageInformationData)
+            is SimpleAction.ViewReactions              -> {
+                ViewReactionsBottomSheet.newInstance(roomDetailArgs.roomId, action.messageInformationData)
                         .show(requireActivity().supportFragmentManager, "DISPLAY_REACTIONS")
             }
-            is SimpleAction.Copy                -> {
+            is SimpleAction.Copy                       -> {
                 // I need info about the current selected message :/
                 copyToClipboard(requireContext(), action.content, false)
                 val msg = requireContext().getString(R.string.copied_to_clipboard)
                 showSnackWithMessage(msg, Snackbar.LENGTH_SHORT)
             }
-            is SimpleAction.Delete              -> {
+            is SimpleAction.Delete                     -> {
                 roomDetailViewModel.process(RoomDetailActions.RedactAction(action.eventId, context?.getString(R.string.event_redacted_by_user_reason)))
             }
-            is SimpleAction.Share               -> {
+            is SimpleAction.Share                      -> {
                 // TODO current data communication is too limited
                 // Need to now the media type
                 // TODO bad, just POC
@@ -973,10 +1057,10 @@ class RoomDetailFragment :
                         }
                 )
             }
-            is SimpleAction.ViewEditHistory     -> {
+            is SimpleAction.ViewEditHistory            -> {
                 onEditedDecorationClicked(action.messageInformationData)
             }
-            is SimpleAction.ViewSource          -> {
+            is SimpleAction.ViewSource                 -> {
                 val view = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_event_content, null)
                 view.findViewById<TextView>(R.id.event_content_text_view)?.let {
                     it.text = action.content
@@ -987,7 +1071,7 @@ class RoomDetailFragment :
                         .setPositiveButton(R.string.ok, null)
                         .show()
             }
-            is SimpleAction.ViewDecryptedSource -> {
+            is SimpleAction.ViewDecryptedSource        -> {
                 val view = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_event_content, null)
                 view.findViewById<TextView>(R.id.event_content_text_view)?.let {
                     it.text = action.content
@@ -998,31 +1082,40 @@ class RoomDetailFragment :
                         .setPositiveButton(R.string.ok, null)
                         .show()
             }
-            is SimpleAction.QuickReact          -> {
+            is SimpleAction.QuickReact                 -> {
                 // eventId,ClickedOn,Add
                 roomDetailViewModel.process(RoomDetailActions.UpdateQuickReactAction(action.eventId, action.clickedOn, action.add))
             }
-            is SimpleAction.Edit                -> {
+            is SimpleAction.Edit                       -> {
                 roomDetailViewModel.process(RoomDetailActions.EnterEditMode(action.eventId, composerLayout.composerEditText.text.toString()))
             }
-            is SimpleAction.Quote               -> {
+            is SimpleAction.Quote                      -> {
                 roomDetailViewModel.process(RoomDetailActions.EnterQuoteMode(action.eventId, composerLayout.composerEditText.text.toString()))
             }
-            is SimpleAction.Reply               -> {
+            is SimpleAction.Reply                      -> {
                 roomDetailViewModel.process(RoomDetailActions.EnterReplyMode(action.eventId, composerLayout.composerEditText.text.toString()))
             }
-            is SimpleAction.CopyPermalink       -> {
+            is SimpleAction.CopyPermalink              -> {
                 val permalink = PermalinkFactory.createPermalink(roomDetailArgs.roomId, action.eventId)
                 copyToClipboard(requireContext(), permalink, false)
                 showSnackWithMessage(requireContext().getString(R.string.copied_to_clipboard), Snackbar.LENGTH_SHORT)
             }
-            is SimpleAction.Resend              -> {
+            is SimpleAction.Resend                     -> {
                 roomDetailViewModel.process(RoomDetailActions.ResendMessage(action.eventId))
             }
-            is SimpleAction.Remove              -> {
+            is SimpleAction.Remove                     -> {
                 roomDetailViewModel.process(RoomDetailActions.RemoveFailedEcho(action.eventId))
             }
-            else                                -> {
+            is SimpleAction.ReportContentSpam          -> {
+                roomDetailViewModel.process(RoomDetailActions.ReportContent(action.eventId, "This message is spam", spam = true))
+            }
+            is SimpleAction.ReportContentInappropriate -> {
+                roomDetailViewModel.process(RoomDetailActions.ReportContent(action.eventId, "This message is inappropriate", inappropriate = true))
+            }
+            is SimpleAction.ReportContentCustom        -> {
+                promptReasonToReportContent(action)
+            }
+            else                                       -> {
                 Toast.makeText(context, "Action $action is not implemented yet", Toast.LENGTH_LONG).show()
             }
         }

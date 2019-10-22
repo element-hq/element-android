@@ -31,18 +31,10 @@ internal class DirectChatsHelper @Inject constructor(@SessionDatabase
      */
     fun getLocalUserAccount(filterRoomId: String? = null): MutableMap<String, MutableList<String>> {
         return Realm.getInstance(realmConfiguration).use { realm ->
-            val currentDirectRooms = RoomSummaryEntity.getDirectRooms(realm)
-            val directChatsMap = mutableMapOf<String, MutableList<String>>()
-            for (directRoom in currentDirectRooms) {
-                if (directRoom.roomId == filterRoomId) continue
-                val directUserId = directRoom.directUserId ?: continue
-                directChatsMap
-                        .getOrPut(directUserId, { arrayListOf() })
-                        .apply {
-                            add(directRoom.roomId)
-                        }
-            }
-            directChatsMap
+            RoomSummaryEntity.getDirectRooms(realm)
+                    .asSequence()
+                    .filter { it.roomId != filterRoomId && it.directUserId != null }
+                    .groupByTo(mutableMapOf(), { it.directUserId!! }, { it.roomId })
         }
     }
 }

@@ -17,7 +17,6 @@ package im.vector.riotx.features.crypto.keysbackup.setup
 
 import android.os.AsyncTask
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
@@ -122,7 +121,7 @@ class KeysBackupSetupStep2Fragment : VectorBaseFragment() {
         })
 
         viewModel.passphrase.observe(this, Observer<String> { newValue ->
-            if (TextUtils.isEmpty(newValue)) {
+            if (newValue.isEmpty()) {
                 viewModel.passwordStrength.value = null
             } else {
                 AsyncTask.execute {
@@ -172,7 +171,7 @@ class KeysBackupSetupStep2Fragment : VectorBaseFragment() {
     @OnClick(R.id.keys_backup_setup_step2_button)
     fun doNext() {
         when {
-            TextUtils.isEmpty(viewModel.passphrase.value) -> {
+            viewModel.passphrase.value.isNullOrEmpty() -> {
                 viewModel.passphraseError.value = context?.getString(R.string.passphrase_empty_error_message)
             }
             viewModel.passphrase.value != viewModel.confirmPassphrase.value -> {
@@ -192,7 +191,7 @@ class KeysBackupSetupStep2Fragment : VectorBaseFragment() {
     @OnClick(R.id.keys_backup_setup_step2_skip_button)
     fun skipPassphrase() {
         when {
-            TextUtils.isEmpty(viewModel.passphrase.value) -> {
+            viewModel.passphrase.value.isNullOrEmpty() -> {
                 // Generate a recovery key for the user
                 viewModel.megolmBackupCreationInfo = null
 

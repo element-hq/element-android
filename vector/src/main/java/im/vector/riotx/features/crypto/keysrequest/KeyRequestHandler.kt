@@ -20,7 +20,6 @@
 package im.vector.riotx.features.crypto.keysrequest
 
 import android.content.Context
-import android.text.TextUtils
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.keyshare.RoomKeysRequestListener
@@ -39,7 +38,8 @@ import im.vector.riotx.features.popup.PopupAlertManager
 import timber.log.Timber
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
+import java.util.Date
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.collections.ArrayList
@@ -100,7 +100,7 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
         alertsToRequests[mappingKey] = ArrayList<IncomingRoomKeyRequest>().apply { this.add(request) }
 
         // Add a notification for every incoming request
-        session?.downloadKeys(Arrays.asList(userId), false, object : MatrixCallback<MXUsersDevicesMap<MXDeviceInfo>> {
+        session?.downloadKeys(listOf(userId), false, object : MatrixCallback<MXUsersDevicesMap<MXDeviceInfo>> {
             override fun onSuccess(data: MXUsersDevicesMap<MXDeviceInfo>) {
                 val deviceInfo = data.getObject(userId, deviceId)
 
@@ -147,7 +147,7 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
                           wasNewDevice: Boolean,
                           deviceInfo: MXDeviceInfo?,
                           moreInfo: DeviceInfo? = null) {
-        val deviceName = if (TextUtils.isEmpty(deviceInfo!!.displayName())) deviceInfo.deviceId else deviceInfo.displayName()
+        val deviceName = if (deviceInfo!!.displayName().isNullOrEmpty()) deviceInfo.deviceId else deviceInfo.displayName()
         val dialogText: String?
 
         if (moreInfo != null) {
@@ -244,12 +244,12 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
         val deviceId = request.deviceId
         val requestId = request.requestId
 
-        if (TextUtils.isEmpty(userId) || TextUtils.isEmpty(deviceId) || TextUtils.isEmpty(requestId)) {
+        if (userId.isNullOrEmpty() || deviceId.isNullOrEmpty() || requestId.isNullOrEmpty()) {
             Timber.e("## handleKeyRequestCancellation() : invalid parameters")
             return
         }
 
-        val alertMgrUniqueKey = alertManagerId(deviceId!!, userId!!)
+        val alertMgrUniqueKey = alertManagerId(deviceId, userId)
         alertsToRequests[alertMgrUniqueKey]?.removeAll {
             it.deviceId == request.deviceId
                     && it.userId == request.userId

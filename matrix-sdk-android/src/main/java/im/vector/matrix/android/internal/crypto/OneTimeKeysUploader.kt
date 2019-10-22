@@ -24,8 +24,9 @@ import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.util.JsonCanonicalizer
 import org.matrix.olm.OlmAccount
 import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
+import kotlin.math.floor
+import kotlin.math.min
 
 @SessionScope
 internal class OneTimeKeysUploader @Inject constructor(
@@ -77,7 +78,7 @@ internal class OneTimeKeysUploader @Inject constructor(
         // If we run out of slots when generating new keys then olm will
         // discard the oldest private keys first. This will eventually clean
         // out stale private keys that won't receive a message.
-        val keyLimit = Math.floor(maxOneTimeKeys / 2.0).toInt()
+        val keyLimit = floor(maxOneTimeKeys / 2.0).toInt()
         if (oneTimeKeyCount != null) {
             uploadOTK(oneTimeKeyCount!!, keyLimit)
         } else {
@@ -116,7 +117,7 @@ internal class OneTimeKeysUploader @Inject constructor(
             // If we don't need to generate any more keys then we are done.
             return
         }
-        val keysThisLoop = Math.min(keyLimit - keyCount, ONE_TIME_KEY_GENERATION_MAX_NUMBER)
+        val keysThisLoop = min(keyLimit - keyCount, ONE_TIME_KEY_GENERATION_MAX_NUMBER)
         olmDevice.generateOneTimeKeys(keysThisLoop)
         val response = uploadOneTimeKeys()
         if (response.hasOneTimeKeyCountsForAlgorithm(MXKey.KEY_SIGNED_CURVE_25519_TYPE)) {
@@ -132,14 +133,14 @@ internal class OneTimeKeysUploader @Inject constructor(
      */
     private suspend fun uploadOneTimeKeys(): KeysUploadResponse {
         val oneTimeKeys = olmDevice.getOneTimeKeys()
-        val oneTimeJson = HashMap<String, Any>()
+        val oneTimeJson = mutableMapOf<String, Any>()
 
         val curve25519Map = oneTimeKeys?.get(OlmAccount.JSON_KEY_ONE_TIME_KEY)
 
         if (null != curve25519Map) {
-            for (key_id in curve25519Map.keys) {
-                val k = HashMap<String, Any>()
-                k["key"] = curve25519Map.getValue(key_id)
+            for ((key_id, value) in curve25519Map) {
+                val k = mutableMapOf<String, Any>()
+                k["key"] = value
 
                 // the key is also signed
                 val canonicalJson = JsonCanonicalizer.getCanonicalJson(Map::class.java, k)

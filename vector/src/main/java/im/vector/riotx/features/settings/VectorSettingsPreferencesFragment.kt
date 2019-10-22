@@ -19,7 +19,6 @@ package im.vector.riotx.features.settings
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.text.TextUtils
 import android.widget.CheckedTextView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
@@ -194,7 +193,7 @@ class VectorSettingsPreferencesFragment : VectorSettingsBaseFragment() {
             val v = linearLayout.getChildAt(i)
 
             if (v is CheckedTextView) {
-                v.isChecked = TextUtils.equals(v.text, scaleText)
+                v.isChecked = v.text == scaleText
 
                 v.setOnClickListener {
                     dialog.dismiss()

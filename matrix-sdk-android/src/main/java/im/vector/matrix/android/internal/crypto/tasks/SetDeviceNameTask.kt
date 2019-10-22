@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.crypto.tasks
 
-import android.text.TextUtils
 import im.vector.matrix.android.internal.crypto.api.CryptoApi
 import im.vector.matrix.android.internal.crypto.model.rest.UpdateDeviceInfoBody
 import im.vector.matrix.android.internal.network.executeRequest
@@ -37,7 +36,7 @@ internal class DefaultSetDeviceNameTask @Inject constructor(private val cryptoAp
 
     override suspend fun execute(params: SetDeviceNameTask.Params) {
         val body = UpdateDeviceInfoBody(
-                displayName = if (TextUtils.isEmpty(params.deviceName)) "" else params.deviceName
+                displayName = params.deviceName
         )
         return executeRequest {
             apiCall = cryptoApi.updateDeviceInfo(params.deviceId, body)

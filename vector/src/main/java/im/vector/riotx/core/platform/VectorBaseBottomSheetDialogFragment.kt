@@ -13,18 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.riotx.features.home.room.detail.timeline.action
+package im.vector.riotx.core.platform
 
+import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
+import android.widget.FrameLayout
+import androidx.annotation.CallSuper
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.MvRxView
 import com.airbnb.mvrx.MvRxViewModelStore
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import im.vector.riotx.core.di.DaggerScreenComponent
 import im.vector.riotx.core.di.ScreenComponent
-import im.vector.riotx.core.platform.VectorBaseActivity
+import im.vector.riotx.core.utils.DimensionConverter
 import java.util.*
 
 /**
@@ -37,9 +42,13 @@ abstract class VectorBaseBottomSheetDialogFragment : BottomSheetDialogFragment()
     private lateinit var screenComponent: ScreenComponent
     final override val mvrxViewId: String by lazy { mvrxPersistedViewId }
 
+    private var bottomSheetBehavior: BottomSheetBehavior<FrameLayout>? = null
+
     val vectorBaseActivity: VectorBaseActivity by lazy {
         activity as VectorBaseActivity
     }
+
+    open val showExpanded = false
 
     override fun onAttach(context: Context) {
         screenComponent = DaggerScreenComponent.factory().create(vectorBaseActivity.getVectorComponent(), vectorBaseActivity)
@@ -57,6 +66,17 @@ abstract class VectorBaseBottomSheetDialogFragment : BottomSheetDialogFragment()
         super.onCreate(savedInstanceState)
     }
 
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return super.onCreateDialog(savedInstanceState).apply {
+            val dialog = this as? BottomSheetDialog
+            bottomSheetBehavior = dialog?.behavior
+            bottomSheetBehavior?.setPeekHeight(DimensionConverter(resources).dpToPx(400), false)
+            if (showExpanded) {
+                bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
+            }
+        }
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         mvrxViewModelStore.saveViewModels(outState)
@@ -68,6 +88,14 @@ abstract class VectorBaseBottomSheetDialogFragment : BottomSheetDialogFragment()
         // This ensures that invalidate() is called for static screens that don't
         // subscribe to a ViewModel.
         postInvalidate()
+    }
+
+    @CallSuper
+    override fun invalidate() {
+        if (showExpanded) {
+            // Force the bottom sheet to be expanded
+            bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
+        }
     }
 
     protected fun setArguments(args: Parcelable? = null) {

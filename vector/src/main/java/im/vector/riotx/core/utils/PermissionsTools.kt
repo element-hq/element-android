@@ -29,7 +29,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import im.vector.riotx.R
 import timber.log.Timber
-import java.util.*
 
 private const val LOG_TAG = "PermissionUtils"
 
@@ -74,7 +73,7 @@ const val PERMISSION_REQUEST_CODE_PICK_ATTACHMENT = 576
  */
 fun logPermissionStatuses(context: Context) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        val permissions = Arrays.asList(
+        val permissions = listOf(
                 Manifest.permission.CAMERA,
                 Manifest.permission.RECORD_AUDIO,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -213,7 +212,7 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
                     .setMessage(rationaleMessage)
                     .setOnCancelListener { Toast.makeText(activity, R.string.missing_permissions_warning, Toast.LENGTH_SHORT).show() }
                     .setPositiveButton(R.string.ok) { _, _ ->
-                        if (!permissionsListToBeGranted.isEmpty()) {
+                        if (permissionsListToBeGranted.isNotEmpty()) {
                             fragment?.requestPermissions(permissionsListToBeGranted.toTypedArray(), requestCode)
                                     ?: run {
                                         ActivityCompat.requestPermissions(activity, permissionsListToBeGranted.toTypedArray(), requestCode)
