@@ -38,15 +38,14 @@ internal class TimelineEventDecryptor(
     private val newSessionListener = object : NewSessionListener {
         override fun onNewSession(roomId: String?, senderKey: String, sessionId: String) {
             synchronized(unknownSessionsFailure) {
-                val toDecryptAgain = ArrayList<String>()
-                val eventIds = unknownSessionsFailure[sessionId]
-                if (eventIds != null) toDecryptAgain.addAll(eventIds)
-                if (toDecryptAgain.isNotEmpty()) {
-                    eventIds?.clear()
-                    toDecryptAgain.forEach {
-                        requestDecryption(it)
-                    }
-                }
+                unknownSessionsFailure[sessionId]
+                        .orEmpty()
+                        .toList()
+                        .also {
+                            unknownSessionsFailure[sessionId]?.clear()
+                        }
+            }.forEach {
+                requestDecryption(it)
             }
         }
     }
@@ -67,8 +66,12 @@ internal class TimelineEventDecryptor(
         cryptoService.removeSessionListener(newSessionListener)
         executor?.shutdownNow()
         executor = null
-        unknownSessionsFailure.clear()
-        existingRequests.clear()
+        synchronized(unknownSessionsFailure) {
+            unknownSessionsFailure.clear()
+        }
+        synchronized(existingRequests) {
+            existingRequests.clear()
+        }
     }
 
     fun requestDecryption(eventId: String) {
@@ -108,7 +111,7 @@ internal class TimelineEventDecryptor(
                 eventEntity.setDecryptionResult(result)
             }
         } catch (e: MXCryptoError) {
-            Timber.v("Failed to decrypt event $eventId $e")
+            Timber.v(e, "Failed to decrypt event $eventId")
             if (e is MXCryptoError.Base && e.errorType == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID) {
                 // Keep track of unknown sessions to automatically try to decrypt on new session
                 realm.executeTransaction {
