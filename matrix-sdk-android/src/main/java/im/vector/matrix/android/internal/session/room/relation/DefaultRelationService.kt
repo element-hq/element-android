@@ -32,10 +32,8 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.api.util.toOptional
-import im.vector.matrix.android.internal.database.helper.addSendingEvent
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryEntity
-import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.room.send.EncryptEventWorker
@@ -67,9 +65,7 @@ internal class DefaultRelationService @AssistedInject constructor(@Assisted priv
 
     override fun sendReaction(targetEventId: String, reaction: String): Cancelable {
         val event = eventFactory.createReactionEvent(roomId, targetEventId, reaction)
-                .also {
-                    saveLocalEcho(it)
-                }
+                .also { saveLocalEcho(it) }
         val sendRelationWork = createSendEventWork(event, true)
         TimelineSendEventWorkCommon.postWork(context, roomId, sendRelationWork)
         return CancelableWork(context, sendRelationWork.id)
@@ -89,9 +85,8 @@ internal class DefaultRelationService @AssistedInject constructor(@Assisted priv
                     // TODO?
                 }
                 data.redactEventId?.let { toRedact ->
-                    val redactEvent = eventFactory.createRedactEvent(roomId, toRedact, null).also {
-                        saveLocalEcho(it)
-                    }
+                    val redactEvent = eventFactory.createRedactEvent(roomId, toRedact, null)
+                            .also { saveLocalEcho(it) }
                     val redactWork = createRedactEventWork(redactEvent, toRedact, null)
 
                     TimelineSendEventWorkCommon.postWork(context, roomId, redactWork)
@@ -125,9 +120,7 @@ internal class DefaultRelationService @AssistedInject constructor(@Assisted priv
                                  compatibilityBodyText: String): Cancelable {
         val event = eventFactory
                 .createReplaceTextEvent(roomId, targetEventId, newBodyText, newBodyAutoMarkdown, msgType, compatibilityBodyText)
-                .also {
-                    saveLocalEcho(it)
-                }
+                .also { saveLocalEcho(it) }
         return if (cryptoService.isRoomEncrypted(roomId)) {
             val encryptWork = createEncryptEventWork(event, listOf("m.relates_to"))
             val workRequest = createSendEventWork(event, false)
@@ -149,9 +142,7 @@ internal class DefaultRelationService @AssistedInject constructor(@Assisted priv
                         replyToEdit,
                         originalTimelineEvent,
                         newBodyText, true, MessageType.MSGTYPE_TEXT, compatibilityBodyText)
-                .also {
-                    saveLocalEcho(it)
-                }
+                .also { saveLocalEcho(it) }
         return if (cryptoService.isRoomEncrypted(roomId)) {
             val encryptWork = createEncryptEventWork(event, listOf("m.relates_to"))
             val workRequest = createSendEventWork(event, false)
@@ -174,9 +165,9 @@ internal class DefaultRelationService @AssistedInject constructor(@Assisted priv
     }
 
     override fun replyToMessage(eventReplied: TimelineEvent, replyText: String, autoMarkdown: Boolean): Cancelable? {
-        val event = eventFactory.createReplyTextEvent(roomId, eventReplied, replyText, autoMarkdown)?.also {
-            saveLocalEcho(it)
-        } ?: return null
+        val event = eventFactory.createReplyTextEvent(roomId, eventReplied, replyText, autoMarkdown)
+                ?.also { saveLocalEcho(it) }
+                ?: return null
 
         return if (cryptoService.isRoomEncrypted(roomId)) {
             val encryptWork = createEncryptEventWork(event, listOf("m.relates_to"))
@@ -220,10 +211,6 @@ internal class DefaultRelationService @AssistedInject constructor(@Assisted priv
      * the same transaction id is received (in unsigned data)
      */
     private fun saveLocalEcho(event: Event) {
-        monarchy.writeAsync { realm ->
-            val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst()
-                    ?: return@writeAsync
-            roomEntity.addSendingEvent(event)
-        }
+        eventFactory.saveLocalEcho(monarchy, event)
     }
 }
