@@ -18,7 +18,6 @@ package im.vector.riotx.core.resources
 
 import android.content.Context
 import android.net.Uri
-import android.text.TextUtils
 import android.webkit.MimeTypeMap
 import im.vector.riotx.core.utils.getFileExtension
 import timber.log.Timber
@@ -73,7 +72,7 @@ fun openResource(context: Context, uri: Uri, providedMimetype: String?): Resourc
     var mimetype = providedMimetype
     try {
         // if the mime type is not provided, try to find it out
-        if (TextUtils.isEmpty(mimetype)) {
+        if (mimetype.isNullOrEmpty()) {
             mimetype = context.contentResolver.getType(uri)
 
             // try to find the mimetype from the filename

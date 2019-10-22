@@ -17,7 +17,6 @@
 
 package im.vector.matrix.android.internal.crypto
 
-import android.text.TextUtils
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.util.JSON_DICT_PARAMETERIZED_TYPE
 import im.vector.matrix.android.api.util.JsonDict
@@ -33,7 +32,6 @@ import im.vector.matrix.android.internal.util.convertToUTF8
 import org.matrix.olm.*
 import timber.log.Timber
 import java.net.URLEncoder
-import java.util.*
 import javax.inject.Inject
 
 // The libolm wrapper.
@@ -434,7 +432,7 @@ internal class MXOlmDevice @Inject constructor(
      * @return the base64-encoded secret key.
      */
     fun getSessionKey(sessionId: String): String? {
-        if (!TextUtils.isEmpty(sessionId)) {
+        if (sessionId.isNotEmpty()) {
             try {
                 return outboundGroupSessionStore[sessionId]!!.sessionKey()
             } catch (e: Exception) {
@@ -451,7 +449,7 @@ internal class MXOlmDevice @Inject constructor(
      * @return the current chain index.
      */
     fun getMessageIndex(sessionId: String): Int {
-        return if (!TextUtils.isEmpty(sessionId)) {
+        return if (sessionId.isNotEmpty()) {
             outboundGroupSessionStore[sessionId]!!.messageIndex()
         } else 0
     }
@@ -464,7 +462,7 @@ internal class MXOlmDevice @Inject constructor(
      * @return ciphertext
      */
     fun encryptGroupMessage(sessionId: String, payloadString: String): String? {
-        if (!TextUtils.isEmpty(sessionId) && !TextUtils.isEmpty(payloadString)) {
+        if (sessionId.isNotEmpty() && payloadString.isNotEmpty()) {
             try {
                 return outboundGroupSessionStore[sessionId]!!.encryptMessage(payloadString)
             } catch (e: Exception) {
@@ -523,7 +521,7 @@ internal class MXOlmDevice @Inject constructor(
         }
 
         try {
-            if (!TextUtils.equals(session.olmInboundGroupSession!!.sessionIdentifier(), sessionId)) {
+            if (session.olmInboundGroupSession!!.sessionIdentifier() != sessionId) {
                 Timber.e("## addInboundGroupSession : ERROR: Mismatched group session ID from senderKey: $senderKey")
                 session.olmInboundGroupSession!!.releaseSession()
                 return false
@@ -573,7 +571,7 @@ internal class MXOlmDevice @Inject constructor(
             }
 
             try {
-                if (!TextUtils.equals(session.olmInboundGroupSession?.sessionIdentifier(), sessionId)) {
+                if (session.olmInboundGroupSession?.sessionIdentifier() != sessionId) {
                     Timber.e("## importInboundGroupSession : ERROR: Mismatched group session ID from senderKey: $senderKey")
                     if (session.olmInboundGroupSession != null) session.olmInboundGroupSession!!.releaseSession()
                     continue
@@ -758,7 +756,7 @@ internal class MXOlmDevice @Inject constructor(
         if (session != null) {
             // Check that the room id matches the original one for the session. This stops
             // the HS pretending a message was targeting a different room.
-            if (!TextUtils.equals(roomId, session.roomId)) {
+            if (roomId != session.roomId) {
                 val errorDescription = String.format(MXCryptoError.INBOUND_SESSION_MISMATCH_ROOM_ID_REASON, roomId, session.roomId)
                 Timber.e("## getInboundGroupSession() : $errorDescription")
                 throw MXCryptoError.Base(MXCryptoError.ErrorType.INBOUND_SESSION_MISMATCH_ROOM_ID, errorDescription)

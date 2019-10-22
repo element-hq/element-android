@@ -24,9 +24,9 @@ import java.util.*
 object TextUtils {
 
     private val suffixes = TreeMap<Int, String>().also {
-        it.put(1000, "k")
-        it.put(1000000, "M")
-        it.put(1000000000, "G")
+        it[1000] = "k"
+        it[1000000] = "M"
+        it[1000000000] = "G"
     }
 
     fun formatCountToShortDecimal(value: Int): String {

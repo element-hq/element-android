@@ -25,7 +25,6 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.os.AsyncTask
 import android.os.Build
-import android.text.TextUtils
 import android.view.View
 import im.vector.matrix.android.api.Matrix
 import im.vector.riotx.BuildConfig
@@ -166,14 +165,11 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
 
                 if (withDevicesLogs) {
                     val files = vectorFileLogger.getLogFiles()
-
-                    for (f in files) {
+                    files.mapNotNullTo(gzippedFiles) { f ->
                         if (!mIsCancelled) {
-                            val gzippedFile = compressFile(f)
-
-                            if (null != gzippedFile) {
-                                gzippedFiles.add(gzippedFile)
-                            }
+                            compressFile(f)
+                        } else {
+                            null
                         }
                     }
                 }
@@ -244,7 +240,7 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
                             .addFormDataPart("theme", ThemeUtils.getApplicationTheme(context))
 
                     val buildNumber = context.getString(R.string.build_number)
-                    if (!TextUtils.isEmpty(buildNumber) && buildNumber != "0") {
+                    if (buildNumber.isNotEmpty() && buildNumber != "0") {
                         builder.addFormDataPart("build_number", buildNumber)
                     }
 
@@ -266,10 +262,9 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
                             }
 
                             try {
-                                val fos = FileOutputStream(logCatScreenshotFile)
-                                bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)
-                                fos.flush()
-                                fos.close()
+                                logCatScreenshotFile.outputStream().use {
+                                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
+                                }
 
                                 builder.addFormDataPart("file",
                                         logCatScreenshotFile.name, logCatScreenshotFile.asRequestBody("application/octet-stream".toMediaTypeOrNull()))
@@ -303,16 +298,14 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
 
                     // add a progress listener
                     requestBody.setWriteListener { totalWritten, contentLength ->
-                        val percentage: Int
-
-                        if (-1L != contentLength) {
+                        val percentage = if (-1L != contentLength) {
                             if (totalWritten > contentLength) {
-                                percentage = 100
+                                100
                             } else {
-                                percentage = (totalWritten * 100 / contentLength).toInt()
+                                (totalWritten * 100 / contentLength).toInt()
                             }
                         } else {
-                            percentage = 0
+                            0
                         }
 
                         if (mIsCancelled && null != mBugReportCall) {
@@ -350,19 +343,18 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
                         } else if (null == response || null == response.body) {
                             serverError = "Failed with error $responseCode"
                         } else {
-                            var inputStream: InputStream? = null
-
                             try {
-                                inputStream = response.body!!.byteStream()
+                                val inputStream = response.body!!.byteStream()
 
-                                var ch = inputStream.read()
-                                val b = StringBuilder()
-                                while (ch != -1) {
-                                    b.append(ch.toChar())
-                                    ch = inputStream.read()
+                                serverError = inputStream.use {
+                                    buildString {
+                                        var ch = it.read()
+                                        while (ch != -1) {
+                                            append(ch.toChar())
+                                            ch = it.read()
+                                        }
+                                    }
                                 }
-                                serverError = b.toString()
-                                inputStream.close()
 
                                 // check if the error message
                                 try {
@@ -378,12 +370,6 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
                                 }
                             } catch (e: Exception) {
                                 Timber.e(e, "## sendBugReport() : failed to parse error")
-                            } finally {
-                                try {
-                                    inputStream?.close()
-                                } catch (e: Exception) {
-                                    Timber.e(e, "## sendBugReport() : failed to close the error stream")
-                                }
                             }
                         }
                     }
@@ -481,15 +467,9 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
             crashFile.delete()
         }
 
-        if (!TextUtils.isEmpty(crashDescription)) {
+        if (crashDescription.isNotEmpty()) {
             try {
-                val fos = FileOutputStream(crashFile)
-                val osw = OutputStreamWriter(fos)
-                osw.write(crashDescription)
-                osw.close()
-
-                fos.flush()
-                fos.close()
+                crashFile.writeText(crashDescription)
             } catch (e: Exception) {
                 Timber.e(e, "## saveCrashReport() : fail to write $e")
             }
@@ -503,25 +483,17 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
      * @return the crash description
      */
     private fun getCrashDescription(context: Context): String? {
-        var crashDescription: String? = null
         val crashFile = getCrashFile(context)
 
         if (crashFile.exists()) {
             try {
-                val fis = FileInputStream(crashFile)
-                val isr = InputStreamReader(fis)
-
-                val buffer = CharArray(fis.available())
-                val len = isr.read(buffer, 0, fis.available())
-                crashDescription = String(buffer, 0, len)
-                isr.close()
-                fis.close()
+                return crashFile.readText()
             } catch (e: Exception) {
                 Timber.e(e, "## getCrashDescription() : fail to read $e")
             }
         }
 
-        return crashDescription
+        return null
     }
 
     // ==============================================================================================================
@@ -589,13 +561,9 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
         }
 
         try {
-            val fos = FileOutputStream(logCatErrFile)
-            val osw = OutputStreamWriter(fos)
-            getLogCatError(osw, isErrorLogcat)
-            osw.close()
-
-            fos.flush()
-            fos.close()
+            logCatErrFile.writer().use {
+                getLogCatError(it, isErrorLogcat)
+            }
 
             return compressFile(logCatErrFile)
         } catch (error: OutOfMemoryError) {
@@ -622,26 +590,17 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
             return
         }
 
-        var reader: BufferedReader? = null
         try {
             val separator = System.getProperty("line.separator")
-            reader = BufferedReader(InputStreamReader(logcatProc.inputStream), BUFFER_SIZE)
-            var line = reader.readLine()
-            while (line != null) {
-                streamWriter.append(line)
-                streamWriter.append(separator)
-                line = reader.readLine()
-            }
+            logcatProc.inputStream
+                    .reader()
+                    .buffered(BUFFER_SIZE)
+                    .forEachLine { line ->
+                        streamWriter.append(line)
+                        streamWriter.append(separator)
+                    }
         } catch (e: IOException) {
             Timber.e(e, "getLog fails")
-        } finally {
-            if (reader != null) {
-                try {
-                    reader.close()
-                } catch (e: IOException) {
-                    Timber.e(e, "getLog fails with")
-                }
-            }
         }
     }
 
@@ -658,30 +617,18 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
     private fun compressFile(fin: File): File? {
         Timber.v("## compressFile() : compress ${fin.name}")
 
-        val dstFile = File(fin.parent, fin.name + ".gz")
+        val dstFile = fin.resolveSibling(fin.name + ".gz")
 
         if (dstFile.exists()) {
             dstFile.delete()
         }
 
-        var fos: FileOutputStream? = null
-        var gos: GZIPOutputStream? = null
-        var inputStream: InputStream? = null
         try {
-            fos = FileOutputStream(dstFile)
-            gos = GZIPOutputStream(fos)
-
-            inputStream = FileInputStream(fin)
-
-            val buffer = ByteArray(2048)
-            var n = inputStream.read(buffer)
-            while (n != -1) {
-                gos.write(buffer, 0, n)
-                n = inputStream.read(buffer)
+            GZIPOutputStream(dstFile.outputStream()).use { gos ->
+                fin.inputStream().use {
+                    it.copyTo(gos, 2048)
+                }
             }
-
-            gos.close()
-            inputStream.close()
 
             Timber.v("## compressFile() : ${fin.length()} compressed to ${dstFile.length()} bytes")
             return dstFile
@@ -689,14 +636,6 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
             Timber.e(e, "## compressFile() failed")
         } catch (oom: OutOfMemoryError) {
             Timber.e(oom, "## compressFile() failed")
-        } finally {
-            try {
-                fos?.close()
-                gos?.close()
-                inputStream?.close()
-            } catch (e: Exception) {
-                Timber.e(e, "## compressFile() failed to close inputStream")
-            }
         }
 
         return null

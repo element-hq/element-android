@@ -17,7 +17,6 @@
 package im.vector.riotx.core.utils
 
 import android.content.Context
-import android.text.TextUtils
 import timber.log.Timber
 import java.io.File
 
@@ -60,7 +59,7 @@ private fun logAction(file: File): Boolean {
     if (file.isDirectory) {
         Timber.v(file.toString())
     } else {
-        Timber.v(file.toString() + " " + file.length() + " bytes")
+        Timber.v("$file ${file.length()} bytes")
     }
     return true
 }
@@ -96,26 +95,19 @@ private fun recursiveActionOnFile(file: File, action: ActionOnFile): Boolean {
 fun getFileExtension(fileUri: String): String? {
     var reducedStr = fileUri
 
-    if (!TextUtils.isEmpty(reducedStr)) {
+    if (reducedStr.isNotEmpty()) {
         // Remove fragment
-        val fragment = fileUri.lastIndexOf('#')
-        if (fragment > 0) {
-            reducedStr = fileUri.substring(0, fragment)
-        }
+        reducedStr = reducedStr.substringBeforeLast('#')
 
         // Remove query
-        val query = reducedStr.lastIndexOf('?')
-        if (query > 0) {
-            reducedStr = reducedStr.substring(0, query)
-        }
+        reducedStr = reducedStr.substringBeforeLast('?')
 
         // Remove path
-        val filenamePos = reducedStr.lastIndexOf('/')
-        val filename = if (0 <= filenamePos) reducedStr.substring(filenamePos + 1) else reducedStr
+        val filename = reducedStr.substringAfterLast('/')
 
         // Contrary to method MimeTypeMap.getFileExtensionFromUrl, we do not check the pattern
         // See https://stackoverflow.com/questions/14320527/android-should-i-use-mimetypemap-getfileextensionfromurl-bugs
-        if (!filename.isEmpty()) {
+        if (filename.isNotEmpty()) {
             val dotPos = filename.lastIndexOf('.')
             if (0 <= dotPos) {
                 val ext = filename.substring(dotPos + 1)
@@ -135,14 +127,10 @@ fun getFileExtension(fileUri: String): String? {
  * ========================================================================================== */
 
 fun getSizeOfFiles(context: Context, root: File): Int {
-    Timber.v("Get size of " + root.absolutePath)
-    return if (root.isDirectory) {
-        root.list()
-                .map {
-                    getSizeOfFiles(context, File(root, it))
-                }
-                .fold(0, { acc, other -> acc + other })
-    } else {
-        root.length().toInt()
-    }
+    return root.walkTopDown()
+            .onEnter {
+                Timber.v("Get size of ${it.absolutePath}")
+                true
+            }
+            .sumBy { it.length().toInt() }
 }

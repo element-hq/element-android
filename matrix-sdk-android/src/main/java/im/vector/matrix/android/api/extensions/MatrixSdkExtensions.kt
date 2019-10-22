@@ -19,7 +19,6 @@ package im.vector.matrix.android.api.extensions
 import im.vector.matrix.android.api.comparators.DatedObjectComparators
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
-import java.util.Collections
 
 /* ==========================================================================================
  * MXDeviceInfo
@@ -29,6 +28,6 @@ fun MXDeviceInfo.getFingerprintHumanReadable() = fingerprint()
         ?.chunked(4)
         ?.joinToString(separator = " ")
 
-fun List<DeviceInfo>.sortByLastSeen() {
-    Collections.sort(this, DatedObjectComparators.descComparator)
+fun MutableList<DeviceInfo>.sortByLastSeen() {
+    sortWith(DatedObjectComparators.descComparator)
 }

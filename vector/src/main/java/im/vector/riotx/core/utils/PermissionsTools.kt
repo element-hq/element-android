@@ -21,7 +21,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
-import android.text.TextUtils
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
@@ -29,7 +28,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import im.vector.riotx.R
 import timber.log.Timber
-import java.util.*
 
 private const val LOG_TAG = "PermissionUtils"
 
@@ -72,7 +70,7 @@ const val PERMISSION_REQUEST_CODE_DOWNLOAD_FILE = 575
  */
 fun logPermissionStatuses(context: Context) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        val permissions = Arrays.asList(
+        val permissions = listOf(
                 Manifest.permission.CAMERA,
                 Manifest.permission.RECORD_AUDIO,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -221,25 +219,25 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
                 permissionListAlreadyDenied.forEach {
                     when (it) {
                         Manifest.permission.CAMERA                 -> {
-                            if (!TextUtils.isEmpty(explanationMessage)) {
+                            if (explanationMessage.isNotEmpty()) {
                                 explanationMessage += "\n\n"
                             }
                             explanationMessage += activity.getString(R.string.permissions_rationale_msg_camera)
                         }
                         Manifest.permission.RECORD_AUDIO           -> {
-                            if (!TextUtils.isEmpty(explanationMessage)) {
+                            if (explanationMessage.isNotEmpty()) {
                                 explanationMessage += "\n\n"
                             }
                             explanationMessage += activity.getString(R.string.permissions_rationale_msg_record_audio)
                         }
                         Manifest.permission.WRITE_EXTERNAL_STORAGE -> {
-                            if (!TextUtils.isEmpty(explanationMessage)) {
+                            if (explanationMessage.isNotEmpty()) {
                                 explanationMessage += "\n\n"
                             }
                             explanationMessage += activity.getString(R.string.permissions_rationale_msg_storage)
                         }
                         Manifest.permission.READ_CONTACTS          -> {
-                            if (!TextUtils.isEmpty(explanationMessage)) {
+                            if (!explanationMessage.isEmpty()) {
                                 explanationMessage += "\n\n"
                             }
                             explanationMessage += activity.getString(R.string.permissions_rationale_msg_contacts)
@@ -255,7 +253,7 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
                     .setMessage(explanationMessage)
                     .setOnCancelListener { Toast.makeText(activity, R.string.missing_permissions_warning, Toast.LENGTH_SHORT).show() }
                     .setPositiveButton(R.string.ok) { _, _ ->
-                        if (!permissionsListToBeGranted.isEmpty()) {
+                        if (permissionsListToBeGranted.isNotEmpty()) {
                             fragment?.requestPermissions(permissionsListToBeGranted.toTypedArray(), requestCode)
                                     ?: run {
                                         ActivityCompat.requestPermissions(activity, permissionsListToBeGranted.toTypedArray(), requestCode)

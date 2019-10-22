@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.api.permalinks
 
-import android.text.TextUtils
 import im.vector.matrix.android.api.session.events.model.Event
 
 /**
@@ -48,7 +47,7 @@ object PermalinkFactory {
      * @return the permalink, or null in case of error
      */
     fun createPermalink(id: String): String? {
-        return if (TextUtils.isEmpty(id)) {
+        return if (id.isEmpty()) {
             null
         } else MATRIX_TO_URL_BASE + escape(id)
     }
@@ -71,11 +70,11 @@ object PermalinkFactory {
      * @param url the universal link, Ex: "https://matrix.to/#/@benoit:matrix.org"
      * @return the id from the url, ex: "@benoit:matrix.org", or null if the url is not a permalink
      */
-    fun getLinkedId(url: String?): String? {
-        val isSupported = url != null && url.startsWith(MATRIX_TO_URL_BASE)
+    fun getLinkedId(url: String): String? {
+        val isSupported = url.startsWith(MATRIX_TO_URL_BASE)
 
         return if (isSupported) {
-            url!!.substring(MATRIX_TO_URL_BASE.length)
+            url.substring(MATRIX_TO_URL_BASE.length)
         } else null
     }
 
@@ -86,6 +85,6 @@ object PermalinkFactory {
      * @return the escaped id
      */
     private fun escape(id: String): String {
-        return id.replace("/".toRegex(), "%2F")
+        return id.replace("/", "%2F")
     }
 }

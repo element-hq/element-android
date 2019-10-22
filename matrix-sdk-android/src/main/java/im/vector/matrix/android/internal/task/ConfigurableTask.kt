@@ -18,7 +18,7 @@ package im.vector.matrix.android.internal.task
 
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.util.Cancelable
-import java.util.*
+import java.util.UUID
 
 internal fun <PARAMS, RESULT> Task<PARAMS, RESULT>.configureWith(params: PARAMS,
                                                                  init: (ConfigurableTask.Builder<PARAMS, RESULT>.() -> Unit) = {}

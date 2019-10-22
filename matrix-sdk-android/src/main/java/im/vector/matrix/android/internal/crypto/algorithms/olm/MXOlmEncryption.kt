@@ -18,7 +18,6 @@
 
 package im.vector.matrix.android.internal.crypto.algorithms.olm
 
-import android.text.TextUtils
 import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.toContent
 import im.vector.matrix.android.internal.crypto.DeviceListManager
@@ -28,7 +27,6 @@ import im.vector.matrix.android.internal.crypto.actions.MessageEncrypter
 import im.vector.matrix.android.internal.crypto.algorithms.IMXEncrypting
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
-import java.util.*
 
 internal class MXOlmEncryption(
         private var roomId: String,
@@ -49,7 +47,7 @@ internal class MXOlmEncryption(
             val devices = cryptoStore.getUserDevices(userId)?.values ?: emptyList()
             for (device in devices) {
                 val key = device.identityKey()
-                if (TextUtils.equals(key, olmDevice.deviceCurve25519Key)) {
+                if (key == olmDevice.deviceCurve25519Key) {
                     // Don't bother setting up session to ourself
                     continue
                 }
@@ -61,10 +59,11 @@ internal class MXOlmEncryption(
             }
         }
 
-        val messageMap = HashMap<String, Any>()
-        messageMap["room_id"] = roomId
-        messageMap["type"] = eventType
-        messageMap["content"] = eventContent
+        val messageMap = mapOf(
+                "room_id" to roomId,
+                "type" to eventType,
+                "content" to eventContent
+        )
 
         messageEncrypter.encryptMessage(messageMap, deviceInfos)
         return messageMap.toContent()!!

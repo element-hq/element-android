@@ -50,19 +50,15 @@ internal class DefaultProcessEventForPushTask @Inject constructor(
             defaultPushRuleService.dispatchRoomJoined(it)
         }
         val newJoinEvents = params.syncResponse.join
-                .map { entries ->
-                    entries.value.timeline?.events?.map { it.copy(roomId = entries.key) }
+                .mapNotNull { (key, value) ->
+                    value.timeline?.events?.map { it.copy(roomId = key) }
                 }
-                .fold(emptyList<Event>(), { acc, next ->
-                    acc + (next ?: emptyList())
-                })
+                .flatten()
         val inviteEvents = params.syncResponse.invite
-                .map { entries ->
-                    entries.value.inviteState?.events?.map { it.copy(roomId = entries.key) }
+                .mapNotNull { (key, value) ->
+                    value.inviteState?.events?.map { it.copy(roomId = key) }
                 }
-                .fold(emptyList<Event>(), { acc, next ->
-                    acc + (next ?: emptyList())
-                })
+                .flatten()
         val allEvents = (newJoinEvents + inviteEvents).filter { event ->
             when (event.type) {
                 EventType.MESSAGE,
@@ -84,16 +80,12 @@ internal class DefaultProcessEventForPushTask @Inject constructor(
         }
 
         val allRedactedEvents = params.syncResponse.join
-                .map { entries ->
-                    entries.value.timeline?.events?.filter {
-                        it.type == EventType.REDACTION
-                    }
-                            .orEmpty()
-                            .mapNotNull { it.redacts }
-                }
-                .fold(emptyList<String>(), { acc, next ->
-                    acc + next
-                })
+                .asSequence()
+                .mapNotNull { (_, value) -> value.timeline?.events }
+                .flatten()
+                .filter { it.type == EventType.REDACTION }
+                .mapNotNull { it.redacts }
+                .toList()
 
         Timber.v("[PushRules] Found ${allRedactedEvents.size} redacted events")
 
@@ -107,18 +99,11 @@ internal class DefaultProcessEventForPushTask @Inject constructor(
     private fun fulfilledBingRule(event: Event, rules: List<PushRule>): PushRule? {
         // TODO This should be injected
         val conditionResolver = DefaultConditionResolver(event, roomService, userId)
-        rules.filter { it.enabled }.forEach { rule ->
-            val isFullfilled = rule.conditions?.map {
+        return rules.firstOrNull { rule ->
+            // All conditions must hold true for an event in order to apply the action for the event.
+            rule.enabled && rule.conditions?.all {
                 it.asExecutableCondition()?.isSatisfied(conditionResolver) ?: false
-            }?.fold(true/*A rule with no conditions always matches*/, { acc, next ->
-                // All conditions must hold true for an event in order to apply the action for the event.
-                acc && next
-            }) ?: false
-
-            if (isFullfilled) {
-                return rule
-            }
+            } ?: false
         }
-        return null
     }
 }

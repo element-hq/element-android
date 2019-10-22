@@ -17,7 +17,6 @@
 package im.vector.riotx.core.preference
 
 import android.content.Context
-import android.text.TextUtils
 import android.util.AttributeSet
 import android.view.View
 import android.widget.RadioGroup
@@ -84,7 +83,7 @@ class BingRulePreference : VectorPreference {
     val ruleStatusIndex: Int
         get() {
             if (null != rule) {
-                if (TextUtils.equals(rule!!.ruleId, BingRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS)) {
+                if (rule!!.ruleId == BingRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS) {
                     if (rule!!.shouldNotNotify()) {
                         return if (rule!!.isEnabled) {
                             NOTIFICATION_OFF_INDEX
@@ -143,7 +142,7 @@ class BingRulePreference : VectorPreference {
         if (null != this.rule && index != ruleStatusIndex) {
             rule = BingRule(this.rule!!)
 
-            if (TextUtils.equals(rule.ruleId, BingRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS)) {
+            if (rule.ruleId == BingRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS) {
                 when (index) {
                     NOTIFICATION_OFF_INDEX    -> {
                         rule.isEnabled = true
@@ -164,8 +163,8 @@ class BingRulePreference : VectorPreference {
             }
 
             if (NOTIFICATION_OFF_INDEX == index) {
-                if (TextUtils.equals(this.rule!!.kind, BingRule.KIND_UNDERRIDE)
-                        || TextUtils.equals(rule.ruleId, BingRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS)) {
+                if (this.rule!!.kind == BingRule.KIND_UNDERRIDE
+                        || rule.ruleId == BingRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS) {
                     rule.setNotify(false)
                 } else {
                     rule.isEnabled = false
@@ -173,11 +172,11 @@ class BingRulePreference : VectorPreference {
             } else {
                 rule.isEnabled = true
                 rule.setNotify(true)
-                rule.setHighlight(!TextUtils.equals(this.rule!!.kind, BingRule.KIND_UNDERRIDE)
-                        && !TextUtils.equals(rule.ruleId, BingRule.RULE_ID_INVITE_ME)
+                rule.setHighlight(this.rule!!.kind != BingRule.KIND_UNDERRIDE
+                        && rule.ruleId != BingRule.RULE_ID_INVITE_ME
                         && NOTIFICATION_NOISY_INDEX == index)
                 if (NOTIFICATION_NOISY_INDEX == index) {
-                    rule.notificationSound = if (TextUtils.equals(rule.ruleId, BingRule.RULE_ID_CALL)) {
+                    rule.notificationSound = if (rule.ruleId == BingRule.RULE_ID_CALL) {
                         BingRule.ACTION_VALUE_RING
                     } else {
                         BingRule.ACTION_VALUE_DEFAULT

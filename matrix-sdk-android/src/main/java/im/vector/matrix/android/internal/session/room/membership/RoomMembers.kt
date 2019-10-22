@@ -132,8 +132,7 @@ internal class RoomMembers(private val realm: Realm,
                 .findAll()
                 .map { it.asDomain() }
                 .associateBy { it.stateKey!! }
-                .mapValues { it.value.content.toModel<RoomMember>()!! }
-                .filterValues { predicate(it) }
+                .filterValues { predicate(it.content.toModel<RoomMember>()!!) }
                 .keys
                 .toList()
     }

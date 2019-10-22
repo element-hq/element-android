@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.crypto.store.db
 
-import android.text.TextUtils
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequest
 import im.vector.matrix.android.internal.crypto.NewSessionListener
@@ -101,8 +100,8 @@ internal class RealmCryptoStore(private val realmConfiguration: RealmConfigurati
                 // Check credentials
                 // The device id may not have been provided in credentials.
                 // Check it only if provided, else trust the stored one.
-                if (!TextUtils.equals(currentMetadata.userId, credentials.userId)
-                        || (credentials.deviceId != null && !TextUtils.equals(credentials.deviceId, currentMetadata.deviceId))) {
+                if (currentMetadata.userId != credentials.userId
+                        || (credentials.deviceId != null && credentials.deviceId != currentMetadata.deviceId)) {
                     Timber.w("## open() : Credentials do not match, close this store and delete data")
                     deleteAll = true
                     currentMetadata = null

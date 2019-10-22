@@ -21,7 +21,6 @@ import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Typeface
-import android.text.TextUtils
 import android.view.KeyEvent
 import android.widget.Button
 import android.widget.EditText
@@ -69,7 +68,7 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
     private var mAccountPassword: String = ""
 
     // devices: device IDs and device names
-    private var mDevicesNameList: List<DeviceInfo> = ArrayList()
+    private val mDevicesNameList: MutableList<DeviceInfo> = mutableListOf()
 
     private var mMyDeviceInfo: DeviceInfo? = null
 
@@ -308,7 +307,7 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
 
             passPhraseEditText.addTextChangedListener(object : SimpleTextWatcher() {
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                    importButton.isEnabled = !TextUtils.isEmpty(passPhraseEditText.text)
+                    importButton.isEnabled = !passPhraseEditText.text.isNullOrEmpty()
                 }
             })
 
@@ -393,20 +392,20 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
         }
 
         // crypto section: device ID
-        if (!TextUtils.isEmpty(deviceId)) {
+        if (!deviceId.isNullOrEmpty()) {
             cryptoInfoDeviceIdPreference.summary = deviceId
 
             cryptoInfoDeviceIdPreference.setOnPreferenceClickListener {
-                activity?.let { copyToClipboard(it, deviceId!!) }
+                activity?.let { copyToClipboard(it, deviceId) }
                 true
             }
         }
 
         // crypto section: device key (fingerprint)
-        if (!TextUtils.isEmpty(deviceId) && !TextUtils.isEmpty(userId)) {
+        if (!deviceId.isNullOrEmpty() && userId.isNotEmpty()) {
             val deviceInfo = session.getDeviceInfo(userId, deviceId)
 
-            if (null != deviceInfo && !TextUtils.isEmpty(deviceInfo.fingerprint())) {
+            if (null != deviceInfo && !deviceInfo.fingerprint().isNullOrEmpty()) {
                 cryptoInfoTextPreference.summary = deviceInfo.getFingerprintHumanReadable()
 
                 cryptoInfoTextPreference.setOnPreferenceClickListener {
@@ -446,7 +445,7 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
      * It can be any mobile device, as any browser.
      */
     private fun refreshDevicesList() {
-        if (session.isCryptoEnabled() && !TextUtils.isEmpty(session.sessionParams.credentials.deviceId)) {
+        if (session.isCryptoEnabled() && !session.sessionParams.credentials.deviceId.isNullOrEmpty()) {
             // display a spinner while loading the devices list
             if (0 == mDevicesListSettingsCategory.preferenceCount) {
                 activity?.let {
@@ -502,7 +501,8 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
 
         if (isNewList) {
             var prefIndex = 0
-            mDevicesNameList = aDeviceInfoList
+            mDevicesNameList.clear()
+            mDevicesNameList.addAll(aDeviceInfoList)
 
             // sort before display: most recent first
             mDevicesNameList.sortByLastSeen()
@@ -570,7 +570,7 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
 
             // device name
             textView = layout.findViewById(R.id.device_name)
-            val displayName = if (TextUtils.isEmpty(aDeviceInfo.displayName)) LABEL_UNAVAILABLE_DATA else aDeviceInfo.displayName
+            val displayName = if (aDeviceInfo.displayName.isNullOrEmpty()) LABEL_UNAVAILABLE_DATA else aDeviceInfo.displayName
             textView.text = displayName
 
             // last seen info
@@ -598,7 +598,7 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
                     .setPositiveButton(R.string.rename) { _, _ -> displayDeviceRenameDialog(aDeviceInfo) }
 
             // disable the deletion for our own device
-            if (!TextUtils.equals(session.getMyDevice().deviceId, aDeviceInfo.deviceId)) {
+            if (session.getMyDevice().deviceId != aDeviceInfo.deviceId) {
                 builder.setNegativeButton(R.string.delete) { _, _ -> deleteDevice(aDeviceInfo) }
             }
 
@@ -645,13 +645,13 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
                                 for (i in 0 until count) {
                                     val pref = mDevicesListSettingsCategory.getPreference(i)
 
-                                    if (TextUtils.equals(aDeviceInfoToRename.deviceId, pref.title)) {
+                                    if (aDeviceInfoToRename.deviceId == pref.title) {
                                         pref.summary = newName
                                     }
                                 }
 
                                 // detect if the updated device is the current account one
-                                if (TextUtils.equals(cryptoInfoDeviceIdPreference.summary, aDeviceInfoToRename.deviceId)) {
+                                if (cryptoInfoDeviceIdPreference.summary == aDeviceInfoToRename.deviceId) {
                                     cryptoInfoDeviceNamePreference.summary = newName
                                 }
 
@@ -716,7 +716,7 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
      * Show a dialog to ask for user password, or use a previously entered password.
      */
     private fun maybeShowDeleteDeviceWithPasswordDialog(deviceId: String, authSession: String?) {
-        if (!TextUtils.isEmpty(mAccountPassword)) {
+        if (mAccountPassword.isNotEmpty()) {
             deleteDeviceWithPassword(deviceId, authSession, mAccountPassword)
         } else {
             activity?.let {
@@ -729,7 +729,7 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
                         .setTitle(R.string.devices_delete_dialog_title)
                         .setView(layout)
                         .setPositiveButton(R.string.devices_delete_submit_button_label, DialogInterface.OnClickListener { _, _ ->
-                            if (TextUtils.isEmpty(passwordEditText.toString())) {
+                            if (passwordEditText.toString().isEmpty()) {
                                 it.toast(R.string.error_empty_field_your_password)
                                 return@OnClickListener
                             }

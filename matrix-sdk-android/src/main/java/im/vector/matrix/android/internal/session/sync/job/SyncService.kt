@@ -31,7 +31,8 @@ import im.vector.matrix.android.internal.task.TaskThread
 import im.vector.matrix.android.internal.task.configureWith
 import timber.log.Timber
 import java.net.SocketTimeoutException
-import java.util.*
+import java.util.Timer
+import java.util.TimerTask
 
 /**
  * Can execute periodic sync task.

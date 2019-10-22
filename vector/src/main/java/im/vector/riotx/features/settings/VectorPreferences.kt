@@ -18,11 +18,9 @@
 package im.vector.riotx.features.settings
 
 import android.content.Context
-import android.database.Cursor
 import android.media.RingtoneManager
 import android.net.Uri
 import android.provider.MediaStore
-import android.text.TextUtils
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import im.vector.riotx.R
@@ -30,7 +28,6 @@ import im.vector.riotx.features.homeserver.ServerUrlsRepository
 import im.vector.riotx.features.themes.ThemeUtils
 import timber.log.Timber
 import java.io.File
-import java.util.*
 import javax.inject.Inject
 
 class VectorPreferences @Inject constructor(private val context: Context) {
@@ -173,7 +170,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val MEDIA_SAVING_FOREVER = 3
 
         // some preferences keys must be kept after a logout
-        private val mKeysToKeepAfterLogout = Arrays.asList(
+        private val mKeysToKeepAfterLogout = listOf(
                 SETTINGS_DEFAULT_MEDIA_COMPRESSION_KEY,
                 SETTINGS_DEFAULT_MEDIA_SOURCE_KEY,
                 SETTINGS_PLAY_SHUTTER_SOUND_KEY,
@@ -394,7 +391,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         val url = defaultPrefs.getString(SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY, null)
 
         // the user selects "None"
-        if (TextUtils.equals(url, "")) {
+        if (url == "") {
             return null
         }
 
@@ -425,29 +422,18 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     fun getNotificationRingToneName(): String? {
         val toneUri = getNotificationRingTone() ?: return null
 
-        var name: String? = null
-
-        var cursor: Cursor? = null
-
         try {
             val proj = arrayOf(MediaStore.Audio.Media.DATA)
-            cursor = context.contentResolver.query(toneUri, proj, null, null, null)
-            val column_index = cursor!!.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)
-            cursor.moveToFirst()
-
-            val file = File(cursor.getString(column_index))
-            name = file.name
-
-            if (name!!.contains(".")) {
-                name = name.substring(0, name.lastIndexOf("."))
+            return context.contentResolver.query(toneUri, proj, null, null, null)?.use {
+                val columnIndex = it.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)
+                it.moveToFirst()
+                File(it.getString(columnIndex)).nameWithoutExtension
             }
         } catch (e: Exception) {
             Timber.e(e, "## getNotificationRingToneName() failed")
-        } finally {
-            cursor?.close()
         }
 
-        return name
+        return null
     }
 
     /**
@@ -553,16 +539,13 @@ class VectorPreferences @Inject constructor(private val context: Context) {
      * @return the min last access time (in seconds)
      */
     fun getMinMediasLastAccessTime(): Long {
-        val selection = getSelectedMediasSavingPeriod()
-
-        when (selection) {
-            MEDIA_SAVING_3_DAYS  -> return System.currentTimeMillis() / 1000 - 3 * 24 * 60 * 60
-            MEDIA_SAVING_1_WEEK  -> return System.currentTimeMillis() / 1000 - 7 * 24 * 60 * 60
-            MEDIA_SAVING_1_MONTH -> return System.currentTimeMillis() / 1000 - 30 * 24 * 60 * 60
-            MEDIA_SAVING_FOREVER -> return 0
+        return when (getSelectedMediasSavingPeriod()) {
+            MEDIA_SAVING_3_DAYS  -> System.currentTimeMillis() / 1000 - 3 * 24 * 60 * 60
+            MEDIA_SAVING_1_WEEK  -> System.currentTimeMillis() / 1000 - 7 * 24 * 60 * 60
+            MEDIA_SAVING_1_MONTH -> System.currentTimeMillis() / 1000 - 30 * 24 * 60 * 60
+            MEDIA_SAVING_FOREVER -> 0
+            else -> 0
         }
-
-        return 0
     }
 
     /**
@@ -571,15 +554,13 @@ class VectorPreferences @Inject constructor(private val context: Context) {
      * @return the selected period
      */
     fun getSelectedMediasSavingPeriodString(): String {
-        val selection = getSelectedMediasSavingPeriod()
-
-        when (selection) {
-            MEDIA_SAVING_3_DAYS  -> return context.getString(R.string.media_saving_period_3_days)
-            MEDIA_SAVING_1_WEEK  -> return context.getString(R.string.media_saving_period_1_week)
-            MEDIA_SAVING_1_MONTH -> return context.getString(R.string.media_saving_period_1_month)
-            MEDIA_SAVING_FOREVER -> return context.getString(R.string.media_saving_period_forever)
+        return when (getSelectedMediasSavingPeriod()) {
+            MEDIA_SAVING_3_DAYS  -> context.getString(R.string.media_saving_period_3_days)
+            MEDIA_SAVING_1_WEEK  -> context.getString(R.string.media_saving_period_1_week)
+            MEDIA_SAVING_1_MONTH -> context.getString(R.string.media_saving_period_1_month)
+            MEDIA_SAVING_FOREVER -> context.getString(R.string.media_saving_period_forever)
+            else -> "?"
         }
-        return "?"
     }
 
     /**

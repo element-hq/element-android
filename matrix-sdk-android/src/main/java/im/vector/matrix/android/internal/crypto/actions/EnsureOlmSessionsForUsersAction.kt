@@ -16,14 +16,11 @@
 
 package im.vector.matrix.android.internal.crypto.actions
 
-import android.text.TextUtils
 import im.vector.matrix.android.internal.crypto.MXOlmDevice
-import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXOlmSessionResult
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
 
 internal class EnsureOlmSessionsForUsersAction @Inject constructor(private val olmDevice: MXOlmDevice,
@@ -36,27 +33,14 @@ internal class EnsureOlmSessionsForUsersAction @Inject constructor(private val o
      */
     suspend fun handle(users: List<String>): MXUsersDevicesMap<MXOlmSessionResult> {
         Timber.v("## ensureOlmSessionsForUsers() : ensureOlmSessionsForUsers $users")
-        val devicesByUser = HashMap<String /* userId */, MutableList<MXDeviceInfo>>()
-
-        for (userId in users) {
-            devicesByUser[userId] = ArrayList()
-
+        val devicesByUser = users.associateWith { userId ->
             val devices = cryptoStore.getUserDevices(userId)?.values ?: emptyList()
 
-            for (device in devices) {
-                val key = device.identityKey()
-
-                if (TextUtils.equals(key, olmDevice.deviceCurve25519Key)) {
-                    // Don't bother setting up session to ourself
-                    continue
-                }
-
-                if (device.isVerified) {
-                    // Don't bother setting up sessions with blocked users
-                    continue
-                }
-
-                devicesByUser[userId]!!.add(device)
+            devices.filter {
+                // Don't bother setting up session to ourself
+                it.identityKey() != olmDevice.deviceCurve25519Key &&
+                        // Don't bother setting up sessions with blocked users
+                        !it.isVerified
             }
         }
         return ensureOlmSessionsForDevicesAction.handle(devicesByUser)
