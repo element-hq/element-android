@@ -156,3 +156,6 @@ Formatter\.formatFileSize===1
 
 ### Use TextUtils.formatFileSize with short format param to true
 Formatter\.formatShortFileSize===1
+
+### Use kotlin stdlib to test or compare strings
+android\.text\.TextUtils
