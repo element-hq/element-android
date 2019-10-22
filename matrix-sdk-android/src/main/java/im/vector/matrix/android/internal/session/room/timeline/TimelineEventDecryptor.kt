@@ -80,10 +80,10 @@ internal class TimelineEventDecryptor(
             existingRequests.add(eventId)
         }
         synchronized(unknownSessionsFailure) {
-            for (it in unknownSessionsFailure.values) {
-                if (eventId in it) {
+            for (eventIds in unknownSessionsFailure.values) {
+                if (eventId in eventIds) {
                     Timber.d("Skip Decryption request for event $eventId, unknown session")
-                    break
+                    return
                 }
             }
         }
