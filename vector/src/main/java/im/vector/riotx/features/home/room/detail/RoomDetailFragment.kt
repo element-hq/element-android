@@ -292,7 +292,6 @@ class RoomDetailFragment :
                 null                      -> Timber.v("No share data to process")
             }
         }
-
     }
 
     override fun onDestroy() {
