@@ -37,7 +37,7 @@ internal object EventMapper {
         val resolvedPrevContent = event.prevContent ?: event.unsignedData?.prevContent
         eventEntity.prevContent = ContentMapper.map(resolvedPrevContent)
         eventEntity.stateKey = event.stateKey
-        eventEntity.type = event.getClearType()
+        eventEntity.type = event.type
         eventEntity.sender = event.senderId
         eventEntity.originServerTs = event.originServerTs
         eventEntity.redacts = event.redacts
