@@ -21,7 +21,6 @@ package im.vector.matrix.android.internal.crypto
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
-import arrow.core.Try
 import com.squareup.moshi.Types
 import com.zhuinden.monarchy.Monarchy
 import dagger.Lazy
