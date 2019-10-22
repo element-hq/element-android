@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.home.room.detail.timeline.action
+package im.vector.riotx.features.home.room.detail.timeline.reactions
 
 import android.widget.TextView
 import androidx.core.view.isVisible

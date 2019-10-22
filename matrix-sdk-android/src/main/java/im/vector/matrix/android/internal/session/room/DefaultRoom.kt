@@ -24,6 +24,7 @@ import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.members.MembershipService
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.relation.RelationService
+import im.vector.matrix.android.api.session.room.reporting.ReportingService
 import im.vector.matrix.android.api.session.room.read.ReadService
 import im.vector.matrix.android.api.session.room.send.DraftService
 import im.vector.matrix.android.api.session.room.send.SendService
@@ -44,18 +45,20 @@ internal class DefaultRoom @Inject constructor(override val roomId: String,
                                                private val sendService: SendService,
                                                private val draftService: DraftService,
                                                private val stateService: StateService,
+                                               private val reportingService: ReportingService,
                                                private val readService: ReadService,
                                                private val cryptoService: CryptoService,
                                                private val relationService: RelationService,
-                                               private val roomMembersService: MembershipService
-) : Room,
-    TimelineService by timelineService,
-    SendService by sendService,
-    DraftService by draftService,
-    StateService by stateService,
-    ReadService by readService,
-    RelationService by relationService,
-    MembershipService by roomMembersService {
+                                               private val roomMembersService: MembershipService) :
+        Room,
+        TimelineService by timelineService,
+        SendService by sendService,
+        DraftService by draftService,
+        StateService by stateService,
+        ReportingService by reportingService,
+        ReadService by readService,
+        RelationService by relationService,
+        MembershipService by roomMembersService {
 
     override fun getRoomSummaryLive(): LiveData<Optional<RoomSummary>> {
         val liveData = monarchy.findAllMappedWithChanges(

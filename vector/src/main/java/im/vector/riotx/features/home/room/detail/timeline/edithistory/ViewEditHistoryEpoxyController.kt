@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.riotx.features.home.room.detail.timeline.action
+package im.vector.riotx.features.home.room.detail.timeline.edithistory
 
 import android.content.Context
 import android.text.Spannable
@@ -41,7 +41,7 @@ import timber.log.Timber
 import java.util.*
 
 /**
- * Epoxy controller for reaction event list
+ * Epoxy controller for edit history list
  */
 class ViewEditHistoryEpoxyController(private val context: Context,
                                      val dateFormatter: VectorDateFormatter,

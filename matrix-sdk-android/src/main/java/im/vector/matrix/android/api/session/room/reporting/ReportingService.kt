@@ -14,15 +14,19 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.home.room.list
+package im.vector.matrix.android.api.session.room.reporting
 
-import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.util.Cancelable
 
-sealed class RoomListActions {
-    data class SelectRoom(val roomSummary: RoomSummary) : RoomListActions()
-    data class ToggleCategory(val category: RoomCategory) : RoomListActions()
-    data class AcceptInvitation(val roomSummary: RoomSummary) : RoomListActions()
-    data class RejectInvitation(val roomSummary: RoomSummary) : RoomListActions()
-    data class FilterWith(val filter: String) : RoomListActions()
-    object MarkAllRoomsRead : RoomListActions()
+/**
+ * This interface defines methods to report content of an event.
+ */
+interface ReportingService {
+
+    /**
+     * Report content
+     * Ref: https://matrix.org/docs/spec/client_server/latest#post-matrix-client-r0-rooms-roomid-report-eventid
+     */
+    fun reportContent(eventId: String, score: Int, reason: String, callback: MatrixCallback<Unit>): Cancelable
 }

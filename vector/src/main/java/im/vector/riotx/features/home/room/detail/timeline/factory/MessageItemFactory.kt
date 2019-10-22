@@ -19,9 +19,9 @@ package im.vector.riotx.features.home.room.detail.timeline.factory
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.TextPaint
+import android.text.style.AbsoluteSizeSpan
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
-import android.text.style.RelativeSizeSpan
 import android.view.View
 import dagger.Lazy
 import im.vector.matrix.android.api.permalinks.MatrixLinkify
@@ -39,6 +39,8 @@ import im.vector.riotx.core.linkify.VectorLinkify
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.utils.DebouncedClickListener
+import im.vector.riotx.core.utils.DimensionConverter
+import im.vector.riotx.core.utils.containsOnlyEmojis
 import im.vector.riotx.core.utils.isLocalFile
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.home.room.detail.timeline.helper.*
@@ -51,6 +53,7 @@ import javax.inject.Inject
 
 class MessageItemFactory @Inject constructor(
         private val colorProvider: ColorProvider,
+        private val dimensionConverter: DimensionConverter,
         private val timelineMediaSizeProvider: TimelineMediaSizeProvider,
         private val htmlRenderer: Lazy<EventHtmlRenderer>,
         private val stringProvider: StringProvider,
@@ -247,6 +250,7 @@ class MessageItemFactory @Inject constructor(
                         message(linkifiedBody)
                     }
                 }
+                .useBigFont(linkifiedBody.length <= MAX_NUMBER_OF_EMOJI_FOR_BIG_FONT * 2 && containsOnlyEmojis(linkifiedBody.toString()))
                 .searchForPills(isFormatted)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .attributes(attributes)
@@ -271,7 +275,13 @@ class MessageItemFactory @Inject constructor(
                 editEnd,
                 Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
 
-        spannable.setSpan(RelativeSizeSpan(.9f), editStart, editEnd, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+        // Note: text size is set to 14sp
+        spannable.setSpan(
+                AbsoluteSizeSpan(dimensionConverter.spToPx(13)),
+                editStart,
+                editEnd,
+                Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+
         spannable.setSpan(object : ClickableSpan() {
             override fun onClick(widget: View?) {
                 callback?.onEditedDecorationClicked(informationData)
@@ -350,5 +360,9 @@ class MessageItemFactory @Inject constructor(
         })
         VectorLinkify.addLinks(spannable, true)
         return spannable
+    }
+
+    companion object {
+        private const val MAX_NUMBER_OF_EMOJI_FOR_BIG_FONT = 5
     }
 }

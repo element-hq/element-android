@@ -212,8 +212,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
 
     /**
      * Clear the preferences.
-     *
-     * @param context the context
      */
     fun clearPreferences() {
         val keysToKeep = HashSet(mKeysToKeepAfterLogout)
@@ -263,7 +261,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     /**
      * Tells if we have already asked the user to disable battery optimisations on android >= M devices.
      *
-     * @param context the context
      * @return true if it was already requested
      */
     fun didAskUserToIgnoreBatteryOptimizations(): Boolean {
@@ -272,8 +269,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
 
     /**
      * Mark as requested the question to disable battery optimisations.
-     *
-     * @param context the context
      */
     fun setDidAskUserToIgnoreBatteryOptimizations() {
         defaultPrefs.edit {
@@ -294,7 +289,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     /**
      * Tells if the timestamp must be displayed in 12h format
      *
-     * @param context the context
      * @return true if the time must be displayed in 12h format
      */
     fun displayTimeIn12hFormat(): Boolean {
@@ -304,7 +298,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     /**
      * Tells if the join and leave membership events should be shown in the messages list.
      *
-     * @param context the context
      * @return true if the join and leave membership events should be shown in the messages list
      */
     fun showJoinLeaveMessages(): Boolean {
@@ -314,7 +307,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     /**
      * Tells if the avatar and display name events should be shown in the messages list.
      *
-     * @param context the context
      * @return true true if the avatar and display name events should be shown in the messages list.
      */
     fun showAvatarDisplayNameChangeMessages(): Boolean {
@@ -324,7 +316,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     /**
      * Tells the native camera to take a photo or record a video.
      *
-     * @param context the context
      * @return true to use the native camera app to record video or take photo.
      */
     fun useNativeCamera(): Boolean {
@@ -334,7 +325,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     /**
      * Tells if the send voice feature is enabled.
      *
-     * @param context the context
      * @return true if the send voice feature is enabled.
      */
     fun isSendVoiceFeatureEnabled(): Boolean {
@@ -344,7 +334,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     /**
      * Tells which compression level to use by default
      *
-     * @param context the context
      * @return the selected compression level
      */
     fun getSelectedDefaultMediaCompressionLevel(): Int {
@@ -354,7 +343,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     /**
      * Tells which media source to use by default
      *
-     * @param context the context
      * @return the selected media source
      */
     fun getSelectedDefaultMediaSource(): Int {
@@ -364,7 +352,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     /**
      * Tells whether to use shutter sound.
      *
-     * @param context the context
      * @return true if shutter sound should play
      */
     fun useShutterSound(): Boolean {
@@ -374,7 +361,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     /**
      * Update the notification ringtone
      *
-     * @param context the context
      * @param uri     the new notification ringtone, or null for no RingTone
      */
     fun setNotificationRingTone(uri: Uri?) {
@@ -399,7 +385,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     /**
      * Provides the selected notification ring tone
      *
-     * @param context the context
      * @return the selected ring tone or null for no RingTone
      */
     fun getNotificationRingTone(): Uri? {
@@ -432,7 +417,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     /**
      * Provide the notification ringtone filename
      *
-     * @param context the context
      * @return the filename or null if "None" is selected
      */
     fun getNotificationRingToneName(): String? {
@@ -455,7 +439,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     /**
      * Enable or disable the lazy loading
      *
-     * @param context  the context
      * @param newValue true to enable lazy loading, false to disable it
      */
     fun setUseLazyLoading(newValue: Boolean) {
@@ -467,7 +450,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     /**
      * Tells if the lazy loading is enabled
      *
-     * @param context the context
      * @return true if the lazy loading of room members is enabled
      */
     fun useLazyLoading(): Boolean {
@@ -477,7 +459,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     /**
      * User explicitly refuses the lazy loading.
      *
-     * @param context the context
      */
     fun setUserRefuseLazyLoading() {
         defaultPrefs.edit {
@@ -488,7 +469,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     /**
      * Tells if the user has explicitly refused the lazy loading
      *
-     * @param context the context
      * @return true if the user has explicitly refuse the lazy loading of room members
      */
     fun hasUserRefusedLazyLoading(): Boolean {
@@ -498,7 +478,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     /**
      * Tells if the data save mode is enabled
      *
-     * @param context the context
      * @return true if the data save mode is enabled
      */
     fun useDataSaveMode(): Boolean {
@@ -508,7 +487,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     /**
      * Tells if the conf calls must be done with Jitsi.
      *
-     * @param context the context
      * @return true if the conference call must be done with jitsi.
      */
     fun useJitsiConfCall(): Boolean {
@@ -518,7 +496,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     /**
      * Tells if the application is started on boot
      *
-     * @param context the context
      * @return true if the application must be started on boot
      */
     fun autoStartOnBoot(): Boolean {
@@ -528,7 +505,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     /**
      * Tells if the application is started on boot
      *
-     * @param context the context
      * @param value   true to start the application on boot
      */
     fun setAutoStartOnBoot(value: Boolean) {
@@ -540,7 +516,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     /**
      * Provides the selected saving period.
      *
-     * @param context the context
      * @return the selected period
      */
     fun getSelectedMediasSavingPeriod(): Int {
@@ -550,7 +525,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     /**
      * Updates the selected saving period.
      *
-     * @param context the context
      * @param index   the selected period index
      */
     fun setSelectedMediasSavingPeriod(index: Int) {
@@ -562,7 +536,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     /**
      * Provides the minimum last access time to keep a media file.
      *
-     * @param context the context
      * @return the min last access time (in seconds)
      */
     fun getMinMediasLastAccessTime(): Long {
@@ -578,7 +551,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     /**
      * Provides the selected saving period.
      *
-     * @param context the context
      * @return the selected period
      */
     fun getSelectedMediasSavingPeriodString(): String {
@@ -601,7 +573,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     /**
      * Tells if the markdown is enabled
      *
-     * @param context the context
      * @return true if the markdown is enabled
      */
     fun isMarkdownEnabled(): Boolean {
@@ -611,7 +582,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     /**
      * Update the markdown enable status.
      *
-     * @param context   the context
      * @param isEnabled true to enable the markdown
      */
     fun setMarkdownEnabled(isEnabled: Boolean) {
@@ -623,7 +593,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     /**
      * Tells if the read receipts should be shown
      *
-     * @param context the context
      * @return true if the read receipts should be shown
      */
     fun showReadReceipts(): Boolean {
@@ -633,7 +602,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     /**
      * Tells if the message timestamps must be always shown
      *
-     * @param context the context
      * @return true if the message timestamps must be always shown
      */
     fun alwaysShowTimeStamps(): Boolean {
@@ -643,7 +611,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     /**
      * Tells if the typing notifications should be sent
      *
-     * @param context the context
      * @return true to send the typing notifs
      */
     fun sendTypingNotifs(): Boolean {
@@ -653,7 +620,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     /**
      * Tells of the missing notifications rooms must be displayed at left (home screen)
      *
-     * @param context the context
      * @return true to move the missed notifications to the left side
      */
     fun pinMissedNotifications(): Boolean {
@@ -663,7 +629,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     /**
      * Tells of the unread rooms must be displayed at left (home screen)
      *
-     * @param context the context
      * @return true to move the unread room to the left side
      */
     fun pinUnreadMessages(): Boolean {
@@ -673,7 +638,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     /**
      * Tells if the phone must vibrate when mentioning
      *
-     * @param context the context
      * @return true
      */
     fun vibrateWhenMentioning(): Boolean {
@@ -683,7 +647,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     /**
      * Tells if a dialog has been displayed to ask to use the analytics tracking (piwik, matomo, etc.).
      *
-     * @param context the context
      * @return true if a dialog has been displayed to ask to use the analytics tracking
      */
     fun didAskToUseAnalytics(): Boolean {
@@ -693,7 +656,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     /**
      * To call if the user has been asked for analytics tracking.
      *
-     * @param context the context
      */
     fun setDidAskToUseAnalytics() {
         defaultPrefs.edit {
@@ -704,7 +666,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     /**
      * Tells if the analytics tracking is authorized (piwik, matomo, etc.).
      *
-     * @param context the context
      * @return true if the analytics tracking is authorized
      */
     fun useAnalytics(): Boolean {
@@ -714,7 +675,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     /**
      * Enable or disable the analytics tracking.
      *
-     * @param context      the context
      * @param useAnalytics true to enable the analytics tracking
      */
     fun setUseAnalytics(useAnalytics: Boolean) {
@@ -726,7 +686,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     /**
      * Tells if media should be previewed before sending
      *
-     * @param context the context
      * @return true to preview media
      */
     fun previewMediaWhenSending(): Boolean {
@@ -736,7 +695,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     /**
      * Tells if message should be send by pressing enter on the soft keyboard
      *
-     * @param context the context
      * @return true to send message with enter
      */
     fun sendMessageWithEnter(): Boolean {
@@ -746,7 +704,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     /**
      * Tells if the rage shake is used.
      *
-     * @param context the context
      * @return true if the rage shake is used
      */
     fun useRageshake(): Boolean {
@@ -756,7 +713,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     /**
      * Update the rage shake  status.
      *
-     * @param context   the context
      * @param isEnabled true to enable the rage shake
      */
     fun setUseRageshake(isEnabled: Boolean) {
@@ -768,7 +724,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     /**
      * Tells if all the events must be displayed ie even the redacted events.
      *
-     * @param context the context
      * @return true to display all the events even the redacted ones.
      */
     fun displayAllEvents(): Boolean {

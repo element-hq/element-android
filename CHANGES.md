@@ -8,6 +8,8 @@ Improvements:
  - Persist active tab between sessions (#503)
  - Do not upload file too big for the homeserver (#587)
  - Handle read markers (#84)
+ - Mark all messages as read (#396)
+ - Add ability to report content (#515)
 
 Other changes:
  - Accessibility improvements to read receipts in the room timeline and reactions emoji chooser
@@ -19,6 +21,7 @@ Bugfix:
  - after login, the icon in the top left is a green 'A' for (all communities) rather than my avatar (#267)
  - Picture uploads are unreliable, pictures are shown in wrong aspect ratio on desktop client (#517)
  - Invitation notifications are not dismissed automatically if room is joined from another client (#347)
+ - Opening links from RiotX reuses browser tab (#599)
 
 Translations:
  -

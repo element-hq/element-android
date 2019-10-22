@@ -78,6 +78,7 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
             is RoomListActions.AcceptInvitation -> handleAcceptInvitation(action)
             is RoomListActions.RejectInvitation -> handleRejectInvitation(action)
             is RoomListActions.FilterWith       -> handleFilter(action)
+            is RoomListActions.MarkAllRoomsRead -> handleMarkAllRoomsRead()
         }
     }
 
@@ -191,6 +192,15 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
                 }
             }
         })
+    }
+
+    private fun handleMarkAllRoomsRead() = withState { state ->
+        state.asyncFilteredRooms.invoke()
+                ?.flatMap { it.value }
+                ?.filter { it.membership == Membership.JOIN }
+                ?.map { it.roomId }
+                ?.toList()
+                ?.let { session.markAllAsRead(it, object : MatrixCallback<Unit> {}) }
     }
 
     private fun buildRoomSummaries(rooms: List<RoomSummary>): RoomSummaries {

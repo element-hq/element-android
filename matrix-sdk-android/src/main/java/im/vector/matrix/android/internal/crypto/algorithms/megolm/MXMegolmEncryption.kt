@@ -156,7 +156,6 @@ internal class MXMegolmEncryption(
      *
      * @param session       the session info
      * @param devicesByUser the devices map
-     * @param callback      the asynchronous callback
      */
     private suspend fun shareUserDevicesKey(session: MXOutboundSessionInfo,
                                             devicesByUser: Map<String, List<MXDeviceInfo>>) {
@@ -262,7 +261,6 @@ internal class MXMegolmEncryption(
      * This method must be called in getDecryptingThreadHandler() thread.
      *
      * @param userIds  the user ids whose devices must be checked.
-     * @param callback the asynchronous callback
      */
     private suspend fun getDevicesInRoom(userIds: List<String>): MXUsersDevicesMap<MXDeviceInfo> {
         // We are happy to use a cached version here: we assume that if we already

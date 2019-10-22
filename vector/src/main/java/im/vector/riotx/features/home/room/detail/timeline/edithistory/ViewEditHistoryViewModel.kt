@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.riotx.features.home.room.detail.timeline.action
+package im.vector.riotx.features.home.room.detail.timeline.edithistory
 
 import com.airbnb.mvrx.*
 import com.squareup.inject.assisted.Assisted
@@ -28,6 +28,7 @@ import im.vector.matrix.android.api.session.room.model.message.isReply
 import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.date.VectorDateFormatter
+import im.vector.riotx.features.home.room.detail.timeline.action.TimelineEventFragmentArgs
 import timber.log.Timber
 import java.util.*
 
