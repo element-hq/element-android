@@ -53,8 +53,10 @@ internal class TimelineEventDecryptor(
 
     private var executor: ExecutorService? = null
 
-    private val existingRequests = HashSet<String>()
-    private val unknownSessionsFailure = HashMap<String, MutableList<String>>()
+    // Set of eventIds which are currently decrypting
+    private val existingRequests = mutableSetOf<String>()
+    // sessionId -> list of eventIds
+    private val unknownSessionsFailure = mutableMapOf<String, MutableList<String>>()
 
     fun start() {
         executor = Executors.newSingleThreadExecutor()
