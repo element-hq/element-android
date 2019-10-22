@@ -421,7 +421,7 @@ class RoomDetailFragment :
         if (text != composerLayout.composerEditText.text.toString()) {
             // Ignore update to avoid saving a draft
             composerLayout.composerEditText.setText(text)
-            composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text.length)
+            composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text?.length ?: 0)
         }
     }
 
@@ -1135,21 +1135,21 @@ class RoomDetailFragment :
             val myDisplayName = session.getUser(session.myUserId)?.displayName
             if (myDisplayName == text) {
                 // current user
-                if (composerLayout.composerEditText.text.isBlank()) {
+                if (composerLayout.composerEditText.text.isNullOrBlank()) {
                     composerLayout.composerEditText.append(Command.EMOTE.command + " ")
-                    composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text.length)
+                    composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text?.length ?: 0)
 //                    vibrate = true
                 }
             } else {
                 // another user
-                if (composerLayout.composerEditText.text.isBlank()) {
+                if (composerLayout.composerEditText.text.isNullOrBlank()) {
                     // Ensure displayName will not be interpreted as a Slash command
                     if (text.startsWith("/")) {
                         composerLayout.composerEditText.append("\\")
                     }
                     composerLayout.composerEditText.append(sanitizeDisplayName(text) + ": ")
                 } else {
-                    composerLayout.composerEditText.text.insert(composerLayout.composerEditText.selectionStart, sanitizeDisplayName(text) + " ")
+                    composerLayout.composerEditText.text?.insert(composerLayout.composerEditText.selectionStart, sanitizeDisplayName(text) + " ")
                 }
 
 //                vibrate = true
