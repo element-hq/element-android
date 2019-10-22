@@ -72,13 +72,6 @@ internal class TimelineEventDecryptor(
     }
 
     fun requestDecryption(eventId: String) {
-        synchronized(existingRequests) {
-            if (eventId in existingRequests) {
-                Timber.d("Skip Decryption request for event $eventId, already requested")
-                return
-            }
-            existingRequests.add(eventId)
-        }
         synchronized(unknownSessionsFailure) {
             for (eventIds in unknownSessionsFailure.values) {
                 if (eventId in eventIds) {
@@ -86,6 +79,13 @@ internal class TimelineEventDecryptor(
                     return
                 }
             }
+        }
+        synchronized(existingRequests) {
+            if (eventId in existingRequests) {
+                Timber.d("Skip Decryption request for event $eventId, already requested")
+                return
+            }
+            existingRequests.add(eventId)
         }
         executor?.execute {
             Realm.getInstance(realmConfiguration).use { realm ->
