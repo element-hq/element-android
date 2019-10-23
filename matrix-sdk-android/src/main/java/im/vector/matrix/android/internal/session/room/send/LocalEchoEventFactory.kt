@@ -160,7 +160,7 @@ internal class LocalEchoEventFactory @Inject constructor(@UserId private val use
                         reaction
                 )
         )
-        val localId = dummyEventId()
+        val localId = LocalEcho.createLocalEchoId()
         return Event(
                 roomId = roomId,
                 originServerTs = dummyOriginServerTs(),
@@ -264,7 +264,7 @@ internal class LocalEchoEventFactory @Inject constructor(@UserId private val use
     }
 
     private fun createEvent(roomId: String, content: Any? = null): Event {
-        val localID = dummyEventId()
+        val localID = LocalEcho.createLocalEchoId()
         return Event(
                 roomId = roomId,
                 originServerTs = dummyOriginServerTs(),
@@ -278,10 +278,6 @@ internal class LocalEchoEventFactory @Inject constructor(@UserId private val use
 
     private fun dummyOriginServerTs(): Long {
         return System.currentTimeMillis()
-    }
-
-    private fun dummyEventId(): String {
-        return "${LocalEcho.PREFIX}${UUID.randomUUID()}"
     }
 
     fun createReplyTextEvent(roomId: String, eventReplied: TimelineEvent, replyText: String, autoMarkdown: Boolean): Event? {
@@ -383,7 +379,7 @@ internal class LocalEchoEventFactory @Inject constructor(@UserId private val use
     }
      */
     fun createRedactEvent(roomId: String, eventId: String, reason: String?): Event {
-        val localID = dummyEventId()
+        val localID = LocalEcho.createLocalEchoId()
         return Event(
                 roomId = roomId,
                 originServerTs = dummyOriginServerTs(),
