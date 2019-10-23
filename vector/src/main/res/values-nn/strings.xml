@@ -173,10 +173,6 @@
     <string name="auth_password_placeholder">Åtgangsord</string>
     <string name="auth_new_password_placeholder">Nytt åtgangsord</string>
     <string name="auth_user_name_placeholder">Brukarnamn</string>
-    <string name="auth_add_email_message">Knyt ei epostadressa til brukaren din slik at folk kann finna deg, og du kan attendestilla åtgangsordet ditt.</string>
-    <string name="auth_add_phone_message">Knyt eit telefonnummer til brukaren din slik at andre brukarar kann finna deg.</string>
-    <string name="auth_add_email_phone_message">Knyt ei epostaddresse og/eller eit telefonnummer til brukaren din slik at andre brukarar kann finna deg. Epostadressa lèt deg au attendestilla åtgangsordet.</string>
-    <string name="auth_add_email_and_phone_message">Knyt ei epostadresse og eit telefonnummer til brukaren din slik at andre brukarar kann finna deg. Epostadressa lèt deg og attendestilla åtgangsordet.</string>
     <string name="auth_email_placeholder">Epostadressa</string>
     <string name="auth_opt_email_placeholder">Epostadressa (valfritt)</string>
     <string name="auth_phone_number_placeholder">Telefonnummer</string>

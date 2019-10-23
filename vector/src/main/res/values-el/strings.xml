@@ -3,7 +3,7 @@
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
     <string name="resources_language">el</string>
-    <string name="resources_country_code">ΕL</string>
+    <string name="resources_country_code">GR</string>
 
 
     <string name="cancel">Ακύρωση</string>

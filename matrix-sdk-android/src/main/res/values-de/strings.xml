@@ -166,4 +166,14 @@
     <string name="event_status_sending_message">Sende eine Nachricht…</string>
     <string name="clear_timeline_send_queue">Sendewarteschlange leeren</string>
 
+    <string name="initial_sync_start_importing_account">Erste Synchronisation: Importiere Benutzerkonto…</string>
+    <string name="initial_sync_start_importing_account_crypto">Erste Synchronisation: Importiere Cryptoschlüssel</string>
+    <string name="initial_sync_start_importing_account_rooms">Erste Synchronisation: Importiere Räume</string>
+    <string name="initial_sync_start_importing_account_joined_rooms">Erste Synchronisation: Importiere betretene Räume</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">Erste Synchronisation: Importiere eingeladene Räume</string>
+    <string name="initial_sync_start_importing_account_left_rooms">Erste Synchronisation: Importiere verlassene Räume</string>
+    <string name="initial_sync_start_importing_account_groups">Erste Synchronisation: Importiere Gemeinschaften</string>
+    <string name="initial_sync_start_importing_account_data">Erste Synchronisation: Importiere Benutzerdaten</string>
+
+    <string name="notice_room_third_party_revoked_invite">%1$s hat die Einladung an %2$s, den Raum zu betreten, zurückgezogen</string>
 </resources>

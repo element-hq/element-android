@@ -172,4 +172,5 @@
     <string name="event_status_sending_message">Mezua bidaltzen…</string>
     <string name="clear_timeline_send_queue">Garbitu bidalketa-ilara</string>
 
+    <string name="notice_room_third_party_revoked_invite">%1$s erabiltzaileak %2$s gelara elkartzeko gonbidapena indargabetu du</string>
 </resources>

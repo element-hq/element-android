@@ -140,14 +140,6 @@
     <string name="auth_password_placeholder">Contraseña</string>
     <string name="auth_new_password_placeholder">Nueva contraseña</string>
     <string name="auth_user_name_placeholder">Nombre de usuario</string>
-    <string name="auth_add_email_message">Añade una dirección de correo electrónico a tu cuenta para poder ser descubierto por otros usuarios, y ser capaz de restablecer tu contraseña.</string>
-    <string name="auth_add_phone_message">Añade un número telefónico a tu cuenta para poder ser descubierto por otros usuarios.</string>
-    <string name="auth_add_email_phone_message">Añade una dirección de correo electrónico y/o un número telefónico a tu cuenta para poder ser descubierto por otros usuarios.
-
-Además, la dirección de correo electrónico te permitirá restablecer tu contraseña.</string>
-    <string name="auth_add_email_and_phone_message">Añade una dirección de correo electrónico y un número telefónico a tu cuenta para poder ser descubierto por otros usuarios.
-
-Además, la dirección de correo electrónico te permitirá restablecer tu contraseña.</string>
     <string name="auth_email_placeholder">Dirección de correo electrónico</string>
     <string name="auth_opt_email_placeholder">Dirección de correo electrónico (opcional)</string>
     <string name="auth_phone_number_placeholder">Número telefónico</string>
@@ -1540,7 +1532,7 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
 
     <string name="event_redacted_by_user_reason">Evento borrado por el usuario</string>
     <string name="event_redacted_by_admin_reason">Evento moderado por el administrador de la sala</string>
-    <string name="last_edited_info_message">Última edición por %s on %s</string>
+    <string name="last_edited_info_message">Última edición por %1$s on %2$s</string>
 
 
     <string name="malformed_message">Evento con error, no se puede mostrar</string>

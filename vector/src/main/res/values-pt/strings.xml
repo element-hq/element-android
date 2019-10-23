@@ -139,14 +139,6 @@
     <string name="auth_password_placeholder">Palavra-passe</string>
     <string name="auth_new_password_placeholder">Nova palavra-passe</string>
     <string name="auth_user_name_placeholder">Nome de utilizador</string>
-    <string name="auth_add_email_message">Adicione um endereço de e-mail à sua conta para permitir que outros utlizadores o encontrem, assim como para que seja possível redefinir a sua palavra-passe.</string>
-    <string name="auth_add_phone_message">Adicione um número de telefone à sua conta para permitir que outros utilizadores o encontrem.</string>
-    <string name="auth_add_email_phone_message">Adicione um endereço de e-mail e/ou um número de telefone à sua conta para permitir que outros utilizadores o encontrem.
-
-O endereço de e-mail também lhe permitirá redefinir sua senha.</string>
-    <string name="auth_add_email_and_phone_message">Adicione um endereço de e-mail e um número de telefone à sua conta para permitir que outros utilizadores o encontrem.
-
-O endereço de e-mail também lhe permitirá redefinir sua senha.</string>
     <string name="auth_email_placeholder">Endereço de e-mail</string>
     <string name="auth_opt_email_placeholder">Endereço de email (opcional)</string>
     <string name="auth_phone_number_placeholder">Número de telefone</string>

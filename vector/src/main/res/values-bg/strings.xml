@@ -212,14 +212,6 @@
     <string name="auth_password_placeholder">Парола</string>
     <string name="auth_new_password_placeholder">Нова парола</string>
     <string name="auth_user_name_placeholder">Потребителско име</string>
-    <string name="auth_add_email_message">Добавете имейл адрес в профила си, за да позволите на потребители да ви откриват и да можете да възстановявате Вашата парола.</string>
-    <string name="auth_add_phone_message">Добавете телефонен номер в профила си, за да позволите на потребители да ви откриват.</string>
-    <string name="auth_add_email_phone_message">Добавете имейл адрес и/или телефонен номер в профила си, за да позволите на потребители да ви откриват.
-
-Имейл адресът също Ви позволява да възстановите Вашата парола.</string>
-    <string name="auth_add_email_and_phone_message">Добавете имейл адрес и телефонен номер в профила си, за да позволите на потребители да Ви откриват.
-
-Имейл адресът също Ви позволява да възстановявате Вашата парола.</string>
     <string name="auth_email_placeholder">Имейл адрес</string>
     <string name="auth_opt_email_placeholder">Имейл адрес (по избор)</string>
     <string name="auth_phone_number_placeholder">Телефонен номер</string>
@@ -1487,7 +1479,7 @@
 
     <string name="event_redacted_by_user_reason">Събитие изтрито от потребителя</string>
     <string name="event_redacted_by_admin_reason">Събитие модерирано от администратор на стаята</string>
-    <string name="last_edited_info_message">Последно редактирано от %s на %s</string>
+    <string name="last_edited_info_message">Последно редактирано от %1$s на %2$s</string>
 
 
     <string name="malformed_message">Повредено събитие, не може да се покаже</string>
@@ -1566,7 +1558,7 @@
 \n
 \nRiotX поддържа: • Вход в съществуващ акаунт • Създаване на стая и влизане в публични стаи • Приемане и отхвърляне на покани • Показване на списък със стаите • Преглеждане на информация за стая • Изпращане на текстови съобщения • Изпращане на прикачени файлове • Четене и писане на съобщения в шифровани стаи • Шифроване: резервни копия на E2E ключове, потвърждение на устройства, заявяване и отговаряне на заявки за споделяне на ключове • Уведомления • Светла, Тъмна и Черна тема
 \n
-\nЗасега не всички функции на Riot са налични в RiotX. Основни липсващи (и скоро пристигащи!) функции са: • Създаване на нов профил • Настройки на стаи (показване на членове и т.н.) • Създаване на директни чатове • Обаждания • Приспособления • …</string>
+\nЗасега не всички функции на Riot са налични в RiotX. Основни липсващи (и скоро пристигащи!) функции са: • Създаване на нов профил • Настройки на стаи (показване на членове и т.н.) • Обаждания • Приспособления • …</string>
 
     <string name="bottom_action_people_x">Директни съобщения</string>
 
@@ -1612,5 +1604,22 @@
     <string name="joining_room">Присъединяване в стая…</string>
 
     <string name="message_view_edit_history">Виж историята на редакциите</string>
+
+    <string name="review">Прегледай</string>
+    <string name="decline">Откажи</string>
+
+    <string name="widget_integration_review_terms">За да продължите трябва да приемете условията за използване на услугата.</string>
+
+    <string name="security_warning_identity_server">Предишни версии на Riot имат проблем със сигурността, давайки достъп на сървъра за самоличност (%1$s) до профила ви. Ако се доверявате на %2$s, може да игнорирате проблема; в противен случай, излезте от профила си и влезте наново.
+\n
+\nНаучете повече подробности тук:
+\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
+
+    <string name="terms_of_service">Условия за ползване</string>
+    <string name="review_terms">Прегледай условията</string>
+    <string name="terms_description_for_identity_server">Бъдете откриваеми от други</string>
+    <string name="terms_description_for_integration_manager">Използвайте ботове, връзки с други мрежи, приспособления и стикери</string>
+
+    <string name="read_at">Прочетете на</string>
 
 </resources>

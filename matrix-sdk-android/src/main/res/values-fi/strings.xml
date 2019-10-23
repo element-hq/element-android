@@ -22,7 +22,7 @@
     <string name="notice_placed_voice_call">%s soitti äänipuhelun.</string>
     <string name="notice_answered_call">%s vastasi puheluun.</string>
     <string name="notice_ended_call">%s lopetti puhelun.</string>
-    <string name="notice_made_future_room_visibility">%1$s muutti tulevan huonehistorian näkyväksi käyttäjälle %2$s</string>
+    <string name="notice_made_future_room_visibility">%1$s muutti tulevan huonehistorian näkyväksi seuraaville: %2$s</string>
     <string name="notice_room_visibility_invited">kaikki huoneen jäsenet, kutsumisestaan asti.</string>
     <string name="notice_room_visibility_joined">kaikki huoneen jäsenet, liittymisestään asti.</string>
     <string name="notice_room_visibility_shared">kaikki huoneen jäsenet.</string>
@@ -34,7 +34,7 @@
     <string name="notice_voip_started">VoIP-konferenssi alkoi</string>
     <string name="notice_voip_finished">VoIP-konferenssi päättyi</string>
 
-    <string name="notice_avatar_changed_too">(myös profiilikuva vaihdettiin)</string>
+    <string name="notice_avatar_changed_too">(myös kuva vaihdettiin)</string>
     <string name="notice_room_name_removed">%1$s poisti huoneen nimen</string>
     <string name="notice_room_topic_removed">%1$s poisti huoneen aiheen</string>
     <string name="notice_profile_change_redacted">%1$s päivitti profiilinsa %2$s</string>
@@ -173,4 +173,5 @@
     <string name="event_status_sending_message">Lähetetään viestiä…</string>
     <string name="clear_timeline_send_queue">Tyhjennä lähetysjono</string>
 
+    <string name="notice_room_third_party_revoked_invite">%1$s veti takaisin käyttäjän %2$s liittymiskutsun huoneeseen</string>
 </resources>

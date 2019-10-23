@@ -171,4 +171,5 @@
     <string name="event_status_sending_message">Üzenet küldése…</string>
     <string name="clear_timeline_send_queue">Küldő sor ürítése</string>
 
+    <string name="notice_room_third_party_revoked_invite">%1$s visszavonta a meghívót a belépéshez ebbe a szobába: %2$s</string>
 </resources>

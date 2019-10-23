@@ -140,14 +140,6 @@
     <string name="auth_password_placeholder">Heslo</string>
     <string name="auth_new_password_placeholder">Nové heslo</string>
     <string name="auth_user_name_placeholder">Používateľské meno</string>
-    <string name="auth_add_email_message">Pridajte si k účtu emailovú adresu, aby vás ostatní ľahšie mohli nájsť, alebo aby ste si mohli obnoviť zabudnuté heslo.</string>
-    <string name="auth_add_phone_message">Pridajte si k účtu telefónne číslo, aby vás ostatní mohli ľahšie nájsť.</string>
-    <string name="auth_add_email_phone_message">Pridajte si k účtu emailovú adresu a/alebo číslo telefónu,aby vás ostatní mohli ľahšie nájsť.
-
-Emailová adresa vám tiež umožní obnoviť si zabudnuté heslo.</string>
-    <string name="auth_add_email_and_phone_message">Pridajte si k účtu emailovú adresu a číslo telefónu,aby vás ostatní mohli ľahšie nájsť.
-
-Emailová adresa vám tiež umožní obnoviť si zabudnuté heslo.</string>
     <string name="auth_email_placeholder">Emailová adresa</string>
     <string name="auth_opt_email_placeholder">Emailová adresa (nepovinné)</string>
     <string name="auth_phone_number_placeholder">Číslo telefónu</string>

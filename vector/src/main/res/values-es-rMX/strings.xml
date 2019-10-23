@@ -139,10 +139,6 @@
     <string name="auth_password_placeholder">Contraseña</string>
     <string name="auth_new_password_placeholder">Contraseña nueva</string>
     <string name="auth_user_name_placeholder">Nombre de usuario</string>
-    <string name="auth_add_email_message">"Añadir un correo electrónico a tu cuenta para que otros te descubran, y para que puedas reiniciar tu contraseña."</string>
-    <string name="auth_add_phone_message">"Añadir número telefónico a tu cuenta para que otros te descubran."</string>
-    <string name="auth_add_email_phone_message">"Añadir un correo electrónico y/o número telefónico a tu cuenta para que otros te descubran.\n\nEl correo electrónico te permitira reiniciar tu contraseña."</string>
-    <string name="auth_add_email_and_phone_message">"Añadir un correo electrónico y un número telefónico a tu cuenta para que otros te descubran.\n\nEl correo electrónico te permitira reiniciar tu contraseña."</string>
     <string name="auth_email_placeholder">Correo electrónico</string>
     <string name="auth_opt_email_placeholder">Correo electrónico (opcional)</string>
     <string name="auth_phone_number_placeholder">Número telefónico</string>

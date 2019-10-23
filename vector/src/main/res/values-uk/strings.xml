@@ -154,10 +154,6 @@
     <string name="auth_password_placeholder">Пароль</string>
     <string name="auth_new_password_placeholder">Новий пароль</string>
     <string name="auth_user_name_placeholder">Логін</string>
-    <string name="auth_add_email_message">"Додайте email адресу, щоб дати користувачам знайти себе та отримати змогу скинути свій пароль."</string>
-    <string name="auth_add_phone_message">"Додайте номер телефону, щоб інші користувачі могли вас знайти."</string>
-    <string name="auth_add_email_phone_message">"Додайте email адресу та/або номер телефону до вашого облікового запису, щоб інші користувачі могли вас знайти.\n\nEmail адреса також дасть вам змогу скидати пароль."</string>
-    <string name="auth_add_email_and_phone_message">"Додайте email адресу та номер телефону до вашого облікового запису, щоб інші користувачі могли вас знайти.\n\nEmail адреса також дасть вам змогу скидати пароль."</string>
     <string name="auth_email_placeholder">Email адреса</string>
     <string name="auth_opt_email_placeholder">Email адреса (oдодаткова)</string>
     <string name="auth_phone_number_placeholder">Номер телефону</string>

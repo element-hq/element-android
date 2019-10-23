@@ -46,6 +46,7 @@
     <string name="notice_event_redacted_by_with_reason">Message removed by %1$s [reason: %2$s]</string>
     <string name="notice_profile_change_redacted">%1$s updated their profile %2$s</string>
     <string name="notice_room_third_party_invite">%1$s sent an invitation to %2$s to join the room</string>
+    <string name="notice_room_third_party_revoked_invite">%1$s revoked the invitation for %2$s to join the room</string>
     <string name="notice_room_third_party_registered_invite">%1$s accepted the invitation for %2$s</string>
 
     <string name="notice_crypto_unable_to_decrypt">** Unable to decrypt: %s **</string>

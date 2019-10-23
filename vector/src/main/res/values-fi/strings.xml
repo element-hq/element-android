@@ -148,14 +148,6 @@
     <string name="auth_password_placeholder">Salasana</string>
     <string name="auth_new_password_placeholder">Uusi salasana</string>
     <string name="auth_user_name_placeholder">Käyttäjätunnus</string>
-    <string name="auth_add_email_message">"Lisää sähköpostiosoite tiliisi antaaksesi muiden käyttäjien löytää sinut. Voit myös nollata salasanasi."</string>
-    <string name="auth_add_phone_message">Lisää puhelinnumero tiliisi, jotta muut käyttäjät löytävät sinut.</string>
-    <string name="auth_add_email_phone_message">Lisää sähköpostiosoite ja/tai puhelinnumero tiliisi, jotta muut käyttäjät löytävät sinut.
-\n
-\nSähköpostiosoitteella voit myös nollata salasanasi.</string>
-    <string name="auth_add_email_and_phone_message">Lisää sähköpostiosoite ja puhelinnumero tiliisi, jotta muut käyttäjät löytävät sinut.
-\n
-\nSähköpostiosoitteella voit myös nollata salasanasi.</string>
     <string name="auth_email_placeholder">Sähköpostiosoite</string>
     <string name="auth_opt_email_placeholder">Sähköpostiosoite (valinnainen)</string>
     <string name="auth_phone_number_placeholder">Puhelinnumero</string>
@@ -360,7 +352,7 @@
     <string name="room_unsent_messages_notification">Viesteja ei lähetetty. %1$s vai %2$s\?</string>
     <string name="room_unknown_devices_messages_notification">Viestejä ei lähetetty koska huoneessa on tuntemattomia laitteita. %1$s vai %2$s\?</string>
     <string name="room_prompt_resend">Lähetä kaikki uudelleen</string>
-    <string name="room_prompt_cancel">peru kaikki</string>
+    <string name="room_prompt_cancel">Peruuta kaikki</string>
     <string name="room_resend_unsent_messages">Lähetä lähettämättömät viestit</string>
     <string name="room_delete_unsent_messages">Poista lähettämättömät viestit</string>
     <string name="room_message_file_not_found">Tiedostoa ei löydy</string>
@@ -463,7 +455,7 @@
     <string name="settings_background_sync">Taustasynkronointi</string>
     <string name="settings_enable_background_sync">Käytä taustasynkronointia</string>
     <string name="settings_set_sync_timeout">Synkronointipyynnön aikakatkaisu</string>
-    <string name="settings_set_sync_delay">Viive jokaisen pyynnön välillä</string>
+    <string name="settings_set_sync_delay">Viive synkronointien välillä</string>
     <string name="settings_second">sekunti</string>
     <string name="settings_seconds">sekuntia</string>
 
@@ -493,8 +485,8 @@
     <string name="settings_devices_list">Laitteet</string>
     <string name="devices_details_dialog_title">Laitteen tiedot</string>
     <string name="devices_details_id_title">ID</string>
-    <string name="devices_details_name_title">Nimi</string>
-    <string name="devices_details_device_name">Laitteen nimi</string>
+    <string name="devices_details_name_title">Julkinen nimi</string>
+    <string name="devices_details_device_name">Päivitä julkinen nimi</string>
     <string name="devices_details_last_seen_title">Viimeksi käytetty</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
     <string name="devices_delete_dialog_text">Tämä toimenpide vaatii lisätunnistautumisen.
@@ -627,8 +619,8 @@
     <string name="encryption_information_decryption_error">Salauksenpurkuvirhe</string>
 
     <string name="encryption_information_sender_device_information">Lähettävän laitteen tiedot</string>
-    <string name="encryption_information_device_name">Laitteen nimi</string>
-    <string name="encryption_information_name">Nimi</string>
+    <string name="encryption_information_device_name">Julkinen nimi</string>
+    <string name="encryption_information_name">Julkinen nimi</string>
     <string name="encryption_information_device_id">Laitteen ID</string>
     <string name="encryption_information_device_key">Laitteen avain</string>
     <string name="encryption_information_verification">Vahvistus</string>
@@ -1534,7 +1526,7 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="settings_preferences">Asetukset</string>
     <string name="settings_security_and_privacy">Tietoturva ja yksityisyys</string>
     <string name="room_list_catchup_empty_title">Olet ajan tasalla!</string>
-    <string name="last_edited_info_message">Viimeksi muokannut %s %s</string>
+    <string name="last_edited_info_message">Viimeksi muokannut %1$s %2$s</string>
 
 
     <string name="change_room_directory_network">Vaihda verkkoa</string>
@@ -1612,4 +1604,57 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Play Storen kuvaus</string>
     <string name="settings_push_rules">Push-säännöt</string>
     <string name="riotx_no_registration_notice">%1$s luodaksesi tilin.</string>
+    <string name="disconnect">Katkaise yhteys</string>
+    <string name="decline">Kieltäydy</string>
+
+    <string name="people_no_identity_server">Identiteettipalvelinta ei ole määritetty.</string>
+
+    <string name="call_failed_no_ice_title">Puhelu epäonnistui väärin määritetyn palvelimen takia</string>
+    <string name="call_failed_dont_ask_again">Älä kysy uudestaan</string>
+
+    <string name="login_error_homeserver_not_found">Kotipalvelinta ei voi tavoittaa tästä URL-osoitteesta, tarkista osoite</string>
+    <string name="invite_no_identity_server_error">Lisää identiteettipalvelin asetuksissasi, jotta voit tehdä tämän toiminnon.</string>
+    <string name="settings_background_fdroid_sync_mode">Taustasynkronointitila (kokeellinen)</string>
+    <string name="settings_background_fdroid_sync_mode_disabled">Ei taustasynkronointia</string>
+    <string name="settings_background_fdroid_sync_mode_disabled_description">Et saa ilmoituksia saapuvista viesteistä, kun sovellus on taustalla.</string>
+    <string name="settings_background_sync_update_error">Asetusten päivittäminen epäonnistui.</string>
+
+
+    <string name="settings_set_workmanager_delay">Haluttu synkronointiväli</string>
+    <string name="settings_set_workmanager_delay_summary">%s
+\nSynkronointia saatetaan lykätä resursseista (akusta) tai laitteen tilasta (virransäästö) riippuen.</string>
+    <string name="encryption_information_device_name_with_warning">Julkinen nimi (näkyy ihmisille, joihin olet yhteydessä)</string>
+    <string name="device_name_warning">Laitteen julkinen nimi näkyy ihmisille, joihin olet yhteydessä</string>
+    <string name="widget_integration_review_terms">Jatkaaksesi sinun täytyy hyväksyä palvelun käyttöehdot.</string>
+
+    <string name="identity_server_not_defined">Et käytä identiteettipalvelinta</string>
+    <string name="identity_server_not_defined_for_password_reset">Identiteettipalvelinta ei ole määritetty, salasanan palautus vaaditaan.</string>
+
+    <string name="error_user_already_logged_in">Näyttää, että yrität yhdistää toiseen kotipalvelimeen. Haluatko kirjautua ulos\?</string>
+
+    <string name="push_gateway_item_url">URL-osoite:</string>
+    <string name="labs_swipe_to_reply_in_timeline">Ota käyttöön pyyhkäisemällä vastaaminen aikajanalla</string>
+
+    <string name="terms_of_service">Käyttöehdot</string>
+    <string name="review_terms">Lue ehdot</string>
+    <string name="terms_description_for_integration_manager">Käytä botteja, siltoja, sovelmia ja tarrapaketteja</string>
+
+    <string name="read_at">Lue osoitteessa</string>
+
+
+    <string name="identity_server">Identiteettipalvelin</string>
+    <string name="disconnect_identity_server">Katkaise yhteys identiteettipalvelimeen</string>
+    <string name="add_identity_server">Määritä identiteettipalvelin</string>
+    <string name="change_identity_server">Vaihda identiteettipalvelinta</string>
+    <string name="settings_discovery_identity_server_info">Käytät palvelinta %1$s löytääksesi tuntemiasi ihmisiä ja jotta he löytäisivät sinut.</string>
+    <string name="settings_discovery_identity_server_info_none">Et käytä tällä hetkellä identiteettipalvelinta. Jotta voit löytää tuntemiasi ihmisiä ja jotta he löytävät sinut, määritä identiteettipalvelin alla.</string>
+    <string name="settings_discovery_mail_pending">Odottaa</string>
+
+    <string name="settings_discovery_enter_identity_server">Syötä uusi identiteettipalvelin</string>
+    <string name="settings_discovery_bad_identity_server">Identiteettipalvelimeen ei saatu yhteyttä</string>
+    <string name="settings_discovery_please_enter_server">Syötä identiteettipalvelimen URL-osoite</string>
+    <string name="settings_discovery_no_terms_title">Identiteettipalvelimella ei ole käyttöehtoja</string>
+    <string name="settings_discovery_no_terms">Valitsemallasi identiteettipalvelimella ei ole käyttöehtoja. Jatka vain, jos luotat palvelun omistajaan</string>
+    <string name="settings_discovery_disconnect_with_bound_pid">Jaat sähköpostiosoitteita tai puhelinnumeroita identiteettipalvelimella %s. Sinun täytyy yhdistää uudelleen palvelimeen %s, jotta voit lopettaa niiden jakamisen.</string>
+    <string name="settings_agree_to_terms">Hyväksy identiteettipalvelimen (%s) käyttöehdot salliaksesi, että sinut voi löytää sähköpostiosoitteen tai puhelinnumeron perusteella.</string>
 </resources>

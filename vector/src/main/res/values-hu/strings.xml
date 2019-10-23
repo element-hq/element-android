@@ -129,14 +129,6 @@
     <string name="auth_password_placeholder">Jelszó</string>
     <string name="auth_new_password_placeholder">Új jelszó</string>
     <string name="auth_user_name_placeholder">Felhasználónév</string>
-    <string name="auth_add_email_message">Adj meg egy e-mail címet a fiókodhoz, hogy mások megtalálhassanak és hogy visszaállíthasd a jelszavadat.</string>
-    <string name="auth_add_phone_message">Adj meg telefonszámot a fiókodhoz, hogy mások megtalálhassanak.</string>
-    <string name="auth_add_email_phone_message">Adj meg e-mail címet és/vagy telefonszámot a fiókodhoz, hogy mások megtalálhassanak.
-
- Az e-mail címmel a jelszavadat is helyreállíthatod.</string>
-    <string name="auth_add_email_and_phone_message">Adj meg e-mail címet és telefonszámot a fiókodhoz, hogy mások megtalálhassanak.
-
- Az e-mail címmel a jelszavadat is helyreállíthatod.</string>
     <string name="auth_email_placeholder">E-mail cím</string>
     <string name="auth_opt_email_placeholder">E-mail cím (nem kötelező)</string>
     <string name="auth_phone_number_placeholder">Telefonszám</string>
@@ -421,7 +413,7 @@ Vedd figyelembe, hogy az alkalmazás újraindul  ami sok időt vehet igénybe."<
     <string name="settings_background_sync">Szinkronizálás a háttérben</string>
     <string name="settings_enable_background_sync">Háttérben történő szinkronizáció engedélyezése</string>
     <string name="settings_set_sync_timeout">Szinkronizáció kérelem időtúllépés</string>
-    <string name="settings_set_sync_delay">Késleltetés kérések között</string>
+    <string name="settings_set_sync_delay">Késleltetés a szinkronizációk között</string>
     <string name="settings_second">másodperc</string>
     <string name="settings_seconds">másodperc</string>
 
@@ -448,8 +440,8 @@ Vedd figyelembe, hogy az alkalmazás újraindul  ami sok időt vehet igénybe."<
     <string name="settings_devices_list">Eszközök</string>
     <string name="devices_details_dialog_title">Eszköz adatai</string>
     <string name="devices_details_id_title">Azonosító</string>
-    <string name="devices_details_name_title">Név</string>
-    <string name="devices_details_device_name">Készüléknév</string>
+    <string name="devices_details_name_title">Nyilvános Név</string>
+    <string name="devices_details_device_name">Nyilvános Név frissítése</string>
     <string name="devices_details_last_seen_title">Legutóbb láttuk</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
     <string name="devices_delete_dialog_text">Ez a művelethez újra azonosításra van szükség.
@@ -565,9 +557,9 @@ Vedd figyelembe, hogy az alkalmazás újraindul  ami sok időt vehet igénybe."<
     <string name="encryption_information_decryption_error">Visszafejtés hiba</string>
 
     <string name="encryption_information_sender_device_information">A küldő eszköz információi</string>
-    <string name="encryption_information_device_name">Eszköz információ</string>
-    <string name="encryption_information_name">Név</string>
-    <string name="encryption_information_device_id">Eszköz azonosító</string>
+    <string name="encryption_information_device_name">Nyilvános név</string>
+    <string name="encryption_information_name">Nyilvános név</string>
+    <string name="encryption_information_device_id">Azon.</string>
     <string name="encryption_information_device_key">Eszköz kulcs</string>
     <string name="encryption_information_verification">Hitelesítés</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519 ujjlenyomat</string>
@@ -1498,7 +1490,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
 
     <string name="event_redacted_by_user_reason">Az eseményt a felhasználó törölte</string>
     <string name="event_redacted_by_admin_reason">Az eseményt a szoba adminisztrátora moderálta</string>
-    <string name="last_edited_info_message">Utoljára szerkesztette: %s ekkor: %s</string>
+    <string name="last_edited_info_message">Utoljára szerkesztette: %1$s ekkor: %2$s</string>
 
 
     <string name="malformed_message">Hibás esemény, nem lehet megjeleníteni</string>
@@ -1577,7 +1569,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
 \n
 \nRiotX ezeket támogatja: • Bejelentkezés létező fiókba • Szoba készítés és nyilvános szobába való belépés • Meghívók fogadása és elutasítás • Felhasználók szobáinak listázása • Szoba adatainak megtekintése • Szöveges üzenet küldése • Csatolmány küldése • Titkosított szobákban üzenetek olvasása és írása • Titkosítás: Végponttól végpontig titkosító kulcsok mentése, fejlett eszköz ellenőrzés, kulcs megosztás kérése és válasz • „Push” értesítések • Világos, sötét és fekete téma
 \n
-\nNem minden Riot funkció támogatott a RiotX-ben jelenleg. A fő hiányzó (és hamarosan elérhető!) funkciók: • Felhasználói fiók létrehozása • Szoba beállítások (szoba tagság mutatása, stb…) • Közvetlen beszélgetések indítása • Hívások • Kisalkalmazások • …</string>
+\nNem minden Riot funkció támogatott a RiotX-ben jelenleg. A fő hiányzó (és hamarosan elérhető!) funkciók: • Felhasználói fiók létrehozása • Szoba beállítások (szoba tagság mutatása, stb…) • Hívások • Kisalkalmazások • …</string>
 
     <string name="bottom_action_people_x">Közvetlen beszélgetés</string>
 
@@ -1624,4 +1616,88 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
 
     <string name="message_view_edit_history">Szerkesztési napló megtekintése</string>
 
+    <string name="review">Átnéz</string>
+    <string name="decline">Elutasít</string>
+
+    <string name="widget_integration_review_terms">A továbblépéshez el kell fogadnod a Felhasználási feltételeket.</string>
+
+    <string name="security_warning_identity_server">A Riot előző verziója egy biztonsági hibát tartalmazott ami az Azonosítási Szervernek (%1$s) hozzáférést adott a fiókodhoz. Ha megbízol a %2$s szerverben, akkor ezt figyelmen kívül hagyhatod különben jelentkezz ki és újra vissza.
+\n
+\nTovábbi információ itt:
+\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
+
+    <string name="terms_of_service">Felhasználási feltételek</string>
+    <string name="review_terms">Feltételek átnézése</string>
+    <string name="terms_description_for_identity_server">Mások által is megtalálható legyél</string>
+    <string name="terms_description_for_integration_manager">Használj botokat, hidakat (bridges), kisalkalmazásokat és matrica csomagokat</string>
+
+    <string name="read_at">Olvasd itt</string>
+
+    <string name="none">Nincs</string>
+    <string name="revoke">Visszavon</string>
+    <string name="disconnect">Lecsatlakozik</string>
+    <string name="people_no_identity_server">Azonosítási szerver nincs beállítva.</string>
+
+    <string name="call_failed_no_ice_title">A hívás sikertelen a hibásan beállított szerver miatt</string>
+    <string name="call_failed_no_ice_description">Kérd meg a matrix szervered (%1$s) adminisztrátorát, hogy állítson be egy TURN szervert, hogy a hívások megbízhatóan működjenek.
+\n
+\nAlternatív megoldásként használhatod a nyilvános szervert itt: %2$s, de ez lehet, hogy nem lesz annyira megbízható és az IP címedet megosztja a szerverrel. Ezt a Beállításokban tudod megadni.</string>
+    <string name="call_failed_no_ice_use_alt">Próbáld ki ezt: %s</string>
+    <string name="call_failed_dont_ask_again">Ne kérdezz újra</string>
+
+    <string name="auth_add_email_message_2">Fiók visszaállításhoz e-mail beállítása, később esetleg megtalálhatnak akik ismernek téged.</string>
+    <string name="auth_add_phone_message_2">Telefonszám beállítása, és később esetleg megtalálhatnak akik ismernek téged.</string>
+    <string name="auth_add_email_phone_message_2">Fiók visszaállításhoz e-mail beállítás. Később esetleg e-mail vagy telefonszám alapján megtalálhatnak akik ismernek téged.</string>
+    <string name="auth_add_email_and_phone_message_2">Fiók visszaállításhoz e-mail beállítás. Később esetleg e-mail vagy telefonszám alapján megtalálhatnak akik ismernek téged.</string>
+    <string name="login_error_homeserver_not_found">A matrix szerver elérhetetlen ezen a címen, kérlek ellenőrizd</string>
+    <string name="settings_call_ringtone_use_default_stun">Tartalék hívás segítő szerver engedélyezése</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">Segítségként %s lesz használatban ha a matrix szervered nem ajánl fel egyet (a hívás ideje alatt az IP címed megosztásra kerül)</string>
+    <string name="invite_no_identity_server_error">A beállításokban adj hozzá egy azonosítási szervert ehhez a művelethez.</string>
+    <string name="settings_background_fdroid_sync_mode">Háttér Szinkronizálási Mód (Kísérleti)</string>
+    <string name="settings_background_fdroid_sync_mode_battery">Optimalizált akkumulátor használat</string>
+    <string name="settings_background_fdroid_sync_mode_battery_description">Riot a háttérben úgy szinkronizál, hogy a leginkább kímélje az eszköz korlátozott erőforrásait (akkumulátor).
+\nAz eszköz erőforrásainak állapotától függően a szinkronizációt az operációs rendszer elhalaszthatja.</string>
+    <string name="settings_background_fdroid_sync_mode_real_time">Optimalizálás valós idejű használatra</string>
+    <string name="settings_background_fdroid_sync_mode_real_time_description">Riot a háttérben rendszeresen, pontosan a megadott időközönként, szinkronizálni fog (beállítható).
+\nEz befolyásolja a rádió és az akkumulátor használatot, és folyamatosan egy értesítés fog megjelenni arról, hogy a riot figyel a neki küldött eseményekre.</string>
+    <string name="settings_background_fdroid_sync_mode_disabled">Nincs szinkroniziálás a háttérben</string>
+    <string name="settings_background_fdroid_sync_mode_disabled_description">Nem leszel értesítve az érkező üzenetekről, ha az alkalmazás csak a háttérben fut.</string>
+    <string name="settings_background_sync_update_error">A beállítások frissítése nem sikerült.</string>
+
+
+    <string name="settings_set_workmanager_delay">Előnyben részesített szinkronizációs időköz</string>
+    <string name="settings_set_workmanager_delay_summary">%s
+\nA szinkronizáció az eszköz erőforrásainak (akkumulátor) és állapotának (alvó mód) függvényében késleltetve lehet.</string>
+    <string name="settings_discovery_category">Felderítés</string>
+    <string name="settings_discovery_manage">Felderítési beállítások megváltoztatása.</string>
+    <string name="encryption_information_device_name_with_warning">Nyilvános név (a beszélgetőpartnerek által látható)</string>
+    <string name="device_name_warning">Az eszköz nyilvános neve látható azoknál akikkel beszélgetsz</string>
+    <string name="identity_server_not_defined">Nem használsz Azonosítási Szervert</string>
+    <string name="identity_server_not_defined_for_password_reset">Nincs beállítva azonosítási szerver amire a jelszó visszaállításához szükség van.</string>
+
+    <string name="error_user_already_logged_in">Úgy látszik másik matrix szerverhez szeretnél csatlakozni. Kijelentkezel\?</string>
+
+    <string name="identity_server">Azonosítási szerver</string>
+    <string name="disconnect_identity_server">Azonosítási szerverről lecsatlakozás</string>
+    <string name="add_identity_server">Azonosítási szerver beállítása</string>
+    <string name="change_identity_server">Azonosítási szerver megváltoztatása</string>
+    <string name="settings_discovery_identity_server_info">A felderítésekhez és hogy megtaláljanak az ismerősök ezt a szervert használod jelenleg: %1$s.</string>
+    <string name="settings_discovery_identity_server_info_none">Jelenleg nem használsz azonosítási szervert. A felderítéshez és, hogy az ismerősök megtalálhassanak állíts be egyet alább.</string>
+    <string name="settings_discovery_emails_title">Felderíthető e-mail címek</string>
+    <string name="settings_discovery_no_mails">Amint hozzáadtál egy e-mail címet megjelenik a felderítési beállítási lehetőség.</string>
+    <string name="settings_discovery_no_msisdn">Amint hozzáadtál egy telefonszámot megjelenik a felderítési beállítási lehetőség.</string>
+    <string name="settings_discovery_disconnect_identity_server_info">Az azonosítási szerverről való lecsatlakozással nem leszel mások által megtalálható és másokat sem tudsz meghívni e-mail címmel vagy telefonszámmal.</string>
+    <string name="settings_discovery_msisdn_title">Felderíthető telefonszámok</string>
+    <string name="settings_discovery_confirm_mail">Megerősítő levelet küldtünk ide: %s, ellenőrizd az e-mailedet és kattints a megerősítő hivatkozásra</string>
+    <string name="settings_discovery_mail_pending">Várakozás</string>
+
+    <string name="settings_discovery_enter_identity_server">Add meg az új azonosítási szervert</string>
+    <string name="settings_discovery_bad_identity_server">Az azonosítási szerverhez nem lehet csatlakozni</string>
+    <string name="settings_discovery_please_enter_server">Kérlek add meg az azonosítási szerver url-jét</string>
+    <string name="settings_discovery_no_terms_title">Az azonosítási szervernek nincsen felhasználási feltétele</string>
+    <string name="settings_discovery_no_terms">Az általad választott azonosítási szervernek nincs felhasználási feltétele. Csak akkor lépj tovább ha megbízol a szolgáltatás tulajdonosában</string>
+    <string name="settings_text_message_sent">Szöveges üzenetet küldtünk ide: %s. Kérlek add meg az ellenőrző kódot amit az üzenet tartalmaz.</string>
+
+    <string name="settings_discovery_disconnect_with_bound_pid">Az azonosítási szerverrel (%s) megosztod az e-mail címeket és telefonszámokat. Újra kell csatlakoznod ehhez: %s, hogy megállítsd a megosztást.</string>
+    <string name="settings_agree_to_terms">Egyetértek az azonosítási szerver (%s) Felhasználási feltételeivel ahhoz, hogy megtalálható legyek e-mail címmel vagy telefonszámmal.</string>
 </resources>
