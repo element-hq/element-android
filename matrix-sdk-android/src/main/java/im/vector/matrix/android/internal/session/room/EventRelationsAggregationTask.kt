@@ -71,7 +71,7 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
                     Timber.w("Event has no room id ${event.eventId}")
                     return@forEach
                 }
-                val isLocalEcho = LocalEchoEventFactory.isLocalEchoId(event.eventId ?: "")
+                val isLocalEcho = LocalEcho.isLocalEchoId(event.eventId ?: "")
                 when (event.type) {
                     EventType.REACTION  -> {
                         // we got a reaction!!

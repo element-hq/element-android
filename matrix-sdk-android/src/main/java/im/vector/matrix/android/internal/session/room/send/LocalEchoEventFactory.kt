@@ -281,7 +281,7 @@ internal class LocalEchoEventFactory @Inject constructor(@UserId private val use
     }
 
     private fun dummyEventId(): String {
-        return "$LOCAL_ID_PREFIX${UUID.randomUUID()}"
+        return "${LocalEcho.PREFIX}${UUID.randomUUID()}"
     }
 
     fun createReplyTextEvent(roomId: String, eventReplied: TimelineEvent, replyText: String, autoMarkdown: Boolean): Event? {
@@ -407,8 +407,6 @@ internal class LocalEchoEventFactory @Inject constructor(@UserId private val use
     }
 
     companion object {
-        const val LOCAL_ID_PREFIX = "local."
-
         // <mx-reply>
         //     <blockquote>
         //         <a href="https://matrix.to/#/!somewhere:domain.com/$event:domain.com">In reply to</a>
@@ -419,7 +417,5 @@ internal class LocalEchoEventFactory @Inject constructor(@UserId private val use
         // </mx-reply>
         // No whitespace because currently breaks temporary formatted text to Span
         const val REPLY_PATTERN = """<mx-reply><blockquote><a href="%s">%s</a><a href="%s">%s</a><br />%s</blockquote></mx-reply>%s"""
-
-        fun isLocalEchoId(eventId: String): Boolean = eventId.startsWith(LOCAL_ID_PREFIX)
     }
 }

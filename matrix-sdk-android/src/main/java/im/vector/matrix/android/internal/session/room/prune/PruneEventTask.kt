@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.session.room.prune
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.LocalEcho
 import im.vector.matrix.android.api.session.events.model.UnsignedData
 import im.vector.matrix.android.internal.database.helper.updateSenderData
 import im.vector.matrix.android.internal.database.mapper.ContentMapper
@@ -59,7 +60,7 @@ internal class DefaultPruneEventTask @Inject constructor(private val monarchy: M
         // Check that we know this event
         EventEntity.where(realm, eventId = redactionEvent.eventId ?: "").findFirst() ?: return
 
-        val isLocalEcho = LocalEchoEventFactory.isLocalEchoId(redactionEvent.eventId ?: "")
+        val isLocalEcho = LocalEcho.isLocalEchoId(redactionEvent.eventId ?: "")
         Timber.v("Redact event for ${redactionEvent.redacts} localEcho=$isLocalEcho")
 
         val eventToPrune = EventEntity.where(realm, eventId = redactionEvent.redacts).findFirst()
