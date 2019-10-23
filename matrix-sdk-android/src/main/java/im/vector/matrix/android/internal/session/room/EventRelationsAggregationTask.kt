@@ -28,7 +28,6 @@ import im.vector.matrix.android.internal.database.mapper.EventMapper
 import im.vector.matrix.android.internal.database.model.*
 import im.vector.matrix.android.internal.database.query.create
 import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.Realm
@@ -71,7 +70,7 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
                     Timber.w("Event has no room id ${event.eventId}")
                     return@forEach
                 }
-                val isLocalEcho = LocalEchoEventFactory.isLocalEchoId(event.eventId ?: "")
+                val isLocalEcho = LocalEcho.isLocalEchoId(event.eventId ?: "")
                 when (event.type) {
                     EventType.REACTION  -> {
                         // we got a reaction!!

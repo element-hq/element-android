@@ -17,6 +17,7 @@
 package im.vector.matrix.android.internal.session.room.read
 
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.api.session.events.model.LocalEcho
 import im.vector.matrix.android.internal.database.model.ReadMarkerEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
@@ -26,7 +27,6 @@ import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
-import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
 import im.vector.matrix.android.internal.session.sync.ReadReceiptHandler
 import im.vector.matrix.android.internal.session.sync.RoomFullyReadHandler
 import im.vector.matrix.android.internal.task.Task
@@ -73,7 +73,7 @@ internal class DefaultSetReadMarkersTask @Inject constructor(private val roomAPI
         }
 
         if (fullyReadEventId != null && isReadMarkerMoreRecent(params.roomId, fullyReadEventId)) {
-            if (LocalEchoEventFactory.isLocalEchoId(fullyReadEventId)) {
+            if (LocalEcho.isLocalEchoId(fullyReadEventId)) {
                 Timber.w("Can't set read marker for local event $fullyReadEventId")
             } else {
                 markers[READ_MARKER] = fullyReadEventId
@@ -82,7 +82,7 @@ internal class DefaultSetReadMarkersTask @Inject constructor(private val roomAPI
 
         if (readReceiptEventId != null
             && !isEventRead(monarchy, userId, params.roomId, readReceiptEventId)) {
-            if (LocalEchoEventFactory.isLocalEchoId(readReceiptEventId)) {
+            if (LocalEcho.isLocalEchoId(readReceiptEventId)) {
                 Timber.w("Can't set read receipt for local event $readReceiptEventId")
             } else {
                 markers[READ_RECEIPT] = readReceiptEventId

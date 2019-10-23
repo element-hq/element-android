@@ -59,6 +59,7 @@ import im.vector.matrix.android.api.permalinks.PermalinkFactory
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.events.model.LocalEcho
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.send.SendState
@@ -994,10 +995,16 @@ class RoomDetailFragment :
             return
         }
         val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
-        val firstVisibleItem = timelineEventController.adapter.getModelAtPosition(firstVisibleItemPosition)
-        val nextReadMarkerId = when (firstVisibleItem) {
-            is BaseEventItem -> firstVisibleItem.getEventIds().firstOrNull()
-            else             -> null
+        var nextReadMarkerId: String? = null
+        for (itemPosition in firstVisibleItemPosition until lastVisibleItemPosition) {
+            val timelineItem = timelineEventController.adapter.getModelAtPosition(itemPosition)
+            if (timelineItem is BaseEventItem) {
+                val eventId = timelineItem.getEventIds().firstOrNull() ?: continue
+                if (!LocalEcho.isLocalEchoId(eventId)) {
+                    nextReadMarkerId = eventId
+                    break
+                }
+            }
         }
         if (nextReadMarkerId != null) {
             roomDetailViewModel.process(RoomDetailActions.SetReadMarkerAction(nextReadMarkerId))

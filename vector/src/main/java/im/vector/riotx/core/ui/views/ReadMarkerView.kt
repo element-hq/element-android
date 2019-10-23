@@ -26,7 +26,7 @@ import android.view.animation.AnimationUtils
 import im.vector.riotx.R
 import kotlinx.coroutines.*
 
-private const val DELAY_IN_MS = 1_500L
+private const val DELAY_IN_MS = 1_000L
 
 class ReadMarkerView @JvmOverloads constructor(
         context: Context,
