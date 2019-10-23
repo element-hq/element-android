@@ -26,7 +26,6 @@ import im.vector.matrix.android.api.util.ContentUtils.extractUsefulTextFromReply
  */
 data class TextContent(
         val text: String,
-
         val formattedText: String? = null
 ) {
     fun takeFormatted() = formattedText ?: text

@@ -39,8 +39,8 @@ internal class TimelineEventDecryptor(
         override fun onNewSession(roomId: String?, senderKey: String, sessionId: String) {
             synchronized(unknownSessionsFailure) {
                 unknownSessionsFailure[sessionId]
+                        ?.toList()
                         .orEmpty()
-                        .toList()
                         .also {
                             unknownSessionsFailure[sessionId]?.clear()
                         }
@@ -55,7 +55,7 @@ internal class TimelineEventDecryptor(
     // Set of eventIds which are currently decrypting
     private val existingRequests = mutableSetOf<String>()
     // sessionId -> list of eventIds
-    private val unknownSessionsFailure = mutableMapOf<String, MutableList<String>>()
+    private val unknownSessionsFailure = mutableMapOf<String, MutableSet<String>>()
 
     fun start() {
         executor = Executors.newSingleThreadExecutor()
@@ -84,11 +84,10 @@ internal class TimelineEventDecryptor(
             }
         }
         synchronized(existingRequests) {
-            if (eventId in existingRequests) {
+            if (!existingRequests.add(eventId)) {
                 Timber.d("Skip Decryption request for event $eventId, already requested")
                 return
             }
-            existingRequests.add(eventId)
         }
         executor?.execute {
             Realm.getInstance(realmConfiguration).use { realm ->
@@ -120,7 +119,7 @@ internal class TimelineEventDecryptor(
                 event.content?.toModel<EncryptedEventContent>()?.let { content ->
                     content.sessionId?.let { sessionId ->
                         synchronized(unknownSessionsFailure) {
-                            val list = unknownSessionsFailure.getOrPut(sessionId) { ArrayList() }
+                            val list = unknownSessionsFailure.getOrPut(sessionId) { mutableSetOf() }
                             list.add(eventId)
                         }
                     }
