@@ -45,6 +45,7 @@ import im.vector.riotx.features.home.room.detail.timeline.action.*
 import im.vector.riotx.features.home.room.detail.timeline.edithistory.ViewEditHistoryBottomSheet
 import im.vector.riotx.features.home.room.detail.timeline.reactions.ViewReactionsBottomSheet
 import im.vector.riotx.features.home.room.filtered.FilteredRoomsActivity
+import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsBottomSheet
 import im.vector.riotx.features.home.room.list.RoomListFragment
 import im.vector.riotx.features.invite.VectorInviteView
 import im.vector.riotx.features.link.LinkHandlerActivity
@@ -185,6 +186,8 @@ interface ScreenComponent {
     fun inject(reactionButton: ReactionButton)
 
     fun inject(incomingShareActivity: IncomingShareActivity)
+
+    fun inject(roomListActionsBottomSheet: RoomListQuickActionsBottomSheet)
 
     @Component.Factory
     interface Factory {

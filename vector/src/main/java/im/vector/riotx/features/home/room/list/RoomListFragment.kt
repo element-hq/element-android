@@ -39,6 +39,7 @@ import im.vector.riotx.core.extensions.observeEventFirstThrottle
 import im.vector.riotx.core.platform.OnBackPressed
 import im.vector.riotx.core.platform.StateView
 import im.vector.riotx.core.platform.VectorBaseFragment
+import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsBottomSheet
 import im.vector.riotx.features.home.room.list.widget.FabMenuView
 import im.vector.riotx.features.notifications.NotificationDrawerManager
 import im.vector.riotx.features.share.SharedData
@@ -298,8 +299,15 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, O
 
     // RoomSummaryController.Callback **************************************************************
 
-    override fun onRoomSelected(room: RoomSummary) {
+    override fun onRoomClicked(room: RoomSummary) {
         roomListViewModel.accept(RoomListActions.SelectRoom(room))
+    }
+
+    override fun onRoomLongClicked(room: RoomSummary): Boolean {
+        RoomListQuickActionsBottomSheet
+                .newInstance(room.roomId)
+                .show(requireActivity().supportFragmentManager, "ROOM_LIST_QUICK_ACTIONS")
+        return true
     }
 
     override fun onAcceptRoomInvitation(room: RoomSummary) {

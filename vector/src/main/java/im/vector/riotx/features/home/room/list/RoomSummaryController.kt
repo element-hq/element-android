@@ -138,7 +138,8 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
 
     interface Listener : FilteredRoomFooterItem.FilteredRoomFooterItemListener {
         fun onToggleRoomCategory(roomCategory: RoomCategory)
-        fun onRoomSelected(room: RoomSummary)
+        fun onRoomClicked(room: RoomSummary)
+        fun onRoomLongClicked(room: RoomSummary): Boolean
         fun onRejectRoomInvitation(room: RoomSummary)
         fun onAcceptRoomInvitation(room: RoomSummary)
     }
