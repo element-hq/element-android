@@ -201,7 +201,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                 if (canCancel(event)) {
                     add(SimpleAction.Cancel(eventId))
                 }
-            } else {
+            } else if (event.root.sendState == SendState.SYNCED) {
                 if (!event.root.isRedacted()) {
                     if (canReply(event, messageContent)) {
                         add(SimpleAction.Reply(eventId))
