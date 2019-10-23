@@ -158,8 +158,6 @@
     <string name="auth_password_placeholder">Heslo</string>
     <string name="auth_new_password_placeholder">Nové heslo</string>
     <string name="auth_user_name_placeholder">Uživatelské jméno</string>
-    <string name="auth_add_email_message">Přidat emailovou adresu k vašemu účtu aby vás mohli ostatní uživatelé najít a abyste si mohl vyresetovat heslo.</string>
-    <string name="auth_add_phone_message">Přidat telefonní číslo k vašemu účtu aby vás mohli ostatní uživatelé najít.</string>
     <string name="auth_email_placeholder">E-mailová adresa</string>
     <string name="auth_opt_email_placeholder">E-mailová adresa (nepovinné)</string>
     <string name="auth_phone_number_placeholder">Telefonní číslo</string>
@@ -237,12 +235,6 @@
 
     <string name="encrypted_message">Šifrovaná zpráva</string>
 
-    <string name="auth_add_email_phone_message">Přidejte k účtu e-mailovou adresu a/nebo telefoní číslo, aby Vás mohli ostatní nalézt.
-
-E-mailová adresa Vám také umožní obnovit heslo.</string>
-    <string name="auth_add_email_and_phone_message">Přidejte k účtu e-mailovou adresu a telefoní číslo, aby Vás mohli ostatní nalézt.
-
-E-mailová adresa Vám také umožní obnovit heslo.</string>
     <string name="auth_threepid_warning_message">Registrace e-mailem a telefonním číslem najednou není zatím podporována z důvodu neexistujícího API. Pouze telefonní čislo bude bráno v potaz.
 
 Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>

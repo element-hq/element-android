@@ -204,14 +204,6 @@
 
     <string name="option_take_photo_video">拍摄照片或视频</string>
 
-    <string name="auth_add_email_message">为您的账户添加一个电子邮箱地址以便其他用户发现您，同时可让您重置密码。</string>
-    <string name="auth_add_phone_message">为您的账户添加一个手机号码以便其他用户发现您。</string>
-    <string name="auth_add_email_phone_message">添加一个电子邮箱地址和/或手机号码到您的账户来让用户发现您。
-
-电子邮箱地址也可以让您重设您的密码。</string>
-    <string name="auth_add_email_and_phone_message">添加一个电子邮箱地址和手机号码到您的账户来让用户发现您。
-
-电子邮箱地址也可以让您重设您的密码。</string>
     <string name="auth_repeat_password_placeholder">重复密码</string>
     <string name="auth_use_server_options">使用自定义服务器选项（高级）</string>
     <string name="auth_email_validation_message">请检查您的电子邮箱以继续注册</string>

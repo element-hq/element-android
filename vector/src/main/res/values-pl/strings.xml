@@ -133,8 +133,6 @@
     <string name="auth_password_placeholder">Hasło</string>
     <string name="auth_new_password_placeholder">Nowe hasło</string>
     <string name="auth_user_name_placeholder">Nazwa użytkownika</string>
-    <string name="auth_add_email_message">Dodaj do konta adres e-mail, aby użytkownicy mogli Cię odnaleźć, oraz abyś mógł przywrócić swoje hasło.</string>
-    <string name="auth_add_phone_message">Dodaj numer telefonu, aby użytkownicy mogli Cię odnaleźć.</string>
     <string name="auth_email_placeholder">Adres e-mail</string>
     <string name="auth_opt_email_placeholder">Adres e-mail (nieobowiązkowy)</string>
     <string name="auth_phone_number_placeholder">Numer telefonu</string>
@@ -572,12 +570,6 @@ Zauważ, że ta czynność spowoduje ponowne uruchomienie aplikacji i może to t
     <string name="option_take_photo">Zrób zdjęcie</string>
     <string name="option_take_video">Nagraj film</string>
 
-    <string name="auth_add_email_phone_message">Dodaj adres e-mail i/lub nr telefonu do swojego konta, aby umożliwić innym użytkownikom odnalezienie ciebie.
-\n
-\nAdres e-mail pozwoli Ci również zresetować hasło.</string>
-    <string name="auth_add_email_and_phone_message">Dodaj adres e-mail i nr telefonu do swojego konta, aby umożliwić innym użytkownikom odnalezienie ciebie.
-\n
-\nAdres e-mail pozwoli Ci również zresetować hasło.</string>
     <string name="auth_threepid_warning_message">Rejestracja jednocześnie za pomocą numeru telefonu i adresu e-mail nie jest obsługiwana dopóki nie pojawi się odpowiednie API. Tylko numer telefonu będzie brany pod uwagę.
 
 Możesz dodać adres e-mail do swojego profilu w ustawieniach.</string>

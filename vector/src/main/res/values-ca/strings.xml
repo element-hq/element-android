@@ -169,10 +169,6 @@
     <string name="auth_password_placeholder">Contrasenya</string>
     <string name="auth_new_password_placeholder">Contrasenya nova</string>
     <string name="auth_user_name_placeholder">Nom d\'usuari</string>
-    <string name="auth_add_email_message">"Afegiu un correu electrònic al vostre compte per tal que altres usuaris us trobin i per poder reiniciar la contrasenya."</string>
-    <string name="auth_add_phone_message">"Afegiu un número de telefon al vostre compte per tal que altres usuaris us trobin."</string>
-    <string name="auth_add_email_phone_message">"Afegiu un correu electrònic i/o un númerode telefon al vostre compte per tal que altres usuaris us trobin.\n\nSi afegiu un correu electrònic també us permetrà poder reiniciar la contrasenya."</string>
-    <string name="auth_add_email_and_phone_message">"Afegiu un correu electrònic i un número de telefon al vostre compte per tal que altres usuaris us trobin.\n\nSi afegiu un correu electrònic també us permetrà poder reiniciar la contrasenya."</string>
     <string name="auth_email_placeholder">Correu electrònic</string>
     <string name="auth_opt_email_placeholder">Correu electrònic (opcional)</string>
     <string name="auth_phone_number_placeholder">Número de telefon</string>
@@ -1531,7 +1527,7 @@ Per què triar Riot.im?
 
     <string name="event_redacted_by_user_reason">Esdeveniment eliminat per l\'usuari</string>
     <string name="event_redacted_by_admin_reason">Esdeveniment moderat per l\'administrador de la sala</string>
-    <string name="last_edited_info_message">Última edició per %s el %s</string>
+    <string name="last_edited_info_message">Última edició per %1$s el %2$s</string>
 
 
     <string name="malformed_message">Esdeveniment mal format, no es pot mostrar</string>

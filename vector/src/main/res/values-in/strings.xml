@@ -194,14 +194,6 @@
 
     <string name="send_files_in">Kirim ke</string>
     <string name="username">Nama Pengguna</string>
-    <string name="auth_add_email_message">Tambahkan alamat email ke akun agar pengguna lain dapat menemukan Anda, dan kata sandi dapat disetel ulang.</string>
-    <string name="auth_add_phone_message">Tambahkan nomor telpon ke akun agar pengguna lain dapat menemukan Anda.</string>
-    <string name="auth_add_email_phone_message">Tambahkan alamat email dan/atau nomor telpon ke akun agar pengguna lain dapat menemukan Anda.
-
-Alamat email juga memungkinkan Anda menyetel ulang kata sandi.</string>
-    <string name="auth_add_email_and_phone_message">Tambahkan alamat email dan nomor telpon ke akun agar pengguna lain dapat menemukan Anda.
-
-Alamat email juga memungkinkan Anda menyetel ulang kata sandi Anda.</string>
     <string name="auth_invalid_login_param">Nama pengguna dan/atau kata sandi salah</string>
     <string name="auth_invalid_user_name">Nama pengguna hanya boleh memuat huruf, angka, titik, tanda hubung ( - ), dan garis bawah ( _ )</string>
     <string name="auth_missing_password">Password belum dimasukkan</string>

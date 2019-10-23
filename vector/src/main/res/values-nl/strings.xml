@@ -140,14 +140,6 @@
     <string name="auth_password_placeholder">Wachtwoord</string>
     <string name="auth_new_password_placeholder">Nieuw wachtwoord</string>
     <string name="auth_user_name_placeholder">Gebruikersnaam</string>
-    <string name="auth_add_email_message">Voeg een e-mailadres aan uw account toe zodat gebruikers u kunnen vinden en zodat u het wachtwoord kunt veranderen.</string>
-    <string name="auth_add_phone_message">Voeg een telefoonnummer aan uw account toe zodat gebruikers u kunnen vinden.</string>
-    <string name="auth_add_email_phone_message">Voeg een e-mailadres en/of telefoonnummer aan uw account toe zodat gebruikers u kunnen vinden.
-\n
-\nHet e-mailadres maakt het ook mogelijk om uw wachtwoord te veranderen.</string>
-    <string name="auth_add_email_and_phone_message">Voeg een e-mailadres en een telefoonnummer aan uw account toe zodat gebruikers u kunnen vinden.
-\n
-\nHet e-mailadres maakt het ook mogelijk om uw wachtwoord te veranderen.</string>
     <string name="auth_email_placeholder">E-mailadres</string>
     <string name="auth_opt_email_placeholder">E-mailadres (optioneel)</string>
     <string name="auth_phone_number_placeholder">Telefoonnummer</string>
@@ -1518,4 +1510,13 @@
     <string name="sas_error_m_user_error">Gebruikers komen niet overeen</string>
     <string name="sas_error_unknown">Onbekende fout</string>
 
+    <string name="none">Geen</string>
+    <string name="revoke">Intrekken</string>
+    <string name="disconnect">Verbinding verbreken</string>
+    <string name="review">Nakijken</string>
+    <string name="decline">Weigeren</string>
+
+    <string name="people_no_identity_server">Geen identiteitsserver geconfigureerd.</string>
+
+    <string name="call_failed_no_ice_title">Oproep mislukt door verkeerd geconfigureerde server</string>
 </resources>

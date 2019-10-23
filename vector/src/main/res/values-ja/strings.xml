@@ -349,19 +349,11 @@
     <string name="auth_password_placeholder">パスワード</string>
     <string name="auth_new_password_placeholder">新しいパスワード</string>
     <string name="auth_user_name_placeholder">ユーザ名</string>
-    <string name="auth_add_email_message">電子メールアドレスを登録すると, 誰かがあなたを検索をしたり, パスワード紛失時に初期化のメールを送ることができます.</string>
-    <string name="auth_add_phone_message">電話番号を登録すると, 誰かがあなたを電話番号で検索できるようになります.</string>
     <string name="auth_email_placeholder">電子メールアドレス</string>
     <string name="auth_opt_email_placeholder">電子メールアドレス (任意で)</string>
     <string name="auth_repeat_password_placeholder">パスワード再確認</string>
     <string name="auth_repeat_new_password_placeholder">新しいパスワードを再確認</string>
     <string name="auth_missing_password">パスワードが違います</string>
-    <string name="auth_add_email_phone_message">電子メールアドレスや電話番号を登録すると, それらを使用して誰かがあなたを検索できるようになります.
-
-電子メールアドレスは, パスワード紛失時に初期化の連絡をするためにも使用されます.</string>
-    <string name="auth_add_email_and_phone_message">電子メールアドレスや電話番号を登録すると, それらを使用して誰かがあなたを検索できるようになります.
-
-電子メールアドレスは, パスワード紛失時に初期化の連絡をするためにも使用されます.</string>
     <string name="auth_missing_email">電子メールアドレスが違います</string>
     <string name="auth_missing_phone">電話番号が違います</string>
     <string name="auth_missing_email_or_phone">電子メールアドレスまたは電話番号が違います</string>

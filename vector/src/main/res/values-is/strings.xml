@@ -793,14 +793,6 @@ Leyfa Riot nota tengiliðina ?</string>
     <string name="send_bug_report_alert_message">Það er eins og þú sért að hrista símann ákveðið. Myndirðu vilja senda villuskýrslu?</string>
     <string name="send_bug_report_app_crashed">Forritið hrundi síðast. Myndirðu vilja senda inn villuskýrslu?</string>
     <string name="option_send_sticker">Senda límmerki</string>
-    <string name="auth_add_email_message">Bættu tölvupóstfangi við notandaaðganginn þinn til að gera öðrum notendum kleift að finna þig og einnig til að endurstilla lykilorðið þitt.</string>
-    <string name="auth_add_phone_message">Bættu símanúmeri við notandaaðganginn þinn til að gera öðrum notendum kleift að finna þig.</string>
-    <string name="auth_add_email_phone_message">Bættu tölvupóstfangi og/eða símanúmeri við notandaaðganginn þinn til að gera öðrum notendum kleift að finna þig.
-
-Tölvupóstfang nýtist einnig til að endurstilla lykilorðið þitt.</string>
-    <string name="auth_add_email_and_phone_message">Bættu tölvupóstfangi og símanúmeri við notandaaðganginn þinn til að gera öðrum notendum kleift að finna þig.
-
-Tölvupóstfang nýtist einnig til að endurstilla lykilorðið þitt.</string>
     <string name="login_error_login_email_not_yet">Tölvupósttengill sem ekki er enn búið að smella á</string>
 
     <string name="malformed_id">Rangt formað auðkenni. Ætti að vera tölvupóstfang eða Matrix-auðkenni á borð við\'@sérheiti:lén\'</string>

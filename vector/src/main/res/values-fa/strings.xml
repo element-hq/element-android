@@ -326,14 +326,6 @@
     <string name="permalink">پیوند دائمی</string>
     <string name="view_decrypted_source">مشاهده منبع رمز نشده</string>
     <string name="action_historical">تاریخچه</string>
-    <string name="auth_add_email_message">یک ایمیل به حساب خود اضافه کنید تا دیگر کاربران بتوانند شما را پیدا کنند و برای شما نیز امکاناتی مانند بازیابی گذرواژه فعال شود.</string>
-    <string name="auth_add_phone_message">یک شماره تلفن به حساب خود اضافه کنید تا دیگر کاربران بتوانند شما را توسط آن پیدا کنند.</string>
-    <string name="auth_add_email_phone_message">یک ایمیل یا شماره تلفن به حساب خود اضافه کنید تا دیگر کاربران بتوانند شما را پیدا کنند.
-\n
-\nنشانی ایمیل امکان بازیابی گذرواژه را نیز به شما می‌دهد.</string>
-    <string name="auth_add_email_and_phone_message">یک ایمیل و یک شماره تلفن به حساب خود اضافه کنید تا دیگر کاربران بتوانند شما را پیدا کنند.
-\n
-\nنشانی ایمیل امکان بازیابی گذرواژه را نیز به شما می‌دهد.</string>
     <string name="auth_invalid_user_name">نام کاربری تنها می‌تواند شامل حروف انگلیسی، اعداد، نقطه، خط زیر و خط تیره باشد</string>
     <string name="auth_threepid_warning_message">ثبت‌نام با ورود همزمان ایمیل و شماره تلفن در حال حاضر پشتیبانی نمی‌شود. تنها شماره تلفن شما برای حساب‌تان ثبت خواهد شد.
 \n

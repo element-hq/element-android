@@ -168,14 +168,6 @@ Quere engadir algún?</string>
     <string name="auth_password_placeholder">Contrasinal</string>
     <string name="auth_new_password_placeholder">Novo contrasinal</string>
     <string name="auth_user_name_placeholder">Nome de usuario</string>
-    <string name="auth_add_email_message">Engadíndolle unha dirección de correo á súa conta permite que outros usuarios o atopen e que poida restaurar o seu contrasinal.</string>
-    <string name="auth_add_phone_message">Engadíndolle o teléfono á súa conta permite que outros usuarios o atopen.</string>
-    <string name="auth_add_email_phone_message">Engade unha dirección de correo e/ou número de teléfono á súa conta e permite que outros usuarios o atopen.
-
-A dirección de correo permitiralle restaurar o contrasinal.</string>
-    <string name="auth_add_email_and_phone_message">Engade unha dirección de correo e un número de teléfono á súa conta para permitirlle a outros usuarios que o atopen.
-
-A dirección de correo permitiralle restaurar o contrasinal.</string>
     <string name="auth_email_placeholder">Enderezo de correo</string>
     <string name="auth_opt_email_placeholder">Enderezo de correo (opcional)</string>
     <string name="auth_phone_number_placeholder">Número de teléfono</string>
