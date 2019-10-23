@@ -67,6 +67,7 @@ import im.vector.riotx.features.roomdirectory.picker.RoomDirectoryPickerFragment
 import im.vector.riotx.features.roomdirectory.roompreview.RoomPreviewNoPreviewFragment
 import im.vector.riotx.features.settings.*
 import im.vector.riotx.features.settings.push.PushGatewaysFragment
+import im.vector.riotx.features.share.IncomingShareActivity
 import im.vector.riotx.features.ui.UiStateRepository
 
 @Component(dependencies = [VectorComponent::class], modules = [AssistedInjectModule::class, ViewModelModule::class, HomeModule::class])
@@ -182,6 +183,8 @@ interface ScreenComponent {
     fun inject(displayReadReceiptsBottomSheet: DisplayReadReceiptsBottomSheet)
 
     fun inject(reactionButton: ReactionButton)
+
+    fun inject(incomingShareActivity: IncomingShareActivity)
 
     @Component.Factory
     interface Factory {

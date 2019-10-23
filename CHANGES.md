@@ -8,6 +8,8 @@ Improvements:
  - Persist active tab between sessions (#503)
  - Do not upload file too big for the homeserver (#587)
  - Handle read markers (#84)
+ - Attachments: start using system pickers (#52)
+ - Attachments: start handling incoming share (#58)
  - Mark all messages as read (#396)
  - Add ability to report content (#515)
 

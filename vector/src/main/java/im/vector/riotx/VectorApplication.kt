@@ -74,6 +74,7 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
     @Inject lateinit var vectorPreferences: VectorPreferences
     @Inject lateinit var versionProvider: VersionProvider
     @Inject lateinit var notificationUtils: NotificationUtils
+    @Inject lateinit var appStateHandler: AppStateHandler
     lateinit var vectorComponent: VectorComponent
     private var fontThreadHandler: Handler? = null
 
@@ -134,6 +135,7 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
                 FcmHelper.onEnterBackground(appContext, vectorPreferences, activeSessionHolder)
             }
         })
+        ProcessLifecycleOwner.get().lifecycle.addObserver(appStateHandler)
         // This should be done as early as possible
         initKnownEmojiHashSet(appContext)
     }

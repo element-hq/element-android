@@ -369,6 +369,9 @@
     <string name="permissions_rationale_msg_contacts">Riot can check your address book to find other Matrix users based on their email and phone numbers. If you agree to share your address book for this purpose, please allow access on the next pop-up.</string>
     <string name="permissions_msg_contacts_warning_other_androids">Riot can check your address book to find other Matrix users based on their email and phone numbers.\n\nDo you agree to share your address book for this purpose?</string>
 
+
+
+
     <string name="permissions_action_not_performed_missing_permissions">Sorry. Action not performed, due to missing permissions</string>
 
     <!-- medias slider string -->

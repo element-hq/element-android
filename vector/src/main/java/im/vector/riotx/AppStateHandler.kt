@@ -14,56 +14,59 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.home
+package im.vector.riotx
 
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
 import arrow.core.Option
-import com.airbnb.mvrx.ActivityViewModelContext
-import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
-import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.rx.rx
-import im.vector.riotx.core.platform.VectorViewModel
+import im.vector.riotx.features.home.HomeRoomListObservableStore
 import im.vector.riotx.features.home.group.ALL_COMMUNITIES_GROUP_ID
 import im.vector.riotx.features.home.group.SelectedGroupStore
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
+import io.reactivex.rxkotlin.addTo
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
+import javax.inject.Singleton
 
-data class EmptyState(val isEmpty: Boolean = true) : MvRxState
+/**
+ * This class handles the global app state. At the moment, it only manages room list.
+ * It requires to be added to ProcessLifecycleOwner.get().lifecycle
+ */
+@Singleton
+class AppStateHandler @Inject constructor(
+        private val sessionObservableStore: ActiveSessionObservableStore,
+        private val homeRoomListStore: HomeRoomListObservableStore,
+        private val selectedGroupStore: SelectedGroupStore) : LifecycleObserver {
 
-class HomeActivityViewModel @AssistedInject constructor(@Assisted initialState: EmptyState,
-                                                        private val session: Session,
-                                                        private val selectedGroupStore: SelectedGroupStore,
-                                                        private val homeRoomListStore: HomeRoomListObservableStore
-) : VectorViewModel<EmptyState>(initialState) {
+    private val compositeDisposable = CompositeDisposable()
 
-    @AssistedInject.Factory
-    interface Factory {
-        fun create(initialState: EmptyState): HomeActivityViewModel
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    fun entersForeground() {
+        observeRoomsAndGroup()
     }
 
-    companion object : MvRxViewModelFactory<HomeActivityViewModel, EmptyState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: EmptyState): HomeActivityViewModel? {
-            val homeActivity: HomeActivity = (viewModelContext as ActivityViewModelContext).activity()
-            return homeActivity.homeActivityViewModelFactory.create(state)
-        }
+    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+    fun entersBackground() {
+        compositeDisposable.clear()
     }
 
-    init {
-        observeRoomAndGroup()
-    }
-
-    private fun observeRoomAndGroup() {
+    private fun observeRoomsAndGroup() {
         Observable
                 .combineLatest<List<RoomSummary>, Option<GroupSummary>, List<RoomSummary>>(
-                        session.rx().liveRoomSummaries().throttleLast(300, TimeUnit.MILLISECONDS),
+                        sessionObservableStore.observe()
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .switchMap {
+                                    it.orNull()?.rx()?.liveRoomSummaries()
+                                    ?: Observable.just(emptyList())
+                                }
+                                .throttleLast(300, TimeUnit.MILLISECONDS),
                         selectedGroupStore.observe(),
                         BiFunction { rooms, selectedGroupOption ->
                             val selectedGroup = selectedGroupOption.orNull()
@@ -83,7 +86,7 @@ class HomeActivityViewModel @AssistedInject constructor(@Assisted initialState: 
                                     .filter { !it.isDirect }
                                     .filter {
                                         selectedGroup?.groupId == ALL_COMMUNITIES_GROUP_ID
-                                                || selectedGroup?.roomIds?.contains(it.roomId) ?: true
+                                        || selectedGroup?.roomIds?.contains(it.roomId) ?: true
                                     }
                             filteredDirectRooms + filteredGroupRooms
                         }
@@ -91,6 +94,6 @@ class HomeActivityViewModel @AssistedInject constructor(@Assisted initialState: 
                 .subscribe {
                     homeRoomListStore.post(it)
                 }
-                .disposeOnClear()
+                .addTo(compositeDisposable)
     }
 }

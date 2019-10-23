@@ -230,6 +230,7 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
             RoomListFragment.DisplayMode.PEOPLE   -> chronologicalRoomComparator
             RoomListFragment.DisplayMode.ROOMS    -> chronologicalRoomComparator
             RoomListFragment.DisplayMode.FILTERED -> chronologicalRoomComparator
+            RoomListFragment.DisplayMode.SHARE    -> chronologicalRoomComparator
         }
 
         return RoomSummaries().apply {

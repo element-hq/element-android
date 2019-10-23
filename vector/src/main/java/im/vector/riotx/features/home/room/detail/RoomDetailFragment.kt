@@ -52,14 +52,12 @@ import com.github.piasy.biv.BigImageViewer
 import com.github.piasy.biv.loader.ImageLoader
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
-import com.jaiselrahman.filepicker.activity.FilePickerActivity
-import com.jaiselrahman.filepicker.config.Configurations
-import com.jaiselrahman.filepicker.model.MediaFile
 import com.otaliastudios.autocomplete.Autocomplete
 import com.otaliastudios.autocomplete.AutocompleteCallback
 import com.otaliastudios.autocomplete.CharPolicy
 import im.vector.matrix.android.api.permalinks.PermalinkFactory
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.message.*
@@ -82,6 +80,11 @@ import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.ui.views.JumpToReadMarkerView
 import im.vector.riotx.core.ui.views.NotificationAreaView
 import im.vector.riotx.core.utils.*
+import im.vector.riotx.core.utils.Debouncer
+import im.vector.riotx.core.utils.createUIHandler
+import im.vector.riotx.features.attachments.AttachmentTypeSelectorView
+import im.vector.riotx.features.attachments.AttachmentsHelper
+import im.vector.riotx.features.attachments.ContactAttachment
 import im.vector.riotx.features.autocomplete.command.AutocompleteCommandPresenter
 import im.vector.riotx.features.autocomplete.command.CommandAutocompletePolicy
 import im.vector.riotx.features.autocomplete.user.AutocompleteUserPresenter
@@ -112,6 +115,7 @@ import im.vector.riotx.features.media.VideoMediaViewerActivity
 import im.vector.riotx.features.notifications.NotificationDrawerManager
 import im.vector.riotx.features.reactions.EmojiReactionPickerActivity
 import im.vector.riotx.features.settings.VectorPreferences
+import im.vector.riotx.features.share.SharedData
 import im.vector.riotx.features.themes.ThemeUtils
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_detail.*
@@ -125,20 +129,20 @@ import javax.inject.Inject
 @Parcelize
 data class RoomDetailArgs(
         val roomId: String,
-        val eventId: String? = null
+        val eventId: String? = null,
+        val sharedData: SharedData? = null
 ) : Parcelable
 
-private const val CAMERA_VALUE_TITLE = "attachment"
-private const val REQUEST_FILES_REQUEST_CODE = 0
-private const val TAKE_IMAGE_REQUEST_CODE = 1
-private const val REACTION_SELECT_REQUEST_CODE = 2
+private const val REACTION_SELECT_REQUEST_CODE = 0
 
 class RoomDetailFragment :
         VectorBaseFragment(),
         TimelineEventController.Callback,
         AutocompleteUserPresenter.Callback,
         VectorInviteView.Callback,
-        JumpToReadMarkerView.Callback {
+        JumpToReadMarkerView.Callback,
+        AttachmentTypeSelectorView.Callback,
+        AttachmentsHelper.Callback {
 
     companion object {
 
@@ -199,9 +203,12 @@ class RoomDetailFragment :
 
     private lateinit var actionViewModel: ActionsHandler
     private lateinit var layoutManager: LinearLayoutManager
+    private lateinit var attachmentsHelper: AttachmentsHelper
+    private lateinit var keyboardStateUtils: KeyboardStateUtils
 
     @BindView(R.id.composerLayout)
     lateinit var composerLayout: TextComposerView
+    private lateinit var attachmentTypeSelector: AttachmentTypeSelectorView
 
     private var lockSendButton = false
 
@@ -212,6 +219,8 @@ class RoomDetailFragment :
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         actionViewModel = ViewModelProviders.of(requireActivity()).get(ActionsHandler::class.java)
+        attachmentsHelper = AttachmentsHelper.create(this, this).register()
+        keyboardStateUtils = KeyboardStateUtils(requireActivity())
         setupToolbar(roomToolbar)
         setupRecyclerView()
         setupComposer()
@@ -274,6 +283,14 @@ class RoomDetailFragment :
 
         roomDetailViewModel.requestLiveData.observeEvent(this) {
             displayRoomDetailActionResult(it)
+        }
+
+        if (savedInstanceState == null) {
+            when (val sharedData = roomDetailArgs.sharedData) {
+                is SharedData.Text        -> roomDetailViewModel.process(RoomDetailActions.SendMessage(sharedData.text, false))
+                is SharedData.Attachments -> roomDetailViewModel.process(RoomDetailActions.SendMedia(sharedData.attachmentData))
+                null                      -> Timber.v("No share data to process")
+            }
         }
     }
 
@@ -404,7 +421,7 @@ class RoomDetailFragment :
         if (text != composerLayout.composerEditText.text.toString()) {
             // Ignore update to avoid saving a draft
             composerLayout.composerEditText.setText(text)
-            composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text.length)
+            composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text?.length ?: 0)
         }
     }
 
@@ -423,13 +440,14 @@ class RoomDetailFragment :
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == RESULT_OK && data != null) {
+        val hasBeenHandled = attachmentsHelper.onActivityResult(requestCode, resultCode, data)
+        if (!hasBeenHandled && resultCode == RESULT_OK && data != null) {
             when (requestCode) {
-                REQUEST_FILES_REQUEST_CODE, TAKE_IMAGE_REQUEST_CODE -> handleMediaIntent(data)
-                REACTION_SELECT_REQUEST_CODE                        -> {
-                    val eventId = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_EVENT_ID) ?: return
-                    val reaction = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_REACTION_RESULT) ?: return
+                REACTION_SELECT_REQUEST_CODE -> {
+                    val eventId = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_EVENT_ID)
+                            ?: return
+                    val reaction = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_REACTION_RESULT)
+                            ?: return
                     // TODO check if already reacted with that?
                     roomDetailViewModel.process(RoomDetailActions.SendReaction(eventId, reaction))
                 }
@@ -598,84 +616,32 @@ class RoomDetailFragment :
         composerLayout.composerRelatedMessageCloseButton.setOnClickListener {
             roomDetailViewModel.process(RoomDetailActions.ExitSpecialMode(composerLayout.composerEditText.text.toString()))
         }
+        composerLayout.callback = object : TextComposerView.Callback {
+            override fun onRichContentSelected(contentUri: Uri): Boolean {
+                val shareIntent = Intent().apply {
+                    action = Intent.ACTION_SEND
+                    data = contentUri
+                }
+                val isHandled = attachmentsHelper.handleShareIntent(shareIntent)
+                if (!isHandled) {
+                    Toast.makeText(requireContext(), R.string.error_handling_incoming_share, Toast.LENGTH_SHORT).show()
+                }
+                return isHandled
+            }
+        }
     }
 
     private fun setupAttachmentButton() {
         composerLayout.attachmentButton.setOnClickListener {
-            val intent = Intent(requireContext(), FilePickerActivity::class.java)
-            intent.putExtra(FilePickerActivity.CONFIGS, Configurations.Builder()
-                    .setCheckPermission(true)
-                    .setShowFiles(true)
-                    .setShowAudios(true)
-                    .setSkipZeroSizeFiles(true)
-                    .build())
-            startActivityForResult(intent, REQUEST_FILES_REQUEST_CODE)
-            /*
-            val items = ArrayList<DialogListItem>()
-            // Send file
-            items.add(DialogListItem.SendFile)
-            // Send voice
-
-            if (vectorPreferences.isSendVoiceFeatureEnabled()) {
-                items.add(DialogListItem.SendVoice.INSTANCE)
+            if (!::attachmentTypeSelector.isInitialized) {
+                attachmentTypeSelector = AttachmentTypeSelectorView(vectorBaseActivity, vectorBaseActivity.layoutInflater, this)
             }
-
-
-            // Send sticker
-            //items.add(DialogListItem.SendSticker)
-            // Camera
-
-            //if (vectorPreferences.useNativeCamera()) {
-            items.add(DialogListItem.TakePhoto)
-            items.add(DialogListItem.TakeVideo)
-            //} else {
-    //                items.add(DialogListItem.TakePhotoVideo.INSTANCE)
-            //          }
-            val adapter = DialogSendItemAdapter(requireContext(), items)
-            AlertDialog.Builder(requireContext())
-                    .setAdapter(adapter) { _, position ->
-                        onSendChoiceClicked(items[position])
-                    }
-                    .setNegativeButton(R.string.cancel, null)
-                    .show()
-                    */
+            attachmentTypeSelector.show(composerLayout.attachmentButton, keyboardStateUtils.isKeyboardShowing)
         }
     }
 
     private fun setupInviteView() {
         inviteView.callback = this
-    }
-
-    /* private fun onSendChoiceClicked(dialogListItem: DialogListItem) {
-        Timber.v("On send choice clicked: $dialogListItem")
-        when (dialogListItem) {
-            is DialogListItem.SendFile       -> {
-                // launchFileIntent
-            }
-            is DialogListItem.SendVoice      -> {
-                //launchAudioRecorderIntent()
-            }
-            is DialogListItem.SendSticker    -> {
-                //startStickerPickerActivity()
-            }
-            is DialogListItem.TakePhotoVideo ->
-                if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
-                    //    launchCamera()
-                }
-            is DialogListItem.TakePhoto      ->
-                if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_CAMERA)) {
-                    openCamera(requireActivity(), CAMERA_VALUE_TITLE, TAKE_IMAGE_REQUEST_CODE)
-                }
-            is DialogListItem.TakeVideo      ->
-                if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), PERMISSION_REQUEST_CODE_LAUNCH_NATIVE_VIDEO_CAMERA)) {
-                    //  launchNativeVideoRecorder()
-                }
-        }
-    } */
-
-    private fun handleMediaIntent(data: Intent) {
-        val files: ArrayList<MediaFile> = data.getParcelableArrayListExtra(FilePickerActivity.MEDIA_FILES)
-        roomDetailViewModel.process(RoomDetailActions.SendMedia(files))
     }
 
     private fun renderState(state: RoomDetailViewState) {
@@ -941,10 +907,15 @@ class RoomDetailFragment :
         if (allGranted(grantResults)) {
             if (requestCode == PERMISSION_REQUEST_CODE_DOWNLOAD_FILE) {
                 val action = roomDetailViewModel.pendingAction
-
                 if (action != null) {
                     roomDetailViewModel.pendingAction = null
                     roomDetailViewModel.process(action)
+                }
+            } else if (requestCode == PERMISSION_REQUEST_CODE_PICK_ATTACHMENT) {
+                val pendingType = attachmentsHelper.pendingType
+                if (pendingType != null) {
+                    attachmentsHelper.pendingType = null
+                    launchAttachmentProcess(pendingType)
                 }
             }
         }
@@ -1164,21 +1135,21 @@ class RoomDetailFragment :
             val myDisplayName = session.getUser(session.myUserId)?.displayName
             if (myDisplayName == text) {
                 // current user
-                if (composerLayout.composerEditText.text.isBlank()) {
+                if (composerLayout.composerEditText.text.isNullOrBlank()) {
                     composerLayout.composerEditText.append(Command.EMOTE.command + " ")
-                    composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text.length)
+                    composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text?.length ?: 0)
 //                    vibrate = true
                 }
             } else {
                 // another user
-                if (composerLayout.composerEditText.text.isBlank()) {
+                if (composerLayout.composerEditText.text.isNullOrBlank()) {
                     // Ensure displayName will not be interpreted as a Slash command
                     if (text.startsWith("/")) {
                         composerLayout.composerEditText.append("\\")
                     }
                     composerLayout.composerEditText.append(sanitizeDisplayName(text) + ": ")
                 } else {
-                    composerLayout.composerEditText.text.insert(composerLayout.composerEditText.selectionStart, sanitizeDisplayName(text) + " ")
+                    composerLayout.composerEditText.text?.insert(composerLayout.composerEditText.selectionStart, sanitizeDisplayName(text) + " ")
                 }
 
 //                vibrate = true
@@ -1226,5 +1197,42 @@ class RoomDetailFragment :
 
     override fun onClearReadMarkerClicked() {
         roomDetailViewModel.process(RoomDetailActions.MarkAllAsRead)
+    }
+
+    // AttachmentTypeSelectorView.Callback
+
+    override fun onTypeSelected(type: AttachmentTypeSelectorView.Type) {
+        if (checkPermissions(type.permissionsBit, this, PERMISSION_REQUEST_CODE_PICK_ATTACHMENT)) {
+            launchAttachmentProcess(type)
+        } else {
+            attachmentsHelper.pendingType = type
+        }
+    }
+
+    private fun launchAttachmentProcess(type: AttachmentTypeSelectorView.Type) {
+        when (type) {
+            AttachmentTypeSelectorView.Type.CAMERA  -> attachmentsHelper.openCamera()
+            AttachmentTypeSelectorView.Type.FILE    -> attachmentsHelper.selectFile()
+            AttachmentTypeSelectorView.Type.GALLERY -> attachmentsHelper.selectGallery()
+            AttachmentTypeSelectorView.Type.AUDIO   -> attachmentsHelper.selectAudio()
+            AttachmentTypeSelectorView.Type.CONTACT -> attachmentsHelper.selectContact()
+            AttachmentTypeSelectorView.Type.STICKER -> vectorBaseActivity.notImplemented("Adding stickers")
+        }
+    }
+
+    // AttachmentsHelper.Callback
+
+    override fun onContentAttachmentsReady(attachments: List<ContentAttachmentData>) {
+        roomDetailViewModel.process(RoomDetailActions.SendMedia(attachments))
+    }
+
+    override fun onAttachmentsProcessFailed() {
+        Toast.makeText(requireContext(), R.string.error_attachment, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onContactAttachmentReady(contactAttachment: ContactAttachment) {
+        super.onContactAttachmentReady(contactAttachment)
+        val formattedContact = contactAttachment.toHumanReadable()
+        roomDetailViewModel.process(RoomDetailActions.SendMessage(formattedContact, false))
     }
 }

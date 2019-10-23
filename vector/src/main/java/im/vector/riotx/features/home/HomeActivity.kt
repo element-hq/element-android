@@ -27,7 +27,6 @@ import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.airbnb.mvrx.viewModel
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.di.ScreenComponent
@@ -55,11 +54,9 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
         object OpenGroup : Navigation()
     }
 
-    private val homeActivityViewModel: HomeActivityViewModel by viewModel()
     private lateinit var navigationViewModel: HomeNavigationViewModel
 
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
-    @Inject lateinit var homeActivityViewModelFactory: HomeActivityViewModel.Factory
     @Inject lateinit var vectorUncaughtExceptionHandler: VectorUncaughtExceptionHandler
     @Inject lateinit var pushManager: PushersManager
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager

@@ -16,7 +16,7 @@
 
 package im.vector.riotx.features.home.room.detail
 
-import com.jaiselrahman.filepicker.model.MediaFile
+import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.model.message.MessageFileContent
 import im.vector.matrix.android.api.session.room.timeline.Timeline
@@ -26,7 +26,7 @@ sealed class RoomDetailActions {
 
     data class SaveDraft(val draft: String) : RoomDetailActions()
     data class SendMessage(val text: String, val autoMarkdown: Boolean) : RoomDetailActions()
-    data class SendMedia(val mediaFiles: List<MediaFile>) : RoomDetailActions()
+    data class SendMedia(val attachments: List<ContentAttachmentData>) : RoomDetailActions()
     data class TimelineEventTurnsVisible(val event: TimelineEvent) : RoomDetailActions()
     data class TimelineEventTurnsInvisible(val event: TimelineEvent) : RoomDetailActions()
     data class LoadMoreTimelineEvents(val direction: Timeline.Direction) : RoomDetailActions()

@@ -48,3 +48,10 @@ fun EditText.showPassword(visible: Boolean, updateCursor: Boolean = true) {
     }
     if (updateCursor) setSelection(text?.length ?: 0)
 }
+
+fun View.getMeasurements(): Pair<Int, Int> {
+    measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
+    val width = measuredWidth
+    val height = measuredHeight
+    return width to height
+}

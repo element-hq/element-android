@@ -22,6 +22,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -51,8 +52,9 @@ const val PERMISSIONS_FOR_MEMBER_DETAILS = PERMISSION_READ_CONTACTS
 const val PERMISSIONS_FOR_ROOM_AVATAR = PERMISSION_CAMERA
 const val PERMISSIONS_FOR_VIDEO_RECORDING = PERMISSION_CAMERA or PERMISSION_RECORD_AUDIO
 const val PERMISSIONS_FOR_WRITING_FILES = PERMISSION_WRITE_EXTERNAL_STORAGE
+const val PERMISSIONS_FOR_PICKING_CONTACT = PERMISSION_READ_CONTACTS
 
-private const val PERMISSIONS_EMPTY = PERMISSION_BYPASSED
+const val PERMISSIONS_EMPTY = PERMISSION_BYPASSED
 
 // Request code to ask permission to the system (arbitrary values)
 const val PERMISSION_REQUEST_CODE = 567
@@ -64,6 +66,7 @@ const val PERMISSION_REQUEST_CODE_VIDEO_CALL = 572
 const val PERMISSION_REQUEST_CODE_EXPORT_KEYS = 573
 const val PERMISSION_REQUEST_CODE_CHANGE_AVATAR = 574
 const val PERMISSION_REQUEST_CODE_DOWNLOAD_FILE = 575
+const val PERMISSION_REQUEST_CODE_PICK_ATTACHMENT = 576
 
 /**
  * Log the used permissions statuses.
@@ -98,8 +101,9 @@ fun logPermissionStatuses(context: Context) {
  */
 fun checkPermissions(permissionsToBeGrantedBitMap: Int,
                      activity: Activity,
-                     requestCode: Int = PERMISSION_REQUEST_CODE): Boolean {
-    return checkPermissions(permissionsToBeGrantedBitMap, activity, null, requestCode)
+                     requestCode: Int,
+                     @StringRes rationaleMessage: Int = 0): Boolean {
+    return checkPermissions(permissionsToBeGrantedBitMap, activity, null, requestCode, rationaleMessage)
 }
 
 /**
@@ -111,8 +115,9 @@ fun checkPermissions(permissionsToBeGrantedBitMap: Int,
  */
 fun checkPermissions(permissionsToBeGrantedBitMap: Int,
                      fragment: Fragment,
-                     requestCode: Int = PERMISSION_REQUEST_CODE): Boolean {
-    return checkPermissions(permissionsToBeGrantedBitMap, fragment.activity, fragment, requestCode)
+                     requestCode: Int,
+                     @StringRes rationaleMessage: Int = 0): Boolean {
+    return checkPermissions(permissionsToBeGrantedBitMap, fragment.activity, fragment, requestCode, rationaleMessage)
 }
 
 /**
@@ -136,7 +141,9 @@ fun checkPermissions(permissionsToBeGrantedBitMap: Int,
 private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
                              activity: Activity?,
                              fragment: Fragment?,
-                             requestCode: Int): Boolean {
+                             requestCode: Int,
+                             @StringRes rationaleMessage: Int
+                             ): Boolean {
     var isPermissionGranted = false
 
     // sanity check
@@ -159,7 +166,6 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
         val permissionListAlreadyDenied = ArrayList<String>()
         val permissionsListToBeGranted = ArrayList<String>()
         var isRequestPermissionRequired = false
-        var explanationMessage = ""
 
         // retrieve the permissions to be granted according to the request code bit map
         if (PERMISSION_CAMERA == permissionsToBeGrantedBitMap and PERMISSION_CAMERA) {
@@ -199,58 +205,11 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
         }
 
         // if some permissions were already denied: display a dialog to the user before asking again.
-        if (!permissionListAlreadyDenied.isEmpty()) {
-            if (permissionsToBeGrantedBitMap == PERMISSIONS_FOR_VIDEO_IP_CALL || permissionsToBeGrantedBitMap == PERMISSIONS_FOR_AUDIO_IP_CALL) {
-                // Permission request for VOIP call
-                if (permissionListAlreadyDenied.contains(Manifest.permission.CAMERA)
-                        && permissionListAlreadyDenied.contains(Manifest.permission.RECORD_AUDIO)) {
-                    // Both missing
-                    explanationMessage += activity.getString(R.string.permissions_rationale_msg_camera_and_audio)
-                } else if (permissionListAlreadyDenied.contains(Manifest.permission.RECORD_AUDIO)) {
-                    // Audio missing
-                    explanationMessage += activity.getString(R.string.permissions_rationale_msg_record_audio)
-                    explanationMessage += activity.getString(R.string.permissions_rationale_msg_record_audio_explanation)
-                } else if (permissionListAlreadyDenied.contains(Manifest.permission.CAMERA)) {
-                    // Camera missing
-                    explanationMessage += activity.getString(R.string.permissions_rationale_msg_camera)
-                    explanationMessage += activity.getString(R.string.permissions_rationale_msg_camera_explanation)
-                }
-            } else {
-                permissionListAlreadyDenied.forEach {
-                    when (it) {
-                        Manifest.permission.CAMERA                 -> {
-                            if (explanationMessage.isNotEmpty()) {
-                                explanationMessage += "\n\n"
-                            }
-                            explanationMessage += activity.getString(R.string.permissions_rationale_msg_camera)
-                        }
-                        Manifest.permission.RECORD_AUDIO           -> {
-                            if (explanationMessage.isNotEmpty()) {
-                                explanationMessage += "\n\n"
-                            }
-                            explanationMessage += activity.getString(R.string.permissions_rationale_msg_record_audio)
-                        }
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE -> {
-                            if (explanationMessage.isNotEmpty()) {
-                                explanationMessage += "\n\n"
-                            }
-                            explanationMessage += activity.getString(R.string.permissions_rationale_msg_storage)
-                        }
-                        Manifest.permission.READ_CONTACTS          -> {
-                            if (!explanationMessage.isEmpty()) {
-                                explanationMessage += "\n\n"
-                            }
-                            explanationMessage += activity.getString(R.string.permissions_rationale_msg_contacts)
-                        }
-                        else                                       -> Timber.v("## checkPermissions(): already denied permission not supported")
-                    }
-                }
-            }
-
+        if (permissionListAlreadyDenied.isNotEmpty() && rationaleMessage != 0) {
             // display the dialog with the info text
             AlertDialog.Builder(activity)
                     .setTitle(R.string.permissions_rationale_popup_title)
-                    .setMessage(explanationMessage)
+                    .setMessage(rationaleMessage)
                     .setOnCancelListener { Toast.makeText(activity, R.string.missing_permissions_warning, Toast.LENGTH_SHORT).show() }
                     .setPositiveButton(R.string.ok) { _, _ ->
                         if (permissionsListToBeGranted.isNotEmpty()) {

@@ -17,9 +17,9 @@
 package im.vector.riotx.features.home.room.detail.composer
 
 import android.content.Context
+import android.net.Uri
 import android.util.AttributeSet
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -39,6 +39,10 @@ import im.vector.riotx.R
 class TextComposerView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null,
                                                  defStyleAttr: Int = 0) : ConstraintLayout(context, attrs, defStyleAttr) {
 
+    interface Callback : ComposerEditText.Callback
+
+    var callback: Callback? = null
+
     @BindView(R.id.composer_related_message_sender)
     lateinit var composerRelatedMessageTitle: TextView
     @BindView(R.id.composer_related_message_preview)
@@ -50,11 +54,11 @@ class TextComposerView @JvmOverloads constructor(context: Context, attrs: Attrib
     @BindView(R.id.composer_related_message_close)
     lateinit var composerRelatedMessageCloseButton: ImageButton
     @BindView(R.id.composerEditText)
-    lateinit var composerEditText: EditText
+    lateinit var composerEditText: ComposerEditText
     @BindView(R.id.composer_avatar_view)
     lateinit var composerAvatarImageView: ImageView
 
-    var currentConstraintSetId: Int = -1
+    private var currentConstraintSetId: Int = -1
 
     private val animationDuration = 100L
 
@@ -62,6 +66,11 @@ class TextComposerView @JvmOverloads constructor(context: Context, attrs: Attrib
         inflate(context, R.layout.merge_composer_layout, this)
         ButterKnife.bind(this)
         collapse(false)
+        composerEditText.callback = object : Callback, ComposerEditText.Callback {
+            override fun onRichContentSelected(contentUri: Uri): Boolean {
+                return callback?.onRichContentSelected(contentUri) ?: false
+            }
+        }
     }
 
     fun collapse(animate: Boolean = true, transitionComplete: (() -> Unit)? = null) {

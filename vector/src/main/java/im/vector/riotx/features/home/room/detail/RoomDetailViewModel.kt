@@ -16,7 +16,6 @@
 
 package im.vector.riotx.features.home.room.detail
 
-import android.net.Uri
 import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -27,7 +26,6 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.MatrixPatterns
 import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.isImageMessage
 import im.vector.matrix.android.api.session.events.model.isTextMessage
@@ -49,8 +47,6 @@ import im.vector.matrix.rx.unwrap
 import im.vector.riotx.BuildConfig
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.postLiveEvent
-import im.vector.riotx.core.images.ImageTools
-import im.vector.riotx.core.intent.getFilenameFromUri
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.UserPreferencesProvider
 import im.vector.riotx.core.utils.LiveEvent
@@ -69,7 +65,6 @@ import java.util.concurrent.TimeUnit
 class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: RoomDetailViewState,
                                                       userPreferencesProvider: UserPreferencesProvider,
                                                       private val vectorPreferences: VectorPreferences,
-                                                      private val imageTools: ImageTools,
                                                       private val session: Session
 ) : VectorViewModel<RoomDetailViewState>(initialState) {
 
@@ -471,32 +466,8 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun handleSendMedia(action: RoomDetailActions.SendMedia) {
-        val attachments = action.mediaFiles.map {
-            val pathWithScheme = if (it.path.startsWith("/")) {
-                "file://" + it.path
-            } else {
-                it.path
-            }
-
-            val uri = Uri.parse(pathWithScheme)
-            val nameWithExtension = getFilenameFromUri(null, uri)
-
-            ContentAttachmentData(
-                    size = it.size,
-                    duration = it.duration,
-                    date = it.date,
-                    height = it.height,
-                    width = it.width,
-                    exifOrientation = imageTools.getOrientationForBitmap(uri),
-                    name = nameWithExtension ?: it.name,
-                    path = it.path,
-                    mimeType = it.mimeType,
-                    type = ContentAttachmentData.Type.values()[it.mediaType]
-            )
-        }
-
+        val attachments = action.attachments
         val homeServerCapabilities = session.getHomeServerCapabilities()
-
         val maxUploadFileSize = homeServerCapabilities.maxUploadFileSize
 
         if (maxUploadFileSize == HomeServerCapabilities.MAX_UPLOAD_FILE_SIZE_UNKNOWN) {
@@ -505,7 +476,8 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         } else {
             when (val tooBigFile = attachments.find { it.size > maxUploadFileSize }) {
                 null -> room.sendMedias(attachments)
-                else -> _fileTooBigEvent.postValue(LiveEvent(FileTooBigError(tooBigFile.name ?: tooBigFile.path, tooBigFile.size, maxUploadFileSize)))
+                else -> _fileTooBigEvent.postValue(LiveEvent(FileTooBigError(tooBigFile.name
+                        ?: tooBigFile.path, tooBigFile.size, maxUploadFileSize)))
             }
         }
     }

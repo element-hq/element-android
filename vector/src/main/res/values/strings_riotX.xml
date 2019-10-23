@@ -37,6 +37,14 @@
 
     <string name="error_file_too_big">"The file '%1$s' (%2$s) is too large to upload. The limit is %3$s."</string>
 
+    <string name="error_attachment">"An error occurred while retrieving the attachment."</string>
+    <string name="attachment_type_file">"File"</string>
+    <string name="attachment_type_contact">"Contact"</string>
+    <string name="attachment_type_camera">"Camera"</string>
+    <string name="attachment_type_audio">"Audio"</string>
+    <string name="attachment_type_gallery">"Gallery"</string>
+    <string name="attachment_type_sticker">"Sticker"</string>
+    <string name="error_handling_incoming_share">Couldn\'t handle share data</string>
 
     <string name="report_content_spam">"It's spam"</string>
     <string name="report_content_inappropriate">"It's inappropriate"</string>
@@ -52,4 +60,7 @@
     <string name="content_reported_as_spam_content">"This content was reported as spam.\n\nIf you don't want to see any more content from this user, you can block him to hide his messages"</string>
     <string name="content_reported_as_inappropriate_title">"Reported as inappropriate"</string>
     <string name="content_reported_as_inappropriate_content">"This content was reported as inappropriate.\n\nIf you don't want to see any more content from this user, you can block him to hide his messages"</string>
+
+    <string name="permissions_rationale_msg_keys_backup_export">Riot needs permission to save your E2E keys on disk.\n\nPlease allow access on the next pop-up to be able to export your keys manually.</string>
+
 </resources>
