@@ -5,5 +5,4 @@ object LocalEcho {
     const val PREFIX = "local."
 
     fun isLocalEchoId(eventId: String): Boolean = eventId.startsWith(PREFIX)
-
 }
