@@ -87,7 +87,7 @@ internal class RoomSummaryUpdater @Inject constructor(@UserId private val userId
             roomSummaryEntity.membership = membership
         }
 
-        val latestPreviewableEvent = TimelineEventEntity.latestEvent(realm, roomId, includesSending = true, includedTypes = PREVIEWABLE_TYPES)
+        val latestPreviewableEvent = TimelineEventEntity.latestEvent(realm, roomId, includesSending = true, filterTypes = PREVIEWABLE_TYPES)
         val lastTopicEvent = EventEntity.where(realm, roomId, EventType.STATE_ROOM_TOPIC).prev()?.asDomain()
 
         roomSummaryEntity.hasUnreadMessages = roomSummaryEntity.notificationCount > 0
