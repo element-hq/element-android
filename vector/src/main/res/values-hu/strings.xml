@@ -1698,6 +1698,6 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="settings_discovery_no_terms">Az általad választott azonosítási szervernek nincs felhasználási feltétele. Csak akkor lépj tovább ha megbízol a szolgáltatás tulajdonosában</string>
     <string name="settings_text_message_sent">Szöveges üzenetet küldtünk ide: %s. Kérlek add meg az ellenőrző kódot amit az üzenet tartalmaz.</string>
 
-    <string name="settings_discovery_disconnect_with_bound_pid">Az azonosítási szerverrel (%s) megosztod az e-mail címeket és telefonszámokat. Újra kell csatlakoznod ehhez: %s, hogy megállítsd a megosztást.</string>
+    <string name="settings_discovery_disconnect_with_bound_pid">Az azonosítási szerverrel (%1$s) megosztod az e-mail címeket és telefonszámokat. Újra kell csatlakoznod ehhez: %2$s, hogy megállítsd a megosztást.</string>
     <string name="settings_agree_to_terms">Egyetértek az azonosítási szerver (%s) Felhasználási feltételeivel ahhoz, hogy megtalálható legyek e-mail címmel vagy telefonszámmal.</string>
 </resources>

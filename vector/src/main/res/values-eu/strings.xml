@@ -1695,6 +1695,6 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="settings_discovery_no_terms">Hautatu duzun identitate-zerbitzariak ez du erabilera baldintzarik. Jarraitu soilik zerbitzuaren jabea fidagarritzat jotzen baduzu</string>
     <string name="settings_text_message_sent">SMS mezu bat bidali zaizu %s zenbakira. Sartu hemen mezu horrek daukan egiaztatze-kodea.</string>
 
-    <string name="settings_discovery_disconnect_with_bound_pid">Orain e-mail helbideak edo telefono zenbakiak partekatzen dituzu %s zerbitzarian. %s zerbitzarira konektatu beharko zara partekatzeari uzteko.</string>
+    <string name="settings_discovery_disconnect_with_bound_pid">Orain e-mail helbideak edo telefono zenbakiak partekatzen dituzu %1$s zerbitzarian. %2$s zerbitzarira konektatu beharko zara partekatzeari uzteko.</string>
     <string name="settings_agree_to_terms">Onartu %s identitate-zerbitzariaren erabilera baldintzak besteek zu e-mail helbidea edo telefonoa erabiliz aurkitzea ahalbidetzeko.</string>
 </resources>

@@ -1652,6 +1652,6 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="settings_discovery_no_terms">Shërbyesi i identiteteve që keni zgjedhur nuk ka ndonjë kusht shërbimi. Vazhdoni vetëm nëse i zini besë të zotit të shërbimit</string>
     <string name="settings_text_message_sent">Te %s u dërgua një mesazh tekst. Ju lutemi, jepni kodin e verifikimit që përmban ai.</string>
 
-    <string name="settings_discovery_disconnect_with_bound_pid">Hëpërhë, ndani me të tjerë adresa email ose numra telefoni te shërbyesi i identiteteve %s. Do të duhet të rilidheni me %s që të ndalni ndarjen e tyre.</string>
+    <string name="settings_discovery_disconnect_with_bound_pid">Hëpërhë, ndani me të tjerë adresa email ose numra telefoni te shërbyesi i identiteteve %1$s. Do të duhet të rilidheni me %2$s që të ndalni ndarjen e tyre.</string>
     <string name="settings_agree_to_terms">Që të lejoni veten të jetë e zbulueshme nga adresë email apo numër telefoni, pajtohuni me Kushtet e Shërbimit të shërbyesit të identiteteve (%s).</string>
 </resources>

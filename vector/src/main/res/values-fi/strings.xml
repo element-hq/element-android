@@ -1655,6 +1655,6 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="settings_discovery_please_enter_server">Syötä identiteettipalvelimen URL-osoite</string>
     <string name="settings_discovery_no_terms_title">Identiteettipalvelimella ei ole käyttöehtoja</string>
     <string name="settings_discovery_no_terms">Valitsemallasi identiteettipalvelimella ei ole käyttöehtoja. Jatka vain, jos luotat palvelun omistajaan</string>
-    <string name="settings_discovery_disconnect_with_bound_pid">Jaat sähköpostiosoitteita tai puhelinnumeroita identiteettipalvelimella %s. Sinun täytyy yhdistää uudelleen palvelimeen %s, jotta voit lopettaa niiden jakamisen.</string>
+    <string name="settings_discovery_disconnect_with_bound_pid">Jaat sähköpostiosoitteita tai puhelinnumeroita identiteettipalvelimella %1$s. Sinun täytyy yhdistää uudelleen palvelimeen %2$s, jotta voit lopettaa niiden jakamisen.</string>
     <string name="settings_agree_to_terms">Hyväksy identiteettipalvelimen (%s) käyttöehdot salliaksesi, että sinut voi löytää sähköpostiosoitteen tai puhelinnumeron perusteella.</string>
 </resources>

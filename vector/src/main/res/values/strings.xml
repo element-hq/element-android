@@ -1706,7 +1706,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="settings_discovery_no_terms">The identity server you have chosen does not have any terms of services. Only continue if you trust the owner of the service</string>
     <string name="settings_text_message_sent">A text message has been sent to %s. Please enter the verification code it contains.</string>
 
-    <string name="settings_discovery_disconnect_with_bound_pid">You are currently sharing email addresses or phone numbers on the identity server %s. You will need to reconnect to %s to stop sharing them.</string>
+    <string name="settings_discovery_disconnect_with_bound_pid">You are currently sharing email addresses or phone numbers on the identity server %1$s. You will need to reconnect to %2$s to stop sharing them.</string>
     <string name="settings_agree_to_terms">Agree to the identity server (%s) Terms of Service to allow yourself to be discoverable by email address or phone number.</string>
 
     <string name="labs_allow_extended_logging">Enable verbose logs.</string>

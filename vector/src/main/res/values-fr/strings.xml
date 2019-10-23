@@ -1699,6 +1699,6 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="settings_discovery_no_terms">Le serveur d’identité qui vous avez choisi n’a pas de conditions de service. Continuez uniquement si vous faites confiance au propriétaire de ce service</string>
     <string name="settings_text_message_sent">Un SMS a été envoyé à %s. Saisissez le code de vérification qu’il contient.</string>
 
-    <string name="settings_discovery_disconnect_with_bound_pid">Vous partagez actuellement des adresse e-mails et des numéros de téléphone sur le serveur d’identité %s. Vous devrez vous reconnecter à %s pour arrêter de les partager.</string>
+    <string name="settings_discovery_disconnect_with_bound_pid">Vous partagez actuellement des adresse e-mails et des numéros de téléphone sur le serveur d’identité %1$s. Vous devrez vous reconnecter à %2$s pour arrêter de les partager.</string>
     <string name="settings_agree_to_terms">Acceptez les conditions de service du serveur d’identité (%s) pour vous permettre d’être découvrable avec une adresse e-mail ou un numéro de téléphone.</string>
 </resources>
