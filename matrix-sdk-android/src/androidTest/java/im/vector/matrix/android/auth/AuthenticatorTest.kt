@@ -17,8 +17,8 @@
 package im.vector.matrix.android.auth
 
 import androidx.test.annotation.UiThreadTest
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
-import androidx.test.runner.AndroidJUnit4
 import im.vector.matrix.android.InstrumentedTest
 import im.vector.matrix.android.OkReplayRuleChainNoActivity
 import im.vector.matrix.android.api.auth.Authenticator

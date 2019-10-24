@@ -17,12 +17,12 @@
 package im.vector.matrix.android
 
 import android.content.Context
-import androidx.test.InstrumentationRegistry
+import androidx.test.core.app.ApplicationProvider
 import java.io.File
 
 interface InstrumentedTest {
     fun context(): Context {
-        return InstrumentationRegistry.getTargetContext()
+        return ApplicationProvider.getApplicationContext()
     }
 
     fun cacheDir(): File {

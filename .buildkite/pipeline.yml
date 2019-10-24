@@ -4,13 +4,25 @@
 # We propagate the environment to the container (sse https://github.com/buildkite-plugins/docker-buildkite-plugin#propagate-environment-optional-boolean)
 
 steps:
-  - label: "Unit test"
+  - label: "Compile and run Unit tests"
     agents:
       # We use a medium sized instance instead of the normal small ones because
       # gradle build is long
       queue: "medium"
     commands:
       - "./gradlew clean test --stacktrace"
+    plugins:
+      - docker#v3.1.0:
+          image: "runmymind/docker-android-sdk"
+          propagate-environment: true
+
+  - label: "Compile Android tests"
+    agents:
+      # We use a medium sized instance instead of the normal small ones because
+      # gradle build is long
+      queue: "medium"
+    commands:
+      - "./gradlew clean assembleAndroidTest --stacktrace"
     plugins:
       - docker#v3.1.0:
           image: "runmymind/docker-android-sdk"
