@@ -20,6 +20,8 @@ import androidx.annotation.StringRes
 import com.airbnb.epoxy.EpoxyController
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.riotx.R
+import im.vector.riotx.core.epoxy.noResultItem
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.home.room.filtered.FilteredRoomFooterItem
 import im.vector.riotx.features.home.room.filtered.filteredRoomFooterItem
@@ -47,24 +49,28 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
 
     override fun buildModels() {
         val nonNullViewState = viewState ?: return
-        if (nonNullViewState.displayMode == RoomListFragment.DisplayMode.FILTERED) {
-            buildFilteredRooms(nonNullViewState)
-        } else {
-            val roomSummaries = nonNullViewState.asyncFilteredRooms()
-            roomSummaries?.forEach { (category, summaries) ->
-                if (summaries.isEmpty()) {
-                    return@forEach
-                } else {
-                    val isExpanded = nonNullViewState.isCategoryExpanded(category)
-                    buildRoomCategory(nonNullViewState, summaries, category.titleRes, nonNullViewState.isCategoryExpanded(category)) {
-                        listener?.onToggleRoomCategory(category)
-                    }
-                    if (isExpanded) {
-                        buildRoomModels(summaries,
-                                        nonNullViewState.joiningRoomsIds,
-                                        nonNullViewState.joiningErrorRoomsIds,
-                                        nonNullViewState.rejectingRoomsIds,
-                                        nonNullViewState.rejectingErrorRoomsIds)
+        when (nonNullViewState.displayMode) {
+            RoomListFragment.DisplayMode.FILTERED,
+            RoomListFragment.DisplayMode.SHARE -> {
+                buildFilteredRooms(nonNullViewState)
+            }
+            else                               -> {
+                val roomSummaries = nonNullViewState.asyncFilteredRooms()
+                roomSummaries?.forEach { (category, summaries) ->
+                    if (summaries.isEmpty()) {
+                        return@forEach
+                    } else {
+                        val isExpanded = nonNullViewState.isCategoryExpanded(category)
+                        buildRoomCategory(nonNullViewState, summaries, category.titleRes, nonNullViewState.isCategoryExpanded(category)) {
+                            listener?.onToggleRoomCategory(category)
+                        }
+                        if (isExpanded) {
+                            buildRoomModels(summaries,
+                                    nonNullViewState.joiningRoomsIds,
+                                    nonNullViewState.joiningErrorRoomsIds,
+                                    nonNullViewState.rejectingRoomsIds,
+                                    nonNullViewState.rejectingErrorRoomsIds)
+                        }
                     }
                 }
             }
@@ -80,12 +86,15 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
                 .filter { it.membership == Membership.JOIN && roomListNameFilter.test(it) }
 
         buildRoomModels(filteredSummaries,
-                        viewState.joiningRoomsIds,
-                        viewState.joiningErrorRoomsIds,
-                        viewState.rejectingRoomsIds,
-                        viewState.rejectingErrorRoomsIds)
+                viewState.joiningRoomsIds,
+                viewState.joiningErrorRoomsIds,
+                viewState.rejectingRoomsIds,
+                viewState.rejectingErrorRoomsIds)
 
-        addFilterFooter(viewState)
+        when {
+            viewState.displayMode == RoomListFragment.DisplayMode.FILTERED -> addFilterFooter(viewState)
+            filteredSummaries.isEmpty()                                    -> addEmptyFooter()
+        }
     }
 
     private fun addFilterFooter(viewState: RoomListViewState) {
@@ -93,6 +102,13 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
             id("filter_footer")
             listener(listener)
             currentFilter(viewState.roomFilter)
+        }
+    }
+
+    private fun addEmptyFooter() {
+        noResultItem {
+            id("no_result")
+            text(stringProvider.getString(R.string.no_result_placeholder))
         }
     }
 
