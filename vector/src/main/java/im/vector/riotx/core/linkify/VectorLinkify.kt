@@ -94,7 +94,7 @@ object VectorLinkify {
             createdSpans.add(LinkSpec(URLSpan(urlSpan.url), start, end))
         }
 
-        LinkifyCompat.addLinks(spannable, VectorAutoLinkPatterns.GEO_URI, "geo:", arrayOf("geo:"), geoMatchFilter, null)
+        LinkifyCompat.addLinks(spannable, VectorAutoLinkPatterns.GEO_URI.toPattern(), "geo:", arrayOf("geo:"), geoMatchFilter, null)
         spannable.forEachSpanIndexed { _, urlSpan, start, end ->
             spannable.removeSpan(urlSpan)
             createdSpans.add(LinkSpec(URLSpan(urlSpan.url), start, end))

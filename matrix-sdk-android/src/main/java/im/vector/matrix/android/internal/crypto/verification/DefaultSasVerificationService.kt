@@ -342,10 +342,8 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
     private fun addTransaction(tx: VerificationTransaction) {
         tx.otherUserId.let { otherUserId ->
             synchronized(txMap) {
-                if (txMap[otherUserId] == null) {
-                    txMap[otherUserId] = HashMap()
-                }
-                txMap[otherUserId]?.set(tx.transactionId, tx)
+                val txInnerMap = txMap.getOrPut(otherUserId) { HashMap() }
+                txInnerMap[tx.transactionId] = tx
                 dispatchTxAdded(tx)
                 tx.addListener(this)
             }

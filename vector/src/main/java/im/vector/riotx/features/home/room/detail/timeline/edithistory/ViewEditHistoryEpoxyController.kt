@@ -94,7 +94,7 @@ class ViewEditHistoryEpoxyController(private val context: Context,
                 val body = cContent.second?.let { eventHtmlRenderer.render(it) }
                         ?: cContent.first
 
-                val nextEvent = if (index + 1 <= sourceEvents.lastIndex) sourceEvents[index + 1] else null
+                val nextEvent = sourceEvents.getOrNull(index + 1)
 
                 var spannedDiff: Spannable? = null
                 if (nextEvent != null && cContent.second == null /*No diff for html*/) {
