@@ -30,7 +30,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import im.vector.riotx.core.di.DaggerScreenComponent
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.utils.DimensionConverter
-import java.util.*
+import java.util.UUID
 
 /**
  * Add MvRx capabilities to bottomsheetdialog (like BaseMvRxFragment)

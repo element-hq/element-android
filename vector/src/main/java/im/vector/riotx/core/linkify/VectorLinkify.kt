@@ -19,7 +19,6 @@ import android.text.Spannable
 import android.text.style.URLSpan
 import android.text.util.Linkify
 import androidx.core.text.util.LinkifyCompat
-import java.util.*
 
 object VectorLinkify {
     /**
@@ -108,7 +107,7 @@ object VectorLinkify {
     }
 
     private fun pruneOverlaps(links: ArrayList<LinkSpec>) {
-        Collections.sort(links, COMPARATOR)
+        links.sortWith(COMPARATOR)
         var len = links.size
         var i = 0
         while (i < len - 1) {

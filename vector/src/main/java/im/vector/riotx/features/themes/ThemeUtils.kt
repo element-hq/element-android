@@ -28,7 +28,6 @@ import androidx.core.graphics.drawable.DrawableCompat
 import androidx.preference.PreferenceManager
 import im.vector.riotx.R
 import timber.log.Timber
-import java.util.*
 
 /**
  * Util class for managing themes.
