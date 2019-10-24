@@ -24,5 +24,4 @@ interface SecureStorageService {
     fun securelyStoreObject(any: Any, keyAlias: String, outputStream: OutputStream)
 
     fun <T> loadSecureSecret(inputStream: InputStream, keyAlias: String): T?
-
 }

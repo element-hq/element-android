@@ -16,13 +16,11 @@
 
 package im.vector.matrix.android.internal.crypto.tasks
 
-import android.text.TextUtils
 import im.vector.matrix.android.internal.crypto.api.CryptoApi
 import im.vector.matrix.android.internal.crypto.model.rest.KeysQueryBody
 import im.vector.matrix.android.internal.crypto.model.rest.KeysQueryResponse
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
-import java.util.*
 import javax.inject.Inject
 
 internal interface DownloadKeysForUsersTask : Task<DownloadKeysForUsersTask.Params, KeysQueryResponse> {
@@ -37,19 +35,13 @@ internal class DefaultDownloadKeysForUsers @Inject constructor(private val crypt
     : DownloadKeysForUsersTask {
 
     override suspend fun execute(params: DownloadKeysForUsersTask.Params): KeysQueryResponse {
-        val downloadQuery = HashMap<String, Map<String, Any>>()
-
-        if (null != params.userIds) {
-            for (userId in params.userIds) {
-                downloadQuery[userId] = HashMap()
-            }
-        }
+        val downloadQuery = params.userIds?.associateWith { emptyMap<String, Any>() }.orEmpty()
 
         val body = KeysQueryBody(
                 deviceKeys = downloadQuery
         )
 
-        if (!TextUtils.isEmpty(params.token)) {
+        if (!params.token.isNullOrEmpty()) {
             body.token = params.token
         }
 

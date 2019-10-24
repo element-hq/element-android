@@ -16,6 +16,7 @@
 package im.vector.matrix.android.internal.database.query
 
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.api.session.events.model.LocalEcho
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.ReadReceiptEntity
 
@@ -26,7 +27,9 @@ internal fun isEventRead(monarchy: Monarchy,
     if (userId.isNullOrBlank() || roomId.isNullOrBlank() || eventId.isNullOrBlank()) {
         return false
     }
-
+    if (LocalEcho.isLocalEchoId(eventId)) {
+        return true
+    }
     var isEventRead = false
 
     monarchy.doWithRealm { realm ->

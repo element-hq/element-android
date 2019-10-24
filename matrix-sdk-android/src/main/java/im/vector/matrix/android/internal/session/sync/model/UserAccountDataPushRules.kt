@@ -24,4 +24,3 @@ import im.vector.matrix.android.api.pushrules.rest.GetPushRulesResponse
 internal data class UserAccountDataPushRules(
         @Json(name = "content") val content: GetPushRulesResponse
 ) : UserAccountData
-

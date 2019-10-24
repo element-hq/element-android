@@ -94,7 +94,6 @@ class SASVerificationIncomingFragment : VectorBaseFragment() {
                 else                                                              -> Unit
             }
         })
-
     }
 
     @OnClick(R.id.sas_request_continue_button)

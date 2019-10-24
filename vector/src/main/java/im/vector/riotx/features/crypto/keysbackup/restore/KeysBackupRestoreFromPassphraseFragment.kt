@@ -79,7 +79,6 @@ class KeysBackupRestoreFromPassphraseFragment : VectorBaseFragment() {
             ViewModelProviders.of(this, viewModelFactory).get(KeysBackupRestoreSharedViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
 
-
         viewModel.passphraseErrorText.observe(this, Observer { newValue ->
             mPassphraseInputLayout.error = newValue
         })
@@ -99,7 +98,6 @@ class KeysBackupRestoreFromPassphraseFragment : VectorBaseFragment() {
             }
             return@setOnEditorActionListener false
         }
-
     }
 
     private fun spannableStringForHelperText(context: Context): SpannableString {
@@ -137,5 +135,4 @@ class KeysBackupRestoreFromPassphraseFragment : VectorBaseFragment() {
             viewModel.recoverKeys(context!!, sharedViewModel)
         }
     }
-
 }

@@ -36,6 +36,8 @@ import me.saket.bettermovementmethod.BetterLinkMovementMethod
 abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
 
     @EpoxyAttribute
+    var searchForPills: Boolean = false
+    @EpoxyAttribute
     var message: CharSequence? = null
     @EpoxyAttribute
     var useBigFont: Boolean = false
@@ -46,41 +48,40 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
     // long pressing to open the context menu on a TextView also triggers an autoLink click.
     private val mvmtMethod = BetterLinkMovementMethod.newInstance().also {
         it.setOnLinkClickListener { _, url ->
-            //Return false to let android manage the click on the link, or true if the link is handled by the application
+            // Return false to let android manage the click on the link, or true if the link is handled by the application
             urlClickCallback?.onUrlClicked(url) == true
         }
-        //We need also to fix the case when long click on link will trigger long click on cell
+        // We need also to fix the case when long click on link will trigger long click on cell
         it.setOnLinkLongClickListener { tv, url ->
-            //Long clicks are handled by parent, return true to block android to do something with url
+            // Long clicks are handled by parent, return true to block android to do something with url
             if (urlClickCallback?.onUrlLongClicked(url) == true) {
                 tv.dispatchTouchEvent(MotionEvent.obtain(0, 0, MotionEvent.ACTION_CANCEL, 0f, 0f, 0))
                 true
             } else {
                 false
             }
-
         }
     }
 
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.messageView.movementMethod = mvmtMethod
-
         if (useBigFont) {
             holder.messageView.textSize = 44F
         } else {
             holder.messageView.textSize = 14F
         }
-
-        val textFuture = PrecomputedTextCompat.getTextFuture(message ?: "",
+        renderSendState(holder.messageView, holder.messageView)
+        holder.messageView.setOnClickListener(attributes.itemClickListener)
+        holder.messageView.setOnLongClickListener(attributes.itemLongClickListener)
+        if (searchForPills) {
+            findPillsAndProcess { it.bind(holder.messageView) }
+        }
+        val textFuture = PrecomputedTextCompat.getTextFuture(
+                message ?: "",
                 TextViewCompat.getTextMetricsParams(holder.messageView),
                 null)
-
         holder.messageView.setTextFuture(textFuture)
-        renderSendState(holder.messageView, holder.messageView)
-        holder.messageView.setOnClickListener(cellClickListener)
-        holder.messageView.setOnLongClickListener(longClickListener)
-        findPillsAndProcess { it.bind(holder.messageView) }
     }
 
     private fun findPillsAndProcess(processBlock: (span: PillImageSpan) -> Unit) {

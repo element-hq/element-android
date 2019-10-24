@@ -43,12 +43,10 @@ abstract class TroubleshootTest(@StringRes val titleResId: Int) {
 
     var quickFix: TroubleshootQuickFix? = null
 
-
     abstract class TroubleshootQuickFix(@StringRes val title: Int) {
         abstract fun doFix()
     }
 
     open fun cancel() {
-
     }
 }

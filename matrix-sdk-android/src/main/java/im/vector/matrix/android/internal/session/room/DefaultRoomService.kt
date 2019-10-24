@@ -32,6 +32,7 @@ import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.room.create.CreateRoomTask
 import im.vector.matrix.android.internal.session.room.membership.joining.JoinRoomTask
+import im.vector.matrix.android.internal.session.room.read.MarkAllRoomsReadTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import io.realm.Realm
@@ -41,6 +42,7 @@ internal class DefaultRoomService @Inject constructor(private val monarchy: Mona
                                                       private val roomSummaryMapper: RoomSummaryMapper,
                                                       private val createRoomTask: CreateRoomTask,
                                                       private val joinRoomTask: JoinRoomTask,
+                                                      private val markAllRoomsReadTask: MarkAllRoomsReadTask,
                                                       private val roomFactory: RoomFactory,
                                                       private val taskExecutor: TaskExecutor) : RoomService {
 
@@ -76,6 +78,14 @@ internal class DefaultRoomService @Inject constructor(private val monarchy: Mona
     override fun joinRoom(roomId: String, viaServers: List<String>, callback: MatrixCallback<Unit>): Cancelable {
         return joinRoomTask
                 .configureWith(JoinRoomTask.Params(roomId, viaServers)) {
+                    this.callback = callback
+                }
+                .executeBy(taskExecutor)
+    }
+
+    override fun markAllAsRead(roomIds: List<String>, callback: MatrixCallback<Unit>): Cancelable {
+        return markAllRoomsReadTask
+                .configureWith(MarkAllRoomsReadTask.Params(roomIds)) {
                     this.callback = callback
                 }
                 .executeBy(taskExecutor)

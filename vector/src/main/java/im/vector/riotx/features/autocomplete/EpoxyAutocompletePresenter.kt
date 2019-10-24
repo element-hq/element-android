@@ -51,7 +51,6 @@ abstract class EpoxyAutocompletePresenter<T>(context: Context) : AutocompletePre
 
     override fun onViewShown() {}
 
-
     override fun onViewHidden() {
         recyclerView = null
         observer = null

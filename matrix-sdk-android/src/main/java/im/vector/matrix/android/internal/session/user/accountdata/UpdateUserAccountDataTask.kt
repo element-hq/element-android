@@ -37,8 +37,6 @@ internal interface UpdateUserAccountDataTask : Task<UpdateUserAccountDataTask.Pa
             return directMessages
         }
     }
-
-
 }
 
 internal class DefaultUpdateUserAccountDataTask @Inject constructor(private val accountDataApi: AccountDataAPI,
@@ -49,5 +47,4 @@ internal class DefaultUpdateUserAccountDataTask @Inject constructor(private val 
             apiCall = accountDataApi.setAccountData(userId, params.type, params.getData())
         }
     }
-
 }

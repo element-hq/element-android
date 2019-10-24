@@ -23,6 +23,7 @@ import androidx.lifecycle.LiveData
 import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.SessionParams
+import im.vector.matrix.android.api.failure.ConsentNotGivenError
 import im.vector.matrix.android.api.pushrules.PushRuleService
 import im.vector.matrix.android.api.session.InitialSyncProgressService
 import im.vector.matrix.android.api.session.Session
@@ -32,6 +33,7 @@ import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.file.FileService
 import im.vector.matrix.android.api.session.group.GroupService
+import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilitiesService
 import im.vector.matrix.android.api.session.pushers.PushersService
 import im.vector.matrix.android.api.session.room.RoomDirectoryService
 import im.vector.matrix.android.api.session.room.RoomService
@@ -44,6 +46,9 @@ import im.vector.matrix.android.internal.crypto.DefaultCryptoService
 import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.session.sync.job.SyncThread
 import im.vector.matrix.android.internal.session.sync.job.SyncWorker
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Provider
@@ -68,7 +73,8 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
                                                   private val syncThreadProvider: Provider<SyncThread>,
                                                   private val contentUrlResolver: ContentUrlResolver,
                                                   private val contentUploadProgressTracker: ContentUploadStateTracker,
-                                                  private val initialSyncProgressService: Lazy<InitialSyncProgressService>)
+                                                  private val initialSyncProgressService: Lazy<InitialSyncProgressService>,
+                                                  private val homeServerCapabilitiesService: Lazy<HomeServerCapabilitiesService>)
     : Session,
         RoomService by roomService.get(),
         RoomDirectoryService by roomDirectoryService.get(),
@@ -81,7 +87,8 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
         PushersService by pushersService.get(),
         FileService by fileService.get(),
         InitialSyncProgressService by initialSyncProgressService.get(),
-        SecureStorageService by secureStorageService.get() {
+        SecureStorageService by secureStorageService.get(),
+        HomeServerCapabilitiesService by homeServerCapabilitiesService.get() {
 
     private var isOpen = false
 
@@ -93,6 +100,7 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
         assert(!isOpen)
         isOpen = true
         liveEntityObservers.forEach { it.start() }
+        EventBus.getDefault().register(this)
     }
 
     override fun requireBackgroundSync() {
@@ -132,6 +140,7 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
         liveEntityObservers.forEach { it.dispose() }
         cryptoService.get().close()
         isOpen = false
+        EventBus.getDefault().unregister(this)
     }
 
     override fun syncState(): LiveData<SyncState> {
@@ -160,6 +169,11 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
         })
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onConsentNotGivenError(consentNotGivenError: ConsentNotGivenError) {
+        sessionListeners.dispatchConsentNotGiven(consentNotGivenError)
+    }
+
     override fun contentUrlResolver() = contentUrlResolver
 
     override fun contentUploadProgressTracker() = contentUploadProgressTracker
@@ -179,5 +193,4 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
             throw IllegalStateException("This method can only be called on the main thread!")
         }
     }
-
 }

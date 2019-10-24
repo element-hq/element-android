@@ -32,5 +32,4 @@ class RetrofitFactory @Inject constructor(private val moshi: Moshi) {
                 .addConverterFactory(MoshiConverterFactory.create(moshi))
                 .build()
     }
-
 }

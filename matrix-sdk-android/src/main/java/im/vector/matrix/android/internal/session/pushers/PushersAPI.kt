@@ -21,7 +21,6 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 
-
 internal interface PushersAPI {
 
     /**
@@ -40,5 +39,4 @@ internal interface PushersAPI {
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "pushers/set")
     fun setPusher(@Body jsonPusher: JsonPusher): Call<Unit>
-
 }

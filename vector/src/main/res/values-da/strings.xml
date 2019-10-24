@@ -137,14 +137,6 @@
     <string name="auth_password_placeholder">Adgangskode</string>
     <string name="auth_new_password_placeholder">Ny adgangskode</string>
     <string name="auth_user_name_placeholder">Brugernavn</string>
-    <string name="auth_add_email_message">Tilføj en mailadresse til din konto for at lade brugere finde dig og for at gendanne dit password.</string>
-    <string name="auth_add_phone_message">Tilføj et telefonnummer til din konto for at brugere kan finde dig.</string>
-    <string name="auth_add_email_phone_message">Tilføj en emailadresse og/eller et telefonnummer til din konto for at andre brugere kan finde dig.
-
-En emailadresse vil også give dig mulighed for at nulstille din adgangskode.</string>
-    <string name="auth_add_email_and_phone_message">Tilføj en emailadresse og et telefonnummer til din konto for at andre brugere kan finde dig.
-
-En emailadresse vil også give dig mulighed for at nulstille dit password.</string>
     <string name="auth_email_placeholder">Emailadresse</string>
     <string name="auth_opt_email_placeholder">Emailadresse (valgfri)</string>
     <string name="auth_phone_number_placeholder">Telefonnummer</string>

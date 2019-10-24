@@ -44,18 +44,14 @@ internal class DefaultClaimOneTimeKeysForUsersDevice @Inject constructor(private
         }
         val map = MXUsersDevicesMap<MXKey>()
         keysClaimResponse.oneTimeKeys?.let { oneTimeKeys ->
-            for (userId in oneTimeKeys.keys) {
-                val mapByUserId = oneTimeKeys[userId]
+            for ((userId, mapByUserId) in oneTimeKeys) {
+                for ((deviceId, deviceKey) in mapByUserId) {
+                    val mxKey = MXKey.from(deviceKey)
 
-                if (mapByUserId != null) {
-                    for (deviceId in mapByUserId.keys) {
-                        val mxKey = MXKey.from(mapByUserId[deviceId])
-
-                        if (mxKey != null) {
-                            map.setObject(userId, deviceId, mxKey)
-                        } else {
-                            Timber.e("## claimOneTimeKeysForUsersDevices : fail to create a MXKey")
-                        }
+                    if (mxKey != null) {
+                        map.setObject(userId, deviceId, mxKey)
+                    } else {
+                        Timber.e("## claimOneTimeKeysForUsersDevices : fail to create a MXKey")
                     }
                 }
             }

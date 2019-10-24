@@ -90,5 +90,4 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
             }
         })
     }
-
 }

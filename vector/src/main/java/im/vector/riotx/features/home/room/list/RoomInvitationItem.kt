@@ -29,7 +29,6 @@ import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.core.platform.ButtonStateView
 import im.vector.riotx.features.home.AvatarRenderer
 
-
 @EpoxyModelClass(layout = R.layout.item_room_invitation)
 abstract class RoomInvitationItem : VectorEpoxyModel<RoomInvitationItem.Holder>() {
 
@@ -46,7 +45,6 @@ abstract class RoomInvitationItem : VectorEpoxyModel<RoomInvitationItem.Holder>(
     @EpoxyAttribute var acceptListener: (() -> Unit)? = null
     @EpoxyAttribute var rejectListener: (() -> Unit)? = null
 
-
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.rootView.setOnClickListener { listener?.invoke() }
@@ -60,7 +58,6 @@ abstract class RoomInvitationItem : VectorEpoxyModel<RoomInvitationItem.Holder>(
             else                    -> holder.acceptView.render(ButtonStateView.State.Button)
         }
         // ButtonStateView.State.Loaded not used because roomSummary will not be displayed as a room invitation anymore
-
 
         holder.acceptView.callback = object : ButtonStateView.Callback {
             override fun onButtonClicked() {
@@ -101,5 +98,4 @@ abstract class RoomInvitationItem : VectorEpoxyModel<RoomInvitationItem.Holder>(
         val avatarImageView by bind<ImageView>(R.id.roomInvitationAvatarImageView)
         val rootView by bind<ViewGroup>(R.id.itemRoomInvitationLayout)
     }
-
 }

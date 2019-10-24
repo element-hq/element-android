@@ -17,7 +17,6 @@
 package im.vector.matrix.android.internal.crypto.attachments
 
 import android.util.Base64
-import arrow.core.Try
 import im.vector.matrix.android.internal.crypto.model.rest.EncryptedFileInfo
 import im.vector.matrix.android.internal.crypto.model.rest.EncryptedFileKey
 import timber.log.Timber
@@ -50,7 +49,7 @@ object MXEncryptedAttachments {
      * @param mimetype the mime type
      * @return the encryption file info
      */
-    fun encryptAttachment(attachmentStream: InputStream, mimetype: String): Try<EncryptionResult> {
+    fun encryptAttachment(attachmentStream: InputStream, mimetype: String): EncryptionResult {
         val t0 = System.currentTimeMillis()
         val secureRandom = SecureRandom()
 
@@ -70,7 +69,7 @@ object MXEncryptedAttachments {
 
         val outStream = ByteArrayOutputStream()
 
-        try {
+        outStream.use {
             val encryptCipher = Cipher.getInstance(CIPHER_ALGORITHM)
             val secretKeySpec = SecretKeySpec(key, SECRET_KEY_SPEC_ALGORITHM)
             val ivParameterSpec = IvParameterSpec(initVectorBytes)
@@ -104,29 +103,17 @@ object MXEncryptedAttachments {
                                     ext = true,
                                     key_ops = listOf("encrypt", "decrypt"),
                                     kty = "oct",
-                                    k = base64ToBase64Url(Base64.encodeToString(key, Base64.DEFAULT))!!
+                                    k = base64ToBase64Url(Base64.encodeToString(key, Base64.DEFAULT))
                             ),
                             iv = Base64.encodeToString(initVectorBytes, Base64.DEFAULT).replace("\n", "").replace("=", ""),
-                            hashes = mapOf("sha256" to base64ToUnpaddedBase64(Base64.encodeToString(messageDigest.digest(), Base64.DEFAULT))!!),
+                            hashes = mapOf("sha256" to base64ToUnpaddedBase64(Base64.encodeToString(messageDigest.digest(), Base64.DEFAULT))),
                             v = "v2"
                     ),
                     encryptedByteArray = outStream.toByteArray()
             )
 
             Timber.v("Encrypt in ${System.currentTimeMillis() - t0} ms")
-            return Try.just(result)
-        } catch (oom: OutOfMemoryError) {
-            Timber.e(oom, "## encryptAttachment failed")
-            return Try.Failure(oom)
-        } catch (e: Exception) {
-            Timber.e(e, "## encryptAttachment failed")
-            return Try.Failure(e)
-        } finally {
-            try {
-                outStream.close()
-            } catch (e: Exception) {
-                Timber.e(e, "## encryptAttachment() : fail to close outStream")
-            }
+            return result
         }
     }
 

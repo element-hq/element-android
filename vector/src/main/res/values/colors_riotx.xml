@@ -147,6 +147,16 @@
     <color name="riotx_touch_guard_bg_dark">#BF000000</color>
     <color name="riotx_touch_guard_bg_black">#BF000000</color>
 
+    <attr name="riotx_attachment_selector_background" format="color" />
+    <color name="riotx_attachment_selector_background_light">#FFFFFFFF</color>
+    <color name="riotx_attachment_selector_background_dark">#FF22262E</color>
+    <color name="riotx_attachment_selector_background_black">#FF090A0C</color>
+
+    <attr name="riotx_attachment_selector_border" format="color" />
+    <color name="riotx_attachment_selector_border_light">#FFE9EDF1</color>
+    <color name="riotx_attachment_selector_border_dark">#FF22262E</color>
+    <color name="riotx_attachment_selector_border_black">#FF090A0C</color>
+
     <!-- (color from RiotWeb) -->
     <attr name="riotx_keys_backup_banner_accent_color" format="color" />
     <color name="riotx_keys_backup_banner_accent_color_light">#FFF8E3</color>

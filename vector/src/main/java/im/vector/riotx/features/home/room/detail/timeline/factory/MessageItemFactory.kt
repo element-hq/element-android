@@ -33,7 +33,6 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
-import im.vector.riotx.EmojiCompatFontProvider
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
 import im.vector.riotx.core.linkify.VectorLinkify
@@ -42,12 +41,10 @@ import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.utils.DebouncedClickListener
 import im.vector.riotx.core.utils.DimensionConverter
 import im.vector.riotx.core.utils.containsOnlyEmojis
-import im.vector.riotx.features.home.AvatarRenderer
+import im.vector.riotx.core.utils.isLocalFile
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
-import im.vector.riotx.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
-import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
+import im.vector.riotx.features.home.room.detail.timeline.helper.*
 import im.vector.riotx.features.home.room.detail.timeline.item.*
-import im.vector.riotx.features.home.room.detail.timeline.util.MessageInformationDataFactory
 import im.vector.riotx.features.html.EventHtmlRenderer
 import im.vector.riotx.features.media.ImageContentRenderer
 import im.vector.riotx.features.media.VideoContentRenderer
@@ -55,139 +52,123 @@ import me.gujun.android.span.span
 import javax.inject.Inject
 
 class MessageItemFactory @Inject constructor(
-        private val avatarRenderer: AvatarRenderer,
         private val colorProvider: ColorProvider,
+        private val dimensionConverter: DimensionConverter,
         private val timelineMediaSizeProvider: TimelineMediaSizeProvider,
         private val htmlRenderer: Lazy<EventHtmlRenderer>,
         private val stringProvider: StringProvider,
-        private val emojiCompatFontProvider: EmojiCompatFontProvider,
         private val imageContentRenderer: ImageContentRenderer,
         private val messageInformationDataFactory: MessageInformationDataFactory,
+        private val messageItemAttributesFactory: MessageItemAttributesFactory,
         private val contentUploadStateTrackerBinder: ContentUploadStateTrackerBinder,
+        private val defaultItemFactory: DefaultItemFactory,
         private val noticeItemFactory: NoticeItemFactory,
-        private val dimensionConverter: DimensionConverter) {
-
+        private val avatarSizeProvider: AvatarSizeProvider) {
 
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
                highlight: Boolean,
+               readMarkerVisible: Boolean,
                callback: TimelineEventController.Callback?
     ): VectorEpoxyModel<*>? {
         event.root.eventId ?: return null
 
-        val informationData = messageInformationDataFactory.create(event, nextEvent)
+        val informationData = messageInformationDataFactory.create(event, nextEvent, readMarkerVisible)
 
         if (event.root.isRedacted()) {
-            //message is redacted
-            return buildRedactedItem(informationData, highlight, callback)
+            // message is redacted
+            val attributes = messageItemAttributesFactory.create(null, informationData, callback)
+            return buildRedactedItem(attributes, highlight)
         }
 
-        val messageContent: MessageContent =
-                event.getLastMessageContent()
-                        ?: //Malformed content, we should echo something on screen
-                        return buildNotHandledMessageItem(stringProvider.getString(R.string.malformed_message),
-                                informationData, highlight, callback)
-
+        val messageContent = event.getLastMessageContent()
+        if (messageContent == null) {
+            val malformedText = stringProvider.getString(R.string.malformed_message)
+            return defaultItemFactory.create(malformedText, informationData, highlight, callback)
+        }
         if (messageContent.relatesTo?.type == RelationType.REPLACE
                 || event.isEncrypted() && event.root.content.toModel<EncryptedEventContent>()?.relatesTo?.type == RelationType.REPLACE
         ) {
-            // This is an edit event, we should display it when debugging as a notice event
-            return noticeItemFactory.create(event, highlight, callback)
+            // This is an edit event, we should it when debugging as a notice event
+            return noticeItemFactory.create(event, highlight, readMarkerVisible, callback)
         }
+        val attributes = messageItemAttributesFactory.create(messageContent, informationData, callback)
+
 //        val all = event.root.toContent()
 //        val ev = all.toModel<Event>()
         return when (messageContent) {
-            is MessageEmoteContent  -> buildEmoteMessageItem(messageContent, informationData, highlight, callback)
-            is MessageTextContent   -> buildTextMessageItem(messageContent, informationData, highlight, callback)
-            is MessageImageContent  -> buildImageMessageItem(messageContent, informationData, highlight, callback)
-            is MessageNoticeContent -> buildNoticeMessageItem(messageContent, informationData, highlight, callback)
-            is MessageVideoContent  -> buildVideoMessageItem(messageContent, informationData, highlight, callback)
-            is MessageFileContent   -> buildFileMessageItem(messageContent, informationData, highlight, callback)
-            is MessageAudioContent  -> buildAudioMessageItem(messageContent, informationData, highlight, callback)
-            else                    -> buildNotHandledMessageItem("${messageContent.type} message events are not yet handled",
-                    informationData, highlight, callback)
+            is MessageEmoteContent  -> buildEmoteMessageItem(messageContent,
+                    informationData,
+                    highlight,
+                    callback,
+                    attributes)
+            is MessageTextContent   -> buildTextMessageItem(messageContent,
+                    informationData,
+                    highlight,
+                    callback,
+                    attributes)
+            is MessageImageContent  -> buildImageMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageNoticeContent -> buildNoticeMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageVideoContent  -> buildVideoMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageFileContent   -> buildFileMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageAudioContent  -> buildAudioMessageItem(messageContent, informationData, highlight, callback, attributes)
+            else                    -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback)
         }
     }
 
     private fun buildAudioMessageItem(messageContent: MessageAudioContent,
+                                      @Suppress("UNUSED_PARAMETER")
                                       informationData: MessageInformationData,
                                       highlight: Boolean,
-                                      callback: TimelineEventController.Callback?): MessageFileItem? {
+                                      callback: TimelineEventController.Callback?,
+                                      attributes: AbsMessageItem.Attributes): MessageFileItem? {
         return MessageFileItem_()
-                .avatarRenderer(avatarRenderer)
-                .colorProvider(colorProvider)
-                .dimensionConverter(dimensionConverter)
-                .informationData(informationData)
+                .attributes(attributes)
+                .izLocalFile(messageContent.getFileUrl().isLocalFile())
+                .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
                 .highlighted(highlight)
-                .avatarCallback(callback)
-                .readReceiptsCallback(callback)
+                .leftGuideline(avatarSizeProvider.leftGuideline)
                 .filename(messageContent.body)
                 .iconRes(R.drawable.filetype_audio)
-                .reactionPillCallback(callback)
-                .emojiTypeFace(emojiCompatFontProvider.typeface)
-                .cellClickListener(
-                        DebouncedClickListener(View.OnClickListener { view: View ->
-                            callback?.onEventCellClicked(informationData, messageContent, view)
-                        }))
                 .clickListener(
                         DebouncedClickListener(View.OnClickListener {
                             callback?.onAudioMessageClicked(messageContent)
                         }))
-                .longClickListener { view ->
-                    return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
-                            ?: false
-                }
     }
 
     private fun buildFileMessageItem(messageContent: MessageFileContent,
                                      informationData: MessageInformationData,
                                      highlight: Boolean,
-                                     callback: TimelineEventController.Callback?): MessageFileItem? {
+                                     callback: TimelineEventController.Callback?,
+                                     attributes: AbsMessageItem.Attributes): MessageFileItem? {
         return MessageFileItem_()
-                .avatarRenderer(avatarRenderer)
-                .colorProvider(colorProvider)
-                .dimensionConverter(dimensionConverter)
-                .informationData(informationData)
+                .attributes(attributes)
+                .leftGuideline(avatarSizeProvider.leftGuideline)
+                .izLocalFile(messageContent.getFileUrl().isLocalFile())
+                .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
                 .highlighted(highlight)
-                .avatarCallback(callback)
                 .filename(messageContent.body)
-                .reactionPillCallback(callback)
-                .readReceiptsCallback(callback)
-                .emojiTypeFace(emojiCompatFontProvider.typeface)
                 .iconRes(R.drawable.filetype_attachment)
-                .cellClickListener(
-                        DebouncedClickListener(View.OnClickListener { view ->
-                            callback?.onEventCellClicked(informationData, messageContent, view)
-                        }))
-                .longClickListener { view ->
-                    return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
-                            ?: false
-                }
                 .clickListener(
-                        DebouncedClickListener(View.OnClickListener { _ ->
+                        DebouncedClickListener(View.OnClickListener {
                             callback?.onFileMessageClicked(informationData.eventId, messageContent)
                         }))
     }
 
-    private fun buildNotHandledMessageItem(text: String,
+    private fun buildNotHandledMessageItem(messageContent: MessageContent,
                                            informationData: MessageInformationData,
                                            highlight: Boolean,
                                            callback: TimelineEventController.Callback?): DefaultItem? {
-        return DefaultItem_()
-                .text(text)
-                .avatarRenderer(avatarRenderer)
-                .dimensionConverter(dimensionConverter)
-                .highlighted(highlight)
-                .informationData(informationData)
-                .baseCallback(callback)
-                .readReceiptsCallback(callback)
+        val text = "${messageContent.type} message events are not yet handled"
+        return defaultItemFactory.create(text, informationData, highlight, callback)
     }
 
     private fun buildImageMessageItem(messageContent: MessageImageContent,
+                                      @Suppress("UNUSED_PARAMETER")
                                       informationData: MessageInformationData,
                                       highlight: Boolean,
-                                      callback: TimelineEventController.Callback?): MessageImageVideoItem? {
-
+                                      callback: TimelineEventController.Callback?,
+                                      attributes: AbsMessageItem.Attributes): MessageImageVideoItem? {
         val (maxWidth, maxHeight) = timelineMediaSizeProvider.getMaxSize()
         val data = ImageContentRenderer.Data(
                 filename = messageContent.body,
@@ -196,43 +177,27 @@ class MessageItemFactory @Inject constructor(
                 height = messageContent.info?.height,
                 maxHeight = maxHeight,
                 width = messageContent.info?.width,
-                maxWidth = maxWidth,
-                orientation = messageContent.info?.orientation,
-                rotation = messageContent.info?.rotation
+                maxWidth = maxWidth
         )
         return MessageImageVideoItem_()
-                .avatarRenderer(avatarRenderer)
-                .colorProvider(colorProvider)
-                .dimensionConverter(dimensionConverter)
+                .attributes(attributes)
+                .leftGuideline(avatarSizeProvider.leftGuideline)
                 .imageContentRenderer(imageContentRenderer)
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
                 .playable(messageContent.info?.mimeType == "image/gif")
-                .informationData(informationData)
                 .highlighted(highlight)
-                .avatarCallback(callback)
                 .mediaData(data)
-                .reactionPillCallback(callback)
-                .readReceiptsCallback(callback)
-                .emojiTypeFace(emojiCompatFontProvider.typeface)
                 .clickListener(
                         DebouncedClickListener(View.OnClickListener { view ->
                             callback?.onImageMessageClicked(messageContent, data, view)
                         }))
-                .cellClickListener(
-                        DebouncedClickListener(View.OnClickListener { view ->
-                            callback?.onEventCellClicked(informationData, messageContent, view)
-                        }))
-                .longClickListener { view ->
-                    return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
-                            ?: false
-                }
     }
 
     private fun buildVideoMessageItem(messageContent: MessageVideoContent,
                                       informationData: MessageInformationData,
                                       highlight: Boolean,
-                                      callback: TimelineEventController.Callback?): MessageImageVideoItem? {
-
+                                      callback: TimelineEventController.Callback?,
+                                      attributes: AbsMessageItem.Attributes): MessageImageVideoItem? {
         val (maxWidth, maxHeight) = timelineMediaSizeProvider.getMaxSize()
         val thumbnailData = ImageContentRenderer.Data(
                 filename = messageContent.body,
@@ -254,35 +219,22 @@ class MessageItemFactory @Inject constructor(
         )
 
         return MessageImageVideoItem_()
+                .leftGuideline(avatarSizeProvider.leftGuideline)
+                .attributes(attributes)
                 .imageContentRenderer(imageContentRenderer)
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
-                .avatarRenderer(avatarRenderer)
-                .colorProvider(colorProvider)
-                .dimensionConverter(dimensionConverter)
                 .playable(true)
-                .informationData(informationData)
                 .highlighted(highlight)
-                .avatarCallback(callback)
                 .mediaData(thumbnailData)
-                .reactionPillCallback(callback)
-                .readReceiptsCallback(callback)
-                .emojiTypeFace(emojiCompatFontProvider.typeface)
-                .cellClickListener(
-                        DebouncedClickListener(View.OnClickListener { view ->
-                            callback?.onEventCellClicked(informationData, messageContent, view)
-                        }))
                 .clickListener { view -> callback?.onVideoMessageClicked(messageContent, videoData, view) }
-                .longClickListener { view ->
-                    return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
-                            ?: false
-                }
     }
 
     private fun buildTextMessageItem(messageContent: MessageTextContent,
                                      informationData: MessageInformationData,
                                      highlight: Boolean,
-                                     callback: TimelineEventController.Callback?): MessageTextItem? {
-
+                                     callback: TimelineEventController.Callback?,
+                                     attributes: AbsMessageItem.Attributes): MessageTextItem? {
+        val isFormatted = messageContent.formattedBody.isNullOrBlank().not()
         val bodyToUse = messageContent.formattedBody?.let {
             htmlRenderer.get().render(it.trim())
         } ?: messageContent.body
@@ -299,25 +251,12 @@ class MessageItemFactory @Inject constructor(
                     }
                 }
                 .useBigFont(linkifiedBody.length <= MAX_NUMBER_OF_EMOJI_FOR_BIG_FONT * 2 && containsOnlyEmojis(linkifiedBody.toString()))
-                .avatarRenderer(avatarRenderer)
-                .informationData(informationData)
-                .colorProvider(colorProvider)
-                .dimensionConverter(dimensionConverter)
+                .searchForPills(isFormatted)
+                .leftGuideline(avatarSizeProvider.leftGuideline)
+                .attributes(attributes)
                 .highlighted(highlight)
-                .avatarCallback(callback)
                 .urlClickCallback(callback)
-                .reactionPillCallback(callback)
-                .readReceiptsCallback(callback)
-                .emojiTypeFace(emojiCompatFontProvider.typeface)
-                //click on the text
-                .cellClickListener(
-                        DebouncedClickListener(View.OnClickListener { view ->
-                            callback?.onEventCellClicked(informationData, messageContent, view)
-                        }))
-                .longClickListener { view ->
-                    return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
-                            ?: false
-                }
+        // click on the text
     }
 
     private fun annotateWithEdited(linkifiedBody: CharSequence,
@@ -337,14 +276,19 @@ class MessageItemFactory @Inject constructor(
                 Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
 
         // Note: text size is set to 14sp
-        spannable.setSpan(AbsoluteSizeSpan(dimensionConverter.spToPx(13)), editStart, editEnd, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+        spannable.setSpan(
+                AbsoluteSizeSpan(dimensionConverter.spToPx(13)),
+                editStart,
+                editEnd,
+                Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+
         spannable.setSpan(object : ClickableSpan() {
             override fun onClick(widget: View?) {
                 callback?.onEditedDecorationClicked(informationData)
             }
 
             override fun updateDrawState(ds: TextPaint?) {
-                //nop
+                // nop
             }
         },
                 editStart,
@@ -354,10 +298,11 @@ class MessageItemFactory @Inject constructor(
     }
 
     private fun buildNoticeMessageItem(messageContent: MessageNoticeContent,
+                                       @Suppress("UNUSED_PARAMETER")
                                        informationData: MessageInformationData,
                                        highlight: Boolean,
-                                       callback: TimelineEventController.Callback?): MessageTextItem? {
-
+                                       callback: TimelineEventController.Callback?,
+                                       attributes: AbsMessageItem.Attributes): MessageTextItem? {
         val message = messageContent.body.let {
             val formattedBody = span {
                 text = it
@@ -367,36 +312,18 @@ class MessageItemFactory @Inject constructor(
             linkifyBody(formattedBody, callback)
         }
         return MessageTextItem_()
-                .avatarRenderer(avatarRenderer)
+                .leftGuideline(avatarSizeProvider.leftGuideline)
+                .attributes(attributes)
                 .message(message)
-                .colorProvider(colorProvider)
-                .dimensionConverter(dimensionConverter)
-                .informationData(informationData)
                 .highlighted(highlight)
-                .avatarCallback(callback)
-                .reactionPillCallback(callback)
                 .urlClickCallback(callback)
-                .readReceiptsCallback(callback)
-                .emojiTypeFace(emojiCompatFontProvider.typeface)
-                .memberClickListener(
-                        DebouncedClickListener(View.OnClickListener { view ->
-                            callback?.onMemberNameClicked(informationData)
-                        }))
-                .cellClickListener(
-                        DebouncedClickListener(View.OnClickListener { view ->
-                            callback?.onEventCellClicked(informationData, messageContent, view)
-                        }))
-                .longClickListener { view ->
-                    return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
-                            ?: false
-                }
     }
 
     private fun buildEmoteMessageItem(messageContent: MessageEmoteContent,
                                       informationData: MessageInformationData,
                                       highlight: Boolean,
-                                      callback: TimelineEventController.Callback?): MessageTextItem? {
-
+                                      callback: TimelineEventController.Callback?,
+                                      attributes: AbsMessageItem.Attributes): MessageTextItem? {
         val message = messageContent.body.let {
             val formattedBody = "* ${informationData.memberName} $it"
             linkifyBody(formattedBody, callback)
@@ -410,45 +337,18 @@ class MessageItemFactory @Inject constructor(
                         message(message)
                     }
                 }
-                .avatarRenderer(avatarRenderer)
-                .colorProvider(colorProvider)
-                .dimensionConverter(dimensionConverter)
-                .informationData(informationData)
+                .leftGuideline(avatarSizeProvider.leftGuideline)
+                .attributes(attributes)
                 .highlighted(highlight)
-                .avatarCallback(callback)
-                .reactionPillCallback(callback)
-                .readReceiptsCallback(callback)
                 .urlClickCallback(callback)
-                .emojiTypeFace(emojiCompatFontProvider.typeface)
-                .cellClickListener(
-                        DebouncedClickListener(View.OnClickListener { view ->
-                            callback?.onEventCellClicked(informationData, messageContent, view)
-                        }))
-                .longClickListener { view ->
-                    return@longClickListener callback?.onEventLongClicked(informationData, messageContent, view)
-                            ?: false
-                }
     }
 
-    private fun buildRedactedItem(informationData: MessageInformationData,
-                                  highlight: Boolean,
-                                  callback: TimelineEventController.Callback?): RedactedMessageItem? {
+    private fun buildRedactedItem(attributes: AbsMessageItem.Attributes,
+                                  highlight: Boolean): RedactedMessageItem? {
         return RedactedMessageItem_()
-                .avatarRenderer(avatarRenderer)
-                .colorProvider(colorProvider)
-                .dimensionConverter(dimensionConverter)
-                .informationData(informationData)
+                .leftGuideline(avatarSizeProvider.leftGuideline)
+                .attributes(attributes)
                 .highlighted(highlight)
-                .avatarCallback(callback)
-                .readReceiptsCallback(callback)
-                .cellClickListener(
-                        DebouncedClickListener(View.OnClickListener { view ->
-                            callback?.onEventCellClicked(informationData, null, view)
-                        }))
-                .longClickListener { view ->
-                    return@longClickListener callback?.onEventLongClicked(informationData, null, view)
-                            ?: false
-                }
     }
 
     private fun linkifyBody(body: CharSequence, callback: TimelineEventController.Callback?): CharSequence {

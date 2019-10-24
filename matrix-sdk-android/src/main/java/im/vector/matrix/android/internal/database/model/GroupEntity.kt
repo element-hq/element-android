@@ -38,5 +38,4 @@ internal open class GroupEntity(@PrimaryKey var groupId: String = "")
         }
 
     companion object
-
 }

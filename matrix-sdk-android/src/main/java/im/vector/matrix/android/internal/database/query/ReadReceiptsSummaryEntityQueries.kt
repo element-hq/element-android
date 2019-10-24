@@ -27,10 +27,7 @@ internal fun ReadReceiptsSummaryEntity.Companion.where(realm: Realm, eventId: St
             .equalTo(ReadReceiptsSummaryEntityFields.EVENT_ID, eventId)
 }
 
-internal fun ReadReceiptsSummaryEntity.Companion.whereInRoom(realm: Realm, roomId: String?): RealmQuery<ReadReceiptsSummaryEntity> {
-    val query = realm.where<ReadReceiptsSummaryEntity>()
-    if (roomId != null) {
-        query.equalTo(ReadReceiptsSummaryEntityFields.ROOM_ID, roomId)
-    }
-    return query
+internal fun ReadReceiptsSummaryEntity.Companion.whereInRoom(realm: Realm, roomId: String): RealmQuery<ReadReceiptsSummaryEntity> {
+    return realm.where<ReadReceiptsSummaryEntity>()
+            .equalTo(ReadReceiptsSummaryEntityFields.ROOM_ID, roomId)
 }

@@ -21,7 +21,6 @@ package im.vector.matrix.android.internal.crypto
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
-import arrow.core.Try
 import com.squareup.moshi.Types
 import com.zhuinden.monarchy.Monarchy
 import dagger.Lazy
@@ -31,9 +30,7 @@ import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.listeners.ProgressListener
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
-import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupService
 import im.vector.matrix.android.api.session.crypto.keyshare.RoomKeysRequestListener
-import im.vector.matrix.android.api.session.crypto.sas.SasVerificationService
 import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
@@ -289,24 +286,18 @@ internal class DefaultCryptoService @Inject constructor(
         outgoingRoomKeyRequestManager.stop()
     }
 
-    override fun isCryptoEnabled(): Boolean {
-        // TODO Check that this test is correct
-        return olmDevice != null
-    }
+    // Aways enabled on RiotX
+    override fun isCryptoEnabled() = true
 
     /**
      * @return the Keys backup Service
      */
-    override fun getKeysBackupService(): KeysBackupService {
-        return keysBackup
-    }
+    override fun getKeysBackupService() = keysBackup
 
     /**
      * @return the SasVerificationService
      */
-    override fun getSasVerificationService(): SasVerificationService {
-        return sasVerificationService
-    }
+    override fun getSasVerificationService() = sasVerificationService
 
     /**
      * A sync response has been received
@@ -367,29 +358,16 @@ internal class DefaultCryptoService @Inject constructor(
      */
     override fun setDevicesKnown(devices: List<MXDeviceInfo>, callback: MatrixCallback<Unit>?) {
         // build a devices map
-        val devicesIdListByUserId = HashMap<String, List<String>>()
+        val devicesIdListByUserId = devices.groupBy({ it.userId }, { it.deviceId })
 
-        for (di in devices) {
-            var deviceIdsList: MutableList<String>? = devicesIdListByUserId[di.userId]?.toMutableList()
-
-            if (null == deviceIdsList) {
-                deviceIdsList = ArrayList()
-                devicesIdListByUserId[di.userId] = deviceIdsList
-            }
-            deviceIdsList.add(di.deviceId)
-        }
-
-        val userIds = devicesIdListByUserId.keys
-
-        for (userId in userIds) {
+        for ((userId, deviceIds) in devicesIdListByUserId) {
             val storedDeviceIDs = cryptoStore.getUserDevices(userId)
 
             // sanity checks
             if (null != storedDeviceIDs) {
                 var isUpdated = false
-                val deviceIds = devicesIdListByUserId[userId]
 
-                deviceIds?.forEach { deviceId ->
+                deviceIds.forEach { deviceId ->
                     val device = storedDeviceIDs[deviceId]
 
                     // assume if the device is either verified or blocked
@@ -405,7 +383,6 @@ internal class DefaultCryptoService @Inject constructor(
                 }
             }
         }
-
 
         callback?.onSuccess(Unit)
     }
@@ -446,7 +423,7 @@ internal class DefaultCryptoService @Inject constructor(
         val encryptingClass = MXCryptoAlgorithms.hasEncryptorClassForAlgorithm(algorithm)
 
         if (!encryptingClass) {
-            Timber.e("## setEncryptionInRoom() : Unable to encrypt room ${roomId} with $algorithm")
+            Timber.e("## setEncryptionInRoom() : Unable to encrypt room $roomId with $algorithm")
             return false
         }
 
@@ -558,16 +535,10 @@ internal class DefaultCryptoService @Inject constructor(
                 val t0 = System.currentTimeMillis()
                 Timber.v("## encryptEventContent() starts")
                 runCatching {
-                    safeAlgorithm.encryptEventContent(eventContent, eventType, userIds)
-                }
-                        .fold(
-                                {
-                                    Timber.v("## encryptEventContent() : succeeds after ${System.currentTimeMillis() - t0} ms")
-                                    callback.onSuccess(MXEncryptEventContentResult(it, EventType.ENCRYPTED))
-                                },
-                                { callback.onFailure(it) }
-
-                        )
+                    val content = safeAlgorithm.encryptEventContent(eventContent, eventType, userIds)
+                    Timber.v("## encryptEventContent() : succeeds after ${System.currentTimeMillis() - t0} ms")
+                    MXEncryptEventContentResult(content, EventType.ENCRYPTED)
+                }.foldToCallback(callback)
             } else {
                 val algorithm = getEncryptionAlgorithm(roomId)
                 val reason = String.format(MXCryptoError.UNABLE_TO_ENCRYPT_REASON,
@@ -659,7 +630,7 @@ internal class DefaultCryptoService @Inject constructor(
                     incomingRoomKeyRequestManager.onRoomKeyRequestEvent(event)
                 }
                 else                                             -> {
-                    //ignore
+                    // ignore
                 }
             }
         }
@@ -714,7 +685,6 @@ internal class DefaultCryptoService @Inject constructor(
             } else {
                 RoomMembers(realm, roomId).getJoinedRoomMemberIds()
             }
-
         }
         return userIds
     }
@@ -761,7 +731,6 @@ internal class DefaultCryptoService @Inject constructor(
         }
     }
 
-
     /**
      * Upload my user's device keys.
      */
@@ -787,7 +756,7 @@ internal class DefaultCryptoService @Inject constructor(
         GlobalScope.launch(coroutineDispatchers.main) {
             runCatching {
                 exportRoomKeys(password, MXMegolmExportEncryption.DEFAULT_ITERATION_COUNT)
-            }.fold(callback::onSuccess, callback::onFailure)
+            }.foldToCallback(callback)
         }
     }
 
@@ -796,7 +765,6 @@ internal class DefaultCryptoService @Inject constructor(
      *
      * @param password         the password
      * @param anIterationCount the encryption iteration count (0 means no encryption)
-     * @param callback         the exported keys
      */
     private suspend fun exportRoomKeys(password: String, anIterationCount: Int): ByteArray {
         return withContext(coroutineDispatchers.crypto) {
@@ -824,8 +792,8 @@ internal class DefaultCryptoService @Inject constructor(
                                 progressListener: ProgressListener?,
                                 callback: MatrixCallback<ImportRoomKeysResult>) {
         GlobalScope.launch(coroutineDispatchers.main) {
-            withContext(coroutineDispatchers.crypto) {
-                Try {
+            runCatching {
+                withContext(coroutineDispatchers.crypto) {
                     Timber.v("## importRoomKeys starts")
 
                     val t0 = System.currentTimeMillis()
@@ -872,19 +840,14 @@ internal class DefaultCryptoService @Inject constructor(
     fun checkUnknownDevices(userIds: List<String>, callback: MatrixCallback<Unit>) {
         // force the refresh to ensure that the devices list is up-to-date
         GlobalScope.launch(coroutineDispatchers.crypto) {
-            runCatching { deviceListManager.downloadKeys(userIds, true) }
-                    .fold(
-                            {
-                                val unknownDevices = getUnknownDevices(it)
-                                if (unknownDevices.map.isEmpty()) {
-                                    callback.onSuccess(Unit)
-                                } else {
-                                    // trigger an an unknown devices exception
-                                    callback.onFailure(Failure.CryptoError(MXCryptoError.UnknownDevice(unknownDevices)))
-                                }
-                            },
-                            { callback.onFailure(it) }
-                    )
+            runCatching {
+                val keys = deviceListManager.downloadKeys(userIds, true)
+                val unknownDevices = getUnknownDevices(keys)
+                if (unknownDevices.map.isNotEmpty()) {
+                    // trigger an an unknown devices exception
+                    throw Failure.CryptoError(MXCryptoError.UnknownDevice(unknownDevices))
+                }
+            }.foldToCallback(callback)
         }
     }
 
@@ -944,7 +907,6 @@ internal class DefaultCryptoService @Inject constructor(
 
         cryptoStore.setRoomsListBlacklistUnverifiedDevices(roomIds)
     }
-
 
     /**
      * Add this room to the ones which don't encrypt messages to unverified devices.

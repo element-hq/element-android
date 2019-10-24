@@ -51,5 +51,4 @@ internal data class RoomSync(
          */
         @Json(name = "summary") val summary: RoomSyncSummary? = null
 
-
 )

@@ -87,6 +87,5 @@ class PushGatewaysFragment : VectorBaseFragment() {
                 }
             }
         }
-
     }
 }

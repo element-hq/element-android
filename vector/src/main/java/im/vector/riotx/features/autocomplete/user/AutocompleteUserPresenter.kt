@@ -51,5 +51,4 @@ class AutocompleteUserPresenter @Inject constructor(context: Context,
     interface Callback {
         fun onQueryUsers(query: CharSequence?)
     }
-
 }

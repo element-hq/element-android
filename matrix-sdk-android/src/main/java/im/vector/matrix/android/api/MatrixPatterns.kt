@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.api
 
-
 /**
  * This class contains pattern to match the different Matrix ids
  */
@@ -154,6 +153,5 @@ object MatrixPatterns {
         return if (index == -1) {
             null
         } else matrixId.substring(index + 1)
-
     }
 }

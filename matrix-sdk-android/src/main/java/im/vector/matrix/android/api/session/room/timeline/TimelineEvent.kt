@@ -40,7 +40,8 @@ data class TimelineEvent(
         val isUniqueDisplayName: Boolean,
         val senderAvatar: String?,
         val annotations: EventAnnotationsSummary? = null,
-        val readReceipts: List<ReadReceipt> = emptyList()
+        val readReceipts: List<ReadReceipt> = emptyList(),
+        val hasReadMarker: Boolean = false
 ) {
 
     val metadata = HashMap<String, Any>()
@@ -87,7 +88,6 @@ data class TimelineEvent(
     }
 }
 
-
 /**
  * Tells if the event has been edited
  */
@@ -106,7 +106,6 @@ fun TimelineEvent.getEditedEventId(): String? {
 fun TimelineEvent.getLastMessageContent(): MessageContent? = annotations?.editSummary?.aggregatedContent?.toModel()
                                                              ?: root.getClearContent().toModel()
 
-
 /**
  * Get last Message body, after a possible edition
  */
@@ -119,7 +118,6 @@ fun TimelineEvent.getLastMessageBody(): String? {
 
     return null
 }
-
 
 fun TimelineEvent.getTextEditableContent(): String? {
     val originalContent = root.getClearContent().toModel<MessageContent>() ?: return null

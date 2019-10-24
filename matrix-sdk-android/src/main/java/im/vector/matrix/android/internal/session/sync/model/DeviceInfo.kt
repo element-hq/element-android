@@ -17,7 +17,6 @@ package im.vector.matrix.android.internal.session.sync.model
 
 import com.squareup.moshi.JsonClass
 
-
 /**
  * This class describes the device information
  */

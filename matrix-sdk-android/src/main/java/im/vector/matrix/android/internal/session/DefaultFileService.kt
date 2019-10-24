@@ -72,8 +72,8 @@ internal class DefaultFileService @Inject constructor(private val context: Conte
                                     .build()
 
                             val response = okHttpClient.newCall(request).execute()
-                            val inputStream = response.body()?.byteStream()
-                            Timber.v("Response size ${response.body()?.contentLength()} - Stream available: ${inputStream?.available()}")
+                            val inputStream = response.body?.byteStream()
+                            Timber.v("Response size ${response.body?.contentLength()} - Stream available: ${inputStream?.available()}")
                             if (!response.isSuccessful
                                     || inputStream == null) {
                                 throw IOException()

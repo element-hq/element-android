@@ -20,7 +20,6 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Parcelable
 import android.widget.ImageView
-import androidx.exifinterface.media.ExifInterface
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -33,9 +32,9 @@ import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.glide.GlideApp
 import im.vector.riotx.core.glide.GlideRequest
 import im.vector.riotx.core.utils.DimensionConverter
+import im.vector.riotx.core.utils.isLocalFile
 import kotlinx.android.parcel.Parcelize
 import timber.log.Timber
-import java.io.File
 import javax.inject.Inject
 
 class ImageContentRenderer @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
@@ -49,14 +48,10 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
             val height: Int?,
             val maxHeight: Int,
             val width: Int?,
-            val maxWidth: Int,
-            val orientation: Int? = null,
-            val rotation: Int? = null
+            val maxWidth: Int
     ) : Parcelable {
 
-        fun isLocalFile(): Boolean {
-            return url != null && File(url).exists()
-        }
+        fun isLocalFile() = url.isLocalFile()
     }
 
     enum class Mode {
@@ -76,7 +71,6 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
                 .transform(RoundedCorners(dimensionConverter.dpToPx(8)))
                 .thumbnail(0.3f)
                 .into(imageView)
-
     }
 
     fun renderFitTarget(data: Data, mode: Mode, imageView: ImageView, callback: ((Boolean) -> Unit)? = null) {
@@ -103,7 +97,6 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
                         callback?.invoke(true)
                         return false
                     }
-
                 })
                 .fitCenter()
                 .into(imageView)
@@ -122,7 +115,7 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
                 Mode.FULL_SIZE -> contentUrlResolver.resolveFullSize(data.url)
                 Mode.THUMBNAIL -> contentUrlResolver.resolveThumbnail(data.url, width, height, ContentUrlResolver.ThumbnailMethod.SCALE)
             }
-            //Fallback to base url
+            // Fallback to base url
                     ?: data.url
 
             GlideApp
@@ -154,26 +147,14 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
     private fun processSize(data: Data, mode: Mode): Pair<Int, Int> {
         val maxImageWidth = data.maxWidth
         val maxImageHeight = data.maxHeight
-        val rotationAngle = data.rotation ?: 0
-        val orientation = data.orientation ?: ExifInterface.ORIENTATION_NORMAL
-        var width = data.width ?: maxImageWidth
-        var height = data.height ?: maxImageHeight
+        val width = data.width ?: maxImageWidth
+        val height = data.height ?: maxImageHeight
         var finalHeight = -1
         var finalWidth = -1
 
         // if the image size is known
         // compute the expected height
         if (width > 0 && height > 0) {
-            // swap width and height if the image is side oriented
-            if (rotationAngle == 90 || rotationAngle == 270) {
-                val tmp = width
-                width = height
-                height = tmp
-            } else if (orientation == ExifInterface.ORIENTATION_ROTATE_90 || orientation == ExifInterface.ORIENTATION_ROTATE_270) {
-                val tmp = width
-                width = height
-                height = tmp
-            }
             if (mode == Mode.FULL_SIZE) {
                 finalHeight = height
                 finalWidth = width

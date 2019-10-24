@@ -129,14 +129,6 @@
     <string name="auth_password_placeholder">Pasahitza</string>
     <string name="auth_new_password_placeholder">Pasahitz berria</string>
     <string name="auth_user_name_placeholder">Erabiltzaile-izena</string>
-    <string name="auth_add_email_message">Gehitu e-mail helbide bat zure kontura erabiltzaileek zu aurkitzea baimentzeko, eta zuk pasahitza berrezarri ahal izateko.</string>
-    <string name="auth_add_phone_message">Gehitu telefono zenbaki bat zure kontura beste erabiltzaileek zu aurkitzea ahalbidetzeko.</string>
-    <string name="auth_add_email_phone_message">Gehitu e-mail helbide bat eta/edo telefono zenbaki bat zure kontura beste erabiltzaileek zu aurkitzea ahalbidetzeko.
-
-E-mail helbideak zuri pasahitza berrezartzea ahalbidetzen dizu ere.</string>
-    <string name="auth_add_email_and_phone_message">Gehitu e-mail helbide bat eta telefono zenbaki bat zure kontura beste erabiltzaileek zu aurkitzea ahalbidetzeko.
-
-E-mail helbideak zuri pasahitza berrezartzea ahalbidetzen dizu ere.</string>
     <string name="auth_email_placeholder">E-mail helbidea</string>
     <string name="auth_opt_email_placeholder">E-mail helbidea (aukerakoa)</string>
     <string name="auth_phone_number_placeholder">Telefono zenbakia</string>
@@ -422,7 +414,7 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="settings_background_sync">Bigarren planoko sinkronizazioa</string>
     <string name="settings_enable_background_sync">Gaitu bigarren planoko sinkronizazioa</string>
     <string name="settings_set_sync_timeout">Sinkronizazio eskaerak debora-muga gainditu du</string>
-    <string name="settings_set_sync_delay">Eskaeren arteko itxaronaldia</string>
+    <string name="settings_set_sync_delay">Sinkronizazioen arteko itxaronaldia</string>
     <string name="settings_second">segundo</string>
     <string name="settings_seconds">segundo</string>
 
@@ -449,10 +441,10 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="settings_pin_unread_messages">Finkatu irakurri gabeko mezuak dituzten gelak</string>
     <string name="settings_devices_list">Gailuak</string>
     <string name="settings_always_show_timestamps">Erakutsi mezu guztien denbora-zigilua</string>
-    <string name="devices_details_dialog_title">Gailuaren xehetasunak</string>
+    <string name="devices_details_dialog_title">Gailuaren informazioa</string>
     <string name="devices_details_id_title">ID</string>
-    <string name="devices_details_name_title">Izena</string>
-    <string name="devices_details_device_name">Gailuaren izena</string>
+    <string name="devices_details_name_title">Izen publikoa</string>
+    <string name="devices_details_device_name">Aldatu izen publikoa</string>
     <string name="devices_details_last_seen_title">Azkenekoz ikusia</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
     <string name="devices_delete_dialog_text">Eragiketa honek autentifikazio gehigarria behar du.
@@ -582,9 +574,9 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="encryption_information_decryption_error">Deszifratze errorea</string>
 
     <string name="encryption_information_sender_device_information">Igorlearen gailuaren informazioa</string>
-    <string name="encryption_information_device_name">Gailuaren izena</string>
-    <string name="encryption_information_name">Izena</string>
-    <string name="encryption_information_device_id">Gailuaren IDa</string>
+    <string name="encryption_information_device_name">Izen publikoa</string>
+    <string name="encryption_information_name">Izen publikoa</string>
+    <string name="encryption_information_device_id">IDa</string>
     <string name="encryption_information_device_key">Gailuaren gakoa</string>
     <string name="encryption_information_verification">Egiaztaketa</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519 hatz-marka</string>
@@ -878,7 +870,7 @@ Baten bat gehitu orain?</string>
     <string name="deactivate_account_submit">Desaktibatu kontua</string>
 
     <string name="dialog_user_consent_content">%1$s hasiera-zerbitzaria erabiltzen jarraitzeko erabilera baldintzak irakurri eta onartu behar dituzu.</string>
-    <string name="dialog_user_consent_submit">Irakurri orain</string>
+    <string name="dialog_user_consent_submit">Berrikusi orain</string>
 
     <string name="deactivate_account_title">Desaktibatu kontua</string>
     <string name="deactivate_account_content">Honek kontua behin betirako erabilgaitza bihurtuko du. Ezin izango duzu saioa hasi, eta ezin izango du beste inork ID hori erabili. Kontua dagoen gela guztietatik aterako da, eta kontuaren xehetasunak identitate-zerbitzaritik ezabatuko dira. <b>Ekintza hau ezin da desegin</b>.
@@ -1056,7 +1048,7 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
 
     <string name="accept">Onartu</string>
 
-    <string name="auth_accept_policies">Berrikusi eta onartu hasiera-zerbitzari honen politikak:</string>
+    <string name="auth_accept_policies">Irakurri eta onartu hasiera-zerbitzari honen baldintzak:</string>
 
     <string name="encryption_import_room_keys_success">%1$d/%2$d gako ongi inportatu dira.</string>
 
@@ -1494,7 +1486,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 
     <string name="event_redacted_by_user_reason">Gertaera ezabatu du erabiltzaileak</string>
     <string name="event_redacted_by_admin_reason">Gertaera moderatu du gelako administratzaileak</string>
-    <string name="last_edited_info_message">%s erabiltzaileak editatuta, azkenekoz: %s</string>
+    <string name="last_edited_info_message">%1$s erabiltzaileak editatuta, azkenekoz: %2$s</string>
 
 
     <string name="malformed_message">Gaizki formatutako gertaera, ezin da bistaratu</string>
@@ -1572,7 +1564,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 \n
 \nRiotX bezeroak honakoa ahalbidetzen du: • Badagoen kontu batean saioa hasi • Gelak sortu eta gela publikoetara elkartu • Gonbidapenak onartu edo ukatu • Erabiltzailearen gelak zerrendatu • Gelaren xehetasunak ikusi • Testuzko mezuak bidali • Eranskinak bidali • Zifratutako geletan mezuak irakurri eta idatzi • Zifratzea: E2Egakoen babeskopia, gailuaren egiaztaketa aurreratua, gakoa partekatzeko eskaria eta erantzuna • Push jakinarazpena • Gai argia, iluna eta beltza
 \n
-\nEz dira oraindik Riot bezeroaren ezaugarri guztiak ezarri RiotX bezeroan. Falta diren (eta laster etorriko direnen) artean nabarmenak dira: • Kontua sortzea • Gelaren ezarpenak (gelako kideak zerrendatzea, eta abar.) • Txat zuzenerako gelak sortzea • Deiak • Trepetak • …</string>
+\nEz dira oraindik Riot bezeroaren ezaugarri guztiak ezarri RiotX bezeroan. Falta diren (eta laster etorriko direnen) artean nabarmenak dira: • Kontua sortzea • Gelaren ezarpenak (gelako kideak zerrendatzea, eta abar.) • Deiak • Trepetak • …</string>
 
     <string name="push_gateway_item_app_display_name">app_display_name:</string>
     <string name="bottom_action_people_x">Mezu zuzenak</string>
@@ -1620,4 +1612,89 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 
     <string name="message_view_edit_history">Ikusi edizioen historiala</string>
 
+    <string name="none">Bat ere ez</string>
+    <string name="revoke">Indargabetu</string>
+    <string name="disconnect">Deskonektatu</string>
+    <string name="review">Berrikusi</string>
+    <string name="decline">Ukatu</string>
+
+    <string name="people_no_identity_server">Ez da identitate-zerbitzaririk konfiguratu.</string>
+
+    <string name="call_failed_no_ice_title">Deiak huts egin du zerbitzaria gaizki konfiguratuta dagoelako</string>
+    <string name="call_failed_no_ice_description">Eskatu zure hasiera-zerbitzariko administratzaileari (%1$s) TURN zerbitzari bat konfiguratu dezala deiak ondo funtzionatu dezaten.
+\n
+\nBestela, %2$s zerbitzari publikoa erabili dezakezu, baina hau ez da hain fidagarria izango, eta zure IP-a partekatuko du zerbitzari horrekin. Hau ezarpenetan aldatu dezakezu.</string>
+    <string name="call_failed_no_ice_use_alt">Saiatu %s erabiltzen</string>
+    <string name="call_failed_dont_ask_again">Ez galdetu berriro</string>
+
+    <string name="auth_add_email_message_2">Ezarri E-mail bat kontua berreskuratzeko, eta gero aukeran zure ezagunek aurkitu zaitzaten.</string>
+    <string name="auth_add_phone_message_2">Ezarri telefono bat gero aukeran zure ezagunek aurkitu zaitzaten.</string>
+    <string name="auth_add_email_phone_message_2">Ezarri E-mail bat kontua berreskuratzeko. Erabili geroo aukeran e-maila edo telefonoa zure ezagunek aurkitu zaitzaten.</string>
+    <string name="auth_add_email_and_phone_message_2">Ezarri E-mail bat kontua berreskuratzeko. Erabili geroo aukeran e-maila edo telefonoa zure ezagunek aurkitu zaitzaten.</string>
+    <string name="login_error_homeserver_not_found">Ezin izan da hasiera-zerbitzari bat atzitu URL honetan, egiaztatu ezazu</string>
+    <string name="settings_call_ringtone_use_default_stun">Baimendu lehenetsitako deien laguntzarako zerbitzaria</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">%s erabiliko da laguntzarako zure hasiera-zerbitzariak ez badu bat eskaintzen (Zure IP helbidea deian partekatuko da)</string>
+    <string name="invite_no_identity_server_error">Gehitu identitate-zerbitzari bat zure ezarpenetan ekintza hau burutzeko.</string>
+    <string name="settings_background_fdroid_sync_mode">Bigarren planoko sinkronizazio modua (Esperimentala)</string>
+    <string name="settings_background_fdroid_sync_mode_battery">Bateria erabilerarako optimizatua</string>
+    <string name="settings_background_fdroid_sync_mode_battery_description">Riot bigarren planoan sinkronizatuko da gailuaren baliabide mugatuen erabilera ahal beste murriztuz (bateria).
+\nZure gailuaren baliabideen egoeraren arabera, sistema eragileak sinkronizazioa atzeratu dezake.</string>
+    <string name="settings_background_fdroid_sync_mode_real_time">Denbora errealerako optimizatua</string>
+    <string name="settings_background_fdroid_sync_mode_real_time_description">Riot bigarren planoan sinkronizatuko da maiztasun finkoarekin (konfiguragarria).
+\nHonek irrati eta bateriaren erabileran eragina izango du, eta Riot gertaerei adi dagoela dion jakinarazpen bat bistaratuko da etengabe.</string>
+    <string name="settings_background_fdroid_sync_mode_disabled">Ez sinkronizatu bigarren planoan</string>
+    <string name="settings_background_fdroid_sync_mode_disabled_description">Ez zaizu jasotako mezuei buruz jakinaraziko aplikazioa bigarren planoan dagoenean.</string>
+    <string name="settings_background_sync_update_error">Huts egin du ezarpenak eguneratzean.</string>
+
+
+    <string name="settings_set_workmanager_delay">Hobetsitako sinkronizazio tartea</string>
+    <string name="settings_set_workmanager_delay_summary">%s
+\nSinkronizazioa atzeratu daiteke zure baliabideen arabera (bateria) edo gailuaren egoeraren arabera (lo).</string>
+    <string name="settings_discovery_category">Aurkitzea</string>
+    <string name="settings_discovery_manage">Kudeatu aurkitzeko ezarpenak.</string>
+    <string name="encryption_information_device_name_with_warning">Izen publikoa (Zurekin komunikatzen den jendeak ikusi dezake)</string>
+    <string name="device_name_warning">Gailu baten izen publikoa zurekin komunikatzen den jendeak ikusi dezake</string>
+    <string name="widget_integration_review_terms">Jarraitzeko erabilera baldintzak onartu behar dituzu.</string>
+
+    <string name="identity_server_not_defined">Ez duzu identitate zerbitzaririk erabiltzen</string>
+    <string name="identity_server_not_defined_for_password_reset">Ez da identitate zerbitzaririk konfiguratu, zure pasahitza berrezartzeko beharrezkoa da.</string>
+
+    <string name="security_warning_identity_server">Riot bertsio zaharrek segurtasun akats bat zuten eta zure identitate zerbitzariak (%1$s) zure kontua atzitu zezakeen. %2$s fidagarritzat jotzen baduzu hau ezikusi dezakezu, bestela maiatu saioa eta hasi berriro.
+\n
+\nXehetasun gehiago hemen:
+\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
+
+    <string name="error_user_already_logged_in">Badirudi beste hasiera-zerbitzari batera konektatzen saiatzen ari zarela. Saioa amaitu nahi duzu\?</string>
+
+    <string name="terms_of_service">Erabilera baldintzak</string>
+    <string name="review_terms">Irakurri baldintzak</string>
+    <string name="terms_description_for_identity_server">Izan besteentzat aurkigarria</string>
+    <string name="terms_description_for_integration_manager">Erabili botak, zubiak, trepetak eta eranskailu multzoak</string>
+
+    <string name="read_at">Irakurri hemen</string>
+
+
+    <string name="identity_server">Identitate-zerbitzaria</string>
+    <string name="disconnect_identity_server">Deskonektatu identitate-zerbitzaria</string>
+    <string name="add_identity_server">Konfiguratu identitate-zerbitzaria</string>
+    <string name="change_identity_server">Aldatu identitate-zerbitzaria</string>
+    <string name="settings_discovery_identity_server_info">Orain %1$s erabiltzen ari zara ezagunak aurkitzeko eta ezagunek zu aurkitzeko.</string>
+    <string name="settings_discovery_identity_server_info_none">Orain ez duzu identitate-zerbitzaririk erabiltzen. Kontaktuak aurkitzeko eta aurkigarria izateko, gehitu bat azpian.</string>
+    <string name="settings_discovery_emails_title">E-mail helbide aurkigarria</string>
+    <string name="settings_discovery_no_mails">Aurkitze aukerak behin e-mail bat gehitu duzunean agertuko dira.</string>
+    <string name="settings_discovery_no_msisdn">Aurkitze aukerak behin telefono zenbaki bat gehitu duzunean agertuko dira.</string>
+    <string name="settings_discovery_disconnect_identity_server_info">Identitate-zerbitzaritik deskonektatzean beste erabiltzaileek ezin izango zaituzte e-mail edo telefonoa erabilita aurkitu, eta zuk ezin izango dituzu e-mail edo telefonoa erabilita aurkitu.</string>
+    <string name="settings_discovery_msisdn_title">Telefono zenbaki aurkigarriak</string>
+    <string name="settings_discovery_confirm_mail">Berrespen e-mail bat bidali dizugu %s helbidera, begiratu zure e-maila eta sakatu baieztapen esteka</string>
+    <string name="settings_discovery_mail_pending">Egiteke</string>
+
+    <string name="settings_discovery_enter_identity_server">Sartu identitate-zerbitzari berria</string>
+    <string name="settings_discovery_bad_identity_server">Ezin izan da identitate-zerbitzarira konektatu</string>
+    <string name="settings_discovery_please_enter_server">Sartu identitate-zerbitzariaren URL-a</string>
+    <string name="settings_discovery_no_terms_title">Identitate-zerbitzariak ez du erabilera baldintzarik</string>
+    <string name="settings_discovery_no_terms">Hautatu duzun identitate-zerbitzariak ez du erabilera baldintzarik. Jarraitu soilik zerbitzuaren jabea fidagarritzat jotzen baduzu</string>
+    <string name="settings_text_message_sent">SMS mezu bat bidali zaizu %s zenbakira. Sartu hemen mezu horrek daukan egiaztatze-kodea.</string>
+
+    <string name="settings_discovery_disconnect_with_bound_pid">Orain e-mail helbideak edo telefono zenbakiak partekatzen dituzu %1$s zerbitzarian. %2$s zerbitzarira konektatu beharko zara partekatzeari uzteko.</string>
+    <string name="settings_agree_to_terms">Onartu %s identitate-zerbitzariaren erabilera baldintzak besteek zu e-mail helbidea edo telefonoa erabiliz aurkitzea ahalbidetzeko.</string>
 </resources>

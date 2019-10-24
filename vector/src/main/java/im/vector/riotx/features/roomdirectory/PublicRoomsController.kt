@@ -113,5 +113,4 @@ class PublicRoomsController @Inject constructor(private val stringProvider: Stri
         fun onPublicRoomJoin(publicRoom: PublicRoom)
         fun loadMore()
     }
-
 }

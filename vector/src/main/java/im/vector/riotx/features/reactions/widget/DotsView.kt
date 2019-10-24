@@ -35,7 +35,12 @@ class DotsView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
     private var COLOR_3 = -0xa8de
     private var COLOR_4 = -0xbbcca
 
-    private val circlePaints = arrayOfNulls<Paint>(4)
+    private val circlePaints = listOf(
+            Paint().apply { style = Paint.Style.FILL },
+            Paint().apply { style = Paint.Style.FILL },
+            Paint().apply { style = Paint.Style.FILL },
+            Paint().apply { style = Paint.Style.FILL }
+    )
 
     private var centerX: Int = 0
     private var centerY: Int = 0
@@ -62,13 +67,6 @@ class DotsView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
     private var currentRadius2 = 0f
 
     private val argbEvaluator = ArgbEvaluator()
-
-    init {
-        for (i in circlePaints.indices) {
-            circlePaints[i] = Paint()
-            circlePaints[i]!!.style = Paint.Style.FILL
-        }
-    }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
@@ -131,9 +129,7 @@ class DotsView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
             this.currentDotSize2 = CircleView.mapValueFromRangeToRange(
                     currentProgress, 0.5f, 1f, maxDotSize * 0.3f, 0f)
         }
-
     }
-
 
     fun setColors(primary: Int, secondary: Int) {
         COLOR_1 = primary
@@ -161,32 +157,31 @@ class DotsView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
 
     private fun updateDotsPaints() {
         if (currentProgress < 0.5f) {
-            val progress = CircleView.mapValueFromRangeToRange(currentProgress, 0f, 0.5f, 0f, 1f) as Float
-            circlePaints[0]?.color = argbEvaluator.evaluate(progress, COLOR_1, COLOR_2) as Int
-            circlePaints[1]?.color = argbEvaluator.evaluate(progress, COLOR_2, COLOR_3) as Int
-            circlePaints[2]?.color = argbEvaluator.evaluate(progress, COLOR_3, COLOR_4) as Int
-            circlePaints[3]?.color = argbEvaluator.evaluate(progress, COLOR_4, COLOR_1) as Int
+            val progress = CircleView.mapValueFromRangeToRange(currentProgress, 0f, 0.5f, 0f, 1f)
+            circlePaints[0].color = argbEvaluator.evaluate(progress, COLOR_1, COLOR_2) as Int
+            circlePaints[1].color = argbEvaluator.evaluate(progress, COLOR_2, COLOR_3) as Int
+            circlePaints[2].color = argbEvaluator.evaluate(progress, COLOR_3, COLOR_4) as Int
+            circlePaints[3].color = argbEvaluator.evaluate(progress, COLOR_4, COLOR_1) as Int
         } else {
-            val progress = CircleView.mapValueFromRangeToRange(currentProgress, 0.5f, 1f, 0f, 1f) as Float
-            circlePaints[0]?.color = argbEvaluator.evaluate(progress, COLOR_2, COLOR_3) as Int
-            circlePaints[1]?.color = argbEvaluator.evaluate(progress, COLOR_3, COLOR_4) as Int
-            circlePaints[2]?.color = argbEvaluator.evaluate(progress, COLOR_4, COLOR_1) as Int
-            circlePaints[3]?.color = argbEvaluator.evaluate(progress, COLOR_1, COLOR_2) as Int
+            val progress = CircleView.mapValueFromRangeToRange(currentProgress, 0.5f, 1f, 0f, 1f)
+            circlePaints[0].color = argbEvaluator.evaluate(progress, COLOR_2, COLOR_3) as Int
+            circlePaints[1].color = argbEvaluator.evaluate(progress, COLOR_3, COLOR_4) as Int
+            circlePaints[2].color = argbEvaluator.evaluate(progress, COLOR_4, COLOR_1) as Int
+            circlePaints[3].color = argbEvaluator.evaluate(progress, COLOR_1, COLOR_2) as Int
         }
     }
 
     private fun updateDotsAlpha() {
-        val progress = CircleView.clamp(currentProgress, 0.6f, 1f) as Float
+        val progress = CircleView.clamp(currentProgress, 0.6f, 1f)
         val alpha = (CircleView.mapValueFromRangeToRange(progress, 0.6f, 1f, 255f, 0f) as? Float)?.toInt()
                 ?: 0
-        circlePaints.forEach { it?.alpha = alpha }
+        circlePaints.forEach { it.alpha = alpha }
     }
-
 
     companion object {
 
-        private val DOTS_COUNT = 7
-        private val OUTER_DOTS_POSITION_ANGLE = 360 / DOTS_COUNT
+        private const val DOTS_COUNT = 7
+        private const val OUTER_DOTS_POSITION_ANGLE = 360 / DOTS_COUNT
 
         val DOTS_PROGRESS: Property<DotsView, Float> = object : Property<DotsView, Float>(Float::class.java, "dotsProgress") {
             override operator fun get(`object`: DotsView): Float? {

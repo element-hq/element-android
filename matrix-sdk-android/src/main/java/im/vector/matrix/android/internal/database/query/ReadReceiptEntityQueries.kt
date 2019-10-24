@@ -28,6 +28,11 @@ internal fun ReadReceiptEntity.Companion.where(realm: Realm, roomId: String, use
             .equalTo(ReadReceiptEntityFields.USER_ID, userId)
 }
 
+internal fun ReadReceiptEntity.Companion.whereUserId(realm: Realm, userId: String): RealmQuery<ReadReceiptEntity> {
+    return realm.where<ReadReceiptEntity>()
+            .equalTo(ReadReceiptEntityFields.USER_ID, userId)
+}
+
 internal fun ReadReceiptEntity.Companion.createUnmanaged(roomId: String, eventId: String, userId: String, originServerTs: Double): ReadReceiptEntity {
     return ReadReceiptEntity().apply {
         this.primaryKey = "${roomId}_$userId"

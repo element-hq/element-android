@@ -25,6 +25,7 @@ import im.vector.matrix.android.internal.session.DefaultInitialSyncProgressServi
 import im.vector.matrix.android.internal.session.mapWithProgress
 import im.vector.matrix.android.internal.session.sync.model.GroupsSyncResponse
 import im.vector.matrix.android.internal.session.sync.model.InvitedGroupSync
+import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.Realm
 import javax.inject.Inject
 
@@ -36,8 +37,8 @@ internal class GroupSyncHandler @Inject constructor(private val monarchy: Monarc
         data class LEFT(val data: Map<String, Any>) : HandlingStrategy()
     }
 
-    fun handle(roomsSyncResponse: GroupsSyncResponse, reporter: DefaultInitialSyncProgressService? = null) {
-        monarchy.runTransactionSync { realm ->
+    suspend fun handle(roomsSyncResponse: GroupsSyncResponse, reporter: DefaultInitialSyncProgressService? = null) {
+        monarchy.awaitTransaction { realm ->
             handleGroupSync(realm, HandlingStrategy.JOINED(roomsSyncResponse.join), reporter)
             handleGroupSync(realm, HandlingStrategy.INVITED(roomsSyncResponse.invite), reporter)
             handleGroupSync(realm, HandlingStrategy.LEFT(roomsSyncResponse.leave), reporter)
@@ -62,7 +63,6 @@ internal class GroupSyncHandler @Inject constructor(private val monarchy: Monarc
                 handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_groups, 0.1f) {
                     handleLeftGroup(realm, it.key)
                 }
-
         }
 
         /** Note: [im.vector.matrix.android.internal.session.group.GroupSummaryUpdater] is observing changes */
@@ -81,7 +81,6 @@ internal class GroupSyncHandler @Inject constructor(private val monarchy: Monarc
         val groupEntity = GroupEntity.where(realm, groupId).findFirst() ?: GroupEntity(groupId)
         groupEntity.membership = Membership.INVITE
         return groupEntity
-
     }
 
     private fun handleLeftGroup(realm: Realm,

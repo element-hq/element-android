@@ -59,7 +59,7 @@ abstract class DebugMaterialThemeActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.vector_home, menu)
+        menuInflater.inflate(R.menu.home, menu)
         return true
     }
 }

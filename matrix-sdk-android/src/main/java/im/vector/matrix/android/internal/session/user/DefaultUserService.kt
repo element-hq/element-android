@@ -26,7 +26,8 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.user.UserService
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.matrix.android.api.util.Cancelable
-import im.vector.matrix.android.internal.database.RealmLiveData
+import im.vector.matrix.android.api.util.Optional
+import im.vector.matrix.android.api.util.toOptional
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.UserEntity
 import im.vector.matrix.android.internal.database.model.UserEntityFields
@@ -61,19 +62,18 @@ internal class DefaultUserService @Inject constructor(private val monarchy: Mona
 
     override fun getUser(userId: String): User? {
         val userEntity = monarchy.fetchCopied { UserEntity.where(it, userId).findFirst() }
-                ?: return null
+                         ?: return null
 
         return userEntity.asDomain()
     }
 
-    override fun liveUser(userId: String): LiveData<User?> {
-        val liveRealmData = RealmLiveData(monarchy.realmConfiguration) { realm ->
-            UserEntity.where(realm, userId)
-        }
-        return Transformations.map(liveRealmData) { results ->
-            results
-                    .map { it.asDomain() }
-                    .firstOrNull()
+    override fun liveUser(userId: String): LiveData<Optional<User>> {
+        val liveData = monarchy.findAllMappedWithChanges(
+                { UserEntity.where(it, userId) },
+                { it.asDomain() }
+        )
+        return Transformations.map(liveData) { results ->
+            results.firstOrNull().toOptional()
         }
     }
 
@@ -105,7 +105,6 @@ internal class DefaultUserService @Inject constructor(private val monarchy: Mona
         }
         return monarchy.findAllPagedWithChanges(realmDataSourceFactory, livePagedListBuilder)
     }
-
 
     override fun searchUsersDirectory(search: String,
                                       limit: Int,

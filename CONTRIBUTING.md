@@ -40,19 +40,45 @@ Please add a line to the top of the file `CHANGES.md` describing your change.
 
 Make sure the following commands execute without any error:
 
-> ./tools/check/check_code_quality.sh
+#### Internal tool
 
-> ./gradlew lintGplayRelease
+<pre>
+./tools/check/check_code_quality.sh
+</pre>
+
+#### ktlint
+
+<pre>
+curl -sSLO https://github.com/pinterest/ktlint/releases/download/0.34.2/ktlint && chmod a+x ktlint
+./ktlint --android --experimental -v
+</pre>
+
+Note that you can run
+
+<pre>
+./ktlint --android --experimental -v -F
+</pre>
+
+For ktlint to fix some detected errors for you (you still have to check and commit the fix of course)
+
+#### lint
+
+<pre>
+./gradlew lintGplayRelease
+./gradlew lintFdroidRelease
+</pre>
 
 ### Unit tests
 
 Make sure the following commands execute without any error:
 
-> ./gradlew testGplayReleaseUnitTest
+<pre>
+./gradlew testGplayReleaseUnitTest
+</pre>
 
 ### Tests
 
-RiotX is currently supported on Android Jelly Bean (API 16+): please test your change on an Android device (or Android emulator) running with API 16. Many issues can happen (including crashes) on older devices.
+RiotX is currently supported on Android KitKat (API 19+): please test your change on an Android device (or Android emulator) running with API 19. Many issues can happen (including crashes) on older devices.
 Also, if possible, please test your change on a real device. Testing on Android emulator may not be sufficient.
 
 ### Internationalisation

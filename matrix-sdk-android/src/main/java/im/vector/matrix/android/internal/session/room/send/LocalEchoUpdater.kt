@@ -32,12 +32,11 @@ internal class LocalEchoUpdater @Inject constructor(private val monarchy: Monarc
             val sendingEventEntity = EventEntity.where(realm, eventId).findFirst()
             if (sendingEventEntity != null) {
                 if (sendState == SendState.SENT && sendingEventEntity.sendState == SendState.SYNCED) {
-                    //If already synced, do not put as sent
+                    // If already synced, do not put as sent
                 } else {
                     sendingEventEntity.sendState = sendState
                 }
             }
         }
     }
-
 }

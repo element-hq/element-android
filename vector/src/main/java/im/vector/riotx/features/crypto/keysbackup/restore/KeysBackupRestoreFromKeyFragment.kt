@@ -75,7 +75,6 @@ class KeysBackupRestoreFromKeyFragment : VectorBaseFragment() {
         viewModel.recoveryCodeErrorText.observe(this, Observer { newValue ->
             mKeyInputLayout.error = newValue
         })
-
     }
 
     @OnTextChanged(R.id.keys_restore_key_enter_edittext)
@@ -122,5 +121,4 @@ class KeysBackupRestoreFromKeyFragment : VectorBaseFragment() {
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
-
 }

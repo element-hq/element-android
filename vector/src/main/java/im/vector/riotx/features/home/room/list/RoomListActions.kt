@@ -19,15 +19,10 @@ package im.vector.riotx.features.home.room.list
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 
 sealed class RoomListActions {
-
     data class SelectRoom(val roomSummary: RoomSummary) : RoomListActions()
-
     data class ToggleCategory(val category: RoomCategory) : RoomListActions()
-
     data class AcceptInvitation(val roomSummary: RoomSummary) : RoomListActions()
-
     data class RejectInvitation(val roomSummary: RoomSummary) : RoomListActions()
-
     data class FilterWith(val filter: String) : RoomListActions()
-
+    object MarkAllRoomsRead : RoomListActions()
 }

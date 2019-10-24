@@ -41,5 +41,4 @@ class ColorProvider @Inject constructor(private val context: AppCompatActivity) 
     fun getColorFromAttribute(@AttrRes colorAttribute: Int): Int {
         return ThemeUtils.getColor(context, colorAttribute)
     }
-
 }

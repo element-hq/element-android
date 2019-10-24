@@ -70,12 +70,11 @@ class KeysBackupSetupStep3Fragment : VectorBaseFragment() {
             ViewModelProviders.of(this, viewModelFactory).get(KeysBackupSetupSharedViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
 
-
         viewModel.shouldPromptOnBack = false
 
         viewModel.passphrase.observe(this, Observer {
             if (it.isNullOrBlank()) {
-                //Recovery was generated, so show key and options to save
+                // Recovery was generated, so show key and options to save
                 mRecoveryKeyLabel2TextView.text = getString(R.string.keys_backup_setup_step3_text_line2_no_passphrase)
                 mFinishButton.text = getString(R.string.keys_backup_setup_step3_button_title_no_passphrase)
 
@@ -88,20 +87,18 @@ class KeysBackupSetupStep3Fragment : VectorBaseFragment() {
                                     .joinToString(" ")
                         }
                 mRecoveryKeyTextView.isVisible = true
-
             } else {
                 mRecoveryKeyLabel2TextView.text = getString(R.string.keys_backup_setup_step3_text_line2)
                 mFinishButton.text = getString(R.string.keys_backup_setup_step3_button_title)
                 mRecoveryKeyTextView.isVisible = false
             }
         })
-
     }
 
     @OnClick(R.id.keys_backup_setup_step3_button)
     fun onFinishButtonClicked() {
         if (viewModel.megolmBackupCreationInfo == null) {
-            //nothing
+            // nothing
         } else {
             if (viewModel.passphrase.value.isNullOrBlank() && !viewModel.copyHasBeenMade) {
                 Toast.makeText(context, R.string.keys_backup_setup_step3_please_make_copy, Toast.LENGTH_LONG).show()
@@ -138,7 +135,13 @@ class KeysBackupSetupStep3Fragment : VectorBaseFragment() {
         }
 
         dialog.findViewById<View>(R.id.keys_backup_setup_save)?.setOnClickListener {
-            if (checkPermissions(PERMISSIONS_FOR_WRITING_FILES, this, PERMISSION_REQUEST_CODE_EXPORT_KEYS)) {
+            val permissionsChecked = checkPermissions(
+                    PERMISSIONS_FOR_WRITING_FILES,
+                    this,
+                    PERMISSION_REQUEST_CODE_EXPORT_KEYS,
+                    R.string.permissions_rationale_msg_keys_backup_export
+            )
+            if (permissionsChecked) {
                 exportRecoveryKeyToFile(recoveryKey)
             }
             dialog.dismiss()

@@ -18,7 +18,6 @@ package im.vector.riotx.core.resources
 
 import android.content.Context
 import android.net.Uri
-import android.text.TextUtils
 import android.webkit.MimeTypeMap
 import im.vector.riotx.core.utils.getFileExtension
 import timber.log.Timber
@@ -48,7 +47,6 @@ data class Resource(
         } catch (e: Exception) {
             Timber.e(e, "Resource.close failed")
         }
-
     }
 
     /**
@@ -64,17 +62,17 @@ data class Resource(
 /**
  * Get a resource stream and metadata about it given its URI returned from onActivityResult.
  *
- * @param context  the context.
- * @param uri      the URI
- * @param mimetype the mimetype
+ * @param context          the context.
+ * @param uri              the URI
+ * @param providedMimetype the mimetype
  * @return a [Resource] encapsulating the opened resource stream and associated metadata
  * or `null` if opening the resource stream failed.
  */
-fun openResource(context: Context, uri: Uri, mimetype: String?): Resource? {
-    var mimetype = mimetype
+fun openResource(context: Context, uri: Uri, providedMimetype: String?): Resource? {
+    var mimetype = providedMimetype
     try {
         // if the mime type is not provided, try to find it out
-        if (TextUtils.isEmpty(mimetype)) {
+        if (mimetype.isNullOrEmpty()) {
             mimetype = context.contentResolver.getType(uri)
 
             // try to find the mimetype from the filename
@@ -86,10 +84,7 @@ fun openResource(context: Context, uri: Uri, mimetype: String?): Resource? {
             }
         }
 
-        return Resource(
-                context.contentResolver.openInputStream(uri),
-                mimetype)
-
+        return Resource(context.contentResolver.openInputStream(uri), mimetype)
     } catch (e: Exception) {
         Timber.e(e, "Failed to open resource input stream")
     }

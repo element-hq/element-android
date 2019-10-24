@@ -38,7 +38,6 @@ class TextComposerViewModel @AssistedInject constructor(@Assisted initialState: 
                                                         private val session: Session
 ) : VectorViewModel<TextComposerViewState>(initialState) {
 
-
     private val room = session.getRoom(initialState.roomId)!!
     private val roomId = initialState.roomId
 
@@ -98,6 +97,5 @@ class TextComposerViewModel @AssistedInject constructor(@Assisted initialState: 
                     asyncUsers = async
             )
         }
-
     }
 }

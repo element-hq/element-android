@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
+@file:Suppress("UNUSED_VARIABLE", "UNUSED_ANONYMOUS_PARAMETER", "UNUSED_PARAMETER")
+
 package im.vector.riotx.features.settings
 
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.text.Editable
-import android.text.TextUtils
+import android.util.Patterns
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
@@ -56,32 +58,30 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
     override var titleRes = R.string.settings_general_title
     override val preferenceXmlRes = R.xml.vector_settings_general
 
-
     private var mDisplayedEmails = ArrayList<String>()
     private var mDisplayedPhoneNumber = ArrayList<String>()
 
     private val mUserSettingsCategory by lazy {
-        findPreference(VectorPreferences.SETTINGS_USER_SETTINGS_PREFERENCE_KEY) as PreferenceCategory
+        findPreference<PreferenceCategory>(VectorPreferences.SETTINGS_USER_SETTINGS_PREFERENCE_KEY)!!
     }
     private val mUserAvatarPreference by lazy {
-        findPreference(VectorPreferences.SETTINGS_PROFILE_PICTURE_PREFERENCE_KEY) as UserAvatarPreference
+        findPreference<UserAvatarPreference>(VectorPreferences.SETTINGS_PROFILE_PICTURE_PREFERENCE_KEY)!!
     }
     private val mDisplayNamePreference by lazy {
-        findPreference(VectorPreferences.SETTINGS_DISPLAY_NAME_PREFERENCE_KEY) as EditTextPreference
+        findPreference<EditTextPreference>(VectorPreferences.SETTINGS_DISPLAY_NAME_PREFERENCE_KEY)!!
     }
     private val mPasswordPreference by lazy {
-        findPreference(VectorPreferences.SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY)
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY)!!
     }
 
     // Local contacts
     private val mContactSettingsCategory by lazy {
-        findPreference(VectorPreferences.SETTINGS_CONTACT_PREFERENCE_KEYS) as PreferenceCategory
+        findPreference<PreferenceCategory>(VectorPreferences.SETTINGS_CONTACT_PREFERENCE_KEYS)!!
     }
 
     private val mContactPhonebookCountryPreference by lazy {
-        findPreference(VectorPreferences.SETTINGS_CONTACTS_PHONEBOOK_COUNTRY_PREFERENCE_KEY)
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_CONTACTS_PHONEBOOK_COUNTRY_PREFERENCE_KEY)!!
     }
-
 
     override fun bindPref() {
         // Avatar
@@ -111,7 +111,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         }
 
         // Add Email
-        (findPreference(ADD_EMAIL_PREFERENCE_KEY) as EditTextPreference).let {
+        findPreference<EditTextPreference>(ADD_EMAIL_PREFERENCE_KEY)!!.let {
             // It does not work on XML, do it here
             it.icon = activity?.let {
                 ThemeUtils.tintDrawable(it,
@@ -123,13 +123,13 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
 
             it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 notImplemented()
-                //addEmail((newValue as String).trim())
+                // addEmail((newValue as String).trim())
                 false
             }
         }
 
         // Add phone number
-        findPreference(ADD_PHONE_NUMBER_PREFERENCE_KEY).let {
+        findPreference<VectorPreference>(ADD_PHONE_NUMBER_PREFERENCE_KEY)!!.let {
             // It does not work on XML, do it here
             it.icon = activity?.let {
                 ThemeUtils.tintDrawable(it,
@@ -147,17 +147,16 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         // Advanced settings
 
         // user account
-        findPreference(VectorPreferences.SETTINGS_LOGGED_IN_PREFERENCE_KEY)
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_LOGGED_IN_PREFERENCE_KEY)!!
                 .summary = session.myUserId
 
         // home server
-        findPreference(VectorPreferences.SETTINGS_HOME_SERVER_PREFERENCE_KEY)
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_HOME_SERVER_PREFERENCE_KEY)!!
                 .summary = session.sessionParams.homeServerConnectionConfig.homeServerUri.toString()
 
         // identity server
-        findPreference(VectorPreferences.SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY)
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY)!!
                 .summary = session.sessionParams.homeServerConnectionConfig.identityServerUri.toString()
-
 
         refreshEmailsList()
         refreshPhoneNumbersList()
@@ -165,13 +164,13 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         setContactsPreferences()
 
         // clear cache
-        findPreference(VectorPreferences.SETTINGS_CLEAR_CACHE_PREFERENCE_KEY).let {
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_CLEAR_CACHE_PREFERENCE_KEY)!!.let {
             /*
             TODO
             MXSession.getApplicationSizeCaches(activity, object : SimpleApiCallback<Long>() {
                 override fun onSuccess(size: Long) {
                     if (null != activity) {
-                        it.summary = android.text.format.Formatter.formatFileSize(activity, size)
+                        it.summary = TextUtils.formatFileSize(activity, size)
                     }
                 }
             })
@@ -185,11 +184,10 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         }
 
         // clear medias cache
-        findPreference(VectorPreferences.SETTINGS_CLEAR_MEDIA_CACHE_PREFERENCE_KEY).let {
-            val size = getSizeOfFiles(requireContext(),
-                    File(requireContext().cacheDir, DiskCache.Factory.DEFAULT_DISK_CACHE_DIR))
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_CLEAR_MEDIA_CACHE_PREFERENCE_KEY)!!.let {
+            val size = getSizeOfFiles(File(requireContext().cacheDir, DiskCache.Factory.DEFAULT_DISK_CACHE_DIR))
 
-            it.summary = android.text.format.Formatter.formatFileSize(activity, size.toLong())
+            it.summary = TextUtils.formatFileSize(requireContext(), size.toLong())
 
             it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 GlobalScope.launch(Dispatchers.Main) {
@@ -204,11 +202,10 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
                         // On BG thread
                         Glide.get(requireContext()).clearDiskCache()
 
-                        newSize = getSizeOfFiles(requireContext(),
-                                File(requireContext().cacheDir, DiskCache.Factory.DEFAULT_DISK_CACHE_DIR))
+                        newSize = getSizeOfFiles(File(requireContext().cacheDir, DiskCache.Factory.DEFAULT_DISK_CACHE_DIR))
                     }
 
-                    it.summary = android.text.format.Formatter.formatFileSize(activity, newSize.toLong())
+                    it.summary = TextUtils.formatFileSize(requireContext(), newSize.toLong())
 
                     hideLoadingView()
                 }
@@ -218,7 +215,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         }
 
         // Sign out
-        findPreference("SETTINGS_SIGN_OUT_KEY")
+        findPreference<VectorPreference>("SETTINGS_SIGN_OUT_KEY")!!
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
             activity?.let {
                 SignOutUiWorker(requireActivity())
@@ -228,11 +225,10 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
             false
         }
 
-
         // Deactivate account section
 
         // deactivate account
-        findPreference(VectorPreferences.SETTINGS_DEACTIVATE_ACCOUNT_KEY)
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_DEACTIVATE_ACCOUNT_KEY)!!
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
             activity?.let {
                 notImplemented()
@@ -333,10 +329,9 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         */
     }
 
-
-    //==============================================================================================================
+    // ==============================================================================================================
     // contacts management
-    //==============================================================================================================
+    // ==============================================================================================================
 
     private fun setContactsPreferences() {
         /* TODO
@@ -369,9 +364,9 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         */
     }
 
-    //==============================================================================================================
+    // ==============================================================================================================
     // Phone number management
-    //==============================================================================================================
+    // ==============================================================================================================
 
     /**
      * Refresh phone number list
@@ -452,9 +447,9 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         }    */
     }
 
-    //==============================================================================================================
+    // ==============================================================================================================
     // Email management
-    //==============================================================================================================
+    // ==============================================================================================================
 
     /**
      * Refresh the emails list
@@ -478,7 +473,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
             run {
                 var index = 0
                 while (true) {
-                    val preference = mUserSettingsCategory.findPreference(EMAIL_PREFERENCE_KEY_BASE + index)
+                    val preference = mUserSettingsCategory.findPreference<VectorPreference>(EMAIL_PREFERENCE_KEY_BASE + index)
 
                     if (null != preference) {
                         mUserSettingsCategory.removePreference(preference)
@@ -492,8 +487,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
             // add new emails list
             mDisplayedEmails = newEmailsList
 
-            val addEmailBtn = mUserSettingsCategory.findPreference(ADD_EMAIL_PREFERENCE_KEY)
-                    ?: return
+            val addEmailBtn = mUserSettingsCategory.findPreference<VectorPreference>(ADD_EMAIL_PREFERENCE_KEY) ?: return
 
             var order = addEmailBtn.order
 
@@ -512,7 +506,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
 
                 preference.onPreferenceLongClickListener = object : VectorPreference.OnPreferenceLongClickListener {
                     override fun onPreferenceLongClick(preference: Preference): Boolean {
-                        activity?.let { copyToClipboard(it, "TODO") } //email3PID.address) }
+                        activity?.let { copyToClipboard(it, "TODO") } // email3PID.address) }
                         return true
                     }
                 }
@@ -534,7 +528,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
     private fun addEmail(email: String) {
         // check first if the email syntax is valid
         // if email is null , then also its invalid email
-        if (TextUtils.isEmpty(email) || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        if (email.isBlank() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             activity?.toast(R.string.auth_invalid_email)
             return
         }
@@ -622,7 +616,6 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         }
     }    */
 
-
     /**
      * Display a dialog which asks confirmation for the deletion of a 3pid
      *
@@ -669,7 +662,6 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
                     .show()
         }
     }
-
 
     /**
      * Update the password.
@@ -719,9 +711,9 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
                     val newPwd = newPasswordText.text.toString().trim()
                     val newConfirmPwd = confirmNewPasswordText.text.toString().trim()
 
-                    updateButton.isEnabled = oldPwd.isNotEmpty() && newPwd.isNotEmpty() && TextUtils.equals(newPwd, newConfirmPwd)
+                    updateButton.isEnabled = oldPwd.isNotEmpty() && newPwd.isNotEmpty() && newPwd == newConfirmPwd
 
-                    if (newPwd.isNotEmpty() && newConfirmPwd.isNotEmpty() && !TextUtils.equals(newPwd, newConfirmPwd)) {
+                    if (newPwd.isNotEmpty() && newConfirmPwd.isNotEmpty() && newPwd != newConfirmPwd) {
                         confirmNewPasswordTil.error = getString(R.string.passwords_do_not_match)
                     }
                 }

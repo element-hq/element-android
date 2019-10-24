@@ -30,7 +30,7 @@ class VectorSettingsFlairFragment : VectorSettingsBaseFragment() {
 
     // Group Flairs
     private val mGroupsFlairCategory by lazy {
-        findPreference(VectorPreferences.SETTINGS_GROUPS_FLAIR_KEY) as PreferenceCategory
+        findPreference<PreferenceCategory>(VectorPreferences.SETTINGS_GROUPS_FLAIR_KEY)!!
     }
 
     override fun bindPref() {
@@ -38,9 +38,9 @@ class VectorSettingsFlairFragment : VectorSettingsBaseFragment() {
         refreshGroupFlairsList()
     }
 
-    //==============================================================================================================
+    // ==============================================================================================================
     // Group flairs management
-    //==============================================================================================================
+    // ==============================================================================================================
 
     /**
      * Force the refresh of the devices list.<br></br>
@@ -167,5 +167,4 @@ class VectorSettingsFlairFragment : VectorSettingsBaseFragment() {
                 */
         }
     }
-
 }

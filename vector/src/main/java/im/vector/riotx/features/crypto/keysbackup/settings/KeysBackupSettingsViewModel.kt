@@ -32,7 +32,6 @@ import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupStateLis
 import im.vector.matrix.android.internal.crypto.keysbackup.model.KeysBackupVersionTrust
 import im.vector.riotx.core.platform.VectorViewModel
 
-
 class KeysBackupSettingsViewModel @AssistedInject constructor(@Assisted initialState: KeysBackupSettingViewState,
                                                               session: Session
 ) : VectorViewModel<KeysBackupSettingViewState>(initialState),

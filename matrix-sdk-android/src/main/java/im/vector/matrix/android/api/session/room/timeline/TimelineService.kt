@@ -17,6 +17,7 @@
 package im.vector.matrix.android.api.session.room.timeline
 
 import androidx.lifecycle.LiveData
+import im.vector.matrix.android.api.util.Optional
 
 /**
  * This interface defines methods to interact with the timeline. It's implemented at the room level.
@@ -32,9 +33,7 @@ interface TimelineService {
      */
     fun createTimeline(eventId: String?, settings: TimelineSettings): Timeline
 
-
     fun getTimeLineEvent(eventId: String): TimelineEvent?
 
-
-    fun liveTimeLineEvent(eventId: String): LiveData<TimelineEvent>
+    fun getTimeLineEventLive(eventId: String): LiveData<Optional<TimelineEvent>>
 }

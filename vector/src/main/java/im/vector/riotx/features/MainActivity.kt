@@ -39,7 +39,6 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 
-
 class MainActivity : VectorBaseActivity() {
 
     companion object {

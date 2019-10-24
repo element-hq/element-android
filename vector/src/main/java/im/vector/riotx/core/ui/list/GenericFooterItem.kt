@@ -32,7 +32,6 @@ import im.vector.riotx.core.extensions.setTextOrHide
 @EpoxyModelClass(layout = R.layout.item_generic_footer)
 abstract class GenericFooterItem : VectorEpoxyModel<GenericFooterItem.Holder>() {
 
-
     @EpoxyAttribute
     var text: String? = null
 
@@ -43,13 +42,11 @@ abstract class GenericFooterItem : VectorEpoxyModel<GenericFooterItem.Holder>() 
     var itemClickAction: GenericItem.Action? = null
 
     override fun bind(holder: Holder) {
-
         holder.text.setTextOrHide(text)
         when (style) {
             GenericItem.STYLE.BIG_TEXT    -> holder.text.textSize = 18f
             GenericItem.STYLE.NORMAL_TEXT -> holder.text.textSize = 14f
         }
-
 
         holder.view.setOnClickListener {
             itemClickAction?.perform?.run()

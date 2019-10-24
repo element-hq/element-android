@@ -16,49 +16,49 @@
 
 package im.vector.matrix.android.internal.session.content
 
-import arrow.core.Try
-import arrow.core.Try.Companion.raise
 import com.squareup.moshi.Moshi
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.internal.di.Authenticated
 import im.vector.matrix.android.internal.network.ProgressRequestBody
-import okhttp3.*
+import im.vector.matrix.android.internal.network.awaitResponse
+import im.vector.matrix.android.internal.network.toFailure
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 import java.io.IOException
 import javax.inject.Inject
 
-
 internal class FileUploader @Inject constructor(@Authenticated
                                                 private val okHttpClient: OkHttpClient,
-                                                private val sessionParams: SessionParams,
-                                                private val moshi: Moshi) {
+                                                sessionParams: SessionParams,
+                                                moshi: Moshi) {
 
     private val uploadUrl = DefaultContentUrlResolver.getUploadUrl(sessionParams.homeServerConnectionConfig)
     private val responseAdapter = moshi.adapter(ContentUploadResponse::class.java)
 
-
-    fun uploadFile(file: File,
-                   filename: String?,
-                   mimeType: String,
-                   progressListener: ProgressRequestBody.Listener? = null): Try<ContentUploadResponse> {
-
-        val uploadBody = RequestBody.create(MediaType.parse(mimeType), file)
-        return upload(uploadBody, filename, progressListener)
-
-    }
-
-    fun uploadByteArray(byteArray: ByteArray,
-                        filename: String?,
-                        mimeType: String,
-                        progressListener: ProgressRequestBody.Listener? = null): Try<ContentUploadResponse> {
-
-        val uploadBody = RequestBody.create(MediaType.parse(mimeType), byteArray)
+    suspend fun uploadFile(file: File,
+                           filename: String?,
+                           mimeType: String,
+                           progressListener: ProgressRequestBody.Listener? = null): ContentUploadResponse {
+        val uploadBody = file.asRequestBody(mimeType.toMediaTypeOrNull())
         return upload(uploadBody, filename, progressListener)
     }
 
+    suspend fun uploadByteArray(byteArray: ByteArray,
+                                filename: String?,
+                                mimeType: String,
+                                progressListener: ProgressRequestBody.Listener? = null): ContentUploadResponse {
+        val uploadBody = byteArray.toRequestBody(mimeType.toMediaTypeOrNull())
+        return upload(uploadBody, filename, progressListener)
+    }
 
-    private fun upload(uploadBody: RequestBody, filename: String?, progressListener: ProgressRequestBody.Listener?): Try<ContentUploadResponse> {
-        val urlBuilder = HttpUrl.parse(uploadUrl)?.newBuilder() ?: return raise(RuntimeException())
+    private suspend fun upload(uploadBody: RequestBody, filename: String?, progressListener: ProgressRequestBody.Listener?): ContentUploadResponse {
+        val urlBuilder = uploadUrl.toHttpUrlOrNull()?.newBuilder() ?: throw RuntimeException()
 
         val httpUrl = urlBuilder
                 .addQueryParameter("filename", filename)
@@ -71,19 +71,15 @@ internal class FileUploader @Inject constructor(@Authenticated
                 .post(requestBody)
                 .build()
 
-        return Try {
-            okHttpClient.newCall(request).execute().use { response ->
-                if (!response.isSuccessful) {
-                    throw IOException()
-                } else {
-                    response.body()?.source()?.let {
-                        responseAdapter.fromJson(it)
-                    }
-                            ?: throw IOException()
+        return okHttpClient.newCall(request).awaitResponse().use { response ->
+            if (!response.isSuccessful) {
+                throw response.toFailure()
+            } else {
+                response.body?.source()?.let {
+                    responseAdapter.fromJson(it)
                 }
+                        ?: throw IOException()
             }
         }
-
     }
-
 }

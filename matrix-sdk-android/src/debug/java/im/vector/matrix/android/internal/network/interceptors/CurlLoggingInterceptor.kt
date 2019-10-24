@@ -22,6 +22,7 @@ import okhttp3.Interceptor
 import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import okio.Buffer
+import timber.log.Timber
 import java.io.IOException
 import java.nio.charset.Charset
 import javax.inject.Inject
@@ -51,27 +52,33 @@ internal class CurlLoggingInterceptor @Inject constructor(private val logger: Ht
         var compressed = false
 
         var curlCmd = "curl"
-        if (curlOptions != null) {
-            curlCmd += " " + curlOptions!!
+        curlOptions?.let {
+            curlCmd += " $it"
         }
-        curlCmd += " -X " + request.method()
+        curlCmd += " -X " + request.method
 
-        val requestBody = request.body()
+        val requestBody = request.body
         if (requestBody != null) {
-            val buffer = Buffer()
-            requestBody.writeTo(buffer)
-            var charset: Charset? = UTF8
-            val contentType = requestBody.contentType()
-            if (contentType != null) {
-                charset = contentType.charset(UTF8)
+            if (requestBody.contentLength() > 100_000) {
+                Timber.w("Unable to log curl command data, size is too big (${requestBody.contentLength()})")
+                // Ensure the curl command will failed
+                curlCmd += "DATA IS TOO BIG"
+            } else {
+                val buffer = Buffer()
+                requestBody.writeTo(buffer)
+                var charset: Charset? = UTF8
+                val contentType = requestBody.contentType()
+                if (contentType != null) {
+                    charset = contentType.charset(UTF8)
+                }
+                // try to keep to a single line and use a subshell to preserve any line breaks
+                curlCmd += " --data $'" + buffer.readString(charset!!).replace("\n", "\\n") + "'"
             }
-            // try to keep to a single line and use a subshell to preserve any line breaks
-            curlCmd += " --data $'" + buffer.readString(charset!!).replace("\n", "\\n") + "'"
         }
 
-        val headers = request.headers()
+        val headers = request.headers
         var i = 0
-        val count = headers.size()
+        val count = headers.size
         while (i < count) {
             val name = headers.name(i)
             val value = headers.value(i)
@@ -82,7 +89,7 @@ internal class CurlLoggingInterceptor @Inject constructor(private val logger: Ht
             i++
         }
 
-        curlCmd += ((if (compressed) " --compressed " else " ") + "'" + request.url().toString()
+        curlCmd += ((if (compressed) " --compressed " else " ") + "'" + request.url.toString()
                 // Replace localhost for emulator by localhost for shell
                 .replace("://10.0.2.2:8080/".toRegex(), "://127.0.0.1:8080/")
                 + "'")
@@ -90,7 +97,7 @@ internal class CurlLoggingInterceptor @Inject constructor(private val logger: Ht
         // Add Json formatting
         curlCmd += " | python -m json.tool"
 
-        logger.log("--- cURL (" + request.url() + ")")
+        logger.log("--- cURL (" + request.url + ")")
         logger.log(curlCmd)
 
         return chain.proceed(request)

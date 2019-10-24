@@ -18,7 +18,7 @@ package im.vector.matrix.android.internal.task
 
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.util.Cancelable
-import java.util.*
+import java.util.UUID
 
 internal fun <PARAMS, RESULT> Task<PARAMS, RESULT>.configureWith(params: PARAMS,
                                                                  init: (ConfigurableTask.Builder<PARAMS, RESULT>.() -> Unit) = {}
@@ -41,7 +41,6 @@ internal data class ConfigurableTask<PARAMS, RESULT>(
         val callback: MatrixCallback<RESULT>
 
 ) : Task<PARAMS, RESULT> by task {
-
 
     class Builder<PARAMS, RESULT>(
             private val task: Task<PARAMS, RESULT>,
@@ -73,7 +72,4 @@ internal data class ConfigurableTask<PARAMS, RESULT>(
     override fun toString(): String {
         return "${task.javaClass.name} with ID: $id"
     }
-
 }
-
-

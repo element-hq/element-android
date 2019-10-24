@@ -31,7 +31,6 @@ class DisplayReadReceiptsController @Inject constructor(private val dateFormatte
                                                         private val avatarRender: AvatarRenderer)
     : TypedEpoxyController<List<ReadReceiptData>>() {
 
-
     override fun buildModels(readReceipts: List<ReadReceiptData>) {
         readReceipts.forEach {
             val timestamp = dateFormatter.formatRelativeDateTime(it.timestamp)

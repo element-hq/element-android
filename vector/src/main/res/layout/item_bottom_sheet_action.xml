@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    android:gravity="center_vertical"
+    android:minHeight="50dp"
+    android:orientation="horizontal"
+    android:paddingLeft="@dimen/layout_horizontal_margin"
+    android:paddingTop="8dp"
+    android:paddingRight="@dimen/layout_horizontal_margin"
+    android:paddingBottom="8dp">
+
+    <Space
+        android:id="@+id/action_start_space"
+        android:layout_width="32dp"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/action_icon"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:tint="?riotx_text_secondary"
+        tools:src="@drawable/ic_delete" />
+
+    <TextView
+        android:id="@+id/action_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:textColor="?riotx_text_secondary"
+        android:textSize="17sp"
+        tools:text="@string/delete" />
+
+    <ImageView
+        android:id="@+id/action_expand"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:tint="?riotx_text_secondary"
+        android:visibility="gone"
+        tools:src="@drawable/ic_material_expand_more_black"
+        tools:visibility="visible" />
+
+</LinearLayout>

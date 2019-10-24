@@ -20,10 +20,10 @@ import android.app.DownloadManager
 import android.content.Context
 import androidx.annotation.WorkerThread
 import arrow.core.Try
-import okio.Okio
+import okio.buffer
+import okio.sink
 import timber.log.Timber
 import java.io.File
-import java.io.InputStream
 
 /**
  * Save a string to a file with Okio
@@ -31,9 +31,9 @@ import java.io.InputStream
 @WorkerThread
 fun writeToFile(str: String, file: File): Try<Unit> {
     return Try {
-        val sink = Okio.sink(file)
+        val sink = file.sink()
 
-        val bufferedSink = Okio.buffer(sink)
+        val bufferedSink = sink.buffer()
 
         bufferedSink.writeString(str, Charsets.UTF_8)
 
@@ -48,9 +48,9 @@ fun writeToFile(str: String, file: File): Try<Unit> {
 @WorkerThread
 fun writeToFile(data: ByteArray, file: File): Try<Unit> {
     return Try {
-        val sink = Okio.sink(file)
+        val sink = file.sink()
 
-        val bufferedSink = Okio.buffer(sink)
+        val bufferedSink = sink.buffer()
 
         bufferedSink.write(data)
 

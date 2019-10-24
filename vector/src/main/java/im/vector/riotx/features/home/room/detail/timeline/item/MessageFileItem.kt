@@ -22,9 +22,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.DrawableRes
+import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
+import im.vector.riotx.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
 abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
@@ -36,19 +38,34 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
     var iconRes: Int = 0
     @EpoxyAttribute
     var clickListener: View.OnClickListener? = null
+    @EpoxyAttribute
+    var izLocalFile = false
+    @EpoxyAttribute
+    lateinit var contentUploadStateTrackerBinder: ContentUploadStateTrackerBinder
 
     override fun bind(holder: Holder) {
         super.bind(holder)
         renderSendState(holder.fileLayout, holder.filenameView)
+        if (!attributes.informationData.sendState.hasFailed()) {
+            contentUploadStateTrackerBinder.bind(attributes.informationData.eventId, izLocalFile, holder.progressLayout)
+        } else {
+            holder.progressLayout.isVisible = false
+        }
         holder.filenameView.text = filename
         holder.fileImageView.setImageResource(iconRes)
         holder.filenameView.setOnClickListener(clickListener)
         holder.filenameView.paintFlags = (holder.filenameView.paintFlags or Paint.UNDERLINE_TEXT_FLAG)
     }
 
+    override fun unbind(holder: Holder) {
+        super.unbind(holder)
+        contentUploadStateTrackerBinder.unbind(attributes.informationData.eventId)
+    }
+
     override fun getViewType() = STUB_ID
 
     class Holder : AbsMessageItem.Holder(STUB_ID) {
+        val progressLayout by bind<ViewGroup>(R.id.messageFileUploadProgressLayout)
         val fileLayout by bind<ViewGroup>(R.id.messageFileLayout)
         val fileImageView by bind<ImageView>(R.id.messageFileImageView)
         val filenameView by bind<TextView>(R.id.messageFilenameView)
@@ -57,5 +74,4 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
     companion object {
         private const val STUB_ID = R.id.messageContentFileStub
     }
-
 }

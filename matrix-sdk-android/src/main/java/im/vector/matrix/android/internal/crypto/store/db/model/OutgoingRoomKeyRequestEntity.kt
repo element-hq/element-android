@@ -73,5 +73,3 @@ internal open class OutgoingRoomKeyRequestEntity(
         }
     }
 }
-
-

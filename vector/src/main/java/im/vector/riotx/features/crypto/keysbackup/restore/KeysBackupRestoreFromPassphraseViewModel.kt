@@ -41,7 +41,7 @@ class KeysBackupRestoreFromPassphraseViewModel @Inject constructor() : ViewModel
         showPasswordMode.value = false
     }
 
-    //========= Actions =========
+    // ========= Actions =========
 
     fun updatePassphrase(newValue: String) {
         passphrase.value = newValue
@@ -79,7 +79,6 @@ class KeysBackupRestoreFromPassphraseViewModel @Inject constructor() : ViewModel
                                     sharedViewModel.loadingEvent.value = WaitingViewData(context.getString(R.string.keys_backup_restoring_waiting_message)
                                             + "\n" + context.getString(R.string.keys_backup_restoring_importing_keys_waiting_message),
                                             isIndeterminate = true)
-
                                 } else {
                                     sharedViewModel.loadingEvent.value = WaitingViewData(context.getString(R.string.keys_backup_restoring_waiting_message)
                                             + "\n" + context.getString(R.string.keys_backup_restoring_importing_keys_waiting_message),
@@ -110,11 +109,9 @@ class KeysBackupRestoreFromPassphraseViewModel @Inject constructor() : ViewModel
     private fun trustOnDecrypt(keysBackup: KeysBackupService, keysVersionResult: KeysVersionResult) {
         keysBackup.trustKeysBackupVersion(keysVersionResult, true,
                 object : MatrixCallback<Unit> {
-
                     override fun onSuccess(data: Unit) {
                         Timber.v("##### trustKeysBackupVersion onSuccess")
                     }
-
                 })
     }
 }

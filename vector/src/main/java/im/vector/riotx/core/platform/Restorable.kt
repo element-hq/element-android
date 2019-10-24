@@ -23,5 +23,4 @@ interface Restorable {
     fun onSaveInstanceState(outState: Bundle)
 
     fun onRestoreInstanceState(savedInstanceState: Bundle?)
-
 }

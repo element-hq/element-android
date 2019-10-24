@@ -28,6 +28,4 @@ internal class FakePaginationTask @Inject constructor(private val tokenChunkEven
         val tokenChunkEvent = FakeTokenChunkEvent(params.from, Random.nextLong(System.currentTimeMillis()).toString(), fakeEvents)
         return tokenChunkEventPersistor.insertInDb(tokenChunkEvent, params.roomId, params.direction)
     }
-
 }
-

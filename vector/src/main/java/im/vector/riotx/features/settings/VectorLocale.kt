@@ -20,15 +20,13 @@ import android.content.Context
 import android.content.res.Configuration
 import android.os.Build
 import android.preference.PreferenceManager
-import android.text.TextUtils
-import android.util.Pair
 import androidx.core.content.edit
-import kotlinx.coroutines.Dispatchers
 import im.vector.riotx.R
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.util.*
+import java.util.Locale
 
 /**
  * Object to manage the Locale choice of the user
@@ -68,7 +66,7 @@ object VectorLocale {
 
             // detect if the default language is used
             val defaultStringValue = getString(context, defaultLocale, R.string.resources_country_code)
-            if (TextUtils.equals(defaultStringValue, getString(context, applicationLocale, R.string.resources_country_code))) {
+            if (defaultStringValue == getString(context, applicationLocale, R.string.resources_country_code)) {
                 applicationLocale = defaultLocale
             }
 
@@ -89,21 +87,21 @@ object VectorLocale {
 
         PreferenceManager.getDefaultSharedPreferences(context).edit {
             val language = locale.language
-            if (TextUtils.isEmpty(language)) {
+            if (language.isEmpty()) {
                 remove(APPLICATION_LOCALE_LANGUAGE_KEY)
             } else {
                 putString(APPLICATION_LOCALE_LANGUAGE_KEY, language)
             }
 
             val country = locale.country
-            if (TextUtils.isEmpty(country)) {
+            if (country.isEmpty()) {
                 remove(APPLICATION_LOCALE_COUNTRY_KEY)
             } else {
                 putString(APPLICATION_LOCALE_COUNTRY_KEY, country)
             }
 
             val variant = locale.variant
-            if (TextUtils.isEmpty(variant)) {
+            if (variant.isEmpty()) {
                 remove(APPLICATION_LOCALE_VARIANT_KEY)
             } else {
                 putString(APPLICATION_LOCALE_VARIANT_KEY, variant)
@@ -120,30 +118,35 @@ object VectorLocale {
      * @return the localized string
      */
     private fun getString(context: Context, locale: Locale, resourceId: Int): String {
-        var result: String
+        val result: String
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             val config = Configuration(context.resources.configuration)
             config.setLocale(locale)
-            try {
-                result = context.createConfigurationContext(config).getText(resourceId).toString()
+            result = try {
+                context.createConfigurationContext(config).getText(resourceId).toString()
             } catch (e: Exception) {
-                Timber.e(e, "## getString() failed : " + e.message)
+                Timber.e(e, "## getString() failed")
                 // use the default one
-                result = context.getString(resourceId)
+                context.getString(resourceId)
             }
         } else {
             val resources = context.resources
             val conf = resources.configuration
+            @Suppress("DEPRECATION")
             val savedLocale = conf.locale
+            @Suppress("DEPRECATION")
             conf.locale = locale
+            @Suppress("DEPRECATION")
             resources.updateConfiguration(conf, null)
 
             // retrieve resources from desired locale
             result = resources.getString(resourceId)
 
             // restore original locale
+            @Suppress("DEPRECATION")
             conf.locale = savedLocale
+            @Suppress("DEPRECATION")
             resources.updateConfiguration(conf, null)
         }
 
@@ -166,14 +169,14 @@ object VectorLocale {
                         getString(context, locale, R.string.resources_country_code)))
             }
         } catch (e: Exception) {
-            Timber.e(e, "## getApplicationLocales() : failed " + e.message)
+            Timber.e(e, "## getApplicationLocales() : failed")
             knownLocalesSet.add(Pair(context.getString(R.string.resources_language), context.getString(R.string.resources_country_code)))
         }
 
         supportedLocales.clear()
 
-        for (knownLocale in knownLocalesSet) {
-            supportedLocales.add(Locale(knownLocale.first, knownLocale.second))
+        knownLocalesSet.mapTo(supportedLocales) { (language, country) ->
+            Locale(language, country)
         }
 
         // sort by human display names
@@ -189,11 +192,10 @@ object VectorLocale {
     fun localeToLocalisedString(locale: Locale): String {
         var res = locale.getDisplayLanguage(locale)
 
-        if (!TextUtils.isEmpty(locale.getDisplayCountry(locale))) {
+        if (locale.getDisplayCountry(locale).isNotEmpty()) {
             res += " (" + locale.getDisplayCountry(locale) + ")"
         }
 
         return res
     }
 }
-

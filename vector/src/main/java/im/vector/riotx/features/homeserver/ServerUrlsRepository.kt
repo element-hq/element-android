@@ -17,7 +17,6 @@
 package im.vector.riotx.features.homeserver
 
 import android.content.Context
-import android.text.TextUtils
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import im.vector.riotx.R
@@ -41,11 +40,11 @@ object ServerUrlsRepository {
     fun setDefaultUrlsFromReferrer(context: Context, homeServerUrl: String, identityServerUrl: String) {
         PreferenceManager.getDefaultSharedPreferences(context)
                 .edit {
-                    if (!TextUtils.isEmpty(homeServerUrl)) {
+                    if (homeServerUrl.isNotEmpty()) {
                         putString(DEFAULT_REFERRER_HOME_SERVER_URL_PREF, homeServerUrl)
                     }
 
-                    if (!TextUtils.isEmpty(identityServerUrl)) {
+                    if (identityServerUrl.isNotEmpty()) {
                         putString(DEFAULT_REFERRER_IDENTITY_SERVER_URL_PREF, identityServerUrl)
                     }
                 }
@@ -70,9 +69,8 @@ object ServerUrlsRepository {
 
         return prefs.getString(HOME_SERVER_URL_PREF,
                                prefs.getString(DEFAULT_REFERRER_HOME_SERVER_URL_PREF,
-                                               getDefaultHomeServerUrl(context)))
+                                               getDefaultHomeServerUrl(context))!!)!!
     }
-
 
     /**
      * Return true if url is the default home server url form resources
@@ -83,5 +81,4 @@ object ServerUrlsRepository {
      * Return default home server url from resources
      */
     fun getDefaultHomeServerUrl(context: Context): String = context.getString(R.string.default_hs_server_url)
-
 }

@@ -17,18 +17,17 @@
 package im.vector.riotx.features.home
 
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.LayoutInflater
 import androidx.core.view.forEachIndexed
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
+import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.platform.ToolbarConfigurable
@@ -38,20 +37,9 @@ import im.vector.riotx.features.home.room.list.RoomListFragment
 import im.vector.riotx.features.home.room.list.RoomListParams
 import im.vector.riotx.features.home.room.list.UnreadCounterBadgeView
 import im.vector.riotx.features.workers.signout.SignOutViewModel
-import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_home_detail.*
+import timber.log.Timber
 import javax.inject.Inject
-
-
-@Parcelize
-data class HomeDetailParams(
-        val groupId: String,
-        val groupName: String,
-        val groupAvatar: String
-) : Parcelable
-
-
-private const val CURRENT_DISPLAY_MODE = "CURRENT_DISPLAY_MODE"
 
 private const val INDEX_CATCHUP = 0
 private const val INDEX_PEOPLE = 1
@@ -59,9 +47,7 @@ private const val INDEX_ROOMS = 2
 
 class HomeDetailFragment : VectorBaseFragment(), KeysBackupBanner.Delegate {
 
-    private val params: HomeDetailParams by args()
     private val unreadCounterBadgeViews = arrayListOf<UnreadCounterBadgeView>()
-    private lateinit var currentDisplayMode: RoomListFragment.DisplayMode
 
     private val viewModel: HomeDetailViewModel by fragmentViewModel()
     private lateinit var navigationViewModel: HomeNavigationViewModel
@@ -80,15 +66,30 @@ class HomeDetailFragment : VectorBaseFragment(), KeysBackupBanner.Delegate {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        currentDisplayMode = savedInstanceState?.getSerializable(CURRENT_DISPLAY_MODE) as? RoomListFragment.DisplayMode
-                             ?: RoomListFragment.DisplayMode.HOME
 
         navigationViewModel = ViewModelProviders.of(requireActivity()).get(HomeNavigationViewModel::class.java)
 
-        switchDisplayMode(currentDisplayMode)
         setupBottomNavigationView()
         setupToolbar()
         setupKeysBackupBanner()
+
+        viewModel.selectSubscribe(this, HomeDetailViewState::groupSummary) { groupSummary ->
+            onGroupChange(groupSummary.orNull())
+        }
+        viewModel.selectSubscribe(this, HomeDetailViewState::displayMode) { displayMode ->
+            switchDisplayMode(displayMode)
+        }
+    }
+
+    private fun onGroupChange(groupSummary: GroupSummary?) {
+        groupSummary?.let {
+            avatarRenderer.render(
+                    it.avatarUrl,
+                    it.groupId,
+                    it.displayName,
+                    groupToolbarAvatarImageView
+            )
+        }
     }
 
     private fun setupKeysBackupBanner() {
@@ -125,24 +126,12 @@ class HomeDetailFragment : VectorBaseFragment(), KeysBackupBanner.Delegate {
         homeKeysBackupBanner.delegate = this
     }
 
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        outState.putSerializable(CURRENT_DISPLAY_MODE, currentDisplayMode)
-        super.onSaveInstanceState(outState)
-    }
-
     private fun setupToolbar() {
         val parentActivity = vectorBaseActivity
         if (parentActivity is ToolbarConfigurable) {
             parentActivity.configure(groupToolbar)
         }
         groupToolbar.title = ""
-        avatarRenderer.render(
-                params.groupAvatar,
-                params.groupId,
-                params.groupName,
-                groupToolbarAvatarImageView
-        )
         groupToolbarAvatarImageView.setOnClickListener {
             navigationViewModel.goTo(HomeActivity.Navigation.OpenDrawer)
         }
@@ -156,10 +145,7 @@ class HomeDetailFragment : VectorBaseFragment(), KeysBackupBanner.Delegate {
                 R.id.bottom_action_rooms  -> RoomListFragment.DisplayMode.ROOMS
                 else                      -> RoomListFragment.DisplayMode.HOME
             }
-            if (currentDisplayMode != displayMode) {
-                currentDisplayMode = displayMode
-                switchDisplayMode(displayMode)
-            }
+            viewModel.switchDisplayMode(displayMode)
             true
         }
 
@@ -176,6 +162,12 @@ class HomeDetailFragment : VectorBaseFragment(), KeysBackupBanner.Delegate {
     private fun switchDisplayMode(displayMode: RoomListFragment.DisplayMode) {
         groupToolbarTitleView.setText(displayMode.titleRes)
         updateSelectedFragment(displayMode)
+        // Update the navigation view (for when we restore the tabs)
+        bottomNavigationView.selectedItemId = when (displayMode) {
+            RoomListFragment.DisplayMode.PEOPLE -> R.id.bottom_action_people
+            RoomListFragment.DisplayMode.ROOMS  -> R.id.bottom_action_rooms
+            else                                -> R.id.bottom_action_home
+        }
     }
 
     private fun updateSelectedFragment(displayMode: RoomListFragment.DisplayMode) {
@@ -203,6 +195,7 @@ class HomeDetailFragment : VectorBaseFragment(), KeysBackupBanner.Delegate {
     }
 
     override fun invalidate() = withState(viewModel) {
+        Timber.v(it.toString())
         unreadCounterBadgeViews[INDEX_CATCHUP].render(UnreadCounterBadgeView.State(it.notificationCountCatchup, it.notificationHighlightCatchup))
         unreadCounterBadgeViews[INDEX_PEOPLE].render(UnreadCounterBadgeView.State(it.notificationCountPeople, it.notificationHighlightPeople))
         unreadCounterBadgeViews[INDEX_ROOMS].render(UnreadCounterBadgeView.State(it.notificationCountRooms, it.notificationHighlightRooms))
@@ -211,11 +204,8 @@ class HomeDetailFragment : VectorBaseFragment(), KeysBackupBanner.Delegate {
 
     companion object {
 
-        fun newInstance(args: HomeDetailParams): HomeDetailFragment {
-            return HomeDetailFragment().apply {
-                setArguments(args)
-            }
+        fun newInstance(): HomeDetailFragment {
+            return HomeDetailFragment()
         }
-
     }
 }

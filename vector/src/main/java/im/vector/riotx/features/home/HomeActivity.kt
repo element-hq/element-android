@@ -16,7 +16,6 @@
 
 package im.vector.riotx.features.home
 
-import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -28,7 +27,6 @@ import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.airbnb.mvrx.viewModel
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.di.ScreenComponent
@@ -48,25 +46,20 @@ import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
 import timber.log.Timber
 import javax.inject.Inject
 
-
 class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     // Supported navigation actions for this Activity
     sealed class Navigation {
         object OpenDrawer : Navigation()
+        object OpenGroup : Navigation()
     }
 
-    private val homeActivityViewModel: HomeActivityViewModel by viewModel()
     private lateinit var navigationViewModel: HomeNavigationViewModel
 
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
-    @Inject lateinit var homeActivityViewModelFactory: HomeActivityViewModel.Factory
-    @Inject lateinit var homeNavigator: HomeNavigator
     @Inject lateinit var vectorUncaughtExceptionHandler: VectorUncaughtExceptionHandler
     @Inject lateinit var pushManager: PushersManager
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
-
-    private var progress: ProgressDialog? = null
 
     private val drawerListener = object : DrawerLayout.SimpleDrawerListener() {
         override fun onDrawerStateChanged(newState: Int) {
@@ -82,7 +75,6 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        homeNavigator.activity = this
         FcmHelper.ensureFcmTokenIsRetrieved(this, pushManager)
         navigationViewModel = ViewModelProviders.of(this).get(HomeNavigationViewModel::class.java)
         drawerLayout.addDrawerListener(drawerListener)
@@ -93,21 +85,14 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
             replaceFragment(homeDrawerFragment, R.id.homeDrawerFragmentContainer)
         }
 
-        homeActivityViewModel.isLoading.observe(this, Observer<Boolean> {
-            // TODO better UI
-            if (it) {
-                progress?.dismiss()
-                progress = ProgressDialog(this)
-                progress?.setMessage(getString(R.string.room_recents_create_room))
-                progress?.show()
-            } else {
-                progress?.dismiss()
-            }
-        })
-
         navigationViewModel.navigateTo.observeEvent(this) { navigation ->
             when (navigation) {
                 is Navigation.OpenDrawer -> drawerLayout.openDrawer(GravityCompat.START)
+                is Navigation.OpenGroup  -> {
+                    drawerLayout.closeDrawer(GravityCompat.START)
+                    val homeDetailFragment = HomeDetailFragment.newInstance()
+                    replaceFragment(homeDetailFragment, R.id.homeDetailFragmentContainer)
+                }
             }
         }
 
@@ -122,7 +107,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
             } else {
                 Timber.e("${getString(status.statusText)} ${status.percentProgress}")
                 waiting_view.setOnClickListener {
-                    //block interactions
+                    // block interactions
                 }
                 waiting_view_status_horizontal_progress.apply {
                     isIndeterminate = false
@@ -149,7 +134,6 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     override fun onDestroy() {
         drawerLayout.removeDrawerListener(drawerListener)
-        homeNavigator.activity = null
         super.onDestroy()
     }
 
@@ -169,7 +153,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
             showDisclaimerDialog(this)
         }
 
-        //Force remote backup state update to update the banner if needed
+        // Force remote backup state update to update the banner if needed
         ViewModelProviders.of(this).get(SignOutViewModel::class.java).refreshRemoteStateIfNeeded()
     }
 
@@ -195,7 +179,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
             }
         }
 
-        return true
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onBackPressed() {
@@ -205,7 +189,6 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
             super.onBackPressed()
         }
     }
-
 
     companion object {
         private const val EXTRA_CLEAR_EXISTING_NOTIFICATION = "EXTRA_CLEAR_EXISTING_NOTIFICATION"
@@ -217,5 +200,4 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
                     }
         }
     }
-
 }

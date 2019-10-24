@@ -19,22 +19,17 @@ package im.vector.riotx.features.home.createdirect
 import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.paging.PagedListEpoxyController
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Incomplete
-import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.user.model.User
-import im.vector.matrix.android.internal.util.createUIHandler
 import im.vector.matrix.android.internal.util.firstLetterOfDisplayName
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.EmptyItem_
-import im.vector.riotx.core.epoxy.errorWithRetryItem
 import im.vector.riotx.core.epoxy.loadingItem
 import im.vector.riotx.core.epoxy.noResultItem
-import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.resources.StringProvider
+import im.vector.riotx.core.utils.createUIHandler
 import im.vector.riotx.features.home.AvatarRenderer
 import javax.inject.Inject
 
@@ -126,5 +121,4 @@ class KnownUsersController @Inject constructor(private val session: Session,
     interface Callback {
         fun onItemClick(user: User)
     }
-
 }

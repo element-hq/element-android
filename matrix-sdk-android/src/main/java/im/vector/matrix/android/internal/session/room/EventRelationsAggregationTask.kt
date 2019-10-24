@@ -28,7 +28,6 @@ import im.vector.matrix.android.internal.database.mapper.EventMapper
 import im.vector.matrix.android.internal.database.model.*
 import im.vector.matrix.android.internal.database.query.create
 import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.Realm
@@ -50,7 +49,7 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
         private val monarchy: Monarchy,
         private val cryptoService: CryptoService) : EventRelationsAggregationTask {
 
-    //OPT OUT serer aggregation until API mature enough
+    // OPT OUT serer aggregation until API mature enough
     private val SHOULD_HANDLE_SERVER_AGREGGATION = false
 
     override suspend fun execute(params: EventRelationsAggregationTask.Params) {
@@ -65,16 +64,16 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
 
     private fun update(realm: Realm, events: List<Event>, userId: String) {
         events.forEach { event ->
-            try { //Temporary catch, should be removed
+            try { // Temporary catch, should be removed
                 val roomId = event.roomId
                 if (roomId == null) {
                     Timber.w("Event has no room id ${event.eventId}")
                     return@forEach
                 }
-                val isLocalEcho = LocalEchoEventFactory.isLocalEchoId(event.eventId ?: "")
+                val isLocalEcho = LocalEcho.isLocalEchoId(event.eventId ?: "")
                 when (event.type) {
                     EventType.REACTION  -> {
-                        //we got a reaction!!
+                        // we got a reaction!!
                         Timber.v("###REACTION in room $roomId , reaction eventID ${event.eventId}")
                         handleReaction(event, roomId, realm, userId, isLocalEcho)
                     }
@@ -85,7 +84,7 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
 
                             EventAnnotationsSummaryEntity.where(realm, event.eventId
                                     ?: "").findFirst()?.let {
-                                TimelineEventEntity.where(realm, eventId = event.eventId
+                                TimelineEventEntity.where(realm, roomId = roomId, eventId = event.eventId
                                         ?: "").findFirst()?.let { tet ->
                                     tet.annotations = it
                                 }
@@ -95,18 +94,16 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
                         val content: MessageContent? = event.content.toModel()
                         if (content?.relatesTo?.type == RelationType.REPLACE) {
                             Timber.v("###REPLACE in room $roomId for event ${event.eventId}")
-                            //A replace!
+                            // A replace!
                             handleReplace(realm, event, content, roomId, isLocalEcho)
                         }
-
-
                     }
 
                     EventType.ENCRYPTED -> {
-                        //Relation type is in clear
+                        // Relation type is in clear
                         val encryptedEventContent = event.content.toModel<EncryptedEventContent>()
                         if (encryptedEventContent?.relatesTo?.type == RelationType.REPLACE) {
-                            //we need to decrypt if needed
+                            // we need to decrypt if needed
                             if (event.mxDecryptionResult == null) {
                                 try {
                                     val result = cryptoService.decryptEvent(event, event.roomId)
@@ -118,12 +115,12 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
                                     )
                                 } catch (e: MXCryptoError) {
                                     Timber.w("Failed to decrypt e2e replace")
-                                    //TODO -> we should keep track of this and retry, or aggregation will be broken
+                                    // TODO -> we should keep track of this and retry, or aggregation will be broken
                                 }
                             }
                             event.getClearContent().toModel<MessageContent>()?.let {
                                 Timber.v("###REPLACE in room $roomId for event ${event.eventId}")
-                                //A replace!
+                                // A replace!
                                 handleReplace(realm, event, it, roomId, isLocalEcho, encryptedEventContent.relatesTo.eventId)
                             }
                         }
@@ -137,12 +134,11 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
 //                                val unsignedData = EventMapper.map(eventToPrune).unsignedData
 //                                        ?: UnsignedData(null, null)
 
-                                //was this event a m.replace
+                                // was this event a m.replace
                                 val contentModel = ContentMapper.map(eventToPrune.content)?.toModel<MessageContent>()
                                 if (RelationType.REPLACE == contentModel?.relatesTo?.type && contentModel.relatesTo?.eventId != null) {
                                     handleRedactionOfReplace(eventToPrune, contentModel.relatesTo!!.eventId!!, realm)
                                 }
-
                             }
                             EventType.REACTION -> {
                                 handleReactionRedact(eventToPrune, realm, userId)
@@ -151,31 +147,28 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
                     }
                     else                -> Timber.v("UnHandled event ${event.eventId}")
                 }
-
             } catch (t: Throwable) {
                 Timber.e(t, "## Should not happen ")
             }
         }
-
     }
 
     private fun handleReplace(realm: Realm, event: Event, content: MessageContent, roomId: String, isLocalEcho: Boolean, relatedEventId: String? = null) {
         val eventId = event.eventId ?: return
         val targetEventId = relatedEventId ?: content.relatesTo?.eventId ?: return
         val newContent = content.newContent ?: return
-        //ok, this is a replace
+        // ok, this is a replace
         var existing = EventAnnotationsSummaryEntity.where(realm, targetEventId).findFirst()
         if (existing == null) {
             Timber.v("###REPLACE creating new relation summary for $targetEventId")
-            existing = EventAnnotationsSummaryEntity.create(realm, targetEventId)
-            existing.roomId = roomId
+            existing = EventAnnotationsSummaryEntity.create(realm, roomId, targetEventId)
         }
 
-        //we have it
+        // we have it
         val existingSummary = existing.editSummary
         if (existingSummary == null) {
-            Timber.v("###REPLACE new edit summary for ${targetEventId}, creating one (localEcho:$isLocalEcho)")
-            //create the edit summary
+            Timber.v("###REPLACE new edit summary for $targetEventId, creating one (localEcho:$isLocalEcho)")
+            // create the edit summary
             val editSummary = realm.createObject(EditAggregatedSummaryEntity::class.java)
             editSummary.aggregatedContent = ContentMapper.map(newContent)
             if (isLocalEcho) {
@@ -189,14 +182,14 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
             existing.editSummary = editSummary
         } else {
             if (existingSummary.sourceEvents.contains(eventId)) {
-                //ignore this event, we already know it (??)
-                Timber.v("###REPLACE ignoring event for summary, it's known ${eventId}")
+                // ignore this event, we already know it (??)
+                Timber.v("###REPLACE ignoring event for summary, it's known $eventId")
                 return
             }
             val txId = event.unsignedData?.transactionId
-            //is it a remote echo?
+            // is it a remote echo?
             if (!isLocalEcho && existingSummary.sourceLocalEchoEvents.contains(txId)) {
-                //ok it has already been managed
+                // ok it has already been managed
                 Timber.v("###REPLACE Receiving remote echo of edit (edit already done)")
                 existingSummary.sourceLocalEchoEvents.remove(txId)
                 existingSummary.sourceEvents.add(event.eventId)
@@ -206,7 +199,7 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
             ) {
                 Timber.v("###REPLACE Computing aggregated edit summary (isLocalEcho:$isLocalEcho)")
                 if (!isLocalEcho) {
-                    //Do not take local echo originServerTs here, could mess up ordering (keep old ts)
+                    // Do not take local echo originServerTs here, could mess up ordering (keep old ts)
                     existingSummary.lastEditTs = event.originServerTs ?: System.currentTimeMillis()
                 }
                 existingSummary.aggregatedContent = ContentMapper.map(newContent)
@@ -216,14 +209,13 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
                     existingSummary.sourceEvents.add(eventId)
                 }
             } else {
-                //ignore this event for the summary (back paginate)
+                // ignore this event for the summary (back paginate)
                 if (!isLocalEcho) {
                     existingSummary.sourceEvents.add(eventId)
                 }
                 Timber.v("###REPLACE ignoring event for summary, it's to old $eventId")
             }
         }
-
     }
 
     private fun handleInitialAggregatedRelations(event: Event, roomId: String, aggregation: AggregatedAnnotation, realm: Realm) {
@@ -233,15 +225,14 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
                     val eventId = event.eventId ?: ""
                     val existing = EventAnnotationsSummaryEntity.where(realm, eventId).findFirst()
                     if (existing == null) {
-                        val eventSummary = EventAnnotationsSummaryEntity.create(realm, eventId)
-                        eventSummary.roomId = roomId
+                        val eventSummary = EventAnnotationsSummaryEntity.create(realm, roomId, eventId)
                         val sum = realm.createObject(ReactionAggregatedSummaryEntity::class.java)
                         sum.key = it.key
-                        sum.firstTimestamp = event.originServerTs ?: 0 //TODO how to maintain order?
+                        sum.firstTimestamp = event.originServerTs ?: 0 // TODO how to maintain order?
                         sum.count = it.count
                         eventSummary.reactionsSummary.add(sum)
                     } else {
-                        //TODO how to handle that
+                        // TODO how to handle that
                     }
                 }
             }
@@ -254,14 +245,14 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
             Timber.e("Malformed reaction content ${event.content}")
             return
         }
-        //rel_type must be m.annotation
+        // rel_type must be m.annotation
         if (RelationType.ANNOTATION == content.relatesTo?.type) {
             val reaction = content.relatesTo.key
             val relatedEventID = content.relatesTo.eventId
             val reactionEventId = event.eventId
             Timber.v("Reaction $reactionEventId relates to $relatedEventID")
             val eventSummary = EventAnnotationsSummaryEntity.where(realm, relatedEventID).findFirst()
-                    ?: EventAnnotationsSummaryEntity.create(realm, relatedEventID).apply { this.roomId = roomId }
+                    ?: EventAnnotationsSummaryEntity.create(realm, roomId, relatedEventID).apply { this.roomId = roomId }
 
             var sum = eventSummary.reactionsSummary.find { it.key == reaction }
             val txId = event.unsignedData?.transactionId
@@ -284,12 +275,11 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
                 sum.addedByMe = sum.addedByMe || (userId == event.senderId)
                 eventSummary.reactionsSummary.add(sum)
             } else {
-                //is this a known event (is possible? pagination?)
+                // is this a known event (is possible? pagination?)
                 if (!sum.sourceEvents.contains(reactionEventId)) {
-
-                    //check if it's not the sync of a local echo
+                    // check if it's not the sync of a local echo
                     if (!isLocalEcho && sum.sourceLocalEcho.contains(txId)) {
-                        //ok it has already been counted, just sync the list, do not touch count
+                        // ok it has already been counted, just sync the list, do not touch count
                         Timber.v("Ignoring synced of local echo for reaction $reaction")
                         sum.sourceLocalEcho.remove(txId)
                         sum.sourceEvents.add(reactionEventId)
@@ -305,14 +295,11 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
 
                         sum.addedByMe = sum.addedByMe || (userId == event.senderId)
                     }
-
                 }
             }
-
         } else {
             Timber.e("Unknwon relation type ${content.relatesTo?.type} for event ${event.eventId}")
         }
-
     }
 
     /**
@@ -331,29 +318,28 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
             Timber.w("Redaction of a replace that was not known in aggregation $sourceToDiscard")
             return
         }
-        //Need to remove this event from the redaction list and compute new aggregation state
+        // Need to remove this event from the redaction list and compute new aggregation state
         sourceEvents.removeAt(sourceToDiscard)
         val previousEdit = sourceEvents.mapNotNull { EventEntity.where(realm, it).findFirst() }.sortedBy { it.originServerTs }.lastOrNull()
         if (previousEdit == null) {
-            //revert to original
+            // revert to original
             eventSummary.editSummary?.deleteFromRealm()
         } else {
-            //I have the last event
+            // I have the last event
             ContentMapper.map(previousEdit.content)?.toModel<MessageContent>()?.newContent?.let { newContent ->
                 eventSummary.editSummary?.lastEditTs = previousEdit.originServerTs
                         ?: System.currentTimeMillis()
                 eventSummary.editSummary?.aggregatedContent = ContentMapper.map(newContent)
             } ?: run {
                 Timber.e("Failed to udate edited summary")
-                //TODO how to reccover that
+                // TODO how to reccover that
             }
-
         }
     }
 
     fun handleReactionRedact(eventToPrune: EventEntity, realm: Realm, userId: String) {
         Timber.v("REDACTION of reaction ${eventToPrune.eventId}")
-        //delete a reaction, need to update the annotation summary if any
+        // delete a reaction, need to update the annotation summary if any
         val reactionContent: ReactionContent = EventMapper.map(eventToPrune).content.toModel()
                 ?: return
         val eventThatWasReacted = reactionContent.relatesTo?.eventId ?: return
@@ -373,11 +359,11 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
                             Timber.v("Known reactions after  ${aggregation.sourceEvents.joinToString(",")}")
                             aggregation.count = aggregation.count - 1
                             if (eventToPrune.sender == userId) {
-                                //Was it a redact on my reaction?
+                                // Was it a redact on my reaction?
                                 aggregation.addedByMe = false
                             }
                             if (aggregation.count == 0) {
-                                //delete!
+                                // delete!
                                 aggregation.deleteFromRealm()
                             }
                         } else {

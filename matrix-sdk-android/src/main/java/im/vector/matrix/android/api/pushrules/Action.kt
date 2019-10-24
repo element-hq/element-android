@@ -18,14 +18,12 @@ package im.vector.matrix.android.api.pushrules
 import im.vector.matrix.android.api.pushrules.rest.PushRule
 import timber.log.Timber
 
-
 sealed class Action {
     object Notify : Action()
     object DoNotNotify : Action()
     data class Sound(val sound: String) : Action()
     data class Highlight(val highlight: Boolean) : Action()
 }
-
 
 private const val ACTION_NOTIFY = "notify"
 private const val ACTION_DONT_NOTIFY = "dont_notify"
@@ -80,7 +78,6 @@ fun PushRule.getActions(): List<Action> {
                         }
                         // When the value is not there, default sound (not specified by the spec)
                                 ?: Action.Sound(ACTION_OBJECT_VALUE_VALUE_DEFAULT)
-
                     }
                     ACTION_OBJECT_SET_TWEAK_VALUE_HIGHLIGHT -> {
                         (actionStrOrObj[ACTION_OBJECT_VALUE_KEY] as? Boolean)?.let { boolValue ->
@@ -104,7 +101,5 @@ fun PushRule.getActions(): List<Action> {
         }
     }
 
-
     return result
 }
-

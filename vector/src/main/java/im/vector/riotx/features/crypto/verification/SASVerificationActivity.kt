@@ -33,7 +33,6 @@ import im.vector.riotx.core.platform.WaitingViewData
 
 class SASVerificationActivity : SimpleFragmentActivity() {
 
-
     companion object {
 
         private const val EXTRA_MATRIX_ID = "EXTRA_MATRIX_ID"
@@ -79,7 +78,6 @@ class SASVerificationActivity : SimpleFragmentActivity() {
 
     override fun getTitleRes() = R.string.title_activity_verify_device
 
-
     private lateinit var viewModel: SasVerificationViewModel
 
     override fun initUiAndData() {
@@ -90,15 +88,16 @@ class SASVerificationActivity : SimpleFragmentActivity() {
         if (isFirstCreation()) {
             val isIncoming = intent.getBooleanExtra(EXTRA_IS_INCOMING, false)
             if (isIncoming) {
-                //incoming always have a transaction id
+                // incoming always have a transaction id
                 viewModel.initIncoming(session, intent.getStringExtra(EXTRA_OTHER_USER_ID), transactionID)
             } else {
                 viewModel.initOutgoing(session, intent.getStringExtra(EXTRA_OTHER_USER_ID), intent.getStringExtra(EXTRA_OTHER_DEVICE_ID))
             }
 
             if (isIncoming) {
-                val incoming = viewModel.transaction as IncomingSasVerificationTransaction
-                when (incoming.uxState) {
+                val incoming = viewModel.transaction as? IncomingSasVerificationTransaction
+                when (incoming?.uxState) {
+                    null,
                     IncomingSasVerificationTransaction.UxState.UNKNOWN,
                     IncomingSasVerificationTransaction.UxState.SHOW_ACCEPT,
                     IncomingSasVerificationTransaction.UxState.WAIT_FOR_KEY_AGREEMENT -> {
@@ -128,7 +127,7 @@ class SASVerificationActivity : SimpleFragmentActivity() {
                 }
             } else {
                 val outgoing = viewModel.transaction as? OutgoingSasVerificationRequest
-                //transaction can be null, as not yet created
+                // transaction can be null, as not yet created
                 when (outgoing?.uxState) {
                     null,
                     OutgoingSasVerificationRequest.UxState.UNKNOWN,
@@ -203,14 +202,14 @@ class SASVerificationActivity : SimpleFragmentActivity() {
                     val message =
                             if (isCancelledByMe) getString(R.string.sas_cancelled_by_me, humanReadableReason)
                             else getString(R.string.sas_cancelled_by_other, humanReadableReason)
-                    //Show a dialog
+                    // Show a dialog
                     if (!this.isFinishing) {
                         AlertDialog.Builder(this)
                                 .setTitle(R.string.sas_cancelled_dialog_title)
                                 .setMessage(message)
                                 .setCancelable(false)
                                 .setPositiveButton(R.string.ok) { _, _ ->
-                                    //nop
+                                    // nop
                                     finish()
                                 }
                                 .show()
@@ -231,16 +230,15 @@ class SASVerificationActivity : SimpleFragmentActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
-            //we want to cancel the transaction
+            // we want to cancel the transaction
             viewModel.cancelTransaction()
         }
 
         return super.onOptionsItemSelected(item)
     }
 
-
     override fun onBackPressed() {
-        //we want to cancel the transaction
+        // we want to cancel the transaction
         viewModel.cancelTransaction()
     }
 }

@@ -26,5 +26,4 @@ internal class CancelableCoroutine(private val job: Job) : Cancelable {
             job.cancel()
         }
     }
-
 }

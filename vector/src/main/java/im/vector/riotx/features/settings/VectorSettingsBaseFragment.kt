@@ -18,7 +18,6 @@ package im.vector.riotx.features.settings
 
 import android.content.Context
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.View
 import androidx.annotation.CallSuper
 import androidx.preference.PreferenceFragmentCompat
@@ -134,12 +133,10 @@ abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat(), HasScree
             return
         }
         activity?.runOnUiThread {
-            if (!TextUtils.isEmpty(errorMessage) && errorMessage != null) {
-                activity?.toast(errorMessage!!)
+            if (errorMessage != null && errorMessage.isNotBlank()) {
+                activity?.toast(errorMessage)
             }
             hideLoadingView()
         }
     }
-
-
 }

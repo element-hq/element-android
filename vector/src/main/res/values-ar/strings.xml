@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="resources_language">ar</string>
+    <string name="resources_country_code">""</string>
 
     <string name="light_theme">السمة الفاتحة</string>
     <string name="dark_theme">السمة الداكنة</string>
@@ -111,8 +112,6 @@
     <string name="auth_password_placeholder">كلمة السر</string>
     <string name="auth_new_password_placeholder">كلمة السر الجديدة</string>
     <string name="auth_user_name_placeholder">اسم المستخدم</string>
-    <string name="auth_add_email_message">أضِف عنوان بريد إلكتروني إلى حسابك ليستطيع الغير اكتشافك على الشبكة، وأيضا لإتاحة خاصية تصفير كلمة السر.</string>
-    <string name="auth_add_phone_message">أضِف رقم هاتف إلى حسابك ليستطيع الغير اكتشافك على الشبكة.</string>
     <string name="auth_email_placeholder">عنوان البريد الإلكتروني</string>
     <string name="auth_opt_email_placeholder">عنوان البريد الإلكتروني (اختياري)</string>
     <string name="auth_phone_number_placeholder">رقم الهاتف</string>
@@ -373,7 +372,6 @@
 
     <!-- share keys -->
     <string name="conference_call_warning_title">تحذير!</string>
-    <string name="resources_country_code">العربية</string>
 
     <string name="room_unknown_devices_messages_notification">لم تُرسل الرسائل بسبب وجود أجهزة مجهولة. ماذا أفعل؟ %1$s. ‏%2$s.</string>
     <string name="room_settings_addresses_invalid_format_dialog_body">ليس ’⁨%s⁩‘ تنسيقا صالحا لاختصار</string>
@@ -533,12 +531,6 @@
     <string name="start_voice_call_prompt_msg">أمتأكد من بدء محادثة صوتية؟</string>
     <string name="start_video_call_prompt_msg">أمتأكد من بدء محادثة صورية؟</string>
 
-    <string name="auth_add_email_phone_message">أضِف عنوان بريد إلكتروني و/أو رقم هاتف لحسابك ليستطيع الناس اكتشافك.
-
-ستقدر أيضا على تصفير كلمة السر عبر البريد الإلكتروني.</string>
-    <string name="auth_add_email_and_phone_message">أضِف عنوان بريد إلكتروني ورقم هاتف لحسابك ليستطيع الناس اكتشافك.
-
-ستقدر أيضا على تصفير كلمة السر عبر البريد الإلكتروني.</string>
     <string name="auth_email_already_defined">عنوان البريد مُعرّف بالفعل.</string>
     <string name="auth_invalid_token">الأمارة غير صالحة</string>
     <string name="auth_threepid_warning_message">التسجيل عبر البريد ورقم الهاتف معا ليس مدعوما إلى حين توفر واجهة API لذلك. سيُستخدم رقم الهاتف فقط دون البريد.

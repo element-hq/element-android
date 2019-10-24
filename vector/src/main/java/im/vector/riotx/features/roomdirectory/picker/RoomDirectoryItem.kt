@@ -62,7 +62,6 @@ abstract class RoomDirectoryItem : VectorEpoxyModel<RoomDirectoryItem.Holder>() 
         holder.descritionView.setTextOrHide(directoryDescription)
     }
 
-
     class Holder : VectorEpoxyHolder() {
         val rootView by bind<ViewGroup>(R.id.itemRoomDirectoryLayout)
 
@@ -70,6 +69,4 @@ abstract class RoomDirectoryItem : VectorEpoxyModel<RoomDirectoryItem.Holder>() 
         val nameView by bind<TextView>(R.id.itemRoomDirectoryName)
         val descritionView by bind<TextView>(R.id.itemRoomDirectoryDescription)
     }
-
 }
-

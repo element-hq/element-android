@@ -53,6 +53,4 @@ abstract class KeysBackupSettingFooterItem : VectorEpoxyModel<KeysBackupSettingF
         val button1 by bind<Button>(R.id.keys_backup_settings_footer_button1)
         val button2 by bind<TextView>(R.id.keys_backup_settings_footer_button2)
     }
-
 }
-

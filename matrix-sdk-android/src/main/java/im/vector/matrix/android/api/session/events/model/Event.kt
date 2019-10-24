@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.api.session.events.model
 
-import android.text.TextUtils
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
@@ -35,18 +34,16 @@ typealias Content = JsonDict
  * This methods is a facility method to map a json content to a model.
  */
 inline fun <reified T> Content?.toModel(catchError: Boolean = true): T? {
-    return this?.let {
-        val moshi = MoshiProvider.providesMoshi()
-        val moshiAdapter = moshi.adapter(T::class.java)
-        return try {
-            moshiAdapter.fromJsonValue(it)
-        } catch (e: Exception) {
-            if (catchError) {
-                Timber.e(e, "To model failed : $e")
-                null
-            } else {
-                throw e
-            }
+    val moshi = MoshiProvider.providesMoshi()
+    val moshiAdapter = moshi.adapter(T::class.java)
+    return try {
+        moshiAdapter.fromJsonValue(this)
+    } catch (e: Exception) {
+        if (catchError) {
+            Timber.e(e, "To model failed : $e")
+            null
+        } else {
+            throw e
         }
     }
 }
@@ -55,12 +52,10 @@ inline fun <reified T> Content?.toModel(catchError: Boolean = true): T? {
  * This methods is a facility method to map a model to a json Content
  */
 @Suppress("UNCHECKED_CAST")
-inline fun <reified T> T?.toContent(): Content? {
-    return this?.let {
-        val moshi = MoshiProvider.providesMoshi()
-        val moshiAdapter = moshi.adapter(T::class.java)
-        return moshiAdapter.toJsonValue(it) as Content
-    }
+inline fun <reified T> T.toContent(): Content {
+    val moshi = MoshiProvider.providesMoshi()
+    val moshiAdapter = moshi.adapter(T::class.java)
+    return moshiAdapter.toJsonValue(this) as Content
 }
 
 /**
@@ -81,7 +76,6 @@ data class Event(
         @Json(name = "redacts") val redacts: String? = null
 ) {
 
-
     @Transient
     var mxDecryptionResult: OlmDecryptionResult? = null
 
@@ -91,7 +85,6 @@ data class Event(
     @Transient
     var sendState: SendState = SendState.UNKNOWN
 
-
     /**
      * Check if event is a state event.
      * @return true if event is state event.
@@ -100,15 +93,15 @@ data class Event(
         return EventType.isStateEvent(getClearType())
     }
 
-    //==============================================================================================================
+    // ==============================================================================================================
     // Crypto
-    //==============================================================================================================
+    // ==============================================================================================================
 
     /**
      * @return true if this event is encrypted.
      */
     fun isEncrypted(): Boolean {
-        return TextUtils.equals(type, EventType.ENCRYPTED)
+        return type == EventType.ENCRYPTED
     }
 
     /**
@@ -136,11 +129,12 @@ data class Event(
      * @return the event content
      */
     fun getClearContent(): Content? {
+        @Suppress("UNCHECKED_CAST")
         return mxDecryptionResult?.payload?.get("content") as? Content ?: content
     }
 
     fun toContentStringWithIndent(): String {
-        val contentMap = toContent()?.toMutableMap() ?: HashMap()
+        val contentMap = toContent().toMutableMap()
         return JSONObject(contentMap).toString(4)
     }
 
@@ -194,9 +188,7 @@ data class Event(
         result = 31 * result + sendState.hashCode()
         return result
     }
-
 }
-
 
 fun Event.isTextMessage(): Boolean {
     return getClearType() == EventType.MESSAGE

@@ -31,7 +31,6 @@ import butterknife.BindView
 import im.vector.matrix.android.api.session.Session
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
-import im.vector.riotx.core.extensions.withArgs
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.rageshake.BugReporter
@@ -59,7 +58,6 @@ class VectorSettingsNotificationsTroubleshootFragment : VectorBaseFragment() {
     @Inject lateinit var bugReporter: BugReporter
     @Inject lateinit var testManagerFactory: NotificationTroubleshootTestManagerFactory
 
-
     override fun getLayoutResId() = R.layout.fragment_settings_notifications_troubleshoot
 
     private var interactionListener: VectorSettingsFragmentInteractionListener? = null
@@ -78,7 +76,6 @@ class VectorSettingsNotificationsTroubleshootFragment : VectorBaseFragment() {
                                                           layoutManager.orientation)
         mRecyclerView.addItemDecoration(dividerItemDecoration)
 
-
         mSummaryButton.setOnClickListener {
             bugReporter.openBugReportScreen(activity!!)
         }
@@ -90,7 +87,6 @@ class VectorSettingsNotificationsTroubleshootFragment : VectorBaseFragment() {
     }
 
     private fun startUI() {
-
         mSummaryDescription.text = getString(R.string.settings_troubleshoot_diagnostic_running_status,
                                              0, 0)
         testManager = testManagerFactory.create(this)
@@ -104,7 +100,7 @@ class VectorSettingsNotificationsTroubleshootFragment : VectorBaseFragment() {
                         mRunButton.visibility = View.VISIBLE
                     }
                     TroubleshootTest.TestStatus.RUNNING     -> {
-                        //Forces int type because it's breaking lint
+                        // Forces int type because it's breaking lint
                         val size: Int = troubleshootTestManager.testList.size
                         val currentTestIndex: Int = troubleshootTestManager.currentTestIndex
                         mSummaryDescription.text = getString(
@@ -116,7 +112,7 @@ class VectorSettingsNotificationsTroubleshootFragment : VectorBaseFragment() {
                         mRunButton.visibility = View.GONE
                     }
                     TroubleshootTest.TestStatus.FAILED      -> {
-                        //check if there are quick fixes
+                        // check if there are quick fixes
                         var hasQuickFix = false
                         testManager?.testList?.let {
                             for (test in it) {
@@ -141,7 +137,6 @@ class VectorSettingsNotificationsTroubleshootFragment : VectorBaseFragment() {
                     }
                 }
             }
-
         }
         mRecyclerView.adapter = testManager?.adapter
         testManager?.runDiagnostic()
@@ -175,9 +170,6 @@ class VectorSettingsNotificationsTroubleshootFragment : VectorBaseFragment() {
 
     companion object {
         // static constructor
-        fun newInstance(matrixId: String) = VectorSettingsNotificationsTroubleshootFragment()
-                .withArgs {
-                    // TODO putString(MXCActionBarActivity.EXTRA_MATRIX_ID, matrixId)
-                }
+        fun newInstance() = VectorSettingsNotificationsTroubleshootFragment()
     }
 }

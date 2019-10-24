@@ -252,7 +252,6 @@
     <string name="room_unsent_messages_notification">సందేశాలు పంపబడలేదు. ఇప్పుడు %1$s లేదా %2$s?</string>
     <string name="room_unknown_devices_messages_notification">తెలియని పరికరాల కారణంగా ఉన్న సందేశాలు పంపబడలేదు. ఇప్పుడు %1$s లేదా %2$s?</string>
     <string name="room_prompt_resend">అన్నీ మళ్లీ పంపు</string>
-    <string name="auth_add_phone_message">వాడుకరులు మిమ్మల్ని కనుగొనడానికి మీ ఖాతాకు ఒక ఫోన్ నంబర్ను జోడించండి.</string>
     <string name="people_search_filter_text">మ్యాట్రిక్స్ వాడుకరులు మాత్రమే</string>
     <string name="room_prompt_cancel">అన్నింటినీ రద్దు చేయండి</string>
     <string name="room_resend_unsent_messages">పంపని సందేశాలను తిరిగి పంపండి</string>
@@ -460,7 +459,6 @@
 
     <string name="auth_send_reset_email">రీసెట్ ఈమెయిల్ పంపండి</string>
     <string name="auth_return_to_login">లాగిన్ తెరకి తిరిగి వెళ్లండి</string>
-    <string name="auth_add_email_message">ఒక ఈమెయిల్ చిరునామా ని జతచేస్తే వేరేవాళ్లు మిమ్మల్ని కనుక్కోవచ్చు, మరియు గుప్తపదాన్ని మార్చుకోవచ్చు</string>
     <string name="action_global_search">విశ్వాన్వేషణ</string>
     <string name="call_error_user_not_responding">అటు వైపు ఎవరు కాల్ ఎత్తలేదు</string>
     <string name="call_error_answered_elsewhere">కాల్ ఎక్కడో ఎత్తారు</string>
@@ -480,12 +478,6 @@
     <string name="send_bug_report_sent">బగ్ నివేదిక విజయవంతంగా పంపబడింది</string>
     <string name="send_bug_report_failed">లోపపు నివేదిక పంపబడదు (%s)</string>
     <string name="identity_url">గుర్తించిన సేవిక యు ఆర్ ఎల్</string>
-    <string name="auth_add_email_phone_message">వినియోగదారులు మిమ్మల్ని కనుగొనడానికి మిమ్మల్ని అనుమతించడానికి మీ ఖాతాకు ఇమెయిల్ చిరునామా మరియు / లేదా ఫోన్ నంబర్ను జోడించండి.
-\n
-\nఇమెయిల్ చిరునామా మీ పాస్ వర్డ్ ను మళ్ళీ రీసెట్ చేస్తుంది.</string>
-    <string name="auth_add_email_and_phone_message">వినియోగదారులు మిమ్మల్ని కనుగొనడానికి మిమ్మల్ని అనుమతించడానికి మీ ఖాతాకు ఇమెయిల్ చిరునామా మరియు / లేదా ఫోన్ నంబర్ను జోడించండి.
-\n
-\nఇమెయిల్ చిరునామా మీ పాస్ వర్డ్ ను మళ్ళీ రీసెట్ చేస్తుంది.</string>
     <string name="auth_use_server_options">కస్టమ్ సర్వర్ ఎంపికలు (ఆధునిక) ఉపయోగించండి</string>
     <string name="auth_reset_password_email_validation_message">%s కు ఒక ఇ-తపాలా పంపబడింది. మీరు కలిగి ఉన్న లింగికను మీరు అనుసరించిన తర్వాత, క్రింద నొక్కండి .</string>
     <string name="auth_reset_password_success_message">"మీ సాంకేతిక పదము  పునః ప్రారంభం చెయ్యబడింది.

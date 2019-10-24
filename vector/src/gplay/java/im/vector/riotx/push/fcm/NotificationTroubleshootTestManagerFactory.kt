@@ -45,5 +45,4 @@ class NotificationTroubleshootTestManagerFactory @Inject constructor(private val
         mgr.addTest(testTokenRegistration)
         return mgr
     }
-
 }

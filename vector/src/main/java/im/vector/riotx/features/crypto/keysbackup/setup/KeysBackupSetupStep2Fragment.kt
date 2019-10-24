@@ -17,7 +17,6 @@ package im.vector.riotx.features.crypto.keysbackup.setup
 
 import android.os.AsyncTask
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
@@ -36,7 +35,6 @@ import im.vector.riotx.core.extensions.showPassword
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.ui.views.PasswordStrengthBar
 import im.vector.riotx.features.settings.VectorLocale
-
 
 class KeysBackupSetupStep2Fragment : VectorBaseFragment() {
 
@@ -116,16 +114,14 @@ class KeysBackupSetupStep2Fragment : VectorBaseFragment() {
                     if (suggestions != null) {
                         mPassphraseInputLayout.error = suggestions.firstOrNull()
                     }
-
                 } else {
                     mPassphraseInputLayout.error = null
                 }
-
             }
         })
 
         viewModel.passphrase.observe(this, Observer<String> { newValue ->
-            if (TextUtils.isEmpty(newValue)) {
+            if (newValue.isEmpty()) {
                 viewModel.passwordStrength.value = null
             } else {
                 AsyncTask.execute {
@@ -135,7 +131,6 @@ class KeysBackupSetupStep2Fragment : VectorBaseFragment() {
                     }
                 }
             }
-
         })
 
         mPassphraseTextEdit.setText(viewModel.passphrase.value)
@@ -166,7 +161,6 @@ class KeysBackupSetupStep2Fragment : VectorBaseFragment() {
             }
             return@setOnEditorActionListener false
         }
-
     }
 
     @OnClick(R.id.keys_backup_view_show_password)
@@ -177,7 +171,7 @@ class KeysBackupSetupStep2Fragment : VectorBaseFragment() {
     @OnClick(R.id.keys_backup_setup_step2_button)
     fun doNext() {
         when {
-            TextUtils.isEmpty(viewModel.passphrase.value) -> {
+            viewModel.passphrase.value.isNullOrEmpty() -> {
                 viewModel.passphraseError.value = context?.getString(R.string.passphrase_empty_error_message)
             }
             viewModel.passphrase.value != viewModel.confirmPassphrase.value -> {
@@ -197,7 +191,7 @@ class KeysBackupSetupStep2Fragment : VectorBaseFragment() {
     @OnClick(R.id.keys_backup_setup_step2_skip_button)
     fun skipPassphrase() {
         when {
-            TextUtils.isEmpty(viewModel.passphrase.value) -> {
+            viewModel.passphrase.value.isNullOrEmpty() -> {
                 // Generate a recovery key for the user
                 viewModel.megolmBackupCreationInfo = null
 

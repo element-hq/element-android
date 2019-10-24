@@ -21,8 +21,6 @@ import androidx.lifecycle.MutableLiveData
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.Membership
@@ -31,18 +29,18 @@ import im.vector.matrix.android.api.session.room.model.tag.RoomTag
 import im.vector.riotx.core.extensions.postLiveEvent
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.utils.LiveEvent
-import im.vector.riotx.features.home.HomeRoomListObservableStore
+import im.vector.riotx.core.utils.RxStore
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
+import javax.inject.Inject
 
-class RoomListViewModel @AssistedInject constructor(@Assisted initialState: RoomListViewState,
-                                                    private val session: Session,
-                                                    private val homeRoomListObservableSource: HomeRoomListObservableStore,
-                                                    private val alphabeticalRoomComparator: AlphabeticalRoomComparator,
-                                                    private val chronologicalRoomComparator: ChronologicalRoomComparator)
+class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
+                                            private val session: Session,
+                                            private val roomSummariesStore: RxStore<List<RoomSummary>>,
+                                            private val alphabeticalRoomComparator: AlphabeticalRoomComparator,
+                                            private val chronologicalRoomComparator: ChronologicalRoomComparator)
     : VectorViewModel<RoomListViewState>(initialState) {
 
-    @AssistedInject.Factory
     interface Factory {
         fun create(initialState: RoomListViewState): RoomListViewModel
     }
@@ -78,6 +76,7 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
             is RoomListActions.AcceptInvitation -> handleAcceptInvitation(action)
             is RoomListActions.RejectInvitation -> handleRejectInvitation(action)
             is RoomListActions.FilterWith       -> handleFilter(action)
+            is RoomListActions.MarkAllRoomsRead -> handleMarkAllRoomsRead()
         }
     }
 
@@ -100,7 +99,7 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
     }
 
     private fun observeRoomSummaries() {
-        homeRoomListObservableSource
+        roomSummariesStore
                 .observe()
                 .observeOn(Schedulers.computation())
                 .map {
@@ -110,7 +109,7 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
                     copy(asyncRooms = asyncRooms)
                 }
 
-        homeRoomListObservableSource
+        roomSummariesStore
                 .observe()
                 .observeOn(Schedulers.computation())
                 .map { buildRoomSummaries(it) }
@@ -130,8 +129,8 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
 
         setState {
             copy(
-                    joiningRoomsIds = joiningRoomsIds.toMutableSet().apply { add(roomId) },
-                    rejectingErrorRoomsIds = rejectingErrorRoomsIds.toMutableSet().apply { remove(roomId) }
+                    joiningRoomsIds = joiningRoomsIds + roomId,
+                    rejectingErrorRoomsIds = rejectingErrorRoomsIds - roomId
             )
         }
 
@@ -147,8 +146,8 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
 
                 setState {
                     copy(
-                            joiningRoomsIds = joiningRoomsIds.toMutableSet().apply { remove(roomId) },
-                            joiningErrorRoomsIds = joiningErrorRoomsIds.toMutableSet().apply { add(roomId) }
+                            joiningRoomsIds = joiningRoomsIds - roomId,
+                            joiningErrorRoomsIds = joiningErrorRoomsIds + roomId
                     )
                 }
             }
@@ -166,15 +165,17 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
 
         setState {
             copy(
-                    rejectingRoomsIds = rejectingRoomsIds.toMutableSet().apply { add(roomId) },
-                    joiningErrorRoomsIds = joiningErrorRoomsIds.toMutableSet().apply { remove(roomId) }
+                    rejectingRoomsIds = rejectingRoomsIds + roomId,
+                    joiningErrorRoomsIds = joiningErrorRoomsIds - roomId
             )
         }
 
         session.getRoom(roomId)?.leave(object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
-                // We do not update the joiningRoomsIds here, because, the room is not joined yet regarding the sync data.
-                // Instead, we wait for the room to be joined
+                // We do not update the rejectingRoomsIds here, because, the room is not rejected yet regarding the sync data.
+                // Instead, we wait for the room to be rejected
+                // Known bug: if the user is invited again (after rejecting the first invitation), the loading will be displayed instead of the buttons.
+                // If we update the state, the button will be displayed again, so it's not ideal...
             }
 
             override fun onFailure(failure: Throwable) {
@@ -183,12 +184,21 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
 
                 setState {
                     copy(
-                            rejectingRoomsIds = rejectingRoomsIds.toMutableSet().apply { remove(roomId) },
-                            rejectingErrorRoomsIds = rejectingErrorRoomsIds.toMutableSet().apply { add(roomId) }
+                            rejectingRoomsIds = rejectingRoomsIds - roomId,
+                            rejectingErrorRoomsIds = rejectingErrorRoomsIds + roomId
                     )
                 }
             }
         })
+    }
+
+    private fun handleMarkAllRoomsRead() = withState { state ->
+        state.asyncFilteredRooms.invoke()
+                ?.flatMap { it.value }
+                ?.filter { it.membership == Membership.JOIN }
+                ?.map { it.roomId }
+                ?.toList()
+                ?.let { session.markAllAsRead(it, object : MatrixCallback<Unit> {}) }
     }
 
     private fun buildRoomSummaries(rooms: List<RoomSummary>): RoomSummaries {
@@ -218,6 +228,7 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
             RoomListFragment.DisplayMode.PEOPLE   -> chronologicalRoomComparator
             RoomListFragment.DisplayMode.ROOMS    -> chronologicalRoomComparator
             RoomListFragment.DisplayMode.FILTERED -> chronologicalRoomComparator
+            RoomListFragment.DisplayMode.SHARE    -> chronologicalRoomComparator
         }
 
         return RoomSummaries().apply {

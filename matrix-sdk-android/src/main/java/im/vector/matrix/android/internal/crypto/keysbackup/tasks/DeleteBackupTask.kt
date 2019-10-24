@@ -21,7 +21,6 @@ import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
 import javax.inject.Inject
 
-
 internal interface DeleteBackupTask : Task<DeleteBackupTask.Params, Unit> {
     data class Params(
             val version: String

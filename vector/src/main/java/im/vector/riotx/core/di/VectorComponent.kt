@@ -23,6 +23,7 @@ import dagger.Component
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.auth.Authenticator
 import im.vector.matrix.android.api.session.Session
+import im.vector.riotx.ActiveSessionObservableStore
 import im.vector.riotx.EmojiCompatFontProvider
 import im.vector.riotx.EmojiCompatWrapper
 import im.vector.riotx.VectorApplication
@@ -32,7 +33,6 @@ import im.vector.riotx.features.configuration.VectorConfiguration
 import im.vector.riotx.features.crypto.keysrequest.KeyRequestHandler
 import im.vector.riotx.features.crypto.verification.IncomingVerificationRequestHandler
 import im.vector.riotx.features.home.AvatarRenderer
-import im.vector.riotx.features.home.HomeNavigator
 import im.vector.riotx.features.home.HomeRoomListObservableStore
 import im.vector.riotx.features.home.group.SelectedGroupStore
 import im.vector.riotx.features.html.EventHtmlRenderer
@@ -41,18 +41,23 @@ import im.vector.riotx.features.notifications.*
 import im.vector.riotx.features.rageshake.BugReporter
 import im.vector.riotx.features.rageshake.VectorFileLogger
 import im.vector.riotx.features.rageshake.VectorUncaughtExceptionHandler
+import im.vector.riotx.features.session.SessionListener
 import im.vector.riotx.features.settings.VectorPreferences
+import im.vector.riotx.features.share.ShareRoomListObservableStore
+import im.vector.riotx.features.ui.UiStateRepository
 import javax.inject.Singleton
 
 @Component(modules = [VectorModule::class])
 @Singleton
 interface VectorComponent {
 
-    fun inject(vectorApplication: NotificationBroadcastReceiver)
+    fun inject(notificationBroadcastReceiver: NotificationBroadcastReceiver)
 
     fun inject(vectorApplication: VectorApplication)
 
     fun matrix(): Matrix
+
+    fun sessionListener(): SessionListener
 
     fun currentSession(): Session
 
@@ -64,7 +69,7 @@ interface VectorComponent {
 
     fun resources(): Resources
 
-    fun dimensionUtils(): DimensionConverter
+    fun dimensionConverter(): DimensionConverter
 
     fun vectorConfiguration(): VectorConfiguration
 
@@ -80,11 +85,13 @@ interface VectorComponent {
 
     fun navigator(): Navigator
 
-    fun homeNavigator(): HomeNavigator
-
     fun homeRoomListObservableStore(): HomeRoomListObservableStore
 
+    fun shareRoomListObservableStore(): ShareRoomListObservableStore
+
     fun selectedGroupStore(): SelectedGroupStore
+
+    fun activeSessionObservableStore(): ActiveSessionObservableStore
 
     fun incomingVerificationRequestHandler(): IncomingVerificationRequestHandler
 
@@ -106,9 +113,10 @@ interface VectorComponent {
 
     fun vectorFileLogger(): VectorFileLogger
 
+    fun uiStateRepository(): UiStateRepository
+
     @Component.Factory
     interface Factory {
         fun create(@BindsInstance context: Context): VectorComponent
     }
-
 }

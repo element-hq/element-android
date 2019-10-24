@@ -185,4 +185,5 @@
     <string name="event_status_sending_message">Отправка сообщения…</string>
     <string name="clear_timeline_send_queue">Очистить очередь отправки</string>
 
+    <string name="notice_room_third_party_revoked_invite">%1$s отозвал приглашение %2$s присоединиться к комнате</string>
 </resources>

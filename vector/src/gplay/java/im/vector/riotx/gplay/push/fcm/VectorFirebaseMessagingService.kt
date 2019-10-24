@@ -21,7 +21,6 @@ package im.vector.riotx.gplay.push.fcm
 
 import android.os.Handler
 import android.os.Looper
-import android.text.TextUtils
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.google.firebase.messaging.FirebaseMessagingService
@@ -73,23 +72,19 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
      *
      * @param message the message
      */
-    override fun onMessageReceived(message: RemoteMessage?) {
+    override fun onMessageReceived(message: RemoteMessage) {
         if (!vectorPreferences.areNotificationEnabledForDevice()) {
             Timber.i("Notification are disabled for this device")
             return
         }
 
-        if (message == null || message.data == null) {
-            Timber.e("## onMessageReceived() : received a null message or message with no data")
-            return
-        }
         if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
             Timber.i("## onMessageReceived() %s", message.data.toString())
             Timber.i("## onMessageReceived() from FCM with priority %s", message.priority)
         }
         mUIHandler.post {
             if (ProcessLifecycleOwner.get().lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
-                //we are in foreground, let the sync do the things?
+                // we are in foreground, let the sync do the things?
                 Timber.v("PUSH received in a foreground state, ignore")
             } else {
                 onMessageReceivedInternal(message.data)
@@ -103,15 +98,11 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
      * when the InstanceID token is initially generated, so this is where
      * you retrieve the token.
      */
-    override fun onNewToken(refreshedToken: String?) {
+    override fun onNewToken(refreshedToken: String) {
         Timber.i("onNewToken: FCM Token has been updated")
         FcmHelper.storeFcmToken(this, refreshedToken)
-        if (refreshedToken == null) {
-            Timber.w("onNewToken:received null token")
-        } else {
-            if (vectorPreferences.areNotificationEnabledForDevice() && activeSessionHolder.hasActiveSession()) {
-                pusherManager.registerPusherWithFcmKey(refreshedToken)
-            }
+        if (vectorPreferences.areNotificationEnabledForDevice() && activeSessionHolder.hasActiveSession()) {
+            pusherManager.registerPusherWithFcmKey(refreshedToken)
         }
     }
 
@@ -161,9 +152,8 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
                     session.requireBackgroundSync()
                 }
             }
-
         } catch (e: Exception) {
-            Timber.e(e, "## onMessageReceivedInternal() failed : " + e.message)
+            Timber.e(e, "## onMessageReceivedInternal() failed")
         }
     }
 
@@ -178,13 +168,11 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
             } catch (e: Exception) {
                 Timber.e(e, "## isEventAlreadyKnown() : failed to check if the event was already defined")
             }
-
         }
         return false
     }
 
     private fun handleNotificationWithoutSyncingMode(data: Map<String, String>, session: Session?) {
-
         if (session == null) {
             Timber.e("## handleNotificationWithoutSyncingMode cannot find session")
             return
@@ -194,16 +182,16 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
         // This is required if the notification is about a particular Matrix event.
         // It may be omitted for notifications that only contain updated badge counts.
         // This ID can and should be used to detect duplicate notification requests.
-        val eventId = data["event_id"] ?: return //Just ignore
+        val eventId = data["event_id"] ?: return // Just ignore
 
         val eventType = data["type"]
         if (eventType == null) {
-            //Just add a generic unknown event
+            // Just add a generic unknown event
             val simpleNotifiableEvent = SimpleNotifiableEvent(
                     session.myUserId,
                     eventId,
                     null,
-                    true, //It's an issue in this case, all event will bing even if expected to be silent.
+                    true, // It's an issue in this case, all event will bing even if expected to be silent.
                     title = getString(R.string.notification_unknown_new_event),
                     description = "",
                     type = null,
@@ -219,17 +207,16 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
             val notifiableEvent = notifiableEventResolver.resolveEvent(event, session)
 
             if (notifiableEvent == null) {
-                Timber.e("Unsupported notifiable event ${eventId}")
+                Timber.e("Unsupported notifiable event $eventId")
                 if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
-                    Timber.e("--> ${event}")
+                    Timber.e("--> $event")
                 }
             } else {
                 if (notifiableEvent is NotifiableMessageEvent) {
-                    if (TextUtils.isEmpty(notifiableEvent.senderName)) {
-                        notifiableEvent.senderName = data["sender_display_name"]
-                                                     ?: data["sender"] ?: ""
+                    if (notifiableEvent.senderName.isNullOrEmpty()) {
+                        notifiableEvent.senderName = data["sender_display_name"] ?: data["sender"] ?: ""
                     }
-                    if (TextUtils.isEmpty(notifiableEvent.roomName)) {
+                    if (notifiableEvent.roomName.isNullOrEmpty()) {
                         notifiableEvent.roomName = findRoomNameBestEffort(data, session) ?: ""
                     }
                 }
@@ -243,17 +230,11 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     private fun findRoomNameBestEffort(data: Map<String, String>, session: Session?): String? {
-        val roomName: String? = data["room_name"]
+        var roomName: String? = data["room_name"]
         val roomId = data["room_id"]
         if (null == roomName && null != roomId) {
             // Try to get the room name from our store
-            /*
-            TODO
-            if (session?.dataHandler?.store?.isReady == true) {
-                val room = session.getRoom(roomId)
-                roomName = room?.getRoomDisplayName(this)
-            }
-            */
+            roomName = session?.getRoom(roomId)?.roomSummary()?.displayName
         }
         return roomName
     }
@@ -272,11 +253,11 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
 
         try {
             return Event(eventId = data["event_id"],
-                         senderId = data["sender"],
-                         roomId = data["room_id"],
-                         type = data.getValue("type"),
+                    senderId = data["sender"],
+                    roomId = data["room_id"],
+                    type = data.getValue("type"),
                     // TODO content = data.getValue("content"),
-                         originServerTs = System.currentTimeMillis())
+                    originServerTs = System.currentTimeMillis())
         } catch (e: Exception) {
             Timber.e(e, "buildEvent fails ")
         }

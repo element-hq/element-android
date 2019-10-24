@@ -41,5 +41,4 @@ internal class ReadReceiptsSummaryMapper @Inject constructor(@SessionDatabase pr
                     }
         }
     }
-
 }

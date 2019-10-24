@@ -63,6 +63,4 @@ internal object ThumbnailExtractor {
         outputStream.reset()
         return thumbnailData
     }
-
-
 }

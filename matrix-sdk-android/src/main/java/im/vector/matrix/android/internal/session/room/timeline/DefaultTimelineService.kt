@@ -26,7 +26,8 @@ import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.TimelineService
 import im.vector.matrix.android.api.session.room.timeline.TimelineSettings
-import im.vector.matrix.android.internal.database.RealmLiveData
+import im.vector.matrix.android.api.util.Optional
+import im.vector.matrix.android.api.util.toOptional
 import im.vector.matrix.android.internal.database.mapper.ReadReceiptsSummaryMapper
 import im.vector.matrix.android.internal.database.mapper.TimelineEventMapper
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
@@ -41,7 +42,8 @@ internal class DefaultTimelineService @AssistedInject constructor(@Assisted priv
                                                                   private val cryptoService: CryptoService,
                                                                   private val paginationTask: PaginationTask,
                                                                   private val timelineEventMapper: TimelineEventMapper,
-                                                                  private val readReceiptsSummaryMapper: ReadReceiptsSummaryMapper
+                                                                  private val readReceiptsSummaryMapper: ReadReceiptsSummaryMapper,
+                                                                  private val clearUnlinkedEventsTask: ClearUnlinkedEventsTask
 ) : TimelineService {
 
     @AssistedInject.Factory
@@ -55,30 +57,32 @@ internal class DefaultTimelineService @AssistedInject constructor(@Assisted priv
                                monarchy.realmConfiguration,
                                taskExecutor,
                                contextOfEventTask,
+                               clearUnlinkedEventsTask,
                                paginationTask,
                                cryptoService,
                                timelineEventMapper,
                                settings,
-                               TimelineHiddenReadReceipts(readReceiptsSummaryMapper, roomId, settings)
+                               TimelineHiddenReadReceipts(readReceiptsSummaryMapper, roomId, settings),
+                               TimelineHiddenReadMarker(roomId, settings)
         )
     }
 
     override fun getTimeLineEvent(eventId: String): TimelineEvent? {
         return monarchy
                 .fetchCopyMap({
-                                  TimelineEventEntity.where(it, eventId = eventId).findFirst()
-                              }, { entity, realm ->
+                                  TimelineEventEntity.where(it, roomId = roomId, eventId = eventId).findFirst()
+                              }, { entity, _ ->
                                   timelineEventMapper.map(entity)
                               })
     }
 
-    override fun liveTimeLineEvent(eventId: String): LiveData<TimelineEvent> {
-        val liveData = RealmLiveData(monarchy.realmConfiguration) {
-            TimelineEventEntity.where(it, eventId = eventId)
-        }
+    override fun getTimeLineEventLive(eventId: String): LiveData<Optional<TimelineEvent>> {
+        val liveData = monarchy.findAllMappedWithChanges(
+                { TimelineEventEntity.where(it, roomId = roomId, eventId = eventId) },
+                { timelineEventMapper.map(it) }
+        )
         return Transformations.map(liveData) { events ->
-            events.firstOrNull()?.let { timelineEventMapper.map(it) }
+            events.firstOrNull().toOptional()
         }
     }
-
 }

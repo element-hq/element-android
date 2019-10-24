@@ -23,6 +23,7 @@ import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.mapper.toEntity
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryEntity
+import im.vector.matrix.android.internal.database.model.ReadMarkerEntity
 import im.vector.matrix.android.internal.database.model.ReadReceiptEntity
 import im.vector.matrix.android.internal.database.model.ReadReceiptsSummaryEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
@@ -110,7 +111,6 @@ internal fun ChunkEntity.add(roomId: String,
                              direction: PaginationDirection,
                              stateIndexOffset: Int = 0,
                              isUnlinked: Boolean = false) {
-
     assertIsManaged()
     if (event.eventId != null && timelineEvents.find(event.eventId) != null) {
         return
@@ -124,7 +124,7 @@ internal fun ChunkEntity.add(roomId: String,
         backwardsDisplayIndex = currentDisplayIndex
     }
     var currentStateIndex = lastStateIndex(direction, defaultValue = stateIndexOffset)
-    if (direction == PaginationDirection.FORWARDS && EventType.isStateEvent(event.getClearType())) {
+    if (direction == PaginationDirection.FORWARDS && EventType.isStateEvent(event.type)) {
         currentStateIndex += 1
         forwardsStateIndex = currentStateIndex
     } else if (direction == PaginationDirection.BACKWARDS && timelineEvents.isNotEmpty()) {
@@ -157,7 +157,6 @@ internal fun ChunkEntity.add(roomId: String,
         }
     }
 
-
     val eventEntity = TimelineEventEntity(localId).also {
         it.root = event.toEntity(roomId).apply {
             this.stateIndex = currentStateIndex
@@ -169,6 +168,7 @@ internal fun ChunkEntity.add(roomId: String,
         it.roomId = roomId
         it.annotations = EventAnnotationsSummaryEntity.where(realm, eventId).findFirst()
         it.readReceipts = readReceiptsSummaryEntity
+        it.readMarker = ReadMarkerEntity.where(realm, roomId = roomId, eventId = eventId).findFirst()
     }
     val position = if (direction == PaginationDirection.FORWARDS) 0 else this.timelineEvents.size
     timelineEvents.add(position, eventEntity)

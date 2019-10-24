@@ -159,14 +159,6 @@
     <string name="auth_password_placeholder">密碼</string>
     <string name="auth_new_password_placeholder">新密碼</string>
     <string name="auth_user_name_placeholder">使用者名稱</string>
-    <string name="auth_add_email_message">輸入電子郵件位址來讓其他人找到您，以及方便您重設密碼。</string>
-    <string name="auth_add_phone_message">新增電話號碼來讓其他人找到您。</string>
-    <string name="auth_add_email_phone_message">新增電子郵件位址或電話號碼來讓其他人找到您。
-
-電子郵件位址也可以用來重設密碼。</string>
-    <string name="auth_add_email_and_phone_message">新增電子郵件位址或電話號碼來讓其他人找到您。
-
-電子郵件位址也可以用來重設密碼。</string>
     <string name="auth_email_placeholder">電子郵件地址</string>
     <string name="auth_opt_email_placeholder">電子郵件位址（選擇性）</string>
     <string name="auth_phone_number_placeholder">電話號碼</string>
@@ -520,7 +512,7 @@
     <string name="settings_background_sync">後臺同步</string>
     <string name="settings_enable_background_sync">開啓後臺同步</string>
     <string name="settings_set_sync_timeout">同步請求超時</string>
-    <string name="settings_set_sync_delay">每次同步請求的延遲</string>
+    <string name="settings_set_sync_delay">每次同步間的延遲</string>
     <string name="settings_second">秒</string>
     <string name="settings_seconds">秒</string>
 
@@ -569,10 +561,10 @@
 
     <string name="settings_data_save_mode">節省流量模式</string>
 
-    <string name="devices_details_dialog_title">裝置資料</string>
+    <string name="devices_details_dialog_title">裝置資訊</string>
     <string name="devices_details_id_title">ID</string>
-    <string name="devices_details_name_title">名稱</string>
-    <string name="devices_details_device_name">裝置名稱</string>
+    <string name="devices_details_name_title">公開名稱</string>
+    <string name="devices_details_device_name">更新公開名稱</string>
     <string name="devices_details_last_seen_title">上次上線</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
     <string name="devices_delete_dialog_text">此操作需要額外的身份驗證。
@@ -711,9 +703,9 @@
     <string name="encryption_information_decryption_error">解密錯誤</string>
 
     <string name="encryption_information_sender_device_information">發送者的裝置訊息</string>
-    <string name="encryption_information_device_name">裝置名稱</string>
-    <string name="encryption_information_name">名稱</string>
-    <string name="encryption_information_device_id">裝置 ID</string>
+    <string name="encryption_information_device_name">公開名稱</string>
+    <string name="encryption_information_name">公開名稱</string>
+    <string name="encryption_information_device_id">ID</string>
     <string name="encryption_information_device_key">裝置金鑰</string>
     <string name="encryption_information_verification">驗證</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519 指紋</string>
@@ -1451,7 +1443,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="event_redacted_by_user_reason">由使用者刪除的活動</string>
     <string name="event_redacted_by_admin_reason">由聊天室管理員審核的活動</string>
-    <string name="last_edited_info_message">最後編輯由 %s 於 %s</string>
+    <string name="last_edited_info_message">最後編輯由 %1$s 於 %2$s</string>
 
 
     <string name="malformed_message">活動格式錯誤，無法顯示</string>
@@ -1530,7 +1522,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 \n
 \nRiotX 支援：• 登入到既有的帳號 • 建立聊天室與加入公開聊天室 • 接受與回絕邀請 • 列出使用者聊天室 • 檢視聊天室詳細資訊 • 傳送文字訊息 • 傳送附件 • 讀取與編寫已加密的聊天室 • 加密：E2E 金鑰備份、進階裝置驗證、金鑰分享請求與回應 • 推送通知 • 亮、暗與黑色主題
 \n
-\n不是所有 Riot 的功能都已在 RiotX 中實作。主要缺少（會在稍後到來！）的功能：• 建立帳號 • 聊天室設定（列出聊天室成員等） • 直接聊天室建立 • 通話 • 小工具 • …</string>
+\n不是所有 Riot 的功能都已在 RiotX 中實作。主要缺少（會在稍後到來！）的功能：• 建立帳號 • 聊天室設定（列出聊天室成員等） • 通話 • 小工具 • …</string>
 
     <string name="bottom_action_people_x">直接訊息</string>
 
@@ -1577,4 +1569,88 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="message_view_edit_history">檢視編輯歷史</string>
 
+    <string name="review">審閱</string>
+    <string name="decline">婉拒</string>
+
+    <string name="widget_integration_review_terms">要繼續，您必須接受此服務的條款。</string>
+
+    <string name="security_warning_identity_server">先前版本的 Riot 有一個安全性問題，讓您的身份識別伺服器 (%1$s) 存取您的帳號。如果您信任 %2$s，您可以忽略這個；否則請登出再登入。
+\n
+\n在此閱讀更多詳細資訊：
+\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
+
+    <string name="terms_of_service">服務條款</string>
+    <string name="review_terms">審閱條款</string>
+    <string name="terms_description_for_identity_server">可被其他人探索</string>
+    <string name="terms_description_for_integration_manager">使用機器人、橋接、小工具與貼紙包</string>
+
+    <string name="read_at">閱讀於</string>
+
+    <string name="none">無</string>
+    <string name="revoke">撤銷</string>
+    <string name="disconnect">斷線</string>
+    <string name="people_no_identity_server">未設定身份識別伺服器。</string>
+
+    <string name="call_failed_no_ice_title">因為錯誤設定的伺服器導致通話失敗</string>
+    <string name="call_failed_no_ice_description">請要求您家伺服器 (%1$s) 的管理員設定 TURN 伺服器以讓通話正常運作。
+\n
+\n或者您也可以試用看看位於 %2$s 的公開伺服器，但這可能不太可靠，而且也會將您的 IP 位置與伺服器分享。您也可以在設定中管理這個。</string>
+    <string name="call_failed_no_ice_use_alt">嘗試使用 %s</string>
+    <string name="call_failed_dont_ask_again">不要再問我</string>
+
+    <string name="auth_add_email_message_2">設定電子郵件以供帳號復原，然後就可以讓認識您的人選擇性探索到您。</string>
+    <string name="auth_add_phone_message_2">設定電話，然後就可以讓認識您的人選擇性探索到您。</string>
+    <string name="auth_add_email_phone_message_2">設定電子郵件以供帳號復原。然後就可以讓認識您的人用電子郵件或電話選擇性探索到您。</string>
+    <string name="auth_add_email_and_phone_message_2">設定電子郵件以供帳號復原。然後就可以讓認識您的人用電子郵件或電話選擇性探索到您。</string>
+    <string name="login_error_homeserver_not_found">無法在此 URL 找到家伺服器，請檢查</string>
+    <string name="settings_call_ringtone_use_default_stun">允許汰退呼叫協助伺服器</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">當您的家伺服器未提供時，將會使用 %s 做為協助（您的 IP 位置將會在通話時被分享）</string>
+    <string name="invite_no_identity_server_error">在您的設定中新增一臺身份識別伺服器以執行此動作。</string>
+    <string name="settings_background_fdroid_sync_mode">背景同步模式（實驗性）</string>
+    <string name="settings_background_fdroid_sync_mode_battery">為電池最佳化</string>
+    <string name="settings_background_fdroid_sync_mode_battery_description">Riot 將會在背景同步以節省裝置的有限資源（電池）。
+\n取決於您裝置的資源狀態，作業系統可能會延遲同步。</string>
+    <string name="settings_background_fdroid_sync_mode_real_time">為即時作業最佳化</string>
+    <string name="settings_background_fdroid_sync_mode_real_time_description">Riot 將會精準地定期在背景同步（可設定）。
+\n這會影響到網路與電池的使用，並會顯示指出 Riot 正在監聽某事件的永久通知。</string>
+    <string name="settings_background_fdroid_sync_mode_disabled">無背景同步</string>
+    <string name="settings_background_fdroid_sync_mode_disabled_description">當應用程式在背景時，您將不會收到訊息通知。</string>
+    <string name="settings_background_sync_update_error">更新設定失敗。</string>
+
+
+    <string name="settings_set_workmanager_delay">偏好同步間隔</string>
+    <string name="settings_set_workmanager_delay_summary">%s
+\n取決於資源（電池）或裝置狀態（休眠），同步可能會被延遲。</string>
+    <string name="settings_discovery_category">探索</string>
+    <string name="settings_discovery_manage">管理您的探索設定。</string>
+    <string name="encryption_information_device_name_with_warning">公開名稱（您通訊的對象可見）</string>
+    <string name="device_name_warning">裝置的公開名稱對您通訊的對象可見</string>
+    <string name="identity_server_not_defined">您未使用任何身份識別伺服器</string>
+    <string name="identity_server_not_defined_for_password_reset">未設定身份識別伺服器，這在重設您的密碼時是必要的。</string>
+
+    <string name="error_user_already_logged_in">看起來您正在嘗試連線到其它家伺服器。您想要登出嗎？</string>
+
+    <string name="identity_server">身份識別伺服器</string>
+    <string name="disconnect_identity_server">取消連線到身份識別伺服器</string>
+    <string name="add_identity_server">設定身份識別伺服器</string>
+    <string name="change_identity_server">變更身份識別伺服器</string>
+    <string name="settings_discovery_identity_server_info">您正在使用 %1$s 來探索與被您認識的既有聯絡人探索。</string>
+    <string name="settings_discovery_identity_server_info_none">您目前並未使用身份識別伺服器。要探索與被您認識的聯絡人探索，請在下方設定一個。</string>
+    <string name="settings_discovery_emails_title">可探索的電子郵件地址</string>
+    <string name="settings_discovery_no_mails">在您新增電子郵件後，探索選項將會出現。</string>
+    <string name="settings_discovery_no_msisdn">在您新增電話號碼後，探索選項將會出現。</string>
+    <string name="settings_discovery_disconnect_identity_server_info">與您的身份識別伺服器斷線代鰾您無法被其他使用者探索，且您將無法透過電子郵件或電話邀請其他人。</string>
+    <string name="settings_discovery_msisdn_title">可探索的電話號碼</string>
+    <string name="settings_discovery_confirm_mail">我們將會傳送確認電子郵件到 %s 給您，請檢查您的電子郵件並在確認連結上點選</string>
+    <string name="settings_discovery_mail_pending">擱置中</string>
+
+    <string name="settings_discovery_enter_identity_server">輸入新的身份識別伺服器</string>
+    <string name="settings_discovery_bad_identity_server">無法連線到身份識別伺服器</string>
+    <string name="settings_discovery_please_enter_server">請輸入身份識別伺服器 URL</string>
+    <string name="settings_discovery_no_terms_title">身份識別伺服器無服務條款</string>
+    <string name="settings_discovery_no_terms">您選擇的身份識別伺服器沒有任何服務條款。僅在您信任服務擁有者時才繼續</string>
+    <string name="settings_text_message_sent">文字訊息已傳送給 %s。請輸入其中包含的驗證碼。</string>
+
+    <string name="settings_discovery_disconnect_with_bound_pid">您目前正在身份識別伺服器 %1$s 上分享電子郵件地址或電話號碼。您將必須重新連線到 %2$s 以停止分享它們。</string>
+    <string name="settings_agree_to_terms">同意身份識別伺服器 (%s) 的服務條款以允許您被透過電子郵件地址或電話號碼探索。</string>
 </resources>

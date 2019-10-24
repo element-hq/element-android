@@ -77,4 +77,3 @@ data class EncryptedFileKey(
         return true
     }
 }
-

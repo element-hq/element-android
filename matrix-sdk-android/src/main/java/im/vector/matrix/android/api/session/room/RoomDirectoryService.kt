@@ -42,5 +42,4 @@ interface RoomDirectoryService {
      * Includes both the available protocols and all fields required for queries against each protocol.
      */
     fun getThirdPartyProtocol(callback: MatrixCallback<Map<String, ThirdPartyProtocol>>): Cancelable
-
 }

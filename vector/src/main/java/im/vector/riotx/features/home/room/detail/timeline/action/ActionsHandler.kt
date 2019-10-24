@@ -31,5 +31,4 @@ class ActionsHandler @Inject constructor() : ViewModel() {
     fun fireAction(action: SimpleAction) {
         actionCommandEvent.postLiveEvent(action)
     }
-
 }

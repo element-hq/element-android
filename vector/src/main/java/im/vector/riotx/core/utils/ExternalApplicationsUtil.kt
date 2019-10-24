@@ -50,6 +50,7 @@ fun openUrlInExternalBrowser(context: Context, uri: Uri?) {
     uri?.let {
         val browserIntent = Intent(Intent.ACTION_VIEW, it).apply {
             putExtra(Browser.EXTRA_APPLICATION_ID, context.packageName)
+            putExtra(Browser.EXTRA_CREATE_NEW_TAB, true)
         }
 
         try {
@@ -154,7 +155,6 @@ fun openCamera(activity: Activity, titlePrefix: String, requestCode: Int): Strin
             if (null == dummyUri) {
                 Timber.e("Cannot use the internal storage to save media to save image")
             }
-
         } catch (e: Exception) {
             Timber.e(e, "Unable to insert camera URI into internal storage. Giving up. $e")
         }
@@ -238,14 +238,12 @@ fun openMedia(activity: Activity, savedMediaPath: String, mimeType: String) {
 }
 
 fun shareMedia(context: Context, file: File, mediaMimeType: String?) {
-
     var mediaUri: Uri? = null
     try {
         mediaUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileProvider", file)
     } catch (e: Exception) {
-        Timber.e("onMediaAction Selected File cannot be shared " + e.message)
+        Timber.e(e, "onMediaAction Selected File cannot be shared")
     }
-
 
     if (null != mediaUri) {
         val sendIntent = Intent()

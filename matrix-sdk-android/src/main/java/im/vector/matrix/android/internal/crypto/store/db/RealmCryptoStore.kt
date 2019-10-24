@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.crypto.store.db
 
-import android.text.TextUtils
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequest
 import im.vector.matrix.android.internal.crypto.NewSessionListener
@@ -60,7 +59,6 @@ internal class RealmCryptoStore(private val realmConfiguration: RealmConfigurati
     // Cache for InboundGroupSession, to release them properly
     private val inboundGroupSessionToRelease = HashMap<String, OlmInboundGroupSessionWrapper>()
 
-
     private val newSessionListeners = ArrayList<NewSessionListener>()
 
     override fun addNewSessionListener(listener: NewSessionListener) {
@@ -102,8 +100,8 @@ internal class RealmCryptoStore(private val realmConfiguration: RealmConfigurati
                 // Check credentials
                 // The device id may not have been provided in credentials.
                 // Check it only if provided, else trust the stored one.
-                if (!TextUtils.equals(currentMetadata.userId, credentials.userId)
-                        || (credentials.deviceId != null && !TextUtils.equals(credentials.deviceId, currentMetadata.deviceId))) {
+                if (currentMetadata.userId != credentials.userId
+                        || (credentials.deviceId != null && credentials.deviceId != currentMetadata.deviceId)) {
                     Timber.w("## open() : Credentials do not match, close this store and delete data")
                     deleteAll = true
                     currentMetadata = null
@@ -209,10 +207,7 @@ internal class RealmCryptoStore(private val realmConfiguration: RealmConfigurati
                 ?.getDeviceInfo()
     }
 
-    override fun storeUserDevices(userId: String, devices: Map<String, MXDeviceInfo>) {
-        if (userId == null) {
-            return
-        }
+    override fun storeUserDevices(userId: String, devices: Map<String, MXDeviceInfo>?) {
         doRealmTransaction(realmConfiguration) { realm ->
             if (devices == null) {
                 // Remove the user
@@ -281,7 +276,7 @@ internal class RealmCryptoStore(private val realmConfiguration: RealmConfigurati
         try {
             sessionIdentifier = olmSessionWrapper.olmSession.sessionIdentifier()
         } catch (e: OlmException) {
-            Timber.e(e, "## storeSession() : sessionIdentifier failed " + e.message)
+            Timber.e(e, "## storeSession() : sessionIdentifier failed")
         }
 
         if (sessionIdentifier != null) {
@@ -360,14 +355,14 @@ internal class RealmCryptoStore(private val realmConfiguration: RealmConfigurati
             return
         }
 
-        doRealmTransaction(realmConfiguration) {
+        doRealmTransaction(realmConfiguration) { realm ->
             sessions.forEach { session ->
                 var sessionIdentifier: String? = null
 
                 try {
                     sessionIdentifier = session.olmInboundGroupSession?.sessionIdentifier()
                 } catch (e: OlmException) {
-                    Timber.e(e, "## storeInboundGroupSession() : sessionIdentifier failed " + e.message)
+                    Timber.e(e, "## storeInboundGroupSession() : sessionIdentifier failed")
                 }
 
                 if (sessionIdentifier != null) {
@@ -387,7 +382,7 @@ internal class RealmCryptoStore(private val realmConfiguration: RealmConfigurati
                         putInboundGroupSession(session)
                     }
 
-                    it.insertOrUpdate(realmOlmInboundGroupSession)
+                    realm.insertOrUpdate(realmOlmInboundGroupSession)
                 }
             }
         }
@@ -737,5 +732,4 @@ internal class RealmCryptoStore(private val realmConfiguration: RealmConfigurati
                 }
                 .toMutableList()
     }
-
 }

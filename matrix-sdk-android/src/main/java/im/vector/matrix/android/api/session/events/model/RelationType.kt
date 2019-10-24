@@ -15,7 +15,6 @@
  */
 package im.vector.matrix.android.api.session.events.model
 
-
 /**
  * Constants defining known event relation types from Matrix specifications
  */
@@ -27,5 +26,4 @@ object RelationType {
     const val REPLACE = "m.replace"
     /** Lets you define an event which references an existing event.*/
     const val REFERENCE = "m.reference"
-
 }

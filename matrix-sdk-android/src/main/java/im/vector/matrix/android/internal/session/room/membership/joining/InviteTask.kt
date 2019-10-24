@@ -21,7 +21,6 @@ import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.task.Task
 import javax.inject.Inject
 
-
 internal interface InviteTask : Task<InviteTask.Params, Unit> {
     data class Params(
             val roomId: String,

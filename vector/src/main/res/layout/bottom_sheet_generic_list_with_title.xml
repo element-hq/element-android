@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/bottomSheetTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:padding="8dp"
+        android:textColor="?android:textColorSecondary"
+        android:textSize="16sp"
+        tools:text="@string/reactions" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/bottomSheetRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fadeScrollbars="false"
+        android:scrollbars="vertical"
+        tools:itemCount="15"
+        tools:listitem="@layout/item_simple_reaction_info" />
+
+</LinearLayout>

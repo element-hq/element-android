@@ -34,5 +34,4 @@ object TimelineAsyncHelper {
         handlerThread.start()
         return Handler(handlerThread.looper)
     }
-
 }

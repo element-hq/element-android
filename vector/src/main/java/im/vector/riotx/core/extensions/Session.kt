@@ -21,10 +21,13 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.sync.FilterService
 import im.vector.riotx.features.notifications.PushRuleTriggerListener
+import im.vector.riotx.features.session.SessionListener
 import timber.log.Timber
 
-fun Session.configureAndStart(pushRuleTriggerListener: PushRuleTriggerListener) {
+fun Session.configureAndStart(pushRuleTriggerListener: PushRuleTriggerListener,
+                              sessionListener: SessionListener) {
     open()
+    addListener(sessionListener)
     setFilter(FilterService.FilterPreset.RiotFilter)
     Timber.i("Configure and start session for ${this.myUserId}")
     val isAtLeastStarted = ProcessLifecycleOwner.get().lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)

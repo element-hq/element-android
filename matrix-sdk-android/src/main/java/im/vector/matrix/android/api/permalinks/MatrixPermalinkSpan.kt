@@ -35,6 +35,4 @@ class MatrixPermalinkSpan(private val url: String,
     override fun onClick(widget: View) {
         callback?.onUrlClicked(url)
     }
-
-
 }

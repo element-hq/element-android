@@ -27,7 +27,6 @@ import im.vector.riotx.core.platform.SimpleFragmentActivity
 import im.vector.riotx.core.platform.WaitingViewData
 import javax.inject.Inject
 
-
 class KeysBackupManageActivity : SimpleFragmentActivity() {
 
     companion object {

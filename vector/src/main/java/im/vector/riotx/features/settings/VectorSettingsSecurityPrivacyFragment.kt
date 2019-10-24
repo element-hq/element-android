@@ -21,9 +21,7 @@ import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Typeface
-import android.text.TextUtils
 import android.view.KeyEvent
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -50,6 +48,7 @@ import im.vector.riotx.core.intent.getFilenameFromUri
 import im.vector.riotx.core.platform.SimpleTextWatcher
 import im.vector.riotx.core.preference.ProgressBarPreference
 import im.vector.riotx.core.preference.VectorPreference
+import im.vector.riotx.core.preference.VectorPreferenceDivider
 import im.vector.riotx.core.utils.*
 import im.vector.riotx.features.crypto.keys.KeysExporter
 import im.vector.riotx.features.crypto.keys.KeysImporter
@@ -69,64 +68,63 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
     private var mAccountPassword: String = ""
 
     // devices: device IDs and device names
-    private var mDevicesNameList: List<DeviceInfo> = ArrayList()
+    private val mDevicesNameList: MutableList<DeviceInfo> = mutableListOf()
 
     private var mMyDeviceInfo: DeviceInfo? = null
 
-
     // cryptography
     private val mCryptographyCategory by lazy {
-        findPreference(VectorPreferences.SETTINGS_CRYPTOGRAPHY_PREFERENCE_KEY) as PreferenceCategory
+        findPreference<PreferenceCategory>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_PREFERENCE_KEY)!!
     }
     private val mCryptographyCategoryDivider by lazy {
-        findPreference(VectorPreferences.SETTINGS_CRYPTOGRAPHY_DIVIDER_PREFERENCE_KEY)
+        findPreference<VectorPreferenceDivider>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_DIVIDER_PREFERENCE_KEY)!!
     }
     // cryptography manage
     private val mCryptographyManageCategory by lazy {
-        findPreference(VectorPreferences.SETTINGS_CRYPTOGRAPHY_MANAGE_PREFERENCE_KEY) as PreferenceCategory
+        findPreference<PreferenceCategory>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_MANAGE_PREFERENCE_KEY)!!
     }
     private val mCryptographyManageCategoryDivider by lazy {
-        findPreference(VectorPreferences.SETTINGS_CRYPTOGRAPHY_MANAGE_DIVIDER_PREFERENCE_KEY)
+        findPreference<VectorPreferenceDivider>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_MANAGE_DIVIDER_PREFERENCE_KEY)!!
     }
     // displayed pushers
     private val mPushersSettingsDivider by lazy {
-        findPreference(VectorPreferences.SETTINGS_NOTIFICATIONS_TARGET_DIVIDER_PREFERENCE_KEY)
+        findPreference<VectorPreferenceDivider>(VectorPreferences.SETTINGS_NOTIFICATIONS_TARGET_DIVIDER_PREFERENCE_KEY)!!
     }
     private val mPushersSettingsCategory by lazy {
-        findPreference(VectorPreferences.SETTINGS_NOTIFICATIONS_TARGETS_PREFERENCE_KEY) as PreferenceCategory
+        findPreference<PreferenceCategory>(VectorPreferences.SETTINGS_NOTIFICATIONS_TARGETS_PREFERENCE_KEY)!!
     }
     private val mDevicesListSettingsCategory by lazy {
-        findPreference(VectorPreferences.SETTINGS_DEVICES_LIST_PREFERENCE_KEY) as PreferenceCategory
+        findPreference<PreferenceCategory>(VectorPreferences.SETTINGS_DEVICES_LIST_PREFERENCE_KEY)!!
     }
     private val mDevicesListSettingsCategoryDivider by lazy {
-        findPreference(VectorPreferences.SETTINGS_DEVICES_DIVIDER_PREFERENCE_KEY)
+        findPreference<VectorPreferenceDivider>(VectorPreferences.SETTINGS_DEVICES_DIVIDER_PREFERENCE_KEY)!!
     }
     private val cryptoInfoDeviceNamePreference by lazy {
-        findPreference(VectorPreferences.SETTINGS_ENCRYPTION_INFORMATION_DEVICE_NAME_PREFERENCE_KEY) as VectorPreference
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_ENCRYPTION_INFORMATION_DEVICE_NAME_PREFERENCE_KEY)!!
     }
 
     private val cryptoInfoDeviceIdPreference by lazy {
-        findPreference(VectorPreferences.SETTINGS_ENCRYPTION_INFORMATION_DEVICE_ID_PREFERENCE_KEY)
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_ENCRYPTION_INFORMATION_DEVICE_ID_PREFERENCE_KEY)!!
     }
 
     private val manageBackupPref by lazy {
-        findPreference(VectorPreferences.SETTINGS_SECURE_MESSAGE_RECOVERY_PREFERENCE_KEY)
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_SECURE_MESSAGE_RECOVERY_PREFERENCE_KEY)!!
     }
 
     private val exportPref by lazy {
-        findPreference(VectorPreferences.SETTINGS_ENCRYPTION_EXPORT_E2E_ROOM_KEYS_PREFERENCE_KEY)
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_ENCRYPTION_EXPORT_E2E_ROOM_KEYS_PREFERENCE_KEY)!!
     }
 
     private val importPref by lazy {
-        findPreference(VectorPreferences.SETTINGS_ENCRYPTION_IMPORT_E2E_ROOM_KEYS_PREFERENCE_KEY)
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_ENCRYPTION_IMPORT_E2E_ROOM_KEYS_PREFERENCE_KEY)!!
     }
 
     private val cryptoInfoTextPreference by lazy {
-        findPreference(VectorPreferences.SETTINGS_ENCRYPTION_INFORMATION_DEVICE_KEY_PREFERENCE_KEY)
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_ENCRYPTION_INFORMATION_DEVICE_KEY_PREFERENCE_KEY)!!
     }
     // encrypt to unverified devices
     private val sendToUnverifiedDevicesPref by lazy {
-        findPreference(VectorPreferences.SETTINGS_ENCRYPTION_NEVER_SENT_TO_PREFERENCE_KEY) as SwitchPreference
+        findPreference<SwitchPreference>(VectorPreferences.SETTINGS_ENCRYPTION_NEVER_SENT_TO_PREFERENCE_KEY)!!
     }
 
     @Inject lateinit var vectorPreferences: VectorPreferences
@@ -142,13 +140,13 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
         // Device list
         refreshDevicesList()
 
-        //Refresh Key Management section
+        // Refresh Key Management section
         refreshKeysManagementSection()
 
         // Analytics
 
         // Analytics tracking management
-        (findPreference(VectorPreferences.SETTINGS_USE_ANALYTICS_KEY) as SwitchPreference).let {
+        findPreference<SwitchPreference>(VectorPreferences.SETTINGS_USE_ANALYTICS_KEY)!!.let {
             // On if the analytics tracking is activated
             it.isChecked = vectorPreferences.useAnalytics()
 
@@ -159,7 +157,7 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
         }
 
         // Rageshake Management
-        (findPreference(VectorPreferences.SETTINGS_USE_RAGE_SHAKE_KEY) as SwitchPreference).let {
+        findPreference<SwitchPreference>(VectorPreferences.SETTINGS_USE_RAGE_SHAKE_KEY)!!.let {
             it.isChecked = vectorPreferences.useRageshake()
 
             it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
@@ -187,10 +185,9 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
         }
     }
 
-
     private fun refreshKeysManagementSection() {
-        //If crypto is not enabled parent section will be removed
-        //TODO notice that this will not work when no network
+        // If crypto is not enabled parent section will be removed
+        // TODO notice that this will not work when no network
         manageBackupPref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             context?.let {
                 startActivity(KeysBackupManageActivity.intent(it))
@@ -214,7 +211,7 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
      */
     private fun exportKeys() {
         // We need WRITE_EXTERNAL permission
-        if (checkPermissions(PERMISSIONS_FOR_WRITING_FILES, this, PERMISSION_REQUEST_CODE_EXPORT_KEYS)) {
+        if (checkPermissions(PERMISSIONS_FOR_WRITING_FILES, this, PERMISSION_REQUEST_CODE_EXPORT_KEYS, R.string.permissions_rationale_msg_keys_backup_export)) {
             activity?.let { activity ->
                 ExportKeysDialog().show(activity, object : ExportKeysDialog.ExportKeyDialogListener {
                     override fun onPassphrase(passphrase: String) {
@@ -239,7 +236,6 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
                                             override fun onFailure(failure: Throwable) {
                                                 onCommonDone(failure.localizedMessage)
                                             }
-
                                         })
                     }
                 })
@@ -311,13 +307,13 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
 
             passPhraseEditText.addTextChangedListener(object : SimpleTextWatcher() {
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                    importButton.isEnabled = !TextUtils.isEmpty(passPhraseEditText.text)
+                    importButton.isEnabled = !passPhraseEditText.text.isNullOrEmpty()
                 }
             })
 
             val importDialog = builder.show()
 
-            importButton.setOnClickListener(View.OnClickListener {
+            importButton.setOnClickListener {
                 val password = passPhraseEditText.text.toString()
 
                 displayLoadingView()
@@ -350,13 +346,13 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
                                 })
 
                 importDialog.dismiss()
-            })
+            }
         }
     }
 
-    //==============================================================================================================
+    // ==============================================================================================================
     // Cryptography
-    //==============================================================================================================
+    // ==============================================================================================================
 
     private fun removeCryptographyPreference() {
         preferenceScreen.let {
@@ -396,20 +392,20 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
         }
 
         // crypto section: device ID
-        if (!TextUtils.isEmpty(deviceId)) {
+        if (!deviceId.isNullOrEmpty()) {
             cryptoInfoDeviceIdPreference.summary = deviceId
 
             cryptoInfoDeviceIdPreference.setOnPreferenceClickListener {
-                activity?.let { copyToClipboard(it, deviceId!!) }
+                activity?.let { copyToClipboard(it, deviceId) }
                 true
             }
         }
 
         // crypto section: device key (fingerprint)
-        if (!TextUtils.isEmpty(deviceId) && !TextUtils.isEmpty(userId)) {
+        if (!deviceId.isNullOrEmpty() && userId.isNotEmpty()) {
             val deviceInfo = session.getDeviceInfo(userId, deviceId)
 
-            if (null != deviceInfo && !TextUtils.isEmpty(deviceInfo.fingerprint())) {
+            if (null != deviceInfo && !deviceInfo.fingerprint().isNullOrEmpty()) {
                 cryptoInfoTextPreference.summary = deviceInfo.getFingerprintHumanReadable()
 
                 cryptoInfoTextPreference.setOnPreferenceClickListener {
@@ -432,10 +428,9 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
         }
     }
 
-
-    //==============================================================================================================
+    // ==============================================================================================================
     // devices list
-    //==============================================================================================================
+    // ==============================================================================================================
 
     private fun removeDevicesPreference() {
         preferenceScreen.let {
@@ -450,7 +445,7 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
      * It can be any mobile device, as any browser.
      */
     private fun refreshDevicesList() {
-        if (session.isCryptoEnabled() && !TextUtils.isEmpty(session.sessionParams.credentials.deviceId)) {
+        if (session.isCryptoEnabled() && !session.sessionParams.credentials.deviceId.isNullOrEmpty()) {
             // display a spinner while loading the devices list
             if (0 == mDevicesListSettingsCategory.preferenceCount) {
                 activity?.let {
@@ -506,7 +501,8 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
 
         if (isNewList) {
             var prefIndex = 0
-            mDevicesNameList = aDeviceInfoList
+            mDevicesNameList.clear()
+            mDevicesNameList.addAll(aDeviceInfoList)
 
             // sort before display: most recent first
             mDevicesNameList.sortByLastSeen()
@@ -564,9 +560,7 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
      * @param aDeviceInfo the device information
      */
     private fun displayDeviceDetailsDialog(aDeviceInfo: DeviceInfo) {
-
         activity?.let {
-
             val builder = AlertDialog.Builder(it)
             val inflater = it.layoutInflater
             val layout = inflater.inflate(R.layout.dialog_device_details, null)
@@ -576,7 +570,7 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
 
             // device name
             textView = layout.findViewById(R.id.device_name)
-            val displayName = if (TextUtils.isEmpty(aDeviceInfo.displayName)) LABEL_UNAVAILABLE_DATA else aDeviceInfo.displayName
+            val displayName = if (aDeviceInfo.displayName.isNullOrEmpty()) LABEL_UNAVAILABLE_DATA else aDeviceInfo.displayName
             textView.text = displayName
 
             // last seen info
@@ -585,7 +579,7 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
             val lastSeenIp = aDeviceInfo.lastSeenIp?.takeIf { ip -> ip.isNotBlank() } ?: "-"
 
             val lastSeenTime = aDeviceInfo.lastSeenTs?.let { ts ->
-                val dateFormatTime = SimpleDateFormat("HH:mm:ss")
+                val dateFormatTime = SimpleDateFormat("HH:mm:ss", Locale.ROOT)
                 val date = Date(ts)
 
                 val time = dateFormatTime.format(date)
@@ -604,7 +598,7 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
                     .setPositiveButton(R.string.rename) { _, _ -> displayDeviceRenameDialog(aDeviceInfo) }
 
             // disable the deletion for our own device
-            if (!TextUtils.equals(session.getMyDevice()?.deviceId, aDeviceInfo.deviceId)) {
+            if (session.getMyDevice().deviceId != aDeviceInfo.deviceId) {
                 builder.setNegativeButton(R.string.delete) { _, _ -> deleteDevice(aDeviceInfo) }
             }
 
@@ -651,13 +645,13 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
                                 for (i in 0 until count) {
                                     val pref = mDevicesListSettingsCategory.getPreference(i)
 
-                                    if (TextUtils.equals(aDeviceInfoToRename.deviceId, pref.title)) {
+                                    if (aDeviceInfoToRename.deviceId == pref.title) {
                                         pref.summary = newName
                                     }
                                 }
 
                                 // detect if the updated device is the current account one
-                                if (TextUtils.equals(cryptoInfoDeviceIdPreference.summary, aDeviceInfoToRename.deviceId)) {
+                                if (cryptoInfoDeviceIdPreference.summary == aDeviceInfoToRename.deviceId) {
                                     cryptoInfoDeviceNamePreference.summary = newName
                                 }
 
@@ -708,7 +702,6 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
                     if (isPasswordRequestFound) {
                         maybeShowDeleteDeviceWithPasswordDialog(deviceId, failure.registrationFlowResponse.session)
                     }
-
                 }
 
                 if (!isPasswordRequestFound) {
@@ -723,7 +716,7 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
      * Show a dialog to ask for user password, or use a previously entered password.
      */
     private fun maybeShowDeleteDeviceWithPasswordDialog(deviceId: String, authSession: String?) {
-        if (!TextUtils.isEmpty(mAccountPassword)) {
+        if (mAccountPassword.isNotEmpty()) {
             deleteDeviceWithPassword(deviceId, authSession, mAccountPassword)
         } else {
             activity?.let {
@@ -736,7 +729,7 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
                         .setTitle(R.string.devices_delete_dialog_title)
                         .setView(layout)
                         .setPositiveButton(R.string.devices_delete_submit_button_label, DialogInterface.OnClickListener { _, _ ->
-                            if (TextUtils.isEmpty(passwordEditText.toString())) {
+                            if (passwordEditText.toString().isEmpty()) {
                                 it.toast(R.string.error_empty_field_your_password)
                                 return@OnClickListener
                             }
@@ -775,15 +768,15 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
         })
     }
 
-    //==============================================================================================================
+    // ==============================================================================================================
     // pushers list management
-    //==============================================================================================================
+    // ==============================================================================================================
 
     /**
      * Refresh the pushers list
      */
     private fun refreshPushersList() {
-        activity?.let { activity ->
+        activity?.let { _ ->
             /* TODO
             val pushManager = Matrix.getInstance(activity).pushManager
             val pushersList = ArrayList(pushManager.mPushersList)

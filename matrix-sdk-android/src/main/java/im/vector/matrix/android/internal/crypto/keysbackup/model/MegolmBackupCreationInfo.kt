@@ -35,5 +35,4 @@ class MegolmBackupCreationInfo {
      * The Base58 recovery key.
      */
     var recoveryKey: String = ""
-
 }

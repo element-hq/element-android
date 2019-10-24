@@ -17,21 +17,17 @@
 package im.vector.riotx.features.home.room.detail.timeline.item
 
 import android.graphics.Typeface
-import android.os.Build
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewStub
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.IdRes
-import androidx.constraintlayout.helper.widget.Flow
-import androidx.core.view.children
-import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.riotx.R
 import im.vector.riotx.core.resources.ColorProvider
+import im.vector.riotx.core.ui.views.ReadMarkerView
 import im.vector.riotx.core.utils.DebouncedClickListener
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
@@ -41,146 +37,147 @@ import im.vector.riotx.features.ui.getMessageTextColor
 abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
 
     @EpoxyAttribute
-    lateinit var informationData: MessageInformationData
-
-    @EpoxyAttribute
-    lateinit var avatarRenderer: AvatarRenderer
-
-    @EpoxyAttribute
-    lateinit var colorProvider: ColorProvider
-
-    @EpoxyAttribute
-    var longClickListener: View.OnLongClickListener? = null
-
-    @EpoxyAttribute
-    var cellClickListener: View.OnClickListener? = null
-
-    @EpoxyAttribute
-    var memberClickListener: View.OnClickListener? = null
-
-    @EpoxyAttribute
-    var emojiTypeFace: Typeface? = null
-
-    @EpoxyAttribute
-    var reactionPillCallback: TimelineEventController.ReactionPillCallback? = null
-
-    @EpoxyAttribute
-    var avatarCallback: TimelineEventController.AvatarCallback? = null
-
-    @EpoxyAttribute
-    var readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null
+    lateinit var attributes: Attributes
 
     private val _avatarClickListener = DebouncedClickListener(View.OnClickListener {
-        avatarCallback?.onAvatarClicked(informationData)
+        attributes.avatarCallback?.onAvatarClicked(attributes.informationData)
     })
     private val _memberNameClickListener = DebouncedClickListener(View.OnClickListener {
-        avatarCallback?.onMemberNameClicked(informationData)
+        attributes.avatarCallback?.onMemberNameClicked(attributes.informationData)
     })
 
     private val _readReceiptsClickListener = DebouncedClickListener(View.OnClickListener {
-        readReceiptsCallback?.onReadReceiptsClicked(informationData.readReceipts)
+        attributes.readReceiptsCallback?.onReadReceiptsClicked(attributes.informationData.readReceipts)
     })
+
+    private val _readMarkerCallback = object : ReadMarkerView.Callback {
+
+        override fun onReadMarkerLongBound(isDisplayed: Boolean) {
+            attributes.readReceiptsCallback?.onReadMarkerLongBound(attributes.informationData.eventId, isDisplayed)
+        }
+    }
 
     var reactionClickListener: ReactionButton.ReactedListener = object : ReactionButton.ReactedListener {
         override fun onReacted(reactionButton: ReactionButton) {
-            reactionPillCallback?.onClickOnReactionPill(informationData, reactionButton.reactionString, true)
+            attributes.reactionPillCallback?.onClickOnReactionPill(attributes.informationData, reactionButton.reactionString, true)
         }
 
         override fun onUnReacted(reactionButton: ReactionButton) {
-            reactionPillCallback?.onClickOnReactionPill(informationData, reactionButton.reactionString, false)
+            attributes.reactionPillCallback?.onClickOnReactionPill(attributes.informationData, reactionButton.reactionString, false)
         }
 
         override fun onLongClick(reactionButton: ReactionButton) {
-            reactionPillCallback?.onLongClickOnReactionPill(informationData, reactionButton.reactionString)
+            attributes.reactionPillCallback?.onLongClickOnReactionPill(attributes.informationData, reactionButton.reactionString)
         }
     }
 
     override fun bind(holder: H) {
         super.bind(holder)
-        if (informationData.showInformation) {
+        if (attributes.informationData.showInformation) {
             holder.avatarImageView.layoutParams = holder.avatarImageView.layoutParams?.apply {
-                val size = dimensionConverter.dpToPx(avatarStyle.avatarSizeDP)
-                height = size
-                width = size
+                height = attributes.avatarSize
+                width = attributes.avatarSize
             }
             holder.avatarImageView.visibility = View.VISIBLE
             holder.avatarImageView.setOnClickListener(_avatarClickListener)
             holder.memberNameView.visibility = View.VISIBLE
             holder.memberNameView.setOnClickListener(_memberNameClickListener)
             holder.timeView.visibility = View.VISIBLE
-            holder.timeView.text = informationData.time
-            holder.memberNameView.text = informationData.memberName
-            avatarRenderer.render(informationData.avatarUrl, informationData.senderId, informationData.memberName?.toString(), holder.avatarImageView)
-            holder.view.setOnClickListener(cellClickListener)
-            holder.view.setOnLongClickListener(longClickListener)
-            holder.avatarImageView.setOnLongClickListener(longClickListener)
-            holder.memberNameView.setOnLongClickListener(longClickListener)
+            holder.timeView.text = attributes.informationData.time
+            holder.memberNameView.text = attributes.informationData.memberName
+            attributes.avatarRenderer.render(
+                    attributes.informationData.avatarUrl,
+                    attributes.informationData.senderId,
+                    attributes.informationData.memberName?.toString(),
+                    holder.avatarImageView
+            )
+            holder.avatarImageView.setOnLongClickListener(attributes.itemLongClickListener)
+            holder.memberNameView.setOnLongClickListener(attributes.itemLongClickListener)
         } else {
             holder.avatarImageView.setOnClickListener(null)
             holder.memberNameView.setOnClickListener(null)
             holder.avatarImageView.visibility = View.GONE
             holder.memberNameView.visibility = View.GONE
             holder.timeView.visibility = View.GONE
-            holder.view.setOnClickListener(null)
-            holder.view.setOnLongClickListener(null)
             holder.avatarImageView.setOnLongClickListener(null)
             holder.memberNameView.setOnLongClickListener(null)
         }
+        holder.view.setOnClickListener(attributes.itemClickListener)
+        holder.view.setOnLongClickListener(attributes.itemLongClickListener)
 
-        holder.readReceiptsView.render(informationData.readReceipts, avatarRenderer, _readReceiptsClickListener)
+        holder.readReceiptsView.render(
+                attributes.informationData.readReceipts,
+                attributes.avatarRenderer,
+                _readReceiptsClickListener
+        )
+        holder.readMarkerView.bindView(
+                attributes.informationData.eventId,
+                attributes.informationData.hasReadMarker,
+                attributes.informationData.displayReadMarker,
+                _readMarkerCallback
+        )
 
-        if (!shouldShowReactionAtBottom() || informationData.orderedReactionList.isNullOrEmpty()) {
-            holder.reactionWrapper?.isVisible = false
+        val reactions = attributes.informationData.orderedReactionList
+        if (!shouldShowReactionAtBottom() || reactions.isNullOrEmpty()) {
+            holder.reactionsContainer.isVisible = false
         } else {
-            //inflate if needed
-            if (holder.reactionFlowHelper == null) {
-                holder.reactionWrapper = holder.view.findViewById<ViewStub>(R.id.messageBottomInfo).inflate() as? ViewGroup
-                holder.reactionFlowHelper = holder.view.findViewById(R.id.reactionsFlowHelper)
+            holder.reactionsContainer.isVisible = true
+            holder.reactionsContainer.removeAllViews()
+            reactions.take(8).forEach { reaction ->
+                val reactionButton = ReactionButton(holder.view.context)
+                reactionButton.reactedListener = reactionClickListener
+                reactionButton.setTag(R.id.reactionsContainer, reaction.key)
+                reactionButton.reactionString = reaction.key
+                reactionButton.reactionCount = reaction.count
+                reactionButton.setChecked(reaction.addedByMe)
+                reactionButton.isEnabled = reaction.synced
+                holder.reactionsContainer.addView(reactionButton)
             }
-            holder.reactionWrapper?.isVisible = true
-            //clear all reaction buttons (but not the Flow helper!)
-            holder.reactionWrapper?.children?.forEach { (it as? ReactionButton)?.isGone = true }
-            val idToRefInFlow = ArrayList<Int>()
-            informationData.orderedReactionList?.chunked(8)?.firstOrNull()?.forEachIndexed { index, reaction ->
-                (holder.reactionWrapper?.children?.elementAtOrNull(index) as? ReactionButton)?.let { reactionButton ->
-                    reactionButton.isVisible = true
-                    reactionButton.reactedListener = reactionClickListener
-                    reactionButton.setTag(R.id.messageBottomInfo, reaction.key)
-                    idToRefInFlow.add(reactionButton.id)
-                    reactionButton.reactionString = reaction.key
-                    reactionButton.reactionCount = reaction.count
-                    //reactionButton.emojiTypeFace = emojiTypeFace
-                    reactionButton.setChecked(reaction.addedByMe)
-                    reactionButton.isEnabled = reaction.synced
-                }
-            }
-            // Just setting the view as gone will break the FlowHelper (and invisible will take too much space),
-            // so have to update ref ids
-            holder.reactionFlowHelper?.referencedIds = idToRefInFlow.toIntArray()
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 && !holder.view.isInLayout) {
-                holder.reactionFlowHelper?.requestLayout()
-            }
-            holder.reactionWrapper?.setOnLongClickListener(longClickListener)
+            holder.reactionsContainer.setOnLongClickListener(attributes.itemLongClickListener)
         }
+    }
+
+    override fun unbind(holder: H) {
+        holder.readMarkerView.unbind()
+        super.unbind(holder)
     }
 
     open fun shouldShowReactionAtBottom(): Boolean {
         return true
     }
 
+    override fun getEventIds(): List<String> {
+        return listOf(attributes.informationData.eventId)
+    }
+
     protected open fun renderSendState(root: View, textView: TextView?, failureIndicator: ImageView? = null) {
-        root.isClickable = informationData.sendState.isSent()
-        val state = if (informationData.hasPendingEdits) SendState.UNSENT else informationData.sendState
-        textView?.setTextColor(colorProvider.getMessageTextColor(state))
-        failureIndicator?.isVisible = informationData.sendState.hasFailed()
+        root.isClickable = attributes.informationData.sendState.isSent()
+        val state = if (attributes.informationData.hasPendingEdits) SendState.UNSENT else attributes.informationData.sendState
+        textView?.setTextColor(attributes.colorProvider.getMessageTextColor(state))
+        failureIndicator?.isVisible = attributes.informationData.sendState.hasFailed()
     }
 
     abstract class Holder(@IdRes stubId: Int) : BaseHolder(stubId) {
         val avatarImageView by bind<ImageView>(R.id.messageAvatarImageView)
         val memberNameView by bind<TextView>(R.id.messageMemberNameView)
         val timeView by bind<TextView>(R.id.messageTimeView)
-        var reactionWrapper: ViewGroup? = null
-        var reactionFlowHelper: Flow? = null
+        val reactionsContainer by bind<ViewGroup>(R.id.reactionsContainer)
     }
 
+    /**
+     * This class holds all the common attributes for timeline items.
+     */
+    data class Attributes(
+            val avatarSize: Int,
+            val informationData: MessageInformationData,
+            val avatarRenderer: AvatarRenderer,
+            val colorProvider: ColorProvider,
+            val itemLongClickListener: View.OnLongClickListener? = null,
+            val itemClickListener: View.OnClickListener? = null,
+            val memberClickListener: View.OnClickListener? = null,
+            val reactionPillCallback: TimelineEventController.ReactionPillCallback? = null,
+            val avatarCallback: TimelineEventController.AvatarCallback? = null,
+            val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null,
+            val emojiTypeFace: Typeface? = null
+    )
 }

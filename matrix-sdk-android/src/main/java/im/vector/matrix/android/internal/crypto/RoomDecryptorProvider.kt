@@ -16,13 +16,11 @@
 
 package im.vector.matrix.android.internal.crypto
 
-import android.text.TextUtils
 import im.vector.matrix.android.internal.crypto.algorithms.IMXDecrypting
 import im.vector.matrix.android.internal.crypto.algorithms.megolm.MXMegolmDecryptionFactory
 import im.vector.matrix.android.internal.crypto.algorithms.olm.MXOlmDecryptionFactory
 import im.vector.matrix.android.internal.session.SessionScope
 import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
 
 @SessionScope
@@ -62,10 +60,8 @@ internal class RoomDecryptorProvider @Inject constructor(
         }
         if (roomId != null && roomId.isNotEmpty()) {
             synchronized(roomDecryptors) {
-                if (!roomDecryptors.containsKey(roomId)) {
-                    roomDecryptors[roomId] = HashMap()
-                }
-                val alg = roomDecryptors[roomId]?.get(algorithm)
+                val decryptors = roomDecryptors.getOrPut(roomId) { mutableMapOf() }
+                val alg = decryptors[algorithm]
                 if (alg != null) {
                     return alg
                 }
@@ -76,12 +72,12 @@ internal class RoomDecryptorProvider @Inject constructor(
             val alg = when (algorithm) {
                 MXCRYPTO_ALGORITHM_MEGOLM -> megolmDecryptionFactory.create().apply {
                     this.newSessionListener = object : NewSessionListener {
-                        override fun onNewSession(rid: String?, senderKey: String, sessionId: String) {
+                        override fun onNewSession(roomId: String?, senderKey: String, sessionId: String) {
+                            // PR reviewer: the parameter has been renamed so is now in conflict with the parameter of getOrCreateRoomDecryptor
                             newSessionListeners.forEach {
                                 try {
                                     it.onNewSession(roomId, senderKey, sessionId)
                                 } catch (e: Throwable) {
-
                                 }
                             }
                         }
@@ -89,7 +85,7 @@ internal class RoomDecryptorProvider @Inject constructor(
                 }
                 else                      -> olmDecryptionFactory.create()
             }
-            if (roomId != null && !TextUtils.isEmpty(roomId)) {
+            if (!roomId.isNullOrEmpty()) {
                 synchronized(roomDecryptors) {
                     roomDecryptors[roomId]?.put(algorithm, alg)
                 }

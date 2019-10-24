@@ -20,7 +20,6 @@ import android.os.Parcelable
 import im.vector.matrix.android.internal.crypto.model.rest.EncryptedFileInfo
 import kotlinx.android.parcel.Parcelize
 
-
 fun EncryptedFileInfo.toElementToDecrypt(): ElementToDecrypt? {
     // Check the validity of some fields
     if (isValid()) {
@@ -34,7 +33,6 @@ fun EncryptedFileInfo.toElementToDecrypt(): ElementToDecrypt? {
 
     return null
 }
-
 
 /**
  * Represent data to decode an attachment

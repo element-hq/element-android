@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseFragment
 
-
 class EmojiChooserFragment : VectorBaseFragment() {
 
     companion object {
@@ -45,5 +44,4 @@ class EmojiChooserFragment : VectorBaseFragment() {
 
 //        val ds = EmojiDataSource(this.context!!)
     }
-
 }

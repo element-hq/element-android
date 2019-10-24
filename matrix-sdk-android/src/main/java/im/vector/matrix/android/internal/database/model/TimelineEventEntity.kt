@@ -21,7 +21,6 @@ import io.realm.RealmResults
 import io.realm.annotations.Index
 import io.realm.annotations.LinkingObjects
 
-
 internal open class TimelineEventEntity(var localId: Long = 0,
                                         @Index var eventId: String = "",
                                         @Index var roomId: String = "",
@@ -31,12 +30,12 @@ internal open class TimelineEventEntity(var localId: Long = 0,
                                         var isUniqueDisplayName: Boolean = false,
                                         var senderAvatar: String? = null,
                                         var senderMembershipEvent: EventEntity? = null,
-                                        var readReceipts: ReadReceiptsSummaryEntity? = null
+                                        var readReceipts: ReadReceiptsSummaryEntity? = null,
+                                        var readMarker: ReadMarkerEntity? = null
 ) : RealmObject() {
 
     @LinkingObjects("timelineEvents")
     val chunk: RealmResults<ChunkEntity>? = null
 
     companion object
-
 }

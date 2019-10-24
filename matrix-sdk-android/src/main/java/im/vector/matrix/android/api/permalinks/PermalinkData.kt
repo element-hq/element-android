@@ -33,5 +33,4 @@ sealed class PermalinkData {
     data class GroupLink(val groupId: String) : PermalinkData()
 
     data class FallbackLink(val uri: Uri) : PermalinkData()
-
 }

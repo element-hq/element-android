@@ -140,14 +140,6 @@
     <string name="auth_password_placeholder">Passwort</string>
     <string name="auth_new_password_placeholder">Neues Passwort</string>
     <string name="auth_user_name_placeholder">Benutzername</string>
-    <string name="auth_add_email_message">Füge eine E-Mail-Adresse zu deinem Account hinzu, damit andere Benutzer dich finden können und du dein Passwort zurücksetzen kannst.</string>
-    <string name="auth_add_phone_message">Füge eine Telefonnummer zu deinem Benutzerkonto hinzu, damit andere Benutzer dich finden können.</string>
-    <string name="auth_add_email_phone_message">Füge eine E-Mail-Adresse und/oder eine Telefonnummer zu deinem Benutzerkonto hinzu, damit andere Benutzer dich finden können.
-
-Das Hinzufügen einer E-Mail-Adresse erlaubt es dir außerdem, dein Passwort zurückzusetzen.</string>
-    <string name="auth_add_email_and_phone_message">Füge eine E-Mail-Adresse und eine Telefonnummer zu deinem Benutzerkonto hinzu, damit andere Benutzer dich finden können.
-
-Das Hinzufügen einer E-Mail-Adresse erlaubt es dir außerdem, dein Passwort zurückzusetzen.</string>
     <string name="auth_email_placeholder">E-Mail-Adresse</string>
     <string name="auth_opt_email_placeholder">E-Mail-Adresse (optional)</string>
     <string name="auth_phone_number_placeholder">Telefonnummer</string>
@@ -1527,7 +1519,7 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
 
     <string name="event_redacted_by_user_reason">Ereignis von Benutzer gelöscht</string>
     <string name="event_redacted_by_admin_reason">Ereignis moderiert durch Raum-Administrator</string>
-    <string name="last_edited_info_message">Zuletzt bearbeitet von %s am %s</string>
+    <string name="last_edited_info_message">Zuletzt bearbeitet von %1$s am %2$s</string>
 
 
     <string name="create_new_room">Neuen Raum erstellen</string>
@@ -1650,7 +1642,7 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
 
     <string name="room_filtering_footer_title">Können Sie nicht finden, wonach Sie suchen\?</string>
     <string name="room_filtering_footer_create_new_room">Erstelle einen neuen Raum</string>
-    <string name="room_directory_search_hint">Name oder ID (#Beispiel: matrix.org)</string>
+    <string name="room_directory_search_hint">Name oder ID (#beispiel:matrix.org)</string>
 
     <string name="labs_swipe_to_reply_in_timeline">Aktivieren Sie das Streichen, um in der Zeitleiste zu antworten</string>
 
@@ -1660,4 +1652,8 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
 
     <string name="joining_room">Raum betreten…</string>
 
+    <string name="decline">Ablehnen</string>
+
+    <string name="push_gateway_item_app_id">app_id:</string>
+    <string name="review">Überprüfung</string>
 </resources>

@@ -19,7 +19,6 @@ package im.vector.matrix.android.api.session.group
 import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 
-
 /**
  * This interface defines methods to get groups. It's implemented at the session level.
  */

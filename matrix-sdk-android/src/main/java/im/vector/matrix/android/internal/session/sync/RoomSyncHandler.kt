@@ -37,11 +37,13 @@ import im.vector.matrix.android.internal.session.mapWithProgress
 import im.vector.matrix.android.internal.session.notification.DefaultPushRuleService
 import im.vector.matrix.android.internal.session.notification.ProcessEventForPushTask
 import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
+import im.vector.matrix.android.internal.session.room.read.FullyReadContent
 import im.vector.matrix.android.internal.session.room.timeline.PaginationDirection
 import im.vector.matrix.android.internal.session.sync.model.*
 import im.vector.matrix.android.internal.session.user.UserEntityFactory
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
+import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.Realm
 import io.realm.kotlin.createObject
 import timber.log.Timber
@@ -51,6 +53,7 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
                                                    private val readReceiptHandler: ReadReceiptHandler,
                                                    private val roomSummaryUpdater: RoomSummaryUpdater,
                                                    private val roomTagHandler: RoomTagHandler,
+                                                   private val roomFullyReadHandler: RoomFullyReadHandler,
                                                    private val cryptoService: DefaultCryptoService,
                                                    private val tokenStore: SyncTokenStore,
                                                    private val pushRuleService: DefaultPushRuleService,
@@ -63,16 +66,14 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
         data class LEFT(val data: Map<String, RoomSync>) : HandlingStrategy()
     }
 
-    fun handle(roomsSyncResponse: RoomsSyncResponse, isInitialSync: Boolean, reporter: DefaultInitialSyncProgressService? = null) {
-        monarchy.runTransactionSync { realm ->
+    suspend fun handle(roomsSyncResponse: RoomsSyncResponse, isInitialSync: Boolean, reporter: DefaultInitialSyncProgressService? = null) {
+        monarchy.awaitTransaction { realm ->
             handleRoomSync(realm, HandlingStrategy.JOINED(roomsSyncResponse.join), isInitialSync, reporter)
             handleRoomSync(realm, HandlingStrategy.INVITED(roomsSyncResponse.invite), isInitialSync, reporter)
             handleRoomSync(realm, HandlingStrategy.LEFT(roomsSyncResponse.leave), isInitialSync, reporter)
         }
-
-        //handle event for bing rule checks
+        // handle event for bing rule checks
         checkPushRules(roomsSyncResponse)
-
     }
 
     private fun checkPushRules(roomsSyncResponse: RoomsSyncResponse) {
@@ -80,7 +81,7 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
         if (tokenStore.getLastToken() == null) {
             Timber.v("[PushRules] <-- No push rule check on initial sync")
             return
-        } //nothing on initial sync
+        } // nothing on initial sync
 
         val rules = pushRuleService.getPushRules(RuleScope.GLOBAL)
         processForPushTask.configureWith(ProcessEventForPushTask.Params(roomsSyncResponse, rules))
@@ -91,7 +92,6 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
     // PRIVATE METHODS *****************************************************************************
 
     private fun handleRoomSync(realm: Realm, handlingStrategy: HandlingStrategy, isInitialSync: Boolean, reporter: DefaultInitialSyncProgressService?) {
-
         val rooms = when (handlingStrategy) {
             is HandlingStrategy.JOINED  ->
                 handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_joined_rooms, 0.6f) {
@@ -115,7 +115,6 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
                                  roomId: String,
                                  roomSync: RoomSync,
                                  isInitialSync: Boolean): RoomEntity {
-
         Timber.v("Handle join sync for room $roomId")
 
         if (roomSync.ephemeral != null && roomSync.ephemeral.events.isNotEmpty()) {
@@ -135,7 +134,8 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
 
         // State event
         if (roomSync.state != null && roomSync.state.events.isNotEmpty()) {
-            val minStateIndex = roomEntity.untimelinedStateEvents.where().min(EventEntityFields.STATE_INDEX)?.toInt() ?: Int.MIN_VALUE
+            val minStateIndex = roomEntity.untimelinedStateEvents.where().min(EventEntityFields.STATE_INDEX)?.toInt()
+                                ?: Int.MIN_VALUE
             val untimelinedStateIndex = minStateIndex + 1
             roomSync.state.events.forEach { event ->
                 roomEntity.addStateEvent(event, filterDuplicates = true, stateIndex = untimelinedStateIndex)
@@ -192,7 +192,6 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
                                      eventList: List<Event>,
                                      prevToken: String? = null,
                                      isLimited: Boolean = true): ChunkEntity {
-
         val lastChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomEntity.roomId)
         var stateIndexOffset = 0
         val chunkEntity = if (!isLimited && lastChunk != null) {
@@ -230,25 +229,28 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
         return chunkEntity
     }
 
-
     @Suppress("UNCHECKED_CAST")
     private fun handleEphemeral(realm: Realm,
                                 roomId: String,
                                 ephemeral: RoomSyncEphemeral,
-                                isInitalSync: Boolean) {
+                                isInitialSync: Boolean) {
         for (event in ephemeral.events) {
             if (event.type != EventType.RECEIPT) continue
             val readReceiptContent = event.content as? ReadReceiptContent ?: continue
-            readReceiptHandler.handle(realm, roomId, readReceiptContent, isInitalSync)
+            readReceiptHandler.handle(realm, roomId, readReceiptContent, isInitialSync)
         }
     }
 
     private fun handleRoomAccountDataEvents(realm: Realm, roomId: String, accountData: RoomSyncAccountData) {
-        accountData.events
-                .asSequence()
-                .filter { it.getClearType() == EventType.TAG }
-                .map { it.content.toModel<RoomTagContent>() }
-                .forEach { roomTagHandler.handle(realm, roomId, it) }
+        for (event in accountData.events) {
+            val eventType = event.getClearType()
+            if (eventType == EventType.TAG) {
+                val content = event.getClearContent().toModel<RoomTagContent>()
+                roomTagHandler.handle(realm, roomId, content)
+            } else if (eventType == EventType.FULLY_READ) {
+                val content = event.getClearContent().toModel<FullyReadContent>()
+                roomFullyReadHandler.handle(realm, roomId, content)
+            }
+        }
     }
-
 }

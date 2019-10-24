@@ -20,7 +20,6 @@
 package im.vector.riotx.features.crypto.keysrequest
 
 import android.content.Context
-import android.text.TextUtils
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.keyshare.RoomKeysRequestListener
@@ -39,7 +38,8 @@ import im.vector.riotx.features.popup.PopupAlertManager
 import timber.log.Timber
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
+import java.util.Date
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.collections.ArrayList
@@ -61,7 +61,6 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
     private val alertsToRequests = HashMap<String, ArrayList<IncomingRoomKeyRequest>>()
 
     var session: Session? = null
-
 
     fun start(session: Session) {
         this.session = session
@@ -90,24 +89,24 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
             return
         }
 
-        //Do we already have alerts for this user/device
+        // Do we already have alerts for this user/device
         val mappingKey = keyForMap(deviceId, userId)
         if (alertsToRequests.containsKey(mappingKey)) {
-            //just add the request, there is already an alert for this
+            // just add the request, there is already an alert for this
             alertsToRequests[mappingKey]?.add(request)
             return
         }
 
         alertsToRequests[mappingKey] = ArrayList<IncomingRoomKeyRequest>().apply { this.add(request) }
 
-        //Add a notification for every incoming request
-        session?.downloadKeys(Arrays.asList(userId), false, object : MatrixCallback<MXUsersDevicesMap<MXDeviceInfo>> {
+        // Add a notification for every incoming request
+        session?.downloadKeys(listOf(userId), false, object : MatrixCallback<MXUsersDevicesMap<MXDeviceInfo>> {
             override fun onSuccess(data: MXUsersDevicesMap<MXDeviceInfo>) {
                 val deviceInfo = data.getObject(userId, deviceId)
 
                 if (null == deviceInfo) {
                     Timber.e("## displayKeyShareDialog() : No details found for device $userId:$deviceId")
-                    //ignore
+                    // ignore
                     return
                 }
 
@@ -116,7 +115,7 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
 
                     deviceInfo.verified = MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED
 
-                    //can we get more info on this device?
+                    // can we get more info on this device?
                     session?.getDevicesList(object : MatrixCallback<DevicesListResponse> {
                         override fun onSuccess(data: DevicesListResponse) {
                             data.devices?.find { it.deviceId == deviceId }?.let {
@@ -129,7 +128,6 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
                         override fun onFailure(failure: Throwable) {
                             postAlert(context, userId, deviceId, true, deviceInfo)
                         }
-
                     })
                 } else {
                     postAlert(context, userId, deviceId, false, deviceInfo)
@@ -137,11 +135,10 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
             }
 
             override fun onFailure(failure: Throwable) {
-                //ignore
+                // ignore
                 Timber.e(failure, "## displayKeyShareDialog : downloadKeys")
             }
         })
-
     }
 
     private fun postAlert(context: Context,
@@ -150,7 +147,7 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
                           wasNewDevice: Boolean,
                           deviceInfo: MXDeviceInfo?,
                           moreInfo: DeviceInfo? = null) {
-        val deviceName = if (TextUtils.isEmpty(deviceInfo!!.displayName())) deviceInfo.deviceId else deviceInfo.displayName()
+        val deviceName = if (deviceInfo!!.displayName().isNullOrEmpty()) deviceInfo.deviceId else deviceInfo.displayName()
         val dialogText: String?
 
         if (moreInfo != null) {
@@ -183,7 +180,6 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
                 context.getString(R.string.your_unverified_device_requesting, deviceName)
             }
         }
-
 
         val alert = PopupAlertManager.VectorAlert(
                 alertManagerId(deviceId, userId),
@@ -248,12 +244,12 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
         val deviceId = request.deviceId
         val requestId = request.requestId
 
-        if (TextUtils.isEmpty(userId) || TextUtils.isEmpty(deviceId) || TextUtils.isEmpty(requestId)) {
+        if (userId.isNullOrEmpty() || deviceId.isNullOrEmpty() || requestId.isNullOrEmpty()) {
             Timber.e("## handleKeyRequestCancellation() : invalid parameters")
             return
         }
 
-        val alertMgrUniqueKey = alertManagerId(deviceId!!, userId!!)
+        val alertMgrUniqueKey = alertManagerId(deviceId, userId)
         alertsToRequests[alertMgrUniqueKey]?.removeAll {
             it.deviceId == request.deviceId
                     && it.userId == request.userId
@@ -271,14 +267,14 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
     override fun transactionUpdated(tx: SasVerificationTransaction) {
         val state = tx.state
         if (state == SasVerificationTxState.Verified) {
-            //ok it's verified, see if we have key request for that
+            // ok it's verified, see if we have key request for that
             shareAllSessions("${tx.otherDeviceId}${tx.otherUserId}")
             PopupAlertManager.cancelAlert("ikr_${tx.otherDeviceId}${tx.otherUserId}")
         }
     }
 
     override fun markedAsManuallyVerified(userId: String, deviceId: String) {
-        //accept related requests
+        // accept related requests
         shareAllSessions(keyForMap(deviceId, userId))
         PopupAlertManager.cancelAlert(alertManagerId(deviceId, userId))
     }

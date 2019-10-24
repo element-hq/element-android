@@ -2,24 +2,6 @@
 <resources>
 
     <!-- Strings not defined in Riot -->
-    <string name="labs_allow_extended_logging">Enable verbose logs.</string>
-    <string name="labs_allow_extended_logging_summary">Verbose logs will help developers by providing more logs when you send a RageShake. Even when enabled, the application does not log message contents or any other private data.</string>
 
-
-    <string name="error_terms_not_accepted">Please retry once you have accepted the terms and conditions of your homeserver.</string>
-
-    <!-- This one is already defined in Riot, but not yet synced-->
-    <string name="error_user_already_logged_in">It looks like you’re trying to connect to another homeserver. Do you want to sign out?</string>
-
-    <string name="error_network_timeout">Looks like the server is taking to long to respond, this can be caused by either poor connectivity or an error with our servers. Please try again in a while.</string>
-
-    <string name="send_attachment">Send attachment</string>
-
-    <string name="a11y_open_drawer">Open the navigation drawer</string>
-    <string name="a11y_create_menu_open">Open the create room menu</string>
-    <string name="a11y_create_menu_close">Close the create room menu…</string>
-    <string name="a11y_create_direct_message">Create a new direct conversation</string>
-    <string name="a11y_create_room">Create a new room</string>
-    <string name="a11y_close_keys_backup_banner">Close keys backup banner</string>
 
 </resources>

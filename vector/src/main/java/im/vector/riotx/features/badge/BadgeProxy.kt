@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
+@file:Suppress("UNUSED_PARAMETER")
+
 package im.vector.riotx.features.badge
 
 import android.content.Context
 import android.os.Build
 import im.vector.matrix.android.api.session.Session
 import me.leolin.shortcutbadger.ShortcutBadger
-import timber.log.Timber
 
 /**
  * Manage application badge (displayed in the launcher)
@@ -45,12 +46,7 @@ object BadgeProxy {
             return
         }
 
-        try {
-            ShortcutBadger.setBadge(context, badgeValue)
-        } catch (e: Exception) {
-            Timber.e(e, "## updateBadgeCount(): Exception Msg=" + e.message)
-        }
-
+        ShortcutBadger.applyCount(context, badgeValue)
     }
 
     /**

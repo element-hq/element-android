@@ -42,9 +42,7 @@ class FilteredRoomsActivity : VectorBaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         configureToolbar(filteredRoomsToolbar)
-
         if (isFirstCreation()) {
             roomListFragment = RoomListFragment.newInstance(RoomListParams(RoomListFragment.DisplayMode.FILTERED))
             replaceFragment(roomListFragment, R.id.filteredRoomsFragmentContainer, FRAGMENT_TAG)
@@ -58,12 +56,10 @@ class FilteredRoomsActivity : VectorBaseActivity() {
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-                // TODO Create a viewModel and remove this public fun
                 roomListFragment.filterRoomsWith(newText)
                 return true
             }
         })
-
         // Open the keyboard immediately
         filteredRoomsSearchView.requestFocus()
     }

@@ -27,5 +27,4 @@ internal interface SignOutAPI {
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "logout")
     fun signOut(): Call<Unit>
-
 }

@@ -31,6 +31,11 @@ internal fun RoomSummaryEntity.Companion.where(realm: Realm, roomId: String? = n
     return query
 }
 
+internal fun RoomSummaryEntity.Companion.getOrCreate(realm: Realm, roomId: String): RoomSummaryEntity {
+    return where(realm, roomId).findFirst()
+           ?: realm.createObject(RoomSummaryEntity::class.java, roomId)
+}
+
 internal fun RoomSummaryEntity.Companion.getDirectRooms(realm: Realm): RealmResults<RoomSummaryEntity> {
     return RoomSummaryEntity.where(realm)
             .equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
@@ -44,6 +49,3 @@ internal fun RoomSummaryEntity.Companion.isDirect(realm: Realm, roomId: String):
             .findAll()
             .isNotEmpty()
 }
-
-
-

@@ -71,7 +71,7 @@
         android:layout_width="22dp"
         android:layout_height="22dp"
         android:background="?android:attr/selectableItemBackground"
-        android:contentDescription="@string/action_close"
+        android:contentDescription="@string/cancel"
         android:src="@drawable/ic_close_round"
         android:tint="@color/riotx_notice"
         tools:ignore="MissingConstraints" />
@@ -89,7 +89,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="?android:attr/selectableItemBackground"
-        android:contentDescription="@string/send_attachment"
+        android:contentDescription="@string/option_send_files"
         android:src="@drawable/ic_attachment"
         android:tint="?attr/colorAccent"
         tools:ignore="MissingConstraints" />
@@ -114,7 +114,7 @@
         android:tint="?attr/colorAccent"
         tools:ignore="MissingConstraints" />
 
-    <EditText
+    <im.vector.riotx.features.home.room.detail.composer.ComposerEditText
         android:id="@+id/composerEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

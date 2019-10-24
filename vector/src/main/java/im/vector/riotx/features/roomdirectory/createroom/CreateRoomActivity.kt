@@ -80,5 +80,4 @@ class CreateRoomActivity : VectorBaseActivity(), ToolbarConfigurable {
             }
         }
     }
-
 }

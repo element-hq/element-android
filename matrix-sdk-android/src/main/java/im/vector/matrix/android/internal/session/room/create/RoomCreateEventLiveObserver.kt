@@ -65,9 +65,7 @@ internal class RoomCreateEventLiveObserver @Inject constructor(@SessionDatabase
                         ?: RoomSummaryEntity(predecessorRoomId)
                 predecessorRoomSummary.versioningState = VersioningState.UPGRADED_ROOM_JOINED
                 realm.insertOrUpdate(predecessorRoomSummary)
-
             }
         }
     }
-
 }

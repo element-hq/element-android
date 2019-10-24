@@ -28,7 +28,6 @@ import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
 import im.vector.riotx.features.home.AvatarRenderer
 
-
 @EpoxyModelClass(layout = R.layout.item_room)
 abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
 
@@ -43,7 +42,6 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
     @EpoxyAttribute var hasDraft: Boolean = false
     @EpoxyAttribute var showHighlighted: Boolean = false
     @EpoxyAttribute var listener: (() -> Unit)? = null
-
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -67,5 +65,4 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         val avatarImageView by bind<ImageView>(R.id.roomAvatarImageView)
         val rootView by bind<ViewGroup>(R.id.itemRoomLayout)
     }
-
 }

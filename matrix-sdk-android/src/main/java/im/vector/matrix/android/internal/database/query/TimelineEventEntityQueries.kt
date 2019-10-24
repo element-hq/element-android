@@ -22,13 +22,15 @@ import im.vector.matrix.android.internal.database.model.EventEntity.LinkFilterMo
 import io.realm.*
 import io.realm.kotlin.where
 
-internal fun TimelineEventEntity.Companion.where(realm: Realm, eventId: String): RealmQuery<TimelineEventEntity> {
+internal fun TimelineEventEntity.Companion.where(realm: Realm, roomId: String, eventId: String): RealmQuery<TimelineEventEntity> {
     return realm.where<TimelineEventEntity>()
+            .equalTo(TimelineEventEntityFields.ROOM_ID, roomId)
             .equalTo(TimelineEventEntityFields.EVENT_ID, eventId)
 }
 
-internal fun TimelineEventEntity.Companion.where(realm: Realm, eventIds: List<String>): RealmQuery<TimelineEventEntity> {
+internal fun TimelineEventEntity.Companion.where(realm: Realm, roomId: String, eventIds: List<String>): RealmQuery<TimelineEventEntity> {
     return realm.where<TimelineEventEntity>()
+            .equalTo(TimelineEventEntityFields.ROOM_ID, roomId)
             .`in`(TimelineEventEntityFields.EVENT_ID, eventIds.toTypedArray())
 }
 
@@ -56,28 +58,29 @@ internal fun TimelineEventEntity.Companion.findWithSenderMembershipEvent(realm: 
             .findAll()
 }
 
-
 internal fun TimelineEventEntity.Companion.latestEvent(realm: Realm,
                                                        roomId: String,
                                                        includesSending: Boolean,
-                                                       includedTypes: List<String> = emptyList(),
-                                                       excludedTypes: List<String> = emptyList()): TimelineEventEntity? {
-
+                                                       filterTypes: List<String> = emptyList()): TimelineEventEntity? {
     val roomEntity = RoomEntity.where(realm, roomId).findFirst() ?: return null
-    val eventList = if (includesSending && roomEntity.sendingTimelineEvents.isNotEmpty()) {
-        roomEntity.sendingTimelineEvents
+    val sendingTimelineEvents = roomEntity.sendingTimelineEvents.where().filterTypes(filterTypes)
+    val liveEvents = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId)?.timelineEvents?.where()?.filterTypes(filterTypes)
+    val query = if (includesSending && sendingTimelineEvents.findAll().isNotEmpty()) {
+        sendingTimelineEvents
     } else {
-        ChunkEntity.findLastLiveChunkFromRoom(realm, roomId)?.timelineEvents
-    }
-    val query = eventList?.where()
-    if (includedTypes.isNotEmpty()) {
-        query?.`in`(TimelineEventEntityFields.ROOT.TYPE, includedTypes.toTypedArray())
-    } else if (excludedTypes.isNotEmpty()) {
-        query?.not()?.`in`(TimelineEventEntityFields.ROOT.TYPE, excludedTypes.toTypedArray())
+        liveEvents
     }
     return query
             ?.sort(TimelineEventEntityFields.ROOT.DISPLAY_INDEX, Sort.DESCENDING)
             ?.findFirst()
+}
+
+internal fun RealmQuery<TimelineEventEntity>.filterTypes(filterTypes: List<String>): RealmQuery<TimelineEventEntity> {
+    return if (filterTypes.isEmpty()) {
+        this
+    } else {
+        this.`in`(TimelineEventEntityFields.ROOT.TYPE, filterTypes.toTypedArray())
+    }
 }
 
 internal fun RealmQuery<TimelineEventEntity>.next(from: Int? = null, strict: Boolean = true): TimelineEventEntity? {
@@ -106,7 +109,6 @@ internal fun RealmQuery<TimelineEventEntity>.prev(since: Int? = null, strict: Bo
             .findFirst()
 }
 
-
 internal fun RealmList<TimelineEventEntity>.find(eventId: String): TimelineEventEntity? {
     return this.where()
             .equalTo(TimelineEventEntityFields.ROOT.EVENT_ID, eventId)
@@ -117,10 +119,9 @@ internal fun TimelineEventEntity.Companion.findAllInRoomWithSendStates(realm: Re
                                                                        roomId: String,
                                                                        sendStates: List<SendState>)
         : RealmResults<TimelineEventEntity> {
-
     val sendStatesStr = sendStates.map { it.name }.toTypedArray()
     return realm.where<TimelineEventEntity>()
             .equalTo(TimelineEventEntityFields.ROOM_ID, roomId)
-            .`in`(TimelineEventEntityFields.ROOT.SEND_STATE_STR,sendStatesStr)
+            .`in`(TimelineEventEntityFields.ROOT.SEND_STATE_STR, sendStatesStr)
             .findAll()
 }

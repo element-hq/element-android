@@ -16,7 +16,6 @@
 
 package im.vector.riotx.features.rageshake
 
-import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -33,7 +32,6 @@ import timber.log.Timber
  * Form to send a bug report
  */
 class BugReportActivity : VectorBaseActivity() {
-
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
@@ -99,7 +97,6 @@ class BugReportActivity : VectorBaseActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-
     /**
      * Send the bug report
      */
@@ -124,7 +121,7 @@ class BugReportActivity : VectorBaseActivity() {
                 object : BugReporter.IMXBugReportListener {
                     override fun onUploadFailed(reason: String?) {
                         try {
-                            if (!TextUtils.isEmpty(reason)) {
+                            if (!reason.isNullOrEmpty()) {
                                 if (forSuggestion) {
                                     Toast.makeText(this@BugReportActivity,
                                             getString(R.string.send_suggestion_failed, reason), Toast.LENGTH_LONG).show()
@@ -134,7 +131,7 @@ class BugReportActivity : VectorBaseActivity() {
                                 }
                             }
                         } catch (e: Exception) {
-                            Timber.e(e, "## onUploadFailed() : failed to display the toast " + e.message)
+                            Timber.e(e, "## onUploadFailed() : failed to display the toast")
                         }
 
                         bug_report_mask_view.isVisible = false
@@ -164,13 +161,13 @@ class BugReportActivity : VectorBaseActivity() {
                                 Toast.makeText(this@BugReportActivity, R.string.send_bug_report_sent, Toast.LENGTH_LONG).show()
                             }
                         } catch (e: Exception) {
-                            Timber.e(e, "## onUploadSucceed() : failed to dismiss the toast " + e.message)
+                            Timber.e(e, "## onUploadSucceed() : failed to dismiss the toast")
                         }
 
                         try {
                             finish()
                         } catch (e: Exception) {
-                            Timber.e(e, "## onUploadSucceed() : failed to dismiss the dialog " + e.message)
+                            Timber.e(e, "## onUploadSucceed() : failed to dismiss the dialog")
                         }
                     }
                 })

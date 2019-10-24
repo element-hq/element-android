@@ -181,4 +181,5 @@
     <string name="event_status_sending_message">Bericht wordt verstuurd…</string>
     <string name="clear_timeline_send_queue">Uitgaande wachtrij legen</string>
 
+    <string name="notice_room_third_party_revoked_invite">%1$s heeft de uitnodiging voor %2$s om het gesprek toe te treden ingetrokken</string>
 </resources>

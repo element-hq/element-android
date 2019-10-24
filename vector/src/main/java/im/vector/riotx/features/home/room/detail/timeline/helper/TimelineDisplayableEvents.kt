@@ -17,10 +17,8 @@
 package im.vector.riotx.features.home.room.detail.timeline.helper
 
 import im.vector.matrix.android.api.session.events.model.EventType
-import im.vector.matrix.android.api.session.events.model.RelationType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.RoomMember
-import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotx.core.extensions.localDateTime
 
@@ -48,30 +46,6 @@ object TimelineDisplayableEvents {
             EventType.REACTION
     )
 }
-
-fun TimelineEvent.isDisplayable(showHiddenEvent: Boolean): Boolean {
-    val allowed = TimelineDisplayableEvents.DEBUG_DISPLAYABLE_TYPES.takeIf { showHiddenEvent }
-            ?: TimelineDisplayableEvents.DISPLAYABLE_TYPES
-    if (!allowed.contains(root.type)) {
-        return false
-    }
-    if (root.content.isNullOrEmpty()) {
-        //redacted events have empty content but are displayable
-        return root.unsignedData?.redactedEvent != null
-    }
-    //Edits should be filtered out!
-    if (EventType.MESSAGE == root.type
-            && root.content.toModel<MessageContent>()?.relatesTo?.type == RelationType.REPLACE) {
-        return false
-    }
-    return true
-}
-//
-//fun List<TimelineEvent>.filterDisplayableEvents(): List<TimelineEvent> {
-//    return this.filter {
-//        it.isDisplayable()
-//    }
-//}
 
 fun TimelineEvent.senderAvatar(): String? {
     // We might have no avatar when user leave, so we try to get it from prevContent
@@ -132,10 +106,10 @@ fun List<TimelineEvent>.prevSameTypeEvents(index: Int, minSize: Int): List<Timel
             .reversed()
 }
 
-fun List<TimelineEvent>.nextDisplayableEvent(index: Int, showHiddenEvent: Boolean): TimelineEvent? {
+fun List<TimelineEvent>.nextOrNull(index: Int): TimelineEvent? {
     return if (index >= size - 1) {
         null
     } else {
-        subList(index + 1, this.size).firstOrNull { it.isDisplayable(showHiddenEvent) }
+        subList(index + 1, this.size).firstOrNull()
     }
 }

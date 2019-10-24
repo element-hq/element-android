@@ -34,7 +34,6 @@ class StateView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         data class Error(val message: CharSequence? = null) : State()
     }
 
-
     private var eventCallback: EventCallback? = null
 
     var contentView: View? = null
@@ -58,7 +57,6 @@ class StateView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         }
         state = State.Content
     }
-
 
     private fun update(newState: State) {
         when (newState) {

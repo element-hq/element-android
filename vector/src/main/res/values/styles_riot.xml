@@ -282,7 +282,7 @@
 
 
     <style name="TimelineContentStubBaseParams">
-        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginStart">8dp</item>
         <item name="android:layout_marginLeft">8dp</item>
@@ -290,20 +290,6 @@
         <item name="android:layout_marginRight">8dp</item>
         <item name="android:layout_marginBottom">4dp</item>
         <item name="android:layout_marginTop">4dp</item>
-        <item name="layout_constraintBottom_toBottomOf">parent</item>
-        <item name="layout_constraintEnd_toEndOf">parent</item>
-        <item name="layout_constraintStart_toEndOf">@id/messageStartGuideline</item>
-    </style>
-
-    <style name="TimelineContentStubNoInfoLayoutParams" parent="TimelineContentStubBaseParams">
-        <item name="layout_constraintTop_toTopOf">parent</item>
-        <item name="layout_constraintBottom_toTopOf">@id/readReceiptsView</item>
-    </style>
-
-
-    <style name="TimelineContentStubLayoutParams" parent="TimelineContentStubBaseParams">
-        <item name="layout_constraintTop_toBottomOf">@id/messageMemberNameView</item>
-        <item name="layout_constraintBottom_toTopOf">@id/messageBottomInfo</item>
     </style>
 
     <style name="VectorLabel">
@@ -336,6 +322,21 @@
         <item name="android:lines">1</item>
         <item name="android:textColor">?riotx_text_secondary</item>
         <item name="android:textSize">12sp</item>
+    </style>
+
+
+    <style name="AttachmentTypeSelectorButton">
+        <item name="android:layout_width">56dp</item>
+        <item name="android:layout_height">56dp</item>
+        <item name="android:scaleType">center</item>
+    </style>
+
+    <style name="AttachmentTypeSelectorLabel">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">?riotx_text_primary</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:layout_marginTop">8dp</item>
     </style>
 
 </resources>

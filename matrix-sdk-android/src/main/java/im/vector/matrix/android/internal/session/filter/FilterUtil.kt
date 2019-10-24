@@ -55,7 +55,6 @@ internal object FilterUtil {
                 }
             }
         } else {
-
             filterBody.room?.let { room ->
                 room.ephemeral?.types?.remove("m.receipt")
                 if (room.ephemeral?.types?.isEmpty() == true) {

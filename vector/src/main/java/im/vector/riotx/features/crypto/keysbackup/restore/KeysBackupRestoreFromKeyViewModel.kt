@@ -39,7 +39,7 @@ class KeysBackupRestoreFromKeyViewModel @Inject constructor() : ViewModel() {
         recoveryCodeErrorText.value = null
     }
 
-    //========= Actions =========
+    // ========= Actions =========
     fun updateCode(newValue: String) {
         recoveryCode.value = newValue
         recoveryCodeErrorText.value = null
@@ -72,7 +72,6 @@ class KeysBackupRestoreFromKeyViewModel @Inject constructor() : ViewModel() {
                                     sharedViewModel.loadingEvent.value = WaitingViewData(context.getString(R.string.keys_backup_restoring_waiting_message)
                                             + "\n" + context.getString(R.string.keys_backup_restoring_importing_keys_waiting_message),
                                             isIndeterminate = true)
-
                                 } else {
                                     sharedViewModel.loadingEvent.value = WaitingViewData(context.getString(R.string.keys_backup_restoring_waiting_message)
                                             + "\n" + context.getString(R.string.keys_backup_restoring_importing_keys_waiting_message),
@@ -84,9 +83,9 @@ class KeysBackupRestoreFromKeyViewModel @Inject constructor() : ViewModel() {
                     }
                 },
                 object : MatrixCallback<ImportRoomKeysResult> {
-                    override fun onSuccess(info: ImportRoomKeysResult) {
+                    override fun onSuccess(data: ImportRoomKeysResult) {
                         sharedViewModel.loadingEvent.value = null
-                        sharedViewModel.didRecoverSucceed(info)
+                        sharedViewModel.didRecoverSucceed(data)
 
                         KeysBackupBanner.onRecoverDoneForVersion(context, keysVersionResult.version!!)
                         trustOnDecrypt(keysBackup, keysVersionResult)
@@ -103,11 +102,9 @@ class KeysBackupRestoreFromKeyViewModel @Inject constructor() : ViewModel() {
     private fun trustOnDecrypt(keysBackup: KeysBackupService, keysVersionResult: KeysVersionResult) {
         keysBackup.trustKeysBackupVersion(keysVersionResult, true,
                 object : MatrixCallback<Unit> {
-
                     override fun onSuccess(data: Unit) {
                         Timber.v("##### trustKeysBackupVersion onSuccess")
                     }
-
                 })
     }
 }

@@ -31,5 +31,4 @@ object RoomSummaryFormatter {
             count.toString()
         }
     }
-
 }

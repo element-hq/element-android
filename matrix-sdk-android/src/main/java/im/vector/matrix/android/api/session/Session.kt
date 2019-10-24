@@ -19,6 +19,7 @@ package im.vector.matrix.android.api.session
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.auth.data.SessionParams
+import im.vector.matrix.android.api.failure.ConsentNotGivenError
 import im.vector.matrix.android.api.pushrules.PushRuleService
 import im.vector.matrix.android.api.session.cache.CacheService
 import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
@@ -26,6 +27,7 @@ import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.file.FileService
 import im.vector.matrix.android.api.session.group.GroupService
+import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilitiesService
 import im.vector.matrix.android.api.session.pushers.PushersService
 import im.vector.matrix.android.api.session.room.RoomDirectoryService
 import im.vector.matrix.android.api.session.room.RoomService
@@ -52,6 +54,7 @@ interface Session :
         PushRuleService,
         PushersService,
         InitialSyncProgressService,
+        HomeServerCapabilitiesService,
         SecureStorageService {
 
     /**
@@ -64,7 +67,6 @@ interface Session :
      */
     val myUserId: String
         get() = sessionParams.credentials.userId
-
 
     /**
      * This method allow to open a session. It does start some service on the background.
@@ -138,6 +140,9 @@ interface Session :
          */
         fun onInvalidToken()
 
+        /**
+         * A M_CONSENT_NOT_GIVEN error has been received from the homeserver
+         */
+        fun onConsentNotGivenError(consentNotGivenError: ConsentNotGivenError)
     }
-
 }

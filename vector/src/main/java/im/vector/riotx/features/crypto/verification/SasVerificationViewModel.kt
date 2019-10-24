@@ -27,10 +27,8 @@ import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotx.core.utils.LiveEvent
 import javax.inject.Inject
 
-
 class SasVerificationViewModel @Inject constructor() : ViewModel(),
         SasVerificationService.SasVerificationListener {
-
 
     companion object {
         const val NAVIGATE_FINISH = "NAVIGATE_FINISH"
@@ -47,18 +45,16 @@ class SasVerificationViewModel @Inject constructor() : ViewModel(),
     var otherUser: User? = null
     var transaction: SasVerificationTransaction? = null
 
-
     var transactionState: MutableLiveData<SasVerificationTxState> = MutableLiveData()
 
     init {
-        //Force a first observe
+        // Force a first observe
         transactionState.value = null
     }
 
     private var _navigateEvent: MutableLiveData<LiveEvent<String>> = MutableLiveData()
     val navigateEvent: LiveData<LiveEvent<String>>
         get() = _navigateEvent
-
 
     var loadingLiveEvent: MutableLiveData<Int> = MutableLiveData()
 
@@ -72,7 +68,6 @@ class SasVerificationViewModel @Inject constructor() : ViewModel(),
             field = value
         }
 
-
     fun initIncoming(session: Session, otherUserId: String, transactionID: String?) {
         this.sasVerificationService = session.getSasVerificationService()
         this.otherUserId = otherUserId
@@ -80,7 +75,7 @@ class SasVerificationViewModel @Inject constructor() : ViewModel(),
         this.sasVerificationService.addListener(this)
         this.otherUser = session.getUser(otherUserId)
         if (transactionID == null || transaction == null) {
-            //sanity, this transaction is not known anymore
+            // sanity, this transaction is not known anymore
             _navigateEvent.value = LiveEvent(NAVIGATE_FINISH)
         }
     }
@@ -98,9 +93,7 @@ class SasVerificationViewModel @Inject constructor() : ViewModel(),
         this.transactionID = verificationSAS
     }
 
-
     override fun transactionCreated(tx: SasVerificationTransaction) {
-
     }
 
     override fun transactionUpdated(tx: SasVerificationTransaction) {
@@ -110,7 +103,6 @@ class SasVerificationViewModel @Inject constructor() : ViewModel(),
     }
 
     override fun markedAsManuallyVerified(userId: String, deviceId: String) {
-
     }
 
     fun cancelTransaction() {
@@ -128,7 +120,6 @@ class SasVerificationViewModel @Inject constructor() : ViewModel(),
         }
         _navigateEvent.value = LiveEvent(NAVIGATE_FINISH_SUCCESS)
     }
-
 
     fun acceptTransaction() {
         (transaction as? IncomingSasVerificationTransaction)?.performAccept()

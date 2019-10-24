@@ -26,4 +26,3 @@ internal open class UserEntity(@PrimaryKey var userId: String = "",
 
     companion object
 }
-

@@ -138,14 +138,6 @@
     <string name="auth_password_placeholder">Lozinka</string>
     <string name="auth_new_password_placeholder">Nova lozinka</string>
     <string name="auth_user_name_placeholder">Korisničko ime</string>
-    <string name="auth_add_email_message">Dodajte email adresu na svoj račun kako biste korisnicima omogućili da vas pronađu, te vam omoguće resetovanje lozinke.</string>
-    <string name="auth_add_phone_message">Dodaj broj telefona na svoj račun da bi omogućili korisnicima da vas pronađu.</string>
-    <string name="auth_add_email_phone_message">Dodajte email adresu i / ili telefonski broj na svoj račun da biste omogućili korisnicima da vas pronađu.
-
-Email adresa će vam također omogućiti resetovanje lozinke.</string>
-    <string name="auth_add_email_and_phone_message">Dodajte email adresu i telefonski broj na svoj račun da biste omogućili korisnicima da vas pronađu.
-
-Email adresa će vam također omogućiti resetovanje lozinke.</string>
     <string name="auth_email_placeholder">Email adresa</string>
     <string name="auth_opt_email_placeholder">Email adresa (nije obavezno)</string>
     <string name="auth_phone_number_placeholder">Broj telefona</string>

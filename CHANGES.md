@@ -1,3 +1,29 @@
+Changes in RiotX 0.7.0 (2019-10-24)
+===================================================
+
+Features:
+ - Share elements from other app to RiotX (#58)
+ - Read marker (#84)
+ - Add ability to report content (#515)
+
+Improvements:
+ - Persist active tab between sessions (#503)
+ - Do not upload file too big for the homeserver (#587)
+ - Attachments: start using system pickers (#52)
+ - Mark all messages as read (#396)
+
+Other changes:
+ - Accessibility improvements to read receipts in the room timeline and reactions emoji chooser
+
+Bugfix:
+ - Fix issue on upload error in loop (#587)
+ - Fix opening a permalink: the targeted event is displayed twice (#556)
+ - Fix opening a permalink paginates all the history up to the last event (#282)
+ - after login, the icon in the top left is a green 'A' for (all communities) rather than my avatar (#267)
+ - Picture uploads are unreliable, pictures are shown in wrong aspect ratio on desktop client (#517)
+ - Invitation notifications are not dismissed automatically if room is joined from another client (#347)
+ - Opening links from RiotX reuses browser tab (#599)
+
 Changes in RiotX 0.6.1 (2019-09-24)
 ===================================================
 
@@ -141,21 +167,21 @@ Mode details here: https://medium.com/@RiotChat/introducing-the-riotx-beta-for-a
 Changes in RiotX 0.0.0 (2019-XX-XX)
 ===================================================
 
-Features:
+Features ✨:
  -
 
-Improvements:
+Improvements 🙌:
  -
 
 Other changes:
  -
 
-Bugfix:
+Bugfix 🐛:
  -
 
-Translations:
+Translations 🗣:
  -
 
-Build:
+Build 🧱:
  -
 

@@ -39,5 +39,4 @@ internal class DefaultGroupService @Inject constructor(private val monarchy: Mon
                 { it.asDomain() }
         )
     }
-
 }

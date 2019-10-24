@@ -168,4 +168,5 @@
     <string name="event_status_sending_message">Po dërgohet mesazh…</string>
     <string name="clear_timeline_send_queue">Spastro radhë pritjeje</string>
 
+    <string name="notice_room_third_party_revoked_invite">%1$s shfuqizoi ftesën për %2$s për pjesëmarrje te dhoma</string>
 </resources>

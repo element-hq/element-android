@@ -41,9 +41,12 @@ import im.vector.riotx.features.home.createdirect.CreateDirectRoomKnownUsersFrag
 import im.vector.riotx.features.home.group.GroupListFragment
 import im.vector.riotx.features.home.room.detail.RoomDetailFragment
 import im.vector.riotx.features.home.room.detail.readreceipts.DisplayReadReceiptsBottomSheet
-import im.vector.riotx.features.home.room.detail.timeline.action.*
+import im.vector.riotx.features.home.room.detail.timeline.action.MessageActionsBottomSheet
+import im.vector.riotx.features.home.room.detail.timeline.edithistory.ViewEditHistoryBottomSheet
+import im.vector.riotx.features.home.room.detail.timeline.reactions.ViewReactionsBottomSheet
 import im.vector.riotx.features.home.room.filtered.FilteredRoomsActivity
 import im.vector.riotx.features.home.room.list.RoomListFragment
+import im.vector.riotx.features.home.room.list.RoomListModule
 import im.vector.riotx.features.invite.VectorInviteView
 import im.vector.riotx.features.link.LinkHandlerActivity
 import im.vector.riotx.features.login.LoginActivity
@@ -65,8 +68,20 @@ import im.vector.riotx.features.roomdirectory.picker.RoomDirectoryPickerFragment
 import im.vector.riotx.features.roomdirectory.roompreview.RoomPreviewNoPreviewFragment
 import im.vector.riotx.features.settings.*
 import im.vector.riotx.features.settings.push.PushGatewaysFragment
+import im.vector.riotx.features.share.IncomingShareActivity
+import im.vector.riotx.features.ui.UiStateRepository
 
-@Component(dependencies = [VectorComponent::class], modules = [AssistedInjectModule::class, ViewModelModule::class, HomeModule::class])
+@Component(
+        dependencies = [
+            VectorComponent::class
+        ],
+        modules = [
+            AssistedInjectModule::class,
+            ViewModelModule::class,
+            HomeModule::class,
+            RoomListModule::class
+        ]
+)
 @ScreenScope
 interface ScreenComponent {
 
@@ -79,6 +94,8 @@ interface ScreenComponent {
     fun rageShake(): RageShake
 
     fun navigator(): Navigator
+
+    fun uiStateRepository(): UiStateRepository
 
     fun inject(activity: HomeActivity)
 
@@ -100,11 +117,9 @@ interface ScreenComponent {
 
     fun inject(messageActionsBottomSheet: MessageActionsBottomSheet)
 
-    fun inject(viewReactionBottomSheet: ViewReactionBottomSheet)
+    fun inject(viewReactionsBottomSheet: ViewReactionsBottomSheet)
 
     fun inject(viewEditHistoryBottomSheet: ViewEditHistoryBottomSheet)
-
-    fun inject(messageMenuFragment: MessageMenuFragment)
 
     fun inject(vectorSettingsActivity: VectorSettingsActivity)
 
@@ -131,8 +146,6 @@ interface ScreenComponent {
     fun inject(loginSsoFallbackFragment: LoginSsoFallbackFragment)
 
     fun inject(sasVerificationIncomingFragment: SASVerificationIncomingFragment)
-
-    fun inject(quickReactionFragment: QuickReactionFragment)
 
     fun inject(emojiReactionPickerActivity: EmojiReactionPickerActivity)
 
@@ -181,6 +194,8 @@ interface ScreenComponent {
     fun inject(displayReadReceiptsBottomSheet: DisplayReadReceiptsBottomSheet)
 
     fun inject(reactionButton: ReactionButton)
+
+    fun inject(incomingShareActivity: IncomingShareActivity)
 
     @Component.Factory
     interface Factory {

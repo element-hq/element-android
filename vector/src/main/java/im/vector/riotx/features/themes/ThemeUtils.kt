@@ -16,7 +16,6 @@
 
 package im.vector.riotx.features.themes
 
-
 import android.app.Activity
 import android.content.Context
 import android.graphics.drawable.Drawable

@@ -25,7 +25,6 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.os.AsyncTask
 import android.os.Build
-import android.text.TextUtils
 import android.view.View
 import im.vector.matrix.android.api.Matrix
 import im.vector.riotx.BuildConfig
@@ -36,7 +35,12 @@ import im.vector.riotx.core.utils.getDeviceLocale
 import im.vector.riotx.features.settings.VectorLocale
 import im.vector.riotx.features.themes.ThemeUtils
 import im.vector.riotx.features.version.VersionProvider
-import okhttp3.*
+import okhttp3.Call
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.Response
 import org.json.JSONException
 import org.json.JSONObject
 import timber.log.Timber
@@ -53,7 +57,7 @@ import javax.inject.Singleton
 @Singleton
 class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
                                       private val versionProvider: VersionProvider,
-                                      private val vectorFileLogger : VectorFileLogger) {
+                                      private val vectorFileLogger: VectorFileLogger) {
     var inMultiWindowMode = false
 
     companion object {
@@ -64,7 +68,6 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
         private const val CRASH_FILENAME = "crash.log"
 
         private const val BUFFER_SIZE = 1024 * 1024 * 50
-
     }
 
     // the http client
@@ -72,7 +75,6 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
 
     // the pending bug report call
     private var mBugReportCall: Call? = null
-
 
     // boolean to cancel the bug report
     private val mIsCancelled = false
@@ -85,14 +87,14 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
     var screenshot: Bitmap? = null
         private set
 
-    private val LOGCAT_CMD_ERROR = arrayOf("logcat", ///< Run 'logcat' command
-            "-d", ///< Dump the log rather than continue outputting it
+    private val LOGCAT_CMD_ERROR = arrayOf("logcat", // /< Run 'logcat' command
+            "-d", // /< Dump the log rather than continue outputting it
             "-v", // formatting
             "threadtime", // include timestamps
-            "AndroidRuntime:E " + ///< Pick all AndroidRuntime errors (such as uncaught exceptions)"communicatorjni:V " + ///< All communicatorjni logging
-                    "libcommunicator:V " + ///< All libcommunicator logging
-                    "DEBUG:V " + ///< All DEBUG logging - which includes native land crashes (seg faults, etc)
-                    "*:S" ///< Everything else silent, so don't pick it..
+            "AndroidRuntime:E " + // /< Pick all AndroidRuntime errors (such as uncaught exceptions)"communicatorjni:V " + ///< All communicatorjni logging
+                    "libcommunicator:V " + // /< All libcommunicator logging
+                    "DEBUG:V " + // /< All DEBUG logging - which includes native land crashes (seg faults, etc)
+                    "*:S" // /< Everything else silent, so don't pick it..
     )
 
     private val LOGCAT_CMD_DEBUG = arrayOf("logcat", "-d", "-v", "threadtime", "*:*")
@@ -146,7 +148,6 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
                       theBugDescription: String,
                       listener: IMXBugReportListener?) {
         object : AsyncTask<Void, Int, String>() {
-
             // enumerate files to delete
             val mBugReportFiles: MutableList<File> = ArrayList()
 
@@ -164,14 +165,11 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
 
                 if (withDevicesLogs) {
                     val files = vectorFileLogger.getLogFiles()
-
-                    for (f in files) {
+                    files.mapNotNullTo(gzippedFiles) { f ->
                         if (!mIsCancelled) {
-                            val gzippedFile = compressFile(f)
-
-                            if (null != gzippedFile) {
-                                gzippedFiles.add(gzippedFile)
-                            }
+                            compressFile(f)
+                        } else {
+                            null
                         }
                     }
                 }
@@ -242,13 +240,13 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
                             .addFormDataPart("theme", ThemeUtils.getApplicationTheme(context))
 
                     val buildNumber = context.getString(R.string.build_number)
-                    if (!TextUtils.isEmpty(buildNumber) && buildNumber != "0") {
+                    if (buildNumber.isNotEmpty() && buildNumber != "0") {
                         builder.addFormDataPart("build_number", buildNumber)
                     }
 
                     // add the gzipped files
                     for (file in gzippedFiles) {
-                        builder.addFormDataPart("compressed-log", file.name, RequestBody.create(MediaType.parse("application/octet-stream"), file))
+                        builder.addFormDataPart("compressed-log", file.name, file.asRequestBody("application/octet-stream".toMediaTypeOrNull()))
                     }
 
                     mBugReportFiles.addAll(gzippedFiles)
@@ -264,17 +262,15 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
                             }
 
                             try {
-                                val fos = FileOutputStream(logCatScreenshotFile)
-                                bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)
-                                fos.flush()
-                                fos.close()
+                                logCatScreenshotFile.outputStream().use {
+                                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
+                                }
 
                                 builder.addFormDataPart("file",
-                                        logCatScreenshotFile.name, RequestBody.create(MediaType.parse("application/octet-stream"), logCatScreenshotFile))
+                                        logCatScreenshotFile.name, logCatScreenshotFile.asRequestBody("application/octet-stream".toMediaTypeOrNull()))
                             } catch (e: Exception) {
                                 Timber.e(e, "## sendBugReport() : fail to write screenshot$e")
                             }
-
                         }
                     }
 
@@ -302,16 +298,14 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
 
                     // add a progress listener
                     requestBody.setWriteListener { totalWritten, contentLength ->
-                        val percentage: Int
-
-                        if (-1L != contentLength) {
+                        val percentage = if (-1L != contentLength) {
                             if (totalWritten > contentLength) {
-                                percentage = 100
+                                100
                             } else {
-                                percentage = (totalWritten * 100 / contentLength).toInt()
+                                (totalWritten * 100 / contentLength).toInt()
                             }
                         } else {
-                            percentage = 0
+                            0
                         }
 
                         if (mIsCancelled && null != mBugReportCall) {
@@ -336,9 +330,9 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
                     try {
                         mBugReportCall = mOkHttpClient.newCall(request)
                         response = mBugReportCall!!.execute()
-                        responseCode = response!!.code()
+                        responseCode = response.code
                     } catch (e: Exception) {
-                        Timber.e(e, "response " + e.message)
+                        Timber.e(e, "response")
                         errorMessage = e.localizedMessage
                     }
 
@@ -346,46 +340,36 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
                     if (responseCode != HttpURLConnection.HTTP_OK) {
                         if (null != errorMessage) {
                             serverError = "Failed with error $errorMessage"
-                        } else if (null == response || null == response.body()) {
+                        } else if (null == response || null == response.body) {
                             serverError = "Failed with error $responseCode"
                         } else {
-                            var inputStream: InputStream? = null
-
                             try {
-                                inputStream = response.body()!!.byteStream()
+                                val inputStream = response.body!!.byteStream()
 
-                                if (null != inputStream) {
-                                    var ch = inputStream.read()
-                                    val b = StringBuilder()
-                                    while (ch != -1) {
-                                        b.append(ch.toChar())
-                                        ch = inputStream.read()
+                                serverError = inputStream.use {
+                                    buildString {
+                                        var ch = it.read()
+                                        while (ch != -1) {
+                                            append(ch.toChar())
+                                            ch = it.read()
+                                        }
                                     }
-                                    serverError = b.toString()
-                                    inputStream.close()
+                                }
 
-                                    // check if the error message
-                                    try {
-                                        val responseJSON = JSONObject(serverError)
-                                        serverError = responseJSON.getString("error")
-                                    } catch (e: JSONException) {
-                                        Timber.e(e, "doInBackground ; Json conversion failed " + e.message)
-                                    }
+                                // check if the error message
+                                try {
+                                    val responseJSON = JSONObject(serverError)
+                                    serverError = responseJSON.getString("error")
+                                } catch (e: JSONException) {
+                                    Timber.e(e, "doInBackground ; Json conversion failed")
+                                }
 
-                                    // should never happen
-                                    if (null == serverError) {
-                                        serverError = "Failed with error $responseCode"
-                                    }
+                                // should never happen
+                                if (null == serverError) {
+                                    serverError = "Failed with error $responseCode"
                                 }
                             } catch (e: Exception) {
-                                Timber.e(e, "## sendBugReport() : failed to parse error " + e.message)
-                            } finally {
-                                try {
-                                    inputStream?.close()
-                                } catch (e: Exception) {
-                                    Timber.e(e, "## sendBugReport() : failed to close the error stream " + e.message)
-                                }
-
+                                Timber.e(e, "## sendBugReport() : failed to parse error")
                             }
                         }
                     }
@@ -394,15 +378,13 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
                 return serverError
             }
 
-
             override fun onProgressUpdate(vararg progress: Int?) {
                 if (null != listener) {
                     try {
-                        listener.onProgress(progress?.get(0) ?: 0)
+                        listener.onProgress(progress[0] ?: 0)
                     } catch (e: Exception) {
-                        Timber.e(e, "## onProgress() : failed " + e.message)
+                        Timber.e(e, "## onProgress() : failed")
                     }
-
                 }
             }
 
@@ -424,9 +406,8 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
                             listener.onUploadFailed(reason)
                         }
                     } catch (e: Exception) {
-                        Timber.e(e, "## onPostExecute() : failed " + e.message)
+                        Timber.e(e, "## onPostExecute() : failed")
                     }
-
                 }
             }
         }.execute()
@@ -443,9 +424,9 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
         activity.startActivity(intent)
     }
 
-    //==============================================================================================================
+    // ==============================================================================================================
     // crash report management
-    //==============================================================================================================
+    // ==============================================================================================================
 
     /**
      * Provides the crash file
@@ -486,19 +467,12 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
             crashFile.delete()
         }
 
-        if (!TextUtils.isEmpty(crashDescription)) {
+        if (crashDescription.isNotEmpty()) {
             try {
-                val fos = FileOutputStream(crashFile)
-                val osw = OutputStreamWriter(fos)
-                osw.write(crashDescription)
-                osw.close()
-
-                fos.flush()
-                fos.close()
+                crashFile.writeText(crashDescription)
             } catch (e: Exception) {
                 Timber.e(e, "## saveCrashReport() : fail to write $e")
             }
-
         }
     }
 
@@ -509,31 +483,22 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
      * @return the crash description
      */
     private fun getCrashDescription(context: Context): String? {
-        var crashDescription: String? = null
         val crashFile = getCrashFile(context)
 
         if (crashFile.exists()) {
             try {
-                val fis = FileInputStream(crashFile)
-                val isr = InputStreamReader(fis)
-
-                val buffer = CharArray(fis.available())
-                val len = isr.read(buffer, 0, fis.available())
-                crashDescription = String(buffer, 0, len)
-                isr.close()
-                fis.close()
+                return crashFile.readText()
             } catch (e: Exception) {
                 Timber.e(e, "## getCrashDescription() : fail to read $e")
             }
-
         }
 
-        return crashDescription
+        return null
     }
 
-    //==============================================================================================================
+    // ==============================================================================================================
     // Screenshot management
-    //==============================================================================================================
+    // ==============================================================================================================
 
     /**
      * Take a screenshot of the display.
@@ -555,10 +520,13 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
             return null
         }
         // refresh it
+        @Suppress("DEPRECATION")
         rootView.isDrawingCacheEnabled = false
+        @Suppress("DEPRECATION")
         rootView.isDrawingCacheEnabled = true
 
         try {
+            @Suppress("DEPRECATION")
             var bitmap = rootView.drawingCache
 
             // Make a copy, because if Activity is destroyed, the bitmap will be recycled
@@ -574,9 +542,9 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
         return null
     }
 
-    //==============================================================================================================
+    // ==============================================================================================================
     // Logcat management
-    //==============================================================================================================
+    // ==============================================================================================================
 
     /**
      * Save the logcat
@@ -593,13 +561,9 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
         }
 
         try {
-            val fos = FileOutputStream(logCatErrFile)
-            val osw = OutputStreamWriter(fos)
-            getLogCatError(osw, isErrorLogcat)
-            osw.close()
-
-            fos.flush()
-            fos.close()
+            logCatErrFile.writer().use {
+                getLogCatError(it, isErrorLogcat)
+            }
 
             return compressFile(logCatErrFile)
         } catch (error: OutOfMemoryError) {
@@ -626,33 +590,23 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
             return
         }
 
-        var reader: BufferedReader? = null
         try {
             val separator = System.getProperty("line.separator")
-            reader = BufferedReader(InputStreamReader(logcatProc.inputStream), BUFFER_SIZE)
-            var line = reader.readLine()
-            while (line != null) {
-                streamWriter.append(line)
-                streamWriter.append(separator)
-                line = reader.readLine()
-            }
+            logcatProc.inputStream
+                    .reader()
+                    .buffered(BUFFER_SIZE)
+                    .forEachLine { line ->
+                        streamWriter.append(line)
+                        streamWriter.append(separator)
+                    }
         } catch (e: IOException) {
-            Timber.e(e, "getLog fails with " + e.localizedMessage)
-        } finally {
-            if (reader != null) {
-                try {
-                    reader.close()
-                } catch (e: IOException) {
-                    Timber.e(e, "getLog fails with " + e.localizedMessage)
-                }
-
-            }
+            Timber.e(e, "getLog fails")
         }
     }
 
-    //==============================================================================================================
+    // ==============================================================================================================
     // File compression management
-    //==============================================================================================================
+    // ==============================================================================================================
 
     /**
      * GZip a file
@@ -661,48 +615,27 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
      * @return the gzipped file
      */
     private fun compressFile(fin: File): File? {
-        Timber.v("## compressFile() : compress " + fin.name)
+        Timber.v("## compressFile() : compress ${fin.name}")
 
-        val dstFile = File(fin.parent, fin.name + ".gz")
+        val dstFile = fin.resolveSibling(fin.name + ".gz")
 
         if (dstFile.exists()) {
             dstFile.delete()
         }
 
-        var fos: FileOutputStream? = null
-        var gos: GZIPOutputStream? = null
-        var inputStream: InputStream? = null
         try {
-            fos = FileOutputStream(dstFile)
-            gos = GZIPOutputStream(fos)
-
-            inputStream = FileInputStream(fin)
-
-            val buffer = ByteArray(2048)
-            var n = inputStream.read(buffer)
-            while (n != -1) {
-                gos.write(buffer, 0, n)
-                n = inputStream.read(buffer)
+            GZIPOutputStream(dstFile.outputStream()).use { gos ->
+                fin.inputStream().use {
+                    it.copyTo(gos, 2048)
+                }
             }
 
-            gos.close()
-            inputStream.close()
-
-            Timber.v("## compressFile() : " + fin.length() + " compressed to " + dstFile.length() + " bytes")
+            Timber.v("## compressFile() : ${fin.length()} compressed to ${dstFile.length()} bytes")
             return dstFile
         } catch (e: Exception) {
-            Timber.e(e, "## compressFile() failed " + e.message)
+            Timber.e(e, "## compressFile() failed")
         } catch (oom: OutOfMemoryError) {
-            Timber.e(oom, "## compressFile() failed " + oom.message)
-        } finally {
-            try {
-                fos?.close()
-                gos?.close()
-                inputStream?.close()
-            } catch (e: Exception) {
-                Timber.e(e, "## compressFile() failed to close inputStream " + e.message)
-            }
-
+            Timber.e(oom, "## compressFile() failed")
         }
 
         return null

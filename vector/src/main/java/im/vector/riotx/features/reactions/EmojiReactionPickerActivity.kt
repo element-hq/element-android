@@ -39,12 +39,11 @@ import javax.inject.Inject
 /**
  *
  * TODO: Loading indicator while getting emoji data source?
- * TODO: migrate to maverick
+ * TODO: migrate to MvRx
  * TODO: Finish Refactor to vector base activity
  * TODO: Move font request to app
  */
 class EmojiReactionPickerActivity : VectorBaseActivity(), EmojiCompatFontProvider.FontProviderListener {
-
 
     private lateinit var tabLayout: TabLayout
 
@@ -58,17 +57,16 @@ class EmojiReactionPickerActivity : VectorBaseActivity(), EmojiCompatFontProvide
 
     @Inject lateinit var emojiCompatFontProvider: EmojiCompatFontProvider
 
-    private var tabLayoutSelectionListener = object : TabLayout.BaseOnTabSelectedListener<TabLayout.Tab> {
-        override fun onTabReselected(p0: TabLayout.Tab) {
+    private var tabLayoutSelectionListener = object : TabLayout.OnTabSelectedListener {
+        override fun onTabReselected(tab: TabLayout.Tab) {
         }
 
-        override fun onTabUnselected(p0: TabLayout.Tab) {
+        override fun onTabUnselected(tab: TabLayout.Tab) {
         }
 
-        override fun onTabSelected(p0: TabLayout.Tab) {
-            viewModel.scrollToSection(p0.position)
+        override fun onTabSelected(tab: TabLayout.Tab) {
+            viewModel.scrollToSection(tab.position)
         }
-
     }
 
     override fun injectWith(injector: ScreenComponent) {
@@ -92,11 +90,17 @@ class EmojiReactionPickerActivity : VectorBaseActivity(), EmojiCompatFontProvide
             it.rawData?.categories?.let { categories ->
                 for (category in categories) {
                     val s = category.emojis[0]
-                    tabLayout.addTab(tabLayout.newTab().setText(it.rawData!!.emojis[s]!!.emojiString()))
+                    tabLayout.newTab()
+                            .also { tab ->
+                                tab.text = it.rawData!!.emojis[s]!!.emojiString()
+                                tab.contentDescription = category.name
+                            }
+                            .also { tab ->
+                                tabLayout.addTab(tab)
+                            }
                 }
                 tabLayout.addOnTabSelectedListener(tabLayoutSelectionListener)
             }
-
         })
 
         viewModel.currentSection.observe(this, Observer { section ->
@@ -109,7 +113,7 @@ class EmojiReactionPickerActivity : VectorBaseActivity(), EmojiCompatFontProvide
 
         viewModel.navigateEvent.observeEvent(this) {
             if (it == EmojiChooserViewModel.NAVIGATE_FINISH) {
-                //finish with result
+                // finish with result
                 val dataResult = Intent()
                 dataResult.putExtra(EXTRA_REACTION_RESULT, viewModel.selectedReaction)
                 dataResult.putExtra(EXTRA_EVENT_ID, viewModel.eventId)
@@ -134,12 +138,11 @@ class EmojiReactionPickerActivity : VectorBaseActivity(), EmojiCompatFontProvide
 
         val searchItem = menu.findItem(R.id.search)
         (searchItem.actionView as? SearchView)?.let {
-
             searchItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
                 override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
                     it.isIconified = false
                     it.requestFocusFromTouch()
-                    //we want to force the tool bar as visible even if hidden with scroll flags
+                    // we want to force the tool bar as visible even if hidden with scroll flags
                     findViewById<Toolbar>(R.id.toolbar)?.minimumHeight = getActionBarSize()
                     return true
                 }
@@ -156,14 +159,14 @@ class EmojiReactionPickerActivity : VectorBaseActivity(), EmojiCompatFontProvide
         return true
     }
 
-    //TODO move to ThemeUtils when core module is created
+    // TODO move to ThemeUtils when core module is created
     private fun getActionBarSize(): Int {
         return try {
             val typedValue = TypedValue()
             theme.resolveAttribute(R.attr.actionBarSize, typedValue, true)
             TypedValue.complexToDimensionPixelSize(typedValue.data, resources.displayMetrics)
         } catch (e: Exception) {
-            //Timber.e(e, "Unable to get color")
+            // Timber.e(e, "Unable to get color")
             TypedValue.complexToDimensionPixelSize(56, resources.displayMetrics)
         }
     }

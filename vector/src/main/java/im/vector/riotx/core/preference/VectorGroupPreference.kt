@@ -70,11 +70,9 @@ class VectorGroupPreference : SwitchPreference {
                 params.gravity = Gravity.CENTER
                 layout.layoutParams = params
                 iconViewParent.addView(layout, 0)
-
             } catch (e: Exception) {
                 mAvatarView = null
             }
-
         }
 
         refreshAvatar()

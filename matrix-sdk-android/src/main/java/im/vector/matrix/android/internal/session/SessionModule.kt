@@ -27,15 +27,16 @@ import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.session.InitialSyncProgressService
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilitiesService
 import im.vector.matrix.android.api.session.securestorage.SecureStorageService
 import im.vector.matrix.android.internal.database.LiveEntityObserver
-import im.vector.matrix.android.internal.database.RealmKeysUtils
-import im.vector.matrix.android.internal.database.model.SessionRealmModule
+import im.vector.matrix.android.internal.database.SessionRealmConfigurationFactory
 import im.vector.matrix.android.internal.di.*
 import im.vector.matrix.android.internal.network.AccessTokenInterceptor
 import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.network.interceptors.CurlLoggingInterceptor
 import im.vector.matrix.android.internal.session.group.GroupSummaryUpdater
+import im.vector.matrix.android.internal.session.homeserver.DefaultHomeServerCapabilitiesService
 import im.vector.matrix.android.internal.session.room.EventRelationsAggregationUpdater
 import im.vector.matrix.android.internal.session.room.create.RoomCreateEventLiveObserver
 import im.vector.matrix.android.internal.session.room.prune.EventsPruner
@@ -52,6 +53,7 @@ internal abstract class SessionModule {
 
     @Module
     companion object {
+
         internal const val DB_ALIAS_PREFIX = "session_db_"
 
         @JvmStatic
@@ -59,7 +61,6 @@ internal abstract class SessionModule {
         fun providesHomeServerConnectionConfig(sessionParams: SessionParams): HomeServerConnectionConfig {
             return sessionParams.homeServerConnectionConfig
         }
-
 
         @JvmStatic
         @Provides
@@ -92,18 +93,8 @@ internal abstract class SessionModule {
         @Provides
         @SessionDatabase
         @SessionScope
-        fun providesRealmConfiguration(realmKeysUtils: RealmKeysUtils,
-                                       @UserCacheDirectory directory: File,
-                                       @UserMd5 userMd5: String): RealmConfiguration {
-            return RealmConfiguration.Builder()
-                    .directory(directory)
-                    .name("disk_store.realm")
-                    .apply {
-                        realmKeysUtils.configureEncryption(this, "$DB_ALIAS_PREFIX$userMd5")
-                    }
-                    .modules(SessionRealmModule())
-                    .deleteRealmIfMigrationNeeded()
-                    .build()
+        fun providesRealmConfiguration(realmConfigurationFactory: SessionRealmConfigurationFactory): RealmConfiguration {
+            return realmConfigurationFactory.create()
         }
 
         @JvmStatic
@@ -162,7 +153,7 @@ internal abstract class SessionModule {
 
     @Binds
     @IntoSet
-    abstract fun bindEventRelationsAggregationUpdater(groupSummaryUpdater: EventRelationsAggregationUpdater): LiveEntityObserver
+    abstract fun bindEventRelationsAggregationUpdater(eventRelationsAggregationUpdater: EventRelationsAggregationUpdater): LiveEntityObserver
 
     @Binds
     @IntoSet
@@ -178,4 +169,6 @@ internal abstract class SessionModule {
     @Binds
     abstract fun bindSecureStorageService(secureStorageService: DefaultSecureStorageService): SecureStorageService
 
+    @Binds
+    abstract fun bindHomeServerCapabilitiesService(homeServerCapabilitiesService: DefaultHomeServerCapabilitiesService): HomeServerCapabilitiesService
 }

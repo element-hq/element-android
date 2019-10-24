@@ -26,8 +26,8 @@ import im.vector.matrix.android.internal.database.query.where
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import timber.log.Timber
+import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-
 
 internal class TimelineEventDecryptor(
         private val realmConfiguration: RealmConfiguration,
@@ -38,64 +38,66 @@ internal class TimelineEventDecryptor(
     private val newSessionListener = object : NewSessionListener {
         override fun onNewSession(roomId: String?, senderKey: String, sessionId: String) {
             synchronized(unknownSessionsFailure) {
-                val toDecryptAgain = ArrayList<String>()
-                unknownSessionsFailure[sessionId]?.let { eventIds ->
-                    toDecryptAgain.addAll(eventIds)
-                }
-                if (toDecryptAgain.isNotEmpty()) {
-                    unknownSessionsFailure[sessionId]?.clear()
-                    toDecryptAgain.forEach {
-                        requestDecryption(it)
-                    }
-                }
+                unknownSessionsFailure[sessionId]
+                        ?.toList()
+                        .orEmpty()
+                        .also {
+                            unknownSessionsFailure[sessionId]?.clear()
+                        }
+            }.forEach {
+                requestDecryption(it)
             }
         }
-
     }
 
-    private val executor = Executors.newSingleThreadExecutor()
+    private var executor: ExecutorService? = null
 
-    private val existingRequests = HashSet<String>()
-    private val unknownSessionsFailure = HashMap<String, MutableList<String>>()
+    // Set of eventIds which are currently decrypting
+    private val existingRequests = mutableSetOf<String>()
+    // sessionId -> list of eventIds
+    private val unknownSessionsFailure = mutableMapOf<String, MutableSet<String>>()
 
     fun start() {
+        executor = Executors.newSingleThreadExecutor()
         cryptoService.addNewSessionListener(newSessionListener)
     }
 
     fun destroy() {
         cryptoService.removeSessionListener(newSessionListener)
-        executor.shutdownNow()
-        unknownSessionsFailure.clear()
-        existingRequests.clear()
+        executor?.shutdownNow()
+        executor = null
+        synchronized(unknownSessionsFailure) {
+            unknownSessionsFailure.clear()
+        }
+        synchronized(existingRequests) {
+            existingRequests.clear()
+        }
     }
 
     fun requestDecryption(eventId: String) {
-        synchronized(existingRequests) {
-            if (existingRequests.contains(eventId)) {
-                return Unit.also {
-                    Timber.d("Skip Decryption request for event ${eventId}, already requested")
-                }
-            }
-            existingRequests.add(eventId)
-        }
         synchronized(unknownSessionsFailure) {
-            unknownSessionsFailure.values.forEach {
-                if (it.contains(eventId)) return@synchronized Unit.also {
-                    Timber.d("Skip Decryption request for event ${eventId}, unknown session")
+            for (eventIds in unknownSessionsFailure.values) {
+                if (eventId in eventIds) {
+                    Timber.d("Skip Decryption request for event $eventId, unknown session")
+                    return
                 }
             }
         }
-        executor.execute {
+        synchronized(existingRequests) {
+            if (!existingRequests.add(eventId)) {
+                Timber.d("Skip Decryption request for event $eventId, already requested")
+                return
+            }
+        }
+        executor?.execute {
             Realm.getInstance(realmConfiguration).use { realm ->
-                realm.executeTransaction {
-                    processDecryptRequest(eventId, it)
-                }
+                processDecryptRequest(eventId, realm)
             }
         }
     }
 
     private fun processDecryptRequest(eventId: String, realm: Realm) {
-        Timber.v("Decryption request for event ${eventId}")
+        Timber.v("Decryption request for event $eventId")
         val eventEntity = EventEntity.where(realm, eventId = eventId).findFirst()
                 ?: return Unit.also {
                     Timber.d("Decryption request for unknown message")
@@ -103,20 +105,21 @@ internal class TimelineEventDecryptor(
         val event = eventEntity.asDomain()
         try {
             val result = cryptoService.decryptEvent(event, timelineId)
-            Timber.v("Successfully decrypted event ${eventId}")
-            eventEntity.setDecryptionResult(result)
+            Timber.v("Successfully decrypted event $eventId")
+            realm.executeTransaction {
+                eventEntity.setDecryptionResult(result)
+            }
         } catch (e: MXCryptoError) {
-            Timber.v("Failed to decrypt event ${eventId} ${e}")
+            Timber.v(e, "Failed to decrypt event $eventId")
             if (e is MXCryptoError.Base && e.errorType == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID) {
-                //Keep track of unknown sessions to automatically try to decrypt on new session
-                eventEntity.decryptionErrorCode = e.errorType.name
+                // Keep track of unknown sessions to automatically try to decrypt on new session
+                realm.executeTransaction {
+                    eventEntity.decryptionErrorCode = e.errorType.name
+                }
                 event.content?.toModel<EncryptedEventContent>()?.let { content ->
                     content.sessionId?.let { sessionId ->
                         synchronized(unknownSessionsFailure) {
-                            val list = unknownSessionsFailure[sessionId]
-                                    ?: ArrayList<String>().also {
-                                        unknownSessionsFailure[sessionId] = it
-                                    }
+                            val list = unknownSessionsFailure.getOrPut(sessionId) { mutableSetOf() }
                             list.add(eventId)
                         }
                     }

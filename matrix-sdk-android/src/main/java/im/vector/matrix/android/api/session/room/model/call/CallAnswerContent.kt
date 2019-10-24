@@ -31,5 +31,4 @@ data class CallAnswerContent(
             @Json(name = "type") val type: String,
             @Json(name = "sdp") val sdp: String
     )
-
 }

@@ -20,7 +20,6 @@ import im.vector.matrix.android.api.session.group.Group
 import im.vector.matrix.android.internal.database.model.GroupEntity
 import im.vector.matrix.android.internal.session.group.DefaultGroup
 
-
 internal object GroupMapper {
 
     fun map(groupEntity: GroupEntity): Group {

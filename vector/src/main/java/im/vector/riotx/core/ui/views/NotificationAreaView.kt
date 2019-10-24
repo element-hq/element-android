@@ -20,7 +20,6 @@ import android.content.Context
 import android.graphics.Color
 import android.text.SpannableString
 import android.text.TextPaint
-import android.text.TextUtils
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.util.AttributeSet
@@ -168,7 +167,7 @@ class NotificationAreaView @JvmOverloads constructor(
         } else {
             imageView.setImageResource(R.drawable.scrolldown)
             messageView.setTextColor(ThemeUtils.getColor(context, R.attr.vctr_room_notification_text_color))
-            if (!TextUtils.isEmpty(state.message)) {
+            if (!state.message.isNullOrEmpty()) {
                 messageView.text = SpannableString(state.message)
             }
         }

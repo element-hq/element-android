@@ -16,6 +16,7 @@
 
 package im.vector.riotx.features.home.room.detail.timeline.factory
 
+import android.view.View
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
@@ -23,9 +24,9 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.internal.crypto.model.event.EncryptionEventContent
 import im.vector.riotx.R
 import im.vector.riotx.core.resources.StringProvider
-import im.vector.riotx.core.utils.DimensionConverter
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
+import im.vector.riotx.features.home.room.detail.timeline.helper.AvatarSizeProvider
 import im.vector.riotx.features.home.room.detail.timeline.helper.senderAvatar
 import im.vector.riotx.features.home.room.detail.timeline.helper.senderName
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
@@ -35,12 +36,11 @@ import javax.inject.Inject
 
 class EncryptionItemFactory @Inject constructor(private val stringProvider: StringProvider,
                                                 private val avatarRenderer: AvatarRenderer,
-                                                private val dimensionConverter: DimensionConverter) {
+                                                private val avatarSizeProvider: AvatarSizeProvider) {
 
     fun create(event: TimelineEvent,
                highlight: Boolean,
-               callback: TimelineEventController.BaseCallback?): NoticeItem? {
-
+               callback: TimelineEventController.Callback?): NoticeItem? {
         val text = buildNoticeText(event.root, event.senderName) ?: return null
         val informationData = MessageInformationData(
                 eventId = event.root.eventId ?: "?",
@@ -50,13 +50,19 @@ class EncryptionItemFactory @Inject constructor(private val stringProvider: Stri
                 memberName = event.senderName(),
                 showInformation = false
         )
+        val attributes = NoticeItem.Attributes(
+                avatarRenderer = avatarRenderer,
+                informationData = informationData,
+                noticeText = text,
+                itemLongClickListener = View.OnLongClickListener { view ->
+                    callback?.onEventLongClicked(informationData, null, view) ?: false
+                },
+                readReceiptsCallback = callback
+        )
         return NoticeItem_()
-                .avatarRenderer(avatarRenderer)
-                .dimensionConverter(dimensionConverter)
-                .noticeText(text)
-                .informationData(informationData)
+                .leftGuideline(avatarSizeProvider.leftGuideline)
                 .highlighted(highlight)
-                .baseCallback(callback)
+                .attributes(attributes)
     }
 
     private fun buildNoticeText(event: Event, senderName: String?): CharSequence? {
@@ -67,8 +73,5 @@ class EncryptionItemFactory @Inject constructor(private val stringProvider: Stri
             }
             else                                         -> null
         }
-
     }
-
-
 }

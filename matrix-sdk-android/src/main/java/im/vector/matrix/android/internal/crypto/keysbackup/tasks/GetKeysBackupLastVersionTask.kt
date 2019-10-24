@@ -27,7 +27,6 @@ internal interface GetKeysBackupLastVersionTask : Task<Unit, KeysVersionResult>
 internal class DefaultGetKeysBackupLastVersionTask @Inject constructor(private val roomKeysApi: RoomKeysApi)
     : GetKeysBackupLastVersionTask {
 
-
     override suspend fun execute(params: Unit): KeysVersionResult {
         return executeRequest {
             apiCall = roomKeysApi.getKeysBackupLastVersion()

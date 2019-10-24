@@ -55,6 +55,6 @@ data class EncryptedEventContent(
         @Json(name = "session_id")
         val sessionId: String? = null,
 
-        //Relation context is in clear in encrypted message
+        // Relation context is in clear in encrypted message
         @Json(name = "m.relates_to") val relatesTo: RelationDefaultContent? = null
 )

@@ -106,5 +106,4 @@ class RoomPreviewViewModel @AssistedInject constructor(@Assisted initialState: R
             }
         })
     }
-
 }

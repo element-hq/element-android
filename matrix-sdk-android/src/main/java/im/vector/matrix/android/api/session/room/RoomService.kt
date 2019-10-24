@@ -54,4 +54,8 @@ interface RoomService {
      */
     fun liveRoomSummaries(): LiveData<List<RoomSummary>>
 
+    /**
+     * Mark all rooms as read
+     */
+    fun markAllAsRead(roomIds: List<String>, callback: MatrixCallback<Unit>): Cancelable
 }

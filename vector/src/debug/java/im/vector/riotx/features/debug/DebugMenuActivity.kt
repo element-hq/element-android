@@ -27,7 +27,6 @@ import butterknife.OnClick
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseActivity
 
-
 class DebugMenuActivity : VectorBaseActivity() {
 
     override fun getLayoutRes() = R.layout.activity_debug_menu
@@ -64,7 +63,6 @@ class DebugMenuActivity : VectorBaseActivity() {
             (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).createNotificationChannel(channel2)
         }
 
-
         val builder = NotificationCompat.Builder(this, "CHAN")
                 .setWhen(System.currentTimeMillis())
                 .setContentTitle("Title")
@@ -91,7 +89,6 @@ class DebugMenuActivity : VectorBaseActivity() {
         )
                 .addMessage("Message 2 - 1", System.currentTimeMillis(), Person.Builder().setName("user 1-1").build())
                 .addMessage("Message 2 - 2", System.currentTimeMillis(), Person.Builder().setName("user 1-2").build())
-
 
         notificationManager.notify(10, builder.build())
 
@@ -137,6 +134,4 @@ class DebugMenuActivity : VectorBaseActivity() {
     fun testCrash() {
         throw RuntimeException("Application crashed from user demand")
     }
-
 }
-

@@ -24,7 +24,6 @@ import im.vector.matrix.android.internal.di.MoshiProvider
 import io.realm.RealmList
 import timber.log.Timber
 
-
 internal object PushRulesMapper {
 
     private val moshiActionsAdapter = MoshiProvider.providesMoshi().adapter<List<Any>>(Types.newParameterizedType(List::class.java, Any::class.java))
@@ -53,7 +52,6 @@ internal object PushRulesMapper {
         }
     }
 
-
     fun mapRoomRule(pushrule: PushRuleEntity): PushRule {
         return PushRule(
                 actions = fromActionStr(pushrule.actionsStr),
@@ -78,7 +76,6 @@ internal object PushRulesMapper {
         )
     }
 
-
     fun map(pushrule: PushRuleEntity): PushRule {
         return PushRule(
                 actions = fromActionStr(pushrule.actionsStr),
@@ -101,5 +98,4 @@ internal object PushRulesMapper {
                 } ?: RealmList()
         )
     }
-
 }

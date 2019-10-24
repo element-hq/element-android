@@ -22,7 +22,6 @@ import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.util.Cancelable
 
-
 /**
  * This interface defines methods to send events in a room. It's implemented at the room level.
  */
@@ -66,7 +65,6 @@ interface SendService {
      */
     fun redactEvent(event: Event, reason: String?): Cancelable
 
-
     /**
      * Schedule this message to be resent
      * @param localEcho the unsent local echo
@@ -78,7 +76,6 @@ interface SendService {
      * @param localEcho the unsent local echo
      */
     fun resendMediaMessage(localEcho: TimelineEvent): Cancelable?
-
 
     /**
      * Remove this failed message from the timeline
@@ -92,5 +89,4 @@ interface SendService {
      * Resend all failed messages one by one (and keep order)
      */
     fun resendAllFailedMessages()
-
 }

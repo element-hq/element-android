@@ -35,7 +35,6 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 
-
 @RunWith(AndroidJUnit4::class)
 internal class ChunkEntityTest : InstrumentedTest {
 
@@ -47,7 +46,6 @@ internal class ChunkEntityTest : InstrumentedTest {
         val testConfig = RealmConfiguration.Builder().inMemory().name("test-realm").build()
         monarchy = Monarchy.Builder().setRealmConfiguration(testConfig).build()
     }
-
 
     @Test
     fun add_shouldAdd_whenNotAlreadyIncluded() {
@@ -194,5 +192,4 @@ internal class ChunkEntityTest : InstrumentedTest {
             chunk1.nextToken shouldEqual nextToken
         }
     }
-
 }

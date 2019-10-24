@@ -30,11 +30,10 @@ import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.model.relation.RelationService
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.util.Cancelable
-import im.vector.matrix.android.internal.database.RealmLiveData
-import im.vector.matrix.android.internal.database.helper.addSendingEvent
+import im.vector.matrix.android.api.util.Optional
+import im.vector.matrix.android.api.util.toOptional
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryEntity
-import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.room.send.EncryptEventWorker
@@ -64,43 +63,37 @@ internal class DefaultRelationService @AssistedInject constructor(@Assisted priv
         fun create(roomId: String): RelationService
     }
 
-    override fun sendReaction(reaction: String, targetEventId: String): Cancelable {
+    override fun sendReaction(targetEventId: String, reaction: String): Cancelable {
         val event = eventFactory.createReactionEvent(roomId, targetEventId, reaction)
-                .also {
-                    saveLocalEcho(it)
-                }
+                .also { saveLocalEcho(it) }
         val sendRelationWork = createSendEventWork(event, true)
         TimelineSendEventWorkCommon.postWork(context, roomId, sendRelationWork)
         return CancelableWork(context, sendRelationWork.id)
     }
 
-    override fun undoReaction(reaction: String, targetEventId: String, myUserId: String)/*: Cancelable*/ {
-
+    override fun undoReaction(targetEventId: String, reaction: String): Cancelable {
         val params = FindReactionEventForUndoTask.Params(
                 roomId,
                 targetEventId,
-                reaction,
-                myUserId
+                reaction
         )
+        // TODO We should avoid using MatrixCallback internally
         val callback = object : MatrixCallback<FindReactionEventForUndoTask.Result> {
             override fun onSuccess(data: FindReactionEventForUndoTask.Result) {
                 if (data.redactEventId == null) {
                     Timber.w("Cannot find reaction to undo (not yet synced?)")
-                    //TODO?
+                    // TODO?
                 }
                 data.redactEventId?.let { toRedact ->
-
-                    val redactEvent = eventFactory.createRedactEvent(roomId, toRedact, null).also {
-                        saveLocalEcho(it)
-                    }
+                    val redactEvent = eventFactory.createRedactEvent(roomId, toRedact, null)
+                            .also { saveLocalEcho(it) }
                     val redactWork = createRedactEventWork(redactEvent, toRedact, null)
 
                     TimelineSendEventWorkCommon.postWork(context, roomId, redactWork)
-
                 }
             }
         }
-        findReactionEventForUndoTask
+        return findReactionEventForUndoTask
                 .configureWith(params) {
                     this.retryCount = Int.MAX_VALUE
                     this.callback = callback
@@ -108,7 +101,7 @@ internal class DefaultRelationService @AssistedInject constructor(@Assisted priv
                 .executeBy(taskExecutor)
     }
 
-    //TODO duplicate with send service?
+    // TODO duplicate with send service?
     private fun createRedactEventWork(localEvent: Event, eventId: String, reason: String?): OneTimeWorkRequest {
         val sendContentWorkerParams = RedactEventWorker.Params(
                 userId,
@@ -127,21 +120,17 @@ internal class DefaultRelationService @AssistedInject constructor(@Assisted priv
                                  compatibilityBodyText: String): Cancelable {
         val event = eventFactory
                 .createReplaceTextEvent(roomId, targetEventId, newBodyText, newBodyAutoMarkdown, msgType, compatibilityBodyText)
-                .also {
-                    saveLocalEcho(it)
-                }
+                .also { saveLocalEcho(it) }
         return if (cryptoService.isRoomEncrypted(roomId)) {
             val encryptWork = createEncryptEventWork(event, listOf("m.relates_to"))
             val workRequest = createSendEventWork(event, false)
             TimelineSendEventWorkCommon.postSequentialWorks(context, roomId, encryptWork, workRequest)
             CancelableWork(context, encryptWork.id)
-
         } else {
             val workRequest = createSendEventWork(event, true)
             TimelineSendEventWorkCommon.postWork(context, roomId, workRequest)
             CancelableWork(context, workRequest.id)
         }
-
     }
 
     override fun editReply(replyToEdit: TimelineEvent,
@@ -153,15 +142,12 @@ internal class DefaultRelationService @AssistedInject constructor(@Assisted priv
                         replyToEdit,
                         originalTimelineEvent,
                         newBodyText, true, MessageType.MSGTYPE_TEXT, compatibilityBodyText)
-                .also {
-                    saveLocalEcho(it)
-                }
+                .also { saveLocalEcho(it) }
         return if (cryptoService.isRoomEncrypted(roomId)) {
             val encryptWork = createEncryptEventWork(event, listOf("m.relates_to"))
             val workRequest = createSendEventWork(event, false)
             TimelineSendEventWorkCommon.postSequentialWorks(context, roomId, encryptWork, workRequest)
             CancelableWork(context, encryptWork.id)
-
         } else {
             val workRequest = createSendEventWork(event, true)
             TimelineSendEventWorkCommon.postWork(context, roomId, workRequest)
@@ -179,22 +165,20 @@ internal class DefaultRelationService @AssistedInject constructor(@Assisted priv
     }
 
     override fun replyToMessage(eventReplied: TimelineEvent, replyText: String, autoMarkdown: Boolean): Cancelable? {
-        val event = eventFactory.createReplyTextEvent(roomId, eventReplied, replyText, autoMarkdown)?.also {
-            saveLocalEcho(it)
-        } ?: return null
+        val event = eventFactory.createReplyTextEvent(roomId, eventReplied, replyText, autoMarkdown)
+                ?.also { saveLocalEcho(it) }
+                ?: return null
 
         return if (cryptoService.isRoomEncrypted(roomId)) {
             val encryptWork = createEncryptEventWork(event, listOf("m.relates_to"))
             val workRequest = createSendEventWork(event, false)
             TimelineSendEventWorkCommon.postSequentialWorks(context, roomId, encryptWork, workRequest)
             CancelableWork(context, encryptWork.id)
-
         } else {
             val workRequest = createSendEventWork(event, true)
             TimelineSendEventWorkCommon.postWork(context, roomId, workRequest)
             CancelableWork(context, workRequest.id)
         }
-
     }
 
     private fun createEncryptEventWork(event: Event, keepKeys: List<String>?): OneTimeWorkRequest {
@@ -210,13 +194,13 @@ internal class DefaultRelationService @AssistedInject constructor(@Assisted priv
         return TimelineSendEventWorkCommon.createWork<SendEventWorker>(sendWorkData, startChain)
     }
 
-    override fun getEventSummaryLive(eventId: String): LiveData<EventAnnotationsSummary> {
-        val liveEntity = RealmLiveData(monarchy.realmConfiguration) { realm ->
-            EventAnnotationsSummaryEntity.where(realm, eventId)
-        }
-        return Transformations.map(liveEntity) { realmResults ->
-            realmResults.firstOrNull()?.asDomain()
-                    ?: EventAnnotationsSummary(eventId, emptyList(), null)
+    override fun getEventSummaryLive(eventId: String): LiveData<Optional<EventAnnotationsSummary>> {
+        val liveData = monarchy.findAllMappedWithChanges(
+                { EventAnnotationsSummaryEntity.where(it, eventId) },
+                { it.asDomain() }
+        )
+        return Transformations.map(liveData) { results ->
+            results.firstOrNull().toOptional()
         }
     }
 
@@ -227,10 +211,6 @@ internal class DefaultRelationService @AssistedInject constructor(@Assisted priv
      * the same transaction id is received (in unsigned data)
      */
     private fun saveLocalEcho(event: Event) {
-        monarchy.writeAsync { realm ->
-            val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst()
-                    ?: return@writeAsync
-            roomEntity.addSendingEvent(event)
-        }
+        eventFactory.saveLocalEcho(monarchy, event)
     }
 }

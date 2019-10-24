@@ -53,7 +53,6 @@ internal fun EventEntity.Companion.where(realm: Realm,
     }
 }
 
-
 internal fun EventEntity.Companion.types(realm: Realm,
                                          typeList: List<String> = emptyList()): RealmQuery<EventEntity> {
     val query = realm.where<EventEntity>()

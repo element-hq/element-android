@@ -17,9 +17,11 @@
 package im.vector.riotx.features.home.room.list
 
 import androidx.annotation.StringRes
-import com.airbnb.epoxy.TypedEpoxyController
+import com.airbnb.epoxy.EpoxyController
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.riotx.R
+import im.vector.riotx.core.epoxy.noResultItem
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.home.room.filtered.FilteredRoomFooterItem
 import im.vector.riotx.features.home.room.filtered.filteredRoomFooterItem
@@ -28,29 +30,47 @@ import javax.inject.Inject
 class RoomSummaryController @Inject constructor(private val stringProvider: StringProvider,
                                                 private val roomSummaryItemFactory: RoomSummaryItemFactory,
                                                 private val roomListNameFilter: RoomListNameFilter
-) : TypedEpoxyController<RoomListViewState>() {
+) : EpoxyController() {
 
     var listener: Listener? = null
 
-    override fun buildModels(viewState: RoomListViewState) {
-        if (viewState.displayMode == RoomListFragment.DisplayMode.FILTERED) {
-            buildFilteredRooms(viewState)
-        } else {
-            val roomSummaries = viewState.asyncFilteredRooms()
-            roomSummaries?.forEach { (category, summaries) ->
-                if (summaries.isEmpty()) {
-                    return@forEach
-                } else {
-                    val isExpanded = viewState.isCategoryExpanded(category)
-                    buildRoomCategory(viewState, summaries, category.titleRes, viewState.isCategoryExpanded(category)) {
-                        listener?.onToggleRoomCategory(category)
-                    }
-                    if (isExpanded) {
-                        buildRoomModels(summaries,
-                                viewState.joiningRoomsIds,
-                                viewState.joiningErrorRoomsIds,
-                                viewState.rejectingRoomsIds,
-                                viewState.rejectingErrorRoomsIds)
+    private var viewState: RoomListViewState? = null
+
+    init {
+        // We are requesting a model build directly as the first build of epoxy is on the main thread.
+        // It avoids to build the the whole list of rooms on the main thread.
+        requestModelBuild()
+    }
+
+    fun update(viewState: RoomListViewState) {
+        this.viewState = viewState
+        requestModelBuild()
+    }
+
+    override fun buildModels() {
+        val nonNullViewState = viewState ?: return
+        when (nonNullViewState.displayMode) {
+            RoomListFragment.DisplayMode.FILTERED,
+            RoomListFragment.DisplayMode.SHARE -> {
+                buildFilteredRooms(nonNullViewState)
+            }
+            else                               -> {
+                val roomSummaries = nonNullViewState.asyncFilteredRooms()
+                roomSummaries?.forEach { (category, summaries) ->
+                    if (summaries.isEmpty()) {
+                        return@forEach
+                    } else {
+                        val isExpanded = nonNullViewState.isCategoryExpanded(category)
+                        buildRoomCategory(nonNullViewState, summaries, category.titleRes, nonNullViewState.isCategoryExpanded(category)) {
+                            listener?.onToggleRoomCategory(category)
+                        }
+                        if (isExpanded) {
+                            buildRoomModels(summaries,
+                                    nonNullViewState.joiningRoomsIds,
+                                    nonNullViewState.joiningErrorRoomsIds,
+                                    nonNullViewState.rejectingRoomsIds,
+                                    nonNullViewState.rejectingErrorRoomsIds)
+                        }
                     }
                 }
             }
@@ -71,7 +91,10 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
                 viewState.rejectingRoomsIds,
                 viewState.rejectingErrorRoomsIds)
 
-        addFilterFooter(viewState)
+        when {
+            viewState.displayMode == RoomListFragment.DisplayMode.FILTERED -> addFilterFooter(viewState)
+            filteredSummaries.isEmpty()                                    -> addEmptyFooter()
+        }
     }
 
     private fun addFilterFooter(viewState: RoomListViewState) {
@@ -79,6 +102,13 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
             id("filter_footer")
             listener(listener)
             currentFilter(viewState.roomFilter)
+        }
+    }
+
+    private fun addEmptyFooter() {
+        noResultItem {
+            id("no_result")
+            text(stringProvider.getString(R.string.no_result_placeholder))
         }
     }
 
@@ -90,7 +120,7 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
         if (summaries.isEmpty()) {
             return
         }
-        //TODO should add some business logic later
+        // TODO should add some business logic later
         val unreadCount = if (summaries.isEmpty()) {
             0
         } else {
@@ -105,7 +135,7 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
             showHighlighted(showHighlighted)
             listener {
                 mutateExpandedState()
-                setData(viewState)
+                update(viewState)
             }
         }
     }
@@ -128,5 +158,4 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
         fun onRejectRoomInvitation(room: RoomSummary)
         fun onAcceptRoomInvitation(room: RoomSummary)
     }
-
 }

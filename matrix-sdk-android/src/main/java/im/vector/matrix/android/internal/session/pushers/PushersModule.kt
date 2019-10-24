@@ -44,7 +44,6 @@ internal abstract class PushersModule {
         fun providesPushRulesApi(retrofit: Retrofit): PushRulesApi {
             return retrofit.create(PushRulesApi::class.java)
         }
-
     }
 
     @Binds
@@ -54,7 +53,7 @@ internal abstract class PushersModule {
     abstract fun bindConditionResolver(conditionResolver: DefaultConditionResolver): ConditionResolver
 
     @Binds
-    abstract fun bindGetPushersTask(getPusherTask: DefaultGetPusherTask): GetPushersTask
+    abstract fun bindGetPushersTask(getPushersTask: DefaultGetPushersTask): GetPushersTask
 
     @Binds
     abstract fun bindGetPushRulesTask(getPushRulesTask: DefaultGetPushRulesTask): GetPushRulesTask
@@ -73,5 +72,4 @@ internal abstract class PushersModule {
 
     @Binds
     abstract fun bindProcessEventForPushTask(processEventForPushTask: DefaultProcessEventForPushTask): ProcessEventForPushTask
-
 }

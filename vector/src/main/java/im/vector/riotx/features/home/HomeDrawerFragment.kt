@@ -51,7 +51,8 @@ class HomeDrawerFragment : VectorBaseFragment() {
             val groupListFragment = GroupListFragment.newInstance()
             replaceChildFragment(groupListFragment, R.id.homeDrawerGroupListContainer)
         }
-        session.liveUser(session.myUserId).observeK(this) { user ->
+        session.liveUser(session.myUserId).observeK(this) { optionalUser ->
+            val user = optionalUser?.getOrNull()
             if (user != null) {
                 avatarRenderer.render(user.avatarUrl, user.userId, user.displayName, homeDrawerHeaderAvatarView)
                 homeDrawerUsernameView.text = user.displayName

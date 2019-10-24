@@ -21,6 +21,7 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.model.EventAnnotationsSummary
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.util.Cancelable
+import im.vector.matrix.android.api.util.Optional
 
 /**
  * In some cases, events may wish to reference other events.
@@ -47,26 +48,21 @@ import im.vector.matrix.android.api.util.Cancelable
  */
 interface RelationService {
 
-
     /**
      * Sends a reaction (emoji) to the targetedEvent.
-     * @param reaction the reaction (preferably emoji)
      * @param targetEventId the id of the event being reacted
+     * @param reaction the reaction (preferably emoji)
      */
-    fun sendReaction(reaction: String,
-                     targetEventId: String): Cancelable
-
+    fun sendReaction(targetEventId: String,
+                     reaction: String): Cancelable
 
     /**
      * Undo a reaction (emoji) to the targetedEvent.
-     * @param reaction the reaction (preferably emoji)
      * @param targetEventId the id of the event being reacted
-     * @param myUserId used to know if a reaction event was made by the user
+     * @param reaction the reaction (preferably emoji)
      */
-    fun undoReaction(reaction: String,
-                     targetEventId: String,
-                     myUserId: String)//: Cancelable
-
+    fun undoReaction(targetEventId: String,
+                     reaction: String): Cancelable
 
     /**
      * Edit a text message body. Limited to "m.text" contentType
@@ -79,7 +75,6 @@ interface RelationService {
                         newBodyText: String,
                         newBodyAutoMarkdown: Boolean,
                         compatibilityBodyText: String = "* $newBodyText"): Cancelable
-
 
     /**
      * Edit a reply. This is a special case because replies contains fallback text as a prefix.
@@ -95,10 +90,9 @@ interface RelationService {
                   compatibilityBodyText: String = "* $newBodyText"): Cancelable
 
     /**
-     * Get's the edit history of the given event
+     * Get the edit history of the given event
      */
     fun fetchEditHistory(eventId: String, callback: MatrixCallback<List<Event>>)
-
 
     /**
      * Reply to an event in the timeline (must be in same room)
@@ -111,7 +105,5 @@ interface RelationService {
                        replyText: String,
                        autoMarkdown: Boolean = false): Cancelable?
 
-    fun getEventSummaryLive(eventId: String): LiveData<EventAnnotationsSummary>
-
-
+    fun getEventSummaryLive(eventId: String): LiveData<Optional<EventAnnotationsSummary>>
 }

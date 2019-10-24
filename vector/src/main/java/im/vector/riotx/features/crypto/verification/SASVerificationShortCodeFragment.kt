@@ -37,7 +37,6 @@ class SASVerificationShortCodeFragment : VectorBaseFragment() {
         fun newInstance() = SASVerificationShortCodeFragment()
     }
 
-
     @BindView(R.id.sas_decimal_code)
     lateinit var decimalTextView: TextView
 
@@ -46,7 +45,6 @@ class SASVerificationShortCodeFragment : VectorBaseFragment() {
 
     @BindView(R.id.sas_emoji_grid)
     lateinit var emojiGrid: ViewGroup
-
 
     @BindView(R.id.emoji0)
     lateinit var emoji0View: ViewGroup
@@ -63,7 +61,6 @@ class SASVerificationShortCodeFragment : VectorBaseFragment() {
     @BindView(R.id.emoji6)
     lateinit var emoji6View: ViewGroup
 
-
     override fun getLayoutResId() = R.layout.fragment_sas_verification_display_code
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -71,7 +68,6 @@ class SASVerificationShortCodeFragment : VectorBaseFragment() {
         viewModel = activity?.run {
             ViewModelProviders.of(this, viewModelFactory).get(SasVerificationViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
-
 
         viewModel.transaction?.let {
             if (it.supportsEmoji()) {
@@ -110,9 +106,8 @@ class SASVerificationShortCodeFragment : VectorBaseFragment() {
                 }
             }
 
-            //decimal is at least supported
+            // decimal is at least supported
             decimalTextView.text = it.getDecimalCodeRepresentation()
-
 
             if (it.supportsEmoji()) {
                 descriptionTextView.text = getString(R.string.sas_emoji_description)
@@ -124,7 +119,6 @@ class SASVerificationShortCodeFragment : VectorBaseFragment() {
                 emojiGrid.isInvisible = true
             }
         }
-
 
         viewModel.transactionState.observe(this, Observer {
             if (viewModel.transaction is IncomingSasVerificationTransaction) {
@@ -146,7 +140,6 @@ class SASVerificationShortCodeFragment : VectorBaseFragment() {
                         viewModel.loadingLiveEvent.value = R.string.sas_waiting_for_partner
                     }
                 }
-
             } else if (viewModel.transaction is OutgoingSasVerificationRequest) {
                 val uxState = (viewModel.transaction as OutgoingSasVerificationRequest).uxState
                 when (uxState) {
@@ -169,7 +162,6 @@ class SASVerificationShortCodeFragment : VectorBaseFragment() {
             }
         })
     }
-
 
     @OnClick(R.id.sas_request_continue_button)
     fun didAccept() {

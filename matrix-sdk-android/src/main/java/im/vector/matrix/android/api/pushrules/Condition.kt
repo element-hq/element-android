@@ -35,9 +35,7 @@ abstract class Condition(val kind: Kind) {
                     else                             -> UNRECOGNIZE
                 }
             }
-
         }
-
     }
 
     abstract fun isSatisfied(conditionResolver: ConditionResolver): Boolean

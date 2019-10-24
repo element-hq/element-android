@@ -17,13 +17,12 @@ package im.vector.riotx.core.linkify
 
 import java.util.regex.Pattern
 
-
 /**
  * Better support for geo URi
  */
 object VectorAutoLinkPatterns {
 
-    //geo:
+    // geo:
     private const val LAT_OR_LONG_OR_ALT_NUMBER = "-?\\d+(?:\\.\\d+)?"
     private const val COORDINATE_SYSTEM = ";crs=[\\w-]+"
 
@@ -31,12 +30,10 @@ object VectorAutoLinkPatterns {
             "(" + LAT_OR_LONG_OR_ALT_NUMBER + ")" +
             "," +
             "(" + LAT_OR_LONG_OR_ALT_NUMBER + ")" +
-            "(?:" + "," + LAT_OR_LONG_OR_ALT_NUMBER + ")?" + //altitude
+            "(?:" + "," + LAT_OR_LONG_OR_ALT_NUMBER + ")?" + // altitude
             "(?:" + COORDINATE_SYSTEM + ")?" +
-            "(?:" + ";u=\\d+(?:\\.\\d+)?" + ")?" +//uncertainty in meters
+            "(?:" + ";u=\\d+(?:\\.\\d+)?" + ")?" + // uncertainty in meters
             "(?:" +
-            ";[\\w-]+=(?:[\\w-_.!~*'()]|%[\\da-f][\\da-f])+" + //dafuk
-            ")*"
-            , Pattern.CASE_INSENSITIVE)
-
+            ";[\\w-]+=(?:[\\w-_.!~*'()]|%[\\da-f][\\da-f])+" + // dafuk
+            ")*", Pattern.CASE_INSENSITIVE)
 }

@@ -38,7 +38,6 @@ data class MatrixConfiguration(
     interface Provider {
         fun providesMatrixConfiguration(): MatrixConfiguration
     }
-
 }
 
 /**
@@ -98,5 +97,4 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
             return BuildConfig.VERSION_NAME + " (" + BuildConfig.GIT_SDK_REVISION + ")"
         }
     }
-
 }

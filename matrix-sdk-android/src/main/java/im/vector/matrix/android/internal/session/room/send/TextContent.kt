@@ -26,12 +26,10 @@ import im.vector.matrix.android.api.util.ContentUtils.extractUsefulTextFromReply
  */
 data class TextContent(
         val text: String,
-
         val formattedText: String? = null
 ) {
     fun takeFormatted() = formattedText ?: text
 }
-
 
 fun TextContent.toMessageTextContent(msgType: String = MessageType.MSGTYPE_TEXT): MessageTextContent {
     return MessageTextContent(
@@ -48,5 +46,3 @@ fun TextContent.removeInReplyFallbacks(): TextContent {
             formattedText = this.formattedText?.let { extractUsefulTextFromHtmlReply(it) }
     )
 }
-
-

@@ -138,7 +138,6 @@
     <string name="auth_password_placeholder">Fjalëkalim</string>
     <string name="auth_new_password_placeholder">Fjalëkalim i ri</string>
     <string name="auth_user_name_placeholder">Emër përdoruesi</string>
-    <string name="auth_add_phone_message">Shtoni te llogaria juaj një numër telefoni, që përdoruesit të mund t’ju zbulojnë.</string>
     <string name="auth_email_placeholder">Adresë email</string>
     <string name="auth_opt_email_placeholder">Adresë email (në daçi)</string>
     <string name="auth_phone_number_placeholder">Numër telefoni</string>
@@ -409,7 +408,7 @@
     <string name="settings_background_sync">Njëkohësim në prapaskenë</string>
     <string name="settings_enable_background_sync">Aktivizo njëkohësim në prapaskenë</string>
     <string name="settings_set_sync_timeout">Mbarim kohe për kërkesë njëkohësimi</string>
-    <string name="settings_set_sync_delay">Vonesë mes çdo kërkese</string>
+    <string name="settings_set_sync_delay">Vonesë mes çdo Njëkohësimi</string>
     <string name="settings_second">sekondë</string>
     <string name="settings_seconds">sekonda</string>
 
@@ -460,10 +459,10 @@
 
     <string name="settings_data_save_mode">Mënyrë ruajtjeje të dhënash</string>
 
-    <string name="devices_details_dialog_title">Hollësi pajisjeje</string>
+    <string name="devices_details_dialog_title">Të dhëna pajisjeje</string>
     <string name="devices_details_id_title">ID</string>
-    <string name="devices_details_name_title">Emër</string>
-    <string name="devices_details_device_name">Emër Pajisjeje</string>
+    <string name="devices_details_name_title">Emër Publik</string>
+    <string name="devices_details_device_name">Përditësoni Emër Publik</string>
     <string name="devices_details_last_seen_title">Parë së fundi më</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
     <string name="devices_delete_dialog_title">Mirëfilltësim</string>
@@ -573,9 +572,9 @@
     <string name="encryption_information_decryption_error">Gabim shfshehtëzimi</string>
 
     <string name="encryption_information_sender_device_information">Të dhëna pajisjeje dërguesi</string>
-    <string name="encryption_information_device_name">Emër pajisjeje</string>
-    <string name="encryption_information_name">Emër</string>
-    <string name="encryption_information_device_id">ID Pajisjeje</string>
+    <string name="encryption_information_device_name">Emër publik</string>
+    <string name="encryption_information_name">Emër publik</string>
+    <string name="encryption_information_device_id">ID</string>
     <string name="encryption_information_device_key">Kyç pajisjeje</string>
     <string name="encryption_information_verification">Verifikim</string>
     <string name="encryption_information_ed25519_fingerprint">Shenja gishtash Ed25519</string>
@@ -745,13 +744,6 @@
     <string name="logout">Dilni</string>
     <string name="option_send_voice">Dërgoni mesazh zanor</string>
 
-    <string name="auth_add_email_message">Shtoni te llogaria juaj një adresë email, për t’u dhënë mundësinë përdoruesve t’ju zbulojnë dhe që t’ju lejojë të ricaktoni fjalëkalimin.</string>
-    <string name="auth_add_email_phone_message">Shtoni te llogaria juaj një adresë email dhe/ose një numër telefoni, për t’u dhënë mundësinë përdoruesve t’ju zbulojnë.
-\n
-\nAdresa email do t’ju lejojë edhe të ricaktoni fjalëkalimin tuaj.</string>
-    <string name="auth_add_email_and_phone_message">Shtoni te llogaria juaj një adresë email dhe një numër telefoni, për t’u dhënë mundësinë përdoruesve t’ju zbulojnë.
-\n
-\nAdresa email do t’ju lejojë edhe të ricaktoni fjalëkalimin tuaj.</string>
     <string name="auth_threepid_warning_message">Regjistrimi me email dhe me numër telefoni njëherazi nuk mbulohet ende, deri sa të ketë API. Do të merret parasysh vetëm numri i telefonit.
 \n
 \nEmail-in tuaj mund ta shtoni te profili juaj, te rregullimet.</string>
@@ -1456,7 +1448,7 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
 
     <string name="event_redacted_by_user_reason">Veprimtari e fshirë nga përdorues</string>
     <string name="event_redacted_by_admin_reason">Veprimtari e moderuar nga përgjegjës dhome</string>
-    <string name="last_edited_info_message">Përpunuar së fundi nga %s më %s</string>
+    <string name="last_edited_info_message">Përpunuar së fundi nga %1$s më %2$s</string>
 
 
     <string name="malformed_message">Veprimtari e keqformuar, s’mund të shfaqet</string>
@@ -1529,7 +1521,7 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
 \n
 \nRiotX-i mbulon: • Hyrje në një llogari ekzistuese • Krijim dhome dhe pjesëmarrje në dhoma publike • Pranim dhe hedhje poshtë ftesash • Njohje të dhomave të përdoruesve • Parje hollësish dhome • Dërgim mesazhesh tekst • Dërgim bashkëngjitjesh • Lexim dhe shkrim mesazhesh në dhoma të fshehtëzuara • Kriptografi: kopjeruajtje kyçesh E2E, verifikim i thelluar pajisjesh, kërkesa dhe përgjigje për ndarje kyçesh • Njoftime push • Tema të Çelëta, të Errëta dhe të Zeza
 \n
-\nNë RiotX s’janë sendërtuar ende krejt veçoritë e Riot-it. Veçori kryesore që mungojnë (dhe që do të vijnë së shpejti!): • Krijim llogarish • Rregullime dhome (shfaqje anëtarësh dhome, etj.) • Krijim dhomash fjalosjeje të drejtpërdrejtë • Thirrje • Widget-es • …</string>
+\nNë RiotX s’janë sendërtuar ende krejt veçoritë e Riot-it. Veçori kryesore që mungojnë (dhe që do të vijnë së shpejti!): • Krijim llogarish • Rregullime dhome (shfaqje anëtarësh dhome, etj.) • Thirrje • Widget-es • …</string>
 
     <string name="settings_integration_manager">Përgjegjës Integrimesh</string>
 
@@ -1578,4 +1570,88 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
 
     <string name="message_view_edit_history">Shihni Historik Përpunimesh</string>
 
+    <string name="review">Shqyrtojeni</string>
+    <string name="decline">Hidhe poshtw</string>
+
+    <string name="widget_integration_review_terms">Që të vazhdohet, lypset të pranoni Kushtet e këtij shërbimi.</string>
+
+    <string name="security_warning_identity_server">Versione të dikurshëm të Riot-it përmbanin një të metë sigurie, e cila mund t’i lejonte Shërbyesit tuaj të Identiteteve (%1$s) hyrje në llogarinë tuaj. Nëse i besoni %2$s, mund ta shpërfillni këtë sinjalizim; përndryshe dilni nga llogaria dhe ribëni hyrjen.
+\n
+\nLexoni më tepër hollësi këtu:
+\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
+
+    <string name="terms_of_service">Kushte Shërbimi</string>
+    <string name="review_terms">Shqyrtoni Kushtet</string>
+    <string name="terms_description_for_identity_server">Jini i zbulueshëm nga të tjerët</string>
+    <string name="terms_description_for_integration_manager">Përdorni robotë, ura, widget-e dhe paketa ngjitësish</string>
+
+    <string name="read_at">Lexoni te</string>
+
+    <string name="none">Asnjë</string>
+    <string name="revoke">Shfuqizoje</string>
+    <string name="disconnect">Shkëputu</string>
+    <string name="people_no_identity_server">S’ka shërbyes identitetesh të formësuar.</string>
+
+    <string name="call_failed_no_ice_title">Thirrja dështoi për shkak shërbyesi të keqformësuar</string>
+    <string name="call_failed_no_ice_description">Që thirrjet të funksionojnë në mënyrë të qëndrueshme, ju lutemi, kërkojini përgjegjësit të shërbyesit tuaj Home (%1$s) të formësojë një shërbyes TURN.
+\n
+\nNdryshe, mund të provoni të përdorni shërbyesin publik te %2$s, por kjo s’do të jetë edhe aq e qëndrueshme, dhe adresa juaj IP do të jetë e ditur për atë shërbyes. Këtë mund ta administroni edhe që nga Rregullimet.</string>
+    <string name="call_failed_no_ice_use_alt">Provoni të përdorni %s</string>
+    <string name="call_failed_dont_ask_again">Mos më pyet sërish</string>
+
+    <string name="auth_add_email_message_2">Caktoni një email për rimarrje llogarie, dhe më vonë të jetë i zbulueshëm (opsionale) nga persona që ju njohin.</string>
+    <string name="auth_add_phone_message_2">Caktoni një telefon, dhe më vonë të jetë i zbulueshëm (opsionale) nga persona që ju njohin.</string>
+    <string name="auth_add_email_phone_message_2">Caktoni një email për rimarrje llogarie. Përdoni email ose telefon që të jeni i zbulueshëm (opsionale) nga persona që ju njohin.</string>
+    <string name="auth_add_email_and_phone_message_2">Caktoni një email për rimarrje llogarie. Përdorni email ose telefon që të jeni i zbulueshëm (opsionale) nga persona që ju njohin.</string>
+    <string name="login_error_homeserver_not_found">S’kapet dot shërbyes Home te kjo URL, ju lutemi, kontrollojeni</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">Do të përdoret %s si ndihmë kur shërbyesi juaj Home nuk ofron të tillë (gjatë thirrjes, adresa juaj IP do të ndahet me të tjerë)</string>
+    <string name="invite_no_identity_server_error">Që të kryhet ky veprim, shtoni një shërbyes identitetesh, që nga rregullimet tuaja.</string>
+    <string name="settings_background_fdroid_sync_mode">Mënyrë Njëkohësimi Në Prapaskenë (Eksperimentale)</string>
+    <string name="settings_background_fdroid_sync_mode_battery">E optimizuar për baterinë</string>
+    <string name="settings_background_fdroid_sync_mode_battery_description">Riot-i do të bëjë njëkohësim në prapaskenë, në një mënyrë që kursen burimet e kufizuara të pajisjes (baterinë).
+\nNë varësi të gjendjes së burimeve tuaja, njëkohësimi mund të shtyhet për më vonë nga sistemi operativ.</string>
+    <string name="settings_background_fdroid_sync_mode_real_time">I optimizuar për kohë të njëmendtë</string>
+    <string name="settings_background_fdroid_sync_mode_real_time_description">Riot0-i do të bëjë njëkohësim në prapaskenë periodikisht në një kohë të caktuar (e formësueshme).
+\nKjo do të ketë ndikim mbi përdorimin e baterisë dhe të transmetimit, do të shfaqet një njoftim i pandërprerë që pohon se Riot-i po përgjon për akte.</string>
+    <string name="settings_background_fdroid_sync_mode_disabled">Pa njëkohësim në prapraskenë</string>
+    <string name="settings_background_fdroid_sync_mode_disabled_description">S’do të njoftoheni për mesazhe ardhës, kur aplikacioni gjendet në prapaskenë.</string>
+    <string name="settings_background_sync_update_error">S’u arrit të përditësohen rregullime.</string>
+
+
+    <string name="settings_set_workmanager_delay">Interval i Parapëlqyer Njëkohësimesh</string>
+    <string name="settings_set_workmanager_delay_summary">%s
+\nNjëkohësimi mund të shtyhet për më vonë, në varësi të burimeve (baterisë) ose gjendjes së pajisjes (dremitje).</string>
+    <string name="settings_discovery_manage">Administroni rregullimet tuaja për zbulime.</string>
+    <string name="encryption_information_device_name_with_warning">Emër publik (i dukshëm për persona me të cilët komunikoni)</string>
+    <string name="device_name_warning">Emri publik i një pajisjeje është i dukshëm për persona me të cilët komunikoni</string>
+    <string name="identity_server_not_defined">S’po përdorni ndonjë Shërbyes Identitetesh</string>
+    <string name="identity_server_not_defined_for_password_reset">S’ka shërbyes identitetesh të formësuar, kjo është e domosdoshme për ricaktimin e fjalëkalimit tuaj.</string>
+
+    <string name="error_user_already_logged_in">Duket se po rrekeni të lidheni me një tjetër shërbyes Home. Doni të bëhet dalja\?</string>
+
+    <string name="labs_swipe_to_reply_in_timeline">Që të përgjigjeni te rrjedha kohore, aktivizoni fërkimin</string>
+
+    <string name="identity_server">Shërbyes identitetesh</string>
+    <string name="disconnect_identity_server">Shkëpute shërbyesin e identiteteve</string>
+    <string name="add_identity_server">Formësoni shërbyes identitetesh</string>
+    <string name="change_identity_server">Ndryshoni shërbyes identitetesh</string>
+    <string name="settings_discovery_identity_server_info">Po përdorni %1$s për të zbuluar dhe për të qenë i zbulueshëm nga kontakte ekzistues që njihni.</string>
+    <string name="settings_discovery_identity_server_info_none">S’po përdorni ndonjë shërbyes identitetesh. Që të zbuloni dhe të jini i zbulueshëm nga kontakte ekzistuese që njihni, formësoni një të tillë më poshtë.</string>
+    <string name="settings_discovery_emails_title">Adresa email të zbulueshme</string>
+    <string name="settings_discovery_no_mails">Mundësitë rreth zbulimesh do të shfaqen sapo të keni shtuar një email.</string>
+    <string name="settings_discovery_no_msisdn">Mundësi zbulimesh do të shfaqen sapo të keni shtuar një numër telefoni.</string>
+    <string name="settings_discovery_disconnect_identity_server_info">Shkëputja prej shërbyesit tuaj të identiteteve do të thotë se s’do të jeni i zbulueshëm prej përdoruesish të tjerë dhe s’do të jeni në gjendje të ftoni të tjerë me email ose telefon.</string>
+    <string name="settings_discovery_msisdn_title">Numra telefoni të zbulueshëm</string>
+    <string name="settings_discovery_confirm_mail">Ju dërguam një email ripohimi te %s, hapeni dhe klikoni mbi lidhjen e ripohimit</string>
+    <string name="settings_discovery_mail_pending">Pezull</string>
+
+    <string name="settings_discovery_enter_identity_server">Jepni një shërbyes të ri identitetesh</string>
+    <string name="settings_discovery_bad_identity_server">S’u lidh dot te shërbyes identitetesh</string>
+    <string name="settings_discovery_please_enter_server">Ju lutemi, jepni URL-në e shërbyesit të identiteteve</string>
+    <string name="settings_discovery_no_terms_title">Shërbyesi i identiteteve s’ka kushte shërbimi</string>
+    <string name="settings_discovery_no_terms">Shërbyesi i identiteteve që keni zgjedhur nuk ka ndonjë kusht shërbimi. Vazhdoni vetëm nëse i zini besë të zotit të shërbimit</string>
+    <string name="settings_text_message_sent">Te %s u dërgua një mesazh tekst. Ju lutemi, jepni kodin e verifikimit që përmban ai.</string>
+
+    <string name="settings_discovery_disconnect_with_bound_pid">Hëpërhë, ndani me të tjerë adresa email ose numra telefoni te shërbyesi i identiteteve %1$s. Do të duhet të rilidheni me %2$s që të ndalni ndarjen e tyre.</string>
+    <string name="settings_agree_to_terms">Që të lejoni veten të jetë e zbulueshme nga adresë email apo numër telefoni, pajtohuni me Kushtet e Shërbimit të shërbyesit të identiteteve (%s).</string>
 </resources>

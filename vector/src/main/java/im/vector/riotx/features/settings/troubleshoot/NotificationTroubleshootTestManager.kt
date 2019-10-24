@@ -30,13 +30,11 @@ class NotificationTroubleshootTestManager(val fragment: Fragment) {
     }
     val adapter = NotificationTroubleshootRecyclerViewAdapter(testList)
 
-
     var statusListener: ((NotificationTroubleshootTestManager) -> Unit)? = null
 
     var diagStatus: TroubleshootTest.TestStatus by Delegates.observable(TroubleshootTest.TestStatus.NOT_STARTED) { _, _, _ ->
         statusListener?.invoke(this)
     }
-
 
     fun addTest(test: TroubleshootTest) {
         testList.add(test)
@@ -59,14 +57,14 @@ class NotificationTroubleshootTestManager(val fragment: Fragment) {
                         if (currentTestIndex < testList.size) {
                             val troubleshootTest = testList[currentTestIndex]
                             troubleshootTest.status = TroubleshootTest.TestStatus.RUNNING
-                            //Cosmetic: Start with a small delay for UI/UX reason (better animation effect) for non async tests
+                            // Cosmetic: Start with a small delay for UI/UX reason (better animation effect) for non async tests
                             handler.postDelayed({
                                 if (fragment.isAdded) {
                                     troubleshootTest.perform()
                                 }
                             }, 600)
                         } else {
-                            //we are done, test global status?
+                            // we are done, test global status?
                             diagStatus = if (isAllGood) TroubleshootTest.TestStatus.SUCCESS else TroubleshootTest.TestStatus.FAILED
                         }
                     }

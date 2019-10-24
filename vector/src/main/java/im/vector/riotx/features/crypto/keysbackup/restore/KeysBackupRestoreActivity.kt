@@ -66,14 +66,14 @@ class KeysBackupRestoreActivity : SimpleFragmentActivity() {
                     .setMessage(message)
                     .setCancelable(false)
                     .setPositiveButton(R.string.ok) { _, _ ->
-                        //nop
+                        // nop
                         finish()
                     }
                     .show()
         }
 
         if (viewModel.keyVersionResult.value == null) {
-            //We need to fetch from API
+            // We need to fetch from API
             viewModel.getLatestVersion(this)
         }
 
@@ -99,7 +99,7 @@ class KeysBackupRestoreActivity : SimpleFragmentActivity() {
         })
 
         viewModel.importRoomKeysFinishWithResult.observeEvent(this) {
-            //set data?
+            // set data?
             setResult(Activity.RESULT_OK)
             finish()
         }

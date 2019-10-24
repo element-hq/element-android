@@ -38,9 +38,13 @@ data class RoomSummary(
         val tags: List<RoomTag> = emptyList(),
         val membership: Membership = Membership.NONE,
         val versioningState: VersioningState = VersioningState.NONE,
+        val readMarkerId: String? = null,
         val userDrafts: List<UserDraft> = emptyList()
 ) {
 
     val isVersioned: Boolean
         get() = versioningState != VersioningState.NONE
+
+    val hasNewMessages: Boolean
+        get() = notificationCount != 0
 }

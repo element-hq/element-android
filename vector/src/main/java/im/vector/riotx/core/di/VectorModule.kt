@@ -28,6 +28,8 @@ import im.vector.matrix.android.api.auth.Authenticator
 import im.vector.matrix.android.api.session.Session
 import im.vector.riotx.features.navigation.DefaultNavigator
 import im.vector.riotx.features.navigation.Navigator
+import im.vector.riotx.features.ui.SharedPreferencesUiStateRepository
+import im.vector.riotx.features.ui.UiStateRepository
 
 @Module
 abstract class VectorModule {
@@ -56,13 +58,13 @@ abstract class VectorModule {
         @Provides
         @JvmStatic
         fun providesCurrentSession(activeSessionHolder: ActiveSessionHolder): Session {
-            //TODO: handle session injection better
+            // TODO: handle session injection better
             return activeSessionHolder.getActiveSession()
         }
 
         @Provides
         @JvmStatic
-        fun providesAuthenticator(matrix: Matrix): Authenticator{
+        fun providesAuthenticator(matrix: Matrix): Authenticator {
             return matrix.authenticator()
         }
     }
@@ -70,5 +72,6 @@ abstract class VectorModule {
     @Binds
     abstract fun bindNavigator(navigator: DefaultNavigator): Navigator
 
-
+    @Binds
+    abstract fun bindUiStateRepository(uiStateRepository: SharedPreferencesUiStateRepository): UiStateRepository
 }

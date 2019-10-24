@@ -18,7 +18,6 @@ package im.vector.riotx.core.dialogs
 
 import android.app.Activity
 import android.text.Editable
-import android.text.TextUtils
 import android.widget.Button
 import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
@@ -45,15 +44,15 @@ class ExportKeysDialog {
         val textWatcher = object : SimpleTextWatcher() {
             override fun afterTextChanged(s: Editable) {
                 when {
-                    TextUtils.isEmpty(passPhrase1EditText.text)                          -> {
+                    passPhrase1EditText.text.isNullOrEmpty()             -> {
                         exportButton.isEnabled = false
                         passPhrase2Til.error = null
                     }
-                    TextUtils.equals(passPhrase1EditText.text, passPhrase2EditText.text) -> {
+                    passPhrase1EditText.text == passPhrase2EditText.text -> {
                         exportButton.isEnabled = true
                         passPhrase2Til.error = null
                     }
-                    else                                                                 -> {
+                    else                                                 -> {
                         exportButton.isEnabled = false
                         passPhrase2Til.error = activity.getString(R.string.passphrase_passphrase_does_not_match)
                     }
@@ -80,7 +79,6 @@ class ExportKeysDialog {
             exportDialog.dismiss()
         }
     }
-
 
     interface ExportKeyDialogListener {
         fun onPassphrase(passphrase: String)

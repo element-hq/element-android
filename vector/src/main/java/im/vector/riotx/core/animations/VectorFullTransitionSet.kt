@@ -40,5 +40,4 @@ class VectorFullTransitionSet : TransitionSet {
                 .addTransition(ChangeTransform())
                 .addTransition(Fade(Fade.IN))
     }
-
 }

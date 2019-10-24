@@ -21,11 +21,13 @@ import im.vector.matrix.android.api.session.room.crypto.RoomCryptoService
 import im.vector.matrix.android.api.session.room.members.MembershipService
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.relation.RelationService
+import im.vector.matrix.android.api.session.room.reporting.ReportingService
 import im.vector.matrix.android.api.session.room.read.ReadService
 import im.vector.matrix.android.api.session.room.send.DraftService
 import im.vector.matrix.android.api.session.room.send.SendService
 import im.vector.matrix.android.api.session.room.state.StateService
 import im.vector.matrix.android.api.session.room.timeline.TimelineService
+import im.vector.matrix.android.api.util.Optional
 
 /**
  * This interface defines methods to interact within a room.
@@ -37,6 +39,7 @@ interface Room :
         ReadService,
         MembershipService,
         StateService,
+        ReportingService,
         RelationService,
         RoomCryptoService {
 
@@ -49,8 +52,7 @@ interface Room :
      * A live [RoomSummary] associated with the room
      * You can observe this summary to get dynamic data from this room.
      */
-    fun liveRoomSummary(): LiveData<RoomSummary>
+    fun getRoomSummaryLive(): LiveData<Optional<RoomSummary>>
 
     fun roomSummary(): RoomSummary?
-
 }

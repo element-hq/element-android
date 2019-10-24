@@ -202,14 +202,6 @@
     <string name="auth_password_placeholder">পাসওয়ার্ড</string>
     <string name="auth_new_password_placeholder">নতুন পাসওয়ার্ড</string>
     <string name="auth_user_name_placeholder">ব্যবহারকারীর নাম</string>
-    <string name="auth_add_email_message">ব্যবহারকারীদের আপনাকে খুঁজে পাওয়ার জন্য আপনার অ্যাকাউন্টে একটি ইমেল ঠিকানা যোগ করুন এবং আপনাকে পাসওয়ার্ড পুনরায় সেট করতে দিন।</string>
-    <string name="auth_add_phone_message">ব্যবহারকারীদের আপনাকে খুঁজে পাওয়ার জন্য আপনার অ্যাকাউন্টে একটি ফোন নম্বর যুক্ত করুন।</string>
-    <string name="auth_add_email_phone_message">ব্যবহারকারীদের আপনাকে খুঁজে পাওয়ার জন্য আপনার অ্যাকাউন্টে একটি ইমেল ঠিকানা এবং / অথবা একটি ফোন নম্বর যোগ করুন।
-\n
-\nইমেল ঠিকানা আপনাকে আপনার পাসওয়ার্ড পুনরায় সেট করতে দেয়।</string>
-    <string name="auth_add_email_and_phone_message">ব্যবহারকারীদের আপনাকে খুঁজে পাওয়ার জন্য আপনার অ্যাকাউন্টে একটি ইমেল ঠিকানা এবং একটি ফোন নম্বর যুক্ত করুন।
-\n
-\nইমেল ঠিকানা আপনাকে আপনার পাসওয়ার্ড পুনরায় সেট করতে দেয়।</string>
     <string name="auth_email_placeholder">ইমেইল ঠিকানা</string>
     <string name="auth_opt_email_placeholder">ইমেইল ঠিকানা (ঐচ্ছিক)</string>
     <string name="auth_phone_number_placeholder">ফোন নম্বর</string>

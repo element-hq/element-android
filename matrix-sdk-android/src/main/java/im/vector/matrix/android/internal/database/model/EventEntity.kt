@@ -59,7 +59,6 @@ internal open class EventEntity(@Index var eventId: String = "",
             sendStateStr = value.name
         }
 
-
     companion object
 
     @LinkingObjects("untimelinedStateEvents")
@@ -67,7 +66,6 @@ internal open class EventEntity(@Index var eventId: String = "",
 
     @LinkingObjects("root")
     val timelineEventEntity: RealmResults<TimelineEventEntity>? = null
-
 
     fun setDecryptionResult(result: MXEventDecryptionResult) {
         val decryptionResult = OlmDecryptionResult(

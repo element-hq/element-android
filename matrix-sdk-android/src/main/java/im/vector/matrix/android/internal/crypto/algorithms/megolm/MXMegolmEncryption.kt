@@ -18,7 +18,6 @@
 
 package im.vector.matrix.android.internal.crypto.algorithms.megolm
 
-import android.text.TextUtils
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.session.events.model.Content
@@ -38,7 +37,6 @@ import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
 import im.vector.matrix.android.internal.util.JsonCanonicalizer
 import im.vector.matrix.android.internal.util.convertToUTF8
 import timber.log.Timber
-import java.util.*
 
 internal class MXMegolmEncryption(
         // The id of the room we will be sending to.
@@ -53,7 +51,6 @@ internal class MXMegolmEncryption(
         private val messageEncrypter: MessageEncrypter,
         private val warnOnUnknownDevicesRepository: WarnOnUnknownDeviceRepository
 ) : IMXEncrypting {
-
 
     // OutboundSessionInfo. Null if we haven't yet started setting one up. Note
     // that even if this is non-null, it may not be ready for use (in which
@@ -86,7 +83,7 @@ internal class MXMegolmEncryption(
         keysClaimedMap["ed25519"] = olmDevice.deviceEd25519Key!!
 
         olmDevice.addInboundGroupSession(sessionId!!, olmDevice.getSessionKey(sessionId)!!, roomId, olmDevice.deviceCurve25519Key!!,
-                ArrayList(), keysClaimedMap, false)
+                emptyList(), keysClaimedMap, false)
 
         keysBackup.maybeBackupKeys()
 
@@ -116,10 +113,8 @@ internal class MXMegolmEncryption(
             for (deviceId in deviceIds!!) {
                 val deviceInfo = devicesInRoom.getObject(userId, deviceId)
                 if (deviceInfo != null && null == safeSession.sharedWithDevices.getObject(userId, deviceId)) {
-                    if (!shareMap.containsKey(userId)) {
-                        shareMap[userId] = ArrayList()
-                    }
-                    shareMap[userId]!!.add(deviceInfo)
+                    val devices = shareMap.getOrPut(userId) { ArrayList() }
+                    devices.add(deviceInfo)
                 }
             }
         }
@@ -142,21 +137,17 @@ internal class MXMegolmEncryption(
         }
         // reduce the map size to avoid request timeout when there are too many devices (Users size  * devices per user)
         val subMap = HashMap<String, List<MXDeviceInfo>>()
-        val userIds = ArrayList<String>()
         var devicesCount = 0
-        for (userId in devicesByUsers.keys) {
-            devicesByUsers[userId]?.let {
-                userIds.add(userId)
-                subMap[userId] = it
-                devicesCount += it.size
-            }
+        for ((userId, devices) in devicesByUsers) {
+            subMap[userId] = devices
+            devicesCount += devices.size
             if (devicesCount > 100) {
                 break
             }
         }
-        Timber.v("## shareKey() ; userId $userIds")
+        Timber.v("## shareKey() ; userId ${subMap.keys}")
         shareUserDevicesKey(session, subMap)
-        val remainingDevices = devicesByUsers.filterKeys { userIds.contains(it).not() }
+        val remainingDevices = devicesByUsers - subMap.keys
         shareKey(session, remainingDevices)
     }
 
@@ -165,7 +156,6 @@ internal class MXMegolmEncryption(
      *
      * @param session       the session info
      * @param devicesByUser the devices map
-     * @param callback      the asynchronous callback
      */
     private suspend fun shareUserDevicesKey(session: MXOutboundSessionInfo,
                                             devicesByUser: Map<String, List<MXDeviceInfo>>) {
@@ -211,8 +201,7 @@ internal class MXMegolmEncryption(
                     continue
                 }
                 Timber.v("## shareUserDevicesKey() : Sharing keys with device $userId:$deviceID")
-                //noinspection ArraysAsListWithZeroOrOneArgument,ArraysAsListWithZeroOrOneArgument
-                contentMap.setObject(userId, deviceID, messageEncrypter.encryptMessage(payload, Arrays.asList(sessionResult.deviceInfo)))
+                contentMap.setObject(userId, deviceID, messageEncrypter.encryptMessage(payload, listOf(sessionResult.deviceInfo)))
                 haveTargets = true
             }
         }
@@ -229,9 +218,8 @@ internal class MXMegolmEncryption(
             // attempted to share with) rather than the contentMap (those we did
             // share with), because we don't want to try to claim a one-time-key
             // for dead devices on every message.
-            for (userId in devicesByUser.keys) {
-                val devicesToShareWith = devicesByUser[userId]
-                for ((deviceId) in devicesToShareWith!!) {
+            for ((userId, devicesToShareWith) in devicesByUser) {
+                for ((deviceId) in devicesToShareWith) {
                     session.sharedWithDevices.setObject(userId, deviceId, chainIndex)
                 }
             }
@@ -253,7 +241,7 @@ internal class MXMegolmEncryption(
         // Get canonical Json from
 
         val payloadString = convertToUTF8(JsonCanonicalizer.getCanonicalJson(Map::class.java, payloadJson))
-        val ciphertext = olmDevice.encryptGroupMessage(session.sessionId, payloadString!!)
+        val ciphertext = olmDevice.encryptGroupMessage(session.sessionId, payloadString)
 
         val map = HashMap<String, Any>()
         map["algorithm"] = MXCRYPTO_ALGORITHM_MEGOLM
@@ -273,7 +261,6 @@ internal class MXMegolmEncryption(
      * This method must be called in getDecryptingThreadHandler() thread.
      *
      * @param userIds  the user ids whose devices must be checked.
-     * @param callback the asynchronous callback
      */
     private suspend fun getDevicesInRoom(userIds: List<String>): MXUsersDevicesMap<MXDeviceInfo> {
         // We are happy to use a cached version here: we assume that if we already
@@ -305,7 +292,7 @@ internal class MXMegolmEncryption(
                     continue
                 }
 
-                if (TextUtils.equals(deviceInfo.identityKey(), olmDevice.deviceCurve25519Key)) {
+                if (deviceInfo.identityKey() == olmDevice.deviceCurve25519Key) {
                     // Don't bother sending to ourself
                     continue
                 }

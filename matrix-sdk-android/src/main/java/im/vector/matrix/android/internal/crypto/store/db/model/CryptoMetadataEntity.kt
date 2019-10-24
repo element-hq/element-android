@@ -37,7 +37,6 @@ internal open class CryptoMetadataEntity(
         var backupVersion: String? = null
 ) : RealmObject() {
 
-
     // Deserialize data
     fun getOlmAccount(): OlmAccount? {
         return deserializeFromRealm(olmAccountData)

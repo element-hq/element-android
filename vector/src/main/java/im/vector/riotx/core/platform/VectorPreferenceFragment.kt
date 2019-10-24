@@ -51,5 +51,4 @@ abstract class VectorPreferenceFragment : PreferenceFragmentCompat() {
         // Snackbar.make(view!!, R.string.not_implemented, Snackbar.LENGTH_SHORT)
         activity?.toast(R.string.not_implemented)
     }
-
 }

@@ -27,5 +27,4 @@ interface SignOutService {
      * Sign out
      */
     fun signOut(callback: MatrixCallback<Unit>)
-
 }

@@ -19,7 +19,6 @@ package im.vector.matrix.android.internal.database.mapper
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.android.internal.database.model.GroupSummaryEntity
 
-
 internal object GroupSummaryMapper {
 
     fun map(groupSummaryEntity: GroupSummaryEntity): GroupSummary {

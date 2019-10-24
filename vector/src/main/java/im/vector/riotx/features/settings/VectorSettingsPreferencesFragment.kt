@@ -19,7 +19,6 @@ package im.vector.riotx.features.settings
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.text.TextUtils
 import android.widget.CheckedTextView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
@@ -27,6 +26,8 @@ import androidx.preference.Preference
 import androidx.preference.SwitchPreference
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
+import im.vector.riotx.core.preference.VectorListPreference
+import im.vector.riotx.core.preference.VectorPreference
 import im.vector.riotx.features.configuration.VectorConfiguration
 import im.vector.riotx.features.themes.ThemeUtils
 import javax.inject.Inject
@@ -37,10 +38,10 @@ class VectorSettingsPreferencesFragment : VectorSettingsBaseFragment() {
     override val preferenceXmlRes = R.xml.vector_settings_preferences
 
     private val selectedLanguagePreference by lazy {
-        findPreference(VectorPreferences.SETTINGS_INTERFACE_LANGUAGE_PREFERENCE_KEY)
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_INTERFACE_LANGUAGE_PREFERENCE_KEY)!!
     }
     private val textSizePreference by lazy {
-        findPreference(VectorPreferences.SETTINGS_INTERFACE_TEXT_SIZE_KEY)
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_INTERFACE_TEXT_SIZE_KEY)!!
     }
 
     @Inject lateinit var vectorConfiguration: VectorConfiguration
@@ -50,13 +51,12 @@ class VectorSettingsPreferencesFragment : VectorSettingsBaseFragment() {
         injector.inject(this)
     }
 
-
     override fun bindPref() {
         // user interface preferences
         setUserInterfacePreferences()
 
         // Themes
-        findPreference(ThemeUtils.APPLICATION_THEME_KEY)
+        findPreference<VectorListPreference>(ThemeUtils.APPLICATION_THEME_KEY)!!
                 .onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
             if (newValue is String) {
                 vectorConfiguration.updateApplicationTheme(newValue)
@@ -73,7 +73,7 @@ class VectorSettingsPreferencesFragment : VectorSettingsBaseFragment() {
         }
 
         // Url preview
-        (findPreference(VectorPreferences.SETTINGS_SHOW_URL_PREVIEW_KEY) as SwitchPreference).let {
+        findPreference<SwitchPreference>(VectorPreferences.SETTINGS_SHOW_URL_PREVIEW_KEY)!!.let {
             /*
             TODO
             it.isChecked = session.isURLPreviewEnabled
@@ -113,7 +113,7 @@ class VectorSettingsPreferencesFragment : VectorSettingsBaseFragment() {
         }
 
         // update keep medias period
-        findPreference(VectorPreferences.SETTINGS_MEDIA_SAVING_PERIOD_KEY).let {
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_MEDIA_SAVING_PERIOD_KEY)!!.let {
             it.summary = vectorPreferences.getSelectedMediasSavingPeriodString()
 
             it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
@@ -149,10 +149,9 @@ class VectorSettingsPreferencesFragment : VectorSettingsBaseFragment() {
         }
     }
 
-
-    //==============================================================================================================
+    // ==============================================================================================================
     // user interface management
-    //==============================================================================================================
+    // ==============================================================================================================
 
     private fun setUserInterfacePreferences() {
         // Selected language
@@ -194,7 +193,7 @@ class VectorSettingsPreferencesFragment : VectorSettingsBaseFragment() {
             val v = linearLayout.getChildAt(i)
 
             if (v is CheckedTextView) {
-                v.isChecked = TextUtils.equals(v.text, scaleText)
+                v.isChecked = v.text == scaleText
 
                 v.setOnClickListener {
                     dialog.dismiss()
@@ -209,5 +208,4 @@ class VectorSettingsPreferencesFragment : VectorSettingsBaseFragment() {
     companion object {
         private const val REQUEST_LOCALE = 777
     }
-
 }

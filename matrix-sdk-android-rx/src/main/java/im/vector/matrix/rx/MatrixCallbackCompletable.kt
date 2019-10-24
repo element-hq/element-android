@@ -19,7 +19,6 @@ package im.vector.matrix.rx
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.util.Cancelable
 import io.reactivex.CompletableEmitter
-import io.reactivex.SingleEmitter
 
 internal class MatrixCallbackCompletable<T>(private val completableEmitter: CompletableEmitter) : MatrixCallback<T> {
 

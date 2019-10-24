@@ -37,7 +37,6 @@ class KeysExporter(private val session: Session) {
      */
     fun export(context: Context, password: String, callback: MatrixCallback<String>) {
         session.exportRoomKeys(password, object : MatrixCallback<ByteArray> {
-
             override fun onSuccess(data: ByteArray) {
                 GlobalScope.launch(Dispatchers.Main) {
                     withContext(Dispatchers.IO) {

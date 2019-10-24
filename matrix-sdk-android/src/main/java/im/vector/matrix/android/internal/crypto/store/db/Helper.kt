@@ -27,46 +27,42 @@ import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import java.util.zip.GZIPInputStream
 
-
 /**
  * Get realm, invoke the action, close realm, and return the result of the action
  */
 fun <T> doWithRealm(realmConfiguration: RealmConfiguration, action: (Realm) -> T): T {
-    val realm = Realm.getInstance(realmConfiguration)
-    val result = action.invoke(realm)
-    realm.close()
-    return result
+    return Realm.getInstance(realmConfiguration).use { realm ->
+        action.invoke(realm)
+    }
 }
 
 /**
  * Get realm, do the query, copy from realm, close realm, and return the copied result
  */
 fun <T : RealmObject> doRealmQueryAndCopy(realmConfiguration: RealmConfiguration, action: (Realm) -> T?): T? {
-    val realm = Realm.getInstance(realmConfiguration)
-    val result = action.invoke(realm)
-    val copiedResult = result?.let { realm.copyFromRealm(result) }
-    realm.close()
-    return copiedResult
+    return Realm.getInstance(realmConfiguration).use { realm ->
+        val result = action.invoke(realm)
+        result?.let { realm.copyFromRealm(it) }
+    }
 }
 
 /**
  * Get realm, do the list query, copy from realm, close realm, and return the copied result
  */
 fun <T : RealmObject> doRealmQueryAndCopyList(realmConfiguration: RealmConfiguration, action: (Realm) -> Iterable<T>): Iterable<T> {
-    val realm = Realm.getInstance(realmConfiguration)
-    val result = action.invoke(realm)
-    val copiedResult = realm.copyFromRealm(result)
-    realm.close()
-    return copiedResult
+    return Realm.getInstance(realmConfiguration).use { realm ->
+        val result = action.invoke(realm)
+        realm.copyFromRealm(result)
+    }
 }
 
 /**
  * Get realm instance, invoke the action in a transaction and close realm
  */
 fun doRealmTransaction(realmConfiguration: RealmConfiguration, action: (Realm) -> Unit) {
-    val realm = Realm.getInstance(realmConfiguration)
-    realm.executeTransaction { action.invoke(it) }
-    realm.close()
+    Realm.getInstance(realmConfiguration).use { realm ->
+        realm.executeTransaction { action.invoke(realm) }
+    }
 }
 
 /**
@@ -101,6 +97,7 @@ fun <T> deserializeFromRealm(string: String?): T? {
     val gzis = GZIPInputStream(bais)
     val ois = ObjectInputStream(gzis)
 
+    @Suppress("UNCHECKED_CAST")
     val result = ois.readObject() as T
 
     ois.close()

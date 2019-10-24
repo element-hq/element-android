@@ -63,6 +63,7 @@ internal class MXOlmDecryption(
         }
 
         // The message for myUser
+        @Suppress("UNCHECKED_CAST")
         val message = messageAny as JsonDict
 
         val decryptedPayload = decryptMessage(message, senderKey)
@@ -72,10 +73,6 @@ internal class MXOlmDecryption(
             throw MXCryptoError.Base(MXCryptoError.ErrorType.BAD_ENCRYPTED_MESSAGE, MXCryptoError.BAD_ENCRYPTED_MESSAGE_REASON)
         }
         val payloadString = convertFromUTF8(decryptedPayload)
-        if (payloadString == null) {
-            Timber.e("## decryptEvent() Failed to decrypt Olm event (id= ${event.eventId} from $senderKey")
-            throw MXCryptoError.Base(MXCryptoError.ErrorType.BAD_ENCRYPTED_MESSAGE, MXCryptoError.BAD_ENCRYPTED_MESSAGE_REASON)
-        }
 
         val adapter = MoshiProvider.providesMoshi().adapter<JsonDict>(JSON_DICT_PARAMETERIZED_TYPE)
         val payload = adapter.fromJson(payloadString)
@@ -104,7 +101,8 @@ internal class MXOlmDecryption(
         }
 
         val recipientKeys = olmPayloadContent.recipient_keys ?: run {
-            Timber.e("## decryptEvent() : Olm event (id=${event.eventId}) contains no 'recipient_keys' property; cannot prevent unknown-key attack")
+            Timber.e("## decryptEvent() : Olm event (id=${event.eventId}) contains no 'recipient_keys'" +
+                    " property; cannot prevent unknown-key attack")
             throw MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_PROPERTY,
                     String.format(MXCryptoError.ERROR_MISSING_PROPERTY_REASON, "recipient_keys"))
         }
@@ -161,9 +159,9 @@ internal class MXOlmDecryption(
         val messageBody = message["body"] as? String ?: return null
         val messageType = when (val typeAsVoid = message["type"]) {
             is Double -> typeAsVoid.toInt()
-            is Int -> typeAsVoid
-            is Long -> typeAsVoid.toInt()
-            else -> return null
+            is Int    -> typeAsVoid
+            is Long   -> typeAsVoid.toInt()
+            else      -> return null
         }
 
         // Try each session in turn

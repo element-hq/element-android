@@ -35,5 +35,4 @@ internal enum class PaginationDirection(val value: String) {
             BACKWARDS -> FORWARDS
         }
     }
-
 }

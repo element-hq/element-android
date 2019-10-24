@@ -57,5 +57,4 @@ class StringProvider @Inject constructor(private val resources: Resources) {
     fun getQuantityString(@PluralsRes resId: Int, quantity: Int, vararg formatArgs: Any?): String {
         return resources.getQuantityString(resId, quantity, *formatArgs)
     }
-
 }

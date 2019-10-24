@@ -142,7 +142,6 @@ internal interface RoomKeysApi {
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "room_keys/keys")
     fun getSessionsData(@Query("version") version: String): Call<KeysBackupData>
 
-
     /* ==========================================================================================
      * Deleting keys
      * ========================================================================================== */

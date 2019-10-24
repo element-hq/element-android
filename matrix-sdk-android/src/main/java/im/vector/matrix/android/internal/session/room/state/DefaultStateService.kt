@@ -57,13 +57,10 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
                                                   "topic" to topic
                                           ))
 
-
         sendStateTask
                 .configureWith(params) {
                     this.callback = callback
                 }
                 .executeBy(taskExecutor)
     }
-
-
 }

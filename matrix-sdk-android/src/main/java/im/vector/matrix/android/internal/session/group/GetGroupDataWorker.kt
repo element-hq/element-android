@@ -52,5 +52,4 @@ internal class GetGroupDataWorker(context: Context, params: WorkerParameters) : 
     private suspend fun fetchGroupData(groupId: String) {
         getGroupDataTask.execute(GetGroupDataTask.Params(groupId))
     }
-
 }

@@ -55,11 +55,9 @@ internal abstract class AuthModule {
         }
     }
 
-
     @Binds
     abstract fun bindSessionParamsStore(sessionParamsStore: RealmSessionParamsStore): SessionParamsStore
 
     @Binds
     abstract fun bindAuthenticator(authenticator: DefaultAuthenticator): Authenticator
-
 }
