@@ -170,8 +170,8 @@ class KeysBackupSetupStep3Fragment : VectorBaseFragment() {
 
     private fun exportRecoveryKeyToFile(data: String) {
         GlobalScope.launch(Dispatchers.Main) {
-            withContext(Dispatchers.IO) {
-                Try {
+            Try {
+                withContext(Dispatchers.IO) {
                     val parentDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
                     val file = File(parentDir, "recovery-key-" + System.currentTimeMillis() + ".txt")
 

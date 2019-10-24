@@ -18,10 +18,10 @@ package im.vector.riotx.features.crypto.keys
 
 import android.content.Context
 import android.os.Environment
-import arrow.core.Try
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.internal.extensions.foldToCallback
+import im.vector.matrix.android.internal.util.awaitCallback
 import im.vector.riotx.core.files.addEntryToDownloadManager
 import im.vector.riotx.core.files.writeToFile
 import kotlinx.coroutines.Dispatchers
@@ -36,28 +36,20 @@ class KeysExporter(private val session: Session) {
      * Export keys and return the file path with the callback
      */
     fun export(context: Context, password: String, callback: MatrixCallback<String>) {
-        session.exportRoomKeys(password, object : MatrixCallback<ByteArray> {
-            override fun onSuccess(data: ByteArray) {
-                GlobalScope.launch(Dispatchers.Main) {
-                    withContext(Dispatchers.IO) {
-                        Try {
-                            val parentDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-                            val file = File(parentDir, "riotx-keys-" + System.currentTimeMillis() + ".txt")
+        GlobalScope.launch(Dispatchers.Main) {
+            runCatching {
+                val data = awaitCallback<ByteArray> { session.exportRoomKeys(password, it) }
+                withContext(Dispatchers.IO) {
+                    val parentDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                    val file = File(parentDir, "riotx-keys-" + System.currentTimeMillis() + ".txt")
 
-                            writeToFile(data, file)
+                    writeToFile(data, file)
 
-                            addEntryToDownloadManager(context, file, "text/plain")
+                    addEntryToDownloadManager(context, file, "text/plain")
 
-                            file.absolutePath
-                        }
-                    }
-                            .foldToCallback(callback)
+                    file.absolutePath
                 }
-            }
-
-            override fun onFailure(failure: Throwable) {
-                callback.onFailure(failure)
-            }
-        })
+            }.foldToCallback(callback)
+        }
     }
 }

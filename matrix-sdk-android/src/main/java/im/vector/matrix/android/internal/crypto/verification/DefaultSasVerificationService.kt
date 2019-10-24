@@ -43,6 +43,7 @@ import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.lang.Exception
 import java.util.UUID
 import javax.inject.Inject
 import kotlin.collections.HashMap
@@ -166,72 +167,59 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
             return
         }
         // Download device keys prior to everything
-        checkKeysAreDownloaded(
-                otherUserId!!,
-                startReq,
-                success = {
-                    Timber.v("## SAS onStartRequestReceived ${startReq.transactionID!!}")
-                    val tid = startReq.transactionID!!
-                    val existing = getExistingTransaction(otherUserId, tid)
-                    val existingTxs = getExistingTransactionsForUser(otherUserId)
-                    if (existing != null) {
-                        // should cancel both!
-                        Timber.v("## SAS onStartRequestReceived - Request exist with same if ${startReq.transactionID!!}")
-                        existing.cancel(CancelCode.UnexpectedMessage)
-                        cancelTransaction(tid, otherUserId, startReq.fromDevice!!, CancelCode.UnexpectedMessage)
-                    } else if (existingTxs?.isEmpty() == false) {
-                        Timber.v("## SAS onStartRequestReceived - There is already a transaction with this user ${startReq.transactionID!!}")
-                        // Multiple keyshares between two devices: any two devices may only have at most one key verification in flight at a time.
-                        existingTxs.forEach {
-                            it.cancel(CancelCode.UnexpectedMessage)
-                        }
-                        cancelTransaction(tid, otherUserId, startReq.fromDevice!!, CancelCode.UnexpectedMessage)
-                    } else {
-                        // Ok we can create
-                        if (KeyVerificationStart.VERIF_METHOD_SAS == startReq.method) {
-                            Timber.v("## SAS onStartRequestReceived - request accepted ${startReq.transactionID!!}")
-                            val tx = IncomingSASVerificationTransaction(
-                                    this,
-                                    setDeviceVerificationAction,
-                                    credentials,
-                                    cryptoStore,
-                                    sendToDeviceTask,
-                                    taskExecutor,
-                                    myDeviceInfoHolder.get().myDevice.fingerprint()!!,
-                                    startReq.transactionID!!,
-                                    otherUserId)
-                            addTransaction(tx)
-                            tx.acceptToDeviceEvent(otherUserId, startReq)
-                        } else {
-                            Timber.e("## SAS onStartRequestReceived - unknown method ${startReq.method}")
-                            cancelTransaction(tid, otherUserId, startReq.fromDevice
-                                    ?: event.getSenderKey()!!, CancelCode.UnknownMethod)
-                        }
-                    }
-                },
-                error = {
-                    cancelTransaction(startReq.transactionID!!, otherUserId, startReq.fromDevice!!, CancelCode.UnexpectedMessage)
-                })
+        if (checkKeysAreDownloaded(otherUserId!!, startReq) != null) {
+            Timber.v("## SAS onStartRequestReceived ${startReq.transactionID!!}")
+            val tid = startReq.transactionID!!
+            val existing = getExistingTransaction(otherUserId, tid)
+            val existingTxs = getExistingTransactionsForUser(otherUserId)
+            if (existing != null) {
+                // should cancel both!
+                Timber.v("## SAS onStartRequestReceived - Request exist with same if ${startReq.transactionID!!}")
+                existing.cancel(CancelCode.UnexpectedMessage)
+                cancelTransaction(tid, otherUserId, startReq.fromDevice!!, CancelCode.UnexpectedMessage)
+            } else if (existingTxs?.isEmpty() == false) {
+                Timber.v("## SAS onStartRequestReceived - There is already a transaction with this user ${startReq.transactionID!!}")
+                // Multiple keyshares between two devices: any two devices may only have at most one key verification in flight at a time.
+                existingTxs.forEach {
+                    it.cancel(CancelCode.UnexpectedMessage)
+                }
+                cancelTransaction(tid, otherUserId, startReq.fromDevice!!, CancelCode.UnexpectedMessage)
+            } else {
+                // Ok we can create
+                if (KeyVerificationStart.VERIF_METHOD_SAS == startReq.method) {
+                    Timber.v("## SAS onStartRequestReceived - request accepted ${startReq.transactionID!!}")
+                    val tx = IncomingSASVerificationTransaction(
+                            this,
+                            setDeviceVerificationAction,
+                            credentials,
+                            cryptoStore,
+                            sendToDeviceTask,
+                            taskExecutor,
+                            myDeviceInfoHolder.get().myDevice.fingerprint()!!,
+                            startReq.transactionID!!,
+                            otherUserId)
+                    addTransaction(tx)
+                    tx.acceptToDeviceEvent(otherUserId, startReq)
+                } else {
+                    Timber.e("## SAS onStartRequestReceived - unknown method ${startReq.method}")
+                    cancelTransaction(tid, otherUserId, startReq.fromDevice
+                            ?: event.getSenderKey()!!, CancelCode.UnknownMethod)
+                }
+            }
+        } else {
+            cancelTransaction(startReq.transactionID!!, otherUserId, startReq.fromDevice!!, CancelCode.UnexpectedMessage)
+        }
     }
 
     private suspend fun checkKeysAreDownloaded(otherUserId: String,
-                                               startReq: KeyVerificationStart,
-                                               success: (MXUsersDevicesMap<MXDeviceInfo>) -> Unit,
-                                               error: () -> Unit) {
-        runCatching {
-            deviceListManager.downloadKeys(listOf(otherUserId), true)
-        }.fold(
-                {
-                    if (it.getUserDeviceIds(otherUserId)?.contains(startReq.fromDevice) == true) {
-                        success(it)
-                    } else {
-                        error()
-                    }
-                },
-                {
-                    error()
-                }
-        )
+                                               startReq: KeyVerificationStart): MXUsersDevicesMap<MXDeviceInfo>? {
+        return try {
+            val keys = deviceListManager.downloadKeys(listOf(otherUserId), true)
+            val deviceIds = keys.getUserDeviceIds(otherUserId) ?: return null
+            keys.takeIf { deviceIds.contains(startReq.fromDevice) }
+        } catch (e: Exception) {
+            null
+        }
     }
 
     private suspend fun onCancelReceived(event: Event) {
