@@ -199,6 +199,10 @@ class PushrulesConditionTest {
     }
 
     class MockRoom(override val roomId: String, val _numberOfJoinedMembers: Int) : Room {
+        override fun reportContent(eventId: String, score: Int, reason: String, callback: MatrixCallback<Unit>): Cancelable {
+            TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
+        }
+
         override fun getReadMarkerLive(): LiveData<Optional<String>> {
             TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
         }
