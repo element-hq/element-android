@@ -24,5 +24,7 @@ sealed class RoomListActions {
     data class AcceptInvitation(val roomSummary: RoomSummary) : RoomListActions()
     data class RejectInvitation(val roomSummary: RoomSummary) : RoomListActions()
     data class FilterWith(val filter: String) : RoomListActions()
+    data class ChangeNotificationMode(val notificationMode: String) : RoomListActions()
+    data class LeaveRoom(val roomId: String) : RoomListActions()
     object MarkAllRoomsRead : RoomListActions()
 }

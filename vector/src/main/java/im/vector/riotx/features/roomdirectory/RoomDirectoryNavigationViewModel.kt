@@ -16,7 +16,9 @@
 
 package im.vector.riotx.features.roomdirectory
 
-import im.vector.riotx.core.mvrx.NavigationViewModel
-import javax.inject.Inject
+import androidx.lifecycle.ViewModel
+import im.vector.riotx.core.utils.PublishStore
+import im.vector.riotx.core.utils.RxStore
 
-class RoomDirectoryNavigationViewModel @Inject constructor(): NavigationViewModel<RoomDirectoryActivity.Navigation>()
+class RoomDirectoryNavigationViewModel(private val store: RxStore<RoomDirectoryActivity.Navigation> = PublishStore())
+    : ViewModel(), RxStore<RoomDirectoryActivity.Navigation> by store

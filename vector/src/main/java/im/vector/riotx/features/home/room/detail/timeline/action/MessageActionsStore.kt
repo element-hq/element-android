@@ -15,20 +15,13 @@
  */
 package im.vector.riotx.features.home.room.detail.timeline.action
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import im.vector.riotx.core.extensions.postLiveEvent
-import im.vector.riotx.core.utils.LiveEvent
-import javax.inject.Inject
+import im.vector.riotx.core.utils.PublishStore
+import im.vector.riotx.core.utils.RxStore
 
 /**
  * Activity shared view model to handle message actions
  */
-class ActionsHandler @Inject constructor() : ViewModel() {
-
-    val actionCommandEvent = MutableLiveData<LiveEvent<SimpleAction>>()
-
-    fun fireAction(action: SimpleAction) {
-        actionCommandEvent.postLiveEvent(action)
-    }
-}
+class MessageActionsStore constructor(
+        private val store: RxStore<SimpleAction> = PublishStore()
+) : ViewModel(), RxStore<SimpleAction> by store

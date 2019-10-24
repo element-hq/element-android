@@ -85,16 +85,18 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
             replaceFragment(homeDrawerFragment, R.id.homeDrawerFragmentContainer)
         }
 
-        navigationViewModel.navigateTo.observeEvent(this) { navigation ->
-            when (navigation) {
-                is Navigation.OpenDrawer -> drawerLayout.openDrawer(GravityCompat.START)
-                is Navigation.OpenGroup  -> {
-                    drawerLayout.closeDrawer(GravityCompat.START)
-                    val homeDetailFragment = HomeDetailFragment.newInstance()
-                    replaceFragment(homeDetailFragment, R.id.homeDetailFragmentContainer)
+        navigationViewModel.observe()
+                .subscribe { navigation ->
+                    when (navigation) {
+                        is Navigation.OpenDrawer -> drawerLayout.openDrawer(GravityCompat.START)
+                        is Navigation.OpenGroup  -> {
+                            drawerLayout.closeDrawer(GravityCompat.START)
+                            val homeDetailFragment = HomeDetailFragment.newInstance()
+                            replaceFragment(homeDetailFragment, R.id.homeDetailFragmentContainer)
+                        }
+                    }
                 }
-            }
-        }
+                .disposeOnDestroy()
 
         if (intent.getBooleanExtra(EXTRA_CLEAR_EXISTING_NOTIFICATION, false)) {
             notificationDrawerManager.clearAllEvents()

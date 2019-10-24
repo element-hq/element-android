@@ -78,16 +78,6 @@ interface ViewModelModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(RoomDirectoryNavigationViewModel::class)
-    fun bindRoomDirectoryNavigationViewModel(viewModel: RoomDirectoryNavigationViewModel): ViewModel
-
-    @Binds
-    @IntoMap
-    @ViewModelKey(HomeNavigationViewModel::class)
-    fun bindHomeNavigationViewModel(viewModel: HomeNavigationViewModel): ViewModel
-
-    @Binds
-    @IntoMap
     @ViewModelKey(KeysBackupSetupSharedViewModel::class)
     fun bindKeysBackupSetupSharedViewModel(viewModel: KeysBackupSetupSharedViewModel): ViewModel
 
@@ -96,8 +86,4 @@ interface ViewModelModule {
     @ViewModelKey(ConfigurationViewModel::class)
     fun bindConfigurationViewModel(viewModel: ConfigurationViewModel): ViewModel
 
-    @Binds
-    @IntoMap
-    @ViewModelKey(CreateDirectRoomNavigationViewModel::class)
-    fun bindCreateDirectRoomNavigationViewModel(viewModel: CreateDirectRoomNavigationViewModel): ViewModel
 }

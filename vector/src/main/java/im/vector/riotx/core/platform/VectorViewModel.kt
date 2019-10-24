@@ -44,4 +44,5 @@ abstract class VectorViewModel<S : MvRxState>(initialState: S)
                 .onErrorReturn { Fail(it) }
                 .doOnNext { setState { stateReducer(it) } }
     }
+
 }

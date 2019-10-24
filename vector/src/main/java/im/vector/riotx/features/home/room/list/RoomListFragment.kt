@@ -23,6 +23,7 @@ import android.view.MenuItem
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.mvrx.*
@@ -39,7 +40,9 @@ import im.vector.riotx.core.extensions.observeEventFirstThrottle
 import im.vector.riotx.core.platform.OnBackPressed
 import im.vector.riotx.core.platform.StateView
 import im.vector.riotx.core.platform.VectorBaseFragment
+import im.vector.riotx.features.home.room.list.actions.RoomListQuickActions
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsBottomSheet
+import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsStore
 import im.vector.riotx.features.home.room.list.widget.FabMenuView
 import im.vector.riotx.features.notifications.NotificationDrawerManager
 import im.vector.riotx.features.share.SharedData
@@ -71,6 +74,7 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, O
         }
     }
 
+    private lateinit var quickActionsDispatcher: RoomListQuickActionsStore
     private val roomListParams: RoomListParams by args()
     @Inject lateinit var roomController: RoomSummaryController
     @Inject lateinit var roomListViewModelFactory: RoomListViewModel.Factory
@@ -106,6 +110,7 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, O
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        quickActionsDispatcher = ViewModelProviders.of(requireActivity()).get(RoomListQuickActionsStore::class.java)
         setupCreateRoomButton()
         setupRecyclerView()
         roomListViewModel.subscribe { renderState(it) }
@@ -126,6 +131,11 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, O
                         .show()
             }
         }
+
+        quickActionsDispatcher
+                .observe()
+                .subscribe { handleQuickActions(it) }
+                .disposeOnDestroy()
     }
 
     private fun setupCreateRoomButton() {
@@ -201,6 +211,17 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, O
                 DisplayMode.ROOMS  -> createGroupRoomButton.show()
                 else               -> Unit
             }
+        }
+    }
+
+    private fun handleQuickActions(quickActions: RoomListQuickActions) {
+        when (quickActions) {
+            is RoomListQuickActions.NotificationsAllNoisy     -> roomListViewModel.accept(RoomListActions.ChangeNotificationMode(""))
+            is RoomListQuickActions.NotificationsAll          -> roomListViewModel.accept(RoomListActions.ChangeNotificationMode(""))
+            is RoomListQuickActions.NotificationsMentionsOnly -> roomListViewModel.accept(RoomListActions.ChangeNotificationMode(""))
+            is RoomListQuickActions.NotificationsMute         -> roomListViewModel.accept(RoomListActions.ChangeNotificationMode(""))
+            is RoomListQuickActions.Settings                  -> navigator.openRoomSettings(requireContext(), quickActions.roomId)
+            is RoomListQuickActions.Leave                     -> roomListViewModel.accept(RoomListActions.LeaveRoom(quickActions.roomId))
         }
     }
 

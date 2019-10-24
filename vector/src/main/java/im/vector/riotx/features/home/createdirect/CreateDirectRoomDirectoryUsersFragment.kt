@@ -74,7 +74,7 @@ class CreateDirectRoomDirectoryUsersFragment : VectorBaseFragment(), DirectoryUs
 
     private fun setupCloseView() {
         createDirectRoomClose.setOnClickListener {
-            navigationViewModel.goTo(CreateDirectRoomActivity.Navigation.Previous)
+            navigationViewModel.post(CreateDirectRoomActivity.Navigation.Previous)
         }
     }
 
@@ -85,7 +85,7 @@ class CreateDirectRoomDirectoryUsersFragment : VectorBaseFragment(), DirectoryUs
     override fun onItemClick(user: User) {
         view?.hideKeyboard()
         viewModel.handle(CreateDirectRoomActions.SelectUser(user))
-        navigationViewModel.goTo(CreateDirectRoomActivity.Navigation.Previous)
+        navigationViewModel.post(CreateDirectRoomActivity.Navigation.Previous)
     }
 
     override fun retryDirectoryUsersRequest() {

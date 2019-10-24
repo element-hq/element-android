@@ -73,12 +73,14 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
 
     fun accept(action: RoomListActions) {
         when (action) {
-            is RoomListActions.SelectRoom       -> handleSelectRoom(action)
-            is RoomListActions.ToggleCategory   -> handleToggleCategory(action)
-            is RoomListActions.AcceptInvitation -> handleAcceptInvitation(action)
-            is RoomListActions.RejectInvitation -> handleRejectInvitation(action)
-            is RoomListActions.FilterWith       -> handleFilter(action)
-            is RoomListActions.MarkAllRoomsRead -> handleMarkAllRoomsRead()
+            is RoomListActions.SelectRoom             -> handleSelectRoom(action)
+            is RoomListActions.ToggleCategory         -> handleToggleCategory(action)
+            is RoomListActions.AcceptInvitation       -> handleAcceptInvitation(action)
+            is RoomListActions.RejectInvitation       -> handleRejectInvitation(action)
+            is RoomListActions.FilterWith             -> handleFilter(action)
+            is RoomListActions.MarkAllRoomsRead       -> handleMarkAllRoomsRead()
+            is RoomListActions.LeaveRoom              -> handleLeaveRoom(action)
+            is RoomListActions.ChangeNotificationMode -> handleChangeNotificationMode(action)
         }
     }
 
@@ -201,6 +203,17 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
                 ?.map { it.roomId }
                 ?.toList()
                 ?.let { session.markAllAsRead(it, object : MatrixCallback<Unit> {}) }
+    }
+
+    private fun handleChangeNotificationMode(action: RoomListActions.ChangeNotificationMode) {
+        //TODO handle this
+        Timber.v("Not handled yet: $action")
+    }
+
+    private fun handleLeaveRoom(action: RoomListActions.LeaveRoom) {
+        session.getRoom(action.roomId)?.also {
+            it.leave(object : MatrixCallback<Unit> {})
+        }
     }
 
     private fun buildRoomSummaries(rooms: List<RoomSummary>): RoomSummaries {

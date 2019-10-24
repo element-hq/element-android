@@ -21,6 +21,7 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
@@ -30,6 +31,7 @@ import com.airbnb.mvrx.withState
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.platform.VectorBaseBottomSheetDialogFragment
+import im.vector.riotx.features.navigation.Navigator
 import kotlinx.android.parcel.Parcelize
 import javax.inject.Inject
 
@@ -43,8 +45,10 @@ data class RoomListActionsArgs(
  */
 class RoomListQuickActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), RoomListQuickActionsEpoxyController.Listener {
 
+    private lateinit var actionsDispatcher: RoomListQuickActionsStore
     @Inject lateinit var roomListActionsViewModelFactory: RoomListActionsViewModel.Factory
     @Inject lateinit var roomListActionsEpoxyController: RoomListQuickActionsEpoxyController
+    @Inject lateinit var navigator: Navigator
 
     private val viewModel: RoomListActionsViewModel by fragmentViewModel(RoomListActionsViewModel::class)
 
@@ -65,6 +69,7 @@ class RoomListQuickActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), R
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        actionsDispatcher = ViewModelProviders.of(requireActivity()).get(RoomListQuickActionsStore::class.java)
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         recyclerView.adapter = roomListActionsEpoxyController.adapter
         // Disable item animation
@@ -79,7 +84,8 @@ class RoomListQuickActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), R
     }
 
     override fun didSelectMenuAction(quickActions: RoomListQuickActions) {
-        vectorBaseActivity.notImplemented("RoomListQuickActions")
+        actionsDispatcher.post(quickActions)
+        dismiss()
     }
 
     companion object {

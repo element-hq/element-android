@@ -19,18 +19,19 @@ import com.airbnb.mvrx.*
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import dagger.Lazy
+import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.rx.rx
+import im.vector.matrix.rx.unwrap
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.home.room.detail.timeline.format.NoticeEventFormatter
 import im.vector.riotx.features.html.EventHtmlRenderer
+import timber.log.Timber
 
 class RoomListActionsViewModel @AssistedInject constructor(@Assisted
                                                            initialState: RoomListQuickActionsState,
-                                                           private val eventHtmlRenderer: Lazy<EventHtmlRenderer>,
-                                                           private val session: Session,
-                                                           private val noticeEventFormatter: NoticeEventFormatter,
-                                                           private val stringProvider: StringProvider
+                                                           session: Session
 ) : VectorViewModel<RoomListQuickActionsState>(initialState) {
 
     @AssistedInject.Factory
@@ -46,8 +47,20 @@ class RoomListActionsViewModel @AssistedInject constructor(@Assisted
         }
     }
 
-    init {
+    private val room = session.getRoom(initialState.roomId)!!
 
+    init {
+        observeRoomSummary()
+    }
+
+    private fun observeRoomSummary() {
+        room
+                .rx()
+                .liveRoomSummary()
+                .unwrap()
+                .execute {
+                    copy(roomSummary = it)
+                }
     }
 
 

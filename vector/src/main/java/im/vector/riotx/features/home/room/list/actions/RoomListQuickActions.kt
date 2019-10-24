@@ -18,7 +18,27 @@ package im.vector.riotx.features.home.room.list.actions
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import im.vector.riotx.R
 
 sealed class RoomListQuickActions(@StringRes val titleRes: Int, @DrawableRes val iconResId: Int) {
+    data class NotificationsAllNoisy(val roomId: String) : RoomListQuickActions(R.string.room_settings_all_messages_noisy, R.drawable.ic_room_actions_notifications_all_noisy)
+    data class NotificationsAll(val roomId: String) : RoomListQuickActions(R.string.room_settings_all_messages, R.drawable.ic_room_actions_notifications_all)
+    data class NotificationsMentionsOnly(val roomId: String) : RoomListQuickActions(R.string.room_settings_mention_only, R.drawable.ic_room_actions_notifications_mentions)
+    data class NotificationsMute(val roomId: String) : RoomListQuickActions(R.string.room_settings_mute, R.drawable.ic_room_actions_notifications_mutes)
+    data class Settings(val roomId: String) : RoomListQuickActions(R.string.room_sliding_menu_settings, R.drawable.ic_room_actions_settings)
+    data class Leave(val roomId: String) : RoomListQuickActions(R.string.leave, R.drawable.ic_room_actions_leave)
+
+    companion object {
+        fun all(roomId: String): List<RoomListQuickActions> {
+            return listOf(
+                    NotificationsAllNoisy(roomId),
+                    NotificationsAll(roomId),
+                    NotificationsMentionsOnly(roomId),
+                    NotificationsMute(roomId),
+                    Settings(roomId),
+                    Leave(roomId)
+            )
+        }
+    }
 
 }

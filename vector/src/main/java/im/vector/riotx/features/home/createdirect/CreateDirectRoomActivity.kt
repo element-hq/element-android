@@ -59,13 +59,16 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
         super.onCreate(savedInstanceState)
         toolbar.visibility = View.GONE
         navigationViewModel = ViewModelProviders.of(this, viewModelFactory).get(CreateDirectRoomNavigationViewModel::class.java)
-        navigationViewModel.navigateTo.observeEvent(this) { navigation ->
-            when (navigation) {
-                is Navigation.UsersDirectory -> addFragmentToBackstack(CreateDirectRoomDirectoryUsersFragment(), R.id.container)
-                Navigation.Close             -> finish()
-                Navigation.Previous          -> onBackPressed()
-            }
-        }
+        navigationViewModel
+                .observe()
+                .subscribe { navigation ->
+                    when (navigation) {
+                        is Navigation.UsersDirectory -> addFragmentToBackstack(CreateDirectRoomDirectoryUsersFragment(), R.id.container)
+                        Navigation.Close             -> finish()
+                        Navigation.Previous          -> onBackPressed()
+                    }
+                }
+                .disposeOnDestroy()
         if (isFirstCreation()) {
             addFragment(CreateDirectRoomKnownUsersFragment(), R.id.container)
         }

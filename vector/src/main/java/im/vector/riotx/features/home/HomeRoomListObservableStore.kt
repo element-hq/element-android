@@ -17,9 +17,9 @@
 package im.vector.riotx.features.home
 
 import im.vector.matrix.android.api.session.room.model.RoomSummary
-import im.vector.riotx.core.utils.RxStore
+import im.vector.riotx.core.utils.BehaviorStore
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class HomeRoomListObservableStore @Inject constructor() : RxStore<List<RoomSummary>>()
+class HomeRoomListObservableStore @Inject constructor() : BehaviorStore<List<RoomSummary>>()

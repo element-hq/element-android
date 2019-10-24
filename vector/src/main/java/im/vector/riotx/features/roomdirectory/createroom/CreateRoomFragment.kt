@@ -52,7 +52,7 @@ class CreateRoomFragment : VectorBaseFragment(), CreateRoomController.Listener {
         navigationViewModel = ViewModelProviders.of(requireActivity()).get(RoomDirectoryNavigationViewModel::class.java)
         setupRecyclerView()
         createRoomClose.setOnClickListener {
-            navigationViewModel.goTo(RoomDirectoryActivity.Navigation.Back)
+            navigationViewModel.post(RoomDirectoryActivity.Navigation.Back)
         }
     }
 
@@ -99,7 +99,7 @@ class CreateRoomFragment : VectorBaseFragment(), CreateRoomController.Listener {
             // Navigate to freshly created room
             navigator.openRoom(requireActivity(), async())
 
-            navigationViewModel.goTo(RoomDirectoryActivity.Navigation.Close)
+            navigationViewModel.post(RoomDirectoryActivity.Navigation.Close)
         } else {
             // Populate list with Epoxy
             createRoomController.setData(state)

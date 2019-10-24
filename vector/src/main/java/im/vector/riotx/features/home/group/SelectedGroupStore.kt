@@ -18,9 +18,9 @@ package im.vector.riotx.features.home.group
 
 import arrow.core.Option
 import im.vector.matrix.android.api.session.group.model.GroupSummary
-import im.vector.riotx.core.utils.RxStore
+import im.vector.riotx.core.utils.BehaviorStore
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class SelectedGroupStore @Inject constructor() : RxStore<Option<GroupSummary>>(Option.empty())
+class SelectedGroupStore @Inject constructor() : BehaviorStore<Option<GroupSummary>>(Option.empty())

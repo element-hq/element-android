@@ -23,8 +23,7 @@ import im.vector.matrix.android.api.session.room.model.RoomSummary
 
 data class RoomListQuickActionsState(
         val roomId: String,
-        val quickActions: Async<List<RoomListQuickActions>> = Uninitialized,
-        val timelineEvent: Async<RoomSummary> = Uninitialized
+        val roomSummary: Async<RoomSummary> = Uninitialized
 ) : MvRxState {
 
     constructor(args: RoomListActionsArgs) : this(roomId = args.roomId)

@@ -94,7 +94,7 @@ class RoomDirectoryPickerFragment : VectorBaseFragment(), RoomDirectoryPickerCon
         Timber.v("onRoomDirectoryClicked: $roomDirectoryData")
         viewModel.setRoomDirectoryData(roomDirectoryData)
 
-        navigationViewModel.goTo(RoomDirectoryActivity.Navigation.Back)
+        navigationViewModel.post(RoomDirectoryActivity.Navigation.Back)
     }
 
     override fun retry() {

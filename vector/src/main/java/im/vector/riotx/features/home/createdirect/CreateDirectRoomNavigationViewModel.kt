@@ -16,7 +16,9 @@
 
 package im.vector.riotx.features.home.createdirect
 
-import im.vector.riotx.core.mvrx.NavigationViewModel
-import javax.inject.Inject
+import androidx.lifecycle.ViewModel
+import im.vector.riotx.core.utils.PublishStore
+import im.vector.riotx.core.utils.RxStore
 
-class CreateDirectRoomNavigationViewModel @Inject constructor(): NavigationViewModel<CreateDirectRoomActivity.Navigation>()
+class CreateDirectRoomNavigationViewModel(private val store: RxStore<CreateDirectRoomActivity.Navigation> = PublishStore())
+    : ViewModel(), RxStore<CreateDirectRoomActivity.Navigation> by store
