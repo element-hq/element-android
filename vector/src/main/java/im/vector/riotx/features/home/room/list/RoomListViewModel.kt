@@ -37,7 +37,7 @@ import timber.log.Timber
 
 class RoomListViewModel @AssistedInject constructor(@Assisted initialState: RoomListViewState,
                                                     private val session: Session,
-                                                    private val homeRoomListObservableSource: HomeRoomListObservableStore,
+                                                    private val homeRoomListObservableStore: HomeRoomListObservableStore,
                                                     private val alphabeticalRoomComparator: AlphabeticalRoomComparator,
                                                     private val chronologicalRoomComparator: ChronologicalRoomComparator)
     : VectorViewModel<RoomListViewState>(initialState) {
@@ -101,7 +101,7 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
     }
 
     private fun observeRoomSummaries() {
-        homeRoomListObservableSource
+        homeRoomListObservableStore
                 .observe()
                 .observeOn(Schedulers.computation())
                 .map {
@@ -111,7 +111,7 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
                     copy(asyncRooms = asyncRooms)
                 }
 
-        homeRoomListObservableSource
+        homeRoomListObservableStore
                 .observe()
                 .observeOn(Schedulers.computation())
                 .map { buildRoomSummaries(it) }

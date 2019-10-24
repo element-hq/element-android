@@ -42,7 +42,7 @@ import javax.inject.Singleton
 @Singleton
 class AppStateHandler @Inject constructor(
         private val sessionObservableStore: ActiveSessionObservableStore,
-        private val homeRoomListStore: HomeRoomListObservableStore,
+        private val homeRoomListObservableStore: HomeRoomListObservableStore,
         private val selectedGroupStore: SelectedGroupStore) : LifecycleObserver {
 
     private val compositeDisposable = CompositeDisposable()
@@ -92,7 +92,7 @@ class AppStateHandler @Inject constructor(
                         }
                 )
                 .subscribe {
-                    homeRoomListStore.post(it)
+                    homeRoomListObservableStore.post(it)
                 }
                 .addTo(compositeDisposable)
     }
