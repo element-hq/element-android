@@ -23,6 +23,7 @@ import dagger.Component
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.auth.Authenticator
 import im.vector.matrix.android.api.session.Session
+import im.vector.riotx.ActiveSessionObservableStore
 import im.vector.riotx.EmojiCompatFontProvider
 import im.vector.riotx.EmojiCompatWrapper
 import im.vector.riotx.VectorApplication
@@ -42,6 +43,7 @@ import im.vector.riotx.features.rageshake.VectorFileLogger
 import im.vector.riotx.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.riotx.features.session.SessionListener
 import im.vector.riotx.features.settings.VectorPreferences
+import im.vector.riotx.features.share.ShareRoomListObservableStore
 import im.vector.riotx.features.ui.UiStateRepository
 import javax.inject.Singleton
 
@@ -85,7 +87,11 @@ interface VectorComponent {
 
     fun homeRoomListObservableStore(): HomeRoomListObservableStore
 
+    fun shareRoomListObservableStore(): ShareRoomListObservableStore
+
     fun selectedGroupStore(): SelectedGroupStore
+
+    fun activeSessionObservableStore(): ActiveSessionObservableStore
 
     fun incomingVerificationRequestHandler(): IncomingVerificationRequestHandler
 

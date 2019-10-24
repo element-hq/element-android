@@ -21,6 +21,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
+import com.airbnb.mvrx.viewModel
 import com.kbeanie.multipicker.utils.IntentUtils
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.riotx.R
@@ -40,8 +41,10 @@ class IncomingShareActivity :
         VectorBaseActivity(), AttachmentsHelper.Callback {
 
     @Inject lateinit var sessionHolder: ActiveSessionHolder
+    @Inject lateinit var incomingShareViewModelFactory: IncomingShareViewModel.Factory
     private var roomListFragment: RoomListFragment? = null
     private lateinit var attachmentsHelper: AttachmentsHelper
+    private val incomingShareViewModel: IncomingShareViewModel by viewModel()
 
     override fun getLayoutRes(): Int {
         return R.layout.activity_incoming_share
