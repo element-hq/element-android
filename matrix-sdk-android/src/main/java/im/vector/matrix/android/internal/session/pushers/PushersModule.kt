@@ -25,6 +25,8 @@ import im.vector.matrix.android.api.session.pushers.PushersService
 import im.vector.matrix.android.internal.session.notification.DefaultProcessEventForPushTask
 import im.vector.matrix.android.internal.session.notification.DefaultPushRuleService
 import im.vector.matrix.android.internal.session.notification.ProcessEventForPushTask
+import im.vector.matrix.android.internal.session.room.notification.DefaultSetRoomNotificationStateTask
+import im.vector.matrix.android.internal.session.room.notification.SetRoomNotificationStateTask
 import retrofit2.Retrofit
 
 @Module
@@ -66,6 +68,15 @@ internal abstract class PushersModule {
 
     @Binds
     abstract fun bindUpdatePushRuleEnableStatusTask(updatePushRuleEnableStatusTask: DefaultUpdatePushRuleEnableStatusTask): UpdatePushRuleEnableStatusTask
+
+    @Binds
+    abstract fun bindAddPushRuleTask(addPushRuleTask: DefaultAddPushRuleTask): AddPushRuleTask
+
+    @Binds
+    abstract fun bindRemovePushRuleTask(removePushRuleTask: DefaultRemovePushRuleTask): RemovePushRuleTask
+
+    @Binds
+    abstract fun bindSetRoomNotificationStateTask(setRoomNotificationStateTask: DefaultSetRoomNotificationStateTask): SetRoomNotificationStateTask
 
     @Binds
     abstract fun bindPushRuleService(pushRuleService: DefaultPushRuleService): PushRuleService

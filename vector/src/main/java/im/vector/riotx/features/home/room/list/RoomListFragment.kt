@@ -31,6 +31,7 @@ import com.google.android.material.snackbar.Snackbar
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.matrix.android.api.session.room.notification.RoomNotificationState
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.epoxy.LayoutManagerStateRestorer
@@ -216,12 +217,24 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, O
 
     private fun handleQuickActions(quickActions: RoomListQuickActions) {
         when (quickActions) {
-            is RoomListQuickActions.NotificationsAllNoisy     -> roomListViewModel.accept(RoomListActions.ChangeNotificationMode(""))
-            is RoomListQuickActions.NotificationsAll          -> roomListViewModel.accept(RoomListActions.ChangeNotificationMode(""))
-            is RoomListQuickActions.NotificationsMentionsOnly -> roomListViewModel.accept(RoomListActions.ChangeNotificationMode(""))
-            is RoomListQuickActions.NotificationsMute         -> roomListViewModel.accept(RoomListActions.ChangeNotificationMode(""))
-            is RoomListQuickActions.Settings                  -> navigator.openRoomSettings(requireContext(), quickActions.roomId)
-            is RoomListQuickActions.Leave                     -> roomListViewModel.accept(RoomListActions.LeaveRoom(quickActions.roomId))
+            is RoomListQuickActions.NotificationsAllNoisy     -> {
+                roomListViewModel.accept(RoomListActions.ChangeRoomNotificationState(quickActions.roomId, RoomNotificationState.ALL_MESSAGES_NOISY))
+            }
+            is RoomListQuickActions.NotificationsAll          -> {
+                roomListViewModel.accept(RoomListActions.ChangeRoomNotificationState(quickActions.roomId, RoomNotificationState.ALL_MESSAGES))
+            }
+            is RoomListQuickActions.NotificationsMentionsOnly -> {
+                roomListViewModel.accept(RoomListActions.ChangeRoomNotificationState(quickActions.roomId, RoomNotificationState.MENTIONS_ONLY))
+            }
+            is RoomListQuickActions.NotificationsMute         -> {
+                roomListViewModel.accept(RoomListActions.ChangeRoomNotificationState(quickActions.roomId, RoomNotificationState.MUTE))
+            }
+            is RoomListQuickActions.Settings                  -> {
+                navigator.openRoomSettings(requireContext(), quickActions.roomId)
+            }
+            is RoomListQuickActions.Leave                     -> {
+                roomListViewModel.accept(RoomListActions.LeaveRoom(quickActions.roomId))
+            }
         }
     }
 

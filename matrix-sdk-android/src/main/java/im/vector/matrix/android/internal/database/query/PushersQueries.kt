@@ -16,10 +16,10 @@
 package im.vector.matrix.android.internal.database.query
 
 import im.vector.matrix.android.api.pushrules.RuleKind
+import im.vector.matrix.android.internal.database.model.*
+import im.vector.matrix.android.internal.database.model.PushRuleEntity
 import im.vector.matrix.android.internal.database.model.PushRulesEntity
-import im.vector.matrix.android.internal.database.model.PushRulesEntityFields
 import im.vector.matrix.android.internal.database.model.PusherEntity
-import im.vector.matrix.android.internal.database.model.PusherEntityFields
 import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.kotlin.where
@@ -41,3 +41,12 @@ internal fun PushRulesEntity.Companion.where(realm: Realm,
             .equalTo(PushRulesEntityFields.SCOPE, scope)
             .equalTo(PushRulesEntityFields.KIND_STR, kind.name)
 }
+
+internal fun PushRuleEntity.Companion.where(realm: Realm,
+                                            scope: String,
+                                            ruleId: String): RealmQuery<PushRuleEntity> {
+    return realm.where<PushRuleEntity>()
+            .equalTo("${PushRuleEntityFields.PARENT}.${PushRulesEntityFields.SCOPE}", scope)
+            .equalTo(PushRuleEntityFields.RULE_ID, ruleId)
+}
+

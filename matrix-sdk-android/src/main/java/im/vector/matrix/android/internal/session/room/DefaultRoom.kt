@@ -24,6 +24,7 @@ import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.members.MembershipService
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.relation.RelationService
+import im.vector.matrix.android.api.session.room.notification.RoomPushRuleService
 import im.vector.matrix.android.api.session.room.reporting.ReportingService
 import im.vector.matrix.android.api.session.room.read.ReadService
 import im.vector.matrix.android.api.session.room.send.DraftService
@@ -49,7 +50,8 @@ internal class DefaultRoom @Inject constructor(override val roomId: String,
                                                private val readService: ReadService,
                                                private val cryptoService: CryptoService,
                                                private val relationService: RelationService,
-                                               private val roomMembersService: MembershipService) :
+                                               private val roomMembersService: MembershipService,
+                                               private val roomPushRuleService: RoomPushRuleService) :
         Room,
         TimelineService by timelineService,
         SendService by sendService,
@@ -58,7 +60,8 @@ internal class DefaultRoom @Inject constructor(override val roomId: String,
         ReportingService by reportingService,
         ReadService by readService,
         RelationService by relationService,
-        MembershipService by roomMembersService {
+        MembershipService by roomMembersService,
+        RoomPushRuleService by roomPushRuleService {
 
     override fun getRoomSummaryLive(): LiveData<Optional<RoomSummary>> {
         val liveData = monarchy.findAllMappedWithChanges(

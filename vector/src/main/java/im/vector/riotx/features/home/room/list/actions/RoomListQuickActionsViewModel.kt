@@ -51,6 +51,16 @@ class RoomListActionsViewModel @AssistedInject constructor(@Assisted
 
     init {
         observeRoomSummary()
+        observeNotificationState()
+    }
+
+    private fun observeNotificationState() {
+        room
+                .rx()
+                .liveNotificationState()
+                .execute {
+                    copy(roomNotificationState = it)
+                }
     }
 
     private fun observeRoomSummary() {

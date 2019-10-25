@@ -20,10 +20,12 @@ import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.matrix.android.api.session.room.notification.RoomNotificationState
 
 data class RoomListQuickActionsState(
         val roomId: String,
-        val roomSummary: Async<RoomSummary> = Uninitialized
+        val roomSummary: Async<RoomSummary> = Uninitialized,
+        val roomNotificationState: Async<RoomNotificationState> = Uninitialized
 ) : MvRxState {
 
     constructor(args: RoomListActionsArgs) : this(roomId = args.roomId)

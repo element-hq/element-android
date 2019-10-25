@@ -73,14 +73,14 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
 
     fun accept(action: RoomListActions) {
         when (action) {
-            is RoomListActions.SelectRoom             -> handleSelectRoom(action)
-            is RoomListActions.ToggleCategory         -> handleToggleCategory(action)
-            is RoomListActions.AcceptInvitation       -> handleAcceptInvitation(action)
-            is RoomListActions.RejectInvitation       -> handleRejectInvitation(action)
-            is RoomListActions.FilterWith             -> handleFilter(action)
-            is RoomListActions.MarkAllRoomsRead       -> handleMarkAllRoomsRead()
-            is RoomListActions.LeaveRoom              -> handleLeaveRoom(action)
-            is RoomListActions.ChangeNotificationMode -> handleChangeNotificationMode(action)
+            is RoomListActions.SelectRoom                  -> handleSelectRoom(action)
+            is RoomListActions.ToggleCategory              -> handleToggleCategory(action)
+            is RoomListActions.AcceptInvitation            -> handleAcceptInvitation(action)
+            is RoomListActions.RejectInvitation            -> handleRejectInvitation(action)
+            is RoomListActions.FilterWith                  -> handleFilter(action)
+            is RoomListActions.MarkAllRoomsRead            -> handleMarkAllRoomsRead()
+            is RoomListActions.LeaveRoom                   -> handleLeaveRoom(action)
+            is RoomListActions.ChangeRoomNotificationState -> handleChangeNotificationMode(action)
         }
     }
 
@@ -205,9 +205,10 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
                 ?.let { session.markAllAsRead(it, object : MatrixCallback<Unit> {}) }
     }
 
-    private fun handleChangeNotificationMode(action: RoomListActions.ChangeNotificationMode) {
-        //TODO handle this
-        Timber.v("Not handled yet: $action")
+    private fun handleChangeNotificationMode(action: RoomListActions.ChangeRoomNotificationState) {
+        session.getRoom(action.roomId)?.also {
+            it.setRoomNotificationState(action.notificationState, object : MatrixCallback<Unit> {})
+        }
     }
 
     private fun handleLeaveRoom(action: RoomListActions.LeaveRoom) {
