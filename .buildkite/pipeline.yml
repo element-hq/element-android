@@ -10,7 +10,7 @@ steps:
     agents:
       # We use a medium sized instance instead of the normal small ones because
       # gradle build is long
-      queue: "medium"
+      queue: "xlarge"
     commands:
       - "./gradlew clean lintGplayRelease assembleGplayDebug --stacktrace"
     artifact_paths:
@@ -25,7 +25,7 @@ steps:
     agents:
       # We use a medium sized instance instead of the normal small ones because
       # gradle build is long
-      queue: "medium"
+      queue: "xlarge"
     commands:
       - "./gradlew clean lintFdroidRelease assembleFdroidDebug --stacktrace"
     artifact_paths:
@@ -40,7 +40,7 @@ steps:
     agents:
       # We use a medium sized instance instead of the normal small ones because
       # gradle build is long
-      queue: "medium"
+      queue: "xlarge"
     commands:
       - "./gradlew clean assembleGplayRelease --stacktrace"
     artifact_paths:
