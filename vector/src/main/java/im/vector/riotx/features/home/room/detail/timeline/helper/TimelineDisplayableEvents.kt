@@ -17,8 +17,6 @@
 package im.vector.riotx.features.home.room.detail.timeline.helper
 
 import im.vector.matrix.android.api.session.events.model.EventType
-import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotx.core.extensions.localDateTime
 

@@ -11,7 +11,7 @@ Other changes:
  -
 
 Bugfix 🐛:
- -
+ - Fix issues with some member events rendering (#498)
 
 Translations 🗣:
  -
