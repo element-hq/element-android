@@ -7,6 +7,7 @@ Features ✨:
 Improvements 🙌:
  - Search reaction by name or keyword in emoji picker
  - Handle code tags (#567)
+ - Support spoiler messages
 
 Other changes:
  - Markdown set to off by default (#412)
