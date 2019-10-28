@@ -182,7 +182,6 @@ class EmojiReactionPickerActivity : VectorBaseActivity(),
                         newText?.let { emitter.onNext(it) }
                         return true
                     }
-
                 })
             }
 

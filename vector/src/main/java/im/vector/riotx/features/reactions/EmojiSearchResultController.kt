@@ -23,11 +23,9 @@ import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.ui.list.genericFooterItem
 import javax.inject.Inject
 
-
 class EmojiSearchResultController @Inject constructor(val stringProvider: StringProvider,
                                                       fontProvider: EmojiCompatFontProvider)
     : TypedEpoxyController<EmojiSearchResultViewState>() {
-
 
     var emojiTypeface: Typeface? = fontProvider.typeface
 
@@ -39,7 +37,6 @@ class EmojiSearchResultController @Inject constructor(val stringProvider: String
         })
     }
 
-
     var listener: ReactionClickListener? = null
 
     override fun buildModels(data: EmojiSearchResultViewState?) {
@@ -47,20 +44,20 @@ class EmojiSearchResultController @Inject constructor(val stringProvider: String
 
         if (results.isEmpty()) {
             if (data.query.isEmpty()) {
-                //display 'Type something to find'
+                // display 'Type something to find'
                 genericFooterItem {
                     id("type.query.item")
                     text(stringProvider.getString(R.string.reaction_search_type_hint))
                 }
             } else {
-                //Display no search Results
+                // Display no search Results
                 genericFooterItem {
                     id("no.results.item")
                     text(stringProvider.getString(R.string.no_result_placeholder))
                 }
             }
         } else {
-            //Build the search results
+            // Build the search results
             results.forEach {
                 emojiSearchResultItem {
                     id(it.name)
@@ -70,8 +67,6 @@ class EmojiSearchResultController @Inject constructor(val stringProvider: String
                     onClickListener(listener)
                 }
             }
-
         }
     }
-
 }

@@ -41,6 +41,5 @@ class EmojiChooserFragment : VectorBaseFragment() {
             it.adapter = viewModel.adapter
             it.adapter?.notifyDataSetChanged()
         }
-
     }
 }

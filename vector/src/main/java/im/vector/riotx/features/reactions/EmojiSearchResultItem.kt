@@ -23,7 +23,6 @@ import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 
-
 @EpoxyModelClass(layout = R.layout.item_emoji_result)
 abstract class EmojiSearchResultItem : EpoxyModelWithHolder<EmojiSearchResultItem.Holder>() {
 
@@ -41,7 +40,7 @@ abstract class EmojiSearchResultItem : EpoxyModelWithHolder<EmojiSearchResultIte
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        //TODO use query string to highlight the matched query in name and keywords?
+        // TODO use query string to highlight the matched query in name and keywords?
         holder.emojiText.text = emojiItem.emojiString()
         holder.emojiText.typeface = emojiTypeFace ?: Typeface.DEFAULT
         holder.emojiNameText.text = emojiItem.name
@@ -57,4 +56,3 @@ abstract class EmojiSearchResultItem : EpoxyModelWithHolder<EmojiSearchResultIte
         val emojiKeywordText by bind<TextView>(R.id.item_emoji_keyword)
     }
 }
-

@@ -47,7 +47,7 @@ class EmojiSearchResultViewModel(val dataSource: EmojiDataSource, initialState: 
     companion object : MvRxViewModelFactory<EmojiSearchResultViewModel, EmojiSearchResultViewState> {
 
         override fun create(viewModelContext: ViewModelContext, state: EmojiSearchResultViewState): EmojiSearchResultViewModel? {
-            //TODO get the data source from activity? share it with other fragment
+            // TODO get the data source from activity? share it with other fragment
             return EmojiSearchResultViewModel(EmojiDataSource(viewModelContext.activity), state)
         }
     }
