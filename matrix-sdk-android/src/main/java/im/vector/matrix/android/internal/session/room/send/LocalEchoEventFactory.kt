@@ -119,7 +119,7 @@ internal class LocalEchoEventFactory @Inject constructor(@UserId private val use
                 permalink,
                 stringProvider.getString(R.string.message_reply_to_prefix),
                 userLink,
-                originalEvent.senderName ?: originalEvent.root.senderId,
+                originalEvent.getDisambiguatedDisplayName(),
                 body.takeFormatted(),
                 createTextContent(newBodyText, newBodyAutoMarkdown).takeFormatted()
         )

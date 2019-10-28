@@ -64,12 +64,12 @@ class MergedHeaderItemFactory @Inject constructor(private val sessionHolder: Act
                     if (!showReadMarker && mergedEvent.hasReadMarker && readMarkerVisible) {
                         showReadMarker = true
                     }
-                    val senderAvatar = mergedEvent.senderAvatar()
-                    val senderName = mergedEvent.senderName()
+                    val senderAvatar = mergedEvent.senderAvatar
+                    val senderName = mergedEvent.getDisambiguatedDisplayName()
                     val data = MergedHeaderItem.Data(
                             userId = mergedEvent.root.senderId ?: "",
                             avatarUrl = senderAvatar,
-                            memberName = senderName ?: "",
+                            memberName = senderName ,
                             localId = mergedEvent.localId,
                             eventId = mergedEvent.root.eventId ?: ""
                     )

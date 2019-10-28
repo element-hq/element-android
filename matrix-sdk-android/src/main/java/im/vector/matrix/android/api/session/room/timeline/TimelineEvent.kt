@@ -62,15 +62,18 @@ data class TimelineEvent(
     }
 
     fun getDisambiguatedDisplayName(): String {
-        return if (isUniqueDisplayName) {
+        val disambiguated = if (isUniqueDisplayName) {
             senderName
         } else {
             senderName?.let { name ->
                 "$name (${root.senderId})"
             }
         }
-               ?: root.senderId
-               ?: ""
+        return if (disambiguated.isNullOrBlank()) {
+            root.senderId ?: ""
+        } else {
+            disambiguated
+        }
     }
 
     /**
@@ -113,7 +116,8 @@ fun TimelineEvent.getLastMessageBody(): String? {
     val lastMessageContent = getLastMessageContent()
 
     if (lastMessageContent != null) {
-        return lastMessageContent.newContent?.toModel<MessageContent>()?.body ?: lastMessageContent.body
+        return lastMessageContent.newContent?.toModel<MessageContent>()?.body
+               ?: lastMessageContent.body
     }
 
     return null
