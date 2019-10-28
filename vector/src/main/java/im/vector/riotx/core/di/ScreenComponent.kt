@@ -59,6 +59,7 @@ import im.vector.riotx.features.rageshake.BugReportActivity
 import im.vector.riotx.features.rageshake.BugReporter
 import im.vector.riotx.features.rageshake.RageShake
 import im.vector.riotx.features.reactions.EmojiReactionPickerActivity
+import im.vector.riotx.features.reactions.EmojiSearchResultFragment
 import im.vector.riotx.features.reactions.widget.ReactionButton
 import im.vector.riotx.features.roomdirectory.PublicRoomsFragment
 import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
@@ -196,6 +197,8 @@ interface ScreenComponent {
     fun inject(reactionButton: ReactionButton)
 
     fun inject(incomingShareActivity: IncomingShareActivity)
+
+    fun inject(emojiSearchResultFragment: EmojiSearchResultFragment)
 
     @Component.Factory
     interface Factory {

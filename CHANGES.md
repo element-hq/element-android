@@ -5,7 +5,7 @@ Features ✨:
  -
 
 Improvements 🙌:
- -
+ - Search reaction by name or keyword in emoji picker
 
 Other changes:
  -

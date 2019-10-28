@@ -36,12 +36,11 @@ class EmojiChooserFragment : VectorBaseFragment() {
         viewModel = activity?.run {
             ViewModelProviders.of(this, viewModelFactory).get(EmojiChooserViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
-        viewModel.initWithContect(context!!)
+        viewModel.initWithContext(context!!)
         (view as? RecyclerView)?.let {
             it.adapter = viewModel.adapter
             it.adapter?.notifyDataSetChanged()
         }
 
-//        val ds = EmojiDataSource(this.context!!)
     }
 }

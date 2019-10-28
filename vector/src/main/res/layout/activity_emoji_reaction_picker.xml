@@ -14,6 +14,14 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:layout="@layout/emoji_chooser_fragment" />
 
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="im.vector.riotx.features.reactions.EmojiSearchResultFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:visibility="invisible" />
+
     <com.google.android.material.appbar.AppBarLayout
         style="@style/VectorAppBarLayoutStyle"
         android:layout_width="match_parent"

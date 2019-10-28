@@ -25,15 +25,22 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.SearchView
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.airbnb.mvrx.viewModel
 import com.google.android.material.tabs.TabLayout
 import im.vector.riotx.EmojiCompatFontProvider
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.platform.VectorBaseActivity
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_emoji_reaction_picker.*
+import timber.log.Timber
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 /**
@@ -41,9 +48,9 @@ import javax.inject.Inject
  * TODO: Loading indicator while getting emoji data source?
  * TODO: migrate to MvRx
  * TODO: Finish Refactor to vector base activity
- * TODO: Move font request to app
  */
-class EmojiReactionPickerActivity : VectorBaseActivity(), EmojiCompatFontProvider.FontProviderListener {
+class EmojiReactionPickerActivity : VectorBaseActivity(),
+        EmojiCompatFontProvider.FontProviderListener {
 
     private lateinit var tabLayout: TabLayout
 
@@ -56,6 +63,8 @@ class EmojiReactionPickerActivity : VectorBaseActivity(), EmojiCompatFontProvide
     override fun getTitleRes(): Int = R.string.title_activity_emoji_reaction_picker
 
     @Inject lateinit var emojiCompatFontProvider: EmojiCompatFontProvider
+
+    val searchResultViewModel: EmojiSearchResultViewModel by viewModel()
 
     private var tabLayoutSelectionListener = object : TabLayout.OnTabSelectedListener {
         override fun onTabReselected(tab: TabLayout.Tab) {
@@ -121,10 +130,15 @@ class EmojiReactionPickerActivity : VectorBaseActivity(), EmojiCompatFontProvide
                 finish()
             }
         }
+
+        supportFragmentManager.findFragmentById(R.id.fragment)?.view?.isVisible = true
+        supportFragmentManager.findFragmentById(R.id.searchFragment)?.view?.isInvisible = true
+        tabLayout.isVisible = true
     }
 
     override fun compatibilityFontUpdate(typeface: Typeface?) {
         EmojiDrawView.configureTextPaint(this, typeface)
+        searchResultViewModel.dataSource
     }
 
     override fun onDestroy() {
@@ -137,11 +151,11 @@ class EmojiReactionPickerActivity : VectorBaseActivity(), EmojiCompatFontProvide
         inflater.inflate(getMenuRes(), menu)
 
         val searchItem = menu.findItem(R.id.search)
-        (searchItem.actionView as? SearchView)?.let {
+        (searchItem.actionView as? SearchView)?.let { searchView ->
             searchItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
                 override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
-                    it.isIconified = false
-                    it.requestFocusFromTouch()
+                    searchView.isIconified = false
+                    searchView.requestFocusFromTouch()
                     // we want to force the tool bar as visible even if hidden with scroll flags
                     findViewById<Toolbar>(R.id.toolbar)?.minimumHeight = getActionBarSize()
                     return true
@@ -150,10 +164,35 @@ class EmojiReactionPickerActivity : VectorBaseActivity(), EmojiCompatFontProvide
                 override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
                     // when back, clear all search
                     findViewById<Toolbar>(R.id.toolbar)?.minimumHeight = 0
-                    it.setQuery("", true)
+                    searchView.setQuery("", true)
                     return true
                 }
             })
+
+            val searchObservable = Observable.create<String> { emitter ->
+
+                searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                    override fun onQueryTextSubmit(query: String?): Boolean {
+                        query?.let { emitter.onNext(it) }
+                        return true
+                    }
+
+                    override fun onQueryTextChange(newText: String?): Boolean {
+                        Timber.d("onQueryTextChange $newText")
+                        newText?.let { emitter.onNext(it) }
+                        return true
+                    }
+
+                })
+            }
+
+            searchObservable
+                    .throttleWithTimeout(600, TimeUnit.MILLISECONDS)
+                    .doOnError { err -> Timber.e(err) }
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe { query ->
+                        onQueryText(query)
+                    }
         }
 
         return true
@@ -168,6 +207,19 @@ class EmojiReactionPickerActivity : VectorBaseActivity(), EmojiCompatFontProvide
         } catch (e: Exception) {
             // Timber.e(e, "Unable to get color")
             TypedValue.complexToDimensionPixelSize(56, resources.displayMetrics)
+        }
+    }
+
+    private fun onQueryText(query: String) {
+        if (query.isEmpty()) {
+            supportFragmentManager.findFragmentById(R.id.fragment)?.view?.isVisible = true
+            supportFragmentManager.findFragmentById(R.id.searchFragment)?.view?.isInvisible = true
+            tabLayout.isVisible = true
+        } else {
+            tabLayout.isVisible = false
+            supportFragmentManager.findFragmentById(R.id.fragment)?.view?.isInvisible = true
+            supportFragmentManager.findFragmentById(R.id.searchFragment)?.view?.isVisible = true
+            searchResultViewModel.updateQuery(query)
         }
     }
 
