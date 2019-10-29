@@ -16,29 +16,26 @@
 
 package im.vector.riotx.features.html
 
-import android.content.Context
 import android.graphics.Color
 import android.text.TextPaint
 import android.text.style.ClickableSpan
 import android.view.View
-import im.vector.riotx.R
-import im.vector.riotx.features.themes.ThemeUtils
 
-class SpoilerSpan(val bgColor: Int, val context: Context) : ClickableSpan() {
+class SpoilerSpan(private val bgColor: Int, private val textColor: Int) : ClickableSpan() {
 
     override fun onClick(widget: View) {
         isHidden = !isHidden
         widget.invalidate()
     }
 
-    var isHidden = true
+    private var isHidden = true
 
     override fun updateDrawState(tp: TextPaint) {
         tp.bgColor = bgColor
         if (isHidden) {
             tp.color = Color.TRANSPARENT
         } else {
-            tp.color = ThemeUtils.getColor(context, R.attr.riotx_text_primary)
+            tp.color = textColor
         }
     }
 }
