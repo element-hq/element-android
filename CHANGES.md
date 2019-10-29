@@ -8,7 +8,7 @@ Improvements 🙌:
  -
 
 Other changes:
- -
+ - Markdown set to off by default (#412)
 
 Bugfix 🐛:
  - Passphrase does not match (Export room keys) (#644)
