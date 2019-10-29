@@ -7,7 +7,7 @@ steps:
   - label: "Compile and run Unit tests"
     agents:
       # We use a medium sized instance instead of the normal small ones because
-      # gradle build is long
+      # gradle build can be memory hungry
       queue: "medium"
     commands:
       - "./gradlew clean test --stacktrace"
@@ -19,7 +19,7 @@ steps:
   - label: "Compile Android tests"
     agents:
       # We use a medium sized instance instead of the normal small ones because
-      # gradle build is long
+      # gradle build can be memory hungry
       queue: "medium"
     commands:
       - "./gradlew clean assembleAndroidTest --stacktrace"
@@ -30,8 +30,8 @@ steps:
 
   - label: "Assemble GPlay Debug version"
     agents:
-      # We use a medium sized instance instead of the normal small ones because
-      # gradle build is long
+      # We use a xlarge sized instance instead of the normal small ones because
+      # gradle build can be memory hungry
       queue: "xlarge"
     commands:
       - "./gradlew clean lintGplayRelease assembleGplayDebug --stacktrace"
@@ -45,8 +45,8 @@ steps:
 
   - label: "Assemble FDroid Debug version"
     agents:
-      # We use a medium sized instance instead of the normal small ones because
-      # gradle build is long
+      # We use a xlarge sized instance instead of the normal small ones because
+      # gradle build can be memory hungry
       queue: "xlarge"
     commands:
       - "./gradlew clean lintFdroidRelease assembleFdroidDebug --stacktrace"
@@ -60,8 +60,8 @@ steps:
 
   - label: "Build Google Play unsigned APK"
     agents:
-      # We use a medium sized instance instead of the normal small ones because
-      # gradle build is long
+      # We use a xlarge sized instance instead of the normal small ones because
+      # gradle build can be memory hungry
       queue: "xlarge"
     commands:
       - "./gradlew clean assembleGplayRelease --stacktrace"
