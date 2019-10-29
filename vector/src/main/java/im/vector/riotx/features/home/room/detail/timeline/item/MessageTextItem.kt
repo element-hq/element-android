@@ -24,6 +24,7 @@ import androidx.core.widget.TextViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
+import im.vector.riotx.core.utils.isValidUrl
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.html.PillImageSpan
 import kotlinx.coroutines.Dispatchers
@@ -31,7 +32,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
-import java.net.URL
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
 abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
@@ -50,25 +50,15 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
     private val mvmtMethod = BetterLinkMovementMethod.newInstance().also {
         it.setOnLinkClickListener { _, url ->
             // Return false to let android manage the click on the link, or true if the link is handled by the application
-            try {
-                (URL(url))
-                urlClickCallback?.onUrlClicked(url) == true
-            } catch (t: Throwable) {
-                false
-            }
+            url.isValidUrl() && urlClickCallback?.onUrlClicked(url) == true
         }
         // We need also to fix the case when long click on link will trigger long click on cell
         it.setOnLinkLongClickListener { tv, url ->
             // Long clicks are handled by parent, return true to block android to do something with url
-            try {
-                (URL(url))
-                if (urlClickCallback?.onUrlLongClicked(url) == true) {
-                    tv.dispatchTouchEvent(MotionEvent.obtain(0, 0, MotionEvent.ACTION_CANCEL, 0f, 0f, 0))
-                    true
-                } else {
-                    false
-                }
-            } catch (t: Throwable) {
+            if (url.isValidUrl() && urlClickCallback?.onUrlLongClicked(url) == true) {
+                tv.dispatchTouchEvent(MotionEvent.obtain(0, 0, MotionEvent.ACTION_CANCEL, 0f, 0f, 0))
+                true
+            } else {
                 false
             }
         }
