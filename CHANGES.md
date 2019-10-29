@@ -11,7 +11,7 @@ Other changes:
  -
 
 Bugfix 🐛:
- -
+ - Passphrase does not match (Export room keys) (#644)
 
 Translations 🗣:
  -
