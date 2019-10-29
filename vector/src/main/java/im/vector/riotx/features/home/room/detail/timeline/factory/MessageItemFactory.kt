@@ -46,9 +46,11 @@ import im.vector.riotx.features.home.room.detail.timeline.TimelineEventControlle
 import im.vector.riotx.features.home.room.detail.timeline.helper.*
 import im.vector.riotx.features.home.room.detail.timeline.item.*
 import im.vector.riotx.features.html.EventHtmlRenderer
+import im.vector.riotx.features.html.CodeVisitor
 import im.vector.riotx.features.media.ImageContentRenderer
 import im.vector.riotx.features.media.VideoContentRenderer
 import me.gujun.android.span.span
+import org.commonmark.node.Document
 import javax.inject.Inject
 
 class MessageItemFactory @Inject constructor(
@@ -234,22 +236,33 @@ class MessageItemFactory @Inject constructor(
                                      highlight: Boolean,
                                      callback: TimelineEventController.Callback?,
                                      attributes: AbsMessageItem.Attributes): MessageTextItem? {
+
         val isFormatted = messageContent.formattedBody.isNullOrBlank().not()
-        val bodyToUse = messageContent.formattedBody?.let {
-            htmlRenderer.get().render(it.trim())
-        } ?: messageContent.body
+        val bodyToUse = if (isFormatted) {
+            val formattedBody = htmlRenderer.get().parse(messageContent.body) as Document
+            val codeVisitor = CodeVisitor()
+            codeVisitor.visit(formattedBody)
+            if (codeVisitor.codeKind == CodeVisitor.Kind.NONE) {
+                messageContent.formattedBody.let {
+                    htmlRenderer.get().render(it!!.trim())
+                }
+            } else {
+                htmlRenderer.get().render(formattedBody)
+            }
+        } else {
+            messageContent.body
+        }
 
         val linkifiedBody = linkifyBody(bodyToUse, callback)
 
-        return MessageTextItem_()
-                .apply {
-                    if (informationData.hasBeenEdited) {
-                        val spannable = annotateWithEdited(linkifiedBody, callback, informationData)
-                        message(spannable)
-                    } else {
-                        message(linkifiedBody)
-                    }
-                }
+        return MessageTextItem_().apply {
+            if (informationData.hasBeenEdited) {
+                val spannable = annotateWithEdited(linkifiedBody, callback, informationData)
+                message(spannable)
+            } else {
+                message(linkifiedBody)
+            }
+        }
                 .useBigFont(linkifiedBody.length <= MAX_NUMBER_OF_EMOJI_FOR_BIG_FONT * 2 && containsOnlyEmojis(linkifiedBody.toString()))
                 .searchForPills(isFormatted)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
