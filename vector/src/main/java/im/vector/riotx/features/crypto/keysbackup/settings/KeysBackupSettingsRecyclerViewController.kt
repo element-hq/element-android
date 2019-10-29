@@ -31,7 +31,7 @@ import im.vector.riotx.core.epoxy.loadingItem
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.ui.list.GenericItem
 import im.vector.riotx.core.ui.list.genericItem
-import java.util.*
+import java.util.UUID
 import javax.inject.Inject
 
 class KeysBackupSettingsRecyclerViewController @Inject constructor(private val stringProvider: StringProvider,

@@ -33,7 +33,7 @@ import im.vector.riotx.R
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.home.room.detail.timeline.format.NoticeEventFormatter
 import timber.log.Timber
-import java.util.*
+import java.util.UUID
 import javax.inject.Inject
 
 /**

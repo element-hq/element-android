@@ -59,9 +59,10 @@ fun initKnownEmojiHashSet(context: Context, done: (() -> Unit)? = null) {
             val jsonAdapter = moshi.adapter(EmojiDataSource.EmojiData::class.java)
             val inputAsString = input.bufferedReader().use { it.readText() }
             val source = jsonAdapter.fromJson(inputAsString)
-            knownEmojiSet = HashSet<String>()
-            source?.emojis?.values?.forEach {
-                knownEmojiSet?.add(it.emojiString())
+            knownEmojiSet = HashSet<String>().also {
+                source?.emojis?.mapTo(it) { (_, value) ->
+                    value.emojiString()
+                }
             }
             done?.invoke()
         }
