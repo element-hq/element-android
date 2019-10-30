@@ -27,8 +27,6 @@ import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.home.room.detail.timeline.helper.AvatarSizeProvider
-import im.vector.riotx.features.home.room.detail.timeline.helper.senderAvatar
-import im.vector.riotx.features.home.room.detail.timeline.helper.senderName
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.riotx.features.home.room.detail.timeline.item.NoticeItem
 import im.vector.riotx.features.home.room.detail.timeline.item.NoticeItem_
@@ -41,13 +39,13 @@ class EncryptionItemFactory @Inject constructor(private val stringProvider: Stri
     fun create(event: TimelineEvent,
                highlight: Boolean,
                callback: TimelineEventController.Callback?): NoticeItem? {
-        val text = buildNoticeText(event.root, event.senderName) ?: return null
+        val text = buildNoticeText(event.root, event.getDisambiguatedDisplayName()) ?: return null
         val informationData = MessageInformationData(
                 eventId = event.root.eventId ?: "?",
                 senderId = event.root.senderId ?: "",
                 sendState = event.root.sendState,
-                avatarUrl = event.senderAvatar(),
-                memberName = event.senderName(),
+                avatarUrl = event.senderAvatar,
+                memberName = event.getDisambiguatedDisplayName(),
                 showInformation = false
         )
         val attributes = NoticeItem.Attributes(

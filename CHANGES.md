@@ -11,6 +11,7 @@ Other changes:
  -
 
 Bugfix 🐛:
+ - Fix issues with some member events rendering (#498)
  - Passphrase does not match (Export room keys) (#644)
 
 Translations 🗣:
