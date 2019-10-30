@@ -99,16 +99,8 @@ class MessageItemFactory @Inject constructor(
 //        val all = event.root.toContent()
 //        val ev = all.toModel<Event>()
         return when (messageContent) {
-            is MessageEmoteContent  -> buildEmoteMessageItem(messageContent,
-                    informationData,
-                    highlight,
-                    callback,
-                    attributes)
-            is MessageTextContent   -> buildTextMessageItem(messageContent,
-                    informationData,
-                    highlight,
-                    callback,
-                    attributes)
+            is MessageEmoteContent  -> buildEmoteMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageTextContent   -> buildItemForTextContent(messageContent, informationData, highlight, callback, attributes)
             is MessageImageContent  -> buildImageMessageItem(messageContent, informationData, highlight, callback, attributes)
             is MessageNoticeContent -> buildNoticeMessageItem(messageContent, informationData, highlight, callback, attributes)
             is MessageVideoContent  -> buildVideoMessageItem(messageContent, informationData, highlight, callback, attributes)
@@ -231,29 +223,43 @@ class MessageItemFactory @Inject constructor(
                 .clickListener { view -> callback?.onVideoMessageClicked(messageContent, videoData, view) }
     }
 
-    private fun buildTextMessageItem(messageContent: MessageTextContent,
+    private fun buildItemForTextContent(messageContent: MessageTextContent,
+                                        informationData: MessageInformationData,
+                                        highlight: Boolean,
+                                        callback: TimelineEventController.Callback?,
+                                        attributes: AbsMessageItem.Attributes): VectorEpoxyModel<*>? {
+
+        val isFormatted = messageContent.formattedBody.isNullOrBlank().not()
+        return if (isFormatted) {
+            val localFormattedBody = htmlRenderer.get().parse(messageContent.body) as Document
+            val codeVisitor = CodeVisitor()
+            codeVisitor.visit(localFormattedBody)
+            when (codeVisitor.codeKind) {
+                CodeVisitor.Kind.BLOCK  -> {
+                    val codeFormattedBlock = htmlRenderer.get().render(localFormattedBody)
+                    buildCodeBlockItem(codeFormattedBlock, informationData, highlight, callback, attributes)
+                }
+                CodeVisitor.Kind.INLINE -> {
+                    val codeFormatted = htmlRenderer.get().render(localFormattedBody)
+                    buildMessageTextItem(codeFormatted, false, informationData, highlight, callback, attributes)
+                }
+                CodeVisitor.Kind.NONE   -> {
+                    val formattedBody = htmlRenderer.get().render(messageContent.formattedBody!!)
+                    buildMessageTextItem(formattedBody, true, informationData, highlight, callback, attributes)
+                }
+            }
+        } else {
+            buildMessageTextItem(messageContent.body, false, informationData, highlight, callback, attributes)
+        }
+    }
+
+    private fun buildMessageTextItem(body: CharSequence,
+                                     isFormatted: Boolean,
                                      informationData: MessageInformationData,
                                      highlight: Boolean,
                                      callback: TimelineEventController.Callback?,
                                      attributes: AbsMessageItem.Attributes): MessageTextItem? {
-
-        val isFormatted = messageContent.formattedBody.isNullOrBlank().not()
-        val bodyToUse = if (isFormatted) {
-            val formattedBody = htmlRenderer.get().parse(messageContent.body) as Document
-            val codeVisitor = CodeVisitor()
-            codeVisitor.visit(formattedBody)
-            if (codeVisitor.codeKind == CodeVisitor.Kind.NONE) {
-                messageContent.formattedBody.let {
-                    htmlRenderer.get().render(it!!.trim())
-                }
-            } else {
-                htmlRenderer.get().render(formattedBody)
-            }
-        } else {
-            messageContent.body
-        }
-
-        val linkifiedBody = linkifyBody(bodyToUse, callback)
+        val linkifiedBody = linkifyBody(body, callback)
 
         return MessageTextItem_().apply {
             if (informationData.hasBeenEdited) {
@@ -269,7 +275,26 @@ class MessageItemFactory @Inject constructor(
                 .attributes(attributes)
                 .highlighted(highlight)
                 .urlClickCallback(callback)
-        // click on the text
+    }
+
+    private fun buildCodeBlockItem(formattedBody: CharSequence,
+                                   informationData: MessageInformationData,
+                                   highlight: Boolean,
+                                   callback: TimelineEventController.Callback?,
+                                   attributes: AbsMessageItem.Attributes): MessageBlockCodeItem? {
+
+
+        return MessageBlockCodeItem_()
+                .apply {
+                    if (informationData.hasBeenEdited) {
+                        val spannable = annotateWithEdited("", callback, informationData)
+                        editedSpan(spannable)
+                    }
+                }
+                .leftGuideline(avatarSizeProvider.leftGuideline)
+                .attributes(attributes)
+                .highlighted(highlight)
+                .message(formattedBody)
     }
 
     private fun annotateWithEdited(linkifiedBody: CharSequence,

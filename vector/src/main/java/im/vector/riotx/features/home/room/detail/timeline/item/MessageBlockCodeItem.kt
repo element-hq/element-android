@@ -16,26 +16,38 @@
 
 package im.vector.riotx.features.home.room.detail.timeline.item
 
+import android.widget.TextView
+import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
-import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
+import im.vector.riotx.core.extensions.setTextOrHide
+import me.saket.bettermovementmethod.BetterLinkMovementMethod
+
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
 abstract class MessageBlockCodeItem : AbsMessageItem<MessageBlockCodeItem.Holder>() {
 
     @EpoxyAttribute
     var message: CharSequence? = null
+    @EpoxyAttribute
+    var editedSpan: CharSequence? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-
+        holder.messageView.text = message
+        renderSendState(holder.messageView, holder.messageView)
+        holder.messageView.setOnClickListener(attributes.itemClickListener)
+        holder.messageView.setOnLongClickListener(attributes.itemLongClickListener)
+        holder.editedView.movementMethod = BetterLinkMovementMethod.getInstance()
+        holder.editedView.setTextOrHide(editedSpan)
     }
 
     override fun getViewType() = STUB_ID
 
     class Holder : AbsMessageItem.Holder(STUB_ID) {
-
+        val messageView by bind<TextView>(R.id.codeBlockTextView)
+        val editedView by bind<TextView>(R.id.codeBlockEditedView)
     }
 
     companion object {
