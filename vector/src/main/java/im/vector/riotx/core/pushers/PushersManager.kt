@@ -22,8 +22,9 @@ import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.resources.AppNameProvider
 import im.vector.riotx.core.resources.LocaleProvider
 import im.vector.riotx.core.resources.StringProvider
-import java.util.*
+import java.util.UUID
 import javax.inject.Inject
+import kotlin.math.abs
 
 private const val DEFAULT_PUSHER_FILE_TAG = "mobile"
 
@@ -36,7 +37,7 @@ class PushersManager @Inject constructor(
 
     fun registerPusherWithFcmKey(pushKey: String): UUID {
         val currentSession = activeSessionHolder.getActiveSession()
-        var profileTag = DEFAULT_PUSHER_FILE_TAG + "_" + Math.abs(currentSession.myUserId.hashCode())
+        val profileTag = DEFAULT_PUSHER_FILE_TAG + "_" + abs(currentSession.myUserId.hashCode())
 
         return currentSession.addHttpPusher(
                 pushKey,

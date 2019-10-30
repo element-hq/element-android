@@ -18,7 +18,7 @@ package im.vector.riotx.core.resources
 
 import android.content.res.Resources
 import androidx.core.os.ConfigurationCompat
-import java.util.*
+import java.util.Locale
 import javax.inject.Inject
 
 class LocaleProvider @Inject constructor(private val resources: Resources) {

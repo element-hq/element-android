@@ -42,7 +42,8 @@ import im.vector.riotx.features.home.room.detail.timeline.format.NoticeEventForm
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.riotx.features.html.EventHtmlRenderer
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 /**
  * Quick reactions state

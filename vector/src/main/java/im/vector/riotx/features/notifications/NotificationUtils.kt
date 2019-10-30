@@ -45,9 +45,9 @@ import im.vector.riotx.features.home.room.detail.RoomDetailActivity
 import im.vector.riotx.features.home.room.detail.RoomDetailArgs
 import im.vector.riotx.features.settings.VectorPreferences
 import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.random.Random
 
 /**
  * Util class for creating notifications.
@@ -299,7 +299,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
         // use a generator for the private requestCode.
         // When using 0, the intent is not created/launched when the user taps on the notification.
         //
-        val pendingIntent = stackBuilder.getPendingIntent(Random().nextInt(1000), PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntent = stackBuilder.getPendingIntent(Random.nextInt(1000), PendingIntent.FLAG_UPDATE_CURRENT)
 
         builder.setContentIntent(pendingIntent)
 
@@ -599,7 +599,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
         val intent = HomeActivity.newIntent(context, clearNotification = true)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
         intent.data = Uri.parse("foobar://tapSummary")
-        return PendingIntent.getActivity(context, Random().nextInt(1000), intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        return PendingIntent.getActivity(context, Random.nextInt(1000), intent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
     /*
