@@ -5,7 +5,7 @@ Features ✨:
  -
 
 Improvements 🙌:
- -
+ - Handle code tags (#567)
 
 Other changes:
  -
