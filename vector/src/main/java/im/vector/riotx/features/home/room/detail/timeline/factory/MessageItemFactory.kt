@@ -228,7 +228,6 @@ class MessageItemFactory @Inject constructor(
                                         highlight: Boolean,
                                         callback: TimelineEventController.Callback?,
                                         attributes: AbsMessageItem.Attributes): VectorEpoxyModel<*>? {
-
         val isFormatted = messageContent.formattedBody.isNullOrBlank().not()
         return if (isFormatted) {
             val localFormattedBody = htmlRenderer.get().parse(messageContent.body) as Document
@@ -282,8 +281,6 @@ class MessageItemFactory @Inject constructor(
                                    highlight: Boolean,
                                    callback: TimelineEventController.Callback?,
                                    attributes: AbsMessageItem.Attributes): MessageBlockCodeItem? {
-
-
         return MessageBlockCodeItem_()
                 .apply {
                     if (informationData.hasBeenEdited) {

@@ -59,5 +59,4 @@ class MatrixHtmlPluginConfigure @Inject constructor(private val context: Context
                 .addHandler(MxLinkTagHandler(GlideApp.with(context), context, avatarRenderer, session))
                 .addHandler(MxReplyTagHandler())
     }
-
 }

@@ -17,13 +17,11 @@
 package im.vector.riotx.features.home.room.detail.timeline.item
 
 import android.widget.TextView
-import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.setTextOrHide
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
-
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
 abstract class MessageBlockCodeItem : AbsMessageItem<MessageBlockCodeItem.Holder>() {

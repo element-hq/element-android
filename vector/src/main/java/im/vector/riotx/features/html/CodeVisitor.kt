@@ -52,5 +52,4 @@ class CodeVisitor : AbstractVisitor() {
         INLINE,
         BLOCK
     }
-
 }
