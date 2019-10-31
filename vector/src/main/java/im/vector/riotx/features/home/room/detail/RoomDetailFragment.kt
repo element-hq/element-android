@@ -480,7 +480,7 @@ class RoomDetailFragment :
                 jumpToReadMarkerView.render(show, readMarkerId)
             }
         }
-        recyclerView.setController(timelineEventController)
+        recyclerView.adapter = timelineEventController.adapter
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 if (recyclerView.scrollState == RecyclerView.SCROLL_STATE_IDLE) {

@@ -5,7 +5,7 @@ Features ✨:
  -
 
 Improvements 🙌:
- -
+ - Handle code tags (#567)
 
 Other changes:
  - Accessibility improvements to the attachment file type chooser
