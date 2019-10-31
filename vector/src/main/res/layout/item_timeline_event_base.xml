@@ -82,7 +82,6 @@
             android:id="@+id/messageContentCodeBlockStub"
             style="@style/TimelineContentStubBaseParams"
             android:layout_height="wrap_content"
-            android:inflatedId="@id/messageTextView"
             android:layout="@layout/item_timeline_event_code_block_stub"
             tools:visibility="visible" />
 
