@@ -8,7 +8,7 @@ Improvements 🙌:
  -
 
 Other changes:
- -
+ - Accessibility improvements to the attachment file type chooser
 
 Bugfix 🐛:
  - Fix issues with some member events rendering (#498)
