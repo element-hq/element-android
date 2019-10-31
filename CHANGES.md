@@ -13,6 +13,7 @@ Other changes:
 Bugfix 🐛:
  - Fix issues with some member events rendering (#498)
  - Passphrase does not match (Export room keys) (#644)
+ - Ask for permission to write external storage when uri comes from the keyboard (#658)
 
 Translations 🗣:
  -
