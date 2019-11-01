@@ -31,12 +31,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.tabs.TabLayout
+import com.jakewharton.rxbinding3.widget.queryTextChanges
 import im.vector.riotx.EmojiCompatFontProvider
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.platform.VectorBaseActivity
-import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_emoji_reaction_picker.*
 import timber.log.Timber
@@ -169,31 +169,15 @@ class EmojiReactionPickerActivity : VectorBaseActivity(),
                 }
             })
 
-            val searchObservable = Observable.create<String> { emitter ->
-
-                searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                    override fun onQueryTextSubmit(query: String?): Boolean {
-                        query?.let { emitter.onNext(it) }
-                        return true
-                    }
-
-                    override fun onQueryTextChange(newText: String?): Boolean {
-                        Timber.d("onQueryTextChange $newText")
-                        newText?.let { emitter.onNext(it) }
-                        return true
-                    }
-                })
-            }
-
-            searchObservable
+            searchView.queryTextChanges()
                     .throttleWithTimeout(600, TimeUnit.MILLISECONDS)
                     .doOnError { err -> Timber.e(err) }
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe { query ->
-                        onQueryText(query)
+                        onQueryText(query.toString())
                     }
+                    .disposeOnDestroy()
         }
-
         return true
     }
 
