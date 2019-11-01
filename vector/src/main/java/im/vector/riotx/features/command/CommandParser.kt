@@ -207,6 +207,11 @@ object CommandParser {
                         ParsedCommand.ErrorSyntax(Command.CLEAR_SCALAR_TOKEN)
                     }
                 }
+                Command.SPOILER.command                -> {
+                    val message = textMessage.substring(Command.SPOILER.command.length).trim()
+
+                    return ParsedCommand.SendSpoiler(message)
+                }
                 else                                   -> {
                     // Unknown command
                     return ParsedCommand.ErrorUnknownSlashCommand(slashCommand)
