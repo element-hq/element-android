@@ -16,6 +16,7 @@
 package im.vector.riotx.features.reactions
 
 import android.graphics.Typeface
+import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.riotx.EmojiCompatFontProvider
 import im.vector.riotx.R
@@ -24,17 +25,19 @@ import im.vector.riotx.core.ui.list.genericFooterItem
 import javax.inject.Inject
 
 class EmojiSearchResultController @Inject constructor(val stringProvider: StringProvider,
-                                                      fontProvider: EmojiCompatFontProvider)
+                                                      private val fontProvider: EmojiCompatFontProvider)
     : TypedEpoxyController<EmojiSearchResultViewState>() {
 
     var emojiTypeface: Typeface? = fontProvider.typeface
 
+    private val fontProviderListener = object : EmojiCompatFontProvider.FontProviderListener {
+        override fun compatibilityFontUpdate(typeface: Typeface?) {
+            emojiTypeface = typeface
+        }
+    }
+
     init {
-        fontProvider.addListener(object : EmojiCompatFontProvider.FontProviderListener {
-            override fun compatibilityFontUpdate(typeface: Typeface?) {
-                emojiTypeface = typeface
-            }
-        })
+        fontProvider.addListener(fontProviderListener)
     }
 
     var listener: ReactionClickListener? = null
@@ -68,5 +71,10 @@ class EmojiSearchResultController @Inject constructor(val stringProvider: String
                 }
             }
         }
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView)
+        fontProvider.removeListener(fontProviderListener)
     }
 }
