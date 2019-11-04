@@ -2,6 +2,6 @@
 <resources>
 
     <!-- Strings not defined in Riot -->
-
+    <string name="notice_member_no_changes">"%1$s made no changes"</string>
 
 </resources>

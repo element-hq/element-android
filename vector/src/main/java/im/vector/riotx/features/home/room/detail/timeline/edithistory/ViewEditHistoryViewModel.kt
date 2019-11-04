@@ -30,7 +30,7 @@ import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.date.VectorDateFormatter
 import im.vector.riotx.features.home.room.detail.timeline.action.TimelineEventFragmentArgs
 import timber.log.Timber
-import java.util.*
+import java.util.UUID
 
 data class ViewEditHistoryViewState(
         val eventId: String,

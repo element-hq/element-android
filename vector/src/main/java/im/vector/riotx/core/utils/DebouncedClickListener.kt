@@ -16,7 +16,7 @@
 package im.vector.riotx.core.utils
 
 import android.view.View
-import java.util.*
+import java.util.WeakHashMap
 
 /**
  * Simple Debounced OnClickListener

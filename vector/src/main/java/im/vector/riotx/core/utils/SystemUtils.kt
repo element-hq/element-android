@@ -31,7 +31,7 @@ import im.vector.riotx.R
 import im.vector.riotx.features.notifications.NotificationUtils
 import im.vector.riotx.features.settings.VectorLocale
 import timber.log.Timber
-import java.util.*
+import java.util.Locale
 
 /**
  * Tells if the application ignores battery optimizations.

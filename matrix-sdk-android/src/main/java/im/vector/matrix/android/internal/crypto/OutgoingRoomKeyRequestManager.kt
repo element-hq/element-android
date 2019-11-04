@@ -216,7 +216,7 @@ internal class OutgoingRoomKeyRequestManager @Inject constructor(
         sendMessageToDevices(requestMessage, request.recipients, request.requestId, object : MatrixCallback<Unit> {
             private fun onDone(state: OutgoingRoomKeyRequest.RequestState) {
                 if (request.state !== OutgoingRoomKeyRequest.RequestState.UNSENT) {
-                    Timber.v("## sendOutgoingRoomKeyRequest() : Cannot update room key request from UNSENT as it was already updated to " + request.state)
+                    Timber.v("## sendOutgoingRoomKeyRequest() : Cannot update room key request from UNSENT as it was already updated to ${request.state}")
                 } else {
                     request.state = state
                     cryptoStore.updateOutgoingRoomKeyRequest(request)

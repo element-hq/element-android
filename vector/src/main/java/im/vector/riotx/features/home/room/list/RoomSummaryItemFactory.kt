@@ -30,7 +30,6 @@ import im.vector.riotx.core.resources.DateProvider
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.format.NoticeEventFormatter
-import im.vector.riotx.features.home.room.detail.timeline.helper.senderName
 import me.gujun.android.span.span
 import javax.inject.Inject
 
@@ -97,10 +96,10 @@ class RoomSummaryItemFactory @Inject constructor(private val noticeEventFormatte
                     && latestEvent.root.mxDecryptionResult == null) {
                 stringProvider.getString(R.string.encrypted_message)
             } else if (latestEvent.root.getClearType() == EventType.MESSAGE) {
-                val senderName = latestEvent.senderName() ?: latestEvent.root.senderId
+                val senderName = latestEvent.getDisambiguatedDisplayName()
                 val content = latestEvent.root.getClearContent()?.toModel<MessageContent>()
                 val message = content?.body ?: ""
-                if (roomSummary.isDirect.not() && senderName != null) {
+                if (roomSummary.isDirect.not()) {
                     span {
                         text = senderName
                         textColor = colorProvider.getColorFromAttribute(R.attr.riotx_text_primary)

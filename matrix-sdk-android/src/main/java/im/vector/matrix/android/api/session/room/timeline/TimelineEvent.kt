@@ -62,15 +62,11 @@ data class TimelineEvent(
     }
 
     fun getDisambiguatedDisplayName(): String {
-        return if (isUniqueDisplayName) {
-            senderName
-        } else {
-            senderName?.let { name ->
-                "$name (${root.senderId})"
-            }
+        return when {
+            senderName.isNullOrBlank() -> root.senderId ?: ""
+            isUniqueDisplayName        -> senderName
+            else                       -> "$senderName (${root.senderId})"
         }
-               ?: root.senderId
-               ?: ""
     }
 
     /**
@@ -104,7 +100,7 @@ fun TimelineEvent.getEditedEventId(): String? {
  * Get last MessageContent, after a possible edition
  */
 fun TimelineEvent.getLastMessageContent(): MessageContent? = annotations?.editSummary?.aggregatedContent?.toModel()
-                                                             ?: root.getClearContent().toModel()
+        ?: root.getClearContent().toModel()
 
 /**
  * Get last Message body, after a possible edition
@@ -113,7 +109,8 @@ fun TimelineEvent.getLastMessageBody(): String? {
     val lastMessageContent = getLastMessageContent()
 
     if (lastMessageContent != null) {
-        return lastMessageContent.newContent?.toModel<MessageContent>()?.body ?: lastMessageContent.body
+        return lastMessageContent.newContent?.toModel<MessageContent>()?.body
+                ?: lastMessageContent.body
     }
 
     return null

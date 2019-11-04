@@ -66,7 +66,7 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
         if (':' in userId) {
             try {
                 synchronized(notReadyToRetryHS) {
-                    res = !notReadyToRetryHS.contains(userId.substring(userId.lastIndexOf(":") + 1))
+                    res = !notReadyToRetryHS.contains(userId.substringAfterLast(':'))
                 }
             } catch (e: Exception) {
                 Timber.e(e, "## canRetryKeysDownload() failed")
