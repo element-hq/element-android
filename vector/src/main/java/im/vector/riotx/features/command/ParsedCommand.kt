@@ -45,4 +45,5 @@ sealed class ParsedCommand {
     class ChangeDisplayName(val displayName: String) : ParsedCommand()
     class SetMarkdown(val enable: Boolean) : ParsedCommand()
     object ClearScalarToken : ParsedCommand()
+    class SendSpoiler(val message: String) : ParsedCommand()
 }
