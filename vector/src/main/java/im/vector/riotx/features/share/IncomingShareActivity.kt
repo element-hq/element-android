@@ -20,6 +20,8 @@ import android.content.ClipDescription
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
+import com.airbnb.mvrx.viewModel
 import com.kbeanie.multipicker.utils.IntentUtils
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.riotx.R
@@ -39,8 +41,10 @@ class IncomingShareActivity :
         VectorBaseActivity(), AttachmentsHelper.Callback {
 
     @Inject lateinit var sessionHolder: ActiveSessionHolder
-    private lateinit var roomListFragment: RoomListFragment
+    @Inject lateinit var incomingShareViewModelFactory: IncomingShareViewModel.Factory
+    private var roomListFragment: RoomListFragment? = null
     private lateinit var attachmentsHelper: AttachmentsHelper
+    private val incomingShareViewModel: IncomingShareViewModel by viewModel()
 
     override fun getLayoutRes(): Int {
         return R.layout.activity_incoming_share
@@ -77,12 +81,23 @@ class IncomingShareActivity :
         } else {
             cannotManageShare()
         }
+
+        incomingShareSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                roomListFragment?.filterRoomsWith(newText)
+                return true
+            }
+        })
     }
 
     override fun onContentAttachmentsReady(attachments: List<ContentAttachmentData>) {
         val roomListParams = RoomListParams(RoomListFragment.DisplayMode.SHARE, sharedData = SharedData.Attachments(attachments))
         roomListFragment = RoomListFragment.newInstance(roomListParams)
-        replaceFragment(roomListFragment, R.id.shareRoomListFragmentContainer)
+                .also { replaceFragment(it, R.id.shareRoomListFragmentContainer) }
     }
 
     override fun onAttachmentsProcessFailed() {
@@ -102,7 +117,7 @@ class IncomingShareActivity :
             } else {
                 val roomListParams = RoomListParams(RoomListFragment.DisplayMode.SHARE, sharedData = SharedData.Text(sharedText))
                 roomListFragment = RoomListFragment.newInstance(roomListParams)
-                replaceFragment(roomListFragment, R.id.shareRoomListFragmentContainer)
+                        .also { replaceFragment(it, R.id.shareRoomListFragmentContainer) }
                 true
             }
         }

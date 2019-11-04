@@ -22,7 +22,7 @@ import com.novoda.merlin.MerlinsBeard
 import im.vector.matrix.android.internal.di.MatrixScope
 import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
 import timber.log.Timber
-import java.util.*
+import java.util.Collections
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine

@@ -16,7 +16,7 @@
 
 package im.vector.matrix.android.api.session.events.model
 
-import java.util.*
+import java.util.UUID
 
 object LocalEcho {
 

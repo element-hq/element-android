@@ -76,11 +76,8 @@ class TextComposerViewModel @AssistedInject constructor(@Assisted initialState: 
         Observable.combineLatest<List<String>, Option<AutocompleteUserQuery>, List<User>>(
                 room.rx().liveRoomMemberIds(),
                 usersQueryObservable.throttleLast(300, TimeUnit.MILLISECONDS),
-                BiFunction { roomMembers, query ->
-                    val users = roomMembers
-                            .mapNotNull {
-                                session.getUser(it)
-                            }
+                BiFunction { roomMemberIds, query ->
+                    val users = roomMemberIds.mapNotNull { session.getUser(it) }
 
                     val filter = query.orNull()
                     if (filter.isNullOrBlank()) {

@@ -3,14 +3,36 @@
 # https://github.com/buildkite-plugins/docker-buildkite-plugin/releases
 # We propagate the environment to the container (sse https://github.com/buildkite-plugins/docker-buildkite-plugin#propagate-environment-optional-boolean)
 
-# Build debug version of the RiotX application, from the develop branch and the features branches
-
 steps:
-  - label: "Assemble GPlay Debug version"
+  - label: "Compile and run Unit tests"
     agents:
       # We use a medium sized instance instead of the normal small ones because
-      # gradle build is long
+      # gradle build can be memory hungry
       queue: "medium"
+    commands:
+      - "./gradlew clean test --stacktrace"
+    plugins:
+      - docker#v3.1.0:
+          image: "runmymind/docker-android-sdk"
+          propagate-environment: true
+
+  - label: "Compile Android tests"
+    agents:
+      # We use a medium sized instance instead of the normal small ones because
+      # gradle build can be memory hungry
+      queue: "medium"
+    commands:
+      - "./gradlew clean assembleAndroidTest --stacktrace"
+    plugins:
+      - docker#v3.1.0:
+          image: "runmymind/docker-android-sdk"
+          propagate-environment: true
+
+  - label: "Assemble GPlay Debug version"
+    agents:
+      # We use a xlarge sized instance instead of the normal small ones because
+      # gradle build can be memory hungry
+      queue: "xlarge"
     commands:
       - "./gradlew clean lintGplayRelease assembleGplayDebug --stacktrace"
     artifact_paths:
@@ -23,9 +45,9 @@ steps:
 
   - label: "Assemble FDroid Debug version"
     agents:
-      # We use a medium sized instance instead of the normal small ones because
-      # gradle build is long
-      queue: "medium"
+      # We use a xlarge sized instance instead of the normal small ones because
+      # gradle build can be memory hungry
+      queue: "xlarge"
     commands:
       - "./gradlew clean lintFdroidRelease assembleFdroidDebug --stacktrace"
     artifact_paths:
@@ -38,9 +60,9 @@ steps:
 
   - label: "Build Google Play unsigned APK"
     agents:
-      # We use a medium sized instance instead of the normal small ones because
-      # gradle build is long
-      queue: "medium"
+      # We use a xlarge sized instance instead of the normal small ones because
+      # gradle build can be memory hungry
+      queue: "xlarge"
     commands:
       - "./gradlew clean assembleGplayRelease --stacktrace"
     artifact_paths:

@@ -16,17 +16,15 @@
 
 package im.vector.riotx.core.platform
 
-import android.annotation.TargetApi
 import android.content.Context
-import android.os.Build
 import android.util.AttributeSet
-import android.widget.ScrollView
-
+import androidx.core.widget.NestedScrollView
 import im.vector.riotx.R
 
 private const val DEFAULT_MAX_HEIGHT = 200
 
-class MaxHeightScrollView : ScrollView {
+class MaxHeightScrollView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0)
+    : NestedScrollView(context, attrs, defStyle) {
 
     var maxHeight: Int = 0
         set(value) {
@@ -34,28 +32,7 @@ class MaxHeightScrollView : ScrollView {
             requestLayout()
         }
 
-    constructor(context: Context) : super(context) {}
-
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        if (!isInEditMode) {
-            init(context, attrs)
-        }
-    }
-
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        if (!isInEditMode) {
-            init(context, attrs)
-        }
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes) {
-        if (!isInEditMode) {
-            init(context, attrs)
-        }
-    }
-
-    private fun init(context: Context, attrs: AttributeSet?) {
+    init {
         if (attrs != null) {
             val styledAttrs = context.obtainStyledAttributes(attrs, R.styleable.MaxHeightScrollView)
             maxHeight = styledAttrs.getDimensionPixelSize(R.styleable.MaxHeightScrollView_maxHeight, DEFAULT_MAX_HEIGHT)

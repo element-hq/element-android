@@ -33,7 +33,7 @@ import im.vector.riotx.R
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.home.room.detail.timeline.format.NoticeEventFormatter
 import timber.log.Timber
-import java.util.*
+import java.util.UUID
 import javax.inject.Inject
 
 /**
@@ -94,7 +94,7 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
                     event.getLastMessageBody()
                             ?: stringProvider.getString(R.string.notification_unknown_new_event)
             val roomName = stringProvider.getString(R.string.notification_unknown_room_name)
-            val senderDisplayName = event.senderName ?: event.root.senderId
+            val senderDisplayName = event.getDisambiguatedDisplayName()
 
             val notifiableEvent = NotifiableMessageEvent(
                     eventId = event.root.eventId!!,
@@ -128,7 +128,7 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
             val body = event.getLastMessageBody()
                     ?: stringProvider.getString(R.string.notification_unknown_new_event)
             val roomName = room.roomSummary()?.displayName ?: ""
-            val senderDisplayName = event.senderName ?: event.root.senderId
+            val senderDisplayName = event.getDisambiguatedDisplayName()
 
             val notifiableEvent = NotifiableMessageEvent(
                     eventId = event.root.eventId!!,

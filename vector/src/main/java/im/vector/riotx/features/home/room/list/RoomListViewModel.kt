@@ -21,8 +21,6 @@ import androidx.lifecycle.MutableLiveData
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.Membership
@@ -31,18 +29,18 @@ import im.vector.matrix.android.api.session.room.model.tag.RoomTag
 import im.vector.riotx.core.extensions.postLiveEvent
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.utils.LiveEvent
-import im.vector.riotx.features.home.HomeRoomListObservableStore
+import im.vector.riotx.core.utils.RxStore
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
+import javax.inject.Inject
 
-class RoomListViewModel @AssistedInject constructor(@Assisted initialState: RoomListViewState,
-                                                    private val session: Session,
-                                                    private val homeRoomListObservableSource: HomeRoomListObservableStore,
-                                                    private val alphabeticalRoomComparator: AlphabeticalRoomComparator,
-                                                    private val chronologicalRoomComparator: ChronologicalRoomComparator)
+class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
+                                            private val session: Session,
+                                            private val roomSummariesStore: RxStore<List<RoomSummary>>,
+                                            private val alphabeticalRoomComparator: AlphabeticalRoomComparator,
+                                            private val chronologicalRoomComparator: ChronologicalRoomComparator)
     : VectorViewModel<RoomListViewState>(initialState) {
 
-    @AssistedInject.Factory
     interface Factory {
         fun create(initialState: RoomListViewState): RoomListViewModel
     }
@@ -103,7 +101,7 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
     }
 
     private fun observeRoomSummaries() {
-        homeRoomListObservableSource
+        roomSummariesStore
                 .observe()
                 .observeOn(Schedulers.computation())
                 .map {
@@ -113,7 +111,7 @@ class RoomListViewModel @AssistedInject constructor(@Assisted initialState: Room
                     copy(asyncRooms = asyncRooms)
                 }
 
-        homeRoomListObservableSource
+        roomSummariesStore
                 .observe()
                 .observeOn(Schedulers.computation())
                 .map { buildRoomSummaries(it) }

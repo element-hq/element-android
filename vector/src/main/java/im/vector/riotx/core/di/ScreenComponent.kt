@@ -41,12 +41,13 @@ import im.vector.riotx.features.home.createdirect.CreateDirectRoomKnownUsersFrag
 import im.vector.riotx.features.home.group.GroupListFragment
 import im.vector.riotx.features.home.room.detail.RoomDetailFragment
 import im.vector.riotx.features.home.room.detail.readreceipts.DisplayReadReceiptsBottomSheet
-import im.vector.riotx.features.home.room.detail.timeline.action.*
+import im.vector.riotx.features.home.room.detail.timeline.action.MessageActionsBottomSheet
 import im.vector.riotx.features.home.room.detail.timeline.edithistory.ViewEditHistoryBottomSheet
 import im.vector.riotx.features.home.room.detail.timeline.reactions.ViewReactionsBottomSheet
 import im.vector.riotx.features.home.room.filtered.FilteredRoomsActivity
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsBottomSheet
 import im.vector.riotx.features.home.room.list.RoomListFragment
+import im.vector.riotx.features.home.room.list.RoomListModule
 import im.vector.riotx.features.invite.VectorInviteView
 import im.vector.riotx.features.link.LinkHandlerActivity
 import im.vector.riotx.features.login.LoginActivity
@@ -71,7 +72,17 @@ import im.vector.riotx.features.settings.push.PushGatewaysFragment
 import im.vector.riotx.features.share.IncomingShareActivity
 import im.vector.riotx.features.ui.UiStateRepository
 
-@Component(dependencies = [VectorComponent::class], modules = [AssistedInjectModule::class, ViewModelModule::class, HomeModule::class])
+@Component(
+        dependencies = [
+            VectorComponent::class
+        ],
+        modules = [
+            AssistedInjectModule::class,
+            ViewModelModule::class,
+            HomeModule::class,
+            RoomListModule::class
+        ]
+)
 @ScreenScope
 interface ScreenComponent {
 

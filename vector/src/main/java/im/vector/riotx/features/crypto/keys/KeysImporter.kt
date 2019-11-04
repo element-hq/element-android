@@ -18,10 +18,11 @@ package im.vector.riotx.features.crypto.keys
 
 import android.content.Context
 import android.net.Uri
-import arrow.core.Try
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
+import im.vector.matrix.android.internal.extensions.foldToCallback
+import im.vector.matrix.android.internal.util.awaitCallback
 import im.vector.riotx.core.intent.getMimeTypeFromUri
 import im.vector.riotx.core.resources.openResource
 import kotlinx.coroutines.Dispatchers
@@ -41,8 +42,8 @@ class KeysImporter(private val session: Session) {
                password: String,
                callback: MatrixCallback<ImportRoomKeysResult>) {
         GlobalScope.launch(Dispatchers.Main) {
-            withContext(Dispatchers.IO) {
-                Try {
+            runCatching {
+                withContext(Dispatchers.IO) {
                     val resource = openResource(context, uri, mimetype ?: getMimeTypeFromUri(context, uri))
 
                     if (resource?.mContentStream == null) {
@@ -51,33 +52,17 @@ class KeysImporter(private val session: Session) {
 
                     val data: ByteArray
                     try {
-                        data = ByteArray(resource.mContentStream!!.available())
-                        resource.mContentStream!!.read(data)
-                        resource.mContentStream!!.close()
-
-                        data
+                        data = resource.mContentStream!!.use { it.readBytes() }
                     } catch (e: Exception) {
-                        try {
-                            resource.mContentStream!!.close()
-                        } catch (e2: Exception) {
-                            Timber.e(e2, "## importKeys()")
-                        }
-
+                        Timber.e(e, "## importKeys()")
                         throw e
                     }
+
+                    awaitCallback<ImportRoomKeysResult> {
+                        session.importRoomKeys(data, password, null, it)
+                    }
                 }
-            }
-                    .fold(
-                            {
-                                callback.onFailure(it)
-                            },
-                            { byteArray ->
-                                session.importRoomKeys(byteArray,
-                                        password,
-                                        null,
-                                        callback)
-                            }
-                    )
+            }.foldToCallback(callback)
         }
     }
 }

@@ -14,20 +14,12 @@
  * limitations under the License.
  */
 
-package im.vector.riotx
+package im.vector.riotx.features.share
 
-import org.junit.Test
+import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.riotx.core.utils.RxStore
+import javax.inject.Inject
+import javax.inject.Singleton
 
-import org.junit.Assert.*
-
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
-class ExampleUnitTest {
-    @Test
-    fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
-    }
-}
+@Singleton
+class ShareRoomListObservableStore @Inject constructor() : RxStore<List<RoomSummary>>()

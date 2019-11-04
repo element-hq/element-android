@@ -32,7 +32,8 @@ import im.vector.riotx.R
 import timber.log.Timber
 import java.io.File
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 /**
  * Open a url in the internet browser of the system

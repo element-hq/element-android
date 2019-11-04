@@ -14,20 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.rx;
+package im.vector.riotx.features.home.room.list
 
-import org.junit.Test;
+import dagger.Binds
+import dagger.Module
 
-import static org.junit.Assert.*;
+@Module
+abstract class RoomListModule {
 
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
- */
-public class ExampleUnitTest {
-    @Test
-    public void addition_isCorrect() {
-        assertEquals(4, 2 + 2);
-    }
+    @Binds
+    abstract fun providesRoomListViewModelFactory(roomListViewModelFactory: RoomListViewModelFactory): RoomListViewModel.Factory
 }

@@ -18,7 +18,7 @@ package im.vector.matrix.android.internal.util
 
 import im.vector.matrix.android.api.MatrixPatterns
 import timber.log.Timber
-import java.util.*
+import java.util.Locale
 
 /**
  * Convert a string to an UTF8 String

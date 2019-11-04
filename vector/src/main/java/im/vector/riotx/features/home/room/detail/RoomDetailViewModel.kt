@@ -16,6 +16,7 @@
 
 package im.vector.riotx.features.home.room.detail
 
+import android.net.Uri
 import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -95,6 +96,8 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
 
     // Slot to keep a pending action during permission request
     var pendingAction: RoomDetailActions? = null
+    // Slot to keep a pending uri during permission request
+    var pendingUri: Uri? = null
 
     @AssistedInject.Factory
     interface Factory {

@@ -1,0 +1,113 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <string name="resources_language">sr</string>
+    <string name="resources_country_code">RS</string>
+    <string name="resources_script">Cyrl</string>
+
+    <string name="light_theme">Светла тема</string>
+    <string name="dark_theme">Тамна тема</string>
+    <string name="black_them">Црна тема</string>
+    <string name="status_theme">Status.im тема</string>
+
+    <string name="notification_sync_init">Иницијализација сервиса</string>
+    <string name="notification_sync_in_progress">Синхронизација у току…</string>
+    <string name="notification_noisy_notifications">Бучна обавештења</string>
+    <string name="notification_silent_notifications">Тиха обавештења</string>
+
+    <string name="title_activity_home">Поруке</string>
+    <string name="title_activity_room">Соба</string>
+    <string name="title_activity_settings">Подешавања</string>
+    <string name="title_activity_member_details">Подаци о члану</string>
+    <string name="title_activity_historical">Историјски</string>
+    <string name="title_activity_bug_report">Пријава грешке</string>
+    <string name="title_activity_choose_sticker">Пошаљи налепницу</string>
+    <string name="title_activity_keys_backup_setup">Резервна копија кључева</string>
+    <string name="title_activity_keys_backup_restore">Користи резервну копију кључева</string>
+    <string name="title_activity_verify_device">Верификуј уређај</string>
+
+    <string name="keys_backup_is_not_finished_please_wait">Креирање резервне копије кључева се није завршило, молим сачекајте…</string>
+    <string name="sign_out_bottom_sheet_warning_no_backup">Изгубићете ваше шифроване поруке ако се сад одјавите</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">Креирање резервне копије кључева је у току. Ако се одјавите сад, изгубићете приступ вашим шифрованим порукама.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">Сигурносна копија кључева би требало да буде активна на свим вашим уређајима како би избегли губитак приступа вашим шифрованим порукама.</string>
+    <string name="sign_out_bottom_sheet_dont_want_secure_messages">Не желим моје шифроване поруке</string>
+    <string name="sign_out_bottom_sheet_backing_up_keys">Прављење резервне копије кључева у току…</string>
+    <string name="keys_backup_activate">Користи резервну копију кључева</string>
+    <string name="are_you_sure">Да ли сте сигурни\?</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Изгубићете приступ вашим шифрованим порукама уколико не направите резервну копију кључева пре него што се одјавите.</string>
+
+    <string name="loading">Учитавање…</string>
+
+    <string name="ok">У реду</string>
+    <string name="cancel">Откажи</string>
+    <string name="save">Сачувај</string>
+    <string name="leave">Напусти</string>
+    <string name="stay">Остани</string>
+    <string name="send">Пошаљи</string>
+    <string name="copy">Копирај</string>
+    <string name="resend">Пошаљи поново</string>
+    <string name="redact">Уклони</string>
+    <string name="share">Подели</string>
+    <string name="accept">Прихвати</string>
+    <string name="skip">Прескочи</string>
+    <string name="done">Готово</string>
+    <string name="abort">Обустави</string>
+    <string name="ignore">Игнориши</string>
+    <string name="review">Прегледај</string>
+    <string name="decline">Одбаци</string>
+
+    <string name="action_exit">Изађи</string>
+    <string name="actions">Акције</string>
+    <string name="action_sign_out">Одјави се</string>
+    <string name="action_sign_out_confirmation_simple">Да ли сте сигурни да желите да се одјавите\?</string>
+    <string name="action_voice_call">Гласовни позив</string>
+    <string name="action_video_call">Видео позив</string>
+    <string name="action_global_search">Глобална претрага</string>
+    <string name="action_mark_all_as_read">Означи све као прочитано</string>
+    <string name="action_quick_reply">Брзи одговор</string>
+    <string name="action_mark_room_read">Означи као прочитано</string>
+    <string name="action_open">Отвори</string>
+    <string name="action_close">Затвори</string>
+    <string name="disable">Онемогући</string>
+
+    <string name="dialog_title_confirmation">Потврда</string>
+    <string name="dialog_title_warning">Упозорење</string>
+    <string name="dialog_title_error">Грешка</string>
+
+    <string name="bottom_action_favourites">Омиљено</string>
+    <string name="bottom_action_people">Људи</string>
+    <string name="bottom_action_rooms">Собе</string>
+    <string name="invitations_header">Позивнице</string>
+    <string name="low_priority_header">Низак приоритет</string>
+    <string name="direct_chats_header">Разговори</string>
+    <string name="local_address_book_header">Локални адресар</string>
+    <string name="user_directory_header">Листа корисника</string>
+    <string name="matrix_only_filter">Само Matrix контакти</string>
+    <string name="no_result_placeholder">Нема резултата</string>
+    <string name="people_no_identity_server">Нема подешених сервера идентитета.</string>
+
+    <string name="rooms_header">Собе</string>
+    <string name="rooms_directory_header">Листа соба</string>
+    <string name="no_room_placeholder">Нема соба</string>
+    <string name="groups_invite_header">Пошаљи позивницу</string>
+    <string name="send_bug_report_placeholder">Опишите ваш проблем овде</string>
+    <string name="read_receipt">Прочитај</string>
+
+    <string name="join_room">Придружи се соби</string>
+    <string name="username">Корисничко име</string>
+    <string name="create_account">Направи налог</string>
+    <string name="login">Пријави се</string>
+    <string name="logout">Одјави се</string>
+    <string name="option_send_sticker">Пошаљи налепницу</string>
+    <string name="option_take_photo_video">Направи фотографију или видео снимак</string>
+    <string name="option_take_photo">Направи фотографију</string>
+    <string name="option_take_video">Направи видео снимак</string>
+
+    <string name="auth_login">Пријави се</string>
+    <string name="auth_login_sso">Пријави се помоћу single sign-on</string>
+    <string name="auth_register">Направи налог</string>
+    <string name="auth_skip">Прескочи</string>
+    <string name="auth_user_id_placeholder">Адреса електронске поште или корисничко име</string>
+    <string name="auth_password_placeholder">Лозинка</string>
+    <string name="auth_new_password_placeholder">Нова лозинка</string>
+    <string name="auth_user_name_placeholder">Корисничко име</string>
+</resources>

@@ -39,14 +39,17 @@ internal fun TimelineEventEntity.updateSenderData() {
     val isUnlinked = chunkEntity.isUnlinked()
     var senderMembershipEvent: EventEntity?
     var senderRoomMemberContent: String?
+    var senderRoomMemberPrevContent: String?
     when {
         stateIndex <= 0 -> {
             senderMembershipEvent = chunkEntity.timelineEvents.buildQuery(senderId, isUnlinked).next(from = stateIndex)?.root
             senderRoomMemberContent = senderMembershipEvent?.prevContent
+            senderRoomMemberPrevContent = senderMembershipEvent?.content
         }
         else            -> {
             senderMembershipEvent = chunkEntity.timelineEvents.buildQuery(senderId, isUnlinked).prev(since = stateIndex)?.root
             senderRoomMemberContent = senderMembershipEvent?.content
+            senderRoomMemberPrevContent = senderMembershipEvent?.prevContent
         }
     }
 
@@ -58,11 +61,27 @@ internal fun TimelineEventEntity.updateSenderData() {
                 .equalTo(EventEntityFields.TYPE, EventType.STATE_ROOM_MEMBER)
                 .prev(since = stateIndex)
         senderRoomMemberContent = senderMembershipEvent?.content
+        senderRoomMemberPrevContent = senderMembershipEvent?.prevContent
     }
-    val senderRoomMember: RoomMember? = ContentMapper.map(senderRoomMemberContent).toModel()
-    this.senderAvatar = senderRoomMember?.avatarUrl
-    this.senderName = senderRoomMember?.displayName
-    this.isUniqueDisplayName = RoomMembers(realm, roomId).isUniqueDisplayName(senderRoomMember?.displayName)
+
+    ContentMapper.map(senderRoomMemberContent).toModel<RoomMember>()?.also {
+        this.senderAvatar = it.avatarUrl
+        this.senderName = it.displayName
+        this.isUniqueDisplayName = RoomMembers(realm, roomId).isUniqueDisplayName(it.displayName)
+    }
+
+    // We try to fallback on prev content if we got a room member state events with null fields
+    if (root?.type == EventType.STATE_ROOM_MEMBER) {
+        ContentMapper.map(senderRoomMemberPrevContent).toModel<RoomMember>()?.also {
+            if (this.senderAvatar == null && it.avatarUrl != null) {
+                this.senderAvatar = it.avatarUrl
+            }
+            if (this.senderName == null && it.displayName != null) {
+                this.senderName = it.displayName
+                this.isUniqueDisplayName = RoomMembers(realm, roomId).isUniqueDisplayName(it.displayName)
+            }
+        }
+    }
     this.senderMembershipEvent = senderMembershipEvent
 }
 

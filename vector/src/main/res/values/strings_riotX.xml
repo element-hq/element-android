@@ -8,5 +8,6 @@
     <string name="room_list_quick_actions_notifications_mute">"Mute"</string>
     <string name="room_list_quick_actions_settings">"Settings"</string>
     <string name="room_list_quick_actions_leave">"Leave the room"</string>
+    <string name="notice_member_no_changes">"%1$s made no changes"</string>
 
 </resources>

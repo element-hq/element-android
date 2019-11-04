@@ -1,17 +1,40 @@
-Changes in RiotX 0.7.0 (2019-XX-XX)
+Changes in RiotX 0.8.0 (2019-XX-XX)
+===================================================
+
+Features ✨:
+ -
+
+Improvements 🙌:
+ - Handle code tags (#567)
+
+Other changes:
+ - Markdown set to off by default (#412)
+ - Accessibility improvements to the attachment file type chooser
+
+Bugfix 🐛:
+ - Fix issues with some member events rendering (#498)
+ - Passphrase does not match (Export room keys) (#644)
+ - Ask for permission to write external storage when uri comes from the keyboard (#658)
+
+Translations 🗣:
+ -
+
+Build 🧱:
+ -
+
+Changes in RiotX 0.7.0 (2019-10-24)
 ===================================================
 
 Features:
- -
+ - Share elements from other app to RiotX (#58)
+ - Read marker (#84)
+ - Add ability to report content (#515)
 
 Improvements:
  - Persist active tab between sessions (#503)
  - Do not upload file too big for the homeserver (#587)
- - Handle read markers (#84)
  - Attachments: start using system pickers (#52)
- - Attachments: start handling incoming share (#58)
  - Mark all messages as read (#396)
- - Add ability to report content (#515)
 
 
 Other changes:
@@ -25,12 +48,6 @@ Bugfix:
  - Picture uploads are unreliable, pictures are shown in wrong aspect ratio on desktop client (#517)
  - Invitation notifications are not dismissed automatically if room is joined from another client (#347)
  - Opening links from RiotX reuses browser tab (#599)
-
-Translations:
- -
-
-Build:
- -
 
 Changes in RiotX 0.6.1 (2019-09-24)
 ===================================================
