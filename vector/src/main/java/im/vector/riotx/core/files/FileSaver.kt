@@ -30,15 +30,10 @@ import java.io.File
  */
 @WorkerThread
 fun writeToFile(str: String, file: File): Try<Unit> {
-    return Try {
-        val sink = file.sink()
-
-        val bufferedSink = sink.buffer()
-
-        bufferedSink.writeString(str, Charsets.UTF_8)
-
-        bufferedSink.close()
-        sink.close()
+    return Try<Unit> {
+        file.sink().buffer().use {
+            it.writeString(str, Charsets.UTF_8)
+        }
     }
 }
 
@@ -47,15 +42,10 @@ fun writeToFile(str: String, file: File): Try<Unit> {
  */
 @WorkerThread
 fun writeToFile(data: ByteArray, file: File): Try<Unit> {
-    return Try {
-        val sink = file.sink()
-
-        val bufferedSink = sink.buffer()
-
-        bufferedSink.write(data)
-
-        bufferedSink.close()
-        sink.close()
+    return Try<Unit> {
+        file.sink().buffer().use {
+            it.write(data)
+        }
     }
 }
 

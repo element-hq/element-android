@@ -17,7 +17,6 @@
 package im.vector.riotx.core.images
 
 import android.content.Context
-import android.database.Cursor
 import android.net.Uri
 import android.provider.MediaStore
 import androidx.exifinterface.media.ExifInterface
@@ -37,26 +36,24 @@ class ImageTools @Inject constructor(private val context: Context) {
 
         if (uri.scheme == "content") {
             val proj = arrayOf(MediaStore.Images.Media.DATA)
-            var cursor: Cursor? = null
             try {
-                cursor = context.contentResolver.query(uri, proj, null, null, null)
-                if (cursor != null && cursor.count > 0) {
-                    cursor.moveToFirst()
-                    val idxData = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-                    val path = cursor.getString(idxData)
-                    if (path.isNullOrBlank()) {
-                        Timber.w("Cannot find path in media db for uri $uri")
-                        return orientation
+                val cursor = context.contentResolver.query(uri, proj, null, null, null)
+                cursor?.use {
+                    if (it.moveToFirst()) {
+                        val idxData = it.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+                        val path = it.getString(idxData)
+                        if (path.isNullOrBlank()) {
+                            Timber.w("Cannot find path in media db for uri $uri")
+                            return orientation
+                        }
+                        val exif = ExifInterface(path)
+                        orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED)
                     }
-                    val exif = ExifInterface(path)
-                    orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED)
                 }
             } catch (e: Exception) {
                 // eg SecurityException from com.google.android.apps.photos.content.GooglePhotosImageProvider URIs
                 // eg IOException from trying to parse the returned path as a file when it is an http uri.
                 Timber.e(e, "Cannot get orientation for bitmap")
-            } finally {
-                cursor?.close()
             }
         } else if (uri.scheme == "file") {
             try {

@@ -576,7 +576,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
      * @return true if the markdown is enabled
      */
     fun isMarkdownEnabled(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_ENABLE_MARKDOWN_KEY, true)
+        return defaultPrefs.getBoolean(SETTINGS_ENABLE_MARKDOWN_KEY, false)
     }
 
     /**

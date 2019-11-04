@@ -19,7 +19,7 @@ package im.vector.riotx.core.utils
 import android.content.Context
 import android.os.Build
 import android.text.format.Formatter
-import java.util.*
+import java.util.TreeMap
 
 object TextUtils {
 

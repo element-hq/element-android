@@ -28,7 +28,6 @@ import androidx.core.graphics.drawable.DrawableCompat
 import androidx.preference.PreferenceManager
 import im.vector.riotx.R
 import timber.log.Timber
-import java.util.*
 
 /**
  * Util class for managing themes.
@@ -131,24 +130,16 @@ object ThemeUtils {
      */
     @ColorInt
     fun getColor(c: Context, @AttrRes colorAttribute: Int): Int {
-        if (mColorByAttr.containsKey(colorAttribute)) {
-            return mColorByAttr[colorAttribute] as Int
+        return mColorByAttr.getOrPut(colorAttribute) {
+            try {
+                val color = TypedValue()
+                c.theme.resolveAttribute(colorAttribute, color, true)
+                color.data
+            } catch (e: Exception) {
+                Timber.e(e, "Unable to get color")
+                ContextCompat.getColor(c, android.R.color.holo_red_dark)
+            }
         }
-
-        var matchedColor: Int
-
-        try {
-            val color = TypedValue()
-            c.theme.resolveAttribute(colorAttribute, color, true)
-            matchedColor = color.data
-        } catch (e: Exception) {
-            Timber.e(e, "Unable to get color")
-            matchedColor = ContextCompat.getColor(c, android.R.color.holo_red_dark)
-        }
-
-        mColorByAttr[colorAttribute] = matchedColor
-
-        return matchedColor
     }
 
     fun getAttribute(c: Context, @AttrRes attribute: Int): TypedValue? {

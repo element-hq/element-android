@@ -81,8 +81,6 @@ import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.ui.views.JumpToReadMarkerView
 import im.vector.riotx.core.ui.views.NotificationAreaView
 import im.vector.riotx.core.utils.*
-import im.vector.riotx.core.utils.Debouncer
-import im.vector.riotx.core.utils.createUIHandler
 import im.vector.riotx.features.attachments.AttachmentTypeSelectorView
 import im.vector.riotx.features.attachments.AttachmentsHelper
 import im.vector.riotx.features.attachments.ContactAttachment
@@ -409,7 +407,7 @@ class RoomDetailFragment :
         composerLayout.composerRelatedMessageActionIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), iconRes))
         composerLayout.sendButton.setContentDescription(getString(descriptionRes))
 
-        avatarRenderer.render(event.senderAvatar, event.root.senderId ?: "", event.senderName, composerLayout.composerRelatedMessageAvatar)
+        avatarRenderer.render(event.senderAvatar, event.root.senderId ?: "", event.getDisambiguatedDisplayName(), composerLayout.composerRelatedMessageAvatar)
         composerLayout.expand {
             // need to do it here also when not using quick reply
             focusComposerAndShowKeyboard()
@@ -480,7 +478,7 @@ class RoomDetailFragment :
                 jumpToReadMarkerView.render(show, readMarkerId)
             }
         }
-        recyclerView.setController(timelineEventController)
+        recyclerView.adapter = timelineEventController.adapter
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 if (recyclerView.scrollState == RecyclerView.SCROLL_STATE_IDLE) {
@@ -619,17 +617,25 @@ class RoomDetailFragment :
         }
         composerLayout.callback = object : TextComposerView.Callback {
             override fun onRichContentSelected(contentUri: Uri): Boolean {
-                val shareIntent = Intent().apply {
-                    action = Intent.ACTION_SEND
-                    data = contentUri
+                // We need WRITE_EXTERNAL permission
+                return if (checkPermissions(PERMISSIONS_FOR_WRITING_FILES, this@RoomDetailFragment, PERMISSION_REQUEST_CODE_INCOMING_URI)) {
+                    sendUri(contentUri)
+                } else {
+                    roomDetailViewModel.pendingUri = contentUri
+                    // Always intercept when we request some permission
+                    true
                 }
-                val isHandled = attachmentsHelper.handleShareIntent(shareIntent)
-                if (!isHandled) {
-                    Toast.makeText(requireContext(), R.string.error_handling_incoming_share, Toast.LENGTH_SHORT).show()
-                }
-                return isHandled
             }
         }
+    }
+
+    private fun sendUri(uri: Uri): Boolean {
+        val shareIntent = Intent(Intent.ACTION_SEND, uri)
+        val isHandled = attachmentsHelper.handleShareIntent(shareIntent)
+        if (!isHandled) {
+            Toast.makeText(requireContext(), R.string.error_handling_incoming_share, Toast.LENGTH_SHORT).show()
+        }
+        return isHandled
     }
 
     private fun setupAttachmentButton() {
@@ -906,19 +912,34 @@ class RoomDetailFragment :
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         if (allGranted(grantResults)) {
-            if (requestCode == PERMISSION_REQUEST_CODE_DOWNLOAD_FILE) {
-                val action = roomDetailViewModel.pendingAction
-                if (action != null) {
-                    roomDetailViewModel.pendingAction = null
-                    roomDetailViewModel.process(action)
+            when (requestCode) {
+                PERMISSION_REQUEST_CODE_DOWNLOAD_FILE   -> {
+                    val action = roomDetailViewModel.pendingAction
+                    if (action != null) {
+                        roomDetailViewModel.pendingAction = null
+                        roomDetailViewModel.process(action)
+                    }
                 }
-            } else if (requestCode == PERMISSION_REQUEST_CODE_PICK_ATTACHMENT) {
-                val pendingType = attachmentsHelper.pendingType
-                if (pendingType != null) {
-                    attachmentsHelper.pendingType = null
-                    launchAttachmentProcess(pendingType)
+                PERMISSION_REQUEST_CODE_INCOMING_URI    -> {
+                    val pendingUri = roomDetailViewModel.pendingUri
+                    if (pendingUri != null) {
+                        roomDetailViewModel.pendingUri = null
+                        sendUri(pendingUri)
+                    }
+                }
+                PERMISSION_REQUEST_CODE_PICK_ATTACHMENT -> {
+                    val pendingType = attachmentsHelper.pendingType
+                    if (pendingType != null) {
+                        attachmentsHelper.pendingType = null
+                        launchAttachmentProcess(pendingType)
+                    }
                 }
             }
+        } else {
+            // Reset all pending data
+            roomDetailViewModel.pendingAction = null
+            roomDetailViewModel.pendingUri = null
+            attachmentsHelper.pendingType = null
         }
     }
 

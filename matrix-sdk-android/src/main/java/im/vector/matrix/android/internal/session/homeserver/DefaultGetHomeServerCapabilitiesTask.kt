@@ -23,7 +23,7 @@ import im.vector.matrix.android.internal.database.query.getOrCreate
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.awaitTransaction
-import java.util.*
+import java.util.Date
 import javax.inject.Inject
 
 internal interface GetHomeServerCapabilitiesTask : Task<Unit, Unit>

@@ -56,7 +56,8 @@ import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupManageActiv
 import timber.log.Timber
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 
 class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {

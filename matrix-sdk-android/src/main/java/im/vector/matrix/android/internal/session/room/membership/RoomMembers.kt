@@ -73,6 +73,7 @@ internal class RoomMembers(private val realm: Realm,
         return EventEntity
                 .where(realm, roomId, EventType.STATE_ROOM_MEMBER)
                 .sort(EventEntityFields.STATE_INDEX, Sort.DESCENDING)
+                .isNotNull(EventEntityFields.STATE_KEY)
                 .distinct(EventEntityFields.STATE_KEY)
                 .isNotNull(EventEntityFields.CONTENT)
     }

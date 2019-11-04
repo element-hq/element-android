@@ -6,12 +6,16 @@ Features ✨:
 
 Improvements 🙌:
  - Search reaction by name or keyword in emoji picker
+ - Handle code tags (#567)
 
 Other changes:
- -
+ - Markdown set to off by default (#412)
+ - Accessibility improvements to the attachment file type chooser
 
 Bugfix 🐛:
- -
+ - Fix issues with some member events rendering (#498)
+ - Passphrase does not match (Export room keys) (#644)
+ - Ask for permission to write external storage when uri comes from the keyboard (#658)
 
 Translations 🗣:
  -
