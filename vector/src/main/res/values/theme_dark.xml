@@ -101,6 +101,7 @@
         <item name="vctr_search_mode_room_name_text_color">#CCC3C3C3</item>
         <item name="vctr_unread_marker_line_color">@color/accent_color_dark</item>
         <item name="vctr_markdown_block_background_color">@android:color/black</item>
+        <item name="vctr_spoiler_background_color">#FFFFFFFF</item>
         <item name="vctr_room_activity_divider_color">#565656</item>
 
         <!-- tab bar colors -->

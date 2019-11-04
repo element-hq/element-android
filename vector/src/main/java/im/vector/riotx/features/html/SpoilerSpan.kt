@@ -21,7 +21,9 @@ import android.text.TextPaint
 import android.text.style.ClickableSpan
 import android.view.View
 
-class SpoilerSpan(private val bgColor: Int, private val textColor: Int) : ClickableSpan() {
+class SpoilerSpan(private val bgColorHidden: Int,
+                  private val bgColorRevealed: Int,
+                  private val textColor: Int) : ClickableSpan() {
 
     override fun onClick(widget: View) {
         isHidden = !isHidden
@@ -31,10 +33,11 @@ class SpoilerSpan(private val bgColor: Int, private val textColor: Int) : Clicka
     private var isHidden = true
 
     override fun updateDrawState(tp: TextPaint) {
-        tp.bgColor = bgColor
         if (isHidden) {
+            tp.bgColor = bgColorHidden
             tp.color = Color.TRANSPARENT
         } else {
+            tp.bgColor = bgColorRevealed
             tp.color = textColor
         }
     }

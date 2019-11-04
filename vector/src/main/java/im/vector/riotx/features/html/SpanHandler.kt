@@ -28,7 +28,8 @@ class SpanHandler(context: Context) : TagHandler() {
 
     override fun supportedTags() = listOf("span")
 
-    private val spoilerBgColor: Int = ThemeUtils.getColor(context, R.attr.vctr_markdown_block_background_color)
+    private val spoilerBgColorHidden: Int = ThemeUtils.getColor(context, R.attr.vctr_spoiler_background_color)
+    private val spoilerBgColorRevealed: Int = ThemeUtils.getColor(context, R.attr.vctr_markdown_block_background_color)
 
     private val textColor: Int = ThemeUtils.getColor(context, R.attr.riotx_text_primary)
 
@@ -37,7 +38,7 @@ class SpanHandler(context: Context) : TagHandler() {
         if (mxSpoiler != null) {
             SpannableBuilder.setSpans(
                     visitor.builder(),
-                    SpoilerSpan(spoilerBgColor, textColor),
+                    SpoilerSpan(spoilerBgColorHidden, spoilerBgColorRevealed, textColor),
                     tag.start(),
                     tag.end()
             )
