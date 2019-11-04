@@ -230,7 +230,7 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, O
                 roomListViewModel.accept(RoomListActions.ChangeRoomNotificationState(quickActions.roomId, RoomNotificationState.MUTE))
             }
             is RoomListQuickActions.Settings                  -> {
-                navigator.openRoomSettings(requireContext(), quickActions.roomId)
+                vectorBaseActivity.notImplemented("Opening room settings")
             }
             is RoomListQuickActions.Leave                     -> {
                 roomListViewModel.accept(RoomListActions.LeaveRoom(quickActions.roomId))

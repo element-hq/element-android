@@ -17,6 +17,7 @@ package im.vector.riotx.features.home.room.list.actions
 
 import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
+import im.vector.matrix.android.api.session.room.notification.RoomNotificationState
 import im.vector.riotx.EmojiCompatFontProvider
 import im.vector.riotx.core.date.VectorDateFormatter
 import im.vector.riotx.core.epoxy.bottomsheet.BottomSheetItemAction_
@@ -53,10 +54,12 @@ class RoomListQuickActionsEpoxyController @Inject constructor(private val string
         bottomSheetItemSeparator {
             id("notifications_separator")
         }
-        RoomListQuickActions.NotificationsAllNoisy(roomSummary.roomId).toBottomSheetItem(0)
-        RoomListQuickActions.NotificationsAll(roomSummary.roomId).toBottomSheetItem(1)
-        RoomListQuickActions.NotificationsMentionsOnly(roomSummary.roomId).toBottomSheetItem(2)
-        RoomListQuickActions.NotificationsMute(roomSummary.roomId).toBottomSheetItem(3)
+
+        val selectedRoomState = state.roomNotificationState()
+        RoomListQuickActions.NotificationsAllNoisy(roomSummary.roomId).toBottomSheetItem(0, selectedRoomState)
+        RoomListQuickActions.NotificationsAll(roomSummary.roomId).toBottomSheetItem(1, selectedRoomState)
+        RoomListQuickActions.NotificationsMentionsOnly(roomSummary.roomId).toBottomSheetItem(2, selectedRoomState)
+        RoomListQuickActions.NotificationsMute(roomSummary.roomId).toBottomSheetItem(3, selectedRoomState)
 
         // Leave
         bottomSheetItemSeparator {
@@ -65,9 +68,18 @@ class RoomListQuickActionsEpoxyController @Inject constructor(private val string
         RoomListQuickActions.Leave(roomSummary.roomId).toBottomSheetItem(5)
     }
 
-    private fun RoomListQuickActions.toBottomSheetItem(index: Int) {
+    private fun RoomListQuickActions.toBottomSheetItem(index: Int, roomNotificationState: RoomNotificationState? = null) {
+        val selected = when (this) {
+            is RoomListQuickActions.NotificationsAllNoisy     -> roomNotificationState == RoomNotificationState.ALL_MESSAGES_NOISY
+            is RoomListQuickActions.NotificationsAll          -> roomNotificationState == RoomNotificationState.ALL_MESSAGES
+            is RoomListQuickActions.NotificationsMentionsOnly -> roomNotificationState == RoomNotificationState.MENTIONS_ONLY
+            is RoomListQuickActions.NotificationsMute         -> roomNotificationState == RoomNotificationState.MUTE
+            is RoomListQuickActions.Settings,
+            is RoomListQuickActions.Leave                     -> false
+        }
         return BottomSheetItemAction_()
                 .id("action_$index")
+                .selected(selected)
                 .iconRes(iconResId)
                 .textRes(titleRes)
                 .listener(View.OnClickListener { listener?.didSelectMenuAction(this) })

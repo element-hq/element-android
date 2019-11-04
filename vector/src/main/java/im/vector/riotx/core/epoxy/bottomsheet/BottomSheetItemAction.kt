@@ -20,12 +20,17 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.DrawableRes
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
+import im.vector.riotx.core.resources.ColorProvider
+import im.vector.riotx.features.themes.ThemeUtils
 
 /**
  * A action for bottom sheet.
@@ -43,6 +48,8 @@ abstract class BottomSheetItemAction : VectorEpoxyModel<BottomSheetItemAction.Ho
     @EpoxyAttribute
     var expanded = false
     @EpoxyAttribute
+    var selected = false
+    @EpoxyAttribute
     var subMenuItem = false
     @EpoxyAttribute
     lateinit var listener: View.OnClickListener
@@ -51,20 +58,30 @@ abstract class BottomSheetItemAction : VectorEpoxyModel<BottomSheetItemAction.Ho
         holder.view.setOnClickListener {
             listener.onClick(it)
         }
-
         holder.startSpace.isVisible = subMenuItem
         holder.icon.setImageResource(iconRes)
         holder.text.setText(textRes)
-        holder.expand.isVisible = showExpand
+        holder.selected.isInvisible = !selected
         if (showExpand) {
-            holder.expand.setImageResource(if (expanded) R.drawable.ic_material_expand_less_black else R.drawable.ic_material_expand_more_black)
+            val expandDrawable = if (expanded) {
+                ContextCompat.getDrawable(holder.view.context, R.drawable.ic_material_expand_less_black)
+            } else {
+                ContextCompat.getDrawable(holder.view.context, R.drawable.ic_material_expand_more_black)
+            }
+            expandDrawable?.also {
+                val tintColor = ThemeUtils.getColor(holder.view.context, R.attr.riotx_text_secondary)
+                DrawableCompat.setTint(it, tintColor)
+            }
+            holder.text.setCompoundDrawablesWithIntrinsicBounds(null, null, expandDrawable, null)
+        } else {
+            holder.text.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
         }
     }
 
     class Holder : VectorEpoxyHolder() {
-        val startSpace by bind<View>(R.id.action_start_space)
-        val icon by bind<ImageView>(R.id.action_icon)
-        val text by bind<TextView>(R.id.action_title)
-        val expand by bind<ImageView>(R.id.action_expand)
+        val startSpace by bind<View>(R.id.actionStartSpace)
+        val icon by bind<ImageView>(R.id.actionIcon)
+        val text by bind<TextView>(R.id.actionTitle)
+        val selected by bind<ImageView>(R.id.actionSelected)
     }
 }
