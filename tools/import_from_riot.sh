@@ -102,6 +102,7 @@ cp ../riot-android/vector/src/main/res/values-ro/strings.xml        ./vector/src
 cp ../riot-android/vector/src/main/res/values-ru/strings.xml        ./vector/src/main/res/values-ru/strings.xml
 cp ../riot-android/vector/src/main/res/values-sk/strings.xml        ./vector/src/main/res/values-sk/strings.xml
 cp ../riot-android/vector/src/main/res/values-sq/strings.xml        ./vector/src/main/res/values-sq/strings.xml
+cp ../riot-android/vector/src/main/res/values-sr/strings.xml        ./vector/src/main/res/values-sr/strings.xml
 cp ../riot-android/vector/src/main/res/values-te/strings.xml        ./vector/src/main/res/values-te/strings.xml
 cp ../riot-android/vector/src/main/res/values-th/strings.xml        ./vector/src/main/res/values-th/strings.xml
 cp ../riot-android/vector/src/main/res/values-tlh/strings.xml       ./vector/src/main/res/values-tlh/strings.xml
