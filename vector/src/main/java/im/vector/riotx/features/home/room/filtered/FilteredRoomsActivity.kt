@@ -44,7 +44,6 @@ class FilteredRoomsActivity : VectorBaseActivity() {
         super.onCreate(savedInstanceState)
         configureToolbar(filteredRoomsToolbar)
         if (isFirstCreation()) {
-            roomListFragment = RoomListFragment.newInstance(RoomListParams(RoomListFragment.DisplayMode.FILTERED))
             replaceFragment(roomListFragment, R.id.filteredRoomsFragmentContainer, FRAGMENT_TAG)
         } else {
             roomListFragment = supportFragmentManager.findFragmentByTag(FRAGMENT_TAG) as RoomListFragment

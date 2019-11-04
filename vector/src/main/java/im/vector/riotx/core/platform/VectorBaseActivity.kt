@@ -26,6 +26,7 @@ import androidx.annotation.*
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentFactory
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -125,7 +126,7 @@ abstract class VectorBaseActivity : BaseMvRxActivity(), HasScreenInjector {
         }
         Timber.v("Injecting dependencies into ${javaClass.simpleName} took $timeForInjection ms")
         ThemeUtils.setActivityTheme(this, getOtherThemes())
-
+        supportFragmentManager.fragmentFactory = screenComponent.fragmentFactory()
         super.onCreate(savedInstanceState)
         viewModelFactory = screenComponent.viewModelFactory()
         configurationViewModel = ViewModelProviders.of(this, viewModelFactory).get(ConfigurationViewModel::class.java)

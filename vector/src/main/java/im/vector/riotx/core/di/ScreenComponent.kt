@@ -17,6 +17,7 @@
 package im.vector.riotx.core.di
 
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentFactory
 import androidx.lifecycle.ViewModelProvider
 import dagger.BindsInstance
 import dagger.Component
@@ -87,6 +88,8 @@ import im.vector.riotx.features.ui.UiStateRepository
 interface ScreenComponent {
 
     fun activeSessionHolder(): ActiveSessionHolder
+
+    fun fragmentFactory(): FragmentFactory
 
     fun viewModelFactory(): ViewModelProvider.Factory
 

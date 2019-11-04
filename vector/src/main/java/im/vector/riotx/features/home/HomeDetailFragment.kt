@@ -30,6 +30,7 @@ import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
+import im.vector.riotx.core.extensions.inTransaction
 import im.vector.riotx.core.platform.ToolbarConfigurable
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.ui.views.KeysBackupBanner
@@ -172,14 +173,17 @@ class HomeDetailFragment : VectorBaseFragment(), KeysBackupBanner.Delegate {
 
     private fun updateSelectedFragment(displayMode: RoomListFragment.DisplayMode) {
         val fragmentTag = "FRAGMENT_TAG_${displayMode.name}"
-        var fragment = childFragmentManager.findFragmentByTag(fragmentTag)
+        val fragment = childFragmentManager.findFragmentByTag(fragmentTag)
         if (fragment == null) {
-            fragment = RoomListFragment.newInstance(RoomListParams(displayMode))
+            childFragmentManager.inTransaction {
+                replace(R.id.roomListContainer, RoomListFragment::class.java, RoomListParams(displayMode).toMvRxBundle(), fragmentTag).addToBackStack(fragmentTag)
+            }
+        } else {
+            childFragmentManager.inTransaction {
+                replace(R.id.roomListContainer, fragment, fragmentTag).addToBackStack(fragmentTag)
+            }
         }
-        childFragmentManager.beginTransaction()
-                .replace(R.id.roomListContainer, fragment, fragmentTag)
-                .addToBackStack(fragmentTag)
-                .commit()
+
     }
 
     /* ==========================================================================================
