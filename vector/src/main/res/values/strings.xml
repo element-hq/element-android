@@ -1168,6 +1168,8 @@
     <string name="command_description_nick">Changes your display nickname</string>
     <string name="command_description_markdown">On/Off markdown</string>
     <string name="command_description_clear_scalar_token">To fix Matrix Apps management</string>
+    <string name="command_description_spoiler">Sends the given message as a spoiler</string>
+    <string name="spoiler">Spoiler</string>
 
     <string name="markdown_has_been_enabled">Markdown has been enabled.</string>
     <string name="markdown_has_been_disabled">Markdown has been disabled.</string>
@@ -1528,6 +1530,7 @@ Why choose Riot.im?
     <string name="message_add_reaction">Add Reaction</string>
     <string name="message_view_reaction">View Reactions</string>
     <string name="reactions">Reactions</string>
+    <string name="reaction_search_type_hint">Type keywords to find a reaction.</string>
 
     <string name="event_redacted_by_user_reason">Event deleted by user</string>
     <string name="event_redacted_by_admin_reason">Event moderated by room admin</string>

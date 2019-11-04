@@ -39,7 +39,7 @@ class EmojiChooserViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    fun initWithContect(context: Context) {
+    fun initWithContext(context: Context) {
         // TODO load async
         val emojiDataSource = EmojiDataSource(context)
         emojiSourceLiveData.value = emojiDataSource

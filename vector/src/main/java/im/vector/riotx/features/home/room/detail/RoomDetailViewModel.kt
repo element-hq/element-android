@@ -49,6 +49,7 @@ import im.vector.riotx.BuildConfig
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.postLiveEvent
 import im.vector.riotx.core.platform.VectorViewModel
+import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.resources.UserPreferencesProvider
 import im.vector.riotx.core.utils.LiveEvent
 import im.vector.riotx.core.utils.subscribeLogError
@@ -66,6 +67,7 @@ import java.util.concurrent.TimeUnit
 class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: RoomDetailViewState,
                                                       userPreferencesProvider: UserPreferencesProvider,
                                                       private val vectorPreferences: VectorPreferences,
+                                                      private val stringProvider: StringProvider,
                                                       private val session: Session
 ) : VectorViewModel<RoomDetailViewState>(initialState) {
 
@@ -324,6 +326,14 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                         }
                         is ParsedCommand.SendEmote                -> {
                             room.sendTextMessage(slashCommandResult.message, msgType = MessageType.MSGTYPE_EMOTE)
+                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled())
+                            popDraft()
+                        }
+                        is ParsedCommand.SendSpoiler              -> {
+                            room.sendFormattedTextMessage(
+                                    "[${stringProvider.getString(R.string.spoiler)}](${slashCommandResult.message})",
+                                    "<span data-mx-spoiler>${slashCommandResult.message}</span>"
+                            )
                             _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled())
                             popDraft()
                         }

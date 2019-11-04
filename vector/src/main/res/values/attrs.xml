@@ -34,6 +34,7 @@
         <attr name="vctr_unread_marker_line_color" format="color" />
         <attr name="vctr_markdown_block_background_color" format="color" />
         <attr name="vctr_room_activity_divider_color" format="color" />
+        <attr name="vctr_spoiler_background_color" format="color" />
 
         <!-- tab bar colors -->
         <attr name="vctr_tab_bar_inverted_background_color" format="color" />

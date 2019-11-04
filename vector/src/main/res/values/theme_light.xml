@@ -101,6 +101,7 @@
         <item name="vctr_search_mode_room_name_text_color">#333C3C3C</item>
         <item name="vctr_unread_marker_line_color">@color/accent_color_light</item>
         <item name="vctr_markdown_block_background_color">#FFEEEEEE</item>
+        <item name="vctr_spoiler_background_color">#FF000000</item>
         <item name="vctr_room_activity_divider_color">#FFF2F2F2</item>
 
         <!-- tab bar colors -->
