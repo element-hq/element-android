@@ -19,7 +19,6 @@ package im.vector.matrix.android.internal.session.room
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.room.Room
-import im.vector.matrix.android.api.session.room.notification.RoomPushRuleService
 import im.vector.matrix.android.internal.database.mapper.RoomSummaryMapper
 import im.vector.matrix.android.internal.session.room.draft.DefaultDraftService
 import im.vector.matrix.android.internal.session.room.membership.DefaultMembershipService

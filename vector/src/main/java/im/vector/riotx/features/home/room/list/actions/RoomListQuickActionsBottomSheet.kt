@@ -46,11 +46,11 @@ data class RoomListActionsArgs(
 class RoomListQuickActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), RoomListQuickActionsEpoxyController.Listener {
 
     private lateinit var actionsDispatcher: RoomListQuickActionsStore
-    @Inject lateinit var roomListActionsViewModelFactory: RoomListActionsViewModel.Factory
+    @Inject lateinit var roomListActionsViewModelFactory: RoomListQuickActionsViewModel.Factory
     @Inject lateinit var roomListActionsEpoxyController: RoomListQuickActionsEpoxyController
     @Inject lateinit var navigator: Navigator
 
-    private val viewModel: RoomListActionsViewModel by fragmentViewModel(RoomListActionsViewModel::class)
+    private val viewModel: RoomListQuickActionsViewModel by fragmentViewModel(RoomListQuickActionsViewModel::class)
 
     @BindView(R.id.bottomSheetRecyclerView)
     lateinit var recyclerView: RecyclerView
@@ -76,7 +76,6 @@ class RoomListQuickActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), R
         recyclerView.itemAnimator = null
         roomListActionsEpoxyController.listener = this
     }
-
 
     override fun invalidate() = withState(viewModel) {
         roomListActionsEpoxyController.setData(it)

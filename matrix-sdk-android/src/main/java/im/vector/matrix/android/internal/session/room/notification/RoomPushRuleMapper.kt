@@ -99,4 +99,3 @@ internal fun RoomPushRule.toRoomNotificationState(): RoomNotificationState {
         RoomNotificationState.ALL_MESSAGES
     }
 }
-

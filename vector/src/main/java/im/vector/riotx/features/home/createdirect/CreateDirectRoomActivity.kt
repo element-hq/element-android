@@ -31,7 +31,6 @@ import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.addFragment
 import im.vector.riotx.core.extensions.addFragmentToBackstack
-import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.platform.SimpleFragmentActivity
 import im.vector.riotx.core.platform.WaitingViewData
 import kotlinx.android.synthetic.main.activity.*

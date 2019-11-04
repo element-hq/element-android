@@ -18,30 +18,23 @@ package im.vector.riotx.features.home.room.list.actions
 import com.airbnb.mvrx.*
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import dagger.Lazy
-import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
 import im.vector.riotx.core.platform.VectorViewModel
-import im.vector.riotx.core.resources.StringProvider
-import im.vector.riotx.features.home.room.detail.timeline.format.NoticeEventFormatter
-import im.vector.riotx.features.html.EventHtmlRenderer
-import timber.log.Timber
 
-class RoomListActionsViewModel @AssistedInject constructor(@Assisted
-                                                           initialState: RoomListQuickActionsState,
-                                                           session: Session
+class RoomListQuickActionsViewModel @AssistedInject constructor(@Assisted initialState: RoomListQuickActionsState,
+                                                                session: Session
 ) : VectorViewModel<RoomListQuickActionsState>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
-        fun create(initialState: RoomListQuickActionsState): RoomListActionsViewModel
+        fun create(initialState: RoomListQuickActionsState): RoomListQuickActionsViewModel
     }
 
-    companion object : MvRxViewModelFactory<RoomListActionsViewModel, RoomListQuickActionsState> {
+    companion object : MvRxViewModelFactory<RoomListQuickActionsViewModel, RoomListQuickActionsState> {
 
-        override fun create(viewModelContext: ViewModelContext, state: RoomListQuickActionsState): RoomListActionsViewModel? {
+        override fun create(viewModelContext: ViewModelContext, state: RoomListQuickActionsState): RoomListQuickActionsViewModel? {
             val fragment: RoomListQuickActionsBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()
             return fragment.roomListActionsViewModelFactory.create(state)
         }
@@ -72,6 +65,4 @@ class RoomListActionsViewModel @AssistedInject constructor(@Assisted
                     copy(roomSummary = it)
                 }
     }
-
-
 }

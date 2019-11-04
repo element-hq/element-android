@@ -52,5 +52,4 @@ interface Navigator {
     fun openUserDetail(userId: String, context: Context)
 
     fun openRoomSettings(context: Context, roomId: String)
-
 }

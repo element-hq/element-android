@@ -31,7 +31,6 @@ import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.hideKeyboard
-import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.extensions.replaceFragment
 import im.vector.riotx.core.platform.ToolbarConfigurable
 import im.vector.riotx.core.platform.VectorBaseActivity

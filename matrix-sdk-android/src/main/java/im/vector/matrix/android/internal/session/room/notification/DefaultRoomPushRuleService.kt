@@ -69,5 +69,4 @@ internal class DefaultRoomPushRuleService @AssistedInject constructor(@Assisted 
             results.firstOrNull()
         }
     }
-
 }

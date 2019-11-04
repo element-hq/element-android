@@ -86,7 +86,6 @@ fun List<Action>.toJson(): List<Any> {
     }
 }
 
-
 fun PushRule.getActions(): List<Action> {
     val result = ArrayList<Action>()
 

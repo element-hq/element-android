@@ -29,7 +29,6 @@ import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
-import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.features.themes.ThemeUtils
 
 /**

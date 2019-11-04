@@ -33,7 +33,8 @@ import javax.inject.Inject
 class RoomListQuickActionsEpoxyController @Inject constructor(private val stringProvider: StringProvider,
                                                               private val avatarRenderer: AvatarRenderer,
                                                               private val dateFormatter: VectorDateFormatter,
-                                                              private val fontProvider: EmojiCompatFontProvider) : TypedEpoxyController<RoomListQuickActionsState>() {
+                                                              private val fontProvider: EmojiCompatFontProvider)
+    : TypedEpoxyController<RoomListQuickActionsState>() {
 
     var listener: Listener? = null
 

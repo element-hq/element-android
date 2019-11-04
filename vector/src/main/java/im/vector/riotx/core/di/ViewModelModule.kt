@@ -27,10 +27,7 @@ import im.vector.riotx.features.crypto.keysbackup.restore.KeysBackupRestoreFromP
 import im.vector.riotx.features.crypto.keysbackup.restore.KeysBackupRestoreSharedViewModel
 import im.vector.riotx.features.crypto.keysbackup.setup.KeysBackupSetupSharedViewModel
 import im.vector.riotx.features.crypto.verification.SasVerificationViewModel
-import im.vector.riotx.features.home.HomeNavigationViewModel
-import im.vector.riotx.features.home.createdirect.CreateDirectRoomNavigationViewModel
 import im.vector.riotx.features.reactions.EmojiChooserViewModel
-import im.vector.riotx.features.roomdirectory.RoomDirectoryNavigationViewModel
 import im.vector.riotx.features.workers.signout.SignOutViewModel
 
 @Module
@@ -85,5 +82,4 @@ interface ViewModelModule {
     @IntoMap
     @ViewModelKey(ConfigurationViewModel::class)
     fun bindConfigurationViewModel(viewModel: ConfigurationViewModel): ViewModel
-
 }

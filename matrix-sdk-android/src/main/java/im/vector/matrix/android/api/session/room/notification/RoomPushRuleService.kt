@@ -25,5 +25,4 @@ interface RoomPushRuleService {
     fun getLiveRoomNotificationState(): LiveData<RoomNotificationState>
 
     fun setRoomNotificationState(roomNotificationState: RoomNotificationState, matrixCallback: MatrixCallback<Unit>): Cancelable
-
 }

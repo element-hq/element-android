@@ -49,4 +49,3 @@ internal fun PushRuleEntity.Companion.where(realm: Realm,
             .equalTo("${PushRuleEntityFields.PARENT}.${PushRulesEntityFields.SCOPE}", scope)
             .equalTo(PushRuleEntityFields.RULE_ID, ruleId)
 }
-

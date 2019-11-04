@@ -29,5 +29,4 @@ data class RoomListQuickActionsState(
 ) : MvRxState {
 
     constructor(args: RoomListActionsArgs) : this(roomId = args.roomId)
-
 }

@@ -13,6 +13,7 @@ Improvements:
  - Mark all messages as read (#396)
  - Add ability to report content (#515)
 
+
 Other changes:
  - Accessibility improvements to read receipts in the room timeline and reactions emoji chooser
 

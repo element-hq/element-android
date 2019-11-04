@@ -25,7 +25,6 @@ import com.airbnb.mvrx.viewModel
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.addFragment
-import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.platform.ToolbarConfigurable
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
