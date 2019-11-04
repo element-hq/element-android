@@ -19,6 +19,7 @@ package im.vector.riotx.features.html
 import android.content.Context
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.glide.GlideApp
+import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.features.home.AvatarRenderer
 import io.noties.markwon.Markwon
 import io.noties.markwon.html.HtmlPlugin
@@ -49,6 +50,7 @@ class EventHtmlRenderer @Inject constructor(context: Context,
 }
 
 class MatrixHtmlPluginConfigure @Inject constructor(private val context: Context,
+                                                    private val colorProvider: ColorProvider,
                                                     private val avatarRenderer: AvatarRenderer,
                                                     private val session: ActiveSessionHolder) : HtmlPlugin.HtmlConfigure {
 
@@ -58,7 +60,6 @@ class MatrixHtmlPluginConfigure @Inject constructor(private val context: Context
                 .addHandler(FontTagHandler())
                 .addHandler(MxLinkTagHandler(GlideApp.with(context), context, avatarRenderer, session))
                 .addHandler(MxReplyTagHandler())
-                // FIXME (P3) SpanHandler is not recreated when theme is change and it depends on theme colors
-                .addHandler(SpanHandler(context))
+                .addHandler(SpanHandler(colorProvider))
     }
 }

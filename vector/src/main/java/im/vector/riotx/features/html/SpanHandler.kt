@@ -15,30 +15,23 @@
  */
 package im.vector.riotx.features.html
 
-import android.content.Context
-import im.vector.riotx.R
-import im.vector.riotx.features.themes.ThemeUtils
+import im.vector.riotx.core.resources.ColorProvider
 import io.noties.markwon.MarkwonVisitor
 import io.noties.markwon.SpannableBuilder
 import io.noties.markwon.html.HtmlTag
 import io.noties.markwon.html.MarkwonHtmlRenderer
 import io.noties.markwon.html.TagHandler
 
-class SpanHandler(context: Context) : TagHandler() {
+class SpanHandler(private val colorProvider: ColorProvider) : TagHandler() {
 
     override fun supportedTags() = listOf("span")
-
-    private val spoilerBgColorHidden: Int = ThemeUtils.getColor(context, R.attr.vctr_spoiler_background_color)
-    private val spoilerBgColorRevealed: Int = ThemeUtils.getColor(context, R.attr.vctr_markdown_block_background_color)
-
-    private val textColor: Int = ThemeUtils.getColor(context, R.attr.riotx_text_primary)
 
     override fun handle(visitor: MarkwonVisitor, renderer: MarkwonHtmlRenderer, tag: HtmlTag) {
         val mxSpoiler = tag.attributes()["data-mx-spoiler"]
         if (mxSpoiler != null) {
             SpannableBuilder.setSpans(
                     visitor.builder(),
-                    SpoilerSpan(spoilerBgColorHidden, spoilerBgColorRevealed, textColor),
+                    SpoilerSpan(colorProvider),
                     tag.start(),
                     tag.end()
             )
