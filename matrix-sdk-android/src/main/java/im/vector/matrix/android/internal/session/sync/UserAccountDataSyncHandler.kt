@@ -26,10 +26,7 @@ import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.pushers.SavePushRulesTask
 import im.vector.matrix.android.internal.session.room.membership.RoomMembers
-import im.vector.matrix.android.internal.session.sync.model.InvitedRoomSync
-import im.vector.matrix.android.internal.session.sync.model.UserAccountDataDirectMessages
-import im.vector.matrix.android.internal.session.sync.model.UserAccountDataPushRules
-import im.vector.matrix.android.internal.session.sync.model.UserAccountDataSync
+import im.vector.matrix.android.internal.session.sync.model.*
 import im.vector.matrix.android.internal.session.user.accountdata.DirectChatsHelper
 import im.vector.matrix.android.internal.session.user.accountdata.UpdateUserAccountDataTask
 import im.vector.matrix.android.internal.task.TaskExecutor
@@ -51,7 +48,8 @@ internal class UserAccountDataSyncHandler @Inject constructor(private val monarc
             when (it) {
                 is UserAccountDataDirectMessages -> handleDirectChatRooms(it)
                 is UserAccountDataPushRules      -> handlePushRules(it)
-                else                             -> return@forEach
+                is UserAccountDataFallback       -> Timber.d("Receive account data of unhandled type ${it.type}")
+                else                             -> error("Missing code here!")
             }
         }
         monarchy.doWithRealm { realm ->
