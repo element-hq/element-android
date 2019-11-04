@@ -58,6 +58,7 @@ class MatrixHtmlPluginConfigure @Inject constructor(private val context: Context
                 .addHandler(FontTagHandler())
                 .addHandler(MxLinkTagHandler(GlideApp.with(context), context, avatarRenderer, session))
                 .addHandler(MxReplyTagHandler())
+                // FIXME (P3) SpanHandler is not recreated when theme is change and it depends on theme colors
                 .addHandler(SpanHandler(context))
     }
 }
