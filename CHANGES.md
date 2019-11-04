@@ -2,7 +2,7 @@ Changes in RiotX 0.8.0 (2019-XX-XX)
 ===================================================
 
 Features ✨:
- -
+ - Handle long click on room in the room list (#395)
 
 Improvements 🙌:
  - Handle code tags (#567)
