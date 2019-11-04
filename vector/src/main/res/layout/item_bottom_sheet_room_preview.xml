@@ -16,6 +16,7 @@
         android:layout_marginBottom="8dp"
         android:adjustViewBounds="true"
         android:background="@drawable/circle"
+        android:importantForAccessibility="no"
         android:contentDescription="@string/avatar"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -50,6 +51,7 @@
         android:background="?attr/selectableItemBackground"
         android:scaleType="centerInside"
         android:src="@drawable/ic_room_actions_settings"
+        android:contentDescription="@string/room_list_quick_actions_settings"
         app:layout_constraintBottom_toBottomOf="@+id/bottomSheetRoomPreviewAvatar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/bottomSheetRoomPreviewAvatar" />

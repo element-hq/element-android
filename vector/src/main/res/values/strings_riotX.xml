@@ -6,7 +6,7 @@
     <string name="room_list_quick_actions_notifications_all">"All messages"</string>
     <string name="room_list_quick_actions_notifications_mentions">"Mentions only"</string>
     <string name="room_list_quick_actions_notifications_mute">"Mute"</string>
-    <string name="room_list_quick_actions_notifications_settings">"Settings"</string>
-    <string name="room_list_quick_actions_leave">"Leave"</string>
+    <string name="room_list_quick_actions_settings">"Settings"</string>
+    <string name="room_list_quick_actions_leave">"Leave the room"</string>
 
 </resources>
