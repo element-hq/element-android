@@ -5,6 +5,7 @@ Features ✨:
  -
 
 Improvements 🙌:
+ - Search reaction by name or keyword in emoji picker
  - Handle code tags (#567)
 
 Other changes:
