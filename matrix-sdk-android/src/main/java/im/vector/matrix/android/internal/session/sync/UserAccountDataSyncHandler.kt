@@ -27,6 +27,10 @@ import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.pushers.SavePushRulesTask
 import im.vector.matrix.android.internal.session.room.membership.RoomMembers
 import im.vector.matrix.android.internal.session.sync.model.*
+import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataDirectMessages
+import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataFallback
+import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataPushRules
+import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataSync
 import im.vector.matrix.android.internal.session.user.accountdata.DirectChatsHelper
 import im.vector.matrix.android.internal.session.user.accountdata.UpdateUserAccountDataTask
 import im.vector.matrix.android.internal.task.TaskExecutor

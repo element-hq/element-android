@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.session.sync.model
+package im.vector.matrix.android.internal.session.sync.model.accountdata
 
-internal interface UserAccountData {
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+import im.vector.matrix.android.api.pushrules.rest.GetPushRulesResponse
 
-    companion object {
-        const val TYPE_IGNORED_USER_LIST = "m.ignored_user_list"
-        const val TYPE_DIRECT_MESSAGES = "m.direct"
-        const val TYPE_PREVIEW_URLS = "org.matrix.preview_urls"
-        const val TYPE_WIDGETS = "m.widgets"
-        const val TYPE_PUSH_RULES = "m.push_rules"
-    }
-}
+@JsonClass(generateAdapter = true)
+internal data class UserAccountDataPushRules(
+        @Json(name = "type") override val type: String = TYPE_PUSH_RULES,
+        @Json(name = "content") val content: GetPushRulesResponse
+) : UserAccountData()

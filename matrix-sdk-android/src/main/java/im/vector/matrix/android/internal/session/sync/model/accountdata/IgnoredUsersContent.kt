@@ -14,12 +14,16 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.session.sync.model
+package im.vector.matrix.android.internal.session.sync.model.accountdata
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import im.vector.matrix.android.api.util.JsonDict
 
 @JsonClass(generateAdapter = true)
-internal data class UserAccountDataDirectMessages(
-        @Json(name = "content") val content: Map<String, List<String>>
-) : UserAccountData
+internal data class IgnoredUsersContent(
+        /**
+         * Required. The map of users to ignore. UserId -> empty object for future enhancement
+         */
+        @Json(name = "ignored_users") val ignoredUsers: Map<String, JsonDict>
+)

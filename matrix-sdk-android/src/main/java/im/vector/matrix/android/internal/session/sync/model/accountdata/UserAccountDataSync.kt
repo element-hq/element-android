@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.session.sync.model
+package im.vector.matrix.android.internal.session.sync.model.accountdata
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class UserAccountDataFallback(
-        @Json(name = "type") val type: String,
-        @Json(name = "content") val content: Map<String, Any>
-) : UserAccountData
+internal data class UserAccountDataSync(
+        @Json(name = "events") val list: List<UserAccountData> = emptyList()
+)
