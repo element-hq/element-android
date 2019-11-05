@@ -30,13 +30,13 @@ import butterknife.OnTextChanged
 import com.google.android.material.textfield.TextInputLayout
 import com.nulabinc.zxcvbn.Zxcvbn
 import im.vector.riotx.R
-import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.showPassword
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.ui.views.PasswordStrengthBar
 import im.vector.riotx.features.settings.VectorLocale
+import javax.inject.Inject
 
-class KeysBackupSetupStep2Fragment : VectorBaseFragment() {
+class KeysBackupSetupStep2Fragment @Inject constructor() : VectorBaseFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_keys_backup_setup_step2
 
@@ -76,10 +76,6 @@ class KeysBackupSetupStep2Fragment : VectorBaseFragment() {
 
     private lateinit var viewModel: KeysBackupSetupSharedViewModel
 
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
@@ -96,7 +92,7 @@ class KeysBackupSetupStep2Fragment : VectorBaseFragment() {
      * ========================================================================================== */
 
     private fun bindViewToViewModel() {
-        viewModel.passwordStrength.observe(this, Observer { strength ->
+        viewModel.passwordStrength.observe(viewLifecycleOwner, Observer { strength ->
             if (strength == null) {
                 mPassphraseProgressLevel.strength = 0
                 mPassphraseInputLayout.error = null
@@ -120,7 +116,7 @@ class KeysBackupSetupStep2Fragment : VectorBaseFragment() {
             }
         })
 
-        viewModel.passphrase.observe(this, Observer<String> { newValue ->
+        viewModel.passphrase.observe(viewLifecycleOwner, Observer<String> { newValue ->
             if (newValue.isEmpty()) {
                 viewModel.passwordStrength.value = null
             } else {
@@ -135,21 +131,21 @@ class KeysBackupSetupStep2Fragment : VectorBaseFragment() {
 
         mPassphraseTextEdit.setText(viewModel.passphrase.value)
 
-        viewModel.passphraseError.observe(this, Observer {
+        viewModel.passphraseError.observe(viewLifecycleOwner, Observer {
             TransitionManager.beginDelayedTransition(rootGroup)
             mPassphraseInputLayout.error = it
         })
 
         mPassphraseConfirmTextEdit.setText(viewModel.confirmPassphrase.value)
 
-        viewModel.showPasswordMode.observe(this, Observer {
+        viewModel.showPasswordMode.observe(viewLifecycleOwner, Observer {
             val shouldBeVisible = it ?: false
             mPassphraseTextEdit.showPassword(shouldBeVisible)
             mPassphraseConfirmTextEdit.showPassword(shouldBeVisible)
             mPassphraseReveal.setImageResource(if (shouldBeVisible) R.drawable.ic_eye_closed_black else R.drawable.ic_eye_black)
         })
 
-        viewModel.confirmPassphraseError.observe(this, Observer {
+        viewModel.confirmPassphraseError.observe(viewLifecycleOwner, Observer {
             TransitionManager.beginDelayedTransition(rootGroup)
             mPassphraseConfirmInputLayout.error = it
         })
@@ -202,9 +198,5 @@ class KeysBackupSetupStep2Fragment : VectorBaseFragment() {
                 viewModel.passphraseError.value = context?.getString(R.string.keys_backup_passphrase_not_empty_error_message)
             }
         }
-    }
-
-    companion object {
-        fun newInstance() = KeysBackupSetupStep2Fragment()
     }
 }

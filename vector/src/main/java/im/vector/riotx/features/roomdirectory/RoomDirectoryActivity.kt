@@ -65,8 +65,8 @@ class RoomDirectoryActivity : VectorBaseActivity() {
         navigationViewModel.navigateTo.observeEvent(this) { navigation ->
             when (navigation) {
                 is Navigation.Back           -> onBackPressed()
-                is Navigation.CreateRoom     -> addFragmentToBackstack(CreateRoomFragment(), R.id.simpleFragmentContainer)
-                is Navigation.ChangeProtocol -> addFragmentToBackstack(RoomDirectoryPickerFragment(), R.id.simpleFragmentContainer)
+                is Navigation.CreateRoom     -> addFragmentToBackstack(R.id.simpleFragmentContainer, CreateRoomFragment::class.java)
+                is Navigation.ChangeProtocol -> addFragmentToBackstack(R.id.simpleFragmentContainer, RoomDirectoryPickerFragment::class.java)
                 is Navigation.Close          -> finish()
             }
         }
@@ -79,7 +79,7 @@ class RoomDirectoryActivity : VectorBaseActivity() {
 
     override fun initUiAndData() {
         if (isFirstCreation()) {
-            addFragment(PublicRoomsFragment(), R.id.simpleFragmentContainer)
+            addFragment(R.id.simpleFragmentContainer, PublicRoomsFragment::class.java)
         }
     }
 

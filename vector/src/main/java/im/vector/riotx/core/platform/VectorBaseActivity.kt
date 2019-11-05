@@ -19,6 +19,7 @@ package im.vector.riotx.core.platform
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -26,7 +27,6 @@ import androidx.annotation.*
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.isVisible
-import androidx.fragment.app.FragmentFactory
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -35,6 +35,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.Unbinder
 import com.airbnb.mvrx.BaseMvRxActivity
+import com.airbnb.mvrx.MvRx
 import com.bumptech.glide.util.Util
 import com.google.android.material.snackbar.Snackbar
 import im.vector.riotx.BuildConfig
@@ -330,6 +331,10 @@ abstract class VectorBaseActivity : BaseMvRxActivity(), HasScreenInjector {
                 it.setDisplayHomeAsUpEnabled(true)
             }
         }
+    }
+
+    fun Parcelable?.toMvRxBundle(): Bundle? {
+        return this?.let { Bundle().apply { putParcelable(MvRx.KEY_ARG, it) } }
     }
 
     // ==============================================================================================

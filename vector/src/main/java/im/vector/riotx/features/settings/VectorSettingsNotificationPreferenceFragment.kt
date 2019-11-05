@@ -24,21 +24,20 @@ import im.vector.matrix.android.api.pushrules.RuleIds
 import im.vector.matrix.android.api.pushrules.RuleKind
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
-import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.preference.VectorSwitchPreference
 import im.vector.riotx.core.pushers.PushersManager
 import im.vector.riotx.push.fcm.FcmHelper
 import javax.inject.Inject
 
 // Referenced in vector_settings_preferences_root.xml
-class VectorSettingsNotificationPreferenceFragment : VectorSettingsBaseFragment() {
+class VectorSettingsNotificationPreferenceFragment @Inject constructor(
+        private val pushManager: PushersManager,
+        private val activeSessionHolder: ActiveSessionHolder,
+        private val vectorPreferences: VectorPreferences
+) : VectorSettingsBaseFragment() {
 
     override var titleRes: Int = R.string.settings_notifications
     override val preferenceXmlRes = R.xml.vector_settings_notifications
-
-    @Inject lateinit var pushManager: PushersManager
-    @Inject lateinit var activeSessionHolder: ActiveSessionHolder
-    @Inject lateinit var vectorPreferences: VectorPreferences
 
     override fun bindPref() {
         findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY)!!.let { pref ->
@@ -55,10 +54,6 @@ class VectorSettingsNotificationPreferenceFragment : VectorSettingsBaseFragment(
             val areNotifEnabledAtAccountLevel = !mRuleMaster.enabled
             (pref as SwitchPreference).isChecked = areNotifEnabledAtAccountLevel
         }
-    }
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
     }
 
     override fun onResume() {

@@ -25,11 +25,11 @@ import androidx.lifecycle.ViewModelProviders
 import butterknife.BindView
 import butterknife.OnClick
 import im.vector.riotx.R
-import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.utils.LiveEvent
+import javax.inject.Inject
 
-class KeysBackupSetupStep1Fragment : VectorBaseFragment() {
+class KeysBackupSetupStep1Fragment @Inject constructor(): VectorBaseFragment() {
 
     companion object {
         fun newInstance() = KeysBackupSetupStep1Fragment()
@@ -44,10 +44,6 @@ class KeysBackupSetupStep1Fragment : VectorBaseFragment() {
 
     @BindView(R.id.keys_backup_setup_step1_manualExport)
     lateinit var manualExportButton: Button
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

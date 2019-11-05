@@ -23,23 +23,18 @@ import androidx.preference.Preference
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import im.vector.matrix.android.api.Matrix
 import im.vector.riotx.R
-import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.preference.VectorPreference
 import im.vector.riotx.core.utils.copyToClipboard
 import im.vector.riotx.core.utils.displayInWebView
 import im.vector.riotx.features.version.VersionProvider
 import javax.inject.Inject
 
-class VectorSettingsHelpAboutFragment : VectorSettingsBaseFragment() {
+class VectorSettingsHelpAboutFragment @Inject constructor(
+        private val versionProvider: VersionProvider
+) : VectorSettingsBaseFragment() {
 
     override var titleRes = R.string.preference_root_help_about
     override val preferenceXmlRes = R.xml.vector_settings_help_about
-
-    @Inject lateinit var versionProvider: VersionProvider
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun bindPref() {
         // preference to start the App info screen, to facilitate App permissions access

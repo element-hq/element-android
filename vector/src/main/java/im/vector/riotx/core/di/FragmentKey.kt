@@ -18,7 +18,6 @@
 package im.vector.riotx.core.di
 
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModel
 import dagger.MapKey
 import kotlin.reflect.KClass
 

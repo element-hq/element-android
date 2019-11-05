@@ -19,13 +19,11 @@ package im.vector.riotx.features.roomdirectory.roompreview
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.transition.TransitionManager
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
-import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.core.platform.ButtonStateView
@@ -38,23 +36,14 @@ import javax.inject.Inject
 /**
  * Note: this Fragment is also used for world readable room for the moment
  */
-class RoomPreviewNoPreviewFragment : VectorBaseFragment() {
+class RoomPreviewNoPreviewFragment @Inject constructor(
+        private val errorFormatter: ErrorFormatter,
+        val roomPreviewViewModelFactory: RoomPreviewViewModel.Factory,
+        private val avatarRenderer: AvatarRenderer
+) : VectorBaseFragment() {
 
-    companion object {
-        fun newInstance(arg: RoomPreviewData): Fragment {
-            return RoomPreviewNoPreviewFragment().apply { setArguments(arg) }
-        }
-    }
-
-    @Inject lateinit var errorFormatter: ErrorFormatter
-    @Inject lateinit var roomPreviewViewModelFactory: RoomPreviewViewModel.Factory
-    @Inject lateinit var avatarRenderer: AvatarRenderer
     private val roomPreviewViewModel: RoomPreviewViewModel by fragmentViewModel()
     private val roomPreviewData: RoomPreviewData by args()
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

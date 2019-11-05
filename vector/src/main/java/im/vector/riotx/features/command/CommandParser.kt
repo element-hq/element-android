@@ -56,7 +56,6 @@ object CommandParser {
                 return ParsedCommand.ErrorEmptySlashCommand
             }
 
-
             return when (val slashCommand = messageParts.first()) {
                 Command.CHANGE_DISPLAY_NAME.command    -> {
                     val newDisplayName = textMessage.substring(Command.CHANGE_DISPLAY_NAME.command.length).trim()

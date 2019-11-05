@@ -16,21 +16,40 @@
 
 package im.vector.riotx.core.extensions
 
-import androidx.appcompat.app.AppCompatActivity
+import android.os.Parcelable
 import androidx.fragment.app.Fragment
+import im.vector.riotx.core.platform.VectorBaseActivity
 
-fun AppCompatActivity.addFragment(fragment: Fragment, frameId: Int) {
+fun VectorBaseActivity.addFragment(frameId: Int, fragment: Fragment) {
     supportFragmentManager.inTransaction { add(frameId, fragment) }
 }
 
-fun AppCompatActivity.replaceFragment(fragment: Fragment, frameId: Int, tag: String? = null) {
+fun <T : Fragment> VectorBaseActivity.addFragment(frameId: Int, fragmentClass: Class<T>, params: Parcelable? = null, tag: String? = null) {
+    supportFragmentManager.inTransaction {
+        add(frameId, fragmentClass, params.toMvRxBundle(), tag)
+    }
+}
+
+fun VectorBaseActivity.replaceFragment(frameId: Int, fragment: Fragment, tag: String? = null) {
     supportFragmentManager.inTransaction { replace(frameId, fragment, tag) }
 }
 
-fun AppCompatActivity.addFragmentToBackstack(fragment: Fragment, frameId: Int, tag: String? = null) {
+fun <T : Fragment> VectorBaseActivity.replaceFragment(frameId: Int, fragmentClass: Class<T>, params: Parcelable? = null, tag: String? = null) {
+    supportFragmentManager.inTransaction {
+        replace(frameId, fragmentClass, params.toMvRxBundle(), tag)
+    }
+}
+
+fun VectorBaseActivity.addFragmentToBackstack(frameId: Int, fragment: Fragment, tag: String? = null) {
     supportFragmentManager.inTransaction { replace(frameId, fragment).addToBackStack(tag) }
 }
 
-fun AppCompatActivity.hideKeyboard() {
+fun <T : Fragment> VectorBaseActivity.addFragmentToBackstack(frameId: Int, fragmentClass: Class<T>, params: Parcelable? = null, tag: String? = null) {
+    supportFragmentManager.inTransaction {
+        replace(frameId, fragmentClass, params.toMvRxBundle(), tag).addToBackStack(tag)
+    }
+}
+
+fun VectorBaseActivity.hideKeyboard() {
     currentFocus?.hideKeyboard()
 }

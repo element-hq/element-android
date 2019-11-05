@@ -29,8 +29,7 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.riotx.R
-import im.vector.riotx.core.di.ScreenComponent
-import im.vector.riotx.core.extensions.inTransaction
+import im.vector.riotx.core.extensions.addChildFragmentToBackstack
 import im.vector.riotx.core.platform.ToolbarConfigurable
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.ui.views.KeysBackupBanner
@@ -46,23 +45,19 @@ private const val INDEX_CATCHUP = 0
 private const val INDEX_PEOPLE = 1
 private const val INDEX_ROOMS = 2
 
-class HomeDetailFragment : VectorBaseFragment(), KeysBackupBanner.Delegate {
+class HomeDetailFragment @Inject constructor(
+        private val session: Session,
+        val homeDetailViewModelFactory: HomeDetailViewModel.Factory,
+        private val avatarRenderer: AvatarRenderer
+) : VectorBaseFragment(), KeysBackupBanner.Delegate {
 
     private val unreadCounterBadgeViews = arrayListOf<UnreadCounterBadgeView>()
 
     private val viewModel: HomeDetailViewModel by fragmentViewModel()
     private lateinit var navigationViewModel: HomeNavigationViewModel
 
-    @Inject lateinit var session: Session
-    @Inject lateinit var homeDetailViewModelFactory: HomeDetailViewModel.Factory
-    @Inject lateinit var avatarRenderer: AvatarRenderer
-
     override fun getLayoutResId(): Int {
         return R.layout.fragment_home_detail
-    }
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -100,7 +95,7 @@ class HomeDetailFragment : VectorBaseFragment(), KeysBackupBanner.Delegate {
 
         model.init(session)
 
-        model.keysBackupState.observe(this, Observer { keysBackupState ->
+        model.keysBackupState.observe(viewLifecycleOwner, Observer { keysBackupState ->
             when (keysBackupState) {
                 null                               ->
                     homeKeysBackupBanner.render(KeysBackupBanner.State.Hidden, false)
@@ -175,15 +170,11 @@ class HomeDetailFragment : VectorBaseFragment(), KeysBackupBanner.Delegate {
         val fragmentTag = "FRAGMENT_TAG_${displayMode.name}"
         val fragment = childFragmentManager.findFragmentByTag(fragmentTag)
         if (fragment == null) {
-            childFragmentManager.inTransaction {
-                replace(R.id.roomListContainer, RoomListFragment::class.java, RoomListParams(displayMode).toMvRxBundle(), fragmentTag).addToBackStack(fragmentTag)
-            }
+            val params = RoomListParams(displayMode)
+            addChildFragmentToBackstack(R.id.roomListContainer, RoomListFragment::class.java, params, fragmentTag)
         } else {
-            childFragmentManager.inTransaction {
-                replace(R.id.roomListContainer, fragment, fragmentTag).addToBackStack(fragmentTag)
-            }
+            addChildFragmentToBackstack(R.id.roomListContainer, fragment, fragmentTag)
         }
-
     }
 
     /* ==========================================================================================
@@ -204,12 +195,5 @@ class HomeDetailFragment : VectorBaseFragment(), KeysBackupBanner.Delegate {
         unreadCounterBadgeViews[INDEX_PEOPLE].render(UnreadCounterBadgeView.State(it.notificationCountPeople, it.notificationHighlightPeople))
         unreadCounterBadgeViews[INDEX_ROOMS].render(UnreadCounterBadgeView.State(it.notificationCountRooms, it.notificationHighlightRooms))
         syncStateView.render(it.syncState)
-    }
-
-    companion object {
-
-        fun newInstance(): HomeDetailFragment {
-            return HomeDetailFragment()
-        }
     }
 }

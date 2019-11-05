@@ -19,8 +19,6 @@ package im.vector.riotx.core.di
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Provider

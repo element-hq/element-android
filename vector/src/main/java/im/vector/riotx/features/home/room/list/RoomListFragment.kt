@@ -31,7 +31,6 @@ import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotx.R
-import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.epoxy.LayoutManagerStateRestorer
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.observeEvent
@@ -72,11 +71,6 @@ class RoomListFragment @Inject constructor(
     private val roomListViewModel: RoomListViewModel by fragmentViewModel()
 
     override fun getLayoutResId() = R.layout.fragment_room_list
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-        setArguments()
-    }
 
     private var hasUnreadRooms = false
 

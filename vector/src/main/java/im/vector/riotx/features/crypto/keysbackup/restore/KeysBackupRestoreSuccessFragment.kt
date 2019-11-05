@@ -21,11 +21,11 @@ import androidx.lifecycle.ViewModelProviders
 import butterknife.BindView
 import butterknife.OnClick
 import im.vector.riotx.R
-import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.utils.LiveEvent
+import javax.inject.Inject
 
-class KeysBackupRestoreSuccessFragment : VectorBaseFragment() {
+class KeysBackupRestoreSuccessFragment @Inject constructor() : VectorBaseFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_keys_backup_restore_success
 
@@ -35,10 +35,6 @@ class KeysBackupRestoreSuccessFragment : VectorBaseFragment() {
     lateinit var mSuccessDetailsText: TextView
 
     private lateinit var sharedViewModel: KeysBackupRestoreSharedViewModel
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

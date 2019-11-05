@@ -67,9 +67,9 @@ class RoomPreviewActivity : VectorBaseActivity(), ToolbarConfigurable {
             if (args.worldReadable) {
                 // TODO Room preview: Note: M does not recommend to use /events anymore, so for now we just display the room preview
                 // TODO the same way if it was not world readable
-                addFragment(RoomPreviewNoPreviewFragment.newInstance(args), R.id.simpleFragmentContainer)
+                addFragment(R.id.simpleFragmentContainer, RoomPreviewNoPreviewFragment::class.java, args)
             } else {
-                addFragment(RoomPreviewNoPreviewFragment.newInstance(args), R.id.simpleFragmentContainer)
+                addFragment(R.id.simpleFragmentContainer, RoomPreviewNoPreviewFragment::class.java, args)
             }
         }
     }

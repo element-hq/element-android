@@ -26,8 +26,6 @@ import com.airbnb.mvrx.*
 import com.jakewharton.rxbinding3.view.focusChanges
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.riotx.R
-import im.vector.riotx.core.di.ScreenComponent
-import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.setTextWithColoredPart
 import im.vector.riotx.core.extensions.showPassword
 import im.vector.riotx.core.platform.VectorBaseFragment
@@ -43,19 +41,13 @@ import javax.inject.Inject
  * What can be improved:
  * - When filtering more (when entering new chars), we could filter on result we already have, during the new server request, to avoid empty screen effect
  */
-class LoginFragment : VectorBaseFragment() {
+class LoginFragment @Inject constructor() : VectorBaseFragment() {
 
     private val viewModel: LoginViewModel by activityViewModel()
 
     private var passwordShown = false
 
-    @Inject lateinit var errorFormatter: ErrorFormatter
-
     override fun getLayoutResId() = R.layout.fragment_login
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

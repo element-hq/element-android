@@ -26,6 +26,7 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.riotx.R
 import im.vector.riotx.core.dialogs.ExportKeysDialog
 import im.vector.riotx.core.extensions.observeEvent
+import im.vector.riotx.core.extensions.replaceFragment
 import im.vector.riotx.core.platform.SimpleFragmentActivity
 import im.vector.riotx.core.utils.*
 import im.vector.riotx.features.crypto.keys.KeysExporter
@@ -39,9 +40,7 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
     override fun initUiAndData() {
         super.initUiAndData()
         if (isFirstCreation()) {
-            supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, KeysBackupSetupStep1Fragment.newInstance())
-                    .commitNow()
+            replaceFragment(R.id.container, KeysBackupSetupStep1Fragment::class.java)
         }
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(KeysBackupSetupSharedViewModel::class.java)
@@ -67,15 +66,11 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
             when (uxStateEvent) {
                 KeysBackupSetupSharedViewModel.NAVIGATE_TO_STEP_2      -> {
                     supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                    supportFragmentManager.beginTransaction()
-                            .replace(R.id.container, KeysBackupSetupStep2Fragment.newInstance())
-                            .commit()
+                    replaceFragment(R.id.container, KeysBackupSetupStep2Fragment::class.java)
                 }
                 KeysBackupSetupSharedViewModel.NAVIGATE_TO_STEP_3      -> {
                     supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                    supportFragmentManager.beginTransaction()
-                            .replace(R.id.container, KeysBackupSetupStep3Fragment.newInstance())
-                            .commit()
+                    replaceFragment(R.id.container, KeysBackupSetupStep3Fragment::class.java)
                 }
                 KeysBackupSetupSharedViewModel.NAVIGATE_FINISH         -> {
                     val resultIntent = Intent()
