@@ -30,7 +30,6 @@ data class IgnoredUsersViewState(
         val unIgnoreRequest: Async<Unit> = Uninitialized
 ) : MvRxState
 
-
 sealed class IgnoredUsersAction {
     data class UnIgnore(val userId: String) : IgnoredUsersAction()
 }
@@ -99,5 +98,4 @@ class IgnoredUsersViewModel @AssistedInject constructor(@Assisted initialState: 
             }
         })
     }
-
 }

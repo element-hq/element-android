@@ -31,7 +31,6 @@ abstract class VectorViewModel<S : MvRxState>(initialState: S)
     val requestErrorLiveData: LiveData<LiveEvent<Throwable>>
         get() = _requestErrorLiveData
 
-
     /**
      * This method does the same thing as the execute function, but it doesn't subscribe to the stream
      * so you can use this in a switchMap or a flatMap

@@ -31,7 +31,6 @@ internal interface UpdateIgnoredUserIdsTask : Task<UpdateIgnoredUserIdsTask.Para
             val userIdsToIgnore: List<String> = emptyList(),
             val userIdsToUnIgnore: List<String> = emptyList()
     )
-
 }
 
 internal class DefaultUpdateIgnoredUserIdsTask @Inject constructor(private val accountDataApi: AccountDataAPI,

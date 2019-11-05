@@ -727,7 +727,6 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         })
     }
 
-
     private fun observeSyncState() {
         session.rx()
                 .liveSyncState()
