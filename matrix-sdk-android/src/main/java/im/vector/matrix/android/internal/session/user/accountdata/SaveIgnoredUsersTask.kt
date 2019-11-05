@@ -16,9 +16,7 @@
 package im.vector.matrix.android.internal.session.user.accountdata
 
 import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.api.pushrules.rest.GetPushRulesResponse
 import im.vector.matrix.android.internal.database.model.IgnoredUserEntity
-import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataIgnoredUsers
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.awaitTransaction
 import javax.inject.Inject
@@ -26,20 +24,23 @@ import javax.inject.Inject
 /**
  * Save the ignored users list in DB
  */
-internal interface SaveIgnoredUsersTask : Task<UserAccountDataIgnoredUsers, Unit> {
-    data class Params(val pa: GetPushRulesResponse)
+internal interface SaveIgnoredUsersTask : Task<SaveIgnoredUsersTask.Params, Unit> {
+    data class Params(
+            val userIds: List<String>
+    )
 }
 
 internal class DefaultSaveIgnoredUsersTask @Inject constructor(private val monarchy: Monarchy) : SaveIgnoredUsersTask {
 
-    override suspend fun execute(params: UserAccountDataIgnoredUsers) {
+    override suspend fun execute(params: SaveIgnoredUsersTask.Params) {
         monarchy.awaitTransaction { realm ->
             // clear current ignored users
             realm.where(IgnoredUserEntity::class.java)
                     .findAll()
                     .deleteAllFromRealm()
 
-            params.content.ignoredUsers.keys.forEach { realm.createObject(IgnoredUserEntity::class.java, it) }
+            // And save the new received list
+            params.userIds.forEach { realm.createObject(IgnoredUserEntity::class.java).apply { userId = it } }
         }
     }
 }

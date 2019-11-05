@@ -18,24 +18,9 @@ package im.vector.matrix.android.internal.session.sync.model.accountdata
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import im.vector.matrix.android.api.util.emptyJsonDict
 
 @JsonClass(generateAdapter = true)
 internal data class UserAccountDataIgnoredUsers(
         @Json(name = "type") override val type: String = TYPE_IGNORED_USER_LIST,
         @Json(name = "content") val content: IgnoredUsersContent
-) : UserAccountData() {
-
-
-    companion object {
-        fun createWithUserIds(userIds: List<String>): UserAccountDataIgnoredUsers {
-            return UserAccountDataIgnoredUsers(
-                    content = IgnoredUsersContent(
-                            ignoredUsers = userIds.associateWith { emptyJsonDict }
-                    )
-            )
-        }
-    }
-}
-
-
+) : UserAccountData()

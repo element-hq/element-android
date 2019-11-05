@@ -125,7 +125,9 @@ internal class UserAccountDataSyncHandler @Inject constructor(private val monarc
     }
 
     private fun handleIgnoredUsers(userAccountDataIgnoredUsers: UserAccountDataIgnoredUsers) {
-        saveIgnoredUsersTask.configureWith(userAccountDataIgnoredUsers).executeBy(taskExecutor)
+        saveIgnoredUsersTask
+                .configureWith(SaveIgnoredUsersTask.Params(userAccountDataIgnoredUsers.content.ignoredUsers.keys.toList()))
+                .executeBy(taskExecutor)
         // TODO If not initial sync, we should execute a init sync
     }
 }

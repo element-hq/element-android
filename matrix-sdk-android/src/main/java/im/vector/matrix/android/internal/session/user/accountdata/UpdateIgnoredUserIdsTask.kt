@@ -20,8 +20,8 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.internal.database.model.IgnoredUserEntity
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.session.sync.model.accountdata.IgnoredUsersContent
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountData
-import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataIgnoredUsers
 import im.vector.matrix.android.internal.task.Task
 import javax.inject.Inject
 
@@ -36,6 +36,7 @@ internal interface UpdateIgnoredUserIdsTask : Task<UpdateIgnoredUserIdsTask.Para
 
 internal class DefaultUpdateIgnoredUserIdsTask @Inject constructor(private val accountDataApi: AccountDataAPI,
                                                                    private val monarchy: Monarchy,
+                                                                   private val saveIgnoredUsersTask: SaveIgnoredUsersTask,
                                                                    @UserId private val userId: String) : UpdateIgnoredUserIdsTask {
 
     override suspend fun execute(params: UpdateIgnoredUserIdsTask.Params) {
@@ -43,22 +44,26 @@ internal class DefaultUpdateIgnoredUserIdsTask @Inject constructor(private val a
         val ignoredUserIds = monarchy.fetchAllMappedSync(
                 { realm -> realm.where(IgnoredUserEntity::class.java) },
                 { it.userId }
-        )
+        ).toMutableSet()
 
         val original = ignoredUserIds.toList()
 
-        ignoredUserIds -= params.userIdsToUnIgnore
-        ignoredUserIds += params.userIdsToIgnore
+        ignoredUserIds.removeAll { it in params.userIdsToUnIgnore }
+        ignoredUserIds.addAll(params.userIdsToIgnore)
 
         if (original == ignoredUserIds) {
             // No change
             return
         }
 
-        val body = UserAccountDataIgnoredUsers.createWithUserIds(ignoredUserIds)
+        val list = ignoredUserIds.toList()
+        val body = IgnoredUsersContent.createWithUserIds(list)
 
-        return executeRequest {
+        executeRequest<Unit> {
             apiCall = accountDataApi.setAccountData(userId, UserAccountData.TYPE_IGNORED_USER_LIST, body)
         }
+
+        // Update the DB right now (do not wait for the sync to come back with updated data, for a faster UI update)
+        saveIgnoredUsersTask.execute(SaveIgnoredUsersTask.Params(list))
     }
 }

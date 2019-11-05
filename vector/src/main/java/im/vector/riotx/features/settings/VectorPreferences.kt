@@ -55,8 +55,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         const val SETTINGS_CONTACT_PREFERENCE_KEYS = "SETTINGS_CONTACT_PREFERENCE_KEYS"
         const val SETTINGS_NOTIFICATIONS_TARGETS_PREFERENCE_KEY = "SETTINGS_NOTIFICATIONS_TARGETS_PREFERENCE_KEY"
         const val SETTINGS_NOTIFICATIONS_TARGET_DIVIDER_PREFERENCE_KEY = "SETTINGS_NOTIFICATIONS_TARGET_DIVIDER_PREFERENCE_KEY"
-        const val SETTINGS_IGNORED_USERS_PREFERENCE_KEY = "SETTINGS_IGNORED_USERS_PREFERENCE_KEY"
-        const val SETTINGS_IGNORE_USERS_DIVIDER_PREFERENCE_KEY = "SETTINGS_IGNORE_USERS_DIVIDER_PREFERENCE_KEY"
         const val SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY = "SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY"
         const val SETTINGS_BACKGROUND_SYNC_DIVIDER_PREFERENCE_KEY = "SETTINGS_BACKGROUND_SYNC_DIVIDER_PREFERENCE_KEY"
         const val SETTINGS_LABS_PREFERENCE_KEY = "SETTINGS_LABS_PREFERENCE_KEY"
@@ -544,7 +542,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
             MEDIA_SAVING_1_WEEK  -> System.currentTimeMillis() / 1000 - 7 * 24 * 60 * 60
             MEDIA_SAVING_1_MONTH -> System.currentTimeMillis() / 1000 - 30 * 24 * 60 * 60
             MEDIA_SAVING_FOREVER -> 0
-            else -> 0
+            else                 -> 0
         }
     }
 
@@ -559,7 +557,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
             MEDIA_SAVING_1_WEEK  -> context.getString(R.string.media_saving_period_1_week)
             MEDIA_SAVING_1_MONTH -> context.getString(R.string.media_saving_period_1_month)
             MEDIA_SAVING_FOREVER -> context.getString(R.string.media_saving_period_forever)
-            else -> "?"
+            else                 -> "?"
         }
     }
 
