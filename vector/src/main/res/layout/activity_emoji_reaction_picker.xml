@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context="im.vector.riotx.features.reactions.EmojiReactionPickerActivity">
 
-    <fragment
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment"
         android:name="im.vector.riotx.features.reactions.EmojiChooserFragment"
         android:layout_width="match_parent"
@@ -14,7 +14,7 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:layout="@layout/emoji_chooser_fragment" />
 
-    <fragment
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/searchFragment"
         android:name="im.vector.riotx.features.reactions.EmojiSearchResultFragment"
         android:layout_width="match_parent"
