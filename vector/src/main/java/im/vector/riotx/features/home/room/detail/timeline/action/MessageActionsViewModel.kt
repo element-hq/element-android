@@ -263,7 +263,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
 
                 if (session.myUserId != event.root.senderId && event.root.getClearType() == EventType.MESSAGE) {
                     // not sent by me
-                    add(SimpleAction.ReportContent(eventId))
+                    add(SimpleAction.ReportContent(eventId, event.root.senderId))
                 }
             }
         }

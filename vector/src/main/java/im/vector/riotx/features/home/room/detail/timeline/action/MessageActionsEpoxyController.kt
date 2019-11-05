@@ -102,9 +102,9 @@ class MessageActionsEpoxyController @Inject constructor(private val stringProvid
             if (action is SimpleAction.ReportContent && state.expendedReportContentMenu) {
                 // Special case for report content menu: add the submenu
                 listOf(
-                        SimpleAction.ReportContentSpam(action.eventId),
-                        SimpleAction.ReportContentInappropriate(action.eventId),
-                        SimpleAction.ReportContentCustom(action.eventId)
+                        SimpleAction.ReportContentSpam(action.eventId, action.senderId),
+                        SimpleAction.ReportContentInappropriate(action.eventId, action.senderId),
+                        SimpleAction.ReportContentCustom(action.eventId, action.senderId)
                 ).forEachIndexed { indexReport, actionReport ->
                     bottomSheetItemAction {
                         id("actionReport_$indexReport")

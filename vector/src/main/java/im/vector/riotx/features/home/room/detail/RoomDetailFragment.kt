@@ -757,7 +757,7 @@ class RoomDetailFragment @Inject constructor(
                 .setView(layout)
                 .setPositiveButton(R.string.report_content_custom_submit) { _, _ ->
                     val reason = input.text.toString()
-                    roomDetailViewModel.process(RoomDetailActions.ReportContent(action.eventId, reason))
+                    roomDetailViewModel.process(RoomDetailActions.ReportContent(action.eventId, action.senderId, reason))
                 }
                 .setNegativeButton(R.string.cancel, null)
                 .show()
@@ -781,7 +781,7 @@ class RoomDetailFragment @Inject constructor(
                                         .setTitle(R.string.content_reported_as_spam_title)
                                         .setMessage(R.string.content_reported_as_spam_content)
                                         .setPositiveButton(R.string.ok, null)
-                                        .setNegativeButton(R.string.block_user) { _, _ -> vectorBaseActivity.notImplemented("block user") }
+                                        .setNegativeButton(R.string.block_user) { _, _ -> roomDetailViewModel.process(RoomDetailActions.IgnoreUser(data.senderId)) }
                                         .show()
                                         .withColoredButton(DialogInterface.BUTTON_NEGATIVE)
                             }
@@ -790,7 +790,7 @@ class RoomDetailFragment @Inject constructor(
                                         .setTitle(R.string.content_reported_as_inappropriate_title)
                                         .setMessage(R.string.content_reported_as_inappropriate_content)
                                         .setPositiveButton(R.string.ok, null)
-                                        .setNegativeButton(R.string.block_user) { _, _ -> vectorBaseActivity.notImplemented("block user") }
+                                        .setNegativeButton(R.string.block_user) { _, _ -> roomDetailViewModel.process(RoomDetailActions.IgnoreUser(data.senderId)) }
                                         .show()
                                         .withColoredButton(DialogInterface.BUTTON_NEGATIVE)
                             }
@@ -799,7 +799,7 @@ class RoomDetailFragment @Inject constructor(
                                         .setTitle(R.string.content_reported_title)
                                         .setMessage(R.string.content_reported_content)
                                         .setPositiveButton(R.string.ok, null)
-                                        .setNegativeButton(R.string.block_user) { _, _ -> vectorBaseActivity.notImplemented("block user") }
+                                        .setNegativeButton(R.string.block_user) { _, _ -> roomDetailViewModel.process(RoomDetailActions.IgnoreUser(data.senderId)) }
                                         .show()
                                         .withColoredButton(DialogInterface.BUTTON_NEGATIVE)
                             }
@@ -1124,10 +1124,10 @@ class RoomDetailFragment @Inject constructor(
                 roomDetailViewModel.process(RoomDetailActions.RemoveFailedEcho(action.eventId))
             }
             is SimpleAction.ReportContentSpam          -> {
-                roomDetailViewModel.process(RoomDetailActions.ReportContent(action.eventId, "This message is spam", spam = true))
+                roomDetailViewModel.process(RoomDetailActions.ReportContent(action.eventId, action.senderId, "This message is spam", spam = true))
             }
             is SimpleAction.ReportContentInappropriate -> {
-                roomDetailViewModel.process(RoomDetailActions.ReportContent(action.eventId, "This message is inappropriate", inappropriate = true))
+                roomDetailViewModel.process(RoomDetailActions.ReportContent(action.eventId, action.senderId, "This message is inappropriate", inappropriate = true))
             }
             is SimpleAction.ReportContentCustom        -> {
                 promptReasonToReportContent(action)

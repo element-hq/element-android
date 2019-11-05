@@ -157,6 +157,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
             is RoomDetailActions.SetReadMarkerAction         -> handleSetReadMarkerAction(action)
             is RoomDetailActions.MarkAllAsRead               -> handleMarkAllAsRead()
             is RoomDetailActions.ReportContent               -> handleReportContent(action)
+            is RoomDetailActions.IgnoreUser                  -> handleIgnoreUser(action)
         }
     }
 
@@ -709,6 +710,23 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
             }
         })
     }
+
+    private fun handleIgnoreUser(action: RoomDetailActions.IgnoreUser) {
+        if (action.userId.isNullOrEmpty()) {
+            return
+        }
+
+        session.ignoreUserIds(listOf(action.userId), object : MatrixCallback<Unit> {
+            override fun onSuccess(data: Unit) {
+                _requestLiveData.postValue(LiveEvent(Success(action)))
+            }
+
+            override fun onFailure(failure: Throwable) {
+                _requestLiveData.postValue(LiveEvent(Fail(failure)))
+            }
+        })
+    }
+
 
     private fun observeSyncState() {
         session.rx()
