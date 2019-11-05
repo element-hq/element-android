@@ -18,7 +18,6 @@ package im.vector.riotx.features.share
 
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotx.core.utils.BehaviorStore
-import im.vector.riotx.core.utils.RxStore
 import javax.inject.Inject
 import javax.inject.Singleton
 

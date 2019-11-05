@@ -25,12 +25,6 @@ import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
 import io.mockk.every
 import io.mockk.mockk
-import org.amshove.kluent.When
-import org.amshove.kluent.any
-import org.amshove.kluent.calling
-import org.amshove.kluent.itAnswers
-import org.amshove.kluent.itReturns
-import org.amshove.kluent.mock
 import org.junit.Assert
 import org.junit.Test
 
@@ -183,5 +177,4 @@ class PushrulesConditionTest {
             Assert.assertTrue("Notice", conditionEqual.isSatisfied(it))
         }
     }
-
 }
