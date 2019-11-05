@@ -2,7 +2,7 @@ Changes in RiotX 0.8.0 (2019-XX-XX)
 ===================================================
 
 Features ✨:
- -
+ - Ignore/UnIgnore users, and display list of ignored users (#542, #617)
 
 Improvements 🙌:
  - Search reaction by name or keyword in emoji picker
