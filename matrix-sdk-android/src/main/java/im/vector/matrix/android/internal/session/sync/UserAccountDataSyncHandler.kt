@@ -26,12 +26,10 @@ import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.pushers.SavePushRulesTask
 import im.vector.matrix.android.internal.session.room.membership.RoomMembers
-import im.vector.matrix.android.internal.session.sync.model.*
-import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataDirectMessages
-import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataFallback
-import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataPushRules
-import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataSync
+import im.vector.matrix.android.internal.session.sync.model.InvitedRoomSync
+import im.vector.matrix.android.internal.session.sync.model.accountdata.*
 import im.vector.matrix.android.internal.session.user.accountdata.DirectChatsHelper
+import im.vector.matrix.android.internal.session.user.accountdata.SaveIgnoredUsersTask
 import im.vector.matrix.android.internal.session.user.accountdata.UpdateUserAccountDataTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
@@ -45,6 +43,7 @@ internal class UserAccountDataSyncHandler @Inject constructor(private val monarc
                                                               private val directChatsHelper: DirectChatsHelper,
                                                               private val updateUserAccountDataTask: UpdateUserAccountDataTask,
                                                               private val savePushRulesTask: SavePushRulesTask,
+                                                              private val saveIgnoredUsersTask: SaveIgnoredUsersTask,
                                                               private val taskExecutor: TaskExecutor) {
 
     suspend fun handle(accountData: UserAccountDataSync?, invites: Map<String, InvitedRoomSync>?) {
@@ -52,10 +51,18 @@ internal class UserAccountDataSyncHandler @Inject constructor(private val monarc
             when (it) {
                 is UserAccountDataDirectMessages -> handleDirectChatRooms(it)
                 is UserAccountDataPushRules      -> handlePushRules(it)
+                is UserAccountDataIgnoredUsers   -> handleIgnoredUsers(it)
                 is UserAccountDataFallback       -> Timber.d("Receive account data of unhandled type ${it.type}")
                 else                             -> error("Missing code here!")
             }
         }
+
+        // TODO Store all account data, app can be interested of it
+        // accountData?.list?.forEach {
+        //     it.toString()
+        //     MoshiProvider.providesMoshi()
+        // }
+
         monarchy.doWithRealm { realm ->
             synchronizeWithServerIfNeeded(realm, invites)
         }
@@ -115,5 +122,10 @@ internal class UserAccountDataSyncHandler @Inject constructor(private val monarc
             )
             updateUserAccountDataTask.configureWith(updateUserAccountParams).executeBy(taskExecutor)
         }
+    }
+
+    private fun handleIgnoredUsers(userAccountDataIgnoredUsers: UserAccountDataIgnoredUsers) {
+        saveIgnoredUsersTask.configureWith(userAccountDataIgnoredUsers).executeBy(taskExecutor)
+        // TODO If not initial sync, we should execute a init sync
     }
 }

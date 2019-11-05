@@ -21,6 +21,10 @@ import dagger.Module
 import dagger.Provides
 import im.vector.matrix.android.api.session.user.UserService
 import im.vector.matrix.android.internal.session.SessionScope
+import im.vector.matrix.android.internal.session.user.accountdata.DefaultSaveIgnoredUsersTask
+import im.vector.matrix.android.internal.session.user.accountdata.DefaultUpdateIgnoredUserIdsTask
+import im.vector.matrix.android.internal.session.user.accountdata.SaveIgnoredUsersTask
+import im.vector.matrix.android.internal.session.user.accountdata.UpdateIgnoredUserIdsTask
 import im.vector.matrix.android.internal.session.user.model.DefaultSearchUserTask
 import im.vector.matrix.android.internal.session.user.model.SearchUserTask
 import retrofit2.Retrofit
@@ -43,4 +47,10 @@ internal abstract class UserModule {
 
     @Binds
     abstract fun bindSearchUserTask(searchUserTask: DefaultSearchUserTask): SearchUserTask
+
+    @Binds
+    abstract fun bindSaveIgnoredUsersTask(task: DefaultSaveIgnoredUsersTask): SaveIgnoredUsersTask
+
+    @Binds
+    abstract fun bindUpdateIgnoredUserIdsTask(task: DefaultUpdateIgnoredUserIdsTask): UpdateIgnoredUserIdsTask
 }

@@ -64,4 +64,19 @@ interface UserService {
      * @return a Livedata of users
      */
     fun livePagedUsers(filter: String? = null): LiveData<PagedList<User>>
+
+    /**
+     * Get list of ignored users id
+     */
+    fun liveIgnoredUserIds(): LiveData<List<String>>
+
+    /**
+     * Ignore users
+     */
+    fun ignoreUserIds(userIds: List<String>, callback: MatrixCallback<Unit>): Cancelable
+
+    /**
+     * Un-ignore some users
+     */
+    fun unIgnoreUserIds(userIds: List<String>, callback: MatrixCallback<Unit>): Cancelable
 }

@@ -35,6 +35,7 @@ import io.realm.annotations.RealmModule
                  RoomTagEntity::class,
                  SyncEntity::class,
                  UserEntity::class,
+                 IgnoredUserEntity::class,
                  EventAnnotationsSummaryEntity::class,
                  ReactionAggregatedSummaryEntity::class,
                  EditAggregatedSummaryEntity::class,

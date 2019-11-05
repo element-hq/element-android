@@ -29,6 +29,7 @@ internal interface UpdateUserAccountDataTask : Task<UpdateUserAccountDataTask.Pa
         fun getData(): Any
     }
 
+    // TODO Use [UserAccountDataDirectMessages] class?
     data class DirectChatParams(override val type: String = UserAccountData.TYPE_DIRECT_MESSAGES,
                                 private val directMessages: Map<String, List<String>>
     ) : Params {
