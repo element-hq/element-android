@@ -66,9 +66,9 @@ interface UserService {
     fun livePagedUsers(filter: String? = null): LiveData<PagedList<User>>
 
     /**
-     * Get list of ignored users id
+     * Get list of ignored users
      */
-    fun liveIgnoredUserIds(): LiveData<List<String>>
+    fun liveIgnoredUsers(): LiveData<List<User>>
 
     /**
      * Ignore users

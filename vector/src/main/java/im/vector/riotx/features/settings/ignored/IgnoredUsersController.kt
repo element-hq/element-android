@@ -17,12 +17,15 @@
 package im.vector.riotx.features.settings.ignored
 
 import com.airbnb.epoxy.EpoxyController
+import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.noResultItem
 import im.vector.riotx.core.resources.StringProvider
+import im.vector.riotx.features.home.AvatarRenderer
 import javax.inject.Inject
 
-class IgnoredUsersController @Inject constructor(private val stringProvider: StringProvider) : EpoxyController() {
+class IgnoredUsersController @Inject constructor(private val stringProvider: StringProvider,
+                                                 private val avatarRenderer: AvatarRenderer) : EpoxyController() {
 
     var callback: Callback? = null
     private var viewState: IgnoredUsersViewState? = null
@@ -38,10 +41,10 @@ class IgnoredUsersController @Inject constructor(private val stringProvider: Str
 
     override fun buildModels() {
         val nonNullViewState = viewState ?: return
-        buildIgnoredUserModels(nonNullViewState.ignoredUserIds)
+        buildIgnoredUserModels(nonNullViewState.ignoredUsers)
     }
 
-    private fun buildIgnoredUserModels(userIds: List<String>) {
+    private fun buildIgnoredUserModels(userIds: List<User>) {
         if (userIds.isEmpty()) {
             noResultItem {
                 id("empty")
@@ -49,10 +52,11 @@ class IgnoredUsersController @Inject constructor(private val stringProvider: Str
             }
         } else {
             userIds.forEach { userId ->
-                ignoredUserItem {
-                    id(userId)
-                    userId(userId)
-                    itemClickAction { callback?.onUserIdClicked(userId) }
+                userItem {
+                    id(userId.userId)
+                    avatarRenderer(avatarRenderer)
+                    user(userId)
+                    itemClickAction { callback?.onUserIdClicked(userId.userId) }
                 }
             }
         }

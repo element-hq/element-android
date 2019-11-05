@@ -54,8 +54,8 @@ class RxSession(private val session: Session) {
         return session.liveUsers().asObservable()
     }
 
-    fun liveIgnoredUserIds(): Observable<List<String>> {
-        return session.liveIgnoredUserIds().asObservable()
+    fun liveIgnoredUsers(): Observable<List<User>> {
+        return session.liveIgnoredUsers().asObservable()
     }
 
     fun livePagedUsers(filter: String? = null): Observable<PagedList<User>> {

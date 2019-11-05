@@ -21,12 +21,13 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.user.model.User
 import im.vector.matrix.rx.rx
 import im.vector.riotx.core.extensions.postLiveEvent
 import im.vector.riotx.core.platform.VectorViewModel
 
 data class IgnoredUsersViewState(
-        val ignoredUserIds: List<String> = emptyList(),
+        val ignoredUsers: List<User> = emptyList(),
         val unIgnoreRequest: Async<Unit> = Uninitialized
 ) : MvRxState
 
@@ -57,10 +58,10 @@ class IgnoredUsersViewModel @AssistedInject constructor(@Assisted initialState: 
 
     private fun observeIgnoredUsers() {
         session.rx()
-                .liveIgnoredUserIds()
+                .liveIgnoredUsers()
                 .execute { async ->
                     copy(
-                            ignoredUserIds = async.invoke().orEmpty()
+                            ignoredUsers = async.invoke().orEmpty()
                     )
                 }
     }

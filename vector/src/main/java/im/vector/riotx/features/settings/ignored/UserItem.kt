@@ -15,33 +15,45 @@
  */
 package im.vector.riotx.features.settings.ignored
 
+import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
+import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
 import im.vector.riotx.core.extensions.setTextOrHide
+import im.vector.riotx.features.home.AvatarRenderer
 
 /**
- * A list item for ignored user.
+ * A list item for User.
  */
-@EpoxyModelClass(layout = R.layout.item_ignored_user)
-abstract class IgnoredUserItem : VectorEpoxyModel<IgnoredUserItem.Holder>() {
+@EpoxyModelClass(layout = R.layout.item_user)
+abstract class UserItem : VectorEpoxyModel<UserItem.Holder>() {
 
     @EpoxyAttribute
-    var userId: String? = null
+    lateinit var avatarRenderer: AvatarRenderer
+
+    @EpoxyAttribute
+    lateinit var user: User
 
     @EpoxyAttribute
     var itemClickAction: (() -> Unit)? = null
 
     override fun bind(holder: Holder) {
-        holder.userIdText.setTextOrHide(userId)
+        holder.root.setOnClickListener { itemClickAction?.invoke() }
 
-        holder.userIdText.setOnClickListener { itemClickAction?.invoke() }
+        avatarRenderer.render(user, holder.avatarImage)
+        holder.userIdText.setTextOrHide(user.userId)
+        holder.displayNameText.setTextOrHide(user.displayName)
     }
 
     class Holder : VectorEpoxyHolder() {
-        val userIdText by bind<TextView>(R.id.itemIgnoredUserId)
+        val root by bind<View>(R.id.itemUserRoot)
+        val avatarImage by bind<ImageView>(R.id.itemUserAvatar)
+        val userIdText by bind<TextView>(R.id.itemUserId)
+        val displayNameText by bind<TextView>(R.id.itemUserName)
     }
 }

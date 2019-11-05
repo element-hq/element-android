@@ -121,14 +121,14 @@ internal class DefaultUserService @Inject constructor(private val monarchy: Mona
                 .executeBy(taskExecutor)
     }
 
-    override fun liveIgnoredUserIds(): LiveData<List<String>> {
+    override fun liveIgnoredUsers(): LiveData<List<User>> {
         return monarchy.findAllMappedWithChanges(
                 { realm ->
                     realm.where(IgnoredUserEntity::class.java)
                             .isNotEmpty(IgnoredUserEntityFields.USER_ID)
                             .sort(IgnoredUserEntityFields.USER_ID)
                 },
-                { it.userId }
+                { getUser(it.userId) ?: User(userId = it.userId) }
         )
     }
 
