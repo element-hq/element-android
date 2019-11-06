@@ -1653,7 +1653,6 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="settings_discovery_disconnect_with_bound_pid">您目前正在身份識別伺服器 %1$s 上分享電子郵件地址或電話號碼。您將必須重新連線到 %2$s 以停止分享它們。</string>
     <string name="settings_agree_to_terms">同意身份識別伺服器 (%s) 的服務條款以允許您被透過電子郵件地址或電話號碼探索。</string>
-    <string name="resources_script">緯度</string>
 
     <string name="labs_allow_extended_logging">啟用詳細紀錄。</string>
     <string name="labs_allow_extended_logging_summary">詳細紀錄可以協助開發者在您傳送憤怒搖晃時取得更多紀錄。即使啟用這個設定，應用程式依然不會紀錄訊息內容或任何個人資料。</string>
