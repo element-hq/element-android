@@ -112,10 +112,24 @@ internal class DefaultAuthenticator @Inject constructor(@Unauthenticated
         sessionManager.getOrCreateSession(sessionParams)
     }
 
-    override fun createSessionFromSso(credentials: Credentials, homeServerConnectionConfig: HomeServerConnectionConfig): Session {
+    override fun createSessionFromSso(credentials: Credentials,
+                                      homeServerConnectionConfig: HomeServerConnectionConfig,
+                                      callback: MatrixCallback<Session>): Cancelable {
+        val job = GlobalScope.launch(coroutineDispatchers.main) {
+            val sessionOrFailure = runCatching {
+                createSessionFromSso(credentials, homeServerConnectionConfig)
+            }
+            sessionOrFailure.foldToCallback(callback)
+        }
+        return CancelableCoroutine(job)
+
+    }
+
+    private suspend fun createSessionFromSso(credentials: Credentials,
+                                             homeServerConnectionConfig: HomeServerConnectionConfig): Session = withContext(coroutineDispatchers.computation) {
         val sessionParams = SessionParams(credentials, homeServerConnectionConfig)
         sessionParamsStore.save(sessionParams)
-        return sessionManager.getOrCreateSession(sessionParams)
+        sessionManager.getOrCreateSession(sessionParams)
     }
 
     private fun buildAuthAPI(homeServerConnectionConfig: HomeServerConnectionConfig): AuthAPI {

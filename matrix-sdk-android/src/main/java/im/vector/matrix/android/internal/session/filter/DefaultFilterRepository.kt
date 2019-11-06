@@ -16,54 +16,46 @@
 
 package im.vector.matrix.android.internal.session.filter
 
+import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.internal.database.model.FilterEntity
 import im.vector.matrix.android.internal.database.model.FilterEntityFields
 import im.vector.matrix.android.internal.database.query.getFilter
 import im.vector.matrix.android.internal.di.SessionDatabase
+import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.kotlin.where
 import javax.inject.Inject
 
-internal class DefaultFilterRepository @Inject constructor(
-        @SessionDatabase private val realmConfiguration: RealmConfiguration
-) : FilterRepository {
+internal class DefaultFilterRepository @Inject constructor(private val monarchy: Monarchy) : FilterRepository {
 
-    override fun storeFilter(filterBody: FilterBody, roomEventFilter: RoomEventFilter): Boolean {
-        val result: Boolean
+    override suspend fun storeFilter(filterBody: FilterBody, roomEventFilter: RoomEventFilter): Boolean {
+        return Realm.getInstance(monarchy.realmConfiguration).use { realm ->
+            val filter = FilterEntity.getFilter(realm)
+            val result = if (filter.filterBodyJson != filterBody.toJSONString()) {
+                // Filter has changed, store it and reset the filter Id
+                monarchy.awaitTransaction {
+                    // We manage only one filter for now
+                    val filterBodyJson = filterBody.toJSONString()
+                    val roomEventFilterJson = roomEventFilter.toJSONString()
 
-        val realm = Realm.getInstance(realmConfiguration)
+                    val filterEntity = FilterEntity.getFilter(it)
 
-        val filter = FilterEntity.getFilter(realm)
-
-        if (filter.filterBodyJson != filterBody.toJSONString()) {
-            // Filter has changed, store it and reset the filter Id
-            realm.executeTransaction {
-                // We manage only one filter for now
-                val filterBodyJson = filterBody.toJSONString()
-                val roomEventFilterJson = roomEventFilter.toJSONString()
-
-                val filterEntity = FilterEntity.getFilter(it)
-
-                filterEntity.filterBodyJson = filterBodyJson
-                filterEntity.roomEventFilterJson = roomEventFilterJson
-                // Reset filterId
-                filterEntity.filterId = ""
+                    filterEntity.filterBodyJson = filterBodyJson
+                    filterEntity.roomEventFilterJson = roomEventFilterJson
+                    // Reset filterId
+                    filterEntity.filterId = ""
+                }
+                true
+            } else {
+                filter.filterId.isBlank()
             }
-            result = true
-        } else {
-            result = filter.filterId.isBlank()
+            result
         }
-
-        realm.close()
-
-        return result
     }
 
-    override fun storeFilterId(filterBody: FilterBody, filterId: String) {
-        val realm = Realm.getInstance(realmConfiguration)
-
-        realm.executeTransaction {
+    override suspend fun storeFilterId(filterBody: FilterBody, filterId: String) {
+        monarchy.awaitTransaction {
             // We manage only one filter for now
             val filterBodyJson = filterBody.toJSONString()
 
@@ -73,39 +65,24 @@ internal class DefaultFilterRepository @Inject constructor(
                     ?.findFirst()
                     ?.filterId = filterId
         }
-
-        realm.close()
     }
 
-    override fun getFilter(): String {
-        val result: String
-
-        val realm = Realm.getInstance(realmConfiguration)
-
-        val filter = FilterEntity.getFilter(realm)
-
-        result = if (filter.filterId.isBlank()) {
-            // Use the Json format
-            filter.filterBodyJson
-        } else {
-            // Use FilterId
-            filter.filterId
+    override suspend fun getFilter(): String {
+        return Realm.getInstance(monarchy.realmConfiguration).use {
+            val filter = FilterEntity.getFilter(it)
+            if (filter.filterId.isBlank()) {
+                // Use the Json format
+                filter.filterBodyJson
+            } else {
+                // Use FilterId
+                filter.filterId
+            }
         }
-
-        realm.close()
-
-        return result
     }
 
-    override fun getRoomFilter(): String {
-        val realm = Realm.getInstance(realmConfiguration)
-
-        val filter = FilterEntity.getFilter(realm)
-
-        val result = filter.roomEventFilterJson
-
-        realm.close()
-
-        return result
+    override suspend fun getRoomFilter(): String {
+        return Realm.getInstance(monarchy.realmConfiguration).use {
+            FilterEntity.getFilter(it).roomEventFilterJson
+        }
     }
 }

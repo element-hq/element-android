@@ -16,27 +16,26 @@
 
 package im.vector.matrix.android.internal.session.sync
 
+import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.internal.database.model.SyncEntity
 import im.vector.matrix.android.internal.di.SessionDatabase
+import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import javax.inject.Inject
 
-internal class SyncTokenStore @Inject constructor(@SessionDatabase private val realmConfiguration: RealmConfiguration) {
+internal class SyncTokenStore @Inject constructor(private val monarchy: Monarchy) {
 
     fun getLastToken(): String? {
-        val realm = Realm.getInstance(realmConfiguration)
-        val token = realm.where(SyncEntity::class.java).findFirst()?.nextBatch
-        realm.close()
-        return token
+        return Realm.getInstance(monarchy.realmConfiguration).use {
+            it.where(SyncEntity::class.java).findFirst()?.nextBatch
+        }
     }
 
-    fun saveToken(token: String?) {
-        val realm = Realm.getInstance(realmConfiguration)
-        realm.executeTransaction {
+    suspend fun saveToken(token: String?) {
+        monarchy.awaitTransaction {
             val sync = SyncEntity(token)
             it.insertOrUpdate(sync)
         }
-        realm.close()
     }
 }

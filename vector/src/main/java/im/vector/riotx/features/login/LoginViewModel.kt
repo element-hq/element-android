@@ -116,7 +116,6 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
     private fun onSessionCreated(session: Session) {
         activeSessionHolder.setActiveSession(session)
         session.configureAndStart(pushRuleTriggerListener, sessionListener)
-
         setState {
             copy(
                     asyncLoginAction = Success(Unit)
@@ -131,9 +130,11 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
             // Should not happen
             Timber.w("homeServerConnectionConfig is null")
         } else {
-            val session = authenticator.createSessionFromSso(action.credentials, homeServerConnectionConfigFinal)
-
-            onSessionCreated(session)
+            authenticator.createSessionFromSso(action.credentials, homeServerConnectionConfigFinal, object : MatrixCallback<Session> {
+                override fun onSuccess(data: Session) {
+                    onSessionCreated(data)
+                }
+            })
         }
     }
 

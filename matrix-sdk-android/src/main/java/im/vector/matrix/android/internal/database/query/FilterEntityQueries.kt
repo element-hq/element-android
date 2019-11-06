@@ -16,6 +16,7 @@
 
 package im.vector.matrix.android.internal.database.query
 
+import im.vector.matrix.android.internal.database.awaitTransaction
 import im.vector.matrix.android.internal.database.model.FilterEntity
 import im.vector.matrix.android.internal.session.filter.FilterFactory
 import io.realm.Realm
@@ -25,18 +26,17 @@ import io.realm.kotlin.where
 /**
  * Get the current filter, create one if it does not exist
  */
-internal fun FilterEntity.Companion.getFilter(realm: Realm): FilterEntity {
+internal suspend fun FilterEntity.Companion.getFilter(realm: Realm): FilterEntity {
     var filter = realm.where<FilterEntity>().findFirst()
     if (filter == null) {
-        realm.executeTransaction {
-            realm.createObject<FilterEntity>().apply {
-                filterBodyJson = FilterFactory.createDefaultFilterBody().toJSONString()
-                roomEventFilterJson = FilterFactory.createDefaultRoomFilter().toJSONString()
-                filterId = ""
-            }
+        filter = FilterEntity().apply {
+            filterBodyJson = FilterFactory.createDefaultFilterBody().toJSONString()
+            roomEventFilterJson = FilterFactory.createDefaultRoomFilter().toJSONString()
+            filterId = ""
         }
-        filter = realm.where<FilterEntity>().findFirst()!!
+        awaitTransaction(realm.configuration) {
+            it.insert(filter)
+        }
     }
-
     return filter
 }

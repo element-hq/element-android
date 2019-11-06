@@ -16,9 +16,9 @@
 
 package im.vector.matrix.android.internal.auth.db
 
-import arrow.core.Try
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.internal.auth.SessionParamsStore
+import im.vector.matrix.android.internal.database.awaitTransaction
 import im.vector.matrix.android.internal.di.AuthDatabase
 import io.realm.Realm
 import io.realm.RealmConfiguration
@@ -62,41 +62,29 @@ internal class RealmSessionParamsStore @Inject constructor(private val mapper: S
         return sessionParams
     }
 
-    override fun save(sessionParams: SessionParams): Try<Unit> {
-        return Try {
+    override suspend fun save(sessionParams: SessionParams) {
+        awaitTransaction(realmConfiguration) {
             val entity = mapper.map(sessionParams)
             if (entity != null) {
-                val realm = Realm.getInstance(realmConfiguration)
-                realm.executeTransaction {
-                    it.insert(entity)
-                }
-                realm.close()
+                it.insert(entity)
             }
         }
     }
 
-    override fun delete(userId: String): Try<Unit> {
-        return Try {
-            val realm = Realm.getInstance(realmConfiguration)
-            realm.executeTransaction {
-                it.where(SessionParamsEntity::class.java)
-                        .equalTo(SessionParamsEntityFields.USER_ID, userId)
-                        .findAll()
-                        .deleteAllFromRealm()
-            }
-            realm.close()
+    override suspend fun delete(userId: String) {
+        awaitTransaction(realmConfiguration) {
+            it.where(SessionParamsEntity::class.java)
+                    .equalTo(SessionParamsEntityFields.USER_ID, userId)
+                    .findAll()
+                    .deleteAllFromRealm()
         }
     }
 
-    override fun deleteAll(): Try<Unit> {
-        return Try {
-            val realm = Realm.getInstance(realmConfiguration)
-            realm.executeTransaction {
-                it.where(SessionParamsEntity::class.java)
-                        .findAll()
-                        .deleteAllFromRealm()
-            }
-            realm.close()
+    override suspend fun deleteAll() {
+        awaitTransaction(realmConfiguration) {
+            it.where(SessionParamsEntity::class.java)
+                    .findAll()
+                    .deleteAllFromRealm()
         }
     }
 }
