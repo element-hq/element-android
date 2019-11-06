@@ -223,7 +223,6 @@ class RoomDetailFragment :
         setupToolbar(roomToolbar)
         setupRecyclerView()
         setupComposer()
-        setupAttachmentButton()
         setupInviteView()
         setupNotificationView()
         setupJumpToReadMarkerView()
@@ -601,21 +600,30 @@ class RoomDetailFragment :
                 })
                 .build()
 
-        composerLayout.sendButton.setOnClickListener {
-            if (lockSendButton) {
-                Timber.w("Send button is locked")
-                return@setOnClickListener
-            }
-            val textMessage = composerLayout.composerEditText.text.toString()
-            if (textMessage.isNotBlank()) {
-                lockSendButton = true
-                roomDetailViewModel.process(RoomDetailActions.SendMessage(textMessage, vectorPreferences.isMarkdownEnabled()))
-            }
-        }
-        composerLayout.composerRelatedMessageCloseButton.setOnClickListener {
-            roomDetailViewModel.process(RoomDetailActions.ExitSpecialMode(composerLayout.composerEditText.text.toString()))
-        }
         composerLayout.callback = object : TextComposerView.Callback {
+
+            override fun onAddAttachment() {
+                if (!::attachmentTypeSelector.isInitialized) {
+                    attachmentTypeSelector = AttachmentTypeSelectorView(vectorBaseActivity, vectorBaseActivity.layoutInflater, this@RoomDetailFragment)
+                }
+                attachmentTypeSelector.show(composerLayout.attachmentButton, keyboardStateUtils.isKeyboardShowing)
+            }
+
+            override fun onSendMessage(text: String) {
+                if (lockSendButton) {
+                    Timber.w("Send button is locked")
+                    return
+                }
+                if (text.isNotBlank()) {
+                    lockSendButton = true
+                    roomDetailViewModel.process(RoomDetailActions.SendMessage(text, vectorPreferences.isMarkdownEnabled()))
+                }
+            }
+
+            override fun onCloseRelatedMessage() {
+                roomDetailViewModel.process(RoomDetailActions.ExitSpecialMode(composerLayout.text.toString()))
+            }
+
             override fun onRichContentSelected(contentUri: Uri): Boolean {
                 // We need WRITE_EXTERNAL permission
                 return if (checkPermissions(PERMISSIONS_FOR_WRITING_FILES, this@RoomDetailFragment, PERMISSION_REQUEST_CODE_INCOMING_URI)) {
@@ -636,15 +644,6 @@ class RoomDetailFragment :
             Toast.makeText(requireContext(), R.string.error_handling_incoming_share, Toast.LENGTH_SHORT).show()
         }
         return isHandled
-    }
-
-    private fun setupAttachmentButton() {
-        composerLayout.attachmentButton.setOnClickListener {
-            if (!::attachmentTypeSelector.isInitialized) {
-                attachmentTypeSelector = AttachmentTypeSelectorView(vectorBaseActivity, vectorBaseActivity.layoutInflater, this)
-            }
-            attachmentTypeSelector.show(composerLayout.attachmentButton, keyboardStateUtils.isKeyboardShowing)
-        }
     }
 
     private fun setupInviteView() {
@@ -1114,13 +1113,13 @@ class RoomDetailFragment :
                 roomDetailViewModel.process(RoomDetailActions.UpdateQuickReactAction(action.eventId, action.clickedOn, action.add))
             }
             is SimpleAction.Edit                       -> {
-                roomDetailViewModel.process(RoomDetailActions.EnterEditMode(action.eventId, composerLayout.composerEditText.text.toString()))
+                roomDetailViewModel.process(RoomDetailActions.EnterEditMode(action.eventId, composerLayout.text.toString()))
             }
             is SimpleAction.Quote                      -> {
-                roomDetailViewModel.process(RoomDetailActions.EnterQuoteMode(action.eventId, composerLayout.composerEditText.text.toString()))
+                roomDetailViewModel.process(RoomDetailActions.EnterQuoteMode(action.eventId, composerLayout.text.toString()))
             }
             is SimpleAction.Reply                      -> {
-                roomDetailViewModel.process(RoomDetailActions.EnterReplyMode(action.eventId, composerLayout.composerEditText.text.toString()))
+                roomDetailViewModel.process(RoomDetailActions.EnterReplyMode(action.eventId, composerLayout.text.toString()))
             }
             is SimpleAction.CopyPermalink              -> {
                 val permalink = PermalinkFactory.createPermalink(roomDetailArgs.roomId, action.eventId)

@@ -520,17 +520,18 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun handleEditAction(action: RoomDetailActions.EnterEditMode) {
-        saveCurrentDraft(action.draft)
+        saveCurrentDraft(action.text)
 
         room.getTimeLineEvent(action.eventId)?.let { timelineEvent ->
             timelineEvent.root.eventId?.let {
                 room.saveDraft(UserDraft.EDIT(it, timelineEvent.getTextEditableContent() ?: ""))
             }
+            setState { copy(sendMode = SendMode.EDIT(timelineEvent, action.text)) }
         }
     }
 
     private fun handleQuoteAction(action: RoomDetailActions.EnterQuoteMode) {
-        saveCurrentDraft(action.draft)
+        saveCurrentDraft(action.text)
 
         room.getTimeLineEvent(action.eventId)?.let { timelineEvent ->
             withState { state ->
@@ -539,16 +540,16 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                     if (state.sendMode is SendMode.EDIT) {
                         room.saveDraft(UserDraft.QUOTE(it, ""))
                     } else {
-                        room.saveDraft(UserDraft.QUOTE(it, action.draft))
+                        room.saveDraft(UserDraft.QUOTE(it, action.text))
                     }
                 }
+                setState { copy(sendMode = SendMode.QUOTE(timelineEvent, action.text)) }
             }
         }
     }
 
     private fun handleReplyAction(action: RoomDetailActions.EnterReplyMode) {
-        saveCurrentDraft(action.draft)
-
+        saveCurrentDraft(action.text)
         room.getTimeLineEvent(action.eventId)?.let { timelineEvent ->
             withState { state ->
                 // Save a new draft and keep the previously entered text, if it was not an edit
@@ -556,9 +557,10 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                     if (state.sendMode is SendMode.EDIT) {
                         room.saveDraft(UserDraft.REPLY(it, ""))
                     } else {
-                        room.saveDraft(UserDraft.REPLY(it, action.draft))
+                        room.saveDraft(UserDraft.REPLY(it, action.text))
                     }
                 }
+                setState { copy(sendMode = SendMode.REPLY(timelineEvent, action.text)) }
             }
         }
     }
@@ -584,7 +586,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 room.deleteDraft()
             } else {
                 // Save a new draft and keep the previously entered text
-                room.saveDraft(UserDraft.REGULAR(action.draft))
+                room.saveDraft(UserDraft.REGULAR(action.text))
             }
         }
     }

@@ -42,10 +42,10 @@ sealed class RoomDetailActions {
     object AcceptInvite : RoomDetailActions()
     object RejectInvite : RoomDetailActions()
 
-    data class EnterEditMode(val eventId: String, val draft: String) : RoomDetailActions()
-    data class EnterQuoteMode(val eventId: String, val draft: String) : RoomDetailActions()
-    data class EnterReplyMode(val eventId: String, val draft: String) : RoomDetailActions()
-    data class ExitSpecialMode(val draft: String) : RoomDetailActions()
+    data class EnterEditMode(val eventId: String, val text: String) : RoomDetailActions()
+    data class EnterQuoteMode(val eventId: String, val text: String) : RoomDetailActions()
+    data class EnterReplyMode(val eventId: String, val text: String) : RoomDetailActions()
+    data class ExitSpecialMode(val text: String) : RoomDetailActions()
 
     data class ResendMessage(val eventId: String) : RoomDetailActions()
     data class RemoveFailedEcho(val eventId: String) : RoomDetailActions()
