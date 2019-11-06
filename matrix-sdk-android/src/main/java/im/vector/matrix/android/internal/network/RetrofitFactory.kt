@@ -17,17 +17,24 @@
 package im.vector.matrix.android.internal.network
 
 import com.squareup.moshi.Moshi
+import dagger.Lazy
+import okhttp3.Call
 import okhttp3.OkHttpClient
+import okhttp3.Request
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Inject
 
 class RetrofitFactory @Inject constructor(private val moshi: Moshi) {
 
-    fun create(okHttpClient: OkHttpClient, baseUrl: String): Retrofit {
+    fun create(okHttpClient: Lazy<OkHttpClient>, baseUrl: String): Retrofit {
         return Retrofit.Builder()
                 .baseUrl(baseUrl)
-                .client(okHttpClient)
+                .callFactory(object : Call.Factory {
+                    override fun newCall(request: Request): Call {
+                        return okHttpClient.get().newCall(request)
+                    }
+                })
                 .addConverterFactory(UnitConverterFactory)
                 .addConverterFactory(MoshiConverterFactory.create(moshi))
                 .build()

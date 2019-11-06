@@ -17,6 +17,7 @@
 package im.vector.matrix.android.internal.auth
 
 import android.util.Patterns
+import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.Authenticator
 import im.vector.matrix.android.api.auth.data.Credentials
@@ -42,7 +43,7 @@ import javax.inject.Inject
 import javax.inject.Provider
 
 internal class DefaultAuthenticator @Inject constructor(@Unauthenticated
-                                                        private val okHttpClient: Provider<OkHttpClient>,
+                                                        private val okHttpClient: Lazy<OkHttpClient>,
                                                         private val retrofitFactory: RetrofitFactory,
                                                         private val coroutineDispatchers: MatrixCoroutineDispatchers,
                                                         private val sessionParamsStore: SessionParamsStore,
@@ -133,7 +134,7 @@ internal class DefaultAuthenticator @Inject constructor(@Unauthenticated
     }
 
     private fun buildAuthAPI(homeServerConnectionConfig: HomeServerConnectionConfig): AuthAPI {
-        val retrofit = retrofitFactory.create(okHttpClient.get(), homeServerConnectionConfig.homeServerUri.toString())
+        val retrofit = retrofitFactory.create(okHttpClient, homeServerConnectionConfig.homeServerUri.toString())
         return retrofit.create(AuthAPI::class.java)
     }
 }
