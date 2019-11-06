@@ -1745,4 +1745,73 @@ Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi."</stri
 
     <string name="settings_discovery_disconnect_with_bound_pid">Attualmente stai condividendo indirizzi email o numeri di telefono sul server di identità %1$s. Dovrai riconnetterti a %2$s per fermarne la condivisione.</string>
     <string name="settings_agree_to_terms">Accetta le condizioni di servizio del server di identità (%s) per consentire di essere trovabile per email o numero di telefono.</string>
+    <string name="resources_script">Latn</string>
+
+    <string name="labs_allow_extended_logging">Attiva log dettagliati.</string>
+    <string name="labs_allow_extended_logging_summary">I log dettagliati aiuteranno gli sviluppatori fornendo loro più informazioni quando invii una segnalazione. Anche quando attivi, l\'applicazione non registra i contenuti dei messaggi o altri dati personali.</string>
+
+
+    <string name="error_terms_not_accepted">Riprova dopo avere accettato i termini e condizioni del tuo homeserver.</string>
+
+    <string name="error_network_timeout">Sembra che il server stia impiegando troppo tempo a rispondere, ciò può essere causato da scarsa connettività o un errore con i nostri server. Riprova fra qualche minuto.</string>
+
+    <string name="send_attachment">Invia allegato</string>
+
+    <string name="a11y_open_drawer">Apri il pannello di navigazione</string>
+    <string name="a11y_create_menu_open">Apri il menu di creazione stanza</string>
+    <string name="a11y_create_menu_close">Chiudi il menu di creazione stanza…</string>
+    <string name="a11y_create_direct_message">Crea una nuova conversazione diretta</string>
+    <string name="a11y_create_room">Crea una nuova stanza</string>
+    <string name="a11y_close_keys_backup_banner">Chiudi il banner di backup chiavi</string>
+    <string name="a11y_show_password">Mostra password</string>
+    <string name="a11y_hide_password">Nascondi password</string>
+    <string name="a11y_jump_to_bottom">Salta in fondo</string>
+
+    <string name="two_and_some_others_read">%1$s, %2$s ed altri %3$d hanno letto</string>
+    <string name="three_users_read">%1$s, %2$s e %3$s hanno letto</string>
+    <string name="two_users_read">%1$s e %2$s hanno letto</string>
+    <string name="one_user_read">%s ha letto</string>
+    <plurals name="fallback_users_read">
+        <item quantity="one">1 utente ha letto</item>
+        <item quantity="other">%d utenti hanno letto</item>
+    </plurals>
+
+    <string name="error_file_too_big">Il file \'%1$s\' (%2$s) è troppo grande da inviare. Il limite è %3$s.</string>
+
+    <string name="error_attachment">Si è verificato un errore ricevendo l\'allegato.</string>
+    <string name="attachment_type_file">File</string>
+    <string name="attachment_type_contact">Contatto</string>
+    <string name="attachment_type_camera">Fotocamera</string>
+    <string name="attachment_type_audio">Audio</string>
+    <string name="attachment_type_gallery">Galleria</string>
+    <string name="attachment_type_sticker">Adesivo</string>
+    <string name="error_handling_incoming_share">Errore di gestione dati condivisi</string>
+
+    <string name="report_content_spam">È spam</string>
+    <string name="report_content_inappropriate">È inappropriato</string>
+    <string name="report_content_custom">Segnalazione personalizzata</string>
+    <string name="report_content_custom_title">Segnala questo contenuto</string>
+    <string name="report_content_custom_hint">Motivo della segnalazione</string>
+    <string name="report_content_custom_submit">SEGNALA</string>
+    <string name="block_user">BLOCCA UTENTE</string>
+
+    <string name="content_reported_title">Contenuto segnalato</string>
+    <string name="content_reported_content">Questo contenuto è stato segnalato.
+\n
+\nSe non vuoi più vedere contenuti da questo utente, puoi bloccarlo per nascondere i suoi messaggi</string>
+    <string name="content_reported_as_spam_title">Segnalato come spam</string>
+    <string name="content_reported_as_spam_content">Questo contenuto è stato segnalato come spam.
+\n
+\nSe non vuoi più vedere contenuti da questo utente, puoi bloccarlo per nascondere i suoi messaggi</string>
+    <string name="content_reported_as_inappropriate_title">Segnalato come inappropriato</string>
+    <string name="content_reported_as_inappropriate_content">Questo contenuto è stato segnalato come inappropriato.
+\n
+\nSe non vuoi più vedere contenuti da questo utente, puoi bloccarlo per nascondere i suoi messaggi</string>
+
+    <string name="permissions_rationale_msg_keys_backup_export">Riot richiede l\'autorizzazione per salvare le tue chiavi E2E su disco.
+\n
+\nPermetti l\'accesso nel prossimo pop-up per poter esportare le chiavi manualmente.</string>
+
+    <string name="no_network_indicator">Non c\'è nessuna connessione di rete al momento</string>
+
 </resources>

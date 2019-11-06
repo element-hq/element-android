@@ -779,4 +779,9 @@ Dispositivos desconocidos:</string>
 
     <string name="room_message_placeholder_reply_to_encrypted">Enviar una respuesta cifrada…</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">Enviar una respuesta (sin cifrar)…</string>
+    <string name="resources_script">Latn</string>
+
+    <string name="notification_sync_init">Iniciando servicio</string>
+    <string name="title_activity_keys_backup_setup">Copia de seguridad de la clave</string>
+    <string name="title_activity_keys_backup_restore">Usar copia de seguridad de la clave</string>
 </resources>

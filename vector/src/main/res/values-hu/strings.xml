@@ -1700,4 +1700,73 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
 
     <string name="settings_discovery_disconnect_with_bound_pid">Az azonosítási szerverrel (%1$s) megosztod az e-mail címeket és telefonszámokat. Újra kell csatlakoznod ehhez: %2$s, hogy megállítsd a megosztást.</string>
     <string name="settings_agree_to_terms">Egyetértek az azonosítási szerver (%s) Felhasználási feltételeivel ahhoz, hogy megtalálható legyek e-mail címmel vagy telefonszámmal.</string>
+    <string name="resources_script">Latn</string>
+
+    <string name="labs_allow_extended_logging">Kibővített naplózás engedélyezése.</string>
+    <string name="labs_allow_extended_logging_summary">A kiterjesztett naplózás a fejlesztőknek nyújt több információt amikor hibajegyet küldesz. Még bekapcsolva sem naplóz üzenet tartalmat vagy más személyes adatot.</string>
+
+
+    <string name="error_terms_not_accepted">Kérlek ismételd meg miután elfogadtad a matrix szervered felhasználási feltételeit.</string>
+
+    <string name="error_network_timeout">Úgy tűnik a szerver sokáig nem válaszol, ennek a bizonytalan kapcsolat vagy egy hiba a szerverünkben lehet az oka. Kicsit később próbáld újra.</string>
+
+    <string name="send_attachment">Csatolmány küldése</string>
+
+    <string name="a11y_open_drawer">Navigációs panel megnyitása</string>
+    <string name="a11y_create_menu_open">Szoba készítés menü megnyitása</string>
+    <string name="a11y_create_menu_close">Szoba készítés menü bezárása…</string>
+    <string name="a11y_create_direct_message">Új közvetlen beszélgetés indítása</string>
+    <string name="a11y_create_room">Új szoba készítése</string>
+    <string name="a11y_close_keys_backup_banner">Kulcs mentés csík bezárása</string>
+    <string name="a11y_show_password">Jelszó mutatása</string>
+    <string name="a11y_hide_password">Jelszó elrejtése</string>
+    <string name="a11y_jump_to_bottom">Végére ugrás</string>
+
+    <string name="two_and_some_others_read">%1$s, %2$s és %3$d olvasták</string>
+    <string name="three_users_read">%1$s, %2$s és %3$s olvasták</string>
+    <string name="two_users_read">%1$s és %2$s olvasták</string>
+    <string name="one_user_read">%s olvasta</string>
+    <plurals name="fallback_users_read">
+        <item quantity="one">1 felhasználó olvasta</item>
+        <item quantity="other">%d felhasználó olvasta</item>
+    </plurals>
+
+    <string name="error_file_too_big">\'%1$s\' (%2$s) fájl túl nagy a feltöltéshez. A korlát: %3$s.</string>
+
+    <string name="error_attachment">A csatolmány letöltésénél hiba történt.</string>
+    <string name="attachment_type_file">Fájl</string>
+    <string name="attachment_type_contact">Kapcsolat</string>
+    <string name="attachment_type_camera">Kamera</string>
+    <string name="attachment_type_audio">Hang</string>
+    <string name="attachment_type_gallery">Galéria</string>
+    <string name="attachment_type_sticker">Matrica</string>
+    <string name="error_handling_incoming_share">Az adatmegosztást nem sikerül kezelni</string>
+
+    <string name="report_content_spam">Ez nemkívánt (spam)</string>
+    <string name="report_content_inappropriate">Ez nem idevaló</string>
+    <string name="report_content_custom">Egyedi jelentés</string>
+    <string name="report_content_custom_title">Tartalom bejelentése</string>
+    <string name="report_content_custom_hint">A tartalom bejelentésének oka</string>
+    <string name="report_content_custom_submit">JELENTÉS</string>
+    <string name="block_user">FELHASZNÁLÓ BLOKKOLÁSA</string>
+
+    <string name="content_reported_title">Tartalom bejelentve</string>
+    <string name="content_reported_content">Ez a tartalom bejelentve.
+\n
+\nHa nem akarsz ettől a felhasználótól több üzenetet látni akkor blokkolhatod, hogy az üzenetei ne jelenjenek meg számodra</string>
+    <string name="content_reported_as_spam_title">Bejelentve nem kívántként (spam)</string>
+    <string name="content_reported_as_spam_content">Ez a tartalom nem kívántnak (spam) lett bejelentve.
+\n
+\n Ha nem akarsz ettől a felhasználótól több üzenetet látni akkor blokkolhatod, hogy az üzenetei ne jelenjenek meg számodra</string>
+    <string name="content_reported_as_inappropriate_title">Nem idevalónak bejelentve</string>
+    <string name="content_reported_as_inappropriate_content">Ez a tartalom nem idevalónak lett bejelentve.
+\n
+\n Ha nem akarsz ettől a felhasználótól több üzenetet látni akkor blokkolhatod, hogy az üzenetei ne jelenjenek meg számodra</string>
+
+    <string name="permissions_rationale_msg_keys_backup_export">Riotnak engedélyre van szüksége ahhoz, hogy a végponttól végpontig titkosító kulcsokat a lemezre menthesse.
+\n
+\nKérlek a következő felugró ablakban engedélyezd a hozzáférést, hogy a kulcsokat kézzel kimenthesd.</string>
+
+    <string name="no_network_indicator">Jelenleg nincs hálózati kapcsolat</string>
+
 </resources>

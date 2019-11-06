@@ -3,5 +3,8 @@
 
     <!-- Strings not defined in Riot -->
     <string name="notice_member_no_changes">"%1$s made no changes"</string>
+    <string name="command_description_spoiler">Sends the given message as a spoiler</string>
+    <string name="spoiler">Spoiler</string>
+    <string name="reaction_search_type_hint">Type keywords to find a reaction.</string>
 
 </resources>
