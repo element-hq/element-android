@@ -28,14 +28,11 @@ import im.vector.matrix.android.api.session.crypto.sas.IncomingSasVerificationTr
 import im.vector.matrix.android.api.session.crypto.sas.OutgoingSasVerificationRequest
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseFragment
+import javax.inject.Inject
 
-class SASVerificationShortCodeFragment : VectorBaseFragment() {
+class SASVerificationShortCodeFragment @Inject constructor(): VectorBaseFragment() {
 
     private lateinit var viewModel: SasVerificationViewModel
-
-    companion object {
-        fun newInstance() = SASVerificationShortCodeFragment()
-    }
 
     @BindView(R.id.sas_decimal_code)
     lateinit var decimalTextView: TextView
@@ -120,7 +117,7 @@ class SASVerificationShortCodeFragment : VectorBaseFragment() {
             }
         }
 
-        viewModel.transactionState.observe(this, Observer {
+        viewModel.transactionState.observe(viewLifecycleOwner, Observer {
             if (viewModel.transaction is IncomingSasVerificationTransaction) {
                 val uxState = (viewModel.transaction as IncomingSasVerificationTransaction).uxState
                 when (uxState) {

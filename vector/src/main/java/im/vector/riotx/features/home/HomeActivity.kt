@@ -79,10 +79,8 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
         navigationViewModel = ViewModelProviders.of(this).get(HomeNavigationViewModel::class.java)
         drawerLayout.addDrawerListener(drawerListener)
         if (isFirstCreation()) {
-            val homeDrawerFragment = HomeDrawerFragment.newInstance()
-            val loadingDetail = LoadingFragment.newInstance()
-            replaceFragment(loadingDetail, R.id.homeDetailFragmentContainer)
-            replaceFragment(homeDrawerFragment, R.id.homeDrawerFragmentContainer)
+            replaceFragment(R.id.homeDetailFragmentContainer, LoadingFragment::class.java)
+            replaceFragment(R.id.homeDrawerFragmentContainer, HomeDrawerFragment::class.java)
         }
 
         navigationViewModel.navigateTo.observeEvent(this) { navigation ->
@@ -90,8 +88,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
                 is Navigation.OpenDrawer -> drawerLayout.openDrawer(GravityCompat.START)
                 is Navigation.OpenGroup  -> {
                     drawerLayout.closeDrawer(GravityCompat.START)
-                    val homeDetailFragment = HomeDetailFragment.newInstance()
-                    replaceFragment(homeDetailFragment, R.id.homeDetailFragmentContainer)
+                    replaceFragment(R.id.homeDetailFragmentContainer, HomeDetailFragment::class.java)
                 }
             }
         }

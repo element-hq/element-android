@@ -63,6 +63,7 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
         screenComponent = DaggerScreenComponent.factory().create(vectorBaseActivity.getVectorComponent(), vectorBaseActivity)
         navigator = screenComponent.navigator()
         viewModelFactory = screenComponent.viewModelFactory()
+        childFragmentManager.fragmentFactory = screenComponent.fragmentFactory()
         injectWith(injector())
         super.onAttach(context)
     }
@@ -134,7 +135,11 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
     }
 
     protected fun setArguments(args: Parcelable? = null) {
-        arguments = args?.let { Bundle().apply { putParcelable(MvRx.KEY_ARG, it) } }
+        arguments = args.toMvRxBundle()
+    }
+
+    fun Parcelable?.toMvRxBundle(): Bundle? {
+        return this?.let { Bundle().apply { putParcelable(MvRx.KEY_ARG, it) } }
     }
 
     @MainThread

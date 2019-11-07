@@ -26,7 +26,6 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.matrix.android.api.session.room.model.thirdparty.RoomDirectoryData
 import im.vector.riotx.R
-import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
 import im.vector.riotx.features.roomdirectory.RoomDirectoryNavigationViewModel
@@ -37,14 +36,13 @@ import javax.inject.Inject
 
 // TODO Set title to R.string.select_room_directory
 // TODO Menu to add custom room directory (not done in RiotWeb so far...)
-class RoomDirectoryPickerFragment : VectorBaseFragment(), RoomDirectoryPickerController.Callback {
+class RoomDirectoryPickerFragment @Inject constructor(val roomDirectoryPickerViewModelFactory: RoomDirectoryPickerViewModel.Factory,
+                                                      private val roomDirectoryPickerController: RoomDirectoryPickerController
+) : VectorBaseFragment(), RoomDirectoryPickerController.Callback {
 
     private val viewModel: RoomDirectoryViewModel by activityViewModel()
     private lateinit var navigationViewModel: RoomDirectoryNavigationViewModel
     private val pickerViewModel: RoomDirectoryPickerViewModel by fragmentViewModel()
-
-    @Inject lateinit var roomDirectoryPickerViewModelFactory: RoomDirectoryPickerViewModel.Factory
-    @Inject lateinit var roomDirectoryPickerController: RoomDirectoryPickerController
 
     override fun getLayoutResId() = R.layout.fragment_room_directory_picker
 
@@ -69,10 +67,6 @@ class RoomDirectoryPickerFragment : VectorBaseFragment(), RoomDirectoryPickerCon
         }
 
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

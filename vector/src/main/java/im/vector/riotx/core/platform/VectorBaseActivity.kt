@@ -19,6 +19,7 @@ package im.vector.riotx.core.platform
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -34,6 +35,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.Unbinder
 import com.airbnb.mvrx.BaseMvRxActivity
+import com.airbnb.mvrx.MvRx
 import com.bumptech.glide.util.Util
 import com.google.android.material.snackbar.Snackbar
 import im.vector.riotx.BuildConfig
@@ -125,7 +127,7 @@ abstract class VectorBaseActivity : BaseMvRxActivity(), HasScreenInjector {
         }
         Timber.v("Injecting dependencies into ${javaClass.simpleName} took $timeForInjection ms")
         ThemeUtils.setActivityTheme(this, getOtherThemes())
-
+        supportFragmentManager.fragmentFactory = screenComponent.fragmentFactory()
         super.onCreate(savedInstanceState)
         viewModelFactory = screenComponent.viewModelFactory()
         configurationViewModel = ViewModelProviders.of(this, viewModelFactory).get(ConfigurationViewModel::class.java)
@@ -329,6 +331,10 @@ abstract class VectorBaseActivity : BaseMvRxActivity(), HasScreenInjector {
                 it.setDisplayHomeAsUpEnabled(true)
             }
         }
+    }
+
+    fun Parcelable?.toMvRxBundle(): Bundle? {
+        return this?.let { Bundle().apply { putParcelable(MvRx.KEY_ARG, it) } }
     }
 
     // ==============================================================================================

@@ -24,24 +24,19 @@ import com.airbnb.epoxy.EpoxyRecyclerView
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
-import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.utils.LiveEvent
 import javax.inject.Inject
 
-class EmojiSearchResultFragment : VectorBaseFragment() {
+class EmojiSearchResultFragment @Inject constructor(
+        private val epoxyController: EmojiSearchResultController
+) : VectorBaseFragment() {
 
     override fun getLayoutResId(): Int = R.layout.fragment_generic_recycler_epoxy
 
     val viewModel: EmojiSearchResultViewModel by activityViewModel()
 
     var sharedViewModel: EmojiChooserViewModel? = null
-
-    @Inject lateinit var epoxyController: EmojiSearchResultController
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

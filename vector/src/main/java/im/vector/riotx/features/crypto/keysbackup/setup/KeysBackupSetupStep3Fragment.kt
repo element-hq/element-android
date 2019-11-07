@@ -30,7 +30,6 @@ import butterknife.BindView
 import butterknife.OnClick
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import im.vector.riotx.R
-import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.files.addEntryToDownloadManager
 import im.vector.riotx.core.files.writeToFile
 import im.vector.riotx.core.platform.VectorBaseFragment
@@ -40,8 +39,9 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
+import javax.inject.Inject
 
-class KeysBackupSetupStep3Fragment : VectorBaseFragment() {
+class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_keys_backup_setup_step3
 
@@ -54,15 +54,7 @@ class KeysBackupSetupStep3Fragment : VectorBaseFragment() {
     @BindView(R.id.keys_backup_setup_step3_line2_text)
     lateinit var mRecoveryKeyLabel2TextView: TextView
 
-    companion object {
-        fun newInstance() = KeysBackupSetupStep3Fragment()
-    }
-
     private lateinit var viewModel: KeysBackupSetupSharedViewModel
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -72,7 +64,7 @@ class KeysBackupSetupStep3Fragment : VectorBaseFragment() {
 
         viewModel.shouldPromptOnBack = false
 
-        viewModel.passphrase.observe(this, Observer {
+        viewModel.passphrase.observe(viewLifecycleOwner, Observer {
             if (it.isNullOrBlank()) {
                 // Recovery was generated, so show key and options to save
                 mRecoveryKeyLabel2TextView.text = getString(R.string.keys_backup_setup_step3_text_line2_no_passphrase)

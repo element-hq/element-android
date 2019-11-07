@@ -25,15 +25,11 @@ import androidx.lifecycle.ViewModelProviders
 import butterknife.BindView
 import butterknife.OnClick
 import im.vector.riotx.R
-import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.utils.LiveEvent
+import javax.inject.Inject
 
-class KeysBackupSetupStep1Fragment : VectorBaseFragment() {
-
-    companion object {
-        fun newInstance() = KeysBackupSetupStep1Fragment()
-    }
+class KeysBackupSetupStep1Fragment @Inject constructor() : VectorBaseFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_keys_backup_setup_step1
 
@@ -45,10 +41,6 @@ class KeysBackupSetupStep1Fragment : VectorBaseFragment() {
     @BindView(R.id.keys_backup_setup_step1_manualExport)
     lateinit var manualExportButton: Button
 
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
@@ -56,7 +48,7 @@ class KeysBackupSetupStep1Fragment : VectorBaseFragment() {
             ViewModelProviders.of(this, viewModelFactory).get(KeysBackupSetupSharedViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
 
-        viewModel.showManualExport.observe(this, Observer {
+        viewModel.showManualExport.observe(viewLifecycleOwner, Observer {
             val showOption = it ?: false
             // Can't use isVisible because the kotlin compiler will crash with  Back-end (JVM) Internal error: wrong code generated
             advancedOptionText.visibility = if (showOption) View.VISIBLE else View.GONE

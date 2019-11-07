@@ -23,6 +23,7 @@ import androidx.preference.PreferenceFragmentCompat
 import im.vector.matrix.android.api.session.Session
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
+import im.vector.riotx.core.extensions.replaceFragment
 import im.vector.riotx.core.platform.VectorBaseActivity
 import kotlinx.android.synthetic.main.activity_vector_settings.*
 import timber.log.Timber
@@ -52,11 +53,8 @@ class VectorSettingsActivity : VectorBaseActivity(),
         configureToolbar(settingsToolbar)
 
         if (isFirstCreation()) {
-            val vectorSettingsPreferencesFragment = VectorSettingsRootFragment.newInstance()
             // display the fragment
-            supportFragmentManager.beginTransaction()
-                    .replace(R.id.vector_settings_page, vectorSettingsPreferencesFragment, FRAGMENT_TAG)
-                    .commit()
+            replaceFragment(R.id.vector_settings_page, VectorSettingsRootFragment::class.java, null, FRAGMENT_TAG)
         }
 
         supportFragmentManager.addOnBackStackChangedListener(this)
@@ -76,9 +74,9 @@ class VectorSettingsActivity : VectorBaseActivity(),
     override fun onPreferenceStartFragment(caller: PreferenceFragmentCompat, pref: Preference): Boolean {
         val oFragment = when {
             VectorPreferences.SETTINGS_NOTIFICATION_TROUBLESHOOT_PREFERENCE_KEY == pref.key ->
-                VectorSettingsNotificationsTroubleshootFragment.newInstance()
+                supportFragmentManager.fragmentFactory.instantiate(classLoader, VectorSettingsNotificationsTroubleshootFragment::class.java.name)
             VectorPreferences.SETTINGS_NOTIFICATION_ADVANCED_PREFERENCE_KEY == pref.key     ->
-                VectorSettingsAdvancedNotificationPreferenceFragment.newInstance()
+                supportFragmentManager.fragmentFactory.instantiate(classLoader, VectorSettingsAdvancedNotificationPreferenceFragment::class.java.name)
             else                                                                            ->
                 try {
                     pref.fragment?.let {

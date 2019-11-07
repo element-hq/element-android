@@ -31,7 +31,6 @@ import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotx.R
-import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.epoxy.LayoutManagerStateRestorer
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.observeEvent
@@ -52,7 +51,13 @@ data class RoomListParams(
         val sharedData: SharedData? = null
 ) : Parcelable
 
-class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, OnBackPressed, FabMenuView.Listener {
+class RoomListFragment @Inject constructor(
+        private val roomController: RoomSummaryController,
+        val roomListViewModelFactory: RoomListViewModel.Factory,
+        private val errorFormatter: ErrorFormatter,
+        private val notificationDrawerManager: NotificationDrawerManager
+
+) : VectorBaseFragment(), RoomSummaryController.Listener, OnBackPressed, FabMenuView.Listener {
 
     enum class DisplayMode(@StringRes val titleRes: Int) {
         HOME(R.string.bottom_action_home),
@@ -62,26 +67,10 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, O
         SHARE(/* Not used */ 0)
     }
 
-    companion object {
-        fun newInstance(roomListParams: RoomListParams): RoomListFragment {
-            return RoomListFragment().apply {
-                setArguments(roomListParams)
-            }
-        }
-    }
-
     private val roomListParams: RoomListParams by args()
-    @Inject lateinit var roomController: RoomSummaryController
-    @Inject lateinit var roomListViewModelFactory: RoomListViewModel.Factory
-    @Inject lateinit var errorFormatter: ErrorFormatter
-    @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
     private val roomListViewModel: RoomListViewModel by fragmentViewModel()
 
     override fun getLayoutResId() = R.layout.fragment_room_list
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     private var hasUnreadRooms = false
 

@@ -35,17 +35,17 @@ import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.riotx.R
-import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.platform.OnBackPressed
 import im.vector.riotx.core.platform.VectorBaseFragment
 import kotlinx.android.synthetic.main.fragment_login_sso_fallback.*
 import timber.log.Timber
 import java.net.URLDecoder
+import javax.inject.Inject
 
 /**
  * Only login is supported for the moment
  */
-class LoginSsoFallbackFragment : VectorBaseFragment(), OnBackPressed {
+class LoginSsoFallbackFragment @Inject constructor() : VectorBaseFragment(), OnBackPressed {
 
     private val viewModel: LoginViewModel by activityViewModel()
 
@@ -61,10 +61,6 @@ class LoginSsoFallbackFragment : VectorBaseFragment(), OnBackPressed {
     private var mMode = Mode.MODE_LOGIN
 
     override fun getLayoutResId() = R.layout.fragment_login_sso_fallback
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
