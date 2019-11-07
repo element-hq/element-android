@@ -40,7 +40,7 @@ import kotlinx.android.synthetic.main.fragment_create_direct_room.*
 import javax.inject.Inject
 
 class CreateDirectRoomKnownUsersFragment @Inject constructor(
-        private val directRoomController: KnownUsersController,
+        private val knownUsersController: KnownUsersController,
         private val dimensionConverter: DimensionConverter
 ) : VectorBaseFragment(), KnownUsersController.Callback {
 
@@ -97,8 +97,8 @@ class CreateDirectRoomKnownUsersFragment @Inject constructor(
         recyclerView.setHasFixedSize(true)
         // Don't activate animation as we might have way to much item animation when filtering
         recyclerView.itemAnimator = null
-        directRoomController.callback = this
-        recyclerView.setController(directRoomController)
+        knownUsersController.callback = this
+        recyclerView.setController(knownUsersController)
     }
 
     private fun setupFilterView() {
@@ -127,7 +127,7 @@ class CreateDirectRoomKnownUsersFragment @Inject constructor(
     }
 
     override fun invalidate() = withState(viewModel) {
-        directRoomController.setData(it)
+        knownUsersController.setData(it)
     }
 
     private fun updateChipsView(data: SelectUserAction) {

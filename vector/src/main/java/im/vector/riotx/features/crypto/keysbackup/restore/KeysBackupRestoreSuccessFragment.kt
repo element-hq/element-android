@@ -58,8 +58,4 @@ class KeysBackupRestoreSuccessFragment @Inject constructor() : VectorBaseFragmen
     fun onDone() {
         sharedViewModel.importRoomKeysFinishWithResult.value = LiveEvent(sharedViewModel.importKeyResult!!)
     }
-
-    companion object {
-        fun newInstance() = KeysBackupRestoreSuccessFragment()
-    }
 }
