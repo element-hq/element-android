@@ -38,8 +38,7 @@ class RoomDetailActivity : VectorBaseActivity(), ToolbarConfigurable {
         if (isFirstCreation()) {
             val roomDetailArgs: RoomDetailArgs = intent?.extras?.getParcelable(EXTRA_ROOM_DETAIL_ARGS)
                     ?: return
-            val roomDetailFragment = RoomDetailFragment.newInstance(roomDetailArgs)
-            replaceFragment(roomDetailFragment, R.id.roomDetailContainer)
+            replaceFragment(R.id.roomDetailContainer, RoomDetailFragment::class.java, roomDetailArgs)
         }
     }
 

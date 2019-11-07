@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.session.sync.model
+package im.vector.matrix.android.internal.session.sync.model.accountdata
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import im.vector.matrix.android.api.pushrules.rest.GetPushRulesResponse
 
 @JsonClass(generateAdapter = true)
-internal data class UserAccountDataPushRules(
-        @Json(name = "content") val content: GetPushRulesResponse
-) : UserAccountData
+internal data class UserAccountDataIgnoredUsers(
+        @Json(name = "type") override val type: String = TYPE_IGNORED_USER_LIST,
+        @Json(name = "content") val content: IgnoredUsersContent
+) : UserAccountData()

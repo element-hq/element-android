@@ -91,7 +91,7 @@ internal class RealmCryptoStore(private val realmConfiguration: RealmConfigurati
         realmLocker = Realm.getInstance(realmConfiguration)
 
         // Ensure CryptoMetadataEntity is inserted in DB
-        doWithRealm(realmConfiguration) { realm ->
+        doRealmTransaction(realmConfiguration) { realm ->
             var currentMetadata = realm.where<CryptoMetadataEntity>().findFirst()
 
             var deleteAll = false
@@ -109,15 +109,13 @@ internal class RealmCryptoStore(private val realmConfiguration: RealmConfigurati
             }
 
             if (currentMetadata == null) {
-                realm.executeTransaction {
-                    if (deleteAll) {
-                        it.deleteAll()
-                    }
+                if (deleteAll) {
+                    realm.deleteAll()
+                }
 
-                    // Metadata not found, or database cleaned, create it
-                    it.createObject(CryptoMetadataEntity::class.java, credentials.userId).apply {
-                        deviceId = credentials.deviceId
-                    }
+                // Metadata not found, or database cleaned, create it
+                realm.createObject(CryptoMetadataEntity::class.java, credentials.userId).apply {
+                    deviceId = credentials.deviceId
                 }
             }
         }

@@ -20,14 +20,11 @@ import androidx.lifecycle.ViewModelProviders
 import butterknife.OnClick
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseFragment
+import javax.inject.Inject
 
-class SASVerificationVerifiedFragment : VectorBaseFragment() {
+class SASVerificationVerifiedFragment @Inject constructor() : VectorBaseFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_sas_verification_verified
-
-    companion object {
-        fun newInstance() = SASVerificationVerifiedFragment()
-    }
 
     private lateinit var viewModel: SasVerificationViewModel
 

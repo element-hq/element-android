@@ -28,9 +28,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.TransitionManager
 import butterknife.BindView
-import im.vector.matrix.android.api.session.Session
 import im.vector.riotx.R
-import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.rageshake.BugReporter
@@ -39,7 +37,10 @@ import im.vector.riotx.features.settings.troubleshoot.TroubleshootTest
 import im.vector.riotx.push.fcm.NotificationTroubleshootTestManagerFactory
 import javax.inject.Inject
 
-class VectorSettingsNotificationsTroubleshootFragment : VectorBaseFragment() {
+class VectorSettingsNotificationsTroubleshootFragment @Inject constructor(
+        private val bugReporter: BugReporter,
+        private val testManagerFactory: NotificationTroubleshootTestManagerFactory
+) : VectorBaseFragment() {
 
     @BindView(R.id.troubleshoot_test_recycler_view)
     lateinit var mRecyclerView: RecyclerView
@@ -54,17 +55,10 @@ class VectorSettingsNotificationsTroubleshootFragment : VectorBaseFragment() {
 
     private var testManager: NotificationTroubleshootTestManager? = null
     // members
-    @Inject lateinit var session: Session
-    @Inject lateinit var bugReporter: BugReporter
-    @Inject lateinit var testManagerFactory: NotificationTroubleshootTestManagerFactory
 
     override fun getLayoutResId() = R.layout.fragment_settings_notifications_troubleshoot
 
     private var interactionListener: VectorSettingsFragmentInteractionListener? = null
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -73,7 +67,7 @@ class VectorSettingsNotificationsTroubleshootFragment : VectorBaseFragment() {
         mRecyclerView.layoutManager = layoutManager
 
         val dividerItemDecoration = DividerItemDecoration(mRecyclerView.context,
-                                                          layoutManager.orientation)
+                layoutManager.orientation)
         mRecyclerView.addItemDecoration(dividerItemDecoration)
 
         mSummaryButton.setOnClickListener {
@@ -88,7 +82,7 @@ class VectorSettingsNotificationsTroubleshootFragment : VectorBaseFragment() {
 
     private fun startUI() {
         mSummaryDescription.text = getString(R.string.settings_troubleshoot_diagnostic_running_status,
-                                             0, 0)
+                0, 0)
         testManager = testManagerFactory.create(this)
         testManager?.statusListener = { troubleshootTestManager ->
             if (isAdded) {
@@ -166,10 +160,5 @@ class VectorSettingsNotificationsTroubleshootFragment : VectorBaseFragment() {
         if (context is VectorSettingsFragmentInteractionListener) {
             interactionListener = context
         }
-    }
-
-    companion object {
-        // static constructor
-        fun newInstance() = VectorSettingsNotificationsTroubleshootFragment()
     }
 }

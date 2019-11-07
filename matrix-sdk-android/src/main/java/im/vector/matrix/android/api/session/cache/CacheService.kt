@@ -19,7 +19,7 @@ package im.vector.matrix.android.api.session.cache
 import im.vector.matrix.android.api.MatrixCallback
 
 /**
- * This interface defines a method to sign out. It's implemented at the session level.
+ * This interface defines a method to clear the cache. It's implemented at the session level.
  */
 interface CacheService {
 

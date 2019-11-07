@@ -19,7 +19,6 @@ package im.vector.riotx.features.home
 import android.os.Bundle
 import im.vector.matrix.android.api.session.Session
 import im.vector.riotx.R
-import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.observeK
 import im.vector.riotx.core.extensions.replaceChildFragment
 import im.vector.riotx.core.platform.VectorBaseFragment
@@ -27,29 +26,17 @@ import im.vector.riotx.features.home.group.GroupListFragment
 import kotlinx.android.synthetic.main.fragment_home_drawer.*
 import javax.inject.Inject
 
-class HomeDrawerFragment : VectorBaseFragment() {
-
-    companion object {
-
-        fun newInstance(): HomeDrawerFragment {
-            return HomeDrawerFragment()
-        }
-    }
-
-    @Inject lateinit var session: Session
-    @Inject lateinit var avatarRenderer: AvatarRenderer
+class HomeDrawerFragment @Inject constructor(
+        private val session: Session,
+        private val avatarRenderer: AvatarRenderer
+) : VectorBaseFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_home_drawer
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         if (savedInstanceState == null) {
-            val groupListFragment = GroupListFragment.newInstance()
-            replaceChildFragment(groupListFragment, R.id.homeDrawerGroupListContainer)
+            replaceChildFragment(R.id.homeDrawerGroupListContainer, GroupListFragment::class.java)
         }
         session.liveUser(session.myUserId).observeK(this) { optionalUser ->
             val user = optionalUser?.getOrNull()

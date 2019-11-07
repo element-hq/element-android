@@ -24,14 +24,15 @@ import androidx.core.content.edit
 import androidx.preference.Preference
 import androidx.preference.PreferenceManager
 import im.vector.riotx.R
-import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.preference.BingRule
 import im.vector.riotx.core.preference.BingRulePreference
 import im.vector.riotx.core.preference.VectorPreference
 import im.vector.riotx.features.notifications.NotificationUtils
 import javax.inject.Inject
 
-class VectorSettingsAdvancedNotificationPreferenceFragment : VectorSettingsBaseFragment() {
+class VectorSettingsAdvancedNotificationPreferenceFragment @Inject constructor(
+        private val vectorPreferences: VectorPreferences
+) : VectorSettingsBaseFragment() {
 
     // events listener
     /* TODO
@@ -45,12 +46,6 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : VectorSettingsBaseF
     override var titleRes: Int = R.string.settings_notification_advanced
 
     override val preferenceXmlRes = R.xml.vector_settings_notification_advanced_preferences
-
-    @Inject lateinit var vectorPreferences: VectorPreferences
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun bindPref() {
         val callNotificationsSystemOptions = findPreference<VectorPreference>(VectorPreferences.SETTINGS_SYSTEM_CALL_NOTIFICATION_PREFERENCE_KEY)!!
@@ -229,7 +224,5 @@ class VectorSettingsAdvancedNotificationPreferenceFragment : VectorSettingsBaseF
                 VectorPreferences.SETTINGS_CALL_INVITATIONS_PREFERENCE_KEY to BingRule.RULE_ID_CALL,
                 VectorPreferences.SETTINGS_MESSAGES_SENT_BY_BOT_PREFERENCE_KEY to BingRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS
         )
-
-        fun newInstance() = VectorSettingsAdvancedNotificationPreferenceFragment()
     }
 }

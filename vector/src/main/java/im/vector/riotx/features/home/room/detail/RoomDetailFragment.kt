@@ -68,7 +68,6 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotx.R
-import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.dialogs.withColoredButton
 import im.vector.riotx.core.epoxy.LayoutManagerStateRestorer
 import im.vector.riotx.core.error.ErrorFormatter
@@ -134,7 +133,22 @@ data class RoomDetailArgs(
 
 private const val REACTION_SELECT_REQUEST_CODE = 0
 
-class RoomDetailFragment :
+class RoomDetailFragment @Inject constructor(
+        private val session: Session,
+        private val avatarRenderer: AvatarRenderer,
+        private val timelineEventController: TimelineEventController,
+        private val commandAutocompletePolicy: CommandAutocompletePolicy,
+        private val autocompleteCommandPresenter: AutocompleteCommandPresenter,
+        private val autocompleteUserPresenter: AutocompleteUserPresenter,
+        private val permalinkHandler: PermalinkHandler,
+        private val notificationDrawerManager: NotificationDrawerManager,
+        val roomDetailViewModelFactory: RoomDetailViewModel.Factory,
+        val textComposerViewModelFactory: TextComposerViewModel.Factory,
+        private val errorFormatter: ErrorFormatter,
+        private val eventHtmlRenderer: EventHtmlRenderer,
+        private val vectorPreferences: VectorPreferences,
+        private val readMarkerHelper: ReadMarkerHelper
+) :
         VectorBaseFragment(),
         TimelineEventController.Callback,
         AutocompleteUserPresenter.Callback,
@@ -144,12 +158,6 @@ class RoomDetailFragment :
         AttachmentsHelper.Callback {
 
     companion object {
-
-        fun newInstance(args: RoomDetailArgs): RoomDetailFragment {
-            return RoomDetailFragment().apply {
-                setArguments(args)
-            }
-        }
 
         /**x
          * Sanitize the display name.
@@ -178,21 +186,6 @@ class RoomDetailFragment :
 
     private val debouncer = Debouncer(createUIHandler())
 
-    @Inject lateinit var session: Session
-    @Inject lateinit var avatarRenderer: AvatarRenderer
-    @Inject lateinit var timelineEventController: TimelineEventController
-    @Inject lateinit var commandAutocompletePolicy: CommandAutocompletePolicy
-    @Inject lateinit var autocompleteCommandPresenter: AutocompleteCommandPresenter
-    @Inject lateinit var autocompleteUserPresenter: AutocompleteUserPresenter
-    @Inject lateinit var permalinkHandler: PermalinkHandler
-    @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
-    @Inject lateinit var roomDetailViewModelFactory: RoomDetailViewModel.Factory
-    @Inject lateinit var textComposerViewModelFactory: TextComposerViewModel.Factory
-    @Inject lateinit var errorFormatter: ErrorFormatter
-    @Inject lateinit var eventHtmlRenderer: EventHtmlRenderer
-    @Inject lateinit var vectorPreferences: VectorPreferences
-    @Inject lateinit var readMarkerHelper: ReadMarkerHelper
-
     private lateinit var scrollOnNewMessageCallback: ScrollOnNewMessageCallback
     private lateinit var scrollOnHighlightedEventCallback: ScrollOnHighlightedEventCallback
 
@@ -210,10 +203,6 @@ class RoomDetailFragment :
     private lateinit var attachmentTypeSelector: AttachmentTypeSelectorView
 
     private var lockSendButton = false
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -771,7 +760,7 @@ class RoomDetailFragment :
                 .setView(layout)
                 .setPositiveButton(R.string.report_content_custom_submit) { _, _ ->
                     val reason = input.text.toString()
-                    roomDetailViewModel.process(RoomDetailActions.ReportContent(action.eventId, reason))
+                    roomDetailViewModel.process(RoomDetailActions.ReportContent(action.eventId, action.senderId, reason))
                 }
                 .setNegativeButton(R.string.cancel, null)
                 .show()
@@ -795,7 +784,9 @@ class RoomDetailFragment :
                                         .setTitle(R.string.content_reported_as_spam_title)
                                         .setMessage(R.string.content_reported_as_spam_content)
                                         .setPositiveButton(R.string.ok, null)
-                                        .setNegativeButton(R.string.block_user) { _, _ -> vectorBaseActivity.notImplemented("block user") }
+                                        .setNegativeButton(R.string.block_user) { _, _ ->
+                                            roomDetailViewModel.process(RoomDetailActions.IgnoreUser(data.senderId))
+                                        }
                                         .show()
                                         .withColoredButton(DialogInterface.BUTTON_NEGATIVE)
                             }
@@ -804,7 +795,9 @@ class RoomDetailFragment :
                                         .setTitle(R.string.content_reported_as_inappropriate_title)
                                         .setMessage(R.string.content_reported_as_inappropriate_content)
                                         .setPositiveButton(R.string.ok, null)
-                                        .setNegativeButton(R.string.block_user) { _, _ -> vectorBaseActivity.notImplemented("block user") }
+                                        .setNegativeButton(R.string.block_user) { _, _ ->
+                                            roomDetailViewModel.process(RoomDetailActions.IgnoreUser(data.senderId))
+                                        }
                                         .show()
                                         .withColoredButton(DialogInterface.BUTTON_NEGATIVE)
                             }
@@ -813,7 +806,9 @@ class RoomDetailFragment :
                                         .setTitle(R.string.content_reported_title)
                                         .setMessage(R.string.content_reported_content)
                                         .setPositiveButton(R.string.ok, null)
-                                        .setNegativeButton(R.string.block_user) { _, _ -> vectorBaseActivity.notImplemented("block user") }
+                                        .setNegativeButton(R.string.block_user) { _, _ ->
+                                            roomDetailViewModel.process(RoomDetailActions.IgnoreUser(data.senderId))
+                                        }
                                         .show()
                                         .withColoredButton(DialogInterface.BUTTON_NEGATIVE)
                             }
@@ -962,6 +957,7 @@ class RoomDetailFragment :
         val roomId = roomDetailArgs.roomId
 
         this.view?.hideKeyboard()
+
         MessageActionsBottomSheet
                 .newInstance(roomId, informationData)
                 .show(requireActivity().supportFragmentManager, "MESSAGE_CONTEXTUAL_ACTIONS")
@@ -1137,10 +1133,12 @@ class RoomDetailFragment :
                 roomDetailViewModel.process(RoomDetailActions.RemoveFailedEcho(action.eventId))
             }
             is SimpleAction.ReportContentSpam          -> {
-                roomDetailViewModel.process(RoomDetailActions.ReportContent(action.eventId, "This message is spam", spam = true))
+                roomDetailViewModel.process(RoomDetailActions.ReportContent(
+                        action.eventId, action.senderId, "This message is spam", spam = true))
             }
             is SimpleAction.ReportContentInappropriate -> {
-                roomDetailViewModel.process(RoomDetailActions.ReportContent(action.eventId, "This message is inappropriate", inappropriate = true))
+                roomDetailViewModel.process(RoomDetailActions.ReportContent(
+                        action.eventId, action.senderId, "This message is inappropriate", inappropriate = true))
             }
             is SimpleAction.ReportContentCustom        -> {
                 promptReasonToReportContent(action)

@@ -24,7 +24,6 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
-import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
 import im.vector.riotx.features.roomdirectory.RoomDirectoryNavigationViewModel
@@ -32,19 +31,14 @@ import kotlinx.android.synthetic.main.fragment_create_room.*
 import timber.log.Timber
 import javax.inject.Inject
 
-class CreateRoomFragment : VectorBaseFragment(), CreateRoomController.Listener {
+class CreateRoomFragment @Inject constructor(private val createRoomController: CreateRoomController): VectorBaseFragment(), CreateRoomController.Listener {
 
     private lateinit var navigationViewModel: RoomDirectoryNavigationViewModel
     private val viewModel: CreateRoomViewModel by activityViewModel()
-    @Inject lateinit var createRoomController: CreateRoomController
 
     override fun getLayoutResId() = R.layout.fragment_create_room
 
     override fun getMenuRes() = R.menu.vector_room_creation
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

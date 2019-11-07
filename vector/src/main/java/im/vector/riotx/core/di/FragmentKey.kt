@@ -12,14 +12,16 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
 
-package im.vector.matrix.android.internal.session.sync.model
+package im.vector.riotx.core.di
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import androidx.fragment.app.Fragment
+import dagger.MapKey
+import kotlin.reflect.KClass
 
-@JsonClass(generateAdapter = true)
-internal data class UserAccountDataFallback(
-        @Json(name = "content") val content: Map<String, Any>
-) : UserAccountData
+@Target(AnnotationTarget.FUNCTION, AnnotationTarget.PROPERTY_GETTER, AnnotationTarget.PROPERTY_SETTER)
+@Retention(AnnotationRetention.RUNTIME)
+@MapKey
+annotation class FragmentKey(val value: KClass<out Fragment>)
