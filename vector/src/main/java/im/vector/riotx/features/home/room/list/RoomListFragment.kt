@@ -21,6 +21,7 @@ import android.os.Parcelable
 import android.view.Menu
 import android.view.MenuItem
 import androidx.annotation.StringRes
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProviders
@@ -36,8 +37,6 @@ import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.epoxy.LayoutManagerStateRestorer
 import im.vector.riotx.core.error.ErrorFormatter
-import im.vector.riotx.core.extensions.observeEvent
-import im.vector.riotx.core.extensions.observeEventFirstThrottle
 import im.vector.riotx.core.platform.OnBackPressed
 import im.vector.riotx.core.platform.StateView
 import im.vector.riotx.core.platform.VectorBaseFragment
@@ -47,6 +46,7 @@ import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsStore
 import im.vector.riotx.features.home.room.list.widget.FabMenuView
 import im.vector.riotx.features.notifications.NotificationDrawerManager
 import im.vector.riotx.features.share.SharedData
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_list.*
 import javax.inject.Inject
@@ -115,28 +115,40 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, O
         setupCreateRoomButton()
         setupRecyclerView()
         roomListViewModel.subscribe { renderState(it) }
-        roomListViewModel.openRoomLiveData.observeEventFirstThrottle(this, 800L) {
-            if (roomListParams.displayMode == DisplayMode.SHARE) {
-                val sharedData = roomListParams.sharedData ?: return@observeEventFirstThrottle
-                navigator.openRoomForSharing(requireActivity(), it, sharedData)
-            } else {
-                navigator.openRoom(requireActivity(), it)
-            }
-        }
+
+        roomListViewModel.viewEvents
+                .observe()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    when (it) {
+                        is RoomListViewEvents.SelectRoom -> openSelectedRoom(it)
+                        is RoomListViewEvents.Failure    -> showError(it)
+                    }
+                }
+                .disposeOnDestroy()
 
         createChatFabMenu.listener = this
-
-        roomListViewModel.invitationAnswerErrorLiveData.observeEvent(this) { throwable ->
-            vectorBaseActivity.coordinatorLayout?.let {
-                Snackbar.make(it, errorFormatter.toHumanReadable(throwable), Snackbar.LENGTH_SHORT)
-                        .show()
-            }
-        }
 
         quickActionsDispatcher
                 .observe()
                 .subscribe { handleQuickActions(it) }
                 .disposeOnDestroy()
+    }
+
+    private fun openSelectedRoom(event: RoomListViewEvents.SelectRoom) {
+        if (roomListParams.displayMode == DisplayMode.SHARE) {
+            val sharedData = roomListParams.sharedData ?: return
+            navigator.openRoomForSharing(requireActivity(), event.roomId, sharedData)
+        } else {
+            navigator.openRoom(requireActivity(), event.roomId)
+        }
+    }
+
+    private fun showError(event: RoomListViewEvents.Failure) {
+        vectorBaseActivity.coordinatorLayout?.let {
+            Snackbar.make(it, errorFormatter.toHumanReadable(event.throwable), Snackbar.LENGTH_SHORT)
+                    .show()
+        }
     }
 
     private fun setupCreateRoomButton() {
@@ -233,7 +245,14 @@ class RoomListFragment : VectorBaseFragment(), RoomSummaryController.Listener, O
                 vectorBaseActivity.notImplemented("Opening room settings")
             }
             is RoomListQuickActions.Leave                     -> {
-                roomListViewModel.accept(RoomListActions.LeaveRoom(quickActions.roomId))
+                AlertDialog.Builder(requireContext())
+                        .setTitle(R.string.room_participants_leave_prompt_title)
+                        .setMessage(R.string.room_participants_leave_prompt_msg)
+                        .setPositiveButton(R.string.leave) { _, _ ->
+                            roomListViewModel.accept(RoomListActions.LeaveRoom(quickActions.roomId))
+                        }
+                        .setNegativeButton(R.string.cancel, null)
+                        .show()
             }
         }
     }

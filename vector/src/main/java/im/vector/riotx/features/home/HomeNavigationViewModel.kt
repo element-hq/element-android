@@ -17,8 +17,8 @@
 package im.vector.riotx.features.home
 
 import androidx.lifecycle.ViewModel
-import im.vector.riotx.core.utils.PublishStore
-import im.vector.riotx.core.utils.RxStore
+import im.vector.riotx.core.utils.PublishDataSource
+import im.vector.riotx.core.utils.MutableDataSource
 
-class HomeNavigationViewModel(private val store: RxStore<HomeActivity.Navigation> = PublishStore())
-    : ViewModel(), RxStore<HomeActivity.Navigation> by store
+class HomeNavigationViewModel(private val source: MutableDataSource<HomeActivity.Navigation> = PublishDataSource())
+    : ViewModel(), MutableDataSource<HomeActivity.Navigation> by source

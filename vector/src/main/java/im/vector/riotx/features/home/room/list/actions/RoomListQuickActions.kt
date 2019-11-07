@@ -20,7 +20,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import im.vector.riotx.R
 
-sealed class RoomListQuickActions(@StringRes val titleRes: Int, @DrawableRes val iconResId: Int) {
+sealed class RoomListQuickActions(@StringRes val titleRes: Int, @DrawableRes val iconResId: Int, val destructive: Boolean = false) {
 
     data class NotificationsAllNoisy(val roomId: String) : RoomListQuickActions(
             R.string.room_list_quick_actions_notifications_all_noisy,
@@ -49,19 +49,7 @@ sealed class RoomListQuickActions(@StringRes val titleRes: Int, @DrawableRes val
 
     data class Leave(val roomId: String) : RoomListQuickActions(
             R.string.room_list_quick_actions_leave,
-            R.drawable.ic_room_actions_leave
+            R.drawable.ic_room_actions_leave,
+            true
     )
-
-    companion object {
-        fun all(roomId: String): List<RoomListQuickActions> {
-            return listOf(
-                    NotificationsAllNoisy(roomId),
-                    NotificationsAll(roomId),
-                    NotificationsMentionsOnly(roomId),
-                    NotificationsMute(roomId),
-                    Settings(roomId),
-                    Leave(roomId)
-            )
-        }
-    }
 }

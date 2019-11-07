@@ -12,16 +12,16 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
-package im.vector.riotx.features.home.room.detail.timeline.action
 
-import androidx.lifecycle.ViewModel
-import im.vector.riotx.core.utils.PublishStore
-import im.vector.riotx.core.utils.RxStore
+package im.vector.riotx
 
-/**
- * Activity shared view model to handle message actions
- */
-class MessageActionsStore constructor(
-        private val store: RxStore<SimpleAction> = PublishStore()
-) : ViewModel(), RxStore<SimpleAction> by store
+import arrow.core.Option
+import im.vector.matrix.android.api.session.Session
+import im.vector.riotx.core.utils.BehaviorDataSource
+import javax.inject.Inject
+import javax.inject.Singleton
+
+@Singleton
+class ActiveSessionDataSource @Inject constructor() : BehaviorDataSource<Option<Session>>()

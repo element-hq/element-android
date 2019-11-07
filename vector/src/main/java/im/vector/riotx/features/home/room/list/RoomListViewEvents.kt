@@ -12,14 +12,15 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
 
-package im.vector.riotx.features.share
+package im.vector.riotx.features.home.room.list
 
-import im.vector.matrix.android.api.session.room.model.RoomSummary
-import im.vector.riotx.core.utils.BehaviorStore
-import javax.inject.Inject
-import javax.inject.Singleton
-
-@Singleton
-class ShareRoomListObservableStore @Inject constructor() : BehaviorStore<List<RoomSummary>>()
+/**
+ * Transient events for RoomList
+ */
+sealed class RoomListViewEvents {
+    data class Failure(val throwable: Throwable) : RoomListViewEvents()
+    data class SelectRoom(val roomId: String) : RoomListViewEvents()
+}

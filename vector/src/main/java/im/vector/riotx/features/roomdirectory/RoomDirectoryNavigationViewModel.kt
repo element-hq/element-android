@@ -17,8 +17,8 @@
 package im.vector.riotx.features.roomdirectory
 
 import androidx.lifecycle.ViewModel
-import im.vector.riotx.core.utils.PublishStore
-import im.vector.riotx.core.utils.RxStore
+import im.vector.riotx.core.utils.PublishDataSource
+import im.vector.riotx.core.utils.MutableDataSource
 
-class RoomDirectoryNavigationViewModel(private val store: RxStore<RoomDirectoryActivity.Navigation> = PublishStore())
-    : ViewModel(), RxStore<RoomDirectoryActivity.Navigation> by store
+class RoomDirectoryNavigationViewModel(private val source: MutableDataSource<RoomDirectoryActivity.Navigation> = PublishDataSource())
+    : ViewModel(), MutableDataSource<RoomDirectoryActivity.Navigation> by source

@@ -21,18 +21,18 @@ import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 
-/**
- * An interface to handle InMemory Rx Store from which you can post or observe values.
- */
-interface RxStore<T> {
+interface DataSource<T> {
     fun observe(): Observable<T>
+}
+
+interface MutableDataSource<T> : DataSource<T> {
     fun post(value: T)
 }
 
 /**
- * This store emits the most recent value it has observed and all subsequent observed values to each subscriber.
+ * This datasource emits the most recent value it has observed and all subsequent observed values to each subscriber.
  */
-open class BehaviorStore<T>(private val defaultValue: T? = null) : RxStore<T> {
+open class BehaviorDataSource<T>(private val defaultValue: T? = null) : MutableDataSource<T> {
 
     private val storeRelay = createRelay()
 
@@ -54,9 +54,9 @@ open class BehaviorStore<T>(private val defaultValue: T? = null) : RxStore<T> {
 }
 
 /**
- * This store only emits all subsequent observed values to each subscriber.
+ * This datasource only emits all subsequent observed values to each subscriber.
  */
-open class PublishStore<T> : RxStore<T> {
+open class PublishDataSource<T> : MutableDataSource<T> {
 
     private val storeRelay = PublishRelay.create<T>()
 

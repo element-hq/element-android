@@ -99,7 +99,7 @@ import im.vector.riotx.features.home.room.detail.composer.TextComposerViewState
 import im.vector.riotx.features.home.room.detail.readreceipts.DisplayReadReceiptsBottomSheet
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.home.room.detail.timeline.action.MessageActionsBottomSheet
-import im.vector.riotx.features.home.room.detail.timeline.action.MessageActionsStore
+import im.vector.riotx.features.home.room.detail.timeline.action.MessageActionsDispatcher
 import im.vector.riotx.features.home.room.detail.timeline.action.SimpleAction
 import im.vector.riotx.features.home.room.detail.timeline.edithistory.ViewEditHistoryBottomSheet
 import im.vector.riotx.features.home.room.detail.timeline.item.*
@@ -200,7 +200,7 @@ class RoomDetailFragment :
 
     override fun getMenuRes() = R.menu.menu_timeline
 
-    private lateinit var messageActionsStore: MessageActionsStore
+    private lateinit var messageActionsDispatcher: MessageActionsDispatcher
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var attachmentsHelper: AttachmentsHelper
     private lateinit var keyboardStateUtils: KeyboardStateUtils
@@ -217,7 +217,7 @@ class RoomDetailFragment :
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        messageActionsStore = ViewModelProviders.of(requireActivity()).get(MessageActionsStore::class.java)
+        messageActionsDispatcher = ViewModelProviders.of(requireActivity()).get(MessageActionsDispatcher::class.java)
         attachmentsHelper = AttachmentsHelper.create(this, this).register()
         keyboardStateUtils = KeyboardStateUtils(requireActivity())
         setupToolbar(roomToolbar)
@@ -236,7 +236,7 @@ class RoomDetailFragment :
             val message = requireContext().getString(pair.first, *pair.second.toTypedArray())
             showSnackWithMessage(message, Snackbar.LENGTH_LONG)
         }
-        messageActionsStore
+        messageActionsDispatcher
                 .observe()
                 .subscribe {
                     handleActions(it)

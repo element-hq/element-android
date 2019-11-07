@@ -17,8 +17,8 @@
 package im.vector.riotx.features.home.createdirect
 
 import androidx.lifecycle.ViewModel
-import im.vector.riotx.core.utils.PublishStore
-import im.vector.riotx.core.utils.RxStore
+import im.vector.riotx.core.utils.PublishDataSource
+import im.vector.riotx.core.utils.MutableDataSource
 
-class CreateDirectRoomNavigationViewModel(private val store: RxStore<CreateDirectRoomActivity.Navigation> = PublishStore())
-    : ViewModel(), RxStore<CreateDirectRoomActivity.Navigation> by store
+class CreateDirectRoomNavigationViewModel(private val dataSource: MutableDataSource<CreateDirectRoomActivity.Navigation> = PublishDataSource())
+    : ViewModel(), MutableDataSource<CreateDirectRoomActivity.Navigation> by dataSource

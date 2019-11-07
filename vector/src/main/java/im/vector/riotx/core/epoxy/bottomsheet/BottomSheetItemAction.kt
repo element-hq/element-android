@@ -16,6 +16,7 @@
  */
 package im.vector.riotx.core.epoxy.bottomsheet
 
+import android.content.res.ColorStateList
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -24,6 +25,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import androidx.core.widget.ImageViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
@@ -51,6 +53,8 @@ abstract class BottomSheetItemAction : VectorEpoxyModel<BottomSheetItemAction.Ho
     @EpoxyAttribute
     var subMenuItem = false
     @EpoxyAttribute
+    var destructive = false
+    @EpoxyAttribute
     lateinit var listener: View.OnClickListener
 
     override fun bind(holder: Holder) {
@@ -58,8 +62,15 @@ abstract class BottomSheetItemAction : VectorEpoxyModel<BottomSheetItemAction.Ho
             listener.onClick(it)
         }
         holder.startSpace.isVisible = subMenuItem
+        val tintColor = if (destructive) {
+            ContextCompat.getColor(holder.view.context, R.color.riotx_notice)
+        } else {
+            ThemeUtils.getColor(holder.view.context, R.attr.riotx_text_secondary)
+        }
         holder.icon.setImageResource(iconRes)
+        ImageViewCompat.setImageTintList(holder.icon, ColorStateList.valueOf(tintColor))
         holder.text.setText(textRes)
+        holder.text.setTextColor(tintColor)
         holder.selected.isInvisible = !selected
         if (showExpand) {
             val expandDrawable = if (expanded) {
@@ -68,7 +79,6 @@ abstract class BottomSheetItemAction : VectorEpoxyModel<BottomSheetItemAction.Ho
                 ContextCompat.getDrawable(holder.view.context, R.drawable.ic_material_expand_more_black)
             }
             expandDrawable?.also {
-                val tintColor = ThemeUtils.getColor(holder.view.context, R.attr.riotx_text_secondary)
                 DrawableCompat.setTint(it, tintColor)
             }
             holder.text.setCompoundDrawablesWithIntrinsicBounds(null, null, expandDrawable, null)

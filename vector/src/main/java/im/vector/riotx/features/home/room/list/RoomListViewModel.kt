@@ -16,8 +16,6 @@
 
 package im.vector.riotx.features.home.room.list
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
@@ -26,17 +24,16 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.tag.RoomTag
-import im.vector.riotx.core.extensions.postLiveEvent
 import im.vector.riotx.core.platform.VectorViewModel
-import im.vector.riotx.core.utils.LiveEvent
-import im.vector.riotx.core.utils.RxStore
+import im.vector.riotx.core.utils.DataSource
+import im.vector.riotx.core.utils.PublishDataSource
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import javax.inject.Inject
 
 class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
                                             private val session: Session,
-                                            private val roomSummariesStore: RxStore<List<RoomSummary>>,
+                                            private val roomSummariesSource: DataSource<List<RoomSummary>>,
                                             private val alphabeticalRoomComparator: AlphabeticalRoomComparator,
                                             private val chronologicalRoomComparator: ChronologicalRoomComparator)
     : VectorViewModel<RoomListViewState>(initialState) {
@@ -57,13 +54,8 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
     private val displayMode = initialState.displayMode
     private val roomListDisplayModeFilter = RoomListDisplayModeFilter(displayMode)
 
-    private val _openRoomLiveData = MutableLiveData<LiveEvent<String>>()
-    val openRoomLiveData: LiveData<LiveEvent<String>>
-        get() = _openRoomLiveData
-
-    private val _invitationAnswerErrorLiveData = MutableLiveData<LiveEvent<Throwable>>()
-    val invitationAnswerErrorLiveData: LiveData<LiveEvent<Throwable>>
-        get() = _invitationAnswerErrorLiveData
+    private val _viewEvents = PublishDataSource<RoomListViewEvents>()
+    val viewEvents: DataSource<RoomListViewEvents> = _viewEvents
 
     init {
         observeRoomSummaries()
@@ -85,7 +77,7 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
     // PRIVATE METHODS *****************************************************************************
 
     private fun handleSelectRoom(action: RoomListActions.SelectRoom) {
-        _openRoomLiveData.postLiveEvent(action.roomSummary.roomId)
+        _viewEvents.post(RoomListViewEvents.SelectRoom(action.roomSummary.roomId))
     }
 
     private fun handleToggleCategory(action: RoomListActions.ToggleCategory) = setState {
@@ -101,7 +93,7 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
     }
 
     private fun observeRoomSummaries() {
-        roomSummariesStore
+        roomSummariesSource
                 .observe()
                 .observeOn(Schedulers.computation())
                 .map {
@@ -111,7 +103,7 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
                     copy(asyncRooms = asyncRooms)
                 }
 
-        roomSummariesStore
+        roomSummariesSource
                 .observe()
                 .observeOn(Schedulers.computation())
                 .map { buildRoomSummaries(it) }
@@ -144,8 +136,7 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
 
             override fun onFailure(failure: Throwable) {
                 // Notify the user
-                _invitationAnswerErrorLiveData.postLiveEvent(failure)
-
+                _viewEvents.post(RoomListViewEvents.Failure(failure))
                 setState {
                     copy(
                             joiningRoomsIds = joiningRoomsIds - roomId,
@@ -182,8 +173,7 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
 
             override fun onFailure(failure: Throwable) {
                 // Notify the user
-                _invitationAnswerErrorLiveData.postLiveEvent(failure)
-
+                _viewEvents.post(RoomListViewEvents.Failure(failure))
                 setState {
                     copy(
                             rejectingRoomsIds = rejectingRoomsIds - roomId,
@@ -204,15 +194,19 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
     }
 
     private fun handleChangeNotificationMode(action: RoomListActions.ChangeRoomNotificationState) {
-        session.getRoom(action.roomId)?.also {
-            it.setRoomNotificationState(action.notificationState, object : MatrixCallback<Unit> {})
-        }
+        session.getRoom(action.roomId)?.setRoomNotificationState(action.notificationState, object : MatrixCallback<Unit> {
+            override fun onFailure(failure: Throwable) {
+                _viewEvents.post(RoomListViewEvents.Failure(failure))
+            }
+        })
     }
 
     private fun handleLeaveRoom(action: RoomListActions.LeaveRoom) {
-        session.getRoom(action.roomId)?.also {
-            it.leave(object : MatrixCallback<Unit> {})
-        }
+        session.getRoom(action.roomId)?.leave(object : MatrixCallback<Unit> {
+            override fun onFailure(failure: Throwable) {
+                _viewEvents.post(RoomListViewEvents.Failure(failure))
+            }
+        })
     }
 
     private fun buildRoomSummaries(rooms: List<RoomSummary>): RoomSummaries {

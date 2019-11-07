@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.home.group
+package im.vector.riotx.features.share
 
-import arrow.core.Option
-import im.vector.matrix.android.api.session.group.model.GroupSummary
-import im.vector.riotx.core.utils.BehaviorStore
+import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.riotx.core.utils.BehaviorDataSource
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class SelectedGroupStore @Inject constructor() : BehaviorStore<Option<GroupSummary>>(Option.empty())
+class ShareRoomListDataSource @Inject constructor() : BehaviorDataSource<List<RoomSummary>>()

@@ -12,17 +12,15 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
-package im.vector.riotx.features.home.room.list.actions
 
-import androidx.lifecycle.ViewModel
-import im.vector.riotx.core.utils.PublishDataSource
-import im.vector.riotx.core.utils.MutableDataSource
+package im.vector.riotx.features.home.group
 
-/**
- * Activity shared view model to handle room list quick actions
- */
-class RoomListQuickActionsStore constructor(
-        private val store: MutableDataSource<RoomListQuickActions> = PublishDataSource()
-) : ViewModel(), MutableDataSource<RoomListQuickActions> by store
+import arrow.core.Option
+import im.vector.matrix.android.api.session.group.model.GroupSummary
+import im.vector.riotx.core.utils.BehaviorDataSource
+import javax.inject.Inject
+import javax.inject.Singleton
+
+@Singleton
+class SelectedGroupDataSource @Inject constructor() : BehaviorDataSource<Option<GroupSummary>>(Option.empty())

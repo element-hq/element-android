@@ -12,16 +12,14 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
-package im.vector.riotx
+package im.vector.riotx.features.home
 
-import arrow.core.Option
-import im.vector.matrix.android.api.session.Session
-import im.vector.riotx.core.utils.BehaviorStore
+import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.riotx.core.utils.BehaviorDataSource
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ActiveSessionObservableStore @Inject constructor() : BehaviorStore<Option<Session>>()
+class HomeRoomListDataSource @Inject constructor() : BehaviorDataSource<List<RoomSummary>>()

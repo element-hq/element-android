@@ -13,13 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package im.vector.riotx.features.home.room.detail.timeline.action
 
-package im.vector.riotx.features.home
+import androidx.lifecycle.ViewModel
+import im.vector.riotx.core.utils.PublishDataSource
+import im.vector.riotx.core.utils.MutableDataSource
 
-import im.vector.matrix.android.api.session.room.model.RoomSummary
-import im.vector.riotx.core.utils.BehaviorStore
-import javax.inject.Inject
-import javax.inject.Singleton
-
-@Singleton
-class HomeRoomListObservableStore @Inject constructor() : BehaviorStore<List<RoomSummary>>()
+/**
+ * Activity shared view model to handle message actions
+ */
+class MessageActionsDispatcher constructor(
+        private val dataSource: MutableDataSource<SimpleAction> = PublishDataSource()
+) : ViewModel(), MutableDataSource<SimpleAction> by dataSource

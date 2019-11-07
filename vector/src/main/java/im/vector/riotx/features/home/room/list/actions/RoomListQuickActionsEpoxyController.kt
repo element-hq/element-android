@@ -18,22 +18,16 @@ package im.vector.riotx.features.home.room.list.actions
 import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.matrix.android.api.session.room.notification.RoomNotificationState
-import im.vector.riotx.EmojiCompatFontProvider
-import im.vector.riotx.core.date.VectorDateFormatter
-import im.vector.riotx.core.epoxy.bottomsheet.BottomSheetItemAction_
+import im.vector.riotx.core.epoxy.bottomsheet.bottomSheetItemAction
 import im.vector.riotx.core.epoxy.bottomsheet.bottomSheetItemRoomPreview
 import im.vector.riotx.core.epoxy.bottomsheet.bottomSheetItemSeparator
-import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.home.AvatarRenderer
 import javax.inject.Inject
 
 /**
  * Epoxy controller for room list actions
  */
-class RoomListQuickActionsEpoxyController @Inject constructor(private val stringProvider: StringProvider,
-                                                              private val avatarRenderer: AvatarRenderer,
-                                                              private val dateFormatter: VectorDateFormatter,
-                                                              private val fontProvider: EmojiCompatFontProvider)
+class RoomListQuickActionsEpoxyController @Inject constructor(private val avatarRenderer: AvatarRenderer)
     : TypedEpoxyController<RoomListQuickActionsState>() {
 
     var listener: Listener? = null
@@ -78,13 +72,14 @@ class RoomListQuickActionsEpoxyController @Inject constructor(private val string
             is RoomListQuickActions.Settings,
             is RoomListQuickActions.Leave                     -> false
         }
-        return BottomSheetItemAction_()
-                .id("action_$index")
-                .selected(selected)
-                .iconRes(iconResId)
-                .textRes(titleRes)
-                .listener(View.OnClickListener { listener?.didSelectMenuAction(this) })
-                .addTo(this@RoomListQuickActionsEpoxyController)
+        return bottomSheetItemAction {
+            id("action_$index")
+            selected(selected)
+            iconRes(iconResId)
+            textRes(titleRes)
+            destructive(this@toBottomSheetItem.destructive)
+            listener(View.OnClickListener { listener?.didSelectMenuAction(this@toBottomSheetItem) })
+        }
     }
 
     interface Listener {
