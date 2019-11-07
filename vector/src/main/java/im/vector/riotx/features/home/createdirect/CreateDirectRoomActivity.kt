@@ -31,7 +31,6 @@ import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.addFragment
 import im.vector.riotx.core.extensions.addFragmentToBackstack
-import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.platform.SimpleFragmentActivity
 import im.vector.riotx.core.platform.WaitingViewData
 import kotlinx.android.synthetic.main.activity.*
@@ -59,13 +58,15 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
         super.onCreate(savedInstanceState)
         toolbar.visibility = View.GONE
         navigationViewModel = ViewModelProviders.of(this, viewModelFactory).get(CreateDirectRoomNavigationViewModel::class.java)
-        navigationViewModel.navigateTo.observeEvent(this) { navigation ->
-            when (navigation) {
-                is Navigation.UsersDirectory -> addFragmentToBackstack(R.id.container, CreateDirectRoomDirectoryUsersFragment::class.java)
-                Navigation.Close             -> finish()
-                Navigation.Previous          -> onBackPressed()
-            }
-        }
+        navigationViewModel.observe()
+                .subscribe { navigation ->
+                    when (navigation) {
+                        is Navigation.UsersDirectory -> addFragmentToBackstack(R.id.container, CreateDirectRoomDirectoryUsersFragment::class.java)
+                        Navigation.Close             -> finish()
+                        Navigation.Previous          -> onBackPressed()
+                    }
+                }
+                .disposeOnDestroy()
         if (isFirstCreation()) {
             addFragment(R.id.container, CreateDirectRoomKnownUsersFragment::class.java)
         }

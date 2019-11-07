@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,15 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.riotx.features.home.room.detail.timeline.action
 
-import com.airbnb.epoxy.EpoxyModelClass
-import im.vector.riotx.R
-import im.vector.riotx.core.epoxy.VectorEpoxyHolder
-import im.vector.riotx.core.epoxy.VectorEpoxyModel
+package im.vector.matrix.android.api.session.room.notification
 
-@EpoxyModelClass(layout = R.layout.item_bottom_sheet_divider)
-abstract class BottomSheetItemSeparator : VectorEpoxyModel<BottomSheetItemSeparator.Holder>() {
+/**
+ * Defines the room notification state
+ */
+enum class RoomNotificationState {
+    /**
+     * All the messages will trigger a noisy notification
+     */
+    ALL_MESSAGES_NOISY,
 
-    class Holder : VectorEpoxyHolder()
+    /**
+     * All the messages will trigger a notification
+     */
+    ALL_MESSAGES,
+
+    /**
+     * Only the messages with user display name / user name will trigger notifications
+     */
+    MENTIONS_ONLY,
+
+    /**
+     * No notifications
+     */
+    MUTE
 }

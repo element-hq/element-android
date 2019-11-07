@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,21 +14,15 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.core.mvrx
+package im.vector.matrix.android.api.session.room.notification
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import im.vector.riotx.core.extensions.postLiveEvent
-import im.vector.riotx.core.utils.LiveEvent
+import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.util.Cancelable
 
-abstract class NavigationViewModel<NavigationClass> : ViewModel() {
+interface RoomPushRuleService {
 
-    private val _navigateTo = MutableLiveData<LiveEvent<NavigationClass>>()
-    val navigateTo: LiveData<LiveEvent<NavigationClass>>
-        get() = _navigateTo
+    fun getLiveRoomNotificationState(): LiveData<RoomNotificationState>
 
-    fun goTo(navigation: NavigationClass) {
-        _navigateTo.postLiveEvent(navigation)
-    }
+    fun setRoomNotificationState(roomNotificationState: RoomNotificationState, matrixCallback: MatrixCallback<Unit>): Cancelable
 }

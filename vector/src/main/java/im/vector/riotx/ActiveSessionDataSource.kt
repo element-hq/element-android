@@ -12,23 +12,16 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
-package im.vector.riotx.features.home.room.detail.timeline.action
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import im.vector.riotx.core.extensions.postLiveEvent
-import im.vector.riotx.core.utils.LiveEvent
+package im.vector.riotx
+
+import arrow.core.Option
+import im.vector.matrix.android.api.session.Session
+import im.vector.riotx.core.utils.BehaviorDataSource
 import javax.inject.Inject
+import javax.inject.Singleton
 
-/**
- * Activity shared view model to handle message actions
- */
-class ActionsHandler @Inject constructor() : ViewModel() {
-
-    val actionCommandEvent = MutableLiveData<LiveEvent<SimpleAction>>()
-
-    fun fireAction(action: SimpleAction) {
-        actionCommandEvent.postLiveEvent(action)
-    }
-}
+@Singleton
+class ActiveSessionDataSource @Inject constructor() : BehaviorDataSource<Option<Session>>()

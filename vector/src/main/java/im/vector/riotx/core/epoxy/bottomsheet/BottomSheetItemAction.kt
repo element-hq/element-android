@@ -5,26 +5,33 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
-package im.vector.riotx.features.home.room.detail.timeline.action
+package im.vector.riotx.core.epoxy.bottomsheet
 
+import android.content.res.ColorStateList
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.DrawableRes
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import androidx.core.widget.ImageViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
+import im.vector.riotx.features.themes.ThemeUtils
 
 /**
  * A action for bottom sheet.
@@ -42,7 +49,11 @@ abstract class BottomSheetItemAction : VectorEpoxyModel<BottomSheetItemAction.Ho
     @EpoxyAttribute
     var expanded = false
     @EpoxyAttribute
+    var selected = false
+    @EpoxyAttribute
     var subMenuItem = false
+    @EpoxyAttribute
+    var destructive = false
     @EpoxyAttribute
     lateinit var listener: View.OnClickListener
 
@@ -50,20 +61,36 @@ abstract class BottomSheetItemAction : VectorEpoxyModel<BottomSheetItemAction.Ho
         holder.view.setOnClickListener {
             listener.onClick(it)
         }
-
         holder.startSpace.isVisible = subMenuItem
+        val tintColor = if (destructive) {
+            ContextCompat.getColor(holder.view.context, R.color.riotx_notice)
+        } else {
+            ThemeUtils.getColor(holder.view.context, R.attr.riotx_text_secondary)
+        }
         holder.icon.setImageResource(iconRes)
+        ImageViewCompat.setImageTintList(holder.icon, ColorStateList.valueOf(tintColor))
         holder.text.setText(textRes)
-        holder.expand.isVisible = showExpand
+        holder.text.setTextColor(tintColor)
+        holder.selected.isInvisible = !selected
         if (showExpand) {
-            holder.expand.setImageResource(if (expanded) R.drawable.ic_material_expand_less_black else R.drawable.ic_material_expand_more_black)
+            val expandDrawable = if (expanded) {
+                ContextCompat.getDrawable(holder.view.context, R.drawable.ic_material_expand_less_black)
+            } else {
+                ContextCompat.getDrawable(holder.view.context, R.drawable.ic_material_expand_more_black)
+            }
+            expandDrawable?.also {
+                DrawableCompat.setTint(it, tintColor)
+            }
+            holder.text.setCompoundDrawablesWithIntrinsicBounds(null, null, expandDrawable, null)
+        } else {
+            holder.text.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
         }
     }
 
     class Holder : VectorEpoxyHolder() {
-        val startSpace by bind<View>(R.id.action_start_space)
-        val icon by bind<ImageView>(R.id.action_icon)
-        val text by bind<TextView>(R.id.action_title)
-        val expand by bind<ImageView>(R.id.action_expand)
+        val startSpace by bind<View>(R.id.actionStartSpace)
+        val icon by bind<ImageView>(R.id.actionIcon)
+        val text by bind<TextView>(R.id.actionTitle)
+        val selected by bind<ImageView>(R.id.actionSelected)
     }
 }

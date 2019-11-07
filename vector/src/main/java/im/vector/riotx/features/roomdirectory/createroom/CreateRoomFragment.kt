@@ -46,7 +46,7 @@ class CreateRoomFragment @Inject constructor(private val createRoomController: C
         navigationViewModel = ViewModelProviders.of(requireActivity()).get(RoomDirectoryNavigationViewModel::class.java)
         setupRecyclerView()
         createRoomClose.setOnClickListener {
-            navigationViewModel.goTo(RoomDirectoryActivity.Navigation.Back)
+            navigationViewModel.post(RoomDirectoryActivity.Navigation.Back)
         }
     }
 
@@ -93,7 +93,7 @@ class CreateRoomFragment @Inject constructor(private val createRoomController: C
             // Navigate to freshly created room
             navigator.openRoom(requireActivity(), async())
 
-            navigationViewModel.goTo(RoomDirectoryActivity.Navigation.Close)
+            navigationViewModel.post(RoomDirectoryActivity.Navigation.Close)
         } else {
             // Populate list with Epoxy
             createRoomController.setData(state)

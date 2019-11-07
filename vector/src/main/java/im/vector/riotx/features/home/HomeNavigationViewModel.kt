@@ -16,7 +16,9 @@
 
 package im.vector.riotx.features.home
 
-import im.vector.riotx.core.mvrx.NavigationViewModel
-import javax.inject.Inject
+import androidx.lifecycle.ViewModel
+import im.vector.riotx.core.utils.PublishDataSource
+import im.vector.riotx.core.utils.MutableDataSource
 
-class HomeNavigationViewModel @Inject constructor() : NavigationViewModel<HomeActivity.Navigation>()
+class HomeNavigationViewModel(private val source: MutableDataSource<HomeActivity.Navigation> = PublishDataSource())
+    : ViewModel(), MutableDataSource<HomeActivity.Navigation> by source

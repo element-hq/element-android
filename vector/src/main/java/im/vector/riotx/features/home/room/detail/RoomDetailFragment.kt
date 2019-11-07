@@ -97,8 +97,8 @@ import im.vector.riotx.features.home.room.detail.composer.TextComposerViewModel
 import im.vector.riotx.features.home.room.detail.composer.TextComposerViewState
 import im.vector.riotx.features.home.room.detail.readreceipts.DisplayReadReceiptsBottomSheet
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
-import im.vector.riotx.features.home.room.detail.timeline.action.ActionsHandler
 import im.vector.riotx.features.home.room.detail.timeline.action.MessageActionsBottomSheet
+import im.vector.riotx.features.home.room.detail.timeline.action.MessageActionsDispatcher
 import im.vector.riotx.features.home.room.detail.timeline.action.SimpleAction
 import im.vector.riotx.features.home.room.detail.timeline.edithistory.ViewEditHistoryBottomSheet
 import im.vector.riotx.features.home.room.detail.timeline.item.*
@@ -193,7 +193,7 @@ class RoomDetailFragment @Inject constructor(
 
     override fun getMenuRes() = R.menu.menu_timeline
 
-    private lateinit var actionViewModel: ActionsHandler
+    private lateinit var messageActionsDispatcher: MessageActionsDispatcher
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var attachmentsHelper: AttachmentsHelper
     private lateinit var keyboardStateUtils: KeyboardStateUtils
@@ -206,7 +206,7 @@ class RoomDetailFragment @Inject constructor(
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        actionViewModel = ViewModelProviders.of(requireActivity()).get(ActionsHandler::class.java)
+        messageActionsDispatcher = ViewModelProviders.of(requireActivity()).get(MessageActionsDispatcher::class.java)
         attachmentsHelper = AttachmentsHelper.create(this, this).register()
         keyboardStateUtils = KeyboardStateUtils(requireActivity())
         setupToolbar(roomToolbar)
@@ -225,9 +225,12 @@ class RoomDetailFragment @Inject constructor(
             val message = requireContext().getString(pair.first, *pair.second.toTypedArray())
             showSnackWithMessage(message, Snackbar.LENGTH_LONG)
         }
-        actionViewModel.actionCommandEvent.observeEvent(this) {
-            handleActions(it)
-        }
+        messageActionsDispatcher
+                .observe()
+                .subscribe {
+                    handleActions(it)
+                }
+                .disposeOnDestroy()
 
         roomDetailViewModel.navigateToEvent.observeEvent(this) {
             val scrollPosition = timelineEventController.searchPositionOfEvent(it)

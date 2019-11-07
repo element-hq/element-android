@@ -12,16 +12,14 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
-package im.vector.riotx
+package im.vector.matrix.android.internal.session.room.notification
 
-import arrow.core.Option
-import im.vector.matrix.android.api.session.Session
-import im.vector.riotx.core.utils.RxStore
-import javax.inject.Inject
-import javax.inject.Singleton
+import im.vector.matrix.android.api.pushrules.RuleKind
+import im.vector.matrix.android.api.pushrules.rest.PushRule
 
-@Singleton
-class ActiveSessionObservableStore @Inject constructor() : RxStore<Option<Session>>()
+internal data class RoomPushRule(
+        val kind: RuleKind,
+        val rule: PushRule
+)

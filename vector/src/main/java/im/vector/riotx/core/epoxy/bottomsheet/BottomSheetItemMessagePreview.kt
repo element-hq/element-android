@@ -5,15 +5,16 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
-package im.vector.riotx.features.home.room.detail.timeline.action
+package im.vector.riotx.core.epoxy.bottomsheet
 
 import android.widget.ImageView
 import android.widget.TextView
@@ -24,7 +25,6 @@ import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
 import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.features.home.AvatarRenderer
-import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
 
 /**
  * A message preview for bottom sheet.
@@ -35,7 +35,9 @@ abstract class BottomSheetItemMessagePreview : VectorEpoxyModel<BottomSheetItemM
     @EpoxyAttribute
     lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute
-    lateinit var informationData: MessageInformationData
+    lateinit var avatarUrl: String
+    @EpoxyAttribute
+    lateinit var senderId: String
     @EpoxyAttribute
     var senderName: String? = null
     @EpoxyAttribute
@@ -44,7 +46,7 @@ abstract class BottomSheetItemMessagePreview : VectorEpoxyModel<BottomSheetItemM
     var time: CharSequence? = null
 
     override fun bind(holder: Holder) {
-        avatarRenderer.render(informationData.avatarUrl, informationData.senderId, senderName, holder.avatar)
+        avatarRenderer.render(avatarUrl, senderId, senderName, holder.avatar)
         holder.sender.setTextOrHide(senderName)
         holder.body.text = body
         holder.timestamp.setTextOrHide(time)

@@ -21,6 +21,7 @@ import im.vector.matrix.android.api.session.room.crypto.RoomCryptoService
 import im.vector.matrix.android.api.session.room.members.MembershipService
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.relation.RelationService
+import im.vector.matrix.android.api.session.room.notification.RoomPushRuleService
 import im.vector.matrix.android.api.session.room.reporting.ReportingService
 import im.vector.matrix.android.api.session.room.read.ReadService
 import im.vector.matrix.android.api.session.room.send.DraftService
@@ -41,7 +42,8 @@ interface Room :
         StateService,
         ReportingService,
         RelationService,
-        RoomCryptoService {
+        RoomCryptoService,
+        RoomPushRuleService {
 
     /**
      * The roomId of this room

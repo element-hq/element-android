@@ -28,7 +28,9 @@ import im.vector.matrix.android.internal.database.mapper.PushRulesMapper
 import im.vector.matrix.android.internal.database.model.PushRulesEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.SessionScope
+import im.vector.matrix.android.internal.session.pushers.AddPushRuleTask
 import im.vector.matrix.android.internal.session.pushers.GetPushRulesTask
+import im.vector.matrix.android.internal.session.pushers.RemovePushRuleTask
 import im.vector.matrix.android.internal.session.pushers.UpdatePushRuleEnableStatusTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
@@ -38,6 +40,8 @@ import javax.inject.Inject
 @SessionScope
 internal class DefaultPushRuleService @Inject constructor(private val getPushRulesTask: GetPushRulesTask,
                                                           private val updatePushRuleEnableStatusTask: UpdatePushRuleEnableStatusTask,
+                                                          private val addPushRuleTask: AddPushRuleTask,
+                                                          private val removePushRuleTask: RemovePushRuleTask,
                                                           private val taskExecutor: TaskExecutor,
                                                           private val monarchy: Monarchy
 ) : PushRuleService {
@@ -93,6 +97,22 @@ internal class DefaultPushRuleService @Inject constructor(private val getPushRul
         // The rules will be updated, and will come back from the next sync response
         return updatePushRuleEnableStatusTask
                 .configureWith(UpdatePushRuleEnableStatusTask.Params(kind, pushRule, enabled)) {
+                    this.callback = callback
+                }
+                .executeBy(taskExecutor)
+    }
+
+    override fun addPushRule(kind: RuleKind, pushRule: PushRule, callback: MatrixCallback<Unit>): Cancelable {
+        return addPushRuleTask
+                .configureWith(AddPushRuleTask.Params(kind, pushRule)) {
+                    this.callback = callback
+                }
+                .executeBy(taskExecutor)
+    }
+
+    override fun removePushRule(kind: RuleKind, pushRule: PushRule, callback: MatrixCallback<Unit>): Cancelable {
+        return removePushRuleTask
+                .configureWith(RemovePushRuleTask.Params(kind, pushRule)) {
                     this.callback = callback
                 }
                 .executeBy(taskExecutor)

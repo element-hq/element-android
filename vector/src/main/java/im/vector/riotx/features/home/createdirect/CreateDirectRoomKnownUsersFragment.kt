@@ -89,7 +89,7 @@ class CreateDirectRoomKnownUsersFragment @Inject constructor(
 
     private fun setupAddByMatrixIdView() {
         addByMatrixId.setOnClickListener {
-            navigationViewModel.goTo(CreateDirectRoomActivity.Navigation.UsersDirectory)
+            navigationViewModel.post(CreateDirectRoomActivity.Navigation.UsersDirectory)
         }
     }
 

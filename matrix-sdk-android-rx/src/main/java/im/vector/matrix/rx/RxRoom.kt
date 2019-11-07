@@ -20,6 +20,7 @@ import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.model.EventAnnotationsSummary
 import im.vector.matrix.android.api.session.room.model.ReadReceipt
 import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.matrix.android.api.session.room.notification.RoomNotificationState
 import im.vector.matrix.android.api.session.room.send.UserDraft
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.util.Optional
@@ -66,6 +67,10 @@ class RxRoom(private val room: Room) {
 
     fun liveDrafts(): Observable<List<UserDraft>> {
         return room.getDraftsLive().asObservable()
+    }
+
+    fun liveNotificationState(): Observable<RoomNotificationState> {
+        return room.getLiveRoomNotificationState().asObservable()
     }
 }
 

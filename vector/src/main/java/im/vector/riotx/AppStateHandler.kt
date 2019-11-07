@@ -23,9 +23,9 @@ import arrow.core.Option
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.rx.rx
-import im.vector.riotx.features.home.HomeRoomListObservableStore
+import im.vector.riotx.features.home.HomeRoomListDataSource
 import im.vector.riotx.features.home.group.ALL_COMMUNITIES_GROUP_ID
-import im.vector.riotx.features.home.group.SelectedGroupStore
+import im.vector.riotx.features.home.group.SelectedGroupDataSource
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -41,9 +41,9 @@ import javax.inject.Singleton
  */
 @Singleton
 class AppStateHandler @Inject constructor(
-        private val sessionObservableStore: ActiveSessionObservableStore,
-        private val homeRoomListObservableStore: HomeRoomListObservableStore,
-        private val selectedGroupStore: SelectedGroupStore) : LifecycleObserver {
+        private val sessionDataSource: ActiveSessionDataSource,
+        private val homeRoomListDataSource: HomeRoomListDataSource,
+        private val selectedGroupDataSource: SelectedGroupDataSource) : LifecycleObserver {
 
     private val compositeDisposable = CompositeDisposable()
 
@@ -60,14 +60,14 @@ class AppStateHandler @Inject constructor(
     private fun observeRoomsAndGroup() {
         Observable
                 .combineLatest<List<RoomSummary>, Option<GroupSummary>, List<RoomSummary>>(
-                        sessionObservableStore.observe()
+                        sessionDataSource.observe()
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .switchMap {
                                     it.orNull()?.rx()?.liveRoomSummaries()
                                     ?: Observable.just(emptyList())
                                 }
                                 .throttleLast(300, TimeUnit.MILLISECONDS),
-                        selectedGroupStore.observe(),
+                        selectedGroupDataSource.observe(),
                         BiFunction { rooms, selectedGroupOption ->
                             val selectedGroup = selectedGroupOption.orNull()
                             val filteredDirectRooms = rooms
@@ -92,7 +92,7 @@ class AppStateHandler @Inject constructor(
                         }
                 )
                 .subscribe {
-                    homeRoomListObservableStore.post(it)
+                    homeRoomListDataSource.post(it)
                 }
                 .addTo(compositeDisposable)
     }

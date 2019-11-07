@@ -49,7 +49,7 @@ class GroupListFragment @Inject constructor(
         groupListEpoxyRecyclerView.setController(groupController)
         viewModel.subscribe { renderState(it) }
         viewModel.openGroupLiveData.observeEvent(this) {
-            navigationViewModel.goTo(HomeActivity.Navigation.OpenGroup)
+            navigationViewModel.post(HomeActivity.Navigation.OpenGroup)
         }
     }
 

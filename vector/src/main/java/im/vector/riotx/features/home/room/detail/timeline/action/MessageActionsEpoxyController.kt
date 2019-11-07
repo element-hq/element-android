@@ -20,6 +20,12 @@ import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Success
 import im.vector.riotx.EmojiCompatFontProvider
 import im.vector.riotx.R
+import im.vector.riotx.core.epoxy.bottomsheet.BottomSheetItemQuickReactions
+import im.vector.riotx.core.epoxy.bottomsheet.bottomSheetItemAction
+import im.vector.riotx.core.epoxy.bottomsheet.bottomSheetItemMessagePreview
+import im.vector.riotx.core.epoxy.bottomsheet.bottomSheetItemQuickReactions
+import im.vector.riotx.core.epoxy.bottomsheet.bottomSheetItemSendState
+import im.vector.riotx.core.epoxy.bottomsheet.bottomSheetItemSeparator
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.home.AvatarRenderer
 import javax.inject.Inject
@@ -40,7 +46,8 @@ class MessageActionsEpoxyController @Inject constructor(private val stringProvid
             bottomSheetItemMessagePreview {
                 id("preview")
                 avatarRenderer(avatarRenderer)
-                informationData(state.informationData)
+                avatarUrl(state.informationData.avatarUrl ?: "")
+                senderId(state.informationData.senderId)
                 senderName(state.senderName())
                 body(body)
                 time(state.time())

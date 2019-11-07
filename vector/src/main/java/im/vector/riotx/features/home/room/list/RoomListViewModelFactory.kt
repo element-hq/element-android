@@ -17,14 +17,14 @@
 package im.vector.riotx.features.home.room.list
 
 import im.vector.matrix.android.api.session.Session
-import im.vector.riotx.features.home.HomeRoomListObservableStore
-import im.vector.riotx.features.share.ShareRoomListObservableStore
+import im.vector.riotx.features.home.HomeRoomListDataSource
+import im.vector.riotx.features.share.ShareRoomListDataSource
 import javax.inject.Inject
 import javax.inject.Provider
 
 class RoomListViewModelFactory @Inject constructor(private val session: Provider<Session>,
-                                                   private val homeRoomListObservableStore: Provider<HomeRoomListObservableStore>,
-                                                   private val shareRoomListObservableStore: Provider<ShareRoomListObservableStore>,
+                                                   private val homeRoomListDataSource: Provider<HomeRoomListDataSource>,
+                                                   private val shareRoomListDataSource: Provider<ShareRoomListDataSource>,
                                                    private val alphabeticalRoomComparator: Provider<AlphabeticalRoomComparator>,
                                                    private val chronologicalRoomComparator: Provider<ChronologicalRoomComparator>) : RoomListViewModel.Factory {
 
@@ -32,7 +32,7 @@ class RoomListViewModelFactory @Inject constructor(private val session: Provider
         return RoomListViewModel(
                 initialState,
                 session.get(),
-                if (initialState.displayMode == RoomListFragment.DisplayMode.SHARE) shareRoomListObservableStore.get() else homeRoomListObservableStore.get(),
+                if (initialState.displayMode == RoomListFragment.DisplayMode.SHARE) shareRoomListDataSource.get() else homeRoomListDataSource.get(),
                 alphabeticalRoomComparator.get(),
                 chronologicalRoomComparator.get())
     }

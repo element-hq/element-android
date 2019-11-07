@@ -17,18 +17,30 @@
 package im.vector.riotx.core.utils
 
 import com.jakewharton.rxrelay2.BehaviorRelay
+import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 
-open class RxStore<T>(private val defaultValue: T? = null) {
+interface DataSource<T> {
+    fun observe(): Observable<T>
+}
+
+interface MutableDataSource<T> : DataSource<T> {
+    fun post(value: T)
+}
+
+/**
+ * This datasource emits the most recent value it has observed and all subsequent observed values to each subscriber.
+ */
+open class BehaviorDataSource<T>(private val defaultValue: T? = null) : MutableDataSource<T> {
 
     private val storeRelay = createRelay()
 
-    fun observe(): Observable<T> {
+    override fun observe(): Observable<T> {
         return storeRelay.hide().observeOn(Schedulers.computation())
     }
 
-    fun post(value: T) {
+    override fun post(value: T) {
         storeRelay.accept(value)
     }
 
@@ -38,5 +50,21 @@ open class RxStore<T>(private val defaultValue: T? = null) {
         } else {
             BehaviorRelay.createDefault(defaultValue)
         }
+    }
+}
+
+/**
+ * This datasource only emits all subsequent observed values to each subscriber.
+ */
+open class PublishDataSource<T> : MutableDataSource<T> {
+
+    private val storeRelay = PublishRelay.create<T>()
+
+    override fun observe(): Observable<T> {
+        return storeRelay.hide()
+    }
+
+    override fun post(value: T) {
+        storeRelay.accept(value)
     }
 }

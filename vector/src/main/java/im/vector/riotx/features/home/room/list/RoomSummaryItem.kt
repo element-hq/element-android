@@ -41,11 +41,13 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
     @EpoxyAttribute var hasUnreadMessage: Boolean = false
     @EpoxyAttribute var hasDraft: Boolean = false
     @EpoxyAttribute var showHighlighted: Boolean = false
-    @EpoxyAttribute var listener: (() -> Unit)? = null
+    @EpoxyAttribute var itemLongClickListener: View.OnLongClickListener? = null
+    @EpoxyAttribute var itemClickListener: View.OnClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.rootView.setOnClickListener { listener?.invoke() }
+        holder.rootView.setOnClickListener(itemClickListener)
+        holder.rootView.setOnLongClickListener(itemLongClickListener)
         holder.titleView.text = roomName
         holder.lastEventTimeView.text = lastEventTime
         holder.lastEventView.text = lastFormattedEvent

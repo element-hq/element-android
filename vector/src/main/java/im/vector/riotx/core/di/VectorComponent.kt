@@ -23,7 +23,7 @@ import dagger.Component
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.auth.Authenticator
 import im.vector.matrix.android.api.session.Session
-import im.vector.riotx.ActiveSessionObservableStore
+import im.vector.riotx.ActiveSessionDataSource
 import im.vector.riotx.EmojiCompatFontProvider
 import im.vector.riotx.EmojiCompatWrapper
 import im.vector.riotx.VectorApplication
@@ -33,8 +33,8 @@ import im.vector.riotx.features.configuration.VectorConfiguration
 import im.vector.riotx.features.crypto.keysrequest.KeyRequestHandler
 import im.vector.riotx.features.crypto.verification.IncomingVerificationRequestHandler
 import im.vector.riotx.features.home.AvatarRenderer
-import im.vector.riotx.features.home.HomeRoomListObservableStore
-import im.vector.riotx.features.home.group.SelectedGroupStore
+import im.vector.riotx.features.home.HomeRoomListDataSource
+import im.vector.riotx.features.home.group.SelectedGroupDataSource
 import im.vector.riotx.features.html.EventHtmlRenderer
 import im.vector.riotx.features.navigation.Navigator
 import im.vector.riotx.features.notifications.*
@@ -43,7 +43,7 @@ import im.vector.riotx.features.rageshake.VectorFileLogger
 import im.vector.riotx.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.riotx.features.session.SessionListener
 import im.vector.riotx.features.settings.VectorPreferences
-import im.vector.riotx.features.share.ShareRoomListObservableStore
+import im.vector.riotx.features.share.ShareRoomListDataSource
 import im.vector.riotx.features.ui.UiStateRepository
 import javax.inject.Singleton
 
@@ -85,13 +85,13 @@ interface VectorComponent {
 
     fun navigator(): Navigator
 
-    fun homeRoomListObservableStore(): HomeRoomListObservableStore
+    fun homeRoomListObservableStore(): HomeRoomListDataSource
 
-    fun shareRoomListObservableStore(): ShareRoomListObservableStore
+    fun shareRoomListObservableStore(): ShareRoomListDataSource
 
-    fun selectedGroupStore(): SelectedGroupStore
+    fun selectedGroupStore(): SelectedGroupDataSource
 
-    fun activeSessionObservableStore(): ActiveSessionObservableStore
+    fun activeSessionObservableStore(): ActiveSessionDataSource
 
     fun incomingVerificationRequestHandler(): IncomingVerificationRequestHandler
 

@@ -22,6 +22,7 @@ import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.internal.database.mapper.RoomSummaryMapper
 import im.vector.matrix.android.internal.session.room.draft.DefaultDraftService
 import im.vector.matrix.android.internal.session.room.membership.DefaultMembershipService
+import im.vector.matrix.android.internal.session.room.notification.DefaultRoomPushRuleService
 import im.vector.matrix.android.internal.session.room.read.DefaultReadService
 import im.vector.matrix.android.internal.session.room.relation.DefaultRelationService
 import im.vector.matrix.android.internal.session.room.reporting.DefaultReportingService
@@ -44,7 +45,8 @@ internal class DefaultRoomFactory @Inject constructor(private val monarchy: Mona
                                                       private val reportingServiceFactory: DefaultReportingService.Factory,
                                                       private val readServiceFactory: DefaultReadService.Factory,
                                                       private val relationServiceFactory: DefaultRelationService.Factory,
-                                                      private val membershipServiceFactory: DefaultMembershipService.Factory) :
+                                                      private val membershipServiceFactory: DefaultMembershipService.Factory,
+                                                      private val roomPushRuleServiceFactory: DefaultRoomPushRuleService.Factory) :
         RoomFactory {
 
     override fun create(roomId: String): Room {
@@ -60,7 +62,8 @@ internal class DefaultRoomFactory @Inject constructor(private val monarchy: Mona
                 readServiceFactory.create(roomId),
                 cryptoService,
                 relationServiceFactory.create(roomId),
-                membershipServiceFactory.create(roomId)
+                membershipServiceFactory.create(roomId),
+                roomPushRuleServiceFactory.create(roomId)
         )
     }
 }

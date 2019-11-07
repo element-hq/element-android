@@ -12,15 +12,15 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
 
-package im.vector.riotx.features.home.group
+package im.vector.riotx.features.home.room.list
 
-import arrow.core.Option
-import im.vector.matrix.android.api.session.group.model.GroupSummary
-import im.vector.riotx.core.utils.RxStore
-import javax.inject.Inject
-import javax.inject.Singleton
-
-@Singleton
-class SelectedGroupStore @Inject constructor() : RxStore<Option<GroupSummary>>(Option.empty())
+/**
+ * Transient events for RoomList
+ */
+sealed class RoomListViewEvents {
+    data class Failure(val throwable: Throwable) : RoomListViewEvents()
+    data class SelectRoom(val roomId: String) : RoomListViewEvents()
+}
