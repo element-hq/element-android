@@ -29,9 +29,12 @@ import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.api.util.toOptional
 import im.vector.matrix.android.internal.database.mapper.asDomain
+import im.vector.matrix.android.internal.database.model.IgnoredUserEntity
+import im.vector.matrix.android.internal.database.model.IgnoredUserEntityFields
 import im.vector.matrix.android.internal.database.model.UserEntity
 import im.vector.matrix.android.internal.database.model.UserEntityFields
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.session.user.accountdata.UpdateIgnoredUserIdsTask
 import im.vector.matrix.android.internal.session.user.model.SearchUserTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
@@ -40,8 +43,8 @@ import javax.inject.Inject
 
 internal class DefaultUserService @Inject constructor(private val monarchy: Monarchy,
                                                       private val searchUserTask: SearchUserTask,
+                                                      private val updateIgnoredUserIdsTask: UpdateIgnoredUserIdsTask,
                                                       private val taskExecutor: TaskExecutor) : UserService {
-
     private val realmDataSourceFactory: Monarchy.RealmDataSourceFactory<UserEntity> by lazy {
         monarchy.createDataSourceFactory { realm ->
             realm.where(UserEntity::class.java)
@@ -62,7 +65,7 @@ internal class DefaultUserService @Inject constructor(private val monarchy: Mona
 
     override fun getUser(userId: String): User? {
         val userEntity = monarchy.fetchCopied { UserEntity.where(it, userId).findFirst() }
-                         ?: return null
+                ?: return null
 
         return userEntity.asDomain()
     }
@@ -112,6 +115,35 @@ internal class DefaultUserService @Inject constructor(private val monarchy: Mona
                                       callback: MatrixCallback<List<User>>): Cancelable {
         val params = SearchUserTask.Params(limit, search, excludedUserIds)
         return searchUserTask
+                .configureWith(params) {
+                    this.callback = callback
+                }
+                .executeBy(taskExecutor)
+    }
+
+    override fun liveIgnoredUsers(): LiveData<List<User>> {
+        return monarchy.findAllMappedWithChanges(
+                { realm ->
+                    realm.where(IgnoredUserEntity::class.java)
+                            .isNotEmpty(IgnoredUserEntityFields.USER_ID)
+                            .sort(IgnoredUserEntityFields.USER_ID)
+                },
+                { getUser(it.userId) ?: User(userId = it.userId) }
+        )
+    }
+
+    override fun ignoreUserIds(userIds: List<String>, callback: MatrixCallback<Unit>): Cancelable {
+        val params = UpdateIgnoredUserIdsTask.Params(userIdsToIgnore = userIds.toList())
+        return updateIgnoredUserIdsTask
+                .configureWith(params) {
+                    this.callback = callback
+                }
+                .executeBy(taskExecutor)
+    }
+
+    override fun unIgnoreUserIds(userIds: List<String>, callback: MatrixCallback<Unit>): Cancelable {
+        val params = UpdateIgnoredUserIdsTask.Params(userIdsToUnIgnore = userIds.toList())
+        return updateIgnoredUserIdsTask
                 .configureWith(params) {
                     this.callback = callback
                 }

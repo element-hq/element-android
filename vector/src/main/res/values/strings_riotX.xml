@@ -4,4 +4,6 @@
     <!-- Strings not defined in Riot -->
     <string name="notice_member_no_changes">"%1$s made no changes"</string>
 
+    <string name="no_ignored_users">You are not ignoring any users</string>
+
 </resources>

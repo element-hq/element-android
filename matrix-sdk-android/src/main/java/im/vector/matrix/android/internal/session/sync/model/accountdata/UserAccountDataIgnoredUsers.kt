@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.session.sync.model
+package im.vector.matrix.android.internal.session.sync.model.accountdata
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class UserAccountDataFallback(
-        @Json(name = "content") val content: Map<String, Any>
-) : UserAccountData
+internal data class UserAccountDataIgnoredUsers(
+        @Json(name = "type") override val type: String = TYPE_IGNORED_USER_LIST,
+        @Json(name = "content") val content: IgnoredUsersContent
+) : UserAccountData()

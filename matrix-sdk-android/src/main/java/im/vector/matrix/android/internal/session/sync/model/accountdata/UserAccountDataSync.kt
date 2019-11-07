@@ -14,17 +14,12 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.api.session.cache
+package im.vector.matrix.android.internal.session.sync.model.accountdata
 
-import im.vector.matrix.android.api.MatrixCallback
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-/**
- * This interface defines a method to clear the cache. It's implemented at the session level.
- */
-interface CacheService {
-
-    /**
-     * Clear the whole cached data, except credentials. Once done, the session is closed and has to be opened again
-     */
-    fun clearCache(callback: MatrixCallback<Unit>)
-}
+@JsonClass(generateAdapter = true)
+internal data class UserAccountDataSync(
+        @Json(name = "events") val list: List<UserAccountData> = emptyList()
+)
