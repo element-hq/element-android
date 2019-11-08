@@ -25,7 +25,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.SearchView
 import androidx.appcompat.widget.Toolbar
-import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -131,8 +130,8 @@ class EmojiReactionPickerActivity : VectorBaseActivity(),
             }
         }
 
-        supportFragmentManager.findFragmentById(R.id.fragment)?.view?.isVisible = true
-        supportFragmentManager.findFragmentById(R.id.searchFragment)?.view?.isInvisible = true
+        emojiPickerWholeListFragmentContainer.isVisible = true
+        emojiPickerFilteredListFragmentContainer.isVisible = false
         tabLayout.isVisible = true
     }
 
@@ -195,13 +194,13 @@ class EmojiReactionPickerActivity : VectorBaseActivity(),
 
     private fun onQueryText(query: String) {
         if (query.isEmpty()) {
-            supportFragmentManager.findFragmentById(R.id.fragment)?.view?.isVisible = true
-            supportFragmentManager.findFragmentById(R.id.searchFragment)?.view?.isInvisible = true
             tabLayout.isVisible = true
+            emojiPickerWholeListFragmentContainer.isVisible = true
+            emojiPickerFilteredListFragmentContainer.isVisible = false
         } else {
             tabLayout.isVisible = false
-            supportFragmentManager.findFragmentById(R.id.fragment)?.view?.isInvisible = true
-            supportFragmentManager.findFragmentById(R.id.searchFragment)?.view?.isVisible = true
+            emojiPickerWholeListFragmentContainer.isVisible = false
+            emojiPickerFilteredListFragmentContainer.isVisible = true
             searchResultViewModel.updateQuery(query)
         }
     }

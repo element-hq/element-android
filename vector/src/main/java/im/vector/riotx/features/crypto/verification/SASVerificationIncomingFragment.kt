@@ -24,16 +24,13 @@ import butterknife.BindView
 import butterknife.OnClick
 import im.vector.matrix.android.api.session.crypto.sas.IncomingSasVerificationTransaction
 import im.vector.riotx.R
-import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.home.AvatarRenderer
 import javax.inject.Inject
 
-class SASVerificationIncomingFragment : VectorBaseFragment() {
-
-    companion object {
-        fun newInstance() = SASVerificationIncomingFragment()
-    }
+class SASVerificationIncomingFragment @Inject constructor(
+        private var avatarRenderer: AvatarRenderer
+) : VectorBaseFragment() {
 
     @BindView(R.id.sas_incoming_request_user_display_name)
     lateinit var otherUserDisplayNameTextView: TextView
@@ -49,12 +46,7 @@ class SASVerificationIncomingFragment : VectorBaseFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_sas_verification_incoming_request
 
-    @Inject lateinit var avatarRenderer: AvatarRenderer
     private lateinit var viewModel: SasVerificationViewModel
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -74,7 +66,7 @@ class SASVerificationIncomingFragment : VectorBaseFragment() {
             avatarRenderer.render(null, viewModel.otherUserId ?: "", viewModel.otherUserId, avatarImageView)
         }
 
-        viewModel.transactionState.observe(this, Observer {
+        viewModel.transactionState.observe(viewLifecycleOwner, Observer {
             val uxState = (viewModel.transaction as? IncomingSasVerificationTransaction)?.uxState
             when (uxState) {
                 IncomingSasVerificationTransaction.UxState.SHOW_ACCEPT            -> {

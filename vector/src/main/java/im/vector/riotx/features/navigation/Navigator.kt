@@ -50,4 +50,6 @@ interface Navigator {
     fun openGroupDetail(groupId: String, context: Context)
 
     fun openUserDetail(userId: String, context: Context)
+
+    fun openRoomSettings(context: Context, roomId: String)
 }

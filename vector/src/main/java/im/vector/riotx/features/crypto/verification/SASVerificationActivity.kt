@@ -27,6 +27,7 @@ import im.vector.matrix.android.api.session.crypto.sas.IncomingSasVerificationTr
 import im.vector.matrix.android.api.session.crypto.sas.OutgoingSasVerificationRequest
 import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTxState
 import im.vector.riotx.R
+import im.vector.riotx.core.extensions.inTransaction
 import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.platform.SimpleFragmentActivity
 import im.vector.riotx.core.platform.WaitingViewData
@@ -102,23 +103,23 @@ class SASVerificationActivity : SimpleFragmentActivity() {
                     IncomingSasVerificationTransaction.UxState.SHOW_ACCEPT,
                     IncomingSasVerificationTransaction.UxState.WAIT_FOR_KEY_AGREEMENT -> {
                         supportActionBar?.setTitle(R.string.sas_incoming_request_title)
-                        supportFragmentManager.beginTransaction()
-                                .setCustomAnimations(R.anim.no_anim, R.anim.exit_fade_out)
-                                .replace(R.id.container, SASVerificationIncomingFragment.newInstance())
-                                .commitNow()
+                        supportFragmentManager.inTransaction {
+                            setCustomAnimations(R.anim.no_anim, R.anim.exit_fade_out)
+                            replace(R.id.container, SASVerificationIncomingFragment::class.java, null)
+                        }
                     }
                     IncomingSasVerificationTransaction.UxState.WAIT_FOR_VERIFICATION,
                     IncomingSasVerificationTransaction.UxState.SHOW_SAS               -> {
-                        supportFragmentManager.beginTransaction()
-                                .setCustomAnimations(R.anim.no_anim, R.anim.exit_fade_out)
-                                .replace(R.id.container, SASVerificationShortCodeFragment.newInstance())
-                                .commitNow()
+                        supportFragmentManager.inTransaction {
+                            setCustomAnimations(R.anim.no_anim, R.anim.exit_fade_out)
+                            replace(R.id.container, SASVerificationShortCodeFragment::class.java, null)
+                        }
                     }
                     IncomingSasVerificationTransaction.UxState.VERIFIED               -> {
-                        supportFragmentManager.beginTransaction()
-                                .setCustomAnimations(R.anim.no_anim, R.anim.exit_fade_out)
-                                .replace(R.id.container, SASVerificationVerifiedFragment.newInstance())
-                                .commitNow()
+                        supportFragmentManager.inTransaction {
+                            setCustomAnimations(R.anim.no_anim, R.anim.exit_fade_out)
+                            replace(R.id.container, SASVerificationVerifiedFragment::class.java, null)
+                        }
                     }
                     IncomingSasVerificationTransaction.UxState.CANCELLED_BY_ME,
                     IncomingSasVerificationTransaction.UxState.CANCELLED_BY_OTHER     -> {
@@ -133,23 +134,23 @@ class SASVerificationActivity : SimpleFragmentActivity() {
                     OutgoingSasVerificationRequest.UxState.UNKNOWN,
                     OutgoingSasVerificationRequest.UxState.WAIT_FOR_START,
                     OutgoingSasVerificationRequest.UxState.WAIT_FOR_KEY_AGREEMENT -> {
-                        supportFragmentManager.beginTransaction()
-                                .setCustomAnimations(R.anim.no_anim, R.anim.exit_fade_out)
-                                .replace(R.id.container, SASVerificationStartFragment.newInstance())
-                                .commitNow()
+                        supportFragmentManager.inTransaction {
+                            setCustomAnimations(R.anim.no_anim, R.anim.exit_fade_out)
+                            replace(R.id.container, SASVerificationStartFragment::class.java, null)
+                        }
                     }
                     OutgoingSasVerificationRequest.UxState.SHOW_SAS,
                     OutgoingSasVerificationRequest.UxState.WAIT_FOR_VERIFICATION  -> {
-                        supportFragmentManager.beginTransaction()
-                                .setCustomAnimations(R.anim.no_anim, R.anim.exit_fade_out)
-                                .replace(R.id.container, SASVerificationShortCodeFragment.newInstance())
-                                .commitNow()
+                        supportFragmentManager.inTransaction {
+                            setCustomAnimations(R.anim.no_anim, R.anim.exit_fade_out)
+                            replace(R.id.container, SASVerificationShortCodeFragment::class.java, null)
+                        }
                     }
                     OutgoingSasVerificationRequest.UxState.VERIFIED               -> {
-                        supportFragmentManager.beginTransaction()
-                                .setCustomAnimations(R.anim.no_anim, R.anim.exit_fade_out)
-                                .replace(R.id.container, SASVerificationVerifiedFragment.newInstance())
-                                .commitNow()
+                        supportFragmentManager.inTransaction {
+                            setCustomAnimations(R.anim.no_anim, R.anim.exit_fade_out)
+                            replace(R.id.container, SASVerificationVerifiedFragment::class.java, null)
+                        }
                     }
                     OutgoingSasVerificationRequest.UxState.CANCELLED_BY_ME,
                     OutgoingSasVerificationRequest.UxState.CANCELLED_BY_OTHER     -> {
@@ -172,16 +173,16 @@ class SASVerificationActivity : SimpleFragmentActivity() {
                     finish()
                 }
                 SasVerificationViewModel.NAVIGATE_SAS_DISPLAY    -> {
-                    supportFragmentManager.beginTransaction()
-                            .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_fade_out)
-                            .replace(R.id.container, SASVerificationShortCodeFragment.newInstance())
-                            .commitNow()
+                    supportFragmentManager.inTransaction {
+                        setCustomAnimations(R.anim.enter_from_right, R.anim.exit_fade_out)
+                        replace(R.id.container, SASVerificationShortCodeFragment::class.java, null)
+                    }
                 }
                 SasVerificationViewModel.NAVIGATE_SUCCESS        -> {
-                    supportFragmentManager.beginTransaction()
-                            .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_fade_out)
-                            .replace(R.id.container, SASVerificationVerifiedFragment.newInstance())
-                            .commitNow()
+                    supportFragmentManager.inTransaction {
+                        setCustomAnimations(R.anim.enter_from_right, R.anim.exit_fade_out)
+                        replace(R.id.container, SASVerificationVerifiedFragment::class.java, null)
+                    }
                 }
                 SasVerificationViewModel.NAVIGATE_CANCELLED      -> {
                     val isCancelledByMe = viewModel.transaction?.state == SasVerificationTxState.Cancelled

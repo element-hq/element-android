@@ -2,7 +2,8 @@ Changes in RiotX 0.8.0 (2019-XX-XX)
 ===================================================
 
 Features ✨:
- -
+ - Handle long click on room in the room list (#395)
+ - Ignore/UnIgnore users, and display list of ignored users (#542, #617)
 
 Improvements 🙌:
  - Search reaction by name or keyword in emoji picker
@@ -37,6 +38,7 @@ Improvements:
  - Do not upload file too big for the homeserver (#587)
  - Attachments: start using system pickers (#52)
  - Mark all messages as read (#396)
+
 
 Other changes:
  - Accessibility improvements to read receipts in the room timeline and reactions emoji chooser

@@ -21,7 +21,7 @@ import timber.log.Timber
 sealed class Action {
     object Notify : Action()
     object DoNotNotify : Action()
-    data class Sound(val sound: String) : Action()
+    data class Sound(val sound: String = ACTION_OBJECT_VALUE_VALUE_DEFAULT) : Action()
     data class Highlight(val highlight: Boolean) : Action()
 }
 
@@ -63,6 +63,29 @@ private const val ACTION_OBJECT_VALUE_VALUE_DEFAULT = "default"
  *
  * </pre>
  */
+
+@Suppress("IMPLICIT_CAST_TO_ANY")
+fun List<Action>.toJson(): List<Any> {
+    return map { action ->
+        when (action) {
+            is Action.Notify      -> ACTION_NOTIFY
+            is Action.DoNotNotify -> ACTION_DONT_NOTIFY
+            is Action.Sound       -> {
+                mapOf(
+                        ACTION_OBJECT_SET_TWEAK_KEY to ACTION_OBJECT_SET_TWEAK_VALUE_SOUND,
+                        ACTION_OBJECT_VALUE_KEY to action.sound
+                )
+            }
+            is Action.Highlight   -> {
+                mapOf(
+                        ACTION_OBJECT_SET_TWEAK_KEY to ACTION_OBJECT_SET_TWEAK_VALUE_HIGHLIGHT,
+                        ACTION_OBJECT_VALUE_KEY to action.highlight
+                )
+            }
+        }
+    }
+}
+
 fun PushRule.getActions(): List<Action> {
     val result = ArrayList<Action>()
 

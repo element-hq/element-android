@@ -112,4 +112,8 @@ class DefaultNavigator @Inject constructor() : Navigator {
     override fun openUserDetail(userId: String, context: Context) {
         Timber.v("Open user detail $userId")
     }
+
+    override fun openRoomSettings(context: Context, roomId: String) {
+        Timber.v("Open room settings$roomId")
+    }
 }

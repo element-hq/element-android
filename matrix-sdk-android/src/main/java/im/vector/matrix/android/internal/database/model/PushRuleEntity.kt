@@ -17,6 +17,8 @@ package im.vector.matrix.android.internal.database.model
 
 import io.realm.RealmList
 import io.realm.RealmObject
+import io.realm.RealmResults
+import io.realm.annotations.LinkingObjects
 
 internal open class PushRuleEntity(
         // Required. The actions to perform when this rule is matched.
@@ -32,6 +34,9 @@ internal open class PushRuleEntity(
         // The glob-style pattern to match against. Only applicable to content rules.
         var pattern: String? = null
 ) : RealmObject() {
+
+    @LinkingObjects("pushRules")
+    val parent: RealmResults<PushRulesEntity>? = null
 
     companion object
 }

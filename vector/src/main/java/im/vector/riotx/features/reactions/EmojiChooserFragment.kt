@@ -20,12 +20,9 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseFragment
+import javax.inject.Inject
 
-class EmojiChooserFragment : VectorBaseFragment() {
-
-    companion object {
-        fun newInstance() = EmojiChooserFragment()
-    }
+class EmojiChooserFragment @Inject constructor() : VectorBaseFragment() {
 
     override fun getLayoutResId() = R.layout.emoji_chooser_fragment
 

@@ -31,7 +31,6 @@ import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.hideKeyboard
-import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.extensions.replaceFragment
 import im.vector.riotx.core.platform.ToolbarConfigurable
 import im.vector.riotx.core.platform.VectorBaseActivity
@@ -79,22 +78,21 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
         navigationViewModel = ViewModelProviders.of(this).get(HomeNavigationViewModel::class.java)
         drawerLayout.addDrawerListener(drawerListener)
         if (isFirstCreation()) {
-            val homeDrawerFragment = HomeDrawerFragment.newInstance()
-            val loadingDetail = LoadingFragment.newInstance()
-            replaceFragment(loadingDetail, R.id.homeDetailFragmentContainer)
-            replaceFragment(homeDrawerFragment, R.id.homeDrawerFragmentContainer)
+            replaceFragment(R.id.homeDetailFragmentContainer, LoadingFragment::class.java)
+            replaceFragment(R.id.homeDrawerFragmentContainer, HomeDrawerFragment::class.java)
         }
 
-        navigationViewModel.navigateTo.observeEvent(this) { navigation ->
-            when (navigation) {
-                is Navigation.OpenDrawer -> drawerLayout.openDrawer(GravityCompat.START)
-                is Navigation.OpenGroup  -> {
-                    drawerLayout.closeDrawer(GravityCompat.START)
-                    val homeDetailFragment = HomeDetailFragment.newInstance()
-                    replaceFragment(homeDetailFragment, R.id.homeDetailFragmentContainer)
+        navigationViewModel.observe()
+                .subscribe { navigation ->
+                    when (navigation) {
+                        is Navigation.OpenDrawer -> drawerLayout.openDrawer(GravityCompat.START)
+                        is Navigation.OpenGroup  -> {
+                            drawerLayout.closeDrawer(GravityCompat.START)
+                            replaceFragment(R.id.homeDetailFragmentContainer, HomeDetailFragment::class.java)
+                        }
+                    }
                 }
-            }
-        }
+                .disposeOnDestroy()
 
         if (intent.getBooleanExtra(EXTRA_CLEAR_EXISTING_NOTIFICATION, false)) {
             notificationDrawerManager.clearAllEvents()

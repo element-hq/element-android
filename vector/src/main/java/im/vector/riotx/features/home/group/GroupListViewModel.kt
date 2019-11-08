@@ -39,7 +39,7 @@ import io.reactivex.functions.BiFunction
 const val ALL_COMMUNITIES_GROUP_ID = "ALL_COMMUNITIES_GROUP_ID"
 
 class GroupListViewModel @AssistedInject constructor(@Assisted initialState: GroupListViewState,
-                                                     private val selectedGroupStore: SelectedGroupStore,
+                                                     private val selectedGroupStore: SelectedGroupDataSource,
                                                      private val session: Session,
                                                      private val stringProvider: StringProvider
 ) : VectorViewModel<GroupListViewState>(initialState) {

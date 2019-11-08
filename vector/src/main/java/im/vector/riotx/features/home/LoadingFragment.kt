@@ -22,15 +22,9 @@ import android.view.View
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseFragment
 import kotlinx.android.synthetic.main.fragment_loading.*
+import javax.inject.Inject
 
-class LoadingFragment : VectorBaseFragment() {
-
-    companion object {
-
-        fun newInstance(): LoadingFragment {
-            return LoadingFragment()
-        }
-    }
+class LoadingFragment @Inject constructor(): VectorBaseFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_loading
 

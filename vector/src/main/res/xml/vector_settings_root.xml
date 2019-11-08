@@ -37,10 +37,9 @@
 
     <im.vector.riotx.core.preference.VectorPreference
         android:layout_width="match_parent"
-        android:enabled="@bool/false_not_implemented"
         android:icon="@drawable/ic_settings_root_ignored_users"
         android:title="@string/settings_ignored_users"
-        app:fragment="im.vector.riotx.features.settings.VectorSettingsIgnoredUsersFragment" />
+        app:fragment="im.vector.riotx.features.settings.ignored.VectorSettingsIgnoredUsersFragment" />
 
     <im.vector.riotx.core.preference.VectorPreference
         android:layout_width="match_parent"

@@ -25,25 +25,21 @@ import com.airbnb.mvrx.withState
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotx.R
-import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.extensions.setupAsSearch
 import im.vector.riotx.core.platform.VectorBaseFragment
 import kotlinx.android.synthetic.main.fragment_create_direct_room_directory_users.*
 import javax.inject.Inject
 
-class CreateDirectRoomDirectoryUsersFragment : VectorBaseFragment(), DirectoryUsersController.Callback {
+class CreateDirectRoomDirectoryUsersFragment @Inject constructor(
+        private val directRoomController: DirectoryUsersController
+) : VectorBaseFragment(), DirectoryUsersController.Callback {
 
     override fun getLayoutResId() = R.layout.fragment_create_direct_room_directory_users
 
     private val viewModel: CreateDirectRoomViewModel by activityViewModel()
 
-    @Inject lateinit var directRoomController: DirectoryUsersController
     private lateinit var navigationViewModel: CreateDirectRoomNavigationViewModel
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -74,7 +70,7 @@ class CreateDirectRoomDirectoryUsersFragment : VectorBaseFragment(), DirectoryUs
 
     private fun setupCloseView() {
         createDirectRoomClose.setOnClickListener {
-            navigationViewModel.goTo(CreateDirectRoomActivity.Navigation.Previous)
+            navigationViewModel.post(CreateDirectRoomActivity.Navigation.Previous)
         }
     }
 
@@ -85,7 +81,7 @@ class CreateDirectRoomDirectoryUsersFragment : VectorBaseFragment(), DirectoryUs
     override fun onItemClick(user: User) {
         view?.hideKeyboard()
         viewModel.handle(CreateDirectRoomActions.SelectUser(user))
-        navigationViewModel.goTo(CreateDirectRoomActivity.Navigation.Previous)
+        navigationViewModel.post(CreateDirectRoomActivity.Navigation.Previous)
     }
 
     override fun retryDirectoryUsersRequest() {

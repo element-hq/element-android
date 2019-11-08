@@ -23,7 +23,6 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.riotx.R
-import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.platform.StateView
 import im.vector.riotx.core.platform.VectorBaseFragment
@@ -32,25 +31,15 @@ import im.vector.riotx.features.home.HomeNavigationViewModel
 import kotlinx.android.synthetic.main.fragment_group_list.*
 import javax.inject.Inject
 
-class GroupListFragment : VectorBaseFragment(), GroupSummaryController.Callback {
-
-    companion object {
-        fun newInstance(): GroupListFragment {
-            return GroupListFragment()
-        }
-    }
+class GroupListFragment @Inject constructor(
+        val groupListViewModelFactory: GroupListViewModel.Factory,
+        private val groupController: GroupSummaryController
+) : VectorBaseFragment(), GroupSummaryController.Callback {
 
     private lateinit var navigationViewModel: HomeNavigationViewModel
     private val viewModel: GroupListViewModel by fragmentViewModel()
 
-    @Inject lateinit var groupListViewModelFactory: GroupListViewModel.Factory
-    @Inject lateinit var groupController: GroupSummaryController
-
     override fun getLayoutResId() = R.layout.fragment_group_list
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -60,7 +49,7 @@ class GroupListFragment : VectorBaseFragment(), GroupSummaryController.Callback 
         groupListEpoxyRecyclerView.setController(groupController)
         viewModel.subscribe { renderState(it) }
         viewModel.openGroupLiveData.observeEvent(this) {
-            navigationViewModel.goTo(HomeActivity.Navigation.OpenGroup)
+            navigationViewModel.post(HomeActivity.Navigation.OpenGroup)
         }
     }
 

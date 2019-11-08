@@ -25,14 +25,16 @@ import androidx.appcompat.app.AlertDialog
 import androidx.preference.Preference
 import androidx.preference.SwitchPreference
 import im.vector.riotx.R
-import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.preference.VectorListPreference
 import im.vector.riotx.core.preference.VectorPreference
 import im.vector.riotx.features.configuration.VectorConfiguration
 import im.vector.riotx.features.themes.ThemeUtils
 import javax.inject.Inject
 
-class VectorSettingsPreferencesFragment : VectorSettingsBaseFragment() {
+class VectorSettingsPreferencesFragment @Inject constructor(
+        private val vectorConfiguration: VectorConfiguration,
+        private val vectorPreferences: VectorPreferences
+) : VectorSettingsBaseFragment() {
 
     override var titleRes = R.string.settings_preferences
     override val preferenceXmlRes = R.xml.vector_settings_preferences
@@ -42,13 +44,6 @@ class VectorSettingsPreferencesFragment : VectorSettingsBaseFragment() {
     }
     private val textSizePreference by lazy {
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_INTERFACE_TEXT_SIZE_KEY)!!
-    }
-
-    @Inject lateinit var vectorConfiguration: VectorConfiguration
-    @Inject lateinit var vectorPreferences: VectorPreferences
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
     }
 
     override fun bindPref() {

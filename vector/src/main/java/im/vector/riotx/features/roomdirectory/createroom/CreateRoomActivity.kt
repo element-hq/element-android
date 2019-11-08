@@ -23,9 +23,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProviders
 import com.airbnb.mvrx.viewModel
 import im.vector.riotx.R
-import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.addFragment
-import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.platform.ToolbarConfigurable
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
@@ -50,25 +48,22 @@ class CreateRoomActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     override fun initUiAndData() {
         if (isFirstCreation()) {
-            addFragment(CreateRoomFragment(), R.id.simpleFragmentContainer)
-
+            addFragment(R.id.simpleFragmentContainer, CreateRoomFragment::class.java)
             createRoomViewModel.setName(intent?.getStringExtra(INITIAL_NAME) ?: "")
         }
-    }
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         navigationViewModel = ViewModelProviders.of(this, viewModelFactory).get(RoomDirectoryNavigationViewModel::class.java)
-        navigationViewModel.navigateTo.observeEvent(this) { navigation ->
-            when (navigation) {
-                is RoomDirectoryActivity.Navigation.Back,
-                is RoomDirectoryActivity.Navigation.Close -> finish()
-            }
-        }
+        navigationViewModel.observe()
+                .subscribe { navigation ->
+                    when (navigation) {
+                        is RoomDirectoryActivity.Navigation.Back,
+                        is RoomDirectoryActivity.Navigation.Close -> finish()
+                    }
+                }
+                .disposeOnDestroy()
     }
 
     companion object {

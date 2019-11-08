@@ -34,6 +34,10 @@ interface PushRuleService {
 
     fun updatePushRuleEnableStatus(kind: RuleKind, pushRule: PushRule, enabled: Boolean, callback: MatrixCallback<Unit>): Cancelable
 
+    fun addPushRule(kind: RuleKind, pushRule: PushRule, callback: MatrixCallback<Unit>): Cancelable
+
+    fun removePushRule(kind: RuleKind, pushRule: PushRule, callback: MatrixCallback<Unit>): Cancelable
+
     fun addPushRuleListener(listener: PushRuleListener)
 
     fun removePushRuleListener(listener: PushRuleListener)

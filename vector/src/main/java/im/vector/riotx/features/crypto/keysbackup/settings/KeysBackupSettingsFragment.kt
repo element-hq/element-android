@@ -21,28 +21,19 @@ import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
-import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.crypto.keysbackup.restore.KeysBackupRestoreActivity
 import im.vector.riotx.features.crypto.keysbackup.setup.KeysBackupSetupActivity
 import kotlinx.android.synthetic.main.fragment_keys_backup_settings.*
 import javax.inject.Inject
 
-class KeysBackupSettingsFragment : VectorBaseFragment(),
-                                   KeysBackupSettingsRecyclerViewController.Listener {
-
-    companion object {
-        fun newInstance() = KeysBackupSettingsFragment()
-    }
+class KeysBackupSettingsFragment @Inject constructor(private val keysBackupSettingsRecyclerViewController: KeysBackupSettingsRecyclerViewController)
+    : VectorBaseFragment(),
+        KeysBackupSettingsRecyclerViewController.Listener {
 
     override fun getLayoutResId() = R.layout.fragment_keys_backup_settings
 
-    @Inject lateinit var keysBackupSettingsRecyclerViewController: KeysBackupSettingsRecyclerViewController
     private val viewModel: KeysBackupSettingsViewModel by activityViewModel()
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

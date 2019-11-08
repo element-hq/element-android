@@ -17,6 +17,7 @@
 package im.vector.riotx.features.home.room.list
 
 import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.matrix.android.api.session.room.notification.RoomNotificationState
 
 sealed class RoomListActions {
     data class SelectRoom(val roomSummary: RoomSummary) : RoomListActions()
@@ -24,5 +25,7 @@ sealed class RoomListActions {
     data class AcceptInvitation(val roomSummary: RoomSummary) : RoomListActions()
     data class RejectInvitation(val roomSummary: RoomSummary) : RoomListActions()
     data class FilterWith(val filter: String) : RoomListActions()
+    data class ChangeRoomNotificationState(val roomId: String, val notificationState: RoomNotificationState) : RoomListActions()
+    data class LeaveRoom(val roomId: String) : RoomListActions()
     object MarkAllRoomsRead : RoomListActions()
 }

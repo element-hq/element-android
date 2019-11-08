@@ -16,6 +16,7 @@
 
 package im.vector.riotx.features.home.room.list
 
+import android.view.View
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.Membership
@@ -28,6 +29,7 @@ import im.vector.riotx.core.extensions.localDateTime
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.DateProvider
 import im.vector.riotx.core.resources.StringProvider
+import im.vector.riotx.core.utils.DebouncedClickListener
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.format.NoticeEventFormatter
 import me.gujun.android.span.span
@@ -78,7 +80,7 @@ class RoomSummaryItemFactory @Inject constructor(private val noticeEventFormatte
                 .rejectListener { listener?.onRejectRoomInvitation(roomSummary) }
                 .roomName(roomSummary.displayName)
                 .avatarUrl(roomSummary.avatarUrl)
-                .listener { listener?.onRoomSelected(roomSummary) }
+                .listener { listener?.onRoomClicked(roomSummary) }
     }
 
     private fun createRoomItem(roomSummary: RoomSummary, listener: RoomSummaryController.Listener?): VectorEpoxyModel<*> {
@@ -133,6 +135,13 @@ class RoomSummaryItemFactory @Inject constructor(private val noticeEventFormatte
                 .unreadNotificationCount(unreadCount)
                 .hasUnreadMessage(roomSummary.hasUnreadMessages)
                 .hasDraft(roomSummary.userDrafts.isNotEmpty())
-                .listener { listener?.onRoomSelected(roomSummary) }
+                .itemLongClickListener { _ ->
+                    listener?.onRoomLongClicked(roomSummary) ?: false
+                }
+                .itemClickListener(
+                        DebouncedClickListener(View.OnClickListener { _ ->
+                            listener?.onRoomClicked(roomSummary)
+                        })
+                )
     }
 }
