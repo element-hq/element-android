@@ -17,5 +17,6 @@
 package im.vector.riotx.features.home.createdirect
 
 import im.vector.riotx.core.platform.VectorSharedActionViewModel
+import javax.inject.Inject
 
-class CreateDirectRoomSharedActionViewModel : VectorSharedActionViewModel<CreateDirectRoomSharedAction>()
+class CreateDirectRoomSharedActionViewModel @Inject constructor() : VectorSharedActionViewModel<CreateDirectRoomSharedAction>()

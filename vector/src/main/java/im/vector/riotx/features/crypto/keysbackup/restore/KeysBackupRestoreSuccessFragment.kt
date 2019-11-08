@@ -38,9 +38,7 @@ class KeysBackupRestoreSuccessFragment @Inject constructor() : VectorBaseFragmen
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        sharedViewModel = activity?.run {
-            ViewModelProviders.of(this, viewModelFactory).get(KeysBackupRestoreSharedViewModel::class.java)
-        } ?: throw Exception("Invalid Activity")
+        sharedViewModel = ViewModelProviders.of(requireActivity(), viewModelFactory).get(KeysBackupRestoreSharedViewModel::class.java)
 
         sharedViewModel.importKeyResult?.let {
             val part1 = resources.getQuantityString(R.plurals.keys_backup_restore_success_description_part1,

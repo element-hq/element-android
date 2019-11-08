@@ -69,7 +69,7 @@ class RoomListQuickActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), R
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        sharedActionViewModel = ViewModelProviders.of(requireActivity()).get(RoomListQuickActionsSharedActionViewModel::class.java)
+        sharedActionViewModel = ViewModelProviders.of(requireActivity(), viewModelFactory).get(RoomListQuickActionsSharedActionViewModel::class.java)
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         recyclerView.adapter = roomListActionsEpoxyController.adapter
         // Disable item animation

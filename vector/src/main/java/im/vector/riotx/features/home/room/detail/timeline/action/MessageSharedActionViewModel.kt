@@ -16,8 +16,9 @@
 package im.vector.riotx.features.home.room.detail.timeline.action
 
 import im.vector.riotx.core.platform.VectorSharedActionViewModel
+import javax.inject.Inject
 
 /**
  * Activity shared view model to handle message actions
  */
-class MessageSharedActionViewModel : VectorSharedActionViewModel<EventSharedAction>()
+class MessageSharedActionViewModel @Inject constructor() : VectorSharedActionViewModel<EventSharedAction>()

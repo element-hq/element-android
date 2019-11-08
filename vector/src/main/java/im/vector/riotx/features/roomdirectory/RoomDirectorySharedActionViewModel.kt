@@ -17,5 +17,6 @@
 package im.vector.riotx.features.roomdirectory
 
 import im.vector.riotx.core.platform.VectorSharedActionViewModel
+import javax.inject.Inject
 
-class RoomDirectorySharedActionViewModel : VectorSharedActionViewModel<RoomDirectorySharedAction>()
+class RoomDirectorySharedActionViewModel @Inject constructor() : VectorSharedActionViewModel<RoomDirectorySharedAction>()

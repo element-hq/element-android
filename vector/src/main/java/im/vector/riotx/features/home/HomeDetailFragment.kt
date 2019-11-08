@@ -63,7 +63,7 @@ class HomeDetailFragment @Inject constructor(
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        sharedActionViewModel = ViewModelProviders.of(requireActivity()).get(HomeSharedActionViewModel::class.java)
+        sharedActionViewModel = ViewModelProviders.of(requireActivity(), viewModelFactory).get(HomeSharedActionViewModel::class.java)
 
         setupBottomNavigationView()
         setupToolbar()

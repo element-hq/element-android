@@ -65,9 +65,7 @@ class KeysBackupRestoreFromPassphraseFragment @Inject constructor(): VectorBaseF
         super.onActivityCreated(savedInstanceState)
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(KeysBackupRestoreFromPassphraseViewModel::class.java)
-        sharedViewModel = activity?.run {
-            ViewModelProviders.of(this, viewModelFactory).get(KeysBackupRestoreSharedViewModel::class.java)
-        } ?: throw Exception("Invalid Activity")
+        sharedViewModel = ViewModelProviders.of(requireActivity(), viewModelFactory).get(KeysBackupRestoreSharedViewModel::class.java)
 
         viewModel.passphraseErrorText.observe(viewLifecycleOwner, Observer { newValue ->
             mPassphraseInputLayout.error = newValue

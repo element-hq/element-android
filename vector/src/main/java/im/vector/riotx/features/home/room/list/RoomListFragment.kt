@@ -100,7 +100,7 @@ class RoomListFragment @Inject constructor(
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        sharedActionViewModel = ViewModelProviders.of(requireActivity()).get(RoomListQuickActionsSharedActionViewModel::class.java)
+        sharedActionViewModel = ViewModelProviders.of(requireActivity(), viewModelFactory).get(RoomListQuickActionsSharedActionViewModel::class.java)
         setupCreateRoomButton()
         setupRecyclerView()
         roomListViewModel.subscribe { renderState(it) }

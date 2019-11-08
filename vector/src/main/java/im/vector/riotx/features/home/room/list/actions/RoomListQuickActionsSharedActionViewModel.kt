@@ -17,8 +17,9 @@
 package im.vector.riotx.features.home.room.list.actions
 
 import im.vector.riotx.core.platform.VectorSharedActionViewModel
+import javax.inject.Inject
 
 /**
  * Activity shared view model to handle room list quick actions
  */
-class RoomListQuickActionsSharedActionViewModel : VectorSharedActionViewModel<RoomListQuickActionsSharedAction>()
+class RoomListQuickActionsSharedActionViewModel @Inject constructor() : VectorSharedActionViewModel<RoomListQuickActionsSharedAction>()

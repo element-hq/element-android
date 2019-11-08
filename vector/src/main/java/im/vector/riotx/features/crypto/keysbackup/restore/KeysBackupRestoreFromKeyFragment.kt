@@ -54,10 +54,7 @@ class KeysBackupRestoreFromKeyFragment @Inject constructor()
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(KeysBackupRestoreFromKeyViewModel::class.java)
-        sharedViewModel = activity?.run {
-            ViewModelProviders.of(this, viewModelFactory).get(KeysBackupRestoreSharedViewModel::class.java)
-        } ?: throw Exception("Invalid Activity")
-
+        sharedViewModel = ViewModelProviders.of(requireActivity(), viewModelFactory).get(KeysBackupRestoreSharedViewModel::class.java)
         mKeyTextEdit.setText(viewModel.recoveryCode.value)
         mKeyTextEdit.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {

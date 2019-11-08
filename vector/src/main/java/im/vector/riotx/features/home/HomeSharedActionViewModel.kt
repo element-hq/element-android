@@ -17,5 +17,6 @@
 package im.vector.riotx.features.home
 
 import im.vector.riotx.core.platform.VectorSharedActionViewModel
+import javax.inject.Inject
 
-class HomeSharedActionViewModel : VectorSharedActionViewModel<HomeActivitySharedAction>()
+class HomeSharedActionViewModel @Inject constructor() : VectorSharedActionViewModel<HomeActivitySharedAction>()

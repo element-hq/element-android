@@ -31,9 +31,7 @@ class SASVerificationVerifiedFragment @Inject constructor() : VectorBaseFragment
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel = activity?.run {
-            ViewModelProviders.of(this, viewModelFactory).get(SasVerificationViewModel::class.java)
-        } ?: throw Exception("Invalid Activity")
+        viewModel = ViewModelProviders.of(requireActivity(), viewModelFactory).get(SasVerificationViewModel::class.java)
     }
 
     @OnClick(R.id.sas_verification_verified_done_button)

@@ -69,7 +69,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         FcmHelper.ensureFcmTokenIsRetrieved(this, pushManager)
-        sharedActionViewModel = ViewModelProviders.of(this).get(HomeSharedActionViewModel::class.java)
+        sharedActionViewModel = ViewModelProviders.of(this, viewModelFactory).get(HomeSharedActionViewModel::class.java)
         drawerLayout.addDrawerListener(drawerListener)
         if (isFirstCreation()) {
             replaceFragment(R.id.homeDetailFragmentContainer, LoadingFragment::class.java)
@@ -147,7 +147,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
         }
 
         // Force remote backup state update to update the banner if needed
-        ViewModelProviders.of(this).get(SignOutViewModel::class.java).refreshRemoteStateIfNeeded()
+        ViewModelProviders.of(this, viewModelFactory).get(SignOutViewModel::class.java).refreshRemoteStateIfNeeded()
     }
 
     override fun configure(toolbar: Toolbar) {
