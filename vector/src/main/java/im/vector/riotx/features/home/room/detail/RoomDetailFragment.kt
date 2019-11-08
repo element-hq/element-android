@@ -203,8 +203,8 @@ class RoomDetailFragment @Inject constructor(
 
     private var lockSendButton = false
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(MessageSharedActionViewModel::class.java)
         attachmentsHelper = AttachmentsHelper.create(this, this).register()
         keyboardStateUtils = KeyboardStateUtils(requireActivity())
@@ -228,7 +228,7 @@ class RoomDetailFragment @Inject constructor(
                 .subscribe {
                     handleActions(it)
                 }
-                .disposeOnDestroy()
+                .disposeOnDestroyView()
 
         roomDetailViewModel.navigateToEvent.observeEvent(this) {
             val scrollPosition = timelineEventController.searchPositionOfEvent(it)
@@ -273,7 +273,10 @@ class RoomDetailFragment @Inject constructor(
         roomDetailViewModel.requestLiveData.observeEvent(this) {
             displayRoomDetailActionResult(it)
         }
+    }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
         if (savedInstanceState == null) {
             when (val sharedData = roomDetailArgs.sharedData) {
                 is SharedData.Text        -> roomDetailViewModel.handle(RoomDetailAction.SendMessage(sharedData.text, false))

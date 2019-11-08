@@ -18,6 +18,7 @@ package im.vector.riotx.features.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import androidx.core.view.forEachIndexed
 import androidx.lifecycle.Observer
 import com.airbnb.mvrx.fragmentViewModel
@@ -28,7 +29,8 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.riotx.R
-import im.vector.riotx.core.extensions.addChildFragmentToBackstack
+import im.vector.riotx.core.extensions.inTransaction
+import im.vector.riotx.core.extensions.replaceChildFragment
 import im.vector.riotx.core.platform.ToolbarConfigurable
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.ui.views.KeysBackupBanner
@@ -59,9 +61,8 @@ class HomeDetailFragment @Inject constructor(
         return R.layout.fragment_home_detail
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(HomeSharedActionViewModel::class.java)
 
         setupBottomNavigationView()
@@ -165,12 +166,15 @@ class HomeDetailFragment @Inject constructor(
 
     private fun updateSelectedFragment(displayMode: RoomListFragment.DisplayMode) {
         val fragmentTag = "FRAGMENT_TAG_${displayMode.name}"
-        val fragment = childFragmentManager.findFragmentByTag(fragmentTag)
-        if (fragment == null) {
-            val params = RoomListParams(displayMode)
-            addChildFragmentToBackstack(R.id.roomListContainer, RoomListFragment::class.java, params, fragmentTag)
-        } else {
-            addChildFragmentToBackstack(R.id.roomListContainer, fragment, fragmentTag)
+        val fragmentToShow = childFragmentManager.findFragmentByTag(fragmentTag)
+        childFragmentManager.inTransaction {
+            childFragmentManager.fragments.forEach { hide(it) }
+            if (fragmentToShow == null) {
+                val params = RoomListParams(displayMode)
+                add(R.id.roomListContainer, RoomListFragment::class.java, params.toMvRxBundle(), fragmentTag)
+            } else {
+                show(fragmentToShow)
+            }
         }
     }
 

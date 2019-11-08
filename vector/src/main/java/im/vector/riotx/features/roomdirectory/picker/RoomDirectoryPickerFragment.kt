@@ -55,6 +55,9 @@ class RoomDirectoryPickerFragment @Inject constructor(val roomDirectoryPickerVie
             it.setDisplayShowHomeEnabled(true)
             it.setDisplayHomeAsUpEnabled(true)
         }
+
+        sharedActionViewModel = activityViewModelProvider.get(RoomDirectorySharedActionViewModel::class.java)
+        setupRecyclerView()
     }
 
     override fun getMenuRes() = R.menu.menu_directory_server_picker
@@ -69,11 +72,6 @@ class RoomDirectoryPickerFragment @Inject constructor(val roomDirectoryPickerVie
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        sharedActionViewModel = activityViewModelProvider.get(RoomDirectorySharedActionViewModel::class.java)
-        setupRecyclerView()
-    }
 
     private fun setupRecyclerView() {
         val layoutManager = LinearLayoutManager(context)

@@ -16,6 +16,7 @@
 package im.vector.riotx.features.reactions
 
 import android.os.Bundle
+import android.view.View
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -37,9 +38,8 @@ class EmojiSearchResultFragment @Inject constructor(
 
     var sharedViewModel: EmojiChooserViewModel? = null
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         sharedViewModel = activityViewModelProvider.get(EmojiChooserViewModel::class.java)
 
         epoxyController.listener = object : ReactionClickListener {

@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
@@ -45,8 +46,10 @@ import im.vector.riotx.features.home.room.list.widget.FabMenuView
 import im.vector.riotx.features.notifications.NotificationDrawerManager
 import im.vector.riotx.features.share.SharedData
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.functions.Consumer
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_list.*
+import timber.log.Timber
 import javax.inject.Inject
 
 @Parcelize
@@ -97,13 +100,13 @@ class RoomListFragment @Inject constructor(
         super.onPrepareOptionsMenu(menu)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        sharedActionViewModel = activityViewModelProvider.get(RoomListQuickActionsSharedActionViewModel::class.java)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         setupCreateRoomButton()
         setupRecyclerView()
-        roomListViewModel.subscribe { renderState(it) }
+        sharedActionViewModel = activityViewModelProvider.get(RoomListQuickActionsSharedActionViewModel::class.java)
 
+        roomListViewModel.subscribe { renderState(it) }
         roomListViewModel.viewEvents
                 .observe()
                 .observeOn(AndroidSchedulers.mainThread())
@@ -113,14 +116,14 @@ class RoomListFragment @Inject constructor(
                         is RoomListViewEvents.Failure    -> showError(it)
                     }
                 }
-                .disposeOnDestroy()
+                .disposeOnDestroyView()
 
         createChatFabMenu.listener = this
 
         sharedActionViewModel
                 .observe()
                 .subscribe { handleQuickActions(it) }
-                .disposeOnDestroy()
+                .disposeOnDestroyView()
     }
 
     private fun openSelectedRoom(event: RoomListViewEvents.SelectRoom) {

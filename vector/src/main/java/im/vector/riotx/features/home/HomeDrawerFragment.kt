@@ -17,6 +17,7 @@
 package im.vector.riotx.features.home
 
 import android.os.Bundle
+import android.view.View
 import im.vector.matrix.android.api.session.Session
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.observeK
@@ -33,8 +34,8 @@ class HomeDrawerFragment @Inject constructor(
 
     override fun getLayoutResId() = R.layout.fragment_home_drawer
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         if (savedInstanceState == null) {
             replaceChildFragment(R.id.homeDrawerGroupListContainer, GroupListFragment::class.java)
         }
@@ -55,4 +56,5 @@ class HomeDrawerFragment @Inject constructor(
             navigator.openDebug(requireActivity())
         }
     }
+
 }

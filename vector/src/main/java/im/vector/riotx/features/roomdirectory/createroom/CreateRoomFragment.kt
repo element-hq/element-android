@@ -18,6 +18,7 @@ package im.vector.riotx.features.roomdirectory.createroom
 
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.activityViewModel
@@ -39,8 +40,8 @@ class CreateRoomFragment @Inject constructor(private val createRoomController: C
 
     override fun getMenuRes() = R.menu.vector_room_creation
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         vectorBaseActivity.setSupportActionBar(createRoomToolbar)
         sharedActionViewModel = activityViewModelProvider.get(RoomDirectorySharedActionViewModel::class.java)
         setupRecyclerView()

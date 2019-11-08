@@ -17,6 +17,7 @@
 package im.vector.riotx.features.home.group
 
 import android.os.Bundle
+import android.view.View
 import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
@@ -40,8 +41,8 @@ class GroupListFragment @Inject constructor(
 
     override fun getLayoutResId() = R.layout.fragment_group_list
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(HomeSharedActionViewModel::class.java)
         groupController.callback = this
         stateView.contentView = groupListEpoxyRecyclerView

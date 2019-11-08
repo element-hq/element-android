@@ -41,7 +41,7 @@ fun <T : Fragment> VectorBaseFragment.replaceFragment(frameId: Int, fragmentClas
 }
 
 fun VectorBaseFragment.addFragmentToBackstack(frameId: Int, fragment: Fragment, tag: String? = null) {
-    parentFragmentManager.inTransaction { replace(frameId, fragment).addToBackStack(tag) }
+    parentFragmentManager.inTransaction { replace(frameId, fragment, tag).addToBackStack(tag) }
 }
 
 fun <T : Fragment> VectorBaseFragment.addFragmentToBackstack(frameId: Int, fragmentClass: Class<T>, params: Parcelable? = null, tag: String? = null) {
@@ -50,8 +50,8 @@ fun <T : Fragment> VectorBaseFragment.addFragmentToBackstack(frameId: Int, fragm
     }
 }
 
-fun VectorBaseFragment.addChildFragment(frameId: Int, fragment: Fragment) {
-    childFragmentManager.inTransaction { add(frameId, fragment) }
+fun VectorBaseFragment.addChildFragment(frameId: Int, fragment: Fragment, tag: String? = null) {
+    childFragmentManager.inTransaction { add(frameId, fragment, tag) }
 }
 
 fun <T : Fragment> VectorBaseFragment.addChildFragment(frameId: Int, fragmentClass: Class<T>, params: Parcelable? = null, tag: String? = null) {
@@ -60,8 +60,8 @@ fun <T : Fragment> VectorBaseFragment.addChildFragment(frameId: Int, fragmentCla
     }
 }
 
-fun VectorBaseFragment.replaceChildFragment(frameId: Int, fragment: Fragment) {
-    childFragmentManager.inTransaction { replace(frameId, fragment) }
+fun VectorBaseFragment.replaceChildFragment(frameId: Int, fragment: Fragment, tag: String? = null) {
+    childFragmentManager.inTransaction { replace(frameId, fragment, tag) }
 }
 
 fun <T : Fragment> VectorBaseFragment.replaceChildFragment(frameId: Int, fragmentClass: Class<T>, params: Parcelable? = null, tag: String? = null) {

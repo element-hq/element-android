@@ -34,14 +34,14 @@ interface MutableDataSource<T> : DataSource<T> {
  */
 open class BehaviorDataSource<T>(private val defaultValue: T? = null) : MutableDataSource<T> {
 
-    private val storeRelay = createRelay()
+    private val behaviorRelay = createRelay()
 
     override fun observe(): Observable<T> {
-        return storeRelay.hide().observeOn(Schedulers.computation())
+        return behaviorRelay.hide().observeOn(Schedulers.computation())
     }
 
     override fun post(value: T) {
-        storeRelay.accept(value)
+        behaviorRelay.accept(value)
     }
 
     private fun createRelay(): BehaviorRelay<T> {
@@ -58,13 +58,13 @@ open class BehaviorDataSource<T>(private val defaultValue: T? = null) : MutableD
  */
 open class PublishDataSource<T> : MutableDataSource<T> {
 
-    private val storeRelay = PublishRelay.create<T>()
+    private val publishRelay = PublishRelay.create<T>()
 
     override fun observe(): Observable<T> {
-        return storeRelay.hide()
+        return publishRelay.hide()
     }
 
     override fun post(value: T) {
-        storeRelay.accept(value)
+        publishRelay.accept(value)
     }
 }
