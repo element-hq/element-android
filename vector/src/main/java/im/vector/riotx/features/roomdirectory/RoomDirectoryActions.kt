@@ -16,7 +16,6 @@
 
 package im.vector.riotx.features.roomdirectory
 
-import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
 import im.vector.matrix.android.api.session.room.model.thirdparty.RoomDirectoryData
 import im.vector.riotx.core.platform.VectorViewModelAction
 
@@ -24,5 +23,5 @@ sealed class RoomDirectoryActions : VectorViewModelAction {
     data class SetRoomDirectoryData(val roomDirectoryData: RoomDirectoryData) : RoomDirectoryActions()
     data class FilterWith(val filter: String) : RoomDirectoryActions()
     object LoadMore : RoomDirectoryActions()
-    data class JoinRoom(val publicRoom: PublicRoom) : RoomDirectoryActions()
+    data class JoinRoom(val roomId: String) : RoomDirectoryActions()
 }

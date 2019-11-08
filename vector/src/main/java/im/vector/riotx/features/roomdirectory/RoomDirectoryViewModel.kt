@@ -202,9 +202,7 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
     }
 
     private fun joinRoom(action: RoomDirectoryActions.JoinRoom) = withState { state ->
-        val roomId = action.publicRoom.roomId
-
-        if (state.joiningRoomsIds.contains(roomId)) {
+        if (state.joiningRoomsIds.contains(action.roomId)) {
             // Request already sent, should not happen
             Timber.w("Try to join an already joining room. Should not happen")
             return@withState
@@ -212,11 +210,11 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
 
         setState {
             copy(
-                    joiningRoomsIds = joiningRoomsIds.toMutableSet().apply { add(roomId) }
+                    joiningRoomsIds = joiningRoomsIds.toMutableSet().apply { add(action.roomId) }
             )
         }
 
-        session.joinRoom(roomId, emptyList(), object : MatrixCallback<Unit> {
+        session.joinRoom(action.roomId, emptyList(), object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
                 // We do not update the joiningRoomsIds here, because, the room is not joined yet regarding the sync data.
                 // Instead, we wait for the room to be joined
@@ -228,8 +226,8 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
 
                 setState {
                     copy(
-                            joiningRoomsIds = joiningRoomsIds.toMutableSet().apply { remove(roomId) },
-                            joiningErrorRoomsIds = joiningErrorRoomsIds.toMutableSet().apply { add(roomId) }
+                            joiningRoomsIds = joiningRoomsIds.toMutableSet().apply { remove(action.roomId) },
+                            joiningErrorRoomsIds = joiningErrorRoomsIds.toMutableSet().apply { add(action.roomId) }
                     )
                 }
             }
