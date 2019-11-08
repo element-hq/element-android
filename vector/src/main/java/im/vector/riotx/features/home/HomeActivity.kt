@@ -47,7 +47,7 @@ import javax.inject.Inject
 
 class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
 
-    private lateinit var actionViewModel: HomeSharedActionViewModel
+    private lateinit var sharedActionViewModel: HomeSharedActionViewModel
 
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var vectorUncaughtExceptionHandler: VectorUncaughtExceptionHandler
@@ -69,16 +69,16 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         FcmHelper.ensureFcmTokenIsRetrieved(this, pushManager)
-        actionViewModel = ViewModelProviders.of(this).get(HomeSharedActionViewModel::class.java)
+        sharedActionViewModel = ViewModelProviders.of(this).get(HomeSharedActionViewModel::class.java)
         drawerLayout.addDrawerListener(drawerListener)
         if (isFirstCreation()) {
             replaceFragment(R.id.homeDetailFragmentContainer, LoadingFragment::class.java)
             replaceFragment(R.id.homeDrawerFragmentContainer, HomeDrawerFragment::class.java)
         }
 
-        actionViewModel.observe()
-                .subscribe { navigation ->
-                    when (navigation) {
+        sharedActionViewModel.observe()
+                .subscribe { sharedAction ->
+                    when (sharedAction) {
                         is HomeActivitySharedAction.OpenDrawer -> drawerLayout.openDrawer(GravityCompat.START)
                         is HomeActivitySharedAction.OpenGroup  -> {
                             drawerLayout.closeDrawer(GravityCompat.START)

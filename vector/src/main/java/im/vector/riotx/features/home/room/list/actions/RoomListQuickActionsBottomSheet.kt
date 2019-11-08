@@ -45,7 +45,7 @@ data class RoomListActionsArgs(
  */
 class RoomListQuickActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), RoomListQuickActionsEpoxyController.Listener {
 
-    private lateinit var actionsDispatcher: RoomListQuickActionsStore
+    private lateinit var sharedActionViewModel: RoomListQuickActionsSharedActionViewModel
     @Inject lateinit var roomListActionsViewModelFactory: RoomListQuickActionsViewModel.Factory
     @Inject lateinit var roomListActionsEpoxyController: RoomListQuickActionsEpoxyController
     @Inject lateinit var navigator: Navigator
@@ -69,7 +69,7 @@ class RoomListQuickActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), R
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        actionsDispatcher = ViewModelProviders.of(requireActivity()).get(RoomListQuickActionsStore::class.java)
+        sharedActionViewModel = ViewModelProviders.of(requireActivity()).get(RoomListQuickActionsSharedActionViewModel::class.java)
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         recyclerView.adapter = roomListActionsEpoxyController.adapter
         // Disable item animation
@@ -83,7 +83,7 @@ class RoomListQuickActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), R
     }
 
     override fun didSelectMenuAction(quickAction: RoomListQuickActionsSharedAction) {
-        actionsDispatcher.post(quickAction)
+        sharedActionViewModel.post(quickAction)
         dismiss()
     }
 

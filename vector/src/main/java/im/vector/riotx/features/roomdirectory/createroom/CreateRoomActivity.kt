@@ -38,7 +38,7 @@ class CreateRoomActivity : VectorBaseActivity(), ToolbarConfigurable {
     @Inject lateinit var createRoomViewModelFactory: CreateRoomViewModel.Factory
     private val createRoomViewModel: CreateRoomViewModel by viewModel()
 
-    private lateinit var actionViewModel: RoomDirectorySharedActionViewModel
+    private lateinit var sharedActionViewModel: RoomDirectorySharedActionViewModel
 
     override fun getLayoutRes() = R.layout.activity_simple
 
@@ -55,10 +55,10 @@ class CreateRoomActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        actionViewModel = ViewModelProviders.of(this, viewModelFactory).get(RoomDirectorySharedActionViewModel::class.java)
-        actionViewModel.observe()
-                .subscribe { navigation ->
-                    when (navigation) {
+        sharedActionViewModel = ViewModelProviders.of(this, viewModelFactory).get(RoomDirectorySharedActionViewModel::class.java)
+        sharedActionViewModel.observe()
+                .subscribe { sharedAction ->
+                    when (sharedAction) {
                         is RoomDirectorySharedAction.Back,
                         is RoomDirectorySharedAction.Close -> finish()
                     }

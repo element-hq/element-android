@@ -42,7 +42,7 @@ class RoomDirectoryPickerFragment @Inject constructor(val roomDirectoryPickerVie
 ) : VectorBaseFragment(), RoomDirectoryPickerController.Callback {
 
     private val viewModel: RoomDirectoryViewModel by activityViewModel()
-    private lateinit var actionViewModel: RoomDirectorySharedActionViewModel
+    private lateinit var sharedActionViewModel: RoomDirectorySharedActionViewModel
     private val pickerViewModel: RoomDirectoryPickerViewModel by fragmentViewModel()
 
     override fun getLayoutResId() = R.layout.fragment_room_directory_picker
@@ -72,7 +72,7 @@ class RoomDirectoryPickerFragment @Inject constructor(val roomDirectoryPickerVie
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        actionViewModel = ViewModelProviders.of(requireActivity()).get(RoomDirectorySharedActionViewModel::class.java)
+        sharedActionViewModel = ViewModelProviders.of(requireActivity()).get(RoomDirectorySharedActionViewModel::class.java)
         setupRecyclerView()
     }
 
@@ -89,7 +89,7 @@ class RoomDirectoryPickerFragment @Inject constructor(val roomDirectoryPickerVie
         Timber.v("onRoomDirectoryClicked: $roomDirectoryData")
         viewModel.handle(RoomDirectoryAction.SetRoomDirectoryData(roomDirectoryData))
 
-        actionViewModel.post(RoomDirectorySharedAction.Back)
+        sharedActionViewModel.post(RoomDirectorySharedAction.Back)
     }
 
     override fun retry() {

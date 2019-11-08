@@ -38,7 +38,7 @@ class RoomDirectoryActivity : VectorBaseActivity() {
     @Inject lateinit var roomDirectoryViewModelFactory: RoomDirectoryViewModel.Factory
     private val roomDirectoryViewModel: RoomDirectoryViewModel by viewModel()
     private val createRoomViewModel: CreateRoomViewModel by viewModel()
-    private lateinit var actionViewModel: RoomDirectorySharedActionViewModel
+    private lateinit var sharedActionViewModel: RoomDirectorySharedActionViewModel
 
     override fun getLayoutRes() = R.layout.activity_simple
 
@@ -48,15 +48,15 @@ class RoomDirectoryActivity : VectorBaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        actionViewModel = ViewModelProviders.of(this, viewModelFactory).get(RoomDirectorySharedActionViewModel::class.java)
+        sharedActionViewModel = ViewModelProviders.of(this, viewModelFactory).get(RoomDirectorySharedActionViewModel::class.java)
 
         if (isFirstCreation()) {
             roomDirectoryViewModel.handle(RoomDirectoryAction.FilterWith(intent?.getStringExtra(INITIAL_FILTER) ?: ""))
         }
 
-        actionViewModel.observe()
-                .subscribe { navigation ->
-                    when (navigation) {
+        sharedActionViewModel.observe()
+                .subscribe { sharedAction ->
+                    when (sharedAction) {
                         is RoomDirectorySharedAction.Back           -> onBackPressed()
                         is RoomDirectorySharedAction.CreateRoom     -> addFragmentToBackstack(R.id.simpleFragmentContainer, CreateRoomFragment::class.java)
                         is RoomDirectorySharedAction.ChangeProtocol -> addFragmentToBackstack(R.id.simpleFragmentContainer, RoomDirectoryPickerFragment::class.java)

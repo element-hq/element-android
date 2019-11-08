@@ -41,7 +41,7 @@ import im.vector.riotx.core.platform.StateView
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsSharedAction
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsBottomSheet
-import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsStore
+import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
 import im.vector.riotx.features.home.room.list.widget.FabMenuView
 import im.vector.riotx.features.notifications.NotificationDrawerManager
 import im.vector.riotx.features.share.SharedData
@@ -72,7 +72,7 @@ class RoomListFragment @Inject constructor(
         SHARE(/* Not used */ 0)
     }
 
-    private lateinit var quickActionsDispatcher: RoomListQuickActionsStore
+    private lateinit var sharedActionViewModel: RoomListQuickActionsSharedActionViewModel
     private val roomListParams: RoomListParams by args()
     private val roomListViewModel: RoomListViewModel by fragmentViewModel()
 
@@ -100,7 +100,7 @@ class RoomListFragment @Inject constructor(
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        quickActionsDispatcher = ViewModelProviders.of(requireActivity()).get(RoomListQuickActionsStore::class.java)
+        sharedActionViewModel = ViewModelProviders.of(requireActivity()).get(RoomListQuickActionsSharedActionViewModel::class.java)
         setupCreateRoomButton()
         setupRecyclerView()
         roomListViewModel.subscribe { renderState(it) }
@@ -118,7 +118,7 @@ class RoomListFragment @Inject constructor(
 
         createChatFabMenu.listener = this
 
-        quickActionsDispatcher
+        sharedActionViewModel
                 .observe()
                 .subscribe { handleQuickActions(it) }
                 .disposeOnDestroy()

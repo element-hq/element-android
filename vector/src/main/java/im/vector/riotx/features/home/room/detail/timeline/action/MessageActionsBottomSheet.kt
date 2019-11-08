@@ -47,7 +47,7 @@ class MessageActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), Message
 
     override val showExpanded = true
 
-    private lateinit var messageActionsStore: MessageActionsDispatcher
+    private lateinit var sharedActionViewModel: MessageSharedActionViewModel
 
     override fun injectWith(screenComponent: ScreenComponent) {
         screenComponent.inject(this)
@@ -61,7 +61,7 @@ class MessageActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), Message
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        messageActionsStore = ViewModelProviders.of(requireActivity()).get(MessageActionsDispatcher::class.java)
+        sharedActionViewModel = ViewModelProviders.of(requireActivity()).get(MessageSharedActionViewModel::class.java)
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         recyclerView.adapter = messageActionsEpoxyController.adapter
         // Disable item animation
@@ -74,7 +74,7 @@ class MessageActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), Message
             // Toggle report menu
             viewModel.handle(MessageActionsAction.ToggleReportMenu)
         } else {
-            messageActionsStore.post(eventAction)
+            sharedActionViewModel.post(eventAction)
             dismiss()
         }
     }

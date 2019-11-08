@@ -33,7 +33,7 @@ import javax.inject.Inject
 
 class CreateRoomFragment @Inject constructor(private val createRoomController: CreateRoomController) : VectorBaseFragment(), CreateRoomController.Listener {
 
-    private lateinit var actionViewModel: RoomDirectorySharedActionViewModel
+    private lateinit var sharedActionViewModel: RoomDirectorySharedActionViewModel
     private val viewModel: CreateRoomViewModel by activityViewModel()
 
     override fun getLayoutResId() = R.layout.fragment_create_room
@@ -43,10 +43,10 @@ class CreateRoomFragment @Inject constructor(private val createRoomController: C
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         vectorBaseActivity.setSupportActionBar(createRoomToolbar)
-        actionViewModel = ViewModelProviders.of(requireActivity()).get(RoomDirectorySharedActionViewModel::class.java)
+        sharedActionViewModel = ViewModelProviders.of(requireActivity()).get(RoomDirectorySharedActionViewModel::class.java)
         setupRecyclerView()
         createRoomClose.setOnClickListener {
-            actionViewModel.post(RoomDirectorySharedAction.Back)
+            sharedActionViewModel.post(RoomDirectorySharedAction.Back)
         }
     }
 
@@ -93,7 +93,7 @@ class CreateRoomFragment @Inject constructor(private val createRoomController: C
             // Navigate to freshly created room
             navigator.openRoom(requireActivity(), async())
 
-            actionViewModel.post(RoomDirectorySharedAction.Close)
+            sharedActionViewModel.post(RoomDirectorySharedAction.Close)
         } else {
             // Populate list with Epoxy
             createRoomController.setData(state)

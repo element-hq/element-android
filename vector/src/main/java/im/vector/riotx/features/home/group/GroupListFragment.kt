@@ -36,20 +36,20 @@ class GroupListFragment @Inject constructor(
         private val groupController: GroupSummaryController
 ) : VectorBaseFragment(), GroupSummaryController.Callback {
 
-    private lateinit var actionViewModel: HomeSharedActionViewModel
+    private lateinit var sharedActionViewModel: HomeSharedActionViewModel
     private val viewModel: GroupListViewModel by fragmentViewModel()
 
     override fun getLayoutResId() = R.layout.fragment_group_list
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        actionViewModel = ViewModelProviders.of(requireActivity()).get(HomeSharedActionViewModel::class.java)
+        sharedActionViewModel = ViewModelProviders.of(requireActivity()).get(HomeSharedActionViewModel::class.java)
         groupController.callback = this
         stateView.contentView = groupListEpoxyRecyclerView
         groupListEpoxyRecyclerView.setController(groupController)
         viewModel.subscribe { renderState(it) }
         viewModel.openGroupLiveData.observeEvent(this) {
-            actionViewModel.post(HomeActivitySharedAction.OpenGroup)
+            sharedActionViewModel.post(HomeActivitySharedAction.OpenGroup)
         }
     }
 

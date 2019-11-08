@@ -12,13 +12,12 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
-package im.vector.riotx.features.home.room.list.actions
+package im.vector.riotx.features.home.room.detail.timeline.action
 
 import im.vector.riotx.core.platform.VectorSharedActionViewModel
 
 /**
- * Activity shared view model to handle room list quick actions
+ * Activity shared view model to handle message actions
  */
-class RoomListQuickActionsStore : VectorSharedActionViewModel<RoomListQuickActionsSharedAction>()
+class MessageSharedActionViewModel : VectorSharedActionViewModel<EventSharedAction>()
