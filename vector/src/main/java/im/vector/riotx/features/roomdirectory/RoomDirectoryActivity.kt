@@ -54,12 +54,15 @@ class RoomDirectoryActivity : VectorBaseActivity() {
             roomDirectoryViewModel.handle(RoomDirectoryAction.FilterWith(intent?.getStringExtra(INITIAL_FILTER) ?: ""))
         }
 
-        sharedActionViewModel.observe()
+        sharedActionViewModel
+                .observe()
                 .subscribe { sharedAction ->
                     when (sharedAction) {
                         is RoomDirectorySharedAction.Back           -> onBackPressed()
-                        is RoomDirectorySharedAction.CreateRoom     -> addFragmentToBackstack(R.id.simpleFragmentContainer, CreateRoomFragment::class.java)
-                        is RoomDirectorySharedAction.ChangeProtocol -> addFragmentToBackstack(R.id.simpleFragmentContainer, RoomDirectoryPickerFragment::class.java)
+                        is RoomDirectorySharedAction.CreateRoom     ->
+                            addFragmentToBackstack(R.id.simpleFragmentContainer, CreateRoomFragment::class.java)
+                        is RoomDirectorySharedAction.ChangeProtocol ->
+                            addFragmentToBackstack(R.id.simpleFragmentContainer, RoomDirectoryPickerFragment::class.java)
                         is RoomDirectorySharedAction.Close          -> finish()
                     }
                 }

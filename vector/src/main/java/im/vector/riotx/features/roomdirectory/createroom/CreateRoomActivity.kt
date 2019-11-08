@@ -56,7 +56,8 @@ class CreateRoomActivity : VectorBaseActivity(), ToolbarConfigurable {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         sharedActionViewModel = ViewModelProviders.of(this, viewModelFactory).get(RoomDirectorySharedActionViewModel::class.java)
-        sharedActionViewModel.observe()
+        sharedActionViewModel
+                .observe()
                 .subscribe { sharedAction ->
                     when (sharedAction) {
                         is RoomDirectorySharedAction.Back,

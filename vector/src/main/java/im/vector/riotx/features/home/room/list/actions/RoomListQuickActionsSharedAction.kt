@@ -21,7 +21,11 @@ import androidx.annotation.StringRes
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorSharedAction
 
-sealed class RoomListQuickActionsSharedAction(@StringRes val titleRes: Int, @DrawableRes val iconResId: Int, val destructive: Boolean = false) : VectorSharedAction {
+sealed class RoomListQuickActionsSharedAction(
+        @StringRes val titleRes: Int,
+        @DrawableRes val iconResId: Int,
+        val destructive: Boolean = false)
+    : VectorSharedAction {
 
     data class NotificationsAllNoisy(val roomId: String) : RoomListQuickActionsSharedAction(
             R.string.room_list_quick_actions_notifications_all_noisy,

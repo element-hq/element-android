@@ -52,10 +52,12 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
         super.onCreate(savedInstanceState)
         toolbar.visibility = View.GONE
         sharedActionViewModel = ViewModelProviders.of(this, viewModelFactory).get(CreateDirectRoomSharedActionViewModel::class.java)
-        sharedActionViewModel.observe()
+        sharedActionViewModel
+                .observe()
                 .subscribe { sharedAction ->
                     when (sharedAction) {
-                        CreateDirectRoomSharedAction.OpenUsersDirectory -> addFragmentToBackstack(R.id.container, CreateDirectRoomDirectoryUsersFragment::class.java)
+                        CreateDirectRoomSharedAction.OpenUsersDirectory ->
+                            addFragmentToBackstack(R.id.container, CreateDirectRoomDirectoryUsersFragment::class.java)
                         CreateDirectRoomSharedAction.Close              -> finish()
                         CreateDirectRoomSharedAction.GoBack             -> onBackPressed()
                     }

@@ -76,7 +76,8 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
             replaceFragment(R.id.homeDrawerFragmentContainer, HomeDrawerFragment::class.java)
         }
 
-        sharedActionViewModel.observe()
+        sharedActionViewModel
+                .observe()
                 .subscribe { sharedAction ->
                     when (sharedAction) {
                         is HomeActivitySharedAction.OpenDrawer -> drawerLayout.openDrawer(GravityCompat.START)
