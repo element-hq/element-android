@@ -69,12 +69,12 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                                                       private val vectorPreferences: VectorPreferences,
                                                       private val stringProvider: StringProvider,
                                                       private val session: Session
-) : VectorViewModel<RoomDetailViewState>(initialState) {
+) : VectorViewModel<RoomDetailViewState, RoomDetailAction>(initialState) {
 
     private val room = session.getRoom(initialState.roomId)!!
     private val eventId = initialState.eventId
-    private val invisibleEventsObservable = BehaviorRelay.create<RoomDetailActions.TimelineEventTurnsInvisible>()
-    private val visibleEventsObservable = BehaviorRelay.create<RoomDetailActions.TimelineEventTurnsVisible>()
+    private val invisibleEventsObservable = BehaviorRelay.create<RoomDetailAction.TimelineEventTurnsInvisible>()
+    private val visibleEventsObservable = BehaviorRelay.create<RoomDetailAction.TimelineEventTurnsVisible>()
     private val timelineSettings = if (userPreferencesProvider.shouldShowHiddenEvents()) {
         TimelineSettings(30,
                 filterEdits = false,
@@ -92,12 +92,12 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     private var timeline = room.createTimeline(eventId, timelineSettings)
 
     // Can be used for several actions, for a one shot result
-    private val _requestLiveData = MutableLiveData<LiveEvent<Async<RoomDetailActions>>>()
-    val requestLiveData: LiveData<LiveEvent<Async<RoomDetailActions>>>
+    private val _requestLiveData = MutableLiveData<LiveEvent<Async<RoomDetailAction>>>()
+    val requestLiveData: LiveData<LiveEvent<Async<RoomDetailAction>>>
         get() = _requestLiveData
 
     // Slot to keep a pending action during permission request
-    var pendingAction: RoomDetailActions? = null
+    var pendingAction: RoomDetailAction? = null
     // Slot to keep a pending uri during permission request
     var pendingUri: Uri? = null
 
@@ -129,46 +129,46 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         setState { copy(timeline = this@RoomDetailViewModel.timeline) }
     }
 
-    fun process(action: RoomDetailActions) {
+    override fun handle(action: RoomDetailAction) {
         when (action) {
-            is RoomDetailActions.SaveDraft                   -> handleSaveDraft(action)
-            is RoomDetailActions.SendMessage                 -> handleSendMessage(action)
-            is RoomDetailActions.SendMedia                   -> handleSendMedia(action)
-            is RoomDetailActions.TimelineEventTurnsVisible   -> handleEventVisible(action)
-            is RoomDetailActions.TimelineEventTurnsInvisible -> handleEventInvisible(action)
-            is RoomDetailActions.LoadMoreTimelineEvents      -> handleLoadMore(action)
-            is RoomDetailActions.SendReaction                -> handleSendReaction(action)
-            is RoomDetailActions.AcceptInvite                -> handleAcceptInvite()
-            is RoomDetailActions.RejectInvite                -> handleRejectInvite()
-            is RoomDetailActions.RedactAction                -> handleRedactEvent(action)
-            is RoomDetailActions.UndoReaction                -> handleUndoReact(action)
-            is RoomDetailActions.UpdateQuickReactAction      -> handleUpdateQuickReaction(action)
-            is RoomDetailActions.ExitSpecialMode             -> handleExitSpecialMode(action)
-            is RoomDetailActions.EnterEditMode               -> handleEditAction(action)
-            is RoomDetailActions.EnterQuoteMode              -> handleQuoteAction(action)
-            is RoomDetailActions.EnterReplyMode              -> handleReplyAction(action)
-            is RoomDetailActions.DownloadFile                -> handleDownloadFile(action)
-            is RoomDetailActions.NavigateToEvent             -> handleNavigateToEvent(action)
-            is RoomDetailActions.HandleTombstoneEvent        -> handleTombstoneEvent(action)
-            is RoomDetailActions.ResendMessage               -> handleResendEvent(action)
-            is RoomDetailActions.RemoveFailedEcho            -> handleRemove(action)
-            is RoomDetailActions.ClearSendQueue              -> handleClearSendQueue()
-            is RoomDetailActions.ResendAll                   -> handleResendAll()
-            is RoomDetailActions.SetReadMarkerAction         -> handleSetReadMarkerAction(action)
-            is RoomDetailActions.MarkAllAsRead               -> handleMarkAllAsRead()
-            is RoomDetailActions.ReportContent               -> handleReportContent(action)
-            is RoomDetailActions.IgnoreUser                  -> handleIgnoreUser(action)
+            is RoomDetailAction.SaveDraft                   -> handleSaveDraft(action)
+            is RoomDetailAction.SendMessage                 -> handleSendMessage(action)
+            is RoomDetailAction.SendMedia                   -> handleSendMedia(action)
+            is RoomDetailAction.TimelineEventTurnsVisible   -> handleEventVisible(action)
+            is RoomDetailAction.TimelineEventTurnsInvisible -> handleEventInvisible(action)
+            is RoomDetailAction.LoadMoreTimelineEvents      -> handleLoadMore(action)
+            is RoomDetailAction.SendReaction                -> handleSendReaction(action)
+            is RoomDetailAction.AcceptInvite                -> handleAcceptInvite()
+            is RoomDetailAction.RejectInvite                -> handleRejectInvite()
+            is RoomDetailAction.RedactAction                -> handleRedactEvent(action)
+            is RoomDetailAction.UndoReaction                -> handleUndoReact(action)
+            is RoomDetailAction.UpdateQuickReactAction      -> handleUpdateQuickReaction(action)
+            is RoomDetailAction.ExitSpecialMode             -> handleExitSpecialMode(action)
+            is RoomDetailAction.EnterEditMode               -> handleEditAction(action)
+            is RoomDetailAction.EnterQuoteMode              -> handleQuoteAction(action)
+            is RoomDetailAction.EnterReplyMode              -> handleReplyAction(action)
+            is RoomDetailAction.DownloadFile                -> handleDownloadFile(action)
+            is RoomDetailAction.NavigateToEvent             -> handleNavigateToEvent(action)
+            is RoomDetailAction.HandleTombstoneEvent        -> handleTombstoneEvent(action)
+            is RoomDetailAction.ResendMessage               -> handleResendEvent(action)
+            is RoomDetailAction.RemoveFailedEcho            -> handleRemove(action)
+            is RoomDetailAction.ClearSendQueue              -> handleClearSendQueue()
+            is RoomDetailAction.ResendAll                   -> handleResendAll()
+            is RoomDetailAction.SetReadMarkerAction         -> handleSetReadMarkerAction(action)
+            is RoomDetailAction.MarkAllAsRead               -> handleMarkAllAsRead()
+            is RoomDetailAction.ReportContent               -> handleReportContent(action)
+            is RoomDetailAction.IgnoreUser                  -> handleIgnoreUser(action)
         }
     }
 
-    private fun handleEventInvisible(action: RoomDetailActions.TimelineEventTurnsInvisible) {
+    private fun handleEventInvisible(action: RoomDetailAction.TimelineEventTurnsInvisible) {
         invisibleEventsObservable.accept(action)
     }
 
     /**
      * Convert a send mode to a draft and save the draft
      */
-    private fun handleSaveDraft(action: RoomDetailActions.SaveDraft) {
+    private fun handleSaveDraft(action: RoomDetailAction.SaveDraft) {
         withState {
             when (it.sendMode) {
                 is SendMode.REGULAR -> room.saveDraft(UserDraft.REGULAR(action.draft))
@@ -211,7 +211,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 .disposeOnClear()
     }
 
-    private fun handleTombstoneEvent(action: RoomDetailActions.HandleTombstoneEvent) {
+    private fun handleTombstoneEvent(action: RoomDetailAction.HandleTombstoneEvent) {
         val tombstoneContent = action.event.getClearContent().toModel<RoomTombstoneContent>()
                 ?: return
 
@@ -267,7 +267,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
 
     // PRIVATE METHODS *****************************************************************************
 
-    private fun handleSendMessage(action: RoomDetailActions.SendMessage) {
+    private fun handleSendMessage(action: RoomDetailAction.SendMessage) {
         withState { state ->
             when (state.sendMode) {
                 is SendMode.REGULAR -> {
@@ -458,20 +458,20 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         })
     }
 
-    private fun handleSendReaction(action: RoomDetailActions.SendReaction) {
+    private fun handleSendReaction(action: RoomDetailAction.SendReaction) {
         room.sendReaction(action.targetEventId, action.reaction)
     }
 
-    private fun handleRedactEvent(action: RoomDetailActions.RedactAction) {
+    private fun handleRedactEvent(action: RoomDetailAction.RedactAction) {
         val event = room.getTimeLineEvent(action.targetEventId) ?: return
         room.redactEvent(event.root, action.reason)
     }
 
-    private fun handleUndoReact(action: RoomDetailActions.UndoReaction) {
+    private fun handleUndoReact(action: RoomDetailAction.UndoReaction) {
         room.undoReaction(action.targetEventId, action.reaction)
     }
 
-    private fun handleUpdateQuickReaction(action: RoomDetailActions.UpdateQuickReactAction) {
+    private fun handleUpdateQuickReaction(action: RoomDetailAction.UpdateQuickReactAction) {
         if (action.add) {
             room.sendReaction(action.targetEventId, action.selectedReaction)
         } else {
@@ -479,7 +479,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         }
     }
 
-    private fun handleSendMedia(action: RoomDetailActions.SendMedia) {
+    private fun handleSendMedia(action: RoomDetailAction.SendMedia) {
         val attachments = action.attachments
         val homeServerCapabilities = session.getHomeServerCapabilities()
         val maxUploadFileSize = homeServerCapabilities.maxUploadFileSize
@@ -496,19 +496,19 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         }
     }
 
-    private fun handleEventVisible(action: RoomDetailActions.TimelineEventTurnsVisible) {
+    private fun handleEventVisible(action: RoomDetailAction.TimelineEventTurnsVisible) {
         if (action.event.root.sendState.isSent()) { // ignore pending/local events
             visibleEventsObservable.accept(action)
         }
         // We need to update this with the related m.replace also (to move read receipt)
         action.event.annotations?.editSummary?.sourceEvents?.forEach {
             room.getTimeLineEvent(it)?.let { event ->
-                visibleEventsObservable.accept(RoomDetailActions.TimelineEventTurnsVisible(event))
+                visibleEventsObservable.accept(RoomDetailAction.TimelineEventTurnsVisible(event))
             }
         }
     }
 
-    private fun handleLoadMore(action: RoomDetailActions.LoadMoreTimelineEvents) {
+    private fun handleLoadMore(action: RoomDetailAction.LoadMoreTimelineEvents) {
         timeline.paginate(action.direction, PAGINATION_COUNT)
     }
 
@@ -520,7 +520,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         room.join(callback = object : MatrixCallback<Unit> {})
     }
 
-    private fun handleEditAction(action: RoomDetailActions.EnterEditMode) {
+    private fun handleEditAction(action: RoomDetailAction.EnterEditMode) {
         saveCurrentDraft(action.draft)
 
         room.getTimeLineEvent(action.eventId)?.let { timelineEvent ->
@@ -530,7 +530,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         }
     }
 
-    private fun handleQuoteAction(action: RoomDetailActions.EnterQuoteMode) {
+    private fun handleQuoteAction(action: RoomDetailAction.EnterQuoteMode) {
         saveCurrentDraft(action.draft)
 
         room.getTimeLineEvent(action.eventId)?.let { timelineEvent ->
@@ -547,7 +547,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         }
     }
 
-    private fun handleReplyAction(action: RoomDetailActions.EnterReplyMode) {
+    private fun handleReplyAction(action: RoomDetailAction.EnterReplyMode) {
         saveCurrentDraft(action.draft)
 
         room.getTimeLineEvent(action.eventId)?.let { timelineEvent ->
@@ -578,7 +578,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         }
     }
 
-    private fun handleExitSpecialMode(action: RoomDetailActions.ExitSpecialMode) {
+    private fun handleExitSpecialMode(action: RoomDetailAction.ExitSpecialMode) {
         withState { state ->
             // For edit, just delete the current draft
             if (state.sendMode is SendMode.EDIT) {
@@ -590,7 +590,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         }
     }
 
-    private fun handleDownloadFile(action: RoomDetailActions.DownloadFile) {
+    private fun handleDownloadFile(action: RoomDetailAction.DownloadFile) {
         session.downloadFile(
                 FileService.DownloadMode.TO_EXPORT,
                 action.eventId,
@@ -616,7 +616,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 })
     }
 
-    private fun handleNavigateToEvent(action: RoomDetailActions.NavigateToEvent) {
+    private fun handleNavigateToEvent(action: RoomDetailAction.NavigateToEvent) {
         val targetEventId: String = action.eventId
         val correctedEventId = timeline.getFirstDisplayableEventId(targetEventId) ?: targetEventId
         val indexOfEvent = timeline.getIndexOfEvent(correctedEventId)
@@ -630,7 +630,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         _navigateToEvent.postLiveEvent(correctedEventId)
     }
 
-    private fun handleResendEvent(action: RoomDetailActions.ResendMessage) {
+    private fun handleResendEvent(action: RoomDetailAction.ResendMessage) {
         val targetEventId = action.eventId
         room.getTimeLineEvent(targetEventId)?.let {
             // State must be UNDELIVERED or Failed
@@ -648,7 +648,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         }
     }
 
-    private fun handleRemove(action: RoomDetailActions.RemoveFailedEcho) {
+    private fun handleRemove(action: RoomDetailAction.RemoveFailedEcho) {
         val targetEventId = action.eventId
         room.getTimeLineEvent(targetEventId)?.let {
             // State must be UNDELIVERED or Failed
@@ -683,7 +683,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 .disposeOnClear()
     }
 
-    private fun handleSetReadMarkerAction(action: RoomDetailActions.SetReadMarkerAction) = withState {
+    private fun handleSetReadMarkerAction(action: RoomDetailAction.SetReadMarkerAction) = withState {
         var readMarkerId = action.eventId
         val indexOfEvent = timeline.getIndexOfEvent(readMarkerId)
         // force to set the read marker on the next event
@@ -699,7 +699,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         room.markAllAsRead(object : MatrixCallback<Any> {})
     }
 
-    private fun handleReportContent(action: RoomDetailActions.ReportContent) {
+    private fun handleReportContent(action: RoomDetailAction.ReportContent) {
         room.reportContent(action.eventId, -100, action.reason, object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
                 _requestLiveData.postValue(LiveEvent(Success(action)))
@@ -711,7 +711,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         })
     }
 
-    private fun handleIgnoreUser(action: RoomDetailActions.IgnoreUser) {
+    private fun handleIgnoreUser(action: RoomDetailAction.IgnoreUser) {
         if (action.userId.isNullOrEmpty()) {
             return
         }

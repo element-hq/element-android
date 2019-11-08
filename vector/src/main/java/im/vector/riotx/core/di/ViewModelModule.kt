@@ -27,7 +27,12 @@ import im.vector.riotx.features.crypto.keysbackup.restore.KeysBackupRestoreFromP
 import im.vector.riotx.features.crypto.keysbackup.restore.KeysBackupRestoreSharedViewModel
 import im.vector.riotx.features.crypto.keysbackup.setup.KeysBackupSetupSharedViewModel
 import im.vector.riotx.features.crypto.verification.SasVerificationViewModel
+import im.vector.riotx.features.home.HomeSharedActionViewModel
+import im.vector.riotx.features.home.createdirect.CreateDirectRoomSharedActionViewModel
+import im.vector.riotx.features.home.room.detail.timeline.action.MessageSharedActionViewModel
+import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
 import im.vector.riotx.features.reactions.EmojiChooserViewModel
+import im.vector.riotx.features.roomdirectory.RoomDirectorySharedActionViewModel
 import im.vector.riotx.features.workers.signout.SignOutViewModel
 
 @Module
@@ -82,4 +87,29 @@ interface ViewModelModule {
     @IntoMap
     @ViewModelKey(ConfigurationViewModel::class)
     fun bindConfigurationViewModel(viewModel: ConfigurationViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(CreateDirectRoomSharedActionViewModel::class)
+    fun bindCreateDirectRoomSharedActionViewModel(viewModel: CreateDirectRoomSharedActionViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(HomeSharedActionViewModel::class)
+    fun bindHomeSharedActionViewModel(viewModel: HomeSharedActionViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(MessageSharedActionViewModel::class)
+    fun bindMessageSharedActionViewModel(viewModel: MessageSharedActionViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(RoomListQuickActionsSharedActionViewModel::class)
+    fun bindRoomListQuickActionsSharedActionViewModel(viewModel: RoomListQuickActionsSharedActionViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(RoomDirectorySharedActionViewModel::class)
+    fun bindRoomDirectorySharedActionViewModel(viewModel: RoomDirectorySharedActionViewModel): ViewModel
 }

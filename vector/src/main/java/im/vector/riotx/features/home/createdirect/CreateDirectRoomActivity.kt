@@ -23,7 +23,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
-import androidx.lifecycle.ViewModelProviders
 import com.airbnb.mvrx.*
 import im.vector.matrix.android.api.session.room.failure.CreateRoomFailure
 import im.vector.riotx.R
@@ -38,14 +37,8 @@ import javax.inject.Inject
 
 class CreateDirectRoomActivity : SimpleFragmentActivity() {
 
-    sealed class Navigation {
-        object UsersDirectory : Navigation()
-        object Close : Navigation()
-        object Previous : Navigation()
-    }
-
     private val viewModel: CreateDirectRoomViewModel by viewModel()
-    lateinit var navigationViewModel: CreateDirectRoomNavigationViewModel
+    private lateinit var sharedActionViewModel: CreateDirectRoomSharedActionViewModel
     @Inject lateinit var createDirectRoomViewModelFactory: CreateDirectRoomViewModel.Factory
     @Inject lateinit var errorFormatter: ErrorFormatter
 
@@ -57,13 +50,15 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         toolbar.visibility = View.GONE
-        navigationViewModel = ViewModelProviders.of(this, viewModelFactory).get(CreateDirectRoomNavigationViewModel::class.java)
-        navigationViewModel.observe()
-                .subscribe { navigation ->
-                    when (navigation) {
-                        is Navigation.UsersDirectory -> addFragmentToBackstack(R.id.container, CreateDirectRoomDirectoryUsersFragment::class.java)
-                        Navigation.Close             -> finish()
-                        Navigation.Previous          -> onBackPressed()
+        sharedActionViewModel = viewModelProvider.get(CreateDirectRoomSharedActionViewModel::class.java)
+        sharedActionViewModel
+                .observe()
+                .subscribe { sharedAction ->
+                    when (sharedAction) {
+                        CreateDirectRoomSharedAction.OpenUsersDirectory ->
+                            addFragmentToBackstack(R.id.container, CreateDirectRoomDirectoryUsersFragment::class.java)
+                        CreateDirectRoomSharedAction.Close              -> finish()
+                        CreateDirectRoomSharedAction.GoBack             -> onBackPressed()
                     }
                 }
                 .disposeOnDestroy()

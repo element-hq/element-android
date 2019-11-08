@@ -21,6 +21,8 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.widget.FrameLayout
 import androidx.annotation.CallSuper
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.MvRxView
 import com.airbnb.mvrx.MvRxViewModelStore
@@ -30,7 +32,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import im.vector.riotx.core.di.DaggerScreenComponent
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.utils.DimensionConverter
-import java.util.UUID
+import java.util.*
 
 /**
  * Add MvRx capabilities to bottomsheetdialog (like BaseMvRxFragment)
@@ -42,6 +44,22 @@ abstract class VectorBaseBottomSheetDialogFragment : BottomSheetDialogFragment()
     private lateinit var screenComponent: ScreenComponent
     final override val mvrxViewId: String by lazy { mvrxPersistedViewId }
 
+    /* ==========================================================================================
+     * View model
+     * ========================================================================================== */
+
+    private lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    protected val activityViewModelProvider
+        get() = ViewModelProviders.of(requireActivity(), viewModelFactory)
+
+    protected val fragmentViewModelProvider
+        get() = ViewModelProviders.of(this, viewModelFactory)
+
+    /* ==========================================================================================
+     * BottomSheetBehavior
+     * ========================================================================================== */
+
     private var bottomSheetBehavior: BottomSheetBehavior<FrameLayout>? = null
 
     val vectorBaseActivity: VectorBaseActivity by lazy {
@@ -52,6 +70,7 @@ abstract class VectorBaseBottomSheetDialogFragment : BottomSheetDialogFragment()
 
     override fun onAttach(context: Context) {
         screenComponent = DaggerScreenComponent.factory().create(vectorBaseActivity.getVectorComponent(), vectorBaseActivity)
+        viewModelFactory = screenComponent.viewModelFactory()
         super.onAttach(context)
         injectWith(screenComponent)
     }

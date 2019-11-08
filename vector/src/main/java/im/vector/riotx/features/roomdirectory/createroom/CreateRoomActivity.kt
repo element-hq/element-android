@@ -20,14 +20,13 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
-import androidx.lifecycle.ViewModelProviders
 import com.airbnb.mvrx.viewModel
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.addFragment
 import im.vector.riotx.core.platform.ToolbarConfigurable
 import im.vector.riotx.core.platform.VectorBaseActivity
-import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
-import im.vector.riotx.features.roomdirectory.RoomDirectoryNavigationViewModel
+import im.vector.riotx.features.roomdirectory.RoomDirectorySharedAction
+import im.vector.riotx.features.roomdirectory.RoomDirectorySharedActionViewModel
 import javax.inject.Inject
 
 /**
@@ -38,7 +37,7 @@ class CreateRoomActivity : VectorBaseActivity(), ToolbarConfigurable {
     @Inject lateinit var createRoomViewModelFactory: CreateRoomViewModel.Factory
     private val createRoomViewModel: CreateRoomViewModel by viewModel()
 
-    private lateinit var navigationViewModel: RoomDirectoryNavigationViewModel
+    private lateinit var sharedActionViewModel: RoomDirectorySharedActionViewModel
 
     override fun getLayoutRes() = R.layout.activity_simple
 
@@ -49,18 +48,19 @@ class CreateRoomActivity : VectorBaseActivity(), ToolbarConfigurable {
     override fun initUiAndData() {
         if (isFirstCreation()) {
             addFragment(R.id.simpleFragmentContainer, CreateRoomFragment::class.java)
-            createRoomViewModel.setName(intent?.getStringExtra(INITIAL_NAME) ?: "")
+            createRoomViewModel.handle(CreateRoomAction.SetName(intent?.getStringExtra(INITIAL_NAME) ?: ""))
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        navigationViewModel = ViewModelProviders.of(this, viewModelFactory).get(RoomDirectoryNavigationViewModel::class.java)
-        navigationViewModel.observe()
-                .subscribe { navigation ->
-                    when (navigation) {
-                        is RoomDirectoryActivity.Navigation.Back,
-                        is RoomDirectoryActivity.Navigation.Close -> finish()
+        sharedActionViewModel = viewModelProvider.get(RoomDirectorySharedActionViewModel::class.java)
+        sharedActionViewModel
+                .observe()
+                .subscribe { sharedAction ->
+                    when (sharedAction) {
+                        is RoomDirectorySharedAction.Back,
+                        is RoomDirectorySharedAction.Close -> finish()
                     }
                 }
                 .disposeOnDestroy()

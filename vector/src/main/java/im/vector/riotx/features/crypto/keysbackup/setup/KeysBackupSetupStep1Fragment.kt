@@ -21,7 +21,6 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import butterknife.BindView
 import butterknife.OnClick
 import im.vector.riotx.R
@@ -44,9 +43,7 @@ class KeysBackupSetupStep1Fragment @Inject constructor() : VectorBaseFragment() 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel = activity?.run {
-            ViewModelProviders.of(this, viewModelFactory).get(KeysBackupSetupSharedViewModel::class.java)
-        } ?: throw Exception("Invalid Activity")
+        viewModel = activityViewModelProvider.get(KeysBackupSetupSharedViewModel::class.java)
 
         viewModel.showManualExport.observe(viewLifecycleOwner, Observer {
             val showOption = it ?: false

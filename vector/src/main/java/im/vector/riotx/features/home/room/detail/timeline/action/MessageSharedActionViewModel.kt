@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package im.vector.riotx.features.home.room.detail.timeline.action
 
-package im.vector.riotx.features.home.group
+import im.vector.riotx.core.platform.VectorSharedActionViewModel
+import javax.inject.Inject
 
-import im.vector.matrix.android.api.session.group.model.GroupSummary
-
-sealed class GroupListActions {
-
-    data class SelectGroup(val groupSummary: GroupSummary) : GroupListActions()
-}
+/**
+ * Activity shared view model to handle message actions
+ */
+class MessageSharedActionViewModel @Inject constructor() : VectorSharedActionViewModel<EventSharedAction>()

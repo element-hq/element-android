@@ -18,7 +18,6 @@ package im.vector.riotx.features.workers.signout
 
 import android.app.Activity
 import android.app.Dialog
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -31,27 +30,19 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.transition.TransitionManager
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
 import im.vector.riotx.R
-import im.vector.riotx.core.di.DaggerScreenComponent
-import im.vector.riotx.core.platform.VectorBaseActivity
+import im.vector.riotx.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.riotx.features.crypto.keysbackup.setup.KeysBackupSetupActivity
 
-class SignOutBottomSheetDialogFragment : BottomSheetDialogFragment() {
-
-    lateinit var session: Session
-    lateinit var viewModelFactory: ViewModelProvider.Factory
+class SignOutBottomSheetDialogFragment : VectorBaseBottomSheetDialogFragment() {
 
     @BindView(R.id.bottom_sheet_signout_warning_text)
     lateinit var sheetTitle: TextView
@@ -97,20 +88,10 @@ class SignOutBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
     private lateinit var viewModel: SignOutViewModel
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        val vectorBaseActivity = activity as VectorBaseActivity
-        val screenComponent = DaggerScreenComponent.factory().create(vectorBaseActivity.getVectorComponent(), vectorBaseActivity)
-        viewModelFactory = screenComponent.viewModelFactory()
-        session = screenComponent.activeSessionHolder().getActiveSession()
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(SignOutViewModel::class.java)
-
-        viewModel.init(session)
+        viewModel = fragmentViewModelProvider.get(SignOutViewModel::class.java)
 
         setupClickableView.setOnClickListener {
             context?.let { context ->
@@ -162,7 +143,7 @@ class SignOutBottomSheetDialogFragment : BottomSheetDialogFragment() {
             }
         }
 
-        viewModel.keysExportedToFile.observe(this, Observer {
+        viewModel.keysExportedToFile.observe(viewLifecycleOwner, Observer {
             val hasExportedToFile = it ?: false
             if (hasExportedToFile) {
                 // We can allow to sign out
@@ -177,7 +158,7 @@ class SignOutBottomSheetDialogFragment : BottomSheetDialogFragment() {
             }
         })
 
-        viewModel.keysBackupState.observe(this, Observer {
+        viewModel.keysBackupState.observe(viewLifecycleOwner, Observer {
             if (viewModel.keysExportedToFile.value == true) {
                 // ignore this
                 return@Observer

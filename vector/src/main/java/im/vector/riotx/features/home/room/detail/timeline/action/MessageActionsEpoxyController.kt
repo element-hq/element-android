@@ -84,7 +84,7 @@ class MessageActionsEpoxyController @Inject constructor(private val stringProvid
                 selecteds(state.quickStates.invoke().map { it.isSelected })
                 listener(object : BottomSheetItemQuickReactions.Listener {
                     override fun didSelect(emoji: String, selected: Boolean) {
-                        listener?.didSelectMenuAction(SimpleAction.QuickReact(state.eventId, emoji, selected))
+                        listener?.didSelectMenuAction(EventSharedAction.QuickReact(state.eventId, emoji, selected))
                     }
                 })
             }
@@ -101,17 +101,17 @@ class MessageActionsEpoxyController @Inject constructor(private val stringProvid
                 id("action_$index")
                 iconRes(action.iconResId)
                 textRes(action.titleRes)
-                showExpand(action is SimpleAction.ReportContent)
+                showExpand(action is EventSharedAction.ReportContent)
                 expanded(state.expendedReportContentMenu)
                 listener(View.OnClickListener { listener?.didSelectMenuAction(action) })
             }
 
-            if (action is SimpleAction.ReportContent && state.expendedReportContentMenu) {
+            if (action is EventSharedAction.ReportContent && state.expendedReportContentMenu) {
                 // Special case for report content menu: add the submenu
                 listOf(
-                        SimpleAction.ReportContentSpam(action.eventId, action.senderId),
-                        SimpleAction.ReportContentInappropriate(action.eventId, action.senderId),
-                        SimpleAction.ReportContentCustom(action.eventId, action.senderId)
+                        EventSharedAction.ReportContentSpam(action.eventId, action.senderId),
+                        EventSharedAction.ReportContentInappropriate(action.eventId, action.senderId),
+                        EventSharedAction.ReportContentCustom(action.eventId, action.senderId)
                 ).forEachIndexed { indexReport, actionReport ->
                     bottomSheetItemAction {
                         id("actionReport_$indexReport")
@@ -126,6 +126,6 @@ class MessageActionsEpoxyController @Inject constructor(private val stringProvid
     }
 
     interface MessageActionsEpoxyControllerListener {
-        fun didSelectMenuAction(simpleAction: SimpleAction)
+        fun didSelectMenuAction(eventAction: EventSharedAction)
     }
 }

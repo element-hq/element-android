@@ -21,7 +21,6 @@ import android.widget.TextView
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import butterknife.BindView
 import butterknife.OnClick
 import im.vector.matrix.android.api.session.crypto.sas.IncomingSasVerificationTransaction
@@ -62,9 +61,7 @@ class SASVerificationShortCodeFragment @Inject constructor(): VectorBaseFragment
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = activity?.run {
-            ViewModelProviders.of(this, viewModelFactory).get(SasVerificationViewModel::class.java)
-        } ?: throw Exception("Invalid Activity")
+        viewModel = activityViewModelProvider.get(SasVerificationViewModel::class.java)
 
         viewModel.transaction?.let {
             if (it.supportsEmoji()) {

@@ -51,7 +51,7 @@ data class SelectUserAction(
 class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
                                                             initialState: CreateDirectRoomViewState,
                                                             private val session: Session)
-    : VectorViewModel<CreateDirectRoomViewState>(initialState) {
+    : VectorViewModel<CreateDirectRoomViewState, CreateDirectRoomAction>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -79,14 +79,14 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
         observeDirectoryUsers()
     }
 
-    fun handle(action: CreateDirectRoomActions) {
+    override fun handle(action: CreateDirectRoomAction) {
         when (action) {
-            is CreateDirectRoomActions.CreateRoomAndInviteSelectedUsers -> createRoomAndInviteSelectedUsers()
-            is CreateDirectRoomActions.FilterKnownUsers                 -> knownUsersFilter.accept(Option.just(action.value))
-            is CreateDirectRoomActions.ClearFilterKnownUsers            -> knownUsersFilter.accept(Option.empty())
-            is CreateDirectRoomActions.SearchDirectoryUsers             -> directoryUsersSearch.accept(action.value)
-            is CreateDirectRoomActions.SelectUser                       -> handleSelectUser(action)
-            is CreateDirectRoomActions.RemoveSelectedUser               -> handleRemoveSelectedUser(action)
+            is CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers -> createRoomAndInviteSelectedUsers()
+            is CreateDirectRoomAction.FilterKnownUsers                 -> knownUsersFilter.accept(Option.just(action.value))
+            is CreateDirectRoomAction.ClearFilterKnownUsers            -> knownUsersFilter.accept(Option.empty())
+            is CreateDirectRoomAction.SearchDirectoryUsers             -> directoryUsersSearch.accept(action.value)
+            is CreateDirectRoomAction.SelectUser                       -> handleSelectUser(action)
+            is CreateDirectRoomAction.RemoveSelectedUser               -> handleRemoveSelectedUser(action)
         }
     }
 
@@ -105,14 +105,14 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
                 }
     }
 
-    private fun handleRemoveSelectedUser(action: CreateDirectRoomActions.RemoveSelectedUser) = withState { state ->
+    private fun handleRemoveSelectedUser(action: CreateDirectRoomAction.RemoveSelectedUser) = withState { state ->
         val index = state.selectedUsers.indexOfFirst { it.userId == action.user.userId }
         val selectedUsers = state.selectedUsers.minus(action.user)
         setState { copy(selectedUsers = selectedUsers) }
         _selectUserEvent.postLiveEvent(SelectUserAction(action.user, false, index))
     }
 
-    private fun handleSelectUser(action: CreateDirectRoomActions.SelectUser) = withState { state ->
+    private fun handleSelectUser(action: CreateDirectRoomAction.SelectUser) = withState { state ->
         // Reset the filter asap
         directoryUsersSearch.accept("")
         val isAddOperation: Boolean

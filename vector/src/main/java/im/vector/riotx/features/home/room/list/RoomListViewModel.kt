@@ -36,7 +36,7 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
                                             private val roomSummariesSource: DataSource<List<RoomSummary>>,
                                             private val alphabeticalRoomComparator: AlphabeticalRoomComparator,
                                             private val chronologicalRoomComparator: ChronologicalRoomComparator)
-    : VectorViewModel<RoomListViewState>(initialState) {
+    : VectorViewModel<RoomListViewState, RoomListAction>(initialState) {
 
     interface Factory {
         fun create(initialState: RoomListViewState): RoomListViewModel
@@ -61,30 +61,30 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
         observeRoomSummaries()
     }
 
-    fun accept(action: RoomListActions) {
+    override fun handle(action: RoomListAction) {
         when (action) {
-            is RoomListActions.SelectRoom                  -> handleSelectRoom(action)
-            is RoomListActions.ToggleCategory              -> handleToggleCategory(action)
-            is RoomListActions.AcceptInvitation            -> handleAcceptInvitation(action)
-            is RoomListActions.RejectInvitation            -> handleRejectInvitation(action)
-            is RoomListActions.FilterWith                  -> handleFilter(action)
-            is RoomListActions.MarkAllRoomsRead            -> handleMarkAllRoomsRead()
-            is RoomListActions.LeaveRoom                   -> handleLeaveRoom(action)
-            is RoomListActions.ChangeRoomNotificationState -> handleChangeNotificationMode(action)
+            is RoomListAction.SelectRoom                  -> handleSelectRoom(action)
+            is RoomListAction.ToggleCategory              -> handleToggleCategory(action)
+            is RoomListAction.AcceptInvitation            -> handleAcceptInvitation(action)
+            is RoomListAction.RejectInvitation            -> handleRejectInvitation(action)
+            is RoomListAction.FilterWith                  -> handleFilter(action)
+            is RoomListAction.MarkAllRoomsRead            -> handleMarkAllRoomsRead()
+            is RoomListAction.LeaveRoom                   -> handleLeaveRoom(action)
+            is RoomListAction.ChangeRoomNotificationState -> handleChangeNotificationMode(action)
         }
     }
 
     // PRIVATE METHODS *****************************************************************************
 
-    private fun handleSelectRoom(action: RoomListActions.SelectRoom) {
+    private fun handleSelectRoom(action: RoomListAction.SelectRoom) {
         _viewEvents.post(RoomListViewEvents.SelectRoom(action.roomSummary.roomId))
     }
 
-    private fun handleToggleCategory(action: RoomListActions.ToggleCategory) = setState {
+    private fun handleToggleCategory(action: RoomListAction.ToggleCategory) = setState {
         this.toggle(action.category)
     }
 
-    private fun handleFilter(action: RoomListActions.FilterWith) {
+    private fun handleFilter(action: RoomListAction.FilterWith) {
         setState {
             copy(
                     roomFilter = action.filter
@@ -112,7 +112,7 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
                 }
     }
 
-    private fun handleAcceptInvitation(action: RoomListActions.AcceptInvitation) = withState { state ->
+    private fun handleAcceptInvitation(action: RoomListAction.AcceptInvitation) = withState { state ->
         val roomId = action.roomSummary.roomId
 
         if (state.joiningRoomsIds.contains(roomId) || state.rejectingRoomsIds.contains(roomId)) {
@@ -147,7 +147,7 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
         })
     }
 
-    private fun handleRejectInvitation(action: RoomListActions.RejectInvitation) = withState { state ->
+    private fun handleRejectInvitation(action: RoomListAction.RejectInvitation) = withState { state ->
         val roomId = action.roomSummary.roomId
 
         if (state.joiningRoomsIds.contains(roomId) || state.rejectingRoomsIds.contains(roomId)) {
@@ -193,7 +193,7 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
                 ?.let { session.markAllAsRead(it, object : MatrixCallback<Unit> {}) }
     }
 
-    private fun handleChangeNotificationMode(action: RoomListActions.ChangeRoomNotificationState) {
+    private fun handleChangeNotificationMode(action: RoomListAction.ChangeRoomNotificationState) {
         session.getRoom(action.roomId)?.setRoomNotificationState(action.notificationState, object : MatrixCallback<Unit> {
             override fun onFailure(failure: Throwable) {
                 _viewEvents.post(RoomListViewEvents.Failure(failure))
@@ -201,7 +201,7 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
         })
     }
 
-    private fun handleLeaveRoom(action: RoomListActions.LeaveRoom) {
+    private fun handleLeaveRoom(action: RoomListAction.LeaveRoom) {
         session.getRoom(action.roomId)?.leave(object : MatrixCallback<Unit> {
             override fun onFailure(failure: Throwable) {
                 _viewEvents.post(RoomListViewEvents.Failure(failure))

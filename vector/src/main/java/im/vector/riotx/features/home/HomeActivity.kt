@@ -26,7 +26,6 @@ import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.di.ScreenComponent
@@ -47,13 +46,7 @@ import javax.inject.Inject
 
 class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
 
-    // Supported navigation actions for this Activity
-    sealed class Navigation {
-        object OpenDrawer : Navigation()
-        object OpenGroup : Navigation()
-    }
-
-    private lateinit var navigationViewModel: HomeNavigationViewModel
+    private lateinit var sharedActionViewModel: HomeSharedActionViewModel
 
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var vectorUncaughtExceptionHandler: VectorUncaughtExceptionHandler
@@ -75,18 +68,19 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         FcmHelper.ensureFcmTokenIsRetrieved(this, pushManager)
-        navigationViewModel = ViewModelProviders.of(this).get(HomeNavigationViewModel::class.java)
+        sharedActionViewModel = viewModelProvider.get(HomeSharedActionViewModel::class.java)
         drawerLayout.addDrawerListener(drawerListener)
         if (isFirstCreation()) {
             replaceFragment(R.id.homeDetailFragmentContainer, LoadingFragment::class.java)
             replaceFragment(R.id.homeDrawerFragmentContainer, HomeDrawerFragment::class.java)
         }
 
-        navigationViewModel.observe()
-                .subscribe { navigation ->
-                    when (navigation) {
-                        is Navigation.OpenDrawer -> drawerLayout.openDrawer(GravityCompat.START)
-                        is Navigation.OpenGroup  -> {
+        sharedActionViewModel
+                .observe()
+                .subscribe { sharedAction ->
+                    when (sharedAction) {
+                        is HomeActivitySharedAction.OpenDrawer -> drawerLayout.openDrawer(GravityCompat.START)
+                        is HomeActivitySharedAction.OpenGroup  -> {
                             drawerLayout.closeDrawer(GravityCompat.START)
                             replaceFragment(R.id.homeDetailFragmentContainer, HomeDetailFragment::class.java)
                         }
@@ -152,7 +146,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
         }
 
         // Force remote backup state update to update the banner if needed
-        ViewModelProviders.of(this).get(SignOutViewModel::class.java).refreshRemoteStateIfNeeded()
+        viewModelProvider.get(SignOutViewModel::class.java).refreshRemoteStateIfNeeded()
     }
 
     override fun configure(toolbar: Toolbar) {

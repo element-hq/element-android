@@ -24,7 +24,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import arrow.core.Try
 import butterknife.BindView
 import butterknife.OnClick
@@ -58,9 +57,7 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment() 
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = activity?.run {
-            ViewModelProviders.of(this, viewModelFactory).get(KeysBackupSetupSharedViewModel::class.java)
-        } ?: throw Exception("Invalid Activity")
+        viewModel = activityViewModelProvider.get(KeysBackupSetupSharedViewModel::class.java)
 
         viewModel.shouldPromptOnBack = false
 

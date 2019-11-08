@@ -21,7 +21,6 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
@@ -45,7 +44,7 @@ data class RoomListActionsArgs(
  */
 class RoomListQuickActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), RoomListQuickActionsEpoxyController.Listener {
 
-    private lateinit var actionsDispatcher: RoomListQuickActionsStore
+    private lateinit var sharedActionViewModel: RoomListQuickActionsSharedActionViewModel
     @Inject lateinit var roomListActionsViewModelFactory: RoomListQuickActionsViewModel.Factory
     @Inject lateinit var roomListActionsEpoxyController: RoomListQuickActionsEpoxyController
     @Inject lateinit var navigator: Navigator
@@ -69,7 +68,7 @@ class RoomListQuickActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), R
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        actionsDispatcher = ViewModelProviders.of(requireActivity()).get(RoomListQuickActionsStore::class.java)
+        sharedActionViewModel = activityViewModelProvider.get(RoomListQuickActionsSharedActionViewModel::class.java)
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         recyclerView.adapter = roomListActionsEpoxyController.adapter
         // Disable item animation
@@ -82,8 +81,8 @@ class RoomListQuickActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), R
         super.invalidate()
     }
 
-    override fun didSelectMenuAction(quickActions: RoomListQuickActions) {
-        actionsDispatcher.post(quickActions)
+    override fun didSelectMenuAction(quickAction: RoomListQuickActionsSharedAction) {
+        sharedActionViewModel.post(quickAction)
         dismiss()
     }
 

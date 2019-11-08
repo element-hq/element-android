@@ -24,7 +24,6 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.mvrx.*
@@ -39,9 +38,9 @@ import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.platform.OnBackPressed
 import im.vector.riotx.core.platform.StateView
 import im.vector.riotx.core.platform.VectorBaseFragment
-import im.vector.riotx.features.home.room.list.actions.RoomListQuickActions
+import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsSharedAction
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsBottomSheet
-import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsStore
+import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
 import im.vector.riotx.features.home.room.list.widget.FabMenuView
 import im.vector.riotx.features.notifications.NotificationDrawerManager
 import im.vector.riotx.features.share.SharedData
@@ -72,7 +71,7 @@ class RoomListFragment @Inject constructor(
         SHARE(/* Not used */ 0)
     }
 
-    private lateinit var quickActionsDispatcher: RoomListQuickActionsStore
+    private lateinit var sharedActionViewModel: RoomListQuickActionsSharedActionViewModel
     private val roomListParams: RoomListParams by args()
     private val roomListViewModel: RoomListViewModel by fragmentViewModel()
 
@@ -85,7 +84,7 @@ class RoomListFragment @Inject constructor(
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_home_mark_all_as_read -> {
-                roomListViewModel.accept(RoomListActions.MarkAllRoomsRead)
+                roomListViewModel.handle(RoomListAction.MarkAllRoomsRead)
                 return true
             }
         }
@@ -100,7 +99,7 @@ class RoomListFragment @Inject constructor(
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        quickActionsDispatcher = ViewModelProviders.of(requireActivity()).get(RoomListQuickActionsStore::class.java)
+        sharedActionViewModel = activityViewModelProvider.get(RoomListQuickActionsSharedActionViewModel::class.java)
         setupCreateRoomButton()
         setupRecyclerView()
         roomListViewModel.subscribe { renderState(it) }
@@ -118,7 +117,7 @@ class RoomListFragment @Inject constructor(
 
         createChatFabMenu.listener = this
 
-        quickActionsDispatcher
+        sharedActionViewModel
                 .observe()
                 .subscribe { handleQuickActions(it) }
                 .disposeOnDestroy()
@@ -183,7 +182,7 @@ class RoomListFragment @Inject constructor(
         // Scroll the list to top
         roomListEpoxyRecyclerView.scrollToPosition(0)
 
-        roomListViewModel.accept(RoomListActions.FilterWith(filter))
+        roomListViewModel.handle(RoomListAction.FilterWith(filter))
     }
 
     override fun openRoomDirectory(initialFilter: String) {
@@ -216,29 +215,29 @@ class RoomListFragment @Inject constructor(
         }
     }
 
-    private fun handleQuickActions(quickActions: RoomListQuickActions) {
-        when (quickActions) {
-            is RoomListQuickActions.NotificationsAllNoisy     -> {
-                roomListViewModel.accept(RoomListActions.ChangeRoomNotificationState(quickActions.roomId, RoomNotificationState.ALL_MESSAGES_NOISY))
+    private fun handleQuickActions(quickAction: RoomListQuickActionsSharedAction) {
+        when (quickAction) {
+            is RoomListQuickActionsSharedAction.NotificationsAllNoisy     -> {
+                roomListViewModel.handle(RoomListAction.ChangeRoomNotificationState(quickAction.roomId, RoomNotificationState.ALL_MESSAGES_NOISY))
             }
-            is RoomListQuickActions.NotificationsAll          -> {
-                roomListViewModel.accept(RoomListActions.ChangeRoomNotificationState(quickActions.roomId, RoomNotificationState.ALL_MESSAGES))
+            is RoomListQuickActionsSharedAction.NotificationsAll          -> {
+                roomListViewModel.handle(RoomListAction.ChangeRoomNotificationState(quickAction.roomId, RoomNotificationState.ALL_MESSAGES))
             }
-            is RoomListQuickActions.NotificationsMentionsOnly -> {
-                roomListViewModel.accept(RoomListActions.ChangeRoomNotificationState(quickActions.roomId, RoomNotificationState.MENTIONS_ONLY))
+            is RoomListQuickActionsSharedAction.NotificationsMentionsOnly -> {
+                roomListViewModel.handle(RoomListAction.ChangeRoomNotificationState(quickAction.roomId, RoomNotificationState.MENTIONS_ONLY))
             }
-            is RoomListQuickActions.NotificationsMute         -> {
-                roomListViewModel.accept(RoomListActions.ChangeRoomNotificationState(quickActions.roomId, RoomNotificationState.MUTE))
+            is RoomListQuickActionsSharedAction.NotificationsMute         -> {
+                roomListViewModel.handle(RoomListAction.ChangeRoomNotificationState(quickAction.roomId, RoomNotificationState.MUTE))
             }
-            is RoomListQuickActions.Settings                  -> {
+            is RoomListQuickActionsSharedAction.Settings                  -> {
                 vectorBaseActivity.notImplemented("Opening room settings")
             }
-            is RoomListQuickActions.Leave                     -> {
+            is RoomListQuickActionsSharedAction.Leave                     -> {
                 AlertDialog.Builder(requireContext())
                         .setTitle(R.string.room_participants_leave_prompt_title)
                         .setMessage(R.string.room_participants_leave_prompt_msg)
                         .setPositiveButton(R.string.leave) { _, _ ->
-                            roomListViewModel.accept(RoomListActions.LeaveRoom(quickActions.roomId))
+                            roomListViewModel.handle(RoomListAction.LeaveRoom(quickAction.roomId))
                         }
                         .setNegativeButton(R.string.cancel, null)
                         .show()
@@ -342,7 +341,7 @@ class RoomListFragment @Inject constructor(
     // RoomSummaryController.Callback **************************************************************
 
     override fun onRoomClicked(room: RoomSummary) {
-        roomListViewModel.accept(RoomListActions.SelectRoom(room))
+        roomListViewModel.handle(RoomListAction.SelectRoom(room))
     }
 
     override fun onRoomLongClicked(room: RoomSummary): Boolean {
@@ -354,16 +353,16 @@ class RoomListFragment @Inject constructor(
 
     override fun onAcceptRoomInvitation(room: RoomSummary) {
         notificationDrawerManager.clearMemberShipNotificationForRoom(room.roomId)
-        roomListViewModel.accept(RoomListActions.AcceptInvitation(room))
+        roomListViewModel.handle(RoomListAction.AcceptInvitation(room))
     }
 
     override fun onRejectRoomInvitation(room: RoomSummary) {
         notificationDrawerManager.clearMemberShipNotificationForRoom(room.roomId)
-        roomListViewModel.accept(RoomListActions.RejectInvitation(room))
+        roomListViewModel.handle(RoomListAction.RejectInvitation(room))
     }
 
     override fun onToggleRoomCategory(roomCategory: RoomCategory) {
-        roomListViewModel.accept(RoomListActions.ToggleCategory(roomCategory))
+        roomListViewModel.handle(RoomListAction.ToggleCategory(roomCategory))
     }
 
     override fun createRoom(initialName: String) {

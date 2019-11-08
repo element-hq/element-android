@@ -24,6 +24,7 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.rx.rx
 import im.vector.riotx.ActiveSessionDataSource
+import im.vector.riotx.core.platform.EmptyAction
 import im.vector.riotx.core.platform.VectorViewModel
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -37,7 +38,7 @@ data class IncomingShareState(private val dummy: Boolean = false) : MvRxState
 class IncomingShareViewModel @AssistedInject constructor(@Assisted initialState: IncomingShareState,
                                                          private val sessionObservableStore: ActiveSessionDataSource,
                                                          private val shareRoomListObservableStore: ShareRoomListDataSource)
-    : VectorViewModel<IncomingShareState>(initialState) {
+    : VectorViewModel<IncomingShareState, EmptyAction>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -69,5 +70,9 @@ class IncomingShareViewModel @AssistedInject constructor(@Assisted initialState:
                     shareRoomListObservableStore.post(it)
                 }
                 .disposeOnClear()
+    }
+
+    override fun handle(action: EmptyAction) {
+        // No op
     }
 }

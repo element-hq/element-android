@@ -22,7 +22,6 @@ import android.text.Editable
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import butterknife.BindView
 import butterknife.OnClick
 import butterknife.OnTextChanged
@@ -53,11 +52,8 @@ class KeysBackupRestoreFromKeyFragment @Inject constructor()
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(KeysBackupRestoreFromKeyViewModel::class.java)
-        sharedViewModel = activity?.run {
-            ViewModelProviders.of(this, viewModelFactory).get(KeysBackupRestoreSharedViewModel::class.java)
-        } ?: throw Exception("Invalid Activity")
-
+        viewModel = fragmentViewModelProvider.get(KeysBackupRestoreFromKeyViewModel::class.java)
+        sharedViewModel = activityViewModelProvider.get(KeysBackupRestoreSharedViewModel::class.java)
         mKeyTextEdit.setText(viewModel.recoveryCode.value)
         mKeyTextEdit.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {

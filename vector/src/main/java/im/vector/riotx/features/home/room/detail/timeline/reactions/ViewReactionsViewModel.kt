@@ -16,20 +16,16 @@
 
 package im.vector.riotx.features.home.room.detail.timeline.reactions
 
-import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
+import com.airbnb.mvrx.*
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.ReactionAggregatedSummary
 import im.vector.matrix.rx.RxRoom
 import im.vector.matrix.rx.unwrap
-import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.date.VectorDateFormatter
+import im.vector.riotx.core.platform.EmptyAction
+import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.features.home.room.detail.timeline.action.TimelineEventFragmentArgs
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -55,15 +51,15 @@ data class ReactionInfo(
  * Used to display the list of members that reacted to a given event
  */
 class ViewReactionsViewModel @AssistedInject constructor(@Assisted
-                                                        initialState: DisplayReactionsViewState,
+                                                         initialState: DisplayReactionsViewState,
                                                          private val session: Session,
                                                          private val dateFormatter: VectorDateFormatter
-) : VectorViewModel<DisplayReactionsViewState>(initialState) {
+) : VectorViewModel<DisplayReactionsViewState, EmptyAction>(initialState) {
 
     private val roomId = initialState.roomId
     private val eventId = initialState.eventId
     private val room = session.getRoom(roomId)
-                       ?: throw IllegalStateException("Shouldn't use this ViewModel without a room")
+            ?: throw IllegalStateException("Shouldn't use this ViewModel without a room")
 
     @AssistedInject.Factory
     interface Factory {
@@ -103,7 +99,7 @@ class ViewReactionsViewModel @AssistedInject constructor(@Assisted
                     .fromIterable(summary.sourceEvents)
                     .map {
                         val event = room.getTimeLineEvent(it)
-                                    ?: throw RuntimeException("Your eventId is not valid")
+                                ?: throw RuntimeException("Your eventId is not valid")
                         ReactionInfo(
                                 event.root.eventId!!,
                                 summary.key,
@@ -114,5 +110,9 @@ class ViewReactionsViewModel @AssistedInject constructor(@Assisted
                         )
                     }
         }.toList()
+    }
+
+    override fun handle(action: EmptyAction) {
+        // No op
     }
 }

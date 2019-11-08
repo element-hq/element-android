@@ -23,7 +23,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.ScrollView
 import androidx.core.view.size
-import androidx.lifecycle.ViewModelProviders
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.chip.Chip
@@ -49,11 +48,11 @@ class CreateDirectRoomKnownUsersFragment @Inject constructor(
     override fun getMenuRes() = R.menu.vector_create_direct_room
 
     private val viewModel: CreateDirectRoomViewModel by activityViewModel()
-    private lateinit var navigationViewModel: CreateDirectRoomNavigationViewModel
+    private lateinit var sharedActionViewModel: CreateDirectRoomSharedActionViewModel
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        navigationViewModel = ViewModelProviders.of(requireActivity(), viewModelFactory).get(CreateDirectRoomNavigationViewModel::class.java)
+        sharedActionViewModel = activityViewModelProvider.get(CreateDirectRoomSharedActionViewModel::class.java)
         vectorBaseActivity.setSupportActionBar(createDirectRoomToolbar)
         setupRecyclerView()
         setupFilterView()
@@ -79,7 +78,7 @@ class CreateDirectRoomKnownUsersFragment @Inject constructor(
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_create_direct_room -> {
-                viewModel.handle(CreateDirectRoomActions.CreateRoomAndInviteSelectedUsers)
+                viewModel.handle(CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers)
                 true
             }
             else                           ->
@@ -89,7 +88,7 @@ class CreateDirectRoomKnownUsersFragment @Inject constructor(
 
     private fun setupAddByMatrixIdView() {
         addByMatrixId.setOnClickListener {
-            navigationViewModel.post(CreateDirectRoomActivity.Navigation.UsersDirectory)
+            sharedActionViewModel.post(CreateDirectRoomSharedAction.OpenUsersDirectory)
         }
     }
 
@@ -108,9 +107,9 @@ class CreateDirectRoomKnownUsersFragment @Inject constructor(
                 .subscribe { text ->
                     val filterValue = text.trim()
                     val action = if (filterValue.isBlank()) {
-                        CreateDirectRoomActions.ClearFilterKnownUsers
+                        CreateDirectRoomAction.ClearFilterKnownUsers
                     } else {
-                        CreateDirectRoomActions.FilterKnownUsers(filterValue.toString())
+                        CreateDirectRoomAction.FilterKnownUsers(filterValue.toString())
                     }
                     viewModel.handle(action)
                 }
@@ -157,7 +156,7 @@ class CreateDirectRoomKnownUsersFragment @Inject constructor(
         chip.isCloseIconVisible = true
         chipGroup.addView(chip)
         chip.setOnCloseIconClickListener {
-            viewModel.handle(CreateDirectRoomActions.RemoveSelectedUser(user))
+            viewModel.handle(CreateDirectRoomAction.RemoveSelectedUser(user))
         }
         chipGroupScrollView.post {
             chipGroupScrollView.fullScroll(ScrollView.FOCUS_DOWN)
@@ -166,6 +165,6 @@ class CreateDirectRoomKnownUsersFragment @Inject constructor(
 
     override fun onItemClick(user: User) {
         view?.hideKeyboard()
-        viewModel.handle(CreateDirectRoomActions.SelectUser(user))
+        viewModel.handle(CreateDirectRoomAction.SelectUser(user))
     }
 }
