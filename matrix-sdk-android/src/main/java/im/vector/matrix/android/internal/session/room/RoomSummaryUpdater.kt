@@ -21,6 +21,7 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomTopicContent
+import im.vector.matrix.android.internal.database.mapper.ContentMapper
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.EventEntityFields
@@ -65,8 +66,10 @@ internal class RoomSummaryUpdater @Inject constructor(@UserId private val userId
                roomId: String,
                membership: Membership? = null,
                roomSummary: RoomSyncSummary? = null,
-               unreadNotifications: RoomSyncUnreadNotifications? = null) {
-        val roomSummaryEntity = RoomSummaryEntity.where(realm, roomId).findFirst() ?: realm.createObject(roomId)
+               unreadNotifications: RoomSyncUnreadNotifications? = null,
+               updateMembers: Boolean = false) {
+        val roomSummaryEntity = RoomSummaryEntity.where(realm, roomId).findFirst()
+                                ?: realm.createObject(roomId)
 
         if (roomSummary != null) {
             if (roomSummary.heroes.isNotEmpty()) {
@@ -88,24 +91,30 @@ internal class RoomSummaryUpdater @Inject constructor(@UserId private val userId
         }
 
         val latestPreviewableEvent = TimelineEventEntity.latestEvent(realm, roomId, includesSending = true, filterTypes = PREVIEWABLE_TYPES)
-        val lastTopicEvent = EventEntity.where(realm, roomId, EventType.STATE_ROOM_TOPIC).prev()?.asDomain()
+        val lastTopicEvent = EventEntity.where(realm, roomId, EventType.STATE_ROOM_TOPIC).prev()
 
         roomSummaryEntity.hasUnreadMessages = roomSummaryEntity.notificationCount > 0
-                // avoid this call if we are sure there are unread events
-                || !isEventRead(monarchy, userId, roomId, latestPreviewableEvent?.eventId)
+                                              // avoid this call if we are sure there are unread events
+                                              || !isEventRead(monarchy, userId, roomId, latestPreviewableEvent?.eventId)
 
-        val otherRoomMembers = RoomMembers(realm, roomId)
-                .queryRoomMembersEvent()
-                .notEqualTo(EventEntityFields.STATE_KEY, userId)
-                .findAll()
-                .asSequence()
-                .map { it.stateKey }
 
         roomSummaryEntity.displayName = roomDisplayNameResolver.resolve(roomId).toString()
         roomSummaryEntity.avatarUrl = roomAvatarResolver.resolve(roomId)
-        roomSummaryEntity.topic = lastTopicEvent?.content.toModel<RoomTopicContent>()?.topic
+        roomSummaryEntity.topic = ContentMapper.map(lastTopicEvent?.content).toModel<RoomTopicContent>()?.topic
         roomSummaryEntity.latestPreviewableEvent = latestPreviewableEvent
-        roomSummaryEntity.otherMemberIds.clear()
-        roomSummaryEntity.otherMemberIds.addAll(otherRoomMembers)
+
+        if (updateMembers) {
+            val otherRoomMembers = RoomMembers(realm, roomId)
+                    .queryRoomMembersEvent()
+                    .notEqualTo(EventEntityFields.STATE_KEY, userId)
+                    .findAll()
+                    .asSequence()
+                    .map { it.stateKey }
+
+            roomSummaryEntity.otherMemberIds.clear()
+            roomSummaryEntity.otherMemberIds.addAll(otherRoomMembers)
+        }
+
+
     }
 }

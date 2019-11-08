@@ -21,6 +21,7 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.RoomAvatarContent
 import im.vector.matrix.android.api.session.room.model.RoomMember
+import im.vector.matrix.android.internal.database.mapper.ContentMapper
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.EventEntityFields
@@ -41,8 +42,8 @@ internal class RoomAvatarResolver @Inject constructor(private val monarchy: Mona
     fun resolve(roomId: String): String? {
         var res: String? = null
         monarchy.doWithRealm { realm ->
-            val roomName = EventEntity.where(realm, roomId, EventType.STATE_ROOM_AVATAR).prev()?.asDomain()
-            res = roomName?.content.toModel<RoomAvatarContent>()?.avatarUrl
+            val roomName = EventEntity.where(realm, roomId, EventType.STATE_ROOM_AVATAR).prev()
+            res = ContentMapper.map(roomName?.content).toModel<RoomAvatarContent>()?.avatarUrl
             if (!res.isNullOrEmpty()) {
                 return@doWithRealm
             }
@@ -60,6 +61,6 @@ internal class RoomAvatarResolver @Inject constructor(private val monarchy: Mona
     }
 
     private fun EventEntity?.toRoomMember(): RoomMember? {
-        return this?.asDomain()?.content?.toModel<RoomMember>()
+        return ContentMapper.map(this?.content).toModel<RoomMember>()
     }
 }

@@ -20,14 +20,20 @@ import io.realm.RealmConfiguration
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
+import timber.log.Timber
+import java.lang.RuntimeException
 
 suspend fun awaitTransaction(config: RealmConfiguration, transaction: suspend (realm: Realm) -> Unit) = withContext(Dispatchers.IO) {
     Realm.getInstance(config).use { bgRealm ->
         bgRealm.beginTransaction()
         try {
+            val start = System.currentTimeMillis()
             transaction(bgRealm)
             if (isActive) {
                 bgRealm.commitTransaction()
+                val end = System.currentTimeMillis()
+                val time = end - start
+                Timber.v("Execute transaction in $time millis")
             }
         } finally {
             if (bgRealm.isInTransaction) {
@@ -35,4 +41,5 @@ suspend fun awaitTransaction(config: RealmConfiguration, transaction: suspend (r
             }
         }
     }
+
 }

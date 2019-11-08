@@ -22,6 +22,7 @@ import im.vector.matrix.android.R
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.*
+import im.vector.matrix.android.internal.database.mapper.ContentMapper
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.EventEntityFields
@@ -56,20 +57,20 @@ internal class RoomDisplayNameResolver @Inject constructor(private val context: 
         var name: CharSequence? = null
         monarchy.doWithRealm { realm ->
             val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst()
-            val roomName = EventEntity.where(realm, roomId, EventType.STATE_ROOM_NAME).prev()?.asDomain()
-            name = roomName?.content.toModel<RoomNameContent>()?.name
+            val roomName = EventEntity.where(realm, roomId, EventType.STATE_ROOM_NAME).prev()
+            name = ContentMapper.map(roomName?.content).toModel<RoomNameContent>()?.name
             if (!name.isNullOrEmpty()) {
                 return@doWithRealm
             }
 
-            val canonicalAlias = EventEntity.where(realm, roomId, EventType.STATE_CANONICAL_ALIAS).prev()?.asDomain()
-            name = canonicalAlias?.content.toModel<RoomCanonicalAliasContent>()?.canonicalAlias
+            val canonicalAlias = EventEntity.where(realm, roomId, EventType.STATE_CANONICAL_ALIAS).prev()
+            name = ContentMapper.map(canonicalAlias?.content).toModel<RoomCanonicalAliasContent>()?.canonicalAlias
             if (!name.isNullOrEmpty()) {
                 return@doWithRealm
             }
 
-            val aliases = EventEntity.where(realm, roomId, EventType.STATE_ROOM_ALIASES).prev()?.asDomain()
-            name = aliases?.content.toModel<RoomAliasesContent>()?.aliases?.firstOrNull()
+            val aliases = EventEntity.where(realm, roomId, EventType.STATE_ROOM_ALIASES).prev()
+            name = ContentMapper.map(aliases?.content).toModel<RoomAliasesContent>()?.aliases?.firstOrNull()
             if (!name.isNullOrEmpty()) {
                 return@doWithRealm
             }
@@ -132,6 +133,6 @@ internal class RoomDisplayNameResolver @Inject constructor(private val context: 
     }
 
     private fun EventEntity?.toRoomMember(): RoomMember? {
-        return this?.asDomain()?.content?.toModel<RoomMember>()
+        return ContentMapper.map(this?.content).toModel<RoomMember>()
     }
 }
