@@ -32,9 +32,7 @@ import androidx.transition.TransitionManager
 import butterknife.BindView
 import butterknife.ButterKnife
 import im.vector.riotx.R
-import im.vector.riotx.features.home.room.detail.RoomDetailActions
 import kotlinx.android.synthetic.main.merge_composer_layout.view.*
-import timber.log.Timber
 
 /**
  * Encapsulate the timeline composer UX.

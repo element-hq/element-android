@@ -15,17 +15,20 @@
  */
 package im.vector.riotx.features.home.room.list.actions
 
-import com.airbnb.mvrx.*
+import com.airbnb.mvrx.FragmentViewModelContext
+import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
+import im.vector.riotx.core.platform.EmptyAction
 import im.vector.riotx.core.platform.VectorViewModel
 
 class RoomListQuickActionsViewModel @AssistedInject constructor(@Assisted initialState: RoomListQuickActionsState,
                                                                 session: Session
-) : VectorViewModel<RoomListQuickActionsState>(initialState) {
+) : VectorViewModel<RoomListQuickActionsState, EmptyAction>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -64,5 +67,9 @@ class RoomListQuickActionsViewModel @AssistedInject constructor(@Assisted initia
                 .execute {
                     copy(roomSummary = it)
                 }
+    }
+
+    override fun handle(action: EmptyAction) {
+        // No op
     }
 }

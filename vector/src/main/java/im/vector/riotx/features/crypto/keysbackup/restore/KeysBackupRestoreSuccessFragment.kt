@@ -17,7 +17,6 @@ package im.vector.riotx.features.crypto.keysbackup.restore
 
 import android.os.Bundle
 import android.widget.TextView
-import androidx.lifecycle.ViewModelProviders
 import butterknife.BindView
 import butterknife.OnClick
 import im.vector.riotx.R
@@ -38,9 +37,7 @@ class KeysBackupRestoreSuccessFragment @Inject constructor() : VectorBaseFragmen
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        sharedViewModel = activity?.run {
-            ViewModelProviders.of(this, viewModelFactory).get(KeysBackupRestoreSharedViewModel::class.java)
-        } ?: throw Exception("Invalid Activity")
+        sharedViewModel = activityViewModelProvider.get(KeysBackupRestoreSharedViewModel::class.java)
 
         sharedViewModel.importKeyResult?.let {
             val part1 = resources.getQuantityString(R.plurals.keys_backup_restore_success_description_part1,

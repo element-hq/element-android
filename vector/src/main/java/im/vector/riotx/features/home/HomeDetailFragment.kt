@@ -20,7 +20,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.core.view.forEachIndexed
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
@@ -54,7 +53,7 @@ class HomeDetailFragment @Inject constructor(
     private val unreadCounterBadgeViews = arrayListOf<UnreadCounterBadgeView>()
 
     private val viewModel: HomeDetailViewModel by fragmentViewModel()
-    private lateinit var navigationViewModel: HomeNavigationViewModel
+    private lateinit var sharedActionViewModel: HomeSharedActionViewModel
 
     override fun getLayoutResId(): Int {
         return R.layout.fragment_home_detail
@@ -63,7 +62,7 @@ class HomeDetailFragment @Inject constructor(
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        navigationViewModel = ViewModelProviders.of(requireActivity()).get(HomeNavigationViewModel::class.java)
+        sharedActionViewModel = activityViewModelProvider.get(HomeSharedActionViewModel::class.java)
 
         setupBottomNavigationView()
         setupToolbar()
@@ -91,9 +90,7 @@ class HomeDetailFragment @Inject constructor(
     private fun setupKeysBackupBanner() {
         // Keys backup banner
         // Use the SignOutViewModel, it observe the keys backup state and this is what we need here
-        val model = ViewModelProviders.of(this, viewModelFactory).get(SignOutViewModel::class.java)
-
-        model.init(session)
+        val model = fragmentViewModelProvider.get(SignOutViewModel::class.java)
 
         model.keysBackupState.observe(viewLifecycleOwner, Observer { keysBackupState ->
             when (keysBackupState) {
@@ -129,7 +126,7 @@ class HomeDetailFragment @Inject constructor(
         }
         groupToolbar.title = ""
         groupToolbarAvatarImageView.setOnClickListener {
-            navigationViewModel.post(HomeActivity.Navigation.OpenDrawer)
+            sharedActionViewModel.post(HomeActivitySharedAction.OpenDrawer)
         }
     }
 
@@ -141,7 +138,7 @@ class HomeDetailFragment @Inject constructor(
                 R.id.bottom_action_rooms  -> RoomListFragment.DisplayMode.ROOMS
                 else                      -> RoomListFragment.DisplayMode.HOME
             }
-            viewModel.switchDisplayMode(displayMode)
+            viewModel.handle(HomeDetailAction.SwitchDisplayMode(displayMode))
             true
         }
 

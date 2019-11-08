@@ -27,7 +27,6 @@ import android.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.tabs.TabLayout
 import com.jakewharton.rxbinding3.widget.queryTextChanges
@@ -63,7 +62,7 @@ class EmojiReactionPickerActivity : VectorBaseActivity(),
 
     @Inject lateinit var emojiCompatFontProvider: EmojiCompatFontProvider
 
-    val searchResultViewModel: EmojiSearchResultViewModel by viewModel()
+    private val searchResultViewModel: EmojiSearchResultViewModel by viewModel()
 
     private var tabLayoutSelectionListener = object : TabLayout.OnTabSelectedListener {
         override fun onTabReselected(tab: TabLayout.Tab) {
@@ -90,7 +89,7 @@ class EmojiReactionPickerActivity : VectorBaseActivity(),
 
         tabLayout = findViewById(R.id.tabs)
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(EmojiChooserViewModel::class.java)
+        viewModel = viewModelProvider.get(EmojiChooserViewModel::class.java)
 
         viewModel.eventId = intent.getStringExtra(EXTRA_EVENT_ID)
 
@@ -201,7 +200,7 @@ class EmojiReactionPickerActivity : VectorBaseActivity(),
             tabLayout.isVisible = false
             emojiPickerWholeListFragmentContainer.isVisible = false
             emojiPickerFilteredListFragmentContainer.isVisible = true
-            searchResultViewModel.updateQuery(query)
+            searchResultViewModel.handle(EmojiSearchAction.UpdateQuery(query))
         }
     }
 

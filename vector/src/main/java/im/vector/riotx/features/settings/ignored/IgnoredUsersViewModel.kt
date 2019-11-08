@@ -25,18 +25,20 @@ import im.vector.matrix.android.api.session.user.model.User
 import im.vector.matrix.rx.rx
 import im.vector.riotx.core.extensions.postLiveEvent
 import im.vector.riotx.core.platform.VectorViewModel
+import im.vector.riotx.core.platform.VectorViewModelAction
 
 data class IgnoredUsersViewState(
         val ignoredUsers: List<User> = emptyList(),
         val unIgnoreRequest: Async<Unit> = Uninitialized
 ) : MvRxState
 
-sealed class IgnoredUsersAction {
+sealed class IgnoredUsersAction : VectorViewModelAction {
     data class UnIgnore(val userId: String) : IgnoredUsersAction()
 }
 
 class IgnoredUsersViewModel @AssistedInject constructor(@Assisted initialState: IgnoredUsersViewState,
-                                                        private val session: Session) : VectorViewModel<IgnoredUsersViewState>(initialState) {
+                                                        private val session: Session)
+    : VectorViewModel<IgnoredUsersViewState, IgnoredUsersAction>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -66,7 +68,7 @@ class IgnoredUsersViewModel @AssistedInject constructor(@Assisted initialState: 
                 }
     }
 
-    fun handle(action: IgnoredUsersAction) {
+    override fun handle(action: IgnoredUsersAction) {
         when (action) {
             is IgnoredUsersAction.UnIgnore -> handleUnIgnore(action)
         }

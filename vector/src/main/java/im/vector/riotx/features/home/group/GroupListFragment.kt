@@ -17,7 +17,6 @@
 package im.vector.riotx.features.home.group
 
 import android.os.Bundle
-import androidx.lifecycle.ViewModelProviders
 import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
@@ -26,8 +25,8 @@ import im.vector.riotx.R
 import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.platform.StateView
 import im.vector.riotx.core.platform.VectorBaseFragment
-import im.vector.riotx.features.home.HomeActivity
-import im.vector.riotx.features.home.HomeNavigationViewModel
+import im.vector.riotx.features.home.HomeSharedActionViewModel
+import im.vector.riotx.features.home.HomeActivitySharedAction
 import kotlinx.android.synthetic.main.fragment_group_list.*
 import javax.inject.Inject
 
@@ -36,20 +35,20 @@ class GroupListFragment @Inject constructor(
         private val groupController: GroupSummaryController
 ) : VectorBaseFragment(), GroupSummaryController.Callback {
 
-    private lateinit var navigationViewModel: HomeNavigationViewModel
+    private lateinit var sharedActionViewModel: HomeSharedActionViewModel
     private val viewModel: GroupListViewModel by fragmentViewModel()
 
     override fun getLayoutResId() = R.layout.fragment_group_list
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        navigationViewModel = ViewModelProviders.of(requireActivity()).get(HomeNavigationViewModel::class.java)
+        sharedActionViewModel = activityViewModelProvider.get(HomeSharedActionViewModel::class.java)
         groupController.callback = this
         stateView.contentView = groupListEpoxyRecyclerView
         groupListEpoxyRecyclerView.setController(groupController)
         viewModel.subscribe { renderState(it) }
         viewModel.openGroupLiveData.observeEvent(this) {
-            navigationViewModel.post(HomeActivity.Navigation.OpenGroup)
+            sharedActionViewModel.post(HomeActivitySharedAction.OpenGroup)
         }
     }
 
@@ -62,6 +61,6 @@ class GroupListFragment @Inject constructor(
     }
 
     override fun onGroupSelected(groupSummary: GroupSummary) {
-        viewModel.accept(GroupListActions.SelectGroup(groupSummary))
+        viewModel.handle(GroupListAction.SelectGroup(groupSummary))
     }
 }

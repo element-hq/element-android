@@ -59,14 +59,14 @@ class LoginFragment @Inject constructor() : VectorBaseFragment() {
         homeServerField.focusChanges()
                 .subscribe {
                     if (!it) {
-                        viewModel.handle(LoginActions.UpdateHomeServer(homeServerField.text.toString()))
+                        viewModel.handle(LoginAction.UpdateHomeServer(homeServerField.text.toString()))
                     }
                 }
                 .disposeOnDestroy()
 
         homeServerField.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                viewModel.handle(LoginActions.UpdateHomeServer(homeServerField.text.toString()))
+                viewModel.handle(LoginAction.UpdateHomeServer(homeServerField.text.toString()))
                 return@setOnEditorActionListener true
             }
             return@setOnEditorActionListener false
@@ -78,7 +78,7 @@ class LoginFragment @Inject constructor() : VectorBaseFragment() {
         } else {
             homeServerField.setText(ServerUrlsRepository.getDefaultHomeServerUrl(requireContext()))
         }
-        viewModel.handle(LoginActions.UpdateHomeServer(homeServerField.text.toString()))
+        viewModel.handle(LoginAction.UpdateHomeServer(homeServerField.text.toString()))
     }
 
     private fun setupNotice() {
@@ -93,7 +93,7 @@ class LoginFragment @Inject constructor() : VectorBaseFragment() {
         val login = loginField.text?.trim().toString()
         val password = passwordField.text?.trim().toString()
 
-        viewModel.handle(LoginActions.Login(login, password))
+        viewModel.handle(LoginAction.Login(login, password))
     }
 
     private fun setupAuthButton() {
@@ -114,7 +114,7 @@ class LoginFragment @Inject constructor() : VectorBaseFragment() {
     }
 
     private fun openSso() {
-        viewModel.handle(LoginActions.NavigateTo(LoginActivity.Navigation.OpenSsoLoginFallback))
+        viewModel.handle(LoginAction.NavigateTo(LoginActivity.Navigation.OpenSsoLoginFallback))
     }
 
     private fun setupPasswordReveal() {

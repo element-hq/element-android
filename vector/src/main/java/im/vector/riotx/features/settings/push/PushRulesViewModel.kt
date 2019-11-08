@@ -20,13 +20,15 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import im.vector.matrix.android.api.pushrules.rest.PushRule
 import im.vector.riotx.core.di.HasScreenInjector
+import im.vector.riotx.core.platform.EmptyAction
 import im.vector.riotx.core.platform.VectorViewModel
 
 data class PushRulesViewState(
         val rules: List<PushRule> = emptyList()
 ) : MvRxState
 
-class PushRulesViewModel(initialState: PushRulesViewState) : VectorViewModel<PushRulesViewState>(initialState) {
+class PushRulesViewModel(initialState: PushRulesViewState)
+    : VectorViewModel<PushRulesViewState, EmptyAction>(initialState) {
 
     companion object : MvRxViewModelFactory<PushRulesViewModel, PushRulesViewState> {
 
@@ -35,5 +37,9 @@ class PushRulesViewModel(initialState: PushRulesViewState) : VectorViewModel<Pus
             val rules = session.getPushRules()
             return PushRulesViewState(rules)
         }
+    }
+
+    override fun handle(action: EmptyAction) {
+        // No op
     }
 }

@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.home.createdirect
+package im.vector.riotx.features.home
 
-import androidx.lifecycle.ViewModel
-import im.vector.riotx.core.utils.PublishDataSource
-import im.vector.riotx.core.utils.MutableDataSource
+import im.vector.riotx.core.platform.VectorViewModelAction
+import im.vector.riotx.features.home.room.list.RoomListFragment
 
-class CreateDirectRoomNavigationViewModel(private val dataSource: MutableDataSource<CreateDirectRoomActivity.Navigation> = PublishDataSource())
-    : ViewModel(), MutableDataSource<CreateDirectRoomActivity.Navigation> by dataSource
+sealed class HomeDetailAction : VectorViewModelAction {
+    data class SwitchDisplayMode(val displayMode: RoomListFragment.DisplayMode) : HomeDetailAction()
+}

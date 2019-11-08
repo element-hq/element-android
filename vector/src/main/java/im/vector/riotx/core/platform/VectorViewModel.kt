@@ -23,7 +23,7 @@ import im.vector.riotx.core.utils.LiveEvent
 import io.reactivex.Observable
 import io.reactivex.Single
 
-abstract class VectorViewModel<S : MvRxState>(initialState: S)
+abstract class VectorViewModel<S : MvRxState, A : VectorViewModelAction>(initialState: S)
     : BaseMvRxViewModel<S>(initialState, false) {
 
     // Generic handling of any request error
@@ -52,4 +52,6 @@ abstract class VectorViewModel<S : MvRxState>(initialState: S)
                 .onErrorReturn { Fail(it) }
                 .doOnNext { setState { stateReducer(it) } }
     }
+
+    abstract fun handle(action: A)
 }

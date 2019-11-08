@@ -42,7 +42,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                                                  private val activeSessionHolder: ActiveSessionHolder,
                                                  private val pushRuleTriggerListener: PushRuleTriggerListener,
                                                  private val sessionListener: SessionListener)
-    : VectorViewModel<LoginViewState>(initialState) {
+    : VectorViewModel<LoginViewState, LoginAction>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -67,21 +67,21 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
     private var homeServerConnectionConfig: HomeServerConnectionConfig? = null
     private var currentTask: Cancelable? = null
 
-    fun handle(action: LoginActions) {
+    override fun handle(action: LoginAction) {
         when (action) {
-            is LoginActions.InitWith         -> handleInitWith(action)
-            is LoginActions.UpdateHomeServer -> handleUpdateHomeserver(action)
-            is LoginActions.Login            -> handleLogin(action)
-            is LoginActions.SsoLoginSuccess  -> handleSsoLoginSuccess(action)
-            is LoginActions.NavigateTo       -> handleNavigation(action)
+            is LoginAction.InitWith         -> handleInitWith(action)
+            is LoginAction.UpdateHomeServer -> handleUpdateHomeserver(action)
+            is LoginAction.Login            -> handleLogin(action)
+            is LoginAction.SsoLoginSuccess  -> handleSsoLoginSuccess(action)
+            is LoginAction.NavigateTo       -> handleNavigation(action)
         }
     }
 
-    private fun handleInitWith(action: LoginActions.InitWith) {
+    private fun handleInitWith(action: LoginAction.InitWith) {
         loginConfig = action.loginConfig
     }
 
-    private fun handleLogin(action: LoginActions.Login) {
+    private fun handleLogin(action: LoginAction.Login) {
         val homeServerConnectionConfigFinal = homeServerConnectionConfig
 
         if (homeServerConnectionConfigFinal == null) {
@@ -123,7 +123,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
         }
     }
 
-    private fun handleSsoLoginSuccess(action: LoginActions.SsoLoginSuccess) {
+    private fun handleSsoLoginSuccess(action: LoginAction.SsoLoginSuccess) {
         val homeServerConnectionConfigFinal = homeServerConnectionConfig
 
         if (homeServerConnectionConfigFinal == null) {
@@ -138,7 +138,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
         }
     }
 
-    private fun handleUpdateHomeserver(action: LoginActions.UpdateHomeServer) = withState { state ->
+    private fun handleUpdateHomeserver(action: LoginAction.UpdateHomeServer) = withState { state ->
 
         var newConfig: HomeServerConnectionConfig? = null
         Try {
@@ -198,7 +198,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
         }
     }
 
-    private fun handleNavigation(action: LoginActions.NavigateTo) {
+    private fun handleNavigation(action: LoginAction.NavigateTo) {
         _navigationLiveData.postValue(LiveEvent(action.target))
     }
 

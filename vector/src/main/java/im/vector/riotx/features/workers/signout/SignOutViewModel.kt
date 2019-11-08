@@ -23,59 +23,43 @@ import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupStateListener
 import javax.inject.Inject
 
-class SignOutViewModel @Inject constructor() : ViewModel(), KeysBackupStateListener {
+class SignOutViewModel @Inject constructor(private val session: Session) : ViewModel(), KeysBackupStateListener {
     // Keys exported manually
     var keysExportedToFile = MutableLiveData<Boolean>()
 
     var keysBackupState = MutableLiveData<KeysBackupState>()
 
-    private var mxSession: Session? = null
+    init {
+        session.getKeysBackupService().addListener(this)
 
-    fun init(session: Session) {
-        if (mxSession == null) {
-            mxSession = session
-
-            mxSession?.getKeysBackupService()
-                    ?.addListener(this)
-        }
-
-        keysBackupState.value = mxSession?.getKeysBackupService()
-                ?.state
+        keysBackupState.value = session.getKeysBackupService().state
     }
 
     /**
      * Safe way to get the current KeysBackup version
      */
     fun getCurrentBackupVersion(): String {
-        return mxSession
-                       ?.getKeysBackupService()
-                       ?.currentBackupVersion
-               ?: ""
+        return session.getKeysBackupService().currentBackupVersion ?: ""
     }
 
     /**
      * Safe way to get the number of keys to backup
      */
     fun getNumberOfKeysToBackup(): Int {
-        return mxSession
-                       ?.inboundGroupSessionsCount(false)
-               ?: 0
+        return session.inboundGroupSessionsCount(false)
     }
 
     /**
      * Safe way to tell if there are more keys on the server
      */
     fun canRestoreKeys(): Boolean {
-        return mxSession
-                ?.getKeysBackupService()
-                ?.canRestoreKeys() == true
+        return session.getKeysBackupService().canRestoreKeys()
     }
 
     override fun onCleared() {
         super.onCleared()
 
-        mxSession?.getKeysBackupService()
-                ?.removeListener(this)
+        session.getKeysBackupService().removeListener(this)
     }
 
     override fun onStateChange(newState: KeysBackupState) {
@@ -84,7 +68,7 @@ class SignOutViewModel @Inject constructor() : ViewModel(), KeysBackupStateListe
 
     fun refreshRemoteStateIfNeeded() {
         if (keysBackupState.value == KeysBackupState.Disabled) {
-            mxSession?.getKeysBackupService()?.checkAndStartKeysBackup()
+            session.getKeysBackupService().checkAndStartKeysBackup()
         }
     }
 
@@ -92,13 +76,9 @@ class SignOutViewModel @Inject constructor() : ViewModel(), KeysBackupStateListe
         /**
          * The backup check on logout flow has to be displayed if there are keys in the store, and the keys backup state is not Ready
          */
-        fun doYouNeedToBeDisplayed(session: Session?): Boolean {
-            return session
-                           ?.inboundGroupSessionsCount(false)
-                   ?: 0 > 0
-                   && session
-                           ?.getKeysBackupService()
-                           ?.state != KeysBackupState.ReadyToBackUp
+        fun doYouNeedToBeDisplayed(session: Session): Boolean {
+            return session.inboundGroupSessionsCount(false) > 0
+                    && session.getKeysBackupService().state != KeysBackupState.ReadyToBackUp
         }
     }
 }

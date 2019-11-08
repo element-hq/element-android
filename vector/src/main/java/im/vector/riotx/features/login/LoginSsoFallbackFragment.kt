@@ -143,7 +143,7 @@ class LoginSsoFallbackFragment @Inject constructor() : VectorBaseFragment(), OnB
                 super.onReceivedError(view, errorCode, description, failingUrl)
 
                 // on error case, close this fragment
-                viewModel.handle(LoginActions.NavigateTo(LoginActivity.Navigation.GoBack))
+                viewModel.handle(LoginAction.NavigateTo(LoginActivity.Navigation.GoBack))
             }
 
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
@@ -253,7 +253,7 @@ class LoginSsoFallbackFragment @Inject constructor() : VectorBaseFragment(), OnB
                                                 refreshToken = null
                                         )
 
-                                        viewModel.handle(LoginActions.SsoLoginSuccess(safeCredentials))
+                                        viewModel.handle(LoginAction.SsoLoginSuccess(safeCredentials))
                                     }
                                 }
                             } catch (e: Exception) {
@@ -278,7 +278,7 @@ class LoginSsoFallbackFragment @Inject constructor() : VectorBaseFragment(), OnB
                                             refreshToken = null
                                     )
 
-                                    viewModel.handle(LoginActions.SsoLoginSuccess(credentials))
+                                    viewModel.handle(LoginAction.SsoLoginSuccess(credentials))
                                 }
                             }
                         }

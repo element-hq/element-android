@@ -16,7 +16,6 @@
 package im.vector.riotx.features.reactions
 
 import android.os.Bundle
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseFragment
@@ -30,9 +29,7 @@ class EmojiChooserFragment @Inject constructor() : VectorBaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = activity?.run {
-            ViewModelProviders.of(this, viewModelFactory).get(EmojiChooserViewModel::class.java)
-        } ?: throw Exception("Invalid Activity")
+        viewModel = activityViewModelProvider.get(EmojiChooserViewModel::class.java)
         viewModel.initWithContext(context!!)
         (view as? RecyclerView)?.let {
             it.adapter = viewModel.adapter

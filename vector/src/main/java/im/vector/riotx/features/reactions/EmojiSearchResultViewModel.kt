@@ -26,17 +26,23 @@ data class EmojiSearchResultViewState(
 ) : MvRxState
 
 class EmojiSearchResultViewModel(val dataSource: EmojiDataSource, initialState: EmojiSearchResultViewState)
-    : VectorViewModel<EmojiSearchResultViewState>(initialState) {
+    : VectorViewModel<EmojiSearchResultViewState, EmojiSearchAction>(initialState) {
 
-    fun updateQuery(queryString: String) {
+    override fun handle(action: EmojiSearchAction) {
+        when (action) {
+            is EmojiSearchAction.UpdateQuery -> updateQuery(action)
+        }
+    }
+
+    private fun updateQuery(action: EmojiSearchAction.UpdateQuery) {
         setState {
             copy(
-                    query = queryString,
+                    query = action.queryString,
                     results = dataSource.rawData?.emojis?.toList()
                             ?.map { it.second }
                             ?.filter {
-                                it.name.contains(queryString, true)
-                                        || queryString.split("\\s".toRegex()).fold(true, { prev, q ->
+                                it.name.contains(action.queryString, true)
+                                        || action.queryString.split("\\s".toRegex()).fold(true, { prev, q ->
                                     prev && (it.keywords?.any { it.contains(q, true) } ?: false)
                                 })
                             } ?: emptyList()

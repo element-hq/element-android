@@ -13,15 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.riotx.features.home.room.detail.timeline.action
 
-import androidx.lifecycle.ViewModel
-import im.vector.riotx.core.utils.PublishDataSource
-import im.vector.riotx.core.utils.MutableDataSource
+package im.vector.riotx.features.roomdirectory.roompreview
 
-/**
- * Activity shared view model to handle message actions
- */
-class MessageActionsDispatcher constructor(
-        private val dataSource: MutableDataSource<SimpleAction> = PublishDataSource()
-) : ViewModel(), MutableDataSource<SimpleAction> by dataSource
+import im.vector.riotx.core.platform.VectorViewModelAction
+
+sealed class RoomPreviewAction : VectorViewModelAction {
+    object Join : RoomPreviewAction()
+}

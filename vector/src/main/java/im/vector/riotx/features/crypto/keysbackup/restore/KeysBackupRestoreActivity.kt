@@ -21,7 +21,6 @@ import android.content.Intent
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.addFragmentToBackstack
 import im.vector.riotx.core.extensions.observeEvent
@@ -43,7 +42,7 @@ class KeysBackupRestoreActivity : SimpleFragmentActivity() {
 
     override fun initUiAndData() {
         super.initUiAndData()
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(KeysBackupRestoreSharedViewModel::class.java)
+        viewModel = viewModelProvider.get(KeysBackupRestoreSharedViewModel::class.java)
         viewModel.initSession(session)
         viewModel.keyVersionResult.observe(this, Observer { keyVersion ->
 

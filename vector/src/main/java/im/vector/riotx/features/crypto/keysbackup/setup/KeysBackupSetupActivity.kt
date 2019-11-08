@@ -21,7 +21,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.riotx.R
 import im.vector.riotx.core.dialogs.ExportKeysDialog
@@ -43,7 +42,7 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
             replaceFragment(R.id.container, KeysBackupSetupStep1Fragment::class.java)
         }
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(KeysBackupSetupSharedViewModel::class.java)
+        viewModel = viewModelProvider.get(KeysBackupSetupSharedViewModel::class.java)
         viewModel.showManualExport.value = intent.getBooleanExtra(EXTRA_SHOW_MANUAL_EXPORT, false)
         viewModel.initSession(session)
 

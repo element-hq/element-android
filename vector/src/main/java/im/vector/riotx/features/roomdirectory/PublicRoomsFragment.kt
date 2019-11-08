@@ -19,7 +19,6 @@ package im.vector.riotx.features.roomdirectory
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.epoxy.EpoxyVisibilityTracker
 import com.airbnb.mvrx.activityViewModel
@@ -47,7 +46,7 @@ class PublicRoomsFragment @Inject constructor(
 ) : VectorBaseFragment(), PublicRoomsController.Callback {
 
     private val viewModel: RoomDirectoryViewModel by activityViewModel()
-    private lateinit var navigationViewModel: RoomDirectoryNavigationViewModel
+    private lateinit var sharedActionViewModel: RoomDirectorySharedActionViewModel
 
     override fun getLayoutResId() = R.layout.fragment_public_rooms
 
@@ -66,12 +65,12 @@ class PublicRoomsFragment @Inject constructor(
         publicRoomsFilter.queryTextChanges()
                 .debounce(500, TimeUnit.MILLISECONDS)
                 .subscribeBy {
-                    viewModel.filterWith(it.toString())
+                    viewModel.handle(RoomDirectoryAction.FilterWith(it.toString()))
                 }
                 .disposeOnDestroy()
 
         publicRoomsCreateNewRoom.setOnClickListener {
-            navigationViewModel.post(RoomDirectoryActivity.Navigation.CreateRoom)
+            sharedActionViewModel.post(RoomDirectorySharedAction.CreateRoom)
         }
 
         viewModel.joinRoomErrorLiveData.observeEvent(this) { throwable ->
@@ -83,7 +82,7 @@ class PublicRoomsFragment @Inject constructor(
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_room_directory_change_protocol -> {
-                navigationViewModel.post(RoomDirectoryActivity.Navigation.ChangeProtocol)
+                sharedActionViewModel.post(RoomDirectorySharedAction.ChangeProtocol)
                 true
             }
             else                                     ->
@@ -93,7 +92,7 @@ class PublicRoomsFragment @Inject constructor(
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        navigationViewModel = ViewModelProviders.of(requireActivity()).get(RoomDirectoryNavigationViewModel::class.java)
+        sharedActionViewModel = activityViewModelProvider.get(RoomDirectorySharedActionViewModel::class.java)
         setupRecyclerView()
     }
 
@@ -130,14 +129,14 @@ class PublicRoomsFragment @Inject constructor(
 
     override fun onPublicRoomJoin(publicRoom: PublicRoom) {
         Timber.v("PublicRoomJoinClicked: $publicRoom")
-        viewModel.joinRoom(publicRoom)
+        viewModel.handle(RoomDirectoryAction.JoinRoom(publicRoom.roomId))
     }
 
     override fun loadMore() {
-        viewModel.loadMore()
+        viewModel.handle(RoomDirectoryAction.LoadMore)
     }
 
-    var initialValueSet = false
+    private var initialValueSet = false
 
     override fun invalidate() = withState(viewModel) { state ->
         if (!initialValueSet) {
