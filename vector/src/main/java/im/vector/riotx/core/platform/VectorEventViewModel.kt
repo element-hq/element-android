@@ -20,7 +20,6 @@ import androidx.lifecycle.ViewModel
 import im.vector.riotx.core.utils.MutableDataSource
 import im.vector.riotx.core.utils.PublishDataSource
 
-
 interface VectorSharedAction
 
 /**
