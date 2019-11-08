@@ -32,18 +32,11 @@ import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.addFragment
 import im.vector.riotx.core.extensions.addFragmentToBackstack
 import im.vector.riotx.core.platform.SimpleFragmentActivity
-import im.vector.riotx.core.platform.VectorAction
 import im.vector.riotx.core.platform.WaitingViewData
 import kotlinx.android.synthetic.main.activity.*
 import javax.inject.Inject
 
 class CreateDirectRoomActivity : SimpleFragmentActivity() {
-
-    sealed class CreateDirectRoomAction : VectorAction {
-        object OpenUsersDirectory : CreateDirectRoomAction()
-        object Close : CreateDirectRoomAction()
-        object GoBack : CreateDirectRoomAction()
-    }
 
     private val viewModel: CreateDirectRoomViewModel by viewModel()
     private lateinit var actionViewModel: CreateDirectRoomActionViewModel

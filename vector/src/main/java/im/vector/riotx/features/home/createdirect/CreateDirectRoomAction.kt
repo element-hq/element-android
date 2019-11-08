@@ -14,8 +14,12 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.roomdirectory
+package im.vector.riotx.features.home.createdirect
 
-import im.vector.riotx.core.platform.VectorActionViewModel
+import im.vector.riotx.core.platform.VectorAction
 
-class RoomDirectoryActionViewModel : VectorActionViewModel<RoomDirectoryAction>()
+sealed class CreateDirectRoomAction : VectorAction {
+    object OpenUsersDirectory : CreateDirectRoomAction()
+    object Close : CreateDirectRoomAction()
+    object GoBack : CreateDirectRoomAction()
+}

@@ -18,4 +18,4 @@ package im.vector.riotx.features.home.createdirect
 
 import im.vector.riotx.core.platform.VectorActionViewModel
 
-class CreateDirectRoomActionViewModel : VectorActionViewModel<CreateDirectRoomActivity.CreateDirectRoomAction>()
+class CreateDirectRoomActionViewModel : VectorActionViewModel<CreateDirectRoomAction>()

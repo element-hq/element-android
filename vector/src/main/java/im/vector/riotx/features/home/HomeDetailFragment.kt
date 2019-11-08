@@ -129,7 +129,7 @@ class HomeDetailFragment @Inject constructor(
         }
         groupToolbar.title = ""
         groupToolbarAvatarImageView.setOnClickListener {
-            actionViewModel.post(HomeActivity.HomeActivityAction.OpenDrawer)
+            actionViewModel.post(HomeActivityAction.OpenDrawer)
         }
     }
 

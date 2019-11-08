@@ -27,8 +27,8 @@ import com.airbnb.mvrx.withState
 import im.vector.matrix.android.api.session.room.model.thirdparty.RoomDirectoryData
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseFragment
+import im.vector.riotx.features.roomdirectory.RoomDirectoryAction
 import im.vector.riotx.features.roomdirectory.RoomDirectoryActionViewModel
-import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
 import im.vector.riotx.features.roomdirectory.RoomDirectoryViewModel
 import kotlinx.android.synthetic.main.fragment_room_directory_picker.*
 import timber.log.Timber
@@ -88,7 +88,7 @@ class RoomDirectoryPickerFragment @Inject constructor(val roomDirectoryPickerVie
         Timber.v("onRoomDirectoryClicked: $roomDirectoryData")
         viewModel.setRoomDirectoryData(roomDirectoryData)
 
-        actionViewModel.post(RoomDirectoryActivity.RoomDirectoryAction.Back)
+        actionViewModel.post(RoomDirectoryAction.Back)
     }
 
     override fun retry() {

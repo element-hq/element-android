@@ -27,7 +27,7 @@ import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.platform.StateView
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.home.HomeActionViewModel
-import im.vector.riotx.features.home.HomeActivity
+import im.vector.riotx.features.home.HomeActivityAction
 import kotlinx.android.synthetic.main.fragment_group_list.*
 import javax.inject.Inject
 
@@ -49,7 +49,7 @@ class GroupListFragment @Inject constructor(
         groupListEpoxyRecyclerView.setController(groupController)
         viewModel.subscribe { renderState(it) }
         viewModel.openGroupLiveData.observeEvent(this) {
-            actionViewModel.post(HomeActivity.HomeActivityAction.OpenGroup)
+            actionViewModel.post(HomeActivityAction.OpenGroup)
         }
     }
 

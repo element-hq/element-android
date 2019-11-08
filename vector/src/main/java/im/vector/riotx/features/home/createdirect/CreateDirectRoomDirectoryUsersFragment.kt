@@ -70,7 +70,7 @@ class CreateDirectRoomDirectoryUsersFragment @Inject constructor(
 
     private fun setupCloseView() {
         createDirectRoomClose.setOnClickListener {
-            actionViewModel.post(CreateDirectRoomActivity.CreateDirectRoomAction.GoBack)
+            actionViewModel.post(CreateDirectRoomAction.GoBack)
         }
     }
 
@@ -81,7 +81,7 @@ class CreateDirectRoomDirectoryUsersFragment @Inject constructor(
     override fun onItemClick(user: User) {
         view?.hideKeyboard()
         viewModel.handle(CreateDirectRoomActions.SelectUser(user))
-        actionViewModel.post(CreateDirectRoomActivity.CreateDirectRoomAction.GoBack)
+        actionViewModel.post(CreateDirectRoomAction.GoBack)
     }
 
     override fun retryDirectoryUsersRequest() {

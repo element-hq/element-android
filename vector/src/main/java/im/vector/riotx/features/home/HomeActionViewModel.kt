@@ -18,4 +18,4 @@ package im.vector.riotx.features.home
 
 import im.vector.riotx.core.platform.VectorActionViewModel
 
-class HomeActionViewModel : VectorActionViewModel<HomeActivity.HomeActivityAction>()
+class HomeActionViewModel : VectorActionViewModel<HomeActivityAction>()

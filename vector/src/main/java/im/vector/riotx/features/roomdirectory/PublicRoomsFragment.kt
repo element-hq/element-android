@@ -71,7 +71,7 @@ class PublicRoomsFragment @Inject constructor(
                 .disposeOnDestroy()
 
         publicRoomsCreateNewRoom.setOnClickListener {
-            actionViewModel.post(RoomDirectoryActivity.RoomDirectoryAction.CreateRoom)
+            actionViewModel.post(RoomDirectoryAction.CreateRoom)
         }
 
         viewModel.joinRoomErrorLiveData.observeEvent(this) { throwable ->
@@ -83,7 +83,7 @@ class PublicRoomsFragment @Inject constructor(
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_room_directory_change_protocol -> {
-                actionViewModel.post(RoomDirectoryActivity.RoomDirectoryAction.ChangeProtocol)
+                actionViewModel.post(RoomDirectoryAction.ChangeProtocol)
                 true
             }
             else                                     ->

@@ -33,7 +33,6 @@ import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.extensions.replaceFragment
 import im.vector.riotx.core.platform.ToolbarConfigurable
-import im.vector.riotx.core.platform.VectorAction
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.pushers.PushersManager
 import im.vector.riotx.features.disclaimer.showDisclaimerDialog
@@ -47,12 +46,6 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
-
-    // Supported navigation actions for this Activity
-    sealed class HomeActivityAction : VectorAction {
-        object OpenDrawer : HomeActivityAction()
-        object OpenGroup : HomeActivityAction()
-    }
 
     private lateinit var actionViewModel: HomeActionViewModel
 

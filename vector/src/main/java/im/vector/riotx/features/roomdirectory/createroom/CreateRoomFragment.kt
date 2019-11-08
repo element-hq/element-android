@@ -25,7 +25,7 @@ import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseFragment
-import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
+import im.vector.riotx.features.roomdirectory.RoomDirectoryAction
 import im.vector.riotx.features.roomdirectory.RoomDirectoryActionViewModel
 import kotlinx.android.synthetic.main.fragment_create_room.*
 import timber.log.Timber
@@ -46,7 +46,7 @@ class CreateRoomFragment @Inject constructor(private val createRoomController: C
         actionViewModel = ViewModelProviders.of(requireActivity()).get(RoomDirectoryActionViewModel::class.java)
         setupRecyclerView()
         createRoomClose.setOnClickListener {
-            actionViewModel.post(RoomDirectoryActivity.RoomDirectoryAction.Back)
+            actionViewModel.post(RoomDirectoryAction.Back)
         }
     }
 
@@ -93,7 +93,7 @@ class CreateRoomFragment @Inject constructor(private val createRoomController: C
             // Navigate to freshly created room
             navigator.openRoom(requireActivity(), async())
 
-            actionViewModel.post(RoomDirectoryActivity.RoomDirectoryAction.Close)
+            actionViewModel.post(RoomDirectoryAction.Close)
         } else {
             // Populate list with Epoxy
             createRoomController.setData(state)

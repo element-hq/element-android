@@ -16,6 +16,14 @@
 
 package im.vector.riotx.features.roomdirectory
 
-import im.vector.riotx.core.platform.VectorActionViewModel
+import im.vector.riotx.core.platform.VectorAction
 
-class RoomDirectoryActionViewModel : VectorActionViewModel<RoomDirectoryAction>()
+/**
+ * Supported navigation actions for [RoomDirectoryActivity]
+ */
+sealed class RoomDirectoryAction : VectorAction {
+    object Back : RoomDirectoryAction()
+    object CreateRoom : RoomDirectoryAction()
+    object Close : RoomDirectoryAction()
+    object ChangeProtocol : RoomDirectoryAction()
+}

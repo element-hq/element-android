@@ -14,8 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.roomdirectory
+package im.vector.riotx.features.home
 
-import im.vector.riotx.core.platform.VectorActionViewModel
+import im.vector.riotx.core.platform.VectorAction
 
-class RoomDirectoryActionViewModel : VectorActionViewModel<RoomDirectoryAction>()
+/**
+ * Supported navigation actions for [HomeActivity]
+ */
+sealed class HomeActivityAction : VectorAction {
+    object OpenDrawer : HomeActivityAction()
+    object OpenGroup : HomeActivityAction()
+}

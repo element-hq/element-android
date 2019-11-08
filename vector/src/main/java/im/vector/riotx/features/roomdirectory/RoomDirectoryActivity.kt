@@ -25,7 +25,6 @@ import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.addFragment
 import im.vector.riotx.core.extensions.addFragmentToBackstack
-import im.vector.riotx.core.platform.VectorAction
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomFragment
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomViewModel
@@ -33,14 +32,6 @@ import im.vector.riotx.features.roomdirectory.picker.RoomDirectoryPickerFragment
 import javax.inject.Inject
 
 class RoomDirectoryActivity : VectorBaseActivity() {
-
-    // Supported navigation actions for this Activity
-    sealed class RoomDirectoryAction : VectorAction {
-        object Back : RoomDirectoryAction()
-        object CreateRoom : RoomDirectoryAction()
-        object Close : RoomDirectoryAction()
-        object ChangeProtocol : RoomDirectoryAction()
-    }
 
     @Inject lateinit var createRoomViewModelFactory: CreateRoomViewModel.Factory
     @Inject lateinit var roomDirectoryViewModelFactory: RoomDirectoryViewModel.Factory

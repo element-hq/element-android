@@ -26,7 +26,7 @@ import im.vector.riotx.R
 import im.vector.riotx.core.extensions.addFragment
 import im.vector.riotx.core.platform.ToolbarConfigurable
 import im.vector.riotx.core.platform.VectorBaseActivity
-import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
+import im.vector.riotx.features.roomdirectory.RoomDirectoryAction
 import im.vector.riotx.features.roomdirectory.RoomDirectoryActionViewModel
 import javax.inject.Inject
 
@@ -59,8 +59,8 @@ class CreateRoomActivity : VectorBaseActivity(), ToolbarConfigurable {
         actionViewModel.observe()
                 .subscribe { navigation ->
                     when (navigation) {
-                        is RoomDirectoryActivity.RoomDirectoryAction.Back,
-                        is RoomDirectoryActivity.RoomDirectoryAction.Close -> finish()
+                        is RoomDirectoryAction.Back,
+                        is RoomDirectoryAction.Close -> finish()
                     }
                 }
                 .disposeOnDestroy()
