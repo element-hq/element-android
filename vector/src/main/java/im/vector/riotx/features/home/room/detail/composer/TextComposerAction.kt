@@ -18,6 +18,6 @@ package im.vector.riotx.features.home.room.detail.composer
 
 import im.vector.riotx.core.platform.VectorViewModelAction
 
-sealed class TextComposerActions : VectorViewModelAction {
-    data class QueryUsers(val query: CharSequence?) : TextComposerActions()
+sealed class TextComposerAction : VectorViewModelAction {
+    data class QueryUsers(val query: CharSequence?) : TextComposerAction()
 }

@@ -91,7 +91,7 @@ import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.NavigateToRoomInterceptor
 import im.vector.riotx.features.home.PermalinkHandler
 import im.vector.riotx.features.home.getColorFromUserId
-import im.vector.riotx.features.home.room.detail.composer.TextComposerActions
+import im.vector.riotx.features.home.room.detail.composer.TextComposerAction
 import im.vector.riotx.features.home.room.detail.composer.TextComposerView
 import im.vector.riotx.features.home.room.detail.composer.TextComposerViewModel
 import im.vector.riotx.features.home.room.detail.composer.TextComposerViewState
@@ -278,8 +278,8 @@ class RoomDetailFragment @Inject constructor(
 
         if (savedInstanceState == null) {
             when (val sharedData = roomDetailArgs.sharedData) {
-                is SharedData.Text        -> roomDetailViewModel.handle(RoomDetailActions.SendMessage(sharedData.text, false))
-                is SharedData.Attachments -> roomDetailViewModel.handle(RoomDetailActions.SendMedia(sharedData.attachmentData))
+                is SharedData.Text        -> roomDetailViewModel.handle(RoomDetailAction.SendMessage(sharedData.text, false))
+                is SharedData.Attachments -> roomDetailViewModel.handle(RoomDetailAction.SendMedia(sharedData.attachmentData))
                 null                      -> Timber.v("No share data to process")
             }
         }
@@ -323,7 +323,7 @@ class RoomDetailFragment @Inject constructor(
     private fun setupNotificationView() {
         notificationAreaView.delegate = object : NotificationAreaView.Delegate {
             override fun onTombstoneEventClicked(tombstoneEvent: Event) {
-                roomDetailViewModel.handle(RoomDetailActions.HandleTombstoneEvent(tombstoneEvent))
+                roomDetailViewModel.handle(RoomDetailAction.HandleTombstoneEvent(tombstoneEvent))
             }
 
             override fun resendUnsentEvents() {
@@ -355,11 +355,11 @@ class RoomDetailFragment @Inject constructor(
             // This a temporary option during dev as it is not super stable
             // Cancel all pending actions in room queue and post a dummy
             // Then mark all sending events as undelivered
-            roomDetailViewModel.handle(RoomDetailActions.ClearSendQueue)
+            roomDetailViewModel.handle(RoomDetailAction.ClearSendQueue)
             return true
         }
         if (item.itemId == R.id.resend_all) {
-            roomDetailViewModel.handle(RoomDetailActions.ResendAll)
+            roomDetailViewModel.handle(RoomDetailAction.ResendAll)
             return true
         }
         return super.onOptionsItemSelected(item)
@@ -427,7 +427,7 @@ class RoomDetailFragment @Inject constructor(
 
         notificationDrawerManager.setCurrentRoom(null)
 
-        roomDetailViewModel.handle(RoomDetailActions.SaveDraft(composerLayout.composerEditText.text.toString()))
+        roomDetailViewModel.handle(RoomDetailAction.SaveDraft(composerLayout.composerEditText.text.toString()))
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -440,7 +440,7 @@ class RoomDetailFragment @Inject constructor(
                     val reaction = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_REACTION_RESULT)
                             ?: return
                     // TODO check if already reacted with that?
-                    roomDetailViewModel.handle(RoomDetailActions.SendReaction(eventId, reaction))
+                    roomDetailViewModel.handle(RoomDetailAction.SendReaction(eventId, reaction))
                 }
             }
         }
@@ -498,7 +498,7 @@ class RoomDetailFragment @Inject constructor(
                 override fun performQuickReplyOnHolder(model: EpoxyModel<*>) {
                     (model as? AbsMessageItem)?.attributes?.informationData?.let {
                         val eventId = it.eventId
-                        roomDetailViewModel.handle(RoomDetailActions.EnterReplyMode(eventId, composerLayout.composerEditText.text.toString()))
+                        roomDetailViewModel.handle(RoomDetailAction.EnterReplyMode(eventId, composerLayout.composerEditText.text.toString()))
                     }
                 }
 
@@ -601,11 +601,11 @@ class RoomDetailFragment @Inject constructor(
             val textMessage = composerLayout.composerEditText.text.toString()
             if (textMessage.isNotBlank()) {
                 lockSendButton = true
-                roomDetailViewModel.handle(RoomDetailActions.SendMessage(textMessage, vectorPreferences.isMarkdownEnabled()))
+                roomDetailViewModel.handle(RoomDetailAction.SendMessage(textMessage, vectorPreferences.isMarkdownEnabled()))
             }
         }
         composerLayout.composerRelatedMessageCloseButton.setOnClickListener {
-            roomDetailViewModel.handle(RoomDetailActions.ExitSpecialMode(composerLayout.composerEditText.text.toString()))
+            roomDetailViewModel.handle(RoomDetailAction.ExitSpecialMode(composerLayout.composerEditText.text.toString()))
         }
         composerLayout.callback = object : TextComposerView.Callback {
             override fun onRichContentSelected(contentUri: Uri): Boolean {
@@ -760,13 +760,13 @@ class RoomDetailFragment @Inject constructor(
                 .setView(layout)
                 .setPositiveButton(R.string.report_content_custom_submit) { _, _ ->
                     val reason = input.text.toString()
-                    roomDetailViewModel.handle(RoomDetailActions.ReportContent(action.eventId, action.senderId, reason))
+                    roomDetailViewModel.handle(RoomDetailAction.ReportContent(action.eventId, action.senderId, reason))
                 }
                 .setNegativeButton(R.string.cancel, null)
                 .show()
     }
 
-    private fun displayRoomDetailActionResult(result: Async<RoomDetailActions>) {
+    private fun displayRoomDetailActionResult(result: Async<RoomDetailAction>) {
         when (result) {
             is Fail    -> {
                 AlertDialog.Builder(requireActivity())
@@ -777,7 +777,7 @@ class RoomDetailFragment @Inject constructor(
             }
             is Success -> {
                 when (val data = result.invoke()) {
-                    is RoomDetailActions.ReportContent -> {
+                    is RoomDetailAction.ReportContent -> {
                         when {
                             data.spam          -> {
                                 AlertDialog.Builder(requireActivity())
@@ -785,7 +785,7 @@ class RoomDetailFragment @Inject constructor(
                                         .setMessage(R.string.content_reported_as_spam_content)
                                         .setPositiveButton(R.string.ok, null)
                                         .setNegativeButton(R.string.block_user) { _, _ ->
-                                            roomDetailViewModel.handle(RoomDetailActions.IgnoreUser(data.senderId))
+                                            roomDetailViewModel.handle(RoomDetailAction.IgnoreUser(data.senderId))
                                         }
                                         .show()
                                         .withColoredButton(DialogInterface.BUTTON_NEGATIVE)
@@ -796,7 +796,7 @@ class RoomDetailFragment @Inject constructor(
                                         .setMessage(R.string.content_reported_as_inappropriate_content)
                                         .setPositiveButton(R.string.ok, null)
                                         .setNegativeButton(R.string.block_user) { _, _ ->
-                                            roomDetailViewModel.handle(RoomDetailActions.IgnoreUser(data.senderId))
+                                            roomDetailViewModel.handle(RoomDetailAction.IgnoreUser(data.senderId))
                                         }
                                         .show()
                                         .withColoredButton(DialogInterface.BUTTON_NEGATIVE)
@@ -807,7 +807,7 @@ class RoomDetailFragment @Inject constructor(
                                         .setMessage(R.string.content_reported_content)
                                         .setPositiveButton(R.string.ok, null)
                                         .setNegativeButton(R.string.block_user) { _, _ ->
-                                            roomDetailViewModel.handle(RoomDetailActions.IgnoreUser(data.senderId))
+                                            roomDetailViewModel.handle(RoomDetailAction.IgnoreUser(data.senderId))
                                         }
                                         .show()
                                         .withColoredButton(DialogInterface.BUTTON_NEGATIVE)
@@ -831,7 +831,7 @@ class RoomDetailFragment @Inject constructor(
                         showSnackWithMessage(getString(R.string.navigate_to_room_when_already_in_the_room))
                     } else {
                         // Highlight and scroll to this event
-                        roomDetailViewModel.handle(RoomDetailActions.NavigateToEvent(eventId, true))
+                        roomDetailViewModel.handle(RoomDetailAction.NavigateToEvent(eventId, true))
                     }
                     return true
                 }
@@ -859,11 +859,11 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onEventVisible(event: TimelineEvent) {
-        roomDetailViewModel.handle(RoomDetailActions.TimelineEventTurnsVisible(event))
+        roomDetailViewModel.handle(RoomDetailAction.TimelineEventTurnsVisible(event))
     }
 
     override fun onEventInvisible(event: TimelineEvent) {
-        roomDetailViewModel.handle(RoomDetailActions.TimelineEventTurnsInvisible(event))
+        roomDetailViewModel.handle(RoomDetailAction.TimelineEventTurnsInvisible(event))
     }
 
     override fun onEncryptedMessageClicked(informationData: MessageInformationData, view: View) {
@@ -899,7 +899,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onFileMessageClicked(eventId: String, messageFileContent: MessageFileContent) {
-        val action = RoomDetailActions.DownloadFile(eventId, messageFileContent)
+        val action = RoomDetailAction.DownloadFile(eventId, messageFileContent)
         // We need WRITE_EXTERNAL permission
         if (checkPermissions(PERMISSIONS_FOR_WRITING_FILES, this, PERMISSION_REQUEST_CODE_DOWNLOAD_FILE)) {
             roomDetailViewModel.handle(action)
@@ -946,7 +946,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onLoadMore(direction: Timeline.Direction) {
-        roomDetailViewModel.handle(RoomDetailActions.LoadMoreTimelineEvents(direction))
+        roomDetailViewModel.handle(RoomDetailAction.LoadMoreTimelineEvents(direction))
     }
 
     override fun onEventCellClicked(informationData: MessageInformationData, messageContent: MessageContent?, view: View) {
@@ -976,10 +976,10 @@ class RoomDetailFragment @Inject constructor(
     override fun onClickOnReactionPill(informationData: MessageInformationData, reaction: String, on: Boolean) {
         if (on) {
             // we should test the current real state of reaction on this event
-            roomDetailViewModel.handle(RoomDetailActions.SendReaction(informationData.eventId, reaction))
+            roomDetailViewModel.handle(RoomDetailAction.SendReaction(informationData.eventId, reaction))
         } else {
             // I need to redact a reaction
-            roomDetailViewModel.handle(RoomDetailActions.UndoReaction(informationData.eventId, reaction))
+            roomDetailViewModel.handle(RoomDetailAction.UndoReaction(informationData.eventId, reaction))
         }
     }
 
@@ -1027,14 +1027,14 @@ class RoomDetailFragment @Inject constructor(
             }
         }
         if (nextReadMarkerId != null) {
-            roomDetailViewModel.handle(RoomDetailActions.SetReadMarkerAction(nextReadMarkerId))
+            roomDetailViewModel.handle(RoomDetailAction.SetReadMarkerAction(nextReadMarkerId))
         }
     }
 
     // AutocompleteUserPresenter.Callback
 
     override fun onQueryUsers(query: CharSequence?) {
-        textComposerViewModel.handle(TextComposerActions.QueryUsers(query))
+        textComposerViewModel.handle(TextComposerAction.QueryUsers(query))
     }
 
     private fun handleActions(action: EventSharedAction) {
@@ -1053,7 +1053,7 @@ class RoomDetailFragment @Inject constructor(
                 showSnackWithMessage(msg, Snackbar.LENGTH_SHORT)
             }
             is EventSharedAction.Delete                     -> {
-                roomDetailViewModel.handle(RoomDetailActions.RedactAction(action.eventId, context?.getString(R.string.event_redacted_by_user_reason)))
+                roomDetailViewModel.handle(RoomDetailAction.RedactAction(action.eventId, context?.getString(R.string.event_redacted_by_user_reason)))
             }
             is EventSharedAction.Share                      -> {
                 // TODO current data communication is too limited
@@ -1110,16 +1110,16 @@ class RoomDetailFragment @Inject constructor(
             }
             is EventSharedAction.QuickReact                 -> {
                 // eventId,ClickedOn,Add
-                roomDetailViewModel.handle(RoomDetailActions.UpdateQuickReactAction(action.eventId, action.clickedOn, action.add))
+                roomDetailViewModel.handle(RoomDetailAction.UpdateQuickReactAction(action.eventId, action.clickedOn, action.add))
             }
             is EventSharedAction.Edit                       -> {
-                roomDetailViewModel.handle(RoomDetailActions.EnterEditMode(action.eventId, composerLayout.composerEditText.text.toString()))
+                roomDetailViewModel.handle(RoomDetailAction.EnterEditMode(action.eventId, composerLayout.composerEditText.text.toString()))
             }
             is EventSharedAction.Quote                      -> {
-                roomDetailViewModel.handle(RoomDetailActions.EnterQuoteMode(action.eventId, composerLayout.composerEditText.text.toString()))
+                roomDetailViewModel.handle(RoomDetailAction.EnterQuoteMode(action.eventId, composerLayout.composerEditText.text.toString()))
             }
             is EventSharedAction.Reply                      -> {
-                roomDetailViewModel.handle(RoomDetailActions.EnterReplyMode(action.eventId, composerLayout.composerEditText.text.toString()))
+                roomDetailViewModel.handle(RoomDetailAction.EnterReplyMode(action.eventId, composerLayout.composerEditText.text.toString()))
             }
             is EventSharedAction.CopyPermalink              -> {
                 val permalink = PermalinkFactory.createPermalink(roomDetailArgs.roomId, action.eventId)
@@ -1127,17 +1127,17 @@ class RoomDetailFragment @Inject constructor(
                 showSnackWithMessage(requireContext().getString(R.string.copied_to_clipboard), Snackbar.LENGTH_SHORT)
             }
             is EventSharedAction.Resend                     -> {
-                roomDetailViewModel.handle(RoomDetailActions.ResendMessage(action.eventId))
+                roomDetailViewModel.handle(RoomDetailAction.ResendMessage(action.eventId))
             }
             is EventSharedAction.Remove                     -> {
-                roomDetailViewModel.handle(RoomDetailActions.RemoveFailedEcho(action.eventId))
+                roomDetailViewModel.handle(RoomDetailAction.RemoveFailedEcho(action.eventId))
             }
             is EventSharedAction.ReportContentSpam          -> {
-                roomDetailViewModel.handle(RoomDetailActions.ReportContent(
+                roomDetailViewModel.handle(RoomDetailAction.ReportContent(
                         action.eventId, action.senderId, "This message is spam", spam = true))
             }
             is EventSharedAction.ReportContentInappropriate -> {
-                roomDetailViewModel.handle(RoomDetailActions.ReportContent(
+                roomDetailViewModel.handle(RoomDetailAction.ReportContent(
                         action.eventId, action.senderId, "This message is inappropriate", inappropriate = true))
             }
             is EventSharedAction.ReportContentCustom        -> {
@@ -1210,22 +1210,22 @@ class RoomDetailFragment @Inject constructor(
 
     override fun onAcceptInvite() {
         notificationDrawerManager.clearMemberShipNotificationForRoom(roomDetailArgs.roomId)
-        roomDetailViewModel.handle(RoomDetailActions.AcceptInvite)
+        roomDetailViewModel.handle(RoomDetailAction.AcceptInvite)
     }
 
     override fun onRejectInvite() {
         notificationDrawerManager.clearMemberShipNotificationForRoom(roomDetailArgs.roomId)
-        roomDetailViewModel.handle(RoomDetailActions.RejectInvite)
+        roomDetailViewModel.handle(RoomDetailAction.RejectInvite)
     }
 
     // JumpToReadMarkerView.Callback
 
     override fun onJumpToReadMarkerClicked(readMarkerId: String) {
-        roomDetailViewModel.handle(RoomDetailActions.NavigateToEvent(readMarkerId, false))
+        roomDetailViewModel.handle(RoomDetailAction.NavigateToEvent(readMarkerId, false))
     }
 
     override fun onClearReadMarkerClicked() {
-        roomDetailViewModel.handle(RoomDetailActions.MarkAllAsRead)
+        roomDetailViewModel.handle(RoomDetailAction.MarkAllAsRead)
     }
 
     // AttachmentTypeSelectorView.Callback
@@ -1252,7 +1252,7 @@ class RoomDetailFragment @Inject constructor(
     // AttachmentsHelper.Callback
 
     override fun onContentAttachmentsReady(attachments: List<ContentAttachmentData>) {
-        roomDetailViewModel.handle(RoomDetailActions.SendMedia(attachments))
+        roomDetailViewModel.handle(RoomDetailAction.SendMedia(attachments))
     }
 
     override fun onAttachmentsProcessFailed() {
@@ -1262,6 +1262,6 @@ class RoomDetailFragment @Inject constructor(
     override fun onContactAttachmentReady(contactAttachment: ContactAttachment) {
         super.onContactAttachmentReady(contactAttachment)
         val formattedContact = contactAttachment.toHumanReadable()
-        roomDetailViewModel.handle(RoomDetailActions.SendMessage(formattedContact, false))
+        roomDetailViewModel.handle(RoomDetailAction.SendMessage(formattedContact, false))
     }
 }

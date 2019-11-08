@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.roomdirectory
+package im.vector.riotx.features.roomdirectory.createroom
 
-import im.vector.matrix.android.api.session.room.model.thirdparty.RoomDirectoryData
 import im.vector.riotx.core.platform.VectorViewModelAction
 
-sealed class RoomDirectoryActions : VectorViewModelAction {
-    data class SetRoomDirectoryData(val roomDirectoryData: RoomDirectoryData) : RoomDirectoryActions()
-    data class FilterWith(val filter: String) : RoomDirectoryActions()
-    object LoadMore : RoomDirectoryActions()
-    data class JoinRoom(val roomId: String) : RoomDirectoryActions()
+sealed class CreateRoomAction : VectorViewModelAction {
+    data class SetName(val name: String) : CreateRoomAction()
+    data class SetIsPublic(val isPublic: Boolean) : CreateRoomAction()
+    data class SetIsInRoomDirectory(val isInRoomDirectory: Boolean) : CreateRoomAction()
+    object Create : CreateRoomAction()
 }

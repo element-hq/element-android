@@ -66,7 +66,7 @@ class PublicRoomsFragment @Inject constructor(
         publicRoomsFilter.queryTextChanges()
                 .debounce(500, TimeUnit.MILLISECONDS)
                 .subscribeBy {
-                    viewModel.handle(RoomDirectoryActions.FilterWith(it.toString()))
+                    viewModel.handle(RoomDirectoryAction.FilterWith(it.toString()))
                 }
                 .disposeOnDestroy()
 
@@ -130,11 +130,11 @@ class PublicRoomsFragment @Inject constructor(
 
     override fun onPublicRoomJoin(publicRoom: PublicRoom) {
         Timber.v("PublicRoomJoinClicked: $publicRoom")
-        viewModel.handle(RoomDirectoryActions.JoinRoom(publicRoom.roomId))
+        viewModel.handle(RoomDirectoryAction.JoinRoom(publicRoom.roomId))
     }
 
     override fun loadMore() {
-        viewModel.handle(RoomDirectoryActions.LoadMore)
+        viewModel.handle(RoomDirectoryAction.LoadMore)
     }
 
     private var initialValueSet = false

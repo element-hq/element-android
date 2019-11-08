@@ -62,6 +62,6 @@ class GroupListFragment @Inject constructor(
     }
 
     override fun onGroupSelected(groupSummary: GroupSummary) {
-        viewModel.handle(GroupListActions.SelectGroup(groupSummary))
+        viewModel.handle(GroupListAction.SelectGroup(groupSummary))
     }
 }

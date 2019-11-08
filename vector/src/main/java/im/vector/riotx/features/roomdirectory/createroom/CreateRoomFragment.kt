@@ -53,7 +53,7 @@ class CreateRoomFragment @Inject constructor(private val createRoomController: C
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_create_room -> {
-                viewModel.handle(CreateRoomActions.Create)
+                viewModel.handle(CreateRoomAction.Create)
                 true
             }
             else                    ->
@@ -71,20 +71,20 @@ class CreateRoomFragment @Inject constructor(private val createRoomController: C
     }
 
     override fun onNameChange(newName: String) {
-        viewModel.handle(CreateRoomActions.SetName(newName))
+        viewModel.handle(CreateRoomAction.SetName(newName))
     }
 
     override fun setIsPublic(isPublic: Boolean) {
-        viewModel.handle(CreateRoomActions.SetIsPublic(isPublic))
+        viewModel.handle(CreateRoomAction.SetIsPublic(isPublic))
     }
 
     override fun setIsInRoomDirectory(isInRoomDirectory: Boolean) {
-        viewModel.handle(CreateRoomActions.SetIsInRoomDirectory(isInRoomDirectory))
+        viewModel.handle(CreateRoomAction.SetIsInRoomDirectory(isInRoomDirectory))
     }
 
     override fun retry() {
         Timber.v("Retry")
-        viewModel.handle(CreateRoomActions.Create)
+        viewModel.handle(CreateRoomAction.Create)
     }
 
     override fun invalidate() = withState(viewModel) { state ->

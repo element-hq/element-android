@@ -85,7 +85,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                                                           private val session: Session,
                                                           private val noticeEventFormatter: NoticeEventFormatter,
                                                           private val stringProvider: StringProvider
-) : VectorViewModel<MessageActionState, MessageActionsActions>(initialState) {
+) : VectorViewModel<MessageActionState, MessageActionsAction>(initialState) {
 
     private val eventId = initialState.eventId
     private val informationData = initialState.informationData
@@ -112,9 +112,9 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         observeEventAction()
     }
 
-    override fun handle(action: MessageActionsActions) {
+    override fun handle(action: MessageActionsAction) {
         when (action) {
-            MessageActionsActions.ToggleReportMenu -> toggleReportMenu()
+            MessageActionsAction.ToggleReportMenu -> toggleReportMenu()
         }
     }
 

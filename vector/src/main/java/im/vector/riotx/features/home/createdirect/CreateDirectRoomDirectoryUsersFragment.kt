@@ -60,7 +60,7 @@ class CreateDirectRoomDirectoryUsersFragment @Inject constructor(
         createDirectRoomSearchById
                 .textChanges()
                 .subscribe {
-                    viewModel.handle(CreateDirectRoomActions.SearchDirectoryUsers(it.toString()))
+                    viewModel.handle(CreateDirectRoomAction.SearchDirectoryUsers(it.toString()))
                 }
                 .disposeOnDestroy()
         createDirectRoomSearchById.requestFocus()
@@ -80,12 +80,12 @@ class CreateDirectRoomDirectoryUsersFragment @Inject constructor(
 
     override fun onItemClick(user: User) {
         view?.hideKeyboard()
-        viewModel.handle(CreateDirectRoomActions.SelectUser(user))
+        viewModel.handle(CreateDirectRoomAction.SelectUser(user))
         actionViewModel.post(CreateDirectRoomSharedAction.GoBack)
     }
 
     override fun retryDirectoryUsersRequest() {
         val currentSearch = createDirectRoomSearchById.text.toString()
-        viewModel.handle(CreateDirectRoomActions.SearchDirectoryUsers(currentSearch))
+        viewModel.handle(CreateDirectRoomAction.SearchDirectoryUsers(currentSearch))
     }
 }

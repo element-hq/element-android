@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.home.group
+package im.vector.riotx.features.roomdirectory
 
-import im.vector.matrix.android.api.session.group.model.GroupSummary
+import im.vector.matrix.android.api.session.room.model.thirdparty.RoomDirectoryData
 import im.vector.riotx.core.platform.VectorViewModelAction
 
-sealed class GroupListActions : VectorViewModelAction {
-    data class SelectGroup(val groupSummary: GroupSummary) : GroupListActions()
+sealed class RoomDirectoryAction : VectorViewModelAction {
+    data class SetRoomDirectoryData(val roomDirectoryData: RoomDirectoryData) : RoomDirectoryAction()
+    data class FilterWith(val filter: String) : RoomDirectoryAction()
+    object LoadMore : RoomDirectoryAction()
+    data class JoinRoom(val roomId: String) : RoomDirectoryAction()
 }

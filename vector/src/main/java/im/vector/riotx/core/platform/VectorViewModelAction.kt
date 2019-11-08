@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.crypto.keysbackup.settings
+package im.vector.riotx.core.platform
 
-import im.vector.riotx.core.platform.VectorViewModelAction
+interface VectorViewModelAction
 
-sealed class KeyBackupSettingsActions : VectorViewModelAction {
-    object Init : KeyBackupSettingsActions()
-    object GetKeyBackupTrust : KeyBackupSettingsActions()
-    object DeleteKeyBackup : KeyBackupSettingsActions()
-}
+/**
+ * To use when no action is associated to the ViewModel
+ */
+object EmptyAction : VectorViewModelAction

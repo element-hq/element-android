@@ -51,7 +51,7 @@ class KeysBackupManageActivity : SimpleFragmentActivity() {
         super.initUiAndData()
         if (supportFragmentManager.fragments.isEmpty()) {
             replaceFragment(R.id.container, KeysBackupSettingsFragment::class.java)
-            viewModel.handle(KeyBackupSettingsActions.Init)
+            viewModel.handle(KeyBackupSettingsAction.Init)
         }
 
         // Observe the deletion of keys backup

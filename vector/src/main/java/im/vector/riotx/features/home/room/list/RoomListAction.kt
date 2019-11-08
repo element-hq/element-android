@@ -20,13 +20,13 @@ import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.notification.RoomNotificationState
 import im.vector.riotx.core.platform.VectorViewModelAction
 
-sealed class RoomListActions : VectorViewModelAction {
-    data class SelectRoom(val roomSummary: RoomSummary) : RoomListActions()
-    data class ToggleCategory(val category: RoomCategory) : RoomListActions()
-    data class AcceptInvitation(val roomSummary: RoomSummary) : RoomListActions()
-    data class RejectInvitation(val roomSummary: RoomSummary) : RoomListActions()
-    data class FilterWith(val filter: String) : RoomListActions()
-    data class ChangeRoomNotificationState(val roomId: String, val notificationState: RoomNotificationState) : RoomListActions()
-    data class LeaveRoom(val roomId: String) : RoomListActions()
-    object MarkAllRoomsRead : RoomListActions()
+sealed class RoomListAction : VectorViewModelAction {
+    data class SelectRoom(val roomSummary: RoomSummary) : RoomListAction()
+    data class ToggleCategory(val category: RoomCategory) : RoomListAction()
+    data class AcceptInvitation(val roomSummary: RoomSummary) : RoomListAction()
+    data class RejectInvitation(val roomSummary: RoomSummary) : RoomListAction()
+    data class FilterWith(val filter: String) : RoomListAction()
+    data class ChangeRoomNotificationState(val roomId: String, val notificationState: RoomNotificationState) : RoomListAction()
+    data class LeaveRoom(val roomId: String) : RoomListAction()
+    object MarkAllRoomsRead : RoomListAction()
 }

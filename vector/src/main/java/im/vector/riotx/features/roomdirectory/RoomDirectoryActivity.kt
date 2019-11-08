@@ -26,7 +26,7 @@ import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.addFragment
 import im.vector.riotx.core.extensions.addFragmentToBackstack
 import im.vector.riotx.core.platform.VectorBaseActivity
-import im.vector.riotx.features.roomdirectory.createroom.CreateRoomActions
+import im.vector.riotx.features.roomdirectory.createroom.CreateRoomAction
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomFragment
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomViewModel
 import im.vector.riotx.features.roomdirectory.picker.RoomDirectoryPickerFragment
@@ -51,7 +51,7 @@ class RoomDirectoryActivity : VectorBaseActivity() {
         actionViewModel = ViewModelProviders.of(this, viewModelFactory).get(RoomDirectorySharedActionViewModel::class.java)
 
         if (isFirstCreation()) {
-            roomDirectoryViewModel.handle(RoomDirectoryActions.FilterWith(intent?.getStringExtra(INITIAL_FILTER) ?: ""))
+            roomDirectoryViewModel.handle(RoomDirectoryAction.FilterWith(intent?.getStringExtra(INITIAL_FILTER) ?: ""))
         }
 
         actionViewModel.observe()
@@ -67,7 +67,7 @@ class RoomDirectoryActivity : VectorBaseActivity() {
 
         roomDirectoryViewModel.selectSubscribe(this, PublicRoomsViewState::currentFilter) { currentFilter ->
             // Transmit the filter to the createRoomViewModel
-            createRoomViewModel.handle(CreateRoomActions.SetName(currentFilter))
+            createRoomViewModel.handle(CreateRoomAction.SetName(currentFilter))
         }
     }
 

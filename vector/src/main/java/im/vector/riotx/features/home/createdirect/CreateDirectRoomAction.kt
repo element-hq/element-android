@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.login
+package im.vector.riotx.features.home.createdirect
 
-import im.vector.matrix.android.api.auth.data.Credentials
+import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotx.core.platform.VectorViewModelAction
 
-sealed class LoginActions : VectorViewModelAction {
-    data class UpdateHomeServer(val homeServerUrl: String) : LoginActions()
-    data class Login(val login: String, val password: String) : LoginActions()
-    data class SsoLoginSuccess(val credentials: Credentials) : LoginActions()
-    data class NavigateTo(val target: LoginActivity.Navigation) : LoginActions()
-    data class InitWith(val loginConfig: LoginConfig) : LoginActions()
+sealed class CreateDirectRoomAction : VectorViewModelAction {
+    object CreateRoomAndInviteSelectedUsers : CreateDirectRoomAction()
+    data class FilterKnownUsers(val value: String) : CreateDirectRoomAction()
+    data class SearchDirectoryUsers(val value: String) : CreateDirectRoomAction()
+    object ClearFilterKnownUsers : CreateDirectRoomAction()
+    data class SelectUser(val user: User) : CreateDirectRoomAction()
+    data class RemoveSelectedUser(val user: User) : CreateDirectRoomAction()
 }

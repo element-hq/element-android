@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.roomdirectory.picker
+package im.vector.riotx.features.home.group
 
+import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.riotx.core.platform.VectorViewModelAction
 
-sealed class RoomDirectoryPickerActions : VectorViewModelAction {
-    object Retry : RoomDirectoryPickerActions()
+sealed class GroupListAction : VectorViewModelAction {
+    data class SelectGroup(val groupSummary: GroupSummary) : GroupListAction()
 }

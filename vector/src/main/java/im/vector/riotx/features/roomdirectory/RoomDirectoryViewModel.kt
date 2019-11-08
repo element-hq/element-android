@@ -40,7 +40,7 @@ private const val PUBLIC_ROOMS_LIMIT = 20
 
 class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState: PublicRoomsViewState,
                                                          private val session: Session)
-    : VectorViewModel<PublicRoomsViewState, RoomDirectoryActions>(initialState) {
+    : VectorViewModel<PublicRoomsViewState, RoomDirectoryAction>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -103,16 +103,16 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
                 .disposeOnClear()
     }
 
-    override fun handle(action: RoomDirectoryActions) {
+    override fun handle(action: RoomDirectoryAction) {
         when (action) {
-            is RoomDirectoryActions.SetRoomDirectoryData -> setRoomDirectoryData(action)
-            is RoomDirectoryActions.FilterWith           -> filterWith(action)
-            RoomDirectoryActions.LoadMore                -> loadMore()
-            is RoomDirectoryActions.JoinRoom             -> joinRoom(action)
+            is RoomDirectoryAction.SetRoomDirectoryData -> setRoomDirectoryData(action)
+            is RoomDirectoryAction.FilterWith           -> filterWith(action)
+            RoomDirectoryAction.LoadMore                -> loadMore()
+            is RoomDirectoryAction.JoinRoom             -> joinRoom(action)
         }
     }
 
-    private fun setRoomDirectoryData(action: RoomDirectoryActions.SetRoomDirectoryData) {
+    private fun setRoomDirectoryData(action: RoomDirectoryAction.SetRoomDirectoryData) {
         if (this.roomDirectoryData == action.roomDirectoryData) {
             return
         }
@@ -123,7 +123,7 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
         load("")
     }
 
-    private fun filterWith(action: RoomDirectoryActions.FilterWith) = withState { state ->
+    private fun filterWith(action: RoomDirectoryAction.FilterWith) = withState { state ->
         if (state.currentFilter != action.filter) {
             currentTask?.cancel()
 
@@ -201,7 +201,7 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
                 })
     }
 
-    private fun joinRoom(action: RoomDirectoryActions.JoinRoom) = withState { state ->
+    private fun joinRoom(action: RoomDirectoryAction.JoinRoom) = withState { state ->
         if (state.joiningRoomsIds.contains(action.roomId)) {
             // Request already sent, should not happen
             Timber.w("Try to join an already joining room. Should not happen")

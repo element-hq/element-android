@@ -201,7 +201,7 @@ class EmojiReactionPickerActivity : VectorBaseActivity(),
             tabLayout.isVisible = false
             emojiPickerWholeListFragmentContainer.isVisible = false
             emojiPickerFilteredListFragmentContainer.isVisible = true
-            searchResultViewModel.handle(EmojiSearchActions.UpdateQuery(query))
+            searchResultViewModel.handle(EmojiSearchAction.UpdateQuery(query))
         }
     }
 

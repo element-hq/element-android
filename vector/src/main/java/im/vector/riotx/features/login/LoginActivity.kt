@@ -57,7 +57,7 @@ class LoginActivity : VectorBaseActivity() {
         // Get config extra
         val loginConfig = intent.getParcelableExtra<LoginConfig?>(EXTRA_CONFIG)
         if (loginConfig != null && isFirstCreation()) {
-            loginViewModel.handle(LoginActions.InitWith(loginConfig))
+            loginViewModel.handle(LoginAction.InitWith(loginConfig))
         }
 
         loginViewModel.navigationLiveData.observeEvent(this) {

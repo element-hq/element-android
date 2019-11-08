@@ -26,7 +26,7 @@ import im.vector.riotx.core.platform.VectorViewModel
 
 class RoomDirectoryPickerViewModel @AssistedInject constructor(@Assisted initialState: RoomDirectoryPickerViewState,
                                                                private val session: Session)
-    : VectorViewModel<RoomDirectoryPickerViewState, RoomDirectoryPickerActions>(initialState) {
+    : VectorViewModel<RoomDirectoryPickerViewState, RoomDirectoryPickerAction>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -62,9 +62,9 @@ class RoomDirectoryPickerViewModel @AssistedInject constructor(@Assisted initial
         })
     }
 
-    override fun handle(action: RoomDirectoryPickerActions) {
+    override fun handle(action: RoomDirectoryPickerAction) {
         when (action) {
-            RoomDirectoryPickerActions.Retry -> load()
+            RoomDirectoryPickerAction.Retry -> load()
         }
     }
 }

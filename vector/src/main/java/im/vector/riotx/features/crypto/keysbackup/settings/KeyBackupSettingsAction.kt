@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.reactions
+package im.vector.riotx.features.crypto.keysbackup.settings
 
 import im.vector.riotx.core.platform.VectorViewModelAction
 
-sealed class EmojiSearchActions : VectorViewModelAction {
-    data class UpdateQuery(val queryString: String) : EmojiSearchActions()
+sealed class KeyBackupSettingsAction : VectorViewModelAction {
+    object Init : KeyBackupSettingsAction()
+    object GetKeyBackupTrust : KeyBackupSettingsAction()
+    object DeleteKeyBackup : KeyBackupSettingsAction()
 }

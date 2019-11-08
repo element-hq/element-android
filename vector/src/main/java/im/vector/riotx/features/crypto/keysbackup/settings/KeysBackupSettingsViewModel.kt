@@ -28,7 +28,7 @@ import im.vector.riotx.core.platform.VectorViewModel
 
 class KeysBackupSettingsViewModel @AssistedInject constructor(@Assisted initialState: KeysBackupSettingViewState,
                                                               session: Session
-) : VectorViewModel<KeysBackupSettingViewState, KeyBackupSettingsActions>(initialState),
+) : VectorViewModel<KeysBackupSettingViewState, KeyBackupSettingsAction>(initialState),
         KeysBackupStateListener {
 
     @AssistedInject.Factory
@@ -58,11 +58,11 @@ class KeysBackupSettingsViewModel @AssistedInject constructor(@Assisted initialS
         getKeysBackupTrust()
     }
 
-    override fun handle(action: KeyBackupSettingsActions) {
+    override fun handle(action: KeyBackupSettingsAction) {
         when (action) {
-            KeyBackupSettingsActions.Init              -> init()
-            KeyBackupSettingsActions.GetKeyBackupTrust -> getKeysBackupTrust()
-            KeyBackupSettingsActions.DeleteKeyBackup   -> deleteCurrentBackup()
+            KeyBackupSettingsAction.Init              -> init()
+            KeyBackupSettingsAction.GetKeyBackupTrust -> getKeysBackupTrust()
+            KeyBackupSettingsAction.DeleteKeyBackup   -> deleteCurrentBackup()
         }
     }
 

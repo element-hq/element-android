@@ -79,7 +79,7 @@ class CreateDirectRoomKnownUsersFragment @Inject constructor(
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_create_direct_room -> {
-                viewModel.handle(CreateDirectRoomActions.CreateRoomAndInviteSelectedUsers)
+                viewModel.handle(CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers)
                 true
             }
             else                           ->
@@ -108,9 +108,9 @@ class CreateDirectRoomKnownUsersFragment @Inject constructor(
                 .subscribe { text ->
                     val filterValue = text.trim()
                     val action = if (filterValue.isBlank()) {
-                        CreateDirectRoomActions.ClearFilterKnownUsers
+                        CreateDirectRoomAction.ClearFilterKnownUsers
                     } else {
-                        CreateDirectRoomActions.FilterKnownUsers(filterValue.toString())
+                        CreateDirectRoomAction.FilterKnownUsers(filterValue.toString())
                     }
                     viewModel.handle(action)
                 }
@@ -157,7 +157,7 @@ class CreateDirectRoomKnownUsersFragment @Inject constructor(
         chip.isCloseIconVisible = true
         chipGroup.addView(chip)
         chip.setOnCloseIconClickListener {
-            viewModel.handle(CreateDirectRoomActions.RemoveSelectedUser(user))
+            viewModel.handle(CreateDirectRoomAction.RemoveSelectedUser(user))
         }
         chipGroupScrollView.post {
             chipGroupScrollView.fullScroll(ScrollView.FOCUS_DOWN)
@@ -166,6 +166,6 @@ class CreateDirectRoomKnownUsersFragment @Inject constructor(
 
     override fun onItemClick(user: User) {
         view?.hideKeyboard()
-        viewModel.handle(CreateDirectRoomActions.SelectUser(user))
+        viewModel.handle(CreateDirectRoomAction.SelectUser(user))
     }
 }

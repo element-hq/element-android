@@ -27,7 +27,7 @@ import com.airbnb.mvrx.withState
 import im.vector.matrix.android.api.session.room.model.thirdparty.RoomDirectoryData
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseFragment
-import im.vector.riotx.features.roomdirectory.RoomDirectoryActions
+import im.vector.riotx.features.roomdirectory.RoomDirectoryAction
 import im.vector.riotx.features.roomdirectory.RoomDirectorySharedAction
 import im.vector.riotx.features.roomdirectory.RoomDirectorySharedActionViewModel
 import im.vector.riotx.features.roomdirectory.RoomDirectoryViewModel
@@ -87,14 +87,14 @@ class RoomDirectoryPickerFragment @Inject constructor(val roomDirectoryPickerVie
 
     override fun onRoomDirectoryClicked(roomDirectoryData: RoomDirectoryData) {
         Timber.v("onRoomDirectoryClicked: $roomDirectoryData")
-        viewModel.handle(RoomDirectoryActions.SetRoomDirectoryData(roomDirectoryData))
+        viewModel.handle(RoomDirectoryAction.SetRoomDirectoryData(roomDirectoryData))
 
         actionViewModel.post(RoomDirectorySharedAction.Back)
     }
 
     override fun retry() {
         Timber.v("Retry")
-        pickerViewModel.handle(RoomDirectoryPickerActions.Retry)
+        pickerViewModel.handle(RoomDirectoryPickerAction.Retry)
     }
 
     override fun invalidate() = withState(pickerViewModel) { state ->

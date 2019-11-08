@@ -14,13 +14,10 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.roomdirectory.createroom
+package im.vector.riotx.features.reactions
 
 import im.vector.riotx.core.platform.VectorViewModelAction
 
-sealed class CreateRoomActions : VectorViewModelAction {
-    data class SetName(val name: String) : CreateRoomActions()
-    data class SetIsPublic(val isPublic: Boolean) : CreateRoomActions()
-    data class SetIsInRoomDirectory(val isInRoomDirectory: Boolean) : CreateRoomActions()
-    object Create : CreateRoomActions()
+sealed class EmojiSearchAction : VectorViewModelAction {
+    data class UpdateQuery(val queryString: String) : EmojiSearchAction()
 }

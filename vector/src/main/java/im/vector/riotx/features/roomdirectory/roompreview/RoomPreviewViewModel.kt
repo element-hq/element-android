@@ -31,7 +31,7 @@ import timber.log.Timber
 
 class RoomPreviewViewModel @AssistedInject constructor(@Assisted initialState: RoomPreviewViewState,
                                                        private val session: Session)
-    : VectorViewModel<RoomPreviewViewState, RoomPreviewActions>(initialState) {
+    : VectorViewModel<RoomPreviewViewState, RoomPreviewAction>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -77,9 +77,9 @@ class RoomPreviewViewModel @AssistedInject constructor(@Assisted initialState: R
                 .disposeOnClear()
     }
 
-    override fun handle(action: RoomPreviewActions) {
+    override fun handle(action: RoomPreviewAction) {
         when (action) {
-            RoomPreviewActions.Join -> joinRoom()
+            RoomPreviewAction.Join -> joinRoom()
         }
     }
 

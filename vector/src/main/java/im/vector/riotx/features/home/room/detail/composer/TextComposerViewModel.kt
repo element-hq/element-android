@@ -36,7 +36,7 @@ typealias AutocompleteUserQuery = CharSequence
 
 class TextComposerViewModel @AssistedInject constructor(@Assisted initialState: TextComposerViewState,
                                                         private val session: Session
-) : VectorViewModel<TextComposerViewState, TextComposerActions>(initialState) {
+) : VectorViewModel<TextComposerViewState, TextComposerAction>(initialState) {
 
     private val room = session.getRoom(initialState.roomId)!!
     private val roomId = initialState.roomId
@@ -61,13 +61,13 @@ class TextComposerViewModel @AssistedInject constructor(@Assisted initialState: 
         observeUsersQuery()
     }
 
-    override fun handle(action: TextComposerActions) {
+    override fun handle(action: TextComposerAction) {
         when (action) {
-            is TextComposerActions.QueryUsers -> handleQueryUsers(action)
+            is TextComposerAction.QueryUsers -> handleQueryUsers(action)
         }
     }
 
-    private fun handleQueryUsers(action: TextComposerActions.QueryUsers) {
+    private fun handleQueryUsers(action: TextComposerAction.QueryUsers) {
         val query = Option.fromNullable(action.query)
         usersQueryObservable.accept(query)
     }

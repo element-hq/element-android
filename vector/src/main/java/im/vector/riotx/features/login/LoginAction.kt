@@ -14,10 +14,15 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.roomdirectory.roompreview
+package im.vector.riotx.features.login
 
+import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.riotx.core.platform.VectorViewModelAction
 
-sealed class RoomPreviewActions : VectorViewModelAction {
-    object Join : RoomPreviewActions()
+sealed class LoginAction : VectorViewModelAction {
+    data class UpdateHomeServer(val homeServerUrl: String) : LoginAction()
+    data class Login(val login: String, val password: String) : LoginAction()
+    data class SsoLoginSuccess(val credentials: Credentials) : LoginAction()
+    data class NavigateTo(val target: LoginActivity.Navigation) : LoginAction()
+    data class InitWith(val loginConfig: LoginConfig) : LoginAction()
 }

@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.home.room.detail.timeline.action
+package im.vector.riotx.features.roomdirectory.picker
 
 import im.vector.riotx.core.platform.VectorViewModelAction
 
-sealed class MessageActionsActions : VectorViewModelAction {
-    object ToggleReportMenu : MessageActionsActions()
+sealed class RoomDirectoryPickerAction : VectorViewModelAction {
+    object Retry : RoomDirectoryPickerAction()
 }

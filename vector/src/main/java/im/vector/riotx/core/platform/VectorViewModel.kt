@@ -23,10 +23,6 @@ import im.vector.riotx.core.utils.LiveEvent
 import io.reactivex.Observable
 import io.reactivex.Single
 
-interface VectorViewModelAction
-
-object EmptyAction : VectorViewModelAction
-
 abstract class VectorViewModel<S : MvRxState, A : VectorViewModelAction>(initialState: S)
     : BaseMvRxViewModel<S>(initialState, false) {
 
