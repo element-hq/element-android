@@ -138,7 +138,7 @@ abstract class VectorBaseActivity : BaseMvRxActivity(), HasScreenInjector {
         supportFragmentManager.fragmentFactory = screenComponent.fragmentFactory()
         super.onCreate(savedInstanceState)
         viewModelFactory = screenComponent.viewModelFactory()
-        configurationViewModel = ViewModelProviders.of(this, viewModelFactory).get(ConfigurationViewModel::class.java)
+        configurationViewModel = viewModelProvider.get(ConfigurationViewModel::class.java)
         bugReporter = screenComponent.bugReporter()
         // Shake detector
         rageShake = screenComponent.rageShake()

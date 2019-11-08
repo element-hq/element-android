@@ -92,8 +92,6 @@ class HomeDetailFragment @Inject constructor(
         // Use the SignOutViewModel, it observe the keys backup state and this is what we need here
         val model = fragmentViewModelProvider.get(SignOutViewModel::class.java)
 
-        model.init(session)
-
         model.keysBackupState.observe(viewLifecycleOwner, Observer { keysBackupState ->
             when (keysBackupState) {
                 null                               ->
