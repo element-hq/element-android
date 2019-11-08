@@ -69,12 +69,12 @@ class MessageActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), Message
         messageActionsEpoxyController.listener = this
     }
 
-    override fun didSelectMenuAction(simpleAction: SimpleAction) {
-        if (simpleAction is SimpleAction.ReportContent) {
+    override fun didSelectMenuAction(eventAction: EventAction) {
+        if (eventAction is EventAction.ReportContent) {
             // Toggle report menu
             viewModel.toggleReportMenu()
         } else {
-            messageActionsStore.post(simpleAction)
+            messageActionsStore.post(eventAction)
             dismiss()
         }
     }

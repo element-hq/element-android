@@ -19,35 +19,36 @@ package im.vector.riotx.features.home.room.list.actions
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import im.vector.riotx.R
+import im.vector.riotx.core.platform.VectorAction
 
-sealed class RoomListQuickActions(@StringRes val titleRes: Int, @DrawableRes val iconResId: Int, val destructive: Boolean = false) {
+sealed class RoomListQuickAction(@StringRes val titleRes: Int, @DrawableRes val iconResId: Int, val destructive: Boolean = false) : VectorAction {
 
-    data class NotificationsAllNoisy(val roomId: String) : RoomListQuickActions(
+    data class NotificationsAllNoisy(val roomId: String) : RoomListQuickAction(
             R.string.room_list_quick_actions_notifications_all_noisy,
             R.drawable.ic_room_actions_notifications_all_noisy
     )
 
-    data class NotificationsAll(val roomId: String) : RoomListQuickActions(
+    data class NotificationsAll(val roomId: String) : RoomListQuickAction(
             R.string.room_list_quick_actions_notifications_all,
             R.drawable.ic_room_actions_notifications_all
     )
 
-    data class NotificationsMentionsOnly(val roomId: String) : RoomListQuickActions(
+    data class NotificationsMentionsOnly(val roomId: String) : RoomListQuickAction(
             R.string.room_list_quick_actions_notifications_mentions,
             R.drawable.ic_room_actions_notifications_mentions
     )
 
-    data class NotificationsMute(val roomId: String) : RoomListQuickActions(
+    data class NotificationsMute(val roomId: String) : RoomListQuickAction(
             R.string.room_list_quick_actions_notifications_mute,
             R.drawable.ic_room_actions_notifications_mutes
     )
 
-    data class Settings(val roomId: String) : RoomListQuickActions(
+    data class Settings(val roomId: String) : RoomListQuickAction(
             R.string.room_list_quick_actions_settings,
             R.drawable.ic_room_actions_settings
     )
 
-    data class Leave(val roomId: String) : RoomListQuickActions(
+    data class Leave(val roomId: String) : RoomListQuickAction(
             R.string.room_list_quick_actions_leave,
             R.drawable.ic_room_actions_leave,
             true

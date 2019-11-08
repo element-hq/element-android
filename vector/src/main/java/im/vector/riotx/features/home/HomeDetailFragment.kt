@@ -54,7 +54,7 @@ class HomeDetailFragment @Inject constructor(
     private val unreadCounterBadgeViews = arrayListOf<UnreadCounterBadgeView>()
 
     private val viewModel: HomeDetailViewModel by fragmentViewModel()
-    private lateinit var navigationViewModel: HomeNavigationViewModel
+    private lateinit var actionViewModel: HomeActionViewModel
 
     override fun getLayoutResId(): Int {
         return R.layout.fragment_home_detail
@@ -63,7 +63,7 @@ class HomeDetailFragment @Inject constructor(
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        navigationViewModel = ViewModelProviders.of(requireActivity()).get(HomeNavigationViewModel::class.java)
+        actionViewModel = ViewModelProviders.of(requireActivity()).get(HomeActionViewModel::class.java)
 
         setupBottomNavigationView()
         setupToolbar()
@@ -129,7 +129,7 @@ class HomeDetailFragment @Inject constructor(
         }
         groupToolbar.title = ""
         groupToolbarAvatarImageView.setOnClickListener {
-            navigationViewModel.post(HomeActivity.Navigation.OpenDrawer)
+            actionViewModel.post(HomeActivity.HomeActivityAction.OpenDrawer)
         }
     }
 

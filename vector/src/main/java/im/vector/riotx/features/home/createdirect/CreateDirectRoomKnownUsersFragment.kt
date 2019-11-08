@@ -49,11 +49,11 @@ class CreateDirectRoomKnownUsersFragment @Inject constructor(
     override fun getMenuRes() = R.menu.vector_create_direct_room
 
     private val viewModel: CreateDirectRoomViewModel by activityViewModel()
-    private lateinit var navigationViewModel: CreateDirectRoomNavigationViewModel
+    private lateinit var actionViewModel: CreateDirectRoomActionViewModel
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        navigationViewModel = ViewModelProviders.of(requireActivity(), viewModelFactory).get(CreateDirectRoomNavigationViewModel::class.java)
+        actionViewModel = ViewModelProviders.of(requireActivity(), viewModelFactory).get(CreateDirectRoomActionViewModel::class.java)
         vectorBaseActivity.setSupportActionBar(createDirectRoomToolbar)
         setupRecyclerView()
         setupFilterView()
@@ -89,7 +89,7 @@ class CreateDirectRoomKnownUsersFragment @Inject constructor(
 
     private fun setupAddByMatrixIdView() {
         addByMatrixId.setOnClickListener {
-            navigationViewModel.post(CreateDirectRoomActivity.Navigation.UsersDirectory)
+            actionViewModel.post(CreateDirectRoomActivity.CreateDirectRoomAction.OpenUsersDirectory)
         }
     }
 

@@ -25,6 +25,7 @@ import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.addFragment
 import im.vector.riotx.core.extensions.addFragmentToBackstack
+import im.vector.riotx.core.platform.VectorAction
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomFragment
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomViewModel
@@ -34,18 +35,18 @@ import javax.inject.Inject
 class RoomDirectoryActivity : VectorBaseActivity() {
 
     // Supported navigation actions for this Activity
-    sealed class Navigation {
-        object Back : Navigation()
-        object CreateRoom : Navigation()
-        object Close : Navigation()
-        object ChangeProtocol : Navigation()
+    sealed class RoomDirectoryAction : VectorAction {
+        object Back : RoomDirectoryAction()
+        object CreateRoom : RoomDirectoryAction()
+        object Close : RoomDirectoryAction()
+        object ChangeProtocol : RoomDirectoryAction()
     }
 
     @Inject lateinit var createRoomViewModelFactory: CreateRoomViewModel.Factory
     @Inject lateinit var roomDirectoryViewModelFactory: RoomDirectoryViewModel.Factory
     private val roomDirectoryViewModel: RoomDirectoryViewModel by viewModel()
     private val createRoomViewModel: CreateRoomViewModel by viewModel()
-    private lateinit var navigationViewModel: RoomDirectoryNavigationViewModel
+    private lateinit var actionViewModel: RoomDirectoryActionViewModel
 
     override fun getLayoutRes() = R.layout.activity_simple
 
@@ -55,19 +56,19 @@ class RoomDirectoryActivity : VectorBaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        navigationViewModel = ViewModelProviders.of(this, viewModelFactory).get(RoomDirectoryNavigationViewModel::class.java)
+        actionViewModel = ViewModelProviders.of(this, viewModelFactory).get(RoomDirectoryActionViewModel::class.java)
 
         if (isFirstCreation()) {
             roomDirectoryViewModel.filterWith(intent?.getStringExtra(INITIAL_FILTER) ?: "")
         }
 
-        navigationViewModel.observe()
+        actionViewModel.observe()
                 .subscribe { navigation ->
                     when (navigation) {
-                        is Navigation.Back           -> onBackPressed()
-                        is Navigation.CreateRoom     -> addFragmentToBackstack(R.id.simpleFragmentContainer, CreateRoomFragment::class.java)
-                        is Navigation.ChangeProtocol -> addFragmentToBackstack(R.id.simpleFragmentContainer, RoomDirectoryPickerFragment::class.java)
-                        is Navigation.Close          -> finish()
+                        is RoomDirectoryAction.Back           -> onBackPressed()
+                        is RoomDirectoryAction.CreateRoom     -> addFragmentToBackstack(R.id.simpleFragmentContainer, CreateRoomFragment::class.java)
+                        is RoomDirectoryAction.ChangeProtocol -> addFragmentToBackstack(R.id.simpleFragmentContainer, RoomDirectoryPickerFragment::class.java)
+                        is RoomDirectoryAction.Close          -> finish()
                     }
                 }
                 .disposeOnDestroy()

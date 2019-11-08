@@ -39,11 +39,11 @@ class CreateDirectRoomDirectoryUsersFragment @Inject constructor(
 
     private val viewModel: CreateDirectRoomViewModel by activityViewModel()
 
-    private lateinit var navigationViewModel: CreateDirectRoomNavigationViewModel
+    private lateinit var actionViewModel: CreateDirectRoomActionViewModel
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        navigationViewModel = ViewModelProviders.of(requireActivity(), viewModelFactory).get(CreateDirectRoomNavigationViewModel::class.java)
+        actionViewModel = ViewModelProviders.of(requireActivity(), viewModelFactory).get(CreateDirectRoomActionViewModel::class.java)
         setupRecyclerView()
         setupSearchByMatrixIdView()
         setupCloseView()
@@ -70,7 +70,7 @@ class CreateDirectRoomDirectoryUsersFragment @Inject constructor(
 
     private fun setupCloseView() {
         createDirectRoomClose.setOnClickListener {
-            navigationViewModel.post(CreateDirectRoomActivity.Navigation.Previous)
+            actionViewModel.post(CreateDirectRoomActivity.CreateDirectRoomAction.GoBack)
         }
     }
 
@@ -81,7 +81,7 @@ class CreateDirectRoomDirectoryUsersFragment @Inject constructor(
     override fun onItemClick(user: User) {
         view?.hideKeyboard()
         viewModel.handle(CreateDirectRoomActions.SelectUser(user))
-        navigationViewModel.post(CreateDirectRoomActivity.Navigation.Previous)
+        actionViewModel.post(CreateDirectRoomActivity.CreateDirectRoomAction.GoBack)
     }
 
     override fun retryDirectoryUsersRequest() {

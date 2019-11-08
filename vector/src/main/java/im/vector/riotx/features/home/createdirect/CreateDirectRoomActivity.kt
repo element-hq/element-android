@@ -32,20 +32,21 @@ import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.addFragment
 import im.vector.riotx.core.extensions.addFragmentToBackstack
 import im.vector.riotx.core.platform.SimpleFragmentActivity
+import im.vector.riotx.core.platform.VectorAction
 import im.vector.riotx.core.platform.WaitingViewData
 import kotlinx.android.synthetic.main.activity.*
 import javax.inject.Inject
 
 class CreateDirectRoomActivity : SimpleFragmentActivity() {
 
-    sealed class Navigation {
-        object UsersDirectory : Navigation()
-        object Close : Navigation()
-        object Previous : Navigation()
+    sealed class CreateDirectRoomAction : VectorAction {
+        object OpenUsersDirectory : CreateDirectRoomAction()
+        object Close : CreateDirectRoomAction()
+        object GoBack : CreateDirectRoomAction()
     }
 
     private val viewModel: CreateDirectRoomViewModel by viewModel()
-    lateinit var navigationViewModel: CreateDirectRoomNavigationViewModel
+    private lateinit var actionViewModel: CreateDirectRoomActionViewModel
     @Inject lateinit var createDirectRoomViewModelFactory: CreateDirectRoomViewModel.Factory
     @Inject lateinit var errorFormatter: ErrorFormatter
 
@@ -57,13 +58,13 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         toolbar.visibility = View.GONE
-        navigationViewModel = ViewModelProviders.of(this, viewModelFactory).get(CreateDirectRoomNavigationViewModel::class.java)
-        navigationViewModel.observe()
+        actionViewModel = ViewModelProviders.of(this, viewModelFactory).get(CreateDirectRoomActionViewModel::class.java)
+        actionViewModel.observe()
                 .subscribe { navigation ->
                     when (navigation) {
-                        is Navigation.UsersDirectory -> addFragmentToBackstack(R.id.container, CreateDirectRoomDirectoryUsersFragment::class.java)
-                        Navigation.Close             -> finish()
-                        Navigation.Previous          -> onBackPressed()
+                        CreateDirectRoomAction.OpenUsersDirectory -> addFragmentToBackstack(R.id.container, CreateDirectRoomDirectoryUsersFragment::class.java)
+                        CreateDirectRoomAction.Close              -> finish()
+                        CreateDirectRoomAction.GoBack             -> onBackPressed()
                     }
                 }
                 .disposeOnDestroy()

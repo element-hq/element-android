@@ -26,8 +26,8 @@ import im.vector.riotx.R
 import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.platform.StateView
 import im.vector.riotx.core.platform.VectorBaseFragment
+import im.vector.riotx.features.home.HomeActionViewModel
 import im.vector.riotx.features.home.HomeActivity
-import im.vector.riotx.features.home.HomeNavigationViewModel
 import kotlinx.android.synthetic.main.fragment_group_list.*
 import javax.inject.Inject
 
@@ -36,20 +36,20 @@ class GroupListFragment @Inject constructor(
         private val groupController: GroupSummaryController
 ) : VectorBaseFragment(), GroupSummaryController.Callback {
 
-    private lateinit var navigationViewModel: HomeNavigationViewModel
+    private lateinit var actionViewModel: HomeActionViewModel
     private val viewModel: GroupListViewModel by fragmentViewModel()
 
     override fun getLayoutResId() = R.layout.fragment_group_list
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        navigationViewModel = ViewModelProviders.of(requireActivity()).get(HomeNavigationViewModel::class.java)
+        actionViewModel = ViewModelProviders.of(requireActivity()).get(HomeActionViewModel::class.java)
         groupController.callback = this
         stateView.contentView = groupListEpoxyRecyclerView
         groupListEpoxyRecyclerView.setController(groupController)
         viewModel.subscribe { renderState(it) }
         viewModel.openGroupLiveData.observeEvent(this) {
-            navigationViewModel.post(HomeActivity.Navigation.OpenGroup)
+            actionViewModel.post(HomeActivity.HomeActivityAction.OpenGroup)
         }
     }
 

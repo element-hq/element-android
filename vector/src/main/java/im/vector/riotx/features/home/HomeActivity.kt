@@ -33,6 +33,7 @@ import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.extensions.replaceFragment
 import im.vector.riotx.core.platform.ToolbarConfigurable
+import im.vector.riotx.core.platform.VectorAction
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.pushers.PushersManager
 import im.vector.riotx.features.disclaimer.showDisclaimerDialog
@@ -48,12 +49,12 @@ import javax.inject.Inject
 class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     // Supported navigation actions for this Activity
-    sealed class Navigation {
-        object OpenDrawer : Navigation()
-        object OpenGroup : Navigation()
+    sealed class HomeActivityAction : VectorAction {
+        object OpenDrawer : HomeActivityAction()
+        object OpenGroup : HomeActivityAction()
     }
 
-    private lateinit var navigationViewModel: HomeNavigationViewModel
+    private lateinit var actionViewModel: HomeActionViewModel
 
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var vectorUncaughtExceptionHandler: VectorUncaughtExceptionHandler
@@ -75,18 +76,18 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         FcmHelper.ensureFcmTokenIsRetrieved(this, pushManager)
-        navigationViewModel = ViewModelProviders.of(this).get(HomeNavigationViewModel::class.java)
+        actionViewModel = ViewModelProviders.of(this).get(HomeActionViewModel::class.java)
         drawerLayout.addDrawerListener(drawerListener)
         if (isFirstCreation()) {
             replaceFragment(R.id.homeDetailFragmentContainer, LoadingFragment::class.java)
             replaceFragment(R.id.homeDrawerFragmentContainer, HomeDrawerFragment::class.java)
         }
 
-        navigationViewModel.observe()
+        actionViewModel.observe()
                 .subscribe { navigation ->
                     when (navigation) {
-                        is Navigation.OpenDrawer -> drawerLayout.openDrawer(GravityCompat.START)
-                        is Navigation.OpenGroup  -> {
+                        is HomeActivityAction.OpenDrawer -> drawerLayout.openDrawer(GravityCompat.START)
+                        is HomeActivityAction.OpenGroup  -> {
                             drawerLayout.closeDrawer(GravityCompat.START)
                             replaceFragment(R.id.homeDetailFragmentContainer, HomeDetailFragment::class.java)
                         }

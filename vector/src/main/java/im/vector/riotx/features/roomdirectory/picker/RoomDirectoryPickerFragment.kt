@@ -27,8 +27,8 @@ import com.airbnb.mvrx.withState
 import im.vector.matrix.android.api.session.room.model.thirdparty.RoomDirectoryData
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseFragment
+import im.vector.riotx.features.roomdirectory.RoomDirectoryActionViewModel
 import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
-import im.vector.riotx.features.roomdirectory.RoomDirectoryNavigationViewModel
 import im.vector.riotx.features.roomdirectory.RoomDirectoryViewModel
 import kotlinx.android.synthetic.main.fragment_room_directory_picker.*
 import timber.log.Timber
@@ -41,7 +41,7 @@ class RoomDirectoryPickerFragment @Inject constructor(val roomDirectoryPickerVie
 ) : VectorBaseFragment(), RoomDirectoryPickerController.Callback {
 
     private val viewModel: RoomDirectoryViewModel by activityViewModel()
-    private lateinit var navigationViewModel: RoomDirectoryNavigationViewModel
+    private lateinit var actionViewModel: RoomDirectoryActionViewModel
     private val pickerViewModel: RoomDirectoryPickerViewModel by fragmentViewModel()
 
     override fun getLayoutResId() = R.layout.fragment_room_directory_picker
@@ -71,7 +71,7 @@ class RoomDirectoryPickerFragment @Inject constructor(val roomDirectoryPickerVie
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        navigationViewModel = ViewModelProviders.of(requireActivity()).get(RoomDirectoryNavigationViewModel::class.java)
+        actionViewModel = ViewModelProviders.of(requireActivity()).get(RoomDirectoryActionViewModel::class.java)
         setupRecyclerView()
     }
 
@@ -88,7 +88,7 @@ class RoomDirectoryPickerFragment @Inject constructor(val roomDirectoryPickerVie
         Timber.v("onRoomDirectoryClicked: $roomDirectoryData")
         viewModel.setRoomDirectoryData(roomDirectoryData)
 
-        navigationViewModel.post(RoomDirectoryActivity.Navigation.Back)
+        actionViewModel.post(RoomDirectoryActivity.RoomDirectoryAction.Back)
     }
 
     override fun retry() {

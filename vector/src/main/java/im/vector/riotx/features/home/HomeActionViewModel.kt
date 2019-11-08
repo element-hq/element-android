@@ -14,11 +14,8 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.roomdirectory
+package im.vector.riotx.features.home
 
-import androidx.lifecycle.ViewModel
-import im.vector.riotx.core.utils.PublishDataSource
-import im.vector.riotx.core.utils.MutableDataSource
+import im.vector.riotx.core.platform.VectorActionViewModel
 
-class RoomDirectoryNavigationViewModel(private val source: MutableDataSource<RoomDirectoryActivity.Navigation> = PublishDataSource())
-    : ViewModel(), MutableDataSource<RoomDirectoryActivity.Navigation> by source
+class HomeActionViewModel : VectorActionViewModel<HomeActivity.HomeActivityAction>()

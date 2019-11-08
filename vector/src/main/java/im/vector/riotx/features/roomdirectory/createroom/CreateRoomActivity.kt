@@ -27,7 +27,7 @@ import im.vector.riotx.core.extensions.addFragment
 import im.vector.riotx.core.platform.ToolbarConfigurable
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
-import im.vector.riotx.features.roomdirectory.RoomDirectoryNavigationViewModel
+import im.vector.riotx.features.roomdirectory.RoomDirectoryActionViewModel
 import javax.inject.Inject
 
 /**
@@ -38,7 +38,7 @@ class CreateRoomActivity : VectorBaseActivity(), ToolbarConfigurable {
     @Inject lateinit var createRoomViewModelFactory: CreateRoomViewModel.Factory
     private val createRoomViewModel: CreateRoomViewModel by viewModel()
 
-    private lateinit var navigationViewModel: RoomDirectoryNavigationViewModel
+    private lateinit var actionViewModel: RoomDirectoryActionViewModel
 
     override fun getLayoutRes() = R.layout.activity_simple
 
@@ -55,12 +55,12 @@ class CreateRoomActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        navigationViewModel = ViewModelProviders.of(this, viewModelFactory).get(RoomDirectoryNavigationViewModel::class.java)
-        navigationViewModel.observe()
+        actionViewModel = ViewModelProviders.of(this, viewModelFactory).get(RoomDirectoryActionViewModel::class.java)
+        actionViewModel.observe()
                 .subscribe { navigation ->
                     when (navigation) {
-                        is RoomDirectoryActivity.Navigation.Back,
-                        is RoomDirectoryActivity.Navigation.Close -> finish()
+                        is RoomDirectoryActivity.RoomDirectoryAction.Back,
+                        is RoomDirectoryActivity.RoomDirectoryAction.Close -> finish()
                     }
                 }
                 .disposeOnDestroy()

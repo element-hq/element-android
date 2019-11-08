@@ -15,13 +15,9 @@
  */
 package im.vector.riotx.features.home.room.detail.timeline.action
 
-import androidx.lifecycle.ViewModel
-import im.vector.riotx.core.utils.PublishDataSource
-import im.vector.riotx.core.utils.MutableDataSource
+import im.vector.riotx.core.platform.VectorActionViewModel
 
 /**
  * Activity shared view model to handle message actions
  */
-class MessageActionsDispatcher constructor(
-        private val dataSource: MutableDataSource<SimpleAction> = PublishDataSource()
-) : ViewModel(), MutableDataSource<SimpleAction> by dataSource
+class MessageActionsDispatcher : VectorActionViewModel<EventAction>()

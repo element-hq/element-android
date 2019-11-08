@@ -39,7 +39,7 @@ import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.platform.OnBackPressed
 import im.vector.riotx.core.platform.StateView
 import im.vector.riotx.core.platform.VectorBaseFragment
-import im.vector.riotx.features.home.room.list.actions.RoomListQuickActions
+import im.vector.riotx.features.home.room.list.actions.RoomListQuickAction
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsBottomSheet
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsStore
 import im.vector.riotx.features.home.room.list.widget.FabMenuView
@@ -216,29 +216,29 @@ class RoomListFragment @Inject constructor(
         }
     }
 
-    private fun handleQuickActions(quickActions: RoomListQuickActions) {
-        when (quickActions) {
-            is RoomListQuickActions.NotificationsAllNoisy     -> {
-                roomListViewModel.accept(RoomListActions.ChangeRoomNotificationState(quickActions.roomId, RoomNotificationState.ALL_MESSAGES_NOISY))
+    private fun handleQuickActions(quickAction: RoomListQuickAction) {
+        when (quickAction) {
+            is RoomListQuickAction.NotificationsAllNoisy     -> {
+                roomListViewModel.accept(RoomListActions.ChangeRoomNotificationState(quickAction.roomId, RoomNotificationState.ALL_MESSAGES_NOISY))
             }
-            is RoomListQuickActions.NotificationsAll          -> {
-                roomListViewModel.accept(RoomListActions.ChangeRoomNotificationState(quickActions.roomId, RoomNotificationState.ALL_MESSAGES))
+            is RoomListQuickAction.NotificationsAll          -> {
+                roomListViewModel.accept(RoomListActions.ChangeRoomNotificationState(quickAction.roomId, RoomNotificationState.ALL_MESSAGES))
             }
-            is RoomListQuickActions.NotificationsMentionsOnly -> {
-                roomListViewModel.accept(RoomListActions.ChangeRoomNotificationState(quickActions.roomId, RoomNotificationState.MENTIONS_ONLY))
+            is RoomListQuickAction.NotificationsMentionsOnly -> {
+                roomListViewModel.accept(RoomListActions.ChangeRoomNotificationState(quickAction.roomId, RoomNotificationState.MENTIONS_ONLY))
             }
-            is RoomListQuickActions.NotificationsMute         -> {
-                roomListViewModel.accept(RoomListActions.ChangeRoomNotificationState(quickActions.roomId, RoomNotificationState.MUTE))
+            is RoomListQuickAction.NotificationsMute         -> {
+                roomListViewModel.accept(RoomListActions.ChangeRoomNotificationState(quickAction.roomId, RoomNotificationState.MUTE))
             }
-            is RoomListQuickActions.Settings                  -> {
+            is RoomListQuickAction.Settings                  -> {
                 vectorBaseActivity.notImplemented("Opening room settings")
             }
-            is RoomListQuickActions.Leave                     -> {
+            is RoomListQuickAction.Leave                     -> {
                 AlertDialog.Builder(requireContext())
                         .setTitle(R.string.room_participants_leave_prompt_title)
                         .setMessage(R.string.room_participants_leave_prompt_msg)
                         .setPositiveButton(R.string.leave) { _, _ ->
-                            roomListViewModel.accept(RoomListActions.LeaveRoom(quickActions.roomId))
+                            roomListViewModel.accept(RoomListActions.LeaveRoom(quickAction.roomId))
                         }
                         .setNegativeButton(R.string.cancel, null)
                         .show()

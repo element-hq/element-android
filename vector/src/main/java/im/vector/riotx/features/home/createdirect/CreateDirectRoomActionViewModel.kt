@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,11 +14,8 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.home
+package im.vector.riotx.features.home.createdirect
 
-import androidx.lifecycle.ViewModel
-import im.vector.riotx.core.utils.PublishDataSource
-import im.vector.riotx.core.utils.MutableDataSource
+import im.vector.riotx.core.platform.VectorActionViewModel
 
-class HomeNavigationViewModel(private val source: MutableDataSource<HomeActivity.Navigation> = PublishDataSource())
-    : ViewModel(), MutableDataSource<HomeActivity.Navigation> by source
+class CreateDirectRoomActionViewModel : VectorActionViewModel<CreateDirectRoomActivity.CreateDirectRoomAction>()

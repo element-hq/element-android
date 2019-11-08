@@ -62,7 +62,7 @@ data class MessageActionState(
         // For quick reactions
         val quickStates: Async<List<ToggleState>> = Uninitialized,
         // For actions
-        val actions: Async<List<SimpleAction>> = Uninitialized,
+        val actions: Async<List<EventAction>> = Uninitialized,
         val expendedReportContentMenu: Boolean = false
 ) : MvRxState {
 
@@ -184,63 +184,63 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         }
     }
 
-    private fun actionsForEvent(optionalEvent: Optional<TimelineEvent>): List<SimpleAction> {
+    private fun actionsForEvent(optionalEvent: Optional<TimelineEvent>): List<EventAction> {
         val event = optionalEvent.getOrNull() ?: return emptyList()
 
         val messageContent: MessageContent? = event.annotations?.editSummary?.aggregatedContent.toModel()
                 ?: event.root.getClearContent().toModel()
         val type = messageContent?.type
 
-        return arrayListOf<SimpleAction>().apply {
+        return arrayListOf<EventAction>().apply {
             if (event.root.sendState.hasFailed()) {
                 if (canRetry(event)) {
-                    add(SimpleAction.Resend(eventId))
+                    add(EventAction.Resend(eventId))
                 }
-                add(SimpleAction.Remove(eventId))
+                add(EventAction.Remove(eventId))
             } else if (event.root.sendState.isSending()) {
                 // TODO is uploading attachment?
                 if (canCancel(event)) {
-                    add(SimpleAction.Cancel(eventId))
+                    add(EventAction.Cancel(eventId))
                 }
             } else if (event.root.sendState == SendState.SYNCED) {
                 if (!event.root.isRedacted()) {
                     if (canReply(event, messageContent)) {
-                        add(SimpleAction.Reply(eventId))
+                        add(EventAction.Reply(eventId))
                     }
 
                     if (canEdit(event, session.myUserId)) {
-                        add(SimpleAction.Edit(eventId))
+                        add(EventAction.Edit(eventId))
                     }
 
                     if (canRedact(event, session.myUserId)) {
-                        add(SimpleAction.Delete(eventId))
+                        add(EventAction.Delete(eventId))
                     }
 
                     if (canCopy(type)) {
                         // TODO copy images? html? see ClipBoard
-                        add(SimpleAction.Copy(messageContent!!.body))
+                        add(EventAction.Copy(messageContent!!.body))
                     }
 
                     if (event.canReact()) {
-                        add(SimpleAction.AddReaction(eventId))
+                        add(EventAction.AddReaction(eventId))
                     }
 
                     if (canQuote(event, messageContent)) {
-                        add(SimpleAction.Quote(eventId))
+                        add(EventAction.Quote(eventId))
                     }
 
                     if (canViewReactions(event)) {
-                        add(SimpleAction.ViewReactions(informationData))
+                        add(EventAction.ViewReactions(informationData))
                     }
 
                     if (event.hasBeenEdited()) {
-                        add(SimpleAction.ViewEditHistory(informationData))
+                        add(EventAction.ViewEditHistory(informationData))
                     }
 
                     if (canShare(type)) {
                         if (messageContent is MessageImageContent) {
                             session.contentUrlResolver().resolveFullSize(messageContent.url)?.let { url ->
-                                add(SimpleAction.Share(url))
+                                add(EventAction.Share(url))
                             }
                         }
                         // TODO
@@ -253,17 +253,17 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                     }
                 }
 
-                add(SimpleAction.ViewSource(event.root.toContentStringWithIndent()))
+                add(EventAction.ViewSource(event.root.toContentStringWithIndent()))
                 if (event.isEncrypted()) {
                     val decryptedContent = event.root.toClearContentStringWithIndent()
                             ?: stringProvider.getString(R.string.encryption_information_decryption_error)
-                    add(SimpleAction.ViewDecryptedSource(decryptedContent))
+                    add(EventAction.ViewDecryptedSource(decryptedContent))
                 }
-                add(SimpleAction.CopyPermalink(eventId))
+                add(EventAction.CopyPermalink(eventId))
 
                 if (session.myUserId != event.root.senderId && event.root.getClearType() == EventType.MESSAGE) {
                     // not sent by me
-                    add(SimpleAction.ReportContent(eventId, event.root.senderId))
+                    add(EventAction.ReportContent(eventId, event.root.senderId))
                 }
             }
         }
