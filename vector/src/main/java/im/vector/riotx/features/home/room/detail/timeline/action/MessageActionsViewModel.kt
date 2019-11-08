@@ -37,7 +37,6 @@ import im.vector.matrix.rx.unwrap
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.canReact
 import im.vector.riotx.core.platform.VectorViewModel
-import im.vector.riotx.core.platform.VectorViewModelAction
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.home.room.detail.timeline.format.NoticeEventFormatter
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
@@ -77,10 +76,6 @@ data class MessageActionState(
     fun canReact() = timelineEvent()?.canReact() == true
 }
 
-sealed class MessageActionActions : VectorViewModelAction {
-    object ToggleReportMenu : MessageActionActions()
-}
-
 /**
  * Information related to an event and used to display preview in contextual bottom sheet.
  */
@@ -90,7 +85,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                                                           private val session: Session,
                                                           private val noticeEventFormatter: NoticeEventFormatter,
                                                           private val stringProvider: StringProvider
-) : VectorViewModel<MessageActionState, MessageActionActions>(initialState) {
+) : VectorViewModel<MessageActionState, MessageActionsActions>(initialState) {
 
     private val eventId = initialState.eventId
     private val informationData = initialState.informationData
@@ -117,9 +112,9 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         observeEventAction()
     }
 
-    override fun handle(action: MessageActionActions) {
+    override fun handle(action: MessageActionsActions) {
         when (action) {
-            MessageActionActions.ToggleReportMenu -> toggleReportMenu()
+            MessageActionsActions.ToggleReportMenu -> toggleReportMenu()
         }
     }
 
