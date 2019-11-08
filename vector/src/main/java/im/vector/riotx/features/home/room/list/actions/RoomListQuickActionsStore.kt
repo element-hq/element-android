@@ -21,4 +21,4 @@ import im.vector.riotx.core.platform.VectorSharedActionViewModel
 /**
  * Activity shared view model to handle room list quick actions
  */
-class RoomListQuickActionsStore : VectorSharedActionViewModel<RoomListQuickSharedAction>()
+class RoomListQuickActionsStore : VectorSharedActionViewModel<RoomListQuickActionsSharedAction>()

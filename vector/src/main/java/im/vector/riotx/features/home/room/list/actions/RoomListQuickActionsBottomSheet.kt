@@ -82,7 +82,7 @@ class RoomListQuickActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), R
         super.invalidate()
     }
 
-    override fun didSelectMenuAction(quickAction: RoomListQuickSharedAction) {
+    override fun didSelectMenuAction(quickAction: RoomListQuickActionsSharedAction) {
         actionsDispatcher.post(quickAction)
         dismiss()
     }
