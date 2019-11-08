@@ -21,10 +21,10 @@ import im.vector.riotx.core.utils.MutableDataSource
 import im.vector.riotx.core.utils.PublishDataSource
 
 
-interface VectorAction
+interface VectorSharedAction
 
 /**
  * Parent class to handle navigation events, action events, or other any events
  */
-open class VectorActionViewModel<T : VectorAction>(private val store: MutableDataSource<T> = PublishDataSource())
+open class VectorSharedActionViewModel<T : VectorSharedAction>(private val store: MutableDataSource<T> = PublishDataSource())
     : ViewModel(), MutableDataSource<T> by store

@@ -25,15 +25,15 @@ import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseFragment
-import im.vector.riotx.features.roomdirectory.RoomDirectoryAction
-import im.vector.riotx.features.roomdirectory.RoomDirectoryActionViewModel
+import im.vector.riotx.features.roomdirectory.RoomDirectorySharedAction
+import im.vector.riotx.features.roomdirectory.RoomDirectorySharedActionViewModel
 import kotlinx.android.synthetic.main.fragment_create_room.*
 import timber.log.Timber
 import javax.inject.Inject
 
 class CreateRoomFragment @Inject constructor(private val createRoomController: CreateRoomController): VectorBaseFragment(), CreateRoomController.Listener {
 
-    private lateinit var actionViewModel: RoomDirectoryActionViewModel
+    private lateinit var actionViewModel: RoomDirectorySharedActionViewModel
     private val viewModel: CreateRoomViewModel by activityViewModel()
 
     override fun getLayoutResId() = R.layout.fragment_create_room
@@ -43,10 +43,10 @@ class CreateRoomFragment @Inject constructor(private val createRoomController: C
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         vectorBaseActivity.setSupportActionBar(createRoomToolbar)
-        actionViewModel = ViewModelProviders.of(requireActivity()).get(RoomDirectoryActionViewModel::class.java)
+        actionViewModel = ViewModelProviders.of(requireActivity()).get(RoomDirectorySharedActionViewModel::class.java)
         setupRecyclerView()
         createRoomClose.setOnClickListener {
-            actionViewModel.post(RoomDirectoryAction.Back)
+            actionViewModel.post(RoomDirectorySharedAction.Back)
         }
     }
 
@@ -93,7 +93,7 @@ class CreateRoomFragment @Inject constructor(private val createRoomController: C
             // Navigate to freshly created room
             navigator.openRoom(requireActivity(), async())
 
-            actionViewModel.post(RoomDirectoryAction.Close)
+            actionViewModel.post(RoomDirectorySharedAction.Close)
         } else {
             // Populate list with Epoxy
             createRoomController.setData(state)

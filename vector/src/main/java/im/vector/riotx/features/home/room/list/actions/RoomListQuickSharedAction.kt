@@ -19,36 +19,36 @@ package im.vector.riotx.features.home.room.list.actions
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import im.vector.riotx.R
-import im.vector.riotx.core.platform.VectorAction
+import im.vector.riotx.core.platform.VectorSharedAction
 
-sealed class RoomListQuickAction(@StringRes val titleRes: Int, @DrawableRes val iconResId: Int, val destructive: Boolean = false) : VectorAction {
+sealed class RoomListQuickSharedAction(@StringRes val titleRes: Int, @DrawableRes val iconResId: Int, val destructive: Boolean = false) : VectorSharedAction {
 
-    data class NotificationsAllNoisy(val roomId: String) : RoomListQuickAction(
+    data class NotificationsAllNoisy(val roomId: String) : RoomListQuickSharedAction(
             R.string.room_list_quick_actions_notifications_all_noisy,
             R.drawable.ic_room_actions_notifications_all_noisy
     )
 
-    data class NotificationsAll(val roomId: String) : RoomListQuickAction(
+    data class NotificationsAll(val roomId: String) : RoomListQuickSharedAction(
             R.string.room_list_quick_actions_notifications_all,
             R.drawable.ic_room_actions_notifications_all
     )
 
-    data class NotificationsMentionsOnly(val roomId: String) : RoomListQuickAction(
+    data class NotificationsMentionsOnly(val roomId: String) : RoomListQuickSharedAction(
             R.string.room_list_quick_actions_notifications_mentions,
             R.drawable.ic_room_actions_notifications_mentions
     )
 
-    data class NotificationsMute(val roomId: String) : RoomListQuickAction(
+    data class NotificationsMute(val roomId: String) : RoomListQuickSharedAction(
             R.string.room_list_quick_actions_notifications_mute,
             R.drawable.ic_room_actions_notifications_mutes
     )
 
-    data class Settings(val roomId: String) : RoomListQuickAction(
+    data class Settings(val roomId: String) : RoomListQuickSharedAction(
             R.string.room_list_quick_actions_settings,
             R.drawable.ic_room_actions_settings
     )
 
-    data class Leave(val roomId: String) : RoomListQuickAction(
+    data class Leave(val roomId: String) : RoomListQuickSharedAction(
             R.string.room_list_quick_actions_leave,
             R.drawable.ic_room_actions_leave,
             true

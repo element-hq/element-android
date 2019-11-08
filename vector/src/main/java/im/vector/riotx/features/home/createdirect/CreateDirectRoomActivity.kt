@@ -39,7 +39,7 @@ import javax.inject.Inject
 class CreateDirectRoomActivity : SimpleFragmentActivity() {
 
     private val viewModel: CreateDirectRoomViewModel by viewModel()
-    private lateinit var actionViewModel: CreateDirectRoomActionViewModel
+    private lateinit var actionViewModel: CreateDirectRoomSharedActionViewModel
     @Inject lateinit var createDirectRoomViewModelFactory: CreateDirectRoomViewModel.Factory
     @Inject lateinit var errorFormatter: ErrorFormatter
 
@@ -51,13 +51,13 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         toolbar.visibility = View.GONE
-        actionViewModel = ViewModelProviders.of(this, viewModelFactory).get(CreateDirectRoomActionViewModel::class.java)
+        actionViewModel = ViewModelProviders.of(this, viewModelFactory).get(CreateDirectRoomSharedActionViewModel::class.java)
         actionViewModel.observe()
                 .subscribe { navigation ->
                     when (navigation) {
-                        CreateDirectRoomAction.OpenUsersDirectory -> addFragmentToBackstack(R.id.container, CreateDirectRoomDirectoryUsersFragment::class.java)
-                        CreateDirectRoomAction.Close              -> finish()
-                        CreateDirectRoomAction.GoBack             -> onBackPressed()
+                        CreateDirectRoomSharedAction.OpenUsersDirectory -> addFragmentToBackstack(R.id.container, CreateDirectRoomDirectoryUsersFragment::class.java)
+                        CreateDirectRoomSharedAction.Close              -> finish()
+                        CreateDirectRoomSharedAction.GoBack             -> onBackPressed()
                     }
                 }
                 .disposeOnDestroy()

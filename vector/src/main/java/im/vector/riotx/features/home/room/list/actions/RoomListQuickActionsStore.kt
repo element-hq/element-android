@@ -16,9 +16,9 @@
  */
 package im.vector.riotx.features.home.room.list.actions
 
-import im.vector.riotx.core.platform.VectorActionViewModel
+import im.vector.riotx.core.platform.VectorSharedActionViewModel
 
 /**
  * Activity shared view model to handle room list quick actions
  */
-class RoomListQuickActionsStore : VectorActionViewModel<RoomListQuickAction>()
+class RoomListQuickActionsStore : VectorSharedActionViewModel<RoomListQuickSharedAction>()

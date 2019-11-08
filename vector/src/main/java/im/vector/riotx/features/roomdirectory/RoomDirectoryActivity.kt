@@ -37,7 +37,7 @@ class RoomDirectoryActivity : VectorBaseActivity() {
     @Inject lateinit var roomDirectoryViewModelFactory: RoomDirectoryViewModel.Factory
     private val roomDirectoryViewModel: RoomDirectoryViewModel by viewModel()
     private val createRoomViewModel: CreateRoomViewModel by viewModel()
-    private lateinit var actionViewModel: RoomDirectoryActionViewModel
+    private lateinit var actionViewModel: RoomDirectorySharedActionViewModel
 
     override fun getLayoutRes() = R.layout.activity_simple
 
@@ -47,7 +47,7 @@ class RoomDirectoryActivity : VectorBaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        actionViewModel = ViewModelProviders.of(this, viewModelFactory).get(RoomDirectoryActionViewModel::class.java)
+        actionViewModel = ViewModelProviders.of(this, viewModelFactory).get(RoomDirectorySharedActionViewModel::class.java)
 
         if (isFirstCreation()) {
             roomDirectoryViewModel.filterWith(intent?.getStringExtra(INITIAL_FILTER) ?: "")
@@ -56,10 +56,10 @@ class RoomDirectoryActivity : VectorBaseActivity() {
         actionViewModel.observe()
                 .subscribe { navigation ->
                     when (navigation) {
-                        is RoomDirectoryAction.Back           -> onBackPressed()
-                        is RoomDirectoryAction.CreateRoom     -> addFragmentToBackstack(R.id.simpleFragmentContainer, CreateRoomFragment::class.java)
-                        is RoomDirectoryAction.ChangeProtocol -> addFragmentToBackstack(R.id.simpleFragmentContainer, RoomDirectoryPickerFragment::class.java)
-                        is RoomDirectoryAction.Close          -> finish()
+                        is RoomDirectorySharedAction.Back           -> onBackPressed()
+                        is RoomDirectorySharedAction.CreateRoom     -> addFragmentToBackstack(R.id.simpleFragmentContainer, CreateRoomFragment::class.java)
+                        is RoomDirectorySharedAction.ChangeProtocol -> addFragmentToBackstack(R.id.simpleFragmentContainer, RoomDirectoryPickerFragment::class.java)
+                        is RoomDirectorySharedAction.Close          -> finish()
                     }
                 }
                 .disposeOnDestroy()

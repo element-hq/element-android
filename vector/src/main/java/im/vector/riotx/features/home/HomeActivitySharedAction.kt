@@ -16,6 +16,12 @@
 
 package im.vector.riotx.features.home
 
-import im.vector.riotx.core.platform.VectorActionViewModel
+import im.vector.riotx.core.platform.VectorSharedAction
 
-class HomeActionViewModel : VectorActionViewModel<HomeActivityAction>()
+/**
+ * Supported navigation actions for [HomeActivity]
+ */
+sealed class HomeActivitySharedAction : VectorSharedAction {
+    object OpenDrawer : HomeActivitySharedAction()
+    object OpenGroup : HomeActivitySharedAction()
+}

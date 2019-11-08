@@ -42,7 +42,7 @@ class RoomListQuickActionsEpoxyController @Inject constructor(private val avatar
             roomName(roomSummary.displayName)
             avatarUrl(roomSummary.avatarUrl)
             roomId(roomSummary.roomId)
-            settingsClickListener(View.OnClickListener { listener?.didSelectMenuAction(RoomListQuickAction.Settings(roomSummary.roomId)) })
+            settingsClickListener(View.OnClickListener { listener?.didSelectMenuAction(RoomListQuickSharedAction.Settings(roomSummary.roomId)) })
         }
 
         // Notifications
@@ -51,26 +51,26 @@ class RoomListQuickActionsEpoxyController @Inject constructor(private val avatar
         }
 
         val selectedRoomState = state.roomNotificationState()
-        RoomListQuickAction.NotificationsAllNoisy(roomSummary.roomId).toBottomSheetItem(0, selectedRoomState)
-        RoomListQuickAction.NotificationsAll(roomSummary.roomId).toBottomSheetItem(1, selectedRoomState)
-        RoomListQuickAction.NotificationsMentionsOnly(roomSummary.roomId).toBottomSheetItem(2, selectedRoomState)
-        RoomListQuickAction.NotificationsMute(roomSummary.roomId).toBottomSheetItem(3, selectedRoomState)
+        RoomListQuickSharedAction.NotificationsAllNoisy(roomSummary.roomId).toBottomSheetItem(0, selectedRoomState)
+        RoomListQuickSharedAction.NotificationsAll(roomSummary.roomId).toBottomSheetItem(1, selectedRoomState)
+        RoomListQuickSharedAction.NotificationsMentionsOnly(roomSummary.roomId).toBottomSheetItem(2, selectedRoomState)
+        RoomListQuickSharedAction.NotificationsMute(roomSummary.roomId).toBottomSheetItem(3, selectedRoomState)
 
         // Leave
         bottomSheetItemSeparator {
             id("leave_separator")
         }
-        RoomListQuickAction.Leave(roomSummary.roomId).toBottomSheetItem(5)
+        RoomListQuickSharedAction.Leave(roomSummary.roomId).toBottomSheetItem(5)
     }
 
-    private fun RoomListQuickAction.toBottomSheetItem(index: Int, roomNotificationState: RoomNotificationState? = null) {
+    private fun RoomListQuickSharedAction.toBottomSheetItem(index: Int, roomNotificationState: RoomNotificationState? = null) {
         val selected = when (this) {
-            is RoomListQuickAction.NotificationsAllNoisy     -> roomNotificationState == RoomNotificationState.ALL_MESSAGES_NOISY
-            is RoomListQuickAction.NotificationsAll          -> roomNotificationState == RoomNotificationState.ALL_MESSAGES
-            is RoomListQuickAction.NotificationsMentionsOnly -> roomNotificationState == RoomNotificationState.MENTIONS_ONLY
-            is RoomListQuickAction.NotificationsMute         -> roomNotificationState == RoomNotificationState.MUTE
-            is RoomListQuickAction.Settings,
-            is RoomListQuickAction.Leave                     -> false
+            is RoomListQuickSharedAction.NotificationsAllNoisy     -> roomNotificationState == RoomNotificationState.ALL_MESSAGES_NOISY
+            is RoomListQuickSharedAction.NotificationsAll          -> roomNotificationState == RoomNotificationState.ALL_MESSAGES
+            is RoomListQuickSharedAction.NotificationsMentionsOnly -> roomNotificationState == RoomNotificationState.MENTIONS_ONLY
+            is RoomListQuickSharedAction.NotificationsMute         -> roomNotificationState == RoomNotificationState.MUTE
+            is RoomListQuickSharedAction.Settings,
+            is RoomListQuickSharedAction.Leave                     -> false
         }
         return bottomSheetItemAction {
             id("action_$index")
@@ -83,6 +83,6 @@ class RoomListQuickActionsEpoxyController @Inject constructor(private val avatar
     }
 
     interface Listener {
-        fun didSelectMenuAction(quickAction: RoomListQuickAction)
+        fun didSelectMenuAction(quickAction: RoomListQuickSharedAction)
     }
 }

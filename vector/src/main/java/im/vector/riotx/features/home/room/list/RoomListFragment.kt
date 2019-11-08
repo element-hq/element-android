@@ -39,7 +39,7 @@ import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.platform.OnBackPressed
 import im.vector.riotx.core.platform.StateView
 import im.vector.riotx.core.platform.VectorBaseFragment
-import im.vector.riotx.features.home.room.list.actions.RoomListQuickAction
+import im.vector.riotx.features.home.room.list.actions.RoomListQuickSharedAction
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsBottomSheet
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsStore
 import im.vector.riotx.features.home.room.list.widget.FabMenuView
@@ -216,24 +216,24 @@ class RoomListFragment @Inject constructor(
         }
     }
 
-    private fun handleQuickActions(quickAction: RoomListQuickAction) {
+    private fun handleQuickActions(quickAction: RoomListQuickSharedAction) {
         when (quickAction) {
-            is RoomListQuickAction.NotificationsAllNoisy     -> {
+            is RoomListQuickSharedAction.NotificationsAllNoisy     -> {
                 roomListViewModel.accept(RoomListActions.ChangeRoomNotificationState(quickAction.roomId, RoomNotificationState.ALL_MESSAGES_NOISY))
             }
-            is RoomListQuickAction.NotificationsAll          -> {
+            is RoomListQuickSharedAction.NotificationsAll          -> {
                 roomListViewModel.accept(RoomListActions.ChangeRoomNotificationState(quickAction.roomId, RoomNotificationState.ALL_MESSAGES))
             }
-            is RoomListQuickAction.NotificationsMentionsOnly -> {
+            is RoomListQuickSharedAction.NotificationsMentionsOnly -> {
                 roomListViewModel.accept(RoomListActions.ChangeRoomNotificationState(quickAction.roomId, RoomNotificationState.MENTIONS_ONLY))
             }
-            is RoomListQuickAction.NotificationsMute         -> {
+            is RoomListQuickSharedAction.NotificationsMute         -> {
                 roomListViewModel.accept(RoomListActions.ChangeRoomNotificationState(quickAction.roomId, RoomNotificationState.MUTE))
             }
-            is RoomListQuickAction.Settings                  -> {
+            is RoomListQuickSharedAction.Settings                  -> {
                 vectorBaseActivity.notImplemented("Opening room settings")
             }
-            is RoomListQuickAction.Leave                     -> {
+            is RoomListQuickSharedAction.Leave                     -> {
                 AlertDialog.Builder(requireContext())
                         .setTitle(R.string.room_participants_leave_prompt_title)
                         .setMessage(R.string.room_participants_leave_prompt_msg)

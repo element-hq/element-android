@@ -14,16 +14,8 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.roomdirectory
+package im.vector.riotx.features.home
 
-import im.vector.riotx.core.platform.VectorAction
+import im.vector.riotx.core.platform.VectorSharedActionViewModel
 
-/**
- * Supported navigation actions for [RoomDirectoryActivity]
- */
-sealed class RoomDirectoryAction : VectorAction {
-    object Back : RoomDirectoryAction()
-    object CreateRoom : RoomDirectoryAction()
-    object Close : RoomDirectoryAction()
-    object ChangeProtocol : RoomDirectoryAction()
-}
+class HomeSharedActionViewModel : VectorSharedActionViewModel<HomeActivitySharedAction>()

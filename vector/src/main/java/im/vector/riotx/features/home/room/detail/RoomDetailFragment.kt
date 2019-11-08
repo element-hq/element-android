@@ -99,7 +99,7 @@ import im.vector.riotx.features.home.room.detail.readreceipts.DisplayReadReceipt
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.home.room.detail.timeline.action.MessageActionsBottomSheet
 import im.vector.riotx.features.home.room.detail.timeline.action.MessageActionsDispatcher
-import im.vector.riotx.features.home.room.detail.timeline.action.EventAction
+import im.vector.riotx.features.home.room.detail.timeline.action.EventSharedAction
 import im.vector.riotx.features.home.room.detail.timeline.edithistory.ViewEditHistoryBottomSheet
 import im.vector.riotx.features.home.room.detail.timeline.item.*
 import im.vector.riotx.features.home.room.detail.timeline.reactions.ViewReactionsBottomSheet
@@ -749,7 +749,7 @@ class RoomDetailFragment @Inject constructor(
                 .show()
     }
 
-    private fun promptReasonToReportContent(action: EventAction.ReportContentCustom) {
+    private fun promptReasonToReportContent(action: EventSharedAction.ReportContentCustom) {
         val inflater = requireActivity().layoutInflater
         val layout = inflater.inflate(R.layout.dialog_report_content, null)
 
@@ -1037,25 +1037,25 @@ class RoomDetailFragment @Inject constructor(
         textComposerViewModel.process(TextComposerActions.QueryUsers(query))
     }
 
-    private fun handleActions(action: EventAction) {
+    private fun handleActions(action: EventSharedAction) {
         when (action) {
-            is EventAction.AddReaction                -> {
+            is EventSharedAction.AddReaction                -> {
                 startActivityForResult(EmojiReactionPickerActivity.intent(requireContext(), action.eventId), REACTION_SELECT_REQUEST_CODE)
             }
-            is EventAction.ViewReactions              -> {
+            is EventSharedAction.ViewReactions              -> {
                 ViewReactionsBottomSheet.newInstance(roomDetailArgs.roomId, action.messageInformationData)
                         .show(requireActivity().supportFragmentManager, "DISPLAY_REACTIONS")
             }
-            is EventAction.Copy                       -> {
+            is EventSharedAction.Copy                       -> {
                 // I need info about the current selected message :/
                 copyToClipboard(requireContext(), action.content, false)
                 val msg = requireContext().getString(R.string.copied_to_clipboard)
                 showSnackWithMessage(msg, Snackbar.LENGTH_SHORT)
             }
-            is EventAction.Delete                     -> {
+            is EventSharedAction.Delete                     -> {
                 roomDetailViewModel.process(RoomDetailActions.RedactAction(action.eventId, context?.getString(R.string.event_redacted_by_user_reason)))
             }
-            is EventAction.Share                      -> {
+            is EventSharedAction.Share                      -> {
                 // TODO current data communication is too limited
                 // Need to now the media type
                 // TODO bad, just POC
@@ -1083,10 +1083,10 @@ class RoomDetailFragment @Inject constructor(
                         }
                 )
             }
-            is EventAction.ViewEditHistory            -> {
+            is EventSharedAction.ViewEditHistory            -> {
                 onEditedDecorationClicked(action.messageInformationData)
             }
-            is EventAction.ViewSource                 -> {
+            is EventSharedAction.ViewSource                 -> {
                 val view = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_event_content, null)
                 view.findViewById<TextView>(R.id.event_content_text_view)?.let {
                     it.text = action.content
@@ -1097,7 +1097,7 @@ class RoomDetailFragment @Inject constructor(
                         .setPositiveButton(R.string.ok, null)
                         .show()
             }
-            is EventAction.ViewDecryptedSource        -> {
+            is EventSharedAction.ViewDecryptedSource        -> {
                 val view = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_event_content, null)
                 view.findViewById<TextView>(R.id.event_content_text_view)?.let {
                     it.text = action.content
@@ -1108,42 +1108,42 @@ class RoomDetailFragment @Inject constructor(
                         .setPositiveButton(R.string.ok, null)
                         .show()
             }
-            is EventAction.QuickReact                 -> {
+            is EventSharedAction.QuickReact                 -> {
                 // eventId,ClickedOn,Add
                 roomDetailViewModel.process(RoomDetailActions.UpdateQuickReactAction(action.eventId, action.clickedOn, action.add))
             }
-            is EventAction.Edit                       -> {
+            is EventSharedAction.Edit                       -> {
                 roomDetailViewModel.process(RoomDetailActions.EnterEditMode(action.eventId, composerLayout.composerEditText.text.toString()))
             }
-            is EventAction.Quote                      -> {
+            is EventSharedAction.Quote                      -> {
                 roomDetailViewModel.process(RoomDetailActions.EnterQuoteMode(action.eventId, composerLayout.composerEditText.text.toString()))
             }
-            is EventAction.Reply                      -> {
+            is EventSharedAction.Reply                      -> {
                 roomDetailViewModel.process(RoomDetailActions.EnterReplyMode(action.eventId, composerLayout.composerEditText.text.toString()))
             }
-            is EventAction.CopyPermalink              -> {
+            is EventSharedAction.CopyPermalink              -> {
                 val permalink = PermalinkFactory.createPermalink(roomDetailArgs.roomId, action.eventId)
                 copyToClipboard(requireContext(), permalink, false)
                 showSnackWithMessage(requireContext().getString(R.string.copied_to_clipboard), Snackbar.LENGTH_SHORT)
             }
-            is EventAction.Resend                     -> {
+            is EventSharedAction.Resend                     -> {
                 roomDetailViewModel.process(RoomDetailActions.ResendMessage(action.eventId))
             }
-            is EventAction.Remove                     -> {
+            is EventSharedAction.Remove                     -> {
                 roomDetailViewModel.process(RoomDetailActions.RemoveFailedEcho(action.eventId))
             }
-            is EventAction.ReportContentSpam          -> {
+            is EventSharedAction.ReportContentSpam          -> {
                 roomDetailViewModel.process(RoomDetailActions.ReportContent(
                         action.eventId, action.senderId, "This message is spam", spam = true))
             }
-            is EventAction.ReportContentInappropriate -> {
+            is EventSharedAction.ReportContentInappropriate -> {
                 roomDetailViewModel.process(RoomDetailActions.ReportContent(
                         action.eventId, action.senderId, "This message is inappropriate", inappropriate = true))
             }
-            is EventAction.ReportContentCustom        -> {
+            is EventSharedAction.ReportContentCustom        -> {
                 promptReasonToReportContent(action)
             }
-            else                                      -> {
+            else                                            -> {
                 Toast.makeText(context, "Action $action is not implemented yet", Toast.LENGTH_LONG).show()
             }
         }

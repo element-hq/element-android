@@ -47,7 +47,7 @@ class PublicRoomsFragment @Inject constructor(
 ) : VectorBaseFragment(), PublicRoomsController.Callback {
 
     private val viewModel: RoomDirectoryViewModel by activityViewModel()
-    private lateinit var actionViewModel: RoomDirectoryActionViewModel
+    private lateinit var actionViewModel: RoomDirectorySharedActionViewModel
 
     override fun getLayoutResId() = R.layout.fragment_public_rooms
 
@@ -71,7 +71,7 @@ class PublicRoomsFragment @Inject constructor(
                 .disposeOnDestroy()
 
         publicRoomsCreateNewRoom.setOnClickListener {
-            actionViewModel.post(RoomDirectoryAction.CreateRoom)
+            actionViewModel.post(RoomDirectorySharedAction.CreateRoom)
         }
 
         viewModel.joinRoomErrorLiveData.observeEvent(this) { throwable ->
@@ -83,7 +83,7 @@ class PublicRoomsFragment @Inject constructor(
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_room_directory_change_protocol -> {
-                actionViewModel.post(RoomDirectoryAction.ChangeProtocol)
+                actionViewModel.post(RoomDirectorySharedAction.ChangeProtocol)
                 true
             }
             else                                     ->
@@ -93,7 +93,7 @@ class PublicRoomsFragment @Inject constructor(
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        actionViewModel = ViewModelProviders.of(requireActivity()).get(RoomDirectoryActionViewModel::class.java)
+        actionViewModel = ViewModelProviders.of(requireActivity()).get(RoomDirectorySharedActionViewModel::class.java)
         setupRecyclerView()
     }
 
