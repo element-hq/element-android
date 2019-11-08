@@ -70,10 +70,18 @@ abstract class VectorBaseActivity : BaseMvRxActivity(), HasScreenInjector {
     var coordinatorLayout: CoordinatorLayout? = null
 
     /* ==========================================================================================
+     * View model
+     * ========================================================================================== */
+
+    private lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    protected val viewModelProvider
+        get() = ViewModelProviders.of(this, viewModelFactory)
+
+    /* ==========================================================================================
      * DATA
      * ========================================================================================== */
 
-    protected lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var configurationViewModel: ConfigurationViewModel
     private lateinit var sessionListener: SessionListener
     protected lateinit var bugReporter: BugReporter

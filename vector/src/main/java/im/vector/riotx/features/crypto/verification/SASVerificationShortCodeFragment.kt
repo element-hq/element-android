@@ -62,7 +62,7 @@ class SASVerificationShortCodeFragment @Inject constructor(): VectorBaseFragment
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(requireActivity(), viewModelFactory).get(SasVerificationViewModel::class.java)
+        viewModel = activityViewModelProvider.get(SasVerificationViewModel::class.java)
 
         viewModel.transaction?.let {
             if (it.supportsEmoji()) {

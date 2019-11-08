@@ -30,7 +30,7 @@ class EmojiChooserFragment @Inject constructor() : VectorBaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(requireActivity(), viewModelFactory).get(EmojiChooserViewModel::class.java)
+        viewModel = activityViewModelProvider.get(EmojiChooserViewModel::class.java)
         viewModel.initWithContext(context!!)
         (view as? RecyclerView)?.let {
             it.adapter = viewModel.adapter

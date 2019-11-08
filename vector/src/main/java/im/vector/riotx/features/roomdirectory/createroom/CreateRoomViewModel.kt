@@ -46,7 +46,7 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
             return when (activity) {
                 is CreateRoomActivity    -> activity.createRoomViewModelFactory.create(state)
                 is RoomDirectoryActivity -> activity.createRoomViewModelFactory.create(state)
-                else                     -> throw IllegalStateException("Wrong activity")
+                else                     -> error("Wrong activity")
             }
         }
     }

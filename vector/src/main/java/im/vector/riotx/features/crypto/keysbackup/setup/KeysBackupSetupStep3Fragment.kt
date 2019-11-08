@@ -58,7 +58,7 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment() 
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(requireActivity(), viewModelFactory).get(KeysBackupSetupSharedViewModel::class.java)
+        viewModel = activityViewModelProvider.get(KeysBackupSetupSharedViewModel::class.java)
 
         viewModel.shouldPromptOnBack = false
 

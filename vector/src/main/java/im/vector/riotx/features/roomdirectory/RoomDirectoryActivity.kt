@@ -48,7 +48,7 @@ class RoomDirectoryActivity : VectorBaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        sharedActionViewModel = ViewModelProviders.of(this, viewModelFactory).get(RoomDirectorySharedActionViewModel::class.java)
+        sharedActionViewModel = viewModelProvider.get(RoomDirectorySharedActionViewModel::class.java)
 
         if (isFirstCreation()) {
             roomDirectoryViewModel.handle(RoomDirectoryAction.FilterWith(intent?.getStringExtra(INITIAL_FILTER) ?: ""))

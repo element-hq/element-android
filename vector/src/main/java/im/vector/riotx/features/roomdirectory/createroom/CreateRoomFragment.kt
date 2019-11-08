@@ -43,7 +43,7 @@ class CreateRoomFragment @Inject constructor(private val createRoomController: C
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         vectorBaseActivity.setSupportActionBar(createRoomToolbar)
-        sharedActionViewModel = ViewModelProviders.of(requireActivity(), viewModelFactory).get(RoomDirectorySharedActionViewModel::class.java)
+        sharedActionViewModel = activityViewModelProvider.get(RoomDirectorySharedActionViewModel::class.java)
         setupRecyclerView()
         createRoomClose.setOnClickListener {
             sharedActionViewModel.post(RoomDirectorySharedAction.Back)

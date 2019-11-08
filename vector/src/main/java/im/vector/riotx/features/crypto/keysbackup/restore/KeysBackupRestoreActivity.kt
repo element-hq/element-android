@@ -43,7 +43,7 @@ class KeysBackupRestoreActivity : SimpleFragmentActivity() {
 
     override fun initUiAndData() {
         super.initUiAndData()
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(KeysBackupRestoreSharedViewModel::class.java)
+        viewModel = viewModelProvider.get(KeysBackupRestoreSharedViewModel::class.java)
         viewModel.initSession(session)
         viewModel.keyVersionResult.observe(this, Observer { keyVersion ->
 

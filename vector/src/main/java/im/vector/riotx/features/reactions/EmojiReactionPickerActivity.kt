@@ -90,7 +90,7 @@ class EmojiReactionPickerActivity : VectorBaseActivity(),
 
         tabLayout = findViewById(R.id.tabs)
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(EmojiChooserViewModel::class.java)
+        viewModel = viewModelProvider.get(EmojiChooserViewModel::class.java)
 
         viewModel.eventId = intent.getStringExtra(EXTRA_EVENT_ID)
 

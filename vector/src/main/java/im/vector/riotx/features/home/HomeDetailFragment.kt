@@ -20,7 +20,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.core.view.forEachIndexed
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
@@ -63,7 +62,7 @@ class HomeDetailFragment @Inject constructor(
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        sharedActionViewModel = ViewModelProviders.of(requireActivity(), viewModelFactory).get(HomeSharedActionViewModel::class.java)
+        sharedActionViewModel = activityViewModelProvider.get(HomeSharedActionViewModel::class.java)
 
         setupBottomNavigationView()
         setupToolbar()
@@ -91,7 +90,7 @@ class HomeDetailFragment @Inject constructor(
     private fun setupKeysBackupBanner() {
         // Keys backup banner
         // Use the SignOutViewModel, it observe the keys backup state and this is what we need here
-        val model = ViewModelProviders.of(this, viewModelFactory).get(SignOutViewModel::class.java)
+        val model = fragmentViewModelProvider.get(SignOutViewModel::class.java)
 
         model.init(session)
 

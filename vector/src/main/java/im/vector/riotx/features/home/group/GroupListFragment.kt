@@ -43,7 +43,7 @@ class GroupListFragment @Inject constructor(
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        sharedActionViewModel = ViewModelProviders.of(requireActivity(), viewModelFactory).get(HomeSharedActionViewModel::class.java)
+        sharedActionViewModel = activityViewModelProvider.get(HomeSharedActionViewModel::class.java)
         groupController.callback = this
         stateView.contentView = groupListEpoxyRecyclerView
         groupListEpoxyRecyclerView.setController(groupController)

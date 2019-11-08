@@ -53,7 +53,7 @@ class SASVerificationStartFragment @Inject constructor(): VectorBaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(vectorBaseActivity, viewModelFactory).get(SasVerificationViewModel::class.java)
+        viewModel = activityViewModelProvider.get(SasVerificationViewModel::class.java)
         viewModel.transactionState.observe(viewLifecycleOwner, Observer {
             val uxState = (viewModel.transaction as? OutgoingSasVerificationRequest)?.uxState
             when (uxState) {

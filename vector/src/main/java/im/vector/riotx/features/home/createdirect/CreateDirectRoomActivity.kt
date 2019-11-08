@@ -51,7 +51,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         toolbar.visibility = View.GONE
-        sharedActionViewModel = ViewModelProviders.of(this, viewModelFactory).get(CreateDirectRoomSharedActionViewModel::class.java)
+        sharedActionViewModel = viewModelProvider.get(CreateDirectRoomSharedActionViewModel::class.java)
         sharedActionViewModel
                 .observe()
                 .subscribe { sharedAction ->

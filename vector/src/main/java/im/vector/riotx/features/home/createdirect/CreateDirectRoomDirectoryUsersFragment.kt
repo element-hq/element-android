@@ -43,7 +43,7 @@ class CreateDirectRoomDirectoryUsersFragment @Inject constructor(
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        sharedActionViewModel = ViewModelProviders.of(requireActivity(), viewModelFactory).get(CreateDirectRoomSharedActionViewModel::class.java)
+        sharedActionViewModel = activityViewModelProvider.get(CreateDirectRoomSharedActionViewModel::class.java)
         setupRecyclerView()
         setupSearchByMatrixIdView()
         setupCloseView()

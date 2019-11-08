@@ -51,7 +51,7 @@ class SASVerificationIncomingFragment @Inject constructor(
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel = ViewModelProviders.of(requireActivity(), viewModelFactory).get(SasVerificationViewModel::class.java)
+        viewModel = activityViewModelProvider.get(SasVerificationViewModel::class.java)
 
         otherUserDisplayNameTextView.text = viewModel.otherUser?.displayName ?: viewModel.otherUserId
         otherUserIdTextView.text = viewModel.otherUserId

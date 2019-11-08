@@ -41,7 +41,7 @@ class EmojiSearchResultFragment @Inject constructor(
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        sharedViewModel = ViewModelProviders.of(requireActivity(), viewModelFactory).get(EmojiChooserViewModel::class.java)
+        sharedViewModel = activityViewModelProvider.get(EmojiChooserViewModel::class.java)
 
         epoxyController.listener = object : ReactionClickListener {
             override fun onReactionSelected(reaction: String) {

@@ -64,8 +64,8 @@ class KeysBackupRestoreFromPassphraseFragment @Inject constructor(): VectorBaseF
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(KeysBackupRestoreFromPassphraseViewModel::class.java)
-        sharedViewModel = ViewModelProviders.of(requireActivity(), viewModelFactory).get(KeysBackupRestoreSharedViewModel::class.java)
+        viewModel = fragmentViewModelProvider.get(KeysBackupRestoreFromPassphraseViewModel::class.java)
+        sharedViewModel = activityViewModelProvider.get(KeysBackupRestoreSharedViewModel::class.java)
 
         viewModel.passphraseErrorText.observe(viewLifecycleOwner, Observer { newValue ->
             mPassphraseInputLayout.error = newValue
