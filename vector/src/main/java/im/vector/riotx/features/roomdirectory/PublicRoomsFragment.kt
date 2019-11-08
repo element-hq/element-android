@@ -19,7 +19,6 @@ package im.vector.riotx.features.roomdirectory
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.epoxy.EpoxyVisibilityTracker
 import com.airbnb.mvrx.activityViewModel

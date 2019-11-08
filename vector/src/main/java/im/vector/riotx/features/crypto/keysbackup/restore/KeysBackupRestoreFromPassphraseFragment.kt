@@ -27,7 +27,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.text.set
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import butterknife.BindView
 import butterknife.OnClick
 import butterknife.OnTextChanged

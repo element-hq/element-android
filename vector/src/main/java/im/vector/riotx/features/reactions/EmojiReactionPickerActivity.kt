@@ -27,7 +27,6 @@ import android.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.tabs.TabLayout
 import com.jakewharton.rxbinding3.widget.queryTextChanges

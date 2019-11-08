@@ -16,7 +16,6 @@
 package im.vector.riotx.features.crypto.verification
 
 import android.os.Bundle
-import androidx.lifecycle.ViewModelProviders
 import butterknife.OnClick
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseFragment

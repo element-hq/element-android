@@ -17,7 +17,6 @@
 package im.vector.riotx.features.home.group
 
 import android.os.Bundle
-import androidx.lifecycle.ViewModelProviders
 import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel

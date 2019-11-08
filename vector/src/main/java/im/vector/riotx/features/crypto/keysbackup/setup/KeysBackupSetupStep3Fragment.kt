@@ -24,7 +24,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import arrow.core.Try
 import butterknife.BindView
 import butterknife.OnClick

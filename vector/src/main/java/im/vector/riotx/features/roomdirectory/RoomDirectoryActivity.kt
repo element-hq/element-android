@@ -19,7 +19,6 @@ package im.vector.riotx.features.roomdirectory
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.lifecycle.ViewModelProviders
 import com.airbnb.mvrx.viewModel
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent

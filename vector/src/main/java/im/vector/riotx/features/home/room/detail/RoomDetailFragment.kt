@@ -40,7 +40,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
 import androidx.core.view.forEach
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView

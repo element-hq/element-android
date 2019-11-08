@@ -19,7 +19,6 @@ package im.vector.riotx.features.roomdirectory.picker
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel

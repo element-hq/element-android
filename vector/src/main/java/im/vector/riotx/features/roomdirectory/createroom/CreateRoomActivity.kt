@@ -20,7 +20,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
-import androidx.lifecycle.ViewModelProviders
 import com.airbnb.mvrx.viewModel
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.addFragment

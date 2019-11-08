@@ -26,7 +26,6 @@ import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.di.ScreenComponent

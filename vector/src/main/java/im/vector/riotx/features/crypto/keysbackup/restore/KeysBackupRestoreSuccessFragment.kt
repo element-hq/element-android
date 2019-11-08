@@ -17,7 +17,6 @@ package im.vector.riotx.features.crypto.keysbackup.restore
 
 import android.os.Bundle
 import android.widget.TextView
-import androidx.lifecycle.ViewModelProviders
 import butterknife.BindView
 import butterknife.OnClick
 import im.vector.riotx.R

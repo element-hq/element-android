@@ -21,7 +21,6 @@ import android.content.Intent
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.addFragmentToBackstack
 import im.vector.riotx.core.extensions.observeEvent

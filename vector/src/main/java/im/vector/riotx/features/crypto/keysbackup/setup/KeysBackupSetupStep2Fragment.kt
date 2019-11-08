@@ -22,7 +22,6 @@ import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.transition.TransitionManager
 import butterknife.BindView
 import butterknife.OnClick

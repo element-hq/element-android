@@ -19,7 +19,6 @@ import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import butterknife.BindView
 import butterknife.OnClick
 import im.vector.matrix.android.api.session.crypto.sas.IncomingSasVerificationTransaction

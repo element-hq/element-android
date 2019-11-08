@@ -23,7 +23,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.ScrollView
 import androidx.core.view.size
-import androidx.lifecycle.ViewModelProviders
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.chip.Chip

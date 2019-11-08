@@ -21,7 +21,6 @@ import android.content.Intent
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import im.vector.matrix.android.api.session.crypto.sas.CancelCode
 import im.vector.matrix.android.api.session.crypto.sas.IncomingSasVerificationTransaction
 import im.vector.matrix.android.api.session.crypto.sas.OutgoingSasVerificationRequest

@@ -18,7 +18,6 @@ package im.vector.riotx.features.roomdirectory.createroom
 
 import android.os.Bundle
 import android.view.MenuItem
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.activityViewModel

@@ -21,7 +21,6 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import butterknife.BindView
 import butterknife.OnClick
 import im.vector.riotx.R

@@ -16,7 +16,6 @@
 package im.vector.riotx.features.reactions
 
 import android.os.Bundle
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseFragment
