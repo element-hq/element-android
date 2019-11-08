@@ -36,7 +36,7 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
                                             private val roomSummariesSource: DataSource<List<RoomSummary>>,
                                             private val alphabeticalRoomComparator: AlphabeticalRoomComparator,
                                             private val chronologicalRoomComparator: ChronologicalRoomComparator)
-    : VectorViewModel<RoomListViewState>(initialState) {
+    : VectorViewModel<RoomListViewState, RoomListActions>(initialState) {
 
     interface Factory {
         fun create(initialState: RoomListViewState): RoomListViewModel
@@ -61,7 +61,7 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
         observeRoomSummaries()
     }
 
-    fun accept(action: RoomListActions) {
+    override fun handle(action: RoomListActions) {
         when (action) {
             is RoomListActions.SelectRoom                  -> handleSelectRoom(action)
             is RoomListActions.ToggleCategory              -> handleToggleCategory(action)

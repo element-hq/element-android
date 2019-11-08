@@ -14,16 +14,10 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.home.createdirect
+package im.vector.riotx.features.roomdirectory.picker
 
-import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotx.core.platform.VectorViewModelAction
 
-sealed class CreateDirectRoomActions : VectorViewModelAction {
-    object CreateRoomAndInviteSelectedUsers : CreateDirectRoomActions()
-    data class FilterKnownUsers(val value: String) : CreateDirectRoomActions()
-    data class SearchDirectoryUsers(val value: String) : CreateDirectRoomActions()
-    object ClearFilterKnownUsers : CreateDirectRoomActions()
-    data class SelectUser(val user: User) : CreateDirectRoomActions()
-    data class RemoveSelectedUser(val user: User) : CreateDirectRoomActions()
+sealed class RoomDirectoryPickerActions : VectorViewModelAction {
+    object Retry : RoomDirectoryPickerActions()
 }

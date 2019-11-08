@@ -30,7 +30,8 @@ import im.vector.riotx.features.roomdirectory.JoinState
 import timber.log.Timber
 
 class RoomPreviewViewModel @AssistedInject constructor(@Assisted initialState: RoomPreviewViewState,
-                                                       private val session: Session) : VectorViewModel<RoomPreviewViewState>(initialState) {
+                                                       private val session: Session)
+    : VectorViewModel<RoomPreviewViewState, RoomPreviewActions>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -76,7 +77,13 @@ class RoomPreviewViewModel @AssistedInject constructor(@Assisted initialState: R
                 .disposeOnClear()
     }
 
-    fun joinRoom() = withState { state ->
+    override fun handle(action: RoomPreviewActions) {
+        when (action) {
+            RoomPreviewActions.Join -> joinRoom()
+        }
+    }
+
+    private fun joinRoom() = withState { state ->
         if (state.roomJoinState == JoinState.JOINING) {
             // Request already sent, should not happen
             Timber.w("Try to join an already joining room. Should not happen")

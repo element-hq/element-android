@@ -51,7 +51,7 @@ data class SelectUserAction(
 class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
                                                             initialState: CreateDirectRoomViewState,
                                                             private val session: Session)
-    : VectorViewModel<CreateDirectRoomViewState>(initialState) {
+    : VectorViewModel<CreateDirectRoomViewState, CreateDirectRoomActions>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -79,7 +79,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
         observeDirectoryUsers()
     }
 
-    fun handle(action: CreateDirectRoomActions) {
+    override fun handle(action: CreateDirectRoomActions) {
         when (action) {
             is CreateDirectRoomActions.CreateRoomAndInviteSelectedUsers -> createRoomAndInviteSelectedUsers()
             is CreateDirectRoomActions.FilterKnownUsers                 -> knownUsersFilter.accept(Option.just(action.value))

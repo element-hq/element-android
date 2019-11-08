@@ -63,7 +63,7 @@ class EmojiReactionPickerActivity : VectorBaseActivity(),
 
     @Inject lateinit var emojiCompatFontProvider: EmojiCompatFontProvider
 
-    val searchResultViewModel: EmojiSearchResultViewModel by viewModel()
+    private val searchResultViewModel: EmojiSearchResultViewModel by viewModel()
 
     private var tabLayoutSelectionListener = object : TabLayout.OnTabSelectedListener {
         override fun onTabReselected(tab: TabLayout.Tab) {
@@ -201,7 +201,7 @@ class EmojiReactionPickerActivity : VectorBaseActivity(),
             tabLayout.isVisible = false
             emojiPickerWholeListFragmentContainer.isVisible = false
             emojiPickerFilteredListFragmentContainer.isVisible = true
-            searchResultViewModel.updateQuery(query)
+            searchResultViewModel.handle(EmojiSearchActions.UpdateQuery(query))
         }
     }
 

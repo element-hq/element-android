@@ -42,7 +42,7 @@ class GroupListViewModel @AssistedInject constructor(@Assisted initialState: Gro
                                                      private val selectedGroupStore: SelectedGroupDataSource,
                                                      private val session: Session,
                                                      private val stringProvider: StringProvider
-) : VectorViewModel<GroupListViewState>(initialState) {
+) : VectorViewModel<GroupListViewState, GroupListActions>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -81,7 +81,7 @@ class GroupListViewModel @AssistedInject constructor(@Assisted initialState: Gro
         }
     }
 
-    fun accept(action: GroupListActions) {
+    override fun handle(action: GroupListActions) {
         when (action) {
             is GroupListActions.SelectGroup -> handleSelectGroup(action)
         }

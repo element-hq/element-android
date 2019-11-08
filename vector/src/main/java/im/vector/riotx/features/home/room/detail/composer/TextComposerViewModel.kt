@@ -36,7 +36,7 @@ typealias AutocompleteUserQuery = CharSequence
 
 class TextComposerViewModel @AssistedInject constructor(@Assisted initialState: TextComposerViewState,
                                                         private val session: Session
-) : VectorViewModel<TextComposerViewState>(initialState) {
+) : VectorViewModel<TextComposerViewState, TextComposerActions>(initialState) {
 
     private val room = session.getRoom(initialState.roomId)!!
     private val roomId = initialState.roomId
@@ -52,7 +52,7 @@ class TextComposerViewModel @AssistedInject constructor(@Assisted initialState: 
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: TextComposerViewState): TextComposerViewModel? {
-            val fragment : RoomDetailFragment = (viewModelContext as FragmentViewModelContext).fragment()
+            val fragment: RoomDetailFragment = (viewModelContext as FragmentViewModelContext).fragment()
             return fragment.textComposerViewModelFactory.create(state)
         }
     }
@@ -61,7 +61,7 @@ class TextComposerViewModel @AssistedInject constructor(@Assisted initialState: 
         observeUsersQuery()
     }
 
-    fun process(action: TextComposerActions) {
+    override fun handle(action: TextComposerActions) {
         when (action) {
             is TextComposerActions.QueryUsers -> handleQueryUsers(action)
         }
@@ -84,8 +84,7 @@ class TextComposerViewModel @AssistedInject constructor(@Assisted initialState: 
                         users
                     } else {
                         users.filter {
-                            it.displayName?.startsWith(prefix = filter, ignoreCase = true)
-                            ?: false
+                            it.displayName?.startsWith(prefix = filter, ignoreCase = true) ?: false
                         }
                     }
                 }

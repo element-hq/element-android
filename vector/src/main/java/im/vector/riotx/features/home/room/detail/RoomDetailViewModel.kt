@@ -69,7 +69,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                                                       private val vectorPreferences: VectorPreferences,
                                                       private val stringProvider: StringProvider,
                                                       private val session: Session
-) : VectorViewModel<RoomDetailViewState>(initialState) {
+) : VectorViewModel<RoomDetailViewState, RoomDetailActions>(initialState) {
 
     private val room = session.getRoom(initialState.roomId)!!
     private val eventId = initialState.eventId
@@ -129,7 +129,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         setState { copy(timeline = this@RoomDetailViewModel.timeline) }
     }
 
-    fun process(action: RoomDetailActions) {
+    override fun handle(action: RoomDetailActions) {
         when (action) {
             is RoomDetailActions.SaveDraft                   -> handleSaveDraft(action)
             is RoomDetailActions.SendMessage                 -> handleSendMessage(action)

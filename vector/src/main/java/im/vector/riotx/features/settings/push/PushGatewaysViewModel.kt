@@ -16,17 +16,13 @@
 
 package im.vector.riotx.features.settings.push
 
-import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
+import com.airbnb.mvrx.*
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.pushers.Pusher
 import im.vector.matrix.rx.RxSession
+import im.vector.riotx.core.platform.EmptyAction
 import im.vector.riotx.core.platform.VectorViewModel
 
 data class PushGatewayViewState(
@@ -34,7 +30,8 @@ data class PushGatewayViewState(
 ) : MvRxState
 
 class PushGatewaysViewModel @AssistedInject constructor(@Assisted initialState: PushGatewayViewState,
-                                                        private val session: Session) : VectorViewModel<PushGatewayViewState>(initialState) {
+                                                        private val session: Session)
+    : VectorViewModel<PushGatewayViewState, EmptyAction>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -59,5 +56,9 @@ class PushGatewaysViewModel @AssistedInject constructor(@Assisted initialState: 
                 .execute {
                     copy(pushGateways = it)
                 }
+    }
+
+    override fun handle(action: EmptyAction) {
+        // No op
     }
 }

@@ -16,11 +16,7 @@
 
 package im.vector.riotx.features.roomdirectory.picker
 
-import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.ViewModelContext
+import com.airbnb.mvrx.*
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
@@ -29,7 +25,8 @@ import im.vector.matrix.android.api.session.room.model.thirdparty.ThirdPartyProt
 import im.vector.riotx.core.platform.VectorViewModel
 
 class RoomDirectoryPickerViewModel @AssistedInject constructor(@Assisted initialState: RoomDirectoryPickerViewState,
-                                                               private val session: Session) : VectorViewModel<RoomDirectoryPickerViewState>(initialState) {
+                                                               private val session: Session)
+    : VectorViewModel<RoomDirectoryPickerViewState, RoomDirectoryPickerActions>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -49,7 +46,7 @@ class RoomDirectoryPickerViewModel @AssistedInject constructor(@Assisted initial
         load()
     }
 
-    fun load() {
+    private fun load() {
         session.getThirdPartyProtocol(object : MatrixCallback<Map<String, ThirdPartyProtocol>> {
             override fun onSuccess(data: Map<String, ThirdPartyProtocol>) {
                 setState {
@@ -63,5 +60,11 @@ class RoomDirectoryPickerViewModel @AssistedInject constructor(@Assisted initial
                 }
             }
         })
+    }
+
+    override fun handle(action: RoomDirectoryPickerActions) {
+        when (action) {
+            RoomDirectoryPickerActions.Retry -> load()
+        }
     }
 }

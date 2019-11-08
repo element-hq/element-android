@@ -26,11 +26,12 @@ import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.isReply
 import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
-import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.date.VectorDateFormatter
+import im.vector.riotx.core.platform.EmptyAction
+import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.features.home.room.detail.timeline.action.TimelineEventFragmentArgs
 import timber.log.Timber
-import java.util.UUID
+import java.util.*
 
 data class ViewEditHistoryViewState(
         val eventId: String,
@@ -46,7 +47,7 @@ class ViewEditHistoryViewModel @AssistedInject constructor(@Assisted
                                                            initialState: ViewEditHistoryViewState,
                                                            val session: Session,
                                                            val dateFormatter: VectorDateFormatter
-) : VectorViewModel<ViewEditHistoryViewState>(initialState) {
+) : VectorViewModel<ViewEditHistoryViewState, EmptyAction>(initialState) {
 
     private val roomId = initialState.roomId
     private val eventId = initialState.eventId
@@ -114,5 +115,9 @@ class ViewEditHistoryViewModel @AssistedInject constructor(@Assisted
                 }
             }
         })
+    }
+
+    override fun handle(action: EmptyAction) {
+        // No op
     }
 }

@@ -66,7 +66,7 @@ class KeysBackupSettingsFragment @Inject constructor(private val keysBackupSetti
                     .setMessage(R.string.keys_backup_settings_delete_confirm_message)
                     .setCancelable(false)
                     .setPositiveButton(R.string.keys_backup_settings_delete_confirm_title) { _, _ ->
-                        viewModel.deleteCurrentBackup()
+                        viewModel.handle(KeyBackupSettingsActions.DeleteKeyBackup)
                     }
                     .setNegativeButton(R.string.cancel, null)
                     .setCancelable(true)
@@ -75,10 +75,10 @@ class KeysBackupSettingsFragment @Inject constructor(private val keysBackupSetti
     }
 
     override fun loadTrustData() {
-        viewModel.getKeysBackupTrust()
+        viewModel.handle(KeyBackupSettingsActions.GetKeyBackupTrust)
     }
 
     override fun loadKeysBackupState() {
-        viewModel.init()
+        viewModel.handle(KeyBackupSettingsActions.Init)
     }
 }

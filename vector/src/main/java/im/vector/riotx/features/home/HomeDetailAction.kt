@@ -14,16 +14,11 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.home.createdirect
+package im.vector.riotx.features.home
 
-import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotx.core.platform.VectorViewModelAction
+import im.vector.riotx.features.home.room.list.RoomListFragment
 
-sealed class CreateDirectRoomActions : VectorViewModelAction {
-    object CreateRoomAndInviteSelectedUsers : CreateDirectRoomActions()
-    data class FilterKnownUsers(val value: String) : CreateDirectRoomActions()
-    data class SearchDirectoryUsers(val value: String) : CreateDirectRoomActions()
-    object ClearFilterKnownUsers : CreateDirectRoomActions()
-    data class SelectUser(val user: User) : CreateDirectRoomActions()
-    data class RemoveSelectedUser(val user: User) : CreateDirectRoomActions()
+sealed class HomeDetailAction : VectorViewModelAction {
+    data class SwitchDisplayMode(val displayMode: RoomListFragment.DisplayMode) : HomeDetailAction()
 }

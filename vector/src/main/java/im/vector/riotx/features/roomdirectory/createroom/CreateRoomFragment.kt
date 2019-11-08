@@ -31,7 +31,7 @@ import kotlinx.android.synthetic.main.fragment_create_room.*
 import timber.log.Timber
 import javax.inject.Inject
 
-class CreateRoomFragment @Inject constructor(private val createRoomController: CreateRoomController): VectorBaseFragment(), CreateRoomController.Listener {
+class CreateRoomFragment @Inject constructor(private val createRoomController: CreateRoomController) : VectorBaseFragment(), CreateRoomController.Listener {
 
     private lateinit var actionViewModel: RoomDirectorySharedActionViewModel
     private val viewModel: CreateRoomViewModel by activityViewModel()
@@ -53,7 +53,7 @@ class CreateRoomFragment @Inject constructor(private val createRoomController: C
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_create_room -> {
-                viewModel.doCreateRoom()
+                viewModel.handle(CreateRoomActions.Create)
                 true
             }
             else                    ->
@@ -71,20 +71,20 @@ class CreateRoomFragment @Inject constructor(private val createRoomController: C
     }
 
     override fun onNameChange(newName: String) {
-        viewModel.setName(newName)
+        viewModel.handle(CreateRoomActions.SetName(newName))
     }
 
     override fun setIsPublic(isPublic: Boolean) {
-        viewModel.setIsPublic(isPublic)
+        viewModel.handle(CreateRoomActions.SetIsPublic(isPublic))
     }
 
     override fun setIsInRoomDirectory(isInRoomDirectory: Boolean) {
-        viewModel.setIsInRoomDirectory(isInRoomDirectory)
+        viewModel.handle(CreateRoomActions.SetIsInRoomDirectory(isInRoomDirectory))
     }
 
     override fun retry() {
         Timber.v("Retry")
-        viewModel.doCreateRoom()
+        viewModel.handle(CreateRoomActions.Create)
     }
 
     override fun invalidate() = withState(viewModel) { state ->

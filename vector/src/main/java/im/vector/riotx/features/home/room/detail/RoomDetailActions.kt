@@ -21,9 +21,9 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.model.message.MessageFileContent
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.riotx.core.platform.VectorViewModelAction
 
-sealed class RoomDetailActions {
-
+sealed class RoomDetailActions : VectorViewModelAction {
     data class SaveDraft(val draft: String) : RoomDetailActions()
     data class SendMessage(val text: String, val autoMarkdown: Boolean) : RoomDetailActions()
     data class SendMedia(val attachments: List<ContentAttachmentData>) : RoomDetailActions()

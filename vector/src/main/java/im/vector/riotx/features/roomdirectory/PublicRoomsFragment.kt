@@ -66,7 +66,7 @@ class PublicRoomsFragment @Inject constructor(
         publicRoomsFilter.queryTextChanges()
                 .debounce(500, TimeUnit.MILLISECONDS)
                 .subscribeBy {
-                    viewModel.filterWith(it.toString())
+                    viewModel.handle(RoomDirectoryActions.FilterWith(it.toString()))
                 }
                 .disposeOnDestroy()
 
@@ -130,14 +130,14 @@ class PublicRoomsFragment @Inject constructor(
 
     override fun onPublicRoomJoin(publicRoom: PublicRoom) {
         Timber.v("PublicRoomJoinClicked: $publicRoom")
-        viewModel.joinRoom(publicRoom)
+        viewModel.handle(RoomDirectoryActions.JoinRoom(publicRoom))
     }
 
     override fun loadMore() {
-        viewModel.loadMore()
+        viewModel.handle(RoomDirectoryActions.LoadMore)
     }
 
-    var initialValueSet = false
+    private var initialValueSet = false
 
     override fun invalidate() = withState(viewModel) { state ->
         if (!initialValueSet) {

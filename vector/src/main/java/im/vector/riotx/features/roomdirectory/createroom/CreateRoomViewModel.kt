@@ -30,7 +30,7 @@ import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
 
 class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: CreateRoomViewState,
                                                       private val session: Session
-) : VectorViewModel<CreateRoomViewState>(initialState) {
+) : VectorViewModel<CreateRoomViewState, CreateRoomActions>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -51,13 +51,22 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
         }
     }
 
-    fun setName(newName: String) = setState { copy(roomName = newName) }
+    override fun handle(action: CreateRoomActions) {
+        when (action) {
+            is CreateRoomActions.SetName              -> setName(action)
+            is CreateRoomActions.SetIsPublic          -> setIsPublic(action)
+            is CreateRoomActions.SetIsInRoomDirectory -> setIsInRoomDirectory(action)
+            is CreateRoomActions.Create               -> doCreateRoom()
+        }
+    }
 
-    fun setIsPublic(isPublic: Boolean) = setState { copy(isPublic = isPublic) }
+    private fun setName(action: CreateRoomActions.SetName) = setState { copy(roomName = action.name) }
 
-    fun setIsInRoomDirectory(isInRoomDirectory: Boolean) = setState { copy(isInRoomDirectory = isInRoomDirectory) }
+    private fun setIsPublic(action: CreateRoomActions.SetIsPublic) = setState { copy(isPublic = action.isPublic) }
 
-    fun doCreateRoom() = withState { state ->
+    private fun setIsInRoomDirectory(action: CreateRoomActions.SetIsInRoomDirectory) = setState { copy(isInRoomDirectory = action.isInRoomDirectory) }
+
+    private fun doCreateRoom() = withState { state ->
         if (state.asyncCreateRoomRequest is Loading || state.asyncCreateRoomRequest is Success) {
             return@withState
         }

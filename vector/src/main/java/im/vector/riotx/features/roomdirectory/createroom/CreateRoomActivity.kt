@@ -49,7 +49,7 @@ class CreateRoomActivity : VectorBaseActivity(), ToolbarConfigurable {
     override fun initUiAndData() {
         if (isFirstCreation()) {
             addFragment(R.id.simpleFragmentContainer, CreateRoomFragment::class.java)
-            createRoomViewModel.setName(intent?.getStringExtra(INITIAL_NAME) ?: "")
+            createRoomViewModel.handle(CreateRoomActions.SetName(intent?.getStringExtra(INITIAL_NAME) ?: ""))
         }
     }
 

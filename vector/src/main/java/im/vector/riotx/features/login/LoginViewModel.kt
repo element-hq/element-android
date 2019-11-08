@@ -42,7 +42,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                                                  private val activeSessionHolder: ActiveSessionHolder,
                                                  private val pushRuleTriggerListener: PushRuleTriggerListener,
                                                  private val sessionListener: SessionListener)
-    : VectorViewModel<LoginViewState>(initialState) {
+    : VectorViewModel<LoginViewState, LoginActions>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -67,7 +67,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
     private var homeServerConnectionConfig: HomeServerConnectionConfig? = null
     private var currentTask: Cancelable? = null
 
-    fun handle(action: LoginActions) {
+    override fun handle(action: LoginActions) {
         when (action) {
             is LoginActions.InitWith         -> handleInitWith(action)
             is LoginActions.UpdateHomeServer -> handleUpdateHomeserver(action)

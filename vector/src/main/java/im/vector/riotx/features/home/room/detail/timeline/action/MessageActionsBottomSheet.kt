@@ -72,7 +72,7 @@ class MessageActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), Message
     override fun didSelectMenuAction(eventAction: EventSharedAction) {
         if (eventAction is EventSharedAction.ReportContent) {
             // Toggle report menu
-            viewModel.toggleReportMenu()
+            viewModel.handle(MessageActionActions.ToggleReportMenu)
         } else {
             messageActionsStore.post(eventAction)
             dismiss()

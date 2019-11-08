@@ -18,8 +18,9 @@ package im.vector.riotx.features.home.room.list
 
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.notification.RoomNotificationState
+import im.vector.riotx.core.platform.VectorViewModelAction
 
-sealed class RoomListActions {
+sealed class RoomListActions : VectorViewModelAction {
     data class SelectRoom(val roomSummary: RoomSummary) : RoomListActions()
     data class ToggleCategory(val category: RoomCategory) : RoomListActions()
     data class AcceptInvitation(val roomSummary: RoomSummary) : RoomListActions()

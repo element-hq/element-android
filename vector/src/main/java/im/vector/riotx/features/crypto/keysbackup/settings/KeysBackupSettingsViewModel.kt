@@ -15,13 +15,7 @@
  */
 package im.vector.riotx.features.crypto.keysbackup.settings
 
-import com.airbnb.mvrx.ActivityViewModelContext
-import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
+import com.airbnb.mvrx.*
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
@@ -34,8 +28,8 @@ import im.vector.riotx.core.platform.VectorViewModel
 
 class KeysBackupSettingsViewModel @AssistedInject constructor(@Assisted initialState: KeysBackupSettingViewState,
                                                               session: Session
-) : VectorViewModel<KeysBackupSettingViewState>(initialState),
-    KeysBackupStateListener {
+) : VectorViewModel<KeysBackupSettingViewState, KeyBackupSettingsActions>(initialState),
+        KeysBackupStateListener {
 
     @AssistedInject.Factory
     interface Factory {
@@ -64,11 +58,19 @@ class KeysBackupSettingsViewModel @AssistedInject constructor(@Assisted initialS
         getKeysBackupTrust()
     }
 
-    fun init() {
+    override fun handle(action: KeyBackupSettingsActions) {
+        when (action) {
+            KeyBackupSettingsActions.Init              -> init()
+            KeyBackupSettingsActions.GetKeyBackupTrust -> getKeysBackupTrust()
+            KeyBackupSettingsActions.DeleteKeyBackup   -> deleteCurrentBackup()
+        }
+    }
+
+    private fun init() {
         keysBackupService.forceUsingLastVersion(object : MatrixCallback<Boolean> {})
     }
 
-    fun getKeysBackupTrust() = withState { state ->
+    private fun getKeysBackupTrust() = withState { state ->
         val versionResult = keysBackupService.keysBackupVersion
 
         if (state.keysBackupVersionTrust is Uninitialized && versionResult != null) {
@@ -116,7 +118,7 @@ class KeysBackupSettingsViewModel @AssistedInject constructor(@Assisted initialS
         getKeysBackupTrust()
     }
 
-    fun deleteCurrentBackup() {
+    private fun deleteCurrentBackup() {
         val keysBackupService = keysBackupService
 
         if (keysBackupService.currentBackupVersion != null) {
@@ -153,6 +155,6 @@ class KeysBackupSettingsViewModel @AssistedInject constructor(@Assisted initialS
         val currentBackupState = keysBackupService.state
 
         return currentBackupState == KeysBackupState.Unknown
-               || currentBackupState == KeysBackupState.CheckingBackUpOnHomeserver
+                || currentBackupState == KeysBackupState.CheckingBackUpOnHomeserver
     }
 }

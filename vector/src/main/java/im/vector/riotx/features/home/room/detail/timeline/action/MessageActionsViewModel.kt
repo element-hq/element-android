@@ -37,13 +37,13 @@ import im.vector.matrix.rx.unwrap
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.canReact
 import im.vector.riotx.core.platform.VectorViewModel
+import im.vector.riotx.core.platform.VectorViewModelAction
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.home.room.detail.timeline.format.NoticeEventFormatter
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.riotx.features.html.EventHtmlRenderer
 import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import java.util.*
 
 /**
  * Quick reactions state
@@ -77,8 +77,12 @@ data class MessageActionState(
     fun canReact() = timelineEvent()?.canReact() == true
 }
 
+sealed class MessageActionActions : VectorViewModelAction {
+    object ToggleReportMenu : MessageActionActions()
+}
+
 /**
- * Information related to an event and used to display preview in contextual bottomsheet.
+ * Information related to an event and used to display preview in contextual bottom sheet.
  */
 class MessageActionsViewModel @AssistedInject constructor(@Assisted
                                                           initialState: MessageActionState,
@@ -86,7 +90,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                                                           private val session: Session,
                                                           private val noticeEventFormatter: NoticeEventFormatter,
                                                           private val stringProvider: StringProvider
-) : VectorViewModel<MessageActionState>(initialState) {
+) : VectorViewModel<MessageActionState, MessageActionActions>(initialState) {
 
     private val eventId = initialState.eventId
     private val informationData = initialState.informationData
@@ -113,7 +117,13 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         observeEventAction()
     }
 
-    fun toggleReportMenu() = withState {
+    override fun handle(action: MessageActionActions) {
+        when (action) {
+            MessageActionActions.ToggleReportMenu -> toggleReportMenu()
+        }
+    }
+
+    private fun toggleReportMenu() = withState {
         setState {
             copy(
                     expendedReportContentMenu = it.expendedReportContentMenu.not()

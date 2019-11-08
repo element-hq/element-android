@@ -17,9 +17,9 @@
 package im.vector.riotx.features.login
 
 import im.vector.matrix.android.api.auth.data.Credentials
+import im.vector.riotx.core.platform.VectorViewModelAction
 
-sealed class LoginActions {
-
+sealed class LoginActions : VectorViewModelAction {
     data class UpdateHomeServer(val homeServerUrl: String) : LoginActions()
     data class Login(val login: String, val password: String) : LoginActions()
     data class SsoLoginSuccess(val credentials: Credentials) : LoginActions()

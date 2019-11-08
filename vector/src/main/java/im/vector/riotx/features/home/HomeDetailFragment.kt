@@ -141,7 +141,7 @@ class HomeDetailFragment @Inject constructor(
                 R.id.bottom_action_rooms  -> RoomListFragment.DisplayMode.ROOMS
                 else                      -> RoomListFragment.DisplayMode.HOME
             }
-            viewModel.switchDisplayMode(displayMode)
+            viewModel.handle(HomeDetailAction.SwitchDisplayMode(displayMode))
             true
         }
 
