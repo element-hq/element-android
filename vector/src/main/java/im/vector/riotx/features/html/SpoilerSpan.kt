@@ -20,10 +20,10 @@ import android.graphics.Color
 import android.text.TextPaint
 import android.text.style.ClickableSpan
 import android.view.View
+import im.vector.riotx.R
+import im.vector.riotx.core.resources.ColorProvider
 
-class SpoilerSpan(private val bgColorHidden: Int,
-                  private val bgColorRevealed: Int,
-                  private val textColor: Int) : ClickableSpan() {
+class SpoilerSpan(private val colorProvider: ColorProvider) : ClickableSpan() {
 
     override fun onClick(widget: View) {
         isHidden = !isHidden
@@ -34,11 +34,11 @@ class SpoilerSpan(private val bgColorHidden: Int,
 
     override fun updateDrawState(tp: TextPaint) {
         if (isHidden) {
-            tp.bgColor = bgColorHidden
+            tp.bgColor = colorProvider.getColorFromAttribute(R.attr.vctr_spoiler_background_color)
             tp.color = Color.TRANSPARENT
         } else {
-            tp.bgColor = bgColorRevealed
-            tp.color = textColor
+            tp.bgColor = colorProvider.getColorFromAttribute(R.attr.vctr_markdown_block_background_color)
+            tp.color = colorProvider.getColorFromAttribute(R.attr.riotx_text_primary)
         }
     }
 }
