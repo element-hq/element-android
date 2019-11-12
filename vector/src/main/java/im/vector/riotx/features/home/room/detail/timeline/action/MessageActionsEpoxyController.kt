@@ -20,12 +20,7 @@ import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Success
 import im.vector.riotx.EmojiCompatFontProvider
 import im.vector.riotx.R
-import im.vector.riotx.core.epoxy.bottomsheet.BottomSheetItemQuickReactions
-import im.vector.riotx.core.epoxy.bottomsheet.bottomSheetItemAction
-import im.vector.riotx.core.epoxy.bottomsheet.bottomSheetItemMessagePreview
-import im.vector.riotx.core.epoxy.bottomsheet.bottomSheetItemQuickReactions
-import im.vector.riotx.core.epoxy.bottomsheet.bottomSheetItemSendState
-import im.vector.riotx.core.epoxy.bottomsheet.bottomSheetItemSeparator
+import im.vector.riotx.core.epoxy.bottomsheet.*
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.home.AvatarRenderer
 import javax.inject.Inject
@@ -97,28 +92,35 @@ class MessageActionsEpoxyController @Inject constructor(private val stringProvid
 
         // Action
         state.actions()?.forEachIndexed { index, action ->
-            bottomSheetItemAction {
-                id("action_$index")
-                iconRes(action.iconResId)
-                textRes(action.titleRes)
-                showExpand(action is EventSharedAction.ReportContent)
-                expanded(state.expendedReportContentMenu)
-                listener(View.OnClickListener { listener?.didSelectMenuAction(action) })
-            }
+            if (action is EventSharedAction.Separator) {
+                bottomSheetItemSeparator {
+                    id("separator_$index")
+                }
+            } else {
+                bottomSheetItemAction {
+                    id("action_$index")
+                    iconRes(action.iconResId)
+                    textRes(action.titleRes)
+                    showExpand(action is EventSharedAction.ReportContent)
+                    expanded(state.expendedReportContentMenu)
+                    listener(View.OnClickListener { listener?.didSelectMenuAction(action) })
+                    destructive(action is EventSharedAction.IgnoreUser)
+                }
 
-            if (action is EventSharedAction.ReportContent && state.expendedReportContentMenu) {
-                // Special case for report content menu: add the submenu
-                listOf(
-                        EventSharedAction.ReportContentSpam(action.eventId, action.senderId),
-                        EventSharedAction.ReportContentInappropriate(action.eventId, action.senderId),
-                        EventSharedAction.ReportContentCustom(action.eventId, action.senderId)
-                ).forEachIndexed { indexReport, actionReport ->
-                    bottomSheetItemAction {
-                        id("actionReport_$indexReport")
-                        subMenuItem(true)
-                        iconRes(actionReport.iconResId)
-                        textRes(actionReport.titleRes)
-                        listener(View.OnClickListener { listener?.didSelectMenuAction(actionReport) })
+                if (action is EventSharedAction.ReportContent && state.expendedReportContentMenu) {
+                    // Special case for report content menu: add the submenu
+                    listOf(
+                            EventSharedAction.ReportContentSpam(action.eventId, action.senderId),
+                            EventSharedAction.ReportContentInappropriate(action.eventId, action.senderId),
+                            EventSharedAction.ReportContentCustom(action.eventId, action.senderId)
+                    ).forEachIndexed { indexReport, actionReport ->
+                        bottomSheetItemAction {
+                            id("actionReport_$indexReport")
+                            subMenuItem(true)
+                            iconRes(actionReport.iconResId)
+                            textRes(actionReport.titleRes)
+                            listener(View.OnClickListener { listener?.didSelectMenuAction(actionReport) })
+                        }
                     }
                 }
             }

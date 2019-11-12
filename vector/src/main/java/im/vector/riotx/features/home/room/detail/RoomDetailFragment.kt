@@ -96,9 +96,9 @@ import im.vector.riotx.features.home.room.detail.composer.TextComposerViewModel
 import im.vector.riotx.features.home.room.detail.composer.TextComposerViewState
 import im.vector.riotx.features.home.room.detail.readreceipts.DisplayReadReceiptsBottomSheet
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
+import im.vector.riotx.features.home.room.detail.timeline.action.EventSharedAction
 import im.vector.riotx.features.home.room.detail.timeline.action.MessageActionsBottomSheet
 import im.vector.riotx.features.home.room.detail.timeline.action.MessageSharedActionViewModel
-import im.vector.riotx.features.home.room.detail.timeline.action.EventSharedAction
 import im.vector.riotx.features.home.room.detail.timeline.edithistory.ViewEditHistoryBottomSheet
 import im.vector.riotx.features.home.room.detail.timeline.item.*
 import im.vector.riotx.features.home.room.detail.timeline.reactions.ViewReactionsBottomSheet
@@ -1141,6 +1141,9 @@ class RoomDetailFragment @Inject constructor(
             }
             is EventSharedAction.ReportContentCustom        -> {
                 promptReasonToReportContent(action)
+            }
+            is EventSharedAction.IgnoreUser                 -> {
+                roomDetailViewModel.handle(RoomDetailAction.IgnoreUser(action.senderId))
             }
             else                                            -> {
                 Toast.makeText(context, "Action $action is not implemented yet", Toast.LENGTH_LONG).show()
