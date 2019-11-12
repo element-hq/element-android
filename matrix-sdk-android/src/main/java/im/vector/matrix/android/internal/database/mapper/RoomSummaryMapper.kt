@@ -36,7 +36,7 @@ internal class RoomSummaryMapper @Inject constructor(
         }
 
         val latestEvent = roomSummaryEntity.latestPreviewableEvent?.let {
-            timelineEventMapper.map(it)
+            timelineEventMapper.map(it, buildReadReceipts = false)
         }
         if (latestEvent?.root?.isEncrypted() == true && latestEvent.root.mxDecryptionResult == null) {
             // TODO use a global event decryptor? attache to session and that listen to new sessionId?
