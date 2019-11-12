@@ -24,7 +24,6 @@ import im.vector.matrix.android.api.session.crypto.sas.EmojiRepresentation
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
 
-
 @EpoxyModelClass(layout = im.vector.riotx.R.layout.item_sas_emoji)
 abstract class ItemSasEmoji : VectorEpoxyModel<ItemSasEmoji.Holder>() {
 

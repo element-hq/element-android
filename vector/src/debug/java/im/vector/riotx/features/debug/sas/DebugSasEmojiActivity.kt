@@ -24,7 +24,6 @@ import kotlinx.android.synthetic.main.fragment_generic_recycler_epoxy.*
 
 class DebugSasEmojiActivity : AppCompatActivity() {
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_generic_recycler_epoxy)

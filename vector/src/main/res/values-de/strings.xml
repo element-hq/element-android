@@ -1662,7 +1662,7 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="people_no_identity_server">Kein Integrationsserver konfiguriert.</string>
 
     <string name="call_failed_no_ice_title">Anruf aufgrund eines falsch konfigurierten Servers fehlgeschlagen</string>
-    <string name="call_failed_no_ice_use_alt">Versuchen Sie es mit %@</string>
+    <string name="call_failed_no_ice_use_alt">Versuchen Sie es mit %s</string>
     <string name="call_failed_dont_ask_again">Nicht erneut fragen</string>
 
     <string name="auth_add_email_message_2">Richten Sie eine E-Mail für die Kontowiederherstellung ein, die später von Personen, die Sie kennen, optional gefunden werden kann.</string>
