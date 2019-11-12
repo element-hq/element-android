@@ -139,6 +139,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
 
     override fun unbind(holder: H) {
         holder.readMarkerView.unbind()
+        holder.readReceiptsView.unbind()
         super.unbind(holder)
     }
 

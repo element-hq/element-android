@@ -23,6 +23,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.core.view.isVisible
 import im.vector.riotx.R
+import im.vector.riotx.core.glide.GlideApp
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.item.ReadReceiptData
 import kotlinx.android.synthetic.main.view_read_receipts.view.*
@@ -105,4 +106,12 @@ class ReadReceiptsView @JvmOverloads constructor(
             isVisible = false
         }
     }
+
+    fun unbind() {
+        receiptAvatars.forEach {
+            GlideApp.with(context.applicationContext).clear(it)
+        }
+        isVisible = false
+    }
+
 }
