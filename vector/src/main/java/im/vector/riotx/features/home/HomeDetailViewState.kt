@@ -17,14 +17,19 @@
 package im.vector.riotx.features.home
 
 import arrow.core.Option
+import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.Uninitialized
 import im.vector.matrix.android.api.session.group.model.GroupSummary
+import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.riotx.features.home.room.list.RoomListFragment
+import im.vector.riotx.features.home.room.list.RoomSummaries
 
 data class HomeDetailViewState(
         val groupSummary: Option<GroupSummary> = Option.empty(),
-        val displayMode: RoomListFragment.DisplayMode = RoomListFragment.DisplayMode.HOME,
+        val asyncRooms: Async<List<RoomSummary>> = Uninitialized,
+        val displayMode: RoomListDisplayMode = RoomListDisplayMode.HOME,
         val notificationCountCatchup: Int = 0,
         val notificationHighlightCatchup: Boolean = false,
         val notificationCountPeople: Int = 0,

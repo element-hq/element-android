@@ -18,21 +18,22 @@ package im.vector.riotx.features.home.room.list
 
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.riotx.features.home.RoomListDisplayMode
 import io.reactivex.functions.Predicate
 
-class RoomListDisplayModeFilter(private val displayMode: RoomListFragment.DisplayMode) : Predicate<RoomSummary> {
+class RoomListDisplayModeFilter(private val displayMode: RoomListDisplayMode) : Predicate<RoomSummary> {
 
     override fun test(roomSummary: RoomSummary): Boolean {
         if (roomSummary.membership.isLeft()) {
             return false
         }
         return when (displayMode) {
-            RoomListFragment.DisplayMode.HOME     ->
+            RoomListDisplayMode.HOME     ->
                 roomSummary.notificationCount > 0 || roomSummary.membership == Membership.INVITE || roomSummary.userDrafts.isNotEmpty()
-            RoomListFragment.DisplayMode.PEOPLE   -> roomSummary.isDirect && roomSummary.membership == Membership.JOIN
-            RoomListFragment.DisplayMode.ROOMS    -> !roomSummary.isDirect && roomSummary.membership == Membership.JOIN
-            RoomListFragment.DisplayMode.FILTERED -> roomSummary.membership == Membership.JOIN
-            RoomListFragment.DisplayMode.SHARE    -> roomSummary.membership == Membership.JOIN
+            RoomListDisplayMode.PEOPLE   -> roomSummary.isDirect && roomSummary.membership == Membership.JOIN
+            RoomListDisplayMode.ROOMS    -> !roomSummary.isDirect && roomSummary.membership == Membership.JOIN
+            RoomListDisplayMode.FILTERED -> roomSummary.membership == Membership.JOIN
+            RoomListDisplayMode.SHARE    -> roomSummary.membership == Membership.JOIN
         }
     }
 }

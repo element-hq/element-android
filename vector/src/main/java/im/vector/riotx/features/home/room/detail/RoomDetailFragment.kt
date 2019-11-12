@@ -286,6 +286,11 @@ class RoomDetailFragment @Inject constructor(
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        recyclerView.adapter = null
+    }
+
     override fun onDestroy() {
         debouncer.cancelAll()
         super.onDestroy()
@@ -472,6 +477,7 @@ class RoomDetailFragment @Inject constructor(
             }
         }
         recyclerView.adapter = timelineEventController.adapter
+
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 if (recyclerView.scrollState == RecyclerView.SCROLL_STATE_IDLE) {
@@ -492,6 +498,7 @@ class RoomDetailFragment @Inject constructor(
                 }
             }
         })
+
         timelineEventController.callback = this
 
         if (vectorPreferences.swipeToReplyIsEnabled()) {

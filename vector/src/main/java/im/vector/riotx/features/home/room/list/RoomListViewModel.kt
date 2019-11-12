@@ -27,6 +27,7 @@ import im.vector.matrix.android.api.session.room.model.tag.RoomTag
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.utils.DataSource
 import im.vector.riotx.core.utils.PublishDataSource
+import im.vector.riotx.features.home.RoomListDisplayMode
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import javax.inject.Inject
@@ -232,11 +233,11 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
                 }
 
         val roomComparator = when (displayMode) {
-            RoomListFragment.DisplayMode.HOME     -> chronologicalRoomComparator
-            RoomListFragment.DisplayMode.PEOPLE   -> chronologicalRoomComparator
-            RoomListFragment.DisplayMode.ROOMS    -> chronologicalRoomComparator
-            RoomListFragment.DisplayMode.FILTERED -> chronologicalRoomComparator
-            RoomListFragment.DisplayMode.SHARE    -> chronologicalRoomComparator
+            RoomListDisplayMode.HOME     -> chronologicalRoomComparator
+            RoomListDisplayMode.PEOPLE   -> chronologicalRoomComparator
+            RoomListDisplayMode.ROOMS    -> chronologicalRoomComparator
+            RoomListDisplayMode.FILTERED -> chronologicalRoomComparator
+            RoomListDisplayMode.SHARE    -> chronologicalRoomComparator
         }
 
         return RoomSummaries().apply {

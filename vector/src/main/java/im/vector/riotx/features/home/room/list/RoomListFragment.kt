@@ -39,6 +39,7 @@ import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.platform.OnBackPressed
 import im.vector.riotx.core.platform.StateView
 import im.vector.riotx.core.platform.VectorBaseFragment
+import im.vector.riotx.features.home.RoomListDisplayMode
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsSharedAction
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsBottomSheet
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
@@ -46,15 +47,13 @@ import im.vector.riotx.features.home.room.list.widget.FabMenuView
 import im.vector.riotx.features.notifications.NotificationDrawerManager
 import im.vector.riotx.features.share.SharedData
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.functions.Consumer
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_list.*
-import timber.log.Timber
 import javax.inject.Inject
 
 @Parcelize
 data class RoomListParams(
-        val displayMode: RoomListFragment.DisplayMode,
+        val displayMode: RoomListDisplayMode,
         val sharedData: SharedData? = null
 ) : Parcelable
 
@@ -65,14 +64,6 @@ class RoomListFragment @Inject constructor(
         private val notificationDrawerManager: NotificationDrawerManager
 
 ) : VectorBaseFragment(), RoomSummaryController.Listener, OnBackPressed, FabMenuView.Listener {
-
-    enum class DisplayMode(@StringRes val titleRes: Int) {
-        HOME(R.string.bottom_action_home),
-        PEOPLE(R.string.bottom_action_people_x),
-        ROOMS(R.string.bottom_action_rooms),
-        FILTERED(/* Not used */ 0),
-        SHARE(/* Not used */ 0)
-    }
 
     private lateinit var sharedActionViewModel: RoomListQuickActionsSharedActionViewModel
     private val roomListParams: RoomListParams by args()
@@ -126,8 +117,13 @@ class RoomListFragment @Inject constructor(
                 .disposeOnDestroyView()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        roomListView.adapter = null
+    }
+
     private fun openSelectedRoom(event: RoomListViewEvents.SelectRoom) {
-        if (roomListParams.displayMode == DisplayMode.SHARE) {
+        if (roomListParams.displayMode == RoomListDisplayMode.SHARE) {
             val sharedData = roomListParams.sharedData ?: return
             navigator.openRoomForSharing(requireActivity(), event.roomId, sharedData)
         } else {
@@ -144,9 +140,9 @@ class RoomListFragment @Inject constructor(
 
     private fun setupCreateRoomButton() {
         when (roomListParams.displayMode) {
-            DisplayMode.HOME   -> createChatFabMenu.isVisible = true
-            DisplayMode.PEOPLE -> createChatRoomButton.isVisible = true
-            DisplayMode.ROOMS  -> createGroupRoomButton.isVisible = true
+            RoomListDisplayMode.HOME   -> createChatFabMenu.isVisible = true
+            RoomListDisplayMode.PEOPLE -> createChatRoomButton.isVisible = true
+            RoomListDisplayMode.ROOMS  -> createGroupRoomButton.isVisible = true
             else               -> Unit // No button in this mode
         }
 
@@ -158,7 +154,7 @@ class RoomListFragment @Inject constructor(
         }
 
         // Hide FAB when list is scrolling
-        roomListEpoxyRecyclerView.addOnScrollListener(
+        roomListView.addOnScrollListener(
                 object : RecyclerView.OnScrollListener() {
                     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                         createChatFabMenu.removeCallbacks(showFabRunnable)
@@ -170,9 +166,9 @@ class RoomListFragment @Inject constructor(
                             RecyclerView.SCROLL_STATE_DRAGGING,
                             RecyclerView.SCROLL_STATE_SETTLING -> {
                                 when (roomListParams.displayMode) {
-                                    DisplayMode.HOME   -> createChatFabMenu.hide()
-                                    DisplayMode.PEOPLE -> createChatRoomButton.hide()
-                                    DisplayMode.ROOMS  -> createGroupRoomButton.hide()
+                                    RoomListDisplayMode.HOME   -> createChatFabMenu.hide()
+                                    RoomListDisplayMode.PEOPLE -> createChatRoomButton.hide()
+                                    RoomListDisplayMode.ROOMS  -> createGroupRoomButton.hide()
                                     else               -> Unit
                                 }
                             }
@@ -183,7 +179,7 @@ class RoomListFragment @Inject constructor(
 
     fun filterRoomsWith(filter: String) {
         // Scroll the list to top
-        roomListEpoxyRecyclerView.scrollToPosition(0)
+        roomListView.scrollToPosition(0)
 
         roomListViewModel.handle(RoomListAction.FilterWith(filter))
     }
@@ -199,20 +195,20 @@ class RoomListFragment @Inject constructor(
     private fun setupRecyclerView() {
         val layoutManager = LinearLayoutManager(context)
         val stateRestorer = LayoutManagerStateRestorer(layoutManager).register()
-        roomListEpoxyRecyclerView.layoutManager = layoutManager
-        roomListEpoxyRecyclerView.itemAnimator = RoomListAnimator()
+        roomListView.layoutManager = layoutManager
+        roomListView.itemAnimator = RoomListAnimator()
         roomController.listener = this
         roomController.addModelBuildListener { it.dispatchTo(stateRestorer) }
-        stateView.contentView = roomListEpoxyRecyclerView
-        roomListEpoxyRecyclerView.setController(roomController)
+        roomListView.adapter = roomController.adapter
+        stateView.contentView = roomListView
     }
 
     private val showFabRunnable = Runnable {
         if (isAdded) {
             when (roomListParams.displayMode) {
-                DisplayMode.HOME   -> createChatFabMenu.show()
-                DisplayMode.PEOPLE -> createChatRoomButton.show()
-                DisplayMode.ROOMS  -> createGroupRoomButton.show()
+                RoomListDisplayMode.HOME   -> createChatFabMenu.show()
+                RoomListDisplayMode.PEOPLE -> createChatRoomButton.show()
+                RoomListDisplayMode.ROOMS  -> createGroupRoomButton.show()
                 else               -> Unit
             }
         }
@@ -258,9 +254,9 @@ class RoomListFragment @Inject constructor(
 
         // Mark all as read menu
         when (roomListParams.displayMode) {
-            DisplayMode.HOME,
-            DisplayMode.PEOPLE,
-            DisplayMode.ROOMS -> {
+            RoomListDisplayMode.HOME,
+            RoomListDisplayMode.PEOPLE,
+            RoomListDisplayMode.ROOMS -> {
                 val newValue = state.hasUnread
                 if (hasUnreadRooms != newValue) {
                     hasUnreadRooms = newValue
@@ -288,7 +284,7 @@ class RoomListFragment @Inject constructor(
                 }
                 .isNullOrEmpty()
         val emptyState = when (roomListParams.displayMode) {
-            DisplayMode.HOME   -> {
+            RoomListDisplayMode.HOME   -> {
                 if (hasNoRoom) {
                     StateView.State.Empty(
                             getString(R.string.room_list_catchup_welcome_title),
@@ -302,13 +298,13 @@ class RoomListFragment @Inject constructor(
                             getString(R.string.room_list_catchup_empty_body))
                 }
             }
-            DisplayMode.PEOPLE ->
+            RoomListDisplayMode.PEOPLE ->
                 StateView.State.Empty(
                         getString(R.string.room_list_people_empty_title),
                         ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_bottom_chat),
                         getString(R.string.room_list_people_empty_body)
                 )
-            DisplayMode.ROOMS  ->
+            RoomListDisplayMode.ROOMS  ->
                 StateView.State.Empty(
                         getString(R.string.room_list_rooms_empty_title),
                         ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_bottom_group),

@@ -16,9 +16,13 @@
 
 package im.vector.riotx.features.home
 
-import im.vector.riotx.core.platform.VectorViewModelAction
-import im.vector.riotx.features.home.room.list.RoomListFragment
+import androidx.annotation.StringRes
+import im.vector.riotx.R
 
-sealed class HomeDetailAction : VectorViewModelAction {
-    data class SwitchDisplayMode(val displayMode: RoomListDisplayMode) : HomeDetailAction()
-}
+enum class RoomListDisplayMode(@StringRes val titleRes: Int) {
+        HOME(R.string.bottom_action_home),
+        PEOPLE(R.string.bottom_action_people_x),
+        ROOMS(R.string.bottom_action_rooms),
+        FILTERED(/* Not used */ 0),
+        SHARE(/* Not used */ 0)
+    }

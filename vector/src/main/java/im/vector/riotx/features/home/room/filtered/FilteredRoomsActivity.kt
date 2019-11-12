@@ -24,6 +24,7 @@ import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.replaceFragment
 import im.vector.riotx.core.platform.VectorBaseActivity
+import im.vector.riotx.features.home.RoomListDisplayMode
 import im.vector.riotx.features.home.room.list.RoomListFragment
 import im.vector.riotx.features.home.room.list.RoomListParams
 import kotlinx.android.synthetic.main.activity_filtered_rooms.*
@@ -47,7 +48,7 @@ class FilteredRoomsActivity : VectorBaseActivity() {
         super.onCreate(savedInstanceState)
         configureToolbar(filteredRoomsToolbar)
         if (isFirstCreation()) {
-            val params = RoomListParams(RoomListFragment.DisplayMode.FILTERED)
+            val params = RoomListParams(RoomListDisplayMode.FILTERED)
             replaceFragment(R.id.filteredRoomsFragmentContainer, RoomListFragment::class.java, params, FRAGMENT_TAG)
         }
         filteredRoomsSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {

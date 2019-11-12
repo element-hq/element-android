@@ -22,11 +22,17 @@ import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.room.model.Membership
+import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.matrix.android.api.session.room.model.tag.RoomTag
 import im.vector.matrix.rx.rx
 import im.vector.riotx.core.di.HasScreenInjector
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.home.group.SelectedGroupDataSource
+import im.vector.riotx.features.home.room.list.RoomCategory
+import im.vector.riotx.features.home.room.list.RoomListFragment
+import im.vector.riotx.features.home.room.list.RoomSummaries
 import im.vector.riotx.features.ui.UiStateRepository
 import io.reactivex.schedulers.Schedulers
 
@@ -144,4 +150,5 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                 }
                 .disposeOnClear()
     }
+
 }
