@@ -521,9 +521,10 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun handleEditAction(action: RoomDetailAction.EnterEditMode) {
-        saveCurrentDraft(action.draft)
+        saveCurrentDraft(action.text)
 
         room.getTimeLineEvent(action.eventId)?.let { timelineEvent ->
+            setState { copy(sendMode = SendMode.EDIT(timelineEvent, action.text)) }
             timelineEvent.root.eventId?.let {
                 room.saveDraft(UserDraft.EDIT(it, timelineEvent.getTextEditableContent() ?: ""))
             }
@@ -531,16 +532,17 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun handleQuoteAction(action: RoomDetailAction.EnterQuoteMode) {
-        saveCurrentDraft(action.draft)
+        saveCurrentDraft(action.text)
 
         room.getTimeLineEvent(action.eventId)?.let { timelineEvent ->
+            setState { copy(sendMode = SendMode.QUOTE(timelineEvent, action.text)) }
             withState { state ->
                 // Save a new draft and keep the previously entered text, if it was not an edit
                 timelineEvent.root.eventId?.let {
                     if (state.sendMode is SendMode.EDIT) {
                         room.saveDraft(UserDraft.QUOTE(it, ""))
                     } else {
-                        room.saveDraft(UserDraft.QUOTE(it, action.draft))
+                        room.saveDraft(UserDraft.QUOTE(it, action.text))
                     }
                 }
             }
@@ -548,16 +550,17 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun handleReplyAction(action: RoomDetailAction.EnterReplyMode) {
-        saveCurrentDraft(action.draft)
+        saveCurrentDraft(action.text)
 
         room.getTimeLineEvent(action.eventId)?.let { timelineEvent ->
+            setState { copy(sendMode = SendMode.REPLY(timelineEvent, action.text)) }
             withState { state ->
                 // Save a new draft and keep the previously entered text, if it was not an edit
                 timelineEvent.root.eventId?.let {
                     if (state.sendMode is SendMode.EDIT) {
                         room.saveDraft(UserDraft.REPLY(it, ""))
                     } else {
-                        room.saveDraft(UserDraft.REPLY(it, action.draft))
+                        room.saveDraft(UserDraft.REPLY(it, action.text))
                     }
                 }
             }
@@ -579,13 +582,14 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun handleExitSpecialMode(action: RoomDetailAction.ExitSpecialMode) {
+        setState { copy(sendMode = SendMode.REGULAR(action.text)) }
         withState { state ->
             // For edit, just delete the current draft
             if (state.sendMode is SendMode.EDIT) {
                 room.deleteDraft()
             } else {
                 // Save a new draft and keep the previously entered text
-                room.saveDraft(UserDraft.REGULAR(action.draft))
+                room.saveDraft(UserDraft.REGULAR(action.text))
             }
         }
     }

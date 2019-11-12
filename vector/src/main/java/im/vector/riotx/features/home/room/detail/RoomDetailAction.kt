@@ -42,10 +42,10 @@ sealed class RoomDetailAction : VectorViewModelAction {
     object AcceptInvite : RoomDetailAction()
     object RejectInvite : RoomDetailAction()
 
-    data class EnterEditMode(val eventId: String, val draft: String) : RoomDetailAction()
-    data class EnterQuoteMode(val eventId: String, val draft: String) : RoomDetailAction()
-    data class EnterReplyMode(val eventId: String, val draft: String) : RoomDetailAction()
-    data class ExitSpecialMode(val draft: String) : RoomDetailAction()
+    data class EnterEditMode(val eventId: String, val text: String) : RoomDetailAction()
+    data class EnterQuoteMode(val eventId: String, val text: String) : RoomDetailAction()
+    data class EnterReplyMode(val eventId: String, val text: String) : RoomDetailAction()
+    data class ExitSpecialMode(val text: String) : RoomDetailAction()
 
     data class ResendMessage(val eventId: String) : RoomDetailAction()
     data class RemoveFailedEcho(val eventId: String) : RoomDetailAction()
