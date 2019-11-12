@@ -28,4 +28,12 @@ class UserPreferencesProvider @Inject constructor(private val vectorPreferences:
     fun shouldShowReadReceipts(): Boolean {
         return vectorPreferences.showReadReceipts()
     }
+
+    fun shouldShowLongClickOnRoomHelp(): Boolean {
+        return vectorPreferences.shouldShowLongClickOnRoomHelp()
+    }
+
+    fun neverShowLongClickOnRoomHelpAgain() {
+        vectorPreferences.neverShowLongClickOnRoomHelpAgain()
+    }
 }

@@ -38,8 +38,8 @@ import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.platform.OnBackPressed
 import im.vector.riotx.core.platform.StateView
 import im.vector.riotx.core.platform.VectorBaseFragment
-import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsSharedAction
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsBottomSheet
+import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsSharedAction
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
 import im.vector.riotx.features.home.room.list.widget.FabMenuView
 import im.vector.riotx.features.notifications.NotificationDrawerManager
@@ -345,6 +345,8 @@ class RoomListFragment @Inject constructor(
     }
 
     override fun onRoomLongClicked(room: RoomSummary): Boolean {
+        roomController.onRoomLongClicked()
+
         RoomListQuickActionsBottomSheet
                 .newInstance(room.roomId)
                 .show(requireActivity().supportFragmentManager, "ROOM_LIST_QUICK_ACTIONS")
