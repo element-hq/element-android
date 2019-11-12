@@ -1420,8 +1420,8 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="keys_backup_info_title_signature">Firma</string>
 
     <string name="autodiscover_well_known_autofill_dialog_title">autocompletar opciones del servidor</string>
-    <string name="autodiscover_well_known_autofill_dialog_message">Riot ha detectado una configuración personalizada del servidor para el dominio de su ID de usuario \"%s\":
-\n%s</string>
+    <string name="autodiscover_well_known_autofill_dialog_message">Riot ha detectado una configuración personalizada del servidor para el dominio de su ID de usuario \"%1$s\": 
+\n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Configuración de uso</string>
 
     <string name="settings_default_media_source">Origen predeterminado de medios</string>

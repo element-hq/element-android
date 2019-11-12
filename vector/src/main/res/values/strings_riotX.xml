@@ -9,6 +9,9 @@
     <string name="room_list_quick_actions_settings">"Settings"</string>
     <string name="room_list_quick_actions_leave">"Leave the room"</string>
     <string name="notice_member_no_changes">"%1$s made no changes"</string>
+    <string name="command_description_spoiler">Sends the given message as a spoiler</string>
+    <string name="spoiler">Spoiler</string>
+    <string name="reaction_search_type_hint">Type keywords to find a reaction.</string>
 
     <string name="no_ignored_users">You are not ignoring any users</string>
 

@@ -1653,4 +1653,71 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="settings_discovery_disconnect_with_bound_pid">您目前正在身份識別伺服器 %1$s 上分享電子郵件地址或電話號碼。您將必須重新連線到 %2$s 以停止分享它們。</string>
     <string name="settings_agree_to_terms">同意身份識別伺服器 (%s) 的服務條款以允許您被透過電子郵件地址或電話號碼探索。</string>
+
+    <string name="labs_allow_extended_logging">啟用詳細紀錄。</string>
+    <string name="labs_allow_extended_logging_summary">詳細紀錄可以協助開發者在您傳送憤怒搖晃時取得更多紀錄。即使啟用這個設定，應用程式依然不會紀錄訊息內容或任何個人資料。</string>
+
+
+    <string name="error_terms_not_accepted">請在您接受您家伺服器的條款與條件前繼續重試。</string>
+
+    <string name="error_network_timeout">看起來伺服器回應時間似乎太久了，這可能是不良的網路連線或我們的伺服器錯誤所造成。請稍後再試。</string>
+
+    <string name="send_attachment">傳送附件</string>
+
+    <string name="a11y_open_drawer">開啟導航選單</string>
+    <string name="a11y_create_menu_open">開啟建立聊天室選單</string>
+    <string name="a11y_create_menu_close">關閉建立聊天室選單……</string>
+    <string name="a11y_create_direct_message">建立新的直接對話</string>
+    <string name="a11y_create_room">建立新的聊天室</string>
+    <string name="a11y_close_keys_backup_banner">關閉金鑰備份橫幅</string>
+    <string name="a11y_show_password">顯示密碼</string>
+    <string name="a11y_hide_password">隱藏密碼</string>
+    <string name="a11y_jump_to_bottom">跳到底部</string>
+
+    <string name="two_and_some_others_read">%1$s、%2$s 與 %3$d 個其他人已閱讀</string>
+    <string name="three_users_read">%1$s、%2$s 與 %3$s 已閱讀</string>
+    <string name="two_users_read">%1$s 與 %2$s 已閱讀</string>
+    <string name="one_user_read">%s 已閱讀</string>
+    <plurals name="fallback_users_read">
+        <item quantity="other">%d 個使用者已閱讀</item>
+    </plurals>
+
+    <string name="error_file_too_big">檔案「%1$s」(%2$s) 太大無法上傳。限制為 %3$s。</string>
+
+    <string name="error_attachment">在擷取附件時遇到錯誤。</string>
+    <string name="attachment_type_file">檔案</string>
+    <string name="attachment_type_contact">聯絡人</string>
+    <string name="attachment_type_camera">相機</string>
+    <string name="attachment_type_audio">音訊</string>
+    <string name="attachment_type_gallery">相簿</string>
+    <string name="attachment_type_sticker">貼圖</string>
+    <string name="error_handling_incoming_share">無法處理分享資料</string>
+
+    <string name="report_content_spam">垃圾訊息</string>
+    <string name="report_content_inappropriate">不合適</string>
+    <string name="report_content_custom">自訂回報</string>
+    <string name="report_content_custom_title">回報此內容</string>
+    <string name="report_content_custom_hint">回報此內容的理由</string>
+    <string name="report_content_custom_submit">回報</string>
+    <string name="block_user">封鎖使用者</string>
+
+    <string name="content_reported_title">內容已回報</string>
+    <string name="content_reported_content">此內容已回報。
+\n
+\n如果您不想要看到從此使用者而來的更多內容，您可以封鎖他以隱藏他的訊息</string>
+    <string name="content_reported_as_spam_title">回報為垃圾訊息</string>
+    <string name="content_reported_as_spam_content">此內容已被回報為垃圾訊息。
+\n
+\n如果您不想要看到從此使用者而來的更多內容，您可以封鎖他以隱藏他的訊息</string>
+    <string name="content_reported_as_inappropriate_title">回報為不合適</string>
+    <string name="content_reported_as_inappropriate_content">此內容已被回報為不合適。
+\n
+\n如果您不想要看到從此使用者而來的更多內容，您可以封鎖他以隱藏他的訊息</string>
+
+    <string name="permissions_rationale_msg_keys_backup_export">Riot 需要權限以在磁碟上儲存您的 E2E 金鑰。
+\n
+\n請在下個彈出視窗中允許存取以讓您可以手動匯出您的金鑰。</string>
+
+    <string name="no_network_indicator">目前沒有網路連線</string>
+
 </resources>

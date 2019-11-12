@@ -1697,4 +1697,73 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 
     <string name="settings_discovery_disconnect_with_bound_pid">Orain e-mail helbideak edo telefono zenbakiak partekatzen dituzu %1$s zerbitzarian. %2$s zerbitzarira konektatu beharko zara partekatzeari uzteko.</string>
     <string name="settings_agree_to_terms">Onartu %s identitate-zerbitzariaren erabilera baldintzak besteek zu e-mail helbidea edo telefonoa erabiliz aurkitzea ahalbidetzeko.</string>
+    <string name="resources_script">Latn</string>
+
+    <string name="labs_allow_extended_logging">Gaitu egunkari xehetsuak.</string>
+    <string name="labs_allow_extended_logging_summary">Amorruz astintzean egunkari xehetsuak bidaltzeak garatzaileei laguntzen diete. Gaituta badago ere, aplikazioak ez ditu mezuen edukiak edo beste datu probaturik gordetzen egunkarian.</string>
+
+
+    <string name="error_terms_not_accepted">Saiatu berriro zure hasiera-zerbitzariaren erabilera baldintzak onartu eta gero.</string>
+
+    <string name="error_network_timeout">Badirudi zerbitzariak luze hartu duela erantzuteko, hau konexio kaxkar baten ondorioz izan daiteke edo zerbitzarian errore bat dagoelako. Saiatu berriro geroago.</string>
+
+    <string name="send_attachment">Bidali eranskina</string>
+
+    <string name="a11y_open_drawer">Ireki nabigazio-tiradera</string>
+    <string name="a11y_create_menu_open">Ireki gela sortzeko menua</string>
+    <string name="a11y_create_menu_close">Itxi gela sortzeko menua…</string>
+    <string name="a11y_create_direct_message">Sortu elkarrizketa zuzen berria</string>
+    <string name="a11y_create_room">Sortu gela berria</string>
+    <string name="a11y_close_keys_backup_banner">Itxi gakoen babes-kopiaren banda</string>
+    <string name="a11y_show_password">Erakutsi pasahitza</string>
+    <string name="a11y_hide_password">Ezkutatu pasahitza</string>
+    <string name="a11y_jump_to_bottom">Jauzi behera</string>
+
+    <string name="two_and_some_others_read">%1$s, %2$s eta beste %3$d erabiltzailek irakurria</string>
+    <string name="three_users_read">%1$s, %2$s eta%3$s erabiltzaileek irakurria</string>
+    <string name="two_users_read">%1$s eta %2$s erabiltzaileek irakurria</string>
+    <string name="one_user_read">%s erabiltzaileak irakurria</string>
+    <plurals name="fallback_users_read">
+        <item quantity="one">Erabiltzaile batek irakurria</item>
+        <item quantity="other">%d erabiltzailek irakurria</item>
+    </plurals>
+
+    <string name="error_file_too_big">\'%1$s\' fitxategia (%2$s) handiegia da igotzeko. Muga %3$s da.</string>
+
+    <string name="error_attachment">Errore bat gertatu da eranskina eskuratzean.</string>
+    <string name="attachment_type_file">Fitxategia</string>
+    <string name="attachment_type_contact">Kontaktua</string>
+    <string name="attachment_type_camera">Kamera</string>
+    <string name="attachment_type_audio">Audioa</string>
+    <string name="attachment_type_gallery">Galeria</string>
+    <string name="attachment_type_sticker">Eranskailua</string>
+    <string name="error_handling_incoming_share">Ezin izan dira partekatutako datuak kudeatu</string>
+
+    <string name="report_content_spam">Spama da</string>
+    <string name="report_content_inappropriate">Desegokia da</string>
+    <string name="report_content_custom">Salaketa pertsonalizatua</string>
+    <string name="report_content_custom_title">Salatu eduki hau</string>
+    <string name="report_content_custom_hint">Eduki hau salatzeko arrazoia</string>
+    <string name="report_content_custom_submit">SALATU</string>
+    <string name="block_user">BLOKEATU ERABILTZAILEA</string>
+
+    <string name="content_reported_title">Edukia salatuta</string>
+    <string name="content_reported_content">Eduki hau salatu da.
+\n
+\nEz baduzu erabiltzaile honen eduki gehiago ikusi nahi, bere mezuak ezkutatzeko blokeatu dezakezu</string>
+    <string name="content_reported_as_spam_title">Spam gisa salatua</string>
+    <string name="content_reported_as_spam_content">Eduki hau spam gisa salatu da.
+\n
+\nEz baduzu erabiltzaile honen eduki gehiago ikusi nahi, bere mezuak ezkutatzeko blokeatu dezakezu</string>
+    <string name="content_reported_as_inappropriate_title">Desegoki gisa salatua</string>
+    <string name="content_reported_as_inappropriate_content">Eduki hau desegoki gisa salatu da.
+\n
+\nEz baduzu erabiltzaile honen eduki gehiago ikusi nahi, bere mezuak ezkutatzeko blokeatu dezakezu</string>
+
+    <string name="permissions_rationale_msg_keys_backup_export">Riot-ek zure E2E gakoak diskoan gordetzeko baimena behar du.
+\n
+\nBaimendu sarbidea hurrengo laster-leihoan zure gakoak eskuz esportatu ahal izateko.</string>
+
+    <string name="no_network_indicator">Ez dago sare konexiorik orain</string>
+
 </resources>
