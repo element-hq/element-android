@@ -2,6 +2,8 @@
 <resources>
 
     <!-- Strings not defined in Riot -->
+    <string name="message_ignore_user">Block user</string>
+
     <string name="room_list_quick_actions_notifications_all_noisy">"All messages (noisy)"</string>
     <string name="room_list_quick_actions_notifications_all">"All messages"</string>
     <string name="room_list_quick_actions_notifications_mentions">"Mentions only"</string>
