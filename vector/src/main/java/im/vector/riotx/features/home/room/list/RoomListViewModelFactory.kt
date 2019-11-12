@@ -25,16 +25,14 @@ import javax.inject.Provider
 
 class RoomListViewModelFactory @Inject constructor(private val session: Provider<Session>,
                                                    private val homeRoomListDataSource: Provider<HomeRoomListDataSource>,
-                                                   private val shareRoomListDataSource: Provider<ShareRoomListDataSource>,
-                                                   private val alphabeticalRoomComparator: Provider<AlphabeticalRoomComparator>,
-                                                   private val chronologicalRoomComparator: Provider<ChronologicalRoomComparator>) : RoomListViewModel.Factory {
+                                                   private val shareRoomListDataSource: Provider<ShareRoomListDataSource>)
+    : RoomListViewModel.Factory {
 
     override fun create(initialState: RoomListViewState): RoomListViewModel {
         return RoomListViewModel(
                 initialState,
                 session.get(),
-                if (initialState.displayMode == RoomListDisplayMode.SHARE) shareRoomListDataSource.get() else homeRoomListDataSource.get(),
-                alphabeticalRoomComparator.get(),
-                chronologicalRoomComparator.get())
+                if (initialState.displayMode == RoomListDisplayMode.SHARE) shareRoomListDataSource.get() else homeRoomListDataSource.get()
+        )
     }
 }
