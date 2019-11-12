@@ -96,6 +96,9 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val SETTINGS_VIBRATE_ON_MENTION_KEY = "SETTINGS_VIBRATE_ON_MENTION_KEY"
         private const val SETTINGS_SEND_MESSAGE_WITH_ENTER = "SETTINGS_SEND_MESSAGE_WITH_ENTER"
 
+        // Help
+        private const val SETTINGS_SHOULD_SHOW_HELP_ON_ROOM_LIST_KEY = "SETTINGS_SHOULD_SHOW_HELP_ON_ROOM_LIST_KEY"
+
         // home
         private const val SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY = "SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY"
         private const val SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY = "SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY"
@@ -595,6 +598,24 @@ class VectorPreferences @Inject constructor(private val context: Context) {
      */
     fun showReadReceipts(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_SHOW_READ_RECEIPTS_KEY, true)
+    }
+
+    /**
+     * Tells if the help on room list should be shown
+     *
+     * @return true if the help on room list should be shown
+     */
+    fun shouldShowLongClickOnRoomHelp(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_SHOULD_SHOW_HELP_ON_ROOM_LIST_KEY, true)
+    }
+
+    /**
+     * Prevent help on room list to be shown again
+     */
+    fun neverShowLongClickOnRoomHelpAgain() {
+        defaultPrefs.edit {
+            putBoolean(SETTINGS_SHOULD_SHOW_HELP_ON_ROOM_LIST_KEY, false)
+        }
     }
 
     /**

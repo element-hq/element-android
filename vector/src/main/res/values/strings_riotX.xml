@@ -12,4 +12,6 @@
 
     <string name="no_ignored_users">You are not ignoring any users</string>
 
+    <string name="help_long_click_on_room_for_more_options">Long click on a room to see more options</string>
+
 </resources>

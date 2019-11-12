@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/itemHelpText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:drawableStart="@drawable/ic_idea"
+        android:drawablePadding="8dp"
+        android:drawableTint="?attr/riotx_text_secondary"
+        android:gravity="center"
+        android:maxWidth="240dp"
+        android:textColor="?attr/riotx_text_secondary"
+        android:textSize="18sp"
+        tools:text="@string/help_long_click_on_room_for_more_options" />
+
+</LinearLayout>
