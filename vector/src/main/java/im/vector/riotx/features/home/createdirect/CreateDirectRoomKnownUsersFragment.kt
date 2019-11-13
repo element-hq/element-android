@@ -21,6 +21,7 @@ package im.vector.riotx.features.home.createdirect
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.ScrollView
 import androidx.core.view.size
 import com.airbnb.mvrx.activityViewModel
@@ -50,8 +51,8 @@ class CreateDirectRoomKnownUsersFragment @Inject constructor(
     private val viewModel: CreateDirectRoomViewModel by activityViewModel()
     private lateinit var sharedActionViewModel: CreateDirectRoomSharedActionViewModel
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(CreateDirectRoomSharedActionViewModel::class.java)
         vectorBaseActivity.setSupportActionBar(createDirectRoomToolbar)
         setupRecyclerView()
@@ -113,7 +114,7 @@ class CreateDirectRoomKnownUsersFragment @Inject constructor(
                     }
                     viewModel.handle(action)
                 }
-                .disposeOnDestroy()
+                .disposeOnDestroyView()
 
         createDirectRoomFilter.setupAsSearch()
         createDirectRoomFilter.requestFocus()

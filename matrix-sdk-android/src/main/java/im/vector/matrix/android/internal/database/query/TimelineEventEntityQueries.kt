@@ -111,7 +111,7 @@ internal fun RealmQuery<TimelineEventEntity>.prev(since: Int? = null, strict: Bo
 
 internal fun RealmList<TimelineEventEntity>.find(eventId: String): TimelineEventEntity? {
     return this.where()
-            .equalTo(TimelineEventEntityFields.ROOT.EVENT_ID, eventId)
+            .equalTo(TimelineEventEntityFields.EVENT_ID, eventId)
             .findFirst()
 }
 

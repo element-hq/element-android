@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:accessibilityTraversalBefore="@+id/roomListEpoxyRecyclerView"
+        android:accessibilityTraversalBefore="@+id/roomListView"
         android:contentDescription="@string/a11y_create_room"
         android:src="@drawable/ic_fab_add_room"
         app:backgroundTint="#FFFFFF"

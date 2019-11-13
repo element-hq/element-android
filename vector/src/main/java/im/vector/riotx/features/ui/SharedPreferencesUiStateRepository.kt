@@ -18,7 +18,7 @@ package im.vector.riotx.features.ui
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import im.vector.riotx.features.home.room.list.RoomListFragment
+import im.vector.riotx.features.home.RoomListDisplayMode
 import javax.inject.Inject
 
 /**
@@ -26,21 +26,21 @@ import javax.inject.Inject
  */
 class SharedPreferencesUiStateRepository @Inject constructor(private val sharedPreferences: SharedPreferences) : UiStateRepository {
 
-    override fun getDisplayMode(): RoomListFragment.DisplayMode {
+    override fun getDisplayMode(): RoomListDisplayMode {
         return when (sharedPreferences.getInt(KEY_DISPLAY_MODE, VALUE_DISPLAY_MODE_CATCHUP)) {
-            VALUE_DISPLAY_MODE_PEOPLE -> RoomListFragment.DisplayMode.PEOPLE
-            VALUE_DISPLAY_MODE_ROOMS  -> RoomListFragment.DisplayMode.ROOMS
-            else                      -> RoomListFragment.DisplayMode.HOME
+            VALUE_DISPLAY_MODE_PEOPLE -> RoomListDisplayMode.PEOPLE
+            VALUE_DISPLAY_MODE_ROOMS  -> RoomListDisplayMode.ROOMS
+            else                      -> RoomListDisplayMode.HOME
         }
     }
 
-    override fun storeDisplayMode(displayMode: RoomListFragment.DisplayMode) {
+    override fun storeDisplayMode(displayMode: RoomListDisplayMode) {
         sharedPreferences.edit {
             putInt(KEY_DISPLAY_MODE,
                     when (displayMode) {
-                        RoomListFragment.DisplayMode.PEOPLE -> VALUE_DISPLAY_MODE_PEOPLE
-                        RoomListFragment.DisplayMode.ROOMS  -> VALUE_DISPLAY_MODE_ROOMS
-                        else                                -> VALUE_DISPLAY_MODE_CATCHUP
+                        RoomListDisplayMode.PEOPLE -> VALUE_DISPLAY_MODE_PEOPLE
+                        RoomListDisplayMode.ROOMS  -> VALUE_DISPLAY_MODE_ROOMS
+                        else                       -> VALUE_DISPLAY_MODE_CATCHUP
                     })
         }
     }

@@ -18,6 +18,7 @@ package im.vector.riotx.features.home.createdirect
 
 import android.content.Context
 import android.os.Bundle
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
@@ -40,8 +41,8 @@ class CreateDirectRoomDirectoryUsersFragment @Inject constructor(
 
     private lateinit var sharedActionViewModel: CreateDirectRoomSharedActionViewModel
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(CreateDirectRoomSharedActionViewModel::class.java)
         setupRecyclerView()
         setupSearchByMatrixIdView()
@@ -61,7 +62,7 @@ class CreateDirectRoomDirectoryUsersFragment @Inject constructor(
                 .subscribe {
                     viewModel.handle(CreateDirectRoomAction.SearchDirectoryUsers(it.toString()))
                 }
-                .disposeOnDestroy()
+                .disposeOnDestroyView()
         createDirectRoomSearchById.requestFocus()
         val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
         imm?.showSoftInput(createDirectRoomSearchById, InputMethodManager.SHOW_IMPLICIT)

@@ -18,6 +18,7 @@ package im.vector.riotx.features.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import androidx.core.view.forEachIndexed
 import androidx.lifecycle.Observer
 import com.airbnb.mvrx.fragmentViewModel
@@ -28,7 +29,7 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.riotx.R
-import im.vector.riotx.core.extensions.addChildFragmentToBackstack
+import im.vector.riotx.core.extensions.commitTransactionNow
 import im.vector.riotx.core.platform.ToolbarConfigurable
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.ui.views.KeysBackupBanner
@@ -59,9 +60,8 @@ class HomeDetailFragment @Inject constructor(
         return R.layout.fragment_home_detail
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(HomeSharedActionViewModel::class.java)
 
         setupBottomNavigationView()
@@ -133,10 +133,10 @@ class HomeDetailFragment @Inject constructor(
     private fun setupBottomNavigationView() {
         bottomNavigationView.setOnNavigationItemSelectedListener {
             val displayMode = when (it.itemId) {
-                R.id.bottom_action_home   -> RoomListFragment.DisplayMode.HOME
-                R.id.bottom_action_people -> RoomListFragment.DisplayMode.PEOPLE
-                R.id.bottom_action_rooms  -> RoomListFragment.DisplayMode.ROOMS
-                else                      -> RoomListFragment.DisplayMode.HOME
+                R.id.bottom_action_home   -> RoomListDisplayMode.HOME
+                R.id.bottom_action_people -> RoomListDisplayMode.PEOPLE
+                R.id.bottom_action_rooms  -> RoomListDisplayMode.ROOMS
+                else                      -> RoomListDisplayMode.HOME
             }
             viewModel.handle(HomeDetailAction.SwitchDisplayMode(displayMode))
             true
@@ -152,25 +152,32 @@ class HomeDetailFragment @Inject constructor(
         }
     }
 
-    private fun switchDisplayMode(displayMode: RoomListFragment.DisplayMode) {
+    private fun switchDisplayMode(displayMode: RoomListDisplayMode) {
         groupToolbarTitleView.setText(displayMode.titleRes)
         updateSelectedFragment(displayMode)
         // Update the navigation view (for when we restore the tabs)
         bottomNavigationView.selectedItemId = when (displayMode) {
-            RoomListFragment.DisplayMode.PEOPLE -> R.id.bottom_action_people
-            RoomListFragment.DisplayMode.ROOMS  -> R.id.bottom_action_rooms
+            RoomListDisplayMode.PEOPLE -> R.id.bottom_action_people
+            RoomListDisplayMode.ROOMS  -> R.id.bottom_action_rooms
             else                                -> R.id.bottom_action_home
         }
     }
 
-    private fun updateSelectedFragment(displayMode: RoomListFragment.DisplayMode) {
+    private fun updateSelectedFragment(displayMode: RoomListDisplayMode) {
         val fragmentTag = "FRAGMENT_TAG_${displayMode.name}"
-        val fragment = childFragmentManager.findFragmentByTag(fragmentTag)
-        if (fragment == null) {
-            val params = RoomListParams(displayMode)
-            addChildFragmentToBackstack(R.id.roomListContainer, RoomListFragment::class.java, params, fragmentTag)
-        } else {
-            addChildFragmentToBackstack(R.id.roomListContainer, fragment, fragmentTag)
+        val fragmentToShow = childFragmentManager.findFragmentByTag(fragmentTag)
+        childFragmentManager.commitTransactionNow {
+            childFragmentManager.fragments
+                    .filter { it != fragmentToShow }
+                    .forEach {
+                        hide(it)
+                    }
+            if (fragmentToShow == null) {
+                val params = RoomListParams(displayMode)
+                add(R.id.roomListContainer, RoomListFragment::class.java, params.toMvRxBundle(), fragmentTag)
+            } else {
+                show(fragmentToShow)
+            }
         }
     }
 

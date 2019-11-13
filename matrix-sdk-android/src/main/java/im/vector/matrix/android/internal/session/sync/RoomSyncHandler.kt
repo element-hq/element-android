@@ -67,6 +67,7 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
     }
 
     suspend fun handle(roomsSyncResponse: RoomsSyncResponse, isInitialSync: Boolean, reporter: DefaultInitialSyncProgressService? = null) {
+        Timber.v("Execute transaction from $this")
         monarchy.awaitTransaction { realm ->
             handleRoomSync(realm, HandlingStrategy.JOINED(roomsSyncResponse.join), isInitialSync, reporter)
             handleRoomSync(realm, HandlingStrategy.INVITED(roomsSyncResponse.invite), isInitialSync, reporter)
@@ -133,6 +134,7 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
         roomEntity.membership = Membership.JOIN
 
         // State event
+
         if (roomSync.state != null && roomSync.state.events.isNotEmpty()) {
             val minStateIndex = roomEntity.untimelinedStateEvents.where().min(EventEntityFields.STATE_INDEX)?.toInt()
                                 ?: Int.MIN_VALUE
@@ -146,7 +148,6 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
                 }
             }
         }
-
         if (roomSync.timeline != null && roomSync.timeline.events.isNotEmpty()) {
             val chunkEntity = handleTimelineEvents(
                     realm,
@@ -157,14 +158,19 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
             )
             roomEntity.addOrUpdate(chunkEntity)
         }
-        roomSummaryUpdater.update(realm, roomId, Membership.JOIN, roomSync.summary, roomSync.unreadNotifications)
+        val hasRoomMember = roomSync.state?.events?.firstOrNull {
+            it.type == EventType.STATE_ROOM_MEMBER
+        } != null || roomSync.timeline?.events?.firstOrNull {
+            it.type == EventType.STATE_ROOM_MEMBER
+        } != null
+
+        roomSummaryUpdater.update(realm, roomId, Membership.JOIN, roomSync.summary, roomSync.unreadNotifications, updateMembers = hasRoomMember)
         return roomEntity
     }
 
     private fun handleInvitedRoom(realm: Realm,
                                   roomId: String,
-                                  roomSync:
-                                  InvitedRoomSync): RoomEntity {
+                                  roomSync: InvitedRoomSync): RoomEntity {
         Timber.v("Handle invited sync for room $roomId")
         val roomEntity = RoomEntity.where(realm, roomId).findFirst() ?: realm.createObject(roomId)
         roomEntity.membership = Membership.INVITE
@@ -172,7 +178,10 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
             val chunkEntity = handleTimelineEvents(realm, roomEntity, roomSync.inviteState.events)
             roomEntity.addOrUpdate(chunkEntity)
         }
-        roomSummaryUpdater.update(realm, roomId, Membership.INVITE)
+        val hasRoomMember = roomSync.inviteState?.events?.firstOrNull {
+            it.type == EventType.STATE_ROOM_MEMBER
+        } != null
+        roomSummaryUpdater.update(realm, roomId, Membership.INVITE, updateMembers = hasRoomMember)
         return roomEntity
     }
 

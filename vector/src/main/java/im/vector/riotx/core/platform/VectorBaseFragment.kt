@@ -114,11 +114,12 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
         super.onDestroyView()
         mUnBinder?.unbind()
         mUnBinder = null
+        uiDisposables.clear()
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         uiDisposables.dispose()
+        super.onDestroy()
     }
 
     override fun injector(): ScreenComponent {
@@ -181,7 +182,7 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
 
     private val uiDisposables = CompositeDisposable()
 
-    protected fun Disposable.disposeOnDestroy(): Disposable {
+    protected fun Disposable.disposeOnDestroyView(): Disposable {
         uiDisposables.add(this)
         return this
     }

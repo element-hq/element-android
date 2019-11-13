@@ -23,9 +23,10 @@ import com.airbnb.mvrx.Uninitialized
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotx.R
+import im.vector.riotx.features.home.RoomListDisplayMode
 
 data class RoomListViewState(
-        val displayMode: RoomListFragment.DisplayMode,
+        val displayMode: RoomListDisplayMode,
         val asyncRooms: Async<List<RoomSummary>> = Uninitialized,
         val roomFilter: String = "",
         val asyncFilteredRooms: Async<RoomSummaries> = Uninitialized,

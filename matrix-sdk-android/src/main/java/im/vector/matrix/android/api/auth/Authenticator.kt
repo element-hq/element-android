@@ -67,5 +67,5 @@ interface Authenticator {
     /**
      * Create a session after a SSO successful login
      */
-    fun createSessionFromSso(credentials: Credentials, homeServerConnectionConfig: HomeServerConnectionConfig): Session
+    fun createSessionFromSso(credentials: Credentials, homeServerConnectionConfig: HomeServerConnectionConfig, callback: MatrixCallback<Session>): Cancelable
 }

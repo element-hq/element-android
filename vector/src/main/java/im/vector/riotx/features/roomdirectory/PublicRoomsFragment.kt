@@ -67,7 +67,7 @@ class PublicRoomsFragment @Inject constructor(
                 .subscribeBy {
                     viewModel.handle(RoomDirectoryAction.FilterWith(it.toString()))
                 }
-                .disposeOnDestroy()
+                .disposeOnDestroyView()
 
         publicRoomsCreateNewRoom.setOnClickListener {
             sharedActionViewModel.post(RoomDirectorySharedAction.CreateRoom)

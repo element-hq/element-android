@@ -21,36 +21,13 @@ import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import javax.inject.Inject
 
-internal class DefaultFilterService @Inject constructor(private val filterRepository: FilterRepository,
-                                                        private val saveFilterTask: SaveFilterTask,
+internal class DefaultFilterService @Inject constructor(private val saveFilterTask: SaveFilterTask,
                                                         private val taskExecutor: TaskExecutor) : FilterService {
 
     // TODO Pass a list of support events instead
     override fun setFilter(filterPreset: FilterService.FilterPreset) {
-        val filterBody = when (filterPreset) {
-            FilterService.FilterPreset.RiotFilter -> {
-                FilterFactory.createRiotFilterBody()
-            }
-            FilterService.FilterPreset.NoFilter   -> {
-                FilterFactory.createDefaultFilterBody()
-            }
-        }
-
-        val roomFilter = when (filterPreset) {
-            FilterService.FilterPreset.RiotFilter -> {
-                FilterFactory.createRiotRoomFilter()
-            }
-            FilterService.FilterPreset.NoFilter   -> {
-                FilterFactory.createDefaultRoomFilter()
-            }
-        }
-
-        val updated = filterRepository.storeFilter(filterBody, roomFilter)
-
-        if (updated) {
-            saveFilterTask
-                    .configureWith(SaveFilterTask.Params(filterBody))
-                    .executeBy(taskExecutor)
-        }
+        saveFilterTask
+                .configureWith(SaveFilterTask.Params(filterPreset))
+                .executeBy(taskExecutor)
     }
 }

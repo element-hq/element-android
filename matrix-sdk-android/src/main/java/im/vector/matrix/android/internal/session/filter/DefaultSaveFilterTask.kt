@@ -16,18 +16,19 @@
 
 package im.vector.matrix.android.internal.session.filter
 
+import im.vector.matrix.android.api.session.sync.FilterService
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
 import javax.inject.Inject
 
 /**
- * Save a filter to the server
+ * Save a filter, in db and if any changes, upload to the server
  */
 internal interface SaveFilterTask : Task<SaveFilterTask.Params, Unit> {
 
     data class Params(
-            val filter: FilterBody
+            val filterPreset: FilterService.FilterPreset
     )
 }
 
@@ -37,10 +38,29 @@ internal class DefaultSaveFilterTask @Inject constructor(@UserId private val use
 ) : SaveFilterTask {
 
     override suspend fun execute(params: SaveFilterTask.Params) {
-        val filterResponse = executeRequest<FilterResponse> {
-            // TODO auto retry
-            apiCall = filterAPI.uploadFilter(userId, params.filter)
+        val filterBody = when (params.filterPreset) {
+            FilterService.FilterPreset.RiotFilter -> {
+                FilterFactory.createRiotFilterBody()
+            }
+            FilterService.FilterPreset.NoFilter   -> {
+                FilterFactory.createDefaultFilterBody()
+            }
         }
-        filterRepository.storeFilterId(params.filter, filterResponse.filterId)
+        val roomFilter = when (params.filterPreset) {
+            FilterService.FilterPreset.RiotFilter -> {
+                FilterFactory.createRiotRoomFilter()
+            }
+            FilterService.FilterPreset.NoFilter   -> {
+                FilterFactory.createDefaultRoomFilter()
+            }
+        }
+        val updated = filterRepository.storeFilter(filterBody, roomFilter)
+        if (updated) {
+            val filterResponse = executeRequest<FilterResponse> {
+                // TODO auto retry
+                apiCall = filterAPI.uploadFilter(userId, filterBody)
+            }
+            filterRepository.storeFilterId(filterBody, filterResponse.filterId)
+        }
     }
 }

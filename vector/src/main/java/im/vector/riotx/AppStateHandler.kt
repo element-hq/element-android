@@ -26,6 +26,7 @@ import im.vector.matrix.rx.rx
 import im.vector.riotx.features.home.HomeRoomListDataSource
 import im.vector.riotx.features.home.group.ALL_COMMUNITIES_GROUP_ID
 import im.vector.riotx.features.home.group.SelectedGroupDataSource
+import im.vector.riotx.features.home.room.list.ChronologicalRoomComparator
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -43,7 +44,8 @@ import javax.inject.Singleton
 class AppStateHandler @Inject constructor(
         private val sessionDataSource: ActiveSessionDataSource,
         private val homeRoomListDataSource: HomeRoomListDataSource,
-        private val selectedGroupDataSource: SelectedGroupDataSource) : LifecycleObserver {
+        private val selectedGroupDataSource: SelectedGroupDataSource,
+        private val chronologicalRoomComparator: ChronologicalRoomComparator) : LifecycleObserver {
 
     private val compositeDisposable = CompositeDisposable()
 
@@ -64,31 +66,24 @@ class AppStateHandler @Inject constructor(
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .switchMap {
                                     it.orNull()?.rx()?.liveRoomSummaries()
-                                    ?: Observable.just(emptyList())
+                                            ?: Observable.just(emptyList())
                                 }
                                 .throttleLast(300, TimeUnit.MILLISECONDS),
                         selectedGroupDataSource.observe(),
                         BiFunction { rooms, selectedGroupOption ->
                             val selectedGroup = selectedGroupOption.orNull()
-                            val filteredDirectRooms = rooms
-                                    .filter { it.isDirect }
-                                    .filter {
-                                        if (selectedGroup == null || selectedGroup.groupId == ALL_COMMUNITIES_GROUP_ID) {
-                                            true
-                                        } else {
-                                            it.otherMemberIds
-                                                    .intersect(selectedGroup.userIds)
-                                                    .isNotEmpty()
-                                        }
-                                    }
-
-                            val filteredGroupRooms = rooms
-                                    .filter { !it.isDirect }
-                                    .filter {
-                                        selectedGroup?.groupId == ALL_COMMUNITIES_GROUP_ID
-                                        || selectedGroup?.roomIds?.contains(it.roomId) ?: true
-                                    }
-                            filteredDirectRooms + filteredGroupRooms
+                            val filteredRooms = rooms.filter {
+                                if (selectedGroup == null || selectedGroup.groupId == ALL_COMMUNITIES_GROUP_ID) {
+                                    true
+                                } else if (it.isDirect) {
+                                    it.otherMemberIds
+                                            .intersect(selectedGroup.userIds)
+                                            .isNotEmpty()
+                                } else {
+                                    selectedGroup.roomIds.contains(it.roomId)
+                                }
+                            }
+                            filteredRooms.sortedWith(chronologicalRoomComparator)
                         }
                 )
                 .subscribe {

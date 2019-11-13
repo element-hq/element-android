@@ -19,6 +19,7 @@ package im.vector.matrix.android.internal.session
 import android.content.Context
 import com.zhuinden.monarchy.Monarchy
 import dagger.Binds
+import dagger.Lazy
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoSet
@@ -132,7 +133,7 @@ internal abstract class SessionModule {
         @JvmStatic
         @Provides
         @SessionScope
-        fun providesRetrofit(@Authenticated okHttpClient: OkHttpClient,
+        fun providesRetrofit(@Authenticated okHttpClient: Lazy<OkHttpClient>,
                              sessionParams: SessionParams,
                              retrofitFactory: RetrofitFactory): Retrofit {
             return retrofitFactory

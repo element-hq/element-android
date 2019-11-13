@@ -24,6 +24,7 @@ import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.helpFooterItem
 import im.vector.riotx.core.epoxy.noResultItem
 import im.vector.riotx.core.resources.StringProvider
+import im.vector.riotx.features.home.RoomListDisplayMode
 import im.vector.riotx.core.resources.UserPreferencesProvider
 import im.vector.riotx.features.home.room.filtered.FilteredRoomFooterItem
 import im.vector.riotx.features.home.room.filtered.filteredRoomFooterItem
@@ -58,8 +59,8 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
     override fun buildModels() {
         val nonNullViewState = viewState ?: return
         when (nonNullViewState.displayMode) {
-            RoomListFragment.DisplayMode.FILTERED,
-            RoomListFragment.DisplayMode.SHARE -> {
+            RoomListDisplayMode.FILTERED,
+            RoomListDisplayMode.SHARE -> {
                 buildFilteredRooms(nonNullViewState)
             }
             else                               -> {
@@ -106,7 +107,7 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
                 viewState.rejectingErrorRoomsIds)
 
         when {
-            viewState.displayMode == RoomListFragment.DisplayMode.FILTERED -> addFilterFooter(viewState)
+            viewState.displayMode == RoomListDisplayMode.FILTERED -> addFilterFooter(viewState)
             filteredSummaries.isEmpty()                                    -> addEmptyFooter()
         }
     }

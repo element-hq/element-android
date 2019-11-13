@@ -45,16 +45,11 @@ class RoomPreviewNoPreviewFragment @Inject constructor(
     private val roomPreviewViewModel: RoomPreviewViewModel by fragmentViewModel()
     private val roomPreviewData: RoomPreviewData by args()
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        setupToolbar(roomPreviewNoPreviewToolbar)
-    }
-
     override fun getLayoutResId() = R.layout.fragment_room_preview_no_preview
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        setupToolbar(roomPreviewNoPreviewToolbar)
         // Toolbar
         avatarRenderer.render(roomPreviewData.avatarUrl, roomPreviewData.roomId, roomPreviewData.roomName, roomPreviewNoPreviewToolbarAvatar)
         roomPreviewNoPreviewToolbarTitle.text = roomPreviewData.roomName

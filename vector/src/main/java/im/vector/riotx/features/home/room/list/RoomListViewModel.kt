@@ -33,9 +33,7 @@ import javax.inject.Inject
 
 class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
                                             private val session: Session,
-                                            private val roomSummariesSource: DataSource<List<RoomSummary>>,
-                                            private val alphabeticalRoomComparator: AlphabeticalRoomComparator,
-                                            private val chronologicalRoomComparator: ChronologicalRoomComparator)
+                                            private val roomSummariesSource: DataSource<List<RoomSummary>>)
     : VectorViewModel<RoomListViewState, RoomListAction>(initialState) {
 
     interface Factory {
@@ -96,9 +94,6 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
         roomSummariesSource
                 .observe()
                 .observeOn(Schedulers.computation())
-                .map {
-                    it.sortedWith(chronologicalRoomComparator)
-                }
                 .execute { asyncRooms ->
                     copy(asyncRooms = asyncRooms)
                 }
@@ -210,10 +205,11 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
     }
 
     private fun buildRoomSummaries(rooms: List<RoomSummary>): RoomSummaries {
+        // Set up init size on directChats and groupRooms as they are the biggest ones
         val invites = ArrayList<RoomSummary>()
         val favourites = ArrayList<RoomSummary>()
-        val directChats = ArrayList<RoomSummary>()
-        val groupRooms = ArrayList<RoomSummary>()
+        val directChats = ArrayList<RoomSummary>(rooms.size)
+        val groupRooms = ArrayList<RoomSummary>(rooms.size)
         val lowPriorities = ArrayList<RoomSummary>()
         val serverNotices = ArrayList<RoomSummary>()
 
@@ -231,21 +227,13 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
                     }
                 }
 
-        val roomComparator = when (displayMode) {
-            RoomListFragment.DisplayMode.HOME     -> chronologicalRoomComparator
-            RoomListFragment.DisplayMode.PEOPLE   -> chronologicalRoomComparator
-            RoomListFragment.DisplayMode.ROOMS    -> chronologicalRoomComparator
-            RoomListFragment.DisplayMode.FILTERED -> chronologicalRoomComparator
-            RoomListFragment.DisplayMode.SHARE    -> chronologicalRoomComparator
-        }
-
         return RoomSummaries().apply {
-            put(RoomCategory.INVITE, invites.sortedWith(roomComparator))
-            put(RoomCategory.FAVOURITE, favourites.sortedWith(roomComparator))
-            put(RoomCategory.DIRECT, directChats.sortedWith(roomComparator))
-            put(RoomCategory.GROUP, groupRooms.sortedWith(roomComparator))
-            put(RoomCategory.LOW_PRIORITY, lowPriorities.sortedWith(roomComparator))
-            put(RoomCategory.SERVER_NOTICE, serverNotices.sortedWith(roomComparator))
+            put(RoomCategory.INVITE, invites)
+            put(RoomCategory.FAVOURITE, favourites)
+            put(RoomCategory.DIRECT, directChats)
+            put(RoomCategory.GROUP, groupRooms)
+            put(RoomCategory.LOW_PRIORITY, lowPriorities)
+            put(RoomCategory.SERVER_NOTICE, serverNotices)
         }
     }
 }

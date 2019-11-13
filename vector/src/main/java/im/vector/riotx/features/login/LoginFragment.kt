@@ -62,7 +62,7 @@ class LoginFragment @Inject constructor() : VectorBaseFragment() {
                         viewModel.handle(LoginAction.UpdateHomeServer(homeServerField.text.toString()))
                     }
                 }
-                .disposeOnDestroy()
+                .disposeOnDestroyView()
 
         homeServerField.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -107,7 +107,7 @@ class LoginFragment @Inject constructor() : VectorBaseFragment() {
                         }
                 )
                 .subscribeBy { authenticateButton.isEnabled = it }
-                .disposeOnDestroy()
+                .disposeOnDestroyView()
         authenticateButton.setOnClickListener { authenticate() }
 
         authenticateButtonSso.setOnClickListener { openSso() }

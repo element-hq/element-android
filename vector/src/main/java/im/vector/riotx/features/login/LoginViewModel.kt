@@ -116,7 +116,6 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
     private fun onSessionCreated(session: Session) {
         activeSessionHolder.setActiveSession(session)
         session.configureAndStart(pushRuleTriggerListener, sessionListener)
-
         setState {
             copy(
                     asyncLoginAction = Success(Unit)
@@ -131,9 +130,15 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
             // Should not happen
             Timber.w("homeServerConnectionConfig is null")
         } else {
-            val session = authenticator.createSessionFromSso(action.credentials, homeServerConnectionConfigFinal)
+            authenticator.createSessionFromSso(action.credentials, homeServerConnectionConfigFinal, object : MatrixCallback<Session> {
+                override fun onSuccess(data: Session) {
+                    onSessionCreated(data)
+                }
 
-            onSessionCreated(session)
+                override fun onFailure(failure: Throwable) = setState {
+                    copy(asyncLoginAction = Fail(failure))
+                }
+            })
         }
     }
 
@@ -149,7 +154,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
 
         // Do not retry if we already have flows for this config -> causes infinite focus loop
         if (newConfig?.homeServerUri?.toString() == homeServerConnectionConfig?.homeServerUri?.toString()
-                && state.asyncHomeServerLoginFlowRequest is Success) return@withState
+            && state.asyncHomeServerLoginFlowRequest is Success) return@withState
 
         currentTask?.cancel()
         homeServerConnectionConfig = newConfig

@@ -18,6 +18,7 @@ package im.vector.riotx.features.home.room.detail.composer
 
 import android.content.Context
 import android.net.Uri
+import android.text.Editable
 import android.util.AttributeSet
 import android.view.ViewGroup
 import android.widget.ImageButton
@@ -31,6 +32,7 @@ import androidx.transition.TransitionManager
 import butterknife.BindView
 import butterknife.ButterKnife
 import im.vector.riotx.R
+import kotlinx.android.synthetic.main.merge_composer_layout.view.*
 
 /**
  * Encapsulate the timeline composer UX.
@@ -39,7 +41,11 @@ import im.vector.riotx.R
 class TextComposerView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null,
                                                  defStyleAttr: Int = 0) : ConstraintLayout(context, attrs, defStyleAttr) {
 
-    interface Callback : ComposerEditText.Callback
+    interface Callback : ComposerEditText.Callback {
+        fun onCloseRelatedMessage()
+        fun onSendMessage(text: String)
+        fun onAddAttachment()
+    }
 
     var callback: Callback? = null
 
@@ -62,14 +68,30 @@ class TextComposerView @JvmOverloads constructor(context: Context, attrs: Attrib
 
     private val animationDuration = 100L
 
+    val text: Editable?
+        get() = composerEditText.text
+
     init {
         inflate(context, R.layout.merge_composer_layout, this)
         ButterKnife.bind(this)
         collapse(false)
-        composerEditText.callback = object : Callback, ComposerEditText.Callback {
+        composerEditText.callback = object : ComposerEditText.Callback {
             override fun onRichContentSelected(contentUri: Uri): Boolean {
                 return callback?.onRichContentSelected(contentUri) ?: false
             }
+        }
+        composerRelatedMessageCloseButton.setOnClickListener {
+            collapse()
+            callback?.onCloseRelatedMessage()
+        }
+
+        sendButton.setOnClickListener {
+            val textMessage = text?.toString() ?: ""
+            callback?.onSendMessage(textMessage)
+        }
+
+        attachmentButton.setOnClickListener {
+            callback?.onAddAttachment()
         }
     }
 

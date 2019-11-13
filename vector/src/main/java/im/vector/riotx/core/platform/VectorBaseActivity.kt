@@ -24,6 +24,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.annotation.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.isVisible
@@ -34,7 +35,6 @@ import androidx.lifecycle.ViewModelProviders
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.Unbinder
-import com.airbnb.mvrx.BaseMvRxActivity
 import com.airbnb.mvrx.MvRx
 import com.bumptech.glide.util.Util
 import com.google.android.material.snackbar.Snackbar
@@ -59,7 +59,7 @@ import io.reactivex.disposables.Disposable
 import timber.log.Timber
 import kotlin.system.measureTimeMillis
 
-abstract class VectorBaseActivity : BaseMvRxActivity(), HasScreenInjector {
+abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
     /* ==========================================================================================
      * UI
      * ========================================================================================== */

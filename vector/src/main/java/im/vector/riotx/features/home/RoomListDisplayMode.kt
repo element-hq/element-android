@@ -14,21 +14,15 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.auth
+package im.vector.riotx.features.home
 
-import im.vector.matrix.android.api.auth.data.SessionParams
+import androidx.annotation.StringRes
+import im.vector.riotx.R
 
-internal interface SessionParamsStore {
-
-    fun get(userId: String): SessionParams?
-
-    fun getLast(): SessionParams?
-
-    fun getAll(): List<SessionParams>
-
-    suspend fun save(sessionParams: SessionParams)
-
-    suspend fun delete(userId: String)
-
-    suspend fun deleteAll()
-}
+enum class RoomListDisplayMode(@StringRes val titleRes: Int) {
+        HOME(R.string.bottom_action_home),
+        PEOPLE(R.string.bottom_action_people_x),
+        ROOMS(R.string.bottom_action_rooms),
+        FILTERED(/* Not used */ 0),
+        SHARE(/* Not used */ 0)
+    }

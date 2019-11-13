@@ -31,6 +31,7 @@ import im.vector.riotx.core.extensions.replaceFragment
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.features.attachments.AttachmentsHelper
 import im.vector.riotx.features.home.LoadingFragment
+import im.vector.riotx.features.home.RoomListDisplayMode
 import im.vector.riotx.features.home.room.list.RoomListFragment
 import im.vector.riotx.features.home.room.list.RoomListParams
 import im.vector.riotx.features.login.LoginActivity
@@ -97,7 +98,7 @@ class IncomingShareActivity :
     }
 
     override fun onContentAttachmentsReady(attachments: List<ContentAttachmentData>) {
-        val roomListParams = RoomListParams(RoomListFragment.DisplayMode.SHARE, sharedData = SharedData.Attachments(attachments))
+        val roomListParams = RoomListParams(RoomListDisplayMode.SHARE, sharedData = SharedData.Attachments(attachments))
         replaceFragment(R.id.shareRoomListFragmentContainer, RoomListFragment::class.java, roomListParams)
     }
 
@@ -116,7 +117,7 @@ class IncomingShareActivity :
             return if (sharedText.isNullOrEmpty()) {
                 false
             } else {
-                val roomListParams = RoomListParams(RoomListFragment.DisplayMode.SHARE, sharedData = SharedData.Text(sharedText))
+                val roomListParams = RoomListParams(RoomListDisplayMode.SHARE, sharedData = SharedData.Text(sharedText))
                 replaceFragment(R.id.shareRoomListFragmentContainer, RoomListFragment::class.java, roomListParams)
                 true
             }
