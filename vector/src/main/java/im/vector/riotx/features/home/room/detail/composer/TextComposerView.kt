@@ -93,7 +93,6 @@ class TextComposerView @JvmOverloads constructor(context: Context, attrs: Attrib
         attachmentButton.setOnClickListener {
             callback?.onAddAttachment()
         }
-
     }
 
     fun collapse(animate: Boolean = true, transitionComplete: (() -> Unit)? = null) {

@@ -40,7 +40,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import javax.inject.Inject
-import javax.inject.Provider
 
 internal class DefaultAuthenticator @Inject constructor(@Unauthenticated
                                                         private val okHttpClient: Lazy<OkHttpClient>,
@@ -123,7 +122,6 @@ internal class DefaultAuthenticator @Inject constructor(@Unauthenticated
             sessionOrFailure.foldToCallback(callback)
         }
         return CancelableCoroutine(job)
-
     }
 
     private suspend fun createSessionFromSso(credentials: Credentials,

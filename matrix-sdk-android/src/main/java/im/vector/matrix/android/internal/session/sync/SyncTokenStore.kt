@@ -18,10 +18,8 @@ package im.vector.matrix.android.internal.session.sync
 
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.internal.database.model.SyncEntity
-import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.Realm
-import io.realm.RealmConfiguration
 import javax.inject.Inject
 
 internal class SyncTokenStore @Inject constructor(private val monarchy: Monarchy) {

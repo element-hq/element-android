@@ -113,5 +113,4 @@ class ReadReceiptsView @JvmOverloads constructor(
         }
         isVisible = false
     }
-
 }

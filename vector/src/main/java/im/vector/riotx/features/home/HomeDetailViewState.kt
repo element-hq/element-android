@@ -23,8 +23,6 @@ import com.airbnb.mvrx.Uninitialized
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.sync.SyncState
-import im.vector.riotx.features.home.room.list.RoomListFragment
-import im.vector.riotx.features.home.room.list.RoomSummaries
 
 data class HomeDetailViewState(
         val groupSummary: Option<GroupSummary> = Option.empty(),

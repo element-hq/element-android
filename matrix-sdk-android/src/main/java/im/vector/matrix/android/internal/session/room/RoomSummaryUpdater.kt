@@ -22,7 +22,6 @@ import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomTopicContent
 import im.vector.matrix.android.internal.database.mapper.ContentMapper
-import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.EventEntityFields
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
@@ -97,7 +96,6 @@ internal class RoomSummaryUpdater @Inject constructor(@UserId private val userId
                                               // avoid this call if we are sure there are unread events
                                               || !isEventRead(monarchy, userId, roomId, latestPreviewableEvent?.eventId)
 
-
         roomSummaryEntity.displayName = roomDisplayNameResolver.resolve(roomId).toString()
         roomSummaryEntity.avatarUrl = roomAvatarResolver.resolve(roomId)
         roomSummaryEntity.topic = ContentMapper.map(lastTopicEvent?.content).toModel<RoomTopicContent>()?.topic
@@ -114,7 +112,5 @@ internal class RoomSummaryUpdater @Inject constructor(@UserId private val userId
             roomSummaryEntity.otherMemberIds.clear()
             roomSummaryEntity.otherMemberIds.addAll(otherRoomMembers)
         }
-
-
     }
 }

@@ -602,14 +602,12 @@ class RoomDetailFragment @Inject constructor(
                 .build()
 
         composerLayout.callback = object : TextComposerView.Callback {
-
             override fun onAddAttachment() {
                 if (!::attachmentTypeSelector.isInitialized) {
                     attachmentTypeSelector = AttachmentTypeSelectorView(vectorBaseActivity, vectorBaseActivity.layoutInflater, this@RoomDetailFragment)
                 }
                 attachmentTypeSelector.show(composerLayout.attachmentButton, keyboardStateUtils.isKeyboardShowing)
             }
-
 
             override fun onSendMessage(text: String) {
                 if (lockSendButton) {
@@ -625,7 +623,6 @@ class RoomDetailFragment @Inject constructor(
             override fun onCloseRelatedMessage() {
                 roomDetailViewModel.handle(RoomDetailAction.ExitSpecialMode(composerLayout.text.toString()))
             }
-
 
             override fun onRichContentSelected(contentUri: Uri): Boolean {
                 // We need WRITE_EXTERNAL permission

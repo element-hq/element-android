@@ -17,7 +17,6 @@
 package im.vector.riotx.features.home
 
 import im.vector.riotx.core.platform.VectorViewModelAction
-import im.vector.riotx.features.home.room.list.RoomListFragment
 
 sealed class HomeDetailAction : VectorViewModelAction {
     data class SwitchDisplayMode(val displayMode: RoomListDisplayMode) : HomeDetailAction()

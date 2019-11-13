@@ -27,7 +27,6 @@ import im.vector.matrix.android.api.session.room.model.tag.RoomTag
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.utils.DataSource
 import im.vector.riotx.core.utils.PublishDataSource
-import im.vector.riotx.features.home.RoomListDisplayMode
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import javax.inject.Inject

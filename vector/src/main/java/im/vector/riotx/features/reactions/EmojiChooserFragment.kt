@@ -37,5 +37,4 @@ class EmojiChooserFragment @Inject constructor() : VectorBaseFragment() {
             it.adapter?.notifyDataSetChanged()
         }
     }
-
 }

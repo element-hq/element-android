@@ -72,7 +72,6 @@ class RoomDirectoryPickerFragment @Inject constructor(val roomDirectoryPickerVie
         return super.onOptionsItemSelected(item)
     }
 
-
     private fun setupRecyclerView() {
         val layoutManager = LinearLayoutManager(context)
 

@@ -20,7 +20,6 @@ import im.vector.matrix.android.internal.database.awaitTransaction
 import im.vector.matrix.android.internal.database.model.FilterEntity
 import im.vector.matrix.android.internal.session.filter.FilterFactory
 import io.realm.Realm
-import io.realm.kotlin.createObject
 import io.realm.kotlin.where
 
 /**

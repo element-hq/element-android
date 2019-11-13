@@ -56,5 +56,4 @@ class HomeDrawerFragment @Inject constructor(
             navigator.openDebug(requireActivity())
         }
     }
-
 }

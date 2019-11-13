@@ -21,7 +21,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
 import timber.log.Timber
-import java.lang.RuntimeException
 
 suspend fun awaitTransaction(config: RealmConfiguration, transaction: suspend (realm: Realm) -> Unit) = withContext(Dispatchers.Default) {
     Realm.getInstance(config).use { bgRealm ->
@@ -41,5 +40,4 @@ suspend fun awaitTransaction(config: RealmConfiguration, transaction: suspend (r
             }
         }
     }
-
 }
