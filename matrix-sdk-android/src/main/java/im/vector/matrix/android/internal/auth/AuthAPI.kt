@@ -19,6 +19,7 @@ package im.vector.matrix.android.internal.auth
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.internal.auth.data.LoginFlowResponse
 import im.vector.matrix.android.internal.auth.data.PasswordLoginParams
+import im.vector.matrix.android.internal.auth.registration.RegistrationParams
 import im.vector.matrix.android.internal.network.NetworkConstants
 import retrofit2.Call
 import retrofit2.http.Body
@@ -30,6 +31,13 @@ import retrofit2.http.POST
  * The login REST API.
  */
 internal interface AuthAPI {
+
+    /**
+     * Register to the homeserver
+     * Ref: https://matrix.org/docs/spec/client_server/latest#account-registration-and-management
+     */
+    @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "register")
+    fun register(registrationParams: RegistrationParams): Call<Credentials>
 
     /**
      * Get the supported login flow

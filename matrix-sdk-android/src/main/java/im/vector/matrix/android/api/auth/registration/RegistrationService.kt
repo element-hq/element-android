@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,21 +14,12 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.api.util
+package im.vector.matrix.android.api.auth.registration
 
-/**
- * An interface defining a unique cancel method.
- * It should be used with methods you want to be able to cancel, such as ones interacting with Web Services.
- */
-interface Cancelable {
+import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 
-    /**
-     * The cancel method, it does nothing by default.
-     */
-    fun cancel() {
-        // no-op
-    }
+interface RegistrationService {
+
+    fun getOrCreateRegistrationWizard(homeServerConnectionConfig: HomeServerConnectionConfig): RegistrationWizard
+
 }
-
-
-object NoOpCancellable : Cancelable

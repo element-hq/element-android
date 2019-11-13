@@ -4,6 +4,7 @@
       <w>backstack</w>
       <w>bytearray</w>
       <w>ciphertext</w>
+      <w>coroutine</w>
       <w>decryptor</w>
       <w>emoji</w>
       <w>emojis</w>
@@ -12,6 +13,7 @@
       <w>linkified</w>
       <w>linkify</w>
       <w>megolm</w>
+      <w>msisdn</w>
       <w>pbkdf</w>
       <w>pkcs</w>
     </words>

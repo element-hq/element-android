@@ -1,11 +1,11 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,21 +14,18 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.api.util
+package org.matrix.androidsdk.rest.model.login
+
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 
 /**
- * An interface defining a unique cancel method.
- * It should be used with methods you want to be able to cancel, such as ones interacting with Web Services.
+ * This class represent a localized privacy policy for registration Flow.
  */
-interface Cancelable {
-
-    /**
-     * The cancel method, it does nothing by default.
-     */
-    fun cancel() {
-        // no-op
-    }
-}
-
-
-object NoOpCancellable : Cancelable
+@Parcelize
+data class LocalizedFlowDataLoginTerms(
+        var policyName: String? = null,
+        var version: String? = null,
+        var localizedUrl: String? = null,
+        var localizedName: String? = null
+) : Parcelable
