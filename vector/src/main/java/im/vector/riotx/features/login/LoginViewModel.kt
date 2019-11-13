@@ -16,8 +16,6 @@
 
 package im.vector.riotx.features.login
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import arrow.core.Try
 import com.airbnb.mvrx.*
 import com.squareup.inject.assisted.Assisted
@@ -32,7 +30,6 @@ import im.vector.matrix.android.internal.auth.data.LoginFlowResponse
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.extensions.configureAndStart
 import im.vector.riotx.core.platform.VectorViewModel
-import im.vector.riotx.core.utils.LiveEvent
 import im.vector.riotx.features.notifications.PushRuleTriggerListener
 import im.vector.riotx.features.session.SessionListener
 import timber.log.Timber
@@ -60,10 +57,6 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
 
     private var loginConfig: LoginConfig? = null
 
-    private val _navigationLiveData = MutableLiveData<LiveEvent<LoginActivity.Navigation>>()
-    val navigationLiveData: LiveData<LiveEvent<LoginActivity.Navigation>>
-        get() = _navigationLiveData
-
     private var homeServerConnectionConfig: HomeServerConnectionConfig? = null
     private var currentTask: Cancelable? = null
 
@@ -73,7 +66,6 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
             is LoginAction.UpdateHomeServer -> handleUpdateHomeserver(action)
             is LoginAction.Login            -> handleLogin(action)
             is LoginAction.SsoLoginSuccess  -> handleSsoLoginSuccess(action)
-            is LoginAction.NavigateTo       -> handleNavigation(action)
         }
     }
 
@@ -200,10 +192,6 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                 }
             })
         }
-    }
-
-    private fun handleNavigation(action: LoginAction.NavigateTo) {
-        _navigationLiveData.postValue(LiveEvent(action.target))
     }
 
     override fun onCleared() {

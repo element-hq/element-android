@@ -47,6 +47,7 @@ import javax.inject.Inject
  */
 class LoginSsoFallbackFragment @Inject constructor() : VectorBaseFragment(), OnBackPressed {
 
+    private lateinit var loginSharedActionViewModel: LoginSharedActionViewModel
     private val viewModel: LoginViewModel by activityViewModel()
 
     var homeServerUrl: String = ""
@@ -69,6 +70,7 @@ class LoginSsoFallbackFragment @Inject constructor() : VectorBaseFragment(), OnB
         login_sso_fallback_toolbar.title = getString(R.string.login)
 
         setupWebview()
+        loginSharedActionViewModel = activityViewModelProvider.get(LoginSharedActionViewModel::class.java)
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -143,7 +145,7 @@ class LoginSsoFallbackFragment @Inject constructor() : VectorBaseFragment(), OnB
                 super.onReceivedError(view, errorCode, description, failingUrl)
 
                 // on error case, close this fragment
-                viewModel.handle(LoginAction.NavigateTo(LoginActivity.Navigation.GoBack))
+                loginSharedActionViewModel.post(LoginNavigation.GoBack)
             }
 
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {

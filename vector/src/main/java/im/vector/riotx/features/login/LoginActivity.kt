@@ -25,7 +25,6 @@ import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.addFragment
 import im.vector.riotx.core.extensions.addFragmentToBackstack
-import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.features.disclaimer.showDisclaimerDialog
 import im.vector.riotx.features.home.HomeActivity
@@ -33,13 +32,8 @@ import javax.inject.Inject
 
 class LoginActivity : VectorBaseActivity() {
 
-    // Supported navigation actions for this Activity
-    sealed class Navigation {
-        object OpenSsoLoginFallback : Navigation()
-        object GoBack : Navigation()
-    }
-
     private val loginViewModel: LoginViewModel by viewModel()
+    private lateinit var loginSharedActionViewModel: LoginSharedActionViewModel
 
     @Inject lateinit var loginViewModelFactory: LoginViewModel.Factory
 
@@ -60,12 +54,15 @@ class LoginActivity : VectorBaseActivity() {
             loginViewModel.handle(LoginAction.InitWith(loginConfig))
         }
 
-        loginViewModel.navigationLiveData.observeEvent(this) {
-            when (it) {
-                is Navigation.OpenSsoLoginFallback -> addFragmentToBackstack(R.id.simpleFragmentContainer, LoginSsoFallbackFragment::class.java)
-                is Navigation.GoBack               -> supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-            }
-        }
+        loginSharedActionViewModel = viewModelProvider.get(LoginSharedActionViewModel::class.java)
+        loginSharedActionViewModel.observe()
+                .subscribe {
+                    when (it) {
+                        is LoginNavigation.OpenSsoLoginFallback -> addFragmentToBackstack(R.id.simpleFragmentContainer, LoginSsoFallbackFragment::class.java)
+                        is LoginNavigation.GoBack               -> supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                    }
+                }
+                .disposeOnDestroy()
 
         loginViewModel.selectSubscribe(this, LoginViewState::asyncLoginAction) {
             if (it is Success) {

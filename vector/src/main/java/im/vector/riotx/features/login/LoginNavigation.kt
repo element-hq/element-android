@@ -16,12 +16,10 @@
 
 package im.vector.riotx.features.login
 
-import im.vector.matrix.android.api.auth.data.Credentials
-import im.vector.riotx.core.platform.VectorViewModelAction
+import im.vector.riotx.core.platform.VectorSharedAction
 
-sealed class LoginAction : VectorViewModelAction {
-    data class UpdateHomeServer(val homeServerUrl: String) : LoginAction()
-    data class Login(val login: String, val password: String) : LoginAction()
-    data class SsoLoginSuccess(val credentials: Credentials) : LoginAction()
-    data class InitWith(val loginConfig: LoginConfig) : LoginAction()
+// Supported navigation actions for this Activity
+sealed class LoginNavigation : VectorSharedAction {
+    object OpenSsoLoginFallback : LoginNavigation()
+    object GoBack : LoginNavigation()
 }

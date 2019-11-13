@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,12 +16,7 @@
 
 package im.vector.riotx.features.login
 
-import im.vector.matrix.android.api.auth.data.Credentials
-import im.vector.riotx.core.platform.VectorViewModelAction
+import im.vector.riotx.core.platform.VectorSharedActionViewModel
+import javax.inject.Inject
 
-sealed class LoginAction : VectorViewModelAction {
-    data class UpdateHomeServer(val homeServerUrl: String) : LoginAction()
-    data class Login(val login: String, val password: String) : LoginAction()
-    data class SsoLoginSuccess(val credentials: Credentials) : LoginAction()
-    data class InitWith(val loginConfig: LoginConfig) : LoginAction()
-}
+class LoginSharedActionViewModel @Inject constructor() : VectorSharedActionViewModel<LoginNavigation>()

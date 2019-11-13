@@ -44,6 +44,7 @@ import javax.inject.Inject
 class LoginFragment @Inject constructor() : VectorBaseFragment() {
 
     private val viewModel: LoginViewModel by activityViewModel()
+    private lateinit var loginSharedActionViewModel: LoginSharedActionViewModel
 
     private var passwordShown = false
 
@@ -51,6 +52,8 @@ class LoginFragment @Inject constructor() : VectorBaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        loginSharedActionViewModel = activityViewModelProvider.get(LoginSharedActionViewModel::class.java)
 
         setupNotice()
         setupAuthButton()
@@ -114,7 +117,7 @@ class LoginFragment @Inject constructor() : VectorBaseFragment() {
     }
 
     private fun openSso() {
-        viewModel.handle(LoginAction.NavigateTo(LoginActivity.Navigation.OpenSsoLoginFallback))
+        loginSharedActionViewModel.post(LoginNavigation.OpenSsoLoginFallback)
     }
 
     private fun setupPasswordReveal() {
