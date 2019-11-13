@@ -134,6 +134,10 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                 override fun onSuccess(data: Session) {
                     onSessionCreated(data)
                 }
+
+                override fun onFailure(failure: Throwable) = setState {
+                    copy(asyncLoginAction = Fail(failure))
+                }
             })
         }
     }
@@ -150,7 +154,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
 
         // Do not retry if we already have flows for this config -> causes infinite focus loop
         if (newConfig?.homeServerUri?.toString() == homeServerConnectionConfig?.homeServerUri?.toString()
-                && state.asyncHomeServerLoginFlowRequest is Success) return@withState
+            && state.asyncHomeServerLoginFlowRequest is Success) return@withState
 
         currentTask?.cancel()
         homeServerConnectionConfig = newConfig
