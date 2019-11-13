@@ -21,7 +21,6 @@ import android.os.Parcelable
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -39,6 +38,7 @@ import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.platform.OnBackPressed
 import im.vector.riotx.core.platform.StateView
 import im.vector.riotx.core.platform.VectorBaseFragment
+
 import im.vector.riotx.features.home.RoomListDisplayMode
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsSharedAction
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsBottomSheet
@@ -344,6 +344,8 @@ class RoomListFragment @Inject constructor(
     }
 
     override fun onRoomLongClicked(room: RoomSummary): Boolean {
+        roomController.onRoomLongClicked()
+
         RoomListQuickActionsBottomSheet
                 .newInstance(room.roomId)
                 .show(requireActivity().supportFragmentManager, "ROOM_LIST_QUICK_ACTIONS")

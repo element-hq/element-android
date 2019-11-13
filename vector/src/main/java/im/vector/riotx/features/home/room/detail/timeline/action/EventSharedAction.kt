@@ -23,6 +23,9 @@ import im.vector.riotx.core.platform.VectorSharedAction
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
 
 sealed class EventSharedAction(@StringRes val titleRes: Int, @DrawableRes val iconResId: Int) : VectorSharedAction {
+    object Separator :
+            EventSharedAction(0, 0)
+
     data class AddReaction(val eventId: String) :
             EventSharedAction(R.string.message_add_reaction, R.drawable.ic_add_reaction)
 
@@ -73,6 +76,9 @@ sealed class EventSharedAction(@StringRes val titleRes: Int, @DrawableRes val ic
 
     data class ReportContentCustom(val eventId: String, val senderId: String?) :
             EventSharedAction(R.string.report_content_custom, R.drawable.ic_report_custom)
+
+    data class IgnoreUser(val senderId: String?) :
+            EventSharedAction(R.string.message_ignore_user, R.drawable.ic_alert_triangle)
 
     data class QuickReact(val eventId: String, val clickedOn: String, val add: Boolean) :
             EventSharedAction(0, 0)

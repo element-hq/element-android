@@ -343,7 +343,7 @@ Bist du sicher?</string>
     <string name="room_unsent_messages_notification">Nachrichten konnten nicht gesendet werden. %1$s oder %2$s?</string>
     <string name="room_unknown_devices_messages_notification">Nachrichten wurden nicht gesendet, da unbekannte Geräte anwesend sind. %1$s oder %2$s?</string>
     <string name="room_prompt_resend">Alles erneut senden</string>
-    <string name="room_prompt_cancel">Senden abbrechen</string>
+    <string name="room_prompt_cancel">alles abbrechen</string>
     <string name="room_resend_unsent_messages">Nicht gesendete Nachrichten erneut senden</string>
     <string name="room_delete_unsent_messages">Nicht gesendete Nachrichten löschen</string>
     <string name="room_message_file_not_found">Datei nicht gefunden</string>
@@ -445,7 +445,7 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="settings_background_sync">Hintergrundsynchronisierung</string>
     <string name="settings_enable_background_sync">Hintergrundsynchronisierung aktivieren</string>
     <string name="settings_set_sync_timeout">Timeout für Synchronisierungsanfragen</string>
-    <string name="settings_set_sync_delay">Verzögerung zwischen jeder Anfrage</string>
+    <string name="settings_set_sync_delay">Verzögerung zwischen jeder Synchronisierung</string>
     <string name="settings_second">Sekunde</string>
     <string name="settings_seconds">Sekunden</string>
 
@@ -473,10 +473,10 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="settings_pin_missed_notifications">Räume mit ungelesenen Benachrichtigungen anheften</string>
     <string name="settings_pin_unread_messages">Räume mit ungelesenen Nachrichten anheften</string>
     <string name="settings_devices_list">Geräte</string>
-    <string name="devices_details_dialog_title">Geräte-Details</string>
+    <string name="devices_details_dialog_title">Geräte Information</string>
     <string name="devices_details_id_title">ID</string>
-    <string name="devices_details_name_title">Name</string>
-    <string name="devices_details_device_name">Gerätename</string>
+    <string name="devices_details_name_title">Öffentlicher Name</string>
+    <string name="devices_details_device_name">Öffentlichen Namen aktualisieren</string>
     <string name="devices_details_last_seen_title">Zuletzt gesehen</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
     <string name="devices_delete_dialog_text">Diese Operation benötigt weitere Authentifizierung.
@@ -607,9 +607,9 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="encryption_information_decryption_error">Entschlüsselungsfehler</string>
 
     <string name="encryption_information_sender_device_information">Absendergeräteinformationen</string>
-    <string name="encryption_information_device_name">Gerätename</string>
-    <string name="encryption_information_name">Name</string>
-    <string name="encryption_information_device_id">Geräte-ID</string>
+    <string name="encryption_information_device_name">Öffentlicher Name</string>
+    <string name="encryption_information_name">Öffentlicher Name</string>
+    <string name="encryption_information_device_id">ID</string>
     <string name="encryption_information_device_key">Geräte-Schlüssel</string>
     <string name="encryption_information_verification">Verifizierungsstatus</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519-Fingerabdruck</string>
@@ -1552,8 +1552,8 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="sas_incoming_request_description">Überprüfen Sie dieses Gerät, um es als vertrauenswürdig zu markieren. Das Vertrauen auf Geräte von Partnern gibt Ihnen zusätzliche Sicherheit, wenn Sie verschlüsselte End-to-End-Nachrichten verwenden.</string>
     <string name="sas_incoming_request_description_2">Das Verifizieren dieses Benutzers wird seine Geräte als \"vertraut\" markieren und dein Gerät bei ihnen als \"vertraut\" markieren.</string>
 
-    <string name="sas_emoji_description">Verifizieren Sie diesen Benutzer, indem Sie bestätigen, dass folgendes Emoji auf dessen Bildschirm erscheint.</string>
-    <string name="sas_decimal_description">Verifizieren Sie diesen Benutzer, indem Sie bestätigen, dass die folgende Nummer auf dessen Bildschirm erscheint.</string>
+    <string name="sas_emoji_description">Überprüfen Sie dieses Gerät, indem Sie bestätigen, dass das folgende Emoji auf dem Bildschirm des Partners angezeigt wird</string>
+    <string name="sas_decimal_description">Überprüfen Sie dieses Gerät, indem Sie bestätigen, dass die folgenden Zahlen auf dem Bildschirm des Partners angezeigt werden</string>
 
     <string name="sas_verifying_keys">Es ist nichts aufgetaucht\? Noch nicht alle Clients unterstützen die interaktive Verifikation. <button>Nutze alte Verifikation</button>.</string>
     <string name="sas_legacy_verification_button_title">Verwenden Sie die Alte-Überprüfung</string>
@@ -1656,4 +1656,56 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
 
     <string name="push_gateway_item_app_id">app_id:</string>
     <string name="review">Überprüfung</string>
+    <string name="none">Keine</string>
+    <string name="revoke">Widerrufen</string>
+    <string name="disconnect">Trennen</string>
+    <string name="people_no_identity_server">Kein Integrationsserver konfiguriert.</string>
+
+    <string name="call_failed_no_ice_title">Anruf aufgrund eines falsch konfigurierten Servers fehlgeschlagen</string>
+    <string name="call_failed_no_ice_use_alt">Versuchen Sie es mit %s</string>
+    <string name="call_failed_dont_ask_again">Nicht erneut fragen</string>
+
+    <string name="auth_add_email_message_2">Richten Sie eine E-Mail für die Kontowiederherstellung ein, die später von Personen, die Sie kennen, optional gefunden werden kann.</string>
+    <string name="auth_add_phone_message_2">Richten Sie ein Telefon ein und lassen Sie es später optional von Personen erkennen, die Sie kennen.</string>
+    <string name="auth_add_email_phone_message_2">Legen Sie eine E-Mail für die Kontowiederherstellung fest. Verwenden Sie eine spätere E-Mail oder ein späteres Telefon, um von Personen, die Sie kennen, optional gefunden zu werden.</string>
+    <string name="auth_add_email_and_phone_message_2">Legen Sie eine E-Mail für die Kontowiederherstellung fest. Verwenden Sie eine spätere E-Mail oder ein späteres Telefon, um von Personen, die Sie kennen, optional gefunden zu werden.</string>
+    <string name="settings_call_ringtone_use_default_stun">Fallback-Call-Assist-Server zulassen</string>
+    <string name="settings_background_fdroid_sync_mode_battery">Optimiert für die Batterie</string>
+    <string name="settings_background_fdroid_sync_mode_real_time">Optimiert für die Echtzeit</string>
+    <string name="settings_background_fdroid_sync_mode_disabled">Keine Hintergrundsynchronisation</string>
+    <string name="settings_background_sync_update_error">Fehler beim Aktualisieren der Einstellungen.</string>
+
+
+    <string name="settings_set_workmanager_delay">Bevorzugtes Synchronisationsintervall</string>
+    <string name="settings_discovery_category">Discovery</string>
+    <string name="encryption_information_device_name_with_warning">Öffentlicher Name (sichtbar für Personen, mit denen Sie kommunizieren)</string>
+    <string name="device_name_warning">Der öffentliche Name eines Geräts ist für Personen sichtbar, mit denen Sie kommunizieren</string>
+    <string name="widget_integration_review_terms">Um fortzufahren, müssen Sie die Bedingungen dieses Dienstes akzeptieren.</string>
+
+    <string name="identity_server_not_defined">Sie verwenden keinen Identity Server</string>
+    <string name="identity_server_not_defined_for_password_reset">Es ist kein Identitätsserver konfiguriert. Sie müssen Ihr Kennwort zurücksetzen.</string>
+
+    <string name="error_user_already_logged_in">Sie versuchen anscheinend, eine Verbindung zu einem anderen Homeserver herzustellen. Möchten Sie sich abmelden\?</string>
+
+    <string name="push_gateway_item_push_key">push_key:</string>
+    <string name="push_gateway_item_app_display_name">app_display_name:</string>
+    <string name="push_gateway_item_url">Url:</string>
+    <string name="terms_of_service">Nutzungsbedingungen</string>
+    <string name="review_terms">Nutzungsbedingungen überprüfen</string>
+    <string name="terms_description_for_identity_server">Für andere auffindbar sein</string>
+    <string name="terms_description_for_integration_manager">Verwenden Sie Bots, Bridges, Widgets und Sticker-Packs</string>
+
+    <string name="read_at">Lesen Sie bei</string>
+
+
+    <string name="identity_server">Identitätsserver</string>
+    <string name="disconnect_identity_server">Trennen Sie den Identitätsserver</string>
+    <string name="add_identity_server">Konfigurieren Sie den Identitätsserver</string>
+    <string name="change_identity_server">Identitätsserver ändern</string>
+    <string name="settings_discovery_emails_title">Erkennbare E-Mail-Adressen</string>
+    <string name="settings_discovery_no_mails">Erkennungsoptionen werden angezeigt, sobald Sie eine E-Mail hinzugefügt haben.</string>
+    <string name="settings_discovery_mail_pending">ausstehend</string>
+
+    <string name="settings_discovery_enter_identity_server">Gib einen neuen Identitätsserver ein</string>
+    <string name="settings_discovery_bad_identity_server">Konnte keine Verbindung zum Heimserver herstellen.</string>
 </resources>

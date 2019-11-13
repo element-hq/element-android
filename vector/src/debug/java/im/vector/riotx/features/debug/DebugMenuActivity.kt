@@ -26,6 +26,7 @@ import androidx.core.app.Person
 import butterknife.OnClick
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseActivity
+import im.vector.riotx.features.debug.sas.DebugSasEmojiActivity
 
 class DebugMenuActivity : VectorBaseActivity() {
 
@@ -34,6 +35,11 @@ class DebugMenuActivity : VectorBaseActivity() {
     @OnClick(R.id.debug_test_text_view_link)
     fun testTextViewLink() {
         startActivity(Intent(this, TestLinkifyActivity::class.java))
+    }
+
+    @OnClick(R.id.debug_show_sas_emoji)
+    fun showSasEmoji() {
+        startActivity(Intent(this, DebugSasEmojiActivity::class.java))
     }
 
     @OnClick(R.id.debug_test_notification)

@@ -266,9 +266,14 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                 }
                 add(EventSharedAction.CopyPermalink(eventId))
 
-                if (session.myUserId != event.root.senderId && event.root.getClearType() == EventType.MESSAGE) {
+                if (session.myUserId != event.root.senderId) {
                     // not sent by me
-                    add(EventSharedAction.ReportContent(eventId, event.root.senderId))
+                    if (event.root.getClearType() == EventType.MESSAGE) {
+                        add(EventSharedAction.ReportContent(eventId, event.root.senderId))
+                    }
+
+                    add(EventSharedAction.Separator)
+                    add(EventSharedAction.IgnoreUser(event.root.senderId))
                 }
             }
         }

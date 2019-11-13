@@ -32,7 +32,7 @@ cp ../matrix-android-sdk/matrix-sdk/src/main/res/values-da/strings.xml     ./mat
 cp ../matrix-android-sdk/matrix-sdk/src/main/res/values-de/strings.xml     ./matrix-sdk-android/src/main/res/values-de/strings.xml
 cp ../matrix-android-sdk/matrix-sdk/src/main/res/values-el/strings.xml     ./matrix-sdk-android/src/main/res/values-el/strings.xml
 cp ../matrix-android-sdk/matrix-sdk/src/main/res/values-eo/strings.xml     ./matrix-sdk-android/src/main/res/values-eo/strings.xml
-cp ../matrix-android-sdk/matrix-sdk/src/main/res/values-en-rUS/strings.xml ./matrix-sdk-android/src/main/res/values-en-rUS/strings.xml
+cp ../matrix-android-sdk/matrix-sdk/src/main/res/values-en-rGB/strings.xml ./matrix-sdk-android/src/main/res/values-en-rGB/strings.xml
 cp ../matrix-android-sdk/matrix-sdk/src/main/res/values-es/strings.xml     ./matrix-sdk-android/src/main/res/values-es/strings.xml
 cp ../matrix-android-sdk/matrix-sdk/src/main/res/values-es-rMX/strings.xml ./matrix-sdk-android/src/main/res/values-es-rMX/strings.xml
 cp ../matrix-android-sdk/matrix-sdk/src/main/res/values-eu/strings.xml     ./matrix-sdk-android/src/main/res/values-eu/strings.xml

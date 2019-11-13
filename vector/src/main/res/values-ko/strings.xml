@@ -302,8 +302,8 @@
     <string name="room_info_room_topic">방 주제</string>
 
     <string name="settings_call_category">전화</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">오는 전화에 Riot 기본 벨소리를 사용합니다</string>
-    <string name="settings_call_ringtone_title">오는 전화 벨소리</string>
+    <string name="settings_call_ringtone_use_riot_ringtone">수신 전화에 Riot 기본 벨소리를 사용합니다</string>
+    <string name="settings_call_ringtone_title">수신 전화 벨소리</string>
     <string name="settings_call_ringtone_dialog_title">전화에 사용할 벨소리를 선택하세요:</string>
 
     <string name="call">전화</string>
@@ -311,9 +311,9 @@
     <string name="call_connecting">전화 연결 중…</string>
     <string name="call_ended">전화 종료됨</string>
     <string name="call_ring">전화 중…</string>
-    <string name="incoming_call">오는 전화</string>
-    <string name="incoming_video_call">오는 영상 통화</string>
-    <string name="incoming_voice_call">오는 음성 통화</string>
+    <string name="incoming_call">수신 전화</string>
+    <string name="incoming_video_call">수신 영상 통화</string>
+    <string name="incoming_voice_call">수신 음성 통화</string>
     <string name="call_in_progress">전화 진행 중…</string>
     <string name="video_call_in_progress">영상 통화 진행 중…</string>
 
@@ -412,8 +412,8 @@
     <string name="room_participants_action_invite">초대</string>
     <string name="room_participants_action_leave">이 방 떠나기</string>
     <string name="room_participants_action_remove">이 방에서 삭제하기</string>
-    <string name="room_participants_action_ban">차단</string>
-    <string name="room_participants_action_unban">차단 해제</string>
+    <string name="room_participants_action_ban">출입 금지</string>
+    <string name="room_participants_action_unban">출입 금지 풀기</string>
     <string name="room_participants_action_kick">추방</string>
     <string name="room_participants_action_set_default_power_level">일반 사용자로 재 설정</string>
     <string name="room_participants_action_set_moderator">중재자로 하기</string>
@@ -432,7 +432,7 @@
     <plurals name="room_participants_kick_prompt_msg">
         <item quantity="other">이 사용자들을 이 대화에서 추방하겠습니까\?</item>
     </plurals>
-    <string name="room_participants_ban_prompt_msg">이 사용자를 이 대화에서 차단하겠습니까\?</string>
+    <string name="room_participants_ban_prompt_msg">이 사용자를 이 대화에서 출입 금지하겠습니까\?</string>
     <string name="reason_hint">이유</string>
 
     <string name="room_participants_invite_prompt_msg">%s님을 이 대화에 초대하겠습니까\?</string>
@@ -720,7 +720,7 @@
     <string name="settings_show_read_receipts">읽은 기록 보이기</string>
     <string name="settings_show_read_receipts_summary">세부적인 목록으로 읽은 목록을 클릭하세요.</string>
     <string name="settings_show_join_leave_messages">참가 및 떠남 이벤트 보이기</string>
-    <string name="settings_show_join_leave_messages_summary">초대, 추방, 그리고 차단은 영향이 없습니다.</string>
+    <string name="settings_show_join_leave_messages_summary">초대, 추방, 그리고 출입 금지은 영향이 없습니다.</string>
     <string name="settings_show_avatar_display_name_changes_messages">계정 이벤트 보이기</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">아바타와 표시 이름 변경도 포함합니다.</string>
     <string name="settings_vibrate_on_mention">사용자가 언급할 때 진동</string>
@@ -854,7 +854,7 @@
     <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">방의 링크를 아는 누구나, 손님 제외</string>
     <string name="room_settings_room_access_entry_anyone_with_link_including_guest">방의 링크를 아는 누구나, 손님 포함</string>
 
-    <string name="room_settings_banned_users_title">차단한 사용자</string>
+    <string name="room_settings_banned_users_title">출입 금지한 사용자</string>
 
     <string name="room_settings_category_advanced_title">고급</string>
     <string name="room_settings_room_internal_id">이 방의 내부 ID</string>
@@ -1064,8 +1064,8 @@
     <string name="unrecognized_command">인식할 수 없는 명령어: %s</string>
     <string name="command_problem_with_parameters">\"%s\" 명령어는 더 많은 매개 변수가 필요하거나, 일부 매개 변수가 옳지 않습니다.</string>
     <string name="command_description_emote">활동 표시하기</string>
-    <string name="command_description_ban_user">주어진 ID로 사용자 차단하기</string>
-    <string name="command_description_unban_user">주어진 ID로 사용자 차단 풀기</string>
+    <string name="command_description_ban_user">주어진 ID로 사용자 출입 금지하기</string>
+    <string name="command_description_unban_user">주어진 ID로 사용자 출입 금지 풀기</string>
     <string name="command_description_op_user">사용자의 권한 등급 정의하기</string>
     <string name="command_description_deop_user">주어진 ID로 사용자 강등하기</string>
     <string name="command_description_invite_user">주어진 ID 현재 방에 사용자 초대하기</string>
@@ -1114,7 +1114,7 @@
     <string name="group_no_long_description">커뮤니티 관리자가 이 커뮤니티에 대한 자세한 설명을 제공하지 않았습니다.</string>
 
     <string name="has_been_kicked">%2$s님에 의해 %1$s 방에서 추방당했습니다</string>
-    <string name="has_been_banned">%2$s님에 의해 %1$s 방에서 차단당했습니다</string>
+    <string name="has_been_banned">%2$s님에 의해 %1$s 방에서 출입 금지당했습니다</string>
     <string name="reason_colon">이유: %1$s</string>
     <string name="rejoin">다시 참가하기</string>
     <string name="forget_room">방 잊어버리기</string>
@@ -1584,7 +1584,7 @@
     <string name="settings_background_fdroid_sync_mode_real_time_description">Riot은 (설정할 수 있는) 특정 시간에 주기적으로 백그라운드에거 동기화됩니다.
 \n이는 라디오와 배터리 사용에 영향을 주며 Riot이 이벤트를 수신하고 있는 상태라는 알림이 영구적으로 표시됩니다.</string>
     <string name="settings_background_fdroid_sync_mode_disabled">백그라운드 동기화 없음</string>
-    <string name="settings_background_fdroid_sync_mode_disabled_description">앱이 백그라운드에 있을 때 오는 메시지의 알림을 받지 않습니다.</string>
+    <string name="settings_background_fdroid_sync_mode_disabled_description">앱이 백그라운드에 있을 때 수신 메시지의 알림을 받지 않습니다.</string>
     <string name="settings_background_sync_update_error">설정을 업데이트하는데 실패했습니다.</string>
 
 
@@ -1623,4 +1623,72 @@
 
     <string name="settings_discovery_disconnect_with_bound_pid">현재 이메일 주소나 전화번호를 ID 서버 %1$s와 공유하고 있습니다. 공유하기를 중지하려면 %2$s(으)로 다시 연결해야 합니다.</string>
     <string name="settings_agree_to_terms">ID 서버 (%s)의 서비스 약관에 동의하면 다른 사용자가 당신을 이메일 주소나 전화번호로 찾을 수 있게 됩니다.</string>
+    <string name="resources_script">Latn</string>
+
+    <string name="labs_allow_extended_logging">상세 로그 켜기.</string>
+    <string name="labs_allow_extended_logging_summary">상세 로그는 분노의 흔들기를 보낼 때 더 많은 로그를 제공해서 개발자에게 도움을 줍니다. 이 설정을 켜도 애플리케이션은 메시지 내용이나 다른 개인 정보를 기록하지 않습니다.</string>
+
+
+    <string name="error_terms_not_accepted">홈서버의 이용 약관에 동의한 후 다시 시도해주세요.</string>
+
+    <string name="error_network_timeout">서버의 응답 시간이 지연되고 있습니다. 연결 상태가 좋지 않거나 서버에서 오류가 발생했을지도 모릅니다. 나중에 다시 시도해주세요.</string>
+
+    <string name="send_attachment">첨부 파일 보내기</string>
+
+    <string name="a11y_open_drawer">내비게이션 서랍 열기</string>
+    <string name="a11y_create_menu_open">방 만들기 메뉴 열기</string>
+    <string name="a11y_create_menu_close">방 만들기 메뉴 닫기…</string>
+    <string name="a11y_create_direct_message">새 다이렉트 대화 만들기</string>
+    <string name="a11y_create_room">새 방 만들기</string>
+    <string name="a11y_close_keys_backup_banner">키 백업 배너 닫기</string>
+    <string name="a11y_show_password">비밀번호 보이기</string>
+    <string name="a11y_hide_password">비밀번호 감추기</string>
+    <string name="a11y_jump_to_bottom">맨 아래로 건너뛰기</string>
+
+    <string name="two_and_some_others_read">%1$s님, %2$s님 외 %3$d명이 읽음</string>
+    <string name="three_users_read">%1$s님, %2$s님 그리고 %3$s님이 읽음</string>
+    <string name="two_users_read">%1$s님 그리고 %2$s님이 읽음</string>
+    <string name="one_user_read">%s님이 읽음</string>
+    <plurals name="fallback_users_read">
+        <item quantity="other">%d명이 읽음</item>
+    </plurals>
+
+    <string name="error_file_too_big">파일 \'%1$s\' (%2$s)이(가) 업로드하기에 너무 큽니다. 제한은 %3$s입니다.</string>
+
+    <string name="error_attachment">첨부 파일을 검색하는 중 오류가 발생했습니다.</string>
+    <string name="attachment_type_file">파일</string>
+    <string name="attachment_type_contact">연락처</string>
+    <string name="attachment_type_camera">카메라</string>
+    <string name="attachment_type_audio">소리</string>
+    <string name="attachment_type_gallery">갤러리</string>
+    <string name="attachment_type_sticker">스티커</string>
+    <string name="error_handling_incoming_share">공유 데이터를 처리할 수 없음</string>
+
+    <string name="report_content_spam">스팸 문자입니다</string>
+    <string name="report_content_inappropriate">부적절한 문자입니다</string>
+    <string name="report_content_custom">맞춤 신고</string>
+    <string name="report_content_custom_title">이 내용 신고하기</string>
+    <string name="report_content_custom_hint">이 내용을 신고하는 이유</string>
+    <string name="report_content_custom_submit">신고</string>
+    <string name="block_user">사용자 출입 금지</string>
+
+    <string name="content_reported_title">내용 신고됨</string>
+    <string name="content_reported_content">이 내용을 신고했습니다.
+\n
+\n이 사용자의 내용을 더 이상 보고 싶지 않다면, 사용자를 차단하거나 메시지를 감출 수 있습니다</string>
+    <string name="content_reported_as_spam_title">스팸 문자로 신고됨</string>
+    <string name="content_reported_as_spam_content">이 내용을 스팸 메일로 신고했습니다.
+\n
+\n이 사용자의 내용을 더 이상 보고 싶지 않다면, 사용자를 차단하거나 메시지를 감출 수 있습니다</string>
+    <string name="content_reported_as_inappropriate_title">부적절한 문자로 신고됨</string>
+    <string name="content_reported_as_inappropriate_content">이 내용을 부적절한 문자로 신고했습니다.
+\n
+\n이 사용자의 내용을 더 이상 보고 싶지 않다면, 사용자를 차단하거나 메시지를 감출 수 있습니다</string>
+
+    <string name="permissions_rationale_msg_keys_backup_export">Riot은 종단간 키를 디스크에 저장하려면 권한이 필요합니다.
+\n
+\n키를 수동으로 내보내려면 다음 팝업에서 접근을 허용해주세요.</string>
+
+    <string name="no_network_indicator">현재 네트워크 연결이 없습니다</string>
+
 </resources>
