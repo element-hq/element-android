@@ -61,6 +61,7 @@ class LoginActivity : VectorBaseActivity() {
                     when (it) {
                         is LoginNavigation.OpenServerSelection   -> addFragmentToBackstack(R.id.simpleFragmentContainer, LoginServerSelectionFragment::class.java)
                         is LoginNavigation.OnServerSelectionDone -> onServerSelectionDone()
+                        is LoginNavigation.OnSignModeSelected    -> onSignModeSelected()
                         is LoginNavigation.OpenSsoLoginFallback  -> addFragmentToBackstack(R.id.simpleFragmentContainer, LoginSsoFallbackFragment::class.java)
                         is LoginNavigation.GoBack                -> supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                     }
@@ -76,11 +77,15 @@ class LoginActivity : VectorBaseActivity() {
         }
     }
 
+    private fun onSignModeSelected() {
+        // TODO
+    }
+
     private fun onServerSelectionDone() = withState(loginViewModel) {
         when (it.serverType) {
             ServerType.MatrixOrg -> addFragmentToBackstack(R.id.simpleFragmentContainer, LoginSignUpSignInSelectionFragment::class.java)
             ServerType.Modular,
-            ServerType.Other     -> addFragmentToBackstack(R.id.simpleFragmentContainer, LoginEnterHomeServerFragment::class.java)
+            ServerType.Other     -> Unit // TODO addFragmentToBackstack(R.id.simpleFragmentContainer, LoginEnterHomeServerFragment::class.java)
         }
     }
 

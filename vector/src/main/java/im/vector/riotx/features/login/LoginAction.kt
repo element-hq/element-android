@@ -25,4 +25,5 @@ sealed class LoginAction : VectorViewModelAction {
     data class SsoLoginSuccess(val credentials: Credentials) : LoginAction()
     data class InitWith(val loginConfig: LoginConfig) : LoginAction()
     data class UpdateServerType(val serverType: ServerType) : LoginAction()
+    data class UpdateSignMode(val signMode: SignMode) : LoginAction()
 }

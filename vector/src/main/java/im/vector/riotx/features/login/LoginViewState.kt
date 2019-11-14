@@ -22,6 +22,7 @@ import com.airbnb.mvrx.Uninitialized
 
 data class LoginViewState(
         val serverType: ServerType = ServerType.MatrixOrg,
+        val signMode: SignMode = SignMode.SignUp,
         val asyncLoginAction: Async<Unit> = Uninitialized,
         val asyncHomeServerLoginFlowRequest: Async<LoginMode> = Uninitialized
 ) : MvRxState

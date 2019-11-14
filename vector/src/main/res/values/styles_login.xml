@@ -11,4 +11,8 @@
         <item name="android:textAllCaps">false</item>
     </style>
 
+    <style name="Style.Vector.Login.Button.Wired" parent="VectorButtonStyleFlat">
+        <item name="android:textAllCaps">false</item>
+    </style>
+
 </resources>
