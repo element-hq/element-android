@@ -23,7 +23,6 @@ import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.EventAnnotationsSummary
 import im.vector.matrix.android.api.session.room.model.ReadReceipt
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
-import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageStickerContent
 import im.vector.matrix.android.api.session.room.model.message.isReply
 import im.vector.matrix.android.api.util.ContentUtils.extractUsefulTextFromReply

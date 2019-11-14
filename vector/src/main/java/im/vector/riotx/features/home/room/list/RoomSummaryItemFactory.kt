@@ -18,10 +18,8 @@ package im.vector.riotx.features.home.room.list
 
 import android.view.View
 import im.vector.matrix.android.api.session.events.model.EventType
-import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
-import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.riotx.R
 import im.vector.riotx.core.date.VectorDateFormatter

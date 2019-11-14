@@ -36,4 +36,3 @@ enum class RoomJoinRules(val value: String) {
     @Json(name = "private")
     PRIVATE("private")
 }
-

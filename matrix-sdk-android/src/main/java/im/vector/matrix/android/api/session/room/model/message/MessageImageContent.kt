@@ -22,7 +22,6 @@ import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultContent
 import im.vector.matrix.android.internal.crypto.model.rest.EncryptedFileInfo
 
-
 @JsonClass(generateAdapter = true)
 data class MessageImageContent(
         /**

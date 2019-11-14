@@ -233,5 +233,4 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
             else                 -> null
         }
     }
-
 }
