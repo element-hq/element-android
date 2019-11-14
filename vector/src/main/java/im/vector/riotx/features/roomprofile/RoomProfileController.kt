@@ -18,6 +18,10 @@
 package im.vector.riotx.features.roomprofile
 
 import com.airbnb.epoxy.TypedEpoxyController
+import im.vector.riotx.R
+import im.vector.riotx.core.epoxy.dividerItem
+import im.vector.riotx.core.epoxy.profiles.profileItemAction
+import im.vector.riotx.core.epoxy.profiles.profileItemSection
 import javax.inject.Inject
 
 class RoomProfileController @Inject constructor()
@@ -27,5 +31,56 @@ class RoomProfileController @Inject constructor()
         if (data == null) {
             return
         }
+
+        profileItemSection {
+            id("section_security")
+            title("Security")
+        }
+
+        profileItemAction {
+            id("action_learn_more")
+            title("Learn more")
+            editable(true)
+            subtitle("Messages in this room are not end-to-end encrypted.")
+        }
+
+        dividerItem{
+            id("action_learn_more_divider")
+        }
+
+        profileItemSection {
+            id("section_options")
+            title("Options")
+        }
+
+        profileItemAction {
+            iconRes(R.drawable.ic_person_outline_black)
+            id("action_member_list")
+            title("88 people")
+            editable(true)
+        }
+
+        dividerItem{
+            id("action_member_list_divider")
+        }
+
+        profileItemAction {
+            iconRes(R.drawable.ic_attachment)
+            id("action_files")
+            title("12 files")
+            editable(true)
+        }
+
+        dividerItem{
+            id("action_files_divider")
+        }
+
+        profileItemAction {
+            iconRes(R.drawable.ic_settings_x)
+            id("action_settings")
+            title("Room settings")
+            editable(true)
+        }
+
     }
 }

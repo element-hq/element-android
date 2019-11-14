@@ -20,13 +20,18 @@ package im.vector.riotx.features.roomprofile
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
-import com.airbnb.epoxy.EpoxyController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
+import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.core.platform.VectorBaseFragment
+import im.vector.riotx.features.home.AvatarRenderer
 import kotlinx.android.parcel.Parcelize
+import kotlinx.android.synthetic.main.fragment_room_profile.*
+import timber.log.Timber
 import javax.inject.Inject
 
 @Parcelize
@@ -36,6 +41,7 @@ data class RoomProfileArgs(
 
 class RoomProfileFragment @Inject constructor(
         private val roomProfileController: RoomProfileController,
+        private val avatarRenderer: AvatarRenderer,
         val roomProfileViewModelFactory: RoomProfileViewModel.Factory
 ) : VectorBaseFragment() {
 
@@ -46,10 +52,34 @@ class RoomProfileFragment @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupToolbar(roomProfileToolbar)
+        setupRecyclerView()
     }
 
-    override fun invalidate() = withState(roomProfileViewModel) {
-        roomProfileController.setData(it)
+    private fun setupRecyclerView() {
+        roomProfileRecyclerView.setHasFixedSize(true)
+        roomProfileRecyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+        roomProfileRecyclerView.adapter = roomProfileController.adapter
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        roomProfileRecyclerView.adapter = null
+    }
+
+    override fun invalidate() = withState(roomProfileViewModel) { state ->
+        state.roomSummary()?.let {
+            if (it.membership.isLeft()) {
+                Timber.w("The room has been left")
+                activity?.finish()
+            } else {
+                roomProfileNameView.text = it.displayName
+                roomProfileIdView.text = it.roomId
+                roomProfileTopicView.setTextOrHide(it.topic)
+                avatarRenderer.render(it, roomProfileAvatarView)
+            }
+        }
+        roomProfileController.setData(state)
     }
 
 

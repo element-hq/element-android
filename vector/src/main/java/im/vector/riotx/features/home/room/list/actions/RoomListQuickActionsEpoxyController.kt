@@ -20,7 +20,7 @@ import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.matrix.android.api.session.room.notification.RoomNotificationState
 import im.vector.riotx.core.epoxy.bottomsheet.bottomSheetItemAction
 import im.vector.riotx.core.epoxy.bottomsheet.bottomSheetItemRoomPreview
-import im.vector.riotx.core.epoxy.bottomsheet.bottomSheetItemSeparator
+import im.vector.riotx.core.epoxy.dividerItem
 import im.vector.riotx.features.home.AvatarRenderer
 import javax.inject.Inject
 
@@ -46,7 +46,7 @@ class RoomListQuickActionsEpoxyController @Inject constructor(private val avatar
         }
 
         // Notifications
-        bottomSheetItemSeparator {
+        dividerItem {
             id("notifications_separator")
         }
 
@@ -57,7 +57,7 @@ class RoomListQuickActionsEpoxyController @Inject constructor(private val avatar
         RoomListQuickActionsSharedAction.NotificationsMute(roomSummary.roomId).toBottomSheetItem(3, selectedRoomState)
 
         // Leave
-        bottomSheetItemSeparator {
+        dividerItem {
             id("leave_separator")
         }
         RoomListQuickActionsSharedAction.Leave(roomSummary.roomId).toBottomSheetItem(5)

@@ -22,9 +22,13 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.rx.rx
+import im.vector.matrix.rx.unwrap
 import im.vector.riotx.core.platform.VectorViewModel
 
-class RoomProfileViewModel @AssistedInject constructor(@Assisted initialState: RoomProfileViewState)
+class RoomProfileViewModel @AssistedInject constructor(@Assisted initialState: RoomProfileViewState,
+                                                       private val session: Session)
     : VectorViewModel<RoomProfileViewState, RoomProfileAction>(initialState) {
 
     @AssistedInject.Factory
@@ -39,6 +43,20 @@ class RoomProfileViewModel @AssistedInject constructor(@Assisted initialState: R
             val fragment: RoomProfileFragment = (viewModelContext as FragmentViewModelContext).fragment()
             return fragment.roomProfileViewModelFactory.create(state)
         }
+    }
+
+    private val room = session.getRoom(initialState.roomId)!!
+
+    init {
+        observeRoomSummary()
+    }
+
+    private fun observeRoomSummary() {
+        room.rx().liveRoomSummary()
+                .unwrap()
+                .execute {
+                    copy(roomSummary = it)
+                }
     }
 
     override fun handle(action: RoomProfileAction) {

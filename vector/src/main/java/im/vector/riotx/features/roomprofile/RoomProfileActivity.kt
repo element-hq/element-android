@@ -19,11 +19,13 @@ package im.vector.riotx.features.roomprofile
 
 import android.content.Context
 import android.content.Intent
+import androidx.appcompat.widget.Toolbar
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.addFragment
+import im.vector.riotx.core.platform.ToolbarConfigurable
 import im.vector.riotx.core.platform.VectorBaseActivity
 
-class RoomProfileActivity : VectorBaseActivity() {
+class RoomProfileActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     companion object {
 
@@ -47,5 +49,8 @@ class RoomProfileActivity : VectorBaseActivity() {
         }
     }
 
+    override fun configure(toolbar: Toolbar) {
+        configureToolbar(toolbar)
+    }
 
 }

@@ -12,20 +12,14 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
+package im.vector.riotx.core.epoxy
 
-package im.vector.riotx.features.roomprofile
+import com.airbnb.epoxy.EpoxyModelClass
+import im.vector.riotx.R
 
-import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.Uninitialized
-import im.vector.matrix.android.api.session.room.model.RoomSummary
+@EpoxyModelClass(layout = R.layout.item_divider)
+abstract class DividerItem : VectorEpoxyModel<DividerItem.Holder>() {
 
-data class RoomProfileViewState(
-        val roomId: String,
-        val roomSummary: Async<RoomSummary> = Uninitialized
-) : MvRxState {
-
-    constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
+    class Holder : VectorEpoxyHolder()
 }

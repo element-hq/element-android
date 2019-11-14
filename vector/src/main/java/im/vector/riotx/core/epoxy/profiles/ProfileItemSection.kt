@@ -12,17 +12,34 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
-package im.vector.riotx.core.epoxy.bottomsheet
 
+package im.vector.riotx.core.epoxy.profiles
+
+import android.widget.TextView
+import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
 
-@EpoxyModelClass(layout = R.layout.item_bottom_sheet_divider)
-abstract class BottomSheetItemSeparator : VectorEpoxyModel<BottomSheetItemSeparator.Holder>() {
+@EpoxyModelClass(layout = R.layout.item_profile_section)
+abstract class ProfileItemSection: VectorEpoxyModel<ProfileItemSection.Holder>() {
 
-    class Holder : VectorEpoxyHolder()
+    @EpoxyAttribute
+    lateinit var title: String
+
+    override fun bind(holder: Holder) {
+        super.bind(holder)
+        holder.sectionView.text = title
+    }
+
+
+
+    class Holder : VectorEpoxyHolder() {
+        val sectionView by bind<TextView>(R.id.itemProfileSectionView)
+    }
+
+
+
 }
