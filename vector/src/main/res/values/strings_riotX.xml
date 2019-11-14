@@ -29,4 +29,14 @@
     <string name="login_splash_text3">Extend &amp; customise your experience</string>
     <string name="login_splash_submit">Get started</string>
 
+    <string name="login_server_title">Select a server</string>
+    <string name="login_server_text">Just like email, accounts have one home, although you can talk to anyone</string>
+    <string name="login_server_matrix_org_text">Join millions free on the largest public server</string>
+    <string name="login_server_modular_text">Premium hosting for organisations</string>
+    <string name="login_server_modular_learn_more">Learn more</string>
+    <string name="login_server_other_title">Other</string>
+    <string name="login_server_other_text">Custom &amp; advanced settings</string>
+    <string name="login_server_submit">Continue</string>
+
+
 </resources>

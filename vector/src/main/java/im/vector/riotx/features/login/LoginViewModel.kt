@@ -62,10 +62,19 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
 
     override fun handle(action: LoginAction) {
         when (action) {
+            is LoginAction.UpdateServerType -> handleUpdateServerType(action)
             is LoginAction.InitWith         -> handleInitWith(action)
             is LoginAction.UpdateHomeServer -> handleUpdateHomeserver(action)
             is LoginAction.Login            -> handleLogin(action)
             is LoginAction.SsoLoginSuccess  -> handleSsoLoginSuccess(action)
+        }
+    }
+
+    private fun handleUpdateServerType(action: LoginAction.UpdateServerType) {
+        setState {
+            copy(
+                    serverType = action.serverType
+            )
         }
     }
 

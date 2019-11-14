@@ -21,6 +21,7 @@ import android.content.Intent
 import androidx.fragment.app.FragmentManager
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.viewModel
+import com.airbnb.mvrx.withState
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.addFragment
@@ -58,9 +59,10 @@ class LoginActivity : VectorBaseActivity() {
         loginSharedActionViewModel.observe()
                 .subscribe {
                     when (it) {
-                        is LoginNavigation.OpenServerSelection  -> addFragmentToBackstack(R.id.simpleFragmentContainer, LoginFragment::class.java)
-                        is LoginNavigation.OpenSsoLoginFallback -> addFragmentToBackstack(R.id.simpleFragmentContainer, LoginSsoFallbackFragment::class.java)
-                        is LoginNavigation.GoBack               -> supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                        is LoginNavigation.OpenServerSelection   -> addFragmentToBackstack(R.id.simpleFragmentContainer, LoginServerSelectionFragment::class.java)
+                        is LoginNavigation.OnServerSelectionDone -> onServerSelectionDone()
+                        is LoginNavigation.OpenSsoLoginFallback  -> addFragmentToBackstack(R.id.simpleFragmentContainer, LoginSsoFallbackFragment::class.java)
+                        is LoginNavigation.GoBack                -> supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                     }
                 }
                 .disposeOnDestroy()
@@ -71,6 +73,14 @@ class LoginActivity : VectorBaseActivity() {
                 startActivity(intent)
                 finish()
             }
+        }
+    }
+
+    private fun onServerSelectionDone() = withState(loginViewModel) {
+        when (it.serverType) {
+            ServerType.MatrixOrg -> addFragmentToBackstack(R.id.simpleFragmentContainer, LoginSignUpSignInSelectionFragment::class.java)
+            ServerType.Modular,
+            ServerType.Other     -> addFragmentToBackstack(R.id.simpleFragmentContainer, LoginEnterHomeServerFragment::class.java)
         }
     }
 
