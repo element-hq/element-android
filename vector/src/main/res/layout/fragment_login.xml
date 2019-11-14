@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -5,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -21,29 +22,33 @@
 
             <ImageView
                 android:id="@+id/logoImageView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:src="@drawable/riotx_logo" />
+                style="@style/LoginTopIcon"
+                android:layout_gravity="center_horizontal" />
 
             <TextView
-                android:id="@+id/riotx_no_registration_notice"
+                android:id="@+id/loginServerTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="32dp"
-                android:gravity="center"
-                android:padding="8dp"
-                android:text="@string/riotx_no_registration_notice"
-                android:textColor="?vctr_notice_secondary"
-                android:textSize="15sp" />
+                android:layout_marginTop="84dp"
+                android:textAppearance="@style/TextAppearance.Vector.Login.Title"
+                tools:text="@string/login_signin_to" />
+
+            <TextView
+                android:id="@+id/loginServerChoiceMatrixOrgText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_vertical_margin"
+                android:gravity="start"
+                android:text="@string/login_server_matrix_org_text"
+                android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small" />
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/VectorTextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
-                android:hint="@string/auth_user_name_placeholder">
+                android:layout_marginTop="32dp"
+                android:hint="@string/auth_user_name_placeholder"
+                app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/loginField"
@@ -64,7 +69,8 @@
                     style="@style/VectorTextInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/auth_password_placeholder">
+                    android:hint="@string/auth_password_placeholder"
+                    app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/passwordField"
@@ -93,44 +99,35 @@
 
             </FrameLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/VectorTextInputLayout"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:hint="@string/settings_home_server">
+                android:layout_marginTop="22dp"
+                android:orientation="horizontal">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/homeServerField"
-                    android:layout_width="match_parent"
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/forgetPasswordButton"
+                    style="@style/Style.Vector.Login.Button.Wired"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:imeOptions="actionDone"
-                    android:inputType="textUri"
-                    android:maxLines="1" />
+                    android:layout_gravity="start"
+                    android:text="@string/auth_forgot_password" />
 
-            </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/authenticateButton"
+                    style="@style/Style.Vector.Login.Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_gravity="end"
+                    android:text="@string/auth_login"
+                    tools:ignore="RelativeOverlap" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/authenticateButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginTop="22dp"
-                android:text="@string/auth_login" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/authenticateButtonSso"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginTop="22dp"
-                android:text="@string/auth_login_sso"
-                android:visibility="gone"
-                tools:visibility="visible" />
+            </RelativeLayout>
 
         </LinearLayout>
 
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
     <View
         android:id="@+id/touchArea"

@@ -21,6 +21,7 @@ import android.view.View
 import butterknife.OnClick
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
+import im.vector.riotx.core.utils.openUrlInExternalBrowser
 import kotlinx.android.synthetic.main.fragment_login_server_selection.*
 import me.gujun.android.span.span
 import javax.inject.Inject
@@ -50,6 +51,7 @@ class LoginServerSelectionFragment @Inject constructor() : AbstractLoginFragment
             textDecorationLine = "underline"
             onClick = {
                 // TODO
+                openUrlInExternalBrowser(requireActivity(), "https://example.org")
             }
         }
 

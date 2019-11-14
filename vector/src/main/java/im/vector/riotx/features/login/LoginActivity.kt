@@ -77,15 +77,18 @@ class LoginActivity : VectorBaseActivity() {
         }
     }
 
-    private fun onSignModeSelected() {
-        // TODO
-    }
-
     private fun onServerSelectionDone() = withState(loginViewModel) {
         when (it.serverType) {
             ServerType.MatrixOrg -> addFragmentToBackstack(R.id.simpleFragmentContainer, LoginSignUpSignInSelectionFragment::class.java)
             ServerType.Modular,
-            ServerType.Other     -> Unit // TODO addFragmentToBackstack(R.id.simpleFragmentContainer, LoginEnterHomeServerFragment::class.java)
+            ServerType.Other     -> addFragmentToBackstack(R.id.simpleFragmentContainer, LoginServerUrlFormFragment::class.java)
+        }
+    }
+
+    private fun onSignModeSelected() = withState(loginViewModel) {
+        when (it.signMode) {
+            SignMode.SignUp -> Unit // TODO addFragmentToBackstack(R.id.simpleFragmentContainer, SignUpFragment::class.java)
+            SignMode.SignIn -> addFragmentToBackstack(R.id.simpleFragmentContainer, LoginFragment::class.java)
         }
     }
 

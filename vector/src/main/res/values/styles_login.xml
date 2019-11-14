@@ -8,10 +8,12 @@
     </style>
 
     <style name="Style.Vector.Login.Button" parent="VectorButtonStyle">
+        <item name="android:minHeight">52dp</item>
         <item name="android:textAllCaps">false</item>
     </style>
 
     <style name="Style.Vector.Login.Button.Wired" parent="VectorButtonStyleFlat">
+        <item name="android:minHeight">52dp</item>
         <item name="android:textAllCaps">false</item>
     </style>
 
