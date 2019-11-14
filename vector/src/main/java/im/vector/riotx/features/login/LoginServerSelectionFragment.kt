@@ -19,6 +19,8 @@ package im.vector.riotx.features.login
 import android.os.Bundle
 import android.view.View
 import butterknife.OnClick
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
 import im.vector.riotx.core.utils.openUrlInExternalBrowser
@@ -73,8 +75,13 @@ class LoginServerSelectionFragment @Inject constructor() : AbstractLoginFragment
     }
 
     @OnClick(R.id.loginServerSubmit)
-    fun submit() {
-        loginSharedActionViewModel.post(LoginNavigation.OnServerSelectionDone)
+    fun submit() = withState(viewModel) {
+        if (it.serverType == ServerType.MatrixOrg) {
+            // Request login flow here
+            viewModel.handle(LoginAction.UpdateHomeServer(getString(R.string.matrix_org_server_url)))
+        } else {
+            loginSharedActionViewModel.post(LoginNavigation.OnServerSelectionDone)
+        }
     }
 
     override fun resetViewModel() {
@@ -83,5 +90,15 @@ class LoginServerSelectionFragment @Inject constructor() : AbstractLoginFragment
 
     override fun invalidate() = withState(viewModel) {
         updateSelectedChoice(it.serverType)
+
+        when (it.asyncHomeServerLoginFlowRequest) {
+            is Fail    -> {
+                // TODO Display error in a dialog?
+            }
+            is Success -> {
+                // The home server url is valid
+                loginSharedActionViewModel.post(LoginNavigation.OnLoginFlowRetrieved(it.asyncHomeServerLoginFlowRequest.invoke()))
+            }
+        }
     }
 }

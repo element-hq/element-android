@@ -116,6 +116,12 @@ interface FragmentModule {
     @FragmentKey(LoginFragment::class)
     fun bindLoginFragment(fragment: LoginFragment): Fragment
 
+    // TODO Add all other Login Fragments
+    @Binds
+    @IntoMap
+    @FragmentKey(LoginServerUrlFormFragment::class)
+    fun bindLoginServerUrlFormFragment(fragment: LoginServerUrlFormFragment): Fragment
+
     @Binds
     @IntoMap
     @FragmentKey(LoginSsoFallbackFragment::class)
@@ -195,10 +201,4 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(PublicRoomsFragment::class)
     fun bindPublicRoomsFragment(fragment: PublicRoomsFragment): Fragment
-
-    // TODO Add all other LoginFragment
-    @Binds
-    @IntoMap
-    @FragmentKey(LoginServerUrlFormFragment::class)
-    fun bindLoginServerUrlFormFragment(fragment: LoginServerUrlFormFragment): Fragment
 }

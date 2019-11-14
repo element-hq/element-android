@@ -66,11 +66,13 @@
                 android:layout_marginTop="16dp">
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/passwordFieldTil"
                     style="@style/VectorTextInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/auth_password_placeholder"
-                    app:errorEnabled="true">
+                    app:errorEnabled="true"
+                    app:errorIconDrawable="@null">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/passwordField"
@@ -128,29 +130,6 @@
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
-
-    <View
-        android:id="@+id/touchArea"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="?vctr_waiting_background_color"
-        android:clickable="true"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_margin="8dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

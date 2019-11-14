@@ -41,12 +41,19 @@ class ErrorFormatter @Inject constructor(private val stringProvider: StringProvi
                 }
             }
             is Failure.ServerError       -> {
-                if (throwable.error.code == MatrixError.M_CONSENT_NOT_GIVEN) {
-                    // Special case for terms and conditions
-                    stringProvider.getString(R.string.error_terms_not_accepted)
-                } else {
-                    throwable.error.message.takeIf { it.isNotEmpty() }
-                            ?: throwable.error.code.takeIf { it.isNotEmpty() }
+                when {
+                    throwable.error.code == MatrixError.M_CONSENT_NOT_GIVEN  -> {
+                        // Special case for terms and conditions
+                        stringProvider.getString(R.string.error_terms_not_accepted)
+                    }
+                    throwable.error.code == MatrixError.FORBIDDEN
+                            && throwable.error.message == "Invalid password" -> {
+                        stringProvider.getString(R.string.auth_invalid_login_param)
+                    }
+                    else                                                     -> {
+                        throwable.error.message.takeIf { it.isNotEmpty() }
+                                ?: throwable.error.code.takeIf { it.isNotEmpty() }
+                    }
                 }
             }
             else                         -> throwable.localizedMessage

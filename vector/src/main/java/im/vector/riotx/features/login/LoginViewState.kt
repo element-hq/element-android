@@ -17,6 +17,7 @@
 package im.vector.riotx.features.login
 
 import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
 
@@ -25,7 +26,14 @@ data class LoginViewState(
         val signMode: SignMode = SignMode.Unknown,
         val asyncLoginAction: Async<Unit> = Uninitialized,
         val asyncHomeServerLoginFlowRequest: Async<LoginMode> = Uninitialized
-) : MvRxState
+) : MvRxState {
+
+    fun isLoading(): Boolean {
+        // TODO Add other async here
+        return asyncLoginAction is Loading
+                || asyncHomeServerLoginFlowRequest is Loading
+    }
+}
 
 enum class LoginMode {
     Password,

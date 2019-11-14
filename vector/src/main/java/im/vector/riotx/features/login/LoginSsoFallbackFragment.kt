@@ -30,13 +30,10 @@ import android.webkit.SslErrorHandler
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AlertDialog
-import com.airbnb.mvrx.activityViewModel
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.riotx.R
-import im.vector.riotx.core.platform.OnBackPressed
-import im.vector.riotx.core.platform.VectorBaseFragment
 import kotlinx.android.synthetic.main.fragment_login_sso_fallback.*
 import timber.log.Timber
 import java.net.URLDecoder
@@ -44,14 +41,10 @@ import javax.inject.Inject
 
 /**
  * Only login is supported for the moment
- * TODO Migrate to new flow
  */
-class LoginSsoFallbackFragment @Inject constructor() : VectorBaseFragment(), OnBackPressed {
+class LoginSsoFallbackFragment @Inject constructor() : AbstractLoginFragment() {
 
-    private lateinit var loginSharedActionViewModel: LoginSharedActionViewModel
-    private val viewModel: LoginViewModel by activityViewModel()
-
-    var homeServerUrl: String = ""
+    private var homeServerUrl: String = ""
 
     enum class Mode {
         MODE_LOGIN,
@@ -71,7 +64,6 @@ class LoginSsoFallbackFragment @Inject constructor() : VectorBaseFragment(), OnB
         login_sso_fallback_toolbar.title = getString(R.string.login)
 
         setupWebview()
-        loginSharedActionViewModel = activityViewModelProvider.get(LoginSharedActionViewModel::class.java)
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -146,7 +138,7 @@ class LoginSsoFallbackFragment @Inject constructor() : VectorBaseFragment(), OnB
                 super.onReceivedError(view, errorCode, description, failingUrl)
 
                 // on error case, close this fragment
-                loginSharedActionViewModel.post(LoginNavigation.GoBack)
+                loginSharedActionViewModel.post(LoginNavigation.OnSsoLoginFallbackError(errorCode, description, failingUrl))
             }
 
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
@@ -294,12 +286,16 @@ class LoginSsoFallbackFragment @Inject constructor() : VectorBaseFragment(), OnB
         }
     }
 
+    override fun resetViewModel() {
+        // Nothing to do
+    }
+
     override fun onBackPressed(): Boolean {
         return if (login_sso_fallback_webview.canGoBack()) {
             login_sso_fallback_webview.goBack()
             true
         } else {
-            false
+            super.onBackPressed()
         }
     }
 }

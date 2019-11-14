@@ -18,6 +18,8 @@ package im.vector.riotx.features.login
 
 import android.content.Context
 import android.content.Intent
+import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.viewModel
@@ -29,8 +31,12 @@ import im.vector.riotx.core.extensions.addFragmentToBackstack
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.features.disclaimer.showDisclaimerDialog
 import im.vector.riotx.features.home.HomeActivity
+import kotlinx.android.synthetic.main.activity_login.*
 import javax.inject.Inject
 
+/**
+ * The LoginActivity manages the fragment navigation and also display the loading View
+ */
 class LoginActivity : VectorBaseActivity() {
 
     private val loginViewModel: LoginViewModel by viewModel()
@@ -42,16 +48,17 @@ class LoginActivity : VectorBaseActivity() {
         injector.inject(this)
     }
 
-    override fun getLayoutRes() = R.layout.activity_simple
+    override fun getLayoutRes() = R.layout.activity_login
 
     override fun initUiAndData() {
         if (isFirstCreation()) {
-            addFragment(R.id.simpleFragmentContainer, LoginSplashFragment::class.java)
+            addFragment(R.id.loginFragmentContainer, LoginSplashFragment::class.java)
         }
 
         // Get config extra
         val loginConfig = intent.getParcelableExtra<LoginConfig?>(EXTRA_CONFIG)
         if (loginConfig != null && isFirstCreation()) {
+            // TODO Check this
             loginViewModel.handle(LoginAction.InitWith(loginConfig))
         }
 
@@ -59,29 +66,59 @@ class LoginActivity : VectorBaseActivity() {
         loginSharedActionViewModel.observe()
                 .subscribe {
                     when (it) {
-                        is LoginNavigation.OpenServerSelection   -> addFragmentToBackstack(R.id.simpleFragmentContainer, LoginServerSelectionFragment::class.java)
-                        is LoginNavigation.OnServerSelectionDone -> onServerSelectionDone()
-                        is LoginNavigation.OnSignModeSelected    -> onSignModeSelected(it)
-                        is LoginNavigation.OpenSsoLoginFallback  -> addFragmentToBackstack(R.id.simpleFragmentContainer, LoginSsoFallbackFragment::class.java)
-                        is LoginNavigation.GoBack                -> supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                        is LoginNavigation.OpenServerSelection     -> addFragmentToBackstack(R.id.loginFragmentContainer, LoginServerSelectionFragment::class.java)
+                        is LoginNavigation.OnServerSelectionDone   -> onServerSelectionDone()
+                        is LoginNavigation.OnSignModeSelected      -> onSignModeSelected(it)
+                        is LoginNavigation.OnLoginFlowRetrieved    -> onLoginFlowRetrieved(it)
+                        is LoginNavigation.OnSsoLoginFallbackError -> onSsoLoginFallbackError(it)
                     }
                 }
                 .disposeOnDestroy()
 
-        loginViewModel.selectSubscribe(this, LoginViewState::asyncLoginAction) {
-            if (it is Success) {
-                val intent = HomeActivity.newIntent(this)
-                startActivity(intent)
-                finish()
-            }
+        loginViewModel
+                .subscribe(this) {
+                    updateWithState(it)
+                }
+                .disposeOnDestroy()
+    }
+
+    private fun onLoginFlowRetrieved(onLoginFlowRetrieved: LoginNavigation.OnLoginFlowRetrieved) {
+        when (onLoginFlowRetrieved.loginMode) {
+            LoginMode.Sso      -> addFragmentToBackstack(R.id.loginFragmentContainer, LoginSsoFallbackFragment::class.java)
+            LoginMode.Unsupported,
+            LoginMode.Password -> addFragmentToBackstack(R.id.loginFragmentContainer, LoginSignUpSignInSelectionFragment::class.java)
         }
+    }
+
+    private fun updateWithState(loginViewState: LoginViewState) {
+        if (loginViewState.asyncLoginAction is Success) {
+            val intent = HomeActivity.newIntent(this)
+            startActivity(intent)
+            finish()
+            return
+        }
+
+        // Loading
+        loginLoading.isVisible = loginViewState.isLoading()
+    }
+
+    private fun onSsoLoginFallbackError(onSsoLoginFallbackError: LoginNavigation.OnSsoLoginFallbackError) {
+        // Pop the backstack
+        supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+
+        // And inform the user
+        AlertDialog.Builder(this)
+                .setTitle(R.string.dialog_title_error)
+                .setMessage(getString(R.string.login_sso_error_message, onSsoLoginFallbackError.description, onSsoLoginFallbackError.errorCode))
+                .setPositiveButton(R.string.ok, null)
+                .show()
     }
 
     private fun onServerSelectionDone() = withState(loginViewModel) {
         when (it.serverType) {
-            ServerType.MatrixOrg -> addFragmentToBackstack(R.id.simpleFragmentContainer, LoginSignUpSignInSelectionFragment::class.java)
+            ServerType.MatrixOrg -> Unit // In this case, we wait for the login flow
             ServerType.Modular,
-            ServerType.Other     -> addFragmentToBackstack(R.id.simpleFragmentContainer, LoginServerUrlFormFragment::class.java)
+            ServerType.Other     -> addFragmentToBackstack(R.id.loginFragmentContainer, LoginServerUrlFormFragment::class.java)
         }
     }
 
@@ -89,8 +126,8 @@ class LoginActivity : VectorBaseActivity() {
         // We cannot use the state, it is not ready...
         when (mode.signMode) {
             SignMode.Unknown -> error("Sign mode has to be set before calling this method")
-            SignMode.SignUp  -> Unit // TODO addFragmentToBackstack(R.id.simpleFragmentContainer, SignUpFragment::class.java)
-            SignMode.SignIn  -> addFragmentToBackstack(R.id.simpleFragmentContainer, LoginFragment::class.java)
+            SignMode.SignUp  -> Unit // TODO addFragmentToBackstack(R.id.loginFragmentContainer, SignUpFragment::class.java)
+            SignMode.SignIn  -> addFragmentToBackstack(R.id.loginFragmentContainer, LoginFragment::class.java)
         }
     }
 

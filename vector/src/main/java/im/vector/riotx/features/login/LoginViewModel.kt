@@ -78,14 +78,14 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
         currentTask = null
 
         when (action) {
-            LoginAction.ResetLogin -> {
+            LoginAction.ResetLogin          -> {
                 setState {
                     copy(
                             asyncLoginAction = Uninitialized
                     )
                 }
             }
-            LoginAction.ResetHomeServerUrl -> {
+            LoginAction.ResetHomeServerUrl  -> {
                 setState {
                     copy(
                             asyncHomeServerLoginFlowRequest = Uninitialized
@@ -99,10 +99,11 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                     )
                 }
             }
-            LoginAction.ResetSignMode -> {
+            LoginAction.ResetSignMode       -> {
                 setState {
                     copy(
-                            signMode = SignMode.Unknown
+                            signMode = SignMode.Unknown,
+                            asyncHomeServerLoginFlowRequest = Uninitialized
                     )
                 }
             }

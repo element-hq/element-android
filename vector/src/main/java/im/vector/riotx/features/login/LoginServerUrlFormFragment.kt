@@ -22,7 +22,9 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.core.view.isVisible
 import butterknife.OnClick
-import com.airbnb.mvrx.*
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.withState
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.riotx.R
 import im.vector.riotx.core.error.ErrorFormatter
@@ -115,22 +117,13 @@ class LoginServerUrlFormFragment @Inject constructor(
         }
 
         when (state.asyncHomeServerLoginFlowRequest) {
-            is Uninitialized -> {
-                progressBar.isVisible = false
-                touchArea.isVisible = false
-            }
-            is Loading       -> {
-                progressBar.isVisible = true
-                touchArea.isVisible = true
-            }
-            is Fail          -> {
-                progressBar.isVisible = false
-                touchArea.isVisible = false
+            is Fail    -> {
                 // TODO Error text is not correct
                 loginServerUrlFormHomeServerUrlTil.error = errorFormatter.toHumanReadable(state.asyncHomeServerLoginFlowRequest.error)
             }
-            is Success       -> {
-                // The home server is valid, the next screen will be opened by the Activity
+            is Success -> {
+                // The home server url is valid
+                loginSharedActionViewModel.post(LoginNavigation.OnLoginFlowRetrieved(state.asyncHomeServerLoginFlowRequest.invoke()))
             }
         }
     }
