@@ -31,7 +31,7 @@ import kotlinx.android.synthetic.main.fragment_login_server_url_form.*
 import javax.inject.Inject
 
 /**
- *
+ * In this screen, the user is prompted to enter a homeserver url
  */
 class LoginServerUrlFormFragment @Inject constructor(
         private val errorFormatter: ErrorFormatter

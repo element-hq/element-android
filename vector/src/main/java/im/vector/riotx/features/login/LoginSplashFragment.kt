@@ -21,7 +21,7 @@ import im.vector.riotx.R
 import javax.inject.Inject
 
 /**
- *
+ * In this screen, the user is viewing an introduction to what he can do with this application
  */
 class LoginSplashFragment @Inject constructor() : AbstractLoginFragment() {
 

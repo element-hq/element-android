@@ -24,7 +24,7 @@ import kotlinx.android.synthetic.main.fragment_login_signup_signin_selection.*
 import javax.inject.Inject
 
 /**
- *
+ * In this screen, the user is asked to sign up or to sign in to the homeserver
  */
 class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractLoginFragment() {
 

@@ -32,11 +32,12 @@ import kotlinx.android.synthetic.main.fragment_login.*
 import javax.inject.Inject
 
 /**
- * What can be improved:
- * - When filtering more (when entering new chars), we could filter on result we already have, during the new server request, to avoid empty screen effect
+ * In this screen, the user is asked for login and password to sign in to a homeserver.
+ * He also can reset his password
  */
 class LoginFragment @Inject constructor() : AbstractLoginFragment() {
 
+    // TODO Move to viewState?
     private var passwordShown = false
 
     override fun getLayoutResId() = R.layout.fragment_login
