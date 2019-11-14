@@ -12,6 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
 
 package im.vector.matrix.android.api.session.room.model.message
@@ -24,11 +25,11 @@ import im.vector.matrix.android.internal.crypto.model.rest.EncryptedFileInfo
 
 
 @JsonClass(generateAdapter = true)
-data class MessageImageContent(
+data class MessageStickerContent(
         /**
-         * Required. Must be 'm.image'.
+         * Set in local, not from server
          */
-        @Json(name = "msgtype") override val type: String,
+        override val type: String = MessageType.MSGTYPE_STICKER_LOCAL,
 
         /**
          * Required. A textual representation of the image. This could be the alt text of the image, the filename of the image,
@@ -54,3 +55,4 @@ data class MessageImageContent(
          */
         @Json(name = "file") override val encryptedFileInfo: EncryptedFileInfo? = null
 ) : MessageImageInfoContent
+

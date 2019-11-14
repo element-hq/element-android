@@ -89,7 +89,7 @@ class MessageItemFactory @Inject constructor(
             return defaultItemFactory.create(malformedText, informationData, highlight, callback)
         }
         if (messageContent.relatesTo?.type == RelationType.REPLACE
-                || event.isEncrypted() && event.root.content.toModel<EncryptedEventContent>()?.relatesTo?.type == RelationType.REPLACE
+            || event.isEncrypted() && event.root.content.toModel<EncryptedEventContent>()?.relatesTo?.type == RelationType.REPLACE
         ) {
             // This is an edit event, we should it when debugging as a notice event
             return noticeItemFactory.create(event, highlight, readMarkerVisible, callback)
@@ -99,14 +99,14 @@ class MessageItemFactory @Inject constructor(
 //        val all = event.root.toContent()
 //        val ev = all.toModel<Event>()
         return when (messageContent) {
-            is MessageEmoteContent  -> buildEmoteMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageTextContent   -> buildItemForTextContent(messageContent, informationData, highlight, callback, attributes)
-            is MessageImageContent  -> buildImageMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageNoticeContent -> buildNoticeMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageVideoContent  -> buildVideoMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageFileContent   -> buildFileMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageAudioContent  -> buildAudioMessageItem(messageContent, informationData, highlight, callback, attributes)
-            else                    -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback)
+            is MessageEmoteContent     -> buildEmoteMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageTextContent      -> buildItemForTextContent(messageContent, informationData, highlight, callback, attributes)
+            is MessageImageInfoContent -> buildImageMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageNoticeContent    -> buildNoticeMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageVideoContent     -> buildVideoMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageFileContent      -> buildFileMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageAudioContent     -> buildAudioMessageItem(messageContent, informationData, highlight, callback, attributes)
+            else                       -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback)
         }
     }
 
@@ -157,7 +157,7 @@ class MessageItemFactory @Inject constructor(
         return defaultItemFactory.create(text, informationData, highlight, callback)
     }
 
-    private fun buildImageMessageItem(messageContent: MessageImageContent,
+    private fun buildImageMessageItem(messageContent: MessageImageInfoContent,
                                       @Suppress("UNUSED_PARAMETER")
                                       informationData: MessageInformationData,
                                       highlight: Boolean,
@@ -196,7 +196,7 @@ class MessageItemFactory @Inject constructor(
         val thumbnailData = ImageContentRenderer.Data(
                 filename = messageContent.body,
                 url = messageContent.videoInfo?.thumbnailFile?.url
-                        ?: messageContent.videoInfo?.thumbnailUrl,
+                      ?: messageContent.videoInfo?.thumbnailUrl,
                 elementToDecrypt = messageContent.videoInfo?.thumbnailFile?.toElementToDecrypt(),
                 height = messageContent.videoInfo?.height,
                 maxHeight = maxHeight,
@@ -326,9 +326,9 @@ class MessageItemFactory @Inject constructor(
                 // nop
             }
         },
-                editStart,
-                editEnd,
-                Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+                          editStart,
+                          editEnd,
+                          Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
         return spannable
     }
 
