@@ -24,8 +24,8 @@ import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.rx.rx
 import im.vector.riotx.features.home.HomeRoomListDataSource
-import im.vector.riotx.features.home.group.ALL_COMMUNITIES_GROUP_ID
-import im.vector.riotx.features.home.group.SelectedGroupDataSource
+import im.vector.riotx.features.grouplist.ALL_COMMUNITIES_GROUP_ID
+import im.vector.riotx.features.grouplist.SelectedGroupDataSource
 import im.vector.riotx.features.home.room.list.ChronologicalRoomComparator
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers

@@ -65,7 +65,7 @@
         <activity android:name=".features.home.room.filtered.FilteredRoomsActivity" />
         <activity android:name=".features.home.room.detail.RoomDetailActivity" />
         <activity android:name=".features.debug.DebugMenuActivity" />
-        <activity android:name=".features.home.createdirect.CreateDirectRoomActivity" />
+        <activity android:name="im.vector.riotx.features.createdirect.CreateDirectRoomActivity" />
         <activity android:name=".features.webview.VectorWebViewActivity" />
         <activity android:name=".features.link.LinkHandlerActivity">
             <intent-filter>
@@ -96,6 +96,7 @@
                 <category android:name="android.intent.category.OPENABLE" />
             </intent-filter>
         </activity>
+        <activity android:name=".features.roomprofile.RoomProfileActivity" />
         <!-- Services -->
 
         <service

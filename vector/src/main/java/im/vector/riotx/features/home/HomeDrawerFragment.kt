@@ -23,7 +23,7 @@ import im.vector.riotx.R
 import im.vector.riotx.core.extensions.observeK
 import im.vector.riotx.core.extensions.replaceChildFragment
 import im.vector.riotx.core.platform.VectorBaseFragment
-import im.vector.riotx.features.home.group.GroupListFragment
+import im.vector.riotx.features.grouplist.GroupListFragment
 import kotlinx.android.synthetic.main.fragment_home_drawer.*
 import javax.inject.Inject
 

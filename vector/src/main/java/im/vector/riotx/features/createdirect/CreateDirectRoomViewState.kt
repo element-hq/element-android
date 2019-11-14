@@ -16,7 +16,7 @@
  *
  */
 
-package im.vector.riotx.features.home.createdirect
+package im.vector.riotx.features.createdirect
 
 import androidx.paging.PagedList
 import arrow.core.Option

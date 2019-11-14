@@ -89,7 +89,7 @@ import im.vector.riotx.features.command.Command
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.NavigateToRoomInterceptor
 import im.vector.riotx.features.home.PermalinkHandler
-import im.vector.riotx.features.home.getColorFromUserId
+import im.vector.riotx.core.utils.getColorFromUserId
 import im.vector.riotx.features.home.room.detail.composer.TextComposerAction
 import im.vector.riotx.features.home.room.detail.composer.TextComposerView
 import im.vector.riotx.features.home.room.detail.composer.TextComposerViewModel
@@ -215,6 +215,9 @@ class RoomDetailFragment @Inject constructor(
         setupNotificationView()
         setupJumpToReadMarkerView()
         setupJumpToBottomView()
+        roomToolbarContentView.setOnClickListener {
+            navigator.openRoomProfile(requireActivity(), roomDetailArgs.roomId)
+        }
         roomDetailViewModel.subscribe { renderState(it) }
         textComposerViewModel.subscribe { renderTextComposerState(it) }
         roomDetailViewModel.sendMessageResultLiveData.observeEvent(this) { renderSendMessageResult(it) }
@@ -318,9 +321,9 @@ class RoomDetailFragment @Inject constructor(
         AlertDialog.Builder(requireActivity())
                 .setTitle(R.string.dialog_title_error)
                 .setMessage(getString(R.string.error_file_too_big,
-                        error.filename,
-                        TextUtils.formatFileSize(requireContext(), error.fileSizeInBytes),
-                        TextUtils.formatFileSize(requireContext(), error.homeServerLimitInBytes)
+                                      error.filename,
+                                      TextUtils.formatFileSize(requireContext(), error.fileSizeInBytes),
+                                      TextUtils.formatFileSize(requireContext(), error.homeServerLimitInBytes)
                 ))
                 .setPositiveButton(R.string.ok, null)
                 .show()
@@ -405,7 +408,8 @@ class RoomDetailFragment @Inject constructor(
         composerLayout.composerRelatedMessageActionIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), iconRes))
         composerLayout.sendButton.setContentDescription(getString(descriptionRes))
 
-        avatarRenderer.render(event.senderAvatar, event.root.senderId ?: "", event.getDisambiguatedDisplayName(), composerLayout.composerRelatedMessageAvatar)
+        avatarRenderer.render(event.senderAvatar, event.root.senderId
+                                                  ?: "", event.getDisambiguatedDisplayName(), composerLayout.composerRelatedMessageAvatar)
         composerLayout.expand {
             // need to do it here also when not using quick reply
             focusComposerAndShowKeyboard()
@@ -418,7 +422,8 @@ class RoomDetailFragment @Inject constructor(
         if (text != composerLayout.composerEditText.text.toString()) {
             // Ignore update to avoid saving a draft
             composerLayout.composerEditText.setText(text)
-            composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text?.length ?: 0)
+            composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text?.length
+                                                         ?: 0)
         }
     }
 
@@ -442,9 +447,9 @@ class RoomDetailFragment @Inject constructor(
             when (requestCode) {
                 REACTION_SELECT_REQUEST_CODE -> {
                     val eventId = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_EVENT_ID)
-                            ?: return
+                                  ?: return
                     val reaction = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_REACTION_RESULT)
-                            ?: return
+                                   ?: return
                     // TODO check if already reacted with that?
                     roomDetailViewModel.handle(RoomDetailAction.SendReaction(eventId, reaction))
                 }
@@ -1176,7 +1181,8 @@ class RoomDetailFragment @Inject constructor(
                 // current user
                 if (composerLayout.composerEditText.text.isNullOrBlank()) {
                     composerLayout.composerEditText.append(Command.EMOTE.command + " ")
-                    composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text?.length ?: 0)
+                    composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text?.length
+                                                                 ?: 0)
 //                    vibrate = true
                 }
             } else {

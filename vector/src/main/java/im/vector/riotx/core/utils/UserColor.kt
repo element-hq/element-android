@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.home
+package im.vector.riotx.core.utils
 
 import androidx.annotation.ColorRes
 import im.vector.riotx.R

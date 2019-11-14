@@ -26,13 +26,14 @@ import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.riotx.features.crypto.keysbackup.setup.KeysBackupSetupActivity
 import im.vector.riotx.features.debug.DebugMenuActivity
-import im.vector.riotx.features.home.createdirect.CreateDirectRoomActivity
+import im.vector.riotx.features.createdirect.CreateDirectRoomActivity
 import im.vector.riotx.features.home.room.detail.RoomDetailActivity
 import im.vector.riotx.features.home.room.detail.RoomDetailArgs
 import im.vector.riotx.features.home.room.filtered.FilteredRoomsActivity
 import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomActivity
 import im.vector.riotx.features.roomdirectory.roompreview.RoomPreviewActivity
+import im.vector.riotx.features.roomprofile.RoomProfileActivity
 import im.vector.riotx.features.settings.VectorSettingsActivity
 import im.vector.riotx.features.share.SharedData
 import timber.log.Timber
@@ -113,7 +114,7 @@ class DefaultNavigator @Inject constructor() : Navigator {
         Timber.v("Open user detail $userId")
     }
 
-    override fun openRoomSettings(context: Context, roomId: String) {
-        Timber.v("Open room settings$roomId")
+    override fun openRoomProfile(context: Context, roomId: String) {
+        context.startActivity(RoomProfileActivity.newIntent(context, roomId))
     }
 }

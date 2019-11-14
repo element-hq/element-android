@@ -14,14 +14,9 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.home.group
+package im.vector.riotx.features.createdirect
 
-import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.Uninitialized
-import im.vector.matrix.android.api.session.group.model.GroupSummary
+import im.vector.riotx.core.platform.VectorSharedActionViewModel
+import javax.inject.Inject
 
-data class GroupListViewState(
-        val asyncGroups: Async<List<GroupSummary>> = Uninitialized,
-        val selectedGroup: GroupSummary? = null
-) : MvRxState
+class CreateDirectRoomSharedActionViewModel @Inject constructor() : VectorSharedActionViewModel<CreateDirectRoomSharedAction>()

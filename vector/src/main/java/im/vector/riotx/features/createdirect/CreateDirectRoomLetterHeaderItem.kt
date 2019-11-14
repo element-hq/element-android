@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.home.createdirect
+package im.vector.riotx.features.createdirect
 
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute

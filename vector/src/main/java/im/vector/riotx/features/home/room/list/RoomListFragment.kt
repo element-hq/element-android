@@ -229,7 +229,7 @@ class RoomListFragment @Inject constructor(
                 roomListViewModel.handle(RoomListAction.ChangeRoomNotificationState(quickAction.roomId, RoomNotificationState.MUTE))
             }
             is RoomListQuickActionsSharedAction.Settings                  -> {
-                vectorBaseActivity.notImplemented("Opening room settings")
+                navigator.openRoomProfile(requireActivity(), quickAction.roomId)
             }
             is RoomListQuickActionsSharedAction.Leave                     -> {
                 AlertDialog.Builder(requireContext())

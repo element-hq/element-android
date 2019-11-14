@@ -12,11 +12,20 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
 
-package im.vector.riotx.features.home.createdirect
+package im.vector.riotx.features.roomprofile
 
-import im.vector.riotx.core.platform.VectorSharedActionViewModel
+import com.airbnb.epoxy.TypedEpoxyController
 import javax.inject.Inject
 
-class CreateDirectRoomSharedActionViewModel @Inject constructor() : VectorSharedActionViewModel<CreateDirectRoomSharedAction>()
+class RoomProfileController @Inject constructor()
+    : TypedEpoxyController<RoomProfileViewState>() {
+
+    override fun buildModels(data: RoomProfileViewState?) {
+        if (data == null) {
+            return
+        }
+    }
+}

@@ -26,7 +26,7 @@ import im.vector.riotx.features.MainActivity
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.riotx.features.home.HomeActivity
 import im.vector.riotx.features.home.HomeModule
-import im.vector.riotx.features.home.createdirect.CreateDirectRoomActivity
+import im.vector.riotx.features.createdirect.CreateDirectRoomActivity
 import im.vector.riotx.features.home.room.detail.readreceipts.DisplayReadReceiptsBottomSheet
 import im.vector.riotx.features.home.room.detail.timeline.action.MessageActionsBottomSheet
 import im.vector.riotx.features.home.room.detail.timeline.edithistory.ViewEditHistoryBottomSheet

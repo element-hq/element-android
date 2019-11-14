@@ -26,7 +26,7 @@ import im.vector.matrix.rx.rx
 import im.vector.riotx.core.di.HasScreenInjector
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
-import im.vector.riotx.features.home.group.SelectedGroupDataSource
+import im.vector.riotx.features.grouplist.SelectedGroupDataSource
 import im.vector.riotx.features.ui.UiStateRepository
 import io.reactivex.schedulers.Schedulers
 

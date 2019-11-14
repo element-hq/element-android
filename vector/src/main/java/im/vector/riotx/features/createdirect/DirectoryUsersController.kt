@@ -16,7 +16,7 @@
  *
  */
 
-package im.vector.riotx.features.home.createdirect
+package im.vector.riotx.features.createdirect
 
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.mvrx.*

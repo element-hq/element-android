@@ -35,6 +35,7 @@ import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.glide.GlideApp
 import im.vector.riotx.core.glide.GlideRequest
 import im.vector.riotx.core.glide.GlideRequests
+import im.vector.riotx.core.utils.getColorFromUserId
 import javax.inject.Inject
 
 /**

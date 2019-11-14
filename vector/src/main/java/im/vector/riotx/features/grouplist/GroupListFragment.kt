@@ -12,9 +12,10 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
 
-package im.vector.riotx.features.home.group
+package im.vector.riotx.features.grouplist
 
 import android.os.Bundle
 import android.view.View

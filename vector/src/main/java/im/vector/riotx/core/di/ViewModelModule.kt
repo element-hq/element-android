@@ -28,7 +28,7 @@ import im.vector.riotx.features.crypto.keysbackup.restore.KeysBackupRestoreShare
 import im.vector.riotx.features.crypto.keysbackup.setup.KeysBackupSetupSharedViewModel
 import im.vector.riotx.features.crypto.verification.SasVerificationViewModel
 import im.vector.riotx.features.home.HomeSharedActionViewModel
-import im.vector.riotx.features.home.createdirect.CreateDirectRoomSharedActionViewModel
+import im.vector.riotx.features.createdirect.CreateDirectRoomSharedActionViewModel
 import im.vector.riotx.features.home.room.detail.timeline.action.MessageSharedActionViewModel
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
 import im.vector.riotx.features.reactions.EmojiChooserViewModel

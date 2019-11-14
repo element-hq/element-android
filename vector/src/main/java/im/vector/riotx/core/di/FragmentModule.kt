@@ -30,9 +30,9 @@ import im.vector.riotx.features.crypto.verification.SASVerificationVerifiedFragm
 import im.vector.riotx.features.home.HomeDetailFragment
 import im.vector.riotx.features.home.HomeDrawerFragment
 import im.vector.riotx.features.home.LoadingFragment
-import im.vector.riotx.features.home.createdirect.CreateDirectRoomDirectoryUsersFragment
-import im.vector.riotx.features.home.createdirect.CreateDirectRoomKnownUsersFragment
-import im.vector.riotx.features.home.group.GroupListFragment
+import im.vector.riotx.features.createdirect.CreateDirectRoomDirectoryUsersFragment
+import im.vector.riotx.features.createdirect.CreateDirectRoomKnownUsersFragment
+import im.vector.riotx.features.grouplist.GroupListFragment
 import im.vector.riotx.features.home.room.detail.RoomDetailFragment
 import im.vector.riotx.features.home.room.list.RoomListFragment
 import im.vector.riotx.features.login.LoginFragment
@@ -42,6 +42,7 @@ import im.vector.riotx.features.roomdirectory.PublicRoomsFragment
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomFragment
 import im.vector.riotx.features.roomdirectory.picker.RoomDirectoryPickerFragment
 import im.vector.riotx.features.roomdirectory.roompreview.RoomPreviewNoPreviewFragment
+import im.vector.riotx.features.roomprofile.RoomProfileFragment
 import im.vector.riotx.features.settings.*
 import im.vector.riotx.features.settings.ignored.VectorSettingsIgnoredUsersFragment
 import im.vector.riotx.features.settings.push.PushGatewaysFragment
@@ -194,4 +195,9 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(PublicRoomsFragment::class)
     fun bindPublicRoomsFragment(fragment: PublicRoomsFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(RoomProfileFragment::class)
+    fun bindRoomProfileFragment(fragment: RoomProfileFragment): Fragment
 }

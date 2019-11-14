@@ -12,13 +12,16 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
 
-package im.vector.riotx.features.home.group
+package im.vector.riotx.features.roomprofile
 
-import im.vector.matrix.android.api.session.group.model.GroupSummary
-import im.vector.riotx.core.platform.VectorViewModelAction
+import com.airbnb.mvrx.MvRxState
 
-sealed class GroupListAction : VectorViewModelAction {
-    data class SelectGroup(val groupSummary: GroupSummary) : GroupListAction()
+data class RoomProfileViewState(
+        val roomId: String
+) : MvRxState {
+
+    constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
 }
