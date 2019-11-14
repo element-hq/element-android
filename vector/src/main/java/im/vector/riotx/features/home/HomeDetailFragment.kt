@@ -170,13 +170,13 @@ class HomeDetailFragment @Inject constructor(
             childFragmentManager.fragments
                     .filter { it != fragmentToShow }
                     .forEach {
-                        hide(it)
+                        detach(it)
                     }
             if (fragmentToShow == null) {
                 val params = RoomListParams(displayMode)
                 add(R.id.roomListContainer, RoomListFragment::class.java, params.toMvRxBundle(), fragmentTag)
             } else {
-                show(fragmentToShow)
+                attach(fragmentToShow)
             }
         }
     }

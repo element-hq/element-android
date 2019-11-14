@@ -143,7 +143,7 @@ class RoomListFragment @Inject constructor(
             RoomListDisplayMode.HOME   -> createChatFabMenu.isVisible = true
             RoomListDisplayMode.PEOPLE -> createChatRoomButton.isVisible = true
             RoomListDisplayMode.ROOMS  -> createGroupRoomButton.isVisible = true
-            else               -> Unit // No button in this mode
+            else                       -> Unit // No button in this mode
         }
 
         createChatRoomButton.setOnClickListener {
@@ -169,7 +169,7 @@ class RoomListFragment @Inject constructor(
                                     RoomListDisplayMode.HOME   -> createChatFabMenu.hide()
                                     RoomListDisplayMode.PEOPLE -> createChatRoomButton.hide()
                                     RoomListDisplayMode.ROOMS  -> createGroupRoomButton.hide()
-                                    else               -> Unit
+                                    else                       -> Unit
                                 }
                             }
                         }
@@ -209,7 +209,7 @@ class RoomListFragment @Inject constructor(
                 RoomListDisplayMode.HOME   -> createChatFabMenu.show()
                 RoomListDisplayMode.PEOPLE -> createChatRoomButton.show()
                 RoomListDisplayMode.ROOMS  -> createGroupRoomButton.show()
-                else               -> Unit
+                else                       -> Unit
             }
         }
     }
@@ -263,7 +263,7 @@ class RoomListFragment @Inject constructor(
                     requireActivity().invalidateOptionsMenu()
                 }
             }
-            else              -> Unit
+            else                      -> Unit
         }
     }
 
@@ -310,7 +310,7 @@ class RoomListFragment @Inject constructor(
                         ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_bottom_group),
                         getString(R.string.room_list_rooms_empty_body)
                 )
-            else               ->
+            else                       ->
                 // Always display the content in this mode, because if the footer
                 StateView.State.Content
         }
@@ -348,7 +348,7 @@ class RoomListFragment @Inject constructor(
 
         RoomListQuickActionsBottomSheet
                 .newInstance(room.roomId)
-                .show(requireActivity().supportFragmentManager, "ROOM_LIST_QUICK_ACTIONS")
+                .show(childFragmentManager, "ROOM_LIST_QUICK_ACTIONS")
         return true
     }
 
