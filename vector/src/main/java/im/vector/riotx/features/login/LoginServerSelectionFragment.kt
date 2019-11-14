@@ -52,7 +52,7 @@ class LoginServerSelectionFragment @Inject constructor() : AbstractLoginFragment
             text = getString(R.string.login_server_modular_learn_more)
             textDecorationLine = "underline"
             onClick = {
-                // TODO
+                // TODO this does not work
                 openUrlInExternalBrowser(requireActivity(), "https://example.org")
             }
         }
@@ -61,17 +61,32 @@ class LoginServerSelectionFragment @Inject constructor() : AbstractLoginFragment
 
     @OnClick(R.id.loginServerChoiceMatrixOrg)
     fun selectMatrixOrg() {
-        viewModel.handle(LoginAction.UpdateServerType(ServerType.MatrixOrg))
+        if (loginServerChoiceMatrixOrg.isChecked) {
+            // Consider this is a submit
+            submit()
+        } else {
+            viewModel.handle(LoginAction.UpdateServerType(ServerType.MatrixOrg))
+        }
     }
 
     @OnClick(R.id.loginServerChoiceModular)
     fun selectModular() {
-        viewModel.handle(LoginAction.UpdateServerType(ServerType.Modular))
+        if (loginServerChoiceModular.isChecked) {
+            // Consider this is a submit
+            submit()
+        } else {
+            viewModel.handle(LoginAction.UpdateServerType(ServerType.Modular))
+        }
     }
 
     @OnClick(R.id.loginServerChoiceOther)
     fun selectOther() {
-        viewModel.handle(LoginAction.UpdateServerType(ServerType.Other))
+        if (loginServerChoiceOther.isChecked) {
+            // Consider this is a submit
+            submit()
+        } else {
+            viewModel.handle(LoginAction.UpdateServerType(ServerType.Other))
+        }
     }
 
     @OnClick(R.id.loginServerSubmit)
