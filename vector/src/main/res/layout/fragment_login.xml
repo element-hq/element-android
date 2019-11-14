@@ -25,24 +25,32 @@
                 style="@style/LoginTopIcon"
                 android:layout_gravity="center_horizontal" />
 
-            <TextView
-                android:id="@+id/loginServerTitle"
+            <ImageView
+                android:id="@+id/loginServerIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="84dp"
+                tools:src="@drawable/ic_logo_matrix_org" />
+
+            <TextView
+                android:id="@+id/loginTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_vertical_margin"
                 android:textAppearance="@style/TextAppearance.Vector.Login.Title"
                 tools:text="@string/login_signin_to" />
 
             <TextView
-                android:id="@+id/loginServerChoiceMatrixOrgText"
+                android:id="@+id/loginNotice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_vertical_margin"
                 android:gravity="start"
-                android:text="@string/login_server_matrix_org_text"
-                android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small" />
+                android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small"
+                tools:text="@string/login_server_matrix_org_text" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/loginFieldTil"
                 style="@style/VectorTextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -116,7 +124,7 @@
                     android:text="@string/auth_forgot_password" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/authenticateButton"
+                    android:id="@+id/loginSubmit"
                     style="@style/Style.Vector.Login.Button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

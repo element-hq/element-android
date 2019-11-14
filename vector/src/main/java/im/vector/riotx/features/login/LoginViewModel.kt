@@ -152,6 +152,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                 }
 
                 override fun onFailure(failure: Throwable) {
+                    // TODO Handled JobCancellationException
                     setState {
                         copy(
                                 asyncLoginAction = Fail(failure)

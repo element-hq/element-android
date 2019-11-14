@@ -18,7 +18,7 @@ package im.vector.riotx.features.login
 
 import android.os.Bundle
 import android.view.View
-import androidx.transition.TransitionManager
+import androidx.core.view.isVisible
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
@@ -69,9 +69,14 @@ class LoginFragment @Inject constructor(
                             isLoginNotEmpty && isPasswordNotEmpty
                         }
                 )
-                .subscribeBy { authenticateButton.isEnabled = it }
-                .disposeOnDestroyView()
-        authenticateButton.setOnClickListener { authenticate() }
+                .subscribeBy {
+                    loginFieldTil.error = null
+                    passwordFieldTil.error = null
+                    loginSubmit.isEnabled = it
+                }
+                .disposeOnDestroy()
+
+        loginSubmit.setOnClickListener { authenticate() }
     }
 
 //    // TODO Move to server selection screen
@@ -108,7 +113,28 @@ class LoginFragment @Inject constructor(
     }
 
     override fun invalidate() = withState(viewModel) { state ->
-        TransitionManager.beginDelayedTransition(login_fragment)
+        when (state.serverType) {
+            ServerType.MatrixOrg -> {
+                loginServerIcon.isVisible = true
+                loginServerIcon.setImageResource(R.drawable.ic_logo_matrix_org)
+                loginTitle.text = getString(R.string.login_connect_to, "matrix.org")
+                loginNotice.text = getString(R.string.login_server_matrix_org_text)
+            }
+            ServerType.Modular   -> {
+                loginServerIcon.isVisible = true
+                loginServerIcon.setImageResource(R.drawable.ic_logo_modular)
+                // TODO
+                loginTitle.text = getString(R.string.login_connect_to, "TODO")
+                // TODO Remove https://
+                loginNotice.text = viewModel.getHomeServerUrl()
+            }
+            ServerType.Other     -> {
+                loginServerIcon.isVisible = false
+                loginTitle.text = getString(R.string.login_server_other_title)
+                // TODO Remove https://
+                loginNotice.text = viewModel.getHomeServerUrl()
+            }
+        }
 
         when (state.asyncLoginAction) {
             is Loading -> {
@@ -117,8 +143,9 @@ class LoginFragment @Inject constructor(
                 renderPasswordField()
             }
             is Fail    -> {
+                // TODO This does not work, we want the error to be on without text. Fix that
+                loginFieldTil.error = ""
                 // TODO Handle error text properly
-                // TODO Reset error when text is changed
                 passwordFieldTil.error = errorFormatter.toHumanReadable(state.asyncLoginAction.error)
             }
             // Success is handled by the LoginActivity
