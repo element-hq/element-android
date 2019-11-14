@@ -19,4 +19,9 @@
 
     <string name="help_long_click_on_room_for_more_options">Long click on a room to see more options</string>
 
+
+    <string name="room_join_rules_public">%1$s made the room public to whoever knows the link.</string>
+    <string name="room_join_rules_invite">%1$s made the room invite only.</string>
+
+
 </resources>

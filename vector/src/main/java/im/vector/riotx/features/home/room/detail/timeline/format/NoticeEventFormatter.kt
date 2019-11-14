@@ -22,6 +22,8 @@ import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibility
 import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibilityContent
+import im.vector.matrix.android.api.session.room.model.RoomJoinRules
+import im.vector.matrix.android.api.session.room.model.RoomJoinRulesContent
 import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.session.room.model.RoomNameContent
 import im.vector.matrix.android.api.session.room.model.RoomTopicContent
@@ -38,6 +40,7 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
 
     fun format(timelineEvent: TimelineEvent): CharSequence? {
         return when (val type = timelineEvent.root.getClearType()) {
+            EventType.STATE_ROOM_JOIN_RULES    -> formatJoinRulesEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
             EventType.STATE_ROOM_NAME          -> formatRoomNameEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
             EventType.STATE_ROOM_TOPIC         -> formatRoomTopicEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
             EventType.STATE_ROOM_MEMBER        -> formatRoomMemberEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
@@ -58,6 +61,7 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
 
     fun format(event: Event, senderName: String?): CharSequence? {
         return when (val type = event.getClearType()) {
+            EventType.STATE_ROOM_JOIN_RULES    -> formatJoinRulesEvent(event, senderName)
             EventType.STATE_ROOM_NAME          -> formatRoomNameEvent(event, senderName)
             EventType.STATE_ROOM_TOPIC         -> formatRoomTopicEvent(event, senderName)
             EventType.STATE_ROOM_MEMBER        -> formatRoomMemberEvent(event, senderName)
@@ -220,4 +224,14 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
             else                                          -> null
         }
     }
+
+    private fun formatJoinRulesEvent(event: Event, senderName: String?): CharSequence? {
+        val content = event.getClearContent().toModel<RoomJoinRulesContent>() ?: return null
+        return when (content.joinRules) {
+            RoomJoinRules.INVITE -> stringProvider.getString(R.string.room_join_rules_invite, senderName)
+            RoomJoinRules.PUBLIC -> stringProvider.getString(R.string.room_join_rules_public, senderName)
+            else                 -> null
+        }
+    }
+
 }
