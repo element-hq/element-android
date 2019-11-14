@@ -16,24 +16,8 @@
 
 package im.vector.riotx.features.login
 
-import com.airbnb.mvrx.*
-
-data class LoginViewState(
-        val serverType: ServerType = ServerType.MatrixOrg,
-        val signMode: SignMode = SignMode.Unknown,
-        val asyncLoginAction: Async<Unit> = Uninitialized,
-        val asyncHomeServerLoginFlowRequest: Async<LoginMode> = Uninitialized
-) : MvRxState {
-
-    fun isLoading(): Boolean {
-        // TODO Add other async here
-        return asyncLoginAction is Loading
-                || asyncHomeServerLoginFlowRequest is Loading
-    }
-
-    fun isUserLogged(): Boolean {
-        // TODO Add other async here
-        return asyncLoginAction is Success
-    }
+enum class LoginMode {
+    Password,
+    Sso,
+    Unsupported
 }
-

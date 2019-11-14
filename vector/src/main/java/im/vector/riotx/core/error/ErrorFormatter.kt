@@ -21,6 +21,7 @@ import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.riotx.R
 import im.vector.riotx.core.resources.StringProvider
 import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 import javax.inject.Inject
 
 class ErrorFormatter @Inject constructor(private val stringProvider: StringProvider) {
@@ -36,6 +37,9 @@ class ErrorFormatter @Inject constructor(private val stringProvider: StringProvi
             is Failure.NetworkConnection -> {
                 if (throwable.ioException is SocketTimeoutException) {
                     stringProvider.getString(R.string.error_network_timeout)
+                } else if (throwable.ioException is UnknownHostException) {
+                    // Invalid homeserver?
+                    stringProvider.getString(R.string.login_error_unknown_host)
                 } else {
                     stringProvider.getString(R.string.error_no_network)
                 }

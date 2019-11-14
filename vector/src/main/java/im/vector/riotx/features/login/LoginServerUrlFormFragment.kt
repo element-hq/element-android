@@ -123,7 +123,7 @@ class LoginServerUrlFormFragment @Inject constructor(
             }
             is Success -> {
                 // The home server url is valid
-                loginSharedActionViewModel.post(LoginNavigation.OnLoginFlowRetrieved(state.asyncHomeServerLoginFlowRequest.invoke()))
+                loginSharedActionViewModel.post(LoginNavigation.OnLoginFlowRetrieved)
             }
         }
     }

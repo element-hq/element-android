@@ -21,7 +21,6 @@ import android.content.Intent
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
-import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
@@ -69,7 +68,7 @@ class LoginActivity : VectorBaseActivity() {
                         is LoginNavigation.OpenServerSelection     -> addFragmentToBackstack(R.id.loginFragmentContainer, LoginServerSelectionFragment::class.java)
                         is LoginNavigation.OnServerSelectionDone   -> onServerSelectionDone()
                         is LoginNavigation.OnSignModeSelected      -> onSignModeSelected(it)
-                        is LoginNavigation.OnLoginFlowRetrieved    -> onLoginFlowRetrieved(it)
+                        is LoginNavigation.OnLoginFlowRetrieved    -> onLoginFlowRetrieved()
                         is LoginNavigation.OnSsoLoginFallbackError -> onSsoLoginFallbackError(it)
                     }
                 }
@@ -82,16 +81,12 @@ class LoginActivity : VectorBaseActivity() {
                 .disposeOnDestroy()
     }
 
-    private fun onLoginFlowRetrieved(onLoginFlowRetrieved: LoginNavigation.OnLoginFlowRetrieved) {
-        when (onLoginFlowRetrieved.loginMode) {
-            LoginMode.Sso      -> addFragmentToBackstack(R.id.loginFragmentContainer, LoginSsoFallbackFragment::class.java)
-            LoginMode.Unsupported,
-            LoginMode.Password -> addFragmentToBackstack(R.id.loginFragmentContainer, LoginSignUpSignInSelectionFragment::class.java)
-        }
+    private fun onLoginFlowRetrieved() {
+        addFragmentToBackstack(R.id.loginFragmentContainer, LoginSignUpSignInSelectionFragment::class.java)
     }
 
     private fun updateWithState(loginViewState: LoginViewState) {
-        if (loginViewState.asyncLoginAction is Success) {
+        if (loginViewState.isUserLogged()) {
             val intent = HomeActivity.newIntent(this)
             startActivity(intent)
             finish()
@@ -123,11 +118,21 @@ class LoginActivity : VectorBaseActivity() {
     }
 
     private fun onSignModeSelected(mode: LoginNavigation.OnSignModeSelected) {
-        // We cannot use the state, it is not ready...
+        // We cannot use the state to get the SignMode, it is not ready...
         when (mode.signMode) {
             SignMode.Unknown -> error("Sign mode has to be set before calling this method")
             SignMode.SignUp  -> Unit // TODO addFragmentToBackstack(R.id.loginFragmentContainer, SignUpFragment::class.java)
-            SignMode.SignIn  -> addFragmentToBackstack(R.id.loginFragmentContainer, LoginFragment::class.java)
+            SignMode.SignIn  -> {
+                // It depends on the LoginMode
+                withState(loginViewModel) {
+                    when (it.asyncHomeServerLoginFlowRequest.invoke()) {
+                        null                  -> error("Developer error")
+                        LoginMode.Password    -> addFragmentToBackstack(R.id.loginFragmentContainer, LoginFragment::class.java)
+                        LoginMode.Sso         -> addFragmentToBackstack(R.id.loginFragmentContainer, LoginSsoFallbackFragment::class.java)
+                        LoginMode.Unsupported -> TODO() // TODO Import Fallback login fragment from Riot-Android
+                    }
+                }
+            }
         }
     }
 

@@ -112,7 +112,7 @@ class LoginServerSelectionFragment @Inject constructor() : AbstractLoginFragment
             }
             is Success -> {
                 // The home server url is valid
-                loginSharedActionViewModel.post(LoginNavigation.OnLoginFlowRetrieved(it.asyncHomeServerLoginFlowRequest.invoke()))
+                loginSharedActionViewModel.post(LoginNavigation.OnLoginFlowRetrieved)
             }
         }
     }
