@@ -45,7 +45,7 @@ class LoginActivity : VectorBaseActivity() {
 
     override fun initUiAndData() {
         if (isFirstCreation()) {
-            addFragment(R.id.simpleFragmentContainer, LoginFragment::class.java)
+            addFragment(R.id.simpleFragmentContainer, LoginSplashFragment::class.java)
         }
 
         // Get config extra
@@ -58,6 +58,7 @@ class LoginActivity : VectorBaseActivity() {
         loginSharedActionViewModel.observe()
                 .subscribe {
                     when (it) {
+                        is LoginNavigation.OpenServerSelection  -> addFragmentToBackstack(R.id.simpleFragmentContainer, LoginFragment::class.java)
                         is LoginNavigation.OpenSsoLoginFallback -> addFragmentToBackstack(R.id.simpleFragmentContainer, LoginSsoFallbackFragment::class.java)
                         is LoginNavigation.GoBack               -> supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                     }

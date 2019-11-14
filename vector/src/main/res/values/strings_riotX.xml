@@ -23,5 +23,10 @@
     <string name="room_join_rules_public">%1$s made the room public to whoever knows the link.</string>
     <string name="room_join_rules_invite">%1$s made the room invite only.</string>
 
+    <string name="login_splash_title">Liberate your communication</string>
+    <string name="login_splash_text1">Chat with people directly or in groups</string>
+    <string name="login_splash_text2">Keep conversations private with encryption</string>
+    <string name="login_splash_text3">Extend &amp; customise your experience</string>
+    <string name="login_splash_submit">Get started</string>
 
 </resources>

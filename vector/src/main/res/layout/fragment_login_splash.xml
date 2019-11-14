@@ -1,0 +1,126 @@
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="36dp">
+
+        <ImageView
+            android:id="@+id/loginSplashLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/riotx_logo"
+            app:layout_constraintBottom_toTopOf="@+id/loginSplashTitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/loginSplashTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:text="@string/login_splash_title"
+            android:textColor="?riotx_text_primary"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/loginSplashText1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/loginSplashLogo" />
+
+        <!-- TODO icon src -->
+        <!-- TODO check relative dimension -->
+        <ImageView
+            android:id="@+id/loginSplashPicto1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_settings_x"
+            android:tint="?vctr_notice_secondary"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/loginSplashText1" />
+
+        <TextView
+            android:id="@+id/loginSplashText1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="32dp"
+            android:gravity="start"
+            android:text="@string/login_splash_text1"
+            android:textColor="?vctr_notice_secondary"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/loginSplashText2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/loginSplashPicto1"
+            app:layout_constraintTop_toBottomOf="@+id/loginSplashTitle" />
+
+        <!-- TODO icon src -->
+        <ImageView
+            android:id="@+id/loginSplashPicto2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_settings_x"
+            android:tint="?vctr_notice_secondary"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/loginSplashText2" />
+
+        <TextView
+            android:id="@+id/loginSplashText2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="16dp"
+            android:gravity="start"
+            android:text="@string/login_splash_text2"
+            android:textColor="?vctr_notice_secondary"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@id/loginSplashText3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/loginSplashPicto2"
+            app:layout_constraintTop_toBottomOf="@+id/loginSplashText1" />
+
+        <!-- TODO icon src -->
+        <ImageView
+            android:id="@+id/loginSplashPicto3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_settings_x"
+            android:tint="?vctr_notice_secondary"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/loginSplashText3" />
+
+        <TextView
+            android:id="@+id/loginSplashText3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="16dp"
+            android:gravity="start"
+            android:text="@string/login_splash_text1"
+            android:textColor="?vctr_notice_secondary"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/loginSplashSubmit"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/loginSplashPicto3"
+            app:layout_constraintTop_toBottomOf="@+id/loginSplashText2" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/loginSplashSubmit"
+            style="@style/VectorButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:text="@string/login_splash_submit"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/loginSplashText3" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+

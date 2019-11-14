@@ -28,7 +28,6 @@ import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.setTextWithColoredPart
 import im.vector.riotx.core.extensions.showPassword
-import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.utils.openUrlInExternalBrowser
 import im.vector.riotx.features.homeserver.ServerUrlsRepository
 import io.reactivex.Observable
@@ -41,10 +40,7 @@ import javax.inject.Inject
  * What can be improved:
  * - When filtering more (when entering new chars), we could filter on result we already have, during the new server request, to avoid empty screen effect
  */
-class LoginFragment @Inject constructor() : VectorBaseFragment() {
-
-    private val viewModel: LoginViewModel by activityViewModel()
-    private lateinit var loginSharedActionViewModel: LoginSharedActionViewModel
+class LoginFragment @Inject constructor() : AbstractLoginFragment() {
 
     private var passwordShown = false
 
@@ -52,8 +48,6 @@ class LoginFragment @Inject constructor() : VectorBaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        loginSharedActionViewModel = activityViewModelProvider.get(LoginSharedActionViewModel::class.java)
 
         setupNotice()
         setupAuthButton()
