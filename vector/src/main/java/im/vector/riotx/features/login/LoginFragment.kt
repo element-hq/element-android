@@ -98,6 +98,10 @@ class LoginFragment @Inject constructor() : AbstractLoginFragment() {
         }
     }
 
+    override fun resetViewModel() {
+        viewModel.handle(LoginAction.ResetLogin)
+    }
+
     override fun invalidate() = withState(viewModel) { state ->
         TransitionManager.beginDelayedTransition(login_fragment)
 

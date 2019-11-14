@@ -44,6 +44,7 @@ import javax.inject.Inject
 
 /**
  * Only login is supported for the moment
+ * TODO Migrate to new flow
  */
 class LoginSsoFallbackFragment @Inject constructor() : VectorBaseFragment(), OnBackPressed {
 

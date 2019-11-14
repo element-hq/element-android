@@ -16,14 +16,16 @@
 
 package im.vector.riotx.features.login
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.core.view.isVisible
 import butterknife.OnClick
-import com.airbnb.mvrx.withState
+import com.airbnb.mvrx.*
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.riotx.R
+import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.utils.openUrlInExternalBrowser
 import kotlinx.android.synthetic.main.fragment_login_server_url_form.*
 import javax.inject.Inject
@@ -31,7 +33,9 @@ import javax.inject.Inject
 /**
  *
  */
-class LoginServerUrlFormFragment @Inject constructor() : AbstractLoginFragment() {
+class LoginServerUrlFormFragment @Inject constructor(
+        private val errorFormatter: ErrorFormatter
+) : AbstractLoginFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_login_server_url_form
 
@@ -64,10 +68,29 @@ class LoginServerUrlFormFragment @Inject constructor() : AbstractLoginFragment()
         openUrlInExternalBrowser(requireActivity(), "https://example.org")
     }
 
+    override fun resetViewModel() {
+        viewModel.handle(LoginAction.ResetHomeServerUrl)
+    }
+
+    @SuppressLint("SetTextI18n")
     @OnClick(R.id.loginServerUrlFormSubmit)
     fun submit() {
-        // TODO Static check of homeserver url, empty, malformed, etc.
-        viewModel.handle(LoginAction.InitWith(LoginConfig(loginServerUrlFormHomeServerUrl.text.toString(), null)))
+        // Static check of homeserver url, empty, malformed, etc.
+        var serverUrl = loginServerUrlFormHomeServerUrl.text.toString()
+
+        when {
+            serverUrl.isBlank() -> {
+                loginServerUrlFormHomeServerUrlTil.error = getString(R.string.login_error_invalid_home_server)
+            }
+            else                -> {
+                if (serverUrl.startsWith("http").not()) {
+                    serverUrl = "https://$serverUrl"
+                    loginServerUrlFormHomeServerUrl.setText(serverUrl)
+
+                }
+                viewModel.handle(LoginAction.UpdateHomeServer(serverUrl))
+            }
+        }
     }
 
     override fun invalidate() = withState(viewModel) { state ->
@@ -89,6 +112,26 @@ class LoginServerUrlFormFragment @Inject constructor() : AbstractLoginFragment()
                 loginServerUrlFormNotice.text = getString(R.string.login_server_url_form_other_notice)
             }
             else               -> error("This fragment should not be display in matrix.org mode")
+        }
+
+        when (state.asyncHomeServerLoginFlowRequest) {
+            is Uninitialized -> {
+                progressBar.isVisible = false
+                touchArea.isVisible = false
+            }
+            is Loading       -> {
+                progressBar.isVisible = true
+                touchArea.isVisible = true
+            }
+            is Fail          -> {
+                progressBar.isVisible = false
+                touchArea.isVisible = false
+                // TODO Error text is not correct
+                loginServerUrlFormHomeServerUrlTil.error = errorFormatter.toHumanReadable(state.asyncHomeServerLoginFlowRequest.error)
+            }
+            is Success       -> {
+                // The home server is valid, the next screen will be opened by the Activity
+            }
         }
     }
 }

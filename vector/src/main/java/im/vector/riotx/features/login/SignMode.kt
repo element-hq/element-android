@@ -17,6 +17,7 @@
 package im.vector.riotx.features.login
 
 enum class SignMode {
+    Unknown,
     // Account creation
     SignUp,
     // Login

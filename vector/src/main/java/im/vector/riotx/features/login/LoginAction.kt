@@ -20,10 +20,18 @@ import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.riotx.core.platform.VectorViewModelAction
 
 sealed class LoginAction : VectorViewModelAction {
+    data class UpdateServerType(val serverType: ServerType) : LoginAction()
     data class UpdateHomeServer(val homeServerUrl: String) : LoginAction()
+    data class UpdateSignMode(val signMode: SignMode) : LoginAction()
     data class Login(val login: String, val password: String) : LoginAction()
     data class SsoLoginSuccess(val credentials: Credentials) : LoginAction()
     data class InitWith(val loginConfig: LoginConfig) : LoginAction()
-    data class UpdateServerType(val serverType: ServerType) : LoginAction()
-    data class UpdateSignMode(val signMode: SignMode) : LoginAction()
+
+    // Reset actions
+    open class ResetAction : LoginAction()
+
+    object ResetHomeServerType : ResetAction()
+    object ResetHomeServerUrl : ResetAction()
+    object ResetSignMode : ResetAction()
+    object ResetLogin : ResetAction()
 }

@@ -22,7 +22,7 @@ import im.vector.riotx.core.platform.VectorSharedAction
 sealed class LoginNavigation : VectorSharedAction {
     object OpenServerSelection : LoginNavigation()
     object OnServerSelectionDone : LoginNavigation()
-    object OnSignModeSelected : LoginNavigation()
+    data class OnSignModeSelected(val signMode: SignMode) : LoginNavigation()
     object OpenSsoLoginFallback : LoginNavigation()
     object GoBack : LoginNavigation()
 }

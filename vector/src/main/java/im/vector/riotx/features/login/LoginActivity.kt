@@ -61,7 +61,7 @@ class LoginActivity : VectorBaseActivity() {
                     when (it) {
                         is LoginNavigation.OpenServerSelection   -> addFragmentToBackstack(R.id.simpleFragmentContainer, LoginServerSelectionFragment::class.java)
                         is LoginNavigation.OnServerSelectionDone -> onServerSelectionDone()
-                        is LoginNavigation.OnSignModeSelected    -> onSignModeSelected()
+                        is LoginNavigation.OnSignModeSelected    -> onSignModeSelected(it)
                         is LoginNavigation.OpenSsoLoginFallback  -> addFragmentToBackstack(R.id.simpleFragmentContainer, LoginSsoFallbackFragment::class.java)
                         is LoginNavigation.GoBack                -> supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                     }
@@ -85,10 +85,12 @@ class LoginActivity : VectorBaseActivity() {
         }
     }
 
-    private fun onSignModeSelected() = withState(loginViewModel) {
-        when (it.signMode) {
-            SignMode.SignUp -> Unit // TODO addFragmentToBackstack(R.id.simpleFragmentContainer, SignUpFragment::class.java)
-            SignMode.SignIn -> addFragmentToBackstack(R.id.simpleFragmentContainer, LoginFragment::class.java)
+    private fun onSignModeSelected(mode: LoginNavigation.OnSignModeSelected) {
+        // We cannot use the state, it is not ready...
+        when (mode.signMode) {
+            SignMode.Unknown -> error("Sign mode has to be set before calling this method")
+            SignMode.SignUp  -> Unit // TODO addFragmentToBackstack(R.id.simpleFragmentContainer, SignUpFragment::class.java)
+            SignMode.SignIn  -> addFragmentToBackstack(R.id.simpleFragmentContainer, LoginFragment::class.java)
         }
     }
 

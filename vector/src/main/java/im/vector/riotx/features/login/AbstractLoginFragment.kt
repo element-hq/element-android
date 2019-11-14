@@ -20,12 +20,13 @@ import android.os.Bundle
 import android.view.View
 import androidx.annotation.CallSuper
 import com.airbnb.mvrx.activityViewModel
+import im.vector.riotx.core.platform.OnBackPressed
 import im.vector.riotx.core.platform.VectorBaseFragment
 
 /**
  * Parent Fragment for all the login/registration screens
  */
-abstract class AbstractLoginFragment() : VectorBaseFragment() {
+abstract class AbstractLoginFragment : VectorBaseFragment(), OnBackPressed {
 
     protected val viewModel: LoginViewModel by activityViewModel()
     protected lateinit var loginSharedActionViewModel: LoginSharedActionViewModel
@@ -37,4 +38,12 @@ abstract class AbstractLoginFragment() : VectorBaseFragment() {
         loginSharedActionViewModel = activityViewModelProvider.get(LoginSharedActionViewModel::class.java)
     }
 
+    override fun onBackPressed(): Boolean {
+        resetViewModel()
+        // Do not consume the Back event
+        return false
+    }
+
+    // Reset any modification of the viewModel by the current fragment
+    abstract fun resetViewModel()
 }

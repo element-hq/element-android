@@ -31,4 +31,8 @@ class LoginSplashFragment @Inject constructor() : AbstractLoginFragment() {
     fun getStarted() {
         loginSharedActionViewModel.post(LoginNavigation.OpenServerSelection)
     }
+
+    override fun resetViewModel() {
+        // Nothing to do
+    }
 }

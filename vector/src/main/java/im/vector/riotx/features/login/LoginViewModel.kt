@@ -68,6 +68,44 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
             is LoginAction.UpdateHomeServer -> handleUpdateHomeserver(action)
             is LoginAction.Login            -> handleLogin(action)
             is LoginAction.SsoLoginSuccess  -> handleSsoLoginSuccess(action)
+            is LoginAction.ResetAction      -> handleResetAction(action)
+        }
+    }
+
+    private fun handleResetAction(action: LoginAction.ResetAction) {
+        // Cancel any request
+        currentTask?.cancel()
+        currentTask = null
+
+        when (action) {
+            LoginAction.ResetLogin -> {
+                setState {
+                    copy(
+                            asyncLoginAction = Uninitialized
+                    )
+                }
+            }
+            LoginAction.ResetHomeServerUrl -> {
+                setState {
+                    copy(
+                            asyncHomeServerLoginFlowRequest = Uninitialized
+                    )
+                }
+            }
+            LoginAction.ResetHomeServerType -> {
+                setState {
+                    copy(
+                            serverType = ServerType.MatrixOrg
+                    )
+                }
+            }
+            LoginAction.ResetSignMode -> {
+                setState {
+                    copy(
+                            signMode = SignMode.Unknown
+                    )
+                }
+            }
         }
     }
 
@@ -107,7 +145,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                 )
             }
 
-            authenticator.authenticate(homeServerConnectionConfigFinal, action.login, action.password, object : MatrixCallback<Session> {
+            currentTask = authenticator.authenticate(homeServerConnectionConfigFinal, action.login, action.password, object : MatrixCallback<Session> {
                 override fun onSuccess(data: Session) {
                     onSessionCreated(data)
                 }
@@ -153,7 +191,6 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
     }
 
     private fun handleUpdateHomeserver(action: LoginAction.UpdateHomeServer) = withState { state ->
-
         var newConfig: HomeServerConnectionConfig? = null
         Try {
             val homeServerUri = action.homeServerUrl
@@ -167,6 +204,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
             && state.asyncHomeServerLoginFlowRequest is Success) return@withState
 
         currentTask?.cancel()
+        currentTask = null
         homeServerConnectionConfig = newConfig
 
         val homeServerConnectionConfigFinal = homeServerConnectionConfig

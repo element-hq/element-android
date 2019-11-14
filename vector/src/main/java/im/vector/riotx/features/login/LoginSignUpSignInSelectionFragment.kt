@@ -64,6 +64,10 @@ class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractLoginFr
         loginSharedActionViewModel.post(LoginNavigation.OnSignModeSelected)
     }
 
+    override fun resetViewModel() {
+        viewModel.handle(LoginAction.ResetSignMode)
+    }
+
     override fun invalidate() = withState(viewModel) {
         updateViews(it.serverType)
     }

@@ -77,6 +77,10 @@ class LoginServerSelectionFragment @Inject constructor() : AbstractLoginFragment
         loginSharedActionViewModel.post(LoginNavigation.OnServerSelectionDone)
     }
 
+    override fun resetViewModel() {
+        viewModel.handle(LoginAction.ResetHomeServerType)
+    }
+
     override fun invalidate() = withState(viewModel) {
         updateSelectedChoice(it.serverType)
     }
