@@ -26,6 +26,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
+import androidx.core.text.toSpannable
 import androidx.transition.AutoTransition
 import androidx.transition.Transition
 import androidx.transition.TransitionManager
@@ -43,7 +44,7 @@ class TextComposerView @JvmOverloads constructor(context: Context, attrs: Attrib
 
     interface Callback : ComposerEditText.Callback {
         fun onCloseRelatedMessage()
-        fun onSendMessage(text: String)
+        fun onSendMessage(text: CharSequence)
         fun onAddAttachment()
     }
 
@@ -86,8 +87,8 @@ class TextComposerView @JvmOverloads constructor(context: Context, attrs: Attrib
         }
 
         sendButton.setOnClickListener {
-            val textMessage = text?.toString() ?: ""
-            callback?.onSendMessage(textMessage)
+            val textMessage = text?.toSpannable()
+            callback?.onSendMessage(textMessage ?: "")
         }
 
         attachmentButton.setOnClickListener {

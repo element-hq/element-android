@@ -34,6 +34,7 @@ import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.file.FileService
 import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilities
 import im.vector.matrix.android.api.session.room.model.Membership
+import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.model.message.getFileUrl
@@ -165,6 +166,9 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         invisibleEventsObservable.accept(action)
     }
 
+    fun getMember(userId: String) : RoomMember? {
+       return room.getRoomMember(userId)
+    }
     /**
      * Convert a send mode to a draft and save the draft
      */
@@ -355,7 +359,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                     if (inReplyTo != null) {
                         // TODO check if same content?
                         room.getTimeLineEvent(inReplyTo)?.let {
-                            room.editReply(state.sendMode.timelineEvent, it, action.text)
+                            room.editReply(state.sendMode.timelineEvent, it, action.text.toString())
                         }
                     } else {
                         val messageContent: MessageContent? =
@@ -380,7 +384,9 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                                     ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
                     val textMsg = messageContent?.body
 
-                    val finalText = legacyRiotQuoteText(textMsg, action.text)
+                    val finalText = legacyRiotQuoteText(textMsg, action.text.toString())
+
+                    //TODO check for pills?
 
                     // TODO Refactor this, just temporary for quotes
                     val parser = Parser.builder().build()
@@ -397,7 +403,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 }
                 is SendMode.REPLY   -> {
                     state.sendMode.timelineEvent.let {
-                        room.replyToMessage(it, action.text, action.autoMarkdown)
+                        room.replyToMessage(it, action.text.toString(), action.autoMarkdown)
                         _sendMessageResultLiveData.postLiveEvent(SendMessageResult.MessageSent)
                         popDraft()
                     }

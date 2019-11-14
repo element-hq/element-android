@@ -17,6 +17,7 @@
 package im.vector.matrix.android.internal.session.room.send
 
 import android.media.MediaMetadataRetriever
+import android.text.SpannableString
 import androidx.exifinterface.media.ExifInterface
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.R
@@ -28,6 +29,7 @@ import im.vector.matrix.android.api.session.room.model.relation.ReactionContent
 import im.vector.matrix.android.api.session.room.model.relation.ReactionInfo
 import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultContent
 import im.vector.matrix.android.api.session.room.model.relation.ReplyToContent
+import im.vector.matrix.android.api.session.room.send.UserMentionSpan
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.matrix.android.internal.database.helper.addSendingEvent
@@ -58,37 +60,67 @@ internal class LocalEchoEventFactory @Inject constructor(@UserId private val use
     // TODO Inject
     private val renderer = HtmlRenderer.builder().build()
 
-    fun createTextEvent(roomId: String, msgType: String, text: String, autoMarkdown: Boolean): Event {
-        if (msgType == MessageType.MSGTYPE_TEXT) {
-            return createFormattedTextEvent(roomId, createTextContent(text, autoMarkdown))
+    fun createTextEvent(roomId: String, msgType: String, text: CharSequence, autoMarkdown: Boolean): Event {
+        if (msgType == MessageType.MSGTYPE_TEXT || msgType == MessageType.MSGTYPE_EMOTE) {
+            return createFormattedTextEvent(roomId, createTextContent(text, autoMarkdown), msgType)
         }
-        val content = MessageTextContent(type = msgType, body = text)
+        val content = MessageTextContent(type = msgType, body = text.toString())
         return createEvent(roomId, content)
     }
 
-    private fun createTextContent(text: String, autoMarkdown: Boolean): TextContent {
+    private fun createTextContent(text: CharSequence, autoMarkdown: Boolean): TextContent {
         if (autoMarkdown) {
-            val document = parser.parse(text)
+            val source = transformPills(text,"[%2\$s](https://matrix.to/#/%1\$s)") ?: text.toString()
+            val document = parser.parse(source)
             val htmlText = renderer.render(document)
 
-            if (isFormattedTextPertinent(text, htmlText)) {
-                return TextContent(text, htmlText)
+            if (isFormattedTextPertinent(source, htmlText)) {
+                return TextContent(source, htmlText)
+            }
+        } else {
+            //Try to detect pills
+            transformPills(text, "<a href=\"https://matrix.to/#/%1\$s\">%2\$s</a>")?.let {
+                return TextContent(text.toString(),it)
             }
         }
 
-        return TextContent(text)
+        return TextContent(text.toString())
+    }
+
+    private fun transformPills(text: CharSequence,
+                               template : String)
+            : String? {
+        val bufSB = StringBuffer()
+        var currIndex = 0
+        SpannableString.valueOf(text).let {
+            val pills = it.getSpans(0, text.length, UserMentionSpan::class.java)
+            if (pills.isNotEmpty()) {
+                pills.forEachIndexed { _, urlSpan ->
+                    val start = it.getSpanStart(urlSpan)
+                    val end = it.getSpanEnd(urlSpan)
+                    //We want to replace with the pill with a html link
+                    bufSB.append(text, currIndex, start)
+                    bufSB.append(String.format(template,urlSpan.userId,urlSpan.displayName))
+                    currIndex = end
+                }
+                bufSB.append(text, currIndex, text.length)
+                return bufSB.toString()
+            } else {
+                return null
+            }
+        }
     }
 
     private fun isFormattedTextPertinent(text: String, htmlText: String?) =
             text != htmlText && htmlText != "<p>${text.trim()}</p>\n"
 
-    fun createFormattedTextEvent(roomId: String, textContent: TextContent): Event {
-        return createEvent(roomId, textContent.toMessageTextContent())
+    fun createFormattedTextEvent(roomId: String, textContent: TextContent, msgType: String): Event {
+        return createEvent(roomId, textContent.toMessageTextContent(msgType))
     }
 
     fun createReplaceTextEvent(roomId: String,
                                targetEventId: String,
-                               newBodyText: String,
+                               newBodyText: CharSequence,
                                newBodyAutoMarkdown: Boolean,
                                msgType: String,
                                compatibilityText: String): Event {
@@ -279,7 +311,7 @@ internal class LocalEchoEventFactory @Inject constructor(@UserId private val use
         return System.currentTimeMillis()
     }
 
-    fun createReplyTextEvent(roomId: String, eventReplied: TimelineEvent, replyText: String, autoMarkdown: Boolean): Event? {
+    fun createReplyTextEvent(roomId: String, eventReplied: TimelineEvent, replyText: CharSequence, autoMarkdown: Boolean): Event? {
         // Fallbacks and event representation
         // TODO Add error/warning logs when any of this is null
         val permalink = PermalinkFactory.createPermalink(eventReplied.root) ?: return null
@@ -298,7 +330,7 @@ internal class LocalEchoEventFactory @Inject constructor(@UserId private val use
         //
         // > <@alice:example.org> This is the original body
         //
-        val replyFallback = buildReplyFallback(body, userId, replyText)
+        val replyFallback = buildReplyFallback(body, userId, replyText.toString())
 
         val eventId = eventReplied.root.eventId ?: return null
         val content = MessageTextContent(

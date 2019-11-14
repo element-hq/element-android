@@ -68,7 +68,7 @@ internal class DefaultSendService @AssistedInject constructor(@Assisted private 
 
     private val workerFutureListenerExecutor = Executors.newSingleThreadExecutor()
 
-    override fun sendTextMessage(text: String, msgType: String, autoMarkdown: Boolean): Cancelable {
+    override fun sendTextMessage(text: CharSequence, msgType: String, autoMarkdown: Boolean): Cancelable {
         val event = localEchoEventFactory.createTextEvent(roomId, msgType, text, autoMarkdown).also {
             saveLocalEcho(it)
         }
@@ -76,8 +76,8 @@ internal class DefaultSendService @AssistedInject constructor(@Assisted private 
         return sendEvent(event)
     }
 
-    override fun sendFormattedTextMessage(text: String, formattedText: String): Cancelable {
-        val event = localEchoEventFactory.createFormattedTextEvent(roomId, TextContent(text, formattedText)).also {
+    override fun sendFormattedTextMessage(text: String, formattedText: String, msgType: String): Cancelable {
+        val event = localEchoEventFactory.createFormattedTextEvent(roomId, TextContent(text, formattedText), msgType).also {
             saveLocalEcho(it)
         }
 

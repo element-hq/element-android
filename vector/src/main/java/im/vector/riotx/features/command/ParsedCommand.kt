@@ -33,7 +33,7 @@ sealed class ParsedCommand {
 
     // Valid commands:
 
-    class SendEmote(val message: String) : ParsedCommand()
+    class SendEmote(val message: CharSequence) : ParsedCommand()
     class BanUser(val userId: String, val reason: String) : ParsedCommand()
     class UnbanUser(val userId: String) : ParsedCommand()
     class SetUserPowerLevel(val userId: String, val powerLevel: Int) : ParsedCommand()

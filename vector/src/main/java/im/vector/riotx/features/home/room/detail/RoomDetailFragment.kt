@@ -28,6 +28,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.text.Editable
 import android.text.Spannable
+import android.text.SpannableStringBuilder
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
@@ -609,7 +610,7 @@ class RoomDetailFragment @Inject constructor(
                 attachmentTypeSelector.show(composerLayout.attachmentButton, keyboardStateUtils.isKeyboardShowing)
             }
 
-            override fun onSendMessage(text: String) {
+            override fun onSendMessage(text: CharSequence) {
                 if (lockSendButton) {
                     Timber.w("Send button is locked")
                     return
@@ -977,7 +978,9 @@ class RoomDetailFragment @Inject constructor(
 
     @SuppressLint("SetTextI18n")
     override fun onMemberNameClicked(informationData: MessageInformationData) {
-        insertUserDisplayNameInTextEditor(informationData.memberName?.toString())
+        session.getUser(informationData.senderId)?.let {
+            insertUserDisplayNameInTextEditor(it)
+        }
     }
 
     override fun onClickOnReactionPill(informationData: MessageInformationData, reaction: String, on: Boolean) {
@@ -1166,8 +1169,9 @@ class RoomDetailFragment @Inject constructor(
      * @param text the text to insert.
      */
 // TODO legacy, refactor
-    private fun insertUserDisplayNameInTextEditor(text: String?) {
+    private fun insertUserDisplayNameInTextEditor(member: User) {
         // TODO move logic outside of fragment
+        val text = member.displayName
         if (null != text) {
 //            var vibrate = false
 
@@ -1176,19 +1180,44 @@ class RoomDetailFragment @Inject constructor(
                 // current user
                 if (composerLayout.composerEditText.text.isNullOrBlank()) {
                     composerLayout.composerEditText.append(Command.EMOTE.command + " ")
-                    composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text?.length ?: 0)
+                    composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text?.length
+                            ?: 0)
 //                    vibrate = true
                 }
             } else {
                 // another user
+                val sanitizeDisplayName = sanitizeDisplayName(text)
                 if (composerLayout.composerEditText.text.isNullOrBlank()) {
                     // Ensure displayName will not be interpreted as a Slash command
                     if (text.startsWith("/")) {
                         composerLayout.composerEditText.append("\\")
                     }
-                    composerLayout.composerEditText.append(sanitizeDisplayName(text) + ": ")
+                    SpannableStringBuilder().apply {
+                        append(sanitizeDisplayName)
+                        setSpan(
+                                PillImageSpan(glideRequests, avatarRenderer, requireContext(), member.userId, member),
+                                0,
+                                sanitizeDisplayName.length,
+                                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                        )
+                        append(": ")
+                    }.let {
+                        composerLayout.composerEditText.append(it)
+                    }
                 } else {
-                    composerLayout.composerEditText.text?.insert(composerLayout.composerEditText.selectionStart, sanitizeDisplayName(text) + " ")
+                    SpannableStringBuilder().apply {
+                        append(sanitizeDisplayName)
+                        setSpan(
+                                PillImageSpan(glideRequests, avatarRenderer, requireContext(), member.userId, member),
+                                0,
+                                sanitizeDisplayName.length,
+                                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                        )
+                        append(" ")
+                    }.let {
+                        composerLayout.composerEditText.text?.insert(composerLayout.composerEditText.selectionStart, it)
+                    }
+//                    composerLayout.composerEditText.text?.insert(composerLayout.composerEditText.selectionStart, sanitizeDisplayName + " ")
                 }
 
 //                vibrate = true
