@@ -99,7 +99,7 @@ class LoginFragment @Inject constructor(
                     passwordFieldTil.error = null
                     loginSubmit.isEnabled = it
                 }
-                .disposeOnDestroy()
+                .disposeOnDestroyView()
 
         loginSubmit.setOnClickListener { authenticate() }
     }

@@ -73,7 +73,7 @@ class LoginResetPasswordFragment @Inject constructor(
                     passwordFieldTil.error = null
                     resetPasswordSubmit.isEnabled = it
                 }
-                .disposeOnDestroy()
+                .disposeOnDestroyView()
 
         resetPasswordSubmit.setOnClickListener { submit() }
     }

@@ -16,6 +16,7 @@
 
 package im.vector.matrix.android.internal.auth.registration
 
+import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.auth.data.SessionParams
@@ -27,18 +28,15 @@ import im.vector.matrix.android.api.util.NoOpCancellable
 import im.vector.matrix.android.internal.SessionManager
 import im.vector.matrix.android.internal.auth.AuthAPI
 import im.vector.matrix.android.internal.auth.SessionParamsStore
-import im.vector.matrix.android.internal.di.Unauthenticated
 import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.util.CancelableCoroutine
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
-import javax.inject.Provider
 
 internal class DefaultRegistrationWizard(private val homeServerConnectionConfig: HomeServerConnectionConfig,
-                                         @Unauthenticated
-                                         private val okHttpClient: Provider<OkHttpClient>,
+                                         private val okHttpClient: Lazy<OkHttpClient>,
                                          private val retrofitFactory: RetrofitFactory,
                                          private val coroutineDispatchers: MatrixCoroutineDispatchers,
                                          private val sessionParamsStore: SessionParamsStore,
@@ -100,7 +98,7 @@ internal class DefaultRegistrationWizard(private val homeServerConnectionConfig:
     }
 
     private fun buildAuthAPI(): AuthAPI {
-        val retrofit = retrofitFactory.create(okHttpClient.get(), homeServerConnectionConfig.homeServerUri.toString())
+        val retrofit = retrofitFactory.create(okHttpClient, homeServerConnectionConfig.homeServerUri.toString())
         return retrofit.create(AuthAPI::class.java)
     }
 }

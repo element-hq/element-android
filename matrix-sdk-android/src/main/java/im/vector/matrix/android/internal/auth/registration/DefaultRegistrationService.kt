@@ -16,6 +16,7 @@
 
 package im.vector.matrix.android.internal.auth.registration
 
+import dagger.Lazy
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.auth.registration.RegistrationService
 import im.vector.matrix.android.api.auth.registration.RegistrationWizard
@@ -25,10 +26,10 @@ import im.vector.matrix.android.internal.di.Unauthenticated
 import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import okhttp3.OkHttpClient
-import javax.inject.Provider
 
+// TODO Add @Inject
 internal class DefaultRegistrationService(@Unauthenticated
-                                          private val okHttpClient: Provider<OkHttpClient>,
+                                          private val okHttpClient: Lazy<OkHttpClient>,
                                           private val retrofitFactory: RetrofitFactory,
                                           private val coroutineDispatchers: MatrixCoroutineDispatchers,
                                           private val sessionParamsStore: SessionParamsStore,

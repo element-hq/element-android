@@ -58,7 +58,7 @@ class LoginServerUrlFormFragment @Inject constructor(
                         {
                             // Ignore error
                         })
-                .disposeOnDestroy()
+                .disposeOnDestroyView()
 
         loginServerUrlFormHomeServerUrl.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
