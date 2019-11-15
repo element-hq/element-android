@@ -65,11 +65,17 @@ class LoginActivity : VectorBaseActivity() {
         loginSharedActionViewModel.observe()
                 .subscribe {
                     when (it) {
-                        is LoginNavigation.OpenServerSelection   -> addFragmentToBackstack(R.id.loginFragmentContainer, LoginServerSelectionFragment::class.java)
-                        is LoginNavigation.OnServerSelectionDone -> onServerSelectionDone()
-                        is LoginNavigation.OnSignModeSelected    -> onSignModeSelected()
-                        is LoginNavigation.OnLoginFlowRetrieved  -> onLoginFlowRetrieved()
-                        is LoginNavigation.OnWebLoginError       -> onWebLoginError(it)
+                        is LoginNavigation.OpenServerSelection        -> addFragmentToBackstack(R.id.loginFragmentContainer, LoginServerSelectionFragment::class.java)
+                        is LoginNavigation.OnServerSelectionDone      -> onServerSelectionDone()
+                        is LoginNavigation.OnSignModeSelected         -> onSignModeSelected()
+                        is LoginNavigation.OnLoginFlowRetrieved       -> onLoginFlowRetrieved()
+                        is LoginNavigation.OnWebLoginError            -> onWebLoginError(it)
+                        is LoginNavigation.OnForgetPasswordClicked    -> addFragmentToBackstack(R.id.loginFragmentContainer, LoginResetPasswordFragment::class.java)
+                        is LoginNavigation.OnResetPasswordSuccess     -> {
+                            supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                            addFragmentToBackstack(R.id.loginFragmentContainer, LoginResetPasswordSuccessFragment::class.java)
+                        }
+                        is LoginNavigation.OnResetPasswordSuccessDone -> supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                     }
                 }
                 .disposeOnDestroy()

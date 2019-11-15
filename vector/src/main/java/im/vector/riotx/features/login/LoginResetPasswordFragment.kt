@@ -18,8 +18,6 @@ package im.vector.riotx.features.login
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.view.isVisible
-import butterknife.OnClick
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
@@ -32,20 +30,22 @@ import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.fragment_login.*
+import kotlinx.android.synthetic.main.fragment_login.passwordField
+import kotlinx.android.synthetic.main.fragment_login.passwordFieldTil
+import kotlinx.android.synthetic.main.fragment_login.passwordReveal
+import kotlinx.android.synthetic.main.fragment_login_reset_password.*
 import javax.inject.Inject
 
 /**
- * In this screen, the user is asked for login and password to sign in to a homeserver.
- * He also can reset his password
+ * In this screen, the user is asked for email and new password to reset his password
  */
-class LoginFragment @Inject constructor(
+class LoginResetPasswordFragment @Inject constructor(
         private val errorFormatter: ErrorFormatter
 ) : AbstractLoginFragment() {
 
-    // TODO Move to viewState?
     private var passwordShown = false
 
-    override fun getLayoutResId() = R.layout.fragment_login
+    override fun getLayoutResId() = R.layout.fragment_login_reset_password
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -55,58 +55,36 @@ class LoginFragment @Inject constructor(
         setupPasswordReveal()
     }
 
-    private fun authenticate() {
-        val login = loginField.text?.trim().toString()
-        val password = passwordField.text?.trim().toString()
-
-        loginViewModel.handle(LoginAction.Login(login, password))
-    }
-
     private fun setupUi() {
-        when (loginViewModel.serverType) {
-            ServerType.MatrixOrg -> {
-                loginServerIcon.isVisible = true
-                loginServerIcon.setImageResource(R.drawable.ic_logo_matrix_org)
-                loginTitle.text = getString(R.string.login_connect_to, "matrix.org")
-                loginNotice.text = getString(R.string.login_server_matrix_org_text)
-            }
-            ServerType.Modular   -> {
-                loginServerIcon.isVisible = true
-                loginServerIcon.setImageResource(R.drawable.ic_logo_modular)
-                // TODO
-                loginTitle.text = getString(R.string.login_connect_to, "TODO")
-                loginNotice.text = loginViewModel.getHomeServerUrlSimple()
-            }
-            ServerType.Other     -> {
-                loginServerIcon.isVisible = false
-                loginTitle.text = getString(R.string.login_server_other_title)
-                loginNotice.text = loginViewModel.getHomeServerUrlSimple()
-            }
-        }
+        resetPasswordTitle.text = getString(R.string.login_reset_password_on, loginViewModel.getHomeServerUrlSimple())
     }
 
     private fun setupSubmitButton() {
         Observable
                 .combineLatest(
-                        loginField.textChanges().map { it.trim().isNotEmpty() },
+                        resetPasswordEmail.textChanges().map { it.trim().isNotEmpty() },
                         passwordField.textChanges().map { it.trim().isNotEmpty() },
-                        BiFunction<Boolean, Boolean, Boolean> { isLoginNotEmpty, isPasswordNotEmpty ->
-                            isLoginNotEmpty && isPasswordNotEmpty
+                        BiFunction<Boolean, Boolean, Boolean> { isEmailNotEmpty, isPasswordNotEmpty ->
+                            isEmailNotEmpty && isPasswordNotEmpty
                         }
                 )
                 .subscribeBy {
-                    loginFieldTil.error = null
+                    resetPasswordEmail.error = null
                     passwordFieldTil.error = null
                     loginSubmit.isEnabled = it
                 }
                 .disposeOnDestroy()
 
-        loginSubmit.setOnClickListener { authenticate() }
+        resetPasswordSubmit.setOnClickListener { submit() }
     }
 
-    @OnClick(R.id.forgetPasswordButton)
-    fun forgetPasswordClicked() {
-        loginSharedActionViewModel.post(LoginNavigation.OnForgetPasswordClicked)
+    private fun submit() {
+        val email = resetPasswordEmail.text?.trim().toString()
+        val password = passwordField.text?.trim().toString()
+
+        // TODO Add static check?
+
+        loginViewModel.handle(LoginAction.ResetPassword(email, password))
     }
 
     private fun setupPasswordReveal() {
@@ -134,24 +112,25 @@ class LoginFragment @Inject constructor(
     }
 
     override fun resetViewModel() {
-        loginViewModel.handle(LoginAction.ResetLogin)
+        loginViewModel.handle(LoginAction.ResetResetPassword)
     }
 
     override fun invalidate() = withState(loginViewModel) { state ->
-        when (state.asyncLoginAction) {
+        when (state.asyncResetPassword) {
             is Loading -> {
-                // Ensure password is hidden
+                // Ensure new password is hidden
                 passwordShown = false
                 renderPasswordField()
             }
             is Fail    -> {
                 // TODO This does not work, we want the error to be on without text. Fix that
-                loginFieldTil.error = ""
+                resetPasswordEmailTil.error = ""
                 // TODO Handle error text properly
-                passwordFieldTil.error = errorFormatter.toHumanReadable(state.asyncLoginAction.error)
+                passwordFieldTil.error = errorFormatter.toHumanReadable(state.asyncResetPassword.error)
             }
-            // Success is handled by the LoginActivity
-            is Success -> Unit
+            is Success -> {
+                loginSharedActionViewModel.post(LoginNavigation.OnResetPasswordSuccess)
+            }
         }
     }
 }

@@ -24,5 +24,9 @@ sealed class LoginNavigation : VectorSharedAction {
     object OnServerSelectionDone : LoginNavigation()
     object OnLoginFlowRetrieved : LoginNavigation()
     object OnSignModeSelected : LoginNavigation()
+    object OnForgetPasswordClicked : LoginNavigation()
+    object OnResetPasswordSuccess : LoginNavigation()
+    object OnResetPasswordSuccessDone : LoginNavigation()
+
     data class OnWebLoginError(val errorCode: Int, val description: String, val failingUrl: String) : LoginNavigation()
 }

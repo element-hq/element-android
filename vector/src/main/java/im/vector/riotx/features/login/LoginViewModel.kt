@@ -57,8 +57,9 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
 
     var serverType: ServerType = ServerType.MatrixOrg
         private set
-
     var signMode: SignMode = SignMode.Unknown
+        private set
+    var resetPasswordEmail: String? = null
         private set
 
     private var loginConfig: LoginConfig? = null
@@ -74,6 +75,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
             is LoginAction.UpdateHomeServer -> handleUpdateHomeserver(action)
             is LoginAction.Login            -> handleLogin(action)
             is LoginAction.WebLoginSuccess  -> handleWebLoginSuccess(action)
+            is LoginAction.ResetPassword    -> handleResetPassword(action)
             is LoginAction.ResetAction      -> handleResetAction(action)
         }
     }
@@ -109,6 +111,14 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                     )
                 }
             }
+            LoginAction.ResetResetPassword  -> {
+                resetPasswordEmail = null
+                setState {
+                    copy(
+                            asyncResetPassword = Uninitialized
+                    )
+                }
+            }
         }
     }
 
@@ -122,6 +132,45 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
 
     private fun handleInitWith(action: LoginAction.InitWith) {
         loginConfig = action.loginConfig
+    }
+
+    private fun handleResetPassword(action: LoginAction.ResetPassword) {
+        val homeServerConnectionConfigFinal = homeServerConnectionConfig
+
+        if (homeServerConnectionConfigFinal == null) {
+            setState {
+                copy(
+                        asyncResetPassword = Fail(Throwable("Bad configuration"))
+                )
+            }
+        } else {
+            resetPasswordEmail = action.email
+
+            setState {
+                copy(
+                        asyncResetPassword = Loading()
+                )
+            }
+
+            currentTask = authenticator.resetPassword(homeServerConnectionConfigFinal, action.email, action.newPassword, object : MatrixCallback<Unit> {
+                override fun onSuccess(data: Unit) {
+                    setState {
+                        copy(
+                                asyncResetPassword = Success(data)
+                        )
+                    }
+                }
+
+                override fun onFailure(failure: Throwable) {
+                    // TODO Handled JobCancellationException
+                    setState {
+                        copy(
+                                asyncResetPassword = Fail(failure)
+                        )
+                    }
+                }
+            })
+        }
     }
 
     private fun handleLogin(action: LoginAction.Login) {
@@ -258,5 +307,9 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
 
     fun getHomeServerUrl(): String {
         return homeServerConnectionConfig?.homeServerUri?.toString() ?: ""
+    }
+
+    fun getHomeServerUrlSimple(): String {
+        return getHomeServerUrl().substringAfter("://")
     }
 }

@@ -38,9 +38,11 @@
     <string name="login_server_other_text">Custom &amp; advanced settings</string>
 
     <string name="login_continue">Continue</string>
+    <!-- Replaced string is the homeserver url -->
     <string name="login_connect_to">Connect to %1$s</string>
     <string name="login_connect_to_modular">Connect to Modular</string>
     <string name="login_connect_to_a_custom_server">Connect to a custom server</string>
+    <!-- Replaced string is the homeserver url -->
     <string name="login_signin_to">Sign in to %1$s</string>
     <string name="login_signup">Sign Up</string>
     <string name="login_signin">Sign In</string>
@@ -54,5 +56,17 @@
 
     <string name="login_sso_error_message">An error occurred when loading the page: %1$s (%2$d)</string>
     <string name="login_mode_not_supported">The application is not able to signin to this homeserver. The homeserver supports the following signin type(s): %1$s.\n\nDo you want to signin using a web client?</string>
+
+    <!-- Replaced string is the homeserver url -->
+    <string name="login_reset_password_on">Reset password on %1$s</string>
+    <string name="login_reset_password_notice">A verification email will be sent to your inbox to confirm setting your new password.</string>
+    <string name="login_reset_password_submit">Next</string>
+    <string name="login_reset_password_email_hint">Email</string>
+    <string name="login_reset_password_password_hint">New password</string>
+    <string name="login_reset_password_success_title">Check your inbox</string>
+    <!-- Replaced string is an email -->
+    <string name="login_reset_password_success_notice">A verification email was sent to %1$s.</string>
+    <string name="login_reset_password_success_notice_2">Tap on the link to confirm your new password.</string>
+    <string name="login_reset_password_success_submit">Back to Sign In</string>
 
 </resources>

@@ -131,6 +131,25 @@ internal class DefaultAuthenticator @Inject constructor(@Unauthenticated
         sessionManager.getOrCreateSession(sessionParams)
     }
 
+    override fun resetPassword(homeServerConnectionConfig: HomeServerConnectionConfig, email: String, newPassword: String, callback: MatrixCallback<Unit>): Cancelable {
+        val job = GlobalScope.launch(coroutineDispatchers.main) {
+            val result = runCatching {
+                resetPasswordInternal(/*homeServerConnectionConfig, email, newPassword*/)
+            }
+            result.foldToCallback(callback)
+        }
+        return CancelableCoroutine(job)
+    }
+
+    private fun resetPasswordInternal(/*homeServerConnectionConfig: HomeServerConnectionConfig, email: String, newPassword: String*/) {
+        // TODO
+        error("Not implemented")
+        //val authAPI = buildAuthAPI(homeServerConnectionConfig)
+        //executeRequest<LoginFlowResponse> {
+        //    apiCall = authAPI.getLoginFlows()
+        //}
+    }
+
     private fun buildAuthAPI(homeServerConnectionConfig: HomeServerConnectionConfig): AuthAPI {
         val retrofit = retrofitFactory.create(okHttpClient, homeServerConnectionConfig.homeServerUri.toString())
         return retrofit.create(AuthAPI::class.java)

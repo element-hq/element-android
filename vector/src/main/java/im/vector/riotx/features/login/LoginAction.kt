@@ -26,6 +26,7 @@ sealed class LoginAction : VectorViewModelAction {
     data class Login(val login: String, val password: String) : LoginAction()
     data class WebLoginSuccess(val credentials: Credentials) : LoginAction()
     data class InitWith(val loginConfig: LoginConfig) : LoginAction()
+    data class ResetPassword(val email: String, val newPassword: String) : LoginAction()
 
     // Reset actions
     open class ResetAction : LoginAction()
@@ -34,4 +35,5 @@ sealed class LoginAction : VectorViewModelAction {
     object ResetHomeServerUrl : ResetAction()
     object ResetSignMode : ResetAction()
     object ResetLogin : ResetAction()
+    object ResetResetPassword : ResetAction()
 }
