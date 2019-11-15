@@ -21,5 +21,4 @@ import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 interface RegistrationService {
 
     fun getOrCreateRegistrationWizard(homeServerConnectionConfig: HomeServerConnectionConfig): RegistrationWizard
-
 }

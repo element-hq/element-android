@@ -72,7 +72,6 @@ internal class DefaultRegistrationWizard(private val homeServerConnectionConfig:
                 ), callback)
     }
 
-
     private fun performRegistrationRequest(registrationParams: RegistrationParams, callback: MatrixCallback<Session>): Cancelable {
         val job = GlobalScope.launch(coroutineDispatchers.main) {
             val result = runCatching {

@@ -30,5 +30,4 @@ interface Cancelable {
     }
 }
 
-
 object NoOpCancellable : Cancelable

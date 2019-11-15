@@ -18,7 +18,6 @@ package im.vector.matrix.android.api.auth.registration
 
 import im.vector.matrix.android.api.util.JsonDict
 
-
 sealed class Stage(open val mandatory: Boolean) {
 
     // m.login.password
@@ -45,7 +44,4 @@ sealed class Stage(open val mandatory: Boolean) {
     data class Other(override val mandatory: Boolean, val type: String, val params: JsonDict?) : Stage(mandatory)
 }
 
-
-class TermPolicies {
-
-}
+class TermPolicies

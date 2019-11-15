@@ -27,5 +27,4 @@ interface RegistrationWizard {
     fun performReCaptcha(response: String, callback: MatrixCallback<Session>): Cancelable
 
     // TODO Add other method here
-
 }

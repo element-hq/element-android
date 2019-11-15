@@ -144,10 +144,10 @@ internal class DefaultAuthenticator @Inject constructor(@Unauthenticated
     private fun resetPasswordInternal(/*homeServerConnectionConfig: HomeServerConnectionConfig, email: String, newPassword: String*/) {
         // TODO
         error("Not implemented")
-        //val authAPI = buildAuthAPI(homeServerConnectionConfig)
-        //executeRequest<LoginFlowResponse> {
+        // val authAPI = buildAuthAPI(homeServerConnectionConfig)
+        // executeRequest<LoginFlowResponse> {
         //    apiCall = authAPI.getLoginFlows()
-        //}
+        // }
     }
 
     private fun buildAuthAPI(homeServerConnectionConfig: HomeServerConnectionConfig): AuthAPI {

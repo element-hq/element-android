@@ -115,7 +115,6 @@ class LoginServerUrlFormFragment @Inject constructor(
                 if (serverUrl.startsWith("http").not()) {
                     serverUrl = "https://$serverUrl"
                     loginServerUrlFormHomeServerUrl.setText(serverUrl)
-
                 }
                 loginViewModel.handle(LoginAction.UpdateHomeServer(serverUrl))
             }
