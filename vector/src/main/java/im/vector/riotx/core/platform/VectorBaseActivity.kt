@@ -332,12 +332,10 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
      */
     protected fun configureToolbar(toolbar: Toolbar, displayBack: Boolean = true) {
         setSupportActionBar(toolbar)
-
-        if (displayBack) {
-            supportActionBar?.let {
-                it.setDisplayShowHomeEnabled(true)
-                it.setDisplayHomeAsUpEnabled(true)
-            }
+        supportActionBar?.let {
+            it.setDisplayShowHomeEnabled(displayBack)
+            it.setDisplayHomeAsUpEnabled(displayBack)
+            it.title = null
         }
     }
 

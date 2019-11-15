@@ -25,8 +25,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="16dp"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/ic_room_actions_notifications_all" />
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/actionTitle"
@@ -45,7 +45,7 @@
         app:layout_constraintBottom_toTopOf="@+id/actionSubtitle"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_default="wrap"
-        tools:text="zbla azjazj" />
+        tools:text="Learn more" />
 
     <TextView
         android:id="@+id/actionSubtitle"
@@ -64,7 +64,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintTop_toBottomOf="@id/actionTitle"
         app:layout_constraintWidth_default="wrap"
-        tools:text="zbla azjazj sdqkqsdkqsd sdqkqsdkqsdk kqdkqsdqk" />
+        tools:text="Messages in this room are not end-to-end encrypted" />
 
 
     <ImageView

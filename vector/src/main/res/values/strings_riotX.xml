@@ -19,4 +19,8 @@
 
     <string name="help_long_click_on_room_for_more_options">Long click on a room to see more options</string>
 
+    <string name="room_profile_not_encrypted_subtitle">Messages in this room are not end-to-end encrypted.</string>
+    <string name="room_profile_encrypted_subtitle">Messages in this room are end-to-end encrypted.</string>
+    <string name="room_profile_member_list_title">"%1$d people"</string>
+
 </resources>

@@ -55,7 +55,10 @@ class RoomProfileViewModel @AssistedInject constructor(@Assisted initialState: R
         room.rx().liveRoomSummary()
                 .unwrap()
                 .execute {
-                    copy(roomSummary = it)
+                    copy(
+                            roomSummary = it,
+                            isEncrypted = room.isEncrypted()
+                    )
                 }
     }
 

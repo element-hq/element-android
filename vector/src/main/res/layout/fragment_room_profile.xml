@@ -7,49 +7,40 @@
     android:background="?riotx_header_panel_background">
 
     <com.google.android.material.appbar.AppBarLayout
-        style="@style/VectorAppBarLayoutStyle"
         android:id="@+id/roomProfileAppBarLayout"
+        style="@style/VectorAppBarLayoutStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
+            style="@style/VectorAppBarLayoutStyle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:titleEnabled="false">
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/roomProfileToolbar"
-                style="@style/VectorToolbarStyle"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:layout_collapseMode="pin" />
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+            app:titleEnabled="false"
+            app:toolbarId="@+id/roomProfileToolbar">
 
             <LinearLayout
+                android:id="@+id/roomProfileHeaderView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:background="?riotx_background"
                 android:orientation="vertical"
-                app:layout_collapseMode="parallax">
-
-                <ImageView
-                    android:id="@+id/roomProfileAvatarView"
-                    android:layout_width="128dp"
-                    android:layout_height="128dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="16dp"
-                    android:src="@drawable/ic_person_outline_black" />
+                android:paddingTop="160dp"
+                android:minHeight="280dp"
+                app:layout_collapseMode="parallax"
+                app:layout_collapseParallaxMultiplier="0.9">
 
                 <TextView
                     android:id="@+id/roomProfileNameView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="16dp"
+                    android:gravity="center_vertical"
                     android:singleLine="true"
                     android:textAppearance="@style/Vector.Toolbar.Title"
-                    android:textStyle="bold"
                     android:textSize="20sp"
+                    android:textStyle="bold"
                     tools:text="Random" />
 
                 <TextView
@@ -77,11 +68,13 @@
                     android:textStyle="normal"
                     tools:text="Here is a room topic, it can be multi-line but should always be displayed in full  🍱" />
 
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="24dp"/>
-
             </LinearLayout>
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/roomProfileToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
@@ -92,7 +85,42 @@
         android:id="@+id/roomProfileRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:listitem="@layout/item_profile_action" />
 
+    <ImageView
+        android:id="@+id/roomProfileAvatarView"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:elevation="10dp"
+        app:behavior_dependTarget="-176dp"
+        app:behavior_dependType="y"
+        app:behavior_dependsOn="@id/roomProfileAppBarLayout"
+        app:behavior_targetHeight="40dp"
+        app:behavior_targetWidth="40dp"
+        app:behavior_targetX="56dp"
+        app:behavior_targetY="8dp"
+        app:layout_behavior="im.vector.riotx.core.animations.behavior.PercentViewBehavior"
+        tools:src="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/roomProfileNameView2"
+        android:layout_width="wrap_content"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_marginStart="104dp"
+        android:layout_marginTop="-100dp"
+        android:alpha="0"
+        android:elevation="10dp"
+        android:gravity="center_vertical"
+        android:textAppearance="@style/Vector.Toolbar.Title"
+        android:textSize="18dp"
+        app:behavior_dependTarget="-208dp"
+        app:behavior_dependType="y"
+        app:behavior_dependsOn="@id/roomProfileAppBarLayout"
+        app:behavior_targetAlpha="1"
+        app:behavior_targetY="0dp"
+        app:layout_behavior="im.vector.riotx.core.animations.behavior.PercentViewBehavior" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

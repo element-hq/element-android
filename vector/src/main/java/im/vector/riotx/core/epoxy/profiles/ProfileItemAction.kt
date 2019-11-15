@@ -16,6 +16,7 @@
 
 package im.vector.riotx.core.epoxy.profiles
 
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isVisible
@@ -37,9 +38,12 @@ abstract class ProfileItemAction : VectorEpoxyModel<ProfileItemAction.Holder>() 
     var iconRes: Int = 0
     @EpoxyAttribute
     var editable: Boolean = true
+    @EpoxyAttribute
+    lateinit var listener: View.OnClickListener
 
     override fun bind(holder: Holder) {
         super.bind(holder)
+        holder.view.setOnClickListener(listener)
         holder.editable.isVisible = editable
         holder.title.text = title
         holder.subtitle.setTextOrHide(subtitle)

@@ -43,7 +43,7 @@ class RoomProfileFragment @Inject constructor(
         private val roomProfileController: RoomProfileController,
         private val avatarRenderer: AvatarRenderer,
         val roomProfileViewModelFactory: RoomProfileViewModel.Factory
-) : VectorBaseFragment() {
+) : VectorBaseFragment(), RoomProfileController.Callback {
 
     private val roomProfileArgs: RoomProfileArgs by args()
     private val roomProfileViewModel: RoomProfileViewModel by fragmentViewModel()
@@ -57,9 +57,11 @@ class RoomProfileFragment @Inject constructor(
     }
 
     private fun setupRecyclerView() {
+        roomProfileController.callback = this
         roomProfileRecyclerView.setHasFixedSize(true)
         roomProfileRecyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         roomProfileRecyclerView.adapter = roomProfileController.adapter
+
     }
 
     override fun onDestroyView() {
@@ -74,12 +76,27 @@ class RoomProfileFragment @Inject constructor(
                 activity?.finish()
             } else {
                 roomProfileNameView.text = it.displayName
+                roomProfileNameView2.text = it.displayName
                 roomProfileIdView.text = it.roomId
                 roomProfileTopicView.setTextOrHide(it.topic)
                 avatarRenderer.render(it, roomProfileAvatarView)
             }
         }
         roomProfileController.setData(state)
+    }
+
+    // RoomProfileController.Callback
+
+    override fun onLearnMoreClicked() {
+        vectorBaseActivity.notImplemented()
+    }
+
+    override fun onMemberListClicked() {
+        vectorBaseActivity.notImplemented("Room member list")
+    }
+
+    override fun onSettingsClicked() {
+        vectorBaseActivity.notImplemented("Room settings")
     }
 
 

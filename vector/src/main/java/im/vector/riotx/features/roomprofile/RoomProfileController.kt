@@ -22,29 +22,49 @@ import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.dividerItem
 import im.vector.riotx.core.epoxy.profiles.profileItemAction
 import im.vector.riotx.core.epoxy.profiles.profileItemSection
+import im.vector.riotx.core.resources.StringProvider
 import javax.inject.Inject
 
-class RoomProfileController @Inject constructor()
+class RoomProfileController @Inject constructor(private val stringProvider: StringProvider)
     : TypedEpoxyController<RoomProfileViewState>() {
+
+    var callback: Callback? = null
+
+    interface Callback {
+        fun onLearnMoreClicked()
+        fun onMemberListClicked()
+        fun onSettingsClicked()
+    }
 
     override fun buildModels(data: RoomProfileViewState?) {
         if (data == null) {
             return
         }
 
+        val roomSummary = data.roomSummary()
+
         profileItemSection {
             id("section_security")
             title("Security")
         }
 
+
+        val learnMoreSubtitle = if (data.isEncrypted) {
+            R.string.room_profile_encrypted_subtitle
+        } else {
+            R.string.room_profile_not_encrypted_subtitle
+        }
         profileItemAction {
             id("action_learn_more")
             title("Learn more")
             editable(true)
-            subtitle("Messages in this room are not end-to-end encrypted.")
+            subtitle(stringProvider.getString(learnMoreSubtitle))
+            listener { _ ->
+                callback?.onLearnMoreClicked()
+            }
         }
 
-        dividerItem{
+        dividerItem {
             id("action_learn_more_divider")
         }
 
@@ -53,33 +73,29 @@ class RoomProfileController @Inject constructor()
             title("Options")
         }
 
+        val numberOfMembers = (roomSummary?.otherMemberIds?.size ?: 0) + 1
         profileItemAction {
             iconRes(R.drawable.ic_person_outline_black)
             id("action_member_list")
-            title("88 people")
+            title(stringProvider.getString(R.string.room_profile_member_list_title, numberOfMembers))
             editable(true)
+            listener { _ ->
+                callback?.onMemberListClicked()
+            }
         }
 
-        dividerItem{
+        dividerItem {
             id("action_member_list_divider")
         }
 
         profileItemAction {
-            iconRes(R.drawable.ic_attachment)
-            id("action_files")
-            title("12 files")
-            editable(true)
-        }
-
-        dividerItem{
-            id("action_files_divider")
-        }
-
-        profileItemAction {
-            iconRes(R.drawable.ic_settings_x)
+            iconRes(R.drawable.ic_room_actions_settings)
             id("action_settings")
             title("Room settings")
             editable(true)
+            listener { _ ->
+                callback?.onSettingsClicked()
+            }
         }
 
     }
