@@ -71,7 +71,7 @@ class LoginResetPasswordFragment @Inject constructor(
                 .subscribeBy {
                     resetPasswordEmail.error = null
                     passwordFieldTil.error = null
-                    loginSubmit.isEnabled = it
+                    resetPasswordSubmit.isEnabled = it
                 }
                 .disposeOnDestroy()
 

@@ -35,9 +35,7 @@ import im.vector.riotx.features.home.createdirect.CreateDirectRoomKnownUsersFrag
 import im.vector.riotx.features.home.group.GroupListFragment
 import im.vector.riotx.features.home.room.detail.RoomDetailFragment
 import im.vector.riotx.features.home.room.list.RoomListFragment
-import im.vector.riotx.features.login.LoginFragment
-import im.vector.riotx.features.login.LoginServerUrlFormFragment
-import im.vector.riotx.features.login.LoginWebFragment
+import im.vector.riotx.features.login.*
 import im.vector.riotx.features.reactions.EmojiSearchResultFragment
 import im.vector.riotx.features.roomdirectory.PublicRoomsFragment
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomFragment
@@ -116,11 +114,35 @@ interface FragmentModule {
     @FragmentKey(LoginFragment::class)
     fun bindLoginFragment(fragment: LoginFragment): Fragment
 
-    // TODO Add all other Login Fragments
     @Binds
     @IntoMap
     @FragmentKey(LoginServerUrlFormFragment::class)
     fun bindLoginServerUrlFormFragment(fragment: LoginServerUrlFormFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(LoginResetPasswordFragment::class)
+    fun bindLoginResetPasswordFragment(fragment: LoginResetPasswordFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(LoginResetPasswordSuccessFragment::class)
+    fun bindLoginResetPasswordSuccessFragment(fragment: LoginResetPasswordSuccessFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(LoginServerSelectionFragment::class)
+    fun bindLoginServerSelectionFragment(fragment: LoginServerSelectionFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(LoginSignUpSignInSelectionFragment::class)
+    fun bindLoginSignUpSignInSelectionFragment(fragment: LoginSignUpSignInSelectionFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(LoginSplashFragment::class)
+    fun bindLoginSplashFragment(fragment: LoginSplashFragment): Fragment
 
     @Binds
     @IntoMap

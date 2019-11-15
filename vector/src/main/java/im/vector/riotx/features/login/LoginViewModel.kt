@@ -309,7 +309,12 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
         return homeServerConnectionConfig?.homeServerUri?.toString() ?: ""
     }
 
+    /**
+     * Ex: "https://matrix.org/" -> "matrix.org"
+     */
     fun getHomeServerUrlSimple(): String {
-        return getHomeServerUrl().substringAfter("://")
+        return getHomeServerUrl()
+                .substringAfter("://")
+                .trim { it == '/' }
     }
 }

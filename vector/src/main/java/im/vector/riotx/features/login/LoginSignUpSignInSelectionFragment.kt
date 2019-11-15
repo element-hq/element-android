@@ -48,13 +48,14 @@ class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractLoginFr
             ServerType.Modular   -> {
                 loginSignupSigninServerIcon.setImageResource(R.drawable.ic_logo_modular)
                 loginSignupSigninServerIcon.isVisible = true
+                // TODO
                 loginSignupSigninTitle.text = getString(R.string.login_connect_to, "TODO MODULAR NAME")
-                loginSignupSigninText.text = "TODO MODULAR URL"
+                loginSignupSigninText.text = loginViewModel.getHomeServerUrlSimple()
             }
             ServerType.Other     -> {
                 loginSignupSigninServerIcon.isVisible = false
                 loginSignupSigninTitle.text = getString(R.string.login_server_other_title)
-                loginSignupSigninText.text = "TODO SERVER URL"
+                loginSignupSigninText.text = getString(R.string.login_connect_to, loginViewModel.getHomeServerUrlSimple())
             }
         }
     }

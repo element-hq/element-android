@@ -25,11 +25,14 @@
                 style="@style/LoginTopIcon"
                 android:layout_gravity="center_horizontal" />
 
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="84dp" />
+
             <ImageView
                 android:id="@+id/loginServerIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="84dp"
                 tools:src="@drawable/ic_logo_matrix_org" />
 
             <TextView
