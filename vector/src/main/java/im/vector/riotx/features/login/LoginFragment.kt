@@ -67,7 +67,7 @@ class LoginFragment @Inject constructor(
             ServerType.MatrixOrg -> {
                 loginServerIcon.isVisible = true
                 loginServerIcon.setImageResource(R.drawable.ic_logo_matrix_org)
-                loginTitle.text = getString(R.string.login_connect_to, "matrix.org")
+                loginTitle.text = getString(R.string.login_connect_to, loginViewModel.getHomeServerUrlSimple())
                 loginNotice.text = getString(R.string.login_server_matrix_org_text)
             }
             ServerType.Modular   -> {
@@ -80,7 +80,7 @@ class LoginFragment @Inject constructor(
             ServerType.Other     -> {
                 loginServerIcon.isVisible = false
                 loginTitle.text = getString(R.string.login_server_other_title)
-                loginNotice.text = loginViewModel.getHomeServerUrlSimple()
+                loginNotice.text = getString(R.string.login_connect_to, loginViewModel.getHomeServerUrlSimple())
             }
         }
     }

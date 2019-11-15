@@ -42,7 +42,7 @@ class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractLoginFr
             ServerType.MatrixOrg -> {
                 loginSignupSigninServerIcon.setImageResource(R.drawable.ic_logo_matrix_org)
                 loginSignupSigninServerIcon.isVisible = true
-                loginSignupSigninTitle.text = getString(R.string.login_connect_to, "matrix.org")
+                loginSignupSigninTitle.text = getString(R.string.login_connect_to, loginViewModel.getHomeServerUrlSimple())
                 loginSignupSigninText.text = getString(R.string.login_server_matrix_org_text)
             }
             ServerType.Modular   -> {
