@@ -70,7 +70,8 @@ internal class LocalEchoEventFactory @Inject constructor(@UserId private val use
 
     private fun createTextContent(text: CharSequence, autoMarkdown: Boolean): TextContent {
         if (autoMarkdown) {
-            val source = transformPills(text,"[%2\$s](https://matrix.to/#/%1\$s)") ?: text.toString()
+            val source = transformPills(text, "[%2\$s](https://matrix.to/#/%1\$s)")
+                    ?: text.toString()
             val document = parser.parse(source)
             val htmlText = renderer.render(document)
 
@@ -78,9 +79,9 @@ internal class LocalEchoEventFactory @Inject constructor(@UserId private val use
                 return TextContent(source, htmlText)
             }
         } else {
-            //Try to detect pills
+            // Try to detect pills
             transformPills(text, "<a href=\"https://matrix.to/#/%1\$s\">%2\$s</a>")?.let {
-                return TextContent(text.toString(),it)
+                return TextContent(text.toString(), it)
             }
         }
 
@@ -88,7 +89,7 @@ internal class LocalEchoEventFactory @Inject constructor(@UserId private val use
     }
 
     private fun transformPills(text: CharSequence,
-                               template : String)
+                               template: String)
             : String? {
         val bufSB = StringBuffer()
         var currIndex = 0
@@ -98,9 +99,9 @@ internal class LocalEchoEventFactory @Inject constructor(@UserId private val use
                 pills.forEachIndexed { _, urlSpan ->
                     val start = it.getSpanStart(urlSpan)
                     val end = it.getSpanEnd(urlSpan)
-                    //We want to replace with the pill with a html link
+                    // We want to replace with the pill with a html link
                     bufSB.append(text, currIndex, start)
-                    bufSB.append(String.format(template,urlSpan.userId,urlSpan.displayName))
+                    bufSB.append(String.format(template, urlSpan.userId, urlSpan.displayName))
                     currIndex = end
                 }
                 bufSB.append(text, currIndex, text.length)

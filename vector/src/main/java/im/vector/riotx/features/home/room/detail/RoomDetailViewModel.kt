@@ -386,7 +386,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
 
                     val finalText = legacyRiotQuoteText(textMsg, action.text.toString())
 
-                    //TODO check for pills?
+                    // TODO check for pills?
 
                     // TODO Refactor this, just temporary for quotes
                     val parser = Parser.builder().build()
