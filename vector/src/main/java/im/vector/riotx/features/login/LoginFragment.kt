@@ -105,11 +105,6 @@ class LoginFragment @Inject constructor(
         loginSubmit.setOnClickListener { authenticate() }
     }
 
-//    // TODO Move to server selection screen
-//    private fun openSso() {
-//        loginSharedActionViewModel.post(LoginNavigation.OpenSsoLoginFallback)
-//    }
-
     private fun setupPasswordReveal() {
         passwordShown = false
 

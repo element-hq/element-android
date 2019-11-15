@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/login_sso_fallback_toolbar"
+        android:id="@+id/loginWebToolbar"
         style="@style/VectorToolbarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,7 +15,7 @@
         tools:title="@string/auth_login" />
 
     <WebView
-        android:id="@+id/login_sso_fallback_webview"
+        android:id="@+id/loginWebWebView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

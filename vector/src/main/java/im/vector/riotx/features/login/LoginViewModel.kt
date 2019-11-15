@@ -73,7 +73,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
             is LoginAction.InitWith         -> handleInitWith(action)
             is LoginAction.UpdateHomeServer -> handleUpdateHomeserver(action)
             is LoginAction.Login            -> handleLogin(action)
-            is LoginAction.SsoLoginSuccess  -> handleSsoLoginSuccess(action)
+            is LoginAction.WebLoginSuccess  -> handleWebLoginSuccess(action)
             is LoginAction.ResetAction      -> handleResetAction(action)
         }
     }
@@ -167,7 +167,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
         }
     }
 
-    private fun handleSsoLoginSuccess(action: LoginAction.SsoLoginSuccess) {
+    private fun handleWebLoginSuccess(action: LoginAction.WebLoginSuccess) {
         val homeServerConnectionConfigFinal = homeServerConnectionConfig
 
         if (homeServerConnectionConfigFinal == null) {
@@ -233,7 +233,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                         // SSO login is taken first
                         data.flows.any { it.type == InteractiveAuthenticationFlow.TYPE_LOGIN_SSO }      -> LoginMode.Sso
                         data.flows.any { it.type == InteractiveAuthenticationFlow.TYPE_LOGIN_PASSWORD } -> LoginMode.Password
-                        else                                                                            -> LoginMode.Unsupported
+                        else                                                                            -> LoginMode.Unsupported(data.flows.mapNotNull { it.type }.toList())
                     }
 
                     setState {

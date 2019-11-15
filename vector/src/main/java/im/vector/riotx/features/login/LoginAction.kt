@@ -24,7 +24,7 @@ sealed class LoginAction : VectorViewModelAction {
     data class UpdateHomeServer(val homeServerUrl: String) : LoginAction()
     data class UpdateSignMode(val signMode: SignMode) : LoginAction()
     data class Login(val login: String, val password: String) : LoginAction()
-    data class SsoLoginSuccess(val credentials: Credentials) : LoginAction()
+    data class WebLoginSuccess(val credentials: Credentials) : LoginAction()
     data class InitWith(val loginConfig: LoginConfig) : LoginAction()
 
     // Reset actions

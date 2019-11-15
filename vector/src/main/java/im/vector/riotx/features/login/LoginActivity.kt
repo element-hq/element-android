@@ -65,11 +65,11 @@ class LoginActivity : VectorBaseActivity() {
         loginSharedActionViewModel.observe()
                 .subscribe {
                     when (it) {
-                        is LoginNavigation.OpenServerSelection     -> addFragmentToBackstack(R.id.loginFragmentContainer, LoginServerSelectionFragment::class.java)
-                        is LoginNavigation.OnServerSelectionDone   -> onServerSelectionDone()
-                        is LoginNavigation.OnSignModeSelected      -> onSignModeSelected()
-                        is LoginNavigation.OnLoginFlowRetrieved    -> onLoginFlowRetrieved()
-                        is LoginNavigation.OnSsoLoginFallbackError -> onSsoLoginFallbackError(it)
+                        is LoginNavigation.OpenServerSelection   -> addFragmentToBackstack(R.id.loginFragmentContainer, LoginServerSelectionFragment::class.java)
+                        is LoginNavigation.OnServerSelectionDone -> onServerSelectionDone()
+                        is LoginNavigation.OnSignModeSelected    -> onSignModeSelected()
+                        is LoginNavigation.OnLoginFlowRetrieved  -> onLoginFlowRetrieved()
+                        is LoginNavigation.OnWebLoginError       -> onWebLoginError(it)
                     }
                 }
                 .disposeOnDestroy()
@@ -97,14 +97,14 @@ class LoginActivity : VectorBaseActivity() {
         loginLoading.isVisible = loginViewState.isLoading()
     }
 
-    private fun onSsoLoginFallbackError(onSsoLoginFallbackError: LoginNavigation.OnSsoLoginFallbackError) {
+    private fun onWebLoginError(onWebLoginError: LoginNavigation.OnWebLoginError) {
         // Pop the backstack
         supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
 
         // And inform the user
         AlertDialog.Builder(this)
                 .setTitle(R.string.dialog_title_error)
-                .setMessage(getString(R.string.login_sso_error_message, onSsoLoginFallbackError.description, onSsoLoginFallbackError.errorCode))
+                .setMessage(getString(R.string.login_sso_error_message, onWebLoginError.description, onWebLoginError.errorCode))
                 .setPositiveButton(R.string.ok, null)
                 .show()
     }
@@ -124,15 +124,26 @@ class LoginActivity : VectorBaseActivity() {
             SignMode.SignIn  -> {
                 // It depends on the LoginMode
                 withState(loginViewModel) {
-                    when (it.asyncHomeServerLoginFlowRequest.invoke()) {
-                        null                  -> error("Developer error")
-                        LoginMode.Password    -> addFragmentToBackstack(R.id.loginFragmentContainer, LoginFragment::class.java)
-                        LoginMode.Sso         -> addFragmentToBackstack(R.id.loginFragmentContainer, LoginSsoFallbackFragment::class.java)
-                        LoginMode.Unsupported -> TODO() // TODO Import Fallback login fragment from Riot-Android
+                    when (val loginMode = it.asyncHomeServerLoginFlowRequest.invoke()) {
+                        null                     -> error("Developer error")
+                        LoginMode.Password       -> addFragmentToBackstack(R.id.loginFragmentContainer, LoginFragment::class.java)
+                        LoginMode.Sso            -> addFragmentToBackstack(R.id.loginFragmentContainer, LoginWebFragment::class.java)
+                        is LoginMode.Unsupported -> onLoginModeNotSupported(loginMode)
                     }
                 }
             }
         }
+    }
+
+    private fun onLoginModeNotSupported(unsupportedLoginMode: LoginMode.Unsupported) {
+        AlertDialog.Builder(this)
+                .setTitle(R.string.app_name)
+                .setMessage(getString(R.string.login_mode_not_supported, unsupportedLoginMode.types.joinToString { "'$it'" }))
+                .setPositiveButton(R.string.yes) { _, _ ->
+                    addFragmentToBackstack(R.id.loginFragmentContainer, LoginWebFragment::class.java)
+                }
+                .setNegativeButton(R.string.no, null)
+                .show()
     }
 
     override fun onResume() {

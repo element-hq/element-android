@@ -34,47 +34,47 @@ import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.riotx.R
-import kotlinx.android.synthetic.main.fragment_login_sso_fallback.*
+import kotlinx.android.synthetic.main.fragment_login_web.*
 import timber.log.Timber
 import java.net.URLDecoder
 import javax.inject.Inject
 
 /**
- * Only login is supported for the moment
+ * This screen is displayed for SSO login and also when the application does not support login flow or registration flow
+ * of the homeserfver, as a fallback to login or to create an account
  */
-class LoginSsoFallbackFragment @Inject constructor() : AbstractLoginFragment() {
+class LoginWebFragment @Inject constructor() : AbstractLoginFragment() {
 
-    private var homeServerUrl: String = ""
+    private lateinit var homeServerUrl: String
+    private lateinit var signMode: SignMode
 
-    enum class Mode {
-        MODE_LOGIN,
-        // Not supported in RiotX for the moment
-        MODE_REGISTER
-    }
-
-    // Mode (MODE_LOGIN or MODE_REGISTER)
-    private var mMode = Mode.MODE_LOGIN
-
-    override fun getLayoutResId() = R.layout.fragment_login_sso_fallback
+    override fun getLayoutResId() = R.layout.fragment_login_web
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupToolbar(login_sso_fallback_toolbar)
-        login_sso_fallback_toolbar.title = getString(R.string.login)
+        homeServerUrl = loginViewModel.getHomeServerUrl()
+        signMode = loginViewModel.signMode.takeIf { it != SignMode.Unknown } ?: error("Developer error: Invalid sign mode")
 
-        setupWebview()
+        setupToolbar(loginWebToolbar)
+        setupTitle()
+        setupWebView()
+    }
+
+    private fun setupTitle() {
+        loginWebToolbar.title = when (signMode) {
+            SignMode.SignIn -> getString(R.string.login_signin)
+            else            -> getString(R.string.login_signup)
+        }
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    private fun setupWebview() {
-        login_sso_fallback_webview.settings.javaScriptEnabled = true
+    private fun setupWebView() {
+        loginWebWebView.settings.javaScriptEnabled = true
 
         // Due to https://developers.googleblog.com/2016/08/modernizing-oauth-interactions-in-native-apps.html, we hack
         // the user agent to bypass the limitation of Google, as a quick fix (a proper solution will be to use the SSO SDK)
-        login_sso_fallback_webview.settings.userAgentString = "Mozilla/5.0 Google"
-
-        homeServerUrl = loginViewModel.getHomeServerUrl()
+        loginWebWebView.settings.userAgentString = "Mozilla/5.0 Google"
 
         if (!homeServerUrl.endsWith("/")) {
             homeServerUrl += "/"
@@ -109,14 +109,14 @@ class LoginSsoFallbackFragment @Inject constructor() : AbstractLoginFragment() {
     }
 
     private fun launchWebView() {
-        if (mMode == Mode.MODE_LOGIN) {
-            login_sso_fallback_webview.loadUrl(homeServerUrl + "_matrix/static/client/login/")
+        if (signMode == SignMode.SignIn) {
+            loginWebWebView.loadUrl(homeServerUrl + "_matrix/static/client/login/")
         } else {
             // MODE_REGISTER
-            login_sso_fallback_webview.loadUrl(homeServerUrl + "_matrix/static/client/register/")
+            loginWebWebView.loadUrl(homeServerUrl + "_matrix/static/client/register/")
         }
 
-        login_sso_fallback_webview.webViewClient = object : WebViewClient() {
+        loginWebWebView.webViewClient = object : WebViewClient() {
             override fun onReceivedSslError(view: WebView, handler: SslErrorHandler,
                                             error: SslError) {
                 AlertDialog.Builder(requireActivity())
@@ -131,20 +131,20 @@ class LoginSsoFallbackFragment @Inject constructor() : AbstractLoginFragment() {
                             }
                             false
                         })
+                        .setCancelable(false)
                         .show()
             }
 
             override fun onReceivedError(view: WebView, errorCode: Int, description: String, failingUrl: String) {
                 super.onReceivedError(view, errorCode, description, failingUrl)
 
-                // on error case, close this fragment
-                loginSharedActionViewModel.post(LoginNavigation.OnSsoLoginFallbackError(errorCode, description, failingUrl))
+                loginSharedActionViewModel.post(LoginNavigation.OnWebLoginError(errorCode, description, failingUrl))
             }
 
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
 
-                login_sso_fallback_toolbar.subtitle = url
+                loginWebToolbar.subtitle = url
             }
 
             override fun onPageFinished(view: WebView, url: String) {
@@ -160,7 +160,7 @@ class LoginSsoFallbackFragment @Inject constructor() : AbstractLoginFragment() {
 
                     view.loadUrl(mxcJavascriptSendObjectMessage)
 
-                    if (mMode == Mode.MODE_LOGIN) {
+                    if (signMode == SignMode.SignIn) {
                         // The function the fallback page calls when the login is complete
                         val mxcJavascriptOnRegistered = "javascript:window.matrixLogin.onLogin = function(response) {" +
                                 " sendObjectMessage({ 'action': 'onLogin', 'credentials': response });" +
@@ -227,7 +227,7 @@ class LoginSsoFallbackFragment @Inject constructor() : AbstractLoginFragment() {
                     if (parameters != null) {
                         val action = parameters["action"] as String
 
-                        if (mMode == Mode.MODE_LOGIN) {
+                        if (signMode == SignMode.SignIn) {
                             try {
                                 if (action == "onLogin") {
                                     @Suppress("UNCHECKED_CAST")
@@ -248,7 +248,7 @@ class LoginSsoFallbackFragment @Inject constructor() : AbstractLoginFragment() {
                                                 refreshToken = null
                                         )
 
-                                        loginViewModel.handle(LoginAction.SsoLoginSuccess(safeCredentials))
+                                        loginViewModel.handle(LoginAction.WebLoginSuccess(safeCredentials))
                                     }
                                 }
                             } catch (e: Exception) {
@@ -273,7 +273,7 @@ class LoginSsoFallbackFragment @Inject constructor() : AbstractLoginFragment() {
                                             refreshToken = null
                                     )
 
-                                    loginViewModel.handle(LoginAction.SsoLoginSuccess(credentials))
+                                    loginViewModel.handle(LoginAction.WebLoginSuccess(credentials))
                                 }
                             }
                         }
@@ -291,8 +291,8 @@ class LoginSsoFallbackFragment @Inject constructor() : AbstractLoginFragment() {
     }
 
     override fun onBackPressed(): Boolean {
-        return if (login_sso_fallback_webview.canGoBack()) {
-            login_sso_fallback_webview.goBack()
+        return if (loginWebWebView.canGoBack()) {
+            loginWebWebView.goBack()
             true
         } else {
             super.onBackPressed()

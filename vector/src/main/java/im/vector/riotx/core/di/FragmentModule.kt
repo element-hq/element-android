@@ -37,7 +37,7 @@ import im.vector.riotx.features.home.room.detail.RoomDetailFragment
 import im.vector.riotx.features.home.room.list.RoomListFragment
 import im.vector.riotx.features.login.LoginFragment
 import im.vector.riotx.features.login.LoginServerUrlFormFragment
-import im.vector.riotx.features.login.LoginSsoFallbackFragment
+import im.vector.riotx.features.login.LoginWebFragment
 import im.vector.riotx.features.reactions.EmojiSearchResultFragment
 import im.vector.riotx.features.roomdirectory.PublicRoomsFragment
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomFragment
@@ -124,8 +124,8 @@ interface FragmentModule {
 
     @Binds
     @IntoMap
-    @FragmentKey(LoginSsoFallbackFragment::class)
-    fun bindLoginSsoFallbackFragment(fragment: LoginSsoFallbackFragment): Fragment
+    @FragmentKey(LoginWebFragment::class)
+    fun bindLoginWebFragment(fragment: LoginWebFragment): Fragment
 
     @Binds
     @IntoMap
