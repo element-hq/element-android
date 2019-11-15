@@ -74,7 +74,7 @@ class LoginSsoFallbackFragment @Inject constructor() : AbstractLoginFragment() {
         // the user agent to bypass the limitation of Google, as a quick fix (a proper solution will be to use the SSO SDK)
         login_sso_fallback_webview.settings.userAgentString = "Mozilla/5.0 Google"
 
-        homeServerUrl = viewModel.getHomeServerUrl()
+        homeServerUrl = loginViewModel.getHomeServerUrl()
 
         if (!homeServerUrl.endsWith("/")) {
             homeServerUrl += "/"
@@ -248,7 +248,7 @@ class LoginSsoFallbackFragment @Inject constructor() : AbstractLoginFragment() {
                                                 refreshToken = null
                                         )
 
-                                        viewModel.handle(LoginAction.SsoLoginSuccess(safeCredentials))
+                                        loginViewModel.handle(LoginAction.SsoLoginSuccess(safeCredentials))
                                     }
                                 }
                             } catch (e: Exception) {
@@ -273,7 +273,7 @@ class LoginSsoFallbackFragment @Inject constructor() : AbstractLoginFragment() {
                                             refreshToken = null
                                     )
 
-                                    viewModel.handle(LoginAction.SsoLoginSuccess(credentials))
+                                    loginViewModel.handle(LoginAction.SsoLoginSuccess(credentials))
                                 }
                             }
                         }

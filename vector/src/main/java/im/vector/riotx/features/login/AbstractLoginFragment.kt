@@ -28,7 +28,7 @@ import im.vector.riotx.core.platform.VectorBaseFragment
  */
 abstract class AbstractLoginFragment : VectorBaseFragment(), OnBackPressed {
 
-    protected val viewModel: LoginViewModel by activityViewModel()
+    protected val loginViewModel: LoginViewModel by activityViewModel()
     protected lateinit var loginSharedActionViewModel: LoginSharedActionViewModel
 
     @CallSuper
@@ -44,6 +44,6 @@ abstract class AbstractLoginFragment : VectorBaseFragment(), OnBackPressed {
         return false
     }
 
-    // Reset any modification of the viewModel by the current fragment
+    // Reset any modification on the loginViewModel by the current fragment
     abstract fun resetViewModel()
 }

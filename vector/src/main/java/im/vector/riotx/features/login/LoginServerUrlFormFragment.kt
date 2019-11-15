@@ -44,6 +44,11 @@ class LoginServerUrlFormFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupUi()
+        setupHomeServerField()
+    }
+
+    private fun setupHomeServerField() {
         // TODO Import code from Riot to clear error on TIL
         loginServerUrlFormHomeServerUrl.textChanges()
                 .subscribe(
@@ -64,39 +69,8 @@ class LoginServerUrlFormFragment @Inject constructor(
         }
     }
 
-    @OnClick(R.id.loginServerUrlFormLearnMore)
-    fun learMore() {
-        // TODO
-        openUrlInExternalBrowser(requireActivity(), "https://example.org")
-    }
-
-    override fun resetViewModel() {
-        viewModel.handle(LoginAction.ResetHomeServerUrl)
-    }
-
-    @SuppressLint("SetTextI18n")
-    @OnClick(R.id.loginServerUrlFormSubmit)
-    fun submit() {
-        // Static check of homeserver url, empty, malformed, etc.
-        var serverUrl = loginServerUrlFormHomeServerUrl.text.toString()
-
-        when {
-            serverUrl.isBlank() -> {
-                loginServerUrlFormHomeServerUrlTil.error = getString(R.string.login_error_invalid_home_server)
-            }
-            else                -> {
-                if (serverUrl.startsWith("http").not()) {
-                    serverUrl = "https://$serverUrl"
-                    loginServerUrlFormHomeServerUrl.setText(serverUrl)
-
-                }
-                viewModel.handle(LoginAction.UpdateHomeServer(serverUrl))
-            }
-        }
-    }
-
-    override fun invalidate() = withState(viewModel) { state ->
-        when (state.serverType) {
+    private fun setupUi() {
+        when (loginViewModel.serverType) {
             ServerType.Modular -> {
                 loginServerUrlFormIcon.isVisible = true
                 loginServerUrlFormTitle.text = getString(R.string.login_connect_to_modular)
@@ -115,7 +89,40 @@ class LoginServerUrlFormFragment @Inject constructor(
             }
             else               -> error("This fragment should not be display in matrix.org mode")
         }
+    }
 
+    @OnClick(R.id.loginServerUrlFormLearnMore)
+    fun learMore() {
+        // TODO
+        openUrlInExternalBrowser(requireActivity(), "https://example.org")
+    }
+
+    override fun resetViewModel() {
+        loginViewModel.handle(LoginAction.ResetHomeServerUrl)
+    }
+
+    @SuppressLint("SetTextI18n")
+    @OnClick(R.id.loginServerUrlFormSubmit)
+    fun submit() {
+        // Static check of homeserver url, empty, malformed, etc.
+        var serverUrl = loginServerUrlFormHomeServerUrl.text.toString()
+
+        when {
+            serverUrl.isBlank() -> {
+                loginServerUrlFormHomeServerUrlTil.error = getString(R.string.login_error_invalid_home_server)
+            }
+            else                -> {
+                if (serverUrl.startsWith("http").not()) {
+                    serverUrl = "https://$serverUrl"
+                    loginServerUrlFormHomeServerUrl.setText(serverUrl)
+
+                }
+                loginViewModel.handle(LoginAction.UpdateHomeServer(serverUrl))
+            }
+        }
+    }
+
+    override fun invalidate() = withState(loginViewModel) { state ->
         when (state.asyncHomeServerLoginFlowRequest) {
             is Fail    -> {
                 // TODO Error text is not correct

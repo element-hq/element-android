@@ -49,6 +49,7 @@ class LoginFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupUi()
         setupLoginButton()
         setupPasswordReveal()
     }
@@ -57,7 +58,32 @@ class LoginFragment @Inject constructor(
         val login = loginField.text?.trim().toString()
         val password = passwordField.text?.trim().toString()
 
-        viewModel.handle(LoginAction.Login(login, password))
+        loginViewModel.handle(LoginAction.Login(login, password))
+    }
+
+    private fun setupUi() {
+        when (loginViewModel.serverType) {
+            ServerType.MatrixOrg -> {
+                loginServerIcon.isVisible = true
+                loginServerIcon.setImageResource(R.drawable.ic_logo_matrix_org)
+                loginTitle.text = getString(R.string.login_connect_to, "matrix.org")
+                loginNotice.text = getString(R.string.login_server_matrix_org_text)
+            }
+            ServerType.Modular   -> {
+                loginServerIcon.isVisible = true
+                loginServerIcon.setImageResource(R.drawable.ic_logo_modular)
+                // TODO
+                loginTitle.text = getString(R.string.login_connect_to, "TODO")
+                // TODO Remove https://
+                loginNotice.text = loginViewModel.getHomeServerUrl()
+            }
+            ServerType.Other     -> {
+                loginServerIcon.isVisible = false
+                loginTitle.text = getString(R.string.login_server_other_title)
+                // TODO Remove https://
+                loginNotice.text = loginViewModel.getHomeServerUrl()
+            }
+        }
     }
 
     private fun setupLoginButton() {
@@ -109,33 +135,10 @@ class LoginFragment @Inject constructor(
     }
 
     override fun resetViewModel() {
-        viewModel.handle(LoginAction.ResetLogin)
+        loginViewModel.handle(LoginAction.ResetLogin)
     }
 
-    override fun invalidate() = withState(viewModel) { state ->
-        when (state.serverType) {
-            ServerType.MatrixOrg -> {
-                loginServerIcon.isVisible = true
-                loginServerIcon.setImageResource(R.drawable.ic_logo_matrix_org)
-                loginTitle.text = getString(R.string.login_connect_to, "matrix.org")
-                loginNotice.text = getString(R.string.login_server_matrix_org_text)
-            }
-            ServerType.Modular   -> {
-                loginServerIcon.isVisible = true
-                loginServerIcon.setImageResource(R.drawable.ic_logo_modular)
-                // TODO
-                loginTitle.text = getString(R.string.login_connect_to, "TODO")
-                // TODO Remove https://
-                loginNotice.text = viewModel.getHomeServerUrl()
-            }
-            ServerType.Other     -> {
-                loginServerIcon.isVisible = false
-                loginTitle.text = getString(R.string.login_server_other_title)
-                // TODO Remove https://
-                loginNotice.text = viewModel.getHomeServerUrl()
-            }
-        }
-
+    override fun invalidate() = withState(loginViewModel) { state ->
         when (state.asyncLoginAction) {
             is Loading -> {
                 // Ensure password is hidden

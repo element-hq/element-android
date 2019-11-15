@@ -16,9 +16,10 @@
 
 package im.vector.riotx.features.login
 
+import android.os.Bundle
+import android.view.View
 import androidx.core.view.isVisible
 import butterknife.OnClick
-import com.airbnb.mvrx.withState
 import im.vector.riotx.R
 import kotlinx.android.synthetic.main.fragment_login_signup_signin_selection.*
 import javax.inject.Inject
@@ -30,8 +31,14 @@ class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractLoginFr
 
     override fun getLayoutResId() = R.layout.fragment_login_signup_signin_selection
 
-    private fun updateViews(serverType: ServerType) {
-        when (serverType) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setupUi()
+    }
+
+    private fun setupUi() {
+        when (loginViewModel.serverType) {
             ServerType.MatrixOrg -> {
                 loginSignupSigninServerIcon.setImageResource(R.drawable.ic_logo_matrix_org)
                 loginSignupSigninServerIcon.isVisible = true
@@ -54,21 +61,17 @@ class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractLoginFr
 
     @OnClick(R.id.loginSignupSigninSignUp)
     fun signUp() {
-        viewModel.handle(LoginAction.UpdateSignMode(SignMode.SignUp))
-        loginSharedActionViewModel.post(LoginNavigation.OnSignModeSelected(SignMode.SignUp))
+        loginViewModel.handle(LoginAction.UpdateSignMode(SignMode.SignUp))
+        loginSharedActionViewModel.post(LoginNavigation.OnSignModeSelected)
     }
 
     @OnClick(R.id.loginSignupSigninSignIn)
     fun signIn() {
-        viewModel.handle(LoginAction.UpdateSignMode(SignMode.SignIn))
-        loginSharedActionViewModel.post(LoginNavigation.OnSignModeSelected(SignMode.SignIn))
+        loginViewModel.handle(LoginAction.UpdateSignMode(SignMode.SignIn))
+        loginSharedActionViewModel.post(LoginNavigation.OnSignModeSelected)
     }
 
     override fun resetViewModel() {
-        viewModel.handle(LoginAction.ResetSignMode)
-    }
-
-    override fun invalidate() = withState(viewModel) {
-        updateViews(it.serverType)
+        loginViewModel.handle(LoginAction.ResetSignMode)
     }
 }

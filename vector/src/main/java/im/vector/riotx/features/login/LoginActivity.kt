@@ -67,7 +67,7 @@ class LoginActivity : VectorBaseActivity() {
                     when (it) {
                         is LoginNavigation.OpenServerSelection     -> addFragmentToBackstack(R.id.loginFragmentContainer, LoginServerSelectionFragment::class.java)
                         is LoginNavigation.OnServerSelectionDone   -> onServerSelectionDone()
-                        is LoginNavigation.OnSignModeSelected      -> onSignModeSelected(it)
+                        is LoginNavigation.OnSignModeSelected      -> onSignModeSelected()
                         is LoginNavigation.OnLoginFlowRetrieved    -> onLoginFlowRetrieved()
                         is LoginNavigation.OnSsoLoginFallbackError -> onSsoLoginFallbackError(it)
                     }
@@ -109,17 +109,16 @@ class LoginActivity : VectorBaseActivity() {
                 .show()
     }
 
-    private fun onServerSelectionDone() = withState(loginViewModel) {
-        when (it.serverType) {
+    private fun onServerSelectionDone() {
+        when (loginViewModel.serverType) {
             ServerType.MatrixOrg -> Unit // In this case, we wait for the login flow
             ServerType.Modular,
             ServerType.Other     -> addFragmentToBackstack(R.id.loginFragmentContainer, LoginServerUrlFormFragment::class.java)
         }
     }
 
-    private fun onSignModeSelected(mode: LoginNavigation.OnSignModeSelected) {
-        // We cannot use the state to get the SignMode, it is not ready...
-        when (mode.signMode) {
+    private fun onSignModeSelected() {
+        when (loginViewModel.signMode) {
             SignMode.Unknown -> error("Sign mode has to be set before calling this method")
             SignMode.SignUp  -> Unit // TODO addFragmentToBackstack(R.id.loginFragmentContainer, SignUpFragment::class.java)
             SignMode.SignIn  -> {

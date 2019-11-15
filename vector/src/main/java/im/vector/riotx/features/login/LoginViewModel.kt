@@ -55,6 +55,12 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
         }
     }
 
+    var serverType: ServerType = ServerType.MatrixOrg
+        private set
+
+    var signMode: SignMode = SignMode.Unknown
+        private set
+
     private var loginConfig: LoginConfig? = null
 
     private var homeServerConnectionConfig: HomeServerConnectionConfig? = null
@@ -93,16 +99,12 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                 }
             }
             LoginAction.ResetHomeServerType -> {
-                setState {
-                    copy(
-                            serverType = ServerType.MatrixOrg
-                    )
-                }
+                serverType = ServerType.MatrixOrg
             }
             LoginAction.ResetSignMode       -> {
+                signMode = SignMode.Unknown
                 setState {
                     copy(
-                            signMode = SignMode.Unknown,
                             asyncHomeServerLoginFlowRequest = Uninitialized
                     )
                 }
@@ -111,19 +113,11 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
     }
 
     private fun handleUpdateSignMode(action: LoginAction.UpdateSignMode) {
-        setState {
-            copy(
-                    signMode = action.signMode
-            )
-        }
+        signMode = action.signMode
     }
 
     private fun handleUpdateServerType(action: LoginAction.UpdateServerType) {
-        setState {
-            copy(
-                    serverType = action.serverType
-            )
-        }
+        serverType = action.serverType
     }
 
     private fun handleInitWith(action: LoginAction.InitWith) {

@@ -38,13 +38,16 @@ class LoginServerSelectionFragment @Inject constructor() : AbstractLoginFragment
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        updateSelectedChoice()
         initTextViews()
     }
 
-    private fun updateSelectedChoice(serverType: ServerType) {
-        loginServerChoiceMatrixOrg.isChecked = serverType == ServerType.MatrixOrg
-        loginServerChoiceModular.isChecked = serverType == ServerType.Modular
-        loginServerChoiceOther.isChecked = serverType == ServerType.Other
+    private fun updateSelectedChoice() {
+        loginViewModel.serverType.let {
+            loginServerChoiceMatrixOrg.isChecked = it == ServerType.MatrixOrg
+            loginServerChoiceModular.isChecked = it == ServerType.Modular
+            loginServerChoiceOther.isChecked = it == ServerType.Other
+        }
     }
 
     private fun initTextViews() {
@@ -56,7 +59,6 @@ class LoginServerSelectionFragment @Inject constructor() : AbstractLoginFragment
                 openUrlInExternalBrowser(requireActivity(), "https://example.org")
             }
         }
-
     }
 
     @OnClick(R.id.loginServerChoiceMatrixOrg)
@@ -65,7 +67,8 @@ class LoginServerSelectionFragment @Inject constructor() : AbstractLoginFragment
             // Consider this is a submit
             submit()
         } else {
-            viewModel.handle(LoginAction.UpdateServerType(ServerType.MatrixOrg))
+            loginViewModel.handle(LoginAction.UpdateServerType(ServerType.MatrixOrg))
+            updateSelectedChoice()
         }
     }
 
@@ -75,7 +78,8 @@ class LoginServerSelectionFragment @Inject constructor() : AbstractLoginFragment
             // Consider this is a submit
             submit()
         } else {
-            viewModel.handle(LoginAction.UpdateServerType(ServerType.Modular))
+            loginViewModel.handle(LoginAction.UpdateServerType(ServerType.Modular))
+            updateSelectedChoice()
         }
     }
 
@@ -85,33 +89,32 @@ class LoginServerSelectionFragment @Inject constructor() : AbstractLoginFragment
             // Consider this is a submit
             submit()
         } else {
-            viewModel.handle(LoginAction.UpdateServerType(ServerType.Other))
+            loginViewModel.handle(LoginAction.UpdateServerType(ServerType.Other))
+            updateSelectedChoice()
         }
     }
 
     @OnClick(R.id.loginServerSubmit)
-    fun submit() = withState(viewModel) {
-        if (it.serverType == ServerType.MatrixOrg) {
+    fun submit() {
+        if (loginViewModel.serverType == ServerType.MatrixOrg) {
             // Request login flow here
-            viewModel.handle(LoginAction.UpdateHomeServer(getString(R.string.matrix_org_server_url)))
+            loginViewModel.handle(LoginAction.UpdateHomeServer(getString(R.string.matrix_org_server_url)))
         } else {
             loginSharedActionViewModel.post(LoginNavigation.OnServerSelectionDone)
         }
     }
 
     override fun resetViewModel() {
-        viewModel.handle(LoginAction.ResetHomeServerType)
+        loginViewModel.handle(LoginAction.ResetHomeServerType)
     }
 
-    override fun invalidate() = withState(viewModel) {
-        updateSelectedChoice(it.serverType)
-
+    override fun invalidate() = withState(loginViewModel) {
         when (it.asyncHomeServerLoginFlowRequest) {
             is Fail    -> {
                 // TODO Display error in a dialog?
             }
             is Success -> {
-                // The home server url is valid
+                // LoginFlow for matrix.org has been retrieved
                 loginSharedActionViewModel.post(LoginNavigation.OnLoginFlowRetrieved)
             }
         }

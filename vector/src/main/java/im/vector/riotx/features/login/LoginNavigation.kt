@@ -23,7 +23,7 @@ sealed class LoginNavigation : VectorSharedAction {
     object OpenServerSelection : LoginNavigation()
     object OnServerSelectionDone : LoginNavigation()
     object OnLoginFlowRetrieved : LoginNavigation()
-    data class OnSignModeSelected(val signMode: SignMode) : LoginNavigation()
+    object OnSignModeSelected : LoginNavigation()
     //object OpenSsoLoginFallback : LoginNavigation()
     data class OnSsoLoginFallbackError(val errorCode: Int, val description: String, val failingUrl: String) : LoginNavigation()
 }
