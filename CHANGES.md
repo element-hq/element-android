@@ -5,7 +5,7 @@ Features ✨:
  -
 
 Improvements 🙌:
- -
+ - Send mention Pills from composer
 
 Other changes:
  - Fix a small grammatical error when an empty room list is shown.
