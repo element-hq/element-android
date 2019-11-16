@@ -17,7 +17,6 @@
 package im.vector.matrix.android.internal.session.room.send
 
 import android.media.MediaMetadataRetriever
-import android.text.SpannableString
 import androidx.exifinterface.media.ExifInterface
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.R
@@ -29,7 +28,7 @@ import im.vector.matrix.android.api.session.room.model.relation.ReactionContent
 import im.vector.matrix.android.api.session.room.model.relation.ReactionInfo
 import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultContent
 import im.vector.matrix.android.api.session.room.model.relation.ReplyToContent
-import im.vector.matrix.android.api.session.room.send.UserMentionSpan
+import im.vector.matrix.android.api.session.room.send.TextPillsUtils
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.matrix.android.internal.database.helper.addSendingEvent
@@ -70,7 +69,7 @@ internal class LocalEchoEventFactory @Inject constructor(@UserId private val use
 
     private fun createTextContent(text: CharSequence, autoMarkdown: Boolean): TextContent {
         if (autoMarkdown) {
-            val source = transformPills(text, "[%2\$s](https://matrix.to/#/%1\$s)")
+            val source = TextPillsUtils.processSpecialSpansToMarkdown(text)
                     ?: text.toString()
             val document = parser.parse(source)
             val htmlText = renderer.render(document)
@@ -80,36 +79,12 @@ internal class LocalEchoEventFactory @Inject constructor(@UserId private val use
             }
         } else {
             // Try to detect pills
-            transformPills(text, "<a href=\"https://matrix.to/#/%1\$s\">%2\$s</a>")?.let {
+            TextPillsUtils.processSpecialSpansToHtml(text)?.let {
                 return TextContent(text.toString(), it)
             }
         }
 
         return TextContent(text.toString())
-    }
-
-    private fun transformPills(text: CharSequence,
-                               template: String)
-            : String? {
-        val bufSB = StringBuffer()
-        var currIndex = 0
-        SpannableString.valueOf(text).let {
-            val pills = it.getSpans(0, text.length, UserMentionSpan::class.java)
-            if (pills.isNotEmpty()) {
-                pills.forEachIndexed { _, urlSpan ->
-                    val start = it.getSpanStart(urlSpan)
-                    val end = it.getSpanEnd(urlSpan)
-                    // We want to replace with the pill with a html link
-                    bufSB.append(text, currIndex, start)
-                    bufSB.append(String.format(template, urlSpan.userId, urlSpan.displayName))
-                    currIndex = end
-                }
-                bufSB.append(text, currIndex, text.length)
-                return bufSB.toString()
-            } else {
-                return null
-            }
-        }
     }
 
     private fun isFormattedTextPertinent(text: String, htmlText: String?) =

@@ -29,7 +29,6 @@ import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.chip.ChipDrawable
 import im.vector.matrix.android.api.session.room.send.UserMentionSpan
-import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotx.R
 import im.vector.riotx.core.glide.GlideRequests
 import im.vector.riotx.features.home.AvatarRenderer
@@ -44,11 +43,8 @@ class PillImageSpan(private val glideRequests: GlideRequests,
                     private val avatarRenderer: AvatarRenderer,
                     private val context: Context,
                     override val userId: String,
-                    private val user: User?) : ReplacementSpan(), UserMentionSpan {
-
-     override val displayName by lazy {
-        if (user?.displayName.isNullOrEmpty()) userId else user?.displayName!!
-    }
+                    override val displayName: String,
+                    private val avatarUrl: String?) : ReplacementSpan(), UserMentionSpan {
 
     private val pillDrawable = createChipDrawable()
     private val target = PillImageSpanTarget(this)
@@ -57,7 +53,7 @@ class PillImageSpan(private val glideRequests: GlideRequests,
     @UiThread
     fun bind(textView: TextView) {
         tv = WeakReference(textView)
-        avatarRenderer.render(context, glideRequests, user?.avatarUrl, userId, displayName, target)
+        avatarRenderer.render(context, glideRequests, avatarUrl, userId, displayName, target)
     }
 
     // ReplacementSpan *****************************************************************************

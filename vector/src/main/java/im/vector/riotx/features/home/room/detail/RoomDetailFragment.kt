@@ -16,7 +16,6 @@
 
 package im.vector.riotx.features.home.room.detail
 
-import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.DialogInterface
@@ -61,6 +60,7 @@ import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.LocalEcho
 import im.vector.matrix.android.api.session.room.model.Membership
+import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.Timeline
@@ -406,7 +406,8 @@ class RoomDetailFragment @Inject constructor(
         composerLayout.composerRelatedMessageActionIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), iconRes))
         composerLayout.sendButton.setContentDescription(getString(descriptionRes))
 
-        avatarRenderer.render(event.senderAvatar, event.root.senderId ?: "", event.getDisambiguatedDisplayName(), composerLayout.composerRelatedMessageAvatar)
+        avatarRenderer.render(event.senderAvatar, event.root.senderId
+                ?: "", event.getDisambiguatedDisplayName(), composerLayout.composerRelatedMessageAvatar)
         composerLayout.expand {
             // need to do it here also when not using quick reply
             focusComposerAndShowKeyboard()
@@ -419,7 +420,8 @@ class RoomDetailFragment @Inject constructor(
         if (text != composerLayout.composerEditText.text.toString()) {
             // Ignore update to avoid saving a draft
             composerLayout.composerEditText.setText(text)
-            composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text?.length ?: 0)
+            composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text?.length
+                    ?: 0)
         }
     }
 
@@ -589,7 +591,8 @@ class RoomDetailFragment @Inject constructor(
 
                         // Add the span
                         val user = session.getUser(item.userId)
-                        val span = PillImageSpan(glideRequests, avatarRenderer, requireContext(), item.userId, user)
+                        val span = PillImageSpan(glideRequests, avatarRenderer, requireContext(), item.userId, user?.displayName
+                                ?: item.userId, user?.avatarUrl)
                         span.bind(composerLayout.composerEditText)
 
                         editable.setSpan(span, startIndex, startIndex + displayName.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -976,10 +979,10 @@ class RoomDetailFragment @Inject constructor(
         vectorBaseActivity.notImplemented("Click on user avatar")
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onMemberNameClicked(informationData: MessageInformationData) {
-        session.getUser(informationData.senderId)?.let {
-            insertUserDisplayNameInTextEditor(it)
+        val userId = informationData.senderId
+        roomDetailViewModel.getMember(userId)?.let {
+            insertUserDisplayNameInTextEditor(userId, it)
         }
     }
 
@@ -1169,9 +1172,9 @@ class RoomDetailFragment @Inject constructor(
      * @param text the text to insert.
      */
 // TODO legacy, refactor
-    private fun insertUserDisplayNameInTextEditor(member: User) {
+    private fun insertUserDisplayNameInTextEditor(userId: String, memberInfo: RoomMember) {
         // TODO move logic outside of fragment
-        val text = member.displayName
+        val text = memberInfo.displayName
         if (null != text) {
 //            var vibrate = false
 
@@ -1195,7 +1198,8 @@ class RoomDetailFragment @Inject constructor(
                     SpannableStringBuilder().apply {
                         append(sanitizeDisplayName)
                         setSpan(
-                                PillImageSpan(glideRequests, avatarRenderer, requireContext(), member.userId, member),
+                                PillImageSpan(glideRequests, avatarRenderer, requireContext(), userId, memberInfo.displayName
+                                        ?: userId, memberInfo.avatarUrl),
                                 0,
                                 sanitizeDisplayName.length,
                                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
@@ -1208,7 +1212,8 @@ class RoomDetailFragment @Inject constructor(
                     SpannableStringBuilder().apply {
                         append(sanitizeDisplayName)
                         setSpan(
-                                PillImageSpan(glideRequests, avatarRenderer, requireContext(), member.userId, member),
+                                PillImageSpan(glideRequests, avatarRenderer, requireContext(), userId, memberInfo.displayName
+                                        ?: userId, memberInfo.avatarUrl),
                                 0,
                                 sanitizeDisplayName.length,
                                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE

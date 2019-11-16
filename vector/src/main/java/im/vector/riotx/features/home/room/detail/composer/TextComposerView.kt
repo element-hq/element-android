@@ -88,7 +88,10 @@ class TextComposerView @JvmOverloads constructor(context: Context, attrs: Attrib
 
         sendButton.setOnClickListener {
             val textMessage = text?.toSpannable()
-            callback?.onSendMessage(textMessage ?: "")
+            callback?.onSendMessage(
+                    textMessage
+                            ?: ""
+            )
         }
 
         attachmentButton.setOnClickListener {

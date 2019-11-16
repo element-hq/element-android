@@ -42,6 +42,7 @@ interface SendService {
      * Method to send a text message with a formatted body.
      * @param text the text message to send
      * @param formattedText The formatted body using MessageType#FORMAT_MATRIX_HTML
+     * @param msgType the message type: MessageType.MSGTYPE_TEXT (default) or MessageType.MSGTYPE_EMOTE
      * @return a [Cancelable]
      */
     fun sendFormattedTextMessage(text: String, formattedText: String, msgType: String = MessageType.MSGTYPE_TEXT): Cancelable
