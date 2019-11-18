@@ -9,12 +9,9 @@
         android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            style="@style/LoginContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="36dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="36dp"
-            android:layout_marginBottom="32dp">
+            android:layout_height="match_parent">
 
             <ImageView
                 android:id="@+id/loginServerLogo"
