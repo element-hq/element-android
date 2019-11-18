@@ -122,7 +122,7 @@
          using colorControlHighlight as an overlay for focused and pressed states.
     -->
     <style name="VectorButtonStyle" parent="Widget.MaterialComponents.Button">
-        <item name="backgroundTint">?colorAccent</item>
+        <item name="backgroundTint">@color/button_background_tint_selector</item>
         <item name="android:paddingLeft">16dp</item>
         <item name="android:paddingRight">16dp</item>
         <item name="android:minWidth">94dp</item>
@@ -154,7 +154,7 @@
         <item name="android:background">@null</item>
         <!--item name="android:textColor">?colorAccent</item-->
         <item name="colorControlHighlight">?colorAccent</item>
-        <item name="strokeColor">?colorAccent</item>
+        <item name="strokeColor">@color/button_background_tint_selector</item>
         <item name="strokeWidth">1dp</item>
     </style>
 

@@ -134,6 +134,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_gravity="end"
                     android:text="@string/auth_login"
+                    tools:enabled="false"
                     tools:ignore="RelativeOverlap" />
 
             </RelativeLayout>
