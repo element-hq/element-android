@@ -93,5 +93,6 @@
     <string name="login_signup_username_hint">Username</string>
     <string name="login_signup_password_hint">Password</string>
     <string name="login_signup_submit">Next</string>
+    <string name="login_signup_error_user_in_use">That username is taken</string>
 
 </resources>

@@ -54,6 +54,9 @@ class ErrorFormatter @Inject constructor(private val stringProvider: StringProvi
                             && throwable.error.message == "Invalid password" -> {
                         stringProvider.getString(R.string.auth_invalid_login_param)
                     }
+                    throwable.error.code == MatrixError.USER_IN_USE          -> {
+                        stringProvider.getString(R.string.login_signup_error_user_in_use)
+                    }
                     else                                                     -> {
                         throwable.error.message.takeIf { it.isNotEmpty() }
                                 ?: throwable.error.code.takeIf { it.isNotEmpty() }

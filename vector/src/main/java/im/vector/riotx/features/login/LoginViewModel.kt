@@ -74,6 +74,24 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
     private var homeServerConnectionConfig: HomeServerConnectionConfig? = null
     private var currentTask: Cancelable? = null
 
+    private val registrationCallback = object : MatrixCallback<RegistrationResult> {
+        override fun onSuccess(data: RegistrationResult) {
+            when (data) {
+                is RegistrationResult.Success      -> onSessionCreated(data.session)
+                is RegistrationResult.FlowResponse -> onFlowResponse(data.flowResult)
+            }
+        }
+
+        override fun onFailure(failure: Throwable) {
+            // TODO Handled JobCancellationException
+            setState {
+                copy(
+                        asyncRegistration = Fail(failure)
+                )
+            }
+        }
+    }
+
     override fun handle(action: LoginAction) {
         when (action) {
             is LoginAction.UpdateServerType -> handleUpdateServerType(action)
@@ -83,8 +101,25 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
             is LoginAction.Login            -> handleLogin(action)
             is LoginAction.WebLoginSuccess  -> handleWebLoginSuccess(action)
             is LoginAction.ResetPassword    -> handleResetPassword(action)
+            is LoginAction.RegisterAction   -> handleRegisterAction(action)
             is LoginAction.ResetAction      -> handleResetAction(action)
         }
+    }
+
+    private fun handleRegisterAction(action: LoginAction.RegisterAction) {
+        when (action) {
+            is LoginAction.RegisterWith -> handleRegisterWith(action)
+        }
+    }
+
+    private fun handleRegisterWith(action: LoginAction.RegisterWith) {
+        setState {
+            copy(
+                    asyncRegistration = Loading()
+            )
+        }
+
+        currentTask = registrationWizard?.createAccount(action.username, action.password, null /* TODO InitialDisplayName */, registrationCallback)
     }
 
     private fun handleResetAction(action: LoginAction.ResetAction) {

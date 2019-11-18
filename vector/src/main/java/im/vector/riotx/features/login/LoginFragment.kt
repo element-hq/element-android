@@ -177,5 +177,18 @@ class LoginFragment @Inject constructor(
             // Success is handled by the LoginActivity
             is Success -> Unit
         }
+
+        when (state.asyncRegistration) {
+            is Loading -> {
+                // Ensure password is hidden
+                passwordShown = false
+                renderPasswordField()
+            }
+            is Fail    -> {
+                loginFieldTil.error = errorFormatter.toHumanReadable(state.asyncRegistration.error)
+            }
+            // Success is handled by the LoginActivity
+            is Success -> Unit
+        }
     }
 }
