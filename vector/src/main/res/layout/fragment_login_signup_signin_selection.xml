@@ -68,7 +68,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/loginSignupSigninSignIn"
-                style="@style/Style.Vector.Login.Button.Wired"
+                style="@style/Style.Vector.Login.Button.Outlined"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"

@@ -7,7 +7,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/buttonStateButtonFlat"
-        style="@style/VectorButtonStyleFlat"
+        style="@style/VectorButtonStyleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -44,7 +44,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/buttonStateRetry"
-        style="@style/VectorButtonStyleFlat"
+        style="@style/VectorButtonStyleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
