@@ -30,16 +30,15 @@ import kotlinx.android.synthetic.main.fragment_login_generic_text_input_form.*
 import javax.inject.Inject
 
 enum class TextInputFormFragmentMode {
-    SetEmailMandatory,
-    SetEmailOptional,
-    SetMsisdnMandatory,
-    SetMsisdnOptional,
+    SetEmail,
+    SetMsisdn,
     ConfirmMsisdn
 }
 
 @Parcelize
 data class LoginGenericTextInputFormFragmentArgument(
-        val mode: TextInputFormFragmentMode
+        val mode: TextInputFormFragmentMode,
+        val mandatory: Boolean
 ) : Parcelable
 
 /**
@@ -60,39 +59,23 @@ class LoginGenericTextInputFormFragment @Inject constructor() : AbstractLoginFra
 
     private fun setupUi() {
         when (params.mode) {
-            TextInputFormFragmentMode.SetEmailMandatory  -> {
+            TextInputFormFragmentMode.SetEmail      -> {
                 loginGenericTextInputFormTitle.text = getString(R.string.login_set_email_title)
                 loginGenericTextInputFormNotice.text = getString(R.string.login_set_email_notice)
-                loginGenericTextInputFormTil.hint = getString(R.string.login_set_email_mandatory_hint)
+                loginGenericTextInputFormTil.hint = getString(if (params.mandatory) R.string.login_set_email_mandatory_hint else R.string.login_set_email_optional_hint)
                 loginGenericTextInputFormTextInput.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
                 loginGenericTextInputFormOtherButton.isVisible = false
                 loginGenericTextInputFormSubmit.text = getString(R.string.login_set_email_submit)
             }
-            TextInputFormFragmentMode.SetEmailOptional   -> {
-                loginGenericTextInputFormTitle.text = getString(R.string.login_set_email_title)
-                loginGenericTextInputFormNotice.text = getString(R.string.login_set_email_notice)
-                loginGenericTextInputFormTil.hint = getString(R.string.login_set_email_optional_hint)
-                loginGenericTextInputFormTextInput.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
-                loginGenericTextInputFormOtherButton.isVisible = false
-                loginGenericTextInputFormSubmit.text = getString(R.string.login_set_email_submit)
-            }
-            TextInputFormFragmentMode.SetMsisdnMandatory -> {
+            TextInputFormFragmentMode.SetMsisdn     -> {
                 loginGenericTextInputFormTitle.text = getString(R.string.login_set_msisdn_title)
                 loginGenericTextInputFormNotice.text = getString(R.string.login_set_msisdn_notice)
-                loginGenericTextInputFormTil.hint = getString(R.string.login_set_msisdn_mandatory_hint)
+                loginGenericTextInputFormTil.hint = getString(if (params.mandatory) R.string.login_set_msisdn_mandatory_hint else R.string.login_set_msisdn_optional_hint)
                 loginGenericTextInputFormTextInput.inputType = InputType.TYPE_CLASS_PHONE
                 loginGenericTextInputFormOtherButton.isVisible = false
                 loginGenericTextInputFormSubmit.text = getString(R.string.login_set_msisdn_submit)
             }
-            TextInputFormFragmentMode.SetMsisdnOptional  -> {
-                loginGenericTextInputFormTitle.text = getString(R.string.login_set_msisdn_title)
-                loginGenericTextInputFormNotice.text = getString(R.string.login_set_msisdn_notice)
-                loginGenericTextInputFormTil.hint = getString(R.string.login_set_msisdn_optional_hint)
-                loginGenericTextInputFormTextInput.inputType = InputType.TYPE_CLASS_PHONE
-                loginGenericTextInputFormOtherButton.isVisible = false
-                loginGenericTextInputFormSubmit.text = getString(R.string.login_set_msisdn_submit)
-            }
-            TextInputFormFragmentMode.ConfirmMsisdn      -> {
+            TextInputFormFragmentMode.ConfirmMsisdn -> {
                 loginGenericTextInputFormTitle.text = getString(R.string.login_msisdn_confirm_title)
                 loginGenericTextInputFormNotice.text = getString(R.string.login_msisdn_confirm_notice)
                 loginGenericTextInputFormTil.hint = getString(R.string.login_msisdn_confirm_hint)
@@ -115,22 +98,16 @@ class LoginGenericTextInputFormFragment @Inject constructor() : AbstractLoginFra
     }
 
     private fun setupSubmitButton() {
-        when (params.mode) {
-            TextInputFormFragmentMode.SetEmailMandatory,
-            TextInputFormFragmentMode.SetMsisdnMandatory,
-            TextInputFormFragmentMode.ConfirmMsisdn     -> {
-                loginGenericTextInputFormSubmit.isEnabled = false
-                loginGenericTextInputFormTextInput.textChanges()
-                        .subscribe {
-                            // TODO Better check for email format, etc?
-                            loginGenericTextInputFormSubmit.isEnabled = it.isNotBlank()
-                        }
-                        .disposeOnDestroyView()
-            }
-            TextInputFormFragmentMode.SetEmailOptional,
-            TextInputFormFragmentMode.SetMsisdnOptional -> {
-                loginGenericTextInputFormSubmit.isEnabled = true
-            }
+        if (params.mandatory) {
+            loginGenericTextInputFormSubmit.isEnabled = false
+            loginGenericTextInputFormTextInput.textChanges()
+                    .subscribe {
+                        // TODO Better check for email format, etc?
+                        loginGenericTextInputFormSubmit.isEnabled = it.isNotBlank()
+                    }
+                    .disposeOnDestroyView()
+        } else {
+            loginGenericTextInputFormSubmit.isEnabled = true
         }
     }
 

@@ -23,6 +23,8 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
+import im.vector.matrix.android.api.auth.registration.FlowResult
+import im.vector.matrix.android.api.auth.registration.Stage
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.addFragment
@@ -85,6 +87,34 @@ class LoginActivity : VectorBaseActivity() {
                     updateWithState(it)
                 }
                 .disposeOnDestroy()
+
+        loginViewModel.viewEvents
+                .observe()
+                .subscribe {
+                    handleLoginViewEvents(it)
+                }
+                .disposeOnDestroy()
+    }
+
+    private fun handleLoginViewEvents(loginViewEvents: LoginViewEvents) {
+        when (loginViewEvents) {
+            is LoginViewEvents.RegistrationFlowResult -> {
+                // Check that all flows are supported by the application
+                if (loginViewEvents.flowResult.missingStages.any { it is Stage.Other }) {
+                    // Display a popup to propose use web fallback
+                    // TODO
+                } else {
+                    // Go on with registration flow
+                    // loginSharedActionViewModel.post(LoginNavigation.OnSignModeSelected)
+                    if (loginViewModel.isPasswordSent) {
+                        handleRegistrationNavigation(loginViewEvents.flowResult)
+                    } else {
+                        // First ask for login and password
+                        addFragmentToBackstack(R.id.loginFragmentContainer, LoginFragment::class.java)
+                    }
+                }
+            }
+        }
     }
 
     private fun onLoginFlowRetrieved() {
@@ -151,6 +181,38 @@ class LoginActivity : VectorBaseActivity() {
                 .setNegativeButton(R.string.no, null)
                 .show()
     }
+
+    private fun handleRegistrationNavigation(flowResult: FlowResult) {
+        // Complete all mandatory stage first
+        val mandatoryStages = flowResult.missingStages.filter { it.mandatory }
+
+        if (mandatoryStages.isEmpty()) {
+            // Consider optional stages
+            val optionalStages = flowResult.missingStages.filter { !it.mandatory }
+            if (optionalStages.isEmpty()) {
+                // Should not happen...
+            } else {
+                doStage(optionalStages.first())
+            }
+        } else {
+            doStage(mandatoryStages.first())
+        }
+    }
+
+    private fun doStage(stage: Stage) {
+        when (stage) {
+            is Stage.ReCaptcha -> addFragmentToBackstack(R.id.loginFragmentContainer, LoginCaptchaFragment::class.java)
+            is Stage.Email     -> addFragmentToBackstack(R.id.loginFragmentContainer,
+                    LoginGenericTextInputFormFragment::class.java,
+                    LoginGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.SetEmail, stage.mandatory))
+            is Stage.Msisdn
+                               -> addFragmentToBackstack(R.id.loginFragmentContainer, LoginGenericTextInputFormFragment::class.java,
+                    LoginGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.SetMsisdn, stage.mandatory))
+            is Stage.Terms
+                               -> TODO()
+        }
+    }
+
 
     override fun onResume() {
         super.onResume()

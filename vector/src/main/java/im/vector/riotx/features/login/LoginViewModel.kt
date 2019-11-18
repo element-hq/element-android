@@ -34,6 +34,8 @@ import im.vector.matrix.android.internal.auth.data.LoginFlowResponse
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.extensions.configureAndStart
 import im.vector.riotx.core.platform.VectorViewModel
+import im.vector.riotx.core.utils.DataSource
+import im.vector.riotx.core.utils.PublishDataSource
 import im.vector.riotx.features.notifications.PushRuleTriggerListener
 import im.vector.riotx.features.session.SessionListener
 import timber.log.Timber
@@ -60,6 +62,9 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
         }
     }
 
+    var isPasswordSent: Boolean = false
+        private set
+
     private var registrationWizard: RegistrationWizard? = null
 
     var serverType: ServerType = ServerType.MatrixOrg
@@ -74,23 +79,8 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
     private var homeServerConnectionConfig: HomeServerConnectionConfig? = null
     private var currentTask: Cancelable? = null
 
-    private val registrationCallback = object : MatrixCallback<RegistrationResult> {
-        override fun onSuccess(data: RegistrationResult) {
-            when (data) {
-                is RegistrationResult.Success      -> onSessionCreated(data.session)
-                is RegistrationResult.FlowResponse -> onFlowResponse(data.flowResult)
-            }
-        }
-
-        override fun onFailure(failure: Throwable) {
-            // TODO Handled JobCancellationException
-            setState {
-                copy(
-                        asyncRegistration = Fail(failure)
-                )
-            }
-        }
-    }
+    private val _viewEvents = PublishDataSource<LoginViewEvents>()
+    val viewEvents: DataSource<LoginViewEvents> = _viewEvents
 
     override fun handle(action: LoginAction) {
         when (action) {
@@ -109,6 +99,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
     private fun handleRegisterAction(action: LoginAction.RegisterAction) {
         when (action) {
             is LoginAction.RegisterWith -> handleRegisterWith(action)
+            // TODO Add other actions here
         }
     }
 
@@ -119,7 +110,25 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
             )
         }
 
-        currentTask = registrationWizard?.createAccount(action.username, action.password, null /* TODO InitialDisplayName */, registrationCallback)
+        currentTask = registrationWizard?.createAccount(action.username, action.password, null /* TODO InitialDisplayName */, object : MatrixCallback<RegistrationResult> {
+            override fun onSuccess(data: RegistrationResult) {
+                isPasswordSent = true
+
+                when (data) {
+                    is RegistrationResult.Success      -> onSessionCreated(data.session)
+                    is RegistrationResult.FlowResponse -> onFlowResponse(data.flowResult)
+                }
+            }
+
+            override fun onFailure(failure: Throwable) {
+                // TODO Handled JobCancellationException
+                setState {
+                    copy(
+                            asyncRegistration = Fail(failure)
+                    )
+                }
+            }
+        })
     }
 
     private fun handleResetAction(action: LoginAction.ResetAction) {
@@ -129,6 +138,8 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
 
         when (action) {
             LoginAction.ResetLogin          -> {
+                isPasswordSent = false
+
                 setState {
                     copy(
                             asyncLoginAction = Uninitialized,
@@ -292,9 +303,12 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
     }
 
     private fun onFlowResponse(flowResult: FlowResult) {
+        // Notify the user
+        _viewEvents.post(LoginViewEvents.RegistrationFlowResult(flowResult))
+
         setState {
             copy(
-                    asyncRegistration = Success(RegistrationResult.FlowResponse(flowResult))
+                    asyncRegistration = Uninitialized
             )
         }
     }
