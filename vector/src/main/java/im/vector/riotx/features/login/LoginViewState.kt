@@ -17,11 +17,13 @@
 package im.vector.riotx.features.login
 
 import com.airbnb.mvrx.*
+import im.vector.matrix.android.api.auth.registration.RegistrationResult
 
 data class LoginViewState(
         val asyncLoginAction: Async<Unit> = Uninitialized,
         val asyncHomeServerLoginFlowRequest: Async<LoginMode> = Uninitialized,
-        val asyncResetPassword: Async<Unit> = Uninitialized
+        val asyncResetPassword: Async<Unit> = Uninitialized,
+        val asyncRegistration: Async<RegistrationResult> = Uninitialized
 ) : MvRxState {
 
     fun isLoading(): Boolean {
@@ -29,10 +31,10 @@ data class LoginViewState(
         return asyncLoginAction is Loading
                 || asyncHomeServerLoginFlowRequest is Loading
                 || asyncResetPassword is Loading
+                || asyncRegistration is Loading
     }
 
     fun isUserLogged(): Boolean {
-        // TODO Add other async here
         return asyncLoginAction is Success
     }
 }

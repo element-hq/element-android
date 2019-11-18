@@ -26,14 +26,14 @@ import im.vector.matrix.android.internal.di.Unauthenticated
 import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import okhttp3.OkHttpClient
+import javax.inject.Inject
 
-// TODO Add @Inject
-internal class DefaultRegistrationService(@Unauthenticated
-                                          private val okHttpClient: Lazy<OkHttpClient>,
-                                          private val retrofitFactory: RetrofitFactory,
-                                          private val coroutineDispatchers: MatrixCoroutineDispatchers,
-                                          private val sessionParamsStore: SessionParamsStore,
-                                          private val sessionManager: SessionManager) : RegistrationService {
+internal class DefaultRegistrationService @Inject constructor(@Unauthenticated
+                                                              private val okHttpClient: Lazy<OkHttpClient>,
+                                                              private val retrofitFactory: RetrofitFactory,
+                                                              private val coroutineDispatchers: MatrixCoroutineDispatchers,
+                                                              private val sessionParamsStore: SessionParamsStore,
+                                                              private val sessionManager: SessionManager) : RegistrationService {
 
     override fun getOrCreateRegistrationWizard(homeServerConnectionConfig: HomeServerConnectionConfig): RegistrationWizard {
         // TODO Persist the wizard?

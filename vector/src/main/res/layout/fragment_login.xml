@@ -58,7 +58,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                android:hint="@string/auth_user_name_placeholder"
+                android:hint="@string/login_signup_username_hint"
                 app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -81,7 +81,7 @@
                     style="@style/VectorTextInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/auth_password_placeholder"
+                    android:hint="@string/login_signup_password_hint"
                     app:errorEnabled="true"
                     app:errorIconDrawable="@null">
 

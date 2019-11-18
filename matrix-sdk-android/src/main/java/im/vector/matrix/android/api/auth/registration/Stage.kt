@@ -16,32 +16,29 @@
 
 package im.vector.matrix.android.api.auth.registration
 
-import im.vector.matrix.android.api.util.JsonDict
-
 sealed class Stage(open val mandatory: Boolean) {
-
-    // m.login.password
-    data class Password(override val mandatory: Boolean, val publicKey: String) : Stage(mandatory)
 
     // m.login.recaptcha
     data class ReCaptcha(override val mandatory: Boolean, val publicKey: String) : Stage(mandatory)
 
     // m.login.oauth2
     // m.login.email.identity
-    data class Email(override val mandatory: Boolean, val policies: TermPolicies) : Stage(mandatory)
+    data class Email(override val mandatory: Boolean) : Stage(mandatory)
 
     // m.login.msisdn
-    data class Msisdn(override val mandatory: Boolean, val policies: TermPolicies) : Stage(mandatory)
+    data class Msisdn(override val mandatory: Boolean) : Stage(mandatory)
+
     // m.login.token
+
     // m.login.dummy
+    object Dummy : Stage(false)
 
     // Undocumented yet: m.login.terms
     data class Terms(override val mandatory: Boolean, val policies: TermPolicies) : Stage(mandatory)
 
-    // TODO SSO
-
     // For unknown stages
-    data class Other(override val mandatory: Boolean, val type: String, val params: JsonDict?) : Stage(mandatory)
+    data class Other(override val mandatory: Boolean, val type: String, val params: Map<*, *>?) : Stage(mandatory)
 }
 
+//TODO
 class TermPolicies

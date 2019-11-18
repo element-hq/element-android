@@ -36,8 +36,8 @@ internal interface AuthAPI {
      * Register to the homeserver
      * Ref: https://matrix.org/docs/spec/client_server/latest#account-registration-and-management
      */
-    @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "register")
-    fun register(registrationParams: RegistrationParams): Call<Credentials>
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "register")
+    fun register(@Body registrationParams: RegistrationParams): Call<Credentials>
 
     /**
      * Get the supported login flow

@@ -28,6 +28,15 @@ sealed class LoginAction : VectorViewModelAction {
     data class InitWith(val loginConfig: LoginConfig) : LoginAction()
     data class ResetPassword(val email: String, val newPassword: String) : LoginAction()
 
+    // Register actions
+    open class RegisterAction : LoginAction()
+
+    data class RegisterWith(val username: String, val password: String) : RegisterAction()
+    data class AddEmail(val email: String) : RegisterAction()
+    data class AddMsisdn(val msisdn: String) : RegisterAction()
+    data class ConfirmMsisdn(val code: String) : RegisterAction()
+    data class PerformCaptcha(val captcha: String /* TODO Add other params */) : RegisterAction()
+
     // Reset actions
     open class ResetAction : LoginAction()
 

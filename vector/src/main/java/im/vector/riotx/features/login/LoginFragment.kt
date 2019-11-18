@@ -35,8 +35,11 @@ import kotlinx.android.synthetic.main.fragment_login.*
 import javax.inject.Inject
 
 /**
- * In this screen, the user is asked for login and password to sign in to a homeserver.
- * He also can reset his password
+ * In this screen, in signin mode:
+ * - the user is asked for login and password to sign in to a homeserver.
+ * - He also can reset his password
+ * In signup mode:
+ * - the user is asked for login and password
  */
 class LoginFragment @Inject constructor(
         private val errorFormatter: ErrorFormatter
@@ -53,37 +56,60 @@ class LoginFragment @Inject constructor(
         setupUi()
         setupSubmitButton()
         setupPasswordReveal()
+        setupButtons()
     }
 
-    private fun authenticate() {
+    @OnClick(R.id.loginSubmit)
+    fun submit() {
         val login = loginField.text?.trim().toString()
         val password = passwordField.text?.trim().toString()
 
-        loginViewModel.handle(LoginAction.Login(login, password))
+        when (loginViewModel.signMode) {
+            SignMode.Unknown -> error("developer error")
+            SignMode.SignUp  -> loginViewModel.handle(LoginAction.RegisterWith(login, password))
+            SignMode.SignIn  -> loginViewModel.handle(LoginAction.Login(login, password))
+        }
     }
 
     private fun setupUi() {
+        val resId = when (loginViewModel.signMode) {
+            SignMode.Unknown -> error("developer error")
+            SignMode.SignUp  -> R.string.login_signup_to
+            SignMode.SignIn  -> R.string.login_connect_to
+        }
+
         when (loginViewModel.serverType) {
             ServerType.MatrixOrg -> {
                 loginServerIcon.isVisible = true
                 loginServerIcon.setImageResource(R.drawable.ic_logo_matrix_org)
-                loginTitle.text = getString(R.string.login_connect_to, loginViewModel.getHomeServerUrlSimple())
+                loginTitle.text = getString(resId, loginViewModel.getHomeServerUrlSimple())
                 loginNotice.text = getString(R.string.login_server_matrix_org_text)
             }
             ServerType.Modular   -> {
                 loginServerIcon.isVisible = true
                 loginServerIcon.setImageResource(R.drawable.ic_logo_modular)
                 // TODO
-                loginTitle.text = getString(R.string.login_connect_to, "TODO")
+                loginTitle.text = getString(resId, "TODO")
                 loginNotice.text = loginViewModel.getHomeServerUrlSimple()
             }
             ServerType.Other     -> {
                 loginServerIcon.isVisible = false
                 loginTitle.text = getString(R.string.login_server_other_title)
-                loginNotice.text = getString(R.string.login_connect_to, loginViewModel.getHomeServerUrlSimple())
+                loginNotice.text = getString(resId, loginViewModel.getHomeServerUrlSimple())
             }
         }
     }
+
+    private fun setupButtons() {
+        forgetPasswordButton.isVisible = loginViewModel.signMode == SignMode.SignIn
+
+        loginSubmit.text = getString(when (loginViewModel.signMode) {
+            SignMode.Unknown -> error("developer error")
+            SignMode.SignUp  -> R.string.login_signup_submit
+            SignMode.SignIn  -> R.string.login_signin
+        })
+    }
+
 
     private fun setupSubmitButton() {
         Observable
@@ -100,8 +126,6 @@ class LoginFragment @Inject constructor(
                     loginSubmit.isEnabled = it
                 }
                 .disposeOnDestroyView()
-
-        loginSubmit.setOnClickListener { authenticate() }
     }
 
     @OnClick(R.id.forgetPasswordButton)

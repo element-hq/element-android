@@ -25,6 +25,7 @@ import dagger.Module
 import dagger.Provides
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.auth.Authenticator
+import im.vector.matrix.android.api.auth.registration.RegistrationService
 import im.vector.matrix.android.api.session.Session
 import im.vector.riotx.features.navigation.DefaultNavigator
 import im.vector.riotx.features.navigation.Navigator
@@ -66,6 +67,12 @@ abstract class VectorModule {
         @JvmStatic
         fun providesAuthenticator(matrix: Matrix): Authenticator {
             return matrix.authenticator()
+        }
+
+        @Provides
+        @JvmStatic
+        fun providesRegistrationService(matrix: Matrix): RegistrationService {
+            return matrix.registrationService()
         }
     }
 

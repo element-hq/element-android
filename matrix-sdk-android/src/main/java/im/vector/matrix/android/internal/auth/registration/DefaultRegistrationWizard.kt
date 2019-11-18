@@ -20,9 +20,9 @@ import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.auth.data.SessionParams
+import im.vector.matrix.android.api.auth.registration.RegistrationResult
 import im.vector.matrix.android.api.auth.registration.RegistrationWizard
 import im.vector.matrix.android.api.failure.Failure
-import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.NoOpCancellable
 import im.vector.matrix.android.internal.SessionManager
@@ -47,10 +47,14 @@ internal class DefaultRegistrationWizard(private val homeServerConnectionConfig:
     private val authAPI = buildAuthAPI()
     private val registerTask = DefaultRegisterTask(authAPI)
 
+    override fun getRegistrationFlow(callback: MatrixCallback<RegistrationResult>): Cancelable {
+        return performRegistrationRequest(RegistrationParams(), callback)
+    }
+
     override fun createAccount(userName: String,
                                password: String,
                                initialDeviceDisplayName: String?,
-                               callback: MatrixCallback<Session>): Cancelable {
+                               callback: MatrixCallback<RegistrationResult>): Cancelable {
         return performRegistrationRequest(RegistrationParams(
                 username = userName,
                 password = password,
@@ -58,7 +62,7 @@ internal class DefaultRegistrationWizard(private val homeServerConnectionConfig:
         ), callback)
     }
 
-    override fun performReCaptcha(response: String, callback: MatrixCallback<Session>): Cancelable {
+    override fun performReCaptcha(response: String, callback: MatrixCallback<RegistrationResult>): Cancelable {
         val safeSession = currentSession ?: run {
             callback.onFailure(IllegalStateException("developer error, call createAccount() method first"))
             return NoOpCancellable
@@ -72,7 +76,7 @@ internal class DefaultRegistrationWizard(private val homeServerConnectionConfig:
                 ), callback)
     }
 
-    private fun performRegistrationRequest(registrationParams: RegistrationParams, callback: MatrixCallback<Session>): Cancelable {
+    private fun performRegistrationRequest(registrationParams: RegistrationParams, callback: MatrixCallback<RegistrationResult>): Cancelable {
         val job = GlobalScope.launch(coroutineDispatchers.main) {
             val result = runCatching {
                 registerTask.execute(RegisterTask.Params(registrationParams))
@@ -83,13 +87,15 @@ internal class DefaultRegistrationWizard(private val homeServerConnectionConfig:
                         sessionParamsStore.save(sessionParams)
                         val session = sessionManager.getOrCreateSession(sessionParams)
 
-                        callback.onSuccess(session)
+                        callback.onSuccess(RegistrationResult.Success(session))
                     },
                     {
                         if (it is Failure.RegistrationFlowError) {
                             currentSession = it.registrationFlowResponse.session
+                            callback.onSuccess(RegistrationResult.FlowResponse(it.registrationFlowResponse.toFlowResult()))
+                        } else {
+                            callback.onFailure(it)
                         }
-                        callback.onFailure(it)
                     }
             )
         }

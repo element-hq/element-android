@@ -22,6 +22,7 @@ import dagger.BindsInstance
 import dagger.Component
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.auth.Authenticator
+import im.vector.matrix.android.api.auth.registration.RegistrationService
 import im.vector.matrix.android.api.session.Session
 import im.vector.riotx.ActiveSessionDataSource
 import im.vector.riotx.EmojiCompatFontProvider
@@ -98,6 +99,8 @@ interface VectorComponent {
     fun incomingKeyRequestHandler(): KeyRequestHandler
 
     fun authenticator(): Authenticator
+
+    fun registrationService(): RegistrationService
 
     fun bugReporter(): BugReporter
 

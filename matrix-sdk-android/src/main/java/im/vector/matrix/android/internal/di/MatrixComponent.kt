@@ -23,6 +23,7 @@ import dagger.BindsInstance
 import dagger.Component
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.auth.Authenticator
+import im.vector.matrix.android.api.auth.registration.RegistrationService
 import im.vector.matrix.android.internal.SessionManager
 import im.vector.matrix.android.internal.auth.AuthModule
 import im.vector.matrix.android.internal.auth.SessionParamsStore
@@ -45,6 +46,8 @@ internal interface MatrixComponent {
     fun okHttpClient(): OkHttpClient
 
     fun authenticator(): Authenticator
+
+    fun registrationService(): RegistrationService
 
     fun context(): Context
 

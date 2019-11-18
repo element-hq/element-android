@@ -126,7 +126,7 @@ class LoginActivity : VectorBaseActivity() {
     private fun onSignModeSelected() {
         when (loginViewModel.signMode) {
             SignMode.Unknown -> error("Sign mode has to be set before calling this method")
-            SignMode.SignUp  -> Unit // TODO addFragmentToBackstack(R.id.loginFragmentContainer, SignUpFragment::class.java)
+            SignMode.SignUp  -> addFragmentToBackstack(R.id.loginFragmentContainer, LoginFragment::class.java)
             SignMode.SignIn  -> {
                 // It depends on the LoginMode
                 withState(loginViewModel) {

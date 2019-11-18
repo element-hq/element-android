@@ -20,6 +20,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import butterknife.OnClick
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.withState
+import im.vector.matrix.android.api.auth.registration.FlowResult
+import im.vector.matrix.android.api.auth.registration.RegistrationResult
+import im.vector.matrix.android.api.auth.registration.Stage
 import im.vector.riotx.R
 import kotlinx.android.synthetic.main.fragment_login_signup_signin_selection.*
 import javax.inject.Inject
@@ -63,7 +69,6 @@ class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractLoginFr
     @OnClick(R.id.loginSignupSigninSignUp)
     fun signUp() {
         loginViewModel.handle(LoginAction.UpdateSignMode(SignMode.SignUp))
-        loginSharedActionViewModel.post(LoginNavigation.OnSignModeSelected)
     }
 
     @OnClick(R.id.loginSignupSigninSignIn)
@@ -75,4 +80,35 @@ class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractLoginFr
     override fun resetViewModel() {
         loginViewModel.handle(LoginAction.ResetSignMode)
     }
+
+    override fun invalidate() = withState(loginViewModel) {
+        when (it.asyncRegistration) {
+            is Success -> {
+                when (val res = it.asyncRegistration()) {
+                    is RegistrationResult.Success      ->
+                        // Should not happen
+                        Unit
+                    is RegistrationResult.FlowResponse -> handleFlowResult(res.flowResult)
+                }
+            }
+            is Fail    -> {
+                // TODO Registration disabled, etc
+                when (it.asyncRegistration.error) {
+
+                }
+            }
+        }
+    }
+
+    private fun handleFlowResult(flowResult: FlowResult) {
+        // Check that all flows are supported by the application
+        if (flowResult.missingStages.any { it is Stage.Other }) {
+            // Display a popup to propose use web fallback
+            // TODO
+        } else {
+            // Go on with registration flow
+            loginSharedActionViewModel.post(LoginNavigation.OnSignModeSelected)
+        }
+    }
+
 }

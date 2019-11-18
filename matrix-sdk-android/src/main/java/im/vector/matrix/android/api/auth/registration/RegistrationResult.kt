@@ -16,16 +16,16 @@
 
 package im.vector.matrix.android.api.auth.registration
 
-import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.util.Cancelable
+import im.vector.matrix.android.api.session.Session
 
-interface RegistrationWizard {
-
-    fun getRegistrationFlow(callback: MatrixCallback<RegistrationResult>): Cancelable
-
-    fun createAccount(userName: String, password: String, initialDeviceDisplayName: String?, callback: MatrixCallback<RegistrationResult>): Cancelable
-
-    fun performReCaptcha(response: String, callback: MatrixCallback<RegistrationResult>): Cancelable
-
-    // TODO Add other method here
+// Either a session or an object containing data about registration stages
+sealed class RegistrationResult {
+    data class Success(val session: Session) : RegistrationResult()
+    data class FlowResponse(val flowResult: FlowResult) : RegistrationResult()
 }
+
+
+data class FlowResult(
+        val missingStages: List<Stage>,
+        val completedStages: List<Stage>
+)

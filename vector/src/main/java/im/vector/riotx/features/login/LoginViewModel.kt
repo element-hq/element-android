@@ -23,6 +23,10 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.Authenticator
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
+import im.vector.matrix.android.api.auth.registration.FlowResult
+import im.vector.matrix.android.api.auth.registration.RegistrationResult
+import im.vector.matrix.android.api.auth.registration.RegistrationService
+import im.vector.matrix.android.api.auth.registration.RegistrationWizard
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.auth.data.InteractiveAuthenticationFlow
@@ -36,6 +40,7 @@ import timber.log.Timber
 
 class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginViewState,
                                                  private val authenticator: Authenticator,
+                                                 private val registrationService: RegistrationService,
                                                  private val activeSessionHolder: ActiveSessionHolder,
                                                  private val pushRuleTriggerListener: PushRuleTriggerListener,
                                                  private val sessionListener: SessionListener)
@@ -54,6 +59,8 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
             return activity.loginViewModelFactory.create(state)
         }
     }
+
+    private var registrationWizard: RegistrationWizard? = null
 
     var serverType: ServerType = ServerType.MatrixOrg
         private set
@@ -89,7 +96,8 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
             LoginAction.ResetLogin          -> {
                 setState {
                     copy(
-                            asyncLoginAction = Uninitialized
+                            asyncLoginAction = Uninitialized,
+                            asyncRegistration = Uninitialized
                     )
                 }
             }
@@ -124,6 +132,10 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
 
     private fun handleUpdateSignMode(action: LoginAction.UpdateSignMode) {
         signMode = action.signMode
+
+        if (signMode == SignMode.SignUp) {
+            startRegistrationFlow()
+        }
     }
 
     private fun handleUpdateServerType(action: LoginAction.UpdateServerType) {
@@ -206,6 +218,53 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
         }
     }
 
+    private fun startRegistrationFlow() {
+        val homeServerConnectionConfigFinal = homeServerConnectionConfig
+
+        if (homeServerConnectionConfigFinal == null) {
+            setState {
+                copy(
+                        asyncRegistration = Fail(Throwable("Bad configuration"))
+                )
+            }
+        } else {
+            setState {
+                copy(
+                        asyncRegistration = Loading()
+                )
+            }
+
+            registrationWizard = registrationService.getOrCreateRegistrationWizard(homeServerConnectionConfigFinal)
+
+            currentTask = registrationWizard?.getRegistrationFlow(object : MatrixCallback<RegistrationResult> {
+                override fun onSuccess(data: RegistrationResult) {
+                    when (data) {
+                        is RegistrationResult.Success      -> onSessionCreated(data.session)
+                        is RegistrationResult.FlowResponse -> onFlowResponse(data.flowResult)
+                    }
+                }
+
+                override fun onFailure(failure: Throwable) {
+                    // TODO Handled JobCancellationException
+                    setState {
+                        copy(
+                                asyncRegistration = Fail(failure)
+                        )
+                    }
+                }
+            })
+        }
+    }
+
+    private fun onFlowResponse(flowResult: FlowResult) {
+        setState {
+            copy(
+                    asyncRegistration = Success(RegistrationResult.FlowResponse(flowResult))
+            )
+        }
+    }
+
+
     private fun onSessionCreated(session: Session) {
         activeSessionHolder.setActiveSession(session)
         session.configureAndStart(pushRuleTriggerListener, sessionListener)
@@ -246,7 +305,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
 
         // Do not retry if we already have flows for this config -> causes infinite focus loop
         if (newConfig?.homeServerUri?.toString() == homeServerConnectionConfig?.homeServerUri?.toString()
-            && state.asyncHomeServerLoginFlowRequest is Success) return@withState
+                && state.asyncHomeServerLoginFlowRequest is Success) return@withState
 
         currentTask?.cancel()
         currentTask = null
