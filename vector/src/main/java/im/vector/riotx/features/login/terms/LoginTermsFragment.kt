@@ -51,6 +51,7 @@ class LoginTermsFragment @Inject constructor(private val policyController: Polic
         super.onViewCreated(view, savedInstanceState)
 
         loginTermsPolicyList.setController(policyController)
+        policyController.homeServer = loginViewModel.getHomeServerUrlSimple()
         policyController.listener = this
 
         val list = ArrayList<LocalizedFlowDataLoginTermsChecked>()
@@ -83,14 +84,18 @@ class LoginTermsFragment @Inject constructor(private val policyController: Polic
     }
 
     override fun openPolicy(localizedFlowDataLoginTerms: LocalizedFlowDataLoginTerms) {
-        openUrlInExternalBrowser(requireContext(), localizedFlowDataLoginTerms.localizedUrl!!)
+        localizedFlowDataLoginTerms.localizedUrl
+                ?.takeIf { it.isNotBlank() }
+                ?.let {
+                    openUrlInExternalBrowser(requireContext(), it)
 
-        // This code crashed, because user is not authenticated yet
-        //val intent = VectorWebViewActivity.getIntent(requireContext(),
-        //        localizedFlowDataLoginTerms.localizedUrl!!,
-        //        localizedFlowDataLoginTerms.localizedName!!,
-        //        WebViewMode.DEFAULT)
-        //startActivity(intent)
+                    // This code crashed, because user is not authenticated yet
+                    //val intent = VectorWebViewActivity.getIntent(requireContext(),
+                    //        localizedFlowDataLoginTerms.localizedUrl!!,
+                    //        localizedFlowDataLoginTerms.localizedName!!,
+                    //        WebViewMode.DEFAULT)
+                    //startActivity(intent)
+                }
     }
 
     @OnClick(R.id.loginTermsSubmit)

@@ -100,5 +100,6 @@
     <string name="login_a11y_choose_modular">Select modular</string>
     <string name="login_a11y_choose_other">Select a custom homeserver</string>
     <string name="login_a11y_captcha_container">Please perform the captcha challenge</string>
+    <string name="login_terms_title">Accept terms to continue</string>
 
 </resources>

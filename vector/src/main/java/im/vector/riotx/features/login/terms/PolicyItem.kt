@@ -27,12 +27,15 @@ import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 
 @EpoxyModelClass(layout = R.layout.item_policy)
-abstract class PolicyModel : EpoxyModelWithHolder<PolicyModel.Holder>() {
+abstract class PolicyItem : EpoxyModelWithHolder<PolicyItem.Holder>() {
     @EpoxyAttribute
     var checked: Boolean = false
 
     @EpoxyAttribute
     var title: String? = null
+
+    @EpoxyAttribute
+    var subtitle: String? = null
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var checkChangeListener: CompoundButton.OnCheckedChangeListener? = null
@@ -45,6 +48,7 @@ abstract class PolicyModel : EpoxyModelWithHolder<PolicyModel.Holder>() {
             it.checkbox.isChecked = checked
             it.checkbox.setOnCheckedChangeListener(checkChangeListener)
             it.title.text = title
+            it.subtitle.text = subtitle
             it.view.setOnClickListener(clickListener)
         }
     }
@@ -58,5 +62,6 @@ abstract class PolicyModel : EpoxyModelWithHolder<PolicyModel.Holder>() {
     class Holder : VectorEpoxyHolder() {
         val checkbox by bind<CheckBox>(R.id.adapter_item_policy_checkbox)
         val title by bind<TextView>(R.id.adapter_item_policy_title)
+        val subtitle by bind<TextView>(R.id.adapter_item_policy_subtitle)
     }
 }

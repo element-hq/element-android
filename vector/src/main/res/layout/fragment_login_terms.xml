@@ -15,13 +15,22 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/loginTermsTitle"
+        style="@style/TextAppearance.Vector.Login.Title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="27dp"
+        android:text="@string/login_terms_title"
+        app:layout_constraintTop_toBottomOf="@+id/logoImageView" />
+
+    <TextView
         android:id="@+id/loginTermsNotice"
         style="@style/TextAppearance.Vector.Login.Text.Small"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="27dp"
+        android:layout_marginTop="12dp"
         android:text="@string/auth_accept_policies"
-        app:layout_constraintTop_toBottomOf="@+id/logoImageView" />
+        app:layout_constraintTop_toBottomOf="@+id/loginTermsTitle" />
 
     <com.airbnb.epoxy.EpoxyRecyclerView
         android:id="@+id/loginTermsPolicyList"
