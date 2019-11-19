@@ -222,26 +222,34 @@ class LoginActivity : VectorBaseActivity() {
         }
     }
 
-    // TODO Unstack fragment when stage is complete
     private fun doStage(stage: Stage) {
+        // Ensure there is no fragment for registration stage in the backstack
+        supportFragmentManager.popBackStack(FRAGMENT_REGISTRATION_STAGE_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+
         when (stage) {
             is Stage.ReCaptcha -> addFragmentToBackstack(R.id.loginFragmentContainer,
-                    LoginCaptchaFragment::class.java, LoginCaptchaFragmentArgument(stage.publicKey))
+                    LoginCaptchaFragment::class.java,
+                    LoginCaptchaFragmentArgument(stage.publicKey),
+                    tag = FRAGMENT_REGISTRATION_STAGE_TAG)
             is Stage.Email     -> addFragmentToBackstack(R.id.loginFragmentContainer,
                     LoginGenericTextInputFormFragment::class.java,
-                    LoginGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.SetEmail, stage.mandatory))
-            is Stage.Msisdn
-                               -> addFragmentToBackstack(R.id.loginFragmentContainer,
+                    LoginGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.SetEmail, stage.mandatory),
+                    tag = FRAGMENT_REGISTRATION_STAGE_TAG)
+            is Stage.Msisdn    -> addFragmentToBackstack(R.id.loginFragmentContainer,
                     LoginGenericTextInputFormFragment::class.java,
-                    LoginGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.SetMsisdn, stage.mandatory))
+                    LoginGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.SetMsisdn, stage.mandatory),
+                    tag = FRAGMENT_REGISTRATION_STAGE_TAG)
             is Stage.Terms     -> addFragmentToBackstack(R.id.loginFragmentContainer,
                     LoginTermsFragment::class.java,
-                    LoginTermsFragmentArgument(stage.policies.toLocalizedLoginTerms(getString(R.string.resources_language))))
-            else               -> TODO()
+                    LoginTermsFragmentArgument(stage.policies.toLocalizedLoginTerms(getString(R.string.resources_language))),
+                    tag = FRAGMENT_REGISTRATION_STAGE_TAG)
+            else               -> Unit // Should not happen
         }
     }
 
     companion object {
+        private const val FRAGMENT_REGISTRATION_STAGE_TAG = "FRAGMENT_REGISTRATION_STAGE_TAG"
+
         private const val EXTRA_CONFIG = "EXTRA_CONFIG"
 
         fun newIntent(context: Context, loginConfig: LoginConfig?): Intent {
