@@ -101,9 +101,10 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
 
     private fun handleRegisterAction(action: LoginAction.RegisterAction) {
         when (action) {
-            is LoginAction.RegisterWith -> handleRegisterWith(action)
-            is LoginAction.CaptchaDone  -> handleCaptchaDone(action)
-            is LoginAction.AcceptTerms  -> handleAcceptTerms()
+            is LoginAction.RegisterWith  -> handleRegisterWith(action)
+            is LoginAction.CaptchaDone   -> handleCaptchaDone(action)
+            is LoginAction.AcceptTerms   -> handleAcceptTerms()
+            is LoginAction.RegisterDummy -> handleRegisterDummy()
             // TODO Add other actions here
         }
     }
@@ -116,6 +117,38 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
         }
 
         currentTask = registrationWizard?.acceptTerms(object : MatrixCallback<RegistrationResult> {
+            override fun onSuccess(data: RegistrationResult) {
+                setState {
+                    copy(
+                            asyncRegistration = Success(data)
+                    )
+                }
+
+                when (data) {
+                    is RegistrationResult.Success      -> onSessionCreated(data.session)
+                    is RegistrationResult.FlowResponse -> onFlowResponse(data.flowResult)
+                }
+            }
+
+            override fun onFailure(failure: Throwable) {
+                // TODO Handled JobCancellationException
+                setState {
+                    copy(
+                            asyncRegistration = Fail(failure)
+                    )
+                }
+            }
+        })
+    }
+
+    private fun handleRegisterDummy() {
+        setState {
+            copy(
+                    asyncRegistration = Loading()
+            )
+        }
+
+        currentTask = registrationWizard?.dummy(object : MatrixCallback<RegistrationResult> {
             override fun onSuccess(data: RegistrationResult) {
                 setState {
                     copy(

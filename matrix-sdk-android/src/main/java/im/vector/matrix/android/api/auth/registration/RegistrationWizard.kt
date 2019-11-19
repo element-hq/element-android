@@ -29,5 +29,7 @@ interface RegistrationWizard {
 
     fun acceptTerms(callback: MatrixCallback<RegistrationResult>): Cancelable
 
+    fun dummy(callback: MatrixCallback<RegistrationResult>): Cancelable
+
     // TODO Add other method here
 }

@@ -90,6 +90,21 @@ internal class DefaultRegistrationWizard(private val homeServerConnectionConfig:
                 ), callback)
     }
 
+    override fun dummy(callback: MatrixCallback<RegistrationResult>): Cancelable {
+        val safeSession = currentSession ?: run {
+            callback.onFailure(IllegalStateException("developer error, call createAccount() method first"))
+            return NoOpCancellable
+        }
+
+        return performRegistrationRequest(
+                RegistrationParams(
+                        auth = AuthParams(
+                                type = LoginFlowTypes.DUMMY,
+                                session = safeSession
+                        )
+                ), callback)
+    }
+
     private fun performRegistrationRequest(registrationParams: RegistrationParams, callback: MatrixCallback<RegistrationResult>): Cancelable {
         val job = GlobalScope.launch(coroutineDispatchers.main) {
             val result = runCatching {

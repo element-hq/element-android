@@ -94,7 +94,24 @@ class LoginGenericTextInputFormFragment @Inject constructor() : AbstractLoginFra
 
     @OnClick(R.id.loginGenericTextInputFormSubmit)
     fun onSubmitClicked() {
-        // TODO
+        val text = loginGenericTextInputFormTextInput.text.toString()
+
+        if (text.isEmpty()) {
+            // Perform dummy action
+            loginViewModel.handle(LoginAction.RegisterDummy)
+        } else {
+            when (params.mode) {
+                TextInputFormFragmentMode.SetEmail      -> {
+                    // TODO
+                }
+                TextInputFormFragmentMode.SetMsisdn     -> {
+                    // TODO
+                }
+                TextInputFormFragmentMode.ConfirmMsisdn -> {
+                    // TODO
+                }
+            }
+        }
     }
 
     private fun setupSubmitButton() {
