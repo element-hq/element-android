@@ -1,4 +1,25 @@
-Changes in RiotX 0.8.0 (2019-XX-XX)
+Changes in RiotX 0.9.0 (2019-XX-XX)
+===================================================
+
+Features ✨:
+ -
+
+Improvements 🙌:
+ -
+
+Other changes:
+ -
+
+Bugfix 🐛:
+ -
+
+Translations 🗣:
+ -
+
+Build 🧱:
+ -
+
+Changes in RiotX 0.8.0 (2019-11-19)
 ===================================================
 
 Features ✨:
@@ -20,12 +41,6 @@ Bugfix 🐛:
  - Passphrase does not match (Export room keys) (#644)
  - Ask for permission to write external storage when uri comes from the keyboard (#658)
  - Fix issue with english US/GB translation (#671)
-
-Translations 🗣:
- -
-
-Build 🧱:
- -
 
 Changes in RiotX 0.7.0 (2019-10-24)
 ===================================================
