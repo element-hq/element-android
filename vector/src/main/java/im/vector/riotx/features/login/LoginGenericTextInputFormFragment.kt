@@ -102,13 +102,13 @@ class LoginGenericTextInputFormFragment @Inject constructor() : AbstractLoginFra
         } else {
             when (params.mode) {
                 TextInputFormFragmentMode.SetEmail      -> {
-                    // TODO
+                    loginViewModel.handle(LoginAction.AddEmail(text))
                 }
                 TextInputFormFragmentMode.SetMsisdn     -> {
-                    // TODO
+                    loginViewModel.handle(LoginAction.AddMsisdn(text))
                 }
                 TextInputFormFragmentMode.ConfirmMsisdn -> {
-                    // TODO
+                    loginViewModel.handle(LoginAction.ConfirmMsisdn(text))
                 }
             }
         }

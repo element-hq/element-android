@@ -105,8 +105,106 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
             is LoginAction.CaptchaDone   -> handleCaptchaDone(action)
             is LoginAction.AcceptTerms   -> handleAcceptTerms()
             is LoginAction.RegisterDummy -> handleRegisterDummy()
-            // TODO Add other actions here
+            is LoginAction.AddEmail      -> handleAddEmail(action)
+            is LoginAction.AddMsisdn     -> handleAddMsisdn(action)
+            is LoginAction.ConfirmMsisdn -> handleConfirmMsisdn(action)
         }
+    }
+
+    private fun handleConfirmMsisdn(action: LoginAction.ConfirmMsisdn) {
+        setState {
+            copy(
+                    asyncRegistration = Loading()
+            )
+        }
+
+        currentTask = registrationWizard?.confirmMsisdn(action.code, object : MatrixCallback<RegistrationResult> {
+            override fun onSuccess(data: RegistrationResult) {
+                setState {
+                    copy(
+                            asyncRegistration = Success(data)
+                    )
+                }
+
+                when (data) {
+                    is RegistrationResult.Success      -> onSessionCreated(data.session)
+                    is RegistrationResult.FlowResponse -> onFlowResponse(data.flowResult)
+                }
+            }
+
+            override fun onFailure(failure: Throwable) {
+                // TODO Handled JobCancellationException
+                setState {
+                    copy(
+                            asyncRegistration = Fail(failure)
+                    )
+                }
+            }
+        })
+    }
+
+    private fun handleAddMsisdn(action: LoginAction.AddMsisdn) {
+        setState {
+            copy(
+                    asyncRegistration = Loading()
+            )
+        }
+
+        currentTask = registrationWizard?.addMsisdn(action.msisdn, object : MatrixCallback<RegistrationResult> {
+            override fun onSuccess(data: RegistrationResult) {
+                setState {
+                    copy(
+                            asyncRegistration = Success(data)
+                    )
+                }
+
+                when (data) {
+                    is RegistrationResult.Success      -> onSessionCreated(data.session)
+                    is RegistrationResult.FlowResponse -> onFlowResponse(data.flowResult)
+                }
+            }
+
+            override fun onFailure(failure: Throwable) {
+                // TODO Handled JobCancellationException
+                setState {
+                    copy(
+                            asyncRegistration = Fail(failure)
+                    )
+                }
+            }
+        })
+    }
+
+    private fun handleAddEmail(action: LoginAction.AddEmail) {
+        setState {
+            copy(
+                    asyncRegistration = Loading()
+            )
+        }
+
+        currentTask = registrationWizard?.addEmail(action.email, object : MatrixCallback<RegistrationResult> {
+            override fun onSuccess(data: RegistrationResult) {
+                setState {
+                    copy(
+                            asyncRegistration = Success(data)
+                    )
+                }
+
+                when (data) {
+                    is RegistrationResult.Success      -> onSessionCreated(data.session)
+                    is RegistrationResult.FlowResponse -> onFlowResponse(data.flowResult)
+                }
+            }
+
+            override fun onFailure(failure: Throwable) {
+                // TODO Handled JobCancellationException
+                setState {
+                    copy(
+                            asyncRegistration = Fail(failure)
+                    )
+                }
+            }
+        })
     }
 
     private fun handleAcceptTerms() {

@@ -31,5 +31,10 @@ interface RegistrationWizard {
 
     fun dummy(callback: MatrixCallback<RegistrationResult>): Cancelable
 
-    // TODO Add other method here
+    fun addEmail(email: String, callback: MatrixCallback<RegistrationResult>): Cancelable
+
+    fun addMsisdn(msisdn: String, callback: MatrixCallback<RegistrationResult>): Cancelable
+
+    fun confirmMsisdn(code: String, callback: MatrixCallback<RegistrationResult>): Cancelable
+
 }

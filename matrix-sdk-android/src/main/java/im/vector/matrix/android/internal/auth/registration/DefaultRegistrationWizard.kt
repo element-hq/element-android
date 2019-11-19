@@ -42,7 +42,6 @@ internal class DefaultRegistrationWizard(private val homeServerConnectionConfig:
                                          private val coroutineDispatchers: MatrixCoroutineDispatchers,
                                          private val sessionParamsStore: SessionParamsStore,
                                          private val sessionManager: SessionManager) : RegistrationWizard {
-
     private var currentSession: String? = null
 
     private val authAPI = buildAuthAPI()
@@ -87,6 +86,48 @@ internal class DefaultRegistrationWizard(private val homeServerConnectionConfig:
                                 type = LoginFlowTypes.TERMS,
                                 session = safeSession
                         )
+                ), callback)
+    }
+
+    override fun addEmail(email: String, callback: MatrixCallback<RegistrationResult>): Cancelable {
+        val safeSession = currentSession ?: run {
+            callback.onFailure(IllegalStateException("developer error, call createAccount() method first"))
+            return NoOpCancellable
+        }
+
+        // TODO
+        return performRegistrationRequest(
+                RegistrationParams(
+                        // TODO
+                        auth = AuthParams.createForEmailIdentity(safeSession, ThreePidCredentials(email))
+                ), callback)
+    }
+
+    override fun addMsisdn(msisdn: String, callback: MatrixCallback<RegistrationResult>): Cancelable {
+        val safeSession = currentSession ?: run {
+            callback.onFailure(IllegalStateException("developer error, call createAccount() method first"))
+            return NoOpCancellable
+        }
+
+        // TODO
+        return performRegistrationRequest(
+                RegistrationParams(
+                        // TODO
+                        auth = AuthParams.createForEmailIdentity(safeSession, ThreePidCredentials(msisdn))
+                ), callback)
+    }
+
+    override fun confirmMsisdn(code: String, callback: MatrixCallback<RegistrationResult>): Cancelable {
+        val safeSession = currentSession ?: run {
+            callback.onFailure(IllegalStateException("developer error, call createAccount() method first"))
+            return NoOpCancellable
+        }
+
+        // TODO
+        return performRegistrationRequest(
+                RegistrationParams(
+                        // TODO
+                        auth = AuthParams.createForEmailIdentity(safeSession, ThreePidCredentials(code))
                 ), callback)
     }
 
