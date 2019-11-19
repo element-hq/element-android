@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.VisibilityState
+import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
@@ -39,9 +40,11 @@ import im.vector.riotx.features.home.room.detail.timeline.item.*
 import im.vector.riotx.features.media.ImageContentRenderer
 import im.vector.riotx.features.media.VideoContentRenderer
 import org.threeten.bp.LocalDateTime
+import timber.log.Timber
 import javax.inject.Inject
 
 class TimelineEventController @Inject constructor(private val dateFormatter: VectorDateFormatter,
+                                                  private val session: Session,
                                                   private val timelineItemFactory: TimelineItemFactory,
                                                   private val timelineMediaSizeProvider: TimelineMediaSizeProvider,
                                                   private val mergedHeaderItemFactory: MergedHeaderItemFactory,
@@ -239,21 +242,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     }
 
     private fun getModels(): List<EpoxyModel<*>> {
-        synchronized(modelCache) {
-            val readMarkerIdSnapshot = this.readMarkerIdSnapshot
-            val displayableReadMarkerId = if (readMarkerIdSnapshot != null) {
-                timeline?.getFirstDisplayableEventId(readMarkerIdSnapshot)
-            } else {
-                null
-            }
-            (0 until modelCache.size).forEach { position ->
-                // Should be build if not cached or if cached but contains additional models
-                // We then are sure we always have items up to date.
-                if (modelCache[position] == null || modelCache[position]?.hasAdditionalModel() == true) {
-                    modelCache[position] = buildItemModels(position, currentSnapshot, displayableReadMarkerId)
-                }
-            }
-        }
+        buildCacheItemsIfNeeded()
         return modelCache
                 .map {
                     val eventModel = if (it == null || mergedHeaderItemFactory.isCollapsed(it.localId)) {
@@ -261,13 +250,41 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
                     } else {
                         it.eventModel
                     }
-                    listOf(it?.readMarkerModel, eventModel, it?.mergedHeaderModel, it?.formattedDayModel)
+                    listOf(eventModel, it?.mergedHeaderModel, it?.formattedDayModel, it?.readMarkerModel)
                 }
                 .flatten()
                 .filterNotNull()
     }
 
-    private fun buildItemModels(currentPosition: Int, items: List<TimelineEvent>, displayableReadMarkerId: String?): CacheItemData {
+    private fun buildCacheItemsIfNeeded() = synchronized(modelCache) {
+        if (modelCache.isEmpty()) {
+            return
+        }
+        val displayableReadMarkerId = computeDisplayableReadMarkerId()
+        (0 until modelCache.size).forEach { position ->
+            // Should be build if not cached or if cached but contains additional models
+            // We then are sure we always have items up to date.
+            if (modelCache[position] == null || modelCache[position]?.shouldTriggerBuild() == true) {
+                modelCache[position] = buildCacheItem(position, currentSnapshot, displayableReadMarkerId)
+            }
+        }
+    }
+
+    private fun computeDisplayableReadMarkerId(): String? {
+        val readMarkerIdSnapshot = this.readMarkerIdSnapshot ?: return null
+        val firstDisplayableEventId = timeline?.getFirstDisplayableEventId(readMarkerIdSnapshot) ?: return null
+        val firstDisplayableEventIndex = timeline?.getIndexOfEvent(firstDisplayableEventId) ?: return null
+        for (i in (firstDisplayableEventIndex - 1) downTo 0) {
+            val timelineEvent = currentSnapshot.getOrNull(i) ?: return null
+            val isFromMe = timelineEvent.root.senderId == session.myUserId
+            if (!isFromMe) {
+                return timelineEvent.root.eventId
+            }
+        }
+        return null
+    }
+
+    private fun buildCacheItem(currentPosition: Int, items: List<TimelineEvent>, displayableReadMarkerId: String?): CacheItemData {
         val event = items[currentPosition]
         val nextEvent = items.nextOrNull(currentPosition)
         val date = event.root.localDateTime()
@@ -288,15 +305,15 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             requestModelBuild()
         }
         val daySeparatorItem = buildDaySeparatorItem(addDaySeparator, date)
-        val readMarkerItem = buildReadMarkerItem(currentPosition, event, displayableReadMarkerId)
+        val readMarkerItem = buildReadMarkerItem(event, displayableReadMarkerId)
         return CacheItemData(event.localId, event.root.eventId, eventModel, mergedHeaderModel, daySeparatorItem, readMarkerItem)
     }
 
-    private fun buildReadMarkerItem(currentPosition: Int, event: TimelineEvent, displayableReadMarkerId: String?): TimelineReadMarkerItem? {
-        return if (currentPosition != 0 && event.root.eventId == displayableReadMarkerId) {
+    private fun buildReadMarkerItem(event: TimelineEvent, displayableReadMarkerId: String?): TimelineReadMarkerItem? {
+        return if (event.root.eventId == displayableReadMarkerId) {
             TimelineReadMarkerItem_()
                     .also {
-                        it.id(event.localId)
+                        it.id("read_marker")
                         it.setOnVisibilityStateChanged(ReadMarkerVisibilityStateChangedListener(callback))
                     }
         } else {
@@ -347,6 +364,6 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             val formattedDayModel: DaySeparatorItem? = null,
             val readMarkerModel: TimelineReadMarkerItem? = null
     ) {
-        fun hasAdditionalModel() = mergedHeaderModel != null || formattedDayModel != null || readMarkerModel != null
+        fun shouldTriggerBuild() = mergedHeaderModel != null || formattedDayModel != null
     }
 }
