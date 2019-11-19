@@ -10,8 +10,6 @@
         android:id="@+id/adapter_item_policy_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -37,8 +35,7 @@
         android:id="@+id/adapter_item_policy_arrow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
+        android:importantForAccessibility="no"
         android:rotationY="@integer/rtl_mirror_flip"
         android:src="@drawable/ic_material_chevron_right_black"
         app:layout_constraintBottom_toBottomOf="parent"

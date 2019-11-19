@@ -12,6 +12,7 @@
         android:id="@+id/logoImageView"
         style="@style/LoginTopIcon"
         android:layout_gravity="center_horizontal"
+        android:importantForAccessibility="no"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -26,14 +27,15 @@
         android:text="@string/auth_recaptcha_message"
         app:layout_constraintTop_toBottomOf="@+id/logoImageView" />
 
+    <!-- contentDescription does not work on WebView? -->
     <WebView
         android:id="@+id/loginCaptchaWevView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
+        android:contentDescription="@string/login_a11y_captcha_container"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/loginCaptchaNotice" />
-
 
     <ProgressBar
         android:id="@+id/loginCaptchaProgress"

@@ -24,12 +24,14 @@
                 android:id="@+id/logoImageView"
                 style="@style/LoginTopIcon"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="130dp" />
+                android:layout_marginBottom="130dp"
+                android:importantForAccessibility="no" />
 
             <ImageView
                 android:id="@+id/loginServerUrlFormIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:importantForAccessibility="no"
                 android:src="@drawable/ic_logo_modular" />
 
             <TextView
