@@ -18,6 +18,7 @@ package im.vector.riotx.core.extensions
 
 import android.os.Parcelable
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import im.vector.riotx.core.platform.VectorBaseActivity
 
 fun VectorBaseActivity.addFragment(frameId: Int, fragment: Fragment) {
@@ -44,8 +45,13 @@ fun VectorBaseActivity.addFragmentToBackstack(frameId: Int, fragment: Fragment, 
     supportFragmentManager.commitTransaction { replace(frameId, fragment).addToBackStack(tag) }
 }
 
-fun <T : Fragment> VectorBaseActivity.addFragmentToBackstack(frameId: Int, fragmentClass: Class<T>, params: Parcelable? = null, tag: String? = null) {
+fun <T : Fragment> VectorBaseActivity.addFragmentToBackstack(frameId: Int,
+                                                             fragmentClass: Class<T>,
+                                                             params: Parcelable? = null,
+                                                             tag: String? = null,
+                                                             option: ((FragmentTransaction) -> Unit)? = null) {
     supportFragmentManager.commitTransaction {
+        option?.invoke(this)
         replace(frameId, fragmentClass, params.toMvRxBundle(), tag).addToBackStack(tag)
     }
 }

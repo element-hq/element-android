@@ -18,7 +18,9 @@ package im.vector.riotx.features.login
 
 import android.content.Context
 import android.content.Intent
+import android.view.View
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import com.airbnb.mvrx.viewModel
@@ -70,7 +72,13 @@ class LoginActivity : VectorBaseActivity() {
         loginSharedActionViewModel.observe()
                 .subscribe {
                     when (it) {
-                        is LoginNavigation.OpenServerSelection        -> addFragmentToBackstack(R.id.loginFragmentContainer, LoginServerSelectionFragment::class.java)
+                        is LoginNavigation.OpenServerSelection        -> addFragmentToBackstack(R.id.loginFragmentContainer, LoginServerSelectionFragment::class.java,
+                                option = { ft ->
+                                    val view = findViewById<View?>(R.id.loginSplashLogo)
+                                    if (view != null) {
+                                        ft.addSharedElement(view, ViewCompat.getTransitionName(view) ?: "")
+                                    }
+                                })
                         is LoginNavigation.OnServerSelectionDone      -> onServerSelectionDone()
                         is LoginNavigation.OnSignModeSelected         -> onSignModeSelected()
                         is LoginNavigation.OnLoginFlowRetrieved       -> onLoginFlowRetrieved()
