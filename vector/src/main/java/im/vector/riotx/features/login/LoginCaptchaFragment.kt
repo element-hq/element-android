@@ -18,6 +18,7 @@ package im.vector.riotx.features.login
 
 import android.annotation.SuppressLint
 import android.content.DialogInterface
+import android.graphics.Bitmap
 import android.net.http.SslError
 import android.os.Build
 import android.os.Bundle
@@ -26,6 +27,7 @@ import android.view.KeyEvent
 import android.view.View
 import android.webkit.*
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.riotx.R
@@ -72,10 +74,18 @@ class LoginCaptchaFragment @Inject constructor(private val assetReader: AssetRea
         loginCaptchaWevView.requestLayout()
 
         loginCaptchaWevView.webViewClient = object : WebViewClient() {
+            override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                super.onPageStarted(view, url, favicon)
+
+                // Show loader
+                loginCaptchaProgress.isVisible = true
+            }
+
             override fun onPageFinished(view: WebView, url: String) {
                 super.onPageFinished(view, url)
 
-                // TODO Hide loader
+                // Hide loader
+                loginCaptchaProgress.isVisible = false
             }
 
             override fun onReceivedSslError(view: WebView, handler: SslErrorHandler, error: SslError) {
