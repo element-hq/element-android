@@ -201,12 +201,14 @@ class LoginActivity : VectorBaseActivity() {
 
     private fun doStage(stage: Stage) {
         when (stage) {
-            is Stage.ReCaptcha -> addFragmentToBackstack(R.id.loginFragmentContainer, LoginCaptchaFragment::class.java)
+            is Stage.ReCaptcha -> addFragmentToBackstack(R.id.loginFragmentContainer,
+                    LoginCaptchaFragment::class.java, LoginCaptchaFragmentArgument(stage.publicKey))
             is Stage.Email     -> addFragmentToBackstack(R.id.loginFragmentContainer,
                     LoginGenericTextInputFormFragment::class.java,
                     LoginGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.SetEmail, stage.mandatory))
             is Stage.Msisdn
-                               -> addFragmentToBackstack(R.id.loginFragmentContainer, LoginGenericTextInputFormFragment::class.java,
+                               -> addFragmentToBackstack(R.id.loginFragmentContainer,
+                    LoginGenericTextInputFormFragment::class.java,
                     LoginGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.SetMsisdn, stage.mandatory))
             is Stage.Terms
                                -> TODO()

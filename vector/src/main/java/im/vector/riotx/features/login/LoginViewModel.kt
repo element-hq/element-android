@@ -99,6 +99,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
     private fun handleRegisterAction(action: LoginAction.RegisterAction) {
         when (action) {
             is LoginAction.RegisterWith -> handleRegisterWith(action)
+            is LoginAction.CaptchaDone  -> handleCaptchaDone(action)
             // TODO Add other actions here
         }
     }
@@ -113,6 +114,44 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
         currentTask = registrationWizard?.createAccount(action.username, action.password, null /* TODO InitialDisplayName */, object : MatrixCallback<RegistrationResult> {
             override fun onSuccess(data: RegistrationResult) {
                 isPasswordSent = true
+
+                setState {
+                    copy(
+                            asyncRegistration = Success(data)
+                    )
+                }
+
+                when (data) {
+                    is RegistrationResult.Success      -> onSessionCreated(data.session)
+                    is RegistrationResult.FlowResponse -> onFlowResponse(data.flowResult)
+                }
+            }
+
+            override fun onFailure(failure: Throwable) {
+                // TODO Handled JobCancellationException
+                setState {
+                    copy(
+                            asyncRegistration = Fail(failure)
+                    )
+                }
+            }
+        })
+    }
+
+    private fun handleCaptchaDone(action: LoginAction.CaptchaDone) {
+        setState {
+            copy(
+                    asyncRegistration = Loading()
+            )
+        }
+
+        currentTask = registrationWizard?.performReCaptcha(action.captchaResponse, object : MatrixCallback<RegistrationResult> {
+            override fun onSuccess(data: RegistrationResult) {
+                setState {
+                    copy(
+                            asyncRegistration = Success(data)
+                    )
+                }
 
                 when (data) {
                     is RegistrationResult.Success      -> onSessionCreated(data.session)
@@ -284,6 +323,12 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
 
             currentTask = registrationWizard?.getRegistrationFlow(object : MatrixCallback<RegistrationResult> {
                 override fun onSuccess(data: RegistrationResult) {
+                    setState {
+                        copy(
+                                asyncRegistration = Success(data)
+                        )
+                    }
+
                     when (data) {
                         is RegistrationResult.Success      -> onSessionCreated(data.session)
                         is RegistrationResult.FlowResponse -> onFlowResponse(data.flowResult)
@@ -305,12 +350,6 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
     private fun onFlowResponse(flowResult: FlowResult) {
         // Notify the user
         _viewEvents.post(LoginViewEvents.RegistrationFlowResult(flowResult))
-
-        setState {
-            copy(
-                    asyncRegistration = Uninitialized
-            )
-        }
     }
 
 

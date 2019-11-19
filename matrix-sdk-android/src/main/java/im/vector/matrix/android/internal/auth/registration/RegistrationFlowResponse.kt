@@ -53,7 +53,16 @@ data class RegistrationFlowResponse(
          * For example, the public key of reCAPTCHA stage could be given here.
          */
         @Json(name = "params")
-        var params: JsonDict? = null
+        var params: JsonDict? = null,
+
+        /**
+         * The two MatrixError fields can also be present here in case of error when validating a stage
+         */
+        @Json(name = "errcode")
+        var code: String? = null,
+
+        @Json(name = "error")
+        var message: String? = null
 )
 
 /**

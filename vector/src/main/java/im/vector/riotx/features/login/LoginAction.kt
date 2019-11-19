@@ -35,7 +35,7 @@ sealed class LoginAction : VectorViewModelAction {
     data class AddEmail(val email: String) : RegisterAction()
     data class AddMsisdn(val msisdn: String) : RegisterAction()
     data class ConfirmMsisdn(val code: String) : RegisterAction()
-    data class PerformCaptcha(val captcha: String /* TODO Add other params */) : RegisterAction()
+    data class CaptchaDone(val captchaResponse: String) : RegisterAction()
 
     // Reset actions
     open class ResetAction : LoginAction()

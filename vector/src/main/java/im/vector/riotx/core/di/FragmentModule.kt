@@ -116,6 +116,11 @@ interface FragmentModule {
 
     @Binds
     @IntoMap
+    @FragmentKey(LoginCaptchaFragment::class)
+    fun bindLoginCaptchaFragment(fragment: LoginCaptchaFragment): Fragment
+
+    @Binds
+    @IntoMap
     @FragmentKey(LoginServerUrlFormFragment::class)
     fun bindLoginServerUrlFormFragment(fragment: LoginServerUrlFormFragment): Fragment
 

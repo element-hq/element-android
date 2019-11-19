@@ -70,9 +70,7 @@ internal class DefaultRegistrationWizard(private val homeServerConnectionConfig:
 
         return performRegistrationRequest(
                 RegistrationParams(
-                        auth = AuthParamsCaptcha(
-                                session = safeSession,
-                                response = response)
+                        auth = AuthParams.createForCaptcha(safeSession, response)
                 ), callback)
     }
 

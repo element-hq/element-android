@@ -18,15 +18,58 @@ package im.vector.matrix.android.internal.auth.registration
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import im.vector.matrix.android.internal.auth.data.LoginFlowTypes
 
 /**
  * Open class, parent to all possible authentication parameters
  */
 @JsonClass(generateAdapter = true)
-open class AuthParams(
+internal data class AuthParams(
         @Json(name = "type")
         val type: String,
 
         @Json(name = "session")
-        val session: String
+        val session: String,
+
+        /**
+         * parameter for "m.login.recaptcha" type
+         */
+        @Json(name = "response")
+        val captchaResponse: String? = null,
+
+        /**
+         * parameter for "m.login.email.identity" type
+         */
+        @Json(name = "threepid_creds")
+        val threePidCredentials: ThreePidCredentials? = null
+) {
+
+    companion object {
+        fun createForCaptcha(session: String, captchaResponse: String): AuthParams {
+            return AuthParams(
+                    type = LoginFlowTypes.RECAPTCHA,
+                    session = session,
+                    captchaResponse = captchaResponse
+            )
+        }
+
+        fun createForEmailIdentity(session: String, threePidCredentials: ThreePidCredentials): AuthParams {
+            return AuthParams(
+                    type = LoginFlowTypes.EMAIL_IDENTITY,
+                    session = session,
+                    threePidCredentials = threePidCredentials
+            )
+        }
+    }
+}
+
+
+data class ThreePidCredentials(
+        @Json(name = "client_secret")
+        val clientSecret: String? = null,
+
+        @Json(name = "id_server")
+        val idServer: String? = null,
+
+        val sid: String? = null
 )

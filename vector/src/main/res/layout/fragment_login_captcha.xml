@@ -22,11 +22,19 @@
             style="@style/LoginTopIcon"
             android:layout_gravity="center_horizontal" />
 
+        <TextView
+            style="@style/TextAppearance.Vector.Login.Text.Small"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center_horizontal"
+            android:text="@string/auth_recaptcha_message" />
+
         <WebView
             android:id="@+id/loginCaptchaWevView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="22dp" />
+            android:layout_marginTop="8dp" />
 
     </LinearLayout>
 

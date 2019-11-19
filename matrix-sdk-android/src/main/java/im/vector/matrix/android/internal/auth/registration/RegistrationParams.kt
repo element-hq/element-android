@@ -24,7 +24,7 @@ import com.squareup.moshi.JsonClass
  * Class to pass parameters to the different registration types for /register.
  */
 @JsonClass(generateAdapter = true)
-data class RegistrationParams(
+internal data class RegistrationParams(
         // authentication parameters
         @Json(name = "auth")
         val auth: AuthParams? = null,
