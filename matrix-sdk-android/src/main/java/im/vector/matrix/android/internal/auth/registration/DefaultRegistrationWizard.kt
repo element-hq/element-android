@@ -28,6 +28,7 @@ import im.vector.matrix.android.api.util.NoOpCancellable
 import im.vector.matrix.android.internal.SessionManager
 import im.vector.matrix.android.internal.auth.AuthAPI
 import im.vector.matrix.android.internal.auth.SessionParamsStore
+import im.vector.matrix.android.internal.auth.data.LoginFlowTypes
 import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.util.CancelableCoroutine
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
@@ -71,6 +72,21 @@ internal class DefaultRegistrationWizard(private val homeServerConnectionConfig:
         return performRegistrationRequest(
                 RegistrationParams(
                         auth = AuthParams.createForCaptcha(safeSession, response)
+                ), callback)
+    }
+
+    override fun acceptTerms(callback: MatrixCallback<RegistrationResult>): Cancelable {
+        val safeSession = currentSession ?: run {
+            callback.onFailure(IllegalStateException("developer error, call createAccount() method first"))
+            return NoOpCancellable
+        }
+
+        return performRegistrationRequest(
+                RegistrationParams(
+                        auth = AuthParams(
+                                type = LoginFlowTypes.TERMS,
+                                session = safeSession
+                        )
                 ), callback)
     }
 

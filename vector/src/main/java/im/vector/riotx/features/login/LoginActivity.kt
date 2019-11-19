@@ -32,6 +32,9 @@ import im.vector.riotx.core.extensions.addFragmentToBackstack
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.features.disclaimer.showDisclaimerDialog
 import im.vector.riotx.features.home.HomeActivity
+import im.vector.riotx.features.login.terms.LoginTermsFragment
+import im.vector.riotx.features.login.terms.LoginTermsFragmentArgument
+import im.vector.riotx.features.login.terms.toLocalizedLoginTerms
 import kotlinx.android.synthetic.main.activity_login.*
 import javax.inject.Inject
 
@@ -184,21 +187,22 @@ class LoginActivity : VectorBaseActivity() {
 
     private fun handleRegistrationNavigation(flowResult: FlowResult) {
         // Complete all mandatory stage first
-        val mandatoryStages = flowResult.missingStages.filter { it.mandatory }
+        val mandatoryStage = flowResult.missingStages.firstOrNull { it.mandatory }
 
-        if (mandatoryStages.isEmpty()) {
+        if (mandatoryStage != null) {
+            doStage(mandatoryStage)
+        } else {
             // Consider optional stages
-            val optionalStages = flowResult.missingStages.filter { !it.mandatory }
-            if (optionalStages.isEmpty()) {
+            val optionalStage = flowResult.missingStages.firstOrNull { !it.mandatory && it !is Stage.Dummy }
+            if (optionalStage == null) {
                 // Should not happen...
             } else {
-                doStage(optionalStages.first())
+                doStage(optionalStage)
             }
-        } else {
-            doStage(mandatoryStages.first())
         }
     }
 
+    // TODO Unstack fragment when stage is complete
     private fun doStage(stage: Stage) {
         when (stage) {
             is Stage.ReCaptcha -> addFragmentToBackstack(R.id.loginFragmentContainer,
@@ -210,11 +214,12 @@ class LoginActivity : VectorBaseActivity() {
                                -> addFragmentToBackstack(R.id.loginFragmentContainer,
                     LoginGenericTextInputFormFragment::class.java,
                     LoginGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.SetMsisdn, stage.mandatory))
-            is Stage.Terms
-                               -> TODO()
+            is Stage.Terms     -> addFragmentToBackstack(R.id.loginFragmentContainer,
+                    LoginTermsFragment::class.java,
+                    LoginTermsFragmentArgument(stage.policies.toLocalizedLoginTerms(getString(R.string.resources_language))))
+            else               -> TODO()
         }
     }
-
 
     override fun onResume() {
         super.onResume()

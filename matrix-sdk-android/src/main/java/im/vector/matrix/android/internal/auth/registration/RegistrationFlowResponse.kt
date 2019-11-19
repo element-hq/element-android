@@ -84,7 +84,7 @@ fun RegistrationFlowResponse.toFlowResult(): FlowResult {
             LoginFlowTypes.RECAPTCHA      -> Stage.ReCaptcha(isMandatory, ((params?.get(type) as? Map<*, *>)?.get("public_key") as? String)
                     ?: "")
             LoginFlowTypes.DUMMY          -> Stage.Dummy
-            LoginFlowTypes.TERMS          -> Stage.Terms(isMandatory, TermPolicies())
+            LoginFlowTypes.TERMS          -> Stage.Terms(isMandatory, params?.get(type) as? TermPolicies ?: emptyMap<String, String>())
             LoginFlowTypes.EMAIL_IDENTITY -> Stage.Email(isMandatory)
             LoginFlowTypes.MSISDN         -> Stage.Msisdn(isMandatory)
             else                          -> Stage.Other(isMandatory, type, (params?.get(type) as? Map<*, *>))

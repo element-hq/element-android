@@ -40,6 +40,9 @@ import im.vector.riotx.features.notifications.PushRuleTriggerListener
 import im.vector.riotx.features.session.SessionListener
 import timber.log.Timber
 
+/**
+ * TODO To speed up registration, consider fetching registration flow instead of login flow at startup
+ */
 class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginViewState,
                                                  private val authenticator: Authenticator,
                                                  private val registrationService: RegistrationService,
@@ -100,8 +103,41 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
         when (action) {
             is LoginAction.RegisterWith -> handleRegisterWith(action)
             is LoginAction.CaptchaDone  -> handleCaptchaDone(action)
+            is LoginAction.AcceptTerms  -> handleAcceptTerms()
             // TODO Add other actions here
         }
+    }
+
+    private fun handleAcceptTerms() {
+        setState {
+            copy(
+                    asyncRegistration = Loading()
+            )
+        }
+
+        currentTask = registrationWizard?.acceptTerms(object : MatrixCallback<RegistrationResult> {
+            override fun onSuccess(data: RegistrationResult) {
+                setState {
+                    copy(
+                            asyncRegistration = Success(data)
+                    )
+                }
+
+                when (data) {
+                    is RegistrationResult.Success      -> onSessionCreated(data.session)
+                    is RegistrationResult.FlowResponse -> onFlowResponse(data.flowResult)
+                }
+            }
+
+            override fun onFailure(failure: Throwable) {
+                // TODO Handled JobCancellationException
+                setState {
+                    copy(
+                            asyncRegistration = Fail(failure)
+                    )
+                }
+            }
+        })
     }
 
     private fun handleRegisterWith(action: LoginAction.RegisterWith) {

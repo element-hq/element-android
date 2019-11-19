@@ -40,5 +40,4 @@ sealed class Stage(open val mandatory: Boolean) {
     data class Other(override val mandatory: Boolean, val type: String, val params: Map<*, *>?) : Stage(mandatory)
 }
 
-//TODO
-class TermPolicies
+typealias TermPolicies = Map<*, *>

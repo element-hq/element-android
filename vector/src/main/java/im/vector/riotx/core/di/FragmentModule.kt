@@ -36,6 +36,7 @@ import im.vector.riotx.features.home.group.GroupListFragment
 import im.vector.riotx.features.home.room.detail.RoomDetailFragment
 import im.vector.riotx.features.home.room.list.RoomListFragment
 import im.vector.riotx.features.login.*
+import im.vector.riotx.features.login.terms.LoginTermsFragment
 import im.vector.riotx.features.reactions.EmojiSearchResultFragment
 import im.vector.riotx.features.roomdirectory.PublicRoomsFragment
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomFragment
@@ -118,6 +119,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(LoginCaptchaFragment::class)
     fun bindLoginCaptchaFragment(fragment: LoginCaptchaFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(LoginTermsFragment::class)
+    fun bindLoginTermsFragment(fragment: LoginTermsFragment): Fragment
 
     @Binds
     @IntoMap
