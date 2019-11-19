@@ -27,8 +27,6 @@ import android.view.View
 import android.webkit.*
 import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.args
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.riotx.R
 import im.vector.riotx.core.utils.AssetReader
@@ -43,14 +41,6 @@ import javax.inject.Inject
 data class LoginCaptchaFragmentArgument(
         val siteKey: String
 ) : Parcelable
-
-@JsonClass(generateAdapter = true)
-data class JavascriptResponse(
-        @Json(name = "action")
-        val action: String? = null,
-        @Json(name = "response")
-        val response: String? = null
-)
 
 /**
  * In this screen, the user is asked to confirm he is not a robot

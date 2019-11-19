@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,22 +14,26 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.api.auth.data
+package im.vector.riotx.features.login
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import im.vector.matrix.android.api.auth.data.Credentials
 
-/**
- * This data class hold credentials user data.
- * You shouldn't have to instantiate it.
- * The access token should be use to authenticate user in all server requests.
- */
 @JsonClass(generateAdapter = true)
-data class Credentials(
-        @Json(name = "user_id") val userId: String,
-        @Json(name = "home_server") val homeServer: String,
-        @Json(name = "access_token") val accessToken: String,
-        @Json(name = "refresh_token") val refreshToken: String?,
-        @Json(name = "device_id") val deviceId: String?
-        // TODO Add Wellknown
+data class JavascriptResponse(
+        @Json(name = "action")
+        val action: String? = null,
+
+        /**
+         * Use for captcha result
+         */
+        @Json(name = "response")
+        val response: String? = null,
+
+        /**
+         * Used for login/registration result
+         */
+        @Json(name = "credentials")
+        val credentials: Credentials? = null
 )

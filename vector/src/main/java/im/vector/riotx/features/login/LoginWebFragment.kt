@@ -30,10 +30,9 @@ import android.webkit.SslErrorHandler
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AlertDialog
-import im.vector.matrix.android.api.auth.data.Credentials
-import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.riotx.R
+import im.vector.riotx.core.utils.AssetReader
 import kotlinx.android.synthetic.main.fragment_login_web.*
 import timber.log.Timber
 import java.net.URLDecoder
@@ -43,7 +42,7 @@ import javax.inject.Inject
  * This screen is displayed for SSO login and also when the application does not support login flow or registration flow
  * of the homeserfver, as a fallback to login or to create an account
  */
-class LoginWebFragment @Inject constructor() : AbstractLoginFragment() {
+class LoginWebFragment @Inject constructor(private val assetReader: AssetReader) : AbstractLoginFragment() {
 
     private lateinit var homeServerUrl: String
     private lateinit var signMode: SignMode
@@ -151,33 +150,17 @@ class LoginWebFragment @Inject constructor() : AbstractLoginFragment() {
                 // avoid infinite onPageFinished call
                 if (url.startsWith("http")) {
                     // Generic method to make a bridge between JS and the UIWebView
-                    val mxcJavascriptSendObjectMessage = "javascript:window.sendObjectMessage = function(parameters) {" +
-                            " var iframe = document.createElement('iframe');" +
-                            " iframe.setAttribute('src', 'js:' + JSON.stringify(parameters));" +
-                            " document.documentElement.appendChild(iframe);" +
-                            " iframe.parentNode.removeChild(iframe); iframe = null;" +
-                            " };"
-
+                    val mxcJavascriptSendObjectMessage = assetReader.readAssetFile("sendObject.js")
                     view.loadUrl(mxcJavascriptSendObjectMessage)
 
                     if (signMode == SignMode.SignIn) {
                         // The function the fallback page calls when the login is complete
-                        val mxcJavascriptOnRegistered = "javascript:window.matrixLogin.onLogin = function(response) {" +
-                                " sendObjectMessage({ 'action': 'onLogin', 'credentials': response });" +
-                                " };"
-
-                        view.loadUrl(mxcJavascriptOnRegistered)
+                        val mxcJavascriptOnLogin = assetReader.readAssetFile("onLogin.js")
+                        view.loadUrl(mxcJavascriptOnLogin)
                     } else {
                         // MODE_REGISTER
                         // The function the fallback page calls when the registration is complete
-                        val mxcJavascriptOnRegistered = "javascript:window.matrixRegistration.onRegistered" +
-                                " = function(homeserverUrl, userId, accessToken) {" +
-                                " sendObjectMessage({ 'action': 'onRegistered'," +
-                                " 'homeServer': homeserverUrl," +
-                                " 'userId': userId," +
-                                " 'accessToken': accessToken });" +
-                                " };"
-
+                        val mxcJavascriptOnRegistered = assetReader.readAssetFile("onRegistered.js")
                         view.loadUrl(mxcJavascriptOnRegistered)
                     }
                 }
@@ -209,46 +192,27 @@ class LoginWebFragment @Inject constructor() : AbstractLoginFragment() {
             override fun shouldOverrideUrlLoading(view: WebView, url: String?): Boolean {
                 if (null != url && url.startsWith("js:")) {
                     var json = url.substring(3)
-                    var parameters: Map<String, Any>? = null
+                    var parameters: JavascriptResponse? = null
 
                     try {
                         // URL decode
                         json = URLDecoder.decode(json, "UTF-8")
-
-                        val adapter = MoshiProvider.providesMoshi().adapter(Map::class.java)
-
-                        @Suppress("UNCHECKED_CAST")
-                        parameters = adapter.fromJson(json) as JsonDict?
+                        val adapter = MoshiProvider.providesMoshi().adapter(JavascriptResponse::class.java)
+                        parameters = adapter.fromJson(json)
                     } catch (e: Exception) {
                         Timber.e(e, "## shouldOverrideUrlLoading() : fromJson failed")
                     }
 
                     // succeeds to parse parameters
                     if (parameters != null) {
-                        val action = parameters["action"] as String
+                        val action = parameters.action
 
                         if (signMode == SignMode.SignIn) {
                             try {
                                 if (action == "onLogin") {
-                                    @Suppress("UNCHECKED_CAST")
-                                    val credentials = parameters["credentials"] as Map<String, String>
-
-                                    val userId = credentials["user_id"]
-                                    val accessToken = credentials["access_token"]
-                                    val homeServer = credentials["home_server"]
-                                    val deviceId = credentials["device_id"]
-
-                                    // check if the parameters are defined
-                                    if (null != homeServer && null != userId && null != accessToken) {
-                                        val safeCredentials = Credentials(
-                                                userId = userId,
-                                                accessToken = accessToken,
-                                                homeServer = homeServer,
-                                                deviceId = deviceId,
-                                                refreshToken = null
-                                        )
-
-                                        loginViewModel.handle(LoginAction.WebLoginSuccess(safeCredentials))
+                                    val credentials = parameters.credentials
+                                    if (credentials != null) {
+                                        loginViewModel.handle(LoginAction.WebLoginSuccess(credentials))
                                     }
                                 }
                             } catch (e: Exception) {
@@ -258,21 +222,8 @@ class LoginWebFragment @Inject constructor() : AbstractLoginFragment() {
                             // MODE_REGISTER
                             // check the required parameters
                             if (action == "onRegistered") {
-                                // TODO The keys are very strange, this code comes from Riot-Android...
-                                if (parameters.containsKey("homeServer")
-                                        && parameters.containsKey("userId")
-                                        && parameters.containsKey("accessToken")) {
-                                    // We cannot parse Credentials here because of https://github.com/matrix-org/synapse/issues/4756
-                                    // Build on object manually
-                                    val credentials = Credentials(
-                                            userId = parameters["userId"] as String,
-                                            accessToken = parameters["accessToken"] as String,
-                                            homeServer = parameters["homeServer"] as String,
-                                            // TODO We need deviceId on RiotX...
-                                            deviceId = "TODO",
-                                            refreshToken = null
-                                    )
-
+                                val credentials = parameters.credentials
+                                if (credentials != null) {
                                     loginViewModel.handle(LoginAction.WebLoginSuccess(credentials))
                                 }
                             }

@@ -103,9 +103,9 @@ class LoginActivity : VectorBaseActivity() {
         when (loginViewEvents) {
             is LoginViewEvents.RegistrationFlowResult -> {
                 // Check that all flows are supported by the application
-                if (loginViewEvents.flowResult.missingStages.any { it is Stage.Other }) {
+                if (loginViewEvents.flowResult.missingStages.any { !it.isSupported() }) {
                     // Display a popup to propose use web fallback
-                    // TODO
+                    onRegistrationStageNotSupported()
                 } else {
                     // Go on with registration flow
                     // loginSharedActionViewModel.post(LoginNavigation.OnSignModeSelected)
@@ -159,7 +159,9 @@ class LoginActivity : VectorBaseActivity() {
     private fun onSignModeSelected() {
         when (loginViewModel.signMode) {
             SignMode.Unknown -> error("Sign mode has to be set before calling this method")
-            SignMode.SignUp  -> addFragmentToBackstack(R.id.loginFragmentContainer, LoginFragment::class.java)
+            SignMode.SignUp  -> {
+                // This is managed by the LoginViewEvents
+            }
             SignMode.SignIn  -> {
                 // It depends on the LoginMode
                 withState(loginViewModel) {
@@ -172,6 +174,17 @@ class LoginActivity : VectorBaseActivity() {
                 }
             }
         }
+    }
+
+    private fun onRegistrationStageNotSupported() {
+        AlertDialog.Builder(this)
+                .setTitle(R.string.app_name)
+                .setMessage(getString(R.string.login_registration_not_supported))
+                .setPositiveButton(R.string.yes) { _, _ ->
+                    addFragmentToBackstack(R.id.loginFragmentContainer, LoginWebFragment::class.java)
+                }
+                .setNegativeButton(R.string.no, null)
+                .show()
     }
 
     private fun onLoginModeNotSupported(unsupportedLoginMode: LoginMode.Unsupported) {
