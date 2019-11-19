@@ -53,31 +53,13 @@
 
     </FrameLayout>
 
-    <LinearLayout
-        android:id="@+id/informationBottom"
-        android:layout_width="match_parent"
+    <im.vector.riotx.core.ui.views.ReadReceiptsView
+        android:id="@+id/readReceiptsView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/viewStubContainer"
-        android:orientation="vertical">
-
-        <im.vector.riotx.core.ui.views.ReadReceiptsView
-            android:id="@+id/readReceiptsView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="4dp" />
-
-        <im.vector.riotx.core.ui.views.ReadMarkerView
-            android:id="@+id/readMarkerView"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="2dp"
-            android:background="?attr/vctr_unread_marker_line_color"
-            android:visibility="invisible" />
-
-    </LinearLayout>
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="4dp" />
 
 </RelativeLayout>

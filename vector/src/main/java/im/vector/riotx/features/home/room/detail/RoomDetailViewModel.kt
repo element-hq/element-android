@@ -40,6 +40,7 @@ import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.model.message.getFileUrl
 import im.vector.matrix.android.api.session.room.model.tombstone.RoomTombstoneContent
 import im.vector.matrix.android.api.session.room.send.UserDraft
+import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.TimelineSettings
 import im.vector.matrix.android.api.session.room.timeline.getTextEditableContent
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
@@ -64,6 +65,7 @@ import org.commonmark.renderer.html.HtmlRenderer
 import timber.log.Timber
 import java.io.File
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicBoolean
 
 class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: RoomDetailViewState,
                                                       userPreferencesProvider: UserPreferencesProvider,
@@ -102,6 +104,9 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     // Slot to keep a pending uri during permission request
     var pendingUri: Uri? = null
 
+    private var trackUnreadMessages = AtomicBoolean(false)
+    private var mostRecentDisplayedEvent: TimelineEvent? = null
+
     @AssistedInject.Factory
     interface Factory {
         fun create(initialState: RoomDetailViewState): RoomDetailViewModel
@@ -120,6 +125,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     init {
+        getSnapshotOfReadMarkerId()
         observeSyncState()
         observeRoomSummary()
         observeEventDisplayedActions()
@@ -132,33 +138,47 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
 
     override fun handle(action: RoomDetailAction) {
         when (action) {
-            is RoomDetailAction.SaveDraft                   -> handleSaveDraft(action)
-            is RoomDetailAction.SendMessage                 -> handleSendMessage(action)
-            is RoomDetailAction.SendMedia                   -> handleSendMedia(action)
-            is RoomDetailAction.TimelineEventTurnsVisible   -> handleEventVisible(action)
-            is RoomDetailAction.TimelineEventTurnsInvisible -> handleEventInvisible(action)
-            is RoomDetailAction.LoadMoreTimelineEvents      -> handleLoadMore(action)
-            is RoomDetailAction.SendReaction                -> handleSendReaction(action)
-            is RoomDetailAction.AcceptInvite                -> handleAcceptInvite()
-            is RoomDetailAction.RejectInvite                -> handleRejectInvite()
-            is RoomDetailAction.RedactAction                -> handleRedactEvent(action)
-            is RoomDetailAction.UndoReaction                -> handleUndoReact(action)
-            is RoomDetailAction.UpdateQuickReactAction      -> handleUpdateQuickReaction(action)
-            is RoomDetailAction.ExitSpecialMode             -> handleExitSpecialMode(action)
-            is RoomDetailAction.EnterEditMode               -> handleEditAction(action)
-            is RoomDetailAction.EnterQuoteMode              -> handleQuoteAction(action)
-            is RoomDetailAction.EnterReplyMode              -> handleReplyAction(action)
-            is RoomDetailAction.DownloadFile                -> handleDownloadFile(action)
-            is RoomDetailAction.NavigateToEvent             -> handleNavigateToEvent(action)
-            is RoomDetailAction.HandleTombstoneEvent        -> handleTombstoneEvent(action)
-            is RoomDetailAction.ResendMessage               -> handleResendEvent(action)
-            is RoomDetailAction.RemoveFailedEcho            -> handleRemove(action)
-            is RoomDetailAction.ClearSendQueue              -> handleClearSendQueue()
-            is RoomDetailAction.ResendAll                   -> handleResendAll()
-            is RoomDetailAction.SetReadMarkerAction         -> handleSetReadMarkerAction(action)
-            is RoomDetailAction.MarkAllAsRead               -> handleMarkAllAsRead()
-            is RoomDetailAction.ReportContent               -> handleReportContent(action)
-            is RoomDetailAction.IgnoreUser                  -> handleIgnoreUser(action)
+            is RoomDetailAction.SaveDraft                        -> handleSaveDraft(action)
+            is RoomDetailAction.SendMessage                      -> handleSendMessage(action)
+            is RoomDetailAction.SendMedia                        -> handleSendMedia(action)
+            is RoomDetailAction.TimelineEventTurnsVisible        -> handleEventVisible(action)
+            is RoomDetailAction.TimelineEventTurnsInvisible      -> handleEventInvisible(action)
+            is RoomDetailAction.LoadMoreTimelineEvents           -> handleLoadMore(action)
+            is RoomDetailAction.SendReaction                     -> handleSendReaction(action)
+            is RoomDetailAction.AcceptInvite                     -> handleAcceptInvite()
+            is RoomDetailAction.RejectInvite                     -> handleRejectInvite()
+            is RoomDetailAction.RedactAction                     -> handleRedactEvent(action)
+            is RoomDetailAction.UndoReaction                     -> handleUndoReact(action)
+            is RoomDetailAction.UpdateQuickReactAction           -> handleUpdateQuickReaction(action)
+            is RoomDetailAction.ExitSpecialMode                  -> handleExitSpecialMode(action)
+            is RoomDetailAction.EnterEditMode                    -> handleEditAction(action)
+            is RoomDetailAction.EnterQuoteMode                   -> handleQuoteAction(action)
+            is RoomDetailAction.EnterReplyMode                   -> handleReplyAction(action)
+            is RoomDetailAction.DownloadFile                     -> handleDownloadFile(action)
+            is RoomDetailAction.NavigateToEvent                  -> handleNavigateToEvent(action)
+            is RoomDetailAction.HandleTombstoneEvent             -> handleTombstoneEvent(action)
+            is RoomDetailAction.ResendMessage                    -> handleResendEvent(action)
+            is RoomDetailAction.RemoveFailedEcho                 -> handleRemove(action)
+            is RoomDetailAction.ClearSendQueue                   -> handleClearSendQueue()
+            is RoomDetailAction.ResendAll                        -> handleResendAll()
+            is RoomDetailAction.MarkAllAsRead                    -> handleMarkAllAsRead()
+            is RoomDetailAction.ReportContent                    -> handleReportContent(action)
+            is RoomDetailAction.IgnoreUser                       -> handleIgnoreUser(action)
+            is RoomDetailAction.EnterTrackingUnreadMessagesState -> handleEnterTrackingUnreadMessages()
+            is RoomDetailAction.ExitTrackingUnreadMessagesState  -> handleExitTrackingUnreadMessages()
+        }
+    }
+
+    private fun handleEnterTrackingUnreadMessages() {
+        trackUnreadMessages.set(true)
+    }
+
+    private fun handleExitTrackingUnreadMessages() {
+        if (trackUnreadMessages.getAndSet(false)) {
+            mostRecentDisplayedEvent?.root?.eventId?.also {
+                room.setReadMarker(it, callback = object : MatrixCallback<Unit> {})
+            }
+            mostRecentDisplayedEvent = null
         }
     }
 
@@ -685,24 +705,20 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 .buffer(1, TimeUnit.SECONDS)
                 .filter { it.isNotEmpty() }
                 .subscribeBy(onNext = { actions ->
-                    val mostRecentEvent = actions.maxBy { it.event.displayIndex }
-                    mostRecentEvent?.event?.root?.eventId?.let { eventId ->
+                    val bufferedMostRecentDisplayedEvent = actions.maxBy { it.event.displayIndex }?.event ?: return@subscribeBy
+                    val globalMostRecentDisplayedEvent = mostRecentDisplayedEvent
+                    if (trackUnreadMessages.get()) {
+                        if (globalMostRecentDisplayedEvent == null) {
+                            mostRecentDisplayedEvent = bufferedMostRecentDisplayedEvent
+                        } else if (bufferedMostRecentDisplayedEvent.displayIndex > globalMostRecentDisplayedEvent.displayIndex) {
+                            mostRecentDisplayedEvent = bufferedMostRecentDisplayedEvent
+                        }
+                    }
+                    bufferedMostRecentDisplayedEvent.root.eventId?.let { eventId ->
                         room.setReadReceipt(eventId, callback = object : MatrixCallback<Unit> {})
                     }
                 })
                 .disposeOnClear()
-    }
-
-    private fun handleSetReadMarkerAction(action: RoomDetailAction.SetReadMarkerAction) = withState {
-        var readMarkerId = action.eventId
-        val indexOfEvent = timeline.getIndexOfEvent(readMarkerId)
-        // force to set the read marker on the next event
-        if (indexOfEvent != null) {
-            timeline.getTimelineEventAtIndex(indexOfEvent - 1)?.root?.eventId?.also { eventIdOfNext ->
-                readMarkerId = eventIdOfNext
-            }
-        }
-        room.setReadMarker(readMarkerId, callback = object : MatrixCallback<Unit> {})
     }
 
     private fun handleMarkAllAsRead() {
@@ -757,6 +773,19 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                             isEncrypted = room.isEncrypted()
                     )
                 }
+    }
+
+    private fun getSnapshotOfReadMarkerId() {
+        room.rx().liveRoomSummary()
+                .unwrap()
+                .filter { it.readMarkerId != null }
+                .take(1)
+                .subscribe { roomSummary ->
+                    setState {
+                        copy(readMarkerIdSnapshot = roomSummary.readMarkerId)
+                    }
+                }
+                .disposeOnClear()
     }
 
     private fun observeSummaryState() {

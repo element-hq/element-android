@@ -22,7 +22,6 @@ import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
-import im.vector.riotx.core.ui.views.ReadMarkerView
 import im.vector.riotx.core.utils.DebouncedClickListener
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
@@ -37,12 +36,6 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
         attributes.readReceiptsCallback?.onReadReceiptsClicked(attributes.informationData.readReceipts)
     })
 
-    private val _readMarkerCallback = object : ReadMarkerView.Callback {
-
-        override fun onReadMarkerLongBound(isDisplayed: Boolean) {
-            attributes.readReceiptsCallback?.onReadMarkerLongBound(attributes.informationData.eventId, isDisplayed)
-        }
-    }
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -56,17 +49,6 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
         )
         holder.view.setOnLongClickListener(attributes.itemLongClickListener)
         holder.readReceiptsView.render(attributes.informationData.readReceipts, attributes.avatarRenderer, _readReceiptsClickListener)
-        holder.readMarkerView.bindView(
-                attributes.informationData.eventId,
-                attributes.informationData.hasReadMarker,
-                attributes.informationData.displayReadMarker,
-                _readMarkerCallback
-        )
-    }
-
-    override fun unbind(holder: Holder) {
-        holder.readMarkerView.unbind()
-        super.unbind(holder)
     }
 
     override fun getEventIds(): List<String> {

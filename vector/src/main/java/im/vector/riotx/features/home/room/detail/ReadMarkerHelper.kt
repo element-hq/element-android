@@ -28,47 +28,12 @@ class ReadMarkerHelper @Inject constructor() {
     lateinit var timelineEventController: TimelineEventController
     lateinit var layoutManager: LinearLayoutManager
     var callback: Callback? = null
-
-    private var onReadMarkerLongDisplayed = false
     private var jumpToReadMarkerVisible = false
-    private var readMarkerVisible: Boolean = true
     private var state: RoomDetailViewState? = null
-
-    fun readMarkerVisible(): Boolean {
-        return readMarkerVisible
-    }
-
-    fun onResume() {
-        onReadMarkerLongDisplayed = false
-    }
-
-    fun onReadMarkerLongDisplayed() {
-        onReadMarkerLongDisplayed = true
-    }
 
     fun updateWith(newState: RoomDetailViewState) {
         state = newState
-        checkReadMarkerVisibility()
         checkJumpToReadMarkerVisibility()
-    }
-
-    fun onTimelineScrolled() {
-        checkJumpToReadMarkerVisibility()
-    }
-
-    private fun checkReadMarkerVisibility() {
-        val nonNullState = this.state ?: return
-        val firstVisibleItem = layoutManager.findFirstVisibleItemPosition()
-        val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
-        readMarkerVisible = if (!onReadMarkerLongDisplayed) {
-            true
-        } else {
-            if (nonNullState.timeline?.isLive == false) {
-                true
-            } else {
-                !(firstVisibleItem == 0 && lastVisibleItem > 0)
-            }
-        }
     }
 
     private fun checkJumpToReadMarkerVisibility() {

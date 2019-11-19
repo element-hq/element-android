@@ -17,8 +17,6 @@
 package im.vector.matrix.android.internal.database.model
 
 import io.realm.RealmObject
-import io.realm.RealmResults
-import io.realm.annotations.LinkingObjects
 import io.realm.annotations.PrimaryKey
 
 internal open class ReadMarkerEntity(
@@ -26,9 +24,6 @@ internal open class ReadMarkerEntity(
         var roomId: String = "",
         var eventId: String = ""
 ) : RealmObject() {
-
-    @LinkingObjects("readMarker")
-    val timelineEvent: RealmResults<TimelineEventEntity>? = null
 
     companion object
 }

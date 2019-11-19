@@ -36,7 +36,6 @@ class MergedHeaderItemFactory @Inject constructor(private val sessionHolder: Act
                nextEvent: TimelineEvent?,
                items: List<TimelineEvent>,
                addDaySeparator: Boolean,
-               readMarkerVisible: Boolean,
                currentPosition: Int,
                eventIdToHighlight: String?,
                callback: TimelineEventController.Callback?,
@@ -50,19 +49,11 @@ class MergedHeaderItemFactory @Inject constructor(private val sessionHolder: Act
                 null
             } else {
                 var highlighted = false
-                var readMarkerId: String? = null
-                var showReadMarker = false
                 val mergedEvents = (prevSameTypeEvents + listOf(event)).asReversed()
                 val mergedData = ArrayList<MergedHeaderItem.Data>(mergedEvents.size)
                 mergedEvents.forEach { mergedEvent ->
                     if (!highlighted && mergedEvent.root.eventId == eventIdToHighlight) {
                         highlighted = true
-                    }
-                    if (readMarkerId == null && mergedEvent.hasReadMarker) {
-                        readMarkerId = mergedEvent.root.eventId
-                    }
-                    if (!showReadMarker && mergedEvent.hasReadMarker && readMarkerVisible) {
-                        showReadMarker = true
                     }
                     val senderAvatar = mergedEvent.senderAvatar
                     val senderName = mergedEvent.getDisambiguatedDisplayName()
@@ -96,8 +87,6 @@ class MergedHeaderItemFactory @Inject constructor(private val sessionHolder: Act
                             mergeItemCollapseStates[event.localId] = it
                             requestModelBuild()
                         },
-                        readMarkerId = readMarkerId,
-                        showReadMarker = isCollapsed && showReadMarker,
                         readReceiptsCallback = callback
                 )
                 MergedHeaderItem_()

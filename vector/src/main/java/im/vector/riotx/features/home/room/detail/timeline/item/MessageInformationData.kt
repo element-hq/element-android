@@ -33,9 +33,7 @@ data class MessageInformationData(
         val orderedReactionList: List<ReactionInfoData>? = null,
         val hasBeenEdited: Boolean = false,
         val hasPendingEdits: Boolean = false,
-        val readReceipts: List<ReadReceiptData> = emptyList(),
-        val hasReadMarker: Boolean = false,
-        val displayReadMarker: Boolean = false
+        val readReceipts: List<ReadReceiptData> = emptyList()
 ) : Parcelable
 
 @Parcelize

@@ -74,9 +74,8 @@ internal class DefaultTimeline(
         private val cryptoService: CryptoService,
         private val timelineEventMapper: TimelineEventMapper,
         private val settings: TimelineSettings,
-        private val hiddenReadReceipts: TimelineHiddenReadReceipts,
-        private val hiddenReadMarker: TimelineHiddenReadMarker
-) : Timeline, TimelineHiddenReadReceipts.Delegate, TimelineHiddenReadMarker.Delegate {
+        private val hiddenReadReceipts: TimelineHiddenReadReceipts
+) : Timeline, TimelineHiddenReadReceipts.Delegate {
 
     private companion object {
         val BACKGROUND_HANDLER = createBackgroundHandler("TIMELINE_DB_THREAD")
@@ -197,7 +196,6 @@ internal class DefaultTimeline(
                 if (settings.buildReadReceipts) {
                     hiddenReadReceipts.start(realm, filteredEvents, nonFilteredEvents, this)
                 }
-                hiddenReadMarker.start(realm, filteredEvents, nonFilteredEvents, this)
                 isReady.set(true)
             }
         }
@@ -217,7 +215,6 @@ internal class DefaultTimeline(
                 if (this::filteredEvents.isInitialized) {
                     filteredEvents.removeAllChangeListeners()
                 }
-                hiddenReadMarker.dispose()
                 if (settings.buildReadReceipts) {
                     hiddenReadReceipts.dispose()
                 }
@@ -298,7 +295,7 @@ internal class DefaultTimeline(
         return hasMoreInCache(direction) || !hasReachedEnd(direction)
     }
 
-// TimelineHiddenReadReceipts.Delegate
+    // TimelineHiddenReadReceipts.Delegate
 
     override fun rebuildEvent(eventId: String, readReceipts: List<ReadReceipt>): Boolean {
         return rebuildEvent(eventId) { te ->
@@ -310,19 +307,7 @@ internal class DefaultTimeline(
         postSnapshot()
     }
 
-// TimelineHiddenReadMarker.Delegate
-
-    override fun rebuildEvent(eventId: String, hasReadMarker: Boolean): Boolean {
-        return rebuildEvent(eventId) { te ->
-            te.copy(hasReadMarker = hasReadMarker)
-        }
-    }
-
-    override fun onReadMarkerUpdated() {
-        postSnapshot()
-    }
-
-// Private methods *****************************************************************************
+    // Private methods *****************************************************************************
 
     private fun rebuildEvent(eventId: String, builder: (TimelineEvent) -> TimelineEvent): Boolean {
         return builtEventsIdMap[eventId]?.let { builtIndex ->

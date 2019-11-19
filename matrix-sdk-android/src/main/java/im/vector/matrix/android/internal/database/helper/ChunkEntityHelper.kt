@@ -23,7 +23,6 @@ import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.mapper.toEntity
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryEntity
-import im.vector.matrix.android.internal.database.model.ReadMarkerEntity
 import im.vector.matrix.android.internal.database.model.ReadReceiptEntity
 import im.vector.matrix.android.internal.database.model.ReadReceiptsSummaryEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
@@ -140,7 +139,7 @@ internal fun ChunkEntity.add(roomId: String,
     val senderId = event.senderId ?: ""
 
     val readReceiptsSummaryEntity = ReadReceiptsSummaryEntity.where(realm, eventId).findFirst()
-                                    ?: ReadReceiptsSummaryEntity(eventId, roomId)
+            ?: ReadReceiptsSummaryEntity(eventId, roomId)
 
     // Update RR for the sender of a new message with a dummy one
 
@@ -168,7 +167,6 @@ internal fun ChunkEntity.add(roomId: String,
         it.roomId = roomId
         it.annotations = EventAnnotationsSummaryEntity.where(realm, eventId).findFirst()
         it.readReceipts = readReceiptsSummaryEntity
-        it.readMarker = ReadMarkerEntity.where(realm, roomId = roomId, eventId = eventId).findFirst()
     }
     val position = if (direction == PaginationDirection.FORWARDS) 0 else this.timelineEvents.size
     timelineEvents.add(position, eventEntity)
@@ -176,14 +174,14 @@ internal fun ChunkEntity.add(roomId: String,
 
 internal fun ChunkEntity.lastDisplayIndex(direction: PaginationDirection, defaultValue: Int = 0): Int {
     return when (direction) {
-               PaginationDirection.FORWARDS  -> forwardsDisplayIndex
-               PaginationDirection.BACKWARDS -> backwardsDisplayIndex
-           } ?: defaultValue
+        PaginationDirection.FORWARDS  -> forwardsDisplayIndex
+        PaginationDirection.BACKWARDS -> backwardsDisplayIndex
+    } ?: defaultValue
 }
 
 internal fun ChunkEntity.lastStateIndex(direction: PaginationDirection, defaultValue: Int = 0): Int {
     return when (direction) {
-               PaginationDirection.FORWARDS  -> forwardsStateIndex
-               PaginationDirection.BACKWARDS -> backwardsStateIndex
-           } ?: defaultValue
+        PaginationDirection.FORWARDS  -> forwardsStateIndex
+        PaginationDirection.BACKWARDS -> backwardsStateIndex
+    } ?: defaultValue
 }

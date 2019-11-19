@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,13 +14,18 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.core.extensions
+package im.vector.riotx.features.home.room.detail.timeline.item
 
-import im.vector.matrix.android.api.session.events.model.EventType
-import im.vector.matrix.android.api.session.room.send.SendState
-import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import com.airbnb.epoxy.EpoxyModelClass
+import im.vector.riotx.R
+import im.vector.riotx.core.epoxy.VectorEpoxyHolder
+import im.vector.riotx.core.epoxy.VectorEpoxyModel
 
-fun TimelineEvent.canReact(): Boolean {
-    // Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
-    return root.getClearType() == EventType.MESSAGE && root.sendState == SendState.SYNCED && !root.isRedacted()
+@EpoxyModelClass(layout = R.layout.item_timeline_read_marker)
+abstract class TimelineReadMarkerItem : VectorEpoxyModel<TimelineReadMarkerItem.Holder>() {
+
+    override fun bind(holder: Holder) {
+    }
+
+    class Holder : VectorEpoxyHolder()
 }
