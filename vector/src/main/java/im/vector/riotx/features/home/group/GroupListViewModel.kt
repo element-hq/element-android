@@ -39,10 +39,10 @@ import io.reactivex.functions.BiFunction
 const val ALL_COMMUNITIES_GROUP_ID = "ALL_COMMUNITIES_GROUP_ID"
 
 class GroupListViewModel @AssistedInject constructor(@Assisted initialState: GroupListViewState,
-                                                     private val selectedGroupStore: SelectedGroupStore,
+                                                     private val selectedGroupStore: SelectedGroupDataSource,
                                                      private val session: Session,
                                                      private val stringProvider: StringProvider
-) : VectorViewModel<GroupListViewState>(initialState) {
+) : VectorViewModel<GroupListViewState, GroupListAction>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -81,15 +81,15 @@ class GroupListViewModel @AssistedInject constructor(@Assisted initialState: Gro
         }
     }
 
-    fun accept(action: GroupListActions) {
+    override fun handle(action: GroupListAction) {
         when (action) {
-            is GroupListActions.SelectGroup -> handleSelectGroup(action)
+            is GroupListAction.SelectGroup -> handleSelectGroup(action)
         }
     }
 
     // PRIVATE METHODS *****************************************************************************
 
-    private fun handleSelectGroup(action: GroupListActions.SelectGroup) = withState { state ->
+    private fun handleSelectGroup(action: GroupListAction.SelectGroup) = withState { state ->
         if (state.selectedGroup?.groupId != action.groupSummary.groupId) {
             setState { copy(selectedGroup = action.groupSummary) }
         }

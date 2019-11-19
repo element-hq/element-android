@@ -37,5 +37,6 @@ enum class Command(val command: String, val parameters: String, @StringRes val d
     KICK_USER("/kick", "<user-id> [reason]", R.string.command_description_kick_user),
     CHANGE_DISPLAY_NAME("/nick", "<display-name>", R.string.command_description_nick),
     MARKDOWN("/markdown", "<on|off>", R.string.command_description_markdown),
-    CLEAR_SCALAR_TOKEN("/clear_scalar_token", "", R.string.command_description_clear_scalar_token);
+    CLEAR_SCALAR_TOKEN("/clear_scalar_token", "", R.string.command_description_clear_scalar_token),
+    SPOILER("/spoiler", "<message>", R.string.command_description_spoiler);
 }

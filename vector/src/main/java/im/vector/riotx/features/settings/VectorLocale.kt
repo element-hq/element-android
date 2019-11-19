@@ -21,12 +21,16 @@ import android.content.res.Configuration
 import android.os.Build
 import android.preference.PreferenceManager
 import androidx.core.content.edit
+import im.vector.riotx.BuildConfig
 import im.vector.riotx.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.Locale
+import kotlin.Comparator
+import kotlin.collections.ArrayList
+import kotlin.collections.HashSet
 
 /**
  * Object to manage the Locale choice of the user
@@ -35,6 +39,7 @@ object VectorLocale {
     private const val APPLICATION_LOCALE_COUNTRY_KEY = "APPLICATION_LOCALE_COUNTRY_KEY"
     private const val APPLICATION_LOCALE_VARIANT_KEY = "APPLICATION_LOCALE_VARIANT_KEY"
     private const val APPLICATION_LOCALE_LANGUAGE_KEY = "APPLICATION_LOCALE_LANGUAGE_KEY"
+    private const val APPLICATION_LOCALE_SCRIPT_KEY = "APPLICATION_LOCALE_SCRIPT_KEY"
 
     private val defaultLocale = Locale("en", "US")
 
@@ -106,6 +111,15 @@ object VectorLocale {
             } else {
                 putString(APPLICATION_LOCALE_VARIANT_KEY, variant)
             }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                val script = locale.script
+                if (script.isEmpty()) {
+                    remove(APPLICATION_LOCALE_SCRIPT_KEY)
+                } else {
+                    putString(APPLICATION_LOCALE_SCRIPT_KEY, script)
+                }
+            }
         }
     }
 
@@ -159,24 +173,43 @@ object VectorLocale {
      * @param context the context
      */
     private fun initApplicationLocales(context: Context) {
-        val knownLocalesSet = HashSet<Pair<String, String>>()
+        val knownLocalesSet = HashSet<Triple<String, String, String>>()
 
         try {
             val availableLocales = Locale.getAvailableLocales()
 
             for (locale in availableLocales) {
-                knownLocalesSet.add(Pair(getString(context, locale, R.string.resources_language),
-                        getString(context, locale, R.string.resources_country_code)))
+                knownLocalesSet.add(
+                        Triple(
+                                getString(context, locale, R.string.resources_language),
+                                getString(context, locale, R.string.resources_country_code),
+                                getString(context, locale, R.string.resources_script)
+                        )
+                )
             }
         } catch (e: Exception) {
             Timber.e(e, "## getApplicationLocales() : failed")
-            knownLocalesSet.add(Pair(context.getString(R.string.resources_language), context.getString(R.string.resources_country_code)))
+            knownLocalesSet.add(
+                    Triple(
+                            context.getString(R.string.resources_language),
+                            context.getString(R.string.resources_country_code),
+                            context.getString(R.string.resources_script)
+                    )
+            )
         }
 
         supportedLocales.clear()
 
-        knownLocalesSet.mapTo(supportedLocales) { (language, country) ->
-            Locale(language, country)
+        knownLocalesSet.mapTo(supportedLocales) { (language, country, script) ->
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                Locale.Builder()
+                        .setLanguage(language)
+                        .setRegion(country)
+                        .setScript(script)
+                        .build()
+            } else {
+                Locale(language, country)
+            }
         }
 
         // sort by human display names
@@ -190,12 +223,37 @@ object VectorLocale {
      * @return the string
      */
     fun localeToLocalisedString(locale: Locale): String {
-        var res = locale.getDisplayLanguage(locale)
+        return buildString {
+            append(locale.getDisplayLanguage(locale))
 
-        if (locale.getDisplayCountry(locale).isNotEmpty()) {
-            res += " (" + locale.getDisplayCountry(locale) + ")"
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+                    && locale.script != "Latn"
+                    && locale.getDisplayScript(locale).isNotEmpty()) {
+                append(" - ")
+                append(locale.getDisplayScript(locale))
+            }
+
+            if (locale.getDisplayCountry(locale).isNotEmpty()) {
+                append(" (")
+                append(locale.getDisplayCountry(locale))
+                append(")")
+            }
+
+            // In debug mode, also display information about the locale in the current locale.
+            if (BuildConfig.DEBUG) {
+                append("\n[")
+                append(locale.displayLanguage)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && locale.script != "Latn") {
+                    append(" - ")
+                    append(locale.displayScript)
+                }
+                if (locale.displayCountry.isNotEmpty()) {
+                    append(" (")
+                    append(locale.displayCountry)
+                    append(")")
+                }
+                append("]")
+            }
         }
-
-        return res
     }
 }

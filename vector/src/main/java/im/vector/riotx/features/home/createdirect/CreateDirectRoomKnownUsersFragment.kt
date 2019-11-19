@@ -21,9 +21,9 @@ package im.vector.riotx.features.home.createdirect
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.ScrollView
 import androidx.core.view.size
-import androidx.lifecycle.ViewModelProviders
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.chip.Chip
@@ -31,36 +31,29 @@ import com.google.android.material.chip.ChipGroup
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotx.R
-import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.extensions.setupAsSearch
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.utils.DimensionConverter
-import im.vector.riotx.features.home.AvatarRenderer
 import kotlinx.android.synthetic.main.fragment_create_direct_room.*
 import javax.inject.Inject
 
-class CreateDirectRoomKnownUsersFragment : VectorBaseFragment(), KnownUsersController.Callback {
+class CreateDirectRoomKnownUsersFragment @Inject constructor(
+        private val knownUsersController: KnownUsersController,
+        private val dimensionConverter: DimensionConverter
+) : VectorBaseFragment(), KnownUsersController.Callback {
 
     override fun getLayoutResId() = R.layout.fragment_create_direct_room
 
     override fun getMenuRes() = R.menu.vector_create_direct_room
 
     private val viewModel: CreateDirectRoomViewModel by activityViewModel()
+    private lateinit var sharedActionViewModel: CreateDirectRoomSharedActionViewModel
 
-    @Inject lateinit var directRoomController: KnownUsersController
-    @Inject lateinit var avatarRenderer: AvatarRenderer
-    @Inject lateinit var dimensionConverter: DimensionConverter
-    private lateinit var navigationViewModel: CreateDirectRoomNavigationViewModel
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        navigationViewModel = ViewModelProviders.of(requireActivity(), viewModelFactory).get(CreateDirectRoomNavigationViewModel::class.java)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        sharedActionViewModel = activityViewModelProvider.get(CreateDirectRoomSharedActionViewModel::class.java)
         vectorBaseActivity.setSupportActionBar(createDirectRoomToolbar)
         setupRecyclerView()
         setupFilterView()
@@ -86,7 +79,7 @@ class CreateDirectRoomKnownUsersFragment : VectorBaseFragment(), KnownUsersContr
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_create_direct_room -> {
-                viewModel.handle(CreateDirectRoomActions.CreateRoomAndInviteSelectedUsers)
+                viewModel.handle(CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers)
                 true
             }
             else                           ->
@@ -96,7 +89,7 @@ class CreateDirectRoomKnownUsersFragment : VectorBaseFragment(), KnownUsersContr
 
     private fun setupAddByMatrixIdView() {
         addByMatrixId.setOnClickListener {
-            navigationViewModel.goTo(CreateDirectRoomActivity.Navigation.UsersDirectory)
+            sharedActionViewModel.post(CreateDirectRoomSharedAction.OpenUsersDirectory)
         }
     }
 
@@ -104,8 +97,8 @@ class CreateDirectRoomKnownUsersFragment : VectorBaseFragment(), KnownUsersContr
         recyclerView.setHasFixedSize(true)
         // Don't activate animation as we might have way to much item animation when filtering
         recyclerView.itemAnimator = null
-        directRoomController.callback = this
-        recyclerView.setController(directRoomController)
+        knownUsersController.callback = this
+        recyclerView.setController(knownUsersController)
     }
 
     private fun setupFilterView() {
@@ -115,13 +108,13 @@ class CreateDirectRoomKnownUsersFragment : VectorBaseFragment(), KnownUsersContr
                 .subscribe { text ->
                     val filterValue = text.trim()
                     val action = if (filterValue.isBlank()) {
-                        CreateDirectRoomActions.ClearFilterKnownUsers
+                        CreateDirectRoomAction.ClearFilterKnownUsers
                     } else {
-                        CreateDirectRoomActions.FilterKnownUsers(filterValue.toString())
+                        CreateDirectRoomAction.FilterKnownUsers(filterValue.toString())
                     }
                     viewModel.handle(action)
                 }
-                .disposeOnDestroy()
+                .disposeOnDestroyView()
 
         createDirectRoomFilter.setupAsSearch()
         createDirectRoomFilter.requestFocus()
@@ -134,7 +127,7 @@ class CreateDirectRoomKnownUsersFragment : VectorBaseFragment(), KnownUsersContr
     }
 
     override fun invalidate() = withState(viewModel) {
-        directRoomController.setData(it)
+        knownUsersController.setData(it)
     }
 
     private fun updateChipsView(data: SelectUserAction) {
@@ -164,7 +157,7 @@ class CreateDirectRoomKnownUsersFragment : VectorBaseFragment(), KnownUsersContr
         chip.isCloseIconVisible = true
         chipGroup.addView(chip)
         chip.setOnCloseIconClickListener {
-            viewModel.handle(CreateDirectRoomActions.RemoveSelectedUser(user))
+            viewModel.handle(CreateDirectRoomAction.RemoveSelectedUser(user))
         }
         chipGroupScrollView.post {
             chipGroupScrollView.fullScroll(ScrollView.FOCUS_DOWN)
@@ -173,6 +166,6 @@ class CreateDirectRoomKnownUsersFragment : VectorBaseFragment(), KnownUsersContr
 
     override fun onItemClick(user: User) {
         view?.hideKeyboard()
-        viewModel.handle(CreateDirectRoomActions.SelectUser(user))
+        viewModel.handle(CreateDirectRoomAction.SelectUser(user))
     }
 }

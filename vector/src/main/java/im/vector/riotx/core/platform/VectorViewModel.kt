@@ -16,12 +16,20 @@
 
 package im.vector.riotx.core.platform
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.airbnb.mvrx.*
+import im.vector.riotx.core.utils.LiveEvent
 import io.reactivex.Observable
 import io.reactivex.Single
 
-abstract class VectorViewModel<S : MvRxState>(initialState: S)
+abstract class VectorViewModel<S : MvRxState, A : VectorViewModelAction>(initialState: S)
     : BaseMvRxViewModel<S>(initialState, false) {
+
+    // Generic handling of any request error
+    protected val _requestErrorLiveData = MutableLiveData<LiveEvent<Throwable>>()
+    val requestErrorLiveData: LiveData<LiveEvent<Throwable>>
+        get() = _requestErrorLiveData
 
     /**
      * This method does the same thing as the execute function, but it doesn't subscribe to the stream
@@ -44,4 +52,6 @@ abstract class VectorViewModel<S : MvRxState>(initialState: S)
                 .onErrorReturn { Fail(it) }
                 .doOnNext { setState { stateReducer(it) } }
     }
+
+    abstract fun handle(action: A)
 }

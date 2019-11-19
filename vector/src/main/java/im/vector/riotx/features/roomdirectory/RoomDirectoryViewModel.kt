@@ -25,7 +25,6 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.Membership
-import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoomsFilter
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoomsParams
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoomsResponse
@@ -40,7 +39,8 @@ import timber.log.Timber
 private const val PUBLIC_ROOMS_LIMIT = 20
 
 class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState: PublicRoomsViewState,
-                                                         private val session: Session) : VectorViewModel<PublicRoomsViewState>(initialState) {
+                                                         private val session: Session)
+    : VectorViewModel<PublicRoomsViewState, RoomDirectoryAction>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -103,23 +103,32 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
                 .disposeOnClear()
     }
 
-    fun setRoomDirectoryData(roomDirectoryData: RoomDirectoryData) {
-        if (this.roomDirectoryData == roomDirectoryData) {
+    override fun handle(action: RoomDirectoryAction) {
+        when (action) {
+            is RoomDirectoryAction.SetRoomDirectoryData -> setRoomDirectoryData(action)
+            is RoomDirectoryAction.FilterWith           -> filterWith(action)
+            RoomDirectoryAction.LoadMore                -> loadMore()
+            is RoomDirectoryAction.JoinRoom             -> joinRoom(action)
+        }
+    }
+
+    private fun setRoomDirectoryData(action: RoomDirectoryAction.SetRoomDirectoryData) {
+        if (this.roomDirectoryData == action.roomDirectoryData) {
             return
         }
 
-        this.roomDirectoryData = roomDirectoryData
+        this.roomDirectoryData = action.roomDirectoryData
 
         reset("")
         load("")
     }
 
-    fun filterWith(filter: String) = withState { state ->
-        if (state.currentFilter != filter) {
+    private fun filterWith(action: RoomDirectoryAction.FilterWith) = withState { state ->
+        if (state.currentFilter != action.filter) {
             currentTask?.cancel()
 
-            reset(filter)
-            load(filter)
+            reset(action.filter)
+            load(action.filter)
         }
     }
 
@@ -138,7 +147,7 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
         }
     }
 
-    fun loadMore() = withState { state ->
+    private fun loadMore() = withState { state ->
         if (currentTask == null) {
             setState {
                 copy(
@@ -192,8 +201,8 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
                 })
     }
 
-    fun joinRoom(publicRoom: PublicRoom) = withState { state ->
-        if (state.joiningRoomsIds.contains(publicRoom.roomId)) {
+    private fun joinRoom(action: RoomDirectoryAction.JoinRoom) = withState { state ->
+        if (state.joiningRoomsIds.contains(action.roomId)) {
             // Request already sent, should not happen
             Timber.w("Try to join an already joining room. Should not happen")
             return@withState
@@ -201,11 +210,11 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
 
         setState {
             copy(
-                    joiningRoomsIds = joiningRoomsIds.toMutableSet().apply { add(publicRoom.roomId) }
+                    joiningRoomsIds = joiningRoomsIds.toMutableSet().apply { add(action.roomId) }
             )
         }
 
-        session.joinRoom(publicRoom.roomId, emptyList(), object : MatrixCallback<Unit> {
+        session.joinRoom(action.roomId, emptyList(), object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
                 // We do not update the joiningRoomsIds here, because, the room is not joined yet regarding the sync data.
                 // Instead, we wait for the room to be joined
@@ -217,8 +226,8 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
 
                 setState {
                     copy(
-                            joiningRoomsIds = joiningRoomsIds.toMutableSet().apply { remove(publicRoom.roomId) },
-                            joiningErrorRoomsIds = joiningErrorRoomsIds.toMutableSet().apply { add(publicRoom.roomId) }
+                            joiningRoomsIds = joiningRoomsIds.toMutableSet().apply { remove(action.roomId) },
+                            joiningErrorRoomsIds = joiningErrorRoomsIds.toMutableSet().apply { add(action.roomId) }
                     )
                 }
             }

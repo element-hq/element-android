@@ -24,7 +24,6 @@ import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
-import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.resources.StringProvider
@@ -33,21 +32,18 @@ import kotlinx.android.synthetic.main.fragment_generic_recycler_epoxy.*
 import javax.inject.Inject
 
 // Referenced in vector_settings_notifications.xml
-class PushGatewaysFragment : VectorBaseFragment() {
+class PushGatewaysFragment @Inject constructor(
+        val pushGatewaysViewModelFactory: PushGatewaysViewModel.Factory
+) : VectorBaseFragment() {
 
     override fun getLayoutResId(): Int = R.layout.fragment_generic_recycler_epoxy
 
-    @Inject lateinit var pushGatewaysViewModelFactory: PushGatewaysViewModel.Factory
     private val viewModel: PushGatewaysViewModel by fragmentViewModel(PushGatewaysViewModel::class)
     private val epoxyController by lazy { PushGateWayController(StringProvider(requireContext().resources)) }
 
     override fun onResume() {
         super.onResume()
         (activity as? VectorBaseActivity)?.supportActionBar?.setTitle(R.string.settings_notifications_targets)
-    }
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

@@ -55,8 +55,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         const val SETTINGS_CONTACT_PREFERENCE_KEYS = "SETTINGS_CONTACT_PREFERENCE_KEYS"
         const val SETTINGS_NOTIFICATIONS_TARGETS_PREFERENCE_KEY = "SETTINGS_NOTIFICATIONS_TARGETS_PREFERENCE_KEY"
         const val SETTINGS_NOTIFICATIONS_TARGET_DIVIDER_PREFERENCE_KEY = "SETTINGS_NOTIFICATIONS_TARGET_DIVIDER_PREFERENCE_KEY"
-        const val SETTINGS_IGNORED_USERS_PREFERENCE_KEY = "SETTINGS_IGNORED_USERS_PREFERENCE_KEY"
-        const val SETTINGS_IGNORE_USERS_DIVIDER_PREFERENCE_KEY = "SETTINGS_IGNORE_USERS_DIVIDER_PREFERENCE_KEY"
         const val SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY = "SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY"
         const val SETTINGS_BACKGROUND_SYNC_DIVIDER_PREFERENCE_KEY = "SETTINGS_BACKGROUND_SYNC_DIVIDER_PREFERENCE_KEY"
         const val SETTINGS_LABS_PREFERENCE_KEY = "SETTINGS_LABS_PREFERENCE_KEY"
@@ -97,6 +95,9 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val SETTINGS_SHOW_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY = "SETTINGS_SHOW_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY"
         private const val SETTINGS_VIBRATE_ON_MENTION_KEY = "SETTINGS_VIBRATE_ON_MENTION_KEY"
         private const val SETTINGS_SEND_MESSAGE_WITH_ENTER = "SETTINGS_SEND_MESSAGE_WITH_ENTER"
+
+        // Help
+        private const val SETTINGS_SHOULD_SHOW_HELP_ON_ROOM_LIST_KEY = "SETTINGS_SHOULD_SHOW_HELP_ON_ROOM_LIST_KEY"
 
         // home
         private const val SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY = "SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY"
@@ -544,7 +545,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
             MEDIA_SAVING_1_WEEK  -> System.currentTimeMillis() / 1000 - 7 * 24 * 60 * 60
             MEDIA_SAVING_1_MONTH -> System.currentTimeMillis() / 1000 - 30 * 24 * 60 * 60
             MEDIA_SAVING_FOREVER -> 0
-            else -> 0
+            else                 -> 0
         }
     }
 
@@ -559,7 +560,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
             MEDIA_SAVING_1_WEEK  -> context.getString(R.string.media_saving_period_1_week)
             MEDIA_SAVING_1_MONTH -> context.getString(R.string.media_saving_period_1_month)
             MEDIA_SAVING_FOREVER -> context.getString(R.string.media_saving_period_forever)
-            else -> "?"
+            else                 -> "?"
         }
     }
 
@@ -576,7 +577,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
      * @return true if the markdown is enabled
      */
     fun isMarkdownEnabled(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_ENABLE_MARKDOWN_KEY, true)
+        return defaultPrefs.getBoolean(SETTINGS_ENABLE_MARKDOWN_KEY, false)
     }
 
     /**
@@ -597,6 +598,24 @@ class VectorPreferences @Inject constructor(private val context: Context) {
      */
     fun showReadReceipts(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_SHOW_READ_RECEIPTS_KEY, true)
+    }
+
+    /**
+     * Tells if the help on room list should be shown
+     *
+     * @return true if the help on room list should be shown
+     */
+    fun shouldShowLongClickOnRoomHelp(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_SHOULD_SHOW_HELP_ON_ROOM_LIST_KEY, true)
+    }
+
+    /**
+     * Prevent help on room list to be shown again
+     */
+    fun neverShowLongClickOnRoomHelpAgain() {
+        defaultPrefs.edit {
+            putBoolean(SETTINGS_SHOULD_SHOW_HELP_ON_ROOM_LIST_KEY, false)
+        }
     }
 
     /**

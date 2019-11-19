@@ -44,12 +44,11 @@ object CommandParser {
                 return ParsedCommand.ErrorNotACommand
             }
 
-            var messageParts: List<String>? = null
-
-            try {
-                messageParts = textMessage.split("\\s+".toRegex()).dropLastWhile { it.isEmpty() }
+            val messageParts = try {
+                textMessage.split("\\s+".toRegex()).dropLastWhile { it.isEmpty() }
             } catch (e: Exception) {
                 Timber.e(e, "## manageSplashCommand() : split failed")
+                null
             }
 
             // test if the string cut fails
@@ -57,52 +56,50 @@ object CommandParser {
                 return ParsedCommand.ErrorEmptySlashCommand
             }
 
-            val slashCommand = messageParts[0]
-
-            when (slashCommand) {
-                Command.CHANGE_DISPLAY_NAME.command -> {
+            return when (val slashCommand = messageParts.first()) {
+                Command.CHANGE_DISPLAY_NAME.command    -> {
                     val newDisplayName = textMessage.substring(Command.CHANGE_DISPLAY_NAME.command.length).trim()
 
-                    return if (newDisplayName.isNotEmpty()) {
+                    if (newDisplayName.isNotEmpty()) {
                         ParsedCommand.ChangeDisplayName(newDisplayName)
                     } else {
                         ParsedCommand.ErrorSyntax(Command.CHANGE_DISPLAY_NAME)
                     }
                 }
-                Command.TOPIC.command -> {
+                Command.TOPIC.command                  -> {
                     val newTopic = textMessage.substring(Command.TOPIC.command.length).trim()
 
-                    return if (newTopic.isNotEmpty()) {
+                    if (newTopic.isNotEmpty()) {
                         ParsedCommand.ChangeTopic(newTopic)
                     } else {
                         ParsedCommand.ErrorSyntax(Command.TOPIC)
                     }
                 }
-                Command.EMOTE.command -> {
+                Command.EMOTE.command                  -> {
                     val message = textMessage.substring(Command.EMOTE.command.length).trim()
 
-                    return ParsedCommand.SendEmote(message)
+                    ParsedCommand.SendEmote(message)
                 }
-                Command.JOIN_ROOM.command -> {
+                Command.JOIN_ROOM.command              -> {
                     val roomAlias = textMessage.substring(Command.JOIN_ROOM.command.length).trim()
 
-                    return if (roomAlias.isNotEmpty()) {
+                    if (roomAlias.isNotEmpty()) {
                         ParsedCommand.JoinRoom(roomAlias)
                     } else {
                         ParsedCommand.ErrorSyntax(Command.JOIN_ROOM)
                     }
                 }
-                Command.PART.command -> {
+                Command.PART.command                   -> {
                     val roomAlias = textMessage.substring(Command.PART.command.length).trim()
 
-                    return if (roomAlias.isNotEmpty()) {
+                    if (roomAlias.isNotEmpty()) {
                         ParsedCommand.PartRoom(roomAlias)
                     } else {
                         ParsedCommand.ErrorSyntax(Command.PART)
                     }
                 }
-                Command.INVITE.command -> {
-                    return if (messageParts.size == 2) {
+                Command.INVITE.command                 -> {
+                    if (messageParts.size == 2) {
                         val userId = messageParts[1]
 
                         if (MatrixPatterns.isUserId(userId)) {
@@ -114,8 +111,8 @@ object CommandParser {
                         ParsedCommand.ErrorSyntax(Command.INVITE)
                     }
                 }
-                Command.KICK_USER.command -> {
-                    return if (messageParts.size >= 2) {
+                Command.KICK_USER.command              -> {
+                    if (messageParts.size >= 2) {
                         val userId = messageParts[1]
                         if (MatrixPatterns.isUserId(userId)) {
                             val reason = textMessage.substring(Command.KICK_USER.command.length
@@ -130,8 +127,8 @@ object CommandParser {
                         ParsedCommand.ErrorSyntax(Command.KICK_USER)
                     }
                 }
-                Command.BAN_USER.command -> {
-                    return if (messageParts.size >= 2) {
+                Command.BAN_USER.command               -> {
+                    if (messageParts.size >= 2) {
                         val userId = messageParts[1]
                         if (MatrixPatterns.isUserId(userId)) {
                             val reason = textMessage.substring(Command.BAN_USER.command.length
@@ -146,8 +143,8 @@ object CommandParser {
                         ParsedCommand.ErrorSyntax(Command.BAN_USER)
                     }
                 }
-                Command.UNBAN_USER.command -> {
-                    return if (messageParts.size == 2) {
+                Command.UNBAN_USER.command             -> {
+                    if (messageParts.size == 2) {
                         val userId = messageParts[1]
 
                         if (MatrixPatterns.isUserId(userId)) {
@@ -159,8 +156,8 @@ object CommandParser {
                         ParsedCommand.ErrorSyntax(Command.UNBAN_USER)
                     }
                 }
-                Command.SET_USER_POWER_LEVEL.command -> {
-                    return if (messageParts.size == 3) {
+                Command.SET_USER_POWER_LEVEL.command   -> {
+                    if (messageParts.size == 3) {
                         val userId = messageParts[1]
                         if (MatrixPatterns.isUserId(userId)) {
                             val powerLevelsAsString = messageParts[2]
@@ -180,7 +177,7 @@ object CommandParser {
                     }
                 }
                 Command.RESET_USER_POWER_LEVEL.command -> {
-                    return if (messageParts.size == 2) {
+                    if (messageParts.size == 2) {
                         val userId = messageParts[1]
 
                         if (MatrixPatterns.isUserId(userId)) {
@@ -192,27 +189,32 @@ object CommandParser {
                         ParsedCommand.ErrorSyntax(Command.SET_USER_POWER_LEVEL)
                     }
                 }
-                Command.MARKDOWN.command -> {
-                    return if (messageParts.size == 2) {
+                Command.MARKDOWN.command               -> {
+                    if (messageParts.size == 2) {
                         when {
-                            "on".equals(messageParts[1], true) -> ParsedCommand.SetMarkdown(true)
+                            "on".equals(messageParts[1], true)  -> ParsedCommand.SetMarkdown(true)
                             "off".equals(messageParts[1], true) -> ParsedCommand.SetMarkdown(false)
-                            else -> ParsedCommand.ErrorSyntax(Command.MARKDOWN)
+                            else                                -> ParsedCommand.ErrorSyntax(Command.MARKDOWN)
                         }
                     } else {
                         ParsedCommand.ErrorSyntax(Command.MARKDOWN)
                     }
                 }
-                Command.CLEAR_SCALAR_TOKEN.command -> {
-                    return if (messageParts.size == 1) {
+                Command.CLEAR_SCALAR_TOKEN.command     -> {
+                    if (messageParts.size == 1) {
                         ParsedCommand.ClearScalarToken
                     } else {
                         ParsedCommand.ErrorSyntax(Command.CLEAR_SCALAR_TOKEN)
                     }
                 }
-                else -> {
+                Command.SPOILER.command                -> {
+                    val message = textMessage.substring(Command.SPOILER.command.length).trim()
+
+                    ParsedCommand.SendSpoiler(message)
+                }
+                else                                   -> {
                     // Unknown command
-                    return ParsedCommand.ErrorUnknownSlashCommand(slashCommand)
+                    ParsedCommand.ErrorUnknownSlashCommand(slashCommand)
                 }
             }
         }

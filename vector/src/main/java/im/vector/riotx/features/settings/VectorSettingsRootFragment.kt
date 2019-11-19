@@ -17,21 +17,14 @@
 package im.vector.riotx.features.settings
 
 import im.vector.riotx.R
-import im.vector.riotx.core.extensions.withArgs
+import javax.inject.Inject
 
-class VectorSettingsRootFragment : VectorSettingsBaseFragment() {
+class VectorSettingsRootFragment @Inject constructor() : VectorSettingsBaseFragment() {
 
     override var titleRes: Int = R.string.title_activity_settings
     override val preferenceXmlRes = R.xml.vector_settings_root
 
     override fun bindPref() {
         // Nothing to do
-    }
-
-    companion object {
-        fun newInstance() = VectorSettingsRootFragment()
-                .withArgs {
-                    // putString(ARG_MATRIX_ID, matrixId)
-                }
     }
 }

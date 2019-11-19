@@ -74,7 +74,7 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(private val roomAP
                 it.updateSenderData()
             }
             roomEntity.areAllMembersLoaded = true
-            roomSummaryUpdater.update(realm, roomId)
+            roomSummaryUpdater.update(realm, roomId, updateMembers = true)
         }
     }
 

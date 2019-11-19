@@ -21,10 +21,10 @@ import android.content.Intent
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-import im.vector.fragments.keysbackup.restore.KeysBackupRestoreFromPassphraseFragment
 import im.vector.riotx.R
+import im.vector.riotx.core.extensions.addFragmentToBackstack
 import im.vector.riotx.core.extensions.observeEvent
+import im.vector.riotx.core.extensions.replaceFragment
 import im.vector.riotx.core.platform.SimpleFragmentActivity
 
 class KeysBackupRestoreActivity : SimpleFragmentActivity() {
@@ -42,20 +42,16 @@ class KeysBackupRestoreActivity : SimpleFragmentActivity() {
 
     override fun initUiAndData() {
         super.initUiAndData()
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(KeysBackupRestoreSharedViewModel::class.java)
+        viewModel = viewModelProvider.get(KeysBackupRestoreSharedViewModel::class.java)
         viewModel.initSession(session)
         viewModel.keyVersionResult.observe(this, Observer { keyVersion ->
 
             if (keyVersion != null && supportFragmentManager.fragments.isEmpty()) {
                 val isBackupCreatedFromPassphrase = keyVersion.getAuthDataAsMegolmBackupAuthData()?.privateKeySalt != null
                 if (isBackupCreatedFromPassphrase) {
-                    supportFragmentManager.beginTransaction()
-                            .replace(R.id.container, KeysBackupRestoreFromPassphraseFragment.newInstance())
-                            .commitNow()
+                    replaceFragment(R.id.container, KeysBackupRestoreFromPassphraseFragment::class.java)
                 } else {
-                    supportFragmentManager.beginTransaction()
-                            .replace(R.id.container, KeysBackupRestoreFromKeyFragment.newInstance())
-                            .commitNow()
+                    replaceFragment(R.id.container, KeysBackupRestoreFromKeyFragment::class.java)
                 }
             }
         })
@@ -80,16 +76,11 @@ class KeysBackupRestoreActivity : SimpleFragmentActivity() {
         viewModel.navigateEvent.observeEvent(this) { uxStateEvent ->
             when (uxStateEvent) {
                 KeysBackupRestoreSharedViewModel.NAVIGATE_TO_RECOVER_WITH_KEY -> {
-                    supportFragmentManager.beginTransaction()
-                            .replace(R.id.container, KeysBackupRestoreFromKeyFragment.newInstance())
-                            .addToBackStack(null)
-                            .commit()
+                    addFragmentToBackstack(R.id.container, KeysBackupRestoreFromKeyFragment::class.java)
                 }
                 KeysBackupRestoreSharedViewModel.NAVIGATE_TO_SUCCESS          -> {
                     supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                    supportFragmentManager.beginTransaction()
-                            .replace(R.id.container, KeysBackupRestoreSuccessFragment.newInstance())
-                            .commit()
+                    replaceFragment(R.id.container, KeysBackupRestoreSuccessFragment::class.java)
                 }
             }
         }

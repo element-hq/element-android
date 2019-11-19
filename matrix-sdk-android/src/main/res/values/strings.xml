@@ -170,7 +170,7 @@
     <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
     <string name="verification_emoji_glasses">Glasses</string>
     <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_wrench">Spanner</string>
+    <string name="verification_emoji_wrench">Wrench</string>
     <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
     <string name="verification_emoji_santa">Santa</string>
     <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
@@ -208,7 +208,7 @@
     <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
     <string name="verification_emoji_bicycle">Bicycle</string>
     <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_airplane">Aeroplane</string>
+    <string name="verification_emoji_airplane">Airplane</string>
     <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
     <string name="verification_emoji_rocket">Rocket</string>
     <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->

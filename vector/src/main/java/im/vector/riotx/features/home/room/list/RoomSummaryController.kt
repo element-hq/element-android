@@ -21,15 +21,19 @@ import com.airbnb.epoxy.EpoxyController
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotx.R
+import im.vector.riotx.core.epoxy.helpFooterItem
 import im.vector.riotx.core.epoxy.noResultItem
 import im.vector.riotx.core.resources.StringProvider
+import im.vector.riotx.features.home.RoomListDisplayMode
+import im.vector.riotx.core.resources.UserPreferencesProvider
 import im.vector.riotx.features.home.room.filtered.FilteredRoomFooterItem
 import im.vector.riotx.features.home.room.filtered.filteredRoomFooterItem
 import javax.inject.Inject
 
 class RoomSummaryController @Inject constructor(private val stringProvider: StringProvider,
                                                 private val roomSummaryItemFactory: RoomSummaryItemFactory,
-                                                private val roomListNameFilter: RoomListNameFilter
+                                                private val roomListNameFilter: RoomListNameFilter,
+                                                private val userPreferencesProvider: UserPreferencesProvider
 ) : EpoxyController() {
 
     var listener: Listener? = null
@@ -47,14 +51,20 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
         requestModelBuild()
     }
 
+    fun onRoomLongClicked() {
+        userPreferencesProvider.neverShowLongClickOnRoomHelpAgain()
+        requestModelBuild()
+    }
+
     override fun buildModels() {
         val nonNullViewState = viewState ?: return
         when (nonNullViewState.displayMode) {
-            RoomListFragment.DisplayMode.FILTERED,
-            RoomListFragment.DisplayMode.SHARE -> {
+            RoomListDisplayMode.FILTERED,
+            RoomListDisplayMode.SHARE -> {
                 buildFilteredRooms(nonNullViewState)
             }
             else                               -> {
+                var showHelp = false
                 val roomSummaries = nonNullViewState.asyncFilteredRooms()
                 roomSummaries?.forEach { (category, summaries) ->
                     if (summaries.isEmpty()) {
@@ -70,8 +80,13 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
                                     nonNullViewState.joiningErrorRoomsIds,
                                     nonNullViewState.rejectingRoomsIds,
                                     nonNullViewState.rejectingErrorRoomsIds)
+                            showHelp = userPreferencesProvider.shouldShowLongClickOnRoomHelp()
                         }
                     }
+                }
+
+                if (showHelp) {
+                    buildLongClickHelp()
                 }
             }
         }
@@ -92,8 +107,15 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
                 viewState.rejectingErrorRoomsIds)
 
         when {
-            viewState.displayMode == RoomListFragment.DisplayMode.FILTERED -> addFilterFooter(viewState)
+            viewState.displayMode == RoomListDisplayMode.FILTERED -> addFilterFooter(viewState)
             filteredSummaries.isEmpty()                                    -> addEmptyFooter()
+        }
+    }
+
+    private fun buildLongClickHelp() {
+        helpFooterItem {
+            id("long_click_help")
+            text(stringProvider.getString(R.string.help_long_click_on_room_for_more_options))
         }
     }
 
@@ -154,7 +176,8 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
 
     interface Listener : FilteredRoomFooterItem.FilteredRoomFooterItemListener {
         fun onToggleRoomCategory(roomCategory: RoomCategory)
-        fun onRoomSelected(room: RoomSummary)
+        fun onRoomClicked(room: RoomSummary)
+        fun onRoomLongClicked(room: RoomSummary): Boolean
         fun onRejectRoomInvitation(room: RoomSummary)
         fun onAcceptRoomInvitation(room: RoomSummary)
     }

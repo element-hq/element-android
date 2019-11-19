@@ -26,8 +26,6 @@ import com.airbnb.mvrx.*
 import com.jakewharton.rxbinding3.view.focusChanges
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.riotx.R
-import im.vector.riotx.core.di.ScreenComponent
-import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.setTextWithColoredPart
 import im.vector.riotx.core.extensions.showPassword
 import im.vector.riotx.core.platform.VectorBaseFragment
@@ -43,19 +41,13 @@ import javax.inject.Inject
  * What can be improved:
  * - When filtering more (when entering new chars), we could filter on result we already have, during the new server request, to avoid empty screen effect
  */
-class LoginFragment : VectorBaseFragment() {
+class LoginFragment @Inject constructor() : VectorBaseFragment() {
 
     private val viewModel: LoginViewModel by activityViewModel()
 
     private var passwordShown = false
 
-    @Inject lateinit var errorFormatter: ErrorFormatter
-
     override fun getLayoutResId() = R.layout.fragment_login
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -67,14 +59,14 @@ class LoginFragment : VectorBaseFragment() {
         homeServerField.focusChanges()
                 .subscribe {
                     if (!it) {
-                        viewModel.handle(LoginActions.UpdateHomeServer(homeServerField.text.toString()))
+                        viewModel.handle(LoginAction.UpdateHomeServer(homeServerField.text.toString()))
                     }
                 }
-                .disposeOnDestroy()
+                .disposeOnDestroyView()
 
         homeServerField.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                viewModel.handle(LoginActions.UpdateHomeServer(homeServerField.text.toString()))
+                viewModel.handle(LoginAction.UpdateHomeServer(homeServerField.text.toString()))
                 return@setOnEditorActionListener true
             }
             return@setOnEditorActionListener false
@@ -86,7 +78,7 @@ class LoginFragment : VectorBaseFragment() {
         } else {
             homeServerField.setText(ServerUrlsRepository.getDefaultHomeServerUrl(requireContext()))
         }
-        viewModel.handle(LoginActions.UpdateHomeServer(homeServerField.text.toString()))
+        viewModel.handle(LoginAction.UpdateHomeServer(homeServerField.text.toString()))
     }
 
     private fun setupNotice() {
@@ -101,7 +93,7 @@ class LoginFragment : VectorBaseFragment() {
         val login = loginField.text?.trim().toString()
         val password = passwordField.text?.trim().toString()
 
-        viewModel.handle(LoginActions.Login(login, password))
+        viewModel.handle(LoginAction.Login(login, password))
     }
 
     private fun setupAuthButton() {
@@ -115,14 +107,14 @@ class LoginFragment : VectorBaseFragment() {
                         }
                 )
                 .subscribeBy { authenticateButton.isEnabled = it }
-                .disposeOnDestroy()
+                .disposeOnDestroyView()
         authenticateButton.setOnClickListener { authenticate() }
 
         authenticateButtonSso.setOnClickListener { openSso() }
     }
 
     private fun openSso() {
-        viewModel.handle(LoginActions.NavigateTo(LoginActivity.Navigation.OpenSsoLoginFallback))
+        viewModel.handle(LoginAction.NavigateTo(LoginActivity.Navigation.OpenSsoLoginFallback))
     }
 
     private fun setupPasswordReveal() {

@@ -21,26 +21,42 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.widget.FrameLayout
 import androidx.annotation.CallSuper
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.MvRxView
-import com.airbnb.mvrx.MvRxViewModelStore
+import com.airbnb.mvrx.MvRxViewId
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import im.vector.riotx.core.di.DaggerScreenComponent
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.utils.DimensionConverter
-import java.util.*
 
 /**
  * Add MvRx capabilities to bottomsheetdialog (like BaseMvRxFragment)
  */
 abstract class VectorBaseBottomSheetDialogFragment : BottomSheetDialogFragment(), MvRxView {
 
-    override val mvrxViewModelStore by lazy { MvRxViewModelStore(viewModelStore) }
-    private lateinit var mvrxPersistedViewId: String
+    private val mvrxViewIdProperty = MvRxViewId()
+    final override val mvrxViewId: String by mvrxViewIdProperty
     private lateinit var screenComponent: ScreenComponent
-    final override val mvrxViewId: String by lazy { mvrxPersistedViewId }
+
+    /* ==========================================================================================
+     * View model
+     * ========================================================================================== */
+
+    private lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    protected val activityViewModelProvider
+        get() = ViewModelProviders.of(requireActivity(), viewModelFactory)
+
+    protected val fragmentViewModelProvider
+        get() = ViewModelProviders.of(this, viewModelFactory)
+
+    /* ==========================================================================================
+     * BottomSheetBehavior
+     * ========================================================================================== */
 
     private var bottomSheetBehavior: BottomSheetBehavior<FrameLayout>? = null
 
@@ -52,6 +68,7 @@ abstract class VectorBaseBottomSheetDialogFragment : BottomSheetDialogFragment()
 
     override fun onAttach(context: Context) {
         screenComponent = DaggerScreenComponent.factory().create(vectorBaseActivity.getVectorComponent(), vectorBaseActivity)
+        viewModelFactory = screenComponent.viewModelFactory()
         super.onAttach(context)
         injectWith(screenComponent)
     }
@@ -59,10 +76,7 @@ abstract class VectorBaseBottomSheetDialogFragment : BottomSheetDialogFragment()
     protected open fun injectWith(screenComponent: ScreenComponent) = Unit
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        mvrxViewModelStore.restoreViewModels(this, savedInstanceState)
-        mvrxPersistedViewId = savedInstanceState?.getString(PERSISTED_VIEW_ID_KEY)
-                ?: this::class.java.simpleName + "_" + UUID.randomUUID().toString()
-
+        mvrxViewIdProperty.restoreFrom(savedInstanceState)
         super.onCreate(savedInstanceState)
     }
 
@@ -79,8 +93,7 @@ abstract class VectorBaseBottomSheetDialogFragment : BottomSheetDialogFragment()
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        mvrxViewModelStore.saveViewModels(outState)
-        outState.putString(PERSISTED_VIEW_ID_KEY, mvrxViewId)
+        mvrxViewIdProperty.saveTo(outState)
     }
 
     override fun onStart() {
@@ -102,5 +115,3 @@ abstract class VectorBaseBottomSheetDialogFragment : BottomSheetDialogFragment()
         arguments = args?.let { Bundle().apply { putParcelable(MvRx.KEY_ARG, it) } }
     }
 }
-
-private const val PERSISTED_VIEW_ID_KEY = "mvrx:bottomsheet_persisted_view_id"

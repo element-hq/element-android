@@ -16,27 +16,21 @@
 package im.vector.riotx.features.crypto.verification
 
 import android.os.Bundle
-import androidx.lifecycle.ViewModelProviders
 import butterknife.OnClick
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseFragment
+import javax.inject.Inject
 
-class SASVerificationVerifiedFragment : VectorBaseFragment() {
+class SASVerificationVerifiedFragment @Inject constructor() : VectorBaseFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_sas_verification_verified
-
-    companion object {
-        fun newInstance() = SASVerificationVerifiedFragment()
-    }
 
     private lateinit var viewModel: SasVerificationViewModel
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel = activity?.run {
-            ViewModelProviders.of(this, viewModelFactory).get(SasVerificationViewModel::class.java)
-        } ?: throw Exception("Invalid Activity")
+        viewModel = activityViewModelProvider.get(SasVerificationViewModel::class.java)
     }
 
     @OnClick(R.id.sas_verification_verified_done_button)

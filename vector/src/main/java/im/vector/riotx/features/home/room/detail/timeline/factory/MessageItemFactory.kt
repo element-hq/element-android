@@ -46,9 +46,11 @@ import im.vector.riotx.features.home.room.detail.timeline.TimelineEventControlle
 import im.vector.riotx.features.home.room.detail.timeline.helper.*
 import im.vector.riotx.features.home.room.detail.timeline.item.*
 import im.vector.riotx.features.html.EventHtmlRenderer
+import im.vector.riotx.features.html.CodeVisitor
 import im.vector.riotx.features.media.ImageContentRenderer
 import im.vector.riotx.features.media.VideoContentRenderer
 import me.gujun.android.span.span
+import org.commonmark.node.Document
 import javax.inject.Inject
 
 class MessageItemFactory @Inject constructor(
@@ -87,7 +89,7 @@ class MessageItemFactory @Inject constructor(
             return defaultItemFactory.create(malformedText, informationData, highlight, callback)
         }
         if (messageContent.relatesTo?.type == RelationType.REPLACE
-                || event.isEncrypted() && event.root.content.toModel<EncryptedEventContent>()?.relatesTo?.type == RelationType.REPLACE
+            || event.isEncrypted() && event.root.content.toModel<EncryptedEventContent>()?.relatesTo?.type == RelationType.REPLACE
         ) {
             // This is an edit event, we should it when debugging as a notice event
             return noticeItemFactory.create(event, highlight, readMarkerVisible, callback)
@@ -97,22 +99,14 @@ class MessageItemFactory @Inject constructor(
 //        val all = event.root.toContent()
 //        val ev = all.toModel<Event>()
         return when (messageContent) {
-            is MessageEmoteContent  -> buildEmoteMessageItem(messageContent,
-                    informationData,
-                    highlight,
-                    callback,
-                    attributes)
-            is MessageTextContent   -> buildTextMessageItem(messageContent,
-                    informationData,
-                    highlight,
-                    callback,
-                    attributes)
-            is MessageImageContent  -> buildImageMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageNoticeContent -> buildNoticeMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageVideoContent  -> buildVideoMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageFileContent   -> buildFileMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageAudioContent  -> buildAudioMessageItem(messageContent, informationData, highlight, callback, attributes)
-            else                    -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback)
+            is MessageEmoteContent     -> buildEmoteMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageTextContent      -> buildItemForTextContent(messageContent, informationData, highlight, callback, attributes)
+            is MessageImageInfoContent -> buildImageMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageNoticeContent    -> buildNoticeMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageVideoContent     -> buildVideoMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageFileContent      -> buildFileMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageAudioContent     -> buildAudioMessageItem(messageContent, informationData, highlight, callback, attributes)
+            else                       -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback)
         }
     }
 
@@ -163,7 +157,7 @@ class MessageItemFactory @Inject constructor(
         return defaultItemFactory.create(text, informationData, highlight, callback)
     }
 
-    private fun buildImageMessageItem(messageContent: MessageImageContent,
+    private fun buildImageMessageItem(messageContent: MessageImageInfoContent,
                                       @Suppress("UNUSED_PARAMETER")
                                       informationData: MessageInformationData,
                                       highlight: Boolean,
@@ -202,7 +196,7 @@ class MessageItemFactory @Inject constructor(
         val thumbnailData = ImageContentRenderer.Data(
                 filename = messageContent.body,
                 url = messageContent.videoInfo?.thumbnailFile?.url
-                        ?: messageContent.videoInfo?.thumbnailUrl,
+                      ?: messageContent.videoInfo?.thumbnailUrl,
                 elementToDecrypt = messageContent.videoInfo?.thumbnailFile?.toElementToDecrypt(),
                 height = messageContent.videoInfo?.height,
                 maxHeight = maxHeight,
@@ -229,34 +223,75 @@ class MessageItemFactory @Inject constructor(
                 .clickListener { view -> callback?.onVideoMessageClicked(messageContent, videoData, view) }
     }
 
-    private fun buildTextMessageItem(messageContent: MessageTextContent,
+    private fun buildItemForTextContent(messageContent: MessageTextContent,
+                                        informationData: MessageInformationData,
+                                        highlight: Boolean,
+                                        callback: TimelineEventController.Callback?,
+                                        attributes: AbsMessageItem.Attributes): VectorEpoxyModel<*>? {
+        val isFormatted = messageContent.formattedBody.isNullOrBlank().not()
+        return if (isFormatted) {
+            val localFormattedBody = htmlRenderer.get().parse(messageContent.body) as Document
+            val codeVisitor = CodeVisitor()
+            codeVisitor.visit(localFormattedBody)
+            when (codeVisitor.codeKind) {
+                CodeVisitor.Kind.BLOCK  -> {
+                    val codeFormattedBlock = htmlRenderer.get().render(localFormattedBody)
+                    buildCodeBlockItem(codeFormattedBlock, informationData, highlight, callback, attributes)
+                }
+                CodeVisitor.Kind.INLINE -> {
+                    val codeFormatted = htmlRenderer.get().render(localFormattedBody)
+                    buildMessageTextItem(codeFormatted, false, informationData, highlight, callback, attributes)
+                }
+                CodeVisitor.Kind.NONE   -> {
+                    val formattedBody = htmlRenderer.get().render(messageContent.formattedBody!!)
+                    buildMessageTextItem(formattedBody, true, informationData, highlight, callback, attributes)
+                }
+            }
+        } else {
+            buildMessageTextItem(messageContent.body, false, informationData, highlight, callback, attributes)
+        }
+    }
+
+    private fun buildMessageTextItem(body: CharSequence,
+                                     isFormatted: Boolean,
                                      informationData: MessageInformationData,
                                      highlight: Boolean,
                                      callback: TimelineEventController.Callback?,
                                      attributes: AbsMessageItem.Attributes): MessageTextItem? {
-        val isFormatted = messageContent.formattedBody.isNullOrBlank().not()
-        val bodyToUse = messageContent.formattedBody?.let {
-            htmlRenderer.get().render(it.trim())
-        } ?: messageContent.body
+        val linkifiedBody = linkifyBody(body, callback)
 
-        val linkifiedBody = linkifyBody(bodyToUse, callback)
-
-        return MessageTextItem_()
-                .apply {
-                    if (informationData.hasBeenEdited) {
-                        val spannable = annotateWithEdited(linkifiedBody, callback, informationData)
-                        message(spannable)
-                    } else {
-                        message(linkifiedBody)
-                    }
-                }
+        return MessageTextItem_().apply {
+            if (informationData.hasBeenEdited) {
+                val spannable = annotateWithEdited(linkifiedBody, callback, informationData)
+                message(spannable)
+            } else {
+                message(linkifiedBody)
+            }
+        }
                 .useBigFont(linkifiedBody.length <= MAX_NUMBER_OF_EMOJI_FOR_BIG_FONT * 2 && containsOnlyEmojis(linkifiedBody.toString()))
                 .searchForPills(isFormatted)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .attributes(attributes)
                 .highlighted(highlight)
                 .urlClickCallback(callback)
-        // click on the text
+    }
+
+    private fun buildCodeBlockItem(formattedBody: CharSequence,
+                                   informationData: MessageInformationData,
+                                   highlight: Boolean,
+                                   callback: TimelineEventController.Callback?,
+                                   attributes: AbsMessageItem.Attributes): MessageBlockCodeItem? {
+        return MessageBlockCodeItem_()
+                .apply {
+                    if (informationData.hasBeenEdited) {
+                        val spannable = annotateWithEdited("", callback, informationData)
+                        editedSpan(spannable)
+                    }
+                }
+                .leftGuideline(avatarSizeProvider.leftGuideline)
+                .attributes(attributes)
+                .highlighted(highlight)
+                .message(formattedBody)
     }
 
     private fun annotateWithEdited(linkifiedBody: CharSequence,
@@ -291,9 +326,9 @@ class MessageItemFactory @Inject constructor(
                 // nop
             }
         },
-                editStart,
-                editEnd,
-                Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+                          editStart,
+                          editEnd,
+                          Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
         return spannable
     }
 

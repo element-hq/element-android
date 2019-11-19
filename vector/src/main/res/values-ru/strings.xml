@@ -1792,4 +1792,9 @@
 
     <string name="settings_discovery_disconnect_with_bound_pid">В настоящее время вы делитесь адресами электронной почты или телефонными номерами на сервере идентификации %1$s. Вам нужно повторно подключиться к %2$s, чтобы прекратить делиться ими.</string>
     <string name="settings_agree_to_terms">Примите Условия обслуживания сервера идентификации (%s), чтобы разрешить обнаружение по адресу электронной почты или номеру телефона.</string>
+    <string name="labs_allow_extended_logging">Включить подробное журнал.</string>
+    <string name="send_attachment">Отправить вложенное</string>
+
+    <string name="a11y_open_drawer">Откройте навигационный ящик</string>
+    <string name="a11y_create_menu_open">Откройте меню «Создать комнату»</string>
 </resources>

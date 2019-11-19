@@ -24,8 +24,7 @@ import io.realm.kotlin.where
 
 internal fun ReadReceiptEntity.Companion.where(realm: Realm, roomId: String, userId: String): RealmQuery<ReadReceiptEntity> {
     return realm.where<ReadReceiptEntity>()
-            .equalTo(ReadReceiptEntityFields.ROOM_ID, roomId)
-            .equalTo(ReadReceiptEntityFields.USER_ID, userId)
+            .equalTo(ReadReceiptEntityFields.PRIMARY_KEY, buildPrimaryKey(roomId, userId))
 }
 
 internal fun ReadReceiptEntity.Companion.whereUserId(realm: Realm, userId: String): RealmQuery<ReadReceiptEntity> {
@@ -45,8 +44,10 @@ internal fun ReadReceiptEntity.Companion.createUnmanaged(roomId: String, eventId
 
 internal fun ReadReceiptEntity.Companion.getOrCreate(realm: Realm, roomId: String, userId: String): ReadReceiptEntity {
     return ReadReceiptEntity.where(realm, roomId, userId).findFirst()
-           ?: realm.createObject(ReadReceiptEntity::class.java, "${roomId}_$userId").apply {
+           ?: realm.createObject(ReadReceiptEntity::class.java, buildPrimaryKey(roomId, userId)).apply {
                this.roomId = roomId
                this.userId = userId
            }
 }
+
+private fun buildPrimaryKey(roomId: String, userId: String) = "${roomId}_$userId"

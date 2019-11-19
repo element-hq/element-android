@@ -23,7 +23,6 @@ import android.widget.TextView
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.transition.TransitionManager
 import butterknife.BindView
 import butterknife.OnClick
@@ -31,12 +30,9 @@ import im.vector.matrix.android.api.session.crypto.sas.OutgoingSasVerificationRe
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.platform.VectorBaseFragment
+import javax.inject.Inject
 
-class SASVerificationStartFragment : VectorBaseFragment() {
-
-    companion object {
-        fun newInstance() = SASVerificationStartFragment()
-    }
+class SASVerificationStartFragment @Inject constructor(): VectorBaseFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_sas_verification_start
 
@@ -56,8 +52,8 @@ class SASVerificationStartFragment : VectorBaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(vectorBaseActivity, viewModelFactory).get(SasVerificationViewModel::class.java)
-        viewModel.transactionState.observe(this, Observer {
+        viewModel = activityViewModelProvider.get(SasVerificationViewModel::class.java)
+        viewModel.transactionState.observe(viewLifecycleOwner, Observer {
             val uxState = (viewModel.transaction as? OutgoingSasVerificationRequest)?.uxState
             when (uxState) {
                 OutgoingSasVerificationRequest.UxState.WAIT_FOR_KEY_AGREEMENT -> {

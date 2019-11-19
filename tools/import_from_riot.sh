@@ -32,7 +32,7 @@ cp ../matrix-android-sdk/matrix-sdk/src/main/res/values-da/strings.xml     ./mat
 cp ../matrix-android-sdk/matrix-sdk/src/main/res/values-de/strings.xml     ./matrix-sdk-android/src/main/res/values-de/strings.xml
 cp ../matrix-android-sdk/matrix-sdk/src/main/res/values-el/strings.xml     ./matrix-sdk-android/src/main/res/values-el/strings.xml
 cp ../matrix-android-sdk/matrix-sdk/src/main/res/values-eo/strings.xml     ./matrix-sdk-android/src/main/res/values-eo/strings.xml
-cp ../matrix-android-sdk/matrix-sdk/src/main/res/values-en-rUS/strings.xml ./matrix-sdk-android/src/main/res/values-en-rUS/strings.xml
+cp ../matrix-android-sdk/matrix-sdk/src/main/res/values-en-rGB/strings.xml ./matrix-sdk-android/src/main/res/values-en-rGB/strings.xml
 cp ../matrix-android-sdk/matrix-sdk/src/main/res/values-es/strings.xml     ./matrix-sdk-android/src/main/res/values-es/strings.xml
 cp ../matrix-android-sdk/matrix-sdk/src/main/res/values-es-rMX/strings.xml ./matrix-sdk-android/src/main/res/values-es-rMX/strings.xml
 cp ../matrix-android-sdk/matrix-sdk/src/main/res/values-eu/strings.xml     ./matrix-sdk-android/src/main/res/values-eu/strings.xml
@@ -102,6 +102,7 @@ cp ../riot-android/vector/src/main/res/values-ro/strings.xml        ./vector/src
 cp ../riot-android/vector/src/main/res/values-ru/strings.xml        ./vector/src/main/res/values-ru/strings.xml
 cp ../riot-android/vector/src/main/res/values-sk/strings.xml        ./vector/src/main/res/values-sk/strings.xml
 cp ../riot-android/vector/src/main/res/values-sq/strings.xml        ./vector/src/main/res/values-sq/strings.xml
+cp ../riot-android/vector/src/main/res/values-sr/strings.xml        ./vector/src/main/res/values-sr/strings.xml
 cp ../riot-android/vector/src/main/res/values-te/strings.xml        ./vector/src/main/res/values-te/strings.xml
 cp ../riot-android/vector/src/main/res/values-th/strings.xml        ./vector/src/main/res/values-th/strings.xml
 cp ../riot-android/vector/src/main/res/values-tlh/strings.xml       ./vector/src/main/res/values-tlh/strings.xml

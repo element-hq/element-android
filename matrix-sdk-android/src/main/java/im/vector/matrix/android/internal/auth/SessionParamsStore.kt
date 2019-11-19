@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.auth
 
-import arrow.core.Try
 import im.vector.matrix.android.api.auth.data.SessionParams
 
 internal interface SessionParamsStore {
@@ -27,9 +26,9 @@ internal interface SessionParamsStore {
 
     fun getAll(): List<SessionParams>
 
-    fun save(sessionParams: SessionParams): Try<Unit>
+    suspend fun save(sessionParams: SessionParams)
 
-    fun delete(userId: String): Try<Unit>
+    suspend fun delete(userId: String)
 
-    fun deleteAll(): Try<Unit>
+    suspend fun deleteAll()
 }

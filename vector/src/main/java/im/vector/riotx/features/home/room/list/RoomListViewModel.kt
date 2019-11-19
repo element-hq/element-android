@@ -16,8 +16,6 @@
 
 package im.vector.riotx.features.home.room.list
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
@@ -26,20 +24,17 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.tag.RoomTag
-import im.vector.riotx.core.extensions.postLiveEvent
 import im.vector.riotx.core.platform.VectorViewModel
-import im.vector.riotx.core.utils.LiveEvent
-import im.vector.riotx.core.utils.RxStore
+import im.vector.riotx.core.utils.DataSource
+import im.vector.riotx.core.utils.PublishDataSource
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import javax.inject.Inject
 
 class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
                                             private val session: Session,
-                                            private val roomSummariesStore: RxStore<List<RoomSummary>>,
-                                            private val alphabeticalRoomComparator: AlphabeticalRoomComparator,
-                                            private val chronologicalRoomComparator: ChronologicalRoomComparator)
-    : VectorViewModel<RoomListViewState>(initialState) {
+                                            private val roomSummariesSource: DataSource<List<RoomSummary>>)
+    : VectorViewModel<RoomListViewState, RoomListAction>(initialState) {
 
     interface Factory {
         fun create(initialState: RoomListViewState): RoomListViewModel
@@ -57,40 +52,37 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
     private val displayMode = initialState.displayMode
     private val roomListDisplayModeFilter = RoomListDisplayModeFilter(displayMode)
 
-    private val _openRoomLiveData = MutableLiveData<LiveEvent<String>>()
-    val openRoomLiveData: LiveData<LiveEvent<String>>
-        get() = _openRoomLiveData
-
-    private val _invitationAnswerErrorLiveData = MutableLiveData<LiveEvent<Throwable>>()
-    val invitationAnswerErrorLiveData: LiveData<LiveEvent<Throwable>>
-        get() = _invitationAnswerErrorLiveData
+    private val _viewEvents = PublishDataSource<RoomListViewEvents>()
+    val viewEvents: DataSource<RoomListViewEvents> = _viewEvents
 
     init {
         observeRoomSummaries()
     }
 
-    fun accept(action: RoomListActions) {
+    override fun handle(action: RoomListAction) {
         when (action) {
-            is RoomListActions.SelectRoom       -> handleSelectRoom(action)
-            is RoomListActions.ToggleCategory   -> handleToggleCategory(action)
-            is RoomListActions.AcceptInvitation -> handleAcceptInvitation(action)
-            is RoomListActions.RejectInvitation -> handleRejectInvitation(action)
-            is RoomListActions.FilterWith       -> handleFilter(action)
-            is RoomListActions.MarkAllRoomsRead -> handleMarkAllRoomsRead()
+            is RoomListAction.SelectRoom                  -> handleSelectRoom(action)
+            is RoomListAction.ToggleCategory              -> handleToggleCategory(action)
+            is RoomListAction.AcceptInvitation            -> handleAcceptInvitation(action)
+            is RoomListAction.RejectInvitation            -> handleRejectInvitation(action)
+            is RoomListAction.FilterWith                  -> handleFilter(action)
+            is RoomListAction.MarkAllRoomsRead            -> handleMarkAllRoomsRead()
+            is RoomListAction.LeaveRoom                   -> handleLeaveRoom(action)
+            is RoomListAction.ChangeRoomNotificationState -> handleChangeNotificationMode(action)
         }
     }
 
     // PRIVATE METHODS *****************************************************************************
 
-    private fun handleSelectRoom(action: RoomListActions.SelectRoom) {
-        _openRoomLiveData.postLiveEvent(action.roomSummary.roomId)
+    private fun handleSelectRoom(action: RoomListAction.SelectRoom) {
+        _viewEvents.post(RoomListViewEvents.SelectRoom(action.roomSummary.roomId))
     }
 
-    private fun handleToggleCategory(action: RoomListActions.ToggleCategory) = setState {
+    private fun handleToggleCategory(action: RoomListAction.ToggleCategory) = setState {
         this.toggle(action.category)
     }
 
-    private fun handleFilter(action: RoomListActions.FilterWith) {
+    private fun handleFilter(action: RoomListAction.FilterWith) {
         setState {
             copy(
                     roomFilter = action.filter
@@ -99,17 +91,14 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
     }
 
     private fun observeRoomSummaries() {
-        roomSummariesStore
+        roomSummariesSource
                 .observe()
                 .observeOn(Schedulers.computation())
-                .map {
-                    it.sortedWith(chronologicalRoomComparator)
-                }
                 .execute { asyncRooms ->
                     copy(asyncRooms = asyncRooms)
                 }
 
-        roomSummariesStore
+        roomSummariesSource
                 .observe()
                 .observeOn(Schedulers.computation())
                 .map { buildRoomSummaries(it) }
@@ -118,7 +107,7 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
                 }
     }
 
-    private fun handleAcceptInvitation(action: RoomListActions.AcceptInvitation) = withState { state ->
+    private fun handleAcceptInvitation(action: RoomListAction.AcceptInvitation) = withState { state ->
         val roomId = action.roomSummary.roomId
 
         if (state.joiningRoomsIds.contains(roomId) || state.rejectingRoomsIds.contains(roomId)) {
@@ -142,8 +131,7 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
 
             override fun onFailure(failure: Throwable) {
                 // Notify the user
-                _invitationAnswerErrorLiveData.postLiveEvent(failure)
-
+                _viewEvents.post(RoomListViewEvents.Failure(failure))
                 setState {
                     copy(
                             joiningRoomsIds = joiningRoomsIds - roomId,
@@ -154,7 +142,7 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
         })
     }
 
-    private fun handleRejectInvitation(action: RoomListActions.RejectInvitation) = withState { state ->
+    private fun handleRejectInvitation(action: RoomListAction.RejectInvitation) = withState { state ->
         val roomId = action.roomSummary.roomId
 
         if (state.joiningRoomsIds.contains(roomId) || state.rejectingRoomsIds.contains(roomId)) {
@@ -180,8 +168,7 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
 
             override fun onFailure(failure: Throwable) {
                 // Notify the user
-                _invitationAnswerErrorLiveData.postLiveEvent(failure)
-
+                _viewEvents.post(RoomListViewEvents.Failure(failure))
                 setState {
                     copy(
                             rejectingRoomsIds = rejectingRoomsIds - roomId,
@@ -201,11 +188,28 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
                 ?.let { session.markAllAsRead(it, object : MatrixCallback<Unit> {}) }
     }
 
+    private fun handleChangeNotificationMode(action: RoomListAction.ChangeRoomNotificationState) {
+        session.getRoom(action.roomId)?.setRoomNotificationState(action.notificationState, object : MatrixCallback<Unit> {
+            override fun onFailure(failure: Throwable) {
+                _viewEvents.post(RoomListViewEvents.Failure(failure))
+            }
+        })
+    }
+
+    private fun handleLeaveRoom(action: RoomListAction.LeaveRoom) {
+        session.getRoom(action.roomId)?.leave(object : MatrixCallback<Unit> {
+            override fun onFailure(failure: Throwable) {
+                _viewEvents.post(RoomListViewEvents.Failure(failure))
+            }
+        })
+    }
+
     private fun buildRoomSummaries(rooms: List<RoomSummary>): RoomSummaries {
+        // Set up init size on directChats and groupRooms as they are the biggest ones
         val invites = ArrayList<RoomSummary>()
         val favourites = ArrayList<RoomSummary>()
-        val directChats = ArrayList<RoomSummary>()
-        val groupRooms = ArrayList<RoomSummary>()
+        val directChats = ArrayList<RoomSummary>(rooms.size)
+        val groupRooms = ArrayList<RoomSummary>(rooms.size)
         val lowPriorities = ArrayList<RoomSummary>()
         val serverNotices = ArrayList<RoomSummary>()
 
@@ -223,21 +227,13 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
                     }
                 }
 
-        val roomComparator = when (displayMode) {
-            RoomListFragment.DisplayMode.HOME     -> chronologicalRoomComparator
-            RoomListFragment.DisplayMode.PEOPLE   -> chronologicalRoomComparator
-            RoomListFragment.DisplayMode.ROOMS    -> chronologicalRoomComparator
-            RoomListFragment.DisplayMode.FILTERED -> chronologicalRoomComparator
-            RoomListFragment.DisplayMode.SHARE    -> chronologicalRoomComparator
-        }
-
         return RoomSummaries().apply {
-            put(RoomCategory.INVITE, invites.sortedWith(roomComparator))
-            put(RoomCategory.FAVOURITE, favourites.sortedWith(roomComparator))
-            put(RoomCategory.DIRECT, directChats.sortedWith(roomComparator))
-            put(RoomCategory.GROUP, groupRooms.sortedWith(roomComparator))
-            put(RoomCategory.LOW_PRIORITY, lowPriorities.sortedWith(roomComparator))
-            put(RoomCategory.SERVER_NOTICE, serverNotices.sortedWith(roomComparator))
+            put(RoomCategory.INVITE, invites)
+            put(RoomCategory.FAVOURITE, favourites)
+            put(RoomCategory.DIRECT, directChats)
+            put(RoomCategory.GROUP, groupRooms)
+            put(RoomCategory.LOW_PRIORITY, lowPriorities)
+            put(RoomCategory.SERVER_NOTICE, serverNotices)
         }
     }
 }

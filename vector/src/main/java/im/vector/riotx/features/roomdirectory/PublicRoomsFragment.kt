@@ -19,7 +19,6 @@ package im.vector.riotx.features.roomdirectory
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.epoxy.EpoxyVisibilityTracker
 import com.airbnb.mvrx.activityViewModel
@@ -28,7 +27,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding3.appcompat.queryTextChanges
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
 import im.vector.riotx.R
-import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.platform.VectorBaseFragment
@@ -42,21 +40,17 @@ import javax.inject.Inject
  * What can be improved:
  * - When filtering more (when entering new chars), we could filter on result we already have, during the new server request, to avoid empty screen effect
  */
-class PublicRoomsFragment : VectorBaseFragment(), PublicRoomsController.Callback {
+class PublicRoomsFragment @Inject constructor(
+        private val publicRoomsController: PublicRoomsController,
+        private val errorFormatter: ErrorFormatter
+) : VectorBaseFragment(), PublicRoomsController.Callback {
 
     private val viewModel: RoomDirectoryViewModel by activityViewModel()
-    private lateinit var navigationViewModel: RoomDirectoryNavigationViewModel
-
-    @Inject lateinit var publicRoomsController: PublicRoomsController
-    @Inject lateinit var errorFormatter: ErrorFormatter
+    private lateinit var sharedActionViewModel: RoomDirectorySharedActionViewModel
 
     override fun getLayoutResId() = R.layout.fragment_public_rooms
 
     override fun getMenuRes() = R.menu.menu_room_directory
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -71,12 +65,12 @@ class PublicRoomsFragment : VectorBaseFragment(), PublicRoomsController.Callback
         publicRoomsFilter.queryTextChanges()
                 .debounce(500, TimeUnit.MILLISECONDS)
                 .subscribeBy {
-                    viewModel.filterWith(it.toString())
+                    viewModel.handle(RoomDirectoryAction.FilterWith(it.toString()))
                 }
-                .disposeOnDestroy()
+                .disposeOnDestroyView()
 
         publicRoomsCreateNewRoom.setOnClickListener {
-            navigationViewModel.goTo(RoomDirectoryActivity.Navigation.CreateRoom)
+            sharedActionViewModel.post(RoomDirectorySharedAction.CreateRoom)
         }
 
         viewModel.joinRoomErrorLiveData.observeEvent(this) { throwable ->
@@ -88,7 +82,7 @@ class PublicRoomsFragment : VectorBaseFragment(), PublicRoomsController.Callback
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_room_directory_change_protocol -> {
-                navigationViewModel.goTo(RoomDirectoryActivity.Navigation.ChangeProtocol)
+                sharedActionViewModel.post(RoomDirectorySharedAction.ChangeProtocol)
                 true
             }
             else                                     ->
@@ -98,7 +92,7 @@ class PublicRoomsFragment : VectorBaseFragment(), PublicRoomsController.Callback
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        navigationViewModel = ViewModelProviders.of(requireActivity()).get(RoomDirectoryNavigationViewModel::class.java)
+        sharedActionViewModel = activityViewModelProvider.get(RoomDirectorySharedActionViewModel::class.java)
         setupRecyclerView()
     }
 
@@ -135,14 +129,14 @@ class PublicRoomsFragment : VectorBaseFragment(), PublicRoomsController.Callback
 
     override fun onPublicRoomJoin(publicRoom: PublicRoom) {
         Timber.v("PublicRoomJoinClicked: $publicRoom")
-        viewModel.joinRoom(publicRoom)
+        viewModel.handle(RoomDirectoryAction.JoinRoom(publicRoom.roomId))
     }
 
     override fun loadMore() {
-        viewModel.loadMore()
+        viewModel.handle(RoomDirectoryAction.LoadMore)
     }
 
-    var initialValueSet = false
+    private var initialValueSet = false
 
     override fun invalidate() = withState(viewModel) { state ->
         if (!initialValueSet) {

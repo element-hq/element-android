@@ -86,6 +86,10 @@ Also, if possible, please test your change on a real device. Testing on Android 
 When adding new string resources, please only add new entries in file `value/strings.xml`. Translations will be added later by the community of translators with a specific tool named [Weblate](https://translate.riot.im/projects/riot-android/).
 Do not hesitate to use plurals when appropriate.
 
+### Accessibility
+
+Please consider accessibility as an important point. As a minimum requirement, in layout XML files please use attributes such as `android:contentDescription` and `android:importantForAccessibility`, and test with a screen reader if it's working well. You can add new string resources, dedicated to accessibility, in this case, please prefix theirs id with `a11y_`.
+
 ### Layout
 
 When adding or editing layouts, make sure the layout will render correctly if device uses a RTL (Right To Left) language.

@@ -19,13 +19,19 @@ package im.vector.riotx.features.home.room.detail.timeline.format
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.*
+import im.vector.matrix.android.api.session.room.model.Membership
+import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibility
+import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibilityContent
+import im.vector.matrix.android.api.session.room.model.RoomJoinRules
+import im.vector.matrix.android.api.session.room.model.RoomJoinRulesContent
+import im.vector.matrix.android.api.session.room.model.RoomMember
+import im.vector.matrix.android.api.session.room.model.RoomNameContent
+import im.vector.matrix.android.api.session.room.model.RoomTopicContent
 import im.vector.matrix.android.api.session.room.model.call.CallInviteContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.resources.StringProvider
-import im.vector.riotx.features.home.room.detail.timeline.helper.senderName
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -34,9 +40,10 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
 
     fun format(timelineEvent: TimelineEvent): CharSequence? {
         return when (val type = timelineEvent.root.getClearType()) {
+            EventType.STATE_ROOM_JOIN_RULES    -> formatJoinRulesEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
             EventType.STATE_ROOM_NAME          -> formatRoomNameEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
             EventType.STATE_ROOM_TOPIC         -> formatRoomTopicEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
-            EventType.STATE_ROOM_MEMBER        -> formatRoomMemberEvent(timelineEvent.root, timelineEvent.senderName())
+            EventType.STATE_ROOM_MEMBER        -> formatRoomMemberEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
             EventType.STATE_HISTORY_VISIBILITY -> formatRoomHistoryVisibilityEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
             EventType.STATE_ROOM_TOMBSTONE     -> formatRoomTombstoneEvent(timelineEvent.getDisambiguatedDisplayName())
             EventType.CALL_INVITE,
@@ -54,6 +61,7 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
 
     fun format(event: Event, senderName: String?): CharSequence? {
         return when (val type = event.getClearType()) {
+            EventType.STATE_ROOM_JOIN_RULES    -> formatJoinRulesEvent(event, senderName)
             EventType.STATE_ROOM_NAME          -> formatRoomNameEvent(event, senderName)
             EventType.STATE_ROOM_TOPIC         -> formatRoomTopicEvent(event, senderName)
             EventType.STATE_ROOM_MEMBER        -> formatRoomMemberEvent(event, senderName)
@@ -96,7 +104,8 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
     }
 
     private fun formatRoomHistoryVisibilityEvent(event: Event, senderName: String?): CharSequence? {
-        val historyVisibility = event.getClearContent().toModel<RoomHistoryVisibilityContent>()?.historyVisibility ?: return null
+        val historyVisibility = event.getClearContent().toModel<RoomHistoryVisibilityContent>()?.historyVisibility
+                                ?: return null
 
         val formattedVisibility = when (historyVisibility) {
             RoomHistoryVisibility.SHARED         -> stringProvider.getString(R.string.notice_room_visibility_shared)
@@ -135,7 +144,7 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
         }
     }
 
-    private fun buildProfileNotice(event: Event, senderName: String?, eventContent: RoomMember?, prevEventContent: RoomMember?): String? {
+    private fun buildProfileNotice(event: Event, senderName: String?, eventContent: RoomMember?, prevEventContent: RoomMember?): String {
         val displayText = StringBuilder()
         // Check display name has been changed
         if (eventContent?.displayName != prevEventContent?.displayName) {
@@ -146,7 +155,7 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
                     stringProvider.getString(R.string.notice_display_name_removed, event.senderId, prevEventContent?.displayName)
                 else                                          ->
                     stringProvider.getString(R.string.notice_display_name_changed_from,
-                            event.senderId, prevEventContent?.displayName, eventContent?.displayName)
+                                             event.senderId, prevEventContent?.displayName, eventContent?.displayName)
             }
             displayText.append(displayNameText)
         }
@@ -160,6 +169,11 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
             }
             displayText.append(displayAvatarText)
         }
+        if (displayText.isEmpty()) {
+            displayText.append(
+                    stringProvider.getString(R.string.notice_member_no_changes, senderName)
+            )
+        }
         return displayText.toString()
     }
 
@@ -171,9 +185,10 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
                 val selfUserId = sessionHolder.getSafeActiveSession()?.myUserId
                 when {
                     eventContent.thirdPartyInvite != null -> {
-                        val userWhoHasAccepted = eventContent.thirdPartyInvite?.signed?.mxid ?: event.stateKey
+                        val userWhoHasAccepted = eventContent.thirdPartyInvite?.signed?.mxid
+                                                 ?: event.stateKey
                         stringProvider.getString(R.string.notice_room_third_party_registered_invite,
-                                userWhoHasAccepted, eventContent.thirdPartyInvite?.displayName)
+                                                 userWhoHasAccepted, eventContent.thirdPartyInvite?.displayName)
                     }
                     event.stateKey == selfUserId          ->
                         stringProvider.getString(R.string.notice_room_invite_you, senderDisplayName)
@@ -207,6 +222,15 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
             Membership.KNOCK == eventContent?.membership  ->
                 stringProvider.getString(R.string.notice_room_kick, senderDisplayName, targetDisplayName)
             else                                          -> null
+        }
+    }
+
+    private fun formatJoinRulesEvent(event: Event, senderName: String?): CharSequence? {
+        val content = event.getClearContent().toModel<RoomJoinRulesContent>() ?: return null
+        return when (content.joinRules) {
+            RoomJoinRules.INVITE -> stringProvider.getString(R.string.room_join_rules_invite, senderName)
+            RoomJoinRules.PUBLIC -> stringProvider.getString(R.string.room_join_rules_public, senderName)
+            else                 -> null
         }
     }
 }

@@ -18,36 +18,32 @@ package im.vector.riotx.features.home.createdirect
 
 import android.content.Context
 import android.os.Bundle
+import android.view.View
 import android.view.inputmethod.InputMethodManager
-import androidx.lifecycle.ViewModelProviders
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotx.R
-import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.extensions.setupAsSearch
 import im.vector.riotx.core.platform.VectorBaseFragment
 import kotlinx.android.synthetic.main.fragment_create_direct_room_directory_users.*
 import javax.inject.Inject
 
-class CreateDirectRoomDirectoryUsersFragment : VectorBaseFragment(), DirectoryUsersController.Callback {
+class CreateDirectRoomDirectoryUsersFragment @Inject constructor(
+        private val directRoomController: DirectoryUsersController
+) : VectorBaseFragment(), DirectoryUsersController.Callback {
 
     override fun getLayoutResId() = R.layout.fragment_create_direct_room_directory_users
 
     private val viewModel: CreateDirectRoomViewModel by activityViewModel()
 
-    @Inject lateinit var directRoomController: DirectoryUsersController
-    private lateinit var navigationViewModel: CreateDirectRoomNavigationViewModel
+    private lateinit var sharedActionViewModel: CreateDirectRoomSharedActionViewModel
 
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        navigationViewModel = ViewModelProviders.of(requireActivity(), viewModelFactory).get(CreateDirectRoomNavigationViewModel::class.java)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        sharedActionViewModel = activityViewModelProvider.get(CreateDirectRoomSharedActionViewModel::class.java)
         setupRecyclerView()
         setupSearchByMatrixIdView()
         setupCloseView()
@@ -64,9 +60,9 @@ class CreateDirectRoomDirectoryUsersFragment : VectorBaseFragment(), DirectoryUs
         createDirectRoomSearchById
                 .textChanges()
                 .subscribe {
-                    viewModel.handle(CreateDirectRoomActions.SearchDirectoryUsers(it.toString()))
+                    viewModel.handle(CreateDirectRoomAction.SearchDirectoryUsers(it.toString()))
                 }
-                .disposeOnDestroy()
+                .disposeOnDestroyView()
         createDirectRoomSearchById.requestFocus()
         val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
         imm?.showSoftInput(createDirectRoomSearchById, InputMethodManager.SHOW_IMPLICIT)
@@ -74,7 +70,7 @@ class CreateDirectRoomDirectoryUsersFragment : VectorBaseFragment(), DirectoryUs
 
     private fun setupCloseView() {
         createDirectRoomClose.setOnClickListener {
-            navigationViewModel.goTo(CreateDirectRoomActivity.Navigation.Previous)
+            sharedActionViewModel.post(CreateDirectRoomSharedAction.GoBack)
         }
     }
 
@@ -84,12 +80,12 @@ class CreateDirectRoomDirectoryUsersFragment : VectorBaseFragment(), DirectoryUs
 
     override fun onItemClick(user: User) {
         view?.hideKeyboard()
-        viewModel.handle(CreateDirectRoomActions.SelectUser(user))
-        navigationViewModel.goTo(CreateDirectRoomActivity.Navigation.Previous)
+        viewModel.handle(CreateDirectRoomAction.SelectUser(user))
+        sharedActionViewModel.post(CreateDirectRoomSharedAction.GoBack)
     }
 
     override fun retryDirectoryUsersRequest() {
         val currentSearch = createDirectRoomSearchById.text.toString()
-        viewModel.handle(CreateDirectRoomActions.SearchDirectoryUsers(currentSearch))
+        viewModel.handle(CreateDirectRoomAction.SearchDirectoryUsers(currentSearch))
     }
 }

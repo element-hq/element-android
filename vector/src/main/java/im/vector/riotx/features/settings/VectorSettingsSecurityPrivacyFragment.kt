@@ -40,7 +40,6 @@ import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
 import im.vector.riotx.R
-import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.dialogs.ExportKeysDialog
 import im.vector.riotx.core.intent.ExternalIntentData
 import im.vector.riotx.core.intent.analyseIntent
@@ -56,10 +55,13 @@ import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupManageActiv
 import timber.log.Timber
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 
-class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
+class VectorSettingsSecurityPrivacyFragment @Inject constructor(
+        private val vectorPreferences: VectorPreferences
+) : VectorSettingsBaseFragment() {
 
     override var titleRes = R.string.settings_security_and_privacy
     override val preferenceXmlRes = R.xml.vector_settings_security_privacy
@@ -125,12 +127,6 @@ class VectorSettingsSecurityPrivacyFragment : VectorSettingsBaseFragment() {
     // encrypt to unverified devices
     private val sendToUnverifiedDevicesPref by lazy {
         findPreference<SwitchPreference>(VectorPreferences.SETTINGS_ENCRYPTION_NEVER_SENT_TO_PREFERENCE_KEY)!!
-    }
-
-    @Inject lateinit var vectorPreferences: VectorPreferences
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
     }
 
     override fun bindPref() {

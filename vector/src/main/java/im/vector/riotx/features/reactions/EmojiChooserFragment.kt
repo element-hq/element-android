@@ -16,32 +16,25 @@
 package im.vector.riotx.features.reactions
 
 import android.os.Bundle
-import androidx.lifecycle.ViewModelProviders
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseFragment
+import javax.inject.Inject
 
-class EmojiChooserFragment : VectorBaseFragment() {
-
-    companion object {
-        fun newInstance() = EmojiChooserFragment()
-    }
+class EmojiChooserFragment @Inject constructor() : VectorBaseFragment() {
 
     override fun getLayoutResId() = R.layout.emoji_chooser_fragment
 
     private lateinit var viewModel: EmojiChooserViewModel
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = activity?.run {
-            ViewModelProviders.of(this, viewModelFactory).get(EmojiChooserViewModel::class.java)
-        } ?: throw Exception("Invalid Activity")
-        viewModel.initWithContect(context!!)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel = activityViewModelProvider.get(EmojiChooserViewModel::class.java)
+        viewModel.initWithContext(context!!)
         (view as? RecyclerView)?.let {
             it.adapter = viewModel.adapter
             it.adapter?.notifyDataSetChanged()
         }
-
-//        val ds = EmojiDataSource(this.context!!)
     }
 }

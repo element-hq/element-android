@@ -22,21 +22,20 @@ import android.text.Editable
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import butterknife.BindView
 import butterknife.OnClick
 import butterknife.OnTextChanged
 import com.google.android.material.textfield.TextInputLayout
 import im.vector.riotx.R
-import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.utils.startImportTextFromFileIntent
 import timber.log.Timber
+import javax.inject.Inject
 
-class KeysBackupRestoreFromKeyFragment : VectorBaseFragment() {
+class KeysBackupRestoreFromKeyFragment @Inject constructor()
+    : VectorBaseFragment() {
 
     companion object {
-        fun newInstance() = KeysBackupRestoreFromKeyFragment()
 
         private const val REQUEST_TEXT_FILE_GET = 1
     }
@@ -51,17 +50,10 @@ class KeysBackupRestoreFromKeyFragment : VectorBaseFragment() {
     @BindView(R.id.keys_restore_key_enter_edittext)
     lateinit var mKeyTextEdit: EditText
 
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(KeysBackupRestoreFromKeyViewModel::class.java)
-        sharedViewModel = activity?.run {
-            ViewModelProviders.of(this, viewModelFactory).get(KeysBackupRestoreSharedViewModel::class.java)
-        } ?: throw Exception("Invalid Activity")
-
+        viewModel = fragmentViewModelProvider.get(KeysBackupRestoreFromKeyViewModel::class.java)
+        sharedViewModel = activityViewModelProvider.get(KeysBackupRestoreSharedViewModel::class.java)
         mKeyTextEdit.setText(viewModel.recoveryCode.value)
         mKeyTextEdit.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -72,7 +64,7 @@ class KeysBackupRestoreFromKeyFragment : VectorBaseFragment() {
         }
 
         mKeyInputLayout.error = viewModel.recoveryCodeErrorText.value
-        viewModel.recoveryCodeErrorText.observe(this, Observer { newValue ->
+        viewModel.recoveryCodeErrorText.observe(viewLifecycleOwner, Observer { newValue ->
             mKeyInputLayout.error = newValue
         })
     }

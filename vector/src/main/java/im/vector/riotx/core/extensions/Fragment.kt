@@ -16,28 +16,66 @@
 
 package im.vector.riotx.core.extensions
 
+import android.os.Parcelable
 import androidx.fragment.app.Fragment
+import im.vector.riotx.core.platform.VectorBaseFragment
 
-fun Fragment.addFragment(fragment: Fragment, frameId: Int) {
-    fragmentManager?.inTransaction { add(frameId, fragment) }
+fun VectorBaseFragment.addFragment(frameId: Int, fragment: Fragment) {
+    parentFragmentManager.commitTransactionNow { add(frameId, fragment) }
 }
 
-fun Fragment.replaceFragment(fragment: Fragment, frameId: Int) {
-    fragmentManager?.inTransaction { replace(frameId, fragment) }
+fun <T : Fragment> VectorBaseFragment.addFragment(frameId: Int, fragmentClass: Class<T>, params: Parcelable? = null, tag: String? = null) {
+    parentFragmentManager.commitTransactionNow {
+        add(frameId, fragmentClass, params.toMvRxBundle(), tag)
+    }
 }
 
-fun Fragment.addFragmentToBackstack(fragment: Fragment, frameId: Int, tag: String? = null) {
-    fragmentManager?.inTransaction { replace(frameId, fragment).addToBackStack(tag) }
+fun VectorBaseFragment.replaceFragment(frameId: Int, fragment: Fragment) {
+    parentFragmentManager.commitTransactionNow { replace(frameId, fragment) }
 }
 
-fun Fragment.addChildFragment(fragment: Fragment, frameId: Int) {
-    childFragmentManager.inTransaction { add(frameId, fragment) }
+fun <T : Fragment> VectorBaseFragment.replaceFragment(frameId: Int, fragmentClass: Class<T>, params: Parcelable? = null, tag: String? = null) {
+    parentFragmentManager.commitTransactionNow {
+        replace(frameId, fragmentClass, params.toMvRxBundle(), tag)
+    }
 }
 
-fun Fragment.replaceChildFragment(fragment: Fragment, frameId: Int) {
-    childFragmentManager.inTransaction { replace(frameId, fragment) }
+fun VectorBaseFragment.addFragmentToBackstack(frameId: Int, fragment: Fragment, tag: String? = null) {
+    parentFragmentManager.commitTransaction { replace(frameId, fragment, tag).addToBackStack(tag) }
 }
 
-fun Fragment.addChildFragmentToBackstack(fragment: Fragment, frameId: Int, tag: String? = null) {
-    childFragmentManager.inTransaction { replace(frameId, fragment).addToBackStack(tag) }
+fun <T : Fragment> VectorBaseFragment.addFragmentToBackstack(frameId: Int, fragmentClass: Class<T>, params: Parcelable? = null, tag: String? = null) {
+    parentFragmentManager.commitTransaction {
+        replace(frameId, fragmentClass, params.toMvRxBundle(), tag).addToBackStack(tag)
+    }
+}
+
+fun VectorBaseFragment.addChildFragment(frameId: Int, fragment: Fragment, tag: String? = null) {
+    childFragmentManager.commitTransactionNow { add(frameId, fragment, tag) }
+}
+
+fun <T : Fragment> VectorBaseFragment.addChildFragment(frameId: Int, fragmentClass: Class<T>, params: Parcelable? = null, tag: String? = null) {
+    childFragmentManager.commitTransactionNow {
+        add(frameId, fragmentClass, params.toMvRxBundle(), tag)
+    }
+}
+
+fun VectorBaseFragment.replaceChildFragment(frameId: Int, fragment: Fragment, tag: String? = null) {
+    childFragmentManager.commitTransactionNow { replace(frameId, fragment, tag) }
+}
+
+fun <T : Fragment> VectorBaseFragment.replaceChildFragment(frameId: Int, fragmentClass: Class<T>, params: Parcelable? = null, tag: String? = null) {
+    childFragmentManager.commitTransactionNow {
+        replace(frameId, fragmentClass, params.toMvRxBundle(), tag)
+    }
+}
+
+fun VectorBaseFragment.addChildFragmentToBackstack(frameId: Int, fragment: Fragment, tag: String? = null) {
+    childFragmentManager.commitTransaction { replace(frameId, fragment).addToBackStack(tag) }
+}
+
+fun <T : Fragment> VectorBaseFragment.addChildFragmentToBackstack(frameId: Int, fragmentClass: Class<T>, params: Parcelable? = null, tag: String? = null) {
+    childFragmentManager.commitTransaction {
+        replace(frameId, fragmentClass, params.toMvRxBundle(), tag).addToBackStack(tag)
+    }
 }

@@ -19,7 +19,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
@@ -47,7 +46,7 @@ class MessageActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), Message
 
     override val showExpanded = true
 
-    private lateinit var actionHandlerModel: ActionsHandler
+    private lateinit var sharedActionViewModel: MessageSharedActionViewModel
 
     override fun injectWith(screenComponent: ScreenComponent) {
         screenComponent.inject(this)
@@ -61,7 +60,7 @@ class MessageActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), Message
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        actionHandlerModel = ViewModelProviders.of(requireActivity()).get(ActionsHandler::class.java)
+        sharedActionViewModel = activityViewModelProvider.get(MessageSharedActionViewModel::class.java)
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         recyclerView.adapter = messageActionsEpoxyController.adapter
         // Disable item animation
@@ -69,12 +68,12 @@ class MessageActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), Message
         messageActionsEpoxyController.listener = this
     }
 
-    override fun didSelectMenuAction(simpleAction: SimpleAction) {
-        if (simpleAction is SimpleAction.ReportContent) {
+    override fun didSelectMenuAction(eventAction: EventSharedAction) {
+        if (eventAction is EventSharedAction.ReportContent) {
             // Toggle report menu
-            viewModel.toggleReportMenu()
+            viewModel.handle(MessageActionsAction.ToggleReportMenu)
         } else {
-            actionHandlerModel.fireAction(simpleAction)
+            sharedActionViewModel.post(eventAction)
             dismiss()
         }
     }

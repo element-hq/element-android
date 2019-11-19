@@ -21,21 +21,17 @@ import android.widget.TextView
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import butterknife.BindView
 import butterknife.OnClick
 import im.vector.matrix.android.api.session.crypto.sas.IncomingSasVerificationTransaction
 import im.vector.matrix.android.api.session.crypto.sas.OutgoingSasVerificationRequest
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseFragment
+import javax.inject.Inject
 
-class SASVerificationShortCodeFragment : VectorBaseFragment() {
+class SASVerificationShortCodeFragment @Inject constructor(): VectorBaseFragment() {
 
     private lateinit var viewModel: SasVerificationViewModel
-
-    companion object {
-        fun newInstance() = SASVerificationShortCodeFragment()
-    }
 
     @BindView(R.id.sas_decimal_code)
     lateinit var decimalTextView: TextView
@@ -65,9 +61,7 @@ class SASVerificationShortCodeFragment : VectorBaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = activity?.run {
-            ViewModelProviders.of(this, viewModelFactory).get(SasVerificationViewModel::class.java)
-        } ?: throw Exception("Invalid Activity")
+        viewModel = activityViewModelProvider.get(SasVerificationViewModel::class.java)
 
         viewModel.transaction?.let {
             if (it.supportsEmoji()) {
@@ -120,7 +114,7 @@ class SASVerificationShortCodeFragment : VectorBaseFragment() {
             }
         }
 
-        viewModel.transactionState.observe(this, Observer {
+        viewModel.transactionState.observe(viewLifecycleOwner, Observer {
             if (viewModel.transaction is IncomingSasVerificationTransaction) {
                 val uxState = (viewModel.transaction as IncomingSasVerificationTransaction).uxState
                 when (uxState) {

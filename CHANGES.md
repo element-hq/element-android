@@ -1,3 +1,26 @@
+Changes in RiotX 0.8.0 (2019-11-19)
+===================================================
+
+Features ✨:
+ - Handle long click on room in the room list (#395)
+ - Ignore/UnIgnore users, and display list of ignored users (#542, #617)
+
+Improvements 🙌:
+ - Search reaction by name or keyword in emoji picker
+ - Handle code tags (#567)
+ - Support spoiler messages
+ - Support m.sticker and m.room.join_rules events in timeline
+
+Other changes:
+ - Markdown set to off by default (#412)
+ - Accessibility improvements to the attachment file type chooser
+
+Bugfix 🐛:
+ - Fix issues with some member events rendering (#498)
+ - Passphrase does not match (Export room keys) (#644)
+ - Ask for permission to write external storage when uri comes from the keyboard (#658)
+ - Fix issue with english US/GB translation (#671)
+
 Changes in RiotX 0.7.0 (2019-10-24)
 ===================================================
 
@@ -11,6 +34,7 @@ Improvements:
  - Do not upload file too big for the homeserver (#587)
  - Attachments: start using system pickers (#52)
  - Mark all messages as read (#396)
+
 
 Other changes:
  - Accessibility improvements to read receipts in the room timeline and reactions emoji chooser

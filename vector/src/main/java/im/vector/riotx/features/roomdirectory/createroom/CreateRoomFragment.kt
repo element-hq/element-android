@@ -18,48 +18,42 @@ package im.vector.riotx.features.roomdirectory.createroom
 
 import android.os.Bundle
 import android.view.MenuItem
-import androidx.lifecycle.ViewModelProviders
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
-import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.platform.VectorBaseFragment
-import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
-import im.vector.riotx.features.roomdirectory.RoomDirectoryNavigationViewModel
+import im.vector.riotx.features.roomdirectory.RoomDirectorySharedAction
+import im.vector.riotx.features.roomdirectory.RoomDirectorySharedActionViewModel
 import kotlinx.android.synthetic.main.fragment_create_room.*
 import timber.log.Timber
 import javax.inject.Inject
 
-class CreateRoomFragment : VectorBaseFragment(), CreateRoomController.Listener {
+class CreateRoomFragment @Inject constructor(private val createRoomController: CreateRoomController) : VectorBaseFragment(), CreateRoomController.Listener {
 
-    private lateinit var navigationViewModel: RoomDirectoryNavigationViewModel
+    private lateinit var sharedActionViewModel: RoomDirectorySharedActionViewModel
     private val viewModel: CreateRoomViewModel by activityViewModel()
-    @Inject lateinit var createRoomController: CreateRoomController
 
     override fun getLayoutResId() = R.layout.fragment_create_room
 
     override fun getMenuRes() = R.menu.vector_room_creation
 
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         vectorBaseActivity.setSupportActionBar(createRoomToolbar)
-        navigationViewModel = ViewModelProviders.of(requireActivity()).get(RoomDirectoryNavigationViewModel::class.java)
+        sharedActionViewModel = activityViewModelProvider.get(RoomDirectorySharedActionViewModel::class.java)
         setupRecyclerView()
         createRoomClose.setOnClickListener {
-            navigationViewModel.goTo(RoomDirectoryActivity.Navigation.Back)
+            sharedActionViewModel.post(RoomDirectorySharedAction.Back)
         }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_create_room -> {
-                viewModel.doCreateRoom()
+                viewModel.handle(CreateRoomAction.Create)
                 true
             }
             else                    ->
@@ -77,20 +71,20 @@ class CreateRoomFragment : VectorBaseFragment(), CreateRoomController.Listener {
     }
 
     override fun onNameChange(newName: String) {
-        viewModel.setName(newName)
+        viewModel.handle(CreateRoomAction.SetName(newName))
     }
 
     override fun setIsPublic(isPublic: Boolean) {
-        viewModel.setIsPublic(isPublic)
+        viewModel.handle(CreateRoomAction.SetIsPublic(isPublic))
     }
 
     override fun setIsInRoomDirectory(isInRoomDirectory: Boolean) {
-        viewModel.setIsInRoomDirectory(isInRoomDirectory)
+        viewModel.handle(CreateRoomAction.SetIsInRoomDirectory(isInRoomDirectory))
     }
 
     override fun retry() {
         Timber.v("Retry")
-        viewModel.doCreateRoom()
+        viewModel.handle(CreateRoomAction.Create)
     }
 
     override fun invalidate() = withState(viewModel) { state ->
@@ -99,7 +93,7 @@ class CreateRoomFragment : VectorBaseFragment(), CreateRoomController.Listener {
             // Navigate to freshly created room
             navigator.openRoom(requireActivity(), async())
 
-            navigationViewModel.goTo(RoomDirectoryActivity.Navigation.Close)
+            sharedActionViewModel.post(RoomDirectorySharedAction.Close)
         } else {
             // Populate list with Epoxy
             createRoomController.setData(state)

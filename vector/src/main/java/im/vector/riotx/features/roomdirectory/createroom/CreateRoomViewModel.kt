@@ -30,7 +30,7 @@ import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
 
 class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: CreateRoomViewState,
                                                       private val session: Session
-) : VectorViewModel<CreateRoomViewState>(initialState) {
+) : VectorViewModel<CreateRoomViewState, CreateRoomAction>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -46,18 +46,27 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
             return when (activity) {
                 is CreateRoomActivity    -> activity.createRoomViewModelFactory.create(state)
                 is RoomDirectoryActivity -> activity.createRoomViewModelFactory.create(state)
-                else                     -> throw IllegalStateException("Wrong activity")
+                else                     -> error("Wrong activity")
             }
         }
     }
 
-    fun setName(newName: String) = setState { copy(roomName = newName) }
+    override fun handle(action: CreateRoomAction) {
+        when (action) {
+            is CreateRoomAction.SetName              -> setName(action)
+            is CreateRoomAction.SetIsPublic          -> setIsPublic(action)
+            is CreateRoomAction.SetIsInRoomDirectory -> setIsInRoomDirectory(action)
+            is CreateRoomAction.Create               -> doCreateRoom()
+        }
+    }
 
-    fun setIsPublic(isPublic: Boolean) = setState { copy(isPublic = isPublic) }
+    private fun setName(action: CreateRoomAction.SetName) = setState { copy(roomName = action.name) }
 
-    fun setIsInRoomDirectory(isInRoomDirectory: Boolean) = setState { copy(isInRoomDirectory = isInRoomDirectory) }
+    private fun setIsPublic(action: CreateRoomAction.SetIsPublic) = setState { copy(isPublic = action.isPublic) }
 
-    fun doCreateRoom() = withState { state ->
+    private fun setIsInRoomDirectory(action: CreateRoomAction.SetIsInRoomDirectory) = setState { copy(isInRoomDirectory = action.isInRoomDirectory) }
+
+    private fun doCreateRoom() = withState { state ->
         if (state.asyncCreateRoomRequest is Loading || state.asyncCreateRoomRequest is Success) {
             return@withState
         }

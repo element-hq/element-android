@@ -22,7 +22,7 @@ import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.tag.RoomTag
 import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
-import java.util.*
+import java.util.UUID
 import javax.inject.Inject
 
 internal class RoomSummaryMapper @Inject constructor(
@@ -36,7 +36,7 @@ internal class RoomSummaryMapper @Inject constructor(
         }
 
         val latestEvent = roomSummaryEntity.latestPreviewableEvent?.let {
-            timelineEventMapper.map(it)
+            timelineEventMapper.map(it, buildReadReceipts = false)
         }
         if (latestEvent?.root?.isEncrypted() == true && latestEvent.root.mxDecryptionResult == null) {
             // TODO use a global event decryptor? attache to session and that listen to new sessionId?

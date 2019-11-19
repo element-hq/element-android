@@ -1430,13 +1430,13 @@ Per què triar Riot.im?
     <string name="error_jitsi_not_supported_on_old_device">Ho sentim, els dispositius amb SO Android inferior a 5.0 no suporten trucades multi-usuari amb Jitsi</string>
 
     <string name="integration_manager_not_configured">No heu configurat cap administrador d\'integracions.</string>
-    <string name="you_added_a_new_device_with_info">Un nou dispositiu està sol·licitant claus d\'encriptació.
-\nNom del dispositiu: %1$s
-\nVist per última vegada: %s$s
+    <string name="you_added_a_new_device_with_info">Un nou dispositiu està sol·licitant claus d\'encriptació. 
+\nNom del dispositiu: %1$s 
+\nVist per última vegada: %2$s 
 \nSi no heu iniciat sessió en un altre dispositiu, ignoreu la sol·licitud.</string>
-    <string name="your_unverified_device_requesting_with_info">Un dispositiu no verificat està sol·licitant claus d\'encriptació.
-\nNom del dispositiu: %1$s
-\nVist per última vegada: %s$s
+    <string name="your_unverified_device_requesting_with_info">Un dispositiu no verificat està sol·licitant claus d\'encriptació. 
+\nNom del dispositiu: %1$s 
+\nVist per última vegada: %2$s 
 \nSi no heu iniciat sessió en un altre dispositiu, ignoreu la sol·licitud.</string>
 
     <string name="start_verification_short_label">Verificar</string>

@@ -23,6 +23,7 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.viewModel
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
+import im.vector.riotx.core.extensions.replaceFragment
 import im.vector.riotx.core.platform.SimpleFragmentActivity
 import im.vector.riotx.core.platform.WaitingViewData
 import javax.inject.Inject
@@ -49,11 +50,8 @@ class KeysBackupManageActivity : SimpleFragmentActivity() {
     override fun initUiAndData() {
         super.initUiAndData()
         if (supportFragmentManager.fragments.isEmpty()) {
-            supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, KeysBackupSettingsFragment.newInstance())
-                    .commitNow()
-
-            viewModel.init()
+            replaceFragment(R.id.container, KeysBackupSettingsFragment::class.java)
+            viewModel.handle(KeyBackupSettingsAction.Init)
         }
 
         // Observe the deletion of keys backup

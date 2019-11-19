@@ -46,7 +46,7 @@ import org.json.JSONObject
 import timber.log.Timber
 import java.io.*
 import java.net.HttpURLConnection
-import java.util.*
+import java.util.Locale
 import java.util.zip.GZIPOutputStream
 import javax.inject.Inject
 import javax.inject.Singleton

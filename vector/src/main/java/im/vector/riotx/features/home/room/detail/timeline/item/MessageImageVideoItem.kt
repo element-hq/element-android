@@ -24,6 +24,7 @@ import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
+import im.vector.riotx.core.glide.GlideApp
 import im.vector.riotx.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
 import im.vector.riotx.features.media.ImageContentRenderer
 
@@ -60,6 +61,7 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
     }
 
     override fun unbind(holder: Holder) {
+        GlideApp.with(holder.view.context.applicationContext).clear(holder.imageView)
         contentUploadStateTrackerBinder.unbind(attributes.informationData.eventId)
         super.unbind(holder)
     }

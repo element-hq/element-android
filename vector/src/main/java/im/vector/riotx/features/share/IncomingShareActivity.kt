@@ -31,6 +31,7 @@ import im.vector.riotx.core.extensions.replaceFragment
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.features.attachments.AttachmentsHelper
 import im.vector.riotx.features.home.LoadingFragment
+import im.vector.riotx.features.home.RoomListDisplayMode
 import im.vector.riotx.features.home.room.list.RoomListFragment
 import im.vector.riotx.features.home.room.list.RoomListParams
 import im.vector.riotx.features.login.LoginActivity
@@ -42,9 +43,12 @@ class IncomingShareActivity :
 
     @Inject lateinit var sessionHolder: ActiveSessionHolder
     @Inject lateinit var incomingShareViewModelFactory: IncomingShareViewModel.Factory
-    private var roomListFragment: RoomListFragment? = null
     private lateinit var attachmentsHelper: AttachmentsHelper
     private val incomingShareViewModel: IncomingShareViewModel by viewModel()
+    private val roomListFragment: RoomListFragment?
+        get() {
+            return supportFragmentManager.findFragmentById(R.id.shareRoomListFragmentContainer) as? RoomListFragment
+        }
 
     override fun getLayoutRes(): Int {
         return R.layout.activity_incoming_share
@@ -64,8 +68,7 @@ class IncomingShareActivity :
         }
         configureToolbar(incomingShareToolbar)
         if (isFirstCreation()) {
-            val loadingDetail = LoadingFragment.newInstance()
-            replaceFragment(loadingDetail, R.id.shareRoomListFragmentContainer)
+            replaceFragment(R.id.shareRoomListFragmentContainer, LoadingFragment::class.java)
         }
         attachmentsHelper = AttachmentsHelper.create(this, this).register()
         if (intent?.action == Intent.ACTION_SEND || intent?.action == Intent.ACTION_SEND_MULTIPLE) {
@@ -95,9 +98,8 @@ class IncomingShareActivity :
     }
 
     override fun onContentAttachmentsReady(attachments: List<ContentAttachmentData>) {
-        val roomListParams = RoomListParams(RoomListFragment.DisplayMode.SHARE, sharedData = SharedData.Attachments(attachments))
-        roomListFragment = RoomListFragment.newInstance(roomListParams)
-                .also { replaceFragment(it, R.id.shareRoomListFragmentContainer) }
+        val roomListParams = RoomListParams(RoomListDisplayMode.SHARE, sharedData = SharedData.Attachments(attachments))
+        replaceFragment(R.id.shareRoomListFragmentContainer, RoomListFragment::class.java, roomListParams)
     }
 
     override fun onAttachmentsProcessFailed() {
@@ -115,9 +117,8 @@ class IncomingShareActivity :
             return if (sharedText.isNullOrEmpty()) {
                 false
             } else {
-                val roomListParams = RoomListParams(RoomListFragment.DisplayMode.SHARE, sharedData = SharedData.Text(sharedText))
-                roomListFragment = RoomListFragment.newInstance(roomListParams)
-                        .also { replaceFragment(it, R.id.shareRoomListFragmentContainer) }
+                val roomListParams = RoomListParams(RoomListDisplayMode.SHARE, sharedData = SharedData.Text(sharedText))
+                replaceFragment(R.id.shareRoomListFragmentContainer, RoomListFragment::class.java, roomListParams)
                 true
             }
         }

@@ -19,17 +19,16 @@ package im.vector.riotx.features.roomdirectory.picker
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.matrix.android.api.session.room.model.thirdparty.RoomDirectoryData
 import im.vector.riotx.R
-import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.platform.VectorBaseFragment
-import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
-import im.vector.riotx.features.roomdirectory.RoomDirectoryNavigationViewModel
+import im.vector.riotx.features.roomdirectory.RoomDirectoryAction
+import im.vector.riotx.features.roomdirectory.RoomDirectorySharedAction
+import im.vector.riotx.features.roomdirectory.RoomDirectorySharedActionViewModel
 import im.vector.riotx.features.roomdirectory.RoomDirectoryViewModel
 import kotlinx.android.synthetic.main.fragment_room_directory_picker.*
 import timber.log.Timber
@@ -37,14 +36,13 @@ import javax.inject.Inject
 
 // TODO Set title to R.string.select_room_directory
 // TODO Menu to add custom room directory (not done in RiotWeb so far...)
-class RoomDirectoryPickerFragment : VectorBaseFragment(), RoomDirectoryPickerController.Callback {
+class RoomDirectoryPickerFragment @Inject constructor(val roomDirectoryPickerViewModelFactory: RoomDirectoryPickerViewModel.Factory,
+                                                      private val roomDirectoryPickerController: RoomDirectoryPickerController
+) : VectorBaseFragment(), RoomDirectoryPickerController.Callback {
 
     private val viewModel: RoomDirectoryViewModel by activityViewModel()
-    private lateinit var navigationViewModel: RoomDirectoryNavigationViewModel
+    private lateinit var sharedActionViewModel: RoomDirectorySharedActionViewModel
     private val pickerViewModel: RoomDirectoryPickerViewModel by fragmentViewModel()
-
-    @Inject lateinit var roomDirectoryPickerViewModelFactory: RoomDirectoryPickerViewModel.Factory
-    @Inject lateinit var roomDirectoryPickerController: RoomDirectoryPickerController
 
     override fun getLayoutResId() = R.layout.fragment_room_directory_picker
 
@@ -57,6 +55,9 @@ class RoomDirectoryPickerFragment : VectorBaseFragment(), RoomDirectoryPickerCon
             it.setDisplayShowHomeEnabled(true)
             it.setDisplayHomeAsUpEnabled(true)
         }
+
+        sharedActionViewModel = activityViewModelProvider.get(RoomDirectorySharedActionViewModel::class.java)
+        setupRecyclerView()
     }
 
     override fun getMenuRes() = R.menu.menu_directory_server_picker
@@ -71,16 +72,6 @@ class RoomDirectoryPickerFragment : VectorBaseFragment(), RoomDirectoryPickerCon
         return super.onOptionsItemSelected(item)
     }
 
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        navigationViewModel = ViewModelProviders.of(requireActivity()).get(RoomDirectoryNavigationViewModel::class.java)
-        setupRecyclerView()
-    }
-
     private fun setupRecyclerView() {
         val layoutManager = LinearLayoutManager(context)
 
@@ -92,14 +83,14 @@ class RoomDirectoryPickerFragment : VectorBaseFragment(), RoomDirectoryPickerCon
 
     override fun onRoomDirectoryClicked(roomDirectoryData: RoomDirectoryData) {
         Timber.v("onRoomDirectoryClicked: $roomDirectoryData")
-        viewModel.setRoomDirectoryData(roomDirectoryData)
+        viewModel.handle(RoomDirectoryAction.SetRoomDirectoryData(roomDirectoryData))
 
-        navigationViewModel.goTo(RoomDirectoryActivity.Navigation.Back)
+        sharedActionViewModel.post(RoomDirectorySharedAction.Back)
     }
 
     override fun retry() {
         Timber.v("Retry")
-        pickerViewModel.load()
+        pickerViewModel.handle(RoomDirectoryPickerAction.Retry)
     }
 
     override fun invalidate() = withState(pickerViewModel) { state ->

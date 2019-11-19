@@ -23,7 +23,8 @@ import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.rx.rx
-import im.vector.riotx.ActiveSessionObservableStore
+import im.vector.riotx.ActiveSessionDataSource
+import im.vector.riotx.core.platform.EmptyAction
 import im.vector.riotx.core.platform.VectorViewModel
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -35,9 +36,9 @@ data class IncomingShareState(private val dummy: Boolean = false) : MvRxState
  * View model used to observe the room list and post update to the ShareRoomListObservableStore
  */
 class IncomingShareViewModel @AssistedInject constructor(@Assisted initialState: IncomingShareState,
-                                                         private val sessionObservableStore: ActiveSessionObservableStore,
-                                                         private val shareRoomListObservableStore: ShareRoomListObservableStore)
-    : VectorViewModel<IncomingShareState>(initialState) {
+                                                         private val sessionObservableStore: ActiveSessionDataSource,
+                                                         private val shareRoomListObservableStore: ShareRoomListDataSource)
+    : VectorViewModel<IncomingShareState, EmptyAction>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -69,5 +70,9 @@ class IncomingShareViewModel @AssistedInject constructor(@Assisted initialState:
                     shareRoomListObservableStore.post(it)
                 }
                 .disposeOnClear()
+    }
+
+    override fun handle(action: EmptyAction) {
+        // No op
     }
 }

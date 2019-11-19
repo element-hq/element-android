@@ -18,9 +18,9 @@ package im.vector.riotx.features.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import androidx.core.view.forEachIndexed
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
@@ -29,7 +29,7 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.riotx.R
-import im.vector.riotx.core.di.ScreenComponent
+import im.vector.riotx.core.extensions.commitTransactionNow
 import im.vector.riotx.core.platform.ToolbarConfigurable
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.ui.views.KeysBackupBanner
@@ -45,29 +45,24 @@ private const val INDEX_CATCHUP = 0
 private const val INDEX_PEOPLE = 1
 private const val INDEX_ROOMS = 2
 
-class HomeDetailFragment : VectorBaseFragment(), KeysBackupBanner.Delegate {
+class HomeDetailFragment @Inject constructor(
+        private val session: Session,
+        val homeDetailViewModelFactory: HomeDetailViewModel.Factory,
+        private val avatarRenderer: AvatarRenderer
+) : VectorBaseFragment(), KeysBackupBanner.Delegate {
 
     private val unreadCounterBadgeViews = arrayListOf<UnreadCounterBadgeView>()
 
     private val viewModel: HomeDetailViewModel by fragmentViewModel()
-    private lateinit var navigationViewModel: HomeNavigationViewModel
-
-    @Inject lateinit var session: Session
-    @Inject lateinit var homeDetailViewModelFactory: HomeDetailViewModel.Factory
-    @Inject lateinit var avatarRenderer: AvatarRenderer
+    private lateinit var sharedActionViewModel: HomeSharedActionViewModel
 
     override fun getLayoutResId(): Int {
         return R.layout.fragment_home_detail
     }
 
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        navigationViewModel = ViewModelProviders.of(requireActivity()).get(HomeNavigationViewModel::class.java)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        sharedActionViewModel = activityViewModelProvider.get(HomeSharedActionViewModel::class.java)
 
         setupBottomNavigationView()
         setupToolbar()
@@ -95,11 +90,9 @@ class HomeDetailFragment : VectorBaseFragment(), KeysBackupBanner.Delegate {
     private fun setupKeysBackupBanner() {
         // Keys backup banner
         // Use the SignOutViewModel, it observe the keys backup state and this is what we need here
-        val model = ViewModelProviders.of(this, viewModelFactory).get(SignOutViewModel::class.java)
+        val model = fragmentViewModelProvider.get(SignOutViewModel::class.java)
 
-        model.init(session)
-
-        model.keysBackupState.observe(this, Observer { keysBackupState ->
+        model.keysBackupState.observe(viewLifecycleOwner, Observer { keysBackupState ->
             when (keysBackupState) {
                 null                               ->
                     homeKeysBackupBanner.render(KeysBackupBanner.State.Hidden, false)
@@ -133,19 +126,19 @@ class HomeDetailFragment : VectorBaseFragment(), KeysBackupBanner.Delegate {
         }
         groupToolbar.title = ""
         groupToolbarAvatarImageView.setOnClickListener {
-            navigationViewModel.goTo(HomeActivity.Navigation.OpenDrawer)
+            sharedActionViewModel.post(HomeActivitySharedAction.OpenDrawer)
         }
     }
 
     private fun setupBottomNavigationView() {
         bottomNavigationView.setOnNavigationItemSelectedListener {
             val displayMode = when (it.itemId) {
-                R.id.bottom_action_home   -> RoomListFragment.DisplayMode.HOME
-                R.id.bottom_action_people -> RoomListFragment.DisplayMode.PEOPLE
-                R.id.bottom_action_rooms  -> RoomListFragment.DisplayMode.ROOMS
-                else                      -> RoomListFragment.DisplayMode.HOME
+                R.id.bottom_action_home   -> RoomListDisplayMode.HOME
+                R.id.bottom_action_people -> RoomListDisplayMode.PEOPLE
+                R.id.bottom_action_rooms  -> RoomListDisplayMode.ROOMS
+                else                      -> RoomListDisplayMode.HOME
             }
-            viewModel.switchDisplayMode(displayMode)
+            viewModel.handle(HomeDetailAction.SwitchDisplayMode(displayMode))
             true
         }
 
@@ -159,27 +152,33 @@ class HomeDetailFragment : VectorBaseFragment(), KeysBackupBanner.Delegate {
         }
     }
 
-    private fun switchDisplayMode(displayMode: RoomListFragment.DisplayMode) {
+    private fun switchDisplayMode(displayMode: RoomListDisplayMode) {
         groupToolbarTitleView.setText(displayMode.titleRes)
         updateSelectedFragment(displayMode)
         // Update the navigation view (for when we restore the tabs)
         bottomNavigationView.selectedItemId = when (displayMode) {
-            RoomListFragment.DisplayMode.PEOPLE -> R.id.bottom_action_people
-            RoomListFragment.DisplayMode.ROOMS  -> R.id.bottom_action_rooms
+            RoomListDisplayMode.PEOPLE -> R.id.bottom_action_people
+            RoomListDisplayMode.ROOMS  -> R.id.bottom_action_rooms
             else                                -> R.id.bottom_action_home
         }
     }
 
-    private fun updateSelectedFragment(displayMode: RoomListFragment.DisplayMode) {
+    private fun updateSelectedFragment(displayMode: RoomListDisplayMode) {
         val fragmentTag = "FRAGMENT_TAG_${displayMode.name}"
-        var fragment = childFragmentManager.findFragmentByTag(fragmentTag)
-        if (fragment == null) {
-            fragment = RoomListFragment.newInstance(RoomListParams(displayMode))
+        val fragmentToShow = childFragmentManager.findFragmentByTag(fragmentTag)
+        childFragmentManager.commitTransactionNow {
+            childFragmentManager.fragments
+                    .filter { it != fragmentToShow }
+                    .forEach {
+                        detach(it)
+                    }
+            if (fragmentToShow == null) {
+                val params = RoomListParams(displayMode)
+                add(R.id.roomListContainer, RoomListFragment::class.java, params.toMvRxBundle(), fragmentTag)
+            } else {
+                attach(fragmentToShow)
+            }
         }
-        childFragmentManager.beginTransaction()
-                .replace(R.id.roomListContainer, fragment, fragmentTag)
-                .addToBackStack(fragmentTag)
-                .commit()
     }
 
     /* ==========================================================================================
@@ -200,12 +199,5 @@ class HomeDetailFragment : VectorBaseFragment(), KeysBackupBanner.Delegate {
         unreadCounterBadgeViews[INDEX_PEOPLE].render(UnreadCounterBadgeView.State(it.notificationCountPeople, it.notificationHighlightPeople))
         unreadCounterBadgeViews[INDEX_ROOMS].render(UnreadCounterBadgeView.State(it.notificationCountRooms, it.notificationHighlightRooms))
         syncStateView.render(it.syncState)
-    }
-
-    companion object {
-
-        fun newInstance(): HomeDetailFragment {
-            return HomeDetailFragment()
-        }
     }
 }

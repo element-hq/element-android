@@ -1,52 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
-    android:gravity="center_vertical"
     android:minHeight="50dp"
-    android:orientation="horizontal"
     android:paddingLeft="@dimen/layout_horizontal_margin"
     android:paddingTop="8dp"
     android:paddingRight="@dimen/layout_horizontal_margin"
     android:paddingBottom="8dp">
 
     <Space
-        android:id="@+id/action_start_space"
+        android:id="@+id/actionStartSpace"
         android:layout_width="32dp"
         android:layout_height="wrap_content"
         android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:visibility="visible" />
 
     <ImageView
-        android:id="@+id/action_icon"
-        android:layout_width="22dp"
-        android:layout_height="22dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
+        android:id="@+id/actionIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@id/actionStartSpace"
+        android:scaleType="center"
         android:tint="?riotx_text_secondary"
-        tools:src="@drawable/ic_delete" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/actionStartSpace"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/ic_room_actions_notifications_all" />
 
     <TextView
-        android:id="@+id/action_title"
-        android:layout_width="wrap_content"
+        android:id="@+id/actionTitle"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
+        android:drawablePadding="16dp"
+        android:ellipsize="end"
+        android:maxLines="2"
         android:textColor="?riotx_text_secondary"
         android:textSize="17sp"
-        tools:text="@string/delete" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/actionSelected"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@id/actionStartSpace"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_default="wrap"
+        tools:text="zbla azjazjaz s sdkqdskdsqk kqsdkdqsk kdqsksqdk" />
+
 
     <ImageView
-        android:id="@+id/action_expand"
+        android:id="@+id/actionSelected"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:tint="?riotx_text_secondary"
+        android:src="@drawable/ic_check_white_24dp"
+        android:tint="@color/riotx_accent"
         android:visibility="gone"
-        tools:src="@drawable/ic_material_expand_more_black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:visibility="visible" />
 
-</LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

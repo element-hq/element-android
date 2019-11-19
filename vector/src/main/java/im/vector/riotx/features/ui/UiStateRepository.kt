@@ -16,14 +16,14 @@
 
 package im.vector.riotx.features.ui
 
-import im.vector.riotx.features.home.room.list.RoomListFragment
+import im.vector.riotx.features.home.RoomListDisplayMode
 
 /**
  * This interface is used to persist UI state across application restart
  */
 interface UiStateRepository {
 
-    fun getDisplayMode(): RoomListFragment.DisplayMode
+    fun getDisplayMode(): RoomListDisplayMode
 
-    fun storeDisplayMode(displayMode: RoomListFragment.DisplayMode)
+    fun storeDisplayMode(displayMode: RoomListDisplayMode)
 }

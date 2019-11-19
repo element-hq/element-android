@@ -25,6 +25,7 @@ import androidx.annotation.LayoutRes
 import androidx.annotation.MainThread
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import butterknife.ButterKnife
 import butterknife.Unbinder
 import com.airbnb.mvrx.BaseMvRxFragment
@@ -51,9 +52,20 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
      * Navigator
      * ========================================================================================== */
 
-    protected lateinit var viewModelFactory: ViewModelProvider.Factory
     protected lateinit var navigator: Navigator
     private lateinit var screenComponent: ScreenComponent
+
+    /* ==========================================================================================
+     * View model
+     * ========================================================================================== */
+
+    private lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    protected val activityViewModelProvider
+        get() = ViewModelProviders.of(requireActivity(), viewModelFactory)
+
+    protected val fragmentViewModelProvider
+        get() = ViewModelProviders.of(this, viewModelFactory)
 
     /* ==========================================================================================
      * Life cycle
@@ -63,6 +75,7 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
         screenComponent = DaggerScreenComponent.factory().create(vectorBaseActivity.getVectorComponent(), vectorBaseActivity)
         navigator = screenComponent.navigator()
         viewModelFactory = screenComponent.viewModelFactory()
+        childFragmentManager.fragmentFactory = screenComponent.fragmentFactory()
         injectWith(injector())
         super.onAttach(context)
     }
@@ -101,11 +114,12 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
         super.onDestroyView()
         mUnBinder?.unbind()
         mUnBinder = null
+        uiDisposables.clear()
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         uiDisposables.dispose()
+        super.onDestroy()
     }
 
     override fun injector(): ScreenComponent {
@@ -134,7 +148,11 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
     }
 
     protected fun setArguments(args: Parcelable? = null) {
-        arguments = args?.let { Bundle().apply { putParcelable(MvRx.KEY_ARG, it) } }
+        arguments = args.toMvRxBundle()
+    }
+
+    fun Parcelable?.toMvRxBundle(): Bundle? {
+        return this?.let { Bundle().apply { putParcelable(MvRx.KEY_ARG, it) } }
     }
 
     @MainThread
@@ -164,7 +182,7 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
 
     private val uiDisposables = CompositeDisposable()
 
-    protected fun Disposable.disposeOnDestroy(): Disposable {
+    protected fun Disposable.disposeOnDestroyView(): Disposable {
         uiDisposables.add(this)
         return this
     }

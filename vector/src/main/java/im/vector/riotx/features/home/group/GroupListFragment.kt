@@ -17,50 +17,39 @@
 package im.vector.riotx.features.home.group
 
 import android.os.Bundle
-import androidx.lifecycle.ViewModelProviders
+import android.view.View
 import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.riotx.R
-import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.platform.StateView
 import im.vector.riotx.core.platform.VectorBaseFragment
-import im.vector.riotx.features.home.HomeActivity
-import im.vector.riotx.features.home.HomeNavigationViewModel
+import im.vector.riotx.features.home.HomeSharedActionViewModel
+import im.vector.riotx.features.home.HomeActivitySharedAction
 import kotlinx.android.synthetic.main.fragment_group_list.*
 import javax.inject.Inject
 
-class GroupListFragment : VectorBaseFragment(), GroupSummaryController.Callback {
+class GroupListFragment @Inject constructor(
+        val groupListViewModelFactory: GroupListViewModel.Factory,
+        private val groupController: GroupSummaryController
+) : VectorBaseFragment(), GroupSummaryController.Callback {
 
-    companion object {
-        fun newInstance(): GroupListFragment {
-            return GroupListFragment()
-        }
-    }
-
-    private lateinit var navigationViewModel: HomeNavigationViewModel
+    private lateinit var sharedActionViewModel: HomeSharedActionViewModel
     private val viewModel: GroupListViewModel by fragmentViewModel()
-
-    @Inject lateinit var groupListViewModelFactory: GroupListViewModel.Factory
-    @Inject lateinit var groupController: GroupSummaryController
 
     override fun getLayoutResId() = R.layout.fragment_group_list
 
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        navigationViewModel = ViewModelProviders.of(requireActivity()).get(HomeNavigationViewModel::class.java)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        sharedActionViewModel = activityViewModelProvider.get(HomeSharedActionViewModel::class.java)
         groupController.callback = this
         stateView.contentView = groupListEpoxyRecyclerView
         groupListEpoxyRecyclerView.setController(groupController)
         viewModel.subscribe { renderState(it) }
         viewModel.openGroupLiveData.observeEvent(this) {
-            navigationViewModel.goTo(HomeActivity.Navigation.OpenGroup)
+            sharedActionViewModel.post(HomeActivitySharedAction.OpenGroup)
         }
     }
 
@@ -73,6 +62,6 @@ class GroupListFragment : VectorBaseFragment(), GroupSummaryController.Callback 
     }
 
     override fun onGroupSelected(groupSummary: GroupSummary) {
-        viewModel.accept(GroupListActions.SelectGroup(groupSummary))
+        viewModel.handle(GroupListAction.SelectGroup(groupSummary))
     }
 }

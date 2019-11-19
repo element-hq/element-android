@@ -18,6 +18,10 @@ package im.vector.riotx.core.extensions
 
 import androidx.fragment.app.FragmentTransaction
 
-inline fun androidx.fragment.app.FragmentManager.inTransaction(func: FragmentTransaction.() -> FragmentTransaction) {
+inline fun androidx.fragment.app.FragmentManager.commitTransactionNow(func: FragmentTransaction.() -> FragmentTransaction) {
+    beginTransaction().func().commitNow()
+}
+
+inline fun androidx.fragment.app.FragmentManager.commitTransaction(func: FragmentTransaction.() -> FragmentTransaction) {
     beginTransaction().func().commit()
 }

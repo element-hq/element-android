@@ -16,15 +16,15 @@
 
 package im.vector.riotx.core.resources
 
+import android.content.Context
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import im.vector.riotx.features.themes.ThemeUtils
 import javax.inject.Inject
 
-class ColorProvider @Inject constructor(private val context: AppCompatActivity) {
+class ColorProvider @Inject constructor(private val context: Context) {
 
     fun getColor(@ColorRes colorRes: Int): Int {
         return ContextCompat.getColor(context, colorRes)
@@ -33,7 +33,6 @@ class ColorProvider @Inject constructor(private val context: AppCompatActivity) 
     /**
      * Translates color attributes to colors
      *
-     * @param c              Context
      * @param colorAttribute Color Attribute
      * @return Requested Color
      */

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.fragments.keysbackup.restore
+package im.vector.riotx.features.crypto.keysbackup.restore
 
 import android.content.Context
 import android.os.Bundle
@@ -27,19 +27,16 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.text.set
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import butterknife.BindView
 import butterknife.OnClick
 import butterknife.OnTextChanged
 import com.google.android.material.textfield.TextInputLayout
 import im.vector.riotx.R
-import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.showPassword
 import im.vector.riotx.core.platform.VectorBaseFragment
-import im.vector.riotx.features.crypto.keysbackup.restore.KeysBackupRestoreFromPassphraseViewModel
-import im.vector.riotx.features.crypto.keysbackup.restore.KeysBackupRestoreSharedViewModel
+import javax.inject.Inject
 
-class KeysBackupRestoreFromPassphraseFragment : VectorBaseFragment() {
+class KeysBackupRestoreFromPassphraseFragment @Inject constructor(): VectorBaseFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_keys_backup_restore_from_passphrase
 
@@ -63,29 +60,19 @@ class KeysBackupRestoreFromPassphraseFragment : VectorBaseFragment() {
         viewModel.showPasswordMode.value = !(viewModel.showPasswordMode.value ?: false)
     }
 
-    companion object {
-        fun newInstance() = KeysBackupRestoreFromPassphraseFragment()
-    }
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(KeysBackupRestoreFromPassphraseViewModel::class.java)
-        sharedViewModel = activity?.run {
-            ViewModelProviders.of(this, viewModelFactory).get(KeysBackupRestoreSharedViewModel::class.java)
-        } ?: throw Exception("Invalid Activity")
+        viewModel = fragmentViewModelProvider.get(KeysBackupRestoreFromPassphraseViewModel::class.java)
+        sharedViewModel = activityViewModelProvider.get(KeysBackupRestoreSharedViewModel::class.java)
 
-        viewModel.passphraseErrorText.observe(this, Observer { newValue ->
+        viewModel.passphraseErrorText.observe(viewLifecycleOwner, Observer { newValue ->
             mPassphraseInputLayout.error = newValue
         })
 
         helperTextWithLink.text = spannableStringForHelperText(context!!)
 
-        viewModel.showPasswordMode.observe(this, Observer {
+        viewModel.showPasswordMode.observe(viewLifecycleOwner, Observer {
             val shouldBeVisible = it ?: false
             mPassphraseTextEdit.showPassword(shouldBeVisible)
             mPassphraseReveal.setImageResource(if (shouldBeVisible) R.drawable.ic_eye_closed_black else R.drawable.ic_eye_black)

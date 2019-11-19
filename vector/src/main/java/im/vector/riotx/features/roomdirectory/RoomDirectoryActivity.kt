@@ -19,14 +19,13 @@ package im.vector.riotx.features.roomdirectory
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.lifecycle.ViewModelProviders
 import com.airbnb.mvrx.viewModel
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.addFragment
 import im.vector.riotx.core.extensions.addFragmentToBackstack
-import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.platform.VectorBaseActivity
+import im.vector.riotx.features.roomdirectory.createroom.CreateRoomAction
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomFragment
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomViewModel
 import im.vector.riotx.features.roomdirectory.picker.RoomDirectoryPickerFragment
@@ -34,19 +33,11 @@ import javax.inject.Inject
 
 class RoomDirectoryActivity : VectorBaseActivity() {
 
-    // Supported navigation actions for this Activity
-    sealed class Navigation {
-        object Back : Navigation()
-        object CreateRoom : Navigation()
-        object Close : Navigation()
-        object ChangeProtocol : Navigation()
-    }
-
     @Inject lateinit var createRoomViewModelFactory: CreateRoomViewModel.Factory
     @Inject lateinit var roomDirectoryViewModelFactory: RoomDirectoryViewModel.Factory
     private val roomDirectoryViewModel: RoomDirectoryViewModel by viewModel()
     private val createRoomViewModel: CreateRoomViewModel by viewModel()
-    private lateinit var navigationViewModel: RoomDirectoryNavigationViewModel
+    private lateinit var sharedActionViewModel: RoomDirectorySharedActionViewModel
 
     override fun getLayoutRes() = R.layout.activity_simple
 
@@ -56,30 +47,35 @@ class RoomDirectoryActivity : VectorBaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        navigationViewModel = ViewModelProviders.of(this, viewModelFactory).get(RoomDirectoryNavigationViewModel::class.java)
+        sharedActionViewModel = viewModelProvider.get(RoomDirectorySharedActionViewModel::class.java)
 
         if (isFirstCreation()) {
-            roomDirectoryViewModel.filterWith(intent?.getStringExtra(INITIAL_FILTER) ?: "")
+            roomDirectoryViewModel.handle(RoomDirectoryAction.FilterWith(intent?.getStringExtra(INITIAL_FILTER) ?: ""))
         }
 
-        navigationViewModel.navigateTo.observeEvent(this) { navigation ->
-            when (navigation) {
-                is Navigation.Back           -> onBackPressed()
-                is Navigation.CreateRoom     -> addFragmentToBackstack(CreateRoomFragment(), R.id.simpleFragmentContainer)
-                is Navigation.ChangeProtocol -> addFragmentToBackstack(RoomDirectoryPickerFragment(), R.id.simpleFragmentContainer)
-                is Navigation.Close          -> finish()
-            }
-        }
+        sharedActionViewModel
+                .observe()
+                .subscribe { sharedAction ->
+                    when (sharedAction) {
+                        is RoomDirectorySharedAction.Back           -> onBackPressed()
+                        is RoomDirectorySharedAction.CreateRoom     ->
+                            addFragmentToBackstack(R.id.simpleFragmentContainer, CreateRoomFragment::class.java)
+                        is RoomDirectorySharedAction.ChangeProtocol ->
+                            addFragmentToBackstack(R.id.simpleFragmentContainer, RoomDirectoryPickerFragment::class.java)
+                        is RoomDirectorySharedAction.Close          -> finish()
+                    }
+                }
+                .disposeOnDestroy()
 
         roomDirectoryViewModel.selectSubscribe(this, PublicRoomsViewState::currentFilter) { currentFilter ->
             // Transmit the filter to the createRoomViewModel
-            createRoomViewModel.setName(currentFilter)
+            createRoomViewModel.handle(CreateRoomAction.SetName(currentFilter))
         }
     }
 
     override fun initUiAndData() {
         if (isFirstCreation()) {
-            addFragment(PublicRoomsFragment(), R.id.simpleFragmentContainer)
+            addFragment(R.id.simpleFragmentContainer, PublicRoomsFragment::class.java)
         }
     }
 

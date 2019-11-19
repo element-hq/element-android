@@ -24,13 +24,17 @@ import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.replaceFragment
 import im.vector.riotx.core.platform.VectorBaseActivity
+import im.vector.riotx.features.home.RoomListDisplayMode
 import im.vector.riotx.features.home.room.list.RoomListFragment
 import im.vector.riotx.features.home.room.list.RoomListParams
 import kotlinx.android.synthetic.main.activity_filtered_rooms.*
 
 class FilteredRoomsActivity : VectorBaseActivity() {
 
-    private lateinit var roomListFragment: RoomListFragment
+    private val roomListFragment: RoomListFragment?
+        get() {
+            return supportFragmentManager.findFragmentByTag(FRAGMENT_TAG) as? RoomListFragment
+        }
 
     override fun getLayoutRes(): Int {
         return R.layout.activity_filtered_rooms
@@ -44,19 +48,16 @@ class FilteredRoomsActivity : VectorBaseActivity() {
         super.onCreate(savedInstanceState)
         configureToolbar(filteredRoomsToolbar)
         if (isFirstCreation()) {
-            roomListFragment = RoomListFragment.newInstance(RoomListParams(RoomListFragment.DisplayMode.FILTERED))
-            replaceFragment(roomListFragment, R.id.filteredRoomsFragmentContainer, FRAGMENT_TAG)
-        } else {
-            roomListFragment = supportFragmentManager.findFragmentByTag(FRAGMENT_TAG) as RoomListFragment
+            val params = RoomListParams(RoomListDisplayMode.FILTERED)
+            replaceFragment(R.id.filteredRoomsFragmentContainer, RoomListFragment::class.java, params, FRAGMENT_TAG)
         }
-
         filteredRoomsSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 return true
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-                roomListFragment.filterRoomsWith(newText)
+                roomListFragment?.filterRoomsWith(newText)
                 return true
             }
         })

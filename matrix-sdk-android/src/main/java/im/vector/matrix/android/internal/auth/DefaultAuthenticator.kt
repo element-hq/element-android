@@ -17,6 +17,7 @@
 package im.vector.matrix.android.internal.auth
 
 import android.util.Patterns
+import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.Authenticator
 import im.vector.matrix.android.api.auth.data.Credentials
@@ -39,10 +40,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import javax.inject.Inject
-import javax.inject.Provider
 
 internal class DefaultAuthenticator @Inject constructor(@Unauthenticated
-                                                        private val okHttpClient: Provider<OkHttpClient>,
+                                                        private val okHttpClient: Lazy<OkHttpClient>,
                                                         private val retrofitFactory: RetrofitFactory,
                                                         private val coroutineDispatchers: MatrixCoroutineDispatchers,
                                                         private val sessionParamsStore: SessionParamsStore,
@@ -112,14 +112,27 @@ internal class DefaultAuthenticator @Inject constructor(@Unauthenticated
         sessionManager.getOrCreateSession(sessionParams)
     }
 
-    override fun createSessionFromSso(credentials: Credentials, homeServerConnectionConfig: HomeServerConnectionConfig): Session {
+    override fun createSessionFromSso(credentials: Credentials,
+                                      homeServerConnectionConfig: HomeServerConnectionConfig,
+                                      callback: MatrixCallback<Session>): Cancelable {
+        val job = GlobalScope.launch(coroutineDispatchers.main) {
+            val sessionOrFailure = runCatching {
+                createSessionFromSso(credentials, homeServerConnectionConfig)
+            }
+            sessionOrFailure.foldToCallback(callback)
+        }
+        return CancelableCoroutine(job)
+    }
+
+    private suspend fun createSessionFromSso(credentials: Credentials,
+                                             homeServerConnectionConfig: HomeServerConnectionConfig): Session = withContext(coroutineDispatchers.computation) {
         val sessionParams = SessionParams(credentials, homeServerConnectionConfig)
         sessionParamsStore.save(sessionParams)
-        return sessionManager.getOrCreateSession(sessionParams)
+        sessionManager.getOrCreateSession(sessionParams)
     }
 
     private fun buildAuthAPI(homeServerConnectionConfig: HomeServerConnectionConfig): AuthAPI {
-        val retrofit = retrofitFactory.create(okHttpClient.get(), homeServerConnectionConfig.homeServerUri.toString())
+        val retrofit = retrofitFactory.create(okHttpClient, homeServerConnectionConfig.homeServerUri.toString())
         return retrofit.create(AuthAPI::class.java)
     }
 }

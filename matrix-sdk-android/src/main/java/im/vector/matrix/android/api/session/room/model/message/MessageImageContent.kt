@@ -38,7 +38,7 @@ data class MessageImageContent(
         /**
          * Metadata about the image referred to in url.
          */
-        @Json(name = "info") val info: ImageInfo? = null,
+        @Json(name = "info") override val info: ImageInfo? = null,
 
         /**
          * Required. Required if the file is unencrypted. The URL (typically MXC URI) to the image.
@@ -52,4 +52,4 @@ data class MessageImageContent(
          * Required if the file is encrypted. Information on the encrypted file, as specified in End-to-end encryption.
          */
         @Json(name = "file") override val encryptedFileInfo: EncryptedFileInfo? = null
-) : MessageEncryptedContent
+) : MessageImageInfoContent

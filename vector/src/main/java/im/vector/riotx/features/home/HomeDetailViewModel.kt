@@ -26,8 +26,7 @@ import im.vector.matrix.rx.rx
 import im.vector.riotx.core.di.HasScreenInjector
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
-import im.vector.riotx.features.home.group.SelectedGroupStore
-import im.vector.riotx.features.home.room.list.RoomListFragment
+import im.vector.riotx.features.home.group.SelectedGroupDataSource
 import im.vector.riotx.features.ui.UiStateRepository
 import io.reactivex.schedulers.Schedulers
 
@@ -38,10 +37,10 @@ import io.reactivex.schedulers.Schedulers
 class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: HomeDetailViewState,
                                                       private val session: Session,
                                                       private val uiStateRepository: UiStateRepository,
-                                                      private val selectedGroupStore: SelectedGroupStore,
-                                                      private val homeRoomListStore: HomeRoomListObservableStore,
+                                                      private val selectedGroupStore: SelectedGroupDataSource,
+                                                      private val homeRoomListStore: HomeRoomListDataSource,
                                                       private val stringProvider: StringProvider)
-    : VectorViewModel<HomeDetailViewState>(initialState) {
+    : VectorViewModel<HomeDetailViewState, HomeDetailAction>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -70,13 +69,19 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
         observeRoomSummaries()
     }
 
-    fun switchDisplayMode(displayMode: RoomListFragment.DisplayMode) = withState { state ->
-        if (state.displayMode != displayMode) {
+    override fun handle(action: HomeDetailAction) {
+        when (action) {
+            is HomeDetailAction.SwitchDisplayMode -> handleSwitchDisplayMode(action)
+        }
+    }
+
+    private fun handleSwitchDisplayMode(action: HomeDetailAction.SwitchDisplayMode) = withState { state ->
+        if (state.displayMode != action.displayMode) {
             setState {
-                copy(displayMode = displayMode)
+                copy(displayMode = action.displayMode)
             }
 
-            uiStateRepository.storeDisplayMode(displayMode)
+            uiStateRepository.storeDisplayMode(action.displayMode)
         }
     }
 

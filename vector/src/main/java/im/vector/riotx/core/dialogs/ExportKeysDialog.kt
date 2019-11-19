@@ -44,15 +44,15 @@ class ExportKeysDialog {
         val textWatcher = object : SimpleTextWatcher() {
             override fun afterTextChanged(s: Editable) {
                 when {
-                    passPhrase1EditText.text.isNullOrEmpty()             -> {
+                    passPhrase1EditText.text.isNullOrEmpty()                                   -> {
                         exportButton.isEnabled = false
                         passPhrase2Til.error = null
                     }
-                    passPhrase1EditText.text == passPhrase2EditText.text -> {
+                    passPhrase1EditText.text.toString() == passPhrase2EditText.text.toString() -> {
                         exportButton.isEnabled = true
                         passPhrase2Til.error = null
                     }
-                    else                                                 -> {
+                    else                                                                       -> {
                         exportButton.isEnabled = false
                         passPhrase2Til.error = activity.getString(R.string.passphrase_passphrase_does_not_match)
                     }
