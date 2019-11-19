@@ -32,7 +32,6 @@ import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.addFragment
 import im.vector.riotx.core.extensions.addFragmentToBackstack
 import im.vector.riotx.core.platform.VectorBaseActivity
-import im.vector.riotx.features.disclaimer.showDisclaimerDialog
 import im.vector.riotx.features.home.HomeActivity
 import im.vector.riotx.features.login.terms.LoginTermsFragment
 import im.vector.riotx.features.login.terms.LoginTermsFragmentArgument
@@ -240,12 +239,6 @@ class LoginActivity : VectorBaseActivity() {
                     LoginTermsFragmentArgument(stage.policies.toLocalizedLoginTerms(getString(R.string.resources_language))))
             else               -> TODO()
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        showDisclaimerDialog(this)
     }
 
     companion object {
