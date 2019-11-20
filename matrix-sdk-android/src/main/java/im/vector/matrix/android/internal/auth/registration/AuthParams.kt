@@ -64,6 +64,7 @@ internal data class AuthParams(
 }
 
 
+@JsonClass(generateAdapter = true)
 data class ThreePidCredentials(
         @Json(name = "client_secret")
         val clientSecret: String? = null,
@@ -71,5 +72,6 @@ data class ThreePidCredentials(
         @Json(name = "id_server")
         val idServer: String? = null,
 
+        @Json(name = "sid")
         val sid: String? = null
 )

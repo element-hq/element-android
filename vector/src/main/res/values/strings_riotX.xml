@@ -108,4 +108,7 @@
     <string name="login_a11y_captcha_container">Please perform the captcha challenge</string>
     <string name="login_terms_title">Accept terms to continue</string>
 
+    <string name="login_wait_for_email_title">Please check your email</string>
+    <string name="login_wait_for_email_notice">We just sent an email to %1$s.\nPlease click on the link it contains to continue the account creation.</string>
+
 </resources>

@@ -34,9 +34,16 @@ import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.util.CancelableCoroutine
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import java.util.*
+
+// Container to store the data when a three pid is in validation step
+internal data class ThreePidData(
+        val threePid: RegisterThreePid,
+        val registrationParams: RegistrationParams
+)
 
 /**
  * This class execute the registration request and is responsible to keep the session of interactive authentication
@@ -55,6 +62,17 @@ internal class DefaultRegistrationWizard(private val homeServerConnectionConfig:
     private val authAPI = buildAuthAPI()
     private val registerTask = DefaultRegisterTask(authAPI)
     private val registerAddThreePidTask = DefaultRegisterAddThreePidTask(authAPI)
+
+    private var currentThreePidData: ThreePidData? = null
+
+    override val currentThreePid: String?
+        get() {
+            return when (val threePid = currentThreePidData?.threePid) {
+                is RegisterThreePid.Email  -> threePid.email
+                is RegisterThreePid.Msisdn -> threePid.msisdn
+                null                       -> null
+            }
+        }
 
     override fun getRegistrationFlow(callback: MatrixCallback<RegistrationResult>): Cancelable {
         return performRegistrationRequest(RegistrationParams(), callback)
@@ -98,27 +116,50 @@ internal class DefaultRegistrationWizard(private val homeServerConnectionConfig:
                 ), callback)
     }
 
-    override fun addThreePid(threePid: RegisterThreePid, callback: MatrixCallback<Unit>): Cancelable {
-        if (currentSession == null) {
+    override fun addThreePid(threePid: RegisterThreePid, callback: MatrixCallback<RegistrationResult>): Cancelable {
+        val safeSession = currentSession ?: run {
             callback.onFailure(IllegalStateException("developer error, call createAccount() method first"))
             return NoOpCancellable
         }
 
         val job = GlobalScope.launch(coroutineDispatchers.main) {
-            val result = runCatching {
+            runCatching {
                 registerAddThreePidTask.execute(RegisterAddThreePidTask.Params(threePid, clientSecret, sendAttempt++))
             }
-            result.fold(
-                    {
-                        // TODO Do something with the data return by the hs?
-                        callback.onSuccess(Unit)
-                    },
-                    {
-                        callback.onFailure(it)
-                    }
-            )
+                    .fold(
+                            {
+                                // Store data
+                                currentThreePidData = ThreePidData(
+                                        threePid,
+                                        RegistrationParams(
+                                                auth = AuthParams.createForEmailIdentity(safeSession,
+                                                        ThreePidCredentials(
+                                                                clientSecret = clientSecret,
+                                                                sid = it.sid
+                                                        )
+                                                )
+                                        ))
+                                        .also { threePidData ->
+                                            // and send the sid a first time
+                                            performRegistrationRequest(threePidData.registrationParams, callback)
+                                        }
+                            },
+                            {
+                                callback.onFailure(it)
+                            }
+                    )
         }
         return CancelableCoroutine(job)
+    }
+
+    override fun validateEmail(callback: MatrixCallback<RegistrationResult>): Cancelable {
+        val safeParam = currentThreePidData?.registrationParams ?: run {
+            callback.onFailure(IllegalStateException("developer error, no pending three pid"))
+            return NoOpCancellable
+        }
+
+        // Wait 10 seconds before doing the request
+        return performRegistrationRequest(safeParam, callback, 10_000)
     }
 
     override fun confirmMsisdn(code: String, callback: MatrixCallback<RegistrationResult>): Cancelable {
@@ -150,28 +191,31 @@ internal class DefaultRegistrationWizard(private val homeServerConnectionConfig:
                 ), callback)
     }
 
-    private fun performRegistrationRequest(registrationParams: RegistrationParams, callback: MatrixCallback<RegistrationResult>): Cancelable {
+    private fun performRegistrationRequest(registrationParams: RegistrationParams,
+                                           callback: MatrixCallback<RegistrationResult>,
+                                           delayMillis: Long = 0): Cancelable {
         val job = GlobalScope.launch(coroutineDispatchers.main) {
-            val result = runCatching {
+            runCatching {
+                if (delayMillis > 0) delay(delayMillis)
                 registerTask.execute(RegisterTask.Params(registrationParams))
             }
-            result.fold(
-                    {
-                        val sessionParams = SessionParams(it, homeServerConnectionConfig)
-                        sessionParamsStore.save(sessionParams)
-                        val session = sessionManager.getOrCreateSession(sessionParams)
+                    .fold(
+                            {
+                                val sessionParams = SessionParams(it, homeServerConnectionConfig)
+                                sessionParamsStore.save(sessionParams)
+                                val session = sessionManager.getOrCreateSession(sessionParams)
 
-                        callback.onSuccess(RegistrationResult.Success(session))
-                    },
-                    {
-                        if (it is Failure.RegistrationFlowError) {
-                            currentSession = it.registrationFlowResponse.session
-                            callback.onSuccess(RegistrationResult.FlowResponse(it.registrationFlowResponse.toFlowResult()))
-                        } else {
-                            callback.onFailure(it)
-                        }
-                    }
-            )
+                                callback.onSuccess(RegistrationResult.Success(session))
+                            },
+                            {
+                                if (it is Failure.RegistrationFlowError) {
+                                    currentSession = it.registrationFlowResponse.session
+                                    callback.onSuccess(RegistrationResult.FlowResponse(it.registrationFlowResponse.toFlowResult()))
+                                } else {
+                                    callback.onFailure(it)
+                                }
+                            }
+                    )
         }
         return CancelableCoroutine(job)
     }

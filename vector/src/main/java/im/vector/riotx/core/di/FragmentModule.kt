@@ -167,6 +167,11 @@ interface FragmentModule {
 
     @Binds
     @IntoMap
+    @FragmentKey(LoginWaitForEmailFragment::class)
+    fun bindLoginWaitForEmailFragment(fragment: LoginWaitForEmailFragment): Fragment
+
+    @Binds
+    @IntoMap
     @FragmentKey(CreateDirectRoomDirectoryUsersFragment::class)
     fun bindCreateDirectRoomDirectoryUsersFragment(fragment: CreateDirectRoomDirectoryUsersFragment): Fragment
 

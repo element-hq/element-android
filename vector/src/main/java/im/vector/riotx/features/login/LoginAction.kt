@@ -34,8 +34,10 @@ sealed class LoginAction : VectorViewModelAction {
 
     data class RegisterWith(val username: String, val password: String, val initialDeviceName: String) : RegisterAction()
     data class AddThreePid(val threePid: RegisterThreePid) : RegisterAction()
-    // TODO Confirm Email (from link in the email)
+    // TODO Confirm Email (from link in the email, open in the phone, intercepted by RiotX)
     data class ConfirmMsisdn(val code: String) : RegisterAction()
+    object ValidateEmail : RegisterAction()
+
     data class CaptchaDone(val captchaResponse: String) : RegisterAction()
     object AcceptTerms : RegisterAction()
     object RegisterDummy : RegisterAction()

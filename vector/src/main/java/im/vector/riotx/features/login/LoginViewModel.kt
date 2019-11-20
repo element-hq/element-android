@@ -66,6 +66,9 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
         }
     }
 
+    val currentThreePid: String?
+        get() = registrationWizard?.currentThreePid
+
     var isPasswordSent: Boolean = false
         private set
 
@@ -108,7 +111,14 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
             is LoginAction.RegisterDummy -> handleRegisterDummy()
             is LoginAction.AddThreePid   -> handleAddThreePid(action)
             is LoginAction.ConfirmMsisdn -> handleConfirmMsisdn(action)
+            is LoginAction.ValidateEmail -> handleValidateEmail()
         }
+    }
+
+    private fun handleValidateEmail() {
+        // We do not want the common progress bar to be displayed, so we do not change asyncRegistration value in the state
+        currentTask?.cancel()
+        currentTask = registrationWizard?.validateEmail(registrationCallback)
     }
 
     private fun handleConfirmMsisdn(action: LoginAction.ConfirmMsisdn) {
@@ -149,11 +159,9 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
     }
 
     private fun handleAddThreePid(action: LoginAction.AddThreePid) {
-        // TODO Use the same async?
         setState { copy(asyncRegistration = Loading()) }
-        currentTask = registrationWizard?.addThreePid(action.threePid, object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
-                // TODO Notify the View
+        currentTask = registrationWizard?.addThreePid(action.threePid, object : MatrixCallback<RegistrationResult> {
+            override fun onSuccess(data: RegistrationResult) {
                 setState {
                     copy(
                             asyncRegistration = Uninitialized

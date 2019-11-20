@@ -90,6 +90,14 @@ class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
                             addFragmentToBackstack(R.id.loginFragmentContainer, LoginResetPasswordSuccessFragment::class.java)
                         }
                         is LoginNavigation.OnResetPasswordSuccessDone -> supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                        is LoginNavigation.OnSendEmailSuccess         -> addFragmentToBackstack(R.id.loginFragmentContainer,
+                                LoginWaitForEmailFragment::class.java,
+                                LoginWaitForEmailFragmentArgument(it.email),
+                                tag = FRAGMENT_REGISTRATION_STAGE_TAG)
+                        is LoginNavigation.OnSendMsisdnSuccess        -> addFragmentToBackstack(R.id.loginFragmentContainer,
+                                LoginGenericTextInputFormFragment::class.java,
+                                LoginGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.ConfirmMsisdn, true, it.msisdn),
+                                tag = FRAGMENT_REGISTRATION_STAGE_TAG)
                     }
                 }
                 .disposeOnDestroy()

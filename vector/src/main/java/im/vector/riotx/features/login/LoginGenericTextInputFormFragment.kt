@@ -25,11 +25,14 @@ import butterknife.OnClick
 import com.airbnb.mvrx.args
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.matrix.android.api.auth.registration.RegisterThreePid
+import im.vector.matrix.android.api.failure.Failure
+import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.riotx.R
 import im.vector.riotx.core.error.ErrorFormatter
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_login_generic_text_input_form.*
 import javax.inject.Inject
+import javax.net.ssl.HttpsURLConnection
 
 enum class TextInputFormFragmentMode {
     SetEmail,
@@ -40,7 +43,8 @@ enum class TextInputFormFragmentMode {
 @Parcelize
 data class LoginGenericTextInputFormFragmentArgument(
         val mode: TextInputFormFragmentMode,
-        val mandatory: Boolean
+        val mandatory: Boolean,
+        val extra: String = ""
 ) : Parcelable
 
 /**
@@ -88,7 +92,7 @@ class LoginGenericTextInputFormFragment @Inject constructor(private val errorFor
             }
             TextInputFormFragmentMode.ConfirmMsisdn -> {
                 loginGenericTextInputFormTitle.text = getString(R.string.login_msisdn_confirm_title)
-                loginGenericTextInputFormNotice.text = getString(R.string.login_msisdn_confirm_notice)
+                loginGenericTextInputFormNotice.text = getString(R.string.login_msisdn_confirm_notice, params.extra)
                 loginGenericTextInputFormTil.hint = getString(R.string.login_msisdn_confirm_hint)
                 loginGenericTextInputFormTextInput.inputType = InputType.TYPE_CLASS_NUMBER
                 loginGenericTextInputFormOtherButton.isVisible = true
@@ -141,7 +145,32 @@ class LoginGenericTextInputFormFragment @Inject constructor(private val errorFor
     }
 
     override fun onRegistrationError(throwable: Throwable) {
-        loginGenericTextInputFormTil.error = errorFormatter.toHumanReadable(throwable)
+        when (params.mode) {
+            TextInputFormFragmentMode.SetEmail      -> {
+                if (throwable.is401()) {
+                    // This is normal use case, we go to the mail waiting screen
+                    loginSharedActionViewModel.post(LoginNavigation.OnSendEmailSuccess(loginViewModel.currentThreePid ?: ""))
+                } else {
+                    loginGenericTextInputFormTil.error = errorFormatter.toHumanReadable(throwable)
+                }
+            }
+            TextInputFormFragmentMode.SetMsisdn     -> {
+                if (throwable.is401()) {
+                    // This is normal use case, we go to the enter code screen
+                    loginSharedActionViewModel.post(LoginNavigation.OnSendMsisdnSuccess(loginViewModel.currentThreePid ?: ""))
+                } else {
+                    loginGenericTextInputFormTil.error = errorFormatter.toHumanReadable(throwable)
+                }
+            }
+            TextInputFormFragmentMode.ConfirmMsisdn -> {
+                // TODO
+            }
+        }
+    }
+
+    private fun Throwable.is401(): Boolean {
+        return (this is Failure.ServerError && this.httpCode == HttpsURLConnection.HTTP_UNAUTHORIZED /* 401 */
+                && this.error.code == MatrixError.UNAUTHORIZED)
     }
 
     override fun resetViewModel() {
