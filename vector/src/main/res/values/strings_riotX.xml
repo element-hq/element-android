@@ -97,6 +97,10 @@
     <string name="login_signup_password_hint">Password</string>
     <string name="login_signup_submit">Next</string>
     <string name="login_signup_error_user_in_use">That username is taken</string>
+    <string name="login_signup_cancel_confirmation_title">Warning</string>
+    <string name="login_signup_cancel_confirmation_content">Your account is not created yet.\n\nStop the registration process?</string>
+    <string name="login_signup_cancel_confirmation_yes">Yes</string>
+    <string name="login_signup_cancel_confirmation_no">No</string>
 
     <string name="login_a11y_choose_matrix_org">Select matrix.org</string>
     <string name="login_a11y_choose_modular">Select modular</string>

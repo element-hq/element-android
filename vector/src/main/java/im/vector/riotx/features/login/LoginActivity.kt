@@ -127,7 +127,11 @@ class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
                         handleRegistrationNavigation(loginViewEvents.flowResult)
                     } else {
                         // First ask for login and password
-                        addFragmentToBackstack(R.id.loginFragmentContainer, LoginFragment::class.java)
+                        // I add a tag to indicate that this fragment is a registration stage.
+                        // This way it will be automatically popped in when starting the next registration stage
+                        addFragmentToBackstack(R.id.loginFragmentContainer,
+                                LoginFragment::class.java,
+                                tag = FRAGMENT_REGISTRATION_STAGE_TAG)
                     }
                 }
             }
@@ -235,7 +239,7 @@ class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
     }
 
     private fun handleRegistrationNavigation(flowResult: FlowResult) {
-        // Complete all mandatory stage first
+        // Complete all mandatory stages first
         val mandatoryStage = flowResult.missingStages.firstOrNull { it.mandatory }
 
         if (mandatoryStage != null) {

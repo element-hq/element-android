@@ -16,10 +16,12 @@
 
 package im.vector.riotx.features.login
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.CallSuper
 import com.airbnb.mvrx.activityViewModel
+import im.vector.riotx.R
 import im.vector.riotx.core.platform.OnBackPressed
 import im.vector.riotx.core.platform.VectorBaseFragment
 
@@ -39,9 +41,24 @@ abstract class AbstractLoginFragment : VectorBaseFragment(), OnBackPressed {
     }
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
-        resetViewModel()
-        // Do not consume the Back event
-        return false
+        if (loginViewModel.isPasswordSent) {
+            // Ask for confirmation before cancelling the registration
+            AlertDialog.Builder(requireActivity())
+                    .setTitle(R.string.login_signup_cancel_confirmation_title)
+                    .setMessage(R.string.login_signup_cancel_confirmation_content)
+                    .setPositiveButton(R.string.login_signup_cancel_confirmation_yes) { _, _ ->
+                        resetViewModel()
+                        vectorBaseActivity.onBackPressed()
+                    }
+                    .setNegativeButton(R.string.login_signup_cancel_confirmation_no, null)
+                    .show()
+
+            return true
+        } else {
+            resetViewModel()
+            // Do not consume the Back event
+            return false
+        }
     }
 
     // Reset any modification on the loginViewModel by the current fragment

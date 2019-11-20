@@ -104,6 +104,6 @@ class LoginTermsFragment @Inject constructor(private val policyController: Polic
     }
 
     override fun resetViewModel() {
-        // No op
+        loginViewModel.handle(LoginAction.ResetLogin)
     }
 }

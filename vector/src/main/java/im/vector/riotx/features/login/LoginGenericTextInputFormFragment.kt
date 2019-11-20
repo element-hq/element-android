@@ -129,6 +129,6 @@ class LoginGenericTextInputFormFragment @Inject constructor() : AbstractLoginFra
     }
 
     override fun resetViewModel() {
-        // Nothing to do
+        loginViewModel.handle(LoginAction.ResetLogin)
     }
 }

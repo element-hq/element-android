@@ -172,11 +172,9 @@ class LoginCaptchaFragment @Inject constructor(private val assetReader: AssetRea
                 return true
             }
         }
-
     }
 
-
     override fun resetViewModel() {
-        // Nothing to do
+        loginViewModel.handle(LoginAction.ResetLogin)
     }
 }

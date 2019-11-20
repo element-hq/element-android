@@ -238,7 +238,7 @@ class LoginWebFragment @Inject constructor(private val assetReader: AssetReader)
     }
 
     override fun resetViewModel() {
-        // Nothing to do
+        loginViewModel.handle(LoginAction.ResetLogin)
     }
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
