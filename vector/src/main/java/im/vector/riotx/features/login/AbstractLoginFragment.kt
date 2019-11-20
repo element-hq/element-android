@@ -38,7 +38,7 @@ abstract class AbstractLoginFragment : VectorBaseFragment(), OnBackPressed {
         loginSharedActionViewModel = activityViewModelProvider.get(LoginSharedActionViewModel::class.java)
     }
 
-    override fun onBackPressed(): Boolean {
+    override fun onBackPressed(toolbarButton: Boolean): Boolean {
         resetViewModel()
         // Do not consume the Back event
         return false

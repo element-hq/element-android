@@ -21,6 +21,7 @@ interface OnBackPressed {
     /**
      * Returns true, if the on back pressed event has been handled by this Fragment.
      * Otherwise return false
+     * @param toolbarButton true if this is the back button from the toolbar
      */
-    fun onBackPressed(): Boolean
+    fun onBackPressed(toolbarButton: Boolean): Boolean
 }

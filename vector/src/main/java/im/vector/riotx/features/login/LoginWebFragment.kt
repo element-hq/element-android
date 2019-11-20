@@ -40,7 +40,7 @@ import javax.inject.Inject
 
 /**
  * This screen is displayed for SSO login and also when the application does not support login flow or registration flow
- * of the homeserfver, as a fallback to login or to create an account
+ * of the homeserver, as a fallback to login or to create an account
  */
 class LoginWebFragment @Inject constructor(private val assetReader: AssetReader) : AbstractLoginFragment() {
 
@@ -241,12 +241,11 @@ class LoginWebFragment @Inject constructor(private val assetReader: AssetReader)
         // Nothing to do
     }
 
-    override fun onBackPressed(): Boolean {
-        return if (loginWebWebView.canGoBack()) {
-            loginWebWebView.goBack()
-            true
-        } else {
-            super.onBackPressed()
+    override fun onBackPressed(toolbarButton: Boolean): Boolean {
+        return when {
+            toolbarButton               -> super.onBackPressed(toolbarButton)
+            loginWebWebView.canGoBack() -> loginWebWebView.goBack().run { true }
+            else                        -> super.onBackPressed(toolbarButton)
         }
     }
 }

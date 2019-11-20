@@ -329,7 +329,7 @@ class RoomListFragment @Inject constructor(
         stateView.state = StateView.State.Error(message)
     }
 
-    override fun onBackPressed(): Boolean {
+    override fun onBackPressed(toolbarButton: Boolean): Boolean {
         if (createChatFabMenu.onBackPressed()) {
             return true
         }

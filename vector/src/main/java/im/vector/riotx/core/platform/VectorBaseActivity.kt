@@ -278,7 +278,7 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
-            onBackPressed()
+            onBackPressed(true)
             return true
         }
 
@@ -286,20 +286,24 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
     }
 
     override fun onBackPressed() {
-        val handled = recursivelyDispatchOnBackPressed(supportFragmentManager)
+        onBackPressed(false)
+    }
+
+    private fun onBackPressed(fromToolbar: Boolean) {
+        val handled = recursivelyDispatchOnBackPressed(supportFragmentManager, fromToolbar)
         if (!handled) {
             super.onBackPressed()
         }
     }
 
-    private fun recursivelyDispatchOnBackPressed(fm: FragmentManager): Boolean {
-        val reverseOrder = fm.fragments.filter { it is VectorBaseFragment }.reversed()
+    private fun recursivelyDispatchOnBackPressed(fm: FragmentManager, fromToolbar: Boolean): Boolean {
+        val reverseOrder = fm.fragments.filterIsInstance<VectorBaseFragment>().reversed()
         for (f in reverseOrder) {
-            val handledByChildFragments = recursivelyDispatchOnBackPressed(f.childFragmentManager)
+            val handledByChildFragments = recursivelyDispatchOnBackPressed(f.childFragmentManager, fromToolbar)
             if (handledByChildFragments) {
                 return true
             }
-            if (f is OnBackPressed && f.onBackPressed()) {
+            if (f is OnBackPressed && f.onBackPressed(fromToolbar)) {
                 return true
             }
         }

@@ -20,6 +20,7 @@ import android.content.Context
 import android.content.Intent
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
@@ -34,6 +35,7 @@ import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.addFragment
 import im.vector.riotx.core.extensions.addFragmentToBackstack
+import im.vector.riotx.core.platform.ToolbarConfigurable
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.features.home.HomeActivity
 import im.vector.riotx.features.login.terms.LoginTermsFragment
@@ -46,7 +48,7 @@ import javax.net.ssl.HttpsURLConnection
 /**
  * The LoginActivity manages the fragment navigation and also display the loading View
  */
-class LoginActivity : VectorBaseActivity() {
+class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     private val loginViewModel: LoginViewModel by viewModel()
     private lateinit var loginSharedActionViewModel: LoginSharedActionViewModel
@@ -134,16 +136,16 @@ class LoginActivity : VectorBaseActivity() {
     }
 
     private fun displayRegistrationError(throwable: Throwable) {
-        val message = when(throwable) {
+        val message = when (throwable) {
             is Failure.ServerError -> {
-                if(throwable.error.code == MatrixError.FORBIDDEN
+                if (throwable.error.code == MatrixError.FORBIDDEN
                         && throwable.httpCode == HttpsURLConnection.HTTP_FORBIDDEN /* 403 */) {
                     getString(R.string.login_registration_disabled)
                 } else {
                     null
                 }
             }
-            else -> null
+            else                   -> null
         }
                 ?: errorFormatter.toHumanReadable(throwable)
 
@@ -272,6 +274,10 @@ class LoginActivity : VectorBaseActivity() {
                     tag = FRAGMENT_REGISTRATION_STAGE_TAG)
             else               -> Unit // Should not happen
         }
+    }
+
+    override fun configure(toolbar: Toolbar) {
+        configureToolbar(toolbar)
     }
 
     companion object {
