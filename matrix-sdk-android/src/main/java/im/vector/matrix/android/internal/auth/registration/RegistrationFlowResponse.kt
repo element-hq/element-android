@@ -53,20 +53,18 @@ data class RegistrationFlowResponse(
          * For example, the public key of reCAPTCHA stage could be given here.
          */
         @Json(name = "params")
-        var params: JsonDict? = null,
+        var params: JsonDict? = null
 
         /**
-         * The two MatrixError fields can also be present here in case of error when validating a stage
+         * WARNING,
+         * The two MatrixError fields "errcode" and "error" can also be present here in case of error when validating a stage,
+         * But in this case Moshi will be able to parse the result as a MatrixError, see [RetrofitExtensions.toFailure]
+         * Ex: when polling for "m.login.msisdn" validation
          */
-        @Json(name = "errcode")
-        var code: String? = null,
-
-        @Json(name = "error")
-        var message: String? = null
 )
 
 /**
- * Convert to something easier to exploit on client side
+ * Convert to something easier to handle on client side
  */
 fun RegistrationFlowResponse.toFlowResult(): FlowResult {
     // Get all the returned stages
