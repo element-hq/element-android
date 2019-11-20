@@ -20,6 +20,7 @@ import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.auth.data.SessionParams
+import im.vector.matrix.android.api.auth.registration.RegisterThreePid
 import im.vector.matrix.android.api.auth.registration.RegistrationResult
 import im.vector.matrix.android.api.auth.registration.RegistrationWizard
 import im.vector.matrix.android.api.failure.Failure
@@ -35,17 +36,25 @@ import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
+import java.util.*
 
+/**
+ * This class execute the registration request and is responsible to keep the session of interactive authentication
+ */
 internal class DefaultRegistrationWizard(private val homeServerConnectionConfig: HomeServerConnectionConfig,
                                          private val okHttpClient: Lazy<OkHttpClient>,
                                          private val retrofitFactory: RetrofitFactory,
                                          private val coroutineDispatchers: MatrixCoroutineDispatchers,
                                          private val sessionParamsStore: SessionParamsStore,
                                          private val sessionManager: SessionManager) : RegistrationWizard {
+    private var clientSecret = UUID.randomUUID().toString()
+    private var sendAttempt = 0
+
     private var currentSession: String? = null
 
     private val authAPI = buildAuthAPI()
     private val registerTask = DefaultRegisterTask(authAPI)
+    private val registerAddThreePidTask = DefaultRegisterAddThreePidTask(authAPI)
 
     override fun getRegistrationFlow(callback: MatrixCallback<RegistrationResult>): Cancelable {
         return performRegistrationRequest(RegistrationParams(), callback)
@@ -89,32 +98,27 @@ internal class DefaultRegistrationWizard(private val homeServerConnectionConfig:
                 ), callback)
     }
 
-    override fun addEmail(email: String, callback: MatrixCallback<RegistrationResult>): Cancelable {
-        val safeSession = currentSession ?: run {
+    override fun addThreePid(threePid: RegisterThreePid, callback: MatrixCallback<Unit>): Cancelable {
+        if (currentSession == null) {
             callback.onFailure(IllegalStateException("developer error, call createAccount() method first"))
             return NoOpCancellable
         }
 
-        // TODO
-        return performRegistrationRequest(
-                RegistrationParams(
-                        // TODO
-                        auth = AuthParams.createForEmailIdentity(safeSession, ThreePidCredentials(email))
-                ), callback)
-    }
-
-    override fun addMsisdn(msisdn: String, callback: MatrixCallback<RegistrationResult>): Cancelable {
-        val safeSession = currentSession ?: run {
-            callback.onFailure(IllegalStateException("developer error, call createAccount() method first"))
-            return NoOpCancellable
+        val job = GlobalScope.launch(coroutineDispatchers.main) {
+            val result = runCatching {
+                registerAddThreePidTask.execute(RegisterAddThreePidTask.Params(threePid, clientSecret, sendAttempt++))
+            }
+            result.fold(
+                    {
+                        // TODO Do something with the data return by the hs?
+                        callback.onSuccess(Unit)
+                    },
+                    {
+                        callback.onFailure(it)
+                    }
+            )
         }
-
-        // TODO
-        return performRegistrationRequest(
-                RegistrationParams(
-                        // TODO
-                        auth = AuthParams.createForEmailIdentity(safeSession, ThreePidCredentials(msisdn))
-                ), callback)
+        return CancelableCoroutine(job)
     }
 
     override fun confirmMsisdn(code: String, callback: MatrixCallback<RegistrationResult>): Cancelable {

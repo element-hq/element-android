@@ -24,6 +24,7 @@ import androidx.core.view.isVisible
 import butterknife.OnClick
 import com.airbnb.mvrx.args
 import com.jakewharton.rxbinding3.widget.textChanges
+import im.vector.matrix.android.api.auth.registration.RegisterThreePid
 import im.vector.riotx.R
 import im.vector.riotx.core.error.ErrorFormatter
 import kotlinx.android.parcel.Parcelize
@@ -112,10 +113,11 @@ class LoginGenericTextInputFormFragment @Inject constructor(private val errorFor
         } else {
             when (params.mode) {
                 TextInputFormFragmentMode.SetEmail      -> {
-                    loginViewModel.handle(LoginAction.AddEmail(text))
+                    loginViewModel.handle(LoginAction.AddThreePid(RegisterThreePid.Email(text)))
                 }
                 TextInputFormFragmentMode.SetMsisdn     -> {
-                    loginViewModel.handle(LoginAction.AddMsisdn(text))
+                    // TODO Country code
+                    loginViewModel.handle(LoginAction.AddThreePid(RegisterThreePid.Msisdn(text, "TODO")))
                 }
                 TextInputFormFragmentMode.ConfirmMsisdn -> {
                     loginViewModel.handle(LoginAction.ConfirmMsisdn(text))

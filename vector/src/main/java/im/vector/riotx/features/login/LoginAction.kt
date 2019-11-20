@@ -17,6 +17,7 @@
 package im.vector.riotx.features.login
 
 import im.vector.matrix.android.api.auth.data.Credentials
+import im.vector.matrix.android.api.auth.registration.RegisterThreePid
 import im.vector.riotx.core.platform.VectorViewModelAction
 
 sealed class LoginAction : VectorViewModelAction {
@@ -32,8 +33,8 @@ sealed class LoginAction : VectorViewModelAction {
     open class RegisterAction : LoginAction()
 
     data class RegisterWith(val username: String, val password: String, val initialDeviceName: String) : RegisterAction()
-    data class AddEmail(val email: String) : RegisterAction()
-    data class AddMsisdn(val msisdn: String) : RegisterAction()
+    data class AddThreePid(val threePid: RegisterThreePid) : RegisterAction()
+    // TODO Confirm Email (from link in the email)
     data class ConfirmMsisdn(val code: String) : RegisterAction()
     data class CaptchaDone(val captchaResponse: String) : RegisterAction()
     object AcceptTerms : RegisterAction()

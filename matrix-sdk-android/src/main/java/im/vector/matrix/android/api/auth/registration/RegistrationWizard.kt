@@ -31,9 +31,7 @@ interface RegistrationWizard {
 
     fun dummy(callback: MatrixCallback<RegistrationResult>): Cancelable
 
-    fun addEmail(email: String, callback: MatrixCallback<RegistrationResult>): Cancelable
-
-    fun addMsisdn(msisdn: String, callback: MatrixCallback<RegistrationResult>): Cancelable
+    fun addThreePid(threePid: RegisterThreePid, callback: MatrixCallback<Unit>): Cancelable
 
     fun confirmMsisdn(code: String, callback: MatrixCallback<RegistrationResult>): Cancelable
 

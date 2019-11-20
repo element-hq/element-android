@@ -22,7 +22,6 @@ import im.vector.matrix.android.internal.auth.AuthAPI
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
-import javax.inject.Inject
 
 internal interface RegisterTask : Task<RegisterTask.Params, Credentials> {
     data class Params(
@@ -30,7 +29,7 @@ internal interface RegisterTask : Task<RegisterTask.Params, Credentials> {
     )
 }
 
-internal class DefaultRegisterTask @Inject constructor(private val authAPI: AuthAPI)
+internal class DefaultRegisterTask(private val authAPI: AuthAPI)
     : RegisterTask {
 
     override suspend fun execute(params: RegisterTask.Params): Credentials {

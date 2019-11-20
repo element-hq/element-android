@@ -106,8 +106,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
             is LoginAction.CaptchaDone   -> handleCaptchaDone(action)
             is LoginAction.AcceptTerms   -> handleAcceptTerms()
             is LoginAction.RegisterDummy -> handleRegisterDummy()
-            is LoginAction.AddEmail      -> handleAddEmail(action)
-            is LoginAction.AddMsisdn     -> handleAddMsisdn(action)
+            is LoginAction.AddThreePid   -> handleAddThreePid(action)
             is LoginAction.ConfirmMsisdn -> handleConfirmMsisdn(action)
         }
     }
@@ -149,14 +148,28 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
         }
     }
 
-    private fun handleAddMsisdn(action: LoginAction.AddMsisdn) {
+    private fun handleAddThreePid(action: LoginAction.AddThreePid) {
+        // TODO Use the same async?
         setState { copy(asyncRegistration = Loading()) }
-        currentTask = registrationWizard?.addMsisdn(action.msisdn, registrationCallback)
-    }
+        currentTask = registrationWizard?.addThreePid(action.threePid, object : MatrixCallback<Unit> {
+            override fun onSuccess(data: Unit) {
+                // TODO Notify the View
+                setState {
+                    copy(
+                            asyncRegistration = Uninitialized
+                    )
+                }
+            }
 
-    private fun handleAddEmail(action: LoginAction.AddEmail) {
-        setState { copy(asyncRegistration = Loading()) }
-        currentTask = registrationWizard?.addEmail(action.email, registrationCallback)
+            override fun onFailure(failure: Throwable) {
+                _viewEvents.post(LoginViewEvents.RegistrationError(failure))
+                setState {
+                    copy(
+                            asyncRegistration = Uninitialized
+                    )
+                }
+            }
+        })
     }
 
     private fun handleAcceptTerms() {
