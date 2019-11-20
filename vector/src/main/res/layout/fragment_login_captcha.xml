@@ -2,49 +2,47 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingStart="16dp"
-    android:paddingTop="32dp"
-    android:paddingEnd="16dp"
-    android:paddingBottom="16dp">
+    android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/logoImageView"
-        style="@style/LoginTopIcon"
-        android:layout_gravity="center_horizontal"
-        android:importantForAccessibility="no"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <ImageView style="@style/LoginLogo" />
 
-    <TextView
-        android:id="@+id/loginCaptchaNotice"
-        style="@style/TextAppearance.Vector.Login.Text.Small"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:gravity="center_horizontal"
-        android:text="@string/auth_recaptcha_message"
-        app:layout_constraintTop_toBottomOf="@+id/logoImageView" />
-
-    <!-- contentDescription does not work on WebView? -->
-    <WebView
-        android:id="@+id/loginCaptchaWevView"
-        android:layout_width="match_parent"
+    <LinearLayout
+        style="@style/LoginFormContainer"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        android:contentDescription="@string/login_a11y_captcha_container"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginCaptchaNotice" />
+        android:orientation="vertical"
+        android:paddingStart="16dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="16dp">
+
+        <TextView
+            android:id="@+id/loginCaptchaNotice"
+            style="@style/TextAppearance.Vector.Login.Text.Small"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@string/auth_recaptcha_message" />
+
+        <!-- contentDescription does not work on WebView? -->
+        <WebView
+            android:id="@+id/loginCaptchaWevView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp"
+            android:contentDescription="@string/login_a11y_captcha_container"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/loginCaptchaNotice" />
+
+    </LinearLayout>
 
     <ProgressBar
         android:id="@+id/loginCaptchaProgress"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        app:layout_constraintBottom_toBottomOf="@+id/loginCaptchaWevView"
-        app:layout_constraintEnd_toEndOf="@+id/loginCaptchaWevView"
-        app:layout_constraintStart_toStartOf="@+id/loginCaptchaWevView"
-        app:layout_constraintTop_toTopOf="@+id/loginCaptchaWevView" />
+        app:layout_constraintBottom_toBottomOf="@id/loginFormContainer"
+        app:layout_constraintEnd_toEndOf="@id/loginFormContainer"
+        app:layout_constraintStart_toStartOf="@id/loginFormContainer"
+        app:layout_constraintTop_toTopOf="@id/loginFormContainer" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
