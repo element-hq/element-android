@@ -20,7 +20,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import butterknife.OnClick
-import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
 import kotlinx.android.synthetic.main.fragment_login_signup_signin_selection.*
@@ -33,10 +32,15 @@ class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractLoginFr
 
     override fun getLayoutResId() = R.layout.fragment_login_signup_signin_selection
 
+    private var isSsoSignIn: Boolean = false
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        isSsoSignIn = withState(loginViewModel) { it.asyncHomeServerLoginFlowRequest.invoke() } == LoginMode.Sso
+
         setupUi()
+        setupButtons()
     }
 
     private fun setupUi() {
@@ -62,9 +66,24 @@ class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractLoginFr
         }
     }
 
-    @OnClick(R.id.loginSignupSigninSignUp)
+    private fun setupButtons() {
+        if (isSsoSignIn) {
+            loginSignupSigninSubmit.text = getString(R.string.login_signin_sso)
+            loginSignupSigninSignIn.isVisible = false
+        } else {
+            loginSignupSigninSubmit.text = getString(R.string.login_signup)
+            loginSignupSigninSignIn.isVisible = true
+        }
+    }
+
+
+    @OnClick(R.id.loginSignupSigninSubmit)
     fun signUp() {
-        loginViewModel.handle(LoginAction.UpdateSignMode(SignMode.SignUp))
+        if (isSsoSignIn) {
+            signIn()
+        } else {
+            loginViewModel.handle(LoginAction.UpdateSignMode(SignMode.SignUp))
+        }
     }
 
     @OnClick(R.id.loginSignupSigninSignIn)
@@ -75,16 +94,5 @@ class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractLoginFr
 
     override fun resetViewModel() {
         loginViewModel.handle(LoginAction.ResetSignMode)
-    }
-
-    override fun invalidate() = withState(loginViewModel) {
-        when (it.asyncRegistration) {
-            is Fail -> {
-                // TODO Registration disabled, (move to Activity?)
-                when (it.asyncRegistration.error) {
-
-                }
-            }
-        }
     }
 }

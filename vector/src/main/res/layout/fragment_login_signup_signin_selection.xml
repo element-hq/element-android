@@ -56,17 +56,19 @@
                 app:layout_constraintTop_toBottomOf="@+id/loginSignupSigninTitle"
                 tools:text="@string/login_server_matrix_org_text" />
 
+            <!-- Sign up or sign in SSO -->
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/loginSignupSigninSignUp"
+                android:id="@+id/loginSignupSigninSubmit"
                 style="@style/Style.Vector.Login.Button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="38dp"
-                android:text="@string/login_signup"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/loginSignupSigninText" />
+                app:layout_constraintTop_toBottomOf="@+id/loginSignupSigninText"
+                tools:text="@string/login_signup" />
 
+            <!-- Sign in or gone -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/loginSignupSigninSignIn"
                 style="@style/Style.Vector.Login.Button.Outlined"
@@ -74,10 +76,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:text="@string/login_signin"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/loginSignupSigninSignUp" />
+                app:layout_constraintTop_toBottomOf="@+id/loginSignupSigninSubmit"
+                tools:visibility="visible" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
