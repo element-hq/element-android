@@ -66,8 +66,8 @@ class LoginFragment @Inject constructor(
 
         when (loginViewModel.signMode) {
             SignMode.Unknown -> error("developer error")
-            SignMode.SignUp  -> loginViewModel.handle(LoginAction.RegisterWith(login, password))
-            SignMode.SignIn  -> loginViewModel.handle(LoginAction.Login(login, password))
+            SignMode.SignUp  -> loginViewModel.handle(LoginAction.RegisterWith(login, password, getString(R.string.login_mobile_device)))
+            SignMode.SignIn  -> loginViewModel.handle(LoginAction.Login(login, password, getString(R.string.login_mobile_device)))
         }
     }
 

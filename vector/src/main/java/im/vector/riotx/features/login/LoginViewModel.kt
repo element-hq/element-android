@@ -42,7 +42,7 @@ import im.vector.riotx.features.session.SessionListener
 import timber.log.Timber
 
 /**
- * TODO To speed up registration, consider fetching registration flow instead of login flow at startup
+ *
  */
 class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginViewState,
                                                  private val authenticator: Authenticator,
@@ -113,12 +113,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
     }
 
     private fun handleConfirmMsisdn(action: LoginAction.ConfirmMsisdn) {
-        setState {
-            copy(
-                    asyncRegistration = Loading()
-            )
-        }
-
+        setState { copy(asyncRegistration = Loading()) }
         currentTask = registrationWizard?.confirmMsisdn(action.code, registrationCallback)
     }
 
@@ -134,7 +129,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
 
             setState {
                 copy(
-                        asyncRegistration = Success(data)
+                        asyncRegistration = Uninitialized
                 )
             }
 
@@ -155,69 +150,43 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
     }
 
     private fun handleAddMsisdn(action: LoginAction.AddMsisdn) {
-        setState {
-            copy(
-                    asyncRegistration = Loading()
-            )
-        }
-
+        setState { copy(asyncRegistration = Loading()) }
         currentTask = registrationWizard?.addMsisdn(action.msisdn, registrationCallback)
     }
 
     private fun handleAddEmail(action: LoginAction.AddEmail) {
-        setState {
-            copy(
-                    asyncRegistration = Loading()
-            )
-        }
-
+        setState { copy(asyncRegistration = Loading()) }
         currentTask = registrationWizard?.addEmail(action.email, registrationCallback)
     }
 
     private fun handleAcceptTerms() {
-        setState {
-            copy(
-                    asyncRegistration = Loading()
-            )
-        }
-
+        setState { copy(asyncRegistration = Loading()) }
         currentTask = registrationWizard?.acceptTerms(registrationCallback)
     }
 
     private fun handleRegisterDummy() {
-        setState {
-            copy(
-                    asyncRegistration = Loading()
-            )
-        }
-
+        setState { copy(asyncRegistration = Loading()) }
         currentTask = registrationWizard?.dummy(registrationCallback)
     }
 
     private fun handleRegisterWith(action: LoginAction.RegisterWith) {
-        setState {
-            copy(
-                    asyncRegistration = Loading()
-            )
-        }
-
-        currentTask = registrationWizard?.createAccount(action.username, action.password, null /* TODO InitialDisplayName */, object : MatrixCallbackDelegate<RegistrationResult>(registrationCallback) {
-            override fun onSuccess(data: RegistrationResult) {
-                isPasswordSent = true
-                // Not sure that this will work:
-                // super.onSuccess(data)
-                registrationCallback.onSuccess(data)
-            }
-        })
+        setState { copy(asyncRegistration = Loading()) }
+        currentTask = registrationWizard?.createAccount(
+                action.username,
+                action.password,
+                action.initialDeviceName,
+                object : MatrixCallbackDelegate<RegistrationResult>(registrationCallback) {
+                    override fun onSuccess(data: RegistrationResult) {
+                        isPasswordSent = true
+                        // Not sure that this will work:
+                        // super.onSuccess(data)
+                        registrationCallback.onSuccess(data)
+                    }
+                })
     }
 
     private fun handleCaptchaDone(action: LoginAction.CaptchaDone) {
-        setState {
-            copy(
-                    asyncRegistration = Loading()
-            )
-        }
-
+        setState { copy(asyncRegistration = Loading()) }
         currentTask = registrationWizard?.performReCaptcha(action.captchaResponse, registrationCallback)
     }
 
@@ -337,20 +306,25 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                 )
             }
 
-            currentTask = authenticator.authenticate(homeServerConnectionConfigFinal, action.login, action.password, object : MatrixCallback<Session> {
-                override fun onSuccess(data: Session) {
-                    onSessionCreated(data)
-                }
+            currentTask = authenticator.authenticate(
+                    homeServerConnectionConfigFinal,
+                    action.login,
+                    action.password,
+                    action.initialDeviceName,
+                    object : MatrixCallback<Session> {
+                        override fun onSuccess(data: Session) {
+                            onSessionCreated(data)
+                        }
 
-                override fun onFailure(failure: Throwable) {
-                    // TODO Handled JobCancellationException
-                    setState {
-                        copy(
-                                asyncLoginAction = Fail(failure)
-                        )
-                    }
-                }
-            })
+                        override fun onFailure(failure: Throwable) {
+                            // TODO Handled JobCancellationException
+                            setState {
+                                copy(
+                                        asyncLoginAction = Fail(failure)
+                                )
+                            }
+                        }
+                    })
         }
     }
 
@@ -358,9 +332,11 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
         val homeServerConnectionConfigFinal = homeServerConnectionConfig
 
         if (homeServerConnectionConfigFinal == null) {
+            // Notify the user
+            _viewEvents.post(LoginViewEvents.RegistrationError(Throwable("Bad configuration")))
             setState {
                 copy(
-                        asyncRegistration = Fail(Throwable("Bad configuration"))
+                        asyncRegistration = Uninitialized
                 )
             }
         } else {

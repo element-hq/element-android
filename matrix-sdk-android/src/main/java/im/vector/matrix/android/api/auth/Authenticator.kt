@@ -38,10 +38,15 @@ interface Authenticator {
      * @param homeServerConnectionConfig this param is used to configure the Homeserver
      * @param login the login field
      * @param password the password field
+     * @param deviceName the initial device name
      * @param callback  the matrix callback on which you'll receive the result of authentication.
      * @return return a [Cancelable]
      */
-    fun authenticate(homeServerConnectionConfig: HomeServerConnectionConfig, login: String, password: String, callback: MatrixCallback<Session>): Cancelable
+    fun authenticate(homeServerConnectionConfig: HomeServerConnectionConfig,
+                     login: String,
+                     password: String,
+                     deviceName: String,
+                     callback: MatrixCallback<Session>): Cancelable
 
     /**
      * Check if there is an authenticated [Session].

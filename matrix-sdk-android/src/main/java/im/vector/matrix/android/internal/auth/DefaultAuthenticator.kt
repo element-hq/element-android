@@ -77,10 +77,11 @@ internal class DefaultAuthenticator @Inject constructor(@Unauthenticated
     override fun authenticate(homeServerConnectionConfig: HomeServerConnectionConfig,
                               login: String,
                               password: String,
+                              deviceName: String,
                               callback: MatrixCallback<Session>): Cancelable {
         val job = GlobalScope.launch(coroutineDispatchers.main) {
             val sessionOrFailure = runCatching {
-                authenticate(homeServerConnectionConfig, login, password)
+                authenticate(homeServerConnectionConfig, login, password, deviceName)
             }
             sessionOrFailure.foldToCallback(callback)
         }
@@ -97,12 +98,13 @@ internal class DefaultAuthenticator @Inject constructor(@Unauthenticated
 
     private suspend fun authenticate(homeServerConnectionConfig: HomeServerConnectionConfig,
                                      login: String,
-                                     password: String) = withContext(coroutineDispatchers.io) {
+                                     password: String,
+                                     deviceName: String) = withContext(coroutineDispatchers.io) {
         val authAPI = buildAuthAPI(homeServerConnectionConfig)
         val loginParams = if (Patterns.EMAIL_ADDRESS.matcher(login).matches()) {
-            PasswordLoginParams.thirdPartyIdentifier(ThreePidMedium.EMAIL, login, password, "Mobile")
+            PasswordLoginParams.thirdPartyIdentifier(ThreePidMedium.EMAIL, login, password, deviceName)
         } else {
-            PasswordLoginParams.userIdentifier(login, password, "Mobile")
+            PasswordLoginParams.userIdentifier(login, password, deviceName)
         }
         val credentials = executeRequest<Credentials> {
             apiCall = authAPI.login(loginParams)
