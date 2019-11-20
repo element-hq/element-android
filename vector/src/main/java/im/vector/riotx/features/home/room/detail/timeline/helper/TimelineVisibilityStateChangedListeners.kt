@@ -24,12 +24,11 @@ import im.vector.riotx.features.home.room.detail.timeline.TimelineEventControlle
 class ReadMarkerVisibilityStateChangedListener(private val callback: TimelineEventController.Callback?)
     : VectorEpoxyModel.OnVisibilityStateChangedListener {
 
-    private var dispatched: Boolean = false
-
     override fun onVisibilityStateChanged(visibilityState: Int) {
-        if (visibilityState == VisibilityState.VISIBLE && !dispatched) {
-            dispatched = true
-            callback?.onReadMarkerDisplayed()
+        if (visibilityState == VisibilityState.VISIBLE) {
+            callback?.onReadMarkerVisible()
+        } else if (visibilityState == VisibilityState.INVISIBLE) {
+            callback?.onReadMarkerInvisible()
         }
     }
 }

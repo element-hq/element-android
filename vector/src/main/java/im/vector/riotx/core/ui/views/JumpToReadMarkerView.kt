@@ -34,7 +34,7 @@ class JumpToReadMarkerView @JvmOverloads constructor(
 ) : RelativeLayout(context, attrs, defStyleAttr) {
 
     interface Callback {
-        fun onJumpToReadMarkerClicked(readMarkerId: String)
+        fun onJumpToReadMarkerClicked()
         fun onClearReadMarkerClicked()
     }
 
@@ -44,24 +44,15 @@ class JumpToReadMarkerView @JvmOverloads constructor(
         setupView()
     }
 
-    private var readMarkerId: String? = null
-
     private fun setupView() {
         inflate(context, R.layout.view_jump_to_read_marker, this)
         setBackgroundColor(ContextCompat.getColor(context, R.color.notification_accent_color))
         jumpToReadMarkerLabelView.setOnClickListener {
-            readMarkerId?.also {
-                callback?.onJumpToReadMarkerClicked(it)
-            }
+            callback?.onJumpToReadMarkerClicked()
         }
         closeJumpToReadMarkerView.setOnClickListener {
             visibility = View.INVISIBLE
             callback?.onClearReadMarkerClicked()
         }
-    }
-
-    fun render(show: Boolean, readMarkerId: String?) {
-        this.readMarkerId = readMarkerId
-        isInvisible = !show
     }
 }

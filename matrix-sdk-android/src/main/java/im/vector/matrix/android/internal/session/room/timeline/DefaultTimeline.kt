@@ -81,14 +81,7 @@ internal class DefaultTimeline(
         val BACKGROUND_HANDLER = createBackgroundHandler("TIMELINE_DB_THREAD")
     }
 
-    override var listener: Timeline.Listener? = null
-        set(value) {
-            field = value
-            BACKGROUND_HANDLER.post {
-                postSnapshot()
-            }
-        }
-
+    private val listeners = ArrayList<Timeline.Listener>()
     private val isStarted = AtomicBoolean(false)
     private val isReady = AtomicBoolean(false)
     private val mainHandler = createUIHandler()
@@ -109,7 +102,7 @@ internal class DefaultTimeline(
     private val backwardsState = AtomicReference(State())
     private val forwardsState = AtomicReference(State())
 
-    private val timelineID = UUID.randomUUID().toString()
+    override val timelineID = UUID.randomUUID().toString()
 
     override val isLive
         get() = !hasMoreToLoad(Timeline.Direction.FORWARDS)
@@ -293,6 +286,20 @@ internal class DefaultTimeline(
 
     override fun hasMoreToLoad(direction: Timeline.Direction): Boolean {
         return hasMoreInCache(direction) || !hasReachedEnd(direction)
+    }
+
+    override fun addListener(listener: Timeline.Listener) = synchronized(listeners) {
+        listeners.add(listener).also {
+            postSnapshot()
+        }
+    }
+
+    override fun removeListener(listener: Timeline.Listener) = synchronized(listeners) {
+        listeners.remove(listener)
+    }
+
+    override fun removeAllListeners() = synchronized(listeners) {
+        listeners.clear()
     }
 
     // TimelineHiddenReadReceipts.Delegate
@@ -487,9 +494,9 @@ internal class DefaultTimeline(
             return
         }
         val params = PaginationTask.Params(roomId = roomId,
-                from = token,
-                direction = direction.toPaginationDirection(),
-                limit = limit)
+                                           from = token,
+                                           direction = direction.toPaginationDirection(),
+                                           limit = limit)
 
         Timber.v("Should fetch $limit items $direction")
         cancelableBag += paginationTask
@@ -564,7 +571,7 @@ internal class DefaultTimeline(
             val timelineEvent = buildTimelineEvent(eventEntity)
 
             if (timelineEvent.isEncrypted()
-                    && timelineEvent.root.mxDecryptionResult == null) {
+                && timelineEvent.root.mxDecryptionResult == null) {
                 timelineEvent.root.eventId?.let { eventDecryptor.requestDecryption(it) }
             }
 
@@ -637,7 +644,13 @@ internal class DefaultTimeline(
             }
             updateLoadingStates(filteredEvents)
             val snapshot = createSnapshot()
-            val runnable = Runnable { listener?.onUpdated(snapshot) }
+            val runnable = Runnable {
+                synchronized(listeners) {
+                    listeners.forEach {
+                        it.onUpdated(snapshot)
+                    }
+                }
+            }
             debouncer.debounce("post_snapshot", runnable, 50)
         }
     }

@@ -41,6 +41,12 @@ sealed class SendMode(open val text: String) {
     data class REPLY(val timelineEvent: TimelineEvent, override val text: String) : SendMode(text)
 }
 
+sealed class UnreadState {
+    object Unknown : UnreadState()
+    object HasNoUnread : UnreadState()
+    data class HasUnread(val eventId: String) : UnreadState()
+}
+
 data class RoomDetailViewState(
         val roomId: String,
         val eventId: String?,
@@ -53,7 +59,10 @@ data class RoomDetailViewState(
         val tombstoneEventHandling: Async<String> = Uninitialized,
         val syncState: SyncState = SyncState.IDLE,
         val highlightedEventId: String? = null,
-        val readMarkerIdSnapshot: String? = null
+        val currentSnapshot: List<TimelineEvent> = emptyList(),
+        val hasMoreToLoadForward: Boolean = false,
+        val hasMoreToLoadBackward: Boolean = false,
+        val unreadState: UnreadState = UnreadState.Unknown
 ) : MvRxState {
 
     constructor(args: RoomDetailArgs) : this(roomId = args.roomId, eventId = args.eventId)

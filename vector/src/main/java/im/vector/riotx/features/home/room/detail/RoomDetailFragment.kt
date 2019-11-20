@@ -39,6 +39,7 @@ import androidx.core.text.buildSpannedString
 import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
 import androidx.core.view.forEach
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -57,7 +58,6 @@ import im.vector.matrix.android.api.permalinks.PermalinkFactory
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.api.session.events.model.LocalEcho
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.send.SendState
@@ -145,8 +145,7 @@ class RoomDetailFragment @Inject constructor(
         val textComposerViewModelFactory: TextComposerViewModel.Factory,
         private val errorFormatter: ErrorFormatter,
         private val eventHtmlRenderer: EventHtmlRenderer,
-        private val vectorPreferences: VectorPreferences,
-        private val readMarkerHelper: ReadMarkerHelper
+        private val vectorPreferences: VectorPreferences
 ) :
         VectorBaseFragment(),
         TimelineEventController.Callback,
@@ -425,7 +424,8 @@ class RoomDetailFragment @Inject constructor(
         if (text != composerLayout.composerEditText.text.toString()) {
             // Ignore update to avoid saving a draft
             composerLayout.composerEditText.setText(text)
-            composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text?.length ?: 0)
+            composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text?.length
+                    ?: 0)
         }
     }
 
@@ -474,13 +474,7 @@ class RoomDetailFragment @Inject constructor(
             it.dispatchTo(stateRestorer)
             it.dispatchTo(scrollOnNewMessageCallback)
             it.dispatchTo(scrollOnHighlightedEventCallback)
-        }
-        readMarkerHelper.timelineEventController = timelineEventController
-        readMarkerHelper.layoutManager = layoutManager
-        readMarkerHelper.callback = object : ReadMarkerHelper.Callback {
-            override fun onJumpToReadMarkerVisibilityUpdate(show: Boolean, readMarkerId: String?) {
-                jumpToReadMarkerView.render(show, readMarkerId)
-            }
+            checkJumpToUnreadBanner()
         }
         recyclerView.adapter = timelineEventController.adapter
 
@@ -523,6 +517,25 @@ class RoomDetailFragment @Inject constructor(
             val swipeCallback = RoomMessageTouchHelperCallback(requireContext(), R.drawable.ic_reply, quickReplyHandler)
             val touchHelper = ItemTouchHelper(swipeCallback)
             touchHelper.attachToRecyclerView(recyclerView)
+        }
+    }
+
+    private fun checkJumpToUnreadBanner() = jumpToReadMarkerView.post {
+        withState(roomDetailViewModel) {
+            val showJumpToUnreadBanner = when (it.unreadState) {
+                UnreadState.Unknown,
+                UnreadState.HasNoUnread  -> false
+                is UnreadState.HasUnread -> {
+                    val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
+                    val positionOfReadMarker = timelineEventController.getPositionOfReadMarker()
+                    if (positionOfReadMarker == null) {
+                        it.timeline?.isLive == true && lastVisibleItem > 0
+                    } else {
+                        positionOfReadMarker > lastVisibleItem
+                    }
+                }
+            }
+            jumpToReadMarkerView.isVisible = showJumpToUnreadBanner
         }
     }
 
@@ -656,7 +669,6 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun renderState(state: RoomDetailViewState) {
-        readMarkerHelper.updateWith(state)
         renderRoomSummary(state)
         val summary = state.asyncRoomSummary()
         val inviter = state.asyncInviter()
@@ -1018,8 +1030,13 @@ class RoomDetailFragment @Inject constructor(
                 .show(requireActivity().supportFragmentManager, "DISPLAY_READ_RECEIPTS")
     }
 
-    override fun onReadMarkerDisplayed() {
+    override fun onReadMarkerVisible() {
+        checkJumpToUnreadBanner()
         roomDetailViewModel.handle(RoomDetailAction.EnterTrackingUnreadMessagesState)
+    }
+
+    override fun onReadMarkerInvisible() {
+        checkJumpToUnreadBanner()
     }
 
     // AutocompleteUserPresenter.Callback
@@ -1226,8 +1243,10 @@ class RoomDetailFragment @Inject constructor(
 
     // JumpToReadMarkerView.Callback
 
-    override fun onJumpToReadMarkerClicked(readMarkerId: String) {
-        roomDetailViewModel.handle(RoomDetailAction.NavigateToEvent(readMarkerId, false))
+    override fun onJumpToReadMarkerClicked() = withState(roomDetailViewModel) {
+        if (it.unreadState is UnreadState.HasUnread) {
+            roomDetailViewModel.handle(RoomDetailAction.NavigateToEvent(it.unreadState.eventId, false))
+        }
     }
 
     override fun onClearReadMarkerClicked() {
