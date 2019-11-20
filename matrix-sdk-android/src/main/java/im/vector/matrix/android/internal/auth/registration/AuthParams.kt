@@ -61,6 +61,10 @@ internal data class AuthParams(
             )
         }
 
+        /**
+         * Note that there is a bug in Synapse (I have to investigate where), but if we pass LoginFlowTypes.MSISDN,
+         * the homeserver answer with the login flow with MatrixError fields and not with a simple MatrixError 401.
+         */
         fun createForMsisdnIdentity(session: String, threePidCredentials: ThreePidCredentials): AuthParams {
             return AuthParams(
                     type = LoginFlowTypes.MSISDN,

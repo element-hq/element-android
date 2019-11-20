@@ -121,10 +121,10 @@ class LoginGenericTextInputFormFragment @Inject constructor(private val errorFor
                 }
                 TextInputFormFragmentMode.SetMsisdn     -> {
                     // TODO Country code
-                    loginViewModel.handle(LoginAction.AddThreePid(RegisterThreePid.Msisdn(text, "TODO")))
+                    loginViewModel.handle(LoginAction.AddThreePid(RegisterThreePid.Msisdn(text, "FR")))
                 }
                 TextInputFormFragmentMode.ConfirmMsisdn -> {
-                    loginViewModel.handle(LoginAction.ConfirmMsisdn(text))
+                    loginViewModel.handle(LoginAction.ValidateThreePid(text))
                 }
             }
         }
@@ -163,7 +163,12 @@ class LoginGenericTextInputFormFragment @Inject constructor(private val errorFor
                 }
             }
             TextInputFormFragmentMode.ConfirmMsisdn -> {
-                // TODO
+                if (throwable is Failure.SuccessError) {
+                    // The entered code is not correct
+                    loginGenericTextInputFormTil.error = getString(R.string.login_validation_code_is_not_correct)
+                } else {
+                    loginGenericTextInputFormTil.error = errorFormatter.toHumanReadable(throwable)
+                }
             }
         }
     }

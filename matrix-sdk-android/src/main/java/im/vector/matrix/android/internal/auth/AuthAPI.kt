@@ -19,9 +19,7 @@ package im.vector.matrix.android.internal.auth
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.internal.auth.data.LoginFlowResponse
 import im.vector.matrix.android.internal.auth.data.PasswordLoginParams
-import im.vector.matrix.android.internal.auth.registration.AddThreePidRegistrationParams
-import im.vector.matrix.android.internal.auth.registration.AddThreePidRegistrationResponse
-import im.vector.matrix.android.internal.auth.registration.RegistrationParams
+import im.vector.matrix.android.internal.auth.registration.*
 import im.vector.matrix.android.internal.network.NetworkConstants
 import retrofit2.Call
 import retrofit2.http.*
@@ -45,6 +43,12 @@ internal interface AuthAPI {
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "register/{threePid}/requestToken")
     fun add3Pid(@Path("threePid") threePid: String, @Body params: AddThreePidRegistrationParams): Call<AddThreePidRegistrationResponse>
+
+    /**
+     * Validate 3pid
+     */
+    @POST
+    fun validate3Pid(@Url url: String, @Body params: ValidationCodeBody): Call<SuccessResult>
 
     /**
      * Get the supported login flow

@@ -63,6 +63,7 @@ internal class DefaultRegistrationWizard(private val homeServerConnectionConfig:
     private val authAPI = buildAuthAPI()
     private val registerTask = DefaultRegisterTask(authAPI)
     private val registerAddThreePidTask = DefaultRegisterAddThreePidTask(authAPI)
+    private val validateCodeTask = DefaultValidateCodeTask(authAPI)
 
     private var currentThreePidData: ThreePidData? = null
 
@@ -168,7 +169,7 @@ internal class DefaultRegistrationWizard(private val homeServerConnectionConfig:
         return CancelableCoroutine(job)
     }
 
-    override fun validateEmail(callback: MatrixCallback<RegistrationResult>): Cancelable {
+    override fun checkIfEmailHasBeenValidated(callback: MatrixCallback<RegistrationResult>): Cancelable {
         val safeParam = currentThreePidData?.registrationParams ?: run {
             callback.onFailure(IllegalStateException("developer error, no pending three pid"))
             return NoOpCancellable
@@ -178,18 +179,49 @@ internal class DefaultRegistrationWizard(private val homeServerConnectionConfig:
         return performRegistrationRequest(safeParam, callback, 10_000)
     }
 
-    override fun confirmMsisdn(code: String, callback: MatrixCallback<RegistrationResult>): Cancelable {
-        val safeSession = currentSession ?: run {
+    override fun handleValidateThreePid(code: String, callback: MatrixCallback<RegistrationResult>): Cancelable {
+        val safeParam = currentThreePidData?.registrationParams ?: run {
+            callback.onFailure(IllegalStateException("developer error, no pending three pid"))
+            return NoOpCancellable
+        }
+
+        val safeCurrentData = currentThreePidData ?: run {
             callback.onFailure(IllegalStateException("developer error, call createAccount() method first"))
             return NoOpCancellable
         }
 
-        // TODO
-        return performRegistrationRequest(
-                RegistrationParams(
-                        // TODO
-                        auth = AuthParams.createForEmailIdentity(safeSession, ThreePidCredentials(code))
-                ), callback)
+        val url = safeCurrentData.addThreePidRegistrationResponse.submitUrl ?: run {
+            callback.onFailure(IllegalStateException("Missing url the send the code"))
+            return NoOpCancellable
+        }
+
+        val params = ValidationCodeBody(
+                clientSecret = clientSecret,
+                sid = safeCurrentData.addThreePidRegistrationResponse.sid,
+                code = code
+        )
+
+        val job = GlobalScope.launch(coroutineDispatchers.main) {
+            runCatching {
+                validateCodeTask.execute(ValidateCodeTask.Params(url, params))
+            }
+                    .fold(
+                            {
+                                if (it.success == true) {
+                                    // The entered code is correct
+                                    // Same that validate email
+                                    performRegistrationRequest(safeParam, callback, 3_000)
+                                } else {
+                                    // The code is not correct
+                                    callback.onFailure(Failure.SuccessError)
+                                }
+                            },
+                            {
+                                callback.onFailure(it)
+                            }
+                    )
+        }
+        return CancelableCoroutine(job)
     }
 
     override fun dummy(callback: MatrixCallback<RegistrationResult>): Cancelable {

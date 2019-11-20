@@ -105,25 +105,25 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
 
     private fun handleRegisterAction(action: LoginAction.RegisterAction) {
         when (action) {
-            is LoginAction.RegisterWith  -> handleRegisterWith(action)
-            is LoginAction.CaptchaDone   -> handleCaptchaDone(action)
-            is LoginAction.AcceptTerms   -> handleAcceptTerms()
-            is LoginAction.RegisterDummy -> handleRegisterDummy()
-            is LoginAction.AddThreePid   -> handleAddThreePid(action)
-            is LoginAction.ConfirmMsisdn -> handleConfirmMsisdn(action)
-            is LoginAction.ValidateEmail -> handleValidateEmail()
+            is LoginAction.RegisterWith                 -> handleRegisterWith(action)
+            is LoginAction.CaptchaDone                  -> handleCaptchaDone(action)
+            is LoginAction.AcceptTerms                  -> handleAcceptTerms()
+            is LoginAction.RegisterDummy                -> handleRegisterDummy()
+            is LoginAction.AddThreePid                  -> handleAddThreePid(action)
+            is LoginAction.ValidateThreePid             -> handleValidateThreePid(action)
+            is LoginAction.CheckIfEmailHasBeenValidated -> handleCheckIfEmailHasBeenValidated()
         }
     }
 
-    private fun handleValidateEmail() {
+    private fun handleCheckIfEmailHasBeenValidated() {
         // We do not want the common progress bar to be displayed, so we do not change asyncRegistration value in the state
         currentTask?.cancel()
-        currentTask = registrationWizard?.validateEmail(registrationCallback)
+        currentTask = registrationWizard?.checkIfEmailHasBeenValidated(registrationCallback)
     }
 
-    private fun handleConfirmMsisdn(action: LoginAction.ConfirmMsisdn) {
+    private fun handleValidateThreePid(action: LoginAction.ValidateThreePid) {
         setState { copy(asyncRegistration = Loading()) }
-        currentTask = registrationWizard?.confirmMsisdn(action.code, registrationCallback)
+        currentTask = registrationWizard?.handleValidateThreePid(action.code, registrationCallback)
     }
 
     private val registrationCallback = object : MatrixCallback<RegistrationResult> {
