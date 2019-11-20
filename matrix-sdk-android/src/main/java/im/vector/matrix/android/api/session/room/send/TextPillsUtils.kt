@@ -16,6 +16,7 @@
 package im.vector.matrix.android.api.session.room.send
 
 import android.text.SpannableString
+import java.util.*
 
 /**
  * Utility class to detect special span in CharSequence and turn them into
@@ -23,11 +24,16 @@ import android.text.SpannableString
  *
  * For now only support UserMentionSpans (TODO rooms, room aliases, etc...)
  */
+
+
 object TextPillsUtils {
+
+    private data class MentionLinkSpec(val span: UserMentionSpan, val start: Int, val end: Int)
 
     private const val MENTION_SPAN_TO_HTML_TEMPLATE = "<a href=\"https://matrix.to/#/%1\$s\">%2\$s</a>"
 
     private const val MENTION_SPAN_TO_MD_TEMPLATE = "[%2\$s](https://matrix.to/#/%1\$s)"
+
 
     /**
      * Detects if transformable spans are present in the text.
@@ -49,19 +55,75 @@ object TextPillsUtils {
         val spannableString = SpannableString.valueOf(text)
         val pills = spannableString
                 ?.getSpans(0, text.length, UserMentionSpan::class.java)
+                ?.map { MentionLinkSpec(it, spannableString.getSpanStart(it), spannableString.getSpanEnd(it)) }
+                ?.toMutableList()
                 ?.takeIf { it.isNotEmpty() }
                 ?: return null
 
+        //we need to prune overlaps!
+        pruneOverlaps(pills)
+
         return buildString {
             var currIndex = 0
-            pills.forEachIndexed { _, urlSpan ->
-                val start = spannableString.getSpanStart(urlSpan)
-                val end = spannableString.getSpanEnd(urlSpan)
+            pills.forEachIndexed { _, (urlSpan, start, end) ->
                 // We want to replace with the pill with a html link
                 append(text, currIndex, start)
                 append(String.format(template, urlSpan.userId, urlSpan.displayName))
                 currIndex = end
             }
         }
+    }
+
+    private fun pruneOverlaps(links: MutableList<MentionLinkSpec>) {
+        Collections.sort(links, COMPARATOR)
+        var len = links.size
+        var i = 0
+        while (i < len - 1) {
+            val a = links[i]
+            val b = links[i + 1]
+            var remove = -1
+
+            //test if there is an overlap
+            if (b.start in a.start until a.end) {
+
+                when {
+                    b.end <= a.end                    ->
+                        //b is inside a -> b should be removed
+                        remove = i + 1
+                    a.end - a.start > b.end - b.start ->
+                        //overlap and a is bigger -> b should be removed
+                        remove = i + 1
+                    a.end - a.start < b.end - b.start ->
+                        //overlap and a is smaller -> a should be removed
+                        remove = i
+                }
+
+
+                if (remove != -1) {
+                    links.removeAt(remove)
+                    len--
+                    continue
+                }
+            }
+            i++
+        }
+    }
+
+    private val COMPARATOR = Comparator<MentionLinkSpec> { (_, startA, endA), (_, startB, endB) ->
+        if (startA < startB) {
+            return@Comparator -1
+        }
+
+        if (startA > startB) {
+            return@Comparator 1
+        }
+
+        if (endA < endB) {
+            return@Comparator 1
+        }
+
+        if (endA > endB) {
+            -1
+        } else 0
     }
 }
