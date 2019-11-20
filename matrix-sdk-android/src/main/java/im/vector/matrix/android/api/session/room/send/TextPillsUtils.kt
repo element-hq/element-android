@@ -24,8 +24,6 @@ import java.util.*
  *
  * For now only support UserMentionSpans (TODO rooms, room aliases, etc...)
  */
-
-
 object TextPillsUtils {
 
     private data class MentionLinkSpec(val span: UserMentionSpan, val start: Int, val end: Int)
@@ -33,7 +31,6 @@ object TextPillsUtils {
     private const val MENTION_SPAN_TO_HTML_TEMPLATE = "<a href=\"https://matrix.to/#/%1\$s\">%2\$s</a>"
 
     private const val MENTION_SPAN_TO_MD_TEMPLATE = "[%2\$s](https://matrix.to/#/%1\$s)"
-
 
     /**
      * Detects if transformable spans are present in the text.
@@ -60,7 +57,7 @@ object TextPillsUtils {
                 ?.takeIf { it.isNotEmpty() }
                 ?: return null
 
-        //we need to prune overlaps!
+        // we need to prune overlaps!
         pruneOverlaps(pills)
 
         return buildString {
@@ -83,21 +80,19 @@ object TextPillsUtils {
             val b = links[i + 1]
             var remove = -1
 
-            //test if there is an overlap
+            // test if there is an overlap
             if (b.start in a.start until a.end) {
-
                 when {
                     b.end <= a.end                    ->
-                        //b is inside a -> b should be removed
+                        // b is inside a -> b should be removed
                         remove = i + 1
                     a.end - a.start > b.end - b.start ->
-                        //overlap and a is bigger -> b should be removed
+                        // overlap and a is bigger -> b should be removed
                         remove = i + 1
                     a.end - a.start < b.end - b.start ->
-                        //overlap and a is smaller -> a should be removed
+                        // overlap and a is smaller -> a should be removed
                         remove = i
                 }
-
 
                 if (remove != -1) {
                     links.removeAt(remove)
