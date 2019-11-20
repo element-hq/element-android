@@ -24,4 +24,5 @@ import im.vector.matrix.android.api.auth.registration.FlowResult
  */
 sealed class LoginViewEvents {
     data class RegistrationFlowResult(val flowResult: FlowResult) : LoginViewEvents()
+    data class RegistrationError(val throwable: Throwable) : LoginViewEvents()
 }

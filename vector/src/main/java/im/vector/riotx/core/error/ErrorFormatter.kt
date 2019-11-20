@@ -35,13 +35,14 @@ class ErrorFormatter @Inject constructor(private val stringProvider: StringProvi
         return when (throwable) {
             null                         -> null
             is Failure.NetworkConnection -> {
-                if (throwable.ioException is SocketTimeoutException) {
-                    stringProvider.getString(R.string.error_network_timeout)
-                } else if (throwable.ioException is UnknownHostException) {
-                    // Invalid homeserver?
-                    stringProvider.getString(R.string.login_error_unknown_host)
-                } else {
-                    stringProvider.getString(R.string.error_no_network)
+                when {
+                    throwable.ioException is SocketTimeoutException ->
+                        stringProvider.getString(R.string.error_network_timeout)
+                    throwable.ioException is UnknownHostException   ->
+                        // Invalid homeserver?
+                        stringProvider.getString(R.string.login_error_unknown_host)
+                    else                                            ->
+                        stringProvider.getString(R.string.error_no_network)
                 }
             }
             is Failure.ServerError       -> {
@@ -56,6 +57,15 @@ class ErrorFormatter @Inject constructor(private val stringProvider: StringProvi
                     }
                     throwable.error.code == MatrixError.USER_IN_USE          -> {
                         stringProvider.getString(R.string.login_signup_error_user_in_use)
+                    }
+                    throwable.error.code == MatrixError.BAD_JSON             -> {
+                        stringProvider.getString(R.string.login_error_bad_json)
+                    }
+                    throwable.error.code == MatrixError.NOT_JSON             -> {
+                        stringProvider.getString(R.string.login_error_not_json)
+                    }
+                    throwable.error.code == MatrixError.LIMIT_EXCEEDED       -> {
+                        stringProvider.getString(R.string.login_error_limit_exceeded)
                     }
                     else                                                     -> {
                         throwable.error.message.takeIf { it.isNotEmpty() }

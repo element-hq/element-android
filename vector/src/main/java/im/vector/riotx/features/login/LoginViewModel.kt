@@ -489,7 +489,16 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
             registrationWizard = registrationService.getOrCreateRegistrationWizard(homeServerConnectionConfigFinal)
 
             currentTask = registrationWizard?.getRegistrationFlow(object : MatrixCallback<RegistrationResult> {
+
                 override fun onSuccess(data: RegistrationResult) {
+                    /*
+                    // Simulate registration disabled
+                    onFailure(Failure.ServerError(MatrixError(
+                            code = MatrixError.FORBIDDEN,
+                            message = "Registration is disabled"
+                    ), 403))
+                    */
+
                     setState {
                         copy(
                                 asyncRegistration = Success(data)
@@ -503,6 +512,9 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                 }
 
                 override fun onFailure(failure: Throwable) {
+                    // Notify the user
+                    _viewEvents.post(LoginViewEvents.RegistrationError(failure))
+
                     // TODO Handled JobCancellationException
                     setState {
                         copy(

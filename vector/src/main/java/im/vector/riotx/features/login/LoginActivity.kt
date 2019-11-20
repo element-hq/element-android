@@ -27,8 +27,11 @@ import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
 import im.vector.matrix.android.api.auth.registration.FlowResult
 import im.vector.matrix.android.api.auth.registration.Stage
+import im.vector.matrix.android.api.failure.Failure
+import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
+import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.addFragment
 import im.vector.riotx.core.extensions.addFragmentToBackstack
 import im.vector.riotx.core.platform.VectorBaseActivity
@@ -38,6 +41,7 @@ import im.vector.riotx.features.login.terms.LoginTermsFragmentArgument
 import im.vector.riotx.features.login.terms.toLocalizedLoginTerms
 import kotlinx.android.synthetic.main.activity_login.*
 import javax.inject.Inject
+import javax.net.ssl.HttpsURLConnection
 
 /**
  * The LoginActivity manages the fragment navigation and also display the loading View
@@ -48,6 +52,7 @@ class LoginActivity : VectorBaseActivity() {
     private lateinit var loginSharedActionViewModel: LoginSharedActionViewModel
 
     @Inject lateinit var loginViewModelFactory: LoginViewModel.Factory
+    @Inject lateinit var errorFormatter: ErrorFormatter
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
@@ -124,7 +129,29 @@ class LoginActivity : VectorBaseActivity() {
                     }
                 }
             }
+            is LoginViewEvents.RegistrationError      -> displayRegistrationError(loginViewEvents.throwable)
         }
+    }
+
+    private fun displayRegistrationError(throwable: Throwable) {
+        val message = when(throwable) {
+            is Failure.ServerError -> {
+                if(throwable.error.code == MatrixError.FORBIDDEN
+                        && throwable.httpCode == HttpsURLConnection.HTTP_FORBIDDEN /* 403 */) {
+                    getString(R.string.login_registration_disabled)
+                } else {
+                    null
+                }
+            }
+            else -> null
+        }
+                ?: errorFormatter.toHumanReadable(throwable)
+
+        AlertDialog.Builder(this)
+                .setTitle(R.string.dialog_title_error)
+                .setMessage(message)
+                .setPositiveButton(R.string.ok, null)
+                .show()
     }
 
     private fun onLoginFlowRetrieved() {
