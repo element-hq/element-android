@@ -60,6 +60,14 @@ internal data class AuthParams(
                     threePidCredentials = threePidCredentials
             )
         }
+
+        fun createForMsisdnIdentity(session: String, threePidCredentials: ThreePidCredentials): AuthParams {
+            return AuthParams(
+                    type = LoginFlowTypes.MSISDN,
+                    session = session,
+                    threePidCredentials = threePidCredentials
+            )
+        }
     }
 }
 

@@ -42,6 +42,7 @@ import java.util.*
 // Container to store the data when a three pid is in validation step
 internal data class ThreePidData(
         val threePid: RegisterThreePid,
+        val addThreePidRegistrationResponse: AddThreePidRegistrationResponse,
         val registrationParams: RegistrationParams
 )
 
@@ -69,7 +70,10 @@ internal class DefaultRegistrationWizard(private val homeServerConnectionConfig:
         get() {
             return when (val threePid = currentThreePidData?.threePid) {
                 is RegisterThreePid.Email  -> threePid.email
-                is RegisterThreePid.Msisdn -> threePid.msisdn
+                is RegisterThreePid.Msisdn -> {
+                    // Take formatted msisdn if provided by the server
+                    currentThreePidData?.addThreePidRegistrationResponse?.formattedMsisdn?.takeIf { it.isNotBlank() } ?: threePid.msisdn
+                }
                 null                       -> null
             }
         }
@@ -122,6 +126,8 @@ internal class DefaultRegistrationWizard(private val homeServerConnectionConfig:
             return NoOpCancellable
         }
 
+        currentThreePidData = null
+
         val job = GlobalScope.launch(coroutineDispatchers.main) {
             runCatching {
                 registerAddThreePidTask.execute(RegisterAddThreePidTask.Params(threePid, clientSecret, sendAttempt++))
@@ -131,13 +137,23 @@ internal class DefaultRegistrationWizard(private val homeServerConnectionConfig:
                                 // Store data
                                 currentThreePidData = ThreePidData(
                                         threePid,
+                                        it,
                                         RegistrationParams(
-                                                auth = AuthParams.createForEmailIdentity(safeSession,
-                                                        ThreePidCredentials(
-                                                                clientSecret = clientSecret,
-                                                                sid = it.sid
-                                                        )
-                                                )
+                                                auth = if (threePid is RegisterThreePid.Email) {
+                                                    AuthParams.createForEmailIdentity(safeSession,
+                                                            ThreePidCredentials(
+                                                                    clientSecret = clientSecret,
+                                                                    sid = it.sid
+                                                            )
+                                                    )
+                                                } else {
+                                                    AuthParams.createForMsisdnIdentity(safeSession,
+                                                            ThreePidCredentials(
+                                                                    clientSecret = clientSecret,
+                                                                    sid = it.sid
+                                                            )
+                                                    )
+                                                }
                                         ))
                                         .also { threePidData ->
                                             // and send the sid a first time

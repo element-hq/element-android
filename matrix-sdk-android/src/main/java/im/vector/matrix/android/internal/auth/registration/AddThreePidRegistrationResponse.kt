@@ -37,5 +37,18 @@ internal data class AddThreePidRegistrationResponse(
          * the homeserver advertises this specification version in the /versions response (ie: r0.5.0).
          */
         @Json(name = "submit_url")
-        val submitUrl: String? = null
+        val submitUrl: String? = null,
+
+        /* ==========================================================================================
+         * It seems that the homeserver is sending more data, we may need it
+         * ========================================================================================== */
+
+        @Json(name = "msisdn")
+        val msisdn: String? = null,
+
+        @Json(name = "intl_fmt")
+        val formattedMsisdn: String? = null,
+
+        @Json(name = "success")
+        val success: Boolean? = null
 )
