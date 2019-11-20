@@ -162,6 +162,11 @@ interface FragmentModule {
 
     @Binds
     @IntoMap
+    @FragmentKey(LoginGenericTextInputFormFragment::class)
+    fun bindLoginGenericTextInputFormFragment(fragment: LoginGenericTextInputFormFragment): Fragment
+
+    @Binds
+    @IntoMap
     @FragmentKey(CreateDirectRoomDirectoryUsersFragment::class)
     fun bindCreateDirectRoomDirectoryUsersFragment(fragment: CreateDirectRoomDirectoryUsersFragment): Fragment
 

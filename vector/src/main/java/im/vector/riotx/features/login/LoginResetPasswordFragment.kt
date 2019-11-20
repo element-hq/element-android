@@ -18,6 +18,7 @@ package im.vector.riotx.features.login
 
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
@@ -113,6 +114,15 @@ class LoginResetPasswordFragment @Inject constructor(
 
     override fun resetViewModel() {
         loginViewModel.handle(LoginAction.ResetResetPassword)
+    }
+
+    override fun onRegistrationError(throwable: Throwable) {
+        // TODO
+        AlertDialog.Builder(requireActivity())
+                .setTitle(R.string.dialog_title_error)
+                .setMessage(errorFormatter.toHumanReadable(throwable))
+                .setPositiveButton(R.string.ok, null)
+                .show()
     }
 
     override fun invalidate() = withState(loginViewModel) { state ->

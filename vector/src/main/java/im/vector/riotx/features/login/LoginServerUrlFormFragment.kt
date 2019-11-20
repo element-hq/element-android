@@ -20,6 +20,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import butterknife.OnClick
 import com.airbnb.mvrx.Fail
@@ -119,6 +120,15 @@ class LoginServerUrlFormFragment @Inject constructor(
                 loginViewModel.handle(LoginAction.UpdateHomeServer(serverUrl))
             }
         }
+    }
+
+    override fun onRegistrationError(throwable: Throwable) {
+        // Cannot happen here, but just in case
+        AlertDialog.Builder(requireActivity())
+                .setTitle(R.string.dialog_title_error)
+                .setMessage(errorFormatter.toHumanReadable(throwable))
+                .setPositiveButton(R.string.ok, null)
+                .show()
     }
 
     override fun invalidate() = withState(loginViewModel) { state ->

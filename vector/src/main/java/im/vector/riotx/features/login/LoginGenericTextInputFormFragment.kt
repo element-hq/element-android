@@ -25,6 +25,7 @@ import butterknife.OnClick
 import com.airbnb.mvrx.args
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.riotx.R
+import im.vector.riotx.core.error.ErrorFormatter
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_login_generic_text_input_form.*
 import javax.inject.Inject
@@ -44,7 +45,7 @@ data class LoginGenericTextInputFormFragmentArgument(
 /**
  * In this screen, the user is asked for a text input
  */
-class LoginGenericTextInputFormFragment @Inject constructor() : AbstractLoginFragment() {
+class LoginGenericTextInputFormFragment @Inject constructor(private val errorFormatter: ErrorFormatter) : AbstractLoginFragment() {
 
     private val params: LoginGenericTextInputFormFragmentArgument by args()
 
@@ -55,6 +56,15 @@ class LoginGenericTextInputFormFragment @Inject constructor() : AbstractLoginFra
 
         setupUi()
         setupSubmitButton()
+        setupTil()
+    }
+
+    private fun setupTil() {
+        loginGenericTextInputFormTextInput.textChanges()
+                .subscribe {
+                    loginGenericTextInputFormTil.error = null
+                }
+                .disposeOnDestroyView()
     }
 
     private fun setupUi() {
@@ -126,6 +136,10 @@ class LoginGenericTextInputFormFragment @Inject constructor() : AbstractLoginFra
         } else {
             loginGenericTextInputFormSubmit.isEnabled = true
         }
+    }
+
+    override fun onRegistrationError(throwable: Throwable) {
+        loginGenericTextInputFormTil.error = errorFormatter.toHumanReadable(throwable)
     }
 
     override fun resetViewModel() {

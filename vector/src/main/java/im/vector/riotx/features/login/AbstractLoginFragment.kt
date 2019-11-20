@@ -21,9 +21,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.annotation.CallSuper
 import com.airbnb.mvrx.activityViewModel
+import im.vector.matrix.android.api.failure.Failure
+import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.OnBackPressed
 import im.vector.riotx.core.platform.VectorBaseFragment
+import javax.net.ssl.HttpsURLConnection
 
 /**
  * Parent Fragment for all the login/registration screens
@@ -38,7 +41,43 @@ abstract class AbstractLoginFragment : VectorBaseFragment(), OnBackPressed {
         super.onViewCreated(view, savedInstanceState)
 
         loginSharedActionViewModel = activityViewModelProvider.get(LoginSharedActionViewModel::class.java)
+
+        loginViewModel.viewEvents
+                .observe()
+                .subscribe {
+                    handleLoginViewEvents(it)
+                }
+                .disposeOnDestroyView()
     }
+
+    private fun handleLoginViewEvents(loginViewEvents: LoginViewEvents) {
+        when (loginViewEvents) {
+            is LoginViewEvents.RegistrationFlowResult ->
+                // This is handled by the Activity
+                Unit
+            is LoginViewEvents.RegistrationError      -> displayRegistrationError(loginViewEvents.throwable)
+        }
+    }
+
+    private fun displayRegistrationError(throwable: Throwable) {
+        when (throwable) {
+            is Failure.ServerError -> {
+                if (throwable.error.code == MatrixError.FORBIDDEN
+                        && throwable.httpCode == HttpsURLConnection.HTTP_FORBIDDEN /* 403 */) {
+                    AlertDialog.Builder(requireActivity())
+                            .setTitle(R.string.dialog_title_error)
+                            .setMessage(getString(R.string.login_registration_disabled))
+                            .setPositiveButton(R.string.ok, null)
+                            .show()
+                } else {
+                    onRegistrationError(throwable)
+                }
+            }
+            else                   -> onRegistrationError(throwable)
+        }
+    }
+
+    abstract fun onRegistrationError(throwable: Throwable)
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
         if (loginViewModel.isPasswordSent) {

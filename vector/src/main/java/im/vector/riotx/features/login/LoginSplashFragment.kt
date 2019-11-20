@@ -16,20 +16,33 @@
 
 package im.vector.riotx.features.login
 
+import androidx.appcompat.app.AlertDialog
 import butterknife.OnClick
 import im.vector.riotx.R
+import im.vector.riotx.core.error.ErrorFormatter
 import javax.inject.Inject
 
 /**
  * In this screen, the user is viewing an introduction to what he can do with this application
  */
-class LoginSplashFragment @Inject constructor() : AbstractLoginFragment() {
+class LoginSplashFragment @Inject constructor(
+        private val errorFormatter: ErrorFormatter
+) : AbstractLoginFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_login_splash
 
     @OnClick(R.id.loginSplashSubmit)
     fun getStarted() {
         loginSharedActionViewModel.post(LoginNavigation.OpenServerSelection)
+    }
+
+    override fun onRegistrationError(throwable: Throwable) {
+        // Cannot happen here, but just in case
+        AlertDialog.Builder(requireActivity())
+                .setTitle(R.string.dialog_title_error)
+                .setMessage(errorFormatter.toHumanReadable(throwable))
+                .setPositiveButton(R.string.ok, null)
+                .show()
     }
 
     override fun resetViewModel() {

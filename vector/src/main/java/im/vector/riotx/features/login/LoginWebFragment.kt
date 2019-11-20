@@ -32,6 +32,7 @@ import android.webkit.WebViewClient
 import androidx.appcompat.app.AlertDialog
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.riotx.R
+import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.utils.AssetReader
 import kotlinx.android.synthetic.main.fragment_login_web.*
 import timber.log.Timber
@@ -42,7 +43,10 @@ import javax.inject.Inject
  * This screen is displayed for SSO login and also when the application does not support login flow or registration flow
  * of the homeserver, as a fallback to login or to create an account
  */
-class LoginWebFragment @Inject constructor(private val assetReader: AssetReader) : AbstractLoginFragment() {
+class LoginWebFragment @Inject constructor(
+        private val assetReader: AssetReader,
+        private val errorFormatter: ErrorFormatter
+) : AbstractLoginFragment() {
 
     private lateinit var homeServerUrl: String
     private lateinit var signMode: SignMode
@@ -239,6 +243,15 @@ class LoginWebFragment @Inject constructor(private val assetReader: AssetReader)
 
     override fun resetViewModel() {
         loginViewModel.handle(LoginAction.ResetLogin)
+    }
+
+    override fun onRegistrationError(throwable: Throwable) {
+        // Cannot happen here, but just in case
+        AlertDialog.Builder(requireActivity())
+                .setTitle(R.string.dialog_title_error)
+                .setMessage(errorFormatter.toHumanReadable(throwable))
+                .setPositiveButton(R.string.ok, null)
+                .show()
     }
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {

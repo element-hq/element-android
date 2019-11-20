@@ -31,6 +31,7 @@ import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.riotx.R
+import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.utils.AssetReader
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_login_captcha.*
@@ -47,7 +48,10 @@ data class LoginCaptchaFragmentArgument(
 /**
  * In this screen, the user is asked to confirm he is not a robot
  */
-class LoginCaptchaFragment @Inject constructor(private val assetReader: AssetReader) : AbstractLoginFragment() {
+class LoginCaptchaFragment @Inject constructor(
+        private val assetReader: AssetReader,
+        private val errorFormatter: ErrorFormatter
+) : AbstractLoginFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_login_captcha
 
@@ -172,6 +176,15 @@ class LoginCaptchaFragment @Inject constructor(private val assetReader: AssetRea
                 return true
             }
         }
+    }
+
+    override fun onRegistrationError(throwable: Throwable) {
+        // Cannot happen here, but just in case
+        AlertDialog.Builder(requireActivity())
+                .setTitle(R.string.dialog_title_error)
+                .setMessage(errorFormatter.toHumanReadable(throwable))
+                .setPositiveButton(R.string.ok, null)
+                .show()
     }
 
     override fun resetViewModel() {

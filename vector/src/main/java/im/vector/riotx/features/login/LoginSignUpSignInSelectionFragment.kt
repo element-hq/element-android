@@ -18,17 +18,21 @@ package im.vector.riotx.features.login
 
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import butterknife.OnClick
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
+import im.vector.riotx.core.error.ErrorFormatter
 import kotlinx.android.synthetic.main.fragment_login_signup_signin_selection.*
 import javax.inject.Inject
 
 /**
  * In this screen, the user is asked to sign up or to sign in to the homeserver
  */
-class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractLoginFragment() {
+class LoginSignUpSignInSelectionFragment @Inject constructor(
+        private val errorFormatter: ErrorFormatter
+) : AbstractLoginFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_login_signup_signin_selection
 
@@ -90,6 +94,15 @@ class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractLoginFr
     fun signIn() {
         loginViewModel.handle(LoginAction.UpdateSignMode(SignMode.SignIn))
         loginSharedActionViewModel.post(LoginNavigation.OnSignModeSelected)
+    }
+
+    override fun onRegistrationError(throwable: Throwable) {
+        // Cannot happen here, but just in case
+        AlertDialog.Builder(requireActivity())
+                .setTitle(R.string.dialog_title_error)
+                .setMessage(errorFormatter.toHumanReadable(throwable))
+                .setPositiveButton(R.string.ok, null)
+                .show()
     }
 
     override fun resetViewModel() {

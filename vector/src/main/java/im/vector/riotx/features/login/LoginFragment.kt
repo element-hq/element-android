@@ -161,6 +161,10 @@ class LoginFragment @Inject constructor(
         loginViewModel.handle(LoginAction.ResetLogin)
     }
 
+    override fun onRegistrationError(throwable: Throwable) {
+        loginFieldTil.error = errorFormatter.toHumanReadable(throwable)
+    }
+
     override fun invalidate() = withState(loginViewModel) { state ->
         when (state.asyncLoginAction) {
             is Loading -> {
@@ -183,9 +187,6 @@ class LoginFragment @Inject constructor(
                 // Ensure password is hidden
                 passwordShown = false
                 renderPasswordField()
-            }
-            is Fail    -> {
-                loginFieldTil.error = errorFormatter.toHumanReadable(state.asyncRegistration.error)
             }
             // Success is handled by the LoginActivity
             is Success -> Unit

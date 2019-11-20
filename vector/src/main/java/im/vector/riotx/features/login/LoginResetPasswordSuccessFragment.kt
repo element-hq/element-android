@@ -18,15 +18,19 @@ package im.vector.riotx.features.login
 
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import butterknife.OnClick
 import im.vector.riotx.R
+import im.vector.riotx.core.error.ErrorFormatter
 import kotlinx.android.synthetic.main.fragment_login_reset_password_success.*
 import javax.inject.Inject
 
 /**
  * In this screen, the user is asked for email and new password to reset his password
  */
-class LoginResetPasswordSuccessFragment @Inject constructor() : AbstractLoginFragment() {
+class LoginResetPasswordSuccessFragment @Inject constructor(
+        private val errorFormatter: ErrorFormatter
+) : AbstractLoginFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_login_reset_password_success
 
@@ -43,6 +47,15 @@ class LoginResetPasswordSuccessFragment @Inject constructor() : AbstractLoginFra
     @OnClick(R.id.resetPasswordSuccessSubmit)
     fun submit() {
         loginSharedActionViewModel.post(LoginNavigation.OnResetPasswordSuccessDone)
+    }
+
+    override fun onRegistrationError(throwable: Throwable) {
+        // Cannot happen here, but just in case
+        AlertDialog.Builder(requireActivity())
+                .setTitle(R.string.dialog_title_error)
+                .setMessage(errorFormatter.toHumanReadable(throwable))
+                .setPositiveButton(R.string.ok, null)
+                .show()
     }
 
     override fun resetViewModel() {
