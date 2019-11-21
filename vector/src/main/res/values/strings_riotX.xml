@@ -80,6 +80,7 @@
 
     <string name="login_set_msisdn_title">Set phone number</string>
     <string name="login_set_msisdn_notice">Set a phone number to optionally allow people you know to discover you.</string>
+    <string name="login_set_msisdn_notice2">Please use the international format.</string>
     <string name="login_set_msisdn_mandatory_hint">Phone number</string>
     <string name="login_set_msisdn_optional_hint">Phone number (optional)</string>
     <string name="login_set_msisdn_submit">Next</string>
@@ -90,6 +91,9 @@
     <string name="login_msisdn_confirm_hint">Enter code</string>
     <string name="login_msisdn_confirm_send_again">Send again</string>
     <string name="login_msisdn_confirm_submit">Next</string>
+
+    <string name="login_msisdn_error_not_international">"International phone numbers must start with '+'"</string>
+    <string name="login_msisdn_error_other">"Phone number seems invalid. Please check it"</string>
 
     <!-- Replaced string is the homeserver url -->
     <string name="login_signup_to">Sign up to %1$s</string>

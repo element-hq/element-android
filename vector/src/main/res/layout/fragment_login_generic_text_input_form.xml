@@ -24,16 +24,26 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/layout_vertical_margin"
+            android:layout_marginBottom="26dp"
             android:gravity="start"
             android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small"
             tools:text="@string/login_set_email_notice" />
+
+        <TextView
+            android:id="@+id/loginGenericTextInputFormNotice2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small"
+            android:visibility="gone"
+            tools:text="@string/login_set_msisdn_notice2"
+            tools:visibility="visible" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/loginGenericTextInputFormTil"
             style="@style/VectorTextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="26dp"
             app:errorEnabled="true"
             tools:hint="@string/login_set_email_optional_hint">
 

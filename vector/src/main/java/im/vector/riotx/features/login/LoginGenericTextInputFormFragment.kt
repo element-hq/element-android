@@ -25,12 +25,15 @@ import androidx.autofill.HintConstants
 import androidx.core.view.isVisible
 import butterknife.OnClick
 import com.airbnb.mvrx.args
+import com.google.i18n.phonenumbers.NumberParseException
+import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.matrix.android.api.auth.registration.RegisterThreePid
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.riotx.R
 import im.vector.riotx.core.error.ErrorFormatter
+import im.vector.riotx.core.extensions.setTextOrHide
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_login_generic_text_input_form.*
 import javax.inject.Inject
@@ -91,6 +94,7 @@ class LoginGenericTextInputFormFragment @Inject constructor(private val errorFor
             TextInputFormFragmentMode.SetEmail      -> {
                 loginGenericTextInputFormTitle.text = getString(R.string.login_set_email_title)
                 loginGenericTextInputFormNotice.text = getString(R.string.login_set_email_notice)
+                loginGenericTextInputFormNotice2.setTextOrHide(null)
                 loginGenericTextInputFormTil.hint = getString(if (params.mandatory) R.string.login_set_email_mandatory_hint else R.string.login_set_email_optional_hint)
                 loginGenericTextInputFormTextInput.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
                 loginGenericTextInputFormOtherButton.isVisible = false
@@ -99,6 +103,7 @@ class LoginGenericTextInputFormFragment @Inject constructor(private val errorFor
             TextInputFormFragmentMode.SetMsisdn     -> {
                 loginGenericTextInputFormTitle.text = getString(R.string.login_set_msisdn_title)
                 loginGenericTextInputFormNotice.text = getString(R.string.login_set_msisdn_notice)
+                loginGenericTextInputFormNotice2.setTextOrHide(getString(R.string.login_set_msisdn_notice2))
                 loginGenericTextInputFormTil.hint = getString(if (params.mandatory) R.string.login_set_msisdn_mandatory_hint else R.string.login_set_msisdn_optional_hint)
                 loginGenericTextInputFormTextInput.inputType = InputType.TYPE_CLASS_PHONE
                 loginGenericTextInputFormOtherButton.isVisible = false
@@ -107,6 +112,7 @@ class LoginGenericTextInputFormFragment @Inject constructor(private val errorFor
             TextInputFormFragmentMode.ConfirmMsisdn -> {
                 loginGenericTextInputFormTitle.text = getString(R.string.login_msisdn_confirm_title)
                 loginGenericTextInputFormNotice.text = getString(R.string.login_msisdn_confirm_notice, params.extra)
+                loginGenericTextInputFormNotice2.setTextOrHide(null)
                 loginGenericTextInputFormTil.hint = getString(R.string.login_msisdn_confirm_hint)
                 loginGenericTextInputFormTextInput.inputType = InputType.TYPE_CLASS_NUMBER
                 loginGenericTextInputFormOtherButton.isVisible = true
@@ -134,14 +140,32 @@ class LoginGenericTextInputFormFragment @Inject constructor(private val errorFor
                     loginViewModel.handle(LoginAction.AddThreePid(RegisterThreePid.Email(text)))
                 }
                 TextInputFormFragmentMode.SetMsisdn     -> {
-                    // TODO Country code
-                    loginViewModel.handle(LoginAction.AddThreePid(RegisterThreePid.Msisdn(text, "FR")))
+                    getCountryCodeOrShowError(text)?.let { countryCode ->
+                        loginViewModel.handle(LoginAction.AddThreePid(RegisterThreePid.Msisdn(text, countryCode)))
+                    }
                 }
                 TextInputFormFragmentMode.ConfirmMsisdn -> {
                     loginViewModel.handle(LoginAction.ValidateThreePid(text))
                 }
             }
         }
+    }
+
+    private fun getCountryCodeOrShowError(text: String): String? {
+        // We expect an international format for the moment (see https://github.com/vector-im/riotX-android/issues/693)
+        if (text.startsWith("+")) {
+            try {
+                val phoneNumber = PhoneNumberUtil.getInstance().parse(text, null)
+                return PhoneNumberUtil.getInstance().getRegionCodeForCountryCode(phoneNumber.countryCode)
+            } catch (e: NumberParseException) {
+                loginGenericTextInputFormTil.error = getString(R.string.login_msisdn_error_other)
+            }
+        } else {
+            loginGenericTextInputFormTil.error = getString(R.string.login_msisdn_error_not_international)
+        }
+
+        // Error
+        return null
     }
 
     private fun setupSubmitButton() {
