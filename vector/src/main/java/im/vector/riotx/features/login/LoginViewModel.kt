@@ -69,8 +69,13 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
     val currentThreePid: String?
         get() = registrationWizard?.currentThreePid
 
-    var isPasswordSent: Boolean = false
+    // True when login and password are sent with success to the homeserver
+    var isRegistrationStarted: Boolean = false
         private set
+
+    // True when email is sent with success to the homeserver
+    val isResetPasswordStarted: Boolean
+        get() = resetPasswordEmail.isNullOrBlank().not()
 
     private var registrationWizard: RegistrationWizard? = null
     private var loginWizard: LoginWizard? = null
@@ -232,7 +237,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                 action.initialDeviceName,
                 object : MatrixCallbackDelegate<RegistrationResult>(registrationCallback) {
                     override fun onSuccess(data: RegistrationResult) {
-                        isPasswordSent = true
+                        isRegistrationStarted = true
                         // Not sure that this will work:
                         // super.onSuccess(data)
                         registrationCallback.onSuccess(data)
@@ -252,7 +257,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
 
         when (action) {
             LoginAction.ResetLogin          -> {
-                isPasswordSent = false
+                isRegistrationStarted = false
 
                 setState {
                     copy(
@@ -323,8 +328,6 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                 )
             }
         } else {
-            resetPasswordEmail = action.email
-
             setState {
                 copy(
                         asyncResetPassword = Loading()
@@ -333,6 +336,8 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
 
             currentTask = safeLoginWizard.resetPassword(action.email, action.newPassword, object : MatrixCallback<Unit> {
                 override fun onSuccess(data: Unit) {
+                    resetPasswordEmail = action.email
+
                     setState {
                         copy(
                                 asyncResetPassword = Success(data)
@@ -370,6 +375,8 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
 
             currentTask = safeLoginWizard.resetPasswordMailConfirmed(object : MatrixCallback<Unit> {
                 override fun onSuccess(data: Unit) {
+                    resetPasswordEmail = null
+
                     setState {
                         copy(
                                 asyncResetMailConfirmed = Success(data)

@@ -80,23 +80,40 @@ abstract class AbstractLoginFragment : VectorBaseFragment(), OnBackPressed {
     abstract fun onRegistrationError(throwable: Throwable)
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
-        if (loginViewModel.isPasswordSent) {
-            // Ask for confirmation before cancelling the registration
-            AlertDialog.Builder(requireActivity())
-                    .setTitle(R.string.login_signup_cancel_confirmation_title)
-                    .setMessage(R.string.login_signup_cancel_confirmation_content)
-                    .setPositiveButton(R.string.login_signup_cancel_confirmation_yes) { _, _ ->
-                        resetViewModel()
-                        vectorBaseActivity.onBackPressed()
-                    }
-                    .setNegativeButton(R.string.login_signup_cancel_confirmation_no, null)
-                    .show()
+        return when {
+            loginViewModel.isRegistrationStarted  -> {
+                // Ask for confirmation before cancelling the registration
+                AlertDialog.Builder(requireActivity())
+                        .setTitle(R.string.login_signup_cancel_confirmation_title)
+                        .setMessage(R.string.login_signup_cancel_confirmation_content)
+                        .setPositiveButton(R.string.yes) { _, _ ->
+                            resetViewModel()
+                            vectorBaseActivity.onBackPressed()
+                        }
+                        .setNegativeButton(R.string.no, null)
+                        .show()
 
-            return true
-        } else {
-            resetViewModel()
-            // Do not consume the Back event
-            return false
+                true
+            }
+            loginViewModel.isResetPasswordStarted -> {
+                // Ask for confirmation before cancelling the reset password
+                AlertDialog.Builder(requireActivity())
+                        .setTitle(R.string.login_reset_password_cancel_confirmation_title)
+                        .setMessage(R.string.login_reset_password_cancel_confirmation_content)
+                        .setPositiveButton(R.string.yes) { _, _ ->
+                            resetViewModel()
+                            vectorBaseActivity.onBackPressed()
+                        }
+                        .setNegativeButton(R.string.no, null)
+                        .show()
+
+                true
+            }
+            else                                  -> {
+                resetViewModel()
+                // Do not consume the Back event
+                false
+            }
         }
     }
 

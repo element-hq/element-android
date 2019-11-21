@@ -84,6 +84,9 @@
     <string name="login_reset_password_success_notice_2">You have been logged out of all devices and will no longer receive push notifications. To re-enable notifications, sign in again on each device.</string>
     <string name="login_reset_password_success_submit">Back to Sign In</string>
 
+    <string name="login_reset_password_cancel_confirmation_title">Warning</string>
+    <string name="login_reset_password_cancel_confirmation_content">Your password is not yet changed.\n\nStop the password change process?</string>
+
     <string name="login_set_email_title">Set email address</string>
     <string name="login_set_email_notice">Set an email to recover your account. Later, you can optionally allow people you know to discover you by your email.</string>
     <string name="login_set_email_mandatory_hint">Email</string>
@@ -115,8 +118,6 @@
     <string name="login_signup_error_user_in_use">That username is taken</string>
     <string name="login_signup_cancel_confirmation_title">Warning</string>
     <string name="login_signup_cancel_confirmation_content">Your account is not created yet.\n\nStop the registration process?</string>
-    <string name="login_signup_cancel_confirmation_yes">Yes</string>
-    <string name="login_signup_cancel_confirmation_no">No</string>
 
     <string name="login_a11y_choose_matrix_org">Select matrix.org</string>
     <string name="login_a11y_choose_modular">Select modular</string>

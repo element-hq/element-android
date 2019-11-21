@@ -134,7 +134,7 @@ class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
                     onRegistrationStageNotSupported()
                 } else {
                     // Go on with registration flow
-                    if (loginViewModel.isPasswordSent) {
+                    if (loginViewModel.isRegistrationStarted) {
                         handleRegistrationNavigation(loginViewEvents.flowResult)
                     } else {
                         // First ask for login and password
