@@ -33,6 +33,7 @@ import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.riotx.R
 import im.vector.riotx.core.error.ErrorFormatter
+import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.extensions.isEmail
 import im.vector.riotx.core.extensions.setTextOrHide
 import kotlinx.android.parcel.Parcelize
@@ -135,7 +136,8 @@ class LoginGenericTextInputFormFragment @Inject constructor(private val errorFor
     }
 
     @OnClick(R.id.loginGenericTextInputFormSubmit)
-    fun onSubmitClicked() {
+    fun submit() {
+        cleanupUi()
         val text = loginGenericTextInputFormTextInput.text.toString()
 
         if (text.isEmpty()) {
@@ -156,6 +158,11 @@ class LoginGenericTextInputFormFragment @Inject constructor(private val errorFor
                 }
             }
         }
+    }
+
+    private fun cleanupUi() {
+        loginGenericTextInputFormSubmit.hideKeyboard()
+        loginGenericTextInputFormSubmit.error = null
     }
 
     private fun getCountryCodeOrShowError(text: String): String? {

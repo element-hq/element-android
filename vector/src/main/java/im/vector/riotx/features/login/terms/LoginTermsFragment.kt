@@ -93,13 +93,6 @@ class LoginTermsFragment @Inject constructor(
                 ?.takeIf { it.isNotBlank() }
                 ?.let {
                     openUrlInExternalBrowser(requireContext(), it)
-
-                    // This code crashed, because user is not authenticated yet
-                    //val intent = VectorWebViewActivity.getIntent(requireContext(),
-                    //        localizedFlowDataLoginTerms.localizedUrl!!,
-                    //        localizedFlowDataLoginTerms.localizedName!!,
-                    //        WebViewMode.DEFAULT)
-                    //startActivity(intent)
                 }
     }
 

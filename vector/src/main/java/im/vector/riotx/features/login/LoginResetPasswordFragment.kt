@@ -27,6 +27,7 @@ import com.airbnb.mvrx.withState
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.riotx.R
 import im.vector.riotx.core.error.ErrorFormatter
+import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.extensions.isEmail
 import im.vector.riotx.core.extensions.showPassword
 import io.reactivex.Observable
@@ -35,6 +36,7 @@ import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.fragment_login.passwordField
 import kotlinx.android.synthetic.main.fragment_login.passwordFieldTil
 import kotlinx.android.synthetic.main.fragment_login.passwordReveal
+import kotlinx.android.synthetic.main.fragment_login_generic_text_input_form.*
 import kotlinx.android.synthetic.main.fragment_login_reset_password.*
 import javax.inject.Inject
 
@@ -71,7 +73,7 @@ class LoginResetPasswordFragment @Inject constructor(
                         }
                 )
                 .subscribeBy {
-                    resetPasswordEmail.error = null
+                    resetPasswordEmailTil.error = null
                     passwordFieldTil.error = null
                     resetPasswordSubmit.isEnabled = it
                 }
@@ -80,10 +82,18 @@ class LoginResetPasswordFragment @Inject constructor(
 
     @OnClick(R.id.resetPasswordSubmit)
     fun submit() {
+        cleanupUi()
+
         val email = resetPasswordEmail.text.toString()
         val password = passwordField.text.toString()
 
         loginViewModel.handle(LoginAction.ResetPassword(email, password))
+    }
+
+    private fun cleanupUi() {
+        resetPasswordSubmit.hideKeyboard()
+        resetPasswordEmailTil.error = null
+        passwordFieldTil.error = null
     }
 
     private fun setupPasswordReveal() {

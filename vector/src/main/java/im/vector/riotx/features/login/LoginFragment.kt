@@ -29,6 +29,7 @@ import com.airbnb.mvrx.withState
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.riotx.R
 import im.vector.riotx.core.error.ErrorFormatter
+import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.extensions.showPassword
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
@@ -79,6 +80,8 @@ class LoginFragment @Inject constructor(
 
     @OnClick(R.id.loginSubmit)
     fun submit() {
+        cleanupUi()
+
         val login = loginField.text?.trim().toString()
         val password = passwordField.text?.trim().toString()
 
@@ -87,6 +90,12 @@ class LoginFragment @Inject constructor(
             SignMode.SignUp  -> loginViewModel.handle(LoginAction.RegisterWith(login, password, getString(R.string.login_mobile_device)))
             SignMode.SignIn  -> loginViewModel.handle(LoginAction.Login(login, password, getString(R.string.login_mobile_device)))
         }
+    }
+
+    private fun cleanupUi() {
+        loginSubmit.hideKeyboard()
+        loginFieldTil.error = null
+        passwordFieldTil.error = null
     }
 
     private fun setupUi() {
@@ -127,7 +136,6 @@ class LoginFragment @Inject constructor(
             SignMode.SignIn  -> R.string.login_signin
         })
     }
-
 
     private fun setupSubmitButton() {
         Observable

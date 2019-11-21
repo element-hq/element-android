@@ -29,6 +29,7 @@ import com.airbnb.mvrx.withState
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.riotx.R
 import im.vector.riotx.core.error.ErrorFormatter
+import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.utils.openUrlInExternalBrowser
 import kotlinx.android.synthetic.main.fragment_login_server_url_form.*
 import javax.inject.Inject
@@ -88,7 +89,7 @@ class LoginServerUrlFormFragment @Inject constructor(
     }
 
     @OnClick(R.id.loginServerUrlFormLearnMore)
-    fun learMore() {
+    fun learnMore() {
         openUrlInExternalBrowser(requireActivity(), MODULAR_LINK)
     }
 
@@ -99,6 +100,8 @@ class LoginServerUrlFormFragment @Inject constructor(
     @SuppressLint("SetTextI18n")
     @OnClick(R.id.loginServerUrlFormSubmit)
     fun submit() {
+        cleanupUi()
+
         // Static check of homeserver url, empty, malformed, etc.
         var serverUrl = loginServerUrlFormHomeServerUrl.text.toString()
 
@@ -114,6 +117,11 @@ class LoginServerUrlFormFragment @Inject constructor(
                 loginViewModel.handle(LoginAction.UpdateHomeServer(serverUrl))
             }
         }
+    }
+
+    private fun cleanupUi() {
+        loginServerUrlFormSubmit.hideKeyboard()
+        loginServerUrlFormHomeServerUrlTil.error = null
     }
 
     override fun onRegistrationError(throwable: Throwable) {
