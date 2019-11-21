@@ -27,8 +27,6 @@ class ReadMarkerVisibilityStateChangedListener(private val callback: TimelineEve
     override fun onVisibilityStateChanged(visibilityState: Int) {
         if (visibilityState == VisibilityState.VISIBLE) {
             callback?.onReadMarkerVisible()
-        } else if (visibilityState == VisibilityState.INVISIBLE) {
-            callback?.onReadMarkerInvisible()
         }
     }
 }

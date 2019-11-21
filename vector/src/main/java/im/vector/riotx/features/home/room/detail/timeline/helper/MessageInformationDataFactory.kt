@@ -47,7 +47,7 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
         val nextDate = nextEvent?.root?.localDateTime()
         val addDaySeparator = date.toLocalDate() != nextDate?.toLocalDate()
         val isNextMessageReceivedMoreThanOneHourAgo = nextDate?.isBefore(date.minusMinutes(60))
-                                                      ?: false
+                ?: false
 
         val showInformation =
                 addDaySeparator

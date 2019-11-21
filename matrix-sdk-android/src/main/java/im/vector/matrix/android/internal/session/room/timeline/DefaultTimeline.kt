@@ -633,7 +633,7 @@ internal class DefaultTimeline(
     }
 
     private fun fetchEvent(eventId: String) {
-        val params = GetContextOfEventTask.Params(roomId, eventId)
+        val params = GetContextOfEventTask.Params(roomId, eventId, settings.initialSize)
         cancelableBag += contextOfEventTask.configureWith(params).executeBy(taskExecutor)
     }
 

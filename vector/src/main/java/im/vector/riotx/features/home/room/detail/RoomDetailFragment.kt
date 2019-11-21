@@ -474,7 +474,8 @@ class RoomDetailFragment @Inject constructor(
             it.dispatchTo(stateRestorer)
             it.dispatchTo(scrollOnNewMessageCallback)
             it.dispatchTo(scrollOnHighlightedEventCallback)
-            checkJumpToUnreadBanner()
+            updateJumpToReadMarkerViewVisibility()
+            updateJumpToBottomViewVisibility()
         }
         recyclerView.adapter = timelineEventController.adapter
 
@@ -520,18 +521,23 @@ class RoomDetailFragment @Inject constructor(
         }
     }
 
-    private fun checkJumpToUnreadBanner() = jumpToReadMarkerView.post {
+    private fun updateJumpToReadMarkerViewVisibility() = jumpToReadMarkerView.post {
         withState(roomDetailViewModel) {
             val showJumpToUnreadBanner = when (it.unreadState) {
                 UnreadState.Unknown,
-                UnreadState.HasNoUnread  -> false
-                is UnreadState.HasUnread -> {
-                    val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
-                    val positionOfReadMarker = timelineEventController.getPositionOfReadMarker()
-                    if (positionOfReadMarker == null) {
-                        it.timeline?.isLive == true && lastVisibleItem > 0
+                UnreadState.HasNoUnread            -> false
+                is UnreadState.ReadMarkerNotLoaded -> true
+                is UnreadState.HasUnread           -> {
+                    if (it.canShowJumpToReadMarker) {
+                        val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
+                        val positionOfReadMarker = timelineEventController.getPositionOfReadMarker()
+                        if (positionOfReadMarker == null) {
+                            false
+                        } else {
+                            positionOfReadMarker > lastVisibleItem
+                        }
                     } else {
-                        positionOfReadMarker > lastVisibleItem
+                        false
                     }
                 }
             }
@@ -1031,12 +1037,8 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onReadMarkerVisible() {
-        checkJumpToUnreadBanner()
+        updateJumpToReadMarkerViewVisibility()
         roomDetailViewModel.handle(RoomDetailAction.EnterTrackingUnreadMessagesState)
-    }
-
-    override fun onReadMarkerInvisible() {
-        checkJumpToUnreadBanner()
     }
 
     // AutocompleteUserPresenter.Callback
@@ -1244,8 +1246,12 @@ class RoomDetailFragment @Inject constructor(
     // JumpToReadMarkerView.Callback
 
     override fun onJumpToReadMarkerClicked() = withState(roomDetailViewModel) {
+        jumpToReadMarkerView.isVisible = false
         if (it.unreadState is UnreadState.HasUnread) {
-            roomDetailViewModel.handle(RoomDetailAction.NavigateToEvent(it.unreadState.eventId, false))
+            roomDetailViewModel.handle(RoomDetailAction.NavigateToEvent(it.unreadState.firstUnreadEventId, false))
+        }
+        if (it.unreadState is UnreadState.ReadMarkerNotLoaded) {
+            roomDetailViewModel.handle(RoomDetailAction.NavigateToEvent(it.unreadState.readMarkerId, false))
         }
     }
 

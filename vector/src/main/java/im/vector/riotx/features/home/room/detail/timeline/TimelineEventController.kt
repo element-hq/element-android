@@ -83,7 +83,6 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     interface ReadReceiptsCallback {
         fun onReadReceiptsClicked(readReceipts: List<ReadReceiptData>)
         fun onReadMarkerVisible()
-        fun onReadMarkerInvisible()
     }
 
     interface UrlClickCallback {
@@ -178,7 +177,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             synchronized(modelCache) {
                 for (i in 0 until modelCache.size) {
                     if (modelCache[i]?.eventId == viewState.highlightedEventId
-                        || modelCache[i]?.eventId == eventIdToHighlight) {
+                            || modelCache[i]?.eventId == eventIdToHighlight) {
                         modelCache[i] = null
                     }
                 }
@@ -280,12 +279,12 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             it.setOnVisibilityStateChanged(TimelineEventVisibilityStateChangedListener(callback, event))
         }
         val mergedHeaderModel = mergedHeaderItemFactory.create(event,
-                                                               nextEvent = nextEvent,
-                                                               items = items,
-                                                               addDaySeparator = addDaySeparator,
-                                                               currentPosition = currentPosition,
-                                                               eventIdToHighlight = eventIdToHighlight,
-                                                               callback = callback
+                nextEvent = nextEvent,
+                items = items,
+                addDaySeparator = addDaySeparator,
+                currentPosition = currentPosition,
+                eventIdToHighlight = eventIdToHighlight,
+                callback = callback
         ) {
             requestModelBuild()
         }
@@ -297,7 +296,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     private fun buildReadMarkerItem(event: TimelineEvent, currentUnreadState: UnreadState): TimelineReadMarkerItem? {
         return when (currentUnreadState) {
             is UnreadState.HasUnread -> {
-                if (event.root.eventId == currentUnreadState.eventId) {
+                if (event.root.eventId == currentUnreadState.firstUnreadEventId) {
                     TimelineReadMarkerItem_()
                             .also {
                                 it.id("read_marker")
@@ -307,8 +306,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
                     null
                 }
             }
-            UnreadState.Unknown,
-            UnreadState.HasNoUnread  -> null
+            else                     -> null
         }
     }
 
@@ -359,6 +357,11 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             val formattedDayModel: DaySeparatorItem? = null,
             val readMarkerModel: TimelineReadMarkerItem? = null
     ) {
-        fun shouldTriggerBuild(unreadState: UnreadState) = mergedHeaderModel != null || formattedDayModel != null || readMarkerModel != null || (unreadState is UnreadState.HasUnread && unreadState.eventId == eventId)
+        fun shouldTriggerBuild(unreadState: UnreadState): Boolean {
+            return mergedHeaderModel != null
+                    || formattedDayModel != null
+                    || readMarkerModel != null
+                    || (unreadState is UnreadState.HasUnread && unreadState.firstUnreadEventId == eventId)
+        }
     }
 }
