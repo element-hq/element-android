@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.home
+package im.vector.riotx.features.permalink
 
 import android.content.Context
 import android.net.Uri
@@ -27,12 +27,22 @@ import javax.inject.Inject
 class PermalinkHandler @Inject constructor(private val session: Session,
                                            private val navigator: Navigator) {
 
-    fun launch(context: Context, deepLink: String?, navigateToRoomInterceptor: NavigateToRoomInterceptor? = null): Boolean {
+    fun launch(
+            context: Context,
+            deepLink: String?,
+            navigateToRoomInterceptor: NavigateToRoomInterceptor? = null,
+            buildTask: Boolean = false
+    ): Boolean {
         val uri = deepLink?.let { Uri.parse(it) }
-        return launch(context, uri, navigateToRoomInterceptor)
+        return launch(context, uri, navigateToRoomInterceptor, buildTask)
     }
 
-    fun launch(context: Context, deepLink: Uri?, navigateToRoomInterceptor: NavigateToRoomInterceptor? = null): Boolean {
+    fun launch(
+            context: Context,
+            deepLink: Uri?,
+            navigateToRoomInterceptor: NavigateToRoomInterceptor? = null,
+            buildTask: Boolean = false
+    ): Boolean {
         if (deepLink == null) {
             return false
         }
@@ -40,24 +50,23 @@ class PermalinkHandler @Inject constructor(private val session: Session,
         return when (val permalinkData = PermalinkParser.parse(deepLink)) {
             is PermalinkData.EventLink    -> {
                 if (navigateToRoomInterceptor?.navToRoom(permalinkData.roomIdOrAlias, permalinkData.eventId) != true) {
-                    openRoom(context, permalinkData.roomIdOrAlias, permalinkData.eventId)
+                    openRoom(context, permalinkData.roomIdOrAlias, permalinkData.eventId, buildTask)
                 }
-
                 true
             }
             is PermalinkData.RoomLink     -> {
                 if (navigateToRoomInterceptor?.navToRoom(permalinkData.roomIdOrAlias) != true) {
-                    openRoom(context, permalinkData.roomIdOrAlias)
+                    openRoom(context, permalinkData.roomIdOrAlias, null, buildTask)
                 }
 
                 true
             }
             is PermalinkData.GroupLink    -> {
-                navigator.openGroupDetail(permalinkData.groupId, context)
-                true
+                navigator.openGroupDetail(permalinkData.groupId, context, buildTask)
+                false
             }
             is PermalinkData.UserLink     -> {
-                navigator.openUserDetail(permalinkData.userId, context)
+                navigator.openUserDetail(permalinkData.userId, context, buildTask)
                 true
             }
             is PermalinkData.FallbackLink -> {
@@ -69,11 +78,11 @@ class PermalinkHandler @Inject constructor(private val session: Session,
     /**
      * Open room either joined, or not unknown
      */
-    private fun openRoom(context: Context, roomIdOrAlias: String, eventId: String? = null) {
+    private fun openRoom(context: Context, roomIdOrAlias: String, eventId: String? = null, buildTask: Boolean) {
         if (session.getRoom(roomIdOrAlias) != null) {
-            navigator.openRoom(context, roomIdOrAlias, eventId)
+            navigator.openRoom(context, roomIdOrAlias, eventId, buildTask)
         } else {
-            navigator.openNotJoinedRoom(context, roomIdOrAlias, eventId)
+            navigator.openNotJoinedRoom(context, roomIdOrAlias, eventId, buildTask)
         }
     }
 }

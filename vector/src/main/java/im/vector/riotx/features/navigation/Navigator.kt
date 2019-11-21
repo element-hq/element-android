@@ -23,11 +23,11 @@ import im.vector.riotx.features.share.SharedData
 
 interface Navigator {
 
-    fun openRoom(context: Context, roomId: String, eventId: String? = null)
+    fun openRoom(context: Context, roomId: String, eventId: String? = null, buildTask: Boolean = false)
 
     fun openRoomForSharing(activity: Activity, roomId: String, sharedData: SharedData)
 
-    fun openNotJoinedRoom(context: Context, roomIdOrAlias: String, eventId: String? = null)
+    fun openNotJoinedRoom(context: Context, roomIdOrAlias: String, eventId: String? = null, buildTask: Boolean = false)
 
     fun openRoomPreview(publicRoom: PublicRoom, context: Context)
 
@@ -47,9 +47,9 @@ interface Navigator {
 
     fun openKeysBackupManager(context: Context)
 
-    fun openGroupDetail(groupId: String, context: Context)
+    fun openGroupDetail(groupId: String, context: Context, buildTask: Boolean = false)
 
-    fun openUserDetail(userId: String, context: Context)
+    fun openUserDetail(userId: String, context: Context, buildTask: Boolean = false)
 
     fun openRoomSettings(context: Context, roomId: String)
 }

@@ -38,14 +38,39 @@ import im.vector.riotx.features.share.SharedData
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
+import androidx.core.app.TaskStackBuilder
+
 
 @Singleton
 class DefaultNavigator @Inject constructor() : Navigator {
 
-    override fun openRoom(context: Context, roomId: String, eventId: String?) {
+    override fun openRoom(context: Context, roomId: String, eventId: String?, buildTask: Boolean) {
         val args = RoomDetailArgs(roomId, eventId)
         val intent = RoomDetailActivity.newIntent(context, args)
-        context.startActivity(intent)
+        if (buildTask) {
+            val stackBuilder = TaskStackBuilder.create(context)
+            stackBuilder.addNextIntentWithParentStack(intent)
+            stackBuilder.startActivities()
+        } else {
+            context.startActivity(intent)
+        }
+    }
+
+    override fun openNotJoinedRoom(context: Context, roomIdOrAlias: String, eventId: String?, buildTask: Boolean) {
+        if (context is VectorBaseActivity) {
+            context.notImplemented("Open not joined room")
+        } else {
+            context.toast(R.string.not_implemented)
+        }
+    }
+
+
+    override fun openGroupDetail(groupId: String, context: Context, buildTask: Boolean) {
+        Timber.v("Open group detail $groupId")
+    }
+
+    override fun openUserDetail(userId: String, context: Context, buildTask: Boolean) {
+        Timber.v("Open user detail $userId")
     }
 
     override fun openRoomForSharing(activity: Activity, roomId: String, sharedData: SharedData) {
@@ -53,14 +78,6 @@ class DefaultNavigator @Inject constructor() : Navigator {
         val intent = RoomDetailActivity.newIntent(activity, args)
         activity.startActivity(intent)
         activity.finish()
-    }
-
-    override fun openNotJoinedRoom(context: Context, roomIdOrAlias: String, eventId: String?) {
-        if (context is VectorBaseActivity) {
-            context.notImplemented("Open not joined room")
-        } else {
-            context.toast(R.string.not_implemented)
-        }
     }
 
     override fun openRoomPreview(publicRoom: PublicRoom, context: Context) {
@@ -103,14 +120,6 @@ class DefaultNavigator @Inject constructor() : Navigator {
 
     override fun openKeysBackupManager(context: Context) {
         context.startActivity(KeysBackupManageActivity.intent(context))
-    }
-
-    override fun openGroupDetail(groupId: String, context: Context) {
-        Timber.v("Open group detail $groupId")
-    }
-
-    override fun openUserDetail(userId: String, context: Context) {
-        Timber.v("Open user detail $userId")
     }
 
     override fun openRoomSettings(context: Context, roomId: String) {

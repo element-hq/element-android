@@ -86,8 +86,8 @@ import im.vector.riotx.features.autocomplete.command.CommandAutocompletePolicy
 import im.vector.riotx.features.autocomplete.user.AutocompleteUserPresenter
 import im.vector.riotx.features.command.Command
 import im.vector.riotx.features.home.AvatarRenderer
-import im.vector.riotx.features.home.NavigateToRoomInterceptor
-import im.vector.riotx.features.home.PermalinkHandler
+import im.vector.riotx.features.permalink.NavigateToRoomInterceptor
+import im.vector.riotx.features.permalink.PermalinkHandler
 import im.vector.riotx.features.home.getColorFromUserId
 import im.vector.riotx.features.home.room.detail.composer.TextComposerAction
 import im.vector.riotx.features.home.room.detail.composer.TextComposerView
