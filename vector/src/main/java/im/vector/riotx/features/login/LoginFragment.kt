@@ -191,9 +191,8 @@ class LoginFragment @Inject constructor(
                 renderPasswordField()
             }
             is Fail    -> {
-                // TODO This does not work, we want the error to be on without text. Fix that
-                loginFieldTil.error = ""
-                // TODO Handle error text properly
+                // Trick to display the error without text.
+                loginFieldTil.error = " "
                 passwordFieldTil.error = errorFormatter.toHumanReadable(state.asyncLoginAction.error)
             }
             // Success is handled by the LoginActivity

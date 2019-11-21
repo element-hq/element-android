@@ -68,11 +68,12 @@ class LoginServerSelectionFragment @Inject constructor(
         loginServerChoiceModularLearnMore.text = span {
             text = getString(R.string.login_server_modular_learn_more)
             textDecorationLine = "underline"
-            onClick = {
-                // TODO this does not work
-                openUrlInExternalBrowser(requireActivity(), "https://example.org")
-            }
         }
+    }
+
+    @OnClick(R.id.loginServerChoiceModularLearnMore)
+    fun learMore() {
+        openUrlInExternalBrowser(requireActivity(), MODULAR_LINK)
     }
 
     @OnClick(R.id.loginServerChoiceMatrixOrg)

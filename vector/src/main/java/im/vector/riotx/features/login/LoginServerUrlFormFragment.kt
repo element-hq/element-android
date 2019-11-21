@@ -50,15 +50,10 @@ class LoginServerUrlFormFragment @Inject constructor(
     }
 
     private fun setupHomeServerField() {
-        // TODO Import code from Riot to clear error on TIL
         loginServerUrlFormHomeServerUrl.textChanges()
-                .subscribe(
-                        {
-                            loginServerUrlFormHomeServerUrlTil.error = null
-                        },
-                        {
-                            // Ignore error
-                        })
+                .subscribe {
+                    loginServerUrlFormHomeServerUrlTil.error = null
+                }
                 .disposeOnDestroyView()
 
         loginServerUrlFormHomeServerUrl.setOnEditorActionListener { _, actionId, _ ->
@@ -88,14 +83,13 @@ class LoginServerUrlFormFragment @Inject constructor(
                 loginServerUrlFormHomeServerUrlTil.hint = getText(R.string.login_server_url_form_other_hint)
                 loginServerUrlFormNotice.text = getString(R.string.login_server_url_form_other_notice)
             }
-            else               -> error("This fragment should not be display in matrix.org mode")
+            else               -> error("This fragment should not be displayed in matrix.org mode")
         }
     }
 
     @OnClick(R.id.loginServerUrlFormLearnMore)
     fun learMore() {
-        // TODO
-        openUrlInExternalBrowser(requireActivity(), "https://example.org")
+        openUrlInExternalBrowser(requireActivity(), MODULAR_LINK)
     }
 
     override fun resetViewModel() {
@@ -134,7 +128,6 @@ class LoginServerUrlFormFragment @Inject constructor(
     override fun invalidate() = withState(loginViewModel) { state ->
         when (state.asyncHomeServerLoginFlowRequest) {
             is Fail    -> {
-                // TODO Error text is not correct
                 loginServerUrlFormHomeServerUrlTil.error = errorFormatter.toHumanReadable(state.asyncHomeServerLoginFlowRequest.error)
             }
             is Success -> {
