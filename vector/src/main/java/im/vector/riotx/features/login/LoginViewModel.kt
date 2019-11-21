@@ -409,7 +409,6 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
         _viewEvents.post(LoginViewEvents.RegistrationFlowResult(flowResult))
     }
 
-
     private fun onSessionCreated(session: Session) {
         activeSessionHolder.setActiveSession(session)
         session.configureAndStart(pushRuleTriggerListener, sessionListener)

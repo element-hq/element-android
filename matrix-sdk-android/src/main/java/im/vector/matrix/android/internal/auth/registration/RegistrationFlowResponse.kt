@@ -97,4 +97,3 @@ fun RegistrationFlowResponse.toFlowResult(): FlowResult {
 
     return FlowResult(missingStage, completedStage)
 }
-

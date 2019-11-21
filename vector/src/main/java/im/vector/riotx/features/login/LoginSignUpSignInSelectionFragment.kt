@@ -80,7 +80,6 @@ class LoginSignUpSignInSelectionFragment @Inject constructor(
         }
     }
 
-
     @OnClick(R.id.loginSignupSigninSubmit)
     fun signUp() {
         if (isSsoSignIn) {

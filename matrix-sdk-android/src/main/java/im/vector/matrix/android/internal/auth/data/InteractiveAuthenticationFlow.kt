@@ -31,4 +31,3 @@ data class InteractiveAuthenticationFlow(
         @Json(name = "stages")
         val stages: List<String>? = null
 )
-

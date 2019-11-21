@@ -75,7 +75,6 @@ internal data class AuthParams(
     }
 }
 
-
 @JsonClass(generateAdapter = true)
 data class ThreePidCredentials(
         @Json(name = "client_secret")
