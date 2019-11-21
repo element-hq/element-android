@@ -30,8 +30,8 @@ import im.vector.matrix.android.api.auth.registration.RegistrationWizard
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.MatrixCallbackDelegate
-import im.vector.matrix.android.internal.auth.data.InteractiveAuthenticationFlow
 import im.vector.matrix.android.internal.auth.data.LoginFlowResponse
+import im.vector.matrix.android.internal.auth.data.LoginFlowTypes
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.extensions.configureAndStart
 import im.vector.riotx.core.platform.VectorViewModel
@@ -461,9 +461,9 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                 override fun onSuccess(data: LoginFlowResponse) {
                     val loginMode = when {
                         // SSO login is taken first
-                        data.flows.any { it.type == InteractiveAuthenticationFlow.TYPE_LOGIN_SSO }      -> LoginMode.Sso
-                        data.flows.any { it.type == InteractiveAuthenticationFlow.TYPE_LOGIN_PASSWORD } -> LoginMode.Password
-                        else                                                                            -> LoginMode.Unsupported(data.flows.mapNotNull { it.type }.toList())
+                        data.flows.any { it.type == LoginFlowTypes.SSO }      -> LoginMode.Sso
+                        data.flows.any { it.type == LoginFlowTypes.PASSWORD } -> LoginMode.Password
+                        else                                                  -> LoginMode.Unsupported(data.flows.mapNotNull { it.type }.toList())
                     }
 
                     setState {

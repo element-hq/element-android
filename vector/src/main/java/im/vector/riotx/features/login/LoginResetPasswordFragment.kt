@@ -30,7 +30,6 @@ import im.vector.riotx.core.extensions.showPassword
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.subscribeBy
-import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.fragment_login.passwordField
 import kotlinx.android.synthetic.main.fragment_login.passwordFieldTil
 import kotlinx.android.synthetic.main.fragment_login.passwordReveal
@@ -133,9 +132,7 @@ class LoginResetPasswordFragment @Inject constructor(
                 renderPasswordField()
             }
             is Fail    -> {
-                // TODO This does not work, we want the error to be on without text. Fix that
-                resetPasswordEmailTil.error = ""
-                // TODO Handle error text properly
+                resetPasswordEmailTil.error = " "
                 passwordFieldTil.error = errorFormatter.toHumanReadable(state.asyncResetPassword.error)
             }
             is Success -> {

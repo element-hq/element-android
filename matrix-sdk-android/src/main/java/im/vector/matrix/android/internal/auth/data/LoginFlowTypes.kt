@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.auth.data
 
-// TODO Move to [InteractiveAuthenticationFlow]
 object LoginFlowTypes {
     const val PASSWORD = "m.login.password"
     const val OAUTH2 = "m.login.oauth2"
@@ -27,4 +26,6 @@ object LoginFlowTypes {
     const val RECAPTCHA = "m.login.recaptcha"
     const val DUMMY = "m.login.dummy"
     const val TERMS = "m.login.terms"
+    const val TOKEN = "m.login.token"
+    const val SSO = "m.login.sso"
 }
