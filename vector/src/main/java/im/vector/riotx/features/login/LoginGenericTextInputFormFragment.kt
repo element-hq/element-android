@@ -16,10 +16,12 @@
 
 package im.vector.riotx.features.login
 
+import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.text.InputType
 import android.view.View
+import androidx.autofill.HintConstants
 import androidx.core.view.isVisible
 import butterknife.OnClick
 import com.airbnb.mvrx.args
@@ -62,6 +64,18 @@ class LoginGenericTextInputFormFragment @Inject constructor(private val errorFor
         setupUi()
         setupSubmitButton()
         setupTil()
+        setupAutoFill()
+    }
+
+    private fun setupAutoFill() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            when (params.mode) {
+                TextInputFormFragmentMode.SetEmail      -> loginGenericTextInputFormTextInput.setAutofillHints(HintConstants.AUTOFILL_HINT_EMAIL_ADDRESS)
+                // TODO Phone number without country code?
+                TextInputFormFragmentMode.SetMsisdn     -> loginGenericTextInputFormTextInput.setAutofillHints(HintConstants.AUTOFILL_HINT_PHONE_NUMBER)
+                TextInputFormFragmentMode.ConfirmMsisdn -> loginGenericTextInputFormTextInput.setAutofillHints(HintConstants.AUTOFILL_HINT_SMS_OTP)
+            }
+        }
     }
 
     private fun setupTil() {

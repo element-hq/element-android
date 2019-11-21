@@ -225,6 +225,7 @@ dependencies {
     def glide_version = '4.10.0'
     def moshi_version = '1.8.0'
     def daggerVersion = '2.24'
+    def autofill_version = "1.0.0-rc01"
 
     implementation project(":matrix-sdk-android")
     implementation project(":matrix-sdk-android-rx")
@@ -290,6 +291,7 @@ dependencies {
     implementation "io.noties.markwon:html:$markwon_version"
     implementation 'me.saket:better-link-movement-method:2.2.0'
     implementation 'com.google.android:flexbox:1.1.1'
+    implementation "androidx.autofill:autofill:$autofill_version"
 
     // Passphrase strength helper
     implementation 'com.nulab-inc:zxcvbn:1.2.7'

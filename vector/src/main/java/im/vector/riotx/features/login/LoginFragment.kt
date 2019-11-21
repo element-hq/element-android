@@ -16,8 +16,10 @@
 
 package im.vector.riotx.features.login
 
+import android.os.Build
 import android.os.Bundle
 import android.view.View
+import androidx.autofill.HintConstants
 import androidx.core.view.isVisible
 import butterknife.OnClick
 import com.airbnb.mvrx.Fail
@@ -45,7 +47,6 @@ class LoginFragment @Inject constructor(
         private val errorFormatter: ErrorFormatter
 ) : AbstractLoginFragment() {
 
-    // TODO Move to viewState?
     private var passwordShown = false
 
     override fun getLayoutResId() = R.layout.fragment_login
@@ -54,9 +55,26 @@ class LoginFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
 
         setupUi()
+        setupAutoFill()
         setupSubmitButton()
         setupPasswordReveal()
         setupButtons()
+    }
+
+    private fun setupAutoFill() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            when (loginViewModel.signMode) {
+                SignMode.Unknown -> error("developer error")
+                SignMode.SignUp  -> {
+                    loginField.setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_USERNAME)
+                    passwordField.setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_PASSWORD)
+                }
+                SignMode.SignIn  -> {
+                    loginField.setAutofillHints(HintConstants.AUTOFILL_HINT_USERNAME)
+                    passwordField.setAutofillHints(HintConstants.AUTOFILL_HINT_PASSWORD)
+                }
+            }
+        }
     }
 
     @OnClick(R.id.loginSubmit)
