@@ -21,9 +21,9 @@ import com.airbnb.mvrx.*
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.auth.login.LoginWizard
 import im.vector.matrix.android.api.auth.AuthenticationService
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
+import im.vector.matrix.android.api.auth.login.LoginWizard
 import im.vector.matrix.android.api.auth.registration.FlowResult
 import im.vector.matrix.android.api.auth.registration.RegistrationResult
 import im.vector.matrix.android.api.auth.registration.RegistrationWizard
@@ -421,38 +421,19 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
     }
 
     private fun startRegistrationFlow() {
-        val homeServerConnectionConfigFinal = homeServerConnectionConfig
-
-        if (homeServerConnectionConfigFinal == null) {
-            // Notify the user
-            _viewEvents.post(LoginViewEvents.RegistrationError(Throwable("Bad configuration")))
-            setState {
-                copy(
-                        asyncRegistration = Uninitialized
-                )
-            }
-        } else {
-            setState {
-                copy(
-                        asyncRegistration = Loading()
-                )
-            }
-
-            registrationWizard = authenticationService.getOrCreateRegistrationWizard(homeServerConnectionConfigFinal)
-
-            currentTask = registrationWizard?.getRegistrationFlow(registrationCallback)
+        setState {
+            copy(
+                    asyncRegistration = Loading()
+            )
         }
+
+        registrationWizard = authenticationService.getOrCreateRegistrationWizard()
+
+        currentTask = registrationWizard?.getRegistrationFlow(registrationCallback)
     }
 
     private fun startAuthenticationFlow() {
-        val homeServerConnectionConfigFinal = homeServerConnectionConfig
-
-        if (homeServerConnectionConfigFinal == null) {
-            // Notify the user
-            _viewEvents.post(LoginViewEvents.RegistrationError(Throwable("Bad configuration")))
-        } else {
-            loginWizard = authenticationService.createLoginWizard(homeServerConnectionConfigFinal)
-        }
+        loginWizard = authenticationService.createLoginWizard()
     }
 
     private fun onFlowResponse(flowResult: FlowResult) {

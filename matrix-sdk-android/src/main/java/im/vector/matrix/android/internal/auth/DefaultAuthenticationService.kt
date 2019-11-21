@@ -50,6 +50,8 @@ internal class DefaultAuthenticationService @Inject constructor(@Unauthenticated
                                                                 private val sessionManager: SessionManager
 ) : AuthenticationService {
 
+    private var currentHomeServerConnectionConfig: HomeServerConnectionConfig? = null
+
     override fun hasAuthenticatedSessions(): Boolean {
         return sessionParamsStore.getLast() != null
     }
@@ -66,11 +68,22 @@ internal class DefaultAuthenticationService @Inject constructor(@Unauthenticated
     }
 
     override fun getLoginFlow(homeServerConnectionConfig: HomeServerConnectionConfig, callback: MatrixCallback<LoginFlowResponse>): Cancelable {
+        currentHomeServerConnectionConfig = null
+
         val job = GlobalScope.launch(coroutineDispatchers.main) {
             val result = runCatching {
                 getLoginFlowInternal(homeServerConnectionConfig)
             }
-            result.foldToCallback(callback)
+            result.fold(
+                    {
+                        // The homeserver exists, keep the config
+                        currentHomeServerConnectionConfig = homeServerConnectionConfig
+                        callback.onSuccess(it)
+                    },
+                    {
+                        callback.onFailure(it)
+                    }
+            )
         }
         return CancelableCoroutine(job)
     }
@@ -83,25 +96,31 @@ internal class DefaultAuthenticationService @Inject constructor(@Unauthenticated
         }
     }
 
-    override fun getOrCreateRegistrationWizard(homeServerConnectionConfig: HomeServerConnectionConfig): RegistrationWizard {
-        // TODO Persist the wizard?
-        return DefaultRegistrationWizard(homeServerConnectionConfig,
-                okHttpClient,
-                retrofitFactory,
-                coroutineDispatchers,
-                sessionParamsStore,
-                sessionManager)
+    override fun getOrCreateRegistrationWizard(): RegistrationWizard {
+        currentHomeServerConnectionConfig?.let {
+            // TODO Persist the wizard?
+            return DefaultRegistrationWizard(
+                    it,
+                    okHttpClient,
+                    retrofitFactory,
+                    coroutineDispatchers,
+                    sessionParamsStore,
+                    sessionManager
+            )
+        } ?: error("Please call getLoginFlow() with success first")
     }
 
-    override fun createLoginWizard(homeServerConnectionConfig: HomeServerConnectionConfig): LoginWizard {
-        return DefaultLoginWizard(
-                homeServerConnectionConfig,
-                coroutineDispatchers,
-                sessionParamsStore,
-                sessionManager,
-                retrofitFactory,
-                okHttpClient
-        )
+    override fun createLoginWizard(): LoginWizard {
+        currentHomeServerConnectionConfig?.let {
+            return DefaultLoginWizard(
+                    it,
+                    coroutineDispatchers,
+                    sessionParamsStore,
+                    sessionManager,
+                    retrofitFactory,
+                    okHttpClient
+            )
+        } ?: error("Please call getLoginFlow() with success first")
     }
 
     override fun createSessionFromSso(homeServerConnectionConfig: HomeServerConnectionConfig,

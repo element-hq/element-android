@@ -32,20 +32,20 @@ import im.vector.matrix.android.internal.auth.data.LoginFlowResponse
 interface AuthenticationService {
 
     /**
-     * Request the supported login flows for this homeserver
+     * Request the supported login flows for this homeserver.
+     * This is the first method to call to be able to get a wizard to login or the create an account
      */
     fun getLoginFlow(homeServerConnectionConfig: HomeServerConnectionConfig, callback: MatrixCallback<LoginFlowResponse>): Cancelable
 
     /**
-     * Return an LoginWizard
-     * @param homeServerConnectionConfig this param is used to request the Homeserver
+     * Return a LoginWizard, to login to the homeserver
      */
-    fun createLoginWizard(homeServerConnectionConfig: HomeServerConnectionConfig): LoginWizard
+    fun createLoginWizard(): LoginWizard
 
     /**
-     * Return a RegistrationWizard, to create an matrix account on a homeserver
+     * Return a RegistrationWizard, to create an matrix account on the homeserver
      */
-    fun getOrCreateRegistrationWizard(homeServerConnectionConfig: HomeServerConnectionConfig): RegistrationWizard
+    fun getOrCreateRegistrationWizard(): RegistrationWizard
 
     /**
      * Check if there is an authenticated [Session].
