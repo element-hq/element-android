@@ -54,6 +54,7 @@ class LoginServerUrlFormFragment @Inject constructor(
         loginServerUrlFormHomeServerUrl.textChanges()
                 .subscribe {
                     loginServerUrlFormHomeServerUrlTil.error = null
+                    loginServerUrlFormSubmit.isEnabled = it.isNotBlank()
                 }
                 .disposeOnDestroyView()
 
