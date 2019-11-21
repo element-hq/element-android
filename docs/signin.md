@@ -79,10 +79,12 @@ If the user confirms before the link is clicked, we get an error:
 
 401
 
+```json
 {
   "errcode": "M_UNAUTHORIZED",
   "error": ""
 }
+```
 
 ### User clicks on the link
 

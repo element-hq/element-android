@@ -25,6 +25,7 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
 import im.vector.riotx.core.error.ErrorFormatter
+import im.vector.riotx.core.error.is401
 import kotlinx.android.synthetic.main.fragment_login_reset_password_mail_confirmation.*
 import javax.inject.Inject
 
@@ -64,9 +65,15 @@ class LoginResetPasswordMailConfirmationFragment @Inject constructor(
         when (state.asyncResetMailConfirmed) {
             is Fail    -> {
                 // Link in email not yet clicked ?
+                val message = if (state.asyncResetMailConfirmed.error.is401()) {
+                    getString(R.string.auth_reset_password_error_unauthorized)
+                } else {
+                    errorFormatter.toHumanReadable(state.asyncResetMailConfirmed.error)
+                }
+
                 AlertDialog.Builder(requireActivity())
                         .setTitle(R.string.dialog_title_error)
-                        .setMessage(errorFormatter.toHumanReadable(state.asyncResetMailConfirmed.error))
+                        .setMessage(message)
                         .setPositiveButton(R.string.ok, null)
                         .show()
             }

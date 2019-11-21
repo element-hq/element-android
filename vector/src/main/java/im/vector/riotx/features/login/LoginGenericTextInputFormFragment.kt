@@ -30,16 +30,15 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.matrix.android.api.auth.registration.RegisterThreePid
 import im.vector.matrix.android.api.failure.Failure
-import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.riotx.R
 import im.vector.riotx.core.error.ErrorFormatter
+import im.vector.riotx.core.error.is401
 import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.extensions.isEmail
 import im.vector.riotx.core.extensions.setTextOrHide
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_login_generic_text_input_form.*
 import javax.inject.Inject
-import javax.net.ssl.HttpsURLConnection
 
 enum class TextInputFormFragmentMode {
     SetEmail,
@@ -240,11 +239,6 @@ class LoginGenericTextInputFormFragment @Inject constructor(private val errorFor
                 }
             }
         }
-    }
-
-    private fun Throwable.is401(): Boolean {
-        return (this is Failure.ServerError && this.httpCode == HttpsURLConnection.HTTP_UNAUTHORIZED /* 401 */
-                && this.error.code == MatrixError.UNAUTHORIZED)
     }
 
     override fun resetViewModel() {

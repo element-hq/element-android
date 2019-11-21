@@ -21,14 +21,12 @@ import android.os.Parcelable
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.args
-import im.vector.matrix.android.api.failure.Failure
-import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.riotx.R
 import im.vector.riotx.core.error.ErrorFormatter
+import im.vector.riotx.core.error.is401
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_login_wait_for_email.*
 import javax.inject.Inject
-import javax.net.ssl.HttpsURLConnection
 
 @Parcelize
 data class LoginWaitForEmailFragmentArgument(
@@ -77,11 +75,6 @@ class LoginWaitForEmailFragment @Inject constructor(private val errorFormatter: 
                     .setPositiveButton(R.string.ok, null)
                     .show()
         }
-    }
-
-    private fun Throwable.is401(): Boolean {
-        return (this is Failure.ServerError && this.httpCode == HttpsURLConnection.HTTP_UNAUTHORIZED /* 401 */
-                && this.error.code == MatrixError.UNAUTHORIZED)
     }
 
     override fun resetViewModel() {
