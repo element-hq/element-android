@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.matrix.android.internal.auth.signin
+package im.vector.matrix.android.internal.auth.login
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass

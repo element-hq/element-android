@@ -21,7 +21,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
 import im.vector.matrix.android.InstrumentedTest
 import im.vector.matrix.android.OkReplayRuleChainNoActivity
-import im.vector.matrix.android.api.auth.Authenticator
+import im.vector.matrix.android.api.auth.AuthenticationService
 import okreplay.*
 import org.junit.ClassRule
 import org.junit.Rule
@@ -29,9 +29,9 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-internal class AuthenticatorTest : InstrumentedTest {
+internal class AuthenticationServiceTest : InstrumentedTest {
 
-    lateinit var authenticator: Authenticator
+    lateinit var authenticationService: AuthenticationService
     lateinit var okReplayInterceptor: OkReplayInterceptor
 
     private val okReplayConfig = OkReplayConfig.Builder()

@@ -22,8 +22,7 @@ import androidx.work.Configuration
 import androidx.work.WorkManager
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.BuildConfig
-import im.vector.matrix.android.api.auth.Authenticator
-import im.vector.matrix.android.api.auth.registration.RegistrationService
+import im.vector.matrix.android.api.auth.AuthenticationService
 import im.vector.matrix.android.internal.SessionManager
 import im.vector.matrix.android.internal.di.DaggerMatrixComponent
 import im.vector.matrix.android.internal.network.UserAgentHolder
@@ -47,8 +46,7 @@ data class MatrixConfiguration(
  */
 class Matrix private constructor(context: Context, matrixConfiguration: MatrixConfiguration) {
 
-    @Inject internal lateinit var authenticator: Authenticator
-    @Inject internal lateinit var registrationService: RegistrationService
+    @Inject internal lateinit var authenticationService: AuthenticationService
     @Inject internal lateinit var userAgentHolder: UserAgentHolder
     @Inject internal lateinit var backgroundDetectionObserver: BackgroundDetectionObserver
     @Inject internal lateinit var olmManager: OlmManager
@@ -66,12 +64,8 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
 
     fun getUserAgent() = userAgentHolder.userAgent
 
-    fun authenticator(): Authenticator {
-        return authenticator
-    }
-
-    fun registrationService(): RegistrationService {
-        return registrationService
+    fun authenticationService(): AuthenticationService {
+        return authenticationService
     }
 
     companion object {

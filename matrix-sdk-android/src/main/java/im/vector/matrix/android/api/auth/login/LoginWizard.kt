@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.api.auth
+package im.vector.matrix.android.api.auth.login
 
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.util.Cancelable
 
-interface AuthenticationWizard {
+interface LoginWizard {
 
     /**
      * @param login the login field
@@ -29,10 +29,10 @@ interface AuthenticationWizard {
      * @param callback  the matrix callback on which you'll receive the result of authentication.
      * @return return a [Cancelable]
      */
-    fun authenticate(login: String,
-                     password: String,
-                     deviceName: String,
-                     callback: MatrixCallback<Session>): Cancelable
+    fun login(login: String,
+              password: String,
+              deviceName: String,
+              callback: MatrixCallback<Session>): Cancelable
 
     /**
      * Reset user password

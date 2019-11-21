@@ -18,15 +18,18 @@ package im.vector.matrix.android.internal.auth
 
 import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.auth.AuthenticationWizard
-import im.vector.matrix.android.api.auth.Authenticator
+import im.vector.matrix.android.api.auth.AuthenticationService
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.auth.data.SessionParams
+import im.vector.matrix.android.api.auth.login.LoginWizard
+import im.vector.matrix.android.api.auth.registration.RegistrationWizard
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.SessionManager
 import im.vector.matrix.android.internal.auth.data.LoginFlowResponse
+import im.vector.matrix.android.internal.auth.login.DefaultLoginWizard
+import im.vector.matrix.android.internal.auth.registration.DefaultRegistrationWizard
 import im.vector.matrix.android.internal.di.Unauthenticated
 import im.vector.matrix.android.internal.extensions.foldToCallback
 import im.vector.matrix.android.internal.network.RetrofitFactory
@@ -39,13 +42,13 @@ import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import javax.inject.Inject
 
-internal class DefaultAuthenticator @Inject constructor(@Unauthenticated
-                                                        private val okHttpClient: Lazy<OkHttpClient>,
-                                                        private val retrofitFactory: RetrofitFactory,
-                                                        private val coroutineDispatchers: MatrixCoroutineDispatchers,
-                                                        private val sessionParamsStore: SessionParamsStore,
-                                                        private val sessionManager: SessionManager
-) : Authenticator {
+internal class DefaultAuthenticationService @Inject constructor(@Unauthenticated
+                                                                private val okHttpClient: Lazy<OkHttpClient>,
+                                                                private val retrofitFactory: RetrofitFactory,
+                                                                private val coroutineDispatchers: MatrixCoroutineDispatchers,
+                                                                private val sessionParamsStore: SessionParamsStore,
+                                                                private val sessionManager: SessionManager
+) : AuthenticationService {
 
     override fun hasAuthenticatedSessions(): Boolean {
         return sessionParamsStore.getLast() != null
@@ -80,8 +83,18 @@ internal class DefaultAuthenticator @Inject constructor(@Unauthenticated
         }
     }
 
-    override fun createAuthenticationWizard(homeServerConnectionConfig: HomeServerConnectionConfig): AuthenticationWizard {
-        return DefaultAuthenticationWizard(
+    override fun getOrCreateRegistrationWizard(homeServerConnectionConfig: HomeServerConnectionConfig): RegistrationWizard {
+        // TODO Persist the wizard?
+        return DefaultRegistrationWizard(homeServerConnectionConfig,
+                okHttpClient,
+                retrofitFactory,
+                coroutineDispatchers,
+                sessionParamsStore,
+                sessionManager)
+    }
+
+    override fun createLoginWizard(homeServerConnectionConfig: HomeServerConnectionConfig): LoginWizard {
+        return DefaultLoginWizard(
                 homeServerConnectionConfig,
                 coroutineDispatchers,
                 sessionParamsStore,

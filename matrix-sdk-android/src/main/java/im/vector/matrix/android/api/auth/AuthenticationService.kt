@@ -20,14 +20,16 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.auth.data.SessionParams
+import im.vector.matrix.android.api.auth.login.LoginWizard
+import im.vector.matrix.android.api.auth.registration.RegistrationWizard
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.auth.data.LoginFlowResponse
 
 /**
- * This interface defines methods to authenticate to a matrix server.
+ * This interface defines methods to authenticate or to create an account to a matrix server.
  */
-interface Authenticator {
+interface AuthenticationService {
 
     /**
      * Request the supported login flows for this homeserver
@@ -35,10 +37,15 @@ interface Authenticator {
     fun getLoginFlow(homeServerConnectionConfig: HomeServerConnectionConfig, callback: MatrixCallback<LoginFlowResponse>): Cancelable
 
     /**
-     * Return an AuthenticationWizard
+     * Return an LoginWizard
      * @param homeServerConnectionConfig this param is used to request the Homeserver
      */
-    fun createAuthenticationWizard(homeServerConnectionConfig: HomeServerConnectionConfig): AuthenticationWizard
+    fun createLoginWizard(homeServerConnectionConfig: HomeServerConnectionConfig): LoginWizard
+
+    /**
+     * Return a RegistrationWizard, to create an matrix account on a homeserver
+     */
+    fun getOrCreateRegistrationWizard(homeServerConnectionConfig: HomeServerConnectionConfig): RegistrationWizard
 
     /**
      * Check if there is an authenticated [Session].

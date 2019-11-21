@@ -14,26 +14,27 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.auth
+package im.vector.matrix.android.internal.auth.login
 
 import android.util.Patterns
 import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.auth.AuthenticationWizard
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.auth.data.SessionParams
+import im.vector.matrix.android.api.auth.login.LoginWizard
 import im.vector.matrix.android.api.auth.registration.RegisterThreePid
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.NoOpCancellable
 import im.vector.matrix.android.internal.SessionManager
+import im.vector.matrix.android.internal.auth.AuthAPI
+import im.vector.matrix.android.internal.auth.SessionParamsStore
 import im.vector.matrix.android.internal.auth.data.PasswordLoginParams
 import im.vector.matrix.android.internal.auth.data.ThreePidMedium
 import im.vector.matrix.android.internal.auth.registration.AddThreePidRegistrationParams
 import im.vector.matrix.android.internal.auth.registration.AddThreePidRegistrationResponse
 import im.vector.matrix.android.internal.auth.registration.RegisterAddThreePidTask
-import im.vector.matrix.android.internal.auth.signin.ResetPasswordMailConfirmed
 import im.vector.matrix.android.internal.extensions.foldToCallback
 import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.network.executeRequest
@@ -51,14 +52,14 @@ internal data class ResetPasswordData(
         val addThreePidRegistrationResponse: AddThreePidRegistrationResponse
 )
 
-internal class DefaultAuthenticationWizard(
+internal class DefaultLoginWizard(
         private val homeServerConnectionConfig: HomeServerConnectionConfig,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val sessionParamsStore: SessionParamsStore,
         private val sessionManager: SessionManager,
         retrofitFactory: RetrofitFactory,
         okHttpClient: Lazy<OkHttpClient>
-) : AuthenticationWizard {
+) : LoginWizard {
 
     private var clientSecret = UUID.randomUUID().toString()
     private var sendAttempt = 0
@@ -68,10 +69,10 @@ internal class DefaultAuthenticationWizard(
     private val authAPI = retrofitFactory.create(okHttpClient, homeServerConnectionConfig.homeServerUri.toString())
             .create(AuthAPI::class.java)
 
-    override fun authenticate(login: String,
-                              password: String,
-                              deviceName: String,
-                              callback: MatrixCallback<Session>): Cancelable {
+    override fun login(login: String,
+                       password: String,
+                       deviceName: String,
+                       callback: MatrixCallback<Session>): Cancelable {
         val job = GlobalScope.launch(coroutineDispatchers.main) {
             val sessionOrFailure = runCatching {
                 authenticate(login, password, deviceName)

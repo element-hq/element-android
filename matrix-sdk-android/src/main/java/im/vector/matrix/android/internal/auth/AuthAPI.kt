@@ -20,7 +20,7 @@ import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.internal.auth.data.LoginFlowResponse
 import im.vector.matrix.android.internal.auth.data.PasswordLoginParams
 import im.vector.matrix.android.internal.auth.registration.*
-import im.vector.matrix.android.internal.auth.signin.ResetPasswordMailConfirmed
+import im.vector.matrix.android.internal.auth.login.ResetPasswordMailConfirmed
 import im.vector.matrix.android.internal.network.NetworkConstants
 import retrofit2.Call
 import retrofit2.http.*

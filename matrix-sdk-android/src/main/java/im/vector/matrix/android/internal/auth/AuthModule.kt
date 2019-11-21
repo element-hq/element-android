@@ -20,11 +20,9 @@ import android.content.Context
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
-import im.vector.matrix.android.api.auth.Authenticator
-import im.vector.matrix.android.api.auth.registration.RegistrationService
+import im.vector.matrix.android.api.auth.AuthenticationService
 import im.vector.matrix.android.internal.auth.db.AuthRealmModule
 import im.vector.matrix.android.internal.auth.db.RealmSessionParamsStore
-import im.vector.matrix.android.internal.auth.registration.DefaultRegistrationService
 import im.vector.matrix.android.internal.database.RealmKeysUtils
 import im.vector.matrix.android.internal.di.AuthDatabase
 import io.realm.RealmConfiguration
@@ -61,8 +59,5 @@ internal abstract class AuthModule {
     abstract fun bindSessionParamsStore(sessionParamsStore: RealmSessionParamsStore): SessionParamsStore
 
     @Binds
-    abstract fun bindAuthenticator(authenticator: DefaultAuthenticator): Authenticator
-
-    @Binds
-    abstract fun bindRegistrationService(service: DefaultRegistrationService): RegistrationService
+    abstract fun bindAuthenticationService(authenticationService: DefaultAuthenticationService): AuthenticationService
 }
