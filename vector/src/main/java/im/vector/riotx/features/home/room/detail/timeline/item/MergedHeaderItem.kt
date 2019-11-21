@@ -72,7 +72,11 @@ abstract class MergedHeaderItem : BaseEventItem<MergedHeaderItem.Holder>() {
     }
 
     override fun getEventIds(): List<String> {
-        return attributes.mergeData.map { it.eventId }
+        return if (attributes.isCollapsed) {
+            attributes.mergeData.map { it.eventId }
+        } else {
+            emptyList()
+        }
     }
 
     data class Data(

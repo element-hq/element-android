@@ -151,7 +151,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     }
 
     // Update position when we are building new items
-    override fun intercept(models: MutableList<EpoxyModel<*>>) {
+    override fun intercept(models: MutableList<EpoxyModel<*>>) = synchronized(modelCache) {
         positionOfReadMarker = null
         adapterPositionMapping.clear()
         models.forEachIndexed { index, epoxyModel ->
@@ -160,8 +160,18 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
                     adapterPositionMapping[it] = index
                 }
             }
-            if (epoxyModel is TimelineReadMarkerItem) {
-                positionOfReadMarker = index
+        }
+        val currentUnreadState = this.unreadState
+        if (currentUnreadState is UnreadState.HasUnread) {
+            val position = adapterPositionMapping[currentUnreadState.firstUnreadEventId]?.plus(1)
+            positionOfReadMarker = position
+            if (position != null) {
+                val readMarker = TimelineReadMarkerItem_()
+                        .also {
+                            it.id("read_marker")
+                            it.setOnVisibilityStateChanged(ReadMarkerVisibilityStateChangedListener(callback))
+                        }
+                models.add(position, readMarker)
             }
         }
     }
@@ -218,7 +228,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         }
     }
 
-    // Timeline.LISTENER ***************************************************************************
+// Timeline.LISTENER ***************************************************************************
 
     override fun onUpdated(snapshot: List<TimelineEvent>) {
         submitSnapshot(snapshot)
@@ -248,7 +258,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
                     } else {
                         it.eventModel
                     }
-                    listOf(eventModel, it?.mergedHeaderModel, it?.readMarkerModel, it?.formattedDayModel)
+                    listOf(eventModel, it?.mergedHeaderModel, it?.formattedDayModel)
                 }
                 .flatten()
                 .filterNotNull()
@@ -258,17 +268,16 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         if (modelCache.isEmpty()) {
             return
         }
-        val currentUnreadState = this.unreadState
         (0 until modelCache.size).forEach { position ->
             // Should be build if not cached or if cached but contains additional models
             // We then are sure we always have items up to date.
-            if (modelCache[position] == null || modelCache[position]?.shouldTriggerBuild(currentUnreadState) == true) {
-                modelCache[position] = buildCacheItem(position, currentSnapshot, currentUnreadState)
+            if (modelCache[position] == null || modelCache[position]?.shouldTriggerBuild() == true) {
+                modelCache[position] = buildCacheItem(position, currentSnapshot)
             }
         }
     }
 
-    private fun buildCacheItem(currentPosition: Int, items: List<TimelineEvent>, currentUnreadState: UnreadState): CacheItemData {
+    private fun buildCacheItem(currentPosition: Int, items: List<TimelineEvent>): CacheItemData {
         val event = items[currentPosition]
         val nextEvent = items.nextOrNull(currentPosition)
         val date = event.root.localDateTime()
@@ -289,25 +298,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             requestModelBuild()
         }
         val daySeparatorItem = buildDaySeparatorItem(addDaySeparator, date)
-        val readMarkerItem = buildReadMarkerItem(event, currentUnreadState)
-        return CacheItemData(event.localId, event.root.eventId, eventModel, mergedHeaderModel, daySeparatorItem, readMarkerItem)
-    }
-
-    private fun buildReadMarkerItem(event: TimelineEvent, currentUnreadState: UnreadState): TimelineReadMarkerItem? {
-        return when (currentUnreadState) {
-            is UnreadState.HasUnread -> {
-                if (event.root.eventId == currentUnreadState.firstUnreadEventId) {
-                    TimelineReadMarkerItem_()
-                            .also {
-                                it.id("read_marker")
-                                it.setOnVisibilityStateChanged(ReadMarkerVisibilityStateChangedListener(callback))
-                            }
-                } else {
-                    null
-                }
-            }
-            else                     -> null
-        }
+        return CacheItemData(event.localId, event.root.eventId, eventModel, mergedHeaderModel, daySeparatorItem)
     }
 
     private fun buildDaySeparatorItem(addDaySeparator: Boolean, date: LocalDateTime): DaySeparatorItem? {
@@ -354,14 +345,11 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             val eventId: String?,
             val eventModel: EpoxyModel<*>? = null,
             val mergedHeaderModel: MergedHeaderItem? = null,
-            val formattedDayModel: DaySeparatorItem? = null,
-            val readMarkerModel: TimelineReadMarkerItem? = null
+            val formattedDayModel: DaySeparatorItem? = null
     ) {
-        fun shouldTriggerBuild(unreadState: UnreadState): Boolean {
-            return mergedHeaderModel != null
-                    || formattedDayModel != null
-                    || readMarkerModel != null
-                    || (unreadState is UnreadState.HasUnread && unreadState.firstUnreadEventId == eventId)
+        fun shouldTriggerBuild(): Boolean {
+            return mergedHeaderModel != null || formattedDayModel != null
+
         }
     }
 }
