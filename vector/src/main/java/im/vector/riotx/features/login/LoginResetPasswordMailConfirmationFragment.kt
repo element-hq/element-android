@@ -25,7 +25,7 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
 import im.vector.riotx.core.error.ErrorFormatter
-import kotlinx.android.synthetic.main.fragment_login_reset_password_success.*
+import kotlinx.android.synthetic.main.fragment_login_reset_password_mail_confirmation.*
 import javax.inject.Inject
 
 /**
@@ -44,7 +44,7 @@ class LoginResetPasswordMailConfirmationFragment @Inject constructor(
     }
 
     private fun setupUi() {
-        resetPasswordSuccessNotice.text = getString(R.string.login_reset_password_mail_confirmation_notice, loginViewModel.resetPasswordEmail)
+        resetPasswordMailConfirmationNotice.text = getString(R.string.login_reset_password_mail_confirmation_notice, loginViewModel.resetPasswordEmail)
     }
 
     @OnClick(R.id.resetPasswordMailConfirmationSubmit)

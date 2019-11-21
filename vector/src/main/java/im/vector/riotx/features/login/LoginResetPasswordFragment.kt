@@ -33,9 +33,6 @@ import im.vector.riotx.core.extensions.showPassword
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.subscribeBy
-import kotlinx.android.synthetic.main.fragment_login.passwordField
-import kotlinx.android.synthetic.main.fragment_login.passwordFieldTil
-import kotlinx.android.synthetic.main.fragment_login.passwordReveal
 import kotlinx.android.synthetic.main.fragment_login_reset_password.*
 import javax.inject.Inject
 
