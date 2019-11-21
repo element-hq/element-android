@@ -82,8 +82,8 @@ class LoginFragment @Inject constructor(
     fun submit() {
         cleanupUi()
 
-        val login = loginField.text?.trim().toString()
-        val password = passwordField.text?.trim().toString()
+        val login = loginField.text.toString()
+        val password = passwordField.text.toString()
 
         when (loginViewModel.signMode) {
             SignMode.Unknown -> error("developer error")
