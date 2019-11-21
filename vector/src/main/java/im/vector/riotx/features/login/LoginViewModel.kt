@@ -21,6 +21,7 @@ import com.airbnb.mvrx.*
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.auth.AuthenticationWizard
 import im.vector.matrix.android.api.auth.Authenticator
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.auth.registration.FlowResult
@@ -74,6 +75,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
         private set
 
     private var registrationWizard: RegistrationWizard? = null
+    private var authenticationWizard: AuthenticationWizard? = null
 
     var serverType: ServerType = ServerType.MatrixOrg
         private set
@@ -294,6 +296,8 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
 
         if (signMode == SignMode.SignUp) {
             startRegistrationFlow()
+        } else if (signMode == SignMode.SignIn) {
+            startAuthenticationFlow()
         }
     }
 
@@ -306,9 +310,9 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
     }
 
     private fun handleResetPassword(action: LoginAction.ResetPassword) {
-        val homeServerConnectionConfigFinal = homeServerConnectionConfig
+        val safeAuthenticationWizard = authenticationWizard
 
-        if (homeServerConnectionConfigFinal == null) {
+        if (safeAuthenticationWizard == null) {
             setState {
                 copy(
                         asyncResetPassword = Fail(Throwable("Bad configuration"))
@@ -323,7 +327,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                 )
             }
 
-            currentTask = authenticator.resetPassword(homeServerConnectionConfigFinal, action.email, action.newPassword, object : MatrixCallback<Unit> {
+            currentTask = safeAuthenticationWizard.resetPassword(action.email, action.newPassword, object : MatrixCallback<Unit> {
                 override fun onSuccess(data: Unit) {
                     setState {
                         copy(
@@ -345,9 +349,9 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
     }
 
     private fun handleResetPasswordMailConfirmed() {
-        val homeServerConnectionConfigFinal = homeServerConnectionConfig
+        val safeAuthenticationWizard = authenticationWizard
 
-        if (homeServerConnectionConfigFinal == null) {
+        if (safeAuthenticationWizard == null) {
             setState {
                 copy(
                         asyncResetMailConfirmed = Fail(Throwable("Bad configuration"))
@@ -360,7 +364,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                 )
             }
 
-            currentTask = authenticator.resetPasswordMailConfirmed(homeServerConnectionConfigFinal, object : MatrixCallback<Unit> {
+            currentTask = safeAuthenticationWizard.resetPasswordMailConfirmed(object : MatrixCallback<Unit> {
                 override fun onSuccess(data: Unit) {
                     setState {
                         copy(
@@ -382,9 +386,9 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
     }
 
     private fun handleLogin(action: LoginAction.Login) {
-        val homeServerConnectionConfigFinal = homeServerConnectionConfig
+        val safeAuthenticationWizard = authenticationWizard
 
-        if (homeServerConnectionConfigFinal == null) {
+        if (safeAuthenticationWizard == null) {
             setState {
                 copy(
                         asyncLoginAction = Fail(Throwable("Bad configuration"))
@@ -397,8 +401,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                 )
             }
 
-            currentTask = authenticator.authenticate(
-                    homeServerConnectionConfigFinal,
+            currentTask = safeAuthenticationWizard.authenticate(
                     action.login,
                     action.password,
                     action.initialDeviceName,
@@ -443,6 +446,17 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
         }
     }
 
+    private fun startAuthenticationFlow() {
+        val homeServerConnectionConfigFinal = homeServerConnectionConfig
+
+        if (homeServerConnectionConfigFinal == null) {
+            // Notify the user
+            _viewEvents.post(LoginViewEvents.RegistrationError(Throwable("Bad configuration")))
+        } else {
+            authenticationWizard = authenticator.createAuthenticationWizard(homeServerConnectionConfigFinal)
+        }
+    }
+
     private fun onFlowResponse(flowResult: FlowResult) {
         // Notify the user
         _viewEvents.post(LoginViewEvents.RegistrationFlowResult(flowResult))
@@ -465,7 +479,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
             // Should not happen
             Timber.w("homeServerConnectionConfig is null")
         } else {
-            authenticator.createSessionFromSso(action.credentials, homeServerConnectionConfigFinal, object : MatrixCallback<Session> {
+            authenticator.createSessionFromSso(homeServerConnectionConfigFinal, action.credentials, object : MatrixCallback<Session> {
                 override fun onSuccess(data: Session) {
                     onSessionCreated(data)
                 }
@@ -493,6 +507,8 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
         currentTask?.cancel()
         currentTask = null
         homeServerConnectionConfig = newConfig
+        authenticationWizard = null
+        registrationWizard = null
 
         val homeServerConnectionConfigFinal = homeServerConnectionConfig
 

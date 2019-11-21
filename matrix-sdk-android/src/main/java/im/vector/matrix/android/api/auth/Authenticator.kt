@@ -26,7 +26,6 @@ import im.vector.matrix.android.internal.auth.data.LoginFlowResponse
 
 /**
  * This interface defines methods to authenticate to a matrix server.
- * TODO Some methods has to be moved to and authenticationWizard, has it is done for registration
  */
 interface Authenticator {
 
@@ -36,18 +35,10 @@ interface Authenticator {
     fun getLoginFlow(homeServerConnectionConfig: HomeServerConnectionConfig, callback: MatrixCallback<LoginFlowResponse>): Cancelable
 
     /**
-     * @param homeServerConnectionConfig this param is used to configure the Homeserver
-     * @param login the login field
-     * @param password the password field
-     * @param deviceName the initial device name
-     * @param callback  the matrix callback on which you'll receive the result of authentication.
-     * @return return a [Cancelable]
+     * Return an AuthenticationWizard
+     * @param homeServerConnectionConfig this param is used to request the Homeserver
      */
-    fun authenticate(homeServerConnectionConfig: HomeServerConnectionConfig,
-                     login: String,
-                     password: String,
-                     deviceName: String,
-                     callback: MatrixCallback<Session>): Cancelable
+    fun createAuthenticationWizard(homeServerConnectionConfig: HomeServerConnectionConfig): AuthenticationWizard
 
     /**
      * Check if there is an authenticated [Session].
@@ -73,15 +64,7 @@ interface Authenticator {
     /**
      * Create a session after a SSO successful login
      */
-    fun createSessionFromSso(credentials: Credentials, homeServerConnectionConfig: HomeServerConnectionConfig, callback: MatrixCallback<Session>): Cancelable
-
-    /**
-     * Reset user password
-     */
-    fun resetPassword(homeServerConnectionConfig: HomeServerConnectionConfig, email: String, newPassword: String, callback: MatrixCallback<Unit>): Cancelable
-
-    /**
-     * Confirm the new password, once the user has check his email
-     */
-    fun resetPasswordMailConfirmed(homeServerConnectionConfig: HomeServerConnectionConfig, callback: MatrixCallback<Unit>): Cancelable
+    fun createSessionFromSso(homeServerConnectionConfig: HomeServerConnectionConfig,
+                             credentials: Credentials,
+                             callback: MatrixCallback<Session>): Cancelable
 }
