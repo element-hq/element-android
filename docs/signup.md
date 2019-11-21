@@ -57,6 +57,15 @@ We get the flows with a 401, which also means the the registration is possible o
 }
 ```
 
+If the registration is not possible, we get a 403
+
+```json
+{
+  "errcode": "M_FORBIDDEN",
+  "error": "Registration is disabled"
+}
+```
+
 ### Step 1: entering user name and password
 
 The app is displaying a form to enter username and password.
