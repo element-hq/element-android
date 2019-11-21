@@ -19,6 +19,7 @@ package im.vector.riotx.features.login
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import butterknife.OnClick
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
@@ -26,6 +27,7 @@ import com.airbnb.mvrx.withState
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.riotx.R
 import im.vector.riotx.core.error.ErrorFormatter
+import im.vector.riotx.core.extensions.isEmail
 import im.vector.riotx.core.extensions.showPassword
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
@@ -62,10 +64,10 @@ class LoginResetPasswordFragment @Inject constructor(
     private fun setupSubmitButton() {
         Observable
                 .combineLatest(
-                        resetPasswordEmail.textChanges().map { it.trim().isNotEmpty() },
-                        passwordField.textChanges().map { it.trim().isNotEmpty() },
-                        BiFunction<Boolean, Boolean, Boolean> { isEmailNotEmpty, isPasswordNotEmpty ->
-                            isEmailNotEmpty && isPasswordNotEmpty
+                        resetPasswordEmail.textChanges().map { it.isEmail() },
+                        passwordField.textChanges().map { it.isNotEmpty() },
+                        BiFunction<Boolean, Boolean, Boolean> { isEmail, isPasswordNotEmpty ->
+                            isEmail && isPasswordNotEmpty
                         }
                 )
                 .subscribeBy {
@@ -74,15 +76,12 @@ class LoginResetPasswordFragment @Inject constructor(
                     resetPasswordSubmit.isEnabled = it
                 }
                 .disposeOnDestroyView()
-
-        resetPasswordSubmit.setOnClickListener { submit() }
     }
 
-    private fun submit() {
-        val email = resetPasswordEmail.text?.trim().toString()
-        val password = passwordField.text?.trim().toString()
-
-        // TODO Add static check?
+    @OnClick(R.id.resetPasswordSubmit)
+    fun submit() {
+        val email = resetPasswordEmail.text.toString()
+        val password = passwordField.text.toString()
 
         loginViewModel.handle(LoginAction.ResetPassword(email, password))
     }

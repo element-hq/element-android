@@ -33,6 +33,7 @@ import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.riotx.R
 import im.vector.riotx.core.error.ErrorFormatter
+import im.vector.riotx.core.extensions.isEmail
 import im.vector.riotx.core.extensions.setTextOrHide
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_login_generic_text_input_form.*
@@ -74,7 +75,6 @@ class LoginGenericTextInputFormFragment @Inject constructor(private val errorFor
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             when (params.mode) {
                 TextInputFormFragmentMode.SetEmail      -> loginGenericTextInputFormTextInput.setAutofillHints(HintConstants.AUTOFILL_HINT_EMAIL_ADDRESS)
-                // TODO Phone number without country code?
                 TextInputFormFragmentMode.SetMsisdn     -> loginGenericTextInputFormTextInput.setAutofillHints(HintConstants.AUTOFILL_HINT_PHONE_NUMBER)
                 TextInputFormFragmentMode.ConfirmMsisdn -> loginGenericTextInputFormTextInput.setAutofillHints(HintConstants.AUTOFILL_HINT_SMS_OTP)
             }
@@ -169,16 +169,29 @@ class LoginGenericTextInputFormFragment @Inject constructor(private val errorFor
     }
 
     private fun setupSubmitButton() {
-        if (params.mandatory) {
-            loginGenericTextInputFormSubmit.isEnabled = false
-            loginGenericTextInputFormTextInput.textChanges()
-                    .subscribe {
-                        // TODO Better check for email format, etc?
-                        loginGenericTextInputFormSubmit.isEnabled = it.isNotBlank()
-                    }
-                    .disposeOnDestroyView()
+        loginGenericTextInputFormSubmit.isEnabled = false
+        loginGenericTextInputFormTextInput.textChanges()
+                .subscribe {
+                    loginGenericTextInputFormSubmit.isEnabled = isInputValid(it)
+                }
+                .disposeOnDestroyView()
+    }
+
+    private fun isInputValid(input: CharSequence): Boolean {
+        return if (input.isEmpty() && !params.mandatory) {
+            true
         } else {
-            loginGenericTextInputFormSubmit.isEnabled = true
+            when (params.mode) {
+                TextInputFormFragmentMode.SetEmail      -> {
+                    input.isEmail()
+                }
+                TextInputFormFragmentMode.SetMsisdn     -> {
+                    input.isNotBlank()
+                }
+                TextInputFormFragmentMode.ConfirmMsisdn -> {
+                    input.isNotBlank()
+                }
+            }
         }
     }
 
