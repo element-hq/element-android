@@ -30,7 +30,7 @@ sealed class Stage(open val mandatory: Boolean) {
 
     // m.login.token
 
-    // m.login.dummy
+    // m.login.dummy, never mandatory by definition
     object Dummy : Stage(false)
 
     // Undocumented yet: m.login.terms
