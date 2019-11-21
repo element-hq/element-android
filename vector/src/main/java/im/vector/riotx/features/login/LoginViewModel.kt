@@ -111,6 +111,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
             is LoginAction.AcceptTerms                  -> handleAcceptTerms()
             is LoginAction.RegisterDummy                -> handleRegisterDummy()
             is LoginAction.AddThreePid                  -> handleAddThreePid(action)
+            is LoginAction.SendAgainThreePid            -> handleSendAgainThreePid()
             is LoginAction.ValidateThreePid             -> handleValidateThreePid(action)
             is LoginAction.CheckIfEmailHasBeenValidated -> handleCheckIfEmailHasBeenValidated(action)
             is LoginAction.StopEmailValidationCheck     -> handleStopEmailValidationCheck()
@@ -169,6 +170,28 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
     private fun handleAddThreePid(action: LoginAction.AddThreePid) {
         setState { copy(asyncRegistration = Loading()) }
         currentTask = registrationWizard?.addThreePid(action.threePid, object : MatrixCallback<RegistrationResult> {
+            override fun onSuccess(data: RegistrationResult) {
+                setState {
+                    copy(
+                            asyncRegistration = Uninitialized
+                    )
+                }
+            }
+
+            override fun onFailure(failure: Throwable) {
+                _viewEvents.post(LoginViewEvents.RegistrationError(failure))
+                setState {
+                    copy(
+                            asyncRegistration = Uninitialized
+                    )
+                }
+            }
+        })
+    }
+
+    private fun handleSendAgainThreePid() {
+        setState { copy(asyncRegistration = Loading()) }
+        currentTask = registrationWizard?.sendAgainThreePid(object : MatrixCallback<RegistrationResult> {
             override fun onSuccess(data: RegistrationResult) {
                 setState {
                     copy(

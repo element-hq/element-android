@@ -122,12 +122,25 @@ internal class DefaultRegistrationWizard(private val homeServerConnectionConfig:
     }
 
     override fun addThreePid(threePid: RegisterThreePid, callback: MatrixCallback<RegistrationResult>): Cancelable {
-        val safeSession = currentSession ?: run {
+        currentThreePidData = null
+
+        return sendThreePid(threePid, callback)
+    }
+
+    override fun sendAgainThreePid(callback: MatrixCallback<RegistrationResult>): Cancelable {
+        val safeCurrentThreePid = currentThreePidData?.threePid ?: run {
             callback.onFailure(IllegalStateException("developer error, call createAccount() method first"))
             return NoOpCancellable
         }
 
-        currentThreePidData = null
+        return sendThreePid(safeCurrentThreePid, callback)
+    }
+
+    private fun sendThreePid(threePid: RegisterThreePid, callback: MatrixCallback<RegistrationResult>): Cancelable {
+        val safeSession = currentSession ?: run {
+            callback.onFailure(IllegalStateException("developer error, call createAccount() method first"))
+            return NoOpCancellable
+        }
 
         val job = GlobalScope.launch(coroutineDispatchers.main) {
             runCatching {

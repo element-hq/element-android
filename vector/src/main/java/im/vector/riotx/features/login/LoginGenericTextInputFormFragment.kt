@@ -124,7 +124,14 @@ class LoginGenericTextInputFormFragment @Inject constructor(private val errorFor
 
     @OnClick(R.id.loginGenericTextInputFormOtherButton)
     fun onOtherButtonClicked() {
-        // TODO
+        when (params.mode) {
+            TextInputFormFragmentMode.ConfirmMsisdn -> {
+                loginViewModel.handle(LoginAction.SendAgainThreePid)
+            }
+            else                                    -> {
+                // Should not happen, button is not displayed
+            }
+        }
     }
 
     @OnClick(R.id.loginGenericTextInputFormSubmit)
@@ -214,11 +221,15 @@ class LoginGenericTextInputFormFragment @Inject constructor(private val errorFor
                 }
             }
             TextInputFormFragmentMode.ConfirmMsisdn -> {
-                if (throwable is Failure.SuccessError) {
-                    // The entered code is not correct
-                    loginGenericTextInputFormTil.error = getString(R.string.login_validation_code_is_not_correct)
-                } else {
-                    loginGenericTextInputFormTil.error = errorFormatter.toHumanReadable(throwable)
+                when {
+                    throwable is Failure.SuccessError ->
+                        // The entered code is not correct
+                        loginGenericTextInputFormTil.error = getString(R.string.login_validation_code_is_not_correct)
+                    throwable.is401()                 ->
+                        // It can happen if user request again the 3pid
+                        Unit
+                    else                              ->
+                        loginGenericTextInputFormTil.error = errorFormatter.toHumanReadable(throwable)
                 }
             }
         }
