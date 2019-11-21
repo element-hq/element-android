@@ -122,11 +122,13 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
     private fun handleCheckIfEmailHasBeenValidated(action: LoginAction.CheckIfEmailHasBeenValidated) {
         // We do not want the common progress bar to be displayed, so we do not change asyncRegistration value in the state
         currentTask?.cancel()
+        currentTask = null
         currentTask = registrationWizard?.checkIfEmailHasBeenValidated(action.delayMillis, registrationCallback)
     }
 
     private fun handleStopEmailValidationCheck() {
         currentTask?.cancel()
+        currentTask = null
     }
 
     private fun handleValidateThreePid(action: LoginAction.ValidateThreePid) {
@@ -260,6 +262,10 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                 }
             }
             LoginAction.ResetHomeServerUrl  -> {
+                homeServerConnectionConfig = null
+                registrationWizard = null
+                loginWizard = null
+
                 setState {
                     copy(
                             asyncHomeServerLoginFlowRequest = Uninitialized

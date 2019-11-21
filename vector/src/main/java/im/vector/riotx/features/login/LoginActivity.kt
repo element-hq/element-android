@@ -95,7 +95,10 @@ class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
                             supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                             addFragmentToBackstack(R.id.loginFragmentContainer, LoginResetPasswordSuccessFragment::class.java)
                         }
-                        is LoginNavigation.OnResetPasswordMailConfirmationSuccessDone -> supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                        is LoginNavigation.OnResetPasswordMailConfirmationSuccessDone -> {
+                            // FIXME It goes to far (to the top fragment)
+                            supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                        }
                         is LoginNavigation.OnSendEmailSuccess                         -> addFragmentToBackstack(R.id.loginFragmentContainer,
                                 LoginWaitForEmailFragment::class.java,
                                 LoginWaitForEmailFragmentArgument(it.email),
