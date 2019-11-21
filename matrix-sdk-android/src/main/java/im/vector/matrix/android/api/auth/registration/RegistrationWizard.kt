@@ -35,7 +35,7 @@ interface RegistrationWizard {
 
     fun handleValidateThreePid(code: String, callback: MatrixCallback<RegistrationResult>): Cancelable
 
-    fun checkIfEmailHasBeenValidated(callback: MatrixCallback<RegistrationResult>): Cancelable
+    fun checkIfEmailHasBeenValidated(delayMillis: Long, callback: MatrixCallback<RegistrationResult>): Cancelable
 
     val currentThreePid: String?
 }

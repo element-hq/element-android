@@ -48,8 +48,18 @@ class LoginWaitForEmailFragment @Inject constructor(private val errorFormatter: 
         super.onViewCreated(view, savedInstanceState)
 
         setupUi()
+    }
 
-        loginViewModel.handle(LoginAction.CheckIfEmailHasBeenValidated)
+    override fun onResume() {
+        super.onResume()
+
+        loginViewModel.handle(LoginAction.CheckIfEmailHasBeenValidated(0))
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        loginViewModel.handle(LoginAction.StopEmailValidationCheck)
     }
 
     private fun setupUi() {
@@ -59,7 +69,7 @@ class LoginWaitForEmailFragment @Inject constructor(private val errorFormatter: 
     override fun onRegistrationError(throwable: Throwable) {
         if (throwable.is401()) {
             // Try again, with a delay
-            loginViewModel.handle(LoginAction.CheckIfEmailHasBeenValidated)
+            loginViewModel.handle(LoginAction.CheckIfEmailHasBeenValidated(10_000))
         } else {
             AlertDialog.Builder(requireActivity())
                     .setTitle(R.string.dialog_title_error)

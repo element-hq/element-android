@@ -169,14 +169,13 @@ internal class DefaultRegistrationWizard(private val homeServerConnectionConfig:
         return CancelableCoroutine(job)
     }
 
-    override fun checkIfEmailHasBeenValidated(callback: MatrixCallback<RegistrationResult>): Cancelable {
+    override fun checkIfEmailHasBeenValidated(delayMillis: Long, callback: MatrixCallback<RegistrationResult>): Cancelable {
         val safeParam = currentThreePidData?.registrationParams ?: run {
             callback.onFailure(IllegalStateException("developer error, no pending three pid"))
             return NoOpCancellable
         }
 
-        // Wait 10 seconds before doing the request
-        return performRegistrationRequest(safeParam, callback, 10_000)
+        return performRegistrationRequest(safeParam, callback, delayMillis)
     }
 
     override fun handleValidateThreePid(code: String, callback: MatrixCallback<RegistrationResult>): Cancelable {

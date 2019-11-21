@@ -40,6 +40,7 @@ import im.vector.riotx.core.utils.PublishDataSource
 import im.vector.riotx.features.notifications.PushRuleTriggerListener
 import im.vector.riotx.features.session.SessionListener
 import timber.log.Timber
+import java.util.concurrent.CancellationException
 
 /**
  *
@@ -111,14 +112,19 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
             is LoginAction.RegisterDummy                -> handleRegisterDummy()
             is LoginAction.AddThreePid                  -> handleAddThreePid(action)
             is LoginAction.ValidateThreePid             -> handleValidateThreePid(action)
-            is LoginAction.CheckIfEmailHasBeenValidated -> handleCheckIfEmailHasBeenValidated()
+            is LoginAction.CheckIfEmailHasBeenValidated -> handleCheckIfEmailHasBeenValidated(action)
+            is LoginAction.StopEmailValidationCheck     -> handleStopEmailValidationCheck()
         }
     }
 
-    private fun handleCheckIfEmailHasBeenValidated() {
+    private fun handleCheckIfEmailHasBeenValidated(action: LoginAction.CheckIfEmailHasBeenValidated) {
         // We do not want the common progress bar to be displayed, so we do not change asyncRegistration value in the state
         currentTask?.cancel()
-        currentTask = registrationWizard?.checkIfEmailHasBeenValidated(registrationCallback)
+        currentTask = registrationWizard?.checkIfEmailHasBeenValidated(action.delayMillis, registrationCallback)
+    }
+
+    private fun handleStopEmailValidationCheck() {
+        currentTask?.cancel()
     }
 
     private fun handleValidateThreePid(action: LoginAction.ValidateThreePid) {
@@ -149,7 +155,9 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
         }
 
         override fun onFailure(failure: Throwable) {
-            _viewEvents.post(LoginViewEvents.RegistrationError(failure))
+            if (failure !is CancellationException) {
+                _viewEvents.post(LoginViewEvents.RegistrationError(failure))
+            }
             setState {
                 copy(
                         asyncRegistration = Uninitialized

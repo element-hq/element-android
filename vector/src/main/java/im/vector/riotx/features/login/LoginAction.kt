@@ -37,7 +37,8 @@ sealed class LoginAction : VectorViewModelAction {
     // TODO Confirm Email (from link in the email, open in the phone, intercepted by RiotX)
     data class ValidateThreePid(val code: String) : RegisterAction()
 
-    object CheckIfEmailHasBeenValidated : RegisterAction()
+    data class CheckIfEmailHasBeenValidated(val delayMillis: Long) : RegisterAction()
+    object StopEmailValidationCheck : RegisterAction()
 
     data class CaptchaDone(val captchaResponse: String) : RegisterAction()
     object AcceptTerms : RegisterAction()
