@@ -36,7 +36,6 @@ import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.fragment_login.passwordField
 import kotlinx.android.synthetic.main.fragment_login.passwordFieldTil
 import kotlinx.android.synthetic.main.fragment_login.passwordReveal
-import kotlinx.android.synthetic.main.fragment_login_generic_text_input_form.*
 import kotlinx.android.synthetic.main.fragment_login_reset_password.*
 import javax.inject.Inject
 
@@ -48,6 +47,9 @@ class LoginResetPasswordFragment @Inject constructor(
 ) : AbstractLoginFragment() {
 
     private var passwordShown = false
+
+    // Show warning only once
+    private var showWarning = true
 
     override fun getLayoutResId() = R.layout.fragment_login_reset_password
 
@@ -84,6 +86,23 @@ class LoginResetPasswordFragment @Inject constructor(
     fun submit() {
         cleanupUi()
 
+        if (showWarning) {
+            showWarning = false
+            // Display a warning as Riot-Web does first
+            AlertDialog.Builder(requireActivity())
+                    .setTitle(R.string.login_reset_password_warning_title)
+                    .setMessage(R.string.login_reset_password_warning_content)
+                    .setPositiveButton(R.string.login_reset_password_warning_submit) { _, _ ->
+                        doSubmit()
+                    }
+                    .setNegativeButton(R.string.cancel, null)
+                    .show()
+        } else {
+            doSubmit()
+        }
+    }
+
+    private fun doSubmit() {
         val email = resetPasswordEmail.text.toString()
         val password = passwordField.text.toString()
 
@@ -141,11 +160,10 @@ class LoginResetPasswordFragment @Inject constructor(
                 renderPasswordField()
             }
             is Fail    -> {
-                resetPasswordEmailTil.error = " "
-                passwordFieldTil.error = errorFormatter.toHumanReadable(state.asyncResetPassword.error)
+                resetPasswordEmailTil.error = errorFormatter.toHumanReadable(state.asyncResetPassword.error)
             }
             is Success -> {
-                loginSharedActionViewModel.post(LoginNavigation.OnResetPasswordSuccess)
+                loginSharedActionViewModel.post(LoginNavigation.OnResetPasswordSendThreePidDone)
             }
         }
     }

@@ -66,10 +66,22 @@
     <string name="login_reset_password_submit">Next</string>
     <string name="login_reset_password_email_hint">Email</string>
     <string name="login_reset_password_password_hint">New password</string>
-    <string name="login_reset_password_success_title">Check your inbox</string>
+
+    <string name="login_reset_password_warning_title">Warning!</string>
+    <string name="login_reset_password_warning_content">Changing your password will reset any end-to-end encryption keys on all of your devices, making encrypted chat history unreadable. Set up Key Backup or export your room keys from another device before resetting your password.</string>
+    <string name="login_reset_password_warning_submit">Continue</string>
+
+    <string name="login_reset_password_error_not_found">This email is not linked to any account</string>
+
+    <string name="login_reset_password_mail_confirmation_title">Check your inbox</string>
     <!-- Replaced string is an email -->
-    <string name="login_reset_password_success_notice">A verification email was sent to %1$s.</string>
-    <string name="login_reset_password_success_notice_2">Tap on the link to confirm your new password.</string>
+    <string name="login_reset_password_mail_confirmation_notice">A verification email was sent to %1$s.</string>
+    <string name="login_reset_password_mail_confirmation_notice_2">Tap on the link to confirm your new password. Once you\'ve followed the link it contains, click below.</string>
+    <string name="login_reset_password_mail_confirmation_submit">I have verified my email address</string>
+
+    <string name="login_reset_password_success_title">Success!</string>
+    <string name="login_reset_password_success_notice">Your password has been reset.</string>
+    <string name="login_reset_password_success_notice_2">You have been logged out of all devices and will no longer receive push notifications. To re-enable notifications, sign in again on each device.</string>
     <string name="login_reset_password_success_submit">Back to Sign In</string>
 
     <string name="login_set_email_title">Set email address</string>

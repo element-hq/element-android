@@ -67,6 +67,9 @@ class ErrorFormatter @Inject constructor(private val stringProvider: StringProvi
                     throwable.error.code == MatrixError.LIMIT_EXCEEDED       -> {
                         stringProvider.getString(R.string.login_error_limit_exceeded)
                     }
+                    throwable.error.code == MatrixError.THREEPID_NOT_FOUND   -> {
+                        stringProvider.getString(R.string.login_reset_password_error_not_found)
+                    }
                     else                                                     -> {
                         throwable.error.message.takeIf { it.isNotEmpty() }
                                 ?: throwable.error.code.takeIf { it.isNotEmpty() }

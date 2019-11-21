@@ -20,6 +20,7 @@ import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.internal.auth.data.LoginFlowResponse
 import im.vector.matrix.android.internal.auth.data.PasswordLoginParams
 import im.vector.matrix.android.internal.auth.registration.*
+import im.vector.matrix.android.internal.auth.signin.ResetPasswordMailConfirmed
 import im.vector.matrix.android.internal.network.NetworkConstants
 import retrofit2.Call
 import retrofit2.http.*
@@ -66,4 +67,16 @@ internal interface AuthAPI {
     @Headers("CONNECT_TIMEOUT:60000", "READ_TIMEOUT:60000", "WRITE_TIMEOUT:60000")
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "login")
     fun login(@Body loginParams: PasswordLoginParams): Call<Credentials>
+
+    /**
+     * Ask the homeserver to reset the password associated with the provided email.
+     */
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "account/password/email/requestToken")
+    fun resetPassword(@Body params: AddThreePidRegistrationParams): Call<AddThreePidRegistrationResponse>
+
+    /**
+     * Ask the homeserver to reset the password with the provided new password once the email is validated.
+     */
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "account/password")
+    fun resetPasswordMailConfirmed(@Body params: ResetPasswordMailConfirmed): Call<Unit>
 }

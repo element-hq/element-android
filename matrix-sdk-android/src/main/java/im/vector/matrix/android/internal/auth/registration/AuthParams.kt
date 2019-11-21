@@ -28,8 +28,11 @@ internal data class AuthParams(
         @Json(name = "type")
         val type: String,
 
+        /**
+         * Note: session can be null for reset password request
+         */
         @Json(name = "session")
-        val session: String,
+        val session: String?,
 
         /**
          * parameter for "m.login.recaptcha" type
@@ -70,6 +73,17 @@ internal data class AuthParams(
                     type = LoginFlowTypes.MSISDN,
                     session = session,
                     threePidCredentials = threePidCredentials
+            )
+        }
+
+        fun createForResetPassword(clientSecret: String, sid: String): AuthParams {
+            return AuthParams(
+                    type = LoginFlowTypes.EMAIL_IDENTITY,
+                    session = null,
+                    threePidCredentials = ThreePidCredentials(
+                            clientSecret = clientSecret,
+                            sid = sid
+                    )
             )
         }
     }

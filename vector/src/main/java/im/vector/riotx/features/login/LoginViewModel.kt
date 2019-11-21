@@ -92,15 +92,16 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
 
     override fun handle(action: LoginAction) {
         when (action) {
-            is LoginAction.UpdateServerType -> handleUpdateServerType(action)
-            is LoginAction.UpdateSignMode   -> handleUpdateSignMode(action)
-            is LoginAction.InitWith         -> handleInitWith(action)
-            is LoginAction.UpdateHomeServer -> handleUpdateHomeserver(action)
-            is LoginAction.Login            -> handleLogin(action)
-            is LoginAction.WebLoginSuccess  -> handleWebLoginSuccess(action)
-            is LoginAction.ResetPassword    -> handleResetPassword(action)
-            is LoginAction.RegisterAction   -> handleRegisterAction(action)
-            is LoginAction.ResetAction      -> handleResetAction(action)
+            is LoginAction.UpdateServerType           -> handleUpdateServerType(action)
+            is LoginAction.UpdateSignMode             -> handleUpdateSignMode(action)
+            is LoginAction.InitWith                   -> handleInitWith(action)
+            is LoginAction.UpdateHomeServer           -> handleUpdateHomeserver(action)
+            is LoginAction.Login                      -> handleLogin(action)
+            is LoginAction.WebLoginSuccess            -> handleWebLoginSuccess(action)
+            is LoginAction.ResetPassword              -> handleResetPassword(action)
+            is LoginAction.ResetPasswordMailConfirmed -> handleResetPasswordMailConfirmed()
+            is LoginAction.RegisterAction             -> handleRegisterAction(action)
+            is LoginAction.ResetAction                -> handleResetAction(action)
         }
     }
 
@@ -280,7 +281,8 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                 resetPasswordEmail = null
                 setState {
                     copy(
-                            asyncResetPassword = Uninitialized
+                            asyncResetPassword = Uninitialized,
+                            asyncResetMailConfirmed = Uninitialized
                     )
                 }
             }
@@ -335,6 +337,43 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                     setState {
                         copy(
                                 asyncResetPassword = Fail(failure)
+                        )
+                    }
+                }
+            })
+        }
+    }
+
+    private fun handleResetPasswordMailConfirmed() {
+        val homeServerConnectionConfigFinal = homeServerConnectionConfig
+
+        if (homeServerConnectionConfigFinal == null) {
+            setState {
+                copy(
+                        asyncResetMailConfirmed = Fail(Throwable("Bad configuration"))
+                )
+            }
+        } else {
+            setState {
+                copy(
+                        asyncResetMailConfirmed = Loading()
+                )
+            }
+
+            currentTask = authenticator.resetPasswordMailConfirmed(homeServerConnectionConfigFinal, object : MatrixCallback<Unit> {
+                override fun onSuccess(data: Unit) {
+                    setState {
+                        copy(
+                                asyncResetMailConfirmed = Success(data)
+                        )
+                    }
+                }
+
+                override fun onFailure(failure: Throwable) {
+                    // TODO Handled JobCancellationException
+                    setState {
+                        copy(
+                                asyncResetMailConfirmed = Fail(failure)
                         )
                     }
                 }

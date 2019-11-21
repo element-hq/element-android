@@ -26,6 +26,7 @@ import im.vector.matrix.android.internal.auth.data.LoginFlowResponse
 
 /**
  * This interface defines methods to authenticate to a matrix server.
+ * TODO Some methods has to be moved to and authenticationWizard, has it is done for registration
  */
 interface Authenticator {
 
@@ -78,4 +79,9 @@ interface Authenticator {
      * Reset user password
      */
     fun resetPassword(homeServerConnectionConfig: HomeServerConnectionConfig, email: String, newPassword: String, callback: MatrixCallback<Unit>): Cancelable
+
+    /**
+     * Confirm the new password, once the user has check his email
+     */
+    fun resetPasswordMailConfirmed(homeServerConnectionConfig: HomeServerConnectionConfig, callback: MatrixCallback<Unit>): Cancelable
 }

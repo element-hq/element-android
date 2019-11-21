@@ -16,13 +16,10 @@
 
 package im.vector.riotx.features.login
 
-import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AlertDialog
 import butterknife.OnClick
 import im.vector.riotx.R
 import im.vector.riotx.core.error.ErrorFormatter
-import kotlinx.android.synthetic.main.fragment_login_reset_password_success.*
 import javax.inject.Inject
 
 /**
@@ -34,19 +31,9 @@ class LoginResetPasswordSuccessFragment @Inject constructor(
 
     override fun getLayoutResId() = R.layout.fragment_login_reset_password_success
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        setupUi()
-    }
-
-    private fun setupUi() {
-        resetPasswordSuccessNotice.text = getString(R.string.login_reset_password_success_notice, loginViewModel.resetPasswordEmail)
-    }
-
     @OnClick(R.id.resetPasswordSuccessSubmit)
     fun submit() {
-        loginSharedActionViewModel.post(LoginNavigation.OnResetPasswordSuccessDone)
+        loginSharedActionViewModel.post(LoginNavigation.OnResetPasswordMailConfirmationSuccessDone)
     }
 
     override fun onRegistrationError(throwable: Throwable) {

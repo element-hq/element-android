@@ -132,6 +132,11 @@ interface FragmentModule {
 
     @Binds
     @IntoMap
+    @FragmentKey(LoginResetPasswordMailConfirmationFragment::class)
+    fun bindLoginResetPasswordMailConfirmationFragment(fragment: LoginResetPasswordMailConfirmationFragment): Fragment
+
+    @Binds
+    @IntoMap
     @FragmentKey(LoginResetPasswordFragment::class)
     fun bindLoginResetPasswordFragment(fragment: LoginResetPasswordFragment): Fragment
 
