@@ -24,9 +24,9 @@ import android.net.Uri
  */
 sealed class PermalinkData {
 
-    data class EventLink(val roomIdOrAlias: String, val eventId: String) : PermalinkData()
+    data class EventLink(val roomIdOrAlias: String, val eventId: String, val isRoomAlias: Boolean) : PermalinkData()
 
-    data class RoomLink(val roomIdOrAlias: String) : PermalinkData()
+    data class RoomLink(val roomIdOrAlias: String, val isRoomAlias: Boolean) : PermalinkData()
 
     data class UserLink(val userId: String) : PermalinkData()
 

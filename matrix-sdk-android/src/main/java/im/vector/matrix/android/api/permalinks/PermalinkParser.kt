@@ -18,6 +18,8 @@ package im.vector.matrix.android.api.permalinks
 
 import android.net.Uri
 import im.vector.matrix.android.api.MatrixPatterns
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 /**
  * This class turns an uri to a [PermalinkData]
@@ -60,16 +62,23 @@ object PermalinkParser {
             return PermalinkData.FallbackLink(uri)
         }
         return when {
-            MatrixPatterns.isUserId(identifier)  -> PermalinkData.UserLink(userId = identifier)
-            MatrixPatterns.isGroupId(identifier) -> PermalinkData.GroupLink(groupId = identifier)
-            MatrixPatterns.isRoomId(identifier)  -> {
+            MatrixPatterns.isUserId(identifier)    -> PermalinkData.UserLink(userId = identifier)
+            MatrixPatterns.isGroupId(identifier)   -> PermalinkData.GroupLink(groupId = identifier)
+            MatrixPatterns.isRoomId(identifier)    -> {
                 if (!extraParameter.isNullOrEmpty() && MatrixPatterns.isEventId(extraParameter)) {
-                    PermalinkData.EventLink(roomIdOrAlias = identifier, eventId = extraParameter)
+                    PermalinkData.EventLink(roomIdOrAlias = identifier, eventId = extraParameter, isRoomAlias = false)
                 } else {
-                    PermalinkData.RoomLink(roomIdOrAlias = identifier)
+                    PermalinkData.RoomLink(roomIdOrAlias = identifier, isRoomAlias = false)
                 }
             }
-            else                                 -> PermalinkData.FallbackLink(uri)
+            MatrixPatterns.isRoomAlias(identifier) -> {
+                if (!extraParameter.isNullOrEmpty() && MatrixPatterns.isEventId(extraParameter)) {
+                    PermalinkData.EventLink(roomIdOrAlias = identifier, eventId = extraParameter, isRoomAlias = true)
+                } else {
+                    PermalinkData.RoomLink(roomIdOrAlias = identifier, isRoomAlias = true)
+                }
+            }
+            else                                   -> PermalinkData.FallbackLink(uri)
         }
     }
 }

@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.session.room
 
 import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.internal.session.room.alias.RoomAliasDescription
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomResponse
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoomsParams
@@ -258,4 +259,12 @@ internal interface RoomAPI {
     fun reportContent(@Path("roomId") roomId: String,
                       @Path("eventId") eventId: String,
                       @Body body: ReportContentBody): Call<Unit>
+
+    /**
+     * Get the room ID associated to the room alias.
+     *
+     * @param roomAlias the room alias.
+     */
+    @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "directory/room/{roomAlias}")
+    fun getRoomIdByAlias(@Path("roomAlias") roomAlias: String): Call<RoomAliasDescription>
 }

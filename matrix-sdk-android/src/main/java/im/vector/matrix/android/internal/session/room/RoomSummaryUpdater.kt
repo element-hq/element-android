@@ -20,6 +20,8 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.Membership
+import im.vector.matrix.android.api.session.room.model.RoomAliasesContent
+import im.vector.matrix.android.api.session.room.model.RoomCanonicalAliasContent
 import im.vector.matrix.android.api.session.room.model.RoomTopicContent
 import im.vector.matrix.android.internal.database.mapper.ContentMapper
 import im.vector.matrix.android.internal.database.model.EventEntity
@@ -68,7 +70,7 @@ internal class RoomSummaryUpdater @Inject constructor(@UserId private val userId
                unreadNotifications: RoomSyncUnreadNotifications? = null,
                updateMembers: Boolean = false) {
         val roomSummaryEntity = RoomSummaryEntity.where(realm, roomId).findFirst()
-                                ?: realm.createObject(roomId)
+                ?: realm.createObject(roomId)
 
         if (roomSummary != null) {
             if (roomSummary.heroes.isNotEmpty()) {
@@ -91,15 +93,24 @@ internal class RoomSummaryUpdater @Inject constructor(@UserId private val userId
 
         val latestPreviewableEvent = TimelineEventEntity.latestEvent(realm, roomId, includesSending = true, filterTypes = PREVIEWABLE_TYPES)
         val lastTopicEvent = EventEntity.where(realm, roomId, EventType.STATE_ROOM_TOPIC).prev()
+        val lastCanonicalAliasEvent = EventEntity.where(realm, roomId, EventType.STATE_CANONICAL_ALIAS).prev()
+        val lastAliasesEvent = EventEntity.where(realm, roomId, EventType.STATE_ROOM_ALIASES).prev()
 
         roomSummaryEntity.hasUnreadMessages = roomSummaryEntity.notificationCount > 0
-                                              // avoid this call if we are sure there are unread events
-                                              || !isEventRead(monarchy, userId, roomId, latestPreviewableEvent?.eventId)
+                // avoid this call if we are sure there are unread events
+                || !isEventRead(monarchy, userId, roomId, latestPreviewableEvent?.eventId)
 
         roomSummaryEntity.displayName = roomDisplayNameResolver.resolve(roomId).toString()
         roomSummaryEntity.avatarUrl = roomAvatarResolver.resolve(roomId)
         roomSummaryEntity.topic = ContentMapper.map(lastTopicEvent?.content).toModel<RoomTopicContent>()?.topic
         roomSummaryEntity.latestPreviewableEvent = latestPreviewableEvent
+        roomSummaryEntity.canonicalAlias = ContentMapper.map(lastCanonicalAliasEvent?.content).toModel<RoomCanonicalAliasContent>()
+                ?.canonicalAlias
+
+        val roomAliases = ContentMapper.map(lastAliasesEvent?.content).toModel<RoomAliasesContent>()?.aliases ?: emptyList()
+        roomSummaryEntity.aliases.clear()
+        roomSummaryEntity.aliases.addAll(roomAliases)
+
 
         if (updateMembers) {
             val otherRoomMembers = RoomMembers(realm, roomId)
