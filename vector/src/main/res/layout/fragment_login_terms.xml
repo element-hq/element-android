@@ -12,8 +12,10 @@
 
     <!-- Missing attributes are in the style -->
     <androidx.constraintlayout.widget.ConstraintLayout
-        style="@style/LoginFormContainer"
+        style="@style/LoginFormScrollView"
         android:layout_height="0dp"
+        android:paddingTop="32dp"
+        android:paddingBottom="32dp"
         tools:ignore="MissingConstraints">
 
         <TextView
@@ -21,6 +23,8 @@
             style="@style/TextAppearance.Vector.Login.Title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingStart="36dp"
+            android:paddingEnd="36dp"
             android:text="@string/login_terms_title"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -30,6 +34,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
+            android:paddingStart="36dp"
+            android:paddingEnd="36dp"
             android:text="@string/auth_accept_policies"
             app:layout_constraintTop_toBottomOf="@+id/loginTermsTitle" />
 
@@ -46,10 +52,12 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/loginTermsSubmit"
             style="@style/Style.Vector.Login.Button"
+            android:layout_marginEnd="36dp"
             android:text="@string/accept"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 

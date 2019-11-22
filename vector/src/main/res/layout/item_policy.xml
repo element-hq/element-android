@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:foreground="?attr/selectableItemBackground"
-    android:minHeight="72dp">
+    android:minHeight="72dp"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp">
 
     <com.google.android.material.checkbox.MaterialCheckBox
         android:id="@+id/adapter_item_policy_checkbox"

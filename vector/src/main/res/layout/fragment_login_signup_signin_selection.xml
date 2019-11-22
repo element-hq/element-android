@@ -11,73 +11,76 @@
         tools:ignore="ContentDescription,MissingConstraints" />
 
     <!-- Missing attributes are in the style -->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        style="@style/LoginFormContainer"
+    <androidx.core.widget.NestedScrollView
+        style="@style/LoginFormScrollView"
         tools:ignore="MissingConstraints">
 
-        <ImageView
-            android:id="@+id/loginSignupSigninServerIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:importantForAccessibility="no"
-            android:visibility="gone"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/ic_logo_matrix_org"
-            tools:visibility="visible" />
+        <androidx.constraintlayout.widget.ConstraintLayout style="@style/LoginFormContainer">
 
-        <TextView
-            android:id="@+id/loginSignupSigninTitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="27dp"
-            android:textAppearance="@style/TextAppearance.Vector.Login.Title"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/loginSignupSigninServerIcon"
-            app:layout_goneMarginTop="172dp"
-            tools:text="@string/login_connect_to" />
+            <ImageView
+                android:id="@+id/loginSignupSigninServerIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:importantForAccessibility="no"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/ic_logo_matrix_org"
+                tools:visibility="visible" />
 
-        <TextView
-            android:id="@+id/loginSignupSigninText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="27dp"
-            android:gravity="start"
-            android:textAppearance="@style/TextAppearance.Vector.Login.Text"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/loginSignupSigninTitle"
-            tools:text="@string/login_server_matrix_org_text" />
+            <TextView
+                android:id="@+id/loginSignupSigninTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="27dp"
+                android:textAppearance="@style/TextAppearance.Vector.Login.Title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/loginSignupSigninServerIcon"
+                app:layout_goneMarginTop="172dp"
+                tools:text="@string/login_connect_to" />
 
-        <!-- Sign up or sign in SSO -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/loginSignupSigninSubmit"
-            style="@style/Style.Vector.Login.Button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="38dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/loginSignupSigninText"
-            tools:text="@string/login_signup" />
+            <TextView
+                android:id="@+id/loginSignupSigninText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="27dp"
+                android:gravity="start"
+                android:textAppearance="@style/TextAppearance.Vector.Login.Text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/loginSignupSigninTitle"
+                tools:text="@string/login_server_matrix_org_text" />
 
-        <!-- Sign in or gone -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/loginSignupSigninSignIn"
-            style="@style/Style.Vector.Login.Button.Outlined"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:text="@string/login_signin"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/loginSignupSigninSubmit"
-            tools:visibility="visible" />
+            <!-- Sign up or sign in SSO -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/loginSignupSigninSubmit"
+                style="@style/Style.Vector.Login.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="38dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/loginSignupSigninText"
+                tools:text="@string/login_signup" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <!-- Sign in or gone -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/loginSignupSigninSignIn"
+                style="@style/Style.Vector.Login.Button.Outlined"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:text="@string/login_signin"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/loginSignupSigninSubmit"
+                tools:visibility="visible" />
 
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
