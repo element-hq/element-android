@@ -12,6 +12,7 @@ Other changes:
 
 Bugfix 🐛:
  - Do not show long click help if only invitation are displayed
+ - Fix emoji filtering not working
 
 Translations 🗣:
  -
