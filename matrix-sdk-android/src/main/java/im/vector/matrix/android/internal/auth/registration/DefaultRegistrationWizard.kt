@@ -24,6 +24,7 @@ import im.vector.matrix.android.api.auth.registration.RegisterThreePid
 import im.vector.matrix.android.api.auth.registration.RegistrationResult
 import im.vector.matrix.android.api.auth.registration.RegistrationWizard
 import im.vector.matrix.android.api.failure.Failure
+import im.vector.matrix.android.api.failure.Failure.RegistrationFlowError
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.NoOpCancellable
 import im.vector.matrix.android.internal.SessionManager
@@ -31,11 +32,9 @@ import im.vector.matrix.android.internal.auth.AuthAPI
 import im.vector.matrix.android.internal.auth.SessionParamsStore
 import im.vector.matrix.android.internal.auth.data.LoginFlowTypes
 import im.vector.matrix.android.internal.network.RetrofitFactory
-import im.vector.matrix.android.internal.util.CancelableCoroutine
+import im.vector.matrix.android.internal.task.launchToCallback
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import okhttp3.OkHttpClient
 import java.util.*
 
@@ -80,18 +79,24 @@ internal class DefaultRegistrationWizard(private val homeServerConnectionConfig:
         }
 
     override fun getRegistrationFlow(callback: MatrixCallback<RegistrationResult>): Cancelable {
-        return performRegistrationRequest(RegistrationParams(), callback)
+        val params = RegistrationParams()
+        return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
+            performRegistrationRequest(params)
+        }
     }
 
     override fun createAccount(userName: String,
                                password: String,
                                initialDeviceDisplayName: String?,
                                callback: MatrixCallback<RegistrationResult>): Cancelable {
-        return performRegistrationRequest(RegistrationParams(
+        val params = RegistrationParams(
                 username = userName,
                 password = password,
                 initialDeviceDisplayName = initialDeviceDisplayName
-        ), callback)
+        )
+        return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
+            performRegistrationRequest(params)
+        }
     }
 
     override fun performReCaptcha(response: String, callback: MatrixCallback<RegistrationResult>): Cancelable {
@@ -99,11 +104,10 @@ internal class DefaultRegistrationWizard(private val homeServerConnectionConfig:
             callback.onFailure(IllegalStateException("developer error, call createAccount() method first"))
             return NoOpCancellable
         }
-
-        return performRegistrationRequest(
-                RegistrationParams(
-                        auth = AuthParams.createForCaptcha(safeSession, response)
-                ), callback)
+        val params = RegistrationParams(auth = AuthParams.createForCaptcha(safeSession, response))
+        return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
+            performRegistrationRequest(params)
+        }
     }
 
     override fun acceptTerms(callback: MatrixCallback<RegistrationResult>): Cancelable {
@@ -111,20 +115,17 @@ internal class DefaultRegistrationWizard(private val homeServerConnectionConfig:
             callback.onFailure(IllegalStateException("developer error, call createAccount() method first"))
             return NoOpCancellable
         }
-
-        return performRegistrationRequest(
-                RegistrationParams(
-                        auth = AuthParams(
-                                type = LoginFlowTypes.TERMS,
-                                session = safeSession
-                        )
-                ), callback)
+        val params = RegistrationParams(auth = AuthParams(type = LoginFlowTypes.TERMS, session = safeSession))
+        return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
+            performRegistrationRequest(params)
+        }
     }
 
     override fun addThreePid(threePid: RegisterThreePid, callback: MatrixCallback<RegistrationResult>): Cancelable {
         currentThreePidData = null
-
-        return sendThreePid(threePid, callback)
+        return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
+            sendThreePid(threePid)
+        }
     }
 
     override fun sendAgainThreePid(callback: MatrixCallback<RegistrationResult>): Cancelable {
@@ -132,54 +133,34 @@ internal class DefaultRegistrationWizard(private val homeServerConnectionConfig:
             callback.onFailure(IllegalStateException("developer error, call createAccount() method first"))
             return NoOpCancellable
         }
-
-        return sendThreePid(safeCurrentThreePid, callback)
+        return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
+            sendThreePid(safeCurrentThreePid)
+        }
     }
 
-    private fun sendThreePid(threePid: RegisterThreePid, callback: MatrixCallback<RegistrationResult>): Cancelable {
-        val safeSession = currentSession ?: run {
-            callback.onFailure(IllegalStateException("developer error, call createAccount() method first"))
-            return NoOpCancellable
-        }
-
-        val job = GlobalScope.launch(coroutineDispatchers.main) {
-            runCatching {
-                registerAddThreePidTask.execute(RegisterAddThreePidTask.Params(threePid, clientSecret, sendAttempt++))
-            }
-                    .fold(
-                            {
-                                // Store data
-                                currentThreePidData = ThreePidData(
-                                        threePid,
-                                        it,
-                                        RegistrationParams(
-                                                auth = if (threePid is RegisterThreePid.Email) {
-                                                    AuthParams.createForEmailIdentity(safeSession,
-                                                            ThreePidCredentials(
-                                                                    clientSecret = clientSecret,
-                                                                    sid = it.sid
-                                                            )
-                                                    )
-                                                } else {
-                                                    AuthParams.createForMsisdnIdentity(safeSession,
-                                                            ThreePidCredentials(
-                                                                    clientSecret = clientSecret,
-                                                                    sid = it.sid
-                                                            )
-                                                    )
-                                                }
-                                        ))
-                                        .also { threePidData ->
-                                            // and send the sid a first time
-                                            performRegistrationRequest(threePidData.registrationParams, callback)
-                                        }
-                            },
-                            {
-                                callback.onFailure(it)
-                            }
+    private suspend fun sendThreePid(threePid: RegisterThreePid): RegistrationResult {
+        val safeSession = currentSession ?: throw IllegalStateException("developer error, call createAccount() method first")
+        val response = registerAddThreePidTask.execute(RegisterAddThreePidTask.Params(threePid, clientSecret, sendAttempt++))
+        val params = RegistrationParams(
+                auth = if (threePid is RegisterThreePid.Email) {
+                    AuthParams.createForEmailIdentity(safeSession,
+                            ThreePidCredentials(
+                                    clientSecret = clientSecret,
+                                    sid = response.sid
+                            )
                     )
-        }
-        return CancelableCoroutine(job)
+                } else {
+                    AuthParams.createForMsisdnIdentity(safeSession,
+                            ThreePidCredentials(
+                                    clientSecret = clientSecret,
+                                    sid = response.sid
+                            )
+                    )
+                }
+        )
+        // Store data
+        currentThreePidData = ThreePidData(threePid, response, params)
+        return performRegistrationRequest(params)
     }
 
     override fun checkIfEmailHasBeenValidated(delayMillis: Long, callback: MatrixCallback<RegistrationResult>): Cancelable {
@@ -187,53 +168,32 @@ internal class DefaultRegistrationWizard(private val homeServerConnectionConfig:
             callback.onFailure(IllegalStateException("developer error, no pending three pid"))
             return NoOpCancellable
         }
-
-        return performRegistrationRequest(safeParam, callback, delayMillis)
+        return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
+            performRegistrationRequest(safeParam)
+        }
     }
 
     override fun handleValidateThreePid(code: String, callback: MatrixCallback<RegistrationResult>): Cancelable {
-        val safeParam = currentThreePidData?.registrationParams ?: run {
-            callback.onFailure(IllegalStateException("developer error, no pending three pid"))
-            return NoOpCancellable
+        return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
+            validateThreePid(code)
         }
+    }
 
-        val safeCurrentData = currentThreePidData ?: run {
-            callback.onFailure(IllegalStateException("developer error, call createAccount() method first"))
-            return NoOpCancellable
-        }
-
-        val url = safeCurrentData.addThreePidRegistrationResponse.submitUrl ?: run {
-            callback.onFailure(IllegalStateException("Missing url the send the code"))
-            return NoOpCancellable
-        }
-
-        val params = ValidationCodeBody(
+    private suspend fun validateThreePid(code: String): RegistrationResult {
+        val registrationParams = currentThreePidData?.registrationParams ?: throw IllegalStateException("developer error, no pending three pid")
+        val safeCurrentData = currentThreePidData ?: throw IllegalStateException("developer error, call createAccount() method first")
+        val url = safeCurrentData.addThreePidRegistrationResponse.submitUrl ?: throw IllegalStateException("Missing url the send the code")
+        val validationBody = ValidationCodeBody(
                 clientSecret = clientSecret,
                 sid = safeCurrentData.addThreePidRegistrationResponse.sid,
                 code = code
         )
-
-        val job = GlobalScope.launch(coroutineDispatchers.main) {
-            runCatching {
-                validateCodeTask.execute(ValidateCodeTask.Params(url, params))
-            }
-                    .fold(
-                            {
-                                if (it.success == true) {
-                                    // The entered code is correct
-                                    // Same that validate email
-                                    performRegistrationRequest(safeParam, callback, 3_000)
-                                } else {
-                                    // The code is not correct
-                                    callback.onFailure(Failure.SuccessError)
-                                }
-                            },
-                            {
-                                callback.onFailure(it)
-                            }
-                    )
+        val validationResponse = validateCodeTask.execute(ValidateCodeTask.Params(url, validationBody))
+        if (validationResponse.success == true) {
+            return performRegistrationRequest(registrationParams, 3_000)
+        } else {
+            throw  Failure.SuccessError
         }
-        return CancelableCoroutine(job)
     }
 
     override fun dummy(callback: MatrixCallback<RegistrationResult>): Cancelable {
@@ -241,43 +201,29 @@ internal class DefaultRegistrationWizard(private val homeServerConnectionConfig:
             callback.onFailure(IllegalStateException("developer error, call createAccount() method first"))
             return NoOpCancellable
         }
-
-        return performRegistrationRequest(
-                RegistrationParams(
-                        auth = AuthParams(
-                                type = LoginFlowTypes.DUMMY,
-                                session = safeSession
-                        )
-                ), callback)
+        return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
+            val params = RegistrationParams(auth = AuthParams(type = LoginFlowTypes.DUMMY, session = safeSession))
+            performRegistrationRequest(params)
+        }
     }
 
-    private fun performRegistrationRequest(registrationParams: RegistrationParams,
-                                           callback: MatrixCallback<RegistrationResult>,
-                                           delayMillis: Long = 0): Cancelable {
-        val job = GlobalScope.launch(coroutineDispatchers.main) {
-            runCatching {
-                if (delayMillis > 0) delay(delayMillis)
-                registerTask.execute(RegisterTask.Params(registrationParams))
+    private suspend fun performRegistrationRequest(registrationParams: RegistrationParams,
+                                                   delayMillis: Long = 0): RegistrationResult {
+        delay(delayMillis)
+        val credentials = try {
+            registerTask.execute(RegisterTask.Params(registrationParams))
+        } catch (exception: Throwable) {
+            if (exception is RegistrationFlowError) {
+                currentSession = exception.registrationFlowResponse.session
+                return RegistrationResult.FlowResponse(exception.registrationFlowResponse.toFlowResult())
+            } else {
+                throw exception
             }
-                    .fold(
-                            {
-                                val sessionParams = SessionParams(it, homeServerConnectionConfig)
-                                sessionParamsStore.save(sessionParams)
-                                val session = sessionManager.getOrCreateSession(sessionParams)
-
-                                callback.onSuccess(RegistrationResult.Success(session))
-                            },
-                            {
-                                if (it is Failure.RegistrationFlowError) {
-                                    currentSession = it.registrationFlowResponse.session
-                                    callback.onSuccess(RegistrationResult.FlowResponse(it.registrationFlowResponse.toFlowResult()))
-                                } else {
-                                    callback.onFailure(it)
-                                }
-                            }
-                    )
         }
-        return CancelableCoroutine(job)
+        val sessionParams = SessionParams(credentials, homeServerConnectionConfig)
+        sessionParamsStore.save(sessionParams)
+        val session = sessionManager.getOrCreateSession(sessionParams)
+        return RegistrationResult.Success(session)
     }
 
     private fun buildAuthAPI(): AuthAPI {

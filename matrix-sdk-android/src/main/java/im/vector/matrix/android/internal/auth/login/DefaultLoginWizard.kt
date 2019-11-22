@@ -35,13 +35,11 @@ import im.vector.matrix.android.internal.auth.data.ThreePidMedium
 import im.vector.matrix.android.internal.auth.registration.AddThreePidRegistrationParams
 import im.vector.matrix.android.internal.auth.registration.AddThreePidRegistrationResponse
 import im.vector.matrix.android.internal.auth.registration.RegisterAddThreePidTask
-import im.vector.matrix.android.internal.extensions.foldToCallback
 import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.network.executeRequest
-import im.vector.matrix.android.internal.util.CancelableCoroutine
+import im.vector.matrix.android.internal.task.launchToCallback
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import java.util.*
@@ -73,18 +71,14 @@ internal class DefaultLoginWizard(
                        password: String,
                        deviceName: String,
                        callback: MatrixCallback<Session>): Cancelable {
-        val job = GlobalScope.launch(coroutineDispatchers.main) {
-            val sessionOrFailure = runCatching {
-                loginInternal(login, password, deviceName)
-            }
-            sessionOrFailure.foldToCallback(callback)
+        return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
+            loginInternal(login, password, deviceName)
         }
-        return CancelableCoroutine(job)
     }
 
     private suspend fun loginInternal(login: String,
                                       password: String,
-                                      deviceName: String) = withContext(coroutineDispatchers.io) {
+                                      deviceName: String) = withContext(coroutineDispatchers.computation) {
         val loginParams = if (Patterns.EMAIL_ADDRESS.matcher(login).matches()) {
             PasswordLoginParams.thirdPartyIdentifier(ThreePidMedium.EMAIL, login, password, deviceName)
         } else {
@@ -94,19 +88,14 @@ internal class DefaultLoginWizard(
             apiCall = authAPI.login(loginParams)
         }
         val sessionParams = SessionParams(credentials, homeServerConnectionConfig)
-
         sessionParamsStore.save(sessionParams)
         sessionManager.getOrCreateSession(sessionParams)
     }
 
     override fun resetPassword(email: String, newPassword: String, callback: MatrixCallback<Unit>): Cancelable {
-        val job = GlobalScope.launch(coroutineDispatchers.main) {
-            val result = runCatching {
-                resetPasswordInternal(email, newPassword)
-            }
-            result.foldToCallback(callback)
+        return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
+            resetPasswordInternal(email, newPassword)
         }
-        return CancelableCoroutine(job)
     }
 
     private suspend fun resetPasswordInternal(email: String, newPassword: String) {
@@ -115,11 +104,9 @@ internal class DefaultLoginWizard(
                 clientSecret,
                 sendAttempt++
         )
-
         val result = executeRequest<AddThreePidRegistrationResponse> {
             apiCall = authAPI.resetPassword(AddThreePidRegistrationParams.from(param))
         }
-
         resetPasswordData = ResetPasswordData(newPassword, result)
     }
 
@@ -128,13 +115,9 @@ internal class DefaultLoginWizard(
             callback.onFailure(IllegalStateException("developer error, no reset password in progress"))
             return NoOpCancellable
         }
-        val job = GlobalScope.launch(coroutineDispatchers.main) {
-            val result = runCatching {
-                resetPasswordMailConfirmedInternal(safeResetPasswordData)
-            }
-            result.foldToCallback(callback)
+        return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
+            resetPasswordMailConfirmedInternal(safeResetPasswordData)
         }
-        return CancelableCoroutine(job)
     }
 
     private suspend fun resetPasswordMailConfirmedInternal(resetPasswordData: ResetPasswordData) {
