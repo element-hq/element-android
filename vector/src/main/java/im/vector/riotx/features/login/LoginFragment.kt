@@ -27,6 +27,8 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.withState
 import com.jakewharton.rxbinding3.widget.textChanges
+import im.vector.matrix.android.api.failure.Failure
+import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.riotx.R
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.hideKeyboard
@@ -199,9 +201,17 @@ class LoginFragment @Inject constructor(
                 renderPasswordField()
             }
             is Fail    -> {
-                // Trick to display the error without text.
-                loginFieldTil.error = " "
-                passwordFieldTil.error = errorFormatter.toHumanReadable(state.asyncLoginAction.error)
+                val error = state.asyncLoginAction.error
+                if (error is Failure.ServerError
+                        && error.error.code == MatrixError.FORBIDDEN
+                        && error.error.message.isEmpty()) {
+                    // Login with email, but email unknown
+                    loginFieldTil.error = getString(R.string.login_login_with_email_error)
+                } else {
+                    // Trick to display the error without text.
+                    loginFieldTil.error = " "
+                    passwordFieldTil.error = errorFormatter.toHumanReadable(state.asyncLoginAction.error)
+                }
             }
             // Success is handled by the LoginActivity
             is Success -> Unit

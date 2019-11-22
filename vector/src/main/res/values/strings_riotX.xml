@@ -59,6 +59,8 @@
     <string name="login_registration_disabled">Sorry, this server isn’t accepting new accounts.</string>
     <string name="login_registration_not_supported">The application is not able to create an account on this homeserver.\n\nDo you want to signup using a web client?</string>
 
+    <string name="login_login_with_email_error">This email is not associated to any account.</string>
+
     <!-- Replaced string is the homeserver url -->
     <string name="login_reset_password_on">Reset password on %1$s</string>
     <string name="login_reset_password_notice">A verification email will be sent to your inbox to confirm setting your new password.</string>

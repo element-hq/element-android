@@ -75,16 +75,16 @@ internal class DefaultLoginWizard(
                        callback: MatrixCallback<Session>): Cancelable {
         val job = GlobalScope.launch(coroutineDispatchers.main) {
             val sessionOrFailure = runCatching {
-                authenticate(login, password, deviceName)
+                loginInternal(login, password, deviceName)
             }
             sessionOrFailure.foldToCallback(callback)
         }
         return CancelableCoroutine(job)
     }
 
-    private suspend fun authenticate(login: String,
-                                     password: String,
-                                     deviceName: String) = withContext(coroutineDispatchers.io) {
+    private suspend fun loginInternal(login: String,
+                                      password: String,
+                                      deviceName: String) = withContext(coroutineDispatchers.io) {
         val loginParams = if (Patterns.EMAIL_ADDRESS.matcher(login).matches()) {
             PasswordLoginParams.thirdPartyIdentifier(ThreePidMedium.EMAIL, login, password, deviceName)
         } else {
