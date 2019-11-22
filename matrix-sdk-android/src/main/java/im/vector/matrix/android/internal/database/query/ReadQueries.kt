@@ -18,7 +18,9 @@ package im.vector.matrix.android.internal.database.query
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.events.model.LocalEcho
 import im.vector.matrix.android.internal.database.model.ChunkEntity
+import im.vector.matrix.android.internal.database.model.ReadMarkerEntity
 import im.vector.matrix.android.internal.database.model.ReadReceiptEntity
+import io.realm.Realm
 
 internal fun isEventRead(monarchy: Monarchy,
                          userId: String?,
@@ -39,8 +41,10 @@ internal fun isEventRead(monarchy: Monarchy,
         isEventRead = if (eventToCheck?.sender == userId) {
             true
         } else {
-            val readReceipt = ReadReceiptEntity.where(realm, roomId, userId).findFirst() ?: return@doWithRealm
-            val readReceiptIndex = liveChunk.timelineEvents.find(readReceipt.eventId)?.root?.displayIndex ?: Int.MIN_VALUE
+            val readReceipt = ReadReceiptEntity.where(realm, roomId, userId).findFirst()
+                              ?: return@doWithRealm
+            val readReceiptIndex = liveChunk.timelineEvents.find(readReceipt.eventId)?.root?.displayIndex
+                                   ?: Int.MIN_VALUE
             val eventToCheckIndex = eventToCheck?.displayIndex ?: Int.MAX_VALUE
 
             eventToCheckIndex <= readReceiptIndex
@@ -49,3 +53,22 @@ internal fun isEventRead(monarchy: Monarchy,
 
     return isEventRead
 }
+
+internal fun isReadMarkerMoreRecent(monarchy: Monarchy,
+                                    roomId: String?,
+                                    eventId: String?): Boolean {
+    if (roomId.isNullOrBlank() || eventId.isNullOrBlank()) {
+        return false
+    }
+    return Realm.getInstance(monarchy.realmConfiguration).use { realm ->
+        val liveChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId) ?: return false
+        val eventToCheck = liveChunk.timelineEvents.find(eventId)?.root
+
+        val readMarker = ReadMarkerEntity.where(realm, roomId).findFirst() ?: return false
+        val readMarkerIndex = liveChunk.timelineEvents.find(readMarker.eventId)?.root?.displayIndex
+                              ?: Int.MIN_VALUE
+        val eventToCheckIndex = eventToCheck?.displayIndex ?: Int.MAX_VALUE
+        eventToCheckIndex <= readMarkerIndex
+    }
+}
+

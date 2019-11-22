@@ -22,13 +22,9 @@ import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.kotlin.where
 
-internal fun ReadMarkerEntity.Companion.where(realm: Realm, roomId: String, eventId: String? = null): RealmQuery<ReadMarkerEntity> {
-    val query = realm.where<ReadMarkerEntity>()
+internal fun ReadMarkerEntity.Companion.where(realm: Realm, roomId: String): RealmQuery<ReadMarkerEntity> {
+    return realm.where<ReadMarkerEntity>()
             .equalTo(ReadMarkerEntityFields.ROOM_ID, roomId)
-    if (eventId != null) {
-        query.equalTo(ReadMarkerEntityFields.EVENT_ID, eventId)
-    }
-    return query
 }
 
 internal fun ReadMarkerEntity.Companion.getOrCreate(realm: Realm, roomId: String): ReadMarkerEntity {

@@ -57,22 +57,18 @@ internal class DefaultSetReadMarkersTask @Inject constructor(private val roomAPI
 
     override suspend fun execute(params: SetReadMarkersTask.Params) {
         val markers = HashMap<String, String>()
-        val fullyReadEventId: String?
-        val readReceiptEventId: String?
 
         Timber.v("Execute set read marker with params: $params")
-        if (params.markAllAsRead) {
+        val (fullyReadEventId, readReceiptEventId) = if (params.markAllAsRead) {
             val latestSyncedEventId = Realm.getInstance(monarchy.realmConfiguration).use { realm ->
                 TimelineEventEntity.latestEvent(realm, roomId = params.roomId, includesSending = false)?.eventId
             }
-            fullyReadEventId = latestSyncedEventId
-            readReceiptEventId = latestSyncedEventId
+            Pair(latestSyncedEventId, latestSyncedEventId)
         } else {
-            fullyReadEventId = params.fullyReadEventId
-            readReceiptEventId = params.readReceiptEventId
+            Pair(params.fullyReadEventId, params.readReceiptEventId)
         }
 
-        if (fullyReadEventId != null && isReadMarkerMoreRecent(params.roomId, fullyReadEventId)) {
+        if (fullyReadEventId != null && !isReadMarkerMoreRecent(monarchy, params.roomId, fullyReadEventId)) {
             if (LocalEcho.isLocalEchoId(fullyReadEventId)) {
                 Timber.w("Can't set read marker for local event $fullyReadEventId")
             } else {
@@ -116,18 +112,6 @@ internal class DefaultSetReadMarkersTask @Inject constructor(private val roomAPI
                     roomSummary.hasUnreadMessages = false
                 }
             }
-        }
-    }
-
-    private fun isReadMarkerMoreRecent(roomId: String, newReadMarkerId: String): Boolean {
-        return Realm.getInstance(monarchy.realmConfiguration).use { realm ->
-            val currentReadMarkerId = ReadMarkerEntity.where(realm, roomId = roomId).findFirst()?.eventId
-                                      ?: return true
-            val readMarkerEvent = TimelineEventEntity.where(realm, roomId = roomId, eventId = currentReadMarkerId).findFirst()
-            val newReadMarkerEvent = TimelineEventEntity.where(realm, roomId = roomId, eventId = newReadMarkerId).findFirst()
-            val currentReadMarkerIndex = readMarkerEvent?.root?.displayIndex ?: Int.MAX_VALUE
-            val newReadMarkerIndex = newReadMarkerEvent?.root?.displayIndex ?: Int.MIN_VALUE
-            newReadMarkerIndex > currentReadMarkerIndex
         }
     }
 }
