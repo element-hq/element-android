@@ -30,6 +30,7 @@ import im.vector.matrix.android.api.auth.registration.FlowResult
 import im.vector.matrix.android.api.auth.registration.Stage
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
+import im.vector.riotx.core.extensions.POP_BACK_STACK_EXCLUSIVE
 import im.vector.riotx.core.extensions.addFragment
 import im.vector.riotx.core.extensions.addFragmentToBackstack
 import im.vector.riotx.core.platform.ToolbarConfigurable
@@ -104,21 +105,20 @@ class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
                         })
             is LoginNavigation.OnServerSelectionDone                      -> onServerSelectionDone()
             is LoginNavigation.OnSignModeSelected                         -> onSignModeSelected()
-            is LoginNavigation.OnLoginFlowRetrieved                       -> onLoginFlowRetrieved()
+            is LoginNavigation.OnLoginFlowRetrieved                       -> addFragmentToBackstack(R.id.loginFragmentContainer, LoginSignUpSignInSelectionFragment::class.java)
             is LoginNavigation.OnWebLoginError                            -> onWebLoginError(loginNavigation)
             is LoginNavigation.OnForgetPasswordClicked                    -> addFragmentToBackstack(R.id.loginFragmentContainer, LoginResetPasswordFragment::class.java)
             is LoginNavigation.OnResetPasswordSendThreePidDone            -> {
-                supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, POP_BACK_STACK_EXCLUSIVE)
                 addFragmentToBackstack(R.id.loginFragmentContainer, LoginResetPasswordMailConfirmationFragment::class.java)
             }
             is LoginNavigation.OnResetPasswordMailConfirmationSuccess     -> {
-                supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, POP_BACK_STACK_EXCLUSIVE)
                 addFragmentToBackstack(R.id.loginFragmentContainer, LoginResetPasswordSuccessFragment::class.java)
             }
             is LoginNavigation.OnResetPasswordMailConfirmationSuccessDone -> {
-                // FIXME It goes too far (to the top fragment)
-                // Can be reproduce by entering email and then click back on the next screen
-                supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                // Go back to the login fragment
+                supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, POP_BACK_STACK_EXCLUSIVE)
             }
             is LoginNavigation.OnSendEmailSuccess                         -> addFragmentToBackstack(R.id.loginFragmentContainer,
                     LoginWaitForEmailFragment::class.java,
@@ -156,10 +156,6 @@ class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
                 // This is handled by the Fragments
                 Unit
         }
-    }
-
-    private fun onLoginFlowRetrieved() {
-        addFragmentToBackstack(R.id.loginFragmentContainer, LoginSignUpSignInSelectionFragment::class.java)
     }
 
     private fun updateWithState(loginViewState: LoginViewState) {
@@ -205,7 +201,7 @@ class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
                 withState(loginViewModel) {
                     when (val loginMode = it.asyncHomeServerLoginFlowRequest.invoke()) {
                         null                     -> error("Developer error")
-                        LoginMode.Password       -> addFragmentToBackstack(R.id.loginFragmentContainer, LoginFragment::class.java)
+                        LoginMode.Password       -> addFragmentToBackstack(R.id.loginFragmentContainer, LoginFragment::class.java, tag = FRAGMENT_LOGIN_TAG)
                         LoginMode.Sso            -> addFragmentToBackstack(R.id.loginFragmentContainer, LoginWebFragment::class.java)
                         is LoginMode.Unsupported -> onLoginModeNotSupported(loginMode)
                     }
@@ -284,6 +280,7 @@ class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     companion object {
         private const val FRAGMENT_REGISTRATION_STAGE_TAG = "FRAGMENT_REGISTRATION_STAGE_TAG"
+        private const val FRAGMENT_LOGIN_TAG = "FRAGMENT_LOGIN_TAG"
 
         private const val EXTRA_CONFIG = "EXTRA_CONFIG"
 

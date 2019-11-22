@@ -79,3 +79,6 @@ fun <T : Fragment> VectorBaseFragment.addChildFragmentToBackstack(frameId: Int, 
         replace(frameId, fragmentClass, params.toMvRxBundle(), tag).addToBackStack(tag)
     }
 }
+
+// Define a missing constant
+const val POP_BACK_STACK_EXCLUSIVE = 0
