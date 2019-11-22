@@ -65,7 +65,7 @@ class ErrorFormatter @Inject constructor(private val stringProvider: StringProvi
                         stringProvider.getString(R.string.login_error_not_json)
                     }
                     throwable.error.code == MatrixError.LIMIT_EXCEEDED       -> {
-                        stringProvider.getString(R.string.login_error_limit_exceeded)
+                        limitExceededError(throwable.error)
                     }
                     throwable.error.code == MatrixError.THREEPID_NOT_FOUND   -> {
                         stringProvider.getString(R.string.login_reset_password_error_not_found)
@@ -79,5 +79,17 @@ class ErrorFormatter @Inject constructor(private val stringProvider: StringProvi
             else                         -> throwable.localizedMessage
         }
                 ?: stringProvider.getString(R.string.unknown_error)
+    }
+
+    private fun limitExceededError(error: MatrixError): String {
+        val delay = error.retryAfterMillis
+
+        return if (delay == null) {
+            stringProvider.getString(R.string.login_error_limit_exceeded)
+        } else {
+            // Ensure at least 1 second
+            val delaySeconds = delay.toInt() / 1000 + 1
+            stringProvider.getQuantityString(R.plurals.login_error_limit_exceeded_retry_after, delaySeconds, delaySeconds)
+        }
     }
 }

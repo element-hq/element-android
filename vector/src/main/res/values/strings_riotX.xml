@@ -128,4 +128,9 @@
     <string name="login_wait_for_email_notice">We just sent an email to %1$s.\nPlease click on the link it contains to continue the account creation.</string>
     <string name="login_validation_code_is_not_correct">The entered code is not correct. Please check.</string>
 
+    <plurals name="login_error_limit_exceeded_retry_after">
+        <item quantity="one">Too many requests have been sent. You can retry in %1$d second…</item>
+        <item quantity="other">Too many requests have been sent. You can retry in %1$d seconds…</item>
+    </plurals>
+
 </resources>

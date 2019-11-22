@@ -31,7 +31,9 @@ data class MatrixError(
         @Json(name = "consent_uri") val consentUri: String? = null,
         // RESOURCE_LIMIT_EXCEEDED data
         @Json(name = "limit_type") val limitType: String? = null,
-        @Json(name = "admin_contact") val adminUri: String? = null) {
+        @Json(name = "admin_contact") val adminUri: String? = null,
+        // For LIMIT_EXCEEDED
+        @Json(name = "retry_after_ms") val retryAfterMillis: Long? = null) {
 
     companion object {
         const val FORBIDDEN = "M_FORBIDDEN"
