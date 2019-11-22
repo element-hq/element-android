@@ -14,8 +14,6 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         style="@style/LoginFormScrollView"
         android:layout_height="0dp"
-        android:paddingTop="32dp"
-        android:paddingBottom="32dp"
         tools:ignore="MissingConstraints">
 
         <TextView

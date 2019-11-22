@@ -29,8 +29,6 @@
 
     <style name="LoginFormContainer">
         <item name="android:id">@id/loginFormContainer</item>
-        <item name="android:paddingTop">32dp</item>
-        <item name="android:paddingBottom">32dp</item>
         <item name="android:paddingStart">36dp</item>
         <item name="android:paddingEnd">36dp</item>
         <item name="android:layout_width">match_parent</item>
@@ -43,6 +41,9 @@
         <item name="layout_constraintBottom_toBottomOf">parent</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:clipToPadding">false</item>
+        <item name="android:paddingTop">32dp</item>
+        <item name="android:paddingBottom">32dp</item>
     </style>
 
     <style name="LoginFormScrollView" parent="LoginFormScrollViewBase">
