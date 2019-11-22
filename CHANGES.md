@@ -8,6 +8,7 @@ Features ✨:
 Improvements 🙌:
  - Send mention Pills from composer
  - Links in message preview in the bottom sheet are now active. 
+ - Rework the read marker to make it more usable
 
 Other changes:
  - Fix a small grammatical error when an empty room list is shown.
