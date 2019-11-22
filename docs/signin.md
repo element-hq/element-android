@@ -1,14 +1,140 @@
 # Sign in to a homeserver
 
-This document describes the flow of signin to a homeserver. Examples come from the `matrix.org` homeserver.
+This document describes the flow of signin to a homeserver, and also the flow when user want to reset his password. Examples come from the `matrix.org` homeserver.
 
 ## Sign up flows
 
-### First step
+### Get the flow
 
 Client request the sign-in flows, once the homeserver is chosen by the user and its url is known (in the example it's `https://matrix.org`)
 
-TODO: Complete the doc with signin flow
+> curl -X GET 'https://matrix.org/_matrix/client/r0/login'
+
+200
+
+```json
+{
+  "flows": [
+    {
+      "type": "m.login.password"
+    }
+  ]
+}
+```
+
+### Login with username
+
+The user is able to connect using `m.login.password`
+
+> curl -X POST --data $'{"identifier":{"type":"m.id.user","user":"alice"},"password":"weak_password","type":"m.login.password","initial_device_display_name":"Portable"}' 'https://matrix.org/_matrix/client/r0/login'
+
+```json
+{
+  "identifier": {
+    "type": "m.id.user",
+    "user": "alice"
+  },
+  "password": "weak_password",
+  "type": "m.login.password",
+  "initial_device_display_name": "Portable"
+}
+```
+
+#### Incorrect password
+
+403
+
+```json
+{
+  "errcode": "M_FORBIDDEN",
+  "error": "Invalid password"
+}
+```
+
+#### Correct password:
+
+We get credential (200)
+
+```json
+{
+  "user_id": "@benoit0816:matrix.org",
+  "access_token": "MDAxOGxvY2F0aW9uIG1hdHREDACTEDb2l0MDgxNjptYXRyaXgub3JnCjAwMTZjaWQgdHlwZSA9IGFjY2VzcwowMDIxY2lkIG5vbmNlID0gfnYrSypfdTtkNXIuNWx1KgowMDJmc2lnbmF0dXJlIOsh1XqeAkXexh4qcofl_aR4kHJoSOWYGOhE7-ubX-DZCg",
+  "home_server": "matrix.org",
+  "device_id": "GTVREDALBF",
+  "well_known": {
+    "m.homeserver": {
+      "base_url": "https:\/\/matrix.org\/"
+    }
+  }
+}
+```
+
+### Login with email
+
+If the user has associated an email with its account, he can signin using the email.
+
+> curl -X POST --data $'{"identifier":{"type":"m.id.thirdparty","medium":"email","address":"alice@yopmail.com"},"password":"weak_password","type":"m.login.password","initial_device_display_name":"Portable"}' 'https://matrix.org/_matrix/client/r0/login'
+
+```json
+{
+  "identifier": {
+    "type": "m.id.thirdparty",
+    "medium": "email",
+    "address": "alice@yopmail.com"
+  },
+  "password": "weak_password",
+  "type": "m.login.password",
+  "initial_device_display_name": "Portable"
+}
+```
+
+#### Unknown email
+
+403
+
+```json
+{
+  "errcode": "M_FORBIDDEN",
+  "error": ""
+}
+```
+
+#### Known email, wrong password
+
+403
+
+```json
+{
+  "errcode": "M_FORBIDDEN",
+  "error": "Invalid password"
+}
+```
+
+##### Known email, correct password
+
+We get the credentials (200)
+
+```json
+{
+  "user_id": "@alice:matrix.org",
+  "access_token": "MDAxOGxvY2F0aW9uIG1hdHJpeC5vcmREDACTEDZXJfaWQgPSBAYmVub2l0MDgxNjptYXRyaXgub3JnCjAwMTZjaWQgdHlwZSA9IGFjY2VzcwowMDIxY2lkIG5vbmNlID0gNjtDY0MwRlNPSFFoOC5wOgowMDJmc2lnbmF0dXJlIGiTRm1mYLLxQywxOh3qzQVT8HoEorSokEP2u-bAwtnYCg",
+  "home_server": "matrix.org",
+  "device_id": "WBSREDASND",
+  "well_known": {
+    "m.homeserver": {
+      "base_url": "https:\/\/matrix.org\/"
+    }
+  }
+}
+```
+
+### Login with Msisdn
+
+Not supported yet in RiotX
+
+### SSO
+
+TODO
 
 ## Reset password
 
