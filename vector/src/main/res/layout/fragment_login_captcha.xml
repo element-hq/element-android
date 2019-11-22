@@ -42,6 +42,7 @@
 
     </LinearLayout>
 
+    <!-- Id is defined in the style -->
     <ProgressBar
         android:id="@+id/loginCaptchaProgress"
         android:layout_width="60dp"
@@ -49,7 +50,8 @@
         app:layout_constraintBottom_toBottomOf="@id/loginFormScrollView"
         app:layout_constraintEnd_toEndOf="@id/loginFormScrollView"
         app:layout_constraintStart_toStartOf="@id/loginFormScrollView"
-        app:layout_constraintTop_toTopOf="@id/loginFormScrollView" />
+        app:layout_constraintTop_toTopOf="@id/loginFormScrollView"
+        tools:ignore="UnknownId" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
