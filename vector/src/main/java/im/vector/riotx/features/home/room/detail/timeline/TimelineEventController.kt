@@ -349,7 +349,6 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     ) {
         fun shouldTriggerBuild(): Boolean {
             return mergedHeaderModel != null || formattedDayModel != null
-
         }
     }
 }

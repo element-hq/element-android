@@ -23,7 +23,6 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.RelativeLayout
 import androidx.core.content.ContextCompat
-import androidx.core.view.isInvisible
 import im.vector.riotx.R
 import kotlinx.android.synthetic.main.view_jump_to_read_marker.view.*
 

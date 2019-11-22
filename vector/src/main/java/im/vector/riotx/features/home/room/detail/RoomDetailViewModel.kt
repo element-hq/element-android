@@ -829,7 +829,6 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         return UnreadState.HasNoUnread
     }
 
-
     private fun observeUnreadState() {
         selectSubscribe(RoomDetailViewState::unreadState) {
             Timber.v("Unread state: $it")

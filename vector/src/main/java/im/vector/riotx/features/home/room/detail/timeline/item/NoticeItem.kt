@@ -36,7 +36,6 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
         attributes.readReceiptsCallback?.onReadReceiptsClicked(attributes.informationData.readReceipts)
     })
 
-
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.noticeTextView.text = attributes.noticeText

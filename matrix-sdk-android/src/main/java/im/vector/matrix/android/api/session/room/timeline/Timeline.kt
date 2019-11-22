@@ -122,5 +122,4 @@ interface Timeline {
          */
         BACKWARDS
     }
-
 }

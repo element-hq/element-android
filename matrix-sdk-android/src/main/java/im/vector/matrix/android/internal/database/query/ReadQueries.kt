@@ -71,4 +71,3 @@ internal fun isReadMarkerMoreRecent(monarchy: Monarchy,
         eventToCheckIndex <= readMarkerIndex
     }
 }
-
