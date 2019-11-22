@@ -105,26 +105,34 @@ class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
                         })
             is LoginNavigation.OnServerSelectionDone                      -> onServerSelectionDone()
             is LoginNavigation.OnSignModeSelected                         -> onSignModeSelected()
-            is LoginNavigation.OnLoginFlowRetrieved                       -> addFragmentToBackstack(R.id.loginFragmentContainer, LoginSignUpSignInSelectionFragment::class.java)
+            is LoginNavigation.OnLoginFlowRetrieved                       ->
+                addFragmentToBackstack(R.id.loginFragmentContainer,
+                        LoginSignUpSignInSelectionFragment::class.java)
             is LoginNavigation.OnWebLoginError                            -> onWebLoginError(loginNavigation)
-            is LoginNavigation.OnForgetPasswordClicked                    -> addFragmentToBackstack(R.id.loginFragmentContainer, LoginResetPasswordFragment::class.java)
+            is LoginNavigation.OnForgetPasswordClicked                    ->
+                addFragmentToBackstack(R.id.loginFragmentContainer,
+                        LoginResetPasswordFragment::class.java)
             is LoginNavigation.OnResetPasswordSendThreePidDone            -> {
                 supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, POP_BACK_STACK_EXCLUSIVE)
-                addFragmentToBackstack(R.id.loginFragmentContainer, LoginResetPasswordMailConfirmationFragment::class.java)
+                addFragmentToBackstack(R.id.loginFragmentContainer,
+                        LoginResetPasswordMailConfirmationFragment::class.java)
             }
             is LoginNavigation.OnResetPasswordMailConfirmationSuccess     -> {
                 supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, POP_BACK_STACK_EXCLUSIVE)
-                addFragmentToBackstack(R.id.loginFragmentContainer, LoginResetPasswordSuccessFragment::class.java)
+                addFragmentToBackstack(R.id.loginFragmentContainer,
+                        LoginResetPasswordSuccessFragment::class.java)
             }
             is LoginNavigation.OnResetPasswordMailConfirmationSuccessDone -> {
                 // Go back to the login fragment
                 supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, POP_BACK_STACK_EXCLUSIVE)
             }
-            is LoginNavigation.OnSendEmailSuccess                         -> addFragmentToBackstack(R.id.loginFragmentContainer,
+            is LoginNavigation.OnSendEmailSuccess                         ->
+                addFragmentToBackstack(R.id.loginFragmentContainer,
                     LoginWaitForEmailFragment::class.java,
                     LoginWaitForEmailFragmentArgument(loginNavigation.email),
                     tag = FRAGMENT_REGISTRATION_STAGE_TAG)
-            is LoginNavigation.OnSendMsisdnSuccess                        -> addFragmentToBackstack(R.id.loginFragmentContainer,
+            is LoginNavigation.OnSendMsisdnSuccess                        ->
+                addFragmentToBackstack(R.id.loginFragmentContainer,
                     LoginGenericTextInputFormFragment::class.java,
                     LoginGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.ConfirmMsisdn, true, loginNavigation.msisdn),
                     tag = FRAGMENT_REGISTRATION_STAGE_TAG)

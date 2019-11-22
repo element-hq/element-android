@@ -16,10 +16,10 @@
 
 package im.vector.riotx.features.login
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.CallSuper
+import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.activityViewModel
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.failure.MatrixError

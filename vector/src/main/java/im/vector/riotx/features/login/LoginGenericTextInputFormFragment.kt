@@ -73,11 +73,13 @@ class LoginGenericTextInputFormFragment @Inject constructor(private val errorFor
 
     private fun setupAutoFill() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            when (params.mode) {
-                TextInputFormFragmentMode.SetEmail      -> loginGenericTextInputFormTextInput.setAutofillHints(HintConstants.AUTOFILL_HINT_EMAIL_ADDRESS)
-                TextInputFormFragmentMode.SetMsisdn     -> loginGenericTextInputFormTextInput.setAutofillHints(HintConstants.AUTOFILL_HINT_PHONE_NUMBER)
-                TextInputFormFragmentMode.ConfirmMsisdn -> loginGenericTextInputFormTextInput.setAutofillHints(HintConstants.AUTOFILL_HINT_SMS_OTP)
-            }
+            loginGenericTextInputFormTextInput.setAutofillHints(
+                    when (params.mode) {
+                        TextInputFormFragmentMode.SetEmail      -> HintConstants.AUTOFILL_HINT_EMAIL_ADDRESS
+                        TextInputFormFragmentMode.SetMsisdn     -> HintConstants.AUTOFILL_HINT_PHONE_NUMBER
+                        TextInputFormFragmentMode.ConfirmMsisdn -> HintConstants.AUTOFILL_HINT_SMS_OTP
+                    }
+            )
         }
     }
 
@@ -95,7 +97,8 @@ class LoginGenericTextInputFormFragment @Inject constructor(private val errorFor
                 loginGenericTextInputFormTitle.text = getString(R.string.login_set_email_title)
                 loginGenericTextInputFormNotice.text = getString(R.string.login_set_email_notice)
                 loginGenericTextInputFormNotice2.setTextOrHide(null)
-                loginGenericTextInputFormTil.hint = getString(if (params.mandatory) R.string.login_set_email_mandatory_hint else R.string.login_set_email_optional_hint)
+                loginGenericTextInputFormTil.hint =
+                        getString(if (params.mandatory) R.string.login_set_email_mandatory_hint else R.string.login_set_email_optional_hint)
                 loginGenericTextInputFormTextInput.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
                 loginGenericTextInputFormOtherButton.isVisible = false
                 loginGenericTextInputFormSubmit.text = getString(R.string.login_set_email_submit)
@@ -104,7 +107,8 @@ class LoginGenericTextInputFormFragment @Inject constructor(private val errorFor
                 loginGenericTextInputFormTitle.text = getString(R.string.login_set_msisdn_title)
                 loginGenericTextInputFormNotice.text = getString(R.string.login_set_msisdn_notice)
                 loginGenericTextInputFormNotice2.setTextOrHide(getString(R.string.login_set_msisdn_notice2))
-                loginGenericTextInputFormTil.hint = getString(if (params.mandatory) R.string.login_set_msisdn_mandatory_hint else R.string.login_set_msisdn_optional_hint)
+                loginGenericTextInputFormTil.hint =
+                        getString(if (params.mandatory) R.string.login_set_msisdn_mandatory_hint else R.string.login_set_msisdn_optional_hint)
                 loginGenericTextInputFormTextInput.inputType = InputType.TYPE_CLASS_PHONE
                 loginGenericTextInputFormOtherButton.isVisible = false
                 loginGenericTextInputFormSubmit.text = getString(R.string.login_set_msisdn_submit)
@@ -113,7 +117,8 @@ class LoginGenericTextInputFormFragment @Inject constructor(private val errorFor
                 loginGenericTextInputFormTitle.text = getString(R.string.login_msisdn_confirm_title)
                 loginGenericTextInputFormNotice.text = getString(R.string.login_msisdn_confirm_notice, params.extra)
                 loginGenericTextInputFormNotice2.setTextOrHide(null)
-                loginGenericTextInputFormTil.hint = getString(R.string.login_msisdn_confirm_hint)
+                loginGenericTextInputFormTil.hint =
+                        getString(R.string.login_msisdn_confirm_hint)
                 loginGenericTextInputFormTextInput.inputType = InputType.TYPE_CLASS_NUMBER
                 loginGenericTextInputFormOtherButton.isVisible = true
                 loginGenericTextInputFormOtherButton.text = getString(R.string.login_msisdn_confirm_send_again)
