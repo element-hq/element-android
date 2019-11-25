@@ -18,7 +18,6 @@ package im.vector.riotx.features.permalink
 
 import android.content.Intent
 import android.os.Bundle
-import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.di.ScreenComponent
@@ -27,7 +26,6 @@ import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.home.LoadingFragment
 import im.vector.riotx.features.login.LoginActivity
-import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.debug.activity_test_material_theme.*
 import java.util.concurrent.TimeUnit
