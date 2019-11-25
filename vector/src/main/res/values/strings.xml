@@ -1800,5 +1800,6 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="permissions_rationale_msg_keys_backup_export">Riot needs permission to save your E2E keys on disk.\n\nPlease allow access on the next pop-up to be able to export your keys manually.</string>
 
     <string name="no_network_indicator">There is no network connection right now</string>
+    <string name="permalink_malformed">Your matrix.to link was malformed</string>
 
 </resources>

@@ -69,7 +69,7 @@ class PermalinkHandler @Inject constructor(private val session: Session,
             }
             is PermalinkData.UserLink     -> {
                 navigator.openUserDetail(permalinkData.userId, context, buildTask)
-                Single.just(false)
+                Single.just(true)
             }
             is PermalinkData.FallbackLink -> {
                 Single.just(false)
