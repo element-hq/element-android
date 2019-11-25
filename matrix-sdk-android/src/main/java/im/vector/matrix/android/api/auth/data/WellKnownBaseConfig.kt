@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,17 +20,16 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * This data class hold credentials user data.
- * You shouldn't have to instantiate it.
- * The access token should be use to authenticate user in all server requests.
+ * https://matrix.org/docs/spec/client_server/r0.4.0.html#server-discovery
+ * <pre>
+ * {
+ *     "base_url": "https://vector.im"
+ * }
+ * </pre>
  */
 @JsonClass(generateAdapter = true)
-data class Credentials(
-        @Json(name = "user_id") val userId: String,
-        @Json(name = "home_server") val homeServer: String,
-        @Json(name = "access_token") val accessToken: String,
-        @Json(name = "refresh_token") val refreshToken: String?,
-        @Json(name = "device_id") val deviceId: String?,
-        // Optional data that may contain info to override home server and/or identity server
-        @Json(name = "well_known") val wellKnown: WellKnown? = null
+data class WellKnownBaseConfig(
+        @Json(name = "base_url")
+        val baseURL: String? = null
 )
+

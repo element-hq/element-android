@@ -16,11 +16,14 @@
 
 package im.vector.matrix.android.internal.auth
 
+import android.net.Uri
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.internal.SessionManager
+import timber.log.Timber
+import javax.inject.Inject
 
 internal interface SessionCreator {
     suspend fun createSession(credentials: Credentials, homeServerConnectionConfig: HomeServerConnectionConfig): Session
@@ -31,8 +34,29 @@ internal class DefaultSessionCreator @Inject constructor(
         private val sessionManager: SessionManager
 ) : SessionCreator {
 
+    /**
+     * Credentials can affect the homeServerConnectionConfig, override home server url and/or
+     * identity server url if provided in the credentials
+     */
     override suspend fun createSession(credentials: Credentials, homeServerConnectionConfig: HomeServerConnectionConfig): Session {
-        val sessionParams = SessionParams(credentials, homeServerConnectionConfig)
+        val sessionParams = SessionParams(
+                credentials = credentials,
+                homeServerConnectionConfig = homeServerConnectionConfig.copy(
+                        homeServerUri = credentials.wellKnown?.homeServer?.baseURL
+                                // remove trailing "/"
+                                ?.trim { it == '/' }
+                                ?.takeIf { it.isNotBlank() }
+                                ?.also { Timber.d("Overriding homeserver url to $it") }
+                                ?.let { Uri.parse(it) }
+                                ?: homeServerConnectionConfig.homeServerUri,
+                        identityServerUri = credentials.wellKnown?.identityServer?.baseURL
+                                // remove trailing "/"
+                                ?.trim { it == '/' }
+                                ?.takeIf { it.isNotBlank() }
+                                ?.also { Timber.d("Overriding identity server url to $it") }
+                                ?.let { Uri.parse(it) }
+                                ?: homeServerConnectionConfig.identityServerUri
+                ))
 
         sessionParamsStore.save(sessionParams)
         return sessionManager.getOrCreateSession(sessionParams)
