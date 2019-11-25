@@ -31,11 +31,11 @@ import im.vector.matrix.android.internal.auth.data.LoginFlowResponse
 import im.vector.matrix.android.internal.auth.login.DefaultLoginWizard
 import im.vector.matrix.android.internal.auth.registration.DefaultRegistrationWizard
 import im.vector.matrix.android.internal.di.Unauthenticated
-import im.vector.matrix.android.internal.extensions.foldToCallback
 import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.network.executeRequest
-import im.vector.matrix.android.internal.util.CancelableCoroutine
+import im.vector.matrix.android.internal.task.launchToCallback
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import im.vector.matrix.android.internal.util.toCancelable
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -70,7 +70,7 @@ internal class DefaultAuthenticationService @Inject constructor(@Unauthenticated
     override fun getLoginFlow(homeServerConnectionConfig: HomeServerConnectionConfig, callback: MatrixCallback<LoginFlowResponse>): Cancelable {
         currentHomeServerConnectionConfig = null
 
-        val job = GlobalScope.launch(coroutineDispatchers.main) {
+        return GlobalScope.launch(coroutineDispatchers.main) {
             val result = runCatching {
                 getLoginFlowInternal(homeServerConnectionConfig)
             }
@@ -85,7 +85,7 @@ internal class DefaultAuthenticationService @Inject constructor(@Unauthenticated
                     }
             )
         }
-        return CancelableCoroutine(job)
+                .toCancelable()
     }
 
     private suspend fun getLoginFlowInternal(homeServerConnectionConfig: HomeServerConnectionConfig) = withContext(coroutineDispatchers.io) {
@@ -126,13 +126,9 @@ internal class DefaultAuthenticationService @Inject constructor(@Unauthenticated
     override fun createSessionFromSso(homeServerConnectionConfig: HomeServerConnectionConfig,
                                       credentials: Credentials,
                                       callback: MatrixCallback<Session>): Cancelable {
-        val job = GlobalScope.launch(coroutineDispatchers.main) {
-            val sessionOrFailure = runCatching {
-                createSessionFromSso(credentials, homeServerConnectionConfig)
-            }
-            sessionOrFailure.foldToCallback(callback)
+        return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
+            createSessionFromSso(credentials, homeServerConnectionConfig)
         }
-        return CancelableCoroutine(job)
     }
 
     private suspend fun createSessionFromSso(credentials: Credentials,

@@ -34,7 +34,8 @@ import im.vector.matrix.android.internal.auth.data.LoginFlowTypes
 import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.task.launchToCallback
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
-import kotlinx.coroutines.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import okhttp3.OkHttpClient
 import java.util.*
 
@@ -160,6 +161,7 @@ internal class DefaultRegistrationWizard(private val homeServerConnectionConfig:
         )
         // Store data
         currentThreePidData = ThreePidData(threePid, response, params)
+        // and send the sid a first time
         return performRegistrationRequest(params)
     }
 
@@ -169,7 +171,7 @@ internal class DefaultRegistrationWizard(private val homeServerConnectionConfig:
             return NoOpCancellable
         }
         return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
-            performRegistrationRequest(safeParam)
+            performRegistrationRequest(safeParam, delayMillis)
         }
     }
 
@@ -190,9 +192,12 @@ internal class DefaultRegistrationWizard(private val homeServerConnectionConfig:
         )
         val validationResponse = validateCodeTask.execute(ValidateCodeTask.Params(url, validationBody))
         if (validationResponse.success == true) {
+            // The entered code is correct
+            // Same than validate email
             return performRegistrationRequest(registrationParams, 3_000)
         } else {
-            throw  Failure.SuccessError
+            // The code is not correct
+            throw Failure.SuccessError
         }
     }
 

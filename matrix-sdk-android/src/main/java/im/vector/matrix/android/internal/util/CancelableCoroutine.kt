@@ -23,7 +23,10 @@ internal fun Job.toCancelable(): Cancelable {
     return CancelableCoroutine(this)
 }
 
-internal class CancelableCoroutine(private val job: Job) : Cancelable {
+/**
+ * Private, use the extension above
+ */
+private class CancelableCoroutine(private val job: Job) : Cancelable {
 
     override fun cancel() {
         if (!job.isCancelled) {
