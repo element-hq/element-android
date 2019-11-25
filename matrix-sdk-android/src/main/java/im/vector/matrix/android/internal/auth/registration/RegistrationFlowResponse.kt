@@ -81,7 +81,7 @@ fun RegistrationFlowResponse.toFlowResult(): FlowResult {
         val stage = when (type) {
             LoginFlowTypes.RECAPTCHA      -> Stage.ReCaptcha(isMandatory, ((params?.get(type) as? Map<*, *>)?.get("public_key") as? String)
                     ?: "")
-            LoginFlowTypes.DUMMY          -> Stage.Dummy
+            LoginFlowTypes.DUMMY          -> Stage.Dummy(isMandatory)
             LoginFlowTypes.TERMS          -> Stage.Terms(isMandatory, params?.get(type) as? TermPolicies ?: emptyMap<String, String>())
             LoginFlowTypes.EMAIL_IDENTITY -> Stage.Email(isMandatory)
             LoginFlowTypes.MSISDN         -> Stage.Msisdn(isMandatory)

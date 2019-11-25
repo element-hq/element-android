@@ -128,14 +128,14 @@ class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
             }
             is LoginNavigation.OnSendEmailSuccess                         ->
                 addFragmentToBackstack(R.id.loginFragmentContainer,
-                    LoginWaitForEmailFragment::class.java,
-                    LoginWaitForEmailFragmentArgument(loginNavigation.email),
-                    tag = FRAGMENT_REGISTRATION_STAGE_TAG)
+                        LoginWaitForEmailFragment::class.java,
+                        LoginWaitForEmailFragmentArgument(loginNavigation.email),
+                        tag = FRAGMENT_REGISTRATION_STAGE_TAG)
             is LoginNavigation.OnSendMsisdnSuccess                        ->
                 addFragmentToBackstack(R.id.loginFragmentContainer,
-                    LoginGenericTextInputFormFragment::class.java,
-                    LoginGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.ConfirmMsisdn, true, loginNavigation.msisdn),
-                    tag = FRAGMENT_REGISTRATION_STAGE_TAG)
+                        LoginGenericTextInputFormFragment::class.java,
+                        LoginGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.ConfirmMsisdn, true, loginNavigation.msisdn),
+                        tag = FRAGMENT_REGISTRATION_STAGE_TAG)
         }
     }
 

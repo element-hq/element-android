@@ -19,7 +19,7 @@ package im.vector.riotx.features.login
 import im.vector.matrix.android.api.auth.registration.Stage
 
 /**
- * Stage.Other is not supported, as well as any other new stage added to the SDK before it is added to the list below
+ * Stage.Other is not supported, as well as any other new stages added to the SDK before it is added to the list below
  */
 fun Stage.isSupported(): Boolean {
     return this is Stage.ReCaptcha

@@ -30,8 +30,9 @@ sealed class Stage(open val mandatory: Boolean) {
 
     // m.login.token
 
-    // m.login.dummy, never mandatory by definition
-    object Dummy : Stage(false)
+    // m.login.dummy, can be mandatory if there is no other stages. In this case the account cannot be created by just sending a username
+    // and a password, the dummy stage has to be done
+    data class Dummy(override val mandatory: Boolean) : Stage(mandatory)
 
     // Undocumented yet: m.login.terms
     data class Terms(override val mandatory: Boolean, val policies: TermPolicies) : Stage(mandatory)

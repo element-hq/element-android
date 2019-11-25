@@ -27,6 +27,7 @@ import im.vector.matrix.android.api.auth.login.LoginWizard
 import im.vector.matrix.android.api.auth.registration.FlowResult
 import im.vector.matrix.android.api.auth.registration.RegistrationResult
 import im.vector.matrix.android.api.auth.registration.RegistrationWizard
+import im.vector.matrix.android.api.auth.registration.Stage
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.MatrixCallbackDelegate
@@ -450,8 +451,14 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
     }
 
     private fun onFlowResponse(flowResult: FlowResult) {
-        // Notify the user
-        _viewEvents.post(LoginViewEvents.RegistrationFlowResult(flowResult))
+        // If dummy stage is mandatory, and password is already sent, do the dummy stage now
+        if (isRegistrationStarted
+                && flowResult.missingStages.any { it is Stage.Dummy && it.mandatory }) {
+            handleRegisterDummy()
+        } else {
+            // Notify the user
+            _viewEvents.post(LoginViewEvents.RegistrationFlowResult(flowResult))
+        }
     }
 
     private fun onSessionCreated(session: Session) {
