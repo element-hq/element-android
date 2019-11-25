@@ -21,7 +21,12 @@ import android.net.Uri
 import im.vector.matrix.android.api.permalinks.PermalinkData
 import im.vector.matrix.android.api.permalinks.PermalinkParser
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.util.Optional
+import im.vector.matrix.rx.rx
 import im.vector.riotx.features.navigation.Navigator
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class PermalinkHandler @Inject constructor(private val session: Session,
@@ -32,7 +37,7 @@ class PermalinkHandler @Inject constructor(private val session: Session,
             deepLink: String?,
             navigateToRoomInterceptor: NavigateToRoomInterceptor? = null,
             buildTask: Boolean = false
-    ): Boolean {
+    ): Single<Boolean> {
         val uri = deepLink?.let { Uri.parse(it) }
         return launch(context, uri, navigateToRoomInterceptor, buildTask)
     }
@@ -42,47 +47,53 @@ class PermalinkHandler @Inject constructor(private val session: Session,
             deepLink: Uri?,
             navigateToRoomInterceptor: NavigateToRoomInterceptor? = null,
             buildTask: Boolean = false
-    ): Boolean {
+    ): Single<Boolean> {
         if (deepLink == null) {
-            return false
+            return Single.just(false)
         }
-
         return when (val permalinkData = PermalinkParser.parse(deepLink)) {
-            is PermalinkData.EventLink    -> {
-                if (navigateToRoomInterceptor?.navToRoom(permalinkData.roomIdOrAlias, permalinkData.eventId) != true) {
-                    openRoom(context, permalinkData.roomIdOrAlias, permalinkData.eventId, buildTask)
-                }
-                true
-            }
             is PermalinkData.RoomLink     -> {
-                if (navigateToRoomInterceptor?.navToRoom(permalinkData.roomIdOrAlias) != true) {
-                    openRoom(context, permalinkData.roomIdOrAlias, null, buildTask)
-                }
-
-                true
+                permalinkData.getRoomId()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .map {
+                            val roomId = it.getOrNull()
+                            if (navigateToRoomInterceptor?.navToRoom(roomId) != true) {
+                                openRoom(context, roomId, permalinkData.eventId, buildTask)
+                            }
+                            true
+                        }
             }
             is PermalinkData.GroupLink    -> {
                 navigator.openGroupDetail(permalinkData.groupId, context, buildTask)
-                false
+                Single.just(true)
             }
             is PermalinkData.UserLink     -> {
                 navigator.openUserDetail(permalinkData.userId, context, buildTask)
-                true
+                Single.just(false)
             }
             is PermalinkData.FallbackLink -> {
-                false
+                Single.just(false)
             }
+        }
+    }
+
+    private fun PermalinkData.RoomLink.getRoomId(): Single<Optional<String>> {
+        return if (isRoomAlias) {
+            // At the moment we are not fetching on the server as we don't handle not join room
+            session.rx().getRoomIdByAlias(roomIdOrAlias, false).subscribeOn(Schedulers.io())
+        } else {
+            Single.just(Optional.from(roomIdOrAlias))
         }
     }
 
     /**
      * Open room either joined, or not unknown
      */
-    private fun openRoom(context: Context, roomIdOrAlias: String, eventId: String? = null, buildTask: Boolean) {
-        if (session.getRoom(roomIdOrAlias) != null) {
-            navigator.openRoom(context, roomIdOrAlias, eventId, buildTask)
+    private fun openRoom(context: Context, roomId: String?, eventId: String? = null, buildTask: Boolean) {
+        return if (roomId != null && session.getRoom(roomId) != null) {
+            navigator.openRoom(context, roomId, eventId, buildTask)
         } else {
-            navigator.openNotJoinedRoom(context, roomIdOrAlias, eventId, buildTask)
+            navigator.openNotJoinedRoom(context, roomId, eventId, buildTask)
         }
     }
 }
@@ -92,5 +103,5 @@ interface NavigateToRoomInterceptor {
     /**
      * Return true if the navigation has been intercepted
      */
-    fun navToRoom(roomId: String, eventId: String? = null): Boolean
+    fun navToRoom(roomId: String?, eventId: String? = null): Boolean
 }

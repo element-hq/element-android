@@ -18,10 +18,10 @@ package im.vector.matrix.android.api.session.room
 
 import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.internal.session.room.alias.RoomAliasDescription
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.util.Cancelable
+import im.vector.matrix.android.api.util.Optional
 
 /**
  * This interface defines methods to get rooms. It's implemented at the session level.
@@ -80,5 +80,6 @@ interface RoomService {
      * Resolve a room alias to a room ID.
      */
     fun getRoomIdByAlias(roomAlias: String,
-                         callback: MatrixCallback<String?>): Cancelable
+                         searchOnServer: Boolean,
+                         callback: MatrixCallback<Optional<String>>): Cancelable
 }

@@ -19,7 +19,6 @@ package im.vector.matrix.android.api.session.room.model
 import im.vector.matrix.android.api.session.room.model.tag.RoomTag
 import im.vector.matrix.android.api.session.room.send.UserDraft
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
-import io.realm.RealmList
 
 /**
  * This class holds some data of a room.

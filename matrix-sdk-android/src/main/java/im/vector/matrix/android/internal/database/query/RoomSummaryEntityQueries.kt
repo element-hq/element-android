@@ -40,7 +40,7 @@ internal fun RoomSummaryEntity.Companion.findByAlias(realm: Realm, roomAlias: St
         return roomSummary
     }
     return realm.where<RoomSummaryEntity>()
-            .`in`(RoomSummaryEntityFields.ALIASES.`$`, arrayOf(roomAlias))
+            .contains(RoomSummaryEntityFields.FLAT_ALIASES, "|$roomAlias")
             .findFirst()
 }
 

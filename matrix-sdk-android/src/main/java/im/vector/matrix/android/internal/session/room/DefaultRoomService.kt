@@ -21,11 +21,11 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.RoomService
-import im.vector.matrix.android.internal.session.room.alias.RoomAliasDescription
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.VersioningState
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.util.Cancelable
+import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.internal.database.mapper.RoomSummaryMapper
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
@@ -50,7 +50,6 @@ internal class DefaultRoomService @Inject constructor(private val monarchy: Mona
                                                       private val roomIdByAliasTask: GetRoomIdByAliasTask,
                                                       private val roomFactory: RoomFactory,
                                                       private val taskExecutor: TaskExecutor) : RoomService {
-
 
     override fun createRoom(createRoomParams: CreateRoomParams, callback: MatrixCallback<String>): Cancelable {
         return createRoomTask
@@ -116,9 +115,9 @@ internal class DefaultRoomService @Inject constructor(private val monarchy: Mona
                 .executeBy(taskExecutor)
     }
 
-    override fun getRoomIdByAlias(roomAlias: String, callback: MatrixCallback<String?>): Cancelable {
+    override fun getRoomIdByAlias(roomAlias: String, searchOnServer: Boolean, callback: MatrixCallback<Optional<String>>): Cancelable {
         return roomIdByAliasTask
-                .configureWith(GetRoomIdByAliasTask.Params(roomAlias)) {
+                .configureWith(GetRoomIdByAliasTask.Params(roomAlias, searchOnServer)) {
                     this.callback = callback
                 }
                 .executeBy(taskExecutor)

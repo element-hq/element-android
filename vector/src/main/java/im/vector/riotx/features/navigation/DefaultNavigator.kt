@@ -40,7 +40,6 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import androidx.core.app.TaskStackBuilder
 
-
 @Singleton
 class DefaultNavigator @Inject constructor() : Navigator {
 
@@ -56,7 +55,7 @@ class DefaultNavigator @Inject constructor() : Navigator {
         }
     }
 
-    override fun openNotJoinedRoom(context: Context, roomIdOrAlias: String, eventId: String?, buildTask: Boolean) {
+    override fun openNotJoinedRoom(context: Context, roomIdOrAlias: String?, eventId: String?, buildTask: Boolean) {
         if (context is VectorBaseActivity) {
             context.notImplemented("Open not joined room")
         } else {
@@ -64,13 +63,20 @@ class DefaultNavigator @Inject constructor() : Navigator {
         }
     }
 
-
     override fun openGroupDetail(groupId: String, context: Context, buildTask: Boolean) {
-        Timber.v("Open group detail $groupId")
+        if (context is VectorBaseActivity) {
+            context.notImplemented("Open group detail")
+        } else {
+            context.toast(R.string.not_implemented)
+        }
     }
 
     override fun openUserDetail(userId: String, context: Context, buildTask: Boolean) {
-        Timber.v("Open user detail $userId")
+        if (context is VectorBaseActivity) {
+            context.notImplemented("Open user detail")
+        } else {
+            context.toast(R.string.not_implemented)
+        }
     }
 
     override fun openRoomForSharing(activity: Activity, roomId: String, sharedData: SharedData) {

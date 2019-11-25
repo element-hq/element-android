@@ -27,7 +27,7 @@ interface Navigator {
 
     fun openRoomForSharing(activity: Activity, roomId: String, sharedData: SharedData)
 
-    fun openNotJoinedRoom(context: Context, roomIdOrAlias: String, eventId: String? = null, buildTask: Boolean = false)
+    fun openNotJoinedRoom(context: Context, roomIdOrAlias: String?, eventId: String? = null, buildTask: Boolean = false)
 
     fun openRoomPreview(publicRoom: PublicRoom, context: Context)
 

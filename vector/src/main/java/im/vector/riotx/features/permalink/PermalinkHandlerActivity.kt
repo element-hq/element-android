@@ -18,11 +18,14 @@ package im.vector.riotx.features.permalink
 
 import android.content.Intent
 import android.os.Bundle
+import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.platform.VectorBaseActivity
+import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.login.LoginActivity
-import timber.log.Timber
+import io.reactivex.android.schedulers.AndroidSchedulers
+import kotlinx.android.synthetic.debug.activity_test_material_theme.*
 import javax.inject.Inject
 
 class PermalinkHandlerActivity : VectorBaseActivity() {
@@ -36,18 +39,23 @@ class PermalinkHandlerActivity : VectorBaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // If we are not logged in, stop the sharing process and open login screen.
-        // In the future, we might want to relaunch the sharing process after login.
+        setContentView(R.layout.activity)
+        // If we are not logged in, open login screen.
+        // In the future, we might want to relaunch the process after login.
         if (!sessionHolder.hasActiveSession()) {
             startLoginActivity()
             return
         }
         val uri = intent.dataString
-        val isHandled = permalinkHandler.launch(this, uri, buildTask = true)
-        if (!isHandled) {
-            Timber.v("Couldn't handle permalink")
-        }
-        finish()
+        permalinkHandler.launch(this, uri, buildTask = true)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { isHandled ->
+                    if (!isHandled) {
+                        toast("Your matrix.to link was malformed")
+                    }
+                    finish()
+                }
+                .disposeOnDestroy()
     }
 
     private fun startLoginActivity() {
@@ -56,6 +64,4 @@ class PermalinkHandlerActivity : VectorBaseActivity() {
         startActivity(intent)
         finish()
     }
-
-
 }

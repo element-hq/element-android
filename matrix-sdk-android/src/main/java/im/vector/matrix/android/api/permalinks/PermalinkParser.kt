@@ -18,8 +18,6 @@ package im.vector.matrix.android.api.permalinks
 
 import android.net.Uri
 import im.vector.matrix.android.api.MatrixPatterns
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 /**
  * This class turns an uri to a [PermalinkData]
@@ -65,18 +63,16 @@ object PermalinkParser {
             MatrixPatterns.isUserId(identifier)    -> PermalinkData.UserLink(userId = identifier)
             MatrixPatterns.isGroupId(identifier)   -> PermalinkData.GroupLink(groupId = identifier)
             MatrixPatterns.isRoomId(identifier)    -> {
-                if (!extraParameter.isNullOrEmpty() && MatrixPatterns.isEventId(extraParameter)) {
-                    PermalinkData.EventLink(roomIdOrAlias = identifier, eventId = extraParameter, isRoomAlias = false)
-                } else {
-                    PermalinkData.RoomLink(roomIdOrAlias = identifier, isRoomAlias = false)
+                val eventId = extraParameter.takeIf {
+                    !it.isNullOrEmpty() && MatrixPatterns.isEventId(it)
                 }
+                PermalinkData.RoomLink(roomIdOrAlias = identifier, isRoomAlias = false, eventId = eventId)
             }
             MatrixPatterns.isRoomAlias(identifier) -> {
-                if (!extraParameter.isNullOrEmpty() && MatrixPatterns.isEventId(extraParameter)) {
-                    PermalinkData.EventLink(roomIdOrAlias = identifier, eventId = extraParameter, isRoomAlias = true)
-                } else {
-                    PermalinkData.RoomLink(roomIdOrAlias = identifier, isRoomAlias = true)
+                val eventId = extraParameter.takeIf {
+                    !it.isNullOrEmpty() && MatrixPatterns.isEventId(it)
                 }
+                PermalinkData.RoomLink(roomIdOrAlias = identifier, isRoomAlias = true, eventId = eventId)
             }
             else                                   -> PermalinkData.FallbackLink(uri)
         }

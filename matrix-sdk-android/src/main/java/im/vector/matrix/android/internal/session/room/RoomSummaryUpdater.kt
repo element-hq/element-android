@@ -110,7 +110,7 @@ internal class RoomSummaryUpdater @Inject constructor(@UserId private val userId
         val roomAliases = ContentMapper.map(lastAliasesEvent?.content).toModel<RoomAliasesContent>()?.aliases ?: emptyList()
         roomSummaryEntity.aliases.clear()
         roomSummaryEntity.aliases.addAll(roomAliases)
-
+        roomSummaryEntity.flatAliases = roomAliases.joinToString(separator = "|", prefix = "|")
 
         if (updateMembers) {
             val otherRoomMembers = RoomMembers(realm, roomId)
