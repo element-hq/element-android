@@ -132,9 +132,23 @@ We get the credentials (200)
 
 Not supported yet in RiotX
 
-### SSO
+### Login with SSO
 
-TODO
+> curl -X GET 'https://homeserver.with.sso/_matrix/client/r0/login'
+
+200
+
+```json
+{
+  "flows": [
+    {
+      "type": "m.login.sso"
+    }
+  ]
+}
+```
+
+In this case, the user can click on "Sign in with SSO" and the web screen will be displayed on the page `https://homeserver.with.sso/_matrix/static/client/login/` and the credentials will be passed back to the native code through the JS bridge
 
 ## Reset password
 
