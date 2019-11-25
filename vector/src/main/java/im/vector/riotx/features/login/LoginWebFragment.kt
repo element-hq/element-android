@@ -196,25 +196,25 @@ class LoginWebFragment @Inject constructor(
             override fun shouldOverrideUrlLoading(view: WebView, url: String?): Boolean {
                 if (null != url && url.startsWith("js:")) {
                     var json = url.substring(3)
-                    var parameters: JavascriptResponse? = null
+                    var javascriptResponse: JavascriptResponse? = null
 
                     try {
                         // URL decode
                         json = URLDecoder.decode(json, "UTF-8")
                         val adapter = MoshiProvider.providesMoshi().adapter(JavascriptResponse::class.java)
-                        parameters = adapter.fromJson(json)
+                        javascriptResponse = adapter.fromJson(json)
                     } catch (e: Exception) {
                         Timber.e(e, "## shouldOverrideUrlLoading() : fromJson failed")
                     }
 
                     // succeeds to parse parameters
-                    if (parameters != null) {
-                        val action = parameters.action
+                    if (javascriptResponse != null) {
+                        val action = javascriptResponse.action
 
                         if (signMode == SignMode.SignIn) {
                             try {
                                 if (action == "onLogin") {
-                                    val credentials = parameters.credentials
+                                    val credentials = javascriptResponse.credentials
                                     if (credentials != null) {
                                         loginViewModel.handle(LoginAction.WebLoginSuccess(credentials))
                                     }
@@ -226,7 +226,7 @@ class LoginWebFragment @Inject constructor(
                             // MODE_REGISTER
                             // check the required parameters
                             if (action == "onRegistered") {
-                                val credentials = parameters.credentials
+                                val credentials = javascriptResponse.credentials
                                 if (credentials != null) {
                                     loginViewModel.handle(LoginAction.WebLoginSuccess(credentials))
                                 }

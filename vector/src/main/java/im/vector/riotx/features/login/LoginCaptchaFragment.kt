@@ -158,18 +158,18 @@ class LoginCaptchaFragment @Inject constructor(
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
                 if (url?.startsWith("js:") == true) {
                     var json = url.substring(3)
-                    var parameters: JavascriptResponse? = null
+                    var javascriptResponse: JavascriptResponse? = null
 
                     try {
                         // URL decode
                         json = URLDecoder.decode(json, "UTF-8")
-                        parameters = MoshiProvider.providesMoshi().adapter(JavascriptResponse::class.java).fromJson(json)
+                        javascriptResponse = MoshiProvider.providesMoshi().adapter(JavascriptResponse::class.java).fromJson(json)
                     } catch (e: Exception) {
                         Timber.e(e, "## shouldOverrideUrlLoading(): failed")
                     }
 
-                    val response = parameters?.response
-                    if (parameters?.action == "verifyCallback" && response != null) {
+                    val response = javascriptResponse?.response
+                    if (javascriptResponse?.action == "verifyCallback" && response != null) {
                         loginViewModel.handle(LoginAction.CaptchaDone(response))
                     }
                 }
