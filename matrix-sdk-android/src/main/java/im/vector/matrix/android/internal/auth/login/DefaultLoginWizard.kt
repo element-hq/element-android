@@ -21,15 +21,13 @@ import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
-import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.auth.login.LoginWizard
 import im.vector.matrix.android.api.auth.registration.RegisterThreePid
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.NoOpCancellable
-import im.vector.matrix.android.internal.SessionManager
 import im.vector.matrix.android.internal.auth.AuthAPI
-import im.vector.matrix.android.internal.auth.SessionParamsStore
+import im.vector.matrix.android.internal.auth.SessionCreator
 import im.vector.matrix.android.internal.auth.data.PasswordLoginParams
 import im.vector.matrix.android.internal.auth.data.ThreePidMedium
 import im.vector.matrix.android.internal.auth.registration.AddThreePidRegistrationParams
@@ -52,11 +50,10 @@ internal data class ResetPasswordData(
 
 internal class DefaultLoginWizard(
         private val homeServerConnectionConfig: HomeServerConnectionConfig,
-        private val coroutineDispatchers: MatrixCoroutineDispatchers,
-        private val sessionParamsStore: SessionParamsStore,
-        private val sessionManager: SessionManager,
+        okHttpClient: Lazy<OkHttpClient>,
         retrofitFactory: RetrofitFactory,
-        okHttpClient: Lazy<OkHttpClient>
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
+        private val sessionCreator: SessionCreator
 ) : LoginWizard {
 
     private var clientSecret = UUID.randomUUID().toString()
@@ -87,9 +84,8 @@ internal class DefaultLoginWizard(
         val credentials = executeRequest<Credentials> {
             apiCall = authAPI.login(loginParams)
         }
-        val sessionParams = SessionParams(credentials, homeServerConnectionConfig)
-        sessionParamsStore.save(sessionParams)
-        sessionManager.getOrCreateSession(sessionParams)
+
+        sessionCreator.createSession(credentials, homeServerConnectionConfig)
     }
 
     override fun resetPassword(email: String, newPassword: String, callback: MatrixCallback<Unit>): Cancelable {

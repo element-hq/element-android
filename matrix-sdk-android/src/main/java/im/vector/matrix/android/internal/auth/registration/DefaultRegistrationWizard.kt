@@ -19,7 +19,6 @@ package im.vector.matrix.android.internal.auth.registration
 import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
-import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.auth.registration.RegisterThreePid
 import im.vector.matrix.android.api.auth.registration.RegistrationResult
 import im.vector.matrix.android.api.auth.registration.RegistrationWizard
@@ -27,9 +26,8 @@ import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.failure.Failure.RegistrationFlowError
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.NoOpCancellable
-import im.vector.matrix.android.internal.SessionManager
 import im.vector.matrix.android.internal.auth.AuthAPI
-import im.vector.matrix.android.internal.auth.SessionParamsStore
+import im.vector.matrix.android.internal.auth.SessionCreator
 import im.vector.matrix.android.internal.auth.data.LoginFlowTypes
 import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.task.launchToCallback
@@ -53,8 +51,7 @@ internal class DefaultRegistrationWizard(private val homeServerConnectionConfig:
                                          private val okHttpClient: Lazy<OkHttpClient>,
                                          private val retrofitFactory: RetrofitFactory,
                                          private val coroutineDispatchers: MatrixCoroutineDispatchers,
-                                         private val sessionParamsStore: SessionParamsStore,
-                                         private val sessionManager: SessionManager) : RegistrationWizard {
+                                         private val sessionCreator: SessionCreator) : RegistrationWizard {
     private var clientSecret = UUID.randomUUID().toString()
     private var sendAttempt = 0
 
@@ -225,9 +222,8 @@ internal class DefaultRegistrationWizard(private val homeServerConnectionConfig:
                 throw exception
             }
         }
-        val sessionParams = SessionParams(credentials, homeServerConnectionConfig)
-        sessionParamsStore.save(sessionParams)
-        val session = sessionManager.getOrCreateSession(sessionParams)
+
+        val session = sessionCreator.createSession(credentials, homeServerConnectionConfig)
         return RegistrationResult.Success(session)
     }
 

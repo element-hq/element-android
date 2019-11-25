@@ -47,7 +47,8 @@ internal class DefaultAuthenticationService @Inject constructor(@Unauthenticated
                                                                 private val retrofitFactory: RetrofitFactory,
                                                                 private val coroutineDispatchers: MatrixCoroutineDispatchers,
                                                                 private val sessionParamsStore: SessionParamsStore,
-                                                                private val sessionManager: SessionManager
+                                                                private val sessionManager: SessionManager,
+                                                                private val sessionCreator: SessionCreator
 ) : AuthenticationService {
 
     private var currentHomeServerConnectionConfig: HomeServerConnectionConfig? = null
@@ -104,8 +105,7 @@ internal class DefaultAuthenticationService @Inject constructor(@Unauthenticated
                     okHttpClient,
                     retrofitFactory,
                     coroutineDispatchers,
-                    sessionParamsStore,
-                    sessionManager
+                    sessionCreator
             )
         } ?: error("Please call getLoginFlow() with success first")
     }
@@ -114,11 +114,10 @@ internal class DefaultAuthenticationService @Inject constructor(@Unauthenticated
         currentHomeServerConnectionConfig?.let {
             return DefaultLoginWizard(
                     it,
-                    coroutineDispatchers,
-                    sessionParamsStore,
-                    sessionManager,
+                    okHttpClient,
                     retrofitFactory,
-                    okHttpClient
+                    coroutineDispatchers,
+                    sessionCreator
             )
         } ?: error("Please call getLoginFlow() with success first")
     }
@@ -133,9 +132,7 @@ internal class DefaultAuthenticationService @Inject constructor(@Unauthenticated
 
     private suspend fun createSessionFromSso(credentials: Credentials,
                                              homeServerConnectionConfig: HomeServerConnectionConfig): Session = withContext(coroutineDispatchers.computation) {
-        val sessionParams = SessionParams(credentials, homeServerConnectionConfig)
-        sessionParamsStore.save(sessionParams)
-        sessionManager.getOrCreateSession(sessionParams)
+        sessionCreator.createSession(credentials, homeServerConnectionConfig)
     }
 
     private fun buildAuthAPI(homeServerConnectionConfig: HomeServerConnectionConfig): AuthAPI {

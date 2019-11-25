@@ -60,4 +60,7 @@ internal abstract class AuthModule {
 
     @Binds
     abstract fun bindAuthenticationService(authenticationService: DefaultAuthenticationService): AuthenticationService
+
+    @Binds
+    abstract fun bindSessionCreator(sessionCreator: DefaultSessionCreator): SessionCreator
 }
