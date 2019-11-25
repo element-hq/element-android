@@ -36,7 +36,7 @@
                 android:textAppearance="@style/TextAppearance.Vector.Login.Title"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/loginSignupSigninServerIcon"
-                app:layout_goneMarginTop="172dp"
+                app:layout_goneMarginTop="0dp"
                 tools:text="@string/login_connect_to" />
 
             <TextView
