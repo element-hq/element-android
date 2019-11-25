@@ -24,8 +24,8 @@ import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.helpFooterItem
 import im.vector.riotx.core.epoxy.noResultItem
 import im.vector.riotx.core.resources.StringProvider
-import im.vector.riotx.features.home.RoomListDisplayMode
 import im.vector.riotx.core.resources.UserPreferencesProvider
+import im.vector.riotx.features.home.RoomListDisplayMode
 import im.vector.riotx.features.home.room.filtered.FilteredRoomFooterItem
 import im.vector.riotx.features.home.room.filtered.filteredRoomFooterItem
 import javax.inject.Inject
@@ -63,7 +63,7 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
             RoomListDisplayMode.SHARE -> {
                 buildFilteredRooms(nonNullViewState)
             }
-            else                               -> {
+            else                      -> {
                 var showHelp = false
                 val roomSummaries = nonNullViewState.asyncFilteredRooms()
                 roomSummaries?.forEach { (category, summaries) ->
@@ -80,7 +80,10 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
                                     nonNullViewState.joiningErrorRoomsIds,
                                     nonNullViewState.rejectingRoomsIds,
                                     nonNullViewState.rejectingErrorRoomsIds)
-                            showHelp = userPreferencesProvider.shouldShowLongClickOnRoomHelp()
+                            // Never set showHelp to true for invitation
+                            if (category != RoomCategory.INVITE) {
+                                showHelp = userPreferencesProvider.shouldShowLongClickOnRoomHelp()
+                            }
                         }
                     }
                 }
@@ -108,7 +111,7 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
 
         when {
             viewState.displayMode == RoomListDisplayMode.FILTERED -> addFilterFooter(viewState)
-            filteredSummaries.isEmpty()                                    -> addEmptyFooter()
+            filteredSummaries.isEmpty()                           -> addEmptyFooter()
         }
     }
 
