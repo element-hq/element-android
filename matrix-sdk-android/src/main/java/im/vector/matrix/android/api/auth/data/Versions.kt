@@ -61,7 +61,6 @@ private const val FEATURE_REQUIRE_IDENTITY_SERVER = "m.require_identity_server"
 private const val FEATURE_ID_ACCESS_TOKEN = "m.id_access_token"
 private const val FEATURE_SEPARATE_ADD_AND_BIND = "m.separate_add_and_bind"
 
-
 /**
  * Return true if the SDK supports this homeserver version
  */

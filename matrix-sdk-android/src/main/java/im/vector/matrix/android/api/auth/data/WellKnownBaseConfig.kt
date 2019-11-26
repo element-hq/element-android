@@ -32,4 +32,3 @@ data class WellKnownBaseConfig(
         @Json(name = "base_url")
         val baseURL: String? = null
 )
-
