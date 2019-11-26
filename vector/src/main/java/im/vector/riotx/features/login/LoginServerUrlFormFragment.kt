@@ -20,10 +20,8 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import butterknife.OnClick
-import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.withState
 import com.jakewharton.rxbinding3.widget.textChanges
@@ -104,7 +102,7 @@ class LoginServerUrlFormFragment @Inject constructor(
         cleanupUi()
 
         // Static check of homeserver url, empty, malformed, etc.
-        var serverUrl = loginServerUrlFormHomeServerUrl.text.toString()
+        var serverUrl = loginServerUrlFormHomeServerUrl.text.toString().trim()
 
         when {
             serverUrl.isBlank() -> {
@@ -113,8 +111,8 @@ class LoginServerUrlFormFragment @Inject constructor(
             else                -> {
                 if (serverUrl.startsWith("http").not()) {
                     serverUrl = "https://$serverUrl"
-                    loginServerUrlFormHomeServerUrl.setText(serverUrl)
                 }
+                loginServerUrlFormHomeServerUrl.setText(serverUrl)
                 loginViewModel.handle(LoginAction.UpdateHomeServer(serverUrl))
             }
         }
@@ -126,18 +124,11 @@ class LoginServerUrlFormFragment @Inject constructor(
     }
 
     override fun onError(throwable: Throwable) {
-        AlertDialog.Builder(requireActivity())
-                .setTitle(R.string.dialog_title_error)
-                .setMessage(errorFormatter.toHumanReadable(throwable))
-                .setPositiveButton(R.string.ok, null)
-                .show()
+        loginServerUrlFormHomeServerUrlTil.error = errorFormatter.toHumanReadable(throwable)
     }
 
     override fun invalidate() = withState(loginViewModel) { state ->
         when (state.asyncHomeServerLoginFlowRequest) {
-            is Fail    -> {
-                loginServerUrlFormHomeServerUrlTil.error = errorFormatter.toHumanReadable(state.asyncHomeServerLoginFlowRequest.error)
-            }
             is Success -> {
                 // The home server url is valid
                 loginSharedActionViewModel.post(LoginNavigation.OnLoginFlowRetrieved)

@@ -530,7 +530,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                     _viewEvents.post(LoginViewEvents.Error(failure))
                     setState {
                         copy(
-                                asyncHomeServerLoginFlowRequest = Fail(failure)
+                                asyncHomeServerLoginFlowRequest = Uninitialized
                         )
                     }
                 }
