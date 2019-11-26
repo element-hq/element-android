@@ -1695,7 +1695,7 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="terms_description_for_identity_server">Für andere auffindbar sein</string>
     <string name="terms_description_for_integration_manager">Verwenden Sie Bots, Bridges, Widgets und Sticker-Packs</string>
 
-    <string name="read_at">Lesen Sie bei</string>
+    <string name="read_at">Gelesen von</string>
 
 
     <string name="identity_server">Identitätsserver</string>
