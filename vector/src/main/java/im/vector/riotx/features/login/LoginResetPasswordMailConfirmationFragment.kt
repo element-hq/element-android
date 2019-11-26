@@ -53,8 +53,12 @@ class LoginResetPasswordMailConfirmationFragment @Inject constructor(
         loginViewModel.handle(LoginAction.ResetPasswordMailConfirmed)
     }
 
-    override fun onRegistrationError(throwable: Throwable) {
-        // No op
+    override fun onError(throwable: Throwable) {
+        AlertDialog.Builder(requireActivity())
+                .setTitle(R.string.dialog_title_error)
+                .setMessage(errorFormatter.toHumanReadable(throwable))
+                .setPositiveButton(R.string.ok, null)
+                .show()
     }
 
     override fun resetViewModel() {

@@ -64,7 +64,7 @@ class LoginWaitForEmailFragment @Inject constructor(private val errorFormatter: 
         loginWaitForEmailNotice.text = getString(R.string.login_wait_for_email_notice, params.email)
     }
 
-    override fun onRegistrationError(throwable: Throwable) {
+    override fun onError(throwable: Throwable) {
         if (throwable.is401()) {
             // Try again, with a delay
             loginViewModel.handle(LoginAction.CheckIfEmailHasBeenValidated(10_000))

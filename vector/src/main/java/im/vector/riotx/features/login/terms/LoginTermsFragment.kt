@@ -101,7 +101,7 @@ class LoginTermsFragment @Inject constructor(
         loginViewModel.handle(LoginAction.AcceptTerms)
     }
 
-    override fun onRegistrationError(throwable: Throwable) {
+    override fun onError(throwable: Throwable) {
         AlertDialog.Builder(requireActivity())
                 .setTitle(R.string.dialog_title_error)
                 .setMessage(errorFormatter.toHumanReadable(throwable))

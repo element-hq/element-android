@@ -17,10 +17,11 @@
 package im.vector.matrix.android.internal.auth
 
 import im.vector.matrix.android.api.auth.data.Credentials
+import im.vector.matrix.android.api.auth.data.Versions
 import im.vector.matrix.android.internal.auth.data.LoginFlowResponse
 import im.vector.matrix.android.internal.auth.data.PasswordLoginParams
-import im.vector.matrix.android.internal.auth.registration.*
 import im.vector.matrix.android.internal.auth.login.ResetPasswordMailConfirmed
+import im.vector.matrix.android.internal.auth.registration.*
 import im.vector.matrix.android.internal.network.NetworkConstants
 import retrofit2.Call
 import retrofit2.http.*
@@ -29,6 +30,12 @@ import retrofit2.http.*
  * The login REST API.
  */
 internal interface AuthAPI {
+
+    /**
+     * Get the version information of the homeserver
+     */
+    @GET(NetworkConstants.URI_API_PREFIX_PATH_ + "versions")
+    fun versions(): Call<Versions>
 
     /**
      * Register to the homeserver

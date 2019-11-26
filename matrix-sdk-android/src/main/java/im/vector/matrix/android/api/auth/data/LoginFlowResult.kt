@@ -5,25 +5,21 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
-package im.vector.riotx.features.login
+package im.vector.matrix.android.api.auth.data
 
-import im.vector.matrix.android.api.auth.registration.FlowResult
+import im.vector.matrix.android.internal.auth.data.LoginFlowResponse
 
-/**
- * Transient events for Login
- */
-sealed class LoginViewEvents {
-    data class RegistrationFlowResult(val flowResult: FlowResult) : LoginViewEvents()
-    data class Error(val throwable: Throwable) : LoginViewEvents()
-    object OutdatedHomeserver : LoginViewEvents()
+// Either a LoginFlowResponse, or an error if the homeserver is outdated
+sealed class LoginFlowResult {
+    data class Success(val loginFlowResponse: LoginFlowResponse) : LoginFlowResult()
+    object OutdatedHomeserver : LoginFlowResult()
 }

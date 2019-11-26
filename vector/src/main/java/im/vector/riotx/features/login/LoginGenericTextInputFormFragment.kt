@@ -213,7 +213,7 @@ class LoginGenericTextInputFormFragment @Inject constructor(private val errorFor
         }
     }
 
-    override fun onRegistrationError(throwable: Throwable) {
+    override fun onError(throwable: Throwable) {
         when (params.mode) {
             TextInputFormFragmentMode.SetEmail      -> {
                 if (throwable.is401()) {

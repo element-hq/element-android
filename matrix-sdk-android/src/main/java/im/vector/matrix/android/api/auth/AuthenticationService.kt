@@ -19,12 +19,12 @@ package im.vector.matrix.android.api.auth
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
+import im.vector.matrix.android.api.auth.data.LoginFlowResult
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.auth.login.LoginWizard
 import im.vector.matrix.android.api.auth.registration.RegistrationWizard
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.util.Cancelable
-import im.vector.matrix.android.internal.auth.data.LoginFlowResponse
 
 /**
  * This interface defines methods to authenticate or to create an account to a matrix server.
@@ -35,7 +35,7 @@ interface AuthenticationService {
      * Request the supported login flows for this homeserver.
      * This is the first method to call to be able to get a wizard to login or the create an account
      */
-    fun getLoginFlow(homeServerConnectionConfig: HomeServerConnectionConfig, callback: MatrixCallback<LoginFlowResponse>): Cancelable
+    fun getLoginFlow(homeServerConnectionConfig: HomeServerConnectionConfig, callback: MatrixCallback<LoginFlowResult>): Cancelable
 
     /**
      * Return a LoginWizard, to login to the homeserver

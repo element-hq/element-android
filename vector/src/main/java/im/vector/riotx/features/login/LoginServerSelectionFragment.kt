@@ -123,8 +123,7 @@ class LoginServerSelectionFragment @Inject constructor(
         loginViewModel.handle(LoginAction.ResetHomeServerType)
     }
 
-    override fun onRegistrationError(throwable: Throwable) {
-        // Cannot happen here, but just in case
+    override fun onError(throwable: Throwable) {
         AlertDialog.Builder(requireActivity())
                 .setTitle(R.string.dialog_title_error)
                 .setMessage(errorFormatter.toHumanReadable(throwable))

@@ -52,14 +52,14 @@ abstract class AbstractLoginFragment : VectorBaseFragment(), OnBackPressed {
 
     private fun handleLoginViewEvents(loginViewEvents: LoginViewEvents) {
         when (loginViewEvents) {
-            is LoginViewEvents.RegistrationFlowResult ->
+            is LoginViewEvents.Error -> showError(loginViewEvents.throwable)
+            else                                                    ->
                 // This is handled by the Activity
                 Unit
-            is LoginViewEvents.RegistrationError      -> displayRegistrationError(loginViewEvents.throwable)
         }
     }
 
-    private fun displayRegistrationError(throwable: Throwable) {
+    private fun showError(throwable: Throwable) {
         when (throwable) {
             is Failure.ServerError -> {
                 if (throwable.error.code == MatrixError.FORBIDDEN
@@ -70,14 +70,14 @@ abstract class AbstractLoginFragment : VectorBaseFragment(), OnBackPressed {
                             .setPositiveButton(R.string.ok, null)
                             .show()
                 } else {
-                    onRegistrationError(throwable)
+                    onError(throwable)
                 }
             }
-            else                   -> onRegistrationError(throwable)
+            else                   -> onError(throwable)
         }
     }
 
-    abstract fun onRegistrationError(throwable: Throwable)
+    abstract fun onError(throwable: Throwable)
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
         return when {

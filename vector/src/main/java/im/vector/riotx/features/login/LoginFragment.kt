@@ -189,7 +189,7 @@ class LoginFragment @Inject constructor(
         loginViewModel.handle(LoginAction.ResetLogin)
     }
 
-    override fun onRegistrationError(throwable: Throwable) {
+    override fun onError(throwable: Throwable) {
         loginFieldTil.error = errorFormatter.toHumanReadable(throwable)
     }
 

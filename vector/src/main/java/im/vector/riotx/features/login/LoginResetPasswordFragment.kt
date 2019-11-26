@@ -140,8 +140,7 @@ class LoginResetPasswordFragment @Inject constructor(
         loginViewModel.handle(LoginAction.ResetResetPassword)
     }
 
-    override fun onRegistrationError(throwable: Throwable) {
-        // TODO
+    override fun onError(throwable: Throwable) {
         AlertDialog.Builder(requireActivity())
                 .setTitle(R.string.dialog_title_error)
                 .setMessage(errorFormatter.toHumanReadable(throwable))

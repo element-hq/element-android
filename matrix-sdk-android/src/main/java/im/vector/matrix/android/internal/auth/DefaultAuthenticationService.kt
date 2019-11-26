@@ -19,9 +19,7 @@ package im.vector.matrix.android.internal.auth
 import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.AuthenticationService
-import im.vector.matrix.android.api.auth.data.Credentials
-import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
-import im.vector.matrix.android.api.auth.data.SessionParams
+import im.vector.matrix.android.api.auth.data.*
 import im.vector.matrix.android.api.auth.login.LoginWizard
 import im.vector.matrix.android.api.auth.registration.RegistrationWizard
 import im.vector.matrix.android.api.session.Session
@@ -68,7 +66,7 @@ internal class DefaultAuthenticationService @Inject constructor(@Unauthenticated
         return sessionManager.getOrCreateSession(sessionParams)
     }
 
-    override fun getLoginFlow(homeServerConnectionConfig: HomeServerConnectionConfig, callback: MatrixCallback<LoginFlowResponse>): Cancelable {
+    override fun getLoginFlow(homeServerConnectionConfig: HomeServerConnectionConfig, callback: MatrixCallback<LoginFlowResult>): Cancelable {
         currentHomeServerConnectionConfig = null
 
         return GlobalScope.launch(coroutineDispatchers.main) {
@@ -77,8 +75,10 @@ internal class DefaultAuthenticationService @Inject constructor(@Unauthenticated
             }
             result.fold(
                     {
-                        // The homeserver exists, keep the config
-                        currentHomeServerConnectionConfig = homeServerConnectionConfig
+                        if (it is LoginFlowResult.Success) {
+                            // The homeserver exists and up to date, keep the config
+                            currentHomeServerConnectionConfig = homeServerConnectionConfig
+                        }
                         callback.onSuccess(it)
                     },
                     {
@@ -92,8 +92,20 @@ internal class DefaultAuthenticationService @Inject constructor(@Unauthenticated
     private suspend fun getLoginFlowInternal(homeServerConnectionConfig: HomeServerConnectionConfig) = withContext(coroutineDispatchers.io) {
         val authAPI = buildAuthAPI(homeServerConnectionConfig)
 
-        executeRequest<LoginFlowResponse> {
-            apiCall = authAPI.getLoginFlows()
+        // First check the homeserver version
+        val versions = executeRequest<Versions> {
+            apiCall = authAPI.versions()
+        }
+
+        if (versions.isSupportedBySdk()) {
+            // Get the login flow
+            val loginFlowResponse = executeRequest<LoginFlowResponse> {
+                apiCall = authAPI.getLoginFlows()
+            }
+            LoginFlowResult.Success(loginFlowResponse)
+        } else {
+            // Not supported
+            LoginFlowResult.OutdatedHomeserver
         }
     }
 

@@ -23,6 +23,7 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.AuthenticationService
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
+import im.vector.matrix.android.api.auth.data.LoginFlowResult
 import im.vector.matrix.android.api.auth.login.LoginWizard
 import im.vector.matrix.android.api.auth.registration.FlowResult
 import im.vector.matrix.android.api.auth.registration.RegistrationResult
@@ -31,7 +32,6 @@ import im.vector.matrix.android.api.auth.registration.Stage
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.MatrixCallbackDelegate
-import im.vector.matrix.android.internal.auth.data.LoginFlowResponse
 import im.vector.matrix.android.internal.auth.data.LoginFlowTypes
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.extensions.configureAndStart
@@ -166,7 +166,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
 
         override fun onFailure(failure: Throwable) {
             if (failure !is CancellationException) {
-                _viewEvents.post(LoginViewEvents.RegistrationError(failure))
+                _viewEvents.post(LoginViewEvents.Error(failure))
             }
             setState {
                 copy(
@@ -188,7 +188,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
             }
 
             override fun onFailure(failure: Throwable) {
-                _viewEvents.post(LoginViewEvents.RegistrationError(failure))
+                _viewEvents.post(LoginViewEvents.Error(failure))
                 setState {
                     copy(
                             asyncRegistration = Uninitialized
@@ -210,7 +210,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
             }
 
             override fun onFailure(failure: Throwable) {
-                _viewEvents.post(LoginViewEvents.RegistrationError(failure))
+                _viewEvents.post(LoginViewEvents.Error(failure))
                 setState {
                     copy(
                             asyncRegistration = Uninitialized
@@ -525,8 +525,9 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                 )
             }
 
-            currentTask = authenticationService.getLoginFlow(homeServerConnectionConfigFinal, object : MatrixCallback<LoginFlowResponse> {
+            currentTask = authenticationService.getLoginFlow(homeServerConnectionConfigFinal, object : MatrixCallback<LoginFlowResult> {
                 override fun onFailure(failure: Throwable) {
+                    _viewEvents.post(LoginViewEvents.Error(failure))
                     setState {
                         copy(
                                 asyncHomeServerLoginFlowRequest = Fail(failure)
@@ -534,18 +535,32 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                     }
                 }
 
-                override fun onSuccess(data: LoginFlowResponse) {
-                    val loginMode = when {
-                        // SSO login is taken first
-                        data.flows.any { it.type == LoginFlowTypes.SSO }      -> LoginMode.Sso
-                        data.flows.any { it.type == LoginFlowTypes.PASSWORD } -> LoginMode.Password
-                        else                                                  -> LoginMode.Unsupported(data.flows.mapNotNull { it.type }.toList())
-                    }
+                override fun onSuccess(data: LoginFlowResult) {
+                    when (data) {
+                        is LoginFlowResult.Success            -> {
+                            val loginMode = when {
+                                // SSO login is taken first
+                                data.loginFlowResponse.flows.any { it.type == LoginFlowTypes.SSO }      -> LoginMode.Sso
+                                data.loginFlowResponse.flows.any { it.type == LoginFlowTypes.PASSWORD } -> LoginMode.Password
+                                else                                                                    -> LoginMode.Unsupported(data.loginFlowResponse.flows.mapNotNull { it.type }.toList())
+                            }
 
-                    setState {
-                        copy(
-                                asyncHomeServerLoginFlowRequest = Success(loginMode)
-                        )
+                            setState {
+                                copy(
+                                        asyncHomeServerLoginFlowRequest = Success(loginMode)
+                                )
+                            }
+                        }
+                        is LoginFlowResult.OutdatedHomeserver -> {
+                            // Notify the UI
+                            _viewEvents.post(LoginViewEvents.OutdatedHomeserver)
+
+                            setState {
+                                copy(
+                                        asyncHomeServerLoginFlowRequest = Uninitialized
+                                )
+                            }
+                        }
                     }
                 }
             })
