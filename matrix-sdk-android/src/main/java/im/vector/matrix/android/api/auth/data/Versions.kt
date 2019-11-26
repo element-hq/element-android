@@ -47,13 +47,13 @@ data class Versions(
 )
 
 // MatrixClientServerAPIVersion
-private const val r0_0_1 = "r0_0_1"
-private const val r0_1_0 = "r0_1_0"
-private const val r0_2_0 = "r0_2_0"
-private const val r0_3_0 = "r0_3_0"
-private const val r0_4_0 = "r0_4_0"
-private const val r0_5_0 = "r0_5_0"
-private const val r0_6_0 = "r0_6_0"
+private const val r0_0_1 = "r0.0.1"
+private const val r0_1_0 = "r0.1.0"
+private const val r0_2_0 = "r0.2.0"
+private const val r0_3_0 = "r0.3.0"
+private const val r0_4_0 = "r0.4.0"
+private const val r0_5_0 = "r0.5.0"
+private const val r0_6_0 = "r0.6.0"
 
 // MatrixVersionsFeature
 private const val FEATURE_LAZY_LOAD_MEMBERS = "m.lazy_load_members"
@@ -67,7 +67,13 @@ private const val FEATURE_SEPARATE_ADD_AND_BIND = "m.separate_add_and_bind"
  */
 fun Versions.isSupportedBySdk(): Boolean {
     return supportLazyLoadMembers()
-            && !doesServerRequireIdentityServerParam()
+}
+
+/**
+ * Return true if the SDK supports this homeserver version for login and registration
+ */
+fun Versions.isLoginAndRegistrationSupportedBySdk(): Boolean {
+    return !doesServerRequireIdentityServerParam()
             && doesServerAcceptIdentityAccessToken()
             && doesServerSeparatesAddAndBind()
 }

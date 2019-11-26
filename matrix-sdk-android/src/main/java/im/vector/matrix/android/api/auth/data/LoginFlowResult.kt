@@ -20,6 +20,10 @@ import im.vector.matrix.android.internal.auth.data.LoginFlowResponse
 
 // Either a LoginFlowResponse, or an error if the homeserver is outdated
 sealed class LoginFlowResult {
-    data class Success(val loginFlowResponse: LoginFlowResponse) : LoginFlowResult()
+    data class Success(
+            val loginFlowResponse: LoginFlowResponse,
+            val isLoginAndRegistrationSupported: Boolean
+    ) : LoginFlowResult()
+
     object OutdatedHomeserver : LoginFlowResult()
 }

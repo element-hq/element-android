@@ -545,22 +545,30 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                                 else                                                                    -> LoginMode.Unsupported(data.loginFlowResponse.flows.mapNotNull { it.type }.toList())
                             }
 
-                            setState {
-                                copy(
-                                        asyncHomeServerLoginFlowRequest = Success(loginMode)
-                                )
+                            if (loginMode == LoginMode.Password && !data.isLoginAndRegistrationSupported) {
+                                notSupported()
+                            } else {
+                                setState {
+                                    copy(
+                                            asyncHomeServerLoginFlowRequest = Success(loginMode)
+                                    )
+                                }
                             }
                         }
                         is LoginFlowResult.OutdatedHomeserver -> {
-                            // Notify the UI
-                            _viewEvents.post(LoginViewEvents.OutdatedHomeserver)
-
-                            setState {
-                                copy(
-                                        asyncHomeServerLoginFlowRequest = Uninitialized
-                                )
-                            }
+                            notSupported()
                         }
+                    }
+                }
+
+                private fun notSupported() {
+                    // Notify the UI
+                    _viewEvents.post(LoginViewEvents.OutdatedHomeserver)
+
+                    setState {
+                        copy(
+                                asyncHomeServerLoginFlowRequest = Uninitialized
+                        )
                     }
                 }
             })
