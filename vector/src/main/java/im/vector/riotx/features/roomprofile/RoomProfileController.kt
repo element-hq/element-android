@@ -17,8 +17,11 @@
 
 package im.vector.riotx.features.roomprofile
 
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.riotx.R
+import im.vector.riotx.core.epoxy.DividerItem_
 import im.vector.riotx.core.epoxy.dividerItem
 import im.vector.riotx.core.epoxy.profiles.profileItemAction
 import im.vector.riotx.core.epoxy.profiles.profileItemSection
@@ -33,7 +36,10 @@ class RoomProfileController @Inject constructor(private val stringProvider: Stri
     interface Callback {
         fun onLearnMoreClicked()
         fun onMemberListClicked()
+        fun onNotificationsClicked()
+        fun onUploadsClicked()
         fun onSettingsClicked()
+        fun onLeaveRoomClicked()
     }
 
     override fun buildModels(data: RoomProfileViewState?) {
@@ -43,60 +49,88 @@ class RoomProfileController @Inject constructor(private val stringProvider: Stri
 
         val roomSummary = data.roomSummary()
 
-        profileItemSection {
-            id("section_security")
-            title("Security")
-        }
-
-
+        // Security
+        buildSection(stringProvider.getString(R.string.room_profile_section_security))
         val learnMoreSubtitle = if (data.isEncrypted) {
             R.string.room_profile_encrypted_subtitle
         } else {
             R.string.room_profile_not_encrypted_subtitle
         }
-        profileItemAction {
-            id("action_learn_more")
-            title("Learn more")
-            editable(true)
-            subtitle(stringProvider.getString(learnMoreSubtitle))
-            listener { _ ->
-                callback?.onLearnMoreClicked()
-            }
-        }
+        buildAction(
+                id = "learn_more",
+                title = stringProvider.getString(R.string.room_profile_section_security_learn_more),
+                subtitle = stringProvider.getString(learnMoreSubtitle),
+                action = { callback?.onLearnMoreClicked() }
+        )
 
-        dividerItem {
-            id("action_learn_more_divider")
-        }
-
-        profileItemSection {
-            id("section_options")
-            title("Options")
-        }
-
-        val numberOfMembers = (roomSummary?.otherMemberIds?.size ?: 0) + 1
-        profileItemAction {
-            iconRes(R.drawable.ic_person_outline_black)
-            id("action_member_list")
-            title(stringProvider.getString(R.string.room_profile_member_list_title, numberOfMembers))
-            editable(true)
-            listener { _ ->
-                callback?.onMemberListClicked()
-            }
-        }
-
-        dividerItem {
-            id("action_member_list_divider")
-        }
-
-        profileItemAction {
-            iconRes(R.drawable.ic_room_actions_settings)
-            id("action_settings")
-            title("Room settings")
-            editable(true)
-            listener { _ ->
-                callback?.onSettingsClicked()
-            }
-        }
-
+        // More
+        buildSection(stringProvider.getString(R.string.room_profile_section_more))
+        buildAction(
+                id = "settings",
+                title = stringProvider.getString(R.string.room_profile_section_more_settings),
+                icon = R.drawable.ic_room_profile_settings,
+                action = { callback?.onSettingsClicked() }
+        )
+        buildAction(
+                id = "notifications",
+                title = stringProvider.getString(R.string.room_profile_section_more_notifications),
+                icon = R.drawable.ic_room_profile_notification,
+                action = { callback?.onNotificationsClicked() }
+        )
+        val numberOfMembers = roomSummary?.joinedMembersCount?.toString() ?: "-"
+        buildAction(
+                id = "member_list",
+                title = stringProvider.getString(R.string.room_profile_section_more_member_list, numberOfMembers),
+                icon = R.drawable.ic_room_profile_member_list,
+                action = { callback?.onMemberListClicked() }
+        )
+        buildAction(
+                id = "uploads",
+                title = stringProvider.getString(R.string.room_profile_section_more_uploads),
+                icon = R.drawable.ic_room_profile_uploads,
+                action = { callback?.onUploadsClicked() }
+        )
+        buildAction(
+                id = "leave",
+                title = stringProvider.getString(R.string.room_profile_section_more_leave),
+                divider = false,
+                destructive = true,
+                action = { callback?.onLeaveRoomClicked() }
+        )
     }
+
+    private fun buildSection(title: String) {
+        profileItemSection {
+            id("section_$title")
+            title(title)
+        }
+    }
+
+    private fun buildAction(
+            id: String,
+            title: String,
+            subtitle: String? = null,
+            @DrawableRes icon: Int = 0,
+            destructive: Boolean = false,
+            divider: Boolean = true,
+            action: () -> Unit
+    ) {
+
+        profileItemAction {
+            iconRes(icon)
+            id("action_$id")
+            subtitle(subtitle)
+            destructive(destructive)
+            title(title)
+            listener { _ ->
+                action()
+            }
+        }
+
+        DividerItem_()
+                .id("divider_$title")
+                .addIf(divider, this)
+    }
+
+
 }

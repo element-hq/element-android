@@ -16,16 +16,20 @@
 
 package im.vector.riotx.core.epoxy.profiles
 
+import android.content.res.ColorStateList
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.core.widget.ImageViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
 import im.vector.riotx.core.extensions.setTextOrHide
+import im.vector.riotx.features.themes.ThemeUtils
 
 @EpoxyModelClass(layout = R.layout.item_profile_action)
 abstract class ProfileItemAction : VectorEpoxyModel<ProfileItemAction.Holder>() {
@@ -39,6 +43,8 @@ abstract class ProfileItemAction : VectorEpoxyModel<ProfileItemAction.Holder>() 
     @EpoxyAttribute
     var editable: Boolean = true
     @EpoxyAttribute
+    var destructive: Boolean = false
+    @EpoxyAttribute
     lateinit var listener: View.OnClickListener
 
     override fun bind(holder: Holder) {
@@ -46,6 +52,12 @@ abstract class ProfileItemAction : VectorEpoxyModel<ProfileItemAction.Holder>() 
         holder.view.setOnClickListener(listener)
         holder.editable.isVisible = editable
         holder.title.text = title
+        val tintColor = if (destructive) {
+            ContextCompat.getColor(holder.view.context, R.color.riotx_notice)
+        } else {
+            ThemeUtils.getColor(holder.view.context, R.attr.riotx_text_primary)
+        }
+        holder.title.setTextColor(tintColor)
         holder.subtitle.setTextOrHide(subtitle)
         if (iconRes != 0) {
             holder.icon.setImageResource(iconRes)

@@ -61,7 +61,6 @@ class RoomProfileFragment @Inject constructor(
         roomProfileRecyclerView.setHasFixedSize(true)
         roomProfileRecyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         roomProfileRecyclerView.adapter = roomProfileController.adapter
-
     }
 
     override fun onDestroyView() {
@@ -77,7 +76,8 @@ class RoomProfileFragment @Inject constructor(
             } else {
                 roomProfileNameView.text = it.displayName
                 roomProfileNameView2.text = it.displayName
-                roomProfileIdView.text = it.roomId
+                // Use canonical alias when PR with alias management will be merged
+                roomProfileAliasView.text = it.roomId
                 roomProfileTopicView.setTextOrHide(it.topic)
                 avatarRenderer.render(it, roomProfileAvatarView)
             }
@@ -92,12 +92,23 @@ class RoomProfileFragment @Inject constructor(
     }
 
     override fun onMemberListClicked() {
-        vectorBaseActivity.notImplemented("Room member list")
+        vectorBaseActivity.notImplemented("See room member list")
     }
 
     override fun onSettingsClicked() {
-        vectorBaseActivity.notImplemented("Room settings")
+        vectorBaseActivity.notImplemented("See Room settings")
     }
 
+    override fun onNotificationsClicked() {
+        vectorBaseActivity.notImplemented("See notifications")
 
+    }
+
+    override fun onUploadsClicked() {
+        vectorBaseActivity.notImplemented("See uploads")
+    }
+
+    override fun onLeaveRoomClicked() {
+        vectorBaseActivity.notImplemented("Leave room")
+    }
 }

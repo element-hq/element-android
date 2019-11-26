@@ -60,6 +60,8 @@ internal class RoomSummaryMapper @Inject constructor(
                 avatarUrl = roomSummaryEntity.avatarUrl ?: "",
                 isDirect = roomSummaryEntity.isDirect,
                 latestPreviewableEvent = latestEvent,
+                joinedMembersCount = roomSummaryEntity.joinedMembersCount,
+                invitedMembersCount = roomSummaryEntity.invitedMembersCount,
                 otherMemberIds = roomSummaryEntity.otherMemberIds.toList(),
                 highlightCount = roomSummaryEntity.highlightCount,
                 notificationCount = roomSummaryEntity.notificationCount,
