@@ -141,7 +141,7 @@ class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     private fun handleLoginViewEvents(loginViewEvents: LoginViewEvents) {
         when (loginViewEvents) {
-            is LoginViewEvents.RegistrationFlowResult               -> {
+            is LoginViewEvents.RegistrationFlowResult -> {
                 // Check that all flows are supported by the application
                 if (loginViewEvents.flowResult.missingStages.any { !it.isSupported() }) {
                     // Display a popup to propose use web fallback
@@ -160,13 +160,13 @@ class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
                     }
                 }
             }
-            is LoginViewEvents.OutdatedHomeserver                   ->
+            is LoginViewEvents.OutdatedHomeserver     ->
                 AlertDialog.Builder(this)
-                        .setTitle(R.string.dialog_title_error)
-                        .setMessage(R.string.login_error_outdated_homeserver)
+                        .setTitle(R.string.login_error_outdated_homeserver_title)
+                        .setMessage(R.string.login_error_outdated_homeserver_content)
                         .setPositiveButton(R.string.ok, null)
                         .show()
-            is LoginViewEvents.Error ->
+            is LoginViewEvents.Error                  ->
                 // This is handled by the Fragments
                 Unit
         }
