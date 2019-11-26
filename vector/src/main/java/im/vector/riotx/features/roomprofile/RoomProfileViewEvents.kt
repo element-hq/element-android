@@ -12,16 +12,15 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
 package im.vector.riotx.features.roomprofile
+/**
+ * Transient events for RoomProfile
+ */
+sealed class RoomProfileViewEvents {
+    object Loading: RoomProfileViewEvents()
+    object OnLeaveRoomSuccess: RoomProfileViewEvents()
+    data class Failure(val throwable: Throwable) : RoomProfileViewEvents()
 
-import im.vector.matrix.android.api.session.room.notification.RoomNotificationState
-import im.vector.riotx.core.platform.VectorViewModelAction
-import im.vector.riotx.features.home.room.list.RoomListAction
-
-sealed class RoomProfileAction: VectorViewModelAction {
-    object LeaveRoom: RoomProfileAction()
-    data class ChangeRoomNotificationState(val notificationState: RoomNotificationState) : RoomProfileAction()
 }

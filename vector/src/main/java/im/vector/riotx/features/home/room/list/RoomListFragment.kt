@@ -40,6 +40,7 @@ import im.vector.riotx.core.platform.StateView
 import im.vector.riotx.core.platform.VectorBaseFragment
 
 import im.vector.riotx.features.home.RoomListDisplayMode
+import im.vector.riotx.features.home.room.list.actions.RoomListActionsArgs
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsSharedAction
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsBottomSheet
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
@@ -132,10 +133,7 @@ class RoomListFragment @Inject constructor(
     }
 
     private fun showError(event: RoomListViewEvents.Failure) {
-        vectorBaseActivity.coordinatorLayout?.let {
-            Snackbar.make(it, errorFormatter.toHumanReadable(event.throwable), Snackbar.LENGTH_SHORT)
-                    .show()
-        }
+        vectorBaseActivity.showSnackbar(errorFormatter.toHumanReadable(event.throwable))
     }
 
     private fun setupCreateRoomButton() {
@@ -347,7 +345,7 @@ class RoomListFragment @Inject constructor(
         roomController.onRoomLongClicked()
 
         RoomListQuickActionsBottomSheet
-                .newInstance(room.roomId)
+                .newInstance(room.roomId, RoomListActionsArgs.Mode.FULL)
                 .show(childFragmentManager, "ROOM_LIST_QUICK_ACTIONS")
         return true
     }

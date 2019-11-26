@@ -29,5 +29,6 @@
     <string name="room_profile_section_more_member_list">"%1$s people"</string>
     <string name="room_profile_section_more_uploads">Uploads</string>
     <string name="room_profile_section_more_leave">Leave Room</string>
+    <string name="room_profile_leaving_room">"Leaving the room..."</string>
 
 </resources>

@@ -35,19 +35,21 @@ class RoomListQuickActionsEpoxyController @Inject constructor(private val avatar
     override fun buildModels(state: RoomListQuickActionsState) {
         val roomSummary = state.roomSummary() ?: return
 
-        // Preview
-        bottomSheetItemRoomPreview {
-            id("preview")
-            avatarRenderer(avatarRenderer)
-            roomName(roomSummary.displayName)
-            avatarUrl(roomSummary.avatarUrl)
-            roomId(roomSummary.roomId)
-            settingsClickListener(View.OnClickListener { listener?.didSelectMenuAction(RoomListQuickActionsSharedAction.Settings(roomSummary.roomId)) })
-        }
+        if (state.mode == RoomListActionsArgs.Mode.FULL) {
+            // Preview
+            bottomSheetItemRoomPreview {
+                id("preview")
+                avatarRenderer(avatarRenderer)
+                roomName(roomSummary.displayName)
+                avatarUrl(roomSummary.avatarUrl)
+                roomId(roomSummary.roomId)
+                settingsClickListener(View.OnClickListener { listener?.didSelectMenuAction(RoomListQuickActionsSharedAction.Settings(roomSummary.roomId)) })
+            }
 
-        // Notifications
-        dividerItem {
-            id("notifications_separator")
+            // Notifications
+            dividerItem {
+                id("notifications_separator")
+            }
         }
 
         val selectedRoomState = state.roomNotificationState()
@@ -56,11 +58,13 @@ class RoomListQuickActionsEpoxyController @Inject constructor(private val avatar
         RoomListQuickActionsSharedAction.NotificationsMentionsOnly(roomSummary.roomId).toBottomSheetItem(2, selectedRoomState)
         RoomListQuickActionsSharedAction.NotificationsMute(roomSummary.roomId).toBottomSheetItem(3, selectedRoomState)
 
-        // Leave
-        dividerItem {
-            id("leave_separator")
+        if (state.mode == RoomListActionsArgs.Mode.FULL) {
+            // Leave
+            dividerItem {
+                id("leave_separator")
+            }
+            RoomListQuickActionsSharedAction.Leave(roomSummary.roomId).toBottomSheetItem(5)
         }
-        RoomListQuickActionsSharedAction.Leave(roomSummary.roomId).toBottomSheetItem(5)
     }
 
     private fun RoomListQuickActionsSharedAction.toBottomSheetItem(index: Int, roomNotificationState: RoomNotificationState? = null) {

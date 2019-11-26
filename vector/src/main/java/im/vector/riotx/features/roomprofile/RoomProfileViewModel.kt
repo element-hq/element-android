@@ -22,10 +22,15 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
 import im.vector.riotx.core.platform.VectorViewModel
+import im.vector.riotx.core.utils.DataSource
+import im.vector.riotx.core.utils.PublishDataSource
+import im.vector.riotx.features.home.room.list.RoomListAction
+import im.vector.riotx.features.home.room.list.RoomListViewEvents
 
 class RoomProfileViewModel @AssistedInject constructor(@Assisted initialState: RoomProfileViewState,
                                                        private val session: Session)
@@ -45,6 +50,9 @@ class RoomProfileViewModel @AssistedInject constructor(@Assisted initialState: R
         }
     }
 
+    private val _viewEvents = PublishDataSource<RoomProfileViewEvents>()
+    val viewEvents: DataSource<RoomProfileViewEvents> = _viewEvents
+
     private val room = session.getRoom(initialState.roomId)!!
 
     init {
@@ -62,7 +70,30 @@ class RoomProfileViewModel @AssistedInject constructor(@Assisted initialState: R
                 }
     }
 
-    override fun handle(action: RoomProfileAction) {
+    override fun handle(action: RoomProfileAction) = when (action) {
+        RoomProfileAction.LeaveRoom                      -> handleLeaveRoom()
+        is RoomProfileAction.ChangeRoomNotificationState -> handleChangeNotificationMode(action)
+    }
+
+    private fun handleChangeNotificationMode(action: RoomProfileAction.ChangeRoomNotificationState) {
+        room.setRoomNotificationState(action.notificationState, object : MatrixCallback<Unit> {
+            override fun onFailure(failure: Throwable) {
+                _viewEvents.post(RoomProfileViewEvents.Failure(failure))
+            }
+        })
+    }
+
+    private fun handleLeaveRoom() {
+        _viewEvents.post(RoomProfileViewEvents.Loading)
+        room.leave(object : MatrixCallback<Unit> {
+            override fun onSuccess(data: Unit) {
+                _viewEvents.post(RoomProfileViewEvents.OnLeaveRoomSuccess)
+            }
+
+            override fun onFailure(failure: Throwable) {
+                _viewEvents.post(RoomProfileViewEvents.Failure(failure))
+            }
+        })
     }
 
 }
