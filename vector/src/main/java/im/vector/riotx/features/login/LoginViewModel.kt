@@ -16,13 +16,11 @@
 
 package im.vector.riotx.features.login
 
-import arrow.core.Try
 import com.airbnb.mvrx.*
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.AuthenticationService
-import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.auth.data.LoginFlowResult
 import im.vector.matrix.android.api.auth.login.LoginWizard
 import im.vector.matrix.android.api.auth.registration.FlowResult
@@ -50,6 +48,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                                                  private val authenticationService: AuthenticationService,
                                                  private val activeSessionHolder: ActiveSessionHolder,
                                                  private val pushRuleTriggerListener: PushRuleTriggerListener,
+                                                 private val homeServerConnectionConfigFactory: HomeServerConnectionConfigFactory,
                                                  private val sessionListener: SessionListener)
     : VectorViewModel<LoginViewState, LoginAction>(initialState) {
 
@@ -81,6 +80,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
     private var registrationWizard: RegistrationWizard? = null
     private var loginWizard: LoginWizard? = null
 
+    // TODO Move all this in a data class
     var serverType: ServerType = ServerType.MatrixOrg
         private set
     var signMode: SignMode = SignMode.Unknown
@@ -88,9 +88,11 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
     var resetPasswordEmail: String? = null
         private set
 
+    var homeServerUrl: String? = null
+        private set
+
     private var loginConfig: LoginConfig? = null
 
-    private var homeServerConnectionConfig: HomeServerConnectionConfig? = null
     private var currentTask: Cancelable? = null
 
     private val _viewEvents = PublishDataSource<LoginViewEvents>()
@@ -268,7 +270,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                 }
             }
             LoginAction.ResetHomeServerUrl  -> {
-                homeServerConnectionConfig = null
+                homeServerUrl = null
                 registrationWizard = null
                 loginWizard = null
 
@@ -472,7 +474,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
     }
 
     private fun handleWebLoginSuccess(action: LoginAction.WebLoginSuccess) {
-        val homeServerConnectionConfigFinal = homeServerConnectionConfig
+        val homeServerConnectionConfigFinal = homeServerConnectionConfigFactory.create(homeServerUrl)
 
         if (homeServerConnectionConfigFinal == null) {
             // Should not happen
@@ -490,28 +492,10 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
         }
     }
 
-    private fun handleUpdateHomeserver(action: LoginAction.UpdateHomeServer) = withState { state ->
-        var newConfig: HomeServerConnectionConfig? = null
-        Try {
-            val homeServerUri = action.homeServerUrl
-            newConfig = HomeServerConnectionConfig.Builder()
-                    .withHomeServerUri(homeServerUri)
-                    .build()
-        }
+    private fun handleUpdateHomeserver(action: LoginAction.UpdateHomeServer) {
+        val homeServerConnectionConfig = homeServerConnectionConfigFactory.create(action.homeServerUrl)
 
-        // Do not retry if we already have flows for this config -> causes infinite focus loop
-        if (newConfig?.homeServerUri?.toString() == homeServerConnectionConfig?.homeServerUri?.toString()
-                && state.asyncHomeServerLoginFlowRequest is Success) return@withState
-
-        currentTask?.cancel()
-        currentTask = null
-        homeServerConnectionConfig = newConfig
-        loginWizard = null
-        registrationWizard = null
-
-        val homeServerConnectionConfigFinal = homeServerConnectionConfig
-
-        if (homeServerConnectionConfigFinal == null) {
+        if (homeServerConnectionConfig == null) {
             // This is invalid
             setState {
                 copy(
@@ -519,13 +503,18 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                 )
             }
         } else {
+            currentTask?.cancel()
+            currentTask = null
+            loginWizard = null
+            registrationWizard = null
+
             setState {
                 copy(
                         asyncHomeServerLoginFlowRequest = Loading()
                 )
             }
 
-            currentTask = authenticationService.getLoginFlow(homeServerConnectionConfigFinal, object : MatrixCallback<LoginFlowResult> {
+            currentTask = authenticationService.getLoginFlow(homeServerConnectionConfig, object : MatrixCallback<LoginFlowResult> {
                 override fun onFailure(failure: Throwable) {
                     _viewEvents.post(LoginViewEvents.Error(failure))
                     setState {
@@ -536,6 +525,9 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                 }
 
                 override fun onSuccess(data: LoginFlowResult) {
+                    // Keep the url
+                    homeServerUrl = action.homeServerUrl
+
                     when (data) {
                         is LoginFlowResult.Success            -> {
                             val loginMode = when {
@@ -585,15 +577,11 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
         return loginConfig?.homeServerUrl
     }
 
-    fun getHomeServerUrl(): String {
-        return homeServerConnectionConfig?.homeServerUri?.toString() ?: ""
-    }
-
     /**
      * Ex: "https://matrix.org/" -> "matrix.org"
      */
     fun getHomeServerUrlSimple(): String {
-        return getHomeServerUrl()
+        return (homeServerUrl ?: "")
                 .substringAfter("://")
                 .trim { it == '/' }
     }

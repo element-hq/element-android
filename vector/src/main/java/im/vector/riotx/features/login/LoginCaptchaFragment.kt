@@ -73,7 +73,7 @@ class LoginCaptchaFragment @Inject constructor(
         val mime = "text/html"
         val encoding = "utf-8"
 
-        val homeServerUrl = loginViewModel.getHomeServerUrl()
+        val homeServerUrl = loginViewModel.homeServerUrl ?: error("missing url of homeserver")
         loginCaptchaWevView.loadDataWithBaseURL(homeServerUrl, html, mime, encoding, null)
         loginCaptchaWevView.requestLayout()
 

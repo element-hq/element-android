@@ -56,7 +56,7 @@ class LoginWebFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        homeServerUrl = loginViewModel.getHomeServerUrl()
+        homeServerUrl = loginViewModel.homeServerUrl ?: error("Developer error: Invalid url")
         signMode = loginViewModel.signMode.takeIf { it != SignMode.Unknown } ?: error("Developer error: Invalid sign mode")
 
         setupToolbar(loginWebToolbar)
