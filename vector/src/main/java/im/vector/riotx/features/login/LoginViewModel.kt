@@ -531,9 +531,12 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                         is LoginFlowResult.Success            -> {
                             val loginMode = when {
                                 // SSO login is taken first
-                                data.loginFlowResponse.flows.any { it.type == LoginFlowTypes.SSO }      -> LoginMode.Sso
-                                data.loginFlowResponse.flows.any { it.type == LoginFlowTypes.PASSWORD } -> LoginMode.Password
-                                else                                                                    -> LoginMode.Unsupported(data.loginFlowResponse.flows.mapNotNull { it.type }.toList())
+                                data.loginFlowResponse.flows.any { it.type == LoginFlowTypes.SSO }      ->
+                                    LoginMode.Sso
+                                data.loginFlowResponse.flows.any { it.type == LoginFlowTypes.PASSWORD } ->
+                                    LoginMode.Password
+                                else                                                                    ->
+                                    LoginMode.Unsupported(data.loginFlowResponse.flows.mapNotNull { it.type }.toList())
                             }
 
                             if (loginMode == LoginMode.Password && !data.isLoginAndRegistrationSupported) {
