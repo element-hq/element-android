@@ -73,23 +73,8 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
     var isRegistrationStarted: Boolean = false
         private set
 
-    // True when email is sent with success to the homeserver
-    val isResetPasswordStarted: Boolean
-        get() = resetPasswordEmail.isNullOrBlank().not()
-
     private var registrationWizard: RegistrationWizard? = null
     private var loginWizard: LoginWizard? = null
-
-    // TODO Move all this in a data class
-    var serverType: ServerType = ServerType.MatrixOrg
-        private set
-    var signMode: SignMode = SignMode.Unknown
-        private set
-    var resetPasswordEmail: String? = null
-        private set
-
-    var homeServerUrl: String? = null
-        private set
 
     private var loginConfig: LoginConfig? = null
 
@@ -104,7 +89,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
             is LoginAction.UpdateSignMode             -> handleUpdateSignMode(action)
             is LoginAction.InitWith                   -> handleInitWith(action)
             is LoginAction.UpdateHomeServer           -> handleUpdateHomeserver(action)
-            is LoginAction.Login                      -> handleLogin(action)
+            is LoginAction.LoginOrRegister            -> handleLoginOrRegister(action)
             is LoginAction.WebLoginSuccess            -> handleWebLoginSuccess(action)
             is LoginAction.ResetPassword              -> handleResetPassword(action)
             is LoginAction.ResetPasswordMailConfirmed -> handleResetPasswordMailConfirmed()
@@ -115,7 +100,6 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
 
     private fun handleRegisterAction(action: LoginAction.RegisterAction) {
         when (action) {
-            is LoginAction.RegisterWith                 -> handleRegisterWith(action)
             is LoginAction.CaptchaDone                  -> handleCaptchaDone(action)
             is LoginAction.AcceptTerms                  -> handleAcceptTerms()
             is LoginAction.RegisterDummy                -> handleRegisterDummy()
@@ -232,7 +216,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
         currentTask = registrationWizard?.dummy(registrationCallback)
     }
 
-    private fun handleRegisterWith(action: LoginAction.RegisterWith) {
+    private fun handleRegisterWith(action: LoginAction.LoginOrRegister) {
         setState { copy(asyncRegistration = Loading()) }
         currentTask = registrationWizard?.createAccount(
                 action.username,
@@ -270,33 +254,37 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                 }
             }
             LoginAction.ResetHomeServerUrl  -> {
-                homeServerUrl = null
                 registrationWizard = null
                 loginWizard = null
 
                 setState {
                     copy(
-                            asyncHomeServerLoginFlowRequest = Uninitialized
+                            asyncHomeServerLoginFlowRequest = Uninitialized,
+                            homeServerUrl = null
                     )
                 }
             }
             LoginAction.ResetHomeServerType -> {
-                serverType = ServerType.MatrixOrg
-            }
-            LoginAction.ResetSignMode       -> {
-                signMode = SignMode.Unknown
                 setState {
                     copy(
-                            asyncHomeServerLoginFlowRequest = Uninitialized
+                            serverType = ServerType.MatrixOrg
+                    )
+                }
+            }
+            LoginAction.ResetSignMode       -> {
+                setState {
+                    copy(
+                            asyncHomeServerLoginFlowRequest = Uninitialized,
+                            signMode = SignMode.Unknown
                     )
                 }
             }
             LoginAction.ResetResetPassword  -> {
-                resetPasswordEmail = null
                 setState {
                     copy(
                             asyncResetPassword = Uninitialized,
-                            asyncResetMailConfirmed = Uninitialized
+                            asyncResetMailConfirmed = Uninitialized,
+                            resetPasswordEmail = null
                     )
                 }
             }
@@ -304,17 +292,25 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
     }
 
     private fun handleUpdateSignMode(action: LoginAction.UpdateSignMode) {
-        signMode = action.signMode
+        setState {
+            copy(
+                    signMode = action.signMode
+            )
+        }
 
-        if (signMode == SignMode.SignUp) {
+        if (action.signMode == SignMode.SignUp) {
             startRegistrationFlow()
-        } else if (signMode == SignMode.SignIn) {
+        } else if (action.signMode == SignMode.SignIn) {
             startAuthenticationFlow()
         }
     }
 
     private fun handleUpdateServerType(action: LoginAction.UpdateServerType) {
-        serverType = action.serverType
+        setState {
+            copy(
+                    serverType = action.serverType
+            )
+        }
     }
 
     private fun handleInitWith(action: LoginAction.InitWith) {
@@ -339,11 +335,10 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
 
             currentTask = safeLoginWizard.resetPassword(action.email, action.newPassword, object : MatrixCallback<Unit> {
                 override fun onSuccess(data: Unit) {
-                    resetPasswordEmail = action.email
-
                     setState {
                         copy(
-                                asyncResetPassword = Success(data)
+                                asyncResetPassword = Success(data),
+                                resetPasswordEmail = action.email
                         )
                     }
                 }
@@ -378,11 +373,10 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
 
             currentTask = safeLoginWizard.resetPasswordMailConfirmed(object : MatrixCallback<Unit> {
                 override fun onSuccess(data: Unit) {
-                    resetPasswordEmail = null
-
                     setState {
                         copy(
-                                asyncResetMailConfirmed = Success(data)
+                                asyncResetMailConfirmed = Success(data),
+                                resetPasswordEmail = null
                         )
                     }
                 }
@@ -399,7 +393,15 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
         }
     }
 
-    private fun handleLogin(action: LoginAction.Login) {
+    private fun handleLoginOrRegister(action: LoginAction.LoginOrRegister) = withState { state ->
+        when (state.signMode) {
+            SignMode.SignIn -> handleLogin(action)
+            SignMode.SignUp -> handleRegisterWith(action)
+            else            -> error("Developer error, invalid sign mode")
+        }
+    }
+
+    private fun handleLogin(action: LoginAction.LoginOrRegister) {
         val safeLoginWizard = loginWizard
 
         if (safeLoginWizard == null) {
@@ -416,7 +418,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
             }
 
             currentTask = safeLoginWizard.login(
-                    action.login,
+                    action.username,
                     action.password,
                     action.initialDeviceName,
                     object : MatrixCallback<Session> {
@@ -473,8 +475,8 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
         }
     }
 
-    private fun handleWebLoginSuccess(action: LoginAction.WebLoginSuccess) {
-        val homeServerConnectionConfigFinal = homeServerConnectionConfigFactory.create(homeServerUrl)
+    private fun handleWebLoginSuccess(action: LoginAction.WebLoginSuccess) = withState { state ->
+        val homeServerConnectionConfigFinal = homeServerConnectionConfigFactory.create(state.homeServerUrl)
 
         if (homeServerConnectionConfigFinal == null) {
             // Should not happen
@@ -525,9 +527,6 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                 }
 
                 override fun onSuccess(data: LoginFlowResult) {
-                    // Keep the url
-                    homeServerUrl = action.homeServerUrl
-
                     when (data) {
                         is LoginFlowResult.Success            -> {
                             val loginMode = when {
@@ -542,7 +541,8 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                             } else {
                                 setState {
                                     copy(
-                                            asyncHomeServerLoginFlowRequest = Success(loginMode)
+                                            asyncHomeServerLoginFlowRequest = Success(loginMode),
+                                            homeServerUrl = action.homeServerUrl
                                     )
                                 }
                             }
@@ -575,14 +575,5 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
 
     fun getInitialHomeServerUrl(): String? {
         return loginConfig?.homeServerUrl
-    }
-
-    /**
-     * Ex: "https://matrix.org/" -> "matrix.org"
-     */
-    fun getHomeServerUrlSimple(): String {
-        return (homeServerUrl ?: "")
-                .substringAfter("://")
-                .trim { it == '/' }
     }
 }

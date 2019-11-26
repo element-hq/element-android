@@ -23,7 +23,17 @@ data class LoginViewState(
         val asyncHomeServerLoginFlowRequest: Async<LoginMode> = Uninitialized,
         val asyncResetPassword: Async<Unit> = Uninitialized,
         val asyncResetMailConfirmed: Async<Unit> = Uninitialized,
-        val asyncRegistration: Async<Unit> = Uninitialized
+        val asyncRegistration: Async<Unit> = Uninitialized,
+
+        // User choice
+        @PersistState
+        val serverType: ServerType = ServerType.MatrixOrg,
+        @PersistState
+        val signMode: SignMode = SignMode.Unknown,
+        @PersistState
+        val resetPasswordEmail: String? = null,
+        @PersistState
+        val homeServerUrl: String? = null
 ) : MvRxState {
 
     fun isLoading(): Boolean {
@@ -37,4 +47,12 @@ data class LoginViewState(
     fun isUserLogged(): Boolean {
         return asyncLoginAction is Success
     }
+
+    /**
+     * Ex: "https://matrix.org/" -> "matrix.org"
+     */
+    val homeServerUrlSimple: String
+        get() = (homeServerUrl ?: "")
+                .substringAfter("://")
+                .trim { it == '/' }
 }

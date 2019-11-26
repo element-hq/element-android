@@ -48,50 +48,48 @@ class LoginWebFragment @Inject constructor(
         private val errorFormatter: ErrorFormatter
 ) : AbstractLoginFragment() {
 
-    private lateinit var homeServerUrl: String
-    private lateinit var signMode: SignMode
-
     override fun getLayoutResId() = R.layout.fragment_login_web
+
+    private var isWebViewLoaded = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        homeServerUrl = loginViewModel.homeServerUrl ?: error("Developer error: Invalid url")
-        signMode = loginViewModel.signMode.takeIf { it != SignMode.Unknown } ?: error("Developer error: Invalid sign mode")
-
         setupToolbar(loginWebToolbar)
-        setupTitle()
-        setupWebView()
     }
 
-    private fun setupTitle() {
-        loginWebToolbar.title = when (signMode) {
+    override fun updateWithState(state: LoginViewState) {
+        setupTitle(state)
+        if (!isWebViewLoaded) {
+            setupWebView(state)
+            isWebViewLoaded = true
+        }
+    }
+
+    private fun setupTitle(state: LoginViewState) {
+        loginWebToolbar.title = when (state.signMode) {
             SignMode.SignIn -> getString(R.string.login_signin)
             else            -> getString(R.string.login_signup)
         }
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    private fun setupWebView() {
+    private fun setupWebView(state: LoginViewState) {
         loginWebWebView.settings.javaScriptEnabled = true
 
         // Due to https://developers.googleblog.com/2016/08/modernizing-oauth-interactions-in-native-apps.html, we hack
         // the user agent to bypass the limitation of Google, as a quick fix (a proper solution will be to use the SSO SDK)
         loginWebWebView.settings.userAgentString = "Mozilla/5.0 Google"
 
-        if (!homeServerUrl.endsWith("/")) {
-            homeServerUrl += "/"
-        }
-
         // AppRTC requires third party cookies to work
         val cookieManager = android.webkit.CookieManager.getInstance()
 
         // clear the cookies must be cleared
         if (cookieManager == null) {
-            launchWebView()
+            launchWebView(state)
         } else {
             if (!cookieManager.hasCookies()) {
-                launchWebView()
+                launchWebView(state)
             } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                 try {
                     cookieManager.removeAllCookie()
@@ -99,24 +97,24 @@ class LoginWebFragment @Inject constructor(
                     Timber.e(e, " cookieManager.removeAllCookie() fails")
                 }
 
-                launchWebView()
+                launchWebView(state)
             } else {
                 try {
-                    cookieManager.removeAllCookies { launchWebView() }
+                    cookieManager.removeAllCookies { launchWebView(state) }
                 } catch (e: Exception) {
                     Timber.e(e, " cookieManager.removeAllCookie() fails")
-                    launchWebView()
+                    launchWebView(state)
                 }
             }
         }
     }
 
-    private fun launchWebView() {
-        if (signMode == SignMode.SignIn) {
-            loginWebWebView.loadUrl(homeServerUrl + "_matrix/static/client/login/")
+    private fun launchWebView(state: LoginViewState) {
+        if (state.signMode == SignMode.SignIn) {
+            loginWebWebView.loadUrl(state.homeServerUrl?.trim { it == '/' } + "/_matrix/static/client/login/")
         } else {
             // MODE_REGISTER
-            loginWebWebView.loadUrl(homeServerUrl + "_matrix/static/client/register/")
+            loginWebWebView.loadUrl(state.homeServerUrl?.trim { it == '/' } + "/_matrix/static/client/register/")
         }
 
         loginWebWebView.webViewClient = object : WebViewClient() {
@@ -157,7 +155,7 @@ class LoginWebFragment @Inject constructor(
                     val mxcJavascriptSendObjectMessage = assetReader.readAssetFile("sendObject.js")
                     view.loadUrl(mxcJavascriptSendObjectMessage)
 
-                    if (signMode == SignMode.SignIn) {
+                    if (state.signMode == SignMode.SignIn) {
                         // The function the fallback page calls when the login is complete
                         val mxcJavascriptOnLogin = assetReader.readAssetFile("onLogin.js")
                         view.loadUrl(mxcJavascriptOnLogin)
@@ -211,7 +209,7 @@ class LoginWebFragment @Inject constructor(
                     if (javascriptResponse != null) {
                         val action = javascriptResponse.action
 
-                        if (signMode == SignMode.SignIn) {
+                        if (state.signMode == SignMode.SignIn) {
                             try {
                                 if (action == "onLogin") {
                                     val credentials = javascriptResponse.credentials

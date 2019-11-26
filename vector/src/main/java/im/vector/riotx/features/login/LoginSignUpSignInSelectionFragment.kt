@@ -16,12 +16,9 @@
 
 package im.vector.riotx.features.login
 
-import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import butterknife.OnClick
-import com.airbnb.mvrx.withState
 import im.vector.riotx.R
 import im.vector.riotx.core.error.ErrorFormatter
 import kotlinx.android.synthetic.main.fragment_login_signup_signin_selection.*
@@ -38,21 +35,12 @@ class LoginSignUpSignInSelectionFragment @Inject constructor(
 
     private var isSsoSignIn: Boolean = false
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        isSsoSignIn = withState(loginViewModel) { it.asyncHomeServerLoginFlowRequest.invoke() } == LoginMode.Sso
-
-        setupUi()
-        setupButtons()
-    }
-
-    private fun setupUi() {
-        when (loginViewModel.serverType) {
+    private fun setupUi(state: LoginViewState) {
+        when (state.serverType) {
             ServerType.MatrixOrg -> {
                 loginSignupSigninServerIcon.setImageResource(R.drawable.ic_logo_matrix_org)
                 loginSignupSigninServerIcon.isVisible = true
-                loginSignupSigninTitle.text = getString(R.string.login_connect_to, loginViewModel.getHomeServerUrlSimple())
+                loginSignupSigninTitle.text = getString(R.string.login_connect_to, state.homeServerUrlSimple)
                 loginSignupSigninText.text = getString(R.string.login_server_matrix_org_text)
             }
             ServerType.Modular   -> {
@@ -60,17 +48,19 @@ class LoginSignUpSignInSelectionFragment @Inject constructor(
                 loginSignupSigninServerIcon.isVisible = true
                 // TODO
                 loginSignupSigninTitle.text = getString(R.string.login_connect_to, "TODO MODULAR NAME")
-                loginSignupSigninText.text = loginViewModel.getHomeServerUrlSimple()
+                loginSignupSigninText.text = state.homeServerUrlSimple
             }
             ServerType.Other     -> {
                 loginSignupSigninServerIcon.isVisible = false
                 loginSignupSigninTitle.text = getString(R.string.login_server_other_title)
-                loginSignupSigninText.text = getString(R.string.login_connect_to, loginViewModel.getHomeServerUrlSimple())
+                loginSignupSigninText.text = getString(R.string.login_connect_to, state.homeServerUrlSimple)
             }
         }
     }
 
-    private fun setupButtons() {
+    private fun setupButtons(state: LoginViewState) {
+        isSsoSignIn = state.asyncHomeServerLoginFlowRequest.invoke() == LoginMode.Sso
+
         if (isSsoSignIn) {
             loginSignupSigninSubmit.text = getString(R.string.login_signin_sso)
             loginSignupSigninSignIn.isVisible = false
@@ -105,5 +95,10 @@ class LoginSignUpSignInSelectionFragment @Inject constructor(
 
     override fun resetViewModel() {
         loginViewModel.handle(LoginAction.ResetSignMode)
+    }
+
+    override fun updateWithState(state: LoginViewState) {
+        setupUi(state)
+        setupButtons(state)
     }
 }

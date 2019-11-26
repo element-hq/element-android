@@ -24,16 +24,17 @@ sealed class LoginAction : VectorViewModelAction {
     data class UpdateServerType(val serverType: ServerType) : LoginAction()
     data class UpdateHomeServer(val homeServerUrl: String) : LoginAction()
     data class UpdateSignMode(val signMode: SignMode) : LoginAction()
-    data class Login(val login: String, val password: String, val initialDeviceName: String) : LoginAction()
     data class WebLoginSuccess(val credentials: Credentials) : LoginAction()
     data class InitWith(val loginConfig: LoginConfig) : LoginAction()
     data class ResetPassword(val email: String, val newPassword: String) : LoginAction()
     object ResetPasswordMailConfirmed : LoginAction()
 
+    // Login or Register, depending on the signMode
+    data class LoginOrRegister(val username: String, val password: String, val initialDeviceName: String) : LoginAction()
+
     // Register actions
     open class RegisterAction : LoginAction()
 
-    data class RegisterWith(val username: String, val password: String, val initialDeviceName: String) : RegisterAction()
     data class AddThreePid(val threePid: RegisterThreePid) : RegisterAction()
     object SendAgainThreePid : RegisterAction()
     // TODO Confirm Email (from link in the email, open in the phone, intercepted by RiotX)

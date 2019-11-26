@@ -23,7 +23,6 @@ import android.view.inputmethod.EditorInfo
 import androidx.core.view.isVisible
 import butterknife.OnClick
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.withState
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.riotx.R
 import im.vector.riotx.core.error.ErrorFormatter
@@ -44,7 +43,6 @@ class LoginServerUrlFormFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupUi()
         setupHomeServerField()
     }
 
@@ -65,8 +63,8 @@ class LoginServerUrlFormFragment @Inject constructor(
         }
     }
 
-    private fun setupUi() {
-        when (loginViewModel.serverType) {
+    private fun setupUi(state: LoginViewState) {
+        when (state.serverType) {
             ServerType.Modular -> {
                 loginServerUrlFormIcon.isVisible = true
                 loginServerUrlFormTitle.text = getString(R.string.login_connect_to_modular)
@@ -127,7 +125,9 @@ class LoginServerUrlFormFragment @Inject constructor(
         loginServerUrlFormHomeServerUrlTil.error = errorFormatter.toHumanReadable(throwable)
     }
 
-    override fun invalidate() = withState(loginViewModel) { state ->
+    override fun updateWithState(state: LoginViewState) {
+        setupUi(state)
+
         when (state.asyncHomeServerLoginFlowRequest) {
             is Success -> {
                 // The home server url is valid

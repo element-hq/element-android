@@ -27,6 +27,7 @@ import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.utils.openUrlInExternalBrowser
 import im.vector.riotx.features.login.AbstractLoginFragment
 import im.vector.riotx.features.login.LoginAction
+import im.vector.riotx.features.login.LoginViewState
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_login_terms.*
 import org.matrix.androidsdk.rest.model.login.LocalizedFlowDataLoginTerms
@@ -56,7 +57,6 @@ class LoginTermsFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
 
         loginTermsPolicyList.setController(policyController)
-        policyController.homeServer = loginViewModel.getHomeServerUrlSimple()
         policyController.listener = this
 
         val list = ArrayList<LocalizedFlowDataLoginTermsChecked>()
@@ -67,8 +67,6 @@ class LoginTermsFragment @Inject constructor(
                 }
 
         loginTermsViewState = LoginTermsViewState(list)
-
-        renderState()
     }
 
     private fun renderState() {
@@ -107,6 +105,11 @@ class LoginTermsFragment @Inject constructor(
                 .setMessage(errorFormatter.toHumanReadable(throwable))
                 .setPositiveButton(R.string.ok, null)
                 .show()
+    }
+
+    override fun updateWithState(state: LoginViewState) {
+        policyController.homeServer = state.homeServerUrlSimple
+        renderState()
     }
 
     override fun resetViewModel() {

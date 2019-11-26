@@ -22,7 +22,6 @@ import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.transition.TransitionInflater
 import butterknife.OnClick
-import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
@@ -52,12 +51,11 @@ class LoginServerSelectionFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        updateSelectedChoice()
         initTextViews()
     }
 
-    private fun updateSelectedChoice() {
-        loginViewModel.serverType.let {
+    private fun updateSelectedChoice(state: LoginViewState) {
+        state.serverType.let {
             loginServerChoiceMatrixOrg.isChecked = it == ServerType.MatrixOrg
             loginServerChoiceModular.isChecked = it == ServerType.Modular
             loginServerChoiceOther.isChecked = it == ServerType.Other
@@ -83,7 +81,6 @@ class LoginServerSelectionFragment @Inject constructor(
             submit()
         } else {
             loginViewModel.handle(LoginAction.UpdateServerType(ServerType.MatrixOrg))
-            updateSelectedChoice()
         }
     }
 
@@ -94,7 +91,6 @@ class LoginServerSelectionFragment @Inject constructor(
             submit()
         } else {
             loginViewModel.handle(LoginAction.UpdateServerType(ServerType.Modular))
-            updateSelectedChoice()
         }
     }
 
@@ -105,13 +101,12 @@ class LoginServerSelectionFragment @Inject constructor(
             submit()
         } else {
             loginViewModel.handle(LoginAction.UpdateServerType(ServerType.Other))
-            updateSelectedChoice()
         }
     }
 
     @OnClick(R.id.loginServerSubmit)
-    fun submit() {
-        if (loginViewModel.serverType == ServerType.MatrixOrg) {
+    fun submit() = withState(loginViewModel) { state ->
+        if (state.serverType == ServerType.MatrixOrg) {
             // Request login flow here
             loginViewModel.handle(LoginAction.UpdateHomeServer(getString(R.string.matrix_org_server_url)))
         } else {
@@ -131,11 +126,10 @@ class LoginServerSelectionFragment @Inject constructor(
                 .show()
     }
 
-    override fun invalidate() = withState(loginViewModel) {
-        when (it.asyncHomeServerLoginFlowRequest) {
-            is Fail    -> {
-                // TODO Display error in a dialog?
-            }
+    override fun updateWithState(state: LoginViewState) {
+        updateSelectedChoice(state)
+
+        when (state.asyncHomeServerLoginFlowRequest) {
             is Success -> {
                 // LoginFlow for matrix.org has been retrieved
                 loginSharedActionViewModel.post(LoginNavigation.OnLoginFlowRetrieved)

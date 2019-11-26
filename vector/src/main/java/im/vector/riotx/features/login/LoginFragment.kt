@@ -25,7 +25,6 @@ import butterknife.OnClick
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.withState
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.failure.MatrixError
@@ -57,16 +56,13 @@ class LoginFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupUi()
-        setupAutoFill()
         setupSubmitButton()
         setupPasswordReveal()
-        setupButtons()
     }
 
-    private fun setupAutoFill() {
+    private fun setupAutoFill(state: LoginViewState) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            when (loginViewModel.signMode) {
+            when (state.signMode) {
                 SignMode.Unknown -> error("developer error")
                 SignMode.SignUp  -> {
                     loginField.setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_USERNAME)
@@ -87,11 +83,7 @@ class LoginFragment @Inject constructor(
         val login = loginField.text.toString()
         val password = passwordField.text.toString()
 
-        when (loginViewModel.signMode) {
-            SignMode.Unknown -> error("developer error")
-            SignMode.SignUp  -> loginViewModel.handle(LoginAction.RegisterWith(login, password, getString(R.string.login_mobile_device)))
-            SignMode.SignIn  -> loginViewModel.handle(LoginAction.Login(login, password, getString(R.string.login_mobile_device)))
-        }
+        loginViewModel.handle(LoginAction.LoginOrRegister(login, password, getString(R.string.login_mobile_device)))
     }
 
     private fun cleanupUi() {
@@ -100,18 +92,18 @@ class LoginFragment @Inject constructor(
         passwordFieldTil.error = null
     }
 
-    private fun setupUi() {
-        val resId = when (loginViewModel.signMode) {
+    private fun setupUi(state: LoginViewState) {
+        val resId = when (state.signMode) {
             SignMode.Unknown -> error("developer error")
             SignMode.SignUp  -> R.string.login_signup_to
             SignMode.SignIn  -> R.string.login_connect_to
         }
 
-        when (loginViewModel.serverType) {
+        when (state.serverType) {
             ServerType.MatrixOrg -> {
                 loginServerIcon.isVisible = true
                 loginServerIcon.setImageResource(R.drawable.ic_logo_matrix_org)
-                loginTitle.text = getString(resId, loginViewModel.getHomeServerUrlSimple())
+                loginTitle.text = getString(resId, state.homeServerUrlSimple)
                 loginNotice.text = getString(R.string.login_server_matrix_org_text)
             }
             ServerType.Modular   -> {
@@ -123,16 +115,16 @@ class LoginFragment @Inject constructor(
             }
             ServerType.Other     -> {
                 loginServerIcon.isVisible = false
-                loginTitle.text = getString(resId, loginViewModel.getHomeServerUrlSimple())
+                loginTitle.text = getString(resId, state.homeServerUrlSimple)
                 loginNotice.text = getString(R.string.login_server_other_text)
             }
         }
     }
 
-    private fun setupButtons() {
-        forgetPasswordButton.isVisible = loginViewModel.signMode == SignMode.SignIn
+    private fun setupButtons(state: LoginViewState) {
+        forgetPasswordButton.isVisible = state.signMode == SignMode.SignIn
 
-        loginSubmit.text = getString(when (loginViewModel.signMode) {
+        loginSubmit.text = getString(when (state.signMode) {
             SignMode.Unknown -> error("developer error")
             SignMode.SignUp  -> R.string.login_signup_submit
             SignMode.SignIn  -> R.string.login_signin
@@ -193,7 +185,11 @@ class LoginFragment @Inject constructor(
         loginFieldTil.error = errorFormatter.toHumanReadable(throwable)
     }
 
-    override fun invalidate() = withState(loginViewModel) { state ->
+    override fun updateWithState(state: LoginViewState) {
+        setupUi(state)
+        setupAutoFill(state)
+        setupButtons(state)
+
         when (state.asyncLoginAction) {
             is Loading -> {
                 // Ensure password is hidden

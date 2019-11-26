@@ -23,7 +23,6 @@ import butterknife.OnClick
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.withState
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.riotx.R
 import im.vector.riotx.core.error.ErrorFormatter
@@ -53,13 +52,12 @@ class LoginResetPasswordFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupUi()
         setupSubmitButton()
         setupPasswordReveal()
     }
 
-    private fun setupUi() {
-        resetPasswordTitle.text = getString(R.string.login_reset_password_on, loginViewModel.getHomeServerUrlSimple())
+    private fun setupUi(state: LoginViewState) {
+        resetPasswordTitle.text = getString(R.string.login_reset_password_on, state.homeServerUrlSimple)
     }
 
     private fun setupSubmitButton() {
@@ -148,7 +146,9 @@ class LoginResetPasswordFragment @Inject constructor(
                 .show()
     }
 
-    override fun invalidate() = withState(loginViewModel) { state ->
+    override fun updateWithState(state: LoginViewState) {
+        setupUi(state)
+
         when (state.asyncResetPassword) {
             is Loading -> {
                 // Ensure new password is hidden

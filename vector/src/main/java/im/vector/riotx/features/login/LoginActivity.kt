@@ -196,29 +196,27 @@ class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
                 .show()
     }
 
-    private fun onServerSelectionDone() {
-        when (loginViewModel.serverType) {
+    private fun onServerSelectionDone() = withState(loginViewModel) { state ->
+        when (state.serverType) {
             ServerType.MatrixOrg -> Unit // In this case, we wait for the login flow
             ServerType.Modular,
             ServerType.Other     -> addFragmentToBackstack(R.id.loginFragmentContainer, LoginServerUrlFormFragment::class.java)
         }
     }
 
-    private fun onSignModeSelected() {
-        when (loginViewModel.signMode) {
+    private fun onSignModeSelected() = withState(loginViewModel) { state ->
+        when (state.signMode) {
             SignMode.Unknown -> error("Sign mode has to be set before calling this method")
             SignMode.SignUp  -> {
                 // This is managed by the LoginViewEvents
             }
             SignMode.SignIn  -> {
                 // It depends on the LoginMode
-                withState(loginViewModel) {
-                    when (val loginMode = it.asyncHomeServerLoginFlowRequest.invoke()) {
-                        null                     -> error("Developer error")
-                        LoginMode.Password       -> addFragmentToBackstack(R.id.loginFragmentContainer, LoginFragment::class.java, tag = FRAGMENT_LOGIN_TAG)
-                        LoginMode.Sso            -> addFragmentToBackstack(R.id.loginFragmentContainer, LoginWebFragment::class.java)
-                        is LoginMode.Unsupported -> onLoginModeNotSupported(loginMode)
-                    }
+                when (val loginMode = state.asyncHomeServerLoginFlowRequest.invoke()) {
+                    null                     -> error("Developer error")
+                    LoginMode.Password       -> addFragmentToBackstack(R.id.loginFragmentContainer, LoginFragment::class.java, tag = FRAGMENT_LOGIN_TAG)
+                    LoginMode.Sso            -> addFragmentToBackstack(R.id.loginFragmentContainer, LoginWebFragment::class.java)
+                    is LoginMode.Unsupported -> onLoginModeNotSupported(loginMode)
                 }
             }
         }

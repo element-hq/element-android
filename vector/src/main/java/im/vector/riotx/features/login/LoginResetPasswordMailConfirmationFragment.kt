@@ -16,13 +16,10 @@
 
 package im.vector.riotx.features.login
 
-import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AlertDialog
 import butterknife.OnClick
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.withState
 import im.vector.riotx.R
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.error.is401
@@ -38,14 +35,8 @@ class LoginResetPasswordMailConfirmationFragment @Inject constructor(
 
     override fun getLayoutResId() = R.layout.fragment_login_reset_password_mail_confirmation
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        setupUi()
-    }
-
-    private fun setupUi() {
-        resetPasswordMailConfirmationNotice.text = getString(R.string.login_reset_password_mail_confirmation_notice, loginViewModel.resetPasswordEmail)
+    private fun setupUi(state: LoginViewState) {
+        resetPasswordMailConfirmationNotice.text = getString(R.string.login_reset_password_mail_confirmation_notice, state.resetPasswordEmail)
     }
 
     @OnClick(R.id.resetPasswordMailConfirmationSubmit)
@@ -65,7 +56,9 @@ class LoginResetPasswordMailConfirmationFragment @Inject constructor(
         loginViewModel.handle(LoginAction.ResetResetPassword)
     }
 
-    override fun invalidate() = withState(loginViewModel) { state ->
+    override fun updateWithState(state: LoginViewState) {
+        setupUi(state)
+
         when (state.asyncResetMailConfirmed) {
             is Fail    -> {
                 // Link in email not yet clicked ?
@@ -85,7 +78,5 @@ class LoginResetPasswordMailConfirmationFragment @Inject constructor(
                 loginSharedActionViewModel.post(LoginNavigation.OnResetPasswordMailConfirmationSuccess)
             }
         }
-
-        Unit
     }
 }

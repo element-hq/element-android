@@ -21,10 +21,8 @@ import android.content.DialogInterface
 import android.graphics.Bitmap
 import android.net.http.SslError
 import android.os.Build
-import android.os.Bundle
 import android.os.Parcelable
 import android.view.KeyEvent
-import android.view.View
 import android.webkit.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
@@ -57,14 +55,10 @@ class LoginCaptchaFragment @Inject constructor(
 
     private val params: LoginCaptchaFragmentArgument by args()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        setupWebView()
-    }
+    private var isWebViewLoaded = false
 
     @SuppressLint("SetJavaScriptEnabled")
-    private fun setupWebView() {
+    private fun setupWebView(state: LoginViewState) {
         loginCaptchaWevView.settings.javaScriptEnabled = true
 
         val reCaptchaPage = assetReader.readAssetFile("reCaptchaPage.html") ?: error("missing asset reCaptchaPage.html")
@@ -73,7 +67,7 @@ class LoginCaptchaFragment @Inject constructor(
         val mime = "text/html"
         val encoding = "utf-8"
 
-        val homeServerUrl = loginViewModel.homeServerUrl ?: error("missing url of homeserver")
+        val homeServerUrl = state.homeServerUrl ?: error("missing url of homeserver")
         loginCaptchaWevView.loadDataWithBaseURL(homeServerUrl, html, mime, encoding, null)
         loginCaptchaWevView.requestLayout()
 
@@ -188,5 +182,12 @@ class LoginCaptchaFragment @Inject constructor(
 
     override fun resetViewModel() {
         loginViewModel.handle(LoginAction.ResetLogin)
+    }
+
+    override fun updateWithState(state: LoginViewState) {
+        if (!isWebViewLoaded) {
+            setupWebView(state)
+            isWebViewLoaded = true
+        }
     }
 }

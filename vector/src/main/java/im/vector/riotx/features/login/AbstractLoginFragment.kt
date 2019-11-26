@@ -21,6 +21,7 @@ import android.view.View
 import androidx.annotation.CallSuper
 import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.activityViewModel
+import com.airbnb.mvrx.withState
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.riotx.R
@@ -35,6 +36,8 @@ abstract class AbstractLoginFragment : VectorBaseFragment(), OnBackPressed {
 
     protected val loginViewModel: LoginViewModel by activityViewModel()
     protected lateinit var loginSharedActionViewModel: LoginSharedActionViewModel
+
+    private var isResetPasswordStarted = false
 
     @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -53,7 +56,7 @@ abstract class AbstractLoginFragment : VectorBaseFragment(), OnBackPressed {
     private fun handleLoginViewEvents(loginViewEvents: LoginViewEvents) {
         when (loginViewEvents) {
             is LoginViewEvents.Error -> showError(loginViewEvents.throwable)
-            else                                                    ->
+            else                     ->
                 // This is handled by the Activity
                 Unit
         }
@@ -81,7 +84,7 @@ abstract class AbstractLoginFragment : VectorBaseFragment(), OnBackPressed {
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
         return when {
-            loginViewModel.isRegistrationStarted  -> {
+            loginViewModel.isRegistrationStarted -> {
                 // Ask for confirmation before cancelling the registration
                 AlertDialog.Builder(requireActivity())
                         .setTitle(R.string.login_signup_cancel_confirmation_title)
@@ -95,7 +98,7 @@ abstract class AbstractLoginFragment : VectorBaseFragment(), OnBackPressed {
 
                 true
             }
-            loginViewModel.isResetPasswordStarted -> {
+            isResetPasswordStarted               -> {
                 // Ask for confirmation before cancelling the reset password
                 AlertDialog.Builder(requireActivity())
                         .setTitle(R.string.login_reset_password_cancel_confirmation_title)
@@ -109,12 +112,23 @@ abstract class AbstractLoginFragment : VectorBaseFragment(), OnBackPressed {
 
                 true
             }
-            else                                  -> {
+            else                                 -> {
                 resetViewModel()
                 // Do not consume the Back event
                 false
             }
         }
+    }
+
+    final override fun invalidate() = withState(loginViewModel) { state ->
+        // True when email is sent with success to the homeserver
+        isResetPasswordStarted = state.resetPasswordEmail.isNullOrBlank().not()
+
+        updateWithState(state)
+    }
+
+    open fun updateWithState(state: LoginViewState) {
+        // No op by default
     }
 
     // Reset any modification on the loginViewModel by the current fragment
