@@ -36,9 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="8dp"
-            android:contentDescription="@string/login_a11y_captcha_container"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/loginCaptchaNotice" />
+            android:contentDescription="@string/login_a11y_captcha_container" />
 
     </LinearLayout>
 
@@ -51,7 +49,7 @@
         app:layout_constraintEnd_toEndOf="@id/loginFormScrollView"
         app:layout_constraintStart_toStartOf="@id/loginFormScrollView"
         app:layout_constraintTop_toTopOf="@id/loginFormScrollView"
-        tools:ignore="UnknownId" />
+        tools:ignore="UnknownId,NotSibling" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
