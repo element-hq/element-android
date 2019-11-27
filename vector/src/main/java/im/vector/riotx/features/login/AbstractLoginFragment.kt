@@ -39,6 +39,9 @@ abstract class AbstractLoginFragment : VectorBaseFragment(), OnBackPressed {
 
     private var isResetPasswordStarted = false
 
+    // Due to async, we keep a boolean to avoid displaying twice the cancellation dialog
+    private var displayCancelDialog = true
+
     @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -84,13 +87,13 @@ abstract class AbstractLoginFragment : VectorBaseFragment(), OnBackPressed {
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
         return when {
-            loginViewModel.isRegistrationStarted -> {
+            displayCancelDialog && loginViewModel.isRegistrationStarted -> {
                 // Ask for confirmation before cancelling the registration
                 AlertDialog.Builder(requireActivity())
                         .setTitle(R.string.login_signup_cancel_confirmation_title)
                         .setMessage(R.string.login_signup_cancel_confirmation_content)
                         .setPositiveButton(R.string.yes) { _, _ ->
-                            resetViewModel()
+                            displayCancelDialog = false
                             vectorBaseActivity.onBackPressed()
                         }
                         .setNegativeButton(R.string.no, null)
@@ -98,13 +101,13 @@ abstract class AbstractLoginFragment : VectorBaseFragment(), OnBackPressed {
 
                 true
             }
-            isResetPasswordStarted               -> {
+            displayCancelDialog && isResetPasswordStarted               -> {
                 // Ask for confirmation before cancelling the reset password
                 AlertDialog.Builder(requireActivity())
                         .setTitle(R.string.login_reset_password_cancel_confirmation_title)
                         .setMessage(R.string.login_reset_password_cancel_confirmation_content)
                         .setPositiveButton(R.string.yes) { _, _ ->
-                            resetViewModel()
+                            displayCancelDialog = false
                             vectorBaseActivity.onBackPressed()
                         }
                         .setNegativeButton(R.string.no, null)
@@ -112,7 +115,7 @@ abstract class AbstractLoginFragment : VectorBaseFragment(), OnBackPressed {
 
                 true
             }
-            else                                 -> {
+            else                                                        -> {
                 resetViewModel()
                 // Do not consume the Back event
                 false
