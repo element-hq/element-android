@@ -166,6 +166,15 @@ internal class DefaultAuthenticationService @Inject constructor(@Unauthenticated
         }
     }
 
+    override fun reset() {
+        currentLoginWizard = null
+        currentRegistrationWizard = null
+
+        GlobalScope.launch(coroutineDispatchers.main) {
+            pendingSessionStore.delete()
+        }
+    }
+
     override fun createSessionFromSso(homeServerConnectionConfig: HomeServerConnectionConfig,
                                       credentials: Credentials,
                                       callback: MatrixCallback<Session>): Cancelable {

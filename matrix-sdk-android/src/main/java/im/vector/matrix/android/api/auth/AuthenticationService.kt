@@ -53,6 +53,11 @@ interface AuthenticationService {
     fun cancelPendingLoginOrRegistration()
 
     /**
+     * Reset all pending settings, including current HomeServerConnectionConfig
+     */
+    fun reset()
+
+    /**
      * Check if there is an authenticated [Session].
      * @return true if there is at least one active session.
      */

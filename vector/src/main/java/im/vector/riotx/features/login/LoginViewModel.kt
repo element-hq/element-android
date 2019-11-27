@@ -240,7 +240,8 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
 
         when (action) {
             LoginAction.ResetLogin          -> {
-                // TODO Clear wizard here?
+                authenticationService.cancelPendingLoginOrRegistration()
+
                 setState {
                     copy(
                             asyncLoginAction = Uninitialized,
@@ -249,7 +250,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                 }
             }
             LoginAction.ResetHomeServerUrl  -> {
-                authenticationService.cancelPendingLoginOrRegistration()
+                authenticationService.reset()
 
                 setState {
                     copy(
