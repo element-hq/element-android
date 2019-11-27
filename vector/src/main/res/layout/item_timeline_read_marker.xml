@@ -7,7 +7,7 @@
     android:padding="8dp">
 
     <View
-        android:id="@+id/itemDayLineViewLeft"
+        android:id="@+id/itemReadMarkerLineLeft"
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginTop="8dp"
@@ -15,17 +15,15 @@
         android:layout_marginBottom="8dp"
         android:background="@color/notification_accent_color"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/itemDayTextView"
+        app:layout_constraintEnd_toStartOf="@+id/itemReadMarker"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
     <TextView
-        android:id="@+id/itemDayTextView"
+        android:id="@+id/itemReadMarker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-medium"
-        android:gravity="center"
         android:text="@string/timeline_unread_messages"
         android:textColor="@color/notification_accent_color"
         android:textSize="15sp"
@@ -35,7 +33,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
-        android:id="@+id/itemDayLineViewRight"
+        android:id="@+id/itemReadMarkerLineRight"
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginStart="8dp"
@@ -44,7 +42,7 @@
         android:background="@color/notification_accent_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/itemDayTextView"
+        app:layout_constraintStart_toEndOf="@id/itemReadMarker"
         app:layout_constraintTop_toTopOf="parent" />
 
 

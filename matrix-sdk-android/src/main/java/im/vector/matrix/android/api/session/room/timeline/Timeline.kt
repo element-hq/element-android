@@ -104,7 +104,7 @@ interface Timeline {
     interface Listener {
         /**
          * Call when the timeline has been updated through pagination or sync.
-         * @param snapshot the most uptodate snapshot
+         * @param snapshot the most up to date snapshot
          */
         fun onUpdated(snapshot: List<TimelineEvent>)
     }
