@@ -38,14 +38,19 @@ interface AuthenticationService {
     fun getLoginFlow(homeServerConnectionConfig: HomeServerConnectionConfig, callback: MatrixCallback<LoginFlowResult>): Cancelable
 
     /**
-     * Return a LoginWizard, to login to the homeserver
+     * Return a LoginWizard, to login to the homeserver. The login flow has to be retrieved first.
      */
-    fun createLoginWizard(): LoginWizard
+    fun getLoginWizard(): LoginWizard
 
     /**
-     * Return a RegistrationWizard, to create an matrix account on the homeserver
+     * Return a RegistrationWizard, to create an matrix account on the homeserver. The login flow has to be retrieved first.
      */
-    fun getOrCreateRegistrationWizard(): RegistrationWizard
+    fun getRegistrationWizard(): RegistrationWizard
+
+    /**
+     * Cancel pending login or pending registration
+     */
+    fun cancelPendingLoginOrRegistration()
 
     /**
      * Check if there is an authenticated [Session].

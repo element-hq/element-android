@@ -14,16 +14,18 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.auth.db
+package im.vector.matrix.android.internal.auth
 
-import io.realm.annotations.RealmModule
+import im.vector.matrix.android.internal.auth.db.PendingSessionData
 
 /**
- * Realm module for authentication classes
+ * Store for elements when doing login or registration
  */
-@RealmModule(library = true,
-        classes = [
-            SessionParamsEntity::class,
-            PendingSessionEntity::class
-        ])
-internal class AuthRealmModule
+internal interface PendingSessionStore {
+
+    suspend fun savePendingSessionData(pendingSessionData: PendingSessionData)
+
+    fun getPendingSessionData(): PendingSessionData?
+
+    suspend fun delete()
+}

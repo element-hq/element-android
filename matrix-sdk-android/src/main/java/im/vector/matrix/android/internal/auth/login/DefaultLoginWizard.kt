@@ -17,19 +17,21 @@
 package im.vector.matrix.android.internal.auth.login
 
 import android.util.Patterns
+import com.squareup.moshi.JsonClass
 import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.Credentials
-import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.auth.login.LoginWizard
 import im.vector.matrix.android.api.auth.registration.RegisterThreePid
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.NoOpCancellable
 import im.vector.matrix.android.internal.auth.AuthAPI
+import im.vector.matrix.android.internal.auth.PendingSessionStore
 import im.vector.matrix.android.internal.auth.SessionCreator
 import im.vector.matrix.android.internal.auth.data.PasswordLoginParams
 import im.vector.matrix.android.internal.auth.data.ThreePidMedium
+import im.vector.matrix.android.internal.auth.db.PendingSessionData
 import im.vector.matrix.android.internal.auth.registration.AddThreePidRegistrationParams
 import im.vector.matrix.android.internal.auth.registration.AddThreePidRegistrationResponse
 import im.vector.matrix.android.internal.auth.registration.RegisterAddThreePidTask
@@ -40,28 +42,25 @@ import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
-import java.util.*
 
 // Container to store the data when a reset password is in the email validation step
+@JsonClass(generateAdapter = true)
 internal data class ResetPasswordData(
         val newPassword: String,
         val addThreePidRegistrationResponse: AddThreePidRegistrationResponse
 )
 
 internal class DefaultLoginWizard(
-        private val homeServerConnectionConfig: HomeServerConnectionConfig,
         okHttpClient: Lazy<OkHttpClient>,
         retrofitFactory: RetrofitFactory,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
-        private val sessionCreator: SessionCreator
+        private val sessionCreator: SessionCreator,
+        private val pendingSessionStore: PendingSessionStore
 ) : LoginWizard {
 
-    private var clientSecret = UUID.randomUUID().toString()
-    private var sendAttempt = 0
+    private var pendingSessionData: PendingSessionData = pendingSessionStore.getPendingSessionData() ?: error("Pending session data should exist here")
 
-    private var resetPasswordData: ResetPasswordData? = null
-
-    private val authAPI = retrofitFactory.create(okHttpClient, homeServerConnectionConfig.homeServerUri.toString())
+    private val authAPI = retrofitFactory.create(okHttpClient, pendingSessionData.homeServerConnectionConfig.homeServerUri.toString())
             .create(AuthAPI::class.java)
 
     override fun login(login: String,
@@ -85,7 +84,7 @@ internal class DefaultLoginWizard(
             apiCall = authAPI.login(loginParams)
         }
 
-        sessionCreator.createSession(credentials, homeServerConnectionConfig)
+        sessionCreator.createSession(credentials, pendingSessionData.homeServerConnectionConfig)
     }
 
     override fun resetPassword(email: String, newPassword: String, callback: MatrixCallback<Unit>): Cancelable {
@@ -97,17 +96,25 @@ internal class DefaultLoginWizard(
     private suspend fun resetPasswordInternal(email: String, newPassword: String) {
         val param = RegisterAddThreePidTask.Params(
                 RegisterThreePid.Email(email),
-                clientSecret,
-                sendAttempt++
+                pendingSessionData.clientSecret,
+                pendingSessionData.sendAttempt
         )
+
+        pendingSessionData = pendingSessionData.copy(
+                sendAttempt = pendingSessionData.sendAttempt + 1
+        ).also { pendingSessionStore.savePendingSessionData(it) }
+
         val result = executeRequest<AddThreePidRegistrationResponse> {
             apiCall = authAPI.resetPassword(AddThreePidRegistrationParams.from(param))
         }
-        resetPasswordData = ResetPasswordData(newPassword, result)
+
+        pendingSessionData = pendingSessionData.copy(
+                resetPasswordData = ResetPasswordData(newPassword, result)
+        ).also { pendingSessionStore.savePendingSessionData(it) }
     }
 
     override fun resetPasswordMailConfirmed(callback: MatrixCallback<Unit>): Cancelable {
-        val safeResetPasswordData = resetPasswordData ?: run {
+        val safeResetPasswordData = pendingSessionData.resetPasswordData ?: run {
             callback.onFailure(IllegalStateException("developer error, no reset password in progress"))
             return NoOpCancellable
         }
@@ -118,7 +125,7 @@ internal class DefaultLoginWizard(
 
     private suspend fun resetPasswordMailConfirmedInternal(resetPasswordData: ResetPasswordData) {
         val param = ResetPasswordMailConfirmed.create(
-                clientSecret,
+                pendingSessionData.clientSecret,
                 resetPasswordData.addThreePidRegistrationResponse.sid,
                 resetPasswordData.newPassword
         )

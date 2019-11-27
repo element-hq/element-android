@@ -22,6 +22,7 @@ import dagger.Module
 import dagger.Provides
 import im.vector.matrix.android.api.auth.AuthenticationService
 import im.vector.matrix.android.internal.auth.db.AuthRealmModule
+import im.vector.matrix.android.internal.auth.db.RealmPendingSessionStore
 import im.vector.matrix.android.internal.auth.db.RealmSessionParamsStore
 import im.vector.matrix.android.internal.database.RealmKeysUtils
 import im.vector.matrix.android.internal.di.AuthDatabase
@@ -50,6 +51,7 @@ internal abstract class AuthModule {
                     }
                     .name("matrix-sdk-auth.realm")
                     .modules(AuthRealmModule())
+                    // TODO Migration !!!! (test it)
                     .deleteRealmIfMigrationNeeded()
                     .build()
         }
@@ -57,6 +59,9 @@ internal abstract class AuthModule {
 
     @Binds
     abstract fun bindSessionParamsStore(sessionParamsStore: RealmSessionParamsStore): SessionParamsStore
+
+    @Binds
+    abstract fun bindPendingSessionStore(pendingSessionStore: RealmPendingSessionStore): PendingSessionStore
 
     @Binds
     abstract fun bindAuthenticationService(authenticationService: DefaultAuthenticationService): AuthenticationService

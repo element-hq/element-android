@@ -73,8 +73,11 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
     var isRegistrationStarted: Boolean = false
         private set
 
-    private var registrationWizard: RegistrationWizard? = null
-    private var loginWizard: LoginWizard? = null
+    private val registrationWizard: RegistrationWizard?
+        get() = authenticationService.getRegistrationWizard()
+
+    private val loginWizard: LoginWizard?
+        get() = authenticationService.getLoginWizard()
 
     private var loginConfig: LoginConfig? = null
 
@@ -254,8 +257,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                 }
             }
             LoginAction.ResetHomeServerUrl  -> {
-                registrationWizard = null
-                loginWizard = null
+                authenticationService.cancelPendingLoginOrRegistration()
 
                 setState {
                     copy(
@@ -449,13 +451,12 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
             )
         }
 
-        registrationWizard = authenticationService.getOrCreateRegistrationWizard()
-
         currentTask = registrationWizard?.getRegistrationFlow(registrationCallback)
     }
 
     private fun startAuthenticationFlow() {
-        loginWizard = authenticationService.createLoginWizard()
+        // No op
+        loginWizard
     }
 
     private fun onFlowResponse(flowResult: FlowResult) {
@@ -507,8 +508,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
         } else {
             currentTask?.cancel()
             currentTask = null
-            loginWizard = null
-            registrationWizard = null
+            authenticationService.cancelPendingLoginOrRegistration()
 
             setState {
                 copy(

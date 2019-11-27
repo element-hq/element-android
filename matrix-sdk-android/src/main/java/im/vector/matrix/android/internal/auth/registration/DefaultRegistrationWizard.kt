@@ -16,9 +16,9 @@
 
 package im.vector.matrix.android.internal.auth.registration
 
+import com.squareup.moshi.JsonClass
 import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.auth.registration.RegisterThreePid
 import im.vector.matrix.android.api.auth.registration.RegistrationResult
 import im.vector.matrix.android.api.auth.registration.RegistrationWizard
@@ -27,50 +27,74 @@ import im.vector.matrix.android.api.failure.Failure.RegistrationFlowError
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.NoOpCancellable
 import im.vector.matrix.android.internal.auth.AuthAPI
+import im.vector.matrix.android.internal.auth.PendingSessionStore
 import im.vector.matrix.android.internal.auth.SessionCreator
 import im.vector.matrix.android.internal.auth.data.LoginFlowTypes
+import im.vector.matrix.android.internal.auth.db.PendingSessionData
 import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.task.launchToCallback
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import okhttp3.OkHttpClient
-import java.util.*
 
 // Container to store the data when a three pid is in validation step
+@JsonClass(generateAdapter = true)
 internal data class ThreePidData(
-        val threePid: RegisterThreePid,
+        val email: String,
+        val msisdn: String,
+        val country: String,
         val addThreePidRegistrationResponse: AddThreePidRegistrationResponse,
         val registrationParams: RegistrationParams
-)
+) {
+    val threePid: RegisterThreePid
+        get() {
+            return if (email.isNotBlank()) {
+                RegisterThreePid.Email(email)
+            } else {
+                RegisterThreePid.Msisdn(msisdn, country)
+            }
+        }
+
+    companion object {
+        fun from(threePid: RegisterThreePid,
+                 addThreePidRegistrationResponse: AddThreePidRegistrationResponse,
+                 registrationParams: RegistrationParams): ThreePidData {
+            return when (threePid) {
+                is RegisterThreePid.Email  ->
+                    ThreePidData(threePid.email, "", "", addThreePidRegistrationResponse, registrationParams)
+                is RegisterThreePid.Msisdn ->
+                    ThreePidData("", threePid.msisdn, threePid.countryCode, addThreePidRegistrationResponse, registrationParams)
+            }
+        }
+    }
+}
 
 /**
  * This class execute the registration request and is responsible to keep the session of interactive authentication
  */
-internal class DefaultRegistrationWizard(private val homeServerConnectionConfig: HomeServerConnectionConfig,
-                                         private val okHttpClient: Lazy<OkHttpClient>,
-                                         private val retrofitFactory: RetrofitFactory,
-                                         private val coroutineDispatchers: MatrixCoroutineDispatchers,
-                                         private val sessionCreator: SessionCreator) : RegistrationWizard {
-    private var clientSecret = UUID.randomUUID().toString()
-    private var sendAttempt = 0
+internal class DefaultRegistrationWizard(
+        private val okHttpClient: Lazy<OkHttpClient>,
+        private val retrofitFactory: RetrofitFactory,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
+        private val sessionCreator: SessionCreator,
+        private val pendingSessionStore: PendingSessionStore
+) : RegistrationWizard {
 
-    private var currentSession: String? = null
+    private var pendingSessionData: PendingSessionData = pendingSessionStore.getPendingSessionData() ?: error("Pending session data should exist here")
 
     private val authAPI = buildAuthAPI()
     private val registerTask = DefaultRegisterTask(authAPI)
     private val registerAddThreePidTask = DefaultRegisterAddThreePidTask(authAPI)
     private val validateCodeTask = DefaultValidateCodeTask(authAPI)
 
-    private var currentThreePidData: ThreePidData? = null
-
     override val currentThreePid: String?
         get() {
-            return when (val threePid = currentThreePidData?.threePid) {
+            return when (val threePid = pendingSessionData.currentThreePidData?.threePid) {
                 is RegisterThreePid.Email  -> threePid.email
                 is RegisterThreePid.Msisdn -> {
                     // Take formatted msisdn if provided by the server
-                    currentThreePidData?.addThreePidRegistrationResponse?.formattedMsisdn?.takeIf { it.isNotBlank() } ?: threePid.msisdn
+                    pendingSessionData.currentThreePidData?.addThreePidRegistrationResponse?.formattedMsisdn?.takeIf { it.isNotBlank() } ?: threePid.msisdn
                 }
                 null                       -> null
             }
@@ -98,7 +122,7 @@ internal class DefaultRegistrationWizard(private val homeServerConnectionConfig:
     }
 
     override fun performReCaptcha(response: String, callback: MatrixCallback<RegistrationResult>): Cancelable {
-        val safeSession = currentSession ?: run {
+        val safeSession = pendingSessionData.currentSession ?: run {
             callback.onFailure(IllegalStateException("developer error, call createAccount() method first"))
             return NoOpCancellable
         }
@@ -109,7 +133,7 @@ internal class DefaultRegistrationWizard(private val homeServerConnectionConfig:
     }
 
     override fun acceptTerms(callback: MatrixCallback<RegistrationResult>): Cancelable {
-        val safeSession = currentSession ?: run {
+        val safeSession = pendingSessionData.currentSession ?: run {
             callback.onFailure(IllegalStateException("developer error, call createAccount() method first"))
             return NoOpCancellable
         }
@@ -120,14 +144,16 @@ internal class DefaultRegistrationWizard(private val homeServerConnectionConfig:
     }
 
     override fun addThreePid(threePid: RegisterThreePid, callback: MatrixCallback<RegistrationResult>): Cancelable {
-        currentThreePidData = null
         return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
+            pendingSessionData = pendingSessionData.copy(currentThreePidData = null)
+                    .also { pendingSessionStore.savePendingSessionData(it) }
+
             sendThreePid(threePid)
         }
     }
 
     override fun sendAgainThreePid(callback: MatrixCallback<RegistrationResult>): Cancelable {
-        val safeCurrentThreePid = currentThreePidData?.threePid ?: run {
+        val safeCurrentThreePid = pendingSessionData.currentThreePidData?.threePid ?: run {
             callback.onFailure(IllegalStateException("developer error, call createAccount() method first"))
             return NoOpCancellable
         }
@@ -137,33 +163,43 @@ internal class DefaultRegistrationWizard(private val homeServerConnectionConfig:
     }
 
     private suspend fun sendThreePid(threePid: RegisterThreePid): RegistrationResult {
-        val safeSession = currentSession ?: throw IllegalStateException("developer error, call createAccount() method first")
-        val response = registerAddThreePidTask.execute(RegisterAddThreePidTask.Params(threePid, clientSecret, sendAttempt++))
+        val safeSession = pendingSessionData.currentSession ?: throw IllegalStateException("developer error, call createAccount() method first")
+        val response = registerAddThreePidTask.execute(
+                RegisterAddThreePidTask.Params(
+                        threePid,
+                        pendingSessionData.clientSecret,
+                        pendingSessionData.sendAttempt))
+
+        pendingSessionData = pendingSessionData.copy(sendAttempt = pendingSessionData.sendAttempt + 1)
+                .also { pendingSessionStore.savePendingSessionData(it) }
+
         val params = RegistrationParams(
                 auth = if (threePid is RegisterThreePid.Email) {
                     AuthParams.createForEmailIdentity(safeSession,
                             ThreePidCredentials(
-                                    clientSecret = clientSecret,
+                                    clientSecret = pendingSessionData.clientSecret,
                                     sid = response.sid
                             )
                     )
                 } else {
                     AuthParams.createForMsisdnIdentity(safeSession,
                             ThreePidCredentials(
-                                    clientSecret = clientSecret,
+                                    clientSecret = pendingSessionData.clientSecret,
                                     sid = response.sid
                             )
                     )
                 }
         )
         // Store data
-        currentThreePidData = ThreePidData(threePid, response, params)
+        pendingSessionData = pendingSessionData.copy(currentThreePidData = ThreePidData.from(threePid, response, params))
+                .also { pendingSessionStore.savePendingSessionData(it) }
+
         // and send the sid a first time
         return performRegistrationRequest(params)
     }
 
     override fun checkIfEmailHasBeenValidated(delayMillis: Long, callback: MatrixCallback<RegistrationResult>): Cancelable {
-        val safeParam = currentThreePidData?.registrationParams ?: run {
+        val safeParam = pendingSessionData.currentThreePidData?.registrationParams ?: run {
             callback.onFailure(IllegalStateException("developer error, no pending three pid"))
             return NoOpCancellable
         }
@@ -179,11 +215,12 @@ internal class DefaultRegistrationWizard(private val homeServerConnectionConfig:
     }
 
     private suspend fun validateThreePid(code: String): RegistrationResult {
-        val registrationParams = currentThreePidData?.registrationParams ?: throw IllegalStateException("developer error, no pending three pid")
-        val safeCurrentData = currentThreePidData ?: throw IllegalStateException("developer error, call createAccount() method first")
+        val registrationParams = pendingSessionData.currentThreePidData?.registrationParams
+                ?: throw IllegalStateException("developer error, no pending three pid")
+        val safeCurrentData = pendingSessionData.currentThreePidData ?: throw IllegalStateException("developer error, call createAccount() method first")
         val url = safeCurrentData.addThreePidRegistrationResponse.submitUrl ?: throw IllegalStateException("Missing url the send the code")
         val validationBody = ValidationCodeBody(
-                clientSecret = clientSecret,
+                clientSecret = pendingSessionData.clientSecret,
                 sid = safeCurrentData.addThreePidRegistrationResponse.sid,
                 code = code
         )
@@ -199,7 +236,7 @@ internal class DefaultRegistrationWizard(private val homeServerConnectionConfig:
     }
 
     override fun dummy(callback: MatrixCallback<RegistrationResult>): Cancelable {
-        val safeSession = currentSession ?: run {
+        val safeSession = pendingSessionData.currentSession ?: run {
             callback.onFailure(IllegalStateException("developer error, call createAccount() method first"))
             return NoOpCancellable
         }
@@ -216,19 +253,20 @@ internal class DefaultRegistrationWizard(private val homeServerConnectionConfig:
             registerTask.execute(RegisterTask.Params(registrationParams))
         } catch (exception: Throwable) {
             if (exception is RegistrationFlowError) {
-                currentSession = exception.registrationFlowResponse.session
+                pendingSessionData = pendingSessionData.copy(currentSession = exception.registrationFlowResponse.session)
+                        .also { pendingSessionStore.savePendingSessionData(it) }
                 return RegistrationResult.FlowResponse(exception.registrationFlowResponse.toFlowResult())
             } else {
                 throw exception
             }
         }
 
-        val session = sessionCreator.createSession(credentials, homeServerConnectionConfig)
+        val session = sessionCreator.createSession(credentials, pendingSessionData.homeServerConnectionConfig)
         return RegistrationResult.Success(session)
     }
 
     private fun buildAuthAPI(): AuthAPI {
-        val retrofit = retrofitFactory.create(okHttpClient, homeServerConnectionConfig.homeServerUri.toString())
+        val retrofit = retrofitFactory.create(okHttpClient, pendingSessionData.homeServerConnectionConfig.homeServerUri.toString())
         return retrofit.create(AuthAPI::class.java)
     }
 }

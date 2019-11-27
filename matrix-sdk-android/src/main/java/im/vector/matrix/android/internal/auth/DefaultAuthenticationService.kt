@@ -26,6 +26,7 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.SessionManager
 import im.vector.matrix.android.internal.auth.data.LoginFlowResponse
+import im.vector.matrix.android.internal.auth.db.PendingSessionData
 import im.vector.matrix.android.internal.auth.login.DefaultLoginWizard
 import im.vector.matrix.android.internal.auth.registration.DefaultRegistrationWizard
 import im.vector.matrix.android.internal.di.Unauthenticated
@@ -46,10 +47,14 @@ internal class DefaultAuthenticationService @Inject constructor(@Unauthenticated
                                                                 private val coroutineDispatchers: MatrixCoroutineDispatchers,
                                                                 private val sessionParamsStore: SessionParamsStore,
                                                                 private val sessionManager: SessionManager,
-                                                                private val sessionCreator: SessionCreator
+                                                                private val sessionCreator: SessionCreator,
+                                                                private val pendingSessionStore: PendingSessionStore
 ) : AuthenticationService {
 
-    private var currentHomeServerConnectionConfig: HomeServerConnectionConfig? = null
+    private var pendingSessionData: PendingSessionData? = pendingSessionStore.getPendingSessionData()
+
+    private var currentLoginWizard: LoginWizard? = null
+    private var currentRegistrationWizard: RegistrationWizard? = null
 
     override fun hasAuthenticatedSessions(): Boolean {
         return sessionParamsStore.getLast() != null
@@ -67,9 +72,9 @@ internal class DefaultAuthenticationService @Inject constructor(@Unauthenticated
     }
 
     override fun getLoginFlow(homeServerConnectionConfig: HomeServerConnectionConfig, callback: MatrixCallback<LoginFlowResult>): Cancelable {
-        currentHomeServerConnectionConfig = null
-
         return GlobalScope.launch(coroutineDispatchers.main) {
+            pendingSessionStore.delete()
+
             val result = runCatching {
                 getLoginFlowInternal(homeServerConnectionConfig)
             }
@@ -77,7 +82,8 @@ internal class DefaultAuthenticationService @Inject constructor(@Unauthenticated
                     {
                         if (it is LoginFlowResult.Success) {
                             // The homeserver exists and up to date, keep the config
-                            currentHomeServerConnectionConfig = homeServerConnectionConfig
+                            pendingSessionData = PendingSessionData(homeServerConnectionConfig)
+                                    .also { data -> pendingSessionStore.savePendingSessionData(data) }
                         }
                         callback.onSuccess(it)
                     },
@@ -109,29 +115,55 @@ internal class DefaultAuthenticationService @Inject constructor(@Unauthenticated
         }
     }
 
-    override fun getOrCreateRegistrationWizard(): RegistrationWizard {
-        currentHomeServerConnectionConfig?.let {
-            // TODO Persist the wizard?
-            return DefaultRegistrationWizard(
-                    it,
-                    okHttpClient,
-                    retrofitFactory,
-                    coroutineDispatchers,
-                    sessionCreator
-            )
-        } ?: error("Please call getLoginFlow() with success first")
+    override fun getRegistrationWizard(): RegistrationWizard {
+        return currentRegistrationWizard
+                ?: let {
+                    pendingSessionData?.homeServerConnectionConfig?.let {
+                        DefaultRegistrationWizard(
+                                okHttpClient,
+                                retrofitFactory,
+                                coroutineDispatchers,
+                                sessionCreator,
+                                pendingSessionStore
+                        ).also {
+                            currentRegistrationWizard = it
+                        }
+                    } ?: error("Please call getLoginFlow() with success first")
+                }
     }
 
-    override fun createLoginWizard(): LoginWizard {
-        currentHomeServerConnectionConfig?.let {
-            return DefaultLoginWizard(
-                    it,
-                    okHttpClient,
-                    retrofitFactory,
-                    coroutineDispatchers,
-                    sessionCreator
-            )
-        } ?: error("Please call getLoginFlow() with success first")
+    override fun getLoginWizard(): LoginWizard {
+        return currentLoginWizard
+                ?: let {
+                    pendingSessionData?.homeServerConnectionConfig?.let {
+                        DefaultLoginWizard(
+                                okHttpClient,
+                                retrofitFactory,
+                                coroutineDispatchers,
+                                sessionCreator,
+                                pendingSessionStore
+                        ).also {
+                            currentLoginWizard = it
+                        }
+                    } ?: error("Please call getLoginFlow() with success first")
+                }
+    }
+
+    override fun cancelPendingLoginOrRegistration() {
+        currentLoginWizard = null
+        currentRegistrationWizard = null
+
+        GlobalScope.launch(coroutineDispatchers.main) {
+            // Keep only the home sever config
+            pendingSessionData?.homeServerConnectionConfig
+                    ?.let {
+                        pendingSessionStore.savePendingSessionData(PendingSessionData(it))
+                    }
+                    ?: run {
+                        // Should not happen
+                        pendingSessionStore.delete()
+                    }
+        }
     }
 
     override fun createSessionFromSso(homeServerConnectionConfig: HomeServerConnectionConfig,

@@ -31,7 +31,8 @@ internal interface SessionCreator {
 
 internal class DefaultSessionCreator @Inject constructor(
         private val sessionParamsStore: SessionParamsStore,
-        private val sessionManager: SessionManager
+        private val sessionManager: SessionManager,
+        private val pendingSessionStore: PendingSessionStore
 ) : SessionCreator {
 
     /**
@@ -39,6 +40,9 @@ internal class DefaultSessionCreator @Inject constructor(
      * identity server url if provided in the credentials
      */
     override suspend fun createSession(credentials: Credentials, homeServerConnectionConfig: HomeServerConnectionConfig): Session {
+        // We can cleanup the pending session params
+        pendingSessionStore.delete()
+
         val sessionParams = SessionParams(
                 credentials = credentials,
                 homeServerConnectionConfig = homeServerConnectionConfig.copy(
