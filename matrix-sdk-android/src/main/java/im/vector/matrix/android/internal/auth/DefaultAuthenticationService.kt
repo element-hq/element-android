@@ -157,10 +157,12 @@ internal class DefaultAuthenticationService @Inject constructor(@Unauthenticated
             // Keep only the home sever config
             pendingSessionData?.homeServerConnectionConfig
                     ?.let {
-                        pendingSessionStore.savePendingSessionData(PendingSessionData(it))
+                        pendingSessionData = PendingSessionData(it)
+                                .also { data -> pendingSessionStore.savePendingSessionData(data) }
                     }
                     ?: run {
                         // Should not happen
+                        pendingSessionData = null
                         pendingSessionStore.delete()
                     }
         }

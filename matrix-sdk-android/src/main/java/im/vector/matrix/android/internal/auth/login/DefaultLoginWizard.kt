@@ -92,17 +92,15 @@ internal class DefaultLoginWizard(
                 pendingSessionData.sendAttempt
         )
 
-        pendingSessionData = pendingSessionData.copy(
-                sendAttempt = pendingSessionData.sendAttempt + 1
-        ).also { pendingSessionStore.savePendingSessionData(it) }
+        pendingSessionData = pendingSessionData.copy(sendAttempt = pendingSessionData.sendAttempt + 1)
+                .also { pendingSessionStore.savePendingSessionData(it) }
 
         val result = executeRequest<AddThreePidRegistrationResponse> {
             apiCall = authAPI.resetPassword(AddThreePidRegistrationParams.from(param))
         }
 
-        pendingSessionData = pendingSessionData.copy(
-                resetPasswordData = ResetPasswordData(newPassword, result)
-        ).also { pendingSessionStore.savePendingSessionData(it) }
+        pendingSessionData = pendingSessionData.copy(resetPasswordData = ResetPasswordData(newPassword, result))
+                .also { pendingSessionStore.savePendingSessionData(it) }
     }
 
     override fun resetPasswordMailConfirmed(callback: MatrixCallback<Unit>): Cancelable {
