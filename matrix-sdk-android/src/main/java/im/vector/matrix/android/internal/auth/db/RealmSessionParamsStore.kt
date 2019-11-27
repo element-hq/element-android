@@ -30,36 +30,33 @@ internal class RealmSessionParamsStore @Inject constructor(private val mapper: S
 ) : SessionParamsStore {
 
     override fun getLast(): SessionParams? {
-        val realm = Realm.getInstance(realmConfiguration)
-        val sessionParams = realm
-                .where(SessionParamsEntity::class.java)
-                .findAll()
-                .map { mapper.map(it) }
-                .lastOrNull()
-        realm.close()
-        return sessionParams
+        return Realm.getInstance(realmConfiguration).use { realm ->
+            realm
+                    .where(SessionParamsEntity::class.java)
+                    .findAll()
+                    .map { mapper.map(it) }
+                    .lastOrNull()
+        }
     }
 
     override fun get(userId: String): SessionParams? {
-        val realm = Realm.getInstance(realmConfiguration)
-        val sessionParams = realm
-                .where(SessionParamsEntity::class.java)
-                .equalTo(SessionParamsEntityFields.USER_ID, userId)
-                .findAll()
-                .map { mapper.map(it) }
-                .firstOrNull()
-        realm.close()
-        return sessionParams
+        return Realm.getInstance(realmConfiguration).use { realm ->
+            realm
+                    .where(SessionParamsEntity::class.java)
+                    .equalTo(SessionParamsEntityFields.USER_ID, userId)
+                    .findAll()
+                    .map { mapper.map(it) }
+                    .firstOrNull()
+        }
     }
 
     override fun getAll(): List<SessionParams> {
-        val realm = Realm.getInstance(realmConfiguration)
-        val sessionParams = realm
-                .where(SessionParamsEntity::class.java)
-                .findAll()
-                .mapNotNull { mapper.map(it) }
-        realm.close()
-        return sessionParams
+        return Realm.getInstance(realmConfiguration).use { realm ->
+            realm
+                    .where(SessionParamsEntity::class.java)
+                    .findAll()
+                    .mapNotNull { mapper.map(it) }
+        }
     }
 
     override suspend fun save(sessionParams: SessionParams) {
