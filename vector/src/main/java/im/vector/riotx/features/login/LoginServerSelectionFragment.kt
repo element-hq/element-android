@@ -22,7 +22,6 @@ import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.transition.TransitionInflater
 import butterknife.OnClick
-import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
 import im.vector.riotx.core.error.ErrorFormatter
@@ -129,11 +128,9 @@ class LoginServerSelectionFragment @Inject constructor(
     override fun updateWithState(state: LoginViewState) {
         updateSelectedChoice(state)
 
-        when (state.asyncHomeServerLoginFlowRequest) {
-            is Success -> {
-                // LoginFlow for matrix.org has been retrieved
-                loginSharedActionViewModel.post(LoginNavigation.OnLoginFlowRetrieved)
-            }
+        if (state.loginMode != LoginMode.Unknown) {
+            // LoginFlow for matrix.org has been retrieved
+            loginSharedActionViewModel.post(LoginNavigation.OnLoginFlowRetrieved)
         }
     }
 }

@@ -22,7 +22,6 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.core.view.isVisible
 import butterknife.OnClick
-import com.airbnb.mvrx.Success
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.riotx.R
 import im.vector.riotx.core.error.ErrorFormatter
@@ -128,11 +127,9 @@ class LoginServerUrlFormFragment @Inject constructor(
     override fun updateWithState(state: LoginViewState) {
         setupUi(state)
 
-        when (state.asyncHomeServerLoginFlowRequest) {
-            is Success -> {
-                // The home server url is valid
-                loginSharedActionViewModel.post(LoginNavigation.OnLoginFlowRetrieved)
-            }
+        if (state.loginMode != LoginMode.Unknown) {
+            // The home server url is valid
+            loginSharedActionViewModel.post(LoginNavigation.OnLoginFlowRetrieved)
         }
     }
 }

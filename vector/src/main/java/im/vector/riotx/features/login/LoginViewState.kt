@@ -20,12 +20,12 @@ import com.airbnb.mvrx.*
 
 data class LoginViewState(
         val asyncLoginAction: Async<Unit> = Uninitialized,
-        val asyncHomeServerLoginFlowRequest: Async<LoginMode> = Uninitialized,
+        val asyncHomeServerLoginFlowRequest: Async<Unit> = Uninitialized,
         val asyncResetPassword: Async<Unit> = Uninitialized,
         val asyncResetMailConfirmed: Async<Unit> = Uninitialized,
         val asyncRegistration: Async<Unit> = Uninitialized,
 
-        // User choice
+        // User choices
         @PersistState
         val serverType: ServerType = ServerType.MatrixOrg,
         @PersistState
@@ -33,7 +33,14 @@ data class LoginViewState(
         @PersistState
         val resetPasswordEmail: String? = null,
         @PersistState
-        val homeServerUrl: String? = null
+        val homeServerUrl: String? = null,
+
+        // Network result
+        @PersistState
+        val loginMode: LoginMode = LoginMode.Unknown,
+        @PersistState
+        // Supported types for the login. We cannot use a sealed class for LoginType because it is not serializable
+        val loginModeSupportedTypes: List<String> = emptyList()
 ) : MvRxState {
 
     fun isLoading(): Boolean {

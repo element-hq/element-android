@@ -16,8 +16,9 @@
 
 package im.vector.riotx.features.login
 
-sealed class LoginMode {
-    object Password : LoginMode()
-    object Sso : LoginMode()
-    data class Unsupported(val types: List<String>) : LoginMode()
+enum class LoginMode {
+    Unknown,
+    Password,
+    Sso,
+    Unsupported
 }

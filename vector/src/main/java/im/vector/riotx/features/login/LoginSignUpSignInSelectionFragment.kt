@@ -59,7 +59,7 @@ class LoginSignUpSignInSelectionFragment @Inject constructor(
     }
 
     private fun setupButtons(state: LoginViewState) {
-        isSsoSignIn = state.asyncHomeServerLoginFlowRequest.invoke() == LoginMode.Sso
+        isSsoSignIn = state.loginMode == LoginMode.Sso
 
         if (isSsoSignIn) {
             loginSignupSigninSubmit.text = getString(R.string.login_signin_sso)

@@ -212,11 +212,11 @@ class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
             }
             SignMode.SignIn  -> {
                 // It depends on the LoginMode
-                when (val loginMode = state.asyncHomeServerLoginFlowRequest.invoke()) {
-                    null                     -> error("Developer error")
-                    LoginMode.Password       -> addFragmentToBackstack(R.id.loginFragmentContainer, LoginFragment::class.java, tag = FRAGMENT_LOGIN_TAG)
-                    LoginMode.Sso            -> addFragmentToBackstack(R.id.loginFragmentContainer, LoginWebFragment::class.java)
-                    is LoginMode.Unsupported -> onLoginModeNotSupported(loginMode)
+                when (state.loginMode) {
+                    LoginMode.Unknown     -> error("Developer error")
+                    LoginMode.Password    -> addFragmentToBackstack(R.id.loginFragmentContainer, LoginFragment::class.java, tag = FRAGMENT_LOGIN_TAG)
+                    LoginMode.Sso         -> addFragmentToBackstack(R.id.loginFragmentContainer, LoginWebFragment::class.java)
+                    LoginMode.Unsupported -> onLoginModeNotSupported(state.loginModeSupportedTypes)
                 }
             }
         }
@@ -233,10 +233,10 @@ class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
                 .show()
     }
 
-    private fun onLoginModeNotSupported(unsupportedLoginMode: LoginMode.Unsupported) {
+    private fun onLoginModeNotSupported(supportedTypes: List<String>) {
         AlertDialog.Builder(this)
                 .setTitle(R.string.app_name)
-                .setMessage(getString(R.string.login_mode_not_supported, unsupportedLoginMode.types.joinToString { "'$it'" }))
+                .setMessage(getString(R.string.login_mode_not_supported, supportedTypes.joinToString { "'$it'" }))
                 .setPositiveButton(R.string.yes) { _, _ ->
                     addFragmentToBackstack(R.id.loginFragmentContainer, LoginWebFragment::class.java)
                 }

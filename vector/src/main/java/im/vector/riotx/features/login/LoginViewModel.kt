@@ -260,7 +260,9 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                 setState {
                     copy(
                             asyncHomeServerLoginFlowRequest = Uninitialized,
-                            homeServerUrl = null
+                            homeServerUrl = null,
+                            loginMode = LoginMode.Unknown,
+                            loginModeSupportedTypes = emptyList()
                     )
                 }
             }
@@ -275,7 +277,9 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                 setState {
                     copy(
                             asyncHomeServerLoginFlowRequest = Uninitialized,
-                            signMode = SignMode.Unknown
+                            signMode = SignMode.Unknown,
+                            loginMode = LoginMode.Unknown,
+                            loginModeSupportedTypes = emptyList()
                     )
                 }
             }
@@ -499,11 +503,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
 
         if (homeServerConnectionConfig == null) {
             // This is invalid
-            setState {
-                copy(
-                        asyncHomeServerLoginFlowRequest = Fail(Throwable("Bad format"))
-                )
-            }
+            _viewEvents.post(LoginViewEvents.Error(Throwable("Unable to create a HomeServerConnectionConfig")))
         } else {
             currentTask?.cancel()
             currentTask = null
@@ -531,12 +531,9 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                         is LoginFlowResult.Success            -> {
                             val loginMode = when {
                                 // SSO login is taken first
-                                data.loginFlowResponse.flows.any { it.type == LoginFlowTypes.SSO }      ->
-                                    LoginMode.Sso
-                                data.loginFlowResponse.flows.any { it.type == LoginFlowTypes.PASSWORD } ->
-                                    LoginMode.Password
-                                else                                                                    ->
-                                    LoginMode.Unsupported(data.loginFlowResponse.flows.mapNotNull { it.type }.toList())
+                                data.loginFlowResponse.flows.any { it.type == LoginFlowTypes.SSO }      -> LoginMode.Sso
+                                data.loginFlowResponse.flows.any { it.type == LoginFlowTypes.PASSWORD } -> LoginMode.Password
+                                else                                                                    -> LoginMode.Unsupported
                             }
 
                             if (loginMode == LoginMode.Password && !data.isLoginAndRegistrationSupported) {
@@ -544,8 +541,10 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                             } else {
                                 setState {
                                     copy(
-                                            asyncHomeServerLoginFlowRequest = Success(loginMode),
-                                            homeServerUrl = action.homeServerUrl
+                                            asyncHomeServerLoginFlowRequest = Uninitialized,
+                                            homeServerUrl = action.homeServerUrl,
+                                            loginMode = loginMode,
+                                            loginModeSupportedTypes = data.loginFlowResponse.flows.mapNotNull { it.type }.toList()
                                     )
                                 }
                             }
