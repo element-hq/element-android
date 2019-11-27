@@ -72,6 +72,8 @@ internal class DefaultAuthenticationService @Inject constructor(@Unauthenticated
     }
 
     override fun getLoginFlow(homeServerConnectionConfig: HomeServerConnectionConfig, callback: MatrixCallback<LoginFlowResult>): Cancelable {
+        pendingSessionData = null
+
         return GlobalScope.launch(coroutineDispatchers.main) {
             pendingSessionStore.delete()
 
@@ -153,24 +155,27 @@ internal class DefaultAuthenticationService @Inject constructor(@Unauthenticated
         currentLoginWizard = null
         currentRegistrationWizard = null
 
-        GlobalScope.launch(coroutineDispatchers.main) {
-            // Keep only the home sever config
-            pendingSessionData?.homeServerConnectionConfig
-                    ?.let {
-                        pendingSessionData = PendingSessionData(it)
-                                .also { data -> pendingSessionStore.savePendingSessionData(data) }
+        // Keep only the home sever config
+        // Update the local pendingSessionData synchronously
+        pendingSessionData = pendingSessionData?.homeServerConnectionConfig
+                ?.let { PendingSessionData(it) }
+                .also {
+                    GlobalScope.launch(coroutineDispatchers.main) {
+                        if (it == null) {
+                            // Should not happen
+                            pendingSessionStore.delete()
+                        } else {
+                            pendingSessionStore.savePendingSessionData(it)
+                        }
                     }
-                    ?: run {
-                        // Should not happen
-                        pendingSessionData = null
-                        pendingSessionStore.delete()
-                    }
-        }
+                }
     }
 
     override fun reset() {
         currentLoginWizard = null
         currentRegistrationWizard = null
+
+        pendingSessionData = null
 
         GlobalScope.launch(coroutineDispatchers.main) {
             pendingSessionStore.delete()
