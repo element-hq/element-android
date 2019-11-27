@@ -239,13 +239,10 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
         currentTask = null
 
         when (action) {
-            LoginAction.ResetLogin          -> {
-                authenticationService.cancelPendingLoginOrRegistration()
-
+            LoginAction.ResetHomeServerType -> {
                 setState {
                     copy(
-                            asyncLoginAction = Uninitialized,
-                            asyncRegistration = Uninitialized
+                            serverType = ServerType.MatrixOrg
                     )
                 }
             }
@@ -261,13 +258,6 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                     )
                 }
             }
-            LoginAction.ResetHomeServerType -> {
-                setState {
-                    copy(
-                            serverType = ServerType.MatrixOrg
-                    )
-                }
-            }
             LoginAction.ResetSignMode       -> {
                 setState {
                     copy(
@@ -275,6 +265,16 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                             signMode = SignMode.Unknown,
                             loginMode = LoginMode.Unknown,
                             loginModeSupportedTypes = emptyList()
+                    )
+                }
+            }
+            LoginAction.ResetLogin          -> {
+                authenticationService.cancelPendingLoginOrRegistration()
+
+                setState {
+                    copy(
+                            asyncLoginAction = Uninitialized,
+                            asyncRegistration = Uninitialized
                     )
                 }
             }
