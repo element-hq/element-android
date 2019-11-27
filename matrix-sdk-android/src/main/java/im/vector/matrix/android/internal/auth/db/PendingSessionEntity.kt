@@ -24,5 +24,6 @@ internal open class PendingSessionEntity(
         var sendAttempt: Int = 0,
         var resetPasswordDataJson: String? = null,
         var currentSession: String? = null,
+        var isRegistrationStarted: Boolean = false,
         var currentThreePidDataJson: String? = null
 ) : RealmObject()

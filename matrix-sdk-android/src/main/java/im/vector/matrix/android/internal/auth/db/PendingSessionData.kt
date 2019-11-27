@@ -45,5 +45,6 @@ internal data class PendingSessionData(
          * ========================================================================================== */
 
         val currentSession: String? = null,
+        val isRegistrationStarted: Boolean = false,
         val currentThreePidData: ThreePidData? = null
 )

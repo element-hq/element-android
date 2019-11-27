@@ -147,8 +147,8 @@ class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
                     // Display a popup to propose use web fallback
                     onRegistrationStageNotSupported()
                 } else {
-                    // Go on with registration flow
-                    if (loginViewModel.isRegistrationStarted) {
+                    if (loginViewEvents.isRegistrationStarted) {
+                        // Go on with registration flow
                         handleRegistrationNavigation(loginViewEvents.flowResult)
                     } else {
                         // First ask for login and password

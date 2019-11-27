@@ -67,6 +67,9 @@ internal class DefaultRegistrationWizard(
             }
         }
 
+    override val isRegistrationStarted: Boolean
+        get() = pendingSessionData.isRegistrationStarted
+
     override fun getRegistrationFlow(callback: MatrixCallback<RegistrationResult>): Cancelable {
         val params = RegistrationParams()
         return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
@@ -85,6 +88,10 @@ internal class DefaultRegistrationWizard(
         )
         return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
             performRegistrationRequest(params)
+                    .also {
+                        pendingSessionData = pendingSessionData.copy(isRegistrationStarted = true)
+                                .also { pendingSessionStore.savePendingSessionData(it) }
+                    }
         }
     }
 

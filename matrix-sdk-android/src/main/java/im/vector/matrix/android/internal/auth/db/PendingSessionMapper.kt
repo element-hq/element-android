@@ -43,6 +43,7 @@ internal class PendingSessionMapper @Inject constructor(moshi: Moshi) {
                 sendAttempt = entity.sendAttempt,
                 resetPasswordData = resetPasswordData,
                 currentSession = entity.currentSession,
+                isRegistrationStarted = entity.isRegistrationStarted,
                 currentThreePidData = threePidData)
     }
 
@@ -61,6 +62,7 @@ internal class PendingSessionMapper @Inject constructor(moshi: Moshi) {
                 sendAttempt = sessionData.sendAttempt,
                 resetPasswordDataJson = resetPasswordDataJson,
                 currentSession = sessionData.currentSession,
+                isRegistrationStarted = sessionData.isRegistrationStarted,
                 currentThreePidDataJson = currentThreePidDataJson
         )
     }

@@ -40,4 +40,7 @@ interface RegistrationWizard {
     fun checkIfEmailHasBeenValidated(delayMillis: Long, callback: MatrixCallback<RegistrationResult>): Cancelable
 
     val currentThreePid: String?
+
+    // True when login and password has been sent with success to the homeserver
+    val isRegistrationStarted: Boolean
 }

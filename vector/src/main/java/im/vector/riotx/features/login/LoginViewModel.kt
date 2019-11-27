@@ -29,7 +29,6 @@ import im.vector.matrix.android.api.auth.registration.RegistrationWizard
 import im.vector.matrix.android.api.auth.registration.Stage
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.util.Cancelable
-import im.vector.matrix.android.api.util.MatrixCallbackDelegate
 import im.vector.matrix.android.internal.auth.data.LoginFlowTypes
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.extensions.configureAndStart
@@ -69,9 +68,9 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
     val currentThreePid: String?
         get() = registrationWizard?.currentThreePid
 
-    // True when login and password are sent with success to the homeserver
-    var isRegistrationStarted: Boolean = false
-        private set
+    // True when login and password has been sent with success to the homeserver
+    val isRegistrationStarted: Boolean
+        get() = registrationWizard?.isRegistrationStarted == true
 
     private val registrationWizard: RegistrationWizard?
         get() = authenticationService.getRegistrationWizard()
@@ -225,14 +224,8 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                 action.username,
                 action.password,
                 action.initialDeviceName,
-                object : MatrixCallbackDelegate<RegistrationResult>(registrationCallback) {
-                    override fun onSuccess(data: RegistrationResult) {
-                        isRegistrationStarted = true
-                        // Not sure that this will work:
-                        // super.onSuccess(data)
-                        registrationCallback.onSuccess(data)
-                    }
-                })
+                registrationCallback
+        )
     }
 
     private fun handleCaptchaDone(action: LoginAction.CaptchaDone) {
@@ -247,8 +240,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
 
         when (action) {
             LoginAction.ResetLogin          -> {
-                isRegistrationStarted = false
-
+                // TODO Clear wizard here?
                 setState {
                     copy(
                             asyncLoginAction = Uninitialized,
@@ -466,7 +458,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
             handleRegisterDummy()
         } else {
             // Notify the user
-            _viewEvents.post(LoginViewEvents.RegistrationFlowResult(flowResult))
+            _viewEvents.post(LoginViewEvents.RegistrationFlowResult(flowResult, isRegistrationStarted))
         }
     }
 
