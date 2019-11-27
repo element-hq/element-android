@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.auth.registration
 
-import com.squareup.moshi.JsonClass
 import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.registration.RegisterThreePid
@@ -37,38 +36,6 @@ import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import okhttp3.OkHttpClient
-
-// Container to store the data when a three pid is in validation step
-@JsonClass(generateAdapter = true)
-internal data class ThreePidData(
-        val email: String,
-        val msisdn: String,
-        val country: String,
-        val addThreePidRegistrationResponse: AddThreePidRegistrationResponse,
-        val registrationParams: RegistrationParams
-) {
-    val threePid: RegisterThreePid
-        get() {
-            return if (email.isNotBlank()) {
-                RegisterThreePid.Email(email)
-            } else {
-                RegisterThreePid.Msisdn(msisdn, country)
-            }
-        }
-
-    companion object {
-        fun from(threePid: RegisterThreePid,
-                 addThreePidRegistrationResponse: AddThreePidRegistrationResponse,
-                 registrationParams: RegistrationParams): ThreePidData {
-            return when (threePid) {
-                is RegisterThreePid.Email  ->
-                    ThreePidData(threePid.email, "", "", addThreePidRegistrationResponse, registrationParams)
-                is RegisterThreePid.Msisdn ->
-                    ThreePidData("", threePid.msisdn, threePid.countryCode, addThreePidRegistrationResponse, registrationParams)
-            }
-        }
-    }
-}
 
 /**
  * This class execute the registration request and is responsible to keep the session of interactive authentication

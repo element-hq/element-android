@@ -17,7 +17,6 @@
 package im.vector.matrix.android.internal.auth.login
 
 import android.util.Patterns
-import com.squareup.moshi.JsonClass
 import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.Credentials
@@ -42,13 +41,6 @@ import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
-
-// Container to store the data when a reset password is in the email validation step
-@JsonClass(generateAdapter = true)
-internal data class ResetPasswordData(
-        val newPassword: String,
-        val addThreePidRegistrationResponse: AddThreePidRegistrationResponse
-)
 
 internal class DefaultLoginWizard(
         okHttpClient: Lazy<OkHttpClient>,
