@@ -11,7 +11,6 @@
         <!-- specify shared element enter and exit transitions -->
         <item name="android:windowSharedElementEnterTransition">@transition/image_preview_transition</item>
         <item name="android:windowSharedElementExitTransition">@transition/image_preview_transition</item>
-
     </style>
 
     <style name="AppTheme.Black" parent="AppTheme.Black.v21" />
