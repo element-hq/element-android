@@ -28,7 +28,6 @@ import im.vector.matrix.android.api.session.room.model.relation.ReactionContent
 import im.vector.matrix.android.api.session.room.model.relation.ReactionInfo
 import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultContent
 import im.vector.matrix.android.api.session.room.model.relation.ReplyToContent
-import im.vector.matrix.android.api.session.room.send.TextPillsUtils
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.matrix.android.internal.database.helper.addSendingEvent
@@ -37,6 +36,7 @@ import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.content.ThumbnailExtractor
 import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
+import im.vector.matrix.android.internal.session.room.send.pills.TextPillsUtils
 import im.vector.matrix.android.internal.util.StringProvider
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
@@ -51,9 +51,12 @@ import javax.inject.Inject
  *
  * The transactionID is used as loc
  */
-internal class LocalEchoEventFactory @Inject constructor(@UserId private val userId: String,
-                                                         private val stringProvider: StringProvider,
-                                                         private val roomSummaryUpdater: RoomSummaryUpdater) {
+internal class LocalEchoEventFactory @Inject constructor(
+        @UserId private val userId: String,
+        private val stringProvider: StringProvider,
+        private val roomSummaryUpdater: RoomSummaryUpdater,
+        private val textPillsUtils: TextPillsUtils
+) {
     // TODO Inject
     private val parser = Parser.builder().build()
     // TODO Inject
@@ -69,7 +72,7 @@ internal class LocalEchoEventFactory @Inject constructor(@UserId private val use
 
     private fun createTextContent(text: CharSequence, autoMarkdown: Boolean): TextContent {
         if (autoMarkdown) {
-            val source = TextPillsUtils.processSpecialSpansToMarkdown(text)
+            val source = textPillsUtils.processSpecialSpansToMarkdown(text)
                     ?: text.toString()
             val document = parser.parse(source)
             val htmlText = renderer.render(document)
@@ -79,7 +82,7 @@ internal class LocalEchoEventFactory @Inject constructor(@UserId private val use
             }
         } else {
             // Try to detect pills
-            TextPillsUtils.processSpecialSpansToHtml(text)?.let {
+            textPillsUtils.processSpecialSpansToHtml(text)?.let {
                 return TextContent(text.toString(), it)
             }
         }

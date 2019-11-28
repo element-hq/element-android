@@ -13,10 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.matrix.android.api.session.room.send
+package im.vector.matrix.android.internal.session.room.send.pills
 
 import android.text.SpannableString
+import im.vector.matrix.android.api.session.room.send.UserMentionSpan
 import java.util.*
+import javax.inject.Inject
 
 /**
  * Utility class to detect special span in CharSequence and turn them into
@@ -24,13 +26,9 @@ import java.util.*
  *
  * For now only support UserMentionSpans (TODO rooms, room aliases, etc...)
  */
-object TextPillsUtils {
-
-    private data class MentionLinkSpec(val span: UserMentionSpan, val start: Int, val end: Int)
-
-    private const val MENTION_SPAN_TO_HTML_TEMPLATE = "<a href=\"https://matrix.to/#/%1\$s\">%2\$s</a>"
-
-    private const val MENTION_SPAN_TO_MD_TEMPLATE = "[%2\$s](https://matrix.to/#/%1\$s)"
+internal class TextPillsUtils @Inject constructor(
+        private val mentionLinkSpecComparator: MentionLinkSpecComparator
+) {
 
     /**
      * Detects if transformable spans are present in the text.
@@ -72,7 +70,7 @@ object TextPillsUtils {
     }
 
     private fun pruneOverlaps(links: MutableList<MentionLinkSpec>) {
-        Collections.sort(links, COMPARATOR)
+        Collections.sort(links, mentionLinkSpecComparator)
         var len = links.size
         var i = 0
         while (i < len - 1) {
@@ -104,21 +102,9 @@ object TextPillsUtils {
         }
     }
 
-    private val COMPARATOR = Comparator<MentionLinkSpec> { (_, startA, endA), (_, startB, endB) ->
-        if (startA < startB) {
-            return@Comparator -1
-        }
+    companion object {
+        private const val MENTION_SPAN_TO_HTML_TEMPLATE = "<a href=\"https://matrix.to/#/%1\$s\">%2\$s</a>"
 
-        if (startA > startB) {
-            return@Comparator 1
-        }
-
-        if (endA < endB) {
-            return@Comparator 1
-        }
-
-        if (endA > endB) {
-            -1
-        } else 0
+        private const val MENTION_SPAN_TO_MD_TEMPLATE = "[%2\$s](https://matrix.to/#/%1\$s)"
     }
 }
