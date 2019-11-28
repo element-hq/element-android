@@ -16,10 +16,12 @@
 
 package im.vector.riotx.features.login
 
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.CallSuper
 import androidx.appcompat.app.AlertDialog
+import androidx.transition.TransitionInflater
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import im.vector.matrix.android.api.failure.Failure
@@ -41,6 +43,14 @@ abstract class AbstractLoginFragment : VectorBaseFragment(), OnBackPressed {
 
     // Due to async, we keep a boolean to avoid displaying twice the cancellation dialog
     private var displayCancelDialog = true
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+        }
+    }
 
     @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -16,11 +16,9 @@
 
 package im.vector.riotx.features.login
 
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
-import androidx.transition.TransitionInflater
 import butterknife.OnClick
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
@@ -38,14 +36,6 @@ class LoginServerSelectionFragment @Inject constructor(
 ) : AbstractLoginFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_login_server_selection
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
-        }
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

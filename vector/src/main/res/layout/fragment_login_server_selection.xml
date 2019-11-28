@@ -9,7 +9,6 @@
     <!-- Missing attributes are in the style -->
     <ImageView
         style="@style/LoginLogo"
-        android:transitionName="loginLogoTransition"
         tools:ignore="ContentDescription,MissingConstraints,UnusedAttribute" />
 
     <!-- Missing attributes are in the style -->
@@ -25,6 +24,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/login_server_title"
                 android:textAppearance="@style/TextAppearance.Vector.Login.Title"
+                android:transitionName="loginTitleTransition"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -148,7 +149,7 @@
 
                 <TextView
                     android:id="@+id/loginServerChoiceOtherTitle"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:text="@string/login_server_other_title"
@@ -156,7 +157,6 @@
                     android:textColor="?riotx_text_primary"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toTopOf="@+id/loginServerChoiceOtherText"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_chainStyle="packed" />
@@ -183,6 +183,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:text="@string/login_continue"
+                android:transitionName="loginSubmitTransition"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

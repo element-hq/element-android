@@ -22,7 +22,9 @@
         <item name="layout_constraintStart_toStartOf">parent</item>
     </style>
 
-    <style name="LoginLogo" parent="LoginLogoBase">
+    <style name="LoginLogo.v21" parent="LoginLogoBase" />
+
+    <style name="LoginLogo" parent="LoginLogo.v21">
         <item name="layout_constraintEnd_toEndOf">parent</item>
         <item name="android:layout_marginTop">32dp</item>
     </style>
