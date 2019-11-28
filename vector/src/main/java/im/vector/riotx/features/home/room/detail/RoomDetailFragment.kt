@@ -16,6 +16,7 @@
 
 package im.vector.riotx.features.home.room.detail
 
+import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.DialogInterface
@@ -27,7 +28,6 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.text.Editable
 import android.text.Spannable
-import android.text.SpannableStringBuilder
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
@@ -37,6 +37,7 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
+import androidx.core.text.buildSpannedString
 import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
 import androidx.core.view.forEach
@@ -60,7 +61,6 @@ import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.LocalEcho
 import im.vector.matrix.android.api.session.room.model.Membership
-import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.Timeline
@@ -159,7 +159,7 @@ class RoomDetailFragment @Inject constructor(
 
     companion object {
 
-        /**x
+        /**
          * Sanitize the display name.
          *
          * @param displayName the display name to sanitize
@@ -406,8 +406,12 @@ class RoomDetailFragment @Inject constructor(
         composerLayout.composerRelatedMessageActionIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), iconRes))
         composerLayout.sendButton.setContentDescription(getString(descriptionRes))
 
-        avatarRenderer.render(event.senderAvatar, event.root.senderId
-                ?: "", event.getDisambiguatedDisplayName(), composerLayout.composerRelatedMessageAvatar)
+        avatarRenderer.render(
+                event.senderAvatar,
+                event.root.senderId ?: "",
+                event.getDisambiguatedDisplayName(),
+                composerLayout.composerRelatedMessageAvatar
+        )
         composerLayout.expand {
             // need to do it here also when not using quick reply
             focusComposerAndShowKeyboard()
@@ -420,8 +424,7 @@ class RoomDetailFragment @Inject constructor(
         if (text != composerLayout.composerEditText.text.toString()) {
             // Ignore update to avoid saving a draft
             composerLayout.composerEditText.setText(text)
-            composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text?.length
-                    ?: 0)
+            composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text?.length ?: 0)
         }
     }
 
@@ -591,8 +594,13 @@ class RoomDetailFragment @Inject constructor(
 
                         // Add the span
                         val user = session.getUser(item.userId)
-                        val span = PillImageSpan(glideRequests, avatarRenderer, requireContext(), item.userId, user?.displayName
-                                ?: item.userId, user?.avatarUrl)
+                        val span = PillImageSpan(
+                                glideRequests,
+                                avatarRenderer,
+                                requireContext(),
+                                item.userId,
+                                user?.displayName ?: item.userId,
+                                user?.avatarUrl)
                         span.bind(composerLayout.composerEditText)
 
                         editable.setSpan(span, startIndex, startIndex + displayName.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -980,10 +988,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onMemberNameClicked(informationData: MessageInformationData) {
-        val userId = informationData.senderId
-        roomDetailViewModel.getMember(userId)?.let {
-            insertUserDisplayNameInTextEditor(userId, it)
-        }
+        insertUserDisplayNameInTextEditor(informationData.senderId)
     }
 
     override fun onClickOnReactionPill(informationData: MessageInformationData, reaction: String, on: Boolean) {
@@ -1165,77 +1170,56 @@ class RoomDetailFragment @Inject constructor(
         }
     }
 
-// utils
     /**
-     * Insert an user displayname  in the message editor.
+     * Insert a user displayName in the message editor.
      *
-     * @param text the text to insert.
+     * @param userId the userId.
      */
-// TODO legacy, refactor
-    private fun insertUserDisplayNameInTextEditor(userId: String, memberInfo: RoomMember) {
-        // TODO move logic outside of fragment
-        val text = memberInfo.displayName
-        if (null != text) {
-//            var vibrate = false
+    @SuppressLint("SetTextI18n")
+    private fun insertUserDisplayNameInTextEditor(userId: String) {
+        val startToCompose = composerLayout.composerEditText.text.isNullOrBlank()
 
-            val myDisplayName = session.getUser(session.myUserId)?.displayName
-            if (myDisplayName == text) {
-                // current user
-                if (composerLayout.composerEditText.text.isNullOrBlank()) {
-                    composerLayout.composerEditText.append(Command.EMOTE.command + " ")
-                    composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text?.length
-                            ?: 0)
-//                    vibrate = true
-                }
-            } else {
-                // another user
-                val sanitizeDisplayName = sanitizeDisplayName(text)
-                if (composerLayout.composerEditText.text.isNullOrBlank()) {
-                    // Ensure displayName will not be interpreted as a Slash command
-                    if (text.startsWith("/")) {
-                        composerLayout.composerEditText.append("\\")
+        if (startToCompose
+                && userId == session.myUserId) {
+            // Empty composer, current user: start an emote
+            composerLayout.composerEditText.setText(Command.EMOTE.command + " ")
+            composerLayout.composerEditText.setSelection(Command.EMOTE.command.length + 1)
+        } else {
+            val roomMember = roomDetailViewModel.getMember(userId)
+            // TODO move logic outside of fragment
+            (roomMember?.displayName ?: userId)
+                    .let { sanitizeDisplayName(it) }
+                    .let { displayName ->
+                        buildSpannedString {
+                            append(displayName)
+                            setSpan(
+                                    PillImageSpan(
+                                            glideRequests,
+                                            avatarRenderer,
+                                            requireContext(),
+                                            userId,
+                                            displayName,
+                                            roomMember?.avatarUrl),
+                                    0,
+                                    displayName.length,
+                                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
+                            append(if (startToCompose) ": " else " ")
+                        }.let { pill ->
+                            if (startToCompose) {
+                                if (displayName.startsWith("/")) {
+                                    // Ensure displayName will not be interpreted as a Slash command
+                                    composerLayout.composerEditText.append("\\")
+                                }
+                                composerLayout.composerEditText.append(pill)
+                            } else {
+                                composerLayout.composerEditText.text?.insert(composerLayout.composerEditText.selectionStart, pill)
+                            }
+                        }
                     }
-                    SpannableStringBuilder().apply {
-                        append(sanitizeDisplayName)
-                        setSpan(
-                                PillImageSpan(glideRequests, avatarRenderer, requireContext(), userId, memberInfo.displayName
-                                        ?: userId, memberInfo.avatarUrl),
-                                0,
-                                sanitizeDisplayName.length,
-                                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-                        )
-                        append(": ")
-                    }.let {
-                        composerLayout.composerEditText.append(it)
-                    }
-                } else {
-                    SpannableStringBuilder().apply {
-                        append(sanitizeDisplayName)
-                        setSpan(
-                                PillImageSpan(glideRequests, avatarRenderer, requireContext(), userId, memberInfo.displayName
-                                        ?: userId, memberInfo.avatarUrl),
-                                0,
-                                sanitizeDisplayName.length,
-                                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-                        )
-                        append(" ")
-                    }.let {
-                        composerLayout.composerEditText.text?.insert(composerLayout.composerEditText.selectionStart, it)
-                    }
-//                    composerLayout.composerEditText.text?.insert(composerLayout.composerEditText.selectionStart, sanitizeDisplayName + " ")
-                }
-
-//                vibrate = true
-            }
-
-//            if (vibrate && vectorPreferences.vibrateWhenMentioning()) {
-//                val v= context.getSystemService(Context.VIBRATOR_SERVICE) as? Vibrator
-//                if (v?.hasVibrator() == true) {
-//                    v.vibrate(100)
-//                }
-//            }
-            focusComposerAndShowKeyboard()
         }
+
+        focusComposerAndShowKeyboard()
     }
 
     private fun focusComposerAndShowKeyboard() {
