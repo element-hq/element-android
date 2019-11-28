@@ -134,6 +134,9 @@ internal class DefaultAuthenticationService @Inject constructor(@Unauthenticated
                 }
     }
 
+    override val isRegistrationStarted: Boolean
+        get() = currentRegistrationWizard?.isRegistrationStarted == true
+
     override fun getLoginWizard(): LoginWizard {
         return currentLoginWizard
                 ?: let {

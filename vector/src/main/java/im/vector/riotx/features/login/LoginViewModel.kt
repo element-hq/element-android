@@ -70,7 +70,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
 
     // True when login and password has been sent with success to the homeserver
     val isRegistrationStarted: Boolean
-        get() = registrationWizard?.isRegistrationStarted == true
+        get() = authenticationService.isRegistrationStarted
 
     private val registrationWizard: RegistrationWizard?
         get() = authenticationService.getRegistrationWizard()

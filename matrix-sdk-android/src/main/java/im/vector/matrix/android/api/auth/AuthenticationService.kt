@@ -48,6 +48,11 @@ interface AuthenticationService {
     fun getRegistrationWizard(): RegistrationWizard
 
     /**
+     * True when login and password has been sent with success to the homeserver
+     */
+    val isRegistrationStarted: Boolean
+
+    /**
      * Cancel pending login or pending registration
      */
     fun cancelPendingLoginOrRegistration()
