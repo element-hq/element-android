@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package im.vector.matrix.android.api.session.room.send
 
 /**
@@ -20,6 +21,6 @@ package im.vector.matrix.android.api.session.room.send
  * These Spans will be transformed into pills when detected in message to send
  */
 interface UserMentionSpan {
-    abstract val displayName: String
-    abstract val userId: String
+    val displayName: String
+    val userId: String
 }
