@@ -8,7 +8,7 @@ Improvements 🙌:
  -
 
 Other changes:
- -
+ - Fix a small grammatical error when an empty room list is shown.
 
 Bugfix 🐛:
  - Do not show long click help if only invitation are displayed
