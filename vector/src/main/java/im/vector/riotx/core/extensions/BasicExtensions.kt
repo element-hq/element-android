@@ -21,6 +21,8 @@ import androidx.fragment.app.Fragment
 
 fun Boolean.toOnOff() = if (this) "ON" else "OFF"
 
+inline fun <T> T.ooi(block: (T) -> Unit): T = also(block)
+
 /**
  * Apply argument to a Fragment
  */

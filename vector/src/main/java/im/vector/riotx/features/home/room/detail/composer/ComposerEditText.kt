@@ -27,6 +27,7 @@ import android.view.inputmethod.InputConnection
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.view.inputmethod.EditorInfoCompat
 import androidx.core.view.inputmethod.InputConnectionCompat
+import im.vector.riotx.core.extensions.ooi
 import im.vector.riotx.core.platform.SimpleTextWatcher
 import im.vector.riotx.features.html.PillImageSpan
 import timber.log.Timber
@@ -75,7 +76,7 @@ class ComposerEditText @JvmOverloads constructor(context: Context, attrs: Attrib
 
                             // Get the first span at this position
                             spanToRemove = editableText.getSpans(deleteCharPosition, deleteCharPosition, PillImageSpan::class.java)
-                                    .also { Timber.v("Pills: beforeTextChanged: found ${it.size} span(s)") }
+                                    .ooi { Timber.v("Pills: beforeTextChanged: found ${it.size} span(s)") }
                                     .firstOrNull()
                         }
                     }
