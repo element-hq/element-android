@@ -448,8 +448,8 @@
 
     <string name="devices_details_dialog_title">Информация за устройството</string>
     <string name="devices_details_id_title">ID</string>
-    <string name="devices_details_name_title">Име</string>
-    <string name="devices_details_device_name">Име на устройството</string>
+    <string name="devices_details_name_title">Публично име</string>
+    <string name="devices_details_device_name">Обнови публичното име</string>
     <string name="devices_details_last_seen_title">Последно видян</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
     <string name="devices_delete_dialog_text">Тази операция изискра допълнителна автентикация.
@@ -582,9 +582,9 @@
     <string name="encryption_information_decryption_error">Грешка при разшифроване</string>
 
     <string name="encryption_information_sender_device_information">Информация за устройството на подателя</string>
-    <string name="encryption_information_device_name">Име на устройство</string>
-    <string name="encryption_information_name">Име</string>
-    <string name="encryption_information_device_id">ID на устройство</string>
+    <string name="encryption_information_device_name">Публично име</string>
+    <string name="encryption_information_name">Публично име</string>
+    <string name="encryption_information_device_id">ID</string>
     <string name="encryption_information_device_key">Ключ на устройство</string>
     <string name="encryption_information_verification">Потвърждение</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519 отпечатък</string>
@@ -745,7 +745,7 @@
     <string name="settings_background_sync">Фонова синхронизация</string>
     <string name="settings_enable_background_sync">Включване на фонова синхронизация</string>
     <string name="settings_set_sync_timeout">Времето за синхронизация изтече</string>
-    <string name="settings_set_sync_delay">Време за чакане между всяка заявка</string>
+    <string name="settings_set_sync_delay">Време за чакане между синхронизации</string>
     <string name="settings_contacts_app_permission">Разрешение за достъп до контакти</string>
     <string name="settings_home_display">Начало</string>
     <string name="settings_vibrate_on_mention">Вибрация при споменаване на потребител</string>
@@ -1621,5 +1621,142 @@
     <string name="terms_description_for_integration_manager">Използвайте ботове, връзки с други мрежи, приспособления и стикери</string>
 
     <string name="read_at">Прочетете на</string>
+
+    <string name="resources_script">Cyrl</string>
+
+    <string name="none">Нищо</string>
+    <string name="revoke">Оттегли</string>
+    <string name="disconnect">Прекъсни</string>
+    <string name="people_no_identity_server">Не е настроен сървър за самоличност.</string>
+
+    <string name="call_failed_no_ice_title">Обаждането се провали поради грешно настроен сървър</string>
+    <string name="call_failed_no_ice_description">Попитайте администратора на сървъра (%1$s) да конфигурира TURN сървър за да може разговорите да работят надеждно.
+\n
+\nКато алтернатива, също може да използвате публичния сървър %2$s, но това няма да е толкова надеждно, а и ще сподели IP адреса ви със сървъра. Може да управлявате това в Настройки.</string>
+    <string name="call_failed_no_ice_use_alt">Опитай с %s</string>
+    <string name="call_failed_dont_ask_again">Не питай пак</string>
+
+    <string name="auth_add_email_message_2">Настройте имейл за възстановяване на профила, а после по желание и за да бъдете откриваеми от познати.</string>
+    <string name="auth_add_phone_message_2">Настройте телефон за възстановяване на профила, а после по желание и за да бъдете откриваеми от познати.</string>
+    <string name="auth_add_email_phone_message_2">Настройте имейл за възстановяване на профила. По-късно използвайте имейл или телефонен номер за да бъдете откривани от хора, които ви познават.</string>
+    <string name="auth_add_email_and_phone_message_2">Настройте имейл за възстановяване на профила. По-късно използвайте имейл или телефонен номер за да бъдете откривани от хора, които ви познават.</string>
+    <string name="login_error_homeserver_not_found">Неуспешна връзка със сървъра на този адрес, моля проверете</string>
+    <string name="settings_call_ringtone_use_default_stun">Позволи използването на резервен сървър за свързване на обаждания</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">Ще използва %s за асистиращ сървър, когато вашия сървър не предлага такъв (IP адресът ви ще бъде споделен по време на обаждане)</string>
+    <string name="invite_no_identity_server_error">Добавете сървър за самоличност в настройки за да извършите това действие.</string>
+    <string name="settings_background_fdroid_sync_mode">Режим на фонова синхронизация (експериментално)</string>
+    <string name="settings_background_fdroid_sync_mode_battery">Пестящ батерия</string>
+    <string name="settings_background_fdroid_sync_mode_battery_description">Riot ще синхронизира във фонов режим по начин, който пести ограничените ресурси на устройството (батерия).
+\nВ зависимост от състоянието на ресурсите, синхронизацията може да бъде отложена от операционната система.</string>
+    <string name="settings_background_fdroid_sync_mode_real_time">Целящ висока интерактивност</string>
+    <string name="settings_background_fdroid_sync_mode_real_time_description">Riot ще синхронизира във фонов режим на определен интервал (конфигурируемо).
+\nТова ще повлияе на използването на антената и батерията. Ще се показва перманентна нотификация, че Riot слуша за събития.</string>
+    <string name="settings_background_fdroid_sync_mode_disabled">Без фонова синхронизация</string>
+    <string name="settings_background_fdroid_sync_mode_disabled_description">Няма да бъдете уведомени за входящи съобщения, когато приложението е във фонов режим.</string>
+    <string name="settings_background_sync_update_error">Неуспешно обновяване на настройките.</string>
+
+
+    <string name="settings_set_workmanager_delay">Предпочитан интервал за синхронизация</string>
+    <string name="settings_set_workmanager_delay_summary">%s
+\nСинхронизацията може да бъде отложена, в зависимост от ресурсите (батерия) или състоянието на устройството (заспиване).</string>
+    <string name="settings_discovery_category">Откриване</string>
+    <string name="settings_discovery_manage">Управлявайте настройките на откриваемостта.</string>
+    <string name="encryption_information_device_name_with_warning">Публично име (видимо за хора, с които общувате)</string>
+    <string name="device_name_warning">Публичното име на устройството е видимо за хората, с които общувате</string>
+    <string name="identity_server_not_defined">Не използвате сървър за самоличност</string>
+    <string name="identity_server_not_defined_for_password_reset">Не е настроен сървър за самоличност. Необходим е за възстановяване на паролата.</string>
+
+    <string name="error_user_already_logged_in">Изглежда се опитвате да се свържете с друг сървър. Искате ли да излезете от профила\?</string>
+
+    <string name="identity_server">Сървър за самоличност</string>
+    <string name="disconnect_identity_server">Прекъсни сървъра за самоличност</string>
+    <string name="add_identity_server">Настрой сървър за самоличност</string>
+    <string name="change_identity_server">Промени сървъра за самоличност</string>
+    <string name="settings_discovery_identity_server_info">В момента използвате %1$s за да откривате и да бъдете открити от съществуващи ваши контакти.</string>
+    <string name="settings_discovery_identity_server_info_none">В момента не използвате сървър за самоличност. Настройте такъв по-долу, за да откривате и да бъдете открити от съществуващи ваши контакти.</string>
+    <string name="settings_discovery_emails_title">Откриваеми имейл адреси</string>
+    <string name="settings_discovery_no_mails">Ще се появят настройки за откриваемост след като добавите имейл.</string>
+    <string name="settings_discovery_no_msisdn">Ще се появят настройки за откриваемост след като добавите телефонен номер.</string>
+    <string name="settings_discovery_disconnect_identity_server_info">Прекъсването на връзката със сървъра за самоличност означава, че няма да бъдете откриваеми от други потребители и няма да можете да каните други по имейл или телефон.</string>
+    <string name="settings_discovery_msisdn_title">Откриваеми телефонни номера</string>
+    <string name="settings_discovery_confirm_mail">Изпратихме имейл за потвърждение на %s. Проверете имейла и кликнете връзката за потвърждение</string>
+    <string name="settings_discovery_mail_pending">Изчакване</string>
+
+    <string name="settings_discovery_enter_identity_server">Въведете нов сървър за самоличност</string>
+    <string name="settings_discovery_bad_identity_server">Неуспешна връзка със сървъра за самоличност</string>
+    <string name="settings_discovery_please_enter_server">Въведете адреса на сървъра за самоличност</string>
+    <string name="settings_discovery_no_terms_title">Сървъра за самоличност няма условия за ползване</string>
+    <string name="settings_discovery_no_terms">Избрания сървър за самоличност няма условия за ползване на услугата. Продължете само ако вярвате на собственика на услугата</string>
+    <string name="settings_text_message_sent">Беше изпратено текстово съобщение на %s. Въведете съдържащият се код за потвърждение.</string>
+
+    <string name="settings_discovery_disconnect_with_bound_pid">В момента споделяте имейл адреси или телефонни номера със сървър за самоличност %1$s. Ще трябва да се свържете наново с %2$s за да спрете да ги споделяте.</string>
+    <string name="settings_agree_to_terms">Съгласете се с условията за ползване на услугата на сървъра за самоличност (%s) за да бъдете откриваеми по имейл адрес или телефонен номер.</string>
+
+    <string name="labs_allow_extended_logging">Включи подробни логове.</string>
+    <string name="labs_allow_extended_logging_summary">Подробните логове помагат на разработчиците, понеже предоставят повече логове когато изпращате RageShake. Дори включени, приложението не записва съдържанието на съобщенията или други лични данни.</string>
+
+
+    <string name="error_terms_not_accepted">Опитайте пак след като приемете условията за ползване на сървъра.</string>
+
+    <string name="error_network_timeout">Изглежда сървъра отнема прекалено дълго за да отговори, поради лоша връзка или проблем със сървърите. Опитайте пак по-късно.</string>
+
+    <string name="send_attachment">Изпрати прикачен файл</string>
+
+    <string name="a11y_open_drawer">Отвори навигационния панел</string>
+    <string name="a11y_create_menu_open">Отвори менюто за създаване на стая</string>
+    <string name="a11y_create_menu_close">Затвори менюто за създаване на стая…</string>
+    <string name="a11y_create_direct_message">Създай нова директна кореспонденция</string>
+    <string name="a11y_create_room">Създай нова стая</string>
+    <string name="a11y_close_keys_backup_banner">Затвори съобщението за резервно копие на ключовете</string>
+    <string name="a11y_show_password">Покажи паролата</string>
+    <string name="a11y_hide_password">Скрий паролата</string>
+    <string name="a11y_jump_to_bottom">Отиди най-отдолу</string>
+
+    <string name="two_and_some_others_read">%1$s, %2$s и %3$d други прочетоха</string>
+    <string name="three_users_read">%1$s, %2$s и %3$s прочетоха</string>
+    <string name="two_users_read">%1$s и %2$s прочетоха</string>
+    <string name="one_user_read">%s прочете</string>
+    <plurals name="fallback_users_read">
+        <item quantity="one">1 потребител прочете</item>
+        <item quantity="other">%d потребителя прочетоха</item>
+    </plurals>
+
+    <string name="error_file_too_big">Файлът \'%1$s\' (%2$s) е прекалено голям за да се качи. Ограничението е %3$s.</string>
+
+    <string name="error_attachment">Възникна грешка при извличане на прикачения файл.</string>
+    <string name="attachment_type_file">Файл</string>
+    <string name="attachment_type_contact">Контакт</string>
+    <string name="attachment_type_camera">Камера</string>
+    <string name="attachment_type_audio">Аудио</string>
+    <string name="attachment_type_gallery">Галерия</string>
+    <string name="attachment_type_sticker">Стикер</string>
+    <string name="error_handling_incoming_share">Неуспешна обработка на споделени данни</string>
+
+    <string name="report_content_spam">Това е спам</string>
+    <string name="report_content_inappropriate">Това е неподходящо</string>
+    <string name="report_content_custom">Собствен доклад</string>
+    <string name="report_content_custom_title">Докладване на това съдържание</string>
+    <string name="report_content_custom_hint">Причина за докладване на това съдържание</string>
+    <string name="report_content_custom_submit">ДОКЛАДВАЙ</string>
+    <string name="block_user">БЛОКИРАЙ ПОТРЕБИТЕЛЯ</string>
+
+    <string name="content_reported_title">Съдържанието беше докладвано</string>
+    <string name="content_reported_content">Съдържанието беше докладвано.
+\n
+\nАко не искате да виждате повече съдържание от този потребител, може да го блокирате за да скриете съобщенията му</string>
+    <string name="content_reported_as_spam_title">Докладвано като спам</string>
+    <string name="content_reported_as_spam_content">Съдържанието беше докладвано като спам.
+\n
+\nАко не искате да виждате повече съдържание от този потребител, може да го блокирате за да скриете съобщенията му</string>
+    <string name="content_reported_as_inappropriate_title">Докладвано като неподходящо</string>
+    <string name="content_reported_as_inappropriate_content">Съдържанието беше докладвано като неподходящо.
+\n
+\nАко не искате да виждате повече съдържание от този потребител, може да го блокирате за да скриете съобщенията му</string>
+
+    <string name="permissions_rationale_msg_keys_backup_export">Riot се нуждае от привилегии за да запази E2E ключовете върху диска.
+\n
+\nПозволете достъп на следващия екран, за да може в бъдеще да експортирате ключовете си ръчно.</string>
+
+    <string name="no_network_indicator">В момента няма връзка с мрежата</string>
 
 </resources>

@@ -121,8 +121,8 @@
     <string name="create_account">Luo tili</string>
     <string name="login">Kirjaudu sisään</string>
     <string name="logout">Kirjaudu ulos</string>
-    <string name="hs_url">Kotipalvelimen URL</string>
-    <string name="identity_url">Identiteettipalvelimen URL</string> <!-- ??? -->
+    <string name="hs_url">Kotipalvelimen URL-osoite</string>
+    <string name="identity_url">Identiteettipalvelimen URL-osoite</string> <!-- ??? -->
     <string name="search">Etsi</string>
 
     <!-- ??? -->
@@ -142,7 +142,7 @@
     <string name="auth_register">Luo tili</string>
     <string name="auth_submit">Lähetä</string>
     <string name="auth_skip">Ohita</string>
-    <string name="auth_send_reset_email">Lähetä nollaussähköposti</string>
+    <string name="auth_send_reset_email">Lähetä palautussähköposti</string>
     <string name="auth_return_to_login">Palaa kirjautumiseen</string>
     <string name="auth_user_id_placeholder">Sähköposti tai käyttäjätunnus</string>
     <string name="auth_password_placeholder">Salasana</string>
@@ -621,7 +621,7 @@
     <string name="encryption_information_sender_device_information">Lähettävän laitteen tiedot</string>
     <string name="encryption_information_device_name">Julkinen nimi</string>
     <string name="encryption_information_name">Julkinen nimi</string>
-    <string name="encryption_information_device_id">Laitteen ID</string>
+    <string name="encryption_information_device_id">Tunnus</string>
     <string name="encryption_information_device_key">Laitteen avain</string>
     <string name="encryption_information_verification">Vahvistus</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519-sormenjälki</string>
@@ -672,7 +672,7 @@
     <string name="select_room_directory">Valitse huoneluettelo</string>
     <string name="directory_server_fail_to_retrieve_server">Palvelin saattaa olla tavoittamattomissa tai ylikuormitettu</string>
     <string name="directory_server_type_homeserver">Syötä kotipalvelin, jolta julkiset huoneet listataan</string>
-    <string name="directory_server_placeholder">Kotipalvelimen URL</string>
+    <string name="directory_server_placeholder">Kotipalvelimen URL-osoite</string>
     <string name="directory_server_all_rooms_on_server">Kaikki huoneet palvelimella %s</string>
     <string name="directory_server_native_rooms">Kaikki alkuperäiset %s huoneet</string>
 
@@ -1707,4 +1707,6 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="terms_description_for_identity_server">Ole löydettävissä</string>
     <string name="settings_text_message_sent">Tekstiviesti on lähetetty numeroon %s. Syötä sen sisältämä varmistuskoodi.</string>
 
+    <string name="settings_push_rules_no_rules">Push-sääntöjä ei ole määritetty</string>
+    <string name="a11y_create_direct_message">Luo uusi yksityiskeskustelu</string>
 </resources>

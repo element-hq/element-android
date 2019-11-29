@@ -473,7 +473,7 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="settings_pin_missed_notifications">Räume mit ungelesenen Benachrichtigungen anheften</string>
     <string name="settings_pin_unread_messages">Räume mit ungelesenen Nachrichten anheften</string>
     <string name="settings_devices_list">Geräte</string>
-    <string name="devices_details_dialog_title">Geräte Information</string>
+    <string name="devices_details_dialog_title">Geräteinformationen</string>
     <string name="devices_details_id_title">ID</string>
     <string name="devices_details_name_title">Öffentlicher Name</string>
     <string name="devices_details_device_name">Öffentlichen Namen aktualisieren</string>
@@ -1707,5 +1707,5 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="settings_discovery_mail_pending">ausstehend</string>
 
     <string name="settings_discovery_enter_identity_server">Gib einen neuen Identitätsserver ein</string>
-    <string name="settings_discovery_bad_identity_server">Konnte keine Verbindung zum Heimserver herstellen.</string>
+    <string name="settings_discovery_bad_identity_server">Konnte keine Verbindung zum Heimserver herstellen</string>
 </resources>

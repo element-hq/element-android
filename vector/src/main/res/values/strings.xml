@@ -630,6 +630,9 @@
     <string name="settings_add_phone_number">Add phone number</string>
     <string name="settings_app_info_link_title">Application info</string>
     <string name="settings_app_info_link_summary">Show the application info in the system settings.</string>
+    <string name="settings_add_3pid_confirm_password_title">Confirm your password</string>
+    <string name="settings_add_3pid_flow_not_supported">You can\'t do this from Riot mobile</string>
+    <string name="settings_add_3pid_authentication_needed">Authentication is required</string>
 
 
     <string name="settings_notification_advanced">Advanced Notification Settings</string>
@@ -770,6 +773,8 @@
     <string name="settings_ignored_users">Ignored users</string>
     <string name="settings_other">Other</string>
     <string name="settings_advanced">Advanced</string>
+    <string name="settings_integrations">Integrations</string>
+    <string name="settings_integrations_summary">Use an Integration Manager to manage bots, bridges, widgets and sticker packs.\nIntegration Managers receive configuration data, and can modify widgets, send room invites and set power levels on your behalf.</string>
     <string name="settings_cryptography">Cryptography</string>
     <string name="settings_cryptography_manage_keys">Cryptography Keys Management</string>
     <string name="settings_notifications_targets">Notification Targets</string>
@@ -836,6 +841,7 @@
     <string name="settings_logged_in">Logged in as</string>
     <string name="settings_home_server">Home Server</string>
     <string name="settings_identity_server">Identity Server</string>
+    <string name="settings_integration_allow">Allow integrations</string>
     <string name="settings_integration_manager">Integration Manager</string>
 
     <string name="settings_user_interface">User interface</string>
@@ -1108,7 +1114,32 @@
         <item quantity="other">%d active widgets</item>
     </plurals>
 
+
+    <string name="room_widget_activity_title">Widget</string>
+    <string name="room_widget_permission_title">Load Widget</string>
+    <string name="room_widget_permission_added_by">This widget was added by:</string>
+    <string name="room_widget_permission_webview_shared_info_title">Using it may set cookies and share data with %s:</string>
+    <string name="room_widget_permission_shared_info_title">Using it may share data with %s:</string>
+    <string name="room_widget_failed_to_load">Failed to load widget.\n%s</string>
+    <string name="room_widget_reload">Reload widget</string>
+    <string name="room_widget_open_in_browser">Open in browser</string>
+    <string name="room_widget_revoke_access">Revoke access for me</string>
+
+    <string name="room_widget_permission_display_name">Your display name</string>
+    <string name="room_widget_permission_avatar_url">Your avatar URL</string>
+    <string name="room_widget_permission_user_id">Your user ID</string>
+    <string name="room_widget_permission_theme">Your theme</string>
+    <string name="room_widget_permission_widget_id">Widget ID</string>
+    <string name="room_widget_permission_room_id">Room ID</string>
+
+
     <string name="error_jitsi_not_supported_on_old_device">Sorry, conference calls with Jitsi are not supported on old devices (devices with Android OS below 5.0)</string>
+    <string name="room_widget_resource_permission_title">This widget wants to use the following resources:</string>
+    <string name="room_widget_resource_grant_permission">Allow</string>
+    <string name="room_widget_resource_decline_permission">Block All</string>
+    <string name="room_widget_webview_access_camera">Use the camera</string>
+    <string name="room_widget_webview_access_microphone">Use the microphone</string>
+    <string name="room_widget_webview_read_protected_media">Read DRM protected Media</string>
 
     <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Unable to create widget.</string>
@@ -1715,7 +1746,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
 
     <string name="error_terms_not_accepted">Please retry once you have accepted the terms and conditions of your homeserver.</string>
 
-    <string name="error_network_timeout">Looks like the server is taking to long to respond, this can be caused by either poor connectivity or an error with our servers. Please try again in a while.</string>
+    <string name="error_network_timeout">Looks like the server is taking too long to respond, this can be caused by either poor connectivity or an error with the server. Please try again in a while.</string>
 
     <string name="send_attachment">Send attachment</string>
 
