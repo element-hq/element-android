@@ -322,13 +322,15 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
         if (safeLoginWizard == null) {
             setState {
                 copy(
-                        asyncResetPassword = Fail(Throwable("Bad configuration"))
+                        asyncResetPassword = Fail(Throwable("Bad configuration")),
+                        asyncResetMailConfirmed = Uninitialized
                 )
             }
         } else {
             setState {
                 copy(
-                        asyncResetPassword = Loading()
+                        asyncResetPassword = Loading(),
+                        asyncResetMailConfirmed = Uninitialized
                 )
             }
 
@@ -360,12 +362,14 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
         if (safeLoginWizard == null) {
             setState {
                 copy(
+                        asyncResetPassword = Uninitialized,
                         asyncResetMailConfirmed = Fail(Throwable("Bad configuration"))
                 )
             }
         } else {
             setState {
                 copy(
+                        asyncResetPassword = Uninitialized,
                         asyncResetMailConfirmed = Loading()
                 )
             }
