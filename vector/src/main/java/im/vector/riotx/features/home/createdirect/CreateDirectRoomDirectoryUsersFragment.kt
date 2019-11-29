@@ -16,10 +16,8 @@
 
 package im.vector.riotx.features.home.createdirect
 
-import android.content.Context
 import android.os.Bundle
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import com.jakewharton.rxbinding3.widget.textChanges
