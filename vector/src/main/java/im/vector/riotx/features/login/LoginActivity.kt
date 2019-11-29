@@ -128,7 +128,7 @@ class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
                             findViewById<View?>(R.id.loginSplashTitle)?.let { ft.addSharedElement(it, ViewCompat.getTransitionName(it) ?: "") }
                             findViewById<View?>(R.id.loginSplashSubmit)?.let { ft.addSharedElement(it, ViewCompat.getTransitionName(it) ?: "") }
                             // TODO Disabled because it provokes a flickering
-                            //ft.setCustomAnimations(enterAnim, exitAnim, popEnterAnim, popExitAnim)
+                            // ft.setCustomAnimations(enterAnim, exitAnim, popEnterAnim, popExitAnim)
                         })
             is LoginNavigation.OnServerSelectionDone                      -> onServerSelectionDone()
             is LoginNavigation.OnSignModeSelected                         -> onSignModeSelected()
