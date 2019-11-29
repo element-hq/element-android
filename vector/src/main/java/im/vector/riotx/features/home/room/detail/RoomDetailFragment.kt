@@ -18,7 +18,6 @@ package im.vector.riotx.features.home.room.detail
 
 import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
-import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
@@ -29,7 +28,6 @@ import android.os.Parcelable
 import android.text.Editable
 import android.text.Spannable
 import android.view.*
-import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.DrawableRes
@@ -1200,7 +1198,8 @@ class RoomDetailFragment @Inject constructor(
                                             requireContext(),
                                             userId,
                                             displayName,
-                                            roomMember?.avatarUrl),
+                                            roomMember?.avatarUrl)
+                                            .also { it.bind(composerLayout.composerEditText) },
                                     0,
                                     displayName.length,
                                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
