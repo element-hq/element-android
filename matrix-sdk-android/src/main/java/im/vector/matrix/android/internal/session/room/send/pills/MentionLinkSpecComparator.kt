@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 New Vector Ltd
+ * Copyright 2019 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,19 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.core.extensions
+package im.vector.matrix.android.internal.session.room.send.pills
 
-import android.os.Bundle
-import androidx.fragment.app.Fragment
+import javax.inject.Inject
 
-fun Boolean.toOnOff() = if (this) "ON" else "OFF"
+internal class MentionLinkSpecComparator @Inject constructor() : Comparator<MentionLinkSpec> {
 
-inline fun <T> T.ooi(block: (T) -> Unit): T = also(block)
-
-/**
- * Apply argument to a Fragment
- */
-fun <T : Fragment> T.withArgs(block: Bundle.() -> Unit) = apply { arguments = Bundle().apply(block) }
+    override fun compare(o1: MentionLinkSpec, o2: MentionLinkSpec): Int {
+        return when {
+            o1.start < o2.start -> -1
+            o1.start > o2.start -> 1
+            o1.end < o2.end     -> 1
+            o1.end > o2.end     -> -1
+            else                -> 0
+        }
+    }
+}

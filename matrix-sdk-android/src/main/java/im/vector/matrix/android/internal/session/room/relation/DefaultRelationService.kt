@@ -115,7 +115,7 @@ internal class DefaultRelationService @AssistedInject constructor(@Assisted priv
 
     override fun editTextMessage(targetEventId: String,
                                  msgType: String,
-                                 newBodyText: String,
+                                 newBodyText: CharSequence,
                                  newBodyAutoMarkdown: Boolean,
                                  compatibilityBodyText: String): Cancelable {
         val event = eventFactory
@@ -164,7 +164,7 @@ internal class DefaultRelationService @AssistedInject constructor(@Assisted priv
                 .executeBy(taskExecutor)
     }
 
-    override fun replyToMessage(eventReplied: TimelineEvent, replyText: String, autoMarkdown: Boolean): Cancelable? {
+    override fun replyToMessage(eventReplied: TimelineEvent, replyText: CharSequence, autoMarkdown: Boolean): Cancelable? {
         val event = eventFactory.createReplyTextEvent(roomId, eventReplied, replyText, autoMarkdown)
                 ?.also { saveLocalEcho(it) }
                 ?: return null

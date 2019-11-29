@@ -25,7 +25,7 @@ import im.vector.riotx.core.platform.VectorViewModelAction
 
 sealed class RoomDetailAction : VectorViewModelAction {
     data class SaveDraft(val draft: String) : RoomDetailAction()
-    data class SendMessage(val text: String, val autoMarkdown: Boolean) : RoomDetailAction()
+    data class SendMessage(val text: CharSequence, val autoMarkdown: Boolean) : RoomDetailAction()
     data class SendMedia(val attachments: List<ContentAttachmentData>) : RoomDetailAction()
     data class TimelineEventTurnsVisible(val event: TimelineEvent) : RoomDetailAction()
     data class TimelineEventTurnsInvisible(val event: TimelineEvent) : RoomDetailAction()
