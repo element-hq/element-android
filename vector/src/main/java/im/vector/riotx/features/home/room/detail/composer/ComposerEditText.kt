@@ -66,27 +66,30 @@ class ComposerEditText @JvmOverloads constructor(context: Context, attrs: Attrib
                     var spanToRemove: PillImageSpan? = null
 
                     override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-                        Timber.v("beforeTextChanged: start:$start count:$count after:$after")
+                        Timber.v("Pills: beforeTextChanged: start:$start count:$count after:$after")
 
                         if (count > after) {
                             // A char has been deleted
                             val deleteCharPosition = start + count
-                            Timber.v("beforeTextChanged: deleted char at $deleteCharPosition")
+                            Timber.v("Pills: beforeTextChanged: deleted char at $deleteCharPosition")
 
-                            // Get span at this position
-                            val spans = editableText.getSpans(deleteCharPosition, deleteCharPosition, PillImageSpan::class.java)
-                            spanToRemove = spans.firstOrNull()
+                            // Get the first span at this position
+                            spanToRemove = editableText.getSpans(deleteCharPosition, deleteCharPosition, PillImageSpan::class.java)
+                                    .also { Timber.v("Pills: beforeTextChanged: found ${it.size} span(s)") }
+                                    .firstOrNull()
                         }
                     }
 
                     override fun afterTextChanged(s: Editable) {
                         if (spanToRemove != null) {
-                            Timber.v("Removing the span")
                             val start = editableText.getSpanStart(spanToRemove)
                             val end = editableText.getSpanEnd(spanToRemove)
+                            Timber.v("Pills: afterTextChanged Removing the span start:$start end:$end")
                             // Must be done before text replacement
                             editableText.removeSpan(spanToRemove)
-                            editableText.replace(start, end, "")
+                            if (start != -1 && end != -1) {
+                                editableText.replace(start, end, "")
+                            }
                             spanToRemove = null
                         }
                     }
