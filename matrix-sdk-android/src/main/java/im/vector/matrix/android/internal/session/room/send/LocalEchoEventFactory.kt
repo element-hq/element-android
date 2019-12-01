@@ -286,6 +286,24 @@ internal class LocalEchoEventFactory @Inject constructor(
         )
     }
 
+    fun createVerificationRequest(roomId: String, fromDevice: String, to: String, methods: List<String>): Event {
+        val localID = LocalEcho.createLocalEchoId()
+        return Event(
+                roomId = roomId,
+                originServerTs = dummyOriginServerTs(),
+                senderId = userId,
+                eventId = localID,
+                type = EventType.MESSAGE,
+                content = MessageVerificationRequestContent(
+                        body = stringProvider.getString(R.string.key_verification_request_fallback_message, userId),
+                        fromDevice = fromDevice,
+                        to = to,
+                        methods = methods
+                ).toContent(),
+                unsignedData = UnsignedData(age = null, transactionId = localID)
+        )
+    }
+
     private fun dummyOriginServerTs(): Long {
         return System.currentTimeMillis()
     }

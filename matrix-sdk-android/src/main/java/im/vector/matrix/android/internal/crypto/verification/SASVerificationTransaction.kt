@@ -16,7 +16,6 @@
 package im.vector.matrix.android.internal.crypto.verification
 
 import android.os.Build
-import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.crypto.sas.CancelCode
 import im.vector.matrix.android.api.session.crypto.sas.EmojiRepresentation
@@ -26,13 +25,8 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXKey
-import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
-import im.vector.matrix.android.internal.crypto.model.rest.*
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
-import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
 import im.vector.matrix.android.internal.extensions.toUnsignedInt
-import im.vector.matrix.android.internal.task.TaskExecutor
-import im.vector.matrix.android.internal.task.configureWith
 import org.matrix.olm.OlmSAS
 import org.matrix.olm.OlmUtility
 import timber.log.Timber
@@ -42,18 +36,17 @@ import kotlin.properties.Delegates
  * Represents an ongoing short code interactive key verification between two devices.
  */
 internal abstract class SASVerificationTransaction(
-        private val sasVerificationService: DefaultSasVerificationService,
         private val setDeviceVerificationAction: SetDeviceVerificationAction,
-        private val credentials: Credentials,
+        open val credentials: Credentials,
         private val cryptoStore: IMXCryptoStore,
-        private val sendToDeviceTask: SendToDeviceTask,
-        private val taskExecutor: TaskExecutor,
         private val deviceFingerprint: String,
         transactionId: String,
         otherUserId: String,
         otherDevice: String?,
         isIncoming: Boolean) :
         VerificationTransaction(transactionId, otherUserId, otherDevice, isIncoming) {
+
+    lateinit var transport: SasTransport
 
     companion object {
         const val SAS_MAC_SHA256_LONGKDF = "hmac-sha256"
@@ -95,13 +88,13 @@ internal abstract class SASVerificationTransaction(
 
     private var olmSas: OlmSAS? = null
 
-    var startReq: KeyVerificationStart? = null
-    var accepted: KeyVerificationAccept? = null
+    var startReq: VerifInfoStart? = null
+    var accepted: VerifInfoAccept? = null
     var otherKey: String? = null
     var shortCodeBytes: ByteArray? = null
 
-    var myMac: KeyVerificationMac? = null
-    var theirMac: KeyVerificationMac? = null
+    var myMac: VerifInfoMac? = null
+    var theirMac: VerifInfoMac? = null
 
     fun getSAS(): OlmSAS {
         if (olmSas == null) olmSas = OlmSAS()
@@ -160,7 +153,7 @@ internal abstract class SASVerificationTransaction(
             return
         }
 
-        val macMsg = KeyVerificationMac.create(transactionId, mapOf(keyId to macString), keyStrings)
+        val macMsg = transport.createMac(transactionId, mapOf(keyId to macString), keyStrings)
         myMac = macMsg
         state = SasVerificationTxState.SendingMac
         sendToOther(EventType.KEY_VERIFICATION_MAC, macMsg, SasVerificationTxState.MacSent, CancelCode.User) {
@@ -176,25 +169,25 @@ internal abstract class SASVerificationTransaction(
         } // if not wait for it
     }
 
-    override fun acceptToDeviceEvent(senderId: String, event: SendToDeviceObject) {
-        when (event) {
-            is KeyVerificationStart  -> onVerificationStart(event)
-            is KeyVerificationAccept -> onVerificationAccept(event)
-            is KeyVerificationKey    -> onKeyVerificationKey(senderId, event)
-            is KeyVerificationMac    -> onKeyVerificationMac(event)
-            else                     -> {
+    override fun acceptVerificationEvent(senderId: String, info: VerificationInfo) {
+        when (info) {
+            is VerifInfoStart  -> onVerificationStart(info)
+            is VerifInfoAccept -> onVerificationAccept(info)
+            is VerifInfoKey    -> onKeyVerificationKey(senderId, info)
+            is VerifInfoMac    -> onKeyVerificationMac(info)
+            else               -> {
                 // nop
             }
         }
     }
 
-    abstract fun onVerificationStart(startReq: KeyVerificationStart)
+    abstract fun onVerificationStart(startReq: VerifInfoStart)
 
-    abstract fun onVerificationAccept(accept: KeyVerificationAccept)
+    abstract fun onVerificationAccept(accept: VerifInfoAccept)
 
-    abstract fun onKeyVerificationKey(userId: String, vKey: KeyVerificationKey)
+    abstract fun onKeyVerificationKey(userId: String, vKey: VerifInfoKey)
 
-    abstract fun onKeyVerificationMac(vKey: KeyVerificationMac)
+    abstract fun onKeyVerificationMac(vKey: VerifInfoMac)
 
     protected fun verifyMacs() {
         Timber.v("## SAS verifying macs for id:$transactionId")
@@ -245,7 +238,7 @@ internal abstract class SASVerificationTransaction(
         // if none of the keys could be verified, then error because the app
         // should be informed about that
         if (verifiedDevices.isEmpty()) {
-            Timber.e("Verification: No devices verified")
+            Timber.e("## SAS Verification: No devices verified")
             cancel(CancelCode.MismatchedKeys)
             return
         }
@@ -254,6 +247,7 @@ internal abstract class SASVerificationTransaction(
         verifiedDevices.forEach {
             setDeviceVerified(it, otherUserId)
         }
+        transport.done(transactionId)
         state = SasVerificationTxState.Verified
     }
 
@@ -270,41 +264,15 @@ internal abstract class SASVerificationTransaction(
     override fun cancel(code: CancelCode) {
         cancelledReason = code
         state = SasVerificationTxState.Cancelled
-        sasVerificationService.cancelTransaction(
-                transactionId,
-                otherUserId,
-                otherDeviceId ?: "",
-                code)
+        transport.cancelTransaction(transactionId, otherUserId, otherDeviceId ?: "", code)
     }
 
     protected fun sendToOther(type: String,
-                              keyToDevice: Any,
+                              keyToDevice: VerificationInfo,
                               nextState: SasVerificationTxState,
                               onErrorReason: CancelCode,
                               onDone: (() -> Unit)?) {
-        val contentMap = MXUsersDevicesMap<Any>()
-        contentMap.setObject(otherUserId, otherDeviceId, keyToDevice)
-
-        sendToDeviceTask
-                .configureWith(SendToDeviceTask.Params(type, contentMap, transactionId)) {
-                    this.callback = object : MatrixCallback<Unit> {
-                        override fun onSuccess(data: Unit) {
-                            Timber.v("## SAS verification [$transactionId] toDevice type '$type' success.")
-                            if (onDone != null) {
-                                onDone()
-                            } else {
-                                state = nextState
-                            }
-                        }
-
-                        override fun onFailure(failure: Throwable) {
-                            Timber.e("## SAS verification [$transactionId] failed to send toDevice in state : $state")
-
-                            cancel(onErrorReason)
-                        }
-                    }
-                }
-                .executeBy(taskExecutor)
+        transport.sendToOther(type, keyToDevice, nextState, onErrorReason, onDone)
     }
 
     fun getShortCodeRepresentation(shortAuthenticationStringMode: String): String? {

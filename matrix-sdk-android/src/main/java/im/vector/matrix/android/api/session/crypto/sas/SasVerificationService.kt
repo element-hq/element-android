@@ -16,18 +16,41 @@
 
 package im.vector.matrix.android.api.session.crypto.sas
 
+import im.vector.matrix.android.api.MatrixCallback
+
+/**
+ * https://matrix.org/docs/spec/client_server/r0.5.0#key-verification-framework
+ *
+ * Verifying keys manually by reading out the Ed25519 key is not very user friendly, and can lead to errors.
+ * SAS verification is a user-friendly key verification process.
+ * SAS verification is intended to be a highly interactive process for users,
+ * and as such exposes verification methods which are easier for users to use.
+ */
 interface SasVerificationService {
+
     fun addListener(listener: SasVerificationListener)
 
     fun removeListener(listener: SasVerificationListener)
 
+    /**
+     * Mark this device as verified manually
+     */
     fun markedLocallyAsManuallyVerified(userId: String, deviceID: String)
 
     fun getExistingTransaction(otherUser: String, tid: String): SasVerificationTransaction?
 
+    /**
+     * Shortcut for KeyVerificationStart.VERIF_METHOD_SAS
+     * @see beginKeyVerification
+     */
     fun beginKeyVerificationSAS(userId: String, deviceID: String): String?
 
+    /**
+     * Request a key verification from another user using toDevice events.
+     */
     fun beginKeyVerification(method: String, userId: String, deviceID: String): String?
+
+    fun requestKeyVerificationInDMs(userId: String, roomId: String, callback: MatrixCallback<String>?)
 
     // fun transactionUpdated(tx: SasVerificationTransaction)
 

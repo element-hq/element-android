@@ -17,14 +17,21 @@
 package im.vector.riotx.features.settings
 
 import im.vector.riotx.R
+import im.vector.riotx.core.preference.VectorSwitchPreference
+import javax.inject.Inject
 
-class VectorSettingsLabsFragment : VectorSettingsBaseFragment() {
+class VectorSettingsLabsFragment @Inject constructor(val vectorPreferences: VectorPreferences) : VectorSettingsBaseFragment() {
 
     override var titleRes = R.string.room_settings_labs_pref_title
     override val preferenceXmlRes = R.xml.vector_settings_labs
 
     override fun bindPref() {
         // Lab
+
+        findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_LABS_ALLOW_EXTENDED_LOGS)?.let {
+            it.isChecked = vectorPreferences.labAllowedExtendedLogging()
+        }
+
 //        val useCryptoPref = findPreference(VectorPreferences.SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_PREFERENCE_KEY) as SwitchPreference
 //        val cryptoIsEnabledPref = findPreference(VectorPreferences.SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_IS_ACTIVE_PREFERENCE_KEY)
 

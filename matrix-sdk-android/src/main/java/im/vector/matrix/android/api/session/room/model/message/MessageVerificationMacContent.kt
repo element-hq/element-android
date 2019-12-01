@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,23 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.matrix.android.internal.crypto.model.rest
+package im.vector.matrix.android.api.session.room.model.message
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import im.vector.matrix.android.api.session.events.model.RelationType
+import im.vector.matrix.android.api.session.events.model.toContent
+import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultContent
 import im.vector.matrix.android.internal.crypto.verification.VerifInfoMac
 import im.vector.matrix.android.internal.crypto.verification.VerifInfoMacFactory
 
-/**
- * Sent by both devices to send the MAC of their device key to the other device.
- */
 @JsonClass(generateAdapter = true)
-internal data class KeyVerificationMac(
-        @Json(name = "transaction_id") override val transactionID: String? = null,
+internal data class MessageVerificationMacContent(
         @Json(name = "mac") override val mac: Map<String, String>? = null,
-        @Json(name = "key") override val keys: String? = null
+        @Json(name = "keys") override val keys: String? = null,
+        @Json(name = "m.relates_to") val relatesTo: RelationDefaultContent?
+) : VerifInfoMac {
 
-) : SendToDeviceObject, VerifInfoMac {
+    override val transactionID: String?
+        get() = relatesTo?.eventId
+
+    override fun toEventContent() = this.toContent()
 
     override fun isValid(): Boolean {
         if (transactionID.isNullOrBlank() || keys.isNullOrBlank() || mac.isNullOrEmpty()) {
@@ -38,11 +42,16 @@ internal data class KeyVerificationMac(
         return true
     }
 
-    override fun toSendToDeviceObject(): SendToDeviceObject? = this
-
     companion object : VerifInfoMacFactory {
         override fun create(tid: String, mac: Map<String, String>, keys: String): VerifInfoMac {
-            return KeyVerificationMac(tid, mac, keys)
+            return MessageVerificationMacContent(
+                    mac,
+                    keys,
+                    RelationDefaultContent(
+                            RelationType.REFERENCE,
+                            tid
+                    )
+            )
         }
     }
 }

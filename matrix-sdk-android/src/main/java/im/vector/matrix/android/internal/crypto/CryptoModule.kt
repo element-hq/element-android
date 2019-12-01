@@ -178,6 +178,9 @@ internal abstract class CryptoModule {
     abstract fun bindSendToDeviceTask(sendToDeviceTask: DefaultSendToDeviceTask): SendToDeviceTask
 
     @Binds
+    abstract fun bindEncryptEventTask(encryptEventTask: DefaultEncryptEventTask): EncryptEventTask
+
+    @Binds
     abstract fun bindClaimOneTimeKeysForUsersDeviceTask(claimOneTimeKeysForUsersDevice: DefaultClaimOneTimeKeysForUsersDevice)
             : ClaimOneTimeKeysForUsersDeviceTask
 

@@ -209,6 +209,11 @@ interface FragmentModule {
 
     @Binds
     @IntoMap
+    @FragmentKey(VectorSettingsLabsFragment::class)
+    fun bindVectorSettingsLabsFragment(fragment: VectorSettingsLabsFragment): Fragment
+
+    @Binds
+    @IntoMap
     @FragmentKey(VectorSettingsPreferencesFragment::class)
     fun bindVectorSettingsPreferencesFragment(fragment: VectorSettingsPreferencesFragment): Fragment
 

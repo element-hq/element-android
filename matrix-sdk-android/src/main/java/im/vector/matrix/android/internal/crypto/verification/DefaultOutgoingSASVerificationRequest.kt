@@ -21,34 +21,22 @@ import im.vector.matrix.android.api.session.crypto.sas.OutgoingSasVerificationRe
 import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTxState
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
-import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationAccept
-import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationKey
-import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationMac
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationStart
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
-import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
-import im.vector.matrix.android.internal.task.TaskExecutor
-import im.vector.matrix.android.internal.util.JsonCanonicalizer
 import timber.log.Timber
 
-internal class OutgoingSASVerificationRequest(
-        private val sasVerificationService: DefaultSasVerificationService,
-        private val setDeviceVerificationAction: SetDeviceVerificationAction,
-        private val credentials: Credentials,
-        private val cryptoStore: IMXCryptoStore,
-        private val sendToDeviceTask: SendToDeviceTask,
-        private val taskExecutor: TaskExecutor,
+internal class DefaultOutgoingSASVerificationRequest(
+        setDeviceVerificationAction: SetDeviceVerificationAction,
+        credentials: Credentials,
+        cryptoStore: IMXCryptoStore,
         deviceFingerprint: String,
         transactionId: String,
         otherUserId: String,
-        otherDeviceId: String)
-    : SASVerificationTransaction(
-        sasVerificationService,
+        otherDeviceId: String
+) : SASVerificationTransaction(
         setDeviceVerificationAction,
         credentials,
         cryptoStore,
-        sendToDeviceTask,
-        taskExecutor,
         deviceFingerprint,
         transactionId,
         otherUserId,
@@ -78,14 +66,14 @@ internal class OutgoingSASVerificationRequest(
             }
         }
 
-    override fun onVerificationStart(startReq: KeyVerificationStart) {
-        Timber.e("## onVerificationStart - unexpected id:$transactionId")
+    override fun onVerificationStart(startReq: VerifInfoStart) {
+        Timber.e("## SAS O: onVerificationStart - unexpected id:$transactionId")
         cancel(CancelCode.UnexpectedMessage)
     }
 
     fun start() {
         if (state != SasVerificationTxState.None) {
-            Timber.e("## start verification from invalid state")
+            Timber.e("## SAS O: start verification from invalid state")
             // should I cancel??
             throw IllegalStateException("Interactive Key verification already started")
         }
@@ -111,10 +99,33 @@ internal class OutgoingSASVerificationRequest(
         )
     }
 
-    override fun onVerificationAccept(accept: KeyVerificationAccept) {
-        Timber.v("## onVerificationAccept id:$transactionId")
+//    fun request() {
+//        if (state != SasVerificationTxState.None) {
+//            Timber.e("## start verification from invalid state")
+//            // should I cancel??
+//            throw IllegalStateException("Interactive Key verification already started")
+//        }
+//
+//        val requestMessage = KeyVerificationRequest(
+//                fromDevice = session.sessionParams.credentials.deviceId ?: "",
+//                methods = listOf(KeyVerificationStart.VERIF_METHOD_SAS),
+//                timestamp = System.currentTimeMillis().toInt(),
+//                transactionID = transactionId
+//        )
+//
+//        sendToOther(
+//                EventType.KEY_VERIFICATION_REQUEST,
+//                requestMessage,
+//                SasVerificationTxState.None,
+//                CancelCode.User,
+//                null
+//        )
+//    }
+
+    override fun onVerificationAccept(accept: VerifInfoAccept) {
+        Timber.v("## SAS O: onVerificationAccept id:$transactionId")
         if (state != SasVerificationTxState.Started) {
-            Timber.e("## received accept request from invalid state $state")
+            Timber.e("## SAS O: received accept request from invalid state $state")
             cancel(CancelCode.UnexpectedMessage)
             return
         }
@@ -123,7 +134,7 @@ internal class OutgoingSASVerificationRequest(
                 || !KNOWN_HASHES.contains(accept.hash)
                 || !KNOWN_MACS.contains(accept.messageAuthenticationCode)
                 || accept.shortAuthenticationStrings!!.intersect(KNOWN_SHORT_CODES).isEmpty()) {
-            Timber.e("## received accept request from invalid state")
+            Timber.e("## SAS O: received accept request from invalid state")
             cancel(CancelCode.UnknownMethod)
             return
         }
@@ -137,7 +148,7 @@ internal class OutgoingSASVerificationRequest(
         // and replies with a to_device message with type set to “m.key.verification.key”, sending Alice’s public key QA
         val pubKey = getSAS().publicKey
 
-        val keyToDevice = KeyVerificationKey.create(transactionId, pubKey)
+        val keyToDevice = transport.createKey(transactionId, pubKey)
         // we need to send this to other device now
         state = SasVerificationTxState.SendingKey
         sendToOther(EventType.KEY_VERIFICATION_KEY, keyToDevice, SasVerificationTxState.KeySent, CancelCode.User) {
@@ -148,8 +159,8 @@ internal class OutgoingSASVerificationRequest(
         }
     }
 
-    override fun onKeyVerificationKey(userId: String, vKey: KeyVerificationKey) {
-        Timber.v("## onKeyVerificationKey id:$transactionId")
+    override fun onKeyVerificationKey(userId: String, vKey: VerifInfoKey) {
+        Timber.v("## SAS O: onKeyVerificationKey id:$transactionId")
         if (state != SasVerificationTxState.SendingKey && state != SasVerificationTxState.KeySent) {
             Timber.e("## received key from invalid state $state")
             cancel(CancelCode.UnexpectedMessage)
@@ -163,7 +174,7 @@ internal class OutgoingSASVerificationRequest(
         // in Bob’s m.key.verification.key and the content of Alice’s m.key.verification.start message.
 
         // check commitment
-        val concat = vKey.key + JsonCanonicalizer.getCanonicalJson(KeyVerificationStart::class.java, startReq!!)
+        val concat = vKey.key + startReq!!.toCanonicalJson()
         val otherCommitment = hashUsingAgreedHashMethod(concat) ?: ""
 
         if (accepted!!.commitment.equals(otherCommitment)) {
@@ -190,14 +201,14 @@ internal class OutgoingSASVerificationRequest(
         }
     }
 
-    override fun onKeyVerificationMac(vKey: KeyVerificationMac) {
-        Timber.v("## onKeyVerificationMac id:$transactionId")
+    override fun onKeyVerificationMac(vKey: VerifInfoMac) {
+        Timber.v("## SAS O: onKeyVerificationMac id:$transactionId")
         if (state != SasVerificationTxState.OnKeyReceived
                 && state != SasVerificationTxState.ShortCodeReady
                 && state != SasVerificationTxState.ShortCodeAccepted
                 && state != SasVerificationTxState.SendingMac
                 && state != SasVerificationTxState.MacSent) {
-            Timber.e("## received key from invalid state $state")
+            Timber.e("## SAS O: received key from invalid state $state")
             cancel(CancelCode.UnexpectedMessage)
             return
         }
