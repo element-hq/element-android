@@ -23,6 +23,7 @@ import android.net.Uri
 import android.provider.MediaStore
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
+import im.vector.riotx.BuildConfig
 import im.vector.riotx.R
 import im.vector.riotx.features.homeserver.ServerUrlsRepository
 import im.vector.riotx.features.themes.ThemeUtils
@@ -256,7 +257,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     }
 
     fun labAllowedExtendedLogging(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_LABS_ALLOW_EXTENDED_LOGS, false)
+        return defaultPrefs.getBoolean(SETTINGS_LABS_ALLOW_EXTENDED_LOGS, BuildConfig.DEBUG)
     }
 
     /**

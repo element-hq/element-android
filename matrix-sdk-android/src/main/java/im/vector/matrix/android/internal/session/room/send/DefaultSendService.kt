@@ -157,7 +157,8 @@ internal class DefaultSendService @AssistedInject constructor(@Assisted private 
 
     override fun deleteFailedEcho(localEcho: TimelineEvent) {
         monarchy.writeAsync { realm ->
-            TimelineEventEntity.where(realm, roomId = roomId, eventId = localEcho.root.eventId ?: "").findFirst()?.let {
+            TimelineEventEntity.where(realm, roomId = roomId, eventId = localEcho.root.eventId
+                    ?: "").findFirst()?.let {
                 it.deleteFromRealm()
             }
             EventEntity.where(realm, eventId = localEcho.root.eventId ?: "").findFirst()?.let {

@@ -12,6 +12,8 @@
     <string name="room_list_quick_actions_leave">"Leave the room"</string>
     <string name="notice_member_no_changes">"%1$s made no changes"</string>
     <string name="command_description_spoiler">Sends the given message as a spoiler</string>
+    <string name="command_description_verify">Request to verify the given userID</string>
+    <string name="command_description_shrug">Prepends ¯\\_(ツ)_/¯ to a plain-text message</string>
     <string name="spoiler">Spoiler</string>
     <string name="reaction_search_type_hint">Type keywords to find a reaction.</string>
 

@@ -17,7 +17,7 @@
 package im.vector.matrix.android.api.session.crypto.sas
 
 interface SasVerificationTransaction {
-    val state: SasVerificationTxState
+    var state: SasVerificationTxState
 
     val cancelledReason: CancelCode?
 
