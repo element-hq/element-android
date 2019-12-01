@@ -20,8 +20,8 @@ import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.session.events.model.RelationType
 import im.vector.matrix.android.api.session.events.model.toContent
 import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultContent
-import im.vector.matrix.android.internal.crypto.verification.VerificationInfoKey
-import im.vector.matrix.android.internal.crypto.verification.VerificationInfoKeyFactory
+import im.vector.matrix.android.internal.crypto.verification.VerifInfoKey
+import im.vector.matrix.android.internal.crypto.verification.KeyVerifInfoFactory
 import timber.log.Timber
 
 @JsonClass(generateAdapter = true)
@@ -31,7 +31,7 @@ internal data class MessageVerificationKeyContent(
          */
         @Json(name = "key") override val key: String? = null,
         @Json(name = "m.relates_to") val relatesTo: RelationDefaultContent?
-) : VerificationInfoKey {
+) : VerifInfoKey {
 
     override val transactionID: String?
         get() = relatesTo?.eventId
@@ -46,9 +46,9 @@ internal data class MessageVerificationKeyContent(
 
     override fun toEventContent() = this.toContent()
 
-    companion object : VerificationInfoKeyFactory {
+    companion object : KeyVerifInfoFactory {
 
-        override fun create(tid: String, pubKey: String): VerificationInfoKey {
+        override fun create(tid: String, pubKey: String): VerifInfoKey {
             return MessageVerificationKeyContent(
                     pubKey,
                     RelationDefaultContent(

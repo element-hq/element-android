@@ -21,12 +21,12 @@ import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultContent
 
 @JsonClass(generateAdapter = true)
-data class MessageVerificationRequestContent(
+class MessageVerificationRequestContent(
         @Json(name = "msgtype") override val type: String = MessageType.MSGTYPE_VERIFICATION_REQUEST,
         @Json(name = "body") override val body: String,
         @Json(name = "from_device") val fromDevice: String,
         @Json(name = "methods") val methods: List<String>,
-        @Json(name = "to") val toUserId: String,
+        @Json(name = "to") val to: String,
         // @Json(name = "timestamp") val timestamp: Int,
         @Json(name = "format") val format: String? = null,
         @Json(name = "formatted_body") val formattedBody: String? = null,

@@ -21,7 +21,7 @@ import im.vector.matrix.android.api.session.crypto.sas.CancelCode
 import im.vector.matrix.android.api.session.events.model.RelationType
 import im.vector.matrix.android.api.session.events.model.toContent
 import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultContent
-import im.vector.matrix.android.internal.crypto.verification.VerificationInfoCancel
+import im.vector.matrix.android.internal.crypto.verification.VerifInfoCancel
 
 @JsonClass(generateAdapter = true)
 internal data class MessageVerificationCancelContent(
@@ -29,7 +29,7 @@ internal data class MessageVerificationCancelContent(
         @Json(name = "reason") override val reason: String? = null,
         @Json(name = "m.relates_to") val relatesTo: RelationDefaultContent?
 
-) : VerificationInfoCancel {
+) : VerifInfoCancel {
 
     override val transactionID: String?
         get() = relatesTo?.eventId
