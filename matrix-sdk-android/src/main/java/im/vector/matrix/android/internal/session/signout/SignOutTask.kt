@@ -17,6 +17,7 @@
 package im.vector.matrix.android.internal.session.signout
 
 import android.content.Context
+import im.vector.matrix.android.BuildConfig
 import im.vector.matrix.android.internal.SessionManager
 import im.vector.matrix.android.internal.auth.SessionParamsStore
 import im.vector.matrix.android.internal.crypto.CryptoModule
@@ -27,6 +28,8 @@ import im.vector.matrix.android.internal.session.SessionModule
 import im.vector.matrix.android.internal.session.cache.ClearCacheTask
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.worker.WorkManagerUtil
+import io.realm.Realm
+import io.realm.RealmConfiguration
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
@@ -42,6 +45,8 @@ internal class DefaultSignOutTask @Inject constructor(private val context: Conte
                                                       @CryptoDatabase private val clearCryptoDataTask: ClearCacheTask,
                                                       @UserCacheDirectory private val userFile: File,
                                                       private val realmKeysUtils: RealmKeysUtils,
+                                                      @SessionDatabase private val realmSessionConfiguration: RealmConfiguration,
+                                                      @CryptoDatabase private val realmCryptoConfiguration: RealmConfiguration,
                                                       @UserMd5 private val userMd5: String) : SignOutTask {
 
     override suspend fun execute(params: Unit) {
@@ -71,5 +76,15 @@ internal class DefaultSignOutTask @Inject constructor(private val context: Conte
         Timber.d("SignOut: clear the database keys")
         realmKeysUtils.clear(SessionModule.DB_ALIAS_PREFIX + userMd5)
         realmKeysUtils.clear(CryptoModule.DB_ALIAS_PREFIX + userMd5)
+
+        // Sanity check
+        if (BuildConfig.DEBUG) {
+            Realm.getGlobalInstanceCount(realmSessionConfiguration)
+                    .takeIf { it > 0 }
+                    ?.let { Timber.e("All realm instance for session has not been closed ($it)") }
+            Realm.getGlobalInstanceCount(realmCryptoConfiguration)
+                    .takeIf { it > 0 }
+                    ?.let { Timber.e("All realm instance for crypto has not been closed ($it)") }
+        }
     }
 }
