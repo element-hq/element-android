@@ -41,8 +41,7 @@ internal fun RoomEntity.addStateEvent(stateEvent: Event,
                                       stateIndex: Int = Int.MIN_VALUE,
                                       filterDuplicates: Boolean = false,
                                       isUnlinked: Boolean = false) {
-    assertIsManaged()
-    if (stateEvent.eventId == null || (filterDuplicates && fastContains(stateEvent.eventId))) {
+    if (stateEvent.eventId == null || (filterDuplicates && untimelinedStateEvents.fastContains(stateEvent.eventId))) {
         return
     } else {
         val entity = stateEvent.toEntity(roomId).apply {
@@ -53,6 +52,7 @@ internal fun RoomEntity.addStateEvent(stateEvent: Event,
         untimelinedStateEvents.add(entity)
     }
 }
+
 internal fun RoomEntity.addSendingEvent(event: Event) {
     assertIsManaged()
     val senderId = event.senderId ?: return

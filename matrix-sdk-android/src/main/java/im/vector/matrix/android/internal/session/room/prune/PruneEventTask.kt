@@ -94,12 +94,6 @@ internal class DefaultPruneEventTask @Inject constructor(private val monarchy: M
 //                }
             }
         }
-        if (eventToPrune.type == EventType.STATE_ROOM_MEMBER) {
-            val timelineEventsToUpdate = TimelineEventEntity.findWithSenderMembershipEvent(realm, eventToPrune.eventId)
-            for (timelineEvent in timelineEventsToUpdate) {
-                timelineEvent.updateSenderData()
-            }
-        }
     }
 
     private fun computeAllowedKeys(type: String): List<String> {

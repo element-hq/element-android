@@ -26,6 +26,7 @@ import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
 import im.vector.matrix.android.internal.session.sync.SyncTask
+import im.vector.matrix.android.internal.task.TaskConstraints
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.TaskThread
 import im.vector.matrix.android.internal.task.configureWith
@@ -108,6 +109,7 @@ open class SyncService : Service() {
                     .configureWith(params) {
                         callbackThread = TaskThread.SYNC
                         executionThread = TaskThread.SYNC
+                        constraints = TaskConstraints(connectedToNetwork = true)
                         callback = object : MatrixCallback<Unit> {
                             override fun onSuccess(data: Unit) {
                                 cancelableTask = null

@@ -55,6 +55,8 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
                                                    private val roomTagHandler: RoomTagHandler,
                                                    private val roomFullyReadHandler: RoomFullyReadHandler,
                                                    private val cryptoService: DefaultCryptoService,
+                                                   private val roomEntityFactory: RoomEntityFactory,
+                                                   private val chunkEntityFactory: ChunkEntityFactory,
                                                    private val tokenStore: SyncTokenStore,
                                                    private val pushRuleService: DefaultPushRuleService,
                                                    private val processForPushTask: ProcessEventForPushTask,
@@ -100,7 +102,7 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
                 }
             is HandlingStrategy.INVITED ->
                 handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_invited_rooms, 0.1f) {
-                    handleInvitedRoom(realm, it.key, it.value)
+                    handleInvitedRoom(realm, it.key, it.value, isInitialSync)
                 }
 
             is HandlingStrategy.LEFT    -> {
@@ -117,65 +119,18 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
                                  roomSync: RoomSync,
                                  isInitialSync: Boolean): RoomEntity {
         Timber.v("Handle join sync for room $roomId")
-
-        if (roomSync.ephemeral != null && roomSync.ephemeral.events.isNotEmpty()) {
-            handleEphemeral(realm, roomId, roomSync.ephemeral, isInitialSync)
-        }
-
-        if (roomSync.accountData != null && roomSync.accountData.events.isNullOrEmpty().not()) {
-            handleRoomAccountDataEvents(realm, roomId, roomSync.accountData)
-        }
-
-        val roomEntity = RoomEntity.where(realm, roomId).findFirst() ?: realm.createObject(roomId)
-
-        if (roomEntity.membership == Membership.INVITE) {
-            roomEntity.chunks.deleteAllFromRealm()
-        }
-        roomEntity.membership = Membership.JOIN
-
-        // State event
-
-        if (roomSync.state != null && roomSync.state.events.isNotEmpty()) {
-            val minStateIndex = roomEntity.untimelinedStateEvents.where().min(EventEntityFields.STATE_INDEX)?.toInt()
-                                ?: Int.MIN_VALUE
-            val untimelinedStateIndex = minStateIndex + 1
-            roomSync.state.events.forEach { event ->
-                roomEntity.addStateEvent(event, filterDuplicates = true, stateIndex = untimelinedStateIndex)
-                // Give info to crypto module
-                cryptoService.onStateEvent(roomId, event)
-                UserEntityFactory.createOrNull(event)?.also {
-                    realm.insertOrUpdate(it)
-                }
-            }
-        }
-        if (roomSync.timeline != null && roomSync.timeline.events.isNotEmpty()) {
-            val chunkEntity = handleTimelineEvents(
-                    realm,
-                    roomEntity,
-                    roomSync.timeline.events,
-                    roomSync.timeline.prevToken,
-                    roomSync.timeline.limited
-            )
-            roomEntity.addOrUpdate(chunkEntity)
-        }
-        val hasRoomMember = roomSync.state?.events?.firstOrNull {
-            it.type == EventType.STATE_ROOM_MEMBER
-        } != null || roomSync.timeline?.events?.firstOrNull {
-            it.type == EventType.STATE_ROOM_MEMBER
-        } != null
-
-        roomSummaryUpdater.update(realm, roomId, Membership.JOIN, roomSync.summary, roomSync.unreadNotifications, updateMembers = hasRoomMember)
-        return roomEntity
+        return roomEntityFactory.create(realm, roomId, roomSync, Membership.JOIN, isInitialSync)
     }
 
     private fun handleInvitedRoom(realm: Realm,
                                   roomId: String,
-                                  roomSync: InvitedRoomSync): RoomEntity {
+                                  roomSync: InvitedRoomSync,
+                                  isInitialSync: Boolean): RoomEntity {
         Timber.v("Handle invited sync for room $roomId")
         val roomEntity = RoomEntity.where(realm, roomId).findFirst() ?: realm.createObject(roomId)
         roomEntity.membership = Membership.INVITE
         if (roomSync.inviteState != null && roomSync.inviteState.events.isNotEmpty()) {
-            val chunkEntity = handleTimelineEvents(realm, roomEntity, roomSync.inviteState.events)
+            val chunkEntity = chunkEntityFactory.create(realm, roomId, roomSync.inviteState.events, isInitialSync = isInitialSync)
             roomEntity.addOrUpdate(chunkEntity)
         }
         val hasRoomMember = roomSync.inviteState?.events?.firstOrNull {
@@ -196,70 +151,4 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
         return roomEntity
     }
 
-    private fun handleTimelineEvents(realm: Realm,
-                                     roomEntity: RoomEntity,
-                                     eventList: List<Event>,
-                                     prevToken: String? = null,
-                                     isLimited: Boolean = true): ChunkEntity {
-        val lastChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomEntity.roomId)
-        var stateIndexOffset = 0
-        val chunkEntity = if (!isLimited && lastChunk != null) {
-            lastChunk
-        } else {
-            realm.createObject<ChunkEntity>().apply { this.prevToken = prevToken }
-        }
-        if (isLimited && lastChunk != null) {
-            stateIndexOffset = lastChunk.lastStateIndex(PaginationDirection.FORWARDS)
-        }
-        lastChunk?.isLastForward = false
-        chunkEntity.isLastForward = true
-
-        val eventIds = ArrayList<String>(eventList.size)
-        for (event in eventList) {
-            event.eventId?.also { eventIds.add(it) }
-            chunkEntity.add(roomEntity.roomId, event, PaginationDirection.FORWARDS, stateIndexOffset)
-            // Give info to crypto module
-            cryptoService.onLiveEvent(roomEntity.roomId, event)
-            // Try to remove local echo
-            event.unsignedData?.transactionId?.also {
-                val sendingEventEntity = roomEntity.sendingTimelineEvents.find(it)
-                if (sendingEventEntity != null) {
-                    Timber.v("Remove local echo for tx:$it")
-                    roomEntity.sendingTimelineEvents.remove(sendingEventEntity)
-                } else {
-                    Timber.v("Can't find corresponding local echo for tx:$it")
-                }
-            }
-            UserEntityFactory.createOrNull(event)?.also {
-                realm.insertOrUpdate(it)
-            }
-        }
-        chunkEntity.updateSenderDataFor(eventIds)
-        return chunkEntity
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    private fun handleEphemeral(realm: Realm,
-                                roomId: String,
-                                ephemeral: RoomSyncEphemeral,
-                                isInitialSync: Boolean) {
-        for (event in ephemeral.events) {
-            if (event.type != EventType.RECEIPT) continue
-            val readReceiptContent = event.content as? ReadReceiptContent ?: continue
-            readReceiptHandler.handle(realm, roomId, readReceiptContent, isInitialSync)
-        }
-    }
-
-    private fun handleRoomAccountDataEvents(realm: Realm, roomId: String, accountData: RoomSyncAccountData) {
-        for (event in accountData.events) {
-            val eventType = event.getClearType()
-            if (eventType == EventType.TAG) {
-                val content = event.getClearContent().toModel<RoomTagContent>()
-                roomTagHandler.handle(realm, roomId, content)
-            } else if (eventType == EventType.FULLY_READ) {
-                val content = event.getClearContent().toModel<FullyReadContent>()
-                roomFullyReadHandler.handle(realm, roomId, content)
-            }
-        }
-    }
 }

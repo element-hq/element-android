@@ -70,9 +70,6 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(private val roomAP
                     realm.insertOrUpdate(it)
                 }
             }
-            roomEntity.chunks.flatMap { it.timelineEvents }.forEach {
-                it.updateSenderData()
-            }
             roomEntity.areAllMembersLoaded = true
             roomSummaryUpdater.update(realm, roomId, updateMembers = true)
         }
