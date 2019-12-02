@@ -22,6 +22,8 @@ import im.vector.matrix.android.internal.database.awaitTransaction
 import im.vector.matrix.android.internal.di.AuthDatabase
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import io.realm.exceptions.RealmPrimaryKeyConstraintException
+import timber.log.Timber
 import javax.inject.Inject
 
 internal class RealmSessionParamsStore @Inject constructor(private val mapper: SessionParamsMapper,
@@ -63,7 +65,12 @@ internal class RealmSessionParamsStore @Inject constructor(private val mapper: S
         awaitTransaction(realmConfiguration) {
             val entity = mapper.map(sessionParams)
             if (entity != null) {
-                it.insert(entity)
+                try {
+                    it.insert(entity)
+                } catch (e: RealmPrimaryKeyConstraintException) {
+                    Timber.e(e, "Something wrong happened during previous session creation. Override with new credentials")
+                    it.insertOrUpdate(entity)
+                }
             }
         }
     }
