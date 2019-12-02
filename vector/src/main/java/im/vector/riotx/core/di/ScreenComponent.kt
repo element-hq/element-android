@@ -32,8 +32,8 @@ import im.vector.riotx.features.home.room.detail.timeline.action.MessageActionsB
 import im.vector.riotx.features.home.room.detail.timeline.edithistory.ViewEditHistoryBottomSheet
 import im.vector.riotx.features.home.room.detail.timeline.reactions.ViewReactionsBottomSheet
 import im.vector.riotx.features.home.room.filtered.FilteredRoomsActivity
-import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsBottomSheet
 import im.vector.riotx.features.home.room.list.RoomListModule
+import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsBottomSheet
 import im.vector.riotx.features.invite.VectorInviteView
 import im.vector.riotx.features.link.LinkHandlerActivity
 import im.vector.riotx.features.login.LoginActivity
@@ -47,7 +47,7 @@ import im.vector.riotx.features.reactions.EmojiReactionPickerActivity
 import im.vector.riotx.features.reactions.widget.ReactionButton
 import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomActivity
-import im.vector.riotx.features.settings.*
+import im.vector.riotx.features.settings.VectorSettingsActivity
 import im.vector.riotx.features.share.IncomingShareActivity
 import im.vector.riotx.features.ui.UiStateRepository
 

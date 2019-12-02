@@ -16,7 +16,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/roomFilterFooterCreateRoom"
-        style="@style/VectorButtonStyleFlat"
+        style="@style/VectorButtonStyleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -25,7 +25,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/roomFilterFooterCreateDirect"
-        style="@style/VectorButtonStyleFlat"
+        style="@style/VectorButtonStyleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -33,7 +33,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/roomFilterFooterOpenRoomDirectory"
-        style="@style/VectorButtonStyleFlat"
+        style="@style/VectorButtonStyleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

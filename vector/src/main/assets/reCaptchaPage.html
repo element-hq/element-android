@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript">
+      var verifyCallback = function(response) {
+        var iframe = document.createElement('iframe');
+        iframe.setAttribute('src', 'js:' + JSON.stringify({'action': 'verifyCallback', 'response': response}));
+        document.documentElement.appendChild(iframe);
+        iframe.parentNode.removeChild(iframe);
+        iframe = null;
+      };
+
+      var onloadCallback = function() {
+        grecaptcha.render('recaptcha_widget', { 'sitekey' : '%s', 'callback': verifyCallback });
+      };
+    </script>
+</head>
+<body>
+<div id="recaptcha_widget"></div>
+<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
+</body>
+</html>

@@ -36,7 +36,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/sas_cancel_button"
-                style="@style/VectorButtonStyleFlat"
+                style="@style/VectorButtonStyleText"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
                 android:text="@string/cancel" />
@@ -68,7 +68,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/sas_legacy_verification"
-            style="@style/VectorButtonStyleFlat"
+            style="@style/VectorButtonStyleText"
             android:layout_gravity="end"
             android:layout_margin="@dimen/layout_horizontal_margin"
             android:text="@string/sas_legacy_verification_button_title"

@@ -16,34 +16,38 @@
 
 package im.vector.riotx.features.login
 
+import android.os.Build
 import android.os.Bundle
 import android.view.View
-import android.view.inputmethod.EditorInfo
-import android.widget.Toast
+import androidx.autofill.HintConstants
 import androidx.core.view.isVisible
-import androidx.transition.TransitionManager
-import com.airbnb.mvrx.*
-import com.jakewharton.rxbinding3.view.focusChanges
+import butterknife.OnClick
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.Success
 import com.jakewharton.rxbinding3.widget.textChanges
+import im.vector.matrix.android.api.failure.Failure
+import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.riotx.R
-import im.vector.riotx.core.extensions.setTextWithColoredPart
+import im.vector.riotx.core.error.ErrorFormatter
+import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.extensions.showPassword
-import im.vector.riotx.core.platform.VectorBaseFragment
-import im.vector.riotx.core.utils.openUrlInExternalBrowser
-import im.vector.riotx.features.homeserver.ServerUrlsRepository
 import io.reactivex.Observable
-import io.reactivex.functions.Function3
+import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.fragment_login.*
 import javax.inject.Inject
 
 /**
- * What can be improved:
- * - When filtering more (when entering new chars), we could filter on result we already have, during the new server request, to avoid empty screen effect
+ * In this screen, in signin mode:
+ * - the user is asked for login and password to sign in to a homeserver.
+ * - He also can reset his password
+ * In signup mode:
+ * - the user is asked for login and password
  */
-class LoginFragment @Inject constructor() : VectorBaseFragment() {
-
-    private val viewModel: LoginViewModel by activityViewModel()
+class LoginFragment @Inject constructor(
+        private val errorFormatter: ErrorFormatter
+) : AbstractLoginFragment() {
 
     private var passwordShown = false
 
@@ -52,69 +56,101 @@ class LoginFragment @Inject constructor() : VectorBaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupNotice()
-        setupAuthButton()
+        setupSubmitButton()
         setupPasswordReveal()
+    }
 
-        homeServerField.focusChanges()
-                .subscribe {
-                    if (!it) {
-                        viewModel.handle(LoginAction.UpdateHomeServer(homeServerField.text.toString()))
-                    }
+    private fun setupAutoFill(state: LoginViewState) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            when (state.signMode) {
+                SignMode.Unknown -> error("developer error")
+                SignMode.SignUp  -> {
+                    loginField.setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_USERNAME)
+                    passwordField.setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_PASSWORD)
                 }
-                .disposeOnDestroyView()
-
-        homeServerField.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                viewModel.handle(LoginAction.UpdateHomeServer(homeServerField.text.toString()))
-                return@setOnEditorActionListener true
+                SignMode.SignIn  -> {
+                    loginField.setAutofillHints(HintConstants.AUTOFILL_HINT_USERNAME)
+                    passwordField.setAutofillHints(HintConstants.AUTOFILL_HINT_PASSWORD)
+                }
             }
-            return@setOnEditorActionListener false
-        }
-
-        val initHsUrl = viewModel.getInitialHomeServerUrl()
-        if (initHsUrl != null) {
-            homeServerField.setText(initHsUrl)
-        } else {
-            homeServerField.setText(ServerUrlsRepository.getDefaultHomeServerUrl(requireContext()))
-        }
-        viewModel.handle(LoginAction.UpdateHomeServer(homeServerField.text.toString()))
-    }
-
-    private fun setupNotice() {
-        riotx_no_registration_notice.setTextWithColoredPart(R.string.riotx_no_registration_notice, R.string.riotx_no_registration_notice_colored_part)
-
-        riotx_no_registration_notice.setOnClickListener {
-            openUrlInExternalBrowser(requireActivity(), "https://about.riot.im/downloads")
         }
     }
 
-    private fun authenticate() {
-        val login = loginField.text?.trim().toString()
-        val password = passwordField.text?.trim().toString()
+    @OnClick(R.id.loginSubmit)
+    fun submit() {
+        cleanupUi()
 
-        viewModel.handle(LoginAction.Login(login, password))
+        val login = loginField.text.toString()
+        val password = passwordField.text.toString()
+
+        loginViewModel.handle(LoginAction.LoginOrRegister(login, password, getString(R.string.login_mobile_device)))
     }
 
-    private fun setupAuthButton() {
+    private fun cleanupUi() {
+        loginSubmit.hideKeyboard()
+        loginFieldTil.error = null
+        passwordFieldTil.error = null
+    }
+
+    private fun setupUi(state: LoginViewState) {
+        val resId = when (state.signMode) {
+            SignMode.Unknown -> error("developer error")
+            SignMode.SignUp  -> R.string.login_signup_to
+            SignMode.SignIn  -> R.string.login_connect_to
+        }
+
+        when (state.serverType) {
+            ServerType.MatrixOrg -> {
+                loginServerIcon.isVisible = true
+                loginServerIcon.setImageResource(R.drawable.ic_logo_matrix_org)
+                loginTitle.text = getString(resId, state.homeServerUrlSimple)
+                loginNotice.text = getString(R.string.login_server_matrix_org_text)
+            }
+            ServerType.Modular   -> {
+                loginServerIcon.isVisible = true
+                loginServerIcon.setImageResource(R.drawable.ic_logo_modular)
+                // TODO
+                loginTitle.text = getString(resId, "TODO")
+                loginNotice.text = getString(R.string.login_server_modular_text)
+            }
+            ServerType.Other     -> {
+                loginServerIcon.isVisible = false
+                loginTitle.text = getString(resId, state.homeServerUrlSimple)
+                loginNotice.text = getString(R.string.login_server_other_text)
+            }
+        }
+    }
+
+    private fun setupButtons(state: LoginViewState) {
+        forgetPasswordButton.isVisible = state.signMode == SignMode.SignIn
+
+        loginSubmit.text = getString(when (state.signMode) {
+            SignMode.Unknown -> error("developer error")
+            SignMode.SignUp  -> R.string.login_signup_submit
+            SignMode.SignIn  -> R.string.login_signin
+        })
+    }
+
+    private fun setupSubmitButton() {
         Observable
                 .combineLatest(
                         loginField.textChanges().map { it.trim().isNotEmpty() },
                         passwordField.textChanges().map { it.trim().isNotEmpty() },
-                        homeServerField.textChanges().map { it.trim().isNotEmpty() },
-                        Function3<Boolean, Boolean, Boolean, Boolean> { isLoginNotEmpty, isPasswordNotEmpty, isHomeServerNotEmpty ->
-                            isLoginNotEmpty && isPasswordNotEmpty && isHomeServerNotEmpty
+                        BiFunction<Boolean, Boolean, Boolean> { isLoginNotEmpty, isPasswordNotEmpty ->
+                            isLoginNotEmpty && isPasswordNotEmpty
                         }
                 )
-                .subscribeBy { authenticateButton.isEnabled = it }
+                .subscribeBy {
+                    loginFieldTil.error = null
+                    passwordFieldTil.error = null
+                    loginSubmit.isEnabled = it
+                }
                 .disposeOnDestroyView()
-        authenticateButton.setOnClickListener { authenticate() }
-
-        authenticateButtonSso.setOnClickListener { openSso() }
     }
 
-    private fun openSso() {
-        viewModel.handle(LoginAction.NavigateTo(LoginActivity.Navigation.OpenSsoLoginFallback))
+    @OnClick(R.id.forgetPasswordButton)
+    fun forgetPasswordClicked() {
+        loginSharedActionViewModel.post(LoginNavigation.OnForgetPasswordClicked)
     }
 
     private fun setupPasswordReveal() {
@@ -141,73 +177,47 @@ class LoginFragment @Inject constructor() : VectorBaseFragment() {
         }
     }
 
-    override fun invalidate() = withState(viewModel) { state ->
-        TransitionManager.beginDelayedTransition(login_fragment)
+    override fun resetViewModel() {
+        loginViewModel.handle(LoginAction.ResetLogin)
+    }
 
-        when (state.asyncHomeServerLoginFlowRequest) {
-            is Incomplete -> {
-                progressBar.isVisible = true
-                touchArea.isVisible = true
-                loginField.isVisible = false
-                passwordContainer.isVisible = false
-                authenticateButton.isVisible = false
-                authenticateButtonSso.isVisible = false
-                passwordShown = false
-                renderPasswordField()
-            }
-            is Fail       -> {
-                progressBar.isVisible = false
-                touchArea.isVisible = false
-                loginField.isVisible = false
-                passwordContainer.isVisible = false
-                authenticateButton.isVisible = false
-                authenticateButtonSso.isVisible = false
-                Toast.makeText(requireActivity(), "Authenticate failure: ${state.asyncHomeServerLoginFlowRequest.error}", Toast.LENGTH_LONG).show()
-            }
-            is Success    -> {
-                progressBar.isVisible = false
-                touchArea.isVisible = false
+    override fun onError(throwable: Throwable) {
+        loginFieldTil.error = errorFormatter.toHumanReadable(throwable)
+    }
 
-                when (state.asyncHomeServerLoginFlowRequest()) {
-                    LoginMode.Password    -> {
-                        loginField.isVisible = true
-                        passwordContainer.isVisible = true
-                        authenticateButton.isVisible = true
-                        authenticateButtonSso.isVisible = false
-                        if (loginField.text.isNullOrBlank() && passwordField.text.isNullOrBlank()) {
-                            // Jump focus to login
-                            loginField.requestFocus()
-                        }
-                    }
-                    LoginMode.Sso         -> {
-                        loginField.isVisible = false
-                        passwordContainer.isVisible = false
-                        authenticateButton.isVisible = false
-                        authenticateButtonSso.isVisible = true
-                    }
-                    LoginMode.Unsupported -> {
-                        loginField.isVisible = false
-                        passwordContainer.isVisible = false
-                        authenticateButton.isVisible = false
-                        authenticateButtonSso.isVisible = false
-                        Toast.makeText(requireActivity(), "None of the homeserver login mode is supported by RiotX", Toast.LENGTH_LONG).show()
-                    }
-                }
-            }
-        }
+    override fun updateWithState(state: LoginViewState) {
+        setupUi(state)
+        setupAutoFill(state)
+        setupButtons(state)
 
         when (state.asyncLoginAction) {
             is Loading -> {
-                progressBar.isVisible = true
-                touchArea.isVisible = true
-
+                // Ensure password is hidden
                 passwordShown = false
                 renderPasswordField()
             }
             is Fail    -> {
-                progressBar.isVisible = false
-                touchArea.isVisible = false
-                Toast.makeText(requireActivity(), "Authenticate failure: ${state.asyncLoginAction.error}", Toast.LENGTH_LONG).show()
+                val error = state.asyncLoginAction.error
+                if (error is Failure.ServerError
+                        && error.error.code == MatrixError.FORBIDDEN
+                        && error.error.message.isEmpty()) {
+                    // Login with email, but email unknown
+                    loginFieldTil.error = getString(R.string.login_login_with_email_error)
+                } else {
+                    // Trick to display the error without text.
+                    loginFieldTil.error = " "
+                    passwordFieldTil.error = errorFormatter.toHumanReadable(state.asyncLoginAction.error)
+                }
+            }
+            // Success is handled by the LoginActivity
+            is Success -> Unit
+        }
+
+        when (state.asyncRegistration) {
+            is Loading -> {
+                // Ensure password is hidden
+                passwordShown = false
+                renderPasswordField()
             }
             // Success is handled by the LoginActivity
             is Success -> Unit

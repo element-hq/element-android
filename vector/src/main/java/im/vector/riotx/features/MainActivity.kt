@@ -21,9 +21,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import com.bumptech.glide.Glide
-import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.auth.Authenticator
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.di.ScreenComponent
@@ -56,8 +54,6 @@ class MainActivity : VectorBaseActivity() {
         }
     }
 
-    @Inject lateinit var matrix: Matrix
-    @Inject lateinit var authenticator: Authenticator
     @Inject lateinit var sessionHolder: ActiveSessionHolder
     @Inject lateinit var errorFormatter: ErrorFormatter
 

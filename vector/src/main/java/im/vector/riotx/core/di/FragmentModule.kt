@@ -35,8 +35,8 @@ import im.vector.riotx.features.home.createdirect.CreateDirectRoomKnownUsersFrag
 import im.vector.riotx.features.home.group.GroupListFragment
 import im.vector.riotx.features.home.room.detail.RoomDetailFragment
 import im.vector.riotx.features.home.room.list.RoomListFragment
-import im.vector.riotx.features.login.LoginFragment
-import im.vector.riotx.features.login.LoginSsoFallbackFragment
+import im.vector.riotx.features.login.*
+import im.vector.riotx.features.login.terms.LoginTermsFragment
 import im.vector.riotx.features.reactions.EmojiSearchResultFragment
 import im.vector.riotx.features.roomdirectory.PublicRoomsFragment
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomFragment
@@ -117,8 +117,63 @@ interface FragmentModule {
 
     @Binds
     @IntoMap
-    @FragmentKey(LoginSsoFallbackFragment::class)
-    fun bindLoginSsoFallbackFragment(fragment: LoginSsoFallbackFragment): Fragment
+    @FragmentKey(LoginCaptchaFragment::class)
+    fun bindLoginCaptchaFragment(fragment: LoginCaptchaFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(LoginTermsFragment::class)
+    fun bindLoginTermsFragment(fragment: LoginTermsFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(LoginServerUrlFormFragment::class)
+    fun bindLoginServerUrlFormFragment(fragment: LoginServerUrlFormFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(LoginResetPasswordMailConfirmationFragment::class)
+    fun bindLoginResetPasswordMailConfirmationFragment(fragment: LoginResetPasswordMailConfirmationFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(LoginResetPasswordFragment::class)
+    fun bindLoginResetPasswordFragment(fragment: LoginResetPasswordFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(LoginResetPasswordSuccessFragment::class)
+    fun bindLoginResetPasswordSuccessFragment(fragment: LoginResetPasswordSuccessFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(LoginServerSelectionFragment::class)
+    fun bindLoginServerSelectionFragment(fragment: LoginServerSelectionFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(LoginSignUpSignInSelectionFragment::class)
+    fun bindLoginSignUpSignInSelectionFragment(fragment: LoginSignUpSignInSelectionFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(LoginSplashFragment::class)
+    fun bindLoginSplashFragment(fragment: LoginSplashFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(LoginWebFragment::class)
+    fun bindLoginWebFragment(fragment: LoginWebFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(LoginGenericTextInputFormFragment::class)
+    fun bindLoginGenericTextInputFormFragment(fragment: LoginGenericTextInputFormFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(LoginWaitForEmailFragment::class)
+    fun bindLoginWaitForEmailFragment(fragment: LoginWaitForEmailFragment): Fragment
 
     @Binds
     @IntoMap

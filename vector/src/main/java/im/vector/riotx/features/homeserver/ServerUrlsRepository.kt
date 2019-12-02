@@ -68,8 +68,8 @@ object ServerUrlsRepository {
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
 
         return prefs.getString(HOME_SERVER_URL_PREF,
-                               prefs.getString(DEFAULT_REFERRER_HOME_SERVER_URL_PREF,
-                                               getDefaultHomeServerUrl(context))!!)!!
+                prefs.getString(DEFAULT_REFERRER_HOME_SERVER_URL_PREF,
+                        getDefaultHomeServerUrl(context))!!)!!
     }
 
     /**
@@ -80,5 +80,5 @@ object ServerUrlsRepository {
     /**
      * Return default home server url from resources
      */
-    fun getDefaultHomeServerUrl(context: Context): String = context.getString(R.string.default_hs_server_url)
+    fun getDefaultHomeServerUrl(context: Context): String = context.getString(R.string.matrix_org_server_url)
 }

@@ -1,0 +1,1 @@
+javascript:window.matrixLogin.onLogin = function(response) { sendObjectMessage({ 'action': 'onLogin', 'credentials': response }); };

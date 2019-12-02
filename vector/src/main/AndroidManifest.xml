@@ -33,7 +33,9 @@
         </activity-alias>
 
         <activity android:name=".features.home.HomeActivity" />
-        <activity android:name=".features.login.LoginActivity" />
+        <activity
+            android:name=".features.login.LoginActivity"
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".features.media.ImageMediaViewerActivity" />
         <activity
             android:name=".features.rageshake.BugReportActivity"

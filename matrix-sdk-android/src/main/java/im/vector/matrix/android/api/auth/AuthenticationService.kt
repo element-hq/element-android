@@ -19,29 +19,48 @@ package im.vector.matrix.android.api.auth
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
+import im.vector.matrix.android.api.auth.data.LoginFlowResult
 import im.vector.matrix.android.api.auth.data.SessionParams
+import im.vector.matrix.android.api.auth.login.LoginWizard
+import im.vector.matrix.android.api.auth.registration.RegistrationWizard
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.util.Cancelable
-import im.vector.matrix.android.internal.auth.data.LoginFlowResponse
 
 /**
- * This interface defines methods to authenticate to a matrix server.
+ * This interface defines methods to authenticate or to create an account to a matrix server.
  */
-interface Authenticator {
+interface AuthenticationService {
 
     /**
-     * Request the supported login flows for this homeserver
+     * Request the supported login flows for this homeserver.
+     * This is the first method to call to be able to get a wizard to login or the create an account
      */
-    fun getLoginFlow(homeServerConnectionConfig: HomeServerConnectionConfig, callback: MatrixCallback<LoginFlowResponse>): Cancelable
+    fun getLoginFlow(homeServerConnectionConfig: HomeServerConnectionConfig, callback: MatrixCallback<LoginFlowResult>): Cancelable
 
     /**
-     * @param homeServerConnectionConfig this param is used to configure the Homeserver
-     * @param login the login field
-     * @param password the password field
-     * @param callback  the matrix callback on which you'll receive the result of authentication.
-     * @return return a [Cancelable]
+     * Return a LoginWizard, to login to the homeserver. The login flow has to be retrieved first.
      */
-    fun authenticate(homeServerConnectionConfig: HomeServerConnectionConfig, login: String, password: String, callback: MatrixCallback<Session>): Cancelable
+    fun getLoginWizard(): LoginWizard
+
+    /**
+     * Return a RegistrationWizard, to create an matrix account on the homeserver. The login flow has to be retrieved first.
+     */
+    fun getRegistrationWizard(): RegistrationWizard
+
+    /**
+     * True when login and password has been sent with success to the homeserver
+     */
+    val isRegistrationStarted: Boolean
+
+    /**
+     * Cancel pending login or pending registration
+     */
+    fun cancelPendingLoginOrRegistration()
+
+    /**
+     * Reset all pending settings, including current HomeServerConnectionConfig
+     */
+    fun reset()
 
     /**
      * Check if there is an authenticated [Session].
@@ -67,5 +86,7 @@ interface Authenticator {
     /**
      * Create a session after a SSO successful login
      */
-    fun createSessionFromSso(credentials: Credentials, homeServerConnectionConfig: HomeServerConnectionConfig, callback: MatrixCallback<Session>): Cancelable
+    fun createSessionFromSso(homeServerConnectionConfig: HomeServerConnectionConfig,
+                             credentials: Credentials,
+                             callback: MatrixCallback<Session>): Cancelable
 }

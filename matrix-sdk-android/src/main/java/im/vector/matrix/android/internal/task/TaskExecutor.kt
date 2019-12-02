@@ -20,8 +20,8 @@ import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.di.MatrixScope
 import im.vector.matrix.android.internal.extensions.foldToCallback
 import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
-import im.vector.matrix.android.internal.util.CancelableCoroutine
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import im.vector.matrix.android.internal.util.toCancelable
 import kotlinx.coroutines.*
 import timber.log.Timber
 import javax.inject.Inject
@@ -34,27 +34,28 @@ internal class TaskExecutor @Inject constructor(private val coroutineDispatchers
     private val executorScope = CoroutineScope(SupervisorJob())
 
     fun <PARAMS, RESULT> execute(task: ConfigurableTask<PARAMS, RESULT>): Cancelable {
-        val job = executorScope.launch(task.callbackThread.toDispatcher()) {
-            val resultOrFailure = runCatching {
-                withContext(task.executionThread.toDispatcher()) {
-                    Timber.v("Enqueue task $task")
-                    retry(task.retryCount) {
-                        if (task.constraints.connectedToNetwork) {
-                            Timber.v("Waiting network for $task")
-                            networkConnectivityChecker.waitUntilConnected()
+        return executorScope
+                .launch(task.callbackThread.toDispatcher()) {
+                    val resultOrFailure = runCatching {
+                        withContext(task.executionThread.toDispatcher()) {
+                            Timber.v("Enqueue task $task")
+                            retry(task.retryCount) {
+                                if (task.constraints.connectedToNetwork) {
+                                    Timber.v("Waiting network for $task")
+                                    networkConnectivityChecker.waitUntilConnected()
+                                }
+                                Timber.v("Execute task $task on ${Thread.currentThread().name}")
+                                task.execute(task.params)
+                            }
                         }
-                        Timber.v("Execute task $task on ${Thread.currentThread().name}")
-                        task.execute(task.params)
                     }
+                    resultOrFailure
+                            .onFailure {
+                                Timber.d(it, "Task failed")
+                            }
+                            .foldToCallback(task.callback)
                 }
-            }
-            resultOrFailure
-                    .onFailure {
-                        Timber.d(it, "Task failed")
-                    }
-                    .foldToCallback(task.callback)
-        }
-        return CancelableCoroutine(job)
+                .toCancelable()
     }
 
     fun cancelAll() = executorScope.coroutineContext.cancelChildren()

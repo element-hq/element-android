@@ -78,7 +78,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/keys_backup_setup_step3_copy_button"
-            style="@style/VectorButtonStyleFlat"
+            style="@style/VectorButtonStyleText"
             android:layout_gravity="center"
             android:maxWidth="@dimen/button_max_width"
             android:text="@string/keys_backup_setup_step3_copy_button_title" />

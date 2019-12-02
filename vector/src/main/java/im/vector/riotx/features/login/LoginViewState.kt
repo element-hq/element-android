@@ -16,17 +16,50 @@
 
 package im.vector.riotx.features.login
 
-import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.Uninitialized
+import com.airbnb.mvrx.*
 
 data class LoginViewState(
         val asyncLoginAction: Async<Unit> = Uninitialized,
-        val asyncHomeServerLoginFlowRequest: Async<LoginMode> = Uninitialized
-) : MvRxState
+        val asyncHomeServerLoginFlowRequest: Async<Unit> = Uninitialized,
+        val asyncResetPassword: Async<Unit> = Uninitialized,
+        val asyncResetMailConfirmed: Async<Unit> = Uninitialized,
+        val asyncRegistration: Async<Unit> = Uninitialized,
 
-enum class LoginMode {
-    Password,
-    Sso,
-    Unsupported
+        // User choices
+        @PersistState
+        val serverType: ServerType = ServerType.MatrixOrg,
+        @PersistState
+        val signMode: SignMode = SignMode.Unknown,
+        @PersistState
+        val resetPasswordEmail: String? = null,
+        @PersistState
+        val homeServerUrl: String? = null,
+
+        // Network result
+        @PersistState
+        val loginMode: LoginMode = LoginMode.Unknown,
+        @PersistState
+        // Supported types for the login. We cannot use a sealed class for LoginType because it is not serializable
+        val loginModeSupportedTypes: List<String> = emptyList()
+) : MvRxState {
+
+    fun isLoading(): Boolean {
+        return asyncLoginAction is Loading
+                || asyncHomeServerLoginFlowRequest is Loading
+                || asyncResetPassword is Loading
+                || asyncResetMailConfirmed is Loading
+                || asyncRegistration is Loading
+    }
+
+    fun isUserLogged(): Boolean {
+        return asyncLoginAction is Success
+    }
+
+    /**
+     * Ex: "https://matrix.org/" -> "matrix.org"
+     */
+    val homeServerUrlSimple: String
+        get() = (homeServerUrl ?: "")
+                .substringAfter("://")
+                .trim { it == '/' }
 }

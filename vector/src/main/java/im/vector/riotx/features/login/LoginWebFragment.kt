@@ -30,70 +30,66 @@ import android.webkit.SslErrorHandler
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AlertDialog
-import com.airbnb.mvrx.activityViewModel
-import im.vector.matrix.android.api.auth.data.Credentials
-import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.riotx.R
-import im.vector.riotx.core.platform.OnBackPressed
-import im.vector.riotx.core.platform.VectorBaseFragment
-import kotlinx.android.synthetic.main.fragment_login_sso_fallback.*
+import im.vector.riotx.core.error.ErrorFormatter
+import im.vector.riotx.core.utils.AssetReader
+import kotlinx.android.synthetic.main.fragment_login_web.*
 import timber.log.Timber
 import java.net.URLDecoder
 import javax.inject.Inject
 
 /**
- * Only login is supported for the moment
+ * This screen is displayed for SSO login and also when the application does not support login flow or registration flow
+ * of the homeserver, as a fallback to login or to create an account
  */
-class LoginSsoFallbackFragment @Inject constructor() : VectorBaseFragment(), OnBackPressed {
+class LoginWebFragment @Inject constructor(
+        private val assetReader: AssetReader,
+        private val errorFormatter: ErrorFormatter
+) : AbstractLoginFragment() {
 
-    private val viewModel: LoginViewModel by activityViewModel()
+    override fun getLayoutResId() = R.layout.fragment_login_web
 
-    var homeServerUrl: String = ""
-
-    enum class Mode {
-        MODE_LOGIN,
-        // Not supported in RiotX for the moment
-        MODE_REGISTER
-    }
-
-    // Mode (MODE_LOGIN or MODE_REGISTER)
-    private var mMode = Mode.MODE_LOGIN
-
-    override fun getLayoutResId() = R.layout.fragment_login_sso_fallback
+    private var isWebViewLoaded = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupToolbar(login_sso_fallback_toolbar)
-        login_sso_fallback_toolbar.title = getString(R.string.login)
+        setupToolbar(loginWebToolbar)
+    }
 
-        setupWebview()
+    override fun updateWithState(state: LoginViewState) {
+        setupTitle(state)
+        if (!isWebViewLoaded) {
+            setupWebView(state)
+            isWebViewLoaded = true
+        }
+    }
+
+    private fun setupTitle(state: LoginViewState) {
+        loginWebToolbar.title = when (state.signMode) {
+            SignMode.SignIn -> getString(R.string.login_signin)
+            else            -> getString(R.string.login_signup)
+        }
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    private fun setupWebview() {
-        login_sso_fallback_webview.settings.javaScriptEnabled = true
+    private fun setupWebView(state: LoginViewState) {
+        loginWebWebView.settings.javaScriptEnabled = true
 
         // Due to https://developers.googleblog.com/2016/08/modernizing-oauth-interactions-in-native-apps.html, we hack
         // the user agent to bypass the limitation of Google, as a quick fix (a proper solution will be to use the SSO SDK)
-        login_sso_fallback_webview.settings.userAgentString = "Mozilla/5.0 Google"
-
-        homeServerUrl = viewModel.getHomeServerUrl()
-
-        if (!homeServerUrl.endsWith("/")) {
-            homeServerUrl += "/"
-        }
+        loginWebWebView.settings.userAgentString = "Mozilla/5.0 Google"
 
         // AppRTC requires third party cookies to work
         val cookieManager = android.webkit.CookieManager.getInstance()
 
         // clear the cookies must be cleared
         if (cookieManager == null) {
-            launchWebView()
+            launchWebView(state)
         } else {
             if (!cookieManager.hasCookies()) {
-                launchWebView()
+                launchWebView(state)
             } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                 try {
                     cookieManager.removeAllCookie()
@@ -101,27 +97,27 @@ class LoginSsoFallbackFragment @Inject constructor() : VectorBaseFragment(), OnB
                     Timber.e(e, " cookieManager.removeAllCookie() fails")
                 }
 
-                launchWebView()
+                launchWebView(state)
             } else {
                 try {
-                    cookieManager.removeAllCookies { launchWebView() }
+                    cookieManager.removeAllCookies { launchWebView(state) }
                 } catch (e: Exception) {
                     Timber.e(e, " cookieManager.removeAllCookie() fails")
-                    launchWebView()
+                    launchWebView(state)
                 }
             }
         }
     }
 
-    private fun launchWebView() {
-        if (mMode == Mode.MODE_LOGIN) {
-            login_sso_fallback_webview.loadUrl(homeServerUrl + "_matrix/static/client/login/")
+    private fun launchWebView(state: LoginViewState) {
+        if (state.signMode == SignMode.SignIn) {
+            loginWebWebView.loadUrl(state.homeServerUrl?.trim { it == '/' } + "/_matrix/static/client/login/")
         } else {
             // MODE_REGISTER
-            login_sso_fallback_webview.loadUrl(homeServerUrl + "_matrix/static/client/register/")
+            loginWebWebView.loadUrl(state.homeServerUrl?.trim { it == '/' } + "/_matrix/static/client/register/")
         }
 
-        login_sso_fallback_webview.webViewClient = object : WebViewClient() {
+        loginWebWebView.webViewClient = object : WebViewClient() {
             override fun onReceivedSslError(view: WebView, handler: SslErrorHandler,
                                             error: SslError) {
                 AlertDialog.Builder(requireActivity())
@@ -136,53 +132,37 @@ class LoginSsoFallbackFragment @Inject constructor() : VectorBaseFragment(), OnB
                             }
                             false
                         })
+                        .setCancelable(false)
                         .show()
             }
 
             override fun onReceivedError(view: WebView, errorCode: Int, description: String, failingUrl: String) {
                 super.onReceivedError(view, errorCode, description, failingUrl)
 
-                // on error case, close this fragment
-                viewModel.handle(LoginAction.NavigateTo(LoginActivity.Navigation.GoBack))
+                loginSharedActionViewModel.post(LoginNavigation.OnWebLoginError(errorCode, description, failingUrl))
             }
 
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
 
-                login_sso_fallback_toolbar.subtitle = url
+                loginWebToolbar.subtitle = url
             }
 
             override fun onPageFinished(view: WebView, url: String) {
                 // avoid infinite onPageFinished call
                 if (url.startsWith("http")) {
                     // Generic method to make a bridge between JS and the UIWebView
-                    val mxcJavascriptSendObjectMessage = "javascript:window.sendObjectMessage = function(parameters) {" +
-                            " var iframe = document.createElement('iframe');" +
-                            " iframe.setAttribute('src', 'js:' + JSON.stringify(parameters));" +
-                            " document.documentElement.appendChild(iframe);" +
-                            " iframe.parentNode.removeChild(iframe); iframe = null;" +
-                            " };"
-
+                    val mxcJavascriptSendObjectMessage = assetReader.readAssetFile("sendObject.js")
                     view.loadUrl(mxcJavascriptSendObjectMessage)
 
-                    if (mMode == Mode.MODE_LOGIN) {
+                    if (state.signMode == SignMode.SignIn) {
                         // The function the fallback page calls when the login is complete
-                        val mxcJavascriptOnRegistered = "javascript:window.matrixLogin.onLogin = function(response) {" +
-                                " sendObjectMessage({ 'action': 'onLogin', 'credentials': response });" +
-                                " };"
-
-                        view.loadUrl(mxcJavascriptOnRegistered)
+                        val mxcJavascriptOnLogin = assetReader.readAssetFile("onLogin.js")
+                        view.loadUrl(mxcJavascriptOnLogin)
                     } else {
                         // MODE_REGISTER
                         // The function the fallback page calls when the registration is complete
-                        val mxcJavascriptOnRegistered = "javascript:window.matrixRegistration.onRegistered" +
-                                " = function(homeserverUrl, userId, accessToken) {" +
-                                " sendObjectMessage({ 'action': 'onRegistered'," +
-                                " 'homeServer': homeserverUrl," +
-                                " 'userId': userId," +
-                                " 'accessToken': accessToken });" +
-                                " };"
-
+                        val mxcJavascriptOnRegistered = assetReader.readAssetFile("onRegistered.js")
                         view.loadUrl(mxcJavascriptOnRegistered)
                     }
                 }
@@ -214,46 +194,27 @@ class LoginSsoFallbackFragment @Inject constructor() : VectorBaseFragment(), OnB
             override fun shouldOverrideUrlLoading(view: WebView, url: String?): Boolean {
                 if (null != url && url.startsWith("js:")) {
                     var json = url.substring(3)
-                    var parameters: Map<String, Any>? = null
+                    var javascriptResponse: JavascriptResponse? = null
 
                     try {
                         // URL decode
                         json = URLDecoder.decode(json, "UTF-8")
-
-                        val adapter = MoshiProvider.providesMoshi().adapter(Map::class.java)
-
-                        @Suppress("UNCHECKED_CAST")
-                        parameters = adapter.fromJson(json) as JsonDict?
+                        val adapter = MoshiProvider.providesMoshi().adapter(JavascriptResponse::class.java)
+                        javascriptResponse = adapter.fromJson(json)
                     } catch (e: Exception) {
                         Timber.e(e, "## shouldOverrideUrlLoading() : fromJson failed")
                     }
 
                     // succeeds to parse parameters
-                    if (parameters != null) {
-                        val action = parameters["action"] as String
+                    if (javascriptResponse != null) {
+                        val action = javascriptResponse.action
 
-                        if (mMode == Mode.MODE_LOGIN) {
+                        if (state.signMode == SignMode.SignIn) {
                             try {
                                 if (action == "onLogin") {
-                                    @Suppress("UNCHECKED_CAST")
-                                    val credentials = parameters["credentials"] as Map<String, String>
-
-                                    val userId = credentials["user_id"]
-                                    val accessToken = credentials["access_token"]
-                                    val homeServer = credentials["home_server"]
-                                    val deviceId = credentials["device_id"]
-
-                                    // check if the parameters are defined
-                                    if (null != homeServer && null != userId && null != accessToken) {
-                                        val safeCredentials = Credentials(
-                                                userId = userId,
-                                                accessToken = accessToken,
-                                                homeServer = homeServer,
-                                                deviceId = deviceId,
-                                                refreshToken = null
-                                        )
-
-                                        viewModel.handle(LoginAction.SsoLoginSuccess(safeCredentials))
+                                    val credentials = javascriptResponse.credentials
+                                    if (credentials != null) {
+                                        loginViewModel.handle(LoginAction.WebLoginSuccess(credentials))
                                     }
                                 }
                             } catch (e: Exception) {
@@ -263,22 +224,9 @@ class LoginSsoFallbackFragment @Inject constructor() : VectorBaseFragment(), OnB
                             // MODE_REGISTER
                             // check the required parameters
                             if (action == "onRegistered") {
-                                // TODO The keys are very strange, this code comes from Riot-Android...
-                                if (parameters.containsKey("homeServer")
-                                        && parameters.containsKey("userId")
-                                        && parameters.containsKey("accessToken")) {
-                                    // We cannot parse Credentials here because of https://github.com/matrix-org/synapse/issues/4756
-                                    // Build on object manually
-                                    val credentials = Credentials(
-                                            userId = parameters["userId"] as String,
-                                            accessToken = parameters["accessToken"] as String,
-                                            homeServer = parameters["homeServer"] as String,
-                                            // TODO We need deviceId on RiotX...
-                                            deviceId = "TODO",
-                                            refreshToken = null
-                                    )
-
-                                    viewModel.handle(LoginAction.SsoLoginSuccess(credentials))
+                                val credentials = javascriptResponse.credentials
+                                if (credentials != null) {
+                                    loginViewModel.handle(LoginAction.WebLoginSuccess(credentials))
                                 }
                             }
                         }
@@ -291,12 +239,23 @@ class LoginSsoFallbackFragment @Inject constructor() : VectorBaseFragment(), OnB
         }
     }
 
-    override fun onBackPressed(): Boolean {
-        return if (login_sso_fallback_webview.canGoBack()) {
-            login_sso_fallback_webview.goBack()
-            true
-        } else {
-            false
+    override fun resetViewModel() {
+        loginViewModel.handle(LoginAction.ResetLogin)
+    }
+
+    override fun onError(throwable: Throwable) {
+        AlertDialog.Builder(requireActivity())
+                .setTitle(R.string.dialog_title_error)
+                .setMessage(errorFormatter.toHumanReadable(throwable))
+                .setPositiveButton(R.string.ok, null)
+                .show()
+    }
+
+    override fun onBackPressed(toolbarButton: Boolean): Boolean {
+        return when {
+            toolbarButton               -> super.onBackPressed(toolbarButton)
+            loginWebWebView.canGoBack() -> loginWebWebView.goBack().run { true }
+            else                        -> super.onBackPressed(toolbarButton)
         }
     }
 }

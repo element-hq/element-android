@@ -2,7 +2,8 @@ Changes in RiotX 0.9.0 (2019-XX-XX)
 ===================================================
 
 Features ✨:
- -
+ - Account creation. It's now possible to create account on any homeserver with RiotX (#34)
+ - Iteration of the login flow (#613)
 
 Improvements 🙌:
  - Send mention Pills from composer
