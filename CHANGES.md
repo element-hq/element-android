@@ -14,6 +14,7 @@ Other changes:
 Bugfix 🐛:
  - Do not show long click help if only invitation are displayed
  - Fix emoji filtering not working
+ - Fix issue of closing Realm in another thread (#725)
 
 Translations 🗣:
  -

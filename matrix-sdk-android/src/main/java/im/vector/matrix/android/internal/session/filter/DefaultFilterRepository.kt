@@ -30,25 +30,26 @@ internal class DefaultFilterRepository @Inject constructor(private val monarchy:
     override suspend fun storeFilter(filterBody: FilterBody, roomEventFilter: RoomEventFilter): Boolean {
         return Realm.getInstance(monarchy.realmConfiguration).use { realm ->
             val filter = FilterEntity.getFilter(realm)
-            val result = if (filter.filterBodyJson != filterBody.toJSONString()) {
-                // Filter has changed, store it and reset the filter Id
-                monarchy.awaitTransaction {
+            // Filter has changed, or no filter Id yet
+            filter.filterBodyJson != filterBody.toJSONString()
+                    || filter.filterId.isBlank()
+        }.also { hasChanged ->
+            if (hasChanged) {
+                // Filter is new or has changed, store it and reset the filter Id.
+                // This has to be done outside of the Realm.use(), because awaitTransaction change the current thread
+                monarchy.awaitTransaction { realm ->
                     // We manage only one filter for now
                     val filterBodyJson = filterBody.toJSONString()
                     val roomEventFilterJson = roomEventFilter.toJSONString()
 
-                    val filterEntity = FilterEntity.getFilter(it)
+                    val filterEntity = FilterEntity.getFilter(realm)
 
                     filterEntity.filterBodyJson = filterBodyJson
                     filterEntity.roomEventFilterJson = roomEventFilterJson
                     // Reset filterId
                     filterEntity.filterId = ""
                 }
-                true
-            } else {
-                filter.filterId.isBlank()
             }
-            result
         }
     }
 
