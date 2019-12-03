@@ -137,4 +137,6 @@
         <item quantity="other">Too many requests have been sent. You can retry in %1$d seconds…</item>
     </plurals>
 
+    <string name="seen_by">Seen by</string>
+
 </resources>
