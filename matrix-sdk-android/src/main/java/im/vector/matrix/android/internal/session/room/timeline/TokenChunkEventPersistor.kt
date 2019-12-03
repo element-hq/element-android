@@ -163,21 +163,4 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
             Result.SUCCESS
         }
     }
-
-    private fun handleMerge(roomEntity: RoomEntity,
-                            direction: PaginationDirection,
-                            currentChunk: ChunkEntity,
-                            otherChunk: ChunkEntity): ChunkEntity {
-        // We always merge the bottom chunk into top chunk, so we are always merging backwards
-        Timber.v("Merge ${currentChunk.prevToken} | ${currentChunk.nextToken} with ${otherChunk.prevToken} | ${otherChunk.nextToken}")
-        return if (direction == PaginationDirection.BACKWARDS && !otherChunk.isLastForward) {
-            currentChunk.merge(roomEntity.roomId, otherChunk, PaginationDirection.BACKWARDS)
-            roomEntity.deleteOnCascade(otherChunk)
-            currentChunk
-        } else {
-            otherChunk.merge(roomEntity.roomId, currentChunk, PaginationDirection.BACKWARDS)
-            roomEntity.deleteOnCascade(currentChunk)
-            otherChunk
-        }
-    }
 }

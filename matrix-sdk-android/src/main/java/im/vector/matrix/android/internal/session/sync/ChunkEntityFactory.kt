@@ -29,6 +29,7 @@ import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.room.timeline.PaginationDirection
 import im.vector.matrix.android.internal.session.user.UserEntityFactory
 import io.realm.Realm
+import io.realm.kotlin.createObject
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -47,12 +48,11 @@ internal class ChunkEntityFactory @Inject constructor(private val cryptoService:
         }
     }
 
-
     private fun initialSyncStrategy(realm: Realm,
                                     roomId: String,
                                     eventList: List<Event>,
                                     prevToken: String?): ChunkEntity {
-        val chunkEntity = ChunkEntity().apply {
+        val chunkEntity = realm.createObject<ChunkEntity>().apply {
             this.roomId = roomId
             this.prevToken = prevToken
             this.isLastForward = true
@@ -75,6 +75,8 @@ internal class ChunkEntityFactory @Inject constructor(private val cryptoService:
                                         isLimited: Boolean = true): ChunkEntity {
         val lastChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId)
         val stateIndexOffset = lastChunk?.lastStateIndex(PaginationDirection.FORWARDS) ?: 0
+        lastChunk?.isLastForward = false
+
         val chunkEntity = if (isLimited || lastChunk == null) {
             ChunkEntity().apply {
                 this.roomId = roomId
@@ -84,9 +86,7 @@ internal class ChunkEntityFactory @Inject constructor(private val cryptoService:
         } else {
             lastChunk
         }
-        val eventIds = ArrayList<String>(eventList.size)
         for (event in eventList) {
-            event.eventId?.also { eventIds.add(it) }
             chunkEntity.add(realm, roomId, event, PaginationDirection.FORWARDS, stateIndexOffset)
             // Give info to crypto module
             cryptoService.onLiveEvent(roomId, event)

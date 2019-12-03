@@ -26,6 +26,7 @@ import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.EventEntityFields
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
+import im.vector.matrix.android.internal.database.query.*
 import im.vector.matrix.android.internal.database.query.isEventRead
 import im.vector.matrix.android.internal.database.query.latestEvent
 import im.vector.matrix.android.internal.database.query.prev
@@ -67,9 +68,8 @@ internal class RoomSummaryUpdater @Inject constructor(@UserId private val userId
                roomSummary: RoomSyncSummary? = null,
                unreadNotifications: RoomSyncUnreadNotifications? = null,
                updateMembers: Boolean = false) {
-        val roomSummaryEntity = RoomSummaryEntity.where(realm, roomId).findFirst()
-                                ?: realm.createObject(roomId)
 
+        val roomSummaryEntity = RoomSummaryEntity.getOrCreate(realm, roomId)
         if (roomSummary != null) {
             if (roomSummary.heroes.isNotEmpty()) {
                 roomSummaryEntity.heroes.clear()
@@ -84,17 +84,15 @@ internal class RoomSummaryUpdater @Inject constructor(@UserId private val userId
         }
         roomSummaryEntity.highlightCount = unreadNotifications?.highlightCount ?: 0
         roomSummaryEntity.notificationCount = unreadNotifications?.notificationCount ?: 0
-
         if (membership != null) {
             roomSummaryEntity.membership = membership
         }
-
         val latestPreviewableEvent = TimelineEventEntity.latestEvent(realm, roomId, includesSending = true, filterTypes = PREVIEWABLE_TYPES)
         val lastTopicEvent = EventEntity.where(realm, roomId, EventType.STATE_ROOM_TOPIC).prev()
 
         roomSummaryEntity.hasUnreadMessages = roomSummaryEntity.notificationCount > 0
-                                              // avoid this call if we are sure there are unread events
-                                              || !isEventRead(monarchy, userId, roomId, latestPreviewableEvent?.eventId)
+                // avoid this call if we are sure there are unread events
+                || !isEventRead(monarchy, userId, roomId, latestPreviewableEvent?.eventId)
 
         roomSummaryEntity.displayName = roomDisplayNameResolver.resolve(roomId).toString()
         roomSummaryEntity.avatarUrl = roomAvatarResolver.resolve(roomId)

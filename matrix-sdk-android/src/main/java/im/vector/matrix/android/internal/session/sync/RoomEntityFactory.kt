@@ -57,15 +57,15 @@ internal class RoomEntityFactory @Inject constructor(private val cryptoService: 
     }
 
     private fun initialSyncStrategy(realm: Realm, roomId: String, roomSync: RoomSync, membership: Membership): RoomEntity {
+        val roomEntity = realm.createObject<RoomEntity>(roomId).apply {
+            this.membership = membership
+        }
         if (roomSync.ephemeral != null && roomSync.ephemeral.events.isNotEmpty()) {
             handleEphemeral(realm, roomId, roomSync.ephemeral, isInitialSync = true)
         }
         if (roomSync.accountData != null && roomSync.accountData.events.isNullOrEmpty().not()) {
             handleRoomAccountDataEvents(realm, roomId, roomSync.accountData)
         }
-        val roomEntity = RoomEntity(roomId)
-        roomEntity.membership = membership
-
         // State events
         if (roomSync.state != null && roomSync.state.events.isNotEmpty()) {
             roomSync.state.events.forEach { event ->
