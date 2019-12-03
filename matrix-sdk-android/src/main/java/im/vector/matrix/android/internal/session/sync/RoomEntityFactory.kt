@@ -34,6 +34,7 @@ import im.vector.matrix.android.internal.session.sync.model.RoomSyncAccountData
 import im.vector.matrix.android.internal.session.sync.model.RoomSyncEphemeral
 import im.vector.matrix.android.internal.session.user.UserEntityFactory
 import io.realm.Realm
+import io.realm.kotlin.createObject
 import javax.inject.Inject
 
 internal class RoomEntityFactory @Inject constructor(private val cryptoService: DefaultCryptoService,
@@ -102,7 +103,7 @@ internal class RoomEntityFactory @Inject constructor(private val cryptoService: 
         }
 
         val roomEntity = RoomEntity.where(realm, roomId).findFirst()
-                         ?: throw IllegalStateException("You should have a room at this point")
+                ?: realm.createObject(roomId)
 
         if (roomEntity.membership == Membership.INVITE) {
             roomEntity.chunks.deleteAllFromRealm()
@@ -112,7 +113,7 @@ internal class RoomEntityFactory @Inject constructor(private val cryptoService: 
 
         if (roomSync.state != null && roomSync.state.events.isNotEmpty()) {
             val minStateIndex = roomEntity.untimelinedStateEvents.where().min(EventEntityFields.STATE_INDEX)?.toInt()
-                                ?: Int.MIN_VALUE
+                    ?: Int.MIN_VALUE
             val untimelinedStateIndex = minStateIndex + 1
             roomSync.state.events.forEach { event ->
                 roomEntity.addStateEvent(event, filterDuplicates = true, stateIndex = untimelinedStateIndex)

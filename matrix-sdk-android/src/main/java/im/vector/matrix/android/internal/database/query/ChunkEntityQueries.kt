@@ -27,7 +27,7 @@ import io.realm.kotlin.where
 
 internal fun ChunkEntity.Companion.where(realm: Realm, roomId: String): RealmQuery<ChunkEntity> {
     return realm.where<ChunkEntity>()
-            .equalTo("${ChunkEntityFields.ROOM}.${RoomEntityFields.ROOM_ID}", roomId)
+            .equalTo(ChunkEntityFields.ROOM_ID, roomId)
 }
 
 internal fun ChunkEntity.Companion.find(realm: Realm, roomId: String, prevToken: String? = null, nextToken: String? = null): ChunkEntity? {
@@ -57,8 +57,9 @@ internal fun ChunkEntity.Companion.findIncludingEvent(realm: Realm, eventId: Str
     return findAllIncludingEvents(realm, listOf(eventId)).firstOrNull()
 }
 
-internal fun ChunkEntity.Companion.create(realm: Realm, prevToken: String?, nextToken: String?): ChunkEntity {
+internal fun ChunkEntity.Companion.create(realm: Realm, roomId: String, prevToken: String?, nextToken: String?): ChunkEntity {
     return realm.createObject<ChunkEntity>().apply {
+        this.roomId = roomId
         this.prevToken = prevToken
         this.nextToken = nextToken
     }

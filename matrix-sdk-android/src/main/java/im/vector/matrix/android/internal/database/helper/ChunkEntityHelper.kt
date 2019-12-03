@@ -88,7 +88,7 @@ internal fun ChunkEntity.add(localRealm: Realm,
                              direction: PaginationDirection,
                              stateIndexOffset: Int = 0,
                              isUnlinked: Boolean = false) {
-    if (event.eventId != null) {
+    if (event.eventId == null) {
         return
     }
     var currentDisplayIndex = lastDisplayIndex(direction, 0)
@@ -111,11 +111,11 @@ internal fun ChunkEntity.add(localRealm: Realm,
         }
     }
     val localId = TimelineEventEntity.nextId(localRealm)
-    val eventId = event.eventId ?: ""
+    val eventId = event.eventId
     val senderId = event.senderId ?: ""
 
     val readReceiptsSummaryEntity = ReadReceiptsSummaryEntity.where(localRealm, eventId).findFirst()
-                                    ?: ReadReceiptsSummaryEntity(eventId, roomId)
+            ?: ReadReceiptsSummaryEntity(eventId, roomId)
 
     // Update RR for the sender of a new message with a dummy one
 
@@ -151,14 +151,14 @@ internal fun ChunkEntity.add(localRealm: Realm,
 
 internal fun ChunkEntity.lastDisplayIndex(direction: PaginationDirection, defaultValue: Int = 0): Int {
     return when (direction) {
-               PaginationDirection.FORWARDS  -> forwardsDisplayIndex
-               PaginationDirection.BACKWARDS -> backwardsDisplayIndex
-           } ?: defaultValue
+        PaginationDirection.FORWARDS  -> forwardsDisplayIndex
+        PaginationDirection.BACKWARDS -> backwardsDisplayIndex
+    } ?: defaultValue
 }
 
 internal fun ChunkEntity.lastStateIndex(direction: PaginationDirection, defaultValue: Int = 0): Int {
     return when (direction) {
-               PaginationDirection.FORWARDS  -> forwardsStateIndex
-               PaginationDirection.BACKWARDS -> backwardsStateIndex
-           } ?: defaultValue
+        PaginationDirection.FORWARDS  -> forwardsStateIndex
+        PaginationDirection.BACKWARDS -> backwardsStateIndex
+    } ?: defaultValue
 }

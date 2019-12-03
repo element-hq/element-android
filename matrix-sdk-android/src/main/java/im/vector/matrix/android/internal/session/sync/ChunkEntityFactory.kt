@@ -53,12 +53,11 @@ internal class ChunkEntityFactory @Inject constructor(private val cryptoService:
                                     eventList: List<Event>,
                                     prevToken: String?): ChunkEntity {
         val chunkEntity = ChunkEntity().apply {
+            this.roomId = roomId
             this.prevToken = prevToken
             this.isLastForward = true
         }
-        val eventIds = ArrayList<String>(eventList.size)
         for (event in eventList) {
-            event.eventId?.also { eventIds.add(it) }
             chunkEntity.add(realm, roomId, event, PaginationDirection.FORWARDS)
             // Give info to crypto module
             cryptoService.onLiveEvent(roomId, event)
@@ -75,12 +74,10 @@ internal class ChunkEntityFactory @Inject constructor(private val cryptoService:
                                         prevToken: String? = null,
                                         isLimited: Boolean = true): ChunkEntity {
         val lastChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId)
-                        ?: throw IllegalStateException("You should already have a live chunk at this point")
-        lastChunk.isLastForward = false
-        var stateIndexOffset = 0
-        val chunkEntity = if (isLimited) {
-            stateIndexOffset = lastChunk.lastStateIndex(PaginationDirection.FORWARDS)
+        val stateIndexOffset = lastChunk?.lastStateIndex(PaginationDirection.FORWARDS) ?: 0
+        val chunkEntity = if (isLimited || lastChunk == null) {
             ChunkEntity().apply {
+                this.roomId = roomId
                 this.prevToken = prevToken
                 this.isLastForward = true
             }
