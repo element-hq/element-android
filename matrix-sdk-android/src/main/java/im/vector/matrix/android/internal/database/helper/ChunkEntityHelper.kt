@@ -145,6 +145,7 @@ internal fun ChunkEntity.add(localRealm: Realm,
         it.readReceipts = readReceiptsSummaryEntity
         it.readMarker = ReadMarkerEntity.where(localRealm, roomId = roomId, eventId = eventId).findFirst()
     }
+    eventEntity.updateSenderData(localRealm, this)
     val position = if (direction == PaginationDirection.FORWARDS) 0 else this.timelineEvents.size
     timelineEvents.add(position, eventEntity)
 }

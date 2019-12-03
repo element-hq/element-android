@@ -75,10 +75,8 @@ internal class ChunkEntityFactory @Inject constructor(private val cryptoService:
                                         isLimited: Boolean = true): ChunkEntity {
         val lastChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId)
         val stateIndexOffset = lastChunk?.lastStateIndex(PaginationDirection.FORWARDS) ?: 0
-        lastChunk?.isLastForward = false
-
         val chunkEntity = if (isLimited || lastChunk == null) {
-            ChunkEntity().apply {
+            realm.createObject<ChunkEntity>().apply {
                 this.roomId = roomId
                 this.prevToken = prevToken
                 this.isLastForward = true

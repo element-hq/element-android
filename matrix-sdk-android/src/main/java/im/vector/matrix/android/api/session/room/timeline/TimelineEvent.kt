@@ -45,38 +45,12 @@ data class TimelineEvent(
         val hasReadMarker: Boolean = false
 ) {
 
-    val metadata = HashMap<String, Any>()
-
-    /**
-     * The method to enrich this timeline event.
-     * If you provides multiple data with the same key, only first one will be kept.
-     * @param key the key to associate data with.
-     * @param data the data to enrich with.
-     */
-    fun enrichWith(key: String?, data: Any?) {
-        if (key == null || data == null) {
-            return
-        }
-        if (!metadata.containsKey(key)) {
-            metadata[key] = data
-        }
-    }
-
     fun getDisambiguatedDisplayName(): String {
         return when {
             senderName.isNullOrBlank() -> root.senderId ?: ""
             isUniqueDisplayName        -> senderName
             else                       -> "$senderName (${root.senderId})"
         }
-    }
-
-    /**
-     * Get the metadata associated with a key.
-     * @param key the key to get the metadata
-     * @return the metadata
-     */
-    inline fun <reified T> getMetadata(key: String): T? {
-        return metadata[key] as T?
     }
 
     fun isEncrypted(): Boolean {
@@ -105,7 +79,7 @@ fun TimelineEvent.getLastMessageContent(): MessageContent? {
         root.getClearContent().toModel<MessageStickerContent>()
     } else {
         annotations?.editSummary?.aggregatedContent?.toModel()
-        ?: root.getClearContent().toModel()
+                ?: root.getClearContent().toModel()
     }
 }
 
@@ -117,7 +91,7 @@ fun TimelineEvent.getLastMessageBody(): String? {
 
     if (lastMessageContent != null) {
         return lastMessageContent.newContent?.toModel<MessageContent>()?.body
-               ?: lastMessageContent.body
+                ?: lastMessageContent.body
     }
 
     return null

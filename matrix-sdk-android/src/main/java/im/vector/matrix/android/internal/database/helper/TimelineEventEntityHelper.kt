@@ -24,18 +24,14 @@ import im.vector.matrix.android.internal.database.model.*
 import im.vector.matrix.android.internal.database.query.next
 import im.vector.matrix.android.internal.database.query.prev
 import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.extensions.assertIsManaged
-import im.vector.matrix.android.internal.session.room.membership.RoomMembers
 import io.realm.Realm
 import io.realm.RealmList
 import io.realm.RealmQuery
 
-internal fun TimelineEventEntity.updateSenderData() {
-    assertIsManaged()
+internal fun TimelineEventEntity.updateSenderData(realm: Realm, chunkEntity: ChunkEntity) {
     val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst() ?: return
     val stateIndex = root?.stateIndex ?: return
     val senderId = root?.sender ?: return
-    val chunkEntity = chunk?.firstOrNull() ?: return
     val isUnlinked = chunkEntity.isUnlinked()
     var senderMembershipEvent: EventEntity?
     var senderRoomMemberContent: String?
@@ -67,7 +63,6 @@ internal fun TimelineEventEntity.updateSenderData() {
     ContentMapper.map(senderRoomMemberContent).toModel<RoomMember>()?.also {
         this.senderAvatar = it.avatarUrl
         this.senderName = it.displayName
-        this.isUniqueDisplayName = RoomMembers(realm, roomId).isUniqueDisplayName(it.displayName)
     }
 
     // We try to fallback on prev content if we got a room member state events with null fields
@@ -78,7 +73,6 @@ internal fun TimelineEventEntity.updateSenderData() {
             }
             if (this.senderName == null && it.displayName != null) {
                 this.senderName = it.displayName
-                this.isUniqueDisplayName = RoomMembers(realm, roomId).isUniqueDisplayName(it.displayName)
             }
         }
     }
