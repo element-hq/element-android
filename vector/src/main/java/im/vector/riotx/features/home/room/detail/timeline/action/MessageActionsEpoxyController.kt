@@ -24,6 +24,7 @@ import im.vector.riotx.core.epoxy.bottomsheet.*
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
+import im.vector.riotx.features.home.room.detail.timeline.tools.createLinkMovementMethod
 import im.vector.riotx.features.home.room.detail.timeline.tools.linkify
 import javax.inject.Inject
 
@@ -46,7 +47,7 @@ class MessageActionsEpoxyController @Inject constructor(private val stringProvid
                 avatarUrl(state.informationData.avatarUrl ?: "")
                 senderId(state.informationData.senderId)
                 senderName(state.senderName())
-                urlClickCallback(listener)
+                movementMethod(createLinkMovementMethod(listener))
                 body(body.linkify(listener))
                 time(state.time())
             }

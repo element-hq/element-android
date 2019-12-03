@@ -16,14 +16,13 @@
 
 package im.vector.riotx.features.home.room.detail.timeline.item
 
+import android.text.method.MovementMethod
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.text.PrecomputedTextCompat
 import androidx.core.widget.TextViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
-import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
-import im.vector.riotx.features.home.room.detail.timeline.tools.createLinkMovementMethod
 import im.vector.riotx.features.home.room.detail.timeline.tools.findPillsAndProcess
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
@@ -36,11 +35,11 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
     @EpoxyAttribute
     var useBigFont: Boolean = false
     @EpoxyAttribute
-    var urlClickCallback: TimelineEventController.UrlClickCallback? = null
+    var movementMethod: MovementMethod? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.messageView.movementMethod = createLinkMovementMethod(urlClickCallback)
+        holder.messageView.movementMethod = movementMethod
         if (useBigFont) {
             holder.messageView.textSize = 44F
         } else {

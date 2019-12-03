@@ -25,9 +25,10 @@ import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.home.room.detail.timeline.helper.AvatarSizeProvider
-import im.vector.riotx.features.home.room.detail.timeline.item.MessageTextItem_
 import im.vector.riotx.features.home.room.detail.timeline.helper.MessageInformationDataFactory
 import im.vector.riotx.features.home.room.detail.timeline.helper.MessageItemAttributesFactory
+import im.vector.riotx.features.home.room.detail.timeline.item.MessageTextItem_
+import im.vector.riotx.features.home.room.detail.timeline.tools.createLinkMovementMethod
 import me.gujun.android.span.span
 import javax.inject.Inject
 
@@ -57,7 +58,7 @@ class EncryptedItemFactory @Inject constructor(private val messageInformationDat
                         }
 
                 val message = stringProvider.getString(R.string.encrypted_message).takeIf { cryptoError == null }
-                              ?: stringProvider.getString(R.string.notice_crypto_unable_to_decrypt, errorDescription)
+                        ?: stringProvider.getString(R.string.notice_crypto_unable_to_decrypt, errorDescription)
                 val spannableStr = span(message) {
                     textStyle = "italic"
                     textColor = colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
@@ -72,7 +73,7 @@ class EncryptedItemFactory @Inject constructor(private val messageInformationDat
                         .highlighted(highlight)
                         .attributes(attributes)
                         .message(spannableStr)
-                        .urlClickCallback(callback)
+                        .movementMethod(createLinkMovementMethod(callback))
             }
             else                                             -> null
         }

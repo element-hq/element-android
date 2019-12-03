@@ -42,6 +42,7 @@ import im.vector.riotx.core.utils.isLocalFile
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.home.room.detail.timeline.helper.*
 import im.vector.riotx.features.home.room.detail.timeline.item.*
+import im.vector.riotx.features.home.room.detail.timeline.tools.createLinkMovementMethod
 import im.vector.riotx.features.home.room.detail.timeline.tools.linkify
 import im.vector.riotx.features.html.CodeVisitor
 import im.vector.riotx.features.html.EventHtmlRenderer
@@ -270,7 +271,7 @@ class MessageItemFactory @Inject constructor(
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .attributes(attributes)
                 .highlighted(highlight)
-                .urlClickCallback(callback)
+                .movementMethod(createLinkMovementMethod(callback))
     }
 
     private fun buildCodeBlockItem(formattedBody: CharSequence,
@@ -348,7 +349,7 @@ class MessageItemFactory @Inject constructor(
                 .attributes(attributes)
                 .message(message)
                 .highlighted(highlight)
-                .urlClickCallback(callback)
+                .movementMethod(createLinkMovementMethod(callback))
     }
 
     private fun buildEmoteMessageItem(messageContent: MessageEmoteContent,
@@ -372,7 +373,7 @@ class MessageItemFactory @Inject constructor(
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .attributes(attributes)
                 .highlighted(highlight)
-                .urlClickCallback(callback)
+                .movementMethod(createLinkMovementMethod(callback))
     }
 
     private fun buildRedactedItem(attributes: AbsMessageItem.Attributes,
