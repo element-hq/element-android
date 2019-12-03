@@ -41,7 +41,11 @@ internal class SasTransportRoomMessage(
         private val taskExecutor: TaskExecutor
 ) : SasTransport {
 
-    override fun sendToOther(type: String, verificationInfo: VerificationInfo, nextState: SasVerificationTxState, onErrorReason: CancelCode, onDone: (() -> Unit)?) {
+    override fun sendToOther(type: String,
+                             verificationInfo: VerificationInfo,
+                             nextState: SasVerificationTxState,
+                             onErrorReason: CancelCode,
+                             onDone: (() -> Unit)?) {
         Timber.d("## SAS sending msg type $type")
         Timber.v("## SAS sending msg info $verificationInfo")
         sendVerificationMessageTask.configureWith(
@@ -109,7 +113,14 @@ internal class SasTransportRoomMessage(
                               commitment: String,
                               messageAuthenticationCode: String,
                               shortAuthenticationStrings: List<String>)
-            : VerificationInfoAccept = MessageVerificationAcceptContent.create(tid, keyAgreementProtocol, hash, commitment, messageAuthenticationCode, shortAuthenticationStrings)
+            : VerificationInfoAccept = MessageVerificationAcceptContent.create(
+            tid,
+            keyAgreementProtocol,
+            hash,
+            commitment,
+            messageAuthenticationCode,
+            shortAuthenticationStrings
+    )
 
     override fun createKey(tid: String, pubKey: String): VerificationInfoKey = MessageVerificationKeyContent.create(tid, pubKey)
 

@@ -36,7 +36,11 @@ internal class SasTransportToDevice(
         private var taskExecutor: TaskExecutor
 ) : SasTransport {
 
-    override fun sendToOther(type: String, verificationInfo: VerificationInfo, nextState: SasVerificationTxState, onErrorReason: CancelCode, onDone: (() -> Unit)?) {
+    override fun sendToOther(type: String,
+                             verificationInfo: VerificationInfo,
+                             nextState: SasVerificationTxState,
+                             onErrorReason: CancelCode,
+                             onDone: (() -> Unit)?) {
         Timber.d("## SAS sending msg type $type")
         Timber.v("## SAS sending msg info $verificationInfo")
         val tx = tx ?: return
@@ -98,7 +102,13 @@ internal class SasTransportToDevice(
                               commitment: String,
                               messageAuthenticationCode: String,
                               shortAuthenticationStrings: List<String>)
-            : VerificationInfoAccept = KeyVerificationAccept.create(tid, keyAgreementProtocol, hash, commitment, messageAuthenticationCode, shortAuthenticationStrings)
+            : VerificationInfoAccept = KeyVerificationAccept.create(
+            tid,
+            keyAgreementProtocol,
+            hash,
+            commitment,
+            messageAuthenticationCode,
+            shortAuthenticationStrings)
 
     override fun createKey(tid: String, pubKey: String): VerificationInfoKey = KeyVerificationKey.create(tid, pubKey)
 

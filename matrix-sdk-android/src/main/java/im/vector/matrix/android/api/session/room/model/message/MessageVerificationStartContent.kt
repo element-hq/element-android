@@ -38,7 +38,7 @@ internal data class MessageVerificationStartContent(
 ) : VerificationInfoStart {
 
     override fun toCanonicalJson(): String? {
-       return JsonCanonicalizer.getCanonicalJson(MessageVerificationStartContent::class.java, this)
+        return JsonCanonicalizer.getCanonicalJson(MessageVerificationStartContent::class.java, this)
     }
 
     override val transactionID: String?
@@ -46,9 +46,14 @@ internal data class MessageVerificationStartContent(
 
     override fun isValid(): Boolean {
         if (
-                (transactionID.isNullOrBlank() || fromDevice.isNullOrBlank() || method != KeyVerificationStart.VERIF_METHOD_SAS || keyAgreementProtocols.isNullOrEmpty() || hashes.isNullOrEmpty())
+                (transactionID.isNullOrBlank()
+                        || fromDevice.isNullOrBlank()
+                        || method != KeyVerificationStart.VERIF_METHOD_SAS
+                        || keyAgreementProtocols.isNullOrEmpty()
+                        || hashes.isNullOrEmpty())
                 || !hashes.contains("sha256") || messageAuthenticationCodes.isNullOrEmpty()
-                || (!messageAuthenticationCodes.contains(SASVerificationTransaction.SAS_MAC_SHA256) && !messageAuthenticationCodes.contains(SASVerificationTransaction.SAS_MAC_SHA256_LONGKDF))
+                || (!messageAuthenticationCodes.contains(SASVerificationTransaction.SAS_MAC_SHA256)
+                        && !messageAuthenticationCodes.contains(SASVerificationTransaction.SAS_MAC_SHA256_LONGKDF))
                 || shortAuthenticationStrings.isNullOrEmpty()
                 || !shortAuthenticationStrings.contains(SasMode.DECIMAL)) {
             Timber.e("## received invalid verification request")
@@ -57,5 +62,5 @@ internal data class MessageVerificationStartContent(
         return true
     }
 
-    override fun toEventContent()  = this.toContent()
+    override fun toEventContent() = this.toContent()
 }
