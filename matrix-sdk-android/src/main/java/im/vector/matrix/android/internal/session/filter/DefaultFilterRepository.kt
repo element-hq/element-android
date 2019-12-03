@@ -19,7 +19,8 @@ package im.vector.matrix.android.internal.session.filter
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.internal.database.model.FilterEntity
 import im.vector.matrix.android.internal.database.model.FilterEntityFields
-import im.vector.matrix.android.internal.database.query.getFilter
+import im.vector.matrix.android.internal.database.query.get
+import im.vector.matrix.android.internal.database.query.getOrCreate
 import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.Realm
 import io.realm.kotlin.where
@@ -29,9 +30,10 @@ internal class DefaultFilterRepository @Inject constructor(private val monarchy:
 
     override suspend fun storeFilter(filterBody: FilterBody, roomEventFilter: RoomEventFilter): Boolean {
         return Realm.getInstance(monarchy.realmConfiguration).use { realm ->
-            val filter = FilterEntity.getFilter(realm)
+            val filter = FilterEntity.get(realm)
             // Filter has changed, or no filter Id yet
-            filter.filterBodyJson != filterBody.toJSONString()
+            filter == null
+                    || filter.filterBodyJson != filterBody.toJSONString()
                     || filter.filterId.isBlank()
         }.also { hasChanged ->
             if (hasChanged) {
@@ -42,7 +44,7 @@ internal class DefaultFilterRepository @Inject constructor(private val monarchy:
                     val filterBodyJson = filterBody.toJSONString()
                     val roomEventFilterJson = roomEventFilter.toJSONString()
 
-                    val filterEntity = FilterEntity.getFilter(realm)
+                    val filterEntity = FilterEntity.getOrCreate(realm)
 
                     filterEntity.filterBodyJson = filterBodyJson
                     filterEntity.roomEventFilterJson = roomEventFilterJson
@@ -68,7 +70,7 @@ internal class DefaultFilterRepository @Inject constructor(private val monarchy:
 
     override suspend fun getFilter(): String {
         return Realm.getInstance(monarchy.realmConfiguration).use {
-            val filter = FilterEntity.getFilter(it)
+            val filter = FilterEntity.getOrCreate(it)
             if (filter.filterId.isBlank()) {
                 // Use the Json format
                 filter.filterBodyJson
@@ -81,7 +83,7 @@ internal class DefaultFilterRepository @Inject constructor(private val monarchy:
 
     override suspend fun getRoomFilter(): String {
         return Realm.getInstance(monarchy.realmConfiguration).use {
-            FilterEntity.getFilter(it).roomEventFilterJson
+            FilterEntity.getOrCreate(it).roomEventFilterJson
         }
     }
 }
