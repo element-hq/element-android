@@ -41,7 +41,7 @@ class MessageActionsEpoxyController @Inject constructor(private val stringProvid
         // Message preview
         val body = state.messageBody
         if (body != null) {
-            bottomSheetItemMessagePreview {
+            bottomSheetMessagePreviewItem {
                 id("preview")
                 avatarRenderer(avatarRenderer)
                 avatarUrl(state.informationData.avatarUrl ?: "")
@@ -55,13 +55,13 @@ class MessageActionsEpoxyController @Inject constructor(private val stringProvid
 
         // Send state
         if (state.informationData.sendState.isSending()) {
-            bottomSheetItemSendState {
+            bottomSheetSendStateItem {
                 id("send_state")
                 showProgress(true)
                 text(stringProvider.getString(R.string.event_status_sending_message))
             }
         } else if (state.informationData.sendState.hasFailed()) {
-            bottomSheetItemSendState {
+            bottomSheetSendStateItem {
                 id("send_state")
                 showProgress(false)
                 text(stringProvider.getString(R.string.unable_to_send_message))
@@ -72,16 +72,16 @@ class MessageActionsEpoxyController @Inject constructor(private val stringProvid
         // Quick reactions
         if (state.canReact() && state.quickStates is Success) {
             // Separator
-            bottomSheetItemSeparator {
+            bottomSheetSeparatorItem {
                 id("reaction_separator")
             }
 
-            bottomSheetItemQuickReactions {
+            bottomSheetQuickReactionsItem {
                 id("quick_reaction")
                 fontProvider(fontProvider)
                 texts(state.quickStates()?.map { it.reaction }.orEmpty())
                 selecteds(state.quickStates.invoke().map { it.isSelected })
-                listener(object : BottomSheetItemQuickReactions.Listener {
+                listener(object : BottomSheetQuickReactionsItem.Listener {
                     override fun didSelect(emoji: String, selected: Boolean) {
                         listener?.didSelectMenuAction(EventSharedAction.QuickReact(state.eventId, emoji, selected))
                     }
@@ -90,18 +90,18 @@ class MessageActionsEpoxyController @Inject constructor(private val stringProvid
         }
 
         // Separator
-        bottomSheetItemSeparator {
+        bottomSheetSeparatorItem {
             id("actions_separator")
         }
 
         // Action
         state.actions()?.forEachIndexed { index, action ->
             if (action is EventSharedAction.Separator) {
-                bottomSheetItemSeparator {
+                bottomSheetSeparatorItem {
                     id("separator_$index")
                 }
             } else {
-                bottomSheetItemAction {
+                bottomSheetActionItem {
                     id("action_$index")
                     iconRes(action.iconResId)
                     textRes(action.titleRes)
@@ -118,7 +118,7 @@ class MessageActionsEpoxyController @Inject constructor(private val stringProvid
                             EventSharedAction.ReportContentInappropriate(action.eventId, action.senderId),
                             EventSharedAction.ReportContentCustom(action.eventId, action.senderId)
                     ).forEachIndexed { indexReport, actionReport ->
-                        bottomSheetItemAction {
+                        bottomSheetActionItem {
                             id("actionReport_$indexReport")
                             subMenuItem(true)
                             iconRes(actionReport.iconResId)

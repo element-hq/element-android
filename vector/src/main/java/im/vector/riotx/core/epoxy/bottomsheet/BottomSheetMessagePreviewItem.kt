@@ -16,7 +16,7 @@
  */
 package im.vector.riotx.core.epoxy.bottomsheet
 
-import android.view.View
+import android.text.method.MovementMethod
 import android.widget.ImageView
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
@@ -26,32 +26,42 @@ import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
 import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.features.home.AvatarRenderer
+import im.vector.riotx.features.home.room.detail.timeline.tools.findPillsAndProcess
 
 /**
- * A room preview for bottom sheet.
+ * A message preview for bottom sheet.
  */
-@EpoxyModelClass(layout = R.layout.item_bottom_sheet_room_preview)
-abstract class BottomSheetItemRoomPreview : VectorEpoxyModel<BottomSheetItemRoomPreview.Holder>() {
+@EpoxyModelClass(layout = R.layout.item_bottom_sheet_message_preview)
+abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessagePreviewItem.Holder>() {
 
     @EpoxyAttribute
     lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute
     lateinit var avatarUrl: String
     @EpoxyAttribute
-    lateinit var roomId: String
+    lateinit var senderId: String
     @EpoxyAttribute
-    var roomName: String? = null
-    @EpoxyAttribute var settingsClickListener: View.OnClickListener? = null
+    var senderName: String? = null
+    @EpoxyAttribute
+    lateinit var body: CharSequence
+    @EpoxyAttribute
+    var time: CharSequence? = null
+    @EpoxyAttribute
+    var movementMethod: MovementMethod? = null
 
     override fun bind(holder: Holder) {
-        avatarRenderer.render(avatarUrl, roomId, roomName, holder.avatar)
-        holder.roomName.setTextOrHide(roomName)
-        holder.roomSettings.setOnClickListener(settingsClickListener)
+        avatarRenderer.render(avatarUrl, senderId, senderName, holder.avatar)
+        holder.sender.setTextOrHide(senderName)
+        holder.body.movementMethod = movementMethod
+        holder.body.text = body
+        body.findPillsAndProcess { it.bind(holder.body) }
+        holder.timestamp.setTextOrHide(time)
     }
 
     class Holder : VectorEpoxyHolder() {
-        val avatar by bind<ImageView>(R.id.bottomSheetRoomPreviewAvatar)
-        val roomName by bind<TextView>(R.id.bottomSheetRoomPreviewName)
-        val roomSettings by bind<View>(R.id.bottomSheetRoomPreviewSettings)
+        val avatar by bind<ImageView>(R.id.bottom_sheet_message_preview_avatar)
+        val sender by bind<TextView>(R.id.bottom_sheet_message_preview_sender)
+        val body by bind<TextView>(R.id.bottom_sheet_message_preview_body)
+        val timestamp by bind<TextView>(R.id.bottom_sheet_message_preview_timestamp)
     }
 }
