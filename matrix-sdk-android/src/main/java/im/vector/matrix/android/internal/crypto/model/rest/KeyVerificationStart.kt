@@ -19,7 +19,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.session.crypto.sas.SasMode
 import im.vector.matrix.android.internal.crypto.verification.SASVerificationTransaction
-import im.vector.matrix.android.internal.crypto.verification.VerifInfoStart
+import im.vector.matrix.android.internal.crypto.verification.VerificationInfoStart
 import im.vector.matrix.android.internal.util.JsonCanonicalizer
 import timber.log.Timber
 
@@ -27,7 +27,7 @@ import timber.log.Timber
  * Sent by Alice to initiate an interactive key verification.
  */
 @JsonClass(generateAdapter = true)
-class KeyVerificationStart : SendToDeviceObject, VerifInfoStart {
+class KeyVerificationStart : SendToDeviceObject, VerificationInfoStart {
 
     override fun toCanonicalJson(): String? {
         return JsonCanonicalizer.getCanonicalJson(KeyVerificationStart::class.java, this)

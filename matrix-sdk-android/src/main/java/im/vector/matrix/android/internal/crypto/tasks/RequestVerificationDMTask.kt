@@ -68,9 +68,8 @@ internal class DefaultRequestVerificationDMTask @Inject constructor(
     }
 
     private suspend fun createRequestEvent(params: RequestVerificationDMTask.Params): Event {
-        val event = localEchoEventFactory.createVerificationRequest(params.roomId, params.from, params.to, params.methods).also {
-            localEchoEventFactory.saveLocalEcho(monarchy, it)
-        }
+        val event = localEchoEventFactory.createVerificationRequest(params.roomId, params.from, params.to, params.methods)
+                .also { localEchoEventFactory.saveLocalEcho(monarchy, it) }
         if (params.cryptoService.isRoomEncrypted(params.roomId)) {
             try {
                 return encryptEventTask.execute(EncryptEventTask.Params(

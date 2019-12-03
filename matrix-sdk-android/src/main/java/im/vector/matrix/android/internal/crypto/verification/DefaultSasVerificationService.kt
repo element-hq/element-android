@@ -39,7 +39,6 @@ import im.vector.matrix.android.internal.crypto.model.rest.*
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.DefaultRequestVerificationDMTask
 import im.vector.matrix.android.internal.crypto.tasks.RequestVerificationDMTask
-import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.room.send.SendResponse
 import im.vector.matrix.android.internal.task.TaskConstraints
@@ -56,18 +55,18 @@ import kotlin.collections.HashMap
 import kotlin.collections.set
 
 @SessionScope
-internal class DefaultSasVerificationService @Inject constructor(private val credentials: Credentials,
-                                                                 private val cryptoStore: IMXCryptoStore,
-                                                                 private val myDeviceInfoHolder: Lazy<MyDeviceInfoHolder>,
-                                                                 private val deviceListManager: DeviceListManager,
-                                                                 private val setDeviceVerificationAction: SetDeviceVerificationAction,
-                                                                 private val sendToDeviceTask: SendToDeviceTask,
-                                                                 private val requestVerificationDMTask: DefaultRequestVerificationDMTask,
-                                                                 private val coroutineDispatchers: MatrixCoroutineDispatchers,
-                                                                 private val sasTransportRoomMessageFactory: SasTransportRoomMessageFactory,
-                                                                 private val sasToDeviceTransportFactory: SasToDeviceTransportFactory,
-                                                                 private val taskExecutor: TaskExecutor)
-    : VerificationTransaction.Listener, SasVerificationService {
+internal class DefaultSasVerificationService @Inject constructor(
+        private val credentials: Credentials,
+        private val cryptoStore: IMXCryptoStore,
+        private val myDeviceInfoHolder: Lazy<MyDeviceInfoHolder>,
+        private val deviceListManager: DeviceListManager,
+        private val setDeviceVerificationAction: SetDeviceVerificationAction,
+        private val requestVerificationDMTask: DefaultRequestVerificationDMTask,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
+        private val sasTransportRoomMessageFactory: SasTransportRoomMessageFactory,
+        private val sasTransportToDeviceFactory: SasTransportToDeviceFactory,
+        private val taskExecutor: TaskExecutor
+) : VerificationTransaction.Listener, SasVerificationService {
 
     private val uiHandler = Handler(Looper.getMainLooper())
 
@@ -217,7 +216,7 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
             return
         }
 
-        handleStart(otherUserId, startReq as VerifInfoStart) {
+        handleStart(otherUserId, startReq as VerificationInfoStart) {
             it.transport = sasTransportRoomMessageFactory.createTransport(event.roomId
                     ?: "", cryptoService)
         }?.let {
@@ -246,7 +245,7 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
 //                        startReq.fromDevice ?: event.getSenderKey()!!,
 //                        CancelCode.UnknownMethod
 //                )
-                sasToDeviceTransportFactory.createTransport(null).cancelTransaction(
+                sasTransportToDeviceFactory.createTransport(null).cancelTransaction(
                         startReq.transactionID ?: "",
                         otherUserId!!,
                         startReq.fromDevice ?: event.getSenderKey()!!,
@@ -257,9 +256,9 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
         }
         // Download device keys prior to everything
         handleStart(otherUserId, startReq) {
-            it.transport = sasToDeviceTransportFactory.createTransport(it)
+            it.transport = sasTransportToDeviceFactory.createTransport(it)
         }?.let {
-            sasToDeviceTransportFactory.createTransport(null).cancelTransaction(
+            sasTransportToDeviceFactory.createTransport(null).cancelTransaction(
                     startReq.transactionID ?: "",
                     otherUserId!!,
                     startReq.fromDevice ?: event.getSenderKey()!!,
@@ -268,7 +267,7 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
         }
     }
 
-    private suspend fun handleStart(otherUserId: String?, startReq: VerifInfoStart, txConfigure: (SASVerificationTransaction) -> Unit): CancelCode? {
+    private suspend fun handleStart(otherUserId: String?, startReq: VerificationInfoStart, txConfigure: (SASVerificationTransaction) -> Unit): CancelCode? {
         Timber.d("## SAS onStartRequestReceived ${startReq.transactionID!!}")
         if (checkKeysAreDownloaded(otherUserId!!, startReq) != null) {
             Timber.v("## SAS onStartRequestReceived $startReq")
@@ -318,7 +317,7 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
     }
 
     private suspend fun checkKeysAreDownloaded(otherUserId: String,
-                                               startReq: VerifInfoStart): MXUsersDevicesMap<MXDeviceInfo>? {
+                                               startReq: VerificationInfoStart): MXUsersDevicesMap<MXDeviceInfo>? {
         return try {
             val keys = deviceListManager.downloadKeys(listOf(otherUserId), true)
             val deviceIds = keys.getUserDeviceIds(otherUserId) ?: return null
@@ -357,7 +356,7 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
         handleOnCancel(otherUserId, cancelReq)
     }
 
-    private fun handleOnCancel(otherUserId: String, cancelReq: VerifInfoCancel) {
+    private fun handleOnCancel(otherUserId: String, cancelReq: VerificationInfoCancel) {
         Timber.v("## SAS onCancelReceived otherUser:$otherUserId reason:${cancelReq.reason}")
         val existing = getExistingTransaction(otherUserId, cancelReq.transactionID!!)
         if (existing == null) {
@@ -387,7 +386,7 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
         handleAccept(acceptReq, event.senderId!!)
     }
 
-    private fun handleAccept(acceptReq: VerifInfoAccept, senderId: String) {
+    private fun handleAccept(acceptReq: VerificationInfoAccept, senderId: String) {
         if (!acceptReq.isValid()) {
             // ignore
             Timber.e("## SAS Received invalid accept request")
@@ -433,7 +432,7 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
         handleKeyReceived(event, keyReq)
     }
 
-    private fun handleKeyReceived(event: Event, keyReq: VerifInfoKey) {
+    private fun handleKeyReceived(event: Event, keyReq: VerificationInfoKey) {
         Timber.d("##  SAS Received Key from ${event.senderId} with info $keyReq")
         val otherUserId = event.senderId!!
         val existing = getExistingTransaction(otherUserId, keyReq.transactionID!!)
@@ -474,7 +473,7 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
         handleMacReceived(event.senderId, macReq)
     }
 
-    private fun handleMacReceived(senderId: String, macReq: VerifInfoMac) {
+    private fun handleMacReceived(senderId: String, macReq: VerificationInfoMac) {
         Timber.v("## SAS Received $macReq")
         val existing = getExistingTransaction(senderId, macReq.transactionID!!)
         if (existing == null) {

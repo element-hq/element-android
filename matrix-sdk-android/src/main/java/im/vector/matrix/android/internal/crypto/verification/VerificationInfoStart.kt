@@ -15,7 +15,7 @@
  */
 package im.vector.matrix.android.internal.crypto.verification
 
-interface VerifInfoStart : VerificationInfo {
+internal interface VerificationInfoStart : VerificationInfo {
 
     val method: String?
     val fromDevice: String?

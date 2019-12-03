@@ -20,7 +20,9 @@ import im.vector.riotx.R
 import im.vector.riotx.core.preference.VectorSwitchPreference
 import javax.inject.Inject
 
-class VectorSettingsLabsFragment @Inject constructor(val vectorPreferences: VectorPreferences) : VectorSettingsBaseFragment() {
+class VectorSettingsLabsFragment @Inject constructor(
+        private val vectorPreferences: VectorPreferences
+) : VectorSettingsBaseFragment() {
 
     override var titleRes = R.string.room_settings_labs_pref_title
     override val preferenceXmlRes = R.xml.vector_settings_labs

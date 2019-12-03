@@ -15,7 +15,7 @@
  */
 package im.vector.matrix.android.internal.crypto.verification
 
-internal interface VerifInfoAccept : VerificationInfo {
+internal interface VerificationInfoAccept : VerificationInfo {
 
     val transactionID: String?
 
@@ -46,12 +46,12 @@ internal interface VerifInfoAccept : VerificationInfo {
     var commitment: String?
 }
 
-internal interface AcceptVerifInfoFactory {
+internal interface VerificationInfoAcceptFactory {
 
     fun create(tid: String,
                keyAgreementProtocol: String,
                hash: String,
                commitment: String,
                messageAuthenticationCode: String,
-               shortAuthenticationStrings: List<String>): VerifInfoAccept
+               shortAuthenticationStrings: List<String>): VerificationInfoAccept
 }

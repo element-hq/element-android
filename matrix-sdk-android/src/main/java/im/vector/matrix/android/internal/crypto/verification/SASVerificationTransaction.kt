@@ -88,13 +88,13 @@ internal abstract class SASVerificationTransaction(
 
     private var olmSas: OlmSAS? = null
 
-    var startReq: VerifInfoStart? = null
-    var accepted: VerifInfoAccept? = null
+    var startReq: VerificationInfoStart? = null
+    var accepted: VerificationInfoAccept? = null
     var otherKey: String? = null
     var shortCodeBytes: ByteArray? = null
 
-    var myMac: VerifInfoMac? = null
-    var theirMac: VerifInfoMac? = null
+    var myMac: VerificationInfoMac? = null
+    var theirMac: VerificationInfoMac? = null
 
     fun getSAS(): OlmSAS {
         if (olmSas == null) olmSas = OlmSAS()
@@ -171,23 +171,23 @@ internal abstract class SASVerificationTransaction(
 
     override fun acceptVerificationEvent(senderId: String, info: VerificationInfo) {
         when (info) {
-            is VerifInfoStart  -> onVerificationStart(info)
-            is VerifInfoAccept -> onVerificationAccept(info)
-            is VerifInfoKey    -> onKeyVerificationKey(senderId, info)
-            is VerifInfoMac    -> onKeyVerificationMac(info)
-            else               -> {
+            is VerificationInfoStart  -> onVerificationStart(info)
+            is VerificationInfoAccept -> onVerificationAccept(info)
+            is VerificationInfoKey    -> onKeyVerificationKey(senderId, info)
+            is VerificationInfoMac    -> onKeyVerificationMac(info)
+            else                      -> {
                 // nop
             }
         }
     }
 
-    abstract fun onVerificationStart(startReq: VerifInfoStart)
+    abstract fun onVerificationStart(startReq: VerificationInfoStart)
 
-    abstract fun onVerificationAccept(accept: VerifInfoAccept)
+    abstract fun onVerificationAccept(accept: VerificationInfoAccept)
 
-    abstract fun onKeyVerificationKey(userId: String, vKey: VerifInfoKey)
+    abstract fun onKeyVerificationKey(userId: String, vKey: VerificationInfoKey)
 
-    abstract fun onKeyVerificationMac(vKey: VerifInfoMac)
+    abstract fun onKeyVerificationMac(vKey: VerificationInfoMac)
 
     protected fun verifyMacs() {
         Timber.v("## SAS verifying macs for id:$transactionId")

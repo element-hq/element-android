@@ -15,7 +15,7 @@
  */
 package im.vector.matrix.android.internal.crypto.verification
 
-internal interface VerifInfoMac : VerificationInfo {
+internal interface VerificationInfoMac : VerificationInfo {
 
     val transactionID: String?
 
@@ -33,6 +33,6 @@ internal interface VerifInfoMac : VerificationInfo {
     val keys: String?
 }
 
-internal interface VerifInfoMacFactory {
-    fun create(tid: String, mac: Map<String, String>, keys: String) : VerifInfoMac
+internal interface VerificationInfoMacFactory {
+    fun create(tid: String, mac: Map<String, String>, keys: String) : VerificationInfoMac
 }

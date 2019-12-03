@@ -37,12 +37,13 @@ import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
-internal class VerificationMessageLiveObserver @Inject constructor(@SessionDatabase realmConfiguration: RealmConfiguration,
-                                                                   @UserId private val userId: String,
-                                                                   private val cryptoService: CryptoService,
-                                                                   private val sasVerificationService: DefaultSasVerificationService,
-                                                                   private val taskExecutor: TaskExecutor) :
-        RealmLiveEntityObserver<EventEntity>(realmConfiguration) {
+internal class VerificationMessageLiveObserver @Inject constructor(
+        @SessionDatabase realmConfiguration: RealmConfiguration,
+        @UserId private val userId: String,
+        private val cryptoService: CryptoService,
+        private val sasVerificationService: DefaultSasVerificationService,
+        private val taskExecutor: TaskExecutor
+) : RealmLiveEntityObserver<EventEntity>(realmConfiguration) {
 
     override val query = Monarchy.Query<EventEntity> {
         EventEntity.types(it, listOf(
@@ -70,7 +71,7 @@ internal class VerificationMessageLiveObserver @Inject constructor(@SessionDatab
                 .toList()
 
         events.forEach { event ->
-            Timber.d("## SAS Verification live observer: received msgId: ${event.eventId}   msgtype: ${event.type} from ${event.senderId}")
+            Timber.d("## SAS Verification live observer: received msgId: ${event.eventId} msgtype: ${event.type} from ${event.senderId}")
             Timber.v("## SAS Verification live observer: received msgId: $event")
 
             // decrypt if needed?

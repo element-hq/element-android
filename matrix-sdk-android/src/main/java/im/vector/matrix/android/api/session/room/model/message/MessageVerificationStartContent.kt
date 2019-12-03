@@ -22,12 +22,12 @@ import im.vector.matrix.android.api.session.events.model.toContent
 import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultContent
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationStart
 import im.vector.matrix.android.internal.crypto.verification.SASVerificationTransaction
-import im.vector.matrix.android.internal.crypto.verification.VerifInfoStart
+import im.vector.matrix.android.internal.crypto.verification.VerificationInfoStart
 import im.vector.matrix.android.internal.util.JsonCanonicalizer
 import timber.log.Timber
 
 @JsonClass(generateAdapter = true)
-data class MessageVerificationStartContent(
+internal data class MessageVerificationStartContent(
         @Json(name = "from_device") override val fromDevice: String?,
         @Json(name = "hashes") override val hashes: List<String>?,
         @Json(name = "key_agreement_protocols") override val keyAgreementProtocols: List<String>?,
@@ -35,7 +35,7 @@ data class MessageVerificationStartContent(
         @Json(name = "short_authentication_string") override val shortAuthenticationStrings: List<String>?,
         @Json(name = "method") override val method: String?,
         @Json(name = "m.relates_to") val relatesTo: RelationDefaultContent?
-) : VerifInfoStart {
+) : VerificationInfoStart {
 
     override fun toCanonicalJson(): String? {
        return JsonCanonicalizer.getCanonicalJson(MessageVerificationStartContent::class.java, this)

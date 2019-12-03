@@ -167,7 +167,7 @@ internal abstract class SessionModule {
 
     @Binds
     @IntoSet
-    abstract fun bindVerificationEventObserver(verificationMessageLiveObserver: VerificationMessageLiveObserver): LiveEntityObserver
+    abstract fun bindVerificationMessageLiveObserver(verificationMessageLiveObserver: VerificationMessageLiveObserver): LiveEntityObserver
 
     @Binds
     abstract fun bindInitialSyncProgressService(initialSyncProgressService: DefaultInitialSyncProgressService): InitialSyncProgressService

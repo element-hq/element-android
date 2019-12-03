@@ -44,10 +44,10 @@ internal interface SasTransport {
                      hash: String,
                      commitment: String,
                      messageAuthenticationCode: String,
-                     shortAuthenticationStrings: List<String>): VerifInfoAccept
+                     shortAuthenticationStrings: List<String>): VerificationInfoAccept
 
     fun createKey(tid: String,
-                     pubKey: String): VerifInfoKey
+                     pubKey: String): VerificationInfoKey
 
-    fun createMac(tid: String, mac: Map<String, String>, keys: String): VerifInfoMac
+    fun createMac(tid: String, mac: Map<String, String>, keys: String): VerificationInfoMac
 }

@@ -377,14 +377,12 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                             popDraft()
                         }
                         is ParsedCommand.SendShrug                -> {
-                            val sequence: CharSequence = buildString {
+                            val sequence = buildString {
                                 append("¯\\_(ツ)_/¯")
-                                        .apply {
-                                            if (slashCommandResult.message.isNotEmpty()) {
-                                                append(" ")
-                                                append(slashCommandResult.message)
-                                            }
-                                        }
+                                if (slashCommandResult.message.isNotEmpty()) {
+                                    append(" ")
+                                    append(slashCommandResult.message)
+                                }
                             }
                             room.sendTextMessage(sequence)
                             _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled())
