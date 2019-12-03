@@ -25,6 +25,8 @@ import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
 import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.features.home.AvatarRenderer
+import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
+import im.vector.riotx.features.home.room.detail.timeline.tools.createLinkMovementMethod
 import im.vector.riotx.features.home.room.detail.timeline.tools.findPillsAndProcess
 
 /**
@@ -45,10 +47,13 @@ abstract class BottomSheetItemMessagePreview : VectorEpoxyModel<BottomSheetItemM
     lateinit var body: CharSequence
     @EpoxyAttribute
     var time: CharSequence? = null
+    @EpoxyAttribute
+    var urlClickCallback: TimelineEventController.UrlClickCallback? = null
 
     override fun bind(holder: Holder) {
         avatarRenderer.render(avatarUrl, senderId, senderName, holder.avatar)
         holder.sender.setTextOrHide(senderName)
+        holder.body.movementMethod = createLinkMovementMethod(urlClickCallback)
         holder.body.text = body
         body.findPillsAndProcess { it.bind(holder.body) }
         holder.timestamp.setTextOrHide(time)

@@ -16,12 +16,20 @@
 
 package im.vector.riotx.features.home.room.detail.timeline.tools
 
+import android.text.SpannableStringBuilder
+import android.view.MotionEvent
 import androidx.core.text.toSpannable
+import im.vector.matrix.android.api.permalinks.MatrixLinkify
+import im.vector.matrix.android.api.permalinks.MatrixPermalinkSpan
+import im.vector.riotx.core.linkify.VectorLinkify
+import im.vector.riotx.core.utils.isValidUrl
+import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.html.PillImageSpan
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import me.saket.bettermovementmethod.BetterLinkMovementMethod
 
 fun CharSequence.findPillsAndProcess(processBlock: (PillImageSpan) -> Unit) {
     GlobalScope.launch(Dispatchers.Main) {
@@ -31,4 +39,38 @@ fun CharSequence.findPillsAndProcess(processBlock: (PillImageSpan) -> Unit) {
             }
         }.forEach { processBlock(it) }
     }
+}
+
+fun CharSequence.linkify(callback: TimelineEventController.UrlClickCallback?): CharSequence {
+    val spannable = SpannableStringBuilder(this)
+    MatrixLinkify.addLinks(spannable, object : MatrixPermalinkSpan.Callback {
+        override fun onUrlClicked(url: String) {
+            callback?.onUrlClicked(url)
+        }
+    })
+    VectorLinkify.addLinks(spannable, true)
+    return spannable
+}
+
+// Better link movement methods fixes the issue when
+// long pressing to open the context menu on a TextView also triggers an autoLink click.
+fun createLinkMovementMethod(urlClickCallback: TimelineEventController.UrlClickCallback?): BetterLinkMovementMethod {
+    return BetterLinkMovementMethod.newInstance()
+            .apply {
+                setOnLinkClickListener { _, url ->
+                    // Return false to let android manage the click on the link, or true if the link is handled by the application
+                    url.isValidUrl() && urlClickCallback?.onUrlClicked(url) == true
+                }
+
+                // We need also to fix the case when long click on link will trigger long click on cell
+                setOnLinkLongClickListener { tv, url ->
+                    // Long clicks are handled by parent, return true to block android to do something with url
+                    if (url.isValidUrl() && urlClickCallback?.onUrlLongClicked(url) == true) {
+                        tv.dispatchTouchEvent(MotionEvent.obtain(0, 0, MotionEvent.ACTION_CANCEL, 0f, 0f, 0))
+                        true
+                    } else {
+                        false
+                    }
+                }
+            }
 }

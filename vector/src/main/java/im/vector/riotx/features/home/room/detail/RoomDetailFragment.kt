@@ -1163,6 +1163,12 @@ class RoomDetailFragment @Inject constructor(
             is EventSharedAction.IgnoreUser                 -> {
                 roomDetailViewModel.handle(RoomDetailAction.IgnoreUser(action.senderId))
             }
+            is EventSharedAction.OnUrlClicked               -> {
+                onUrlClicked(action.url)
+            }
+            is EventSharedAction.OnUrlLongClicked           -> {
+                onUrlLongClicked(action.url)
+            }
             else                                            -> {
                 Toast.makeText(context, "Action $action is not implemented yet", Toast.LENGTH_LONG).show()
             }

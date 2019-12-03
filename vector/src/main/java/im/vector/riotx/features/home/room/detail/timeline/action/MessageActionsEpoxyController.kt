@@ -23,6 +23,8 @@ import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.bottomsheet.*
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.home.AvatarRenderer
+import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
+import im.vector.riotx.features.home.room.detail.timeline.tools.linkify
 import javax.inject.Inject
 
 /**
@@ -44,7 +46,8 @@ class MessageActionsEpoxyController @Inject constructor(private val stringProvid
                 avatarUrl(state.informationData.avatarUrl ?: "")
                 senderId(state.informationData.senderId)
                 senderName(state.senderName())
-                body(body)
+                urlClickCallback(listener)
+                body(body.linkify(listener))
                 time(state.time())
             }
         }
@@ -127,7 +130,7 @@ class MessageActionsEpoxyController @Inject constructor(private val stringProvid
         }
     }
 
-    interface MessageActionsEpoxyControllerListener {
+    interface MessageActionsEpoxyControllerListener : TimelineEventController.UrlClickCallback {
         fun didSelectMenuAction(eventAction: EventSharedAction)
     }
 }

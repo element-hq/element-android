@@ -16,17 +16,15 @@
 
 package im.vector.riotx.features.home.room.detail.timeline.item
 
-import android.view.MotionEvent
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.text.PrecomputedTextCompat
 import androidx.core.widget.TextViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
-import im.vector.riotx.core.utils.isValidUrl
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
+import im.vector.riotx.features.home.room.detail.timeline.tools.createLinkMovementMethod
 import im.vector.riotx.features.home.room.detail.timeline.tools.findPillsAndProcess
-import me.saket.bettermovementmethod.BetterLinkMovementMethod
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
 abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
@@ -40,28 +38,9 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
     @EpoxyAttribute
     var urlClickCallback: TimelineEventController.UrlClickCallback? = null
 
-    // Better link movement methods fixes the issue when
-    // long pressing to open the context menu on a TextView also triggers an autoLink click.
-    private val mvmtMethod = BetterLinkMovementMethod.newInstance().also {
-        it.setOnLinkClickListener { _, url ->
-            // Return false to let android manage the click on the link, or true if the link is handled by the application
-            url.isValidUrl() && urlClickCallback?.onUrlClicked(url) == true
-        }
-        // We need also to fix the case when long click on link will trigger long click on cell
-        it.setOnLinkLongClickListener { tv, url ->
-            // Long clicks are handled by parent, return true to block android to do something with url
-            if (url.isValidUrl() && urlClickCallback?.onUrlLongClicked(url) == true) {
-                tv.dispatchTouchEvent(MotionEvent.obtain(0, 0, MotionEvent.ACTION_CANCEL, 0f, 0f, 0))
-                true
-            } else {
-                false
-            }
-        }
-    }
-
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.messageView.movementMethod = mvmtMethod
+        holder.messageView.movementMethod = createLinkMovementMethod(urlClickCallback)
         if (useBigFont) {
             holder.messageView.textSize = 44F
         } else {
