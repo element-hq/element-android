@@ -69,12 +69,23 @@ internal class VerificationMessageLiveObserver @Inject constructor(@SessionDatab
                 }
                 .toList()
 
+        // TODO use age also, ignore initial sync or back pagination?
+        val now = System.currentTimeMillis()
+        val tooInThePast = now - (10 * 60 * 1000 * 1000)
+        val tooInTheFuture = System.currentTimeMillis() + (5 * 60 * 1000 * 1000)
+
         events.forEach { event ->
             Timber.d("## SAS Verification live observer: received msgId: ${event.eventId}   msgtype: ${event.type} from ${event.senderId}")
             Timber.v("## SAS Verification live observer: received msgId: $event")
 
+            // If the request is in the future by more than 5 minutes or more than 10 minutes in the past,
+            // the message should be ignored by the receiver.
+            val eventOrigin = event.originServerTs ?: -1
+            if (eventOrigin < tooInThePast || eventOrigin > tooInTheFuture) {
+                Timber.d("## SAS Verification live observer: msgId: ${event.eventId} is out of time ^^")
+                return@forEach
+            }
             // decrypt if needed?
-
             if (event.isEncrypted() && event.mxDecryptionResult == null) {
                 // TODO use a global event decryptor? attache to session and that listen to new sessionId?
                 // for now decrypt sync
@@ -102,8 +113,6 @@ internal class VerificationMessageLiveObserver @Inject constructor(@SessionDatab
                 }
                 EventType.MESSAGE               -> {
                     if (MessageType.MSGTYPE_VERIFICATION_REQUEST == event.getClearContent().toModel<MessageContent>()?.type) {
-                        // TODO  If the request is in the future by more than 5 minutes or more than 10 minutes in the past,
-                        // the message should be ignored by the receiver.
                         sasVerificationService.onRoomRequestReceived(event)
                     }
                 }
