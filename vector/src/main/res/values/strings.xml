@@ -1783,7 +1783,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
 
     <string name="report_content_spam">"It's spam"</string>
     <string name="report_content_inappropriate">"It's inappropriate"</string>
-    <string name="report_content_custom">"Custom report"</string>
+    <string name="report_content_custom">"Custom report…"</string>
     <string name="report_content_custom_title">"Report this content"</string>
     <string name="report_content_custom_hint">"Reason for reporting this content"</string>
     <string name="report_content_custom_submit">"REPORT"</string>
