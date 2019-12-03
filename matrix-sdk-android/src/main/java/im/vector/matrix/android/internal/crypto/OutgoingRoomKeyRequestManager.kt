@@ -187,7 +187,7 @@ internal class OutgoingRoomKeyRequestManager @Inject constructor(
                         OutgoingRoomKeyRequest.RequestState.CANCELLATION_PENDING_AND_WILL_RESEND))
 
         if (null == outgoingRoomKeyRequest) {
-            Timber.e("## sendOutgoingRoomKeyRequests() : No more outgoing room key requests")
+            Timber.v("## sendOutgoingRoomKeyRequests() : No more outgoing room key requests")
             sendOutgoingRoomKeyRequestsRunning.set(false)
             return
         }

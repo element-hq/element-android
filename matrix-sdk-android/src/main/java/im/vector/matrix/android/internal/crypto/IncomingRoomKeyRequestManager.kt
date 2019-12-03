@@ -78,7 +78,7 @@ internal class IncomingRoomKeyRequestManager @Inject constructor(
             Timber.v("m.room_key_request from $userId:$deviceId for $roomId / ${body.sessionId} id ${request.requestId}")
             if (userId == null || credentials.userId != userId) {
                 // TODO: determine if we sent this device the keys already: in
-                Timber.e("## processReceivedRoomKeyRequests() : Ignoring room key request from other user for now")
+                Timber.w("## processReceivedRoomKeyRequests() : Ignoring room key request from other user for now")
                 return
             }
             // TODO: should we queue up requests we don't yet have keys for, in case they turn up later?
@@ -86,11 +86,11 @@ internal class IncomingRoomKeyRequestManager @Inject constructor(
             // the keys for the requested events, and can drop the requests.
             val decryptor = roomDecryptorProvider.getRoomDecryptor(roomId, alg)
             if (null == decryptor) {
-                Timber.e("## processReceivedRoomKeyRequests() : room key request for unknown $alg in room $roomId")
+                Timber.w("## processReceivedRoomKeyRequests() : room key request for unknown $alg in room $roomId")
                 continue
             }
             if (!decryptor.hasKeysForKeyRequest(request)) {
-                Timber.e("## processReceivedRoomKeyRequests() : room key request for unknown session ${body.sessionId!!}")
+                Timber.w("## processReceivedRoomKeyRequests() : room key request for unknown session ${body.sessionId!!}")
                 cryptoStore.deleteIncomingRoomKeyRequest(request)
                 continue
             }
