@@ -17,8 +17,8 @@ package im.vector.matrix.android.internal.crypto.model.rest
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import im.vector.matrix.android.internal.crypto.verification.VerifInfoMac
-import im.vector.matrix.android.internal.crypto.verification.VerifInfoMacFactory
+import im.vector.matrix.android.internal.crypto.verification.VerificationInfoMac
+import im.vector.matrix.android.internal.crypto.verification.VerificationInfoMacFactory
 
 /**
  * Sent by both devices to send the MAC of their device key to the other device.
@@ -29,7 +29,7 @@ internal data class KeyVerificationMac(
         @Json(name = "mac") override val mac: Map<String, String>? = null,
         @Json(name = "key") override val keys: String? = null
 
-) : SendToDeviceObject, VerifInfoMac {
+) : SendToDeviceObject, VerificationInfoMac {
 
     override fun isValid(): Boolean {
         if (transactionID.isNullOrBlank() || keys.isNullOrBlank() || mac.isNullOrEmpty()) {
@@ -40,8 +40,8 @@ internal data class KeyVerificationMac(
 
     override fun toSendToDeviceObject(): SendToDeviceObject? = this
 
-    companion object : VerifInfoMacFactory {
-        override fun create(tid: String, mac: Map<String, String>, keys: String): VerifInfoMac {
+    companion object : VerificationInfoMacFactory {
+        override fun create(tid: String, mac: Map<String, String>, keys: String): VerificationInfoMac {
             return KeyVerificationMac(tid, mac, keys)
         }
     }

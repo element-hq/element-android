@@ -98,14 +98,14 @@ internal class SasTransportToDevice(
                               commitment: String,
                               messageAuthenticationCode: String,
                               shortAuthenticationStrings: List<String>)
-            : VerifInfoAccept = KeyVerificationAccept.create(tid, keyAgreementProtocol, hash, commitment, messageAuthenticationCode, shortAuthenticationStrings)
+            : VerificationInfoAccept = KeyVerificationAccept.create(tid, keyAgreementProtocol, hash, commitment, messageAuthenticationCode, shortAuthenticationStrings)
 
-    override fun createKey(tid: String, pubKey: String): VerifInfoKey = KeyVerificationKey.create(tid, pubKey)
+    override fun createKey(tid: String, pubKey: String): VerificationInfoKey = KeyVerificationKey.create(tid, pubKey)
 
     override fun createMac(tid: String, mac: Map<String, String>, keys: String) = KeyVerificationMac.create(tid, mac, keys)
 }
 
-internal class SasToDeviceTransportFactory @Inject constructor(
+internal class SasTransportToDeviceFactory @Inject constructor(
         private val sendToDeviceTask: SendToDeviceTask,
         private val taskExecutor: TaskExecutor) {
 

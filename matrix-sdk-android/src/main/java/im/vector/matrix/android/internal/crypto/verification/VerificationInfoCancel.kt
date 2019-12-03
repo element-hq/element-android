@@ -15,18 +15,16 @@
  */
 package im.vector.matrix.android.internal.crypto.verification
 
-/**
- * Sent by both devices to send their ephemeral Curve25519 public key to the other device.
- */
-internal interface VerifInfoKey : VerificationInfo {
+internal interface VerificationInfoCancel : VerificationInfo {
 
     val transactionID: String?
     /**
-     * The device’s ephemeral public key, as an unpadded base64 string
+     * machine-readable reason for cancelling, see [CancelCode]
      */
-    val key: String?
-}
+    val code: String?
 
-internal interface KeyVerifInfoFactory {
-    fun create(tid: String, pubKey: String): VerifInfoKey
+    /**
+     * human-readable reason for cancelling.  This should only be used if the receiving client does not understand the code given.
+     */
+    val reason: String?
 }

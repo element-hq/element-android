@@ -17,8 +17,8 @@ package im.vector.matrix.android.internal.crypto.model.rest
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import im.vector.matrix.android.internal.crypto.verification.KeyVerifInfoFactory
-import im.vector.matrix.android.internal.crypto.verification.VerifInfoKey
+import im.vector.matrix.android.internal.crypto.verification.VerificationInfoKeyFactory
+import im.vector.matrix.android.internal.crypto.verification.VerificationInfoKey
 
 /**
  * Sent by both devices to send their ephemeral Curve25519 public key to the other device.
@@ -35,9 +35,9 @@ internal data class KeyVerificationKey(
          */
         @Json(name = "key") override val key: String? = null
 
-) : SendToDeviceObject, VerifInfoKey {
+) : SendToDeviceObject, VerificationInfoKey {
 
-    companion object : KeyVerifInfoFactory {
+    companion object : VerificationInfoKeyFactory {
         override fun create(tid: String, pubKey: String): KeyVerificationKey {
             return KeyVerificationKey(tid, pubKey)
         }

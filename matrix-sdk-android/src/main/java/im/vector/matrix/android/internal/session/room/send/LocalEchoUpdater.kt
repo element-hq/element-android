@@ -25,7 +25,7 @@ import javax.inject.Inject
 
 internal class LocalEchoUpdater @Inject constructor(private val monarchy: Monarchy) {
 
-    suspend fun updateSendState(eventId: String, sendState: SendState) {
+    fun updateSendState(eventId: String, sendState: SendState) {
         Timber.v("Update local state of $eventId to ${sendState.name}")
         monarchy.writeAsync { realm ->
             val sendingEventEntity = EventEntity.where(realm, eventId).findFirst()

@@ -18,7 +18,7 @@ package im.vector.matrix.android.internal.crypto.model.rest
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.session.crypto.sas.CancelCode
-import im.vector.matrix.android.internal.crypto.verification.VerifInfoCancel
+import im.vector.matrix.android.internal.crypto.verification.VerificationInfoCancel
 
 /**
  * To device event sent by either party to cancel a key verification.
@@ -40,7 +40,7 @@ internal data class KeyVerificationCancel(
          * human-readable reason for cancelling.  This should only be used if the receiving client does not understand the code given.
          */
         override var reason: String? = null
-) : SendToDeviceObject, VerifInfoCancel {
+) : SendToDeviceObject, VerificationInfoCancel {
 
     companion object {
         fun create(tid: String, cancelCode: CancelCode): KeyVerificationCancel {

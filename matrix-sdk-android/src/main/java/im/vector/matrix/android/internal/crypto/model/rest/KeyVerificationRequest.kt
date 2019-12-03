@@ -23,7 +23,7 @@ import im.vector.matrix.android.internal.crypto.verification.VerificationInfo
  * Requests a key verification with another user's devices.
  */
 @JsonClass(generateAdapter = true)
-data class KeyVerificationRequest(
+internal data class KeyVerificationRequest(
 
         @Json(name = "from_device")
         val fromDevice: String,

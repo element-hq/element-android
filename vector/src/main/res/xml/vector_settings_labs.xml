@@ -46,7 +46,7 @@
         android:title="@string/labs_swipe_to_reply_in_timeline" />
 
     <im.vector.riotx.core.preference.VectorSwitchPreference
-        android:defaultValue="false"
+        android:defaultValue="@bool/debug_mode"
         android:key="SETTINGS_LABS_ALLOW_EXTENDED_LOGS"
         android:summary="@string/labs_allow_extended_logging_summary"
         android:title="@string/labs_allow_extended_logging" />

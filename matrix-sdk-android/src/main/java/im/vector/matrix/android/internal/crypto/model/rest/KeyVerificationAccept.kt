@@ -17,8 +17,8 @@ package im.vector.matrix.android.internal.crypto.model.rest
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import im.vector.matrix.android.internal.crypto.verification.VerifInfoAccept
-import im.vector.matrix.android.internal.crypto.verification.AcceptVerifInfoFactory
+import im.vector.matrix.android.internal.crypto.verification.VerificationInfoAccept
+import im.vector.matrix.android.internal.crypto.verification.VerificationInfoAcceptFactory
 import timber.log.Timber
 
 /**
@@ -65,7 +65,7 @@ internal data class KeyVerificationAccept(
          */
         @Json(name = "commitment")
         override var commitment: String? = null
-) : SendToDeviceObject, VerifInfoAccept {
+) : SendToDeviceObject, VerificationInfoAccept {
 
     override fun isValid(): Boolean {
         if (transactionID.isNullOrBlank()
@@ -82,13 +82,13 @@ internal data class KeyVerificationAccept(
 
     override fun toSendToDeviceObject() = this
 
-    companion object : AcceptVerifInfoFactory {
+    companion object : VerificationInfoAcceptFactory {
         override fun create(tid: String,
                             keyAgreementProtocol: String,
                             hash: String,
                             commitment: String,
                             messageAuthenticationCode: String,
-                            shortAuthenticationStrings: List<String>): VerifInfoAccept {
+                            shortAuthenticationStrings: List<String>): VerificationInfoAccept {
             return KeyVerificationAccept().apply {
                 this.transactionID = tid
                 this.keyAgreementProtocol = keyAgreementProtocol

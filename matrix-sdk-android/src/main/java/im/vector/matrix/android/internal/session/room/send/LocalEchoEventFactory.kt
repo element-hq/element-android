@@ -286,7 +286,7 @@ internal class LocalEchoEventFactory @Inject constructor(
         )
     }
 
-    fun createVerificationRequest(roomId: String, fromDevice: String, to: String, methods: List<String>): Event {
+    fun createVerificationRequest(roomId: String, fromDevice: String, toUserId: String, methods: List<String>): Event {
         val localID = LocalEcho.createLocalEchoId()
         return Event(
                 roomId = roomId,
@@ -297,7 +297,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                 content = MessageVerificationRequestContent(
                         body = stringProvider.getString(R.string.key_verification_request_fallback_message, userId),
                         fromDevice = fromDevice,
-                        to = to,
+                        toUserId = toUserId,
                         methods = methods
                 ).toContent(),
                 unsignedData = UnsignedData(age = null, transactionId = localID)

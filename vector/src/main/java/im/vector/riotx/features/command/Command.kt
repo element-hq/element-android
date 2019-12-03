@@ -40,7 +40,7 @@ enum class Command(val command: String, val parameters: String, @StringRes val d
     CLEAR_SCALAR_TOKEN("/clear_scalar_token", "", R.string.command_description_clear_scalar_token),
     SHRUG("/shrug", "<message>", R.string.command_description_shrug),
     // TODO temporary command
-    VERIFY_USER("/verify", "<userID>", R.string.command_description_spoiler);
+    VERIFY_USER("/verify", "<user-id>", R.string.command_description_verify);
 
     val length
         get() = command.length + 1

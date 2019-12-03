@@ -20,15 +20,15 @@ import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.session.events.model.RelationType
 import im.vector.matrix.android.api.session.events.model.toContent
 import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultContent
-import im.vector.matrix.android.internal.crypto.verification.VerifInfoMac
-import im.vector.matrix.android.internal.crypto.verification.VerifInfoMacFactory
+import im.vector.matrix.android.internal.crypto.verification.VerificationInfoMac
+import im.vector.matrix.android.internal.crypto.verification.VerificationInfoMacFactory
 
 @JsonClass(generateAdapter = true)
 internal data class MessageVerificationMacContent(
         @Json(name = "mac") override val mac: Map<String, String>? = null,
         @Json(name = "keys") override val keys: String? = null,
         @Json(name = "m.relates_to") val relatesTo: RelationDefaultContent?
-) : VerifInfoMac {
+) : VerificationInfoMac {
 
     override val transactionID: String?
         get() = relatesTo?.eventId
@@ -42,8 +42,8 @@ internal data class MessageVerificationMacContent(
         return true
     }
 
-    companion object : VerifInfoMacFactory {
-        override fun create(tid: String, mac: Map<String, String>, keys: String): VerifInfoMac {
+    companion object : VerificationInfoMacFactory {
+        override fun create(tid: String, mac: Map<String, String>, keys: String): VerificationInfoMac {
             return MessageVerificationMacContent(
                     mac,
                     keys,

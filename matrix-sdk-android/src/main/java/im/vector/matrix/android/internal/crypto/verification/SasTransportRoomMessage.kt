@@ -33,7 +33,7 @@ import im.vector.matrix.android.internal.task.configureWith
 import timber.log.Timber
 import javax.inject.Inject
 
-internal class SasTransportRoomMessage constructor(
+internal class SasTransportRoomMessage(
         private val roomId: String,
         private val cryptoService: CryptoService,
 //        private val tx: SASVerificationTransaction?,
@@ -109,9 +109,9 @@ internal class SasTransportRoomMessage constructor(
                               commitment: String,
                               messageAuthenticationCode: String,
                               shortAuthenticationStrings: List<String>)
-            : VerifInfoAccept = MessageVerificationAcceptContent.create(tid, keyAgreementProtocol, hash, commitment, messageAuthenticationCode, shortAuthenticationStrings)
+            : VerificationInfoAccept = MessageVerificationAcceptContent.create(tid, keyAgreementProtocol, hash, commitment, messageAuthenticationCode, shortAuthenticationStrings)
 
-    override fun createKey(tid: String, pubKey: String): VerifInfoKey = MessageVerificationKeyContent.create(tid, pubKey)
+    override fun createKey(tid: String, pubKey: String): VerificationInfoKey = MessageVerificationKeyContent.create(tid, pubKey)
 
     override fun createMac(tid: String, mac: Map<String, String>, keys: String) = MessageVerificationMacContent.create(tid, mac, keys)
 }
