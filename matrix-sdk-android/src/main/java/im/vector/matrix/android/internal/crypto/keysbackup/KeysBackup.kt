@@ -345,9 +345,7 @@ internal class KeysBackup @Inject constructor(
                             }
                         })
                     }
-                }
-
-                keysBackupStateManager.addListener(keysBackupStateListener!!)
+                }.also { keysBackupStateManager.addListener(it) }
 
                 backupKeys()
             }
