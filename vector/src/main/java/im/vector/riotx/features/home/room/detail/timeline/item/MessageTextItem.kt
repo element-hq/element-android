@@ -19,18 +19,13 @@ package im.vector.riotx.features.home.room.detail.timeline.item
 import android.view.MotionEvent
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.text.PrecomputedTextCompat
-import androidx.core.text.toSpannable
 import androidx.core.widget.TextViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
 import im.vector.riotx.core.utils.isValidUrl
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
-import im.vector.riotx.features.html.PillImageSpan
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import im.vector.riotx.features.home.room.detail.timeline.tools.findPillsAndProcess
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
@@ -76,24 +71,13 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
         holder.messageView.setOnClickListener(attributes.itemClickListener)
         holder.messageView.setOnLongClickListener(attributes.itemLongClickListener)
         if (searchForPills) {
-            findPillsAndProcess { it.bind(holder.messageView) }
+            message?.findPillsAndProcess { it.bind(holder.messageView) }
         }
         val textFuture = PrecomputedTextCompat.getTextFuture(
                 message ?: "",
                 TextViewCompat.getTextMetricsParams(holder.messageView),
                 null)
         holder.messageView.setTextFuture(textFuture)
-    }
-
-    private fun findPillsAndProcess(processBlock: (span: PillImageSpan) -> Unit) {
-        GlobalScope.launch(Dispatchers.Main) {
-            val pillImageSpans: Array<PillImageSpan>? = withContext(Dispatchers.IO) {
-                message?.toSpannable()?.let { spannable ->
-                    spannable.getSpans(0, spannable.length, PillImageSpan::class.java)
-                }
-            }
-            pillImageSpans?.forEach { processBlock(it) }
-        }
     }
 
     override fun getViewType() = STUB_ID

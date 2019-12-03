@@ -25,6 +25,7 @@ import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
 import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.features.home.AvatarRenderer
+import im.vector.riotx.features.home.room.detail.timeline.tools.findPillsAndProcess
 
 /**
  * A message preview for bottom sheet.
@@ -49,6 +50,7 @@ abstract class BottomSheetItemMessagePreview : VectorEpoxyModel<BottomSheetItemM
         avatarRenderer.render(avatarUrl, senderId, senderName, holder.avatar)
         holder.sender.setTextOrHide(senderName)
         holder.body.text = body
+        body.findPillsAndProcess { it.bind(holder.body) }
         holder.timestamp.setTextOrHide(time)
     }
 
