@@ -22,7 +22,7 @@ import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
 
 @EpoxyModelClass(layout = R.layout.item_bottom_sheet_divider)
-abstract class BottomSheetItemSeparator : VectorEpoxyModel<BottomSheetItemSeparator.Holder>() {
+abstract class BottomSheetSeparatorItem : VectorEpoxyModel<BottomSheetSeparatorItem.Holder>() {
 
     class Holder : VectorEpoxyHolder()
 }

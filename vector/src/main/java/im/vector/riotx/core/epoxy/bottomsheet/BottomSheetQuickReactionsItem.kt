@@ -29,7 +29,7 @@ import im.vector.riotx.core.epoxy.VectorEpoxyModel
  * A quick reaction list for bottom sheet.
  */
 @EpoxyModelClass(layout = R.layout.item_bottom_sheet_quick_reaction)
-abstract class BottomSheetItemQuickReactions : VectorEpoxyModel<BottomSheetItemQuickReactions.Holder>() {
+abstract class BottomSheetQuickReactionsItem : VectorEpoxyModel<BottomSheetQuickReactionsItem.Holder>() {
 
     @EpoxyAttribute
     lateinit var fontProvider: EmojiCompatFontProvider

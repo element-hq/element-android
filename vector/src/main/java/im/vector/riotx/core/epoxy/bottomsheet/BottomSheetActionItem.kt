@@ -37,7 +37,7 @@ import im.vector.riotx.features.themes.ThemeUtils
  * A action for bottom sheet.
  */
 @EpoxyModelClass(layout = R.layout.item_bottom_sheet_action)
-abstract class BottomSheetItemAction : VectorEpoxyModel<BottomSheetItemAction.Holder>() {
+abstract class BottomSheetActionItem : VectorEpoxyModel<BottomSheetActionItem.Holder>() {
 
     @EpoxyAttribute
     @DrawableRes

@@ -16,22 +16,14 @@
 
 package im.vector.riotx.features.home.room.detail.timeline.item
 
-import android.view.MotionEvent
+import android.text.method.MovementMethod
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.text.PrecomputedTextCompat
-import androidx.core.text.toSpannable
 import androidx.core.widget.TextViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
-import im.vector.riotx.core.utils.isValidUrl
-import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
-import im.vector.riotx.features.html.PillImageSpan
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import me.saket.bettermovementmethod.BetterLinkMovementMethod
+import im.vector.riotx.features.home.room.detail.timeline.tools.findPillsAndProcess
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
 abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
@@ -43,30 +35,11 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
     @EpoxyAttribute
     var useBigFont: Boolean = false
     @EpoxyAttribute
-    var urlClickCallback: TimelineEventController.UrlClickCallback? = null
-
-    // Better link movement methods fixes the issue when
-    // long pressing to open the context menu on a TextView also triggers an autoLink click.
-    private val mvmtMethod = BetterLinkMovementMethod.newInstance().also {
-        it.setOnLinkClickListener { _, url ->
-            // Return false to let android manage the click on the link, or true if the link is handled by the application
-            url.isValidUrl() && urlClickCallback?.onUrlClicked(url) == true
-        }
-        // We need also to fix the case when long click on link will trigger long click on cell
-        it.setOnLinkLongClickListener { tv, url ->
-            // Long clicks are handled by parent, return true to block android to do something with url
-            if (url.isValidUrl() && urlClickCallback?.onUrlLongClicked(url) == true) {
-                tv.dispatchTouchEvent(MotionEvent.obtain(0, 0, MotionEvent.ACTION_CANCEL, 0f, 0f, 0))
-                true
-            } else {
-                false
-            }
-        }
-    }
+    var movementMethod: MovementMethod? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.messageView.movementMethod = mvmtMethod
+        holder.messageView.movementMethod = movementMethod
         if (useBigFont) {
             holder.messageView.textSize = 44F
         } else {
@@ -76,24 +49,13 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
         holder.messageView.setOnClickListener(attributes.itemClickListener)
         holder.messageView.setOnLongClickListener(attributes.itemLongClickListener)
         if (searchForPills) {
-            findPillsAndProcess { it.bind(holder.messageView) }
+            message?.findPillsAndProcess { it.bind(holder.messageView) }
         }
         val textFuture = PrecomputedTextCompat.getTextFuture(
                 message ?: "",
                 TextViewCompat.getTextMetricsParams(holder.messageView),
                 null)
         holder.messageView.setTextFuture(textFuture)
-    }
-
-    private fun findPillsAndProcess(processBlock: (span: PillImageSpan) -> Unit) {
-        GlobalScope.launch(Dispatchers.Main) {
-            val pillImageSpans: Array<PillImageSpan>? = withContext(Dispatchers.IO) {
-                message?.toSpannable()?.let { spannable ->
-                    spannable.getSpans(0, spannable.length, PillImageSpan::class.java)
-                }
-            }
-            pillImageSpans?.forEach { processBlock(it) }
-        }
     }
 
     override fun getViewType() = STUB_ID

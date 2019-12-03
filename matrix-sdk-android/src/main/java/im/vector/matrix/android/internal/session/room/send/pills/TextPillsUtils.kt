@@ -62,10 +62,14 @@ internal class TextPillsUtils @Inject constructor(
             var currIndex = 0
             pills.forEachIndexed { _, (urlSpan, start, end) ->
                 // We want to replace with the pill with a html link
+                // append text before pill
                 append(text, currIndex, start)
+                // append the pill
                 append(String.format(template, urlSpan.userId, urlSpan.displayName))
                 currIndex = end
             }
+            // append text after the last pill
+            append(text, currIndex, text.length)
         }
     }
 

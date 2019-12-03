@@ -266,6 +266,7 @@
         <item name="android:textColorSecondary">@color/riot_secondary_text_color_dark</item>
         <!-- Default color for text View -->
         <item name="android:textColorTertiary">@color/riot_tertiary_text_color_dark</item>
+        <item name="android:textColorLink">@color/riotx_links</item>
     </style>
 
     <style name="Vector.BottomSheet.Light" parent="Theme.Design.Light.BottomSheetDialog">
@@ -273,6 +274,7 @@
         <item name="android:textColorSecondary">@color/riot_secondary_text_color_light</item>
         <!-- Default color for text View -->
         <item name="android:textColorTertiary">@color/riot_tertiary_text_color_light</item>
+        <item name="android:textColorLink">@color/riotx_links</item>
     </style>
 
     <style name="Vector.BottomSheet.Status" parent="Theme.Design.Light.BottomSheetDialog">
@@ -280,6 +282,7 @@
         <item name="android:textColorSecondary">@color/riot_secondary_text_color_status</item>
         <!-- Default color for text View -->
         <item name="android:textColorTertiary">@color/riot_tertiary_text_color_status</item>
+        <item name="android:textColorLink">@color/link_color_status</item>
     </style>
 
 

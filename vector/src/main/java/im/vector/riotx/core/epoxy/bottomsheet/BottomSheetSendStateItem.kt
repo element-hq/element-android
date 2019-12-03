@@ -17,41 +17,37 @@
 package im.vector.riotx.core.epoxy.bottomsheet
 
 import android.view.View
-import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.DrawableRes
+import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
-import im.vector.riotx.core.extensions.setTextOrHide
-import im.vector.riotx.features.home.AvatarRenderer
 
 /**
- * A room preview for bottom sheet.
+ * A send state for bottom sheet.
  */
-@EpoxyModelClass(layout = R.layout.item_bottom_sheet_room_preview)
-abstract class BottomSheetItemRoomPreview : VectorEpoxyModel<BottomSheetItemRoomPreview.Holder>() {
+@EpoxyModelClass(layout = R.layout.item_bottom_sheet_message_status)
+abstract class BottomSheetSendStateItem : VectorEpoxyModel<BottomSheetSendStateItem.Holder>() {
 
     @EpoxyAttribute
-    lateinit var avatarRenderer: AvatarRenderer
+    var showProgress: Boolean = false
     @EpoxyAttribute
-    lateinit var avatarUrl: String
+    lateinit var text: CharSequence
     @EpoxyAttribute
-    lateinit var roomId: String
-    @EpoxyAttribute
-    var roomName: String? = null
-    @EpoxyAttribute var settingsClickListener: View.OnClickListener? = null
+    @DrawableRes
+    var drawableStart: Int = 0
 
     override fun bind(holder: Holder) {
-        avatarRenderer.render(avatarUrl, roomId, roomName, holder.avatar)
-        holder.roomName.setTextOrHide(roomName)
-        holder.roomSettings.setOnClickListener(settingsClickListener)
+        holder.progress.isVisible = showProgress
+        holder.text.setCompoundDrawablesWithIntrinsicBounds(drawableStart, 0, 0, 0)
+        holder.text.text = text
     }
 
     class Holder : VectorEpoxyHolder() {
-        val avatar by bind<ImageView>(R.id.bottomSheetRoomPreviewAvatar)
-        val roomName by bind<TextView>(R.id.bottomSheetRoomPreviewName)
-        val roomSettings by bind<View>(R.id.bottomSheetRoomPreviewSettings)
+        val progress by bind<View>(R.id.messageStatusProgress)
+        val text by bind<TextView>(R.id.messageStatusText)
     }
 }
