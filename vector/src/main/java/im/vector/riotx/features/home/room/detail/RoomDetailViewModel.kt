@@ -266,7 +266,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 }
             }
             session.rx()
-                    .joinRoom(roomId, viaServer)
+                    .joinRoom(roomId, null, viaServer)
                     .map { roomId }
                     .execute {
                         copy(tombstoneEventHandling = it)
@@ -487,7 +487,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     private fun handleInviteSlashCommand(invite: ParsedCommand.Invite) {
         _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled())
 
-        room.invite(invite.userId, object : MatrixCallback<Unit> {
+        room.invite(invite.userId, invite.reason, object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
                 _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandResultOk)
             }
@@ -553,11 +553,11 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun handleRejectInvite() {
-        room.leave(object : MatrixCallback<Unit> {})
+        room.leave(null, object : MatrixCallback<Unit> {})
     }
 
     private fun handleAcceptInvite() {
-        room.join(callback = object : MatrixCallback<Unit> {})
+        room.join(null, callback = object : MatrixCallback<Unit> {})
     }
 
     private fun handleEditAction(action: RoomDetailAction.EnterEditMode) {

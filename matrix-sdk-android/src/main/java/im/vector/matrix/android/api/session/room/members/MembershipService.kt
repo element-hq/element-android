@@ -52,16 +52,16 @@ interface MembershipService {
     /**
      * Invite a user in the room
      */
-    fun invite(userId: String, callback: MatrixCallback<Unit>): Cancelable
+    fun invite(userId: String, reason: String?, callback: MatrixCallback<Unit>): Cancelable
 
     /**
      * Join the room, or accept an invitation.
      */
 
-    fun join(viaServers: List<String> = emptyList(), callback: MatrixCallback<Unit>): Cancelable
+    fun join(reason: String?, viaServers: List<String> = emptyList(), callback: MatrixCallback<Unit>): Cancelable
 
     /**
      * Leave the room, or reject an invitation.
      */
-    fun leave(callback: MatrixCallback<Unit>): Cancelable
+    fun leave(reason: String?, callback: MatrixCallback<Unit>): Cancelable
 }
