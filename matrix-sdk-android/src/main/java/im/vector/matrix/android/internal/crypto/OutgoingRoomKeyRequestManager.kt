@@ -63,6 +63,7 @@ internal class OutgoingRoomKeyRequestManager @Inject constructor(
      */
     fun stop() {
         isClientRunning = false
+        stopTimer()
     }
 
     /**
@@ -169,6 +170,10 @@ internal class OutgoingRoomKeyRequestManager @Inject constructor(
             sendOutgoingRoomKeyRequestsRunning.set(true)
             sendOutgoingRoomKeyRequests()
         }, SEND_KEY_REQUESTS_DELAY_MS.toLong())
+    }
+
+    private fun stopTimer() {
+        BACKGROUND_HANDLER.removeCallbacksAndMessages(null)
     }
 
     // look for and send any queued requests. Runs itself recursively until

@@ -22,12 +22,14 @@ import arrow.core.Try
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.matrix.android.api.session.file.FileService
+import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.crypto.attachments.ElementToDecrypt
 import im.vector.matrix.android.internal.crypto.attachments.MXEncryptedAttachments
 import im.vector.matrix.android.internal.di.UserMd5
 import im.vector.matrix.android.internal.extensions.foldToCallback
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import im.vector.matrix.android.internal.util.md5
+import im.vector.matrix.android.internal.util.toCancelable
 import im.vector.matrix.android.internal.util.writeToFile
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -55,8 +57,8 @@ internal class DefaultFileService @Inject constructor(private val context: Conte
                               fileName: String,
                               url: String?,
                               elementToDecrypt: ElementToDecrypt?,
-                              callback: MatrixCallback<File>) {
-        GlobalScope.launch(coroutineDispatchers.main) {
+                              callback: MatrixCallback<File>): Cancelable {
+        return GlobalScope.launch(coroutineDispatchers.main) {
             withContext(coroutineDispatchers.io) {
                 Try {
                     val folder = getFolder(downloadMode, id)
@@ -96,7 +98,7 @@ internal class DefaultFileService @Inject constructor(private val context: Conte
                 }
             }
                     .foldToCallback(callback)
-        }
+        }.toCancelable()
     }
 
     private fun getFolder(downloadMode: FileService.DownloadMode, id: String): File {
