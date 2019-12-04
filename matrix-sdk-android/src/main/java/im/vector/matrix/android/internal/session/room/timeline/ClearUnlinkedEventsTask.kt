@@ -22,6 +22,7 @@ import im.vector.matrix.android.internal.database.helper.deleteOnCascade
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.ChunkEntityFields
 import im.vector.matrix.android.internal.database.model.EventEntityFields
+import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.awaitTransaction
@@ -43,6 +44,9 @@ internal class DefaultClearUnlinkedEventsTask @Inject constructor(private val mo
             unlinkedChunks.forEach {
                 it.deleteOnCascade()
             }
+            val roomEntity = RoomEntity.where(localRealm, roomId = params.roomId).findFirst()
+                             ?: return@awaitTransaction
+            roomEntity.untimelinedStateEvents.where().equalTo(EventEntityFields.IS_UNLINKED, true).findAll().deleteAllFromRealm()
         }
     }
 }

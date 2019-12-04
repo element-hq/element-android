@@ -31,6 +31,6 @@ data class EventContextResponse(
 ) : TokenChunkEvent {
 
     override val events: List<Event> by lazy {
-        eventsAfter.reversed() + listOf(event) + eventsBefore
+        eventsBefore.reversed() + listOf(event) + eventsAfter
     }
 }
