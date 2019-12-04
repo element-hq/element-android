@@ -103,6 +103,6 @@ abstract class MergedHeaderItem : BaseEventItem<MergedHeaderItem.Holder>() {
     }
 
     companion object {
-        private const val STUB_ID = R.id.messageContentMergedheaderStub
+        private const val STUB_ID = R.id.messageContentMergedHeaderStub
     }
 }

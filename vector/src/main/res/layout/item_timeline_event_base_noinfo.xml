@@ -10,7 +10,7 @@
         android:id="@+id/messageSelectedBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignBottom="@+id/informationBottom"
+        android:layout_alignBottom="@+id/readReceiptsView"
         android:layout_alignParentTop="true"
         android:background="?riotx_highlighted_message_background" />
 
@@ -47,7 +47,7 @@
             android:layout="@layout/item_timeline_event_blank_stub" />
 
         <ViewStub
-            android:id="@+id/messageContentMergedheaderStub"
+            android:id="@+id/messageContentMergedHeaderStub"
             style="@style/TimelineContentStubBaseParams"
             android:layout="@layout/item_timeline_event_merged_header_stub" />
 

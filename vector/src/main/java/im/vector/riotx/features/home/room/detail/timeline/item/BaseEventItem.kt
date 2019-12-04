@@ -19,7 +19,6 @@ import android.view.View
 import android.view.ViewStub
 import android.widget.RelativeLayout
 import androidx.annotation.IdRes
-import androidx.core.view.marginStart
 import androidx.core.view.updateLayoutParams
 import com.airbnb.epoxy.EpoxyAttribute
 import im.vector.riotx.R
