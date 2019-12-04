@@ -39,4 +39,7 @@ enum class Command(val command: String, val parameters: String, @StringRes val d
     MARKDOWN("/markdown", "<on|off>", R.string.command_description_markdown),
     CLEAR_SCALAR_TOKEN("/clear_scalar_token", "", R.string.command_description_clear_scalar_token),
     SPOILER("/spoiler", "<message>", R.string.command_description_spoiler);
+
+    val length
+        get() = command.length + 1
 }

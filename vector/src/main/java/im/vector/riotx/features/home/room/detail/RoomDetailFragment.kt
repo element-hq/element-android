@@ -1181,7 +1181,7 @@ class RoomDetailFragment @Inject constructor(
                 && userId == session.myUserId) {
             // Empty composer, current user: start an emote
             composerLayout.composerEditText.setText(Command.EMOTE.command + " ")
-            composerLayout.composerEditText.setSelection(Command.EMOTE.command.length + 1)
+            composerLayout.composerEditText.setSelection(Command.EMOTE.length)
         } else {
             val roomMember = roomDetailViewModel.getMember(userId)
             // TODO move logic outside of fragment

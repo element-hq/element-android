@@ -87,7 +87,7 @@ object CommandParser {
                         if (roomAlias.isNotEmpty()) {
                             ParsedCommand.JoinRoom(
                                     roomAlias,
-                                    textMessage.substring(Command.JOIN_ROOM.command.length + 1 + roomAlias.length)
+                                    textMessage.substring(Command.JOIN_ROOM.length + roomAlias.length)
                                             .trim()
                                             .takeIf { it.isNotBlank() }
                             )
@@ -105,7 +105,7 @@ object CommandParser {
                         if (roomAlias.isNotEmpty()) {
                             ParsedCommand.PartRoom(
                                     roomAlias,
-                                    textMessage.substring(Command.PART.command.length + 1 + roomAlias.length)
+                                    textMessage.substring(Command.PART.length + roomAlias.length)
                                             .trim()
                                             .takeIf { it.isNotBlank() }
                             )
@@ -123,7 +123,7 @@ object CommandParser {
                         if (MatrixPatterns.isUserId(userId)) {
                             ParsedCommand.Invite(
                                     userId,
-                                    textMessage.substring(Command.INVITE.command.length + 1 + userId.length)
+                                    textMessage.substring(Command.INVITE.length + userId.length)
                                             .trim()
                                             .takeIf { it.isNotBlank() }
                             )
@@ -141,7 +141,7 @@ object CommandParser {
                         if (MatrixPatterns.isUserId(userId)) {
                             ParsedCommand.KickUser(
                                     userId,
-                                    textMessage.substring(Command.KICK_USER.command.length + 1 + userId.length)
+                                    textMessage.substring(Command.KICK_USER.length + userId.length)
                                             .trim()
                                             .takeIf { it.isNotBlank() }
                             )
@@ -159,7 +159,7 @@ object CommandParser {
                         if (MatrixPatterns.isUserId(userId)) {
                             ParsedCommand.BanUser(
                                     userId,
-                                    textMessage.substring(Command.BAN_USER.command.length + 1 + userId.length)
+                                    textMessage.substring(Command.BAN_USER.length + userId.length)
                                             .trim()
                                             .takeIf { it.isNotBlank() }
                             )
@@ -177,7 +177,7 @@ object CommandParser {
                         if (MatrixPatterns.isUserId(userId)) {
                             ParsedCommand.UnbanUser(
                                     userId,
-                                    textMessage.substring(Command.UNBAN_USER.command.length + 1 + userId.length)
+                                    textMessage.substring(Command.UNBAN_USER.length + userId.length)
                                             .trim()
                                             .takeIf { it.isNotBlank() }
                             )
