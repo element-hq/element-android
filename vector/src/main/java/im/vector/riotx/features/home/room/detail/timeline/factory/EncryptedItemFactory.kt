@@ -42,7 +42,6 @@ class EncryptedItemFactory @Inject constructor(private val messageInformationDat
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
                highlight: Boolean,
-               readMarkerVisible: Boolean,
                callback: TimelineEventController.Callback?): VectorEpoxyModel<*>? {
         event.root.eventId ?: return null
 
@@ -66,7 +65,7 @@ class EncryptedItemFactory @Inject constructor(private val messageInformationDat
 
                 // TODO This is not correct format for error, change it
 
-                val informationData = messageInformationDataFactory.create(event, nextEvent, readMarkerVisible)
+                val informationData = messageInformationDataFactory.create(event, nextEvent)
                 val attributes = attributesFactory.create(null, informationData, callback)
                 return MessageTextItem_()
                         .leftGuideline(avatarSizeProvider.leftGuideline)

@@ -26,7 +26,8 @@ internal interface GetContextOfEventTask : Task<GetContextOfEventTask.Params, To
 
     data class Params(
             val roomId: String,
-            val eventId: String
+            val eventId: String,
+            val limit: Int
     )
 }
 
@@ -38,7 +39,7 @@ internal class DefaultGetContextOfEventTask @Inject constructor(private val room
     override suspend fun execute(params: GetContextOfEventTask.Params): TokenChunkEventPersistor.Result {
         val filter = filterRepository.getRoomFilter()
         val response = executeRequest<EventContextResponse> {
-            apiCall = roomAPI.getContextOfEvent(params.roomId, params.eventId, 0, filter)
+            apiCall = roomAPI.getContextOfEvent(params.roomId, params.eventId, params.limit, filter)
         }
         return tokenChunkEventPersistor.insertInDb(response, params.roomId, PaginationDirection.BACKWARDS)
     }

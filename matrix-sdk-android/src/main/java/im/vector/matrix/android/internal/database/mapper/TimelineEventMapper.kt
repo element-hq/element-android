@@ -36,7 +36,7 @@ internal class TimelineEventMapper @Inject constructor(private val readReceiptsS
         }
         return TimelineEvent(
                 root = timelineEventEntity.root?.asDomain()
-                       ?: Event("", timelineEventEntity.eventId),
+                        ?: Event("", timelineEventEntity.eventId),
                 annotations = timelineEventEntity.annotations?.asDomain(),
                 localId = timelineEventEntity.localId,
                 displayIndex = timelineEventEntity.root?.displayIndex ?: 0,
@@ -45,8 +45,7 @@ internal class TimelineEventMapper @Inject constructor(private val readReceiptsS
                 senderAvatar = timelineEventEntity.senderAvatar,
                 readReceipts = readReceipts?.sortedByDescending {
                     it.originServerTs
-                } ?: emptyList(),
-                hasReadMarker = timelineEventEntity.readMarker?.eventId?.isNotEmpty() == true
+                } ?: emptyList()
         )
     }
 }

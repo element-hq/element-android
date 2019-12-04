@@ -35,12 +35,14 @@ sealed class RoomDetailAction : VectorViewModelAction {
     data class RedactAction(val targetEventId: String, val reason: String? = "") : RoomDetailAction()
     data class UpdateQuickReactAction(val targetEventId: String, val selectedReaction: String, val add: Boolean) : RoomDetailAction()
     data class NavigateToEvent(val eventId: String, val highlight: Boolean) : RoomDetailAction()
-    data class SetReadMarkerAction(val eventId: String) : RoomDetailAction()
     object MarkAllAsRead : RoomDetailAction()
     data class DownloadFile(val eventId: String, val messageFileContent: MessageFileContent) : RoomDetailAction()
     data class HandleTombstoneEvent(val event: Event) : RoomDetailAction()
     object AcceptInvite : RoomDetailAction()
     object RejectInvite : RoomDetailAction()
+
+    object EnterTrackingUnreadMessagesState : RoomDetailAction()
+    object ExitTrackingUnreadMessagesState : RoomDetailAction()
 
     data class EnterEditMode(val eventId: String, val text: String) : RoomDetailAction()
     data class EnterQuoteMode(val eventId: String, val text: String) : RoomDetailAction()

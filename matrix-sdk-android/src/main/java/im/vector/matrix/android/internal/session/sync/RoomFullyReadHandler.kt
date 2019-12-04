@@ -16,14 +16,10 @@
 
 package im.vector.matrix.android.internal.session.sync
 
-import im.vector.matrix.android.internal.database.model.EventEntity
-import im.vector.matrix.android.internal.session.room.read.FullyReadContent
 import im.vector.matrix.android.internal.database.model.ReadMarkerEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
-import im.vector.matrix.android.internal.database.model.TimelineEventEntity
-import im.vector.matrix.android.internal.database.model.TimelineEventEntityFields
 import im.vector.matrix.android.internal.database.query.getOrCreate
-import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.session.room.read.FullyReadContent
 import io.realm.Realm
 import timber.log.Timber
 import javax.inject.Inject
@@ -39,18 +35,8 @@ internal class RoomFullyReadHandler @Inject constructor() {
         RoomSummaryEntity.getOrCreate(realm, roomId).apply {
             readMarkerId = content.eventId
         }
-        // Remove the old markers if any
-        val oldReadMarkerEvents = TimelineEventEntity
-                .where(realm, roomId = roomId, linkFilterMode = EventEntity.LinkFilterMode.BOTH)
-                .isNotNull(TimelineEventEntityFields.READ_MARKER.`$`)
-                .findAll()
-
-        oldReadMarkerEvents.forEach { it.readMarker = null }
-        val readMarkerEntity = ReadMarkerEntity.getOrCreate(realm, roomId).apply {
+        ReadMarkerEntity.getOrCreate(realm, roomId).apply {
             this.eventId = content.eventId
         }
-        // Attach to timelineEvent if known
-        val timelineEventEntities = TimelineEventEntity.where(realm, roomId = roomId, eventId = content.eventId).findAll()
-        timelineEventEntities.forEach { it.readMarker = readMarkerEntity }
     }
 }

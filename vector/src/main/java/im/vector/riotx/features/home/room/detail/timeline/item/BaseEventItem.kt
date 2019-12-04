@@ -19,14 +19,12 @@ import android.view.View
 import android.view.ViewStub
 import android.widget.RelativeLayout
 import androidx.annotation.IdRes
-import androidx.core.view.marginStart
 import androidx.core.view.updateLayoutParams
 import com.airbnb.epoxy.EpoxyAttribute
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
 import im.vector.riotx.core.platform.CheckableView
-import im.vector.riotx.core.ui.views.ReadMarkerView
 import im.vector.riotx.core.ui.views.ReadReceiptsView
 import im.vector.riotx.core.utils.DimensionConverter
 
@@ -62,7 +60,6 @@ abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>
         val leftGuideline by bind<View>(R.id.messageStartGuideline)
         val checkableBackground by bind<CheckableView>(R.id.messageSelectedBackground)
         val readReceiptsView by bind<ReadReceiptsView>(R.id.readReceiptsView)
-        val readMarkerView by bind<ReadMarkerView>(R.id.readMarkerView)
 
         override fun bindView(itemView: View) {
             super.bindView(itemView)
