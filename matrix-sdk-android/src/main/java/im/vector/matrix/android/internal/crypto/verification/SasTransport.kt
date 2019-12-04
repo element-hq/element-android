@@ -47,7 +47,15 @@ internal interface SasTransport {
                      shortAuthenticationStrings: List<String>): VerificationInfoAccept
 
     fun createKey(tid: String,
-                     pubKey: String): VerificationInfoKey
+                  pubKey: String): VerificationInfoKey
+
+    fun createStart(fromDevice: String,
+                    method: String,
+                    transactionID: String,
+                    keyAgreementProtocols: List<String>,
+                    hashes: List<String>,
+                    messageAuthenticationCodes: List<String>,
+                    shortAuthenticationStrings: List<String>) : VerificationInfoStart
 
     fun createMac(tid: String, mac: Map<String, String>, keys: String): VerificationInfoMac
 }

@@ -20,10 +20,7 @@ import im.vector.matrix.android.api.session.crypto.sas.CancelCode
 import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTxState
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
-import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationAccept
-import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationCancel
-import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationKey
-import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationMac
+import im.vector.matrix.android.internal.crypto.model.rest.*
 import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
@@ -113,6 +110,24 @@ internal class SasTransportToDevice(
     override fun createKey(tid: String, pubKey: String): VerificationInfoKey = KeyVerificationKey.create(tid, pubKey)
 
     override fun createMac(tid: String, mac: Map<String, String>, keys: String) = KeyVerificationMac.create(tid, mac, keys)
+
+    override fun createStart(fromDevice: String,
+                             method: String,
+                             transactionID: String,
+                             keyAgreementProtocols: List<String>,
+                             hashes: List<String>,
+                             messageAuthenticationCodes: List<String>,
+                             shortAuthenticationStrings: List<String>): VerificationInfoStart {
+        return KeyVerificationStart().apply {
+            this.fromDevice = fromDevice
+            this.method = method
+            this.transactionID = transactionID
+            this.keyAgreementProtocols = keyAgreementProtocols
+            this.hashes = hashes
+            this.messageAuthenticationCodes = messageAuthenticationCodes
+            this.shortAuthenticationStrings = shortAuthenticationStrings
+        }
+    }
 }
 
 internal class SasTransportToDeviceFactory @Inject constructor(

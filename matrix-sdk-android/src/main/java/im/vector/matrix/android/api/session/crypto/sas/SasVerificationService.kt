@@ -52,6 +52,13 @@ interface SasVerificationService {
 
     fun requestKeyVerificationInDMs(userId: String, roomId: String, callback: MatrixCallback<String>?)
 
+    fun beginKeyVerificationInDMs(method: String,
+                                  transactionId: String,
+                                  roomId: String,
+                                  otherUserId: String,
+                                  otherDeviceId: String,
+                                  callback: MatrixCallback<String>?): String?
+
     // fun transactionUpdated(tx: SasVerificationTransaction)
 
     interface SasVerificationListener {
