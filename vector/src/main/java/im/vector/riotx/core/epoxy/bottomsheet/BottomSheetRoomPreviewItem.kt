@@ -17,37 +17,41 @@
 package im.vector.riotx.core.epoxy.bottomsheet
 
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
-import androidx.annotation.DrawableRes
-import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
+import im.vector.riotx.core.extensions.setTextOrHide
+import im.vector.riotx.features.home.AvatarRenderer
 
 /**
- * A send state for bottom sheet.
+ * A room preview for bottom sheet.
  */
-@EpoxyModelClass(layout = R.layout.item_bottom_sheet_message_status)
-abstract class BottomSheetItemSendState : VectorEpoxyModel<BottomSheetItemSendState.Holder>() {
+@EpoxyModelClass(layout = R.layout.item_bottom_sheet_room_preview)
+abstract class BottomSheetRoomPreviewItem : VectorEpoxyModel<BottomSheetRoomPreviewItem.Holder>() {
 
     @EpoxyAttribute
-    var showProgress: Boolean = false
+    lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute
-    lateinit var text: CharSequence
+    lateinit var avatarUrl: String
     @EpoxyAttribute
-    @DrawableRes
-    var drawableStart: Int = 0
+    lateinit var roomId: String
+    @EpoxyAttribute
+    var roomName: String? = null
+    @EpoxyAttribute var settingsClickListener: View.OnClickListener? = null
 
     override fun bind(holder: Holder) {
-        holder.progress.isVisible = showProgress
-        holder.text.setCompoundDrawablesWithIntrinsicBounds(drawableStart, 0, 0, 0)
-        holder.text.text = text
+        avatarRenderer.render(avatarUrl, roomId, roomName, holder.avatar)
+        holder.roomName.setTextOrHide(roomName)
+        holder.roomSettings.setOnClickListener(settingsClickListener)
     }
 
     class Holder : VectorEpoxyHolder() {
-        val progress by bind<View>(R.id.messageStatusProgress)
-        val text by bind<TextView>(R.id.messageStatusText)
+        val avatar by bind<ImageView>(R.id.bottomSheetRoomPreviewAvatar)
+        val roomName by bind<TextView>(R.id.bottomSheetRoomPreviewName)
+        val roomSettings by bind<View>(R.id.bottomSheetRoomPreviewSettings)
     }
 }

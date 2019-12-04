@@ -16,6 +16,7 @@
  */
 package im.vector.riotx.core.epoxy.bottomsheet
 
+import android.text.method.MovementMethod
 import android.widget.ImageView
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
@@ -25,12 +26,13 @@ import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
 import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.features.home.AvatarRenderer
+import im.vector.riotx.features.home.room.detail.timeline.tools.findPillsAndProcess
 
 /**
  * A message preview for bottom sheet.
  */
 @EpoxyModelClass(layout = R.layout.item_bottom_sheet_message_preview)
-abstract class BottomSheetItemMessagePreview : VectorEpoxyModel<BottomSheetItemMessagePreview.Holder>() {
+abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessagePreviewItem.Holder>() {
 
     @EpoxyAttribute
     lateinit var avatarRenderer: AvatarRenderer
@@ -44,11 +46,15 @@ abstract class BottomSheetItemMessagePreview : VectorEpoxyModel<BottomSheetItemM
     lateinit var body: CharSequence
     @EpoxyAttribute
     var time: CharSequence? = null
+    @EpoxyAttribute
+    var movementMethod: MovementMethod? = null
 
     override fun bind(holder: Holder) {
         avatarRenderer.render(avatarUrl, senderId, senderName, holder.avatar)
         holder.sender.setTextOrHide(senderName)
+        holder.body.movementMethod = movementMethod
         holder.body.text = body
+        body.findPillsAndProcess { it.bind(holder.body) }
         holder.timestamp.setTextOrHide(time)
     }
 

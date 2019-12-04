@@ -21,6 +21,16 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 
+class ReadMarkerVisibilityStateChangedListener(private val callback: TimelineEventController.Callback?)
+    : VectorEpoxyModel.OnVisibilityStateChangedListener {
+
+    override fun onVisibilityStateChanged(visibilityState: Int) {
+        if (visibilityState == VisibilityState.VISIBLE) {
+            callback?.onReadMarkerVisible()
+        }
+    }
+}
+
 class TimelineEventVisibilityStateChangedListener(private val callback: TimelineEventController.Callback?,
                                                   private val event: TimelineEvent)
     : VectorEpoxyModel.OnVisibilityStateChangedListener {

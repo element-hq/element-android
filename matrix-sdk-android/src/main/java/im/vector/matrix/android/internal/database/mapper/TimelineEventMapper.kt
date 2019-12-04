@@ -46,8 +46,7 @@ internal class TimelineEventMapper @Inject constructor(private val readReceiptsS
                 senderAvatar = timelineEventEntity.senderAvatar,
                 readReceipts = readReceipts?.sortedByDescending {
                     it.originServerTs
-                } ?: emptyList(),
-                hasReadMarker = timelineEventEntity.readMarker?.eventId?.isNotEmpty() == true
+                } ?: emptyList()
         )
     }
 }

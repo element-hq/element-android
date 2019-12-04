@@ -18,9 +18,9 @@ package im.vector.riotx.features.home.room.list.actions
 import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.matrix.android.api.session.room.notification.RoomNotificationState
-import im.vector.riotx.core.epoxy.bottomsheet.bottomSheetItemAction
-import im.vector.riotx.core.epoxy.bottomsheet.bottomSheetItemRoomPreview
-import im.vector.riotx.core.epoxy.bottomsheet.bottomSheetItemSeparator
+import im.vector.riotx.core.epoxy.bottomsheet.bottomSheetActionItem
+import im.vector.riotx.core.epoxy.bottomsheet.bottomSheetRoomPreviewItem
+import im.vector.riotx.core.epoxy.bottomsheet.bottomSheetSeparatorItem
 import im.vector.riotx.features.home.AvatarRenderer
 import javax.inject.Inject
 
@@ -36,7 +36,7 @@ class RoomListQuickActionsEpoxyController @Inject constructor(private val avatar
         val roomSummary = state.roomSummary() ?: return
 
         // Preview
-        bottomSheetItemRoomPreview {
+        bottomSheetRoomPreviewItem {
             id("preview")
             avatarRenderer(avatarRenderer)
             roomName(roomSummary.displayName)
@@ -46,7 +46,7 @@ class RoomListQuickActionsEpoxyController @Inject constructor(private val avatar
         }
 
         // Notifications
-        bottomSheetItemSeparator {
+        bottomSheetSeparatorItem {
             id("notifications_separator")
         }
 
@@ -57,7 +57,7 @@ class RoomListQuickActionsEpoxyController @Inject constructor(private val avatar
         RoomListQuickActionsSharedAction.NotificationsMute(roomSummary.roomId).toBottomSheetItem(3, selectedRoomState)
 
         // Leave
-        bottomSheetItemSeparator {
+        bottomSheetSeparatorItem {
             id("leave_separator")
         }
         RoomListQuickActionsSharedAction.Leave(roomSummary.roomId).toBottomSheetItem(5)
@@ -72,7 +72,7 @@ class RoomListQuickActionsEpoxyController @Inject constructor(private val avatar
             is RoomListQuickActionsSharedAction.Settings,
             is RoomListQuickActionsSharedAction.Leave                     -> false
         }
-        return bottomSheetItemAction {
+        return bottomSheetActionItem {
             id("action_$index")
             selected(selected)
             iconRes(iconResId)

@@ -39,6 +39,7 @@ import androidx.core.text.buildSpannedString
 import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
 import androidx.core.view.forEach
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -57,7 +58,6 @@ import im.vector.matrix.android.api.permalinks.PermalinkFactory
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.api.session.events.model.LocalEcho
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.send.SendState
@@ -145,8 +145,7 @@ class RoomDetailFragment @Inject constructor(
         val textComposerViewModelFactory: TextComposerViewModel.Factory,
         private val errorFormatter: ErrorFormatter,
         private val eventHtmlRenderer: EventHtmlRenderer,
-        private val vectorPreferences: VectorPreferences,
-        private val readMarkerHelper: ReadMarkerHelper
+        private val vectorPreferences: VectorPreferences
 ) :
         VectorBaseFragment(),
         TimelineEventController.Callback,
@@ -292,6 +291,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onDestroy() {
+        roomDetailViewModel.handle(RoomDetailAction.ExitTrackingUnreadMessagesState)
         debouncer.cancelAll()
         super.onDestroy()
     }
@@ -299,6 +299,7 @@ class RoomDetailFragment @Inject constructor(
     private fun setupJumpToBottomView() {
         jumpToBottomView.visibility = View.INVISIBLE
         jumpToBottomView.setOnClickListener {
+            roomDetailViewModel.handle(RoomDetailAction.ExitTrackingUnreadMessagesState)
             jumpToBottomView.visibility = View.INVISIBLE
             withState(roomDetailViewModel) { state ->
                 if (state.timeline?.isLive == false) {
@@ -423,12 +424,12 @@ class RoomDetailFragment @Inject constructor(
         if (text != composerLayout.composerEditText.text.toString()) {
             // Ignore update to avoid saving a draft
             composerLayout.composerEditText.setText(text)
-            composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text?.length ?: 0)
+            composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text?.length
+                    ?: 0)
         }
     }
 
     override fun onResume() {
-        readMarkerHelper.onResume()
         super.onResume()
         notificationDrawerManager.setCurrentRoom(roomDetailArgs.roomId)
     }
@@ -473,24 +474,12 @@ class RoomDetailFragment @Inject constructor(
             it.dispatchTo(stateRestorer)
             it.dispatchTo(scrollOnNewMessageCallback)
             it.dispatchTo(scrollOnHighlightedEventCallback)
-        }
-        readMarkerHelper.timelineEventController = timelineEventController
-        readMarkerHelper.layoutManager = layoutManager
-        readMarkerHelper.callback = object : ReadMarkerHelper.Callback {
-            override fun onJumpToReadMarkerVisibilityUpdate(show: Boolean, readMarkerId: String?) {
-                jumpToReadMarkerView.render(show, readMarkerId)
-            }
+            updateJumpToReadMarkerViewVisibility()
+            updateJumpToBottomViewVisibility()
         }
         recyclerView.adapter = timelineEventController.adapter
 
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if (recyclerView.scrollState == RecyclerView.SCROLL_STATE_IDLE) {
-                    updateJumpToBottomViewVisibility()
-                }
-                readMarkerHelper.onTimelineScrolled()
-            }
-
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 when (newState) {
                     RecyclerView.SCROLL_STATE_IDLE     -> {
@@ -529,6 +518,30 @@ class RoomDetailFragment @Inject constructor(
             val swipeCallback = RoomMessageTouchHelperCallback(requireContext(), R.drawable.ic_reply, quickReplyHandler)
             val touchHelper = ItemTouchHelper(swipeCallback)
             touchHelper.attachToRecyclerView(recyclerView)
+        }
+    }
+
+    private fun updateJumpToReadMarkerViewVisibility() = jumpToReadMarkerView.post {
+        withState(roomDetailViewModel) {
+            val showJumpToUnreadBanner = when (it.unreadState) {
+                UnreadState.Unknown,
+                UnreadState.HasNoUnread            -> false
+                is UnreadState.ReadMarkerNotLoaded -> true
+                is UnreadState.HasUnread           -> {
+                    if (it.canShowJumpToReadMarker) {
+                        val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
+                        val positionOfReadMarker = timelineEventController.getPositionOfReadMarker()
+                        if (positionOfReadMarker == null) {
+                            false
+                        } else {
+                            positionOfReadMarker > lastVisibleItem
+                        }
+                    } else {
+                        false
+                    }
+                }
+            }
+            jumpToReadMarkerView.isVisible = showJumpToUnreadBanner
         }
     }
 
@@ -662,13 +675,12 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun renderState(state: RoomDetailViewState) {
-        readMarkerHelper.updateWith(state)
         renderRoomSummary(state)
         val summary = state.asyncRoomSummary()
         val inviter = state.asyncInviter()
         if (summary?.membership == Membership.JOIN) {
             scrollOnHighlightedEventCallback.timeline = state.timeline
-            timelineEventController.update(state, readMarkerHelper.readMarkerVisible())
+            timelineEventController.update(state)
             inviteView.visibility = View.GONE
             val uid = session.myUserId
             val meMember = session.getRoom(state.roomId)?.getRoomMember(uid)
@@ -1024,28 +1036,9 @@ class RoomDetailFragment @Inject constructor(
                 .show(requireActivity().supportFragmentManager, "DISPLAY_READ_RECEIPTS")
     }
 
-    override fun onReadMarkerLongBound(readMarkerId: String, isDisplayed: Boolean) {
-        readMarkerHelper.onReadMarkerLongDisplayed()
-        val readMarkerIndex = timelineEventController.searchPositionOfEvent(readMarkerId) ?: return
-        val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
-        if (readMarkerIndex > lastVisibleItemPosition) {
-            return
-        }
-        val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
-        var nextReadMarkerId: String? = null
-        for (itemPosition in firstVisibleItemPosition until lastVisibleItemPosition) {
-            val timelineItem = timelineEventController.adapter.getModelAtPosition(itemPosition)
-            if (timelineItem is BaseEventItem) {
-                val eventId = timelineItem.getEventIds().firstOrNull() ?: continue
-                if (!LocalEcho.isLocalEchoId(eventId)) {
-                    nextReadMarkerId = eventId
-                    break
-                }
-            }
-        }
-        if (nextReadMarkerId != null) {
-            roomDetailViewModel.handle(RoomDetailAction.SetReadMarkerAction(nextReadMarkerId))
-        }
+    override fun onReadMarkerVisible() {
+        updateJumpToReadMarkerViewVisibility()
+        roomDetailViewModel.handle(RoomDetailAction.EnterTrackingUnreadMessagesState)
     }
 
     // AutocompleteUserPresenter.Callback
@@ -1163,6 +1156,12 @@ class RoomDetailFragment @Inject constructor(
             is EventSharedAction.IgnoreUser                 -> {
                 roomDetailViewModel.handle(RoomDetailAction.IgnoreUser(action.senderId))
             }
+            is EventSharedAction.OnUrlClicked               -> {
+                onUrlClicked(action.url)
+            }
+            is EventSharedAction.OnUrlLongClicked           -> {
+                onUrlLongClicked(action.url)
+            }
             else                                            -> {
                 Toast.makeText(context, "Action $action is not implemented yet", Toast.LENGTH_LONG).show()
             }
@@ -1246,8 +1245,14 @@ class RoomDetailFragment @Inject constructor(
 
     // JumpToReadMarkerView.Callback
 
-    override fun onJumpToReadMarkerClicked(readMarkerId: String) {
-        roomDetailViewModel.handle(RoomDetailAction.NavigateToEvent(readMarkerId, false))
+    override fun onJumpToReadMarkerClicked() = withState(roomDetailViewModel) {
+        jumpToReadMarkerView.isVisible = false
+        if (it.unreadState is UnreadState.HasUnread) {
+            roomDetailViewModel.handle(RoomDetailAction.NavigateToEvent(it.unreadState.firstUnreadEventId, false))
+        }
+        if (it.unreadState is UnreadState.ReadMarkerNotLoaded) {
+            roomDetailViewModel.handle(RoomDetailAction.NavigateToEvent(it.unreadState.readMarkerId, false))
+        }
     }
 
     override fun onClearReadMarkerClicked() {

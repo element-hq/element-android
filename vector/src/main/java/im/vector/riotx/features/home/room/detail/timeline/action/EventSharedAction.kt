@@ -88,4 +88,12 @@ sealed class EventSharedAction(@StringRes val titleRes: Int, @DrawableRes val ic
 
     data class ViewEditHistory(val messageInformationData: MessageInformationData) :
             EventSharedAction(R.string.message_view_edit_history, R.drawable.ic_view_edit_history)
+
+    // An url in the event preview has been clicked
+    data class OnUrlClicked(val url: String) :
+            EventSharedAction(0, 0)
+
+    // An url in the event preview has been long clicked
+    data class OnUrlLongClicked(val url: String) :
+            EventSharedAction(0, 0)
 }

@@ -12,17 +12,20 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
-package im.vector.riotx.core.epoxy.bottomsheet
+
+package im.vector.riotx.features.home.room.detail.timeline.item
 
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
 
-@EpoxyModelClass(layout = R.layout.item_bottom_sheet_divider)
-abstract class BottomSheetItemSeparator : VectorEpoxyModel<BottomSheetItemSeparator.Holder>() {
+@EpoxyModelClass(layout = R.layout.item_timeline_read_marker)
+abstract class TimelineReadMarkerItem : VectorEpoxyModel<TimelineReadMarkerItem.Holder>() {
+
+    override fun bind(holder: Holder) {
+    }
 
     class Holder : VectorEpoxyHolder()
 }

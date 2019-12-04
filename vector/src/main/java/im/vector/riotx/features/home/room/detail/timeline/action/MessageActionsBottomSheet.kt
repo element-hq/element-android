@@ -68,6 +68,18 @@ class MessageActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), Message
         messageActionsEpoxyController.listener = this
     }
 
+    override fun onUrlClicked(url: String): Boolean {
+        sharedActionViewModel.post(EventSharedAction.OnUrlClicked(url))
+        // Always consume
+        return true
+    }
+
+    override fun onUrlLongClicked(url: String): Boolean {
+        sharedActionViewModel.post(EventSharedAction.OnUrlLongClicked(url))
+        // Always consume
+        return true
+    }
+
     override fun didSelectMenuAction(eventAction: EventSharedAction) {
         if (eventAction is EventSharedAction.ReportContent) {
             // Toggle report menu

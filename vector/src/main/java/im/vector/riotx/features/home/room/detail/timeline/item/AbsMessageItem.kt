@@ -27,7 +27,6 @@ import com.airbnb.epoxy.EpoxyAttribute
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.riotx.R
 import im.vector.riotx.core.resources.ColorProvider
-import im.vector.riotx.core.ui.views.ReadMarkerView
 import im.vector.riotx.core.utils.DebouncedClickListener
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
@@ -49,13 +48,6 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
     private val _readReceiptsClickListener = DebouncedClickListener(View.OnClickListener {
         attributes.readReceiptsCallback?.onReadReceiptsClicked(attributes.informationData.readReceipts)
     })
-
-    private val _readMarkerCallback = object : ReadMarkerView.Callback {
-
-        override fun onReadMarkerLongBound(isDisplayed: Boolean) {
-            attributes.readReceiptsCallback?.onReadMarkerLongBound(attributes.informationData.eventId, isDisplayed)
-        }
-    }
 
     var reactionClickListener: ReactionButton.ReactedListener = object : ReactionButton.ReactedListener {
         override fun onReacted(reactionButton: ReactionButton) {
@@ -110,12 +102,6 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
                 attributes.avatarRenderer,
                 _readReceiptsClickListener
         )
-        holder.readMarkerView.bindView(
-                attributes.informationData.eventId,
-                attributes.informationData.hasReadMarker,
-                attributes.informationData.displayReadMarker,
-                _readMarkerCallback
-        )
 
         val reactions = attributes.informationData.orderedReactionList
         if (!shouldShowReactionAtBottom() || reactions.isNullOrEmpty()) {
@@ -138,7 +124,6 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : BaseEventItem<H>() {
     }
 
     override fun unbind(holder: H) {
-        holder.readMarkerView.unbind()
         holder.readReceiptsView.unbind()
         super.unbind(holder)
     }

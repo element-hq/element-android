@@ -22,6 +22,7 @@
 
     <string name="room_join_rules_public">%1$s made the room public to whoever knows the link.</string>
     <string name="room_join_rules_invite">%1$s made the room invite only.</string>
+    <string name="timeline_unread_messages">Unread messages</string>
 
     <string name="login_splash_title">Liberate your communication</string>
     <string name="login_splash_text1">Chat with people directly or in groups</string>
@@ -136,5 +137,7 @@
         <item quantity="one">Too many requests have been sent. You can retry in %1$d second…</item>
         <item quantity="other">Too many requests have been sent. You can retry in %1$d seconds…</item>
     </plurals>
+
+    <string name="seen_by">Seen by</string>
 
 </resources>
