@@ -101,7 +101,7 @@ class DefaultInitialSyncProgressService @Inject constructor() : InitialSyncProgr
                 val parentProgress = (currentProgress * parentWeight).toInt()
                 it.setProgress(offset + parentProgress)
             } ?: run {
-                Timber.e("--- ${leaf().nameRes}: $currentProgress")
+                Timber.v("--- ${leaf().nameRes}: $currentProgress")
                 status.postValue(
                         InitialSyncProgressService.Status(leaf().nameRes, currentProgress)
                 )

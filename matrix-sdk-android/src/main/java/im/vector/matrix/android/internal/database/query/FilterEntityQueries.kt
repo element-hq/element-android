@@ -16,26 +16,27 @@
 
 package im.vector.matrix.android.internal.database.query
 
-import im.vector.matrix.android.internal.database.awaitTransaction
 import im.vector.matrix.android.internal.database.model.FilterEntity
 import im.vector.matrix.android.internal.session.filter.FilterFactory
 import io.realm.Realm
+import io.realm.kotlin.createObject
 import io.realm.kotlin.where
+
+/**
+ * Get the current filter
+ */
+internal fun FilterEntity.Companion.get(realm: Realm): FilterEntity? {
+    return realm.where<FilterEntity>().findFirst()
+}
 
 /**
  * Get the current filter, create one if it does not exist
  */
-internal suspend fun FilterEntity.Companion.getFilter(realm: Realm): FilterEntity {
-    var filter = realm.where<FilterEntity>().findFirst()
-    if (filter == null) {
-        filter = FilterEntity().apply {
-            filterBodyJson = FilterFactory.createDefaultFilterBody().toJSONString()
-            roomEventFilterJson = FilterFactory.createDefaultRoomFilter().toJSONString()
-            filterId = ""
-        }
-        awaitTransaction(realm.configuration) {
-            it.insert(filter)
-        }
-    }
-    return filter
+internal fun FilterEntity.Companion.getOrCreate(realm: Realm): FilterEntity {
+    return get(realm) ?: realm.createObject<FilterEntity>()
+            .apply {
+                filterBodyJson = FilterFactory.createDefaultFilterBody().toJSONString()
+                roomEventFilterJson = FilterFactory.createDefaultRoomFilter().toJSONString()
+                filterId = ""
+            }
 }

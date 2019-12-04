@@ -16,6 +16,8 @@ Other changes:
 Bugfix 🐛:
  - Do not show long click help if only invitation are displayed
  - Fix emoji filtering not working
+ - Fix issue of closing Realm in another thread (#725)
+ - Attempt to properly cancel the crypto module when user signs out (#724)
 
 Translations 🗣:
  -

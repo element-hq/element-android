@@ -63,6 +63,7 @@ internal class OutgoingRoomKeyRequestManager @Inject constructor(
      */
     fun stop() {
         isClientRunning = false
+        stopTimer()
     }
 
     /**
@@ -171,6 +172,10 @@ internal class OutgoingRoomKeyRequestManager @Inject constructor(
         }, SEND_KEY_REQUESTS_DELAY_MS.toLong())
     }
 
+    private fun stopTimer() {
+        BACKGROUND_HANDLER.removeCallbacksAndMessages(null)
+    }
+
     // look for and send any queued requests. Runs itself recursively until
     // there are no more requests, or there is an error (in which case, the
     // timer will be restarted before the promise resolves).
@@ -187,7 +192,7 @@ internal class OutgoingRoomKeyRequestManager @Inject constructor(
                         OutgoingRoomKeyRequest.RequestState.CANCELLATION_PENDING_AND_WILL_RESEND))
 
         if (null == outgoingRoomKeyRequest) {
-            Timber.e("## sendOutgoingRoomKeyRequests() : No more outgoing room key requests")
+            Timber.v("## sendOutgoingRoomKeyRequests() : No more outgoing room key requests")
             sendOutgoingRoomKeyRequestsRunning.set(false)
             return
         }
