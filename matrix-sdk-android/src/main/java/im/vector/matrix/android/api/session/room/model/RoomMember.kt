@@ -32,4 +32,7 @@ data class RoomMember(
         @Json(name = "is_direct") val isDirect: Boolean = false,
         @Json(name = "third_party_invite") val thirdPartyInvite: Invite? = null,
         @Json(name = "unsigned") val unsignedData: UnsignedData? = null
-)
+) {
+    val safeReason
+        get() = reason?.takeIf { it.isNotBlank() }
+}

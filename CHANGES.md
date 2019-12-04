@@ -39,6 +39,7 @@ Improvements 🙌:
 
 Other changes:
  - Fix a small grammatical error when an empty room list is shown.
+ - Add reason for all membership events (https://github.com/matrix-org/matrix-doc/pull/2367)
 
 Bugfix 🐛:
  - Do not show long click help if only invitation are displayed
