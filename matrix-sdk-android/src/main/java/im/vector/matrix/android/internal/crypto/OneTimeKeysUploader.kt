@@ -93,14 +93,15 @@ internal class OneTimeKeysUploader @Inject constructor(
             // So we need some kind of engineering compromise to balance all of
             // these factors.
             try {
-                uploadOTK(oneTimeKeyCountFromSync, keyLimit)
+                val uploadedKeys = uploadOTK(oneTimeKeyCountFromSync, keyLimit)
+                Timber.v("## uploadKeys() : success, $uploadedKeys key(s) sent")
             } finally {
                 oneTimeKeyCheckInProgress = false
             }
-            Timber.v("## uploadKeys() : success")
         } else {
             Timber.w("maybeUploadOneTimeKeys: waiting to know the number of OTK from the sync")
             oneTimeKeyCheckInProgress = false
+            lastOneTimeKeyCheck = 0
         }
     }
 
@@ -109,11 +110,12 @@ internal class OneTimeKeysUploader @Inject constructor(
      *
      * @param keyCount the key count
      * @param keyLimit the limit
+     * @return the number of uploaded keys
      */
-    private suspend fun uploadOTK(keyCount: Int, keyLimit: Int) {
+    private suspend fun uploadOTK(keyCount: Int, keyLimit: Int): Int {
         if (keyLimit <= keyCount) {
             // If we don't need to generate any more keys then we are done.
-            return
+            return 0
         }
         val keysThisLoop = min(keyLimit - keyCount, ONE_TIME_KEY_GENERATION_MAX_NUMBER)
         olmDevice.generateOneTimeKeys(keysThisLoop)
@@ -122,7 +124,7 @@ internal class OneTimeKeysUploader @Inject constructor(
 
         if (response.hasOneTimeKeyCountsForAlgorithm(MXKey.KEY_SIGNED_CURVE_25519_TYPE)) {
             // Maybe upload other keys
-            uploadOTK(response.oneTimeKeyCountsForAlgorithm(MXKey.KEY_SIGNED_CURVE_25519_TYPE), keyLimit)
+            return keysThisLoop + uploadOTK(response.oneTimeKeyCountsForAlgorithm(MXKey.KEY_SIGNED_CURVE_25519_TYPE), keyLimit)
         } else {
             Timber.e("## uploadOTK() : response for uploading keys does not contain one_time_key_counts.signed_curve25519")
             throw Exception("response for uploading keys does not contain one_time_key_counts.signed_curve25519")
