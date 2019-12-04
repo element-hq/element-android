@@ -169,7 +169,7 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
     }
 
     private fun buildMembershipNotice(event: Event, senderName: String?, eventContent: RoomMember?, prevEventContent: RoomMember?): String? {
-        val senderDisplayName = senderName ?: event.senderId
+        val senderDisplayName = senderName ?: event.senderId ?: ""
         val targetDisplayName = eventContent?.displayName ?: prevEventContent?.displayName ?: event.stateKey ?: ""
         return when (eventContent?.membership) {
             Membership.INVITE -> {
@@ -177,9 +177,10 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
                 when {
                     eventContent.thirdPartyInvite != null -> {
                         val userWhoHasAccepted = eventContent.thirdPartyInvite?.signed?.mxid ?: event.stateKey
+                        val threePidDisplayName = eventContent.thirdPartyInvite?.displayName ?: ""
                         eventContent.safeReason
-                                ?.let { reason -> stringProvider.getString(R.string.notice_room_third_party_registered_invite_with_reason, userWhoHasAccepted, eventContent.thirdPartyInvite?.displayName, reason) }
-                                ?: stringProvider.getString(R.string.notice_room_third_party_registered_invite, userWhoHasAccepted, eventContent.thirdPartyInvite?.displayName)
+                                ?.let { reason -> stringProvider.getString(R.string.notice_room_third_party_registered_invite_with_reason, userWhoHasAccepted, threePidDisplayName, reason) }
+                                ?: stringProvider.getString(R.string.notice_room_third_party_registered_invite, userWhoHasAccepted, threePidDisplayName)
                     }
                     event.stateKey == selfUserId          ->
                         eventContent.safeReason
