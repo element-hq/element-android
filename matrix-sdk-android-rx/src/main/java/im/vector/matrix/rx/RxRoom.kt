@@ -57,7 +57,8 @@ class RxRoom(private val room: Room) {
         room.loadRoomMembersIfNeeded(MatrixCallbackSingle(it)).toSingle(it)
     }
 
-    fun joinRoom(reason: String?, viaServers: List<String> = emptyList()): Single<Unit> = Single.create {
+    fun joinRoom(reason: String? = null,
+                 viaServers: List<String> = emptyList()): Single<Unit> = Single.create {
         room.join(reason, viaServers, MatrixCallbackSingle(it)).toSingle(it)
     }
 

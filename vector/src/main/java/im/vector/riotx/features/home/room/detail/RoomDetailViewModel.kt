@@ -200,9 +200,10 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         invisibleEventsObservable.accept(action)
     }
 
-    fun getMember(userId: String) : RoomMember? {
-       return room.getRoomMember(userId)
+    fun getMember(userId: String): RoomMember? {
+        return room.getRoomMember(userId)
     }
+
     /**
      * Convert a send mode to a draft and save the draft
      */
@@ -266,7 +267,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 }
             }
             session.rx()
-                    .joinRoom(roomId, null, viaServer)
+                    .joinRoom(roomId, viaServers = viaServer)
                     .map { roomId }
                     .execute {
                         copy(tombstoneEventHandling = it)
@@ -557,7 +558,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun handleAcceptInvite() {
-        room.join(null, callback = object : MatrixCallback<Unit> {})
+        room.join(callback = object : MatrixCallback<Unit> {})
     }
 
     private fun handleEditAction(action: RoomDetailAction.EnterEditMode) {

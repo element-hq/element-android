@@ -30,7 +30,8 @@ interface RoomService {
     /**
      * Create a room asynchronously
      */
-    fun createRoom(createRoomParams: CreateRoomParams, callback: MatrixCallback<String>): Cancelable
+    fun createRoom(createRoomParams: CreateRoomParams,
+                   callback: MatrixCallback<String>): Cancelable
 
     /**
      * Join a room by id
@@ -39,7 +40,7 @@ interface RoomService {
      * @param viaServers the servers to attempt to join the room through. One of the servers must be participating in the room.
      */
     fun joinRoom(roomId: String,
-                 reason: String?,
+                 reason: String? = null,
                  viaServers: List<String> = emptyList(),
                  callback: MatrixCallback<Unit>): Cancelable
 
@@ -71,5 +72,6 @@ interface RoomService {
     /**
      * Mark all rooms as read
      */
-    fun markAllAsRead(roomIds: List<String>, callback: MatrixCallback<Unit>): Cancelable
+    fun markAllAsRead(roomIds: List<String>,
+                      callback: MatrixCallback<Unit>): Cancelable
 }
