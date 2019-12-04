@@ -42,8 +42,6 @@ internal class OneTimeKeysUploader @Inject constructor(
     private var lastOneTimeKeyCheck: Long = 0
     private var oneTimeKeyCount: Int? = null
 
-    private var lastPublishedOneTimeKeys: Map<String, Map<String, String>>? = null
-
     /**
      * Stores the current one_time_key count which will be handled later (in a call of
      * _onSyncCompleted). The count is e.g. coming from a /sync response.
@@ -59,10 +57,12 @@ internal class OneTimeKeysUploader @Inject constructor(
      */
     suspend fun maybeUploadOneTimeKeys() {
         if (oneTimeKeyCheckInProgress) {
+            Timber.v("maybeUploadOneTimeKeys: already in progress")
             return
         }
         if (System.currentTimeMillis() - lastOneTimeKeyCheck < ONE_TIME_KEY_UPLOAD_PERIOD) {
             // we've done a key upload recently.
+            Timber.v("maybeUploadOneTimeKeys: executed too recently")
             return
         }
 
@@ -79,12 +79,8 @@ internal class OneTimeKeysUploader @Inject constructor(
         // discard the oldest private keys first. This will eventually clean
         // out stale private keys that won't receive a message.
         val keyLimit = floor(maxOneTimeKeys / 2.0).toInt()
-        if (oneTimeKeyCount != null) {
-            uploadOTK(oneTimeKeyCount!!, keyLimit)
-        } else {
-            // ask the server how many keys we have
-            val uploadKeysParams = UploadKeysTask.Params(null, null, credentials.deviceId!!)
-            val response = uploadKeysTask.execute(uploadKeysParams)
+        val oneTimeKeyCountFromSync = oneTimeKeyCount
+        if (oneTimeKeyCountFromSync != null) {
             // We need to keep a pool of one time public keys on the server so that
             // other devices can start conversations with us. But we can only store
             // a finite number of private keys in the olm Account object.
@@ -96,14 +92,16 @@ internal class OneTimeKeysUploader @Inject constructor(
             // private keys clogging up our local storage.
             // So we need some kind of engineering compromise to balance all of
             // these factors.
-            // TODO Why we do not set oneTimeKeyCount here?
-            // TODO This is not needed anymore, see https://github.com/matrix-org/matrix-js-sdk/pull/493 (TODO on iOS also)
-            val keyCount = response.oneTimeKeyCountsForAlgorithm(MXKey.KEY_SIGNED_CURVE_25519_TYPE)
-            uploadOTK(keyCount, keyLimit)
+            try {
+                uploadOTK(oneTimeKeyCountFromSync, keyLimit)
+            } finally {
+                oneTimeKeyCheckInProgress = false
+            }
+            Timber.v("## uploadKeys() : success")
+        } else {
+            Timber.w("maybeUploadOneTimeKeys: waiting to know the number of OTK from the sync")
+            oneTimeKeyCheckInProgress = false
         }
-        Timber.v("## uploadKeys() : success")
-        oneTimeKeyCount = null
-        oneTimeKeyCheckInProgress = false
     }
 
     /**
@@ -119,45 +117,42 @@ internal class OneTimeKeysUploader @Inject constructor(
         }
         val keysThisLoop = min(keyLimit - keyCount, ONE_TIME_KEY_GENERATION_MAX_NUMBER)
         olmDevice.generateOneTimeKeys(keysThisLoop)
-        val response = uploadOneTimeKeys()
+        val response = uploadOneTimeKeys(olmDevice.getOneTimeKeys())
+        olmDevice.markKeysAsPublished()
+
         if (response.hasOneTimeKeyCountsForAlgorithm(MXKey.KEY_SIGNED_CURVE_25519_TYPE)) {
+            // Maybe upload other keys
             uploadOTK(response.oneTimeKeyCountsForAlgorithm(MXKey.KEY_SIGNED_CURVE_25519_TYPE), keyLimit)
         } else {
-            Timber.e("## uploadLoop() : response for uploading keys does not contain one_time_key_counts.signed_curve25519")
+            Timber.e("## uploadOTK() : response for uploading keys does not contain one_time_key_counts.signed_curve25519")
             throw Exception("response for uploading keys does not contain one_time_key_counts.signed_curve25519")
         }
     }
 
     /**
-     * Upload my user's one time keys.
+     * Upload curve25519 one time keys.
      */
-    private suspend fun uploadOneTimeKeys(): KeysUploadResponse {
-        val oneTimeKeys = olmDevice.getOneTimeKeys()
+    private suspend fun uploadOneTimeKeys(oneTimeKeys: Map<String, Map<String, String>>?): KeysUploadResponse {
         val oneTimeJson = mutableMapOf<String, Any>()
 
-        val curve25519Map = oneTimeKeys?.get(OlmAccount.JSON_KEY_ONE_TIME_KEY)
+        val curve25519Map = oneTimeKeys?.get(OlmAccount.JSON_KEY_ONE_TIME_KEY) ?: emptyMap()
 
-        if (null != curve25519Map) {
-            for ((key_id, value) in curve25519Map) {
-                val k = mutableMapOf<String, Any>()
-                k["key"] = value
+        curve25519Map.forEach { (key_id, value) ->
+            val k = mutableMapOf<String, Any>()
+            k["key"] = value
 
-                // the key is also signed
-                val canonicalJson = JsonCanonicalizer.getCanonicalJson(Map::class.java, k)
+            // the key is also signed
+            val canonicalJson = JsonCanonicalizer.getCanonicalJson(Map::class.java, k)
 
-                k["signatures"] = objectSigner.signObject(canonicalJson)
+            k["signatures"] = objectSigner.signObject(canonicalJson)
 
-                oneTimeJson["signed_curve25519:$key_id"] = k
-            }
+            oneTimeJson["signed_curve25519:$key_id"] = k
         }
 
         // For now, we set the device id explicitly, as we may not be using the
         // same one as used in login.
         val uploadParams = UploadKeysTask.Params(null, oneTimeJson, credentials.deviceId!!)
-        val response = uploadKeysTask.execute(uploadParams)
-        lastPublishedOneTimeKeys = oneTimeKeys
-        olmDevice.markKeysAsPublished()
-        return response
+        return uploadKeysTask.execute(uploadParams)
     }
 
     companion object {
