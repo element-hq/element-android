@@ -57,7 +57,7 @@ internal fun ChunkEntity.Companion.findIncludingEvent(realm: Realm, eventId: Str
     return findAllIncludingEvents(realm, listOf(eventId)).firstOrNull()
 }
 
-internal fun ChunkEntity.Companion.create(realm: Realm, roomId: String, prevToken: String?, nextToken: String?): ChunkEntity {
+internal fun ChunkEntity.Companion.create(realm: Realm, roomId: String, prevToken: String? = null, nextToken: String? = null): ChunkEntity {
     return realm.createObject<ChunkEntity>().apply {
         this.roomId = roomId
         this.prevToken = prevToken

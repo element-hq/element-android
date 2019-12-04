@@ -51,36 +51,6 @@ internal fun ChunkEntity.deleteOnCascade() {
     this.deleteFromRealm()
 }
 
-internal fun ChunkEntity.merge(roomId: String,
-                               chunkToMerge: ChunkEntity,
-                               direction: PaginationDirection) {
-    assertIsManaged()
-    val isChunkToMergeUnlinked = chunkToMerge.isUnlinked()
-    val isCurrentChunkUnlinked = this.isUnlinked()
-    val isUnlinked = isCurrentChunkUnlinked && isChunkToMergeUnlinked
-
-    if (isCurrentChunkUnlinked && !isChunkToMergeUnlinked) {
-        this.timelineEvents.forEach { it.root?.isUnlinked = false }
-    }
-    val eventsToMerge: List<TimelineEventEntity>
-    if (direction == PaginationDirection.FORWARDS) {
-        this.nextToken = chunkToMerge.nextToken
-        this.isLastForward = chunkToMerge.isLastForward
-        eventsToMerge = chunkToMerge.timelineEvents.sort(TimelineEventEntityFields.ROOT.DISPLAY_INDEX, Sort.ASCENDING)
-    } else {
-        this.prevToken = chunkToMerge.prevToken
-        this.isLastBackward = chunkToMerge.isLastBackward
-        eventsToMerge = chunkToMerge.timelineEvents.sort(TimelineEventEntityFields.ROOT.DISPLAY_INDEX, Sort.DESCENDING)
-    }
-    val events = eventsToMerge.mapNotNull { it.root?.asDomain() }
-    val eventIds = ArrayList<String>()
-    events.forEach { event ->
-        add(realm, roomId, event, direction, isUnlinked = isUnlinked)
-        if (event.eventId != null) {
-            eventIds.add(event.eventId)
-        }
-    }
-}
 
 internal fun ChunkEntity.add(localRealm: Realm,
                              roomId: String,
@@ -115,7 +85,7 @@ internal fun ChunkEntity.add(localRealm: Realm,
     val senderId = event.senderId ?: ""
 
     val readReceiptsSummaryEntity = ReadReceiptsSummaryEntity.where(localRealm, eventId).findFirst()
-            ?: ReadReceiptsSummaryEntity(eventId, roomId)
+                                    ?: ReadReceiptsSummaryEntity(eventId, roomId)
 
     // Update RR for the sender of a new message with a dummy one
 
@@ -152,14 +122,14 @@ internal fun ChunkEntity.add(localRealm: Realm,
 
 internal fun ChunkEntity.lastDisplayIndex(direction: PaginationDirection, defaultValue: Int = 0): Int {
     return when (direction) {
-        PaginationDirection.FORWARDS  -> forwardsDisplayIndex
-        PaginationDirection.BACKWARDS -> backwardsDisplayIndex
-    } ?: defaultValue
+               PaginationDirection.FORWARDS  -> forwardsDisplayIndex
+               PaginationDirection.BACKWARDS -> backwardsDisplayIndex
+           } ?: defaultValue
 }
 
 internal fun ChunkEntity.lastStateIndex(direction: PaginationDirection, defaultValue: Int = 0): Int {
     return when (direction) {
-        PaginationDirection.FORWARDS  -> forwardsStateIndex
-        PaginationDirection.BACKWARDS -> backwardsStateIndex
-    } ?: defaultValue
+               PaginationDirection.FORWARDS  -> forwardsStateIndex
+               PaginationDirection.BACKWARDS -> backwardsStateIndex
+           } ?: defaultValue
 }

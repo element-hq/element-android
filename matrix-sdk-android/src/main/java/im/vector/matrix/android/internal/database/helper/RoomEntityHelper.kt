@@ -26,11 +26,6 @@ import im.vector.matrix.android.internal.database.query.fastContains
 import im.vector.matrix.android.internal.extensions.assertIsManaged
 import im.vector.matrix.android.internal.session.room.membership.RoomMembers
 
-internal fun RoomEntity.deleteOnCascade(chunkEntity: ChunkEntity) {
-    chunks.remove(chunkEntity)
-    chunkEntity.deleteOnCascade()
-}
-
 internal fun RoomEntity.addOrUpdate(chunkEntity: ChunkEntity) {
     if (!chunks.contains(chunkEntity)) {
         chunks.add(chunkEntity)

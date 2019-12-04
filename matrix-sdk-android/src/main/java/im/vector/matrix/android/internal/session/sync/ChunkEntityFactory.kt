@@ -20,9 +20,11 @@ package im.vector.matrix.android.internal.session.sync
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.internal.crypto.DefaultCryptoService
 import im.vector.matrix.android.internal.database.helper.add
+import im.vector.matrix.android.internal.database.helper.deleteOnCascade
 import im.vector.matrix.android.internal.database.helper.lastStateIndex
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
+import im.vector.matrix.android.internal.database.query.create
 import im.vector.matrix.android.internal.database.query.find
 import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
 import im.vector.matrix.android.internal.database.query.where
@@ -52,10 +54,8 @@ internal class ChunkEntityFactory @Inject constructor(private val cryptoService:
                                     roomId: String,
                                     eventList: List<Event>,
                                     prevToken: String?): ChunkEntity {
-        val chunkEntity = realm.createObject<ChunkEntity>().apply {
-            this.roomId = roomId
-            this.prevToken = prevToken
-            this.isLastForward = true
+        val chunkEntity = ChunkEntity.create(realm, roomId, prevToken = prevToken).apply {
+            isLastForward = true
         }
         for (event in eventList) {
             chunkEntity.add(realm, roomId, event, PaginationDirection.FORWARDS)
@@ -76,13 +76,14 @@ internal class ChunkEntityFactory @Inject constructor(private val cryptoService:
         val lastChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId)
         val stateIndexOffset = lastChunk?.lastStateIndex(PaginationDirection.FORWARDS) ?: 0
         val chunkEntity = if (isLimited || lastChunk == null) {
-            realm.createObject<ChunkEntity>().apply {
-                this.roomId = roomId
-                this.prevToken = prevToken
-                this.isLastForward = true
+            ChunkEntity.create(realm, roomId, prevToken = prevToken).apply {
+                isLastForward = true
             }
         } else {
             lastChunk
+        }
+        if (lastChunk != chunkEntity) {
+            lastChunk?.deleteOnCascade()
         }
         for (event in eventList) {
             chunkEntity.add(realm, roomId, event, PaginationDirection.FORWARDS, stateIndexOffset)

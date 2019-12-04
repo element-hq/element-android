@@ -470,13 +470,13 @@ internal class DefaultTimeline(
                 Pair(filteredEvents[range.startIndex]!!.root!!.displayIndex, Timeline.Direction.BACKWARDS)
             }
             val state = getState(direction)
-            if (state.isPaginating) {
+            postSnapshot = if (state.isPaginating) {
                 // We are getting new items from pagination
-                postSnapshot = paginateInternal(startDisplayIndex, direction, state.requestedPaginationCount)
+                paginateInternal(startDisplayIndex, direction, state.requestedPaginationCount)
             } else {
                 // We are getting new items from sync
                 buildTimelineEvents(startDisplayIndex, direction, range.length.toLong())
-                postSnapshot = true
+                true
             }
         }
         changeSet.changes.forEach { index ->
