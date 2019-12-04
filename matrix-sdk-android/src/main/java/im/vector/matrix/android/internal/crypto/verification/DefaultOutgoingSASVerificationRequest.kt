@@ -78,14 +78,15 @@ internal class DefaultOutgoingSASVerificationRequest(
             throw IllegalStateException("Interactive Key verification already started")
         }
 
-        val startMessage = KeyVerificationStart()
-        startMessage.fromDevice = credentials.deviceId
-        startMessage.method = KeyVerificationStart.VERIF_METHOD_SAS
-        startMessage.transactionID = transactionId
-        startMessage.keyAgreementProtocols = KNOWN_AGREEMENT_PROTOCOLS
-        startMessage.hashes = KNOWN_HASHES
-        startMessage.messageAuthenticationCodes = KNOWN_MACS
-        startMessage.shortAuthenticationStrings = KNOWN_SHORT_CODES
+        val startMessage = transport.createStart(
+                credentials.deviceId ?: "",
+                KeyVerificationStart.VERIF_METHOD_SAS,
+                transactionId,
+                KNOWN_AGREEMENT_PROTOCOLS,
+                KNOWN_HASHES,
+                KNOWN_MACS,
+                KNOWN_SHORT_CODES
+        )
 
         startReq = startMessage
         state = SasVerificationTxState.SendingStart

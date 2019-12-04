@@ -125,6 +125,27 @@ internal class SasTransportRoomMessage(
     override fun createKey(tid: String, pubKey: String): VerificationInfoKey = MessageVerificationKeyContent.create(tid, pubKey)
 
     override fun createMac(tid: String, mac: Map<String, String>, keys: String) = MessageVerificationMacContent.create(tid, mac, keys)
+
+    override fun createStart(fromDevice: String,
+                             method: String,
+                             transactionID: String,
+                             keyAgreementProtocols: List<String>,
+                             hashes: List<String>,
+                             messageAuthenticationCodes: List<String>,
+                             shortAuthenticationStrings: List<String>): VerificationInfoStart {
+        return MessageVerificationStartContent(
+                fromDevice,
+                hashes,
+                keyAgreementProtocols,
+                messageAuthenticationCodes,
+                shortAuthenticationStrings,
+                method,
+                RelationDefaultContent(
+                        type = RelationType.REFERENCE,
+                        eventId = transactionID
+                )
+        )
+    }
 }
 
 internal class SasTransportRoomMessageFactory @Inject constructor(

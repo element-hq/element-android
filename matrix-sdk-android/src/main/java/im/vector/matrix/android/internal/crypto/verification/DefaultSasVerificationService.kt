@@ -348,7 +348,7 @@ internal class DefaultSasVerificationService @Inject constructor(
 
         if (!cancelReq.isValid()) {
             // ignore
-            Timber.e("## SAS Received invalid accept request")
+            Timber.e("## SAS Received invalid cancel request")
             return
         }
         val otherUserId = event.senderId!!
@@ -477,7 +477,7 @@ internal class DefaultSasVerificationService @Inject constructor(
         Timber.v("## SAS Received $macReq")
         val existing = getExistingTransaction(senderId, macReq.transactionID!!)
         if (existing == null) {
-            Timber.e("## SAS Received invalid accept request")
+            Timber.e("## SAS Received invalid Mac request")
             return
         }
         if (existing is SASVerificationTransaction) {
@@ -532,6 +532,7 @@ internal class DefaultSasVerificationService @Inject constructor(
                     txID,
                     userId,
                     deviceID)
+            tx.transport = sasTransportToDeviceFactory.createTransport(tx)
             addTransaction(tx)
 
             tx.start()
@@ -563,6 +564,28 @@ internal class DefaultSasVerificationService @Inject constructor(
             constraints = TaskConstraints(true)
             retryCount = 3
         }.executeBy(taskExecutor)
+    }
+
+    override fun beginKeyVerificationInDMs(method: String, transactionId: String, roomId: String,
+                                           otherUserId: String, otherDeviceId: String,
+                                           callback: MatrixCallback<String>?): String? {
+        if (KeyVerificationStart.VERIF_METHOD_SAS == method) {
+            val tx = DefaultOutgoingSASVerificationRequest(
+                    setDeviceVerificationAction,
+                    credentials,
+                    cryptoStore,
+                    myDeviceInfoHolder.get().myDevice.fingerprint()!!,
+                    transactionId,
+                    otherUserId,
+                    otherDeviceId)
+            tx.transport = sasTransportRoomMessageFactory.createTransport(roomId, cryptoService)
+            addTransaction(tx)
+
+            tx.start()
+            return transactionId
+        } else {
+            throw IllegalArgumentException("Unknown verification method")
+        }
     }
 
     /**
