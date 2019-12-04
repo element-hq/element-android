@@ -26,6 +26,7 @@ import im.vector.matrix.android.api.session.events.model.UnsignedData
 @JsonClass(generateAdapter = true)
 data class RoomMember(
         @Json(name = "membership") val membership: Membership,
+        @Json(name = "reason") val reason: String?,
         @Json(name = "displayname") val displayName: String? = null,
         @Json(name = "avatar_url") val avatarUrl: String? = null,
         @Json(name = "is_direct") val isDirect: Boolean = false,

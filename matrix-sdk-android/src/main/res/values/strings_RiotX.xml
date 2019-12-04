@@ -2,7 +2,7 @@
 <resources>
 
 
-
+    <string name="notice_room_ban_with_reason">%1$s banned %2$s. Reason: %3$s</string>
 
 
     <string name="no_network_indicator">There is no network connection right now</string>
