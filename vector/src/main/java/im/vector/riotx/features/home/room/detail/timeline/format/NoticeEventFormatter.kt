@@ -192,15 +192,14 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
                         } ?: sp.getString(R.string.notice_room_invite_no_invitee, senderDisplayName)
                     else                                  ->
                         eventContent.safeReason?.let { reason ->
-                            sp.getString(R.string.notice_room_invite, senderDisplayName, targetDisplayName, reason)
+                            sp.getString(R.string.notice_room_invite_with_reason, senderDisplayName, targetDisplayName, reason)
                         } ?: sp.getString(R.string.notice_room_invite, senderDisplayName, targetDisplayName)
                 }
             }
             Membership.JOIN   ->
                 eventContent.safeReason?.let { reason ->
                     sp.getString(R.string.notice_room_join_with_reason, senderDisplayName, reason)
-                }
-                        ?: sp.getString(R.string.notice_room_join, senderDisplayName)
+                } ?: sp.getString(R.string.notice_room_join, senderDisplayName)
             Membership.LEAVE  ->
                 // 2 cases here: this member may have left voluntarily or they may have been "left" by someone else ie. kicked
                 if (event.senderId == event.stateKey) {
