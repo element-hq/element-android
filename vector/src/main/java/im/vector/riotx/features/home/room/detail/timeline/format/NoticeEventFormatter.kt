@@ -178,63 +178,74 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
                     eventContent.thirdPartyInvite != null -> {
                         val userWhoHasAccepted = eventContent.thirdPartyInvite?.signed?.mxid ?: event.stateKey
                         val threePidDisplayName = eventContent.thirdPartyInvite?.displayName ?: ""
-                        eventContent.safeReason
-                                ?.let { reason -> stringProvider.getString(R.string.notice_room_third_party_registered_invite_with_reason, userWhoHasAccepted, threePidDisplayName, reason) }
+                        eventContent.safeReason?.let { reason ->
+                            stringProvider.getString(R.string.notice_room_third_party_registered_invite_with_reason, userWhoHasAccepted, threePidDisplayName, reason)
+                        }
                                 ?: stringProvider.getString(R.string.notice_room_third_party_registered_invite, userWhoHasAccepted, threePidDisplayName)
                     }
                     event.stateKey == selfUserId          ->
-                        eventContent.safeReason
-                                ?.let { reason -> stringProvider.getString(R.string.notice_room_invite_you_with_reason, senderDisplayName, reason) }
+                        eventContent.safeReason?.let { reason ->
+                            stringProvider.getString(R.string.notice_room_invite_you_with_reason, senderDisplayName, reason)
+                        }
                                 ?: stringProvider.getString(R.string.notice_room_invite_you, senderDisplayName)
                     event.stateKey.isNullOrEmpty()        ->
-                        eventContent.safeReason
-                                ?.let { reason -> stringProvider.getString(R.string.notice_room_invite_no_invitee_with_reason, senderDisplayName, reason) }
+                        eventContent.safeReason?.let { reason ->
+                            stringProvider.getString(R.string.notice_room_invite_no_invitee_with_reason, senderDisplayName, reason)
+                        }
                                 ?: stringProvider.getString(R.string.notice_room_invite_no_invitee, senderDisplayName)
                     else                                  ->
-                        eventContent.safeReason
-                                ?.let { reason -> stringProvider.getString(R.string.notice_room_invite, senderDisplayName, targetDisplayName, reason) }
+                        eventContent.safeReason?.let { reason ->
+                            stringProvider.getString(R.string.notice_room_invite, senderDisplayName, targetDisplayName, reason)
+                        }
                                 ?: stringProvider.getString(R.string.notice_room_invite, senderDisplayName, targetDisplayName)
                 }
             }
             Membership.JOIN   ->
-                eventContent.safeReason
-                        ?.let { reason -> stringProvider.getString(R.string.notice_room_join_with_reason, senderDisplayName, reason) }
+                eventContent.safeReason?.let { reason ->
+                    stringProvider.getString(R.string.notice_room_join_with_reason, senderDisplayName, reason)
+                }
                         ?: stringProvider.getString(R.string.notice_room_join, senderDisplayName)
             Membership.LEAVE  ->
                 // 2 cases here: this member may have left voluntarily or they may have been "left" by someone else ie. kicked
                 if (event.senderId == event.stateKey) {
                     if (prevEventContent?.membership == Membership.INVITE) {
-                        eventContent.safeReason
-                                ?.let { reason -> stringProvider.getString(R.string.notice_room_reject_with_reason, senderDisplayName, reason) }
+                        eventContent.safeReason?.let { reason ->
+                            stringProvider.getString(R.string.notice_room_reject_with_reason, senderDisplayName, reason)
+                        }
                                 ?: stringProvider.getString(R.string.notice_room_reject, senderDisplayName)
                     } else {
-                        eventContent.safeReason
-                                ?.let { reason -> stringProvider.getString(R.string.notice_room_leave_with_reason, senderDisplayName, reason) }
+                        eventContent.safeReason?.let { reason ->
+                            stringProvider.getString(R.string.notice_room_leave_with_reason, senderDisplayName, reason)
+                        }
                                 ?: stringProvider.getString(R.string.notice_room_leave, senderDisplayName)
                     }
                 } else if (prevEventContent?.membership == Membership.INVITE) {
-                    eventContent.safeReason
-                            ?.let { reason -> stringProvider.getString(R.string.notice_room_withdraw_with_reason, senderDisplayName, targetDisplayName, reason) }
+                    eventContent.safeReason?.let { reason ->
+                        stringProvider.getString(R.string.notice_room_withdraw_with_reason, senderDisplayName, targetDisplayName, reason)
+                    }
                             ?: stringProvider.getString(R.string.notice_room_withdraw, senderDisplayName, targetDisplayName)
                 } else if (prevEventContent?.membership == Membership.JOIN) {
-                    eventContent.safeReason
-                            ?.let { reason -> stringProvider.getString(R.string.notice_room_kick_with_reason, senderDisplayName, targetDisplayName, reason) }
+                    eventContent.safeReason?.let { reason ->
+                        stringProvider.getString(R.string.notice_room_kick_with_reason, senderDisplayName, targetDisplayName, reason)
+                    }
                             ?: stringProvider.getString(R.string.notice_room_kick, senderDisplayName, targetDisplayName)
                 } else if (prevEventContent?.membership == Membership.BAN) {
-                    eventContent.safeReason
-                            ?.let { reason -> stringProvider.getString(R.string.notice_room_unban_with_reason, senderDisplayName, targetDisplayName, reason) }
+                    eventContent.safeReason?.let { reason ->
+                        stringProvider.getString(R.string.notice_room_unban_with_reason, senderDisplayName, targetDisplayName, reason)
+                    }
                             ?: stringProvider.getString(R.string.notice_room_unban, senderDisplayName, targetDisplayName)
                 } else {
                     null
                 }
             Membership.BAN    ->
-                eventContent.safeReason
-                        ?.let { reason -> stringProvider.getString(R.string.notice_room_ban_with_reason, senderDisplayName, targetDisplayName, reason) }
+                eventContent.safeReason?.let { reason ->
+                    stringProvider.getString(R.string.notice_room_ban_with_reason, senderDisplayName, targetDisplayName, reason)
+                }
                         ?: stringProvider.getString(R.string.notice_room_ban, senderDisplayName, targetDisplayName)
             Membership.KNOCK  ->
-                eventContent.safeReason
-                        ?.let { reason -> stringProvider.getString(R.string.notice_room_kick_with_reason, senderDisplayName, targetDisplayName, reason) }
-                        ?: stringProvider.getString(R.string.notice_room_kick, senderDisplayName, targetDisplayName)
+                eventContent.safeReason?.let { reason ->
+                    stringProvider.getString(R.string.notice_room_kick_with_reason, senderDisplayName, targetDisplayName, reason)
+                } ?: stringProvider.getString(R.string.notice_room_kick, senderDisplayName, targetDisplayName)
             else              -> null
         }
     }
