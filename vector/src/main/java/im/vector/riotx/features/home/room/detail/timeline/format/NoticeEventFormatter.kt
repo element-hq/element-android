@@ -171,8 +171,8 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
     private fun buildMembershipNotice(event: Event, senderName: String?, eventContent: RoomMember?, prevEventContent: RoomMember?): String? {
         val senderDisplayName = senderName ?: event.senderId
         val targetDisplayName = eventContent?.displayName ?: prevEventContent?.displayName ?: event.stateKey ?: ""
-        return when {
-            Membership.INVITE == eventContent?.membership -> {
+        return when (eventContent?.membership) {
+            Membership.INVITE -> {
                 val selfUserId = sessionHolder.getSafeActiveSession()?.myUserId
                 when {
                     eventContent.thirdPartyInvite != null -> {
@@ -195,13 +195,13 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
                                 ?: stringProvider.getString(R.string.notice_room_invite, senderDisplayName, targetDisplayName)
                 }
             }
-            Membership.JOIN == eventContent?.membership   ->
+            Membership.JOIN   ->
                 eventContent.safeReason
                         ?.let { reason -> stringProvider.getString(R.string.notice_room_join_with_reason, senderDisplayName, reason) }
                         ?: stringProvider.getString(R.string.notice_room_join, senderDisplayName)
-            Membership.LEAVE == eventContent?.membership  ->
+            Membership.LEAVE  ->
                 // 2 cases here: this member may have left voluntarily or they may have been "left" by someone else ie. kicked
-                return if (event.senderId == event.stateKey) {
+                if (event.senderId == event.stateKey) {
                     if (prevEventContent?.membership == Membership.INVITE) {
                         eventContent.safeReason
                                 ?.let { reason -> stringProvider.getString(R.string.notice_room_reject_with_reason, senderDisplayName, reason) }
@@ -226,15 +226,15 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
                 } else {
                     null
                 }
-            Membership.BAN == eventContent?.membership    ->
+            Membership.BAN    ->
                 eventContent.safeReason
                         ?.let { reason -> stringProvider.getString(R.string.notice_room_ban_with_reason, senderDisplayName, targetDisplayName, reason) }
                         ?: stringProvider.getString(R.string.notice_room_ban, senderDisplayName, targetDisplayName)
-            Membership.KNOCK == eventContent?.membership  ->
+            Membership.KNOCK  ->
                 eventContent.safeReason
                         ?.let { reason -> stringProvider.getString(R.string.notice_room_kick_with_reason, senderDisplayName, targetDisplayName, reason) }
                         ?: stringProvider.getString(R.string.notice_room_kick, senderDisplayName, targetDisplayName)
-            else                                          -> null
+            else              -> null
         }
     }
 
