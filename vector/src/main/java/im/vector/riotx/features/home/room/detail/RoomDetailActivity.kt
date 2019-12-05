@@ -57,19 +57,21 @@ class RoomDetailActivity : VectorBaseActivity(), ToolbarConfigurable {
                 .observe()
                 .subscribe { sharedAction ->
                     when (sharedAction) {
-                        is RoomDetailSharedAction.OpenRoom -> {
-                            drawerLayout.closeDrawer(GravityCompat.START)
-                            // Do not replace the Fragment if it's the same roomId
-                            if (currentRoomId != sharedAction.roomId) {
-                                currentRoomId = sharedAction.roomId
-                                replaceFragment(R.id.roomDetailContainer, RoomDetailFragment::class.java, RoomDetailArgs(sharedAction.roomId))
-                            }
-                        }
+                        is RoomDetailSharedAction.SwitchToRoom -> switchToRoom(sharedAction)
                     }
                 }
                 .disposeOnDestroy()
 
         drawerLayout.addDrawerListener(drawerListener)
+    }
+
+    private fun switchToRoom(switchToRoom: RoomDetailSharedAction.SwitchToRoom) {
+        drawerLayout.closeDrawer(GravityCompat.START)
+        // Do not replace the Fragment if it's the same roomId
+        if (currentRoomId != switchToRoom.roomId) {
+            currentRoomId = switchToRoom.roomId
+            replaceFragment(R.id.roomDetailContainer, RoomDetailFragment::class.java, RoomDetailArgs(switchToRoom.roomId))
+        }
     }
 
     override fun onDestroy() {

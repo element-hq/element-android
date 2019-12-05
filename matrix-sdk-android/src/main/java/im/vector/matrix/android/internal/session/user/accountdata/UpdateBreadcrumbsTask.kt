@@ -46,9 +46,9 @@ internal class DefaultUpdateBreadcrumbsTask @Inject constructor(
                         ?.recentRoomIds
                         ?.apply {
                             // Modify the list to add the newTopRoomId first
-                            // Ensure the roomId is not already in the list
+                            // Ensure the newTopRoomId is not already in the list
                             remove(params.newTopRoomId)
-                            // Add the room at first position
+                            // Add the newTopRoomId at first position
                             add(0, params.newTopRoomId)
                         }
                         ?.take(MAX_BREADCRUMBS_ROOMS_NUMBER)

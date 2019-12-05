@@ -20,7 +20,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.mvrx.fragmentViewModel
-import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.home.room.detail.RoomDetailSharedAction
@@ -65,7 +64,7 @@ class BreadcrumbsFragment @Inject constructor(
 
     // BreadcrumbsController.Listener **************************************************************
 
-    override fun onRoomClicked(room: RoomSummary) {
-        sharedActionViewModel.post(RoomDetailSharedAction.OpenRoom(room.roomId))
+    override fun onBreadcrumbClicked(roomId: String) {
+        sharedActionViewModel.post(RoomDetailSharedAction.SwitchToRoom(roomId))
     }
 }

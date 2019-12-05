@@ -22,5 +22,5 @@ import im.vector.riotx.core.platform.VectorSharedAction
  * Supported navigation actions for [RoomDetailActivity]
  */
 sealed class RoomDetailSharedAction : VectorSharedAction {
-    data class OpenRoom(val roomId: String) : RoomDetailSharedAction()
+    data class SwitchToRoom(val roomId: String) : RoomDetailSharedAction()
 }

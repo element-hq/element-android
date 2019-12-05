@@ -17,7 +17,7 @@ Client request the sign-up flows, once the homeserver is chosen by the user and 
 }
 ```
 
-We get the flows with a 401, which also means the the registration is possible on this homeserver.
+We get the flows with a 401, which also means that the registration is possible on this homeserver.
 
 ```json
 {

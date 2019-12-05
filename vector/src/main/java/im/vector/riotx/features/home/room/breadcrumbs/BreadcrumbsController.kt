@@ -18,7 +18,6 @@ package im.vector.riotx.features.home.room.breadcrumbs
 
 import android.view.View
 import com.airbnb.epoxy.EpoxyController
-import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotx.core.utils.DebouncedClickListener
 import im.vector.riotx.features.home.AvatarRenderer
 import javax.inject.Inject
@@ -33,7 +32,7 @@ class BreadcrumbsController @Inject constructor(
 
     init {
         // We are requesting a model build directly as the first build of epoxy is on the main thread.
-        // It avoids to build the the whole list of rooms on the main thread.
+        // It avoids to build the whole list of breadcrumbs on the main thread.
         requestModelBuild()
     }
 
@@ -43,11 +42,12 @@ class BreadcrumbsController @Inject constructor(
     }
 
     override fun buildModels() {
-        val nonNullViewState = viewState ?: return
+        val safeViewState = viewState ?: return
 
-        // TODO Display a loading, or an empty state
+        // An empty breadcrumbs list can only be temporary because when entering in a room,
+        // this one is added to the breadcrumbs
 
-        nonNullViewState.asyncRooms.invoke()
+        safeViewState.asyncBreadcrumbs.invoke()
                 ?.forEach {
                     breadcrumbsItem {
                         id(it.roomId)
@@ -61,7 +61,7 @@ class BreadcrumbsController @Inject constructor(
                         hasDraft(it.userDrafts.isNotEmpty())
                         itemClickListener(
                                 DebouncedClickListener(View.OnClickListener { _ ->
-                                    listener?.onRoomClicked(it)
+                                    listener?.onBreadcrumbClicked(it.roomId)
                                 })
                         )
                     }
@@ -69,6 +69,6 @@ class BreadcrumbsController @Inject constructor(
     }
 
     interface Listener {
-        fun onRoomClicked(room: RoomSummary)
+        fun onBreadcrumbClicked(roomId: String)
     }
 }

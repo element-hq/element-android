@@ -22,5 +22,5 @@ import com.airbnb.mvrx.Uninitialized
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 
 data class BreadcrumbsViewState(
-        val asyncRooms: Async<List<RoomSummary>> = Uninitialized
+        val asyncBreadcrumbs: Async<List<RoomSummary>> = Uninitialized
 ) : MvRxState
