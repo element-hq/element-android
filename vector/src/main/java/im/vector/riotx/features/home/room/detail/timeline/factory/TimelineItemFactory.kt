@@ -72,7 +72,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 EventType.KEY_VERIFICATION_MAC          -> {
                     // These events are filtered from timeline in normal case
                     // Only visible in developer mode
-                    defaultItemFactory.create(event, highlight, readMarkerVisible, callback)
+                    defaultItemFactory.create(event, highlight, callback)
                 }
 
                 // Unhandled event types (yet)
