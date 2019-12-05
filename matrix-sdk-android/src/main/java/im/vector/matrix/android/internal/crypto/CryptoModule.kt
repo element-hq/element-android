@@ -37,6 +37,8 @@ import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.cache.ClearCacheTask
 import im.vector.matrix.android.internal.session.cache.RealmClearCacheTask
 import io.realm.RealmConfiguration
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
 import retrofit2.Retrofit
 import java.io.File
 
@@ -64,6 +66,13 @@ internal abstract class CryptoModule {
                     .schemaVersion(RealmCryptoStoreMigration.CRYPTO_STORE_SCHEMA_VERSION)
                     .migration(RealmCryptoStoreMigration)
                     .build()
+        }
+
+        @JvmStatic
+        @Provides
+        @SessionScope
+        fun providesCryptoCoroutineScope(): CoroutineScope {
+            return CoroutineScope(SupervisorJob())
         }
 
         @JvmStatic

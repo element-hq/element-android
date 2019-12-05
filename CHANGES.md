@@ -1,4 +1,25 @@
-Changes in RiotX 0.9.0 (2019-XX-XX)
+Changes in RiotX 0.10.0 (2019-XX-XX)
+===================================================
+
+Features ✨:
+ -
+
+Improvements 🙌:
+ -
+
+Other changes:
+ -
+
+Bugfix 🐛:
+ -
+
+Translations 🗣:
+ -
+
+Build 🧱:
+ -
+
+Changes in RiotX 0.9.0 (2019-12-05)
 ===================================================
 
 Features ✨:
@@ -16,12 +37,8 @@ Other changes:
 Bugfix 🐛:
  - Do not show long click help if only invitation are displayed
  - Fix emoji filtering not working
-
-Translations 🗣:
- -
-
-Build 🧱:
- -
+ - Fix issue of closing Realm in another thread (#725)
+ - Attempt to properly cancel the crypto module when user signs out (#724)
 
 Changes in RiotX 0.8.0 (2019-11-19)
 ===================================================

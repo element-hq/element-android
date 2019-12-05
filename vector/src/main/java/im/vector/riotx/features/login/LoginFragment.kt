@@ -109,8 +109,7 @@ class LoginFragment @Inject constructor(
             ServerType.Modular   -> {
                 loginServerIcon.isVisible = true
                 loginServerIcon.setImageResource(R.drawable.ic_logo_modular)
-                // TODO
-                loginTitle.text = getString(resId, "TODO")
+                loginTitle.text = getString(resId, "Modular")
                 loginNotice.text = getString(R.string.login_server_modular_text)
             }
             ServerType.Other     -> {

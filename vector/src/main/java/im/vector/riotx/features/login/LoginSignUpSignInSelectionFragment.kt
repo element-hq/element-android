@@ -46,8 +46,7 @@ class LoginSignUpSignInSelectionFragment @Inject constructor(
             ServerType.Modular   -> {
                 loginSignupSigninServerIcon.setImageResource(R.drawable.ic_logo_modular)
                 loginSignupSigninServerIcon.isVisible = true
-                // TODO
-                loginSignupSigninTitle.text = getString(R.string.login_connect_to, "TODO MODULAR NAME")
+                loginSignupSigninTitle.text = getString(R.string.login_connect_to_modular)
                 loginSignupSigninText.text = state.homeServerUrlSimple
             }
             ServerType.Other     -> {

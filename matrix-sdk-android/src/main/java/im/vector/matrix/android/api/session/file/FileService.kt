@@ -17,6 +17,7 @@
 package im.vector.matrix.android.api.session.file
 
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.crypto.attachments.ElementToDecrypt
 import java.io.File
 
@@ -47,5 +48,5 @@ interface FileService {
             fileName: String,
             url: String?,
             elementToDecrypt: ElementToDecrypt?,
-            callback: MatrixCallback<File>)
+            callback: MatrixCallback<File>): Cancelable
 }

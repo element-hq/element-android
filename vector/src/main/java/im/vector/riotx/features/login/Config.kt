@@ -16,5 +16,4 @@
 
 package im.vector.riotx.features.login
 
-// TODO Check the link with Nad
-const val MODULAR_LINK = "https://modular.im/?utm_source=riot-web&utm_medium=web&utm_campaign=riot-web-authentication"
+const val MODULAR_LINK = "https://modular.im/?utm_source=riot-x-android&utm_medium=native&utm_campaign=riot-x-android-authentication"

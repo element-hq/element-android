@@ -25,17 +25,21 @@ import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import kotlinx.coroutines.CoroutineScope
 import javax.inject.Inject
 
-internal class MXMegolmDecryptionFactory @Inject constructor(@UserId private val userId: String,
-                                                             private val olmDevice: MXOlmDevice,
-                                                             private val deviceListManager: DeviceListManager,
-                                                             private val outgoingRoomKeyRequestManager: OutgoingRoomKeyRequestManager,
-                                                             private val messageEncrypter: MessageEncrypter,
-                                                             private val ensureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction,
-                                                             private val cryptoStore: IMXCryptoStore,
-                                                             private val sendToDeviceTask: SendToDeviceTask,
-                                                             private val coroutineDispatchers: MatrixCoroutineDispatchers) {
+internal class MXMegolmDecryptionFactory @Inject constructor(
+        @UserId private val userId: String,
+        private val olmDevice: MXOlmDevice,
+        private val deviceListManager: DeviceListManager,
+        private val outgoingRoomKeyRequestManager: OutgoingRoomKeyRequestManager,
+        private val messageEncrypter: MessageEncrypter,
+        private val ensureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction,
+        private val cryptoStore: IMXCryptoStore,
+        private val sendToDeviceTask: SendToDeviceTask,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
+        private val cryptoCoroutineScope: CoroutineScope
+) {
 
     fun create(): MXMegolmDecryption {
         return MXMegolmDecryption(
@@ -47,6 +51,7 @@ internal class MXMegolmDecryptionFactory @Inject constructor(@UserId private val
                 ensureOlmSessionsForDevicesAction,
                 cryptoStore,
                 sendToDeviceTask,
-                coroutineDispatchers)
+                coroutineDispatchers,
+                cryptoCoroutineScope)
     }
 }
