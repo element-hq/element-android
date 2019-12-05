@@ -19,6 +19,12 @@ Translations 🗣:
 Build 🧱:
  -
 
+Changes in RiotX 0.9.1 (2019-12-05)
+===================================================
+
+Bugfix 🐛:
+ - Fix an issue with DB transaction (#740)
+
 Changes in RiotX 0.9.0 (2019-12-05)
 ===================================================
 

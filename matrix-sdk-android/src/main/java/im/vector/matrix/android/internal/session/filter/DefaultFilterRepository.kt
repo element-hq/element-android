@@ -69,7 +69,7 @@ internal class DefaultFilterRepository @Inject constructor(private val monarchy:
     }
 
     override suspend fun getFilter(): String {
-        return Realm.getInstance(monarchy.realmConfiguration).use {
+        return monarchy.awaitTransaction {
             val filter = FilterEntity.getOrCreate(it)
             if (filter.filterId.isBlank()) {
                 // Use the Json format
@@ -82,7 +82,7 @@ internal class DefaultFilterRepository @Inject constructor(private val monarchy:
     }
 
     override suspend fun getRoomFilter(): String {
-        return Realm.getInstance(monarchy.realmConfiguration).use {
+        return monarchy.awaitTransaction {
             FilterEntity.getOrCreate(it).roomEventFilterJson
         }
     }
