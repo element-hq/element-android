@@ -22,12 +22,13 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 
-suspend fun awaitTransaction(config: RealmConfiguration, transaction: suspend (realm: Realm) -> Unit) = withContext(Dispatchers.Default) {
+suspend fun <T> awaitTransaction(config: RealmConfiguration, transaction: suspend (realm: Realm) -> T) = withContext(Dispatchers.Default) {
     Realm.getInstance(config).use { bgRealm ->
         bgRealm.beginTransaction()
+        val result: T
         try {
             val start = System.currentTimeMillis()
-            transaction(bgRealm)
+            result = transaction(bgRealm)
             if (isActive) {
                 bgRealm.commitTransaction()
                 val end = System.currentTimeMillis()
@@ -39,5 +40,6 @@ suspend fun awaitTransaction(config: RealmConfiguration, transaction: suspend (r
                 bgRealm.cancelTransaction()
             }
         }
+        result
     }
 }

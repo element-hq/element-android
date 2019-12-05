@@ -41,6 +41,7 @@ internal open class OutgoingRoomKeyRequestEntity(
      * Convert to OutgoingRoomKeyRequest
      */
     fun toOutgoingRoomKeyRequest(): OutgoingRoomKeyRequest {
+        val cancellationTxnId = this.cancellationTxnId
         return OutgoingRoomKeyRequest(
                 RoomKeyRequestBody().apply {
                     algorithm = requestBodyAlgorithm
