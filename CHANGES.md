@@ -2,7 +2,7 @@ Changes in RiotX 0.10.0 (2019-XX-XX)
 ===================================================
 
 Features ✨:
- -
+ - Breadcrumbs: switch from one room to another quickly (#571)
 
 Improvements 🙌:
  -
