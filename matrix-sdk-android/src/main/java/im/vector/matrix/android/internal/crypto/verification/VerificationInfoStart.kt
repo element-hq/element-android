@@ -18,10 +18,23 @@ package im.vector.matrix.android.internal.crypto.verification
 internal interface VerificationInfoStart : VerificationInfo {
 
     val method: String?
+    /**
+     * Alice’s device ID
+     */
     val fromDevice: String?
 
+    /**
+     * String to identify the transaction.
+     * This string must be unique for the pair of users performing verification for the duration that the transaction is valid.
+     * Alice’s device should record this ID and use it in future messages in this transaction.
+     */
     val transactionID: String?
 
+    /**
+     * An array of key agreement protocols that Alice’s client understands.
+     * Must include “curve25519”.
+     * Other methods may be defined in the future
+     */
     val keyAgreementProtocols: List<String>?
 
     /**

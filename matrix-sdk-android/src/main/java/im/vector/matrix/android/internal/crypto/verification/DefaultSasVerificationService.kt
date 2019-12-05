@@ -239,14 +239,8 @@ internal class DefaultSasVerificationService @Inject constructor(
         if (!startReq.isValid()) {
             Timber.e("## SAS received invalid verification request")
             if (startReq.transactionID != null) {
-//                cancelTransaction(
-//                        startReq.transactionID!!,
-//                        otherUserId!!,
-//                        startReq.fromDevice ?: event.getSenderKey()!!,
-//                        CancelCode.UnknownMethod
-//                )
                 sasTransportToDeviceFactory.createTransport(null).cancelTransaction(
-                        startReq.transactionID ?: "",
+                        startReq.transactionID,
                         otherUserId!!,
                         startReq.fromDevice ?: event.getSenderKey()!!,
                         CancelCode.UnknownMethod

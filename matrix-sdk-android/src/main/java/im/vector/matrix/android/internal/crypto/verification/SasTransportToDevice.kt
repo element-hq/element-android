@@ -118,15 +118,14 @@ internal class SasTransportToDevice(
                              hashes: List<String>,
                              messageAuthenticationCodes: List<String>,
                              shortAuthenticationStrings: List<String>): VerificationInfoStart {
-        return KeyVerificationStart().apply {
-            this.fromDevice = fromDevice
-            this.method = method
-            this.transactionID = transactionID
-            this.keyAgreementProtocols = keyAgreementProtocols
-            this.hashes = hashes
-            this.messageAuthenticationCodes = messageAuthenticationCodes
-            this.shortAuthenticationStrings = shortAuthenticationStrings
-        }
+        return KeyVerificationStart(
+                fromDevice,
+                method,
+                transactionID,
+                keyAgreementProtocols,
+                hashes,
+                messageAuthenticationCodes,
+                shortAuthenticationStrings)
     }
 }
 
