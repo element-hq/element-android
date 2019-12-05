@@ -26,6 +26,7 @@ import im.vector.matrix.android.api.session.room.model.VersioningState
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.database.mapper.RoomSummaryMapper
+import im.vector.matrix.android.internal.database.model.BreadcrumbsEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
@@ -36,6 +37,7 @@ import im.vector.matrix.android.internal.session.room.read.MarkAllRoomsReadTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import io.realm.Realm
+import io.realm.RealmList
 import javax.inject.Inject
 
 internal class DefaultRoomService @Inject constructor(private val monarchy: Monarchy,
@@ -70,6 +72,18 @@ internal class DefaultRoomService @Inject constructor(private val monarchy: Mona
                     RoomSummaryEntity.where(realm)
                             .isNotEmpty(RoomSummaryEntityFields.DISPLAY_NAME)
                             .notEqualTo(RoomSummaryEntityFields.VERSIONING_STATE_STR, VersioningState.UPGRADED_ROOM_JOINED.name)
+                },
+                { roomSummaryMapper.map(it) }
+        )
+    }
+
+    override fun liveBreadcrumbs(): LiveData<List<RoomSummary>> {
+        return monarchy.findAllMappedWithChanges(
+                { realm ->
+                    // TODO Improve this query, it's not live when breadcrumbs changes
+                    realm.where(RoomSummaryEntity::class.java)
+                            .`in`(RoomSummaryEntityFields.ROOM_ID,
+                                    (realm.where(BreadcrumbsEntity::class.java).findFirst()?.roomIds ?: RealmList()).toTypedArray())
                 },
                 { roomSummaryMapper.map(it) }
         )

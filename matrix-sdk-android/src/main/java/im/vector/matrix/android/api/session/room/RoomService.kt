@@ -55,6 +55,12 @@ interface RoomService {
     fun liveRoomSummaries(): LiveData<List<RoomSummary>>
 
     /**
+     * Get a live list of Breadcrumbs
+     * @return the [LiveData] of [RoomSummary]
+     */
+    fun liveBreadcrumbs(): LiveData<List<RoomSummary>>
+
+    /**
      * Mark all rooms as read
      */
     fun markAllAsRead(roomIds: List<String>, callback: MatrixCallback<Unit>): Cancelable

@@ -36,4 +36,7 @@ internal abstract class AccountDataModule {
 
     @Binds
     abstract fun bindUpdateUserAccountDataTask(updateUserAccountDataTask: DefaultUpdateUserAccountDataTask): UpdateUserAccountDataTask
+
+    @Binds
+    abstract fun bindSaveBreadcrumbsTask(saveBreadcrumbsTask: DefaultSaveBreadcrumbsTask): SaveBreadcrumbsTask
 }

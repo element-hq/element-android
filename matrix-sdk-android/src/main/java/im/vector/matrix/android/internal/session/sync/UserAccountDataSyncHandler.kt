@@ -29,6 +29,7 @@ import im.vector.matrix.android.internal.session.room.membership.RoomMembers
 import im.vector.matrix.android.internal.session.sync.model.InvitedRoomSync
 import im.vector.matrix.android.internal.session.sync.model.accountdata.*
 import im.vector.matrix.android.internal.session.user.accountdata.DirectChatsHelper
+import im.vector.matrix.android.internal.session.user.accountdata.SaveBreadcrumbsTask
 import im.vector.matrix.android.internal.session.user.accountdata.SaveIgnoredUsersTask
 import im.vector.matrix.android.internal.session.user.accountdata.UpdateUserAccountDataTask
 import im.vector.matrix.android.internal.task.TaskExecutor
@@ -44,6 +45,7 @@ internal class UserAccountDataSyncHandler @Inject constructor(private val monarc
                                                               private val updateUserAccountDataTask: UpdateUserAccountDataTask,
                                                               private val savePushRulesTask: SavePushRulesTask,
                                                               private val saveIgnoredUsersTask: SaveIgnoredUsersTask,
+                                                              private val saveBreadcrumbsTask: SaveBreadcrumbsTask,
                                                               private val taskExecutor: TaskExecutor) {
 
     suspend fun handle(accountData: UserAccountDataSync?, invites: Map<String, InvitedRoomSync>?) {
@@ -52,6 +54,7 @@ internal class UserAccountDataSyncHandler @Inject constructor(private val monarc
                 is UserAccountDataDirectMessages -> handleDirectChatRooms(it)
                 is UserAccountDataPushRules      -> handlePushRules(it)
                 is UserAccountDataIgnoredUsers   -> handleIgnoredUsers(it)
+                is UserAccountDataBreadcrumbs    -> handleBreadcrumbs(it)
                 is UserAccountDataFallback       -> Timber.d("Receive account data of unhandled type ${it.type}")
                 else                             -> error("Missing code here!")
             }
@@ -129,5 +132,11 @@ internal class UserAccountDataSyncHandler @Inject constructor(private val monarc
                 .configureWith(SaveIgnoredUsersTask.Params(userAccountDataIgnoredUsers.content.ignoredUsers.keys.toList()))
                 .executeBy(taskExecutor)
         // TODO If not initial sync, we should execute a init sync
+    }
+
+    private fun handleBreadcrumbs(userAccountDataBreadcrumbs: UserAccountDataBreadcrumbs) {
+        saveBreadcrumbsTask
+                .configureWith(SaveBreadcrumbsTask.Params(userAccountDataBreadcrumbs.content.roomIds))
+                .executeBy(taskExecutor)
     }
 }
