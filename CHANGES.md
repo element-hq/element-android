@@ -8,7 +8,7 @@ Improvements 🙌:
  -
 
 Other changes:
- -
+ - Add reason for all membership events (https://github.com/matrix-org/matrix-doc/pull/2367)
 
 Bugfix 🐛:
  - When automardown is ON, pills are sent as MD in body (#739)
@@ -17,7 +17,7 @@ Translations 🗣:
  -
 
 Build 🧱:
- -
+ - "ban" event are not rendered correctly (#716)
 
 Changes in RiotX 0.9.1 (2019-12-05)
 ===================================================
@@ -39,14 +39,12 @@ Improvements 🙌:
 
 Other changes:
  - Fix a small grammatical error when an empty room list is shown.
- - Add reason for all membership events (https://github.com/matrix-org/matrix-doc/pull/2367)
 
 Bugfix 🐛:
  - Do not show long click help if only invitation are displayed
  - Fix emoji filtering not working
  - Fix issue of closing Realm in another thread (#725)
  - Attempt to properly cancel the crypto module when user signs out (#724)
- - "ban" event are not rendered correctly (#716)
 
 Changes in RiotX 0.8.0 (2019-11-19)
 ===================================================
