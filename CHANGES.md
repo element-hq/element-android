@@ -1,23 +1,8 @@
-Changes in RiotX 0.10.0 (2019-XX-XX)
+Changes in RiotX 0.9.1 (2019-12-05)
 ===================================================
 
-Features ✨:
- -
-
-Improvements 🙌:
- -
-
-Other changes:
- -
-
 Bugfix 🐛:
- -
-
-Translations 🗣:
- -
-
-Build 🧱:
- -
+ - Fix an issue with DB transaction (#740)
 
 Changes in RiotX 0.9.0 (2019-12-05)
 ===================================================
