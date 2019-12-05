@@ -23,6 +23,9 @@ import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.fetchCopied
 import javax.inject.Inject
 
+// Use same arbitrary value than Riot-Web
+private const val MAX_BREADCRUMBS_ROOMS_NUMBER = 20
+
 internal interface UpdateBreadcrumbsTask : Task<UpdateBreadcrumbsTask.Params, Unit> {
     data class Params(
             // Last seen roomId
@@ -50,7 +53,7 @@ internal class DefaultUpdateBreadcrumbsTask @Inject constructor(
             bc.recentRoomIds.remove(params.roomId)
             // Add the room at first position
             bc.recentRoomIds.add(0, params.roomId)
-            bc.recentRoomIds.toList()
+            bc.recentRoomIds.take(MAX_BREADCRUMBS_ROOMS_NUMBER)
         } else {
             listOf(params.roomId)
         }
