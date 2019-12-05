@@ -41,7 +41,6 @@ data class KeyVerificationStart(
         return JsonCanonicalizer.getCanonicalJson(KeyVerificationStart::class.java, this)
     }
 
-
     companion object {
         const val VERIF_METHOD_SAS = "m.sas.v1"
     }
