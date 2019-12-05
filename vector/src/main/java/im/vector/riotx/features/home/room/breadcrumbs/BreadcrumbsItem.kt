@@ -19,12 +19,14 @@ package im.vector.riotx.features.home.room.breadcrumbs
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
 import im.vector.riotx.features.home.AvatarRenderer
+import im.vector.riotx.features.home.room.list.UnreadCounterBadgeView
 
 @EpoxyModelClass(layout = R.layout.item_breadcrumbs)
 abstract class BreadcrumbsItem : VectorEpoxyModel<BreadcrumbsItem.Holder>() {
@@ -33,20 +35,25 @@ abstract class BreadcrumbsItem : VectorEpoxyModel<BreadcrumbsItem.Holder>() {
     @EpoxyAttribute lateinit var roomId: String
     @EpoxyAttribute lateinit var roomName: CharSequence
     @EpoxyAttribute var avatarUrl: String? = null
-    // TODO @EpoxyAttribute var unreadNotificationCount: Int = 0
-    // TODO @EpoxyAttribute var hasUnreadMessage: Boolean = false
-    // TODO @EpoxyAttribute var showHighlighted: Boolean = false
+    @EpoxyAttribute var unreadNotificationCount: Int = 0
+    @EpoxyAttribute var showHighlighted: Boolean = false
+    @EpoxyAttribute var hasUnreadMessage: Boolean = false
+    @EpoxyAttribute var hasDraft: Boolean = false
     @EpoxyAttribute var itemClickListener: View.OnClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.rootView.setOnClickListener(itemClickListener)
+        holder.unreadIndentIndicator.isVisible = hasUnreadMessage
         avatarRenderer.render(avatarUrl, roomId, roomName.toString(), holder.avatarImageView)
+        holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadNotificationCount, showHighlighted))
+        holder.draftIndentIndicator.isVisible = hasDraft
     }
 
     class Holder : VectorEpoxyHolder() {
-        // TODO val unreadCounterBadgeView by bind<UnreadCounterBadgeView>(R.id.roomUnreadCounterBadgeView)
-        // TODO val unreadIndentIndicator by bind<View>(R.id.roomUnreadIndicator)
+        val unreadCounterBadgeView by bind<UnreadCounterBadgeView>(R.id.breadcrumbsUnreadCounterBadgeView)
+        val unreadIndentIndicator by bind<View>(R.id.breadcrumbsUnreadIndicator)
+        val draftIndentIndicator by bind<View>(R.id.breadcrumbsDraftBadge)
         val avatarImageView by bind<ImageView>(R.id.breadcrumbsImageView)
         val rootView by bind<ViewGroup>(R.id.breadcrumbsRoot)
     }

@@ -55,6 +55,10 @@ class BreadcrumbsController @Inject constructor(
                         roomId(it.roomId)
                         roomName(it.displayName)
                         avatarUrl(it.avatarUrl)
+                        unreadNotificationCount(it.notificationCount)
+                        showHighlighted(it.highlightCount > 0)
+                        hasUnreadMessage(it.hasUnreadMessages)
+                        hasDraft(it.userDrafts.isNotEmpty())
                         itemClickListener(
                                 DebouncedClickListener(View.OnClickListener { _ ->
                                     listener?.onRoomClicked(it)
