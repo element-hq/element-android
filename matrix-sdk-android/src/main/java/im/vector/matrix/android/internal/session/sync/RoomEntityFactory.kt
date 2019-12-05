@@ -69,7 +69,7 @@ internal class RoomEntityFactory @Inject constructor(private val cryptoService: 
         // State events
         if (roomSync.state != null && roomSync.state.events.isNotEmpty()) {
             roomSync.state.events.forEach { event ->
-                roomEntity.addStateEvent(event, filterDuplicates = false, stateIndex = Int.MIN_VALUE)
+                roomEntity.addStateEvent(event)
                 // Give info to crypto module
                 cryptoService.onStateEvent(roomId, event)
                 UserEntityFactory.createOrNull(event)?.also {
@@ -116,7 +116,7 @@ internal class RoomEntityFactory @Inject constructor(private val cryptoService: 
                     ?: Int.MIN_VALUE
             val untimelinedStateIndex = minStateIndex + 1
             roomSync.state.events.forEach { event ->
-                roomEntity.addStateEvent(event, filterDuplicates = true, stateIndex = untimelinedStateIndex)
+                roomEntity.addStateEvent(event, stateIndex = untimelinedStateIndex)
                 // Give info to crypto module
                 cryptoService.onStateEvent(roomId, event)
                 UserEntityFactory.createOrNull(event)?.also {

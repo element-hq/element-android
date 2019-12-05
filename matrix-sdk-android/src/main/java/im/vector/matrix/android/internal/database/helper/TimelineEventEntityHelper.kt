@@ -32,30 +32,36 @@ internal fun TimelineEventEntity.updateSenderData(realm: Realm, chunkEntity: Chu
     val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst() ?: return
     val stateIndex = root?.stateIndex ?: return
     val senderId = root?.sender ?: return
-    val isUnlinked = chunkEntity.isUnlinked()
     var senderMembershipEvent: EventEntity?
     var senderRoomMemberContent: String?
     var senderRoomMemberPrevContent: String?
     when {
         stateIndex <= 0 -> {
-            senderMembershipEvent = chunkEntity.timelineEvents.buildQuery(senderId, isUnlinked).next(from = stateIndex)?.root
+            senderMembershipEvent = chunkEntity.timelineEvents.buildTimelineEventQuery(senderId).next(from = stateIndex)?.root
             senderRoomMemberContent = senderMembershipEvent?.prevContent
             senderRoomMemberPrevContent = senderMembershipEvent?.content
         }
         else            -> {
-            senderMembershipEvent = chunkEntity.timelineEvents.buildQuery(senderId, isUnlinked).prev(since = stateIndex)?.root
+            senderMembershipEvent = chunkEntity.timelineEvents.buildTimelineEventQuery(senderId).prev(since = stateIndex)?.root
             senderRoomMemberContent = senderMembershipEvent?.content
             senderRoomMemberPrevContent = senderMembershipEvent?.prevContent
         }
     }
 
-    // We fallback to untimelinedStateEvents if we can't find membership events in timeline
+    // We fallback to chunk stateEvents if we can't find membership events in timeline
+    if (senderMembershipEvent == null) {
+        senderMembershipEvent = chunkEntity.stateEvents
+                .buildStateEventQuery(senderId)
+                .prev()
+        senderRoomMemberContent = senderMembershipEvent?.content
+        senderRoomMemberPrevContent = senderMembershipEvent?.prevContent
+    }
+
+    // We fallback to room stateEvents if we can't find membership events in timeline and chunk
     if (senderMembershipEvent == null) {
         senderMembershipEvent = roomEntity.untimelinedStateEvents
-                .where()
-                .equalTo(EventEntityFields.STATE_KEY, senderId)
-                .equalTo(EventEntityFields.TYPE, EventType.STATE_ROOM_MEMBER)
-                .prev(since = stateIndex)
+                .buildStateEventQuery(senderId)
+                .prev()
         senderRoomMemberContent = senderMembershipEvent?.content
         senderRoomMemberPrevContent = senderMembershipEvent?.prevContent
     }
@@ -88,9 +94,15 @@ internal fun TimelineEventEntity.Companion.nextId(realm: Realm): Long {
     }
 }
 
-private fun RealmList<TimelineEventEntity>.buildQuery(sender: String, isUnlinked: Boolean): RealmQuery<TimelineEventEntity> {
+private fun RealmList<EventEntity>.buildStateEventQuery(sender: String): RealmQuery<EventEntity> {
+    return where()
+            .equalTo(EventEntityFields.STATE_KEY, sender)
+            .equalTo(EventEntityFields.TYPE, EventType.STATE_ROOM_MEMBER)
+}
+
+
+private fun RealmList<TimelineEventEntity>.buildTimelineEventQuery(sender: String): RealmQuery<TimelineEventEntity> {
     return where()
             .equalTo(TimelineEventEntityFields.ROOT.STATE_KEY, sender)
             .equalTo(TimelineEventEntityFields.ROOT.TYPE, EventType.STATE_ROOM_MEMBER)
-            .equalTo(TimelineEventEntityFields.ROOT.IS_UNLINKED, isUnlinked)
 }

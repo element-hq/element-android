@@ -19,35 +19,38 @@ package im.vector.matrix.android.internal.database.helper
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.send.SendState
-import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.mapper.toEntity
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryEntity
 import im.vector.matrix.android.internal.database.model.ReadReceiptEntity
 import im.vector.matrix.android.internal.database.model.ReadReceiptsSummaryEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
-import im.vector.matrix.android.internal.database.model.TimelineEventEntityFields
+import im.vector.matrix.android.internal.database.query.fastContains
 import im.vector.matrix.android.internal.database.query.find
 import im.vector.matrix.android.internal.database.query.getOrCreate
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.extensions.assertIsManaged
 import im.vector.matrix.android.internal.session.room.timeline.PaginationDirection
 import io.realm.Realm
-import io.realm.Sort
-
-// By default if a chunk is empty we consider it unlinked
-internal fun ChunkEntity.isUnlinked(): Boolean {
-    assertIsManaged()
-    return timelineEvents.where()
-            .equalTo(TimelineEventEntityFields.ROOT.IS_UNLINKED, false)
-            .findAll()
-            .isEmpty()
-}
 
 internal fun ChunkEntity.deleteOnCascade() {
     assertIsManaged()
+    this.stateEvents.deleteAllFromRealm()
     this.timelineEvents.deleteAllFromRealm()
     this.deleteFromRealm()
+}
+
+internal fun ChunkEntity.addStateEvent(stateEvent: Event) {
+    if (stateEvent.eventId == null || stateEvents.fastContains(stateEvent.eventId)) {
+        return
+    } else {
+        val entity = stateEvent.toEntity(roomId).apply {
+            this.stateIndex = Int.MIN_VALUE
+            this.isUnlinked = true
+            this.sendState = SendState.SYNCED
+        }
+        stateEvents.add(entity)
+    }
 }
 
 
@@ -57,7 +60,7 @@ internal fun ChunkEntity.add(localRealm: Realm,
                              direction: PaginationDirection,
                              stateIndexOffset: Int = 0,
                              isUnlinked: Boolean = false) {
-    if (event.eventId == null) {
+    if (event.eventId == null || timelineEvents.fastContains(event.eventId)) {
         return
     }
     var currentDisplayIndex = lastDisplayIndex(direction, 0)
@@ -84,7 +87,7 @@ internal fun ChunkEntity.add(localRealm: Realm,
     val senderId = event.senderId ?: ""
 
     val readReceiptsSummaryEntity = ReadReceiptsSummaryEntity.where(localRealm, eventId).findFirst()
-                                    ?: ReadReceiptsSummaryEntity(eventId, roomId)
+            ?: ReadReceiptsSummaryEntity(eventId, roomId)
 
     // Update RR for the sender of a new message with a dummy one
 

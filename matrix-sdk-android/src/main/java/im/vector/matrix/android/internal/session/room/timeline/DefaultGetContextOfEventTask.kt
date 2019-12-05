@@ -41,6 +41,6 @@ internal class DefaultGetContextOfEventTask @Inject constructor(private val room
         val response = executeRequest<EventContextResponse> {
             apiCall = roomAPI.getContextOfEvent(params.roomId, params.eventId, params.limit, filter)
         }
-        return tokenChunkEventPersistor.insertInDb(response, params.roomId, PaginationDirection.FORWARDS)
+        return tokenChunkEventPersistor.insertInDb(response, params.roomId, PaginationDirection.BACKWARDS)
     }
 }

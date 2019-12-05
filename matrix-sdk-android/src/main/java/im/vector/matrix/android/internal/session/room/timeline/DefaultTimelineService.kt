@@ -42,8 +42,7 @@ internal class DefaultTimelineService @AssistedInject constructor(@Assisted priv
                                                                   private val cryptoService: CryptoService,
                                                                   private val paginationTask: PaginationTask,
                                                                   private val timelineEventMapper: TimelineEventMapper,
-                                                                  private val readReceiptsSummaryMapper: ReadReceiptsSummaryMapper,
-                                                                  private val clearUnlinkedEventsTask: ClearUnlinkedEventsTask
+                                                                  private val readReceiptsSummaryMapper: ReadReceiptsSummaryMapper
 ) : TimelineService {
 
     @AssistedInject.Factory
@@ -57,7 +56,6 @@ internal class DefaultTimelineService @AssistedInject constructor(@Assisted priv
                 monarchy.realmConfiguration,
                 taskExecutor,
                 contextOfEventTask,
-                clearUnlinkedEventsTask,
                 paginationTask,
                 cryptoService,
                 timelineEventMapper,
@@ -69,10 +67,10 @@ internal class DefaultTimelineService @AssistedInject constructor(@Assisted priv
     override fun getTimeLineEvent(eventId: String): TimelineEvent? {
         return monarchy
                 .fetchCopyMap({
-                                  TimelineEventEntity.where(it, roomId = roomId, eventId = eventId).findFirst()
-                              }, { entity, _ ->
-                                  timelineEventMapper.map(entity)
-                              })
+                    TimelineEventEntity.where(it, roomId = roomId, eventId = eventId).findFirst()
+                }, { entity, _ ->
+                    timelineEventMapper.map(entity)
+                })
     }
 
     override fun getTimeLineEventLive(eventId: String): LiveData<Optional<TimelineEvent>> {

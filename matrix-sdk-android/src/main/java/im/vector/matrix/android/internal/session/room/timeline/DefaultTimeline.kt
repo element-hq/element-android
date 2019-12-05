@@ -69,7 +69,6 @@ internal class DefaultTimeline(
         private val realmConfiguration: RealmConfiguration,
         private val taskExecutor: TaskExecutor,
         private val contextOfEventTask: GetContextOfEventTask,
-        private val clearUnlinkedEventsTask: ClearUnlinkedEventsTask,
         private val paginationTask: PaginationTask,
         private val cryptoService: CryptoService,
         private val timelineEventMapper: TimelineEventMapper,
@@ -217,9 +216,6 @@ internal class DefaultTimeline(
                 }
                 eventDecryptor.destroy()
             }
-            clearUnlinkedEventsTask
-                    .configureWith(ClearUnlinkedEventsTask.Params(roomId))
-                    .executeBy(taskExecutor)
         }
     }
 
@@ -335,7 +331,7 @@ internal class DefaultTimeline(
         val lastBuiltEvent = builtEvents.lastOrNull()
         val firstCacheEvent = results.firstOrNull()
         val firstBuiltEvent = builtEvents.firstOrNull()
-        val chunkEntity = getLiveChunk()
+        val chunkEntity = getCurrentChunk()
 
         updateState(Timeline.Direction.FORWARDS) {
             it.copy(
@@ -371,7 +367,6 @@ internal class DefaultTimeline(
         } else {
             updateState(direction) { it.copy(isPaginating = false, requestedPaginationCount = 0) }
         }
-
         return !shouldFetchMore
     }
 
@@ -488,15 +483,15 @@ internal class DefaultTimeline(
      * This has to be called on TimelineThread as it access realm live results
      */
     private fun executePaginationTask(direction: Timeline.Direction, limit: Int) {
-        val token = getTokenLive(direction)
+        val token = getCurrentToken(direction)
         if (token == null) {
             updateState(direction) { it.copy(isPaginating = false, requestedPaginationCount = 0) }
             return
         }
         val params = PaginationTask.Params(roomId = roomId,
-                                           from = token,
-                                           direction = direction.toPaginationDirection(),
-                                           limit = limit)
+                from = token,
+                direction = direction.toPaginationDirection(),
+                limit = limit)
 
         Timber.v("Should fetch $limit items $direction")
         cancelableBag += paginationTask
@@ -510,6 +505,7 @@ internal class DefaultTimeline(
                                     Timber.v("Success fetching $limit items $direction from pagination request")
                                 }
                                 TokenChunkEventPersistor.Result.REACHED_END       -> {
+                                    updateState(direction) { it.copy(isPaginating = false, requestedPaginationCount = 0) }
                                     postSnapshot()
                                 }
                                 TokenChunkEventPersistor.Result.SHOULD_FETCH_MORE ->
@@ -532,15 +528,15 @@ internal class DefaultTimeline(
      * This has to be called on TimelineThread as it access realm live results
      */
 
-    private fun getTokenLive(direction: Timeline.Direction): String? {
-        val chunkEntity = getLiveChunk() ?: return null
+    private fun getCurrentToken(direction: Timeline.Direction): String? {
+        val chunkEntity = getCurrentChunk() ?: return null
         return if (direction == Timeline.Direction.BACKWARDS) chunkEntity.prevToken else chunkEntity.nextToken
     }
 
     /**
      * This has to be called on TimelineThread as it access realm live results
      */
-    private fun getLiveChunk(): ChunkEntity? {
+    private fun getCurrentChunk(): ChunkEntity? {
         return filteredEvents.firstOrNull()?.chunk?.firstOrNull()
     }
 
@@ -571,7 +567,7 @@ internal class DefaultTimeline(
             val timelineEvent = buildTimelineEvent(eventEntity)
 
             if (timelineEvent.isEncrypted()
-                && timelineEvent.root.mxDecryptionResult == null) {
+                    && timelineEvent.root.mxDecryptionResult == null) {
                 timelineEvent.root.eventId?.let { eventDecryptor.requestDecryption(it) }
             }
 
@@ -623,7 +619,7 @@ internal class DefaultTimeline(
     private fun buildEventQuery(realm: Realm): RealmQuery<TimelineEventEntity> {
         return if (initialEventId == null) {
             TimelineEventEntity
-                    .where(realm, roomId = roomId, linkFilterMode = EventEntity.LinkFilterMode.LINKED_ONLY)
+                    .where(realm, roomId = roomId)
                     .equalTo("${TimelineEventEntityFields.CHUNK}.${ChunkEntityFields.IS_LAST_FORWARD}", true)
         } else {
             TimelineEventEntity

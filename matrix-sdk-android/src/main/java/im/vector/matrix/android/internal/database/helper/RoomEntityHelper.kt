@@ -33,15 +33,13 @@ internal fun RoomEntity.addOrUpdate(chunkEntity: ChunkEntity) {
 }
 
 internal fun RoomEntity.addStateEvent(stateEvent: Event,
-                                      stateIndex: Int = Int.MIN_VALUE,
-                                      filterDuplicates: Boolean = false,
-                                      isUnlinked: Boolean = false) {
-    if (stateEvent.eventId == null || (filterDuplicates && untimelinedStateEvents.fastContains(stateEvent.eventId))) {
+                                      stateIndex: Int = Int.MIN_VALUE) {
+    if (stateEvent.eventId == null || untimelinedStateEvents.fastContains(stateEvent.eventId)) {
         return
     } else {
         val entity = stateEvent.toEntity(roomId).apply {
             this.stateIndex = stateIndex
-            this.isUnlinked = isUnlinked
+            this.isUnlinked = false
             this.sendState = SendState.SYNCED
         }
         untimelinedStateEvents.add(entity)

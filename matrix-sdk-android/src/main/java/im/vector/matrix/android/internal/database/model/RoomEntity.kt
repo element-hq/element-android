@@ -23,6 +23,7 @@ import io.realm.annotations.PrimaryKey
 
 internal open class RoomEntity(@PrimaryKey var roomId: String = "",
                                var chunks: RealmList<ChunkEntity> = RealmList(),
+                               // These are live state events coming from sync only
                                var untimelinedStateEvents: RealmList<EventEntity> = RealmList(),
                                var sendingTimelineEvents: RealmList<TimelineEventEntity> = RealmList(),
                                var areAllMembersLoaded: Boolean = false

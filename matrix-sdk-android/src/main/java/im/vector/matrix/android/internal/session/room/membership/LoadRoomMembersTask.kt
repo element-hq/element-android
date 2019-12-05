@@ -19,7 +19,6 @@ package im.vector.matrix.android.internal.session.room.membership
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.internal.database.helper.addStateEvent
-import im.vector.matrix.android.internal.database.helper.updateSenderData
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.network.executeRequest

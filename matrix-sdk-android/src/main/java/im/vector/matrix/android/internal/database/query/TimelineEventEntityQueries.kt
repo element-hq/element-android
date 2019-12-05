@@ -115,6 +115,10 @@ internal fun RealmList<TimelineEventEntity>.find(eventId: String): TimelineEvent
             .findFirst()
 }
 
+internal fun RealmList<TimelineEventEntity>.fastContains(eventId: String): Boolean {
+    return find(eventId) != null
+}
+
 internal fun TimelineEventEntity.Companion.findAllInRoomWithSendStates(realm: Realm,
                                                                        roomId: String,
                                                                        sendStates: List<SendState>)
