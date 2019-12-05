@@ -18,7 +18,6 @@
 
 package im.vector.matrix.android.internal.network
 
-import com.squareup.moshi.JsonDataException
 import com.squareup.moshi.JsonEncodingException
 import im.vector.matrix.android.api.failure.ConsentNotGivenError
 import im.vector.matrix.android.api.failure.Failure
