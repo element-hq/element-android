@@ -17,6 +17,9 @@ package im.vector.matrix.android.internal.session.user.accountdata
 
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.internal.database.model.BreadcrumbsEntity
+import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
+import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
+import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.RealmList
@@ -43,6 +46,22 @@ internal class DefaultSaveBreadcrumbsTask @Inject constructor(
 
             // And save the new received list
             entity.recentRoomIds = RealmList<String>().apply { addAll(params.recentRoomIds) }
+
+            // Update the room summaries
+            // Reset all the indexes...
+            RoomSummaryEntity.where(realm)
+                    .greaterThan(RoomSummaryEntityFields.BREADCRUMBS_INDEX, RoomSummaryEntity.NOT_IN_BREADCRUMBS)
+                    .findAll()
+                    .forEach {
+                        it.breadcrumbsIndex = RoomSummaryEntity.NOT_IN_BREADCRUMBS
+                    }
+
+            // ...and apply new indexes
+            params.recentRoomIds.forEachIndexed { index, roomId ->
+                RoomSummaryEntity.where(realm, roomId)
+                        .findFirst()
+                        ?.breadcrumbsIndex = index
+            }
         }
     }
 }
