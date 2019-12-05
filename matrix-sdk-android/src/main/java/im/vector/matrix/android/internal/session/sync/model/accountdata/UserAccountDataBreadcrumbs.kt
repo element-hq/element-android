@@ -27,8 +27,5 @@ internal data class UserAccountDataBreadcrumbs(
 
 @JsonClass(generateAdapter = true)
 internal data class BreadcrumbsContent(
-        @Json(name = "rooms") val roomIds: List<String> = emptyList(),
-
-        // We also have "recent_rooms", I do not know what to do with that list
         @Json(name = "recent_rooms") val recentRoomIds: List<String> = emptyList()
 )

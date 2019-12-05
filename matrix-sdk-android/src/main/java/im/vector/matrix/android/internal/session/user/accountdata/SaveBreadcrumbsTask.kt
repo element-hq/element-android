@@ -23,15 +23,17 @@ import io.realm.RealmList
 import javax.inject.Inject
 
 /**
- * Save the Breadcrumbs roomId list in DB
+ * Save the Breadcrumbs roomId list in DB, either from the sync, or updated locally
  */
 internal interface SaveBreadcrumbsTask : Task<SaveBreadcrumbsTask.Params, Unit> {
     data class Params(
-            val roomIds: List<String>
+            val recentRoomIds: List<String>
     )
 }
 
-internal class DefaultSaveBreadcrumbsTask @Inject constructor(private val monarchy: Monarchy) : SaveBreadcrumbsTask {
+internal class DefaultSaveBreadcrumbsTask @Inject constructor(
+        private val monarchy: Monarchy
+) : SaveBreadcrumbsTask {
 
     override suspend fun execute(params: SaveBreadcrumbsTask.Params) {
         monarchy.awaitTransaction { realm ->
@@ -40,7 +42,7 @@ internal class DefaultSaveBreadcrumbsTask @Inject constructor(private val monarc
                     ?: realm.createObject(BreadcrumbsEntity::class.java)
 
             // And save the new received list
-            entity.roomIds = RealmList<String>().apply { addAll(params.roomIds) }
+            entity.recentRoomIds = RealmList<String>().apply { addAll(params.recentRoomIds) }
         }
     }
 }

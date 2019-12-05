@@ -34,6 +34,7 @@ import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.room.create.CreateRoomTask
 import im.vector.matrix.android.internal.session.room.membership.joining.JoinRoomTask
 import im.vector.matrix.android.internal.session.room.read.MarkAllRoomsReadTask
+import im.vector.matrix.android.internal.session.user.accountdata.UpdateBreadcrumbsTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import io.realm.Realm
@@ -45,6 +46,7 @@ internal class DefaultRoomService @Inject constructor(private val monarchy: Mona
                                                       private val createRoomTask: CreateRoomTask,
                                                       private val joinRoomTask: JoinRoomTask,
                                                       private val markAllRoomsReadTask: MarkAllRoomsReadTask,
+                                                      private val updateBreadcrumbsTask: UpdateBreadcrumbsTask,
                                                       private val roomFactory: RoomFactory,
                                                       private val taskExecutor: TaskExecutor) : RoomService {
 
@@ -83,10 +85,16 @@ internal class DefaultRoomService @Inject constructor(private val monarchy: Mona
                     // TODO Improve this query, it's not live when breadcrumbs changes
                     realm.where(RoomSummaryEntity::class.java)
                             .`in`(RoomSummaryEntityFields.ROOM_ID,
-                                    (realm.where(BreadcrumbsEntity::class.java).findFirst()?.roomIds ?: RealmList()).toTypedArray())
+                                    (realm.where(BreadcrumbsEntity::class.java).findFirst()?.recentRoomIds ?: RealmList()).toTypedArray())
                 },
                 { roomSummaryMapper.map(it) }
         )
+    }
+
+    override fun onRoomDisplayed(roomId: String): Cancelable {
+        return updateBreadcrumbsTask
+                .configureWith(UpdateBreadcrumbsTask.Params(roomId))
+                .executeBy(taskExecutor)
     }
 
     override fun joinRoom(roomId: String, viaServers: List<String>, callback: MatrixCallback<Unit>): Cancelable {

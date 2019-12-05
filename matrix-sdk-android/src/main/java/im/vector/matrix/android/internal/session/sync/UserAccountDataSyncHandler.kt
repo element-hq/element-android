@@ -136,7 +136,7 @@ internal class UserAccountDataSyncHandler @Inject constructor(private val monarc
 
     private fun handleBreadcrumbs(userAccountDataBreadcrumbs: UserAccountDataBreadcrumbs) {
         saveBreadcrumbsTask
-                .configureWith(SaveBreadcrumbsTask.Params(userAccountDataBreadcrumbs.content.roomIds))
+                .configureWith(SaveBreadcrumbsTask.Params(userAccountDataBreadcrumbs.content.recentRoomIds))
                 .executeBy(taskExecutor)
     }
 }
