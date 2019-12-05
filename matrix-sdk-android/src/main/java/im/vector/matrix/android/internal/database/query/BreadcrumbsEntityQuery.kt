@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,18 +16,15 @@
 
 package im.vector.matrix.android.internal.database.query
 
-import im.vector.matrix.android.internal.database.model.ReadMarkerEntity
-import im.vector.matrix.android.internal.database.model.ReadMarkerEntityFields
+import im.vector.matrix.android.internal.database.model.BreadcrumbsEntity
 import io.realm.Realm
-import io.realm.RealmQuery
 import io.realm.kotlin.createObject
 import io.realm.kotlin.where
 
-internal fun ReadMarkerEntity.Companion.where(realm: Realm, roomId: String): RealmQuery<ReadMarkerEntity> {
-    return realm.where<ReadMarkerEntity>()
-            .equalTo(ReadMarkerEntityFields.ROOM_ID, roomId)
+internal fun BreadcrumbsEntity.Companion.get(realm: Realm): BreadcrumbsEntity? {
+    return realm.where<BreadcrumbsEntity>().findFirst()
 }
 
-internal fun ReadMarkerEntity.Companion.getOrCreate(realm: Realm, roomId: String): ReadMarkerEntity {
-    return where(realm, roomId).findFirst() ?: realm.createObject(roomId)
+internal fun BreadcrumbsEntity.Companion.getOrCreate(realm: Realm): BreadcrumbsEntity {
+    return get(realm) ?: realm.createObject()
 }

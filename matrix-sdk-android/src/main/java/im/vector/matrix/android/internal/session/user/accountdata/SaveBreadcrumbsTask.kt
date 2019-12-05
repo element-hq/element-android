@@ -19,6 +19,7 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.internal.database.model.BreadcrumbsEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
+import im.vector.matrix.android.internal.database.query.getOrCreate
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.awaitTransaction
@@ -41,8 +42,7 @@ internal class DefaultSaveBreadcrumbsTask @Inject constructor(
     override suspend fun execute(params: SaveBreadcrumbsTask.Params) {
         monarchy.awaitTransaction { realm ->
             // Get or create a breadcrumbs entity
-            val entity = realm.where(BreadcrumbsEntity::class.java).findFirst()
-                    ?: realm.createObject(BreadcrumbsEntity::class.java)
+            val entity = BreadcrumbsEntity.getOrCreate(realm)
 
             // And save the new received list
             entity.recentRoomIds = RealmList<String>().apply { addAll(params.recentRoomIds) }

@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.session.user.accountdata
 
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.internal.database.model.BreadcrumbsEntity
+import im.vector.matrix.android.internal.database.query.get
 import im.vector.matrix.android.internal.session.sync.model.accountdata.BreadcrumbsContent
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.fetchCopied
@@ -43,8 +44,7 @@ internal class DefaultUpdateBreadcrumbsTask @Inject constructor(
         // Get the current breadcrumbs in DB
         val bc = monarchy.fetchCopied { realm ->
             // Get the breadcrumbs entity, if any
-            realm.where(BreadcrumbsEntity::class.java).findFirst()
-
+            BreadcrumbsEntity.get(realm)
         }
 
         // Modify the list to add the roomId first
@@ -55,6 +55,7 @@ internal class DefaultUpdateBreadcrumbsTask @Inject constructor(
             bc.recentRoomIds.add(0, params.roomId)
             bc.recentRoomIds.take(MAX_BREADCRUMBS_ROOMS_NUMBER)
         } else {
+            // FIXME It can remove the previous breadcrumbs, if not synced yet
             listOf(params.roomId)
         }
 

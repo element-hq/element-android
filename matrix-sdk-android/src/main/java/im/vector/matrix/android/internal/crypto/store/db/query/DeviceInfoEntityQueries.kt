@@ -20,18 +20,20 @@ import im.vector.matrix.android.internal.crypto.store.db.model.DeviceInfoEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.DeviceInfoEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.createPrimaryKey
 import io.realm.Realm
+import io.realm.kotlin.createObject
 import io.realm.kotlin.where
 
 /**
  * Get or create a device info
  */
 internal fun DeviceInfoEntity.Companion.getOrCreate(realm: Realm, userId: String, deviceId: String): DeviceInfoEntity {
+    val key = DeviceInfoEntity.createPrimaryKey(userId, deviceId)
+
     return realm.where<DeviceInfoEntity>()
-            .equalTo(DeviceInfoEntityFields.PRIMARY_KEY, DeviceInfoEntity.createPrimaryKey(userId, deviceId))
+            .equalTo(DeviceInfoEntityFields.PRIMARY_KEY, key)
             .findFirst()
-            ?: let {
-                realm.createObject(DeviceInfoEntity::class.java, DeviceInfoEntity.createPrimaryKey(userId, deviceId)).apply {
-                    this.deviceId = deviceId
-                }
-            }
+            ?: realm.createObject<DeviceInfoEntity>(key)
+                    .apply {
+                        this.deviceId = deviceId
+                    }
 }
