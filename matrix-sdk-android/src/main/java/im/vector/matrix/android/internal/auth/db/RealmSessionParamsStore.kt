@@ -22,6 +22,8 @@ import im.vector.matrix.android.internal.database.awaitTransaction
 import im.vector.matrix.android.internal.di.AuthDatabase
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import io.realm.exceptions.RealmPrimaryKeyConstraintException
+import timber.log.Timber
 import javax.inject.Inject
 
 internal class RealmSessionParamsStore @Inject constructor(private val mapper: SessionParamsMapper,
@@ -30,43 +32,45 @@ internal class RealmSessionParamsStore @Inject constructor(private val mapper: S
 ) : SessionParamsStore {
 
     override fun getLast(): SessionParams? {
-        val realm = Realm.getInstance(realmConfiguration)
-        val sessionParams = realm
-                .where(SessionParamsEntity::class.java)
-                .findAll()
-                .map { mapper.map(it) }
-                .lastOrNull()
-        realm.close()
-        return sessionParams
+        return Realm.getInstance(realmConfiguration).use { realm ->
+            realm
+                    .where(SessionParamsEntity::class.java)
+                    .findAll()
+                    .map { mapper.map(it) }
+                    .lastOrNull()
+        }
     }
 
     override fun get(userId: String): SessionParams? {
-        val realm = Realm.getInstance(realmConfiguration)
-        val sessionParams = realm
-                .where(SessionParamsEntity::class.java)
-                .equalTo(SessionParamsEntityFields.USER_ID, userId)
-                .findAll()
-                .map { mapper.map(it) }
-                .firstOrNull()
-        realm.close()
-        return sessionParams
+        return Realm.getInstance(realmConfiguration).use { realm ->
+            realm
+                    .where(SessionParamsEntity::class.java)
+                    .equalTo(SessionParamsEntityFields.USER_ID, userId)
+                    .findAll()
+                    .map { mapper.map(it) }
+                    .firstOrNull()
+        }
     }
 
     override fun getAll(): List<SessionParams> {
-        val realm = Realm.getInstance(realmConfiguration)
-        val sessionParams = realm
-                .where(SessionParamsEntity::class.java)
-                .findAll()
-                .mapNotNull { mapper.map(it) }
-        realm.close()
-        return sessionParams
+        return Realm.getInstance(realmConfiguration).use { realm ->
+            realm
+                    .where(SessionParamsEntity::class.java)
+                    .findAll()
+                    .mapNotNull { mapper.map(it) }
+        }
     }
 
     override suspend fun save(sessionParams: SessionParams) {
         awaitTransaction(realmConfiguration) {
             val entity = mapper.map(sessionParams)
             if (entity != null) {
-                it.insert(entity)
+                try {
+                    it.insert(entity)
+                } catch (e: RealmPrimaryKeyConstraintException) {
+                    Timber.e(e, "Something wrong happened during previous session creation. Override with new credentials")
+                    it.insertOrUpdate(entity)
+                }
             }
         }
     }

@@ -28,7 +28,7 @@ import androidx.annotation.UiThread
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.chip.ChipDrawable
-import im.vector.matrix.android.api.session.user.model.User
+import im.vector.matrix.android.api.session.room.send.UserMentionSpan
 import im.vector.riotx.R
 import im.vector.riotx.core.glide.GlideRequests
 import im.vector.riotx.features.home.AvatarRenderer
@@ -37,16 +37,14 @@ import java.lang.ref.WeakReference
 /**
  * This span is able to replace a text by a [ChipDrawable]
  * It's needed to call [bind] method to start requesting avatar, otherwise only the placeholder icon will be displayed if not already cached.
+ * Implements UserMentionSpan so that it could be automatically transformed in matrix links and displayed as pills.
  */
 class PillImageSpan(private val glideRequests: GlideRequests,
                     private val avatarRenderer: AvatarRenderer,
                     private val context: Context,
-                    private val userId: String,
-                    private val user: User?) : ReplacementSpan() {
-
-    private val displayName by lazy {
-        if (user?.displayName.isNullOrEmpty()) userId else user?.displayName!!
-    }
+                    override val userId: String,
+                    override val displayName: String,
+                    private val avatarUrl: String?) : ReplacementSpan(), UserMentionSpan {
 
     private val pillDrawable = createChipDrawable()
     private val target = PillImageSpanTarget(this)
@@ -55,7 +53,7 @@ class PillImageSpan(private val glideRequests: GlideRequests,
     @UiThread
     fun bind(textView: TextView) {
         tv = WeakReference(textView)
-        avatarRenderer.render(context, glideRequests, user?.avatarUrl, userId, displayName, target)
+        avatarRenderer.render(context, glideRequests, avatarUrl, userId, displayName, target)
     }
 
     // ReplacementSpan *****************************************************************************

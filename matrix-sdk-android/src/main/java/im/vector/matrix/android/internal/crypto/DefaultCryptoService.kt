@@ -132,7 +132,8 @@ internal class DefaultCryptoService @Inject constructor(
         private val loadRoomMembersTask: LoadRoomMembersTask,
         private val monarchy: Monarchy,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
-        private val taskExecutor: TaskExecutor
+        private val taskExecutor: TaskExecutor,
+        private val cryptoCoroutineScope: CoroutineScope
 ) : CryptoService {
 
     private val uiHandler = Handler(Looper.getMainLooper())
@@ -243,7 +244,8 @@ internal class DefaultCryptoService @Inject constructor(
             return
         }
         isStarting.set(true)
-        GlobalScope.launch(coroutineDispatchers.crypto) {
+
+        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
             internalStart(isInitialSync)
         }
     }
@@ -269,10 +271,9 @@ internal class DefaultCryptoService @Inject constructor(
                     isStarted.set(true)
                 },
                 {
-                    Timber.e("Start failed: $it")
-                    delay(1000)
                     isStarting.set(false)
-                    internalStart(isInitialSync)
+                    isStarted.set(false)
+                    Timber.e(it, "Start failed")
                 }
         )
     }
@@ -281,9 +282,12 @@ internal class DefaultCryptoService @Inject constructor(
      * Close the crypto
      */
     fun close() = runBlocking(coroutineDispatchers.crypto) {
+        cryptoCoroutineScope.coroutineContext.cancelChildren(CancellationException("Closing crypto module"))
+
+        outgoingRoomKeyRequestManager.stop()
+
         olmDevice.release()
         cryptoStore.close()
-        outgoingRoomKeyRequestManager.stop()
     }
 
     // Aways enabled on RiotX
@@ -305,19 +309,21 @@ internal class DefaultCryptoService @Inject constructor(
      * @param syncResponse the syncResponse
      */
     fun onSyncCompleted(syncResponse: SyncResponse) {
-        GlobalScope.launch(coroutineDispatchers.crypto) {
-            if (syncResponse.deviceLists != null) {
-                deviceListManager.handleDeviceListsChanges(syncResponse.deviceLists.changed, syncResponse.deviceLists.left)
-            }
-            if (syncResponse.deviceOneTimeKeysCount != null) {
-                val currentCount = syncResponse.deviceOneTimeKeysCount.signedCurve25519 ?: 0
-                oneTimeKeysUploader.updateOneTimeKeyCount(currentCount)
-            }
-            if (isStarted()) {
-                // Make sure we process to-device messages before generating new one-time-keys #2782
-                deviceListManager.refreshOutdatedDeviceLists()
-                oneTimeKeysUploader.maybeUploadOneTimeKeys()
-                incomingRoomKeyRequestManager.processReceivedRoomKeyRequests()
+        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+            runCatching {
+                if (syncResponse.deviceLists != null) {
+                    deviceListManager.handleDeviceListsChanges(syncResponse.deviceLists.changed, syncResponse.deviceLists.left)
+                }
+                if (syncResponse.deviceOneTimeKeysCount != null) {
+                    val currentCount = syncResponse.deviceOneTimeKeysCount.signedCurve25519 ?: 0
+                    oneTimeKeysUploader.updateOneTimeKeyCount(currentCount)
+                }
+                if (isStarted()) {
+                    // Make sure we process to-device messages before generating new one-time-keys #2782
+                    deviceListManager.refreshOutdatedDeviceLists()
+                    oneTimeKeysUploader.maybeUploadOneTimeKeys()
+                    incomingRoomKeyRequestManager.processReceivedRoomKeyRequests()
+                }
             }
         }
     }
@@ -511,7 +517,7 @@ internal class DefaultCryptoService @Inject constructor(
                                      eventType: String,
                                      roomId: String,
                                      callback: MatrixCallback<MXEncryptEventContentResult>) {
-        GlobalScope.launch(coroutineDispatchers.crypto) {
+        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
             if (!isStarted()) {
                 Timber.v("## encryptEventContent() : wait after e2e init")
                 internalStart(false)
@@ -571,7 +577,7 @@ internal class DefaultCryptoService @Inject constructor(
      * @param callback the callback to return data or null
      */
     override fun decryptEventAsync(event: Event, timeline: String, callback: MatrixCallback<MXEventDecryptionResult>) {
-        GlobalScope.launch {
+        cryptoCoroutineScope.launch {
             val result = runCatching {
                 withContext(coroutineDispatchers.crypto) {
                     internalDecryptEvent(event, timeline)
@@ -621,7 +627,7 @@ internal class DefaultCryptoService @Inject constructor(
      * @param event the event
      */
     fun onToDeviceEvent(event: Event) {
-        GlobalScope.launch(coroutineDispatchers.crypto) {
+        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
             when (event.getClearType()) {
                 EventType.ROOM_KEY, EventType.FORWARDED_ROOM_KEY -> {
                     onRoomKeyEvent(event)
@@ -661,7 +667,7 @@ internal class DefaultCryptoService @Inject constructor(
      * @param event the encryption event.
      */
     private fun onRoomEncryptionEvent(roomId: String, event: Event) {
-        GlobalScope.launch(coroutineDispatchers.crypto) {
+        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
             val params = LoadRoomMembersTask.Params(roomId)
             try {
                 loadRoomMembersTask.execute(params)
@@ -753,7 +759,7 @@ internal class DefaultCryptoService @Inject constructor(
      * @param callback the exported keys
      */
     override fun exportRoomKeys(password: String, callback: MatrixCallback<ByteArray>) {
-        GlobalScope.launch(coroutineDispatchers.main) {
+        cryptoCoroutineScope.launch(coroutineDispatchers.main) {
             runCatching {
                 exportRoomKeys(password, MXMegolmExportEncryption.DEFAULT_ITERATION_COUNT)
             }.foldToCallback(callback)
@@ -791,7 +797,7 @@ internal class DefaultCryptoService @Inject constructor(
                                 password: String,
                                 progressListener: ProgressListener?,
                                 callback: MatrixCallback<ImportRoomKeysResult>) {
-        GlobalScope.launch(coroutineDispatchers.main) {
+        cryptoCoroutineScope.launch(coroutineDispatchers.main) {
             runCatching {
                 withContext(coroutineDispatchers.crypto) {
                     Timber.v("## importRoomKeys starts")
@@ -839,7 +845,7 @@ internal class DefaultCryptoService @Inject constructor(
      */
     fun checkUnknownDevices(userIds: List<String>, callback: MatrixCallback<Unit>) {
         // force the refresh to ensure that the devices list is up-to-date
-        GlobalScope.launch(coroutineDispatchers.crypto) {
+        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
             runCatching {
                 val keys = deviceListManager.downloadKeys(userIds, true)
                 val unknownDevices = getUnknownDevices(keys)
@@ -999,7 +1005,7 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     override fun downloadKeys(userIds: List<String>, forceDownload: Boolean, callback: MatrixCallback<MXUsersDevicesMap<MXDeviceInfo>>) {
-        GlobalScope.launch(coroutineDispatchers.crypto) {
+        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
             runCatching {
                 deviceListManager.downloadKeys(userIds, forceDownload)
             }.foldToCallback(callback)

@@ -37,4 +37,23 @@
         <item name="android:textColor">?riotx_text_secondary</item>
     </style>
 
+    <style name="TextAppearance.Vector.Login.Title" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">?riotx_text_primary</item>
+    </style>
+
+    <style name="TextAppearance.Vector.Login.Text" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">?vctr_notice_secondary</item>
+    </style>
+
+    <style name="TextAppearance.Vector.Login.Text.Small">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">?riotx_android_secondary</item>
+    </style>
+
 </resources>

@@ -17,11 +17,19 @@
 package im.vector.riotx.core.extensions
 
 import android.os.Bundle
+import android.util.Patterns
 import androidx.fragment.app.Fragment
 
 fun Boolean.toOnOff() = if (this) "ON" else "OFF"
+
+inline fun <T> T.ooi(block: (T) -> Unit): T = also(block)
 
 /**
  * Apply argument to a Fragment
  */
 fun <T : Fragment> T.withArgs(block: Bundle.() -> Unit) = apply { arguments = Bundle().apply(block) }
+
+/**
+ * Check if a CharSequence is an email
+ */
+fun CharSequence.isEmail() = Patterns.EMAIL_ADDRESS.matcher(this).matches()

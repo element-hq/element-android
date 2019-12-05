@@ -25,7 +25,6 @@ import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.session.SessionScope
 import timber.log.Timber
 import javax.inject.Inject
-import kotlin.collections.ArrayList
 
 @SessionScope
 internal class IncomingRoomKeyRequestManager @Inject constructor(
@@ -51,7 +50,7 @@ internal class IncomingRoomKeyRequestManager @Inject constructor(
      *
      * @param event the announcement event.
      */
-    suspend fun onRoomKeyRequestEvent(event: Event) {
+    fun onRoomKeyRequestEvent(event: Event) {
         val roomKeyShare = event.getClearContent().toModel<RoomKeyShare>()
         when (roomKeyShare?.action) {
             RoomKeyShare.ACTION_SHARE_REQUEST      -> receivedRoomKeyRequests.add(IncomingRoomKeyRequest(event))
@@ -78,7 +77,7 @@ internal class IncomingRoomKeyRequestManager @Inject constructor(
             Timber.v("m.room_key_request from $userId:$deviceId for $roomId / ${body.sessionId} id ${request.requestId}")
             if (userId == null || credentials.userId != userId) {
                 // TODO: determine if we sent this device the keys already: in
-                Timber.e("## processReceivedRoomKeyRequests() : Ignoring room key request from other user for now")
+                Timber.w("## processReceivedRoomKeyRequests() : Ignoring room key request from other user for now")
                 return
             }
             // TODO: should we queue up requests we don't yet have keys for, in case they turn up later?
@@ -86,11 +85,11 @@ internal class IncomingRoomKeyRequestManager @Inject constructor(
             // the keys for the requested events, and can drop the requests.
             val decryptor = roomDecryptorProvider.getRoomDecryptor(roomId, alg)
             if (null == decryptor) {
-                Timber.e("## processReceivedRoomKeyRequests() : room key request for unknown $alg in room $roomId")
+                Timber.w("## processReceivedRoomKeyRequests() : room key request for unknown $alg in room $roomId")
                 continue
             }
             if (!decryptor.hasKeysForKeyRequest(request)) {
-                Timber.e("## processReceivedRoomKeyRequests() : room key request for unknown session ${body.sessionId!!}")
+                Timber.w("## processReceivedRoomKeyRequests() : room key request for unknown session ${body.sessionId!!}")
                 cryptoStore.deleteIncomingRoomKeyRequest(request)
                 continue
             }
@@ -139,7 +138,7 @@ internal class IncomingRoomKeyRequestManager @Inject constructor(
         if (null != receivedRoomKeyRequestCancellations) {
             for (request in receivedRoomKeyRequestCancellations!!) {
                 Timber.v("## ## processReceivedRoomKeyRequests() : m.room_key_request cancellation for " + request.userId
-                         + ":" + request.deviceId + " id " + request.requestId)
+                        + ":" + request.deviceId + " id " + request.requestId)
 
                 // we should probably only notify the app of cancellations we told it
                 // about, but we don't currently have a record of that, so we just pass

@@ -53,17 +53,16 @@ internal class DefaultTimelineService @AssistedInject constructor(@Assisted priv
 
     override fun createTimeline(eventId: String?, settings: TimelineSettings): Timeline {
         return DefaultTimeline(roomId,
-                               eventId,
-                               monarchy.realmConfiguration,
-                               taskExecutor,
-                               contextOfEventTask,
-                               clearUnlinkedEventsTask,
-                               paginationTask,
-                               cryptoService,
-                               timelineEventMapper,
-                               settings,
-                               TimelineHiddenReadReceipts(readReceiptsSummaryMapper, roomId, settings),
-                               TimelineHiddenReadMarker(roomId, settings)
+                eventId,
+                monarchy.realmConfiguration,
+                taskExecutor,
+                contextOfEventTask,
+                clearUnlinkedEventsTask,
+                paginationTask,
+                cryptoService,
+                timelineEventMapper,
+                settings,
+                TimelineHiddenReadReceipts(readReceiptsSummaryMapper, roomId, settings)
         )
     }
 

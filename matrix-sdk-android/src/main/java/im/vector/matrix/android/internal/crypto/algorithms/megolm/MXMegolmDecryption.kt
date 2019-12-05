@@ -34,7 +34,7 @@ import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -46,8 +46,9 @@ internal class MXMegolmDecryption(private val userId: String,
                                   private val ensureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction,
                                   private val cryptoStore: IMXCryptoStore,
                                   private val sendToDeviceTask: SendToDeviceTask,
-                                  private val coroutineDispatchers: MatrixCoroutineDispatchers)
-    : IMXDecrypting {
+                                  private val coroutineDispatchers: MatrixCoroutineDispatchers,
+                                  private val cryptoCoroutineScope: CoroutineScope
+) : IMXDecrypting {
 
     var newSessionListener: NewSessionListener? = null
 
@@ -61,7 +62,7 @@ internal class MXMegolmDecryption(private val userId: String,
         return decryptEvent(event, timeline, true)
     }
 
-    private suspend fun decryptEvent(event: Event, timeline: String, requestKeysOnFail: Boolean): MXEventDecryptionResult {
+    private fun decryptEvent(event: Event, timeline: String, requestKeysOnFail: Boolean): MXEventDecryptionResult {
         if (event.roomId.isNullOrBlank()) {
             throw MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_FIELDS, MXCryptoError.MISSING_FIELDS_REASON)
         }
@@ -292,7 +293,7 @@ internal class MXMegolmDecryption(private val userId: String,
             return
         }
         val userId = request.userId ?: return
-        GlobalScope.launch(coroutineDispatchers.crypto) {
+        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
             runCatching { deviceListManager.downloadKeys(listOf(userId), false) }
                     .mapCatching {
                         val deviceId = request.deviceId

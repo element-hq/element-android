@@ -21,13 +21,14 @@ import android.content.res.Resources
 import dagger.BindsInstance
 import dagger.Component
 import im.vector.matrix.android.api.Matrix
-import im.vector.matrix.android.api.auth.Authenticator
+import im.vector.matrix.android.api.auth.AuthenticationService
 import im.vector.matrix.android.api.session.Session
 import im.vector.riotx.ActiveSessionDataSource
 import im.vector.riotx.EmojiCompatFontProvider
 import im.vector.riotx.EmojiCompatWrapper
 import im.vector.riotx.VectorApplication
 import im.vector.riotx.core.pushers.PushersManager
+import im.vector.riotx.core.utils.AssetReader
 import im.vector.riotx.core.utils.DimensionConverter
 import im.vector.riotx.features.configuration.VectorConfiguration
 import im.vector.riotx.features.crypto.keysrequest.KeyRequestHandler
@@ -69,6 +70,8 @@ interface VectorComponent {
 
     fun resources(): Resources
 
+    fun assetReader(): AssetReader
+
     fun dimensionConverter(): DimensionConverter
 
     fun vectorConfiguration(): VectorConfiguration
@@ -97,7 +100,7 @@ interface VectorComponent {
 
     fun incomingKeyRequestHandler(): KeyRequestHandler
 
-    fun authenticator(): Authenticator
+    fun authenticationService(): AuthenticationService
 
     fun bugReporter(): BugReporter
 

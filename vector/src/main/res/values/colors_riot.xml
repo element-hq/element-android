@@ -122,7 +122,7 @@
 
     <!-- Button color -->
     <color name="button_enabled_text_color">#FFFFFFFF</color>
-    <color name="button_disabled_text_color">#FF7F7F7F</color>
+    <color name="button_disabled_text_color">#FFFFFFFF</color>
 
     <!-- Link color -->
     <color name="link_color_light">#368BD6</color>

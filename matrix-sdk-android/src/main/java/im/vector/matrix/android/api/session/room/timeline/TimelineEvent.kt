@@ -41,8 +41,7 @@ data class TimelineEvent(
         val isUniqueDisplayName: Boolean,
         val senderAvatar: String?,
         val annotations: EventAnnotationsSummary? = null,
-        val readReceipts: List<ReadReceipt> = emptyList(),
-        val hasReadMarker: Boolean = false
+        val readReceipts: List<ReadReceipt> = emptyList()
 ) {
 
     val metadata = HashMap<String, Any>()

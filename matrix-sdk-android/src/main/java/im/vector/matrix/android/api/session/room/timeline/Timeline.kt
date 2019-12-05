@@ -30,9 +30,15 @@ package im.vector.matrix.android.api.session.room.timeline
  */
 interface Timeline {
 
-    var listener: Listener?
+    val timelineID: String
 
     val isLive: Boolean
+
+    fun addListener(listener: Listener): Boolean
+
+    fun removeListener(listener: Listener): Boolean
+
+    fun removeAllListeners()
 
     /**
      * This should be called before any other method after creating the timeline. It ensures the underlying database is open
@@ -98,7 +104,7 @@ interface Timeline {
     interface Listener {
         /**
          * Call when the timeline has been updated through pagination or sync.
-         * @param snapshot the most uptodate snapshot
+         * @param snapshot the most up to date snapshot
          */
         fun onUpdated(snapshot: List<TimelineEvent>)
     }

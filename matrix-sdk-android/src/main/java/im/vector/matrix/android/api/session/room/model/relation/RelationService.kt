@@ -72,7 +72,7 @@ interface RelationService {
      */
     fun editTextMessage(targetEventId: String,
                         msgType: String,
-                        newBodyText: String,
+                        newBodyText: CharSequence,
                         newBodyAutoMarkdown: Boolean,
                         compatibilityBodyText: String = "* $newBodyText"): Cancelable
 
@@ -97,12 +97,14 @@ interface RelationService {
     /**
      * Reply to an event in the timeline (must be in same room)
      * https://matrix.org/docs/spec/client_server/r0.4.0.html#id350
+     * The replyText can be a Spannable and contains special spans (UserMentionSpan) that will be translated
+     * by the sdk into pills.
      * @param eventReplied the event referenced by the reply
      * @param replyText the reply text
      * @param autoMarkdown If true, the SDK will generate a formatted HTML message from the body text if markdown syntax is present
      */
     fun replyToMessage(eventReplied: TimelineEvent,
-                       replyText: String,
+                       replyText: CharSequence,
                        autoMarkdown: Boolean = false): Cancelable?
 
     fun getEventSummaryLive(eventId: String): LiveData<Optional<EventAnnotationsSummary>>

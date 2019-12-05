@@ -66,7 +66,7 @@ class DisplayReadReceiptsBottomSheet : VectorBaseBottomSheetDialogFragment() {
         super.onActivityCreated(savedInstanceState)
         recyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         recyclerView.adapter = epoxyController.adapter
-        bottomSheetTitle.text = getString(R.string.read_at)
+        bottomSheetTitle.text = getString(R.string.seen_by)
         epoxyController.setData(displayReadReceiptArgs.readReceipts)
     }
 

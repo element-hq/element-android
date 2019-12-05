@@ -1654,4 +1654,71 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
 
     <string name="settings_discovery_disconnect_with_bound_pid">Hëpërhë, ndani me të tjerë adresa email ose numra telefoni te shërbyesi i identiteteve %1$s. Do të duhet të rilidheni me %2$s që të ndalni ndarjen e tyre.</string>
     <string name="settings_agree_to_terms">Që të lejoni veten të jetë e zbulueshme nga adresë email apo numër telefoni, pajtohuni me Kushtet e Shërbimit të shërbyesit të identiteteve (%s).</string>
+    <string name="resources_script">Latn</string>
+
+    <string name="settings_discovery_category">Zbulim</string>
+    <string name="labs_allow_extended_logging">Aktivizo regjistra fjalamanë.</string>
+    <string name="labs_allow_extended_logging_summary">Regjistrat fjalamanë do t’i ndihmojnë zhvilluesit duke furnizuar më tepër regjistrim kur dërgoni një RageShake. Edhe kur është e aktivizuar kjo, aplikimi nuk regjistron lëndë mesazhesh apo çfarëdo të dhëne tjetër private.</string>
+
+
+    <string name="error_terms_not_accepted">Ju lutemi, riprovoni sapo të keni pranuar termat dhe kushtet e shërbyesit tuaj Home.</string>
+
+    <string name="error_network_timeout">Duket sikur shërbyesit po i duhet shumë kohë për t’u përgjigjur,kjo mund të shkaktohet ose nga lidhje e dobët, ose nga një gabim me shërbyesit tanë. Ju lutemi, riprovoni pas pak.</string>
+
+    <string name="send_attachment">Dërgo bashkëngjitje</string>
+
+    <string name="a11y_open_drawer">Hapni zonën e lëvizjeve</string>
+    <string name="a11y_create_menu_open">Hapni menunë e krijimit të dhomave</string>
+    <string name="a11y_create_menu_close">Mbylleni menunë e krijmit të dhomave…</string>
+    <string name="a11y_create_direct_message">Krijoni një bisedë të re të drejtpërdrejtë</string>
+    <string name="a11y_create_room">Krijoni një dhomë të re</string>
+    <string name="a11y_show_password">Shfaq fjalëkalim</string>
+    <string name="a11y_hide_password">Fshihe fjalëkalimin</string>
+    <string name="a11y_jump_to_bottom">Hidhu në fund</string>
+
+    <string name="two_and_some_others_read">%1$s, %2$s dhe %3$d të tjerë të lexuar</string>
+    <string name="three_users_read">%1$s, %2$s dhe %3$s të lexuar</string>
+    <string name="two_users_read">%1$s dhe %2$s të lexuar</string>
+    <string name="one_user_read">%s i lexuar</string>
+    <plurals name="fallback_users_read">
+        <item quantity="one">1 përdorues lexoi</item>
+        <item quantity="other">%d përdorues lexuan</item>
+    </plurals>
+
+    <string name="error_file_too_big">"Kartela \'%1$s\' (%2$s) është  shumë e madhe për ngarkim. Caku është %3$s."</string>
+
+    <string name="error_attachment">Ndodhi një gabim gjatë marrjes së bashkëngjitjes.</string>
+    <string name="attachment_type_file">Kartelë</string>
+    <string name="attachment_type_contact">Kontakt</string>
+    <string name="attachment_type_camera">Kamerë</string>
+    <string name="attachment_type_audio">Audio</string>
+    <string name="attachment_type_gallery">Galeri</string>
+    <string name="attachment_type_sticker">Ngjitës</string>
+    <string name="report_content_spam">Është e padëshiruar</string>
+    <string name="report_content_inappropriate">Është e papërshtatshme</string>
+    <string name="report_content_custom">Raport vetjak</string>
+    <string name="report_content_custom_title">Raportojeni këtë lëndë</string>
+    <string name="report_content_custom_hint">Arsye për raportimin e kësaj lënde</string>
+    <string name="report_content_custom_submit">RAPORTOJENI</string>
+    <string name="block_user">BLLOKOJENI PËRDORUESIN</string>
+
+    <string name="content_reported_title">Lënda u raportua</string>
+    <string name="content_reported_content">Kjo lëndë është raportuar.
+\n
+\nNëse s’doni të shihni më lëndë nga ky përdorues, mund ta bllokoni, që të fshihen mesazhet e tij</string>
+    <string name="content_reported_as_spam_title">E raportuar si e padëshiruar</string>
+    <string name="content_reported_as_spam_content">Kjo lëndë është raportuar si e padëshiruar.
+\n
+\nNëse s’doni të shihni më lëndë nga ky përdorues, mund ta bllokoni, që të fshihen mesazhet e tij</string>
+    <string name="content_reported_as_inappropriate_title">E raportuar si e papërshtatshme</string>
+    <string name="content_reported_as_inappropriate_content">Kjo lëndë është raportuar si e papërshtatshme.
+\n
+\nNëse s’doni të shihni më lëndë nga ky përdorues, mund ta bllokoni, që të fshihen mesazhet e tij</string>
+
+    <string name="permissions_rationale_msg_keys_backup_export">Riot-i lyp leje për të ruajtur kyçet tuaj E2E në disk.
+\n
+\nJu lutemi, lejoni, te flluska pasuese, hyrje për të qenë e mundur të eksportohen kyçet tuaj dorazi.</string>
+
+    <string name="no_network_indicator">Tani për tani s’la lidhje rrjeti</string>
+
 </resources>

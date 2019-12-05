@@ -25,9 +25,10 @@ import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.home.room.detail.timeline.helper.AvatarSizeProvider
-import im.vector.riotx.features.home.room.detail.timeline.item.MessageTextItem_
 import im.vector.riotx.features.home.room.detail.timeline.helper.MessageInformationDataFactory
 import im.vector.riotx.features.home.room.detail.timeline.helper.MessageItemAttributesFactory
+import im.vector.riotx.features.home.room.detail.timeline.item.MessageTextItem_
+import im.vector.riotx.features.home.room.detail.timeline.tools.createLinkMovementMethod
 import me.gujun.android.span.span
 import javax.inject.Inject
 
@@ -41,7 +42,6 @@ class EncryptedItemFactory @Inject constructor(private val messageInformationDat
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
                highlight: Boolean,
-               readMarkerVisible: Boolean,
                callback: TimelineEventController.Callback?): VectorEpoxyModel<*>? {
         event.root.eventId ?: return null
 
@@ -57,7 +57,7 @@ class EncryptedItemFactory @Inject constructor(private val messageInformationDat
                         }
 
                 val message = stringProvider.getString(R.string.encrypted_message).takeIf { cryptoError == null }
-                              ?: stringProvider.getString(R.string.notice_crypto_unable_to_decrypt, errorDescription)
+                        ?: stringProvider.getString(R.string.notice_crypto_unable_to_decrypt, errorDescription)
                 val spannableStr = span(message) {
                     textStyle = "italic"
                     textColor = colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
@@ -65,14 +65,14 @@ class EncryptedItemFactory @Inject constructor(private val messageInformationDat
 
                 // TODO This is not correct format for error, change it
 
-                val informationData = messageInformationDataFactory.create(event, nextEvent, readMarkerVisible)
+                val informationData = messageInformationDataFactory.create(event, nextEvent)
                 val attributes = attributesFactory.create(null, informationData, callback)
                 return MessageTextItem_()
                         .leftGuideline(avatarSizeProvider.leftGuideline)
                         .highlighted(highlight)
                         .attributes(attributes)
                         .message(spannableStr)
-                        .urlClickCallback(callback)
+                        .movementMethod(createLinkMovementMethod(callback))
             }
             else                                             -> null
         }

@@ -24,7 +24,3 @@ fun TimelineEvent.canReact(): Boolean {
     // Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
     return root.getClearType() == EventType.MESSAGE && root.sendState == SendState.SYNCED && !root.isRedacted()
 }
-
-fun TimelineEvent.displayReadMarker(myUserId: String): Boolean {
-    return hasReadMarker && readReceipts.find { it.user.userId == myUserId } == null
-}

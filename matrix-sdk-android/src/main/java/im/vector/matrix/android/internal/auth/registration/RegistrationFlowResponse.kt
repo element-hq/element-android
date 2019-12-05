@@ -18,8 +18,12 @@ package im.vector.matrix.android.internal.auth.registration
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import im.vector.matrix.android.api.auth.registration.FlowResult
+import im.vector.matrix.android.api.auth.registration.Stage
+import im.vector.matrix.android.api.auth.registration.TermPolicies
 import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.internal.auth.data.InteractiveAuthenticationFlow
+import im.vector.matrix.android.internal.auth.data.LoginFlowTypes
 
 @JsonClass(generateAdapter = true)
 data class RegistrationFlowResponse(
@@ -50,4 +54,46 @@ data class RegistrationFlowResponse(
          */
         @Json(name = "params")
         var params: JsonDict? = null
+
+        /**
+         * WARNING,
+         * The two MatrixError fields "errcode" and "error" can also be present here in case of error when validating a stage,
+         * But in this case Moshi will be able to parse the result as a MatrixError, see [RetrofitExtensions.toFailure]
+         * Ex: when polling for "m.login.msisdn" validation
+         */
 )
+
+/**
+ * Convert to something easier to handle on client side
+ */
+fun RegistrationFlowResponse.toFlowResult(): FlowResult {
+    // Get all the returned stages
+    val allFlowTypes = mutableSetOf<String>()
+
+    val missingStage = mutableListOf<Stage>()
+    val completedStage = mutableListOf<Stage>()
+
+    this.flows?.forEach { it.stages?.mapTo(allFlowTypes) { type -> type } }
+
+    allFlowTypes.forEach { type ->
+        val isMandatory = flows?.all { type in it.stages ?: emptyList() } == true
+
+        val stage = when (type) {
+            LoginFlowTypes.RECAPTCHA      -> Stage.ReCaptcha(isMandatory, ((params?.get(type) as? Map<*, *>)?.get("public_key") as? String)
+                    ?: "")
+            LoginFlowTypes.DUMMY          -> Stage.Dummy(isMandatory)
+            LoginFlowTypes.TERMS          -> Stage.Terms(isMandatory, params?.get(type) as? TermPolicies ?: emptyMap<String, String>())
+            LoginFlowTypes.EMAIL_IDENTITY -> Stage.Email(isMandatory)
+            LoginFlowTypes.MSISDN         -> Stage.Msisdn(isMandatory)
+            else                          -> Stage.Other(isMandatory, type, (params?.get(type) as? Map<*, *>))
+        }
+
+        if (type in completedStages ?: emptyList()) {
+            completedStage.add(stage)
+        } else {
+            missingStage.add(stage)
+        }
+    }
+
+    return FlowResult(missingStage, completedStage)
+}

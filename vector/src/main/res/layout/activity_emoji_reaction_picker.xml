@@ -19,8 +19,9 @@
         android:name="im.vector.riotx.features.reactions.EmojiSearchResultFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="gone"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:visibility="gone" />
+        tools:visibility="visible" />
 
     <com.google.android.material.appbar.AppBarLayout
         style="@style/VectorAppBarLayoutStyle"

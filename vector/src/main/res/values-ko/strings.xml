@@ -32,7 +32,7 @@
     <string name="share">공유</string>
     <string name="permalink">고유 주소</string>
     <string name="view_source">소스 보기</string>
-    <string name="view_decrypted_source">해독된 소스 보기</string>
+    <string name="view_decrypted_source">복호화된 소스 보기</string>
     <string name="delete">삭제</string>
     <string name="rename">다시 이름 짓기</string>
     <string name="report_content">내용 신고하기</string>
@@ -904,7 +904,7 @@
     <string name="encryption_information_claimed_ed25519_fingerprint_key">Ed25519 핑거프린트 키가 필요함</string>
     <string name="encryption_information_algorithm">알고리즘</string>
     <string name="encryption_information_session_id">세션 ID</string>
-    <string name="encryption_information_decryption_error">암호 해독 오류</string>
+    <string name="encryption_information_decryption_error">암호 복호화 오류</string>
 
     <string name="encryption_information_sender_device_information">발신자 기기 정보</string>
     <string name="encryption_information_device_name">공개 이름</string>
@@ -1264,7 +1264,7 @@
     <string name="keys_backup_restore_setup_recovery_key">메시지 복구</string>
 
     <string name="keys_backup_restore_with_key_helper">복구 키를 잃어버렸나요\? 설정에서 새로운 키를 만들 수 있습니다.</string>
-    <string name="keys_backup_passphrase_error_decrypt">이 암호로 백업을 해독할 수 없습니다: 올바른 복구 암호를 입력해서 확인해주세요.</string>
+    <string name="keys_backup_passphrase_error_decrypt">이 암호로 백업을 복호화할 수 없습니다: 올바른 복구 암호를 입력해서 확인해주세요.</string>
     <string name="network_error_please_check_and_retry">네트워크 오류: 인터넷 연결 상태를 확인하고 다시 시도해주세요.</string>
 
     <string name="keys_backup_restoring_waiting_message">백업 복구:</string>
@@ -1273,7 +1273,7 @@
     <string name="keys_backup_restoring_importing_keys_waiting_message">키 가져오는 중…</string>
     <string name="keys_backup_unlock_button">기록 풀기</string>
     <string name="keys_backup_recovery_code_empty_error_message">복구 키를 입력하세요</string>
-    <string name="keys_backup_recovery_code_error_decrypt">이 복구 키로 백업을 해독할 수 없습니다: 올바른 복구 키를 입력해서 확인해주세요.</string>
+    <string name="keys_backup_recovery_code_error_decrypt">이 복구 키로 백업을 복호화할 수 없습니다: 올바른 복구 키를 입력해서 확인해주세요.</string>
 
     <string name="keys_backup_restore_success_title">백업이 복구되었습니다 %s !</string>
     <string name="keys_backup_restore_success_description">%1$d개의 세션 키를 복구했고, 이 기기에서 알려지지 않은 %2$d개의 새 키를 추가함</string>

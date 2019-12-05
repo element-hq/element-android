@@ -50,9 +50,10 @@
     <string name="rename">Yeniden Adlandır</string>
     <string name="report_content">İçeriği bildir</string>
     <string name="active_call">Şu anki görüşme</string>
-    <string name="ongoing_conference_call">Devam eden konferans görüşmesi.\n%1$s veya %2$s katıl.</string>
+    <string name="ongoing_conference_call">Devam eden konferans görüşmesi.
+\n%1$s veya %2$s olarak katıl.</string>
     <string name="ongoing_conference_call_voice">Sesli</string>
-    <string name="ongoing_conference_call_video">görüntülü</string>
+    <string name="ongoing_conference_call_video">Görüntülü</string>
     <string name="cannot_start_call">Görüşme başlatılamıyor, lütfen sonra tekrar deneyin</string>
     <string name="missing_permissions_warning">Eksik izinler nedeni ile bazı özellikler eksik olabilir…</string>
     <string name="missing_permissions_to_start_conf_call">Bu odada bir konferans başlatma davetiyesi göndermek için izniniz olması gerekmektedir</string>
@@ -88,10 +89,10 @@
     <string name="bottom_action_groups">Topluluklar</string>
 
     <string name="home_filter_placeholder_home">Odaları ara</string>
-    <string name="home_filter_placeholder_favorites">Favorileri ara</string>
-    <string name="home_filter_placeholder_people">Kişileri ara</string>
-    <string name="home_filter_placeholder_rooms">Odaları ara</string>
-    <string name="home_filter_placeholder_groups">Toplulukları ara</string>
+    <string name="home_filter_placeholder_favorites">Favorileri filtrele</string>
+    <string name="home_filter_placeholder_people">Kişileri filtrele</string>
+    <string name="home_filter_placeholder_rooms">Oda adlarını filtrele</string>
+    <string name="home_filter_placeholder_groups">Topluluk adlarını filtrele</string>
 
     <string name="invitations_header">Davetler</string>
     <string name="low_priority_header">Düşük öncelik</string>
@@ -137,7 +138,7 @@
 
     <string name="join_room">Odaya Katıl</string>
     <string name="username">Kullanıcı adı</string>
-    <string name="create_account">Kayıt</string>
+    <string name="create_account">Hesap oluştur</string>
     <string name="login">Giriş yap</string>
     <string name="logout">Çıkış yap</string>
     <string name="hs_url">Ev Sunucusu URL\'si</string>
@@ -276,7 +277,7 @@ Eğer yeni kurtarma yöntemini siz ayarlamadıysanız, bir saldırgan hesabını
     <string name="login_error_registration_network_error">Kayıt olunamadı: Ağ hatası</string>
     <string name="login_error_unable_register">Kayıt olunamadı</string>
     <string name="login_error_unable_register_mail_ownership">Kayıt olunamadı: eposta sahiplik hatası</string>
-    <string name="login_error_invalid_home_server">Geçerli bir URL girin</string>
+    <string name="login_error_invalid_home_server">Lütfen geçerli bir URL girin</string>
     <string name="login_mobile_device">Mobil</string>
 
     <string name="login_error_forbidden">Geçersiz kullanıcıadı/şifre</string>
@@ -1306,4 +1307,22 @@ Neden Riot.im’i seçmeliyim?
     <string name="keys_backup_info_title_algorithm">Algoritma</string>
     <string name="keys_backup_info_title_signature">İmza</string>
 
+    <string name="notification_sync_init">İşlem başlatılıyor</string>
+    <string name="title_activity_verify_device">Cihazı doğrula</string>
+
+    <string name="none">Hiç (Yok)</string>
+    <string name="revoke">Geri Al</string>
+    <string name="disconnect">Bağlantıyı Kes</string>
+    <string name="ignore">Önemseme</string>
+    <string name="review">Gözden Geçir</string>
+    <string name="decline">Reddet</string>
+
+    <string name="action_mark_room_read">Okunmuş olarak işaretle</string>
+    <string name="call_failed_no_ice_title">Arama yanlış yapılandırılmış odadan dolayı başarısız oldu</string>
+    <string name="call_failed_no_ice_use_alt">%s kullanmayı deneyin</string>
+    <string name="call_failed_dont_ask_again">Yeniden sorma</string>
+
+    <string name="auth_login_sso">Tek oturum açma ile giriş yap</string>
+    <string name="auth_add_email_message_2">Hesap kurtarması için email ayarla, ve sonradan da isteğe bağlı olarak başklarının seni tanıyan kişilerin bulması için kullan.</string>
+    <string name="login_error_unknown_host">Bu adrese erişilemiyor, lütfen kontrol et</string>
 </resources>

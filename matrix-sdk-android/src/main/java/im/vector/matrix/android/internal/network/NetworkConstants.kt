@@ -19,6 +19,7 @@ package im.vector.matrix.android.internal.network
 internal object NetworkConstants {
 
     private const val URI_API_PREFIX_PATH = "_matrix/client"
+    const val URI_API_PREFIX_PATH_ = "$URI_API_PREFIX_PATH/"
     const val URI_API_PREFIX_PATH_R0 = "$URI_API_PREFIX_PATH/r0/"
     const val URI_API_PREFIX_PATH_UNSTABLE = "$URI_API_PREFIX_PATH/unstable/"
 

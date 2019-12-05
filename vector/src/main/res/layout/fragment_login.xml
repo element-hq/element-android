@@ -1,49 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/login_fragment"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?riotx_background">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <!-- Missing attributes are in the style -->
+    <ImageView
+        style="@style/LoginLogo"
+        tools:ignore="ContentDescription,MissingConstraints" />
+
+    <!-- Missing attributes are in the style -->
+    <androidx.core.widget.NestedScrollView
+        style="@style/LoginFormScrollView"
+        tools:ignore="MissingConstraints">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="24dp">
+            style="@style/LoginFormContainer"
+            android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/logoImageView"
+                android:id="@+id/loginServerIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:src="@drawable/riotx_logo" />
+                tools:src="@drawable/ic_logo_matrix_org" />
 
             <TextView
-                android:id="@+id/riotx_no_registration_notice"
+                android:id="@+id/loginTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="32dp"
-                android:gravity="center"
-                android:padding="8dp"
-                android:text="@string/riotx_no_registration_notice"
-                android:textColor="?vctr_notice_secondary"
-                android:textSize="15sp" />
+                android:layout_marginTop="@dimen/layout_vertical_margin"
+                android:textAppearance="@style/TextAppearance.Vector.Login.Title"
+                tools:text="@string/login_signin_to" />
+
+            <TextView
+                android:id="@+id/loginNotice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_vertical_margin"
+                android:gravity="start"
+                android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small"
+                tools:text="@string/login_server_matrix_org_text" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/loginFieldTil"
                 style="@style/VectorTextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
-                android:hint="@string/auth_user_name_placeholder">
+                android:layout_marginTop="32dp"
+                android:hint="@string/login_signup_username_hint"
+                app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/loginField"
@@ -61,10 +69,13 @@
                 android:layout_marginTop="16dp">
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/passwordFieldTil"
                     style="@style/VectorTextInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/auth_password_placeholder">
+                    android:hint="@string/login_signup_password_hint"
+                    app:errorEnabled="true"
+                    app:errorIconDrawable="@null">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/passwordField"
@@ -93,67 +104,36 @@
 
             </FrameLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/VectorTextInputLayout"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:hint="@string/settings_home_server">
+                android:layout_marginTop="22dp"
+                android:orientation="horizontal">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/homeServerField"
-                    android:layout_width="match_parent"
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/forgetPasswordButton"
+                    style="@style/Style.Vector.Login.Button.Text"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:imeOptions="actionDone"
-                    android:inputType="textUri"
-                    android:maxLines="1" />
+                    android:layout_gravity="start"
+                    android:text="@string/auth_forgot_password" />
 
-            </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/loginSubmit"
+                    style="@style/Style.Vector.Login.Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_gravity="end"
+                    android:text="@string/auth_login"
+                    tools:enabled="false"
+                    tools:ignore="RelativeOverlap" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/authenticateButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginTop="22dp"
-                android:text="@string/auth_login" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/authenticateButtonSso"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginTop="22dp"
-                android:text="@string/auth_login_sso"
-                android:visibility="gone"
-                tools:visibility="visible" />
+            </RelativeLayout>
 
         </LinearLayout>
 
-    </ScrollView>
-
-    <View
-        android:id="@+id/touchArea"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="?vctr_waiting_background_color"
-        android:clickable="true"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_margin="8dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:visibility="visible" />
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

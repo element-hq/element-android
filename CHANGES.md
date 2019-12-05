@@ -1,3 +1,24 @@
+Changes in RiotX 0.9.0 (2019-12-05)
+===================================================
+
+Features ✨:
+ - Account creation. It's now possible to create account on any homeserver with RiotX (#34)
+ - Iteration of the login flow (#613)
+
+Improvements 🙌:
+ - Send mention Pills from composer
+ - Links in message preview in the bottom sheet are now active. 
+ - Rework the read marker to make it more usable
+
+Other changes:
+ - Fix a small grammatical error when an empty room list is shown.
+
+Bugfix 🐛:
+ - Do not show long click help if only invitation are displayed
+ - Fix emoji filtering not working
+ - Fix issue of closing Realm in another thread (#725)
+ - Attempt to properly cancel the crypto module when user signs out (#724)
+
 Changes in RiotX 0.8.0 (2019-11-19)
 ===================================================
 

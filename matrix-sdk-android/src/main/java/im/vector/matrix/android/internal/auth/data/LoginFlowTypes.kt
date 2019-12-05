@@ -25,4 +25,7 @@ object LoginFlowTypes {
     const val MSISDN = "m.login.msisdn"
     const val RECAPTCHA = "m.login.recaptcha"
     const val DUMMY = "m.login.dummy"
+    const val TERMS = "m.login.terms"
+    const val TOKEN = "m.login.token"
+    const val SSO = "m.login.sso"
 }

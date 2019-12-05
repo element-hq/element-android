@@ -36,7 +36,7 @@ import com.github.piasy.biv.BigImageViewer
 import com.github.piasy.biv.loader.glide.GlideImageLoader
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.MatrixConfiguration
-import im.vector.matrix.android.api.auth.Authenticator
+import im.vector.matrix.android.api.auth.AuthenticationService
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.di.DaggerVectorComponent
 import im.vector.riotx.core.di.HasVectorInjector
@@ -63,7 +63,7 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
 
     lateinit var appContext: Context
     // font thread handler
-    @Inject lateinit var authenticator: Authenticator
+    @Inject lateinit var authenticationService: AuthenticationService
     @Inject lateinit var vectorConfiguration: VectorConfiguration
     @Inject lateinit var emojiCompatFontProvider: EmojiCompatFontProvider
     @Inject lateinit var emojiCompatWrapper: EmojiCompatWrapper
@@ -115,8 +115,8 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
         emojiCompatWrapper.init(fontRequest)
 
         notificationUtils.createNotificationChannels()
-        if (authenticator.hasAuthenticatedSessions() && !activeSessionHolder.hasActiveSession()) {
-            val lastAuthenticatedSession = authenticator.getLastAuthenticatedSession()!!
+        if (authenticationService.hasAuthenticatedSessions() && !activeSessionHolder.hasActiveSession()) {
+            val lastAuthenticatedSession = authenticationService.getLastAuthenticatedSession()!!
             activeSessionHolder.setActiveSession(lastAuthenticatedSession)
             lastAuthenticatedSession.configureAndStart(pushRuleTriggerListener, sessionListener)
         }

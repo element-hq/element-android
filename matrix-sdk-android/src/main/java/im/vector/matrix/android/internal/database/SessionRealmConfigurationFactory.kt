@@ -83,7 +83,7 @@ internal class SessionRealmConfigurationFactory @Inject constructor(private val 
             try {
                 File(directory, file).deleteRecursively()
             } catch (e: Exception) {
-                Timber.e(e, "Unable to move files")
+                Timber.e(e, "Unable to delete files")
             }
         }
     }

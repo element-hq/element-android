@@ -27,7 +27,7 @@ object CommandParser {
      * @param textMessage   the text message
      * @return a parsed slash command (ok or error)
      */
-    fun parseSplashCommand(textMessage: String): ParsedCommand {
+    fun parseSplashCommand(textMessage: CharSequence): ParsedCommand {
         // check if it has the Slash marker
         if (!textMessage.startsWith("/")) {
             return ParsedCommand.ErrorNotACommand
@@ -76,7 +76,7 @@ object CommandParser {
                     }
                 }
                 Command.EMOTE.command                  -> {
-                    val message = textMessage.substring(Command.EMOTE.command.length).trim()
+                    val message = textMessage.subSequence(Command.EMOTE.command.length, textMessage.length).trim()
 
                     ParsedCommand.SendEmote(message)
                 }
