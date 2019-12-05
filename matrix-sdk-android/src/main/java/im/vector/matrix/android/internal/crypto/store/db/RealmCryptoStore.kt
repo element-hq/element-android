@@ -643,9 +643,10 @@ internal class RealmCryptoStore(private val realmConfiguration: RealmConfigurati
     }
 
     override fun getOutgoingRoomKeyRequestByState(states: Set<OutgoingRoomKeyRequest.RequestState>): OutgoingRoomKeyRequest? {
+        val statesIndex = states.map { it.ordinal }.toTypedArray()
         return doRealmQueryAndCopy(realmConfiguration) {
             it.where<OutgoingRoomKeyRequestEntity>()
-                    .`in`(OutgoingRoomKeyRequestEntityFields.STATE, states.map { it.ordinal }.toTypedArray())
+                    .`in`(OutgoingRoomKeyRequestEntityFields.STATE, statesIndex)
                     .findFirst()
         }
                 ?.toOutgoingRoomKeyRequest()
