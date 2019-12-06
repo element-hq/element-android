@@ -79,8 +79,6 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
     lateinit var vectorComponent: VectorComponent
     private var fontThreadHandler: Handler? = null
 
-//    var slowMode = false
-
     override fun onCreate() {
         super.onCreate()
         appContext = this
