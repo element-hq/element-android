@@ -78,7 +78,7 @@ internal class LocalEchoEventFactory @Inject constructor(
             val htmlText = renderer.render(document)
 
             if (isFormattedTextPertinent(source, htmlText)) {
-                return TextContent(source, htmlText)
+                return TextContent(text.toString(), htmlText)
             }
         } else {
             // Try to detect pills
