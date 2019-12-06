@@ -11,7 +11,7 @@ Other changes:
  -
 
 Bugfix 🐛:
- -
+ - When automardown is ON, pills are sent as MD in body (#739)
 
 Translations 🗣:
  -
