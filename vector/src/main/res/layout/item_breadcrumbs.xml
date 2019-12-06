@@ -49,6 +49,7 @@
         app:layout_constraintCircleAngle="45"
         app:layout_constraintCircleRadius="28dp"
         tools:background="@drawable/bg_unread_highlight"
+        tools:ignore="MissingConstraints"
         tools:text="24"
         tools:visibility="visible" />
 
@@ -63,6 +64,7 @@
         app:layout_constraintCircle="@+id/breadcrumbsImageView"
         app:layout_constraintCircleAngle="135"
         app:layout_constraintCircleRadius="28dp"
+        tools:ignore="MissingConstraints"
         tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
