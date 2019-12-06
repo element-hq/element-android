@@ -46,6 +46,7 @@ import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.EpoxyVisibilityTracker
+import com.airbnb.epoxy.OnModelBuildFinishedListener
 import com.airbnb.mvrx.*
 import com.github.piasy.biv.BigImageViewer
 import com.github.piasy.biv.loader.ImageLoader
@@ -193,6 +194,8 @@ class RoomDetailFragment @Inject constructor(
 
     private lateinit var sharedActionViewModel: MessageSharedActionViewModel
     private lateinit var layoutManager: LinearLayoutManager
+    private lateinit var modelBuildListener: OnModelBuildFinishedListener
+
     private lateinit var attachmentsHelper: AttachmentsHelper
     private lateinit var keyboardStateUtils: KeyboardStateUtils
 
@@ -286,8 +289,9 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
+        timelineEventController.removeModelBuildListener(modelBuildListener)
         recyclerView.adapter = null
+        super.onDestroyView()
     }
 
     override fun onDestroy() {
@@ -470,13 +474,14 @@ class RoomDetailFragment @Inject constructor(
         recyclerView.layoutManager = layoutManager
         recyclerView.itemAnimator = null
         recyclerView.setHasFixedSize(true)
-        timelineEventController.addModelBuildListener {
+        modelBuildListener = OnModelBuildFinishedListener {
             it.dispatchTo(stateRestorer)
             it.dispatchTo(scrollOnNewMessageCallback)
             it.dispatchTo(scrollOnHighlightedEventCallback)
             updateJumpToReadMarkerViewVisibility()
             updateJumpToBottomViewVisibility()
         }
+        timelineEventController.addModelBuildListener { modelBuildListener }
         recyclerView.adapter = timelineEventController.adapter
 
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -521,37 +526,41 @@ class RoomDetailFragment @Inject constructor(
         }
     }
 
-    private fun updateJumpToReadMarkerViewVisibility() = jumpToReadMarkerView.post {
-        withState(roomDetailViewModel) {
-            val showJumpToUnreadBanner = when (it.unreadState) {
-                UnreadState.Unknown,
-                UnreadState.HasNoUnread            -> false
-                is UnreadState.ReadMarkerNotLoaded -> true
-                is UnreadState.HasUnread           -> {
-                    if (it.canShowJumpToReadMarker) {
-                        val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
-                        val positionOfReadMarker = timelineEventController.getPositionOfReadMarker()
-                        if (positionOfReadMarker == null) {
-                            false
+    private fun updateJumpToReadMarkerViewVisibility() {
+        jumpToReadMarkerView?.post {
+            withState(roomDetailViewModel) {
+                val showJumpToUnreadBanner = when (it.unreadState) {
+                    UnreadState.Unknown,
+                    UnreadState.HasNoUnread            -> false
+                    is UnreadState.ReadMarkerNotLoaded -> true
+                    is UnreadState.HasUnread           -> {
+                        if (it.canShowJumpToReadMarker) {
+                            val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
+                            val positionOfReadMarker = timelineEventController.getPositionOfReadMarker()
+                            if (positionOfReadMarker == null) {
+                                false
+                            } else {
+                                positionOfReadMarker > lastVisibleItem
+                            }
                         } else {
-                            positionOfReadMarker > lastVisibleItem
+                            false
                         }
-                    } else {
-                        false
                     }
                 }
+                jumpToReadMarkerView.isVisible = showJumpToUnreadBanner
             }
-            jumpToReadMarkerView.isVisible = showJumpToUnreadBanner
         }
     }
 
     private fun updateJumpToBottomViewVisibility() {
         debouncer.debounce("jump_to_bottom_visibility", 250, Runnable {
-            Timber.v("First visible: ${layoutManager.findFirstCompletelyVisibleItemPosition()}")
-            if (layoutManager.findFirstVisibleItemPosition() != 0) {
-                jumpToBottomView.show()
-            } else {
-                jumpToBottomView.hide()
+            if (isAdded) {
+                Timber.v("First visible: ${layoutManager.findFirstCompletelyVisibleItemPosition()}")
+                if (layoutManager.findFirstVisibleItemPosition() != 0) {
+                    jumpToBottomView.show()
+                } else {
+                    jumpToBottomView.hide()
+                }
             }
         })
     }
