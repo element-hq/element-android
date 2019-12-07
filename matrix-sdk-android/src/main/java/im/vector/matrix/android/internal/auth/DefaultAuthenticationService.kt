@@ -159,7 +159,7 @@ internal class DefaultAuthenticationService @Inject constructor(@Unauthenticated
 
             return getLoginFlowResult(newAuthAPI, versions, riotConfig.defaultHomeServerUrl)
         } else {
-            // Config exists, but we cannot retrieve a default homeserver url
+            // Config exists, but there is no default homeserver url (ex: https://riot.im/app)
             throw Failure.OtherServerError("", HttpsURLConnection.HTTP_NOT_FOUND /* 404 */)
         }
     }
