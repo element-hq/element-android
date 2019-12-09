@@ -55,6 +55,18 @@ interface RoomService {
     fun liveRoomSummaries(): LiveData<List<RoomSummary>>
 
     /**
+     * Get a live list of Breadcrumbs
+     * @return the [LiveData] of [RoomSummary]
+     */
+    fun liveBreadcrumbs(): LiveData<List<RoomSummary>>
+
+    /**
+     * Inform the Matrix SDK that a room is displayed.
+     * The SDK will update the breadcrumbs in the user account data
+     */
+    fun onRoomDisplayed(roomId: String): Cancelable
+
+    /**
      * Mark all rooms as read
      */
     fun markAllAsRead(roomIds: List<String>, callback: MatrixCallback<Unit>): Cancelable

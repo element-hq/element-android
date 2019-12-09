@@ -38,6 +38,10 @@ class RxSession(private val session: Session) {
         return session.liveGroupSummaries().asObservable()
     }
 
+    fun liveBreadcrumbs(): Observable<List<RoomSummary>> {
+        return session.liveBreadcrumbs().asObservable()
+    }
+
     fun liveSyncState(): Observable<SyncState> {
         return session.syncState().asObservable()
     }

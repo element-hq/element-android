@@ -19,16 +19,14 @@ package im.vector.matrix.android.internal.crypto.store.db.query
 import im.vector.matrix.android.internal.crypto.store.db.model.CryptoRoomEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.CryptoRoomEntityFields
 import io.realm.Realm
+import io.realm.kotlin.createObject
 import io.realm.kotlin.where
 
 /**
  * Get or create a room
  */
 internal fun CryptoRoomEntity.Companion.getOrCreate(realm: Realm, roomId: String): CryptoRoomEntity {
-    return getById(realm, roomId)
-            ?: let {
-                realm.createObject(CryptoRoomEntity::class.java, roomId)
-            }
+    return getById(realm, roomId) ?: realm.createObject(roomId)
 }
 
 /**

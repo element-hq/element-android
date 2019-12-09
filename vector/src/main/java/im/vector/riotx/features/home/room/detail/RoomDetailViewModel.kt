@@ -143,6 +143,9 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         timeline.addListener(this)
         timeline.start()
         setState { copy(timeline = this@RoomDetailViewModel.timeline) }
+
+        // Inform the SDK that the room is displayed
+        session.onRoomDisplayed(initialState.roomId)
     }
 
     override fun handle(action: RoomDetailAction) {

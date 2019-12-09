@@ -33,6 +33,7 @@ import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.room.create.CreateRoomTask
 import im.vector.matrix.android.internal.session.room.membership.joining.JoinRoomTask
 import im.vector.matrix.android.internal.session.room.read.MarkAllRoomsReadTask
+import im.vector.matrix.android.internal.session.user.accountdata.UpdateBreadcrumbsTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import io.realm.Realm
@@ -43,6 +44,7 @@ internal class DefaultRoomService @Inject constructor(private val monarchy: Mona
                                                       private val createRoomTask: CreateRoomTask,
                                                       private val joinRoomTask: JoinRoomTask,
                                                       private val markAllRoomsReadTask: MarkAllRoomsReadTask,
+                                                      private val updateBreadcrumbsTask: UpdateBreadcrumbsTask,
                                                       private val roomFactory: RoomFactory,
                                                       private val taskExecutor: TaskExecutor) : RoomService {
 
@@ -73,6 +75,25 @@ internal class DefaultRoomService @Inject constructor(private val monarchy: Mona
                 },
                 { roomSummaryMapper.map(it) }
         )
+    }
+
+    override fun liveBreadcrumbs(): LiveData<List<RoomSummary>> {
+        return monarchy.findAllMappedWithChanges(
+                { realm ->
+                    RoomSummaryEntity.where(realm)
+                            .isNotEmpty(RoomSummaryEntityFields.DISPLAY_NAME)
+                            .notEqualTo(RoomSummaryEntityFields.VERSIONING_STATE_STR, VersioningState.UPGRADED_ROOM_JOINED.name)
+                            .greaterThan(RoomSummaryEntityFields.BREADCRUMBS_INDEX, RoomSummaryEntity.NOT_IN_BREADCRUMBS)
+                            .sort(RoomSummaryEntityFields.BREADCRUMBS_INDEX)
+                },
+                { roomSummaryMapper.map(it) }
+        )
+    }
+
+    override fun onRoomDisplayed(roomId: String): Cancelable {
+        return updateBreadcrumbsTask
+                .configureWith(UpdateBreadcrumbsTask.Params(roomId))
+                .executeBy(taskExecutor)
     }
 
     override fun joinRoom(roomId: String, viaServers: List<String>, callback: MatrixCallback<Unit>): Cancelable {

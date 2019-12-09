@@ -33,6 +33,7 @@ import im.vector.riotx.features.home.LoadingFragment
 import im.vector.riotx.features.home.createdirect.CreateDirectRoomDirectoryUsersFragment
 import im.vector.riotx.features.home.createdirect.CreateDirectRoomKnownUsersFragment
 import im.vector.riotx.features.home.group.GroupListFragment
+import im.vector.riotx.features.home.room.breadcrumbs.BreadcrumbsFragment
 import im.vector.riotx.features.home.room.detail.RoomDetailFragment
 import im.vector.riotx.features.home.room.list.RoomListFragment
 import im.vector.riotx.features.login.*
@@ -249,4 +250,9 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(PublicRoomsFragment::class)
     fun bindPublicRoomsFragment(fragment: PublicRoomsFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(BreadcrumbsFragment::class)
+    fun bindBreadcrumbsFragment(fragment: BreadcrumbsFragment): Fragment
 }
