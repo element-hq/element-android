@@ -15,7 +15,10 @@
  */
 package im.vector.riotx.features.reactions
 
-import com.airbnb.mvrx.*
+import com.airbnb.mvrx.ActivityViewModelContext
+import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.riotx.core.platform.VectorViewModel
@@ -52,21 +55,26 @@ class EmojiSearchResultViewModel @AssistedInject constructor(
     }
 
     private fun updateQuery(action: EmojiSearchAction.UpdateQuery) {
+        val words = action.queryString.split("\\s".toRegex())
         setState {
             copy(
                     query = action.queryString,
-                    results = dataSource.rawData?.emojis?.toList()
-                            ?.map { it.second }
-                            ?.filter {
-                                it.name.contains(action.queryString, true)
-                                        || action.queryString
-                                        .split("\\s".toRegex())
-                                        .fold(true, { prev, q ->
-                                            prev
-                                                    && (it.keywords?.any { it.contains(q, true) }
-                                                    ?: false)
-                                        })
-                            } ?: emptyList()
+                    // First add emojis with name matching query, sorted by name
+                    // Then emojis with keyword matching any of the word in the query, sorted by name
+                    results = dataSource.rawData.emojis
+                            .values
+                            .filter { emojiItem ->
+                                emojiItem.name.contains(action.queryString, true)
+                            }
+                            .sortedBy { it.name }
+                            + dataSource.rawData.emojis
+                            .values
+                            .filter { emojiItem ->
+                                words.fold(true, { prev, word ->
+                                    prev && emojiItem.keywords.any { keyword -> keyword.contains(word, true) }
+                                })
+                            }
+                            .sortedBy { it.name }
             )
         }
     }

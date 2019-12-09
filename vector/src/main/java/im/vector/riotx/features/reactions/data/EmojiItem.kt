@@ -40,7 +40,7 @@ import com.squareup.moshi.JsonClass
 data class EmojiItem(
         @Json(name = "a") val name: String,
         @Json(name = "b") val unicode: String,
-        @Json(name = "j") val keywords: List<String>?
+        @Json(name = "j") val keywords: List<String> = emptyList()
 ) {
     // Cannot be private...
     var cache: String? = null

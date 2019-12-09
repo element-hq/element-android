@@ -95,20 +95,18 @@ class EmojiReactionPickerActivity : VectorBaseActivity(),
 
         viewModel.eventId = intent.getStringExtra(EXTRA_EVENT_ID)
 
-        emojiDataSource.rawData?.categories?.let { categories ->
-            for (category in categories) {
-                val s = category.emojis[0]
-                tabLayout.newTab()
-                        .also { tab ->
-                            tab.text = emojiDataSource.rawData!!.emojis[s]!!.emoji
-                            tab.contentDescription = category.name
-                        }
-                        .also { tab ->
-                            tabLayout.addTab(tab)
-                        }
-            }
-            tabLayout.addOnTabSelectedListener(tabLayoutSelectionListener)
+        emojiDataSource.rawData.categories.forEach { category ->
+            val s = category.emojis[0]
+            tabLayout.newTab()
+                    .also { tab ->
+                        tab.text = emojiDataSource.rawData.emojis[s]!!.emoji
+                        tab.contentDescription = category.name
+                    }
+                    .also { tab ->
+                        tabLayout.addTab(tab)
+                    }
         }
+        tabLayout.addOnTabSelectedListener(tabLayoutSelectionListener)
 
         viewModel.currentSection.observe(this, Observer { section ->
             section?.let {

@@ -46,7 +46,7 @@ abstract class EmojiSearchResultItem : EpoxyModelWithHolder<EmojiSearchResultIte
         holder.emojiText.text = emojiItem.emoji
         holder.emojiText.typeface = emojiTypeFace ?: Typeface.DEFAULT
         holder.emojiNameText.text = emojiItem.name
-        holder.emojiKeywordText.setTextOrHide(emojiItem.keywords?.joinToString())
+        holder.emojiKeywordText.setTextOrHide(emojiItem.keywords.joinToString())
         holder.view.setOnClickListener {
             onClickListener?.onReactionSelected(emojiItem.emoji)
         }
