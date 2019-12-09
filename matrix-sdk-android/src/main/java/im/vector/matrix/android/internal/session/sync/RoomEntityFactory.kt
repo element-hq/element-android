@@ -169,6 +169,4 @@ internal class RoomEntityFactory @Inject constructor(private val cryptoService: 
             }
         }
     }
-
-
 }

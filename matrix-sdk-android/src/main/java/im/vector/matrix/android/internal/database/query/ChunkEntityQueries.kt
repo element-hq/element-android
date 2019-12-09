@@ -18,7 +18,6 @@ package im.vector.matrix.android.internal.database.query
 
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.ChunkEntityFields
-import im.vector.matrix.android.internal.database.model.RoomEntityFields
 import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.RealmResults

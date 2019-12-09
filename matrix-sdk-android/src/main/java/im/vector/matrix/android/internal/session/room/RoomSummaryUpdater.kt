@@ -37,7 +37,6 @@ import im.vector.matrix.android.internal.session.room.membership.RoomMembers
 import im.vector.matrix.android.internal.session.sync.model.RoomSyncSummary
 import im.vector.matrix.android.internal.session.sync.model.RoomSyncUnreadNotifications
 import io.realm.Realm
-import io.realm.kotlin.createObject
 import javax.inject.Inject
 
 internal class RoomSummaryUpdater @Inject constructor(@UserId private val userId: String,
@@ -68,7 +67,6 @@ internal class RoomSummaryUpdater @Inject constructor(@UserId private val userId
                roomSummary: RoomSyncSummary? = null,
                unreadNotifications: RoomSyncUnreadNotifications? = null,
                updateMembers: Boolean = false) {
-
         val roomSummaryEntity = RoomSummaryEntity.getOrCreate(realm, roomId)
         if (roomSummary != null) {
             if (roomSummary.heroes.isNotEmpty()) {

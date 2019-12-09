@@ -20,12 +20,9 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.LocalEcho
 import im.vector.matrix.android.api.session.events.model.UnsignedData
-import im.vector.matrix.android.internal.database.helper.updateSenderData
 import im.vector.matrix.android.internal.database.mapper.ContentMapper
 import im.vector.matrix.android.internal.database.mapper.EventMapper
 import im.vector.matrix.android.internal.database.model.EventEntity
-import im.vector.matrix.android.internal.database.model.TimelineEventEntity
-import im.vector.matrix.android.internal.database.query.findWithSenderMembershipEvent
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.task.Task

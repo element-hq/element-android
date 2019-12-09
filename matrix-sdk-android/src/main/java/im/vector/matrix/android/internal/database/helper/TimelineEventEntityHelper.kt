@@ -100,7 +100,6 @@ private fun RealmList<EventEntity>.buildStateEventQuery(sender: String): RealmQu
             .equalTo(EventEntityFields.TYPE, EventType.STATE_ROOM_MEMBER)
 }
 
-
 private fun RealmList<TimelineEventEntity>.buildTimelineEventQuery(sender: String): RealmQuery<TimelineEventEntity> {
     return where()
             .equalTo(TimelineEventEntityFields.ROOT.STATE_KEY, sender)

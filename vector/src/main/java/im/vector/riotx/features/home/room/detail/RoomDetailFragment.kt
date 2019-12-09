@@ -114,6 +114,7 @@ import im.vector.riotx.features.reactions.EmojiReactionPickerActivity
 import im.vector.riotx.features.settings.VectorPreferences
 import im.vector.riotx.features.share.SharedData
 import im.vector.riotx.features.themes.ThemeUtils
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_detail.*
 import kotlinx.android.synthetic.main.merge_composer_layout.view.*
@@ -272,6 +273,16 @@ class RoomDetailFragment @Inject constructor(
         roomDetailViewModel.requestLiveData.observeEvent(this) {
             displayRoomDetailActionResult(it)
         }
+
+        roomDetailViewModel.viewEvents
+                .observe()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    when (it) {
+                        is RoomDetailViewEvents.Failure -> showErrorInSnackbar(it.throwable)
+                    }
+                }
+                .disposeOnDestroyView()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

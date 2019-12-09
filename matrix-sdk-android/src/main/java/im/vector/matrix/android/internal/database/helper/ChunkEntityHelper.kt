@@ -26,7 +26,6 @@ import im.vector.matrix.android.internal.database.model.ReadReceiptEntity
 import im.vector.matrix.android.internal.database.model.ReadReceiptsSummaryEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.query.fastContains
-import im.vector.matrix.android.internal.database.query.find
 import im.vector.matrix.android.internal.database.query.getOrCreate
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.extensions.assertIsManaged
@@ -52,7 +51,6 @@ internal fun ChunkEntity.addStateEvent(stateEvent: Event) {
         stateEvents.add(entity)
     }
 }
-
 
 internal fun ChunkEntity.add(localRealm: Realm,
                              roomId: String,

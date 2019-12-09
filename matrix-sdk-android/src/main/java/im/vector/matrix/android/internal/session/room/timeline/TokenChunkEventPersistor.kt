@@ -17,7 +17,6 @@
 package im.vector.matrix.android.internal.session.room.timeline
 
 import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.internal.database.helper.add
 import im.vector.matrix.android.internal.database.helper.addOrUpdate
 import im.vector.matrix.android.internal.database.helper.addStateEvent
@@ -197,5 +196,4 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
         roomEntity.addOrUpdate(currentChunk)
         roomSummaryUpdater.update(realm, roomId, updateMembers = false)
     }
-
 }

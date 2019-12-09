@@ -31,7 +31,6 @@ import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.room.timeline.PaginationDirection
 import im.vector.matrix.android.internal.session.user.UserEntityFactory
 import io.realm.Realm
-import io.realm.kotlin.createObject
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -106,5 +105,4 @@ internal class ChunkEntityFactory @Inject constructor(private val cryptoService:
         }
         return chunkEntity
     }
-
 }

@@ -19,28 +19,18 @@ package im.vector.matrix.android.internal.session.sync
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.R
 import im.vector.matrix.android.api.pushrules.RuleScope
-import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
-import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.Membership
-import im.vector.matrix.android.api.session.room.model.tag.RoomTagContent
 import im.vector.matrix.android.internal.crypto.DefaultCryptoService
 import im.vector.matrix.android.internal.database.helper.*
-import im.vector.matrix.android.internal.database.model.ChunkEntity
-import im.vector.matrix.android.internal.database.model.EventEntityFields
 import im.vector.matrix.android.internal.database.model.RoomEntity
-import im.vector.matrix.android.internal.database.query.find
-import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.DefaultInitialSyncProgressService
 import im.vector.matrix.android.internal.session.mapWithProgress
 import im.vector.matrix.android.internal.session.notification.DefaultPushRuleService
 import im.vector.matrix.android.internal.session.notification.ProcessEventForPushTask
 import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
-import im.vector.matrix.android.internal.session.room.read.FullyReadContent
-import im.vector.matrix.android.internal.session.room.timeline.PaginationDirection
 import im.vector.matrix.android.internal.session.sync.model.*
-import im.vector.matrix.android.internal.session.user.UserEntityFactory
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.awaitTransaction
@@ -150,5 +140,4 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
         roomSummaryUpdater.update(realm, roomId, Membership.LEAVE, roomSync.summary, roomSync.unreadNotifications)
         return roomEntity
     }
-
 }

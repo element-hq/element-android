@@ -31,9 +31,11 @@ import butterknife.Unbinder
 import com.airbnb.mvrx.BaseMvRxFragment
 import com.airbnb.mvrx.MvRx
 import com.bumptech.glide.util.Util.assertMainThread
+import com.google.android.material.snackbar.Snackbar
 import im.vector.riotx.core.di.DaggerScreenComponent
 import im.vector.riotx.core.di.HasScreenInjector
 import im.vector.riotx.core.di.ScreenComponent
+import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.features.navigation.Navigator
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -54,6 +56,7 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
 
     protected lateinit var navigator: Navigator
     private lateinit var screenComponent: ScreenComponent
+    private lateinit var errorFormatter: ErrorFormatter
 
     /* ==========================================================================================
      * View model
@@ -74,6 +77,7 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
     override fun onAttach(context: Context) {
         screenComponent = DaggerScreenComponent.factory().create(vectorBaseActivity.getVectorComponent(), vectorBaseActivity)
         navigator = screenComponent.navigator()
+        errorFormatter = screenComponent.errorFormatter()
         viewModelFactory = screenComponent.viewModelFactory()
         childFragmentManager.fragmentFactory = screenComponent.fragmentFactory()
         injectWith(injector())
@@ -160,6 +164,13 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
         assertMainThread()
         restorables.add(this)
         return this
+    }
+
+    protected fun showErrorInSnackbar(throwable: Throwable) {
+        vectorBaseActivity.coordinatorLayout?.let {
+            Snackbar.make(it, errorFormatter.toHumanReadable(throwable), Snackbar.LENGTH_SHORT)
+                    .show()
+        }
     }
 
     /* ==========================================================================================

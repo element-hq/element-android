@@ -104,7 +104,7 @@ class RoomListFragment @Inject constructor(
                 .subscribe {
                     when (it) {
                         is RoomListViewEvents.SelectRoom -> openSelectedRoom(it)
-                        is RoomListViewEvents.Failure    -> showError(it)
+                        is RoomListViewEvents.Failure    -> showErrorInSnackbar(it.throwable)
                     }
                 }
                 .disposeOnDestroyView()
