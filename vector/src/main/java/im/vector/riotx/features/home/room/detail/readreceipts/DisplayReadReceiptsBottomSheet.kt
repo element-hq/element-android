@@ -53,8 +53,8 @@ class DisplayReadReceiptsBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
     private val displayReadReceiptArgs: DisplayReadReceiptArgs by args()
 
-    override fun injectWith(screenComponent: ScreenComponent) {
-        screenComponent.inject(this)
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

@@ -73,7 +73,7 @@ abstract class VectorBaseBottomSheetDialogFragment : BottomSheetDialogFragment()
         injectWith(screenComponent)
     }
 
-    protected open fun injectWith(screenComponent: ScreenComponent) = Unit
+    protected open fun injectWith(injector: ScreenComponent) = Unit
 
     override fun onCreate(savedInstanceState: Bundle?) {
         mvrxViewIdProperty.restoreFrom(savedInstanceState)

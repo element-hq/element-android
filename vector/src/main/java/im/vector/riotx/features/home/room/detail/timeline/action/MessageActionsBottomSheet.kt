@@ -49,8 +49,8 @@ class MessageActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), Message
 
     private lateinit var sharedActionViewModel: MessageSharedActionViewModel
 
-    override fun injectWith(screenComponent: ScreenComponent) {
-        screenComponent.inject(this)
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
