@@ -23,12 +23,13 @@ import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.extensions.setTextOrHide
+import im.vector.riotx.features.reactions.data.EmojiItem
 
 @EpoxyModelClass(layout = R.layout.item_emoji_result)
 abstract class EmojiSearchResultItem : EpoxyModelWithHolder<EmojiSearchResultItem.Holder>() {
 
     @EpoxyAttribute
-    lateinit var emojiItem: EmojiDataSource.EmojiItem
+    lateinit var emojiItem: EmojiItem
 
     @EpoxyAttribute
     var currentQuery: String? = null

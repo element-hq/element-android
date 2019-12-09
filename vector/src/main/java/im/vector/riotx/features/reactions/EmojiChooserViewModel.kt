@@ -19,6 +19,7 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import im.vector.riotx.core.utils.LiveEvent
+import im.vector.riotx.features.reactions.data.EmojiDataSource
 import javax.inject.Inject
 
 class EmojiChooserViewModel @Inject constructor() : ViewModel() {

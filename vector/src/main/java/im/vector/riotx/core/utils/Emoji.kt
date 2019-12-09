@@ -19,7 +19,7 @@ package im.vector.riotx.core.utils
 import android.content.Context
 import com.squareup.moshi.Moshi
 import im.vector.riotx.R
-import im.vector.riotx.features.reactions.EmojiDataSource
+import im.vector.riotx.features.reactions.data.EmojiData
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -56,7 +56,7 @@ fun initKnownEmojiHashSet(context: Context, done: (() -> Unit)? = null) {
     GlobalScope.launch {
         context.resources.openRawResource(R.raw.emoji_picker_datasource).use { input ->
             val moshi = Moshi.Builder().build()
-            val jsonAdapter = moshi.adapter(EmojiDataSource.EmojiData::class.java)
+            val jsonAdapter = moshi.adapter(EmojiData::class.java)
             val inputAsString = input.bufferedReader().use { it.readText() }
             val source = jsonAdapter.fromJson(inputAsString)
             knownEmojiSet = HashSet<String>().also {

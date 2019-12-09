@@ -19,10 +19,12 @@ import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import im.vector.riotx.core.platform.VectorViewModel
+import im.vector.riotx.features.reactions.data.EmojiDataSource
+import im.vector.riotx.features.reactions.data.EmojiItem
 
 data class EmojiSearchResultViewState(
         val query: String = "",
-        val results: List<EmojiDataSource.EmojiItem> = emptyList()
+        val results: List<EmojiItem> = emptyList()
 ) : MvRxState
 
 class EmojiSearchResultViewModel(val dataSource: EmojiDataSource, initialState: EmojiSearchResultViewState)
