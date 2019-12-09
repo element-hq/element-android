@@ -32,6 +32,7 @@ import javax.inject.Inject
 internal interface JoinRoomTask : Task<JoinRoomTask.Params, Unit> {
     data class Params(
             val roomId: String,
+            val reason: String?,
             val viaServers: List<String> = emptyList()
     )
 }
@@ -43,7 +44,7 @@ internal class DefaultJoinRoomTask @Inject constructor(private val roomAPI: Room
 
     override suspend fun execute(params: JoinRoomTask.Params) {
         executeRequest<Unit> {
-            apiCall = roomAPI.join(params.roomId, params.viaServers, HashMap())
+            apiCall = roomAPI.join(params.roomId, params.viaServers, mapOf("reason" to params.reason))
         }
         val roomId = params.roomId
         // Wait for room to come back from the sync (but it can maybe be in the DB is the sync response is received before)

@@ -217,7 +217,7 @@ internal interface RoomAPI {
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/join")
     fun join(@Path("roomId") roomId: String,
              @Query("server_name") viaServers: List<String>,
-             @Body params: Map<String, String>): Call<Unit>
+             @Body params: Map<String, String?>): Call<Unit>
 
     /**
      * Leave the given room.
@@ -227,7 +227,7 @@ internal interface RoomAPI {
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/leave")
     fun leave(@Path("roomId") roomId: String,
-              @Body params: Map<String, String>): Call<Unit>
+              @Body params: Map<String, String?>): Call<Unit>
 
     /**
      * Strips all information out of an event which isn't critical to the integrity of the server-side representation of the room.

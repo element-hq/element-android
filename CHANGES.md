@@ -8,7 +8,7 @@ Improvements 🙌:
  - Support entering a RiotWeb client URL instead of the homeserver URL during connection (#744)
 
 Other changes:
- -
+ - Add reason for all membership events (https://github.com/matrix-org/matrix-doc/pull/2367)
 
 Bugfix 🐛:
  - When automardown is ON, pills are sent as MD in body (#739)
@@ -17,7 +17,7 @@ Translations 🗣:
  -
 
 Build 🧱:
- -
+ - "ban" event are not rendered correctly (#716)
 
 Changes in RiotX 0.9.1 (2019-12-05)
 ===================================================

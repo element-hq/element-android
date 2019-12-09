@@ -24,7 +24,8 @@ import javax.inject.Inject
 internal interface InviteTask : Task<InviteTask.Params, Unit> {
     data class Params(
             val roomId: String,
-            val userId: String
+            val userId: String,
+            val reason: String?
     )
 }
 
@@ -32,7 +33,7 @@ internal class DefaultInviteTask @Inject constructor(private val roomAPI: RoomAP
 
     override suspend fun execute(params: InviteTask.Params) {
         return executeRequest {
-            val body = InviteBody(params.userId)
+            val body = InviteBody(params.userId, params.reason)
             apiCall = roomAPI.invite(params.roomId, body)
         }
     }

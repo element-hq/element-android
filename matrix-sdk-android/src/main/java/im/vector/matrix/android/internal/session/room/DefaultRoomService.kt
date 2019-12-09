@@ -96,9 +96,9 @@ internal class DefaultRoomService @Inject constructor(private val monarchy: Mona
                 .executeBy(taskExecutor)
     }
 
-    override fun joinRoom(roomId: String, viaServers: List<String>, callback: MatrixCallback<Unit>): Cancelable {
+    override fun joinRoom(roomId: String, reason: String?, viaServers: List<String>, callback: MatrixCallback<Unit>): Cancelable {
         return joinRoomTask
-                .configureWith(JoinRoomTask.Params(roomId, viaServers)) {
+                .configureWith(JoinRoomTask.Params(roomId, reason, viaServers)) {
                     this.callback = callback
                 }
                 .executeBy(taskExecutor)
