@@ -54,11 +54,11 @@ class EmojiReactionPickerActivity : VectorBaseActivity(),
 
     lateinit var viewModel: EmojiChooserViewModel
 
-    override fun getMenuRes(): Int = R.menu.menu_emoji_reaction_picker
+    override fun getMenuRes() = R.menu.menu_emoji_reaction_picker
 
-    override fun getLayoutRes(): Int = R.layout.activity_emoji_reaction_picker
+    override fun getLayoutRes() = R.layout.activity_emoji_reaction_picker
 
-    override fun getTitleRes(): Int = R.string.title_activity_emoji_reaction_picker
+    override fun getTitleRes() = R.string.title_activity_emoji_reaction_picker
 
     @Inject lateinit var emojiCompatFontProvider: EmojiCompatFontProvider
 

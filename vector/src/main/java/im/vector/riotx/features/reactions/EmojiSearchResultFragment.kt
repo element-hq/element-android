@@ -32,7 +32,7 @@ class EmojiSearchResultFragment @Inject constructor(
         private val epoxyController: EmojiSearchResultController
 ) : VectorBaseFragment() {
 
-    override fun getLayoutResId(): Int = R.layout.fragment_generic_recycler
+    override fun getLayoutResId() = R.layout.fragment_generic_recycler
 
     val viewModel: EmojiSearchResultViewModel by activityViewModel()
 

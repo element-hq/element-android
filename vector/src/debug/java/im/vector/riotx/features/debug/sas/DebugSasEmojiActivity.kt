@@ -29,7 +29,6 @@ class DebugSasEmojiActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_generic_recycler)
-        // TODO Inject
         val controller = SasEmojiController()
         recyclerView.configureWith(controller)
         controller.setData(SasState(getAllVerificationEmojis()))

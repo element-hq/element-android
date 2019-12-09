@@ -50,9 +50,7 @@ class IncomingShareActivity :
             return supportFragmentManager.findFragmentById(R.id.shareRoomListFragmentContainer) as? RoomListFragment
         }
 
-    override fun getLayoutRes(): Int {
-        return R.layout.activity_incoming_share
-    }
+    override fun getLayoutRes() = R.layout.activity_incoming_share
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)

@@ -30,7 +30,6 @@ import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
-import kotlinx.android.synthetic.main.activity_image_media_viewer.*
 import javax.inject.Inject
 
 /**
@@ -88,7 +87,11 @@ class MessageActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), Message
 
     override fun didSelectMenuAction(eventAction: EventSharedAction) {
         if (eventAction is EventSharedAction.ReportContent) {
-            // Toggle report menu // TODO Reanable item animation?
+            // Toggle report menu
+            // Enable item animation
+            if (recyclerView.itemAnimator == null) {
+                recyclerView.itemAnimator = MessageActionsAnimator()
+            }
             viewModel.handle(MessageActionsAction.ToggleReportMenu)
         } else {
             sharedActionViewModel.post(eventAction)

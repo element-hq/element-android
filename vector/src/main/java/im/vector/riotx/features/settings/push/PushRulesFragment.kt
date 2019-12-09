@@ -33,7 +33,7 @@ import kotlinx.android.synthetic.main.fragment_generic_recycler.*
 // Referenced in vector_settings_notifications.xml
 class PushRulesFragment : VectorBaseFragment() {
 
-    override fun getLayoutResId(): Int = R.layout.fragment_generic_recycler
+    override fun getLayoutResId() = R.layout.fragment_generic_recycler
 
     private val viewModel: PushRulesViewModel by fragmentViewModel(PushRulesViewModel::class)
 
