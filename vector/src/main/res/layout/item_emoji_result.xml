@@ -3,49 +3,50 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="?riotx_background"
+    android:foreground="?attr/selectableItemBackground"
+    android:gravity="center_vertical"
+    android:minHeight="48dp"
     android:orientation="horizontal"
-    android:paddingEnd="8dp"
-    android:paddingStart="8dp"
-    android:minHeight="44dp">
+    android:paddingStart="@dimen/layout_horizontal_margin"
+    android:paddingEnd="@dimen/layout_horizontal_margin">
 
     <!-- size in dp, because we do not want the display to be impacted by font size setting -->
     <TextView
         android:id="@+id/item_emoji_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:layout_marginEnd="8dp"
-        android:textSize="25sp"
+        android:textColor="@color/black"
+        android:textSize="25dp"
         tools:ignore="SpUsage"
-        android:textColor="?android:textColorPrimary"
         tools:text="@sample/reactions.json/data/reaction" />
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/item_emoji_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textStyle="bold"
+            android:textColor="?riotx_text_primary"
             android:textSize="16sp"
-            android:textColor="?android:textColorPrimary"
+            android:textStyle="bold"
             tools:text="Smiley Face" />
-
 
         <TextView
             android:id="@+id/item_emoji_keyword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textSize="14sp"
             android:maxLines="2"
-            android:textColor="?android:textColorPrimary"
-            tools:text="Smile, foo, bar" />
+            android:textColor="?riotx_text_secondary"
+            android:textSize="14sp"
+            android:visibility="gone"
+            tools:text="Smile, foo, bar"
+            tools:visibility="visible" />
     </LinearLayout>
 
 </LinearLayout>

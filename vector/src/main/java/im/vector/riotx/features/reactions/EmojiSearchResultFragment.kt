@@ -29,25 +29,18 @@ import javax.inject.Inject
 
 class EmojiSearchResultFragment @Inject constructor(
         private val epoxyController: EmojiSearchResultController
-) : VectorBaseFragment() {
+) : VectorBaseFragment(), ReactionClickListener {
 
     override fun getLayoutResId() = R.layout.fragment_generic_recycler
 
-    val viewModel: EmojiSearchResultViewModel by activityViewModel()
+    private val viewModel: EmojiSearchResultViewModel by activityViewModel()
 
-    var sharedViewModel: EmojiChooserViewModel? = null
+    private lateinit var sharedViewModel: EmojiChooserViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedViewModel = activityViewModelProvider.get(EmojiChooserViewModel::class.java)
-
-        epoxyController.listener = object : ReactionClickListener {
-            override fun onReactionSelected(reaction: String) {
-                sharedViewModel?.selectedReaction = reaction
-                sharedViewModel?.navigateEvent?.value = LiveEvent(EmojiChooserViewModel.NAVIGATE_FINISH)
-            }
-        }
-
+        epoxyController.listener = this
         recyclerView.configureWith(epoxyController, showDivider = true)
     }
 
@@ -55,6 +48,11 @@ class EmojiSearchResultFragment @Inject constructor(
         epoxyController.listener = null
         recyclerView.cleanup()
         super.onDestroyView()
+    }
+
+    override fun onReactionSelected(reaction: String) {
+        sharedViewModel.selectedReaction = reaction
+        sharedViewModel.navigateEvent.value = LiveEvent(EmojiChooserViewModel.NAVIGATE_FINISH)
     }
 
     override fun invalidate() = withState(viewModel) { state ->

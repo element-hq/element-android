@@ -22,6 +22,7 @@ import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
+import im.vector.riotx.core.extensions.setTextOrHide
 
 @EpoxyModelClass(layout = R.layout.item_emoji_result)
 abstract class EmojiSearchResultItem : EpoxyModelWithHolder<EmojiSearchResultItem.Holder>() {
@@ -44,7 +45,7 @@ abstract class EmojiSearchResultItem : EpoxyModelWithHolder<EmojiSearchResultIte
         holder.emojiText.text = emojiItem.emojiString()
         holder.emojiText.typeface = emojiTypeFace ?: Typeface.DEFAULT
         holder.emojiNameText.text = emojiItem.name
-        holder.emojiKeywordText.text = emojiItem.keywords?.joinToString(", ")
+        holder.emojiKeywordText.setTextOrHide(emojiItem.keywords?.joinToString())
         holder.view.setOnClickListener {
             onClickListener?.onReactionSelected(emojiItem.emojiString())
         }
