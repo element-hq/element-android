@@ -17,7 +17,6 @@ package im.vector.riotx.features.reactions
 
 import android.os.Bundle
 import android.view.View
-import androidx.recyclerview.widget.DividerItemDecoration
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
@@ -49,7 +48,7 @@ class EmojiSearchResultFragment @Inject constructor(
             }
         }
 
-        recyclerView.configureWith(epoxyController, itemDecoration = DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
+        recyclerView.configureWith(epoxyController, showDivider = true)
     }
 
     override fun onDestroyView() {

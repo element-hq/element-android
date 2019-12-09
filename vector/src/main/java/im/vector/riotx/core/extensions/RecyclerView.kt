@@ -16,6 +16,7 @@
 
 package im.vector.riotx.core.extensions
 
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyController
@@ -25,11 +26,13 @@ import com.airbnb.epoxy.EpoxyController
  */
 fun RecyclerView.configureWith(epoxyController: EpoxyController,
                                itemAnimator: RecyclerView.ItemAnimator? = null,
-                               itemDecoration: RecyclerView.ItemDecoration? = null,
+                               showDivider: Boolean = false,
                                hasFixedSize: Boolean = true) {
     layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
     itemAnimator?.let { this.itemAnimator = it }
-    itemDecoration?.let { addItemDecoration(it) }
+    if (showDivider) {
+        addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+    }
     setHasFixedSize(hasFixedSize)
     adapter = epoxyController.adapter
 }

@@ -68,7 +68,7 @@ class ViewEditHistoryBottomSheet : VectorBaseBottomSheetDialogFragment() {
         super.onActivityCreated(savedInstanceState)
         recyclerView.configureWith(
                 epoxyController,
-                itemDecoration = DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL),
+                showDivider = true,
                 hasFixedSize = false)
         bottomSheetTitle.text = context?.getString(R.string.message_edits)
     }

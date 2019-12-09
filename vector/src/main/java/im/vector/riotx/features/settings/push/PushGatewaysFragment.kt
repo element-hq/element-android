@@ -18,7 +18,6 @@ package im.vector.riotx.features.settings.push
 
 import android.os.Bundle
 import android.view.View
-import androidx.recyclerview.widget.DividerItemDecoration
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
@@ -46,7 +45,7 @@ class PushGatewaysFragment @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recyclerView.configureWith(epoxyController, itemDecoration = DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
+        recyclerView.configureWith(epoxyController, showDivider = true)
     }
 
     override fun onDestroyView() {
