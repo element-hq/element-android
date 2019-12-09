@@ -236,8 +236,12 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
 
 // Timeline.LISTENER ***************************************************************************
 
-    override fun onUpdated(snapshot: List<TimelineEvent>) {
+    override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
         submitSnapshot(snapshot)
+    }
+
+    override fun onTimelineFailure(throwable: Throwable) {
+        // no-op, already handled
     }
 
     private fun submitSnapshot(newSnapshot: List<TimelineEvent>) {

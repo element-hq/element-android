@@ -274,6 +274,16 @@ class RoomDetailFragment @Inject constructor(
         roomDetailViewModel.requestLiveData.observeEvent(this) {
             displayRoomDetailActionResult(it)
         }
+
+        roomDetailViewModel.viewEvents
+                .observe()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    when (it) {
+                        is RoomDetailViewEvents.Failure -> showErrorInSnackbar(it.throwable)
+                    }
+                }
+                .disposeOnDestroyView()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

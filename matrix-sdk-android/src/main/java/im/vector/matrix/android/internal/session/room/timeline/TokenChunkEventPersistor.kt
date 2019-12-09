@@ -18,6 +18,10 @@ package im.vector.matrix.android.internal.session.room.timeline
 
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.internal.database.helper.*
+import im.vector.matrix.android.internal.database.helper.add
+import im.vector.matrix.android.internal.database.helper.addOrUpdate
+import im.vector.matrix.android.internal.database.helper.addStateEvent
+import im.vector.matrix.android.internal.database.helper.deleteOnCascade
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.create
@@ -112,7 +116,7 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
                     Timber.v("Start persisting ${receivedChunk.events.size} events in $roomId towards $direction")
 
                     val roomEntity = RoomEntity.where(realm, roomId).findFirst()
-                                     ?: realm.createObject(roomId)
+                            ?: realm.createObject(roomId)
 
                     val nextToken: String?
                     val prevToken: String?
@@ -125,7 +129,7 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
                     }
 
                     val shouldSkip = ChunkEntity.find(realm, roomId, nextToken = nextToken) != null
-                                     || ChunkEntity.find(realm, roomId, prevToken = prevToken) != null
+                            || ChunkEntity.find(realm, roomId, prevToken = prevToken) != null
 
                     val prevChunk = ChunkEntity.find(realm, roomId, nextToken = prevToken)
                     val nextChunk = ChunkEntity.find(realm, roomId, prevToken = nextToken)
@@ -139,7 +143,7 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
                     } else {
                         nextChunk?.apply { this.prevToken = prevToken }
                     }
-                                       ?: ChunkEntity.create(realm, prevToken, nextToken)
+                            ?: ChunkEntity.create(realm, prevToken, nextToken)
 
                     if (receivedChunk.events.isEmpty() && receivedChunk.end == receivedChunk.start) {
                         Timber.v("Reach end of $roomId")

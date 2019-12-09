@@ -17,7 +17,6 @@
 package im.vector.matrix.android.internal.session.sync
 
 import im.vector.matrix.android.R
-import im.vector.matrix.android.internal.auth.SessionParamsStore
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.DefaultInitialSyncProgressService

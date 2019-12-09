@@ -104,7 +104,7 @@ class RoomListFragment @Inject constructor(
                 .subscribe {
                     when (it) {
                         is RoomListViewEvents.SelectRoom -> openSelectedRoom(it)
-                        is RoomListViewEvents.Failure    -> showError(it)
+                        is RoomListViewEvents.Failure    -> showErrorInSnackbar(it.throwable)
                     }
                 }
                 .disposeOnDestroyView()
@@ -132,13 +132,6 @@ class RoomListFragment @Inject constructor(
             navigator.openRoomForSharing(requireActivity(), event.roomId, sharedData)
         } else {
             navigator.openRoom(requireActivity(), event.roomId)
-        }
-    }
-
-    private fun showError(event: RoomListViewEvents.Failure) {
-        vectorBaseActivity.coordinatorLayout?.let {
-            Snackbar.make(it, errorFormatter.toHumanReadable(event.throwable), Snackbar.LENGTH_SHORT)
-                    .show()
         }
     }
 
