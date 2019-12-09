@@ -50,6 +50,12 @@ class CreateRoomFragment @Inject constructor(private val createRoomController: C
         }
     }
 
+    override fun onDestroyView() {
+        createRoomForm.adapter = null
+        createRoomController.listener = null
+        super.onDestroyView()
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_create_room -> {
@@ -63,11 +69,9 @@ class CreateRoomFragment @Inject constructor(private val createRoomController: C
 
     private fun setupRecyclerView() {
         val layoutManager = LinearLayoutManager(context)
-
         createRoomForm.layoutManager = layoutManager
         createRoomController.listener = this
-
-        createRoomForm.setController(createRoomController)
+        createRoomForm.adapter = createRoomController.adapter
     }
 
     override fun onNameChange(newName: String) {

@@ -18,6 +18,8 @@ package im.vector.riotx.features.home.createdirect
 
 import android.os.Bundle
 import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import com.jakewharton.rxbinding3.widget.textChanges
@@ -48,10 +50,17 @@ class CreateDirectRoomDirectoryUsersFragment @Inject constructor(
         setupCloseView()
     }
 
+    override fun onDestroyView() {
+        recyclerView.adapter = null
+        directRoomController.callback = null
+        super.onDestroyView()
+    }
+
     private fun setupRecyclerView() {
         recyclerView.setHasFixedSize(true)
         directRoomController.callback = this
-        recyclerView.setController(directRoomController)
+        recyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        recyclerView.adapter = directRoomController.adapter
     }
 
     private fun setupSearchByMatrixIdView() {

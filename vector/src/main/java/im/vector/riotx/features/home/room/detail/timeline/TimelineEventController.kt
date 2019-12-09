@@ -44,7 +44,7 @@ import org.threeten.bp.LocalDateTime
 import javax.inject.Inject
 
 class TimelineEventController @Inject constructor(private val dateFormatter: VectorDateFormatter,
-                                                  private val session: Session,
+                                                  private val contentUploadStateTrackerBinder: ContentUploadStateTrackerBinder,
                                                   private val timelineItemFactory: TimelineItemFactory,
                                                   private val timelineMediaSizeProvider: TimelineMediaSizeProvider,
                                                   private val mergedHeaderItemFactory: MergedHeaderItemFactory,
@@ -207,6 +207,13 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         timelineMediaSizeProvider.recyclerView = recyclerView
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        timelineMediaSizeProvider.recyclerView = null
+        contentUploadStateTrackerBinder.clear()
+        timeline?.removeListener(this)
+        super.onDetachedFromRecyclerView(recyclerView)
     }
 
     override fun buildModels() {

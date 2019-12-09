@@ -194,7 +194,7 @@ class RoomDetailFragment @Inject constructor(
 
     private lateinit var sharedActionViewModel: MessageSharedActionViewModel
     private lateinit var layoutManager: LinearLayoutManager
-    private lateinit var modelBuildListener: OnModelBuildFinishedListener
+    private var modelBuildListener: OnModelBuildFinishedListener? = null
 
     private lateinit var attachmentsHelper: AttachmentsHelper
     private lateinit var keyboardStateUtils: KeyboardStateUtils
@@ -289,14 +289,16 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
+        timelineEventController.callback = null
         timelineEventController.removeModelBuildListener(modelBuildListener)
+        modelBuildListener = null
+        debouncer.cancelAll()
         recyclerView.adapter = null
         super.onDestroyView()
     }
 
     override fun onDestroy() {
         roomDetailViewModel.handle(RoomDetailAction.ExitTrackingUnreadMessagesState)
-        debouncer.cancelAll()
         super.onDestroy()
     }
 
@@ -481,7 +483,7 @@ class RoomDetailFragment @Inject constructor(
             updateJumpToReadMarkerViewVisibility()
             updateJumpToBottomViewVisibility()
         }
-        timelineEventController.addModelBuildListener { modelBuildListener }
+        timelineEventController.addModelBuildListener(modelBuildListener)
         recyclerView.adapter = timelineEventController.adapter
 
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -554,13 +556,11 @@ class RoomDetailFragment @Inject constructor(
 
     private fun updateJumpToBottomViewVisibility() {
         debouncer.debounce("jump_to_bottom_visibility", 250, Runnable {
-            if (isAdded) {
-                Timber.v("First visible: ${layoutManager.findFirstCompletelyVisibleItemPosition()}")
-                if (layoutManager.findFirstVisibleItemPosition() != 0) {
-                    jumpToBottomView.show()
-                } else {
-                    jumpToBottomView.hide()
-                }
+            Timber.v("First visible: ${layoutManager.findFirstCompletelyVisibleItemPosition()}")
+            if (layoutManager.findFirstVisibleItemPosition() != 0) {
+                jumpToBottomView.show()
+            } else {
+                jumpToBottomView.hide()
             }
         })
     }

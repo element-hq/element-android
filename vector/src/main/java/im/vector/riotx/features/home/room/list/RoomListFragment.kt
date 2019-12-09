@@ -65,7 +65,7 @@ class RoomListFragment @Inject constructor(
 
 ) : VectorBaseFragment(), RoomSummaryController.Listener, OnBackPressed, FabMenuView.Listener {
 
-    private lateinit var modelBuildListener: OnModelBuildFinishedListener
+    private var modelBuildListener: OnModelBuildFinishedListener? = null
     private lateinit var sharedActionViewModel: RoomListQuickActionsSharedActionViewModel
     private val roomListParams: RoomListParams by args()
     private val roomListViewModel: RoomListViewModel by fragmentViewModel()
@@ -120,7 +120,10 @@ class RoomListFragment @Inject constructor(
 
     override fun onDestroyView() {
         roomController.removeModelBuildListener(modelBuildListener)
+        modelBuildListener = null
         roomListView.adapter = null
+        roomController.listener = null
+        createChatFabMenu.listener = null
         super.onDestroyView()
     }
 

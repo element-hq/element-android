@@ -62,6 +62,9 @@ class PublicRoomsFragment @Inject constructor(
             it.setDisplayHomeAsUpEnabled(true)
         }
 
+        sharedActionViewModel = activityViewModelProvider.get(RoomDirectorySharedActionViewModel::class.java)
+        setupRecyclerView()
+
         publicRoomsFilter.queryTextChanges()
                 .debounce(500, TimeUnit.MILLISECONDS)
                 .subscribeBy {
@@ -79,6 +82,12 @@ class PublicRoomsFragment @Inject constructor(
         }
     }
 
+    override fun onDestroyView() {
+        publicRoomsController.callback = null
+        publicRoomsList.adapter = null
+        super.onDestroyView()
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_room_directory_change_protocol -> {
@@ -90,22 +99,12 @@ class PublicRoomsFragment @Inject constructor(
         }
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        sharedActionViewModel = activityViewModelProvider.get(RoomDirectorySharedActionViewModel::class.java)
-        setupRecyclerView()
-    }
-
     private fun setupRecyclerView() {
         val epoxyVisibilityTracker = EpoxyVisibilityTracker()
         epoxyVisibilityTracker.attach(publicRoomsList)
-
-        val layoutManager = LinearLayoutManager(context)
-
-        publicRoomsList.layoutManager = layoutManager
+        publicRoomsList.layoutManager = LinearLayoutManager(context)
         publicRoomsController.callback = this
-
-        publicRoomsList.setController(publicRoomsController)
+        publicRoomsList.adapter = publicRoomsController.adapter
     }
 
     override fun onPublicRoomClicked(publicRoom: PublicRoom, joinState: JoinState) {

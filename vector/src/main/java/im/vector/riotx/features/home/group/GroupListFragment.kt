@@ -18,6 +18,8 @@ package im.vector.riotx.features.home.group
 
 import android.os.Bundle
 import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
@@ -45,12 +47,19 @@ class GroupListFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(HomeSharedActionViewModel::class.java)
         groupController.callback = this
-        stateView.contentView = groupListEpoxyRecyclerView
-        groupListEpoxyRecyclerView.setController(groupController)
+        stateView.contentView = groupListView
+        groupListView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+        groupListView.adapter = groupController.adapter
         viewModel.subscribe { renderState(it) }
         viewModel.openGroupLiveData.observeEvent(this) {
             sharedActionViewModel.post(HomeActivitySharedAction.OpenGroup)
         }
+    }
+
+    override fun onDestroyView() {
+        groupController.callback = null
+        groupListView.adapter = null
+        super.onDestroyView()
     }
 
     private fun renderState(state: GroupListViewState) {

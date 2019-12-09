@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.fragmentViewModel
@@ -29,7 +30,7 @@ import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.platform.VectorBaseFragment
-import kotlinx.android.synthetic.main.fragment_generic_recycler_epoxy.*
+import kotlinx.android.synthetic.main.fragment_generic_recycler.*
 import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
 import javax.inject.Inject
 
@@ -39,7 +40,7 @@ class VectorSettingsIgnoredUsersFragment @Inject constructor(
         private val errorFormatter: ErrorFormatter
 ) : VectorBaseFragment(), IgnoredUsersController.Callback {
 
-    override fun getLayoutResId() = R.layout.fragment_generic_recycler_epoxy
+    override fun getLayoutResId() = R.layout.fragment_generic_recycler
 
     private val ignoredUsersViewModel: IgnoredUsersViewModel by fragmentViewModel()
 
@@ -49,10 +50,17 @@ class VectorSettingsIgnoredUsersFragment @Inject constructor(
         waiting_view_status_text.setText(R.string.please_wait)
         waiting_view_status_text.isVisible = true
         ignoredUsersController.callback = this
-        epoxyRecyclerView.setController(ignoredUsersController)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        recyclerView.adapter = ignoredUsersController.adapter
         ignoredUsersViewModel.requestErrorLiveData.observeEvent(this) {
             displayErrorDialog(it)
         }
+    }
+
+    override fun onDestroyView() {
+        ignoredUsersController.callback = null
+        recyclerView.adapter = null
+        super.onDestroyView()
     }
 
     override fun onResume() {

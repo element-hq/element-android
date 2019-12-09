@@ -289,6 +289,9 @@ internal class DefaultTimeline(
     }
 
     override fun addListener(listener: Timeline.Listener) = synchronized(listeners) {
+        if (listeners.contains(listener)) {
+            return false
+        }
         listeners.add(listener).also {
             postSnapshot()
         }
@@ -494,9 +497,9 @@ internal class DefaultTimeline(
             return
         }
         val params = PaginationTask.Params(roomId = roomId,
-                                           from = token,
-                                           direction = direction.toPaginationDirection(),
-                                           limit = limit)
+                from = token,
+                direction = direction.toPaginationDirection(),
+                limit = limit)
 
         Timber.v("Should fetch $limit items $direction")
         cancelableBag += paginationTask
@@ -571,7 +574,7 @@ internal class DefaultTimeline(
             val timelineEvent = buildTimelineEvent(eventEntity)
 
             if (timelineEvent.isEncrypted()
-                && timelineEvent.root.mxDecryptionResult == null) {
+                    && timelineEvent.root.mxDecryptionResult == null) {
                 timelineEvent.root.eventId?.let { eventDecryptor.requestDecryption(it) }
             }
 

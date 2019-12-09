@@ -24,6 +24,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ScrollView
 import androidx.core.view.size
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.chip.Chip
@@ -67,6 +68,12 @@ class CreateDirectRoomKnownUsersFragment @Inject constructor(
         }
     }
 
+    override fun onDestroyView() {
+        knownUsersController.callback = null
+        recyclerView.adapter = null
+        super.onDestroyView()
+    }
+
     override fun onPrepareOptionsMenu(menu: Menu) {
         withState(viewModel) {
             val createMenuItem = menu.findItem(R.id.action_create_direct_room)
@@ -98,7 +105,8 @@ class CreateDirectRoomKnownUsersFragment @Inject constructor(
         // Don't activate animation as we might have way to much item animation when filtering
         recyclerView.itemAnimator = null
         knownUsersController.callback = this
-        recyclerView.setController(knownUsersController)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        recyclerView.adapter = knownUsersController.adapter
     }
 
     private fun setupFilterView() {

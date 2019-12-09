@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.LinearLayoutManager
 import butterknife.OnClick
 import com.airbnb.mvrx.args
 import im.vector.riotx.R
@@ -55,8 +56,9 @@ class LoginTermsFragment @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        loginTermsPolicyList.setController(policyController)
+        loginTermsPolicyList.setHasFixedSize(true)
+        loginTermsPolicyList.layoutManager = LinearLayoutManager(requireContext())
+        loginTermsPolicyList.adapter = policyController.adapter
         policyController.listener = this
 
         val list = ArrayList<LocalizedFlowDataLoginTermsChecked>()
@@ -67,6 +69,12 @@ class LoginTermsFragment @Inject constructor(
                 }
 
         loginTermsViewState = LoginTermsViewState(list)
+    }
+
+    override fun onDestroyView() {
+        loginTermsPolicyList.adapter = null
+        policyController.listener = null
+        super.onDestroyView()
     }
 
     private fun renderState() {

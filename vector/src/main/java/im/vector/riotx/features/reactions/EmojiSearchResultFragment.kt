@@ -25,14 +25,14 @@ import com.airbnb.mvrx.withState
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.utils.LiveEvent
-import kotlinx.android.synthetic.main.fragment_generic_recycler_epoxy.*
+import kotlinx.android.synthetic.main.fragment_generic_recycler.*
 import javax.inject.Inject
 
 class EmojiSearchResultFragment @Inject constructor(
         private val epoxyController: EmojiSearchResultController
 ) : VectorBaseFragment() {
 
-    override fun getLayoutResId(): Int = R.layout.fragment_generic_recycler_epoxy
+    override fun getLayoutResId(): Int = R.layout.fragment_generic_recycler
 
     val viewModel: EmojiSearchResultViewModel by activityViewModel()
 
@@ -50,10 +50,16 @@ class EmojiSearchResultFragment @Inject constructor(
         }
 
         val lmgr = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        epoxyRecyclerView.layoutManager = lmgr
-        val dividerItemDecoration = DividerItemDecoration(epoxyRecyclerView.context, lmgr.orientation)
-        epoxyRecyclerView.addItemDecoration(dividerItemDecoration)
-        epoxyRecyclerView.setController(epoxyController)
+        recyclerView.layoutManager = lmgr
+        val dividerItemDecoration = DividerItemDecoration(recyclerView.context, lmgr.orientation)
+        recyclerView.addItemDecoration(dividerItemDecoration)
+        recyclerView.adapter = epoxyController.adapter
+    }
+
+    override fun onDestroyView() {
+        epoxyController.listener = null
+        recyclerView.adapter = null
+        super.onDestroyView()
     }
 
     override fun invalidate() = withState(viewModel) { state ->

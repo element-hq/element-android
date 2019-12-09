@@ -60,6 +60,12 @@ class RoomDirectoryPickerFragment @Inject constructor(val roomDirectoryPickerVie
         setupRecyclerView()
     }
 
+    override fun onDestroyView() {
+        roomDirectoryPickerList.adapter = null
+        roomDirectoryPickerController.callback = null
+        super.onDestroyView()
+    }
+
     override fun getMenuRes() = R.menu.menu_directory_server_picker
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -74,11 +80,9 @@ class RoomDirectoryPickerFragment @Inject constructor(val roomDirectoryPickerVie
 
     private fun setupRecyclerView() {
         val layoutManager = LinearLayoutManager(context)
-
         roomDirectoryPickerList.layoutManager = layoutManager
         roomDirectoryPickerController.callback = this
-
-        roomDirectoryPickerList.setController(roomDirectoryPickerController)
+        roomDirectoryPickerList.adapter = roomDirectoryPickerController.adapter
     }
 
     override fun onRoomDirectoryClicked(roomDirectoryData: RoomDirectoryData) {

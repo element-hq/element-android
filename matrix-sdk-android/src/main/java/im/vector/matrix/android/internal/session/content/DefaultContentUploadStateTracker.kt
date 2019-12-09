@@ -42,6 +42,10 @@ internal class DefaultContentUploadStateTracker @Inject constructor() : ContentU
         }
     }
 
+    override fun clear() {
+        listeners.clear()
+    }
+
     internal fun setFailure(key: String, throwable: Throwable) {
         val failure = ContentUploadStateTracker.State.Failure(throwable)
         updateState(key, failure)

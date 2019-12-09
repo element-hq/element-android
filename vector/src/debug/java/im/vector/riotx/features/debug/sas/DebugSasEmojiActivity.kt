@@ -18,18 +18,24 @@ package im.vector.riotx.features.debug.sas
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import im.vector.matrix.android.api.crypto.getAllVerificationEmojis
 import im.vector.riotx.R
-import kotlinx.android.synthetic.main.fragment_generic_recycler_epoxy.*
+import kotlinx.android.synthetic.main.fragment_generic_recycler.*
 
 class DebugSasEmojiActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_generic_recycler_epoxy)
-
+        setContentView(R.layout.fragment_generic_recycler)
         val controller = SasEmojiController()
-        epoxyRecyclerView.setController(controller)
+        recyclerView.adapter = controller.adapter
+        recyclerView.layoutManager = LinearLayoutManager(this)
         controller.setData(SasState(getAllVerificationEmojis()))
+    }
+
+    override fun onDestroy() {
+        recyclerView.adapter = null
+        super.onDestroy()
     }
 }
