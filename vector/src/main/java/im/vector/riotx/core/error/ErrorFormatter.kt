@@ -20,6 +20,7 @@ import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.riotx.R
 import im.vector.riotx.core.resources.StringProvider
+import java.net.HttpURLConnection
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import javax.inject.Inject
@@ -74,6 +75,15 @@ class ErrorFormatter @Inject constructor(private val stringProvider: StringProvi
                         throwable.error.message.takeIf { it.isNotEmpty() }
                                 ?: throwable.error.code.takeIf { it.isNotEmpty() }
                     }
+                }
+            }
+            is Failure.OtherServerError  -> {
+                when (throwable.httpCode) {
+                    HttpURLConnection.HTTP_NOT_FOUND ->
+                        // homeserver not found
+                        stringProvider.getString(R.string.login_error_no_homeserver_found)
+                    else                             ->
+                        throwable.localizedMessage
                 }
             }
             else                         -> throwable.localizedMessage

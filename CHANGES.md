@@ -5,7 +5,7 @@ Features ✨:
  - Breadcrumbs: switch from one room to another quickly (#571)
 
 Improvements 🙌:
- -
+ - Support entering a RiotWeb client URL instead of the homeserver URL during connection (#744)
 
 Other changes:
  -

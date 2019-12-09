@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.api.auth.data
+package im.vector.matrix.android.internal.auth.data
 
-import im.vector.matrix.android.internal.auth.data.LoginFlowResponse
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-// Either a LoginFlowResponse, or an error if the homeserver is outdated
-sealed class LoginFlowResult {
-    data class Success(
-            val loginFlowResponse: LoginFlowResponse,
-            val isLoginAndRegistrationSupported: Boolean,
-            val homeServerUrl: String
-    ) : LoginFlowResult()
-
-    object OutdatedHomeserver : LoginFlowResult()
-}
+@JsonClass(generateAdapter = true)
+data class RiotConfig(
+        // There are plenty of other elements in the file config.json of a RiotWeb client, but for the moment only one is interesting
+        // Ex: "brand", "branding", etc.
+        @Json(name = "default_hs_url")
+        val defaultHomeServerUrl: String?
+)

@@ -284,6 +284,7 @@
     <string name="login_error_unable_register_mail_ownership">Unable to register : email ownership failure</string>
     <string name="login_error_invalid_home_server">Please enter a valid URL</string>
     <string name="login_error_unknown_host">This URL is not reachable, please check it</string>
+    <string name="login_error_no_homeserver_found">This is not a valid Matrix server address</string>
     <string name="login_error_homeserver_not_found">Cannot reach a homeserver at this URL, please check it</string>
     <string name="login_error_ssl_handshake">Your device is using an outdated TLS security protocol, vulnerable to attack, for your security you will not be able to connect</string>
     <string name="login_mobile_device">Mobile</string>

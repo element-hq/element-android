@@ -16,16 +16,19 @@
 
 package im.vector.matrix.android.internal.auth
 
+import android.net.Uri
 import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.AuthenticationService
 import im.vector.matrix.android.api.auth.data.*
 import im.vector.matrix.android.api.auth.login.LoginWizard
 import im.vector.matrix.android.api.auth.registration.RegistrationWizard
+import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.SessionManager
 import im.vector.matrix.android.internal.auth.data.LoginFlowResponse
+import im.vector.matrix.android.internal.auth.data.RiotConfig
 import im.vector.matrix.android.internal.auth.db.PendingSessionData
 import im.vector.matrix.android.internal.auth.login.DefaultLoginWizard
 import im.vector.matrix.android.internal.auth.registration.DefaultRegistrationWizard
@@ -40,6 +43,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import javax.inject.Inject
+import javax.net.ssl.HttpsURLConnection
 
 internal class DefaultAuthenticationService @Inject constructor(@Unauthenticated
                                                                 private val okHttpClient: Lazy<OkHttpClient>,
@@ -84,7 +88,12 @@ internal class DefaultAuthenticationService @Inject constructor(@Unauthenticated
                     {
                         if (it is LoginFlowResult.Success) {
                             // The homeserver exists and up to date, keep the config
-                            pendingSessionData = PendingSessionData(homeServerConnectionConfig)
+                            // Homeserver url may have been changed, if it was a Riot url
+                            val alteredHomeServerConnectionConfig = homeServerConnectionConfig.copy(
+                                    homeServerUri = Uri.parse(it.homeServerUrl)
+                            )
+
+                            pendingSessionData = PendingSessionData(alteredHomeServerConnectionConfig)
                                     .also { data -> pendingSessionStore.savePendingSessionData(data) }
                         }
                         callback.onSuccess(it)
@@ -97,20 +106,71 @@ internal class DefaultAuthenticationService @Inject constructor(@Unauthenticated
                 .toCancelable()
     }
 
-    private suspend fun getLoginFlowInternal(homeServerConnectionConfig: HomeServerConnectionConfig) = withContext(coroutineDispatchers.io) {
+    private suspend fun getLoginFlowInternal(homeServerConnectionConfig: HomeServerConnectionConfig): LoginFlowResult {
+        return withContext(coroutineDispatchers.io) {
+            val authAPI = buildAuthAPI(homeServerConnectionConfig)
+
+            // First check the homeserver version
+            runCatching {
+                executeRequest<Versions> {
+                    apiCall = authAPI.versions()
+                }
+            }
+                    .map { versions ->
+                        // Ok, it seems that the homeserver url is valid
+                        getLoginFlowResult(authAPI, versions, homeServerConnectionConfig.homeServerUri.toString())
+                    }
+                    .fold(
+                            {
+                                it
+                            },
+                            {
+                                if (it is Failure.OtherServerError
+                                        && it.httpCode == HttpsURLConnection.HTTP_NOT_FOUND /* 404 */) {
+                                    // It's maybe a Riot url?
+                                    getRiotLoginFlowInternal(homeServerConnectionConfig)
+                                } else {
+                                    throw it
+                                }
+                            }
+                    )
+        }
+    }
+
+    private suspend fun getRiotLoginFlowInternal(homeServerConnectionConfig: HomeServerConnectionConfig): LoginFlowResult {
         val authAPI = buildAuthAPI(homeServerConnectionConfig)
 
-        // First check the homeserver version
-        val versions = executeRequest<Versions> {
-            apiCall = authAPI.versions()
+        // Ok, try to get the config.json file of a RiotWeb client
+        val riotConfig = executeRequest<RiotConfig> {
+            apiCall = authAPI.getRiotConfig()
         }
 
-        if (versions.isSupportedBySdk()) {
+        if (riotConfig.defaultHomeServerUrl?.isNotBlank() == true) {
+            // Ok, good sign, we got a default hs url
+            val newHomeServerConnectionConfig = homeServerConnectionConfig.copy(
+                    homeServerUri = Uri.parse(riotConfig.defaultHomeServerUrl)
+            )
+
+            val newAuthAPI = buildAuthAPI(newHomeServerConnectionConfig)
+
+            val versions = executeRequest<Versions> {
+                apiCall = newAuthAPI.versions()
+            }
+
+            return getLoginFlowResult(newAuthAPI, versions, riotConfig.defaultHomeServerUrl)
+        } else {
+            // Config exists, but there is no default homeserver url (ex: https://riot.im/app)
+            throw Failure.OtherServerError("", HttpsURLConnection.HTTP_NOT_FOUND /* 404 */)
+        }
+    }
+
+    private suspend fun getLoginFlowResult(authAPI: AuthAPI, versions: Versions, homeServerUrl: String): LoginFlowResult {
+        return if (versions.isSupportedBySdk()) {
             // Get the login flow
             val loginFlowResponse = executeRequest<LoginFlowResponse> {
                 apiCall = authAPI.getLoginFlows()
             }
-            LoginFlowResult.Success(loginFlowResponse, versions.isLoginAndRegistrationSupportedBySdk())
+            LoginFlowResult.Success(loginFlowResponse, versions.isLoginAndRegistrationSupportedBySdk(), homeServerUrl)
         } else {
             // Not supported
             LoginFlowResult.OutdatedHomeserver
