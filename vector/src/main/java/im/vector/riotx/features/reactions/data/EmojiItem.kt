@@ -19,6 +19,23 @@ package im.vector.riotx.features.reactions.data
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
+/**
+ *  name: 'a',
+ *  unified: 'b',
+ *  non_qualified: 'c',
+ *  has_img_apple: 'd',
+ *  has_img_google: 'e',
+ *  has_img_twitter: 'f',
+ *  has_img_emojione: 'g',
+ *  has_img_facebook: 'h',
+ *  has_img_messenger: 'i',
+ *  keywords: 'j',
+ *  sheet: 'k',
+ *  emoticons: 'l',
+ *  text: 'm',
+ *  short_names: 'n',
+ *  added_in: 'o'
+ */
 @JsonClass(generateAdapter = true)
 data class EmojiItem(
         @Json(name = "a") val name: String,
@@ -26,14 +43,14 @@ data class EmojiItem(
         @Json(name = "j") val keywords: List<String>?
 ) {
 
-    var _emojiText: String? = null
+    private var emojiText: String? = null
 
     fun emojiString(): String {
-        if (_emojiText == null) {
-            val utf8Text = unicode.split("-").joinToString("") { "\\u$it" } // "\u0048\u0065\u006C\u006C\u006F World"
-            _emojiText = fromUnicode(utf8Text)
-        }
-        return _emojiText!!
+        emojiText?.let { return it }
+
+        val utf8Text = unicode.split("-").joinToString("") { "\\u$it" } // "\u0048\u0065\u006C\u006C\u006F World"
+        return fromUnicode(utf8Text)
+                .also { emojiText = it }
     }
 
     companion object {
@@ -50,18 +67,3 @@ data class EmojiItem(
     }
 }
 
-//    name: 'a',
-//    unified: 'b',
-//    non_qualified: 'c',
-//    has_img_apple: 'd',
-//    has_img_google: 'e',
-//    has_img_twitter: 'f',
-//    has_img_emojione: 'g',
-//    has_img_facebook: 'h',
-//    has_img_messenger: 'i',
-//    keywords: 'j',
-//    sheet: 'k',
-//    emoticons: 'l',
-//    text: 'm',
-//    short_names: 'n',
-//    added_in: 'o',
