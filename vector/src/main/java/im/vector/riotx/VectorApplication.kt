@@ -43,7 +43,6 @@ import im.vector.riotx.core.di.HasVectorInjector
 import im.vector.riotx.core.di.VectorComponent
 import im.vector.riotx.core.extensions.configureAndStart
 import im.vector.riotx.core.rx.setupRxPlugin
-import im.vector.riotx.core.utils.initKnownEmojiHashSet
 import im.vector.riotx.features.configuration.VectorConfiguration
 import im.vector.riotx.features.lifecycle.VectorActivityLifecycleCallbacks
 import im.vector.riotx.features.notifications.NotificationDrawerManager
@@ -137,7 +136,7 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
         })
         ProcessLifecycleOwner.get().lifecycle.addObserver(appStateHandler)
         // This should be done as early as possible
-        initKnownEmojiHashSet(appContext)
+        // initKnownEmojiHashSet(appContext)
     }
 
     override fun providesMatrixConfiguration() = MatrixConfiguration(BuildConfig.FLAVOR_DESCRIPTION)

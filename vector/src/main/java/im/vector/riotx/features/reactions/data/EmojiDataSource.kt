@@ -18,17 +18,28 @@ package im.vector.riotx.features.reactions.data
 import android.content.Context
 import com.squareup.moshi.Moshi
 import im.vector.riotx.R
+import im.vector.riotx.core.di.ScreenScope
+import timber.log.Timber
+import javax.inject.Inject
+import kotlin.system.measureTimeMillis
 
-class EmojiDataSource(val context: Context) {
+@ScreenScope
+class EmojiDataSource @Inject constructor(
+        context: Context
+) {
 
     var rawData: EmojiData? = null
 
     init {
-        context.resources.openRawResource(R.raw.emoji_picker_datasource).use { input ->
-            val moshi = Moshi.Builder().build()
-            val jsonAdapter = moshi.adapter(EmojiData::class.java)
-            val inputAsString = input.bufferedReader().use { it.readText() }
-            this.rawData = jsonAdapter.fromJson(inputAsString)
+        measureTimeMillis {
+            context.resources.openRawResource(R.raw.emoji_picker_datasource).use { input ->
+                val moshi = Moshi.Builder().build()
+                val jsonAdapter = moshi.adapter(EmojiData::class.java)
+                val inputAsString = input.bufferedReader().use { it.readText() }
+                this.rawData = jsonAdapter.fromJson(inputAsString)
+            }
+        }.also {
+            Timber.e("Emoji: $it millis")
         }
     }
 }

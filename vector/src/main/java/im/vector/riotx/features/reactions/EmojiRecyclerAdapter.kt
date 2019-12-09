@@ -34,6 +34,7 @@ import im.vector.riotx.features.reactions.data.EmojiDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 import kotlin.math.abs
 
 /**
@@ -43,10 +44,12 @@ import kotlin.math.abs
  * TODO: Performances
  * TODO: Scroll to section - Find a way to snap section to the top
  */
-class EmojiRecyclerAdapter(private val dataSource: EmojiDataSource? = null,
-                           private var reactionClickListener: ReactionClickListener?) :
+class EmojiRecyclerAdapter @Inject constructor(
+        private val dataSource: EmojiDataSource?
+) :
         RecyclerView.Adapter<EmojiRecyclerAdapter.ViewHolder>() {
 
+    var reactionClickListener: ReactionClickListener? = null
     var interactionListener: InteractionListener? = null
     private var mRecyclerView: RecyclerView? = null
 
@@ -73,7 +76,7 @@ class EmojiRecyclerAdapter(private val dataSource: EmojiDataSource? = null,
                     val sectionMojis = categories[sectionNumber].emojis
                     val sectionOffset = getSectionOffset(sectionNumber)
                     val emoji = sectionMojis[itemPosition - sectionOffset]
-                    val item = dataSource.rawData!!.emojis.getValue(emoji).emojiString()
+                    val item = dataSource.rawData!!.emojis.getValue(emoji).emoji
                     reactionClickListener?.onReactionSelected(item)
                 }
             }
@@ -197,7 +200,7 @@ class EmojiRecyclerAdapter(private val dataSource: EmojiDataSource? = null,
                 val sectionMojis = categories[sectionNumber].emojis
                 val sectionOffset = getSectionOffset(sectionNumber)
                 val emoji = sectionMojis[position - sectionOffset]
-                val item = dataSource.rawData!!.emojis[emoji]!!.emojiString()
+                val item = dataSource.rawData!!.emojis[emoji]!!.emoji
                 (holder as EmojiViewHolder).data = item
                 if (scrollState != ScrollState.SETTLING || !isFastScroll) {
 //                    Log.i("PERF","Bind with draw at position:$position")

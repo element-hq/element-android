@@ -17,13 +17,18 @@ package im.vector.riotx.features.reactions
 
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.RecyclerView
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.platform.VectorBaseFragment
 import javax.inject.Inject
 
-class EmojiChooserFragment @Inject constructor() : VectorBaseFragment() {
+class EmojiChooserFragment @Inject constructor(
+        private val emojiRecyclerAdapter: EmojiRecyclerAdapter
+) : VectorBaseFragment(),
+        EmojiRecyclerAdapter.InteractionListener,
+        ReactionClickListener {
 
     override fun getLayoutResId() = R.layout.emoji_chooser_fragment
 
@@ -32,15 +37,32 @@ class EmojiChooserFragment @Inject constructor() : VectorBaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = activityViewModelProvider.get(EmojiChooserViewModel::class.java)
-        viewModel.initWithContext(context!!)
+
+        emojiRecyclerAdapter.reactionClickListener = this
+        emojiRecyclerAdapter.interactionListener = this
+
         (view as? RecyclerView)?.let {
-            it.adapter = viewModel.adapter
+            it.adapter = emojiRecyclerAdapter
             it.adapter?.notifyDataSetChanged()
         }
+
+        viewModel.moveToSection.observe(viewLifecycleOwner) { section ->
+            emojiRecyclerAdapter.scrollToSection(section)
+        }
+    }
+
+    override fun firstVisibleSectionChange(section: Int) {
+        viewModel.setCurrentSection(section)
+    }
+
+    override fun onReactionSelected(reaction: String) {
+        viewModel.onReactionSelected(reaction)
     }
 
     override fun onDestroyView() {
         (view as? RecyclerView)?.cleanup()
+        emojiRecyclerAdapter.reactionClickListener = null
+        emojiRecyclerAdapter.interactionListener = null
         super.onDestroyView()
     }
 }

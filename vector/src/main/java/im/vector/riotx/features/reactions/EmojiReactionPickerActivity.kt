@@ -35,6 +35,7 @@ import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.platform.VectorBaseActivity
+import im.vector.riotx.features.reactions.data.EmojiDataSource
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_emoji_reaction_picker.*
 import timber.log.Timber
@@ -44,7 +45,6 @@ import javax.inject.Inject
 /**
  *
  * TODO: Loading indicator while getting emoji data source?
- * TODO: migrate to MvRx
  * TODO: Finish Refactor to vector base activity
  */
 class EmojiReactionPickerActivity : VectorBaseActivity(),
@@ -60,7 +60,9 @@ class EmojiReactionPickerActivity : VectorBaseActivity(),
 
     override fun getTitleRes() = R.string.title_activity_emoji_reaction_picker
 
+    @Inject lateinit var emojiSearchResultViewModelFactory: EmojiSearchResultViewModel.Factory
     @Inject lateinit var emojiCompatFontProvider: EmojiCompatFontProvider
+    @Inject lateinit var emojiDataSource: EmojiDataSource
 
     private val searchResultViewModel: EmojiSearchResultViewModel by viewModel()
 
@@ -93,22 +95,20 @@ class EmojiReactionPickerActivity : VectorBaseActivity(),
 
         viewModel.eventId = intent.getStringExtra(EXTRA_EVENT_ID)
 
-        viewModel.emojiSourceLiveData.observe(this, Observer {
-            it.rawData?.categories?.let { categories ->
-                for (category in categories) {
-                    val s = category.emojis[0]
-                    tabLayout.newTab()
-                            .also { tab ->
-                                tab.text = it.rawData!!.emojis[s]!!.emojiString()
-                                tab.contentDescription = category.name
-                            }
-                            .also { tab ->
-                                tabLayout.addTab(tab)
-                            }
-                }
-                tabLayout.addOnTabSelectedListener(tabLayoutSelectionListener)
+        emojiDataSource.rawData?.categories?.let { categories ->
+            for (category in categories) {
+                val s = category.emojis[0]
+                tabLayout.newTab()
+                        .also { tab ->
+                            tab.text = emojiDataSource.rawData!!.emojis[s]!!.emoji
+                            tab.contentDescription = category.name
+                        }
+                        .also { tab ->
+                            tabLayout.addTab(tab)
+                        }
             }
-        })
+            tabLayout.addOnTabSelectedListener(tabLayoutSelectionListener)
+        }
 
         viewModel.currentSection.observe(this, Observer { section ->
             section?.let {
@@ -136,7 +136,6 @@ class EmojiReactionPickerActivity : VectorBaseActivity(),
 
     override fun compatibilityFontUpdate(typeface: Typeface?) {
         EmojiDrawView.configureTextPaint(this, typeface)
-        searchResultViewModel.dataSource
     }
 
     override fun onDestroy() {
