@@ -20,12 +20,12 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
 import androidx.appcompat.app.AlertDialog
-import androidx.recyclerview.widget.LinearLayoutManager
 import butterknife.OnClick
 import com.airbnb.mvrx.args
 import im.vector.riotx.R
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.cleanup
+import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.utils.openUrlInExternalBrowser
 import im.vector.riotx.features.login.AbstractLoginFragment
 import im.vector.riotx.features.login.LoginAction
@@ -57,9 +57,7 @@ class LoginTermsFragment @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        loginTermsPolicyList.setHasFixedSize(true)
-        loginTermsPolicyList.layoutManager = LinearLayoutManager(requireContext())
-        loginTermsPolicyList.adapter = policyController.adapter
+        loginTermsPolicyList.configureWith(policyController)
         policyController.listener = this
 
         val list = ArrayList<LocalizedFlowDataLoginTermsChecked>()

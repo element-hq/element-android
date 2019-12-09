@@ -18,19 +18,18 @@ package im.vector.riotx.features.home.group
 
 import android.os.Bundle
 import android.view.View
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.cleanup
+import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.platform.StateView
 import im.vector.riotx.core.platform.VectorBaseFragment
-import im.vector.riotx.features.home.HomeSharedActionViewModel
 import im.vector.riotx.features.home.HomeActivitySharedAction
+import im.vector.riotx.features.home.HomeSharedActionViewModel
 import kotlinx.android.synthetic.main.fragment_group_list.*
 import javax.inject.Inject
 
@@ -49,8 +48,7 @@ class GroupListFragment @Inject constructor(
         sharedActionViewModel = activityViewModelProvider.get(HomeSharedActionViewModel::class.java)
         groupController.callback = this
         stateView.contentView = groupListView
-        groupListView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-        groupListView.adapter = groupController.adapter
+        groupListView.configureWith(groupController)
         viewModel.subscribe { renderState(it) }
         viewModel.openGroupLiveData.observeEvent(this) {
             sharedActionViewModel.post(HomeActivitySharedAction.OpenGroup)

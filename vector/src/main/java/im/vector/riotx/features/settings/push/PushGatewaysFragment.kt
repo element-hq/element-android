@@ -19,13 +19,12 @@ package im.vector.riotx.features.settings.push
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.cleanup
+import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.resources.StringProvider
@@ -50,12 +49,7 @@ class PushGatewaysFragment @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val lmgr = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        recyclerView.layoutManager = lmgr
-        val dividerItemDecoration = DividerItemDecoration(recyclerView.context,
-                lmgr.orientation)
-        recyclerView.addItemDecoration(dividerItemDecoration)
-        recyclerView.adapter = epoxyController.adapter
+        recyclerView.configureWith(epoxyController, itemDecoration = DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
     }
 
     override fun onDestroyView() {
@@ -67,6 +61,7 @@ class PushGatewaysFragment @Inject constructor(
         epoxyController.setData(state)
     }
 
+    // TODO Move to a proper file
     class PushGateWayController(private val stringProvider: StringProvider) : TypedEpoxyController<PushGatewayViewState>() {
         override fun buildModels(data: PushGatewayViewState?) {
             data?.pushGateways?.invoke()?.let { pushers ->

@@ -24,7 +24,6 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ScrollView
 import androidx.core.view.size
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.chip.Chip
@@ -32,10 +31,7 @@ import com.google.android.material.chip.ChipGroup
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotx.R
-import im.vector.riotx.core.extensions.cleanup
-import im.vector.riotx.core.extensions.hideKeyboard
-import im.vector.riotx.core.extensions.observeEvent
-import im.vector.riotx.core.extensions.setupAsSearch
+import im.vector.riotx.core.extensions.*
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.utils.DimensionConverter
 import kotlinx.android.synthetic.main.fragment_create_direct_room.*
@@ -102,12 +98,10 @@ class CreateDirectRoomKnownUsersFragment @Inject constructor(
     }
 
     private fun setupRecyclerView() {
-        recyclerView.setHasFixedSize(true)
         // Don't activate animation as we might have way to much item animation when filtering
         recyclerView.itemAnimator = null
         knownUsersController.callback = this
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        recyclerView.adapter = knownUsersController.adapter
+        recyclerView.configureWith(knownUsersController)
     }
 
     private fun setupFilterView() {

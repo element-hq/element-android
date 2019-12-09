@@ -18,11 +18,11 @@ package im.vector.riotx.features.crypto.keysbackup.settings
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.cleanup
+import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.crypto.keysbackup.restore.KeysBackupRestoreActivity
 import im.vector.riotx.features.crypto.keysbackup.setup.KeysBackupSetupActivity
@@ -39,8 +39,7 @@ class KeysBackupSettingsFragment @Inject constructor(private val keysBackupSetti
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        keysBackupSettingsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        keysBackupSettingsRecyclerView.adapter = keysBackupSettingsRecyclerViewController.adapter
+        keysBackupSettingsRecyclerView.configureWith(keysBackupSettingsRecyclerViewController)
         keysBackupSettingsRecyclerViewController.listener = this
     }
 

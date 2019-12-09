@@ -18,12 +18,11 @@ package im.vector.riotx.features.reactions
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.cleanup
+import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.utils.LiveEvent
 import kotlinx.android.synthetic.main.fragment_generic_recycler.*
@@ -50,11 +49,7 @@ class EmojiSearchResultFragment @Inject constructor(
             }
         }
 
-        val lmgr = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        recyclerView.layoutManager = lmgr
-        val dividerItemDecoration = DividerItemDecoration(recyclerView.context, lmgr.orientation)
-        recyclerView.addItemDecoration(dividerItemDecoration)
-        recyclerView.adapter = epoxyController.adapter
+        recyclerView.configureWith(epoxyController, itemDecoration = DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
     }
 
     override fun onDestroyView() {

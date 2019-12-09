@@ -16,12 +16,22 @@
 
 package im.vector.riotx.core.extensions
 
-import android.content.Context
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyController
 
-fun RecyclerView.configureWith(context: Context, controller: EpoxyController) {
-
+/**
+ * Apply a Vertical LinearLayout Manager to the recyclerView and set the adapter from the epoxy controller
+ */
+fun RecyclerView.configureWith(epoxyController: EpoxyController,
+                               itemAnimator: RecyclerView.ItemAnimator? = null,
+                               itemDecoration: RecyclerView.ItemDecoration? = null,
+                               hasFixedSize: Boolean = true) {
+    layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+    itemAnimator?.let { this.itemAnimator = it }
+    itemDecoration?.let { addItemDecoration(it) }
+    setHasFixedSize(hasFixedSize)
+    adapter = epoxyController.adapter
 }
 
 /**

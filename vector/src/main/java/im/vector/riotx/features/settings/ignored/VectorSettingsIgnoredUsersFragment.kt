@@ -20,7 +20,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.fragmentViewModel
@@ -28,6 +27,7 @@ import com.airbnb.mvrx.withState
 import im.vector.riotx.R
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.cleanup
+import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.platform.VectorBaseFragment
@@ -51,8 +51,7 @@ class VectorSettingsIgnoredUsersFragment @Inject constructor(
         waiting_view_status_text.setText(R.string.please_wait)
         waiting_view_status_text.isVisible = true
         ignoredUsersController.callback = this
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        recyclerView.adapter = ignoredUsersController.adapter
+        recyclerView.configureWith(ignoredUsersController)
         ignoredUsersViewModel.requestErrorLiveData.observeEvent(this) {
             displayErrorDialog(it)
         }

@@ -64,7 +64,6 @@ class ContentUploadStateTrackerBinder @Inject constructor(private val activeSess
             it.contentUploadProgressTracker().clear()
         }
     }
-
 }
 
 private class ContentMediaProgressUpdater(private val progressLayout: ViewGroup,

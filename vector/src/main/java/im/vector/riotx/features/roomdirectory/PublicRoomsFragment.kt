@@ -19,7 +19,6 @@ package im.vector.riotx.features.roomdirectory
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.epoxy.EpoxyVisibilityTracker
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
@@ -29,6 +28,7 @@ import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
 import im.vector.riotx.R
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.cleanup
+import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.platform.VectorBaseFragment
 import io.reactivex.rxkotlin.subscribeBy
@@ -103,9 +103,8 @@ class PublicRoomsFragment @Inject constructor(
     private fun setupRecyclerView() {
         val epoxyVisibilityTracker = EpoxyVisibilityTracker()
         epoxyVisibilityTracker.attach(publicRoomsList)
-        publicRoomsList.layoutManager = LinearLayoutManager(context)
+        publicRoomsList.configureWith(publicRoomsController)
         publicRoomsController.callback = this
-        publicRoomsList.adapter = publicRoomsController.adapter
     }
 
     override fun onPublicRoomClicked(publicRoom: PublicRoom, joinState: JoinState) {
