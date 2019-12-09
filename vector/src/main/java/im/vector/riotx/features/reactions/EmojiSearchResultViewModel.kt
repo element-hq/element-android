@@ -44,9 +44,13 @@ class EmojiSearchResultViewModel(val dataSource: EmojiDataSource, initialState: 
                             ?.map { it.second }
                             ?.filter {
                                 it.name.contains(action.queryString, true)
-                                        || action.queryString.split("\\s".toRegex()).fold(true, { prev, q ->
-                                    prev && (it.keywords?.any { it.contains(q, true) } ?: false)
-                                })
+                                        || action.queryString
+                                        .split("\\s".toRegex())
+                                        .fold(true, { prev, q ->
+                                            prev
+                                                    && (it.keywords?.any { it.contains(q, true) }
+                                                    ?: false)
+                                        })
                             } ?: emptyList()
             )
         }

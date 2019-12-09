@@ -31,17 +31,4 @@ class EmojiDataSource(val context: Context) {
             this.rawData = jsonAdapter.fromJson(inputAsString)
         }
     }
-
-    companion object {
-        fun fromUnicode(unicode: String): String {
-            val str = unicode.replace("\\", "")
-            val arr = str.split("u".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-            val text = StringBuffer()
-            for (i in 1 until arr.size) {
-                val hexVal = Integer.parseInt(arr[i], 16)
-                text.append(Character.toChars(hexVal))
-            }
-            return text.toString()
-        }
-    }
 }

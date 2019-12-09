@@ -16,11 +16,12 @@
 
 package im.vector.riotx.features.reactions.data
 
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class EmojiCategory(
-        val id: String,
-        val name: String,
-        val emojis: List<String>
+        @Json(name = "id") val id: String,
+        @Json(name = "name") val name: String,
+        @Json(name = "emojis") val emojis: List<String>
 )
