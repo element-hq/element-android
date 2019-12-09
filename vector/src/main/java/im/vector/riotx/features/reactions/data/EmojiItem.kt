@@ -42,21 +42,27 @@ data class EmojiItem(
         @Json(name = "b") val unicode: String,
         @Json(name = "j") val keywords: List<String>?
 ) {
+    // Cannot be private...
+    var cache: String? = null
 
-    private var emojiText: String? = null
+    val emoji: String
+        get() {
+            cache?.let { return it }
 
-    fun emojiString(): String {
-        emojiText?.let { return it }
-
-        val utf8Text = unicode.split("-").joinToString("") { "\\u$it" } // "\u0048\u0065\u006C\u006C\u006F World"
-        return fromUnicode(utf8Text)
-                .also { emojiText = it }
-    }
+            // "\u0048\u0065\u006C\u006C\u006F World"
+            val utf8Text = unicode
+                    .split("-")
+                    .joinToString("") { "\\u$it" }
+            return fromUnicode(utf8Text)
+                    .also { cache = it }
+        }
 
     companion object {
         private fun fromUnicode(unicode: String): String {
-            val str = unicode.replace("\\", "")
-            val arr = str.split("u".toRegex()).dropLastWhile { it.isEmpty() }
+            val arr = unicode
+                    .replace("\\", "")
+                    .split("u".toRegex())
+                    .dropLastWhile { it.isEmpty() }
             return buildString {
                 for (i in 1 until arr.size) {
                     val hexVal = Integer.parseInt(arr[i], 16)
