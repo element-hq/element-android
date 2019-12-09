@@ -25,6 +25,7 @@ import butterknife.OnClick
 import com.airbnb.mvrx.args
 import im.vector.riotx.R
 import im.vector.riotx.core.error.ErrorFormatter
+import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.utils.openUrlInExternalBrowser
 import im.vector.riotx.features.login.AbstractLoginFragment
 import im.vector.riotx.features.login.LoginAction
@@ -72,7 +73,7 @@ class LoginTermsFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        loginTermsPolicyList.adapter = null
+        loginTermsPolicyList.cleanup()
         policyController.listener = null
         super.onDestroyView()
     }

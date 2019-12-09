@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import im.vector.matrix.android.api.crypto.getAllVerificationEmojis
 import im.vector.riotx.R
+import im.vector.riotx.core.extensions.cleanup
 import kotlinx.android.synthetic.main.fragment_generic_recycler.*
 
 class DebugSasEmojiActivity : AppCompatActivity() {
@@ -35,7 +36,7 @@ class DebugSasEmojiActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        recyclerView.adapter = null
+        recyclerView.cleanup()
         super.onDestroy()
     }
 }

@@ -32,6 +32,7 @@ import com.google.android.material.chip.ChipGroup
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotx.R
+import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.extensions.setupAsSearch
@@ -70,7 +71,7 @@ class CreateDirectRoomKnownUsersFragment @Inject constructor(
 
     override fun onDestroyView() {
         knownUsersController.callback = null
-        recyclerView.adapter = null
+        recyclerView.cleanup()
         super.onDestroyView()
     }
 

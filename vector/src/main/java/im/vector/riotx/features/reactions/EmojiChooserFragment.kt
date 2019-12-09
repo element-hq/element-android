@@ -19,6 +19,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import im.vector.riotx.R
+import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.platform.VectorBaseFragment
 import javax.inject.Inject
 
@@ -36,5 +37,10 @@ class EmojiChooserFragment @Inject constructor() : VectorBaseFragment() {
             it.adapter = viewModel.adapter
             it.adapter?.notifyDataSetChanged()
         }
+    }
+
+    override fun onDestroyView() {
+        (view as? RecyclerView)?.cleanup()
+        super.onDestroyView()
     }
 }

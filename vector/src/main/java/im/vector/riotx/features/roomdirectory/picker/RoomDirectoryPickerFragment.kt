@@ -25,6 +25,7 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.matrix.android.api.session.room.model.thirdparty.RoomDirectoryData
 import im.vector.riotx.R
+import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.roomdirectory.RoomDirectoryAction
 import im.vector.riotx.features.roomdirectory.RoomDirectorySharedAction
@@ -61,7 +62,7 @@ class RoomDirectoryPickerFragment @Inject constructor(val roomDirectoryPickerVie
     }
 
     override fun onDestroyView() {
-        roomDirectoryPickerList.adapter = null
+        roomDirectoryPickerList.cleanup()
         roomDirectoryPickerController.callback = null
         super.onDestroyView()
     }

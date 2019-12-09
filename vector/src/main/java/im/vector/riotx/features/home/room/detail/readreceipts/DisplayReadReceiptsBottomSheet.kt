@@ -29,6 +29,7 @@ import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.args
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
+import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.riotx.features.home.room.detail.timeline.item.ReadReceiptData
 import kotlinx.android.parcel.Parcelize
@@ -68,6 +69,11 @@ class DisplayReadReceiptsBottomSheet : VectorBaseBottomSheetDialogFragment() {
         recyclerView.adapter = epoxyController.adapter
         bottomSheetTitle.text = getString(R.string.seen_by)
         epoxyController.setData(displayReadReceiptArgs.readReceipts)
+    }
+
+    override fun onDestroyView() {
+        recyclerView.cleanup()
+        super.onDestroyView()
     }
 
     // we are not using state for this one as it's static, so no need to override invalidate()

@@ -29,6 +29,7 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
+import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.riotx.features.home.room.detail.timeline.action.TimelineEventFragmentArgs
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
@@ -64,6 +65,11 @@ class ViewReactionsBottomSheet : VectorBaseBottomSheetDialogFragment() {
         recyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         recyclerView.adapter = epoxyController.adapter
         bottomSheetTitle.text = context?.getString(R.string.reactions)
+    }
+
+    override fun onDestroyView() {
+        recyclerView.cleanup()
+        super.onDestroyView()
     }
 
     override fun invalidate() = withState(viewModel) {

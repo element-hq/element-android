@@ -27,6 +27,7 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
+import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
 import javax.inject.Inject
@@ -66,6 +67,11 @@ class MessageActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), Message
         // Disable item animation
         recyclerView.itemAnimator = null
         messageActionsEpoxyController.listener = this
+    }
+
+    override fun onDestroyView() {
+        recyclerView.cleanup()
+        super.onDestroyView()
     }
 
     override fun onUrlClicked(url: String): Boolean {

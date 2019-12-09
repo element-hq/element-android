@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
+import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.utils.LiveEvent
 import kotlinx.android.synthetic.main.fragment_generic_recycler.*
@@ -58,7 +59,7 @@ class EmojiSearchResultFragment @Inject constructor(
 
     override fun onDestroyView() {
         epoxyController.listener = null
-        recyclerView.adapter = null
+        recyclerView.cleanup()
         super.onDestroyView()
     }
 

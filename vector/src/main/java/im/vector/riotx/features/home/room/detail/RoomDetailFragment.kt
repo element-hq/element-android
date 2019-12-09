@@ -70,10 +70,7 @@ import im.vector.riotx.R
 import im.vector.riotx.core.dialogs.withColoredButton
 import im.vector.riotx.core.epoxy.LayoutManagerStateRestorer
 import im.vector.riotx.core.error.ErrorFormatter
-import im.vector.riotx.core.extensions.hideKeyboard
-import im.vector.riotx.core.extensions.observeEvent
-import im.vector.riotx.core.extensions.setTextOrHide
-import im.vector.riotx.core.extensions.showKeyboard
+import im.vector.riotx.core.extensions.*
 import im.vector.riotx.core.files.addEntryToDownloadManager
 import im.vector.riotx.core.glide.GlideApp
 import im.vector.riotx.core.platform.VectorBaseFragment
@@ -293,7 +290,7 @@ class RoomDetailFragment @Inject constructor(
         timelineEventController.removeModelBuildListener(modelBuildListener)
         modelBuildListener = null
         debouncer.cancelAll()
-        recyclerView.adapter = null
+        recyclerView.cleanup()
         super.onDestroyView()
     }
 

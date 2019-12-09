@@ -24,6 +24,7 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
+import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.roomdirectory.RoomDirectorySharedAction
 import im.vector.riotx.features.roomdirectory.RoomDirectorySharedActionViewModel
@@ -51,7 +52,7 @@ class CreateRoomFragment @Inject constructor(private val createRoomController: C
     }
 
     override fun onDestroyView() {
-        createRoomForm.adapter = null
+        createRoomForm.cleanup()
         createRoomController.listener = null
         super.onDestroyView()
     }

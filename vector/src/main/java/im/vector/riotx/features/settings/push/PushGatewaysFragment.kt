@@ -25,6 +25,7 @@ import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
+import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.resources.StringProvider
@@ -58,7 +59,7 @@ class PushGatewaysFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        recyclerView.adapter = null
+        recyclerView.cleanup()
         super.onDestroyView()
     }
 

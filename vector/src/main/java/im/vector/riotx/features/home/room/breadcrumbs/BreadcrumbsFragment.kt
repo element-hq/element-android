@@ -21,6 +21,7 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.mvrx.fragmentViewModel
 import im.vector.riotx.R
+import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.home.room.detail.RoomDetailSharedAction
 import im.vector.riotx.features.home.room.detail.RoomDetailSharedActionViewModel
@@ -46,8 +47,8 @@ class BreadcrumbsFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
+        breadcrumbsRecyclerView.cleanup()
         super.onDestroyView()
-        breadcrumbsRecyclerView.adapter = null
     }
 
     private fun setupRecyclerView() {

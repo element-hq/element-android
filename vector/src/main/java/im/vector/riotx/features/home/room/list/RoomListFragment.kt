@@ -36,6 +36,7 @@ import im.vector.matrix.android.api.session.room.notification.RoomNotificationSt
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.LayoutManagerStateRestorer
 import im.vector.riotx.core.error.ErrorFormatter
+import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.platform.OnBackPressed
 import im.vector.riotx.core.platform.StateView
 import im.vector.riotx.core.platform.VectorBaseFragment
@@ -121,7 +122,7 @@ class RoomListFragment @Inject constructor(
     override fun onDestroyView() {
         roomController.removeModelBuildListener(modelBuildListener)
         modelBuildListener = null
-        roomListView.adapter = null
+        roomListView.cleanup()
         roomController.listener = null
         createChatFabMenu.listener = null
         super.onDestroyView()

@@ -25,6 +25,7 @@ import com.airbnb.mvrx.withState
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotx.R
+import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.extensions.setupAsSearch
 import im.vector.riotx.core.extensions.showKeyboard
@@ -51,7 +52,7 @@ class CreateDirectRoomDirectoryUsersFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        recyclerView.adapter = null
+        recyclerView.cleanup()
         directRoomController.callback = null
         super.onDestroyView()
     }

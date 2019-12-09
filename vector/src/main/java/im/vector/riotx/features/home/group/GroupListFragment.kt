@@ -25,6 +25,7 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.riotx.R
+import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.platform.StateView
 import im.vector.riotx.core.platform.VectorBaseFragment
@@ -58,7 +59,7 @@ class GroupListFragment @Inject constructor(
 
     override fun onDestroyView() {
         groupController.callback = null
-        groupListView.adapter = null
+        groupListView.cleanup()
         super.onDestroyView()
     }
 

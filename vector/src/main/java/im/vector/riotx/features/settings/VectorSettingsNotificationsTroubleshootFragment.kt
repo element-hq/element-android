@@ -29,6 +29,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.TransitionManager
 import butterknife.BindView
 import im.vector.riotx.R
+import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.rageshake.BugReporter
@@ -134,6 +135,11 @@ class VectorSettingsNotificationsTroubleshootFragment @Inject constructor(
         }
         mRecyclerView.adapter = testManager?.adapter
         testManager?.runDiagnostic()
+    }
+
+    override fun onDestroyView() {
+        mRecyclerView.cleanup()
+        super.onDestroyView()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

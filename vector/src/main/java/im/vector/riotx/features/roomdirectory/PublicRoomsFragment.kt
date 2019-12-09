@@ -28,6 +28,7 @@ import com.jakewharton.rxbinding3.appcompat.queryTextChanges
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
 import im.vector.riotx.R
 import im.vector.riotx.core.error.ErrorFormatter
+import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.platform.VectorBaseFragment
 import io.reactivex.rxkotlin.subscribeBy
@@ -84,7 +85,7 @@ class PublicRoomsFragment @Inject constructor(
 
     override fun onDestroyView() {
         publicRoomsController.callback = null
-        publicRoomsList.adapter = null
+        publicRoomsList.cleanup()
         super.onDestroyView()
     }
 

@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
+import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.crypto.keysbackup.restore.KeysBackupRestoreActivity
 import im.vector.riotx.features.crypto.keysbackup.setup.KeysBackupSetupActivity
@@ -45,7 +46,7 @@ class KeysBackupSettingsFragment @Inject constructor(private val keysBackupSetti
 
     override fun onDestroyView() {
         keysBackupSettingsRecyclerViewController.listener = null
-        keysBackupSettingsRecyclerView.adapter = null
+        keysBackupSettingsRecyclerView.cleanup()
         super.onDestroyView()
     }
 

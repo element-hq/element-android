@@ -27,6 +27,7 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
 import im.vector.riotx.core.error.ErrorFormatter
+import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.platform.VectorBaseFragment
@@ -59,7 +60,7 @@ class VectorSettingsIgnoredUsersFragment @Inject constructor(
 
     override fun onDestroyView() {
         ignoredUsersController.callback = null
-        recyclerView.adapter = null
+        recyclerView.cleanup()
         super.onDestroyView()
     }
 

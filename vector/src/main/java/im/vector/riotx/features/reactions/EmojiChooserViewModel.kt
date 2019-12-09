@@ -23,6 +23,7 @@ import javax.inject.Inject
 
 class EmojiChooserViewModel @Inject constructor() : ViewModel() {
 
+    // TODO Move the adapter out of the ViewModel
     var adapter: EmojiRecyclerAdapter? = null
     val emojiSourceLiveData: MutableLiveData<EmojiDataSource> = MutableLiveData()
 

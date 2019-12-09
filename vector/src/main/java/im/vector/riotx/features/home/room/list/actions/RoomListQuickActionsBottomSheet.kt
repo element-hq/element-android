@@ -29,6 +29,7 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
+import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.riotx.features.navigation.Navigator
 import kotlinx.android.parcel.Parcelize
@@ -74,6 +75,11 @@ class RoomListQuickActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), R
         // Disable item animation
         recyclerView.itemAnimator = null
         roomListActionsEpoxyController.listener = this
+    }
+
+    override fun onDestroyView() {
+        recyclerView.cleanup()
+        super.onDestroyView()
     }
 
     override fun invalidate() = withState(viewModel) {
