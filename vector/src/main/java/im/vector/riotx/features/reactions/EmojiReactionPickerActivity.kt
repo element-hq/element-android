@@ -203,13 +203,19 @@ class EmojiReactionPickerActivity : VectorBaseActivity(),
 
     companion object {
 
-        const val EXTRA_EVENT_ID = "EXTRA_EVENT_ID"
-        const val EXTRA_REACTION_RESULT = "EXTRA_REACTION_RESULT"
+        private const val EXTRA_EVENT_ID = "EXTRA_EVENT_ID"
+        private const val EXTRA_REACTION_RESULT = "EXTRA_REACTION_RESULT"
 
         fun intent(context: Context, eventId: String): Intent {
             val intent = Intent(context, EmojiReactionPickerActivity::class.java)
             intent.putExtra(EXTRA_EVENT_ID, eventId)
             return intent
+        }
+
+        fun getOutput(data: Intent): Pair<String, String>? {
+            val eventId = data.getStringExtra(EXTRA_EVENT_ID) ?: return null
+            val reaction = data.getStringExtra(EXTRA_REACTION_RESULT) ?: return null
+            return eventId to reaction
         }
     }
 }

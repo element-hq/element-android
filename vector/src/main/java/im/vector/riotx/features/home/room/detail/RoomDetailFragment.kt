@@ -450,11 +450,7 @@ class RoomDetailFragment @Inject constructor(
         if (!hasBeenHandled && resultCode == RESULT_OK && data != null) {
             when (requestCode) {
                 REACTION_SELECT_REQUEST_CODE -> {
-                    val eventId = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_EVENT_ID)
-                            ?: return
-                    val reaction = data.getStringExtra(EmojiReactionPickerActivity.EXTRA_REACTION_RESULT)
-                            ?: return
-                    // TODO check if already reacted with that?
+                    val (eventId, reaction) = EmojiReactionPickerActivity.getOutput(data) ?: return
                     roomDetailViewModel.handle(RoomDetailAction.SendReaction(eventId, reaction))
                 }
             }
