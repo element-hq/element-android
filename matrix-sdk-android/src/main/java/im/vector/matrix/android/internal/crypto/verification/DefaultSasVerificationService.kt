@@ -572,7 +572,7 @@ internal class DefaultSasVerificationService @Inject constructor(
                     transactionId,
                     otherUserId,
                     otherDeviceId)
-            tx.transport = sasTransportRoomMessageFactory.createTransport(roomId, cryptoService)
+            tx.transport = sasTransportRoomMessageFactory.createTransport(roomId, cryptoService, tx)
             addTransaction(tx)
 
             tx.start()
