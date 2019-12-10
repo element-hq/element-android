@@ -18,9 +18,10 @@ package im.vector.riotx.features.home.room.breadcrumbs
 
 import android.os.Bundle
 import android.view.View
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.mvrx.fragmentViewModel
 import im.vector.riotx.R
+import im.vector.riotx.core.extensions.cleanup
+import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.home.room.detail.RoomDetailSharedAction
 import im.vector.riotx.features.home.room.detail.RoomDetailSharedActionViewModel
@@ -46,16 +47,13 @@ class BreadcrumbsFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
+        breadcrumbsRecyclerView.cleanup()
         super.onDestroyView()
-        breadcrumbsRecyclerView.adapter = null
     }
 
     private fun setupRecyclerView() {
-        val layoutManager = LinearLayoutManager(context)
-        breadcrumbsRecyclerView.layoutManager = layoutManager
-        breadcrumbsRecyclerView.itemAnimator = BreadcrumbsAnimator()
+        breadcrumbsRecyclerView.configureWith(breadcrumbsController, BreadcrumbsAnimator(), hasFixedSize = false)
         breadcrumbsController.listener = this
-        breadcrumbsRecyclerView.setController(breadcrumbsController)
     }
 
     private fun renderState(state: BreadcrumbsViewState) {

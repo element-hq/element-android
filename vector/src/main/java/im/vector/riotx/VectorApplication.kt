@@ -42,7 +42,7 @@ import im.vector.riotx.core.di.DaggerVectorComponent
 import im.vector.riotx.core.di.HasVectorInjector
 import im.vector.riotx.core.di.VectorComponent
 import im.vector.riotx.core.extensions.configureAndStart
-import im.vector.riotx.core.utils.initKnownEmojiHashSet
+import im.vector.riotx.core.rx.setupRxPlugin
 import im.vector.riotx.features.configuration.VectorConfiguration
 import im.vector.riotx.features.lifecycle.VectorActivityLifecycleCallbacks
 import im.vector.riotx.features.notifications.NotificationDrawerManager
@@ -55,8 +55,7 @@ import im.vector.riotx.features.version.VersionProvider
 import im.vector.riotx.push.fcm.FcmHelper
 import timber.log.Timber
 import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import java.util.*
 import javax.inject.Inject
 
 class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.Provider, androidx.work.Configuration.Provider {
@@ -79,14 +78,13 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
     lateinit var vectorComponent: VectorComponent
     private var fontThreadHandler: Handler? = null
 
-//    var slowMode = false
-
     override fun onCreate() {
         super.onCreate()
         appContext = this
         vectorComponent = DaggerVectorComponent.factory().create(this)
         vectorComponent.inject(this)
         vectorUncaughtExceptionHandler.activate(this)
+        setupRxPlugin()
 
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
@@ -138,7 +136,7 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
         })
         ProcessLifecycleOwner.get().lifecycle.addObserver(appStateHandler)
         // This should be done as early as possible
-        initKnownEmojiHashSet(appContext)
+        // initKnownEmojiHashSet(appContext)
     }
 
     override fun providesMatrixConfiguration() = MatrixConfiguration(BuildConfig.FLAVOR_DESCRIPTION)

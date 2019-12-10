@@ -50,6 +50,7 @@ interface RelationService {
 
     /**
      * Sends a reaction (emoji) to the targetedEvent.
+     * It has no effect if the user has already added the same reaction to the event.
      * @param targetEventId the id of the event being reacted
      * @param reaction the reaction (preferably emoji)
      */

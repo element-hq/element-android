@@ -28,17 +28,16 @@ import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
 import im.vector.matrix.android.api.util.ContentUtils.extractUsefulTextFromReply
 import im.vector.riotx.R
+import im.vector.riotx.core.date.VectorDateFormatter
 import im.vector.riotx.core.extensions.localDateTime
 import im.vector.riotx.core.ui.list.genericFooterItem
 import im.vector.riotx.core.ui.list.genericItem
 import im.vector.riotx.core.ui.list.genericItemHeader
 import im.vector.riotx.core.ui.list.genericLoaderItem
-import im.vector.riotx.core.date.VectorDateFormatter
 import im.vector.riotx.features.html.EventHtmlRenderer
 import me.gujun.android.span.span
 import name.fraser.neil.plaintext.diff_match_patch
-import timber.log.Timber
-import java.util.Calendar
+import java.util.*
 
 /**
  * Epoxy controller for edit history list
@@ -104,9 +103,7 @@ class ViewEditHistoryEpoxyController(private val context: Context,
                             ?: nContent.first
                     val dmp = diff_match_patch()
                     val diff = dmp.diff_main(nextBody.toString(), body.toString())
-                    Timber.e("#### Diff: $diff")
                     dmp.diff_cleanupSemantic(diff)
-                    Timber.e("#### Diff: $diff")
                     spannedDiff = span {
                         diff.map {
                             when (it.operation) {

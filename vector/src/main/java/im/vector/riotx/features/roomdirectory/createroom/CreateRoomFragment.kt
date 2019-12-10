@@ -19,11 +19,12 @@ package im.vector.riotx.features.roomdirectory.createroom
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
+import im.vector.riotx.core.extensions.cleanup
+import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.roomdirectory.RoomDirectorySharedAction
 import im.vector.riotx.features.roomdirectory.RoomDirectorySharedActionViewModel
@@ -50,6 +51,12 @@ class CreateRoomFragment @Inject constructor(private val createRoomController: C
         }
     }
 
+    override fun onDestroyView() {
+        createRoomForm.cleanup()
+        createRoomController.listener = null
+        super.onDestroyView()
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_create_room -> {
@@ -62,12 +69,8 @@ class CreateRoomFragment @Inject constructor(private val createRoomController: C
     }
 
     private fun setupRecyclerView() {
-        val layoutManager = LinearLayoutManager(context)
-
-        createRoomForm.layoutManager = layoutManager
+        createRoomForm.configureWith(createRoomController)
         createRoomController.listener = this
-
-        createRoomForm.setController(createRoomController)
     }
 
     override fun onNameChange(newName: String) {

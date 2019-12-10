@@ -863,7 +863,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
 
     override fun onCleared() {
         timeline.dispose()
-        timeline.removeAllListeners()
+        timeline.removeListener(this)
         super.onCleared()
     }
 }

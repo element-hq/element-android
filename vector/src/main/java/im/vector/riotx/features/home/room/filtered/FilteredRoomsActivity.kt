@@ -36,9 +36,7 @@ class FilteredRoomsActivity : VectorBaseActivity() {
             return supportFragmentManager.findFragmentByTag(FRAGMENT_TAG) as? RoomListFragment
         }
 
-    override fun getLayoutRes(): Int {
-        return R.layout.activity_filtered_rooms
-    }
+    override fun getLayoutRes() = R.layout.activity_filtered_rooms
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
