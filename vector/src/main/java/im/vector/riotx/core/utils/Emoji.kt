@@ -16,13 +16,6 @@
 
 package im.vector.riotx.core.utils
 
-import android.content.Context
-import com.squareup.moshi.Moshi
-import im.vector.riotx.R
-import im.vector.riotx.features.reactions.data.EmojiData
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.util.regex.Pattern
 
 private val emojisPattern = Pattern.compile("((?:[\uD83C\uDF00-\uD83D\uDDFF]" +

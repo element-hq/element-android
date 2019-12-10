@@ -72,4 +72,3 @@ data class EmojiItem(
         }
     }
 }
-

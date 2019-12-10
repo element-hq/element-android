@@ -18,10 +18,10 @@ package im.vector.riotx.features.reactions
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.observe
-import androidx.recyclerview.widget.RecyclerView
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.platform.VectorBaseFragment
+import kotlinx.android.synthetic.main.emoji_chooser_fragment.*
 import javax.inject.Inject
 
 class EmojiChooserFragment @Inject constructor(
@@ -41,10 +41,7 @@ class EmojiChooserFragment @Inject constructor(
         emojiRecyclerAdapter.reactionClickListener = this
         emojiRecyclerAdapter.interactionListener = this
 
-        (view as? RecyclerView)?.let {
-            it.adapter = emojiRecyclerAdapter
-            it.adapter?.notifyDataSetChanged()
-        }
+        emojiRecyclerView.adapter = emojiRecyclerAdapter
 
         viewModel.moveToSection.observe(viewLifecycleOwner) { section ->
             emojiRecyclerAdapter.scrollToSection(section)
@@ -60,7 +57,7 @@ class EmojiChooserFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        (view as? RecyclerView)?.cleanup()
+        emojiRecyclerView.cleanup()
         emojiRecyclerAdapter.reactionClickListener = null
         emojiRecyclerAdapter.interactionListener = null
         super.onDestroyView()
