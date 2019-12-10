@@ -34,7 +34,11 @@ import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 
-internal interface SignOutTask : Task<Unit, Unit>
+internal interface SignOutTask : Task<SignOutTask.Params, Unit> {
+    data class Params(
+            val sigOutFromHomeserver: Boolean
+    )
+}
 
 internal class DefaultSignOutTask @Inject constructor(private val context: Context,
                                                       @UserId private val userId: String,
@@ -49,10 +53,13 @@ internal class DefaultSignOutTask @Inject constructor(private val context: Conte
                                                       @CryptoDatabase private val realmCryptoConfiguration: RealmConfiguration,
                                                       @UserMd5 private val userMd5: String) : SignOutTask {
 
-    override suspend fun execute(params: Unit) {
+    override suspend fun execute(params: SignOutTask.Params) {
         Timber.d("SignOut: send request...")
-        executeRequest<Unit> {
-            apiCall = signOutAPI.signOut()
+
+        if (params.sigOutFromHomeserver) {
+            executeRequest<Unit> {
+                apiCall = signOutAPI.signOut()
+            }
         }
 
         Timber.d("SignOut: release session...")

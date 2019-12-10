@@ -17,6 +17,7 @@
 package im.vector.matrix.android.api.session.signout
 
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.util.Cancelable
 
 /**
  * This interface defines a method to sign out. It's implemented at the session level.
@@ -24,7 +25,9 @@ import im.vector.matrix.android.api.MatrixCallback
 interface SignOutService {
 
     /**
-     * Sign out
+     * Sign out, and release the session, clear all the session data, including crypto data
+     * @param sigOutFromHomeserver true if the sign out request has to be done
      */
-    fun signOut(callback: MatrixCallback<Unit>)
+    fun signOut(sigOutFromHomeserver: Boolean,
+                callback: MatrixCallback<Unit>): Cancelable
 }

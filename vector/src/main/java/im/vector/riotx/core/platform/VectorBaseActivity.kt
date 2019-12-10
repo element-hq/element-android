@@ -45,6 +45,8 @@ import im.vector.riotx.core.di.*
 import im.vector.riotx.core.dialogs.DialogLocker
 import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.utils.toast
+import im.vector.riotx.features.MainActivity
+import im.vector.riotx.features.MainActivityArgs
 import im.vector.riotx.features.configuration.VectorConfiguration
 import im.vector.riotx.features.consent.ConsentNotGivenHelper
 import im.vector.riotx.features.navigation.Navigator
@@ -89,6 +91,9 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
     private lateinit var rageShake: RageShake
     protected lateinit var navigator: Navigator
     private lateinit var activeSessionHolder: ActiveSessionHolder
+
+    // Filter for multiple invalid token error
+    private var mainActivityStarted = false
 
     private var unBinder: Unbinder? = null
 
@@ -182,11 +187,30 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
 
     private fun handleGlobalError(globalError: GlobalError) {
         when (globalError) {
-            is GlobalError.InvalidToken         -> TODO()
+            is GlobalError.InvalidToken         ->
+                handleInvalidToken(globalError)
             is GlobalError.ConsentNotGivenError ->
                 consentNotGivenHelper.displayDialog(globalError.consentUri,
                         activeSessionHolder.getActiveSession().sessionParams.homeServerConnectionConfig.homeServerUri.host ?: "")
         }
+    }
+
+    protected open fun handleInvalidToken(globalError: GlobalError.InvalidToken) {
+        Timber.w("Invalid token event received")
+        if(mainActivityStarted) {
+            return
+        }
+
+        mainActivityStarted = true
+
+        MainActivity.restartApp(this,
+                MainActivityArgs(
+                        clearCache = true,
+                        clearCredentials = !globalError.softLogout,
+                        isUserLoggedOut = true,
+                        isSoftLogout = globalError.softLogout
+                )
+        )
     }
 
     override fun onDestroy() {

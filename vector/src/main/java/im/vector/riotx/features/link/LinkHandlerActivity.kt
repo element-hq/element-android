@@ -87,7 +87,7 @@ class LinkHandlerActivity : VectorBaseActivity() {
                 .setMessage(R.string.error_user_already_logged_in)
                 .setCancelable(false)
                 .setPositiveButton(R.string.logout) { _, _ ->
-                    sessionHolder.getSafeActiveSession()?.signOut(object : MatrixCallback<Unit> {
+                    sessionHolder.getSafeActiveSession()?.signOut(true, object : MatrixCallback<Unit> {
                         override fun onFailure(failure: Throwable) {
                             displayError(failure)
                         }

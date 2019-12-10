@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.session.signout
 
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.signout.SignOutService
+import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import javax.inject.Inject
@@ -25,9 +26,10 @@ import javax.inject.Inject
 internal class DefaultSignOutService @Inject constructor(private val signOutTask: SignOutTask,
                                                          private val taskExecutor: TaskExecutor) : SignOutService {
 
-    override fun signOut(callback: MatrixCallback<Unit>) {
-        signOutTask
-                .configureWith {
+    override fun signOut(sigOutFromHomeserver: Boolean,
+                         callback: MatrixCallback<Unit>): Cancelable {
+        return signOutTask
+                .configureWith(SignOutTask.Params(sigOutFromHomeserver)) {
                     this.callback = callback
                 }
                 .executeBy(taskExecutor)

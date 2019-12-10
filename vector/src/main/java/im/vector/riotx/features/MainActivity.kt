@@ -23,6 +23,7 @@ import android.os.Parcelable
 import androidx.appcompat.app.AlertDialog
 import com.bumptech.glide.Glide
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.failure.GlobalError
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.di.ScreenComponent
@@ -31,6 +32,7 @@ import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.utils.deleteAllFiles
 import im.vector.riotx.features.home.HomeActivity
 import im.vector.riotx.features.login.LoginActivity
+import im.vector.riotx.features.main.SignedOutActivity
 import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -62,7 +64,8 @@ class MainActivity : VectorBaseActivity() {
         }
     }
 
-    private var args: MainActivityArgs? = null
+    private lateinit var args: MainActivityArgs
+
     @Inject lateinit var sessionHolder: ActiveSessionHolder
     @Inject lateinit var errorFormatter: ErrorFormatter
 
@@ -72,42 +75,59 @@ class MainActivity : VectorBaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        args = intent.getParcelableExtra(EXTRA_ARGS)
-
-        val clearCache = args?.clearCache ?: false
-        val clearCredentials = args?.clearCredentials ?: false
+        args = parseArgs()
 
         // Handle some wanted cleanup
-        if (clearCache || clearCredentials) {
-            doCleanUp(clearCache, clearCredentials)
+        if (args.clearCache || args.clearCredentials) {
+            doCleanUp()
         } else {
             start()
         }
     }
 
-    private fun doCleanUp(clearCache: Boolean, clearCredentials: Boolean) {
+    private fun parseArgs(): MainActivityArgs {
+        val argsFromIntent: MainActivityArgs? = intent.getParcelableExtra(EXTRA_ARGS)
+        Timber.w("Starting MainActivity with $argsFromIntent")
+
+        return MainActivityArgs(
+                clearCache = argsFromIntent?.clearCache ?: false,
+                clearCredentials = argsFromIntent?.clearCredentials ?: false,
+                isUserLoggedOut = argsFromIntent?.isUserLoggedOut ?: false,
+                isSoftLogout = argsFromIntent?.isSoftLogout ?: false
+        )
+    }
+
+    private fun doCleanUp() {
         when {
-            clearCredentials -> sessionHolder.getActiveSession().signOut(object : MatrixCallback<Unit> {
-                override fun onSuccess(data: Unit) {
-                    Timber.w("SIGN_OUT: success, start app")
-                    sessionHolder.clearActiveSession()
-                    doLocalCleanupAndStart()
-                }
+            args.clearCredentials -> sessionHolder.getActiveSession().signOut(
+                    !args.isUserLoggedOut,
+                    object : MatrixCallback<Unit> {
+                        override fun onSuccess(data: Unit) {
+                            Timber.w("SIGN_OUT: success, start app")
+                            sessionHolder.clearActiveSession()
+                            doLocalCleanupAndStart()
+                        }
 
-                override fun onFailure(failure: Throwable) {
-                    displayError(failure, clearCache, clearCredentials)
-                }
-            })
-            clearCache       -> sessionHolder.getActiveSession().clearCache(object : MatrixCallback<Unit> {
-                override fun onSuccess(data: Unit) {
-                    doLocalCleanupAndStart()
-                }
+                        override fun onFailure(failure: Throwable) {
+                            displayError(failure)
+                        }
+                    })
+            args.clearCache       -> sessionHolder.getActiveSession().clearCache(
+                    object : MatrixCallback<Unit> {
+                        override fun onSuccess(data: Unit) {
+                            doLocalCleanupAndStart()
+                        }
 
-                override fun onFailure(failure: Throwable) {
-                    displayError(failure, clearCache, clearCredentials)
-                }
-            })
+                        override fun onFailure(failure: Throwable) {
+                            displayError(failure)
+                        }
+                    })
         }
+    }
+
+    override fun handleInvalidToken(globalError: GlobalError.InvalidToken) {
+        // No op here
+        Timber.w("Ignoring invalid token global error")
     }
 
     private fun doLocalCleanupAndStart() {
@@ -126,11 +146,11 @@ class MainActivity : VectorBaseActivity() {
         start()
     }
 
-    private fun displayError(failure: Throwable, clearCache: Boolean, clearCredentials: Boolean) {
+    private fun displayError(failure: Throwable) {
         AlertDialog.Builder(this)
                 .setTitle(R.string.dialog_title_error)
                 .setMessage(errorFormatter.toHumanReadable(failure))
-                .setPositiveButton(R.string.global_retry) { _, _ -> doCleanUp(clearCache, clearCredentials) }
+                .setPositiveButton(R.string.global_retry) { _, _ -> doCleanUp() }
                 .setNegativeButton(R.string.cancel) { _, _ -> start() }
                 .setCancelable(false)
                 .show()
@@ -140,7 +160,13 @@ class MainActivity : VectorBaseActivity() {
         val intent = if (sessionHolder.hasActiveSession()) {
             HomeActivity.newIntent(this)
         } else {
-            LoginActivity.newIntent(this, null)
+            // Check if we've been signed out
+            if (args.isUserLoggedOut) {
+                // TODO Soft logout
+                SignedOutActivity.newIntent(this)
+            } else {
+                LoginActivity.newIntent(this, null)
+            }
         }
         startActivity(intent)
         finish()
