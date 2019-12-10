@@ -134,7 +134,7 @@ class LoginFragment @Inject constructor(
         Observable
                 .combineLatest(
                         loginField.textChanges().map { it.trim().isNotEmpty() },
-                        passwordField.textChanges().map { it.trim().isNotEmpty() },
+                        passwordField.textChanges().map { it.isNotEmpty() },
                         BiFunction<Boolean, Boolean, Boolean> { isLoginNotEmpty, isPasswordNotEmpty ->
                             isLoginNotEmpty && isPasswordNotEmpty
                         }
