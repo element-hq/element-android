@@ -29,11 +29,14 @@ data class MatrixError(
         @Json(name = "error") val message: String,
 
         @Json(name = "consent_uri") val consentUri: String? = null,
-        // RESOURCE_LIMIT_EXCEEDED data
+        // For RESOURCE_LIMIT_EXCEEDED
         @Json(name = "limit_type") val limitType: String? = null,
         @Json(name = "admin_contact") val adminUri: String? = null,
         // For LIMIT_EXCEEDED
-        @Json(name = "retry_after_ms") val retryAfterMillis: Long? = null) {
+        @Json(name = "retry_after_ms") val retryAfterMillis: Long? = null,
+        // For UNAUTHORIZED
+        @Json(name = "soft_logout") val isSoftLogout: Boolean? = null
+) {
 
     companion object {
         const val FORBIDDEN = "M_FORBIDDEN"
