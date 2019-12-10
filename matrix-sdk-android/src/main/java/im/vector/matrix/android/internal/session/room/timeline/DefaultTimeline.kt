@@ -504,7 +504,6 @@ internal class DefaultTimeline(
         Timber.v("Should fetch $limit items $direction")
         cancelableBag += paginationTask
                 .configureWith(params) {
-                    this.retryCount = Int.MAX_VALUE
                     this.constraints = TaskConstraints(connectedToNetwork = true)
                     this.callback = object : MatrixCallback<TokenChunkEventPersistor.Result> {
                         override fun onSuccess(data: TokenChunkEventPersistor.Result) {
@@ -524,6 +523,8 @@ internal class DefaultTimeline(
                         }
 
                         override fun onFailure(failure: Throwable) {
+                            updateState(direction) { it.copy(isPaginating = false, requestedPaginationCount = 0) }
+                            postSnapshot()
                             Timber.v("Failure fetching $limit items $direction from pagination request")
                         }
                     }
