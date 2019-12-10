@@ -822,9 +822,14 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         if (events.isEmpty()) return UnreadState.Unknown
         val readMarkerIdSnapshot = roomSummary.readMarkerId ?: return UnreadState.Unknown
         val firstDisplayableEventId = timeline.getFirstDisplayableEventId(readMarkerIdSnapshot)
-                ?: return UnreadState.ReadMarkerNotLoaded(readMarkerIdSnapshot)
         val firstDisplayableEventIndex = timeline.getIndexOfEvent(firstDisplayableEventId)
-                ?: return UnreadState.ReadMarkerNotLoaded(readMarkerIdSnapshot)
+        if (firstDisplayableEventId == null || firstDisplayableEventIndex == null) {
+            return if (timeline.isLive) {
+                UnreadState.ReadMarkerNotLoaded(readMarkerIdSnapshot)
+            } else {
+                UnreadState.Unknown
+            }
+        }
         for (i in (firstDisplayableEventIndex - 1) downTo 0) {
             val timelineEvent = events.getOrNull(i) ?: return UnreadState.Unknown
             val eventId = timelineEvent.root.eventId ?: return UnreadState.Unknown
