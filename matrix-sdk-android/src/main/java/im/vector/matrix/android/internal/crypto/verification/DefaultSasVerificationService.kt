@@ -206,7 +206,7 @@ internal class DefaultSasVerificationService @Inject constructor(
             Timber.e("## received invalid verification request")
             if (startReq.transactionID != null) {
                 sasTransportRoomMessageFactory.createTransport(event.roomId
-                        ?: "", cryptoService).cancelTransaction(
+                        ?: "", cryptoService, null).cancelTransaction(
                         startReq.transactionID ?: "",
                         otherUserId!!,
                         startReq.fromDevice ?: event.getSenderKey()!!,
@@ -218,10 +218,10 @@ internal class DefaultSasVerificationService @Inject constructor(
 
         handleStart(otherUserId, startReq as VerificationInfoStart) {
             it.transport = sasTransportRoomMessageFactory.createTransport(event.roomId
-                    ?: "", cryptoService)
+                    ?: "", cryptoService, it)
         }?.let {
             sasTransportRoomMessageFactory.createTransport(event.roomId
-                    ?: "", cryptoService).cancelTransaction(
+                    ?: "", cryptoService, null).cancelTransaction(
                     startReq.transactionID ?: "",
                     otherUserId!!,
                     startReq.fromDevice ?: event.getSenderKey()!!,
@@ -431,7 +431,7 @@ internal class DefaultSasVerificationService @Inject constructor(
         val otherUserId = event.senderId!!
         val existing = getExistingTransaction(otherUserId, keyReq.transactionID!!)
         if (existing == null) {
-            Timber.e("##  SAS Received invalid accept request")
+            Timber.e("##  SAS Received invalid key request")
             return
         }
         if (existing is SASVerificationTransaction) {
@@ -572,7 +572,7 @@ internal class DefaultSasVerificationService @Inject constructor(
                     transactionId,
                     otherUserId,
                     otherDeviceId)
-            tx.transport = sasTransportRoomMessageFactory.createTransport(roomId, cryptoService)
+            tx.transport = sasTransportRoomMessageFactory.createTransport(roomId, cryptoService, tx)
             addTransaction(tx)
 
             tx.start()

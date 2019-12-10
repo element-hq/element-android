@@ -36,7 +36,7 @@ import javax.inject.Inject
 internal class SasTransportRoomMessage(
         private val roomId: String,
         private val cryptoService: CryptoService,
-//        private val tx: SASVerificationTransaction?,
+        private val tx: SASVerificationTransaction?,
         private val sendVerificationMessageTask: SendVerificationMessageTask,
         private val taskExecutor: TaskExecutor
 ) : SasTransport {
@@ -57,6 +57,20 @@ internal class SasTransportRoomMessage(
                 )
         ) {
             constraints = TaskConstraints(true)
+            callback = object : MatrixCallback<SendResponse> {
+                override fun onSuccess(data: SendResponse) {
+                    if (onDone != null) {
+                        onDone()
+                    } else {
+                        tx?.state = nextState
+                    }
+                }
+
+                override fun onFailure(failure: Throwable) {
+                    Timber.e("## SAS verification [${tx?.transactionId}] failed to send toDevice in state : ${tx?.state}")
+                    tx?.cancel(onErrorReason)
+                }
+            }
             retryCount = 3
         }
                 .executeBy(taskExecutor)
@@ -153,9 +167,9 @@ internal class SasTransportRoomMessageFactory @Inject constructor(
         private val taskExecutor: TaskExecutor) {
 
     fun createTransport(roomId: String,
-                        cryptoService: CryptoService
-//                        tx: SASVerificationTransaction?
+                        cryptoService: CryptoService,
+                        tx: SASVerificationTransaction?
     ): SasTransportRoomMessage {
-        return SasTransportRoomMessage(roomId, cryptoService, /*tx,*/ sendVerificationMessageTask, taskExecutor)
+        return SasTransportRoomMessage(roomId, cryptoService, tx, sendVerificationMessageTask, taskExecutor)
     }
 }
