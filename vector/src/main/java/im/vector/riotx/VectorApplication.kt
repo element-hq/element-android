@@ -116,11 +116,12 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
         if (authenticationService.hasAuthenticatedSessions() && !activeSessionHolder.hasActiveSession()) {
             val lastAuthenticatedSession = authenticationService.getLastAuthenticatedSession()!!
             activeSessionHolder.setActiveSession(lastAuthenticatedSession)
-            lastAuthenticatedSession.configureAndStart(pushRuleTriggerListener, sessionListener)
+            lastAuthenticatedSession.configureAndStart(applicationContext, pushRuleTriggerListener, sessionListener)
         }
         ProcessLifecycleOwner.get().lifecycle.addObserver(object : LifecycleObserver {
             @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
             fun entersForeground() {
+                Timber.i("App entered foreground")
                 FcmHelper.onEnterForeground(appContext)
                 activeSessionHolder.getSafeActiveSession()?.also {
                     it.stopAnyBackgroundSync()

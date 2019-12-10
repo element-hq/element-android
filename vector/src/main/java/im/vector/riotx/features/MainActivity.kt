@@ -26,6 +26,8 @@ import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.error.ErrorFormatter
+import im.vector.riotx.core.extensions.configureAndStart
+import im.vector.riotx.core.extensions.startSyncing
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.utils.deleteAllFiles
 import im.vector.riotx.features.home.HomeActivity
@@ -75,8 +77,13 @@ class MainActivity : VectorBaseActivity() {
     }
 
     private fun doCleanUp(clearCache: Boolean, clearCredentials: Boolean) {
+        val session = sessionHolder.getSafeActiveSession()
+        if (session == null) {
+            start()
+            return
+        }
         when {
-            clearCredentials -> sessionHolder.getActiveSession().signOut(object : MatrixCallback<Unit> {
+            clearCredentials -> session.signOut(object : MatrixCallback<Unit> {
                 override fun onSuccess(data: Unit) {
                     Timber.w("SIGN_OUT: success, start app")
                     sessionHolder.clearActiveSession()
@@ -87,8 +94,9 @@ class MainActivity : VectorBaseActivity() {
                     displayError(failure, clearCache, clearCredentials)
                 }
             })
-            clearCache       -> sessionHolder.getActiveSession().clearCache(object : MatrixCallback<Unit> {
+            clearCache       -> session.clearCache(object : MatrixCallback<Unit> {
                 override fun onSuccess(data: Unit) {
+                    session.startSyncing(applicationContext)
                     doLocalCleanupAndStart()
                 }
 

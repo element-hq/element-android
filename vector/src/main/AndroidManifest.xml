@@ -104,6 +104,10 @@
             android:name=".core.services.CallService"
             android:exported="false" />
 
+        <service
+            android:name=".core.services.VectorSyncService"
+            android:exported="false" />
+
         <!-- Receivers -->
 
         <!-- Exported false, should only be accessible from this app!! -->

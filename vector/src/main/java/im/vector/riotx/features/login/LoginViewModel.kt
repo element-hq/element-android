@@ -16,6 +16,7 @@
 
 package im.vector.riotx.features.login
 
+import android.content.Context
 import com.airbnb.mvrx.*
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
@@ -44,6 +45,7 @@ import java.util.concurrent.CancellationException
  *
  */
 class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginViewState,
+                                                 private val applicationContext: Context,
                                                  private val authenticationService: AuthenticationService,
                                                  private val activeSessionHolder: ActiveSessionHolder,
                                                  private val pushRuleTriggerListener: PushRuleTriggerListener,
@@ -469,7 +471,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
 
     private fun onSessionCreated(session: Session) {
         activeSessionHolder.setActiveSession(session)
-        session.configureAndStart(pushRuleTriggerListener, sessionListener)
+        session.configureAndStart(applicationContext, pushRuleTriggerListener, sessionListener)
         setState {
             copy(
                     asyncLoginAction = Success(Unit)

@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.riotx.fdroid.service
+package im.vector.riotx.core.services
 
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import androidx.core.content.ContextCompat
 import im.vector.matrix.android.internal.session.sync.job.SyncService
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.vectorComponent
@@ -26,6 +27,15 @@ import im.vector.riotx.features.notifications.NotificationUtils
 import timber.log.Timber
 
 class VectorSyncService : SyncService() {
+
+    companion object {
+
+        fun newIntent(context: Context, userId: String): Intent {
+            return Intent(context, VectorSyncService::class.java).also {
+                it.putExtra(EXTRA_USER_ID, userId)
+            }
+        }
+    }
 
     private lateinit var notificationUtils: NotificationUtils
 
@@ -45,8 +55,7 @@ class VectorSyncService : SyncService() {
     }
 
     /**
-     * Service is started only in fdroid mode when no FCM is available
-     * Otherwise it is bounded
+     * Service is started in fdroid mode when no FCM is available or is used for initialSync
      */
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Timber.v("VectorSyncService - onStartCommand ")

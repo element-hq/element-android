@@ -21,6 +21,7 @@ import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.internal.auth.SessionParamsStore
 import im.vector.matrix.android.internal.di.UserId
+import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.DefaultInitialSyncProgressService
 import im.vector.matrix.android.internal.session.filter.FilterRepository
@@ -28,6 +29,7 @@ import im.vector.matrix.android.internal.session.homeserver.GetHomeServerCapabil
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import im.vector.matrix.android.internal.session.user.UserStore
 import im.vector.matrix.android.internal.task.Task
+import timber.log.Timber
 import javax.inject.Inject
 
 internal interface SyncTask : Task<SyncTask.Params, Unit> {
@@ -47,6 +49,7 @@ internal class DefaultSyncTask @Inject constructor(private val syncAPI: SyncAPI,
 ) : SyncTask {
 
     override suspend fun execute(params: SyncTask.Params) {
+        Timber.v("Sync task started on Thread: ${Thread.currentThread().name}")
         // Maybe refresh the home server capabilities data we know
         getHomeServerCapabilitiesTask.execute(Unit)
 
@@ -84,5 +87,6 @@ internal class DefaultSyncTask @Inject constructor(private val syncAPI: SyncAPI,
         if (isInitialSync) {
             initialSyncProgressService.endAll()
         }
+        Timber.v("Sync task finished on Thread: ${Thread.currentThread().name}")
     }
 }

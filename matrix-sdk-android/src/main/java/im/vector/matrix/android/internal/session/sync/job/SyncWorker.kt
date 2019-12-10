@@ -18,6 +18,10 @@ package im.vector.matrix.android.internal.session.sync.job
 import android.content.Context
 import androidx.work.*
 import com.squareup.moshi.JsonClass
+import im.vector.matrix.android.api.failure.Failure
+import im.vector.matrix.android.api.failure.MatrixError
+import im.vector.matrix.android.api.failure.isTokenError
+import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
 import im.vector.matrix.android.internal.session.sync.SyncTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
@@ -25,6 +29,7 @@ import im.vector.matrix.android.internal.worker.WorkManagerUtil
 import im.vector.matrix.android.internal.worker.WorkManagerUtil.matrixOneTimeWorkRequestBuilder
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import im.vector.matrix.android.internal.worker.getSessionComponent
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -46,45 +51,58 @@ internal class SyncWorker(context: Context,
     @Inject lateinit var syncTask: SyncTask
     @Inject lateinit var taskExecutor: TaskExecutor
     @Inject lateinit var coroutineDispatchers: MatrixCoroutineDispatchers
+    @Inject lateinit var networkConnectivityChecker: NetworkConnectivityChecker
 
     override suspend fun doWork(): Result {
         Timber.i("Sync work starting")
         val params = WorkerParamsFactory.fromData<Params>(inputData) ?: return Result.success()
         val sessionComponent = getSessionComponent(params.userId) ?: return Result.success()
         sessionComponent.inject(this)
-        runCatching {
-            withContext(coroutineDispatchers.sync) {
-                val taskParams = SyncTask.Params(0)
-                syncTask.execute(taskParams)
-            }
-        }
-        return Result.success()
+        return runCatching {
+            doSync(params.timeout)
+        }.fold(
+                { Result.success() },
+                { failure ->
+                    if (failure.isTokenError() || !params.automaticallyRetry) {
+                        Result.failure()
+                    } else {
+                        Result.retry()
+                    }
+                }
+        )
+    }
+
+    private suspend fun doSync(timeout: Long) = withContext(coroutineDispatchers.sync) {
+        val taskParams = SyncTask.Params(timeout)
+        syncTask.execute(taskParams)
     }
 
     companion object {
 
+        const val BG_SYNC_WORK_NAME = "BG_SYNCP"
+
         fun requireBackgroundSync(context: Context, userId: String, serverTimeout: Long = 0) {
             val data = WorkerParamsFactory.toData(Params(userId, serverTimeout, false))
             val workRequest = matrixOneTimeWorkRequestBuilder<SyncWorker>()
-                    .setInputData(data)
                     .setConstraints(WorkManagerUtil.workConstraints)
                     .setBackoffCriteria(BackoffPolicy.LINEAR, 1_000, TimeUnit.MILLISECONDS)
+                    .setInputData(data)
                     .build()
-            WorkManager.getInstance(context).enqueueUniqueWork("BG_SYNCP", ExistingWorkPolicy.REPLACE, workRequest)
+            WorkManager.getInstance(context).enqueueUniqueWork(BG_SYNC_WORK_NAME, ExistingWorkPolicy.REPLACE, workRequest)
         }
 
         fun automaticallyBackgroundSync(context: Context, userId: String, serverTimeout: Long = 0, delay: Long = 30_000) {
             val data = WorkerParamsFactory.toData(Params(userId, serverTimeout, true))
             val workRequest = matrixOneTimeWorkRequestBuilder<SyncWorker>()
-                    .setInputData(data)
                     .setConstraints(WorkManagerUtil.workConstraints)
+                    .setInputData(data)
                     .setBackoffCriteria(BackoffPolicy.LINEAR, delay, TimeUnit.MILLISECONDS)
                     .build()
-            WorkManager.getInstance(context).enqueueUniqueWork("BG_SYNCP", ExistingWorkPolicy.REPLACE, workRequest)
+            WorkManager.getInstance(context).enqueueUniqueWork(BG_SYNC_WORK_NAME, ExistingWorkPolicy.REPLACE, workRequest)
         }
 
         fun stopAnyBackgroundSync(context: Context) {
-            WorkManager.getInstance(context).cancelUniqueWork("BG_SYNCP")
+            WorkManager.getInstance(context).cancelUniqueWork(BG_SYNC_WORK_NAME)
         }
     }
 }

@@ -44,6 +44,7 @@ import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.matrix.android.api.session.user.UserService
 import im.vector.matrix.android.internal.crypto.DefaultCryptoService
 import im.vector.matrix.android.internal.database.LiveEntityObserver
+import im.vector.matrix.android.internal.session.sync.SyncTokenStore
 import im.vector.matrix.android.internal.session.sync.job.SyncThread
 import im.vector.matrix.android.internal.session.sync.job.SyncWorker
 import org.greenrobot.eventbus.EventBus
@@ -72,6 +73,7 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
                                                   private val secureStorageService: Lazy<SecureStorageService>,
                                                   private val syncThreadProvider: Provider<SyncThread>,
                                                   private val contentUrlResolver: ContentUrlResolver,
+                                                  private val syncTokenStore: SyncTokenStore,
                                                   private val contentUploadProgressTracker: ContentUploadStateTracker,
                                                   private val initialSyncProgressService: Lazy<InitialSyncProgressService>,
                                                   private val homeServerCapabilitiesService: Lazy<HomeServerCapabilitiesService>)
@@ -147,6 +149,10 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
         return getSyncThread().liveState()
     }
 
+    override fun hasAlreadySynced(): Boolean {
+        return syncTokenStore.getLastToken() != null
+    }
+
     private fun getSyncThread(): SyncThread {
         return syncThread ?: syncThreadProvider.get().also {
             syncThread = it
@@ -156,17 +162,7 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
     override fun clearCache(callback: MatrixCallback<Unit>) {
         stopSync()
         stopAnyBackgroundSync()
-        cacheService.get().clearCache(object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
-                startSync(true)
-                callback.onSuccess(data)
-            }
-
-            override fun onFailure(failure: Throwable) {
-                startSync(true)
-                callback.onFailure(failure)
-            }
-        })
+        cacheService.get().clearCache(callback)
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

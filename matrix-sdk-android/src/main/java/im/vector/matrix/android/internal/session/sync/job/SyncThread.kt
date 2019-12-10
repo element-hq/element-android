@@ -99,11 +99,10 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
         isStarted = true
         networkConnectivityChecker.register(this)
         backgroundDetectionObserver.register(this)
-
         while (state != SyncState.KILLING) {
             Timber.v("Entering loop, state: $state")
 
-            if (!networkConnectivityChecker.hasInternetAccess) {
+            if (!networkConnectivityChecker.hasInternetAccess()) {
                 Timber.v("No network. Waiting...")
                 updateStateTo(SyncState.NO_NETWORK)
                 synchronized(lock) { lock.wait() }

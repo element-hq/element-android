@@ -17,6 +17,7 @@
 package im.vector.matrix.android.internal.network
 
 import android.content.Context
+import androidx.annotation.WorkerThread
 import com.novoda.merlin.Merlin
 import com.novoda.merlin.MerlinsBeard
 import im.vector.matrix.android.internal.di.MatrixScope
@@ -28,8 +29,8 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 @MatrixScope
-internal class NetworkConnectivityChecker @Inject constructor(context: Context,
-                                                              backgroundDetectionObserver: BackgroundDetectionObserver)
+internal class NetworkConnectivityChecker @Inject constructor(private val context: Context,
+                                                              private val backgroundDetectionObserver: BackgroundDetectionObserver)
     : BackgroundDetectionObserver.Listener {
 
     private val merlin = Merlin.Builder()
@@ -37,19 +38,30 @@ internal class NetworkConnectivityChecker @Inject constructor(context: Context,
             .withDisconnectableCallbacks()
             .build(context)
 
-    private val listeners = Collections.synchronizedSet(LinkedHashSet<Listener>())
+    private val merlinsBeard = MerlinsBeard.Builder().build(context)
 
-    // True when internet is available
-    var hasInternetAccess = MerlinsBeard.Builder().build(context).isConnected
-        private set
+    private val listeners = Collections.synchronizedSet(LinkedHashSet<Listener>())
+    private var hasInternetAccess = merlinsBeard.isConnected
 
     init {
         backgroundDetectionObserver.register(this)
     }
 
+    /**
+     * Returns true when internet is available
+     */
+    @WorkerThread
+    fun hasInternetAccess(): Boolean {
+        // If we are in background we have unbound merlin, so we have to check
+        return if (backgroundDetectionObserver.isIsBackground) {
+            merlinsBeard.hasInternetAccess()
+        } else {
+            hasInternetAccess
+        }
+    }
+
     override fun onMoveToForeground() {
         merlin.bind()
-
         merlin.registerDisconnectable {
             if (hasInternetAccess) {
                 Timber.v("On Disconnect")
@@ -76,14 +88,17 @@ internal class NetworkConnectivityChecker @Inject constructor(context: Context,
         merlin.unbind()
     }
 
+    // In background you won't get notification as merlin is unbound
     suspend fun waitUntilConnected() {
         if (hasInternetAccess) {
             return
         } else {
+            Timber.v("Waiting for network...")
             suspendCoroutine<Unit> { continuation ->
                 register(object : Listener {
                     override fun onConnect() {
                         unregister(this)
+                        Timber.v("Connected to network...")
                         continuation.resume(Unit)
                     }
                 })

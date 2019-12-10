@@ -20,10 +20,6 @@
             android:enabled="true"
             android:exported="false" />
 
-        <service
-            android:name=".fdroid.service.VectorSyncService"
-            android:exported="false" />
-
     </application>
 
 </manifest>
