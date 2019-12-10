@@ -141,7 +141,7 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
                             } else if (failure is Failure.Cancelled) {
                                 Timber.v("Cancelled")
                             } else if (failure is Failure.ServerError
-                                    && (failure.error.code == MatrixError.UNKNOWN_TOKEN || failure.error.code == MatrixError.MISSING_TOKEN)) {
+                                    && (failure.error.code == MatrixError.M_UNKNOWN_TOKEN || failure.error.code == MatrixError.M_MISSING_TOKEN)) {
                                 // No token or invalid token, stop the thread
                                 Timber.w(failure)
                                 updateStateTo(SyncState.KILLING)

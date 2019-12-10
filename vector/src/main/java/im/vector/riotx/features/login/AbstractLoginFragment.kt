@@ -78,7 +78,7 @@ abstract class AbstractLoginFragment : VectorBaseFragment(), OnBackPressed {
     private fun showError(throwable: Throwable) {
         when (throwable) {
             is Failure.ServerError -> {
-                if (throwable.error.code == MatrixError.FORBIDDEN
+                if (throwable.error.code == MatrixError.M_FORBIDDEN
                         && throwable.httpCode == HttpsURLConnection.HTTP_FORBIDDEN /* 403 */) {
                     AlertDialog.Builder(requireActivity())
                             .setTitle(R.string.dialog_title_error)

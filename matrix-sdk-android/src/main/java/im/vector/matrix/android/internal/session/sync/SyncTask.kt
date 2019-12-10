@@ -74,7 +74,7 @@ internal class DefaultSyncTask @Inject constructor(private val syncAPI: SyncAPI,
         } catch (throwable: Throwable) {
             // Intercept 401
             if (throwable is Failure.ServerError
-                    && throwable.error.code == MatrixError.UNKNOWN_TOKEN) {
+                    && throwable.error.code == MatrixError.M_UNKNOWN_TOKEN) {
                 sessionParamsStore.delete(userId)
             }
             throw throwable

@@ -198,7 +198,7 @@ class LoginFragment @Inject constructor(
             is Fail    -> {
                 val error = state.asyncLoginAction.error
                 if (error is Failure.ServerError
-                        && error.error.code == MatrixError.FORBIDDEN
+                        && error.error.code == MatrixError.M_FORBIDDEN
                         && error.error.message.isEmpty()) {
                     // Login with email, but email unknown
                     loginFieldTil.error = getString(R.string.login_login_with_email_error)
