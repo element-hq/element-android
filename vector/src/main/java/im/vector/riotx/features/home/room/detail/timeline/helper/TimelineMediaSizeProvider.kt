@@ -19,11 +19,12 @@ package im.vector.riotx.features.home.room.detail.timeline.helper
 import androidx.recyclerview.widget.RecyclerView
 import im.vector.riotx.core.di.ScreenScope
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 @ScreenScope
 class TimelineMediaSizeProvider @Inject constructor() {
 
-    lateinit var recyclerView: RecyclerView
+    var recyclerView: RecyclerView? = null
     private var cachedSize: Pair<Int, Int>? = null
 
     fun getMaxSize(): Pair<Int, Int> {
@@ -31,17 +32,17 @@ class TimelineMediaSizeProvider @Inject constructor() {
     }
 
     private fun computeMaxSize(): Pair<Int, Int> {
-        val width = recyclerView.width
-        val height = recyclerView.height
+        val width = recyclerView?.width ?: 0
+        val height = recyclerView?.height ?: 0
         val maxImageWidth: Int
         val maxImageHeight: Int
         // landscape / portrait
         if (width < height) {
-            maxImageWidth = Math.round(width * 0.7f)
-            maxImageHeight = Math.round(height * 0.5f)
+            maxImageWidth = (width * 0.7f).roundToInt()
+            maxImageHeight = (height * 0.5f).roundToInt()
         } else {
-            maxImageWidth = Math.round(width * 0.5f)
-            maxImageHeight = Math.round(height * 0.7f)
+            maxImageWidth = (width * 0.5f).roundToInt()
+            maxImageHeight = (height * 0.7f).roundToInt()
         }
         return Pair(maxImageWidth, maxImageHeight)
     }

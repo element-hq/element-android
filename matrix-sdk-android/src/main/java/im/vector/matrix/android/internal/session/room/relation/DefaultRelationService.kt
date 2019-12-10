@@ -30,10 +30,13 @@ import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.model.relation.RelationService
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.util.Cancelable
+import im.vector.matrix.android.api.util.NoOpCancellable
 import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.api.util.toOptional
+import im.vector.matrix.android.internal.database.mapper.TimelineEventMapper
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryEntity
+import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.room.send.EncryptEventWorker
@@ -44,6 +47,7 @@ import im.vector.matrix.android.internal.session.room.timeline.TimelineSendEvent
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.CancelableWork
+import im.vector.matrix.android.internal.util.fetchCopyMap
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import timber.log.Timber
 
@@ -54,6 +58,7 @@ internal class DefaultRelationService @AssistedInject constructor(@Assisted priv
                                                                   private val cryptoService: CryptoService,
                                                                   private val findReactionEventForUndoTask: FindReactionEventForUndoTask,
                                                                   private val fetchEditHistoryTask: FetchEditHistoryTask,
+                                                                  private val timelineEventMapper: TimelineEventMapper,
                                                                   private val monarchy: Monarchy,
                                                                   private val taskExecutor: TaskExecutor)
     : RelationService {
@@ -64,11 +69,27 @@ internal class DefaultRelationService @AssistedInject constructor(@Assisted priv
     }
 
     override fun sendReaction(targetEventId: String, reaction: String): Cancelable {
-        val event = eventFactory.createReactionEvent(roomId, targetEventId, reaction)
-                .also { saveLocalEcho(it) }
-        val sendRelationWork = createSendEventWork(event, true)
-        TimelineSendEventWorkCommon.postWork(context, roomId, sendRelationWork)
-        return CancelableWork(context, sendRelationWork.id)
+        return if (monarchy
+                        .fetchCopyMap(
+                                { realm ->
+                                    TimelineEventEntity.where(realm, roomId, targetEventId).findFirst()
+                                },
+                                { entity, _ ->
+                                    timelineEventMapper.map(entity)
+                                })
+                        ?.annotations
+                        ?.reactionsSummary
+                        .orEmpty()
+                        .none { it.addedByMe && it.key == reaction }) {
+            val event = eventFactory.createReactionEvent(roomId, targetEventId, reaction)
+                    .also { saveLocalEcho(it) }
+            val sendRelationWork = createSendEventWork(event, true)
+            TimelineSendEventWorkCommon.postWork(context, roomId, sendRelationWork)
+            CancelableWork(context, sendRelationWork.id)
+        } else {
+            Timber.w("Reaction already added")
+            NoOpCancellable
+        }
     }
 
     override fun undoReaction(targetEventId: String, reaction: String): Cancelable {

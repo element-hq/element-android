@@ -20,6 +20,7 @@ import im.vector.matrix.android.internal.database.model.ReadMarkerEntity
 import im.vector.matrix.android.internal.database.model.ReadMarkerEntityFields
 import io.realm.Realm
 import io.realm.RealmQuery
+import io.realm.kotlin.createObject
 import io.realm.kotlin.where
 
 internal fun ReadMarkerEntity.Companion.where(realm: Realm, roomId: String): RealmQuery<ReadMarkerEntity> {
@@ -28,6 +29,5 @@ internal fun ReadMarkerEntity.Companion.where(realm: Realm, roomId: String): Rea
 }
 
 internal fun ReadMarkerEntity.Companion.getOrCreate(realm: Realm, roomId: String): ReadMarkerEntity {
-    return where(realm, roomId).findFirst()
-           ?: realm.createObject(ReadMarkerEntity::class.java, roomId)
+    return where(realm, roomId).findFirst() ?: realm.createObject(roomId)
 }

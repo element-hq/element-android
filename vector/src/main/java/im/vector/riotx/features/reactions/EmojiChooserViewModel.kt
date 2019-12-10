@@ -15,7 +15,6 @@
  */
 package im.vector.riotx.features.reactions
 
-import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import im.vector.riotx.core.utils.LiveEvent
@@ -23,36 +22,26 @@ import javax.inject.Inject
 
 class EmojiChooserViewModel @Inject constructor() : ViewModel() {
 
-    var adapter: EmojiRecyclerAdapter? = null
-    val emojiSourceLiveData: MutableLiveData<EmojiDataSource> = MutableLiveData()
-
     val navigateEvent: MutableLiveData<LiveEvent<String>> = MutableLiveData()
     var selectedReaction: String? = null
     var eventId: String? = null
 
     val currentSection: MutableLiveData<Int> = MutableLiveData()
+    val moveToSection: MutableLiveData<Int> = MutableLiveData()
 
-    var reactionClickListener = object : ReactionClickListener {
-        override fun onReactionSelected(reaction: String) {
-            selectedReaction = reaction
-            navigateEvent.value = LiveEvent(NAVIGATE_FINISH)
-        }
+    fun onReactionSelected(reaction: String) {
+        selectedReaction = reaction
+        navigateEvent.value = LiveEvent(NAVIGATE_FINISH)
     }
 
-    fun initWithContext(context: Context) {
-        // TODO load async
-        val emojiDataSource = EmojiDataSource(context)
-        emojiSourceLiveData.value = emojiDataSource
-        adapter = EmojiRecyclerAdapter(emojiDataSource, reactionClickListener)
-        adapter?.interactionListener = object : EmojiRecyclerAdapter.InteractionListener {
-            override fun firstVisibleSectionChange(section: Int) {
-                currentSection.value = section
-            }
-        }
+    // Called by the Fragment, when the List is scrolled
+    fun setCurrentSection(section: Int) {
+        currentSection.value = section
     }
 
-    fun scrollToSection(sectionIndex: Int) {
-        adapter?.scrollToSection(sectionIndex)
+    // Called by the Activity, when a tab item is clicked
+    fun scrollToSection(section: Int) {
+        moveToSection.value = section
     }
 
     companion object {

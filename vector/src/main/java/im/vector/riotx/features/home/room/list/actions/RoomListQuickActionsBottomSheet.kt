@@ -21,7 +21,6 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -29,6 +28,8 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
+import im.vector.riotx.core.extensions.cleanup
+import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.riotx.features.navigation.Navigator
 import kotlinx.android.parcel.Parcelize
@@ -56,8 +57,8 @@ class RoomListQuickActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), R
 
     override val showExpanded = true
 
-    override fun injectWith(screenComponent: ScreenComponent) {
-        screenComponent.inject(this)
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -69,11 +70,15 @@ class RoomListQuickActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), R
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(RoomListQuickActionsSharedActionViewModel::class.java)
-        recyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-        recyclerView.adapter = roomListActionsEpoxyController.adapter
+        recyclerView.configureWith(roomListActionsEpoxyController, hasFixedSize = false)
         // Disable item animation
         recyclerView.itemAnimator = null
         roomListActionsEpoxyController.listener = this
+    }
+
+    override fun onDestroyView() {
+        recyclerView.cleanup()
+        super.onDestroyView()
     }
 
     override fun invalidate() = withState(viewModel) {

@@ -97,7 +97,7 @@ class RoomPreviewViewModel @AssistedInject constructor(@Assisted initialState: R
             )
         }
 
-        session.joinRoom(state.roomId, emptyList(), object : MatrixCallback<Unit> {
+        session.joinRoom(state.roomId, callback = object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
                 // We do not update the joiningRoomsIds here, because, the room is not joined yet regarding the sync data.
                 // Instead, we wait for the room to be joined

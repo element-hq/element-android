@@ -539,7 +539,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                                 setState {
                                     copy(
                                             asyncHomeServerLoginFlowRequest = Uninitialized,
-                                            homeServerUrl = action.homeServerUrl,
+                                            homeServerUrl = data.homeServerUrl,
                                             loginMode = loginMode,
                                             loginModeSupportedTypes = data.loginFlowResponse.flows.mapNotNull { it.type }.toList()
                                     )

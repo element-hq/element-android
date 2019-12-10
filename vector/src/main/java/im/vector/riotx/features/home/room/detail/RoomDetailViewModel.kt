@@ -143,6 +143,9 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         timeline.addListener(this)
         timeline.start()
         setState { copy(timeline = this@RoomDetailViewModel.timeline) }
+
+        // Inform the SDK that the room is displayed
+        session.onRoomDisplayed(initialState.roomId)
     }
 
     override fun handle(action: RoomDetailAction) {
@@ -197,9 +200,10 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         invisibleEventsObservable.accept(action)
     }
 
-    fun getMember(userId: String) : RoomMember? {
-       return room.getRoomMember(userId)
+    fun getMember(userId: String): RoomMember? {
+        return room.getRoomMember(userId)
     }
+
     /**
      * Convert a send mode to a draft and save the draft
      */
@@ -263,7 +267,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 }
             }
             session.rx()
-                    .joinRoom(roomId, viaServer)
+                    .joinRoom(roomId, viaServers = viaServer)
                     .map { roomId }
                     .execute {
                         copy(tombstoneEventHandling = it)
@@ -484,7 +488,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     private fun handleInviteSlashCommand(invite: ParsedCommand.Invite) {
         _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled())
 
-        room.invite(invite.userId, object : MatrixCallback<Unit> {
+        room.invite(invite.userId, invite.reason, object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
                 _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandResultOk)
             }
@@ -550,7 +554,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun handleRejectInvite() {
-        room.leave(object : MatrixCallback<Unit> {})
+        room.leave(null, object : MatrixCallback<Unit> {})
     }
 
     private fun handleAcceptInvite() {
@@ -859,7 +863,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
 
     override fun onCleared() {
         timeline.dispose()
-        timeline.removeAllListeners()
+        timeline.removeListener(this)
         super.onCleared()
     }
 }

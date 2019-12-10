@@ -44,9 +44,9 @@ internal class DefaultRoomDirectoryService @Inject constructor(private val getPu
                 .executeBy(taskExecutor)
     }
 
-    override fun joinRoom(roomId: String, callback: MatrixCallback<Unit>): Cancelable {
+    override fun joinRoom(roomId: String, reason: String?, callback: MatrixCallback<Unit>): Cancelable {
         return joinRoomTask
-                .configureWith(JoinRoomTask.Params(roomId)) {
+                .configureWith(JoinRoomTask.Params(roomId, reason)) {
                     this.callback = callback
                 }
                 .executeBy(taskExecutor)

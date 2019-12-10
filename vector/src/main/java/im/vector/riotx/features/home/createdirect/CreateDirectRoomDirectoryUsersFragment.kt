@@ -23,9 +23,7 @@ import com.airbnb.mvrx.withState
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotx.R
-import im.vector.riotx.core.extensions.hideKeyboard
-import im.vector.riotx.core.extensions.setupAsSearch
-import im.vector.riotx.core.extensions.showKeyboard
+import im.vector.riotx.core.extensions.*
 import im.vector.riotx.core.platform.VectorBaseFragment
 import kotlinx.android.synthetic.main.fragment_create_direct_room_directory_users.*
 import javax.inject.Inject
@@ -48,10 +46,15 @@ class CreateDirectRoomDirectoryUsersFragment @Inject constructor(
         setupCloseView()
     }
 
+    override fun onDestroyView() {
+        recyclerView.cleanup()
+        directRoomController.callback = null
+        super.onDestroyView()
+    }
+
     private fun setupRecyclerView() {
-        recyclerView.setHasFixedSize(true)
         directRoomController.callback = this
-        recyclerView.setController(directRoomController)
+        recyclerView.configureWith(directRoomController)
     }
 
     private fun setupSearchByMatrixIdView() {

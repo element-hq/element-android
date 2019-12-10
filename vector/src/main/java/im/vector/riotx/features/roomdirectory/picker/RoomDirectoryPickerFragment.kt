@@ -19,12 +19,13 @@ package im.vector.riotx.features.roomdirectory.picker
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.matrix.android.api.session.room.model.thirdparty.RoomDirectoryData
 import im.vector.riotx.R
+import im.vector.riotx.core.extensions.cleanup
+import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.roomdirectory.RoomDirectoryAction
 import im.vector.riotx.features.roomdirectory.RoomDirectorySharedAction
@@ -60,6 +61,12 @@ class RoomDirectoryPickerFragment @Inject constructor(val roomDirectoryPickerVie
         setupRecyclerView()
     }
 
+    override fun onDestroyView() {
+        roomDirectoryPickerList.cleanup()
+        roomDirectoryPickerController.callback = null
+        super.onDestroyView()
+    }
+
     override fun getMenuRes() = R.menu.menu_directory_server_picker
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -73,12 +80,8 @@ class RoomDirectoryPickerFragment @Inject constructor(val roomDirectoryPickerVie
     }
 
     private fun setupRecyclerView() {
-        val layoutManager = LinearLayoutManager(context)
-
-        roomDirectoryPickerList.layoutManager = layoutManager
+        roomDirectoryPickerList.configureWith(roomDirectoryPickerController)
         roomDirectoryPickerController.callback = this
-
-        roomDirectoryPickerList.setController(roomDirectoryPickerController)
     }
 
     override fun onRoomDirectoryClicked(roomDirectoryData: RoomDirectoryData) {

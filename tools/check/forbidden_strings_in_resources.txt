@@ -82,3 +82,6 @@ layout_constraintLeft_
 ### Will crash on API < 21. Use ?colorAccent instead
 \?android:colorAccent
 \?android:attr/colorAccent
+
+### Use androidx.recyclerview.widget.RecyclerView because EpoxyRecyclerViews add behavior we do not want to
+<com\.airbnb\.epoxy\.EpoxyRecyclerView

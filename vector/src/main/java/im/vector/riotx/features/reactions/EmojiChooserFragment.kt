@@ -17,12 +17,18 @@ package im.vector.riotx.features.reactions
 
 import android.os.Bundle
 import android.view.View
-import androidx.recyclerview.widget.RecyclerView
+import androidx.lifecycle.observe
 import im.vector.riotx.R
+import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.platform.VectorBaseFragment
+import kotlinx.android.synthetic.main.emoji_chooser_fragment.*
 import javax.inject.Inject
 
-class EmojiChooserFragment @Inject constructor() : VectorBaseFragment() {
+class EmojiChooserFragment @Inject constructor(
+        private val emojiRecyclerAdapter: EmojiRecyclerAdapter
+) : VectorBaseFragment(),
+        EmojiRecyclerAdapter.InteractionListener,
+        ReactionClickListener {
 
     override fun getLayoutResId() = R.layout.emoji_chooser_fragment
 
@@ -31,10 +37,29 @@ class EmojiChooserFragment @Inject constructor() : VectorBaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = activityViewModelProvider.get(EmojiChooserViewModel::class.java)
-        viewModel.initWithContext(context!!)
-        (view as? RecyclerView)?.let {
-            it.adapter = viewModel.adapter
-            it.adapter?.notifyDataSetChanged()
+
+        emojiRecyclerAdapter.reactionClickListener = this
+        emojiRecyclerAdapter.interactionListener = this
+
+        emojiRecyclerView.adapter = emojiRecyclerAdapter
+
+        viewModel.moveToSection.observe(viewLifecycleOwner) { section ->
+            emojiRecyclerAdapter.scrollToSection(section)
         }
+    }
+
+    override fun firstVisibleSectionChange(section: Int) {
+        viewModel.setCurrentSection(section)
+    }
+
+    override fun onReactionSelected(reaction: String) {
+        viewModel.onReactionSelected(reaction)
+    }
+
+    override fun onDestroyView() {
+        emojiRecyclerView.cleanup()
+        emojiRecyclerAdapter.reactionClickListener = null
+        emojiRecyclerAdapter.interactionListener = null
+        super.onDestroyView()
     }
 }

@@ -81,29 +81,52 @@ object CommandParser {
                     ParsedCommand.SendEmote(message)
                 }
                 Command.JOIN_ROOM.command              -> {
-                    val roomAlias = textMessage.substring(Command.JOIN_ROOM.command.length).trim()
+                    if (messageParts.size >= 2) {
+                        val roomAlias = messageParts[1]
 
-                    if (roomAlias.isNotEmpty()) {
-                        ParsedCommand.JoinRoom(roomAlias)
+                        if (roomAlias.isNotEmpty()) {
+                            ParsedCommand.JoinRoom(
+                                    roomAlias,
+                                    textMessage.substring(Command.JOIN_ROOM.length + roomAlias.length)
+                                            .trim()
+                                            .takeIf { it.isNotBlank() }
+                            )
+                        } else {
+                            ParsedCommand.ErrorSyntax(Command.JOIN_ROOM)
+                        }
                     } else {
                         ParsedCommand.ErrorSyntax(Command.JOIN_ROOM)
                     }
                 }
                 Command.PART.command                   -> {
-                    val roomAlias = textMessage.substring(Command.PART.command.length).trim()
+                    if (messageParts.size >= 2) {
+                        val roomAlias = messageParts[1]
 
-                    if (roomAlias.isNotEmpty()) {
-                        ParsedCommand.PartRoom(roomAlias)
+                        if (roomAlias.isNotEmpty()) {
+                            ParsedCommand.PartRoom(
+                                    roomAlias,
+                                    textMessage.substring(Command.PART.length + roomAlias.length)
+                                            .trim()
+                                            .takeIf { it.isNotBlank() }
+                            )
+                        } else {
+                            ParsedCommand.ErrorSyntax(Command.PART)
+                        }
                     } else {
                         ParsedCommand.ErrorSyntax(Command.PART)
                     }
                 }
                 Command.INVITE.command                 -> {
-                    if (messageParts.size == 2) {
+                    if (messageParts.size >= 2) {
                         val userId = messageParts[1]
 
                         if (MatrixPatterns.isUserId(userId)) {
-                            ParsedCommand.Invite(userId)
+                            ParsedCommand.Invite(
+                                    userId,
+                                    textMessage.substring(Command.INVITE.length + userId.length)
+                                            .trim()
+                                            .takeIf { it.isNotBlank() }
+                            )
                         } else {
                             ParsedCommand.ErrorSyntax(Command.INVITE)
                         }
@@ -114,12 +137,14 @@ object CommandParser {
                 Command.KICK_USER.command              -> {
                     if (messageParts.size >= 2) {
                         val userId = messageParts[1]
-                        if (MatrixPatterns.isUserId(userId)) {
-                            val reason = textMessage.substring(Command.KICK_USER.command.length
-                                    + 1
-                                    + userId.length).trim()
 
-                            ParsedCommand.KickUser(userId, reason)
+                        if (MatrixPatterns.isUserId(userId)) {
+                            ParsedCommand.KickUser(
+                                    userId,
+                                    textMessage.substring(Command.KICK_USER.length + userId.length)
+                                            .trim()
+                                            .takeIf { it.isNotBlank() }
+                            )
                         } else {
                             ParsedCommand.ErrorSyntax(Command.KICK_USER)
                         }
@@ -130,12 +155,14 @@ object CommandParser {
                 Command.BAN_USER.command               -> {
                     if (messageParts.size >= 2) {
                         val userId = messageParts[1]
-                        if (MatrixPatterns.isUserId(userId)) {
-                            val reason = textMessage.substring(Command.BAN_USER.command.length
-                                    + 1
-                                    + userId.length).trim()
 
-                            ParsedCommand.BanUser(userId, reason)
+                        if (MatrixPatterns.isUserId(userId)) {
+                            ParsedCommand.BanUser(
+                                    userId,
+                                    textMessage.substring(Command.BAN_USER.length + userId.length)
+                                            .trim()
+                                            .takeIf { it.isNotBlank() }
+                            )
                         } else {
                             ParsedCommand.ErrorSyntax(Command.BAN_USER)
                         }
@@ -144,11 +171,16 @@ object CommandParser {
                     }
                 }
                 Command.UNBAN_USER.command             -> {
-                    if (messageParts.size == 2) {
+                    if (messageParts.size >= 2) {
                         val userId = messageParts[1]
 
                         if (MatrixPatterns.isUserId(userId)) {
-                            ParsedCommand.UnbanUser(userId)
+                            ParsedCommand.UnbanUser(
+                                    userId,
+                                    textMessage.substring(Command.UNBAN_USER.length + userId.length)
+                                            .trim()
+                                            .takeIf { it.isNotBlank() }
+                            )
                         } else {
                             ParsedCommand.ErrorSyntax(Command.UNBAN_USER)
                         }

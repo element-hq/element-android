@@ -38,7 +38,8 @@ internal open class RoomSummaryEntity(@PrimaryKey var roomId: String = "",
                                       var readMarkerId: String? = null,
                                       var hasUnreadMessages: Boolean = false,
                                       var tags: RealmList<RoomTagEntity> = RealmList(),
-                                      var userDrafts: UserDraftsEntity? = null
+                                      var userDrafts: UserDraftsEntity? = null,
+                                      var breadcrumbsIndex: Int = NOT_IN_BREADCRUMBS
 ) : RealmObject() {
 
     private var membershipStr: String = Membership.NONE.name
@@ -59,5 +60,7 @@ internal open class RoomSummaryEntity(@PrimaryKey var roomId: String = "",
             versioningStateStr = value.name
         }
 
-    companion object
+    companion object {
+        const val NOT_IN_BREADCRUMBS = -1
+    }
 }

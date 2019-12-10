@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/emoji_recycler_view"
+    android:id="@+id/emojiRecyclerView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:scrollbars="vertical"
@@ -9,6 +9,4 @@
     tools:itemCount="100"
     tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
     tools:listitem="@layout/grid_item_emoji"
-    tools:spanCount="10">
-
-</androidx.recyclerview.widget.RecyclerView>
+    tools:spanCount="10" />
