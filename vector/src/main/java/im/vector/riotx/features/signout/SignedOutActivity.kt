@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.main
+package im.vector.riotx.features.signout
 
 import android.content.Context
 import android.content.Intent

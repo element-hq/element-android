@@ -98,7 +98,7 @@
                 <category android:name="android.intent.category.OPENABLE" />
             </intent-filter>
         </activity>
-        <activity android:name=".features.main.SignedOutActivity" />
+        <activity android:name=".features.signout.SignedOutActivity" />
         <!-- Services -->
 
         <service
