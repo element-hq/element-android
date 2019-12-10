@@ -25,7 +25,6 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
-import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.riotx.R
@@ -46,7 +45,6 @@ private const val INDEX_PEOPLE = 1
 private const val INDEX_ROOMS = 2
 
 class HomeDetailFragment @Inject constructor(
-        private val session: Session,
         val homeDetailViewModelFactory: HomeDetailViewModel.Factory,
         private val avatarRenderer: AvatarRenderer
 ) : VectorBaseFragment(), KeysBackupBanner.Delegate {
@@ -56,9 +54,7 @@ class HomeDetailFragment @Inject constructor(
     private val viewModel: HomeDetailViewModel by fragmentViewModel()
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
 
-    override fun getLayoutResId(): Int {
-        return R.layout.fragment_home_detail
-    }
+    override fun getLayoutResId() = R.layout.fragment_home_detail
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

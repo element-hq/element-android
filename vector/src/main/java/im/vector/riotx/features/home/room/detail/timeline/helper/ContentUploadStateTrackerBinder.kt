@@ -25,12 +25,14 @@ import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
+import im.vector.riotx.core.di.ScreenScope
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.utils.TextUtils
 import im.vector.riotx.features.ui.getMessageTextColor
 import javax.inject.Inject
 
+@ScreenScope
 class ContentUploadStateTrackerBinder @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
                                                           private val colorProvider: ColorProvider,
                                                           private val errorFormatter: ErrorFormatter) {
@@ -40,7 +42,7 @@ class ContentUploadStateTrackerBinder @Inject constructor(private val activeSess
     fun bind(eventId: String,
              isLocalFile: Boolean,
              progressLayout: ViewGroup) {
-        activeSessionHolder.getActiveSession().also { session ->
+        activeSessionHolder.getSafeActiveSession()?.also { session ->
             val uploadStateTracker = session.contentUploadProgressTracker()
             val updateListener = ContentMediaProgressUpdater(progressLayout, isLocalFile, colorProvider, errorFormatter)
             updateListeners[eventId] = updateListener
@@ -49,11 +51,17 @@ class ContentUploadStateTrackerBinder @Inject constructor(private val activeSess
     }
 
     fun unbind(eventId: String) {
-        activeSessionHolder.getActiveSession().also { session ->
+        activeSessionHolder.getSafeActiveSession()?.also { session ->
             val uploadStateTracker = session.contentUploadProgressTracker()
             updateListeners[eventId]?.also {
                 uploadStateTracker.untrack(eventId, it)
             }
+        }
+    }
+
+    fun clear() {
+        activeSessionHolder.getSafeActiveSession()?.also {
+            it.contentUploadProgressTracker().clear()
         }
     }
 }

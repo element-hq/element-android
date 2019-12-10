@@ -25,7 +25,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.VisibilityState
-import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
@@ -44,7 +43,7 @@ import org.threeten.bp.LocalDateTime
 import javax.inject.Inject
 
 class TimelineEventController @Inject constructor(private val dateFormatter: VectorDateFormatter,
-                                                  private val session: Session,
+                                                  private val contentUploadStateTrackerBinder: ContentUploadStateTrackerBinder,
                                                   private val timelineItemFactory: TimelineItemFactory,
                                                   private val timelineMediaSizeProvider: TimelineMediaSizeProvider,
                                                   private val mergedHeaderItemFactory: MergedHeaderItemFactory,
@@ -207,6 +206,13 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         timelineMediaSizeProvider.recyclerView = recyclerView
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        timelineMediaSizeProvider.recyclerView = null
+        contentUploadStateTrackerBinder.clear()
+        timeline?.removeListener(this)
+        super.onDetachedFromRecyclerView(recyclerView)
     }
 
     override fun buildModels() {

@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.airbnb.epoxy.EpoxyRecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/publicRoomsList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

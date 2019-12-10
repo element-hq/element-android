@@ -2,16 +2,18 @@ Changes in RiotX 0.10.0 (2019-XX-XX)
 ===================================================
 
 Features ✨:
- -
+ - Breadcrumbs: switch from one room to another quickly (#571)
 
 Improvements 🙌:
- -
+ - Support entering a RiotWeb client URL instead of the homeserver URL during connection (#744)
 
 Other changes:
- -
+ - Add reason for all membership events (https://github.com/matrix-org/matrix-doc/pull/2367)
 
 Bugfix 🐛:
- -
+ - When automardown is ON, pills are sent as MD in body (#739)
+ - "ban" event are not rendered correctly (#716)
+ - Fix crash when rotating screen in Room timeline
 
 Translations 🗣:
  -

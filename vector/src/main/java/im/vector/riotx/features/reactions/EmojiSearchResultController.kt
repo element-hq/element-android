@@ -24,9 +24,10 @@ import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.ui.list.genericFooterItem
 import javax.inject.Inject
 
-class EmojiSearchResultController @Inject constructor(val stringProvider: StringProvider,
-                                                      private val fontProvider: EmojiCompatFontProvider)
-    : TypedEpoxyController<EmojiSearchResultViewState>() {
+class EmojiSearchResultController @Inject constructor(
+        private val stringProvider: StringProvider,
+        private val fontProvider: EmojiCompatFontProvider
+) : TypedEpoxyController<EmojiSearchResultViewState>() {
 
     var emojiTypeface: Typeface? = fontProvider.typeface
 

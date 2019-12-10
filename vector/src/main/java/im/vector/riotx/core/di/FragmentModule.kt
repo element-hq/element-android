@@ -33,10 +33,12 @@ import im.vector.riotx.features.home.LoadingFragment
 import im.vector.riotx.features.home.createdirect.CreateDirectRoomDirectoryUsersFragment
 import im.vector.riotx.features.home.createdirect.CreateDirectRoomKnownUsersFragment
 import im.vector.riotx.features.home.group.GroupListFragment
+import im.vector.riotx.features.home.room.breadcrumbs.BreadcrumbsFragment
 import im.vector.riotx.features.home.room.detail.RoomDetailFragment
 import im.vector.riotx.features.home.room.list.RoomListFragment
 import im.vector.riotx.features.login.*
 import im.vector.riotx.features.login.terms.LoginTermsFragment
+import im.vector.riotx.features.reactions.EmojiChooserFragment
 import im.vector.riotx.features.reactions.EmojiSearchResultFragment
 import im.vector.riotx.features.roomdirectory.PublicRoomsFragment
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomFragment
@@ -249,4 +251,14 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(PublicRoomsFragment::class)
     fun bindPublicRoomsFragment(fragment: PublicRoomsFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(BreadcrumbsFragment::class)
+    fun bindBreadcrumbsFragment(fragment: BreadcrumbsFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(EmojiChooserFragment::class)
+    fun bindEmojiChooserFragment(fragment: EmojiChooserFragment): Fragment
 }

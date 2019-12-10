@@ -29,6 +29,7 @@ import im.vector.riotx.features.crypto.keysbackup.setup.KeysBackupSetupSharedVie
 import im.vector.riotx.features.crypto.verification.SasVerificationViewModel
 import im.vector.riotx.features.home.HomeSharedActionViewModel
 import im.vector.riotx.features.home.createdirect.CreateDirectRoomSharedActionViewModel
+import im.vector.riotx.features.home.room.detail.RoomDetailSharedActionViewModel
 import im.vector.riotx.features.home.room.detail.timeline.action.MessageSharedActionViewModel
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
 import im.vector.riotx.features.login.LoginSharedActionViewModel
@@ -118,4 +119,9 @@ interface ViewModelModule {
     @IntoMap
     @ViewModelKey(LoginSharedActionViewModel::class)
     fun bindLoginSharedActionViewModel(viewModel: LoginSharedActionViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(RoomDetailSharedActionViewModel::class)
+    fun bindRoomDetailSharedActionViewModel(viewModel: RoomDetailSharedActionViewModel): ViewModel
 }

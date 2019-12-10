@@ -285,6 +285,9 @@ internal class DefaultTimeline(
     }
 
     override fun addListener(listener: Timeline.Listener) = synchronized(listeners) {
+        if (listeners.contains(listener)) {
+            return false
+        }
         listeners.add(listener).also {
             postSnapshot()
         }

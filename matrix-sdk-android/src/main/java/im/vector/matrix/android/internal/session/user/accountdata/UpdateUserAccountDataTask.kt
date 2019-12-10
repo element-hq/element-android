@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.session.user.accountdata
 
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.session.sync.model.accountdata.BreadcrumbsContent
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountData
 import im.vector.matrix.android.internal.task.Task
 import javax.inject.Inject
@@ -36,6 +37,15 @@ internal interface UpdateUserAccountDataTask : Task<UpdateUserAccountDataTask.Pa
 
         override fun getData(): Any {
             return directMessages
+        }
+    }
+
+    data class BreadcrumbsParams(override val type: String = UserAccountData.TYPE_BREADCRUMBS,
+                                 private val breadcrumbsContent: BreadcrumbsContent
+    ) : Params {
+
+        override fun getData(): Any {
+            return breadcrumbsContent
         }
     }
 }

@@ -83,8 +83,8 @@ internal class DefaultMembershipService @AssistedInject constructor(@Assisted pr
         return result
     }
 
-    override fun invite(userId: String, callback: MatrixCallback<Unit>): Cancelable {
-        val params = InviteTask.Params(roomId, userId)
+    override fun invite(userId: String, reason: String?, callback: MatrixCallback<Unit>): Cancelable {
+        val params = InviteTask.Params(roomId, userId, reason)
         return inviteTask
                 .configureWith(params) {
                     this.callback = callback
@@ -92,8 +92,8 @@ internal class DefaultMembershipService @AssistedInject constructor(@Assisted pr
                 .executeBy(taskExecutor)
     }
 
-    override fun join(viaServers: List<String>, callback: MatrixCallback<Unit>): Cancelable {
-        val params = JoinRoomTask.Params(roomId, viaServers)
+    override fun join(reason: String?, viaServers: List<String>, callback: MatrixCallback<Unit>): Cancelable {
+        val params = JoinRoomTask.Params(roomId, reason, viaServers)
         return joinTask
                 .configureWith(params) {
                     this.callback = callback
@@ -101,8 +101,8 @@ internal class DefaultMembershipService @AssistedInject constructor(@Assisted pr
                 .executeBy(taskExecutor)
     }
 
-    override fun leave(callback: MatrixCallback<Unit>): Cancelable {
-        val params = LeaveRoomTask.Params(roomId)
+    override fun leave(reason: String?, callback: MatrixCallback<Unit>): Cancelable {
+        val params = LeaveRoomTask.Params(roomId, reason)
         return leaveRoomTask
                 .configureWith(params) {
                     this.callback = callback

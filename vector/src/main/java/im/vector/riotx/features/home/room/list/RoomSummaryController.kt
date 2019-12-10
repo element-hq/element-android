@@ -42,7 +42,7 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
 
     init {
         // We are requesting a model build directly as the first build of epoxy is on the main thread.
-        // It avoids to build the the whole list of rooms on the main thread.
+        // It avoids to build the whole list of rooms on the main thread.
         requestModelBuild()
     }
 

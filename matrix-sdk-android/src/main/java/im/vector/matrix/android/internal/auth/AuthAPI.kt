@@ -20,6 +20,7 @@ import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.auth.data.Versions
 import im.vector.matrix.android.internal.auth.data.LoginFlowResponse
 import im.vector.matrix.android.internal.auth.data.PasswordLoginParams
+import im.vector.matrix.android.internal.auth.data.RiotConfig
 import im.vector.matrix.android.internal.auth.login.ResetPasswordMailConfirmed
 import im.vector.matrix.android.internal.auth.registration.*
 import im.vector.matrix.android.internal.network.NetworkConstants
@@ -30,6 +31,12 @@ import retrofit2.http.*
  * The login REST API.
  */
 internal interface AuthAPI {
+
+    /**
+     * Get a Riot config file
+     */
+    @GET("config.json")
+    fun getRiotConfig(): Call<RiotConfig>
 
     /**
      * Get the version information of the homeserver

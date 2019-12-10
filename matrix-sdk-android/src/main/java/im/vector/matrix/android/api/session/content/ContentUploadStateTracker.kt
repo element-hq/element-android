@@ -22,6 +22,8 @@ interface ContentUploadStateTracker {
 
     fun untrack(key: String, updateListener: UpdateListener)
 
+    fun clear()
+
     interface UpdateListener {
         fun onUpdate(state: State)
     }

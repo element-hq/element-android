@@ -16,23 +16,23 @@
 package im.vector.riotx.features.settings.push
 
 import android.os.Bundle
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
+import im.vector.riotx.core.extensions.cleanup
+import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.ui.list.genericFooterItem
-import kotlinx.android.synthetic.main.fragment_generic_recycler_epoxy.*
+import kotlinx.android.synthetic.main.fragment_generic_recycler.*
 
 // Referenced in vector_settings_notifications.xml
 class PushRulesFragment : VectorBaseFragment() {
 
-    override fun getLayoutResId(): Int = R.layout.fragment_generic_recycler_epoxy
+    override fun getLayoutResId() = R.layout.fragment_generic_recycler
 
     private val viewModel: PushRulesViewModel by fragmentViewModel(PushRulesViewModel::class)
 
@@ -43,14 +43,14 @@ class PushRulesFragment : VectorBaseFragment() {
         (activity as? VectorBaseActivity)?.supportActionBar?.setTitle(R.string.settings_push_rules)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        val lmgr = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        epoxyRecyclerView.layoutManager = lmgr
-        val dividerItemDecoration = DividerItemDecoration(epoxyRecyclerView.context,
-                lmgr.orientation)
-        epoxyRecyclerView.addItemDecoration(dividerItemDecoration)
-        epoxyRecyclerView.setController(epoxyController)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        recyclerView.configureWith(epoxyController, showDivider = true)
+    }
+
+    override fun onDestroyView() {
+        recyclerView.cleanup()
+        super.onDestroyView()
     }
 
     override fun invalidate() = withState(viewModel) { state ->

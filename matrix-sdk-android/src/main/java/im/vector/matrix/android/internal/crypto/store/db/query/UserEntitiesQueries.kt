@@ -19,6 +19,7 @@ package im.vector.matrix.android.internal.crypto.store.db.query
 import im.vector.matrix.android.internal.crypto.store.db.model.UserEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.UserEntityFields
 import io.realm.Realm
+import io.realm.kotlin.createObject
 import io.realm.kotlin.where
 
 /**
@@ -28,9 +29,7 @@ internal fun UserEntity.Companion.getOrCreate(realm: Realm, userId: String): Use
     return realm.where<UserEntity>()
             .equalTo(UserEntityFields.USER_ID, userId)
             .findFirst()
-            ?: let {
-                realm.createObject(UserEntity::class.java, userId)
-            }
+            ?: realm.createObject(userId)
 }
 
 /**

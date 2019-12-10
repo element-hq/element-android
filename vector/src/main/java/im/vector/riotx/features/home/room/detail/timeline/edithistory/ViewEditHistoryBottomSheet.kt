@@ -19,9 +19,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -30,6 +27,8 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
+import im.vector.riotx.core.extensions.cleanup
+import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.riotx.features.home.room.detail.timeline.action.TimelineEventFragmentArgs
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
@@ -54,8 +53,8 @@ class ViewEditHistoryBottomSheet : VectorBaseBottomSheetDialogFragment() {
         ViewEditHistoryEpoxyController(requireContext(), viewModel.dateFormatter, eventHtmlRenderer)
     }
 
-    override fun injectWith(screenComponent: ScreenComponent) {
-        screenComponent.inject(this)
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -66,11 +65,16 @@ class ViewEditHistoryBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        recyclerView.adapter = epoxyController.adapter
-        recyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        val dividerItemDecoration = DividerItemDecoration(requireContext(), LinearLayout.VERTICAL)
-        recyclerView.addItemDecoration(dividerItemDecoration)
+        recyclerView.configureWith(
+                epoxyController,
+                showDivider = true,
+                hasFixedSize = false)
         bottomSheetTitle.text = context?.getString(R.string.message_edits)
+    }
+
+    override fun onDestroyView() {
+        recyclerView.cleanup()
+        super.onDestroyView()
     }
 
     override fun invalidate() = withState(viewModel) {

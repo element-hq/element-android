@@ -22,7 +22,8 @@ import im.vector.matrix.android.internal.auth.data.LoginFlowResponse
 sealed class LoginFlowResult {
     data class Success(
             val loginFlowResponse: LoginFlowResponse,
-            val isLoginAndRegistrationSupported: Boolean
+            val isLoginAndRegistrationSupported: Boolean,
+            val homeServerUrl: String
     ) : LoginFlowResult()
 
     object OutdatedHomeserver : LoginFlowResult()

@@ -27,16 +27,19 @@ import im.vector.riotx.R
 enum class Command(val command: String, val parameters: String, @StringRes val description: Int) {
     EMOTE("/me", "<message>", R.string.command_description_emote),
     BAN_USER("/ban", "<user-id> [reason]", R.string.command_description_ban_user),
-    UNBAN_USER("/unban", "<user-id>", R.string.command_description_unban_user),
+    UNBAN_USER("/unban", "<user-id> [reason]", R.string.command_description_unban_user),
     SET_USER_POWER_LEVEL("/op", "<user-id> [<power-level>]", R.string.command_description_op_user),
     RESET_USER_POWER_LEVEL("/deop", "<user-id>", R.string.command_description_deop_user),
-    INVITE("/invite", "<user-id>", R.string.command_description_invite_user),
-    JOIN_ROOM("/join", "<room-alias>", R.string.command_description_join_room),
-    PART("/part", "<room-alias>", R.string.command_description_part_room),
+    INVITE("/invite", "<user-id> [reason]", R.string.command_description_invite_user),
+    JOIN_ROOM("/join", "<room-alias> [reason]", R.string.command_description_join_room),
+    PART("/part", "<room-alias> [reason]", R.string.command_description_part_room),
     TOPIC("/topic", "<topic>", R.string.command_description_topic),
     KICK_USER("/kick", "<user-id> [reason]", R.string.command_description_kick_user),
     CHANGE_DISPLAY_NAME("/nick", "<display-name>", R.string.command_description_nick),
     MARKDOWN("/markdown", "<on|off>", R.string.command_description_markdown),
     CLEAR_SCALAR_TOKEN("/clear_scalar_token", "", R.string.command_description_clear_scalar_token),
     SPOILER("/spoiler", "<message>", R.string.command_description_spoiler);
+
+    val length
+        get() = command.length + 1
 }

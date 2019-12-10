@@ -139,6 +139,7 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         restorables.forEach { it.onSaveInstanceState(outState) }
+        restorables.clear()
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {

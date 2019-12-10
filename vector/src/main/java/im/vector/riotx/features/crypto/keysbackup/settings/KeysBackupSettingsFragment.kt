@@ -21,6 +21,8 @@ import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
+import im.vector.riotx.core.extensions.cleanup
+import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.crypto.keysbackup.restore.KeysBackupRestoreActivity
 import im.vector.riotx.features.crypto.keysbackup.setup.KeysBackupSetupActivity
@@ -37,10 +39,14 @@ class KeysBackupSettingsFragment @Inject constructor(private val keysBackupSetti
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        keysBackupSettingsRecyclerView.setController(keysBackupSettingsRecyclerViewController)
-
+        keysBackupSettingsRecyclerView.configureWith(keysBackupSettingsRecyclerViewController)
         keysBackupSettingsRecyclerViewController.listener = this
+    }
+
+    override fun onDestroyView() {
+        keysBackupSettingsRecyclerViewController.listener = null
+        keysBackupSettingsRecyclerView.cleanup()
+        super.onDestroyView()
     }
 
     override fun invalidate() = withState(viewModel) { state ->

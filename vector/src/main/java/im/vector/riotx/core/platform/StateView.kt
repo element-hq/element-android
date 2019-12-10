@@ -51,7 +51,7 @@ class StateView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
 
     init {
         View.inflate(context, R.layout.view_state, this)
-        layoutParams = LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT)
+        layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
         errorRetryView.setOnClickListener {
             eventCallback?.onRetryClicked()
         }
