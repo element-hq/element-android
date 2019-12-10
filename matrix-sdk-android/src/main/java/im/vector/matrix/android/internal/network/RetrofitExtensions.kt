@@ -32,6 +32,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
 import java.io.IOException
+import java.net.HttpURLConnection
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
@@ -100,10 +101,11 @@ private fun toFailure(errorBody: ResponseBody?, httpCode: Int): Failure {
             if (matrixError.code == MatrixError.M_CONSENT_NOT_GIVEN && !matrixError.consentUri.isNullOrBlank()) {
                 // Also send this error to the bus, for a global management
                 EventBus.getDefault().post(GlobalError.ConsentNotGivenError(matrixError.consentUri))
-            } else if (matrixError.code == MatrixError.M_UNAUTHORIZED) {
+            } else if (httpCode == HttpURLConnection.HTTP_UNAUTHORIZED /* 401 */
+                    && matrixError.code == MatrixError.M_UNKNOWN_TOKEN) {
                 // TODO Check that this is ok during the login flow
                 // Also send this error to the bus, for a global management
-                EventBus.getDefault().post(GlobalError.InvalidToken(matrixError.isSoftLogout == true))
+                EventBus.getDefault().post(GlobalError.InvalidToken(matrixError.isSoftLogout))
             }
 
             return Failure.ServerError(matrixError, httpCode)

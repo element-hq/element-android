@@ -19,6 +19,7 @@ package im.vector.riotx.features
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.os.Parcelable
 import androidx.appcompat.app.AlertDialog
 import com.bumptech.glide.Glide
 import im.vector.matrix.android.api.MatrixCallback
@@ -30,6 +31,7 @@ import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.utils.deleteAllFiles
 import im.vector.riotx.features.home.HomeActivity
 import im.vector.riotx.features.login.LoginActivity
+import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -37,23 +39,30 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 
+@Parcelize
+data class MainActivityArgs(
+        val clearCache: Boolean = false,
+        val clearCredentials: Boolean = false,
+        val isUserLoggedOut: Boolean = false,
+        val isSoftLogout: Boolean = false
+) : Parcelable
+
 class MainActivity : VectorBaseActivity() {
 
     companion object {
-        private const val EXTRA_CLEAR_CACHE = "EXTRA_CLEAR_CACHE"
-        private const val EXTRA_CLEAR_CREDENTIALS = "EXTRA_CLEAR_CREDENTIALS"
+        private const val EXTRA_ARGS = "EXTRA_ARGS"
 
         // Special action to clear cache and/or clear credentials
-        fun restartApp(activity: Activity, clearCache: Boolean = false, clearCredentials: Boolean = false) {
+        fun restartApp(activity: Activity, args: MainActivityArgs) {
             val intent = Intent(activity, MainActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
 
-            intent.putExtra(EXTRA_CLEAR_CACHE, clearCache)
-            intent.putExtra(EXTRA_CLEAR_CREDENTIALS, clearCredentials)
+            intent.putExtra(EXTRA_ARGS, args)
             activity.startActivity(intent)
         }
     }
 
+    private var args: MainActivityArgs? = null
     @Inject lateinit var sessionHolder: ActiveSessionHolder
     @Inject lateinit var errorFormatter: ErrorFormatter
 
@@ -63,8 +72,10 @@ class MainActivity : VectorBaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val clearCache = intent.getBooleanExtra(EXTRA_CLEAR_CACHE, false)
-        val clearCredentials = intent.getBooleanExtra(EXTRA_CLEAR_CREDENTIALS, false)
+        args = intent.getParcelableExtra(EXTRA_ARGS)
+
+        val clearCache = args?.clearCache ?: false
+        val clearCredentials = args?.clearCredentials ?: false
 
         // Handle some wanted cleanup
         if (clearCache || clearCredentials) {

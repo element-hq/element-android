@@ -38,8 +38,8 @@ data class MatrixError(
         @Json(name = "admin_contact") val adminUri: String? = null,
         // For M_LIMIT_EXCEEDED
         @Json(name = "retry_after_ms") val retryAfterMillis: Long? = null,
-        // For M_UNAUTHORIZED
-        @Json(name = "soft_logout") val isSoftLogout: Boolean? = null
+        // For M_UNKNOWN_TOKEN
+        @Json(name = "soft_logout") val isSoftLogout: Boolean = false
 ) {
 
     companion object {

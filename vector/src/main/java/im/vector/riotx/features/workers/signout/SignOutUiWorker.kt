@@ -23,6 +23,7 @@ import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.extensions.vectorComponent
 import im.vector.riotx.features.MainActivity
+import im.vector.riotx.features.MainActivityArgs
 import im.vector.riotx.features.notifications.NotificationDrawerManager
 
 class SignOutUiWorker(private val activity: FragmentActivity) {
@@ -58,6 +59,11 @@ class SignOutUiWorker(private val activity: FragmentActivity) {
         notificationDrawerManager.clearAllEvents()
         notificationDrawerManager.persistInfo()
 
-        MainActivity.restartApp(activity, clearCache = true, clearCredentials = true)
+        MainActivity.restartApp(activity,
+                MainActivityArgs(
+                        clearCache = true,
+                        clearCredentials = true
+                )
+        )
     }
 }
