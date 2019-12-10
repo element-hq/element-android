@@ -38,6 +38,7 @@ import butterknife.Unbinder
 import com.airbnb.mvrx.MvRx
 import com.bumptech.glide.util.Util
 import com.google.android.material.snackbar.Snackbar
+import im.vector.matrix.android.api.failure.GlobalError
 import im.vector.riotx.BuildConfig
 import im.vector.riotx.R
 import im.vector.riotx.core.di.*
@@ -153,9 +154,8 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
         })
 
         sessionListener = getVectorComponent().sessionListener()
-        sessionListener.consentNotGivenLiveData.observeEvent(this) {
-            consentNotGivenHelper.displayDialog(it.consentUri,
-                    activeSessionHolder.getActiveSession().sessionParams.homeServerConnectionConfig.homeServerUri.host ?: "")
+        sessionListener.globalErrorLiveData.observeEvent(this) {
+            handleGlobalError(it)
         }
 
         doBeforeSetContentView()
@@ -177,6 +177,15 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
             } ?: run {
                 setTitle(titleRes)
             }
+        }
+    }
+
+    private fun handleGlobalError(globalError: GlobalError) {
+        when (globalError) {
+            is GlobalError.InvalidToken         -> TODO()
+            is GlobalError.ConsentNotGivenError ->
+                consentNotGivenHelper.displayDialog(globalError.consentUri,
+                        activeSessionHolder.getActiveSession().sessionParams.homeServerConnectionConfig.homeServerUri.host ?: "")
         }
     }
 

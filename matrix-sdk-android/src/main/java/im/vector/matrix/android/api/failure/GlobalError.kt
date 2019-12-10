@@ -16,7 +16,8 @@
 
 package im.vector.matrix.android.api.failure
 
-// This data class will be sent to the bus
-data class ConsentNotGivenError(
-        val consentUri: String
-)
+// This class will be sent to the bus
+sealed class GlobalError {
+    data class InvalidToken(val softLogout: Boolean) : GlobalError()
+    data class ConsentNotGivenError(val consentUri: String) : GlobalError()
+}

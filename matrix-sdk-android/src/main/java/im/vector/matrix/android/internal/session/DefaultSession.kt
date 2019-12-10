@@ -23,7 +23,7 @@ import androidx.lifecycle.LiveData
 import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.SessionParams
-import im.vector.matrix.android.api.failure.ConsentNotGivenError
+import im.vector.matrix.android.api.failure.GlobalError
 import im.vector.matrix.android.api.pushrules.PushRuleService
 import im.vector.matrix.android.api.session.InitialSyncProgressService
 import im.vector.matrix.android.api.session.Session
@@ -170,8 +170,8 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onConsentNotGivenError(consentNotGivenError: ConsentNotGivenError) {
-        sessionListeners.dispatchConsentNotGiven(consentNotGivenError)
+    fun onGlobalError(globalError: GlobalError) {
+        sessionListeners.dispatchGlobalError(globalError)
     }
 
     override fun contentUrlResolver() = contentUrlResolver

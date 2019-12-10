@@ -20,8 +20,8 @@ package im.vector.matrix.android.internal.network
 
 import com.squareup.moshi.JsonDataException
 import com.squareup.moshi.JsonEncodingException
-import im.vector.matrix.android.api.failure.ConsentNotGivenError
 import im.vector.matrix.android.api.failure.Failure
+import im.vector.matrix.android.api.failure.GlobalError
 import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.internal.di.MoshiProvider
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -99,7 +99,11 @@ private fun toFailure(errorBody: ResponseBody?, httpCode: Int): Failure {
         if (matrixError != null) {
             if (matrixError.code == MatrixError.M_CONSENT_NOT_GIVEN && !matrixError.consentUri.isNullOrBlank()) {
                 // Also send this error to the bus, for a global management
-                EventBus.getDefault().post(ConsentNotGivenError(matrixError.consentUri))
+                EventBus.getDefault().post(GlobalError.ConsentNotGivenError(matrixError.consentUri))
+            } else if (matrixError.code == MatrixError.M_UNAUTHORIZED) {
+                // TODO Check that this is ok during the login flow
+                // Also send this error to the bus, for a global management
+                EventBus.getDefault().post(GlobalError.InvalidToken(matrixError.isSoftLogout == true))
             }
 
             return Failure.ServerError(matrixError, httpCode)
