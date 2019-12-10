@@ -1,4 +1,4 @@
-Changes in RiotX 0.10.0 (2019-XX-XX)
+Changes in RiotX 0.10.0 (2019-12-10)
 ===================================================
 
 Features ✨:
@@ -14,12 +14,6 @@ Bugfix 🐛:
  - When automardown is ON, pills are sent as MD in body (#739)
  - "ban" event are not rendered correctly (#716)
  - Fix crash when rotating screen in Room timeline
-
-Translations 🗣:
- -
-
-Build 🧱:
- -
 
 Changes in RiotX 0.9.1 (2019-12-05)
 ===================================================
