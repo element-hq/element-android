@@ -22,11 +22,9 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.util.Cancelable
-import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.extensions.toReducedUrl
 import im.vector.riotx.core.platform.VectorViewModel
-import im.vector.riotx.core.resources.StringProvider
 
 /**
  *
@@ -34,7 +32,6 @@ import im.vector.riotx.core.resources.StringProvider
 class SoftLogoutViewModel @AssistedInject constructor(
         @Assisted initialState: SoftLogoutViewState,
         private val session: Session,
-        private val stringProvider: StringProvider,
         private val activeSessionHolder: ActiveSessionHolder)
     : VectorViewModel<SoftLogoutViewState, SoftLogoutAction>(initialState) {
 
@@ -77,8 +74,6 @@ class SoftLogoutViewModel @AssistedInject constructor(
     private fun handleSignInAgain(action: SoftLogoutAction.SignInAgain) {
         setState { copy(asyncLoginAction = Loading()) }
         currentTask = session.signInAgain(action.password,
-                // TODO We should use the previous device name (we have to provide it for the homeserver
-                stringProvider.getString(R.string.login_mobile_device),
                 object : MatrixCallback<Unit> {
                     override fun onFailure(failure: Throwable) {
                         setState {

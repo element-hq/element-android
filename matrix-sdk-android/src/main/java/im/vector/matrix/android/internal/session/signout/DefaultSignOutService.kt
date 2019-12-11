@@ -28,10 +28,9 @@ internal class DefaultSignOutService @Inject constructor(private val signOutTask
                                                          private val taskExecutor: TaskExecutor) : SignOutService {
 
     override fun signInAgain(password: String,
-                             deviceName: String,
                              callback: MatrixCallback<Unit>): Cancelable {
         return signInAgainTask
-                .configureWith(SignInAgainTask.Params(password, deviceName)) {
+                .configureWith(SignInAgainTask.Params(password)) {
                     this.callback = callback
                 }
                 .executeBy(taskExecutor)

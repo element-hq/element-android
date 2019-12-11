@@ -26,8 +26,7 @@ import javax.inject.Inject
 
 internal interface SignInAgainTask : Task<SignInAgainTask.Params, Unit> {
     data class Params(
-            val password: String,
-            val deviceName: String
+            val password: String
     )
 }
 
@@ -43,9 +42,11 @@ internal class DefaultSignInAgainTask @Inject constructor(
                             // Reuse the same userId
                             sessionParams.credentials.userId,
                             params.password,
-                            params.deviceName,
+                            // The spec says it will be ignored
+                            // https://matrix.org/docs/spec/client_server/latest#post-matrix-client-r0-login
+                            // but https://github.com/matrix-org/synapse/issues/6525
                             // Reuse the same deviceId
-                            sessionParams.credentials.deviceId
+                            deviceId = sessionParams.credentials.deviceId
                     )
             )
         }

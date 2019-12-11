@@ -29,7 +29,6 @@ interface SignOutService {
      * The same deviceId will be used
      */
     fun signInAgain(password: String,
-                    deviceName: String,
                     callback: MatrixCallback<Unit>): Cancelable
 
     /**
