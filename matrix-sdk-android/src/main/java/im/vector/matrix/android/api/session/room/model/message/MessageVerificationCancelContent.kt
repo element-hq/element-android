@@ -24,7 +24,7 @@ import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultC
 import im.vector.matrix.android.internal.crypto.verification.VerificationInfoCancel
 
 @JsonClass(generateAdapter = true)
-internal data class MessageVerificationCancelContent(
+data class MessageVerificationCancelContent(
         @Json(name = "code") override val code: String? = null,
         @Json(name = "reason") override val reason: String? = null,
         @Json(name = "m.relates_to") val relatesTo: RelationDefaultContent?

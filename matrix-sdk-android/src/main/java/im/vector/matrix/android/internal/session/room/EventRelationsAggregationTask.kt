@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.session.room
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
+import im.vector.matrix.android.api.session.crypto.sas.CancelCode
 import im.vector.matrix.android.api.session.events.model.*
 import im.vector.matrix.android.api.session.room.model.ReferencesAggregatedContent
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
@@ -52,6 +53,9 @@ enum class VerificationState {
     DONE
 }
 
+fun VerificationState.isCanceled() : Boolean {
+    return this == VerificationState.CANCELED_BY_ME || this == VerificationState.CANCELED_BY_OTHER
+}
 /**
  * Called by EventRelationAggregationUpdater, when new events that can affect relations are inserted in base.
  */
@@ -438,26 +442,27 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
                     ?: ReferencesAggregatedContent(VerificationState.REQUEST.name)
             // TODO ignore invalid messages? e.g a START after a CANCEL?
             // i.e. never change state if already canceled/done
+            val currentState = VerificationState.values().firstOrNull { data.verificationSummary == it.name }
             val newState = when (event.getClearType()) {
                 EventType.KEY_VERIFICATION_START  -> {
-                    VerificationState.WAITING
+                    updateVerificationState(currentState, VerificationState.WAITING)
                 }
                 EventType.KEY_VERIFICATION_ACCEPT -> {
-                    VerificationState.WAITING
+                    updateVerificationState(currentState, VerificationState.WAITING)
                 }
                 EventType.KEY_VERIFICATION_KEY    -> {
-                    VerificationState.WAITING
+                    updateVerificationState(currentState, VerificationState.WAITING)
                 }
                 EventType.KEY_VERIFICATION_MAC    -> {
-                    VerificationState.WAITING
+                    updateVerificationState(currentState, VerificationState.WAITING)
                 }
                 EventType.KEY_VERIFICATION_CANCEL -> {
-                    if (event.senderId == userId) {
+                    updateVerificationState(currentState, if (event.senderId == userId) {
                         VerificationState.CANCELED_BY_ME
-                    } else VerificationState.CANCELED_BY_OTHER
+                    } else VerificationState.CANCELED_BY_OTHER)
                 }
                 EventType.KEY_VERIFICATION_DONE   -> {
-                    VerificationState.DONE
+                    updateVerificationState(currentState, VerificationState.DONE)
                 }
                 else                              -> VerificationState.REQUEST
             }
@@ -474,5 +479,19 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
             }
             verifSummary.sourceEvents.add(event.eventId)
         }
+    }
+
+    private fun updateVerificationState(oldState: VerificationState?, newState: VerificationState) : VerificationState{
+        // Cancel is always prioritary ?
+        // Eg id i found that mac or keys mismatch and send a cancel and the other send a done, i have to
+        // consider as canceled
+        if (newState == VerificationState.CANCELED_BY_OTHER || newState == VerificationState.CANCELED_BY_ME) {
+            return newState
+        }
+        //never move out of cancel
+        if (oldState == VerificationState.CANCELED_BY_OTHER || oldState == VerificationState.CANCELED_BY_ME) {
+            return oldState
+        }
+        return newState
     }
 }

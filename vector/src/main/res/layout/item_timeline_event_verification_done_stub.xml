@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:drawableStart="@drawable/ic_shield_trusted"
+        tools:drawableStart="@drawable/ic_shield_trusted"
         android:drawablePadding="6dp"
         android:gravity="center"
         android:textColor="?riotx_text_primary"

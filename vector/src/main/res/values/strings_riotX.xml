@@ -150,6 +150,7 @@
     <string name="verification_request_you_cancelled">You cancelled</string>
     <string name="verification_request_other_cancelled">%s cancelled</string>
     <string name="verification_request_waiting">Waiting…</string>
+    <string name="verification_conclusion_warning">Untrusted sign in</string>
 
 
 </resources>

@@ -20,6 +20,7 @@ import android.graphics.Typeface
 import android.view.View
 import android.widget.RelativeLayout
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.content.ContextCompat
 import androidx.core.view.updateLayoutParams
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
@@ -45,8 +46,15 @@ abstract class VerificationRequestConclusionItem : AbsBaseMessageItem<Verificati
         holder.endGuideline.updateLayoutParams<RelativeLayout.LayoutParams> {
             this.marginEnd = leftGuideline
         }
-        holder.titleView.text = holder.view.context.getString(R.string.sas_verified)
+        val title = if (attributes.isPositive) R.string.sas_verified else R.string.verification_conclusion_warning
+        holder.titleView.text = holder.view.context.getString(title)
         holder.descriptionView.text = "${attributes.informationData.memberName} (${attributes.informationData.senderId})"
+
+        val startDrawable = if (attributes.isPositive) R.drawable.ic_shield_trusted else R.drawable.ic_shield_warning
+        holder.titleView.setCompoundDrawablesWithIntrinsicBounds(
+                ContextCompat.getDrawable(holder.view.context, startDrawable),
+                null, null, null
+        )
     }
 
     class Holder : AbsBaseMessageItem.Holder(STUB_ID) {
@@ -65,6 +73,7 @@ abstract class VerificationRequestConclusionItem : AbsBaseMessageItem<Verificati
     data class Attributes(
             val toUserId: String,
             val toUserName: String,
+            val isPositive: Boolean,
             override val informationData: MessageInformationData,
             override val avatarRenderer: AvatarRenderer,
             override val colorProvider: ColorProvider,
