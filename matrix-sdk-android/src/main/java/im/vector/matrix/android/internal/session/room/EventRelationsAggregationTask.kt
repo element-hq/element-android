@@ -19,7 +19,9 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.session.events.model.*
+import im.vector.matrix.android.api.session.room.model.ReferencesAggregatedContent
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageRelationContent
 import im.vector.matrix.android.api.session.room.model.relation.ReactionContent
 import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
@@ -40,6 +42,14 @@ internal interface EventRelationsAggregationTask : Task<EventRelationsAggregatio
             val events: List<Event>,
             val userId: String
     )
+}
+
+enum class VerificationState {
+    REQUEST,
+    WAITING,
+    CANCELED_BY_ME,
+    CANCELED_BY_OTHER,
+    DONE
 }
 
 /**
@@ -72,12 +82,12 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
                 }
                 val isLocalEcho = LocalEcho.isLocalEchoId(event.eventId ?: "")
                 when (event.type) {
-                    EventType.REACTION  -> {
+                    EventType.REACTION             -> {
                         // we got a reaction!!
                         Timber.v("###REACTION in room $roomId , reaction eventID ${event.eventId}")
                         handleReaction(event, roomId, realm, userId, isLocalEcho)
                     }
-                    EventType.MESSAGE   -> {
+                    EventType.MESSAGE              -> {
                         if (event.unsignedData?.relations?.annotations != null) {
                             Timber.v("###REACTION Agreggation in room $roomId for event ${event.eventId}")
                             handleInitialAggregatedRelations(event, roomId, event.unsignedData.relations.annotations, realm)
@@ -99,33 +109,49 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
                         }
                     }
 
-                    EventType.ENCRYPTED -> {
+                    EventType.KEY_VERIFICATION_DONE,
+                    EventType.KEY_VERIFICATION_CANCEL,
+                    EventType.KEY_VERIFICATION_ACCEPT,
+                    EventType.KEY_VERIFICATION_START,
+                    EventType.KEY_VERIFICATION_MAC,
+                    EventType.KEY_VERIFICATION_KEY -> {
+                        Timber.v("## SAS REF in room $roomId for event ${event.eventId}")
+                        event.content.toModel<MessageRelationContent>()?.relatesTo?.let {
+                            if (it.type == RelationType.REFERENCE && it.eventId != null) {
+                                handleVerification(realm, event, roomId, isLocalEcho, it.eventId, userId)
+                            }
+                        }
+                    }
+
+                    EventType.ENCRYPTED            -> {
                         // Relation type is in clear
                         val encryptedEventContent = event.content.toModel<EncryptedEventContent>()
                         if (encryptedEventContent?.relatesTo?.type == RelationType.REPLACE) {
                             // we need to decrypt if needed
-                            if (event.mxDecryptionResult == null) {
-                                try {
-                                    val result = cryptoService.decryptEvent(event, event.roomId)
-                                    event.mxDecryptionResult = OlmDecryptionResult(
-                                            payload = result.clearEvent,
-                                            senderKey = result.senderCurve25519Key,
-                                            keysClaimed = result.claimedEd25519Key?.let { k -> mapOf("ed25519" to k) },
-                                            forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
-                                    )
-                                } catch (e: MXCryptoError) {
-                                    Timber.w("Failed to decrypt e2e replace")
-                                    // TODO -> we should keep track of this and retry, or aggregation will be broken
-                                }
-                            }
+                            decryptIfNeeded(event)
                             event.getClearContent().toModel<MessageContent>()?.let {
                                 Timber.v("###REPLACE in room $roomId for event ${event.eventId}")
                                 // A replace!
                                 handleReplace(realm, event, it, roomId, isLocalEcho, encryptedEventContent.relatesTo.eventId)
                             }
+                        } else if (encryptedEventContent?.relatesTo?.type == RelationType.REFERENCE) {
+                            decryptIfNeeded(event)
+                            when (event.getClearType()) {
+                                EventType.KEY_VERIFICATION_DONE,
+                                EventType.KEY_VERIFICATION_CANCEL,
+                                EventType.KEY_VERIFICATION_ACCEPT,
+                                EventType.KEY_VERIFICATION_START,
+                                EventType.KEY_VERIFICATION_MAC,
+                                EventType.KEY_VERIFICATION_KEY -> {
+                                    Timber.v("## SAS REF in room $roomId for event ${event.eventId}")
+                                    encryptedEventContent.relatesTo.eventId?.let {
+                                        handleVerification(realm, event, roomId, isLocalEcho, it, userId)
+                                    }
+                                }
+                            }
                         }
                     }
-                    EventType.REDACTION -> {
+                    EventType.REDACTION            -> {
                         val eventToPrune = event.redacts?.let { EventEntity.where(realm, eventId = it).findFirst() }
                                 ?: return@forEach
                         when (eventToPrune.type) {
@@ -145,10 +171,27 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
                             }
                         }
                     }
-                    else                -> Timber.v("UnHandled event ${event.eventId}")
+                    else                           -> Timber.v("UnHandled event ${event.eventId}")
                 }
             } catch (t: Throwable) {
                 Timber.e(t, "## Should not happen ")
+            }
+        }
+    }
+
+    private fun decryptIfNeeded(event: Event) {
+        if (event.mxDecryptionResult == null) {
+            try {
+                val result = cryptoService.decryptEvent(event, event.roomId ?: "")
+                event.mxDecryptionResult = OlmDecryptionResult(
+                        payload = result.clearEvent,
+                        senderKey = result.senderCurve25519Key,
+                        keysClaimed = result.claimedEd25519Key?.let { k -> mapOf("ed25519" to k) },
+                        forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
+                )
+            } catch (e: MXCryptoError) {
+                Timber.w("Failed to decrypt e2e replace")
+                // TODO -> we should keep track of this and retry, or aggregation will be broken
             }
         }
     }
@@ -228,7 +271,8 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
                         val eventSummary = EventAnnotationsSummaryEntity.create(realm, roomId, eventId)
                         val sum = realm.createObject(ReactionAggregatedSummaryEntity::class.java)
                         sum.key = it.key
-                        sum.firstTimestamp = event.originServerTs ?: 0 // TODO how to maintain order?
+                        sum.firstTimestamp = event.originServerTs
+                                ?: 0 // TODO how to maintain order?
                         sum.count = it.count
                         eventSummary.reactionsSummary.add(sum)
                     } else {
@@ -372,6 +416,63 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
                     }
         } else {
             Timber.e("## Cannot find summary for key $reactionKey")
+        }
+    }
+
+    private fun handleVerification(realm: Realm, event: Event, roomId: String, isLocalEcho: Boolean, relatedEventId: String, userId: String) {
+        val eventSummary = EventAnnotationsSummaryEntity.where(realm, relatedEventId).findFirst()
+                ?: EventAnnotationsSummaryEntity.create(realm, roomId, relatedEventId).apply { this.roomId = roomId }
+
+        val verifSummary = eventSummary.referencesSummaryEntity
+                ?: ReferencesAggregatedSummaryEntity.create(realm, relatedEventId).also {
+                    eventSummary.referencesSummaryEntity = it
+                }
+
+        val txId = event.unsignedData?.transactionId
+
+        if (!isLocalEcho && verifSummary.sourceLocalEcho.contains(txId)) {
+            // ok it has already been handled
+        } else {
+            ContentMapper.map(verifSummary.content)?.toModel<ReferencesAggregatedContent>()
+            var data = ContentMapper.map(verifSummary.content)?.toModel<ReferencesAggregatedContent>()
+                    ?: ReferencesAggregatedContent(VerificationState.REQUEST.name)
+            // TODO ignore invalid messages? e.g a START after a CANCEL?
+            // i.e. never change state if already canceled/done
+            val newState = when (event.getClearType()) {
+                EventType.KEY_VERIFICATION_START  -> {
+                    VerificationState.WAITING
+                }
+                EventType.KEY_VERIFICATION_ACCEPT -> {
+                    VerificationState.WAITING
+                }
+                EventType.KEY_VERIFICATION_KEY    -> {
+                    VerificationState.WAITING
+                }
+                EventType.KEY_VERIFICATION_MAC    -> {
+                    VerificationState.WAITING
+                }
+                EventType.KEY_VERIFICATION_CANCEL -> {
+                    if (event.senderId == userId) {
+                        VerificationState.CANCELED_BY_ME
+                    } else VerificationState.CANCELED_BY_OTHER
+                }
+                EventType.KEY_VERIFICATION_DONE   -> {
+                    VerificationState.DONE
+                }
+                else                              -> VerificationState.REQUEST
+            }
+
+            data = data.copy(verificationSummary = newState.name)
+            verifSummary.content = ContentMapper.map(data.toContent())
+        }
+
+        if (isLocalEcho) {
+            verifSummary.sourceLocalEcho.add(event.eventId)
+        } else {
+            if (verifSummary.sourceLocalEcho.contains(txId)) {
+                verifSummary.sourceLocalEcho.remove(txId)
+            }
+            verifSummary.sourceEvents.add(event.eventId)
         }
     }
 }

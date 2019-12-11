@@ -93,14 +93,15 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
     // PRIVATE METHODS *****************************************************************************
 
     private fun handleRoomSync(realm: Realm, handlingStrategy: HandlingStrategy, isInitialSync: Boolean, reporter: DefaultInitialSyncProgressService?) {
+        val syncLocalTimeStampMillis = System.currentTimeMillis()
         val rooms = when (handlingStrategy) {
             is HandlingStrategy.JOINED  ->
                 handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_joined_rooms, 0.6f) {
-                    handleJoinedRoom(realm, it.key, it.value, isInitialSync)
+                    handleJoinedRoom(realm, it.key, it.value, isInitialSync, syncLocalTimeStampMillis)
                 }
             is HandlingStrategy.INVITED ->
                 handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_invited_rooms, 0.1f) {
-                    handleInvitedRoom(realm, it.key, it.value)
+                    handleInvitedRoom(realm, it.key, it.value, syncLocalTimeStampMillis)
                 }
 
             is HandlingStrategy.LEFT    -> {
@@ -115,7 +116,8 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
     private fun handleJoinedRoom(realm: Realm,
                                  roomId: String,
                                  roomSync: RoomSync,
-                                 isInitialSync: Boolean): RoomEntity {
+                                 isInitialSync: Boolean,
+                                 syncLocalTimestampMillis: Long): RoomEntity {
         Timber.v("Handle join sync for room $roomId")
 
         if (roomSync.ephemeral != null && roomSync.ephemeral.events.isNotEmpty()) {
@@ -154,7 +156,8 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
                     roomEntity,
                     roomSync.timeline.events,
                     roomSync.timeline.prevToken,
-                    roomSync.timeline.limited
+                    roomSync.timeline.limited,
+                    syncLocalTimestampMillis
             )
             roomEntity.addOrUpdate(chunkEntity)
         }
@@ -170,12 +173,13 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
 
     private fun handleInvitedRoom(realm: Realm,
                                   roomId: String,
-                                  roomSync: InvitedRoomSync): RoomEntity {
+                                  roomSync: InvitedRoomSync,
+                                  syncLocalTimestampMillis: Long): RoomEntity {
         Timber.v("Handle invited sync for room $roomId")
         val roomEntity = RoomEntity.where(realm, roomId).findFirst() ?: realm.createObject(roomId)
         roomEntity.membership = Membership.INVITE
         if (roomSync.inviteState != null && roomSync.inviteState.events.isNotEmpty()) {
-            val chunkEntity = handleTimelineEvents(realm, roomEntity, roomSync.inviteState.events)
+            val chunkEntity = handleTimelineEvents(realm, roomEntity, roomSync.inviteState.events, syncLocalTimestampMillis = syncLocalTimestampMillis)
             roomEntity.addOrUpdate(chunkEntity)
         }
         val hasRoomMember = roomSync.inviteState?.events?.firstOrNull {
@@ -200,7 +204,8 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
                                      roomEntity: RoomEntity,
                                      eventList: List<Event>,
                                      prevToken: String? = null,
-                                     isLimited: Boolean = true): ChunkEntity {
+                                     isLimited: Boolean = true,
+                                     syncLocalTimestampMillis: Long): ChunkEntity {
         val lastChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomEntity.roomId)
         var stateIndexOffset = 0
         val chunkEntity = if (!isLimited && lastChunk != null) {
@@ -216,6 +221,7 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
 
         val eventIds = ArrayList<String>(eventList.size)
         for (event in eventList) {
+            event.ageLocalTs = event.unsignedData?.age?.let { syncLocalTimestampMillis - it }
             event.eventId?.also { eventIds.add(it) }
             chunkEntity.add(roomEntity.roomId, event, PaginationDirection.FORWARDS, stateIndexOffset)
             // Give info to crypto module

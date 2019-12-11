@@ -19,9 +19,11 @@ package im.vector.matrix.android.internal.database.mapper
 import im.vector.matrix.android.api.session.room.model.EditAggregatedSummary
 import im.vector.matrix.android.api.session.room.model.EventAnnotationsSummary
 import im.vector.matrix.android.api.session.room.model.ReactionAggregatedSummary
+import im.vector.matrix.android.api.session.room.model.ReferencesAggregatedSummary
 import im.vector.matrix.android.internal.database.model.EditAggregatedSummaryEntity
 import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryEntity
 import im.vector.matrix.android.internal.database.model.ReactionAggregatedSummaryEntity
+import im.vector.matrix.android.internal.database.model.ReferencesAggregatedSummaryEntity
 import io.realm.RealmList
 
 internal object EventAnnotationsSummaryMapper {
@@ -44,6 +46,14 @@ internal object EventAnnotationsSummaryMapper {
                             it.sourceEvents.toList(),
                             it.sourceLocalEchoEvents.toList(),
                             it.lastEditTs
+                    )
+                },
+                referencesAggregatedSummary = annotationsSummary.referencesSummaryEntity?.let {
+                    ReferencesAggregatedSummary(
+                            it.eventId,
+                            ContentMapper.map(it.content),
+                            it.sourceEvents.toList(),
+                            it.sourceLocalEcho.toList()
                     )
                 }
         )
@@ -74,6 +84,14 @@ internal object EventAnnotationsSummaryMapper {
                     )
                 })
             }
+        }
+        eventAnnotationsSummaryEntity.referencesSummaryEntity = annotationsSummary.referencesAggregatedSummary?.let {
+            ReferencesAggregatedSummaryEntity(
+                    it.eventId,
+                    ContentMapper.map(it.content),
+                    RealmList<String>().apply { addAll(it.sourceEvents) },
+                    RealmList<String>().apply { addAll(it.localEchos) }
+            )
         }
         return eventAnnotationsSummaryEntity
     }

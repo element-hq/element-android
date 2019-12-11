@@ -59,6 +59,8 @@ internal open class EventEntity(@Index var eventId: String = "",
             sendStateStr = value.name
         }
 
+    var ageLocalTs: Long? = null
+
     companion object
 
     @LinkingObjects("untimelinedStateEvents")

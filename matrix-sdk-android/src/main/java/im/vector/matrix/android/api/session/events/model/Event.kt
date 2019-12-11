@@ -86,6 +86,14 @@ data class Event(
     var sendState: SendState = SendState.UNKNOWN
 
     /**
+    The `age` value transcoded in a timestamp based on the device clock when the SDK received
+    the event from the home server.
+    Unlike `age`, this value is static.
+     */
+    @Transient
+    var ageLocalTs: Long? = null
+
+    /**
      * Check if event is a state event.
      * @return true if event is state event.
      */
