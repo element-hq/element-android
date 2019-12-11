@@ -58,7 +58,7 @@ data class RoomDetailViewState(
         val isEncrypted: Boolean = false,
         val tombstoneEvent: Event? = null,
         val tombstoneEventHandling: Async<String> = Uninitialized,
-        val syncState: SyncState = SyncState.IDLE,
+        val syncState: SyncState = SyncState.Idle,
         val highlightedEventId: String? = null,
         val unreadState: UnreadState = UnreadState.Unknown,
         val canShowJumpToReadMarker: Boolean = true

@@ -17,11 +17,11 @@
 package im.vector.matrix.android.api.session.sync
 
 sealed class SyncState {
-    object IDLE : SyncState()
-    data class RUNNING(val afterPause: Boolean) : SyncState()
-    object PAUSED : SyncState()
-    object KILLING : SyncState()
-    object KILLED : SyncState()
-    object NO_NETWORK : SyncState()
-    object INVALID_TOKEN : SyncState()
+    object Idle : SyncState()
+    data class Running(val afterPause: Boolean) : SyncState()
+    object Paused : SyncState()
+    object Killing : SyncState()
+    object Killed : SyncState()
+    object NoNetwork : SyncState()
+    object InvalidToken : SyncState()
 }
