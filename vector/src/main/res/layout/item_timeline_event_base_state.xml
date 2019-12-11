@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:addStatesFromChildren="true"
+    android:background="?attr/selectableItemBackground">
+
+    <im.vector.riotx.core.platform.CheckableView
+        android:id="@+id/messageSelectedBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@+id/informationBottom"
+        android:layout_alignParentTop="true"
+        android:background="?riotx_highlighted_message_background" />
+
+    <View
+        android:id="@+id/messageStartGuideline"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="52dp" />
+
+    <View
+        android:id="@+id/messageEndGuideline"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="52dp" />
+
+    <FrameLayout
+        android:id="@+id/viewStubContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:layout_toStartOf="@id/messageEndGuideline"
+        android:layout_toEndOf="@id/messageStartGuideline"
+        android:background="@drawable/rounded_rect_shape_8"
+        android:padding="8dp">
+
+        <ViewStub
+            android:id="@+id/messageVerificationRequestStub"
+            style="@style/TimelineContentStubBaseParams"
+            android:layout="@layout/item_timeline_event_verification_stub"
+            tools:visibility="gone" />
+
+        <ViewStub
+            android:id="@+id/messageVerificationDoneStub"
+            style="@style/TimelineContentStubBaseParams"
+            android:layout="@layout/item_timeline_event_verification_done_stub"
+            tools:visibility="visible" />
+
+    </FrameLayout>
+
+
+    <LinearLayout
+        android:id="@+id/informationBottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/viewStubContainer"
+        android:layout_toEndOf="@id/messageStartGuideline"
+        android:orientation="vertical">
+
+        <com.google.android.flexbox.FlexboxLayout
+            android:id="@+id/reactionsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="4dp"
+            app:dividerDrawable="@drawable/reaction_divider"
+            app:flexWrap="wrap"
+            app:showDivider="middle"
+            tools:background="#F0E0F0"
+            tools:layout_height="40dp">
+
+            <!-- ReactionButtons will be added here in the code -->
+            <!--im.vector.riotx.features.reactions.widget.ReactionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" /-->
+
+        </com.google.android.flexbox.FlexboxLayout>
+
+        <im.vector.riotx.core.ui.views.ReadReceiptsView
+            android:id="@+id/readReceiptsView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="4dp" />
+
+    </LinearLayout>
+
+</RelativeLayout>

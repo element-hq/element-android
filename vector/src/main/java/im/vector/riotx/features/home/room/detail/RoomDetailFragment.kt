@@ -1024,6 +1024,10 @@ class RoomDetailFragment @Inject constructor(
                 .show(requireActivity().supportFragmentManager, "DISPLAY_EDITS")
     }
 
+    override fun onTimelineItemAction(itemAction: RoomDetailAction) {
+        roomDetailViewModel.handle(itemAction)
+    }
+
     override fun onRoomCreateLinkClicked(url: String) {
         permalinkHandler.launch(requireContext(), url, object : NavigateToRoomInterceptor {
             override fun navToRoom(roomId: String, eventId: String?): Boolean {

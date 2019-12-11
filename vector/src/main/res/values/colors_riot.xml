@@ -123,6 +123,9 @@
     <!-- Button color -->
     <color name="button_enabled_text_color">#FFFFFFFF</color>
     <color name="button_disabled_text_color">#FFFFFFFF</color>
+    <color name="button_destructive_enabled_text_color">#FF4B55</color>
+    <color name="button_destructive_disabled_text_color">#FF4B55</color>
+
 
     <!-- Link color -->
     <color name="link_color_light">#368BD6</color>

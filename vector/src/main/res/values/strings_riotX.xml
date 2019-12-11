@@ -142,4 +142,14 @@
 
     <string name="seen_by">Seen by</string>
 
+
+    <string name="verification_request">Verification Request</string>
+    <string name="verification_sent">Verification Sent</string>
+    <string name="verification_request_you_accepted">You accepted</string>
+    <string name="verification_request_other_accepted">%s accepted</string>
+    <string name="verification_request_you_cancelled">You cancelled</string>
+    <string name="verification_request_other_cancelled">%s cancelled</string>
+    <string name="verification_request_waiting">Waiting…</string>
+
+
 </resources>

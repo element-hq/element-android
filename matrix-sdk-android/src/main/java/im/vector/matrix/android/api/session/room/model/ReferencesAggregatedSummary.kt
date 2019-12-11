@@ -27,4 +27,3 @@ class ReferencesAggregatedSummary(
         val sourceEvents: List<String>,
         val localEchos: List<String>
 )
-

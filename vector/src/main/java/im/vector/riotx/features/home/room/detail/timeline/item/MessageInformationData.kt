@@ -18,6 +18,7 @@ package im.vector.riotx.features.home.room.detail.timeline.item
 
 import android.os.Parcelable
 import im.vector.matrix.android.api.session.room.send.SendState
+import im.vector.matrix.android.internal.session.room.VerificationState
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -33,7 +34,14 @@ data class MessageInformationData(
         val orderedReactionList: List<ReactionInfoData>? = null,
         val hasBeenEdited: Boolean = false,
         val hasPendingEdits: Boolean = false,
-        val readReceipts: List<ReadReceiptData> = emptyList()
+        val readReceipts: List<ReadReceiptData> = emptyList(),
+        val referencesInfoData: ReferencesInfoData? = null,
+        val sentByMe : Boolean
+) : Parcelable
+
+@Parcelize
+data class ReferencesInfoData(
+        val verificationStatus: VerificationState
 ) : Parcelable
 
 @Parcelize
