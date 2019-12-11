@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,14 +14,11 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.api.session.sync
+package im.vector.riotx.features.signout
 
-sealed class SyncState {
-    object IDLE : SyncState()
-    data class RUNNING(val afterPause: Boolean) : SyncState()
-    object PAUSED : SyncState()
-    object KILLING : SyncState()
-    object KILLED : SyncState()
-    object NO_NETWORK : SyncState()
-    object INVALID_TOKEN : SyncState()
+import im.vector.riotx.core.platform.VectorViewModelAction
+
+sealed class SoftLogoutAction : VectorViewModelAction {
+    data class SignInAgain(val password: String) : SoftLogoutAction()
+    // TODO Add reset pwd...
 }

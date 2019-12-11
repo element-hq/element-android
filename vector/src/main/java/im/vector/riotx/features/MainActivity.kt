@@ -33,6 +33,7 @@ import im.vector.riotx.core.utils.deleteAllFiles
 import im.vector.riotx.features.home.HomeActivity
 import im.vector.riotx.features.login.LoginActivity
 import im.vector.riotx.features.signout.SignedOutActivity
+import im.vector.riotx.features.signout.SoftLogoutActivity
 import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -81,7 +82,7 @@ class MainActivity : VectorBaseActivity() {
         if (args.clearCache || args.clearCredentials) {
             doCleanUp()
         } else {
-            start()
+            startNextActivityAndFinish()
         }
     }
 
@@ -143,7 +144,7 @@ class MainActivity : VectorBaseActivity() {
             }
         }
 
-        start()
+        startNextActivityAndFinish()
     }
 
     private fun displayError(failure: Throwable) {
@@ -151,22 +152,29 @@ class MainActivity : VectorBaseActivity() {
                 .setTitle(R.string.dialog_title_error)
                 .setMessage(errorFormatter.toHumanReadable(failure))
                 .setPositiveButton(R.string.global_retry) { _, _ -> doCleanUp() }
-                .setNegativeButton(R.string.cancel) { _, _ -> start() }
+                .setNegativeButton(R.string.cancel) { _, _ -> startNextActivityAndFinish() }
                 .setCancelable(false)
                 .show()
     }
 
-    private fun start() {
-        val intent = if (sessionHolder.hasActiveSession()) {
-            HomeActivity.newIntent(this)
-        } else {
-            // Check if we've been signed out
-            if (args.isUserLoggedOut) {
-                // TODO Soft logout
-                SignedOutActivity.newIntent(this)
-            } else {
+    private fun startNextActivityAndFinish() {
+        val intent = when {
+            args.clearCredentials            ->
+                // User has explicitly asked to log out
                 LoginActivity.newIntent(this, null)
-            }
+            args.isSoftLogout                ->
+                // The homeserver has invalidated the token, with a soft logout
+                SoftLogoutActivity.newIntent(this)
+            args.isUserLoggedOut             ->
+                // the homeserver has invalidated the token (password changed, device deleted, other security reason
+                SignedOutActivity.newIntent(this)
+            sessionHolder.hasActiveSession() ->
+                // We have a session. In case of soft logout (i.e. restart of the app after a soft logout)
+                // the app will try to sync and will reenter the soft logout use case
+                HomeActivity.newIntent(this)
+            else                             ->
+                // First start, or no active session
+                LoginActivity.newIntent(this, null)
         }
         startActivity(intent)
         finish()

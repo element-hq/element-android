@@ -49,6 +49,7 @@ import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomActivity
 import im.vector.riotx.features.settings.VectorSettingsActivity
 import im.vector.riotx.features.share.IncomingShareActivity
+import im.vector.riotx.features.signout.SoftLogoutActivity
 import im.vector.riotx.features.ui.UiStateRepository
 
 @Component(
@@ -125,6 +126,8 @@ interface ScreenComponent {
     fun inject(incomingShareActivity: IncomingShareActivity)
 
     fun inject(roomListActionsBottomSheet: RoomListQuickActionsBottomSheet)
+
+    fun inject(activity: SoftLogoutActivity)
 
     @Component.Factory
     interface Factory {

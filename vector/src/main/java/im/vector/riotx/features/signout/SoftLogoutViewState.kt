@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.api.session.sync
+package im.vector.riotx.features.signout
 
-sealed class SyncState {
-    object IDLE : SyncState()
-    data class RUNNING(val afterPause: Boolean) : SyncState()
-    object PAUSED : SyncState()
-    object KILLING : SyncState()
-    object KILLED : SyncState()
-    object NO_NETWORK : SyncState()
-    object INVALID_TOKEN : SyncState()
-}
+import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.Uninitialized
+
+data class SoftLogoutViewState(
+        val asyncLoginAction: Async<Unit> = Uninitialized,
+        val homeServerUrl: String,
+        val userId: String,
+        val userDisplayName: String
+) : MvRxState

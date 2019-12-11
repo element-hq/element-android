@@ -20,9 +20,17 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.util.Cancelable
 
 /**
- * This interface defines a method to sign out. It's implemented at the session level.
+ * This interface defines a method to sign out, or to renew the token. It's implemented at the session level.
  */
 interface SignOutService {
+
+    /**
+     * Ask the homeserver for a new access token.
+     * The same deviceId will be used
+     */
+    fun signInAgain(password: String,
+                    deviceName: String,
+                    callback: MatrixCallback<Unit>): Cancelable
 
     /**
      * Sign out, and release the session, clear all the session data, including crypto data

@@ -37,8 +37,11 @@ internal abstract class SignOutModule {
     }
 
     @Binds
-    abstract fun bindSignOutTask(signOutTask: DefaultSignOutTask): SignOutTask
+    abstract fun bindSignOutTask(task: DefaultSignOutTask): SignOutTask
 
     @Binds
-    abstract fun bindSignOutService(signOutService: DefaultSignOutService): SignOutService
+    abstract fun bindSignInAgainTask(task: DefaultSignInAgainTask): SignInAgainTask
+
+    @Binds
+    abstract fun bindSignOutService(service: DefaultSignOutService): SignOutService
 }

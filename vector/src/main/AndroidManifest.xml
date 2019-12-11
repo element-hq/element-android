@@ -99,6 +99,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".features.signout.SignedOutActivity" />
+        <activity
+            android:name=".features.signout.SoftLogoutActivity"
+            android:windowSoftInputMode="adjustResize" />
         <!-- Services -->
 
         <service

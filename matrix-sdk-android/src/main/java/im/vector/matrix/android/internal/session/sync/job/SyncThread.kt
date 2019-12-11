@@ -50,6 +50,7 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
     private var cancelableTask: Cancelable? = null
 
     private var isStarted = false
+    private var isTokenValid = true
 
     init {
         updateStateTo(SyncState.IDLE)
@@ -64,6 +65,8 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
         if (!isStarted) {
             Timber.v("Resume sync...")
             isStarted = true
+            // Check again the token validity
+            isTokenValid = true
             lock.notify()
         }
     }
@@ -113,6 +116,11 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
                 updateStateTo(SyncState.PAUSED)
                 synchronized(lock) { lock.wait() }
                 Timber.v("...unlocked")
+            } else if (!isTokenValid) {
+                Timber.v("Token is invalid. Waiting...")
+                updateStateTo(SyncState.INVALID_TOKEN)
+                synchronized(lock) { lock.wait() }
+                Timber.v("...unlocked")
             } else {
                 if (state !is SyncState.RUNNING) {
                     updateStateTo(SyncState.RUNNING(afterPause = true))
@@ -142,9 +150,10 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
                                 Timber.v("Cancelled")
                             } else if (failure is Failure.ServerError
                                     && (failure.error.code == MatrixError.M_UNKNOWN_TOKEN || failure.error.code == MatrixError.M_MISSING_TOKEN)) {
-                                // No token or invalid token, stop the thread
+                                // No token or invalid token
                                 Timber.w(failure)
-                                updateStateTo(SyncState.KILLING)
+                                isTokenValid = false
+                                isStarted = false
                             } else {
                                 Timber.e(failure)
 

@@ -16,6 +16,7 @@
 
 package im.vector.matrix.android.internal.auth
 
+import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.auth.data.SessionParams
 
 internal interface SessionParamsStore {
@@ -27,6 +28,8 @@ internal interface SessionParamsStore {
     fun getAll(): List<SessionParams>
 
     suspend fun save(sessionParams: SessionParams)
+
+    suspend fun updateCredentials(newCredentials: Credentials)
 
     suspend fun delete(userId: String)
 

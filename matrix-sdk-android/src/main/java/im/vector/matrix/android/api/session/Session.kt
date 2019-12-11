@@ -81,7 +81,7 @@ interface Session :
 
     /**
      * Launches infinite periodic background syncs
-     * THis does not work in doze mode :/
+     * This does not work in doze mode :/
      * If battery optimization is on it can work in app standby but that's all :/
      */
     fun startAutomaticBackgroundSync(repeatDelay: Long = 30_000L)
