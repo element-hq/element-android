@@ -13,20 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.matrix.android.internal.database.model
+package im.vector.matrix.android.api.session.room.model
 
-import io.realm.RealmList
-import io.realm.RealmObject
-import io.realm.annotations.PrimaryKey
+import im.vector.matrix.android.api.session.events.model.Content
 
-internal open class EventAnnotationsSummaryEntity(
-        @PrimaryKey
-        var eventId: String = "",
-        var roomId: String? = null,
-        var reactionsSummary: RealmList<ReactionAggregatedSummaryEntity> = RealmList(),
-        var editSummary: EditAggregatedSummaryEntity? = null,
-        var referencesSummaryEntity: ReferencesAggregatedSummaryEntity? = null
-) : RealmObject() {
+/**
+ * Events can relates to other events, this object keeps a summary
+ * of all events that are referencing the 'eventId' event via the RelationType.REFERENCE
+ */
+class ReferencesAggregatedSummary(
+        val eventId: String,
+        val content: Content?,
+        val sourceEvents: List<String>,
+        val localEchos: List<String>
+)
 
-    companion object
-}

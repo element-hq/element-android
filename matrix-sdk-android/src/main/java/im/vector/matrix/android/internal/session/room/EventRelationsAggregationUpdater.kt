@@ -48,6 +48,12 @@ internal class EventRelationsAggregationUpdater @Inject constructor(@SessionData
                 EventType.MESSAGE,
                 EventType.REDACTION,
                 EventType.REACTION,
+                EventType.KEY_VERIFICATION_DONE,
+                EventType.KEY_VERIFICATION_CANCEL,
+                EventType.KEY_VERIFICATION_ACCEPT,
+                EventType.KEY_VERIFICATION_START,
+                EventType.KEY_VERIFICATION_MAC,
+                EventType.KEY_VERIFICATION_KEY,
                 EventType.ENCRYPTED)
         )
     }

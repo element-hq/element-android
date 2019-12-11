@@ -70,10 +70,12 @@ internal class VerificationMessageLiveObserver @Inject constructor(
                 }
                 .toList()
 
-        // TODO use age also, ignore initial sync or back pagination?
+        // TODO ignore initial sync or back pagination?
+
         val now = System.currentTimeMillis()
-        val tooInThePast = now - (10 * 60 * 1000 * 1000)
-        val tooInTheFuture = System.currentTimeMillis() + (5 * 60 * 1000 * 1000)
+        val tooInThePast = now - (10 * 60 * 1000)
+        val fiveMinInMs = 5 * 60 * 1000
+        val tooInTheFuture = System.currentTimeMillis() + fiveMinInMs
 
         events.forEach { event ->
             Timber.d("## SAS Verification live observer: received msgId: ${event.eventId} msgtype: ${event.type} from ${event.senderId}")
@@ -81,11 +83,18 @@ internal class VerificationMessageLiveObserver @Inject constructor(
 
             // If the request is in the future by more than 5 minutes or more than 10 minutes in the past,
             // the message should be ignored by the receiver.
-            val eventOrigin = event.originServerTs ?: -1
-            if (eventOrigin < tooInThePast || eventOrigin > tooInTheFuture) {
-                Timber.d("## SAS Verification live observer: msgId: ${event.eventId} is out of time ^^")
+            val ageLocalTs = event.ageLocalTs
+            if (ageLocalTs != null && (now - ageLocalTs) > fiveMinInMs) {
+                Timber.d("## SAS Verification live observer: msgId: ${event.eventId} is too old (age: ${(now - ageLocalTs)})")
                 return@forEach
+            } else {
+                val eventOrigin = event.originServerTs ?: -1
+                if (eventOrigin < tooInThePast || eventOrigin > tooInTheFuture) {
+                    Timber.d("## SAS Verification live observer: msgId: ${event.eventId} is too old (ts: $eventOrigin")
+                    return@forEach
+                }
             }
+
             // decrypt if needed?
             if (event.isEncrypted() && event.mxDecryptionResult == null) {
                 // TODO use a global event decryptor? attache to session and that listen to new sessionId?

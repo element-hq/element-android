@@ -21,6 +21,6 @@ import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultContent
 
 @JsonClass(generateAdapter = true)
-internal data class MessageRelationContent(
+data class MessageRelationContent(
         @Json(name = "m.relates_to") val relatesTo: RelationDefaultContent?
 )

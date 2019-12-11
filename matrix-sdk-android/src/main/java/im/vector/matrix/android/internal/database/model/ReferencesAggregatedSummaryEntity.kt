@@ -17,15 +17,14 @@ package im.vector.matrix.android.internal.database.model
 
 import io.realm.RealmList
 import io.realm.RealmObject
-import io.realm.annotations.PrimaryKey
 
-internal open class EventAnnotationsSummaryEntity(
-        @PrimaryKey
+internal open class ReferencesAggregatedSummaryEntity(
         var eventId: String = "",
-        var roomId: String? = null,
-        var reactionsSummary: RealmList<ReactionAggregatedSummaryEntity> = RealmList(),
-        var editSummary: EditAggregatedSummaryEntity? = null,
-        var referencesSummaryEntity: ReferencesAggregatedSummaryEntity? = null
+        var content: String? = null,
+        // The list of the eventIDs used to build the summary (might be out of sync if chunked received from message chunk)
+        var sourceEvents: RealmList<String> = RealmList(),
+        // List of transaction ids for local echos
+        var sourceLocalEcho: RealmList<String> = RealmList()
 ) : RealmObject() {
 
     companion object
