@@ -21,6 +21,7 @@ import android.os.Looper
 import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.Credentials
+import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.crypto.sas.CancelCode
 import im.vector.matrix.android.api.session.crypto.sas.SasVerificationService
 import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTxState
@@ -28,6 +29,7 @@ import im.vector.matrix.android.api.session.crypto.sas.safeValueOf
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.internal.crypto.DeviceListManager
 import im.vector.matrix.android.internal.crypto.MyDeviceInfoHolder
 import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
@@ -35,37 +37,41 @@ import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.rest.*
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
-import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
+import im.vector.matrix.android.internal.crypto.tasks.DefaultRequestVerificationDMTask
+import im.vector.matrix.android.internal.crypto.tasks.RequestVerificationDMTask
 import im.vector.matrix.android.internal.session.SessionScope
+import im.vector.matrix.android.internal.session.room.send.SendResponse
+import im.vector.matrix.android.internal.task.TaskConstraints
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.lang.Exception
-import java.util.UUID
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
-
-/**
- * Manages all current verifications transactions with short codes.
- * Short codes interactive verification is a more user friendly way of verifying devices
- * that is still maintaining a good level of security (alternative to the 43-character strings compare method).
- */
+import kotlin.collections.set
 
 @SessionScope
-internal class DefaultSasVerificationService @Inject constructor(private val credentials: Credentials,
-                                                                 private val cryptoStore: IMXCryptoStore,
-                                                                 private val myDeviceInfoHolder: Lazy<MyDeviceInfoHolder>,
-                                                                 private val deviceListManager: DeviceListManager,
-                                                                 private val setDeviceVerificationAction: SetDeviceVerificationAction,
-                                                                 private val sendToDeviceTask: SendToDeviceTask,
-                                                                 private val coroutineDispatchers: MatrixCoroutineDispatchers,
-                                                                 private val taskExecutor: TaskExecutor)
-    : VerificationTransaction.Listener, SasVerificationService {
+internal class DefaultSasVerificationService @Inject constructor(
+        private val credentials: Credentials,
+        private val cryptoStore: IMXCryptoStore,
+        private val myDeviceInfoHolder: Lazy<MyDeviceInfoHolder>,
+        private val deviceListManager: DeviceListManager,
+        private val setDeviceVerificationAction: SetDeviceVerificationAction,
+        private val requestVerificationDMTask: DefaultRequestVerificationDMTask,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
+        private val sasTransportRoomMessageFactory: SasTransportRoomMessageFactory,
+        private val sasTransportToDeviceFactory: SasTransportToDeviceFactory,
+        private val taskExecutor: TaskExecutor
+) : VerificationTransaction.Listener, SasVerificationService {
 
     private val uiHandler = Handler(Looper.getMainLooper())
+
+    // Cannot be injected in constructor as it creates a dependency cycle
+    lateinit var cryptoService: CryptoService
 
     // map [sender : [transaction]]
     private val txMap = HashMap<String, HashMap<String, VerificationTransaction>>()
@@ -88,6 +94,39 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
                 }
                 EventType.KEY_VERIFICATION_MAC    -> {
                     onMacReceived(event)
+                }
+                else                              -> {
+                    // ignore
+                }
+            }
+        }
+    }
+
+    fun onRoomEvent(event: Event) {
+        GlobalScope.launch(coroutineDispatchers.crypto) {
+            when (event.getClearType()) {
+                EventType.KEY_VERIFICATION_START  -> {
+                    onRoomStartRequestReceived(event)
+                }
+                EventType.KEY_VERIFICATION_CANCEL -> {
+                    onRoomCancelReceived(event)
+                }
+                EventType.KEY_VERIFICATION_ACCEPT -> {
+                    onRoomAcceptReceived(event)
+                }
+                EventType.KEY_VERIFICATION_KEY    -> {
+                    onRoomKeyRequestReceived(event)
+                }
+                EventType.KEY_VERIFICATION_MAC    -> {
+                    onRoomMacReceived(event)
+                }
+                EventType.KEY_VERIFICATION_DONE   -> {
+                    // TODO?
+                }
+                EventType.MESSAGE                 -> {
+                    if (MessageType.MSGTYPE_VERIFICATION_REQUEST == event.getClearContent().toModel<MessageContent>()?.type) {
+                        onRoomRequestReceived(event)
+                    }
                 }
                 else                              -> {
                     // ignore
@@ -150,15 +189,58 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
         }
     }
 
+    fun onRoomRequestReceived(event: Event) {
+        // TODO
+        Timber.v("## SAS Verification request from ${event.senderId} in room ${event.roomId}")
+    }
+
+    private suspend fun onRoomStartRequestReceived(event: Event) {
+        val startReq = event.getClearContent().toModel<MessageVerificationStartContent>()
+                ?.copy(
+                        // relates_to is in clear in encrypted payload
+                        relatesTo = event.content.toModel<MessageRelationContent>()?.relatesTo
+                )
+
+        val otherUserId = event.senderId
+        if (startReq?.isValid()?.not() == true) {
+            Timber.e("## received invalid verification request")
+            if (startReq.transactionID != null) {
+                sasTransportRoomMessageFactory.createTransport(event.roomId
+                        ?: "", cryptoService, null).cancelTransaction(
+                        startReq.transactionID ?: "",
+                        otherUserId!!,
+                        startReq.fromDevice ?: event.getSenderKey()!!,
+                        CancelCode.UnknownMethod
+                )
+            }
+            return
+        }
+
+        handleStart(otherUserId, startReq as VerificationInfoStart) {
+            it.transport = sasTransportRoomMessageFactory.createTransport(event.roomId
+                    ?: "", cryptoService, it)
+        }?.let {
+            sasTransportRoomMessageFactory.createTransport(event.roomId
+                    ?: "", cryptoService, null).cancelTransaction(
+                    startReq.transactionID ?: "",
+                    otherUserId!!,
+                    startReq.fromDevice ?: event.getSenderKey()!!,
+                    it
+            )
+        }
+    }
+
     private suspend fun onStartRequestReceived(event: Event) {
+        Timber.e("## SAS received Start request ${event.eventId}")
         val startReq = event.getClearContent().toModel<KeyVerificationStart>()!!
+        Timber.v("## SAS received Start request $startReq")
 
         val otherUserId = event.senderId
         if (!startReq.isValid()) {
-            Timber.e("## received invalid verification request")
+            Timber.e("## SAS received invalid verification request")
             if (startReq.transactionID != null) {
-                cancelTransaction(
-                        startReq.transactionID!!,
+                sasTransportToDeviceFactory.createTransport(null).cancelTransaction(
+                        startReq.transactionID,
                         otherUserId!!,
                         startReq.fromDevice ?: event.getSenderKey()!!,
                         CancelCode.UnknownMethod
@@ -167,8 +249,22 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
             return
         }
         // Download device keys prior to everything
+        handleStart(otherUserId, startReq) {
+            it.transport = sasTransportToDeviceFactory.createTransport(it)
+        }?.let {
+            sasTransportToDeviceFactory.createTransport(null).cancelTransaction(
+                    startReq.transactionID ?: "",
+                    otherUserId!!,
+                    startReq.fromDevice ?: event.getSenderKey()!!,
+                    it
+            )
+        }
+    }
+
+    private suspend fun handleStart(otherUserId: String?, startReq: VerificationInfoStart, txConfigure: (SASVerificationTransaction) -> Unit): CancelCode? {
+        Timber.d("## SAS onStartRequestReceived ${startReq.transactionID!!}")
         if (checkKeysAreDownloaded(otherUserId!!, startReq) != null) {
-            Timber.v("## SAS onStartRequestReceived ${startReq.transactionID!!}")
+            Timber.v("## SAS onStartRequestReceived $startReq")
             val tid = startReq.transactionID!!
             val existing = getExistingTransaction(otherUserId, tid)
             val existingTxs = getExistingTransactionsForUser(otherUserId)
@@ -176,43 +272,46 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
                 // should cancel both!
                 Timber.v("## SAS onStartRequestReceived - Request exist with same if ${startReq.transactionID!!}")
                 existing.cancel(CancelCode.UnexpectedMessage)
-                cancelTransaction(tid, otherUserId, startReq.fromDevice!!, CancelCode.UnexpectedMessage)
+                return CancelCode.UnexpectedMessage
+                // cancelTransaction(tid, otherUserId, startReq.fromDevice!!, CancelCode.UnexpectedMessage)
             } else if (existingTxs?.isEmpty() == false) {
                 Timber.v("## SAS onStartRequestReceived - There is already a transaction with this user ${startReq.transactionID!!}")
                 // Multiple keyshares between two devices: any two devices may only have at most one key verification in flight at a time.
                 existingTxs.forEach {
                     it.cancel(CancelCode.UnexpectedMessage)
                 }
-                cancelTransaction(tid, otherUserId, startReq.fromDevice!!, CancelCode.UnexpectedMessage)
+                return CancelCode.UnexpectedMessage
+                // cancelTransaction(tid, otherUserId, startReq.fromDevice!!, CancelCode.UnexpectedMessage)
             } else {
                 // Ok we can create
                 if (KeyVerificationStart.VERIF_METHOD_SAS == startReq.method) {
                     Timber.v("## SAS onStartRequestReceived - request accepted ${startReq.transactionID!!}")
-                    val tx = IncomingSASVerificationTransaction(
-                            this,
+                    val tx = DefaultIncomingSASVerificationTransaction(
+//                            this,
                             setDeviceVerificationAction,
                             credentials,
                             cryptoStore,
-                            sendToDeviceTask,
-                            taskExecutor,
                             myDeviceInfoHolder.get().myDevice.fingerprint()!!,
                             startReq.transactionID!!,
-                            otherUserId)
+                            otherUserId).also { txConfigure(it) }
                     addTransaction(tx)
-                    tx.acceptToDeviceEvent(otherUserId, startReq)
+                    tx.acceptVerificationEvent(otherUserId, startReq)
                 } else {
                     Timber.e("## SAS onStartRequestReceived - unknown method ${startReq.method}")
-                    cancelTransaction(tid, otherUserId, startReq.fromDevice
-                            ?: event.getSenderKey()!!, CancelCode.UnknownMethod)
+                    return CancelCode.UnknownMethod
+                    // cancelTransaction(tid, otherUserId, startReq.fromDevice
+//                            ?: event.getSenderKey()!!, CancelCode.UnknownMethod)
                 }
             }
         } else {
-            cancelTransaction(startReq.transactionID!!, otherUserId, startReq.fromDevice!!, CancelCode.UnexpectedMessage)
+            return CancelCode.UnexpectedMessage
+//            cancelTransaction(startReq.transactionID!!, otherUserId, startReq.fromDevice!!, CancelCode.UnexpectedMessage)
         }
+        return null
     }
 
     private suspend fun checkKeysAreDownloaded(otherUserId: String,
-                                               startReq: KeyVerificationStart): MXUsersDevicesMap<MXDeviceInfo>? {
+                                               startReq: VerificationInfoStart): MXUsersDevicesMap<MXDeviceInfo>? {
         return try {
             val keys = deviceListManager.downloadKeys(listOf(otherUserId), true)
             val deviceIds = keys.getUserDeviceIds(otherUserId) ?: return null
@@ -222,17 +321,36 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
         }
     }
 
-    private suspend fun onCancelReceived(event: Event) {
+    private fun onRoomCancelReceived(event: Event) {
+        val cancelReq = event.getClearContent().toModel<MessageVerificationCancelContent>()
+                ?.copy(
+                        // relates_to is in clear in encrypted payload
+                        relatesTo = event.content.toModel<MessageRelationContent>()?.relatesTo
+                )
+        if (cancelReq == null || cancelReq.isValid().not()) {
+            // ignore
+            Timber.e("## SAS Received invalid key request")
+            // TODO should we cancel?
+            return
+        }
+        handleOnCancel(event.senderId!!, cancelReq)
+    }
+
+    private fun onCancelReceived(event: Event) {
         Timber.v("## SAS onCancelReceived")
         val cancelReq = event.getClearContent().toModel<KeyVerificationCancel>()!!
 
         if (!cancelReq.isValid()) {
             // ignore
-            Timber.e("## Received invalid accept request")
+            Timber.e("## SAS Received invalid cancel request")
             return
         }
         val otherUserId = event.senderId!!
 
+        handleOnCancel(otherUserId, cancelReq)
+    }
+
+    private fun handleOnCancel(otherUserId: String, cancelReq: VerificationInfoCancel) {
         Timber.v("## SAS onCancelReceived otherUser:$otherUserId reason:${cancelReq.reason}")
         val existing = getExistingTransaction(otherUserId, cancelReq.transactionID!!)
         if (existing == null) {
@@ -245,65 +363,119 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
         }
     }
 
-    private suspend fun onAcceptReceived(event: Event) {
-        val acceptReq = event.getClearContent().toModel<KeyVerificationAccept>()!!
+    private fun onRoomAcceptReceived(event: Event) {
+        Timber.d("##  SAS Received Accept via DM $event")
+        val accept = event.getClearContent().toModel<MessageVerificationAcceptContent>()
+                ?.copy(
+                        // relates_to is in clear in encrypted payload
+                        relatesTo = event.content.toModel<MessageRelationContent>()?.relatesTo
+                )
+                ?: return
+        handleAccept(accept, event.senderId!!)
+    }
 
+    private fun onAcceptReceived(event: Event) {
+        Timber.d("##  SAS Received Accept $event")
+        val acceptReq = event.getClearContent().toModel<KeyVerificationAccept>() ?: return
+        handleAccept(acceptReq, event.senderId!!)
+    }
+
+    private fun handleAccept(acceptReq: VerificationInfoAccept, senderId: String) {
         if (!acceptReq.isValid()) {
             // ignore
-            Timber.e("## Received invalid accept request")
+            Timber.e("## SAS Received invalid accept request")
             return
         }
-        val otherUserId = event.senderId!!
+        val otherUserId = senderId
         val existing = getExistingTransaction(otherUserId, acceptReq.transactionID!!)
         if (existing == null) {
-            Timber.e("## Received invalid accept request")
+            Timber.e("## SAS Received invalid accept request")
             return
         }
 
         if (existing is SASVerificationTransaction) {
-            existing.acceptToDeviceEvent(otherUserId, acceptReq)
+            existing.acceptVerificationEvent(otherUserId, acceptReq)
         } else {
             // not other types now
         }
     }
 
-    private suspend fun onKeyReceived(event: Event) {
+    private fun onRoomKeyRequestReceived(event: Event) {
+        val keyReq = event.getClearContent().toModel<MessageVerificationKeyContent>()
+                ?.copy(
+                        // relates_to is in clear in encrypted payload
+                        relatesTo = event.content.toModel<MessageRelationContent>()?.relatesTo
+                )
+        if (keyReq == null || keyReq.isValid().not()) {
+            // ignore
+            Timber.e("## SAS Received invalid key request")
+            // TODO should we cancel?
+            return
+        }
+        handleKeyReceived(event, keyReq)
+    }
+
+    private fun onKeyReceived(event: Event) {
         val keyReq = event.getClearContent().toModel<KeyVerificationKey>()!!
 
         if (!keyReq.isValid()) {
             // ignore
-            Timber.e("## Received invalid key request")
+            Timber.e("## SAS Received invalid key request")
             return
         }
+        handleKeyReceived(event, keyReq)
+    }
+
+    private fun handleKeyReceived(event: Event, keyReq: VerificationInfoKey) {
+        Timber.d("##  SAS Received Key from ${event.senderId} with info $keyReq")
         val otherUserId = event.senderId!!
         val existing = getExistingTransaction(otherUserId, keyReq.transactionID!!)
         if (existing == null) {
-            Timber.e("## Received invalid accept request")
+            Timber.e("##  SAS Received invalid key request")
             return
         }
         if (existing is SASVerificationTransaction) {
-            existing.acceptToDeviceEvent(otherUserId, keyReq)
+            existing.acceptVerificationEvent(otherUserId, keyReq)
         } else {
             // not other types now
         }
     }
 
-    private suspend fun onMacReceived(event: Event) {
-        val macReq = event.getClearContent().toModel<KeyVerificationMac>()!!
-
-        if (!macReq.isValid()) {
+    private fun onRoomMacReceived(event: Event) {
+        val macReq = event.getClearContent().toModel<MessageVerificationMacContent>()
+                ?.copy(
+                        // relates_to is in clear in encrypted payload
+                        relatesTo = event.content.toModel<MessageRelationContent>()?.relatesTo
+                )
+        if (macReq == null || macReq.isValid().not() || event.senderId == null) {
             // ignore
-            Timber.e("## Received invalid key request")
+            Timber.e("## SAS Received invalid mac request")
+            // TODO should we cancel?
             return
         }
-        val otherUserId = event.senderId!!
-        val existing = getExistingTransaction(otherUserId, macReq.transactionID!!)
+        handleMacReceived(event.senderId, macReq)
+    }
+
+    private fun onMacReceived(event: Event) {
+        val macReq = event.getClearContent().toModel<KeyVerificationMac>()!!
+
+        if (!macReq.isValid() || event.senderId == null) {
+            // ignore
+            Timber.e("## SAS Received invalid mac request")
+            return
+        }
+        handleMacReceived(event.senderId, macReq)
+    }
+
+    private fun handleMacReceived(senderId: String, macReq: VerificationInfoMac) {
+        Timber.v("## SAS Received $macReq")
+        val existing = getExistingTransaction(senderId, macReq.transactionID!!)
         if (existing == null) {
-            Timber.e("## Received invalid accept request")
+            Timber.e("## SAS Received invalid Mac request")
             return
         }
         if (existing is SASVerificationTransaction) {
-            existing.acceptToDeviceEvent(otherUserId, macReq)
+            existing.acceptVerificationEvent(senderId, macReq)
         } else {
             // not other types known for now
         }
@@ -346,21 +518,65 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
         val txID = createUniqueIDForTransaction(userId, deviceID)
         // should check if already one (and cancel it)
         if (KeyVerificationStart.VERIF_METHOD_SAS == method) {
-            val tx = OutgoingSASVerificationRequest(
-                    this,
+            val tx = DefaultOutgoingSASVerificationRequest(
                     setDeviceVerificationAction,
                     credentials,
                     cryptoStore,
-                    sendToDeviceTask,
-                    taskExecutor,
                     myDeviceInfoHolder.get().myDevice.fingerprint()!!,
                     txID,
                     userId,
                     deviceID)
+            tx.transport = sasTransportToDeviceFactory.createTransport(tx)
             addTransaction(tx)
 
             tx.start()
             return txID
+        } else {
+            throw IllegalArgumentException("Unknown verification method")
+        }
+    }
+
+    override fun requestKeyVerificationInDMs(userId: String, roomId: String, callback: MatrixCallback<String>?) {
+        requestVerificationDMTask.configureWith(
+                RequestVerificationDMTask.Params(
+                        roomId = roomId,
+                        from = credentials.deviceId ?: "",
+                        methods = listOf(KeyVerificationStart.VERIF_METHOD_SAS),
+                        to = userId,
+                        cryptoService = cryptoService
+                )
+        ) {
+            this.callback = object : MatrixCallback<SendResponse> {
+                override fun onSuccess(data: SendResponse) {
+                    callback?.onSuccess(data.eventId)
+                }
+
+                override fun onFailure(failure: Throwable) {
+                    callback?.onFailure(failure)
+                }
+            }
+            constraints = TaskConstraints(true)
+            retryCount = 3
+        }.executeBy(taskExecutor)
+    }
+
+    override fun beginKeyVerificationInDMs(method: String, transactionId: String, roomId: String,
+                                           otherUserId: String, otherDeviceId: String,
+                                           callback: MatrixCallback<String>?): String? {
+        if (KeyVerificationStart.VERIF_METHOD_SAS == method) {
+            val tx = DefaultOutgoingSASVerificationRequest(
+                    setDeviceVerificationAction,
+                    credentials,
+                    cryptoStore,
+                    myDeviceInfoHolder.get().myDevice.fingerprint()!!,
+                    transactionId,
+                    otherUserId,
+                    otherDeviceId)
+            tx.transport = sasTransportRoomMessageFactory.createTransport(roomId, cryptoService, tx)
+            addTransaction(tx)
+
+            tx.start()
+            return transactionId
         } else {
             throw IllegalArgumentException("Unknown verification method")
         }
@@ -390,24 +606,28 @@ internal class DefaultSasVerificationService @Inject constructor(private val cre
             this.removeTransaction(tx.otherUserId, tx.transactionId)
         }
     }
-
-    fun cancelTransaction(transactionId: String, userId: String, userDevice: String, code: CancelCode) {
-        val cancelMessage = KeyVerificationCancel.create(transactionId, code)
-        val contentMap = MXUsersDevicesMap<Any>()
-        contentMap.setObject(userId, userDevice, cancelMessage)
-
-        sendToDeviceTask
-                .configureWith(SendToDeviceTask.Params(EventType.KEY_VERIFICATION_CANCEL, contentMap, transactionId)) {
-                    this.callback = object : MatrixCallback<Unit> {
-                        override fun onSuccess(data: Unit) {
-                            Timber.v("## SAS verification [$transactionId] canceled for reason ${code.value}")
-                        }
-
-                        override fun onFailure(failure: Throwable) {
-                            Timber.e(failure, "## SAS verification [$transactionId] failed to cancel.")
-                        }
-                    }
-                }
-                .executeBy(taskExecutor)
-    }
+//
+//    fun cancelTransaction(transactionId: String, userId: String, userDevice: String, code: CancelCode, roomId: String? = null) {
+//        val cancelMessage = KeyVerificationCancel.create(transactionId, code)
+//        val contentMap = MXUsersDevicesMap<Any>()
+//        contentMap.setObject(userId, userDevice, cancelMessage)
+//
+//        if (roomId != null) {
+//
+//        } else {
+//            sendToDeviceTask
+//                    .configureWith(SendToDeviceTask.Params(EventType.KEY_VERIFICATION_CANCEL, contentMap, transactionId)) {
+//                        this.callback = object : MatrixCallback<Unit> {
+//                            override fun onSuccess(data: Unit) {
+//                                Timber.v("## SAS verification [$transactionId] canceled for reason ${code.value}")
+//                            }
+//
+//                            override fun onFailure(failure: Throwable) {
+//                                Timber.e(failure, "## SAS verification [$transactionId] failed to cancel.")
+//                            }
+//                        }
+//                    }
+//                    .executeBy(taskExecutor)
+//        }
+//    }
 }

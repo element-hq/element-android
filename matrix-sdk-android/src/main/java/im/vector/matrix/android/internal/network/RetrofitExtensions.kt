@@ -18,7 +18,6 @@
 
 package im.vector.matrix.android.internal.network
 
-import com.squareup.moshi.JsonDataException
 import com.squareup.moshi.JsonEncodingException
 import im.vector.matrix.android.api.failure.ConsentNotGivenError
 import im.vector.matrix.android.api.failure.Failure
@@ -104,7 +103,7 @@ private fun toFailure(errorBody: ResponseBody?, httpCode: Int): Failure {
 
             return Failure.ServerError(matrixError, httpCode)
         }
-    } catch (ex: JsonDataException) {
+    } catch (ex: Exception) {
         // This is not a MatrixError
         Timber.w("The error returned by the server is not a MatrixError")
     } catch (ex: JsonEncodingException) {

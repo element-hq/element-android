@@ -136,6 +136,10 @@ internal class DefaultCryptoService @Inject constructor(
         private val cryptoCoroutineScope: CoroutineScope
 ) : CryptoService {
 
+    init {
+        sasVerificationService.cryptoService = this
+    }
+
     private val uiHandler = Handler(Looper.getMainLooper())
 
     // MXEncrypting instance for each room.

@@ -244,6 +244,17 @@ object CommandParser {
 
                     ParsedCommand.SendSpoiler(message)
                 }
+                Command.SHRUG.command                  -> {
+                    val message = textMessage.substring(Command.SHRUG.command.length).trim()
+
+                    ParsedCommand.SendShrug(message)
+                }
+
+                Command.VERIFY_USER.command            -> {
+                    val message = textMessage.substring(Command.VERIFY_USER.command.length).trim()
+
+                    ParsedCommand.VerifyUser(message)
+                }
                 else                                   -> {
                     // Unknown command
                     ParsedCommand.ErrorUnknownSlashCommand(slashCommand)

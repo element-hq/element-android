@@ -50,7 +50,6 @@ import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
 import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
-import im.vector.riotx.BuildConfig
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.postLiveEvent
 import im.vector.riotx.core.platform.VectorViewModel
@@ -374,6 +373,23 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                                     "[${stringProvider.getString(R.string.spoiler)}](${slashCommandResult.message})",
                                     "<span data-mx-spoiler>${slashCommandResult.message}</span>"
                             )
+                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled())
+                            popDraft()
+                        }
+                        is ParsedCommand.SendShrug                -> {
+                            val sequence = buildString {
+                                append("¯\\_(ツ)_/¯")
+                                if (slashCommandResult.message.isNotEmpty()) {
+                                    append(" ")
+                                    append(slashCommandResult.message)
+                                }
+                            }
+                            room.sendTextMessage(sequence)
+                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled())
+                            popDraft()
+                        }
+                        is ParsedCommand.VerifyUser               -> {
+                            session.getSasVerificationService().requestKeyVerificationInDMs(slashCommandResult.userId, room.roomId, null)
                             _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled())
                             popDraft()
                         }

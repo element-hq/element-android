@@ -17,4 +17,7 @@
     <string name="notice_room_withdraw_with_reason">%1$s withdrew %2$s\'s invitation. Reason: %3$s</string>
 
     <string name="no_network_indicator">There is no network connection right now</string>
+
+    <string name="key_verification_request_fallback_message">%s is requesting to verify your key, but your client does not support in-chat key verification. You will need to use legacy key verification to verify keys.</string>
+
 </resources>

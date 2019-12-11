@@ -17,7 +17,6 @@ package im.vector.matrix.android.internal.crypto.verification
 
 import im.vector.matrix.android.api.session.crypto.sas.CancelCode
 import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTransaction
-import im.vector.matrix.android.internal.crypto.model.rest.SendToDeviceObject
 
 /**
  * Generic interactive key verification transaction
@@ -42,7 +41,7 @@ internal abstract class VerificationTransaction(
         listeners.remove(listener)
     }
 
-    abstract fun acceptToDeviceEvent(senderId: String, event: SendToDeviceObject)
+    abstract fun acceptVerificationEvent(senderId: String, info: VerificationInfo)
 
     abstract fun cancel(code: CancelCode)
 }
