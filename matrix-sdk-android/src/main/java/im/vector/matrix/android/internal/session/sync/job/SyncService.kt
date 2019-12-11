@@ -34,8 +34,9 @@ import java.util.concurrent.atomic.AtomicBoolean
  * in order to be able to perform a sync even if the app is not running.
  * The <receiver> and <service> must be declared in the Manifest or the app using the SDK
  */
-open class SyncService : Service() {
+abstract class SyncService : Service() {
 
+    private var userId: String? = null
     private var mIsSelfDestroyed: Boolean = false
 
     private lateinit var syncTask: SyncTask
@@ -50,9 +51,10 @@ open class SyncService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Timber.i("onStartCommand $intent")
         intent?.let {
-            val userId = it.getStringExtra(EXTRA_USER_ID)
-            val sessionComponent = Matrix.getInstance(applicationContext).sessionManager.getSessionComponent(userId)
+            val safeUserId = it.getStringExtra(EXTRA_USER_ID) ?: return@let
+            val sessionComponent = Matrix.getInstance(applicationContext).sessionManager.getSessionComponent(safeUserId)
                     ?: return@let
+            userId = safeUserId
             syncTask = sessionComponent.syncTask()
             networkConnectivityChecker = sessionComponent.networkConnectivityChecker()
             taskExecutor = sessionComponent.taskExecutor()
@@ -87,9 +89,11 @@ open class SyncService : Service() {
 
     private suspend fun doSync() {
         if (!networkConnectivityChecker.hasInternetAccess()) {
-            Timber.v("No network, try to sync again in 10s")
-            delay(DELAY_NO_NETWORK)
-            doSync()
+            Timber.v("No network reschedule to avoid wasting resources")
+            userId?.also {
+                onRescheduleAsked(it, delay = 10_000L)
+            }
+            stopMe()
             return
         }
         Timber.v("Execute sync request with timeout 0")
@@ -109,6 +113,8 @@ open class SyncService : Service() {
         }
     }
 
+    abstract fun onRescheduleAsked(userId: String, delay: Long)
+
     override fun onBind(intent: Intent?): IBinder? {
         return null
     }
@@ -116,7 +122,6 @@ open class SyncService : Service() {
     companion object {
         const val EXTRA_USER_ID = "EXTRA_USER_ID"
         private const val TIME_OUT = 0L
-        private const val DELAY_NO_NETWORK = 10_000L
         private const val DELAY_FAILURE = 5_000L
     }
 }

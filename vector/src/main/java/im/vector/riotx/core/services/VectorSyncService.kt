@@ -15,11 +15,12 @@
  */
 package im.vector.riotx.core.services
 
+import android.app.AlarmManager
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import androidx.core.content.ContextCompat
 import im.vector.matrix.android.internal.session.sync.job.SyncService
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.vectorComponent
@@ -44,16 +45,6 @@ class VectorSyncService : SyncService() {
         notificationUtils = vectorComponent().notificationUtils()
     }
 
-    override fun onDestroy() {
-        removeForegroundNotif()
-        super.onDestroy()
-    }
-
-    private fun removeForegroundNotif() {
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.cancel(NotificationUtils.NOTIFICATION_ID_FOREGROUND_SERVICE)
-    }
-
     /**
      * Service is started in fdroid mode when no FCM is available or is used for initialSync
      */
@@ -64,5 +55,34 @@ class VectorSyncService : SyncService() {
             startForeground(NotificationUtils.NOTIFICATION_ID_FOREGROUND_SERVICE, notification)
         }
         return super.onStartCommand(intent, flags, startId)
+    }
+
+    override fun onDestroy() {
+        removeForegroundNotif()
+        super.onDestroy()
+    }
+
+    override fun onRescheduleAsked(userId: String, delay: Long) {
+        reschedule(userId, delay)
+    }
+
+    private fun removeForegroundNotif() {
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.cancel(NotificationUtils.NOTIFICATION_ID_FOREGROUND_SERVICE)
+    }
+
+    private fun reschedule(userId: String, delay: Long) {
+        val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            PendingIntent.getForegroundService(this, 0, newIntent(this, userId), 0)
+        } else {
+            PendingIntent.getService(this, 0, newIntent(this, userId), 0)
+        }
+        val firstMillis = System.currentTimeMillis() + delay
+        val alarmMgr = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            alarmMgr.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, firstMillis, pendingIntent)
+        } else {
+            alarmMgr.set(AlarmManager.RTC_WAKEUP, firstMillis, pendingIntent)
+        }
     }
 }

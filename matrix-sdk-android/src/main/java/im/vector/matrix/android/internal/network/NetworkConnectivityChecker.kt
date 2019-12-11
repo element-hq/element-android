@@ -62,6 +62,9 @@ internal class NetworkConnectivityChecker @Inject constructor(private val contex
 
     override fun onMoveToForeground() {
         merlin.bind()
+        merlinsBeard.hasInternetAccess {
+            hasInternetAccess = it
+        }
         merlin.registerDisconnectable {
             if (hasInternetAccess) {
                 Timber.v("On Disconnect")
