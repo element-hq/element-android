@@ -29,6 +29,7 @@ import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.extensions.isEmail
 import im.vector.riotx.core.extensions.showPassword
+import im.vector.riotx.core.extensions.toReducedUrl
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.subscribeBy
@@ -57,7 +58,7 @@ class LoginResetPasswordFragment @Inject constructor(
     }
 
     private fun setupUi(state: LoginViewState) {
-        resetPasswordTitle.text = getString(R.string.login_reset_password_on, state.homeServerUrlSimple)
+        resetPasswordTitle.text = getString(R.string.login_reset_password_on, state.homeServerUrl.toReducedUrl())
     }
 
     private fun setupSubmitButton() {

@@ -26,6 +26,7 @@ import im.vector.riotx.R
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
+import im.vector.riotx.core.extensions.toReducedUrl
 import im.vector.riotx.core.utils.openUrlInExternalBrowser
 import im.vector.riotx.features.login.AbstractLoginFragment
 import im.vector.riotx.features.login.LoginAction
@@ -115,7 +116,7 @@ class LoginTermsFragment @Inject constructor(
     }
 
     override fun updateWithState(state: LoginViewState) {
-        policyController.homeServer = state.homeServerUrlSimple
+        policyController.homeServer = state.homeServerUrl.toReducedUrl()
         renderState()
     }
 

@@ -32,6 +32,7 @@ import im.vector.riotx.R
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.extensions.showPassword
+import im.vector.riotx.core.extensions.toReducedUrl
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.subscribeBy
@@ -103,7 +104,7 @@ class LoginFragment @Inject constructor(
             ServerType.MatrixOrg -> {
                 loginServerIcon.isVisible = true
                 loginServerIcon.setImageResource(R.drawable.ic_logo_matrix_org)
-                loginTitle.text = getString(resId, state.homeServerUrlSimple)
+                loginTitle.text = getString(resId, state.homeServerUrl.toReducedUrl())
                 loginNotice.text = getString(R.string.login_server_matrix_org_text)
             }
             ServerType.Modular   -> {
@@ -114,7 +115,7 @@ class LoginFragment @Inject constructor(
             }
             ServerType.Other     -> {
                 loginServerIcon.isVisible = false
-                loginTitle.text = getString(resId, state.homeServerUrlSimple)
+                loginTitle.text = getString(resId, state.homeServerUrl.toReducedUrl())
                 loginNotice.text = getString(R.string.login_server_other_text)
             }
         }

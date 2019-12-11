@@ -96,7 +96,8 @@ class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
         }
 
         loginSharedActionViewModel = viewModelProvider.get(LoginSharedActionViewModel::class.java)
-        loginSharedActionViewModel.observe()
+        loginSharedActionViewModel
+                .observe()
                 .subscribe {
                     handleLoginNavigation(it)
                 }
@@ -106,7 +107,6 @@ class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
                 .subscribe(this) {
                     updateWithState(it)
                 }
-                .disposeOnDestroy()
 
         loginViewModel.viewEvents
                 .observe()

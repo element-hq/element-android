@@ -54,12 +54,4 @@ data class LoginViewState(
     fun isUserLogged(): Boolean {
         return asyncLoginAction is Success
     }
-
-    /**
-     * Ex: "https://matrix.org/" -> "matrix.org"
-     */
-    val homeServerUrlSimple: String
-        get() = (homeServerUrl ?: "")
-                .substringAfter("://")
-                .trim { it == '/' }
 }
