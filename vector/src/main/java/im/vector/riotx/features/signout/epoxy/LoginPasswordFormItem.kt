@@ -17,6 +17,7 @@
 package im.vector.riotx.features.signout.epoxy
 
 import android.os.Build
+import android.text.Editable
 import android.widget.Button
 import android.widget.ImageView
 import androidx.autofill.HintConstants
@@ -28,17 +29,26 @@ import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
 import im.vector.riotx.core.extensions.showPassword
+import im.vector.riotx.core.platform.SimpleTextWatcher
 import im.vector.riotx.core.resources.StringProvider
 
 @EpoxyModelClass(layout = R.layout.item_login_password_form)
 abstract class LoginPasswordFormItem : VectorEpoxyModel<LoginPasswordFormItem.Holder>() {
 
     @EpoxyAttribute var passwordShown: Boolean = false
+    @EpoxyAttribute var submitEnabled: Boolean = false
     @EpoxyAttribute var errorText: String? = null
     @EpoxyAttribute lateinit var stringProvider: StringProvider
     @EpoxyAttribute var passwordRevealClickListener: (() -> Unit)? = null
     @EpoxyAttribute var forgetPasswordClickListener: (() -> Unit)? = null
     @EpoxyAttribute var submitClickListener: ((String) -> Unit)? = null
+    @EpoxyAttribute var onPasswordEdited: ((String) -> Unit)? = null
+
+    private val textChangeListener = object : SimpleTextWatcher() {
+        override fun afterTextChanged(s: Editable) {
+            onPasswordEdited?.invoke(s.toString())
+        }
+    }
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -48,7 +58,14 @@ abstract class LoginPasswordFormItem : VectorEpoxyModel<LoginPasswordFormItem.Ho
         renderPasswordField(holder)
         holder.passwordReveal.setOnClickListener { passwordRevealClickListener?.invoke() }
         holder.forgetPassword.setOnClickListener { forgetPasswordClickListener?.invoke() }
+        holder.submit.isEnabled = submitEnabled
         holder.submit.setOnClickListener { submitClickListener?.invoke(holder.passwordField.text.toString()) }
+        holder.passwordField.addTextChangedListener(textChangeListener)
+    }
+
+    override fun unbind(holder: Holder) {
+        super.unbind(holder)
+        holder.passwordField.removeTextChangedListener(textChangeListener)
     }
 
     private fun setupAutoFill(holder: Holder) {

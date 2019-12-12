@@ -72,6 +72,10 @@ class SoftLogoutFragment @Inject constructor(
         softLogoutViewModel.handle(SoftLogoutAction.RetryLoginFlow)
     }
 
+    override fun passwordEdited(password: String) {
+        softLogoutViewModel.handle(SoftLogoutAction.PasswordChanged(password))
+    }
+
     override fun submit(password: String) {
         cleanupUi()
         softLogoutViewModel.handle(SoftLogoutAction.SignInAgain(password))

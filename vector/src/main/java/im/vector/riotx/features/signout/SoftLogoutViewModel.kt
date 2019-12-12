@@ -143,9 +143,19 @@ class SoftLogoutViewModel @AssistedInject constructor(
 
     override fun handle(action: SoftLogoutAction) {
         when (action) {
-            is SoftLogoutAction.RetryLoginFlow -> getSupportedLoginFlow()
-            is SoftLogoutAction.SignInAgain    -> handleSignInAgain(action)
-            is SoftLogoutAction.TogglePassword -> handleTogglePassword()
+            is SoftLogoutAction.RetryLoginFlow  -> getSupportedLoginFlow()
+            is SoftLogoutAction.SignInAgain     -> handleSignInAgain(action)
+            is SoftLogoutAction.PasswordChanged -> handlePasswordChange(action)
+            is SoftLogoutAction.TogglePassword  -> handleTogglePassword()
+        }
+    }
+
+    private fun handlePasswordChange(action: SoftLogoutAction.PasswordChanged) {
+        setState {
+            copy(
+                    asyncLoginAction = Uninitialized,
+                    submitEnabled = action.password.isNotBlank()
+            )
         }
     }
 

@@ -20,6 +20,7 @@ import im.vector.riotx.core.platform.VectorViewModelAction
 
 sealed class SoftLogoutAction : VectorViewModelAction {
     object RetryLoginFlow : SoftLogoutAction()
+    data class PasswordChanged(val password: String) : SoftLogoutAction()
     object TogglePassword : SoftLogoutAction()
 
     data class SignInAgain(val password: String) : SoftLogoutAction()
