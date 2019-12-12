@@ -20,8 +20,8 @@ import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.session.events.model.RelationType
 import im.vector.matrix.android.api.session.events.model.toContent
 import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultContent
-import im.vector.matrix.android.internal.crypto.verification.AcceptVerifInfoFactory
-import im.vector.matrix.android.internal.crypto.verification.VerifInfoAccept
+import im.vector.matrix.android.internal.crypto.verification.VerificationInfoAccept
+import im.vector.matrix.android.internal.crypto.verification.VerificationInfoAcceptFactory
 import timber.log.Timber
 
 @JsonClass(generateAdapter = true)
@@ -32,7 +32,7 @@ internal data class MessageVerificationAcceptContent(
         @Json(name = "short_authentication_string") override val shortAuthenticationStrings: List<String>?,
         @Json(name = "m.relates_to") val relatesTo: RelationDefaultContent?,
         @Json(name = "commitment") override var commitment: String? = null
-) : VerifInfoAccept {
+) : VerificationInfoAccept {
 
     override val transactionID: String?
         get() = relatesTo?.eventId
@@ -52,14 +52,14 @@ internal data class MessageVerificationAcceptContent(
 
     override fun toEventContent() = this.toContent()
 
-    companion object : AcceptVerifInfoFactory {
+    companion object : VerificationInfoAcceptFactory {
 
         override fun create(tid: String,
                             keyAgreementProtocol: String,
                             hash: String,
                             commitment: String,
                             messageAuthenticationCode: String,
-                            shortAuthenticationStrings: List<String>): VerifInfoAccept {
+                            shortAuthenticationStrings: List<String>): VerificationInfoAccept {
             return MessageVerificationAcceptContent(
                     hash,
                     keyAgreementProtocol,
