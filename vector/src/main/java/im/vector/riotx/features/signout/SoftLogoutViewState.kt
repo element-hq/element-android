@@ -20,8 +20,10 @@ import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
+import im.vector.riotx.features.login.LoginMode
 
 data class SoftLogoutViewState(
+        val asyncHomeServerLoginFlowRequest: Async<LoginMode> = Uninitialized,
         val asyncLoginAction: Async<Unit> = Uninitialized,
         val homeServerUrl: String,
         val userId: String,

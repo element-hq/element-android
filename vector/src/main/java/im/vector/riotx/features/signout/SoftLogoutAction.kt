@@ -19,6 +19,7 @@ package im.vector.riotx.features.signout
 import im.vector.riotx.core.platform.VectorViewModelAction
 
 sealed class SoftLogoutAction : VectorViewModelAction {
+    object RetryLoginFlow : SoftLogoutAction()
     data class SignInAgain(val password: String) : SoftLogoutAction()
     // TODO Add reset pwd...
 }

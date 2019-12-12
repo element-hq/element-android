@@ -30,18 +30,22 @@ import im.vector.riotx.R
 import im.vector.riotx.core.dialogs.withColoredButton
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.hideKeyboard
+import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.core.extensions.showPassword
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.MainActivity
 import im.vector.riotx.features.MainActivityArgs
+import im.vector.riotx.features.login.LoginMode
 import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.fragment_soft_logout.*
+import kotlinx.android.synthetic.main.item_error_retry.*
 import javax.inject.Inject
 
 /**
  * In this screen:
  * - the user is asked to enter a password to sign in again to a homeserver.
  * - or to cleanup all the data
+ * TODO: migrate to Epoxy (along with all the login screen?)
  */
 class SoftLogoutFragment @Inject constructor(
         private val errorFormatter: ErrorFormatter
@@ -67,6 +71,11 @@ class SoftLogoutFragment @Inject constructor(
         }
     }
 
+    @OnClick(R.id.itemErrorRetryButton)
+    fun retry() {
+        softLogoutViewModel.handle(SoftLogoutAction.RetryLoginFlow)
+    }
+
     @OnClick(R.id.softLogoutSubmit)
     fun submit() {
         cleanupUi()
@@ -75,29 +84,36 @@ class SoftLogoutFragment @Inject constructor(
         softLogoutViewModel.handle(SoftLogoutAction.SignInAgain(password))
     }
 
+    @OnClick(R.id.softLogoutFormSsoSubmit)
+    fun ssoSubmit() {
+        // TODO
+    }
+
     @OnClick(R.id.softLogoutClearDataSubmit)
-    fun clearData() = withState(softLogoutViewModel) { state ->
-        cleanupUi()
+    fun clearData() {
+        withState(softLogoutViewModel) { state ->
+            cleanupUi()
 
-        val messageResId = if (state.hasUnsavedKeys) {
-            R.string.soft_logout_clear_data_dialog_content
-        } else {
-            R.string.soft_logout_clear_data_dialog_e2e_warning_content
+            val messageResId = if (state.hasUnsavedKeys) {
+                R.string.soft_logout_clear_data_dialog_content
+            } else {
+                R.string.soft_logout_clear_data_dialog_e2e_warning_content
+            }
+
+            AlertDialog.Builder(requireActivity())
+                    .setTitle(R.string.soft_logout_clear_data_dialog_title)
+                    .setMessage(messageResId)
+                    .setNegativeButton(R.string.cancel, null)
+                    .setPositiveButton(R.string.soft_logout_clear_data_submit) { _, _ ->
+                        MainActivity.restartApp(requireActivity(), MainActivityArgs(
+                                clearCache = true,
+                                clearCredentials = true,
+                                isUserLoggedOut = true
+                        ))
+                    }
+                    .show()
+                    .withColoredButton(DialogInterface.BUTTON_POSITIVE)
         }
-
-        AlertDialog.Builder(requireActivity())
-                .setTitle(R.string.soft_logout_clear_data_dialog_title)
-                .setMessage(messageResId)
-                .setNegativeButton(R.string.cancel, null)
-                .setPositiveButton(R.string.soft_logout_clear_data_submit) { _, _ ->
-                    MainActivity.restartApp(requireActivity(), MainActivityArgs(
-                            clearCache = true,
-                            clearCredentials = true,
-                            isUserLoggedOut = true
-                    ))
-                }
-                .show()
-                .withColoredButton(DialogInterface.BUTTON_POSITIVE)
     }
 
     private fun cleanupUi() {
@@ -112,6 +128,14 @@ class SoftLogoutFragment @Inject constructor(
                 state.userId)
 
         softLogoutE2eWarningNotice.isVisible = state.hasUnsavedKeys
+    }
+
+    private fun setupForm(state: SoftLogoutViewState) {
+        softLogoutFormLoading.isVisible = state.asyncHomeServerLoginFlowRequest is Loading
+        softLogoutFormSsoSubmit.isVisible = state.asyncHomeServerLoginFlowRequest.invoke() == LoginMode.Sso
+        softLogoutFormPassword.isVisible = state.asyncHomeServerLoginFlowRequest.invoke() == LoginMode.Password
+        softLogoutFormError.isVisible = state.asyncHomeServerLoginFlowRequest is Fail
+        itemErrorRetryText.setTextOrHide((state.asyncHomeServerLoginFlowRequest as? Fail)?.error?.let { errorFormatter.toHumanReadable(it) })
     }
 
     private fun setupSubmitButton() {
@@ -156,6 +180,7 @@ class SoftLogoutFragment @Inject constructor(
 
     override fun invalidate() = withState(softLogoutViewModel) { state ->
         setupUi(state)
+        setupForm(state)
         setupAutoFill()
 
         when (state.asyncLoginAction) {

@@ -41,6 +41,7 @@ class ErrorFormatter @Inject constructor(private val stringProvider: StringProvi
                         stringProvider.getString(R.string.error_network_timeout)
                     throwable.ioException is UnknownHostException   ->
                         // Invalid homeserver?
+                        // TODO Check network state, airplane mode, etc.
                         stringProvider.getString(R.string.login_error_unknown_host)
                     else                                            ->
                         stringProvider.getString(R.string.error_no_network)

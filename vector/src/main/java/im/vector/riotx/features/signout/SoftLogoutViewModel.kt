@@ -20,12 +20,16 @@ import com.airbnb.mvrx.*
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.auth.AuthenticationService
+import im.vector.matrix.android.api.auth.data.LoginFlowResult
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.util.Cancelable
+import im.vector.matrix.android.internal.auth.data.LoginFlowTypes
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.extensions.hasUnsavedKeys
 import im.vector.riotx.core.extensions.toReducedUrl
 import im.vector.riotx.core.platform.VectorViewModel
+import im.vector.riotx.features.login.LoginMode
 
 /**
  *
@@ -33,8 +37,9 @@ import im.vector.riotx.core.platform.VectorViewModel
 class SoftLogoutViewModel @AssistedInject constructor(
         @Assisted initialState: SoftLogoutViewState,
         private val session: Session,
-        private val activeSessionHolder: ActiveSessionHolder)
-    : VectorViewModel<SoftLogoutViewState, SoftLogoutAction>(initialState) {
+        private val activeSessionHolder: ActiveSessionHolder,
+        private val authenticationService: AuthenticationService
+) : VectorViewModel<SoftLogoutViewState, SoftLogoutAction>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -63,13 +68,83 @@ class SoftLogoutViewModel @AssistedInject constructor(
 
     private var currentTask: Cancelable? = null
 
+    init {
+        // Get the supported login flow
+        getSupportedLoginFlow()
+    }
+
+    private fun getSupportedLoginFlow() {
+        val homeServerConnectionConfig = session.sessionParams.homeServerConnectionConfig
+
+        currentTask?.cancel()
+        currentTask = null
+        authenticationService.cancelPendingLoginOrRegistration()
+
+        setState {
+            copy(
+                    asyncHomeServerLoginFlowRequest = Loading()
+            )
+        }
+
+        currentTask = authenticationService.getLoginFlow(homeServerConnectionConfig, object : MatrixCallback<LoginFlowResult> {
+            override fun onFailure(failure: Throwable) {
+                // TODO _viewEvents.post(LoginViewEvents.Error(failure))
+                setState {
+                    copy(
+                            asyncHomeServerLoginFlowRequest = Fail(failure)
+                    )
+                }
+            }
+
+            override fun onSuccess(data: LoginFlowResult) {
+                when (data) {
+                    is LoginFlowResult.Success            -> {
+                        val loginMode = when {
+                            // SSO login is taken first
+                            data.loginFlowResponse.flows.any { it.type == LoginFlowTypes.SSO }      -> LoginMode.Sso
+                            data.loginFlowResponse.flows.any { it.type == LoginFlowTypes.PASSWORD } -> LoginMode.Password
+                            else                                                                    -> LoginMode.Unsupported
+                        }
+
+                        if ((loginMode == LoginMode.Password && !data.isLoginAndRegistrationSupported)
+                                || loginMode == LoginMode.Unsupported) {
+                            notSupported()
+                        } else {
+                            setState {
+                                copy(
+                                        asyncHomeServerLoginFlowRequest = Success(loginMode)
+                                )
+                            }
+                        }
+                    }
+                    is LoginFlowResult.OutdatedHomeserver -> {
+                        notSupported()
+                    }
+                }
+            }
+
+            private fun notSupported() {
+                // Should not happen since it's a re-logout
+                // Notify the UI
+                // _viewEvents.post(LoginViewEvents.OutdatedHomeserver)
+
+                setState {
+                    copy(
+                            asyncHomeServerLoginFlowRequest = Fail(IllegalStateException("Should not happen"))
+                    )
+                }
+            }
+        })
+    }
+
     // TODO Cleanup
     // private val _viewEvents = PublishDataSource<LoginViewEvents>()
     // val viewEvents: DataSource<LoginViewEvents> = _viewEvents
 
     override fun handle(action: SoftLogoutAction) {
         when (action) {
-            is SoftLogoutAction.SignInAgain -> handleSignInAgain(action)
+            is SoftLogoutAction.RetryLoginFlow -> getSupportedLoginFlow()
+            is SoftLogoutAction.SignInAgain    -> handleSignInAgain(action)
         }
     }
 
