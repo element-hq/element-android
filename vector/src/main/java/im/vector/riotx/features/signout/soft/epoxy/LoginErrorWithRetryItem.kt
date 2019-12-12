@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,32 +14,32 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.signout.epoxy
+package im.vector.riotx.features.signout.soft.epoxy
 
 import android.widget.Button
+import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
-import im.vector.riotx.core.extensions.setTextOrHide
 
-@EpoxyModelClass(layout = R.layout.item_login_red_button)
-abstract class LoginRedButtonItem : VectorEpoxyModel<LoginRedButtonItem.Holder>() {
+@EpoxyModelClass(layout = R.layout.item_login_error_retry)
+abstract class LoginErrorWithRetryItem : VectorEpoxyModel<LoginErrorWithRetryItem.Holder>() {
 
-    @EpoxyAttribute var text: String? = null
-    @EpoxyAttribute var listener: (() -> Unit)? = null
+    @EpoxyAttribute
+    var text: String? = null
+
+    @EpoxyAttribute
+    var listener: (() -> Unit)? = null
 
     override fun bind(holder: Holder) {
-        super.bind(holder)
-
-        holder.button.setTextOrHide(text)
-        holder.button.setOnClickListener {
-            listener?.invoke()
-        }
+        holder.textView.text = text
+        holder.buttonView.setOnClickListener { listener?.invoke() }
     }
 
     class Holder : VectorEpoxyHolder() {
-        val button by bind<Button>(R.id.itemLoginRedButton)
+        val textView by bind<TextView>(R.id.itemLoginErrorRetryText)
+        val buttonView by bind<Button>(R.id.itemLoginErrorRetryButton)
     }
 }

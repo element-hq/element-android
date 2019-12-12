@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.signout
+package im.vector.riotx.features.signout.soft
 
 import android.content.DialogInterface
 import android.os.Bundle

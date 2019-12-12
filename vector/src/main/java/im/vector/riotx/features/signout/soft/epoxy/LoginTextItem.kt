@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.signout.epoxy
+package im.vector.riotx.features.signout.soft.epoxy
 
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
@@ -24,8 +24,8 @@ import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
 import im.vector.riotx.core.extensions.setTextOrHide
 
-@EpoxyModelClass(layout = R.layout.item_login_title_small)
-abstract class LoginTitleSmallItem : VectorEpoxyModel<LoginTitleSmallItem.Holder>() {
+@EpoxyModelClass(layout = R.layout.item_login_text)
+abstract class LoginTextItem : VectorEpoxyModel<LoginTextItem.Holder>() {
 
     @EpoxyAttribute var text: String? = null
 
@@ -36,6 +36,6 @@ abstract class LoginTitleSmallItem : VectorEpoxyModel<LoginTitleSmallItem.Holder
     }
 
     class Holder : VectorEpoxyHolder() {
-        val textView by bind<TextView>(R.id.itemLoginTitleSmallText)
+        val textView by bind<TextView>(R.id.itemLoginText)
     }
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.signout
+package im.vector.riotx.features.signout.soft
 
 import com.airbnb.mvrx.*
 import im.vector.riotx.features.login.LoginMode

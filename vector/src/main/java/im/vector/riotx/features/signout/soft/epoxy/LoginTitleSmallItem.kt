@@ -14,14 +14,28 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.signout.epoxy
+package im.vector.riotx.features.signout.soft.epoxy
 
+import android.widget.TextView
+import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
+import im.vector.riotx.core.extensions.setTextOrHide
 
-@EpoxyModelClass(layout = R.layout.item_login_header)
-abstract class LoginHeaderItem : VectorEpoxyModel<LoginHeaderItem.Holder>() {
-    class Holder : VectorEpoxyHolder()
+@EpoxyModelClass(layout = R.layout.item_login_title_small)
+abstract class LoginTitleSmallItem : VectorEpoxyModel<LoginTitleSmallItem.Holder>() {
+
+    @EpoxyAttribute var text: String? = null
+
+    override fun bind(holder: Holder) {
+        super.bind(holder)
+
+        holder.textView.setTextOrHide(text)
+    }
+
+    class Holder : VectorEpoxyHolder() {
+        val textView by bind<TextView>(R.id.itemLoginTitleSmallText)
+    }
 }

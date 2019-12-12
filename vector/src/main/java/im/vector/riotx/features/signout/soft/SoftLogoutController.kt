@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.signout
+package im.vector.riotx.features.signout.soft
 
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.mvrx.Fail
@@ -25,7 +25,7 @@ import im.vector.riotx.core.epoxy.loadingItem
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.login.LoginMode
-import im.vector.riotx.features.signout.epoxy.*
+import im.vector.riotx.features.signout.soft.epoxy.*
 import javax.inject.Inject
 
 class SoftLogoutController @Inject constructor(

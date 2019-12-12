@@ -33,8 +33,8 @@ import im.vector.riotx.core.utils.deleteAllFiles
 import im.vector.riotx.features.home.HomeActivity
 import im.vector.riotx.features.login.LoginActivity
 import im.vector.riotx.features.notifications.NotificationDrawerManager
-import im.vector.riotx.features.signout.SignedOutActivity
-import im.vector.riotx.features.signout.SoftLogoutActivity
+import im.vector.riotx.features.signout.hard.SignedOutActivity
+import im.vector.riotx.features.signout.soft.SoftLogoutActivity
 import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope

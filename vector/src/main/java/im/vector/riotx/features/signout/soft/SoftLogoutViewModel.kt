@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.signout
+package im.vector.riotx.features.signout.soft
 
 import com.airbnb.mvrx.*
 import com.squareup.inject.assisted.Assisted
@@ -32,7 +32,9 @@ import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.features.login.LoginMode
 
 /**
- *
+ * TODO Get login flow to tell if it's SSO or Password, or store this info during sigin?
+ * TODO Reset password
+ * TODO Test push: disable the pushers?
  */
 class SoftLogoutViewModel @AssistedInject constructor(
         @Assisted initialState: SoftLogoutViewState,

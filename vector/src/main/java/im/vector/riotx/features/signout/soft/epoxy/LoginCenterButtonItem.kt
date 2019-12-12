@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.signout.epoxy
+package im.vector.riotx.features.signout.soft.epoxy
 
 import android.widget.Button
 import com.airbnb.epoxy.EpoxyAttribute
