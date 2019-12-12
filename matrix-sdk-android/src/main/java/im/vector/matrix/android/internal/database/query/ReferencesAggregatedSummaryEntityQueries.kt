@@ -17,6 +17,3 @@ internal fun ReferencesAggregatedSummaryEntity.Companion.create(realm: Realm, tx
         this.eventId = txID
     }
 }
-
-
-
