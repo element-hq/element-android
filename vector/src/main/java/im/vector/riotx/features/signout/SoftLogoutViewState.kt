@@ -17,6 +17,7 @@
 package im.vector.riotx.features.signout
 
 import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
 
@@ -25,4 +26,10 @@ data class SoftLogoutViewState(
         val homeServerUrl: String,
         val userId: String,
         val userDisplayName: String
-) : MvRxState
+) : MvRxState {
+
+    fun isLoading(): Boolean {
+        return asyncLoginAction is Loading
+    }
+
+}

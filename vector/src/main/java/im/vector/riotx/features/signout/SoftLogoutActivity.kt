@@ -18,6 +18,7 @@ package im.vector.riotx.features.signout
 
 import android.content.Context
 import android.content.Intent
+import androidx.core.view.isVisible
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.viewModel
 import im.vector.matrix.android.api.failure.GlobalError
@@ -28,6 +29,7 @@ import im.vector.riotx.core.extensions.replaceFragment
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.features.MainActivity
 import im.vector.riotx.features.MainActivityArgs
+import kotlinx.android.synthetic.main.activity_login.*
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -47,13 +49,13 @@ class SoftLogoutActivity : VectorBaseActivity() {
         injector.inject(this)
     }
 
-    override fun getLayoutRes() = R.layout.activity_simple
+    override fun getLayoutRes() = R.layout.activity_login
 
     override fun initUiAndData() {
         super.initUiAndData()
 
         if (isFirstCreation()) {
-            replaceFragment(R.id.simpleFragmentContainer, SoftLogoutFragment::class.java)
+            replaceFragment(R.id.loginFragmentContainer, SoftLogoutFragment::class.java)
         }
 
         softLogoutViewModel
@@ -66,6 +68,8 @@ class SoftLogoutActivity : VectorBaseActivity() {
         if (softLogoutViewState.asyncLoginAction is Success) {
             MainActivity.restartApp(this, MainActivityArgs())
         }
+
+        loginLoading.isVisible = softLogoutViewState.isLoading()
     }
 
     companion object {
