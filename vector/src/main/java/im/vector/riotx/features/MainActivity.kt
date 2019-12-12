@@ -32,6 +32,7 @@ import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.utils.deleteAllFiles
 import im.vector.riotx.features.home.HomeActivity
 import im.vector.riotx.features.login.LoginActivity
+import im.vector.riotx.features.notifications.NotificationDrawerManager
 import im.vector.riotx.features.signout.SignedOutActivity
 import im.vector.riotx.features.signout.SoftLogoutActivity
 import kotlinx.android.parcel.Parcelize
@@ -50,6 +51,11 @@ data class MainActivityArgs(
         val isSoftLogout: Boolean = false
 ) : Parcelable
 
+/**
+ * This is the entry point of RiotX
+ * This Activity, when started with argument, is also doing some cleanup when user disconnects,
+ * clears cache, is logged out, or is soft logged out
+ */
 class MainActivity : VectorBaseActivity() {
 
     companion object {
@@ -67,6 +73,7 @@ class MainActivity : VectorBaseActivity() {
 
     private lateinit var args: MainActivityArgs
 
+    @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
     @Inject lateinit var sessionHolder: ActiveSessionHolder
     @Inject lateinit var errorFormatter: ErrorFormatter
 
@@ -78,12 +85,22 @@ class MainActivity : VectorBaseActivity() {
         super.onCreate(savedInstanceState)
         args = parseArgs()
 
+        if (args.clearCredentials || args.isUserLoggedOut) {
+            clearNotifications()
+        }
+
         // Handle some wanted cleanup
         if (args.clearCache || args.clearCredentials) {
             doCleanUp()
         } else {
             startNextActivityAndFinish()
         }
+    }
+
+    private fun clearNotifications() {
+        // Dismiss all notifications
+        notificationDrawerManager.clearAllEvents()
+        notificationDrawerManager.persistInfo()
     }
 
     private fun parseArgs(): MainActivityArgs {
@@ -171,7 +188,7 @@ class MainActivity : VectorBaseActivity() {
             sessionHolder.hasActiveSession() ->
                 // We have a session.
                 // Check it can be opened
-                if(sessionHolder.getActiveSession().isOpenable) {
+                if (sessionHolder.getActiveSession().isOpenable) {
                     HomeActivity.newIntent(this)
                 } else {
                     // The token is still invalid

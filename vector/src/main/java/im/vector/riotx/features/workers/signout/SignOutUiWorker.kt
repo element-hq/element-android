@@ -24,15 +24,12 @@ import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.extensions.vectorComponent
 import im.vector.riotx.features.MainActivity
 import im.vector.riotx.features.MainActivityArgs
-import im.vector.riotx.features.notifications.NotificationDrawerManager
 
 class SignOutUiWorker(private val activity: FragmentActivity) {
 
-    lateinit var notificationDrawerManager: NotificationDrawerManager
     lateinit var activeSessionHolder: ActiveSessionHolder
 
     fun perform(context: Context) {
-        notificationDrawerManager = context.vectorComponent().notificationDrawerManager()
         activeSessionHolder = context.vectorComponent().activeSessionHolder()
         val session = activeSessionHolder.getActiveSession()
         if (SignOutViewModel.doYouNeedToBeDisplayed(session)) {
@@ -55,10 +52,6 @@ class SignOutUiWorker(private val activity: FragmentActivity) {
     }
 
     private fun doSignOut() {
-        // Dismiss all notifications
-        notificationDrawerManager.clearAllEvents()
-        notificationDrawerManager.persistInfo()
-
         MainActivity.restartApp(activity,
                 MainActivityArgs(
                         clearCache = true,
