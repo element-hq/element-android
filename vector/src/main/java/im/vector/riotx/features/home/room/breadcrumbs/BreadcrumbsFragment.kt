@@ -48,6 +48,7 @@ class BreadcrumbsFragment @Inject constructor(
 
     override fun onDestroyView() {
         breadcrumbsRecyclerView.cleanup()
+        breadcrumbsController.listener = null
         super.onDestroyView()
     }
 
@@ -56,6 +57,7 @@ class BreadcrumbsFragment @Inject constructor(
         breadcrumbsController.listener = this
     }
 
+    // TODO Use invalidate() ?
     private fun renderState(state: BreadcrumbsViewState) {
         breadcrumbsController.update(state)
     }
