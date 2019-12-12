@@ -115,6 +115,7 @@ class SoftLogoutController @Inject constructor(
                     LoginMode.Sso         -> {
                         loginCenterButtonItem {
                             id("sso")
+                            text(stringProvider.getString(R.string.login_signin_sso))
                             listener { listener?.ssoSubmit() }
                         }
                     }
