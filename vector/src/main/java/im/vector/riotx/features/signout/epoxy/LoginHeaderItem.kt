@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.signout
+package im.vector.riotx.features.signout.epoxy
 
-import im.vector.riotx.core.platform.VectorViewModelAction
+import com.airbnb.epoxy.EpoxyModelClass
+import im.vector.riotx.R
+import im.vector.riotx.core.epoxy.VectorEpoxyHolder
+import im.vector.riotx.core.epoxy.VectorEpoxyModel
 
-sealed class SoftLogoutAction : VectorViewModelAction {
-    object RetryLoginFlow : SoftLogoutAction()
-    object TogglePassword : SoftLogoutAction()
-
-    data class SignInAgain(val password: String) : SoftLogoutAction()
-    // TODO Add reset pwd...
+@EpoxyModelClass(layout = R.layout.item_login_header)
+abstract class LoginHeaderItem : VectorEpoxyModel<LoginHeaderItem.Holder>() {
+    class Holder : VectorEpoxyHolder()
 }

@@ -145,11 +145,28 @@ class SoftLogoutViewModel @AssistedInject constructor(
         when (action) {
             is SoftLogoutAction.RetryLoginFlow -> getSupportedLoginFlow()
             is SoftLogoutAction.SignInAgain    -> handleSignInAgain(action)
+            is SoftLogoutAction.TogglePassword -> handleTogglePassword()
+        }
+    }
+
+    private fun handleTogglePassword() {
+        withState {
+            setState {
+                copy(
+                        passwordShown = !this.passwordShown
+                )
+            }
         }
     }
 
     private fun handleSignInAgain(action: SoftLogoutAction.SignInAgain) {
-        setState { copy(asyncLoginAction = Loading()) }
+        setState {
+            copy(
+                    asyncLoginAction = Loading(),
+                    // Ensure password is hidden
+                    passwordShown = false
+            )
+        }
         currentTask = session.signInAgain(action.password,
                 object : MatrixCallback<Unit> {
                     override fun onFailure(failure: Throwable) {
