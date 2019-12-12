@@ -34,10 +34,14 @@ import javax.inject.Inject
 internal interface SendVerificationMessageTask : Task<SendVerificationMessageTask.Params, SendResponse> {
     data class Params(
             val type: String,
-            val roomId: String,
-            val content: Content,
+            val event: Event,
             val cryptoService: CryptoService?
     )
+
+    fun createParamsAndLocalEcho(type: String,
+                                 roomId: String,
+                                 content: Content,
+                                 cryptoService: CryptoService?) : Params
 }
 
 internal class DefaultSendVerificationMessageTask @Inject constructor(
@@ -48,8 +52,28 @@ internal class DefaultSendVerificationMessageTask @Inject constructor(
         @UserId private val userId: String,
         private val roomAPI: RoomAPI) : SendVerificationMessageTask {
 
+    override fun createParamsAndLocalEcho(type: String, roomId: String, content: Content, cryptoService: CryptoService?): SendVerificationMessageTask.Params {
+        val localID = LocalEcho.createLocalEchoId()
+        val event = Event(
+                roomId = roomId,
+                originServerTs = System.currentTimeMillis(),
+                senderId = userId,
+                eventId = localID,
+                type = type,
+                content = content,
+                unsignedData = UnsignedData(age = null, transactionId = localID)
+        ).also {
+            localEchoEventFactory.saveLocalEcho(monarchy, it)
+        }
+        return SendVerificationMessageTask.Params(
+                type,
+                event,
+                cryptoService
+        )
+    }
+
     override suspend fun execute(params: SendVerificationMessageTask.Params): SendResponse {
-        val event = createRequestEvent(params)
+        val event = handleEncryption(params)
         val localID = event.eventId!!
 
         try {
@@ -57,7 +81,7 @@ internal class DefaultSendVerificationMessageTask @Inject constructor(
             val executeRequest = executeRequest<SendResponse> {
                 apiCall = roomAPI.send(
                         localID,
-                        roomId = params.roomId,
+                        roomId = event.roomId ?: "",
                         content = event.content,
                         eventType = event.type
                 )
@@ -70,25 +94,12 @@ internal class DefaultSendVerificationMessageTask @Inject constructor(
         }
     }
 
-    private suspend fun createRequestEvent(params: SendVerificationMessageTask.Params): Event {
-        val localID = LocalEcho.createLocalEchoId()
-        val event = Event(
-                roomId = params.roomId,
-                originServerTs = System.currentTimeMillis(),
-                senderId = userId,
-                eventId = localID,
-                type = params.type,
-                content = params.content,
-                unsignedData = UnsignedData(age = null, transactionId = localID)
-        ).also {
-            localEchoEventFactory.saveLocalEcho(monarchy, it)
-        }
-
-        if (params.cryptoService?.isRoomEncrypted(params.roomId) == true) {
+    private suspend fun handleEncryption(params: SendVerificationMessageTask.Params): Event {
+        if (params.cryptoService?.isRoomEncrypted(params.event.roomId ?: "") == true) {
             try {
                 return encryptEventTask.execute(EncryptEventTask.Params(
-                        params.roomId,
-                        event,
+                        params.event.roomId ?: "",
+                        params.event,
                         listOf("m.relates_to"),
                         params.cryptoService
                 ))
@@ -96,6 +107,6 @@ internal class DefaultSendVerificationMessageTask @Inject constructor(
                 // We said it's ok to send verification request in clear
             }
         }
-        return event
+        return params.event
     }
 }

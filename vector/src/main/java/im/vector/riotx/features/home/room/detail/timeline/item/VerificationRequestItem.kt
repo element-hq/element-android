@@ -20,6 +20,7 @@ import android.graphics.Typeface
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
@@ -110,6 +111,8 @@ abstract class VerificationRequestItem : AbsBaseMessageItem<VerificationRequestI
 
         holder.callback = callback
         holder.attributes = attributes
+
+        renderSendState(holder.view, null, holder.failedToSendIndicator)
     }
 
     override fun unbind(holder: Holder) {
@@ -142,6 +145,7 @@ abstract class VerificationRequestItem : AbsBaseMessageItem<VerificationRequestI
         val endGuideline by bind<View>(R.id.messageEndGuideline)
         private val declineButton by bind<Button>(R.id.sas_verification_verified_decline_button)
         private val acceptButton by bind<Button>(R.id.sas_verification_verified_accept_button)
+        val failedToSendIndicator by bind<ImageView>(R.id.messageFailToSendIndicator)
 
         override fun bindView(itemView: View) {
             super.bindView(itemView)

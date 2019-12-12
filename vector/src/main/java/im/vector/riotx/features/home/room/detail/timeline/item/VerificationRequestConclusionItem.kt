@@ -18,6 +18,7 @@ package im.vector.riotx.features.home.room.detail.timeline.item
 import android.annotation.SuppressLint
 import android.graphics.Typeface
 import android.view.View
+import android.widget.ImageView
 import android.widget.RelativeLayout
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
@@ -55,12 +56,15 @@ abstract class VerificationRequestConclusionItem : AbsBaseMessageItem<Verificati
                 ContextCompat.getDrawable(holder.view.context, startDrawable),
                 null, null, null
         )
+
+        renderSendState(holder.view, null, holder.failedToSendIndicator)
     }
 
     class Holder : AbsBaseMessageItem.Holder(STUB_ID) {
         val titleView by bind<AppCompatTextView>(R.id.itemVerificationDoneTitleTextView)
         val descriptionView by bind<AppCompatTextView>(R.id.itemVerificationDoneDetailTextView)
         val endGuideline by bind<View>(R.id.messageEndGuideline)
+        val failedToSendIndicator by bind<ImageView>(R.id.messageFailToSendIndicator)
     }
 
     companion object {

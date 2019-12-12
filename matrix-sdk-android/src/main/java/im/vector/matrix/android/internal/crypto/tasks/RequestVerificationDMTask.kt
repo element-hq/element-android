@@ -29,12 +29,11 @@ import javax.inject.Inject
 
 internal interface RequestVerificationDMTask : Task<RequestVerificationDMTask.Params, SendResponse> {
     data class Params(
-            val roomId: String,
-            val from: String,
-            val methods: List<String>,
-            val to: String,
+            val event: Event,
             val cryptoService: CryptoService
     )
+
+    fun createParamsAndLocalEcho(roomId: String, from: String, methods: List<String>, to: String, cryptoService: CryptoService) : Params
 }
 
 internal class DefaultRequestVerificationDMTask @Inject constructor(
@@ -45,8 +44,16 @@ internal class DefaultRequestVerificationDMTask @Inject constructor(
         private val roomAPI: RoomAPI)
     : RequestVerificationDMTask {
 
+    override fun createParamsAndLocalEcho(roomId: String, from: String, methods: List<String>, to: String, cryptoService: CryptoService): RequestVerificationDMTask.Params {
+        val event = localEchoEventFactory.createVerificationRequest(roomId, from, to, methods)
+                .also { localEchoEventFactory.saveLocalEcho(monarchy, it) }
+        return RequestVerificationDMTask.Params(
+                event,
+                cryptoService
+        )
+    }
     override suspend fun execute(params: RequestVerificationDMTask.Params): SendResponse {
-        val event = createRequestEvent(params)
+        val event = handleEncryption(params)
         val localID = event.eventId!!
 
         try {
@@ -54,7 +61,7 @@ internal class DefaultRequestVerificationDMTask @Inject constructor(
             val executeRequest = executeRequest<SendResponse> {
                 apiCall = roomAPI.send(
                         localID,
-                        roomId = params.roomId,
+                        roomId = event.roomId ?: "",
                         content = event.content,
                         eventType = event.type // message or room.encrypted
                 )
@@ -67,14 +74,13 @@ internal class DefaultRequestVerificationDMTask @Inject constructor(
         }
     }
 
-    private suspend fun createRequestEvent(params: RequestVerificationDMTask.Params): Event {
-        val event = localEchoEventFactory.createVerificationRequest(params.roomId, params.from, params.to, params.methods)
-                .also { localEchoEventFactory.saveLocalEcho(monarchy, it) }
-        if (params.cryptoService.isRoomEncrypted(params.roomId)) {
+    private suspend fun handleEncryption(params: RequestVerificationDMTask.Params): Event {
+        val roomId = params.event.roomId ?: ""
+        if (params.cryptoService.isRoomEncrypted(roomId)) {
             try {
                 return encryptEventTask.execute(EncryptEventTask.Params(
-                        params.roomId,
-                        event,
+                        roomId,
+                        params.event,
                         listOf("m.relates_to"),
                         params.cryptoService
                 ))
@@ -82,6 +88,6 @@ internal class DefaultRequestVerificationDMTask @Inject constructor(
                 // We said it's ok to send verification request in clear
             }
         }
-        return event
+        return params.event
     }
 }

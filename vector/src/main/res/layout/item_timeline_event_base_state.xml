@@ -54,6 +54,17 @@
 
     </FrameLayout>
 
+    <ImageView
+        android:id="@+id/messageFailToSendIndicator"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
+        android:layout_marginStart="2dp"
+        android:src="@drawable/ic_warning_small"
+        android:visibility="gone"
+        android:layout_toEndOf="@+id/viewStubContainer"
+        android:layout_alignTop="@+id/viewStubContainer"
+        tools:visibility="visible" />
+
 
     <LinearLayout
         android:id="@+id/informationBottom"

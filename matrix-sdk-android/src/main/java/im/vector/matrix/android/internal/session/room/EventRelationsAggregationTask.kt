@@ -18,7 +18,6 @@ package im.vector.matrix.android.internal.session.room
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
-import im.vector.matrix.android.api.session.crypto.sas.CancelCode
 import im.vector.matrix.android.api.session.events.model.*
 import im.vector.matrix.android.api.session.room.model.ReferencesAggregatedContent
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
@@ -481,14 +480,14 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
         }
     }
 
-    private fun updateVerificationState(oldState: VerificationState?, newState: VerificationState) : VerificationState{
+    private fun updateVerificationState(oldState: VerificationState?, newState: VerificationState) : VerificationState {
         // Cancel is always prioritary ?
         // Eg id i found that mac or keys mismatch and send a cancel and the other send a done, i have to
         // consider as canceled
         if (newState == VerificationState.CANCELED_BY_OTHER || newState == VerificationState.CANCELED_BY_ME) {
             return newState
         }
-        //never move out of cancel
+        // never move out of cancel
         if (oldState == VerificationState.CANCELED_BY_OTHER || oldState == VerificationState.CANCELED_BY_ME) {
             return oldState
         }

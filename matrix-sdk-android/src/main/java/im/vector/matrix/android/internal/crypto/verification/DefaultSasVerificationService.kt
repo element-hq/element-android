@@ -38,7 +38,6 @@ import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.rest.*
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.DefaultRequestVerificationDMTask
-import im.vector.matrix.android.internal.crypto.tasks.RequestVerificationDMTask
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.room.send.SendResponse
 import im.vector.matrix.android.internal.task.TaskConstraints
@@ -538,7 +537,7 @@ internal class DefaultSasVerificationService @Inject constructor(
 
     override fun requestKeyVerificationInDMs(userId: String, roomId: String, callback: MatrixCallback<String>?) {
         requestVerificationDMTask.configureWith(
-                RequestVerificationDMTask.Params(
+                requestVerificationDMTask.createParamsAndLocalEcho(
                         roomId = roomId,
                         from = credentials.deviceId ?: "",
                         methods = listOf(KeyVerificationStart.VERIF_METHOD_SAS),

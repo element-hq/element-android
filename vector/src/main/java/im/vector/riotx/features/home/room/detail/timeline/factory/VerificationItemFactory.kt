@@ -26,7 +26,6 @@ import im.vector.matrix.android.api.session.room.model.message.MessageVerificati
 import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.internal.session.room.VerificationState
-import im.vector.matrix.android.internal.session.room.isCanceled
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.UserPreferencesProvider
@@ -91,7 +90,7 @@ class VerificationItemFactory @Inject constructor(
                     CancelCode.MismatchedCommitment,
                     CancelCode.MismatchedKeys,
                     CancelCode.MismatchedSas -> {
-                        //We should display these bad conclusions
+                        // We should display these bad conclusions
                         return VerificationRequestConclusionItem_()
                                 .attributes(
                                         VerificationRequestConclusionItem.Attributes(
@@ -113,10 +112,8 @@ class VerificationItemFactory @Inject constructor(
                     }
                     else -> ignoredConclusion(event, highlight, callback)
                 }
-
             }
             EventType.KEY_VERIFICATION_DONE -> {
-
                 // Is the request referenced is actually really completed?
                 if (referenceInformationData.referencesInfoData?.verificationStatus != VerificationState.DONE) return ignoredConclusion(event, highlight, callback)
 
