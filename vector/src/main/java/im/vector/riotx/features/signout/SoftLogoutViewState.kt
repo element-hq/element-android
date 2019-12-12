@@ -16,10 +16,7 @@
 
 package im.vector.riotx.features.signout
 
-import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.Uninitialized
+import com.airbnb.mvrx.*
 import im.vector.riotx.features.login.LoginMode
 
 data class SoftLogoutViewState(
@@ -35,5 +32,7 @@ data class SoftLogoutViewState(
 
     fun isLoading(): Boolean {
         return asyncLoginAction is Loading
+                // Keep loading when it is success because of the delay to switch to the next Activity
+                || asyncLoginAction is Success
     }
 }
