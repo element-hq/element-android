@@ -20,8 +20,8 @@ import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.session.events.model.RelationType
 import im.vector.matrix.android.api.session.events.model.toContent
 import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultContent
-import im.vector.matrix.android.internal.crypto.verification.VerificationInfoAcceptFactory
 import im.vector.matrix.android.internal.crypto.verification.VerificationInfoAccept
+import im.vector.matrix.android.internal.crypto.verification.VerificationInfoAcceptFactory
 import timber.log.Timber
 
 @JsonClass(generateAdapter = true)
