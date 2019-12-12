@@ -53,7 +53,7 @@ internal abstract class AuthModule {
                     .name("matrix-sdk-auth.realm")
                     .modules(AuthRealmModule())
                     .schemaVersion(AuthRealmMigration.SCHEMA_VERSION)
-                    .migration(AuthRealmMigration())
+                    .migration(AuthRealmMigration)
                     .build()
         }
     }

@@ -20,12 +20,10 @@ import io.realm.DynamicRealm
 import io.realm.RealmMigration
 import timber.log.Timber
 
-internal class AuthRealmMigration : RealmMigration {
+internal object AuthRealmMigration : RealmMigration {
 
-    companion object {
-        // Current schema version
-        const val SCHEMA_VERSION = 2L
-    }
+    // Current schema version
+    const val SCHEMA_VERSION = 2L
 
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
         Timber.d("Migrating Auth Realm from $oldVersion to $newVersion")
