@@ -88,7 +88,7 @@ internal data class KeyVerificationAccept(
                             hash: String,
                             commitment: String,
                             messageAuthenticationCode: String,
-                            shortAuthenticationStrings: List<String>): VerifInfoAccept {
+                            shortAuthenticationStrings: List<String>): VerificationInfoAccept {
             return KeyVerificationAccept().apply {
                 this.transactionID = tid
                 this.keyAgreementProtocol = keyAgreementProtocol
