@@ -24,13 +24,14 @@ import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
 import im.vector.riotx.core.dialogs.withColoredButton
-import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.extensions.hideKeyboard
-import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.MainActivity
 import im.vector.riotx.features.MainActivityArgs
+import im.vector.riotx.features.login.AbstractLoginFragment
+import im.vector.riotx.features.login.LoginNavigation
+import im.vector.riotx.features.login.LoginViewState
 import kotlinx.android.synthetic.main.fragment_generic_recycler.*
 import javax.inject.Inject
 
@@ -40,9 +41,8 @@ import javax.inject.Inject
  * - or to cleanup all the data
  */
 class SoftLogoutFragment @Inject constructor(
-        private val errorFormatter: ErrorFormatter,
         private val softLogoutController: SoftLogoutController
-) : VectorBaseFragment(), SoftLogoutController.Listener {
+) : AbstractLoginFragment(), SoftLogoutController.Listener {
 
     private val softLogoutViewModel: SoftLogoutViewModel by activityViewModel()
 
@@ -52,9 +52,6 @@ class SoftLogoutFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
 
         setupRecyclerView()
-
-        // TODO setupSubmitButton()
-        // TODO setupPasswordReveal()
     }
 
     private fun setupRecyclerView() {
@@ -82,7 +79,7 @@ class SoftLogoutFragment @Inject constructor(
     }
 
     override fun ssoSubmit() {
-        // TODO
+        // TODO loginSharedActionViewModel.post(LoginNavigation.Sso)
     }
 
     override fun clearData() {
@@ -113,29 +110,28 @@ class SoftLogoutFragment @Inject constructor(
 
     private fun cleanupUi() {
         recyclerView.hideKeyboard()
-        // TODO softLogoutPasswordFieldTil.error = null
-    }
-
-    private fun setupSubmitButton() {
-//        softLogoutPasswordField.textChanges()
-//                .map { it.trim().isNotEmpty() }
-//                .subscribeBy {
-//                    softLogoutPasswordFieldTil.error = null
-//                    softLogoutSubmit.isEnabled = it
-//                }
-//                .disposeOnDestroyView()
     }
 
     override fun forgetPasswordClicked() {
-        // TODO
-        // loginSharedActionViewModel.post(LoginNavigation.OnForgetPasswordClicked)
+        loginSharedActionViewModel.post(LoginNavigation.OnForgetPasswordClicked)
     }
 
     override fun revealPasswordClicked() {
         softLogoutViewModel.handle(SoftLogoutAction.TogglePassword)
     }
 
-    override fun invalidate() = withState(softLogoutViewModel) { state ->
-        softLogoutController.update(state)
+    override fun updateWithState(state: LoginViewState) {
+        super.updateWithState(state)
+
+        withState(softLogoutViewModel) { state2 ->
+            softLogoutController.update(state2)
+        }
+    }
+
+    override fun onError(throwable: Throwable) {
+    }
+
+    override fun resetViewModel() {
+        // No op
     }
 }

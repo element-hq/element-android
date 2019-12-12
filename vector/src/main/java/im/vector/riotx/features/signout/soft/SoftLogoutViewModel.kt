@@ -32,7 +32,7 @@ import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.features.login.LoginMode
 
 /**
- * TODO Get login flow to tell if it's SSO or Password, or store this info during sigin?
+ * TODO SSO
  * TODO Reset password
  * TODO Test push: disable the pushers?
  */

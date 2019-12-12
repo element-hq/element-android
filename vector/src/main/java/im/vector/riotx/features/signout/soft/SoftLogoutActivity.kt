@@ -26,17 +26,18 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.replaceFragment
-import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.features.MainActivity
 import im.vector.riotx.features.MainActivityArgs
+import im.vector.riotx.features.login.LoginActivity
 import kotlinx.android.synthetic.main.activity_login.*
 import timber.log.Timber
 import javax.inject.Inject
 
 /**
  * In this screen, the user is viewing a message informing that he has been logged out
+ * Extends LoginActivity to get the login with SSO and forget password functionality for free
  */
-class SoftLogoutActivity : VectorBaseActivity() {
+class SoftLogoutActivity : LoginActivity() {
 
     private val softLogoutViewModel: SoftLogoutViewModel by viewModel()
     // TODO For forgotten pwd
@@ -46,22 +47,21 @@ class SoftLogoutActivity : VectorBaseActivity() {
     @Inject lateinit var session: Session
 
     override fun injectWith(injector: ScreenComponent) {
+        super.injectWith(injector)
         injector.inject(this)
     }
 
-    override fun getLayoutRes() = R.layout.activity_login
-
     override fun initUiAndData() {
         super.initUiAndData()
-
-        if (isFirstCreation()) {
-            replaceFragment(R.id.loginFragmentContainer, SoftLogoutFragment::class.java)
-        }
 
         softLogoutViewModel
                 .subscribe(this) {
                     updateWithState(it)
                 }
+    }
+
+    override fun addFirstFragment() {
+        replaceFragment(R.id.loginFragmentContainer, SoftLogoutFragment::class.java)
     }
 
     private fun updateWithState(softLogoutViewState: SoftLogoutViewState) {
