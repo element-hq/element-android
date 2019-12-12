@@ -148,6 +148,7 @@
     <string name="soft_logout_signin_title">Sign in</string>
     <!-- Replacement: homeserver url, user display name and userId -->
     <string name="soft_logout_signin_notice">Your homeserver (%1$s) admin has signed you out of your account %2$s (%3$s).</string>
+    <string name="soft_logout_signin_e2e_warning_notice">Sign in to recover encryption keys stored exclusively on this device. You need them to read all of your secure messages on any device.</string>
     <string name="soft_logout_signin_submit">Sign in</string>
     <string name="soft_logout_signin_password_hint">Password</string>
     <string name="soft_logout_clear_data_title">Clear personal data</string>
@@ -156,6 +157,7 @@
 
     <string name="soft_logout_clear_data_dialog_title">Clear data</string>
     <string name="soft_logout_clear_data_dialog_content">Clear all data currently stored on this device?\nSign in again to access your account data and messages.</string>
+    <string name="soft_logout_clear_data_dialog_e2e_warning_content">You’ll lose access to secure messages unless you sign in to recover your encryption keys.</string>
     <string name="soft_logout_clear_data_dialog_submit">Clear data</string>
 
 </resources>

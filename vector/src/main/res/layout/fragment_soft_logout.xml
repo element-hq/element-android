@@ -43,6 +43,17 @@
                 android:textAppearance="@style/TextAppearance.Vector.Login.Text"
                 tools:text="@string/soft_logout_signin_notice" />
 
+            <TextView
+                android:id="@+id/softLogoutE2eWarningNotice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="start"
+                android:text="@string/soft_logout_signin_e2e_warning_notice"
+                android:textAppearance="@style/TextAppearance.Vector.Login.Text"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
             <FrameLayout
                 android:id="@+id/softLogoutPasswordContainer"
                 android:layout_width="match_parent"

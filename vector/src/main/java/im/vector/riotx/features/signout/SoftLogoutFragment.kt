@@ -22,6 +22,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.autofill.HintConstants
+import androidx.core.view.isVisible
 import butterknife.OnClick
 import com.airbnb.mvrx.*
 import com.jakewharton.rxbinding3.widget.textChanges
@@ -75,12 +76,18 @@ class SoftLogoutFragment @Inject constructor(
     }
 
     @OnClick(R.id.softLogoutClearDataSubmit)
-    fun clearData() {
+    fun clearData() = withState(softLogoutViewModel) { state ->
         cleanupUi()
+
+        val messageResId = if (state.hasUnsavedKeys) {
+            R.string.soft_logout_clear_data_dialog_content
+        } else {
+            R.string.soft_logout_clear_data_dialog_e2e_warning_content
+        }
 
         AlertDialog.Builder(requireActivity())
                 .setTitle(R.string.soft_logout_clear_data_dialog_title)
-                .setMessage(R.string.soft_logout_clear_data_dialog_content)
+                .setMessage(messageResId)
                 .setNegativeButton(R.string.cancel, null)
                 .setPositiveButton(R.string.soft_logout_clear_data_submit) { _, _ ->
                     MainActivity.restartApp(requireActivity(), MainActivityArgs(
@@ -103,6 +110,8 @@ class SoftLogoutFragment @Inject constructor(
                 state.homeServerUrl,
                 state.userDisplayName,
                 state.userId)
+
+        softLogoutE2eWarningNotice.isVisible = state.hasUnsavedKeys
     }
 
     private fun setupSubmitButton() {

@@ -23,6 +23,7 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.riotx.core.di.ActiveSessionHolder
+import im.vector.riotx.core.extensions.hasUnsavedKeys
 import im.vector.riotx.core.extensions.toReducedUrl
 import im.vector.riotx.core.platform.VectorViewModel
 
@@ -48,7 +49,8 @@ class SoftLogoutViewModel @AssistedInject constructor(
             return SoftLogoutViewState(
                     homeServerUrl = activity.session.sessionParams.homeServerConnectionConfig.homeServerUri.toString().toReducedUrl(),
                     userId = userId,
-                    userDisplayName = activity.session.getUser(userId)?.displayName ?: userId
+                    userDisplayName = activity.session.getUser(userId)?.displayName ?: userId,
+                    hasUnsavedKeys = activity.session.hasUnsavedKeys()
             )
         }
 

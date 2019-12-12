@@ -25,7 +25,8 @@ data class SoftLogoutViewState(
         val asyncLoginAction: Async<Unit> = Uninitialized,
         val homeServerUrl: String,
         val userId: String,
-        val userDisplayName: String
+        val userDisplayName: String,
+        val hasUnsavedKeys: Boolean
 ) : MvRxState {
 
     fun isLoading(): Boolean {

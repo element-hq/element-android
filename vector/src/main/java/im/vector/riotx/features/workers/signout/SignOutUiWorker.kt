@@ -21,6 +21,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentActivity
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
+import im.vector.riotx.core.extensions.hasUnsavedKeys
 import im.vector.riotx.core.extensions.vectorComponent
 import im.vector.riotx.features.MainActivity
 import im.vector.riotx.features.MainActivityArgs
@@ -32,7 +33,8 @@ class SignOutUiWorker(private val activity: FragmentActivity) {
     fun perform(context: Context) {
         activeSessionHolder = context.vectorComponent().activeSessionHolder()
         val session = activeSessionHolder.getActiveSession()
-        if (SignOutViewModel.doYouNeedToBeDisplayed(session)) {
+        if (session.hasUnsavedKeys()) {
+            // The backup check on logout flow has to be displayed if there are keys in the store, and the keys backup state is not Ready
             val signOutDialog = SignOutBottomSheetDialogFragment.newInstance()
             signOutDialog.onSignOut = Runnable {
                 doSignOut()
