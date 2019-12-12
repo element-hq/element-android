@@ -63,6 +63,11 @@ interface Session :
     val sessionParams: SessionParams
 
     /**
+     * The session is valid, i.e. it has a valid token so far
+     */
+    val isOpenable: Boolean
+
+    /**
      * Useful shortcut to get access to the userId
      */
     val myUserId: String

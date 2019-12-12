@@ -42,10 +42,14 @@ import im.vector.matrix.android.api.session.signout.SignOutService
 import im.vector.matrix.android.api.session.sync.FilterService
 import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.matrix.android.api.session.user.UserService
+import im.vector.matrix.android.internal.auth.SessionParamsStore
 import im.vector.matrix.android.internal.crypto.DefaultCryptoService
 import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.session.sync.job.SyncThread
 import im.vector.matrix.android.internal.session.sync.job.SyncWorker
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -72,6 +76,7 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
                                                   private val secureStorageService: Lazy<SecureStorageService>,
                                                   private val syncThreadProvider: Provider<SyncThread>,
                                                   private val contentUrlResolver: ContentUrlResolver,
+                                                  private val sessionParamsStore: SessionParamsStore,
                                                   private val contentUploadProgressTracker: ContentUploadStateTracker,
                                                   private val initialSyncProgressService: Lazy<InitialSyncProgressService>,
                                                   private val homeServerCapabilitiesService: Lazy<HomeServerCapabilitiesService>)
@@ -93,6 +98,9 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
     private var isOpen = false
 
     private var syncThread: SyncThread? = null
+
+    override val isOpenable: Boolean
+        get() = sessionParamsStore.get(myUserId)?.isTokenValid ?: false
 
     @MainThread
     override fun open() {
@@ -171,6 +179,14 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onGlobalError(globalError: GlobalError) {
+        if (globalError is GlobalError.InvalidToken
+                && globalError.softLogout) {
+            // Mark the token has invalid
+            GlobalScope.launch(Dispatchers.IO) {
+                sessionParamsStore.setTokenInvalid(myUserId)
+            }
+        }
+
         sessionListeners.dispatchGlobalError(globalError)
     }
 

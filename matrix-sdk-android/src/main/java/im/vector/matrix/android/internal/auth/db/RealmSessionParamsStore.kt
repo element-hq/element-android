@@ -76,6 +76,26 @@ internal class RealmSessionParamsStore @Inject constructor(private val mapper: S
         }
     }
 
+    override suspend fun setTokenInvalid(userId: String) {
+        awaitTransaction(realmConfiguration) { realm ->
+            val currentSessionParams = realm
+                    .where(SessionParamsEntity::class.java)
+                    .equalTo(SessionParamsEntityFields.USER_ID, userId)
+                    .findAll()
+                    .firstOrNull()
+
+            if (currentSessionParams == null) {
+                // Should not happen
+                "Session param not found for user $userId"
+                        .let { Timber.w(it) }
+                        .also { error(it) }
+            } else {
+                currentSessionParams.isTokenValid = false
+            }
+        }
+    }
+
+
     override suspend fun updateCredentials(newCredentials: Credentials) {
         awaitTransaction(realmConfiguration) { realm ->
             val currentSessionParams = realm
@@ -92,7 +112,8 @@ internal class RealmSessionParamsStore @Inject constructor(private val mapper: S
                         .also { error(it) }
             } else {
                 val newSessionParams = currentSessionParams.copy(
-                        credentials = newCredentials
+                        credentials = newCredentials,
+                        isTokenValid = true
                 )
 
                 val entity = mapper.map(newSessionParams)

@@ -169,9 +169,14 @@ class MainActivity : VectorBaseActivity() {
                 // the homeserver has invalidated the token (password changed, device deleted, other security reason
                 SignedOutActivity.newIntent(this)
             sessionHolder.hasActiveSession() ->
-                // We have a session. In case of soft logout (i.e. restart of the app after a soft logout)
-                // the app will try to sync and will reenter the soft logout use case
-                HomeActivity.newIntent(this)
+                // We have a session.
+                // Check it can be opened
+                if(sessionHolder.getActiveSession().isOpenable) {
+                    HomeActivity.newIntent(this)
+                } else {
+                    // The token is still invalid
+                    SoftLogoutActivity.newIntent(this)
+                }
             else                             ->
                 // First start, or no active session
                 LoginActivity.newIntent(this, null)

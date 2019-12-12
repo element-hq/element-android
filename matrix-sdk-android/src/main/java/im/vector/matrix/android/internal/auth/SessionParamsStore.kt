@@ -29,6 +29,8 @@ internal interface SessionParamsStore {
 
     suspend fun save(sessionParams: SessionParams)
 
+    suspend fun setTokenInvalid(userId: String)
+
     suspend fun updateCredentials(newCredentials: Credentials)
 
     suspend fun delete(userId: String)
