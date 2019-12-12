@@ -197,7 +197,7 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
 
     protected open fun handleInvalidToken(globalError: GlobalError.InvalidToken) {
         Timber.w("Invalid token event received")
-        if(mainActivityStarted) {
+        if (mainActivityStarted) {
             return
         }
 

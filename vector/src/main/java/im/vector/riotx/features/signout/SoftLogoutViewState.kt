@@ -32,5 +32,4 @@ data class SoftLogoutViewState(
     fun isLoading(): Boolean {
         return asyncLoginAction is Loading
     }
-
 }

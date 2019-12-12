@@ -95,7 +95,6 @@ internal class RealmSessionParamsStore @Inject constructor(private val mapper: S
         }
     }
 
-
     override suspend fun updateCredentials(newCredentials: Credentials) {
         awaitTransaction(realmConfiguration) { realm ->
             val currentSessionParams = realm

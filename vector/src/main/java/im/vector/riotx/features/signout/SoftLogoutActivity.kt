@@ -83,4 +83,3 @@ class SoftLogoutActivity : VectorBaseActivity() {
         Timber.w("Ignoring invalid token global error")
     }
 }
-

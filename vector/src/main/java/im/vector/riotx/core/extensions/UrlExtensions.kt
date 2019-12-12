@@ -36,7 +36,6 @@ fun StringBuilder.appendParamToUrl(param: String, value: String): StringBuilder 
     return this
 }
 
-
 /**
  * Ex: "https://matrix.org/" -> "matrix.org"
  */
