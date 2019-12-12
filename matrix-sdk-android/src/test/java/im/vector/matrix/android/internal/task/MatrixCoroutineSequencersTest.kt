@@ -16,46 +16,116 @@
 
 package im.vector.matrix.android.internal.task
 
-import kotlinx.coroutines.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.joinAll
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.util.concurrent.Executors
 
 class MatrixCoroutineSequencersTest {
 
+    private val dispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
+
     @Test
     fun sequencer_should_run_sequential() {
-        val sequencer = MatrixCoroutineSequencers()
-        val dispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
+        val sequencer = ChannelCoroutineSequencer<String>()
+        val results = ArrayList<String>()
 
         val jobs = listOf(
                 GlobalScope.launch(dispatcher) {
-                    sequencer.post("Sequencer1") { suspendingMethod("#3") }
+                    sequencer.post { suspendingMethod("#1") }.also {
+                        results.add(it)
+                    }
                 },
                 GlobalScope.launch(dispatcher) {
-                    sequencer.post("Sequencer1") { suspendingMethod("#4") }
+                    sequencer.post { suspendingMethod("#2") }.also {
+                        results.add(it)
+                    }
                 },
                 GlobalScope.launch(dispatcher) {
-                    sequencer.post("Sequencer2") { suspendingMethod("#5") }
-                },
-                GlobalScope.launch(dispatcher) {
-                    sequencer.post("Sequencer2") { suspendingMethod("#6") }
-                },
-                GlobalScope.launch(dispatcher) {
-                    sequencer.post("Sequencer2") { suspendingMethod("#7") }
+                    sequencer.post { suspendingMethod("#3") }.also {
+                        results.add(it)
+                    }
                 }
         )
-        Thread.sleep(5500)
-        sequencer.cancelAll()
         runBlocking {
             jobs.joinAll()
         }
+        assertEquals(3, results.size)
+        assertEquals(results[0], "#1")
+        assertEquals(results[1], "#2")
+        assertEquals(results[2], "#3")
     }
 
-    private suspend fun suspendingMethod(name: String): String = withContext(Dispatchers.Default) {
-        println("BLOCKING METHOD $name STARTS")
-        delay(3000)
-        println("BLOCKING METHOD $name ENDS")
-        name
+    @Test
+    fun sequencer_should_run_parallel() {
+        val sequencer1 = ChannelCoroutineSequencer<String>()
+        val sequencer2 = ChannelCoroutineSequencer<String>()
+        val sequencer3 = ChannelCoroutineSequencer<String>()
+        val results = ArrayList<String>()
+        val jobs = listOf(
+                GlobalScope.launch(dispatcher) {
+                    sequencer1.post { suspendingMethod("#1") }.also {
+                        results.add(it)
+                    }
+                },
+                GlobalScope.launch(dispatcher) {
+                    sequencer2.post { suspendingMethod("#2") }.also {
+                        results.add(it)
+                    }
+                },
+                GlobalScope.launch(dispatcher) {
+                    sequencer3.post { suspendingMethod("#3") }.also {
+                        results.add(it)
+                    }
+                }
+        )
+        runBlocking {
+            jobs.joinAll()
+        }
+        assertEquals(3, results.size)
+    }
+
+    @Test
+    fun sequencer_should_jump_to_next_when_current_job_canceled() {
+        val sequencer = ChannelCoroutineSequencer<String>()
+        val results = ArrayList<String>()
+        val jobs = listOf(
+                GlobalScope.launch(dispatcher) {
+                    sequencer.post { suspendingMethod("#1") }.also {
+                        results.add(it)
+                    }
+
+                },
+                GlobalScope.launch(dispatcher) {
+                    val result = sequencer.post { suspendingMethod("#2") }.also {
+                        results.add(it)
+                    }
+                    println("Result: $result")
+                },
+                GlobalScope.launch(dispatcher) {
+                    sequencer.post { suspendingMethod("#3") }.also {
+                        results.add(it)
+                    }
+                }
+        )
+        // We are canceling the second job
+        jobs[1].cancel()
+        runBlocking {
+            jobs.joinAll()
+        }
+        assertEquals(2, results.size)
+    }
+
+    private suspend fun suspendingMethod(name: String): String {
+        println("BLOCKING METHOD $name STARTS on ${Thread.currentThread().name}")
+        delay(1000)
+        println("BLOCKING METHOD $name ENDS on ${Thread.currentThread().name}")
+        return name
     }
 
 }

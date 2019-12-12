@@ -16,59 +16,43 @@
 
 package im.vector.matrix.android.internal.task
 
-import im.vector.matrix.android.internal.di.MatrixScope
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.intrinsics.startCoroutineCancellable
+import kotlinx.coroutines.launch
 import java.util.concurrent.Executors
-import javax.inject.Inject
 
-
-@MatrixScope
-internal class MatrixCoroutineSequencers @Inject constructor() {
-
-    private val sequencers = HashMap<String, CoroutineSequencer>()
-
-    suspend fun post(name: String, block: suspend CoroutineScope.() -> Any): Any {
-        val sequencer = sequencers.getOrPut(name) {
-            ChannelCoroutineSequencer()
-        }
-        return sequencer.post(block)
-    }
-
-    fun cancel(name: String) {
-        sequencers.remove(name)?.cancel()
-    }
-
-    fun cancelAll() {
-        sequencers.values.forEach {
-            it.cancel()
-        }
-        sequencers.clear()
-    }
-
-}
-
-internal interface CoroutineSequencer {
-    suspend fun post(block: suspend CoroutineScope.() -> Any): Any
+internal interface CoroutineSequencer<T> {
+    suspend fun post(block: suspend () -> T): T
     fun cancel()
+    fun close()
 }
 
-internal class ChannelCoroutineSequencer : CoroutineSequencer {
+internal class ChannelCoroutineSequencer<T> : CoroutineSequencer<T> {
 
-    private data class Message(
-            val block: suspend CoroutineScope.() -> Any,
-            val deferred: CompletableDeferred<Any>
+    private data class Message<T>(
+            val block: suspend () -> T,
+            val deferred: CompletableDeferred<T>
     )
 
-    private val messageChannel: Channel<Message> = Channel()
+    private val messageChannel: Channel<Message<T>> = Channel()
     private val coroutineScope = CoroutineScope(SupervisorJob())
     private val singleDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
 
     init {
+        launchCoroutine()
+    }
+
+    private fun launchCoroutine() {
         coroutineScope.launch(singleDispatcher) {
             for (message in messageChannel) {
                 try {
-                    val result = message.block(this)
+                    val result = message.block()
                     message.deferred.complete(result)
                 } catch (exception: Throwable) {
                     message.deferred.completeExceptionally(exception)
@@ -77,16 +61,27 @@ internal class ChannelCoroutineSequencer : CoroutineSequencer {
         }
     }
 
-    override fun cancel() {
+    override fun close() {
         messageChannel.cancel()
         coroutineScope.coroutineContext.cancelChildren()
     }
 
-    override suspend fun post(block: suspend CoroutineScope.() -> Any): Any {
-        val deferred = CompletableDeferred<Any>()
+    override fun cancel() {
+        close()
+        launchCoroutine()
+    }
+
+    override suspend fun post(block: suspend () -> T): T {
+        val deferred = CompletableDeferred<T>()
         val message = Message(block, deferred)
         messageChannel.send(message)
-        return deferred.await()
+        return try {
+            deferred.await()
+        } catch (cancellation: CancellationException) {
+            coroutineScope.coroutineContext.cancelChildren()
+            launchCoroutine()
+            throw cancellation
+        }
     }
 
 }
