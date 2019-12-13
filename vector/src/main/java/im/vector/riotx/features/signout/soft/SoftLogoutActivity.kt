@@ -18,17 +18,21 @@ package im.vector.riotx.features.signout.soft
 
 import android.content.Context
 import android.content.Intent
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentManager
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.viewModel
 import im.vector.matrix.android.api.failure.GlobalError
 import im.vector.matrix.android.api.session.Session
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
+import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.replaceFragment
 import im.vector.riotx.features.MainActivity
 import im.vector.riotx.features.MainActivityArgs
 import im.vector.riotx.features.login.LoginActivity
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_login.*
 import timber.log.Timber
 import javax.inject.Inject
@@ -43,6 +47,7 @@ class SoftLogoutActivity : LoginActivity() {
 
     @Inject lateinit var softLogoutViewModelFactory: SoftLogoutViewModel.Factory
     @Inject lateinit var session: Session
+    @Inject lateinit var errorFormatter: ErrorFormatter
 
     override fun injectWith(injector: ScreenComponent) {
         super.injectWith(injector)
@@ -56,6 +61,40 @@ class SoftLogoutActivity : LoginActivity() {
                 .subscribe(this) {
                     updateWithState(it)
                 }
+
+        softLogoutViewModel.viewEvents
+                .observe()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    handleSoftLogoutViewEvents(it)
+                }
+                .disposeOnDestroy()
+    }
+
+    private fun handleSoftLogoutViewEvents(softLogoutViewEvents: SoftLogoutViewEvents) {
+        when (softLogoutViewEvents) {
+            is SoftLogoutViewEvents.Error            ->
+                showError(errorFormatter.toHumanReadable(softLogoutViewEvents.throwable))
+            is SoftLogoutViewEvents.ErrorNotSameUser -> {
+                // Pop the backstack
+                supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+
+                // And inform the user
+                showError(getString(
+                        R.string.soft_logout_sso_not_same_user_error,
+                        softLogoutViewEvents.currentUserId,
+                        softLogoutViewEvents.newUserId)
+                )
+            }
+        }
+    }
+
+    private fun showError(message: String) {
+        AlertDialog.Builder(this)
+                .setTitle(R.string.dialog_title_error)
+                .setMessage(message)
+                .setPositiveButton(R.string.ok, null)
+                .show()
     }
 
     override fun addFirstFragment() {

@@ -28,7 +28,10 @@ import im.vector.matrix.android.internal.auth.data.LoginFlowTypes
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.extensions.hasUnsavedKeys
 import im.vector.riotx.core.platform.VectorViewModel
+import im.vector.riotx.core.utils.DataSource
+import im.vector.riotx.core.utils.PublishDataSource
 import im.vector.riotx.features.login.LoginMode
+import timber.log.Timber
 
 /**
  * TODO Test push: disable the pushers?
@@ -68,6 +71,9 @@ class SoftLogoutViewModel @AssistedInject constructor(
 
     private var currentTask: Cancelable? = null
 
+    private val _viewEvents = PublishDataSource<SoftLogoutViewEvents>()
+    val viewEvents: DataSource<SoftLogoutViewEvents> = _viewEvents
+
     init {
         // Get the supported login flow
         getSupportedLoginFlow()
@@ -88,7 +94,6 @@ class SoftLogoutViewModel @AssistedInject constructor(
 
         currentTask = authenticationService.getLoginFlow(homeServerConnectionConfig, object : MatrixCallback<LoginFlowResult> {
             override fun onFailure(failure: Throwable) {
-                // TODO _viewEvents.post(LoginViewEvents.Error(failure))
                 setState {
                     copy(
                             asyncHomeServerLoginFlowRequest = Fail(failure)
@@ -167,26 +172,38 @@ class SoftLogoutViewModel @AssistedInject constructor(
     }
 
     private fun handleWebLoginSuccess(action: SoftLogoutAction.WebLoginSuccess) {
-        setState {
-            copy(
-                    asyncLoginAction = Loading()
-            )
-        }
-        currentTask = session.updateCredentials(action.credentials,
-                object : MatrixCallback<Unit> {
-                    override fun onFailure(failure: Throwable) {
-                        setState {
-                            copy(
-                                    asyncLoginAction = Fail(failure)
-                            )
-                        }
-                    }
-
-                    override fun onSuccess(data: Unit) {
-                        onSessionRestored()
-                    }
+        // User may have been connected with SSO with another userId
+        // We have to check this
+        withState { softLogoutViewState ->
+            if (softLogoutViewState.userId != action.credentials.userId) {
+                Timber.w("User login again with SSO, but using another account")
+                _viewEvents.post(SoftLogoutViewEvents.ErrorNotSameUser(
+                        softLogoutViewState.userId,
+                        action.credentials.userId))
+            } else {
+                setState {
+                    copy(
+                            asyncLoginAction = Loading()
+                    )
                 }
-        )
+                currentTask = session.updateCredentials(action.credentials,
+                        object : MatrixCallback<Unit> {
+                            override fun onFailure(failure: Throwable) {
+                                _viewEvents.post(SoftLogoutViewEvents.Error(failure))
+                                setState {
+                                    copy(
+                                            asyncLoginAction = Uninitialized
+                                    )
+                                }
+                            }
+
+                            override fun onSuccess(data: Unit) {
+                                onSessionRestored()
+                            }
+                        }
+                )
+            }
+        }
     }
 
     private fun handleSignInAgain(action: SoftLogoutAction.SignInAgain) {

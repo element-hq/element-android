@@ -44,6 +44,7 @@ import im.vector.riotx.features.home.HomeActivity
 import im.vector.riotx.features.login.terms.LoginTermsFragment
 import im.vector.riotx.features.login.terms.LoginTermsFragmentArgument
 import im.vector.riotx.features.login.terms.toLocalizedLoginTerms
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_login.*
 import javax.inject.Inject
 
@@ -112,6 +113,7 @@ open class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
 
         loginViewModel.viewEvents
                 .observe()
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     handleLoginViewEvents(it)
                 }

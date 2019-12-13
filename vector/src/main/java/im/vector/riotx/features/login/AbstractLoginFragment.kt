@@ -29,6 +29,7 @@ import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.OnBackPressed
 import im.vector.riotx.core.platform.VectorBaseFragment
+import io.reactivex.android.schedulers.AndroidSchedulers
 import javax.net.ssl.HttpsURLConnection
 
 /**
@@ -60,6 +61,7 @@ abstract class AbstractLoginFragment : VectorBaseFragment(), OnBackPressed {
 
         loginViewModel.viewEvents
                 .observe()
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     handleLoginViewEvents(it)
                 }
