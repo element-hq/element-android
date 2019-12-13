@@ -108,6 +108,7 @@ internal class DefaultSasVerificationService @Inject constructor(
                     onRoomStartRequestReceived(event)
                 }
                 EventType.KEY_VERIFICATION_CANCEL -> {
+                    // MultiSessions | ignore events if i didn't sent the start from this device, or accepted from this device
                     onRoomCancelReceived(event)
                 }
                 EventType.KEY_VERIFICATION_ACCEPT -> {
