@@ -176,7 +176,8 @@ class MainActivity : VectorBaseActivity() {
 
     private fun startNextActivityAndFinish() {
         val intent = when {
-            args.clearCredentials            ->
+            args.clearCredentials
+                    && !args.isUserLoggedOut ->
                 // User has explicitly asked to log out
                 LoginActivity.newIntent(this, null)
             args.isSoftLogout                ->
