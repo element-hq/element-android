@@ -31,8 +31,6 @@ import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.features.login.LoginMode
 
 /**
- * TODO SSO
- * TODO Reset password
  * TODO Test push: disable the pushers?
  */
 class SoftLogoutViewModel @AssistedInject constructor(

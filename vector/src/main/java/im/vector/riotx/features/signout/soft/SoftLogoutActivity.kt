@@ -35,13 +35,11 @@ import javax.inject.Inject
 
 /**
  * In this screen, the user is viewing a message informing that he has been logged out
- * Extends LoginActivity to get the login with SSO and forget password functionality for free
+ * Extends LoginActivity to get the login with SSO and forget password functionality for (nearly) free
  */
 class SoftLogoutActivity : LoginActivity() {
 
     private val softLogoutViewModel: SoftLogoutViewModel by viewModel()
-    // TODO For forgotten pwd
-    // private lateinit var loginSharedActionViewModel: LoginSharedActionViewModel
 
     @Inject lateinit var softLogoutViewModelFactory: SoftLogoutViewModel.Factory
     @Inject lateinit var session: Session
