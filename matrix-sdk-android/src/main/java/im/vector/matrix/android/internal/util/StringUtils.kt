@@ -16,9 +16,7 @@
 
 package im.vector.matrix.android.internal.util
 
-import im.vector.matrix.android.api.MatrixPatterns
 import timber.log.Timber
-import java.util.Locale
 
 /**
  * Convert a string to an UTF8 String
@@ -50,12 +48,4 @@ fun convertFromUTF8(s: String): String {
         Timber.e(e, "## convertFromUTF8()  failed")
         s
     }
-}
-
-// TODO Improve this
-fun String?.firstLetterOfDisplayName(): String {
-    if (this.isNullOrEmpty()) return ""
-    val isUserId = MatrixPatterns.isUserId(this)
-    val firstLetterIndex = if (isUserId) 1 else 0
-    return this[firstLetterIndex].toString().toUpperCase(Locale.ROOT)
 }

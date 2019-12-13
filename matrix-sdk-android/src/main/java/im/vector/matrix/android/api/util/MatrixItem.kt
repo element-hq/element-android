@@ -20,6 +20,7 @@ import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
 import im.vector.matrix.android.api.session.user.model.User
+import java.util.*
 
 sealed class MatrixItem(
         open val id: String,
@@ -65,6 +66,41 @@ sealed class MatrixItem(
         is RoomAliasItem -> '#'
         is GroupItem     -> '+'
     }
+
+    fun firstLetterOfDisplayName(): String {
+        return displayName
+                ?.takeIf { it.isNotBlank() }
+                ?.let { dn ->
+                    var startIndex = 0
+                    val initial = dn[startIndex]
+
+                    if (initial in listOf('@', '#', '+') && dn.length > 1) {
+                        startIndex++
+                    }
+
+                    var length = 1
+                    var first = dn[startIndex]
+
+                    // LEFT-TO-RIGHT MARK
+                    if (dn.length >= 2 && 0x200e == first.toInt()) {
+                        startIndex++
+                        first = dn[startIndex]
+                    }
+
+                    // check if it’s the start of a surrogate pair
+                    if (first.toInt() in 0xD800..0xDBFF && dn.length > startIndex + 1) {
+                        val second = dn[startIndex + 1]
+                        if (second.toInt() in 0xDC00..0xDFFF) {
+                            length++
+                        }
+                    }
+
+                    dn.substring(startIndex, startIndex + length)
+                }
+                ?.toUpperCase(Locale.ROOT)
+                ?: " "
+    }
+
 
     companion object {
         fun from(user: User) = UserItem(user.userId, user.displayName, user.avatarUrl)

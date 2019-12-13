@@ -24,7 +24,6 @@ import com.airbnb.mvrx.Uninitialized
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.matrix.android.api.util.MatrixItem
-import im.vector.matrix.android.internal.util.firstLetterOfDisplayName
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.EmptyItem_
 import im.vector.riotx.core.epoxy.loadingItem
@@ -87,7 +86,7 @@ class KnownUsersController @Inject constructor(private val session: Session,
             for (model in models) {
                 if (model is CreateDirectRoomUserItem) {
                     if (model.matrixItem.id == session.myUserId) continue
-                    val currentFirstLetter = model.matrixItem.displayName.firstLetterOfDisplayName()
+                    val currentFirstLetter = model.matrixItem.firstLetterOfDisplayName()
                     val showLetter = !isFiltering && currentFirstLetter.isNotEmpty() && lastFirstLetter != currentFirstLetter
                     lastFirstLetter = currentFirstLetter
 

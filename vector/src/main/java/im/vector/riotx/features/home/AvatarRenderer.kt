@@ -28,7 +28,6 @@ import com.bumptech.glide.request.target.DrawableImageViewTarget
 import com.bumptech.glide.request.target.Target
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.matrix.android.api.util.MatrixItem
-import im.vector.matrix.android.internal.util.firstLetterOfDisplayName
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.glide.GlideApp
 import im.vector.riotx.core.glide.GlideRequest
@@ -73,7 +72,7 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
         return if (matrixItem.displayName.isNullOrBlank()) {
             TextDrawable.builder().buildRound("", avatarColor)
         } else {
-            val firstLetter = matrixItem.displayName.firstLetterOfDisplayName()
+            val firstLetter = matrixItem.firstLetterOfDisplayName()
             TextDrawable.builder()
                     .beginConfig()
                     .bold()

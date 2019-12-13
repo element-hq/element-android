@@ -12,6 +12,7 @@ Other changes:
 
 Bugfix 🐛:
  - Scroll breadcrumbs to top when opened
+ - Render default room name when it starts with an emoji (#477)
 
 Translations 🗣:
  -
