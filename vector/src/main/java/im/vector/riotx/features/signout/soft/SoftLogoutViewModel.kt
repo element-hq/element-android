@@ -130,8 +130,6 @@ class SoftLogoutViewModel @AssistedInject constructor(
             private fun notSupported() {
                 // Should not happen since it's a re-logout
                 // Notify the UI
-                // _viewEvents.post(LoginViewEvents.OutdatedHomeserver)
-
                 setState {
                     copy(
                             asyncHomeServerLoginFlowRequest = Fail(IllegalStateException("Should not happen"))
@@ -144,11 +142,17 @@ class SoftLogoutViewModel @AssistedInject constructor(
     override fun handle(action: SoftLogoutAction) {
         when (action) {
             is SoftLogoutAction.RetryLoginFlow  -> getSupportedLoginFlow()
-            is SoftLogoutAction.SignInAgain     -> handleSignInAgain(action)
-            is SoftLogoutAction.WebLoginSuccess -> handleWebLoginSuccess(action)
             is SoftLogoutAction.PasswordChanged -> handlePasswordChange(action)
             is SoftLogoutAction.TogglePassword  -> handleTogglePassword()
+            is SoftLogoutAction.SignInAgain     -> handleSignInAgain(action)
+            is SoftLogoutAction.WebLoginSuccess -> handleWebLoginSuccess(action)
+            is SoftLogoutAction.ClearData       -> handleClearData()
         }
+    }
+
+    private fun handleClearData() {
+        // Notify the Activity
+        _viewEvents.post(SoftLogoutViewEvents.ClearData)
     }
 
     private fun handlePasswordChange(action: SoftLogoutAction.PasswordChanged) {

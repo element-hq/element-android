@@ -20,10 +20,17 @@ import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.riotx.core.platform.VectorViewModelAction
 
 sealed class SoftLogoutAction : VectorViewModelAction {
+    // In case of failure to get the login flow
     object RetryLoginFlow : SoftLogoutAction()
+
+    // For password entering management
     data class PasswordChanged(val password: String) : SoftLogoutAction()
     object TogglePassword : SoftLogoutAction()
-
     data class SignInAgain(val password: String) : SoftLogoutAction()
+
+    // For signing again with SSO
     data class WebLoginSuccess(val credentials: Credentials) : SoftLogoutAction()
+
+    // To clear the current session
+    object ClearData : SoftLogoutAction()
 }

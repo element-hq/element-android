@@ -114,11 +114,7 @@ class SoftLogoutFragment @Inject constructor(
                     .setMessage(messageResId)
                     .setNegativeButton(R.string.cancel, null)
                     .setPositiveButton(R.string.soft_logout_clear_data_submit) { _, _ ->
-                        MainActivity.restartApp(requireActivity(), MainActivityArgs(
-                                clearCache = true,
-                                clearCredentials = true,
-                                isUserLoggedOut = true
-                        ))
+                        softLogoutViewModel.handle(SoftLogoutAction.ClearData)
                     }
                     .show()
                     .withColoredButton(DialogInterface.BUTTON_POSITIVE)

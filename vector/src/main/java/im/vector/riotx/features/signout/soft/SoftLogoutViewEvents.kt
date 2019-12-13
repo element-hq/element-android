@@ -23,4 +23,5 @@ package im.vector.riotx.features.signout.soft
 sealed class SoftLogoutViewEvents {
     data class ErrorNotSameUser(val currentUserId: String, val newUserId: String) : SoftLogoutViewEvents()
     data class Error(val throwable: Throwable) : SoftLogoutViewEvents()
+    object ClearData : SoftLogoutViewEvents()
 }

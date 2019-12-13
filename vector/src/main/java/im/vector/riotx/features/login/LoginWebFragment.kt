@@ -50,8 +50,6 @@ class LoginWebFragment @Inject constructor(
         private val assetReader: AssetReader
 ) : AbstractLoginFragment() {
 
-    private val softLogoutViewModel: SoftLogoutViewModel by activityViewModel()
-
     override fun getLayoutResId() = R.layout.fragment_login_web
 
     private var isWebViewLoaded = false
@@ -252,6 +250,7 @@ class LoginWebFragment @Inject constructor(
 
     private fun notifyViewModel(credentials: Credentials) {
         if (isForSessionRecovery) {
+            val softLogoutViewModel: SoftLogoutViewModel by activityViewModel()
             softLogoutViewModel.handle(SoftLogoutAction.WebLoginSuccess(credentials))
         } else {
             loginViewModel.handle(LoginAction.WebLoginSuccess(credentials))

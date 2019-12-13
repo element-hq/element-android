@@ -18,6 +18,8 @@ package im.vector.matrix.android.internal.session.signout
 
 import android.content.Context
 import im.vector.matrix.android.BuildConfig
+import im.vector.matrix.android.api.failure.Failure
+import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.internal.SessionManager
 import im.vector.matrix.android.internal.auth.SessionParamsStore
 import im.vector.matrix.android.internal.crypto.CryptoModule
@@ -32,6 +34,7 @@ import io.realm.Realm
 import io.realm.RealmConfiguration
 import timber.log.Timber
 import java.io.File
+import java.net.HttpURLConnection
 import javax.inject.Inject
 
 internal interface SignOutTask : Task<SignOutTask.Params, Unit> {
@@ -54,12 +57,24 @@ internal class DefaultSignOutTask @Inject constructor(private val context: Conte
                                                       @UserMd5 private val userMd5: String) : SignOutTask {
 
     override suspend fun execute(params: SignOutTask.Params) {
-        // TODO It should be done even after a soft logout, to be sure the deviceId is deleted on the
-        // TODO  homeserver but https://github.com/matrix-org/synapse/issues/5755
+        // It should be done even after a soft logout, to be sure the deviceId is deleted on the
         if (params.sigOutFromHomeserver) {
             Timber.d("SignOut: send request...")
-            executeRequest<Unit> {
-                apiCall = signOutAPI.signOut()
+            try {
+                executeRequest<Unit> {
+                    apiCall = signOutAPI.signOut()
+                }
+            } catch (throwable: Throwable) {
+                // Maybe due to https://github.com/matrix-org/synapse/issues/5755
+                if (throwable is Failure.ServerError
+                        && throwable.httpCode == HttpURLConnection.HTTP_UNAUTHORIZED /* 401 */
+                        && throwable.error.code == MatrixError.M_UNKNOWN_TOKEN) {
+                    // Also throwable.error.isSoftLogout should be true
+                    // Ignore
+                    Timber.w("Ignore error due to https://github.com/matrix-org/synapse/issues/5755")
+                } else {
+                    throw throwable
+                }
             }
         }
 
