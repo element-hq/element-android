@@ -95,7 +95,13 @@ abstract class AbstractLoginFragment : VectorBaseFragment(), OnBackPressed {
         }
     }
 
-    abstract fun onError(throwable: Throwable)
+    open fun onError(throwable: Throwable) {
+        AlertDialog.Builder(requireActivity())
+                .setTitle(R.string.dialog_title_error)
+                .setMessage(errorFormatter.toHumanReadable(throwable))
+                .setPositiveButton(R.string.ok, null)
+                .show()
+    }
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
         return when {

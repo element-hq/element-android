@@ -21,6 +21,7 @@ import androidx.fragment.app.FragmentFactory
 import androidx.lifecycle.ViewModelProvider
 import dagger.BindsInstance
 import dagger.Component
+import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.preference.UserAvatarPreference
 import im.vector.riotx.features.MainActivity
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupManageActivity
@@ -78,6 +79,8 @@ interface ScreenComponent {
     fun rageShake(): RageShake
 
     fun navigator(): Navigator
+
+    fun errorFormatter(): ErrorFormatter
 
     fun uiStateRepository(): UiStateRepository
 

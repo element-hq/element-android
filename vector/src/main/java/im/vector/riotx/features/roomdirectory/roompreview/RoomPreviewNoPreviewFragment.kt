@@ -24,7 +24,6 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
-import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.core.platform.ButtonStateView
 import im.vector.riotx.core.platform.VectorBaseFragment
@@ -37,7 +36,6 @@ import javax.inject.Inject
  * Note: this Fragment is also used for world readable room for the moment
  */
 class RoomPreviewNoPreviewFragment @Inject constructor(
-        private val errorFormatter: ErrorFormatter,
         val roomPreviewViewModelFactory: RoomPreviewViewModel.Factory,
         private val avatarRenderer: AvatarRenderer
 ) : VectorBaseFragment() {

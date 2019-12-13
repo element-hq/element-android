@@ -25,7 +25,6 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.riotx.R
-import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.extensions.isEmail
 import im.vector.riotx.core.extensions.showPassword
@@ -39,9 +38,7 @@ import javax.inject.Inject
 /**
  * In this screen, the user is asked for email and new password to reset his password
  */
-class LoginResetPasswordFragment @Inject constructor(
-        private val errorFormatter: ErrorFormatter
-) : AbstractLoginFragment() {
+class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment() {
 
     private var passwordShown = false
 
@@ -137,14 +134,6 @@ class LoginResetPasswordFragment @Inject constructor(
 
     override fun resetViewModel() {
         loginViewModel.handle(LoginAction.ResetResetPassword)
-    }
-
-    override fun onError(throwable: Throwable) {
-        AlertDialog.Builder(requireActivity())
-                .setTitle(R.string.dialog_title_error)
-                .setMessage(errorFormatter.toHumanReadable(throwable))
-                .setPositiveButton(R.string.ok, null)
-                .show()
     }
 
     override fun updateWithState(state: LoginViewState) {

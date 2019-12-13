@@ -19,11 +19,9 @@ package im.vector.riotx.features.login.terms
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
-import androidx.appcompat.app.AlertDialog
 import butterknife.OnClick
 import com.airbnb.mvrx.args
 import im.vector.riotx.R
-import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.extensions.toReducedUrl
@@ -45,8 +43,7 @@ data class LoginTermsFragmentArgument(
  * LoginTermsFragment displays the list of policies the user has to accept
  */
 class LoginTermsFragment @Inject constructor(
-        private val policyController: PolicyController,
-        private val errorFormatter: ErrorFormatter
+        private val policyController: PolicyController
 ) : AbstractLoginFragment(),
         PolicyController.PolicyControllerListener {
 
@@ -105,14 +102,6 @@ class LoginTermsFragment @Inject constructor(
     @OnClick(R.id.loginTermsSubmit)
     internal fun submit() {
         loginViewModel.handle(LoginAction.AcceptTerms)
-    }
-
-    override fun onError(throwable: Throwable) {
-        AlertDialog.Builder(requireActivity())
-                .setTitle(R.string.dialog_title_error)
-                .setMessage(errorFormatter.toHumanReadable(throwable))
-                .setPositiveButton(R.string.ok, null)
-                .show()
     }
 
     override fun updateWithState(state: LoginViewState) {

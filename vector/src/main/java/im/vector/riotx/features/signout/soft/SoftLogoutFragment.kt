@@ -24,7 +24,6 @@ import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
 import im.vector.riotx.core.dialogs.withColoredButton
-import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.extensions.hideKeyboard
@@ -43,8 +42,7 @@ import javax.inject.Inject
  * - or to cleanup all the data
  */
 class SoftLogoutFragment @Inject constructor(
-        private val softLogoutController: SoftLogoutController,
-        private val errorFormatter: ErrorFormatter
+        private val softLogoutController: SoftLogoutController
 ) : AbstractLoginFragment(), SoftLogoutController.Listener {
 
     private val softLogoutViewModel: SoftLogoutViewModel by activityViewModel()
@@ -137,14 +135,6 @@ class SoftLogoutFragment @Inject constructor(
 
     override fun revealPasswordClicked() {
         softLogoutViewModel.handle(SoftLogoutAction.TogglePassword)
-    }
-
-    override fun onError(throwable: Throwable) {
-        AlertDialog.Builder(requireActivity())
-                .setTitle(R.string.dialog_title_error)
-                .setMessage(errorFormatter.toHumanReadable(throwable))
-                .setPositiveButton(R.string.ok, null)
-                .show()
     }
 
     override fun resetViewModel() {

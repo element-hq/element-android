@@ -16,32 +16,20 @@
 
 package im.vector.riotx.features.login
 
-import androidx.appcompat.app.AlertDialog
 import butterknife.OnClick
 import im.vector.riotx.R
-import im.vector.riotx.core.error.ErrorFormatter
 import javax.inject.Inject
 
 /**
- * In this screen, the user is asked for email and new password to reset his password
+ * In this screen, we confirm to the user that his password has been reset
  */
-class LoginResetPasswordSuccessFragment @Inject constructor(
-        private val errorFormatter: ErrorFormatter
-) : AbstractLoginFragment() {
+class LoginResetPasswordSuccessFragment @Inject constructor() : AbstractLoginFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_login_reset_password_success
 
     @OnClick(R.id.resetPasswordSuccessSubmit)
     fun submit() {
         loginSharedActionViewModel.post(LoginNavigation.OnResetPasswordMailConfirmationSuccessDone)
-    }
-
-    override fun onError(throwable: Throwable) {
-        AlertDialog.Builder(requireActivity())
-                .setTitle(R.string.dialog_title_error)
-                .setMessage(errorFormatter.toHumanReadable(throwable))
-                .setPositiveButton(R.string.ok, null)
-                .show()
     }
 
     override fun resetViewModel() {

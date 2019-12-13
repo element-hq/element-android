@@ -21,7 +21,6 @@ import butterknife.OnClick
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Success
 import im.vector.riotx.R
-import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.error.is401
 import kotlinx.android.synthetic.main.fragment_login_reset_password_mail_confirmation.*
 import javax.inject.Inject
@@ -29,9 +28,7 @@ import javax.inject.Inject
 /**
  * In this screen, the user is asked to check his email and to click on a button once it's done
  */
-class LoginResetPasswordMailConfirmationFragment @Inject constructor(
-        private val errorFormatter: ErrorFormatter
-) : AbstractLoginFragment() {
+class LoginResetPasswordMailConfirmationFragment @Inject constructor() : AbstractLoginFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_login_reset_password_mail_confirmation
 
@@ -42,14 +39,6 @@ class LoginResetPasswordMailConfirmationFragment @Inject constructor(
     @OnClick(R.id.resetPasswordMailConfirmationSubmit)
     fun submit() {
         loginViewModel.handle(LoginAction.ResetPasswordMailConfirmed)
-    }
-
-    override fun onError(throwable: Throwable) {
-        AlertDialog.Builder(requireActivity())
-                .setTitle(R.string.dialog_title_error)
-                .setMessage(errorFormatter.toHumanReadable(throwable))
-                .setPositiveButton(R.string.ok, null)
-                .show()
     }
 
     override fun resetViewModel() {

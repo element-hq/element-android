@@ -29,7 +29,6 @@ import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.riotx.R
-import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.extensions.showPassword
 import im.vector.riotx.core.extensions.toReducedUrl
@@ -46,9 +45,7 @@ import javax.inject.Inject
  * In signup mode:
  * - the user is asked for login and password
  */
-class LoginFragment @Inject constructor(
-        private val errorFormatter: ErrorFormatter
-) : AbstractLoginFragment() {
+class LoginFragment @Inject constructor() : AbstractLoginFragment() {
 
     private var passwordShown = false
 

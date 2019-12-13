@@ -34,7 +34,6 @@ import com.airbnb.mvrx.activityViewModel
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.riotx.R
-import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.utils.AssetReader
 import im.vector.riotx.features.signout.soft.SoftLogoutAction
 import im.vector.riotx.features.signout.soft.SoftLogoutViewModel
@@ -48,8 +47,7 @@ import javax.inject.Inject
  * of the homeserver, as a fallback to login or to create an account
  */
 class LoginWebFragment @Inject constructor(
-        private val assetReader: AssetReader,
-        private val errorFormatter: ErrorFormatter
+        private val assetReader: AssetReader
 ) : AbstractLoginFragment() {
 
     private val softLogoutViewModel: SoftLogoutViewModel by activityViewModel()
@@ -262,14 +260,6 @@ class LoginWebFragment @Inject constructor(
 
     override fun resetViewModel() {
         loginViewModel.handle(LoginAction.ResetLogin)
-    }
-
-    override fun onError(throwable: Throwable) {
-        AlertDialog.Builder(requireActivity())
-                .setTitle(R.string.dialog_title_error)
-                .setMessage(errorFormatter.toHumanReadable(throwable))
-                .setPositiveButton(R.string.ok, null)
-                .show()
     }
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
