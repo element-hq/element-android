@@ -27,7 +27,6 @@ import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.auth.data.LoginFlowTypes
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.extensions.hasUnsavedKeys
-import im.vector.riotx.core.extensions.toReducedUrl
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.features.login.LoginMode
 
@@ -190,7 +189,6 @@ class SoftLogoutViewModel @AssistedInject constructor(
                     }
                 }
         )
-
     }
 
     private fun handleSignInAgain(action: SoftLogoutAction.SignInAgain) {

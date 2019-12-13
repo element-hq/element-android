@@ -54,7 +54,6 @@ data class LoginViewState(
                 || asyncRegistration is Loading
                 // Keep loading when it is success because of the delay to switch to the next Activity
                 || asyncLoginAction is Success
-
     }
 
     fun isUserLogged(): Boolean {
