@@ -103,7 +103,6 @@ private fun toFailure(errorBody: ResponseBody?, httpCode: Int): Failure {
                 EventBus.getDefault().post(GlobalError.ConsentNotGivenError(matrixError.consentUri))
             } else if (httpCode == HttpURLConnection.HTTP_UNAUTHORIZED /* 401 */
                     && matrixError.code == MatrixError.M_UNKNOWN_TOKEN) {
-                // TODO Check that this is ok during the login flow
                 // Also send this error to the bus, for a global management
                 EventBus.getDefault().post(GlobalError.InvalidToken(matrixError.isSoftLogout))
             }
