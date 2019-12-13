@@ -26,7 +26,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.android.asCoroutineDispatcher
 import kotlinx.coroutines.asCoroutineDispatcher
 import org.matrix.olm.OlmManager
-import java.util.concurrent.Executors
 
 @Module
 internal object MatrixModule {

@@ -26,7 +26,6 @@ import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.error.ErrorFormatter
-import im.vector.riotx.core.extensions.configureAndStart
 import im.vector.riotx.core.extensions.startSyncing
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.utils.deleteAllFiles

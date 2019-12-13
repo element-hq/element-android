@@ -99,7 +99,6 @@ class CoroutineSequencersTest {
                     sequencer.post { suspendingMethod("#1") }.also {
                         results.add(it)
                     }
-
                 },
                 GlobalScope.launch(dispatcher) {
                     val result = sequencer.post { suspendingMethod("#2") }.also {
@@ -127,5 +126,4 @@ class CoroutineSequencersTest {
         println("BLOCKING METHOD $name ENDS on ${Thread.currentThread().name}")
         return name
     }
-
 }

@@ -21,7 +21,6 @@ import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.internal.auth.SessionParamsStore
 import im.vector.matrix.android.internal.di.UserId
-import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.DefaultInitialSyncProgressService
 import im.vector.matrix.android.internal.session.filter.FilterRepository
@@ -88,7 +87,6 @@ internal class DefaultSyncTask @Inject constructor(private val syncAPI: SyncAPI,
             throw throwable
         }
         syncResponseHandler.handleResponse(syncResponse, token)
-        syncTokenStore.saveToken(syncResponse.nextBatch)
         if (isInitialSync) {
             initialSyncProgressService.endAll()
         }

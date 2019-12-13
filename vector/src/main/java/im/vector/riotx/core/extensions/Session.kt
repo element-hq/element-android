@@ -17,13 +17,11 @@
 package im.vector.riotx.core.extensions
 
 import android.content.Context
-import android.content.Intent
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ProcessLifecycleOwner
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.sync.FilterService
-import im.vector.matrix.android.internal.session.sync.job.SyncService
 import im.vector.riotx.core.services.VectorSyncService
 import im.vector.riotx.features.notifications.PushRuleTriggerListener
 import im.vector.riotx.features.session.SessionListener

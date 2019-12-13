@@ -84,6 +84,4 @@ internal open class ChannelCoroutineSequencer<T> : CoroutineSequencer<T> {
             throw cancellation
         }
     }
-
 }
-

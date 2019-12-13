@@ -19,21 +19,15 @@ package im.vector.matrix.android.internal.session.sync.job
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.squareup.moshi.JsonEncodingException
-import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.api.session.sync.SyncState
-import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
 import im.vector.matrix.android.internal.session.sync.SyncTask
-import im.vector.matrix.android.internal.task.TaskExecutor
-import im.vector.matrix.android.internal.task.TaskThread
-import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
 import kotlinx.coroutines.*
 import timber.log.Timber
 import java.net.SocketTimeoutException
-import java.util.concurrent.CountDownLatch
 import javax.inject.Inject
 
 private const val RETRY_WAIT_TIME_MS = 10_000L
