@@ -177,12 +177,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
 
             it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 displayLoadingView()
-                MainActivity.restartApp(activity!!,
-                        MainActivityArgs(
-                                clearCache = true,
-                                clearCredentials = false
-                        )
-                )
+                MainActivity.restartApp(activity!!, MainActivityArgs(clearCache = true))
                 false
             }
         }

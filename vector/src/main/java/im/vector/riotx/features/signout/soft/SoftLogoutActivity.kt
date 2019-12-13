@@ -87,9 +87,7 @@ class SoftLogoutActivity : LoginActivity() {
                 )
             }
             is SoftLogoutViewEvents.ClearData        -> {
-                MainActivity.restartApp(this, MainActivityArgs(
-                        clearCredentials = true
-                ))
+                MainActivity.restartApp(this, MainActivityArgs(clearCredentials = true))
             }
         }
     }

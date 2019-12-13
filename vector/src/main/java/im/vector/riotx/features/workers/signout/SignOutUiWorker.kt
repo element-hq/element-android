@@ -54,11 +54,6 @@ class SignOutUiWorker(private val activity: FragmentActivity) {
     }
 
     private fun doSignOut() {
-        MainActivity.restartApp(activity,
-                MainActivityArgs(
-                        clearCache = true,
-                        clearCredentials = true
-                )
-        )
+        MainActivity.restartApp(activity, MainActivityArgs(clearCredentials = true))
     }
 }
