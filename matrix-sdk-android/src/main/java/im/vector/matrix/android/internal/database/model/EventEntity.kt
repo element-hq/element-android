@@ -40,7 +40,8 @@ internal open class EventEntity(@Index var eventId: String = "",
                                 @Index var displayIndex: Int = 0,
                                 @Index var isUnlinked: Boolean = false,
                                 var decryptionResultJson: String? = null,
-                                var decryptionErrorCode: String? = null
+                                var decryptionErrorCode: String? = null,
+                                var ageLocalTs: Long? = null
 ) : RealmObject() {
 
     enum class LinkFilterMode {
@@ -58,8 +59,6 @@ internal open class EventEntity(@Index var eventId: String = "",
         set(value) {
             sendStateStr = value.name
         }
-
-    var ageLocalTs: Long? = null
 
     companion object
 
