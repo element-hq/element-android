@@ -25,14 +25,15 @@ import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import javax.inject.Inject
 
-class ErrorFormatter @Inject constructor(private val stringProvider: StringProvider) {
+interface ErrorFormatter {
+    fun toHumanReadable(throwable: Throwable?): String
+}
 
-    fun toHumanReadable(failure: Failure): String {
-        // Default
-        return failure.localizedMessage
-    }
+class DefaultErrorFormatter @Inject constructor(
+        private val stringProvider: StringProvider
+) : ErrorFormatter {
 
-    fun toHumanReadable(throwable: Throwable?): String {
+    override fun toHumanReadable(throwable: Throwable?): String {
         return when (throwable) {
             null                         -> null
             is Failure.NetworkConnection -> {
@@ -57,19 +58,19 @@ class ErrorFormatter @Inject constructor(private val stringProvider: StringProvi
                             && throwable.error.message == "Invalid password" -> {
                         stringProvider.getString(R.string.auth_invalid_login_param)
                     }
-                    throwable.error.code == MatrixError.M_USER_IN_USE          -> {
+                    throwable.error.code == MatrixError.M_USER_IN_USE        -> {
                         stringProvider.getString(R.string.login_signup_error_user_in_use)
                     }
-                    throwable.error.code == MatrixError.M_BAD_JSON             -> {
+                    throwable.error.code == MatrixError.M_BAD_JSON           -> {
                         stringProvider.getString(R.string.login_error_bad_json)
                     }
-                    throwable.error.code == MatrixError.M_NOT_JSON             -> {
+                    throwable.error.code == MatrixError.M_NOT_JSON           -> {
                         stringProvider.getString(R.string.login_error_not_json)
                     }
-                    throwable.error.code == MatrixError.M_LIMIT_EXCEEDED       -> {
+                    throwable.error.code == MatrixError.M_LIMIT_EXCEEDED     -> {
                         limitExceededError(throwable.error)
                     }
-                    throwable.error.code == MatrixError.M_THREEPID_NOT_FOUND   -> {
+                    throwable.error.code == MatrixError.M_THREEPID_NOT_FOUND -> {
                         stringProvider.getString(R.string.login_reset_password_error_not_found)
                     }
                     else                                                     -> {
