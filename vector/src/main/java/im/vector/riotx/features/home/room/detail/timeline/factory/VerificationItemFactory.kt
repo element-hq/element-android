@@ -81,8 +81,6 @@ class VerificationItemFactory @Inject constructor(
         when (event.root.getClearType()) {
             EventType.KEY_VERIFICATION_CANCEL -> {
                 // Is the request referenced is actually really cancelled?
-               // if (referenceInformationData.referencesInfoData?.verificationStatus?.isCanceled() == false) return ignoredConclusion(event, highlight, callback)
-
                 val cancelContent = event.root.getClearContent().toModel<MessageVerificationCancelContent>()
                         ?: return ignoredConclusion(event, highlight, callback)
 
@@ -110,12 +108,13 @@ class VerificationItemFactory @Inject constructor(
                                 .highlighted(highlight)
                                 .leftGuideline(avatarSizeProvider.leftGuideline)
                     }
-                    else -> ignoredConclusion(event, highlight, callback)
+                    else                     -> ignoredConclusion(event, highlight, callback)
                 }
             }
-            EventType.KEY_VERIFICATION_DONE -> {
+            EventType.KEY_VERIFICATION_DONE   -> {
                 // Is the request referenced is actually really completed?
-                if (referenceInformationData.referencesInfoData?.verificationStatus != VerificationState.DONE) return ignoredConclusion(event, highlight, callback)
+                if (referenceInformationData.referencesInfoData?.verificationStatus != VerificationState.DONE)
+                    return ignoredConclusion(event, highlight, callback)
 
                 // We only tale the one sent by me
                 if (informationData.sentByMe) {

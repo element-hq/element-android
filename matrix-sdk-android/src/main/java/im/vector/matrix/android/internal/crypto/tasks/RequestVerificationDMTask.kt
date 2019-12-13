@@ -33,7 +33,7 @@ internal interface RequestVerificationDMTask : Task<RequestVerificationDMTask.Pa
             val cryptoService: CryptoService
     )
 
-    fun createParamsAndLocalEcho(roomId: String, from: String, methods: List<String>, to: String, cryptoService: CryptoService) : Params
+    fun createParamsAndLocalEcho(roomId: String, from: String, methods: List<String>, to: String, cryptoService: CryptoService): Params
 }
 
 internal class DefaultRequestVerificationDMTask @Inject constructor(
@@ -44,7 +44,8 @@ internal class DefaultRequestVerificationDMTask @Inject constructor(
         private val roomAPI: RoomAPI)
     : RequestVerificationDMTask {
 
-    override fun createParamsAndLocalEcho(roomId: String, from: String, methods: List<String>, to: String, cryptoService: CryptoService): RequestVerificationDMTask.Params {
+    override fun createParamsAndLocalEcho(roomId: String, from: String, methods: List<String>, to: String, cryptoService: CryptoService)
+            : RequestVerificationDMTask.Params {
         val event = localEchoEventFactory.createVerificationRequest(roomId, from, to, methods)
                 .also { localEchoEventFactory.saveLocalEcho(monarchy, it) }
         return RequestVerificationDMTask.Params(
@@ -52,6 +53,7 @@ internal class DefaultRequestVerificationDMTask @Inject constructor(
                 cryptoService
         )
     }
+
     override suspend fun execute(params: RequestVerificationDMTask.Params): SendResponse {
         val event = handleEncryption(params)
         val localID = event.eventId!!
