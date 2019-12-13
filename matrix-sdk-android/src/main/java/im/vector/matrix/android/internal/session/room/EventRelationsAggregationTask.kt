@@ -29,6 +29,7 @@ import im.vector.matrix.android.internal.database.mapper.ContentMapper
 import im.vector.matrix.android.internal.database.mapper.EventMapper
 import im.vector.matrix.android.internal.database.model.*
 import im.vector.matrix.android.internal.database.query.create
+import im.vector.matrix.android.internal.database.query.getOrCreate
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.awaitTransaction
@@ -201,11 +202,7 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
         val targetEventId = relatedEventId ?: content.relatesTo?.eventId ?: return
         val newContent = content.newContent ?: return
         // ok, this is a replace
-        var existing = EventAnnotationsSummaryEntity.where(realm, targetEventId).findFirst()
-        if (existing == null) {
-            Timber.v("###REPLACE creating new relation summary for $targetEventId")
-            existing = EventAnnotationsSummaryEntity.create(realm, roomId, targetEventId)
-        }
+        val existing = EventAnnotationsSummaryEntity.getOrCreate(realm, roomId, targetEventId)
 
         // we have it
         val existingSummary = existing.editSummary
@@ -295,8 +292,7 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
             val relatedEventID = content.relatesTo.eventId
             val reactionEventId = event.eventId
             Timber.v("Reaction $reactionEventId relates to $relatedEventID")
-            val eventSummary = EventAnnotationsSummaryEntity.where(realm, relatedEventID).findFirst()
-                    ?: EventAnnotationsSummaryEntity.create(realm, roomId, relatedEventID).apply { this.roomId = roomId }
+            val eventSummary = EventAnnotationsSummaryEntity.getOrCreate(realm, roomId, relatedEventID)
 
             var sum = eventSummary.reactionsSummary.find { it.key == reaction }
             val txId = event.unsignedData?.transactionId
@@ -420,8 +416,7 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
     }
 
     private fun handleVerification(realm: Realm, event: Event, roomId: String, isLocalEcho: Boolean, relatedEventId: String, userId: String) {
-        val eventSummary = EventAnnotationsSummaryEntity.where(realm, relatedEventId).findFirst()
-                ?: EventAnnotationsSummaryEntity.create(realm, roomId, relatedEventId).apply { this.roomId = roomId }
+        val eventSummary = EventAnnotationsSummaryEntity.getOrCreate(realm, roomId, relatedEventId)
 
         val verifSummary = eventSummary.referencesSummaryEntity
                 ?: ReferencesAggregatedSummaryEntity.create(realm, relatedEventId).also {
@@ -469,9 +464,7 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
         if (isLocalEcho) {
             verifSummary.sourceLocalEcho.add(event.eventId)
         } else {
-            if (verifSummary.sourceLocalEcho.contains(txId)) {
-                verifSummary.sourceLocalEcho.remove(txId)
-            }
+            verifSummary.sourceLocalEcho.remove(txId)
             verifSummary.sourceEvents.add(event.eventId)
         }
     }
