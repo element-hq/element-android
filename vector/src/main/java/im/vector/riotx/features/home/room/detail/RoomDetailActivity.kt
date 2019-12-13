@@ -86,7 +86,17 @@ class RoomDetailActivity : VectorBaseActivity(), ToolbarConfigurable {
     private val drawerListener = object : DrawerLayout.SimpleDrawerListener() {
         override fun onDrawerStateChanged(newState: Int) {
             hideKeyboard()
+
+            if (!drawerLayout.isDrawerOpen(GravityCompat.START) && newState == DrawerLayout.STATE_DRAGGING) {
+                // User is starting to open the drawer, scroll the list to op
+                scrollBreadcrumbsToTop()
+            }
         }
+    }
+
+    private fun scrollBreadcrumbsToTop() {
+        supportFragmentManager.fragments.filterIsInstance<BreadcrumbsFragment>()
+                .forEach { it.scrollToTop() }
     }
 
     override fun onBackPressed() {

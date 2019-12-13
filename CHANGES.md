@@ -11,7 +11,7 @@ Other changes:
  -
 
 Bugfix 🐛:
- -
+ - Scroll breadcrumbs to top when opened
 
 Translations 🗣:
  -
