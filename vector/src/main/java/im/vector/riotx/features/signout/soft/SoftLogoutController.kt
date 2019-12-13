@@ -110,18 +110,24 @@ class SoftLogoutController @Inject constructor(
                             errorText((state.asyncLoginAction as? Fail)?.error?.let { errorFormatter.toHumanReadable(it) })
                             passwordRevealClickListener { listener?.revealPasswordClicked() }
                             forgetPasswordClickListener { listener?.forgetPasswordClicked() }
-                            submitClickListener { password -> listener?.submit(password) }
+                            submitClickListener { password -> listener?.signinSubmit(password) }
                         }
                     }
                     LoginMode.Sso         -> {
                         loginCenterButtonItem {
                             id("sso")
                             text(stringProvider.getString(R.string.login_signin_sso))
-                            listener { listener?.ssoSubmit() }
+                            listener { listener?.signinFallbackSubmit() }
+                        }
+                    }
+                    LoginMode.Unsupported -> {
+                        loginCenterButtonItem {
+                            id("fallback")
+                            text(stringProvider.getString(R.string.login_signin))
+                            listener { listener?.signinFallbackSubmit() }
                         }
                     }
                     LoginMode.Unknown     -> Unit // Should not happen
-                    LoginMode.Unsupported -> Unit // Should not happen
                 }
             }
         }
@@ -146,8 +152,8 @@ class SoftLogoutController @Inject constructor(
     interface Listener {
         fun retry()
         fun passwordEdited(password: String)
-        fun submit(password: String)
-        fun ssoSubmit()
+        fun signinSubmit(password: String)
+        fun signinFallbackSubmit()
         fun clearData()
         fun forgetPasswordClicked()
         fun revealPasswordClicked()

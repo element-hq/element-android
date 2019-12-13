@@ -111,8 +111,7 @@ class SoftLogoutViewModel @AssistedInject constructor(
                             else                                                                    -> LoginMode.Unsupported
                         }
 
-                        if ((loginMode == LoginMode.Password && !data.isLoginAndRegistrationSupported)
-                                || loginMode == LoginMode.Unsupported) {
+                        if (loginMode == LoginMode.Password && !data.isLoginAndRegistrationSupported) {
                             notSupported()
                         } else {
                             setState {

@@ -59,12 +59,16 @@ class SoftLogoutFragment @Inject constructor(
         softLogoutViewModel.subscribe(this) { softLogoutViewState ->
             softLogoutController.update(softLogoutViewState)
 
-            if (softLogoutViewState.asyncHomeServerLoginFlowRequest.invoke() == LoginMode.Sso) {
-                // Prepare the loginViewModel for a SSO recovery
-                loginViewModel.handle(LoginAction.SetupSsoForSessionRecovery(
-                        softLogoutViewState.homeServerUrl,
-                        softLogoutViewState.deviceId
-                ))
+            when (softLogoutViewState.asyncHomeServerLoginFlowRequest.invoke()) {
+                LoginMode.Sso,
+                LoginMode.Unsupported -> {
+                    // Prepare the loginViewModel for a SSO/login fallback recovery
+                    loginViewModel.handle(LoginAction.SetupSsoForSessionRecovery(
+                            softLogoutViewState.homeServerUrl,
+                            softLogoutViewState.deviceId
+                    ))
+                }
+                else                  -> Unit
             }
         }
     }
@@ -88,12 +92,12 @@ class SoftLogoutFragment @Inject constructor(
         softLogoutViewModel.handle(SoftLogoutAction.PasswordChanged(password))
     }
 
-    override fun submit(password: String) {
+    override fun signinSubmit(password: String) {
         cleanupUi()
         softLogoutViewModel.handle(SoftLogoutAction.SignInAgain(password))
     }
 
-    override fun ssoSubmit() {
+    override fun signinFallbackSubmit() {
         loginSharedActionViewModel.post(LoginNavigation.OnSignModeSelected)
     }
 
