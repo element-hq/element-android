@@ -153,4 +153,9 @@
     <string name="verification_conclusion_warning">Untrusted sign in</string>
 
 
+    <string name="sent_a_video">Video.</string>
+    <string name="sent_an_image">Image.</string>
+    <string name="sent_an_audio_file">Audio</string>
+    <string name="sent_a_file">File</string>
+
 </resources>
