@@ -61,7 +61,6 @@ internal class SasTransportToDevice(
 
                         override fun onFailure(failure: Throwable) {
                             Timber.e("## SAS verification [$tx.transactionId] failed to send toDevice in state : $tx.state")
-
                             tx.cancel(onErrorReason)
                         }
                     }

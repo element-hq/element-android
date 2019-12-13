@@ -38,6 +38,7 @@ import io.realm.annotations.RealmModule
                  IgnoredUserEntity::class,
                  BreadcrumbsEntity::class,
                  EventAnnotationsSummaryEntity::class,
+                 ReferencesAggregatedSummaryEntity::class,
                  ReactionAggregatedSummaryEntity::class,
                  EditAggregatedSummaryEntity::class,
                  PushRulesEntity::class,

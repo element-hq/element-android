@@ -29,6 +29,7 @@ import im.vector.matrix.android.internal.crypto.tasks.SendVerificationMessageTas
 import im.vector.matrix.android.internal.session.room.send.SendResponse
 import im.vector.matrix.android.internal.task.TaskConstraints
 import im.vector.matrix.android.internal.task.TaskExecutor
+import im.vector.matrix.android.internal.task.TaskThread
 import im.vector.matrix.android.internal.task.configureWith
 import timber.log.Timber
 import javax.inject.Inject
@@ -56,6 +57,8 @@ internal class SasTransportRoomMessage(
                         cryptoService
                 )
         ) {
+            callbackThread = TaskThread.DM_VERIF
+            executionThread = TaskThread.DM_VERIF
             constraints = TaskConstraints(true)
             callback = object : MatrixCallback<SendResponse> {
                 override fun onSuccess(data: SendResponse) {
@@ -86,6 +89,8 @@ internal class SasTransportRoomMessage(
                         cryptoService
                 )
         ) {
+            callbackThread = TaskThread.DM_VERIF
+            executionThread = TaskThread.DM_VERIF
             constraints = TaskConstraints(true)
             retryCount = 3
             callback = object : MatrixCallback<SendResponse> {
@@ -115,6 +120,8 @@ internal class SasTransportRoomMessage(
                         cryptoService
                 )
         ) {
+            callbackThread = TaskThread.DM_VERIF
+            executionThread = TaskThread.DM_VERIF
             constraints = TaskConstraints(true)
             retryCount = 3
         }

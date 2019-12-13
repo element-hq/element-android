@@ -13,20 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.matrix.android.internal.database.model
+package im.vector.matrix.android.api.session.room.model
 
-import io.realm.RealmList
-import io.realm.RealmObject
-import io.realm.annotations.PrimaryKey
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-internal open class EventAnnotationsSummaryEntity(
-        @PrimaryKey
-        var eventId: String = "",
-        var roomId: String? = null,
-        var reactionsSummary: RealmList<ReactionAggregatedSummaryEntity> = RealmList(),
-        var editSummary: EditAggregatedSummaryEntity? = null,
-        var referencesSummaryEntity: ReferencesAggregatedSummaryEntity? = null
-) : RealmObject() {
-
-    companion object
-}
+/**
+ * Contains an aggregated summary info of the references.
+ * Put pre-computed info that you want to access quickly without having
+ * to go through all references events
+ */
+@JsonClass(generateAdapter = true)
+data class ReferencesAggregatedContent(
+        // Verification status info for m.key.verification.request msgType events
+        @Json(name = "verif_sum") val verificationSummary: String
+        // Add more fields for future summary info.
+)
