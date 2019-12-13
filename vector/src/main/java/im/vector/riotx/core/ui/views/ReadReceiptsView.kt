@@ -22,6 +22,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.core.view.isVisible
+import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.glide.GlideApp
 import im.vector.riotx.features.home.AvatarRenderer
@@ -59,7 +60,10 @@ class ReadReceiptsView @JvmOverloads constructor(
                     receiptAvatars[index].visibility = View.INVISIBLE
                 } else {
                     receiptAvatars[index].visibility = View.VISIBLE
-                    avatarRenderer.render(receiptData.avatarUrl, receiptData.userId, receiptData.displayName, receiptAvatars[index])
+                    avatarRenderer.render(
+                            MatrixItem.UserItem(receiptData.userId, receiptData.displayName, receiptData.avatarUrl),
+                            receiptAvatars[index]
+                    )
                 }
             }
 

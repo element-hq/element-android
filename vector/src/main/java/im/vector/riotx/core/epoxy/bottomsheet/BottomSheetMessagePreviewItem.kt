@@ -21,6 +21,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
+import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
@@ -37,11 +38,7 @@ abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessa
     @EpoxyAttribute
     lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute
-    lateinit var avatarUrl: String
-    @EpoxyAttribute
-    lateinit var senderId: String
-    @EpoxyAttribute
-    var senderName: String? = null
+    lateinit var matrixItem: MatrixItem
     @EpoxyAttribute
     lateinit var body: CharSequence
     @EpoxyAttribute
@@ -50,8 +47,8 @@ abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessa
     var movementMethod: MovementMethod? = null
 
     override fun bind(holder: Holder) {
-        avatarRenderer.render(avatarUrl, senderId, senderName, holder.avatar)
-        holder.sender.setTextOrHide(senderName)
+        avatarRenderer.render(matrixItem, holder.avatar)
+        holder.sender.setTextOrHide(matrixItem.displayName)
         holder.body.movementMethod = movementMethod
         holder.body.text = body
         body.findPillsAndProcess { it.bind(holder.body) }

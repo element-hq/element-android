@@ -22,6 +22,7 @@ import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.updateLayoutParams
 import im.vector.matrix.android.api.session.user.model.User
+import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.di.HasScreenInjector
 import im.vector.riotx.features.home.AvatarRenderer
@@ -56,7 +57,7 @@ class VectorInviteView @JvmOverloads constructor(context: Context, attrs: Attrib
     fun render(sender: User, mode: Mode = Mode.LARGE) {
         if (mode == Mode.LARGE) {
             updateLayoutParams { height = LayoutParams.MATCH_CONSTRAINT }
-            avatarRenderer.render(sender.avatarUrl, sender.userId, sender.displayName, inviteAvatarView)
+            avatarRenderer.render(MatrixItem.from(sender), inviteAvatarView)
             inviteIdentifierView.text = sender.userId
             inviteNameView.text = sender.displayName
             inviteLabelView.text = context.getString(R.string.send_you_invite)

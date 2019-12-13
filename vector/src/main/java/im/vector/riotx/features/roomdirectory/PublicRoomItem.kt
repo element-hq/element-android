@@ -21,6 +21,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
+import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
@@ -35,13 +36,7 @@ abstract class PublicRoomItem : VectorEpoxyModel<PublicRoomItem.Holder>() {
     lateinit var avatarRenderer: AvatarRenderer
 
     @EpoxyAttribute
-    var avatarUrl: String? = null
-
-    @EpoxyAttribute
-    var roomId: String? = null
-
-    @EpoxyAttribute
-    var roomName: String? = null
+    lateinit var matrixItem: MatrixItem
 
     @EpoxyAttribute
     var roomAlias: String? = null
@@ -64,8 +59,8 @@ abstract class PublicRoomItem : VectorEpoxyModel<PublicRoomItem.Holder>() {
     override fun bind(holder: Holder) {
         holder.rootView.setOnClickListener { globalListener?.invoke() }
 
-        avatarRenderer.render(avatarUrl, roomId!!, roomName, holder.avatarView)
-        holder.nameView.text = roomName
+        avatarRenderer.render(matrixItem, holder.avatarView)
+        holder.nameView.text = matrixItem.displayName
         holder.aliasView.setTextOrHide(roomAlias)
         holder.topicView.setTextOrHide(roomTopic)
         // TODO Use formatter for big numbers?

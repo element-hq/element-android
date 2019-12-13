@@ -27,10 +27,8 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.DrawableImageViewTarget
 import com.bumptech.glide.request.target.Target
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
-import im.vector.matrix.android.api.session.room.model.RoomSummary
-import im.vector.matrix.android.api.session.user.model.User
+import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.internal.util.firstLetterOfDisplayName
-import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.glide.GlideApp
 import im.vector.riotx.core.glide.GlideRequest
@@ -45,54 +43,37 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
 
     companion object {
         private const val THUMBNAIL_SIZE = 250
-
-        private val AVATAR_COLOR_LIST = listOf(
-                R.color.riotx_avatar_fill_1,
-                R.color.riotx_avatar_fill_2,
-                R.color.riotx_avatar_fill_3
-        )
     }
 
     @UiThread
-    fun render(roomSummary: RoomSummary, imageView: ImageView) {
-        render(roomSummary.avatarUrl, roomSummary.roomId, roomSummary.displayName, imageView)
-    }
-
-    @UiThread
-    fun render(user: User, imageView: ImageView) {
-        render(imageView.context, GlideApp.with(imageView), user.avatarUrl, user.userId, user.displayName, DrawableImageViewTarget(imageView))
-    }
-
-    @UiThread
-    fun render(avatarUrl: String?, identifier: String, name: String?, imageView: ImageView) {
-        render(imageView.context, GlideApp.with(imageView), avatarUrl, identifier, name, DrawableImageViewTarget(imageView))
+    fun render(matrixItem: MatrixItem, imageView: ImageView) {
+        render(imageView.context,
+                GlideApp.with(imageView),
+                matrixItem,
+                DrawableImageViewTarget(imageView))
     }
 
     @UiThread
     fun render(context: Context,
                glideRequest: GlideRequests,
-               avatarUrl: String?,
-               identifier: String,
-               name: String?,
+               matrixItem: MatrixItem,
                target: Target<Drawable>) {
-        val displayName = if (name.isNullOrBlank()) {
-            identifier
-        } else {
-            name
-        }
-        val placeholder = getPlaceholderDrawable(context, identifier, displayName)
-        buildGlideRequest(glideRequest, avatarUrl)
+        val placeholder = getPlaceholderDrawable(context, matrixItem)
+        buildGlideRequest(glideRequest, matrixItem.avatarUrl)
                 .placeholder(placeholder)
                 .into(target)
     }
 
     @AnyThread
-    fun getPlaceholderDrawable(context: Context, identifier: String, text: String): Drawable {
-        val avatarColor = ContextCompat.getColor(context, getColorFromUserId(identifier))
-        return if (text.isEmpty()) {
+    fun getPlaceholderDrawable(context: Context, matrixItem: MatrixItem): Drawable {
+        val avatarColor = when (matrixItem) {
+            is MatrixItem.UserItem -> ContextCompat.getColor(context, getColorFromUserId(matrixItem.id))
+            else                   -> ContextCompat.getColor(context, getColorFromRoomId(matrixItem.id))
+        }
+        return if (matrixItem.displayName.isNullOrBlank()) {
             TextDrawable.builder().buildRound("", avatarColor)
         } else {
-            val firstLetter = text.firstLetterOfDisplayName()
+            val firstLetter = matrixItem.displayName.firstLetterOfDisplayName()
             TextDrawable.builder()
                     .beginConfig()
                     .bold()
@@ -102,18 +83,6 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
     }
 
     // PRIVATE API *********************************************************************************
-
-//    private fun getAvatarColor(text: String? = null): Int {
-//        var colorIndex: Long = 0
-//        if (!text.isNullOrEmpty()) {
-//            var sum: Long = 0
-//            for (i in 0 until text.length) {
-//                sum += text[i].toLong()
-//            }
-//            colorIndex = sum % AVATAR_COLOR_LIST.size
-//        }
-//        return AVATAR_COLOR_LIST[colorIndex.toInt()]
-//    }
 
     private fun buildGlideRequest(glideRequest: GlideRequests, avatarUrl: String?): GlideRequest<Drawable> {
         val resolvedUrl = activeSessionHolder.getActiveSession().contentUrlResolver()

@@ -24,6 +24,7 @@ import androidx.core.view.children
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
+import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
@@ -54,7 +55,7 @@ abstract class MergedHeaderItem : BaseEventItem<MergedHeaderItem.Holder>() {
                 val data = distinctMergeData.getOrNull(index)
                 if (data != null && view is ImageView) {
                     view.visibility = View.VISIBLE
-                    attributes.avatarRenderer.render(data.avatarUrl, data.userId, data.memberName, view)
+                    attributes.avatarRenderer.render(MatrixItem.UserItem(data.userId, data.memberName, data.avatarUrl), view)
                 } else {
                     view.visibility = View.GONE
                 }

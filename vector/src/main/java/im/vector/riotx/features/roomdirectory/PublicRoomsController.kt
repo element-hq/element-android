@@ -22,6 +22,7 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Success
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
+import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.errorWithRetryItem
 import im.vector.riotx.core.epoxy.loadingItem
@@ -83,9 +84,7 @@ class PublicRoomsController @Inject constructor(private val stringProvider: Stri
         publicRoomItem {
             avatarRenderer(avatarRenderer)
             id(publicRoom.roomId)
-            roomId(publicRoom.roomId)
-            avatarUrl(publicRoom.avatarUrl)
-            roomName(publicRoom.name)
+            matrixItem(MatrixItem.from(publicRoom))
             roomAlias(publicRoom.canonicalAlias)
             roomTopic(publicRoom.topic)
             nbOfMembers(publicRoom.numJoinedMembers)

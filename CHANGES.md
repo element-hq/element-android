@@ -8,7 +8,7 @@ Improvements 🙌:
  -
 
 Other changes:
- -
+ - Use same default room colors than Riot-Web
 
 Bugfix 🐛:
  - Scroll breadcrumbs to top when opened

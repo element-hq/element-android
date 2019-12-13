@@ -19,6 +19,7 @@ package im.vector.riotx.features.home
 import android.os.Bundle
 import android.view.View
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.observeK
 import im.vector.riotx.core.extensions.replaceChildFragment
@@ -42,7 +43,7 @@ class HomeDrawerFragment @Inject constructor(
         session.liveUser(session.myUserId).observeK(this) { optionalUser ->
             val user = optionalUser?.getOrNull()
             if (user != null) {
-                avatarRenderer.render(user.avatarUrl, user.userId, user.displayName, homeDrawerHeaderAvatarView)
+                avatarRenderer.render(MatrixItem.from(user), homeDrawerHeaderAvatarView)
                 homeDrawerUsernameView.text = user.displayName
                 homeDrawerUserIdView.text = user.userId
             }

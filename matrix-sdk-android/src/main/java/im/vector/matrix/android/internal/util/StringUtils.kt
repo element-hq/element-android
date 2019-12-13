@@ -52,6 +52,7 @@ fun convertFromUTF8(s: String): String {
     }
 }
 
+// TODO Improve this
 fun String?.firstLetterOfDisplayName(): String {
     if (this.isNullOrEmpty()) return ""
     val isUserId = MatrixPatterns.isUserId(this)
