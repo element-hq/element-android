@@ -16,32 +16,36 @@
 
 package im.vector.matrix.android.internal.task
 
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.asCoroutineDispatcher
-import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.intrinsics.startCoroutineCancellable
-import kotlinx.coroutines.launch
 import java.util.concurrent.Executors
 
+/**
+ * This class intends to be used for ensure suspendable methods are played sequentially all the way long.
+ */
 internal interface CoroutineSequencer<T> {
+    /**
+     * @param block the suspendable block to execute
+     * @return the result of the block
+     */
     suspend fun post(block: suspend () -> T): T
-    fun cancel()
+
+    /**
+     * Cancel all and close, so you won't be able to post anything else after
+     */
     fun close()
 }
 
-internal class ChannelCoroutineSequencer<T> : CoroutineSequencer<T> {
+internal open class ChannelCoroutineSequencer<T> : CoroutineSequencer<T> {
 
     private data class Message<T>(
             val block: suspend () -> T,
             val deferred: CompletableDeferred<T>
     )
 
-    private val messageChannel: Channel<Message<T>> = Channel()
+    private var messageChannel: Channel<Message<T>> = Channel()
     private val coroutineScope = CoroutineScope(SupervisorJob())
+    // This will ensure
     private val singleDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
 
     init {
@@ -62,13 +66,8 @@ internal class ChannelCoroutineSequencer<T> : CoroutineSequencer<T> {
     }
 
     override fun close() {
-        messageChannel.cancel()
         coroutineScope.coroutineContext.cancelChildren()
-    }
-
-    override fun cancel() {
-        close()
-        launchCoroutine()
+        messageChannel.close()
     }
 
     override suspend fun post(block: suspend () -> T): T {
@@ -78,6 +77,8 @@ internal class ChannelCoroutineSequencer<T> : CoroutineSequencer<T> {
         return try {
             deferred.await()
         } catch (cancellation: CancellationException) {
+            // In case of cancellation, we stop the current coroutine context
+            // and relaunch one to consume next messages
             coroutineScope.coroutineContext.cancelChildren()
             launchCoroutine()
             throw cancellation

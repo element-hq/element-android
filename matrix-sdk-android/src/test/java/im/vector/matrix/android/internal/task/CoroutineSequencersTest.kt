@@ -26,7 +26,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.util.concurrent.Executors
 
-class MatrixCoroutineSequencersTest {
+class CoroutineSequencersTest {
 
     private val dispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
 

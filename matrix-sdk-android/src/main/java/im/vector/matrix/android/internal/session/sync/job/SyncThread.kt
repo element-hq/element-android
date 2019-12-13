@@ -30,8 +30,7 @@ import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.TaskThread
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import timber.log.Timber
 import java.net.SocketTimeoutException
 import java.util.concurrent.CountDownLatch
@@ -42,14 +41,13 @@ private const val DEFAULT_LONG_POOL_TIMEOUT = 30_000L
 
 internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
                                               private val networkConnectivityChecker: NetworkConnectivityChecker,
-                                              private val backgroundDetectionObserver: BackgroundDetectionObserver,
-                                              private val taskExecutor: TaskExecutor
-) : Thread(), NetworkConnectivityChecker.Listener, BackgroundDetectionObserver.Listener {
+                                              private val backgroundDetectionObserver: BackgroundDetectionObserver)
+    : Thread(), NetworkConnectivityChecker.Listener, BackgroundDetectionObserver.Listener {
 
     private var state: SyncState = SyncState.IDLE
     private var liveState = MutableLiveData<SyncState>()
     private val lock = Object()
-    private var cancelableTask: Cancelable? = null
+    private val syncScope = CoroutineScope(SupervisorJob())
 
     private var isStarted = false
 
@@ -74,14 +72,14 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
         if (isStarted) {
             Timber.v("Pause sync...")
             isStarted = false
-            cancelableTask?.cancel()
+            syncScope.coroutineContext.cancelChildren()
         }
     }
 
     fun kill() = synchronized(lock) {
         Timber.v("Kill sync...")
         updateStateTo(SyncState.KILLING)
-        cancelableTask?.cancel()
+        syncScope.coroutineContext.cancelChildren()
         lock.notify()
     }
 
@@ -101,7 +99,6 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
         isStarted = true
         networkConnectivityChecker.register(this)
         backgroundDetectionObserver.register(this)
-
         while (state != SyncState.KILLING) {
             Timber.v("Entering loop, state: $state")
             if (!networkConnectivityChecker.hasInternetAccess()) {
@@ -122,8 +119,11 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
                 val timeout = state.let { if (it is SyncState.RUNNING && it.afterPause) 0 else DEFAULT_LONG_POOL_TIMEOUT }
                 Timber.v("Execute sync request with timeout $timeout")
                 val params = SyncTask.Params(timeout)
-                runBlocking {
+                val sync = syncScope.launch {
                     doSync(params)
+                }
+                runBlocking {
+                    sync.join()
                 }
                 Timber.v("...Continue")
             }

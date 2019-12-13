@@ -63,7 +63,7 @@ abstract class SyncService : Service() {
                 Timber.i("Received a start while was already syncing... ignore")
             } else {
                 isRunning.set(true)
-                serviceScope.launch(coroutineDispatchers.sync) {
+                serviceScope.launch(coroutineDispatchers.io) {
                     doSync()
                 }
             }

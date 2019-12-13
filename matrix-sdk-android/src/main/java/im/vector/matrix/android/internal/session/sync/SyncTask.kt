@@ -45,10 +45,15 @@ internal class DefaultSyncTask @Inject constructor(private val syncAPI: SyncAPI,
                                                    private val initialSyncProgressService: DefaultInitialSyncProgressService,
                                                    private val syncTokenStore: SyncTokenStore,
                                                    private val getHomeServerCapabilitiesTask: GetHomeServerCapabilitiesTask,
-                                                   private val userStore: UserStore
+                                                   private val userStore: UserStore,
+                                                   private val syncTaskSequencer: SyncTaskSequencer
 ) : SyncTask {
 
-    override suspend fun execute(params: SyncTask.Params) {
+    override suspend fun execute(params: SyncTask.Params) = syncTaskSequencer.post {
+        doSync(params)
+    }
+
+    private suspend fun doSync(params: SyncTask.Params) {
         Timber.v("Sync task started on Thread: ${Thread.currentThread().name}")
         // Maybe refresh the home server capabilities data we know
         getHomeServerCapabilitiesTask.execute(Unit)

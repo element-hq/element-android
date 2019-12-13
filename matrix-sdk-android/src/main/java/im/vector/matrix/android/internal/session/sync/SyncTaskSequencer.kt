@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.task
+package im.vector.matrix.android.internal.session.sync
 
-internal enum class TaskThread {
-    MAIN,
-    COMPUTATION,
-    IO,
-    CALLER,
-    CRYPTO
-}
+import im.vector.matrix.android.internal.session.SessionScope
+import im.vector.matrix.android.internal.task.ChannelCoroutineSequencer
+import javax.inject.Inject
+
+@SessionScope
+internal class SyncTaskSequencer @Inject constructor() : ChannelCoroutineSequencer<Unit>()

@@ -38,8 +38,7 @@ internal object MatrixModule {
         return MatrixCoroutineDispatchers(io = Dispatchers.IO,
                                           computation = Dispatchers.Default,
                                           main = Dispatchers.Main,
-                                          crypto = createBackgroundHandler("Crypto_Thread").asCoroutineDispatcher(),
-                                          sync = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
+                                          crypto = createBackgroundHandler("Crypto_Thread").asCoroutineDispatcher()
         )
     }
 

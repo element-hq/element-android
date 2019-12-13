@@ -85,6 +85,5 @@ internal class TaskExecutor @Inject constructor(private val coroutineDispatchers
         TaskThread.IO          -> coroutineDispatchers.io
         TaskThread.CALLER      -> EmptyCoroutineContext
         TaskThread.CRYPTO      -> coroutineDispatchers.crypto
-        TaskThread.SYNC        -> coroutineDispatchers.sync
     }
 }

@@ -44,6 +44,7 @@ import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.matrix.android.api.session.user.UserService
 import im.vector.matrix.android.internal.crypto.DefaultCryptoService
 import im.vector.matrix.android.internal.database.LiveEntityObserver
+import im.vector.matrix.android.internal.session.sync.SyncTaskSequencer
 import im.vector.matrix.android.internal.session.sync.SyncTokenStore
 import im.vector.matrix.android.internal.session.sync.job.SyncThread
 import im.vector.matrix.android.internal.session.sync.job.SyncWorker
@@ -74,6 +75,7 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
                                                   private val syncThreadProvider: Provider<SyncThread>,
                                                   private val contentUrlResolver: ContentUrlResolver,
                                                   private val syncTokenStore: SyncTokenStore,
+                                                  private val syncTaskSequencer: SyncTaskSequencer,
                                                   private val contentUploadProgressTracker: ContentUploadStateTracker,
                                                   private val initialSyncProgressService: Lazy<InitialSyncProgressService>,
                                                   private val homeServerCapabilitiesService: Lazy<HomeServerCapabilitiesService>)
@@ -143,6 +145,7 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
         cryptoService.get().close()
         isOpen = false
         EventBus.getDefault().unregister(this)
+        syncTaskSequencer.close()
     }
 
     override fun syncState(): LiveData<SyncState> {

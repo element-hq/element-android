@@ -18,19 +18,14 @@ package im.vector.matrix.android.internal.session.sync.job
 import android.content.Context
 import androidx.work.*
 import com.squareup.moshi.JsonClass
-import im.vector.matrix.android.api.failure.Failure
-import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.api.failure.isTokenError
 import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
 import im.vector.matrix.android.internal.session.sync.SyncTask
 import im.vector.matrix.android.internal.task.TaskExecutor
-import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import im.vector.matrix.android.internal.worker.WorkManagerUtil
 import im.vector.matrix.android.internal.worker.WorkManagerUtil.matrixOneTimeWorkRequestBuilder
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import im.vector.matrix.android.internal.worker.getSessionComponent
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -50,7 +45,6 @@ internal class SyncWorker(context: Context,
 
     @Inject lateinit var syncTask: SyncTask
     @Inject lateinit var taskExecutor: TaskExecutor
-    @Inject lateinit var coroutineDispatchers: MatrixCoroutineDispatchers
     @Inject lateinit var networkConnectivityChecker: NetworkConnectivityChecker
 
     override suspend fun doWork(): Result {
@@ -72,7 +66,7 @@ internal class SyncWorker(context: Context,
         )
     }
 
-    private suspend fun doSync(timeout: Long) = withContext(coroutineDispatchers.sync) {
+    private suspend fun doSync(timeout: Long) {
         val taskParams = SyncTask.Params(timeout)
         syncTask.execute(taskParams)
     }
