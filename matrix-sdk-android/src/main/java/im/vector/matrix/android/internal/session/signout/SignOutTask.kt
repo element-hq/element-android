@@ -54,9 +54,10 @@ internal class DefaultSignOutTask @Inject constructor(private val context: Conte
                                                       @UserMd5 private val userMd5: String) : SignOutTask {
 
     override suspend fun execute(params: SignOutTask.Params) {
-        Timber.d("SignOut: send request...")
-
+        // TODO It should be done even after a soft logout, to be sure the deviceId is deleted on the
+        // TODO  homeserver but https://github.com/matrix-org/synapse/issues/5755
         if (params.sigOutFromHomeserver) {
+            Timber.d("SignOut: send request...")
             executeRequest<Unit> {
                 apiCall = signOutAPI.signOut()
             }
