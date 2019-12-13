@@ -102,6 +102,18 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
             is LoginAction.ResetPasswordMailConfirmed -> handleResetPasswordMailConfirmed()
             is LoginAction.RegisterAction             -> handleRegisterAction(action)
             is LoginAction.ResetAction                -> handleResetAction(action)
+            is LoginAction.SetupSsoForSessionRecovery -> handleSetupSsoForSessionRecovery(action)
+        }
+    }
+
+    private fun handleSetupSsoForSessionRecovery(action: LoginAction.SetupSsoForSessionRecovery) {
+        setState {
+            copy(
+                    signMode = SignMode.SignIn,
+                    loginMode = LoginMode.Sso,
+                    homeServerUrl = action.homeServerUrl,
+                    deviceId = action.deviceId
+            )
         }
     }
 

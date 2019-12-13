@@ -24,6 +24,7 @@ data class SoftLogoutViewState(
         val asyncLoginAction: Async<Unit> = Uninitialized,
         val homeServerUrl: String,
         val userId: String,
+        val deviceId: String,
         val userDisplayName: String,
         val hasUnsavedKeys: Boolean,
         val passwordShown: Boolean = false,

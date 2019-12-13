@@ -55,4 +55,7 @@ sealed class LoginAction : VectorViewModelAction {
     object ResetSignMode : ResetAction()
     object ResetLogin : ResetAction()
     object ResetResetPassword : ResetAction()
+
+    // For the soft logout case
+    data class SetupSsoForSessionRecovery(val homeServerUrl: String, val deviceId: String) : LoginAction()
 }

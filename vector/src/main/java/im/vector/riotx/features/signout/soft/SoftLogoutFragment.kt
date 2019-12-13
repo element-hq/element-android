@@ -31,6 +31,8 @@ import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.features.MainActivity
 import im.vector.riotx.features.MainActivityArgs
 import im.vector.riotx.features.login.AbstractLoginFragment
+import im.vector.riotx.features.login.LoginAction
+import im.vector.riotx.features.login.LoginMode
 import im.vector.riotx.features.login.LoginNavigation
 import kotlinx.android.synthetic.main.fragment_generic_recycler.*
 import javax.inject.Inject
@@ -56,6 +58,14 @@ class SoftLogoutFragment @Inject constructor(
 
         softLogoutViewModel.subscribe(this) { softLogoutViewState ->
             softLogoutController.update(softLogoutViewState)
+
+            if (softLogoutViewState.asyncHomeServerLoginFlowRequest.invoke() == LoginMode.Sso) {
+                // Prepare the loginViewModel for a SSO recovery
+                loginViewModel.handle(LoginAction.SetupSsoForSessionRecovery(
+                        softLogoutViewState.homeServerUrl,
+                        softLogoutViewState.deviceId
+                ))
+            }
         }
     }
 
@@ -84,7 +94,7 @@ class SoftLogoutFragment @Inject constructor(
     }
 
     override fun ssoSubmit() {
-        // TODO loginSharedActionViewModel.post(LoginNavigation.Sso)
+        loginSharedActionViewModel.post(LoginNavigation.OnSignModeSelected)
     }
 
     override fun clearData() {

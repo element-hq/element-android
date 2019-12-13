@@ -16,6 +16,7 @@
 
 package im.vector.riotx.features.signout.soft
 
+import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.riotx.core.platform.VectorViewModelAction
 
 sealed class SoftLogoutAction : VectorViewModelAction {
@@ -24,5 +25,5 @@ sealed class SoftLogoutAction : VectorViewModelAction {
     object TogglePassword : SoftLogoutAction()
 
     data class SignInAgain(val password: String) : SoftLogoutAction()
-    // TODO Add reset pwd...
+    data class WebLoginSuccess(val credentials: Credentials) : SoftLogoutAction()
 }

@@ -34,6 +34,9 @@ data class LoginViewState(
         val resetPasswordEmail: String? = null,
         @PersistState
         val homeServerUrl: String? = null,
+        // For SSO session recovery
+        @PersistState
+        val deviceId: String? = null,
 
         // Network result
         @PersistState

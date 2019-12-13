@@ -23,6 +23,7 @@ import com.airbnb.mvrx.Success
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.loadingItem
 import im.vector.riotx.core.error.ErrorFormatter
+import im.vector.riotx.core.extensions.toReducedUrl
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.login.LoginMode
 import im.vector.riotx.features.signout.soft.epoxy.*
@@ -71,7 +72,7 @@ class SoftLogoutController @Inject constructor(
         loginTextItem {
             id("signText1")
             text(stringProvider.getString(R.string.soft_logout_signin_notice,
-                    state.homeServerUrl,
+                    state.homeServerUrl.toReducedUrl(),
                     state.userDisplayName,
                     state.userId))
         }

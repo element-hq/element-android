@@ -54,8 +54,9 @@ class SoftLogoutViewModel @AssistedInject constructor(
             val activity: SoftLogoutActivity = (viewModelContext as ActivityViewModelContext).activity()
             val userId = activity.session.myUserId
             return SoftLogoutViewState(
-                    homeServerUrl = activity.session.sessionParams.homeServerConnectionConfig.homeServerUri.toString().toReducedUrl(),
+                    homeServerUrl = activity.session.sessionParams.homeServerConnectionConfig.homeServerUri.toString(),
                     userId = userId,
+                    deviceId = activity.session.sessionParams.credentials.deviceId ?: "",
                     userDisplayName = activity.session.getUser(userId)?.displayName ?: userId,
                     hasUnsavedKeys = activity.session.hasUnsavedKeys()
             )
@@ -139,14 +140,11 @@ class SoftLogoutViewModel @AssistedInject constructor(
         })
     }
 
-    // TODO Cleanup
-    // private val _viewEvents = PublishDataSource<LoginViewEvents>()
-    // val viewEvents: DataSource<LoginViewEvents> = _viewEvents
-
     override fun handle(action: SoftLogoutAction) {
         when (action) {
             is SoftLogoutAction.RetryLoginFlow  -> getSupportedLoginFlow()
             is SoftLogoutAction.SignInAgain     -> handleSignInAgain(action)
+            is SoftLogoutAction.WebLoginSuccess -> handleWebLoginSuccess(action)
             is SoftLogoutAction.PasswordChanged -> handlePasswordChange(action)
             is SoftLogoutAction.TogglePassword  -> handleTogglePassword()
         }
@@ -171,6 +169,30 @@ class SoftLogoutViewModel @AssistedInject constructor(
         }
     }
 
+    private fun handleWebLoginSuccess(action: SoftLogoutAction.WebLoginSuccess) {
+        setState {
+            copy(
+                    asyncLoginAction = Loading()
+            )
+        }
+        currentTask = session.updateCredentials(action.credentials,
+                object : MatrixCallback<Unit> {
+                    override fun onFailure(failure: Throwable) {
+                        setState {
+                            copy(
+                                    asyncLoginAction = Fail(failure)
+                            )
+                        }
+                    }
+
+                    override fun onSuccess(data: Unit) {
+                        onSessionRestored()
+                    }
+                }
+        )
+
+    }
+
     private fun handleSignInAgain(action: SoftLogoutAction.SignInAgain) {
         setState {
             copy(
@@ -190,19 +212,23 @@ class SoftLogoutViewModel @AssistedInject constructor(
                     }
 
                     override fun onSuccess(data: Unit) {
-                        activeSessionHolder.setActiveSession(session)
-                        // Start the sync
-                        session.startSync(true)
-
-                        // TODO Configure and start ? Check that the push still works...
-                        setState {
-                            copy(
-                                    asyncLoginAction = Success(Unit)
-                            )
-                        }
+                        onSessionRestored()
                     }
                 }
         )
+    }
+
+    private fun onSessionRestored() {
+        activeSessionHolder.setActiveSession(session)
+        // Start the sync
+        session.startSync(true)
+
+        // TODO Configure and start ? Check that the push still works...
+        setState {
+            copy(
+                    asyncLoginAction = Success(Unit)
+            )
+        }
     }
 
     override fun onCleared() {

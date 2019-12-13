@@ -30,10 +30,14 @@ import android.webkit.SslErrorHandler
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AlertDialog
+import com.airbnb.mvrx.activityViewModel
+import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.riotx.R
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.utils.AssetReader
+import im.vector.riotx.features.signout.soft.SoftLogoutAction
+import im.vector.riotx.features.signout.soft.SoftLogoutViewModel
 import kotlinx.android.synthetic.main.fragment_login_web.*
 import timber.log.Timber
 import java.net.URLDecoder
@@ -48,9 +52,12 @@ class LoginWebFragment @Inject constructor(
         private val errorFormatter: ErrorFormatter
 ) : AbstractLoginFragment() {
 
+    private val softLogoutViewModel: SoftLogoutViewModel by activityViewModel()
+
     override fun getLayoutResId() = R.layout.fragment_login_web
 
     private var isWebViewLoaded = false
+    private var isForSessionRecovery = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -60,6 +67,9 @@ class LoginWebFragment @Inject constructor(
 
     override fun updateWithState(state: LoginViewState) {
         setupTitle(state)
+
+        isForSessionRecovery = state.deviceId?.isNotBlank() == true
+
         if (!isWebViewLoaded) {
             setupWebView(state)
             isWebViewLoaded = true
@@ -110,12 +120,21 @@ class LoginWebFragment @Inject constructor(
     }
 
     private fun launchWebView(state: LoginViewState) {
-        if (state.signMode == SignMode.SignIn) {
-            loginWebWebView.loadUrl(state.homeServerUrl?.trim { it == '/' } + "/_matrix/static/client/login/")
-        } else {
-            // MODE_REGISTER
-            loginWebWebView.loadUrl(state.homeServerUrl?.trim { it == '/' } + "/_matrix/static/client/register/")
+        val url = buildString {
+            append(state.homeServerUrl?.trim { it == '/' })
+            if (state.signMode == SignMode.SignIn) {
+                append("/_matrix/static/client/login/")
+                state.deviceId?.takeIf { it.isNotBlank() }?.let {
+                    // But https://github.com/matrix-org/synapse/issues/5755
+                    append("?device_id=$it")
+                }
+            } else {
+                // MODE_REGISTER
+                append("/_matrix/static/client/register/")
+            }
         }
+
+        loginWebWebView.loadUrl(url)
 
         loginWebWebView.webViewClient = object : WebViewClient() {
             override fun onReceivedSslError(view: WebView, handler: SslErrorHandler,
@@ -212,10 +231,7 @@ class LoginWebFragment @Inject constructor(
                         if (state.signMode == SignMode.SignIn) {
                             try {
                                 if (action == "onLogin") {
-                                    val credentials = javascriptResponse.credentials
-                                    if (credentials != null) {
-                                        loginViewModel.handle(LoginAction.WebLoginSuccess(credentials))
-                                    }
+                                    javascriptResponse.credentials?.let { notifyViewModel(it) }
                                 }
                             } catch (e: Exception) {
                                 Timber.e(e, "## shouldOverrideUrlLoading() : failed")
@@ -224,10 +240,7 @@ class LoginWebFragment @Inject constructor(
                             // MODE_REGISTER
                             // check the required parameters
                             if (action == "onRegistered") {
-                                val credentials = javascriptResponse.credentials
-                                if (credentials != null) {
-                                    loginViewModel.handle(LoginAction.WebLoginSuccess(credentials))
-                                }
+                                javascriptResponse.credentials?.let { notifyViewModel(it) }
                             }
                         }
                     }
@@ -236,6 +249,14 @@ class LoginWebFragment @Inject constructor(
 
                 return super.shouldOverrideUrlLoading(view, url)
             }
+        }
+    }
+
+    private fun notifyViewModel(credentials: Credentials) {
+        if (isForSessionRecovery) {
+            softLogoutViewModel.handle(SoftLogoutAction.WebLoginSuccess(credentials))
+        } else {
+            loginViewModel.handle(LoginAction.WebLoginSuccess(credentials))
         }
     }
 

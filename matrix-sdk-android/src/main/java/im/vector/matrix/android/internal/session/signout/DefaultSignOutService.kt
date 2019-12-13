@@ -17,14 +17,21 @@
 package im.vector.matrix.android.internal.session.signout
 
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.signout.SignOutService
 import im.vector.matrix.android.api.util.Cancelable
+import im.vector.matrix.android.internal.auth.SessionParamsStore
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
+import im.vector.matrix.android.internal.task.launchToCallback
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import kotlinx.coroutines.GlobalScope
 import javax.inject.Inject
 
 internal class DefaultSignOutService @Inject constructor(private val signOutTask: SignOutTask,
                                                          private val signInAgainTask: SignInAgainTask,
+                                                         private val sessionParamsStore: SessionParamsStore,
+                                                         private val coroutineDispatchers: MatrixCoroutineDispatchers,
                                                          private val taskExecutor: TaskExecutor) : SignOutService {
 
     override fun signInAgain(password: String,
@@ -34,6 +41,13 @@ internal class DefaultSignOutService @Inject constructor(private val signOutTask
                     this.callback = callback
                 }
                 .executeBy(taskExecutor)
+    }
+
+    override fun updateCredentials(credentials: Credentials,
+                                   callback: MatrixCallback<Unit>): Cancelable {
+        return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
+            sessionParamsStore.updateCredentials(credentials)
+        }
     }
 
     override fun signOut(sigOutFromHomeserver: Boolean,
