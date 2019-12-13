@@ -37,7 +37,9 @@ object TimelineDisplayableEvents {
             EventType.STICKER,
             EventType.STATE_ROOM_CREATE,
             EventType.STATE_ROOM_TOMBSTONE,
-            EventType.STATE_ROOM_JOIN_RULES
+            EventType.STATE_ROOM_JOIN_RULES,
+            EventType.KEY_VERIFICATION_DONE,
+            EventType.KEY_VERIFICATION_CANCEL
     )
 
     val DEBUG_DISPLAYABLE_TYPES = DISPLAYABLE_TYPES + listOf(
@@ -45,8 +47,6 @@ object TimelineDisplayableEvents {
             EventType.REACTION,
             EventType.KEY_VERIFICATION_ACCEPT,
             EventType.KEY_VERIFICATION_START,
-            EventType.KEY_VERIFICATION_DONE,
-            EventType.KEY_VERIFICATION_CANCEL,
             EventType.KEY_VERIFICATION_MAC,
             EventType.KEY_VERIFICATION_KEY
     )
