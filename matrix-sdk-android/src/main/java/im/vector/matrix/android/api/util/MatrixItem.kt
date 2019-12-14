@@ -29,8 +29,8 @@ sealed class MatrixItem(
 ) {
     data class UserItem(override val id: String,
                         override val displayName: String? = null,
-                        override val avatarUrl: String? = null
-    ) : MatrixItem(id, displayName, avatarUrl)
+                        override val avatarUrl: String? = null)
+        : MatrixItem(id, displayName?.removeSuffix(ircPattern), avatarUrl)
 
     data class EventItem(override val id: String,
                          override val displayName: String? = null,
@@ -59,7 +59,7 @@ sealed class MatrixItem(
     /**
      * Return the prefix as defined in the matrix spec (and not extracted from the id)
      */
-    fun getPrefix() = when (this) {
+    fun getIdPrefix() = when (this) {
         is UserItem      -> '@'
         is EventItem     -> '$'
         is RoomItem      -> '!'
@@ -103,6 +103,8 @@ sealed class MatrixItem(
 
 
     companion object {
+        private const val ircPattern = " (IRC)"
+
         fun from(user: User) = UserItem(user.userId, user.displayName, user.avatarUrl)
         fun from(groupSummary: GroupSummary) = GroupItem(groupSummary.groupId, groupSummary.displayName, groupSummary.avatarUrl)
         fun from(roomSummary: RoomSummary) = RoomItem(roomSummary.roomId, roomSummary.displayName, roomSummary.avatarUrl)
