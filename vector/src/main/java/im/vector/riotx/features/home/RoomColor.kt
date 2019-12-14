@@ -20,7 +20,7 @@ import androidx.annotation.ColorRes
 import im.vector.riotx.R
 
 @ColorRes
-fun getColorFromRoomId(roomId: String? = null): Int {
+fun getColorFromRoomId(roomId: String?): Int {
     return when ((roomId?.toList()?.sumBy { it.toInt() } ?: 0) % 3) {
         1    -> R.color.riotx_avatar_fill_2
         2    -> R.color.riotx_avatar_fill_3
