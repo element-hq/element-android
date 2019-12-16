@@ -69,16 +69,11 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
             is MatrixItem.UserItem -> ContextCompat.getColor(context, getColorFromUserId(matrixItem.id))
             else                   -> ContextCompat.getColor(context, getColorFromRoomId(matrixItem.id))
         }
-        return if (matrixItem.displayName.isNullOrBlank()) {
-            TextDrawable.builder().buildRound("", avatarColor)
-        } else {
-            val firstLetter = matrixItem.firstLetterOfDisplayName()
-            TextDrawable.builder()
-                    .beginConfig()
-                    .bold()
-                    .endConfig()
-                    .buildRound(firstLetter, avatarColor)
-        }
+        return TextDrawable.builder()
+                .beginConfig()
+                .bold()
+                .endConfig()
+                .buildRound(matrixItem.firstLetterOfDisplayName(), avatarColor)
     }
 
     // PRIVATE API *********************************************************************************
