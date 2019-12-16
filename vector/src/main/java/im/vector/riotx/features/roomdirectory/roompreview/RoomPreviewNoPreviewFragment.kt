@@ -23,7 +23,6 @@ import androidx.transition.TransitionManager
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.setTextOrHide
@@ -52,11 +51,11 @@ class RoomPreviewNoPreviewFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         setupToolbar(roomPreviewNoPreviewToolbar)
         // Toolbar
-        avatarRenderer.render(MatrixItem.RoomItem(roomPreviewData.roomId, roomPreviewData.roomName, roomPreviewData.avatarUrl), roomPreviewNoPreviewToolbarAvatar)
+        avatarRenderer.render(roomPreviewData.matrixItem, roomPreviewNoPreviewToolbarAvatar)
         roomPreviewNoPreviewToolbarTitle.text = roomPreviewData.roomName
 
         // Screen
-        avatarRenderer.render(MatrixItem.RoomItem(roomPreviewData.roomId, roomPreviewData.roomName, roomPreviewData.avatarUrl), roomPreviewNoPreviewAvatar)
+        avatarRenderer.render(roomPreviewData.matrixItem, roomPreviewNoPreviewAvatar)
         roomPreviewNoPreviewName.text = roomPreviewData.roomName
         roomPreviewNoPreviewTopic.setTextOrHide(roomPreviewData.topic)
 

@@ -126,7 +126,6 @@ sealed class MatrixItem(
                 .toUpperCase(Locale.ROOT)
     }
 
-
     companion object {
         private const val ircPattern = " (IRC)"
     }
