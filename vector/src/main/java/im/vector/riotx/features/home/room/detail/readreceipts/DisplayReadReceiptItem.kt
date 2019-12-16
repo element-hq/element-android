@@ -22,6 +22,7 @@ import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
+import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.features.home.AvatarRenderer
@@ -29,15 +30,13 @@ import im.vector.riotx.features.home.AvatarRenderer
 @EpoxyModelClass(layout = R.layout.item_display_read_receipt)
 abstract class DisplayReadReceiptItem : EpoxyModelWithHolder<DisplayReadReceiptItem.Holder>() {
 
-    @EpoxyAttribute var name: String? = null
-    @EpoxyAttribute var userId: String = ""
-    @EpoxyAttribute var avatarUrl: String? = null
+    @EpoxyAttribute lateinit var matrixItem: MatrixItem
     @EpoxyAttribute var timestamp: CharSequence? = null
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
 
     override fun bind(holder: Holder) {
-        avatarRenderer.render(avatarUrl, userId, name, holder.avatarView)
-        holder.displayNameView.text = name ?: userId
+        avatarRenderer.render(matrixItem, holder.avatarView)
+        holder.displayNameView.text = matrixItem.getBestName()
         timestamp?.let {
             holder.timestampView.text = it
             holder.timestampView.isVisible = true

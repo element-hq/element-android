@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.api.session.room.send
+package im.vector.riotx.features.home
 
-import im.vector.matrix.android.api.util.MatrixItem
+import androidx.annotation.ColorRes
+import im.vector.riotx.R
 
-/**
- * Tag class for spans that should mention a user.
- * These Spans will be transformed into pills when detected in message to send
- */
-interface UserMentionSpan {
-    val matrixItem: MatrixItem
+@ColorRes
+fun getColorFromRoomId(roomId: String?): Int {
+    return when ((roomId?.toList()?.sumBy { it.toInt() } ?: 0) % 3) {
+        1    -> R.color.riotx_avatar_fill_2
+        2    -> R.color.riotx_avatar_fill_3
+        else -> R.color.riotx_avatar_fill_1
+    }
 }

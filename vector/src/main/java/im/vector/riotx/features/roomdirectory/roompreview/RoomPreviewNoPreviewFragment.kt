@@ -49,11 +49,11 @@ class RoomPreviewNoPreviewFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         setupToolbar(roomPreviewNoPreviewToolbar)
         // Toolbar
-        avatarRenderer.render(roomPreviewData.avatarUrl, roomPreviewData.roomId, roomPreviewData.roomName, roomPreviewNoPreviewToolbarAvatar)
+        avatarRenderer.render(roomPreviewData.matrixItem, roomPreviewNoPreviewToolbarAvatar)
         roomPreviewNoPreviewToolbarTitle.text = roomPreviewData.roomName
 
         // Screen
-        avatarRenderer.render(roomPreviewData.avatarUrl, roomPreviewData.roomId, roomPreviewData.roomName, roomPreviewNoPreviewAvatar)
+        avatarRenderer.render(roomPreviewData.matrixItem, roomPreviewNoPreviewAvatar)
         roomPreviewNoPreviewName.text = roomPreviewData.roomName
         roomPreviewNoPreviewTopic.setTextOrHide(roomPreviewData.topic)
 

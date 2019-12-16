@@ -8,10 +8,12 @@ Improvements 🙌:
  -
 
 Other changes:
- -
+ - Use same default room colors than Riot-Web
 
 Bugfix 🐛:
- -
+ - Scroll breadcrumbs to top when opened
+ - Render default room name when it starts with an emoji (#477)
+ - Do not display " (IRC)") in display names https://github.com/vector-im/riot-android/issues/444
 
 Translations 🗣:
  -
