@@ -20,7 +20,6 @@ import android.view.View
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.util.toMatrixItem
-import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.riotx.R
 import im.vector.riotx.core.date.VectorDateFormatter
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
