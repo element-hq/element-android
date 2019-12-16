@@ -29,6 +29,7 @@ import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.chip.ChipDrawable
 import im.vector.matrix.android.api.session.room.send.UserMentionSpan
+import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.glide.GlideRequests
 import im.vector.riotx.features.home.AvatarRenderer
@@ -42,9 +43,8 @@ import java.lang.ref.WeakReference
 class PillImageSpan(private val glideRequests: GlideRequests,
                     private val avatarRenderer: AvatarRenderer,
                     private val context: Context,
-                    override val userId: String,
-                    override val displayName: String,
-                    private val avatarUrl: String?) : ReplacementSpan(), UserMentionSpan {
+                    override val matrixItem: MatrixItem
+) : ReplacementSpan(), UserMentionSpan {
 
     private val pillDrawable = createChipDrawable()
     private val target = PillImageSpanTarget(this)
@@ -53,7 +53,7 @@ class PillImageSpan(private val glideRequests: GlideRequests,
     @UiThread
     fun bind(textView: TextView) {
         tv = WeakReference(textView)
-        avatarRenderer.render(context, glideRequests, avatarUrl, userId, displayName, target)
+        avatarRenderer.render(context, glideRequests, matrixItem, target)
     }
 
     // ReplacementSpan *****************************************************************************
@@ -101,12 +101,12 @@ class PillImageSpan(private val glideRequests: GlideRequests,
     private fun createChipDrawable(): ChipDrawable {
         val textPadding = context.resources.getDimension(R.dimen.pill_text_padding)
         return ChipDrawable.createFromResource(context, R.xml.pill_view).apply {
-            text = displayName
+            text = matrixItem.getBestName()
             textEndPadding = textPadding
             textStartPadding = textPadding
             setChipMinHeightResource(R.dimen.pill_min_height)
             setChipIconSizeResource(R.dimen.pill_avatar_size)
-            chipIcon = avatarRenderer.getPlaceholderDrawable(context, userId, displayName)
+            chipIcon = avatarRenderer.getPlaceholderDrawable(context, matrixItem)
             setBounds(0, 0, intrinsicWidth, intrinsicHeight)
         }
     }

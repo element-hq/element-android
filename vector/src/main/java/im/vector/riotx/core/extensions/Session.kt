@@ -21,6 +21,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ProcessLifecycleOwner
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
 import im.vector.matrix.android.api.session.sync.FilterService
 import im.vector.riotx.core.services.VectorSyncService
 import im.vector.riotx.features.notifications.PushRuleTriggerListener
@@ -58,4 +59,12 @@ fun Session.startSyncing(context: Context) {
     val isAtLeastStarted = ProcessLifecycleOwner.get().lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)
     Timber.v("--> is at least started? $isAtLeastStarted")
     startSync(isAtLeastStarted)
+}
+
+/**
+ * Tell is the session has unsaved e2e keys in the backup
+ */
+fun Session.hasUnsavedKeys(): Boolean {
+    return inboundGroupSessionsCount(false) > 0
+            && getKeysBackupService().state != KeysBackupState.ReadyToBackUp
 }

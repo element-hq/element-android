@@ -23,6 +23,7 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
+import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
@@ -32,11 +33,9 @@ import im.vector.riotx.features.home.AvatarRenderer
 abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
 
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
-    @EpoxyAttribute lateinit var roomName: CharSequence
-    @EpoxyAttribute lateinit var roomId: String
+    @EpoxyAttribute lateinit var matrixItem: MatrixItem
     @EpoxyAttribute lateinit var lastFormattedEvent: CharSequence
     @EpoxyAttribute lateinit var lastEventTime: CharSequence
-    @EpoxyAttribute var avatarUrl: String? = null
     @EpoxyAttribute var unreadNotificationCount: Int = 0
     @EpoxyAttribute var hasUnreadMessage: Boolean = false
     @EpoxyAttribute var hasDraft: Boolean = false
@@ -48,13 +47,13 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         super.bind(holder)
         holder.rootView.setOnClickListener(itemClickListener)
         holder.rootView.setOnLongClickListener(itemLongClickListener)
-        holder.titleView.text = roomName
+        holder.titleView.text = matrixItem.getBestName()
         holder.lastEventTimeView.text = lastEventTime
         holder.lastEventView.text = lastFormattedEvent
         holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadNotificationCount, showHighlighted))
         holder.unreadIndentIndicator.isVisible = hasUnreadMessage
         holder.draftView.isVisible = hasDraft
-        avatarRenderer.render(avatarUrl, roomId, roomName.toString(), holder.avatarImageView)
+        avatarRenderer.render(matrixItem, holder.avatarImageView)
     }
 
     class Holder : VectorEpoxyHolder() {

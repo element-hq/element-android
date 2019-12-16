@@ -45,4 +45,4 @@ sealed class Failure(cause: Throwable? = null) : Throwable(cause = cause) {
     abstract class FeatureFailure : Failure()
 }
 
-fun Throwable.isTokenError() = this is Failure.ServerError && (this.error.code == MatrixError.UNKNOWN_TOKEN || this.error.code == MatrixError.MISSING_TOKEN)
+fun Throwable.isTokenError() = this is Failure.ServerError && (this.error.code == MatrixError.M_UNKNOWN_TOKEN || this.error.code == MatrixError.M_MISSING_TOKEN)

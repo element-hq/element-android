@@ -15,7 +15,7 @@ androidExtensions {
 }
 
 ext.versionMajor = 0
-ext.versionMinor = 10
+ext.versionMinor = 11
 ext.versionPatch = 0
 
 static def getGitTimestamp() {
@@ -229,6 +229,7 @@ dependencies {
 
     implementation project(":matrix-sdk-android")
     implementation project(":matrix-sdk-android-rx")
+    implementation project(":diff-match-patch")
     implementation 'com.android.support:multidex:1.0.3'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -340,8 +341,6 @@ dependencies {
         exclude group: 'com.google.firebase', module: 'firebase-analytics'
         exclude group: 'com.google.firebase', module: 'firebase-measurement-connector'
     }
-
-    implementation 'diff_match_patch:diff_match_patch:current'
 
     implementation "androidx.emoji:emoji-appcompat:1.0.0"
 

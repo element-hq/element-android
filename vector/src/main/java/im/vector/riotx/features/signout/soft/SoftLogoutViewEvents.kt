@@ -12,27 +12,16 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
 
-package im.vector.matrix.rx
+package im.vector.riotx.features.signout.soft
 
-import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.util.Cancelable
-import io.reactivex.SingleEmitter
-
-internal class MatrixCallbackSingle<T>(private val singleEmitter: SingleEmitter<T>) : MatrixCallback<T> {
-
-    override fun onSuccess(data: T) {
-        singleEmitter.onSuccess(data)
-    }
-
-    override fun onFailure(failure: Throwable) {
-        singleEmitter.tryOnError(failure)
-    }
-}
-
-fun <T> Cancelable.toSingle(singleEmitter: SingleEmitter<T>) {
-    singleEmitter.setCancellable {
-        this.cancel()
-    }
+/**
+ * Transient events for SoftLogout
+ */
+sealed class SoftLogoutViewEvents {
+    data class ErrorNotSameUser(val currentUserId: String, val newUserId: String) : SoftLogoutViewEvents()
+    data class Error(val throwable: Throwable) : SoftLogoutViewEvents()
+    object ClearData : SoftLogoutViewEvents()
 }

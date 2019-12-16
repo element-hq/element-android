@@ -47,6 +47,7 @@ import im.vector.riotx.features.roomdirectory.roompreview.RoomPreviewNoPreviewFr
 import im.vector.riotx.features.settings.*
 import im.vector.riotx.features.settings.ignored.VectorSettingsIgnoredUsersFragment
 import im.vector.riotx.features.settings.push.PushGatewaysFragment
+import im.vector.riotx.features.signout.soft.SoftLogoutFragment
 
 @Module
 interface FragmentModule {
@@ -261,4 +262,9 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(EmojiChooserFragment::class)
     fun bindEmojiChooserFragment(fragment: EmojiChooserFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(SoftLogoutFragment::class)
+    fun bindSoftLogoutFragment(fragment: SoftLogoutFragment): Fragment
 }

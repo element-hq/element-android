@@ -25,7 +25,6 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
-import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.extensions.observeEvent
@@ -37,8 +36,7 @@ import javax.inject.Inject
 
 class VectorSettingsIgnoredUsersFragment @Inject constructor(
         val ignoredUsersViewModelFactory: IgnoredUsersViewModel.Factory,
-        private val ignoredUsersController: IgnoredUsersController,
-        private val errorFormatter: ErrorFormatter
+        private val ignoredUsersController: IgnoredUsersController
 ) : VectorBaseFragment(), IgnoredUsersController.Callback {
 
     override fun getLayoutResId() = R.layout.fragment_generic_recycler

@@ -20,12 +20,10 @@ import io.realm.DynamicRealm
 import io.realm.RealmMigration
 import timber.log.Timber
 
-internal class AuthRealmMigration : RealmMigration {
+internal object AuthRealmMigration : RealmMigration {
 
-    companion object {
-        // Current schema version
-        const val SCHEMA_VERSION = 1L
-    }
+    // Current schema version
+    const val SCHEMA_VERSION = 2L
 
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
         Timber.d("Migrating Auth Realm from $oldVersion to $newVersion")
@@ -45,6 +43,15 @@ internal class AuthRealmMigration : RealmMigration {
                     .addField(PendingSessionEntityFields.CURRENT_SESSION, String::class.java)
                     .addField(PendingSessionEntityFields.IS_REGISTRATION_STARTED, Boolean::class.java)
                     .addField(PendingSessionEntityFields.CURRENT_THREE_PID_DATA_JSON, String::class.java)
+        }
+
+        if (oldVersion <= 1) {
+            Timber.d("Step 1 -> 2")
+            Timber.d("Add boolean isTokenValid in SessionParamsEntity, with value true")
+
+            realm.schema.get("SessionParamsEntity")
+                    ?.addField(SessionParamsEntityFields.IS_TOKEN_VALID, Boolean::class.java)
+                    ?.transform { it.set(SessionParamsEntityFields.IS_TOKEN_VALID, true) }
         }
     }
 }

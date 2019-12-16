@@ -19,6 +19,7 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import im.vector.matrix.android.api.Matrix
+import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.api.failure.isTokenError
 import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
 import im.vector.matrix.android.internal.session.sync.SyncTask

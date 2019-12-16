@@ -44,9 +44,7 @@ class MessageActionsEpoxyController @Inject constructor(private val stringProvid
             bottomSheetMessagePreviewItem {
                 id("preview")
                 avatarRenderer(avatarRenderer)
-                avatarUrl(state.informationData.avatarUrl ?: "")
-                senderId(state.informationData.senderId)
-                senderName(state.senderName())
+                matrixItem(state.informationData.matrixItem)
                 movementMethod(createLinkMovementMethod(listener))
                 body(body.linkify(listener))
                 time(state.time())

@@ -807,7 +807,7 @@ internal class KeysBackup @Inject constructor(
 
                         override fun onFailure(failure: Throwable) {
                             if (failure is Failure.ServerError
-                                    && failure.error.code == MatrixError.NOT_FOUND) {
+                                    && failure.error.code == MatrixError.M_NOT_FOUND) {
                                 // Workaround because the homeserver currently returns M_NOT_FOUND when there is no key backup
                                 callback.onSuccess(null)
                             } else {
@@ -830,7 +830,7 @@ internal class KeysBackup @Inject constructor(
 
                         override fun onFailure(failure: Throwable) {
                             if (failure is Failure.ServerError
-                                    && failure.error.code == MatrixError.NOT_FOUND) {
+                                    && failure.error.code == MatrixError.M_NOT_FOUND) {
                                 // Workaround because the homeserver currently returns M_NOT_FOUND when there is no key backup
                                 callback.onSuccess(null)
                             } else {
@@ -1209,8 +1209,8 @@ internal class KeysBackup @Inject constructor(
                                 Timber.e(failure, "backupKeys: backupKeys failed.")
 
                                 when (failure.error.code) {
-                                    MatrixError.NOT_FOUND,
-                                    MatrixError.WRONG_ROOM_KEYS_VERSION -> {
+                                    MatrixError.M_NOT_FOUND,
+                                    MatrixError.M_WRONG_ROOM_KEYS_VERSION -> {
                                         // Backup has been deleted on the server, or we are not using the last backup version
                                         keysBackupStateManager.state = KeysBackupState.WrongBackUpVersion
                                         backupAllGroupSessionsCallback?.onFailure(failure)

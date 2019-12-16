@@ -29,9 +29,9 @@ import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.riotx.R
-import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.extensions.showPassword
+import im.vector.riotx.core.extensions.toReducedUrl
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.subscribeBy
@@ -45,9 +45,7 @@ import javax.inject.Inject
  * In signup mode:
  * - the user is asked for login and password
  */
-class LoginFragment @Inject constructor(
-        private val errorFormatter: ErrorFormatter
-) : AbstractLoginFragment() {
+class LoginFragment @Inject constructor() : AbstractLoginFragment() {
 
     private var passwordShown = false
 
@@ -103,7 +101,7 @@ class LoginFragment @Inject constructor(
             ServerType.MatrixOrg -> {
                 loginServerIcon.isVisible = true
                 loginServerIcon.setImageResource(R.drawable.ic_logo_matrix_org)
-                loginTitle.text = getString(resId, state.homeServerUrlSimple)
+                loginTitle.text = getString(resId, state.homeServerUrl.toReducedUrl())
                 loginNotice.text = getString(R.string.login_server_matrix_org_text)
             }
             ServerType.Modular   -> {
@@ -114,7 +112,7 @@ class LoginFragment @Inject constructor(
             }
             ServerType.Other     -> {
                 loginServerIcon.isVisible = false
-                loginTitle.text = getString(resId, state.homeServerUrlSimple)
+                loginTitle.text = getString(resId, state.homeServerUrl.toReducedUrl())
                 loginNotice.text = getString(R.string.login_server_other_text)
             }
         }
@@ -134,7 +132,7 @@ class LoginFragment @Inject constructor(
         Observable
                 .combineLatest(
                         loginField.textChanges().map { it.trim().isNotEmpty() },
-                        passwordField.textChanges().map { it.trim().isNotEmpty() },
+                        passwordField.textChanges().map { it.isNotEmpty() },
                         BiFunction<Boolean, Boolean, Boolean> { isLoginNotEmpty, isPasswordNotEmpty ->
                             isLoginNotEmpty && isPasswordNotEmpty
                         }
@@ -198,7 +196,7 @@ class LoginFragment @Inject constructor(
             is Fail    -> {
                 val error = state.asyncLoginAction.error
                 if (error is Failure.ServerError
-                        && error.error.code == MatrixError.FORBIDDEN
+                        && error.error.code == MatrixError.M_FORBIDDEN
                         && error.error.message.isEmpty()) {
                     // Login with email, but email unknown
                     loginFieldTil.error = getString(R.string.login_login_with_email_error)

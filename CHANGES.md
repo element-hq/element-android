@@ -1,4 +1,28 @@
-Changes in RiotX 0.10.0 (2019-XX-XX)
+Changes in RiotX 0.11.0 (2019-XX-XX)
+===================================================
+
+Features ✨:
+ - Implement soft logout (#281)
+
+Improvements 🙌:
+ - Handle navigation to room via room alias (#201)
+ - Open matrix.to link in RiotX (#57)
+
+Other changes:
+ - Use same default room colors than Riot-Web
+
+Bugfix 🐛:
+ - Scroll breadcrumbs to top when opened
+ - Render default room name when it starts with an emoji (#477)
+ - Do not display " (IRC)") in display names https://github.com/vector-im/riot-android/issues/444
+
+Translations 🗣:
+ -
+
+Build 🧱:
+ - Include diff-match-patch sources as dependency
+
+Changes in RiotX 0.10.0 (2019-12-10)
 ===================================================
 
 Features ✨:
@@ -14,12 +38,6 @@ Bugfix 🐛:
  - When automardown is ON, pills are sent as MD in body (#739)
  - "ban" event are not rendered correctly (#716)
  - Fix crash when rotating screen in Room timeline
-
-Translations 🗣:
- -
-
-Build 🧱:
- -
 
 Changes in RiotX 0.9.1 (2019-12-05)
 ===================================================
