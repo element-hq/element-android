@@ -41,6 +41,7 @@ import im.vector.riotx.features.login.LoginActivity
 import im.vector.riotx.features.media.ImageMediaViewerActivity
 import im.vector.riotx.features.media.VideoMediaViewerActivity
 import im.vector.riotx.features.navigation.Navigator
+import im.vector.riotx.features.permalink.PermalinkHandlerActivity
 import im.vector.riotx.features.rageshake.BugReportActivity
 import im.vector.riotx.features.rageshake.BugReporter
 import im.vector.riotx.features.rageshake.RageShake
@@ -131,6 +132,8 @@ interface ScreenComponent {
     fun inject(roomListActionsBottomSheet: RoomListQuickActionsBottomSheet)
 
     fun inject(activity: SoftLogoutActivity)
+
+    fun inject(permalinkHandlerActivity: PermalinkHandlerActivity)
 
     @Component.Factory
     interface Factory {

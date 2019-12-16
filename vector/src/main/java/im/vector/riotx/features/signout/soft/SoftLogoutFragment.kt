@@ -27,8 +27,6 @@ import im.vector.riotx.core.dialogs.withColoredButton
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.extensions.hideKeyboard
-import im.vector.riotx.features.MainActivity
-import im.vector.riotx.features.MainActivityArgs
 import im.vector.riotx.features.login.AbstractLoginFragment
 import im.vector.riotx.features.login.LoginAction
 import im.vector.riotx.features.login.LoginMode

@@ -60,16 +60,21 @@ object PermalinkParser {
             return PermalinkData.FallbackLink(uri)
         }
         return when {
-            MatrixPatterns.isUserId(identifier)  -> PermalinkData.UserLink(userId = identifier)
-            MatrixPatterns.isGroupId(identifier) -> PermalinkData.GroupLink(groupId = identifier)
-            MatrixPatterns.isRoomId(identifier)  -> {
-                if (!extraParameter.isNullOrEmpty() && MatrixPatterns.isEventId(extraParameter)) {
-                    PermalinkData.EventLink(roomIdOrAlias = identifier, eventId = extraParameter)
-                } else {
-                    PermalinkData.RoomLink(roomIdOrAlias = identifier)
+            MatrixPatterns.isUserId(identifier)    -> PermalinkData.UserLink(userId = identifier)
+            MatrixPatterns.isGroupId(identifier)   -> PermalinkData.GroupLink(groupId = identifier)
+            MatrixPatterns.isRoomId(identifier)    -> {
+                val eventId = extraParameter.takeIf {
+                    !it.isNullOrEmpty() && MatrixPatterns.isEventId(it)
                 }
+                PermalinkData.RoomLink(roomIdOrAlias = identifier, isRoomAlias = false, eventId = eventId)
             }
-            else                                 -> PermalinkData.FallbackLink(uri)
+            MatrixPatterns.isRoomAlias(identifier) -> {
+                val eventId = extraParameter.takeIf {
+                    !it.isNullOrEmpty() && MatrixPatterns.isEventId(it)
+                }
+                PermalinkData.RoomLink(roomIdOrAlias = identifier, isRoomAlias = true, eventId = eventId)
+            }
+            else                                   -> PermalinkData.FallbackLink(uri)
         }
     }
 }
