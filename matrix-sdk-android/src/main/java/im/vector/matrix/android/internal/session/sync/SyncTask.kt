@@ -17,8 +17,6 @@
 package im.vector.matrix.android.internal.session.sync
 
 import im.vector.matrix.android.R
-import im.vector.matrix.android.api.failure.Failure
-import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.internal.auth.SessionParamsStore
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.network.executeRequest
@@ -67,17 +65,8 @@ internal class DefaultSyncTask @Inject constructor(private val syncAPI: SyncAPI,
             initialSyncProgressService.endAll()
             initialSyncProgressService.startTask(R.string.initial_sync_start_importing_account, 100)
         }
-        val syncResponse = try {
-            executeRequest<SyncResponse> {
-                apiCall = syncAPI.sync(requestParams)
-            }
-        } catch (throwable: Throwable) {
-            // Intercept 401
-            if (throwable is Failure.ServerError
-                    && throwable.error.code == MatrixError.UNKNOWN_TOKEN) {
-                sessionParamsStore.delete(userId)
-            }
-            throw throwable
+        val syncResponse = executeRequest<SyncResponse> {
+            apiCall = syncAPI.sync(requestParams)
         }
         syncResponseHandler.handleResponse(syncResponse, token)
         syncTokenStore.saveToken(syncResponse.nextBatch)

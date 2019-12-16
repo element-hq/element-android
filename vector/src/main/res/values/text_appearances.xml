@@ -44,6 +44,10 @@
         <item name="android:textColor">?riotx_text_primary</item>
     </style>
 
+    <style name="TextAppearance.Vector.Login.Title.Small">
+        <item name="android:textSize">15sp</item>
+    </style>
+
     <style name="TextAppearance.Vector.Login.Text" parent="TextAppearance.AppCompat">
         <item name="android:textSize">16sp</item>
         <item name="android:fontFamily">sans-serif</item>

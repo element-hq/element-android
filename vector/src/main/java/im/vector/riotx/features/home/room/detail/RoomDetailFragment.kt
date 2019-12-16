@@ -69,7 +69,6 @@ import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotx.R
 import im.vector.riotx.core.dialogs.withColoredButton
 import im.vector.riotx.core.epoxy.LayoutManagerStateRestorer
-import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.*
 import im.vector.riotx.core.files.addEntryToDownloadManager
 import im.vector.riotx.core.glide.GlideApp
@@ -141,7 +140,6 @@ class RoomDetailFragment @Inject constructor(
         private val notificationDrawerManager: NotificationDrawerManager,
         val roomDetailViewModelFactory: RoomDetailViewModel.Factory,
         val textComposerViewModelFactory: TextComposerViewModel.Factory,
-        private val errorFormatter: ErrorFormatter,
         private val eventHtmlRenderer: EventHtmlRenderer,
         private val vectorPreferences: VectorPreferences
 ) :

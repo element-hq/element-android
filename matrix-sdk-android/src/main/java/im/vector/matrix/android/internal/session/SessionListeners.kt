@@ -16,7 +16,7 @@
 
 package im.vector.matrix.android.internal.session
 
-import im.vector.matrix.android.api.failure.ConsentNotGivenError
+import im.vector.matrix.android.api.failure.GlobalError
 import im.vector.matrix.android.api.session.Session
 import javax.inject.Inject
 
@@ -36,10 +36,10 @@ internal class SessionListeners @Inject constructor() {
         }
     }
 
-    fun dispatchConsentNotGiven(consentNotGivenError: ConsentNotGivenError) {
+    fun dispatchGlobalError(globalError: GlobalError) {
         synchronized(listeners) {
             listeners.forEach {
-                it.onConsentNotGivenError(consentNotGivenError)
+                it.onGlobalError(globalError)
             }
         }
     }

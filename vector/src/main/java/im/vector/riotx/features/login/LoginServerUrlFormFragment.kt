@@ -24,7 +24,6 @@ import androidx.core.view.isVisible
 import butterknife.OnClick
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.riotx.R
-import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.utils.openUrlInExternalBrowser
 import kotlinx.android.synthetic.main.fragment_login_server_url_form.*
@@ -33,9 +32,7 @@ import javax.inject.Inject
 /**
  * In this screen, the user is prompted to enter a homeserver url
  */
-class LoginServerUrlFormFragment @Inject constructor(
-        private val errorFormatter: ErrorFormatter
-) : AbstractLoginFragment() {
+class LoginServerUrlFormFragment @Inject constructor() : AbstractLoginFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_login_server_url_form
 

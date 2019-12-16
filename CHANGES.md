@@ -2,7 +2,7 @@ Changes in RiotX 0.11.0 (2019-XX-XX)
 ===================================================
 
 Features ✨:
- -
+ - Implement soft logout (#281)
 
 Improvements 🙌:
  -

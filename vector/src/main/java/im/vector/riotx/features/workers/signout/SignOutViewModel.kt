@@ -71,14 +71,4 @@ class SignOutViewModel @Inject constructor(private val session: Session) : ViewM
             session.getKeysBackupService().checkAndStartKeysBackup()
         }
     }
-
-    companion object {
-        /**
-         * The backup check on logout flow has to be displayed if there are keys in the store, and the keys backup state is not Ready
-         */
-        fun doYouNeedToBeDisplayed(session: Session): Boolean {
-            return session.inboundGroupSessionsCount(false) > 0
-                    && session.getKeysBackupService().state != KeysBackupState.ReadyToBackUp
-        }
-    }
 }

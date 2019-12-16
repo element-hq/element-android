@@ -34,5 +34,5 @@ data class HomeDetailViewState(
         val notificationHighlightPeople: Boolean = false,
         val notificationCountRooms: Int = 0,
         val notificationHighlightRooms: Boolean = false,
-        val syncState: SyncState = SyncState.IDLE
+        val syncState: SyncState = SyncState.Idle
 ) : MvRxState

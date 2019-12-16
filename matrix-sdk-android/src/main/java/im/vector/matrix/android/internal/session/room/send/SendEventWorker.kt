@@ -79,7 +79,7 @@ internal class SendEventWorker constructor(context: Context, params: WorkerParam
 
     private fun Throwable.shouldBeRetried(): Boolean {
         return this is Failure.NetworkConnection
-                || (this is Failure.ServerError && this.error.code == MatrixError.LIMIT_EXCEEDED)
+                || (this is Failure.ServerError && error.code == MatrixError.M_LIMIT_EXCEEDED)
     }
 
     private suspend fun sendEvent(eventId: String, eventType: String, content: Content?, roomId: String) {

@@ -21,6 +21,7 @@ import androidx.fragment.app.FragmentFactory
 import androidx.lifecycle.ViewModelProvider
 import dagger.BindsInstance
 import dagger.Component
+import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.preference.UserAvatarPreference
 import im.vector.riotx.features.MainActivity
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupManageActivity
@@ -49,6 +50,7 @@ import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomActivity
 import im.vector.riotx.features.settings.VectorSettingsActivity
 import im.vector.riotx.features.share.IncomingShareActivity
+import im.vector.riotx.features.signout.soft.SoftLogoutActivity
 import im.vector.riotx.features.ui.UiStateRepository
 
 @Component(
@@ -77,6 +79,8 @@ interface ScreenComponent {
     fun rageShake(): RageShake
 
     fun navigator(): Navigator
+
+    fun errorFormatter(): ErrorFormatter
 
     fun uiStateRepository(): UiStateRepository
 
@@ -125,6 +129,8 @@ interface ScreenComponent {
     fun inject(incomingShareActivity: IncomingShareActivity)
 
     fun inject(roomListActionsBottomSheet: RoomListQuickActionsBottomSheet)
+
+    fun inject(activity: SoftLogoutActivity)
 
     @Component.Factory
     interface Factory {

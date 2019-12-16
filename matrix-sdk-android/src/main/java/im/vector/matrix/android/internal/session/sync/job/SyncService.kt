@@ -147,7 +147,7 @@ open class SyncService : Service() {
                                 }
 
                                 if (failure is Failure.ServerError
-                                        && (failure.error.code == MatrixError.UNKNOWN_TOKEN || failure.error.code == MatrixError.MISSING_TOKEN)) {
+                                        && (failure.error.code == MatrixError.M_UNKNOWN_TOKEN || failure.error.code == MatrixError.M_MISSING_TOKEN)) {
                                     // No token or invalid token, stop the thread
                                     stopSelf()
                                 }
