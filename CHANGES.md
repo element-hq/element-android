@@ -19,7 +19,7 @@ Translations 🗣:
  -
 
 Build 🧱:
- -
+ - Include diff-match-patch sources as dependency
 
 Changes in RiotX 0.10.0 (2019-12-10)
 ===================================================
