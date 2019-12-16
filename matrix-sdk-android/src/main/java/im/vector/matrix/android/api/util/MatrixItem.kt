@@ -95,9 +95,8 @@ sealed class MatrixItem(
     }
 
     fun firstLetterOfDisplayName(): String {
-        return displayName
-                ?.takeIf { it.isNotBlank() }
-                ?.let { dn ->
+        return getBestName()
+                .let { dn ->
                     var startIndex = 0
                     val initial = dn[startIndex]
 
@@ -124,8 +123,7 @@ sealed class MatrixItem(
 
                     dn.substring(startIndex, startIndex + length)
                 }
-                ?.toUpperCase(Locale.ROOT)
-                ?: " "
+                .toUpperCase(Locale.ROOT)
     }
 
 
