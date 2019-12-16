@@ -34,6 +34,7 @@ import com.bumptech.glide.util.Util.assertMainThread
 import im.vector.riotx.core.di.DaggerScreenComponent
 import im.vector.riotx.core.di.HasScreenInjector
 import im.vector.riotx.core.di.ScreenComponent
+import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.features.navigation.Navigator
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -49,11 +50,13 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
     }
 
     /* ==========================================================================================
-     * Navigator
+     * Navigator and other common objects
      * ========================================================================================== */
 
-    protected lateinit var navigator: Navigator
     private lateinit var screenComponent: ScreenComponent
+
+    protected lateinit var navigator: Navigator
+    protected lateinit var errorFormatter: ErrorFormatter
 
     /* ==========================================================================================
      * View model
@@ -74,6 +77,7 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
     override fun onAttach(context: Context) {
         screenComponent = DaggerScreenComponent.factory().create(vectorBaseActivity.getVectorComponent(), vectorBaseActivity)
         navigator = screenComponent.navigator()
+        errorFormatter = screenComponent.errorFormatter()
         viewModelFactory = screenComponent.viewModelFactory()
         childFragmentManager.fragmentFactory = screenComponent.fragmentFactory()
         injectWith(injector())

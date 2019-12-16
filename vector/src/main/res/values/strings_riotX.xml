@@ -142,6 +142,27 @@
 
     <string name="seen_by">Seen by</string>
 
+    <string name="signed_out_title">You’re signed out</string>
+    <string name="signed_out_notice">It can be due to various reasons:\n\n• You’ve changed your password on another device.\n\n• You have deleted this device from another device.\n\n• The administrator of your server has invalidated your access for security reason.</string>
+    <string name="signed_out_submit">Sign in again</string>
+
+    <string name="soft_logout_title">You’re signed out</string>
+    <string name="soft_logout_signin_title">Sign in</string>
+    <!-- Replacement: homeserver url, user display name and userId -->
+    <string name="soft_logout_signin_notice">Your homeserver (%1$s) admin has signed you out of your account %2$s (%3$s).</string>
+    <string name="soft_logout_signin_e2e_warning_notice">Sign in to recover encryption keys stored exclusively on this device. You need them to read all of your secure messages on any device.</string>
+    <string name="soft_logout_signin_submit">Sign in</string>
+    <string name="soft_logout_signin_password_hint">Password</string>
+    <string name="soft_logout_clear_data_title">Clear personal data</string>
+    <string name="soft_logout_clear_data_notice">Warning: Your personal data (including encryption keys) is still stored on this device.\n\nClear it if you’re finished using this device, or want to sign in to another account.</string>
+    <string name="soft_logout_clear_data_submit">Clear all data</string>
+
+    <string name="soft_logout_clear_data_dialog_title">Clear data</string>
+    <string name="soft_logout_clear_data_dialog_content">Clear all data currently stored on this device?\nSign in again to access your account data and messages.</string>
+    <string name="soft_logout_clear_data_dialog_e2e_warning_content">You’ll lose access to secure messages unless you sign in to recover your encryption keys.</string>
+    <string name="soft_logout_clear_data_dialog_submit">Clear data</string>
+    <string name="soft_logout_sso_not_same_user_error">The current session is for user %1$s and you provide credentials for user %2$s. This is not supported by RiotX.\nPlease first clear data, then sign in again on another account.</string>
+
 
     <string name="verification_request">Verification Request</string>
     <string name="verification_sent">Verification Sent</string>

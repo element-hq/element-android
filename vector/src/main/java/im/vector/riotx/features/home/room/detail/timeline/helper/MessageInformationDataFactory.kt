@@ -64,7 +64,7 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
         val avatarUrl = event.senderAvatar
         val memberName = event.getDisambiguatedDisplayName()
         val formattedMemberName = span(memberName) {
-            textColor = colorProvider.getColor(getColorFromUserId(event.root.senderId ?: ""))
+            textColor = colorProvider.getColor(getColorFromUserId(event.root.senderId))
         }
 
         return MessageInformationData(

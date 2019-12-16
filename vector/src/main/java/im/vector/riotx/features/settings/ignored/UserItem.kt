@@ -20,7 +20,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
-import im.vector.matrix.android.api.session.user.model.User
+import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
@@ -37,7 +37,7 @@ abstract class UserItem : VectorEpoxyModel<UserItem.Holder>() {
     lateinit var avatarRenderer: AvatarRenderer
 
     @EpoxyAttribute
-    lateinit var user: User
+    lateinit var matrixItem: MatrixItem
 
     @EpoxyAttribute
     var itemClickAction: (() -> Unit)? = null
@@ -45,9 +45,9 @@ abstract class UserItem : VectorEpoxyModel<UserItem.Holder>() {
     override fun bind(holder: Holder) {
         holder.root.setOnClickListener { itemClickAction?.invoke() }
 
-        avatarRenderer.render(user, holder.avatarImage)
-        holder.userIdText.setTextOrHide(user.userId)
-        holder.displayNameText.setTextOrHide(user.displayName)
+        avatarRenderer.render(matrixItem, holder.avatarImage)
+        holder.userIdText.setTextOrHide(matrixItem.id)
+        holder.displayNameText.setTextOrHide(matrixItem.displayName)
     }
 
     class Holder : VectorEpoxyHolder() {

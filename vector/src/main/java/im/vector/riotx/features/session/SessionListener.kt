@@ -18,27 +18,21 @@ package im.vector.riotx.features.session
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import im.vector.matrix.android.api.failure.ConsentNotGivenError
+import im.vector.matrix.android.api.failure.GlobalError
 import im.vector.matrix.android.api.session.Session
 import im.vector.riotx.core.extensions.postLiveEvent
 import im.vector.riotx.core.utils.LiveEvent
-import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class SessionListener @Inject constructor() : Session.Listener {
 
-    private val _consentNotGivenLiveData = MutableLiveData<LiveEvent<ConsentNotGivenError>>()
-    val consentNotGivenLiveData: LiveData<LiveEvent<ConsentNotGivenError>>
-        get() = _consentNotGivenLiveData
+    private val _globalErrorLiveData = MutableLiveData<LiveEvent<GlobalError>>()
+    val globalErrorLiveData: LiveData<LiveEvent<GlobalError>>
+        get() = _globalErrorLiveData
 
-    override fun onInvalidToken() {
-        // TODO Handle this error
-        Timber.e("Token is not valid anymore: handle this properly")
-    }
-
-    override fun onConsentNotGivenError(consentNotGivenError: ConsentNotGivenError) {
-        _consentNotGivenLiveData.postLiveEvent(consentNotGivenError)
+    override fun onGlobalError(globalError: GlobalError) {
+        _globalErrorLiveData.postLiveEvent(globalError)
     }
 }

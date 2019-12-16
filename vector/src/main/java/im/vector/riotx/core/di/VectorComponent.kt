@@ -27,6 +27,7 @@ import im.vector.riotx.ActiveSessionDataSource
 import im.vector.riotx.EmojiCompatFontProvider
 import im.vector.riotx.EmojiCompatWrapper
 import im.vector.riotx.VectorApplication
+import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.pushers.PushersManager
 import im.vector.riotx.core.utils.AssetReader
 import im.vector.riotx.core.utils.DimensionConverter
@@ -87,6 +88,8 @@ interface VectorComponent {
     fun eventHtmlRenderer(): EventHtmlRenderer
 
     fun navigator(): Navigator
+
+    fun errorFormatter(): ErrorFormatter
 
     fun homeRoomListObservableStore(): HomeRoomListDataSource
 

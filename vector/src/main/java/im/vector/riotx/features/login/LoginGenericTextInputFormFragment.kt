@@ -31,7 +31,6 @@ import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.matrix.android.api.auth.registration.RegisterThreePid
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.riotx.R
-import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.error.is401
 import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.extensions.isEmail
@@ -56,7 +55,7 @@ data class LoginGenericTextInputFormFragmentArgument(
 /**
  * In this screen, the user is asked for a text input
  */
-class LoginGenericTextInputFormFragment @Inject constructor(private val errorFormatter: ErrorFormatter) : AbstractLoginFragment() {
+class LoginGenericTextInputFormFragment @Inject constructor() : AbstractLoginFragment() {
 
     private val params: LoginGenericTextInputFormFragmentArgument by args()
 

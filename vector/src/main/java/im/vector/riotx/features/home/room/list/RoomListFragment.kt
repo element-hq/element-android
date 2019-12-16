@@ -35,7 +35,6 @@ import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.notification.RoomNotificationState
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.LayoutManagerStateRestorer
-import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.platform.OnBackPressed
 import im.vector.riotx.core.platform.StateView
@@ -61,7 +60,6 @@ data class RoomListParams(
 class RoomListFragment @Inject constructor(
         private val roomController: RoomSummaryController,
         val roomListViewModelFactory: RoomListViewModel.Factory,
-        private val errorFormatter: ErrorFormatter,
         private val notificationDrawerManager: NotificationDrawerManager
 
 ) : VectorBaseFragment(), RoomSummaryController.Listener, OnBackPressed, FabMenuView.Listener {

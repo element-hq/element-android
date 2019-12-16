@@ -19,6 +19,8 @@ package im.vector.riotx.features.home.room.list
 import android.view.View
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.matrix.android.api.util.toMatrixItem
+import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.riotx.R
 import im.vector.riotx.core.date.VectorDateFormatter
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
@@ -66,7 +68,7 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
         return RoomInvitationItem_()
                 .id(roomSummary.roomId)
                 .avatarRenderer(avatarRenderer)
-                .roomId(roomSummary.roomId)
+                .matrixItem(roomSummary.toMatrixItem())
                 .secondLine(secondLine)
                 .invitationAcceptInProgress(joiningRoomsIds.contains(roomSummary.roomId))
                 .invitationAcceptInError(joiningErrorRoomsIds.contains(roomSummary.roomId))
@@ -74,8 +76,6 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                 .invitationRejectInError(rejectingErrorRoomsIds.contains(roomSummary.roomId))
                 .acceptListener { listener?.onAcceptRoomInvitation(roomSummary) }
                 .rejectListener { listener?.onRejectRoomInvitation(roomSummary) }
-                .roomName(roomSummary.displayName)
-                .avatarUrl(roomSummary.avatarUrl)
                 .listener { listener?.onRoomClicked(roomSummary) }
     }
 
@@ -100,11 +100,9 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
         return RoomSummaryItem_()
                 .id(roomSummary.roomId)
                 .avatarRenderer(avatarRenderer)
-                .roomId(roomSummary.roomId)
+                .matrixItem(roomSummary.toMatrixItem())
                 .lastEventTime(latestEventTime)
                 .lastFormattedEvent(latestFormattedEvent)
-                .roomName(roomSummary.displayName)
-                .avatarUrl(roomSummary.avatarUrl)
                 .showHighlighted(showHighlighted)
                 .unreadNotificationCount(unreadCount)
                 .hasUnreadMessage(roomSummary.hasUnreadMessages)

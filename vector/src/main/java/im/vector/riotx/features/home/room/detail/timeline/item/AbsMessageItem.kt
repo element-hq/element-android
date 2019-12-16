@@ -61,12 +61,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
             holder.timeView.visibility = View.VISIBLE
             holder.timeView.text = attributes.informationData.time
             holder.memberNameView.text = attributes.informationData.memberName
-            attributes.avatarRenderer.render(
-                    attributes.informationData.avatarUrl,
-                    attributes.informationData.senderId,
-                    attributes.informationData.memberName?.toString(),
-                    holder.avatarImageView
-            )
+            attributes.avatarRenderer.render(attributes.informationData.matrixItem, holder.avatarImageView)
             holder.avatarImageView.setOnLongClickListener(attributes.itemLongClickListener)
             holder.memberNameView.setOnLongClickListener(attributes.itemLongClickListener)
         } else {

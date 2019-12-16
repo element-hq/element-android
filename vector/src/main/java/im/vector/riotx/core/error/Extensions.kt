@@ -21,6 +21,6 @@ import im.vector.matrix.android.api.failure.MatrixError
 import javax.net.ssl.HttpsURLConnection
 
 fun Throwable.is401(): Boolean {
-    return (this is Failure.ServerError && this.httpCode == HttpsURLConnection.HTTP_UNAUTHORIZED /* 401 */
-            && this.error.code == MatrixError.UNAUTHORIZED)
+    return (this is Failure.ServerError && httpCode == HttpsURLConnection.HTTP_UNAUTHORIZED /* 401 */
+            && error.code == MatrixError.M_UNAUTHORIZED)
 }

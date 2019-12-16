@@ -18,6 +18,7 @@ package im.vector.riotx.features.home.room.detail.timeline.item
 
 import android.os.Parcelable
 import im.vector.matrix.android.api.session.room.send.SendState
+import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.internal.session.room.VerificationState
 import kotlinx.android.parcel.Parcelize
 
@@ -37,7 +38,11 @@ data class MessageInformationData(
         val readReceipts: List<ReadReceiptData> = emptyList(),
         val referencesInfoData: ReferencesInfoData? = null,
         val sentByMe : Boolean
-) : Parcelable
+) : Parcelable {
+
+    val matrixItem: MatrixItem
+        get() = MatrixItem.UserItem(senderId, memberName?.toString(), avatarUrl)
+}
 
 @Parcelize
 data class ReferencesInfoData(
@@ -59,3 +64,5 @@ data class ReadReceiptData(
         val displayName: String?,
         val timestamp: Long
 ) : Parcelable
+
+fun ReadReceiptData.toMatrixItem() = MatrixItem.UserItem(userId, displayName, avatarUrl)

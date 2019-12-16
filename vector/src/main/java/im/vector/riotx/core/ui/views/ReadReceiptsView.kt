@@ -26,6 +26,7 @@ import im.vector.riotx.R
 import im.vector.riotx.core.glide.GlideApp
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.item.ReadReceiptData
+import im.vector.riotx.features.home.room.detail.timeline.item.toMatrixItem
 import kotlinx.android.synthetic.main.view_read_receipts.view.*
 
 private const val MAX_RECEIPT_DISPLAYED = 5
@@ -59,7 +60,7 @@ class ReadReceiptsView @JvmOverloads constructor(
                     receiptAvatars[index].visibility = View.INVISIBLE
                 } else {
                     receiptAvatars[index].visibility = View.VISIBLE
-                    avatarRenderer.render(receiptData.avatarUrl, receiptData.userId, receiptData.displayName, receiptAvatars[index])
+                    avatarRenderer.render(receiptData.toMatrixItem(), receiptAvatars[index])
                 }
             }
 

@@ -21,6 +21,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
+import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
@@ -36,16 +37,12 @@ abstract class BottomSheetRoomPreviewItem : VectorEpoxyModel<BottomSheetRoomPrev
     @EpoxyAttribute
     lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute
-    lateinit var avatarUrl: String
-    @EpoxyAttribute
-    lateinit var roomId: String
-    @EpoxyAttribute
-    var roomName: String? = null
+    lateinit var matrixItem: MatrixItem
     @EpoxyAttribute var settingsClickListener: View.OnClickListener? = null
 
     override fun bind(holder: Holder) {
-        avatarRenderer.render(avatarUrl, roomId, roomName, holder.avatar)
-        holder.roomName.setTextOrHide(roomName)
+        avatarRenderer.render(matrixItem, holder.avatar)
+        holder.roomName.setTextOrHide(matrixItem.displayName)
         holder.roomSettings.setOnClickListener(settingsClickListener)
     }
 
