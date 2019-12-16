@@ -161,4 +161,5 @@
     <string name="soft_logout_clear_data_dialog_submit">Clear data</string>
     <string name="soft_logout_sso_not_same_user_error">The current session is for user %1$s and you provide credentials for user %2$s. This is not supported by RiotX.\nPlease first clear data, then sign in again on another account.</string>
 
+    <string name="permalink_malformed">Your matrix.to link was malformed</string>
 </resources>

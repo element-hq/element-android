@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class RoomAliasDescription(
+internal data class RoomAliasDescription(
         /**
          * The room ID for this alias.
          */
