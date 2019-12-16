@@ -55,7 +55,7 @@ abstract class MergedHeaderItem : BaseEventItem<MergedHeaderItem.Holder>() {
                 val data = distinctMergeData.getOrNull(index)
                 if (data != null && view is ImageView) {
                     view.visibility = View.VISIBLE
-                    attributes.avatarRenderer.render(MatrixItem.UserItem(data.userId, data.memberName, data.avatarUrl), view)
+                    attributes.avatarRenderer.render(data.toMatrixItem(), view)
                 } else {
                     view.visibility = View.GONE
                 }
@@ -87,6 +87,8 @@ abstract class MergedHeaderItem : BaseEventItem<MergedHeaderItem.Holder>() {
             val memberName: String,
             val avatarUrl: String?
     )
+
+    fun Data.toMatrixItem() = MatrixItem.UserItem(userId, memberName, avatarUrl)
 
     data class Attributes(
             val isCollapsed: Boolean,

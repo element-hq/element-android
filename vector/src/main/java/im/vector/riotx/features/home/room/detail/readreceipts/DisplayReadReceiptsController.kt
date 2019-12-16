@@ -18,10 +18,10 @@ package im.vector.riotx.features.home.room.detail.readreceipts
 
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.core.date.VectorDateFormatter
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.item.ReadReceiptData
+import im.vector.riotx.features.home.room.detail.timeline.item.toMatrixItem
 import javax.inject.Inject
 
 /**
@@ -37,7 +37,7 @@ class DisplayReadReceiptsController @Inject constructor(private val dateFormatte
             val timestamp = dateFormatter.formatRelativeDateTime(it.timestamp)
             DisplayReadReceiptItem_()
                     .id(it.userId)
-                    .matrixItem(MatrixItem.UserItem(it.userId, it.displayName, it.avatarUrl))
+                    .matrixItem(it.toMatrixItem())
                     .avatarRenderer(avatarRender)
                     .timestamp(timestamp)
                     .addIf(session.myUserId != it.userId, this)

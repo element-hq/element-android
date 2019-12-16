@@ -37,8 +37,7 @@ data class MessageInformationData(
         val readReceipts: List<ReadReceiptData> = emptyList()
 ) : Parcelable {
 
-    val matrixItem: MatrixItem
-        get() = MatrixItem.UserItem(senderId, memberName?.toString(), avatarUrl)
+    val matrixItem = MatrixItem.UserItem(senderId, memberName?.toString(), avatarUrl)
 }
 
 @Parcelize
@@ -56,3 +55,5 @@ data class ReadReceiptData(
         val displayName: String?,
         val timestamp: Long
 ) : Parcelable
+
+fun ReadReceiptData.toMatrixItem() = MatrixItem.UserItem(userId, displayName, avatarUrl)
