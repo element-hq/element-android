@@ -36,7 +36,7 @@ import im.vector.riotx.core.utils.LiveEvent
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 
-const val ALL_COMMUNITIES_GROUP_ID = "ALL_COMMUNITIES_GROUP_ID"
+const val ALL_COMMUNITIES_GROUP_ID = "+ALL_COMMUNITIES_GROUP_ID"
 
 class GroupListViewModel @AssistedInject constructor(@Assisted initialState: GroupListViewState,
                                                      private val selectedGroupStore: SelectedGroupDataSource,

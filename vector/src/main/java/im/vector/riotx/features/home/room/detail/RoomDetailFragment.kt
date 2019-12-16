@@ -67,6 +67,7 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.matrix.android.api.util.MatrixItem
+import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.dialogs.withColoredButton
 import im.vector.riotx.core.epoxy.LayoutManagerStateRestorer
@@ -600,7 +601,7 @@ class RoomDetailFragment @Inject constructor(
                         }
 
                         // Replace the word by its completion
-                        val matrixItem = MatrixItem.from(item)
+                        val matrixItem = item.toMatrixItem()
                         val displayName = matrixItem.getBestName()
 
                         // with a trailing space
@@ -711,7 +712,7 @@ class RoomDetailFragment @Inject constructor(
                 activity?.finish()
             } else {
                 roomToolbarTitleView.text = it.displayName
-                avatarRenderer.render(MatrixItem.from(it), roomToolbarAvatarImageView)
+                avatarRenderer.render(it.toMatrixItem(), roomToolbarAvatarImageView)
                 roomToolbarSubtitleView.setTextOrHide(it.topic)
             }
             jumpToBottomView.count = it.notificationCount

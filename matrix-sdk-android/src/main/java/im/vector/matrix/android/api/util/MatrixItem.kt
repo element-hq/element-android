@@ -16,6 +16,7 @@
 
 package im.vector.matrix.android.api.util
 
+import im.vector.matrix.android.BuildConfig
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
@@ -30,30 +31,56 @@ sealed class MatrixItem(
     data class UserItem(override val id: String,
                         override val displayName: String? = null,
                         override val avatarUrl: String? = null)
-        : MatrixItem(id, displayName?.removeSuffix(ircPattern), avatarUrl)
+        : MatrixItem(id, displayName?.removeSuffix(ircPattern), avatarUrl) {
+        init {
+            if (BuildConfig.DEBUG) checkId()
+        }
+    }
 
     data class EventItem(override val id: String,
                          override val displayName: String? = null,
                          override val avatarUrl: String? = null)
-        : MatrixItem(id, displayName, avatarUrl)
+        : MatrixItem(id, displayName, avatarUrl) {
+        init {
+            if (BuildConfig.DEBUG) checkId()
+        }
+    }
 
     data class RoomItem(override val id: String,
                         override val displayName: String? = null,
                         override val avatarUrl: String? = null)
-        : MatrixItem(id, displayName, avatarUrl)
+        : MatrixItem(id, displayName, avatarUrl) {
+        init {
+            if (BuildConfig.DEBUG) checkId()
+        }
+    }
 
     data class RoomAliasItem(override val id: String,
                              override val displayName: String? = null,
                              override val avatarUrl: String? = null)
-        : MatrixItem(id, displayName, avatarUrl)
+        : MatrixItem(id, displayName, avatarUrl) {
+        init {
+            if (BuildConfig.DEBUG) checkId()
+        }
+    }
 
     data class GroupItem(override val id: String,
                          override val displayName: String? = null,
                          override val avatarUrl: String? = null)
-        : MatrixItem(id, displayName, avatarUrl)
+        : MatrixItem(id, displayName, avatarUrl) {
+        init {
+            if (BuildConfig.DEBUG) checkId()
+        }
+    }
 
     fun getBestName(): String {
         return displayName?.takeIf { it.isNotBlank() } ?: id
+    }
+
+    protected fun checkId() {
+        if (!id.startsWith(getIdPrefix())) {
+            error("Wrong usage of MatrixItem: check the id $id should start with ${getIdPrefix()}")
+        }
     }
 
     /**
@@ -104,10 +131,14 @@ sealed class MatrixItem(
 
     companion object {
         private const val ircPattern = " (IRC)"
-
-        fun from(user: User) = UserItem(user.userId, user.displayName, user.avatarUrl)
-        fun from(groupSummary: GroupSummary) = GroupItem(groupSummary.groupId, groupSummary.displayName, groupSummary.avatarUrl)
-        fun from(roomSummary: RoomSummary) = RoomItem(roomSummary.roomId, roomSummary.displayName, roomSummary.avatarUrl)
-        fun from(publicRoom: PublicRoom) = RoomItem(publicRoom.roomId, publicRoom.name, publicRoom.avatarUrl)
     }
 }
+
+/* ==========================================================================================
+ * Extensions to create MatrixItem
+ * ========================================================================================== */
+
+fun User.toMatrixItem() = MatrixItem.UserItem(userId, displayName, avatarUrl)
+fun GroupSummary.toMatrixItem() = MatrixItem.GroupItem(groupId, displayName, avatarUrl)
+fun RoomSummary.toMatrixItem() = MatrixItem.RoomItem(roomId, displayName, avatarUrl)
+fun PublicRoom.toMatrixItem() = MatrixItem.RoomItem(roomId, name, avatarUrl)

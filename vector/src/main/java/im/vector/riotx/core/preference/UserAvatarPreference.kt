@@ -24,6 +24,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceViewHolder
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.util.MatrixItem
+import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.vectorComponent
 import im.vector.riotx.features.home.AvatarRenderer
@@ -60,7 +61,7 @@ open class UserAvatarPreference : Preference {
         val session = mSession ?: return
         val view = mAvatarView ?: return
         session.getUser(session.myUserId)?.let {
-            avatarRenderer.render(MatrixItem.from(it), view)
+            avatarRenderer.render(it.toMatrixItem(), view)
         } ?: run {
             avatarRenderer.render(MatrixItem.UserItem(session.myUserId), view)
         }

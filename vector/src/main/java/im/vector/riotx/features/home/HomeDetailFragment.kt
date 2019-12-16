@@ -27,7 +27,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
 import im.vector.matrix.android.api.session.group.model.GroupSummary
-import im.vector.matrix.android.api.util.MatrixItem
+import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.commitTransactionNow
 import im.vector.riotx.core.platform.ToolbarConfigurable
@@ -75,7 +75,7 @@ class HomeDetailFragment @Inject constructor(
 
     private fun onGroupChange(groupSummary: GroupSummary?) {
         groupSummary?.let {
-            avatarRenderer.render(MatrixItem.from(it), groupToolbarAvatarImageView)
+            avatarRenderer.render(it.toMatrixItem(), groupToolbarAvatarImageView)
         }
     }
 

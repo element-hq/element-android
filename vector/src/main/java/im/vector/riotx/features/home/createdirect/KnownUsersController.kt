@@ -23,7 +23,7 @@ import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Uninitialized
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.user.model.User
-import im.vector.matrix.android.api.util.MatrixItem
+import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.EmptyItem_
 import im.vector.riotx.core.epoxy.loadingItem
@@ -68,7 +68,7 @@ class KnownUsersController @Inject constructor(private val session: Session,
             CreateDirectRoomUserItem_()
                     .id(item.userId)
                     .selected(isSelected)
-                    .matrixItem(MatrixItem.from(item))
+                    .matrixItem(item.toMatrixItem())
                     .avatarRenderer(avatarRenderer)
                     .clickListener { _ ->
                         callback?.onItemClick(item)

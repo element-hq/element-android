@@ -21,7 +21,7 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
-import im.vector.matrix.android.api.util.MatrixItem
+import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.date.VectorDateFormatter
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
@@ -70,7 +70,7 @@ class RoomSummaryItemFactory @Inject constructor(private val noticeEventFormatte
         return RoomInvitationItem_()
                 .id(roomSummary.roomId)
                 .avatarRenderer(avatarRenderer)
-                .matrixItem(MatrixItem.from(roomSummary))
+                .matrixItem(roomSummary.toMatrixItem())
                 .secondLine(secondLine)
                 .invitationAcceptInProgress(joiningRoomsIds.contains(roomSummary.roomId))
                 .invitationAcceptInError(joiningErrorRoomsIds.contains(roomSummary.roomId))
@@ -124,7 +124,7 @@ class RoomSummaryItemFactory @Inject constructor(private val noticeEventFormatte
         return RoomSummaryItem_()
                 .id(roomSummary.roomId)
                 .avatarRenderer(avatarRenderer)
-                .matrixItem(MatrixItem.from(roomSummary))
+                .matrixItem(roomSummary.toMatrixItem())
                 .lastEventTime(latestEventTime)
                 .lastFormattedEvent(latestFormattedEvent)
                 .showHighlighted(showHighlighted)

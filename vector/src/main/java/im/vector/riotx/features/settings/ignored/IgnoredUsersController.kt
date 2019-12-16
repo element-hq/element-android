@@ -18,7 +18,7 @@ package im.vector.riotx.features.settings.ignored
 
 import com.airbnb.epoxy.EpoxyController
 import im.vector.matrix.android.api.session.user.model.User
-import im.vector.matrix.android.api.util.MatrixItem
+import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.noResultItem
 import im.vector.riotx.core.resources.StringProvider
@@ -56,7 +56,7 @@ class IgnoredUsersController @Inject constructor(private val stringProvider: Str
                 userItem {
                     id(user.userId)
                     avatarRenderer(avatarRenderer)
-                    matrixItem(MatrixItem.from(user))
+                    matrixItem(user.toMatrixItem())
                     itemClickAction { callback?.onUserIdClicked(user.userId) }
                 }
             }

@@ -18,7 +18,7 @@ package im.vector.riotx.features.home.group
 
 import com.airbnb.epoxy.EpoxyController
 import im.vector.matrix.android.api.session.group.model.GroupSummary
-import im.vector.matrix.android.api.util.MatrixItem
+import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.features.home.AvatarRenderer
 import javax.inject.Inject
 
@@ -50,7 +50,7 @@ class GroupSummaryController @Inject constructor(private val avatarRenderer: Ava
             groupSummaryItem {
                 avatarRenderer(avatarRenderer)
                 id(groupSummary.groupId)
-                matrixItem(MatrixItem.from(groupSummary))
+                matrixItem(groupSummary.toMatrixItem())
                 selected(isSelected)
                 listener { callback?.onGroupSelected(groupSummary) }
             }

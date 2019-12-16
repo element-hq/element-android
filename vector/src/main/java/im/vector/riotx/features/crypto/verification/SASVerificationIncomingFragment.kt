@@ -23,6 +23,7 @@ import butterknife.BindView
 import butterknife.OnClick
 import im.vector.matrix.android.api.session.crypto.sas.IncomingSasVerificationTransaction
 import im.vector.matrix.android.api.util.MatrixItem
+import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.home.AvatarRenderer
@@ -58,7 +59,7 @@ class SASVerificationIncomingFragment @Inject constructor(
         otherDeviceTextView.text = viewModel.otherDeviceId
 
         viewModel.otherUser?.let {
-            avatarRenderer.render(MatrixItem.from(it), avatarImageView)
+            avatarRenderer.render(it.toMatrixItem(), avatarImageView)
         } ?: run {
             // Fallback to what we know
             avatarRenderer.render(MatrixItem.UserItem(viewModel.otherUserId ?: "", viewModel.otherUserId), avatarImageView)

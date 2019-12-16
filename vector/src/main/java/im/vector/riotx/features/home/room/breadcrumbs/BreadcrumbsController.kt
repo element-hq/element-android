@@ -18,7 +18,7 @@ package im.vector.riotx.features.home.room.breadcrumbs
 
 import android.view.View
 import com.airbnb.epoxy.EpoxyController
-import im.vector.matrix.android.api.util.MatrixItem
+import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.core.utils.DebouncedClickListener
 import im.vector.riotx.features.home.AvatarRenderer
 import javax.inject.Inject
@@ -53,7 +53,7 @@ class BreadcrumbsController @Inject constructor(
                     breadcrumbsItem {
                         id(it.roomId)
                         avatarRenderer(avatarRenderer)
-                        matrixItem(MatrixItem.from(it))
+                        matrixItem(it.toMatrixItem())
                         unreadNotificationCount(it.notificationCount)
                         showHighlighted(it.highlightCount > 0)
                         hasUnreadMessage(it.hasUnreadMessages)

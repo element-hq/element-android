@@ -18,7 +18,7 @@ package im.vector.riotx.features.autocomplete.user
 
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.matrix.android.api.session.user.model.User
-import im.vector.matrix.android.api.util.MatrixItem
+import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.features.autocomplete.AutocompleteClickListener
 import im.vector.riotx.features.home.AvatarRenderer
 import javax.inject.Inject
@@ -36,7 +36,7 @@ class AutocompleteUserController @Inject constructor() : TypedEpoxyController<Li
         data.forEach { user ->
             autocompleteUserItem {
                 id(user.userId)
-                matrixItem(MatrixItem.from(user))
+                matrixItem(user.toMatrixItem())
                 avatarRenderer(avatarRenderer)
                 clickListener { _ ->
                     listener?.onItemClick(user)

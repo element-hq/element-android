@@ -25,7 +25,7 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.user.model.User
-import im.vector.matrix.android.api.util.MatrixItem
+import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.errorWithRetryItem
 import im.vector.riotx.core.epoxy.loadingItem
@@ -98,7 +98,7 @@ class DirectoryUsersController @Inject constructor(private val session: Session,
             createDirectRoomUserItem {
                 id(user.userId)
                 selected(isSelected)
-                matrixItem(MatrixItem.from(user))
+                matrixItem(user.toMatrixItem())
                 avatarRenderer(avatarRenderer)
                 clickListener { _ ->
                     callback?.onItemClick(user)
