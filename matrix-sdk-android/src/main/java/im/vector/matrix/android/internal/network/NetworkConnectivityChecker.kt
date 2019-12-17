@@ -53,7 +53,7 @@ internal class NetworkConnectivityChecker @Inject constructor(private val contex
     @WorkerThread
     fun hasInternetAccess(): Boolean {
         // If we are in background we have unbound merlin, so we have to check
-        return if (backgroundDetectionObserver.isIsBackground) {
+        return if (backgroundDetectionObserver.isInBackground) {
             merlinsBeard.hasInternetAccess()
         } else {
             hasInternetAccess

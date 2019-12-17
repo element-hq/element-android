@@ -55,10 +55,11 @@ fun Session.startSyncing(context: Context) {
                 Timber.e(ex)
             }
         }
+    } else {
+        val isAtLeastStarted = ProcessLifecycleOwner.get().lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)
+        Timber.v("--> is at least started? $isAtLeastStarted")
+        startSync(isAtLeastStarted)
     }
-    val isAtLeastStarted = ProcessLifecycleOwner.get().lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)
-    Timber.v("--> is at least started? $isAtLeastStarted")
-    startSync(isAtLeastStarted)
 }
 
 /**

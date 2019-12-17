@@ -25,7 +25,6 @@ import im.vector.matrix.android.internal.session.sync.job.SyncService
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.vectorComponent
 import im.vector.riotx.features.notifications.NotificationUtils
-import timber.log.Timber
 
 class VectorSyncService : SyncService() {
 
@@ -45,25 +44,25 @@ class VectorSyncService : SyncService() {
         notificationUtils = vectorComponent().notificationUtils()
     }
 
-    /**
-     * Service is started in fdroid mode when no FCM is available or is used for initialSync
-     */
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        Timber.v("VectorSyncService - onStartCommand ")
+    override fun onStart(isInitialSync: Boolean) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val notification = notificationUtils.buildForegroundServiceNotification(R.string.notification_listening_for_events, false)
+            val notificationSubtitleRes = if (isInitialSync) {
+                R.string.notification_initial_sync
+            } else {
+                R.string.notification_listening_for_events
+            }
+            val notification = notificationUtils.buildForegroundServiceNotification(notificationSubtitleRes, false)
             startForeground(NotificationUtils.NOTIFICATION_ID_FOREGROUND_SERVICE, notification)
         }
-        return super.onStartCommand(intent, flags, startId)
+    }
+
+    override fun onRescheduleAsked(userId: String, isInitialSync: Boolean, delay: Long) {
+        reschedule(userId, delay)
     }
 
     override fun onDestroy() {
         removeForegroundNotif()
         super.onDestroy()
-    }
-
-    override fun onRescheduleAsked(userId: String, delay: Long) {
-        reschedule(userId, delay)
     }
 
     private fun removeForegroundNotif() {

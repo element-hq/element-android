@@ -127,7 +127,8 @@ class MainActivity : VectorBaseActivity() {
                         override fun onSuccess(data: Unit) {
                             Timber.w("SIGN_OUT: success, start app")
                             sessionHolder.clearActiveSession()
-                            doLocalCleanupAndStart()
+                            doLocalCleanup()
+                            startNextActivityAndFinish()
                         }
 
                         override fun onFailure(failure: Throwable) {
@@ -137,8 +138,9 @@ class MainActivity : VectorBaseActivity() {
             args.clearCache       -> session.clearCache(
                     object : MatrixCallback<Unit> {
                         override fun onSuccess(data: Unit) {
+                            doLocalCleanup()
                             session.startSyncing(applicationContext)
-                            doLocalCleanupAndStart()
+                            startNextActivityAndFinish()
                         }
 
                         override fun onFailure(failure: Throwable) {
@@ -153,7 +155,7 @@ class MainActivity : VectorBaseActivity() {
         Timber.w("Ignoring invalid token global error")
     }
 
-    private fun doLocalCleanupAndStart() {
+    private fun doLocalCleanup() {
         GlobalScope.launch(Dispatchers.Main) {
             // On UI Thread
             Glide.get(this@MainActivity).clearMemory()
@@ -165,8 +167,6 @@ class MainActivity : VectorBaseActivity() {
                 deleteAllFiles(this@MainActivity.cacheDir)
             }
         }
-
-        startNextActivityAndFinish()
     }
 
     private fun displayError(failure: Throwable) {
@@ -182,7 +182,7 @@ class MainActivity : VectorBaseActivity() {
     private fun startNextActivityAndFinish() {
         val intent = when {
             args.clearCredentials
-            && !args.isUserLoggedOut         ->
+                    && !args.isUserLoggedOut ->
                 // User has explicitly asked to log out
                 LoginActivity.newIntent(this, null)
             args.isSoftLogout                ->

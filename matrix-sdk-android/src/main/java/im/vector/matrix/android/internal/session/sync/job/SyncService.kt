@@ -19,11 +19,13 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import im.vector.matrix.android.api.Matrix
-import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.api.failure.isTokenError
+import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
 import im.vector.matrix.android.internal.session.sync.SyncTask
 import im.vector.matrix.android.internal.task.TaskExecutor
+import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.*
 import timber.log.Timber
@@ -40,10 +42,13 @@ abstract class SyncService : Service() {
     private var userId: String? = null
     private var mIsSelfDestroyed: Boolean = false
 
+    private var isInitialSync: Boolean = false
+    private lateinit var session: Session
     private lateinit var syncTask: SyncTask
     private lateinit var networkConnectivityChecker: NetworkConnectivityChecker
     private lateinit var taskExecutor: TaskExecutor
     private lateinit var coroutineDispatchers: MatrixCoroutineDispatchers
+    private lateinit var backgroundDetectionObserver: BackgroundDetectionObserver
 
     private val isRunning = AtomicBoolean(false)
 
@@ -52,14 +57,19 @@ abstract class SyncService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Timber.i("onStartCommand $intent")
         intent?.let {
+            val matrix = Matrix.getInstance(applicationContext)
             val safeUserId = it.getStringExtra(EXTRA_USER_ID) ?: return@let
-            val sessionComponent = Matrix.getInstance(applicationContext).sessionManager.getSessionComponent(safeUserId)
+            val sessionComponent = matrix.sessionManager.getSessionComponent(safeUserId)
                     ?: return@let
+            session = sessionComponent.session()
             userId = safeUserId
             syncTask = sessionComponent.syncTask()
+            isInitialSync = !session.hasAlreadySynced()
             networkConnectivityChecker = sessionComponent.networkConnectivityChecker()
             taskExecutor = sessionComponent.taskExecutor()
             coroutineDispatchers = sessionComponent.coroutineDispatchers()
+            backgroundDetectionObserver = matrix.backgroundDetectionObserver
+            onStart(isInitialSync)
             if (isRunning.get()) {
                 Timber.i("Received a start while was already syncing... ignore")
             } else {
@@ -92,7 +102,7 @@ abstract class SyncService : Service() {
         if (!networkConnectivityChecker.hasInternetAccess()) {
             Timber.v("No network reschedule to avoid wasting resources")
             userId?.also {
-                onRescheduleAsked(it, delay = 10_000L)
+                onRescheduleAsked(it, isInitialSync, delay = 10_000L)
             }
             stopMe()
             return
@@ -101,6 +111,11 @@ abstract class SyncService : Service() {
         val params = SyncTask.Params(TIME_OUT)
         try {
             syncTask.execute(params)
+            // Start sync if we were doing an initial sync and the syncThread is not launched yet
+            if (isInitialSync && session.syncState().value == SyncState.Idle) {
+                val isForeground = !backgroundDetectionObserver.isInBackground
+                session.startSync(isForeground)
+            }
             stopMe()
         } catch (throwable: Throwable) {
             Timber.e(throwable)
@@ -114,7 +129,9 @@ abstract class SyncService : Service() {
         }
     }
 
-    abstract fun onRescheduleAsked(userId: String, delay: Long)
+    abstract fun onStart(isInitialSync: Boolean)
+
+    abstract fun onRescheduleAsked(userId: String, isInitialSync: Boolean, delay: Long)
 
     override fun onBind(intent: Intent?): IBinder? {
         return null
