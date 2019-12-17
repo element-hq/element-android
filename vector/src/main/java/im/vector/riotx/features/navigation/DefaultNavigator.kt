@@ -19,8 +19,11 @@ package im.vector.riotx.features.navigation
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import androidx.core.app.TaskStackBuilder
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
 import im.vector.riotx.R
+import im.vector.riotx.core.di.ActiveSessionHolder
+import im.vector.riotx.core.error.fatalError
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupManageActivity
@@ -38,12 +41,18 @@ import im.vector.riotx.features.share.SharedData
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
-import androidx.core.app.TaskStackBuilder
 
 @Singleton
-class DefaultNavigator @Inject constructor() : Navigator {
+class DefaultNavigator @Inject constructor(
+        private val sessionHolder: ActiveSessionHolder
+) : Navigator {
 
     override fun openRoom(context: Context, roomId: String, eventId: String?, buildTask: Boolean) {
+        if (sessionHolder.getSafeActiveSession()?.getRoom(roomId) == null) {
+            fatalError("Trying to open an unknown room $roomId")
+            return
+        }
+
         val args = RoomDetailArgs(roomId, eventId)
         val intent = RoomDetailActivity.newIntent(context, args)
         if (buildTask) {
