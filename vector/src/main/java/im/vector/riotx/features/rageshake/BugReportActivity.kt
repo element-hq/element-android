@@ -77,8 +77,7 @@ class BugReportActivity : VectorBaseActivity() {
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         menu.findItem(R.id.ic_action_send_bug_report)?.let {
-            val isValid = bug_report_edit_text.text.toString().trim().length > 10
-                    && !bug_report_mask_view.isVisible
+            val isValid = !bug_report_mask_view.isVisible
 
             it.isEnabled = isValid
             it.icon.alpha = if (isValid) 255 else 100
@@ -90,7 +89,11 @@ class BugReportActivity : VectorBaseActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.ic_action_send_bug_report -> {
-                sendBugReport()
+                if (bug_report_edit_text.text.toString().trim().length >= 10) {
+                    sendBugReport()
+                } else {
+                    bug_report_text_input_layout.error = getString(R.string.bug_report_error_too_short)
+                }
                 return true
             }
         }
@@ -150,7 +153,7 @@ class BugReportActivity : VectorBaseActivity() {
                         val myProgress = progress.coerceIn(0, 100)
 
                         bug_report_progress_view.progress = myProgress
-                        bug_report_progress_text_view.text = getString(R.string.send_bug_report_progress, "$myProgress")
+                        bug_report_progress_text_view.text = getString(R.string.send_bug_report_progress, myProgress.toString())
                     }
 
                     override fun onUploadSucceed() {
@@ -179,7 +182,7 @@ class BugReportActivity : VectorBaseActivity() {
 
     @OnTextChanged(R.id.bug_report_edit_text)
     internal fun textChanged() {
-        invalidateOptionsMenu()
+        bug_report_text_input_layout.error = null
     }
 
     @OnCheckedChanged(R.id.bug_report_button_include_screenshot)
