@@ -24,9 +24,7 @@ import java.io.File
 import java.io.PrintWriter
 import java.io.StringWriter
 import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-import java.util.TimeZone
+import java.util.*
 import java.util.logging.*
 import java.util.logging.Formatter
 import javax.inject.Inject
@@ -83,7 +81,8 @@ class VectorFileLogger @Inject constructor(val context: Context, private val vec
         return if (vectorPreferences.labAllowedExtendedLogging()) {
             false
         } else {
-            priority < Log.ERROR
+            // Exclude debug and verbose logs
+            priority <= Log.DEBUG
         }
     }
 

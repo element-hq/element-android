@@ -104,7 +104,7 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
     @CallSuper
     override fun onResume() {
         super.onResume()
-        Timber.v("onResume Fragment ${this.javaClass.simpleName}")
+        Timber.i("onResume Fragment ${this.javaClass.simpleName}")
     }
 
     @CallSuper

@@ -222,8 +222,7 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
 
     override fun onResume() {
         super.onResume()
-
-        Timber.v("onResume Activity ${this.javaClass.simpleName}")
+        Timber.i("onResume Activity ${this.javaClass.simpleName}")
 
         configurationViewModel.onActivityResumed()
 
