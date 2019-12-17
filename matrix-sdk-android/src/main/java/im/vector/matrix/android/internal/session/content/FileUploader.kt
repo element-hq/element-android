@@ -43,9 +43,9 @@ internal class FileUploader @Inject constructor(@Authenticated
 
     suspend fun uploadFile(file: File,
                            filename: String?,
-                           mimeType: String,
+                           mimeType: String?,
                            progressListener: ProgressRequestBody.Listener? = null): ContentUploadResponse {
-        val uploadBody = file.asRequestBody(mimeType.toMediaTypeOrNull())
+        val uploadBody = file.asRequestBody(mimeType?.toMediaTypeOrNull())
         return upload(uploadBody, filename, progressListener)
     }
 

@@ -25,7 +25,7 @@ data class VideoInfo(
         /**
          * The mimetype of the video e.g. "video/mp4".
          */
-        @Json(name = "mimetype") val mimeType: String,
+        @Json(name = "mimetype") val mimeType: String?,
 
         /**
          * The width of the video in pixels.
