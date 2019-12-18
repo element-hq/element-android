@@ -41,6 +41,7 @@ import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.home.room.detail.timeline.format.NoticeEventFormatter
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.riotx.features.html.EventHtmlRenderer
+import im.vector.riotx.features.html.VectorHtmlCompressor
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -82,6 +83,7 @@ data class MessageActionState(
 class MessageActionsViewModel @AssistedInject constructor(@Assisted
                                                           initialState: MessageActionState,
                                                           private val eventHtmlRenderer: Lazy<EventHtmlRenderer>,
+                                                          private val htmlCompressor: VectorHtmlCompressor,
                                                           private val session: Session,
                                                           private val noticeEventFormatter: NoticeEventFormatter,
                                                           private val stringProvider: StringProvider
@@ -170,8 +172,12 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
             EventType.MESSAGE     -> {
                 val messageContent: MessageContent? = timelineEvent()?.getLastMessageContent()
                 if (messageContent is MessageTextContent && messageContent.format == MessageType.FORMAT_MATRIX_HTML) {
-                    eventHtmlRenderer.get().render(messageContent.formattedBody
-                            ?: messageContent.body)
+                    val html = messageContent.formattedBody
+                            ?.takeIf { it.isNotBlank() }
+                            ?.let { htmlCompressor.compress(it) }
+                            ?: messageContent.body
+
+                    eventHtmlRenderer.get().render(html)
                 } else {
                     messageContent?.body
                 }
