@@ -16,6 +16,7 @@ Bugfix 🐛:
  - Render default room name when it starts with an emoji (#477)
  - Do not display " (IRC)" in display names https://github.com/vector-im/riot-android/issues/444
  - Fix rendering issue with HTML formatted body
+ - Disable click on Stickers (#703)
 
 Translations 🗣:
  -

@@ -181,10 +181,14 @@ class MessageItemFactory @Inject constructor(
                 .playable(messageContent.info?.mimeType == "image/gif")
                 .highlighted(highlight)
                 .mediaData(data)
-                .clickListener(
-                        DebouncedClickListener(View.OnClickListener { view ->
-                            callback?.onImageMessageClicked(messageContent, data, view)
-                        }))
+                .apply {
+                    if (messageContent.type != MessageType.MSGTYPE_STICKER_LOCAL) {
+                        clickListener(
+                                DebouncedClickListener(View.OnClickListener { view ->
+                                    callback?.onImageMessageClicked(messageContent, data, view)
+                                }))
+                    }
+                }
     }
 
     private fun buildVideoMessageItem(messageContent: MessageVideoContent,
