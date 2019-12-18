@@ -85,19 +85,19 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
                                                   private val initialSyncProgressService: Lazy<InitialSyncProgressService>,
                                                   private val homeServerCapabilitiesService: Lazy<HomeServerCapabilitiesService>)
     : Session,
-        RoomService by roomService.get(),
-        RoomDirectoryService by roomDirectoryService.get(),
-        GroupService by groupService.get(),
-        UserService by userService.get(),
-        CryptoService by cryptoService.get(),
-        SignOutService by signOutService.get(),
-        FilterService by filterService.get(),
-        PushRuleService by pushRuleService.get(),
-        PushersService by pushersService.get(),
-        FileService by fileService.get(),
-        InitialSyncProgressService by initialSyncProgressService.get(),
-        SecureStorageService by secureStorageService.get(),
-        HomeServerCapabilitiesService by homeServerCapabilitiesService.get() {
+      RoomService by roomService.get(),
+      RoomDirectoryService by roomDirectoryService.get(),
+      GroupService by groupService.get(),
+      UserService by userService.get(),
+      CryptoService by cryptoService.get(),
+      SignOutService by signOutService.get(),
+      FilterService by filterService.get(),
+      PushRuleService by pushRuleService.get(),
+      PushersService by pushersService.get(),
+      FileService by fileService.get(),
+      InitialSyncProgressService by initialSyncProgressService.get(),
+      SecureStorageService by secureStorageService.get(),
+      HomeServerCapabilitiesService by homeServerCapabilitiesService.get() {
 
     private var isOpen = false
 
@@ -173,13 +173,14 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
     override fun clearCache(callback: MatrixCallback<Unit>) {
         stopSync()
         stopAnyBackgroundSync()
+        liveEntityObservers.forEach { it.cancelProcess() }
         cacheService.get().clearCache(callback)
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onGlobalError(globalError: GlobalError) {
         if (globalError is GlobalError.InvalidToken
-                && globalError.softLogout) {
+            && globalError.softLogout) {
             // Mark the token has invalid
             GlobalScope.launch(Dispatchers.IO) {
                 sessionParamsStore.setTokenInvalid(myUserId)

@@ -20,7 +20,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.squareup.moshi.JsonEncodingException
 import im.vector.matrix.android.api.failure.Failure
-import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.api.failure.isTokenError
 import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.matrix.android.internal.network.NetworkConnectivityChecker

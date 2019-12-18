@@ -95,7 +95,6 @@ internal class UserAccountDataSyncHandler @Inject constructor(private val monarc
         }
     }
 
-
     private fun handlePushRules(realm: Realm, userAccountDataPushRules: UserAccountDataPushRules) {
         val pushRules = userAccountDataPushRules.content
         realm.where(PushRulesEntity::class.java)
