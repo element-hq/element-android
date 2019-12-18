@@ -37,6 +37,7 @@ class RoomListQuickActionsViewModel @AssistedInject constructor(@Assisted initia
 
     companion object : MvRxViewModelFactory<RoomListQuickActionsViewModel, RoomListQuickActionsState> {
 
+        @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: RoomListQuickActionsState): RoomListQuickActionsViewModel? {
             val fragment: RoomListQuickActionsBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()
             return fragment.roomListActionsViewModelFactory.create(state)

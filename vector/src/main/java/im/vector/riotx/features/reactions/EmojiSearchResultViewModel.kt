@@ -42,6 +42,7 @@ class EmojiSearchResultViewModel @AssistedInject constructor(
 
     companion object : MvRxViewModelFactory<EmojiSearchResultViewModel, EmojiSearchResultViewState> {
 
+        @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: EmojiSearchResultViewState): EmojiSearchResultViewModel? {
             val activity: EmojiReactionPickerActivity = (viewModelContext as ActivityViewModelContext).activity()
             return activity.emojiSearchResultViewModelFactory.create(state)

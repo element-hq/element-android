@@ -102,6 +102,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
 
         val quickEmojis = listOf("👍", "👎", "😄", "🎉", "😕", "❤️", "🚀", "👀")
 
+        @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: MessageActionState): MessageActionsViewModel? {
             val fragment: MessageActionsBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()
             return fragment.messageActionViewModelFactory.create(state)
