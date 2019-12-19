@@ -17,21 +17,26 @@
 package im.vector.riotx.features.autocomplete.command
 
 import android.content.Context
-import com.airbnb.epoxy.EpoxyController
-import im.vector.riotx.features.autocomplete.EpoxyAutocompletePresenter
+import androidx.recyclerview.widget.RecyclerView
+import com.otaliastudios.autocomplete.RecyclerViewPresenter
+import im.vector.riotx.features.autocomplete.AutocompleteClickListener
 import im.vector.riotx.features.command.Command
 import javax.inject.Inject
 
 class AutocompleteCommandPresenter @Inject constructor(context: Context,
                                                        private val controller: AutocompleteCommandController) :
-        EpoxyAutocompletePresenter<Command>(context) {
+        RecyclerViewPresenter<Command>(context), AutocompleteClickListener<Command> {
 
     init {
         controller.listener = this
     }
 
-    override fun providesController(): EpoxyController {
-        return controller
+    override fun instantiateAdapter(): RecyclerView.Adapter<*> {
+        return controller.adapter
+    }
+
+    override fun onItemClick(t: Command) {
+        dispatchClick(t)
     }
 
     override fun onQuery(query: CharSequence?) {
