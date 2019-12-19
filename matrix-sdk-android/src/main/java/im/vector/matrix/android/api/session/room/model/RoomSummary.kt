@@ -29,6 +29,8 @@ data class RoomSummary(
         val displayName: String = "",
         val topic: String = "",
         val avatarUrl: String = "",
+        val canonicalAlias: String? = null,
+        val aliases: List<String> = emptyList(),
         val isDirect: Boolean = false,
         val latestPreviewableEvent: TimelineEvent? = null,
         val otherMemberIds: List<String> = emptyList(),

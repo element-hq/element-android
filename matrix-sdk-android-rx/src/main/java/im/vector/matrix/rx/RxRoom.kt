@@ -53,13 +53,13 @@ class RxRoom(private val room: Room) {
         return room.getMyReadReceiptLive().asObservable()
     }
 
-    fun loadRoomMembersIfNeeded(): Single<Unit> = Single.create {
-        room.loadRoomMembersIfNeeded(MatrixCallbackSingle(it)).toSingle(it)
+    fun loadRoomMembersIfNeeded(): Single<Unit> = singleBuilder {
+        room.loadRoomMembersIfNeeded(it)
     }
 
     fun joinRoom(reason: String? = null,
-                 viaServers: List<String> = emptyList()): Single<Unit> = Single.create {
-        room.join(reason, viaServers, MatrixCallbackSingle(it)).toSingle(it)
+                 viaServers: List<String> = emptyList()): Single<Unit> = singleBuilder {
+        room.join(reason, viaServers, it)
     }
 
     fun liveEventReadReceipts(eventId: String): Observable<List<ReadReceipt>> {

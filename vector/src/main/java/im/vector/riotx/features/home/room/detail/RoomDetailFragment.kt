@@ -86,8 +86,8 @@ import im.vector.riotx.features.autocomplete.command.CommandAutocompletePolicy
 import im.vector.riotx.features.autocomplete.user.AutocompleteUserPresenter
 import im.vector.riotx.features.command.Command
 import im.vector.riotx.features.home.AvatarRenderer
-import im.vector.riotx.features.home.NavigateToRoomInterceptor
-import im.vector.riotx.features.home.PermalinkHandler
+import im.vector.riotx.features.permalink.NavigateToRoomInterceptor
+import im.vector.riotx.features.permalink.PermalinkHandler
 import im.vector.riotx.features.home.getColorFromUserId
 import im.vector.riotx.features.home.room.detail.composer.TextComposerAction
 import im.vector.riotx.features.home.room.detail.composer.TextComposerView
@@ -113,6 +113,8 @@ import im.vector.riotx.features.reactions.EmojiReactionPickerActivity
 import im.vector.riotx.features.settings.VectorPreferences
 import im.vector.riotx.features.share.SharedData
 import im.vector.riotx.features.themes.ThemeUtils
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_detail.*
 import kotlinx.android.synthetic.main.merge_composer_layout.view.*
@@ -851,30 +853,33 @@ class RoomDetailFragment @Inject constructor(
 // TimelineEventController.Callback ************************************************************
 
     override fun onUrlClicked(url: String): Boolean {
-        val managed = permalinkHandler.launch(requireActivity(), url, object : NavigateToRoomInterceptor {
-            override fun navToRoom(roomId: String, eventId: String?): Boolean {
-                // Same room?
-                if (roomId == roomDetailArgs.roomId) {
-                    // Navigation to same room
-                    if (eventId == null) {
-                        showSnackWithMessage(getString(R.string.navigate_to_room_when_already_in_the_room))
-                    } else {
-                        // Highlight and scroll to this event
-                        roomDetailViewModel.handle(RoomDetailAction.NavigateToEvent(eventId, true))
+        permalinkHandler
+                .launch(requireActivity(), url, object : NavigateToRoomInterceptor {
+                    override fun navToRoom(roomId: String?, eventId: String?): Boolean {
+                        // Same room?
+                        if (roomId == roomDetailArgs.roomId) {
+                            // Navigation to same room
+                            if (eventId == null) {
+                                showSnackWithMessage(getString(R.string.navigate_to_room_when_already_in_the_room))
+                            } else {
+                                // Highlight and scroll to this event
+                                roomDetailViewModel.handle(RoomDetailAction.NavigateToEvent(eventId, true))
+                            }
+                            return true
+                        }
+                        // Not handled
+                        return false
                     }
-                    return true
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { managed ->
+                    if (!managed) {
+                        // Open in external browser, in a new Tab
+                        openUrlInExternalBrowser(requireContext(), url)
+                    }
                 }
-
-                // Not handled
-                return false
-            }
-        })
-
-        if (!managed) {
-            // Open in external browser, in a new Tab
-            openUrlInExternalBrowser(requireContext(), url)
-        }
-
+                .disposeOnDestroyView()
         // In fact it is always managed
         return true
     }
@@ -1026,12 +1031,15 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onRoomCreateLinkClicked(url: String) {
-        permalinkHandler.launch(requireContext(), url, object : NavigateToRoomInterceptor {
-            override fun navToRoom(roomId: String, eventId: String?): Boolean {
-                requireActivity().finish()
-                return false
-            }
-        })
+        permalinkHandler
+                .launch(requireContext(), url, object : NavigateToRoomInterceptor {
+                    override fun navToRoom(roomId: String?, eventId: String?): Boolean {
+                        requireActivity().finish()
+                        return false
+                    }
+                })
+                .subscribe()
+                .disposeOnDestroyView()
     }
 
     override fun onReadReceiptsClicked(readReceipts: List<ReadReceiptData>) {

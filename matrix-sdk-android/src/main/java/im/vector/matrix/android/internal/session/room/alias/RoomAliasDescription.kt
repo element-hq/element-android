@@ -14,25 +14,20 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.rx
+package im.vector.matrix.android.internal.session.room.alias
 
-import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.util.Cancelable
-import io.reactivex.SingleEmitter
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-internal class MatrixCallbackSingle<T>(private val singleEmitter: SingleEmitter<T>) : MatrixCallback<T> {
+@JsonClass(generateAdapter = true)
+internal data class RoomAliasDescription(
+        /**
+         * The room ID for this alias.
+         */
+        @Json(name = "room_id") val roomId: String,
 
-    override fun onSuccess(data: T) {
-        singleEmitter.onSuccess(data)
-    }
-
-    override fun onFailure(failure: Throwable) {
-        singleEmitter.tryOnError(failure)
-    }
-}
-
-fun <T> Cancelable.toSingle(singleEmitter: SingleEmitter<T>) {
-    singleEmitter.setCancellable {
-        this.cancel()
-    }
-}
+        /**
+         * A list of servers that are aware of this room ID.
+         */
+        @Json(name = "servers") val servers: List<String> = emptyList()
+)

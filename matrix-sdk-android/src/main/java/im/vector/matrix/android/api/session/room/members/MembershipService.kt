@@ -59,7 +59,6 @@ interface MembershipService {
     /**
      * Join the room, or accept an invitation.
      */
-
     fun join(reason: String? = null,
              viaServers: List<String> = emptyList(),
              callback: MatrixCallback<Unit>): Cancelable
