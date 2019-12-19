@@ -20,4 +20,5 @@ import im.vector.riotx.core.platform.VectorViewModelAction
 
 sealed class TextComposerAction : VectorViewModelAction {
     data class QueryUsers(val query: CharSequence?) : TextComposerAction()
+    data class QueryRooms(val query: CharSequence?) : TextComposerAction()
 }
