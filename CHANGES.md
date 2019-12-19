@@ -5,7 +5,7 @@ Features ✨:
  -
 
 Improvements 🙌:
- -
+ - Render aliases and canonical alias change in the timeline
 
 Other changes:
  -

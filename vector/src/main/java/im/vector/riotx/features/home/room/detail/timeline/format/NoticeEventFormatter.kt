@@ -37,6 +37,8 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
             EventType.STATE_ROOM_NAME          -> formatRoomNameEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
             EventType.STATE_ROOM_TOPIC         -> formatRoomTopicEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
             EventType.STATE_ROOM_MEMBER        -> formatRoomMemberEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
+            EventType.STATE_ROOM_ALIASES       -> formatRoomAliasesEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
+            EventType.STATE_CANONICAL_ALIAS    -> formatRoomCanonicalAliasEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
             EventType.STATE_HISTORY_VISIBILITY -> formatRoomHistoryVisibilityEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
             EventType.STATE_ROOM_TOMBSTONE     -> formatRoomTombstoneEvent(timelineEvent.getDisambiguatedDisplayName())
             EventType.CALL_INVITE,
@@ -134,6 +136,34 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
         } else {
             buildProfileNotice(event, senderName, eventContent, prevEventContent)
         }
+    }
+
+    private fun formatRoomAliasesEvent(event: Event, senderName: String?): String? {
+        val eventContent: RoomAliasesContent? = event.getClearContent().toModel()
+        val prevEventContent: RoomAliasesContent? = event.unsignedData?.prevContent?.toModel()
+
+        val addedAliases = eventContent?.aliases.orEmpty() - prevEventContent?.aliases.orEmpty()
+        val removedAliases = prevEventContent?.aliases.orEmpty() - eventContent?.aliases.orEmpty()
+
+        return if (addedAliases.isNotEmpty() && removedAliases.isNotEmpty()) {
+            sp.getString(R.string.notice_room_aliases_added_and_removed, senderName, addedAliases.joinToString(), removedAliases.joinToString())
+        } else if (addedAliases.isNotEmpty()) {
+            sp.getQuantityString(R.plurals.notice_room_aliases_added, addedAliases.size, senderName, addedAliases.joinToString())
+        } else if (removedAliases.isNotEmpty()) {
+            sp.getQuantityString(R.plurals.notice_room_aliases_removed, removedAliases.size, senderName, removedAliases.joinToString())
+        } else {
+            Timber.w("Alias event without any change...")
+            null
+        }
+    }
+
+    private fun formatRoomCanonicalAliasEvent(event: Event, senderName: String?): String? {
+        val eventContent: RoomCanonicalAliasContent? = event.getClearContent().toModel()
+        val canonicalAlias = eventContent?.canonicalAlias
+        return canonicalAlias
+                ?.takeIf { it.isNotBlank() }
+                ?.let { sp.getString(R.string.notice_room_canonical_alias_set, senderName, it) }
+                ?: sp.getString(R.string.notice_room_canonical_alias_unset, senderName)
     }
 
     private fun buildProfileNotice(event: Event, senderName: String?, eventContent: RoomMember?, prevEventContent: RoomMember?): String {
