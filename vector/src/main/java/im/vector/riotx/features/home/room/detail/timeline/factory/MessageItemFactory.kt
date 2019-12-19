@@ -182,7 +182,9 @@ class MessageItemFactory @Inject constructor(
                 .highlighted(highlight)
                 .mediaData(data)
                 .apply {
-                    if (messageContent.type != MessageType.MSGTYPE_STICKER_LOCAL) {
+                    if (messageContent.type == MessageType.MSGTYPE_STICKER_LOCAL) {
+                        mode(ImageContentRenderer.Mode.STICKER)
+                    } else {
                         clickListener(
                                 DebouncedClickListener(View.OnClickListener { view ->
                                     callback?.onImageMessageClicked(messageContent, data, view)

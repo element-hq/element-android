@@ -7,6 +7,7 @@ Features ✨:
 Improvements 🙌:
  - Handle navigation to room via room alias (#201)
  - Open matrix.to link in RiotX (#57)
+ - Limit sticker size in the timeline
 
 Other changes:
  - Use same default room colors than Riot-Web
