@@ -19,18 +19,18 @@ package im.vector.riotx.features.autocomplete
 import android.content.Context
 import android.database.DataSetObserver
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyController
-import com.airbnb.epoxy.EpoxyRecyclerView
 import com.otaliastudios.autocomplete.AutocompletePresenter
 
 abstract class EpoxyAutocompletePresenter<T>(context: Context) : AutocompletePresenter<T>(context), AutocompleteClickListener<T> {
 
-    private var recyclerView: EpoxyRecyclerView? = null
-    private var clicks: AutocompletePresenter.ClickProvider<T>? = null
+    private var recyclerView: RecyclerView? = null
+    private var clicks: ClickProvider<T>? = null
     private var observer: Observer? = null
 
-    override fun registerClickProvider(provider: AutocompletePresenter.ClickProvider<T>) {
+    override fun registerClickProvider(provider: ClickProvider<T>) {
         this.clicks = provider
     }
 
@@ -39,8 +39,10 @@ abstract class EpoxyAutocompletePresenter<T>(context: Context) : AutocompletePre
     }
 
     override fun getView(): ViewGroup? {
-        recyclerView = EpoxyRecyclerView(context).apply {
-            setController(providesController())
+        recyclerView = RecyclerView(context).apply {
+            layoutManager = LinearLayoutManager(context)
+            setHasFixedSize(false)
+            adapter = providesController().adapter
             observer?.let {
                 adapter?.registerAdapterDataObserver(it)
             }
@@ -52,6 +54,7 @@ abstract class EpoxyAutocompletePresenter<T>(context: Context) : AutocompletePre
     override fun onViewShown() {}
 
     override fun onViewHidden() {
+        recyclerView?.adapter = null
         recyclerView = null
         observer = null
     }
