@@ -49,7 +49,7 @@ object MXEncryptedAttachments {
      * @param mimetype the mime type
      * @return the encryption file info
      */
-    fun encryptAttachment(attachmentStream: InputStream, mimetype: String): EncryptionResult {
+    fun encryptAttachment(attachmentStream: InputStream, mimetype: String?): EncryptionResult {
         val t0 = System.currentTimeMillis()
         val secureRandom = SecureRandom()
 

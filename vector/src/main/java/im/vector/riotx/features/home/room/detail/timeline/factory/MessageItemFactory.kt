@@ -46,6 +46,7 @@ import im.vector.riotx.features.home.room.detail.timeline.tools.createLinkMoveme
 import im.vector.riotx.features.home.room.detail.timeline.tools.linkify
 import im.vector.riotx.features.html.CodeVisitor
 import im.vector.riotx.features.html.EventHtmlRenderer
+import im.vector.riotx.features.html.VectorHtmlCompressor
 import im.vector.riotx.features.media.ImageContentRenderer
 import im.vector.riotx.features.media.VideoContentRenderer
 import me.gujun.android.span.span
@@ -57,6 +58,7 @@ class MessageItemFactory @Inject constructor(
         private val dimensionConverter: DimensionConverter,
         private val timelineMediaSizeProvider: TimelineMediaSizeProvider,
         private val htmlRenderer: Lazy<EventHtmlRenderer>,
+        private val htmlCompressor: VectorHtmlCompressor,
         private val stringProvider: StringProvider,
         private val imageContentRenderer: ImageContentRenderer,
         private val messageInformationDataFactory: MessageInformationDataFactory,
@@ -179,10 +181,16 @@ class MessageItemFactory @Inject constructor(
                 .playable(messageContent.info?.mimeType == "image/gif")
                 .highlighted(highlight)
                 .mediaData(data)
-                .clickListener(
-                        DebouncedClickListener(View.OnClickListener { view ->
-                            callback?.onImageMessageClicked(messageContent, data, view)
-                        }))
+                .apply {
+                    if (messageContent.type == MessageType.MSGTYPE_STICKER_LOCAL) {
+                        mode(ImageContentRenderer.Mode.STICKER)
+                    } else {
+                        clickListener(
+                                DebouncedClickListener(View.OnClickListener { view ->
+                                    callback?.onImageMessageClicked(messageContent, data, view)
+                                }))
+                    }
+                }
     }
 
     private fun buildVideoMessageItem(messageContent: MessageVideoContent,
@@ -227,6 +235,7 @@ class MessageItemFactory @Inject constructor(
                                         attributes: AbsMessageItem.Attributes): VectorEpoxyModel<*>? {
         val isFormatted = messageContent.formattedBody.isNullOrBlank().not()
         return if (isFormatted) {
+            // First detect if the message contains some code block(s) or inline code
             val localFormattedBody = htmlRenderer.get().parse(messageContent.body) as Document
             val codeVisitor = CodeVisitor()
             codeVisitor.visit(localFormattedBody)
@@ -240,7 +249,8 @@ class MessageItemFactory @Inject constructor(
                     buildMessageTextItem(codeFormatted, false, informationData, highlight, callback, attributes)
                 }
                 CodeVisitor.Kind.NONE   -> {
-                    val formattedBody = htmlRenderer.get().render(messageContent.formattedBody!!)
+                    val compressed = htmlCompressor.compress(messageContent.formattedBody!!)
+                    val formattedBody = htmlRenderer.get().render(compressed)
                     buildMessageTextItem(formattedBody, true, informationData, highlight, callback, attributes)
                 }
             }

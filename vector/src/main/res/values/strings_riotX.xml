@@ -114,7 +114,7 @@
 
     <!-- Replaced string is the homeserver url -->
     <string name="login_signup_to">Sign up to %1$s</string>
-    <string name="login_signup_username_hint">Username</string>
+    <string name="login_signup_username_hint">Username or email</string>
     <string name="login_signup_password_hint">Password</string>
     <string name="login_signup_submit">Next</string>
     <string name="login_signup_error_user_in_use">That username is taken</string>
@@ -162,4 +162,5 @@
     <string name="soft_logout_sso_not_same_user_error">The current session is for user %1$s and you provide credentials for user %2$s. This is not supported by RiotX.\nPlease first clear data, then sign in again on another account.</string>
 
     <string name="permalink_malformed">Your matrix.to link was malformed</string>
+    <string name="bug_report_error_too_short">The description is too short</string>
 </resources>

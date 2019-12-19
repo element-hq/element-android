@@ -86,8 +86,6 @@ import im.vector.riotx.features.autocomplete.command.CommandAutocompletePolicy
 import im.vector.riotx.features.autocomplete.user.AutocompleteUserPresenter
 import im.vector.riotx.features.command.Command
 import im.vector.riotx.features.home.AvatarRenderer
-import im.vector.riotx.features.permalink.NavigateToRoomInterceptor
-import im.vector.riotx.features.permalink.PermalinkHandler
 import im.vector.riotx.features.home.getColorFromUserId
 import im.vector.riotx.features.home.room.detail.composer.TextComposerAction
 import im.vector.riotx.features.home.room.detail.composer.TextComposerView
@@ -109,6 +107,8 @@ import im.vector.riotx.features.media.ImageMediaViewerActivity
 import im.vector.riotx.features.media.VideoContentRenderer
 import im.vector.riotx.features.media.VideoMediaViewerActivity
 import im.vector.riotx.features.notifications.NotificationDrawerManager
+import im.vector.riotx.features.permalink.NavigateToRoomInterceptor
+import im.vector.riotx.features.permalink.PermalinkHandler
 import im.vector.riotx.features.reactions.EmojiReactionPickerActivity
 import im.vector.riotx.features.settings.VectorPreferences
 import im.vector.riotx.features.share.SharedData
@@ -416,8 +416,10 @@ class RoomDetailFragment @Inject constructor(
                 composerLayout.composerRelatedMessageAvatar
         )
         composerLayout.expand {
-            // need to do it here also when not using quick reply
-            focusComposerAndShowKeyboard()
+            if (isAdded) {
+                // need to do it here also when not using quick reply
+                focusComposerAndShowKeyboard()
+            }
         }
         focusComposerAndShowKeyboard()
     }

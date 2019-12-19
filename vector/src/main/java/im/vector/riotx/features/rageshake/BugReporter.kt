@@ -33,6 +33,7 @@ import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.extensions.toOnOff
 import im.vector.riotx.core.utils.getDeviceLocale
 import im.vector.riotx.features.settings.VectorLocale
+import im.vector.riotx.features.settings.VectorPreferences
 import im.vector.riotx.features.themes.ThemeUtils
 import im.vector.riotx.features.version.VersionProvider
 import okhttp3.Call
@@ -44,12 +45,15 @@ import okhttp3.Response
 import org.json.JSONException
 import org.json.JSONObject
 import timber.log.Timber
-import java.io.*
+import java.io.File
+import java.io.IOException
+import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
-import java.util.Locale
+import java.util.*
 import java.util.zip.GZIPOutputStream
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.collections.ArrayList
 
 /**
  * BugReporter creates and sends the bug reports.
@@ -57,6 +61,7 @@ import javax.inject.Singleton
 @Singleton
 class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
                                       private val versionProvider: VersionProvider,
+                                      private val vectorPreferences: VectorPreferences,
                                       private val vectorFileLogger: VectorFileLogger) {
     var inMultiWindowMode = false
 
@@ -230,7 +235,7 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
                             .addFormDataPart("matrix_sdk_version", Matrix.getSdkVersion())
                             .addFormDataPart("olm_version", olmVersion)
                             .addFormDataPart("device", Build.MODEL.trim())
-                            .addFormDataPart("lazy_loading", true.toOnOff())
+                            .addFormDataPart("verbose_log", vectorPreferences.labAllowedExtendedLogging().toOnOff())
                             .addFormDataPart("multi_window", inMultiWindowMode.toOnOff())
                             .addFormDataPart("os", Build.VERSION.RELEASE + " (API " + Build.VERSION.SDK_INT + ") "
                                     + Build.VERSION.INCREMENTAL + "-" + Build.VERSION.CODENAME)

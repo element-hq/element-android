@@ -7,6 +7,7 @@ Features ✨:
 Improvements 🙌:
  - Handle navigation to room via room alias (#201)
  - Open matrix.to link in RiotX (#57)
+ - Limit sticker size in the timeline
 
 Other changes:
  - Use same default room colors than Riot-Web
@@ -14,7 +15,9 @@ Other changes:
 Bugfix 🐛:
  - Scroll breadcrumbs to top when opened
  - Render default room name when it starts with an emoji (#477)
- - Do not display " (IRC)") in display names https://github.com/vector-im/riot-android/issues/444
+ - Do not display " (IRC)" in display names https://github.com/vector-im/riot-android/issues/444
+ - Fix rendering issue with HTML formatted body
+ - Disable click on Stickers (#703)
 
 Translations 🗣:
  -

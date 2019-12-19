@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -82,7 +83,9 @@
                     android:layout_marginEnd="10dp"
                     android:layout_marginRight="10dp"
                     android:hint="@string/send_bug_report_placeholder"
-                    android:textColorHint="?attr/vctr_default_text_hint_color">
+                    android:textColorHint="?attr/vctr_default_text_hint_color"
+                    app:counterEnabled="true"
+                    app:counterMaxLength="500">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/bug_report_edit_text"

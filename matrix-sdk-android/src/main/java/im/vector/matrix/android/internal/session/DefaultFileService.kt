@@ -83,15 +83,13 @@ internal class DefaultFileService @Inject constructor(private val context: Conte
 
                             if (elementToDecrypt != null) {
                                 Timber.v("## decrypt file")
-                                MXEncryptedAttachments.decryptAttachment(inputStream, elementToDecrypt) ?: throw IllegalStateException("Decryption error")
-                            } else {
-                                inputStream
+                                MXEncryptedAttachments.decryptAttachment(inputStream, elementToDecrypt)
+                                        ?: throw IllegalStateException("Decryption error")
                             }
+
+                            writeToFile(inputStream, destFile)
+                            destFile
                         }
-                                .map { inputStream ->
-                                    writeToFile(inputStream, destFile)
-                                    destFile
-                                }
                     } else {
                         Try.just(destFile)
                     }

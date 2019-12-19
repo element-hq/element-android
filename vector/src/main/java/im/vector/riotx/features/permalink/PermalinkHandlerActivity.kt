@@ -27,7 +27,6 @@ import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.home.LoadingFragment
 import im.vector.riotx.features.login.LoginActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.android.synthetic.debug.activity_test_material_theme.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
