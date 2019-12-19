@@ -1471,4 +1471,13 @@ Riot 在后台时的工作将被显著的限制，这可能会影响消息通知
     <string name="store_riotx_title">RiotX - -下一代 Matrix 客户端</string>
     <string name="edited_suffix">（已编辑）</string>
 
+    <string name="none">无</string>
+    <string name="revoke">撤消</string>
+    <string name="disconnect">断开连接</string>
+    <string name="review">检查</string>
+    <string name="decline">拒绝</string>
+
+    <string name="people_no_identity_server">没有设置身份服务器。</string>
+
+    <string name="call_failed_no_ice_title">服务器的错误配置导致通话失败</string>
 </resources>
