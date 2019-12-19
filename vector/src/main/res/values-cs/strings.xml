@@ -28,7 +28,7 @@
     <string name="resources_country_code">CZ</string>
 
     <string name="forget_room">Zapomenout místnost</string>
-    <string name="notification_sync_in_progress">Synchronizace</string>
+    <string name="notification_sync_in_progress">Synchronizuji..</string>
     <string name="notification_noisy_notifications">Hlasitá oznámení</string>
     <string name="notification_silent_notifications">Tichá oznámení</string>
 
@@ -46,7 +46,8 @@
     <string name="view_decrypted_source">Zobraz dešifrovaný zdroj</string>
     <string name="report_content">Nahlásit obsah</string>
     <string name="active_call">Aktivní hovor</string>
-    <string name="ongoing_conference_call">Probíhající konferenční hovor.\nPřipojit se %1$s nebo %2$s.</string>
+    <string name="ongoing_conference_call">Probíhající konferenční hovor.
+\nPřipojit se jako %1$s nebo %2$s.</string>
     <string name="ongoing_conference_call_voice">hlasem</string>
     <string name="ongoing_conference_call_video">videem</string>
     <string name="cannot_start_call">Nemohu spustit hovor, prosím zkusit později</string>
@@ -601,4 +602,12 @@ Omlouváme se za způsobené nepříjemnosti.</string>
     <string name="settings_notification_advanced_summary">Nastavit důležitost upozornění na základě události, nastavení zvuku, LED, vibrací</string>
     <string name="settings_notification_by_event">Důležitost upozornění na základě události</string>
 
+    <string name="notification_sync_init">Inicializuji službu</string>
+    <string name="title_activity_verify_device">Ověřte zařízení</string>
+
+    <string name="disconnect">Odpojit</string>
+    <string name="ignore">Ignorovat</string>
+    <string name="decline">Odmítnout</string>
+
+    <string name="action_mark_room_read">Označit za přečtené</string>
 </resources>

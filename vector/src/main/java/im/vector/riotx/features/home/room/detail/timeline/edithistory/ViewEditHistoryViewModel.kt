@@ -61,6 +61,7 @@ class ViewEditHistoryViewModel @AssistedInject constructor(@Assisted
 
     companion object : MvRxViewModelFactory<ViewEditHistoryViewModel, ViewEditHistoryViewState> {
 
+        @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: ViewEditHistoryViewState): ViewEditHistoryViewModel? {
             val fragment: ViewEditHistoryBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()
             return fragment.viewEditHistoryViewModelFactory.create(state)

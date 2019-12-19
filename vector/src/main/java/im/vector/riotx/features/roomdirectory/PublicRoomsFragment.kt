@@ -26,7 +26,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding3.appcompat.queryTextChanges
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
 import im.vector.riotx.R
-import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.extensions.observeEvent
@@ -42,8 +41,7 @@ import javax.inject.Inject
  * - When filtering more (when entering new chars), we could filter on result we already have, during the new server request, to avoid empty screen effect
  */
 class PublicRoomsFragment @Inject constructor(
-        private val publicRoomsController: PublicRoomsController,
-        private val errorFormatter: ErrorFormatter
+        private val publicRoomsController: PublicRoomsController
 ) : VectorBaseFragment(), PublicRoomsController.Callback {
 
     private val viewModel: RoomDirectoryViewModel by activityViewModel()

@@ -34,9 +34,9 @@ class SyncStateView @JvmOverloads constructor(context: Context, attrs: Attribute
 
     fun render(newState: SyncState) {
         syncStateProgressBar.visibility = when (newState) {
-            is SyncState.RUNNING -> if (newState.afterPause) View.VISIBLE else View.GONE
+            is SyncState.Running -> if (newState.afterPause) View.VISIBLE else View.GONE
             else                 -> View.GONE
         }
-        syncStateNoNetwork.isVisible = newState == SyncState.NO_NETWORK
+        syncStateNoNetwork.isVisible = newState == SyncState.NoNetwork
     }
 }

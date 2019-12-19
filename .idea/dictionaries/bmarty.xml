@@ -18,6 +18,7 @@
       <w>pbkdf</w>
       <w>pkcs</w>
       <w>signin</w>
+      <w>signout</w>
       <w>signup</w>
     </words>
   </dictionary>

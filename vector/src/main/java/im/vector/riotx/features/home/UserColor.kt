@@ -22,28 +22,18 @@ import kotlin.math.abs
 
 @ColorRes
 fun getColorFromUserId(userId: String?): Int {
-    if (userId.isNullOrBlank()) {
-        return R.color.riotx_username_1
-    }
-
     var hash = 0
-    var i = 0
-    var chr: Char
 
-    while (i < userId.length) {
-        chr = userId[i]
-        hash = (hash shl 5) - hash + chr.toInt()
-        i++
-    }
+    userId?.toList()?.map { chr -> hash = (hash shl 5) - hash + chr.toInt() }
 
-    return when (abs(hash) % 8 + 1) {
-        1    -> R.color.riotx_username_1
-        2    -> R.color.riotx_username_2
-        3    -> R.color.riotx_username_3
-        4    -> R.color.riotx_username_4
-        5    -> R.color.riotx_username_5
-        6    -> R.color.riotx_username_6
-        7    -> R.color.riotx_username_7
-        else -> R.color.riotx_username_8
+    return when (abs(hash) % 8) {
+        1    -> R.color.riotx_username_2
+        2    -> R.color.riotx_username_3
+        3    -> R.color.riotx_username_4
+        4    -> R.color.riotx_username_5
+        5    -> R.color.riotx_username_6
+        6    -> R.color.riotx_username_7
+        7    -> R.color.riotx_username_8
+        else -> R.color.riotx_username_1
     }
 }

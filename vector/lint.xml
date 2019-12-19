@@ -31,4 +31,8 @@
     <issue id="ViewConstructor" severity="error" />
     <issue id="UseValueOf" severity="error" />
 
+    <!-- Ignore error from HtmlCompressor lib -->
+    <issue id="InvalidPackage">
+        <ignore path="**/htmlcompressor-1.4.jar"/>
+    </issue>
 </lint>

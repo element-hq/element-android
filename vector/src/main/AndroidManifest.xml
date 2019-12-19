@@ -65,7 +65,13 @@
         <activity android:name=".features.roomdirectory.RoomDirectoryActivity" />
         <activity android:name=".features.roomdirectory.roompreview.RoomPreviewActivity" />
         <activity android:name=".features.home.room.filtered.FilteredRoomsActivity" />
-        <activity android:name=".features.home.room.detail.RoomDetailActivity" />
+        <activity
+            android:name=".features.home.room.detail.RoomDetailActivity"
+            android:parentActivityName=".features.home.HomeActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".features.home.HomeActivity" />
+        </activity>
         <activity android:name=".features.debug.DebugMenuActivity" />
         <activity android:name=".features.home.createdirect.CreateDirectRoomActivity" />
         <activity android:name=".features.webview.VectorWebViewActivity" />
@@ -96,6 +102,22 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.OPENABLE" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".features.signout.hard.SignedOutActivity" />
+        <activity
+            android:name=".features.signout.soft.SoftLogoutActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".features.permalink.PermalinkHandlerActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="matrix.to" />
             </intent-filter>
         </activity>
         <!-- Services -->

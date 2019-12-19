@@ -19,7 +19,7 @@ package im.vector.matrix.android.api.session
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.auth.data.SessionParams
-import im.vector.matrix.android.api.failure.ConsentNotGivenError
+import im.vector.matrix.android.api.failure.GlobalError
 import im.vector.matrix.android.api.pushrules.PushRuleService
 import im.vector.matrix.android.api.session.cache.CacheService
 import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
@@ -63,6 +63,11 @@ interface Session :
     val sessionParams: SessionParams
 
     /**
+     * The session is valid, i.e. it has a valid token so far
+     */
+    val isOpenable: Boolean
+
+    /**
      * Useful shortcut to get access to the userId
      */
     val myUserId: String
@@ -81,7 +86,7 @@ interface Session :
 
     /**
      * Launches infinite periodic background syncs
-     * THis does not work in doze mode :/
+     * This does not work in doze mode :/
      * If battery optimization is on it can work in app standby but that's all :/
      */
     fun startAutomaticBackgroundSync(repeatDelay: Long = 30_000L)
@@ -136,13 +141,10 @@ interface Session :
      */
     interface Listener {
         /**
-         * The access token is not valid anymore
+         * Possible cases:
+         * - The access token is not valid anymore,
+         * - a M_CONSENT_NOT_GIVEN error has been received from the homeserver
          */
-        fun onInvalidToken()
-
-        /**
-         * A M_CONSENT_NOT_GIVEN error has been received from the homeserver
-         */
-        fun onConsentNotGivenError(consentNotGivenError: ConsentNotGivenError)
+        fun onGlobalError(globalError: GlobalError)
     }
 }

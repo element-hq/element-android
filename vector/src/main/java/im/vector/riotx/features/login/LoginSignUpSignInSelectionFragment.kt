@@ -16,20 +16,17 @@
 
 package im.vector.riotx.features.login
 
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import butterknife.OnClick
 import im.vector.riotx.R
-import im.vector.riotx.core.error.ErrorFormatter
+import im.vector.riotx.core.extensions.toReducedUrl
 import kotlinx.android.synthetic.main.fragment_login_signup_signin_selection.*
 import javax.inject.Inject
 
 /**
  * In this screen, the user is asked to sign up or to sign in to the homeserver
  */
-class LoginSignUpSignInSelectionFragment @Inject constructor(
-        private val errorFormatter: ErrorFormatter
-) : AbstractLoginFragment() {
+class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractLoginFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_login_signup_signin_selection
 
@@ -40,19 +37,19 @@ class LoginSignUpSignInSelectionFragment @Inject constructor(
             ServerType.MatrixOrg -> {
                 loginSignupSigninServerIcon.setImageResource(R.drawable.ic_logo_matrix_org)
                 loginSignupSigninServerIcon.isVisible = true
-                loginSignupSigninTitle.text = getString(R.string.login_connect_to, state.homeServerUrlSimple)
+                loginSignupSigninTitle.text = getString(R.string.login_connect_to, state.homeServerUrl.toReducedUrl())
                 loginSignupSigninText.text = getString(R.string.login_server_matrix_org_text)
             }
             ServerType.Modular   -> {
                 loginSignupSigninServerIcon.setImageResource(R.drawable.ic_logo_modular)
                 loginSignupSigninServerIcon.isVisible = true
                 loginSignupSigninTitle.text = getString(R.string.login_connect_to_modular)
-                loginSignupSigninText.text = state.homeServerUrlSimple
+                loginSignupSigninText.text = state.homeServerUrl.toReducedUrl()
             }
             ServerType.Other     -> {
                 loginSignupSigninServerIcon.isVisible = false
                 loginSignupSigninTitle.text = getString(R.string.login_server_other_title)
-                loginSignupSigninText.text = getString(R.string.login_connect_to, state.homeServerUrlSimple)
+                loginSignupSigninText.text = getString(R.string.login_connect_to, state.homeServerUrl.toReducedUrl())
             }
         }
     }
@@ -82,14 +79,6 @@ class LoginSignUpSignInSelectionFragment @Inject constructor(
     fun signIn() {
         loginViewModel.handle(LoginAction.UpdateSignMode(SignMode.SignIn))
         loginSharedActionViewModel.post(LoginNavigation.OnSignModeSelected)
-    }
-
-    override fun onError(throwable: Throwable) {
-        AlertDialog.Builder(requireActivity())
-                .setTitle(R.string.dialog_title_error)
-                .setMessage(errorFormatter.toHumanReadable(throwable))
-                .setPositiveButton(R.string.ok, null)
-                .show()
     }
 
     override fun resetViewModel() {

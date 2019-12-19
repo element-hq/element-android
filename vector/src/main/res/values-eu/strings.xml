@@ -1766,4 +1766,39 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 
     <string name="no_network_indicator">Ez dago sare konexiorik orain</string>
 
+    <string name="settings_add_3pid_confirm_password_title">Berretsi zure pasahitza</string>
+    <string name="settings_add_3pid_flow_not_supported">Ezin duzu hau egin mugikorrerako Riot erabiliz</string>
+    <string name="settings_add_3pid_authentication_needed">Autentifikazioa behar da</string>
+
+
+    <string name="settings_integrations">Integrazioak</string>
+    <string name="settings_integrations_summary">Erabili integrazio kudeatzaileren bat botak, zubiak, trepetak eta eranskailu multzoak kudeatzeko.
+\nIntegrazio kudeatzaileek konfigurazio datuak jasotzen dituzte, eta trepetak aldatu ditzakete, gelarako gonbidapenak bidali, eta botere mailak zure izenean ezarri.</string>
+    <string name="settings_integration_allow">Baimendu integrazioak</string>
+    <string name="room_widget_activity_title">Trepeta</string>
+    <string name="room_widget_permission_title">Kargatu trepeta</string>
+    <string name="room_widget_permission_added_by">Trepeta hau honek gehitu du:</string>
+    <string name="room_widget_permission_webview_shared_info_title">Hau erabiltzean cookie-ak ezarri litezke eta %s zerbitzariarekin datuak partekatu:</string>
+    <string name="room_widget_permission_shared_info_title">Hau erabiltzean %s zerbitzariarekin datuak partekatu litezke:</string>
+    <string name="room_widget_failed_to_load">Huts egin du trepeta kargatzean.
+\n%s</string>
+    <string name="room_widget_reload">Birkargatu trepeta</string>
+    <string name="room_widget_open_in_browser">Ireki nabigatzailean</string>
+    <string name="room_widget_revoke_access">Indargabetu sarbidea niretzat</string>
+
+    <string name="room_widget_permission_display_name">Zure pantaila-izena</string>
+    <string name="room_widget_permission_avatar_url">Zure abatarraren URL-a</string>
+    <string name="room_widget_permission_user_id">Zure erabiltzaile ID-a</string>
+    <string name="room_widget_permission_theme">Zure gaia</string>
+    <string name="room_widget_permission_widget_id">Trepetaren ID-a</string>
+    <string name="room_widget_permission_room_id">Gelaren ID-a</string>
+
+
+    <string name="room_widget_resource_permission_title">Trepetak honako baliabide hauek erabili nahi ditu:</string>
+    <string name="room_widget_resource_grant_permission">Baimendu</string>
+    <string name="room_widget_resource_decline_permission">Blokeatu denak</string>
+    <string name="room_widget_webview_access_camera">Kamera erabili</string>
+    <string name="room_widget_webview_access_microphone">Mikrofonoa erabili</string>
+    <string name="room_widget_webview_read_protected_media">DRM bidez babestutako multimedia irakurri</string>
+
 </resources>

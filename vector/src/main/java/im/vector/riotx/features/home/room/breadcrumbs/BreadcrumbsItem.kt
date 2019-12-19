@@ -22,6 +22,7 @@ import android.widget.ImageView
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
+import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
@@ -32,9 +33,7 @@ import im.vector.riotx.features.home.room.list.UnreadCounterBadgeView
 abstract class BreadcrumbsItem : VectorEpoxyModel<BreadcrumbsItem.Holder>() {
 
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
-    @EpoxyAttribute lateinit var roomId: String
-    @EpoxyAttribute lateinit var roomName: CharSequence
-    @EpoxyAttribute var avatarUrl: String? = null
+    @EpoxyAttribute lateinit var matrixItem: MatrixItem
     @EpoxyAttribute var unreadNotificationCount: Int = 0
     @EpoxyAttribute var showHighlighted: Boolean = false
     @EpoxyAttribute var hasUnreadMessage: Boolean = false
@@ -45,7 +44,7 @@ abstract class BreadcrumbsItem : VectorEpoxyModel<BreadcrumbsItem.Holder>() {
         super.bind(holder)
         holder.rootView.setOnClickListener(itemClickListener)
         holder.unreadIndentIndicator.isVisible = hasUnreadMessage
-        avatarRenderer.render(avatarUrl, roomId, roomName.toString(), holder.avatarImageView)
+        avatarRenderer.render(matrixItem, holder.avatarImageView)
         holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadNotificationCount, showHighlighted))
         holder.draftIndentIndicator.isVisible = hasDraft
     }

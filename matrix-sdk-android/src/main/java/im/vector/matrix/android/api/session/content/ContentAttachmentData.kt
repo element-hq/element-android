@@ -30,7 +30,7 @@ data class ContentAttachmentData(
         val exifOrientation: Int = ExifInterface.ORIENTATION_UNDEFINED,
         val name: String? = null,
         val path: String,
-        val mimeType: String,
+        val mimeType: String?,
         val type: Type
 ) : Parcelable {
 

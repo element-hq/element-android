@@ -18,6 +18,8 @@ package im.vector.riotx.features.home.room.breadcrumbs
 
 import android.view.View
 import com.airbnb.epoxy.EpoxyController
+import im.vector.matrix.android.api.util.toMatrixItem
+import im.vector.riotx.core.epoxy.zeroItem
 import im.vector.riotx.core.utils.DebouncedClickListener
 import im.vector.riotx.features.home.AvatarRenderer
 import javax.inject.Inject
@@ -44,17 +46,19 @@ class BreadcrumbsController @Inject constructor(
     override fun buildModels() {
         val safeViewState = viewState ?: return
 
+        // Add a ZeroItem to avoid automatic scroll when the breadcrumbs are updated from another client
+        zeroItem {
+            id("top")
+        }
+
         // An empty breadcrumbs list can only be temporary because when entering in a room,
         // this one is added to the breadcrumbs
-
         safeViewState.asyncBreadcrumbs.invoke()
                 ?.forEach {
                     breadcrumbsItem {
                         id(it.roomId)
                         avatarRenderer(avatarRenderer)
-                        roomId(it.roomId)
-                        roomName(it.displayName)
-                        avatarUrl(it.avatarUrl)
+                        matrixItem(it.toMatrixItem())
                         unreadNotificationCount(it.notificationCount)
                         showHighlighted(it.highlightCount > 0)
                         hasUnreadMessage(it.hasUnreadMessages)

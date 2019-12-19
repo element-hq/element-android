@@ -35,3 +35,12 @@ fun StringBuilder.appendParamToUrl(param: String, value: String): StringBuilder 
 
     return this
 }
+
+/**
+ * Ex: "https://matrix.org/" -> "matrix.org"
+ */
+fun String?.toReducedUrl(): String {
+    return (this ?: "")
+            .substringAfter("://")
+            .trim { it == '/' }
+}

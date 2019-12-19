@@ -52,7 +52,7 @@ internal class DefaultCreateRoomTask @Inject constructor(private val roomAPI: Ro
             apiCall = roomAPI.createRoom(params)
         }
         val roomId = createRoomResponse.roomId!!
-        // Wait for room to come back from the sync (but it can maybe be in the DB is the sync response is received before)
+        // Wait for room to come back from the sync (but it can maybe be in the DB if the sync response is received before)
         val rql = RealmQueryLatch<RoomEntity>(realmConfiguration) { realm ->
             realm.where(RoomEntity::class.java)
                     .equalTo(RoomEntityFields.ROOM_ID, roomId)

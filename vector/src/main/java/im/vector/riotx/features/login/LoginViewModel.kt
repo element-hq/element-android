@@ -16,6 +16,7 @@
 
 package im.vector.riotx.features.login
 
+import androidx.fragment.app.FragmentActivity
 import com.airbnb.mvrx.*
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
@@ -37,6 +38,7 @@ import im.vector.riotx.core.utils.DataSource
 import im.vector.riotx.core.utils.PublishDataSource
 import im.vector.riotx.features.notifications.PushRuleTriggerListener
 import im.vector.riotx.features.session.SessionListener
+import im.vector.riotx.features.signout.soft.SoftLogoutActivity
 import timber.log.Timber
 import java.util.concurrent.CancellationException
 
@@ -60,8 +62,11 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: LoginViewState): LoginViewModel? {
-            val activity: LoginActivity = (viewModelContext as ActivityViewModelContext).activity()
-            return activity.loginViewModelFactory.create(state)
+            return when (val activity: FragmentActivity = (viewModelContext as ActivityViewModelContext).activity()) {
+                is LoginActivity      -> activity.loginViewModelFactory.create(state)
+                is SoftLogoutActivity -> activity.loginViewModelFactory.create(state)
+                else                  -> error("Invalid Activity")
+            }
         }
     }
 
@@ -97,6 +102,18 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
             is LoginAction.ResetPasswordMailConfirmed -> handleResetPasswordMailConfirmed()
             is LoginAction.RegisterAction             -> handleRegisterAction(action)
             is LoginAction.ResetAction                -> handleResetAction(action)
+            is LoginAction.SetupSsoForSessionRecovery -> handleSetupSsoForSessionRecovery(action)
+        }
+    }
+
+    private fun handleSetupSsoForSessionRecovery(action: LoginAction.SetupSsoForSessionRecovery) {
+        setState {
+            copy(
+                    signMode = SignMode.SignIn,
+                    loginMode = LoginMode.Sso,
+                    homeServerUrl = action.homeServerUrl,
+                    deviceId = action.deviceId
+            )
         }
     }
 
@@ -452,7 +469,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
     }
 
     private fun startAuthenticationFlow() {
-        // No op
+        // Ensure Wizard is ready
         loginWizard
     }
 

@@ -49,7 +49,7 @@
     <string name="notice_room_third_party_invite">%1$s님이 %2$s님에게 방 초대를 보냈습니다</string>
     <string name="notice_room_third_party_registered_invite">%1$s님이 %2$s의 초대를 수락했습니다</string>
 
-    <string name="notice_crypto_unable_to_decrypt">** 암호를 해독할 수 없음: %s **</string>
+    <string name="notice_crypto_unable_to_decrypt">** 암호를 복호화할 수 없음: %s **</string>
     <string name="notice_crypto_error_unkwown_inbound_session_id">발신인의 기기에서 이 메시지의 키를 보내지 않았습니다.</string>
 
     <string name="message_reply_to_prefix">관련 대화</string>

@@ -25,11 +25,13 @@ import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.VersioningState
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.util.Cancelable
+import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.internal.database.mapper.RoomSummaryMapper
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.session.room.alias.GetRoomIdByAliasTask
 import im.vector.matrix.android.internal.session.room.create.CreateRoomTask
 import im.vector.matrix.android.internal.session.room.membership.joining.JoinRoomTask
 import im.vector.matrix.android.internal.session.room.read.MarkAllRoomsReadTask
@@ -45,6 +47,7 @@ internal class DefaultRoomService @Inject constructor(private val monarchy: Mona
                                                       private val joinRoomTask: JoinRoomTask,
                                                       private val markAllRoomsReadTask: MarkAllRoomsReadTask,
                                                       private val updateBreadcrumbsTask: UpdateBreadcrumbsTask,
+                                                      private val roomIdByAliasTask: GetRoomIdByAliasTask,
                                                       private val roomFactory: RoomFactory,
                                                       private val taskExecutor: TaskExecutor) : RoomService {
 
@@ -107,6 +110,14 @@ internal class DefaultRoomService @Inject constructor(private val monarchy: Mona
     override fun markAllAsRead(roomIds: List<String>, callback: MatrixCallback<Unit>): Cancelable {
         return markAllRoomsReadTask
                 .configureWith(MarkAllRoomsReadTask.Params(roomIds)) {
+                    this.callback = callback
+                }
+                .executeBy(taskExecutor)
+    }
+
+    override fun getRoomIdByAlias(roomAlias: String, searchOnServer: Boolean, callback: MatrixCallback<Optional<String>>): Cancelable {
+        return roomIdByAliasTask
+                .configureWith(GetRoomIdByAliasTask.Params(roomAlias, searchOnServer)) {
                     this.callback = callback
                 }
                 .executeBy(taskExecutor)

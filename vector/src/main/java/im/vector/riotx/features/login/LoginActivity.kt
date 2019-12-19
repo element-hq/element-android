@@ -20,6 +20,7 @@ import android.content.Context
 import android.content.Intent
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.CallSuper
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
@@ -43,19 +44,21 @@ import im.vector.riotx.features.home.HomeActivity
 import im.vector.riotx.features.login.terms.LoginTermsFragment
 import im.vector.riotx.features.login.terms.LoginTermsFragmentArgument
 import im.vector.riotx.features.login.terms.toLocalizedLoginTerms
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_login.*
 import javax.inject.Inject
 
 /**
  * The LoginActivity manages the fragment navigation and also display the loading View
  */
-class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
+open class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     private val loginViewModel: LoginViewModel by viewModel()
     private lateinit var loginSharedActionViewModel: LoginSharedActionViewModel
 
     @Inject lateinit var loginViewModelFactory: LoginViewModel.Factory
 
+    @CallSuper
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
     }
@@ -75,17 +78,17 @@ class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
                 // Find findViewById does not work, I do not know why
                 // findViewById<View?>(R.id.loginLogo)
                 ?.children
-                ?.first { it.id == R.id.loginLogo }
+                ?.firstOrNull { it.id == R.id.loginLogo }
                 ?.let { ft.addSharedElement(it, ViewCompat.getTransitionName(it) ?: "") }
         // TODO
         ft.setCustomAnimations(enterAnim, exitAnim, popEnterAnim, popExitAnim)
     }
 
-    override fun getLayoutRes() = R.layout.activity_login
+    final override fun getLayoutRes() = R.layout.activity_login
 
     override fun initUiAndData() {
         if (isFirstCreation()) {
-            addFragment(R.id.loginFragmentContainer, LoginSplashFragment::class.java)
+            addFirstFragment()
         }
 
         // Get config extra
@@ -96,7 +99,8 @@ class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
         }
 
         loginSharedActionViewModel = viewModelProvider.get(LoginSharedActionViewModel::class.java)
-        loginSharedActionViewModel.observe()
+        loginSharedActionViewModel
+                .observe()
                 .subscribe {
                     handleLoginNavigation(it)
                 }
@@ -106,14 +110,18 @@ class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
                 .subscribe(this) {
                     updateWithState(it)
                 }
-                .disposeOnDestroy()
 
         loginViewModel.viewEvents
                 .observe()
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     handleLoginViewEvents(it)
                 }
                 .disposeOnDestroy()
+    }
+
+    protected open fun addFirstFragment() {
+        addFragment(R.id.loginFragmentContainer, LoginSplashFragment::class.java)
     }
 
     private fun handleLoginNavigation(loginNavigation: LoginNavigation) {

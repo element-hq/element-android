@@ -19,10 +19,8 @@ package im.vector.riotx.features.login
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
-import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.args
 import im.vector.riotx.R
-import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.error.is401
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_login_wait_for_email.*
@@ -36,7 +34,7 @@ data class LoginWaitForEmailFragmentArgument(
 /**
  * In this screen, the user is asked to check his emails
  */
-class LoginWaitForEmailFragment @Inject constructor(private val errorFormatter: ErrorFormatter) : AbstractLoginFragment() {
+class LoginWaitForEmailFragment @Inject constructor() : AbstractLoginFragment() {
 
     private val params: LoginWaitForEmailFragmentArgument by args()
 
@@ -69,11 +67,7 @@ class LoginWaitForEmailFragment @Inject constructor(private val errorFormatter: 
             // Try again, with a delay
             loginViewModel.handle(LoginAction.CheckIfEmailHasBeenValidated(10_000))
         } else {
-            AlertDialog.Builder(requireActivity())
-                    .setTitle(R.string.dialog_title_error)
-                    .setMessage(errorFormatter.toHumanReadable(throwable))
-                    .setPositiveButton(R.string.ok, null)
-                    .show()
+            super.onError(throwable)
         }
     }
 

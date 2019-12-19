@@ -32,6 +32,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import im.vector.riotx.core.di.DaggerScreenComponent
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.utils.DimensionConverter
+import timber.log.Timber
 
 /**
  * Add MvRx capabilities to bottomsheetdialog (like BaseMvRxFragment)
@@ -78,6 +79,11 @@ abstract class VectorBaseBottomSheetDialogFragment : BottomSheetDialogFragment()
     override fun onCreate(savedInstanceState: Bundle?) {
         mvrxViewIdProperty.restoreFrom(savedInstanceState)
         super.onCreate(savedInstanceState)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Timber.i("onResume BottomSheet ${this.javaClass.simpleName}")
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

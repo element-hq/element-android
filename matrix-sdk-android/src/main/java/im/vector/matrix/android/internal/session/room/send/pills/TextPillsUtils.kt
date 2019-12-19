@@ -65,7 +65,7 @@ internal class TextPillsUtils @Inject constructor(
                 // append text before pill
                 append(text, currIndex, start)
                 // append the pill
-                append(String.format(template, urlSpan.userId, urlSpan.displayName))
+                append(String.format(template, urlSpan.matrixItem.id, urlSpan.matrixItem.displayName))
                 currIndex = end
             }
             // append text after the last pill
