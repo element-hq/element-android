@@ -21,6 +21,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
+import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
@@ -30,15 +31,13 @@ import im.vector.riotx.features.home.AvatarRenderer
 abstract class AutocompleteUserItem : VectorEpoxyModel<AutocompleteUserItem.Holder>() {
 
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
-    @EpoxyAttribute var name: String? = null
-    @EpoxyAttribute var userId: String = ""
-    @EpoxyAttribute var avatarUrl: String? = null
+    @EpoxyAttribute lateinit var matrixItem: MatrixItem
     @EpoxyAttribute var clickListener: View.OnClickListener? = null
 
     override fun bind(holder: Holder) {
         holder.view.setOnClickListener(clickListener)
-        holder.nameView.text = name
-        avatarRenderer.render(avatarUrl, userId, name, holder.avatarImageView)
+        holder.nameView.text = matrixItem.getBestName()
+        avatarRenderer.render(matrixItem, holder.avatarImageView)
     }
 
     class Holder : VectorEpoxyHolder() {

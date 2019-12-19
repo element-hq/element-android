@@ -44,19 +44,20 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
                                               private val taskExecutor: TaskExecutor
 ) : Thread(), NetworkConnectivityChecker.Listener, BackgroundDetectionObserver.Listener {
 
-    private var state: SyncState = SyncState.IDLE
+    private var state: SyncState = SyncState.Idle
     private var liveState = MutableLiveData<SyncState>()
     private val lock = Object()
     private var cancelableTask: Cancelable? = null
 
     private var isStarted = false
+    private var isTokenValid = true
 
     init {
-        updateStateTo(SyncState.IDLE)
+        updateStateTo(SyncState.Idle)
     }
 
     fun setInitialForeground(initialForeground: Boolean) {
-        val newState = if (initialForeground) SyncState.IDLE else SyncState.PAUSED
+        val newState = if (initialForeground) SyncState.Idle else SyncState.Paused
         updateStateTo(newState)
     }
 
@@ -64,6 +65,8 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
         if (!isStarted) {
             Timber.v("Resume sync...")
             isStarted = true
+            // Check again the token validity
+            isTokenValid = true
             lock.notify()
         }
     }
@@ -78,7 +81,7 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
 
     fun kill() = synchronized(lock) {
         Timber.v("Kill sync...")
-        updateStateTo(SyncState.KILLING)
+        updateStateTo(SyncState.Killing)
         cancelableTask?.cancel()
         lock.notify()
     }
@@ -100,26 +103,31 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
         networkConnectivityChecker.register(this)
         backgroundDetectionObserver.register(this)
 
-        while (state != SyncState.KILLING) {
+        while (state != SyncState.Killing) {
             Timber.v("Entering loop, state: $state")
 
             if (!networkConnectivityChecker.hasInternetAccess) {
                 Timber.v("No network. Waiting...")
-                updateStateTo(SyncState.NO_NETWORK)
+                updateStateTo(SyncState.NoNetwork)
                 synchronized(lock) { lock.wait() }
                 Timber.v("...unlocked")
             } else if (!isStarted) {
                 Timber.v("Sync is Paused. Waiting...")
-                updateStateTo(SyncState.PAUSED)
+                updateStateTo(SyncState.Paused)
+                synchronized(lock) { lock.wait() }
+                Timber.v("...unlocked")
+            } else if (!isTokenValid) {
+                Timber.v("Token is invalid. Waiting...")
+                updateStateTo(SyncState.InvalidToken)
                 synchronized(lock) { lock.wait() }
                 Timber.v("...unlocked")
             } else {
-                if (state !is SyncState.RUNNING) {
-                    updateStateTo(SyncState.RUNNING(afterPause = true))
+                if (state !is SyncState.Running) {
+                    updateStateTo(SyncState.Running(afterPause = true))
                 }
 
                 // No timeout after a pause
-                val timeout = state.let { if (it is SyncState.RUNNING && it.afterPause) 0 else DEFAULT_LONG_POOL_TIMEOUT }
+                val timeout = state.let { if (it is SyncState.Running && it.afterPause) 0 else DEFAULT_LONG_POOL_TIMEOUT }
 
                 Timber.v("Execute sync request with timeout $timeout")
                 val latch = CountDownLatch(1)
@@ -141,10 +149,11 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
                             } else if (failure is Failure.Cancelled) {
                                 Timber.v("Cancelled")
                             } else if (failure is Failure.ServerError
-                                    && (failure.error.code == MatrixError.UNKNOWN_TOKEN || failure.error.code == MatrixError.MISSING_TOKEN)) {
-                                // No token or invalid token, stop the thread
+                                    && (failure.error.code == MatrixError.M_UNKNOWN_TOKEN || failure.error.code == MatrixError.M_MISSING_TOKEN)) {
+                                // No token or invalid token
                                 Timber.w(failure)
-                                updateStateTo(SyncState.KILLING)
+                                isTokenValid = false
+                                isStarted = false
                             } else {
                                 Timber.e(failure)
 
@@ -163,8 +172,8 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
 
                 latch.await()
                 state.let {
-                    if (it is SyncState.RUNNING && it.afterPause) {
-                        updateStateTo(SyncState.RUNNING(afterPause = false))
+                    if (it is SyncState.Running && it.afterPause) {
+                        updateStateTo(SyncState.Running(afterPause = false))
                     }
                 }
 
@@ -172,7 +181,7 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
             }
         }
         Timber.v("Sync killed")
-        updateStateTo(SyncState.KILLED)
+        updateStateTo(SyncState.Killed)
         backgroundDetectionObserver.unregister(this)
         networkConnectivityChecker.unregister(this)
     }

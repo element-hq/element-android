@@ -17,6 +17,7 @@
 package im.vector.riotx.features.home.room.detail.timeline.factory
 
 import android.view.View
+import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
@@ -34,7 +35,8 @@ import javax.inject.Inject
 
 class EncryptionItemFactory @Inject constructor(private val stringProvider: StringProvider,
                                                 private val avatarRenderer: AvatarRenderer,
-                                                private val avatarSizeProvider: AvatarSizeProvider) {
+                                                private val avatarSizeProvider: AvatarSizeProvider,
+                                                private val session: Session) {
 
     fun create(event: TimelineEvent,
                highlight: Boolean,
@@ -46,7 +48,8 @@ class EncryptionItemFactory @Inject constructor(private val stringProvider: Stri
                 sendState = event.root.sendState,
                 avatarUrl = event.senderAvatar,
                 memberName = event.getDisambiguatedDisplayName(),
-                showInformation = false
+                showInformation = false,
+                sentByMe = event.root.senderId == session.myUserId
         )
         val attributes = NoticeItem.Attributes(
                 avatarRenderer = avatarRenderer,

@@ -19,14 +19,15 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.LocalEcho
 import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.message.MessageContent
-import im.vector.matrix.android.api.session.room.model.message.MessageType
+import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
 import im.vector.matrix.android.internal.database.RealmLiveEntityObserver
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.query.types
+import im.vector.matrix.android.internal.di.DeviceId
 import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.task.TaskExecutor
@@ -36,13 +37,16 @@ import io.realm.RealmResults
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
-internal class VerificationMessageLiveObserver @Inject constructor(@SessionDatabase realmConfiguration: RealmConfiguration,
-                                                                   @UserId private val userId: String,
-                                                                   private val cryptoService: CryptoService,
-                                                                   private val sasVerificationService: DefaultSasVerificationService,
-                                                                   private val taskExecutor: TaskExecutor) :
-        RealmLiveEntityObserver<EventEntity>(realmConfiguration) {
+internal class VerificationMessageLiveObserver @Inject constructor(
+        @SessionDatabase realmConfiguration: RealmConfiguration,
+        @UserId private val userId: String,
+        @DeviceId private val deviceId: String?,
+        private val cryptoService: CryptoService,
+        private val sasVerificationService: DefaultSasVerificationService,
+        private val taskExecutor: TaskExecutor
+) : RealmLiveEntityObserver<EventEntity>(realmConfiguration) {
 
     override val query = Monarchy.Query<EventEntity> {
         EventEntity.types(it, listOf(
@@ -57,6 +61,8 @@ internal class VerificationMessageLiveObserver @Inject constructor(@SessionDatab
         )
     }
 
+    val transactionsHandledByOtherDevice = ArrayList<String>()
+
     override fun onChange(results: RealmResults<EventEntity>, changeSet: OrderedCollectionChangeSet) {
         // TODO do that in a task
         // TODO how to ignore when it's an initial sync?
@@ -64,8 +70,8 @@ internal class VerificationMessageLiveObserver @Inject constructor(@SessionDatab
                 .asSequence()
                 .mapNotNull { results[it]?.asDomain() }
                 .filterNot {
-                    // ignore mines ^^
-                    it.senderId == userId
+                    // ignore local echos
+                    LocalEcho.isLocalEchoId(it.eventId ?: "")
                 }
                 .toList()
 
@@ -77,7 +83,7 @@ internal class VerificationMessageLiveObserver @Inject constructor(@SessionDatab
         val tooInTheFuture = System.currentTimeMillis() + fiveMinInMs
 
         events.forEach { event ->
-            Timber.d("## SAS Verification live observer: received msgId: ${event.eventId}   msgtype: ${event.type} from ${event.senderId}")
+            Timber.d("## SAS Verification live observer: received msgId: ${event.eventId} msgtype: ${event.type} from ${event.senderId}")
             Timber.v("## SAS Verification live observer: received msgId: $event")
 
             // If the request is in the future by more than 5 minutes or more than 10 minutes in the past,
@@ -111,6 +117,45 @@ internal class VerificationMessageLiveObserver @Inject constructor(@SessionDatab
                 }
             }
             Timber.v("## SAS Verification live observer: received msgId: ${event.eventId} type: ${event.getClearType()}")
+
+            if (event.senderId == userId) {
+                // If it's send from me, we need to keep track of Requests or Start
+                // done from another device of mine
+
+                if (EventType.MESSAGE == event.type) {
+                    val msgType = event.getClearContent().toModel<MessageContent>()?.type
+                    if (MessageType.MSGTYPE_VERIFICATION_REQUEST == msgType) {
+                        event.getClearContent().toModel<MessageVerificationRequestContent>()?.let {
+                            if (it.fromDevice != deviceId) {
+                                // The verification is requested from another device
+                                Timber.v("## SAS Verification live observer: Transaction requested from other device  tid:${event.eventId} ")
+                                event.eventId?.let { txId -> transactionsHandledByOtherDevice.add(txId) }
+                            }
+                        }
+                    }
+                } else if (EventType.KEY_VERIFICATION_START == event.type) {
+                    event.getClearContent().toModel<MessageVerificationStartContent>()?.let {
+                        if (it.fromDevice != deviceId) {
+                            // The verification is started from another device
+                            Timber.v("## SAS Verification live observer: Transaction started by other device  tid:${it.transactionID} ")
+                            it.transactionID?.let { txId -> transactionsHandledByOtherDevice.add(txId) }
+                        }
+                    }
+                } else if (EventType.KEY_VERIFICATION_CANCEL == event.type || EventType.KEY_VERIFICATION_DONE == event.type) {
+                    event.getClearContent().toModel<MessageRelationContent>()?.relatesTo?.eventId?.let {
+                        transactionsHandledByOtherDevice.remove(it)
+                    }
+                }
+
+                return@forEach
+            }
+
+            val relatesTo = event.getClearContent().toModel<MessageRelationContent>()?.relatesTo?.eventId
+            if (relatesTo != null && transactionsHandledByOtherDevice.contains(relatesTo)) {
+                // Ignore this event, it is directed to another of my devices
+                Timber.v("## SAS Verification live observer: Ignore Transaction handled by other device  tid:$relatesTo ")
+                return@forEach
+            }
             when (event.getClearType()) {
                 EventType.KEY_VERIFICATION_START,
                 EventType.KEY_VERIFICATION_ACCEPT,

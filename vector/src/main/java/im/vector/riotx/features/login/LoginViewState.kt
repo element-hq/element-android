@@ -34,6 +34,9 @@ data class LoginViewState(
         val resetPasswordEmail: String? = null,
         @PersistState
         val homeServerUrl: String? = null,
+        // For SSO session recovery
+        @PersistState
+        val deviceId: String? = null,
 
         // Network result
         @PersistState
@@ -49,17 +52,11 @@ data class LoginViewState(
                 || asyncResetPassword is Loading
                 || asyncResetMailConfirmed is Loading
                 || asyncRegistration is Loading
+                // Keep loading when it is success because of the delay to switch to the next Activity
+                || asyncLoginAction is Success
     }
 
     fun isUserLogged(): Boolean {
         return asyncLoginAction is Success
     }
-
-    /**
-     * Ex: "https://matrix.org/" -> "matrix.org"
-     */
-    val homeServerUrlSimple: String
-        get() = (homeServerUrl ?: "")
-                .substringAfter("://")
-                .trim { it == '/' }
 }

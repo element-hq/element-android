@@ -18,11 +18,9 @@ package im.vector.riotx.features.login
 
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AlertDialog
 import butterknife.OnClick
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
-import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.utils.openUrlInExternalBrowser
 import kotlinx.android.synthetic.main.fragment_login_server_selection.*
 import me.gujun.android.span.span
@@ -31,9 +29,7 @@ import javax.inject.Inject
 /**
  * In this screen, the user will choose between matrix.org, modular or other type of homeserver
  */
-class LoginServerSelectionFragment @Inject constructor(
-        private val errorFormatter: ErrorFormatter
-) : AbstractLoginFragment() {
+class LoginServerSelectionFragment @Inject constructor() : AbstractLoginFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_login_server_selection
 
@@ -105,14 +101,6 @@ class LoginServerSelectionFragment @Inject constructor(
 
     override fun resetViewModel() {
         loginViewModel.handle(LoginAction.ResetHomeServerType)
-    }
-
-    override fun onError(throwable: Throwable) {
-        AlertDialog.Builder(requireActivity())
-                .setTitle(R.string.dialog_title_error)
-                .setMessage(errorFormatter.toHumanReadable(throwable))
-                .setPositiveButton(R.string.ok, null)
-                .show()
     }
 
     override fun updateWithState(state: LoginViewState) {

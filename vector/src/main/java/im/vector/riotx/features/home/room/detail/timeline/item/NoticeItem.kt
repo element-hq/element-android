@@ -39,13 +39,7 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.noticeTextView.text = attributes.noticeText
-        attributes.avatarRenderer.render(
-                attributes.informationData.avatarUrl,
-                attributes.informationData.senderId,
-                attributes.informationData.memberName?.toString()
-                        ?: attributes.informationData.senderId,
-                holder.avatarImageView
-        )
+        attributes.avatarRenderer.render(attributes.informationData.matrixItem, holder.avatarImageView)
         holder.view.setOnLongClickListener(attributes.itemLongClickListener)
         holder.readReceiptsView.render(attributes.informationData.readReceipts, attributes.avatarRenderer, _readReceiptsClickListener)
     }

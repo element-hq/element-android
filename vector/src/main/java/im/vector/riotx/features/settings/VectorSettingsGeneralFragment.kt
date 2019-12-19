@@ -43,6 +43,7 @@ import im.vector.riotx.core.preference.UserAvatarPreference
 import im.vector.riotx.core.preference.VectorPreference
 import im.vector.riotx.core.utils.*
 import im.vector.riotx.features.MainActivity
+import im.vector.riotx.features.MainActivityArgs
 import im.vector.riotx.features.themes.ThemeUtils
 import im.vector.riotx.features.workers.signout.SignOutUiWorker
 import kotlinx.coroutines.Dispatchers
@@ -176,7 +177,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
 
             it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 displayLoadingView()
-                MainActivity.restartApp(activity!!, clearCache = true, clearCredentials = false)
+                MainActivity.restartApp(activity!!, MainActivityArgs(clearCache = true))
                 false
             }
         }

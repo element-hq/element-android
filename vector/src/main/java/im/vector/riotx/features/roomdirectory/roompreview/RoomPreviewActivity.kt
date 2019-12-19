@@ -21,6 +21,7 @@ import android.content.Intent
 import android.os.Parcelable
 import androidx.appcompat.widget.Toolbar
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
+import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.addFragment
 import im.vector.riotx.core.platform.ToolbarConfigurable
@@ -34,7 +35,10 @@ data class RoomPreviewData(
         val topic: String?,
         val worldReadable: Boolean,
         val avatarUrl: String?
-) : Parcelable
+) : Parcelable {
+    val matrixItem: MatrixItem
+        get() = MatrixItem.RoomItem(roomId, roomName, avatarUrl)
+}
 
 class RoomPreviewActivity : VectorBaseActivity(), ToolbarConfigurable {
 

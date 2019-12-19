@@ -60,7 +60,8 @@ internal class DefaultSessionCreator @Inject constructor(
                                 ?.also { Timber.d("Overriding identity server url to $it") }
                                 ?.let { Uri.parse(it) }
                                 ?: homeServerConnectionConfig.identityServerUri
-                ))
+                ),
+                isTokenValid = true)
 
         sessionParamsStore.save(sessionParams)
         return sessionManager.getOrCreateSession(sessionParams)

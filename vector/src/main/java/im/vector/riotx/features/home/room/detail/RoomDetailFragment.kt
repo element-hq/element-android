@@ -66,10 +66,11 @@ import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.matrix.android.api.session.user.model.User
+import im.vector.matrix.android.api.util.MatrixItem
+import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.dialogs.withColoredButton
 import im.vector.riotx.core.epoxy.LayoutManagerStateRestorer
-import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.*
 import im.vector.riotx.core.files.addEntryToDownloadManager
 import im.vector.riotx.core.glide.GlideApp
@@ -141,7 +142,6 @@ class RoomDetailFragment @Inject constructor(
         private val notificationDrawerManager: NotificationDrawerManager,
         val roomDetailViewModelFactory: RoomDetailViewModel.Factory,
         val textComposerViewModelFactory: TextComposerViewModel.Factory,
-        private val errorFormatter: ErrorFormatter,
         private val eventHtmlRenderer: EventHtmlRenderer,
         private val vectorPreferences: VectorPreferences
 ) :
@@ -410,9 +410,7 @@ class RoomDetailFragment @Inject constructor(
         composerLayout.sendButton.setContentDescription(getString(descriptionRes))
 
         avatarRenderer.render(
-                event.senderAvatar,
-                event.root.senderId ?: "",
-                event.getDisambiguatedDisplayName(),
+                MatrixItem.UserItem(event.root.senderId ?: "", event.getDisambiguatedDisplayName(), event.senderAvatar),
                 composerLayout.composerRelatedMessageAvatar
         )
         composerLayout.expand {
@@ -601,20 +599,19 @@ class RoomDetailFragment @Inject constructor(
                         }
 
                         // Replace the word by its completion
-                        val displayName = item.displayName ?: item.userId
+                        val matrixItem = item.toMatrixItem()
+                        val displayName = matrixItem.getBestName()
 
                         // with a trailing space
                         editable.replace(startIndex, endIndex, "$displayName ")
 
                         // Add the span
-                        val user = session.getUser(item.userId)
                         val span = PillImageSpan(
                                 glideRequests,
                                 avatarRenderer,
                                 requireContext(),
-                                item.userId,
-                                user?.displayName ?: item.userId,
-                                user?.avatarUrl)
+                                matrixItem
+                        )
                         span.bind(composerLayout.composerEditText)
 
                         editable.setSpan(span, startIndex, startIndex + displayName.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -686,7 +683,7 @@ class RoomDetailFragment @Inject constructor(
             inviteView.visibility = View.GONE
             val uid = session.myUserId
             val meMember = session.getRoom(state.roomId)?.getRoomMember(uid)
-            avatarRenderer.render(meMember?.avatarUrl, uid, meMember?.displayName, composerLayout.composerAvatarImageView)
+            avatarRenderer.render(MatrixItem.UserItem(uid, meMember?.displayName, meMember?.avatarUrl), composerLayout.composerAvatarImageView)
         } else if (summary?.membership == Membership.INVITE && inviter != null) {
             inviteView.visibility = View.VISIBLE
             inviteView.render(inviter, VectorInviteView.Mode.LARGE)
@@ -713,7 +710,7 @@ class RoomDetailFragment @Inject constructor(
                 activity?.finish()
             } else {
                 roomToolbarTitleView.text = it.displayName
-                avatarRenderer.render(it, roomToolbarAvatarImageView)
+                avatarRenderer.render(it.toMatrixItem(), roomToolbarAvatarImageView)
                 roomToolbarSubtitleView.setTextOrHide(it.topic)
             }
             jumpToBottomView.count = it.notificationCount
@@ -1024,6 +1021,10 @@ class RoomDetailFragment @Inject constructor(
                 .show(requireActivity().supportFragmentManager, "DISPLAY_EDITS")
     }
 
+    override fun onTimelineItemAction(itemAction: RoomDetailAction) {
+        roomDetailViewModel.handle(itemAction)
+    }
+
     override fun onRoomCreateLinkClicked(url: String) {
         permalinkHandler.launch(requireContext(), url, object : NavigateToRoomInterceptor {
             override fun navToRoom(roomId: String, eventId: String?): Boolean {
@@ -1197,9 +1198,8 @@ class RoomDetailFragment @Inject constructor(
                                             glideRequests,
                                             avatarRenderer,
                                             requireContext(),
-                                            userId,
-                                            displayName,
-                                            roomMember?.avatarUrl)
+                                            MatrixItem.UserItem(userId, displayName, roomMember?.avatarUrl)
+                                    )
                                             .also { it.bind(composerLayout.composerEditText) },
                                     0,
                                     displayName.length,

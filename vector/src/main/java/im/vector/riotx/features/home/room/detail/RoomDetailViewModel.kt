@@ -48,6 +48,7 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineSettings
 import im.vector.matrix.android.api.session.room.timeline.getTextEditableContent
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
+import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationStart
 import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
 import im.vector.riotx.R
@@ -177,6 +178,8 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
             is RoomDetailAction.IgnoreUser                       -> handleIgnoreUser(action)
             is RoomDetailAction.EnterTrackingUnreadMessagesState -> startTrackingUnreadMessages()
             is RoomDetailAction.ExitTrackingUnreadMessagesState  -> stopTrackingUnreadMessages()
+            is RoomDetailAction.AcceptVerificationRequest   -> handleAcceptVerification(action)
+            is RoomDetailAction.DeclineVerificationRequest  -> handleDeclineVerification(action)
         }
     }
 
@@ -784,6 +787,21 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 _requestLiveData.postValue(LiveEvent(Fail(failure)))
             }
         })
+    }
+
+    private fun handleAcceptVerification(action: RoomDetailAction.AcceptVerificationRequest) {
+        session.getSasVerificationService().beginKeyVerificationInDMs(
+                KeyVerificationStart.VERIF_METHOD_SAS,
+                action.transactionId,
+                room.roomId,
+                action.otherUserId,
+                action.otherdDeviceId,
+                null
+        )
+    }
+
+    private fun handleDeclineVerification(action: RoomDetailAction.DeclineVerificationRequest) {
+        Timber.e("TODO implement $action")
     }
 
     private fun observeSyncState() {

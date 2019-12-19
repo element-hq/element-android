@@ -37,7 +37,7 @@ class ActiveSessionHolder @Inject constructor(private val authenticationService:
 
     fun setActiveSession(session: Session) {
         activeSession.set(session)
-        sessionObservableStore.post(Option.fromNullable(session))
+        sessionObservableStore.post(Option.just(session))
         keyRequestHandler.start(session)
         incomingVerificationRequestHandler.start(session)
     }

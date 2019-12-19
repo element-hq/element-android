@@ -44,6 +44,12 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
             EventType.CALL_ANSWER              -> formatCallEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
             EventType.MESSAGE,
             EventType.REACTION,
+            EventType.KEY_VERIFICATION_START,
+            EventType.KEY_VERIFICATION_CANCEL,
+            EventType.KEY_VERIFICATION_ACCEPT,
+            EventType.KEY_VERIFICATION_MAC,
+            EventType.KEY_VERIFICATION_DONE,
+            EventType.KEY_VERIFICATION_KEY,
             EventType.REDACTION                -> formatDebug(timelineEvent.root)
             else                               -> {
                 Timber.v("Type $type not handled by this formatter")

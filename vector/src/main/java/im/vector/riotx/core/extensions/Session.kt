@@ -19,6 +19,7 @@ package im.vector.riotx.core.extensions
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ProcessLifecycleOwner
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
 import im.vector.matrix.android.api.session.sync.FilterService
 import im.vector.riotx.features.notifications.PushRuleTriggerListener
 import im.vector.riotx.features.session.SessionListener
@@ -39,4 +40,12 @@ fun Session.configureAndStart(pushRuleTriggerListener: PushRuleTriggerListener,
     // TODO P1 From HomeActivity
     // @Inject lateinit var incomingVerificationRequestHandler: IncomingVerificationRequestHandler
     // @Inject lateinit var keyRequestHandler: KeyRequestHandler
+}
+
+/**
+ * Tell is the session has unsaved e2e keys in the backup
+ */
+fun Session.hasUnsavedKeys(): Boolean {
+    return inboundGroupSessionsCount(false) > 0
+            && getKeysBackupService().state != KeysBackupState.ReadyToBackUp
 }

@@ -18,6 +18,7 @@ package im.vector.riotx.features.home.room.list.actions
 import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.matrix.android.api.session.room.notification.RoomNotificationState
+import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.core.epoxy.bottomsheet.bottomSheetActionItem
 import im.vector.riotx.core.epoxy.bottomsheet.bottomSheetRoomPreviewItem
 import im.vector.riotx.core.epoxy.bottomsheet.bottomSheetSeparatorItem
@@ -39,9 +40,7 @@ class RoomListQuickActionsEpoxyController @Inject constructor(private val avatar
         bottomSheetRoomPreviewItem {
             id("preview")
             avatarRenderer(avatarRenderer)
-            roomName(roomSummary.displayName)
-            avatarUrl(roomSummary.avatarUrl)
-            roomId(roomSummary.roomId)
+            matrixItem(roomSummary.toMatrixItem())
             settingsClickListener(View.OnClickListener { listener?.didSelectMenuAction(RoomListQuickActionsSharedAction.Settings(roomSummary.roomId)) })
         }
 

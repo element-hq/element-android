@@ -38,12 +38,15 @@ import butterknife.Unbinder
 import com.airbnb.mvrx.MvRx
 import com.bumptech.glide.util.Util
 import com.google.android.material.snackbar.Snackbar
+import im.vector.matrix.android.api.failure.GlobalError
 import im.vector.riotx.BuildConfig
 import im.vector.riotx.R
 import im.vector.riotx.core.di.*
 import im.vector.riotx.core.dialogs.DialogLocker
 import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.utils.toast
+import im.vector.riotx.features.MainActivity
+import im.vector.riotx.features.MainActivityArgs
 import im.vector.riotx.features.configuration.VectorConfiguration
 import im.vector.riotx.features.consent.ConsentNotGivenHelper
 import im.vector.riotx.features.navigation.Navigator
@@ -88,6 +91,9 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
     private lateinit var rageShake: RageShake
     protected lateinit var navigator: Navigator
     private lateinit var activeSessionHolder: ActiveSessionHolder
+
+    // Filter for multiple invalid token error
+    private var mainActivityStarted = false
 
     private var unBinder: Unbinder? = null
 
@@ -153,9 +159,8 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
         })
 
         sessionListener = getVectorComponent().sessionListener()
-        sessionListener.consentNotGivenLiveData.observeEvent(this) {
-            consentNotGivenHelper.displayDialog(it.consentUri,
-                    activeSessionHolder.getActiveSession().sessionParams.homeServerConnectionConfig.homeServerUri.host ?: "")
+        sessionListener.globalErrorLiveData.observeEvent(this) {
+            handleGlobalError(it)
         }
 
         doBeforeSetContentView()
@@ -178,6 +183,33 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
                 setTitle(titleRes)
             }
         }
+    }
+
+    private fun handleGlobalError(globalError: GlobalError) {
+        when (globalError) {
+            is GlobalError.InvalidToken         ->
+                handleInvalidToken(globalError)
+            is GlobalError.ConsentNotGivenError ->
+                consentNotGivenHelper.displayDialog(globalError.consentUri,
+                        activeSessionHolder.getActiveSession().sessionParams.homeServerConnectionConfig.homeServerUri.host ?: "")
+        }
+    }
+
+    protected open fun handleInvalidToken(globalError: GlobalError.InvalidToken) {
+        Timber.w("Invalid token event received")
+        if (mainActivityStarted) {
+            return
+        }
+
+        mainActivityStarted = true
+
+        MainActivity.restartApp(this,
+                MainActivityArgs(
+                        clearCredentials = !globalError.softLogout,
+                        isUserLoggedOut = true,
+                        isSoftLogout = globalError.softLogout
+                )
+        )
     }
 
     override fun onDestroy() {

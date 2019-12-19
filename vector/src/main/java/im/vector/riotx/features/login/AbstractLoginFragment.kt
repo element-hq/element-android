@@ -29,6 +29,7 @@ import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.OnBackPressed
 import im.vector.riotx.core.platform.VectorBaseFragment
+import io.reactivex.android.schedulers.AndroidSchedulers
 import javax.net.ssl.HttpsURLConnection
 
 /**
@@ -60,6 +61,7 @@ abstract class AbstractLoginFragment : VectorBaseFragment(), OnBackPressed {
 
         loginViewModel.viewEvents
                 .observe()
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     handleLoginViewEvents(it)
                 }
@@ -78,7 +80,7 @@ abstract class AbstractLoginFragment : VectorBaseFragment(), OnBackPressed {
     private fun showError(throwable: Throwable) {
         when (throwable) {
             is Failure.ServerError -> {
-                if (throwable.error.code == MatrixError.FORBIDDEN
+                if (throwable.error.code == MatrixError.M_FORBIDDEN
                         && throwable.httpCode == HttpsURLConnection.HTTP_FORBIDDEN /* 403 */) {
                     AlertDialog.Builder(requireActivity())
                             .setTitle(R.string.dialog_title_error)
@@ -93,7 +95,13 @@ abstract class AbstractLoginFragment : VectorBaseFragment(), OnBackPressed {
         }
     }
 
-    abstract fun onError(throwable: Throwable)
+    open fun onError(throwable: Throwable) {
+        AlertDialog.Builder(requireActivity())
+                .setTitle(R.string.dialog_title_error)
+                .setMessage(errorFormatter.toHumanReadable(throwable))
+                .setPositiveButton(R.string.ok, null)
+                .show()
+    }
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
         return when {

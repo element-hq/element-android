@@ -28,7 +28,8 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                                               private val encryptedItemFactory: EncryptedItemFactory,
                                               private val noticeItemFactory: NoticeItemFactory,
                                               private val defaultItemFactory: DefaultItemFactory,
-                                              private val roomCreateItemFactory: RoomCreateItemFactory) {
+                                              private val roomCreateItemFactory: RoomCreateItemFactory,
+                                              private val verificationConclusionItemFactory: VerificationItemFactory) {
 
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
@@ -66,13 +67,15 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 }
                 EventType.KEY_VERIFICATION_ACCEPT,
                 EventType.KEY_VERIFICATION_START,
-                EventType.KEY_VERIFICATION_DONE,
-                EventType.KEY_VERIFICATION_CANCEL,
                 EventType.KEY_VERIFICATION_KEY,
                 EventType.KEY_VERIFICATION_MAC          -> {
                     // These events are filtered from timeline in normal case
                     // Only visible in developer mode
-                    defaultItemFactory.create(event, highlight, callback)
+                    noticeItemFactory.create(event, highlight, callback)
+                }
+                EventType.KEY_VERIFICATION_CANCEL,
+                EventType.KEY_VERIFICATION_DONE         -> {
+                    verificationConclusionItemFactory.create(event, highlight, callback)
                 }
 
                 // Unhandled event types (yet)

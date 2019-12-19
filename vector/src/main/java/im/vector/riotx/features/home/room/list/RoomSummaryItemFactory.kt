@@ -17,10 +17,9 @@
 package im.vector.riotx.features.home.room.list
 
 import android.view.View
-import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
-import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
+import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.date.VectorDateFormatter
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
@@ -30,11 +29,10 @@ import im.vector.riotx.core.resources.DateProvider
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.utils.DebouncedClickListener
 import im.vector.riotx.features.home.AvatarRenderer
-import im.vector.riotx.features.home.room.detail.timeline.format.NoticeEventFormatter
-import me.gujun.android.span.span
+import im.vector.riotx.features.home.room.detail.timeline.format.DisplayableEventFormatter
 import javax.inject.Inject
 
-class RoomSummaryItemFactory @Inject constructor(private val noticeEventFormatter: NoticeEventFormatter,
+class RoomSummaryItemFactory @Inject constructor(private val displayableEventFormatter: DisplayableEventFormatter,
                                                  private val dateFormatter: VectorDateFormatter,
                                                  private val colorProvider: ColorProvider,
                                                  private val stringProvider: StringProvider,
@@ -69,7 +67,7 @@ class RoomSummaryItemFactory @Inject constructor(private val noticeEventFormatte
         return RoomInvitationItem_()
                 .id(roomSummary.roomId)
                 .avatarRenderer(avatarRenderer)
-                .roomId(roomSummary.roomId)
+                .matrixItem(roomSummary.toMatrixItem())
                 .secondLine(secondLine)
                 .invitationAcceptInProgress(joiningRoomsIds.contains(roomSummary.roomId))
                 .invitationAcceptInError(joiningErrorRoomsIds.contains(roomSummary.roomId))
@@ -77,8 +75,6 @@ class RoomSummaryItemFactory @Inject constructor(private val noticeEventFormatte
                 .invitationRejectInError(rejectingErrorRoomsIds.contains(roomSummary.roomId))
                 .acceptListener { listener?.onAcceptRoomInvitation(roomSummary) }
                 .rejectListener { listener?.onRejectRoomInvitation(roomSummary) }
-                .roomName(roomSummary.displayName)
-                .avatarUrl(roomSummary.avatarUrl)
                 .listener { listener?.onRoomClicked(roomSummary) }
     }
 
@@ -93,29 +89,7 @@ class RoomSummaryItemFactory @Inject constructor(private val noticeEventFormatte
             val date = latestEvent.root.localDateTime()
             val currentDate = DateProvider.currentLocalDateTime()
             val isSameDay = date.toLocalDate() == currentDate.toLocalDate()
-            latestFormattedEvent = if (latestEvent.root.isEncrypted()
-                    && latestEvent.root.mxDecryptionResult == null) {
-                stringProvider.getString(R.string.encrypted_message)
-            } else if (latestEvent.root.getClearType() == EventType.MESSAGE || latestEvent.root.getClearType() == EventType.STICKER) {
-                val senderName = latestEvent.getDisambiguatedDisplayName()
-                val content = latestEvent.getLastMessageContent()
-                val message = content?.body ?: ""
-                if (roomSummary.isDirect.not()) {
-                    span {
-                        text = senderName
-                        textColor = colorProvider.getColorFromAttribute(R.attr.riotx_text_primary)
-                    }
-                            .append(" - ")
-                            .append(message)
-                } else {
-                    message
-                }
-            } else {
-                span {
-                    text = noticeEventFormatter.format(latestEvent) ?: ""
-                    textStyle = "italic"
-                }
-            }
+            latestFormattedEvent = displayableEventFormatter.format(latestEvent, roomSummary.isDirect.not())
             latestEventTime = if (isSameDay) {
                 dateFormatter.formatMessageHour(date)
             } else {
@@ -125,11 +99,9 @@ class RoomSummaryItemFactory @Inject constructor(private val noticeEventFormatte
         return RoomSummaryItem_()
                 .id(roomSummary.roomId)
                 .avatarRenderer(avatarRenderer)
-                .roomId(roomSummary.roomId)
+                .matrixItem(roomSummary.toMatrixItem())
                 .lastEventTime(latestEventTime)
                 .lastFormattedEvent(latestFormattedEvent)
-                .roomName(roomSummary.displayName)
-                .avatarUrl(roomSummary.avatarUrl)
                 .showHighlighted(showHighlighted)
                 .unreadNotificationCount(unreadCount)
                 .hasUnreadMessage(roomSummary.hasUnreadMessages)

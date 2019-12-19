@@ -50,7 +50,7 @@ internal class SasTransportRoomMessage(
         Timber.d("## SAS sending msg type $type")
         Timber.v("## SAS sending msg info $verificationInfo")
         sendVerificationMessageTask.configureWith(
-                SendVerificationMessageTask.Params(
+                sendVerificationMessageTask.createParamsAndLocalEcho(
                         type,
                         roomId,
                         verificationInfo.toEventContent()!!,
@@ -82,7 +82,7 @@ internal class SasTransportRoomMessage(
     override fun cancelTransaction(transactionId: String, userId: String, userDevice: String, code: CancelCode) {
         Timber.d("## SAS canceling transaction $transactionId for reason $code")
         sendVerificationMessageTask.configureWith(
-                SendVerificationMessageTask.Params(
+                sendVerificationMessageTask.createParamsAndLocalEcho(
                         EventType.KEY_VERIFICATION_CANCEL,
                         roomId,
                         MessageVerificationCancelContent.create(transactionId, code).toContent(),
@@ -108,7 +108,7 @@ internal class SasTransportRoomMessage(
 
     override fun done(transactionId: String) {
         sendVerificationMessageTask.configureWith(
-                SendVerificationMessageTask.Params(
+                sendVerificationMessageTask.createParamsAndLocalEcho(
                         EventType.KEY_VERIFICATION_DONE,
                         roomId,
                         MessageVerificationDoneContent(
