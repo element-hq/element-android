@@ -31,6 +31,7 @@ import im.vector.matrix.android.internal.crypto.attachments.ElementToDecrypt
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.glide.GlideApp
 import im.vector.riotx.core.glide.GlideRequest
+import im.vector.riotx.core.ui.model.Size
 import im.vector.riotx.core.utils.DimensionConverter
 import im.vector.riotx.core.utils.isLocalFile
 import kotlinx.android.parcel.Parcelize
@@ -62,13 +63,13 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
     }
 
     fun render(data: Data, mode: Mode, imageView: ImageView) {
-        val (width, height) = processSize(data, mode)
-        imageView.layoutParams.height = height
-        imageView.layoutParams.width = width
+        val size = processSize(data, mode)
+        imageView.layoutParams.width = size.width
+        imageView.layoutParams.height = size.height
         // a11y
         imageView.contentDescription = data.filename
 
-        createGlideRequest(data, mode, imageView, width, height)
+        createGlideRequest(data, mode, imageView, size)
                 .dontAnimate()
                 .transform(RoundedCorners(dimensionConverter.dpToPx(8)))
                 .thumbnail(0.3f)
@@ -76,12 +77,12 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
     }
 
     fun renderFitTarget(data: Data, mode: Mode, imageView: ImageView, callback: ((Boolean) -> Unit)? = null) {
-        val (width, height) = processSize(data, mode)
+        val size = processSize(data, mode)
 
         // a11y
         imageView.contentDescription = data.filename
 
-        createGlideRequest(data, mode, imageView, width, height)
+        createGlideRequest(data, mode, imageView, size)
                 .listener(object : RequestListener<Drawable> {
                     override fun onLoadFailed(e: GlideException?,
                                               model: Any?,
@@ -104,7 +105,7 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
                 .into(imageView)
     }
 
-    private fun createGlideRequest(data: Data, mode: Mode, imageView: ImageView, width: Int, height: Int): GlideRequest<Drawable> {
+    private fun createGlideRequest(data: Data, mode: Mode, imageView: ImageView, size: Size): GlideRequest<Drawable> {
         return if (data.elementToDecrypt != null) {
             // Encrypted image
             GlideApp
@@ -116,7 +117,7 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
             val resolvedUrl = when (mode) {
                 Mode.FULL_SIZE,
                 Mode.STICKER   -> contentUrlResolver.resolveFullSize(data.url)
-                Mode.THUMBNAIL -> contentUrlResolver.resolveThumbnail(data.url, width, height, ContentUrlResolver.ThumbnailMethod.SCALE)
+                Mode.THUMBNAIL -> contentUrlResolver.resolveThumbnail(data.url, size.width, size.height, ContentUrlResolver.ThumbnailMethod.SCALE)
             }
             // Fallback to base url
                     ?: data.url
@@ -147,7 +148,7 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
         )
     }
 
-    private fun processSize(data: Data, mode: Mode): Pair<Int, Int> {
+    private fun processSize(data: Data, mode: Mode): Size {
         val maxImageWidth = data.maxWidth
         val maxImageHeight = data.maxHeight
         val width = data.width ?: maxImageWidth
@@ -182,6 +183,6 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
         if (finalWidth < 0) {
             finalWidth = maxImageWidth
         }
-        return Pair(finalWidth, finalHeight)
+        return Size(finalWidth, finalHeight)
     }
 }
