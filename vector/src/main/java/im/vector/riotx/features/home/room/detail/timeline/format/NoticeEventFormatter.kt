@@ -33,21 +33,21 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
 
     fun format(timelineEvent: TimelineEvent): CharSequence? {
         return when (val type = timelineEvent.root.getClearType()) {
-            EventType.STATE_ROOM_JOIN_RULES    -> formatJoinRulesEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
-            EventType.STATE_ROOM_NAME          -> formatRoomNameEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
-            EventType.STATE_ROOM_TOPIC         -> formatRoomTopicEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
-            EventType.STATE_ROOM_MEMBER        -> formatRoomMemberEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
-            EventType.STATE_ROOM_ALIASES       -> formatRoomAliasesEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
-            EventType.STATE_CANONICAL_ALIAS    -> formatRoomCanonicalAliasEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
-            EventType.STATE_HISTORY_VISIBILITY -> formatRoomHistoryVisibilityEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
-            EventType.STATE_ROOM_TOMBSTONE     -> formatRoomTombstoneEvent(timelineEvent.getDisambiguatedDisplayName())
+            EventType.STATE_ROOM_JOIN_RULES         -> formatJoinRulesEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
+            EventType.STATE_ROOM_NAME               -> formatRoomNameEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
+            EventType.STATE_ROOM_TOPIC              -> formatRoomTopicEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
+            EventType.STATE_ROOM_MEMBER             -> formatRoomMemberEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
+            EventType.STATE_ROOM_ALIASES            -> formatRoomAliasesEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
+            EventType.STATE_ROOM_CANONICAL_ALIAS    -> formatRoomCanonicalAliasEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
+            EventType.STATE_ROOM_HISTORY_VISIBILITY -> formatRoomHistoryVisibilityEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
+            EventType.STATE_ROOM_TOMBSTONE          -> formatRoomTombstoneEvent(timelineEvent.getDisambiguatedDisplayName())
             EventType.CALL_INVITE,
             EventType.CALL_HANGUP,
-            EventType.CALL_ANSWER              -> formatCallEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
+            EventType.CALL_ANSWER                   -> formatCallEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
             EventType.MESSAGE,
             EventType.REACTION,
-            EventType.REDACTION                -> formatDebug(timelineEvent.root)
-            else                               -> {
+            EventType.REDACTION                     -> formatDebug(timelineEvent.root)
+            else                                    -> {
                 Timber.v("Type $type not handled by this formatter")
                 null
             }
@@ -56,16 +56,16 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
 
     fun format(event: Event, senderName: String?): CharSequence? {
         return when (val type = event.getClearType()) {
-            EventType.STATE_ROOM_JOIN_RULES    -> formatJoinRulesEvent(event, senderName)
-            EventType.STATE_ROOM_NAME          -> formatRoomNameEvent(event, senderName)
-            EventType.STATE_ROOM_TOPIC         -> formatRoomTopicEvent(event, senderName)
-            EventType.STATE_ROOM_MEMBER        -> formatRoomMemberEvent(event, senderName)
-            EventType.STATE_HISTORY_VISIBILITY -> formatRoomHistoryVisibilityEvent(event, senderName)
+            EventType.STATE_ROOM_JOIN_RULES         -> formatJoinRulesEvent(event, senderName)
+            EventType.STATE_ROOM_NAME               -> formatRoomNameEvent(event, senderName)
+            EventType.STATE_ROOM_TOPIC              -> formatRoomTopicEvent(event, senderName)
+            EventType.STATE_ROOM_MEMBER             -> formatRoomMemberEvent(event, senderName)
+            EventType.STATE_ROOM_HISTORY_VISIBILITY -> formatRoomHistoryVisibilityEvent(event, senderName)
             EventType.CALL_INVITE,
             EventType.CALL_HANGUP,
-            EventType.CALL_ANSWER              -> formatCallEvent(event, senderName)
-            EventType.STATE_ROOM_TOMBSTONE     -> formatRoomTombstoneEvent(senderName)
-            else                               -> {
+            EventType.CALL_ANSWER                   -> formatCallEvent(event, senderName)
+            EventType.STATE_ROOM_TOMBSTONE          -> formatRoomTombstoneEvent(senderName)
+            else                                    -> {
                 Timber.v("Type $type not handled by this formatter")
                 null
             }
