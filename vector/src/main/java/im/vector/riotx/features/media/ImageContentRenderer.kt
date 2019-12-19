@@ -31,11 +31,13 @@ import im.vector.matrix.android.internal.crypto.attachments.ElementToDecrypt
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.glide.GlideApp
 import im.vector.riotx.core.glide.GlideRequest
+import im.vector.riotx.core.ui.model.Size
 import im.vector.riotx.core.utils.DimensionConverter
 import im.vector.riotx.core.utils.isLocalFile
 import kotlinx.android.parcel.Parcelize
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.math.min
 
 class ImageContentRenderer @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
                                                private val dimensionConverter: DimensionConverter) {
@@ -56,17 +58,18 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
 
     enum class Mode {
         FULL_SIZE,
-        THUMBNAIL
+        THUMBNAIL,
+        STICKER
     }
 
     fun render(data: Data, mode: Mode, imageView: ImageView) {
-        val (width, height) = processSize(data, mode)
-        imageView.layoutParams.height = height
-        imageView.layoutParams.width = width
+        val size = processSize(data, mode)
+        imageView.layoutParams.width = size.width
+        imageView.layoutParams.height = size.height
         // a11y
         imageView.contentDescription = data.filename
 
-        createGlideRequest(data, mode, imageView, width, height)
+        createGlideRequest(data, mode, imageView, size)
                 .dontAnimate()
                 .transform(RoundedCorners(dimensionConverter.dpToPx(8)))
                 .thumbnail(0.3f)
@@ -74,12 +77,12 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
     }
 
     fun renderFitTarget(data: Data, mode: Mode, imageView: ImageView, callback: ((Boolean) -> Unit)? = null) {
-        val (width, height) = processSize(data, mode)
+        val size = processSize(data, mode)
 
         // a11y
         imageView.contentDescription = data.filename
 
-        createGlideRequest(data, mode, imageView, width, height)
+        createGlideRequest(data, mode, imageView, size)
                 .listener(object : RequestListener<Drawable> {
                     override fun onLoadFailed(e: GlideException?,
                                               model: Any?,
@@ -102,7 +105,7 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
                 .into(imageView)
     }
 
-    private fun createGlideRequest(data: Data, mode: Mode, imageView: ImageView, width: Int, height: Int): GlideRequest<Drawable> {
+    private fun createGlideRequest(data: Data, mode: Mode, imageView: ImageView, size: Size): GlideRequest<Drawable> {
         return if (data.elementToDecrypt != null) {
             // Encrypted image
             GlideApp
@@ -112,8 +115,9 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
             // Clear image
             val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()
             val resolvedUrl = when (mode) {
-                Mode.FULL_SIZE -> contentUrlResolver.resolveFullSize(data.url)
-                Mode.THUMBNAIL -> contentUrlResolver.resolveThumbnail(data.url, width, height, ContentUrlResolver.ThumbnailMethod.SCALE)
+                Mode.FULL_SIZE,
+                Mode.STICKER   -> contentUrlResolver.resolveFullSize(data.url)
+                Mode.THUMBNAIL -> contentUrlResolver.resolveThumbnail(data.url, size.width, size.height, ContentUrlResolver.ThumbnailMethod.SCALE)
             }
             // Fallback to base url
                     ?: data.url
@@ -144,23 +148,32 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
         )
     }
 
-    private fun processSize(data: Data, mode: Mode): Pair<Int, Int> {
+    private fun processSize(data: Data, mode: Mode): Size {
         val maxImageWidth = data.maxWidth
         val maxImageHeight = data.maxHeight
         val width = data.width ?: maxImageWidth
         val height = data.height ?: maxImageHeight
-        var finalHeight = -1
         var finalWidth = -1
+        var finalHeight = -1
 
         // if the image size is known
         // compute the expected height
         if (width > 0 && height > 0) {
-            if (mode == Mode.FULL_SIZE) {
-                finalHeight = height
-                finalWidth = width
-            } else {
-                finalHeight = Math.min(maxImageWidth * height / width, maxImageHeight)
-                finalWidth = finalHeight * width / height
+            when (mode) {
+                Mode.FULL_SIZE -> {
+                    finalHeight = height
+                    finalWidth = width
+                }
+                Mode.THUMBNAIL -> {
+                    finalHeight = min(maxImageWidth * height / width, maxImageHeight)
+                    finalWidth = finalHeight * width / height
+                }
+                Mode.STICKER   -> {
+                    // limit on width
+                    val maxWidthDp = min(dimensionConverter.dpToPx(120), maxImageWidth / 2)
+                    finalWidth = min(dimensionConverter.dpToPx(width), maxWidthDp)
+                    finalHeight = finalWidth * height / width
+                }
             }
         }
         // ensure that some values are properly initialized
@@ -170,6 +183,6 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
         if (finalWidth < 0) {
             finalWidth = maxImageWidth
         }
-        return Pair(finalWidth, finalHeight)
+        return Size(finalWidth, finalHeight)
     }
 }

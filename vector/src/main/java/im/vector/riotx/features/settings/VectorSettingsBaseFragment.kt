@@ -65,7 +65,7 @@ abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat(), HasScree
 
     override fun onResume() {
         super.onResume()
-        Timber.v("onResume Fragment ${this.javaClass.simpleName}")
+        Timber.i("onResume Fragment ${this.javaClass.simpleName}")
         vectorActivity.supportActionBar?.setTitle(titleRes)
         // find the view from parent activity
         mLoadingView = vectorActivity.findViewById(R.id.vector_settings_spinner_views)

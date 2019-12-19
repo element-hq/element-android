@@ -104,7 +104,7 @@ fun TimelineEvent.getLastMessageContent(): MessageContent? {
         root.getClearContent().toModel<MessageStickerContent>()
     } else {
         annotations?.editSummary?.aggregatedContent?.toModel()
-        ?: root.getClearContent().toModel()
+                ?: root.getClearContent().toModel()
     }
 }
 
@@ -116,7 +116,7 @@ fun TimelineEvent.getLastMessageBody(): String? {
 
     if (lastMessageContent != null) {
         return lastMessageContent.newContent?.toModel<MessageContent>()?.body
-               ?: lastMessageContent.body
+                ?: lastMessageContent.body
     }
 
     return null

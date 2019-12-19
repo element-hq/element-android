@@ -38,6 +38,7 @@ import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.HomeRoomListDataSource
 import im.vector.riotx.features.home.group.SelectedGroupDataSource
 import im.vector.riotx.features.html.EventHtmlRenderer
+import im.vector.riotx.features.html.VectorHtmlCompressor
 import im.vector.riotx.features.navigation.Navigator
 import im.vector.riotx.features.notifications.*
 import im.vector.riotx.features.rageshake.BugReporter
@@ -86,6 +87,8 @@ interface VectorComponent {
     fun emojiCompatWrapper(): EmojiCompatWrapper
 
     fun eventHtmlRenderer(): EventHtmlRenderer
+
+    fun vectorHtmlCompressor(): VectorHtmlCompressor
 
     fun navigator(): Navigator
 

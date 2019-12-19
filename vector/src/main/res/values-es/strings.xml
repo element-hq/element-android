@@ -1568,4 +1568,34 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="send_suggestion">Haz una sugerencia</string>
     <string name="send_suggestion_content">Por favor escriba su sugerencia a continuación.</string>
     <string name="send_suggestion_report_placeholder">Describa su sugerencia aquí</string>
+    <string name="resources_script">Latn</string>
+
+    <string name="none">Ninguno</string>
+    <string name="revoke">Revocar</string>
+    <string name="disconnect">Desconectar</string>
+    <string name="review">Revisar</string>
+    <string name="decline">Declinar</string>
+
+    <string name="people_no_identity_server">No se ha configurado un servidor de identidad.</string>
+
+    <string name="call_failed_no_ice_title">La llamada ha fallado por un servidor mal configurado</string>
+    <string name="call_failed_no_ice_use_alt">Intente usar %s</string>
+    <string name="call_failed_dont_ask_again">No volver a preguntar</string>
+
+    <string name="invite_no_identity_server_error">Para hacer esto, vaya a las opciones y añada un servidor de identidad.</string>
+    <string name="settings_add_3pid_confirm_password_title">Confirme su contraseña</string>
+    <string name="settings_add_3pid_flow_not_supported">Eso no se puede hacer en Riot para móvil</string>
+    <string name="settings_add_3pid_authentication_needed">Se necesita autenticación</string>
+
+
+    <string name="settings_background_fdroid_sync_mode_battery">Optimizado para batería</string>
+    <string name="settings_background_fdroid_sync_mode_real_time">Optimizado para operar en tiempo real</string>
+    <string name="settings_background_fdroid_sync_mode_disabled">Sin sincronización en segundo plano</string>
+    <string name="settings_background_sync_update_error">No se han podido actualizar las opciones.</string>
+
+
+    <string name="settings_integrations">Integraciones</string>
+    <string name="settings_discovery_category">Descubrimiento</string>
+    <string name="settings_discovery_manage">Gestione sus preferencias de descubrimiento.</string>
+    <string name="room_list_catchup_welcome_body">Entérese aquí de los mensajes sin leer</string>
 </resources>

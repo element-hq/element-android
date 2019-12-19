@@ -40,6 +40,7 @@ class PushGatewaysViewModel @AssistedInject constructor(@Assisted initialState: 
 
     companion object : MvRxViewModelFactory<PushGatewaysViewModel, PushGatewayViewState> {
 
+        @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: PushGatewayViewState): PushGatewaysViewModel? {
             val fragment: PushGatewaysFragment = (viewModelContext as FragmentViewModelContext).fragment()
             return fragment.pushGatewaysViewModelFactory.create(state)
