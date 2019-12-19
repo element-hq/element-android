@@ -170,7 +170,8 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
 
     private fun computeMessageBody(timelineEvent: Async<TimelineEvent>): CharSequence? {
         return when (timelineEvent()?.root?.getClearType()) {
-            EventType.MESSAGE     -> {
+            EventType.MESSAGE,
+            EventType.STICKER     -> {
                 val messageContent: MessageContent? = timelineEvent()?.getLastMessageContent()
                 if (messageContent is MessageTextContent && messageContent.format == MessageType.FORMAT_MATRIX_HTML) {
                     val html = messageContent.formattedBody
