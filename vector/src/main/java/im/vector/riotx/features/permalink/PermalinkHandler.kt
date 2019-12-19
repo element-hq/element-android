@@ -57,7 +57,7 @@ class PermalinkHandler @Inject constructor(private val session: Session,
                         .observeOn(AndroidSchedulers.mainThread())
                         .map {
                             val roomId = it.getOrNull()
-                            if (navigateToRoomInterceptor?.navToRoom(roomId) != true) {
+                            if (navigateToRoomInterceptor?.navToRoom(roomId, permalinkData.eventId) != true) {
                                 openRoom(context, roomId, permalinkData.eventId, buildTask)
                             }
                             true
