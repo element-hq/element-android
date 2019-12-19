@@ -32,6 +32,8 @@ class AutocompleteCommandPresenter @Inject constructor(context: Context,
     }
 
     override fun instantiateAdapter(): RecyclerView.Adapter<*> {
+        // Also remove animation
+        recyclerView?.itemAnimator = null
         return controller.adapter
     }
 
