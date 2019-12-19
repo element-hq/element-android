@@ -1,4 +1,4 @@
-Changes in RiotX 0.11.0 (2019-XX-XX)
+Changes in RiotX 0.11.0 (2019-12-19)
 ===================================================
 
 Features ✨:
@@ -18,9 +18,6 @@ Bugfix 🐛:
  - Do not display " (IRC)" in display names https://github.com/vector-im/riot-android/issues/444
  - Fix rendering issue with HTML formatted body
  - Disable click on Stickers (#703)
-
-Translations 🗣:
- -
 
 Build 🧱:
  - Include diff-match-patch sources as dependency
