@@ -184,8 +184,8 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
             is RoomDetailAction.IgnoreUser                       -> handleIgnoreUser(action)
             is RoomDetailAction.EnterTrackingUnreadMessagesState -> startTrackingUnreadMessages()
             is RoomDetailAction.ExitTrackingUnreadMessagesState  -> stopTrackingUnreadMessages()
-            is RoomDetailAction.AcceptVerificationRequest   -> handleAcceptVerification(action)
-            is RoomDetailAction.DeclineVerificationRequest  -> handleDeclineVerification(action)
+            is RoomDetailAction.AcceptVerificationRequest        -> handleAcceptVerification(action)
+            is RoomDetailAction.DeclineVerificationRequest       -> handleDeclineVerification(action)
         }
     }
 
@@ -398,7 +398,9 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                             popDraft()
                         }
                         is ParsedCommand.VerifyUser               -> {
-                            session.getSasVerificationService().requestKeyVerificationInDMs(slashCommandResult.userId, room.roomId, null)
+//
+                            _requestLiveData.postValue(LiveEvent(Success(RoomDetailAction.RequestVerification(slashCommandResult.userId))))
+//                            session.getSasVerificationService().requestKeyVerificationInDMs(slashCommandResult.userId, room.roomId, null)
                             _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled())
                             popDraft()
                         }

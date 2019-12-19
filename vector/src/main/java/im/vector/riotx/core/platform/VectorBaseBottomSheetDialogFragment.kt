@@ -21,17 +21,17 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.widget.FrameLayout
 import androidx.annotation.CallSuper
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import com.airbnb.mvrx.MvRx
-import com.airbnb.mvrx.MvRxView
-import com.airbnb.mvrx.MvRxViewId
+import com.airbnb.mvrx.*
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import im.vector.riotx.core.di.DaggerScreenComponent
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.utils.DimensionConverter
+import kotlin.reflect.KClass
 import timber.log.Timber
 
 /**
@@ -70,6 +70,7 @@ abstract class VectorBaseBottomSheetDialogFragment : BottomSheetDialogFragment()
     override fun onAttach(context: Context) {
         screenComponent = DaggerScreenComponent.factory().create(vectorBaseActivity.getVectorComponent(), vectorBaseActivity)
         viewModelFactory = screenComponent.viewModelFactory()
+        childFragmentManager.fragmentFactory = screenComponent.fragmentFactory()
         super.onAttach(context)
         injectWith(screenComponent)
     }
@@ -120,4 +121,17 @@ abstract class VectorBaseBottomSheetDialogFragment : BottomSheetDialogFragment()
     protected fun setArguments(args: Parcelable? = null) {
         arguments = args?.let { Bundle().apply { putParcelable(MvRx.KEY_ARG, it) } }
     }
+}
+
+inline fun <T, reified VM : BaseMvRxViewModel<S>, reified S : MvRxState> T.parentFragmentViewModel(
+        viewModelClass: KClass<VM> = VM::class,
+        crossinline keyFactory: () -> String = { viewModelClass.java.name }
+) where T : Fragment, T : MvRxView = lifecycleAwareLazy(this) {
+    MvRxViewModelProvider.get(
+            viewModelClass.java,
+            S::class.java,
+            FragmentViewModelContext(this.requireActivity(), _fragmentArgsProvider(), this.parentFragment
+                    ?: this),
+            keyFactory()
+    ).apply { subscribe(this@parentFragmentViewModel, subscriber = { postInvalidate() }) }
 }

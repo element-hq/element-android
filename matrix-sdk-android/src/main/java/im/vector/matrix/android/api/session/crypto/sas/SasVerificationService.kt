@@ -59,6 +59,8 @@ interface SasVerificationService {
                                   otherDeviceId: String,
                                   callback: MatrixCallback<String>?): String?
 
+    fun readyPendingVerificationInDMs(transactionId: String)
+
     // fun transactionUpdated(tx: SasVerificationTransaction)
 
     interface SasVerificationListener {

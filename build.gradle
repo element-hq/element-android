@@ -34,6 +34,8 @@ allprojects {
                 includeGroupByRegex "com\\.github\\.jaiselrahman"
                 // And monarchy
                 includeGroupByRegex "com\\.github\\.Zhuinden"
+                // And QR lib
+                includeGroupByRegex "com\\.github\\.kenglxn\\.QRGen"
             }
         }
         maven {

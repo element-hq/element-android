@@ -1168,7 +1168,7 @@
     <string name="your_unverified_device_requesting">Your unverified device  \'%s\' is requesting encryption keys.</string>
     <string name="your_unverified_device_requesting_with_info">An unverified device is requesting encryption keys.\nDevice name: %1$s\nLast seen: %2$s\nIf you didn’t log in on another device, ignore this request.</string>
 
-    <string name="start_verification">Start verification</string>
+    <string name="start_verification">Start Verification</string>
     <!-- Keep the label as small as possible-->
     <string name="start_verification_short_label">Verify</string>
     <string name="share_without_verifying">Share without verifying</string>

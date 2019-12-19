@@ -26,14 +26,14 @@ import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getEditedEventId
-import im.vector.matrix.android.api.session.room.timeline.getLastMessageBody
 import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
 import im.vector.riotx.BuildConfig
 import im.vector.riotx.R
 import im.vector.riotx.core.resources.StringProvider
+import im.vector.riotx.features.home.room.detail.timeline.format.DisplayableEventFormatter
 import im.vector.riotx.features.home.room.detail.timeline.format.NoticeEventFormatter
 import timber.log.Timber
-import java.util.UUID
+import java.util.*
 import javax.inject.Inject
 
 /**
@@ -43,6 +43,7 @@ import javax.inject.Inject
  * this pattern allow decoupling between the object responsible of displaying notifications and the matrix sdk.
  */
 class NotifiableEventResolver @Inject constructor(private val stringProvider: StringProvider,
+                                                  private val displayableEventFormatter: DisplayableEventFormatter,
                                                   private val noticeEventFormatter: NoticeEventFormatter) {
 
     // private val eventDisplay = RiotEventDisplay(context)
@@ -86,13 +87,11 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
     private fun resolveMessageEvent(event: TimelineEvent, session: Session): NotifiableEvent? {
         // The event only contains an eventId, and roomId (type is m.room.*) , we need to get the displayable content (names, avatar, text, etc...)
         val room = session.getRoom(event.root.roomId!! /*roomID cannot be null*/)
-
+        val body = displayableEventFormatter.format(event, false).toString()
         if (room == null) {
             Timber.e("## Unable to resolve room for eventId [$event]")
             // Ok room is not known in store, but we can still display something
-            val body =
-                    event.getLastMessageBody()
-                            ?: stringProvider.getString(R.string.notification_unknown_new_event)
+
             val roomName = stringProvider.getString(R.string.notification_unknown_room_name)
             val senderDisplayName = event.getDisambiguatedDisplayName()
 
@@ -125,8 +124,6 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
                 }
             }
 
-            val body = event.getLastMessageBody()
-                    ?: stringProvider.getString(R.string.notification_unknown_new_event)
             val roomName = room.roomSummary()?.displayName ?: ""
             val senderDisplayName = event.getDisambiguatedDisplayName()
 

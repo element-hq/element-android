@@ -66,4 +66,6 @@ sealed class RoomDetailAction : VectorViewModelAction {
 
     data class AcceptVerificationRequest(val transactionId: String, val otherUserId: String, val otherdDeviceId: String) : RoomDetailAction()
     data class DeclineVerificationRequest(val transactionId: String) : RoomDetailAction()
+
+    data class RequestVerification(val userId: String) : RoomDetailAction()
 }

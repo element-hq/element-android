@@ -23,10 +23,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupSettingsFragment
-import im.vector.riotx.features.crypto.verification.SASVerificationIncomingFragment
-import im.vector.riotx.features.crypto.verification.SASVerificationShortCodeFragment
-import im.vector.riotx.features.crypto.verification.SASVerificationStartFragment
-import im.vector.riotx.features.crypto.verification.SASVerificationVerifiedFragment
+import im.vector.riotx.features.crypto.verification.*
 import im.vector.riotx.features.home.HomeDetailFragment
 import im.vector.riotx.features.home.HomeDrawerFragment
 import im.vector.riotx.features.home.LoadingFragment
@@ -272,4 +269,15 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(SoftLogoutFragment::class)
     fun bindSoftLogoutFragment(fragment: SoftLogoutFragment): Fragment
+
+
+    @Binds
+    @IntoMap
+    @FragmentKey(OutgoingVerificationRequestFragment::class)
+    fun bindVerificationRequestFragment(fragment: OutgoingVerificationRequestFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(VerificationChooseMethodFragment::class)
+    fun bindVerificationMethodChooserFragment(fragment: VerificationChooseMethodFragment): Fragment
 }

@@ -17,6 +17,9 @@ package im.vector.matrix.android.internal.crypto.verification
 
 internal interface VerificationInfoStart : VerificationInfo {
 
+    /**
+     * An array of verification methods that the device supports
+     */
     val method: String?
     /**
      * Alice’s device ID

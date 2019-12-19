@@ -46,6 +46,7 @@ internal interface EventRelationsAggregationTask : Task<EventRelationsAggregatio
 }
 
 enum class VerificationState {
+    UNKNOWN,
     REQUEST,
     WAITING,
     CANCELED_BY_ME,

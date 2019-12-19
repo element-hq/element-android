@@ -21,4 +21,21 @@
 
     <string name="key_verification_request_fallback_message">%s is requesting to verify your key, but your client does not support in-chat key verification. You will need to use legacy key verification to verify keys.</string>
 
+    <!-- Sender name of a message when it is send by you, e.g. You: Hello!-->
+    <string name="you">You</string>
+
+    <string name="verify_by_scanning_title">Verify by scanning</string>
+    <!-- the %s will be replaced by verify_open_camera_link that will be clickable -->
+    <string name="verify_by_scanning_description">Ask the other user to scan this code, or %s to scan theirs</string>
+    <!-- This part is inserted in verify_by_scanning_description-->
+    <string name="verify_open_camera_link">open your camera</string>
+
+    <string name="verify_by_emoji_title">Verify by emoji</string>
+    <string name="verify_by_emoji_description">If you can’t scan the code above, verify by comparing a short, unique selection of emoji.</string>
+
+    <string name="aria_qr_code_description">QR code image</string>
+
+    <string name="verification_request_alert_title">Verify %s</string>
+    <string name="verification_request_waiting_for">Waiting for %s…</string>
+    <string name="verification_request_alert_description">For extra security, verify %s by checking a one-time code on both your devices.\n\nFor maximum security, do this in person.</string>
 </resources>

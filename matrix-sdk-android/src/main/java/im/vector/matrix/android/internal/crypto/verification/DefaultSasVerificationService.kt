@@ -75,6 +75,16 @@ internal class DefaultSasVerificationService @Inject constructor(
     // map [sender : [transaction]]
     private val txMap = HashMap<String, HashMap<String, VerificationTransaction>>()
 
+    /**
+     * Map [sender: [PendingVerificationRequest]]
+     */
+    private val incomingRequests = HashMap<String, ArrayList<PendingVerificationRequest>>()
+
+    /**
+     * Map [sender: [PendingVerificationRequest]]
+     */
+    private val outgoingRequests = HashMap<String, ArrayList<PendingVerificationRequest>>()
+
     // Event received from the sync
     fun onToDeviceEvent(event: Event) {
         GlobalScope.launch(coroutineDispatchers.crypto) {
@@ -190,8 +200,32 @@ internal class DefaultSasVerificationService @Inject constructor(
     }
 
     fun onRoomRequestReceived(event: Event) {
-        // TODO
         Timber.v("## SAS Verification request from ${event.senderId} in room ${event.roomId}")
+        val requestInfo = event.getClearContent().toModel<MessageVerificationRequestContent>()
+                ?: return
+        val senderId = event.senderId ?: return
+        // Remember this request
+        val requestsForUser = incomingRequests[senderId]
+                ?: ArrayList<PendingVerificationRequest>().also {
+                    incomingRequests[event.senderId] = it
+                }
+
+        val pendingVerificationRequest = PendingVerificationRequest(
+                transactionId = event.eventId,
+                requestInfo = requestInfo
+        )
+        requestsForUser.add(pendingVerificationRequest)
+
+        /*
+        * After the m.key.verification.ready event is sent, either party can send an m.key.verification.start event
+        * to begin the verification.
+        * If both parties send an m.key.verification.start event, and they both specify the same verification method,
+        * then the event sent by the user whose user ID is the smallest is used, and the other m.key.verification.start
+        * event is ignored.
+        * In the case of a single user verifying two of their devices, the device ID is compared instead.
+        * If both parties send an m.key.verification.start event, but they specify different verification methods,
+        * the verification should be cancelled with a code of m.unexpected_message.
+         */
     }
 
     private suspend fun onRoomStartRequestReceived(event: Event) {
@@ -537,17 +571,29 @@ internal class DefaultSasVerificationService @Inject constructor(
     }
 
     override fun requestKeyVerificationInDMs(userId: String, roomId: String, callback: MatrixCallback<String>?) {
+        val requestsForUser = outgoingRequests[userId]
+                ?: ArrayList<PendingVerificationRequest>().also {
+                    outgoingRequests[userId] = it
+                }
+        
+        val params = requestVerificationDMTask.createParamsAndLocalEcho(
+                roomId = roomId,
+                from = credentials.deviceId ?: "",
+                methods = listOf(KeyVerificationStart.VERIF_METHOD_SAS),
+                to = userId,
+                cryptoService = cryptoService
+        )
         requestVerificationDMTask.configureWith(
-                requestVerificationDMTask.createParamsAndLocalEcho(
-                        roomId = roomId,
-                        from = credentials.deviceId ?: "",
-                        methods = listOf(KeyVerificationStart.VERIF_METHOD_SAS),
-                        to = userId,
-                        cryptoService = cryptoService
-                )
+                params
         ) {
             this.callback = object : MatrixCallback<SendResponse> {
                 override fun onSuccess(data: SendResponse) {
+                    params.event.getClearContent().toModel<MessageVerificationRequestContent>()?.let {
+                        requestsForUser.add(PendingVerificationRequest(
+                                transactionId = data.eventId,
+                                requestInfo = it
+                        ))
+                    }
                     callback?.onSuccess(data.eventId)
                 }
 
@@ -582,6 +628,9 @@ internal class DefaultSasVerificationService @Inject constructor(
         }
     }
 
+    override fun readyPendingVerificationInDMs(transactionId: String) {
+        //
+    }
     /**
      * This string must be unique for the pair of users performing verification for the duration that the transaction is valid
      */

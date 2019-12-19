@@ -23,13 +23,14 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.matrix.android.api.session.room.timeline.getTextEditableContent
 import im.vector.riotx.R
+import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
 import me.gujun.android.span.span
 import javax.inject.Inject
 
 class DisplayableEventFormatter @Inject constructor(
-//        private val sessionHolder: ActiveSessionHolder,
+        private val sessionHolder: ActiveSessionHolder,
         private val stringProvider: StringProvider,
         private val colorProvider: ColorProvider,
         private val noticeEventFormatter: NoticeEventFormatter
@@ -41,32 +42,36 @@ class DisplayableEventFormatter @Inject constructor(
             return stringProvider.getString(R.string.encrypted_message)
         }
 
-        val senderName = timelineEvent.getDisambiguatedDisplayName()
+        sessionHolder.getActiveSession().myUserId
+        val senderName = if (sessionHolder.getActiveSession().myUserId == timelineEvent.root.senderId)
+            stringProvider.getString(R.string.you)
+        else
+            timelineEvent.getDisambiguatedDisplayName()
 
         when (timelineEvent.root.getClearType()) {
             EventType.MESSAGE -> {
                 timelineEvent.getLastMessageContent()?.let { messageContent ->
                     when (messageContent.type) {
                         MessageType.MSGTYPE_VERIFICATION_REQUEST -> {
-                            return simpleFormat(senderName, stringProvider.getString(R.string.verification_request), appendAuthor)
+                            return simpleFormat(senderName, stringProvider.getString(R.string.verification_request).italicSpan(), appendAuthor)
                         }
                         MessageType.MSGTYPE_IMAGE                -> {
-                            return simpleFormat(senderName, stringProvider.getString(R.string.sent_an_image), appendAuthor)
+                            return simpleFormat(senderName, stringProvider.getString(R.string.sent_an_image).italicSpan(), appendAuthor)
                         }
                         MessageType.MSGTYPE_AUDIO                -> {
-                            return simpleFormat(senderName, stringProvider.getString(R.string.sent_an_audio_file), appendAuthor)
+                            return simpleFormat(senderName, stringProvider.getString(R.string.sent_an_audio_file).italicSpan(), appendAuthor)
                         }
                         MessageType.MSGTYPE_VIDEO                -> {
-                            return simpleFormat(senderName, stringProvider.getString(R.string.sent_a_video), appendAuthor)
+                            return simpleFormat(senderName, stringProvider.getString(R.string.sent_a_video).italicSpan(), appendAuthor)
                         }
                         MessageType.MSGTYPE_FILE                 -> {
-                            return simpleFormat(senderName, stringProvider.getString(R.string.sent_a_file), appendAuthor)
+                            return simpleFormat(senderName, stringProvider.getString(R.string.sent_a_file).italicSpan(), appendAuthor)
                         }
                         MessageType.MSGTYPE_TEXT                 -> {
                             if (messageContent.isReply()) {
                                 // Skip reply prefix, and show important
                                 // TODO add a reply image span ?
-                                return simpleFormat(senderName, timelineEvent.getTextEditableContent()
+                                return simpleFormat(senderName, timelineEvent.getTextEditableContent()?.let { "↩︎ $it" }
                                         ?: messageContent.body, appendAuthor)
                             } else {
                                 return simpleFormat(senderName, messageContent.body, appendAuthor)
@@ -99,6 +104,13 @@ class DisplayableEventFormatter @Inject constructor(
                     .append(body)
         } else {
             body
+        }
+    }
+
+    private fun String.italicSpan(): CharSequence {
+        return span {
+            text = this@italicSpan
+            textStyle = "italic"
         }
     }
 }
