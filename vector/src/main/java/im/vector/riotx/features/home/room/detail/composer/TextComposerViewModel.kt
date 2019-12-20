@@ -24,6 +24,8 @@ import com.jakewharton.rxrelay2.BehaviorRelay
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.group.model.GroupSummary
+import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.matrix.rx.rx
 import im.vector.riotx.core.platform.VectorViewModel
@@ -32,16 +34,17 @@ import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import java.util.concurrent.TimeUnit
 
-typealias AutocompleteUserQuery = CharSequence
+typealias AutocompleteQuery = CharSequence
 
 class TextComposerViewModel @AssistedInject constructor(@Assisted initialState: TextComposerViewState,
                                                         private val session: Session
 ) : VectorViewModel<TextComposerViewState, TextComposerAction>(initialState) {
 
     private val room = session.getRoom(initialState.roomId)!!
-    private val roomId = initialState.roomId
 
-    private val usersQueryObservable = BehaviorRelay.create<Option<AutocompleteUserQuery>>()
+    private val usersQueryObservable = BehaviorRelay.create<Option<AutocompleteQuery>>()
+    private val roomsQueryObservable = BehaviorRelay.create<Option<AutocompleteQuery>>()
+    private val groupsQueryObservable = BehaviorRelay.create<Option<AutocompleteQuery>>()
 
     @AssistedInject.Factory
     interface Factory {
@@ -59,11 +62,15 @@ class TextComposerViewModel @AssistedInject constructor(@Assisted initialState: 
 
     init {
         observeUsersQuery()
+        observeRoomsQuery()
+        observeGroupsQuery()
     }
 
     override fun handle(action: TextComposerAction) {
         when (action) {
-            is TextComposerAction.QueryUsers -> handleQueryUsers(action)
+            is TextComposerAction.QueryUsers  -> handleQueryUsers(action)
+            is TextComposerAction.QueryRooms  -> handleQueryRooms(action)
+            is TextComposerAction.QueryGroups -> handleQueryGroups(action)
         }
     }
 
@@ -72,8 +79,18 @@ class TextComposerViewModel @AssistedInject constructor(@Assisted initialState: 
         usersQueryObservable.accept(query)
     }
 
+    private fun handleQueryRooms(action: TextComposerAction.QueryRooms) {
+        val query = Option.fromNullable(action.query)
+        roomsQueryObservable.accept(query)
+    }
+
+    private fun handleQueryGroups(action: TextComposerAction.QueryGroups) {
+        val query = Option.fromNullable(action.query)
+        groupsQueryObservable.accept(query)
+    }
+
     private fun observeUsersQuery() {
-        Observable.combineLatest<List<String>, Option<AutocompleteUserQuery>, List<User>>(
+        Observable.combineLatest<List<String>, Option<AutocompleteQuery>, List<User>>(
                 room.rx().liveRoomMemberIds(),
                 usersQueryObservable.throttleLast(300, TimeUnit.MILLISECONDS),
                 BiFunction { roomMemberIds, query ->
@@ -84,13 +101,57 @@ class TextComposerViewModel @AssistedInject constructor(@Assisted initialState: 
                         users
                     } else {
                         users.filter {
-                            it.displayName?.startsWith(prefix = filter, ignoreCase = true) ?: false
+                            it.displayName?.contains(filter, ignoreCase = true) ?: false
                         }
                     }
+                            .sortedBy { it.displayName }
                 }
         ).execute { async ->
             copy(
                     asyncUsers = async
+            )
+        }
+    }
+
+    private fun observeRoomsQuery() {
+        Observable.combineLatest<List<RoomSummary>, Option<AutocompleteQuery>, List<RoomSummary>>(
+                session.rx().liveRoomSummaries(),
+                roomsQueryObservable.throttleLast(300, TimeUnit.MILLISECONDS),
+                BiFunction { roomSummaries, query ->
+                    val filter = query.orNull() ?: ""
+                    // Keep only room with a canonical alias
+                    roomSummaries
+                            .filter {
+                                it.canonicalAlias?.contains(filter, ignoreCase = true) == true
+                            }
+                            .sortedBy { it.displayName }
+                }
+        ).execute { async ->
+            copy(
+                    asyncRooms = async
+            )
+        }
+    }
+
+    private fun observeGroupsQuery() {
+        Observable.combineLatest<List<GroupSummary>, Option<AutocompleteQuery>, List<GroupSummary>>(
+                session.rx().liveGroupSummaries(),
+                groupsQueryObservable.throttleLast(300, TimeUnit.MILLISECONDS),
+                BiFunction { groupSummaries, query ->
+                    val filter = query.orNull()
+                    if (filter.isNullOrBlank()) {
+                        groupSummaries
+                    } else {
+                        groupSummaries
+                                .filter {
+                                    it.groupId.contains(filter, ignoreCase = true)
+                                }
+                    }
+                            .sortedBy { it.displayName }
+                }
+        ).execute { async ->
+            copy(
+                    asyncGroups = async
             )
         }
     }

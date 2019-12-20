@@ -56,23 +56,23 @@ object PermalinkParser {
 
         val identifier = params.getOrNull(0)
         val extraParameter = params.getOrNull(1)
-        if (identifier.isNullOrEmpty()) {
-            return PermalinkData.FallbackLink(uri)
-        }
         return when {
+            identifier.isNullOrEmpty()             -> PermalinkData.FallbackLink(uri)
             MatrixPatterns.isUserId(identifier)    -> PermalinkData.UserLink(userId = identifier)
             MatrixPatterns.isGroupId(identifier)   -> PermalinkData.GroupLink(groupId = identifier)
             MatrixPatterns.isRoomId(identifier)    -> {
-                val eventId = extraParameter.takeIf {
-                    !it.isNullOrEmpty() && MatrixPatterns.isEventId(it)
-                }
-                PermalinkData.RoomLink(roomIdOrAlias = identifier, isRoomAlias = false, eventId = eventId)
+                PermalinkData.RoomLink(
+                        roomIdOrAlias = identifier,
+                        isRoomAlias = false,
+                        eventId = extraParameter.takeIf { !it.isNullOrEmpty() && MatrixPatterns.isEventId(it) }
+                )
             }
             MatrixPatterns.isRoomAlias(identifier) -> {
-                val eventId = extraParameter.takeIf {
-                    !it.isNullOrEmpty() && MatrixPatterns.isEventId(it)
-                }
-                PermalinkData.RoomLink(roomIdOrAlias = identifier, isRoomAlias = true, eventId = eventId)
+                PermalinkData.RoomLink(
+                        roomIdOrAlias = identifier,
+                        isRoomAlias = true,
+                        eventId = extraParameter.takeIf { !it.isNullOrEmpty() && MatrixPatterns.isEventId(it) }
+                )
             }
             else                                   -> PermalinkData.FallbackLink(uri)
         }

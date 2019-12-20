@@ -25,12 +25,20 @@ import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.GroupSummaryEntity
 import im.vector.matrix.android.internal.database.model.GroupSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.util.fetchCopyMap
 import javax.inject.Inject
 
 internal class DefaultGroupService @Inject constructor(private val monarchy: Monarchy) : GroupService {
 
     override fun getGroup(groupId: String): Group? {
         return null
+    }
+
+    override fun getGroupSummary(groupId: String): GroupSummary? {
+        return monarchy.fetchCopyMap(
+                { realm -> GroupSummaryEntity.where(realm, groupId).findFirst() },
+                { it, _ -> it.asDomain() }
+        )
     }
 
     override fun liveGroupSummaries(): LiveData<List<GroupSummary>> {

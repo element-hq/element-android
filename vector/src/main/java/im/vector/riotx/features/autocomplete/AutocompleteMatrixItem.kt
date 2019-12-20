@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.autocomplete.user
+package im.vector.riotx.features.autocomplete
 
 import android.view.View
 import android.widget.ImageView
@@ -25,23 +25,27 @@ import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
+import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.features.home.AvatarRenderer
 
-@EpoxyModelClass(layout = R.layout.item_autocomplete_user)
-abstract class AutocompleteUserItem : VectorEpoxyModel<AutocompleteUserItem.Holder>() {
+@EpoxyModelClass(layout = R.layout.item_autocomplete_matrix_item)
+abstract class AutocompleteMatrixItem : VectorEpoxyModel<AutocompleteMatrixItem.Holder>() {
 
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute lateinit var matrixItem: MatrixItem
+    @EpoxyAttribute var subName: String? = null
     @EpoxyAttribute var clickListener: View.OnClickListener? = null
 
     override fun bind(holder: Holder) {
         holder.view.setOnClickListener(clickListener)
         holder.nameView.text = matrixItem.getBestName()
+        holder.subNameView.setTextOrHide(subName)
         avatarRenderer.render(matrixItem, holder.avatarImageView)
     }
 
     class Holder : VectorEpoxyHolder() {
-        val nameView by bind<TextView>(R.id.userAutocompleteName)
-        val avatarImageView by bind<ImageView>(R.id.userAutocompleteAvatar)
+        val nameView by bind<TextView>(R.id.matrixItemAutocompleteName)
+        val subNameView by bind<TextView>(R.id.matrixItemAutocompleteSubname)
+        val avatarImageView by bind<ImageView>(R.id.matrixItemAutocompleteAvatar)
     }
 }

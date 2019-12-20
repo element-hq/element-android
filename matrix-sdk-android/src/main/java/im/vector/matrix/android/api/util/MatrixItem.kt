@@ -62,6 +62,9 @@ sealed class MatrixItem(
         init {
             if (BuildConfig.DEBUG) checkId()
         }
+
+        // Best name is the id, and we keep the displayName of the room for the case we need the first letter
+        override fun getBestName() = id
     }
 
     data class GroupItem(override val id: String,
@@ -71,9 +74,12 @@ sealed class MatrixItem(
         init {
             if (BuildConfig.DEBUG) checkId()
         }
+
+        // Best name is the id, and we keep the displayName of the room for the case we need the first letter
+        override fun getBestName() = id
     }
 
-    fun getBestName(): String {
+    open fun getBestName(): String {
         return displayName?.takeIf { it.isNotBlank() } ?: id
     }
 
@@ -95,7 +101,7 @@ sealed class MatrixItem(
     }
 
     fun firstLetterOfDisplayName(): String {
-        return getBestName()
+        return (displayName?.takeIf { it.isNotBlank() } ?: id)
                 .let { dn ->
                     var startIndex = 0
                     val initial = dn[startIndex]
@@ -138,4 +144,5 @@ sealed class MatrixItem(
 fun User.toMatrixItem() = MatrixItem.UserItem(userId, displayName, avatarUrl)
 fun GroupSummary.toMatrixItem() = MatrixItem.GroupItem(groupId, displayName, avatarUrl)
 fun RoomSummary.toMatrixItem() = MatrixItem.RoomItem(roomId, displayName, avatarUrl)
+fun RoomSummary.toRoomAliasMatrixItem() = MatrixItem.RoomAliasItem(canonicalAlias ?: roomId, displayName, avatarUrl)
 fun PublicRoom.toMatrixItem() = MatrixItem.RoomItem(roomId, name, avatarUrl)

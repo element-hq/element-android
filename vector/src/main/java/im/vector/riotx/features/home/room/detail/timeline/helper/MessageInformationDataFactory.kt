@@ -33,6 +33,7 @@ import me.gujun.android.span.span
 import javax.inject.Inject
 
 /**
+ * TODO Update this comment
  * This class compute if data of an event (such has avatar, display name, ...) should be displayed, depending on the previous event in the timeline
  */
 class MessageInformationDataFactory @Inject constructor(private val session: Session,

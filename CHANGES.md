@@ -5,7 +5,8 @@ Features ✨:
  -
 
 Improvements 🙌:
- -
+ - Render aliases and canonical alias change in the timeline
+ - Fix autocompletion issues and add support for rooms and groups
 
 Other changes:
  -

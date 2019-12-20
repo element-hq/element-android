@@ -32,6 +32,13 @@ interface GroupService {
     fun getGroup(groupId: String): Group?
 
     /**
+     * Get a groupSummary from a groupId
+     * @param groupId the groupId to look for.
+     * @return the groupSummary with groupId or null
+     */
+    fun getGroupSummary(groupId: String): GroupSummary?
+
+    /**
      * Get a live list of group summaries. This list is refreshed as soon as the data changes.
      * @return the [LiveData] of [GroupSummary]
      */
