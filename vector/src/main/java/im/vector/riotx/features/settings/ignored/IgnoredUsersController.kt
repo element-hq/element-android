@@ -18,6 +18,7 @@ package im.vector.riotx.features.settings.ignored
 
 import com.airbnb.epoxy.EpoxyController
 import im.vector.matrix.android.api.session.user.model.User
+import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.noResultItem
 import im.vector.riotx.core.resources.StringProvider
@@ -44,19 +45,19 @@ class IgnoredUsersController @Inject constructor(private val stringProvider: Str
         buildIgnoredUserModels(nonNullViewState.ignoredUsers)
     }
 
-    private fun buildIgnoredUserModels(userIds: List<User>) {
-        if (userIds.isEmpty()) {
+    private fun buildIgnoredUserModels(users: List<User>) {
+        if (users.isEmpty()) {
             noResultItem {
                 id("empty")
                 text(stringProvider.getString(R.string.no_ignored_users))
             }
         } else {
-            userIds.forEach { userId ->
+            users.forEach { user ->
                 userItem {
-                    id(userId.userId)
+                    id(user.userId)
                     avatarRenderer(avatarRenderer)
-                    user(userId)
-                    itemClickAction { callback?.onUserIdClicked(userId.userId) }
+                    matrixItem(user.toMatrixItem())
+                    itemClickAction { callback?.onUserIdClicked(user.userId) }
                 }
             }
         }

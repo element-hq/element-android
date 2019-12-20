@@ -19,34 +19,46 @@ package im.vector.matrix.android.internal.auth.data
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
+/**
+ * Ref:
+ * - https://matrix.org/docs/spec/client_server/r0.5.0#password-based
+ * - https://matrix.org/docs/spec/client_server/r0.5.0#identifier-types
+ */
 @JsonClass(generateAdapter = true)
-internal data class PasswordLoginParams(@Json(name = "identifier") val identifier: Map<String, String>,
-                               @Json(name = "password") val password: String,
-                               @Json(name = "type") override val type: String,
-                               @Json(name = "initial_device_display_name") val deviceDisplayName: String?,
-                               @Json(name = "device_id") val deviceId: String?) : LoginParams {
+internal data class PasswordLoginParams(
+        @Json(name = "identifier") val identifier: Map<String, String>,
+        @Json(name = "password") val password: String,
+        @Json(name = "type") override val type: String,
+        @Json(name = "initial_device_display_name") val deviceDisplayName: String?,
+        @Json(name = "device_id") val deviceId: String?) : LoginParams {
 
     companion object {
+        private const val IDENTIFIER_KEY_TYPE = "type"
 
-        val IDENTIFIER_KEY_TYPE_USER = "m.id.user"
-        val IDENTIFIER_KEY_TYPE_THIRD_PARTY = "m.id.thirdparty"
-        val IDENTIFIER_KEY_TYPE_PHONE = "m.id.phone"
+        private const val IDENTIFIER_KEY_TYPE_USER = "m.id.user"
+        private const val IDENTIFIER_KEY_USER = "user"
 
-        val IDENTIFIER_KEY_TYPE = "type"
-        val IDENTIFIER_KEY_MEDIUM = "medium"
-        val IDENTIFIER_KEY_ADDRESS = "address"
-        val IDENTIFIER_KEY_USER = "user"
-        val IDENTIFIER_KEY_COUNTRY = "country"
-        val IDENTIFIER_KEY_NUMBER = "number"
+        private const val IDENTIFIER_KEY_TYPE_THIRD_PARTY = "m.id.thirdparty"
+        private const val IDENTIFIER_KEY_MEDIUM = "medium"
+        private const val IDENTIFIER_KEY_ADDRESS = "address"
+
+        private const val IDENTIFIER_KEY_TYPE_PHONE = "m.id.phone"
+        private const val IDENTIFIER_KEY_COUNTRY = "country"
+        private const val IDENTIFIER_KEY_PHONE = "phone"
 
         fun userIdentifier(user: String,
                            password: String,
                            deviceDisplayName: String? = null,
                            deviceId: String? = null): PasswordLoginParams {
-            val identifier = HashMap<String, String>()
-            identifier[IDENTIFIER_KEY_TYPE] = IDENTIFIER_KEY_TYPE_USER
-            identifier[IDENTIFIER_KEY_USER] = user
-            return PasswordLoginParams(identifier, password, LoginFlowTypes.PASSWORD, deviceDisplayName, deviceId)
+            return PasswordLoginParams(
+                    mapOf(
+                            IDENTIFIER_KEY_TYPE to IDENTIFIER_KEY_TYPE_USER,
+                            IDENTIFIER_KEY_USER to user
+                    ),
+                    password,
+                    LoginFlowTypes.PASSWORD,
+                    deviceDisplayName,
+                    deviceId)
         }
 
         fun thirdPartyIdentifier(medium: String,
@@ -54,11 +66,33 @@ internal data class PasswordLoginParams(@Json(name = "identifier") val identifie
                                  password: String,
                                  deviceDisplayName: String? = null,
                                  deviceId: String? = null): PasswordLoginParams {
-            val identifier = HashMap<String, String>()
-            identifier[IDENTIFIER_KEY_TYPE] = IDENTIFIER_KEY_TYPE_THIRD_PARTY
-            identifier[IDENTIFIER_KEY_MEDIUM] = medium
-            identifier[IDENTIFIER_KEY_ADDRESS] = address
-            return PasswordLoginParams(identifier, password, LoginFlowTypes.PASSWORD, deviceDisplayName, deviceId)
+            return PasswordLoginParams(
+                    mapOf(
+                            IDENTIFIER_KEY_TYPE to IDENTIFIER_KEY_TYPE_THIRD_PARTY,
+                            IDENTIFIER_KEY_MEDIUM to medium,
+                            IDENTIFIER_KEY_ADDRESS to address
+                    ),
+                    password,
+                    LoginFlowTypes.PASSWORD,
+                    deviceDisplayName,
+                    deviceId)
+        }
+
+        fun phoneIdentifier(country: String,
+                            phone: String,
+                            password: String,
+                            deviceDisplayName: String? = null,
+                            deviceId: String? = null): PasswordLoginParams {
+            return PasswordLoginParams(
+                    mapOf(
+                            IDENTIFIER_KEY_TYPE to IDENTIFIER_KEY_TYPE_PHONE,
+                            IDENTIFIER_KEY_COUNTRY to country,
+                            IDENTIFIER_KEY_PHONE to phone
+                    ),
+                    password,
+                    LoginFlowTypes.PASSWORD,
+                    deviceDisplayName,
+                    deviceId)
         }
     }
 }

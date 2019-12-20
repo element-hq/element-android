@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <set xmlns:android="http://schemas.android.com/apk/res/android"
-    android:duration="@integer/default_animation_duration"
-    android:shareInterpolator="false">
+    android:duration="@integer/default_animation_half">
 
     <alpha
         android:fromAlpha="1"

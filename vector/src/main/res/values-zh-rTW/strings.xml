@@ -1660,7 +1660,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="error_terms_not_accepted">請在您接受您家伺服器的條款與條件前繼續重試。</string>
 
-    <string name="error_network_timeout">看起來伺服器回應時間似乎太久了，這可能是不良的網路連線或我們的伺服器錯誤所造成。請稍後再試。</string>
+    <string name="error_network_timeout">看起來伺服器回應時間似乎太久了，這可能是不良的網路連線或伺服器錯誤所造成。請稍後再試。</string>
 
     <string name="send_attachment">傳送附件</string>
 
@@ -1719,5 +1719,42 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 \n請在下個彈出視窗中允許存取以讓您可以手動匯出您的金鑰。</string>
 
     <string name="no_network_indicator">目前沒有網路連線</string>
+
+    <string name="resources_script">Latn</string>
+
+    <string name="settings_add_3pid_confirm_password_title">確認您的密碼</string>
+    <string name="settings_add_3pid_flow_not_supported">您無法在行動裝置上的 Riot 做這件事</string>
+    <string name="settings_add_3pid_authentication_needed">需要驗證</string>
+
+
+    <string name="settings_integrations">整合</string>
+    <string name="settings_integrations_summary">使用整合管理員以管理機器人、橋接、小工具與貼紙包。
+\n整合管理員可以代表您接收設定資料，調整小工具、傳送聊天室邀請並設定權力等級。</string>
+    <string name="settings_integration_allow">允許整合</string>
+    <string name="room_widget_activity_title">小工具</string>
+    <string name="room_widget_permission_title">載入小工具</string>
+    <string name="room_widget_permission_added_by">此小工具新增由：</string>
+    <string name="room_widget_permission_webview_shared_info_title">使用它可能會設定 cookies 並與 %s 分享資料：</string>
+    <string name="room_widget_permission_shared_info_title">使用它可能會與 %s 分享資料：</string>
+    <string name="room_widget_failed_to_load">載入小工具失敗。
+\n%s</string>
+    <string name="room_widget_reload">重新載入小工具</string>
+    <string name="room_widget_open_in_browser">在瀏覽器中開啟</string>
+    <string name="room_widget_revoke_access">撤銷我的存取權限</string>
+
+    <string name="room_widget_permission_display_name">您的顯示名稱</string>
+    <string name="room_widget_permission_avatar_url">您的大頭貼 URL</string>
+    <string name="room_widget_permission_user_id">您的使用者 ID</string>
+    <string name="room_widget_permission_theme">您的佈景主題</string>
+    <string name="room_widget_permission_widget_id">小工具 ID</string>
+    <string name="room_widget_permission_room_id">聊天室 ID</string>
+
+
+    <string name="room_widget_resource_permission_title">此小工具想要使用下列資源：</string>
+    <string name="room_widget_resource_grant_permission">允許</string>
+    <string name="room_widget_resource_decline_permission">阻擋所有</string>
+    <string name="room_widget_webview_access_camera">使用相機</string>
+    <string name="room_widget_webview_access_microphone">使用麥克風</string>
+    <string name="room_widget_webview_read_protected_media">讀取 DRM 保護的媒體</string>
 
 </resources>

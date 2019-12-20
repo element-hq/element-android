@@ -19,8 +19,9 @@
 package im.vector.matrix.android.internal.network
 
 import com.squareup.moshi.JsonDataException
-import im.vector.matrix.android.api.failure.ConsentNotGivenError
+import com.squareup.moshi.JsonEncodingException
 import im.vector.matrix.android.api.failure.Failure
+import im.vector.matrix.android.api.failure.GlobalError
 import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.internal.di.MoshiProvider
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -31,6 +32,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
 import java.io.IOException
+import java.net.HttpURLConnection
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
@@ -98,7 +100,11 @@ private fun toFailure(errorBody: ResponseBody?, httpCode: Int): Failure {
         if (matrixError != null) {
             if (matrixError.code == MatrixError.M_CONSENT_NOT_GIVEN && !matrixError.consentUri.isNullOrBlank()) {
                 // Also send this error to the bus, for a global management
-                EventBus.getDefault().post(ConsentNotGivenError(matrixError.consentUri))
+                EventBus.getDefault().post(GlobalError.ConsentNotGivenError(matrixError.consentUri))
+            } else if (httpCode == HttpURLConnection.HTTP_UNAUTHORIZED /* 401 */
+                    && matrixError.code == MatrixError.M_UNKNOWN_TOKEN) {
+                // Also send this error to the bus, for a global management
+                EventBus.getDefault().post(GlobalError.InvalidToken(matrixError.isSoftLogout))
             }
 
             return Failure.ServerError(matrixError, httpCode)
@@ -106,6 +112,9 @@ private fun toFailure(errorBody: ResponseBody?, httpCode: Int): Failure {
     } catch (ex: JsonDataException) {
         // This is not a MatrixError
         Timber.w("The error returned by the server is not a MatrixError")
+    } catch (ex: JsonEncodingException) {
+        // This is not a MatrixError, HTML code?
+        Timber.w("The error returned by the server is not a MatrixError, probably HTML string")
     }
 
     return Failure.OtherServerError(errorBodyStr, httpCode)

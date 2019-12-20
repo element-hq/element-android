@@ -18,6 +18,7 @@ package im.vector.riotx.features.attachments
 
 import com.kbeanie.multipicker.api.entity.*
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
+import timber.log.Timber
 
 fun ChosenContact.toContactAttachment(): ContactAttachment {
     return ContactAttachment(
@@ -29,6 +30,7 @@ fun ChosenContact.toContactAttachment(): ContactAttachment {
 }
 
 fun ChosenFile.toContentAttachmentData(): ContentAttachmentData {
+    if (mimeType == null) Timber.w("No mimeType")
     return ContentAttachmentData(
             path = originalPath,
             mimeType = mimeType,
@@ -40,6 +42,7 @@ fun ChosenFile.toContentAttachmentData(): ContentAttachmentData {
 }
 
 fun ChosenAudio.toContentAttachmentData(): ContentAttachmentData {
+    if (mimeType == null) Timber.w("No mimeType")
     return ContentAttachmentData(
             path = originalPath,
             mimeType = mimeType,
@@ -51,16 +54,17 @@ fun ChosenAudio.toContentAttachmentData(): ContentAttachmentData {
     )
 }
 
-fun ChosenFile.mapType(): ContentAttachmentData.Type {
+private fun ChosenFile.mapType(): ContentAttachmentData.Type {
     return when {
-        mimeType.startsWith("image/") -> ContentAttachmentData.Type.IMAGE
-        mimeType.startsWith("video/") -> ContentAttachmentData.Type.VIDEO
-        mimeType.startsWith("audio/") -> ContentAttachmentData.Type.AUDIO
-        else                          -> ContentAttachmentData.Type.FILE
+        mimeType?.startsWith("image/") == true -> ContentAttachmentData.Type.IMAGE
+        mimeType?.startsWith("video/") == true -> ContentAttachmentData.Type.VIDEO
+        mimeType?.startsWith("audio/") == true -> ContentAttachmentData.Type.AUDIO
+        else                                   -> ContentAttachmentData.Type.FILE
     }
 }
 
 fun ChosenImage.toContentAttachmentData(): ContentAttachmentData {
+    if (mimeType == null) Timber.w("No mimeType")
     return ContentAttachmentData(
             path = originalPath,
             mimeType = mimeType,
@@ -75,6 +79,7 @@ fun ChosenImage.toContentAttachmentData(): ContentAttachmentData {
 }
 
 fun ChosenVideo.toContentAttachmentData(): ContentAttachmentData {
+    if (mimeType == null) Timber.w("No mimeType")
     return ContentAttachmentData(
             path = originalPath,
             mimeType = mimeType,

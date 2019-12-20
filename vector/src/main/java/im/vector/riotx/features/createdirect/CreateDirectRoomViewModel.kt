@@ -30,7 +30,7 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.session.user.model.User
-import im.vector.matrix.android.internal.util.firstLetterOfDisplayName
+import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.matrix.rx.rx
 import im.vector.riotx.core.extensions.postLiveEvent
 import im.vector.riotx.core.platform.VectorViewModel
@@ -142,7 +142,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
                         session.rx()
                                 .searchUsersDirectory(search, 50, emptySet())
                                 .map { users ->
-                                    users.sortedBy { it.displayName.firstLetterOfDisplayName() }
+                                    users.sortedBy { it.toMatrixItem().firstLetterOfDisplayName() }
                                 }
                     }
                     stream.toAsync {

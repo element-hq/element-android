@@ -24,11 +24,13 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.riotx.R
+import im.vector.riotx.core.extensions.cleanup
+import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.platform.StateView
 import im.vector.riotx.core.platform.VectorBaseFragment
-import im.vector.riotx.features.home.HomeSharedActionViewModel
 import im.vector.riotx.features.home.HomeActivitySharedAction
+import im.vector.riotx.features.home.HomeSharedActionViewModel
 import kotlinx.android.synthetic.main.fragment_group_list.*
 import javax.inject.Inject
 
@@ -46,12 +48,18 @@ class GroupListFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(HomeSharedActionViewModel::class.java)
         groupController.callback = this
-        stateView.contentView = groupListEpoxyRecyclerView
-        groupListEpoxyRecyclerView.setController(groupController)
+        stateView.contentView = groupListView
+        groupListView.configureWith(groupController)
         viewModel.subscribe { renderState(it) }
         viewModel.openGroupLiveData.observeEvent(this) {
             sharedActionViewModel.post(HomeActivitySharedAction.OpenGroup)
         }
+    }
+
+    override fun onDestroyView() {
+        groupController.callback = null
+        groupListView.cleanup()
+        super.onDestroyView()
     }
 
     private fun renderState(state: GroupListViewState) {

@@ -25,7 +25,7 @@ import okhttp3.TlsVersion
 
 /**
  * This data class holds how to connect to a specific Homeserver.
- * It's used with [im.vector.matrix.android.api.auth.Authenticator] class.
+ * It's used with [im.vector.matrix.android.api.auth.AuthenticationService] class.
  * You should use the [Builder] to create one.
  */
 @JsonClass(generateAdapter = true)

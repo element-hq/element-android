@@ -123,7 +123,7 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
             )
         }
 
-        session.getRoom(roomId)?.join(emptyList(), object : MatrixCallback<Unit> {
+        session.getRoom(roomId)?.join(callback = object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
                 // We do not update the joiningRoomsIds here, because, the room is not joined yet regarding the sync data.
                 // Instead, we wait for the room to be joined
@@ -158,7 +158,7 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
             )
         }
 
-        session.getRoom(roomId)?.leave(object : MatrixCallback<Unit> {
+        session.getRoom(roomId)?.leave(null, object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
                 // We do not update the rejectingRoomsIds here, because, the room is not rejected yet regarding the sync data.
                 // Instead, we wait for the room to be rejected
@@ -197,7 +197,7 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
     }
 
     private fun handleLeaveRoom(action: RoomListAction.LeaveRoom) {
-        session.getRoom(action.roomId)?.leave(object : MatrixCallback<Unit> {
+        session.getRoom(action.roomId)?.leave(null, object : MatrixCallback<Unit> {
             override fun onFailure(failure: Throwable) {
                 _viewEvents.post(RoomListViewEvents.Failure(failure))
             }

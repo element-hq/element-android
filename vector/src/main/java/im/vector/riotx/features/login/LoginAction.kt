@@ -17,12 +17,45 @@
 package im.vector.riotx.features.login
 
 import im.vector.matrix.android.api.auth.data.Credentials
+import im.vector.matrix.android.api.auth.registration.RegisterThreePid
 import im.vector.riotx.core.platform.VectorViewModelAction
 
 sealed class LoginAction : VectorViewModelAction {
+    data class UpdateServerType(val serverType: ServerType) : LoginAction()
     data class UpdateHomeServer(val homeServerUrl: String) : LoginAction()
-    data class Login(val login: String, val password: String) : LoginAction()
-    data class SsoLoginSuccess(val credentials: Credentials) : LoginAction()
-    data class NavigateTo(val target: LoginActivity.Navigation) : LoginAction()
+    data class UpdateSignMode(val signMode: SignMode) : LoginAction()
+    data class WebLoginSuccess(val credentials: Credentials) : LoginAction()
     data class InitWith(val loginConfig: LoginConfig) : LoginAction()
+    data class ResetPassword(val email: String, val newPassword: String) : LoginAction()
+    object ResetPasswordMailConfirmed : LoginAction()
+
+    // Login or Register, depending on the signMode
+    data class LoginOrRegister(val username: String, val password: String, val initialDeviceName: String) : LoginAction()
+
+    // Register actions
+    open class RegisterAction : LoginAction()
+
+    data class AddThreePid(val threePid: RegisterThreePid) : RegisterAction()
+    object SendAgainThreePid : RegisterAction()
+    // TODO Confirm Email (from link in the email, open in the phone, intercepted by RiotX)
+    data class ValidateThreePid(val code: String) : RegisterAction()
+
+    data class CheckIfEmailHasBeenValidated(val delayMillis: Long) : RegisterAction()
+    object StopEmailValidationCheck : RegisterAction()
+
+    data class CaptchaDone(val captchaResponse: String) : RegisterAction()
+    object AcceptTerms : RegisterAction()
+    object RegisterDummy : RegisterAction()
+
+    // Reset actions
+    open class ResetAction : LoginAction()
+
+    object ResetHomeServerType : ResetAction()
+    object ResetHomeServerUrl : ResetAction()
+    object ResetSignMode : ResetAction()
+    object ResetLogin : ResetAction()
+    object ResetResetPassword : ResetAction()
+
+    // For the soft logout case
+    data class SetupSsoForSessionRecovery(val homeServerUrl: String, val deviceId: String) : LoginAction()
 }

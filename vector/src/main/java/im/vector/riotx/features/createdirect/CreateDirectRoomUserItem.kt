@@ -25,6 +25,7 @@ import androidx.core.content.ContextCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.amulyakhare.textdrawable.TextDrawable
+import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
@@ -34,22 +35,20 @@ import im.vector.riotx.features.home.AvatarRenderer
 abstract class CreateDirectRoomUserItem : VectorEpoxyModel<CreateDirectRoomUserItem.Holder>() {
 
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
-    @EpoxyAttribute var name: String? = null
-    @EpoxyAttribute var userId: String = ""
-    @EpoxyAttribute var avatarUrl: String? = null
+    @EpoxyAttribute lateinit var matrixItem: MatrixItem
     @EpoxyAttribute var clickListener: View.OnClickListener? = null
     @EpoxyAttribute var selected: Boolean = false
 
     override fun bind(holder: Holder) {
         holder.view.setOnClickListener(clickListener)
         // If name is empty, use userId as name and force it being centered
-        if (name.isNullOrEmpty()) {
+        if (matrixItem.displayName.isNullOrEmpty()) {
             holder.userIdView.visibility = View.GONE
-            holder.nameView.text = userId
+            holder.nameView.text = matrixItem.id
         } else {
             holder.userIdView.visibility = View.VISIBLE
-            holder.nameView.text = name
-            holder.userIdView.text = userId
+            holder.nameView.text = matrixItem.displayName
+            holder.userIdView.text = matrixItem.id
         }
         renderSelection(holder, selected)
     }
@@ -62,7 +61,7 @@ abstract class CreateDirectRoomUserItem : VectorEpoxyModel<CreateDirectRoomUserI
             holder.avatarImageView.setImageDrawable(backgroundDrawable)
         } else {
             holder.avatarCheckedImageView.visibility = View.GONE
-            avatarRenderer.render(avatarUrl, userId, name, holder.avatarImageView)
+            avatarRenderer.render(matrixItem, holder.avatarImageView)
         }
     }
 

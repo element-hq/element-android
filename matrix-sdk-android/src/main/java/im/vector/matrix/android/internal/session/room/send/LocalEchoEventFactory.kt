@@ -36,6 +36,7 @@ import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.content.ThumbnailExtractor
 import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
+import im.vector.matrix.android.internal.session.room.send.pills.TextPillsUtils
 import im.vector.matrix.android.internal.util.StringProvider
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
@@ -50,45 +51,55 @@ import javax.inject.Inject
  *
  * The transactionID is used as loc
  */
-internal class LocalEchoEventFactory @Inject constructor(@UserId private val userId: String,
-                                                         private val stringProvider: StringProvider,
-                                                         private val roomSummaryUpdater: RoomSummaryUpdater) {
+internal class LocalEchoEventFactory @Inject constructor(
+        @UserId private val userId: String,
+        private val stringProvider: StringProvider,
+        private val roomSummaryUpdater: RoomSummaryUpdater,
+        private val textPillsUtils: TextPillsUtils
+) {
     // TODO Inject
     private val parser = Parser.builder().build()
     // TODO Inject
     private val renderer = HtmlRenderer.builder().build()
 
-    fun createTextEvent(roomId: String, msgType: String, text: String, autoMarkdown: Boolean): Event {
-        if (msgType == MessageType.MSGTYPE_TEXT) {
-            return createFormattedTextEvent(roomId, createTextContent(text, autoMarkdown))
+    fun createTextEvent(roomId: String, msgType: String, text: CharSequence, autoMarkdown: Boolean): Event {
+        if (msgType == MessageType.MSGTYPE_TEXT || msgType == MessageType.MSGTYPE_EMOTE) {
+            return createFormattedTextEvent(roomId, createTextContent(text, autoMarkdown), msgType)
         }
-        val content = MessageTextContent(type = msgType, body = text)
+        val content = MessageTextContent(type = msgType, body = text.toString())
         return createEvent(roomId, content)
     }
 
-    private fun createTextContent(text: String, autoMarkdown: Boolean): TextContent {
+    private fun createTextContent(text: CharSequence, autoMarkdown: Boolean): TextContent {
         if (autoMarkdown) {
-            val document = parser.parse(text)
+            val source = textPillsUtils.processSpecialSpansToMarkdown(text)
+                    ?: text.toString()
+            val document = parser.parse(source)
             val htmlText = renderer.render(document)
 
-            if (isFormattedTextPertinent(text, htmlText)) {
-                return TextContent(text, htmlText)
+            if (isFormattedTextPertinent(source, htmlText)) {
+                return TextContent(text.toString(), htmlText)
+            }
+        } else {
+            // Try to detect pills
+            textPillsUtils.processSpecialSpansToHtml(text)?.let {
+                return TextContent(text.toString(), it)
             }
         }
 
-        return TextContent(text)
+        return TextContent(text.toString())
     }
 
     private fun isFormattedTextPertinent(text: String, htmlText: String?) =
             text != htmlText && htmlText != "<p>${text.trim()}</p>\n"
 
-    fun createFormattedTextEvent(roomId: String, textContent: TextContent): Event {
-        return createEvent(roomId, textContent.toMessageTextContent())
+    fun createFormattedTextEvent(roomId: String, textContent: TextContent, msgType: String): Event {
+        return createEvent(roomId, textContent.toMessageTextContent(msgType))
     }
 
     fun createReplaceTextEvent(roomId: String,
                                targetEventId: String,
-                               newBodyText: String,
+                               newBodyText: CharSequence,
                                newBodyAutoMarkdown: Boolean,
                                msgType: String,
                                compatibilityText: String): Event {
@@ -240,7 +251,7 @@ internal class LocalEchoEventFactory @Inject constructor(@UserId private val use
                 type = MessageType.MSGTYPE_AUDIO,
                 body = attachment.name ?: "audio",
                 audioInfo = AudioInfo(
-                        mimeType = attachment.mimeType.takeIf { it.isNotBlank() } ?: "audio/mpeg",
+                        mimeType = attachment.mimeType?.takeIf { it.isNotBlank() } ?: "audio/mpeg",
                         size = attachment.size
                 ),
                 url = attachment.path
@@ -253,7 +264,7 @@ internal class LocalEchoEventFactory @Inject constructor(@UserId private val use
                 type = MessageType.MSGTYPE_FILE,
                 body = attachment.name ?: "file",
                 info = FileInfo(
-                        mimeType = attachment.mimeType.takeIf { it.isNotBlank() }
+                        mimeType = attachment.mimeType?.takeIf { it.isNotBlank() }
                                 ?: "application/octet-stream",
                         size = attachment.size
                 ),
@@ -279,7 +290,7 @@ internal class LocalEchoEventFactory @Inject constructor(@UserId private val use
         return System.currentTimeMillis()
     }
 
-    fun createReplyTextEvent(roomId: String, eventReplied: TimelineEvent, replyText: String, autoMarkdown: Boolean): Event? {
+    fun createReplyTextEvent(roomId: String, eventReplied: TimelineEvent, replyText: CharSequence, autoMarkdown: Boolean): Event? {
         // Fallbacks and event representation
         // TODO Add error/warning logs when any of this is null
         val permalink = PermalinkFactory.createPermalink(eventReplied.root) ?: return null
@@ -298,7 +309,7 @@ internal class LocalEchoEventFactory @Inject constructor(@UserId private val use
         //
         // > <@alice:example.org> This is the original body
         //
-        val replyFallback = buildReplyFallback(body, userId, replyText)
+        val replyFallback = buildReplyFallback(body, userId, replyText.toString())
 
         val eventId = eventReplied.root.eventId ?: return null
         val content = MessageTextContent(

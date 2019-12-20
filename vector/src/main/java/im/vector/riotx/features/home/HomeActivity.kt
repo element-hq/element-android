@@ -97,7 +97,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
             if (status == null) {
                 waiting_view.isVisible = false
             } else {
-                Timber.e("${getString(status.statusText)} ${status.percentProgress}")
+                Timber.v("${getString(status.statusText)} ${status.percentProgress}")
                 waiting_view.setOnClickListener {
                     // block interactions
                 }

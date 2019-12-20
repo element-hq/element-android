@@ -36,6 +36,8 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
     @EpoxyAttribute
     var playable: Boolean = false
     @EpoxyAttribute
+    var mode = ImageContentRenderer.Mode.THUMBNAIL
+    @EpoxyAttribute
     var clickListener: View.OnClickListener? = null
     @EpoxyAttribute
     lateinit var imageContentRenderer: ImageContentRenderer
@@ -44,7 +46,7 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        imageContentRenderer.render(mediaData, ImageContentRenderer.Mode.THUMBNAIL, holder.imageView)
+        imageContentRenderer.render(mediaData, mode, holder.imageView)
         if (!attributes.informationData.sendState.hasFailed()) {
             contentUploadStateTrackerBinder.bind(attributes.informationData.eventId, mediaData.isLocalFile(), holder.progressLayout)
         } else {

@@ -107,7 +107,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/addByMatrixId"
-            style="@style/VectorButtonStyleFlat"
+            style="@style/VectorButtonStyleText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -122,7 +122,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/createDirectRoomFilterDivider" />
 
-        <com.airbnb.epoxy.EpoxyRecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="0dp"
             android:layout_height="0dp"

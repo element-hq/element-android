@@ -119,7 +119,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/sas_request_cancel_button"
-            style="@style/VectorButtonStyleFlat"
+            style="@style/VectorButtonStyleText"
             android:layout_gravity="end"
             android:layout_marginEnd="@dimen/layout_vertical_margin"
             android:layout_marginRight="@dimen/layout_vertical_margin"

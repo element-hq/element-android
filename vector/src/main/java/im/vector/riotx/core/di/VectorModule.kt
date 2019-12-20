@@ -24,8 +24,10 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import im.vector.matrix.android.api.Matrix
-import im.vector.matrix.android.api.auth.Authenticator
+import im.vector.matrix.android.api.auth.AuthenticationService
 import im.vector.matrix.android.api.session.Session
+import im.vector.riotx.core.error.DefaultErrorFormatter
+import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.features.navigation.DefaultNavigator
 import im.vector.riotx.features.navigation.Navigator
 import im.vector.riotx.features.ui.SharedPreferencesUiStateRepository
@@ -64,13 +66,16 @@ abstract class VectorModule {
 
         @Provides
         @JvmStatic
-        fun providesAuthenticator(matrix: Matrix): Authenticator {
-            return matrix.authenticator()
+        fun providesAuthenticationService(matrix: Matrix): AuthenticationService {
+            return matrix.authenticationService()
         }
     }
 
     @Binds
     abstract fun bindNavigator(navigator: DefaultNavigator): Navigator
+
+    @Binds
+    abstract fun bindErrorFormatter(errorFormatter: DefaultErrorFormatter): ErrorFormatter
 
     @Binds
     abstract fun bindUiStateRepository(uiStateRepository: SharedPreferencesUiStateRepository): UiStateRepository

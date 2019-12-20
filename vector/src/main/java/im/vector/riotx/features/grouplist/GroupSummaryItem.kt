@@ -21,6 +21,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
+import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
@@ -31,18 +32,16 @@ import im.vector.riotx.features.home.AvatarRenderer
 abstract class GroupSummaryItem : VectorEpoxyModel<GroupSummaryItem.Holder>() {
 
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
-    @EpoxyAttribute lateinit var groupName: CharSequence
-    @EpoxyAttribute lateinit var groupId: String
-    @EpoxyAttribute var avatarUrl: String? = null
+    @EpoxyAttribute lateinit var matrixItem: MatrixItem
     @EpoxyAttribute var selected: Boolean = false
     @EpoxyAttribute var listener: (() -> Unit)? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.rootView.setOnClickListener { listener?.invoke() }
-        holder.groupNameView.text = groupName
+        holder.groupNameView.text = matrixItem.displayName
         holder.rootView.isChecked = selected
-        avatarRenderer.render(avatarUrl, groupId, groupName.toString(), holder.avatarImageView)
+        avatarRenderer.render(matrixItem, holder.avatarImageView)
     }
 
     class Holder : VectorEpoxyHolder() {

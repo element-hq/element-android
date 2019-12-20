@@ -19,7 +19,6 @@ package im.vector.riotx.features.roomdirectory
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.epoxy.EpoxyVisibilityTracker
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
@@ -27,7 +26,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding3.appcompat.queryTextChanges
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
 import im.vector.riotx.R
-import im.vector.riotx.core.error.ErrorFormatter
+import im.vector.riotx.core.extensions.cleanup
+import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.platform.VectorBaseFragment
 import io.reactivex.rxkotlin.subscribeBy
@@ -41,8 +41,7 @@ import javax.inject.Inject
  * - When filtering more (when entering new chars), we could filter on result we already have, during the new server request, to avoid empty screen effect
  */
 class PublicRoomsFragment @Inject constructor(
-        private val publicRoomsController: PublicRoomsController,
-        private val errorFormatter: ErrorFormatter
+        private val publicRoomsController: PublicRoomsController
 ) : VectorBaseFragment(), PublicRoomsController.Callback {
 
     private val viewModel: RoomDirectoryViewModel by activityViewModel()
@@ -62,6 +61,9 @@ class PublicRoomsFragment @Inject constructor(
             it.setDisplayHomeAsUpEnabled(true)
         }
 
+        sharedActionViewModel = activityViewModelProvider.get(RoomDirectorySharedActionViewModel::class.java)
+        setupRecyclerView()
+
         publicRoomsFilter.queryTextChanges()
                 .debounce(500, TimeUnit.MILLISECONDS)
                 .subscribeBy {
@@ -79,6 +81,12 @@ class PublicRoomsFragment @Inject constructor(
         }
     }
 
+    override fun onDestroyView() {
+        publicRoomsController.callback = null
+        publicRoomsList.cleanup()
+        super.onDestroyView()
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_room_directory_change_protocol -> {
@@ -90,22 +98,11 @@ class PublicRoomsFragment @Inject constructor(
         }
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        sharedActionViewModel = activityViewModelProvider.get(RoomDirectorySharedActionViewModel::class.java)
-        setupRecyclerView()
-    }
-
     private fun setupRecyclerView() {
         val epoxyVisibilityTracker = EpoxyVisibilityTracker()
         epoxyVisibilityTracker.attach(publicRoomsList)
-
-        val layoutManager = LinearLayoutManager(context)
-
-        publicRoomsList.layoutManager = layoutManager
+        publicRoomsList.configureWith(publicRoomsController)
         publicRoomsController.callback = this
-
-        publicRoomsList.setController(publicRoomsController)
     }
 
     override fun onPublicRoomClicked(publicRoom: PublicRoom, joinState: JoinState) {

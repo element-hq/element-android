@@ -19,7 +19,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -27,6 +26,8 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
+import im.vector.riotx.core.extensions.cleanup
+import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
 import javax.inject.Inject
@@ -48,8 +49,8 @@ class MessageActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), Message
 
     private lateinit var sharedActionViewModel: MessageSharedActionViewModel
 
-    override fun injectWith(screenComponent: ScreenComponent) {
-        screenComponent.inject(this)
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -61,16 +62,36 @@ class MessageActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), Message
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(MessageSharedActionViewModel::class.java)
-        recyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-        recyclerView.adapter = messageActionsEpoxyController.adapter
+        recyclerView.configureWith(messageActionsEpoxyController, hasFixedSize = false)
         // Disable item animation
         recyclerView.itemAnimator = null
         messageActionsEpoxyController.listener = this
     }
 
+    override fun onDestroyView() {
+        recyclerView.cleanup()
+        super.onDestroyView()
+    }
+
+    override fun onUrlClicked(url: String): Boolean {
+        sharedActionViewModel.post(EventSharedAction.OnUrlClicked(url))
+        // Always consume
+        return true
+    }
+
+    override fun onUrlLongClicked(url: String): Boolean {
+        sharedActionViewModel.post(EventSharedAction.OnUrlLongClicked(url))
+        // Always consume
+        return true
+    }
+
     override fun didSelectMenuAction(eventAction: EventSharedAction) {
         if (eventAction is EventSharedAction.ReportContent) {
             // Toggle report menu
+            // Enable item animation
+            if (recyclerView.itemAnimator == null) {
+                recyclerView.itemAnimator = MessageActionsAnimator()
+            }
             viewModel.handle(MessageActionsAction.ToggleReportMenu)
         } else {
             sharedActionViewModel.post(eventAction)

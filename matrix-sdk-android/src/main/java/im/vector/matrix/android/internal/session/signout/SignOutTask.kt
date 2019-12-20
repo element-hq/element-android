@@ -17,6 +17,9 @@
 package im.vector.matrix.android.internal.session.signout
 
 import android.content.Context
+import im.vector.matrix.android.BuildConfig
+import im.vector.matrix.android.api.failure.Failure
+import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.internal.SessionManager
 import im.vector.matrix.android.internal.auth.SessionParamsStore
 import im.vector.matrix.android.internal.crypto.CryptoModule
@@ -27,11 +30,18 @@ import im.vector.matrix.android.internal.session.SessionModule
 import im.vector.matrix.android.internal.session.cache.ClearCacheTask
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.worker.WorkManagerUtil
+import io.realm.Realm
+import io.realm.RealmConfiguration
 import timber.log.Timber
 import java.io.File
+import java.net.HttpURLConnection
 import javax.inject.Inject
 
-internal interface SignOutTask : Task<Unit, Unit>
+internal interface SignOutTask : Task<SignOutTask.Params, Unit> {
+    data class Params(
+            val sigOutFromHomeserver: Boolean
+    )
+}
 
 internal class DefaultSignOutTask @Inject constructor(private val context: Context,
                                                       @UserId private val userId: String,
@@ -42,12 +52,30 @@ internal class DefaultSignOutTask @Inject constructor(private val context: Conte
                                                       @CryptoDatabase private val clearCryptoDataTask: ClearCacheTask,
                                                       @UserCacheDirectory private val userFile: File,
                                                       private val realmKeysUtils: RealmKeysUtils,
+                                                      @SessionDatabase private val realmSessionConfiguration: RealmConfiguration,
+                                                      @CryptoDatabase private val realmCryptoConfiguration: RealmConfiguration,
                                                       @UserMd5 private val userMd5: String) : SignOutTask {
 
-    override suspend fun execute(params: Unit) {
-        Timber.d("SignOut: send request...")
-        executeRequest<Unit> {
-            apiCall = signOutAPI.signOut()
+    override suspend fun execute(params: SignOutTask.Params) {
+        // It should be done even after a soft logout, to be sure the deviceId is deleted on the
+        if (params.sigOutFromHomeserver) {
+            Timber.d("SignOut: send request...")
+            try {
+                executeRequest<Unit> {
+                    apiCall = signOutAPI.signOut()
+                }
+            } catch (throwable: Throwable) {
+                // Maybe due to https://github.com/matrix-org/synapse/issues/5755
+                if (throwable is Failure.ServerError
+                        && throwable.httpCode == HttpURLConnection.HTTP_UNAUTHORIZED /* 401 */
+                        && throwable.error.code == MatrixError.M_UNKNOWN_TOKEN) {
+                    // Also throwable.error.isSoftLogout should be true
+                    // Ignore
+                    Timber.w("Ignore error due to https://github.com/matrix-org/synapse/issues/5755")
+                } else {
+                    throw throwable
+                }
+            }
         }
 
         Timber.d("SignOut: release session...")
@@ -71,5 +99,15 @@ internal class DefaultSignOutTask @Inject constructor(private val context: Conte
         Timber.d("SignOut: clear the database keys")
         realmKeysUtils.clear(SessionModule.DB_ALIAS_PREFIX + userMd5)
         realmKeysUtils.clear(CryptoModule.DB_ALIAS_PREFIX + userMd5)
+
+        // Sanity check
+        if (BuildConfig.DEBUG) {
+            Realm.getGlobalInstanceCount(realmSessionConfiguration)
+                    .takeIf { it > 0 }
+                    ?.let { Timber.e("All realm instance for session has not been closed ($it)") }
+            Realm.getGlobalInstanceCount(realmCryptoConfiguration)
+                    .takeIf { it > 0 }
+                    ?.let { Timber.e("All realm instance for crypto has not been closed ($it)") }
+        }
     }
 }

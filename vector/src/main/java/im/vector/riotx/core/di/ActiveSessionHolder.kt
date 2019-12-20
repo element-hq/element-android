@@ -17,7 +17,7 @@
 package im.vector.riotx.core.di
 
 import arrow.core.Option
-import im.vector.matrix.android.api.auth.Authenticator
+import im.vector.matrix.android.api.auth.AuthenticationService
 import im.vector.matrix.android.api.session.Session
 import im.vector.riotx.ActiveSessionDataSource
 import im.vector.riotx.features.crypto.keysrequest.KeyRequestHandler
@@ -27,7 +27,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ActiveSessionHolder @Inject constructor(private val authenticator: Authenticator,
+class ActiveSessionHolder @Inject constructor(private val authenticationService: AuthenticationService,
                                               private val sessionObservableStore: ActiveSessionDataSource,
                                               private val keyRequestHandler: KeyRequestHandler,
                                               private val incomingVerificationRequestHandler: IncomingVerificationRequestHandler
@@ -37,7 +37,7 @@ class ActiveSessionHolder @Inject constructor(private val authenticator: Authent
 
     fun setActiveSession(session: Session) {
         activeSession.set(session)
-        sessionObservableStore.post(Option.fromNullable(session))
+        sessionObservableStore.post(Option.just(session))
         keyRequestHandler.start(session)
         incomingVerificationRequestHandler.start(session)
     }
@@ -64,7 +64,7 @@ class ActiveSessionHolder @Inject constructor(private val authenticator: Authent
 
     // TODO: Stop sync ?
 //    fun switchToSession(sessionParams: SessionParams) {
-//        val newActiveSession = authenticator.getSession(sessionParams)
+//        val newActiveSession = authenticationService.getSession(sessionParams)
 //        activeSession.set(newActiveSession)
 //    }
 }

@@ -1,4 +1,93 @@
-Changes in RiotX 0.8.0 (2019-XX-XX)
+Changes in RiotX 0.12.0 (2019-XX-XX)
+===================================================
+
+Features ✨:
+ -
+
+Improvements 🙌:
+ -
+
+Other changes:
+ -
+
+Bugfix 🐛:
+ -
+
+Translations 🗣:
+ -
+
+Build 🧱:
+ -
+
+Changes in RiotX 0.11.0 (2019-12-19)
+===================================================
+
+Features ✨:
+ - Implement soft logout (#281)
+
+Improvements 🙌:
+ - Handle navigation to room via room alias (#201)
+ - Open matrix.to link in RiotX (#57)
+ - Limit sticker size in the timeline
+
+Other changes:
+ - Use same default room colors than Riot-Web
+
+Bugfix 🐛:
+ - Scroll breadcrumbs to top when opened
+ - Render default room name when it starts with an emoji (#477)
+ - Do not display " (IRC)" in display names https://github.com/vector-im/riot-android/issues/444
+ - Fix rendering issue with HTML formatted body
+ - Disable click on Stickers (#703)
+
+Build 🧱:
+ - Include diff-match-patch sources as dependency
+
+Changes in RiotX 0.10.0 (2019-12-10)
+===================================================
+
+Features ✨:
+ - Breadcrumbs: switch from one room to another quickly (#571)
+
+Improvements 🙌:
+ - Support entering a RiotWeb client URL instead of the homeserver URL during connection (#744)
+
+Other changes:
+ - Add reason for all membership events (https://github.com/matrix-org/matrix-doc/pull/2367)
+
+Bugfix 🐛:
+ - When automardown is ON, pills are sent as MD in body (#739)
+ - "ban" event are not rendered correctly (#716)
+ - Fix crash when rotating screen in Room timeline
+
+Changes in RiotX 0.9.1 (2019-12-05)
+===================================================
+
+Bugfix 🐛:
+ - Fix an issue with DB transaction (#740)
+
+Changes in RiotX 0.9.0 (2019-12-05)
+===================================================
+
+Features ✨:
+ - Account creation. It's now possible to create account on any homeserver with RiotX (#34)
+ - Iteration of the login flow (#613)
+
+Improvements 🙌:
+ - Send mention Pills from composer
+ - Links in message preview in the bottom sheet are now active. 
+ - Rework the read marker to make it more usable
+
+Other changes:
+ - Fix a small grammatical error when an empty room list is shown.
+
+Bugfix 🐛:
+ - Do not show long click help if only invitation are displayed
+ - Fix emoji filtering not working
+ - Fix issue of closing Realm in another thread (#725)
+ - Attempt to properly cancel the crypto module when user signs out (#724)
+
+Changes in RiotX 0.8.0 (2019-11-19)
 ===================================================
 
 Features ✨:
@@ -9,6 +98,7 @@ Improvements 🙌:
  - Search reaction by name or keyword in emoji picker
  - Handle code tags (#567)
  - Support spoiler messages
+ - Support m.sticker and m.room.join_rules events in timeline
 
 Other changes:
  - Markdown set to off by default (#412)
@@ -19,12 +109,6 @@ Bugfix 🐛:
  - Passphrase does not match (Export room keys) (#644)
  - Ask for permission to write external storage when uri comes from the keyboard (#658)
  - Fix issue with english US/GB translation (#671)
-
-Translations 🗣:
- -
-
-Build 🧱:
- -
 
 Changes in RiotX 0.7.0 (2019-10-24)
 ===================================================

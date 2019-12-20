@@ -35,6 +35,7 @@ import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.platform.VectorBaseActivity
+import im.vector.riotx.features.reactions.data.EmojiDataSource
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_emoji_reaction_picker.*
 import timber.log.Timber
@@ -44,7 +45,6 @@ import javax.inject.Inject
 /**
  *
  * TODO: Loading indicator while getting emoji data source?
- * TODO: migrate to MvRx
  * TODO: Finish Refactor to vector base activity
  */
 class EmojiReactionPickerActivity : VectorBaseActivity(),
@@ -54,13 +54,15 @@ class EmojiReactionPickerActivity : VectorBaseActivity(),
 
     lateinit var viewModel: EmojiChooserViewModel
 
-    override fun getMenuRes(): Int = R.menu.menu_emoji_reaction_picker
+    override fun getMenuRes() = R.menu.menu_emoji_reaction_picker
 
-    override fun getLayoutRes(): Int = R.layout.activity_emoji_reaction_picker
+    override fun getLayoutRes() = R.layout.activity_emoji_reaction_picker
 
-    override fun getTitleRes(): Int = R.string.title_activity_emoji_reaction_picker
+    override fun getTitleRes() = R.string.title_activity_emoji_reaction_picker
 
+    @Inject lateinit var emojiSearchResultViewModelFactory: EmojiSearchResultViewModel.Factory
     @Inject lateinit var emojiCompatFontProvider: EmojiCompatFontProvider
+    @Inject lateinit var emojiDataSource: EmojiDataSource
 
     private val searchResultViewModel: EmojiSearchResultViewModel by viewModel()
 
@@ -93,22 +95,18 @@ class EmojiReactionPickerActivity : VectorBaseActivity(),
 
         viewModel.eventId = intent.getStringExtra(EXTRA_EVENT_ID)
 
-        viewModel.emojiSourceLiveData.observe(this, Observer {
-            it.rawData?.categories?.let { categories ->
-                for (category in categories) {
-                    val s = category.emojis[0]
-                    tabLayout.newTab()
-                            .also { tab ->
-                                tab.text = it.rawData!!.emojis[s]!!.emojiString()
-                                tab.contentDescription = category.name
-                            }
-                            .also { tab ->
-                                tabLayout.addTab(tab)
-                            }
-                }
-                tabLayout.addOnTabSelectedListener(tabLayoutSelectionListener)
-            }
-        })
+        emojiDataSource.rawData.categories.forEach { category ->
+            val s = category.emojis[0]
+            tabLayout.newTab()
+                    .also { tab ->
+                        tab.text = emojiDataSource.rawData.emojis[s]!!.emoji
+                        tab.contentDescription = category.name
+                    }
+                    .also { tab ->
+                        tabLayout.addTab(tab)
+                    }
+        }
+        tabLayout.addOnTabSelectedListener(tabLayoutSelectionListener)
 
         viewModel.currentSection.observe(this, Observer { section ->
             section?.let {
@@ -136,7 +134,6 @@ class EmojiReactionPickerActivity : VectorBaseActivity(),
 
     override fun compatibilityFontUpdate(typeface: Typeface?) {
         EmojiDrawView.configureTextPaint(this, typeface)
-        searchResultViewModel.dataSource
     }
 
     override fun onDestroy() {
@@ -206,13 +203,19 @@ class EmojiReactionPickerActivity : VectorBaseActivity(),
 
     companion object {
 
-        const val EXTRA_EVENT_ID = "EXTRA_EVENT_ID"
-        const val EXTRA_REACTION_RESULT = "EXTRA_REACTION_RESULT"
+        private const val EXTRA_EVENT_ID = "EXTRA_EVENT_ID"
+        private const val EXTRA_REACTION_RESULT = "EXTRA_REACTION_RESULT"
 
         fun intent(context: Context, eventId: String): Intent {
             val intent = Intent(context, EmojiReactionPickerActivity::class.java)
             intent.putExtra(EXTRA_EVENT_ID, eventId)
             return intent
+        }
+
+        fun getOutput(data: Intent): Pair<String, String>? {
+            val eventId = data.getStringExtra(EXTRA_EVENT_ID) ?: return null
+            val reaction = data.getStringExtra(EXTRA_REACTION_RESULT) ?: return null
+            return eventId to reaction
         }
     }
 }

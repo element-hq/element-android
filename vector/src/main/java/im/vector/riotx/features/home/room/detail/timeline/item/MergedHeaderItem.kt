@@ -24,8 +24,8 @@ import androidx.core.view.children
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
+import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
-import im.vector.riotx.core.ui.views.ReadMarkerView
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 
@@ -37,13 +37,6 @@ abstract class MergedHeaderItem : BaseEventItem<MergedHeaderItem.Holder>() {
 
     private val distinctMergeData by lazy {
         attributes.mergeData.distinctBy { it.userId }
-    }
-
-    private val _readMarkerCallback = object : ReadMarkerView.Callback {
-
-        override fun onReadMarkerLongBound(isDisplayed: Boolean) {
-            attributes.readReceiptsCallback?.onReadMarkerLongBound(attributes.readMarkerId ?: "", isDisplayed)
-        }
     }
 
     override fun getViewType() = STUB_ID
@@ -62,7 +55,7 @@ abstract class MergedHeaderItem : BaseEventItem<MergedHeaderItem.Holder>() {
                 val data = distinctMergeData.getOrNull(index)
                 if (data != null && view is ImageView) {
                     view.visibility = View.VISIBLE
-                    attributes.avatarRenderer.render(data.avatarUrl, data.userId, data.memberName, view)
+                    attributes.avatarRenderer.render(data.toMatrixItem(), view)
                 } else {
                     view.visibility = View.GONE
                 }
@@ -77,20 +70,14 @@ abstract class MergedHeaderItem : BaseEventItem<MergedHeaderItem.Holder>() {
         }
         // No read receipt for this item
         holder.readReceiptsView.isVisible = false
-        holder.readMarkerView.bindView(
-                attributes.readMarkerId,
-                !attributes.readMarkerId.isNullOrEmpty(),
-                attributes.showReadMarker,
-                _readMarkerCallback)
-    }
-
-    override fun unbind(holder: Holder) {
-        holder.readMarkerView.unbind()
-        super.unbind(holder)
     }
 
     override fun getEventIds(): List<String> {
-        return attributes.mergeData.map { it.eventId }
+        return if (attributes.isCollapsed) {
+            attributes.mergeData.map { it.eventId }
+        } else {
+            emptyList()
+        }
     }
 
     data class Data(
@@ -101,10 +88,10 @@ abstract class MergedHeaderItem : BaseEventItem<MergedHeaderItem.Holder>() {
             val avatarUrl: String?
     )
 
+    fun Data.toMatrixItem() = MatrixItem.UserItem(userId, memberName, avatarUrl)
+
     data class Attributes(
-            val readMarkerId: String?,
             val isCollapsed: Boolean,
-            val showReadMarker: Boolean,
             val mergeData: List<Data>,
             val avatarRenderer: AvatarRenderer,
             val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null,
@@ -119,6 +106,6 @@ abstract class MergedHeaderItem : BaseEventItem<MergedHeaderItem.Holder>() {
     }
 
     companion object {
-        private const val STUB_ID = R.id.messageContentMergedheaderStub
+        private const val STUB_ID = R.id.messageContentMergedHeaderStub
     }
 }

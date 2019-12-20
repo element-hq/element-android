@@ -18,10 +18,10 @@ package im.vector.riotx.features.home.room.list
 
 import android.view.View
 import im.vector.matrix.android.api.session.events.model.EventType
-import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
-import im.vector.matrix.android.api.session.room.model.message.MessageContent
+import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
+import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.date.VectorDateFormatter
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
@@ -70,7 +70,7 @@ class RoomSummaryItemFactory @Inject constructor(private val noticeEventFormatte
         return RoomInvitationItem_()
                 .id(roomSummary.roomId)
                 .avatarRenderer(avatarRenderer)
-                .roomId(roomSummary.roomId)
+                .matrixItem(roomSummary.toMatrixItem())
                 .secondLine(secondLine)
                 .invitationAcceptInProgress(joiningRoomsIds.contains(roomSummary.roomId))
                 .invitationAcceptInError(joiningErrorRoomsIds.contains(roomSummary.roomId))
@@ -78,8 +78,6 @@ class RoomSummaryItemFactory @Inject constructor(private val noticeEventFormatte
                 .invitationRejectInError(rejectingErrorRoomsIds.contains(roomSummary.roomId))
                 .acceptListener { listener?.onAcceptRoomInvitation(roomSummary) }
                 .rejectListener { listener?.onRejectRoomInvitation(roomSummary) }
-                .roomName(roomSummary.displayName)
-                .avatarUrl(roomSummary.avatarUrl)
                 .listener { listener?.onRoomClicked(roomSummary) }
     }
 
@@ -97,9 +95,9 @@ class RoomSummaryItemFactory @Inject constructor(private val noticeEventFormatte
             latestFormattedEvent = if (latestEvent.root.isEncrypted()
                     && latestEvent.root.mxDecryptionResult == null) {
                 stringProvider.getString(R.string.encrypted_message)
-            } else if (latestEvent.root.getClearType() == EventType.MESSAGE) {
+            } else if (latestEvent.root.getClearType() == EventType.MESSAGE || latestEvent.root.getClearType() == EventType.STICKER) {
                 val senderName = latestEvent.getDisambiguatedDisplayName()
-                val content = latestEvent.root.getClearContent()?.toModel<MessageContent>()
+                val content = latestEvent.getLastMessageContent()
                 val message = content?.body ?: ""
                 if (roomSummary.isDirect.not()) {
                     span {
@@ -126,11 +124,9 @@ class RoomSummaryItemFactory @Inject constructor(private val noticeEventFormatte
         return RoomSummaryItem_()
                 .id(roomSummary.roomId)
                 .avatarRenderer(avatarRenderer)
-                .roomId(roomSummary.roomId)
+                .matrixItem(roomSummary.toMatrixItem())
                 .lastEventTime(latestEventTime)
                 .lastFormattedEvent(latestFormattedEvent)
-                .roomName(roomSummary.displayName)
-                .avatarUrl(roomSummary.avatarUrl)
                 .showHighlighted(showHighlighted)
                 .unreadNotificationCount(unreadCount)
                 .hasUnreadMessage(roomSummary.hasUnreadMessages)

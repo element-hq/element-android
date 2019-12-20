@@ -21,6 +21,7 @@ import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
 import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.RealmResults
+import io.realm.kotlin.createObject
 import io.realm.kotlin.where
 
 internal fun RoomSummaryEntity.Companion.where(realm: Realm, roomId: String? = null): RealmQuery<RoomSummaryEntity> {
@@ -31,9 +32,20 @@ internal fun RoomSummaryEntity.Companion.where(realm: Realm, roomId: String? = n
     return query
 }
 
+internal fun RoomSummaryEntity.Companion.findByAlias(realm: Realm, roomAlias: String): RoomSummaryEntity? {
+    val roomSummary = realm.where<RoomSummaryEntity>()
+            .equalTo(RoomSummaryEntityFields.CANONICAL_ALIAS, roomAlias)
+            .findFirst()
+    if (roomSummary != null) {
+        return roomSummary
+    }
+    return realm.where<RoomSummaryEntity>()
+            .contains(RoomSummaryEntityFields.FLAT_ALIASES, "|$roomAlias")
+            .findFirst()
+}
+
 internal fun RoomSummaryEntity.Companion.getOrCreate(realm: Realm, roomId: String): RoomSummaryEntity {
-    return where(realm, roomId).findFirst()
-           ?: realm.createObject(RoomSummaryEntity::class.java, roomId)
+    return where(realm, roomId).findFirst() ?: realm.createObject(roomId)
 }
 
 internal fun RoomSummaryEntity.Companion.getDirectRooms(realm: Realm): RealmResults<RoomSummaryEntity> {

@@ -24,8 +24,6 @@ import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.view.View
 import dagger.Lazy
-import im.vector.matrix.android.api.permalinks.MatrixLinkify
-import im.vector.matrix.android.api.permalinks.MatrixPermalinkSpan
 import im.vector.matrix.android.api.session.events.model.RelationType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.message.*
@@ -35,7 +33,6 @@ import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
-import im.vector.riotx.core.linkify.VectorLinkify
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.utils.DebouncedClickListener
@@ -45,8 +42,11 @@ import im.vector.riotx.core.utils.isLocalFile
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.home.room.detail.timeline.helper.*
 import im.vector.riotx.features.home.room.detail.timeline.item.*
-import im.vector.riotx.features.html.EventHtmlRenderer
+import im.vector.riotx.features.home.room.detail.timeline.tools.createLinkMovementMethod
+import im.vector.riotx.features.home.room.detail.timeline.tools.linkify
 import im.vector.riotx.features.html.CodeVisitor
+import im.vector.riotx.features.html.EventHtmlRenderer
+import im.vector.riotx.features.html.VectorHtmlCompressor
 import im.vector.riotx.features.media.ImageContentRenderer
 import im.vector.riotx.features.media.VideoContentRenderer
 import me.gujun.android.span.span
@@ -58,6 +58,7 @@ class MessageItemFactory @Inject constructor(
         private val dimensionConverter: DimensionConverter,
         private val timelineMediaSizeProvider: TimelineMediaSizeProvider,
         private val htmlRenderer: Lazy<EventHtmlRenderer>,
+        private val htmlCompressor: VectorHtmlCompressor,
         private val stringProvider: StringProvider,
         private val imageContentRenderer: ImageContentRenderer,
         private val messageInformationDataFactory: MessageInformationDataFactory,
@@ -70,12 +71,11 @@ class MessageItemFactory @Inject constructor(
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
                highlight: Boolean,
-               readMarkerVisible: Boolean,
                callback: TimelineEventController.Callback?
     ): VectorEpoxyModel<*>? {
         event.root.eventId ?: return null
 
-        val informationData = messageInformationDataFactory.create(event, nextEvent, readMarkerVisible)
+        val informationData = messageInformationDataFactory.create(event, nextEvent)
 
         if (event.root.isRedacted()) {
             // message is redacted
@@ -92,21 +92,21 @@ class MessageItemFactory @Inject constructor(
                 || event.isEncrypted() && event.root.content.toModel<EncryptedEventContent>()?.relatesTo?.type == RelationType.REPLACE
         ) {
             // This is an edit event, we should it when debugging as a notice event
-            return noticeItemFactory.create(event, highlight, readMarkerVisible, callback)
+            return noticeItemFactory.create(event, highlight, callback)
         }
         val attributes = messageItemAttributesFactory.create(messageContent, informationData, callback)
 
 //        val all = event.root.toContent()
 //        val ev = all.toModel<Event>()
         return when (messageContent) {
-            is MessageEmoteContent  -> buildEmoteMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageTextContent   -> buildItemForTextContent(messageContent, informationData, highlight, callback, attributes)
-            is MessageImageContent  -> buildImageMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageNoticeContent -> buildNoticeMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageVideoContent  -> buildVideoMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageFileContent   -> buildFileMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageAudioContent  -> buildAudioMessageItem(messageContent, informationData, highlight, callback, attributes)
-            else                    -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback)
+            is MessageEmoteContent     -> buildEmoteMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageTextContent      -> buildItemForTextContent(messageContent, informationData, highlight, callback, attributes)
+            is MessageImageInfoContent -> buildImageMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageNoticeContent    -> buildNoticeMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageVideoContent     -> buildVideoMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageFileContent      -> buildFileMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageAudioContent     -> buildAudioMessageItem(messageContent, informationData, highlight, callback, attributes)
+            else                       -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback)
         }
     }
 
@@ -157,7 +157,7 @@ class MessageItemFactory @Inject constructor(
         return defaultItemFactory.create(text, informationData, highlight, callback)
     }
 
-    private fun buildImageMessageItem(messageContent: MessageImageContent,
+    private fun buildImageMessageItem(messageContent: MessageImageInfoContent,
                                       @Suppress("UNUSED_PARAMETER")
                                       informationData: MessageInformationData,
                                       highlight: Boolean,
@@ -181,10 +181,16 @@ class MessageItemFactory @Inject constructor(
                 .playable(messageContent.info?.mimeType == "image/gif")
                 .highlighted(highlight)
                 .mediaData(data)
-                .clickListener(
-                        DebouncedClickListener(View.OnClickListener { view ->
-                            callback?.onImageMessageClicked(messageContent, data, view)
-                        }))
+                .apply {
+                    if (messageContent.type == MessageType.MSGTYPE_STICKER_LOCAL) {
+                        mode(ImageContentRenderer.Mode.STICKER)
+                    } else {
+                        clickListener(
+                                DebouncedClickListener(View.OnClickListener { view ->
+                                    callback?.onImageMessageClicked(messageContent, data, view)
+                                }))
+                    }
+                }
     }
 
     private fun buildVideoMessageItem(messageContent: MessageVideoContent,
@@ -195,8 +201,7 @@ class MessageItemFactory @Inject constructor(
         val (maxWidth, maxHeight) = timelineMediaSizeProvider.getMaxSize()
         val thumbnailData = ImageContentRenderer.Data(
                 filename = messageContent.body,
-                url = messageContent.videoInfo?.thumbnailFile?.url
-                        ?: messageContent.videoInfo?.thumbnailUrl,
+                url = messageContent.videoInfo?.thumbnailFile?.url ?: messageContent.videoInfo?.thumbnailUrl,
                 elementToDecrypt = messageContent.videoInfo?.thumbnailFile?.toElementToDecrypt(),
                 height = messageContent.videoInfo?.height,
                 maxHeight = maxHeight,
@@ -230,6 +235,7 @@ class MessageItemFactory @Inject constructor(
                                         attributes: AbsMessageItem.Attributes): VectorEpoxyModel<*>? {
         val isFormatted = messageContent.formattedBody.isNullOrBlank().not()
         return if (isFormatted) {
+            // First detect if the message contains some code block(s) or inline code
             val localFormattedBody = htmlRenderer.get().parse(messageContent.body) as Document
             val codeVisitor = CodeVisitor()
             codeVisitor.visit(localFormattedBody)
@@ -243,7 +249,8 @@ class MessageItemFactory @Inject constructor(
                     buildMessageTextItem(codeFormatted, false, informationData, highlight, callback, attributes)
                 }
                 CodeVisitor.Kind.NONE   -> {
-                    val formattedBody = htmlRenderer.get().render(messageContent.formattedBody!!)
+                    val compressed = htmlCompressor.compress(messageContent.formattedBody!!)
+                    val formattedBody = htmlRenderer.get().render(compressed)
                     buildMessageTextItem(formattedBody, true, informationData, highlight, callback, attributes)
                 }
             }
@@ -258,7 +265,7 @@ class MessageItemFactory @Inject constructor(
                                      highlight: Boolean,
                                      callback: TimelineEventController.Callback?,
                                      attributes: AbsMessageItem.Attributes): MessageTextItem? {
-        val linkifiedBody = linkifyBody(body, callback)
+        val linkifiedBody = body.linkify(callback)
 
         return MessageTextItem_().apply {
             if (informationData.hasBeenEdited) {
@@ -273,7 +280,7 @@ class MessageItemFactory @Inject constructor(
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .attributes(attributes)
                 .highlighted(highlight)
-                .urlClickCallback(callback)
+                .movementMethod(createLinkMovementMethod(callback))
     }
 
     private fun buildCodeBlockItem(formattedBody: CharSequence,
@@ -344,14 +351,14 @@ class MessageItemFactory @Inject constructor(
                 textColor = colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
                 textStyle = "italic"
             }
-            linkifyBody(formattedBody, callback)
+            formattedBody.linkify(callback)
         }
         return MessageTextItem_()
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .attributes(attributes)
                 .message(message)
                 .highlighted(highlight)
-                .urlClickCallback(callback)
+                .movementMethod(createLinkMovementMethod(callback))
     }
 
     private fun buildEmoteMessageItem(messageContent: MessageEmoteContent,
@@ -361,7 +368,7 @@ class MessageItemFactory @Inject constructor(
                                       attributes: AbsMessageItem.Attributes): MessageTextItem? {
         val message = messageContent.body.let {
             val formattedBody = "* ${informationData.memberName} $it"
-            linkifyBody(formattedBody, callback)
+            formattedBody.linkify(callback)
         }
         return MessageTextItem_()
                 .apply {
@@ -375,7 +382,7 @@ class MessageItemFactory @Inject constructor(
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .attributes(attributes)
                 .highlighted(highlight)
-                .urlClickCallback(callback)
+                .movementMethod(createLinkMovementMethod(callback))
     }
 
     private fun buildRedactedItem(attributes: AbsMessageItem.Attributes,
@@ -384,17 +391,6 @@ class MessageItemFactory @Inject constructor(
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .attributes(attributes)
                 .highlighted(highlight)
-    }
-
-    private fun linkifyBody(body: CharSequence, callback: TimelineEventController.Callback?): CharSequence {
-        val spannable = SpannableStringBuilder(body)
-        MatrixLinkify.addLinks(spannable, object : MatrixPermalinkSpan.Callback {
-            override fun onUrlClicked(url: String) {
-                callback?.onUrlClicked(url)
-            }
-        })
-        VectorLinkify.addLinks(spannable, true)
-        return spannable
     }
 
     companion object {

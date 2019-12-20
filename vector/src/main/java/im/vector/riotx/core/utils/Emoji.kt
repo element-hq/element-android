@@ -16,13 +16,6 @@
 
 package im.vector.riotx.core.utils
 
-import android.content.Context
-import com.squareup.moshi.Moshi
-import im.vector.riotx.R
-import im.vector.riotx.features.reactions.EmojiDataSource
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.util.regex.Pattern
 
 private val emojisPattern = Pattern.compile("((?:[\uD83C\uDF00-\uD83D\uDDFF]" +
@@ -49,6 +42,7 @@ private val emojisPattern = Pattern.compile("((?:[\uD83C\uDF00-\uD83D\uDDFF]" +
         "|\uD83C\uDCCF\uFE0F?" +
         "|[\u231A\u231B\u2328\u23CF\u23E9-\u23F3\u23F8-\u23FA]\uFE0F?))")
 
+/*
 // A hashset from all supported emoji
 private var knownEmojiSet: HashSet<String>? = null
 
@@ -56,7 +50,7 @@ fun initKnownEmojiHashSet(context: Context, done: (() -> Unit)? = null) {
     GlobalScope.launch {
         context.resources.openRawResource(R.raw.emoji_picker_datasource).use { input ->
             val moshi = Moshi.Builder().build()
-            val jsonAdapter = moshi.adapter(EmojiDataSource.EmojiData::class.java)
+            val jsonAdapter = moshi.adapter(EmojiData::class.java)
             val inputAsString = input.bufferedReader().use { it.readText() }
             val source = jsonAdapter.fromJson(inputAsString)
             knownEmojiSet = HashSet<String>().also {
@@ -77,6 +71,7 @@ fun isSingleEmoji(string: String): Boolean {
     }
     return knownEmojiSet?.contains(string) ?: false
 }
+ */
 
 /**
  * Test if a string contains emojis.

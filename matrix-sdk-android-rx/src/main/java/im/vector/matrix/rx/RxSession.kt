@@ -38,6 +38,10 @@ class RxSession(private val session: Session) {
         return session.liveGroupSummaries().asObservable()
     }
 
+    fun liveBreadcrumbs(): Observable<List<RoomSummary>> {
+        return session.liveBreadcrumbs().asObservable()
+    }
+
     fun liveSyncState(): Observable<SyncState> {
         return session.syncState().asObservable()
     }
@@ -62,18 +66,25 @@ class RxSession(private val session: Session) {
         return session.livePagedUsers(filter).asObservable()
     }
 
-    fun createRoom(roomParams: CreateRoomParams): Single<String> = Single.create {
-        session.createRoom(roomParams, MatrixCallbackSingle(it)).toSingle(it)
+    fun createRoom(roomParams: CreateRoomParams): Single<String> = singleBuilder {
+        session.createRoom(roomParams, it)
     }
 
     fun searchUsersDirectory(search: String,
                              limit: Int,
-                             excludedUserIds: Set<String>): Single<List<User>> = Single.create {
-        session.searchUsersDirectory(search, limit, excludedUserIds, MatrixCallbackSingle(it)).toSingle(it)
+                             excludedUserIds: Set<String>): Single<List<User>> = singleBuilder {
+        session.searchUsersDirectory(search, limit, excludedUserIds, it)
     }
 
-    fun joinRoom(roomId: String, viaServers: List<String> = emptyList()): Single<Unit> = Single.create {
-        session.joinRoom(roomId, viaServers, MatrixCallbackSingle(it)).toSingle(it)
+    fun joinRoom(roomId: String,
+                 reason: String? = null,
+                 viaServers: List<String> = emptyList()): Single<Unit> = singleBuilder {
+        session.joinRoom(roomId, reason, viaServers, it)
+    }
+
+    fun getRoomIdByAlias(roomAlias: String,
+                         searchOnServer: Boolean): Single<Optional<String>> = singleBuilder {
+        session.getRoomIdByAlias(roomAlias, searchOnServer, it)
     }
 }
 

@@ -2,22 +2,7 @@
 <resources>
 
     <!-- Strings not defined in Riot -->
-    <string name="message_ignore_user">Block user</string>
 
-    <string name="room_list_quick_actions_notifications_all_noisy">"All messages (noisy)"</string>
-    <string name="room_list_quick_actions_notifications_all">"All messages"</string>
-    <string name="room_list_quick_actions_notifications_mentions">"Mentions only"</string>
-    <string name="room_list_quick_actions_notifications_mute">"Mute"</string>
-    <string name="room_list_quick_actions_settings">"Settings"</string>
-    <string name="room_list_quick_actions_leave">"Leave the room"</string>
-    <string name="notice_member_no_changes">"%1$s made no changes"</string>
-    <string name="command_description_spoiler">Sends the given message as a spoiler</string>
-    <string name="spoiler">Spoiler</string>
-    <string name="reaction_search_type_hint">Type keywords to find a reaction.</string>
-
-    <string name="no_ignored_users">You are not ignoring any users</string>
-
-    <string name="help_long_click_on_room_for_more_options">Long click on a room to see more options</string>
 
     <string name="room_profile_not_encrypted_subtitle">Messages in this room are not end-to-end encrypted.</string>
     <string name="room_profile_encrypted_subtitle">Messages in this room are end-to-end encrypted.</string>

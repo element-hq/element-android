@@ -20,6 +20,7 @@ import android.content.Context
 import android.text.style.URLSpan
 import im.vector.matrix.android.api.permalinks.PermalinkData
 import im.vector.matrix.android.api.permalinks.PermalinkParser
+import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.glide.GlideRequests
 import im.vector.riotx.features.home.AvatarRenderer
@@ -41,7 +42,8 @@ class MxLinkTagHandler(private val glideRequests: GlideRequests,
             when (permalinkData) {
                 is PermalinkData.UserLink -> {
                     val user = sessionHolder.getSafeActiveSession()?.getUser(permalinkData.userId)
-                    val span = PillImageSpan(glideRequests, avatarRenderer, context, permalinkData.userId, user)
+                    val span = PillImageSpan(glideRequests, avatarRenderer, context, MatrixItem.UserItem(permalinkData.userId, user?.displayName
+                            ?: permalinkData.userId, user?.avatarUrl))
                     SpannableBuilder.setSpans(
                             visitor.builder(),
                             span,

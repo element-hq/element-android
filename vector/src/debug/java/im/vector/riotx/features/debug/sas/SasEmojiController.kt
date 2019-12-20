@@ -29,7 +29,7 @@ class SasEmojiController : TypedEpoxyController<SasState>() {
         if (data == null) return
 
         data.emojiList.forEachIndexed { idx, emojiRepresentation ->
-            itemSasEmoji {
+            sasEmojiItem {
                 id(idx)
                 index(idx)
                 emojiRepresentation(emojiRepresentation)

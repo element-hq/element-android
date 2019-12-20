@@ -38,12 +38,15 @@ import butterknife.Unbinder
 import com.airbnb.mvrx.MvRx
 import com.bumptech.glide.util.Util
 import com.google.android.material.snackbar.Snackbar
+import im.vector.matrix.android.api.failure.GlobalError
 import im.vector.riotx.BuildConfig
 import im.vector.riotx.R
 import im.vector.riotx.core.di.*
 import im.vector.riotx.core.dialogs.DialogLocker
 import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.utils.toast
+import im.vector.riotx.features.MainActivity
+import im.vector.riotx.features.MainActivityArgs
 import im.vector.riotx.features.configuration.VectorConfiguration
 import im.vector.riotx.features.consent.ConsentNotGivenHelper
 import im.vector.riotx.features.navigation.Navigator
@@ -88,6 +91,9 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
     private lateinit var rageShake: RageShake
     protected lateinit var navigator: Navigator
     private lateinit var activeSessionHolder: ActiveSessionHolder
+
+    // Filter for multiple invalid token error
+    private var mainActivityStarted = false
 
     private var unBinder: Unbinder? = null
 
@@ -153,9 +159,8 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
         })
 
         sessionListener = getVectorComponent().sessionListener()
-        sessionListener.consentNotGivenLiveData.observeEvent(this) {
-            consentNotGivenHelper.displayDialog(it.consentUri,
-                    activeSessionHolder.getActiveSession().sessionParams.homeServerConnectionConfig.homeServerUri.host ?: "")
+        sessionListener.globalErrorLiveData.observeEvent(this) {
+            handleGlobalError(it)
         }
 
         doBeforeSetContentView()
@@ -180,6 +185,33 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
         }
     }
 
+    private fun handleGlobalError(globalError: GlobalError) {
+        when (globalError) {
+            is GlobalError.InvalidToken         ->
+                handleInvalidToken(globalError)
+            is GlobalError.ConsentNotGivenError ->
+                consentNotGivenHelper.displayDialog(globalError.consentUri,
+                        activeSessionHolder.getActiveSession().sessionParams.homeServerConnectionConfig.homeServerUri.host ?: "")
+        }
+    }
+
+    protected open fun handleInvalidToken(globalError: GlobalError.InvalidToken) {
+        Timber.w("Invalid token event received")
+        if (mainActivityStarted) {
+            return
+        }
+
+        mainActivityStarted = true
+
+        MainActivity.restartApp(this,
+                MainActivityArgs(
+                        clearCredentials = !globalError.softLogout,
+                        isUserLoggedOut = true,
+                        isSoftLogout = globalError.softLogout
+                )
+        )
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         unBinder?.unbind()
@@ -190,8 +222,7 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
 
     override fun onResume() {
         super.onResume()
-
-        Timber.v("onResume Activity ${this.javaClass.simpleName}")
+        Timber.i("onResume Activity ${this.javaClass.simpleName}")
 
         configurationViewModel.onActivityResumed()
 
@@ -278,7 +309,7 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
-            onBackPressed()
+            onBackPressed(true)
             return true
         }
 
@@ -286,20 +317,24 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
     }
 
     override fun onBackPressed() {
-        val handled = recursivelyDispatchOnBackPressed(supportFragmentManager)
+        onBackPressed(false)
+    }
+
+    private fun onBackPressed(fromToolbar: Boolean) {
+        val handled = recursivelyDispatchOnBackPressed(supportFragmentManager, fromToolbar)
         if (!handled) {
             super.onBackPressed()
         }
     }
 
-    private fun recursivelyDispatchOnBackPressed(fm: FragmentManager): Boolean {
-        val reverseOrder = fm.fragments.filter { it is VectorBaseFragment }.reversed()
+    private fun recursivelyDispatchOnBackPressed(fm: FragmentManager, fromToolbar: Boolean): Boolean {
+        val reverseOrder = fm.fragments.filterIsInstance<VectorBaseFragment>().reversed()
         for (f in reverseOrder) {
-            val handledByChildFragments = recursivelyDispatchOnBackPressed(f.childFragmentManager)
+            val handledByChildFragments = recursivelyDispatchOnBackPressed(f.childFragmentManager, fromToolbar)
             if (handledByChildFragments) {
                 return true
             }
-            if (f is OnBackPressed && f.onBackPressed()) {
+            if (f is OnBackPressed && f.onBackPressed(fromToolbar)) {
                 return true
             }
         }

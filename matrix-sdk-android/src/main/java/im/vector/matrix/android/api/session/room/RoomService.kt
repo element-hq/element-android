@@ -21,6 +21,7 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.util.Cancelable
+import im.vector.matrix.android.api.util.Optional
 
 /**
  * This interface defines methods to get rooms. It's implemented at the session level.
@@ -30,14 +31,17 @@ interface RoomService {
     /**
      * Create a room asynchronously
      */
-    fun createRoom(createRoomParams: CreateRoomParams, callback: MatrixCallback<String>): Cancelable
+    fun createRoom(createRoomParams: CreateRoomParams,
+                   callback: MatrixCallback<String>): Cancelable
 
     /**
      * Join a room by id
      * @param roomId the roomId of the room to join
+     * @param reason optional reason for joining the room
      * @param viaServers the servers to attempt to join the room through. One of the servers must be participating in the room.
      */
     fun joinRoom(roomId: String,
+                 reason: String? = null,
                  viaServers: List<String> = emptyList(),
                  callback: MatrixCallback<Unit>): Cancelable
 
@@ -55,7 +59,27 @@ interface RoomService {
     fun liveRoomSummaries(): LiveData<List<RoomSummary>>
 
     /**
+     * Get a live list of Breadcrumbs
+     * @return the [LiveData] of [RoomSummary]
+     */
+    fun liveBreadcrumbs(): LiveData<List<RoomSummary>>
+
+    /**
+     * Inform the Matrix SDK that a room is displayed.
+     * The SDK will update the breadcrumbs in the user account data
+     */
+    fun onRoomDisplayed(roomId: String): Cancelable
+
+    /**
      * Mark all rooms as read
      */
-    fun markAllAsRead(roomIds: List<String>, callback: MatrixCallback<Unit>): Cancelable
+    fun markAllAsRead(roomIds: List<String>,
+                      callback: MatrixCallback<Unit>): Cancelable
+
+    /**
+     * Resolve a room alias to a room ID.
+     */
+    fun getRoomIdByAlias(roomAlias: String,
+                         searchOnServer: Boolean,
+                         callback: MatrixCallback<Optional<String>>): Cancelable
 }

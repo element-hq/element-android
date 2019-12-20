@@ -21,7 +21,6 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -29,6 +28,8 @@ import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.args
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
+import im.vector.riotx.core.extensions.cleanup
+import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.riotx.features.home.room.detail.timeline.item.ReadReceiptData
 import kotlinx.android.parcel.Parcelize
@@ -52,8 +53,8 @@ class DisplayReadReceiptsBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
     private val displayReadReceiptArgs: DisplayReadReceiptArgs by args()
 
-    override fun injectWith(screenComponent: ScreenComponent) {
-        screenComponent.inject(this)
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -64,10 +65,14 @@ class DisplayReadReceiptsBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        recyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        recyclerView.adapter = epoxyController.adapter
-        bottomSheetTitle.text = getString(R.string.read_at)
+        recyclerView.configureWith(epoxyController, hasFixedSize = false)
+        bottomSheetTitle.text = getString(R.string.seen_by)
         epoxyController.setData(displayReadReceiptArgs.readReceipts)
+    }
+
+    override fun onDestroyView() {
+        recyclerView.cleanup()
+        super.onDestroyView()
     }
 
     // we are not using state for this one as it's static, so no need to override invalidate()

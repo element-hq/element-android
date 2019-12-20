@@ -33,15 +33,15 @@ sealed class ParsedCommand {
 
     // Valid commands:
 
-    class SendEmote(val message: String) : ParsedCommand()
-    class BanUser(val userId: String, val reason: String) : ParsedCommand()
-    class UnbanUser(val userId: String) : ParsedCommand()
+    class SendEmote(val message: CharSequence) : ParsedCommand()
+    class BanUser(val userId: String, val reason: String?) : ParsedCommand()
+    class UnbanUser(val userId: String, val reason: String?) : ParsedCommand()
     class SetUserPowerLevel(val userId: String, val powerLevel: Int) : ParsedCommand()
-    class Invite(val userId: String) : ParsedCommand()
-    class JoinRoom(val roomAlias: String) : ParsedCommand()
-    class PartRoom(val roomAlias: String) : ParsedCommand()
+    class Invite(val userId: String, val reason: String?) : ParsedCommand()
+    class JoinRoom(val roomAlias: String, val reason: String?) : ParsedCommand()
+    class PartRoom(val roomAlias: String, val reason: String?) : ParsedCommand()
     class ChangeTopic(val topic: String) : ParsedCommand()
-    class KickUser(val userId: String, val reason: String) : ParsedCommand()
+    class KickUser(val userId: String, val reason: String?) : ParsedCommand()
     class ChangeDisplayName(val displayName: String) : ParsedCommand()
     class SetMarkdown(val enable: Boolean) : ParsedCommand()
     object ClearScalarToken : ParsedCommand()

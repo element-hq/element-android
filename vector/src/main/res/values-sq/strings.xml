@@ -1158,7 +1158,7 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="passphrase_empty_error_message">Ju lutemi, jepni një frazëkalim</string>
     <string name="passphrase_passphrase_too_weak">Frazëkalimi është shumë i dobët</string>
 
-    <string name="keys_backup_passphrase_not_empty_error_message">Ju lutemi, fshini frazëkalimin, nëse doni që Riot-i të prodhojë një kyç rikthimesh.</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">Ju lutemi, fshini frazëkalimin, nëse doni që Riot-i të prodhojë një kyç rimarrjesh.</string>
     <string name="keys_backup_no_session_error">S’ka sesione Matrix të gatshëm</string>
 
     <string name="keys_backup_setup_step1_title">Mos humbni kurrë mesazhe të fshehtëzuar</string>
@@ -1167,16 +1167,16 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
 \nBëni një kopjeruajtje të sigurt të kyçeve tuaj, për të shmangur humbjen e tyre.</string>
     <string name="keys_backup_setup_step2_button_title">Caktoni Frazëkalim</string>
     <string name="keys_backup_setup_step3_button_title">U bë</string>
-    <string name="keys_backup_setup_step3_copy_button_title">Ruani Kyç Rikthimesh</string>
+    <string name="keys_backup_setup_step3_copy_button_title">Ruani Kyç Rimarrjesh</string>
     <string name="keys_backup_setup_step3_save_button_title">Ruaje si Skedë</string>
-    <string name="recovery_key_export_saved_as_warning">Kyçi i rikthimeve u ruajt te \'%s\'.
-\n
+    <string name="recovery_key_export_saved_as_warning">Kyçi i rimarrjeve u ruajt te \'%s\'. 
+\n 
 \nKujdes: kjo kartelë mund të fshihet, nëse çinstalohet aplikacioni.</string>
 
     <string name="keys_backup_setup_step3_please_make_copy">Ju lutemi, bëni një kopje</string>
-    <string name="keys_backup_setup_step3_share_intent_chooser_title">Jepjani kyçin e rikthimeve…</string>
-    <string name="keys_backup_setup_step3_generating_key_status">Po prodhohet Kyç Rikthimesh duke përdorur frazëkalim, ky proces mund të hajë disa sekonda.</string>
-    <string name="recovery_key">Kyç Rikthimesh</string>
+    <string name="keys_backup_setup_step3_share_intent_chooser_title">Jepjani kyçin e rimarrjeve…</string>
+    <string name="keys_backup_setup_step3_generating_key_status">Po prodhohet Kyç Rimarrjesh duke përdorur frazëkalim, ky proces mund të hajë disa sekonda.</string>
+    <string name="recovery_key">Kyç Rimarrjesh</string>
     <string name="unexpected_error">Gabim i papritur</string>
     <string name="keys_backup_setup_backup_started_title">Nisi Kopjeruajtja</string>
     <string name="keys_backup_setup_backup_started_message">Te shërbyesi juaj Home, tani po krijohet në prapaskenë kopjeruajtje e kyçeve tuaj të fshehtëzimit. Kopjeruajtja fillestare mund të dojë disa minuta.</string>
@@ -1186,23 +1186,23 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="keys_backup_setup_skip_msg">Nëse dilni nga llogaria, ose nëse humbni pajisjen tuaj, mund të humbni hyrjen në mesazhet tuaj.</string>
 
     <string name="keys_backup_restore_is_getting_backup_version">Po sillet version kopjeruajtjeje…</string>
-    <string name="keys_backup_restore_with_passphrase">Që të shkyçni historikun e mesazheve tuaj të sigurt, përdorni frazëkalimin tuaj të rikthimeve</string>
-    <string name="keys_backup_restore_use_recovery_key">përdorni kyçin tuaj të rikthimeve</string>
-    <string name="keys_backup_restore_with_passphrase_helper_with_link">S’dihet frazëkalimi juaj i rikthimeve, mundeni të %s.</string>
+    <string name="keys_backup_restore_with_passphrase">Që të shkyçni historikun e mesazheve tuaj të sigurt, përdorni frazëkalimin tuaj të rimarrjeve</string>
+    <string name="keys_backup_restore_use_recovery_key">përdorni kyçin tuaj të rimarrjeve</string>
+    <string name="keys_backup_restore_with_passphrase_helper_with_link">S’dihet frazëkalimi juaj i rimarrjeve, mundeni të %s.</string>
 
-    <string name="keys_backup_restore_with_recovery_key">Përdorni Kyçin tuaj të Rikthimeve për të shkyçur historikun tuaj të mesazheve të sigurt</string>
-    <string name="keys_backup_restore_key_enter_hint">Jepni Kyç Rikthimesh</string>
+    <string name="keys_backup_restore_with_recovery_key">Përdorni Kyçin tuaj të Rimarrjeve për të shkyçur historikun tuaj të mesazheve të sigurt</string>
+    <string name="keys_backup_restore_key_enter_hint">Jepni Kyç Rimarrjesh</string>
 
-    <string name="keys_backup_restore_setup_recovery_key">Rikthim Mesazhesh</string>
+    <string name="keys_backup_restore_setup_recovery_key">Rimarrje Mesazhesh</string>
 
-    <string name="keys_backup_restore_with_key_helper">Humbët kyçin tuaj të rikthimeve? Te rregullimet mund të caktoni një të ri.</string>
-    <string name="keys_backup_passphrase_error_decrypt">S’u shfshehtëzua dot kopjeruajtja me këtë frazëkalim: ju lutemi, verifikoni që dhatë frazëkalimin e duhur të rikthimeve.</string>
+    <string name="keys_backup_restore_with_key_helper">Humbët kyçin tuaj të rimarrjeve\? Te rregullimet mund të caktoni një të ri.</string>
+    <string name="keys_backup_passphrase_error_decrypt">S’u shfshehtëzua dot kopjeruajtja me këtë frazëkalim: ju lutemi, verifikoni që dhatë frazëkalimin e duhur të rimarrjeve.</string>
     <string name="network_error_please_check_and_retry">Gabim lidhjeje: ju lutemi, kontrolloni lidhjen tuaj dhe riprovoni.</string>
 
     <string name="keys_backup_restoring_waiting_message">Po rikthehet kopjeruajtja:</string>
     <string name="keys_backup_unlock_button">Shkyçeni Historikun</string>
-    <string name="keys_backup_recovery_code_empty_error_message">Ju lutemi, jepni një kyç rikthimesh</string>
-    <string name="keys_backup_recovery_code_error_decrypt">S’u shfshehtëzua dot kopjeruajtja me këtë kyç: ju lutemi, verifikoni që dhatë kyçin e duhur të rikthimeve.</string>
+    <string name="keys_backup_recovery_code_empty_error_message">Ju lutemi, jepni një kyç rimarrjesh</string>
+    <string name="keys_backup_recovery_code_error_decrypt">S’u shfshehtëzua dot kopjeruajtja me këtë kyç: ju lutemi, verifikoni që dhatë kyçin e duhur të rimarrjeve.</string>
 
     <string name="keys_backup_restore_success_title">Kopjeruajtja u Rikthye %s !</string>
     <string name="keys_backup_restore_success_description">U rikthyen %1$d kyçe sesioni, dhe u shtuan %2$d kyç(e) të rinj që nuk njiheshin nga kjo pajisje</string>
@@ -1239,7 +1239,7 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="keys_backup_settings_delete_backup_error">S’arrihet të fshihet kopjeruajtje (%s)</string>
 
     <string name="keys_backup_settings_delete_confirm_title">Fshije Kopjeruajtjen</string>
-    <string name="keys_backup_settings_delete_confirm_message">Të fshihen nga shërbyesi kyçet tuaj të kopjeruajtur të fshehtëzimit? S’do të jeni më në gjendje të përdorni kyçin tuaj të rikthimeve për lexim historiku mesazhesh të fshehtëzuar.</string>
+    <string name="keys_backup_settings_delete_confirm_message">Të fshihen nga shërbyesi kyçet tuaj të kopjeruajtur të fshehtëzimit\? S’do të jeni më në gjendje të përdorni kyçin tuaj të rimarrjeve për lexim historiku mesazhesh të fshehtëzuar.</string>
 
     <string name="sign_out_bottom_sheet_warning_no_backup">Nëse dilni tani nga llogaria, do të humbni mesazhet tuaj të fshehtëzuar</string>
     <string name="sign_out_bottom_sheet_warning_backing_up">Kopjeruajtja e kyçeve po kryhet. Nëse dilni tani nga llogaria, do të humbni hyrjen te mesazhet tuaj të fshehtëzuar.</string>
@@ -1257,7 +1257,7 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="action_sign_out_confirmation_simple">Jeni i sigurt se doni të dilni?</string>
     <string name="settings_data_save_mode_summary">Mënyra e ruajtjes së të dhënave aplikon një filtër specifik, që kështu përditësimet rreth pranish dhe njoftime mbi shtypje në tastierë lihen jashtë.</string>
 
-    <string name="encryption_message_recovery">Rikthim Mesazhesh të Fshehtëzuar</string>
+    <string name="encryption_message_recovery">Rimarrje Mesazhesh të Fshehtëzuar</string>
     <string name="error_empty_field_enter_user_name">Ju lutemi, jepni emër përdoruesi.</string>
     <string name="keys_backup_setup">Fillo të përdorësh Kopjeruajtje Kyçesh</string>
     <string name="keys_backup_setup_step1_advanced">(Të mëtejshme)</string>
@@ -1268,13 +1268,13 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
 \n
 \nPër maksimumin e sigurisë, ky duhet të jetë i ndryshëm nga fjalëkalimi juaj për llogarinë.</string>
     <string name="keys_backup_setup_creating_backup">Po Krijohet Kopjeruajtje</string>
-    <string name="keys_backup_setup_step1_recovery_key_alternative">Ose, sigurojeni kopjeruajtjen tuaj me një Kyç Rikthimesh, duke e ruajtur këtë diku të parrezikuar.</string>
-    <string name="keys_backup_setup_step2_skip_button_title">(Të mëtejshme) Rregullojeni me një Kyç Rikthimesh</string>
+    <string name="keys_backup_setup_step1_recovery_key_alternative">Ose, sigurojeni kopjeruajtjen tuaj me një Kyç Rimarrjesh, duke e ruajtur këtë diku të parrezikuar.</string>
+    <string name="keys_backup_setup_step2_skip_button_title">(Të mëtejshme) Rregullojeni me një Kyç Rimarrjesh</string>
     <string name="keys_backup_setup_step3_success_title">Sukses!</string>
     <string name="keys_backup_setup_step3_text_line1">Kyçet tuaj po kopjeruhen.</string>
-    <string name="keys_backup_setup_step3_text_line2">Kyçi juaj i rikthimeve është një lloj rrjeti sigurie - mund ta përdorni për të rifituar hyrje te mesazhet tuaj të fshehtëzuar, nëse harroni frazëkalimin tuaj.
-\nMbajeni kyçin tuaj të rikthimeve diku shumë të sigurt, bie fjala, nën një përgjegjës fjalëkalimesh (ose në një kasafortë)</string>
-    <string name="keys_backup_setup_step3_text_line2_no_passphrase">Mbajeni kyçin tuaj të rikthimeve diku në një vend shumë të sigurt, bie fjala, nën një përgjegjës fjalëkalimesh (ose në një kasafortë)</string>
+    <string name="keys_backup_setup_step3_text_line2">Kyçi juaj i rimarrjeve është një lloj mase sigurie - mund ta përdorni për të rifituar hyrje te mesazhet tuaj të fshehtëzuar, nëse harroni frazëkalimin tuaj. 
+\nMbajeni kyçin tuaj të rimarrjeve diku shumë të sigurt, bie fjala, nën një përgjegjës fjalëkalimesh (ose në një kasafortë)</string>
+    <string name="keys_backup_setup_step3_text_line2_no_passphrase">Mbajeni kyçin tuaj të rimarrjeve diku në një vend shumë të sigurt, bie fjala, nën një përgjegjës fjalëkalimesh (ose në një kasafortë)</string>
     <string name="keys_backup_setup_step3_button_title_no_passphrase">Bëra një kopje</string>
     <string name="keys_backup_setup_step3_share_recovery_file">Ndajeni me të tjerë</string>
     <string name="keys_backup_banner_setup_line1">Mos humbni kurrë mesazhe të fshehtëzuar</string>
@@ -1310,14 +1310,14 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="settings_fail_to_update_password_invalid_current_password">Fjalëkalimi s’është i vlefshëm</string>
     <string name="passwords_do_not_match">Fjalëkalimet s’përputhen</string>
 
-    <string name="keys_backup_restoring_computing_key_waiting_message">Po përllogariten kyçe rikthimesh…</string>
+    <string name="keys_backup_restoring_computing_key_waiting_message">Po përllogariten kyçe rimarrjesh…</string>
     <string name="keys_backup_restoring_downloading_backup_waiting_message">Po shkarkohen kyçe…</string>
     <string name="keys_backup_restoring_importing_keys_waiting_message">Po importohen kyçe…</string>
-    <string name="keys_backup_settings_untrusted_backup">Që të përdorni Kopjeruajtje Kyçesh në këtë pajisje, rikthejeni tani përmes frazëkalimit tuaj ose kyçit të rikthimeve.</string>
+    <string name="keys_backup_settings_untrusted_backup">Që të përdorni Kopjeruajtje Kyçesh në këtë pajisje, rikthejeni tani përmes frazëkalimit tuaj ose kyçit të rimarrjeve.</string>
     <string name="new_recovery_method_popup_title">Kopjeruajtje e Re Kyçesh</string>
-    <string name="new_recovery_method_popup_description">U pikas një kopjeruajtje e re kyçesh mesazhesh të sigurt.
-\n
-\nNëse metodën e re të rikthimeve nuk e caktuat ju, dikush mund të jetë duke u rrekur të hyjë në llogarinë tuaj. Ndryshoni menjëherë fjalëkalimin e llogarisë tuaj dhe caktoni një metodë të re rikthimesh, te Rregullimet.</string>
+    <string name="new_recovery_method_popup_description">U pikas një kopjeruajtje e re kyçesh mesazhesh të sigurt. 
+\n 
+\nNëse metodën e re të rimarrjeve nuk e caktuat ju, dikush mund të jetë duke u rrekur të hyjë në llogarinë tuaj. Ndryshoni menjëherë fjalëkalimin e llogarisë tuaj dhe caktoni një metodë të re rimarrjesh, te Rregullimet.</string>
     <string name="new_recovery_method_popup_was_me">Unë qeshë</string>
     <string name="autodiscover_invalid_response">Përgjigje e pavlefshme zbulimi shërbyesi Home</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Mundësi Vetëplotësimi Shërbyesi</string>
@@ -1435,7 +1435,7 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="room_list_catchup_welcome_title">Mirë se vini në vatër!</string>
     <string name="room_list_catchup_welcome_body">Mbaroni punë me mesazhet e palexuara</string>
     <string name="room_list_people_empty_title">Biseda</string>
-    <string name="room_list_people_empty_body">Biseda përmes mesazhesh të drejtpërdrejta do të shfaqet këtu</string>
+    <string name="room_list_people_empty_body">Biseda përmes mesazhesh të drejtpërdrejta do të shfaqen këtu</string>
     <string name="room_list_rooms_empty_title">Dhoma</string>
     <string name="room_list_rooms_empty_body">Dhomat tuaja do të shfaqen këtu</string>
 
@@ -1601,7 +1601,7 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
 
     <string name="auth_add_email_message_2">Caktoni një email për rimarrje llogarie, dhe më vonë të jetë i zbulueshëm (opsionale) nga persona që ju njohin.</string>
     <string name="auth_add_phone_message_2">Caktoni një telefon, dhe më vonë të jetë i zbulueshëm (opsionale) nga persona që ju njohin.</string>
-    <string name="auth_add_email_phone_message_2">Caktoni një email për rimarrje llogarie. Përdoni email ose telefon që të jeni i zbulueshëm (opsionale) nga persona që ju njohin.</string>
+    <string name="auth_add_email_phone_message_2">Caktoni një email për rimarrje llogarie. Përdorni email ose telefon që të jeni i zbulueshëm (opsionale) nga persona që ju njohin.</string>
     <string name="auth_add_email_and_phone_message_2">Caktoni një email për rimarrje llogarie. Përdorni email ose telefon që të jeni i zbulueshëm (opsionale) nga persona që ju njohin.</string>
     <string name="login_error_homeserver_not_found">S’kapet dot shërbyes Home te kjo URL, ju lutemi, kontrollojeni</string>
     <string name="settings_call_ringtone_use_default_stun_sum">Do të përdoret %s si ndihmë kur shërbyesi juaj Home nuk ofron të tillë (gjatë thirrjes, adresa juaj IP do të ndahet me të tjerë)</string>
@@ -1654,4 +1654,107 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
 
     <string name="settings_discovery_disconnect_with_bound_pid">Hëpërhë, ndani me të tjerë adresa email ose numra telefoni te shërbyesi i identiteteve %1$s. Do të duhet të rilidheni me %2$s që të ndalni ndarjen e tyre.</string>
     <string name="settings_agree_to_terms">Që të lejoni veten të jetë e zbulueshme nga adresë email apo numër telefoni, pajtohuni me Kushtet e Shërbimit të shërbyesit të identiteteve (%s).</string>
+    <string name="resources_script">Latn</string>
+
+    <string name="settings_discovery_category">Zbulim</string>
+    <string name="labs_allow_extended_logging">Aktivizo regjistra fjalamanë.</string>
+    <string name="labs_allow_extended_logging_summary">Regjistrat fjalamanë do t’i ndihmojnë zhvilluesit duke furnizuar më tepër regjistrim kur dërgoni një RageShake. Edhe kur është e aktivizuar kjo, aplikimi nuk regjistron lëndë mesazhesh apo çfarëdo të dhëne tjetër private.</string>
+
+
+    <string name="error_terms_not_accepted">Ju lutemi, riprovoni sapo të keni pranuar termat dhe kushtet e shërbyesit tuaj Home.</string>
+
+    <string name="error_network_timeout">Duket sikur shërbyesit po i duhet shumë kohë për t’u përgjigjur,kjo mund të shkaktohet ose nga lidhje e dobët, ose nga një gabim me shërbyesin tonë. Ju lutemi, riprovoni pas pak.</string>
+
+    <string name="send_attachment">Dërgo bashkëngjitje</string>
+
+    <string name="a11y_open_drawer">Hapni zonën e lëvizjeve</string>
+    <string name="a11y_create_menu_open">Hapni menunë e krijimit të dhomave</string>
+    <string name="a11y_create_menu_close">Mbylleni menunë e krijmit të dhomave…</string>
+    <string name="a11y_create_direct_message">Krijoni një bisedë të re të drejtpërdrejtë</string>
+    <string name="a11y_create_room">Krijoni një dhomë të re</string>
+    <string name="a11y_show_password">Shfaq fjalëkalim</string>
+    <string name="a11y_hide_password">Fshihe fjalëkalimin</string>
+    <string name="a11y_jump_to_bottom">Hidhu në fund</string>
+
+    <string name="two_and_some_others_read">%1$s, %2$s dhe %3$d të tjerë të lexuar</string>
+    <string name="three_users_read">%1$s, %2$s dhe %3$s të lexuar</string>
+    <string name="two_users_read">%1$s dhe %2$s të lexuar</string>
+    <string name="one_user_read">%s i lexuar</string>
+    <plurals name="fallback_users_read">
+        <item quantity="one">1 përdorues lexoi</item>
+        <item quantity="other">%d përdorues lexuan</item>
+    </plurals>
+
+    <string name="error_file_too_big">"Kartela \'%1$s\' (%2$s) është  shumë e madhe për ngarkim. Caku është %3$s."</string>
+
+    <string name="error_attachment">Ndodhi një gabim gjatë marrjes së bashkëngjitjes.</string>
+    <string name="attachment_type_file">Kartelë</string>
+    <string name="attachment_type_contact">Kontakt</string>
+    <string name="attachment_type_camera">Kamerë</string>
+    <string name="attachment_type_audio">Audio</string>
+    <string name="attachment_type_gallery">Galeri</string>
+    <string name="attachment_type_sticker">Ngjitës</string>
+    <string name="report_content_spam">Është e padëshiruar</string>
+    <string name="report_content_inappropriate">Është e papërshtatshme</string>
+    <string name="report_content_custom">Raport vetjak</string>
+    <string name="report_content_custom_title">Raportojeni këtë lëndë</string>
+    <string name="report_content_custom_hint">Arsye për raportimin e kësaj lënde</string>
+    <string name="report_content_custom_submit">RAPORTOJENI</string>
+    <string name="block_user">BLLOKOJENI PËRDORUESIN</string>
+
+    <string name="content_reported_title">Lënda u raportua</string>
+    <string name="content_reported_content">Kjo lëndë është raportuar.
+\n
+\nNëse s’doni të shihni më lëndë nga ky përdorues, mund ta bllokoni, që të fshihen mesazhet e tij</string>
+    <string name="content_reported_as_spam_title">E raportuar si e padëshiruar</string>
+    <string name="content_reported_as_spam_content">Kjo lëndë është raportuar si e padëshiruar.
+\n
+\nNëse s’doni të shihni më lëndë nga ky përdorues, mund ta bllokoni, që të fshihen mesazhet e tij</string>
+    <string name="content_reported_as_inappropriate_title">E raportuar si e papërshtatshme</string>
+    <string name="content_reported_as_inappropriate_content">Kjo lëndë është raportuar si e papërshtatshme.
+\n
+\nNëse s’doni të shihni më lëndë nga ky përdorues, mund ta bllokoni, që të fshihen mesazhet e tij</string>
+
+    <string name="permissions_rationale_msg_keys_backup_export">Riot-i lyp leje për të ruajtur kyçet tuaj E2E në disk.
+\n
+\nJu lutemi, lejoni, te flluska pasuese, hyrje për të qenë e mundur të eksportohen kyçet tuaj dorazi.</string>
+
+    <string name="no_network_indicator">Tani për tani s’la lidhje rrjeti</string>
+
+    <string name="settings_add_3pid_confirm_password_title">Ripohoni fjalëkalimin tuaj</string>
+    <string name="settings_add_3pid_flow_not_supported">Këtë s’e bëni dot që nga Riot-i për celular</string>
+    <string name="settings_add_3pid_authentication_needed">Lypset mirëfilltësim</string>
+
+
+    <string name="settings_integrations">Integrime</string>
+    <string name="settings_integrations_summary">Përdorni një Përgjegjës Integrimesh që të administroni robotë, ura, widget-e dhe paketa ngjitësish.
+\nPërgjegjësit e Integrimeve marrin të dhëna formësimi dhe mund të ndryshojnë widget-e, të dërgojnë ftesa për në dhoma dhe të caktojnë shkallë pushteti në emrin tuaj.</string>
+    <string name="settings_integration_allow">Lejo integrim</string>
+    <string name="room_widget_activity_title">Widget</string>
+    <string name="room_widget_permission_title">Ngarko Widget</string>
+    <string name="room_widget_permission_added_by">Ky <em>widget</em> qe shtuar nga:</string>
+    <string name="room_widget_permission_webview_shared_info_title">Përdorimi i tij mund të sjellë depozitim <em>cookies</em> dhe ndarje të dhënash me %s:</string>
+    <string name="room_widget_permission_shared_info_title">Përdorimi i tij mund të sjellë ndarje të dhënash me %s:</string>
+    <string name="room_widget_failed_to_load">S’u arrit të ngarkohej widget.
+\n%s</string>
+    <string name="room_widget_reload">Ringarkoje widget-in</string>
+    <string name="room_widget_open_in_browser">Hape në shfletues</string>
+    <string name="room_widget_revoke_access">Shfuqizo hyrje për mua</string>
+
+    <string name="room_widget_permission_display_name">Emri juaj në ekran</string>
+    <string name="room_widget_permission_avatar_url">URL-ja e avatarit tuaj</string>
+    <string name="room_widget_permission_user_id">ID-ja juaj si përdorues</string>
+    <string name="room_widget_permission_theme">Tema juaj</string>
+    <string name="room_widget_permission_widget_id">ID Widget-i</string>
+    <string name="room_widget_permission_room_id">ID Dhome</string>
+
+
+    <string name="room_widget_resource_permission_title">Ky widget dëshiron të përdorë burimet vijuese:</string>
+    <string name="room_widget_resource_grant_permission">Lejoje</string>
+    <string name="room_widget_resource_decline_permission">Bllokoji Krejt</string>
+    <string name="room_widget_webview_access_camera">Të përdorë kamerën</string>
+    <string name="room_widget_webview_access_microphone">Të përdorë mikrofonin</string>
+    <string name="room_widget_webview_read_protected_media">Të lexojë Media të mbrojtur me DRM</string>
+
+    <string name="a11y_close_keys_backup_banner">Mbyll banderolë kopjeruajtjeje kyçesh</string>
 </resources>

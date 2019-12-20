@@ -30,6 +30,7 @@ data class EventContextResponse(
         @Json(name = "state") override val stateEvents: List<Event> = emptyList()
 ) : TokenChunkEvent {
 
-    override val events: List<Event>
-        get() = listOf(event)
+    override val events: List<Event> by lazy {
+        eventsAfter.reversed() + listOf(event) + eventsBefore
+    }
 }

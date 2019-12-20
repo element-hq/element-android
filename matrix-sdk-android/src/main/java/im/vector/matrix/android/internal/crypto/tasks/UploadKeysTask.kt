@@ -53,10 +53,10 @@ internal class DefaultUploadKeysTask @Inject constructor(private val cryptoApi: 
         }
 
         return executeRequest {
-            if (encodedDeviceId.isNullOrBlank()) {
-                apiCall = cryptoApi.uploadKeys(body)
+            apiCall = if (encodedDeviceId.isBlank()) {
+                cryptoApi.uploadKeys(body)
             } else {
-                apiCall = cryptoApi.uploadKeys(encodedDeviceId, body)
+                cryptoApi.uploadKeys(encodedDeviceId, body)
             }
         }
     }

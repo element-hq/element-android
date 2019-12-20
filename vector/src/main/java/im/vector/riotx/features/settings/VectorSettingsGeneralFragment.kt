@@ -19,13 +19,11 @@
 package im.vector.riotx.features.settings
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.text.Editable
 import android.util.Patterns
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
@@ -38,12 +36,14 @@ import com.bumptech.glide.load.engine.cache.DiskCache
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import im.vector.riotx.R
+import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.extensions.showPassword
 import im.vector.riotx.core.platform.SimpleTextWatcher
 import im.vector.riotx.core.preference.UserAvatarPreference
 import im.vector.riotx.core.preference.VectorPreference
 import im.vector.riotx.core.utils.*
 import im.vector.riotx.features.MainActivity
+import im.vector.riotx.features.MainActivityArgs
 import im.vector.riotx.features.themes.ThemeUtils
 import im.vector.riotx.features.workers.signout.SignOutUiWorker
 import kotlinx.coroutines.Dispatchers
@@ -177,7 +177,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
 
             it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 displayLoadingView()
-                MainActivity.restartApp(activity!!, clearCache = true, clearCredentials = false)
+                MainActivity.restartApp(activity!!, MainActivityArgs(clearCache = true))
                 false
             }
         }
@@ -696,8 +696,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
                     .setPositiveButton(R.string.settings_change_password_submit, null)
                     .setNegativeButton(R.string.cancel, null)
                     .setOnDismissListener {
-                        val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                        imm.hideSoftInputFromWindow(view.applicationWindowToken, 0)
+                        view.hideKeyboard()
                     }
                     .create()
 
@@ -762,8 +761,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
                         showPassword.performClick()
                     }
 
-                    val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm.hideSoftInputFromWindow(view.applicationWindowToken, 0)
+                    view.hideKeyboard()
 
                     val oldPwd = oldPasswordText.text.toString().trim()
                     val newPwd = newPasswordText.text.toString().trim()

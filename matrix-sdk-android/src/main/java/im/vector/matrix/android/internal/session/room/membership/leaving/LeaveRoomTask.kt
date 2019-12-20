@@ -23,7 +23,8 @@ import javax.inject.Inject
 
 internal interface LeaveRoomTask : Task<LeaveRoomTask.Params, Unit> {
     data class Params(
-            val roomId: String
+            val roomId: String,
+            val reason: String?
     )
 }
 
@@ -31,7 +32,7 @@ internal class DefaultLeaveRoomTask @Inject constructor(private val roomAPI: Roo
 
     override suspend fun execute(params: LeaveRoomTask.Params) {
         return executeRequest {
-            apiCall = roomAPI.leave(params.roomId, HashMap())
+            apiCall = roomAPI.leave(params.roomId, mapOf("reason" to params.reason))
         }
     }
 }

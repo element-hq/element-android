@@ -19,8 +19,11 @@ package im.vector.riotx.features.navigation
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import androidx.core.app.TaskStackBuilder
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
 import im.vector.riotx.R
+import im.vector.riotx.core.di.ActiveSessionHolder
+import im.vector.riotx.core.error.fatalError
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupManageActivity
@@ -41,12 +44,49 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class DefaultNavigator @Inject constructor() : Navigator {
+class DefaultNavigator @Inject constructor(
+        private val sessionHolder: ActiveSessionHolder
+) : Navigator {
 
-    override fun openRoom(context: Context, roomId: String, eventId: String?) {
+    override fun openRoom(context: Context, roomId: String, eventId: String?, buildTask: Boolean) {
+        if (sessionHolder.getSafeActiveSession()?.getRoom(roomId) == null) {
+            fatalError("Trying to open an unknown room $roomId")
+            return
+        }
+
         val args = RoomDetailArgs(roomId, eventId)
         val intent = RoomDetailActivity.newIntent(context, args)
-        context.startActivity(intent)
+        if (buildTask) {
+            val stackBuilder = TaskStackBuilder.create(context)
+            stackBuilder.addNextIntentWithParentStack(intent)
+            stackBuilder.startActivities()
+        } else {
+            context.startActivity(intent)
+        }
+    }
+
+    override fun openNotJoinedRoom(context: Context, roomIdOrAlias: String?, eventId: String?, buildTask: Boolean) {
+        if (context is VectorBaseActivity) {
+            context.notImplemented("Open not joined room")
+        } else {
+            context.toast(R.string.not_implemented)
+        }
+    }
+
+    override fun openGroupDetail(groupId: String, context: Context, buildTask: Boolean) {
+        if (context is VectorBaseActivity) {
+            context.notImplemented("Open group detail")
+        } else {
+            context.toast(R.string.not_implemented)
+        }
+    }
+
+    override fun openUserDetail(userId: String, context: Context, buildTask: Boolean) {
+        if (context is VectorBaseActivity) {
+            context.notImplemented("Open user detail")
+        } else {
+            context.toast(R.string.not_implemented)
+        }
     }
 
     override fun openRoomForSharing(activity: Activity, roomId: String, sharedData: SharedData) {
@@ -54,14 +94,6 @@ class DefaultNavigator @Inject constructor() : Navigator {
         val intent = RoomDetailActivity.newIntent(activity, args)
         activity.startActivity(intent)
         activity.finish()
-    }
-
-    override fun openNotJoinedRoom(context: Context, roomIdOrAlias: String, eventId: String?) {
-        if (context is VectorBaseActivity) {
-            context.notImplemented("Open not joined room")
-        } else {
-            context.toast(R.string.not_implemented)
-        }
     }
 
     override fun openRoomPreview(publicRoom: PublicRoom, context: Context) {
@@ -106,15 +138,8 @@ class DefaultNavigator @Inject constructor() : Navigator {
         context.startActivity(KeysBackupManageActivity.intent(context))
     }
 
-    override fun openGroupDetail(groupId: String, context: Context) {
-        Timber.v("Open group detail $groupId")
-    }
-
-    override fun openUserDetail(userId: String, context: Context) {
-        Timber.v("Open user detail $userId")
-    }
-
     override fun openRoomProfile(context: Context, roomId: String) {
         context.startActivity(RoomProfileActivity.newIntent(context, roomId))
     }
+
 }

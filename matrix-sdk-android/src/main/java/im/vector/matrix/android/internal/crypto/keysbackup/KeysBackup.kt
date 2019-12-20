@@ -59,7 +59,7 @@ import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.JsonCanonicalizer
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import im.vector.matrix.android.internal.util.awaitCallback
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.olm.OlmException
@@ -102,7 +102,8 @@ internal class KeysBackup @Inject constructor(
         private val updateKeysBackupVersionTask: UpdateKeysBackupVersionTask,
         // Task executor
         private val taskExecutor: TaskExecutor,
-        private val coroutineDispatchers: MatrixCoroutineDispatchers
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
+        private val cryptoCoroutineScope: CoroutineScope
 ) : KeysBackupService {
 
     private val uiHandler = Handler(Looper.getMainLooper())
@@ -143,7 +144,7 @@ internal class KeysBackup @Inject constructor(
     override fun prepareKeysBackupVersion(password: String?,
                                           progressListener: ProgressListener?,
                                           callback: MatrixCallback<MegolmBackupCreationInfo>) {
-        GlobalScope.launch(coroutineDispatchers.main) {
+        cryptoCoroutineScope.launch(coroutineDispatchers.main) {
             runCatching {
                 withContext(coroutineDispatchers.crypto) {
                     val olmPkDecryption = OlmPkDecryption()
@@ -233,7 +234,7 @@ internal class KeysBackup @Inject constructor(
     }
 
     override fun deleteBackup(version: String, callback: MatrixCallback<Unit>?) {
-        GlobalScope.launch(coroutineDispatchers.main) {
+        cryptoCoroutineScope.launch(coroutineDispatchers.main) {
             withContext(coroutineDispatchers.crypto) {
                 // If we're currently backing up to this backup... stop.
                 // (We start using it automatically in createKeysBackupVersion so this is symmetrical).
@@ -344,9 +345,7 @@ internal class KeysBackup @Inject constructor(
                             }
                         })
                     }
-                }
-
-                keysBackupStateManager.addListener(keysBackupStateListener!!)
+                }.also { keysBackupStateManager.addListener(it) }
 
                 backupKeys()
             }
@@ -448,7 +447,7 @@ internal class KeysBackup @Inject constructor(
 
             callback.onFailure(IllegalArgumentException("Missing element"))
         } else {
-            GlobalScope.launch(coroutineDispatchers.main) {
+            cryptoCoroutineScope.launch(coroutineDispatchers.main) {
                 val updateKeysBackupVersionBody = withContext(coroutineDispatchers.crypto) {
                     // Get current signatures, or create an empty set
                     val myUserSignatures = authData.signatures?.get(userId)?.toMutableMap()
@@ -523,7 +522,7 @@ internal class KeysBackup @Inject constructor(
                                                        callback: MatrixCallback<Unit>) {
         Timber.v("trustKeysBackupVersionWithRecoveryKey: version ${keysBackupVersion.version}")
 
-        GlobalScope.launch(coroutineDispatchers.main) {
+        cryptoCoroutineScope.launch(coroutineDispatchers.main) {
             val isValid = withContext(coroutineDispatchers.crypto) {
                 isValidRecoveryKeyForKeysBackupVersion(recoveryKey, keysBackupVersion)
             }
@@ -543,7 +542,7 @@ internal class KeysBackup @Inject constructor(
                                                       callback: MatrixCallback<Unit>) {
         Timber.v("trustKeysBackupVersionWithPassphrase: version ${keysBackupVersion.version}")
 
-        GlobalScope.launch(coroutineDispatchers.main) {
+        cryptoCoroutineScope.launch(coroutineDispatchers.main) {
             val recoveryKey = withContext(coroutineDispatchers.crypto) {
                 recoveryKeyFromPassword(password, keysBackupVersion, null)
             }
@@ -614,7 +613,7 @@ internal class KeysBackup @Inject constructor(
                                             callback: MatrixCallback<ImportRoomKeysResult>) {
         Timber.v("restoreKeysWithRecoveryKey: From backup version: ${keysVersionResult.version}")
 
-        GlobalScope.launch(coroutineDispatchers.main) {
+        cryptoCoroutineScope.launch(coroutineDispatchers.main) {
             runCatching {
                 val decryption = withContext(coroutineDispatchers.crypto) {
                     // Check if the recovery is valid before going any further
@@ -695,7 +694,7 @@ internal class KeysBackup @Inject constructor(
                                               callback: MatrixCallback<ImportRoomKeysResult>) {
         Timber.v("[MXKeyBackup] restoreKeyBackup with password: From backup version: ${keysBackupVersion.version}")
 
-        GlobalScope.launch(coroutineDispatchers.main) {
+        cryptoCoroutineScope.launch(coroutineDispatchers.main) {
             runCatching {
                 val progressListener = if (stepProgressListener != null) {
                     object : ProgressListener {
@@ -729,8 +728,8 @@ internal class KeysBackup @Inject constructor(
      * parameters and always returns a KeysBackupData object through the Callback
      */
     private suspend fun getKeys(sessionId: String?,
-                        roomId: String?,
-                        version: String): KeysBackupData {
+                                roomId: String?,
+                                version: String): KeysBackupData {
         return if (roomId != null && sessionId != null) {
             // Get key for the room and for the session
             val data = getRoomSessionDataTask.execute(GetRoomSessionDataTask.Params(roomId, sessionId, version))
@@ -808,7 +807,7 @@ internal class KeysBackup @Inject constructor(
 
                         override fun onFailure(failure: Throwable) {
                             if (failure is Failure.ServerError
-                                    && failure.error.code == MatrixError.NOT_FOUND) {
+                                    && failure.error.code == MatrixError.M_NOT_FOUND) {
                                 // Workaround because the homeserver currently returns M_NOT_FOUND when there is no key backup
                                 callback.onSuccess(null)
                             } else {
@@ -831,7 +830,7 @@ internal class KeysBackup @Inject constructor(
 
                         override fun onFailure(failure: Throwable) {
                             if (failure is Failure.ServerError
-                                    && failure.error.code == MatrixError.NOT_FOUND) {
+                                    && failure.error.code == MatrixError.M_NOT_FOUND) {
                                 // Workaround because the homeserver currently returns M_NOT_FOUND when there is no key backup
                                 callback.onSuccess(null)
                             } else {
@@ -1154,7 +1153,7 @@ internal class KeysBackup @Inject constructor(
 
         keysBackupStateManager.state = KeysBackupState.BackingUp
 
-        GlobalScope.launch(coroutineDispatchers.main) {
+        cryptoCoroutineScope.launch(coroutineDispatchers.main) {
             withContext(coroutineDispatchers.crypto) {
                 Timber.v("backupKeys: 2 - Encrypting keys")
 
@@ -1210,8 +1209,8 @@ internal class KeysBackup @Inject constructor(
                                 Timber.e(failure, "backupKeys: backupKeys failed.")
 
                                 when (failure.error.code) {
-                                    MatrixError.NOT_FOUND,
-                                    MatrixError.WRONG_ROOM_KEYS_VERSION -> {
+                                    MatrixError.M_NOT_FOUND,
+                                    MatrixError.M_WRONG_ROOM_KEYS_VERSION -> {
                                         // Backup has been deleted on the server, or we are not using the last backup version
                                         keysBackupStateManager.state = KeysBackupState.WrongBackUpVersion
                                         backupAllGroupSessionsCallback?.onFailure(failure)

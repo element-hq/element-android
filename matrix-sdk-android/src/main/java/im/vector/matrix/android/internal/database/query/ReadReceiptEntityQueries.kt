@@ -20,6 +20,7 @@ import im.vector.matrix.android.internal.database.model.ReadReceiptEntity
 import im.vector.matrix.android.internal.database.model.ReadReceiptEntityFields
 import io.realm.Realm
 import io.realm.RealmQuery
+import io.realm.kotlin.createObject
 import io.realm.kotlin.where
 
 internal fun ReadReceiptEntity.Companion.where(realm: Realm, roomId: String, userId: String): RealmQuery<ReadReceiptEntity> {
@@ -44,10 +45,11 @@ internal fun ReadReceiptEntity.Companion.createUnmanaged(roomId: String, eventId
 
 internal fun ReadReceiptEntity.Companion.getOrCreate(realm: Realm, roomId: String, userId: String): ReadReceiptEntity {
     return ReadReceiptEntity.where(realm, roomId, userId).findFirst()
-           ?: realm.createObject(ReadReceiptEntity::class.java, buildPrimaryKey(roomId, userId)).apply {
-               this.roomId = roomId
-               this.userId = userId
-           }
+            ?: realm.createObject<ReadReceiptEntity>(buildPrimaryKey(roomId, userId))
+                    .apply {
+                        this.roomId = roomId
+                        this.userId = userId
+                    }
 }
 
 private fun buildPrimaryKey(roomId: String, userId: String) = "${roomId}_$userId"

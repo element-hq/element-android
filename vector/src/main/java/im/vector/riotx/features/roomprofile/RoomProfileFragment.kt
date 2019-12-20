@@ -31,6 +31,7 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.snackbar.Snackbar
 import im.vector.matrix.android.api.session.room.notification.RoomNotificationState
+import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.setTextOrHide
@@ -54,7 +55,6 @@ data class RoomProfileArgs(
 class RoomProfileFragment @Inject constructor(
         private val roomProfileController: RoomProfileController,
         private val avatarRenderer: AvatarRenderer,
-        private val errorFormatter: ErrorFormatter,
         val roomProfileViewModelFactory: RoomProfileViewModel.Factory
 ) : VectorBaseFragment(), RoomProfileController.Callback {
 
@@ -143,7 +143,7 @@ class RoomProfileFragment @Inject constructor(
                 // Use canonical alias when PR with alias management will be merged
                 roomProfileAliasView.text = it.roomId
                 roomProfileTopicView.setTextOrHide(it.topic)
-                avatarRenderer.render(it, roomProfileAvatarView)
+                avatarRenderer.render(it.toMatrixItem(), roomProfileAvatarView)
             }
         }
         roomProfileController.setData(state)

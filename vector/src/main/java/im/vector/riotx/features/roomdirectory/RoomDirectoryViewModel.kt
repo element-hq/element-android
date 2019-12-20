@@ -178,7 +178,9 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
                             copy(
                                     asyncPublicRoomsRequest = Success(data.chunk!!),
                                     // It's ok to append at the end of the list, so I use publicRooms.size()
-                                    publicRooms = publicRooms.appendAt(data.chunk!!, publicRooms.size),
+                                    publicRooms = publicRooms.appendAt(data.chunk!!, publicRooms.size)
+                                            // Rageshake #8206 tells that we can have several times the same room
+                                            .distinctBy { it.roomId },
                                     hasMore = since != null
                             )
                         }
@@ -214,7 +216,7 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
             )
         }
 
-        session.joinRoom(action.roomId, emptyList(), object : MatrixCallback<Unit> {
+        session.joinRoom(action.roomId, callback = object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
                 // We do not update the joiningRoomsIds here, because, the room is not joined yet regarding the sync data.
                 // Instead, we wait for the room to be joined

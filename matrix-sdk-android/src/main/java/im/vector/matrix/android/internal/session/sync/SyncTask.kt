@@ -17,8 +17,6 @@
 package im.vector.matrix.android.internal.session.sync
 
 import im.vector.matrix.android.R
-import im.vector.matrix.android.api.failure.Failure
-import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.internal.auth.SessionParamsStore
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.network.executeRequest
@@ -26,6 +24,7 @@ import im.vector.matrix.android.internal.session.DefaultInitialSyncProgressServi
 import im.vector.matrix.android.internal.session.filter.FilterRepository
 import im.vector.matrix.android.internal.session.homeserver.GetHomeServerCapabilitiesTask
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
+import im.vector.matrix.android.internal.session.user.UserStore
 import im.vector.matrix.android.internal.task.Task
 import javax.inject.Inject
 
@@ -41,7 +40,8 @@ internal class DefaultSyncTask @Inject constructor(private val syncAPI: SyncAPI,
                                                    private val sessionParamsStore: SessionParamsStore,
                                                    private val initialSyncProgressService: DefaultInitialSyncProgressService,
                                                    private val syncTokenStore: SyncTokenStore,
-                                                   private val getHomeServerCapabilitiesTask: GetHomeServerCapabilitiesTask
+                                                   private val getHomeServerCapabilitiesTask: GetHomeServerCapabilitiesTask,
+                                                   private val userStore: UserStore
 ) : SyncTask {
 
     override suspend fun execute(params: SyncTask.Params) {
@@ -60,20 +60,13 @@ internal class DefaultSyncTask @Inject constructor(private val syncAPI: SyncAPI,
 
         val isInitialSync = token == null
         if (isInitialSync) {
+            // We might want to get the user information in parallel too
+            userStore.createOrUpdate(userId)
             initialSyncProgressService.endAll()
             initialSyncProgressService.startTask(R.string.initial_sync_start_importing_account, 100)
         }
-        val syncResponse = try {
-            executeRequest<SyncResponse> {
-                apiCall = syncAPI.sync(requestParams)
-            }
-        } catch (throwable: Throwable) {
-            // Intercept 401
-            if (throwable is Failure.ServerError
-                    && throwable.error.code == MatrixError.UNKNOWN_TOKEN) {
-                sessionParamsStore.delete(userId)
-            }
-            throw throwable
+        val syncResponse = executeRequest<SyncResponse> {
+            apiCall = syncAPI.sync(requestParams)
         }
         syncResponseHandler.handleResponse(syncResponse, token)
         syncTokenStore.saveToken(syncResponse.nextBatch)

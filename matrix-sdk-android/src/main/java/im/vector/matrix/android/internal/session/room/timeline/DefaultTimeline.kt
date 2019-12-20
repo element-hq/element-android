@@ -74,22 +74,14 @@ internal class DefaultTimeline(
         private val cryptoService: CryptoService,
         private val timelineEventMapper: TimelineEventMapper,
         private val settings: TimelineSettings,
-        private val hiddenReadReceipts: TimelineHiddenReadReceipts,
-        private val hiddenReadMarker: TimelineHiddenReadMarker
-) : Timeline, TimelineHiddenReadReceipts.Delegate, TimelineHiddenReadMarker.Delegate {
+        private val hiddenReadReceipts: TimelineHiddenReadReceipts
+) : Timeline, TimelineHiddenReadReceipts.Delegate {
 
     private companion object {
         val BACKGROUND_HANDLER = createBackgroundHandler("TIMELINE_DB_THREAD")
     }
 
-    override var listener: Timeline.Listener? = null
-        set(value) {
-            field = value
-            BACKGROUND_HANDLER.post {
-                postSnapshot()
-            }
-        }
-
+    private val listeners = ArrayList<Timeline.Listener>()
     private val isStarted = AtomicBoolean(false)
     private val isReady = AtomicBoolean(false)
     private val mainHandler = createUIHandler()
@@ -110,7 +102,7 @@ internal class DefaultTimeline(
     private val backwardsState = AtomicReference(State())
     private val forwardsState = AtomicReference(State())
 
-    private val timelineID = UUID.randomUUID().toString()
+    override val timelineID = UUID.randomUUID().toString()
 
     override val isLive
         get() = !hasMoreToLoad(Timeline.Direction.FORWARDS)
@@ -197,7 +189,6 @@ internal class DefaultTimeline(
                 if (settings.buildReadReceipts) {
                     hiddenReadReceipts.start(realm, filteredEvents, nonFilteredEvents, this)
                 }
-                hiddenReadMarker.start(realm, filteredEvents, nonFilteredEvents, this)
                 isReady.set(true)
             }
         }
@@ -217,7 +208,6 @@ internal class DefaultTimeline(
                 if (this::filteredEvents.isInitialized) {
                     filteredEvents.removeAllChangeListeners()
                 }
-                hiddenReadMarker.dispose()
                 if (settings.buildReadReceipts) {
                     hiddenReadReceipts.dispose()
                 }
@@ -298,7 +288,24 @@ internal class DefaultTimeline(
         return hasMoreInCache(direction) || !hasReachedEnd(direction)
     }
 
-// TimelineHiddenReadReceipts.Delegate
+    override fun addListener(listener: Timeline.Listener) = synchronized(listeners) {
+        if (listeners.contains(listener)) {
+            return false
+        }
+        listeners.add(listener).also {
+            postSnapshot()
+        }
+    }
+
+    override fun removeListener(listener: Timeline.Listener) = synchronized(listeners) {
+        listeners.remove(listener)
+    }
+
+    override fun removeAllListeners() = synchronized(listeners) {
+        listeners.clear()
+    }
+
+    // TimelineHiddenReadReceipts.Delegate
 
     override fun rebuildEvent(eventId: String, readReceipts: List<ReadReceipt>): Boolean {
         return rebuildEvent(eventId) { te ->
@@ -310,19 +317,7 @@ internal class DefaultTimeline(
         postSnapshot()
     }
 
-// TimelineHiddenReadMarker.Delegate
-
-    override fun rebuildEvent(eventId: String, hasReadMarker: Boolean): Boolean {
-        return rebuildEvent(eventId) { te ->
-            te.copy(hasReadMarker = hasReadMarker)
-        }
-    }
-
-    override fun onReadMarkerUpdated() {
-        postSnapshot()
-    }
-
-// Private methods *****************************************************************************
+    // Private methods *****************************************************************************
 
     private fun rebuildEvent(eventId: String, builder: (TimelineEvent) -> TimelineEvent): Boolean {
         return builtEventsIdMap[eventId]?.let { builtIndex ->
@@ -641,7 +636,7 @@ internal class DefaultTimeline(
     }
 
     private fun fetchEvent(eventId: String) {
-        val params = GetContextOfEventTask.Params(roomId, eventId)
+        val params = GetContextOfEventTask.Params(roomId, eventId, settings.initialSize)
         cancelableBag += contextOfEventTask.configureWith(params).executeBy(taskExecutor)
     }
 
@@ -652,7 +647,13 @@ internal class DefaultTimeline(
             }
             updateLoadingStates(filteredEvents)
             val snapshot = createSnapshot()
-            val runnable = Runnable { listener?.onUpdated(snapshot) }
+            val runnable = Runnable {
+                synchronized(listeners) {
+                    listeners.forEach {
+                        it.onUpdated(snapshot)
+                    }
+                }
+            }
             debouncer.debounce("post_snapshot", runnable, 50)
         }
     }

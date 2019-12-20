@@ -298,7 +298,7 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
                 }
             }
         } else {
-            Timber.e("Unknwon relation type ${content.relatesTo?.type} for event ${event.eventId}")
+            Timber.e("Unknown relation type ${content.relatesTo?.type} for event ${event.eventId}")
         }
     }
 

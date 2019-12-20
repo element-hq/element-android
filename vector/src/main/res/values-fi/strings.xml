@@ -121,8 +121,8 @@
     <string name="create_account">Luo tili</string>
     <string name="login">Kirjaudu sisään</string>
     <string name="logout">Kirjaudu ulos</string>
-    <string name="hs_url">Kotipalvelimen URL</string>
-    <string name="identity_url">Identiteettipalvelimen URL</string> <!-- ??? -->
+    <string name="hs_url">Kotipalvelimen URL-osoite</string>
+    <string name="identity_url">Identiteettipalvelimen URL-osoite</string> <!-- ??? -->
     <string name="search">Etsi</string>
 
     <!-- ??? -->
@@ -142,7 +142,7 @@
     <string name="auth_register">Luo tili</string>
     <string name="auth_submit">Lähetä</string>
     <string name="auth_skip">Ohita</string>
-    <string name="auth_send_reset_email">Lähetä nollaussähköposti</string>
+    <string name="auth_send_reset_email">Lähetä palautussähköposti</string>
     <string name="auth_return_to_login">Palaa kirjautumiseen</string>
     <string name="auth_user_id_placeholder">Sähköposti tai käyttäjätunnus</string>
     <string name="auth_password_placeholder">Salasana</string>
@@ -257,11 +257,11 @@
     <string name="permissions_rationale_msg_camera">Riot tarvitsee käyttöluvan kameraan ottaakseen kuvia ja suorittakseen videopuheluita.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
-\nSalli kameran käyttö seuraavassa ponnahdusikkunassa soittaaksesi puhelun."</string>
+\nSoittaaksesi videopuhelun, salli seuraavassa ponnahdusikkunassa sovelluksen käyttää kameraa."</string>
     <string name="permissions_rationale_msg_record_audio">Riot tarvitsee käyttöluvan mikrofoniin suorittakseen puheluita.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
-\nSalli mikrofonin käyttö seuraavassa ponnahdusikkunassa soittaaksesi puhelun."</string>
+\nSoittaaksesi äänipuhelun, salli seuraavassa ponnahdusikkunassa sovelluksen käyttää mikrofonia."</string>
     <string name="permissions_rationale_msg_camera_and_audio">Riot tarvitsee käyttöluvan kameraan ja mikrofoniin suorittakseen videopuheluita.
 \n
 \nSalli mikrofonin ja kameran käyttö seuraavilla näytöillä aloittaaksesi tämän puhelun.</string>
@@ -621,7 +621,7 @@
     <string name="encryption_information_sender_device_information">Lähettävän laitteen tiedot</string>
     <string name="encryption_information_device_name">Julkinen nimi</string>
     <string name="encryption_information_name">Julkinen nimi</string>
-    <string name="encryption_information_device_id">Laitteen ID</string>
+    <string name="encryption_information_device_id">Tunnus</string>
     <string name="encryption_information_device_key">Laitteen avain</string>
     <string name="encryption_information_verification">Vahvistus</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519-sormenjälki</string>
@@ -672,7 +672,7 @@
     <string name="select_room_directory">Valitse huoneluettelo</string>
     <string name="directory_server_fail_to_retrieve_server">Palvelin saattaa olla tavoittamattomissa tai ylikuormitettu</string>
     <string name="directory_server_type_homeserver">Syötä kotipalvelin, jolta julkiset huoneet listataan</string>
-    <string name="directory_server_placeholder">Kotipalvelimen URL</string>
+    <string name="directory_server_placeholder">Kotipalvelimen URL-osoite</string>
     <string name="directory_server_all_rooms_on_server">Kaikki huoneet palvelimella %s</string>
     <string name="directory_server_native_rooms">Kaikki alkuperäiset %s huoneet</string>
 
@@ -1036,10 +1036,10 @@ Haluatko lisätä paketteja?</string>
 \n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Korjaa Play Services -palvelu</string>
 
-    <string name="settings_troubleshoot_test_fcm_title">Firebase-token</string>
-    <string name="settings_troubleshoot_test_fcm_success">FCM-token haettu onnistuneesti:
+    <string name="settings_troubleshoot_test_fcm_title">Firebase-tunniste</string>
+    <string name="settings_troubleshoot_test_fcm_success">FCM-tunniste haettu onnistuneesti: 
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_fcm_failed">FCM-tokenin haku epäonnistui:
+    <string name="settings_troubleshoot_test_fcm_failed">FCM-tunnisteen haku epäonnistui: 
 \n%1$s</string>
     <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
 \nTämä virhe ei ole Riotin hallinnassa ja Googlen mukaan tämä virhe tarkoittaa, että tällä laitteella on liikaa FCM:ään liittyneitä sovelluksia. Tämä virhe ilmenee vain tapauksissa, jossa on on erittäin paljon sovelluksia asennettuna, joten sen ei pitäisi vaikuttaa normaaliin käyttäjään.</string>
@@ -1049,9 +1049,9 @@ Haluatko lisätä paketteja?</string>
 \nTämä virhe ei ole Riotin ratkaistavissa. Tässä puhelimessa ei ole Google-tiliä. Lisää laitteeseesi Google-tili tätä toimintoa varten.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Lisää tili</string>
 
-    <string name="settings_troubleshoot_test_token_registration_title">Tokenin rekisteröinti</string>
-    <string name="settings_troubleshoot_test_token_registration_success">FCM-token rekisteröity onnistuneesti kotipalvelimelle.</string>
-    <string name="settings_troubleshoot_test_token_registration_failed">FCM-tokenin rekisteröinti kotipalvelimelle epäonnistui:
+    <string name="settings_troubleshoot_test_token_registration_title">Tunnisteen rekisteröinti</string>
+    <string name="settings_troubleshoot_test_token_registration_success">FCM-tunniste rekisteröity onnistuneesti kotipalvelimelle.</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">FCM-tunnisteen rekisteröinti kotipalvelimelle epäonnistui: 
 \n%1$s</string>
 
     <string name="settings_troubleshoot_test_foreground_service_started_title">Ilmoituspalvelu</string>
@@ -1479,7 +1479,7 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="room_list_catchup_welcome_title">Tervetuloa kotiin!</string>
     <string name="room_list_catchup_welcome_body">Löydät täältä lukemattomat viestit</string>
     <string name="room_list_people_empty_title">Keskustelut</string>
-    <string name="room_list_people_empty_body">Yksityiset keskustelusi näytetään tässä</string>
+    <string name="room_list_people_empty_body">Tässä näytetään yksityiset keskustelusi</string>
     <string name="room_list_rooms_empty_title">Huoneet</string>
     <string name="room_list_rooms_empty_body">Huoneesi näytetään tässä</string>
 
@@ -1601,8 +1601,8 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="create_room_directory_title">Huoneluettelo</string>
     <string name="create_room_directory_description">Julkaise tämä huone huoneluettelossa</string>
 
-    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Play Storen kuvaus</string>
-    <string name="settings_push_rules">Push-säännöt</string>
+    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Play Storen kuvauksessa</string>
+    <string name="settings_push_rules">Viesti-ilmoitusten säännöt</string>
     <string name="riotx_no_registration_notice">%1$s luodaksesi tilin.</string>
     <string name="disconnect">Katkaise yhteys</string>
     <string name="decline">Kieltäydy</string>
@@ -1664,7 +1664,7 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="labs_allow_extended_logging">Ota yksityiskohtaiset lokit käyttöön.</string>
     <string name="error_terms_not_accepted">Yritä uudelleen, kun olet hyväksynyt kotipalvelimesi käyttöehdot.</string>
 
-    <string name="error_network_timeout">Palvelimen vastaus näyttää viipyvän. Tämä voi johtua kehnosta yhteydestä tai palvelimillamme tapahtuneesta virheestä. Yritä hetken kuluttua uudelleen.</string>
+    <string name="error_network_timeout">Palvelimen vastaus näyttäisi olevan liian hidas. Tämä voi johtua kehnosta yhteydestä tai palvelimella olevasta ongelmasta. Yritä hetken kuluttua uudelleen.</string>
 
     <string name="send_attachment">Lähetä liite</string>
 
@@ -1706,5 +1706,149 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="message_edits">Viestimuokkaukset</string>
     <string name="terms_description_for_identity_server">Ole löydettävissä</string>
     <string name="settings_text_message_sent">Tekstiviesti on lähetetty numeroon %s. Syötä sen sisältämä varmistuskoodi.</string>
+
+    <string name="settings_push_rules_no_rules">Viesti-ilmoitusten sääntöjä ei ole määritetty</string>
+    <string name="a11y_create_direct_message">Luo uusi yksityiskeskustelu</string>
+    <string name="resources_script">Latn</string>
+
+    <string name="revoke">Kumoa</string>
+    <string name="review">Tarkasta</string>
+    <string name="auth_add_phone_message_2">Aseta puhelinnumerosi, ja voit myöhemmin antaa muiden löytää sinut puhelinnumerosi perusteella.</string>
+    <string name="auth_add_email_phone_message_2">Aseta sähköpostisi tunnuksen palautusta varten. Myöhemmin voit asettaa sähköpostisi tai puhelinnumerosi löydettäviksi, jotta sinut voi löytää näillä tiedoilla.</string>
+    <string name="auth_add_email_and_phone_message_2">Aseta sähköpostisi tunnuksen palautusta varten. Myöhemmin voit asettaa sähköpostisi tai puhelinnumerosi löydettäviksi, jotta sinut voi löytää näillä tiedoilla.</string>
+    <string name="settings_add_3pid_confirm_password_title">Vahvista salasanasi</string>
+    <string name="settings_add_3pid_flow_not_supported">Et voi tehdä tätä mobiili-Riotista</string>
+    <string name="settings_add_3pid_authentication_needed">Tunnistautuminen vaaditaan</string>
+
+
+    <string name="settings_integrations">Integraatiot</string>
+    <string name="settings_integrations_summary">Käytä integraatioiden lähdettä bottien, siltojen ja tarrapakettien hallintaan.
+\nIntegraatioiden lähteet vastaanottavat asetusdataa ja voivat muokata sovelmia, lähettää kutsuja huoneeseen ja muokata oikeustasoja puolestasi.</string>
+    <string name="settings_discovery_category">Käyttäjien etsintä</string>
+    <string name="settings_discovery_manage">Muokkaa etsinnän asetuksia.</string>
+    <string name="settings_integration_allow">Salli integraatiot</string>
+    <string name="settings_integration_manager">Integraatioiden lähde</string>
+
+    <string name="room_widget_activity_title">Sovelma</string>
+    <string name="room_widget_permission_title">Lataa sovelma</string>
+    <string name="room_widget_permission_added_by">Sovelman lisäsi:</string>
+    <string name="room_widget_permission_webview_shared_info_title">Sovelman käyttö saattaa asettaa keksejä ja jakaa tietoa kohteen %s kanssa:</string>
+    <string name="room_widget_permission_shared_info_title">Sovelman käyttö saattaa jakaa tietoa kohteen %s kanssa:</string>
+    <string name="room_widget_failed_to_load">Sovelman lataus epäonnistui.
+\n%s</string>
+    <string name="room_widget_reload">Lataa sovelma uudelleen</string>
+    <string name="room_widget_open_in_browser">Avaa selaimessa</string>
+    <string name="room_widget_revoke_access">Kumoa minun pääsy</string>
+
+    <string name="room_widget_permission_display_name">Näyttönimesi</string>
+    <string name="room_widget_permission_avatar_url">Profiilikuvasi osoite</string>
+    <string name="room_widget_permission_user_id">Käyttäjätunnisteesi</string>
+    <string name="room_widget_permission_theme">Teemasi</string>
+    <string name="room_widget_permission_widget_id">Sovelman tunniste</string>
+    <string name="room_widget_permission_room_id">Huoneen tunniste</string>
+
+
+    <string name="room_widget_resource_permission_title">Tämä sovelma haluaa käyttää seuraavia resursseja:</string>
+    <string name="room_widget_resource_grant_permission">Salli</string>
+    <string name="room_widget_resource_decline_permission">Estä kaikki</string>
+    <string name="room_widget_webview_access_camera">Käytä kameraa</string>
+    <string name="room_widget_webview_access_microphone">Käytä mikrofonia</string>
+    <string name="room_widget_webview_read_protected_media">Lue DRM-suojattua mediaa</string>
+
+    <string name="integration_manager_not_configured">Ei integraatioiden lähteitä asetettuna.</string>
+    <string name="ignore_request_short_label">Huomiotta</string>
+
+    <string name="invalid_or_expired_credentials">Olet kirjautunut ulos epäkelpojen tai vanhentuneiden pääsytietojen takia.</string>
+
+    <string name="sas_verify_title">Varmenna vertaamalla lyhyttä tekstijonoa.</string>
+    <string name="sas_incoming_request_description">Varmenna tämä laite merkkaamalla se luotetuksi. Kumppaneiden laitteisiin luottaminen antaa sinulle ylimääräistä mielenrauhaa, kun käytät osapuolten välistä salausta.</string>
+    <string name="sas_incoming_request_description_2">Tämän laitteen varmentaminen merkkaa sen luotetuksi, ja samoin sinun laitteesi merkataan luotetuksi kumppanisi näkökulmasta.</string>
+
+    <string name="sas_emoji_description">Varmenna tämä laite varmistamalla, että seuraava emoji ilmestyy kumppanisi näytölle</string>
+    <string name="sas_decimal_description">Varmenna tämä laite varmistamalla, että seuraavat numerot ilmestyvät kumppanisi näytölle</string>
+
+    <string name="sas_verified_successful_description">Turvalliset viestit tämän käyttäjän kanssa ovat salattuja päästä päähän, eivätkä kolmannet osapuolet voi lukea niitä.</string>
+    <string name="sas_verifying_keys">Mitään ei tule näytölle\? Kaikki asiakasohjelmat eivät vielä tue interaktiivista varmennusta. Käytä vanhaa varmennustapaa.</string>
+    <string name="sas_legacy_verification_button_title">Käytä vanhaa varmennustapaa.</string>
+
+    <string name="sas_error_m_unknown_method">Laitteet eivät pysty sopimaan avaimista, tiivisteestä, MAC:sta tai SAS-metodista</string>
+    <string name="sas_error_m_mismatched_commitment">Tiivisteet eivät täsmänneet</string>
+    <string name="security_warning_identity_server">Vanhoissa Riotin versioissa oli tietoturvaongelma, joka saattoi antaa identiteettipalvelimelle(%1$s) pääsyn tunnukseesi. Jos luotat kohteeseen %2$s, voit jättää tämän huomiotta. Muussa tapauksessa, kirjaudu ulos ja kirjaudu uudelleen Riotiin.
+\n
+\nLue lisää:
+\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
+
+    <string name="action_change">Muuta</string>
+    <string name="alpha_disclaimer_content_line_2_gplay">Viimeisin ominaisuuslista on aina %1$s. Jos löydät virheitä, lähetäthän virheraportin painikkeella, joka löytyy ylhäällä ja vasemmalla olevasta kotivalikosta, niin korjaamme vian niin nopeasti kuin pystymme.</string>
+    <string name="alpha_disclaimer_content_line_2_fdroid">Jos löytät virheitä, lähetäthän virheraportin ylhäältä ja vasemmalta löytyvästä kotivalikosta, niin korjaamme ongelman niin nopeasti kuin vain pystymme.</string>
+
+    <string name="import_e2e_keys_from_file">Tuo osapuolten välisen salauksen avaimet tiedostosta ”%1$s”.</string>
+
+    <string name="settings_expert">Edistynyt</string>
+    <string name="settings_push_gateway_no_pushers">Ei rekisteröityjä viesti-ilmoitusten yhdyskäytäviä</string>
+
+    <string name="push_gateway_item_app_id">app_id:</string>
+    <string name="push_gateway_item_push_key">push_key:</string>
+    <string name="push_gateway_item_app_display_name">app_display_name:</string>
+    <string name="push_gateway_item_device_name">device_name:</string>
+    <string name="push_gateway_item_format">Formaatti:</string>
+
+    <string name="settings_troubleshoot_test_token_registration_quick_fix">Rekisteröi tunniste</string>
+
+    <string name="store_riotx_full_description">RiotX on uusi Matrix-protokollaa (Matrix.org) käyttävä ohjelma: avointa ja hajautettua keskustelua tukeva turvallinen verkko. RiotX on täysin uusittu versio Riot Android -ohjelmasta, joka perustuu Matrix Android SDK:n uudelleenkirjoitukseen.
+\n
+\nHuomaa: tämä on betaversio. RiotX on vielä kehitystyössä, ja siinä on rajoitteita ja (toivottavasti ei kuitenkaan monta) bugeja. Kaikki palaute on tervetullutta!
+\n
+\nRiotX tukee: • Kirjaudu olemassaolevalle tunnukselle • Luo huoneita ja liity julkisiin huoneisiin • Hyväksy ja hylkää kutsuja • Listaa käyttäjän huoneet • Katso huoneen tietoja • Lähetä tekstiviestejä • Lähetä liitteitä • Lue ja kirjoita viestejä salatuissa huoneissa • Salaus: osapuolten välisen salauksen avaimien varmuuskopiointi, edistynyt laitteiden varmennus, avainten jakopyynnöt ja vastaus • Viesti-ilmoitukset • Vaalea, tumma ja musta teema
+\n
+\nKaikkia Riotin ominaisuuksia ei ole vielä toteutettu RiotX:ssä. Tärkeimmät puuttuvat (ja pian saapuvat!) ominaisuudet: • Tunnusten luonti • Huoneen asetukset (listaa huoneen jäsenet jne.) • Puhelut • Sovelmat • …</string>
+
+    <string name="send_file_step_encrypting_thumbnail">Salataan pikkukuvaa…</string>
+    <string name="send_file_step_sending_thumbnail">Lähetetään pikkukuvaa (%1$s / %2$s)</string>
+    <string name="room_directory_search_hint">Nimi tai tunniste (#example:matrix.org)</string>
+
+    <string name="add_by_matrix_id">Lisää Matrix-tunnisteella</string>
+    <string name="direct_room_no_known_users">Tuloksia ei löytynyt. Käytä ”Lisää Matrix-tunnisteella” etsiäksesi palvelimelta.</string>
+    <string name="direct_room_filter_hint">Suodata käyttäjätunnuksella tai tunnisteella…</string>
+
+    <string name="settings_discovery_emails_title">Etsittävät sähköpostiosoitteet</string>
+    <string name="settings_discovery_no_mails">Vaihtoehdot ilmestyvät, kunhan olet lisännyt sähköpostiosoitteen.</string>
+    <string name="settings_discovery_no_msisdn">Vaihtoehdot ilmestyvät, kunhan olet lisännyt puhelinnumeron.</string>
+    <string name="settings_discovery_msisdn_title">Etsittävät puhelinnumerot</string>
+    <string name="labs_allow_extended_logging_summary">Runsassanaiset lokit auttavat antamalla enemmän tietoa kehittäjille, kun lähetät virheilmoituksen. Vaikka runsaammat lokit ovat käytössä, sovellus ei lähetä viestien sisältöjä tai mitään muuta yksityistä tietoa.</string>
+
+
+    <string name="a11y_open_drawer">Avaa navigaatiovalikko</string>
+    <string name="a11y_create_menu_open">Avaa huoneen luontivalikko</string>
+    <string name="a11y_create_menu_close">Sulje huoneen luontivalikko…</string>
+    <string name="a11y_close_keys_backup_banner">Sulje avainten varmuuskopion mainos</string>
+    <string name="error_file_too_big">Tiedosto ”%s$s” (%2$s) on liian iso lähetettäväksi. Raja on %3$s.</string>
+
+    <string name="attachment_type_contact">Yhteystieto</string>
+    <string name="attachment_type_audio">Ääni</string>
+    <string name="error_handling_incoming_share">Jakotiedon käsittely epäonnistui</string>
+
+    <string name="report_content_custom">Muokattu ilmianto</string>
+    <string name="report_content_custom_title">Ilmianna tämä sisältö</string>
+    <string name="report_content_custom_hint">Sisällön ilmiannon syy</string>
+    <string name="report_content_custom_submit">ILMIANNA</string>
+    <string name="block_user">ESTÄ KÄYTTÄJÄ</string>
+
+    <string name="content_reported_title">Sisältö ilmiannettu</string>
+    <string name="content_reported_content">Tämä sisältö on ilmiannettu.
+\n
+\nJos et halua nähdä enempää sisältöä tältä käyttäjältä, voit estää hänet piilottaaksesi hänen viestit</string>
+    <string name="content_reported_as_spam_title">Ilmiannettu roskapostina</string>
+    <string name="content_reported_as_spam_content">Tämä sisältö on ilmiannettu roskapostina.
+\n
+\nJos et halua nähdä enempää sisältöä tältä käyttäjältä, voit estää hänet piilottaaksesi hänen viestit</string>
+    <string name="content_reported_as_inappropriate_title">Ilmiannettu epäsopivana</string>
+    <string name="content_reported_as_inappropriate_content">Tämä sisältö on ilmiannettu epäsopivana.
+\n
+\nJos et halua nähdä enempää sisältöä tältä käyttäjältä, voit estää hänet piilottaaksesi hänen viestit</string>
+
+    <string name="permissions_rationale_msg_keys_backup_export">Riot tarvitsee oikeuden tallentaakseen osapuolten välisen salauksen avaimesi talteen.
+\n
+\nSalli pääsy tiedostoihin seuraavassa ponnahdusikkunassa, jotta voit viedä avaimesi käsin.</string>
 
 </resources>

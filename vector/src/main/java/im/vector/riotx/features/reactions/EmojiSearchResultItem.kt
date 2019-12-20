@@ -22,12 +22,14 @@ import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
+import im.vector.riotx.core.extensions.setTextOrHide
+import im.vector.riotx.features.reactions.data.EmojiItem
 
 @EpoxyModelClass(layout = R.layout.item_emoji_result)
 abstract class EmojiSearchResultItem : EpoxyModelWithHolder<EmojiSearchResultItem.Holder>() {
 
     @EpoxyAttribute
-    lateinit var emojiItem: EmojiDataSource.EmojiItem
+    lateinit var emojiItem: EmojiItem
 
     @EpoxyAttribute
     var currentQuery: String? = null
@@ -41,12 +43,12 @@ abstract class EmojiSearchResultItem : EpoxyModelWithHolder<EmojiSearchResultIte
     override fun bind(holder: Holder) {
         super.bind(holder)
         // TODO use query string to highlight the matched query in name and keywords?
-        holder.emojiText.text = emojiItem.emojiString()
+        holder.emojiText.text = emojiItem.emoji
         holder.emojiText.typeface = emojiTypeFace ?: Typeface.DEFAULT
         holder.emojiNameText.text = emojiItem.name
-        holder.emojiKeywordText.text = emojiItem.keywords?.joinToString(", ")
+        holder.emojiKeywordText.setTextOrHide(emojiItem.keywords.joinToString())
         holder.view.setOnClickListener {
-            onClickListener?.onReactionSelected(emojiItem.emojiString())
+            onClickListener?.onReactionSelected(emojiItem.emoji)
         }
     }
 

@@ -30,4 +30,7 @@ data class Credentials(
         @Json(name = "home_server") val homeServer: String,
         @Json(name = "access_token") val accessToken: String,
         @Json(name = "refresh_token") val refreshToken: String?,
-        @Json(name = "device_id") val deviceId: String?)
+        @Json(name = "device_id") val deviceId: String?,
+        // Optional data that may contain info to override home server and/or identity server
+        @Json(name = "well_known") val wellKnown: WellKnown? = null
+)

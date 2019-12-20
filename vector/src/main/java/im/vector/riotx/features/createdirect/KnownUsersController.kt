@@ -23,7 +23,7 @@ import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Uninitialized
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.user.model.User
-import im.vector.matrix.android.internal.util.firstLetterOfDisplayName
+import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.EmptyItem_
 import im.vector.riotx.core.epoxy.loadingItem
@@ -68,9 +68,7 @@ class KnownUsersController @Inject constructor(private val session: Session,
             CreateDirectRoomUserItem_()
                     .id(item.userId)
                     .selected(isSelected)
-                    .userId(item.userId)
-                    .name(item.displayName)
-                    .avatarUrl(item.avatarUrl)
+                    .matrixItem(item.toMatrixItem())
                     .avatarRenderer(avatarRenderer)
                     .clickListener { _ ->
                         callback?.onItemClick(item)
@@ -87,8 +85,8 @@ class KnownUsersController @Inject constructor(private val session: Session,
             var lastFirstLetter: String? = null
             for (model in models) {
                 if (model is CreateDirectRoomUserItem) {
-                    if (model.userId == session.myUserId) continue
-                    val currentFirstLetter = model.name.firstLetterOfDisplayName()
+                    if (model.matrixItem.id == session.myUserId) continue
+                    val currentFirstLetter = model.matrixItem.firstLetterOfDisplayName()
                     val showLetter = !isFiltering && currentFirstLetter.isNotEmpty() && lastFirstLetter != currentFirstLetter
                     lastFirstLetter = currentFirstLetter
 

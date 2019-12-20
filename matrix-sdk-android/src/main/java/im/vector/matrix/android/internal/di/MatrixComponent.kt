@@ -22,7 +22,7 @@ import com.squareup.moshi.Moshi
 import dagger.BindsInstance
 import dagger.Component
 import im.vector.matrix.android.api.Matrix
-import im.vector.matrix.android.api.auth.Authenticator
+import im.vector.matrix.android.api.auth.AuthenticationService
 import im.vector.matrix.android.internal.SessionManager
 import im.vector.matrix.android.internal.auth.AuthModule
 import im.vector.matrix.android.internal.auth.SessionParamsStore
@@ -44,7 +44,7 @@ internal interface MatrixComponent {
     @Unauthenticated
     fun okHttpClient(): OkHttpClient
 
-    fun authenticator(): Authenticator
+    fun authenticationService(): AuthenticationService
 
     fun context(): Context
 

@@ -30,8 +30,7 @@ internal open class TimelineEventEntity(var localId: Long = 0,
                                         var isUniqueDisplayName: Boolean = false,
                                         var senderAvatar: String? = null,
                                         var senderMembershipEvent: EventEntity? = null,
-                                        var readReceipts: ReadReceiptsSummaryEntity? = null,
-                                        var readMarker: ReadMarkerEntity? = null
+                                        var readReceipts: ReadReceiptsSummaryEntity? = null
 ) : RealmObject() {
 
     @LinkingObjects("timelineEvents")

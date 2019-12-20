@@ -39,7 +39,7 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                                                         private val dateFormatter: VectorDateFormatter,
                                                         private val colorProvider: ColorProvider) {
 
-    fun create(event: TimelineEvent, nextEvent: TimelineEvent?, readMarkerVisible: Boolean): MessageInformationData {
+    fun create(event: TimelineEvent, nextEvent: TimelineEvent?): MessageInformationData {
         // Non nullability has been tested before
         val eventId = event.root.eventId!!
 
@@ -47,7 +47,7 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
         val nextDate = nextEvent?.root?.localDateTime()
         val addDaySeparator = date.toLocalDate() != nextDate?.toLocalDate()
         val isNextMessageReceivedMoreThanOneHourAgo = nextDate?.isBefore(date.minusMinutes(60))
-                                                      ?: false
+                ?: false
 
         val showInformation =
                 addDaySeparator
@@ -60,11 +60,8 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
         val avatarUrl = event.senderAvatar
         val memberName = event.getDisambiguatedDisplayName()
         val formattedMemberName = span(memberName) {
-            textColor = colorProvider.getColor(getColorFromUserId(event.root.senderId
-                                                                                             ?: ""))
+            textColor = colorProvider.getColor(getColorFromUserId(event.root.senderId))
         }
-
-        val displayReadMarker = readMarkerVisible && event.hasReadMarker
 
         return MessageInformationData(
                 eventId = eventId,
@@ -89,9 +86,7 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                         .map {
                             ReadReceiptData(it.user.userId, it.user.avatarUrl, it.user.displayName, it.originServerTs)
                         }
-                        .toList(),
-                hasReadMarker = event.hasReadMarker,
-                displayReadMarker = displayReadMarker
+                        .toList()
         )
     }
 }

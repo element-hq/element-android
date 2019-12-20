@@ -85,7 +85,7 @@ class RoomProfileViewModel @AssistedInject constructor(@Assisted initialState: R
 
     private fun handleLeaveRoom() {
         _viewEvents.post(RoomProfileViewEvents.Loading)
-        room.leave(object : MatrixCallback<Unit> {
+        room.leave(null, object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
                 _viewEvents.post(RoomProfileViewEvents.OnLeaveRoomSuccess)
             }

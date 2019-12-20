@@ -23,6 +23,7 @@ import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.EventAnnotationsSummary
 import im.vector.matrix.android.api.session.room.model.ReadReceipt
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageStickerContent
 import im.vector.matrix.android.api.session.room.model.message.isReply
 import im.vector.matrix.android.api.util.ContentUtils.extractUsefulTextFromReply
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
@@ -40,8 +41,7 @@ data class TimelineEvent(
         val isUniqueDisplayName: Boolean,
         val senderAvatar: String?,
         val annotations: EventAnnotationsSummary? = null,
-        val readReceipts: List<ReadReceipt> = emptyList(),
-        val hasReadMarker: Boolean = false
+        val readReceipts: List<ReadReceipt> = emptyList()
 ) {
 
     val metadata = HashMap<String, Any>()
@@ -99,8 +99,14 @@ fun TimelineEvent.getEditedEventId(): String? {
 /**
  * Get last MessageContent, after a possible edition
  */
-fun TimelineEvent.getLastMessageContent(): MessageContent? = annotations?.editSummary?.aggregatedContent?.toModel()
-        ?: root.getClearContent().toModel()
+fun TimelineEvent.getLastMessageContent(): MessageContent? {
+    return if (root.getClearType() == EventType.STICKER) {
+        root.getClearContent().toModel<MessageStickerContent>()
+    } else {
+        annotations?.editSummary?.aggregatedContent?.toModel()
+                ?: root.getClearContent().toModel()
+    }
+}
 
 /**
  * Get last Message body, after a possible edition

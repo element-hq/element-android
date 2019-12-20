@@ -26,23 +26,22 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.epoxy.OnModelBuildFinishedListener
 import com.airbnb.mvrx.*
-import com.google.android.material.snackbar.Snackbar
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.notification.RoomNotificationState
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.LayoutManagerStateRestorer
-import im.vector.riotx.core.error.ErrorFormatter
+import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.platform.OnBackPressed
 import im.vector.riotx.core.platform.StateView
 import im.vector.riotx.core.platform.VectorBaseFragment
-
 import im.vector.riotx.features.home.RoomListDisplayMode
 import im.vector.riotx.features.home.room.list.actions.RoomListActionsArgs
-import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsSharedAction
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsBottomSheet
+import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsSharedAction
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
 import im.vector.riotx.features.home.room.list.widget.FabMenuView
 import im.vector.riotx.features.notifications.NotificationDrawerManager
@@ -61,11 +60,11 @@ data class RoomListParams(
 class RoomListFragment @Inject constructor(
         private val roomController: RoomSummaryController,
         val roomListViewModelFactory: RoomListViewModel.Factory,
-        private val errorFormatter: ErrorFormatter,
         private val notificationDrawerManager: NotificationDrawerManager
 
 ) : VectorBaseFragment(), RoomSummaryController.Listener, OnBackPressed, FabMenuView.Listener {
 
+    private var modelBuildListener: OnModelBuildFinishedListener? = null
     private lateinit var sharedActionViewModel: RoomListQuickActionsSharedActionViewModel
     private val roomListParams: RoomListParams by args()
     private val roomListViewModel: RoomListViewModel by fragmentViewModel()
@@ -119,8 +118,12 @@ class RoomListFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
+        roomController.removeModelBuildListener(modelBuildListener)
+        modelBuildListener = null
+        roomListView.cleanup()
+        roomController.listener = null
+        createChatFabMenu.listener = null
         super.onDestroyView()
-        roomListView.adapter = null
     }
 
     private fun openSelectedRoom(event: RoomListViewEvents.SelectRoom) {
@@ -196,7 +199,8 @@ class RoomListFragment @Inject constructor(
         roomListView.layoutManager = layoutManager
         roomListView.itemAnimator = RoomListAnimator()
         roomController.listener = this
-        roomController.addModelBuildListener { it.dispatchTo(stateRestorer) }
+        modelBuildListener = OnModelBuildFinishedListener { it.dispatchTo(stateRestorer) }
+        roomController.addModelBuildListener(modelBuildListener)
         roomListView.adapter = roomController.adapter
         stateView.contentView = roomListView
     }
@@ -327,7 +331,7 @@ class RoomListFragment @Inject constructor(
         stateView.state = StateView.State.Error(message)
     }
 
-    override fun onBackPressed(): Boolean {
+    override fun onBackPressed(toolbarButton: Boolean): Boolean {
         if (createChatFabMenu.onBackPressed()) {
             return true
         }

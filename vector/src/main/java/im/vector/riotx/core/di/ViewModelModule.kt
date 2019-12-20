@@ -22,15 +22,17 @@ import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
 import im.vector.riotx.core.platform.ConfigurationViewModel
+import im.vector.riotx.features.createdirect.CreateDirectRoomSharedActionViewModel
 import im.vector.riotx.features.crypto.keysbackup.restore.KeysBackupRestoreFromKeyViewModel
 import im.vector.riotx.features.crypto.keysbackup.restore.KeysBackupRestoreFromPassphraseViewModel
 import im.vector.riotx.features.crypto.keysbackup.restore.KeysBackupRestoreSharedViewModel
 import im.vector.riotx.features.crypto.keysbackup.setup.KeysBackupSetupSharedViewModel
 import im.vector.riotx.features.crypto.verification.SasVerificationViewModel
 import im.vector.riotx.features.home.HomeSharedActionViewModel
-import im.vector.riotx.features.createdirect.CreateDirectRoomSharedActionViewModel
+import im.vector.riotx.features.home.room.detail.RoomDetailSharedActionViewModel
 import im.vector.riotx.features.home.room.detail.timeline.action.MessageSharedActionViewModel
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
+import im.vector.riotx.features.login.LoginSharedActionViewModel
 import im.vector.riotx.features.reactions.EmojiChooserViewModel
 import im.vector.riotx.features.roomdirectory.RoomDirectorySharedActionViewModel
 import im.vector.riotx.features.workers.signout.SignOutViewModel
@@ -112,4 +114,14 @@ interface ViewModelModule {
     @IntoMap
     @ViewModelKey(RoomDirectorySharedActionViewModel::class)
     fun bindRoomDirectorySharedActionViewModel(viewModel: RoomDirectorySharedActionViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(LoginSharedActionViewModel::class)
+    fun bindLoginSharedActionViewModel(viewModel: LoginSharedActionViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(RoomDetailSharedActionViewModel::class)
+    fun bindRoomDetailSharedActionViewModel(viewModel: RoomDetailSharedActionViewModel): ViewModel
 }

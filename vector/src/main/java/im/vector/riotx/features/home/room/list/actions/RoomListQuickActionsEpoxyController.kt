@@ -18,8 +18,9 @@ package im.vector.riotx.features.home.room.list.actions
 import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.matrix.android.api.session.room.notification.RoomNotificationState
-import im.vector.riotx.core.epoxy.bottomsheet.bottomSheetItemAction
-import im.vector.riotx.core.epoxy.bottomsheet.bottomSheetItemRoomPreview
+import im.vector.matrix.android.api.util.toMatrixItem
+import im.vector.riotx.core.epoxy.bottomsheet.bottomSheetActionItem
+import im.vector.riotx.core.epoxy.bottomsheet.bottomSheetRoomPreviewItem
 import im.vector.riotx.core.epoxy.dividerItem
 import im.vector.riotx.features.home.AvatarRenderer
 import javax.inject.Inject
@@ -35,21 +36,17 @@ class RoomListQuickActionsEpoxyController @Inject constructor(private val avatar
     override fun buildModels(state: RoomListQuickActionsState) {
         val roomSummary = state.roomSummary() ?: return
 
-        if (state.mode == RoomListActionsArgs.Mode.FULL) {
-            // Preview
-            bottomSheetItemRoomPreview {
-                id("preview")
-                avatarRenderer(avatarRenderer)
-                roomName(roomSummary.displayName)
-                avatarUrl(roomSummary.avatarUrl)
-                roomId(roomSummary.roomId)
-                settingsClickListener(View.OnClickListener { listener?.didSelectMenuAction(RoomListQuickActionsSharedAction.Settings(roomSummary.roomId)) })
-            }
+        // Preview
+        bottomSheetRoomPreviewItem {
+            id("preview")
+            avatarRenderer(avatarRenderer)
+            matrixItem(roomSummary.toMatrixItem())
+            settingsClickListener(View.OnClickListener { listener?.didSelectMenuAction(RoomListQuickActionsSharedAction.Settings(roomSummary.roomId)) })
+        }
 
-            // Notifications
-            dividerItem {
-                id("notifications_separator")
-            }
+        // Notifications
+        dividerItem {
+            id("notifications_separator")
         }
 
         val selectedRoomState = state.roomNotificationState()
@@ -58,12 +55,15 @@ class RoomListQuickActionsEpoxyController @Inject constructor(private val avatar
         RoomListQuickActionsSharedAction.NotificationsMentionsOnly(roomSummary.roomId).toBottomSheetItem(2, selectedRoomState)
         RoomListQuickActionsSharedAction.NotificationsMute(roomSummary.roomId).toBottomSheetItem(3, selectedRoomState)
 
+
         if (state.mode == RoomListActionsArgs.Mode.FULL) {
             // Leave
             dividerItem {
                 id("leave_separator")
             }
             RoomListQuickActionsSharedAction.Leave(roomSummary.roomId).toBottomSheetItem(5)
+
+            // Leave
         }
     }
 
@@ -76,7 +76,7 @@ class RoomListQuickActionsEpoxyController @Inject constructor(private val avatar
             is RoomListQuickActionsSharedAction.Settings,
             is RoomListQuickActionsSharedAction.Leave                     -> false
         }
-        return bottomSheetItemAction {
+        return bottomSheetActionItem {
             id("action_$index")
             selected(selected)
             iconRes(iconResId)

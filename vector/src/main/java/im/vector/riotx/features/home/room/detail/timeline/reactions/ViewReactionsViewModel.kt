@@ -68,6 +68,7 @@ class ViewReactionsViewModel @AssistedInject constructor(@Assisted
 
     companion object : MvRxViewModelFactory<ViewReactionsViewModel, DisplayReactionsViewState> {
 
+        @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: DisplayReactionsViewState): ViewReactionsViewModel? {
             val fragment: ViewReactionsBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()
             return fragment.viewReactionsViewModelFactory.create(state)
