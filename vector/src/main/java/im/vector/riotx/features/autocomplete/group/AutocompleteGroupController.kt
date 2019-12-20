@@ -14,33 +14,33 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.autocomplete.user
+package im.vector.riotx.features.autocomplete.group
 
 import com.airbnb.epoxy.TypedEpoxyController
-import im.vector.matrix.android.api.session.user.model.User
+import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.features.autocomplete.AutocompleteClickListener
 import im.vector.riotx.features.autocomplete.autocompleteMatrixItem
 import im.vector.riotx.features.home.AvatarRenderer
 import javax.inject.Inject
 
-class AutocompleteUserController @Inject constructor() : TypedEpoxyController<List<User>>() {
+class AutocompleteGroupController @Inject constructor() : TypedEpoxyController<List<GroupSummary>>() {
 
-    var listener: AutocompleteClickListener<User>? = null
+    var listener: AutocompleteClickListener<GroupSummary>? = null
 
     @Inject lateinit var avatarRenderer: AvatarRenderer
 
-    override fun buildModels(data: List<User>?) {
+    override fun buildModels(data: List<GroupSummary>?) {
         if (data.isNullOrEmpty()) {
             return
         }
-        data.forEach { user ->
+        data.forEach { groupSummary ->
             autocompleteMatrixItem {
-                id(user.userId)
-                matrixItem(user.toMatrixItem())
+                id(groupSummary.groupId)
+                matrixItem(groupSummary.toMatrixItem())
                 avatarRenderer(avatarRenderer)
                 clickListener { _ ->
-                    listener?.onItemClick(user)
+                    listener?.onItemClick(groupSummary)
                 }
             }
         }

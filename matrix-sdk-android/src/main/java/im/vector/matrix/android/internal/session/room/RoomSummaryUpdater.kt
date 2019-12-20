@@ -52,7 +52,7 @@ internal class RoomSummaryUpdater @Inject constructor(@UserId private val userId
             EventType.STATE_ROOM_NAME,
             EventType.STATE_ROOM_TOPIC,
             EventType.STATE_ROOM_MEMBER,
-            EventType.STATE_HISTORY_VISIBILITY,
+            EventType.STATE_ROOM_HISTORY_VISIBILITY,
             EventType.CALL_INVITE,
             EventType.CALL_HANGUP,
             EventType.CALL_ANSWER,
@@ -91,7 +91,7 @@ internal class RoomSummaryUpdater @Inject constructor(@UserId private val userId
 
         val latestPreviewableEvent = TimelineEventEntity.latestEvent(realm, roomId, includesSending = true, filterTypes = PREVIEWABLE_TYPES)
         val lastTopicEvent = EventEntity.where(realm, roomId, EventType.STATE_ROOM_TOPIC).prev()
-        val lastCanonicalAliasEvent = EventEntity.where(realm, roomId, EventType.STATE_CANONICAL_ALIAS).prev()
+        val lastCanonicalAliasEvent = EventEntity.where(realm, roomId, EventType.STATE_ROOM_CANONICAL_ALIAS).prev()
         val lastAliasesEvent = EventEntity.where(realm, roomId, EventType.STATE_ROOM_ALIASES).prev()
 
         roomSummaryEntity.hasUnreadMessages = roomSummaryEntity.notificationCount > 0

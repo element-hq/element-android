@@ -19,9 +19,9 @@ package im.vector.matrix.android.api.session.room.send
 import im.vector.matrix.android.api.util.MatrixItem
 
 /**
- * Tag class for spans that should mention a user.
+ * Tag class for spans that should mention a matrix item.
  * These Spans will be transformed into pills when detected in message to send
  */
-interface UserMentionSpan {
+interface MatrixItemSpan {
     val matrixItem: MatrixItem
 }

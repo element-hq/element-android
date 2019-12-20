@@ -16,10 +16,10 @@
 
 package im.vector.matrix.android.internal.session.room.send.pills
 
-import im.vector.matrix.android.api.session.room.send.UserMentionSpan
+import im.vector.matrix.android.api.session.room.send.MatrixItemSpan
 
 internal data class MentionLinkSpec(
-        val span: UserMentionSpan,
+        val span: MatrixItemSpan,
         val start: Int,
         val end: Int
 )
