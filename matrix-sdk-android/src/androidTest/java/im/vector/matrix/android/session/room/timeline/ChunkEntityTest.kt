@@ -19,8 +19,10 @@ package im.vector.matrix.android.session.room.timeline
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.InstrumentedTest
+import im.vector.matrix.android.internal.crypto.store.db.RealmCryptoStoreModule
 import im.vector.matrix.android.internal.database.helper.*
 import im.vector.matrix.android.internal.database.model.ChunkEntity
+import im.vector.matrix.android.internal.database.model.SessionRealmModule
 import im.vector.matrix.android.internal.session.room.timeline.PaginationDirection
 import im.vector.matrix.android.session.room.timeline.RoomDataHelper.createFakeListOfEvents
 import im.vector.matrix.android.session.room.timeline.RoomDataHelper.createFakeMessageEvent
@@ -43,7 +45,11 @@ internal class ChunkEntityTest : InstrumentedTest {
     @Before
     fun setup() {
         Realm.init(context())
-        val testConfig = RealmConfiguration.Builder().inMemory().name("test-realm").build()
+        val testConfig = RealmConfiguration.Builder()
+                .inMemory()
+                .name("test-realm")
+                .modules(SessionRealmModule())
+                .build()
         monarchy = Monarchy.Builder().setRealmConfiguration(testConfig).build()
     }
 
