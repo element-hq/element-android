@@ -35,6 +35,7 @@ import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsShare
 import im.vector.riotx.features.login.LoginSharedActionViewModel
 import im.vector.riotx.features.reactions.EmojiChooserViewModel
 import im.vector.riotx.features.roomdirectory.RoomDirectorySharedActionViewModel
+import im.vector.riotx.features.roomprofile.RoomProfileSharedActionViewModel
 import im.vector.riotx.features.workers.signout.SignOutViewModel
 
 @Module
@@ -124,4 +125,9 @@ interface ViewModelModule {
     @IntoMap
     @ViewModelKey(RoomDetailSharedActionViewModel::class)
     fun bindRoomDetailSharedActionViewModel(viewModel: RoomDetailSharedActionViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(RoomProfileSharedActionViewModel::class)
+    fun bindRoomProfileSharedActionViewModel(viewModel: RoomProfileSharedActionViewModel): ViewModel
 }

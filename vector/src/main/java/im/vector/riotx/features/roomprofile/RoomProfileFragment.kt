@@ -60,14 +60,16 @@ class RoomProfileFragment @Inject constructor(
 
     private var progress: ProgressDialog? = null
     private val roomProfileArgs: RoomProfileArgs by args()
-    private lateinit var sharedActionViewModel: RoomListQuickActionsSharedActionViewModel
+    private lateinit var roomListQuickActionsSharedActionViewModel: RoomListQuickActionsSharedActionViewModel
+    private lateinit var roomProfileSharedActionViewModel: RoomProfileSharedActionViewModel
     private val roomProfileViewModel: RoomProfileViewModel by fragmentViewModel()
 
     override fun getLayoutResId() = R.layout.fragment_room_profile
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        sharedActionViewModel = activityViewModelProvider.get(RoomListQuickActionsSharedActionViewModel::class.java)
+        roomListQuickActionsSharedActionViewModel = activityViewModelProvider.get(RoomListQuickActionsSharedActionViewModel::class.java)
+        roomProfileSharedActionViewModel = activityViewModelProvider.get(RoomProfileSharedActionViewModel::class.java)
         setupToolbar(roomProfileToolbar)
         setupRecyclerView()
         roomProfileViewModel.viewEvents
@@ -82,7 +84,7 @@ class RoomProfileFragment @Inject constructor(
                 }
                 .disposeOnDestroyView()
 
-        sharedActionViewModel
+        roomListQuickActionsSharedActionViewModel
                 .observe()
                 .subscribe { handleQuickActions(it) }
                 .disposeOnDestroyView()
@@ -156,11 +158,11 @@ class RoomProfileFragment @Inject constructor(
     }
 
     override fun onMemberListClicked() {
-        vectorBaseActivity.notImplemented("See room member list")
+        roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomMembers)
     }
 
     override fun onSettingsClicked() {
-        vectorBaseActivity.notImplemented("See Room settings")
+        roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomSettings)
     }
 
     override fun onNotificationsClicked() {
@@ -170,7 +172,7 @@ class RoomProfileFragment @Inject constructor(
     }
 
     override fun onUploadsClicked() {
-        vectorBaseActivity.notImplemented("See uploads")
+        roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomUploads)
     }
 
     override fun onLeaveRoomClicked() {
