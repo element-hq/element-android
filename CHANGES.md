@@ -5,13 +5,14 @@ Features ✨:
  -
 
 Improvements 🙌:
- -
+ - The initial sync is now handled by a foreground service
 
 Other changes:
  -
 
 Bugfix 🐛:
- -
+ - Fix avatar image disappearing (#777)
+ - Fix read marker banner when permalink
 
 Translations 🗣:
  -
