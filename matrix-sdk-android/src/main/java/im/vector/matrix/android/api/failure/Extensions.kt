@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.core.error
+package im.vector.matrix.android.api.failure
 
-import im.vector.matrix.android.api.failure.Failure
-import im.vector.matrix.android.api.failure.MatrixError
 import javax.net.ssl.HttpsURLConnection
 
-fun Throwable.is401(): Boolean {
-    return (this is Failure.ServerError && httpCode == HttpsURLConnection.HTTP_UNAUTHORIZED /* 401 */
-            && error.code == MatrixError.M_UNAUTHORIZED)
-}
+fun Throwable.is401() =
+        this is Failure.ServerError
+                && httpCode == HttpsURLConnection.HTTP_UNAUTHORIZED /* 401 */
+                && error.code == MatrixError.M_UNAUTHORIZED
+
+fun Throwable.isTokenError() =
+        this is Failure.ServerError
+                && (error.code == MatrixError.M_UNKNOWN_TOKEN || error.code == MatrixError.M_MISSING_TOKEN)
