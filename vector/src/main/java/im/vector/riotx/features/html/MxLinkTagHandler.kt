@@ -46,11 +46,16 @@ class MxLinkTagHandler(private val glideRequests: GlideRequests,
                     MatrixItem.UserItem(permalinkData.userId, user?.displayName, user?.avatarUrl)
                 }
                 is PermalinkData.RoomLink  -> {
-                    val room: RoomSummary? = sessionHolder.getSafeActiveSession()?.getRoomSummary(permalinkData.roomIdOrAlias)
-                    if (permalinkData.isRoomAlias) {
-                        MatrixItem.RoomAliasItem(permalinkData.roomIdOrAlias, room?.displayName, room?.avatarUrl)
+                    // Exclude event link (used in reply event)
+                    if (permalinkData.eventId == null) {
+                        val room: RoomSummary? = sessionHolder.getSafeActiveSession()?.getRoomSummary(permalinkData.roomIdOrAlias)
+                        if (permalinkData.isRoomAlias) {
+                            MatrixItem.RoomAliasItem(permalinkData.roomIdOrAlias, room?.displayName, room?.avatarUrl)
+                        } else {
+                            MatrixItem.RoomItem(permalinkData.roomIdOrAlias, room?.displayName, room?.avatarUrl)
+                        }
                     } else {
-                        MatrixItem.RoomItem(permalinkData.roomIdOrAlias, room?.displayName, room?.avatarUrl)
+                        null
                     }
                 }
                 is PermalinkData.GroupLink -> {
