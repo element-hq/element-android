@@ -102,7 +102,7 @@ class TextComposerViewModel @AssistedInject constructor(@Assisted initialState: 
                         users
                     } else {
                         users.filter {
-                            it.displayName?.startsWith(prefix = filter, ignoreCase = true) ?: false
+                            it.displayName?.contains(filter, ignoreCase = true) ?: false
                         }
                     }
                             .sortedBy { it.displayName }
@@ -139,11 +139,15 @@ class TextComposerViewModel @AssistedInject constructor(@Assisted initialState: 
                 session.rx().liveGroupSummaries(),
                 groupsQueryObservable.throttleLast(300, TimeUnit.MILLISECONDS),
                 BiFunction { groupSummaries, query ->
-                    val filter = query.orNull() ?: ""
-                    groupSummaries
-                            .filter {
-                                it.groupId.contains(filter, ignoreCase = true)
-                            }
+                    val filter = query.orNull()
+                    if (filter.isNullOrBlank()) {
+                        groupSummaries
+                    } else {
+                        groupSummaries
+                                .filter {
+                                    it.groupId.contains(filter, ignoreCase = true)
+                                }
+                    }
                             .sortedBy { it.displayName }
                 }
         ).execute { async ->
