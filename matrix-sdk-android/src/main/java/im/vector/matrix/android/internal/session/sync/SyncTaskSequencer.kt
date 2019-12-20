@@ -14,17 +14,11 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.api.session.cache
+package im.vector.matrix.android.internal.session.sync
 
-import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.internal.session.SessionScope
+import im.vector.matrix.android.internal.task.ChannelCoroutineSequencer
+import javax.inject.Inject
 
-/**
- * This interface defines a method to clear the cache. It's implemented at the session level.
- */
-interface CacheService {
-
-    /**
-     * Clear the whole cached data, except credentials. Once done, the sync has to be restarted by the sdk user.
-     */
-    fun clearCache(callback: MatrixCallback<Unit>)
-}
+@SessionScope
+internal class SyncTaskSequencer @Inject constructor() : ChannelCoroutineSequencer<Unit>()

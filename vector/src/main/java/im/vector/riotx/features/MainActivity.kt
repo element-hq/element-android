@@ -28,6 +28,7 @@ import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.error.ErrorFormatter
+import im.vector.riotx.core.extensions.startSyncing
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.utils.deleteAllFiles
 import im.vector.riotx.features.home.HomeActivity
@@ -84,11 +85,9 @@ class MainActivity : VectorBaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         args = parseArgs()
-
         if (args.clearCredentials || args.isUserLoggedOut) {
             clearNotifications()
         }
-
         // Handle some wanted cleanup
         if (args.clearCache || args.clearCredentials) {
             doCleanUp()
@@ -116,24 +115,32 @@ class MainActivity : VectorBaseActivity() {
     }
 
     private fun doCleanUp() {
+        val session = sessionHolder.getSafeActiveSession()
+        if (session == null) {
+            startNextActivityAndFinish()
+            return
+        }
         when {
-            args.clearCredentials -> sessionHolder.getActiveSession().signOut(
+            args.clearCredentials -> session.signOut(
                     !args.isUserLoggedOut,
                     object : MatrixCallback<Unit> {
                         override fun onSuccess(data: Unit) {
                             Timber.w("SIGN_OUT: success, start app")
                             sessionHolder.clearActiveSession()
-                            doLocalCleanupAndStart()
+                            doLocalCleanup()
+                            startNextActivityAndFinish()
                         }
 
                         override fun onFailure(failure: Throwable) {
                             displayError(failure)
                         }
                     })
-            args.clearCache       -> sessionHolder.getActiveSession().clearCache(
+            args.clearCache       -> session.clearCache(
                     object : MatrixCallback<Unit> {
                         override fun onSuccess(data: Unit) {
-                            doLocalCleanupAndStart()
+                            doLocalCleanup()
+                            session.startSyncing(applicationContext)
+                            startNextActivityAndFinish()
                         }
 
                         override fun onFailure(failure: Throwable) {
@@ -148,7 +155,7 @@ class MainActivity : VectorBaseActivity() {
         Timber.w("Ignoring invalid token global error")
     }
 
-    private fun doLocalCleanupAndStart() {
+    private fun doLocalCleanup() {
         GlobalScope.launch(Dispatchers.Main) {
             // On UI Thread
             Glide.get(this@MainActivity).clearMemory()
@@ -160,8 +167,6 @@ class MainActivity : VectorBaseActivity() {
                 deleteAllFiles(this@MainActivity.cacheDir)
             }
         }
-
-        startNextActivityAndFinish()
     }
 
     private fun displayError(failure: Throwable) {

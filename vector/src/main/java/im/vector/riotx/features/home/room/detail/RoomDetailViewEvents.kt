@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.core.error
+package im.vector.riotx.features.home.room.detail
 
-import im.vector.matrix.android.api.failure.Failure
-import im.vector.matrix.android.api.failure.MatrixError
-import javax.net.ssl.HttpsURLConnection
-
-fun Throwable.is401(): Boolean {
-    return (this is Failure.ServerError && httpCode == HttpsURLConnection.HTTP_UNAUTHORIZED /* 401 */
-            && error.code == MatrixError.M_UNAUTHORIZED)
+/**
+ * Transient events for RoomDetail
+ */
+sealed class RoomDetailViewEvents {
+    data class Failure(val throwable: Throwable) : RoomDetailViewEvents()
 }

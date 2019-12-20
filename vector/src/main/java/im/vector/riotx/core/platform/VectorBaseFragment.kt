@@ -31,6 +31,7 @@ import butterknife.Unbinder
 import com.airbnb.mvrx.BaseMvRxFragment
 import com.airbnb.mvrx.MvRx
 import com.bumptech.glide.util.Util.assertMainThread
+import com.google.android.material.snackbar.Snackbar
 import im.vector.riotx.core.di.DaggerScreenComponent
 import im.vector.riotx.core.di.HasScreenInjector
 import im.vector.riotx.core.di.ScreenComponent
@@ -165,6 +166,13 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
         assertMainThread()
         restorables.add(this)
         return this
+    }
+
+    protected fun showErrorInSnackbar(throwable: Throwable) {
+        vectorBaseActivity.coordinatorLayout?.let {
+            Snackbar.make(it, errorFormatter.toHumanReadable(throwable), Snackbar.LENGTH_SHORT)
+                    .show()
+        }
     }
 
     /* ==========================================================================================

@@ -53,6 +53,14 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
     }
 
     @UiThread
+    fun render(matrixItem: MatrixItem, imageView: ImageView, glideRequests: GlideRequests) {
+        render(imageView.context,
+                glideRequests,
+                matrixItem,
+                DrawableImageViewTarget(imageView))
+    }
+
+    @UiThread
     fun render(context: Context,
                glideRequest: GlideRequests,
                matrixItem: MatrixItem,

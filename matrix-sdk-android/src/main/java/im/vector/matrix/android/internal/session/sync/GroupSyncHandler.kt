@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.session.sync
 
-import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.R
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.internal.database.model.GroupEntity
@@ -25,11 +24,10 @@ import im.vector.matrix.android.internal.session.DefaultInitialSyncProgressServi
 import im.vector.matrix.android.internal.session.mapWithProgress
 import im.vector.matrix.android.internal.session.sync.model.GroupsSyncResponse
 import im.vector.matrix.android.internal.session.sync.model.InvitedGroupSync
-import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.Realm
 import javax.inject.Inject
 
-internal class GroupSyncHandler @Inject constructor(private val monarchy: Monarchy) {
+internal class GroupSyncHandler @Inject constructor() {
 
     sealed class HandlingStrategy {
         data class JOINED(val data: Map<String, Any>) : HandlingStrategy()
@@ -37,12 +35,14 @@ internal class GroupSyncHandler @Inject constructor(private val monarchy: Monarc
         data class LEFT(val data: Map<String, Any>) : HandlingStrategy()
     }
 
-    suspend fun handle(roomsSyncResponse: GroupsSyncResponse, reporter: DefaultInitialSyncProgressService? = null) {
-        monarchy.awaitTransaction { realm ->
-            handleGroupSync(realm, HandlingStrategy.JOINED(roomsSyncResponse.join), reporter)
-            handleGroupSync(realm, HandlingStrategy.INVITED(roomsSyncResponse.invite), reporter)
-            handleGroupSync(realm, HandlingStrategy.LEFT(roomsSyncResponse.leave), reporter)
-        }
+    fun handle(
+            realm: Realm,
+            roomsSyncResponse: GroupsSyncResponse,
+            reporter: DefaultInitialSyncProgressService? = null
+    ) {
+        handleGroupSync(realm, HandlingStrategy.JOINED(roomsSyncResponse.join), reporter)
+        handleGroupSync(realm, HandlingStrategy.INVITED(roomsSyncResponse.invite), reporter)
+        handleGroupSync(realm, HandlingStrategy.LEFT(roomsSyncResponse.leave), reporter)
     }
 
     // PRIVATE METHODS *****************************************************************************

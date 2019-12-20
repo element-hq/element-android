@@ -28,7 +28,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.OnModelBuildFinishedListener
 import com.airbnb.mvrx.*
-import com.google.android.material.snackbar.Snackbar
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
@@ -104,7 +103,7 @@ class RoomListFragment @Inject constructor(
                 .subscribe {
                     when (it) {
                         is RoomListViewEvents.SelectRoom -> openSelectedRoom(it)
-                        is RoomListViewEvents.Failure    -> showError(it)
+                        is RoomListViewEvents.Failure    -> showErrorInSnackbar(it.throwable)
                     }
                 }
                 .disposeOnDestroyView()
@@ -132,13 +131,6 @@ class RoomListFragment @Inject constructor(
             navigator.openRoomForSharing(requireActivity(), event.roomId, sharedData)
         } else {
             navigator.openRoom(requireActivity(), event.roomId)
-        }
-    }
-
-    private fun showError(event: RoomListViewEvents.Failure) {
-        vectorBaseActivity.coordinatorLayout?.let {
-            Snackbar.make(it, errorFormatter.toHumanReadable(event.throwable), Snackbar.LENGTH_SHORT)
-                    .show()
         }
     }
 

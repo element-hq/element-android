@@ -27,6 +27,7 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.MatrixPatterns
+import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.isImageMessage
@@ -56,7 +57,9 @@ import im.vector.riotx.core.extensions.postLiveEvent
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.resources.UserPreferencesProvider
+import im.vector.riotx.core.utils.DataSource
 import im.vector.riotx.core.utils.LiveEvent
+import im.vector.riotx.core.utils.PublishDataSource
 import im.vector.riotx.core.utils.subscribeLogError
 import im.vector.riotx.features.command.CommandParser
 import im.vector.riotx.features.command.ParsedCommand
@@ -100,6 +103,9 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
 
     private var timelineEvents = PublishRelay.create<List<TimelineEvent>>()
     private var timeline = room.createTimeline(eventId, timelineSettings)
+
+    private val _viewEvents = PublishDataSource<RoomDetailViewEvents>()
+    val viewEvents: DataSource<RoomDetailViewEvents> = _viewEvents
 
     // Can be used for several actions, for a one shot result
     private val _requestLiveData = MutableLiveData<LiveEvent<Async<RoomDetailAction>>>()
@@ -819,9 +825,14 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         if (events.isEmpty()) return UnreadState.Unknown
         val readMarkerIdSnapshot = roomSummary.readMarkerId ?: return UnreadState.Unknown
         val firstDisplayableEventId = timeline.getFirstDisplayableEventId(readMarkerIdSnapshot)
-                ?: return UnreadState.ReadMarkerNotLoaded(readMarkerIdSnapshot)
         val firstDisplayableEventIndex = timeline.getIndexOfEvent(firstDisplayableEventId)
-                ?: return UnreadState.ReadMarkerNotLoaded(readMarkerIdSnapshot)
+        if (firstDisplayableEventId == null || firstDisplayableEventIndex == null) {
+            return if (timeline.isLive) {
+                UnreadState.ReadMarkerNotLoaded(readMarkerIdSnapshot)
+            } else {
+                UnreadState.Unknown
+            }
+        }
         for (i in (firstDisplayableEventIndex - 1) downTo 0) {
             val timelineEvent = events.getOrNull(i) ?: return UnreadState.Unknown
             val eventId = timelineEvent.root.eventId ?: return UnreadState.Unknown
@@ -857,8 +868,14 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         }
     }
 
-    override fun onUpdated(snapshot: List<TimelineEvent>) {
+    override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
         timelineEvents.accept(snapshot)
+    }
+
+    override fun onTimelineFailure(throwable: Throwable) {
+        // If we have a critical timeline issue, we get back to live.
+        timeline.restartWithEventId(null)
+        _viewEvents.post(RoomDetailViewEvents.Failure(throwable))
     }
 
     override fun onCleared() {

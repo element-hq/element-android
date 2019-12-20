@@ -19,12 +19,16 @@ package im.vector.matrix.android.internal.database
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.internal.util.createBackgroundHandler
 import io.realm.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancelChildren
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 
 internal interface LiveEntityObserver {
     fun start()
     fun dispose()
+    fun cancelProcess()
     fun isStarted(): Boolean
 }
 
@@ -35,6 +39,7 @@ internal abstract class RealmLiveEntityObserver<T : RealmObject>(protected val r
         val BACKGROUND_HANDLER = createBackgroundHandler("LIVE_ENTITY_BACKGROUND")
     }
 
+    protected val observerScope = CoroutineScope(SupervisorJob())
     protected abstract val query: Monarchy.Query<T>
     private val isStarted = AtomicBoolean(false)
     private val backgroundRealm = AtomicReference<Realm>()
@@ -59,8 +64,13 @@ internal abstract class RealmLiveEntityObserver<T : RealmObject>(protected val r
                 backgroundRealm.getAndSet(null).also {
                     it.close()
                 }
+                observerScope.coroutineContext.cancelChildren()
             }
         }
+    }
+
+    override fun cancelProcess() {
+        observerScope.coroutineContext.cancelChildren()
     }
 
     override fun isStarted(): Boolean {

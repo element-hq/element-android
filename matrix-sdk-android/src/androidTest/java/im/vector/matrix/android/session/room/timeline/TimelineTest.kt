@@ -66,7 +66,7 @@ internal class TimelineTest : InstrumentedTest {
 //        val latch = CountDownLatch(2)
 //        var timelineEvents: List<TimelineEvent> = emptyList()
 //        timeline.listener = object : Timeline.Listener {
-//            override fun onUpdated(snapshot: List<TimelineEvent>) {
+//            override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
 //                if (snapshot.isNotEmpty()) {
 //                    if (initialLoad == 0) {
 //                        initialLoad = snapshot.size

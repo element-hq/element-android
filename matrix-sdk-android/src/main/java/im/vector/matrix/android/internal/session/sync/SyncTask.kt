@@ -17,7 +17,6 @@
 package im.vector.matrix.android.internal.session.sync
 
 import im.vector.matrix.android.R
-import im.vector.matrix.android.internal.auth.SessionParamsStore
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.DefaultInitialSyncProgressService
@@ -26,6 +25,7 @@ import im.vector.matrix.android.internal.session.homeserver.GetHomeServerCapabil
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import im.vector.matrix.android.internal.session.user.UserStore
 import im.vector.matrix.android.internal.task.Task
+import timber.log.Timber
 import javax.inject.Inject
 
 internal interface SyncTask : Task<SyncTask.Params, Unit> {
@@ -37,14 +37,19 @@ internal class DefaultSyncTask @Inject constructor(private val syncAPI: SyncAPI,
                                                    @UserId private val userId: String,
                                                    private val filterRepository: FilterRepository,
                                                    private val syncResponseHandler: SyncResponseHandler,
-                                                   private val sessionParamsStore: SessionParamsStore,
                                                    private val initialSyncProgressService: DefaultInitialSyncProgressService,
                                                    private val syncTokenStore: SyncTokenStore,
                                                    private val getHomeServerCapabilitiesTask: GetHomeServerCapabilitiesTask,
-                                                   private val userStore: UserStore
+                                                   private val userStore: UserStore,
+                                                   private val syncTaskSequencer: SyncTaskSequencer
 ) : SyncTask {
 
-    override suspend fun execute(params: SyncTask.Params) {
+    override suspend fun execute(params: SyncTask.Params) = syncTaskSequencer.post {
+        doSync(params)
+    }
+
+    private suspend fun doSync(params: SyncTask.Params) {
+        Timber.v("Sync task started on Thread: ${Thread.currentThread().name}")
         // Maybe refresh the home server capabilities data we know
         getHomeServerCapabilitiesTask.execute(Unit)
 
@@ -69,9 +74,9 @@ internal class DefaultSyncTask @Inject constructor(private val syncAPI: SyncAPI,
             apiCall = syncAPI.sync(requestParams)
         }
         syncResponseHandler.handleResponse(syncResponse, token)
-        syncTokenStore.saveToken(syncResponse.nextBatch)
         if (isInitialSync) {
             initialSyncProgressService.endAll()
         }
+        Timber.v("Sync task finished on Thread: ${Thread.currentThread().name}")
     }
 }

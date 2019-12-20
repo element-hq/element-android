@@ -18,21 +18,18 @@ package im.vector.matrix.android.internal.session.sync.job
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
-import com.squareup.moshi.JsonEncodingException
 import im.vector.matrix.android.api.Matrix
-import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.failure.Failure
-import im.vector.matrix.android.api.failure.MatrixError
-import im.vector.matrix.android.api.util.Cancelable
+import im.vector.matrix.android.api.failure.isTokenError
+import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
 import im.vector.matrix.android.internal.session.sync.SyncTask
 import im.vector.matrix.android.internal.task.TaskExecutor
-import im.vector.matrix.android.internal.task.TaskThread
-import im.vector.matrix.android.internal.task.configureWith
+import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import kotlinx.coroutines.*
 import timber.log.Timber
-import java.net.SocketTimeoutException
-import java.util.Timer
-import java.util.TimerTask
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * Can execute periodic sync task.
@@ -40,33 +37,46 @@ import java.util.TimerTask
  * in order to be able to perform a sync even if the app is not running.
  * The <receiver> and <service> must be declared in the Manifest or the app using the SDK
  */
-open class SyncService : Service() {
+abstract class SyncService : Service() {
 
+    private var userId: String? = null
     private var mIsSelfDestroyed: Boolean = false
-    private var cancelableTask: Cancelable? = null
 
+    private var isInitialSync: Boolean = false
+    private lateinit var session: Session
     private lateinit var syncTask: SyncTask
     private lateinit var networkConnectivityChecker: NetworkConnectivityChecker
     private lateinit var taskExecutor: TaskExecutor
+    private lateinit var coroutineDispatchers: MatrixCoroutineDispatchers
+    private lateinit var backgroundDetectionObserver: BackgroundDetectionObserver
 
-    var timer = Timer()
+    private val isRunning = AtomicBoolean(false)
+
+    private val serviceScope = CoroutineScope(SupervisorJob())
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Timber.i("onStartCommand $intent")
         intent?.let {
-            val userId = it.getStringExtra(EXTRA_USER_ID)
-            val sessionComponent = Matrix.getInstance(applicationContext).sessionManager.getSessionComponent(userId)
+            val matrix = Matrix.getInstance(applicationContext)
+            val safeUserId = it.getStringExtra(EXTRA_USER_ID) ?: return@let
+            val sessionComponent = matrix.sessionManager.getSessionComponent(safeUserId)
                     ?: return@let
+            session = sessionComponent.session()
+            userId = safeUserId
             syncTask = sessionComponent.syncTask()
+            isInitialSync = !session.hasAlreadySynced()
             networkConnectivityChecker = sessionComponent.networkConnectivityChecker()
             taskExecutor = sessionComponent.taskExecutor()
-            if (cancelableTask == null) {
-                timer.cancel()
-                timer = Timer()
-                doSync(true)
+            coroutineDispatchers = sessionComponent.coroutineDispatchers()
+            backgroundDetectionObserver = matrix.backgroundDetectionObserver
+            onStart(isInitialSync)
+            if (isRunning.get()) {
+                Timber.i("Received a start while was already syncing... ignore")
             } else {
-                // Already syncing ignore
-                Timber.i("Received a start while was already syncking... ignore")
+                isRunning.set(true)
+                serviceScope.launch(coroutineDispatchers.io) {
+                    doSync()
+                }
             }
         }
         // No intent just start the service, an alarm will should call with intent
@@ -75,88 +85,53 @@ open class SyncService : Service() {
 
     override fun onDestroy() {
         Timber.i("## onDestroy() : $this")
-
         if (!mIsSelfDestroyed) {
             Timber.w("## Destroy by the system : $this")
         }
-
-        cancelableTask?.cancel()
+        serviceScope.coroutineContext.cancelChildren()
+        isRunning.set(false)
         super.onDestroy()
     }
 
-    fun stopMe() {
-        timer.cancel()
-        timer = Timer()
-        cancelableTask?.cancel()
+    private fun stopMe() {
         mIsSelfDestroyed = true
         stopSelf()
     }
 
-    fun doSync(once: Boolean = false) {
-        if (!networkConnectivityChecker.hasInternetAccess) {
-            Timber.v("No internet access. Waiting...")
-            // TODO Retry in ?
-            timer.schedule(object : TimerTask() {
-                override fun run() {
-                    doSync()
-                }
-            }, NO_NETWORK_DELAY)
-        } else {
-            Timber.v("Execute sync request with timeout 0")
-            val params = SyncTask.Params(TIME_OUT)
-            cancelableTask = syncTask
-                    .configureWith(params) {
-                        callbackThread = TaskThread.SYNC
-                        executionThread = TaskThread.SYNC
-                        callback = object : MatrixCallback<Unit> {
-                            override fun onSuccess(data: Unit) {
-                                cancelableTask = null
-                                if (!once) {
-                                    timer.schedule(object : TimerTask() {
-                                        override fun run() {
-                                            doSync()
-                                        }
-                                    }, NEXT_BATCH_DELAY)
-                                } else {
-                                    // stop
-                                    stopMe()
-                                }
-                            }
-
-                            override fun onFailure(failure: Throwable) {
-                                Timber.e(failure)
-                                cancelableTask = null
-                                if (failure is Failure.NetworkConnection
-                                        && failure.cause is SocketTimeoutException) {
-                                    // Timeout are not critical
-                                    timer.schedule(object : TimerTask() {
-                                        override fun run() {
-                                            doSync()
-                                        }
-                                    }, 5_000L)
-                                }
-
-                                if (failure !is Failure.NetworkConnection
-                                        || failure.cause is JsonEncodingException) {
-                                    // Wait 10s before retrying
-                                    timer.schedule(object : TimerTask() {
-                                        override fun run() {
-                                            doSync()
-                                        }
-                                    }, 5_000L)
-                                }
-
-                                if (failure is Failure.ServerError
-                                        && (failure.error.code == MatrixError.M_UNKNOWN_TOKEN || failure.error.code == MatrixError.M_MISSING_TOKEN)) {
-                                    // No token or invalid token, stop the thread
-                                    stopSelf()
-                                }
-                            }
-                        }
-                    }
-                    .executeBy(taskExecutor)
+    private suspend fun doSync() {
+        if (!networkConnectivityChecker.hasInternetAccess()) {
+            Timber.v("No network reschedule to avoid wasting resources")
+            userId?.also {
+                onRescheduleAsked(it, isInitialSync, delay = 10_000L)
+            }
+            stopMe()
+            return
+        }
+        Timber.v("Execute sync request with timeout 0")
+        val params = SyncTask.Params(TIME_OUT)
+        try {
+            syncTask.execute(params)
+            // Start sync if we were doing an initial sync and the syncThread is not launched yet
+            if (isInitialSync && session.syncState().value == SyncState.Idle) {
+                val isForeground = !backgroundDetectionObserver.isInBackground
+                session.startSync(isForeground)
+            }
+            stopMe()
+        } catch (throwable: Throwable) {
+            Timber.e(throwable)
+            if (throwable.isTokenError()) {
+                stopMe()
+            } else {
+                Timber.v("Retry to sync in 5s")
+                delay(DELAY_FAILURE)
+                doSync()
+            }
         }
     }
+
+    abstract fun onStart(isInitialSync: Boolean)
+
+    abstract fun onRescheduleAsked(userId: String, isInitialSync: Boolean, delay: Long)
 
     override fun onBind(intent: Intent?): IBinder? {
         return null
@@ -164,9 +139,7 @@ open class SyncService : Service() {
 
     companion object {
         const val EXTRA_USER_ID = "EXTRA_USER_ID"
-
-        const val TIME_OUT = 0L
-        const val NEXT_BATCH_DELAY = 60_000L
-        const val NO_NETWORK_DELAY = 5_000L
+        private const val TIME_OUT = 0L
+        private const val DELAY_FAILURE = 5_000L
     }
 }

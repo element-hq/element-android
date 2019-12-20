@@ -30,6 +30,7 @@ import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.commitTransactionNow
+import im.vector.riotx.core.glide.GlideApp
 import im.vector.riotx.core.platform.ToolbarConfigurable
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.ui.views.KeysBackupBanner
@@ -75,7 +76,8 @@ class HomeDetailFragment @Inject constructor(
 
     private fun onGroupChange(groupSummary: GroupSummary?) {
         groupSummary?.let {
-            avatarRenderer.render(it.toMatrixItem(), groupToolbarAvatarImageView)
+            // Use GlideApp with activity context to avoid the glideRequests to be paused
+            avatarRenderer.render(it.toMatrixItem(), groupToolbarAvatarImageView, GlideApp.with(requireActivity()))
         }
     }
 

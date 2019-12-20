@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.api.session.cache
+package im.vector.matrix.android.api.failure
 
-import im.vector.matrix.android.api.MatrixCallback
+import javax.net.ssl.HttpsURLConnection
 
-/**
- * This interface defines a method to clear the cache. It's implemented at the session level.
- */
-interface CacheService {
+fun Throwable.is401() =
+        this is Failure.ServerError
+                && httpCode == HttpsURLConnection.HTTP_UNAUTHORIZED /* 401 */
+                && error.code == MatrixError.M_UNAUTHORIZED
 
-    /**
-     * Clear the whole cached data, except credentials. Once done, the sync has to be restarted by the sdk user.
-     */
-    fun clearCache(callback: MatrixCallback<Unit>)
-}
+fun Throwable.isTokenError() =
+        this is Failure.ServerError
+                && (error.code == MatrixError.M_UNKNOWN_TOKEN || error.code == MatrixError.M_MISSING_TOKEN)

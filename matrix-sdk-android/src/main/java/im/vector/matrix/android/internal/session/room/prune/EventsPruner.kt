@@ -23,11 +23,10 @@ import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.query.types
 import im.vector.matrix.android.internal.di.SessionDatabase
-import im.vector.matrix.android.internal.task.TaskExecutor
-import im.vector.matrix.android.internal.task.configureWith
 import io.realm.OrderedCollectionChangeSet
 import io.realm.RealmConfiguration
 import io.realm.RealmResults
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -36,8 +35,7 @@ import javax.inject.Inject
  * As it will actually delete the content, it should be called last in the list of listener.
  */
 internal class EventsPruner @Inject constructor(@SessionDatabase realmConfiguration: RealmConfiguration,
-                                                private val pruneEventTask: PruneEventTask,
-                                                private val taskExecutor: TaskExecutor) :
+                                                private val pruneEventTask: PruneEventTask) :
         RealmLiveEntityObserver<EventEntity>(realmConfiguration) {
 
     override val query = Monarchy.Query<EventEntity> { EventEntity.types(it, listOf(EventType.REDACTION)) }
@@ -50,7 +48,9 @@ internal class EventsPruner @Inject constructor(@SessionDatabase realmConfigurat
                 .mapNotNull { results[it]?.asDomain() }
                 .toList()
 
-        val params = PruneEventTask.Params(insertedDomains)
-        pruneEventTask.configureWith(params).executeBy(taskExecutor)
+        observerScope.launch {
+            val params = PruneEventTask.Params(insertedDomains)
+            pruneEventTask.execute(params)
+        }
     }
 }

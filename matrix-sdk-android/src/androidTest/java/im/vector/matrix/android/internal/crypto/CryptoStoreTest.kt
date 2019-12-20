@@ -16,19 +16,30 @@
 
 package im.vector.matrix.android.internal.crypto
 
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import im.vector.matrix.android.InstrumentedTest
 import im.vector.matrix.android.internal.crypto.model.OlmSessionWrapper
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
+import io.realm.Realm
 import org.junit.Assert.*
+import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.matrix.olm.OlmAccount
 import org.matrix.olm.OlmManager
 import org.matrix.olm.OlmSession
 
 private const val DUMMY_DEVICE_KEY = "DeviceKey"
 
-class CryptoStoreTest {
+@RunWith(AndroidJUnit4::class)
+class CryptoStoreTest : InstrumentedTest {
 
     private val cryptoStoreHelper = CryptoStoreHelper()
+
+    @Before
+    fun setup() {
+        Realm.init(context())
+    }
 
     @Test
     fun test_metadata_realm_ok() {

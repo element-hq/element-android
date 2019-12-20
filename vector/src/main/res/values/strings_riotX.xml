@@ -3,5 +3,6 @@
 
     <!-- Strings not defined in Riot -->
 
+    <string name="notification_initial_sync">Initial Sync…</string>
 
 </resources>
