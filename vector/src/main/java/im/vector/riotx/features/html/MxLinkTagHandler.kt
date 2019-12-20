@@ -46,7 +46,6 @@ class MxLinkTagHandler(private val glideRequests: GlideRequests,
                     MatrixItem.UserItem(permalinkData.userId, user?.displayName, user?.avatarUrl)
                 }
                 is PermalinkData.RoomLink  -> {
-                    // Exclude event link (used in reply event)
                     if (permalinkData.eventId == null) {
                         val room: RoomSummary? = sessionHolder.getSafeActiveSession()?.getRoomSummary(permalinkData.roomIdOrAlias)
                         if (permalinkData.isRoomAlias) {
@@ -55,6 +54,7 @@ class MxLinkTagHandler(private val glideRequests: GlideRequests,
                             MatrixItem.RoomItem(permalinkData.roomIdOrAlias, room?.displayName, room?.avatarUrl)
                         }
                     } else {
+                        // Exclude event link (used in reply events, we do not want to pill the "in reply to")
                         null
                     }
                 }
