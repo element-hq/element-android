@@ -20,6 +20,7 @@ import android.content.Context
 import android.text.style.URLSpan
 import im.vector.matrix.android.api.permalinks.PermalinkData
 import im.vector.matrix.android.api.permalinks.PermalinkParser
+import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.glide.GlideRequests
@@ -39,26 +40,42 @@ class MxLinkTagHandler(private val glideRequests: GlideRequests,
         val link = tag.attributes()["href"]
         if (link != null) {
             val permalinkData = PermalinkParser.parse(link)
-            when (permalinkData) {
-                is PermalinkData.UserLink -> {
+            val matrixItem = when (permalinkData) {
+                is PermalinkData.UserLink  -> {
                     val user = sessionHolder.getSafeActiveSession()?.getUser(permalinkData.userId)
-                    val span = PillImageSpan(glideRequests, avatarRenderer, context, MatrixItem.UserItem(permalinkData.userId, user?.displayName
-                            ?: permalinkData.userId, user?.avatarUrl))
-                    SpannableBuilder.setSpans(
-                            visitor.builder(),
-                            span,
-                            tag.start(),
-                            tag.end()
-                    )
-                    // also add clickable span
-                    SpannableBuilder.setSpans(
-                            visitor.builder(),
-                            URLSpan(link),
-                            tag.start(),
-                            tag.end()
-                    )
+                    MatrixItem.UserItem(permalinkData.userId, user?.displayName, user?.avatarUrl)
                 }
-                else                      -> super.handle(visitor, renderer, tag)
+                is PermalinkData.RoomLink  -> {
+                    val room: RoomSummary? = sessionHolder.getSafeActiveSession()?.getRoomSummary(permalinkData.roomIdOrAlias)
+                    if (permalinkData.isRoomAlias) {
+                        MatrixItem.RoomAliasItem(permalinkData.roomIdOrAlias, room?.displayName, room?.avatarUrl)
+                    } else {
+                        MatrixItem.RoomItem(permalinkData.roomIdOrAlias, room?.displayName, room?.avatarUrl)
+                    }
+                }
+                is PermalinkData.GroupLink -> {
+                    // TODO val group = sessionHolder.getSafeActiveSession()?.getGroup(permalinkData.groupId)
+                    MatrixItem.RoomItem(permalinkData.groupId /* TODO Group display name and avatar */)
+                }
+                else                       -> null
+            }
+
+            if (matrixItem == null) {
+                super.handle(visitor, renderer, tag)
+            } else {
+                val span = PillImageSpan(glideRequests, avatarRenderer, context, matrixItem)
+                SpannableBuilder.setSpans(
+                        visitor.builder(),
+                        span,
+                        tag.start(),
+                        tag.end()
+                )
+                SpannableBuilder.setSpans(
+                        visitor.builder(),
+                        URLSpan(link),
+                        tag.start(),
+                        tag.end()
+                )
             }
         } else {
             super.handle(visitor, renderer, tag)
