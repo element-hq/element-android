@@ -54,8 +54,8 @@ class MxLinkTagHandler(private val glideRequests: GlideRequests,
                     }
                 }
                 is PermalinkData.GroupLink -> {
-                    // TODO val group = sessionHolder.getSafeActiveSession()?.getGroup(permalinkData.groupId)
-                    MatrixItem.RoomItem(permalinkData.groupId /* TODO Group display name and avatar */)
+                    val group = sessionHolder.getSafeActiveSession()?.getGroupSummary(permalinkData.groupId)
+                    MatrixItem.GroupItem(permalinkData.groupId, group?.displayName, group?.avatarUrl)
                 }
                 else                       -> null
             }

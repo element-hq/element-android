@@ -24,6 +24,7 @@ import com.jakewharton.rxrelay2.BehaviorRelay
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.matrix.rx.rx
@@ -43,6 +44,7 @@ class TextComposerViewModel @AssistedInject constructor(@Assisted initialState: 
 
     private val usersQueryObservable = BehaviorRelay.create<Option<AutocompleteQuery>>()
     private val roomsQueryObservable = BehaviorRelay.create<Option<AutocompleteQuery>>()
+    private val groupsQueryObservable = BehaviorRelay.create<Option<AutocompleteQuery>>()
 
     @AssistedInject.Factory
     interface Factory {
@@ -61,12 +63,14 @@ class TextComposerViewModel @AssistedInject constructor(@Assisted initialState: 
     init {
         observeUsersQuery()
         observeRoomsQuery()
+        observeGroupsQuery()
     }
 
     override fun handle(action: TextComposerAction) {
         when (action) {
-            is TextComposerAction.QueryUsers -> handleQueryUsers(action)
-            is TextComposerAction.QueryRooms -> handleQueryRooms(action)
+            is TextComposerAction.QueryUsers  -> handleQueryUsers(action)
+            is TextComposerAction.QueryRooms  -> handleQueryRooms(action)
+            is TextComposerAction.QueryGroups -> handleQueryGroups(action)
         }
     }
 
@@ -79,6 +83,11 @@ class TextComposerViewModel @AssistedInject constructor(@Assisted initialState: 
     private fun handleQueryRooms(action: TextComposerAction.QueryRooms) {
         val query = Option.fromNullable(action.query)
         roomsQueryObservable.accept(query)
+    }
+
+    private fun handleQueryGroups(action: TextComposerAction.QueryGroups) {
+        val query = Option.fromNullable(action.query)
+        groupsQueryObservable.accept(query)
     }
 
     private fun observeUsersQuery() {
@@ -121,6 +130,25 @@ class TextComposerViewModel @AssistedInject constructor(@Assisted initialState: 
         ).execute { async ->
             copy(
                     asyncRooms = async
+            )
+        }
+    }
+
+    private fun observeGroupsQuery() {
+        Observable.combineLatest<List<GroupSummary>, Option<AutocompleteQuery>, List<GroupSummary>>(
+                session.rx().liveGroupSummaries(),
+                groupsQueryObservable.throttleLast(300, TimeUnit.MILLISECONDS),
+                BiFunction { groupSummaries, query ->
+                    val filter = query.orNull() ?: ""
+                    groupSummaries
+                            .filter {
+                                it.groupId.contains(filter, ignoreCase = true)
+                            }
+                            .sortedBy { it.displayName }
+                }
+        ).execute { async ->
+            copy(
+                    asyncGroups = async
             )
         }
     }

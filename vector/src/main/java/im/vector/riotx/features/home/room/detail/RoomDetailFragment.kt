@@ -59,6 +59,7 @@ import im.vector.matrix.android.api.permalinks.PermalinkFactory
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.message.*
@@ -85,6 +86,7 @@ import im.vector.riotx.features.attachments.AttachmentsHelper
 import im.vector.riotx.features.attachments.ContactAttachment
 import im.vector.riotx.features.autocomplete.command.AutocompleteCommandPresenter
 import im.vector.riotx.features.autocomplete.command.CommandAutocompletePolicy
+import im.vector.riotx.features.autocomplete.group.AutocompleteGroupPresenter
 import im.vector.riotx.features.autocomplete.room.AutocompleteRoomPresenter
 import im.vector.riotx.features.autocomplete.user.AutocompleteUserPresenter
 import im.vector.riotx.features.command.Command
@@ -144,6 +146,7 @@ class RoomDetailFragment @Inject constructor(
         private val autocompleteCommandPresenter: AutocompleteCommandPresenter,
         private val autocompleteUserPresenter: AutocompleteUserPresenter,
         private val autocompleteRoomPresenter: AutocompleteRoomPresenter,
+        private val autocompleteGroupPresenter: AutocompleteGroupPresenter,
         private val permalinkHandler: PermalinkHandler,
         private val notificationDrawerManager: NotificationDrawerManager,
         val roomDetailViewModelFactory: RoomDetailViewModel.Factory,
@@ -155,6 +158,7 @@ class RoomDetailFragment @Inject constructor(
         TimelineEventController.Callback,
         AutocompleteUserPresenter.Callback,
         AutocompleteRoomPresenter.Callback,
+        AutocompleteGroupPresenter.Callback,
         VectorInviteView.Callback,
         JumpToReadMarkerView.Callback,
         AttachmentTypeSelectorView.Callback,
@@ -633,6 +637,52 @@ class RoomDetailFragment @Inject constructor(
                 })
                 .build()
 
+        autocompleteGroupPresenter.callback = this
+        Autocomplete.on<GroupSummary>(composerLayout.composerEditText)
+                .with(CharPolicy('+', true))
+                .with(autocompleteGroupPresenter)
+                .with(elevation)
+                .with(backgroundDrawable)
+                .with(object : AutocompleteCallback<GroupSummary> {
+                    override fun onPopupItemClicked(editable: Editable, item: GroupSummary): Boolean {
+                        // Detect last '+' and remove it
+                        var startIndex = editable.lastIndexOf("+")
+                        if (startIndex == -1) {
+                            startIndex = 0
+                        }
+
+                        // Detect next word separator
+                        var endIndex = editable.indexOf(" ", startIndex)
+                        if (endIndex == -1) {
+                            endIndex = editable.length
+                        }
+
+                        // Replace the word by its completion
+                        val matrixItem = item.toMatrixItem()
+                        val displayName = matrixItem.getBestName()
+
+                        // with a trailing space
+                        editable.replace(startIndex, endIndex, "$displayName ")
+
+                        // Add the span
+                        val span = PillImageSpan(
+                                glideRequests,
+                                avatarRenderer,
+                                requireContext(),
+                                matrixItem
+                        )
+                        span.bind(composerLayout.composerEditText)
+
+                        editable.setSpan(span, startIndex, startIndex + displayName.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+                        return true
+                    }
+
+                    override fun onPopupVisibilityChanged(shown: Boolean) {
+                    }
+                })
+                .build()
+
         autocompleteUserPresenter.callback = this
         Autocomplete.on<User>(composerLayout.composerEditText)
                 .with(CharPolicy('@', true))
@@ -776,6 +826,7 @@ class RoomDetailFragment @Inject constructor(
     private fun renderTextComposerState(state: TextComposerViewState) {
         autocompleteUserPresenter.render(state.asyncUsers)
         autocompleteRoomPresenter.render(state.asyncRooms)
+        autocompleteGroupPresenter.render(state.asyncGroups)
     }
 
     private fun renderTombstoneEventHandling(async: Async<String>) {
@@ -1112,6 +1163,12 @@ class RoomDetailFragment @Inject constructor(
 
     override fun onQueryRooms(query: CharSequence?) {
         textComposerViewModel.handle(TextComposerAction.QueryRooms(query))
+    }
+
+    // AutocompleteGroupPresenter.Callback
+
+    override fun onQueryGroups(query: CharSequence?) {
+        textComposerViewModel.handle(TextComposerAction.QueryGroups(query))
     }
 
     private fun handleActions(action: EventSharedAction) {

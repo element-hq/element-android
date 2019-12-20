@@ -74,6 +74,9 @@ sealed class MatrixItem(
         init {
             if (BuildConfig.DEBUG) checkId()
         }
+
+        // Best name is the id, and we keep the displayName of the room for the case we need the first letter
+        override fun getBestName() = id
     }
 
     open fun getBestName(): String {

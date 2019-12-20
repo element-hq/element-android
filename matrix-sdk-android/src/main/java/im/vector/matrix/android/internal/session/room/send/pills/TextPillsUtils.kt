@@ -23,8 +23,6 @@ import javax.inject.Inject
 /**
  * Utility class to detect special span in CharSequence and turn them into
  * formatted text to send them as a Matrix messages.
- *
- * For now only support UserMentionSpans (TODO rooms, room aliases, etc...)
  */
 internal class TextPillsUtils @Inject constructor(
         private val mentionLinkSpecComparator: MentionLinkSpecComparator
