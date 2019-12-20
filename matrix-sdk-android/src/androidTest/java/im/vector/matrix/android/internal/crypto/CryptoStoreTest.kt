@@ -17,12 +17,10 @@
 package im.vector.matrix.android.internal.crypto
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.InstrumentedTest
 import im.vector.matrix.android.internal.crypto.model.OlmSessionWrapper
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import io.realm.Realm
-import io.realm.RealmConfiguration
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
@@ -42,7 +40,6 @@ class CryptoStoreTest : InstrumentedTest {
     fun setup() {
         Realm.init(context())
     }
-
 
     @Test
     fun test_metadata_realm_ok() {
