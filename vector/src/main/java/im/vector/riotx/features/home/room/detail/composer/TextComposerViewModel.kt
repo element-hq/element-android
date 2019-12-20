@@ -79,7 +79,6 @@ class TextComposerViewModel @AssistedInject constructor(@Assisted initialState: 
         usersQueryObservable.accept(query)
     }
 
-
     private fun handleQueryRooms(action: TextComposerAction.QueryRooms) {
         val query = Option.fromNullable(action.query)
         roomsQueryObservable.accept(query)
