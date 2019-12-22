@@ -53,6 +53,15 @@ class EmojiDataSource @Inject constructor(
     }
 
     fun getQuickReactions(): List<EmojiItem> {
-        return listOf("👍", "👎", "😄", "🎉", "😕", "❤️", "🚀", "👀").mapNotNull { rawData.emojis[it] }
+        return listOf(
+                "+1", // 👍
+                "-1", // 👎
+                "grinning", // 😄
+                "tada", // 🎉
+                "confused", // 😕
+                "heart", // ❤️
+                "rocket", // 🚀
+                "eyes" // 👀
+        ).mapNotNull { rawData.emojis[it] }
     }
 }
