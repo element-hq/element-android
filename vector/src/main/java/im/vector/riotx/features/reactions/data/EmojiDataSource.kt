@@ -33,4 +33,25 @@ class EmojiDataSource @Inject constructor(
                         .fromJson(input.bufferedReader().use { it.readText() })
             }
             ?: EmojiData(emptyList(), emptyMap(), emptyMap())
+
+    fun filterWith(query: String): List<EmojiItem> {
+        val words = query.split("\\s".toRegex())
+
+        return rawData.emojis.values
+                .filter { emojiItem ->
+                    emojiItem.name.contains(query, true)
+                }
+                .sortedBy { it.name } +
+                rawData.emojis.values
+                        .filter { emojiItem ->
+                            words.fold(true, { prev, word ->
+                                prev && emojiItem.keywords.any { keyword -> keyword.contains(word, true) }
+                            })
+                        }
+                        .sortedBy { it.name }
+    }
+
+    fun getQuickReactions(): List<EmojiItem> {
+        return listOf("👍", "👎", "😄", "🎉", "😕", "❤️", "🚀", "👀").mapNotNull { rawData.emojis[it] }
+    }
 }

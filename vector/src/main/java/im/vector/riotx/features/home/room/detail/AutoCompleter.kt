@@ -21,7 +21,6 @@ import android.graphics.drawable.Drawable
 import android.text.Editable
 import android.text.Spannable
 import android.widget.EditText
-import androidx.fragment.app.Fragment
 import com.otaliastudios.autocomplete.Autocomplete
 import com.otaliastudios.autocomplete.AutocompleteCallback
 import com.otaliastudios.autocomplete.CharPolicy
@@ -35,6 +34,7 @@ import im.vector.riotx.R
 import im.vector.riotx.core.glide.GlideApp
 import im.vector.riotx.features.autocomplete.command.AutocompleteCommandPresenter
 import im.vector.riotx.features.autocomplete.command.CommandAutocompletePolicy
+import im.vector.riotx.features.autocomplete.emoji.AutocompleteEmojiPresenter
 import im.vector.riotx.features.autocomplete.group.AutocompleteGroupPresenter
 import im.vector.riotx.features.autocomplete.room.AutocompleteRoomPresenter
 import im.vector.riotx.features.autocomplete.user.AutocompleteUserPresenter
@@ -51,7 +51,8 @@ class AutoCompleter @Inject constructor(
         private val autocompleteCommandPresenter: AutocompleteCommandPresenter,
         private val autocompleteUserPresenter: AutocompleteUserPresenter,
         private val autocompleteRoomPresenter: AutocompleteRoomPresenter,
-        private val autocompleteGroupPresenter: AutocompleteGroupPresenter
+        private val autocompleteGroupPresenter: AutocompleteGroupPresenter,
+        private val autocompleteEmojiPresenter: AutocompleteEmojiPresenter
 ) {
     private lateinit var editText: EditText
 
@@ -76,6 +77,7 @@ class AutoCompleter @Inject constructor(
         setupUsers(backgroundDrawable, editText, listener)
         setupRooms(backgroundDrawable, editText, listener)
         setupGroups(backgroundDrawable, editText, listener)
+        setupEmojis(backgroundDrawable, editText)
     }
 
     fun render(state: TextComposerViewState) {
@@ -153,6 +155,27 @@ class AutoCompleter @Inject constructor(
                 .with(object : AutocompleteCallback<GroupSummary> {
                     override fun onPopupItemClicked(editable: Editable, item: GroupSummary): Boolean {
                         insertMatrixItem(editText, editable, "+", item.toMatrixItem())
+                        return true
+                    }
+
+                    override fun onPopupVisibilityChanged(shown: Boolean) {
+                    }
+                })
+                .build()
+    }
+
+    private fun setupEmojis(backgroundDrawable: Drawable, editText: EditText) {
+        Autocomplete.on<String>(editText)
+                .with(CharPolicy(':', true))
+                .with(autocompleteEmojiPresenter)
+                .with(ELEVATION)
+                .with(backgroundDrawable)
+                .with(object : AutocompleteCallback<String> {
+                    override fun onPopupItemClicked(editable: Editable, item: String): Boolean {
+                        editable.clear()
+                        editable
+                                .append(item)
+                                .append(" ")
                         return true
                     }
 
