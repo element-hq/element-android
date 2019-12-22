@@ -559,7 +559,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun setupComposer() {
-        autoCompleter.setup(this, composerLayout.composerEditText, this)
+        autoCompleter.setup(composerLayout.composerEditText, this)
 
         composerLayout.callback = object : TextComposerView.Callback {
             override fun onAddAttachment() {

@@ -53,7 +53,7 @@ class AutoCompleter @Inject constructor(
         private val autocompleteRoomPresenter: AutocompleteRoomPresenter,
         private val autocompleteGroupPresenter: AutocompleteGroupPresenter
 ) {
-    private lateinit var fragment: Fragment
+    private lateinit var editText: EditText
 
     fun enterSpecialMode() {
         commandAutocompletePolicy.enabled = false
@@ -64,13 +64,13 @@ class AutoCompleter @Inject constructor(
     }
 
     private val glideRequests by lazy {
-        GlideApp.with(fragment)
+        GlideApp.with(editText)
     }
 
-    fun setup(fragment: Fragment, editText: EditText, listener: AutoCompleterListener) {
-        this.fragment = fragment
+    fun setup(editText: EditText, listener: AutoCompleterListener) {
+        this.editText = editText
 
-        val backgroundDrawable = ColorDrawable(ThemeUtils.getColor(fragment.requireContext(), R.attr.riotx_background))
+        val backgroundDrawable = ColorDrawable(ThemeUtils.getColor(editText.context, R.attr.riotx_background))
 
         setupCommands(backgroundDrawable, editText)
         setupUsers(backgroundDrawable, editText, listener)
@@ -185,7 +185,7 @@ class AutoCompleter @Inject constructor(
         val span = PillImageSpan(
                 glideRequests,
                 avatarRenderer,
-                fragment.requireContext(),
+                editText.context,
                 matrixItem
         )
         span.bind(editText)
