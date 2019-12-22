@@ -166,7 +166,7 @@ class AutoCompleter @Inject constructor(
 
     private fun setupEmojis(backgroundDrawable: Drawable, editText: EditText) {
         Autocomplete.on<String>(editText)
-                .with(CharPolicy(':', true))
+                .with(CharPolicy(':', false))
                 .with(autocompleteEmojiPresenter)
                 .with(ELEVATION)
                 .with(backgroundDrawable)

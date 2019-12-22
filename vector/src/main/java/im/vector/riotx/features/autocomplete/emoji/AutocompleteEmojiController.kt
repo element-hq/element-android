@@ -47,18 +47,26 @@ class AutocompleteEmojiController @Inject constructor(
         if (data.isNullOrEmpty()) {
             return
         }
-        data.forEach { emojiItem ->
-            autocompleteEmojiItem {
-                id(emojiItem.name)
-                emojiItem(emojiItem)
-                emojiTypeFace(emojiTypeface)
-                onClickListener(
-                        object : ReactionClickListener {
-                            override fun onReactionSelected(reaction: String) {
-                                listener?.onItemClick(reaction)
-                            }
-                        }
-                )
+        data
+                .take(MAX)
+                .forEach { emojiItem ->
+                    autocompleteEmojiItem {
+                        id(emojiItem.name)
+                        emojiItem(emojiItem)
+                        emojiTypeFace(emojiTypeface)
+                        onClickListener(
+                                object : ReactionClickListener {
+                                    override fun onReactionSelected(reaction: String) {
+                                        listener?.onItemClick(reaction)
+                                    }
+                                }
+                        )
+                    }
+                }
+
+        if (data.size > MAX) {
+            autocompleteMoreResultItem {
+                id("more_result")
             }
         }
     }
@@ -66,5 +74,9 @@ class AutocompleteEmojiController @Inject constructor(
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
         super.onDetachedFromRecyclerView(recyclerView)
         fontProvider.removeListener(fontProviderListener)
+    }
+
+    companion object {
+        const val MAX = 50
     }
 }
