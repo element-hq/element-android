@@ -37,11 +37,13 @@ class EmojiDataSource @Inject constructor(
     fun filterWith(query: String): List<EmojiItem> {
         val words = query.split("\\s".toRegex())
 
+        // First add emojis with name matching query, sorted by name
         return (rawData.emojis.values
                 .filter { emojiItem ->
                     emojiItem.name.contains(query, true)
                 }
                 .sortedBy { it.name } +
+                // Then emojis with keyword matching any of the word in the query, sorted by name
                 rawData.emojis.values
                         .filter { emojiItem ->
                             words.fold(true, { prev, word ->
@@ -49,6 +51,7 @@ class EmojiDataSource @Inject constructor(
                             })
                         }
                         .sortedBy { it.name })
+                // and ensure they will not be present twice
                 .distinct()
     }
 

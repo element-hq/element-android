@@ -59,8 +59,6 @@ class EmojiSearchResultViewModel @AssistedInject constructor(
         setState {
             copy(
                     query = action.queryString,
-                    // First add emojis with name matching query, sorted by name
-                    // Then emojis with keyword matching any of the word in the query, sorted by name
                     results = dataSource.filterWith(action.queryString)
             )
         }
