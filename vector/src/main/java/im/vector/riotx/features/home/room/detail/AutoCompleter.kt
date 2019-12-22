@@ -28,6 +28,7 @@ import com.otaliastudios.autocomplete.CharPolicy
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.user.model.User
+import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.matrix.android.api.util.toRoomAliasMatrixItem
 import im.vector.riotx.R
@@ -77,6 +78,12 @@ class AutoCompleter @Inject constructor(
         setupGroups(backgroundDrawable, editText, listener)
     }
 
+    fun render(state: TextComposerViewState) {
+        autocompleteUserPresenter.render(state.asyncUsers)
+        autocompleteRoomPresenter.render(state.asyncRooms)
+        autocompleteGroupPresenter.render(state.asyncGroups)
+    }
+
     private fun setupCommands(backgroundDrawable: Drawable, editText: EditText) {
         Autocomplete.on<Command>(editText)
                 .with(commandAutocompletePolicy)
@@ -107,36 +114,7 @@ class AutoCompleter @Inject constructor(
                 .with(backgroundDrawable)
                 .with(object : AutocompleteCallback<User> {
                     override fun onPopupItemClicked(editable: Editable, item: User): Boolean {
-                        // Detect last '@' and remove it
-                        var startIndex = editable.lastIndexOf("@")
-                        if (startIndex == -1) {
-                            startIndex = 0
-                        }
-
-                        // Detect next word separator
-                        var endIndex = editable.indexOf(" ", startIndex)
-                        if (endIndex == -1) {
-                            endIndex = editable.length
-                        }
-
-                        // Replace the word by its completion
-                        val matrixItem = item.toMatrixItem()
-                        val displayName = matrixItem.getBestName()
-
-                        // with a trailing space
-                        editable.replace(startIndex, endIndex, "$displayName ")
-
-                        // Add the span
-                        val span = PillImageSpan(
-                                glideRequests,
-                                avatarRenderer,
-                                fragment.requireContext(),
-                                matrixItem
-                        )
-                        span.bind(editText)
-
-                        editable.setSpan(span, startIndex, startIndex + displayName.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-
+                        insertMatrixItem(editText, editable, "@", item.toMatrixItem())
                         return true
                     }
 
@@ -155,36 +133,7 @@ class AutoCompleter @Inject constructor(
                 .with(backgroundDrawable)
                 .with(object : AutocompleteCallback<RoomSummary> {
                     override fun onPopupItemClicked(editable: Editable, item: RoomSummary): Boolean {
-                        // Detect last '#' and remove it
-                        var startIndex = editable.lastIndexOf("#")
-                        if (startIndex == -1) {
-                            startIndex = 0
-                        }
-
-                        // Detect next word separator
-                        var endIndex = editable.indexOf(" ", startIndex)
-                        if (endIndex == -1) {
-                            endIndex = editable.length
-                        }
-
-                        // Replace the word by its completion
-                        val matrixItem = item.toRoomAliasMatrixItem()
-                        val displayName = matrixItem.getBestName()
-
-                        // with a trailing space
-                        editable.replace(startIndex, endIndex, "$displayName ")
-
-                        // Add the span
-                        val span = PillImageSpan(
-                                glideRequests,
-                                avatarRenderer,
-                                fragment.requireContext(),
-                                matrixItem
-                        )
-                        span.bind(editText)
-
-                        editable.setSpan(span, startIndex, startIndex + displayName.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-
+                        insertMatrixItem(editText, editable, "#", item.toRoomAliasMatrixItem())
                         return true
                     }
 
@@ -203,36 +152,7 @@ class AutoCompleter @Inject constructor(
                 .with(backgroundDrawable)
                 .with(object : AutocompleteCallback<GroupSummary> {
                     override fun onPopupItemClicked(editable: Editable, item: GroupSummary): Boolean {
-                        // Detect last '+' and remove it
-                        var startIndex = editable.lastIndexOf("+")
-                        if (startIndex == -1) {
-                            startIndex = 0
-                        }
-
-                        // Detect next word separator
-                        var endIndex = editable.indexOf(" ", startIndex)
-                        if (endIndex == -1) {
-                            endIndex = editable.length
-                        }
-
-                        // Replace the word by its completion
-                        val matrixItem = item.toMatrixItem()
-                        val displayName = matrixItem.getBestName()
-
-                        // with a trailing space
-                        editable.replace(startIndex, endIndex, "$displayName ")
-
-                        // Add the span
-                        val span = PillImageSpan(
-                                glideRequests,
-                                avatarRenderer,
-                                fragment.requireContext(),
-                                matrixItem
-                        )
-                        span.bind(editText)
-
-                        editable.setSpan(span, startIndex, startIndex + displayName.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-
+                        insertMatrixItem(editText, editable, "+", item.toMatrixItem())
                         return true
                     }
 
@@ -242,10 +162,35 @@ class AutoCompleter @Inject constructor(
                 .build()
     }
 
-    fun render(state: TextComposerViewState) {
-        autocompleteUserPresenter.render(state.asyncUsers)
-        autocompleteRoomPresenter.render(state.asyncRooms)
-        autocompleteGroupPresenter.render(state.asyncGroups)
+    private fun insertMatrixItem(editText: EditText, editable: Editable, firstChar: String, matrixItem: MatrixItem) {
+        // Detect last firstChar and remove it
+        var startIndex = editable.lastIndexOf(firstChar)
+        if (startIndex == -1) {
+            startIndex = 0
+        }
+
+        // Detect next word separator
+        var endIndex = editable.indexOf(" ", startIndex)
+        if (endIndex == -1) {
+            endIndex = editable.length
+        }
+
+        // Replace the word by its completion
+        val displayName = matrixItem.getBestName()
+
+        // with a trailing space
+        editable.replace(startIndex, endIndex, "$displayName ")
+
+        // Add the span
+        val span = PillImageSpan(
+                glideRequests,
+                avatarRenderer,
+                fragment.requireContext(),
+                matrixItem
+        )
+        span.bind(editText)
+
+        editable.setSpan(span, startIndex, startIndex + displayName.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
     }
 
     interface AutoCompleterListener :
