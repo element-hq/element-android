@@ -16,37 +16,43 @@
 
 package im.vector.riotx.features.autocomplete.emoji
 
-import android.view.View
+import android.graphics.Typeface
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
+import im.vector.riotx.core.extensions.setTextOrHide
+import im.vector.riotx.features.reactions.ReactionClickListener
+import im.vector.riotx.features.reactions.data.EmojiItem
 
-//@EpoxyModelClass(layout = R.layout.item_autocomplete_emoji)
-//abstract class AutocompleteEmojiItem : VectorEpoxyModel<AutocompleteEmojiItem.Holder>() {
-//
-//    @EpoxyAttribute
-//    var name: CharSequence? = null
-//    @EpoxyAttribute
-//    var parameters: CharSequence? = null
-//    @EpoxyAttribute
-//    var description: CharSequence? = null
-//    @EpoxyAttribute
-//    var clickListener: View.OnClickListener? = null
-//
-//    override fun bind(holder: Holder) {
-//        holder.view.setOnClickListener(clickListener)
-//
-//        holder.nameView.text = name
-//        holder.parametersView.text = parameters
-//        holder.descriptionView.text = description
-//    }
-//
-//    class Holder : VectorEpoxyHolder() {
-//        val nameView by bind<TextView>(R.id.commandName)
-//        val parametersView by bind<TextView>(R.id.commandParameter)
-//        val descriptionView by bind<TextView>(R.id.commandDescription)
-//    }
-//}
+@EpoxyModelClass(layout = R.layout.item_autocomplete_emoji)
+abstract class AutocompleteEmojiItem : VectorEpoxyModel<AutocompleteEmojiItem.Holder>() {
+
+    @EpoxyAttribute
+    lateinit var emojiItem: EmojiItem
+
+    @EpoxyAttribute
+    var emojiTypeFace: Typeface? = null
+
+    @EpoxyAttribute
+    var onClickListener: ReactionClickListener? = null
+
+    override fun bind(holder: Holder) {
+        holder.emojiText.text = emojiItem.emoji
+        holder.emojiText.typeface = emojiTypeFace ?: Typeface.DEFAULT
+        holder.emojiNameText.text = emojiItem.name
+        holder.emojiKeywordText.setTextOrHide(emojiItem.keywords.joinToString())
+
+        holder.view.setOnClickListener {
+            onClickListener?.onReactionSelected(emojiItem.emoji)
+        }
+    }
+
+    class Holder : VectorEpoxyHolder() {
+        val emojiText by bind<TextView>(R.id.itemAutocompleteEmoji)
+        val emojiNameText by bind<TextView>(R.id.itemAutocompleteEmojiName)
+        val emojiKeywordText by bind<TextView>(R.id.itemAutocompleteEmojiSubname)
+    }
+}

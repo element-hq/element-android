@@ -23,7 +23,6 @@ import im.vector.riotx.EmojiCompatFontProvider
 import im.vector.riotx.features.autocomplete.AutocompleteClickListener
 import im.vector.riotx.features.reactions.ReactionClickListener
 import im.vector.riotx.features.reactions.data.EmojiItem
-import im.vector.riotx.features.reactions.emojiSearchResultItem
 import javax.inject.Inject
 
 class AutocompleteEmojiController @Inject constructor(
@@ -49,16 +48,16 @@ class AutocompleteEmojiController @Inject constructor(
             return
         }
         data.forEach { emojiItem ->
-            emojiSearchResultItem {
+            autocompleteEmojiItem {
                 id(emojiItem.name)
                 emojiItem(emojiItem)
                 emojiTypeFace(emojiTypeface)
-                //currentQuery(data.query)
-                onClickListener(object : ReactionClickListener {
-                    override fun onReactionSelected(reaction: String) {
-                        listener?.onItemClick(reaction)
-                    }
-                }
+                onClickListener(
+                        object : ReactionClickListener {
+                            override fun onReactionSelected(reaction: String) {
+                                listener?.onItemClick(reaction)
+                            }
+                        }
                 )
             }
         }

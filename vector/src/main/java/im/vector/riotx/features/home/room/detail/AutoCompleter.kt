@@ -172,10 +172,20 @@ class AutoCompleter @Inject constructor(
                 .with(backgroundDrawable)
                 .with(object : AutocompleteCallback<String> {
                     override fun onPopupItemClicked(editable: Editable, item: String): Boolean {
-                        editable.clear()
-                        editable
-                                .append(item)
-                                .append(" ")
+                        // Detect last ":" and remove it
+                        var startIndex = editable.lastIndexOf(":")
+                        if (startIndex == -1) {
+                            startIndex = 0
+                        }
+
+                        // Detect next word separator
+                        var endIndex = editable.indexOf(" ", startIndex)
+                        if (endIndex == -1) {
+                            endIndex = editable.length
+                        }
+
+                        // Replace the word by its completion
+                        editable.replace(startIndex, endIndex, item)
                         return true
                     }
 
