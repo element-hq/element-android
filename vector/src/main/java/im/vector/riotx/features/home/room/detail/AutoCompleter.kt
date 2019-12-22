@@ -17,6 +17,7 @@
 package im.vector.riotx.features.home.room.detail
 
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.text.Editable
 import android.text.Spannable
 import android.widget.EditText
@@ -68,12 +69,19 @@ class AutoCompleter @Inject constructor(
     fun setup(fragment: Fragment, editText: EditText, listener: AutoCompleterListener) {
         this.fragment = fragment
 
-        val elevation = 6f
         val backgroundDrawable = ColorDrawable(ThemeUtils.getColor(fragment.requireContext(), R.attr.riotx_background))
+
+        setupCommands(backgroundDrawable, editText)
+        setupUsers(backgroundDrawable, editText, listener)
+        setupRooms(backgroundDrawable, editText, listener)
+        setupGroups(backgroundDrawable, editText, listener)
+    }
+
+    private fun setupCommands(backgroundDrawable: Drawable, editText: EditText) {
         Autocomplete.on<Command>(editText)
                 .with(commandAutocompletePolicy)
                 .with(autocompleteCommandPresenter)
-                .with(elevation)
+                .with(ELEVATION)
                 .with(backgroundDrawable)
                 .with(object : AutocompleteCallback<Command> {
                     override fun onPopupItemClicked(editable: Editable, item: Command): Boolean {
@@ -88,12 +96,62 @@ class AutoCompleter @Inject constructor(
                     }
                 })
                 .build()
+    }
 
+    private fun setupUsers(backgroundDrawable: ColorDrawable, editText: EditText, listener: AutocompleteUserPresenter.Callback) {
+        autocompleteUserPresenter.callback = listener
+        Autocomplete.on<User>(editText)
+                .with(CharPolicy('@', true))
+                .with(autocompleteUserPresenter)
+                .with(ELEVATION)
+                .with(backgroundDrawable)
+                .with(object : AutocompleteCallback<User> {
+                    override fun onPopupItemClicked(editable: Editable, item: User): Boolean {
+                        // Detect last '@' and remove it
+                        var startIndex = editable.lastIndexOf("@")
+                        if (startIndex == -1) {
+                            startIndex = 0
+                        }
+
+                        // Detect next word separator
+                        var endIndex = editable.indexOf(" ", startIndex)
+                        if (endIndex == -1) {
+                            endIndex = editable.length
+                        }
+
+                        // Replace the word by its completion
+                        val matrixItem = item.toMatrixItem()
+                        val displayName = matrixItem.getBestName()
+
+                        // with a trailing space
+                        editable.replace(startIndex, endIndex, "$displayName ")
+
+                        // Add the span
+                        val span = PillImageSpan(
+                                glideRequests,
+                                avatarRenderer,
+                                fragment.requireContext(),
+                                matrixItem
+                        )
+                        span.bind(editText)
+
+                        editable.setSpan(span, startIndex, startIndex + displayName.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+                        return true
+                    }
+
+                    override fun onPopupVisibilityChanged(shown: Boolean) {
+                    }
+                })
+                .build()
+    }
+
+    private fun setupRooms(backgroundDrawable: ColorDrawable, editText: EditText, listener: AutocompleteRoomPresenter.Callback) {
         autocompleteRoomPresenter.callback = listener
         Autocomplete.on<RoomSummary>(editText)
                 .with(CharPolicy('#', true))
                 .with(autocompleteRoomPresenter)
-                .with(elevation)
+                .with(ELEVATION)
                 .with(backgroundDrawable)
                 .with(object : AutocompleteCallback<RoomSummary> {
                     override fun onPopupItemClicked(editable: Editable, item: RoomSummary): Boolean {
@@ -134,63 +192,19 @@ class AutoCompleter @Inject constructor(
                     }
                 })
                 .build()
+    }
 
+    private fun setupGroups(backgroundDrawable: ColorDrawable, editText: EditText, listener: AutocompleteGroupPresenter.Callback) {
         autocompleteGroupPresenter.callback = listener
         Autocomplete.on<GroupSummary>(editText)
                 .with(CharPolicy('+', true))
                 .with(autocompleteGroupPresenter)
-                .with(elevation)
+                .with(ELEVATION)
                 .with(backgroundDrawable)
                 .with(object : AutocompleteCallback<GroupSummary> {
                     override fun onPopupItemClicked(editable: Editable, item: GroupSummary): Boolean {
                         // Detect last '+' and remove it
                         var startIndex = editable.lastIndexOf("+")
-                        if (startIndex == -1) {
-                            startIndex = 0
-                        }
-
-                        // Detect next word separator
-                        var endIndex = editable.indexOf(" ", startIndex)
-                        if (endIndex == -1) {
-                            endIndex = editable.length
-                        }
-
-                        // Replace the word by its completion
-                        val matrixItem = item.toMatrixItem()
-                        val displayName = matrixItem.getBestName()
-
-                        // with a trailing space
-                        editable.replace(startIndex, endIndex, "$displayName ")
-
-                        // Add the span
-                        val span = PillImageSpan(
-                                glideRequests,
-                                avatarRenderer,
-                                fragment.requireContext(),
-                                matrixItem
-                        )
-                        span.bind(editText)
-
-                        editable.setSpan(span, startIndex, startIndex + displayName.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-
-                        return true
-                    }
-
-                    override fun onPopupVisibilityChanged(shown: Boolean) {
-                    }
-                })
-                .build()
-
-        autocompleteUserPresenter.callback = listener
-        Autocomplete.on<User>(editText)
-                .with(CharPolicy('@', true))
-                .with(autocompleteUserPresenter)
-                .with(elevation)
-                .with(backgroundDrawable)
-                .with(object : AutocompleteCallback<User> {
-                    override fun onPopupItemClicked(editable: Editable, item: User): Boolean {
-                        // Detect last '@' and remove it
-                        var startIndex = editable.lastIndexOf("@")
                         if (startIndex == -1) {
                             startIndex = 0
                         }
@@ -238,4 +252,8 @@ class AutoCompleter @Inject constructor(
             AutocompleteUserPresenter.Callback,
             AutocompleteRoomPresenter.Callback,
             AutocompleteGroupPresenter.Callback
+
+    companion object {
+        private const val ELEVATION = 6f
+    }
 }
