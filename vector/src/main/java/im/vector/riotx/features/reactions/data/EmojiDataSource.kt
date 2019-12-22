@@ -37,7 +37,7 @@ class EmojiDataSource @Inject constructor(
     fun filterWith(query: String): List<EmojiItem> {
         val words = query.split("\\s".toRegex())
 
-        return rawData.emojis.values
+        return (rawData.emojis.values
                 .filter { emojiItem ->
                     emojiItem.name.contains(query, true)
                 }
@@ -48,7 +48,8 @@ class EmojiDataSource @Inject constructor(
                                 prev && emojiItem.keywords.any { keyword -> keyword.contains(word, true) }
                             })
                         }
-                        .sortedBy { it.name }
+                        .sortedBy { it.name })
+                .distinct()
     }
 
     fun getQuickReactions(): List<EmojiItem> {
