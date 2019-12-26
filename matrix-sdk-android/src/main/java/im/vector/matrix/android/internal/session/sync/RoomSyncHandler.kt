@@ -33,6 +33,7 @@ import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.DefaultInitialSyncProgressService
 import im.vector.matrix.android.internal.session.mapWithProgress
 import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
+import im.vector.matrix.android.internal.session.room.membership.RoomMemberEventHandler
 import im.vector.matrix.android.internal.session.room.read.FullyReadContent
 import im.vector.matrix.android.internal.session.room.timeline.PaginationDirection
 import im.vector.matrix.android.internal.session.sync.model.*
@@ -46,7 +47,8 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                                    private val roomSummaryUpdater: RoomSummaryUpdater,
                                                    private val roomTagHandler: RoomTagHandler,
                                                    private val roomFullyReadHandler: RoomFullyReadHandler,
-                                                   private val cryptoService: DefaultCryptoService) {
+                                                   private val cryptoService: DefaultCryptoService,
+                                                   private val roomMemberEventHandler: RoomMemberEventHandler) {
 
     sealed class HandlingStrategy {
         data class JOINED(val data: Map<String, RoomSync>) : HandlingStrategy()
@@ -119,9 +121,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                 roomEntity.addStateEvent(event, filterDuplicates = true, stateIndex = untimelinedStateIndex)
                 // Give info to crypto module
                 cryptoService.onStateEvent(roomId, event)
-                UserEntityFactory.createOrNull(event)?.also {
-                    realm.insertOrUpdate(it)
-                }
+                roomMemberEventHandler.handle(realm, roomId, event)
             }
         }
         if (roomSync.timeline != null && roomSync.timeline.events.isNotEmpty()) {
@@ -206,9 +206,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                     Timber.v("Can't find corresponding local echo for tx:$it")
                 }
             }
-            UserEntityFactory.createOrNull(event)?.also {
-                realm.insertOrUpdate(it)
-            }
+            roomMemberEventHandler.handle(realm, roomEntity.roomId, event)
         }
         chunkEntity.updateSenderDataFor(eventIds)
         return chunkEntity

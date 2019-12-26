@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.autocomplete.user
+package im.vector.riotx.features.autocomplete.member
 
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Success
 import com.otaliastudios.autocomplete.RecyclerViewPresenter
-import im.vector.matrix.android.api.session.user.model.User
+import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.riotx.features.autocomplete.AutocompleteClickListener
 import javax.inject.Inject
 
-class AutocompleteUserPresenter @Inject constructor(context: Context,
-                                                    private val controller: AutocompleteUserController
-) : RecyclerViewPresenter<User>(context), AutocompleteClickListener<User> {
+class AutocompleteMemberPresenter @Inject constructor(context: Context,
+                                                      private val controller: AutocompleteMemberController
+) : RecyclerViewPresenter<RoomMember>(context), AutocompleteClickListener<RoomMember> {
 
     var callback: Callback? = null
 
@@ -41,21 +41,21 @@ class AutocompleteUserPresenter @Inject constructor(context: Context,
         return controller.adapter
     }
 
-    override fun onItemClick(t: User) {
+    override fun onItemClick(t: RoomMember) {
         dispatchClick(t)
     }
 
     override fun onQuery(query: CharSequence?) {
-        callback?.onQueryUsers(query)
+        callback?.onQueryMembers(query)
     }
 
-    fun render(users: Async<List<User>>) {
-        if (users is Success) {
-            controller.setData(users())
+    fun render(members: Async<List<RoomMember>>) {
+        if (members is Success) {
+            controller.setData(members())
         }
     }
 
     interface Callback {
-        fun onQueryUsers(query: CharSequence?)
+        fun onQueryMembers(query: CharSequence?)
     }
 }

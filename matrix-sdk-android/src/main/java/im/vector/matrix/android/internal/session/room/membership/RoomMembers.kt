@@ -21,8 +21,9 @@ import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.internal.database.mapper.asDomain
+import im.vector.matrix.android.internal.database.model.*
 import im.vector.matrix.android.internal.database.model.EventEntity
-import im.vector.matrix.android.internal.database.model.EventEntityFields
+import im.vector.matrix.android.internal.database.model.RoomMemberEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.query.where
 import io.realm.Realm
@@ -42,19 +43,18 @@ internal class RoomMembers(private val realm: Realm,
         RoomSummaryEntity.where(realm, roomId).findFirst()
     }
 
-    fun getStateEvent(userId: String): EventEntity? {
+    fun getLastStateEvent(userId: String): EventEntity? {
         return EventEntity
                 .where(realm, roomId, EventType.STATE_ROOM_MEMBER)
-                .sort(EventEntityFields.STATE_INDEX, Sort.DESCENDING)
                 .equalTo(EventEntityFields.STATE_KEY, userId)
+                .sort(EventEntityFields.STATE_INDEX, Sort.DESCENDING)
                 .findFirst()
     }
 
-    fun get(userId: String): RoomMember? {
-        return getStateEvent(userId)
-                ?.let {
-                    it.asDomain().content?.toModel<RoomMember>()
-                }
+    fun getLastRoomMember(userId: String): RoomMemberEntity? {
+        return RoomMemberEntity
+                .where(realm, roomId, userId)
+                .findFirst()
     }
 
     fun isUniqueDisplayName(displayName: String?): Boolean {
@@ -69,36 +69,35 @@ internal class RoomMembers(private val realm: Realm,
                 .size == 1
     }
 
-    fun queryRoomMembersEvent(): RealmQuery<EventEntity> {
-        return EventEntity
-                .where(realm, roomId, EventType.STATE_ROOM_MEMBER)
-                .sort(EventEntityFields.STATE_INDEX, Sort.DESCENDING)
-                .isNotNull(EventEntityFields.STATE_KEY)
-                .distinct(EventEntityFields.STATE_KEY)
-                .isNotNull(EventEntityFields.CONTENT)
+    fun queryRoomMembersEvent(): RealmQuery<RoomMemberEntity> {
+        return RoomMemberEntity.where(realm, roomId)
     }
 
-    fun queryJoinedRoomMembersEvent(): RealmQuery<EventEntity> {
-        return queryRoomMembersEvent().contains(EventEntityFields.CONTENT, "\"membership\":\"join\"")
+    fun queryJoinedRoomMembersEvent(): RealmQuery<RoomMemberEntity> {
+        return queryRoomMembersEvent().equalTo(RoomMemberEntityFields.MEMBERSHIP_STR, Membership.JOIN.name)
     }
 
-    fun queryInvitedRoomMembersEvent(): RealmQuery<EventEntity> {
-        return queryRoomMembersEvent().contains(EventEntityFields.CONTENT, "\"membership\":\"invite\"")
+    fun queryInvitedRoomMembersEvent(): RealmQuery<RoomMemberEntity> {
+        return queryRoomMembersEvent().equalTo(RoomMemberEntityFields.MEMBERSHIP_STR, Membership.INVITE.name)
     }
 
-    fun queryRoomMemberEvent(userId: String): RealmQuery<EventEntity> {
+    fun queryActiveRoomMembersEvent(): RealmQuery<RoomMemberEntity> {
         return queryRoomMembersEvent()
-                .equalTo(EventEntityFields.STATE_KEY, userId)
+                .beginGroup()
+                .equalTo(RoomMemberEntityFields.MEMBERSHIP_STR, Membership.INVITE.name)
+                .or()
+                .equalTo(RoomMemberEntityFields.MEMBERSHIP_STR, Membership.JOIN.name)
+                .endGroup()
     }
 
     fun getNumberOfJoinedMembers(): Int {
         return roomSummary?.joinedMembersCount
-               ?: queryJoinedRoomMembersEvent().findAll().size
+                ?: queryJoinedRoomMembersEvent().findAll().size
     }
 
     fun getNumberOfInvitedMembers(): Int {
         return roomSummary?.invitedMembersCount
-               ?: queryInvitedRoomMembersEvent().findAll().size
+                ?: queryInvitedRoomMembersEvent().findAll().size
     }
 
     fun getNumberOfMembers(): Int {
@@ -111,7 +110,7 @@ internal class RoomMembers(private val realm: Realm,
      * @return a roomMember id list of joined or invited members.
      */
     fun getActiveRoomMemberIds(): List<String> {
-        return getRoomMemberIdsFiltered { it.membership == Membership.JOIN || it.membership == Membership.INVITE }
+        return queryActiveRoomMembersEvent().findAll().map { it.userId }
     }
 
     /**
@@ -120,21 +119,6 @@ internal class RoomMembers(private val realm: Realm,
      * @return a roomMember id list of joined members.
      */
     fun getJoinedRoomMemberIds(): List<String> {
-        return getRoomMemberIdsFiltered { it.membership == Membership.JOIN }
-    }
-
-    /* ==========================================================================================
-     * Private
-     * ========================================================================================== */
-
-    private fun getRoomMemberIdsFiltered(predicate: (RoomMember) -> Boolean): List<String> {
-        return RoomMembers(realm, roomId)
-                .queryRoomMembersEvent()
-                .findAll()
-                .map { it.asDomain() }
-                .associateBy { it.stateKey!! }
-                .filterValues { predicate(it.content.toModel<RoomMember>()!!) }
-                .keys
-                .toList()
+        return queryJoinedRoomMembersEvent().findAll().map { it.userId }
     }
 }

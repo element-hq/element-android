@@ -16,23 +16,12 @@
 
 package im.vector.matrix.android.api.session.room.model
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
-import im.vector.matrix.android.api.session.events.model.UnsignedData
-
 /**
- * Class representing the EventType.STATE_ROOM_MEMBER state event content
+ * Class representing a simplified version of EventType.STATE_ROOM_MEMBER state event content
  */
-@JsonClass(generateAdapter = true)
 data class RoomMember(
-        @Json(name = "membership") val membership: Membership,
-        @Json(name = "reason") val reason: String? = null,
-        @Json(name = "displayname") val displayName: String? = null,
-        @Json(name = "avatar_url") val avatarUrl: String? = null,
-        @Json(name = "is_direct") val isDirect: Boolean = false,
-        @Json(name = "third_party_invite") val thirdPartyInvite: Invite? = null,
-        @Json(name = "unsigned") val unsignedData: UnsignedData? = null
-) {
-    val safeReason
-        get() = reason?.takeIf { it.isNotBlank() }
-}
+        val membership: Membership,
+        val userId: String,
+        val displayName: String? = null,
+        val avatarUrl: String? = null
+)

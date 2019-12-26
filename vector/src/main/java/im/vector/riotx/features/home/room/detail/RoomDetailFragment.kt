@@ -61,6 +61,7 @@ import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.android.api.session.room.model.Membership
+import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.send.SendState
@@ -88,7 +89,7 @@ import im.vector.riotx.features.autocomplete.command.AutocompleteCommandPresente
 import im.vector.riotx.features.autocomplete.command.CommandAutocompletePolicy
 import im.vector.riotx.features.autocomplete.group.AutocompleteGroupPresenter
 import im.vector.riotx.features.autocomplete.room.AutocompleteRoomPresenter
-import im.vector.riotx.features.autocomplete.user.AutocompleteUserPresenter
+import im.vector.riotx.features.autocomplete.member.AutocompleteMemberPresenter
 import im.vector.riotx.features.command.Command
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.getColorFromUserId
@@ -144,7 +145,7 @@ class RoomDetailFragment @Inject constructor(
         private val timelineEventController: TimelineEventController,
         private val commandAutocompletePolicy: CommandAutocompletePolicy,
         private val autocompleteCommandPresenter: AutocompleteCommandPresenter,
-        private val autocompleteUserPresenter: AutocompleteUserPresenter,
+        private val autocompleteMemberPresenter: AutocompleteMemberPresenter,
         private val autocompleteRoomPresenter: AutocompleteRoomPresenter,
         private val autocompleteGroupPresenter: AutocompleteGroupPresenter,
         private val permalinkHandler: PermalinkHandler,
@@ -156,7 +157,7 @@ class RoomDetailFragment @Inject constructor(
 ) :
         VectorBaseFragment(),
         TimelineEventController.Callback,
-        AutocompleteUserPresenter.Callback,
+        AutocompleteMemberPresenter.Callback,
         AutocompleteRoomPresenter.Callback,
         AutocompleteGroupPresenter.Callback,
         VectorInviteView.Callback,
@@ -693,14 +694,14 @@ class RoomDetailFragment @Inject constructor(
                 })
                 .build()
 
-        autocompleteUserPresenter.callback = this
-        Autocomplete.on<User>(composerLayout.composerEditText)
+        autocompleteMemberPresenter.callback = this
+        Autocomplete.on<RoomMember>(composerLayout.composerEditText)
                 .with(CharPolicy('@', true))
-                .with(autocompleteUserPresenter)
+                .with(autocompleteMemberPresenter)
                 .with(elevation)
                 .with(backgroundDrawable)
-                .with(object : AutocompleteCallback<User> {
-                    override fun onPopupItemClicked(editable: Editable, item: User): Boolean {
+                .with(object : AutocompleteCallback<RoomMember> {
+                    override fun onPopupItemClicked(editable: Editable, item: RoomMember): Boolean {
                         // Detect last '@' and remove it
                         var startIndex = editable.lastIndexOf("@")
                         if (startIndex == -1) {
@@ -834,7 +835,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun renderTextComposerState(state: TextComposerViewState) {
-        autocompleteUserPresenter.render(state.asyncUsers)
+        autocompleteMemberPresenter.render(state.asyncMembers)
         autocompleteRoomPresenter.render(state.asyncRooms)
         autocompleteGroupPresenter.render(state.asyncGroups)
     }
@@ -1163,9 +1164,9 @@ class RoomDetailFragment @Inject constructor(
         roomDetailViewModel.handle(RoomDetailAction.EnterTrackingUnreadMessagesState)
     }
 
-    // AutocompleteUserPresenter.Callback
+    // AutocompleteMemberPresenter.Callback
 
-    override fun onQueryUsers(query: CharSequence?) {
+    override fun onQueryMembers(query: CharSequence?) {
         textComposerViewModel.handle(TextComposerAction.QueryUsers(query))
     }
 

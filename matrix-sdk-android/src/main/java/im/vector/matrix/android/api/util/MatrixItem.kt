@@ -18,6 +18,7 @@ package im.vector.matrix.android.api.util
 
 import im.vector.matrix.android.BuildConfig
 import im.vector.matrix.android.api.session.group.model.GroupSummary
+import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
 import im.vector.matrix.android.api.session.user.model.User
@@ -146,3 +147,4 @@ fun GroupSummary.toMatrixItem() = MatrixItem.GroupItem(groupId, displayName, ava
 fun RoomSummary.toMatrixItem() = MatrixItem.RoomItem(roomId, displayName, avatarUrl)
 fun RoomSummary.toRoomAliasMatrixItem() = MatrixItem.RoomAliasItem(canonicalAlias ?: roomId, displayName, avatarUrl)
 fun PublicRoom.toMatrixItem() = MatrixItem.RoomItem(roomId, name, avatarUrl)
+fun RoomMember.toMatrixItem() = MatrixItem.UserItem(userId, displayName, avatarUrl)

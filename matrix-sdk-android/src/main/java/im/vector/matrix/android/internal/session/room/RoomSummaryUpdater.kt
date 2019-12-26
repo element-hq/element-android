@@ -24,8 +24,8 @@ import im.vector.matrix.android.api.session.room.model.RoomAliasesContent
 import im.vector.matrix.android.api.session.room.model.RoomCanonicalAliasContent
 import im.vector.matrix.android.api.session.room.model.RoomTopicContent
 import im.vector.matrix.android.internal.database.mapper.ContentMapper
+import im.vector.matrix.android.internal.database.model.*
 import im.vector.matrix.android.internal.database.model.EventEntity
-import im.vector.matrix.android.internal.database.model.EventEntityFields
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.query.*
@@ -113,10 +113,10 @@ internal class RoomSummaryUpdater @Inject constructor(@UserId private val userId
         if (updateMembers) {
             val otherRoomMembers = RoomMembers(realm, roomId)
                     .queryRoomMembersEvent()
-                    .notEqualTo(EventEntityFields.STATE_KEY, userId)
+                    .notEqualTo(RoomMemberEntityFields.USER_ID, userId)
                     .findAll()
                     .asSequence()
-                    .map { it.stateKey }
+                    .map { it.userId }
 
             roomSummaryEntity.otherMemberIds.clear()
             roomSummaryEntity.otherMemberIds.addAll(otherRoomMembers)

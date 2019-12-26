@@ -19,6 +19,7 @@ package im.vector.matrix.android.internal.database.helper
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.RoomMember
+import im.vector.matrix.android.api.session.room.model.RoomMemberContent
 import im.vector.matrix.android.internal.database.mapper.ContentMapper
 import im.vector.matrix.android.internal.database.model.*
 import im.vector.matrix.android.internal.database.query.next
@@ -64,7 +65,7 @@ internal fun TimelineEventEntity.updateSenderData() {
         senderRoomMemberPrevContent = senderMembershipEvent?.prevContent
     }
 
-    ContentMapper.map(senderRoomMemberContent).toModel<RoomMember>()?.also {
+    ContentMapper.map(senderRoomMemberContent).toModel<RoomMemberContent>()?.also {
         this.senderAvatar = it.avatarUrl
         this.senderName = it.displayName
         this.isUniqueDisplayName = RoomMembers(realm, roomId).isUniqueDisplayName(it.displayName)
@@ -72,7 +73,7 @@ internal fun TimelineEventEntity.updateSenderData() {
 
     // We try to fallback on prev content if we got a room member state events with null fields
     if (root?.type == EventType.STATE_ROOM_MEMBER) {
-        ContentMapper.map(senderRoomMemberPrevContent).toModel<RoomMember>()?.also {
+        ContentMapper.map(senderRoomMemberPrevContent).toModel<RoomMemberContent>()?.also {
             if (this.senderAvatar == null && it.avatarUrl != null) {
                 this.senderAvatar = it.avatarUrl
             }

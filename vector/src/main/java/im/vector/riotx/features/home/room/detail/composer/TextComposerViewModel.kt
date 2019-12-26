@@ -25,6 +25,8 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.group.model.GroupSummary
+import im.vector.matrix.android.api.session.room.model.Membership
+import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.matrix.rx.rx
@@ -90,17 +92,15 @@ class TextComposerViewModel @AssistedInject constructor(@Assisted initialState: 
     }
 
     private fun observeUsersQuery() {
-        Observable.combineLatest<List<String>, Option<AutocompleteQuery>, List<User>>(
-                room.rx().liveRoomMemberIds(),
+        Observable.combineLatest<List<RoomMember>, Option<AutocompleteQuery>, List<RoomMember>>(
+                room.rx().liveRoomMembers(Membership.activeMemberships()),
                 usersQueryObservable.throttleLast(300, TimeUnit.MILLISECONDS),
-                BiFunction { roomMemberIds, query ->
-                    val users = roomMemberIds.mapNotNull { session.getUser(it) }
-
+                BiFunction { roomMembers, query ->
                     val filter = query.orNull()
                     if (filter.isNullOrBlank()) {
-                        users
+                        roomMembers
                     } else {
-                        users.filter {
+                        roomMembers.filter {
                             it.displayName?.contains(filter, ignoreCase = true) ?: false
                         }
                     }
@@ -108,7 +108,7 @@ class TextComposerViewModel @AssistedInject constructor(@Assisted initialState: 
                 }
         ).execute { async ->
             copy(
-                    asyncUsers = async
+                    asyncMembers = async
             )
         }
     }

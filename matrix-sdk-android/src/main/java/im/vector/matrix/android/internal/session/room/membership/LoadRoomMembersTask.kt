@@ -44,7 +44,8 @@ internal interface LoadRoomMembersTask : Task<LoadRoomMembersTask.Params, Unit> 
 internal class DefaultLoadRoomMembersTask @Inject constructor(private val roomAPI: RoomAPI,
                                                               private val monarchy: Monarchy,
                                                               private val syncTokenStore: SyncTokenStore,
-                                                              private val roomSummaryUpdater: RoomSummaryUpdater
+                                                              private val roomSummaryUpdater: RoomSummaryUpdater,
+                                                              private val roomMemberEventHandler: RoomMemberEventHandler
 ) : LoadRoomMembersTask {
 
     override suspend fun execute(params: LoadRoomMembersTask.Params) {
@@ -66,9 +67,7 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(private val roomAP
 
             for (roomMemberEvent in response.roomMemberEvents) {
                 roomEntity.addStateEvent(roomMemberEvent)
-                UserEntityFactory.createOrNull(roomMemberEvent)?.also {
-                    realm.insertOrUpdate(it)
-                }
+                roomMemberEventHandler.handle(realm, roomId, roomMemberEvent)
             }
             roomEntity.chunks.flatMap { it.timelineEvents }.forEach {
                 it.updateSenderData()

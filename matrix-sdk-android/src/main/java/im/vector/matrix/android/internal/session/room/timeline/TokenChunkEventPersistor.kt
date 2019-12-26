@@ -28,6 +28,7 @@ import im.vector.matrix.android.internal.database.query.create
 import im.vector.matrix.android.internal.database.query.find
 import im.vector.matrix.android.internal.database.query.findAllIncludingEvents
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.session.room.membership.RoomMemberEventHandler
 import im.vector.matrix.android.internal.session.user.UserEntityFactory
 import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.kotlin.createObject
@@ -154,9 +155,6 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
                         for (event in receivedChunk.events) {
                             event.eventId?.also { eventIds.add(it) }
                             currentChunk.add(roomId, event, direction, isUnlinked = currentChunk.isUnlinked())
-                            UserEntityFactory.createOrNull(event)?.also {
-                                realm.insertOrUpdate(it)
-                            }
                         }
                         // Then we merge chunks if needed
                         if (currentChunk != prevChunk && prevChunk != null) {
@@ -175,9 +173,6 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
                         roomEntity.addOrUpdate(currentChunk)
                         for (stateEvent in receivedChunk.stateEvents) {
                             roomEntity.addStateEvent(stateEvent, isUnlinked = currentChunk.isUnlinked())
-                            UserEntityFactory.createOrNull(stateEvent)?.also {
-                                realm.insertOrUpdate(it)
-                            }
                         }
                         currentChunk.updateSenderDataFor(eventIds)
                     }

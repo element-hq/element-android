@@ -60,7 +60,7 @@ internal fun RoomEntity.addSendingEvent(event: Event) {
         this.sendState = SendState.UNSENT
     }
     val roomMembers = RoomMembers(realm, roomId)
-    val myUser = roomMembers.get(senderId)
+    val myUser = roomMembers.getLastRoomMember(senderId)
     val localId = TimelineEventEntity.nextId(realm)
     val timelineEventEntity = TimelineEventEntity(localId).also {
         it.root = eventEntity
@@ -69,7 +69,6 @@ internal fun RoomEntity.addSendingEvent(event: Event) {
         it.senderName = myUser?.displayName
         it.senderAvatar = myUser?.avatarUrl
         it.isUniqueDisplayName = roomMembers.isUniqueDisplayName(myUser?.displayName)
-        it.senderMembershipEvent = roomMembers.queryRoomMemberEvent(senderId).findFirst()
     }
     sendingTimelineEvents.add(0, timelineEventEntity)
 }
