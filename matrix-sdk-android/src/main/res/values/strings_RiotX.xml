@@ -30,7 +30,7 @@
     <!-- This part is inserted in verify_by_scanning_description-->
     <string name="verify_open_camera_link">open your camera</string>
 
-    <string name="verify_by_emoji_title">Verify by emoji</string>
+    <string name="verify_by_emoji_title">Verify by Emoji</string>
     <string name="verify_by_emoji_description">If you can’t scan the code above, verify by comparing a short, unique selection of emoji.</string>
 
     <string name="aria_qr_code_description">QR code image</string>

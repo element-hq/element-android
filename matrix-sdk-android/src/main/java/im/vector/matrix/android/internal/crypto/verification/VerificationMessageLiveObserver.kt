@@ -56,6 +56,7 @@ internal class VerificationMessageLiveObserver @Inject constructor(
                 EventType.KEY_VERIFICATION_MAC,
                 EventType.KEY_VERIFICATION_CANCEL,
                 EventType.KEY_VERIFICATION_DONE,
+                EventType.KEY_VERIFICATION_READY,
                 EventType.MESSAGE,
                 EventType.ENCRYPTED)
         )
@@ -141,6 +142,14 @@ internal class VerificationMessageLiveObserver @Inject constructor(
                             it.transactionID?.let { txId -> transactionsHandledByOtherDevice.add(txId) }
                         }
                     }
+                } else if (EventType.KEY_VERIFICATION_READY == event.type) {
+                    event.getClearContent().toModel<MessageVerificationReadyContent>()?.let {
+                        if (it.fromDevice != deviceId) {
+                            // The verification is started from another device
+                            Timber.v("## SAS Verification live observer: Transaction started by other device  tid:${it.transactionID} ")
+                            it.transactionID?.let { txId -> transactionsHandledByOtherDevice.add(txId) }
+                        }
+                    }
                 } else if (EventType.KEY_VERIFICATION_CANCEL == event.type || EventType.KEY_VERIFICATION_DONE == event.type) {
                     event.getClearContent().toModel<MessageRelationContent>()?.relatesTo?.eventId?.let {
                         transactionsHandledByOtherDevice.remove(it)
@@ -162,6 +171,7 @@ internal class VerificationMessageLiveObserver @Inject constructor(
                 EventType.KEY_VERIFICATION_KEY,
                 EventType.KEY_VERIFICATION_MAC,
                 EventType.KEY_VERIFICATION_CANCEL,
+                EventType.KEY_VERIFICATION_READY,
                 EventType.KEY_VERIFICATION_DONE -> {
                     sasVerificationService.onRoomEvent(event)
                 }

@@ -17,6 +17,7 @@
 package im.vector.matrix.android.api.session.crypto.sas
 
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.internal.crypto.verification.PendingVerificationRequest
 
 /**
  * https://matrix.org/docs/spec/client_server/r0.5.0#key-verification-framework
@@ -39,6 +40,8 @@ interface SasVerificationService {
 
     fun getExistingTransaction(otherUser: String, tid: String): SasVerificationTransaction?
 
+    fun getExistingVerificationRequest(otherUser: String): List<PendingVerificationRequest>?
+
     /**
      * Shortcut for KeyVerificationStart.VERIF_METHOD_SAS
      * @see beginKeyVerification
@@ -50,7 +53,7 @@ interface SasVerificationService {
      */
     fun beginKeyVerification(method: String, userId: String, deviceID: String): String?
 
-    fun requestKeyVerificationInDMs(userId: String, roomId: String, callback: MatrixCallback<String>?)
+    fun requestKeyVerificationInDMs(userId: String, roomId: String, callback: MatrixCallback<String>?) : PendingVerificationRequest
 
     fun beginKeyVerificationInDMs(method: String,
                                   transactionId: String,
@@ -59,13 +62,16 @@ interface SasVerificationService {
                                   otherDeviceId: String,
                                   callback: MatrixCallback<String>?): String?
 
-    fun readyPendingVerificationInDMs(transactionId: String)
+    fun readyPendingVerificationInDMs(otherUserId: String, roomId: String, transactionId: String)
 
     // fun transactionUpdated(tx: SasVerificationTransaction)
 
     interface SasVerificationListener {
         fun transactionCreated(tx: SasVerificationTransaction)
         fun transactionUpdated(tx: SasVerificationTransaction)
-        fun markedAsManuallyVerified(userId: String, deviceId: String)
+        fun markedAsManuallyVerified(userId: String, deviceId: String) {}
+
+        fun verificationRequestCreated(pr: PendingVerificationRequest) {}
+        fun verificationRequestUpdated(pr: PendingVerificationRequest) {}
     }
 }

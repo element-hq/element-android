@@ -86,6 +86,20 @@ internal class DefaultRoomService @Inject constructor(private val monarchy: Mona
                 })
     }
 
+    override fun getExistingDirectRoomWithUser(otherUserId: String): Room? {
+        Realm.getInstance(monarchy.realmConfiguration).use { realm ->
+            val roomId = RoomSummaryEntity.where(realm)
+                    .equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
+                    .findAll()?.let { dms ->
+                        dms.firstOrNull {
+                            it.otherMemberIds.contains(otherUserId)
+                        }
+                    }
+                    ?.roomId ?: return null
+            return RoomEntity.where(realm, roomId).findFirst()?.let { roomFactory.create(roomId) }
+        }
+    }
+
     override fun liveRoomSummaries(): LiveData<List<RoomSummary>> {
         return monarchy.findAllMappedWithChanges(
                 { realm ->

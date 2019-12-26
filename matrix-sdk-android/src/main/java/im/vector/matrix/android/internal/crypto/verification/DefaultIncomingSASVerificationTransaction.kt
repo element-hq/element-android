@@ -33,7 +33,8 @@ internal class DefaultIncomingSASVerificationTransaction(
         private val cryptoStore: IMXCryptoStore,
         deviceFingerprint: String,
         transactionId: String,
-        otherUserID: String
+        otherUserID: String,
+        val autoAccept: Boolean = false
 ) : SASVerificationTransaction(
         setDeviceVerificationAction,
         credentials,
@@ -76,6 +77,10 @@ internal class DefaultIncomingSASVerificationTransaction(
         this.startReq = startReq
         state = SasVerificationTxState.OnStarted
         this.otherDeviceId = startReq.fromDevice
+
+        if (autoAccept) {
+            performAccept()
+        }
     }
 
     override fun performAccept() {

@@ -49,14 +49,16 @@ enum class VerificationState {
     UNKNOWN,
     REQUEST,
     WAITING,
+    READY,
     CANCELED_BY_ME,
     CANCELED_BY_OTHER,
     DONE
 }
 
-fun VerificationState.isCanceled() : Boolean {
+fun VerificationState.isCanceled(): Boolean {
     return this == VerificationState.CANCELED_BY_ME || this == VerificationState.CANCELED_BY_OTHER
 }
+
 /**
  * Called by EventRelationAggregationUpdater, when new events that can affect relations are inserted in base.
  */
@@ -119,6 +121,7 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
                     EventType.KEY_VERIFICATION_ACCEPT,
                     EventType.KEY_VERIFICATION_START,
                     EventType.KEY_VERIFICATION_MAC,
+                    EventType.KEY_VERIFICATION_READY,
                     EventType.KEY_VERIFICATION_KEY -> {
                         Timber.v("## SAS REF in room $roomId for event ${event.eventId}")
                         event.content.toModel<MessageRelationContent>()?.relatesTo?.let {
@@ -459,6 +462,9 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
                 EventType.KEY_VERIFICATION_DONE   -> {
                     updateVerificationState(currentState, VerificationState.DONE)
                 }
+                EventType.KEY_VERIFICATION_READY   -> {
+                    updateVerificationState(currentState, VerificationState.READY)
+                }
                 else                              -> VerificationState.REQUEST
             }
 
@@ -474,7 +480,7 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
         }
     }
 
-    private fun updateVerificationState(oldState: VerificationState?, newState: VerificationState) : VerificationState {
+    private fun updateVerificationState(oldState: VerificationState?, newState: VerificationState): VerificationState {
         // Cancel is always prioritary ?
         // Eg id i found that mac or keys mismatch and send a cancel and the other send a done, i have to
         // consider as canceled

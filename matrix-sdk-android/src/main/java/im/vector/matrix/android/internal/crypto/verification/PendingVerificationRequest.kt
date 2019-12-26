@@ -16,12 +16,20 @@
 package im.vector.matrix.android.internal.crypto.verification
 
 import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
+import java.util.*
 
 /**
  * Stores current pending verification requests
  */
-internal data class PendingVerificationRequest(
-        val transactionId: String?,
-        val requestInfo: MessageVerificationRequestContent?,
+data class PendingVerificationRequest(
+        val isIncoming: Boolean = false,
+        val localID: String =  UUID.randomUUID().toString(),
+        val otherUserId: String,
+        val transactionId: String? = null,
+        val requestInfo: MessageVerificationRequestContent? = null,
         val readyInfo: VerificationInfoReady? = null
-)
+) {
+
+    val isReady: Boolean = readyInfo != null
+    val isSent: Boolean = transactionId != null
+}
