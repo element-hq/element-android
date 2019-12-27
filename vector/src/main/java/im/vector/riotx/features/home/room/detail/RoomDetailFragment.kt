@@ -563,7 +563,7 @@ class RoomDetailFragment @Inject constructor(
                         }
                     }
                 }
-                jumpToReadMarkerView.isVisible = showJumpToUnreadBanner
+                jumpToReadMarkerView?.isVisible = showJumpToUnreadBanner
             }
         }
     }
