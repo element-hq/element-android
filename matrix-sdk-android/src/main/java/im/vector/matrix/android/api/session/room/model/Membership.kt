@@ -49,7 +49,4 @@ enum class Membership(val value: String) {
             return listOf(INVITE, JOIN)
         }
     }
-
 }
-
-

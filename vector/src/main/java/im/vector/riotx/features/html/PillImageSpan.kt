@@ -88,25 +88,27 @@ class PillImageSpan(private val glideRequests: GlideRequests,
     }
 
     internal fun updateAvatarDrawable(drawable: Drawable?) {
-        pillDrawable.apply {
-            chipIcon = drawable
-        }
-        tv?.get()?.apply {
-            invalidate()
-        }
+        pillDrawable.chipIcon = drawable
+        tv?.get()?.invalidate()
     }
 
     // Private methods *****************************************************************************
 
     private fun createChipDrawable(): ChipDrawable {
         val textPadding = context.resources.getDimension(R.dimen.pill_text_padding)
+        val icon = try {
+            avatarRenderer.getCachedDrawable(glideRequests, matrixItem)
+        } catch (exception: Exception) {
+            avatarRenderer.getPlaceholderDrawable(context, matrixItem)
+        }
+
         return ChipDrawable.createFromResource(context, R.xml.pill_view).apply {
             text = matrixItem.getBestName()
             textEndPadding = textPadding
             textStartPadding = textPadding
             setChipMinHeightResource(R.dimen.pill_min_height)
             setChipIconSizeResource(R.dimen.pill_avatar_size)
-            chipIcon = avatarRenderer.getPlaceholderDrawable(context, matrixItem)
+            chipIcon = icon
             setBounds(0, 0, intrinsicWidth, intrinsicHeight)
         }
     }

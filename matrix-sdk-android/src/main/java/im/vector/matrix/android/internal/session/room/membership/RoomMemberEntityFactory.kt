@@ -22,7 +22,7 @@ import im.vector.matrix.android.internal.database.model.RoomMemberEntity
 internal object RoomMemberEntityFactory {
 
     fun create(roomId: String, userId: String, roomMember: RoomMemberContent): RoomMemberEntity {
-        val primaryKey = "${roomId}_${userId}"
+        val primaryKey = "${roomId}_$userId"
         return RoomMemberEntity(
                 primaryKey = primaryKey,
                 userId = userId,

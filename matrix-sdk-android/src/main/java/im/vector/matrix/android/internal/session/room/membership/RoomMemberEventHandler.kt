@@ -20,7 +20,6 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.Membership
-import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.session.room.model.RoomMemberContent
 import im.vector.matrix.android.internal.session.user.UserEntityFactory
 import io.realm.Realm
@@ -42,6 +41,4 @@ internal class RoomMemberEventHandler @Inject constructor() {
         }
         return true
     }
-
-
 }

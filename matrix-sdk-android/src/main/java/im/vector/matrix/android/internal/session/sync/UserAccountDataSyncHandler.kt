@@ -20,7 +20,6 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.pushrules.RuleScope
 import im.vector.matrix.android.api.pushrules.RuleSetKey
 import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.session.room.model.RoomMemberContent
 import im.vector.matrix.android.internal.database.mapper.PushRulesMapper
 import im.vector.matrix.android.internal.database.mapper.asDomain

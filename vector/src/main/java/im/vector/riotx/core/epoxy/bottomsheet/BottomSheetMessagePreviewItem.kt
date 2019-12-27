@@ -51,7 +51,7 @@ abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessa
         holder.sender.setTextOrHide(matrixItem.displayName)
         holder.body.movementMethod = movementMethod
         holder.body.text = body
-        body.findPillsAndProcess { it.bind(holder.body) }
+        body.findPillsAndProcess(coroutineScope) { it.bind(holder.body) }
         holder.timestamp.setTextOrHide(time)
     }
 

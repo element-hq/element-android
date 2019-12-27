@@ -27,6 +27,7 @@ import im.vector.riotx.core.epoxy.VectorEpoxyModel
 import im.vector.riotx.core.platform.CheckableView
 import im.vector.riotx.core.ui.views.ReadReceiptsView
 import im.vector.riotx.core.utils.DimensionConverter
+import kotlinx.coroutines.*
 
 /**
  * Children must override getViewType()

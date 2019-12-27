@@ -18,8 +18,6 @@ package im.vector.matrix.android.internal.database.query
 
 import im.vector.matrix.android.internal.database.model.RoomMemberEntity
 import im.vector.matrix.android.internal.database.model.RoomMemberEntityFields
-import im.vector.matrix.android.internal.database.model.UserEntity
-import im.vector.matrix.android.internal.database.model.UserEntityFields
 import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.kotlin.where

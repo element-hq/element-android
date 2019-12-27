@@ -28,8 +28,6 @@ import im.vector.matrix.android.internal.database.query.create
 import im.vector.matrix.android.internal.database.query.find
 import im.vector.matrix.android.internal.database.query.findAllIncludingEvents
 import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.session.room.membership.RoomMemberEventHandler
-import im.vector.matrix.android.internal.session.user.UserEntityFactory
 import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.kotlin.createObject
 import timber.log.Timber

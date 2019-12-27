@@ -37,7 +37,6 @@ import im.vector.matrix.android.internal.session.room.membership.RoomMemberEvent
 import im.vector.matrix.android.internal.session.room.read.FullyReadContent
 import im.vector.matrix.android.internal.session.room.timeline.PaginationDirection
 import im.vector.matrix.android.internal.session.sync.model.*
-import im.vector.matrix.android.internal.session.user.UserEntityFactory
 import io.realm.Realm
 import io.realm.kotlin.createObject
 import timber.log.Timber
