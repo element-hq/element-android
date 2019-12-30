@@ -91,7 +91,7 @@ class SASVerificationStartFragment @Inject constructor(): VectorBaseFragment() {
         (requireActivity() as VectorBaseActivity).notImplemented()
 
         /*
-        viewModel.session.crypto?.getDeviceInfo(viewModel.otherUserId ?: "", viewModel.otherDeviceId
+        viewModel.session.crypto?.getDeviceInfo(viewModel.otherUserMxItem ?: "", viewModel.otherDeviceId
                 ?: "", object : SimpleApiCallback<MXDeviceInfo>() {
             override fun onSuccess(info: MXDeviceInfo?) {
                 info?.let {

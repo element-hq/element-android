@@ -272,4 +272,27 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(SoftLogoutFragment::class)
     fun bindSoftLogoutFragment(fragment: SoftLogoutFragment): Fragment
+
+
+    @Binds
+    @IntoMap
+    @FragmentKey(VerificationRequestFragment::class)
+    fun bindVerificationRequestFragment(fragment: VerificationRequestFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(VerificationChooseMethodFragment::class)
+    fun bindVerificationMethodChooserFragment(fragment: VerificationChooseMethodFragment): Fragment
+
+
+    @Binds
+    @IntoMap
+    @FragmentKey(SASVerificationCodeFragment::class)
+    fun bindVerificationSasCodeFragment(fragment: SASVerificationCodeFragment): Fragment
+
+
+    @Binds
+    @IntoMap
+    @FragmentKey(VerificationConclusionFragment::class)
+    fun bindVerificationSasConclusionFragment(fragment: VerificationConclusionFragment): Fragment
 }

@@ -923,7 +923,7 @@ class RoomDetailFragment @Inject constructor(
             }
             is Success -> {
                 when (val data = result.invoke()) {
-                    is RoomDetailAction.ReportContent -> {
+                    is RoomDetailAction.ReportContent             -> {
                         when {
                             data.spam          -> {
                                 AlertDialog.Builder(requireActivity())
@@ -959,6 +959,22 @@ class RoomDetailFragment @Inject constructor(
                                         .withColoredButton(DialogInterface.BUTTON_NEGATIVE)
                             }
                         }
+                    }
+                    is RoomDetailAction.RequestVerification       -> {
+                        VerificationBottomSheet().apply {
+                            arguments = Bundle().apply {
+                                putParcelable(MvRx.KEY_ARG, VerificationBottomSheet.VerificationArgs(data.userId, roomId = roomDetailArgs.roomId))
+                            }
+//                            setArguments()
+                        }.show(parentFragmentManager, "REQ")
+                    }
+                    is RoomDetailAction.AcceptVerificationRequest -> {
+                        VerificationBottomSheet().apply {
+                            arguments = Bundle().apply {
+                                putParcelable(MvRx.KEY_ARG, VerificationBottomSheet.VerificationArgs(
+                                        data.otherUserId, data.transactionId, roomId = roomDetailArgs.roomId))
+                            }
+                        }.show(parentFragmentManager, "REQ")
                     }
                 }
             }
@@ -1114,7 +1130,8 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onAvatarClicked(informationData: MessageInformationData) {
-        vectorBaseActivity.notImplemented("Click on user avatar")
+        //vectorBaseActivity.notImplemented("Click on user avatar")
+        roomDetailViewModel.handle(RoomDetailAction.RequestVerification(informationData.senderId))
     }
 
     override fun onMemberNameClicked(informationData: MessageInformationData) {

@@ -1500,7 +1500,7 @@ Why choose Riot.im?
 
     <string name="sas_verified">Verified!</string>
     <string name="sas_verified_successful">You\'ve successfully verified this device.</string>
-    <string name="sas_verified_successful_description">Secure messages with this user are end-to-end encrypted and not able to be read by third parties.</string>
+    <string name="sas_verified_successful_description">Messages with this user in this room are end-to-end encrypted and can‘t be read by third parties.</string>
     <string name="sas_got_it">Got it</string>
 
     <string name="sas_verifying_keys">Nothing appearing? Not all clients supports interactive verification yet. Use legacy verification.</string>

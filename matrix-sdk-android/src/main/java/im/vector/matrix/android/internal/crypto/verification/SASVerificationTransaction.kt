@@ -222,13 +222,14 @@ internal abstract class SASVerificationTransaction(
             val keyIDNoPrefix = if (it.startsWith("ed25519:")) it.substring("ed25519:".length) else it
             val otherDeviceKey = otherUserKnownDevices?.get(keyIDNoPrefix)?.fingerprint()
             if (otherDeviceKey == null) {
-                Timber.e("Verification: Could not find device $keyIDNoPrefix to verify")
+                Timber.e("## SAS Verification: Could not find device $keyIDNoPrefix to verify")
                 // just ignore and continue
                 return@forEach
             }
             val mac = macUsingAgreedMethod(otherDeviceKey, baseInfo + it)
             if (mac != theirMac?.mac?.get(it)) {
                 // WRONG!
+                Timber.e("## SAS Verification: mac mismatch for $otherDeviceKey with id $keyIDNoPrefix")
                 cancel(CancelCode.MismatchedKeys)
                 return
             }

@@ -70,6 +70,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 EventType.KEY_VERIFICATION_ACCEPT,
                 EventType.KEY_VERIFICATION_START,
                 EventType.KEY_VERIFICATION_KEY,
+                EventType.KEY_VERIFICATION_READY,
                 EventType.KEY_VERIFICATION_MAC          -> {
                     // These events are filtered from timeline in normal case
                     // Only visible in developer mode
