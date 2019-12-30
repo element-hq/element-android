@@ -56,7 +56,6 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
             val roomId: String? = null
     ) : Parcelable
 
-
     @Inject
     lateinit var verificationRequestViewModelFactory: VerificationRequestViewModel.Factory
     @Inject
@@ -99,7 +98,6 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
     }
 
     override fun invalidate() = withState(viewModel) {
-
         it.otherUserMxItem?.let { matrixItem ->
             val displayName = matrixItem.displayName ?: ""
             otherUserNameText.text = getString(R.string.verification_request_alert_title, displayName)
@@ -111,7 +109,6 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
         // Did the request result in a SAS transaction?
         if (it.sasTransactionState != null) {
-
             when (it.sasTransactionState) {
                 SasVerificationTxState.None,
                 SasVerificationTxState.SendingStart,
@@ -148,7 +145,6 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
             return@withState
         }
 
-
         // Transaction has not yet started
         if (it.pendingRequest == null || !it.pendingRequest.isReady) {
             showFragment(VerificationRequestFragment::class, Bundle().apply {
@@ -159,7 +155,6 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
                 putParcelable(MvRx.KEY_ARG, VerificationArgs(it.otherUserMxItem?.id
                         ?: "", it.pendingRequest.transactionId))
             })
-
         }
 
         super.invalidate()
@@ -173,7 +168,6 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
             }
             // Commit now, to ensure changes occurs before next rendering frame (or bottomsheet want animate)
             childFragmentManager.commitTransactionNow {
-
                 replace(R.id.bottomSheetFragmentContainer,
                         fragmentClass.java,
                         bundle,
@@ -183,7 +177,6 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
         }
     }
 }
-
 
 fun View.getParentCoordinatorLayout(): CoordinatorLayout? {
     var current = this as? View

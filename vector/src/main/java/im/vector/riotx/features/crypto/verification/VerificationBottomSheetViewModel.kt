@@ -34,7 +34,6 @@ import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.platform.VectorViewModelAction
 import im.vector.riotx.core.utils.LiveEvent
 
-
 data class VerificationBottomSheetViewState(
         val otherUserMxItem: MatrixItem? = null,
         val roomId: String? = null,
@@ -42,7 +41,6 @@ data class VerificationBottomSheetViewState(
         val sasTransactionState: SasVerificationTxState? = null,
         val cancelCode: CancelCode? = null
 ) : MvRxState
-
 
 sealed class VerificationAction : VectorViewModelAction {
     data class RequestVerificationByDM(val userID: String, val roomId: String?) : VerificationAction()
@@ -56,7 +54,6 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
                                                                    private val session: Session)
     : VectorViewModel<VerificationBottomSheetViewState, VerificationAction>(initialState),
         SasVerificationService.SasVerificationListener {
-
 
     // Can be used for several actions, for a one shot result
     private val _requestLiveData = MutableLiveData<LiveEvent<Async<VerificationAction>>>()
@@ -145,7 +142,6 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
             }
         }
     }
-
 
     override fun transactionCreated(tx: SasVerificationTransaction) {
         transactionUpdated(tx)

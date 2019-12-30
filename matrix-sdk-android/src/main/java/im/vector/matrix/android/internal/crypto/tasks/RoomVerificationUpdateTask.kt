@@ -25,10 +25,8 @@ import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
 import im.vector.matrix.android.internal.crypto.verification.DefaultSasVerificationService
 import im.vector.matrix.android.internal.di.DeviceId
-import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.task.Task
-import io.realm.RealmConfiguration
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
@@ -51,8 +49,7 @@ internal class DefaultRoomVerificationUpdateTask @Inject constructor(
         private val transactionsHandledByOtherDevice = ArrayList<String>()
     }
 
-    override suspend fun execute(params: RoomVerificationUpdateTask.Params): Unit {
-
+    override suspend fun execute(params: RoomVerificationUpdateTask.Params) {
         // TODO ignore initial sync or back pagination?
 
         val now = System.currentTimeMillis()
@@ -160,5 +157,4 @@ internal class DefaultRoomVerificationUpdateTask @Inject constructor(
             }
         }
     }
-
 }

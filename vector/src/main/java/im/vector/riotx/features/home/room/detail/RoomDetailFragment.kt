@@ -1130,7 +1130,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onAvatarClicked(informationData: MessageInformationData) {
-        //vectorBaseActivity.notImplemented("Click on user avatar")
+        // vectorBaseActivity.notImplemented("Click on user avatar")
         roomDetailViewModel.handle(RoomDetailAction.RequestVerification(informationData.senderId))
     }
 

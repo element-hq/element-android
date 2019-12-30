@@ -33,12 +33,10 @@ data class VerificationChooseMethodViewState(
         val SASMOdeAvailable: Boolean = false
 ) : MvRxState
 
-
 class VerificationChooseMethodViewModel @AssistedInject constructor(
         @Assisted initialState: VerificationChooseMethodViewState,
         private val session: Session
 ) : VectorViewModel<VerificationChooseMethodViewState, EmptyAction>(initialState) {
-
 
     init {
         withState { state ->
@@ -70,8 +68,5 @@ class VerificationChooseMethodViewModel @AssistedInject constructor(
         }
     }
 
-
     override fun handle(action: EmptyAction) {}
-
-
 }

@@ -196,13 +196,13 @@ internal class DefaultSasVerificationService @Inject constructor(
         val senderId = event.senderId ?: return
 
         if (requestInfo.toUserId != credentials.userId) {
-            //I should ignore this, it's not for me
+            // I should ignore this, it's not for me
             Timber.w("## SAS Verification ignoring request from ${event.senderId}, not sent to me")
             return
         }
 
-        if(checkKeysAreDownloaded(senderId, requestInfo.fromDevice) == null) {
-            //I should ignore this, it's not for me
+        if (checkKeysAreDownloaded(senderId, requestInfo.fromDevice) == null) {
+            // I should ignore this, it's not for me
             Timber.e("## SAS Verification device ${requestInfo.fromDevice} is not knwon")
             // TODO cancel?
             return
@@ -216,7 +216,7 @@ internal class DefaultSasVerificationService @Inject constructor(
 
         val pendingVerificationRequest = PendingVerificationRequest(
                 isIncoming = true,
-                otherUserId = senderId,//requestInfo.toUserId,
+                otherUserId = senderId, // requestInfo.toUserId,
                 transactionId = event.eventId,
                 requestInfo = requestInfo
         )
@@ -512,12 +512,11 @@ internal class DefaultSasVerificationService @Inject constructor(
             // TODO should we cancel?
             return
         }
-        if(checkKeysAreDownloaded(event.senderId, readyReq.fromDevice ?: "") == null) {
+        if (checkKeysAreDownloaded(event.senderId, readyReq.fromDevice ?: "") == null) {
             Timber.e("## SAS Verification device ${readyReq.fromDevice} is not knwown")
             // TODO cancel?
             return
         }
-
 
         handleReadyReceived(event.senderId, readyReq)
     }
@@ -616,8 +615,7 @@ internal class DefaultSasVerificationService @Inject constructor(
 
     override fun requestKeyVerificationInDMs(userId: String, roomId: String, callback: MatrixCallback<String>?)
             : PendingVerificationRequest {
-
-        Timber.i("## SAS Requesting verification to user: $userId in room ${roomId}")
+        Timber.i("## SAS Requesting verification to user: $userId in room $roomId")
         val requestsForUser = pendingRequests[userId]
                 ?: ArrayList<PendingVerificationRequest>().also {
                     pendingRequests[userId] = it

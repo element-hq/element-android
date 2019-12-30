@@ -27,13 +27,11 @@ import im.vector.matrix.android.internal.crypto.verification.PendingVerification
 import im.vector.riotx.core.di.HasScreenInjector
 import im.vector.riotx.core.platform.VectorViewModel
 
-
 data class VerificationRequestViewState(
         val roomId: String? = null,
         val matrixItem: MatrixItem,
         val started: Async<Boolean> = Success(false)
 ) : MvRxState
-
 
 class VerificationRequestViewModel @AssistedInject constructor(
         @Assisted initialState: VerificationRequestViewState,

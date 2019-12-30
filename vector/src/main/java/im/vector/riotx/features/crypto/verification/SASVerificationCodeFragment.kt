@@ -37,7 +37,6 @@ class SASVerificationCodeFragment @Inject constructor(
     @BindView(R.id.sas_emoji_grid)
     lateinit var emojiGrid: ViewGroup
 
-
     @BindView(R.id.sas_decimal_code)
     lateinit var decimalTextView: TextView
 
@@ -56,7 +55,6 @@ class SASVerificationCodeFragment @Inject constructor(
     @BindView(R.id.emoji6)
     lateinit var emoji6View: ViewGroup
 
-
     private val viewModel by fragmentViewModel(SASVerificationCodeViewModel::class)
 
     private val sharedViewModel by parentFragmentViewModel(VerificationBottomSheetViewModel::class)
@@ -65,7 +63,7 @@ class SASVerificationCodeFragment @Inject constructor(
 
         if (state.supportsEmoji) {
             decimalTextView.isVisible = false
-            when(val emojiDescription = state.emojiDescription) {
+            when (val emojiDescription = state.emojiDescription) {
                 is Success -> {
                     sasLoadingProgress.isVisible = false
                     emojiGrid.isVisible = true
@@ -104,20 +102,19 @@ class SASVerificationCodeFragment @Inject constructor(
                     }
 
                     if (state.isWaitingFromOther) {
-                        //hide buttons
+                        // hide buttons
                         ButtonsVisibilityGroup.isInvisible = true
                         sasCodeWaitingPartnerText.isVisible = true
                     } else {
                         ButtonsVisibilityGroup.isVisible = true
                         sasCodeWaitingPartnerText.isVisible = false
                     }
-
                 }
                 is Fail -> {
                     sasLoadingProgress.isVisible = false
                     emojiGrid.isInvisible = true
                     ButtonsVisibilityGroup.isInvisible = true
-                    //TODO?
+                    // TODO?
                 }
                 else -> {
                     sasLoadingProgress.isVisible = true
@@ -126,15 +123,15 @@ class SASVerificationCodeFragment @Inject constructor(
                 }
             }
         } else {
-            //Decimal
+            // Decimal
             emojiGrid.isInvisible = true
             decimalTextView.isVisible = true
             val decimalCode = state.decimalDescription.invoke()
             decimalTextView.text = decimalCode
 
-            //TODO
+            // TODO
             if (state.isWaitingFromOther) {
-                //hide buttons
+                // hide buttons
                 ButtonsVisibilityGroup.isInvisible = true
                 sasCodeWaitingPartnerText.isVisible = true
             } else {
@@ -144,10 +141,9 @@ class SASVerificationCodeFragment @Inject constructor(
         }
     }
 
-
     @OnClick(R.id.sas_request_continue_button)
     fun onMatchButtonTapped() = withState(viewModel) { state ->
-        //UX echo
+        // UX echo
         ButtonsVisibilityGroup.isInvisible = true
         sasCodeWaitingPartnerText.isVisible = true
         sharedViewModel.handle(VerificationAction.SASMatchAction(state.otherUserId, state.transactionId))
@@ -155,10 +151,9 @@ class SASVerificationCodeFragment @Inject constructor(
 
     @OnClick(R.id.sas_request_cancel_button)
     fun onDoNotMatchButtonTapped() = withState(viewModel) { state ->
-        //UX echo
+        // UX echo
         ButtonsVisibilityGroup.isInvisible = true
         sasCodeWaitingPartnerText.isVisible = true
         sharedViewModel.handle(VerificationAction.SASDoNotMatchAction(state.otherUserId, state.transactionId))
     }
-
 }

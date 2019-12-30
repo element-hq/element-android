@@ -55,7 +55,7 @@ class VerificationRequestFragment @Inject constructor(
 
         when (state.started) {
             is Loading -> {
-                //Hide the start button, show waiting
+                // Hide the start button, show waiting
                 verificationStartButton.isInvisible = true
                 verificationWaitingText.isVisible = true
                 val otherUser = state.matrixItem.displayName ?: state.matrixItem.id
@@ -79,5 +79,4 @@ class VerificationRequestFragment @Inject constructor(
         verificationStartButton.isEnabled = false
         sharedViewModel.handle(VerificationAction.RequestVerificationByDM(state.matrixItem.id, state.roomId))
     }
-
 }

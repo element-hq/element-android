@@ -796,7 +796,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun handleAcceptVerification(action: RoomDetailAction.AcceptVerificationRequest) {
-        session.getSasVerificationService().readyPendingVerificationInDMs(action.otherUserId,room.roomId,
+        session.getSasVerificationService().readyPendingVerificationInDMs(action.otherUserId, room.roomId,
                 action.transactionId)
         _requestLiveData.postValue(LiveEvent(Success(action)))
 //        session.getSasVerificationService().beginKeyVerificationInDMs(

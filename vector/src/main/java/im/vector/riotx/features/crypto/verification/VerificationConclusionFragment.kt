@@ -50,7 +50,6 @@ class VerificationConclusionFragment @Inject constructor() : VectorBaseFragment(
                 verifyConclusionDescription.setTextOrHide(getString(R.string.sas_verified_successful_description))
                 verifyConclusionBottomDescription.text = getString(R.string.verification_green_shield)
                 verifyConclusionImageView.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_shield_trusted))
-
             }
             ConclusionState.WARNING   -> {
                 verificationConclusionTitle.text = getString(R.string.verification_conclusion_not_secure)

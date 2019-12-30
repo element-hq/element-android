@@ -43,7 +43,6 @@ class VerificationChooseMethodFragment @Inject constructor(
         if (state.QRModeAvailable) {
             val cSpan = object : ClickableSpan() {
                 override fun onClick(widget: View) {
-
                 }
             }
             val openLink = getString(R.string.verify_open_camera_link)
@@ -65,5 +64,4 @@ class VerificationChooseMethodFragment @Inject constructor(
         sharedViewModel.handle(VerificationAction.StartSASVerification(it.otherUserMxItem?.id ?: "", it.pendingRequest?.transactionId
                 ?: ""))
     }
-
 }

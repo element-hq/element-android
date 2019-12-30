@@ -41,8 +41,7 @@ data class SASVerificationCodeViewState(
 class SASVerificationCodeViewModel @AssistedInject constructor(
         @Assisted initialState: SASVerificationCodeViewState,
         private val session: Session
-) : VectorViewModel<SASVerificationCodeViewState, EmptyAction>(initialState)
-        , SasVerificationService.SasVerificationListener {
+) : VectorViewModel<SASVerificationCodeViewState, EmptyAction>(initialState), SasVerificationService.SasVerificationListener {
 
     init {
         withState { state ->
@@ -165,6 +164,5 @@ class SASVerificationCodeViewModel @AssistedInject constructor(
     }
 
     override fun handle(action: EmptyAction) {
-
     }
 }

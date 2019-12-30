@@ -68,6 +68,5 @@ internal class VerificationMessageLiveObserver @Inject constructor(
         roomVerificationUpdateTask.configureWith(
                 RoomVerificationUpdateTask.Params(events, sasVerificationService, cryptoService)
         ).executeBy(taskExecutor)
-
     }
 }
