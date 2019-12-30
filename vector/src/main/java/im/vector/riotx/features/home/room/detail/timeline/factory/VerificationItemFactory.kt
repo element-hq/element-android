@@ -113,10 +113,11 @@ class VerificationItemFactory @Inject constructor(
             }
             EventType.KEY_VERIFICATION_DONE   -> {
                 // Is the request referenced is actually really completed?
-                if (referenceInformationData.referencesInfoData?.verificationStatus != VerificationState.DONE)
+                if (referenceInformationData.referencesInfoData?.verificationStatus != VerificationState.DONE) {
                     return ignoredConclusion(event, highlight, callback)
-
+                }
                 // We only tale the one sent by me
+
                 if (informationData.sentByMe) {
                     // We only display the done sent by the other user, the done send by me is ignored
                     return ignoredConclusion(event, highlight, callback)

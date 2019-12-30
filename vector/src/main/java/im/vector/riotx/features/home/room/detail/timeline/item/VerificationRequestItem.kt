@@ -58,19 +58,17 @@ abstract class VerificationRequestItem : AbsBaseMessageItem<VerificationRequestI
             this.marginEnd = leftGuideline
         }
 
-        holder.titleView.text = if (attributes.informationData.sentByMe)
+        holder.titleView.text = if (attributes.informationData.sentByMe) {
             holder.view.context.getString(R.string.verification_sent)
-//        + "\n ${attributes.informationData.referencesInfoData?.verificationStatus?.name
-//                    ?: "??"}"
-        else
+        } else {
             holder.view.context.getString(R.string.verification_request)
-//        + "\n ${attributes.informationData.referencesInfoData?.verificationStatus?.name
-//                    ?: "??"}"
+        }
 
-        holder.descriptionView.text = if (!attributes.informationData.sentByMe)
+        holder.descriptionView.text = if (!attributes.informationData.sentByMe) {
             "${attributes.informationData.memberName} (${attributes.informationData.senderId})"
-        else
+        } else {
             "${attributes.otherUserName} (${attributes.otherUserId})"
+        }
 
         when (attributes.informationData.referencesInfoData?.verificationStatus) {
             VerificationState.REQUEST,
@@ -96,10 +94,11 @@ abstract class VerificationRequestItem : AbsBaseMessageItem<VerificationRequestI
             }
             VerificationState.DONE              -> {
                 holder.buttonBar.isVisible = false
-                holder.statusTextView.text = if (attributes.informationData.sentByMe)
+                holder.statusTextView.text = if (attributes.informationData.sentByMe) {
                     holder.view.context.getString(R.string.verification_request_other_accepted, attributes.otherUserName)
-                else
+                } else {
                     holder.view.context.getString(R.string.verification_request_you_accepted)
+                }
                 holder.statusTextView.isVisible = true
             }
             else                                -> {
