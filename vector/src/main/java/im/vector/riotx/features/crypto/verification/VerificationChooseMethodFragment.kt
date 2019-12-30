@@ -21,10 +21,10 @@ import androidx.core.text.toSpannable
 import androidx.core.view.isVisible
 import butterknife.OnClick
 import com.airbnb.mvrx.fragmentViewModel
+import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseFragment
-import im.vector.riotx.core.platform.parentFragmentViewModel
 import im.vector.riotx.core.utils.tappableMatchingText
 import kotlinx.android.synthetic.main.fragment_verification_choose_method.*
 import javax.inject.Inject

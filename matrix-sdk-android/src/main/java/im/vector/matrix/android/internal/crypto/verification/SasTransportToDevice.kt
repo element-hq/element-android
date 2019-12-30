@@ -126,6 +126,14 @@ internal class SasTransportToDevice(
                 messageAuthenticationCodes,
                 shortAuthenticationStrings)
     }
+
+    override fun createReady(tid: String, fromDevice: String, methods: List<String>): VerificationInfoReady {
+        return KeyVerificationReady(
+                transactionID = tid,
+                fromDevice = fromDevice,
+                methods = methods
+        )
+    }
 }
 
 internal class SasTransportToDeviceFactory @Inject constructor(

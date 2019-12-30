@@ -22,10 +22,10 @@ import androidx.core.view.isVisible
 import butterknife.OnClick
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.fragmentViewModel
+import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseFragment
-import im.vector.riotx.core.platform.parentFragmentViewModel
 import im.vector.riotx.core.utils.colorizeMatchingText
 import im.vector.riotx.core.utils.styleMatchingText
 import im.vector.riotx.features.home.AvatarRenderer

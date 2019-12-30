@@ -19,11 +19,11 @@ import android.os.Parcelable
 import androidx.core.content.ContextCompat
 import butterknife.OnClick
 import com.airbnb.mvrx.fragmentViewModel
+import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.core.platform.VectorBaseFragment
-import im.vector.riotx.core.platform.parentFragmentViewModel
 import io.noties.markwon.Markwon
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_verification_conclusion.*
@@ -56,7 +56,9 @@ class VerificationConclusionFragment @Inject constructor() : VectorBaseFragment(
                 verifyConclusionDescription.setTextOrHide(null)
                 verifyConclusionImageView.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_shield_warning))
 
-                verifyConclusionBottomDescription.text = Markwon.builder(requireContext()).build().toMarkdown(getString(R.string.verification_conclusion_compromised))
+                verifyConclusionBottomDescription.text = Markwon.builder(requireContext())
+                        .build()
+                        .toMarkdown(getString(R.string.verification_conclusion_compromised))
             }
             ConclusionState.CANCELLED -> {
                 // Just dismiss in this case

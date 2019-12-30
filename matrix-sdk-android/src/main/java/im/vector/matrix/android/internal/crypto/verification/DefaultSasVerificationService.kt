@@ -75,6 +75,12 @@ internal class DefaultSasVerificationService @Inject constructor(
     // map [sender : [transaction]]
     private val txMap = HashMap<String, HashMap<String, VerificationTransaction>>()
 
+    /**
+     * Map [sender: [PendingVerificationRequest]]
+     */
+    private val pendingRequests = HashMap<String, ArrayList<PendingVerificationRequest>>()
+
+
     // Event received from the sync
     fun onToDeviceEvent(event: Event) {
         GlobalScope.launch(coroutineDispatchers.crypto) {
@@ -119,6 +125,9 @@ internal class DefaultSasVerificationService @Inject constructor(
                 }
                 EventType.KEY_VERIFICATION_MAC    -> {
                     onRoomMacReceived(event)
+                }
+                EventType.KEY_VERIFICATION_READY  -> {
+                    onRoomReadyReceived(event)
                 }
                 EventType.KEY_VERIFICATION_DONE   -> {
                     // TODO?
@@ -168,6 +177,31 @@ internal class DefaultSasVerificationService @Inject constructor(
             listeners.forEach {
                 try {
                     it.transactionUpdated(tx)
+                } catch (e: Throwable) {
+                    Timber.e(e, "## Error while notifying listeners")
+                }
+            }
+        }
+    }
+
+
+    private fun dispatchRequestAdded(tx: PendingVerificationRequest) {
+        uiHandler.post {
+            listeners.forEach {
+                try {
+                    it.verificationRequestCreated(tx)
+                } catch (e: Throwable) {
+                    Timber.e(e, "## Error while notifying listeners")
+                }
+            }
+        }
+    }
+
+    private fun dispatchRequestUpdated(tx: PendingVerificationRequest) {
+        uiHandler.post {
+            listeners.forEach {
+                try {
+                    it.verificationRequestUpdated(tx)
                 } catch (e: Throwable) {
                     Timber.e(e, "## Error while notifying listeners")
                 }
@@ -326,6 +360,10 @@ internal class DefaultSasVerificationService @Inject constructor(
                 // Ok we can create
                 if (KeyVerificationStart.VERIF_METHOD_SAS == startReq.method) {
                     Timber.v("## SAS onStartRequestReceived - request accepted ${startReq.transactionID!!}")
+                    // If there is a corresponding request, we can auto accept
+                    // as we are the one requesting in first place (or we accepted the request)
+                    val autoAccept = getExistingVerificationRequest(otherUserId)?.any { it.transactionId == startReq.transactionID }
+                            ?: false
                     val tx = DefaultIncomingSASVerificationTransaction(
 //                            this,
                             setDeviceVerificationAction,
@@ -333,7 +371,8 @@ internal class DefaultSasVerificationService @Inject constructor(
                             cryptoStore,
                             myDeviceInfoHolder.get().myDevice.fingerprint()!!,
                             startReq.transactionID!!,
-                            otherUserId).also { txConfigure(it) }
+                            otherUserId,
+                            autoAccept).also { txConfigure(it) }
                     addTransaction(tx)
                     tx.acceptVerificationEvent(otherUserId, startReq)
                 } else {
@@ -546,6 +585,15 @@ internal class DefaultSasVerificationService @Inject constructor(
         }
     }
 
+    private fun handleReadyReceived(senderId: String, readyReq: VerificationInfoReady) {
+        val existingRequest = getExistingVerificationRequest(senderId)?.find { it.transactionId == readyReq.transactionID }
+        if (existingRequest == null) {
+            Timber.e("## SAS Received Ready for unknown request txId:${readyReq.transactionID} fromDevice ${readyReq.fromDevice}")
+            return
+        }
+        updateOutgoingPendingRequest(existingRequest.copy(readyInfo = readyReq))
+    }
+
     override fun getExistingTransaction(otherUser: String, tid: String): VerificationTransaction? {
         synchronized(lock = txMap) {
             return txMap[otherUser]?.get(tid)
@@ -647,6 +695,12 @@ internal class DefaultSasVerificationService @Inject constructor(
         ) {
             this.callback = object : MatrixCallback<SendResponse> {
                 override fun onSuccess(data: SendResponse) {
+                    params.event.getClearContent().toModel<MessageVerificationRequestContent>()?.let {
+                        updateOutgoingPendingRequest(verificationRequest.copy(
+                                transactionId = data.eventId,
+                                requestInfo = it
+                        ))
+                    }
                     callback?.onSuccess(data.eventId)
                 }
 
@@ -657,6 +711,24 @@ internal class DefaultSasVerificationService @Inject constructor(
             constraints = TaskConstraints(true)
             retryCount = 3
         }.executeBy(taskExecutor)
+
+        return verificationRequest
+    }
+
+    private fun updateOutgoingPendingRequest(updated: PendingVerificationRequest) {
+        val requestsForUser = pendingRequests[updated.otherUserId]
+                ?: ArrayList<PendingVerificationRequest>().also {
+                    pendingRequests[updated.otherUserId] = it
+                }
+        val index = requestsForUser.indexOfFirst {
+            it.transactionId == updated.transactionId
+                    || it.transactionId == null && it.localID == updated.localID
+        }
+        if (index != -1) {
+            requestsForUser.removeAt(index)
+        }
+        requestsForUser.add(updated)
+        dispatchRequestUpdated(updated)
     }
 
     override fun beginKeyVerificationInDMs(method: String, transactionId: String, roomId: String,
@@ -678,6 +750,27 @@ internal class DefaultSasVerificationService @Inject constructor(
             return transactionId
         } else {
             throw IllegalArgumentException("Unknown verification method")
+        }
+    }
+
+    override fun readyPendingVerificationInDMs(otherUserId: String, roomId: String, transactionId: String) {
+        // Let's find the related request
+        getExistingVerificationRequest(otherUserId)?.find { it.transactionId == transactionId }?.let {
+            //we need to send a ready event, with matching methods
+            val transport = sasTransportRoomMessageFactory.createTransport(roomId, cryptoService, null)
+            val methods = it.requestInfo?.methods?.intersect(listOf(KeyVerificationStart.VERIF_METHOD_SAS))?.toList()
+            if (methods.isNullOrEmpty()) {
+                Timber.i("Cannot ready this request, no common methods found txId:$transactionId")
+                return@let
+            }
+            //TODO this is not yet related to a transaction, maybe we should use another method like for cancel?
+            val readyMsg = transport.createReady(transactionId, credentials.deviceId ?: "", methods)
+            transport.sendToOther(EventType.KEY_VERIFICATION_READY, readyMsg,
+                    SasVerificationTxState.None,
+                    CancelCode.User,
+                    null // TODO handle error?
+            )
+            updateOutgoingPendingRequest(it.copy(readyInfo = readyMsg))
         }
     }
 

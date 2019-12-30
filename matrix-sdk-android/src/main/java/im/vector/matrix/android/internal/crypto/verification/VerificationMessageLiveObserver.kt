@@ -49,6 +49,7 @@ internal class VerificationMessageLiveObserver @Inject constructor(
                 EventType.KEY_VERIFICATION_MAC,
                 EventType.KEY_VERIFICATION_CANCEL,
                 EventType.KEY_VERIFICATION_DONE,
+                EventType.KEY_VERIFICATION_READY,
                 EventType.MESSAGE,
                 EventType.ENCRYPTED)
         )

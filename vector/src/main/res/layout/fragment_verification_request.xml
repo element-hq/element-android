@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!--    <ImageView-->
+    <!--        android:id="@+id/verificationRequestAvatar"-->
+    <!--        android:layout_width="32dp"-->
+    <!--        android:layout_height="32dp"-->
+    <!--        android:adjustViewBounds="true"-->
+    <!--        android:background="@drawable/circle"-->
+    <!--        android:contentDescription="@string/avatar"-->
+    <!--        android:scaleType="centerCrop"-->
+    <!--        android:transitionName="bottomSheetAvatar"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent"-->
+    <!--        app:layout_constraintVertical_bias="0"-->
+    <!--        tools:src="@tools:sample/avatars" />-->
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/verificationRequestName"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginStart="16dp"-->
+    <!--        android:text="@string/verification_request_alert_title"-->
+    <!--        android:textColor="?riotx_text_primary"-->
+    <!--        android:textSize="20sp"-->
+    <!--        android:textStyle="bold"-->
+    <!--        android:transitionName="bottomSheetDisplayName"-->
+    <!--        app:layout_constraintBottom_toBottomOf="@id/verificationRequestAvatar"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toEndOf="@id/verificationRequestAvatar"-->
+    <!--        app:layout_constraintTop_toTopOf="@id/verificationRequestAvatar" />-->
+
+    <TextView
+        android:id="@+id/verificationRequestText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:textColor="?riotx_text_secondary"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/verification_request_alert_description" />
+
+    <!--    app:layout_constraintTop_toBottomOf="@id/verificationRequestAvatar"-->
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/verificationStartButton"
+        style="@style/VectorButtonStylePositive"
+        android:layout_width="match_parent"
+        android:layout_marginTop="16dp"
+        android:text="@string/start_verification"
+        app:layout_constraintTop_toBottomOf="@id/verificationRequestText"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/verificationWaitingText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textColor="?vctr_notice_secondary"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/verificationStartButton"
+        app:layout_constraintTop_toTopOf="@id/verificationStartButton"
+        tools:text="@string/verification_request_waiting_for" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

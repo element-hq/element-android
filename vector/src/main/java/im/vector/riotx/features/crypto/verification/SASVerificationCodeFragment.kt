@@ -24,7 +24,6 @@ import butterknife.OnClick
 import com.airbnb.mvrx.*
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseFragment
-import im.vector.riotx.core.platform.parentFragmentViewModel
 import kotlinx.android.synthetic.main.fragment_bottom_sas_verification_code.*
 import javax.inject.Inject
 

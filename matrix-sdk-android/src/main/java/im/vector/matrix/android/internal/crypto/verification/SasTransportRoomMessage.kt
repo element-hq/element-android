@@ -167,6 +167,17 @@ internal class SasTransportRoomMessage(
                 )
         )
     }
+
+    override fun createReady(tid: String, fromDevice: String, methods: List<String>): VerificationInfoReady {
+        return MessageVerificationReadyContent(
+                fromDevice = fromDevice,
+                relatesTo =  RelationDefaultContent(
+                        type = RelationType.REFERENCE,
+                        eventId = tid
+                ),
+                methods =  methods
+        )
+    }
 }
 
 internal class SasTransportRoomMessageFactory @Inject constructor(
