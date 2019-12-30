@@ -40,20 +40,18 @@ internal fun TimelineEventEntity.updateSenderData() {
     var senderMembershipEvent: EventEntity?
     var senderRoomMemberContent: String?
     var senderRoomMemberPrevContent: String?
-    when {
-        stateIndex <= 0 -> {
-            senderMembershipEvent = chunkEntity.timelineEvents.buildQuery(senderId, isUnlinked).next(from = stateIndex)?.root
-            senderRoomMemberContent = senderMembershipEvent?.prevContent
-            senderRoomMemberPrevContent = senderMembershipEvent?.content
-        }
-        else            -> {
-            senderMembershipEvent = chunkEntity.timelineEvents.buildQuery(senderId, isUnlinked).prev(since = stateIndex)?.root
-            senderRoomMemberContent = senderMembershipEvent?.content
-            senderRoomMemberPrevContent = senderMembershipEvent?.prevContent
-        }
+
+    if (stateIndex <= 0) {
+        senderMembershipEvent = chunkEntity.timelineEvents.buildQuery(senderId, isUnlinked).next(from = stateIndex)?.root
+        senderRoomMemberContent = senderMembershipEvent?.prevContent
+        senderRoomMemberPrevContent = senderMembershipEvent?.content
+    } else {
+        senderMembershipEvent = chunkEntity.timelineEvents.buildQuery(senderId, isUnlinked).prev(since = stateIndex)?.root
+        senderRoomMemberContent = senderMembershipEvent?.content
+        senderRoomMemberPrevContent = senderMembershipEvent?.prevContent
     }
 
-    // We fallback to untimelinedStateEvents if we can't find membership events in timeline
+// We fallback to untimelinedStateEvents if we can't find membership events in timeline
     if (senderMembershipEvent == null) {
         senderMembershipEvent = roomEntity.untimelinedStateEvents
                 .where()
@@ -70,7 +68,7 @@ internal fun TimelineEventEntity.updateSenderData() {
         this.isUniqueDisplayName = RoomMembers(realm, roomId).isUniqueDisplayName(it.displayName)
     }
 
-    // We try to fallback on prev content if we got a room member state events with null fields
+// We try to fallback on prev content if we got a room member state events with null fields
     if (root?.type == EventType.STATE_ROOM_MEMBER) {
         ContentMapper.map(senderRoomMemberPrevContent).toModel<RoomMemberContent>()?.also {
             if (this.senderAvatar == null && it.avatarUrl != null) {
@@ -82,7 +80,7 @@ internal fun TimelineEventEntity.updateSenderData() {
             }
         }
     }
-    this.senderMembershipEvent = senderMembershipEvent
+    this.senderMembershipEventId = senderMembershipEvent?.eventId
 }
 
 internal fun TimelineEventEntity.Companion.nextId(realm: Realm): Long {

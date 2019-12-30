@@ -149,10 +149,8 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
                         currentChunk.isLastBackward = true
                     } else if (!shouldSkip) {
                         Timber.v("Add ${receivedChunk.events.size} events in chunk(${currentChunk.nextToken} | ${currentChunk.prevToken}")
-                        val eventIds = ArrayList<String>(receivedChunk.events.size)
-                        for (event in receivedChunk.events) {
-                            event.eventId?.also { eventIds.add(it) }
-                            currentChunk.add(roomId, event, direction, isUnlinked = currentChunk.isUnlinked())
+                        val timelineEvents = receivedChunk.events.mapNotNull {
+                            currentChunk.add(roomId, it, direction, isUnlinked = currentChunk.isUnlinked())
                         }
                         // Then we merge chunks if needed
                         if (currentChunk != prevChunk && prevChunk != null) {
@@ -172,7 +170,7 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
                         for (stateEvent in receivedChunk.stateEvents) {
                             roomEntity.addStateEvent(stateEvent, isUnlinked = currentChunk.isUnlinked())
                         }
-                        currentChunk.updateSenderDataFor(eventIds)
+                        currentChunk.updateSenderDataFor(timelineEvents)
                     }
                 }
         return if (receivedChunk.events.isEmpty()) {

@@ -19,7 +19,11 @@ package im.vector.matrix.android.session.room.timeline
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.InstrumentedTest
-import im.vector.matrix.android.internal.database.helper.*
+import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.internal.database.helper.add
+import im.vector.matrix.android.internal.database.helper.isUnlinked
+import im.vector.matrix.android.internal.database.helper.lastStateIndex
+import im.vector.matrix.android.internal.database.helper.merge
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.SessionRealmModule
 import im.vector.matrix.android.internal.session.room.timeline.PaginationDirection
@@ -195,6 +199,17 @@ internal class ChunkEntityTest : InstrumentedTest {
             chunk2.addAll("roomId", createFakeListOfEvents(30), PaginationDirection.BACKWARDS, isUnlinked = true)
             chunk1.merge("roomId", chunk2, PaginationDirection.BACKWARDS)
             chunk1.nextToken shouldEqual nextToken
+        }
+    }
+
+    private fun ChunkEntity.addAll(roomId: String,
+                                   events: List<Event>,
+                                   direction: PaginationDirection,
+                                   stateIndexOffset: Int = 0,
+            // Set to true for Event retrieved from a Permalink (i.e. not linked to live Chunk)
+                                   isUnlinked: Boolean = false) {
+        events.forEach { event ->
+            add(roomId, event, direction, stateIndexOffset, isUnlinked)
         }
     }
 }

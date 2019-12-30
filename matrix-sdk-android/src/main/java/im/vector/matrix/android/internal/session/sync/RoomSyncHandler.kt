@@ -27,6 +27,7 @@ import im.vector.matrix.android.internal.database.helper.*
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.EventEntityFields
 import im.vector.matrix.android.internal.database.model.RoomEntity
+import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.query.find
 import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
 import im.vector.matrix.android.internal.database.query.where
@@ -189,10 +190,11 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         lastChunk?.isLastForward = false
         chunkEntity.isLastForward = true
 
-        val eventIds = ArrayList<String>(eventList.size)
+        val timelineEvents = ArrayList<TimelineEventEntity>(eventList.size)
         for (event in eventList) {
-            event.eventId?.also { eventIds.add(it) }
-            chunkEntity.add(roomEntity.roomId, event, PaginationDirection.FORWARDS, stateIndexOffset)
+            chunkEntity.add(roomEntity.roomId, event, PaginationDirection.FORWARDS, stateIndexOffset)?.also {
+                timelineEvents.add(it)
+            }
             // Give info to crypto module
             cryptoService.onLiveEvent(roomEntity.roomId, event)
             // Try to remove local echo
@@ -207,7 +209,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
             }
             roomMemberEventHandler.handle(realm, roomEntity.roomId, event)
         }
-        chunkEntity.updateSenderDataFor(eventIds)
+        chunkEntity.updateSenderDataFor(timelineEvents)
         return chunkEntity
     }
 

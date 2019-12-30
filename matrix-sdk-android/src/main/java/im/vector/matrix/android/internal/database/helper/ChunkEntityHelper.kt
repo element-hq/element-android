@@ -28,6 +28,7 @@ import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.extensions.assertIsManaged
 import im.vector.matrix.android.internal.session.room.timeline.PaginationDirection
 import io.realm.Sort
+import io.realm.kotlin.createObject
 
 // By default if a chunk is empty we consider it unlinked
 internal fun ChunkEntity.isUnlinked(): Boolean {
@@ -65,38 +66,22 @@ internal fun ChunkEntity.merge(roomId: String,
         this.isLastBackward = chunkToMerge.isLastBackward
         eventsToMerge = chunkToMerge.timelineEvents.sort(TimelineEventEntityFields.ROOT.DISPLAY_INDEX, Sort.DESCENDING)
     }
-    val events = eventsToMerge.mapNotNull { it.root?.asDomain() }
-    val eventIds = ArrayList<String>()
-    events.forEach { event ->
-        add(roomId, event, direction, isUnlinked = isUnlinked)
-        if (event.eventId != null) {
-            eventIds.add(event.eventId)
-        }
-    }
-    updateSenderDataFor(eventIds)
+    val timelineEvents = eventsToMerge
+            .mapNotNull {
+                val event = it.root?.asDomain() ?: return@mapNotNull null
+                add(roomId, event, direction, isUnlinked = isUnlinked)
+            }
+    updateSenderDataFor(timelineEvents)
 }
 
-internal fun ChunkEntity.addAll(roomId: String,
-                                events: List<Event>,
-                                direction: PaginationDirection,
-                                stateIndexOffset: Int = 0,
-        // Set to true for Event retrieved from a Permalink (i.e. not linked to live Chunk)
-                                isUnlinked: Boolean = false) {
-    assertIsManaged()
-    val eventIds = ArrayList<String>()
-    events.forEach { event ->
-        add(roomId, event, direction, stateIndexOffset, isUnlinked)
-        if (event.eventId != null) {
-            eventIds.add(event.eventId)
-        }
-    }
-    updateSenderDataFor(eventIds)
-}
-
-internal fun ChunkEntity.updateSenderDataFor(eventIds: List<String>) {
-    for (eventId in eventIds) {
-        val timelineEventEntity = timelineEvents.find(eventId) ?: continue
-        timelineEventEntity.updateSenderData()
+internal fun ChunkEntity.updateSenderDataFor(events: List<TimelineEventEntity>) {
+    val cache = RoomMembersCache()
+    events.forEach {
+        val result = cache.get(it)
+        it.isUniqueDisplayName = result.isUniqueDisplayName
+        it.senderAvatar = result.senderAvatar
+        it.senderName = result.senderName
+        it.senderMembershipEventId = result.senderMembershipEventId
     }
 }
 
@@ -104,10 +89,10 @@ internal fun ChunkEntity.add(roomId: String,
                              event: Event,
                              direction: PaginationDirection,
                              stateIndexOffset: Int = 0,
-                             isUnlinked: Boolean = false) {
+                             isUnlinked: Boolean = false): TimelineEventEntity? {
     assertIsManaged()
     if (event.eventId != null && timelineEvents.find(event.eventId) != null) {
-        return
+        return null
     }
     var currentDisplayIndex = lastDisplayIndex(direction, 0)
     if (direction == PaginationDirection.FORWARDS) {
@@ -134,7 +119,9 @@ internal fun ChunkEntity.add(roomId: String,
     val senderId = event.senderId ?: ""
 
     val readReceiptsSummaryEntity = ReadReceiptsSummaryEntity.where(realm, eventId).findFirst()
-            ?: ReadReceiptsSummaryEntity(eventId, roomId)
+            ?: realm.createObject<ReadReceiptsSummaryEntity>(eventId).apply {
+                this.roomId = roomId
+            }
 
     // Update RR for the sender of a new message with a dummy one
 
@@ -151,13 +138,15 @@ internal fun ChunkEntity.add(roomId: String,
         }
     }
 
-    val eventEntity = TimelineEventEntity(localId).also {
-        it.root = event.toEntity(roomId).apply {
-            this.stateIndex = currentStateIndex
-            this.isUnlinked = isUnlinked
-            this.displayIndex = currentDisplayIndex
-            this.sendState = SendState.SYNCED
-        }
+    val rootEvent = event.toEntity(roomId).apply {
+        this.stateIndex = currentStateIndex
+        this.isUnlinked = isUnlinked
+        this.displayIndex = currentDisplayIndex
+        this.sendState = SendState.SYNCED
+    }
+    val eventEntity = realm.createObject<TimelineEventEntity>().also {
+        it.localId = localId
+        it.root = realm.copyToRealm(rootEvent)
         it.eventId = eventId
         it.roomId = roomId
         it.annotations = EventAnnotationsSummaryEntity.where(realm, eventId).findFirst()
@@ -165,6 +154,7 @@ internal fun ChunkEntity.add(roomId: String,
     }
     val position = if (direction == PaginationDirection.FORWARDS) 0 else this.timelineEvents.size
     timelineEvents.add(position, eventEntity)
+    return eventEntity
 }
 
 internal fun ChunkEntity.lastDisplayIndex(direction: PaginationDirection, defaultValue: Int = 0): Int {
