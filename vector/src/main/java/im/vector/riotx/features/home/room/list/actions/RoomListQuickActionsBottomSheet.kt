@@ -46,6 +46,7 @@ data class RoomListActionsArgs(
 class RoomListQuickActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), RoomListQuickActionsEpoxyController.Listener {
 
     private lateinit var sharedActionViewModel: RoomListQuickActionsSharedActionViewModel
+    @Inject lateinit var sharedViewPool: RecyclerView.RecycledViewPool
     @Inject lateinit var roomListActionsViewModelFactory: RoomListQuickActionsViewModel.Factory
     @Inject lateinit var roomListActionsEpoxyController: RoomListQuickActionsEpoxyController
     @Inject lateinit var navigator: Navigator
@@ -70,7 +71,7 @@ class RoomListQuickActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), R
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(RoomListQuickActionsSharedActionViewModel::class.java)
-        recyclerView.configureWith(roomListActionsEpoxyController, hasFixedSize = false)
+        recyclerView.configureWith(roomListActionsEpoxyController, viewPool = sharedViewPool, hasFixedSize = false)
         // Disable item animation
         recyclerView.itemAnimator = null
         roomListActionsEpoxyController.listener = this
