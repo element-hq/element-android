@@ -15,6 +15,7 @@
  */
 package im.vector.matrix.android.internal.crypto.verification
 
+import im.vector.matrix.android.api.session.crypto.sas.CancelCode
 import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
 import java.util.*
 
@@ -27,7 +28,10 @@ data class PendingVerificationRequest(
         val otherUserId: String,
         val transactionId: String? = null,
         val requestInfo: MessageVerificationRequestContent? = null,
-        val readyInfo: VerificationInfoReady? = null
+        val readyInfo: VerificationInfoReady? = null,
+        val cancelConclusion: CancelCode? = null,
+        val isSuccessful : Boolean = false
+
 ) {
 
     val isReady: Boolean = readyInfo != null

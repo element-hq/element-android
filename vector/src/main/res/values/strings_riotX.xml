@@ -2,16 +2,28 @@
 <resources>
 
     <!-- Strings not defined in Riot -->
+    <string name="command_description_verify">Request to verify the given userID</string>
+    <string name="command_description_shrug">Prepends ¯\\_(ツ)_/¯ to a plain-text message</string>
+
 
     <string name="notification_initial_sync">Initial Sync…</string>
 
-    <string name="sent_a_file">File</string>
-    <string name="sent_an_audio_file">Audio</string>
-    <string name="sent_an_image">Image.</string>
-    <string name="sent_a_video">Video.</string>
-
-
     <string name="verification_conclusion_warning">Untrusted sign in</string>
+    <string name="verification_sas_match">They match</string>
+    <string name="verification_sas_do_not_match">They don‘t match</string>
+    <string name="verify_user_sas_emoji_help_text">Verify this user by confirming the following unique emoji appear on their screen, in the same order."</string>
+    <string name="verify_user_sas_emoji_security_tip">For ultimate security, use another trusted means of communication or do this in person.</string>
+    <string name="verification_green_shield">Look for the green shield to ensure a user is trusted. Trust all users in a room to ensure the room is secure.</string>
+
+    <string name="verification_conclusion_not_secure">Not secure</string>
+    <string name="verification_conclusion_compromised">One of the following may be compromised:\n\n   - Your homeserver\n   - The homeserver the user you’re verifying is connected to\n   - Yours, or the other users’ internet connection\n   - Yours, or the other users’ device
+    </string>
+
+    <string name="sent_a_video">Video.</string>
+    <string name="sent_an_image">Image.</string>
+    <string name="sent_an_audio_file">Audio</string>
+    <string name="sent_a_file">File</string>
+
     <string name="verification_request_waiting">Waiting…</string>
     <string name="verification_request_other_cancelled">%s cancelled</string>
     <string name="verification_request_you_cancelled">You cancelled</string>

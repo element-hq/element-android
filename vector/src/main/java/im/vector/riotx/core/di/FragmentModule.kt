@@ -273,11 +273,23 @@ interface FragmentModule {
 
     @Binds
     @IntoMap
-    @FragmentKey(OutgoingVerificationRequestFragment::class)
-    fun bindVerificationRequestFragment(fragment: OutgoingVerificationRequestFragment): Fragment
+    @FragmentKey(VerificationRequestFragment::class)
+    fun bindVerificationRequestFragment(fragment: VerificationRequestFragment): Fragment
 
     @Binds
     @IntoMap
     @FragmentKey(VerificationChooseMethodFragment::class)
     fun bindVerificationMethodChooserFragment(fragment: VerificationChooseMethodFragment): Fragment
+
+
+    @Binds
+    @IntoMap
+    @FragmentKey(SASVerificationCodeFragment::class)
+    fun bindVerificationSasCodeFragment(fragment: SASVerificationCodeFragment): Fragment
+
+
+    @Binds
+    @IntoMap
+    @FragmentKey(VerificationConclusionFragment::class)
+    fun bindVerificationSasConclusionFragment(fragment: VerificationConclusionFragment): Fragment
 }

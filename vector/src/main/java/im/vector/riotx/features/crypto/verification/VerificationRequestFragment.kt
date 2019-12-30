@@ -16,16 +16,14 @@
 package im.vector.riotx.features.crypto.verification
 
 import android.graphics.Typeface
-import android.os.Bundle
 import androidx.core.text.toSpannable
-import androidx.transition.AutoTransition
-import androidx.transition.TransitionManager
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import butterknife.OnClick
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
-import im.vector.riotx.core.extensions.commitTransaction
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.platform.parentFragmentViewModel
 import im.vector.riotx.core.utils.colorizeMatchingText
@@ -35,43 +33,51 @@ import im.vector.riotx.features.themes.ThemeUtils
 import kotlinx.android.synthetic.main.fragment_verification_request.*
 import javax.inject.Inject
 
-class OutgoingVerificationRequestFragment @Inject constructor(
-        val outgoingVerificationRequestViewModelFactory: OutgoingVerificationRequestViewModel.Factory,
+class VerificationRequestFragment @Inject constructor(
+        val verificationRequestViewModelFactory: VerificationRequestViewModel.Factory,
         val avatarRenderer: AvatarRenderer
 ) : VectorBaseFragment() {
 
-    private val viewModel by fragmentViewModel(OutgoingVerificationRequestViewModel::class)
+    private val viewModel by fragmentViewModel(VerificationRequestViewModel::class)
 
     private val sharedViewModel by parentFragmentViewModel(VerificationBottomSheetViewModel::class)
 
     override fun getLayoutResId() = R.layout.fragment_verification_request
 
     override fun invalidate() = withState(viewModel) { state ->
-        state.matrixItem?.let {
+        state.matrixItem.let {
             val styledText = getString(R.string.verification_request_alert_description, it.id)
                     .toSpannable()
                     .styleMatchingText(it.id, Typeface.BOLD)
                     .colorizeMatchingText(it.id, ThemeUtils.getColor(requireContext(), R.attr.vctr_notice_text_color))
             verificationRequestText.text = styledText
         }
+
+        when (state.started) {
+            is Loading -> {
+                //Hide the start button, show waiting
+                verificationStartButton.isInvisible = true
+                verificationWaitingText.isVisible = true
+                val otherUser = state.matrixItem.displayName ?: state.matrixItem.id
+                verificationWaitingText.text = getString(R.string.verification_request_waiting_for, otherUser)
+                        .toSpannable()
+                        .styleMatchingText(otherUser, Typeface.BOLD)
+                        .colorizeMatchingText(otherUser, ThemeUtils.getColor(requireContext(), R.attr.vctr_notice_text_color))
+            }
+            else       -> {
+                verificationStartButton.isEnabled = true
+                verificationStartButton.isVisible = true
+                verificationWaitingText.isInvisible = true
+            }
+        }
+
         Unit
     }
 
     @OnClick(R.id.verificationStartButton)
     fun onClickOnVerificationStart() = withState(viewModel) { state ->
-
-        sharedViewModel.handle(VerificationAction.RequestVerificationByDM(state.otherUserId))
-
-        getParentCoordinatorLayout()?.let {
-            TransitionManager.beginDelayedTransition(it, AutoTransition().apply { duration = 150 })
-        }
-        parentFragmentManager.commitTransaction {
-            replace(R.id.bottomSheetFragmentContainer,
-                    VerificationChooseMethodFragment::class.java,
-                    Bundle().apply { putString(MvRx.KEY_ARG, state.otherUserId) },
-                    "REQUEST"
-            )
-        }
+        verificationStartButton.isEnabled = false
+        sharedViewModel.handle(VerificationAction.RequestVerificationByDM(state.matrixItem.id, state.roomId))
     }
 
 }

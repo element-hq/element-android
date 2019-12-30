@@ -42,6 +42,8 @@ interface SasVerificationService {
 
     fun getExistingVerificationRequest(otherUser: String): List<PendingVerificationRequest>?
 
+    fun getExistingVerificationRequest(otherUser: String, tid: String?): PendingVerificationRequest?
+
     /**
      * Shortcut for KeyVerificationStart.VERIF_METHOD_SAS
      * @see beginKeyVerification
