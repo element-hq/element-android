@@ -110,6 +110,11 @@ interface Session :
     fun syncState(): LiveData<SyncState>
 
     /**
+     * This methods return true if an initial sync has been processed
+     */
+    fun hasAlreadySynced(): Boolean
+
+    /**
      * This method allow to close a session. It does stop some services.
      */
     fun close()

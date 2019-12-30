@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.api.session.room.send
+package im.vector.riotx.core.error
 
-import im.vector.matrix.android.api.util.MatrixItem
+import im.vector.riotx.BuildConfig
+import timber.log.Timber
 
 /**
- * Tag class for spans that should mention a user.
- * These Spans will be transformed into pills when detected in message to send
+ * throw in debug, only log in production. As this method does not always throw, next statement should be a return
  */
-interface UserMentionSpan {
-    val matrixItem: MatrixItem
+fun fatalError(message: String) {
+    if (BuildConfig.DEBUG) {
+        error(message)
+    } else {
+        Timber.e(message)
+    }
 }

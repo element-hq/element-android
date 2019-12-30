@@ -28,6 +28,7 @@ import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.EventEntityFields
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
+import im.vector.matrix.android.internal.database.query.*
 import im.vector.matrix.android.internal.database.query.isEventRead
 import im.vector.matrix.android.internal.database.query.latestEvent
 import im.vector.matrix.android.internal.database.query.prev
@@ -38,7 +39,6 @@ import im.vector.matrix.android.internal.session.room.membership.RoomMembers
 import im.vector.matrix.android.internal.session.sync.model.RoomSyncSummary
 import im.vector.matrix.android.internal.session.sync.model.RoomSyncUnreadNotifications
 import io.realm.Realm
-import io.realm.kotlin.createObject
 import javax.inject.Inject
 
 internal class RoomSummaryUpdater @Inject constructor(@UserId private val userId: String,
@@ -52,7 +52,7 @@ internal class RoomSummaryUpdater @Inject constructor(@UserId private val userId
             EventType.STATE_ROOM_NAME,
             EventType.STATE_ROOM_TOPIC,
             EventType.STATE_ROOM_MEMBER,
-            EventType.STATE_HISTORY_VISIBILITY,
+            EventType.STATE_ROOM_HISTORY_VISIBILITY,
             EventType.CALL_INVITE,
             EventType.CALL_HANGUP,
             EventType.CALL_ANSWER,
@@ -69,9 +69,7 @@ internal class RoomSummaryUpdater @Inject constructor(@UserId private val userId
                roomSummary: RoomSyncSummary? = null,
                unreadNotifications: RoomSyncUnreadNotifications? = null,
                updateMembers: Boolean = false) {
-        val roomSummaryEntity = RoomSummaryEntity.where(realm, roomId).findFirst()
-                ?: realm.createObject(roomId)
-
+        val roomSummaryEntity = RoomSummaryEntity.getOrCreate(realm, roomId)
         if (roomSummary != null) {
             if (roomSummary.heroes.isNotEmpty()) {
                 roomSummaryEntity.heroes.clear()
@@ -93,7 +91,7 @@ internal class RoomSummaryUpdater @Inject constructor(@UserId private val userId
 
         val latestPreviewableEvent = TimelineEventEntity.latestEvent(realm, roomId, includesSending = true, filterTypes = PREVIEWABLE_TYPES)
         val lastTopicEvent = EventEntity.where(realm, roomId, EventType.STATE_ROOM_TOPIC).prev()
-        val lastCanonicalAliasEvent = EventEntity.where(realm, roomId, EventType.STATE_CANONICAL_ALIAS).prev()
+        val lastCanonicalAliasEvent = EventEntity.where(realm, roomId, EventType.STATE_ROOM_CANONICAL_ALIAS).prev()
         val lastAliasesEvent = EventEntity.where(realm, roomId, EventType.STATE_ROOM_ALIASES).prev()
 
         roomSummaryEntity.hasUnreadMessages = roomSummaryEntity.notificationCount > 0

@@ -504,7 +504,6 @@ internal class DefaultTimeline(
         Timber.v("Should fetch $limit items $direction")
         cancelableBag += paginationTask
                 .configureWith(params) {
-                    this.retryCount = Int.MAX_VALUE
                     this.constraints = TaskConstraints(connectedToNetwork = true)
                     this.callback = object : MatrixCallback<TokenChunkEventPersistor.Result> {
                         override fun onSuccess(data: TokenChunkEventPersistor.Result) {
@@ -524,6 +523,8 @@ internal class DefaultTimeline(
                         }
 
                         override fun onFailure(failure: Throwable) {
+                            updateState(direction) { it.copy(isPaginating = false, requestedPaginationCount = 0) }
+                            postSnapshot()
                             Timber.v("Failure fetching $limit items $direction from pagination request")
                         }
                     }
@@ -637,7 +638,14 @@ internal class DefaultTimeline(
 
     private fun fetchEvent(eventId: String) {
         val params = GetContextOfEventTask.Params(roomId, eventId, settings.initialSize)
-        cancelableBag += contextOfEventTask.configureWith(params).executeBy(taskExecutor)
+        cancelableBag += contextOfEventTask.configureWith(params) {
+            callback = object : MatrixCallback<TokenChunkEventPersistor.Result> {
+                override fun onFailure(failure: Throwable) {
+                    postFailure(failure)
+                }
+            }
+        }
+                .executeBy(taskExecutor)
     }
 
     private fun postSnapshot() {
@@ -650,12 +658,26 @@ internal class DefaultTimeline(
             val runnable = Runnable {
                 synchronized(listeners) {
                     listeners.forEach {
-                        it.onUpdated(snapshot)
+                        it.onTimelineUpdated(snapshot)
                     }
                 }
             }
             debouncer.debounce("post_snapshot", runnable, 50)
         }
+    }
+
+    private fun postFailure(throwable: Throwable) {
+        if (isReady.get().not()) {
+            return
+        }
+        val runnable = Runnable {
+            synchronized(listeners) {
+                listeners.forEach {
+                    it.onTimelineFailure(throwable)
+                }
+            }
+        }
+        mainHandler.post(runnable)
     }
 
     private fun clearAllValues() {

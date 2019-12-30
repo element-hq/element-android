@@ -23,6 +23,5 @@ internal data class MatrixCoroutineDispatchers(
         val computation: CoroutineDispatcher,
         val main: CoroutineDispatcher,
         val crypto: CoroutineDispatcher,
-        val sync: CoroutineDispatcher,
         val dmVerif: CoroutineDispatcher
 )

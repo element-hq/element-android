@@ -46,6 +46,7 @@ import im.vector.matrix.android.internal.session.sync.job.SyncWorker
 import im.vector.matrix.android.internal.session.user.UserModule
 import im.vector.matrix.android.internal.session.user.accountdata.AccountDataModule
 import im.vector.matrix.android.internal.task.TaskExecutor
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 
 @Component(dependencies = [MatrixComponent::class],
            modules = [
@@ -68,6 +69,8 @@ import im.vector.matrix.android.internal.task.TaskExecutor
 )
 @SessionScope
 internal interface SessionComponent {
+
+    fun coroutineDispatchers(): MatrixCoroutineDispatchers
 
     fun session(): Session
 

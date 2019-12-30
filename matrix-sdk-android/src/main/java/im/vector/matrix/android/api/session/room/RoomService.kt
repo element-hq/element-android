@@ -53,6 +53,13 @@ interface RoomService {
     fun getRoom(roomId: String): Room?
 
     /**
+     * Get a roomSummary from a roomId or a room alias
+     * @param roomIdOrAlias the roomId or the alias of a room to look for.
+     * @return a matching room summary or null
+     */
+    fun getRoomSummary(roomIdOrAlias: String): RoomSummary?
+
+    /**
      * Get a live list of room summaries. This list is refreshed as soon as the data changes.
      * @return the [LiveData] of [RoomSummary]
      */

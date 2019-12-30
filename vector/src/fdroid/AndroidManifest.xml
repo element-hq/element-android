@@ -4,7 +4,6 @@
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application>
 
@@ -18,10 +17,6 @@
         <receiver
             android:name=".fdroid.receiver.AlarmSyncBroadcastReceiver"
             android:enabled="true"
-            android:exported="false" />
-
-        <service
-            android:name=".fdroid.service.VectorSyncService"
             android:exported="false" />
 
     </application>

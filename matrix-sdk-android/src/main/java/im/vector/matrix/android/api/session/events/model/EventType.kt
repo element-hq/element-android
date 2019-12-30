@@ -50,10 +50,10 @@ object EventType {
     const val STATE_ROOM_POWER_LEVELS = "m.room.power_levels"
     const val STATE_ROOM_ALIASES = "m.room.aliases"
     const val STATE_ROOM_TOMBSTONE = "m.room.tombstone"
-    const val STATE_CANONICAL_ALIAS = "m.room.canonical_alias"
-    const val STATE_HISTORY_VISIBILITY = "m.room.history_visibility"
-    const val STATE_RELATED_GROUPS = "m.room.related_groups"
-    const val STATE_PINNED_EVENT = "m.room.pinned_events"
+    const val STATE_ROOM_CANONICAL_ALIAS = "m.room.canonical_alias"
+    const val STATE_ROOM_HISTORY_VISIBILITY = "m.room.history_visibility"
+    const val STATE_ROOM_RELATED_GROUPS = "m.room.related_groups"
+    const val STATE_ROOM_PINNED_EVENT = "m.room.pinned_events"
 
     // Call Events
 
@@ -87,10 +87,12 @@ object EventType {
             STATE_ROOM_JOIN_RULES,
             STATE_ROOM_GUEST_ACCESS,
             STATE_ROOM_POWER_LEVELS,
+            STATE_ROOM_ALIASES,
             STATE_ROOM_TOMBSTONE,
-            STATE_HISTORY_VISIBILITY,
-            STATE_RELATED_GROUPS,
-            STATE_PINNED_EVENT
+            STATE_ROOM_CANONICAL_ALIAS,
+            STATE_ROOM_HISTORY_VISIBILITY,
+            STATE_ROOM_RELATED_GROUPS,
+            STATE_ROOM_PINNED_EVENT
     )
 
     fun isStateEvent(type: String): Boolean {

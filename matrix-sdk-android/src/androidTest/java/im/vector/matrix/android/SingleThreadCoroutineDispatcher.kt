@@ -21,5 +21,5 @@ import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.asCoroutineDispatcher
 import java.util.concurrent.Executors
 
-internal val testCoroutineDispatchers = MatrixCoroutineDispatchers(Main, Main, Main, Main, Main,
+internal val testCoroutineDispatchers = MatrixCoroutineDispatchers(Main, Main, Main, Main,
         Executors.newSingleThreadExecutor().asCoroutineDispatcher())

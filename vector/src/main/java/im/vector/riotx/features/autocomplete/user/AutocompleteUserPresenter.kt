@@ -17,16 +17,17 @@
 package im.vector.riotx.features.autocomplete.user
 
 import android.content.Context
-import com.airbnb.epoxy.EpoxyController
+import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Success
+import com.otaliastudios.autocomplete.RecyclerViewPresenter
 import im.vector.matrix.android.api.session.user.model.User
-import im.vector.riotx.features.autocomplete.EpoxyAutocompletePresenter
+import im.vector.riotx.features.autocomplete.AutocompleteClickListener
 import javax.inject.Inject
 
 class AutocompleteUserPresenter @Inject constructor(context: Context,
                                                     private val controller: AutocompleteUserController
-) : EpoxyAutocompletePresenter<User>(context) {
+) : RecyclerViewPresenter<User>(context), AutocompleteClickListener<User> {
 
     var callback: Callback? = null
 
@@ -34,8 +35,14 @@ class AutocompleteUserPresenter @Inject constructor(context: Context,
         controller.listener = this
     }
 
-    override fun providesController(): EpoxyController {
-        return controller
+    override fun instantiateAdapter(): RecyclerView.Adapter<*> {
+        // Also remove animation
+        recyclerView?.itemAnimator = null
+        return controller.adapter
+    }
+
+    override fun onItemClick(t: User) {
+        dispatchClick(t)
     }
 
     override fun onQuery(query: CharSequence?) {

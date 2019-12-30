@@ -16,15 +16,13 @@
 package im.vector.matrix.android.internal.session.room.send.pills
 
 import android.text.SpannableString
-import im.vector.matrix.android.api.session.room.send.UserMentionSpan
+import im.vector.matrix.android.api.session.room.send.MatrixItemSpan
 import java.util.*
 import javax.inject.Inject
 
 /**
  * Utility class to detect special span in CharSequence and turn them into
  * formatted text to send them as a Matrix messages.
- *
- * For now only support UserMentionSpans (TODO rooms, room aliases, etc...)
  */
 internal class TextPillsUtils @Inject constructor(
         private val mentionLinkSpecComparator: MentionLinkSpecComparator
@@ -49,7 +47,7 @@ internal class TextPillsUtils @Inject constructor(
     private fun transformPills(text: CharSequence, template: String): String? {
         val spannableString = SpannableString.valueOf(text)
         val pills = spannableString
-                ?.getSpans(0, text.length, UserMentionSpan::class.java)
+                ?.getSpans(0, text.length, MatrixItemSpan::class.java)
                 ?.map { MentionLinkSpec(it, spannableString.getSpanStart(it), spannableString.getSpanEnd(it)) }
                 ?.toMutableList()
                 ?.takeIf { it.isNotEmpty() }
@@ -65,7 +63,7 @@ internal class TextPillsUtils @Inject constructor(
                 // append text before pill
                 append(text, currIndex, start)
                 // append the pill
-                append(String.format(template, urlSpan.matrixItem.id, urlSpan.matrixItem.displayName))
+                append(String.format(template, urlSpan.matrixItem.id, urlSpan.matrixItem.getBestName()))
                 currIndex = end
             }
             // append text after the last pill

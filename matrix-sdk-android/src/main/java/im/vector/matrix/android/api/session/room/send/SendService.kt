@@ -29,7 +29,7 @@ interface SendService {
 
     /**
      * Method to send a text message asynchronously.
-     * The text to send can be a Spannable and contains special spans (UserMentionSpan) that will be translated
+     * The text to send can be a Spannable and contains special spans (MatrixItemSpan) that will be translated
      * by the sdk into pills.
      * @param text the text message to send
      * @param msgType the message type: MessageType.MSGTYPE_TEXT (default) or MessageType.MSGTYPE_EMOTE

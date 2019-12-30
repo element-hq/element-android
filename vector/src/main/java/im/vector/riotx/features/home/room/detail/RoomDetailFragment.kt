@@ -59,7 +59,9 @@ import im.vector.matrix.android.api.permalinks.PermalinkFactory
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.android.api.session.room.model.Membership
+import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.Timeline
@@ -68,6 +70,7 @@ import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
+import im.vector.matrix.android.api.util.toRoomAliasMatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.dialogs.withColoredButton
 import im.vector.riotx.core.epoxy.LayoutManagerStateRestorer
@@ -83,11 +86,11 @@ import im.vector.riotx.features.attachments.AttachmentsHelper
 import im.vector.riotx.features.attachments.ContactAttachment
 import im.vector.riotx.features.autocomplete.command.AutocompleteCommandPresenter
 import im.vector.riotx.features.autocomplete.command.CommandAutocompletePolicy
+import im.vector.riotx.features.autocomplete.group.AutocompleteGroupPresenter
+import im.vector.riotx.features.autocomplete.room.AutocompleteRoomPresenter
 import im.vector.riotx.features.autocomplete.user.AutocompleteUserPresenter
 import im.vector.riotx.features.command.Command
 import im.vector.riotx.features.home.AvatarRenderer
-import im.vector.riotx.features.permalink.NavigateToRoomInterceptor
-import im.vector.riotx.features.permalink.PermalinkHandler
 import im.vector.riotx.features.home.getColorFromUserId
 import im.vector.riotx.features.home.room.detail.composer.TextComposerAction
 import im.vector.riotx.features.home.room.detail.composer.TextComposerView
@@ -109,6 +112,8 @@ import im.vector.riotx.features.media.ImageMediaViewerActivity
 import im.vector.riotx.features.media.VideoContentRenderer
 import im.vector.riotx.features.media.VideoMediaViewerActivity
 import im.vector.riotx.features.notifications.NotificationDrawerManager
+import im.vector.riotx.features.permalink.NavigateToRoomInterceptor
+import im.vector.riotx.features.permalink.PermalinkHandler
 import im.vector.riotx.features.reactions.EmojiReactionPickerActivity
 import im.vector.riotx.features.settings.VectorPreferences
 import im.vector.riotx.features.share.SharedData
@@ -140,6 +145,8 @@ class RoomDetailFragment @Inject constructor(
         private val commandAutocompletePolicy: CommandAutocompletePolicy,
         private val autocompleteCommandPresenter: AutocompleteCommandPresenter,
         private val autocompleteUserPresenter: AutocompleteUserPresenter,
+        private val autocompleteRoomPresenter: AutocompleteRoomPresenter,
+        private val autocompleteGroupPresenter: AutocompleteGroupPresenter,
         private val permalinkHandler: PermalinkHandler,
         private val notificationDrawerManager: NotificationDrawerManager,
         val roomDetailViewModelFactory: RoomDetailViewModel.Factory,
@@ -150,6 +157,8 @@ class RoomDetailFragment @Inject constructor(
         VectorBaseFragment(),
         TimelineEventController.Callback,
         AutocompleteUserPresenter.Callback,
+        AutocompleteRoomPresenter.Callback,
+        AutocompleteGroupPresenter.Callback,
         VectorInviteView.Callback,
         JumpToReadMarkerView.Callback,
         AttachmentTypeSelectorView.Callback,
@@ -274,6 +283,16 @@ class RoomDetailFragment @Inject constructor(
         roomDetailViewModel.requestLiveData.observeEvent(this) {
             displayRoomDetailActionResult(it)
         }
+
+        roomDetailViewModel.viewEvents
+                .observe()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    when (it) {
+                        is RoomDetailViewEvents.Failure -> showErrorInSnackbar(it.throwable)
+                    }
+                }
+                .disposeOnDestroyView()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -416,8 +435,10 @@ class RoomDetailFragment @Inject constructor(
                 composerLayout.composerRelatedMessageAvatar
         )
         composerLayout.expand {
-            // need to do it here also when not using quick reply
-            focusComposerAndShowKeyboard()
+            if (isAdded) {
+                // need to do it here also when not using quick reply
+                focusComposerAndShowKeyboard()
+            }
         }
         focusComposerAndShowKeyboard()
     }
@@ -580,6 +601,98 @@ class RoomDetailFragment @Inject constructor(
                 })
                 .build()
 
+        autocompleteRoomPresenter.callback = this
+        Autocomplete.on<RoomSummary>(composerLayout.composerEditText)
+                .with(CharPolicy('#', true))
+                .with(autocompleteRoomPresenter)
+                .with(elevation)
+                .with(backgroundDrawable)
+                .with(object : AutocompleteCallback<RoomSummary> {
+                    override fun onPopupItemClicked(editable: Editable, item: RoomSummary): Boolean {
+                        // Detect last '#' and remove it
+                        var startIndex = editable.lastIndexOf("#")
+                        if (startIndex == -1) {
+                            startIndex = 0
+                        }
+
+                        // Detect next word separator
+                        var endIndex = editable.indexOf(" ", startIndex)
+                        if (endIndex == -1) {
+                            endIndex = editable.length
+                        }
+
+                        // Replace the word by its completion
+                        val matrixItem = item.toRoomAliasMatrixItem()
+                        val displayName = matrixItem.getBestName()
+
+                        // with a trailing space
+                        editable.replace(startIndex, endIndex, "$displayName ")
+
+                        // Add the span
+                        val span = PillImageSpan(
+                                glideRequests,
+                                avatarRenderer,
+                                requireContext(),
+                                matrixItem
+                        )
+                        span.bind(composerLayout.composerEditText)
+
+                        editable.setSpan(span, startIndex, startIndex + displayName.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+                        return true
+                    }
+
+                    override fun onPopupVisibilityChanged(shown: Boolean) {
+                    }
+                })
+                .build()
+
+        autocompleteGroupPresenter.callback = this
+        Autocomplete.on<GroupSummary>(composerLayout.composerEditText)
+                .with(CharPolicy('+', true))
+                .with(autocompleteGroupPresenter)
+                .with(elevation)
+                .with(backgroundDrawable)
+                .with(object : AutocompleteCallback<GroupSummary> {
+                    override fun onPopupItemClicked(editable: Editable, item: GroupSummary): Boolean {
+                        // Detect last '+' and remove it
+                        var startIndex = editable.lastIndexOf("+")
+                        if (startIndex == -1) {
+                            startIndex = 0
+                        }
+
+                        // Detect next word separator
+                        var endIndex = editable.indexOf(" ", startIndex)
+                        if (endIndex == -1) {
+                            endIndex = editable.length
+                        }
+
+                        // Replace the word by its completion
+                        val matrixItem = item.toMatrixItem()
+                        val displayName = matrixItem.getBestName()
+
+                        // with a trailing space
+                        editable.replace(startIndex, endIndex, "$displayName ")
+
+                        // Add the span
+                        val span = PillImageSpan(
+                                glideRequests,
+                                avatarRenderer,
+                                requireContext(),
+                                matrixItem
+                        )
+                        span.bind(composerLayout.composerEditText)
+
+                        editable.setSpan(span, startIndex, startIndex + displayName.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+                        return true
+                    }
+
+                    override fun onPopupVisibilityChanged(shown: Boolean) {
+                    }
+                })
+                .build()
+
         autocompleteUserPresenter.callback = this
         Autocomplete.on<User>(composerLayout.composerEditText)
                 .with(CharPolicy('@', true))
@@ -722,6 +835,8 @@ class RoomDetailFragment @Inject constructor(
 
     private fun renderTextComposerState(state: TextComposerViewState) {
         autocompleteUserPresenter.render(state.asyncUsers)
+        autocompleteRoomPresenter.render(state.asyncRooms)
+        autocompleteGroupPresenter.render(state.asyncGroups)
     }
 
     private fun renderTombstoneEventHandling(async: Async<String>) {
@@ -1056,6 +1171,18 @@ class RoomDetailFragment @Inject constructor(
 
     override fun onQueryUsers(query: CharSequence?) {
         textComposerViewModel.handle(TextComposerAction.QueryUsers(query))
+    }
+
+    // AutocompleteRoomPresenter.Callback
+
+    override fun onQueryRooms(query: CharSequence?) {
+        textComposerViewModel.handle(TextComposerAction.QueryRooms(query))
+    }
+
+    // AutocompleteGroupPresenter.Callback
+
+    override fun onQueryGroups(query: CharSequence?) {
+        textComposerViewModel.handle(TextComposerAction.QueryGroups(query))
     }
 
     private fun handleActions(action: EventSharedAction) {

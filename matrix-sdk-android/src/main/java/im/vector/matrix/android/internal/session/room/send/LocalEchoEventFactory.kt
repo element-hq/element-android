@@ -251,7 +251,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                 type = MessageType.MSGTYPE_AUDIO,
                 body = attachment.name ?: "audio",
                 audioInfo = AudioInfo(
-                        mimeType = attachment.mimeType.takeIf { it.isNotBlank() } ?: "audio/mpeg",
+                        mimeType = attachment.mimeType?.takeIf { it.isNotBlank() } ?: "audio/mpeg",
                         size = attachment.size
                 ),
                 url = attachment.path
@@ -264,7 +264,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                 type = MessageType.MSGTYPE_FILE,
                 body = attachment.name ?: "file",
                 info = FileInfo(
-                        mimeType = attachment.mimeType.takeIf { it.isNotBlank() }
+                        mimeType = attachment.mimeType?.takeIf { it.isNotBlank() }
                                 ?: "application/octet-stream",
                         size = attachment.size
                 ),

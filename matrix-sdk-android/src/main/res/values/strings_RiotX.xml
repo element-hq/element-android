@@ -2,19 +2,20 @@
 <resources>
 
 
-    <string name="notice_room_invite_no_invitee_with_reason">%1$s\'s invitation. Reason: %2$s</string>
-    <string name="notice_room_invite_with_reason">%1$s invited %2$s. Reason: %3$s</string>
-    <string name="notice_room_invite_you_with_reason">%1$s invited you. Reason: %2$s</string>
-    <string name="notice_room_join_with_reason">%1$s joined. Reason: %2$s</string>
-    <string name="notice_room_leave_with_reason">%1$s left. Reason: %2$s</string>
-    <string name="notice_room_reject_with_reason">%1$s rejected the invitation. Reason: %2$s</string>
-    <string name="notice_room_kick_with_reason">%1$s kicked %2$s. Reason: %3$s</string>
-    <string name="notice_room_unban_with_reason">%1$s unbanned %2$s. Reason: %3$s</string>
-    <string name="notice_room_ban_with_reason">%1$s banned %2$s. Reason: %3$s</string>
-    <string name="notice_room_third_party_invite_with_reason">%1$s sent an invitation to %2$s to join the room. Reason: %3$s</string>
-    <string name="notice_room_third_party_revoked_invite_with_reason">%1$s revoked the invitation for %2$s to join the room. Reason: %3$s</string>
-    <string name="notice_room_third_party_registered_invite_with_reason">%1$s accepted the invitation for %2$s. Reason: %3$s</string>
-    <string name="notice_room_withdraw_with_reason">%1$s withdrew %2$s\'s invitation. Reason: %3$s</string>
+    <plurals name="notice_room_aliases_added">
+        <item quantity="one">%1$s added %2$s as an address for this room.</item>
+        <item quantity="other">%1$s added %2$s as addresses for this room.</item>
+    </plurals>
+
+    <plurals name="notice_room_aliases_removed">
+        <item quantity="one">%1$s removed %2$s as an address for this room.</item>
+        <item quantity="other">%1$s removed %3$s as addresses for this room.</item>
+    </plurals>
+
+    <string name="notice_room_aliases_added_and_removed">%1$s added %2$s and removed %3$s as addresses for this room.</string>
+
+    <string name="notice_room_canonical_alias_set">"%1$s set the main address for this room to %2$s."</string>
+    <string name="notice_room_canonical_alias_unset">"%1$s removed the main address for this room."</string>
 
     <string name="no_network_indicator">There is no network connection right now</string>
 

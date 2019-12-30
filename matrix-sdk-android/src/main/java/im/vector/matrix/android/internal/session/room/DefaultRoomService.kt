@@ -30,6 +30,7 @@ import im.vector.matrix.android.internal.database.mapper.RoomSummaryMapper
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
+import im.vector.matrix.android.internal.database.query.findByAlias
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.room.alias.GetRoomIdByAliasTask
 import im.vector.matrix.android.internal.session.room.create.CreateRoomTask
@@ -38,6 +39,7 @@ import im.vector.matrix.android.internal.session.room.read.MarkAllRoomsReadTask
 import im.vector.matrix.android.internal.session.user.accountdata.UpdateBreadcrumbsTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
+import im.vector.matrix.android.internal.util.fetchCopyMap
 import io.realm.Realm
 import javax.inject.Inject
 
@@ -67,6 +69,21 @@ internal class DefaultRoomService @Inject constructor(private val monarchy: Mona
                 null
             }
         }
+    }
+
+    override fun getRoomSummary(roomIdOrAlias: String): RoomSummary? {
+        return monarchy
+                .fetchCopyMap({
+                    if (roomIdOrAlias.startsWith("!")) {
+                        // It's a roomId
+                        RoomSummaryEntity.where(it, roomId = roomIdOrAlias).findFirst()
+                    } else {
+                        // Assume it's a room alias
+                        RoomSummaryEntity.findByAlias(it, roomIdOrAlias)
+                    }
+                }, { entity, _ ->
+                    roomSummaryMapper.map(entity)
+                })
     }
 
     override fun liveRoomSummaries(): LiveData<List<RoomSummary>> {

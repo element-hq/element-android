@@ -23,6 +23,7 @@ import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.VersioningState
 import im.vector.matrix.android.api.session.room.model.create.RoomCreateContent
 import im.vector.matrix.android.internal.database.RealmLiveEntityObserver
+import im.vector.matrix.android.internal.database.awaitTransaction
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
@@ -30,9 +31,9 @@ import im.vector.matrix.android.internal.database.query.types
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.SessionDatabase
 import io.realm.OrderedCollectionChangeSet
-import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.RealmResults
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 internal class RoomCreateEventLiveObserver @Inject constructor(@SessionDatabase
@@ -51,21 +52,21 @@ internal class RoomCreateEventLiveObserver @Inject constructor(@SessionDatabase
                 }
                 .toList()
                 .also {
-                    handleRoomCreateEvents(it)
+                    observerScope.launch {
+                        handleRoomCreateEvents(it)
+                    }
                 }
     }
 
-    private fun handleRoomCreateEvents(createEvents: List<Event>) = Realm.getInstance(realmConfiguration).use {
-        it.executeTransactionAsync { realm ->
-            for (event in createEvents) {
-                val createRoomContent = event.getClearContent().toModel<RoomCreateContent>()
-                val predecessorRoomId = createRoomContent?.predecessor?.roomId ?: continue
+    private suspend fun handleRoomCreateEvents(createEvents: List<Event>) = awaitTransaction(realmConfiguration) { realm ->
+        for (event in createEvents) {
+            val createRoomContent = event.getClearContent().toModel<RoomCreateContent>()
+            val predecessorRoomId = createRoomContent?.predecessor?.roomId ?: continue
 
-                val predecessorRoomSummary = RoomSummaryEntity.where(realm, predecessorRoomId).findFirst()
-                        ?: RoomSummaryEntity(predecessorRoomId)
-                predecessorRoomSummary.versioningState = VersioningState.UPGRADED_ROOM_JOINED
-                realm.insertOrUpdate(predecessorRoomSummary)
-            }
+            val predecessorRoomSummary = RoomSummaryEntity.where(realm, predecessorRoomId).findFirst()
+                                         ?: RoomSummaryEntity(predecessorRoomId)
+            predecessorRoomSummary.versioningState = VersioningState.UPGRADED_ROOM_JOINED
+            realm.insertOrUpdate(predecessorRoomSummary)
         }
     }
 }

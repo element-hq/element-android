@@ -149,17 +149,17 @@ internal class DefaultCryptoService @Inject constructor(
 
     fun onStateEvent(roomId: String, event: Event) {
         when {
-            event.getClearType() == EventType.ENCRYPTION               -> onRoomEncryptionEvent(roomId, event)
-            event.getClearType() == EventType.STATE_ROOM_MEMBER        -> onRoomMembershipEvent(roomId, event)
-            event.getClearType() == EventType.STATE_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event)
+            event.getClearType() == EventType.ENCRYPTION                    -> onRoomEncryptionEvent(roomId, event)
+            event.getClearType() == EventType.STATE_ROOM_MEMBER             -> onRoomMembershipEvent(roomId, event)
+            event.getClearType() == EventType.STATE_ROOM_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event)
         }
     }
 
     fun onLiveEvent(roomId: String, event: Event) {
         when {
-            event.getClearType() == EventType.ENCRYPTION               -> onRoomEncryptionEvent(roomId, event)
-            event.getClearType() == EventType.STATE_ROOM_MEMBER        -> onRoomMembershipEvent(roomId, event)
-            event.getClearType() == EventType.STATE_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event)
+            event.getClearType() == EventType.ENCRYPTION                    -> onRoomEncryptionEvent(roomId, event)
+            event.getClearType() == EventType.STATE_ROOM_MEMBER             -> onRoomMembershipEvent(roomId, event)
+            event.getClearType() == EventType.STATE_ROOM_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event)
         }
     }
 

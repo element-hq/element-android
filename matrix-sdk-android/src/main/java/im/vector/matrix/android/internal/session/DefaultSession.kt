@@ -45,6 +45,8 @@ import im.vector.matrix.android.api.session.user.UserService
 import im.vector.matrix.android.internal.auth.SessionParamsStore
 import im.vector.matrix.android.internal.crypto.DefaultCryptoService
 import im.vector.matrix.android.internal.database.LiveEntityObserver
+import im.vector.matrix.android.internal.session.sync.SyncTaskSequencer
+import im.vector.matrix.android.internal.session.sync.SyncTokenStore
 import im.vector.matrix.android.internal.session.sync.job.SyncThread
 import im.vector.matrix.android.internal.session.sync.job.SyncWorker
 import kotlinx.coroutines.Dispatchers
@@ -76,24 +78,26 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
                                                   private val secureStorageService: Lazy<SecureStorageService>,
                                                   private val syncThreadProvider: Provider<SyncThread>,
                                                   private val contentUrlResolver: ContentUrlResolver,
+                                                  private val syncTokenStore: SyncTokenStore,
+                                                  private val syncTaskSequencer: SyncTaskSequencer,
                                                   private val sessionParamsStore: SessionParamsStore,
                                                   private val contentUploadProgressTracker: ContentUploadStateTracker,
                                                   private val initialSyncProgressService: Lazy<InitialSyncProgressService>,
                                                   private val homeServerCapabilitiesService: Lazy<HomeServerCapabilitiesService>)
     : Session,
-        RoomService by roomService.get(),
-        RoomDirectoryService by roomDirectoryService.get(),
-        GroupService by groupService.get(),
-        UserService by userService.get(),
-        CryptoService by cryptoService.get(),
-        SignOutService by signOutService.get(),
-        FilterService by filterService.get(),
-        PushRuleService by pushRuleService.get(),
-        PushersService by pushersService.get(),
-        FileService by fileService.get(),
-        InitialSyncProgressService by initialSyncProgressService.get(),
-        SecureStorageService by secureStorageService.get(),
-        HomeServerCapabilitiesService by homeServerCapabilitiesService.get() {
+      RoomService by roomService.get(),
+      RoomDirectoryService by roomDirectoryService.get(),
+      GroupService by groupService.get(),
+      UserService by userService.get(),
+      CryptoService by cryptoService.get(),
+      SignOutService by signOutService.get(),
+      FilterService by filterService.get(),
+      PushRuleService by pushRuleService.get(),
+      PushersService by pushersService.get(),
+      FileService by fileService.get(),
+      InitialSyncProgressService by initialSyncProgressService.get(),
+      SecureStorageService by secureStorageService.get(),
+      HomeServerCapabilitiesService by homeServerCapabilitiesService.get() {
 
     private var isOpen = false
 
@@ -149,10 +153,15 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
         cryptoService.get().close()
         isOpen = false
         EventBus.getDefault().unregister(this)
+        syncTaskSequencer.close()
     }
 
     override fun syncState(): LiveData<SyncState> {
         return getSyncThread().liveState()
+    }
+
+    override fun hasAlreadySynced(): Boolean {
+        return syncTokenStore.getLastToken() != null
     }
 
     private fun getSyncThread(): SyncThread {
@@ -164,23 +173,14 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
     override fun clearCache(callback: MatrixCallback<Unit>) {
         stopSync()
         stopAnyBackgroundSync()
-        cacheService.get().clearCache(object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
-                startSync(true)
-                callback.onSuccess(data)
-            }
-
-            override fun onFailure(failure: Throwable) {
-                startSync(true)
-                callback.onFailure(failure)
-            }
-        })
+        liveEntityObservers.forEach { it.cancelProcess() }
+        cacheService.get().clearCache(callback)
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onGlobalError(globalError: GlobalError) {
         if (globalError is GlobalError.InvalidToken
-                && globalError.softLogout) {
+            && globalError.softLogout) {
             // Mark the token has invalid
             GlobalScope.launch(Dispatchers.IO) {
                 sessionParamsStore.setTokenInvalid(myUserId)

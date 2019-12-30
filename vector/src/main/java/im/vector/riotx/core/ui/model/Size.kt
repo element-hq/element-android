@@ -14,13 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.core.error
+package im.vector.riotx.core.ui.model
 
-import im.vector.matrix.android.api.failure.Failure
-import im.vector.matrix.android.api.failure.MatrixError
-import javax.net.ssl.HttpsURLConnection
-
-fun Throwable.is401(): Boolean {
-    return (this is Failure.ServerError && httpCode == HttpsURLConnection.HTTP_UNAUTHORIZED /* 401 */
-            && error.code == MatrixError.M_UNAUTHORIZED)
-}
+// android.util.Size in API 21+
+data class Size(val width: Int, val height: Int)

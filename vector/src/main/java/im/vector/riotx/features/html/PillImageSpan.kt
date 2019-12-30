@@ -28,7 +28,7 @@ import androidx.annotation.UiThread
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.chip.ChipDrawable
-import im.vector.matrix.android.api.session.room.send.UserMentionSpan
+import im.vector.matrix.android.api.session.room.send.MatrixItemSpan
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.glide.GlideRequests
@@ -38,13 +38,13 @@ import java.lang.ref.WeakReference
 /**
  * This span is able to replace a text by a [ChipDrawable]
  * It's needed to call [bind] method to start requesting avatar, otherwise only the placeholder icon will be displayed if not already cached.
- * Implements UserMentionSpan so that it could be automatically transformed in matrix links and displayed as pills.
+ * Implements MatrixItemSpan so that it could be automatically transformed in matrix links and displayed as pills.
  */
 class PillImageSpan(private val glideRequests: GlideRequests,
                     private val avatarRenderer: AvatarRenderer,
                     private val context: Context,
                     override val matrixItem: MatrixItem
-) : ReplacementSpan(), UserMentionSpan {
+) : ReplacementSpan(), MatrixItemSpan {
 
     private val pillDrawable = createChipDrawable()
     private val target = PillImageSpanTarget(this)

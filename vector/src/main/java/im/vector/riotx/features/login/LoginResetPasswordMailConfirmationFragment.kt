@@ -20,8 +20,8 @@ import androidx.appcompat.app.AlertDialog
 import butterknife.OnClick
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Success
+import im.vector.matrix.android.api.failure.is401
 import im.vector.riotx.R
-import im.vector.riotx.core.error.is401
 import kotlinx.android.synthetic.main.fragment_login_reset_password_mail_confirmation.*
 import javax.inject.Inject
 

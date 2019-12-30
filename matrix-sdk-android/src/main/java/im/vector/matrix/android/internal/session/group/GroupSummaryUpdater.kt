@@ -22,6 +22,7 @@ import androidx.work.WorkManager
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.internal.database.RealmLiveEntityObserver
+import im.vector.matrix.android.internal.database.awaitTransaction
 import im.vector.matrix.android.internal.database.model.GroupEntity
 import im.vector.matrix.android.internal.database.model.GroupSummaryEntity
 import im.vector.matrix.android.internal.database.query.where
@@ -31,6 +32,7 @@ import im.vector.matrix.android.internal.worker.WorkManagerUtil.matrixOneTimeWor
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import io.realm.OrderedCollectionChangeSet
 import io.realm.RealmResults
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 private const val GET_GROUP_DATA_WORKER = "GET_GROUP_DATA_WORKER"
@@ -49,14 +51,19 @@ internal class GroupSummaryUpdater @Inject constructor(private val context: Cont
                 .mapNotNull { results[it] }
 
         fetchGroupsData(modifiedGroupEntity
-                .filter { it.membership == Membership.JOIN || it.membership == Membership.INVITE }
-                .map { it.groupId }
-                .toList())
+                                .filter { it.membership == Membership.JOIN || it.membership == Membership.INVITE }
+                                .map { it.groupId }
+                                .toList())
 
-        deleteGroups(modifiedGroupEntity
+        modifiedGroupEntity
                 .filter { it.membership == Membership.LEAVE }
                 .map { it.groupId }
-                .toList())
+                .toList()
+                .also {
+                    observerScope.launch {
+                        deleteGroups(it)
+                    }
+                }
     }
 
     private fun fetchGroupsData(groupIds: List<String>) {
@@ -77,12 +84,9 @@ internal class GroupSummaryUpdater @Inject constructor(private val context: Cont
     /**
      * Delete the GroupSummaryEntity of left groups
      */
-    private fun deleteGroups(groupIds: List<String>) {
-        monarchy
-                .writeAsync { realm ->
-                    GroupSummaryEntity.where(realm, groupIds)
-                            .findAll()
-                            .deleteAllFromRealm()
-                }
+    private suspend fun deleteGroups(groupIds: List<String>) = awaitTransaction(monarchy.realmConfiguration) { realm ->
+        GroupSummaryEntity.where(realm, groupIds)
+                .findAll()
+                .deleteAllFromRealm()
     }
 }

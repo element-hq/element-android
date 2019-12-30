@@ -22,6 +22,5 @@ internal enum class TaskThread {
     IO,
     CALLER,
     CRYPTO,
-    SYNC,
     DM_VERIF
 }

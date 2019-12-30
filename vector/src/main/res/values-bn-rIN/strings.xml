@@ -336,12 +336,10 @@
     <string name="permissions_rationale_msg_camera_and_audio">ভিডিও কল সম্পাদনের জন্য Riot আপনার ক্যামেরা এবং আপনার মাইক্রোফোন অ্যাক্সেস করার অনুমতির প্রয়োজন।
 \n
 \nকল করতে সক্ষম হতে পরবর্তী পপ আপ অ্যাক্সেস অনুমতি দিন।</string>
-    <string name="permissions_rationale_msg_contacts">Riot আপনার ইমেল এবং ফোন নম্বরগুলির উপর ভিত্তি করে অন্যান্য ম্যাট্রিক্স ব্যবহারকারীদের খুঁজে পেতে আপনার ঠিকানা বই পরিচিতিগুলি অ্যাক্সেস করার অনুমতির প্রয়োজন।
+    <string name="permissions_rationale_msg_contacts">রায়ট অন্যান্য ম্যাট্রিক্স ব্যবহারকারীদের তাদের ইমেল এবং ফোন নম্বরগুলির উপর ভিত্তি করে আপনার ঠিকানা বইটি চেক করতে পারে। আপনি যদি এই উদ্দেশ্যে আপনার ঠিকানা বইটি ভাগ করে নিতে সম্মত হন তবে দয়া করে পরবর্তী পপ-আপটিতে অ্যাক্সেসের অনুমতি দিন।</string>
+    <string name="permissions_msg_contacts_warning_other_androids">রায়ট অন্যান্য ম্যাট্রিক্স ব্যবহারকারীদের তাদের ইমেল এবং ফোন নম্বরগুলির উপর ভিত্তি করে আপনার ঠিকানা বইটি চেক করতে পারে। 
 \n
-\nদয়া করে পরবর্তী পপ-আপ অ্যাক্সেসের অনুমতি দিয়ে ঠিকানা বই ব্যবহারকারীদের Riot থেকে অ্যাক্সেসযোগ্য করুন।</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riot কে আপনার ইমেল এবং ফোন নম্বরগুলির উপর ভিত্তি করে অন্যান্য ম্যাট্রিক্স ব্যবহারকারীদের সন্ধান করার জন্য আপনার ঠিকানা বই যোগাযোগ অ্যাক্সেস করার অনুমতির প্রয়োজন।
-\n
-\nRiot কে আপনার পরিচিতি অ্যাক্সেস করার অনুমতি দেবেন \?</string>
+\nআপনি এই উদ্দেশ্যে আপনার ঠিকানা বই ভাগ করতে সম্মত হন\?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">"দুঃখিত। কর্ম সঞ্চালিত না, অনুপস্থিত অনুমতির জন্য "</string>
 
@@ -726,7 +724,7 @@
     <string name="settings_start_on_boot">বুট করার সময় শুরু</string>
     <string name="settings_enable_background_sync">ব্যাকগ্রাউন্ড সিঙ্ক সক্ষম করুন</string>
     <string name="settings_set_sync_timeout">সিঙ্ক অনুরোধ সময়সীমার</string>
-    <string name="settings_set_sync_delay">প্রতিটি অনুরোধের মধ্যে বিলম্ব</string>
+    <string name="settings_set_sync_delay">প্রতিটি সিঙ্কের মধ্যে বিলম্ব</string>
     <string name="settings_second">সেকেন্ড</string>
     <string name="settings_seconds">সেকেন্ড</string>
 
@@ -791,10 +789,10 @@
     <string name="settings_data_save_mode">ডেটা সংরক্ষণ মোড</string>
     <string name="settings_data_save_mode_summary">ডেটা সংরক্ষণ মোড একটি নির্দিষ্ট ফিল্টার প্রয়োগ করে যাতে উপস্থিতি আপডেট এবং টাইপিং বিজ্ঞপ্তি ফিল্টার করা হয়।</string>
 
-    <string name="devices_details_dialog_title">যন্ত্র বিবরণ</string>
+    <string name="devices_details_dialog_title">যন্ত্রের তথ্য</string>
     <string name="devices_details_id_title">আইডি</string>
-    <string name="devices_details_name_title">নাম</string>
-    <string name="devices_details_device_name">যন্ত্রের নাম</string>
+    <string name="devices_details_name_title">সর্বজনীন নাম</string>
+    <string name="devices_details_device_name">সর্বজনীন নাম আপডেট করুন</string>
     <string name="devices_details_last_seen_title">শেষ দেখা</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
     <string name="devices_delete_dialog_text">এই অপারেশন অতিরিক্ত প্রমাণীকরণ প্রয়োজন।
@@ -942,9 +940,9 @@
     <string name="encryption_information_decryption_error">ডিক্রিপশন সমস্যা</string>
 
     <string name="encryption_information_sender_device_information">প্রেরক ডিভাইস তথ্য</string>
-    <string name="encryption_information_device_name">যন্ত্রের নাম</string>
-    <string name="encryption_information_name">নাম</string>
-    <string name="encryption_information_device_id">ডিভাইস আইডি</string>
+    <string name="encryption_information_device_name">সর্বজনীন নাম</string>
+    <string name="encryption_information_name">সর্বজনীন নাম</string>
+    <string name="encryption_information_device_id">আইডি</string>
     <string name="encryption_information_device_key">যন্ত্রের কুঞ্জি</string>
     <string name="encryption_information_verification">প্রতিপাদন</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519 ফিঙ্গারপ্রিন্ট</string>
@@ -1098,4 +1096,100 @@
     <string name="command_problem_with_parameters">কমান্ড \"%s\" আরও পেরামিটার প্রয়োজন, অথবা কিছু পেরামিটার ভুল।</string>
     <string name="command_description_emote">কর্ম প্রদর্শন করে</string>
     <string name="command_description_ban_user">দেওয়া আইডি সঙ্গে ব্যবহারকারী কে নিষিদ্ধ করে</string>
+    <string name="none">কোনটা না</string>
+    <string name="revoke">রদ কর</string>
+    <string name="disconnect">বিযুক্ত</string>
+    <string name="review">পর্যালোচনা</string>
+    <string name="decline">পতন</string>
+
+    <string name="people_no_identity_server">কোনও পরিচয় সার্ভার কনফিগার করা নেই।</string>
+
+    <string name="call_failed_no_ice_title">ভুল কনফিগার্ড সার্ভারের কারণে কল ব্যর্থ হয়েছে</string>
+    <string name="call_failed_no_ice_description">কলগুলি নির্ভরযোগ্যভাবে কাজ করার জন্য দয়া করে আপনার হোমসার্ভার (%1$s) এর প্রশাসককে একটি টার্ন সার্ভার কনফিগার করতে বলুন।
+\n
+\nবিকল্পভাবে, আপনি পাবলিক সার্ভারটি %2$s এ ব্যবহার করার চেষ্টা করতে পারেন, তবে এটি নির্ভরযোগ্য হবে না এবং এটি আপনার সার্ভারের সাথে আপনার আইপি ঠিকানাটি ভাগ করে দেবে। আপনি সেটিংসে এটি পরিচালনা করতে পারেন।</string>
+    <string name="call_failed_no_ice_use_alt">%s ব্যবহার করার চেষ্টা করুন</string>
+    <string name="call_failed_dont_ask_again">আবার আমাকে জিজ্ঞাসা করবেন না</string>
+
+    <string name="auth_add_email_message_2">অ্যাকাউন্ট পুনরুদ্ধারের জন্য একটি ইমেল সেট করুন এবং পরে আপনাকে চিনে এমন লোকেরা ইচ্ছিকভাবে আবিষ্কারযোগ্য।</string>
+    <string name="auth_add_phone_message_2">একটি ফোন সেট করুন এবং পরে আপনাকে জারা চেনে সেই লোকেদের দ্বারা বিকল্প হিসাবে আবিষ্কার করার জন্য।</string>
+    <string name="auth_add_email_phone_message_2">অ্যাকাউন্ট পুনরুদ্ধারের জন্য একটি ইমেল সেট করুন। আপনার পরিচিত লোকদের দ্বারা বিকল্প হিসাবে আবিষ্কারের জন্য পরে ইমেল বা ফোন ব্যবহার করুন।</string>
+    <string name="auth_add_email_and_phone_message_2">অ্যাকাউন্ট পুনরুদ্ধারের জন্য একটি ইমেল সেট করুন। আপনার পরিচিত লোকদের দ্বারা বিকল্প হিসাবে আবিষ্কারের জন্য পরে ইমেল বা ফোন ব্যবহার করুন।</string>
+    <string name="login_error_homeserver_not_found">এই ইউআরএলে কোনও হোম সার্ভারে পৌঁছানো যায় না, দয়া করে এটি পরীক্ষা করে দেখুন</string>
+    <string name="settings_call_ringtone_use_default_stun">ফ্যালব্যাক কল সহায়তা সার্ভারকে অনুমতি দিন</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">আপনার হোমসার্ভার একটি প্রস্তাব না দিলে সহায়তা হিসাবে %s ব্যবহার করবে (আপনার আইপি ঠিকানা কল করার সময় ভাগ করা হবে)</string>
+    <string name="invite_no_identity_server_error">এই ক্রিয়াটি সম্পাদন করতে আপনার সেটিংসে একটি পরিচয় সার্ভার যুক্ত করুন।</string>
+    <string name="settings_add_3pid_confirm_password_title">আপনার পাসওয়ার্ড নিশ্চিত করুন</string>
+    <string name="settings_add_3pid_flow_not_supported">আপনি রায়ট মোবাইল থেকে এটি করতে পারবেন না</string>
+    <string name="settings_add_3pid_authentication_needed">প্রমাণীকরণ প্রয়োজন</string>
+
+
+    <string name="settings_background_fdroid_sync_mode">পটভূমি সিঙ্ক মোড (পরীক্ষামূলক)</string>
+    <string name="settings_background_fdroid_sync_mode_battery">ব্যাটারির জন্য অনুকূলিত</string>
+    <string name="settings_background_fdroid_sync_mode_battery_description">রায়ট এমনভাবে পটভূমিতে সিঙ্ক হবে যা ডিভাইসের সীমিত সংস্থান (ব্যাটারি) সংরক্ষণ করে।
+\nআপনার ডিভাইস রিসোর্স স্থিতির উপর নির্ভর করে সিঙ্কটি অপারেটিং সিস্টেম দ্বারা পিছিয়ে যেতে পারে।</string>
+    <string name="settings_background_fdroid_sync_mode_real_time">রিয়েল টাইম জন্য অনুকূলিত</string>
+    <string name="settings_background_fdroid_sync_mode_real_time_description">রায়ট নির্দিষ্ট সময়ে সময়ে পটভূমিতে সিঙ্ক হবে (কনফিগারযোগ্য)।
+\nএটি রেডিও এবং ব্যাটারির ব্যবহারকে প্রভাবিত করবে, রায়ট ইভেন্টগুলি শুনছে বলে জানিয়ে একটি স্থায়ী বিজ্ঞপ্তি প্রদর্শিত হবে।</string>
+    <string name="settings_background_fdroid_sync_mode_disabled">কোনও পটভূমি সিঙ্ক না</string>
+    <string name="settings_background_fdroid_sync_mode_disabled_description">অ্যাপটি ব্যাকগ্রাউন্ডে থাকা অবস্থায় আপনাকে আগত বার্তাগুলি সম্পর্কে অবহিত করা হবে না।</string>
+    <string name="settings_background_sync_update_error">সেটিংস আপডেট করতে ব্যর্থ।</string>
+
+
+    <string name="settings_set_workmanager_delay">পছন্দের সিঙ্ক ব্যবধান</string>
+    <string name="settings_set_workmanager_delay_summary">%s
+\nসিঙ্কটি ডিভাইসের সংস্থান (ব্যাটারি) বা অবস্থার (ঘুম) উপর নির্ভর করে পিছিয়ে যেতে পারে।</string>
+    <string name="settings_integrations">ঐক্যবদ্ধতা</string>
+    <string name="settings_integrations_summary">বট, সেতু, উইজেট এবং স্টিকার প্যাকগুলি পরিচালনা করতে ইন্টিগ্রেশন ম্যানেজার ব্যবহার করুন।
+\nইন্টিগ্রেশন ম্যানেজাররা কনফিগারেশন ডেটা গ্রহণ করে এবং উইজেটগুলি সংশোধন করতে, রুম আমন্ত্রন প্রেরণ করতে এবং আপনার পক্ষে পাওয়ার স্তর নির্ধারণ করতে পারে।</string>
+    <string name="settings_discovery_category">আবিষ্কার</string>
+    <string name="settings_discovery_manage">আপনার আবিষ্কারের সেটিংস পরিচালনা করুন।</string>
+    <string name="settings_integration_allow">সংহতকরণের অনুমতি দিন</string>
+    <string name="settings_integration_manager">ইন্টিগ্রেশন ম্যানেজার</string>
+
+    <string name="encryption_information_device_name_with_warning">সর্বজনীন নাম (যাদের সাথে আপনি যোগাযোগ করেন তাদের কাছে দৃশ্যমান)</string>
+    <string name="device_name_warning">একটি ডিভাইসের সর্বজনীন নাম আপনি যাদের সাথে যোগাযোগ করেন তাদের কাছে দৃশ্যমান</string>
+    <string name="room_widget_activity_title">উইজেট</string>
+    <string name="room_widget_permission_title">উইজেট লোড করুন</string>
+    <string name="room_widget_permission_added_by">এই উইজেটটি যুক্ত করেছেন:</string>
+    <string name="room_widget_permission_webview_shared_info_title">এটি ব্যবহার করে কুকিজ সেট করতে পারে এবং %s এর সাথে ডেটা ভাগ করা যায়:</string>
+    <string name="room_widget_permission_shared_info_title">এটি ব্যবহার করে ডেটা %s এর সাথে ভাগ করে নিতে পারে:</string>
+    <string name="room_widget_failed_to_load">উইজেট লোড করতে ব্যর্থ।
+\n%s</string>
+    <string name="room_widget_reload">উইজেট পুনরায় লোড করুন</string>
+    <string name="room_widget_open_in_browser">ব্রাউজারে খুলুন</string>
+    <string name="room_widget_revoke_access">আমার জন্য অ্যাক্সেস প্রত্যাহার করুন</string>
+
+    <string name="room_widget_permission_display_name">আপনার প্রদশনীয় নাম</string>
+    <string name="room_widget_permission_avatar_url">আপনার অবতার URL</string>
+    <string name="room_widget_permission_user_id">আপনার ব্যবহারকারীর আইডি</string>
+    <string name="room_widget_permission_theme">আপনার থিম</string>
+    <string name="room_widget_permission_widget_id">উইজেট আইডি</string>
+    <string name="room_widget_permission_room_id">কক্ষের আইডি</string>
+
+
+    <string name="room_widget_resource_permission_title">এই উইজেটটি নিম্নলিখিত সংস্থানগুলি ব্যবহার করতে চায়:</string>
+    <string name="room_widget_resource_grant_permission">অনুমতি</string>
+    <string name="room_widget_resource_decline_permission">সব অবরুদ্ধ</string>
+    <string name="room_widget_webview_access_camera">ক্যামেরা ব্যবহার করুন</string>
+    <string name="room_widget_webview_access_microphone">মাইক্রোফোন ব্যবহার করুন</string>
+    <string name="room_widget_webview_read_protected_media">ডিআরএম সুরক্ষিত মিডিয়া পড়ুন</string>
+
+    <string name="integration_manager_not_configured">কোনও ইন্টিগ্রেশন ম্যানেজার কনফিগার করা নেই।</string>
+    <string name="widget_integration_review_terms">চালিয়ে যেতে আপনার এই পরিষেবার শর্তাদি স্বীকার করতে হবে।</string>
+
+    <string name="command_description_unban_user">প্রদত্ত আইডি সহ ব্যবহারকারীকে নিষিদ্ধ তালিকা থেকে বের করে</string>
+    <string name="command_description_op_user">ব্যবহারকারীর পাওয়ার স্তর নির্ধারণ করুন</string>
+    <string name="command_description_deop_user">প্রদত্ত আইডি সহ ব্যবহারকারীকে ডিওপ করে</string>
+    <string name="command_description_invite_user">প্রদত্ত আইডি সহ ব্যবহারকারীকে বর্তমান কক্ষ এ আমন্ত্রণ জানায়</string>
+    <string name="command_description_join_room">প্রদত্ত ওরফে সহ রুমে যোগ দেয়</string>
+    <string name="command_description_part_room">কক্ষ ছেড়ে দিন</string>
+    <string name="command_description_topic">রুমের টপিক সেট করুন</string>
+    <string name="command_description_kick_user">প্রদত্ত আইডি সহ ব্যবহারকারীকে কিক্ করে</string>
+    <string name="command_description_nick">আপনার প্রদর্শনের ডাকনাম পরিবর্তন করে</string>
+    <string name="command_description_markdown">অন/অফ মার্কডাউন</string>
+    <string name="markdown_has_been_enabled">মার্কডাউন সক্ষম করা হয়েছে।</string>
+    <string name="markdown_has_been_disabled">মার্কডাউন অক্ষম করা হয়েছে।</string>
+
+    <string name="notification_off">অফ</string>
 </resources>

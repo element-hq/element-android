@@ -10,39 +10,39 @@
     <string name="title_activity_home">Messaggi</string>
     <string name="title_activity_room">Stanza</string>
     <string name="title_activity_settings">Impostazioni</string>
-    <string name="title_activity_member_details">Dettagli membri</string>
+    <string name="title_activity_member_details">Dettagli sui membri</string>
     <string name="title_activity_historical">Cronologia</string>
 
     <!-- button names -->
     <string name="ok">OK</string>
     <string name="cancel">Annulla</string>
     <string name="save">Salva</string>
-    <string name="leave">Lascia</string>
+    <string name="leave">Esci</string>
     <string name="send">Invia</string>
     <string name="copy">Copia</string>
-    <string name="resend">Rinvia</string>
+    <string name="resend">Rispedisci</string>
     <string name="redact">Rimuovi</string>
-    <string name="quote">Cita</string>
+    <string name="quote">Citazione</string>
     <string name="share">Condividi</string>
     <string name="later">Ultimi</string>
     <string name="forward">Inoltra</string>
-    <string name="permalink">Collegamento permanente</string>
-    <string name="view_source">Vedi sorgente</string>
-    <string name="view_decrypted_source">Vedi sorgente decriptato</string>
+    <string name="permalink">Permalink</string>
+    <string name="view_source">Vedi il codice sorgente</string>
+    <string name="view_decrypted_source">Vedi il codice sorgente decifrato</string>
     <string name="delete">Elimina</string>
     <string name="rename">Rinomina</string>
-    <string name="report_content">Segnala contenuto</string>
-    <string name="active_call">Chiamata attiva</string>
-    <string name="ongoing_conference_call">Chiamata di conferenza in corso.
+    <string name="report_content">Segnala questo contenuto</string>
+    <string name="active_call">Chiamata in corso</string>
+    <string name="ongoing_conference_call">Avvio conferenza. 
 \nUnisciti come %1$s o %2$s</string>
-    <string name="ongoing_conference_call_voice">Voce</string>
+    <string name="ongoing_conference_call_voice">Audio</string>
     <string name="ongoing_conference_call_video">Video</string>
     <string name="cannot_start_call">Impossibile avviare la chiamata, riprova più tardi</string>
-    <string name="missing_permissions_warning">A causa di permessi insufficienti, potrebbero mancare alcune funzioni…</string>
-    <string name="missing_permissions_to_start_conf_call">Necessiti del permesso per invitare ad iniziare una conferenza in questa stanza</string>
+    <string name="missing_permissions_warning">Poichè i tuoi permessi non sono sufficienti, alcune funzioni potrebbero non esser disponibili…</string>
+    <string name="missing_permissions_to_start_conf_call">Non hai permessi sufficienti per avviare una conferenza in questa stanza</string>
     <string name="missing_permissions_title_to_start_conf_call">Impossibile avviare la chiamata</string>
-    <string name="device_information">Informazioni dispositivo</string>
-    <string name="room_no_conference_call_in_encrypted_rooms">Le chiamate in modalità conferenza non sono supportate nelle stanze criptate</string>
+    <string name="device_information">Informazioni sul dispositivo</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">Le stanze criptate non supportano le conferenze</string>
     <string name="send_anyway">Invia comunque</string>
     <string name="or">o</string>
     <string name="invite">Invita</string>
@@ -50,7 +50,7 @@
 
     <!-- actions -->
     <string name="action_sign_out">Disconnetti</string>
-    <string name="action_voice_call">Chiamata voce</string>
+    <string name="action_voice_call">Chiamata audio</string>
     <string name="action_video_call">Chiamata video</string>
     <string name="action_global_search">Ricerca globale</string>
     <string name="action_mark_all_as_read">Segna tutti come letti</string>
@@ -68,14 +68,14 @@
     <!-- Bottom navigation buttons -->
     <string name="bottom_action_home">Home</string>
     <string name="bottom_action_favourites">Preferiti</string>
-    <string name="bottom_action_people">Persone</string>
+    <string name="bottom_action_people">Chat dirette</string>
     <string name="bottom_action_rooms">Stanze</string>
 
     <!-- Home screen -->
-    <string name="home_filter_placeholder_home">Filtra i nomi delle stanze</string>
-    <string name="home_filter_placeholder_favorites">Filtra i preferiti</string>
-    <string name="home_filter_placeholder_people">Filtra le persone</string>
-    <string name="home_filter_placeholder_rooms">Filtra i nomi delle stanze</string>
+    <string name="home_filter_placeholder_home">Cerca</string>
+    <string name="home_filter_placeholder_favorites">Cerca tra i preferiti</string>
+    <string name="home_filter_placeholder_people">Cerca tra le chat dirette</string>
+    <string name="home_filter_placeholder_rooms">Cerca tra le stanze</string>
 
     <!-- Home fragment -->
     <string name="invitations_header">Inviti</string>
@@ -83,11 +83,11 @@
 
     <!-- People fragment -->
     <string name="direct_chats_header">Conversazioni</string>
-    <string name="local_address_book_header">Libro degli indirizzi locale</string>
+    <string name="local_address_book_header">Rubrica locale</string>
     <string name="user_directory_header">Elenco utenti</string>
-    <string name="matrix_only_filter">Solo contatti Matrix</string>
+    <string name="matrix_only_filter">Mostra solo i contatti Matrix</string>
     <string name="no_conversation_placeholder">Nessuna conversazione</string>
-    <string name="no_contact_access_placeholder">Riot non ha il permesso di accedere ai tuoi contatti locali</string>
+    <string name="no_contact_access_placeholder">Riot non ha avuto l\'autorizzazione ad accedere alla tua Rubrica locale</string>
     <string name="no_result_placeholder">Nessun risultato</string>
 
     <!-- Rooms fragment -->
@@ -100,18 +100,18 @@
         <item quantity="other">%d utenti</item>
     </plurals>
 
-    <string name="send_bug_report_include_logs">Invia registri</string>
-    <string name="send_bug_report_include_crash_logs">Invia registri di crash</string>
-    <string name="send_bug_report_include_screenshot">Invia istantanea</string>
+    <string name="send_bug_report_include_logs">Invia i registri</string>
+    <string name="send_bug_report_include_crash_logs">Invia i registri di crash</string>
+    <string name="send_bug_report_include_screenshot">Invia schermata</string>
     <string name="send_bug_report">Segnala errore</string>
-    <string name="send_bug_report_description">Per favore descrivi l\'errore. Cosa hai fatto? Cosa ti aspettavi dovesse accadere? Cosa è effettivamente successo?</string>
+    <string name="send_bug_report_description">Per favore descrivi l\'errore. Cosa stavi facendo\? Cosa ti aspettavi dovesse accadere\? Cosa è effettivamente successo\?</string>
     <string name="send_bug_report_placeholder">Descrivi qui il problema</string>
-    <string name="send_bug_report_logs_description">Al fine di diagnosticare i problemi, i registri Riot di questo dispositivo saranno inviati con il rapporto dell\'errore. Questo rapporto, che include i registri e l\'istantanea grafica, non sarà pubblicamente visibile. Se preferisci inviare solo il testo soprastante, deseleziona:</string>
-    <string name="send_bug_report_alert_message">Sembra che tu stia scuotendo il dispositivo con frustrazione. Desideri aprire la schermata di segnalazione errore?</string>
-    <string name="send_bug_report_app_crashed">L\'applicazione è andata in crash l\'ultima volta. Desideri aprire la schermata di segnalazione del crash?</string>
+    <string name="send_bug_report_logs_description">Per permettere una diagnosi del problema, oltre alla segnalazione errore verranno inviati anche i registri di Riot. Rapporto, registri e schermata non saranno resi pubblici. Tuttavia, se preferisci inviare solamente la segnalazione, deseleziona:</string>
+    <string name="send_bug_report_alert_message">Sembra tu stia scuotendo il dispositivo con rabbia. Vuoi segnalare un errore\?</string>
+    <string name="send_bug_report_app_crashed">L\'ultima volta l\'applicazione è andata in crash. Vuoi inviare una segnalazione\?</string>
 
-    <string name="send_bug_report_sent">La segnalazione dell\'errore è stata spedita con successo</string>
-    <string name="send_bug_report_failed">Fallito l\'invio della segnalazione di errore (%s)</string>
+    <string name="send_bug_report_sent">La segnalazione errore è stata spedita</string>
+    <string name="send_bug_report_failed">L\'invio della segnalazione errore è fallito (%s)</string>
     <string name="send_bug_report_progress">Avanzamento (%s%%)</string>
 
     <string name="send_files_in">Invia file in</string>
@@ -122,16 +122,16 @@
     <string name="create_account">Crea account</string>
     <string name="login">Accedi</string>
     <string name="logout">Disconnetti</string>
-    <string name="hs_url">URL server home</string>
-    <string name="identity_url">URL server identità</string>
+    <string name="hs_url">URL dell\'Home Server</string>
+    <string name="identity_url">URL dell\'Identity Server</string>
     <string name="search">Cerca</string>
 
-    <string name="start_new_chat">Inizia nuova chat</string>
-    <string name="start_voice_call">Avvia chiamata voce</string>
+    <string name="start_new_chat">Avvia una nuova chat diretta</string>
+    <string name="start_voice_call">Avvia chiamata audio</string>
     <string name="start_video_call">Avvia chiamata video</string>
 
     <string name="option_send_files">Invia file</string>
-    <string name="option_take_photo_video">Cattura foto o video</string>
+    <string name="option_take_photo_video">Fai una foto o un video</string>
 
     <!-- Authentication -->
     <string name="auth_login">Accedi</string>
@@ -152,35 +152,33 @@
     <string name="auth_repeat_new_password_placeholder">Conferma la nuova password</string>
     <string name="auth_invalid_login_param">Nome utente e/o password non corretti</string>
     <string name="auth_invalid_user_name">Il nome utente può contenere solo lettere, numeri, punti, trattini e linee basse</string>
-    <string name="auth_invalid_password">Password troppo breve (min 6)</string>
-    <string name="auth_missing_password">Password mancante</string>
-    <string name="auth_invalid_email">Non sembra essere un indirizzo email valido</string>
-    <string name="auth_invalid_phone">Non sembra essere un numero di telefono valido</string>
-    <string name="auth_email_already_defined">L\'indirizzo email è già stato definito.</string>
-    <string name="auth_missing_email">Indirizzo email mancante</string>
-    <string name="auth_missing_phone">Numero di telefono mancante</string>
-    <string name="auth_missing_email_or_phone">Indirizzo email o numero di telefono mancante</string>
+    <string name="auth_invalid_password">Password troppo corta (min 6)</string>
+    <string name="auth_missing_password">Manca la password</string>
+    <string name="auth_invalid_email">Questo indirizzo email non sembra corretto</string>
+    <string name="auth_invalid_phone">Questo numero di telefono non sembra corretto</string>
+    <string name="auth_email_already_defined">L\'indirizzo email è già stato impostato.</string>
+    <string name="auth_missing_email">Manca l\'indirizzo email</string>
+    <string name="auth_missing_phone">Manca il numero di telefono</string>
+    <string name="auth_missing_email_or_phone">Manca l\'indirizzo email o il numero di telefono</string>
     <string name="auth_invalid_token">Token non valido</string>
     <string name="auth_password_dont_match">Le password non corrispondono</string>
-    <string name="auth_forgot_password">Password dimenticata?</string>
+    <string name="auth_forgot_password">Hai dimenticato la password\?</string>
     <string name="auth_use_server_options">Usa opzioni server personalizzate (avanzate)</string>
     <string name="auth_email_validation_message">Per favore controlla la tua email per proseguire la registrazione</string>
-    <string name="auth_threepid_warning_message">La registrazione con email e numero di telefono in una volta sola non è ancora supportata (relative API in sviluppo). Sarà utilizzato solo il numero di telefono.
-
-Puoi aggiungere la tua email al tuo profilo dalle impostazioni.</string>
-    <string name="auth_recaptcha_message">Questo server home vorrebbe assicurarsi che tu non sia un robot</string>
-    <string name="auth_username_in_use">Nome utente in uso</string>
-    <string name="auth_home_server">Server home:</string>
-    <string name="auth_identity_server">Server identità:</string>
+    <string name="auth_threepid_warning_message">La registrazione con email e numero di telefono in una volta sola non è ancora supportata. Sarà utilizzato solo il numero di telefono. Potrai aggiungere l\'indirizzo email al tuo profilo dalle impostazioni.</string>
+    <string name="auth_recaptcha_message">Questo Home Server vorrebbe assicurarsi che tu non sia un robot</string>
+    <string name="auth_username_in_use">Nome utente già in uso</string>
+    <string name="auth_home_server">Home Server:</string>
+    <string name="auth_identity_server">Identity Server:</string>
     <string name="auth_reset_password_next_step_button">Ho verificato il mio indirizzo email</string>
-    <string name="auth_reset_password_message">Per ripristinare la password, inserisci l\'indirizzo email associato al tuo account:</string>
-    <string name="auth_reset_password_missing_email">L\'indirizzo email associato al tuo account deve essere inserito.</string>
-    <string name="auth_reset_password_missing_password">Una nuova password deve essere inserita.</string>
-    <string name="auth_reset_password_email_validation_message">Un\'email è stata inviata a %s. Appena avrai seguito il link lì contenuto, clicca qui sotto.</string>
-    <string name="auth_reset_password_error_unauthorized">Verifica indirizzo email fallita: assicurati di aver cliccato sul link contenuto nell\'email</string>
-    <string name="auth_reset_password_success_message">La tua password è stata ripristinata.
-
-Sei stato disconnesso da tutti i dispositivi e non riceverai più alcuna notifica. Per riabilitare le notifiche, riconnettiti su ciascun dispositivo.</string>
+    <string name="auth_reset_password_message">Per reimpostare la password, inserisci l\'indirizzo email associato al tuo account:</string>
+    <string name="auth_reset_password_missing_email">Va inserito l\'indirizzo email associato al tuo account.</string>
+    <string name="auth_reset_password_missing_password">Va inserita una nuova password.</string>
+    <string name="auth_reset_password_email_validation_message">E\' stata inviata una mail a %s. Dopo che avrai seguito il link che contiene, clicca qui sotto.</string>
+    <string name="auth_reset_password_error_unauthorized">La verifica del tuo indirizzo email è fallita: assicurati di aver cliccato sul link contenuto nella mail</string>
+    <string name="auth_reset_password_success_message">La tua password è stata reimpostata. 
+\n
+\nSei stato disconnesso da tutti i dispositivi e non riceverai più alcuna notifica. Per ripristinare le notifiche, riconnettiti su ciascun dispositivo.</string>
 
     <!-- Login Screen -->
     <string name="login_error_must_start_http">L\'URL deve iniziare con http[s]://</string>
@@ -191,18 +189,18 @@ Sei stato disconnesso da tutti i dispositivi e non riceverai più alcuna notific
     <string name="login_error_unable_register_mail_ownership">Impossibile registrarsi: difetto proprietà dell\'email</string>
     <string name="login_error_invalid_home_server">Inserisci un URL valido</string>
 
-    <string name="login_error_forbidden">Nome utente/password non validi</string>
-    <string name="login_error_unknown_token">Il token di accesso specificato non è stato riconosciuto</string>
+    <string name="login_error_forbidden">Nome utente/password non corretto</string>
+    <string name="login_error_unknown_token">Il Token di accesso specificato non è stato riconosciuto</string>
     <string name="login_error_bad_json">JSON malformato</string>
     <string name="login_error_not_json">Non conteneva un JSON valido</string>
     <string name="login_error_limit_exceeded">Sono state inviate troppe richieste</string>
     <string name="login_error_user_in_use">Questo nome utente è già in uso</string>
-    <string name="login_error_login_email_not_yet">Il link nell\'email non è ancora stato cliccato</string>
+    <string name="login_error_login_email_not_yet">Il link nella mail non è ancora stato cliccato</string>
 
     <!-- crypto warnings -->
-    <string name="e2e_need_log_in_again">È necessario eseguire nuovamente l\'accesso per generare le chiavi di crittografia da-utente-a-utente per questo dispositivo ed inviare la chiave pubblica al server home.
-Ciò può capitare solo una volta.
-Ci scusiamo per l\'inconveniente.</string>
+    <string name="e2e_need_log_in_again">È necessario eseguire nuovamente l\'accesso per generare le chiavi crittografiche per questo dispositivo ed inviare la chiave pubblica al\'Home Server.
+\nQuesto inconveniente non capiterà più. 
+\nScusa per il disguido.</string>
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Elenco ricevute lette</string>
@@ -231,46 +229,46 @@ Ci scusiamo per l\'inconveniente.</string>
     <string name="room_info_room_topic">Argomento stanza</string>
 
     <!-- call string -->
-    <string name="call_connected">Chiamata connessa</string>
+    <string name="call_connected">Chiamata in corso</string>
     <string name="call_connecting">Chiamata in connessione…</string>
     <string name="call_ended">Chiamata terminata</string>
-    <string name="call_ring">Sto chiamando…</string>
+    <string name="call_ring">Chiamata in corso…</string>
     <string name="incoming_call">Chiamata in arrivo</string>
-    <string name="incoming_video_call">Videochiamata in arrivo</string>
-    <string name="incoming_voice_call">Chiamata voce in arrivo</string>
+    <string name="incoming_video_call">Chiamata video in arrivo</string>
+    <string name="incoming_voice_call">Chiamata audio in arrivo</string>
     <string name="call_in_progress">Chiamata in corso…</string>
 
     <string name="call_error_user_not_responding">Ricezione fallita da parte del destinatario.</string>
-    <string name="call_error_ice_failed">Fallita connessione al supporto multimediale</string>
+    <string name="call_error_ice_failed">La connessione al supporto multimediale è fallita</string>
     <string name="call_error_camera_init_failed">Impossibile avviare la fotocamera</string>
     <string name="call_error_answered_elsewhere">chiamata risposta altrove</string>
 
     <!-- medias picker string -->
-    <string name="media_picker_both_capture_title">Cattura foto o video</string>
+    <string name="media_picker_both_capture_title">Fai una foto o un video</string>
     <string name="media_picker_cannot_record_video">Impossibile registrare video</string>
 
     <!-- permissions Android M -->
     <string name="permissions_rationale_popup_title">Informazione</string>
-    <string name="permissions_rationale_msg_storage">Riot necessita del permesso di accedere alla tua galleria di foto e video per inviare e salvare allegati.
-
-Per favore consenti l\'accesso nella prossima finestra così da poter inviare file dal tuo telefono.</string>
-    <string name="permissions_rationale_msg_camera">Riot necessita del permesso di accedere alla fotocamera per scattare foto e fare videochiamate.</string>
-    <string name="permissions_rationale_msg_camera_explanation">
-
-Per favore dai l\'autorizzazione nella prossima finestra al fine di effettuare la chiamata.</string>
-    <string name="permissions_rationale_msg_record_audio">Riot necessita del permesso di accedere al microfono per eseguire chiamate audio.</string>
-    <string name="permissions_rationale_msg_record_audio_explanation">
-
-Per favore dai l\'autorizzazione nella prossima finestra al fine di effettuare la chiamata.</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Riot necessita del permesso di accedere alla fotocamera ed al microfono per eseguire videochiamate.
-
-Per favore consenti l\'accesso nella prossima finestra per potere effettuare la chiamata.</string>
-    <string name="permissions_rationale_msg_contacts">Riot può accedere alla tua rubrica per trovare altri utenti Matrix basandosi sulla loro email e sul numero di telefono. Se sei d\'accordo sulla condivisione della tua rubrica a questo scopo, consenti l\'accesso nella prossima finestra.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riot può accedere alla tua rubrica per trovare altri utenti Matrix basandosi sulla loro email e sul numero di telefono.
+    <string name="permissions_rationale_msg_storage">Riot deve essere autorizzato ad accedere alla tua Galleria di foto e video per poter inviare e salvare allegati.
 \n
-\nSei d\'accordo sulla condivisione della tua rubrica a questo scopo\?</string>
+\nNel prossimo pop-up concedi l\'autorizzazione per poteri inviare file dal tuo dispositivo.</string>
+    <string name="permissions_rationale_msg_camera">Riot deve essere autorizzato ad accedere alla tua fotocamera per poter fare foto e video.</string>
+    <string name="permissions_rationale_msg_camera_explanation">"
+\n
+\nNel prossimo pop-up concedi l\'autorizzazione per poter fare la chiamata."</string>
+    <string name="permissions_rationale_msg_record_audio">Riot deve essere autorizzato ad accedere al microfono e poter così fare chiamate audio.</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">"
+\n
+\nNel prossimo pop-up concedi l\'autorizzazione per poter fare la chiamata."</string>
+    <string name="permissions_rationale_msg_camera_and_audio">Riot deve essere autorizzato ad accedere a fotocamera e microfono per poter fare chiamate video.
+\n
+\nNel prossimo pop-up concedi le autorizzazioni per poter fare la chiamata.</string>
+    <string name="permissions_rationale_msg_contacts">Riot può usare tua Rubrica locale per trovare altri utenti Matrix grazie alle loro email e numeri di telefono. Se ti sta bene comunicare i dati di tutti i tuoi contatti all\'Identity Server, puoi concedere l\'autorizzazione nel prossimo pop-up.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot può usare tua Rubrica locale per trovare altri utenti Matrix grazie alle loro email e numeri di telefono.
+\n
+\nTi sta bene comunicare i dati di tutti i tuoi contatti per questo scopo\?</string>
 
-    <string name="permissions_action_not_performed_missing_permissions">Spiacente. Azione non eseguita a causa di mancate autorizzazioni</string>
+    <string name="permissions_action_not_performed_missing_permissions">Purtroppo l\'azione non è stata eseguita poichè mancano i permessi</string>
 
     <!-- medias slider string -->
     <string name="media_slider_saved">Salvato</string>
@@ -280,7 +278,7 @@ Per favore consenti l\'accesso nella prossima finestra per potere effettuare la 
     <string name="_continue">Continua</string>
 
     <!-- Actions -->
-    <string name="remove">Rimuoviti</string>
+    <string name="remove">Rimuovi</string>
     <string name="join">Unisciti</string>
     <string name="preview">Anteprima</string>
     <string name="reject">Rifiuta</string>
@@ -289,19 +287,20 @@ Per favore consenti l\'accesso nella prossima finestra per potere effettuare la 
     <string name="room_jump_to_first_unread">Vai al primo messaggio non letto.</string>
 
     <!-- Room Preview -->
-    <string name="room_preview_invitation_format">Sei stato invitato ad unirti in questa stanza da %s</string>
-    <string name="room_preview_unlinked_email_warning">Questo invito è stato spedito da %s, che non è associato a questo account. È possibile che tu voglia connetterti con un altro account, o aggiungere l\'email al tuo account.</string>
+    <string name="room_preview_invitation_format">Sei stato invitato ad entrare in questa stanza da %s</string>
+    <string name="room_preview_unlinked_email_warning">Questo invito è stato spedito a %s, che non è associato a questo account.
+\nPuoi aggiungere questa email al tuo account o provare ad accedere con un account differente.</string>
     <string name="room_preview_try_join_an_unknown_room">Stai provando ad accedere a %s. Desideri entrare per partecipare alla discussione?</string>
     <string name="room_preview_try_join_an_unknown_room_default">una stanza</string>
-    <string name="room_preview_room_interactions_disabled">Questa è l\'anteprima della stanza. Le interazioni con la stanza sono state disabilitate.</string>
+    <string name="room_preview_room_interactions_disabled">Questa è l\'anteprima della stanza. Le interazioni sono disabilitate.</string>
 
     <!-- Chat creation -->
     <string name="room_creation_title">Nuova chat</string>
-    <string name="room_creation_add_member">Aggiungi membro</string>
-    <string name="room_title_one_member">1 membro</string>
+    <string name="room_creation_add_member">Aggiungi utente</string>
+    <string name="room_title_one_member">1 utente</string>
 
     <!--  Chat participants -->
-    <string name="room_participants_leave_prompt_title">Lascia stanza</string>
+    <string name="room_participants_leave_prompt_title">Esci dalla stanza</string>
     <string name="room_participants_leave_prompt_msg">Sei sicuro di voler uscire dalla stanza?</string>
     <string name="room_participants_remove_prompt_msg">Sei sicuro di voler rimuovere %s da questa chat?</string>
     <string name="room_participants_create">Crea</string>
@@ -316,32 +315,32 @@ Per favore consenti l\'accesso nella prossima finestra per potere effettuare la 
     <string name="room_participants_header_devices">DISPOSITIVI</string>
 
     <string name="room_participants_action_invite">Invita</string>
-    <string name="room_participants_action_leave">Lascia questa stanza</string>
-    <string name="room_participants_action_remove">Rimuovi da questa stanza</string>
-    <string name="room_participants_action_ban">Bandisci</string>
-    <string name="room_participants_action_unban">Togli il bando</string>
+    <string name="room_participants_action_leave">Esci da questa stanza</string>
+    <string name="room_participants_action_remove">Butta fuori da questa stanza</string>
+    <string name="room_participants_action_ban">Bannalo</string>
+    <string name="room_participants_action_unban">Togli il ban</string>
     <string name="room_participants_action_set_default_power_level">Ripristina ad utente normale</string>
-    <string name="room_participants_action_set_moderator">Rendi moderatore</string>
-    <string name="room_participants_action_set_admin">Rendi amministratore</string>
+    <string name="room_participants_action_set_moderator">Nomina moderatore</string>
+    <string name="room_participants_action_set_admin">Nomina amministratore</string>
     <string name="room_participants_action_ignore">Nascondi tutti i messaggi di questo utente</string>
     <string name="room_participants_action_unignore">Mostra tutti i messaggi di questo utente</string>
     <string name="room_participants_invite_search_another_user">ID utente, nome o email</string>
-    <string name="room_participants_action_mention">Citazione</string>
-    <string name="room_participants_action_devices_list">Mostra elenco dispositivi</string>
-    <string name="room_participants_power_level_prompt">Non potrai annullare questa modifica in quanto promuoverai l\'utente al tuo stesso livello di potere.
-Sicuro di procedere?</string>
+    <string name="room_participants_action_mention">Cita</string>
+    <string name="room_participants_action_devices_list">Mostra l\'elenco dei dispositivi</string>
+    <string name="room_participants_power_level_prompt">La nomina non potrà essere annullata perché darai a questo utente i tuoi stessi poteri.
+\nSicuro di voler procedere\?</string>
 
-    <string name="room_participants_invite_prompt_msg">"Sicuro di voler invitare %s in questa chat?"</string>
+    <string name="room_participants_invite_prompt_msg">Sicuro di voler invitare %s\?</string>
 
     <!-- invitation -->
-    <string name="people_search_invite_by_id"><u>Invita tramite ID</u></string>
+    <string name="people_search_invite_by_id"><u>Invita tramite ID utente </u></string>
     <string name="people_search_local_contacts">CONTATTI LOCALI (%d)</string>
     <string name="people_search_user_directory">ELENCO UTENTI (%s)</string>
     <string name="people_search_filter_text">Solo utenti Matrix</string>
 
-    <string name="people_search_invite_by_id_dialog_title">Invita utente tramite ID</string>
-    <string name="people_search_invite_by_id_dialog_description">Per favore inserisci uno o più indirizzi email o ID Matrix</string>
-    <string name="people_search_invite_by_id_dialog_hint">Email o ID Matrix</string>
+    <string name="people_search_invite_by_id_dialog_title">Invita tramite ID utente</string>
+    <string name="people_search_invite_by_id_dialog_description">Per favore inserisci uno o più indirizzi email o ID utente</string>
+    <string name="people_search_invite_by_id_dialog_hint">Email o ID utente</string>
 
     <!--  Chat -->
     <string name="room_menu_search">Cerca</string>
@@ -352,11 +351,11 @@ Sicuro di procedere?</string>
     <string name="room_message_placeholder_not_encrypted">Messaggio non criptato…</string>
     <string name="room_offline_notification">La connessione al server è stata persa.</string>
     <string name="room_unsent_messages_notification">Messaggi non inviati. %1$s o %2$s ora?</string>
-    <string name="room_unknown_devices_messages_notification">Messaggi non inviati a causa di dispositivi sconosciuti qui presenti. %1$s o %2$s ora?</string>
+    <string name="room_unknown_devices_messages_notification">Messaggi non inviati a causa della presenza di dispositivi sconosciuti. %1$s o %2$s ora\?</string>
     <string name="room_prompt_resend">Rispedisci tutto</string>
     <string name="room_prompt_cancel">Annulla tutto</string>
-    <string name="room_resend_unsent_messages">Rinvia messaggi non spediti</string>
-    <string name="room_delete_unsent_messages">Elimina messaggi non spediti</string>
+    <string name="room_resend_unsent_messages">Rispedisci messaggi non inviati</string>
+    <string name="room_delete_unsent_messages">Elimina i messaggi non inviati</string>
     <string name="room_message_file_not_found">File non trovato</string>
     <string name="room_do_not_have_permission_to_post">Non hai il permesso di pubblicare in questa stanza</string>
 
@@ -367,40 +366,40 @@ Sicuro di procedere?</string>
     <string name="ssl_remain_offline">Ignora</string>
     <string name="ssl_fingerprint_hash">Impronta digitale (%s):</string>
     <string name="ssl_could_not_verify">Impossibile verificare l\'identità del server remoto.</string>
-    <string name="ssl_cert_not_trust">Ciò potrebbe significare che qualcuno sta intercettando il tuo traffico, oppure il tuo telefono non riconosce come affidabile il certificato fornito dal server remoto.</string>
-    <string name="ssl_cert_new_account_expl">Se l\'amministratore del server ha dichiarato che questa anomalia è prevista, assicurati che l\'impronta digitale corrisponda a quella fornita da loro.</string>
-    <string name="ssl_unexpected_existing_expl">Il certificato è cambiato rispetto a quello ritenuto affidabile dal tuo telefono. Questo è ESTREMAMENTE INSOLITO. Si raccomanda di NON ACCETTARE questo nuovo certificato.</string>
-    <string name="ssl_expected_existing_expl">Il certificato è cambiato da quello precedente ritenuto affidabile ad uno non affidabile. Il server potrebbe aver rinnovato il proprio certificato. Contatta l\'amministratore del server per chiedere l\'impronta digitale prevista.</string>
-    <string name="ssl_only_accept">Accetta il certificato solo se l\'amministratore ha pubblicato un\'impronta digitale che corrisponda a quella qua sopra.</string>
+    <string name="ssl_cert_not_trust">Ciò potrebbe voler dire che qualcuno sta intercettando il tuo traffico dati, oppure che il tuo telefono non riconosce come affidabile il certificato fornito dal server remoto.</string>
+    <string name="ssl_cert_new_account_expl">Se l\'amministratore del server ha dichiarato che questa anomalia è prevista, assicurati che l\'impronta digitale corrisponda a quella fornita dal server stesso..</string>
+    <string name="ssl_unexpected_existing_expl">Il certificato è diverso da quello precedentemente contrassegnato sul tuo telefono come \"affidabile\". Questa cosa è MOLTO INSOLITA. Si raccomanda di NON ACCETTARE questo nuovo certificato.</string>
+    <string name="ssl_expected_existing_expl">Il certificato del server è cambiato: quello precedente era stato contrassegnato come affidabile ma quello attuale no. Può darsi che il certificato precedente sia scaduto e sia stato semplicemente sostituito con uno nuovo. Contatta l\'amministratore del server per verificare l\'impronta digitale in uso.</string>
+    <string name="ssl_only_accept">Contrassegna il certificato come affidabile solo se l\'mpronta digitale comunicata dall\'amministratore del server corrisponde a quella qua sopra.</string>
 
     <!-- Room Details -->
     <string name="room_details_title">Dettagli stanza</string>
-    <string name="room_details_people">Persone</string>
+    <string name="room_details_people">Utenti</string>
     <string name="room_details_files">File</string>
     <string name="room_details_settings">Impostazioni</string>
-    <string name="malformed_id">ID malformato. Dovrebbe essere un indirizzo email o un ID Matrix come \'@localpart:domain\'</string>
+    <string name="malformed_id">ID malformato. Dovrebbe essere un indirizzo email o un ID utente come \'@localpart:domain\'</string>
     <string name="room_details_people_invited_group_name">INVITATI</string>
-    <string name="room_details_people_present_group_name">AGGIUNTI</string>
+    <string name="room_details_people_present_group_name">MEMBRI</string>
 
     <!-- Room events -->
-    <string name="room_event_action_report_prompt_reason">Motivo per segnalare questo contenuto</string>
-    <string name="room_event_action_report_prompt_ignore_user">Desideri nascondere tutti i messaggi di questo utente?
-
-Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tempo.</string>
-    <string name="room_event_action_cancel_upload">Annulla caricamento</string>
-    <string name="room_event_action_cancel_download">Annulla scaricamento</string>
+    <string name="room_event_action_report_prompt_reason">Motivo per cui segnali questo contenuto</string>
+    <string name="room_event_action_report_prompt_ignore_user">Desideri nascondere tutti i messaggi di questo utente\? 
+\n
+\nTieni presente che questa azione riavvierà l\'app e ciò potrebbe richiedere molto tempo.</string>
+    <string name="room_event_action_cancel_upload">Annulla l\'upload</string>
+    <string name="room_event_action_cancel_download">Annulla il download</string>
 
     <!-- Search -->
     <string name="search_hint">Cerca</string>
-    <string name="search_members_hint">Filtra membri della stanza</string>
+    <string name="search_members_hint">Cerca tra i membri della stanza</string>
     <string name="search_no_results">Nessun risultato</string>
     <string name="tab_title_search_rooms">STANZE</string>
     <string name="tab_title_search_messages">MESSAGGI</string>
-    <string name="tab_title_search_people">PERSONE</string>
+    <string name="tab_title_search_people">UTENTI</string>
     <string name="tab_title_search_files">FILE</string>
 
     <!-- Room recents -->
-    <string name="room_recents_join">ENTRARE</string>
+    <string name="room_recents_join">ENTRA</string>
     <string name="room_recents_directory">ELENCO</string>
     <string name="room_recents_favourites">PREFERITI</string>
     <string name="room_recents_conversations">STANZE</string>
@@ -410,17 +409,17 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="room_recents_create_room">Crea stanza</string>
     <string name="room_recents_join_room">Entra nella stanza</string>
     <string name="room_recents_join_room_title">Entra in una stanza</string>
-    <string name="room_recents_join_room_prompt">Digita ID o soprannome (alias)</string>
+    <string name="room_recents_join_room_prompt">Digita l\'ID stanza o il suo nome</string>
 
     <!-- Directory -->
-    <string name="directory_search_results_title">Esplora elenco</string>
+    <string name="directory_search_results_title">Esplora l\'elenco</string>
     <string name="directory_searching_title">Ricerca negli elenchi…</string>
 
     <!-- home room settings -->
     <string name="room_settings_favourite">Preferito</string>
     <string name="room_settings_de_prioritize">Bassa priorità</string>
     <string name="room_settings_direct_chat">Chat diretta</string>
-    <string name="room_settings_leave_conversation">Lascia conversazione</string>
+    <string name="room_settings_leave_conversation">Esci dalla conversazione</string>
     <string name="room_settings_forget">Dimentica</string>
 
     <!-- home sliding menu -->
@@ -434,30 +433,30 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
 
     <!-- Vector Settings -->
 
-    <string name="settings_profile_picture">Immagine profilo</string>
+    <string name="settings_profile_picture">Immagine del profilo</string>
     <string name="settings_display_name">Nome visualizzato</string>
     <string name="settings_email_address">Email</string>
     <string name="settings_add_email_address">Aggiungi indirizzo email</string>
     <string name="settings_phone_number">Telefono</string>
     <string name="settings_add_phone_number">Aggiungi numero di telefono</string>
-    <string name="settings_app_info_link_summary">Mostra le informazioni dell\'app nelle impostazioni di sistema.</string>
-    <string name="settings_app_info_link_title">Informazioni applicazione</string>
+    <string name="settings_app_info_link_summary">Mostra le informazioni dell\'App nelle Impostazioni di sistema.</string>
+    <string name="settings_app_info_link_title">Informazioni sull\'App</string>
 
-    <string name="settings_enable_all_notif">Abilita notifiche per questo account</string>
-    <string name="settings_enable_this_device">Abilita notifiche per questo dispositivo</string>
+    <string name="settings_enable_all_notif">Abilita le notifiche per questo account</string>
+    <string name="settings_enable_this_device">Abilita le notifiche per questo dispositivo</string>
     <string name="settings_turn_screen_on">Accendi lo schermo per 3 secondi alla notifica</string>
 
-    <string name="settings_messages_in_one_to_one">Msg nelle chat uno-a-uno</string>
-    <string name="settings_messages_in_group_chat">Msg nelle chat di gruppo</string>
-    <string name="settings_invited_to_room">Quando vengo invitato in una stanza</string>
+    <string name="settings_messages_in_one_to_one">Messaggi nelle chat dirette</string>
+    <string name="settings_messages_in_group_chat">Messaggi nelle chat di gruppo</string>
+    <string name="settings_invited_to_room">Invito ad entrare in una stanza</string>
     <string name="settings_call_invitations">Invito ad una chiamata</string>
     <string name="settings_messages_sent_by_bot">Messaggi inviati da bot</string>
 
     <string name="settings_start_on_boot">Esegui all\'avvio</string>
-    <string name="settings_background_sync">Sincronizzazione in sottofondo</string>
-    <string name="settings_enable_background_sync">Abilita sync in sottofondo</string>
-    <string name="settings_set_sync_timeout">Attesa per una richiesta di sync</string>
-    <string name="settings_set_sync_delay">Attesa per ogni sincronizzazione</string>
+    <string name="settings_background_sync">Sincronizzazione in background</string>
+    <string name="settings_enable_background_sync">Abilita la sincronizzazione in background</string>
+    <string name="settings_set_sync_timeout">La richiesta di sincronizzazione sta impiegando troppo tempo</string>
+    <string name="settings_set_sync_delay">Ritardo tra ogni sincronizzazione</string>
     <string name="settings_second">secondo</string>
     <string name="settings_seconds">secondi</string>
 
@@ -467,9 +466,9 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="settings_third_party_notices">Avvisi di terze parti</string>
     <string name="settings_copyright">Copyright</string>
     <string name="settings_privacy_policy">Politica sulla privacy</string>
-    <string name="settings_clear_cache">Elimina cache</string>
-    <string name="settings_clear_media_cache">Elimina file multimediali temporanei</string>
-    <string name="settings_keep_media">Conserva file multimediali</string>
+    <string name="settings_clear_cache">Svuota la cache</string>
+    <string name="settings_clear_media_cache">Svuota la cache dei file multimediali</string>
+    <string name="settings_keep_media">Conserva i file multimediali</string>
 
     <string name="settings_user_settings">Impostazioni utente</string>
     <string name="settings_notifications">Notifiche</string>
@@ -479,63 +478,63 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="settings_cryptography">Crittografia</string>
     <string name="settings_notifications_targets">Target delle notifiche</string>
     <string name="settings_contact">Contatti locali</string>
-    <string name="settings_contacts_app_permission">Autorizzazione contatti</string>
-    <string name="settings_contacts_phonebook_country">Nazione rubrica telefonica</string>
+    <string name="settings_contacts_app_permission">Consenti l\'accesso alla Rubrica locale</string>
+    <string name="settings_contacts_phonebook_country">Prefisso telefonico internazionale</string>
     <string name="settings_home_display">Schermata iniziale</string>
     <string name="settings_pin_missed_notifications">Segna le stanze con notifiche perse</string>
     <string name="settings_pin_unread_messages">Segna le stanze con messaggi non letti</string>
     <string name="settings_devices_list">Dispositivi</string>
     <string name="settings_always_show_timestamps">Mostra data e ora di tutti i messaggi</string>
-    <string name="settings_data_save_mode">Modalità risparmio banda</string>
+    <string name="settings_data_save_mode">Modalità risparmio dati</string>
 
-    <string name="devices_details_dialog_title">Informazioni dispositivo</string>
+    <string name="devices_details_dialog_title">Informazioni sul dispositivo</string>
     <string name="devices_details_id_title">ID</string>
     <string name="devices_details_name_title">Nome pubblico</string>
-    <string name="devices_details_device_name">Aggiorna nome pubblico</string>
-    <string name="devices_details_last_seen_title">Ultima visualizzazione</string>
+    <string name="devices_details_device_name">Aggiorna il nome pubblico</string>
+    <string name="devices_details_last_seen_title">Ultimo accesso</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
     <string name="devices_delete_dialog_text">Questa operazione richiede un\'autenticazione aggiuntiva.\nPer proseguire, inserisci la tua password.</string>
     <string name="devices_delete_dialog_title">Autenticazione</string>
     <string name="devices_delete_pswd">Password:</string>
     <string name="devices_delete_submit_button_label">Invia</string>
 
-    <string name="settings_logged_in">Connesso come</string>
-    <string name="settings_home_server">Server home</string>
-    <string name="settings_identity_server">Server identità</string>
+    <string name="settings_logged_in">Autenticato come</string>
+    <string name="settings_home_server">Home Server</string>
+    <string name="settings_identity_server">Identity Server</string>
 
     <string name="settings_user_interface">Interfaccia utente</string>
     <string name="settings_interface_language">Lingua</string>
     <string name="settings_select_language">Scegli una lingua</string>
 
     <string name="account_email_validation_title">In attesa di verifica</string>
-    <string name="account_email_validation_message">Controlla la tua email e clicca sul link lì contenuto. Fatto questo, clicca su Continua.</string>
-    <string name="account_email_validation_error">Impossibile verificare l\'indirizzo email. Controlla la tua email e clicca sul link lì contenuto. Fatto questo, clicca su continua.</string>
+    <string name="account_email_validation_message">Controlla la tua email e clicca sul link che ti è stato spedito. Fatto questo, clicca su Continua.</string>
+    <string name="account_email_validation_error">Impossibile verificare l\'indirizzo email. Controlla la tua email e clicca sul link che ti è stato spedito. Fatto questo, clicca su Continua.</string>
     <string name="account_email_already_used_error">Questo indirizzo email è già in uso.</string>
     <string name="account_email_not_found_error">Questo indirizzo email non è stato trovato.</string>
     <string name="account_phone_number_already_used_error">Questo numero di telefono è già in uso.</string>
 
-    <string name="settings_change_password">Cambia password</string>
+    <string name="settings_change_password">Cambia la password</string>
     <string name="settings_old_password">Password attuale</string>
     <string name="settings_new_password">Nuova password</string>
-    <string name="settings_confirm_password">Conferma nuova password</string>
-    <string name="settings_fail_to_update_password">Fallito l\'aggiornamento password</string>
+    <string name="settings_confirm_password">Conferma la nuova password</string>
+    <string name="settings_fail_to_update_password">Fallito l\'aggiornamento della password</string>
     <string name="settings_password_updated">La tua password è stata aggiornata</string>
-    <string name="settings_unignore_user">Mostrare tutti i messaggi di %s?
-
-Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tempo.</string>
+    <string name="settings_unignore_user">Mostrare tutti i messaggi di %s\?
+\n
+\nTieni presente che questa azione riavvierà l\'app e ciò potrebbe richiedere molto tempo.</string>
 
     <string name="settings_delete_notification_targets_confirmation">Sicuro di voler rimuovere questo target di notifica?</string>
 
     <string name="settings_delete_threepid_confirmation">Sicuro di voler rimuovere %1$s %2$s?</string>
 
-    <string name="settings_select_country">Scegli una nazione</string>
+    <string name="settings_select_country">Scegli un paese</string>
 
-    <string name="settings_phone_number_country_label">Nazione</string>
-    <string name="settings_phone_number_country_error">Per favore scegli una nazione</string>
+    <string name="settings_phone_number_country_label">Paese</string>
+    <string name="settings_phone_number_country_error">Per favore scegli un paese</string>
     <string name="settings_phone_number_label">Numero di telefono</string>
-    <string name="settings_phone_number_error">Numero di telefono non valido per la nazione selezionata</string>
+    <string name="settings_phone_number_error">Numero di telefono non valido per il paese selezionato</string>
     <string name="settings_phone_number_verification">Verifica numero di telefono</string>
-    <string name="settings_phone_number_verification_instruction">"Un SMS è stato spedito con il codice di attivazione. Per favore inserisci il codice qui sotto."</string>
+    <string name="settings_phone_number_verification_instruction">E\' stato spedito un SMS con il codice di attivazione. Per favore inserisci il codice qui sotto.</string>
     <string name="settings_phone_number_verification_error_empty_code">Inserisci un codice di attivazione</string>
     <string name="settings_phone_number_verification_error">Errore durante la convalida del numero di telefono</string>
     <string name="settings_phone_number_code">Codice</string>
@@ -549,23 +548,23 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <!-- Room Settings -->
 
     <!-- room global settings-->
-    <string name="room_settings_room_photo">Immagine stanza</string>
-    <string name="room_settings_room_name">Nome stanza</string>
+    <string name="room_settings_room_photo">Icona della stanza</string>
+    <string name="room_settings_room_name">Nome della stanza</string>
     <string name="room_settings_topic">Argomento</string>
-    <string name="room_settings_room_tag">Etichetta stanza</string>
-    <string name="room_settings_tag_pref_dialog_title">Etichettata come:</string>
+    <string name="room_settings_room_tag">Etichetta</string>
+    <string name="room_settings_tag_pref_dialog_title">Etichetta come:</string>
 
     <!-- Room settings: Room tag -->
     <string name="room_settings_tag_pref_entry_favourite">Preferito</string>
     <string name="room_settings_tag_pref_entry_low_priority">Bassa priorità</string>
-    <string name="room_settings_tag_pref_entry_none">Niente</string>
+    <string name="room_settings_tag_pref_entry_none">Nessuna etichetta</string>
 
     <!-- room settings : access and visibility -->
     <string name="room_settings_category_access_visibility_title">Accesso e visibilità</string>
-    <string name="room_settings_directory_visibility">Mostra questa stanza nell\'elenco delle stanze</string>
+    <string name="room_settings_directory_visibility">Mostra questa stanza nell\'elenco delle stanze pubbliche</string>
     <string name="room_settings_room_access_rules_pref_title">Accesso alla stanza</string>
-    <string name="room_settings_room_read_history_rules_pref_title">Leggibilità cronologia della stanza</string>
-    <string name="room_settings_room_read_history_rules_pref_dialog_title">Chi può leggere la cronologia?</string>
+    <string name="room_settings_room_read_history_rules_pref_title">Accesso alla Timeline</string>
+    <string name="room_settings_room_read_history_rules_pref_dialog_title">Chi può leggere la Timeline\?</string>
     <string name="room_settings_room_access_rules_pref_dialog_title">Chi può entrare in questa stanza?</string>
 
     <!-- Room settings, access and visibility : WHO CAN READ HISTORY? (read rule) -->
@@ -575,37 +574,37 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="room_settings_read_history_entry_members_only_joined">Solo i membri (dal momento in cui entrano nella stanza)</string>
 
     <!-- Room settings: "Who can access this room?" (access rule) -->
-    <string name="room_settings_room_access_warning">Per indirizzare ad una stanza tramite link, essa deve avere un indirizzo.</string>
+    <string name="room_settings_room_access_warning">Una stanza deve avere un indirizzo per poter essere linkata.</string>
     <string name="room_settings_room_access_entry_only_invited">Solo le persone che sono state invitate</string>
     <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Chiunque conosca il link della stanza, eccetto gli ospiti</string>
     <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Chiunque conosca il link della stanza, compresi gli ospiti</string>
 
     <!-- Room settings: banned users -->
-    <string name="room_settings_banned_users_title">Utenti banditi</string>
+    <string name="room_settings_banned_users_title">Utenti bannati</string>
 
     <!-- advanced -->
     <string name="room_settings_category_advanced_title">Avanzate</string>
     <string name="room_settings_room_internal_id">ID interno della stanza</string>
     <string name="room_settings_addresses_pref_title">Indirizzi</string>
     <string name="room_settings_labs_pref_title">Laboratorio</string>
-    <string name="room_settings_labs_warning_message">Queste sono caratteristiche sperimentali che possono fallire in modo inatteso. Usare con cautela.</string>
+    <string name="room_settings_labs_warning_message">Queste sono caratteristiche sperimentali che potrebbero dare risultati inattesi. Usare con cautela.</string>
     <string name="room_settings_labs_end_to_end">Crittografia da-utente-a-utente</string>
     <string name="room_settings_labs_end_to_end_is_active">La crittografia da-utente-a-utente è attiva</string>
     <string name="room_settings_labs_end_to_end_warnings">Devi disconnetterti per abilitare la crittografia.</string>
     <string name="room_settings_never_send_to_unverified_devices_title">Cripta solo per i dispositivi verificati</string>
-    <string name="room_settings_never_send_to_unverified_devices_summary">Non inviare mai da questa stanza messaggi criptati a dispositivi non verificati.</string>
+    <string name="room_settings_never_send_to_unverified_devices_summary">Non inviare mai da questa stanza dei messaggi criptati verso dispositivi che non siano stati verificati da questo stesso dispositivo.</string>
 
     <!-- Room settings: advanced addresses -->
     <string name="room_settings_addresses_no_local_addresses">Questa stanza non ha indirizzi locali</string>
-    <string name="room_settings_addresses_add_new_address">Nuovo indirizzo (es. #foo:matrix.org)</string>
+    <string name="room_settings_addresses_add_new_address">Nuovo indirizzo stanza (es. #foo:matrix.org)</string>
 
-    <string name="room_settings_addresses_invalid_format_dialog_title">Formato soprannome non valido</string>
-    <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' non è un formato valido per un soprannome</string>
-    <string name="room_settings_addresses_disable_main_address_prompt_msg">Non avrai un indirizzo principale specificato per questa stanza.</string>
+    <string name="room_settings_addresses_invalid_format_dialog_title">Il formato del nome della stanza non è corretto</string>
+    <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' non è un formato valido per un nome di stanza</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_msg">Non avrai un indirizzo principale specifico per questa stanza.</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">Avvisi per l\'indirizzo principale</string>
 
     <string name="room_settings_set_main_address">Imposta come indirizzo principale</string>
-    <string name="room_settings_unset_main_address">Non più come indirizzo principale</string>
+    <string name="room_settings_unset_main_address">Non usare più come indirizzo principale</string>
     <string name="room_settings_copy_room_id">Copia ID stanza</string>
     <string name="room_settings_copy_room_address">Copia indirizzo stanza</string>
 
@@ -618,20 +617,20 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="settings_theme">Tema</string>
 
     <!-- matrix error -->
-    <string name="failed_to_load_timeline_position">%s stava cercando di caricare un punto specifico della cronologia di questa stanza, ma non l\'ha trovato.</string>
+    <string name="failed_to_load_timeline_position">%s stava cercando di caricare un punto specifico tra i messaggi passati di questa stanza, ma non l\'ha trovato.</string>
 
     <!-- encryption dialog -->
-    <string name="encryption_information_title">Informazioni crittografia da-utente-a-utente</string>
+    <string name="encryption_information_title">Informazioni sulla crittografia E2E</string>
 
-    <string name="encryption_information_device_info">Informazioni evento</string>
+    <string name="encryption_information_device_info">Informazioni sull\'evento</string>
     <string name="encryption_information_user_id">ID utente</string>
     <string name="encryption_information_curve25519_identity_key">Chiave identità Curve25519</string>
     <string name="encryption_information_claimed_ed25519_fingerprint_key">Richiesta chiave per l\'impronta digitale Ed25519</string>
     <string name="encryption_information_algorithm">Algoritmo</string>
     <string name="encryption_information_session_id">ID sessione</string>
-    <string name="encryption_information_decryption_error">Errore decriptazione</string>
+    <string name="encryption_information_decryption_error">Errore di decriptazione</string>
 
-    <string name="encryption_information_sender_device_information">Informazioni dispositivo mittente</string>
+    <string name="encryption_information_sender_device_information">Informazioni sul dispositivo mittente</string>
     <string name="encryption_information_device_name">Nome pubblico</string>
     <string name="encryption_information_name">Nome pubblico</string>
     <string name="encryption_information_device_id">ID</string>
@@ -639,56 +638,62 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="encryption_information_verification">Verifica</string>
     <string name="encryption_information_ed25519_fingerprint">Impronta digitale Ed25519</string>
 
-    <string name="encryption_export_e2e_room_keys">Esporta chiavi da-utente-a-utente delle stanze</string>
+    <string name="encryption_export_e2e_room_keys">Esporta le chiavi di crittografia delle stanze</string>
     <string name="encryption_export_room_keys">Esporta le chiavi delle stanze</string>
     <string name="encryption_export_room_keys_summary">Esporta le chiavi in un file locale</string>
     <string name="encryption_export_export">Esporta</string>
-    <string name="passphrase_enter_passphrase">Inserisci frase d\'accesso (passphrase)</string>
-    <string name="passphrase_confirm_passphrase">Conferma frase d\'accesso (passphrase)</string>
-    <string name="encryption_export_saved_as">Le chiavi da-utente-a-utente della stanza sono state salvate su \'%s\'.
+    <string name="passphrase_enter_passphrase">Inserisci password</string>
+    <string name="passphrase_confirm_passphrase">Conferma password</string>
+    <string name="encryption_export_saved_as">Le chiavi di crittografia della stanza sono state salvate su \'%s\'.
+\n
+\nAttenzione: se si disinstalla quest\'applicazione il file, viene eliminato.</string>
 
-Attenzione: questo file può essere eliminato se l\'applicazione viene disinstallata.</string>
-
-    <string name="encryption_import_e2e_room_keys">Importa chiavi da-utente-a-utente delle stanze</string>
-    <string name="encryption_import_room_keys">Importa chiavi delle stanze</string>
+    <string name="encryption_import_e2e_room_keys">Importa le chiavi di crittografia della stanza</string>
+    <string name="encryption_import_room_keys">Importa le chiavi della stanza</string>
     <string name="encryption_import_room_keys_summary">Importa le chiavi da un file locale</string>
     <string name="encryption_import_import">Importa</string>
     <string name="encryption_never_send_to_unverified_devices_title">Cripta solo per i dispositivi verificati</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">Non inviare mai da questo dispositivo messaggi criptati a dispositivi non verificati.</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Non inviare mai da questo dispositivo messaggi criptati verso dispositivi non verificati.</string>
 
     <string name="encryption_information_not_verified">NON verificato</string>
     <string name="encryption_information_verified">Verificato</string>
-    <string name="encryption_information_blocked">Nella lista nera</string>
+    <string name="encryption_information_blocked">Metti in lista nera</string>
 
     <string name="encryption_information_unknown_device">dispositivo sconosciuto</string>
     <string name="encryption_information_none">niente</string>
 
     <string name="encryption_information_verify">Conferma</string>
-    <string name="encryption_information_unverify">Sconferma</string>
-    <string name="encryption_information_block">Nella lista nera</string>
-    <string name="encryption_information_unblock">Non nella lista nera</string>
+    <string name="encryption_information_unverify">Rimuovi la conferma</string>
+    <string name="encryption_information_block">Lista nera</string>
+    <string name="encryption_information_unblock">Togli dalla lista nera</string>
 
-    <string name="encryption_information_verify_device">Verifica dispositivo</string>
-    <string name="encryption_information_verify_device_warning">Per verificare che quel dispositivo è affidabile, contatta il suo proprietario utilizzando altri canali di comunicazione (ad esempio, per persona o per telefono) e chiedigli se nelle Impostazioni, sezione Crittografia, la voce Chiave dispositivo corrisponde al codice riportato qui sotto:</string>
-    <string name="encryption_information_verify_device_warning2">Se ciò corrisponde, premi il pulsante di verifica qui sotto. In caso contrario, qualcun altro sta intercettando questo dispositivo e probabilmente dovresti inserirlo nella lista nera. In futuro il processo di verifica sarà più sofisticato.</string>
-    <string name="encryption_information_verify_key_match">Ho verificato che le chiavi corrispondano</string>
+    <string name="encryption_information_verify_device">Verifica il dispositivo</string>
+    <string name="encryption_information_verify_device_warning">Per verificare se quel dispositivo è affidabile, contatta il suo proprietario utilizzando altri canali di comunicazione (ad esempio, per persona o per telefono) e chiedigli se nelle Impostazioni, sezione Crittografia, la chiave del dispositivo corrisponde a quella riportata qui sotto:</string>
+    <string name="encryption_information_verify_device_warning2">Se corrisponde, premi il pulsante di verifica qui sotto. In caso contrario, qualcun altro sta intercettando questo dispositivo e probabilmente dovresti metterlo in lista nera. In futuro il processo di verifica sarà più sofisticato.</string>
+    <string name="encryption_information_verify_key_match">Ho verificato che le chiavi corrispondono</string>
 
-    <string name="e2e_enabling_on_app_update">Riot supporta ora la crittografia da-utente-a-utente, ma devi riconnetterti per abilitarla.\n\nPuoi farlo ora o più tardi dalle impostazioni dell\'applicazione.</string>
+    <string name="e2e_enabling_on_app_update">Riot supporta ora la crittografia da-utente-a-utente, ma per abilitarla devi riconnetterti.
+\n
+\nPuoi farlo ora, o più tardi, dalle impostazioni dell\'applicazione.</string>
 
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">La stanza contiene dispositivi sconosciuti</string>
-    <string name="unknown_devices_alert_message">Questa stanza contiene dispositivi sconosciuti che non sono stati verificati.\nCiò significa che non esiste alcuna garanzia che i dispositivi appartengano agli utenti che ne rivendicano il possesso.\nSi consiglia di passare attraverso il processo di verifica per ogni dispositivo prima di continuare, ma è possibile inviare ugualmente il messaggio senza fare la verifica se preferisci.\n\nDispositivi sconosciuti:</string>
+    <string name="unknown_devices_alert_message">Questa stanza contiene dispositivi sconosciuti che non sono stati verificati.
+\nNon v\'è alcuna garanzia che le persone che utilizzano quei dispositivi siano davvero chi dicono d\'essere.
+\nSi consiglia di verificare ogni dispositivo prima di continuare, ma se si preferisce, è comunque possibile inviare ugualmente il messaggio anche senza la verifica.
+\n
+\nDispositivi sconosciuti:</string>
 
     <!-- directory activity  -->
     <string name="select_room_directory">Scegli un elenco di stanze</string>
     <string name="directory_server_fail_to_retrieve_server">Il server potrebbe essere non disponibile o sovraccarico</string>
-    <string name="directory_server_type_homeserver">Digita un server home per elencare le sue stanze pubbliche</string>
-    <string name="directory_server_placeholder">URL server home</string>
-    <string name="directory_server_all_rooms_on_server">Tutte le stanze sul server home %s</string>
+    <string name="directory_server_type_homeserver">Inserisci un Home Server per vedere le sue stanze pubbliche</string>
+    <string name="directory_server_placeholder">URL dell\'Home Server</string>
+    <string name="directory_server_all_rooms_on_server">Tutte le stanze sull\'Home Server %s</string>
     <string name="directory_server_native_rooms">Tutte le stanze native %s</string>
 
     <!-- historical -->
-    <string name="historical_placeholder">Cerca nella cronologia</string>
+    <string name="historical_placeholder">Cerca tra i messaggi passati</string>
 
     <!-- text size selection -->
     <string name="font_size">Grandezza font</string>
@@ -704,40 +709,40 @@ Attenzione: questo file può essere eliminato se l\'applicazione viene disinstal
     <string name="black_them">Tema Nero</string>
 
     <string name="notification_sync_in_progress">Sincronizzazione…</string>
-    <string name="settings_notification_ringtone">Suono notifiche</string>
+    <string name="settings_notification_ringtone">Suono delle notifiche</string>
     <string name="settings_12_24_timestamps">Mostra gli orari in formato 12 ore</string>
-    <string name="widget_no_power_to_manage">Hai bisogno dei permessi per gestire i widget in questa stanza</string>
+    <string name="widget_no_power_to_manage">Devi avere il permesso per poter gestire i widget in questa stanza</string>
     <string name="event_formatter_widget_added">%1$s aggiunto da %2$s</string>
     <string name="event_formatter_widget_removed">%1$s rimosso da %2$s</string>
-    <string name="settings_labs_create_conference_with_jitsi">Crea una videoconferenza con jitsi</string>
-    <string name="widget_delete_message_confirmation">Sei sicuro di voler eliminare questo widget da questa stanza?</string>
+    <string name="settings_labs_create_conference_with_jitsi">Avvia una conferenza usando Jitsi</string>
+    <string name="widget_delete_message_confirmation">Vuoi davvero eliminare questo widget dalla stanza\?</string>
 
     <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Impossibile creare il widget.</string>
-    <string name="widget_integration_failed_to_send_request">Invio della richiesta fallito.</string>
+    <string name="widget_integration_failed_to_send_request">L\'invio della richiesta è fallito.</string>
     <string name="widget_integration_must_be_in_room">Non sei in questa stanza.</string>
     <string name="widget_integration_no_permission_in_room">Non hai i permessi per eseguire l\'azione in questa stanza.</string>
-    <string name="widget_integration_missing_room_id">room_id mancante nella richiesta.</string>
-    <string name="widget_integration_missing_user_id">user_id mancante nella richiesta.</string>
-    <string name="room_add_matrix_apps">Aggiungi una app Matrix</string>
-    <string name="option_take_photo">Cattura foto</string>
-    <string name="option_take_video">Cattura video</string>
+    <string name="widget_integration_missing_room_id">Nella richiesta manca l\'ID stanza.</string>
+    <string name="widget_integration_missing_user_id">Nella richiesta manca l\'ID utente.</string>
+    <string name="room_add_matrix_apps">Aggiungi un Widget</string>
+    <string name="option_take_photo">Fai una foto</string>
+    <string name="option_take_video">Fai un video</string>
 
-    <string name="settings_containing_my_display_name">Msg contenenti il nome mostrato</string>
-    <string name="settings_containing_my_user_name">Msg contenenti il nome utente</string>
+    <string name="settings_containing_my_display_name">Messaggi contenenti il nome mostrato</string>
+    <string name="settings_containing_my_user_name">Messaggi contenenti il nome utente</string>
 
     <string name="notification_silent_notifications">Notifiche silenziose</string>
 
     <string name="notification_noisy_notifications">Notifiche audio</string>
-    <string name="notification_listening_for_events">In ascolto di eventi</string>
-    <string name="title_activity_bug_report">Rapporto errori</string>
+    <string name="notification_listening_for_events">Rilevazione eventi</string>
+    <string name="title_activity_bug_report">Segnalazione errore</string>
 
-    <string name="login_mobile_device">Cellulare</string>
+    <string name="login_mobile_device">Smartphone</string>
 
     <string name="call">Chiama</string>
     <string name="encrypted_message">Messaggio criptato</string>
 
-    <string name="title_activity_group_details">Dettagli della comunità</string>
+    <string name="title_activity_group_details">Dettagli sulla comunità</string>
 
     <string name="loading">Caricamento…</string>
 
@@ -745,32 +750,32 @@ Attenzione: questo file può essere eliminato se l\'applicazione viene disinstal
     <string name="actions">Azioni</string>
     <string name="bottom_action_groups">Comunità</string>
 
-    <string name="home_filter_placeholder_groups">Filtra i nomi delle comunità</string>
+    <string name="home_filter_placeholder_groups">Cerca tra le e comunità</string>
 
     <string name="groups_invite_header">Invita</string>
     <string name="groups_header">Comunità</string>
     <string name="no_group_placeholder">Nessun gruppo</string>
 
-    <string name="send_bug_report_rage_shake">Agita con rabbia per segnalare un errore</string>
+    <string name="send_bug_report_rage_shake">Per segnalare un errore agita il dispositivo con rabbia</string>
 
-    <string name="start_new_chat_prompt_msg">Sicuro di voler iniziare una nuova conversazione con %s?</string>
-    <string name="start_voice_call_prompt_msg">Sicuro di voler iniziare una chiamata vocale?</string>
-    <string name="start_video_call_prompt_msg">Sicuro di voler iniziare una chiamata video?</string>
+    <string name="start_new_chat_prompt_msg">Sicuro di voler avviare una nuova chat con %s\?</string>
+    <string name="start_voice_call_prompt_msg">Sicuro di voler fare una chiamata audio\?</string>
+    <string name="start_video_call_prompt_msg">Sicuro di voler fare una chiamata video\?</string>
 
     <string name="groups_list">Elenco gruppi</string>
 
-    <string name="list_members">Elenca i membri</string>
-    <string name="open_chat_header">Apri intestazione</string>
+    <string name="list_members">Elenco dei membri</string>
+    <string name="open_chat_header">Apri descrizione</string>
     <string name="room_sync_in_progress">Sincronizzazione…</string>
     <plurals name="room_header_active_members_count">
-        <item quantity="one">1 membro attivo</item>
-        <item quantity="other">%d membri attivi</item>
+        <item quantity="one">1 utente attivo</item>
+        <item quantity="other">%d utenti attivi</item>
     </plurals>
     <plurals name="room_title_members">
-        <item quantity="one">1 membro</item>
-        <item quantity="other">%d membri</item>
+        <item quantity="one">1 utente</item>
+        <item quantity="other">%d utenti</item>
     </plurals>
-    <string name="room_participants_ban_prompt_msg">Sei sicuro di voler bandire dalla chat questo utente?</string>
+    <string name="room_participants_ban_prompt_msg">Sei sicuro di voler bannare questo utente\?</string>
 
     <plurals name="room_new_messages_notification">
         <item quantity="one">1 nuovo messaggio</item>
@@ -789,16 +794,16 @@ Attenzione: questo file può essere eliminato se l\'applicazione viene disinstal
     <string name="room_settings_all_messages">Tutti i messaggi</string>
     <string name="room_settings_mention_only">Solo le citazioni</string>
     <string name="room_settings_mute">Silenzioso</string>
-    <string name="room_settings_add_homescreen_shortcut">Aggiungi scorciatoia su schermata iniziale</string>
+    <string name="room_settings_add_homescreen_shortcut">Aggiungi scorciatoia sulla schermata iniziale</string>
 
-    <string name="settings_inline_url_preview">Anteprima degli URL in linea</string>
+    <string name="settings_inline_url_preview">Anteprima degli URL</string>
     <string name="settings_vibrate_on_mention">Vibra quando menzionano un utente</string>
 
     <string name="settings_analytics">Statistiche</string>
 
     <string name="room_settings_room_notifications_title">Notifiche</string>
     <string name="room_settings_add_new_group">Nuovo ID della comunità (es. +foo:matrix.org)</string>
-    <string name="room_settings_invalid_group_format_dialog_title">ID comunità non valido</string>
+    <string name="room_settings_invalid_group_format_dialog_title">L\'ID comunità non è valido</string>
     <string name="room_settings_invalid_group_format_dialog_body">\'%s\' non è un ID comunità valido</string>
 
 
@@ -816,7 +821,7 @@ Attenzione: questo file può essere eliminato se l\'applicazione viene disinstal
     </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s in %2$s</string>
 
-    <string name="widget_creation_failure">Creazione del widget fallita</string>
+    <string name="widget_creation_failure">La creazione del widget è fallita</string>
     <plurals name="active_widgets">
         <item quantity="one">1 widget attivo</item>
         <item quantity="other">%d widget attivi</item>
@@ -824,18 +829,18 @@ Attenzione: questo file può essere eliminato se l\'applicazione viene disinstal
 
     <!-- Widget Integration Manager -->
     <string name="widget_integration_room_not_visible">La stanza %s non è visibile.</string>
-    <string name="settings_labs_native_camera">Usa fotocamera nativa</string>
+    <string name="settings_labs_native_camera">Usa la fotocamera di sistema</string>
 
     <!-- share keys -->
     <string name="you_added_a_new_device">Hai aggiunto un nuovo dispositivo \'%s\' che sta richiedendo le chiavi crittografiche.</string>
-    <string name="your_unverified_device_requesting">Il tuo dispositivo non verificato \'%s\' sta richiedendo le chiavi crittografiche.</string>
-    <string name="start_verification">Inizia la verifica</string>
+    <string name="your_unverified_device_requesting">Il tuo dispositivo non verificato \'%s\' sta chiedendo le chiavi crittografiche.</string>
+    <string name="start_verification">Avvia la verifica</string>
     <string name="share_without_verifying">Condividi senza verificare</string>
     <string name="ignore_request">Ignora la richiesta</string>
 
     <!-- conference call -->
     <string name="conference_call_warning_title">Attenzione!</string>
-    <string name="conference_call_warning_message">La chiamata in conferenza è in fase di sviluppo e potrebbe non essere affidabile.</string>
+    <string name="conference_call_warning_message">Le conferenze sono in fase di sviluppo e potrebbero non essere affidabili.</string>
 
     <!-- slash commands -->
     <string name="command_error">Errore di comando</string>
@@ -849,7 +854,7 @@ Attenzione: questo file può essere eliminato se l\'applicazione viene disinstal
     <string name="create_community">Crea una comunità</string>
     <string name="community_name">Nome della comunità</string>
     <string name="community_name_hint">Esempio</string>
-    <string name="community_id">ID della comunità</string>
+    <string name="community_id">ID comunità</string>
     <string name="community_id_hint">esempio</string>
 
     <!-- group details -->
@@ -860,25 +865,25 @@ Attenzione: questo file può essere eliminato se l\'applicazione viene disinstal
     <string name="rooms">Stanze</string>
     <string name="joined">Si è unito</string>
     <string name="invited">Invitato</string>
-    <string name="filter_group_members">Filtra i membri del gruppo</string>
-    <string name="filter_group_rooms">Filtra le stanze del gruppo</string>
+    <string name="filter_group_members">Cerca tra i membri del gruppo</string>
+    <string name="filter_group_rooms">Cerca tra le stanze del gruppo</string>
 
-    <string name="group_no_long_description">L\'amministratore non ha fornito una descrizione estesa per questa comunità.</string>
+    <string name="group_no_long_description">L\'amministratore non ha fornito una descrizione estesa di questa comunità.</string>
 
     <string name="has_been_kicked">%2$s ti ha buttato fuori da %1$s</string>
-    <string name="has_been_banned">%2$s ti ha bandito da %1$s</string>
+    <string name="has_been_banned">%2$s ti ha bannato da %1$s</string>
     <string name="reason_colon">Motivo: %1$s</string>
     <string name="rejoin">Rientra</string>
     <string name="forget_room">Dimentica la stanza</string>
 
     <string name="avatar">Avatar</string>
 
-    <string name="settings_flair">Insegna</string>
+    <string name="settings_flair">Predisposizione</string>
 
-    <string name="room_settings_no_flair">Questa stanza non mostra insegne per alcuna comunità</string>
+    <string name="room_settings_no_flair">Questa stanza non mostra predisposizione per alcuna comunità</string>
     <string name="widget_integration_positive_power_level">Il livello di potere deve essere un intero positivo.</string>
-    <string name="notice_avatar">Notificare avatar</string>
-    <string name="receipt_avatar">Avatar ricevuto</string>
+    <string name="notice_avatar">Avatar di avviso</string>
+    <string name="receipt_avatar">Avatar di ricezione</string>
     <plurals name="membership_changes">
         <item quantity="one">1 cambio d\'appartenenza</item>
         <item quantity="other">%d cambi d\'appartenenza</item>
@@ -887,63 +892,63 @@ Attenzione: questo file può essere eliminato se l\'applicazione viene disinstal
     <string name="settings_notification_privacy">Privacy delle notifiche</string>
     <string name="settings_notification_privacy_normal">Normale</string>
     <string name="settings_notification_privacy_reduced">Privacy ridotta</string>
-    <string name="settings_notification_privacy_need_permission">L\'app richiede il permesso per funzionare in sottofondo</string>
+    <string name="settings_notification_privacy_need_permission">L\'App deve essere autorizzata a funzionare in background</string>
     <string name="settings_notification_privacy_fcm">• Le notifiche vengono inviate via Firebase Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Le notifiche contengono solo metadati</string>
-    <string name="settings_notification_privacy_secure_message_content">• Il contenuto del messaggio di una notifica <b>si trova al sicuro direttamente dal server home di Matrix</b></string>
-    <string name="settings_notification_privacy_nosecure_message_content">• Le notifiche contengono <b>dati e metadati sul messaggio</b></string>
+    <string name="settings_notification_privacy_secure_message_content">• Il contenuto del messaggio di una notifica è <b>emesso direttamente dall\'Home Server Matrix</b></string>
+    <string name="settings_notification_privacy_nosecure_message_content">• Le notifiche contengono <b>metadati e contenuto del messaggio</b></string>
     <string name="settings_notification_privacy_message_content_not_shown">• Le notifiche <b>non mostreranno il contenuto del messaggio</b></string>
 
-    <string name="startup_notification_privacy_title">Privacy notifiche</string>
-    <string name="startup_notification_privacy_message">Riot può funzionare in sottofondo per gestire le tue notifiche in modo sicuro e privato. Ciò può influenzare la durata della batteria.</string>
+    <string name="startup_notification_privacy_title">Privacy delle notifiche</string>
+    <string name="startup_notification_privacy_message">Riot può esser sempre attivo in background in modo da gestire le tue notifiche in modo costante e sicuro. Ciò può influire sulla durata della batteria.</string>
     <string name="startup_notification_privacy_button_grant">Concedi l\'autorizzazione</string>
     <string name="startup_notification_privacy_button_other">Scegli un\'altra opzione</string>
 
-    <string name="title_activity_choose_sticker">Invia un adesivo</string>
+    <string name="title_activity_choose_sticker">Invia uno sticker</string>
 
-    <string name="option_send_sticker">Invia adesivo</string>
-    <string name="no_sticker_application_dialog_content">Non hai ancora alcun pacco di adesivi attivo.
-\n
-\nAggiungerne qualcuno ora\?</string>
+    <string name="option_send_sticker">Invia sticker</string>
+    <string name="no_sticker_application_dialog_content">Non ci sono pacchetti di sticker attivi. 
+\n 
+\nVuoi aggiungerne qualcuno\?</string>
 
-    <string name="settings_deactivate_account_section">Disattiva iscrizione</string>
+    <string name="settings_deactivate_account_section">Disattiva l\'account</string>
     <string name="settings_deactivate_my_account">Disattiva il mio account</string>
 
-    <string name="settings_opt_in_of_analytics">Invia statistiche di utilizzo</string>
-    <string name="settings_opt_in_of_analytics_summary">Riot raccoglie statistiche anonime per permetterci di migliorare l\'applicazione.</string>
-    <string name="settings_opt_in_of_analytics_prompt">Attiva le statistiche per aiutarci a migliorare Riot.</string>
+    <string name="settings_opt_in_of_analytics">Invia le statistiche di utilizzo</string>
+    <string name="settings_opt_in_of_analytics_summary">Riot raccoglie statistiche anonime per permettere il miglioramento dell\'applicazione.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Attiva le statistiche per aiutare a migliorare Riot.</string>
     <string name="settings_opt_in_of_analytics_ok">Sì, voglio aiutare!</string>
 
-    <string name="widget_integration_missing_parameter">Parametro necessario mancante.</string>
-    <string name="widget_integration_invalid_parameter">Un parametro non è valido.</string>
-    <string name="dialog_user_consent_content">Per continuare ad usare l\'homeserver %1$s devi leggere e accettare i termini e le condizioni di utilizzo.</string>
-    <string name="dialog_user_consent_submit">Leggi adesso</string>
+    <string name="widget_integration_missing_parameter">Manca un parametro indispensabile.</string>
+    <string name="widget_integration_invalid_parameter">Uno dei parametri non è valido.</string>
+    <string name="dialog_user_consent_content">Per continuare ad usare l\'Home Server %1$s devi leggerne e accettarne i termini di servizio.</string>
+    <string name="dialog_user_consent_submit">Leggi ora</string>
 
-    <string name="deactivate_account_title">Disattiva account</string>
-    <string name="deactivate_account_content">Questo renderà il tuo account permanentemente inutilizzabile. Non ci potrai più accedere e nessuno potrà ri-registrare lo stesso ID utente. Il tuo account abbandonerà tutte le stanze a cui partecipa e i dettagli del tuo account saranno rimossi dal server identità. <b>Questa azione è irreversibile</b>.
-
-Disattivare il tuo account <b>non eliminerà in modo automatico i messaggi che hai inviato</b>. Se vuoi che siano dimenticati i tuoi messaggi, seleziona la casella qua sotto.
-
-La visibilità dei messaggi in Matrix è simile alle email. \"Dimenticare i tuoi messaggi\" significa che quelli che hai inviato non verranno condivisi con alcun utente nuovo o non registrato, ma gli utenti registrati che hanno avuto accesso ai tuoi messaggi avranno ancora accesso alla loro copia.</string>
-    <string name="deactivate_account_delete_checkbox">Per favore dimenticate tutti i messaggi che ho inviato al momento della disattivazione del mio account (Attenzione: gli utenti futuri vedranno un elenco incompleto di conversazioni)</string>
+    <string name="deactivate_account_title">Disattiva l\'account</string>
+    <string name="deactivate_account_content">Ciò renderà il tuo account inutilizzabile per l\'eternità. Non potrai più accederci e nessuno potrà ri-registrare lo stesso ID utente. Il tuo account uscirà da tutte le stanze in cui si trova attualmente e di dettagli del tuo account saranno rimossi dall\'Identity Server. <b>Questa azione è irreversibile</b>. 
+\n
+\nDisattivare il tuo account <b>non eliminerà i messaggi che hai inviato</b>. Se vuoi che i tuoi messaggi siano dimenticati seleziona la casella qua sotto.
+\n
+\nLa visibilità dei messaggi in Matrix è simile alle email. Questo vuol dire che se chiedi di \"dimenticare i tuoi messaggi\", quelli che hai inviato finora non verranno mai più condivisi con alcun nuovo utente, ma gli utenti che hanno già avuto accesso ai tuoi messaggi continueranno a potervi accedere.</string>
+    <string name="deactivate_account_delete_checkbox">Per favore dimenticate tutti i messaggi che ho inviato fino al momento della disattivazione del mio account (Attenzione: in questo modo i nuovi utenti potrebbero vedere delle conversazioni incomplete)</string>
     <string name="deactivate_account_prompt_password">Per continuare, inserisci la tua password:</string>
-    <string name="deactivate_account_submit">Disattiva account</string>
+    <string name="deactivate_account_submit">Disattiva l\'account</string>
 
     <string name="dialog_title_third_party_licences">Licenze di terze parti</string>
 
     <string name="download">Scarica</string>
     <string name="speak">Parla</string>
     <string name="clear">Svuota</string>
-    <string name="e2e_re_request_encryption_key"><u>Richiedi di nuovo le chiavi di cifratura</u> dai tuoi altri dispositivi.</string>
+    <string name="e2e_re_request_encryption_key"><u>Richiedi di nuovo le chiavi di crittografia</u> dagli altri tuoi dispositivi.</string>
 
-    <string name="e2e_re_request_encryption_key_sent">Richiesta chiave inviata.</string>
+    <string name="e2e_re_request_encryption_key_sent">La richiesta della chiave è stata inviata.</string>
 
     <string name="e2e_re_request_encryption_key_dialog_title">Richiesta inviata</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Avvia Riot su un altro dispositivo che possa decifrare il messaggio, in modo da inviare le chiavi a questo dispositivo.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Avvia Riot su un altro dispositivo che possa decifrare il messaggio, in modo che possa inviare le chiavi a questo dispositivo.</string>
 
     <string name="lock_screen_hint">Digita qui…</string>
 
-    <string name="option_send_voice">Invia voce</string>
+    <string name="option_send_voice">Invia messaggio vocale</string>
 
     <string name="go_on_with">prosegui con…</string>
     <string name="error_no_external_application_found">Spiacenti, ma non è stata trovata alcuna applicazione esterna per completare l\'azione.</string>
@@ -953,37 +958,37 @@ La visibilità dei messaggi in Matrix è simile alle email. \"Dimenticare i tuoi
     <string name="group_details_people">Persone</string>
     <string name="error_empty_field_your_password">Per favore, inserisci la tua password.</string>
 
-    <string name="send_bug_report_description_in_english">Se possibile, scrivi la descrizione in inglese, grazie.</string>
+    <string name="send_bug_report_description_in_english">Se possibile, scrivi in inglese, grazie.</string>
     <string name="room_message_placeholder_reply_to_encrypted">Invia risposta criptata…</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">Risposta non criptata…</string>
     <string name="settings_preview_media_before_sending">Mostra file multimediale prima dell\'invio</string>
 
-    <string name="settings_without_flair">Attualmente non sei membro di alcuna comunità.</string>
+    <string name="settings_without_flair">Al momento non fai parte di alcuna comunità.</string>
 
-    <string name="settings_labs_keyboard_options_to_send_message">Usa invio da tastiera per spedire un messaggio</string>
+    <string name="settings_labs_keyboard_options_to_send_message">Usa il tasto invio per spedire i messaggi</string>
     <string name="command_description_emote">Mostra l\'azione</string>
-    <string name="command_description_ban_user">Bandisci utente con un dato id</string>
-    <string name="command_description_unban_user">Togli il bando a un utente con un dato id</string>
-    <string name="command_description_op_user">Definisci il livello di potere di un utente</string>
-    <string name="command_description_deop_user">Dimentica utente con un dato id</string>
-    <string name="command_description_invite_user">Invita utente con un dato id nella stanza corrente</string>
-    <string name="command_description_join_room">Entra nella stanza con un determinato alias</string>
-    <string name="command_description_part_room">Lascia la stanza</string>
-    <string name="command_description_topic">Imposta argomento della stanza</string>
-    <string name="command_description_kick_user">Butta fuori un utente con un dato id</string>
+    <string name="command_description_ban_user">Banna utente con l\'ID specificato</string>
+    <string name="command_description_unban_user">Togli il ban all\'utente con l\'ID specificato</string>
+    <string name="command_description_op_user">Imposta i poteri di un utente</string>
+    <string name="command_description_deop_user">Rimuove il rango di operatore dall\'utente con l\'ID specificato</string>
+    <string name="command_description_invite_user">Invita l\'utente con l\'ID specificato nella stanza corrente</string>
+    <string name="command_description_join_room">Entra nella stanza con un determinato nome</string>
+    <string name="command_description_part_room">Esci dalla stanza</string>
+    <string name="command_description_topic">Imposta l\'argomento della stanza</string>
+    <string name="command_description_kick_user">Butta fuori l\'utente con l\'ID specificato</string>
     <string name="command_description_nick">Cambia il tuo nome visualizzato</string>
     <string name="command_description_markdown">Markdown attivo / spento</string>
-    <string name="command_description_clear_scalar_token">Per correggere la gestione delle app Matrix</string>
+    <string name="command_description_clear_scalar_token">Per correggere la gestione dei widget</string>
 
-    <string name="room_tombstone_versioned_description">Questa stanza è stata sostituita e non è più attiva</string>
+    <string name="room_tombstone_versioned_description">Questa stanza è stata sostituita da un\'altra e non è più attiva</string>
     <string name="room_tombstone_continuation_link">La conversazione continua qui</string>
-    <string name="room_tombstone_continuation_description">Questa stanza è la continuazione di un\'altra conversazione</string>
-    <string name="room_tombstone_predecessor_link">Clicca qui per vedere i messaggi più vecchi</string>
+    <string name="room_tombstone_continuation_description">Questa stanza contiene una conversazione cominciata altrove</string>
+    <string name="room_tombstone_predecessor_link">Clicca qui per vedere i messaggi precedenti</string>
 
-    <string name="room_participants_action_unignore_prompt">Mostrare tutti i messaggi di questo utente?
-
-Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tempo.</string>
-    <string name="missing_permissions_error">A causa di permessi insufficienti, questa azione non è possibile.</string>
+    <string name="room_participants_action_unignore_prompt">Mostrare tutti i messaggi di questo utente\?
+\n
+\nTieni presente che questa azione riavvierà l\'app e ciò potrebbe richiedere molto tempo.</string>
+    <string name="missing_permissions_error">Non hai permessi sufficienti per effettuare questa azione.</string>
     <plurals name="format_time_s">
         <item quantity="one">1s</item>
         <item quantity="other">%ds</item>
@@ -1028,31 +1033,31 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
 
     <string name="resource_limit_contact_admin">contatta l\'amministratore del servizio</string>
 
-    <string name="resource_limit_soft_default">Il server home ha superato uno dei limiti delle risorse, pertanto <b>alcuni utenti non potranno accedere</b>.</string>
-    <string name="resource_limit_hard_default">Il server home ha superato uno dei limiti delle risorse.</string>
+    <string name="resource_limit_soft_default">L\'Home Server ha superato uno dei limiti delle risorse, pertanto <b>alcuni utenti non potranno accedere</b>.</string>
+    <string name="resource_limit_hard_default">L\'Home Server ha superato uno dei limiti delle risorse.</string>
 
-    <string name="resource_limit_soft_mau"> Il server home ha raggiunto il limite mensile di utenti attivi, pertanto <b>alcuni utenti non potranno accedere</b>.</string>
-    <string name="resource_limit_hard_mau">Il server home ha raggiunto il limite mensile di utenti attivi.</string>
+    <string name="resource_limit_soft_mau"> L\'Home Server ha raggiunto il limite mensile di utenti attivi, pertanto <b>alcuni utenti non potranno accedere</b>.</string>
+    <string name="resource_limit_hard_mau">L\'Home Server ha raggiunto il limite mensile di utenti attivi.</string>
 
     <string name="resource_limit_soft_contact">Per favore %s per aumentare questo limite.</string>
     <string name="resource_limit_hard_contact">Per favore %s per continuare ad usare questo servizio.</string>
 
     <string name="dialog_title_error">Errore</string>
 
-    <string name="settings_lazy_loading_description">Aumenta le prestazioni caricando i membri della stanza solo alla prima visualizzazione.</string>
-    <string name="error_lazy_loading_not_supported_by_home_server">Il tuo server home non supporta ancora il caricamento posticipato dei membri delle stanze. Prova in seguito.</string>
+    <string name="settings_lazy_loading_description">Aumenta la performance caricando i dati dei membri della stanza solo quando questi si fan vedere.</string>
+    <string name="error_lazy_loading_not_supported_by_home_server">Il tuo Home Server non supporta ancora il caricamento differito dei membri delle stanze. Prova più avanti.</string>
 
     <string name="unknown_error">Spiacente, si è verificato un errore</string>
 
-    <string name="settings_lazy_loading_title">Caricamento posticipato dei membri della stanza</string>
+    <string name="settings_lazy_loading_title">Caricamento differito dei membri della stanza</string>
     <string name="status_theme">Tema Status.im</string>
 
     <string name="room_sliding_menu_version_x">Versione %s</string>
-    <string name="encryption_export_notice">Crea una passphrase (frase d\'ordine) per crittografare le chiavi esportate. Dovrai inserire la stessa passphrase per poter importare le chiavi.</string>
-    <string name="passphrase_create_passphrase">Crea passphrase</string>
-    <string name="passphrase_passphrase_does_not_match">Le passphrase devono corrispondere</string>
+    <string name="encryption_export_notice">Crea una password per mettere al sicuro le chiavi esportate. La stessa password dovrà essere usata per poter importare le chiavi.</string>
+    <string name="passphrase_create_passphrase">Crea una password</string>
+    <string name="passphrase_passphrase_does_not_match">Le password devono corrispondere</string>
     <string name="merged_events_expand">espandi</string>
-    <string name="merged_events_collapse">collassa</string>
+    <string name="merged_events_collapse">riduci</string>
 
     <string name="settings_info_area_show">Mostra l\'area informazioni</string>
     <string name="show_info_area_always">Sempre</string>
@@ -1067,115 +1072,114 @@ Tieni presente che questa azione riavvierà l\'app e potrebbe richiedere del tem
     <string name="call_anyway">Chiama comunque</string>
     <string name="room_participants_action_kick">Butta fuori</string>
     <plurals name="room_participants_kick_prompt_msg">
-        <item quantity="one">Sei sicuro di voler buttare fuori questo utente dalla chat?</item>
-        <item quantity="other">Sei sicuro di voler buttare fuori questi utenti dalla chat?</item>
+        <item quantity="one">Sei sicuro di voler buttare fuori questo utente\?</item>
+        <item quantity="other">Sei sicuro di voler buttare fuori questi utenti\?</item>
     </plurals>
     <string name="reason_hint">Motivo</string>
 
-    <string name="settings_inline_url_preview_summary">Visualizza anteprima dei link all\'interno della chat quando il tuo server home supporta questa funzione.</string>
+    <string name="settings_inline_url_preview_summary">Se il tuo Home Server supporta questa funzione, all\'interno delle chat verrà visualizzata un\'anteprima dei link postati.</string>
     <string name="settings_send_typing_notifs">Invia notifiche di digitazione</string>
     <string name="settings_send_typing_notifs_summary">Fai sapere agli altri utenti che stai scrivendo.</string>
-    <string name="settings_send_markdown">Formattazione markdown</string>
-    <string name="settings_send_markdown_summary">Formatta i messaggi utilizzando la sintassi markdown prima dell\'invio. Ciò consente una formattazione avanzata come l\'uso degli asterischi per visualizzare il testo in corsivo.</string>
+    <string name="settings_send_markdown">Formattazione Markdown</string>
+    <string name="settings_send_markdown_summary">Permette di formattare i messaggi con sintassi Markdown prima di inviarli. Ad esempio si può ottienere un testo in corsivo aggiungendovi degli asterischi prima e dopo.</string>
     <string name="settings_show_read_receipts">Mostra le conferme di lettura</string>
-    <string name="settings_show_read_receipts_summary">Clicca sulle conferme di lettura per un elenco dettagliato.</string>
-    <string name="settings_show_join_leave_messages">Mostra eventi di ingresso ed uscita partecipanti</string>
-    <string name="settings_show_join_leave_messages_summary">Non si applica ad inviti, butta fuori ed espulsioni.</string>
-    <string name="settings_show_avatar_display_name_changes_messages">Mostra eventi degli account</string>
+    <string name="settings_show_read_receipts_summary">Clicca sulle conferme di lettura per vederne l\'elenco dettagliato.</string>
+    <string name="settings_show_join_leave_messages">Mostra entrata ed uscita degli utenti</string>
+    <string name="settings_show_join_leave_messages_summary">Inviti, butta fuori e ban non vengono considerati.</string>
+    <string name="settings_show_avatar_display_name_changes_messages">Mostra i cambiamenti degli account</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Includi cambiamenti dell\'avatar e del nome visualizzato.</string>
     <string name="settings_password">Password</string>
-    <string name="settings_labs_native_camera_summary">Avvia la fotocamera di sistema invece della schermata fotocamera personalizzata.</string>
+    <string name="settings_labs_native_camera_summary">Avvia la fotocamera di sistema invece della fotocamera di Riot.</string>
     <string name="settings_labs_enable_send_voice_summary">Questa opzione richiede un\'applicazione di terze parti per registrare i messaggi.</string>
 
-    <string name="command_problem_with_parameters">Il comando \"%s\" necessita di più parametri, o alcuni parametri non sono validi.</string>
+    <string name="command_problem_with_parameters">Il comando \"%s\" necessita di più parametri, oppure alcuni parametri non sono corretti.</string>
     <string name="markdown_has_been_enabled">Markdown è stato abilitato.</string>
     <string name="markdown_has_been_disabled">Markdown è stato disabilitato.</string>
 
     <string name="settings_call_category">Chiamate</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Usa suoneria predefinita di Riot per le chiamate in arrivo</string>
-    <string name="settings_call_ringtone_title">Suoneria chiamate in arrivo</string>
-    <string name="settings_call_ringtone_dialog_title">Scegli suoneria per le chiamate:</string>
+    <string name="settings_call_ringtone_use_riot_ringtone">Usa la suoneria predefinita di Riot per le chiamate in arrivo</string>
+    <string name="settings_call_ringtone_title">Suoneria delle chiamate in arrivo</string>
+    <string name="settings_call_ringtone_dialog_title">Scegli la suoneria per le chiamate:</string>
 
-    <string name="accept">Accetto</string>
+    <string name="accept">Accetta</string>
 
-    <string name="auth_accept_policies">Per favore, rivedere e accettare le politiche di questo server home:</string>
+    <string name="auth_accept_policies">Per favore, leggi e accetta i termini di servizio di questo Home Server:</string>
 
-    <string name="encryption_import_room_keys_success">%1$d/%2$d chiave/i importate con successo.</string>
+    <string name="encryption_import_room_keys_success">%1$d/%2$d chiav(i) importate con successo.</string>
 
-    <string name="settings_notification_troubleshoot">Notifiche per la risoluzione dei problemi</string>
-    <string name="settings_troubleshoot_diagnostic">Diagnostica per la risoluzione dei problemi</string>
+    <string name="settings_notification_troubleshoot">Diagnostica delle notifiche</string>
+    <string name="settings_troubleshoot_diagnostic">Diagnosi</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Esegui i test</string>
     <string name="settings_troubleshoot_diagnostic_running_status">In esecuzione… (%1$d di %2$d)</string>
     <string name="settings_troubleshoot_diagnostic_success_status">La diagnostica di base risponde correttamente. Se continui a non ricevere notifiche, invia una segnalazione errore per aiutarci a indagare.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Uno o più test hanno fallito, prova le soluzioni suggerite.</string>
-    <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Uno o più test hanno fallito, per favore invia un rapporto errore per aiutarci a indagare.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Uno o più test hanno fallito, per favore invia un rapporto di errore per aiutarci a indagare.</string>
 
     <string name="settings_troubleshoot_test_system_settings_title">Impostazioni di sistema.</string>
-    <string name="settings_troubleshoot_test_system_settings_success">Le notifiche sono abilitate nelle impostazioni di sistema.</string>
-    <string name="settings_troubleshoot_test_system_settings_failed">Le notifiche sono disabilitate nelle impostazioni di sistema.
-Controlla le impostazioni di sistema.</string>
-    <string name="open_settings">Apri le impostazioni</string>
+    <string name="settings_troubleshoot_test_system_settings_success">Le notifiche sono abilitate nelle Impostazioni di sistema.</string>
+    <string name="settings_troubleshoot_test_system_settings_failed">Le notifiche sono disabilitate nelle Impostazioni di sistema.
+\nControlla le Impostazioni di sistema.</string>
+    <string name="open_settings">Apri le Impostazioni</string>
 
     <string name="settings_troubleshoot_test_account_settings_title">Impostazioni account.</string>
     <string name="settings_troubleshoot_test_account_settings_success">Le notifiche sono abilitate per il tuo account.</string>
     <string name="settings_troubleshoot_test_account_settings_failed">Le notifiche sono disabilitate per il tuo account.
-Controlla le impostazioni dell\'account.</string>
+\nControlla le impostazioni dell\'account.</string>
     <string name="settings_troubleshoot_test_account_settings_quickfix">Abilita</string>
 
     <string name="settings_troubleshoot_test_device_settings_title">Impostazioni dispositivo.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Le notifiche sono abilitate per questo dispositivo.</string>
     <string name="settings_troubleshoot_test_device_settings_failed">Le notifiche non sono abilitate per questo dispositivo.
-Controlla le impostazioni Riot.</string>
+\nControlla le impostazioni di Riot.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Abilita</string>
 
-    <string name="settings_troubleshoot_test_play_services_title">Esegui controllo servizi</string>
+    <string name="settings_troubleshoot_test_play_services_title">Esegui un controllo dei servizi</string>
     <string name="settings_troubleshoot_test_play_services_success">L\'APK Google Play Services è disponibile e aggiornato.</string>
-    <string name="settings_troubleshoot_test_play_services_failed">Riot usa Google Play Services per consegnare i messaggi a comparsa, ma non sembra sia configurato correttamente:
+    <string name="settings_troubleshoot_test_play_services_failed">Riot usa Google Play Services per consegnare i messaggi a comparsa, ma sembra non sia stato configurato correttamente: 
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_play_services_quickfix">Correggi i servizi play</string>
+    <string name="settings_troubleshoot_test_play_services_quickfix">Correggi i Play Services</string>
 
     <string name="settings_troubleshoot_test_fcm_title">Token di Firebase</string>
     <string name="settings_troubleshoot_test_fcm_success">Token FCM recuperato con successo:
 %1$s</string>
-    <string name="settings_troubleshoot_test_fcm_failed">Recupero fallito del Token FCM:
-%1$s</string>
+    <string name="settings_troubleshoot_test_fcm_failed">Il recupero del Token FCM: %1$s è fallito</string>
 
-    <string name="settings_troubleshoot_test_token_registration_title">Registrazione token</string>
-    <string name="settings_troubleshoot_test_token_registration_success">Token FCM registrato con successo sul server home.</string>
-    <string name="settings_troubleshoot_test_token_registration_failed">Registrazione fallita del token FCM sul server home:
-%1$s</string>
+    <string name="settings_troubleshoot_test_token_registration_title">Registrazione Token</string>
+    <string name="settings_troubleshoot_test_token_registration_success">Token FCM registrato con successo sull\'Home Server.</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">E\'fallita la registrazione del Token FCM sull\'Home Server:
+\n %1$s</string>
 
     <string name="settings_troubleshoot_test_foreground_service_started_title">Servizio di notifiche</string>
     <string name="settings_troubleshoot_test_foreground_service_startedt_success">Servizio di notifiche in esecuzione.</string>
     <string name="settings_troubleshoot_test_foreground_service_started_failed">Servizio di notifiche non in esecuzione.
-Prova a riavviare l\'applicazione.</string>
+\nProva a riavviare l\'applicazione.</string>
     <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Avvia il servizio</string>
 
     <string name="settings_troubleshoot_test_service_restart_title">Auto riavvio del servizio di notifiche</string>
-    <string name="settings_troubleshoot_test_service_restart_success">Il servizio è stato terminato e riavviato automaticamente.</string>
-    <string name="settings_troubleshoot_test_service_restart_failed">Fallito l\'avvio del servizio</string>
+    <string name="settings_troubleshoot_test_service_restart_success">Il servizio è stato chiuso e si è riavviato automaticamente.</string>
+    <string name="settings_troubleshoot_test_service_restart_failed">L\'avvio del servizio è fallito</string>
 
     <string name="settings_troubleshoot_test_service_boot_title">Esegui all\'avvio</string>
-    <string name="settings_troubleshoot_test_service_boot_success">Il servizio sarà eseguito quando il dispositivo sarà riavviato.</string>
-    <string name="settings_troubleshoot_test_service_boot_failed">Il servizio non sarà avviato al riavvio del dispositivo, non riceverai notifiche finché Riot non verrà aperto almeno una volta.</string>
+    <string name="settings_troubleshoot_test_service_boot_success">Il servizio inizierà quando il dispositivo sarà riavviato.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">Il servizio non partirà al riavvio del dispositivo. Non riceverai notifiche finché Riot non verrà aperto almeno una volta.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Abilita l\'esecuzione all\'avvio</string>
 
-    <string name="settings_troubleshoot_test_bg_restricted_title">Controlla le restrizioni in sottofondo</string>
-    <string name="settings_troubleshoot_test_bg_restricted_success">Le restrizioni in sottofondo sono disabilitate per Riot. Questo test andrebbe eseguito usando dati mobili (non WIFI).
-%1$s</string>
-    <string name="settings_troubleshoot_test_bg_restricted_failed">Le restrizioni in sottofondo sono abilitate per Riot.
-Il lavoro che l\'app tenta di eseguire verrà limitato in modo aggressivo mentre è in sottofondo e ciò potrebbe influenzare le notifiche.
-%1$s</string>
-    <string name="settings_troubleshoot_test_bg_restricted_quickfix">Disabilita le restrizioni</string>
+    <string name="settings_troubleshoot_test_bg_restricted_title">Verifica se Riot sia stato configurato per funzionare in modo limitato quando lavora in background</string>
+    <string name="settings_troubleshoot_test_bg_restricted_success">Riot non funziona senza alcuna restrizione anche quando è eseguito in background. Questo test andrebbe eseguito usando dati mobili (non WIFI).
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Riot è stato configurato per funzionare in modo limitato quando è eseguito in background.
+\nIl funzionamento dell\'App, quando è eseguita in background, è stato fortemente limitato e ciò potrebbe influenzare la ricezione delle notifiche.
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_bg_restricted_quickfix">Non limitare</string>
 
     <string name="settings_troubleshoot_test_battery_title">Ottimizzazione della batteria</string>
     <string name="settings_troubleshoot_test_battery_success">Riot non è influenzato dall\'ottimizzazione della batteria.</string>
-    <string name="settings_troubleshoot_test_battery_failed">Se un utente lascia un dispositivo scollegato e fermo per un periodo di tempo, a schermo spento, il dispositivo entra in modalità Doze. Ciò impedisce alle app di accedere alla rete e rinvia le attività, le sincronizzazioni e gli allarmi normali.</string>
+    <string name="settings_troubleshoot_test_battery_failed">Se si lascia un dispositivo scollegato, fermo e con lo schermo spento, dopo un certo tempo questo entra in modalità Doze. Ciò impedisce alle App di accedere alla rete e ritarda le attività, le sincronizzazioni e la ricezione dei normali allarmi.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Ignora l\'ottimizzazione</string>
 
-    <string name="startup_notification_fdroid_battery_optim_title">Connessione in sottofondo</string>
-    <string name="startup_notification_fdroid_battery_optim_message">Riot deve mantenere una connessione in sottofondo a basso impatto per poter ricevere notifiche affidabili.
-Nella schermata successiva ti verrà chiesto di consentire a Riot di funzionare sempre in sottofondo, accetta per favore.</string>
+    <string name="startup_notification_fdroid_battery_optim_title">Connessione in background</string>
+    <string name="startup_notification_fdroid_battery_optim_message">Per poter ricevere le notifiche in tempo reale, Riot deve potersi sempre connettere. Anche quando funziona in background. 
+\nNella schermata successiva ti verrà chiesto di consentire a Riot di funzionare anche quando è in background, accetta per favore.</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">Concedi il permesso</string>
 
     <string name="account_email_error">Si è verificato un errore durante la verifica dell\'indirizzo email.</string>
@@ -1183,186 +1187,184 @@ Nella schermata successiva ti verrà chiesto di consentire a Riot di funzionare 
     <string name="account_phone_number_error">Si è verificato un errore durante la verifica del numero di telefono.</string>
     <string name="account_additional_info">Ulteriori informazioni: %s</string>
 
-    <string name="no_valid_google_play_services_apk">Nessun valido APK Google Play Services è stato trovato. Le notifiche non funzioneranno correttamente.</string>
+    <string name="no_valid_google_play_services_apk">Non è stato trovato nessun APK Google Play Services valido. Le notifiche non funzioneranno correttamente.</string>
 
     <string name="store_title">Riot.im - Comunica, a modo tuo</string>
-    <string name="store_short_description">Un\'app universale di chat sicure interamente sotto il tuo controllo.</string>
-    <string name="store_full_description">Un\'app di chat, sotto il tuo controllo e interamente flessibile. Riot ti permette di comunicare a modo tuo. Creata per [matrix] - lo standard per le comunicazioni aperte, decentralizzate. 
+    <string name="store_short_description">Una App per chat universali, sicure ed interamente sotto il tuo controllo.</string>
+    <string name="store_full_description">Una App per chat flessibile e interamente sotto il tuo controllo. Riot ti permette di comunicare a modo tuo. Creata per [matrix] - lo standard per le comunicazioni aperte, decentralizzate. 
 \n 
-\nOttieni un account matrix.org gratuito, ottieni il tuo server su https://modular.im, o usa un altro server Matrix. 
+\nPuoi aprire un account matrix.org gratuito, creare il tuo server su https://modular.im o usare un altro server Matrix. 
 \n 
 \nPerché scegliere Riot.im\? 
 \n 
-\n• COMUNICAZIONE COMPLETA: crea stanze per i tuoi team, i tuoi amici, la tua comunità - come preferisci! Chatta, condividi file, aggiungi widget e fai videochiamate vocali - tutto gratuito. 
+\n• COMUNICAZIONE COMPLETA: crea stanze per discussione pubbliche o private per i tuoi team, i tuoi amici, la tua comunità - come preferisci! Chatta, condividi file, aggiungi widget e fai chiamate video o audio - tutto gratuito. 
 \n 
-\n• GRANDI INTEGRAZIONI: usa Riot.im con gli strumenti che conosci ed ami. Con Riot.im puoi addirittura chattare con utenti e gruppi su altre app di chat. 
+\n• GRANDI INTEGRAZIONI: collega Riot.im alle piattaforme che conosci ed ami. Con Riot.im puoi addirittura chattare con utenti e gruppi che usano altre App di chat. 
 \n 
-\n• PRIVATO E SICURO: tieni segrete le tue conversazioni. Una crittografia end-to-end allo stato dell\'arte assicura che le comunicazioni private restino tali. 
+\n• PRIVATO E SICURO: tieni segrete le tue conversazioni. Una crittografia end-to-end allo stato dell\'arte assicura che le comunicazioni private restino sempre tali. 
 \n 
-\n• OPEN, NON CHIUSO: open source e costruito su Matrix. Possiedi i tuoi dati ospitando il tuo server personale, o scegliendone uno di cui ti fidi. 
+\n• OPEN, NON CHIUSO: open source e costruito su Matrix. Riprendi il possesso dei tuoi dati creando il tuo server Matrix personale, o scegliendone uno di cui ti fidi. 
 \n 
-\n• OVUNQUE TU SIA: resta in contatto ovunque tu sia con la cronologia dei messaggi totalmente sincronizzata tra i tuoi dispositivi ed online su https://riot.im.</string>
+\n• OVUNQUE TU SIA: stai sul pezzo ovunque tu sia grazie la cronologia dei messaggi sempre sincronizzata tra i tuoi dispositivi ed online su https://riot.im.</string>
 
-    <string name="video_call_in_progress">Videochiamata in corso…</string>
+    <string name="video_call_in_progress">Chiamata video in corso…</string>
 
-    <string name="store_whats_new">"Apportiamo continuamente cambiamenti e migliorie a Riot.im.
-Il registro completo delle modifiche si può trovare qui: %1$s.
-Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi."</string>
-    <string name="title_activity_keys_backup_setup">Backup chiave</string>
-    <string name="title_activity_keys_backup_restore">Usa backup chiave</string>
-    <string name="keys_backup_is_not_finished_please_wait">Il backup delle chiavi non è concluso, attendere prego…</string>
+    <string name="store_whats_new">Riot.im continua a crescere e migliorare. Il registro completo delle modifiche si può trovare qui: %1$s. Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi.</string>
+    <string name="title_activity_keys_backup_setup">Backup delle chiavi</string>
+    <string name="title_activity_keys_backup_restore">Usa il Backup delle chiavi</string>
+    <string name="keys_backup_is_not_finished_please_wait">Il Backup delle chiavi non è concluso, attendere prego…</string>
 
     <string name="skip">Salta</string>
     <string name="done">Fatto</string>
 
     <string name="settings_notification_advanced">Impostazioni di notifica avanzate</string>
-    <string name="sign_out_bottom_sheet_warning_no_backup">Perderai i tuoi messaggi cifrati se ti disconnetti adesso</string>
-    <string name="sign_out_bottom_sheet_warning_backing_up">Backup chiave in corso. Se ti disconnetti ora, perderai l\'accesso ai tuoi messaggi cifrati.</string>
-    <string name="sign_out_bottom_sheet_warning_backup_not_active">Il Backup Chiave Sicuro deve essere attivo su tutti i tuoi dispositivi per evitare di perdere l\'accesso ai tuoi messaggi cifrati.</string>
+    <string name="sign_out_bottom_sheet_warning_no_backup">Se ti disconnetti adesso perderai i tuoi messaggi cifrati</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">Il Backup delle chiavi è in corso. Se ti disconnetti adesso perderai i tuoi messaggi cifrati.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">Il Backup delle chiavi deve essere attivo su tutti i tuoi dispositivi per evitare di perdere l\'accesso ai tuoi messaggi cifrati.</string>
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">Non voglio i miei messaggi cifrati</string>
     <string name="sign_out_bottom_sheet_backing_up_keys">Backup delle chiavi…</string>
-    <string name="keys_backup_activate">Usa backup chiave</string>
+    <string name="keys_backup_activate">Usa il Backup delle chiavi</string>
     <string name="are_you_sure">Sei sicuro\?</string>
     <string name="backup">Backup</string>
-    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Perderai l\'accesso ai tuoi messaggi cifrati a meno che non fai il backup delle tue chiavi prima di disconnetterti.</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Perderai l\'accesso ai tuoi messaggi cifrati a meno che tu non faccia il Backup delle chiavi prima di disconnetterti.</string>
 
-    <string name="stay">Resta</string>
+    <string name="stay">Rimani</string>
     <string name="abort">Interrompi</string>
     <string name="ignore">Ignora</string>
 
     <string name="action_sign_out_confirmation_simple">Sei sicuro di volerti disconnettere\?</string>
     <string name="auth_login_sso">Accedi con single sign-on</string>
-    <string name="login_error_unknown_host">Questo URL è irraggiungibile, controllalo</string>
-    <string name="login_error_ssl_handshake">Il tuo dispositivo sta usando un protocollo di sicurezza TLS obsoleto, vulnerabile ad attacchi. Per la tua sicurezza non potrai connetterti</string>
-    <string name="settings_notification_advanced_summary">Imposta l\'importanza della notifica per evento, configura il suono, il led, la vibrazione</string>
-    <string name="settings_notification_by_event">Importanza della notifica per evento</string>
+    <string name="login_error_unknown_host">Questo URL è irraggiungibile. Per favore controllalo</string>
+    <string name="login_error_ssl_handshake">"Il tuo dispositivo usa  un protocollo di sicurezza TLS obsoleto e vulnerabile agli attacchi. Per la tua sicurezza, ti viene impedito di connetterti"</string>
+    <string name="settings_notification_advanced_summary">Imposta i livelli di importanza delle notifiche in base al tipo. Configura i suoni, i led, e la vibrazione</string>
+    <string name="settings_notification_by_event">Importanza delle notifiche in base al tipo</string>
 
     <string name="settings_troubleshoot_test_bing_settings_title">Impostazioni personalizzate.</string>
-    <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Nota che alcuni tipi di messaggio sono impostati come silenziosi (produrrà una notifica senza suono).</string>
+    <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Nota che alcuni tipi di messaggio sono impostati come silenziosi (ossia generano notifiche senza suono).</string>
     <string name="settings_troubleshoot_test_bing_settings_failed">Alcune notifiche sono disattivate nelle tue impostazioni personalizzate.</string>
-    <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">Caricamento regole personalizzate fallito, riprova.</string>
-    <string name="settings_troubleshoot_test_bing_settings_quickfix">Controlla impostazioni</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">Il caricamento delle regole personalizzate è fallito, riprova.</string>
+    <string name="settings_troubleshoot_test_bing_settings_quickfix">Controlla le Impostazioni</string>
 
-    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
-\nQuesto errore è fuori dal controllo di Riot e secondo Google, questo errore indica che il dispositivo ha troppe app registrate con FCM. L\'errore si verifica solo in casi in cui ci sia un numero estremo di app, quindi non dovrebbe affliggere l\'utente medio.</string>
-    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
-\nQuesto errore è fuori dal controllo di Riot. Può accadere per vari motivi. Potrebbe funzionare se riprovi più tardi, puoi anche controllare che Google Play Service non ha limitazioni di utilizzo di dati nelle impostazioni di sistema, o che l\'orologio del tuo dispositivo è corretto, o può succedere in custom ROM.</string>
-    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
-\nQuesto errore è fuori dal controllo di Riot. Non c\'è alcun account Google nel telefono. Apri il gestore di account ed aggiungi un account Google.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s] 
+\nQuesto errore non dipende da Riot. Secondo Google dipende dal fatto che questo dispositivo ha troppe App registrate con FCM. L\'errore si verifica solo in casi in cui ci sia un numero estremo di app, quindi non dovrebbe affliggere l\'utente medio.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s] 
+\nQuesto errore non dipende da Riot e può avere diverse cause. Potresti riprovare più tardi o controllare che Google Play Service non abbia configurato nelle Impostazioni di sistema dei limiti di utilizzo di dati. Anche un orologio di sistema regolato male potrebbe esserne la causa. Oppure può verificarsi se hai una ROM customizzata.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s] 
+\nQuesto errore non dipende da Riot. Non c\'è alcun account Google nel telefono. Apri il gestore di account ed aggiungi un account Google.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Aggiungi account</string>
 
-    <string name="settings_noisy_notifications_preferences">Configura notifiche rumorose</string>
-    <string name="settings_call_notifications_preferences">Configura notifiche chiamata</string>
-    <string name="settings_silent_notifications_preferences">Configura notifiche silenziose</string>
-    <string name="settings_system_preferences_summary">Scegli colore del LED, vibrazione, suono…</string>
+    <string name="settings_noisy_notifications_preferences">Configura le notifiche rumorose</string>
+    <string name="settings_call_notifications_preferences">Configura le notifiche di chiamata</string>
+    <string name="settings_silent_notifications_preferences">Configura le notifiche silenziose</string>
+    <string name="settings_system_preferences_summary">Scegli il colore del LED, la vibrazione, il suono…</string>
 
 
     <string name="settings_cryptography_manage_keys">Gestione chiavi crittografiche</string>
-    <string name="settings_send_message_with_enter">Invia messaggio con tasto Invio</string>
-    <string name="settings_send_message_with_enter_summary">Il tasto Invio della tastiera invierà il messaggio invece di andare a capo</string>
+    <string name="settings_send_message_with_enter">Invia il messaggio col tasto Invio</string>
+    <string name="settings_send_message_with_enter_summary">Il tasto Invio della tastiera, invece di andare a capo invierà il messaggio</string>
 
-    <string name="settings_data_save_mode_summary">La modalità risparmio dati applica un filtro specifico in modo che gli aggiornamenti di presenza e le notifiche di scrittura sono esclusi.</string>
+    <string name="settings_data_save_mode_summary">La modalità risparmio dati applica un filtro specifico che esclude gli aggiornamenti di presenza e le notifiche di scrittura.</string>
 
-    <string name="settings_change_password_submit">Aggiorna password</string>
+    <string name="settings_change_password_submit">Aggiorna la password</string>
     <string name="settings_fail_to_update_password_invalid_current_password">La password non è valida</string>
     <string name="passwords_do_not_match">Le password non corrispondono</string>
 
-    <string name="encryption_message_recovery">Ripristino messaggi cifrati</string>
-    <string name="encryption_settings_manage_message_recovery_summary">Gestisci backup chiave</string>
+    <string name="encryption_message_recovery">Ripristino dei messaggi cifrati</string>
+    <string name="encryption_settings_manage_message_recovery_summary">Gestisci il Backup delle chiavi</string>
 
     <string name="notification_silent">Silenzioso</string>
     <string name="error_empty_field_enter_user_name">Inserisci un nome utente.</string>
     <string name="passphrase_empty_error_message">Inserisci una password</string>
     <string name="passphrase_passphrase_too_weak">La password è troppo debole</string>
 
-    <string name="keys_backup_passphrase_not_empty_error_message">Elimina la password se vuoi che Riot generi una chiave di recupero.</string>
-    <string name="keys_backup_no_session_error">Nessuna sessione Matrix disponibile</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">Cancella la password se vuoi che Riot generi un codice di recupero.</string>
+    <string name="keys_backup_no_session_error">Non c\'è alcuna sessione Matrix disponibile</string>
 
     <string name="keys_backup_setup_step1_title">Non perdere mai i messaggi cifrati</string>
-    <string name="keys_backup_setup_step1_description">I messaggi nelle stanze cifrate sono protetti con la cifratura end-to-end. Solo tu e il/i destinatario/i avete le chiavi per leggere questi messaggi.
-\n
-\nFai un backup sicuro delle tue chiavi per evitare di perderle.</string>
-    <string name="keys_backup_setup">Inizia ad usare il backup chiavi</string>
+    <string name="keys_backup_setup_step1_description">I messaggi nelle stanze cifrate sono protetti con crittografia E2E. Solo tu e il/i destinatario/i avete le chiavi crittografiche per leggere questi messaggi. 
+\n 
+\nRicorda di fare un backup delle tue chiavi crittografiche per evitare di perderle.</string>
+    <string name="keys_backup_setup">Inizia ad usare il Backup delle chiavi crittografiche</string>
     <string name="keys_backup_setup_step1_advanced">(Avanzato)</string>
-    <string name="keys_backup_setup_step1_manual_export">Esporta manualmente le chiavi</string>
+    <string name="keys_backup_setup_step1_manual_export">Esporta manualmente le chiavi crittografiche</string>
 
     <string name="keys_backup_setup_step2_text_title">Proteggi il tuo backup con una password.</string>
-    <string name="keys_backup_setup_step2_text_description">Salveremo una copia cifrata delle tue chiavi nel tuo homeserver. Proteggi il tuo backup con una password per tenerlo sicuro.
-\n
-\nPer massima sicurezza, dovrebbe essere diversa dalla password del tuo account.</string>
+    <string name="keys_backup_setup_step2_text_description">Una copia cifrata delle tue chiavi crittografiche sarà salvata sul tuo Home Server. Proteggi il tuo Backup con una password per tenerlo al sicuro. 
+\n 
+\nPer una maggior sicurezza, è meglio che la password del Backup delle chiavi sia diversa da quella del tuo account.</string>
     <string name="keys_backup_setup_step2_button_title">Imposta password</string>
     <string name="keys_backup_setup_creating_backup">Creazione backup</string>
-    <string name="keys_backup_setup_step1_recovery_key_alternative">Oppure, proteggi il tuo backup con una chiave di ripristino, salvandola in un luogo sicuro.</string>
-    <string name="keys_backup_setup_step2_skip_button_title">(Avanzato) Imposta con chiave di ripristino</string>
-    <string name="keys_backup_setup_step3_success_title">Completato!</string>
-    <string name="keys_backup_setup_step3_text_line1">Backup delle tue chiavi in corso.</string>
-    <string name="keys_backup_setup_step3_text_line2">La tua chiave di ripristino è una rete di sicurezza - puoi usarla per recuperare l\'accesso ai tuoi messaggi cifrati se dimentichi la password.
-\nTieni la tua chiave di ripristino in un luogo sicuro, come un password manager (o una cassaforte)</string>
-    <string name="keys_backup_setup_step3_text_line2_no_passphrase">Tieni la tua chiave di ripristino in un luogo sicuro, come un password manager (o una cassaforte)</string>
+    <string name="keys_backup_setup_step1_recovery_key_alternative">Oppure, proteggi il tuo Backup con un codice di recupero, salvandolo in un luogo sicuro.</string>
+    <string name="keys_backup_setup_step2_skip_button_title">(Avanzato) Imposta un codice di recupero</string>
+    <string name="keys_backup_setup_step3_success_title">Fatto!</string>
+    <string name="keys_backup_setup_step3_text_line1">Il Backup delle tue chiavi crittografiche è in corso.</string>
+    <string name="keys_backup_setup_step3_text_line2">Il tuo codice di recupero è un\'ancora di salvezza - puoi usarlo per riaccedere ai tuoi messaggi cifrati se dimentichi la password. 
+\nSalva il tuo codice di recupero in un luogo sicuro, tipo un password manager (o una cassaforte)</string>
+    <string name="keys_backup_setup_step3_text_line2_no_passphrase">Salva il tuo codice di recupero in un luogo sicuro, come un password manager (o una cassaforte)</string>
     <string name="keys_backup_setup_step3_button_title">Fatto</string>
     <string name="keys_backup_setup_step3_button_title_no_passphrase">Ho fatto una copia</string>
-    <string name="keys_backup_setup_step3_copy_button_title">Salva chiave di ripristino</string>
+    <string name="keys_backup_setup_step3_copy_button_title">Salva il codice di recupero</string>
     <string name="keys_backup_setup_step3_share_recovery_file">Condividi</string>
     <string name="keys_backup_setup_step3_save_button_title">Salva come file</string>
-    <string name="recovery_key_export_saved_as_warning">La chiave di ripristino è stata salvata in \'%s\'.
-\n
-\nAttenzione: questo file potrebbe essere eliminato se viene disinstallata l\'applicazione.</string>
+    <string name="recovery_key_export_saved_as_warning">Il codice di recupero è stato salvato in \'%s\'. 
+\n 
+\nAttenzione: se l\'applicazione su cui è salvato venisse disinstallata, il codice di recupero verrà perso.</string>
 
     <string name="keys_backup_setup_step3_please_make_copy">Si prega di farne una copia</string>
-    <string name="keys_backup_setup_step3_share_intent_chooser_title">Condividi chiave di ripristino con…</string>
-    <string name="keys_backup_setup_step3_generating_key_status">Generazione chiave di ripristino usando la password, questo processo può durare diversi secondi.</string>
-    <string name="recovery_key">Chiave di ripristino</string>
+    <string name="keys_backup_setup_step3_share_intent_chooser_title">Condividi il codice di recupero con…</string>
+    <string name="keys_backup_setup_step3_generating_key_status">Generazione del codice di recupero usando la password. Questo processo può durare alcuni secondi.</string>
+    <string name="recovery_key">Codice di recupero</string>
     <string name="unexpected_error">Errore inatteso</string>
-    <string name="keys_backup_setup_backup_started_title">Backup iniziato</string>
-    <string name="keys_backup_setup_backup_started_message">Backup in corso in secondo piano delle tue chiavi di ripristino nel tuo homeserver. Il backup iniziale può durare diversi minuti.</string>
+    <string name="keys_backup_setup_backup_started_title">Backup avviato</string>
+    <string name="keys_backup_setup_backup_started_message">Il tuo Home Server sta facendo il Backup delle tue chiavi crittografiche in background. Il primo Backup può impiegare diversi minuti.</string>
 
 
     <string name="keys_backup_setup_skip_title">Sei sicuro\?</string>
-    <string name="keys_backup_setup_skip_msg">Potresti perdere l\'accesso ai tuoi messaggi se ti disconnetti o perdi il dispositivo.</string>
+    <string name="keys_backup_setup_skip_msg">Se ti disconnetti o perdessi questo dispositivo potresti perdere l\'accesso ai tuoi messaggi.</string>
 
-    <string name="keys_backup_restore_is_getting_backup_version">Rilevazione versione backup…</string>
-    <string name="keys_backup_restore_with_passphrase">Usa la tua password di ripristino per sbloccare la cronologia dei messaggi cifrati</string>
-    <string name="keys_backup_restore_use_recovery_key">usa la tua chiave di ripristino</string>
-    <string name="keys_backup_restore_with_passphrase_helper_with_link">Non conosci la tua password di ripristino, puoi %s.</string>
+    <string name="keys_backup_restore_is_getting_backup_version">Verifica versione backup…</string>
+    <string name="keys_backup_restore_with_passphrase">Usa la tua password di recupero per sbloccare i messaggi cifrati</string>
+    <string name="keys_backup_restore_use_recovery_key">usa il tuo codice di recupero</string>
+    <string name="keys_backup_restore_with_passphrase_helper_with_link">Se non conosci la tua password di recupero, puoi %s.</string>
 
-    <string name="keys_backup_restore_with_recovery_key">Usa la tua chiave di ripristino per sbloccare la cronologia dei messaggi cifrati</string>
-    <string name="keys_backup_restore_key_enter_hint">Inserisci chiave di ripristino</string>
+    <string name="keys_backup_restore_with_recovery_key">Usa il tuo codice di recupero per sbloccare la Timeline dei messaggi cifrati</string>
+    <string name="keys_backup_restore_key_enter_hint">Inserisci codice di recupero</string>
 
     <string name="keys_backup_restore_setup_recovery_key">Ripristino messaggio</string>
 
-    <string name="keys_backup_restore_with_key_helper">Hai perso la chiave di ripristino\? Puoi crearne una nuova nelle impostazioni.</string>
-    <string name="keys_backup_passphrase_error_decrypt">Impossibile decifrare il backup con questa password: verifica di avere inserito la password di ripristino corretta.</string>
+    <string name="keys_backup_restore_with_key_helper">Hai perso il codice di recupero\? Nelle Impostazioni puoi crearne uno nuovo.</string>
+    <string name="keys_backup_passphrase_error_decrypt">Impossibile decifrare il backup con questa password: verifica che la password di recupero inserita sia corretta.</string>
     <string name="network_error_please_check_and_retry">Errore di rete: controlla la tua connessione e riprova.</string>
 
-    <string name="keys_backup_restoring_waiting_message">Ripristino backup:</string>
-    <string name="keys_backup_restoring_computing_key_waiting_message">Calcolo chiave di ripristino…</string>
-    <string name="keys_backup_restoring_downloading_backup_waiting_message">Scaricamento chiavi…</string>
+    <string name="keys_backup_restoring_waiting_message">Ripristino Backup:</string>
+    <string name="keys_backup_restoring_computing_key_waiting_message">Codice di recupero in elaborazione…</string>
+    <string name="keys_backup_restoring_downloading_backup_waiting_message">Download chiavi…</string>
     <string name="keys_backup_restoring_importing_keys_waiting_message">Importazione chiavi…</string>
-    <string name="keys_backup_unlock_button">Sblocca cronologia</string>
-    <string name="keys_backup_recovery_code_empty_error_message">Inserisci una chiave di ripristino</string>
-    <string name="keys_backup_recovery_code_error_decrypt">Impossibile decifrare il backup con questa chiave di ripristino: verifica di avere inserito la chiave di ripristino corretta.</string>
+    <string name="keys_backup_unlock_button">Sblocca Timeline</string>
+    <string name="keys_backup_recovery_code_empty_error_message">Inserisci un codice di recupero</string>
+    <string name="keys_backup_recovery_code_error_decrypt">Impossibile decifrare il backup con questo codice di recupero: verifica di avere inserito il codice di recupero corretto.</string>
 
     <string name="keys_backup_restore_success_title">Backup ripristinato %s !</string>
-    <string name="keys_backup_restore_success_description">Ripristinate %1$d chiavi di sessione e aggiunte %2$d nuove chiavi sconosciute a questo dispositivo</string>
+    <string name="keys_backup_restore_success_description">Ripristinate %1$d Session-Keys e aggiunte %2$d nuove Key(s) finora sconosciute a questo dispositivo</string>
     <plurals name="keys_backup_restore_success_description_part1">
-        <item quantity="one">Ripristinato un backup con %d chiave.</item>
-        <item quantity="other">Ripristinato un backup con %d chiavi.</item>
+        <item quantity="one">Ripristinato un Backup con %d chiave.</item>
+        <item quantity="other">Ripristinato un Backup con %d chiavi.</item>
     </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
         <item quantity="one">%d nuova chiave è stata aggiunta a questo dispositivo.</item>
         <item quantity="other">%d nuove chiavi sono state aggiunte a questo dispositivo.</item>
     </plurals>
 
-    <string name="keys_backup_get_version_error">Rilevazione ultima versione chiavi di ripristino fallita (%s).</string>
-    <string name="keys_backup_no_keysbackup_sdk_error">La cifratura di sessione non è attivata</string>
+    <string name="keys_backup_get_version_error">Rilevazione ultima versione codici di recupero fallita (%s).</string>
+    <string name="keys_backup_no_keysbackup_sdk_error">La cifratura della sessione non è stata attivata</string>
 
 
     <string name="keys_backup_settings_restore_backup_button">Ripristina da backup</string>
     <string name="keys_backup_settings_delete_backup_button">Elimina backup</string>
 
-    <string name="keys_backup_settings_status_ok">Backup chiavi impostato correttamente per questo dispositivo.</string>
-    <string name="keys_backup_settings_status_ko">Backup chiavi non attivo per questo dispositivo.</string>
-    <string name="keys_backup_settings_status_not_setup">Nessun backup programmato per le chiavi da questo dispositivo.</string>
+    <string name="keys_backup_settings_status_ok">Il Backup delle chiavi è stato impostato correttamente su questo dispositivo.</string>
+    <string name="keys_backup_settings_status_ko">Il Backup delle chiavi non è attivo su questo dispositivo.</string>
+    <string name="keys_backup_settings_status_not_setup">Questo dispositivo non sta facendo il Backup delle chiavi.</string>
 
     <string name="keys_backup_settings_signature_from_unknown_device">Il backup ha una firma da un dispositivo sconosciuto con ID %s.</string>
     <string name="keys_backup_settings_valid_signature_from_this_device">Il backup ha una firma valida da questo dispositivo.</string>
@@ -1372,30 +1374,30 @@ Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi."</stri
     <string name="keys_backup_settings_invalid_signature_from_unverified_device">Il backup ha una firma non valida dal dispositivo non verificato %s</string>
     <string name="keys_backup_get_trust_error">Impossibile ottenere info di fiducia per il backup (%s).</string>
 
-    <string name="keys_backup_settings_untrusted_backup">Per usare il backup chiavi su questo dispositivo, recupera con la password o chiave di ripristino ora.</string>
+    <string name="keys_backup_settings_untrusted_backup">Per utilizzare il Backup delle chiavi crittografiche su questo dispositivo, devi accedervi con la password o con il codice di recupero.</string>
     <string name="keys_backup_settings_deleting_backup">Eliminazione backup…</string>
     <string name="keys_backup_settings_delete_backup_error">Eliminazione backup fallita (%s)</string>
 
     <string name="keys_backup_settings_delete_confirm_title">Elimina backup</string>
-    <string name="keys_backup_settings_delete_confirm_message">Eliminare dal server il backup delle chiavi di cifratura\? Non potrai più usare la tua chiave di ripristino per leggere la cronologia di messaggi cifrati.</string>
+    <string name="keys_backup_settings_delete_confirm_message">Eliminare il Backup delle chiavi crittografiche dall\'Home Server\? Non potrai più usare il codice di recupero per leggere i messaggi cifrati.</string>
 
-    <string name="new_recovery_method_popup_title">Nessun backup chiavi</string>
-    <string name="new_recovery_method_popup_description">È stato rilevato un nuovo backup chiavi per messaggi sicuri.
-\n
-\nSe non hai impostato il nuovo metodo di ripristino, potrebbe essere un tentativo di un aggressore di accedere al tuo account. Cambia la tua password e imposta un nuovo metodo di ripristino immediatamente nelle impostazioni.</string>
+    <string name="new_recovery_method_popup_title">Nuovo Backup delle chiavi</string>
+    <string name="new_recovery_method_popup_description">È stato rilevato un nuovo Backup delle chiavi crittografiche. 
+\n 
+\nSe non hai già configurato il nuovo metodo di ripristino, potrebbe trattarsi di un tentativo di un aggressore. Cambia subito la tua password e configura un nuovo metodo di ripristino nelle Impostazioni.</string>
     <string name="new_recovery_method_popup_was_me">Sono stato io</string>
     <string name="keys_backup_banner_setup_line1">Non perdere mai i messaggi cifrati</string>
-    <string name="keys_backup_banner_setup_line2">Inizia ad usare il backup chiavi</string>
+    <string name="keys_backup_banner_setup_line2">Inizia ad usare il Backup delle chiavi</string>
 
     <string name="keys_backup_banner_recover_line1">Non perdere mai i messaggi cifrati</string>
-    <string name="keys_backup_banner_recover_line2">Usa backup chiavi</string>
+    <string name="keys_backup_banner_recover_line2">Usa il Backup delle chiavi</string>
 
-    <string name="keys_backup_banner_update_line1">Nuove chiavi di messaggi cifrati</string>
-    <string name="keys_backup_banner_update_line2">Gestisci in backup chiavi</string>
+    <string name="keys_backup_banner_update_line1">Nuove chiavi di crittografia</string>
+    <string name="keys_backup_banner_update_line2">Gestisci nel Backup delle chiavi</string>
 
-    <string name="keys_backup_banner_in_progress">Backup chiavi…</string>
+    <string name="keys_backup_banner_in_progress">Backup chiavi in corso…</string>
 
-    <string name="keys_backup_info_keys_all_backup_up">Backup fatto di tutte le chiavi</string>
+    <string name="keys_backup_info_keys_all_backup_up">Il Backup delle chiavi è stato eseguito</string>
     <plurals name="keys_backup_info_keys_backing_up">
         <item quantity="one">Backup di %d chiave…</item>
         <item quantity="other">Backup di %d chiavi…</item>
@@ -1405,7 +1407,7 @@ Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi."</stri
     <string name="keys_backup_info_title_algorithm">Algoritmo</string>
     <string name="keys_backup_info_title_signature">Firma</string>
 
-    <string name="autodiscover_invalid_response">Risposta alla scoperta di un homeserver non valida</string>
+    <string name="autodiscover_invalid_response">Risposta Home Server non valida</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Opzioni autocompletamento server</string>
     <string name="autodiscover_well_known_autofill_dialog_message">Riot ha rilevato una configurazione server personalizzata per il tuo dominio userId \"%1$s\":
 \n%2$s</string>
@@ -1417,10 +1419,10 @@ Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi."</stri
     <string name="compression_opt_list_choose">Scegli</string>
     <string name="settings_default_media_source">Sorgente multimediale predefinita</string>
     <string name="media_source_choose">Scegli</string>
-    <string name="settings_play_shutter_sound">Riproduci suono otturatore</string>
+    <string name="settings_play_shutter_sound">Riproduci il suono dell\'otturatore</string>
 
     <string name="action_mark_room_read">Segna come letto</string>
-    <string name="settings_notification_privacy_no_background_sync">L\'app <b>non</b> ha bisogno di connettersi in background all\'homeserver, dovrebbe ridurre il consumo della batteria</string>
+    <string name="settings_notification_privacy_no_background_sync">L\'app <b>non</b> ha bisogno di connettersi in background all\'Home Server. Ciò dovrebbe ridurre il consumo della batteria</string>
     <plurals name="notification_compat_summary_line_for_room">
         <item quantity="one">%1$s: 1 messaggio</item>
         <item quantity="other">%1$s: %2$d messaggi</item>
@@ -1437,23 +1439,23 @@ Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi."</stri
     <string name="notification_sender_me">Io</string>
     <string name="notification_inline_reply_failed">** Invio fallito - per favore apri la stanza</string>
 
-    <string name="error_jitsi_not_supported_on_old_device">Spiacenti, le chiamate di gruppo con Jitsi non sono supportate sui vecchi dispositivi (con Android precedenti al 5.0)</string>
+    <string name="error_jitsi_not_supported_on_old_device">Purtroppo i vecchi dispositivi (quelli con Android precedenti al 5.0) non supportano le conferenze con Jitsi</string>
 
     <string name="title_activity_verify_device">Verifica dispositivo</string>
 
     <string name="encryption_information_unknown_ip">IP sconosciuto</string>
-    <string name="you_added_a_new_device_with_info">Un nuovo dispositivo sta richiedendo le chiavi di cifratura.
-\nNome dispositivo: %1$s
-\nUltimo accesso: %2$s
-\nSe non hai effettuato l\'accesso in un altro dispositivo, ignora questa richiesta.</string>
-    <string name="your_unverified_device_requesting_with_info">Un dispositivo non verificato sta richiedendo le chiavi di cifratura.
-\nNome dispositivo: %1$s
-\nUltimo accesso: %2$s
-\nSe non hai effettuato l\'accesso in un altro dispositivo, ignora questa richiesta.</string>
+    <string name="you_added_a_new_device_with_info">Un nuovo dispositivo sta chiedendo le chiavi crittografiche. 
+\nNome dispositivo: %1$s 
+\nUltimo accesso: %2$s 
+\nSe non hai effettuato l\'accesso da un altro dispositivo, ignora questa richiesta.</string>
+    <string name="your_unverified_device_requesting_with_info">Un dispositivo non verificato sta chiedendo le chiavi crittografiche. 
+\nNome dispositivo: %1$s 
+\nUltimo accesso: %2$s 
+\nSe non hai effettuato l\'accesso da un altro dispositivo, ignora questa richiesta.</string>
 
     <string name="start_verification_short_label">Verifica</string>
     <string name="share_without_verifying_short_label">Condividi</string>
-    <string name="key_share_request">Richiesta condivisione chiave</string>
+    <string name="key_share_request">Richiesta condivisione chiavi crittografiche</string>
     <string name="ignore_request_short_label">Ignora</string>
 
     <string name="sas_verify_title">Verifica confrontando una breve stringa.</string>
@@ -1497,12 +1499,12 @@ Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi."</stri
     <string name="sas_error_m_mismatched_sas">Il SAS non corrispondeva</string>
     <string name="sas_error_m_unexpected_message">Il dispositivo ha ricevuto un messaggio inaspettato</string>
     <string name="sas_error_m_invalid_message">È stato ricevuto un messaggio non valido</string>
-    <string name="sas_error_m_key_mismatch">Chiave non corrispondente</string>
+    <string name="sas_error_m_key_mismatch">Le chiavi non corrispondono</string>
     <string name="sas_error_m_user_error">Utente non corrispondente</string>
     <string name="sas_error_unknown">Errore sconosciuto</string>
 
-    <string name="keys_backup_setup_override_backup_prompt_tile">Esiste già un backup sul tuo HomeServer</string>
-    <string name="keys_backup_setup_override_backup_prompt_description">Sembra che tu abbia già impostato un backup chiavi da un altro dispositivo. Vuoi sostituirlo con quello che stai creando\?</string>
+    <string name="keys_backup_setup_override_backup_prompt_tile">Esiste già un backup sul tuo Home Server</string>
+    <string name="keys_backup_setup_override_backup_prompt_description">Sembra tu abbia già impostato il Backup delle chiavi crittografiche da un altro dispositivo. Vuoi sostituirlo con il Backup che stai creando\?</string>
     <string name="keys_backup_setup_override_replace">Sostituisci</string>
     <string name="keys_backup_setup_override_stop">Ferma</string>
 
@@ -1521,7 +1523,7 @@ Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi."</stri
     <string name="room_list_catchup_welcome_title">Benvenuti a casa!</string>
     <string name="room_list_catchup_welcome_body">Recupera i messaggi non letti qui</string>
     <string name="room_list_people_empty_title">Conversazioni</string>
-    <string name="room_list_people_empty_body">La tua conversazione diretta verrà mostrata qui</string>
+    <string name="room_list_people_empty_body">Le tue conversazioni dirette verranno mostrate qui</string>
     <string name="room_list_rooms_empty_title">Stanze</string>
     <string name="room_list_rooms_empty_body">Le tue stanze verranno mostrate qui</string>
 
@@ -1560,7 +1562,7 @@ Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi."</stri
     <string name="create_room_directory_description">Pubblica questa stanza nell\'elenco stanze</string>
 
     <string name="keys_backup_unable_to_get_trust_info">Si è verificato un errore nell\'ottenere informazioni sulla fiducia</string>
-    <string name="keys_backup_unable_to_get_keys_backup_data">Si è verificato un errore nell\'ottenere i dati del backup chiavi</string>
+    <string name="keys_backup_unable_to_get_keys_backup_data">Si è verificato un errore nell\'ottenere i dati dal Backup delle chiavi</string>
 
     <string name="alpha_disclaimer_title">Benvenuti nella beta!</string>
     <string name="alpha_disclaimer_content_line_1">Mentre RiotX si trova nella fase iniziale dello sviluppo, potrebbero mancare alcune funzioni e potrebbero verificarsi errori.</string>
@@ -1568,7 +1570,7 @@ Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi."</stri
     <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Descrizione nel Play Store</string>
     <string name="alpha_disclaimer_content_line_2_fdroid">Se trovi errori ti preghiamo segnalarli nel menu in alto a sinistra della Pagina Iniziale e noi li correggeremo appena possibile.</string>
 
-    <string name="import_e2e_keys_from_file">Importa chiavi e2e dal file \"%1$s\".</string>
+    <string name="import_e2e_keys_from_file">Importa le chiavi di crittografia dal file \"%1$s\".</string>
 
     <string name="settings_sdk_version">Versione SDK Matrix</string>
     <string name="settings_other_third_party_notices">Altre note di terze parti</string>
@@ -1591,7 +1593,7 @@ Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi."</stri
     <string name="push_gateway_item_url">Url:</string>
     <string name="push_gateway_item_format">Formato:</string>
 
-    <string name="preference_voice_and_video">Voce e video</string>
+    <string name="preference_voice_and_video">Audio e Video</string>
     <string name="preference_root_help_about">Aiuto e informazioni</string>
 
 
@@ -1603,16 +1605,16 @@ Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi."</stri
     <string name="send_suggestion_sent">Grazie, il suggerimento è stato inviato correttamente</string>
     <string name="send_suggestion_failed">L\'invio del suggerimento è fallito (%s)</string>
 
-    <string name="settings_labs_show_hidden_events_in_timeline">Mostra eventi nascosti nella cronologia</string>
+    <string name="settings_labs_show_hidden_events_in_timeline">Mostra gli eventi nascosti nella Timeline</string>
 
     <string name="store_riotx_title">RiotX - Client Matrix di nuova generazione</string>
-    <string name="store_riotx_short_description">Un client per Matrix più veloce e leggero usando gli ultimi framework di Android</string>
-    <string name="store_riotx_full_description">RiotX è un nuovo client per il protocollo Matrix (Matrix.org): una rete aperta per comunicazioni sicure e decentralizzate. RiotX è una riscrittura totale del client Riot Android, basata su una riscrittura completa dell\'SDK Android di Matrix.
-\n
-\nDisclaimer: questa è una versione beta. RiotX è attualmente in uno sviluppo attivo e contiene limitazioni ed errori (speriamo non troppi). I suggerimenti sono ben accetti!
-\n
-\nRiotX supporta: • Accesso ad account esistente • Crea stanze ed entra in stanze pubbliche • Accetta e rifiuta inviti • Elenca stanze utenti • Vedi dettagli stanza • Invia messaggi di testo • Invia allegati • Leggi e scrivi messaggi in stanze cifrate • Crypto: backup chiavi E2E, verifica avanzata dispositivi, richiesta e risposta condivisione chiavi • Notifiche push • Tema chiaro, scuro e nero
-\n
+    <string name="store_riotx_short_description">Un client per Matrix più veloce e leggero che utilizza gli ultimi framework di Android</string>
+    <string name="store_riotx_full_description">RiotX è un nuovo client per il protocollo Matrix (Matrix.org): una rete aperta per comunicazioni sicure e decentralizzate. RiotX è stato completamente riscritto rispetto a Riot Android, ed è a sua volta basato su un SDK Android di Matrix totalmente riscritto. 
+\n 
+\nDisclaimer: questa è una versione beta. RiotX è attualmente in uno sviluppo attivo e contiene ancora alcune limitazioni ed errori (speriamo non troppi). I suggerimenti sono ben accetti! 
+\n 
+\nRiotX supporta: • Accesso ad account esistente • Crea stanze ed entra in stanze pubbliche • Accetta e rifiuta inviti • Elenca stanze utenti • Vedi dettagli stanza • Invia messaggi di testo • Invia allegati • Leggi e scrivi messaggi in stanze cifrate • Crypto: backup chiavi E2E, verifica avanzata dispositivi, richiesta e risposta condivisione chiavi • Notifiche push • Tema chiaro, scuro e nero 
+\n 
 \nNon tutte le funzioni di Riot sono già implementate in RiotX. Principali funzioni mancanti (prossimamente!): • Creazione account • Impostazioni stanza (elenca membri stanza, ecc.) • Chiamate • Widget • …</string>
 
     <string name="room_list_catchup_empty_title">Non hai nulla di nuovo da vedere!</string>
@@ -1642,127 +1644,127 @@ Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi."</stri
     <string name="room_filtering_footer_create_new_direct_message">Invia un nuovo messaggio diretto</string>
     <string name="room_filtering_footer_open_room_directory">Vedi l\'elenco delle stanze</string>
 
-    <string name="room_directory_search_hint">Nome o ID (#esempio:matrix.org)</string>
+    <string name="room_directory_search_hint">Nome o ID stanza (#esempio:matrix.org)</string>
 
     <string name="labs_swipe_to_reply_in_timeline">Attiva swipe per rispondere nella timeline</string>
 
     <string name="link_copied_to_clipboard">Collegamento copiato negli appunti</string>
 
-    <string name="settings_integration_manager">Gestore dell\'integrazione</string>
+    <string name="settings_integration_manager">Integration Manager</string>
 
-    <string name="integration_manager_not_configured">Nessun gestore integrazione configurato.</string>
-    <string name="add_by_matrix_id">Aggiungi per ID matrix</string>
+    <string name="integration_manager_not_configured">Non è stato configurato nessun Integration Manager.</string>
+    <string name="add_by_matrix_id">Aggiungi per ID utente</string>
     <string name="creating_direct_room">Creare una stanza …</string>
-    <string name="direct_room_no_known_users">Nessun risultato trovato, usa \"Aggiungi per ID matrix\" per cercare sul server.</string>
+    <string name="direct_room_no_known_users">Nessun risultato trovato. Usa \"Aggiungi per ID utente\" per cercare sul server.</string>
     <string name="direct_room_start_search">Inizia a digitare per ottenere risultati</string>
-    <string name="direct_room_filter_hint">Filtra per nome utente o ID …</string>
+    <string name="direct_room_filter_hint">Cerca per nome o ID utente …</string>
 
     <string name="joining_room">Sto entrando nella stanza …</string>
 
-    <string name="message_view_edit_history">Visualizza Modifica cronologia</string>
+    <string name="message_view_edit_history">Visualizza Modifica Timeline</string>
 
     <string name="review">Leggi</string>
     <string name="decline">Rifiuta</string>
 
-    <string name="widget_integration_review_terms">Per continuare, devi accettare i termini di servizio.</string>
+    <string name="widget_integration_review_terms">Per continuare devi accettare i termini di servizio.</string>
 
-    <string name="security_warning_identity_server">Le precedenti versioni di Riot avevano un errore di sicurezza che poteva dare accesso al tuo account al tuo Server di Identità (%1$s). Se ti fidi di %2$s, puoi ignorare; altrimenti disconnettiti e riaccedi di nuovo.
-\n
-\nLeggi maggiori dettagli qui:
+    <string name="security_warning_identity_server">Alcune precedenti versioni di Riot contenevano un errore di sicurezza che permetteva al tuo Identity Server (%1$s) di accedere al tuo account. Se ti fidi di %2$s, puoi ignorare questo avviso; altrimenti disconnettiti e riaccedi di nuovo. 
+\n 
+\nLeggi maggiori dettagli qui: 
 \nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
 
     <string name="terms_of_service">Termini di servizio</string>
-    <string name="review_terms">Leggi i termini</string>
-    <string name="terms_description_for_identity_server">Diventa trovabile dagli altri</string>
-    <string name="terms_description_for_integration_manager">Usa bot, bridge, widget e pacchetti di adesivi</string>
+    <string name="review_terms">Leggi i termini di servizio</string>
+    <string name="terms_description_for_identity_server">Fatti trovare dagli altri utenti</string>
+    <string name="terms_description_for_integration_manager">Usa bot, bridge, widget e pacchetti di sticker</string>
 
     <string name="read_at">Leggi su</string>
 
     <string name="none">Nessuno</string>
     <string name="revoke">Revoca</string>
     <string name="disconnect">Disconnetti</string>
-    <string name="people_no_identity_server">Nessun server di identità configurato.</string>
+    <string name="people_no_identity_server">Non è stato configurato alcun Identity Server.</string>
 
-    <string name="call_failed_no_ice_title">Chiamata fallita per server malconfigurato</string>
-    <string name="call_failed_no_ice_description">Chiedi all\'amministratore del tuo homeserver (%1$s) di configurare un server TURN affinché le chiamate funzionino in modo affidabile.
-\n
-\nAltrimenti, puoi provare ad usare il server pubblico su %2$s, ma non è ugualmente affidabile e vedrà il tuo indirizzo IP. Puoi fare la tua scelta anche nelle Impostazioni.</string>
+    <string name="call_failed_no_ice_title">Chiamata fallita a causa di un\'errata configurazione del server</string>
+    <string name="call_failed_no_ice_description">Chiedi all\'amministratore del tuo Home Server (%1$s) di configurare un server TURN affinché le chiamate funzionino in modo affidabile. 
+\n 
+\nOppure puoi provare ad usare il server pubblico su %2$s, ma non sarà altrettanto affidabile e potrà vedere il tuo indirizzo IP. Puoi configurare tutto questo nelle Impostazioni.</string>
     <string name="call_failed_no_ice_use_alt">Prova ad usare %s</string>
     <string name="call_failed_dont_ask_again">Non chiedermelo più</string>
 
-    <string name="auth_add_email_message_2">Imposta un\'email per il recupero dell\'account, o più tardi per essere trovabile dalle persone che ti conoscono.</string>
-    <string name="auth_add_phone_message_2">Imposta un telefono, o più tardi per essere trovabile dalle persone che ti conoscono.</string>
-    <string name="auth_add_email_phone_message_2">Imposta un\'email per il recupero dell\'account. Più tardi usa email o telefono per essere trovabile dalle persone che ti conoscono.</string>
-    <string name="auth_add_email_and_phone_message_2">Imposta un\'email per il recupero dell\'account. Più tardi usa email o telefono per essere trovabile dalle persone che ti conoscono.</string>
-    <string name="login_error_homeserver_not_found">Impossibile raggiungere un homeserver con questo URL, controllalo</string>
-    <string name="settings_call_ringtone_use_default_stun">Permetti server di assistenza chiamata di riserva</string>
-    <string name="settings_call_ringtone_use_default_stun_sum">Userà %s come assistente quando l\'homeserver non ne offre uno (il tuo indirizzo IP sarà visibile durante le chiamate)</string>
-    <string name="invite_no_identity_server_error">Aggiungi un server di identità nelle impostazioni per poterlo fare.</string>
+    <string name="auth_add_email_message_2">Imposta un\'email per il ripristino dell\'account in caso di problemi e, se vuoi, anche per farti trovare da chi conosce quell\'indirizzo email.</string>
+    <string name="auth_add_phone_message_2">Aggiungi un numero di telefono se vuoi farti trovare da chi lo conosce.</string>
+    <string name="auth_add_email_phone_message_2">Imposta un\'email per il ripristino dell\'account in caso di problemi. Email e telefono potranno essere usati anche per farti trovare dagli altri utenti.</string>
+    <string name="auth_add_email_and_phone_message_2">Imposta un\'email per il ripristino dell\'account in caso di problemi. Email e numero di telefono potranno essere usati, se lo vorrai, anche per permettere a chi li conosce di trovarti.</string>
+    <string name="login_error_homeserver_not_found">Non è stato trovato alcun Home Server seguendo questo URL. Per favore, controllalo</string>
+    <string name="settings_call_ringtone_use_default_stun">Permetti chiamate dal Server di appoggio</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">"Se il tuo Home Server non ne ha un proprio Server d\'appoggio verrà usato %s  (il Server d\'appoggio verrà a conoscenza del tuo indirizzo IP durante le chiamate)"</string>
+    <string name="invite_no_identity_server_error">Per poterlo fare, aggiungi un Identity Server nelle Impostazioni.</string>
     <string name="settings_background_fdroid_sync_mode">Modalità sync in background (Sperimentale)</string>
     <string name="settings_background_fdroid_sync_mode_battery">Ottimizzato per la batteria</string>
-    <string name="settings_background_fdroid_sync_mode_battery_description">Riot sincronizzerà in background in modo da preservare le risorse limitate del dispositivo (batteria).
-\nA seconda dello stato delle risorse del tuo dispositivo, la sincronizzazione può essere ritardata dal sistema operativo.</string>
-    <string name="settings_background_fdroid_sync_mode_real_time">Ottimizzato per il tempo reale</string>
-    <string name="settings_background_fdroid_sync_mode_real_time_description">Riot sincronizzerà in background periodicamente in momenti precisi (configurabile).
-\nCiò avrà impatto sull\'uso di dati e batteria, ci sarà una notifica permanente per comunicare che Riot è in attesa di eventi.</string>
-    <string name="settings_background_fdroid_sync_mode_disabled">Nessun sync in background</string>
-    <string name="settings_background_fdroid_sync_mode_disabled_description">Non ti verranno notificati i messaggi in arrivo quando l\'app è in background.</string>
-    <string name="settings_background_sync_update_error">Aggiornamento impostazioni fallito.</string>
+    <string name="settings_background_fdroid_sync_mode_battery_description">Riot si sincronizzerà in background in modo da non consumare la poca batteria disponibile. 
+\nA seconda del livello della batteria, il sistema operativo potrebbe ritardare la sincronizzazione.</string>
+    <string name="settings_background_fdroid_sync_mode_real_time">Ottimizzato per la performance</string>
+    <string name="settings_background_fdroid_sync_mode_real_time_description">Riot si sincronizzerà in background ad intervalli regolari (configurabili). 
+\nCiò avrà un certo impatto sulla quantità di dati e batteria utilizzati. Una notifica sempre accesa comunicherà che Riot è attivo.</string>
+    <string name="settings_background_fdroid_sync_mode_disabled">Nessuna sincronizzazione in background</string>
+    <string name="settings_background_fdroid_sync_mode_disabled_description">Quando l\'App è in background non ti verranno notificati i messaggi in arrivo.</string>
+    <string name="settings_background_sync_update_error">L\'aggiornamento delle impostazioni è fallito.</string>
 
 
-    <string name="settings_set_workmanager_delay">Intervallo di sync preferito</string>
+    <string name="settings_set_workmanager_delay">Intervallo preferito tra le sincronizzazioni</string>
     <string name="settings_set_workmanager_delay_summary">%s
 \nLa sincronizzazione può essere ritardata a seconda delle risorse (batteria) o dello stato del dispositivo (sospensione).</string>
-    <string name="settings_discovery_category">Scoperte</string>
-    <string name="settings_discovery_manage">Gestisci le tue impostazioni di rilevamento.</string>
+    <string name="settings_discovery_category">Farsi trovare</string>
+    <string name="settings_discovery_manage">Configura l\'Identity Server per trovare e farsi trovare dagli altri utenti.</string>
     <string name="encryption_information_device_name_with_warning">Nome pubblico (visibile alle persone con cui comunichi)</string>
     <string name="device_name_warning">Il nome pubblico di un dispositivo è visibile alle persone con cui comunichi</string>
-    <string name="identity_server_not_defined">Non stai usando alcun server di identità</string>
-    <string name="identity_server_not_defined_for_password_reset">Nessun server di identità configurato, è necessario per ripristinare la tua password.</string>
+    <string name="identity_server_not_defined">Non stai usando alcun Identity Server</string>
+    <string name="identity_server_not_defined_for_password_reset">Nessun Identity Server configurato. E\' necessario per poter ripristinare la tua password.</string>
 
     <string name="error_user_already_logged_in">Pare che tu stia provando a connetterti ad un altro homeserver. Vuoi disconnetterti da qui\?</string>
 
-    <string name="identity_server">Server di identità</string>
-    <string name="disconnect_identity_server">Disconnetti server di identità</string>
-    <string name="add_identity_server">Configura server di identità</string>
-    <string name="change_identity_server">Cambia server di identità</string>
-    <string name="settings_discovery_identity_server_info">Attualmente stai usando %1$s per scoprire ed essere trovabile dai contatti esistenti che conosci.</string>
-    <string name="settings_discovery_identity_server_info_none">Attualmente non stai usando alcun server di identità. Per scoprire ed essere trovabile dai contatti esistenti che conosci, configurane uno qua sotto.</string>
-    <string name="settings_discovery_emails_title">Indirizzi email trovabili</string>
-    <string name="settings_discovery_no_mails">Le opzioni di scoperta appariranno dopo avere aggiunto un\'email.</string>
-    <string name="settings_discovery_no_msisdn">Le opzioni di scoperta appariranno dopo avere aggiunto un numero di telefono.</string>
-    <string name="settings_discovery_disconnect_identity_server_info">Se ti disconnetti dal server di identità non potrai più essere trovato da altri utenti e non potrai invitarne altri per email o telefono.</string>
-    <string name="settings_discovery_msisdn_title">Numeri di telefono trovabili</string>
-    <string name="settings_discovery_confirm_mail">Ti abbiamo inviato un\'email di conferma a %s, controlla l\'email e clicca sul link di conferma</string>
+    <string name="identity_server">Identity Server</string>
+    <string name="disconnect_identity_server">Disconnetti Identity Server</string>
+    <string name="add_identity_server">Configura Identity Server</string>
+    <string name="change_identity_server">Cambia Identity Server</string>
+    <string name="settings_discovery_identity_server_info">Stai usando l\'Identity Server %1$s per trovare e farti trovare da altri utenti.</string>
+    <string name="settings_discovery_identity_server_info_none">In questo momento non stai usando alcun Identity Server. Per trovare e farti trovare dagli altri utenti, configurane uno qua sotto.</string>
+    <string name="settings_discovery_emails_title">Indirizzi email visibili pubblicamente</string>
+    <string name="settings_discovery_no_mails">Le opzioni su come farsi trovare da altri utenti appariranno dopo avere aggiunto un\'email.</string>
+    <string name="settings_discovery_no_msisdn">Le opzioni su come farsi trovare da altri utenti appariranno dopo avere aggiunto un numero di telefono.</string>
+    <string name="settings_discovery_disconnect_identity_server_info">Se ti disconnetti dall\'Identity Server gli altri utenti non potranno trovarti e tu non potrai invitarne di nuovi per email o telefono.</string>
+    <string name="settings_discovery_msisdn_title">Numeri di telefono visibili pubblicamente</string>
+    <string name="settings_discovery_confirm_mail">Abbiamo inviato un\'email di conferma a %s, controlla l\'email e clicca sul link di conferma</string>
     <string name="settings_discovery_mail_pending">In attesa</string>
 
-    <string name="settings_discovery_enter_identity_server">Inserisci un nuovo server di identità</string>
-    <string name="settings_discovery_bad_identity_server">Impossibile connettersi al server di identità</string>
-    <string name="settings_discovery_please_enter_server">Inserisci l\'URL del server di identità</string>
-    <string name="settings_discovery_no_terms_title">Il server di identità non ha condizioni di servizio</string>
-    <string name="settings_discovery_no_terms">Il server di identità che hai scelto non ha alcuna condizione di servizio. Continua solo se ti fidi del proprietario del servizio</string>
-    <string name="settings_text_message_sent">È stato inviato un messaggio a %s. Inserisci il codice di verifica contenuto.</string>
+    <string name="settings_discovery_enter_identity_server">Inserisci un nuovo Identity Server</string>
+    <string name="settings_discovery_bad_identity_server">Impossibile connettersi all\'Identity Server</string>
+    <string name="settings_discovery_please_enter_server">Inserisci l\'URL dell\'Identity Server</string>
+    <string name="settings_discovery_no_terms_title">L\'Identity Server non ha reso noti i propri termini di servizio</string>
+    <string name="settings_discovery_no_terms">L\'Identity Server che hai scelto non ha freso noti i propri termini di servizio. Continua solo se ti fidi</string>
+    <string name="settings_text_message_sent">È stato inviato un messaggio a %s. Inserisci il codice di verifica che contiene.</string>
 
-    <string name="settings_discovery_disconnect_with_bound_pid">Attualmente stai condividendo indirizzi email o numeri di telefono sul server di identità %1$s. Dovrai riconnetterti a %2$s per fermarne la condivisione.</string>
-    <string name="settings_agree_to_terms">Accetta le condizioni di servizio del server di identità (%s) per consentire di essere trovabile per email o numero di telefono.</string>
+    <string name="settings_discovery_disconnect_with_bound_pid">In questo momento stai condividendo i tuoi indirizzi email o numeri di telefono sull\'Identity Server %1$s. Dovrai riconnetterti a %2$s per interromperne la condivisione.</string>
+    <string name="settings_agree_to_terms">Accetta i termini di servizio dell\'Identity Server (%s) per permettere ad altri utenti di trovarti tramite la tua email o numero di telefono.</string>
     <string name="resources_script">Latn</string>
 
-    <string name="labs_allow_extended_logging">Attiva log dettagliati.</string>
-    <string name="labs_allow_extended_logging_summary">I log dettagliati aiuteranno gli sviluppatori fornendo loro più informazioni quando invii una segnalazione. Anche quando attivi, l\'applicazione non registra i contenuti dei messaggi o altri dati personali.</string>
+    <string name="labs_allow_extended_logging">Attiva i log dettagliati.</string>
+    <string name="labs_allow_extended_logging_summary">I log dettagliati aiuteranno gli sviluppatori fornendo loro molte più informazioni nelle segnalazioni che invii scuotendo il dispositivo. Anche se attivi i log dettagliati, Riot non registra mai i contenuti dei messaggi o altri dati personali.</string>
 
 
-    <string name="error_terms_not_accepted">Riprova dopo avere accettato i termini e condizioni del tuo homeserver.</string>
+    <string name="error_terms_not_accepted">Riprova dopo avere accettato i termini di servizio del tuo Home Server.</string>
 
-    <string name="error_network_timeout">Sembra che il server stia impiegando troppo tempo a rispondere, ciò può essere causato da scarsa connettività o un errore con i nostri server. Riprova fra qualche minuto.</string>
+    <string name="error_network_timeout">Sembra che il server stia impiegando troppo tempo a rispondere. Ciò può essere causato da una cattiva connessione o da un errore del server. Riprova fra qualche minuto.</string>
 
     <string name="send_attachment">Invia allegato</string>
 
     <string name="a11y_open_drawer">Apri il pannello di navigazione</string>
-    <string name="a11y_create_menu_open">Apri il menu di creazione stanza</string>
-    <string name="a11y_create_menu_close">Chiudi il menu di creazione stanza…</string>
+    <string name="a11y_create_menu_open">Apri il menu \"Crea nuova stanza\"</string>
+    <string name="a11y_create_menu_close">Chiudi il menu di \"Crea nuova stanza\"…</string>
     <string name="a11y_create_direct_message">Crea una nuova conversazione diretta</string>
-    <string name="a11y_create_room">Crea una nuova stanza</string>
-    <string name="a11y_close_keys_backup_banner">Chiudi il banner di backup chiavi</string>
+    <string name="a11y_create_room">Crea nuova stanza</string>
+    <string name="a11y_close_keys_backup_banner">Chiudi il banner del Backup delle chiavi</string>
     <string name="a11y_show_password">Mostra password</string>
     <string name="a11y_hide_password">Nascondi password</string>
     <string name="a11y_jump_to_bottom">Salta in fondo</string>
@@ -1784,8 +1786,8 @@ Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi."</stri
     <string name="attachment_type_camera">Fotocamera</string>
     <string name="attachment_type_audio">Audio</string>
     <string name="attachment_type_gallery">Galleria</string>
-    <string name="attachment_type_sticker">Adesivo</string>
-    <string name="error_handling_incoming_share">Errore di gestione dati condivisi</string>
+    <string name="attachment_type_sticker">Sticker</string>
+    <string name="error_handling_incoming_share">Errore nella gestione dei dati condivisi</string>
 
     <string name="report_content_spam">È spam</string>
     <string name="report_content_inappropriate">È inappropriato</string>
@@ -1808,10 +1810,45 @@ Per essere certo di non perdere nulla, mantieni gli aggiornamenti attivi."</stri
 \n
 \nSe non vuoi più vedere contenuti da questo utente, puoi bloccarlo per nascondere i suoi messaggi</string>
 
-    <string name="permissions_rationale_msg_keys_backup_export">Riot richiede l\'autorizzazione per salvare le tue chiavi E2E su disco.
-\n
+    <string name="permissions_rationale_msg_keys_backup_export">Riot richiede l\'autorizzazione per salvare le tue chiavi crittografiche sul disco. 
+\n 
 \nPermetti l\'accesso nel prossimo pop-up per poter esportare le chiavi manualmente.</string>
 
-    <string name="no_network_indicator">Non c\'è nessuna connessione di rete al momento</string>
+    <string name="no_network_indicator">In questo momento non c\'è nessuna connessione di rete</string>
+
+    <string name="settings_add_3pid_confirm_password_title">Conferma la tua password</string>
+    <string name="settings_add_3pid_flow_not_supported">Non puoi farlo da Riot mobile</string>
+    <string name="settings_add_3pid_authentication_needed">E\'necessaria l\'autenticazione</string>
+
+
+    <string name="settings_integrations">Integrazioni</string>
+    <string name="settings_integrations_summary">Usa un Integration Manager per gestire bot, bridge, widget e pacchetti di sticker.
+\nGli Integration Manager possono ricevere dati di configurazione, modificare widget, mandare inviti alle stanze e modificare permessi a tuo nome.</string>
+    <string name="settings_integration_allow">Permetti l\'uso di integrazioni</string>
+    <string name="room_widget_activity_title">Widget</string>
+    <string name="room_widget_permission_title">Carica widget</string>
+    <string name="room_widget_permission_added_by">Questo widget è stato aggiunto da:</string>
+    <string name="room_widget_permission_webview_shared_info_title">Utilizzandolo potrebbero esser impostati dei cookie e dei dati potrebbero essere condivisi con %s:</string>
+    <string name="room_widget_permission_shared_info_title">Utilizzandolo potrebbero essere condivisi dei dati con %s:</string>
+    <string name="room_widget_failed_to_load">Il caricamento del widget è fallito.
+\n%s</string>
+    <string name="room_widget_reload">Ricarica widget</string>
+    <string name="room_widget_open_in_browser">Apri nel browser</string>
+    <string name="room_widget_revoke_access">Revoca l\'accesso per me</string>
+
+    <string name="room_widget_permission_display_name">Il tuo nome visualizzato</string>
+    <string name="room_widget_permission_avatar_url">L\'URL del tuo avatar</string>
+    <string name="room_widget_permission_user_id">Il tuo ID utente</string>
+    <string name="room_widget_permission_theme">Il tuo tema</string>
+    <string name="room_widget_permission_widget_id">ID widget</string>
+    <string name="room_widget_permission_room_id">ID stanza</string>
+
+
+    <string name="room_widget_resource_permission_title">Questo widget vuole usare le seguenti risorse:</string>
+    <string name="room_widget_resource_grant_permission">Permetti</string>
+    <string name="room_widget_resource_decline_permission">Blocca tutto</string>
+    <string name="room_widget_webview_access_camera">Usare la fotocamera</string>
+    <string name="room_widget_webview_access_microphone">Usa il microfono</string>
+    <string name="room_widget_webview_read_protected_media">Leggi media protetti da DRM</string>
 
 </resources>

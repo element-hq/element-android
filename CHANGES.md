@@ -1,4 +1,28 @@
-Changes in RiotX 0.11.0 (2019-XX-XX)
+Changes in RiotX 0.12.0 (2019-XX-XX)
+===================================================
+
+Features ✨:
+ -
+
+Improvements 🙌:
+ - The initial sync is now handled by a foreground service
+ - Render aliases and canonical alias change in the timeline
+ - Fix autocompletion issues and add support for rooms and groups
+
+Other changes:
+ -
+
+Bugfix 🐛:
+ - Fix avatar image disappearing (#777)
+ - Fix read marker banner when permalink
+
+Translations 🗣:
+ -
+
+Build 🧱:
+ -
+
+Changes in RiotX 0.11.0 (2019-12-19)
 ===================================================
 
 Features ✨:
@@ -7,6 +31,7 @@ Features ✨:
 Improvements 🙌:
  - Handle navigation to room via room alias (#201)
  - Open matrix.to link in RiotX (#57)
+ - Limit sticker size in the timeline
 
 Other changes:
  - Use same default room colors than Riot-Web
@@ -14,10 +39,9 @@ Other changes:
 Bugfix 🐛:
  - Scroll breadcrumbs to top when opened
  - Render default room name when it starts with an emoji (#477)
- - Do not display " (IRC)") in display names https://github.com/vector-im/riot-android/issues/444
-
-Translations 🗣:
- -
+ - Do not display " (IRC)" in display names https://github.com/vector-im/riot-android/issues/444
+ - Fix rendering issue with HTML formatted body
+ - Disable click on Stickers (#703)
 
 Build 🧱:
  - Include diff-match-patch sources as dependency

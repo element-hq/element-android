@@ -1709,7 +1709,7 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
 
     <string name="error_terms_not_accepted">Réessayez quand vous aurez accepté les termes et conditions de votre serveur d’accueil.</string>
 
-    <string name="error_network_timeout">On dirait que le serveur mette trop de temps à répondre. Ça peut être dû à une mauvaise connexion ou à une erreur avec nos serveurs. Réessayez plus tard.</string>
+    <string name="error_network_timeout">On dirait que le serveur met trop de temps à répondre. Ça peut être dû à une mauvaise connexion ou à une erreur avec le serveur. Réessayez plus tard.</string>
 
     <string name="send_attachment">Envoyer une pièce jointe</string>
 
@@ -1769,5 +1769,40 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
 \nAutorisez l’accès dans le prochaine fenêtre pour pouvoir exporter vos clés manuellement.</string>
 
     <string name="no_network_indicator">Il n’y a aucune connexion au réseau pour le moment</string>
+
+    <string name="settings_add_3pid_confirm_password_title">Confirmez votre mot de passe</string>
+    <string name="settings_add_3pid_flow_not_supported">Vous ne pouvez pas faire cela depuis Riot mobile</string>
+    <string name="settings_add_3pid_authentication_needed">Une authentification est nécessaire</string>
+
+
+    <string name="settings_integrations">Intégrations</string>
+    <string name="settings_integrations_summary">Utilisez un gestionnaire d’intégrations pour gérer les bots, les passerelles, les widgets et les packs de stickers.
+\nLes gestionnaires d’intégrations reçoivent des données de configuration et peuvent modifier des widgets, envoyer des invitations de salon et définir des rangs à votre place.</string>
+    <string name="settings_integration_allow">Autoriser les intégrations</string>
+    <string name="room_widget_activity_title">Widget</string>
+    <string name="room_widget_permission_title">Charger un widget</string>
+    <string name="room_widget_permission_added_by">Ce widget a été ajouté par :</string>
+    <string name="room_widget_permission_webview_shared_info_title">Son utilisation peut entraîner l’utilisation de cookies et le partage de données avec %s :</string>
+    <string name="room_widget_permission_shared_info_title">Son utilisation peut entraîner le partage de données avec %s :</string>
+    <string name="room_widget_failed_to_load">Échec de chargement du widget.
+\n%s</string>
+    <string name="room_widget_reload">Recharger le widget</string>
+    <string name="room_widget_open_in_browser">Ouvrir dans le navigateur</string>
+    <string name="room_widget_revoke_access">Révoquer l’accès pour moi</string>
+
+    <string name="room_widget_permission_display_name">Votre nom affiché</string>
+    <string name="room_widget_permission_avatar_url">L’URL de votre avatar</string>
+    <string name="room_widget_permission_user_id">Votre identifiant utilisateur</string>
+    <string name="room_widget_permission_theme">Votre thème</string>
+    <string name="room_widget_permission_widget_id">L’identifiant du widget</string>
+    <string name="room_widget_permission_room_id">L’identifiant du salon</string>
+
+
+    <string name="room_widget_resource_permission_title">Ce widget veut utiliser les ressources suivantes :</string>
+    <string name="room_widget_resource_grant_permission">Autoriser</string>
+    <string name="room_widget_resource_decline_permission">Tout bloquer</string>
+    <string name="room_widget_webview_access_camera">Utiliser la caméra</string>
+    <string name="room_widget_webview_access_microphone">Utiliser le micro</string>
+    <string name="room_widget_webview_read_protected_media">Lire des médias protégés par des DRM</string>
 
 </resources>

@@ -5,7 +5,7 @@
 
     <string name="resources_language">en</string>
     <string name="resources_country_code">US</string>
-    <!-- Note to translators: Possible values: Latn or Cyrl -->
+    <!-- NOTE TO TRANSLATORS: ONLY POSSIBLE VALUES: Latn OR Cyrl -->
     <string name="resources_script">Latn</string>
 
     <!-- theme -->
@@ -1801,5 +1801,167 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="permissions_rationale_msg_keys_backup_export">Riot needs permission to save your E2E keys on disk.\n\nPlease allow access on the next pop-up to be able to export your keys manually.</string>
 
     <string name="no_network_indicator">There is no network connection right now</string>
+
+    <string name="message_ignore_user">Block user</string>
+
+    <string name="room_list_quick_actions_notifications_all_noisy">"All messages (noisy)"</string>
+    <string name="room_list_quick_actions_notifications_all">"All messages"</string>
+    <string name="room_list_quick_actions_notifications_mentions">"Mentions only"</string>
+    <string name="room_list_quick_actions_notifications_mute">"Mute"</string>
+    <string name="room_list_quick_actions_settings">"Settings"</string>
+    <string name="room_list_quick_actions_leave">"Leave the room"</string>
+    <string name="notice_member_no_changes">"%1$s made no changes"</string>
+    <string name="command_description_spoiler">Sends the given message as a spoiler</string>
+    <string name="spoiler">Spoiler</string>
+    <string name="reaction_search_type_hint">Type keywords to find a reaction.</string>
+
+    <string name="no_ignored_users">You are not ignoring any users</string>
+
+    <string name="help_long_click_on_room_for_more_options">Long click on a room to see more options</string>
+
+
+    <string name="room_join_rules_public">%1$s made the room public to whoever knows the link.</string>
+    <string name="room_join_rules_invite">%1$s made the room invite only.</string>
+    <string name="timeline_unread_messages">Unread messages</string>
+
+    <string name="login_splash_title">Liberate your communication</string>
+    <string name="login_splash_text1">Chat with people directly or in groups</string>
+    <string name="login_splash_text2">Keep conversations private with encryption</string>
+    <string name="login_splash_text3">Extend &amp; customise your experience</string>
+    <string name="login_splash_submit">Get started</string>
+
+    <string name="login_server_title">Select a server</string>
+    <string name="login_server_text">Just like email, accounts have one home, although you can talk to anyone</string>
+    <string name="login_server_matrix_org_text">Join millions free on the largest public server</string>
+    <string name="login_server_modular_text">Premium hosting for organisations</string>
+    <string name="login_server_modular_learn_more">Learn more</string>
+    <string name="login_server_other_title">Other</string>
+    <string name="login_server_other_text">Custom &amp; advanced settings</string>
+
+    <string name="login_continue">Continue</string>
+    <!-- Replaced string is the homeserver url -->
+    <string name="login_connect_to">Connect to %1$s</string>
+    <string name="login_connect_to_modular">Connect to Modular</string>
+    <string name="login_connect_to_a_custom_server">Connect to a custom server</string>
+    <!-- Replaced string is the homeserver url -->
+    <string name="login_signin_to">Sign in to %1$s</string>
+    <string name="login_signup">Sign Up</string>
+    <string name="login_signin">Sign In</string>
+    <string name="login_signin_sso">Continue with SSO</string>
+
+    <string name="login_server_url_form_modular_hint">Modular Address</string>
+    <string name="login_server_url_form_other_hint">Address</string>
+    <string name="login_server_url_form_modular_text">Premium hosting for organisations</string>
+    <string name="login_server_url_form_modular_notice">Enter the address of the Modular Riot or Server you want to use</string>
+    <string name="login_server_url_form_other_notice">Enter the address of a server or a Riot you want to connect to</string>
+
+    <string name="login_sso_error_message">An error occurred when loading the page: %1$s (%2$d)</string>
+    <string name="login_mode_not_supported">The application is not able to signin to this homeserver. The homeserver supports the following signin type(s): %1$s.\n\nDo you want to signin using a web client?</string>
+    <string name="login_registration_disabled">Sorry, this server isn’t accepting new accounts.</string>
+    <string name="login_registration_not_supported">The application is not able to create an account on this homeserver.\n\nDo you want to signup using a web client?</string>
+
+    <string name="login_login_with_email_error">This email is not associated to any account.</string>
+
+    <!-- Replaced string is the homeserver url -->
+    <string name="login_reset_password_on">Reset password on %1$s</string>
+    <string name="login_reset_password_notice">A verification email will be sent to your inbox to confirm setting your new password.</string>
+    <string name="login_reset_password_submit">Next</string>
+    <string name="login_reset_password_email_hint">Email</string>
+    <string name="login_reset_password_password_hint">New password</string>
+
+    <string name="login_reset_password_warning_title">Warning!</string>
+    <string name="login_reset_password_warning_content">Changing your password will reset any end-to-end encryption keys on all of your devices, making encrypted chat history unreadable. Set up Key Backup or export your room keys from another device before resetting your password.</string>
+    <string name="login_reset_password_warning_submit">Continue</string>
+
+    <string name="login_reset_password_error_not_found">This email is not linked to any account</string>
+
+    <string name="login_reset_password_mail_confirmation_title">Check your inbox</string>
+    <!-- Replaced string is an email -->
+    <string name="login_reset_password_mail_confirmation_notice">A verification email was sent to %1$s.</string>
+    <string name="login_reset_password_mail_confirmation_notice_2">Tap on the link to confirm your new password. Once you\'ve followed the link it contains, click below.</string>
+    <string name="login_reset_password_mail_confirmation_submit">I have verified my email address</string>
+
+    <string name="login_reset_password_success_title">Success!</string>
+    <string name="login_reset_password_success_notice">Your password has been reset.</string>
+    <string name="login_reset_password_success_notice_2">You have been logged out of all devices and will no longer receive push notifications. To re-enable notifications, sign in again on each device.</string>
+    <string name="login_reset_password_success_submit">Back to Sign In</string>
+
+    <string name="login_reset_password_cancel_confirmation_title">Warning</string>
+    <string name="login_reset_password_cancel_confirmation_content">Your password is not yet changed.\n\nStop the password change process?</string>
+
+    <string name="login_set_email_title">Set email address</string>
+    <string name="login_set_email_notice">Set an email to recover your account. Later, you can optionally allow people you know to discover you by your email.</string>
+    <string name="login_set_email_mandatory_hint">Email</string>
+    <string name="login_set_email_optional_hint">Email (optional)</string>
+    <string name="login_set_email_submit">Next</string>
+
+    <string name="login_set_msisdn_title">Set phone number</string>
+    <string name="login_set_msisdn_notice">Set a phone number to optionally allow people you know to discover you.</string>
+    <string name="login_set_msisdn_notice2">Please use the international format.</string>
+    <string name="login_set_msisdn_mandatory_hint">Phone number</string>
+    <string name="login_set_msisdn_optional_hint">Phone number (optional)</string>
+    <string name="login_set_msisdn_submit">Next</string>
+
+    <string name="login_msisdn_confirm_title">Confirm phone number</string>
+    <!-- Template will be replaced by a phone number -->
+    <string name="login_msisdn_confirm_notice">We just sent a code to %1$s. Enter it below to verify it’s you.</string>
+    <string name="login_msisdn_confirm_hint">Enter code</string>
+    <string name="login_msisdn_confirm_send_again">Send again</string>
+    <string name="login_msisdn_confirm_submit">Next</string>
+
+    <string name="login_msisdn_error_not_international">"International phone numbers must start with '+'"</string>
+    <string name="login_msisdn_error_other">"Phone number seems invalid. Please check it"</string>
+
+    <!-- Replaced string is the homeserver url -->
+    <string name="login_signup_to">Sign up to %1$s</string>
+    <string name="login_signup_username_hint">Username or email</string>
+    <string name="login_signup_password_hint">Password</string>
+    <string name="login_signup_submit">Next</string>
+    <string name="login_signup_error_user_in_use">That username is taken</string>
+    <string name="login_signup_cancel_confirmation_title">Warning</string>
+    <string name="login_signup_cancel_confirmation_content">Your account is not created yet.\n\nStop the registration process?</string>
+
+    <string name="login_a11y_choose_matrix_org">Select matrix.org</string>
+    <string name="login_a11y_choose_modular">Select modular</string>
+    <string name="login_a11y_choose_other">Select a custom homeserver</string>
+    <string name="login_a11y_captcha_container">Please perform the captcha challenge</string>
+    <string name="login_terms_title">Accept terms to continue</string>
+
+    <string name="login_wait_for_email_title">Please check your email</string>
+    <string name="login_wait_for_email_notice">We just sent an email to %1$s.\nPlease click on the link it contains to continue the account creation.</string>
+    <string name="login_validation_code_is_not_correct">The entered code is not correct. Please check.</string>
+    <string name="login_error_outdated_homeserver_title">Outdated homeserver</string>
+    <string name="login_error_outdated_homeserver_content">This homeserver is running too old a version to connect to. Ask your homeserver admin to upgrade.</string>
+
+    <plurals name="login_error_limit_exceeded_retry_after">
+        <item quantity="one">Too many requests have been sent. You can retry in %1$d second…</item>
+        <item quantity="other">Too many requests have been sent. You can retry in %1$d seconds…</item>
+    </plurals>
+
+    <string name="seen_by">Seen by</string>
+
+    <string name="signed_out_title">You’re signed out</string>
+    <string name="signed_out_notice">It can be due to various reasons:\n\n• You’ve changed your password on another device.\n\n• You have deleted this device from another device.\n\n• The administrator of your server has invalidated your access for security reason.</string>
+    <string name="signed_out_submit">Sign in again</string>
+
+    <string name="soft_logout_title">You’re signed out</string>
+    <string name="soft_logout_signin_title">Sign in</string>
+    <!-- Replacement: homeserver url, user display name and userId -->
+    <string name="soft_logout_signin_notice">Your homeserver (%1$s) admin has signed you out of your account %2$s (%3$s).</string>
+    <string name="soft_logout_signin_e2e_warning_notice">Sign in to recover encryption keys stored exclusively on this device. You need them to read all of your secure messages on any device.</string>
+    <string name="soft_logout_signin_submit">Sign in</string>
+    <string name="soft_logout_signin_password_hint">Password</string>
+    <string name="soft_logout_clear_data_title">Clear personal data</string>
+    <string name="soft_logout_clear_data_notice">Warning: Your personal data (including encryption keys) is still stored on this device.\n\nClear it if you’re finished using this device, or want to sign in to another account.</string>
+    <string name="soft_logout_clear_data_submit">Clear all data</string>
+
+    <string name="soft_logout_clear_data_dialog_title">Clear data</string>
+    <string name="soft_logout_clear_data_dialog_content">Clear all data currently stored on this device?\nSign in again to access your account data and messages.</string>
+    <string name="soft_logout_clear_data_dialog_e2e_warning_content">You’ll lose access to secure messages unless you sign in to recover your encryption keys.</string>
+    <string name="soft_logout_clear_data_dialog_submit">Clear data</string>
+    <string name="soft_logout_sso_not_same_user_error">The current session is for user %1$s and you provide credentials for user %2$s. This is not supported by RiotX.\nPlease first clear data, then sign in again on another account.</string>
+
+    <string name="permalink_malformed">Your matrix.to link was malformed</string>
+    <string name="bug_report_error_too_short">The description is too short</string>
 
 </resources>
