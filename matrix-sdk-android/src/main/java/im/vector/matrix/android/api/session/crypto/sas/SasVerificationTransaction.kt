@@ -48,6 +48,5 @@ interface SasVerificationTransaction {
      */
     fun userHasVerifiedShortCode()
 
-
     fun shortCodeDoNotMatch()
 }

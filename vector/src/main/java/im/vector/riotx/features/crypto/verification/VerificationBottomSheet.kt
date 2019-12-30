@@ -84,7 +84,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.requestLiveData.observe(this, Observer {
+        viewModel.requestLiveData.observe(viewLifecycleOwner, Observer {
             it.peekContent().let { va ->
                 when (va) {
                     is Success -> {

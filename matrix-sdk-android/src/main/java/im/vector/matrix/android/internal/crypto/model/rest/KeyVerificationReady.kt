@@ -25,7 +25,7 @@ import im.vector.matrix.android.internal.crypto.verification.VerificationInfoRea
 @JsonClass(generateAdapter = true)
 internal data class KeyVerificationReady(
         @Json(name = "from_device") override val fromDevice: String?,
-        //TODO add qr?
+        // TODO add qr?
         @Json(name = "methods") override val methods: List<String>? = listOf(KeyVerificationStart.VERIF_METHOD_SAS),
         @Json(name = "transaction_id") override var transactionID: String? = null
 ) : SendToDeviceObject, VerificationInfoReady {

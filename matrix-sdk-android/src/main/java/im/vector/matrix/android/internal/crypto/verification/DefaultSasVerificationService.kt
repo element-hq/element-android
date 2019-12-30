@@ -80,7 +80,6 @@ internal class DefaultSasVerificationService @Inject constructor(
      */
     private val pendingRequests = HashMap<String, ArrayList<PendingVerificationRequest>>()
 
-
     // Event received from the sync
     fun onToDeviceEvent(event: Event) {
         GlobalScope.launch(coroutineDispatchers.crypto) {
@@ -183,7 +182,6 @@ internal class DefaultSasVerificationService @Inject constructor(
             }
         }
     }
-
 
     private fun dispatchRequestAdded(tx: PendingVerificationRequest) {
         uiHandler.post {
@@ -756,14 +754,14 @@ internal class DefaultSasVerificationService @Inject constructor(
     override fun readyPendingVerificationInDMs(otherUserId: String, roomId: String, transactionId: String) {
         // Let's find the related request
         getExistingVerificationRequest(otherUserId)?.find { it.transactionId == transactionId }?.let {
-            //we need to send a ready event, with matching methods
+            // we need to send a ready event, with matching methods
             val transport = sasTransportRoomMessageFactory.createTransport(roomId, cryptoService, null)
             val methods = it.requestInfo?.methods?.intersect(listOf(KeyVerificationStart.VERIF_METHOD_SAS))?.toList()
             if (methods.isNullOrEmpty()) {
                 Timber.i("Cannot ready this request, no common methods found txId:$transactionId")
                 return@let
             }
-            //TODO this is not yet related to a transaction, maybe we should use another method like for cancel?
+            // TODO this is not yet related to a transaction, maybe we should use another method like for cancel?
             val readyMsg = transport.createReady(transactionId, credentials.deviceId ?: "", methods)
             transport.sendToOther(EventType.KEY_VERIFICATION_READY, readyMsg,
                     SasVerificationTxState.None,

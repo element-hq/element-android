@@ -59,6 +59,5 @@ internal interface SasTransport {
 
     fun createMac(tid: String, mac: Map<String, String>, keys: String): VerificationInfoMac
 
-
     fun createReady(tid: String, fromDevice: String, methods: List<String>): VerificationInfoReady
 }
