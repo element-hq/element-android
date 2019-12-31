@@ -17,7 +17,7 @@ package im.vector.matrix.android.internal.crypto.verification
 
 internal interface VerificationInfoCancel : VerificationInfo {
 
-    val transactionID: String?
+    override val transactionID: String?
     /**
      * machine-readable reason for cancelling, see [CancelCode]
      */

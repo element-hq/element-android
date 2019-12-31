@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.crypto.tasks
 
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
+import im.vector.matrix.android.api.session.crypto.sas.SasVerificationService
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
@@ -52,27 +53,16 @@ internal class DefaultRoomVerificationUpdateTask @Inject constructor(
     override suspend fun execute(params: RoomVerificationUpdateTask.Params) {
         // TODO ignore initial sync or back pagination?
 
-        val now = System.currentTimeMillis()
-        val tooInThePast = now - (10 * 60 * 1000)
-        val fiveMinInMs = 5 * 60 * 1000
-        val tooInTheFuture = System.currentTimeMillis() + fiveMinInMs
-
         params.events.forEach { event ->
             Timber.d("## SAS Verification live observer: received msgId: ${event.eventId} msgtype: ${event.type} from ${event.senderId}")
             Timber.v("## SAS Verification live observer: received msgId: $event")
 
             // If the request is in the future by more than 5 minutes or more than 10 minutes in the past,
             // the message should be ignored by the receiver.
-            val ageLocalTs = event.ageLocalTs
-            if (ageLocalTs != null && (now - ageLocalTs) > fiveMinInMs) {
-                Timber.d("## SAS Verification live observer: msgId: ${event.eventId} is too old (age: ${(now - ageLocalTs)})")
-                return@forEach
-            } else {
-                val eventOrigin = event.originServerTs ?: -1
-                if (eventOrigin < tooInThePast || eventOrigin > tooInTheFuture) {
-                    Timber.d("## SAS Verification live observer: msgId: ${event.eventId} is too old (ts: $eventOrigin")
-                    return@forEach
-                }
+
+            if (!SasVerificationService.isValidRequest(event.ageLocalTs
+                            ?: event.originServerTs)) return@forEach Unit.also {
+                Timber.d("## SAS Verification live observer: msgId: ${event.eventId} is outdated")
             }
 
             // decrypt if needed?
@@ -149,7 +139,7 @@ internal class DefaultRoomVerificationUpdateTask @Inject constructor(
                 EventType.KEY_VERIFICATION_DONE -> {
                     params.sasVerificationService.onRoomEvent(event)
                 }
-                EventType.MESSAGE               -> {
+                EventType.MESSAGE -> {
                     if (MessageType.MSGTYPE_VERIFICATION_REQUEST == event.getClearContent().toModel<MessageContent>()?.type) {
                         params.sasVerificationService.onRoomRequestReceived(event)
                     }

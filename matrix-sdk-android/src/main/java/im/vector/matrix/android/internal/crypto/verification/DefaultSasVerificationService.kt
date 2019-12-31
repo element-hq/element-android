@@ -77,6 +77,7 @@ internal class DefaultSasVerificationService @Inject constructor(
 
     /**
      * Map [sender: [PendingVerificationRequest]]
+     * For now we keep all requests (even terminated ones) during the lifetime of the app.
      */
     private val pendingRequests = HashMap<String, ArrayList<PendingVerificationRequest>>()
 
@@ -84,7 +85,7 @@ internal class DefaultSasVerificationService @Inject constructor(
     fun onToDeviceEvent(event: Event) {
         GlobalScope.launch(coroutineDispatchers.crypto) {
             when (event.getClearType()) {
-                EventType.KEY_VERIFICATION_START  -> {
+                EventType.KEY_VERIFICATION_START -> {
                     onStartRequestReceived(event)
                 }
                 EventType.KEY_VERIFICATION_CANCEL -> {
@@ -93,13 +94,13 @@ internal class DefaultSasVerificationService @Inject constructor(
                 EventType.KEY_VERIFICATION_ACCEPT -> {
                     onAcceptReceived(event)
                 }
-                EventType.KEY_VERIFICATION_KEY    -> {
+                EventType.KEY_VERIFICATION_KEY -> {
                     onKeyReceived(event)
                 }
-                EventType.KEY_VERIFICATION_MAC    -> {
+                EventType.KEY_VERIFICATION_MAC -> {
                     onMacReceived(event)
                 }
-                else                              -> {
+                else -> {
                     // ignore
                 }
             }
@@ -109,7 +110,7 @@ internal class DefaultSasVerificationService @Inject constructor(
     fun onRoomEvent(event: Event) {
         GlobalScope.launch(coroutineDispatchers.crypto) {
             when (event.getClearType()) {
-                EventType.KEY_VERIFICATION_START  -> {
+                EventType.KEY_VERIFICATION_START -> {
                     onRoomStartRequestReceived(event)
                 }
                 EventType.KEY_VERIFICATION_CANCEL -> {
@@ -119,24 +120,24 @@ internal class DefaultSasVerificationService @Inject constructor(
                 EventType.KEY_VERIFICATION_ACCEPT -> {
                     onRoomAcceptReceived(event)
                 }
-                EventType.KEY_VERIFICATION_KEY    -> {
+                EventType.KEY_VERIFICATION_KEY -> {
                     onRoomKeyRequestReceived(event)
                 }
-                EventType.KEY_VERIFICATION_MAC    -> {
+                EventType.KEY_VERIFICATION_MAC -> {
                     onRoomMacReceived(event)
                 }
-                EventType.KEY_VERIFICATION_READY  -> {
+                EventType.KEY_VERIFICATION_READY -> {
                     onRoomReadyReceived(event)
                 }
-                EventType.KEY_VERIFICATION_DONE   -> {
-                    // TODO?
+                EventType.KEY_VERIFICATION_DONE -> {
+                    onRoomDoneReceived(event)
                 }
-                EventType.MESSAGE                 -> {
+                EventType.MESSAGE -> {
                     if (MessageType.MSGTYPE_VERIFICATION_REQUEST == event.getClearContent().toModel<MessageContent>()?.type) {
                         onRoomRequestReceived(event)
                     }
                 }
-                else                              -> {
+                else -> {
                     // ignore
                 }
             }
@@ -247,6 +248,7 @@ internal class DefaultSasVerificationService @Inject constructor(
                 }
 
         val pendingVerificationRequest = PendingVerificationRequest(
+                ageLocalTs = event.ageLocalTs ?: System.currentTimeMillis(),
                 isIncoming = true,
                 otherUserId = senderId, // requestInfo.toUserId,
                 transactionId = event.eventId,
@@ -411,7 +413,7 @@ internal class DefaultSasVerificationService @Inject constructor(
             return
         }
         getExistingVerificationRequest(event.senderId ?: "", cancelReq.transactionID)?.let {
-            updateOutgoingPendingRequest(it.copy(cancelConclusion = safeValueOf(cancelReq.code)))
+            updatePendingRequest(it.copy(cancelConclusion = safeValueOf(cancelReq.code)))
             // Should we remove it from the list?
         }
         handleOnCancel(event.senderId!!, cancelReq)
@@ -433,14 +435,20 @@ internal class DefaultSasVerificationService @Inject constructor(
 
     private fun handleOnCancel(otherUserId: String, cancelReq: VerificationInfoCancel) {
         Timber.v("## SAS onCancelReceived otherUser:$otherUserId reason:${cancelReq.reason}")
-        val existing = getExistingTransaction(otherUserId, cancelReq.transactionID!!)
-        if (existing == null) {
-            Timber.e("## Received invalid cancel request")
-            return
+
+        val existingTransaction = getExistingTransaction(otherUserId, cancelReq.transactionID!!)
+        val existingRequest = getExistingVerificationRequest(otherUserId, cancelReq.transactionID!!)
+
+        if (existingRequest != null) {
+            // Mark this request as cancelled
+            updatePendingRequest(existingRequest.copy(
+                    cancelConclusion = safeValueOf(cancelReq.code)
+            ))
         }
-        if (existing is SASVerificationTransaction) {
-            existing.cancelledReason = safeValueOf(cancelReq.code)
-            existing.state = SasVerificationTxState.OnCancelled
+
+        if (existingTransaction is SASVerificationTransaction) {
+            existingTransaction.cancelledReason = safeValueOf(cancelReq.code)
+            existingTransaction.state = SasVerificationTxState.OnCancelled
         }
     }
 
@@ -558,6 +566,23 @@ internal class DefaultSasVerificationService @Inject constructor(
         handleReadyReceived(event.senderId, readyReq)
     }
 
+    private fun onRoomDoneReceived(event: Event) {
+        val doneReq = event.getClearContent().toModel<MessageVerificationDoneContent>()
+                ?.copy(
+                        // relates_to is in clear in encrypted payload
+                        relatesTo = event.content.toModel<MessageRelationContent>()?.relatesTo
+                )
+
+        if (doneReq == null || doneReq.isValid().not() || event.senderId == null) {
+            // ignore
+            Timber.e("## SAS Received invalid Done request")
+            // TODO should we cancel?
+            return
+        }
+
+        handleDoneReceived(event.senderId, doneReq)
+    }
+
     private fun onMacReceived(event: Event) {
         val macReq = event.getClearContent().toModel<KeyVerificationMac>()!!
 
@@ -589,7 +614,16 @@ internal class DefaultSasVerificationService @Inject constructor(
             Timber.e("## SAS Received Ready for unknown request txId:${readyReq.transactionID} fromDevice ${readyReq.fromDevice}")
             return
         }
-        updateOutgoingPendingRequest(existingRequest.copy(readyInfo = readyReq))
+        updatePendingRequest(existingRequest.copy(readyInfo = readyReq))
+    }
+
+    private fun handleDoneReceived(senderId: String, doneInfo: VerificationInfo) {
+        val existingRequest = getExistingVerificationRequest(senderId)?.find { it.transactionId == doneInfo.transactionID }
+        if (existingRequest == null) {
+            Timber.e("## SAS Received Done for unknown request txId:${doneInfo.transactionID}")
+            return
+        }
+        updatePendingRequest(existingRequest.copy(isSuccessful = true))
     }
 
     override fun getExistingTransaction(otherUser: String, tid: String): VerificationTransaction? {
@@ -675,6 +709,7 @@ internal class DefaultSasVerificationService @Inject constructor(
                 cryptoService = cryptoService
         )
         val verificationRequest = PendingVerificationRequest(
+                ageLocalTs = System.currentTimeMillis(),
                 isIncoming = false,
                 localID = params.event.eventId ?: "",
                 otherUserId = userId
@@ -694,7 +729,7 @@ internal class DefaultSasVerificationService @Inject constructor(
             this.callback = object : MatrixCallback<SendResponse> {
                 override fun onSuccess(data: SendResponse) {
                     params.event.getClearContent().toModel<MessageVerificationRequestContent>()?.let {
-                        updateOutgoingPendingRequest(verificationRequest.copy(
+                        updatePendingRequest(verificationRequest.copy(
                                 transactionId = data.eventId,
                                 requestInfo = it
                         ))
@@ -713,7 +748,7 @@ internal class DefaultSasVerificationService @Inject constructor(
         return verificationRequest
     }
 
-    private fun updateOutgoingPendingRequest(updated: PendingVerificationRequest) {
+    private fun updatePendingRequest(updated: PendingVerificationRequest) {
         val requestsForUser = pendingRequests[updated.otherUserId]
                 ?: ArrayList<PendingVerificationRequest>().also {
                     pendingRequests[updated.otherUserId] = it
@@ -768,7 +803,7 @@ internal class DefaultSasVerificationService @Inject constructor(
                     CancelCode.User,
                     null // TODO handle error?
             )
-            updateOutgoingPendingRequest(it.copy(readyInfo = readyMsg))
+            updatePendingRequest(it.copy(readyInfo = readyMsg))
         }
     }
 

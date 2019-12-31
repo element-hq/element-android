@@ -17,6 +17,8 @@ package im.vector.matrix.android.api.session.room.model.message
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import im.vector.matrix.android.api.session.events.model.Content
+import im.vector.matrix.android.api.session.events.model.toContent
 import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultContent
 import im.vector.matrix.android.internal.crypto.verification.VerificationInfo
 
@@ -24,5 +26,11 @@ import im.vector.matrix.android.internal.crypto.verification.VerificationInfo
 internal data class MessageVerificationDoneContent(
         @Json(name = "m.relates_to") val relatesTo: RelationDefaultContent?
 ) : VerificationInfo {
-    override fun isValid() = true
+
+    override val transactionID: String?
+        get() = relatesTo?.eventId
+
+    override fun isValid() = transactionID?.isNotEmpty() == true
+
+    override fun toEventContent(): Content? = this.toContent()
 }

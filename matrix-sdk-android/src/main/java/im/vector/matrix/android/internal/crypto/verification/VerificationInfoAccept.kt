@@ -17,7 +17,7 @@ package im.vector.matrix.android.internal.crypto.verification
 
 internal interface VerificationInfoAccept : VerificationInfo {
 
-    val transactionID: String?
+    override val transactionID: String?
 
     /**
      * The key agreement protocol that Bob’s device has selected to use, out of the list proposed by Alice’s device

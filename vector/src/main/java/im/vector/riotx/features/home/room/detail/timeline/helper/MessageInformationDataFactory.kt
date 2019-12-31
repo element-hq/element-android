@@ -73,6 +73,7 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                 senderId = event.root.senderId ?: "",
                 sendState = event.root.sendState,
                 time = time,
+                ageLocalTS = event.root.ageLocalTs,
                 avatarUrl = avatarUrl,
                 memberName = formattedMemberName,
                 showInformation = showInformation,

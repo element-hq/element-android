@@ -22,4 +22,5 @@ interface VerificationInfo {
     fun toEventContent(): Content? = null
     fun toSendToDeviceObject(): SendToDeviceObject? = null
     fun isValid() : Boolean
+    val transactionID: String?
 }

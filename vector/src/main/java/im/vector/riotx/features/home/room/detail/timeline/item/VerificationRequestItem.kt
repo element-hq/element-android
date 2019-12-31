@@ -28,6 +28,7 @@ import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
+import im.vector.matrix.android.api.session.crypto.sas.SasVerificationService
 import im.vector.matrix.android.internal.session.room.VerificationState
 import im.vector.riotx.R
 import im.vector.riotx.core.resources.ColorProvider
@@ -72,7 +73,7 @@ abstract class VerificationRequestItem : AbsBaseMessageItem<VerificationRequestI
 
         when (attributes.informationData.referencesInfoData?.verificationStatus) {
             VerificationState.REQUEST,
-            null                                -> {
+            null -> {
                 holder.buttonBar.isVisible = !attributes.informationData.sentByMe
                 holder.statusTextView.text = null
                 holder.statusTextView.isVisible = false
@@ -82,17 +83,17 @@ abstract class VerificationRequestItem : AbsBaseMessageItem<VerificationRequestI
                 holder.statusTextView.text = holder.view.context.getString(R.string.verification_request_other_cancelled, attributes.informationData.memberName)
                 holder.statusTextView.isVisible = true
             }
-            VerificationState.CANCELED_BY_ME    -> {
+            VerificationState.CANCELED_BY_ME -> {
                 holder.buttonBar.isVisible = false
                 holder.statusTextView.text = holder.view.context.getString(R.string.verification_request_you_cancelled)
                 holder.statusTextView.isVisible = true
             }
-            VerificationState.WAITING           -> {
+            VerificationState.WAITING -> {
                 holder.buttonBar.isVisible = false
                 holder.statusTextView.text = holder.view.context.getString(R.string.verification_request_waiting)
                 holder.statusTextView.isVisible = true
             }
-            VerificationState.DONE              -> {
+            VerificationState.DONE -> {
                 holder.buttonBar.isVisible = false
                 holder.statusTextView.text = if (attributes.informationData.sentByMe) {
                     holder.view.context.getString(R.string.verification_request_other_accepted, attributes.otherUserName)
@@ -101,12 +102,15 @@ abstract class VerificationRequestItem : AbsBaseMessageItem<VerificationRequestI
                 }
                 holder.statusTextView.isVisible = true
             }
-            else                                -> {
+            else -> {
                 holder.buttonBar.isVisible = false
                 holder.statusTextView.text = null
                 holder.statusTextView.isVisible = false
             }
         }
+
+        // Always hide buttons if request is too old
+        holder.buttonBar.isVisible = holder.buttonBar.isVisible && SasVerificationService.isValidRequest(attributes.informationData.ageLocalTS)
 
         holder.callback = callback
         holder.attributes = attributes

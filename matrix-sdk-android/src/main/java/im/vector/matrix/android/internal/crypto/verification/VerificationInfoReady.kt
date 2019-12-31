@@ -24,7 +24,7 @@ package im.vector.matrix.android.internal.crypto.verification
  */
 interface VerificationInfoReady : VerificationInfo {
 
-    val transactionID: String?
+    override val transactionID: String?
 
     /**
      * The ID of the device that sent the m.key.verification.ready message

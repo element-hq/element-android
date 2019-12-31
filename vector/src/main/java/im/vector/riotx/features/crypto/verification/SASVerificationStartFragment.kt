@@ -32,6 +32,7 @@ import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.platform.VectorBaseFragment
 import javax.inject.Inject
 
+// TODO Deprecated("replaced by bottomsheet UX")
 class SASVerificationStartFragment @Inject constructor(): VectorBaseFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_sas_verification_start

@@ -55,7 +55,7 @@ interface SasVerificationService {
      */
     fun beginKeyVerification(method: String, userId: String, deviceID: String): String?
 
-    fun requestKeyVerificationInDMs(userId: String, roomId: String, callback: MatrixCallback<String>?) : PendingVerificationRequest
+    fun requestKeyVerificationInDMs(userId: String, roomId: String, callback: MatrixCallback<String>?): PendingVerificationRequest
 
     fun beginKeyVerificationInDMs(method: String,
                                   transactionId: String,
@@ -75,5 +75,18 @@ interface SasVerificationService {
 
         fun verificationRequestCreated(pr: PendingVerificationRequest) {}
         fun verificationRequestUpdated(pr: PendingVerificationRequest) {}
+    }
+
+    companion object {
+
+        fun isValidRequest(age: Long?): Boolean {
+            if (age == null) return false
+            val now = System.currentTimeMillis()
+            val tooInThePast = now - (10 * 60 * 1000)
+            val fiveMinInMs = 5 * 60 * 1000
+            val tooInTheFuture = System.currentTimeMillis() + fiveMinInMs
+
+            return !(age < tooInThePast || age > tooInTheFuture)
+        }
     }
 }

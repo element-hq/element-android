@@ -20,7 +20,7 @@ package im.vector.matrix.android.internal.crypto.verification
  */
 internal interface VerificationInfoKey : VerificationInfo {
 
-    val transactionID: String?
+    override val transactionID: String?
     /**
      * The device’s ephemeral public key, as an unpadded base64 string
      */

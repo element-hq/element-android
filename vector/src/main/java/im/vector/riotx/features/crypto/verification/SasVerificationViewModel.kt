@@ -27,6 +27,7 @@ import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotx.core.utils.LiveEvent
 import javax.inject.Inject
 
+// TODO Deprecated("replaced by bottomsheet UX")
 class SasVerificationViewModel @Inject constructor() : ViewModel(),
         SasVerificationService.SasVerificationListener {
 

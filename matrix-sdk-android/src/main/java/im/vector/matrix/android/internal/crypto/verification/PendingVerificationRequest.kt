@@ -23,6 +23,7 @@ import java.util.*
  * Stores current pending verification requests
  */
 data class PendingVerificationRequest(
+        val ageLocalTs : Long,
         val isIncoming: Boolean = false,
         val localID: String =  UUID.randomUUID().toString(),
         val otherUserId: String,
