@@ -30,15 +30,6 @@ import im.vector.matrix.android.internal.session.room.timeline.PaginationDirecti
 import io.realm.Sort
 import io.realm.kotlin.createObject
 
-// By default if a chunk is empty we consider it unlinked
-internal fun ChunkEntity.isUnlinked(): Boolean {
-    assertIsManaged()
-    return timelineEvents.where()
-            .equalTo(TimelineEventEntityFields.ROOT.IS_UNLINKED, false)
-            .findAll()
-            .isEmpty()
-}
-
 internal fun ChunkEntity.deleteOnCascade() {
     assertIsManaged()
     this.timelineEvents.deleteAllFromRealm()
@@ -49,9 +40,8 @@ internal fun ChunkEntity.merge(roomId: String,
                                chunkToMerge: ChunkEntity,
                                direction: PaginationDirection): List<TimelineEventEntity> {
     assertIsManaged()
-    val isChunkToMergeUnlinked = chunkToMerge.isUnlinked()
-    val isCurrentChunkUnlinked = this.isUnlinked()
-    val isUnlinked = isCurrentChunkUnlinked && isChunkToMergeUnlinked
+    val isChunkToMergeUnlinked = chunkToMerge.isUnlinked
+    val isCurrentChunkUnlinked = isUnlinked
 
     if (isCurrentChunkUnlinked && !isChunkToMergeUnlinked) {
         this.timelineEvents.forEach { it.root?.isUnlinked = false }
@@ -69,15 +59,15 @@ internal fun ChunkEntity.merge(roomId: String,
     return eventsToMerge
             .mapNotNull {
                 val event = it.root?.asDomain() ?: return@mapNotNull null
-                add(roomId, event, direction, isUnlinked = isUnlinked)
+                add(roomId, event, direction)
             }
 }
 
 internal fun ChunkEntity.add(roomId: String,
                              event: Event,
                              direction: PaginationDirection,
-                             stateIndexOffset: Int = 0,
-                             isUnlinked: Boolean = false): TimelineEventEntity? {
+                             stateIndexOffset: Int = 0
+): TimelineEventEntity? {
     assertIsManaged()
     if (event.eventId != null && timelineEvents.find(event.eventId) != null) {
         return null
@@ -102,6 +92,7 @@ internal fun ChunkEntity.add(roomId: String,
         }
     }
 
+    val isUnlinked = isUnlinked
     val localId = TimelineEventEntity.nextId(realm)
     val eventId = event.eventId ?: ""
     val senderId = event.senderId ?: ""
@@ -128,9 +119,9 @@ internal fun ChunkEntity.add(roomId: String,
 
     val rootEvent = event.toEntity(roomId).apply {
         this.stateIndex = currentStateIndex
-        this.isUnlinked = isUnlinked
         this.displayIndex = currentDisplayIndex
         this.sendState = SendState.SYNCED
+        this.isUnlinked = isUnlinked
     }
     val eventEntity = realm.createObject<TimelineEventEntity>().also {
         it.localId = localId

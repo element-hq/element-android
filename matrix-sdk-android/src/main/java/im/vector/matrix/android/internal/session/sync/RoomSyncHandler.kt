@@ -190,6 +190,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         }
         lastChunk?.isLastForward = false
         chunkEntity.isLastForward = true
+        chunkEntity.isUnlinked = false
 
         val timelineEvents = ArrayList<TimelineEventEntity>(eventList.size)
         for (event in eventList) {

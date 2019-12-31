@@ -66,6 +66,9 @@ internal class TimelineEventSenderVisitor @Inject constructor() {
     fun visit(timelineEventEntities: List<TimelineEventEntity>) = timelineEventEntities.forEach { visit(it) }
 
     fun visit(timelineEventEntity: TimelineEventEntity) {
+        if (!timelineEventEntity.isValid) {
+            return
+        }
         val key = Key(
                 roomId = timelineEventEntity.roomId,
                 stateIndex = timelineEventEntity.root?.stateIndex ?: 0,
@@ -96,7 +99,7 @@ internal class TimelineEventSenderVisitor @Inject constructor() {
         val stateIndex = root?.stateIndex ?: return result
         val senderId = root?.sender ?: return result
         val chunkEntity = chunk?.firstOrNull() ?: return result
-        val isUnlinked = chunkEntity.isUnlinked()
+        val isUnlinked = chunkEntity.isUnlinked
         var senderMembershipEvent: EventEntity?
         var senderRoomMemberContent: String?
         var senderRoomMemberPrevContent: String?
@@ -142,5 +145,4 @@ internal class TimelineEventSenderVisitor @Inject constructor() {
         result.senderMembershipEventId = senderMembershipEvent?.eventId
         return result
     }
-
 }

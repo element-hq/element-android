@@ -198,5 +198,4 @@ class HomeDetailFragment @Inject constructor(
         RoomListDisplayMode.ROOMS  -> R.id.bottom_action_rooms
         else                       -> R.id.bottom_action_home
     }
-
 }
