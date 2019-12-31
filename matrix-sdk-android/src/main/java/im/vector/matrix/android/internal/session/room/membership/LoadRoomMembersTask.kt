@@ -18,8 +18,8 @@ package im.vector.matrix.android.internal.session.room.membership
 
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.room.model.Membership
+import im.vector.matrix.android.internal.database.helper.TimelineEventSenderVisitor
 import im.vector.matrix.android.internal.database.helper.addStateEvent
-import im.vector.matrix.android.internal.database.helper.updateSenderData
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.network.executeRequest
@@ -44,7 +44,8 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(private val roomAP
                                                               private val monarchy: Monarchy,
                                                               private val syncTokenStore: SyncTokenStore,
                                                               private val roomSummaryUpdater: RoomSummaryUpdater,
-                                                              private val roomMemberEventHandler: RoomMemberEventHandler
+                                                              private val roomMemberEventHandler: RoomMemberEventHandler,
+                                                              private val timelineEventSenderVisitor: TimelineEventSenderVisitor
 ) : LoadRoomMembersTask {
 
     override suspend fun execute(params: LoadRoomMembersTask.Params) {
@@ -68,8 +69,9 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(private val roomAP
                 roomEntity.addStateEvent(roomMemberEvent)
                 roomMemberEventHandler.handle(realm, roomId, roomMemberEvent)
             }
+            timelineEventSenderVisitor.clear()
             roomEntity.chunks.flatMap { it.timelineEvents }.forEach {
-                it.updateSenderData()
+                timelineEventSenderVisitor.visit(it)
             }
             roomEntity.areAllMembersLoaded = true
             roomSummaryUpdater.update(realm, roomId, updateMembers = true)

@@ -47,7 +47,7 @@ internal fun ChunkEntity.deleteOnCascade() {
 
 internal fun ChunkEntity.merge(roomId: String,
                                chunkToMerge: ChunkEntity,
-                               direction: PaginationDirection) {
+                               direction: PaginationDirection): List<TimelineEventEntity> {
     assertIsManaged()
     val isChunkToMergeUnlinked = chunkToMerge.isUnlinked()
     val isCurrentChunkUnlinked = this.isUnlinked()
@@ -66,23 +66,11 @@ internal fun ChunkEntity.merge(roomId: String,
         this.isLastBackward = chunkToMerge.isLastBackward
         eventsToMerge = chunkToMerge.timelineEvents.sort(TimelineEventEntityFields.ROOT.DISPLAY_INDEX, Sort.DESCENDING)
     }
-    val timelineEvents = eventsToMerge
+    return eventsToMerge
             .mapNotNull {
                 val event = it.root?.asDomain() ?: return@mapNotNull null
                 add(roomId, event, direction, isUnlinked = isUnlinked)
             }
-    updateSenderDataFor(timelineEvents)
-}
-
-internal fun ChunkEntity.updateSenderDataFor(events: List<TimelineEventEntity>) {
-    val cache = RoomMembersCache()
-    events.forEach {
-        val result = cache.get(it)
-        it.isUniqueDisplayName = result.isUniqueDisplayName
-        it.senderAvatar = result.senderAvatar
-        it.senderName = result.senderName
-        it.senderMembershipEventId = result.senderMembershipEventId
-    }
 }
 
 internal fun ChunkEntity.add(roomId: String,

@@ -25,15 +25,17 @@ import im.vector.matrix.android.internal.database.query.next
 import im.vector.matrix.android.internal.database.query.prev
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.extensions.assertIsManaged
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.room.membership.RoomMembers
 import io.realm.RealmList
 import io.realm.RealmQuery
-import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * This is an internal cache to avoid querying all the time the room member events
  */
-internal class RoomMembersCache {
+@SessionScope
+internal class TimelineEventSenderVisitor @Inject constructor() {
 
     internal data class Key(
             val roomId: String,
@@ -50,24 +52,34 @@ internal class RoomMembersCache {
 
     private val values = HashMap<Key, Value>()
 
-    fun get(timelineEventEntity: TimelineEventEntity): Value {
+    fun clear() {
+        values.clear()
+    }
+
+    fun clear(roomId: String, senderId: String) {
+        val keysToRemove = values.keys.filter { it.senderId == senderId && it.roomId == roomId }
+        keysToRemove.forEach {
+            values.remove(it)
+        }
+    }
+
+    fun visit(timelineEventEntities: List<TimelineEventEntity>) = timelineEventEntities.forEach { visit(it) }
+
+    fun visit(timelineEventEntity: TimelineEventEntity) {
         val key = Key(
                 roomId = timelineEventEntity.roomId,
                 stateIndex = timelineEventEntity.root?.stateIndex ?: 0,
                 senderId = timelineEventEntity.root?.sender ?: ""
         )
-        val result: Value
-        val start = System.currentTimeMillis()
-        result = values.getOrPut(key) {
-            doQueryAndBuildValue(timelineEventEntity)
+        val result = values.getOrPut(key) {
+            timelineEventEntity.computeValue()
         }
-        val end = System.currentTimeMillis()
-        Timber.v("Get value took: ${end - start} millis")
-        return result
-    }
-
-    private fun doQueryAndBuildValue(timelineEventEntity: TimelineEventEntity): Value {
-        return timelineEventEntity.computeValue()
+        timelineEventEntity.apply {
+            this.isUniqueDisplayName = result.isUniqueDisplayName
+            this.senderAvatar = result.senderAvatar
+            this.senderName = result.senderName
+            this.senderMembershipEventId = result.senderMembershipEventId
+        }
     }
 
     private fun RealmList<TimelineEventEntity>.buildQuery(sender: String, isUnlinked: Boolean): RealmQuery<TimelineEventEntity> {
@@ -80,7 +92,6 @@ internal class RoomMembersCache {
     private fun TimelineEventEntity.computeValue(): Value {
         assertIsManaged()
         val result = Value()
-
         val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst() ?: return result
         val stateIndex = root?.stateIndex ?: return result
         val senderId = root?.sender ?: return result

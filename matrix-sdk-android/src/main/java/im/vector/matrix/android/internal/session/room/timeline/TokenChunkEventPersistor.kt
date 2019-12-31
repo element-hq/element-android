@@ -36,7 +36,8 @@ import javax.inject.Inject
 /**
  * Insert Chunk in DB, and eventually merge with existing chunk event
  */
-internal class TokenChunkEventPersistor @Inject constructor(private val monarchy: Monarchy) {
+internal class TokenChunkEventPersistor @Inject constructor(private val monarchy: Monarchy,
+                                                            private val timelineEventSenderVisitor: TimelineEventSenderVisitor) {
 
     /**
      * <pre>
@@ -170,7 +171,7 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
                         for (stateEvent in receivedChunk.stateEvents) {
                             roomEntity.addStateEvent(stateEvent, isUnlinked = currentChunk.isUnlinked())
                         }
-                        currentChunk.updateSenderDataFor(timelineEvents)
+                        timelineEventSenderVisitor.visit(timelineEvents)
                     }
                 }
         return if (receivedChunk.events.isEmpty()) {
@@ -191,11 +192,13 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
         // We always merge the bottom chunk into top chunk, so we are always merging backwards
         Timber.v("Merge ${currentChunk.prevToken} | ${currentChunk.nextToken} with ${otherChunk.prevToken} | ${otherChunk.nextToken}")
         return if (direction == PaginationDirection.BACKWARDS && !otherChunk.isLastForward) {
-            currentChunk.merge(roomEntity.roomId, otherChunk, PaginationDirection.BACKWARDS)
+            val events = currentChunk.merge(roomEntity.roomId, otherChunk, PaginationDirection.BACKWARDS)
+            timelineEventSenderVisitor.visit(events)
             roomEntity.deleteOnCascade(otherChunk)
             currentChunk
         } else {
-            otherChunk.merge(roomEntity.roomId, currentChunk, PaginationDirection.BACKWARDS)
+            val events = otherChunk.merge(roomEntity.roomId, currentChunk, PaginationDirection.BACKWARDS)
+            timelineEventSenderVisitor.visit(events)
             roomEntity.deleteOnCascade(currentChunk)
             otherChunk
         }

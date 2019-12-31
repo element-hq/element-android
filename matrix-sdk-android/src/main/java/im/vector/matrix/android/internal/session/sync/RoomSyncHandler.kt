@@ -48,7 +48,8 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                                    private val roomTagHandler: RoomTagHandler,
                                                    private val roomFullyReadHandler: RoomFullyReadHandler,
                                                    private val cryptoService: DefaultCryptoService,
-                                                   private val roomMemberEventHandler: RoomMemberEventHandler) {
+                                                   private val roomMemberEventHandler: RoomMemberEventHandler,
+                                                   private val timelineEventSenderVisitor: TimelineEventSenderVisitor) {
 
     sealed class HandlingStrategy {
         data class JOINED(val data: Map<String, RoomSync>) : HandlingStrategy()
@@ -209,7 +210,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
             }
             roomMemberEventHandler.handle(realm, roomEntity.roomId, event)
         }
-        chunkEntity.updateSenderDataFor(timelineEvents)
+        timelineEventSenderVisitor.visit(timelineEvents)
         return chunkEntity
     }
 
