@@ -146,7 +146,11 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
         }
 
         // Transaction has not yet started
-        if (it.pendingRequest == null || !it.pendingRequest.isReady) {
+        if (it.pendingRequest?.cancelConclusion != null) {
+            // The request has been declined, we should dismiss
+            dismiss()
+        } else if (it.pendingRequest == null || !it.pendingRequest.isReady) {
+            // We are waiting for other party to reply with ready
             showFragment(VerificationRequestFragment::class, Bundle().apply {
                 putParcelable(MvRx.KEY_ARG, VerificationArgs(it.otherUserMxItem?.id ?: ""))
             })

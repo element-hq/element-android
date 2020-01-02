@@ -137,7 +137,7 @@ abstract class VerificationRequestItem : AbsBaseMessageItem<VerificationRequestI
                         att.otherUserId,
                         att.fromDevide))
             } else if (it == declineButton) {
-                callback?.onTimelineItemAction(RoomDetailAction.DeclineVerificationRequest(att.referenceId))
+                callback?.onTimelineItemAction(RoomDetailAction.DeclineVerificationRequest(att.referenceId, att.otherUserId, att.fromDevide))
             }
         })
 

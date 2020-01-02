@@ -57,6 +57,8 @@ interface SasVerificationService {
 
     fun requestKeyVerificationInDMs(userId: String, roomId: String): PendingVerificationRequest
 
+    fun declineVerificationRequestInDMs(otherUserId: String, otherDeviceId: String, transactionId: String, roomId: String)
+
     fun beginKeyVerificationInDMs(method: String,
                                   transactionId: String,
                                   roomId: String,

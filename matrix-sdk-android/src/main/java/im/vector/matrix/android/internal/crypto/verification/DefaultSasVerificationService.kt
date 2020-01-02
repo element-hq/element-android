@@ -704,6 +704,16 @@ internal class DefaultSasVerificationService @Inject constructor(
         val transport = sasTransportRoomMessageFactory.createTransport(context, credentials.userId, credentials.deviceId
                 ?: "", roomId, null)
 
+        // Cancel existing pending requests?
+        requestsForUser.forEach { existingRequest ->
+            existingRequest.transactionId?.let { tid ->
+                if (!existingRequest.isFinished) {
+                    Timber.d("## SAS, cancelling pending requests to start a new one")
+                    transport.cancelTransaction(tid, existingRequest.otherUserId, "", CancelCode.User)
+                }
+            }
+        }
+
         val localID = LocalEcho.createLocalEchoId()
 
         val verificationRequest = PendingVerificationRequest(
@@ -725,6 +735,17 @@ internal class DefaultSasVerificationService @Inject constructor(
         dispatchRequestAdded(verificationRequest)
 
         return verificationRequest
+    }
+
+    override fun declineVerificationRequestInDMs(otherUserId: String, otherDeviceId: String, transactionId: String, roomId: String) {
+        sasTransportRoomMessageFactory.createTransport(context, credentials.userId, credentials.deviceId
+                ?: "", roomId, null).cancelTransaction(transactionId, otherUserId, otherDeviceId, CancelCode.User)
+
+        getExistingVerificationRequest(otherUserId, transactionId)?.let {
+            updatePendingRequest(it.copy(
+                    cancelConclusion = CancelCode.User
+            ))
+        }
     }
 
     private fun updatePendingRequest(updated: PendingVerificationRequest) {

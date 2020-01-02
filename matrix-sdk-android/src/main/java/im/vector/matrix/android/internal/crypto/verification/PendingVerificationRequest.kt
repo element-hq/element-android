@@ -37,4 +37,6 @@ data class PendingVerificationRequest(
 
     val isReady: Boolean = readyInfo != null
     val isSent: Boolean = transactionId != null
+
+    val isFinished: Boolean = isSuccessful || cancelConclusion != null
 }

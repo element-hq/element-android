@@ -27,7 +27,6 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.MatrixPatterns
-import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.isImageMessage
@@ -185,7 +184,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
             is RoomDetailAction.ExitTrackingUnreadMessagesState  -> stopTrackingUnreadMessages()
             is RoomDetailAction.AcceptVerificationRequest        -> handleAcceptVerification(action)
             is RoomDetailAction.DeclineVerificationRequest       -> handleDeclineVerification(action)
-            is RoomDetailAction.RequestVerification       -> handleRequestVerification(action)
+            is RoomDetailAction.RequestVerification              -> handleRequestVerification(action)
         }
     }
 
@@ -799,18 +798,14 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         session.getSasVerificationService().readyPendingVerificationInDMs(action.otherUserId, room.roomId,
                 action.transactionId)
         _requestLiveData.postValue(LiveEvent(Success(action)))
-//        session.getSasVerificationService().beginKeyVerificationInDMs(
-//                KeyVerificationStart.VERIF_METHOD_SAS,
-//                action.transactionId,
-//                room.roomId,
-//                action.otherUserMxItem,
-//                action.otherdDeviceId,
-//                null
-//        )
     }
 
     private fun handleDeclineVerification(action: RoomDetailAction.DeclineVerificationRequest) {
-        Timber.e("TODO implement $action")
+        session.getSasVerificationService().declineVerificationRequestInDMs(
+                action.otherUserId,
+                action.otherdDeviceId,
+                action.transactionId,
+                room.roomId)
     }
 
     private fun handleRequestVerification(action: RoomDetailAction.RequestVerification) {
