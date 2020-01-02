@@ -398,7 +398,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                             popDraft()
                         }
                         is ParsedCommand.VerifyUser               -> {
-                            session.getSasVerificationService().requestKeyVerificationInDMs(slashCommandResult.userId, room.roomId, null)
+                            session.getSasVerificationService().requestKeyVerificationInDMs(slashCommandResult.userId, room.roomId)
                             _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled())
                             popDraft()
                         }

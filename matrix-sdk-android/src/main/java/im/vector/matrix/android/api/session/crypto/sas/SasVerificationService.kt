@@ -55,7 +55,7 @@ interface SasVerificationService {
      */
     fun beginKeyVerification(method: String, userId: String, deviceID: String): String?
 
-    fun requestKeyVerificationInDMs(userId: String, roomId: String, callback: MatrixCallback<String>?): PendingVerificationRequest
+    fun requestKeyVerificationInDMs(userId: String, roomId: String): PendingVerificationRequest
 
     fun beginKeyVerificationInDMs(method: String,
                                   transactionId: String,

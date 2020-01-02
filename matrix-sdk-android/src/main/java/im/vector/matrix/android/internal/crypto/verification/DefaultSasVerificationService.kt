@@ -16,6 +16,7 @@
 
 package im.vector.matrix.android.internal.crypto.verification
 
+import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import dagger.Lazy
@@ -28,6 +29,7 @@ import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTxState
 import im.vector.matrix.android.api.session.crypto.sas.safeValueOf
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.LocalEcho
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.internal.crypto.DeviceListManager
@@ -37,12 +39,7 @@ import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.rest.*
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
-import im.vector.matrix.android.internal.crypto.tasks.DefaultRequestVerificationDMTask
 import im.vector.matrix.android.internal.session.SessionScope
-import im.vector.matrix.android.internal.session.room.send.SendResponse
-import im.vector.matrix.android.internal.task.TaskConstraints
-import im.vector.matrix.android.internal.task.TaskExecutor
-import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -55,16 +52,15 @@ import kotlin.collections.set
 
 @SessionScope
 internal class DefaultSasVerificationService @Inject constructor(
+        private val context: Context,
         private val credentials: Credentials,
         private val cryptoStore: IMXCryptoStore,
         private val myDeviceInfoHolder: Lazy<MyDeviceInfoHolder>,
         private val deviceListManager: DeviceListManager,
         private val setDeviceVerificationAction: SetDeviceVerificationAction,
-        private val requestVerificationDMTask: DefaultRequestVerificationDMTask,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val sasTransportRoomMessageFactory: SasTransportRoomMessageFactory,
-        private val sasTransportToDeviceFactory: SasTransportToDeviceFactory,
-        private val taskExecutor: TaskExecutor
+        private val sasTransportToDeviceFactory: SasTransportToDeviceFactory
 ) : VerificationTransaction.Listener, SasVerificationService {
 
     private val uiHandler = Handler(Looper.getMainLooper())
@@ -279,8 +275,9 @@ internal class DefaultSasVerificationService @Inject constructor(
         if (startReq?.isValid()?.not() == true) {
             Timber.e("## received invalid verification request")
             if (startReq.transactionID != null) {
-                sasTransportRoomMessageFactory.createTransport(event.roomId
-                        ?: "", cryptoService, null).cancelTransaction(
+                sasTransportRoomMessageFactory.createTransport(context, credentials.userId, credentials.deviceId
+                        ?: "", event.roomId
+                        ?: "", null).cancelTransaction(
                         startReq.transactionID ?: "",
                         otherUserId!!,
                         startReq.fromDevice ?: event.getSenderKey()!!,
@@ -291,11 +288,13 @@ internal class DefaultSasVerificationService @Inject constructor(
         }
 
         handleStart(otherUserId, startReq as VerificationInfoStart) {
-            it.transport = sasTransportRoomMessageFactory.createTransport(event.roomId
-                    ?: "", cryptoService, it)
+            it.transport = sasTransportRoomMessageFactory.createTransport(context, credentials.userId, credentials.deviceId
+                    ?: "", event.roomId
+                    ?: "", it)
         }?.let {
-            sasTransportRoomMessageFactory.createTransport(event.roomId
-                    ?: "", cryptoService, null).cancelTransaction(
+            sasTransportRoomMessageFactory.createTransport(context, credentials.userId, credentials.deviceId
+                    ?: "", event.roomId
+                    ?: "", null).cancelTransaction(
                     startReq.transactionID ?: "",
                     otherUserId!!,
                     startReq.fromDevice ?: event.getSenderKey()!!,
@@ -693,57 +692,37 @@ internal class DefaultSasVerificationService @Inject constructor(
         }
     }
 
-    override fun requestKeyVerificationInDMs(userId: String, roomId: String, callback: MatrixCallback<String>?)
+    override fun requestKeyVerificationInDMs(userId: String, roomId: String)
             : PendingVerificationRequest {
         Timber.i("## SAS Requesting verification to user: $userId in room $roomId")
+
         val requestsForUser = pendingRequests[userId]
                 ?: ArrayList<PendingVerificationRequest>().also {
                     pendingRequests[userId] = it
                 }
 
-        val params = requestVerificationDMTask.createParamsAndLocalEcho(
-                roomId = roomId,
-                from = credentials.deviceId ?: "",
-                methods = listOf(KeyVerificationStart.VERIF_METHOD_SAS),
-                to = userId,
-                cryptoService = cryptoService
-        )
+        val transport = sasTransportRoomMessageFactory.createTransport(context, credentials.userId, credentials.deviceId
+                ?: "", roomId, null)
+
+        val localID = LocalEcho.createLocalEchoId()
+
         val verificationRequest = PendingVerificationRequest(
                 ageLocalTs = System.currentTimeMillis(),
                 isIncoming = false,
-                localID = params.event.eventId ?: "",
+                localID = localID,
                 otherUserId = userId
         )
+
+        transport.sendVerificationRequest(localID, userId, roomId) { syncedId, info ->
+            // We need to update with the syncedID
+            updatePendingRequest(verificationRequest.copy(
+                    transactionId = syncedId,
+                    requestInfo = info
+            ))
+        }
+
         requestsForUser.add(verificationRequest)
         dispatchRequestAdded(verificationRequest)
-
-        requestVerificationDMTask.configureWith(
-                requestVerificationDMTask.createParamsAndLocalEcho(
-                        roomId = roomId,
-                        from = credentials.deviceId ?: "",
-                        methods = listOf(KeyVerificationStart.VERIF_METHOD_SAS),
-                        to = userId,
-                        cryptoService = cryptoService
-                )
-        ) {
-            this.callback = object : MatrixCallback<SendResponse> {
-                override fun onSuccess(data: SendResponse) {
-                    params.event.getClearContent().toModel<MessageVerificationRequestContent>()?.let {
-                        updatePendingRequest(verificationRequest.copy(
-                                transactionId = data.eventId,
-                                requestInfo = it
-                        ))
-                    }
-                    callback?.onSuccess(data.eventId)
-                }
-
-                override fun onFailure(failure: Throwable) {
-                    callback?.onFailure(failure)
-                }
-            }
-            constraints = TaskConstraints(true)
-            retryCount = 3
-        }.executeBy(taskExecutor)
 
         return verificationRequest
     }
@@ -776,7 +755,8 @@ internal class DefaultSasVerificationService @Inject constructor(
                     transactionId,
                     otherUserId,
                     otherDeviceId)
-            tx.transport = sasTransportRoomMessageFactory.createTransport(roomId, cryptoService, tx)
+            tx.transport = sasTransportRoomMessageFactory.createTransport(context, credentials.userId, credentials.deviceId
+                    ?: "", roomId, tx)
             addTransaction(tx)
 
             tx.start()
@@ -790,7 +770,8 @@ internal class DefaultSasVerificationService @Inject constructor(
         // Let's find the related request
         getExistingVerificationRequest(otherUserId)?.find { it.transactionId == transactionId }?.let {
             // we need to send a ready event, with matching methods
-            val transport = sasTransportRoomMessageFactory.createTransport(roomId, cryptoService, null)
+            val transport = sasTransportRoomMessageFactory.createTransport(context, credentials.userId, credentials.deviceId
+                    ?: "", roomId, null)
             val methods = it.requestInfo?.methods?.intersect(listOf(KeyVerificationStart.VERIF_METHOD_SAS))?.toList()
             if (methods.isNullOrEmpty()) {
                 Timber.i("Cannot ready this request, no common methods found txId:$transactionId")
@@ -831,28 +812,4 @@ internal class DefaultSasVerificationService @Inject constructor(
             this.removeTransaction(tx.otherUserId, tx.transactionId)
         }
     }
-//
-//    fun cancelTransaction(transactionId: String, userId: String, userDevice: String, code: CancelCode, roomId: String? = null) {
-//        val cancelMessage = KeyVerificationCancel.create(transactionId, code)
-//        val contentMap = MXUsersDevicesMap<Any>()
-//        contentMap.setObject(userId, userDevice, cancelMessage)
-//
-//        if (roomId != null) {
-//
-//        } else {
-//            sendToDeviceTask
-//                    .configureWith(SendToDeviceTask.Params(EventType.KEY_VERIFICATION_CANCEL, contentMap, transactionId)) {
-//                        this.callback = object : MatrixCallback<Unit> {
-//                            override fun onSuccess(data: Unit) {
-//                                Timber.v("## SAS verification [$transactionId] canceled for reason ${code.value}")
-//                            }
-//
-//                            override fun onFailure(failure: Throwable) {
-//                                Timber.e(failure, "## SAS verification [$transactionId] failed to cancel.")
-//                            }
-//                        }
-//                    }
-//                    .executeBy(taskExecutor)
-//        }
-//    }
 }

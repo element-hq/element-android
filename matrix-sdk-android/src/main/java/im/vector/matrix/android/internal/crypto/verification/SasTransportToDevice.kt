@@ -19,6 +19,7 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.crypto.sas.CancelCode
 import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTxState
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.rest.*
 import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
@@ -32,6 +33,10 @@ internal class SasTransportToDevice(
         private var sendToDeviceTask: SendToDeviceTask,
         private var taskExecutor: TaskExecutor
 ) : SasTransport {
+
+    override fun sendVerificationRequest(localID: String, otherUserId: String, roomId: String, callback: (String?, MessageVerificationRequestContent?) -> Unit) {
+        // TODO "not implemented"
+    }
 
     override fun sendToOther(type: String,
                              verificationInfo: VerificationInfo,

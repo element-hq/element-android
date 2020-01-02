@@ -109,7 +109,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
             is VerificationAction.RequestVerificationByDM -> {
 //                session
                 setState {
-                    copy(pendingRequest = session.getSasVerificationService().requestKeyVerificationInDMs(otherUserId, roomId, null))
+                    copy(pendingRequest = session.getSasVerificationService().requestKeyVerificationInDMs(otherUserId, roomId))
                 }
             }
             is VerificationAction.StartSASVerification    -> {

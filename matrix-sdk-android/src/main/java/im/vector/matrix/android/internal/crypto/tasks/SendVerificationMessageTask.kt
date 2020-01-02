@@ -15,64 +15,29 @@
  */
 package im.vector.matrix.android.internal.crypto.tasks
 
-import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.crypto.CryptoService
-import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.api.session.events.model.LocalEcho
-import im.vector.matrix.android.api.session.events.model.UnsignedData
 import im.vector.matrix.android.api.session.room.send.SendState
-import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
-import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
 import im.vector.matrix.android.internal.session.room.send.LocalEchoUpdater
 import im.vector.matrix.android.internal.session.room.send.SendResponse
 import im.vector.matrix.android.internal.task.Task
 import javax.inject.Inject
 
-internal interface SendVerificationMessageTask : Task<SendVerificationMessageTask.Params, SendResponse> {
+internal interface SendVerificationMessageTask : Task<SendVerificationMessageTask.Params, String> {
     data class Params(
-            val type: String,
             val event: Event,
             val cryptoService: CryptoService?
     )
-
-    fun createParamsAndLocalEcho(type: String,
-                                 roomId: String,
-                                 content: Content,
-                                 cryptoService: CryptoService?) : Params
 }
 
 internal class DefaultSendVerificationMessageTask @Inject constructor(
         private val localEchoUpdater: LocalEchoUpdater,
-        private val localEchoEventFactory: LocalEchoEventFactory,
         private val encryptEventTask: DefaultEncryptEventTask,
-        private val monarchy: Monarchy,
-        @UserId private val userId: String,
         private val roomAPI: RoomAPI) : SendVerificationMessageTask {
 
-    override fun createParamsAndLocalEcho(type: String, roomId: String, content: Content, cryptoService: CryptoService?): SendVerificationMessageTask.Params {
-        val localID = LocalEcho.createLocalEchoId()
-        val event = Event(
-                roomId = roomId,
-                originServerTs = System.currentTimeMillis(),
-                senderId = userId,
-                eventId = localID,
-                type = type,
-                content = content,
-                unsignedData = UnsignedData(age = null, transactionId = localID)
-        ).also {
-            localEchoEventFactory.saveLocalEcho(monarchy, it)
-        }
-        return SendVerificationMessageTask.Params(
-                type,
-                event,
-                cryptoService
-        )
-    }
-
-    override suspend fun execute(params: SendVerificationMessageTask.Params): SendResponse {
+    override suspend fun execute(params: SendVerificationMessageTask.Params): String {
         val event = handleEncryption(params)
         val localID = event.eventId!!
 
@@ -87,7 +52,7 @@ internal class DefaultSendVerificationMessageTask @Inject constructor(
                 )
             }
             localEchoUpdater.updateSendState(localID, SendState.SENT)
-            return executeRequest
+            return executeRequest.eventId
         } catch (e: Throwable) {
             localEchoUpdater.updateSendState(localID, SendState.UNDELIVERED)
             throw e
