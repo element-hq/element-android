@@ -114,10 +114,10 @@ internal class SasTransportRoomMessage(
         GlobalScope.launch(Dispatchers.Main) {
             workLiveData.observeForever(observer)
         }
-
     }
 
-    override fun sendVerificationRequest(localID: String, otherUserId: String, roomId: String, callback: (String?, MessageVerificationRequestContent?) -> Unit) {
+    override fun sendVerificationRequest(localID: String, otherUserId: String, roomId: String,
+                                         callback: (String?, MessageVerificationRequestContent?) -> Unit) {
         val info = MessageVerificationRequestContent(
                 body = context.getString(R.string.key_verification_request_fallback_message, userId),
                 fromDevice = userDevice,
