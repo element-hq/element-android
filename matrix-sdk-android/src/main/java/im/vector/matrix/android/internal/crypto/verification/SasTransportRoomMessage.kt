@@ -177,7 +177,7 @@ internal class SasTransportRoomMessage(
         }
     }
 
-    override fun cancelTransaction(transactionId: String, userId: String, userDevice: String, code: CancelCode) {
+    override fun cancelTransaction(transactionId: String, otherUserId: String, otherUserDevice: String, code: CancelCode) {
         Timber.d("## SAS canceling transaction $transactionId for reason $code")
         val event = createEventAndLocalEcho(
                 type = EventType.KEY_VERIFICATION_CANCEL,
@@ -185,7 +185,7 @@ internal class SasTransportRoomMessage(
                 content = MessageVerificationCancelContent.create(transactionId, code).toContent()
         )
         val workerParams = WorkerParamsFactory.toData(SendVerificationMessageWorker.Params(
-                userId = userId,
+                userId = this.userId,
                 event = event
         ))
         enqueueSendWork(workerParams)

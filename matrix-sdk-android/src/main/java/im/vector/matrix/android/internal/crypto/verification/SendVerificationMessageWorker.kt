@@ -12,6 +12,7 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.internal.crypto.tasks.SendVerificationMessageTask
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import im.vector.matrix.android.internal.worker.getSessionComponent
+import timber.log.Timber
 import javax.inject.Inject
 
 internal class SendVerificationMessageWorker constructor(context: Context, params: WorkerParameters)
@@ -30,10 +31,14 @@ internal class SendVerificationMessageWorker constructor(context: Context, param
     lateinit var cryptoService: CryptoService
 
     override suspend fun doWork(): Result {
+        val errorOutputData = Data.Builder().putBoolean("failed", true).build()
         val params = WorkerParamsFactory.fromData<Params>(inputData)
-                ?: return Result.success(Data.Builder().putBoolean("failed", true).build())
+                ?: return Result.success(errorOutputData)
 
-        val sessionComponent = getSessionComponent(params.userId) ?: return Result.success()
+        val sessionComponent = getSessionComponent(params.userId) ?: return Result.success(errorOutputData).also {
+            // TODO, can this happen? should I update local echo?
+            Timber.e("Unknown Session, cannot send message, userId:${params.userId}")
+        }
         sessionComponent.inject(this)
         val localId = params.event.eventId ?: ""
         return try {
@@ -49,7 +54,7 @@ internal class SendVerificationMessageWorker constructor(context: Context, param
             if (exception.shouldBeRetried()) {
                 Result.retry()
             } else {
-                Result.success(Data.Builder().putBoolean("failed", true).build())
+                Result.success(errorOutputData)
             }
         }
     }
