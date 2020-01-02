@@ -38,7 +38,6 @@ import im.vector.riotx.core.intent.analyseIntent
 import im.vector.riotx.core.intent.getFilenameFromUri
 import im.vector.riotx.core.platform.SimpleTextWatcher
 import im.vector.riotx.core.preference.VectorPreference
-import im.vector.riotx.core.preference.VectorPreferenceDivider
 import im.vector.riotx.core.utils.*
 import im.vector.riotx.features.crypto.keys.KeysExporter
 import im.vector.riotx.features.crypto.keys.KeysImporter
@@ -61,20 +60,11 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
     private val mCryptographyCategory by lazy {
         findPreference<PreferenceCategory>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_PREFERENCE_KEY)!!
     }
-    private val mCryptographyCategoryDivider by lazy {
-        findPreference<VectorPreferenceDivider>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_DIVIDER_PREFERENCE_KEY)!!
-    }
     // cryptography manage
     private val mCryptographyManageCategory by lazy {
         findPreference<PreferenceCategory>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_MANAGE_PREFERENCE_KEY)!!
     }
-    private val mCryptographyManageCategoryDivider by lazy {
-        findPreference<VectorPreferenceDivider>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_MANAGE_DIVIDER_PREFERENCE_KEY)!!
-    }
     // displayed pushers
-    private val mPushersSettingsDivider by lazy {
-        findPreference<VectorPreferenceDivider>(VectorPreferences.SETTINGS_NOTIFICATIONS_TARGET_DIVIDER_PREFERENCE_KEY)!!
-    }
     private val mPushersSettingsCategory by lazy {
         findPreference<PreferenceCategory>(VectorPreferences.SETTINGS_NOTIFICATIONS_TARGETS_PREFERENCE_KEY)!!
     }
@@ -128,16 +118,6 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
 
             it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 vectorPreferences.setUseAnalytics(newValue as Boolean)
-                true
-            }
-        }
-
-        // Rageshake Management
-        findPreference<SwitchPreference>(VectorPreferences.SETTINGS_USE_RAGE_SHAKE_KEY)!!.let {
-            it.isChecked = vectorPreferences.useRageshake()
-
-            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                vectorPreferences.setUseRageshake(newValue as Boolean)
                 true
             }
         }
@@ -333,11 +313,9 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
     private fun removeCryptographyPreference() {
         preferenceScreen.let {
             it.removePreference(mCryptographyCategory)
-            it.removePreference(mCryptographyCategoryDivider)
 
             // Also remove keys management section
             it.removePreference(mCryptographyManageCategory)
-            it.removePreference(mCryptographyManageCategoryDivider)
         }
     }
 

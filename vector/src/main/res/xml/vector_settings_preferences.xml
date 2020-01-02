@@ -99,8 +99,6 @@
 
     </im.vector.riotx.core.preference.VectorPreferenceCategory>
 
-    <im.vector.riotx.core.preference.VectorPreferenceDivider app:isPreferenceVisible="@bool/false_not_implemented" />
-
     <im.vector.riotx.core.preference.VectorPreferenceCategory
         android:key="SETTINGS_HOME_DISPLAY_KEY"
         android:title="@string/settings_home_display"
@@ -117,8 +115,6 @@
             android:title="@string/settings_pin_unread_messages" />
 
     </im.vector.riotx.core.preference.VectorPreferenceCategory>
-
-    <im.vector.riotx.core.preference.VectorPreferenceDivider app:isPreferenceVisible="@bool/false_not_implemented" />
 
     <im.vector.riotx.core.preference.VectorPreferenceCategory
         android:title="@string/settings_media"

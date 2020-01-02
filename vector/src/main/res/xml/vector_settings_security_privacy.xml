@@ -27,8 +27,6 @@
 
     </im.vector.riotx.core.preference.VectorPreferenceCategory>
 
-    <im.vector.riotx.core.preference.VectorPreferenceDivider android:key="SETTINGS_CRYPTOGRAPHY_DIVIDER_PREFERENCE_KEY" />
-
     <!-- devices list entry point -->
     <im.vector.riotx.core.preference.VectorPreferenceCategory
         android:key="SETTINGS_DEVICES_LIST_PREFERENCE_KEY"
@@ -40,8 +38,6 @@
             app:fragment="im.vector.riotx.features.settings.devices.VectorSettingsDevicesFragment" />
 
     </im.vector.riotx.core.preference.VectorPreferenceCategory>
-
-    <im.vector.riotx.core.preference.VectorPreferenceDivider android:key="SETTINGS_DEVICES_DIVIDER_PREFERENCE_KEY" />
 
     <im.vector.riotx.core.preference.VectorPreferenceCategory
         android:key="SETTINGS_CRYPTOGRAPHY_MANAGE_PREFERENCE_KEY"
@@ -63,10 +59,6 @@
             android:title="@string/encryption_import_e2e_room_keys" />
 
     </im.vector.riotx.core.preference.VectorPreferenceCategory>
-
-    <im.vector.riotx.core.preference.VectorPreferenceDivider
-        android:key="SETTINGS_CRYPTOGRAPHY_MANAGE_DIVIDER_PREFERENCE_KEY"
-        app:isPreferenceVisible="@bool/false_not_implemented" />
 
     <im.vector.riotx.core.preference.VectorPreferenceCategory
         android:key="SETTINGS_ANALYTICS_PREFERENCE_KEY"

@@ -744,17 +744,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     }
 
     /**
-     * Update the rage shake  status.
-     *
-     * @param isEnabled true to enable the rage shake
-     */
-    fun setUseRageshake(isEnabled: Boolean) {
-        defaultPrefs.edit {
-            putBoolean(SETTINGS_USE_RAGE_SHAKE_KEY, isEnabled)
-        }
-    }
-
-    /**
      * Tells if all the events must be displayed ie even the redacted events.
      *
      * @return true to display all the events even the redacted ones.

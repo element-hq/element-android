@@ -67,12 +67,8 @@
 
     </im.vector.riotx.core.preference.VectorPreferenceCategory>
 
-    <im.vector.riotx.core.preference.VectorPreferenceDivider android:key="SETTINGS_BACKGROUND_SYNC_DIVIDER_PREFERENCE_KEY" />
-
     <im.vector.riotx.core.preference.VectorPreferenceCategory
         android:key="SETTINGS_NOTIFICATIONS_TARGETS_PREFERENCE_KEY"
-        android:title="@string/settings_notifications_targets" />
-
-    <im.vector.riotx.core.preference.VectorPreferenceDivider android:key="SETTINGS_NOTIFICATIONS_TARGET_DIVIDER_PREFERENCE_KEY" /-->
+        android:title="@string/settings_notifications_targets" /-->
 
 </androidx.preference.PreferenceScreen>

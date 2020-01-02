@@ -45,8 +45,6 @@
 
     </im.vector.riotx.core.preference.VectorPreferenceCategory>
 
-    <im.vector.riotx.core.preference.VectorPreferenceDivider />
-
     <im.vector.riotx.core.preference.VectorPreferenceCategory
         android:key="SETTINGS_CONTACT_PREFERENCE_KEYS"
         android:title="@string/settings_contact"
@@ -62,8 +60,6 @@
             android:title="@string/settings_contacts_phonebook_country" />
 
     </im.vector.riotx.core.preference.VectorPreferenceCategory>
-
-    <im.vector.riotx.core.preference.VectorPreferenceDivider />
 
     <im.vector.riotx.core.preference.VectorPreferenceCategory android:title="@string/settings_advanced">
 
@@ -92,8 +88,6 @@
             android:title="@string/settings_clear_cache" />
 
     </im.vector.riotx.core.preference.VectorPreferenceCategory>
-
-    <im.vector.riotx.core.preference.VectorPreferenceDivider />
 
     <im.vector.riotx.core.preference.VectorPreferenceCategory android:title="@string/action_sign_out">
 
