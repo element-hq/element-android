@@ -72,8 +72,11 @@ class DevicesController @Inject constructor(private val errorFormatter: ErrorFor
                             deviceItem {
                                 id("device$idx")
                                 deviceInfo(deviceInfo)
-                                bold(isCurrentDevice)
-                                itemClickAction { callback?.onDeviceClicked(deviceInfo, isCurrentDevice) }
+                                currentDevice(isCurrentDevice)
+                                buttonsVisible(deviceInfo.deviceId == state.currentExpandedDeviceId)
+                                itemClickAction { callback?.onDeviceClicked(deviceInfo) }
+                                renameClickAction { callback?.onRenameDevice(deviceInfo) }
+                                deleteClickAction { callback?.onDeleteDevice(deviceInfo) }
                             }
                         }
         }
@@ -81,8 +84,8 @@ class DevicesController @Inject constructor(private val errorFormatter: ErrorFor
 
     interface Callback {
         fun retry()
-        fun onDeviceClicked(deviceInfo: DeviceInfo, isCurrentDevice: Boolean)
+        fun onDeviceClicked(deviceInfo: DeviceInfo)
+        fun onRenameDevice(deviceInfo: DeviceInfo)
+        fun onDeleteDevice(deviceInfo: DeviceInfo)
     }
 }
-
-

@@ -21,7 +21,6 @@ import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
 import android.widget.EditText
-import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Async
@@ -36,12 +35,8 @@ import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.utils.toast
-import im.vector.riotx.features.settings.VectorSettingsSecurityPrivacyFragment
 import kotlinx.android.synthetic.main.fragment_generic_recycler.*
 import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.util.*
 import javax.inject.Inject
 
 /**
@@ -97,63 +92,22 @@ class VectorSettingsDevicesFragment @Inject constructor(
     }
 
     /**
-     * Display a dialog containing the device ID, the device name and the "last seen" information.<>
+     * Display a dialog containing the device ID, the device name and the "last seen" information.
      * This dialog allow to delete the corresponding device (see [.displayDeviceDeletionDialog])
      *
      * @param deviceInfo the device information
      * @param isCurrentDevice true if this is the current device
      */
-    override fun onDeviceClicked(deviceInfo: DeviceInfo, isCurrentDevice: Boolean) {
-        val builder = AlertDialog.Builder(requireActivity())
-        val inflater = requireActivity().layoutInflater
-        val layout = inflater.inflate(R.layout.dialog_device_details, null)
-        var textView = layout.findViewById<TextView>(R.id.device_id)
+    override fun onDeviceClicked(deviceInfo: DeviceInfo) {
+        devicesViewModel.handle(DevicesAction.ToggleDevice(deviceInfo))
+    }
 
-        textView.text = deviceInfo.deviceId
+    override fun onDeleteDevice(deviceInfo: DeviceInfo) {
+        devicesViewModel.handle(DevicesAction.Delete(deviceInfo))
+    }
 
-        // device name
-        textView = layout.findViewById(R.id.device_name)
-        val displayName = if (deviceInfo.displayName.isNullOrEmpty()) VectorSettingsSecurityPrivacyFragment.LABEL_UNAVAILABLE_DATA else deviceInfo.displayName
-        textView.text = displayName
-
-        // last seen info
-        textView = layout.findViewById(R.id.device_last_seen)
-
-        val lastSeenIp = deviceInfo.lastSeenIp?.takeIf { ip -> ip.isNotBlank() } ?: "-"
-
-        val lastSeenTime = deviceInfo.lastSeenTs?.let { ts ->
-            val dateFormatTime = SimpleDateFormat("HH:mm:ss", Locale.ROOT)
-            val date = Date(ts)
-
-            val time = dateFormatTime.format(date)
-            val dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault())
-
-            dateFormat.format(date) + ", " + time
-        } ?: "-"
-
-        val lastSeenInfo = getString(R.string.devices_details_last_seen_format, lastSeenIp, lastSeenTime)
-        textView.text = lastSeenInfo
-
-        // title & icon
-        builder.setTitle(R.string.devices_details_dialog_title)
-                .setIcon(android.R.drawable.ic_dialog_info)
-                .setView(layout)
-                .setPositiveButton(R.string.rename) { _, _ -> displayDeviceRenameDialog(deviceInfo) }
-
-        // disable the deletion for our own device
-        if (!isCurrentDevice) {
-            builder.setNegativeButton(R.string.delete) { _, _ -> devicesViewModel.handle(DevicesAction.Delete(deviceInfo)) }
-        }
-
-        builder.setNeutralButton(R.string.cancel, null)
-                .setOnKeyListener(DialogInterface.OnKeyListener { dialog, keyCode, event ->
-                    if (event.action == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
-                        dialog.cancel()
-                        return@OnKeyListener true
-                    }
-                    false
-                })
-                .show()
+    override fun onRenameDevice(deviceInfo: DeviceInfo) {
+        displayDeviceRenameDialog(deviceInfo)
     }
 
     override fun retry() {

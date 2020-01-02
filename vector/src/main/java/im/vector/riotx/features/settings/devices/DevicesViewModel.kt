@@ -36,6 +36,7 @@ import timber.log.Timber
 data class DevicesViewState(
         val myDeviceId: String = "",
         val devices: Async<List<DeviceInfo>> = Uninitialized,
+        val currentExpandedDeviceId: String? = null,
         val request: Async<Unit> = Uninitialized
 ) : MvRxState
 
@@ -44,6 +45,7 @@ sealed class DevicesAction : VectorViewModelAction {
     data class Delete(val deviceInfo: DeviceInfo) : DevicesAction()
     data class Password(val password: String) : DevicesAction()
     data class Rename(val deviceInfo: DeviceInfo, val newName: String) : DevicesAction()
+    data class ToggleDevice(val deviceInfo: DeviceInfo) : DevicesAction()
 }
 
 class DevicesViewModel @AssistedInject constructor(@Assisted initialState: DevicesViewState,
@@ -114,10 +116,21 @@ class DevicesViewModel @AssistedInject constructor(@Assisted initialState: Devic
 
     override fun handle(action: DevicesAction) {
         return when (action) {
-            is DevicesAction.Retry    -> refreshDevicesList()
-            is DevicesAction.Delete   -> handleDelete(action)
-            is DevicesAction.Password -> handlePassword(action)
-            is DevicesAction.Rename   -> handleRename(action)
+            is DevicesAction.Retry        -> refreshDevicesList()
+            is DevicesAction.Delete       -> handleDelete(action)
+            is DevicesAction.Password     -> handlePassword(action)
+            is DevicesAction.Rename       -> handleRename(action)
+            is DevicesAction.ToggleDevice -> handleToggleDevice(action)
+        }
+    }
+
+    private fun handleToggleDevice(action: DevicesAction.ToggleDevice) {
+        withState {
+            setState {
+                copy(
+                        currentExpandedDeviceId = if (it.currentExpandedDeviceId == action.deviceInfo.deviceId) null else action.deviceInfo.deviceId
+                )
+            }
         }
     }
 
