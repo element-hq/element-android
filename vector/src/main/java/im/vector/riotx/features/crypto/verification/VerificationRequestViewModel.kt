@@ -44,18 +44,6 @@ class VerificationRequestViewModel @AssistedInject constructor(
     }
 
     init {
-        withState {
-            val pr = session.getSasVerificationService()
-                    .getExistingVerificationRequest(it.matrixItem.id)
-                    ?.firstOrNull()
-            setState {
-                copy(
-                        started = Success(false).takeIf { pr == null }
-                                ?: Success(true).takeIf { pr?.isReady == true }
-                                ?: Loading<Boolean>()
-                )
-            }
-        }
         session.getSasVerificationService().addListener(this)
     }
 
@@ -71,11 +59,18 @@ class VerificationRequestViewModel @AssistedInject constructor(
         }
 
         override fun initialState(viewModelContext: ViewModelContext): VerificationRequestViewState? {
-            val otherUserId = viewModelContext.args<VerificationBottomSheet.VerificationArgs>().otherUserId
+            val args = viewModelContext.args<VerificationBottomSheet.VerificationArgs>()
             val session = (viewModelContext.activity as HasScreenInjector).injector().activeSessionHolder().getActiveSession()
 
-            return session.getUser(otherUserId)?.let {
-                VerificationRequestViewState(matrixItem = it.toMatrixItem())
+            val pr = session.getSasVerificationService()
+                    .getExistingVerificationRequest(args.otherUserId, args.verificationId)
+            return session.getUser(args.otherUserId)?.let {
+                VerificationRequestViewState(
+                        started = Success(false).takeIf { pr == null }
+                                ?: Success(true).takeIf { pr?.isReady == true }
+                                ?: Loading(),
+                        matrixItem = it.toMatrixItem()
+                )
             }
         }
     }

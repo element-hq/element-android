@@ -124,7 +124,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
                 SasVerificationTxState.ShortCodeAccepted,
                 SasVerificationTxState.SendingMac,
                 SasVerificationTxState.MacSent,
-                SasVerificationTxState.Verifying -> {
+                SasVerificationTxState.Verifying   -> {
                     showFragment(SASVerificationCodeFragment::class, Bundle().apply {
                         putParcelable(MvRx.KEY_ARG, VerificationArgs(
                                 it.otherUserMxItem?.id ?: "",
@@ -152,7 +152,10 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
         } else if (it.pendingRequest == null || !it.pendingRequest.isReady) {
             // We are waiting for other party to reply with ready
             showFragment(VerificationRequestFragment::class, Bundle().apply {
-                putParcelable(MvRx.KEY_ARG, VerificationArgs(it.otherUserMxItem?.id ?: ""))
+                putParcelable(MvRx.KEY_ARG, VerificationArgs(
+                        it.otherUserMxItem?.id ?: "",
+                        it.pendingRequest?.transactionId,
+                        it.roomId))
             })
         } else if (it.pendingRequest.isReady) {
             showFragment(VerificationChooseMethodFragment::class, Bundle().apply {

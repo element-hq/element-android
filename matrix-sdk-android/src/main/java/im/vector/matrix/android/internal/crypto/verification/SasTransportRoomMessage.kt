@@ -34,7 +34,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.*
-import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -47,8 +46,6 @@ internal class SasTransportRoomMessage(
         private val localEchoEventFactory: LocalEchoEventFactory,
         private val tx: SASVerificationTransaction?
 ) : SasTransport {
-
-    private val listenerExecutor = Executors.newSingleThreadExecutor()
 
     override fun sendToOther(type: String,
                              verificationInfo: VerificationInfo,

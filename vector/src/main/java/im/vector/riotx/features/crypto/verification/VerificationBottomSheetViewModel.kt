@@ -84,12 +84,11 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
 
             val userItem = session.getUser(args.otherUserId)
 
-            val sasTx = state.pendingRequest?.transactionId?.let {
+            val pr = session.getSasVerificationService().getExistingVerificationRequest(args.otherUserId, args.verificationId)
+
+            val sasTx = pr?.transactionId?.let {
                 session.getSasVerificationService().getExistingTransaction(args.otherUserId, it)
             }
-
-            val pr = session.getSasVerificationService().getExistingVerificationRequest(args.otherUserId)
-                    ?.firstOrNull { it.transactionId == args.verificationId }
 
             return fragment.verificationViewModelFactory.create(VerificationBottomSheetViewState(
                     otherUserMxItem = userItem?.toMatrixItem(),
