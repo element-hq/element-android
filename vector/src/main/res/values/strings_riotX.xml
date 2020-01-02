@@ -5,4 +5,8 @@
 
     <string name="notification_initial_sync">Initial Sync…</string>
 
+
+
+    <string name="settings_show_devices_list">See all my devices</string>
+
 </resources>
