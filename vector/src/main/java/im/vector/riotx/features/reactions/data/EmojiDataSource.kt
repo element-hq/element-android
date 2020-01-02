@@ -34,6 +34,8 @@ class EmojiDataSource @Inject constructor(
             }
             ?: EmojiData(emptyList(), emptyMap(), emptyMap())
 
+    private val quickReactions = mutableListOf<EmojiItem>()
+
     fun filterWith(query: String): List<EmojiItem> {
         val words = query.split("\\s".toRegex())
 
@@ -56,15 +58,24 @@ class EmojiDataSource @Inject constructor(
     }
 
     fun getQuickReactions(): List<EmojiItem> {
-        return listOf(
-                "+1", // 👍
-                "-1", // 👎
-                "grinning", // 😄
-                "tada", // 🎉
-                "confused", // 😕
-                "heart", // ❤️
-                "rocket", // 🚀
-                "eyes" // 👀
-        ).mapNotNull { rawData.emojis[it] }
+        if (quickReactions.isEmpty()) {
+            listOf(
+                    "+1", // 👍
+                    "-1", // 👎
+                    "grinning", // 😄
+                    "tada", // 🎉
+                    "confused", // 😕
+                    "heart", // ❤️
+                    "rocket", // 🚀
+                    "eyes" // 👀
+            )
+                    .mapNotNullTo(quickReactions) { rawData.emojis[it] }
+        }
+
+        return quickReactions
+    }
+
+    companion object {
+        val quickEmojis = listOf("👍", "👎", "😄", "🎉", "😕", "❤️", "🚀", "👀")
     }
 }
