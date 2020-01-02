@@ -61,9 +61,6 @@ class DevicesController @Inject constructor(private val errorFormatter: ErrorFor
                     listener { callback?.retry() }
                 }
             is Success       ->
-                // Build the devices portion of the settings.
-                // Each row correspond to a device ID and its corresponding device name. Clicking on the row
-                // display a dialog containing: the device ID, the device name and the "last seen" information.
                 devices()
                         // sort before display: most recent first
                         .sortByLastSeen()

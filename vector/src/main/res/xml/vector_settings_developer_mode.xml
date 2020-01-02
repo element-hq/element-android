@@ -10,7 +10,7 @@
             android:key="SETTINGS_USE_RAGE_SHAKE_KEY"
             android:title="@string/send_bug_report_rage_shake" />
 
-        <SeekBarPreference
+        <androidx.preference.SeekBarPreference
             android:defaultValue="13"
             android:dependency="SETTINGS_USE_RAGE_SHAKE_KEY"
             android:key="SETTINGS_RAGE_SHAKE_DETECTION_THRESHOLD_KEY"

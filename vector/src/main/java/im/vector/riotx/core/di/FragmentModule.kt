@@ -227,7 +227,7 @@ interface FragmentModule {
     @Binds
     @IntoMap
     @FragmentKey(VectorSettingsIgnoredUsersFragment::class)
-    fun  bindVectorSettingsIgnoredUsersFragment(fragment: VectorSettingsIgnoredUsersFragment): Fragment
+    fun bindVectorSettingsIgnoredUsersFragment(fragment: VectorSettingsIgnoredUsersFragment): Fragment
 
     @Binds
     @IntoMap

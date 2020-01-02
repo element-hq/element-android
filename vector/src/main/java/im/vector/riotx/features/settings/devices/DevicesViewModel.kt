@@ -80,8 +80,8 @@ class DevicesViewModel @AssistedInject constructor(@Assisted initialState: Devic
 
     /**
      * Force the refresh of the devices list.
-     * The devices list is the list of the devices where the user as logged in.
-     * It can be any mobile device, as any browser.
+     * The devices list is the list of the devices where the user is logged in.
+     * It can be any mobile devices, and any browsers.
      */
     private fun refreshDevicesList() {
         if (session.isCryptoEnabled() && !session.sessionParams.credentials.deviceId.isNullOrEmpty()) {

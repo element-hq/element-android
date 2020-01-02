@@ -91,13 +91,6 @@ class VectorSettingsDevicesFragment @Inject constructor(
                 .show()
     }
 
-    /**
-     * Display a dialog containing the device ID, the device name and the "last seen" information.
-     * This dialog allow to delete the corresponding device (see [.displayDeviceDeletionDialog])
-     *
-     * @param deviceInfo the device information
-     * @param isCurrentDevice true if this is the current device
-     */
     override fun onDeviceClicked(deviceInfo: DeviceInfo) {
         devicesViewModel.handle(DevicesAction.ToggleDevice(deviceInfo))
     }
@@ -117,14 +110,14 @@ class VectorSettingsDevicesFragment @Inject constructor(
     /**
      * Display an alert dialog to rename a device
      *
-     * @param aDeviceInfoToRename device info
+     * @param deviceInfo device info
      */
-    private fun displayDeviceRenameDialog(aDeviceInfoToRename: DeviceInfo) {
+    private fun displayDeviceRenameDialog(deviceInfo: DeviceInfo) {
         val inflater = requireActivity().layoutInflater
         val layout = inflater.inflate(R.layout.dialog_base_edit_text, null)
 
         val input = layout.findViewById<EditText>(R.id.edit_text)
-        input.setText(aDeviceInfoToRename.displayName)
+        input.setText(deviceInfo.displayName)
 
         AlertDialog.Builder(requireActivity())
                 .setTitle(R.string.devices_details_device_name)
@@ -132,7 +125,7 @@ class VectorSettingsDevicesFragment @Inject constructor(
                 .setPositiveButton(R.string.ok) { _, _ ->
                     val newName = input.text.toString()
 
-                    devicesViewModel.handle(DevicesAction.Rename(aDeviceInfoToRename, newName))
+                    devicesViewModel.handle(DevicesAction.Rename(deviceInfo, newName))
                 }
                 .setNegativeButton(R.string.cancel, null)
                 .show()
