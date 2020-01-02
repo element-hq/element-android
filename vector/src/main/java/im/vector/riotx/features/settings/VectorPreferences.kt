@@ -23,6 +23,7 @@ import android.net.Uri
 import android.provider.MediaStore
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
+import com.squareup.seismic.ShakeDetector
 import im.vector.riotx.R
 import im.vector.riotx.features.homeserver.ServerUrlsRepository
 import im.vector.riotx.features.themes.ThemeUtils
@@ -153,7 +154,10 @@ class VectorPreferences @Inject constructor(private val context: Context) {
 
         // analytics
         const val SETTINGS_USE_ANALYTICS_KEY = "SETTINGS_USE_ANALYTICS_KEY"
+
+        // Rageshake
         const val SETTINGS_USE_RAGE_SHAKE_KEY = "SETTINGS_USE_RAGE_SHAKE_KEY"
+        const val SETTINGS_RAGE_SHAKE_DETECTION_THRESHOLD_KEY = "SETTINGS_RAGE_SHAKE_DETECTION_THRESHOLD_KEY"
 
         // other
         const val SETTINGS_MEDIA_SAVING_PERIOD_KEY = "SETTINGS_MEDIA_SAVING_PERIOD_KEY"
@@ -730,6 +734,13 @@ class VectorPreferences @Inject constructor(private val context: Context) {
      */
     fun useRageshake(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_USE_RAGE_SHAKE_KEY, true)
+    }
+
+    /**
+     * Get the rage shake sensitivity.
+     */
+    fun getRageshakeSensitivity(): Int {
+        return defaultPrefs.getInt(SETTINGS_RAGE_SHAKE_DETECTION_THRESHOLD_KEY, ShakeDetector.SENSITIVITY_MEDIUM)
     }
 
     /**

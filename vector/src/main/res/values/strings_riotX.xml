@@ -10,5 +10,9 @@
     <string name="settings_developer_mode">Developer mode</string>
     <string name="settings_developer_mode_summary">The developer mode activates hidden features and may also make the application less stable. For developers only!</string>
     <string name="settings_rageshake">Rageshake</string>
+    <string name="settings_rageshake_detection_threshold">Detection threshold</string>
+    <string name="settings_rageshake_detection_threshold_summary">Shake your phone to test the detection threshold</string>
+    <string name="rageshake_detected">Shake detected!</string>
+    <string name="settings">Settings</string>
 
 </resources>

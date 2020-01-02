@@ -81,13 +81,4 @@
 
     </im.vector.riotx.core.preference.VectorPreferenceCategory>
 
-    <im.vector.riotx.core.preference.VectorPreferenceDivider />
-
-    <im.vector.riotx.core.preference.VectorPreferenceCategory android:title="@string/settings_rageshake">
-
-        <im.vector.riotx.core.preference.VectorSwitchPreference
-            android:key="SETTINGS_USE_RAGE_SHAKE_KEY"
-            android:title="@string/send_bug_report_rage_shake" />
-
-    </im.vector.riotx.core.preference.VectorPreferenceCategory>
 </androidx.preference.PreferenceScreen>
