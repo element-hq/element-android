@@ -147,6 +147,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
 
         const val SETTINGS_LABS_ALLOW_EXTENDED_LOGS = "SETTINGS_LABS_ALLOW_EXTENDED_LOGS"
 
+        private const val SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY = "SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY"
         private const val SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY = "SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY"
         private const val SETTINGS_LABS_ENABLE_SWIPE_TO_REPLY = "SETTINGS_LABS_ENABLE_SWIPE_TO_REPLY"
 
@@ -245,8 +246,12 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         }
     }
 
+    fun developerMode(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY, false)
+    }
+
     fun shouldShowHiddenEvents(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY, false)
+        return developerMode() && defaultPrefs.getBoolean(SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY, false)
     }
 
     fun swipeToReplyIsEnabled(): Boolean {
@@ -254,7 +259,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     }
 
     fun labAllowedExtendedLogging(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_LABS_ALLOW_EXTENDED_LOGS, false)
+        return developerMode() && defaultPrefs.getBoolean(SETTINGS_LABS_ALLOW_EXTENDED_LOGS, false)
     }
 
     /**
