@@ -49,7 +49,8 @@
 
     <im.vector.riotx.core.preference.VectorPreferenceCategory
         android:key="SETTINGS_CONTACT_PREFERENCE_KEYS"
-        android:title="@string/settings_contact">
+        android:title="@string/settings_contact"
+        app:isPreferenceVisible="@bool/false_not_implemented">
 
         <im.vector.riotx.core.preference.VectorSwitchPreference
             android:key="CONTACT_BOOK_ACCESS_KEY"
