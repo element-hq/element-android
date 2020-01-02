@@ -75,19 +75,4 @@
 
     <im.vector.riotx.core.preference.VectorPreferenceDivider android:key="SETTINGS_NOTIFICATIONS_TARGET_DIVIDER_PREFERENCE_KEY" /-->
 
-    <im.vector.riotx.core.preference.VectorPreferenceCategory android:title="@string/settings_expert">
-
-        <im.vector.riotx.core.preference.VectorPreference
-            android:layout_width="match_parent"
-            android:persistent="false"
-            android:title="@string/settings_notifications_targets"
-            app:fragment="im.vector.riotx.features.settings.push.PushGatewaysFragment" />
-
-        <im.vector.riotx.core.preference.VectorPreference
-            android:layout_width="match_parent"
-            android:persistent="false"
-            android:title="@string/settings_push_rules"
-            app:fragment="im.vector.riotx.features.settings.push.PushRulesFragment" />
-
-    </im.vector.riotx.core.preference.VectorPreferenceCategory>
 </androidx.preference.PreferenceScreen>
