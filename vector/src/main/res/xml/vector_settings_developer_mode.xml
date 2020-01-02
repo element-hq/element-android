@@ -14,10 +14,10 @@
             android:defaultValue="13"
             android:dependency="SETTINGS_USE_RAGE_SHAKE_KEY"
             android:key="SETTINGS_RAGE_SHAKE_DETECTION_THRESHOLD_KEY"
-            android:max="17"
+            android:max="15"
             android:summary="@string/settings_rageshake_detection_threshold_summary"
             android:title="@string/settings_rageshake_detection_threshold"
-            app:min="9" />
+            app:min="11" />
 
     </im.vector.riotx.core.preference.VectorPreferenceCategory>
 

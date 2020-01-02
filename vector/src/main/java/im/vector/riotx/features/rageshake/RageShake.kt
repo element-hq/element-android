@@ -23,11 +23,15 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.squareup.seismic.ShakeDetector
 import im.vector.riotx.R
+import im.vector.riotx.core.hardware.vibrate
+import im.vector.riotx.features.navigation.Navigator
 import im.vector.riotx.features.settings.VectorPreferences
+import im.vector.riotx.features.settings.VectorSettingsActivity
 import javax.inject.Inject
 
 class RageShake @Inject constructor(private val activity: AppCompatActivity,
                                     private val bugReporter: BugReporter,
+                                    private val navigator: Navigator,
                                     private val vectorPreferences: VectorPreferences) : ShakeDetector.Listener {
 
     private var shakeDetector: ShakeDetector? = null
@@ -56,6 +60,7 @@ class RageShake @Inject constructor(private val activity: AppCompatActivity,
     override fun hearShake() {
         val i = interceptor
         if (i != null) {
+            vibrate(activity)
             i.invoke()
         } else {
             if (dialogDisplayed) {
@@ -63,6 +68,7 @@ class RageShake @Inject constructor(private val activity: AppCompatActivity,
                 return
             }
 
+            vibrate(activity)
             dialogDisplayed = true
 
             AlertDialog.Builder(activity)
@@ -80,7 +86,7 @@ class RageShake @Inject constructor(private val activity: AppCompatActivity,
     }
 
     private fun openSettings() {
-        // TODO
+        navigator.openSettings(activity, VectorSettingsActivity.EXTRA_DIRECT_ACCESS_DEVELOPER)
     }
 
     companion object {
