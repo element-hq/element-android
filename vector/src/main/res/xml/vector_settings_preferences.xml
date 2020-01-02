@@ -30,13 +30,15 @@
             android:defaultValue="true"
             android:key="SETTINGS_SHOW_URL_PREVIEW_KEY"
             android:summary="@string/settings_inline_url_preview_summary"
-            android:title="@string/settings_inline_url_preview" />
+            android:title="@string/settings_inline_url_preview"
+            app:isPreferenceVisible="@bool/false_not_implemented" />
 
         <im.vector.riotx.core.preference.VectorSwitchPreference
             android:defaultValue="true"
             android:key="SETTINGS_SEND_TYPING_NOTIF_KEY"
             android:summary="@string/settings_send_typing_notifs_summary"
-            android:title="@string/settings_send_typing_notifs" />
+            android:title="@string/settings_send_typing_notifs"
+            app:isPreferenceVisible="@bool/false_not_implemented" />
 
         <im.vector.riotx.core.preference.VectorSwitchPreference
             android:defaultValue="false"
@@ -46,38 +48,45 @@
 
         <im.vector.riotx.core.preference.VectorSwitchPreference
             android:key="SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY"
-            android:title="@string/settings_always_show_timestamps" />
+            android:title="@string/settings_always_show_timestamps"
+            app:isPreferenceVisible="@bool/false_not_implemented" />
 
         <im.vector.riotx.core.preference.VectorSwitchPreference
             android:key="SETTINGS_12_24_TIMESTAMPS_KEY"
-            android:title="@string/settings_12_24_timestamps" />
+            android:title="@string/settings_12_24_timestamps"
+            app:isPreferenceVisible="@bool/false_not_implemented" />
 
         <im.vector.riotx.core.preference.VectorSwitchPreference
             android:defaultValue="true"
             android:key="SETTINGS_SHOW_READ_RECEIPTS_KEY"
             android:summary="@string/settings_show_read_receipts_summary"
-            android:title="@string/settings_show_read_receipts" />
+            android:title="@string/settings_show_read_receipts"
+            app:isPreferenceVisible="@bool/false_not_implemented" />
 
         <im.vector.riotx.core.preference.VectorSwitchPreference
             android:defaultValue="true"
             android:key="SETTINGS_SHOW_JOIN_LEAVE_MESSAGES_KEY"
             android:summary="@string/settings_show_join_leave_messages_summary"
-            android:title="@string/settings_show_join_leave_messages" />
+            android:title="@string/settings_show_join_leave_messages"
+            app:isPreferenceVisible="@bool/false_not_implemented" />
 
         <im.vector.riotx.core.preference.VectorSwitchPreference
             android:defaultValue="true"
             android:key="SETTINGS_SHOW_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY"
             android:summary="@string/settings_show_avatar_display_name_changes_messages_summary"
-            android:title="@string/settings_show_avatar_display_name_changes_messages" />
+            android:title="@string/settings_show_avatar_display_name_changes_messages"
+            app:isPreferenceVisible="@bool/false_not_implemented" />
 
         <im.vector.riotx.core.preference.VectorSwitchPreference
             android:key="SETTINGS_VIBRATE_ON_MENTION_KEY"
-            android:title="@string/settings_vibrate_on_mention" />
+            android:title="@string/settings_vibrate_on_mention"
+            app:isPreferenceVisible="@bool/false_not_implemented" />
 
         <im.vector.riotx.core.preference.VectorSwitchPreference
             android:key="SETTINGS_SEND_MESSAGE_WITH_ENTER"
             android:summary="@string/settings_send_message_with_enter_summary"
-            android:title="@string/settings_send_message_with_enter" />
+            android:title="@string/settings_send_message_with_enter"
+            app:isPreferenceVisible="@bool/false_not_implemented" />
 
         <im.vector.riotx.core.preference.VectorListPreference
             android:defaultValue="always"
@@ -85,15 +94,17 @@
             android:entryValues="@array/show_info_area_values"
             android:key="SETTINGS_SHOW_INFO_AREA_KEY"
             android:summary="%s"
-            android:title="@string/settings_info_area_show" />
+            android:title="@string/settings_info_area_show"
+            app:isPreferenceVisible="@bool/false_not_implemented" />
 
     </im.vector.riotx.core.preference.VectorPreferenceCategory>
 
-    <im.vector.riotx.core.preference.VectorPreferenceDivider />
+    <im.vector.riotx.core.preference.VectorPreferenceDivider app:isPreferenceVisible="@bool/false_not_implemented" />
 
     <im.vector.riotx.core.preference.VectorPreferenceCategory
         android:key="SETTINGS_HOME_DISPLAY_KEY"
-        android:title="@string/settings_home_display">
+        android:title="@string/settings_home_display"
+        app:isPreferenceVisible="@bool/false_not_implemented">
 
         <im.vector.riotx.core.preference.VectorSwitchPreference
             android:defaultValue="true"
@@ -107,9 +118,11 @@
 
     </im.vector.riotx.core.preference.VectorPreferenceCategory>
 
-    <im.vector.riotx.core.preference.VectorPreferenceDivider />
+    <im.vector.riotx.core.preference.VectorPreferenceDivider app:isPreferenceVisible="@bool/false_not_implemented" />
 
-    <im.vector.riotx.core.preference.VectorPreferenceCategory android:title="@string/settings_media">
+    <im.vector.riotx.core.preference.VectorPreferenceCategory
+        android:title="@string/settings_media"
+        app:isPreferenceVisible="@bool/false_not_implemented">
 
         <im.vector.riotx.core.preference.VectorPreference
             android:key="SETTINGS_MEDIA_SAVING_PERIOD_KEY"

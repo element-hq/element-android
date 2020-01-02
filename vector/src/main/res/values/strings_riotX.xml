@@ -9,5 +9,6 @@
     <string name="settings_show_devices_list">See all my devices</string>
     <string name="settings_developer_mode">Developer mode</string>
     <string name="settings_developer_mode_summary">The developer mode activates hidden features and may also make the application less stable. For developers only!</string>
+    <string name="settings_rageshake">Rageshake</string>
 
 </resources>

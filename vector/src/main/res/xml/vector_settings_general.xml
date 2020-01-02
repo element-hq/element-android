@@ -74,11 +74,12 @@
         <im.vector.riotx.core.preference.VectorPreference
             android:key="SETTINGS_HOME_SERVER_PREFERENCE_KEY"
             android:title="@string/settings_home_server"
-            tools:summary="@string/default_hs_server_url" />
+            tools:summary="https://homeserver.org" />
 
         <im.vector.riotx.core.preference.VectorPreference
             android:key="SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY"
             android:title="@string/settings_identity_server"
+            app:isPreferenceVisible="@bool/false_not_implemented"
             tools:summary="https://identity.server.url" />
 
         <im.vector.riotx.core.preference.VectorPreference
@@ -93,8 +94,7 @@
 
     <im.vector.riotx.core.preference.VectorPreferenceDivider />
 
-    <im.vector.riotx.core.preference.VectorPreferenceCategory
-        android:title="@string/action_sign_out">
+    <im.vector.riotx.core.preference.VectorPreferenceCategory android:title="@string/action_sign_out">
 
         <im.vector.riotx.core.preference.VectorPreference
             android:key="SETTINGS_SIGN_OUT_KEY"
@@ -104,7 +104,8 @@
 
     <im.vector.riotx.core.preference.VectorPreferenceCategory
         android:key="SETTINGS_DEACTIVATE_ACCOUNT_CATEGORY_KEY"
-        android:title="@string/settings_deactivate_account_section">
+        android:title="@string/settings_deactivate_account_section"
+        app:isPreferenceVisible="@bool/false_not_implemented">
 
         <im.vector.riotx.core.preference.VectorPreference
             android:key="SETTINGS_DEACTIVATE_ACCOUNT_KEY"

@@ -17,6 +17,7 @@ Other changes:
 Bugfix 🐛:
  - Fix avatar image disappearing (#777)
  - Fix read marker banner when permalink
+ - Hide non working settings (#751)
 
 Translations 🗣:
  -
