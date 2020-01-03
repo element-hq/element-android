@@ -30,6 +30,7 @@ import im.vector.matrix.android.api.session.InitialSyncProgressService
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilitiesService
 import im.vector.matrix.android.api.session.securestorage.SecureStorageService
+import im.vector.matrix.android.internal.auth.createSessionId
 import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.database.SessionRealmConfigurationFactory
 import im.vector.matrix.android.internal.di.*
@@ -84,10 +85,25 @@ internal abstract class SessionModule {
         }
 
         @JvmStatic
+        @SessionId
+        @Provides
+        fun providesSessionId(credentials: Credentials): String {
+            return createSessionId(credentials.userId, credentials.deviceId)
+        }
+
+        @JvmStatic
         @Provides
         @UserCacheDirectory
-        fun providesFilesDir(@UserMd5 userMd5: String, context: Context): File {
-            return File(context.filesDir, userMd5)
+        fun providesFilesDir(@UserMd5 userMd5: String,
+                             @SessionId sessionId: String,
+                             context: Context): File {
+            // Temporary code for migration
+            val old = File(context.filesDir, userMd5)
+            if (old.exists()) {
+                old.renameTo(File(context.filesDir, sessionId))
+            }
+
+            return File(context.filesDir, sessionId)
         }
 
         @JvmStatic
