@@ -27,11 +27,13 @@ data class PendingVerificationRequest(
         val isIncoming: Boolean = false,
         val localID: String =  UUID.randomUUID().toString(),
         val otherUserId: String,
+        val roomId: String?,
         val transactionId: String? = null,
         val requestInfo: MessageVerificationRequestContent? = null,
         val readyInfo: VerificationInfoReady? = null,
         val cancelConclusion: CancelCode? = null,
-        val isSuccessful : Boolean = false
+        val isSuccessful : Boolean = false,
+        val handledByOtherSession : Boolean = false
 
 ) {
 

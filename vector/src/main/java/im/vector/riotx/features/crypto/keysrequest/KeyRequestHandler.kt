@@ -33,13 +33,11 @@ import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
 import im.vector.riotx.R
-import im.vector.riotx.features.crypto.verification.SASVerificationActivity
 import im.vector.riotx.features.popup.PopupAlertManager
 import timber.log.Timber
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.util.Locale
-import java.util.Date
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.collections.ArrayList
@@ -195,18 +193,19 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
             denyAllRequests(mappingKey)
         }
 
-        alert.addButton(
-                context.getString(R.string.start_verification_short_label),
-                Runnable {
-                    alert.weakCurrentActivity?.get()?.let {
-                        val intent = SASVerificationActivity.outgoingIntent(it,
-                                session?.myUserId ?: "",
-                                userId, deviceId)
-                        it.startActivity(intent)
-                    }
-                },
-                false
-        )
+        // TODO send to the new profile page
+//        alert.addButton(
+//                context.getString(R.string.start_verification_short_label),
+//                Runnable {
+//                    alert.weakCurrentActivity?.get()?.let {
+//                        val intent = SASVerificationActivity.outgoingIntent(it,
+//                                session?.myUserId ?: "",
+//                                userId, deviceId)
+//                        it.startActivity(intent)
+//                    }
+//                },
+//                false
+//        )
 
         alert.addButton(context.getString(R.string.share_without_verifying_short_label), Runnable {
             shareAllSessions(mappingKey)

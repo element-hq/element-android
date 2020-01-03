@@ -849,6 +849,15 @@ class RoomDetailFragment @Inject constructor(
                                 data.transactionId
                         ).show(parentFragmentManager, "REQ")
                     }
+                    is RoomDetailAction.ResumeVerification        -> {
+                        val otherUserId = data.otherUserId ?: return
+                        VerificationBottomSheet().apply {
+                            arguments = Bundle().apply {
+                                putParcelable(MvRx.KEY_ARG, VerificationBottomSheet.VerificationArgs(
+                                        otherUserId, data.transactionId, roomId = roomDetailArgs.roomId))
+                            }
+                        }.show(parentFragmentManager, "REQ")
+                    }
                 }
             }
         }
@@ -998,6 +1007,9 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onEventCellClicked(informationData: MessageInformationData, messageContent: MessageContent?, view: View) {
+        if (messageContent is MessageVerificationRequestContent) {
+            roomDetailViewModel.handle(RoomDetailAction.ResumeVerification(informationData.eventId))
+        }
     }
 
     override fun onEventLongClicked(informationData: MessageInformationData, messageContent: MessageContent?, view: View): Boolean {

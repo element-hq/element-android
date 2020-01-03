@@ -216,7 +216,20 @@ internal class DefaultSasVerificationService @Inject constructor(
         }
     }
 
-    fun onRoomRequestReceived(event: Event) {
+    fun onRoomRequestHandledByOtherDevice(event: Event) {
+        val requestInfo = event.getClearContent().toModel<MessageRelationContent>()
+                ?: return
+        val requestId = requestInfo.relatesTo?.eventId ?: return
+        getExistingVerificationRequestInRoom(event.roomId ?: "", requestId)?.let {
+            updatePendingRequest(
+                    it.copy(
+                            handledByOtherSession = true
+                    )
+            )
+        }
+    }
+
+    suspend fun onRoomRequestReceived(event: Event) {
         Timber.v("## SAS Verification request from ${event.senderId} in room ${event.roomId}")
         val requestInfo = event.getClearContent().toModel<MessageVerificationRequestContent>()
                 ?: return
@@ -245,6 +258,7 @@ internal class DefaultSasVerificationService @Inject constructor(
                 ageLocalTs = event.ageLocalTs ?: System.currentTimeMillis(),
                 isIncoming = true,
                 otherUserId = senderId, // requestInfo.toUserId,
+                roomId = event.roomId,
                 transactionId = event.eventId,
                 requestInfo = requestInfo
         )
@@ -647,6 +661,16 @@ internal class DefaultSasVerificationService @Inject constructor(
         }
     }
 
+    override fun getExistingVerificationRequestInRoom(roomId: String, tid: String?): PendingVerificationRequest? {
+        synchronized(lock = pendingRequests) {
+            return tid?.let { tid ->
+                pendingRequests.flatMap { entry ->
+                    entry.value.filter { it.roomId == roomId && it.transactionId == tid }
+                }.firstOrNull()
+            }
+        }
+    }
+
     private fun getExistingTransactionsForUser(otherUser: String): Collection<VerificationTransaction>? {
         synchronized(txMap) {
             return txMap[otherUser]?.values
@@ -723,6 +747,7 @@ internal class DefaultSasVerificationService @Inject constructor(
         val verificationRequest = PendingVerificationRequest(
                 ageLocalTs = System.currentTimeMillis(),
                 isIncoming = false,
+                roomId = roomId,
                 localID = localID,
                 otherUserId = userId
         )
