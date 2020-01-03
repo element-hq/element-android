@@ -216,7 +216,7 @@ internal class DefaultSasVerificationService @Inject constructor(
         }
     }
 
-    suspend fun onRoomRequestReceived(event: Event) {
+    fun onRoomRequestReceived(event: Event) {
         Timber.v("## SAS Verification request from ${event.senderId} in room ${event.roomId}")
         val requestInfo = event.getClearContent().toModel<MessageVerificationRequestContent>()
                 ?: return
@@ -228,11 +228,11 @@ internal class DefaultSasVerificationService @Inject constructor(
             return
         }
 
-        if (checkKeysAreDownloaded(senderId, requestInfo.fromDevice) == null) {
-            // I should ignore this, it's not for me
-            Timber.e("## SAS Verification device ${requestInfo.fromDevice} is not knwon")
-            // TODO cancel?
-            return
+        // We don't want to block here
+        GlobalScope.launch {
+            if (checkKeysAreDownloaded(senderId, requestInfo.fromDevice) == null) {
+                Timber.e("## SAS Verification device ${requestInfo.fromDevice} is not knwon")
+            }
         }
 
         // Remember this request
@@ -249,6 +249,7 @@ internal class DefaultSasVerificationService @Inject constructor(
                 requestInfo = requestInfo
         )
         requestsForUser.add(pendingVerificationRequest)
+        dispatchRequestAdded(pendingVerificationRequest)
 
         /*
         * After the m.key.verification.ready event is sent, either party can send an m.key.verification.start event
@@ -389,9 +390,14 @@ internal class DefaultSasVerificationService @Inject constructor(
     private suspend fun checkKeysAreDownloaded(otherUserId: String,
                                                fromDevice: String): MXUsersDevicesMap<MXDeviceInfo>? {
         return try {
-            val keys = deviceListManager.downloadKeys(listOf(otherUserId), true)
-            val deviceIds = keys.getUserDeviceIds(otherUserId) ?: return null
-            keys.takeIf { deviceIds.contains(fromDevice) }
+            var keys = deviceListManager.downloadKeys(listOf(otherUserId), false)
+            if (keys.getUserDeviceIds(otherUserId)?.contains(fromDevice) == true) {
+                return keys
+            } else {
+                // force download
+                keys = deviceListManager.downloadKeys(listOf(otherUserId), true)
+                return keys.takeIf { keys.getUserDeviceIds(otherUserId)?.contains(fromDevice) == true }
+            }
         } catch (e: Exception) {
             null
         }
@@ -785,16 +791,19 @@ internal class DefaultSasVerificationService @Inject constructor(
         }
     }
 
-    override fun readyPendingVerificationInDMs(otherUserId: String, roomId: String, transactionId: String) {
+    override fun readyPendingVerificationInDMs(otherUserId: String, roomId: String, transactionId: String): Boolean {
+        Timber.v("## SAS readyPendingVerificationInDMs $otherUserId room:$roomId tx:$transactionId")
         // Let's find the related request
-        getExistingVerificationRequest(otherUserId)?.find { it.transactionId == transactionId }?.let {
+        val existingRequest = getExistingVerificationRequest(otherUserId, transactionId)
+        if (existingRequest != null) {
             // we need to send a ready event, with matching methods
             val transport = sasTransportRoomMessageFactory.createTransport(credentials.userId, credentials.deviceId
                     ?: "", roomId, null)
-            val methods = it.requestInfo?.methods?.intersect(listOf(KeyVerificationStart.VERIF_METHOD_SAS))?.toList()
+            val methods = existingRequest.requestInfo?.methods?.intersect(listOf(KeyVerificationStart.VERIF_METHOD_SAS))?.toList()
             if (methods.isNullOrEmpty()) {
                 Timber.i("Cannot ready this request, no common methods found txId:$transactionId")
-                return@let
+                // TODO buttons should not be shown in  this case?
+                return false
             }
             // TODO this is not yet related to a transaction, maybe we should use another method like for cancel?
             val readyMsg = transport.createReady(transactionId, credentials.deviceId ?: "", methods)
@@ -803,7 +812,12 @@ internal class DefaultSasVerificationService @Inject constructor(
                     CancelCode.User,
                     null // TODO handle error?
             )
-            updatePendingRequest(it.copy(readyInfo = readyMsg))
+            updatePendingRequest(existingRequest.copy(readyInfo = readyMsg))
+            return true
+        } else {
+            Timber.e("## SAS readyPendingVerificationInDMs Verification not found")
+            // :/ should not be possible... unless live observer very slow
+            return false
         }
     }
 

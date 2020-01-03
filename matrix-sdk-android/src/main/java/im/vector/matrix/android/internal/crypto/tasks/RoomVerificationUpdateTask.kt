@@ -120,6 +120,7 @@ internal class DefaultRoomVerificationUpdateTask @Inject constructor(
                     }
                 }
 
+                Timber.v("## SAS Verification ignoring message sent by me: ${event.eventId} type: ${event.getClearType()}")
                 return@forEach
             }
 

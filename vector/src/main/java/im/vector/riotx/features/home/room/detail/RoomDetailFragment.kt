@@ -963,12 +963,14 @@ class RoomDetailFragment @Inject constructor(
                         }
                     }
                     is RoomDetailAction.RequestVerification       -> {
+                        Timber.v("## SAS RequestVerification action")
                         VerificationBottomSheet.withArgs(
                                 roomDetailArgs.roomId,
                                 data.userId
                         ).show(parentFragmentManager, "REQ")
                     }
                     is RoomDetailAction.AcceptVerificationRequest -> {
+                        Timber.v("## SAS AcceptVerificationRequest action")
                         VerificationBottomSheet.withArgs(
                                 roomDetailArgs.roomId,
                                 data.otherUserId,

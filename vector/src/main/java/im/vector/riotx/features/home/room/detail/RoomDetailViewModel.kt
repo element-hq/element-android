@@ -795,9 +795,11 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun handleAcceptVerification(action: RoomDetailAction.AcceptVerificationRequest) {
-        session.getSasVerificationService().readyPendingVerificationInDMs(action.otherUserId, room.roomId,
-                action.transactionId)
-        _requestLiveData.postValue(LiveEvent(Success(action)))
+        Timber.v("## SAS handleAcceptVerification ${action.otherUserId},  roomId:${room.roomId}, txId:${action.transactionId}")
+        if (session.getSasVerificationService().readyPendingVerificationInDMs(action.otherUserId, room.roomId,
+                action.transactionId)) {
+            _requestLiveData.postValue(LiveEvent(Success(action)))
+        }
     }
 
     private fun handleDeclineVerification(action: RoomDetailAction.DeclineVerificationRequest) {

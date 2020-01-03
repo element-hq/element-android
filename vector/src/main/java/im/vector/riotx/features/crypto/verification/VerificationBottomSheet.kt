@@ -45,6 +45,7 @@ import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.themes.ThemeUtils
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.bottom_sheet_verification.*
+import timber.log.Timber
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
@@ -154,25 +155,41 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
             return@withState
         }
 
+        // At this point there is no transaction for this request
+
         // Transaction has not yet started
         if (it.pendingRequest?.cancelConclusion != null) {
             // The request has been declined, we should dismiss
             dismiss()
-        } else if (it.pendingRequest == null || !it.pendingRequest.isReady) {
-            // We are waiting for other party to reply with ready
-            showFragment(VerificationRequestFragment::class, Bundle().apply {
-                putParcelable(MvRx.KEY_ARG, VerificationArgs(
-                        it.otherUserMxItem?.id ?: "",
-                        it.pendingRequest?.transactionId,
-                        it.roomId))
-            })
-        } else if (it.pendingRequest.isReady) {
+        }
+
+        // If it's an outgoing
+        if (it.pendingRequest == null || !it.pendingRequest.isIncoming) {
+            Timber.v("## SAS show bottom sheet for outgoing request")
+            if (it.pendingRequest?.isReady == true) {
+                Timber.v("## SAS show bottom sheet for outgoing and ready request")
+                // Show choose method fragment with waiting
+                showFragment(VerificationChooseMethodFragment::class, Bundle().apply {
+                    putParcelable(MvRx.KEY_ARG, VerificationArgs(it.otherUserMxItem?.id
+                            ?: "", it.pendingRequest.transactionId))
+                })
+            } else {
+                // Stay on the start fragment
+                showFragment(VerificationRequestFragment::class, Bundle().apply {
+                    putParcelable(MvRx.KEY_ARG, VerificationArgs(
+                            it.otherUserMxItem?.id ?: "",
+                            it.pendingRequest?.transactionId,
+                            it.roomId))
+                })
+            }
+        } else if (it.pendingRequest.isIncoming) {
+            Timber.v("## SAS show bottom sheet for Incoming request")
+            // For incoming we can switch to choose method because ready is being sent or already sent
             showFragment(VerificationChooseMethodFragment::class, Bundle().apply {
                 putParcelable(MvRx.KEY_ARG, VerificationArgs(it.otherUserMxItem?.id
                         ?: "", it.pendingRequest.transactionId))
             })
         }
-
         super.invalidate()
     }
 

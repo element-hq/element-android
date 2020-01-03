@@ -66,7 +66,10 @@ interface SasVerificationService {
                                   otherDeviceId: String,
                                   callback: MatrixCallback<String>?): String?
 
-    fun readyPendingVerificationInDMs(otherUserId: String, roomId: String, transactionId: String)
+    /**
+     * Returns false if the request is unknwown
+     */
+    fun readyPendingVerificationInDMs(otherUserId: String, roomId: String, transactionId: String): Boolean
 
     // fun transactionUpdated(tx: SasVerificationTransaction)
 

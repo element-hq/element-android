@@ -22,7 +22,10 @@ import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.crypto.sas.SasVerificationService
+import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTransaction
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationStart
+import im.vector.matrix.android.internal.crypto.verification.PendingVerificationRequest
 import im.vector.riotx.core.di.HasScreenInjector
 import im.vector.riotx.core.platform.EmptyAction
 import im.vector.riotx.core.platform.VectorViewModel
@@ -37,11 +40,39 @@ data class VerificationChooseMethodViewState(
 class VerificationChooseMethodViewModel @AssistedInject constructor(
         @Assisted initialState: VerificationChooseMethodViewState,
         private val session: Session
-) : VectorViewModel<VerificationChooseMethodViewState, EmptyAction>(initialState) {
+) : VectorViewModel<VerificationChooseMethodViewState, EmptyAction>(initialState), SasVerificationService.SasVerificationListener {
+
+    override fun transactionCreated(tx: SasVerificationTransaction) {}
+
+    override fun transactionUpdated(tx: SasVerificationTransaction) {}
+
+    override fun verificationRequestUpdated(pr: PendingVerificationRequest) = withState { state ->
+        val pvr = session.getSasVerificationService().getExistingVerificationRequest(state.otherUserId, state.transactionId)
+        val qrAvailable = pvr?.readyInfo?.methods?.contains(KeyVerificationStart.VERIF_METHOD_SCAN)
+                ?: false
+        val emojiAvailable = pvr?.readyInfo?.methods?.contains(KeyVerificationStart.VERIF_METHOD_SAS)
+                ?: false
+
+        setState {
+            copy(
+                    QRModeAvailable = qrAvailable,
+                    SASMOdeAvailable = emojiAvailable
+            )
+        }
+    }
 
     @AssistedInject.Factory
     interface Factory {
         fun create(initialState: VerificationChooseMethodViewState): VerificationChooseMethodViewModel
+    }
+
+    init {
+        session.getSasVerificationService().addListener(this)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        session.getSasVerificationService().removeListener(this)
     }
 
     companion object : MvRxViewModelFactory<VerificationChooseMethodViewModel, VerificationChooseMethodViewState> {
