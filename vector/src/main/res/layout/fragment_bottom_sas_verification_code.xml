@@ -1,195 +1,188 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="?android:colorBackground">
 
+    <TextView
+        android:id="@+id/sas_emoji_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/layout_horizontal_margin"
+        android:layout_marginTop="@dimen/layout_vertical_margin"
+        android:text="@string/verify_by_emoji_title"
+        android:textColor="?riotx_text_primary"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/sas_emoji_description_2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/layout_vertical_margin"
+        android:text="@string/verify_user_sas_emoji_help_text"
+        android:textColor="?riotx_text_secondary"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sas_emoji_description" />
+
+    <TextView
+        android:id="@+id/sas_decimal_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textColor="?riotx_text_primary"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/sas_emoji_grid"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/sas_emoji_grid"
+        tools:text="1234-4320-3905"
+        tools:visibility="visible" />
+
+    <ProgressBar
+        android:id="@+id/sasLoadingProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:layout_constraintBottom_toBottomOf="@+id/sas_emoji_grid"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/sas_emoji_grid" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:id="@+id/sas_emoji_grid"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/layout_vertical_margin"
+        android:visibility="invisible"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sas_emoji_description_2"
+        tools:visibility="visible">
 
-        <TextView
-            android:id="@+id/sas_emoji_description"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/layout_horizontal_margin"
-            android:layout_marginTop="@dimen/layout_vertical_margin"
-            android:text="@string/verify_by_emoji_title"
-            android:textColor="?riotx_text_primary"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <include
+            android:id="@+id/emoji0"
+            layout="@layout/item_emoji_verif" />
 
-        <TextView
-            android:id="@+id/sas_emoji_description_2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/layout_vertical_margin"
-            android:text="@string/verify_user_sas_emoji_help_text"
-            android:textColor="?riotx_text_secondary"
-            android:textSize="15sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/sas_emoji_description" />
+        <include
+            android:id="@+id/emoji1"
+            layout="@layout/item_emoji_verif" />
 
-        <TextView
-            android:id="@+id/sas_decimal_code"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textColor="?riotx_text_primary"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="@+id/sas_emoji_grid"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/sas_emoji_grid"
-            tools:text="1234-4320-3905"
-            tools:visibility="visible" />
+        <include
+            android:id="@+id/emoji2"
+            layout="@layout/item_emoji_verif" />
 
-        <ProgressBar
-            android:id="@+id/sasLoadingProgress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:layout_constraintBottom_toBottomOf="@+id/sas_emoji_grid"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/sas_emoji_grid"
-            />
+        <include
+            android:id="@+id/emoji3"
+            layout="@layout/item_emoji_verif" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/sas_emoji_grid"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/layout_vertical_margin"
-            android:visibility="invisible"
-            app:layout_constrainedWidth="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/sas_emoji_description_2"
-            tools:visibility="visible">
+        <include
+            android:id="@+id/emoji4"
+            layout="@layout/item_emoji_verif" />
 
-            <include
-                android:id="@+id/emoji0"
-                layout="@layout/item_emoji_verif" />
+        <include
+            android:id="@+id/emoji5"
+            layout="@layout/item_emoji_verif" />
 
-            <include
-                android:id="@+id/emoji1"
-                layout="@layout/item_emoji_verif" />
+        <include
+            android:id="@+id/emoji6"
+            layout="@layout/item_emoji_verif" />
 
-            <include
-                android:id="@+id/emoji2"
-                layout="@layout/item_emoji_verif" />
-
-            <include
-                android:id="@+id/emoji3"
-                layout="@layout/item_emoji_verif" />
-
-            <include
-                android:id="@+id/emoji4"
-                layout="@layout/item_emoji_verif" />
-
-            <include
-                android:id="@+id/emoji5"
-                layout="@layout/item_emoji_verif" />
-
-            <include
-                android:id="@+id/emoji6"
-                layout="@layout/item_emoji_verif" />
-
-            <androidx.constraintlayout.helper.widget.Flow
-                android:id="@+id/sas_emoji_grid_flow"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:constraint_referenced_ids="emoji0,emoji1,emoji2,emoji3,emoji4,emoji5,emoji6"
-                app:flow_horizontalBias="0.5"
-                app:flow_horizontalGap="16dp"
-                app:flow_horizontalStyle="packed"
-                app:flow_verticalBias="0"
-                app:flow_verticalGap="8dp"
-                app:flow_wrapMode="chain"
-                tools:ignore="MissingConstraints" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/sas_request_continue_button"
-            style="@style/VectorButtonStylePositive"
-            android:layout_width="0dp"
-            android:layout_margin="@dimen/layout_vertical_margin"
-            android:minWidth="160dp"
-            android:text="@string/verification_sas_match"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/centerGuideLine"
-            app:layout_constraintTop_toBottomOf="@+id/sas_emoji_grid"
-            tools:text="A very long translation thats too big" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/centerGuideLine"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.5" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/sas_request_cancel_button"
-            style="@style/VectorButtonStyleDestructive"
-            android:layout_width="0dp"
-            android:layout_margin="@dimen/layout_vertical_margin"
-            android:text="@string/verification_sas_do_not_match"
-            app:layout_constraintEnd_toStartOf="@+id/centerGuideLine"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/sas_emoji_grid" />
-
-
-        <androidx.constraintlayout.widget.Barrier
-            android:id="@+id/bottomBarrier"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:barrierDirection="bottom"
-            app:barrierMargin="8dp"
-            app:constraint_referenced_ids="sas_request_cancel_button,sas_request_continue_button" />
-
-        <TextView
-            android:id="@+id/sasCodeWaitingPartnerText"
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/sas_emoji_grid_flow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textColor="?attr/vctr_notice_secondary"
-            android:textSize="15sp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/bottomBarrier"
-            app:layout_constraintTop_toBottomOf="@id/sas_emoji_grid"
-            android:text="@string/sas_waiting_for_partner"
-            tools:visibility="visible" />
-
-        <TextView
-            android:id="@+id/sasEmojiSecurityTip"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/layout_vertical_margin"
-            android:gravity="center"
-            android:text="@string/verify_user_sas_emoji_security_tip"
-            android:textColor="?riotx_text_secondary"
-            android:textSize="12sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/bottomBarrier" />
-
-        <androidx.constraintlayout.widget.Group
-            android:id="@+id/ButtonsVisibilityGroup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:constraint_referenced_ids="sas_request_continue_button,sas_request_cancel_button"
-            tools:visibility="visible" />
+            app:constraint_referenced_ids="emoji0,emoji1,emoji2,emoji3,emoji4,emoji5,emoji6"
+            app:flow_horizontalBias="0.5"
+            app:flow_horizontalGap="16dp"
+            app:flow_horizontalStyle="packed"
+            app:flow_verticalBias="0"
+            app:flow_verticalGap="8dp"
+            app:flow_wrapMode="chain"
+            tools:ignore="MissingConstraints" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</ScrollView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/sas_request_continue_button"
+        style="@style/VectorButtonStylePositive"
+        android:layout_width="0dp"
+        android:layout_margin="@dimen/layout_vertical_margin"
+        android:minWidth="160dp"
+        android:text="@string/verification_sas_match"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/centerGuideLine"
+        app:layout_constraintTop_toBottomOf="@+id/sas_emoji_grid"
+        tools:text="A very long translation thats too big" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/centerGuideLine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/sas_request_cancel_button"
+        style="@style/VectorButtonStyleDestructive"
+        android:layout_width="0dp"
+        android:layout_margin="@dimen/layout_vertical_margin"
+        android:text="@string/verification_sas_do_not_match"
+        app:layout_constraintEnd_toStartOf="@+id/centerGuideLine"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sas_emoji_grid" />
+
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/bottomBarrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:barrierMargin="8dp"
+        app:constraint_referenced_ids="sas_request_cancel_button,sas_request_continue_button" />
+
+    <TextView
+        android:id="@+id/sasCodeWaitingPartnerText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/sas_waiting_for_partner"
+        android:textColor="?attr/vctr_notice_secondary"
+        android:textSize="15sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/bottomBarrier"
+        app:layout_constraintTop_toBottomOf="@id/sas_emoji_grid"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/sasEmojiSecurityTip"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/layout_vertical_margin"
+        android:gravity="center"
+        android:text="@string/verify_user_sas_emoji_security_tip"
+        android:textColor="?riotx_text_secondary"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bottomBarrier" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/ButtonsVisibilityGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="sas_request_continue_button,sas_request_cancel_button"
+        tools:visibility="visible" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

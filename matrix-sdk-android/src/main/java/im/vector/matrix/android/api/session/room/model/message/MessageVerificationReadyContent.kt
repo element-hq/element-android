@@ -33,7 +33,7 @@ internal data class MessageVerificationReadyContent(
     override val transactionID: String?
         get() = relatesTo?.eventId
 
-    override fun toEventContent() = this.toContent()
+    override fun toEventContent() = toContent()
 
     override fun isValid(): Boolean {
         if (transactionID.isNullOrBlank() || methods.isNullOrEmpty() || fromDevice.isNullOrEmpty()) {

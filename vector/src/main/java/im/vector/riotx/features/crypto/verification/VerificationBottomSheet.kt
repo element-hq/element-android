@@ -30,6 +30,7 @@ import androidx.transition.AutoTransition
 import androidx.transition.TransitionManager
 import butterknife.BindView
 import butterknife.ButterKnife
+import butterknife.Unbinder
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
@@ -75,10 +76,18 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
     @BindView(R.id.verificationRequestAvatar)
     lateinit var otherUserAvatarImageView: ImageView
 
+    private var unBinder: Unbinder? = null
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.bottom_sheet_verification, container, false)
-        ButterKnife.bind(this, view)
+        unBinder = ButterKnife.bind(this, view)
         return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        unBinder?.unbind()
+        unBinder = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -180,6 +189,20 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
                         bundle,
                         fragmentClass.simpleName
                 )
+            }
+        }
+    }
+
+    companion object {
+        fun withArgs(roomId: String, otherUserId: String, transactionId: String? = null): VerificationBottomSheet {
+            return VerificationBottomSheet().apply {
+                arguments = Bundle().apply {
+                    putParcelable(MvRx.KEY_ARG, VerificationBottomSheet.VerificationArgs(
+                            otherUserId = otherUserId,
+                            roomId = roomId,
+                            verificationId = transactionId
+                    ))
+                }
             }
         }
     }

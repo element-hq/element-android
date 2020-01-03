@@ -432,7 +432,8 @@ class RoomDetailFragment @Inject constructor(
         composerLayout.sendButton.setContentDescription(getString(descriptionRes))
 
         avatarRenderer.render(
-                MatrixItem.UserItem(event.root.senderId ?: "", event.getDisambiguatedDisplayName(), event.senderAvatar),
+                MatrixItem.UserItem(event.root.senderId
+                        ?: "", event.getDisambiguatedDisplayName(), event.senderAvatar),
                 composerLayout.composerRelatedMessageAvatar
         )
         composerLayout.expand {
@@ -962,20 +963,17 @@ class RoomDetailFragment @Inject constructor(
                         }
                     }
                     is RoomDetailAction.RequestVerification       -> {
-                        VerificationBottomSheet().apply {
-                            arguments = Bundle().apply {
-                                putParcelable(MvRx.KEY_ARG, VerificationBottomSheet.VerificationArgs(data.userId, roomId = roomDetailArgs.roomId))
-                            }
-//                            setArguments()
-                        }.show(parentFragmentManager, "REQ")
+                        VerificationBottomSheet.withArgs(
+                                roomDetailArgs.roomId,
+                                data.userId
+                        ).show(parentFragmentManager, "REQ")
                     }
                     is RoomDetailAction.AcceptVerificationRequest -> {
-                        VerificationBottomSheet().apply {
-                            arguments = Bundle().apply {
-                                putParcelable(MvRx.KEY_ARG, VerificationBottomSheet.VerificationArgs(
-                                        data.otherUserId, data.transactionId, roomId = roomDetailArgs.roomId))
-                            }
-                        }.show(parentFragmentManager, "REQ")
+                        VerificationBottomSheet.withArgs(
+                                roomDetailArgs.roomId,
+                                data.otherUserId,
+                                data.transactionId
+                        ).show(parentFragmentManager, "REQ")
                     }
                 }
             }

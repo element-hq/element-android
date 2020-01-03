@@ -109,13 +109,13 @@ class SASVerificationCodeFragment @Inject constructor(
                         sasCodeWaitingPartnerText.isVisible = false
                     }
                 }
-                is Fail -> {
+                is Fail    -> {
                     sasLoadingProgress.isVisible = false
                     emojiGrid.isInvisible = true
                     ButtonsVisibilityGroup.isInvisible = true
                     // TODO?
                 }
-                else -> {
+                else       -> {
                     sasLoadingProgress.isVisible = true
                     emojiGrid.isInvisible = true
                     ButtonsVisibilityGroup.isInvisible = true
@@ -142,17 +142,21 @@ class SASVerificationCodeFragment @Inject constructor(
 
     @OnClick(R.id.sas_request_continue_button)
     fun onMatchButtonTapped() = withState(viewModel) { state ->
+        val otherUserId = state.otherUser?.id ?: return@withState
+        val txId = state.transactionId ?: return@withState
         // UX echo
         ButtonsVisibilityGroup.isInvisible = true
         sasCodeWaitingPartnerText.isVisible = true
-        sharedViewModel.handle(VerificationAction.SASMatchAction(state.otherUserId, state.transactionId))
+        sharedViewModel.handle(VerificationAction.SASMatchAction(otherUserId, txId))
     }
 
     @OnClick(R.id.sas_request_cancel_button)
     fun onDoNotMatchButtonTapped() = withState(viewModel) { state ->
+        val otherUserId = state.otherUser?.id ?: return@withState
+        val txId = state.transactionId ?: return@withState
         // UX echo
         ButtonsVisibilityGroup.isInvisible = true
         sasCodeWaitingPartnerText.isVisible = true
-        sharedViewModel.handle(VerificationAction.SASDoNotMatchAction(state.otherUserId, state.transactionId))
+        sharedViewModel.handle(VerificationAction.SASDoNotMatchAction(otherUserId, txId))
     }
 }

@@ -17,6 +17,7 @@ package im.vector.riotx.features.crypto.verification
 
 import android.os.Parcelable
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import butterknife.OnClick
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.parentFragmentViewModel
@@ -53,7 +54,7 @@ class VerificationConclusionFragment @Inject constructor() : VectorBaseFragment(
             }
             ConclusionState.WARNING   -> {
                 verificationConclusionTitle.text = getString(R.string.verification_conclusion_not_secure)
-                verifyConclusionDescription.setTextOrHide(null)
+                verifyConclusionDescription.isVisible = false
                 verifyConclusionImageView.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_shield_warning))
 
                 verifyConclusionBottomDescription.text = Markwon.builder(requireContext())

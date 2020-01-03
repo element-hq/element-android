@@ -44,7 +44,7 @@ internal data class MessageVerificationKeyContent(
         return true
     }
 
-    override fun toEventContent() = this.toContent()
+    override fun toEventContent() = toContent()
 
     companion object : VerificationInfoKeyFactory {
 

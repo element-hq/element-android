@@ -25,6 +25,7 @@ import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.matrix.android.internal.crypto.verification.PendingVerificationRequest
 import im.vector.riotx.core.di.HasScreenInjector
+import im.vector.riotx.core.platform.EmptyAction
 import im.vector.riotx.core.platform.VectorViewModel
 
 data class VerificationRequestViewState(
@@ -36,7 +37,7 @@ data class VerificationRequestViewState(
 class VerificationRequestViewModel @AssistedInject constructor(
         @Assisted initialState: VerificationRequestViewState,
         private val session: Session
-) : VectorViewModel<VerificationRequestViewState, VerificationAction>(initialState), SasVerificationService.SasVerificationListener {
+) : VectorViewModel<VerificationRequestViewState, EmptyAction>(initialState), SasVerificationService.SasVerificationListener {
 
     @AssistedInject.Factory
     interface Factory {
@@ -75,8 +76,7 @@ class VerificationRequestViewModel @AssistedInject constructor(
         }
     }
 
-    override fun handle(action: VerificationAction) {
-    }
+    override fun handle(action: EmptyAction) {}
 
     override fun transactionCreated(tx: SasVerificationTransaction) {}
 

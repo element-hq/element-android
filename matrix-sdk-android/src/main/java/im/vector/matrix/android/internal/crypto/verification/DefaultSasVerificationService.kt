@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.crypto.verification
 
-import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import dagger.Lazy
@@ -52,7 +51,6 @@ import kotlin.collections.set
 
 @SessionScope
 internal class DefaultSasVerificationService @Inject constructor(
-        private val context: Context,
         private val credentials: Credentials,
         private val cryptoStore: IMXCryptoStore,
         private val myDeviceInfoHolder: Lazy<MyDeviceInfoHolder>,
@@ -81,7 +79,7 @@ internal class DefaultSasVerificationService @Inject constructor(
     fun onToDeviceEvent(event: Event) {
         GlobalScope.launch(coroutineDispatchers.crypto) {
             when (event.getClearType()) {
-                EventType.KEY_VERIFICATION_START -> {
+                EventType.KEY_VERIFICATION_START  -> {
                     onStartRequestReceived(event)
                 }
                 EventType.KEY_VERIFICATION_CANCEL -> {
@@ -90,13 +88,13 @@ internal class DefaultSasVerificationService @Inject constructor(
                 EventType.KEY_VERIFICATION_ACCEPT -> {
                     onAcceptReceived(event)
                 }
-                EventType.KEY_VERIFICATION_KEY -> {
+                EventType.KEY_VERIFICATION_KEY    -> {
                     onKeyReceived(event)
                 }
-                EventType.KEY_VERIFICATION_MAC -> {
+                EventType.KEY_VERIFICATION_MAC    -> {
                     onMacReceived(event)
                 }
-                else -> {
+                else                              -> {
                     // ignore
                 }
             }
@@ -106,7 +104,7 @@ internal class DefaultSasVerificationService @Inject constructor(
     fun onRoomEvent(event: Event) {
         GlobalScope.launch(coroutineDispatchers.crypto) {
             when (event.getClearType()) {
-                EventType.KEY_VERIFICATION_START -> {
+                EventType.KEY_VERIFICATION_START  -> {
                     onRoomStartRequestReceived(event)
                 }
                 EventType.KEY_VERIFICATION_CANCEL -> {
@@ -116,24 +114,24 @@ internal class DefaultSasVerificationService @Inject constructor(
                 EventType.KEY_VERIFICATION_ACCEPT -> {
                     onRoomAcceptReceived(event)
                 }
-                EventType.KEY_VERIFICATION_KEY -> {
+                EventType.KEY_VERIFICATION_KEY    -> {
                     onRoomKeyRequestReceived(event)
                 }
-                EventType.KEY_VERIFICATION_MAC -> {
+                EventType.KEY_VERIFICATION_MAC    -> {
                     onRoomMacReceived(event)
                 }
-                EventType.KEY_VERIFICATION_READY -> {
+                EventType.KEY_VERIFICATION_READY  -> {
                     onRoomReadyReceived(event)
                 }
-                EventType.KEY_VERIFICATION_DONE -> {
+                EventType.KEY_VERIFICATION_DONE   -> {
                     onRoomDoneReceived(event)
                 }
-                EventType.MESSAGE -> {
+                EventType.MESSAGE                 -> {
                     if (MessageType.MSGTYPE_VERIFICATION_REQUEST == event.getClearContent().toModel<MessageContent>()?.type) {
                         onRoomRequestReceived(event)
                     }
                 }
-                else -> {
+                else                              -> {
                     // ignore
                 }
             }
@@ -275,7 +273,7 @@ internal class DefaultSasVerificationService @Inject constructor(
         if (startReq?.isValid()?.not() == true) {
             Timber.e("## received invalid verification request")
             if (startReq.transactionID != null) {
-                sasTransportRoomMessageFactory.createTransport(context, credentials.userId, credentials.deviceId
+                sasTransportRoomMessageFactory.createTransport(credentials.userId, credentials.deviceId
                         ?: "", event.roomId
                         ?: "", null).cancelTransaction(
                         startReq.transactionID ?: "",
@@ -288,11 +286,11 @@ internal class DefaultSasVerificationService @Inject constructor(
         }
 
         handleStart(otherUserId, startReq as VerificationInfoStart) {
-            it.transport = sasTransportRoomMessageFactory.createTransport(context, credentials.userId, credentials.deviceId
+            it.transport = sasTransportRoomMessageFactory.createTransport(credentials.userId, credentials.deviceId
                     ?: "", event.roomId
                     ?: "", it)
         }?.let {
-            sasTransportRoomMessageFactory.createTransport(context, credentials.userId, credentials.deviceId
+            sasTransportRoomMessageFactory.createTransport(credentials.userId, credentials.deviceId
                     ?: "", event.roomId
                     ?: "", null).cancelTransaction(
                     startReq.transactionID ?: "",
@@ -701,7 +699,7 @@ internal class DefaultSasVerificationService @Inject constructor(
                     pendingRequests[userId] = it
                 }
 
-        val transport = sasTransportRoomMessageFactory.createTransport(context, credentials.userId, credentials.deviceId
+        val transport = sasTransportRoomMessageFactory.createTransport(credentials.userId, credentials.deviceId
                 ?: "", roomId, null)
 
         // Cancel existing pending requests?
@@ -738,7 +736,7 @@ internal class DefaultSasVerificationService @Inject constructor(
     }
 
     override fun declineVerificationRequestInDMs(otherUserId: String, otherDeviceId: String, transactionId: String, roomId: String) {
-        sasTransportRoomMessageFactory.createTransport(context, credentials.userId, credentials.deviceId
+        sasTransportRoomMessageFactory.createTransport(credentials.userId, credentials.deviceId
                 ?: "", roomId, null).cancelTransaction(transactionId, otherUserId, otherDeviceId, CancelCode.User)
 
         getExistingVerificationRequest(otherUserId, transactionId)?.let {
@@ -776,7 +774,7 @@ internal class DefaultSasVerificationService @Inject constructor(
                     transactionId,
                     otherUserId,
                     otherDeviceId)
-            tx.transport = sasTransportRoomMessageFactory.createTransport(context, credentials.userId, credentials.deviceId
+            tx.transport = sasTransportRoomMessageFactory.createTransport(credentials.userId, credentials.deviceId
                     ?: "", roomId, tx)
             addTransaction(tx)
 
@@ -791,7 +789,7 @@ internal class DefaultSasVerificationService @Inject constructor(
         // Let's find the related request
         getExistingVerificationRequest(otherUserId)?.find { it.transactionId == transactionId }?.let {
             // we need to send a ready event, with matching methods
-            val transport = sasTransportRoomMessageFactory.createTransport(context, credentials.userId, credentials.deviceId
+            val transport = sasTransportRoomMessageFactory.createTransport(credentials.userId, credentials.deviceId
                     ?: "", roomId, null)
             val methods = it.requestInfo?.methods?.intersect(listOf(KeyVerificationStart.VERIF_METHOD_SAS))?.toList()
             if (methods.isNullOrEmpty()) {

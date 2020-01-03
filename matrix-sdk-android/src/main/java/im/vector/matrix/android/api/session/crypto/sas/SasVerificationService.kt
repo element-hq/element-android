@@ -81,14 +81,15 @@ interface SasVerificationService {
 
     companion object {
 
+        private const val TEN_MINTUTES_IN_MILLIS = 10 * 60 * 1000
+        private const val FIVE_MINTUTES_IN_MILLIS = 5 * 60 * 1000
+
         fun isValidRequest(age: Long?): Boolean {
             if (age == null) return false
             val now = System.currentTimeMillis()
-            val tooInThePast = now - (10 * 60 * 1000)
-            val fiveMinInMs = 5 * 60 * 1000
-            val tooInTheFuture = System.currentTimeMillis() + fiveMinInMs
-
-            return !(age < tooInThePast || age > tooInTheFuture)
+            val tooInThePast = now - TEN_MINTUTES_IN_MILLIS
+            val tooInTheFuture = now + FIVE_MINTUTES_IN_MILLIS
+            return age in tooInThePast..tooInTheFuture
         }
     }
 }

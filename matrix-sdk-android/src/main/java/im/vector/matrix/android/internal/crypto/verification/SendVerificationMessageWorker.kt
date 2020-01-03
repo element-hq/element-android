@@ -1,3 +1,18 @@
+/*
+ * Copyright 2020 New Vector Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package im.vector.matrix.android.internal.crypto.verification
 
 import android.content.Context
@@ -5,8 +20,7 @@ import androidx.work.CoroutineWorker
 import androidx.work.Data
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
-import im.vector.matrix.android.api.failure.Failure
-import im.vector.matrix.android.api.failure.MatrixError
+import im.vector.matrix.android.api.failure.shouldBeRetried
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.internal.crypto.tasks.SendVerificationMessageTask
@@ -35,10 +49,11 @@ internal class SendVerificationMessageWorker constructor(context: Context, param
         val params = WorkerParamsFactory.fromData<Params>(inputData)
                 ?: return Result.success(errorOutputData)
 
-        val sessionComponent = getSessionComponent(params.userId) ?: return Result.success(errorOutputData).also {
-            // TODO, can this happen? should I update local echo?
-            Timber.e("Unknown Session, cannot send message, userId:${params.userId}")
-        }
+        val sessionComponent = getSessionComponent(params.userId)
+                ?: return Result.success(errorOutputData).also {
+                    // TODO, can this happen? should I update local echo?
+                    Timber.e("Unknown Session, cannot send message, userId:${params.userId}")
+                }
         sessionComponent.inject(this)
         val localId = params.event.eventId ?: ""
         return try {
@@ -57,10 +72,5 @@ internal class SendVerificationMessageWorker constructor(context: Context, param
                 Result.success(errorOutputData)
             }
         }
-    }
-
-    private fun Throwable.shouldBeRetried(): Boolean {
-        return this is Failure.NetworkConnection
-                || (this is Failure.ServerError && error.code == MatrixError.M_LIMIT_EXCEEDED)
     }
 }

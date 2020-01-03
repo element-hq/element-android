@@ -169,7 +169,7 @@ internal abstract class SASVerificationTransaction(
         } // if not wait for it
     }
 
-    override fun shortCodeDoNotMatch() {
+    override fun shortCodeDoesNotMatch() {
         Timber.v("## SAS short code do not match for id:$transactionId")
         cancel(CancelCode.MismatchedSas)
     }

@@ -62,5 +62,5 @@ internal data class MessageVerificationStartContent(
         return true
     }
 
-    override fun toEventContent() = this.toContent()
+    override fun toEventContent() = toContent()
 }

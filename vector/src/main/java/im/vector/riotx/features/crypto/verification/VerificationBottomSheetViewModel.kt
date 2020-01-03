@@ -112,8 +112,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
                 }
             }
             is VerificationAction.StartSASVerification    -> {
-                val request = session.getSasVerificationService().getExistingVerificationRequest(otherUserId)
-                        ?.firstOrNull { it.transactionId == action.pendingRequestTransactionId }
+                val request = session.getSasVerificationService().getExistingVerificationRequest(otherUserId, action.pendingRequestTransactionId)
                         ?: return@withState
 
                 val otherDevice = if (request.isIncoming) request.requestInfo?.fromDevice else request.readyInfo?.fromDevice
@@ -134,7 +133,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
             is VerificationAction.SASDoNotMatchAction     -> {
                 session.getSasVerificationService()
                         .getExistingTransaction(action.userID, action.sasTransactionId)
-                        ?.shortCodeDoNotMatch()
+                        ?.shortCodeDoesNotMatch()
             }
             is VerificationAction.GotItConclusion         -> {
                 _requestLiveData.postValue(LiveEvent(Success(action)))

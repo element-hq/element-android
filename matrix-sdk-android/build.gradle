@@ -106,7 +106,6 @@ dependencies {
 
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
     kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
-    implementation("com.google.guava:guava:28.2-jre")
 
     // Network
     implementation 'com.squareup.retrofit2:retrofit:2.6.2'

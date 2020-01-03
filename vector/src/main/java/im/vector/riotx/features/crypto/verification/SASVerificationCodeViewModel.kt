@@ -25,12 +25,12 @@ import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTransactio
 import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTxState
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
+import im.vector.riotx.core.di.HasScreenInjector
 import im.vector.riotx.core.platform.EmptyAction
 import im.vector.riotx.core.platform.VectorViewModel
 
 data class SASVerificationCodeViewState(
-        val transactionId: String,
-        val otherUserId: String,
+        val transactionId: String?,
         val otherUser: MatrixItem? = null,
         val supportsEmoji: Boolean = true,
         val emojiDescription: Async<List<EmojiRepresentation>> = Uninitialized,
@@ -45,23 +45,9 @@ class SASVerificationCodeViewModel @AssistedInject constructor(
 
     init {
         withState { state ->
-            val matrixItem = session.getUser(state.otherUserId)?.toMatrixItem()
-            setState {
-                copy(otherUser = matrixItem)
-            }
-            val sasTx = session.getSasVerificationService()
-                    .getExistingTransaction(state.otherUserId, state.transactionId)
-            if (sasTx == null) {
-                setState {
-                    copy(
-                            isWaitingFromOther = false,
-                            emojiDescription = Fail(Throwable("Unknown Transaction")),
-                            decimalDescription = Fail(Throwable("Unknown Transaction"))
-                    )
-                }
-            } else {
-                refreshStateFromTx(sasTx)
-            }
+            refreshStateFromTx(session.getSasVerificationService()
+                    .getExistingTransaction(state.otherUser?.id ?: "", state.transactionId
+                            ?: ""))
         }
 
         session.getSasVerificationService().addListener(this)
@@ -72,8 +58,8 @@ class SASVerificationCodeViewModel @AssistedInject constructor(
         super.onCleared()
     }
 
-    private fun refreshStateFromTx(sasTx: SasVerificationTransaction) {
-        when (sasTx.state) {
+    private fun refreshStateFromTx(sasTx: SasVerificationTransaction?) {
+        when (sasTx?.state) {
             SasVerificationTxState.None,
             SasVerificationTxState.SendingStart,
             SasVerificationTxState.Started,
@@ -131,6 +117,15 @@ class SASVerificationCodeViewModel @AssistedInject constructor(
                     )
                 }
             }
+            null                                  -> {
+                setState {
+                    copy(
+                            isWaitingFromOther = false,
+                            emojiDescription = Fail(Throwable("Unknown Transaction")),
+                            decimalDescription = Fail(Throwable("Unknown Transaction"))
+                    )
+                }
+            }
         }
     }
 
@@ -138,8 +133,10 @@ class SASVerificationCodeViewModel @AssistedInject constructor(
         transactionUpdated(tx)
     }
 
-    override fun transactionUpdated(tx: SasVerificationTransaction) {
-        refreshStateFromTx(tx)
+    override fun transactionUpdated(tx: SasVerificationTransaction) = withState { state ->
+        if (tx.transactionId == state.transactionId) {
+            refreshStateFromTx(tx)
+        }
     }
 
     @AssistedInject.Factory
@@ -156,9 +153,12 @@ class SASVerificationCodeViewModel @AssistedInject constructor(
 
         override fun initialState(viewModelContext: ViewModelContext): SASVerificationCodeViewState? {
             val args = viewModelContext.args<VerificationBottomSheet.VerificationArgs>()
+            val session = (viewModelContext.activity as HasScreenInjector).injector().activeSessionHolder().getActiveSession()
+            val matrixItem = session.getUser(args.otherUserId)?.toMatrixItem()
+
             return SASVerificationCodeViewState(
-                    transactionId = args.verificationId ?: "",
-                    otherUserId = args.otherUserId
+                    transactionId = args.verificationId,
+                    otherUser = matrixItem
             )
         }
     }

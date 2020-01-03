@@ -32,5 +32,5 @@ internal data class MessageVerificationDoneContent(
 
     override fun isValid() = transactionID?.isNotEmpty() == true
 
-    override fun toEventContent(): Content? = this.toContent()
+    override fun toEventContent(): Content? = toContent()
 }

@@ -14,21 +14,21 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:text="@string/sas_verified"
-        tools:text="@string/sas_verified"
         android:textColor="?riotx_text_primary"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/sas_verified" />
 
     <TextView
         android:id="@+id/verifyConclusionDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        tools:text="@string/sas_verified_successful_description"
         android:text="@string/sas_verified_successful_description"
         android:textColor="?riotx_text_secondary"
-        app:layout_constraintTop_toBottomOf="@id/verificationConclusionTitle"/>
+        app:layout_constraintTop_toBottomOf="@id/verificationConclusionTitle"
+        tools:text="@string/sas_verified_successful_description" />
 
     <ImageView
         android:id="@+id/verifyConclusionImageView"
@@ -36,22 +36,20 @@
         android:layout_height="180dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="16dp"
-        tools:background="@drawable/ic_shield_trusted"
-        android:background="@drawable/ic_shield_trusted"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/verifyConclusionDescription" />
+        app:layout_constraintTop_toBottomOf="@id/verifyConclusionDescription"
+        tools:background="@drawable/ic_shield_trusted" />
 
     <TextView
         android:id="@+id/verifyConclusionBottomDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        tools:text="@string/verification_green_shield"
-        android:text="@string/verification_green_shield"
         android:textColor="?riotx_text_secondary"
-        app:layout_constraintTop_toBottomOf="@id/verifyConclusionImageView"/>
+        app:layout_constraintTop_toBottomOf="@id/verifyConclusionImageView"
+        tools:text="@string/verification_green_shield" />
 
 
     <com.google.android.material.button.MaterialButton

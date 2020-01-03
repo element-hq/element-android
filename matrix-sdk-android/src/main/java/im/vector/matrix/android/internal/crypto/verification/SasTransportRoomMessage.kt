@@ -284,10 +284,11 @@ internal class SasTransportRoomMessage(
 }
 
 internal class SasTransportRoomMessageFactory @Inject constructor(
+        private val context: Context,
         private val monarchy: Monarchy,
         private val localEchoEventFactory: LocalEchoEventFactory) {
 
-    fun createTransport(context: Context, userId: String, userDevice: String, roomId: String, tx: SASVerificationTransaction?
+    fun createTransport(userId: String, userDevice: String, roomId: String, tx: SASVerificationTransaction?
     ): SasTransportRoomMessage {
         return SasTransportRoomMessage(context, userId, userDevice, roomId, monarchy, localEchoEventFactory, tx)
     }

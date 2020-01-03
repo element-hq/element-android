@@ -50,7 +50,7 @@ internal data class MessageVerificationAcceptContent(
         return true
     }
 
-    override fun toEventContent() = this.toContent()
+    override fun toEventContent() = toContent()
 
     companion object : VerificationInfoAcceptFactory {
 
