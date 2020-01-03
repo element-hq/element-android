@@ -62,7 +62,7 @@ internal class SessionRealmConfigurationFactory @Inject constructor(private val 
                 .directory(directory)
                 .name(REALM_NAME)
                 .apply {
-                    realmKeysUtils.configureEncryption(this, "${SessionModule.DB_ALIAS_PREFIX}$userMd5")
+                    realmKeysUtils.configureEncryption(this, SessionModule.getKeyAlias(userMd5))
                 }
                 .modules(SessionRealmModule())
                 .deleteRealmIfMigrationNeeded()

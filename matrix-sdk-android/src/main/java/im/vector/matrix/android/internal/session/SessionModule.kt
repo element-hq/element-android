@@ -55,8 +55,7 @@ internal abstract class SessionModule {
 
     @Module
     companion object {
-
-        internal const val DB_ALIAS_PREFIX = "session_db_"
+        internal fun getKeyAlias(userMd5: String) = "session_db_$userMd5"
 
         @JvmStatic
         @Provides

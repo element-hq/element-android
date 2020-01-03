@@ -97,8 +97,8 @@ internal class DefaultSignOutTask @Inject constructor(private val context: Conte
         userFile.deleteRecursively()
 
         Timber.d("SignOut: clear the database keys")
-        realmKeysUtils.clear(SessionModule.DB_ALIAS_PREFIX + userMd5)
-        realmKeysUtils.clear(CryptoModule.DB_ALIAS_PREFIX + userMd5)
+        realmKeysUtils.clear(SessionModule.getKeyAlias(userMd5))
+        realmKeysUtils.clear(CryptoModule.getKeyAlias(userMd5))
 
         // Sanity check
         if (BuildConfig.DEBUG) {
