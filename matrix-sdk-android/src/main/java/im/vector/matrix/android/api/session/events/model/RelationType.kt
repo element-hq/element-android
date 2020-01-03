@@ -26,4 +26,6 @@ object RelationType {
     const val REPLACE = "m.replace"
     /** Lets you define an event which references an existing event.*/
     const val REFERENCE = "m.reference"
+    /** Lets you define an event which references an existing event.*/
+    const val RESPONSE = "m.response"
 }

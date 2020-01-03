@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:orientation="horizontal"
+    tools:parentTag="android.widget.LinearLayout">
+
+    <ImageView
+        android:id="@+id/pollResultItemSelectedIcon"
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"
+        android:paddingStart="2dp"
+        android:layout_gravity="center_vertical"
+        android:paddingEnd="2dp"
+        android:src="@drawable/ic_check_white_24dp"
+        android:tint="?riotx_text_secondary"
+        android:contentDescription="@string/poll_item_selected_aria" />
+
+    <TextView
+        android:id="@+id/pollResultItemLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:textColor="?riotx_text_primary"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        tools:text="Open a Github Issue" />
+
+
+    <TextView
+        android:id="@+id/pollResultItemPercent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:textColor="?riotx_text_primary"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        tools:text="47%" />
+</merge>

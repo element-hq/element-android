@@ -97,4 +97,11 @@
         <attr name="riotx_highlighted_message_background" format="reference" />
 
     </declare-styleable>
+
+    <declare-styleable name="PollResultLineView">
+        <attr name="optionName" format="string" localization="suggested" />
+        <attr name="optionCount" format="string" />
+        <attr name="optionSelected" format="boolean" />
+    </declare-styleable>
+
 </resources>

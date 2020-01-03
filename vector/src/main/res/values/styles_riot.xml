@@ -183,6 +183,14 @@
         <item name="colorControlHighlight">@android:color/white</item>
     </style>
 
+
+    <style name="Style.Vector.Poll.Button" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:minHeight">44dp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="cornerRadius">10dp</item>
+    </style>
+
+
     <style name="VectorSearchView" parent="Widget.AppCompat.SearchView">
         <item name="searchIcon">@drawable/ic_search</item>
         <item name="closeIcon">@drawable/ic_x_green</item>

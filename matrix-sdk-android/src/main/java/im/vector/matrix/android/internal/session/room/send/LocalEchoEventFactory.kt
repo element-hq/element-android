@@ -36,6 +36,7 @@ import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageFileContent
 import im.vector.matrix.android.api.session.room.model.message.MessageFormat
 import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
+import im.vector.matrix.android.api.session.room.model.message.MessagePollResponseContent
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
@@ -129,6 +130,21 @@ internal class LocalEchoEventFactory @Inject constructor(
                         newContent = createTextContent(newBodyText, newBodyAutoMarkdown)
                                 .toMessageTextContent(msgType)
                                 .toContent()
+                ))
+    }
+
+    fun createPollReplyEvent(roomId: String,
+                             pollEventId: String,
+                             optionIndex: Int,
+                             optionLabel: String): Event {
+        return createEvent(roomId,
+                MessagePollResponseContent(
+                        body = optionLabel,
+                        relatesTo = RelationDefaultContent(
+                                type = RelationType.RESPONSE,
+                                option = optionIndex,
+                                eventId = pollEventId)
+
                 ))
     }
 

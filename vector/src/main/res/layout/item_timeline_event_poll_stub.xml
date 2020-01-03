@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/pollLabelText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="?riotx_text_primary"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        tools:text="What would you like to do?" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/pollButton1"
+        style="@style/Style.Vector.Poll.Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="Create Github issue" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/pollButton2"
+        style="@style/Style.Vector.Poll.Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="Search Github" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/pollButton3"
+        style="@style/Style.Vector.Poll.Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="Logout" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/pollButton4"
+        style="@style/Style.Vector.Poll.Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        tools:text="Option 4" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/pollButton5"
+        style="@style/Style.Vector.Poll.Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        tools:text="Option 5" />
+
+    <im.vector.riotx.features.home.room.detail.timeline.item.PollResultLineView
+        android:id="@+id/pollResult1"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        tools:optionName="Create Github issue"
+        tools:optionCount="40%"
+        tools:optionSelected="true"
+        />
+    <im.vector.riotx.features.home.room.detail.timeline.item.PollResultLineView
+        android:id="@+id/pollResult2"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        tools:optionName="Search Github"
+        tools:optionCount="60%"
+        tools:optionSelected="false"
+        />
+
+    <im.vector.riotx.features.home.room.detail.timeline.item.PollResultLineView
+        android:id="@+id/pollResult3"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        tools:optionName="Logout"
+        tools:optionCount="0%"
+        tools:optionSelected="false"
+        />
+
+    <im.vector.riotx.features.home.room.detail.timeline.item.PollResultLineView
+        android:id="@+id/pollResult4"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        tools:optionName="Option 4"
+        tools:optionCount="0%"
+        tools:optionSelected="false"
+        />
+
+    <im.vector.riotx.features.home.room.detail.timeline.item.PollResultLineView
+        android:id="@+id/pollResult5"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        tools:optionName="Option 5"
+        tools:optionCount="0%"
+        tools:optionSelected="false"
+        />
+
+    <TextView
+        android:id="@+id/pollInfosText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="?riotx_text_secondary"
+        android:gravity="start"
+        android:textSize="12sp"
+        tools:text="12 votes - Final Results" />
+
+</LinearLayout>

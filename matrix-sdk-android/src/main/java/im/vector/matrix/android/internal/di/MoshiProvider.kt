@@ -46,6 +46,7 @@ object MoshiProvider {
                     .registerSubtype(MessageVideoContent::class.java, MessageType.MSGTYPE_VIDEO)
                     .registerSubtype(MessageLocationContent::class.java, MessageType.MSGTYPE_LOCATION)
                     .registerSubtype(MessageFileContent::class.java, MessageType.MSGTYPE_FILE)
+                    .registerSubtype(MessageOptionsContent::class.java, MessageType.MSGTYPE_OPTIONS)
                     .registerSubtype(MessageVerificationRequestContent::class.java, MessageType.MSGTYPE_VERIFICATION_REQUEST)
             )
             .add(SerializeNulls.JSON_ADAPTER_FACTORY)

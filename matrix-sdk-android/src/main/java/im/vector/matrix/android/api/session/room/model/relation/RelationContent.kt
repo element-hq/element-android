@@ -23,4 +23,5 @@ interface RelationContent {
     val type: String?
     val eventId: String?
     val inReplyTo: ReplyToContent?
+    val option: Int?
 }
