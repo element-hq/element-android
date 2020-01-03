@@ -16,6 +16,9 @@
 
 package im.vector.matrix.android.internal.auth.db
 
+import im.vector.matrix.android.api.auth.data.Credentials
+import im.vector.matrix.android.internal.auth.createSessionId
+import im.vector.matrix.android.internal.di.MoshiProvider
 import io.realm.DynamicRealm
 import io.realm.RealmMigration
 import timber.log.Timber
@@ -23,7 +26,7 @@ import timber.log.Timber
 internal object AuthRealmMigration : RealmMigration {
 
     // Current schema version
-    const val SCHEMA_VERSION = 2L
+    const val SCHEMA_VERSION = 3L
 
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
         Timber.d("Migrating Auth Realm from $oldVersion to $newVersion")
@@ -52,6 +55,27 @@ internal object AuthRealmMigration : RealmMigration {
             realm.schema.get("SessionParamsEntity")
                     ?.addField(SessionParamsEntityFields.IS_TOKEN_VALID, Boolean::class.java)
                     ?.transform { it.set(SessionParamsEntityFields.IS_TOKEN_VALID, true) }
+        }
+
+        if (oldVersion <= 2) {
+            Timber.d("Step 2 -> 3")
+            Timber.d("Update SessionParamsEntity primary key, to allow several sessions with the same userId")
+
+            realm.schema.get("SessionParamsEntity")
+                    ?.removePrimaryKey()
+                    ?.addField(SessionParamsEntityFields.SESSION_ID, String::class.java)
+                    ?.setRequired(SessionParamsEntityFields.SESSION_ID, true)
+                    ?.transform {
+                        val userId = it.getString(SessionParamsEntityFields.USER_ID)
+                        val credentialsJson = it.getString(SessionParamsEntityFields.CREDENTIALS_JSON)
+
+                        val credentials = MoshiProvider.providesMoshi()
+                                .adapter(Credentials::class.java)
+                                .fromJson(credentialsJson)
+
+                        it.set(SessionParamsEntityFields.SESSION_ID, createSessionId(userId, credentials?.deviceId))
+                    }
+                    ?.addPrimaryKey(SessionParamsEntityFields.SESSION_ID)
         }
     }
 }
