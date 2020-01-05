@@ -91,6 +91,13 @@ internal class DefaultSendService @AssistedInject constructor(
         return sendEvent(event)
     }
 
+    override fun sendPoll(question: String, options: List<Pair<String, String>>) {
+        localEchoEventFactory.createPollEvent(roomId, question, options).also {
+            saveLocalEcho(it)
+            sendEvent(it)
+        }
+    }
+
     private fun sendEvent(event: Event): Cancelable {
         // Encrypted room handling
         return if (cryptoService.isRoomEncrypted(roomId)) {

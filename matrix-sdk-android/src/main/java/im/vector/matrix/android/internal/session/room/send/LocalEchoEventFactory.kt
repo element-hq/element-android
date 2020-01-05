@@ -36,11 +36,14 @@ import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageFileContent
 import im.vector.matrix.android.api.session.room.model.message.MessageFormat
 import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageOptionsContent
 import im.vector.matrix.android.api.session.room.model.message.MessagePollResponseContent
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
 import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
+import im.vector.matrix.android.api.session.room.model.message.OptionItems
+import im.vector.matrix.android.api.session.room.model.message.OptionsType
 import im.vector.matrix.android.api.session.room.model.message.ThumbnailInfo
 import im.vector.matrix.android.api.session.room.model.message.VideoInfo
 import im.vector.matrix.android.api.session.room.model.message.isReply
@@ -146,6 +149,30 @@ internal class LocalEchoEventFactory @Inject constructor(
                                 eventId = pollEventId)
 
                 ))
+    }
+
+    fun createPollEvent(roomId: String,
+                        question: String,
+                        options: List<Pair<String, String>>): Event {
+        val compatLabel = buildString {
+            append(question)
+            append("\n")
+            options.forEach {
+                append("\n")
+                append(it.second)
+            }
+        }
+        return createEvent(
+                roomId,
+                MessageOptionsContent(
+                        body = compatLabel,
+                        label = question,
+                        optionType = OptionsType.POLL.value,
+                        options = options.map {
+                            OptionItems(it.first, it.second)
+                        }
+                )
+        )
     }
 
     fun createReplaceTextOfReply(roomId: String,

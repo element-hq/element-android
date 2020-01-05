@@ -62,11 +62,18 @@ interface SendService {
     fun sendMedias(attachments: List<ContentAttachmentData>): Cancelable
 
     /**
-     * Method to send a list of media asynchronously.
-     * @param attachments the list of media to send
+     * Method to send a poll response.
+     * @param pollEventId the poll currently replied to
+     * @param optionIndex The reply index
+     * @param optionValue The option value (for compatibility)
      * @return a [Cancelable]
      */
     fun sendPollReply(pollEventId: String, optionIndex: Int, optionValue: String): Cancelable
+
+    /**
+     * @param options list of (label, value)
+     */
+    fun sendPoll(question: String, options: List<Pair<String, String>>)
 
     /**
      * Redacts (delete) the given event.

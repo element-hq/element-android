@@ -251,7 +251,6 @@ object CommandParser {
                 }
                 Command.SPOILER.command                -> {
                     val message = textMessage.substring(Command.SPOILER.command.length).trim()
-
                     ParsedCommand.SendSpoiler(message)
                 }
                 Command.SHRUG.command                  -> {
@@ -264,6 +263,15 @@ object CommandParser {
                     val message = textMessage.substring(Command.VERIFY_USER.command.length).trim()
 
                     ParsedCommand.VerifyUser(message)
+                }
+                Command.POLL.command                   -> {
+                    val rawCommand = textMessage.substring(Command.POLL.command.length).trim()
+                    val splited = rawCommand.split("|").map { it.trim() }
+                    if (splited.size > 2) {
+                        ParsedCommand.SendPoll(splited[0], splited.subList(1, splited.size))
+                    } else {
+                        ParsedCommand.ErrorUnknownSlashCommand(slashCommand)
+                    }
                 }
                 else                                   -> {
                     // Unknown command

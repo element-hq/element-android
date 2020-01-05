@@ -15,6 +15,7 @@
         <item quantity="other">%d votes - Final results</item>
     </plurals>
     <string name="poll_item_selected_aria">Selected Option</string>
+    <string name="command_description_poll">Creates a simple poll</string>
     <!-- END Strings added by Valere -->
 
 

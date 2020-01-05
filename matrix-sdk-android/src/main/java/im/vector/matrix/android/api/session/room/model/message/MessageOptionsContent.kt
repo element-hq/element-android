@@ -30,7 +30,7 @@ enum class OptionsType(val value: String) {
  */
 @JsonClass(generateAdapter = true)
 data class MessageOptionsContent(
-        @Json(name = "msgtype") override val type: String,
+        @Json(name = "msgtype") override val type: String = MessageType.MSGTYPE_OPTIONS,
         @Json(name = "type") val optionType: String? = null,
         @Json(name = "body") override val body: String,
         @Json(name = "label") val label: String?,
