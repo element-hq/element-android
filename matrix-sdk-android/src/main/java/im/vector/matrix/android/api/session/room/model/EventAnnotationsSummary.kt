@@ -19,5 +19,6 @@ data class EventAnnotationsSummary(
         var eventId: String,
         var reactionsSummary: List<ReactionAggregatedSummary>,
         var editSummary: EditAggregatedSummary?,
+        var pollResponseSummary: PollResponseAggregatedSummary?,
         var referencesAggregatedSummary: ReferencesAggregatedSummary? = null
 )

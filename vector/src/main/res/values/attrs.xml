@@ -102,6 +102,7 @@
         <attr name="optionName" format="string" localization="suggested" />
         <attr name="optionCount" format="string" />
         <attr name="optionSelected" format="boolean" />
+        <attr name="optionIsWinner" format="boolean" />
     </declare-styleable>
 
 </resources>

@@ -26,8 +26,12 @@ import im.vector.matrix.android.api.session.events.model.RelationType
 import im.vector.matrix.android.api.session.events.model.toContent
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.ReferencesAggregatedContent
+import im.vector.matrix.android.api.session.events.model.*
+import im.vector.matrix.android.api.session.room.model.PollSummaryContent
+import im.vector.matrix.android.api.session.room.model.VoteInfo
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageRelationContent
+import im.vector.matrix.android.api.session.room.model.message.MessagePollResponseContent
 import im.vector.matrix.android.api.session.room.model.relation.ReactionContent
 import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
@@ -36,6 +40,7 @@ import im.vector.matrix.android.internal.database.mapper.EventMapper
 import im.vector.matrix.android.internal.database.model.EditAggregatedSummaryEntity
 import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryEntity
 import im.vector.matrix.android.internal.database.model.EventEntity
+import im.vector.matrix.android.internal.database.model.PollResponseAggregatedSummaryEntity
 import im.vector.matrix.android.internal.database.model.ReactionAggregatedSummaryEntity
 import im.vector.matrix.android.internal.database.model.ReactionAggregatedSummaryEntityFields
 import im.vector.matrix.android.internal.database.model.ReferencesAggregatedSummaryEntity
@@ -123,6 +128,9 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
                             Timber.v("###REPLACE in room $roomId for event ${event.eventId}")
                             // A replace!
                             handleReplace(realm, event, content, roomId, isLocalEcho)
+                        } else if (content?.relatesTo?.type == RelationType.RESPONSE) {
+                            Timber.v("###RESPONSE in room $roomId for event ${event.eventId}")
+                            handleResponse(realm,userId,event, content, roomId, isLocalEcho)
                         }
                     }
 
@@ -144,13 +152,20 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
                     EventType.ENCRYPTED            -> {
                         // Relation type is in clear
                         val encryptedEventContent = event.content.toModel<EncryptedEventContent>()
-                        if (encryptedEventContent?.relatesTo?.type == RelationType.REPLACE) {
+                        if (encryptedEventContent?.relatesTo?.type == RelationType.REPLACE
+                                || encryptedEventContent?.relatesTo?.type == RelationType.RESPONSE
+                        ) {
                             // we need to decrypt if needed
                             decryptIfNeeded(event)
                             event.getClearContent().toModel<MessageContent>()?.let {
-                                Timber.v("###REPLACE in room $roomId for event ${event.eventId}")
-                                // A replace!
-                                handleReplace(realm, event, it, roomId, isLocalEcho, encryptedEventContent.relatesTo.eventId)
+                                if (encryptedEventContent.relatesTo.type == RelationType.REPLACE) {
+                                    Timber.v("###REPLACE in room $roomId for event ${event.eventId}")
+                                    // A replace!
+                                    handleReplace(realm, event, it, roomId, isLocalEcho, encryptedEventContent.relatesTo.eventId)
+                                } else if (encryptedEventContent.relatesTo.type == RelationType.RESPONSE) {
+                                    Timber.v("###RESPONSE in room $roomId for event ${event.eventId}")
+                                    handleResponse(realm, userId, event, it, roomId, isLocalEcho, encryptedEventContent.relatesTo.eventId)
+                                }
                             }
                         } else if (encryptedEventContent?.relatesTo?.type == RelationType.REFERENCE) {
                             decryptIfNeeded(event)
@@ -275,6 +290,90 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
             }
         }
     }
+
+    private fun handleResponse(realm: Realm, userId: String, event: Event, content: MessageContent, roomId: String, isLocalEcho: Boolean, relatedEventId: String? = null) {
+        val eventId = event.eventId ?: return
+        val senderId = event.senderId ?: return
+        val targetEventId = relatedEventId ?: content.relatesTo?.eventId ?: return
+        val eventTimestamp = event.originServerTs ?: return
+
+        // ok, this is a poll response
+        var existing = EventAnnotationsSummaryEntity.where(realm, targetEventId).findFirst()
+        if (existing == null) {
+            Timber.v("## POLL creating new relation summary for $targetEventId")
+            existing = EventAnnotationsSummaryEntity.create(realm, roomId, targetEventId)
+        }
+
+        // we have it
+        val existingPollSummary = existing.pollResponseSummary
+                ?: realm.createObject(PollResponseAggregatedSummaryEntity::class.java).also {
+                    existing.pollResponseSummary = it
+                }
+
+        val closedTime = existingPollSummary?.closedTime
+        if (closedTime != null && eventTimestamp > closedTime) {
+            Timber.v("## POLL is closed ignore event poll:$targetEventId, event :${event.eventId}")
+            return
+        }
+
+        val sumModel = ContentMapper.map(existingPollSummary?.aggregatedContent).toModel<PollSummaryContent>() ?: PollSummaryContent()
+
+        if (existingPollSummary!!.sourceEvents.contains(eventId)) {
+            // ignore this event, we already know it (??)
+            Timber.v("## POLL  ignoring event for summary, it's known eventId:$eventId")
+            return
+        }
+        val txId = event.unsignedData?.transactionId
+        // is it a remote echo?
+        if (!isLocalEcho && existingPollSummary.sourceLocalEchoEvents.contains(txId)) {
+            // ok it has already been managed
+            Timber.v("## POLL  Receiving remote echo of response eventId:$eventId")
+            existingPollSummary.sourceLocalEchoEvents.remove(txId)
+            existingPollSummary.sourceEvents.add(event.eventId)
+            return
+        }
+
+        val responseContent = event.content.toModel<MessagePollResponseContent>() ?: return Unit.also {
+            Timber.d("## POLL  Receiving malformed response eventId:$eventId content: ${event.content}")
+        }
+
+        val optionIndex = responseContent.relatesTo?.option ?: return Unit.also {
+            Timber.d("## POLL Ignoring malformed response no option eventId:$eventId content: ${event.content}")
+        }
+
+        val votes = sumModel.votes?.toMutableList() ?: ArrayList()
+        val existingVoteIndex = votes.indexOfFirst { it.userId == senderId }
+        if (existingVoteIndex != -1) {
+            //Is the vote newer?
+            val existingVote = votes[existingVoteIndex]
+            if (existingVote.voteTimestamp < eventTimestamp) {
+                //Take the new one
+                votes[existingVoteIndex] = VoteInfo(senderId,optionIndex, eventTimestamp)
+                if (userId == senderId) {
+                    sumModel.myVote = optionIndex
+                }
+                Timber.v("## POLL adding vote $optionIndex for user $senderId in poll :$relatedEventId ")
+            } else {
+                Timber.v("## POLL Ignoring vote (older than known one)  eventId:$eventId ")
+            }
+        } else {
+            votes.add(VoteInfo(senderId,optionIndex, eventTimestamp))
+            if (userId == senderId) {
+                sumModel.myVote = optionIndex
+            }
+            Timber.v("## POLL adding vote $optionIndex for user $senderId in poll :$relatedEventId ")
+        }
+        sumModel.votes = votes
+        if (isLocalEcho) {
+            existingPollSummary.sourceLocalEchoEvents.add(eventId)
+        } else {
+            existingPollSummary.sourceEvents.add(eventId)
+        }
+
+        existingPollSummary.aggregatedContent = ContentMapper.map(sumModel.toContent())
+    }
+
+
 
     private fun handleInitialAggregatedRelations(event: Event, roomId: String, aggregation: AggregatedAnnotation, realm: Realm) {
         if (SHOULD_HANDLE_SERVER_AGREGGATION) {

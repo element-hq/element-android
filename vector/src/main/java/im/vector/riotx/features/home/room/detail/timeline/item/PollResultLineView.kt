@@ -16,6 +16,7 @@
 package im.vector.riotx.features.home.room.detail.timeline.item
 
 import android.content.Context
+import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.View
 import android.widget.ImageView
@@ -25,6 +26,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.setTextOrHide
+import im.vector.riotx.features.themes.ThemeUtils
 
 class PollResultLineView @JvmOverloads constructor(
         context: Context,
@@ -59,6 +61,15 @@ class PollResultLineView @JvmOverloads constructor(
             selectedIcon.visibility = if (value) View.VISIBLE else View.INVISIBLE
         }
 
+    var isWinner: Boolean = false
+        set(value) {
+            field = value
+            // Text in main color
+            labelTextView.setTypeface(labelTextView.getTypeface(), if (value) Typeface.BOLD else Typeface.NORMAL)
+            percentTextView.setTypeface(percentTextView.getTypeface(), if (value) Typeface.BOLD else Typeface.NORMAL)
+        }
+
+
     init {
         inflate(context, R.layout.item_timeline_event_poll_result_item, this)
         orientation = HORIZONTAL
@@ -68,6 +79,7 @@ class PollResultLineView @JvmOverloads constructor(
                 R.styleable.PollResultLineView, 0, 0)
         label = typedArray.getString(R.styleable.PollResultLineView_optionName) ?: ""
         percent = typedArray.getString(R.styleable.PollResultLineView_optionCount) ?: ""
-        optionSelected  = typedArray.getBoolean(R.styleable.PollResultLineView_optionSelected, false)
+        optionSelected = typedArray.getBoolean(R.styleable.PollResultLineView_optionSelected, false)
+        isWinner = typedArray.getBoolean(R.styleable.PollResultLineView_optionIsWinner, false)
     }
 }

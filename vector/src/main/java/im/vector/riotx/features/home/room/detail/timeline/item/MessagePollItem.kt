@@ -28,6 +28,7 @@ import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.core.utils.DebouncedClickListener
 import im.vector.riotx.features.home.room.detail.RoomDetailAction
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
+import kotlin.math.roundToInt
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
 abstract class MessagePollItem : AbsMessageItem<MessagePollItem.Holder>() {
@@ -55,32 +56,51 @@ abstract class MessagePollItem : AbsMessageItem<MessagePollItem.Holder>() {
         holder.labelText.setTextOrHide(optionsContent?.label)
 
         val buttons = listOf(holder.button1, holder.button2, holder.button3, holder.button4, holder.button5)
-
-        buttons.forEach { it.isVisible = false }
-
-        optionsContent?.options?.forEachIndexed { index, item ->
-            if (index < buttons.size) {
-                buttons[index].let {
-                    it.text = item.label
-                    it.isVisible = true
-                }
-            }
-        }
-
         val resultLines = listOf(holder.result1, holder.result2, holder.result3, holder.result4, holder.result5)
 
+        buttons.forEach { it.isVisible = false }
         resultLines.forEach { it.isVisible = false }
-        optionsContent?.options?.forEachIndexed { index, item ->
-            if (index < resultLines.size) {
-                resultLines[index].let {
-                    it.label = item.label
-                    it.optionSelected = index == 0
-                    it.percent = "20%"
-                    it.isVisible = true
+
+        val myVote = informationData?.pollResponseAggregatedSummary?.myVote
+        val iHaveVoted = myVote != null
+        val votes = informationData?.pollResponseAggregatedSummary?.votes
+        val totalVotes = votes?.values
+                ?.fold(0) { acc, count -> acc + count } ?: 0
+        val percentMode = totalVotes > 100
+
+        if (!iHaveVoted) {
+            // Show buttons if i have not voted
+            optionsContent?.options?.forEachIndexed { index, item ->
+                if (index < buttons.size) {
+                    buttons[index].let {
+                        it.text = item.label
+                        it.isVisible = true
+                    }
+                }
+            }
+        } else {
+            val maxCount = votes?.maxBy { it.value }?.value ?: 0
+            optionsContent?.options?.forEachIndexed { index, item ->
+                if (index < resultLines.size) {
+                    val optionCount = votes?.get(index) ?: 0
+                    val count = if (percentMode) {
+                        if (totalVotes > 0)
+                            (optionCount / totalVotes.toFloat() * 100).roundToInt().let { "$it%" }
+                        else ""
+                    } else {
+                        optionCount.toString()
+                    }
+                    resultLines[index].let {
+                        it.label = item.label
+                        it.isWinner = optionCount == maxCount
+                        it.optionSelected = index == myVote
+                        it.percent = count
+                        it.isVisible = true
+                    }
                 }
             }
         }
-        holder.infoText.text = holder.view.context.resources.getQuantityString(R.plurals.poll_info, 0, 0)
+        holder.infoText.text = holder.view.context.resources.getQuantityString(R.plurals.poll_info, totalVotes, totalVotes)
     }
 
     override fun unbind(holder: Holder) {
@@ -93,7 +113,7 @@ abstract class MessagePollItem : AbsMessageItem<MessagePollItem.Holder>() {
     class Holder : AbsMessageItem.Holder(STUB_ID) {
 
         var pollId: String? = null
-        var optionValues : List<String?>? = null
+        var optionValues: List<String?>? = null
         var callback: TimelineEventController.Callback? = null
 
         val button1 by bind<Button>(R.id.pollButton1)
@@ -118,7 +138,8 @@ abstract class MessagePollItem : AbsMessageItem<MessagePollItem.Holder>() {
                 val optionIndex = buttons.indexOf(it)
                 if (optionIndex != -1 && pollId != null) {
                     val compatValue = if (optionIndex < optionValues?.size ?: 0) optionValues?.get(optionIndex) else null
-                    callback?.onAction(RoomDetailAction.ReplyToPoll(pollId!!, optionIndex, compatValue ?: "$optionIndex"))
+                    callback?.onTimelineItemAction(RoomDetailAction.ReplyToPoll(pollId!!, optionIndex, compatValue
+                            ?: "$optionIndex"))
                 }
             })
             buttons.forEach { it.setOnClickListener(clickListener) }

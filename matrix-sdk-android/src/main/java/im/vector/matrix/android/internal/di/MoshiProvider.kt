@@ -48,6 +48,7 @@ object MoshiProvider {
                     .registerSubtype(MessageFileContent::class.java, MessageType.MSGTYPE_FILE)
                     .registerSubtype(MessageOptionsContent::class.java, MessageType.MSGTYPE_OPTIONS)
                     .registerSubtype(MessageVerificationRequestContent::class.java, MessageType.MSGTYPE_VERIFICATION_REQUEST)
+                    .registerSubtype(MessagePollResponseContent::class.java, MessageType.MSGTYPE_RESPONSE)
             )
             .add(SerializeNulls.JSON_ADAPTER_FACTORY)
             .build()

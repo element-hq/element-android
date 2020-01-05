@@ -67,6 +67,7 @@
         tools:optionName="Search Github"
         tools:optionCount="60%"
         tools:optionSelected="false"
+        tools:optionIsWinner="true"
         />
 
     <im.vector.riotx.features.home.room.detail.timeline.item.PollResultLineView

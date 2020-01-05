@@ -25,7 +25,6 @@
         android:layout_weight="1"
         android:textColor="?riotx_text_primary"
         android:textSize="14sp"
-        android:textStyle="bold"
         tools:text="Open a Github Issue" />
 
 
@@ -36,6 +35,5 @@
         android:layout_gravity="center_vertical"
         android:textColor="?riotx_text_primary"
         android:textSize="14sp"
-        android:textStyle="bold"
         tools:text="47%" />
 </merge>

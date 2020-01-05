@@ -30,6 +30,7 @@ import im.vector.riotx.core.extensions.localDateTime
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.utils.getColorFromUserId
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
+import im.vector.riotx.features.home.room.detail.timeline.item.PollResponseData
 import im.vector.riotx.features.home.room.detail.timeline.item.ReactionInfoData
 import im.vector.riotx.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.riotx.features.home.room.detail.timeline.item.ReferencesInfoData
@@ -82,6 +83,15 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                         ?.map {
                             ReactionInfoData(it.key, it.count, it.addedByMe, it.localEchoEvents.isEmpty())
                         },
+                pollResponseAggregatedSummary = event.annotations?.pollResponseSummary?.let {
+                    PollResponseData(
+                            myVote = it.aggregatedContent?.myVote,
+                            isClosed = it.closedTime ?: Long.MAX_VALUE > System.currentTimeMillis(),
+                            votes = it.aggregatedContent?.votes
+                                    ?.groupBy ({ it.optionIndex }, { it.userId  })
+                                    ?.mapValues { it.value.size }
+                    )
+                },
                 hasBeenEdited = event.hasBeenEdited(),
                 hasPendingEdits = event.annotations?.editSummary?.localEchos?.any() ?: false,
                 readReceipts = event.readReceipts

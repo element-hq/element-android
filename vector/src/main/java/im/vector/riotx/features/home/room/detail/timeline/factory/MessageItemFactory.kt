@@ -34,6 +34,7 @@ import im.vector.matrix.android.api.session.room.model.message.MessageFileConten
 import im.vector.matrix.android.api.session.room.model.message.MessageImageInfoContent
 import im.vector.matrix.android.api.session.room.model.message.MessageNoticeContent
 import im.vector.matrix.android.api.session.room.model.message.MessageOptionsContent
+import im.vector.matrix.android.api.session.room.model.message.MessagePollResponseContent
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
@@ -65,6 +66,7 @@ import im.vector.riotx.features.home.room.detail.timeline.item.MessageFileItem_
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageImageVideoItem
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageImageVideoItem_
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
+import im.vector.riotx.features.home.room.detail.timeline.item.MessagePollItem_
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageTextItem
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageTextItem_
 import im.vector.riotx.features.home.room.detail.timeline.item.RedactedMessageItem
@@ -121,7 +123,7 @@ class MessageItemFactory @Inject constructor(
         if (messageContent.relatesTo?.type == RelationType.REPLACE
                 || event.isEncrypted() && event.root.content.toModel<EncryptedEventContent>()?.relatesTo?.type == RelationType.REPLACE
         ) {
-            // This is an edit event, we should it when debugging as a notice event
+            // This is an edit event, we should display it when debugging as a notice event
             return noticeItemFactory.create(event, highlight, callback)
         }
         val attributes = messageItemAttributesFactory.create(messageContent, informationData, callback)
@@ -138,7 +140,8 @@ class MessageItemFactory @Inject constructor(
             is MessageAudioContent               -> buildAudioMessageItem(messageContent, informationData, highlight, callback, attributes)
             is MessageVerificationRequestContent -> buildVerificationRequestMessageItem(messageContent, informationData, highlight, callback, attributes)
             is MessageOptionsContent             -> buildPollMessageItem(messageContent, informationData, highlight, callback, attributes)
-            else                                 -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback)
+            is MessagePollResponseContent        -> noticeItemFactory.create(event, highlight, callback)
+            else                                 -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback, attributes)
         }
     }
 
