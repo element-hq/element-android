@@ -26,7 +26,6 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.setTextOrHide
-import im.vector.riotx.features.themes.ThemeUtils
 
 class PollResultLineView @JvmOverloads constructor(
         context: Context,
@@ -68,7 +67,6 @@ class PollResultLineView @JvmOverloads constructor(
             labelTextView.setTypeface(labelTextView.getTypeface(), if (value) Typeface.BOLD else Typeface.NORMAL)
             percentTextView.setTypeface(percentTextView.getTypeface(), if (value) Typeface.BOLD else Typeface.NORMAL)
         }
-
 
     init {
         inflate(context, R.layout.item_timeline_event_poll_result_item, this)

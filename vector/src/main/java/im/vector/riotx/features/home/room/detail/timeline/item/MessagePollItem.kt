@@ -87,9 +87,11 @@ abstract class MessagePollItem : AbsMessageItem<MessagePollItem.Holder>() {
                 if (index < resultLines.size) {
                     val optionCount = votes?.get(index) ?: 0
                     val count = if (percentMode) {
-                        if (totalVotes > 0)
+                        if (totalVotes > 0) {
                             (optionCount / totalVotes.toFloat() * 100).roundToInt().let { "$it%" }
-                        else ""
+                        } else {
+                            ""
+                        }
                     } else {
                         optionCount.toString()
                     }

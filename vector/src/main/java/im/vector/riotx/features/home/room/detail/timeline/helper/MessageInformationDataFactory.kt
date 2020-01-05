@@ -88,7 +88,7 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                             myVote = it.aggregatedContent?.myVote,
                             isClosed = it.closedTime ?: Long.MAX_VALUE > System.currentTimeMillis(),
                             votes = it.aggregatedContent?.votes
-                                    ?.groupBy ({ it.optionIndex }, { it.userId  })
+                                    ?.groupBy({ it.optionIndex }, { it.userId  })
                                     ?.mapValues { it.value.size }
                     )
                 },

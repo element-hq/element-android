@@ -130,7 +130,7 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
                             handleReplace(realm, event, content, roomId, isLocalEcho)
                         } else if (content?.relatesTo?.type == RelationType.RESPONSE) {
                             Timber.v("###RESPONSE in room $roomId for event ${event.eventId}")
-                            handleResponse(realm,userId,event, content, roomId, isLocalEcho)
+                            handleResponse(realm, userId, event, content, roomId, isLocalEcho)
                         }
                     }
 
@@ -344,11 +344,11 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
         val votes = sumModel.votes?.toMutableList() ?: ArrayList()
         val existingVoteIndex = votes.indexOfFirst { it.userId == senderId }
         if (existingVoteIndex != -1) {
-            //Is the vote newer?
+            // Is the vote newer?
             val existingVote = votes[existingVoteIndex]
             if (existingVote.voteTimestamp < eventTimestamp) {
-                //Take the new one
-                votes[existingVoteIndex] = VoteInfo(senderId,optionIndex, eventTimestamp)
+                // Take the new one
+                votes[existingVoteIndex] = VoteInfo(senderId, optionIndex, eventTimestamp)
                 if (userId == senderId) {
                     sumModel.myVote = optionIndex
                 }
@@ -357,7 +357,7 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
                 Timber.v("## POLL Ignoring vote (older than known one)  eventId:$eventId ")
             }
         } else {
-            votes.add(VoteInfo(senderId,optionIndex, eventTimestamp))
+            votes.add(VoteInfo(senderId, optionIndex, eventTimestamp))
             if (userId == senderId) {
                 sumModel.myVote = optionIndex
             }
@@ -372,8 +372,6 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
 
         existingPollSummary.aggregatedContent = ContentMapper.map(sumModel.toContent())
     }
-
-
 
     private fun handleInitialAggregatedRelations(event: Event, roomId: String, aggregation: AggregatedAnnotation, realm: Realm) {
         if (SHOULD_HANDLE_SERVER_AGREGGATION) {

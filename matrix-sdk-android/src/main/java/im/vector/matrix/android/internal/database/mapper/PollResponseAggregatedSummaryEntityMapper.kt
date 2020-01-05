@@ -33,7 +33,6 @@ internal object PollResponseAggregatedSummaryEntityMapper {
         )
     }
 
-
     fun map(model: PollResponseAggregatedSummary): PollResponseAggregatedSummaryEntity {
         return PollResponseAggregatedSummaryEntity(
                 aggregatedContent = ContentMapper.map(model.aggregatedContent.toContent()),

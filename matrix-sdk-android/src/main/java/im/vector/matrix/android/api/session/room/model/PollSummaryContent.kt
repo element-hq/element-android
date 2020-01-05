@@ -24,7 +24,7 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class PollSummaryContent(
-        //Index of my vote
+        // Index of my vote
         var myVote: Int? = null,
         // Array of VoteInfo, list is constructed so that there is only one vote by user
         // And that optionIndex is valid
