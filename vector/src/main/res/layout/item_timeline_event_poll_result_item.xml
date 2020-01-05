@@ -8,14 +8,14 @@
 
     <ImageView
         android:id="@+id/pollResultItemSelectedIcon"
-        android:layout_width="30dp"
+        android:layout_width="24dp"
         android:layout_height="wrap_content"
-        android:paddingStart="2dp"
         android:layout_gravity="center_vertical"
+        android:contentDescription="@string/poll_item_selected_aria"
+        android:paddingStart="2dp"
         android:paddingEnd="2dp"
         android:src="@drawable/ic_check_white_24dp"
-        android:tint="?riotx_text_secondary"
-        android:contentDescription="@string/poll_item_selected_aria" />
+        android:tint="?riotx_text_secondary" />
 
     <TextView
         android:id="@+id/pollResultItemLabel"

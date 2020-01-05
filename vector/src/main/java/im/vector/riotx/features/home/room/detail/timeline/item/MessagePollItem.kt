@@ -17,6 +17,7 @@
 package im.vector.riotx.features.home.room.detail.timeline.item
 
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.core.view.isVisible
@@ -70,6 +71,7 @@ abstract class MessagePollItem : AbsMessageItem<MessagePollItem.Holder>() {
 
         if (!iHaveVoted) {
             // Show buttons if i have not voted
+            holder.resultWrapper.isVisible = false
             optionsContent?.options?.forEachIndexed { index, item ->
                 if (index < buttons.size) {
                     buttons[index].let {
@@ -79,6 +81,7 @@ abstract class MessagePollItem : AbsMessageItem<MessagePollItem.Holder>() {
                 }
             }
         } else {
+            holder.resultWrapper.isVisible = true
             val maxCount = votes?.maxBy { it.value }?.value ?: 0
             optionsContent?.options?.forEachIndexed { index, item ->
                 if (index < resultLines.size) {
@@ -130,6 +133,8 @@ abstract class MessagePollItem : AbsMessageItem<MessagePollItem.Holder>() {
 
         val labelText by bind<TextView>(R.id.pollLabelText)
         val infoText by bind<TextView>(R.id.pollInfosText)
+
+        val resultWrapper by bind<ViewGroup>(R.id.pollResultsWrapper)
 
         override fun bindView(itemView: View) {
             super.bindView(itemView)

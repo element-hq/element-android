@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <TextView
@@ -52,57 +51,63 @@
         android:visibility="gone"
         tools:text="Option 5" />
 
-    <im.vector.riotx.features.home.room.detail.timeline.item.PollResultLineView
-        android:id="@+id/pollResult1"
+    <LinearLayout
+        android:id="@+id/pollResultsWrapper"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        tools:optionName="Create Github issue"
-        tools:optionCount="40%"
-        tools:optionSelected="true"
-        />
-    <im.vector.riotx.features.home.room.detail.timeline.item.PollResultLineView
-        android:id="@+id/pollResult2"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        tools:optionName="Search Github"
-        tools:optionCount="60%"
-        tools:optionSelected="false"
-        tools:optionIsWinner="true"
-        />
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_attachment_type_selector"
+        android:orientation="vertical"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp">
 
-    <im.vector.riotx.features.home.room.detail.timeline.item.PollResultLineView
-        android:id="@+id/pollResult3"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        tools:optionName="Logout"
-        tools:optionCount="0%"
-        tools:optionSelected="false"
-        />
+        <im.vector.riotx.features.home.room.detail.timeline.item.PollResultLineView
+            android:id="@+id/pollResult1"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            tools:optionCount="40%"
+            tools:optionName="Create Github issue"
+            tools:optionSelected="true" />
 
-    <im.vector.riotx.features.home.room.detail.timeline.item.PollResultLineView
-        android:id="@+id/pollResult4"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        tools:optionName="Option 4"
-        tools:optionCount="0%"
-        tools:optionSelected="false"
-        />
+        <im.vector.riotx.features.home.room.detail.timeline.item.PollResultLineView
+            android:id="@+id/pollResult2"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            tools:optionCount="60%"
+            tools:optionIsWinner="true"
+            tools:optionName="Search Github"
+            tools:optionSelected="false" />
 
-    <im.vector.riotx.features.home.room.detail.timeline.item.PollResultLineView
-        android:id="@+id/pollResult5"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        tools:optionName="Option 5"
-        tools:optionCount="0%"
-        tools:optionSelected="false"
-        />
+        <im.vector.riotx.features.home.room.detail.timeline.item.PollResultLineView
+            android:id="@+id/pollResult3"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            tools:optionCount="0%"
+            tools:optionName="Logout"
+            tools:optionSelected="false" />
+
+        <im.vector.riotx.features.home.room.detail.timeline.item.PollResultLineView
+            android:id="@+id/pollResult4"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            tools:optionCount="0%"
+            tools:optionName="Option 4"
+            tools:optionSelected="false" />
+
+        <im.vector.riotx.features.home.room.detail.timeline.item.PollResultLineView
+            android:id="@+id/pollResult5"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            tools:optionCount="0%"
+            tools:optionName="Option 5"
+            tools:optionSelected="false" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/pollInfosText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="?riotx_text_secondary"
         android:gravity="start"
+        android:textColor="?riotx_text_secondary"
         android:textSize="12sp"
         tools:text="12 votes - Final Results" />
 
