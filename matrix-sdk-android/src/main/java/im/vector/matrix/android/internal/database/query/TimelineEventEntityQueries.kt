@@ -16,6 +16,7 @@
 
 package im.vector.matrix.android.internal.database.query
 
+import android.service.autofill.Validators.not
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.database.model.*
 import io.realm.*
@@ -48,10 +49,15 @@ internal fun TimelineEventEntity.Companion.findWithSenderMembershipEvent(realm: 
 internal fun TimelineEventEntity.Companion.latestEvent(realm: Realm,
                                                        roomId: String,
                                                        includesSending: Boolean,
+                                                       filterContentRelation: Boolean = false,
                                                        filterTypes: List<String> = emptyList()): TimelineEventEntity? {
     val roomEntity = RoomEntity.where(realm, roomId).findFirst() ?: return null
     val sendingTimelineEvents = roomEntity.sendingTimelineEvents.where().filterTypes(filterTypes)
     val liveEvents = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId)?.timelineEvents?.where()?.filterTypes(filterTypes)
+    if (filterContentRelation) {
+        liveEvents?.not()?.like(TimelineEventEntityFields.ROOT.CONTENT, FilterContent.EDIT_TYPE)
+                ?.not()?.like(TimelineEventEntityFields.ROOT.CONTENT, FilterContent.RESPONSE_TYPE)
+    }
     val query = if (includesSending && sendingTimelineEvents.findAll().isNotEmpty()) {
         sendingTimelineEvents
     } else {

@@ -157,6 +157,8 @@ internal class TimelineHiddenReadReceipts constructor(private val readReceiptsSu
         }
         if (settings.filterEdits) {
             like("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT}.${TimelineEventEntityFields.ROOT.CONTENT}", FilterContent.EDIT_TYPE)
+            or()
+            like("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT}.${TimelineEventEntityFields.ROOT.CONTENT}", FilterContent.RESPONSE_TYPE)
         }
         endGroup()
         return this
