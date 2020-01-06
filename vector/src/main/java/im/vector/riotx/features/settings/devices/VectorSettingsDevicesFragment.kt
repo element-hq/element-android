@@ -60,7 +60,7 @@ class VectorSettingsDevicesFragment @Inject constructor(
         waiting_view_status_text.setText(R.string.please_wait)
         waiting_view_status_text.isVisible = true
         devicesController.callback = this
-        recyclerView.configureWith(devicesController)
+        recyclerView.configureWith(devicesController, showDivider = true)
         devicesViewModel.requestErrorLiveData.observeEvent(this) {
             displayErrorDialog(it)
             // Password is maybe not good, for safety measure, reset it here
