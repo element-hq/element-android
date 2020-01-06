@@ -15,7 +15,11 @@
  */
 package im.vector.matrix.android.common
 
-import okhttp3.*
+import okhttp3.Interceptor
+import okhttp3.Protocol
+import okhttp3.Request
+import okhttp3.Response
+import okhttp3.ResponseBody.Companion.toResponseBody
 import javax.net.ssl.HttpsURLConnection
 
 /**
@@ -73,7 +77,7 @@ class MockOkHttpInterceptor : Interceptor {
                     .protocol(Protocol.HTTP_1_1)
                     .request(originalRequest)
                     .message("mocked answer")
-                    .body(ResponseBody.create(null, body))
+                    .body(body.toResponseBody(null))
                     .code(code)
                     .build()
         }

@@ -17,85 +17,77 @@
 
 package im.vector.matrix.android.common
 
-// import android.content.Context
-// import android.net.Uri
-// import androidx.test.InstrumentationRegistry
-//
-// import org.junit.Assert
-//
-// import java.util.ArrayList
-// import java.util.HashMap
-// import java.util.UUID
-// import java.util.concurrent.CountDownLatch
-// import java.util.concurrent.TimeUnit
-//
-// import im.vector.matrix.android.api.Matrix
-// import im.vector.matrix.android.api.auth.data.Credentials
-// import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
-// import im.vector.matrix.android.api.session.Session
-// import im.vector.matrix.android.internal.auth.registration.AuthParams
-// import im.vector.matrix.android.internal.auth.registration.RegistrationFlowResponse
-// import im.vector.matrix.android.internal.auth.registration.RegistrationParams
-// import io.realm.internal.android.JsonUtils
-//
-//
-// /**
-//  * This class exposes methods to be used in common cases
-//  * Registration, login, Sync, Sending messages...
-//  */
-// class CommonTestHelper {
-//
-//     @Throws(InterruptedException::class)
-//     fun createAccount(userNamePrefix: String, testParams: SessionTestParams): Session {
-//         return createAccount(userNamePrefix, TestConstants.PASSWORD, testParams)
-//     }
-//
-//     @Throws(InterruptedException::class)
-//     fun logIntoAccount(userId: String, testParams: SessionTestParams): Session {
-//         return logIntoAccount(userId, TestConstants.PASSWORD, testParams)
-//     }
-//
-//     /**
-//      * Create a Home server configuration, with Http connection allowed for test
-//      */
-//     fun createHomeServerConfig(): HomeServerConnectionConfig {
-//         return HomeServerConnectionConfig.Builder()
-//                 .withHomeServerUri(Uri.parse(TestConstants.TESTS_HOME_SERVER_URL))
-//                 .build()
-//     }
-//
-//     /**
-//      * This methods init the event stream and check for initial sync
-//      *
-//      * @param session    the session to sync
-//      * @param withCrypto true if crypto is enabled and should be checked
-//      */
-//     @Throws(InterruptedException::class)
-//     fun syncSession(session: Session, withCrypto: Boolean) {
-//         val params = HashMap<String, Boolean>()
-//         val sizeOfLock = if (withCrypto) 2 else 1
-//         val lock2 = CountDownLatch(sizeOfLock)
-//         session.getDataHandler().addListener(object : MXEventListener() {
-//             fun onInitialSyncComplete(toToken: String) {
-//                 params["isInit"] = true
-//                 lock2.countDown()
-//             }
-//
-//             fun onCryptoSyncComplete() {
-//                 params["onCryptoSyncComplete"] = true
-//                 lock2.countDown()
-//             }
-//         })
-//         session.getDataHandler().getStore().open()
-//         session.startEventStream(null)
-//
-//         await(lock2)
-//         Assert.assertTrue(params.containsKey("isInit"))
-//         if (withCrypto) {
-//             Assert.assertTrue(params.containsKey("onCryptoSyncComplete"))
-//         }
-//     }
-//
+import android.content.Context
+import android.net.Uri
+import im.vector.matrix.android.api.Matrix
+import im.vector.matrix.android.api.MatrixConfiguration
+import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
+import im.vector.matrix.android.api.auth.data.LoginFlowResult
+import im.vector.matrix.android.api.auth.registration.RegistrationResult
+import im.vector.matrix.android.api.session.Session
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
+import java.util.*
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
+
+/**
+ * This class exposes methods to be used in common cases
+ * Registration, login, Sync, Sending messages...
+ */
+class CommonTestHelper(context: Context) {
+
+    val matrix: Matrix
+
+    init {
+        Matrix.initialize(context, MatrixConfiguration("TestFlavor"))
+
+        matrix = Matrix.getInstance(context)
+    }
+
+
+    fun createAccount(userNamePrefix: String, testParams: SessionTestParams): Session {
+        return createAccount(userNamePrefix, TestConstants.PASSWORD, testParams)
+    }
+
+    fun logIntoAccount(userId: String, testParams: SessionTestParams): Session {
+        return logIntoAccount(userId, TestConstants.PASSWORD, testParams)
+    }
+
+    /**
+     * Create a Home server configuration, with Http connection allowed for test
+     */
+    fun createHomeServerConfig(): HomeServerConnectionConfig {
+        return HomeServerConnectionConfig.Builder()
+                .withHomeServerUri(Uri.parse(TestConstants.TESTS_HOME_SERVER_URL))
+                .build()
+    }
+
+    /**
+     * This methods init the event stream and check for initial sync
+     *
+     * @param session    the session to sync
+     */
+    fun syncSession(session: Session) {
+        //val lock = CountDownLatch(1)
+
+        // val observer = androidx.lifecycle.Observer<SyncState> { syncState ->
+        //     if (syncState is SyncState.Idle) {
+        //         lock.countDown()
+        //     }
+        // }
+
+        // TODO observe?
+        // while (session.syncState().value !is SyncState.Idle) {
+        //     sleep(100)
+        // }
+
+        session.open()
+        session.startSync(true)
+        //await(lock)
+        //session.syncState().removeObserver(observer)
+    }
+
 //     /**
 //      * Sends text messages in a room
 //      *
@@ -140,216 +132,153 @@ package im.vector.matrix.android.common
 //     }
 //
 //
-//     // PRIVATE METHODS *****************************************************************************
-//
-//     /**
-//      * Creates a unique account
-//      *
-//      * @param userNamePrefix the user name prefix
-//      * @param password       the password
-//      * @param testParams     test params about the session
-//      * @return the session associated with the newly created account
-//      */
-//     @Throws(InterruptedException::class)
-//     private fun createAccount(userNamePrefix: String,
-//                               password: String,
-//                               testParams: SessionTestParams): Session {
-//         val context = InstrumentationRegistry.getContext()
-//         val session = createAccountAndSync(
-//                 context,
-//                 userNamePrefix + "_" + System.currentTimeMillis() + UUID.randomUUID(),
-//                 password,
-//                 testParams
-//         )
-//         Assert.assertNotNull(session)
-//         return session
-//     }
-//
-//     /**
-//      * Logs into an existing account
-//      *
-//      * @param userId     the userId to log in
-//      * @param password   the password to log in
-//      * @param testParams test params about the session
-//      * @return the session associated with the existing account
-//      */
-//     @Throws(InterruptedException::class)
-//     private fun logIntoAccount(userId: String,
-//                                password: String,
-//                                testParams: SessionTestParams): Session {
-//         val context = InstrumentationRegistry.getContext()
-//         val session = logAccountAndSync(context, userId, password, testParams)
-//         Assert.assertNotNull(session)
-//         return session
-//     }
-//
-//     /**
-//      * Create an account and a dedicated session
-//      *
-//      * @param context           the context
-//      * @param userName          the account username
-//      * @param password          the password
-//      * @param sessionTestParams parameters for the test
-//      */
-//     @Throws(InterruptedException::class)
-//     private fun createAccountAndSync(context: Context,
-//                                      userName: String,
-//                                      password: String,
-//                                      sessionTestParams: SessionTestParams): Session {
-//         val hs = createHomeServerConfig()
-//
-//         val loginRestClient = LoginRestClient(hs)
-//
-//         val params = HashMap<String, Any>()
-//         val registrationParams = RegistrationParams()
-//
-//         var lock = CountDownLatch(1)
-//
-//         // get the registration session id
-//         loginRestClient.register(registrationParams, object : TestMatrixCallback<Credentials>(lock, false) {
-//             override fun onFailure(failure: Throwable) {
-//                 // detect if a parameter is expected
-//                 var registrationFlowResponse: RegistrationFlowResponse? = null
-//
-//                 // when a response is not completed the server returns an error message
-//                 if (null != failure.mStatus && failure.mStatus === 401) {
-//                     try {
-//                         registrationFlowResponse = JsonUtils.toRegistrationFlowResponse(e.mErrorBodyAsString)
-//                     } catch (castExcept: Exception) {
-//                     }
-//
-//                 }
-//
-//                 // check if the server response can be casted
-//                 if (null != registrationFlowResponse) {
-//                     params["session"] = registrationFlowResponse!!.session
-//                 }
-//
-//                 super.onFailure(failure)
-//             }
-//         })
-//
-//         await(lock)
-//
-//         val session = params["session"] as String?
-//
-//         Assert.assertNotNull(session)
-//
-//         registrationParams.username = userName
-//         registrationParams.password = password
-//         val authParams = AuthParams(LOGIN_FLOW_TYPE_DUMMY)
-//         authParams.session = session
-//
-//         registrationParams.auth = authParams
-//
-//         lock = CountDownLatch(1)
-//         loginRestClient.register(registrationParams, object : TestMatrixCallback<Credentials>(lock) {
-//             fun onSuccess(credentials: Credentials) {
-//                 params["credentials"] = credentials
-//                 super.onSuccess(credentials)
-//             }
-//         })
-//
-//         await(lock)
-//
-//         val credentials = params["credentials"] as Credentials?
-//
-//         Assert.assertNotNull(credentials)
-//
-//         hs.setCredentials(credentials)
-//
-//         val store = MXFileStore(hs, false, context)
-//
-//         val dataHandler = MXDataHandler(store, credentials)
-//         dataHandler.setLazyLoadingEnabled(sessionTestParams.withLazyLoading)
-//
-//         val Session = Session.Builder(hs, dataHandler, context)
-//                 .withLegacyCryptoStore(sessionTestParams.withLegacyCryptoStore)
-//                 .build()
-//
-//         if (sessionTestParams.withCryptoEnabled) {
-//             Session.enableCryptoWhenStarting()
-//         }
-//         if (sessionTestParams.withInitialSync) {
-//             syncSession(Session, sessionTestParams.withCryptoEnabled)
-//         }
-//         return Session
-//     }
-//
-//     /**
-//      * Start an account login
-//      *
-//      * @param context           the context
-//      * @param userName          the account username
-//      * @param password          the password
-//      * @param sessionTestParams session test params
-//      */
-//     @Throws(InterruptedException::class)
-//     private fun logAccountAndSync(context: Context,
-//                                   userName: String,
-//                                   password: String,
-//                                   sessionTestParams: SessionTestParams): Session {
-//         val hs = createHomeServerConfig(null)
-//         val loginRestClient = LoginRestClient(hs)
-//         val params = HashMap<String, Any>()
-//         val lock = CountDownLatch(1)
-//
-//         // get the registration session id
-//         loginRestClient.loginWithUser(userName, password, object : TestMatrixCallback<Credentials>(lock) {
-//             fun onSuccess(credentials: Credentials) {
-//                 params["credentials"] = credentials
-//                 super.onSuccess(credentials)
-//             }
-//         })
-//
-//         await(lock)
-//
-//         val credentials = params["credentials"] as Credentials?
-//
-//         Assert.assertNotNull(credentials)
-//
-//         hs.setCredentials(credentials)
-//
-//         val store = MXFileStore(hs, false, context)
-//
-//         val mxDataHandler = MXDataHandler(store, credentials)
-//         mxDataHandler.setLazyLoadingEnabled(sessionTestParams.withLazyLoading)
-//
-//         val Session = Session.Builder(hs, mxDataHandler, context)
-//                 .withLegacyCryptoStore(sessionTestParams.withLegacyCryptoStore)
-//                 .build()
-//
-//         if (sessionTestParams.withCryptoEnabled) {
-//             Session.enableCryptoWhenStarting()
-//         }
-//         if (sessionTestParams.withInitialSync) {
-//             syncSession(Session, sessionTestParams.withCryptoEnabled)
-//         }
-//         return Session
-//     }
-//
-//     /**
-//      * Await for a latch and ensure the result is true
-//      *
-//      * @param latch
-//      * @throws InterruptedException
-//      */
-//     @Throws(InterruptedException::class)
-//     fun await(latch: CountDownLatch) {
-//         Assert.assertTrue(latch.await(TestConstants.timeOutMillis, TimeUnit.MILLISECONDS))
-//     }
-//
-//     /**
-//      * Clear all provided sessions
-//      *
-//      * @param sessions the sessions to clear
-//      */
-//     fun closeAllSessions(sessions: List<Session>) {
-//         for (session in sessions) {
-//             session.close()
-//         }
-//     }
-//
+    // PRIVATE METHODS *****************************************************************************
+
+    /**
+     * Creates a unique account
+     *
+     * @param userNamePrefix the user name prefix
+     * @param password       the password
+     * @param testParams     test params about the session
+     * @return the session associated with the newly created account
+     */
+    @Throws(InterruptedException::class)
+    private fun createAccount(userNamePrefix: String,
+                              password: String,
+                              testParams: SessionTestParams): Session {
+        val session = createAccountAndSync(
+                userNamePrefix + "_" + System.currentTimeMillis() + UUID.randomUUID(),
+                password,
+                testParams
+        )
+        assertNotNull(session)
+        return session
+    }
+
+    /**
+     * Logs into an existing account
+     *
+     * @param userId     the userId to log in
+     * @param password   the password to log in
+     * @param testParams test params about the session
+     * @return the session associated with the existing account
+     */
+    @Throws(InterruptedException::class)
+    private fun logIntoAccount(userId: String,
+                               password: String,
+                               testParams: SessionTestParams): Session {
+        val session = logAccountAndSync(userId, password, testParams)
+        assertNotNull(session)
+        return session
+    }
+
+    /**
+     * Create an account and a dedicated session
+     *
+     * @param userName          the account username
+     * @param password          the password
+     * @param sessionTestParams parameters for the test
+     */
+    private fun createAccountAndSync(userName: String,
+                                     password: String,
+                                     sessionTestParams: SessionTestParams): Session {
+        val hs = createHomeServerConfig()
+
+        var lock = CountDownLatch(1)
+        matrix.authenticationService.getLoginFlow(hs, object : TestMatrixCallback<LoginFlowResult>(lock) {})
+        await(lock)
+
+        lock = CountDownLatch(1)
+        matrix.authenticationService.getRegistrationWizard().createAccount(userName, password, null, object : TestMatrixCallback<RegistrationResult>(lock) {
+            override fun onSuccess(data: RegistrationResult) {
+                super.onSuccess(data)
+            }
+        })
+        await(lock)
+
+        // Preform dummy step
+        lock = CountDownLatch(1)
+        var registrationResult: RegistrationResult? = null
+        matrix.authenticationService.getRegistrationWizard().dummy(object : TestMatrixCallback<RegistrationResult>(lock) {
+            override fun onSuccess(data: RegistrationResult) {
+                registrationResult = data
+                super.onSuccess(data)
+            }
+        })
+        await(lock)
+
+        assertTrue(registrationResult is RegistrationResult.Success)
+        val session = (registrationResult as RegistrationResult.Success).session
+        if (sessionTestParams.withInitialSync) {
+            syncSession(session)
+        }
+
+        return session
+    }
+
+    /**
+     * Start an account login
+     *
+     * @param userName          the account username
+     * @param password          the password
+     * @param sessionTestParams session test params
+     */
+    private fun logAccountAndSync(userName: String,
+                                  password: String,
+                                  sessionTestParams: SessionTestParams): Session {
+        val hs = createHomeServerConfig()
+
+        var lock = CountDownLatch(1)
+        matrix.authenticationService.getLoginFlow(hs, object : TestMatrixCallback<LoginFlowResult>(lock) {})
+        await(lock)
+
+        lock = CountDownLatch(1)
+        var session: Session? = null
+        matrix.authenticationService.getLoginWizard().login(userName, password, "myDevice", object : TestMatrixCallback<Session>(lock) {
+            override fun onSuccess(data: Session) {
+                session = data
+                super.onSuccess(data)
+            }
+        })
+        await(lock)
+
+        assertNotNull(session)
+
+        if (sessionTestParams.withInitialSync) {
+            syncSession(session!!)
+        }
+
+        return session!!
+    }
+
+    /**
+     * Await for a latch and ensure the result is true
+     *
+     * @param latch
+     * @throws InterruptedException
+     */
+    fun await(latch: CountDownLatch) {
+        assertTrue(latch.await(TestConstants.timeOutMillis, TimeUnit.MILLISECONDS))
+    }
+
+    /**
+     * Clear all provided sessions
+     *
+     * @param sessions the sessions to clear
+     */
+    fun closeAllSessions(sessions: List<Session>) {
+        for (session in sessions) {
+            session.close()
+        }
+    }
+
+    fun signout(session: Session) {
+        val lock = CountDownLatch(1)
+        session.signOut(true, object : TestMatrixCallback<Unit>(lock) {})
+        await(lock)
+    }
+
+
 //     /**
 //      * Clone a session.
 //      * It simulate that the user launches again the application with the same Credentials, contrary to login which will create a new DeviceId
@@ -404,4 +333,4 @@ package im.vector.matrix.android.common
 //
 //         return session2
 //     }
-// }
+}

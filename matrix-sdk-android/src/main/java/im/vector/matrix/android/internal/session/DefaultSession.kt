@@ -108,7 +108,6 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
 
     @MainThread
     override fun open() {
-        assertMainThread()
         assert(!isOpen)
         isOpen = true
         liveEntityObservers.forEach { it.start() }
@@ -200,13 +199,5 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
 
     override fun removeListener(listener: Session.Listener) {
         sessionListeners.removeListener(listener)
-    }
-
-    // Private methods *****************************************************************************
-
-    private fun assertMainThread() {
-        if (Looper.getMainLooper().thread !== Thread.currentThread()) {
-            throw IllegalStateException("This method can only be called on the main thread!")
-        }
     }
 }
