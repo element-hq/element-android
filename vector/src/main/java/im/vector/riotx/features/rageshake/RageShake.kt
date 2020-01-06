@@ -86,7 +86,7 @@ class RageShake @Inject constructor(private val activity: AppCompatActivity,
     }
 
     private fun openSettings() {
-        navigator.openSettings(activity, VectorSettingsActivity.EXTRA_DIRECT_ACCESS_DEVELOPER)
+        navigator.openSettings(activity, VectorSettingsActivity.EXTRA_DIRECT_ACCESS_ADVANCED_SETTINGS)
     }
 
     companion object {

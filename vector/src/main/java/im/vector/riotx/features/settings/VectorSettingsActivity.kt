@@ -55,9 +55,9 @@ class VectorSettingsActivity : VectorBaseActivity(),
         if (isFirstCreation()) {
             // display the fragment
             when (intent.getIntExtra(EXTRA_DIRECT_ACCESS, EXTRA_DIRECT_ACCESS_ROOT)) {
-                EXTRA_DIRECT_ACCESS_DEVELOPER ->
-                    replaceFragment(R.id.vector_settings_page, VectorSettingsDeveloperModeFragment::class.java, null, FRAGMENT_TAG)
-                else                          ->
+                EXTRA_DIRECT_ACCESS_ADVANCED_SETTINGS ->
+                    replaceFragment(R.id.vector_settings_page, VectorSettingsAdvancedSettingsFragment::class.java, null, FRAGMENT_TAG)
+                else                                  ->
                     replaceFragment(R.id.vector_settings_page, VectorSettingsRootFragment::class.java, null, FRAGMENT_TAG)
             }
         }
@@ -122,7 +122,7 @@ class VectorSettingsActivity : VectorBaseActivity(),
         private const val EXTRA_DIRECT_ACCESS = "EXTRA_DIRECT_ACCESS"
 
         const val EXTRA_DIRECT_ACCESS_ROOT = 0
-        const val EXTRA_DIRECT_ACCESS_DEVELOPER = 1
+        const val EXTRA_DIRECT_ACCESS_ADVANCED_SETTINGS = 1
 
         private const val FRAGMENT_TAG = "VectorSettingsPreferencesFragment"
     }

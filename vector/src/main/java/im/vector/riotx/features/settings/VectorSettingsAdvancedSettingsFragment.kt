@@ -23,10 +23,10 @@ import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.preference.VectorSwitchPreference
 import im.vector.riotx.features.rageshake.RageShake
 
-class VectorSettingsDeveloperModeFragment : VectorSettingsBaseFragment() {
+class VectorSettingsAdvancedSettingsFragment : VectorSettingsBaseFragment() {
 
-    override var titleRes = R.string.settings_developer_mode
-    override val preferenceXmlRes = R.xml.vector_settings_developer_mode
+    override var titleRes = R.string.settings_advanced_settings
+    override val preferenceXmlRes = R.xml.vector_settings_advanced_settings
 
     private var rageshake: RageShake? = null
 

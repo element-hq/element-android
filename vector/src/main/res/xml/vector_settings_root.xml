@@ -47,8 +47,8 @@
 
     <im.vector.riotx.core.preference.VectorPreference
         android:icon="@drawable/ic_settings_root_general"
-        android:title="@string/settings_developer_mode"
-        app:fragment="im.vector.riotx.features.settings.VectorSettingsDeveloperModeFragment" />
+        android:title="@string/settings_advanced_settings"
+        app:fragment="im.vector.riotx.features.settings.VectorSettingsAdvancedSettingsFragment" />
 
     <im.vector.riotx.core.preference.VectorPreference
         android:icon="@drawable/ic_settings_root_help_about"
