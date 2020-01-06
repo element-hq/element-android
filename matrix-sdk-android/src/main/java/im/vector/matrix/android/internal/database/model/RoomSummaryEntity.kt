@@ -43,7 +43,8 @@ internal open class RoomSummaryEntity(@PrimaryKey var roomId: String = "",
                                       var canonicalAlias: String? = null,
                                       var aliases: RealmList<String> = RealmList(),
                                       // this is required for querying
-                                      var flatAliases: String = ""
+                                      var flatAliases: String = "",
+                                      var isEncrypted: Boolean = false
 ) : RealmObject() {
 
     private var membershipStr: String = Membership.NONE.name

@@ -51,11 +51,9 @@ sealed class UnreadState {
 data class RoomDetailViewState(
         val roomId: String,
         val eventId: String?,
-        val timeline: Timeline? = null,
         val asyncInviter: Async<User> = Uninitialized,
         val asyncRoomSummary: Async<RoomSummary> = Uninitialized,
         val sendMode: SendMode = SendMode.REGULAR(""),
-        val isEncrypted: Boolean = false,
         val tombstoneEvent: Event? = null,
         val tombstoneEventHandling: Async<String> = Uninitialized,
         val syncState: SyncState = SyncState.Idle,

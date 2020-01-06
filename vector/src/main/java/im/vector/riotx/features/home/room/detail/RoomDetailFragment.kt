@@ -40,6 +40,7 @@ import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
 import androidx.core.view.forEach
 import androidx.core.view.isVisible
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -71,6 +72,7 @@ import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.matrix.android.api.util.toRoomAliasMatrixItem
+import im.vector.matrix.rx.rx
 import im.vector.riotx.R
 import im.vector.riotx.core.dialogs.withColoredButton
 import im.vector.riotx.core.epoxy.LayoutManagerStateRestorer
@@ -225,6 +227,8 @@ class RoomDetailFragment @Inject constructor(
         setupNotificationView()
         setupJumpToReadMarkerView()
         setupJumpToBottomView()
+
+
         roomDetailViewModel.subscribe { renderState(it) }
         textComposerViewModel.subscribe { renderTextComposerState(it) }
         roomDetailViewModel.sendMessageResultLiveData.observeEvent(this) { renderSendMessageResult(it) }
@@ -325,12 +329,10 @@ class RoomDetailFragment @Inject constructor(
         jumpToBottomView.setOnClickListener {
             roomDetailViewModel.handle(RoomDetailAction.ExitTrackingUnreadMessagesState)
             jumpToBottomView.visibility = View.INVISIBLE
-            withState(roomDetailViewModel) { state ->
-                if (state.timeline?.isLive == false) {
-                    state.timeline.restartWithEventId(null)
-                } else {
-                    layoutManager.scrollToPosition(0)
-                }
+            if (!roomDetailViewModel.timeline.isLive) {
+                roomDetailViewModel.timeline.restartWithEventId(null)
+            } else {
+                layoutManager.scrollToPosition(0)
             }
         }
     }
@@ -343,9 +345,9 @@ class RoomDetailFragment @Inject constructor(
         AlertDialog.Builder(requireActivity())
                 .setTitle(R.string.dialog_title_error)
                 .setMessage(getString(R.string.error_file_too_big,
-                        error.filename,
-                        TextUtils.formatFileSize(requireContext(), error.fileSizeInBytes),
-                        TextUtils.formatFileSize(requireContext(), error.homeServerLimitInBytes)
+                                      error.filename,
+                                      TextUtils.formatFileSize(requireContext(), error.fileSizeInBytes),
+                                      TextUtils.formatFileSize(requireContext(), error.homeServerLimitInBytes)
                 ))
                 .setPositiveButton(R.string.ok, null)
                 .show()
@@ -431,7 +433,8 @@ class RoomDetailFragment @Inject constructor(
         composerLayout.sendButton.setContentDescription(getString(descriptionRes))
 
         avatarRenderer.render(
-                MatrixItem.UserItem(event.root.senderId ?: "", event.getDisambiguatedDisplayName(), event.senderAvatar),
+                MatrixItem.UserItem(event.root.senderId
+                                    ?: "", event.getDisambiguatedDisplayName(), event.senderAvatar),
                 composerLayout.composerRelatedMessageAvatar
         )
         composerLayout.expand {
@@ -449,7 +452,7 @@ class RoomDetailFragment @Inject constructor(
             // Ignore update to avoid saving a draft
             composerLayout.composerEditText.setText(text)
             composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text?.length
-                    ?: 0)
+                                                         ?: 0)
         }
     }
 
@@ -481,6 +484,9 @@ class RoomDetailFragment @Inject constructor(
 // PRIVATE METHODS *****************************************************************************
 
     private fun setupRecyclerView() {
+        timelineEventController.callback = this
+        timelineEventController.timeline = roomDetailViewModel.timeline
+
         val epoxyVisibilityTracker = EpoxyVisibilityTracker()
         epoxyVisibilityTracker.attach(recyclerView)
         layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, true)
@@ -513,8 +519,6 @@ class RoomDetailFragment @Inject constructor(
                 }
             }
         })
-
-        timelineEventController.callback = this
 
         if (vectorPreferences.swipeToReplyIsEnabled()) {
             val quickReplyHandler = object : RoomMessageTouchHelperCallback.QuickReplayHandler {
@@ -789,11 +793,12 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun renderState(state: RoomDetailViewState) {
+        Timber.v("Render state summary complete: ${state.asyncRoomSummary.complete}")
         renderRoomSummary(state)
         val summary = state.asyncRoomSummary()
         val inviter = state.asyncInviter()
         if (summary?.membership == Membership.JOIN) {
-            scrollOnHighlightedEventCallback.timeline = state.timeline
+            scrollOnHighlightedEventCallback.timeline = roomDetailViewModel.timeline
             timelineEventController.update(state)
             inviteView.visibility = View.GONE
             val uid = session.myUserId
@@ -808,9 +813,10 @@ class RoomDetailFragment @Inject constructor(
         } else if (state.asyncInviter.complete) {
             vectorBaseActivity.finish()
         }
+        val isRoomEncrypted = summary?.isEncrypted ?: false
         if (state.tombstoneEvent == null) {
             composerLayout.visibility = View.VISIBLE
-            composerLayout.setRoomEncrypted(state.isEncrypted)
+            composerLayout.setRoomEncrypted(isRoomEncrypted)
             notificationAreaView.render(NotificationAreaView.State.Hidden)
         } else {
             composerLayout.visibility = View.GONE
@@ -1312,7 +1318,7 @@ class RoomDetailFragment @Inject constructor(
         val startToCompose = composerLayout.composerEditText.text.isNullOrBlank()
 
         if (startToCompose
-                && userId == session.myUserId) {
+            && userId == session.myUserId) {
             // Empty composer, current user: start an emote
             composerLayout.composerEditText.setText(Command.EMOTE.command + " ")
             composerLayout.composerEditText.setSelection(Command.EMOTE.length)

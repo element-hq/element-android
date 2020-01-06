@@ -52,8 +52,8 @@ import io.realm.RealmQuery
 import io.realm.RealmResults
 import io.realm.Sort
 import timber.log.Timber
-import java.util.Collections
-import java.util.UUID
+import java.util.*
+import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.collections.ArrayList
@@ -77,11 +77,9 @@ internal class DefaultTimeline(
         private val hiddenReadReceipts: TimelineHiddenReadReceipts
 ) : Timeline, TimelineHiddenReadReceipts.Delegate {
 
-    private companion object {
-        val BACKGROUND_HANDLER = createBackgroundHandler("TIMELINE_DB_THREAD")
-    }
+    val backgroundHandler = createBackgroundHandler("TIMELINE_DB_THREAD_${System.currentTimeMillis()}")
 
-    private val listeners = ArrayList<Timeline.Listener>()
+    private val listeners = CopyOnWriteArrayList<Timeline.Listener>()
     private val isStarted = AtomicBoolean(false)
     private val isReady = AtomicBoolean(false)
     private val mainHandler = createUIHandler()
@@ -137,7 +135,7 @@ internal class DefaultTimeline(
 // Public methods ******************************************************************************
 
     override fun paginate(direction: Timeline.Direction, count: Int) {
-        BACKGROUND_HANDLER.post {
+        backgroundHandler.post {
             if (!canPaginate(direction)) {
                 return@post
             }
@@ -165,7 +163,7 @@ internal class DefaultTimeline(
     override fun start() {
         if (isStarted.compareAndSet(false, true)) {
             Timber.v("Start timeline for roomId: $roomId and eventId: $initialEventId")
-            BACKGROUND_HANDLER.post {
+            backgroundHandler.post {
                 eventDecryptor.start()
                 val realm = Realm.getInstance(realmConfiguration)
                 backgroundRealm.set(realm)
@@ -199,8 +197,8 @@ internal class DefaultTimeline(
             isReady.set(false)
             Timber.v("Dispose timeline for roomId: $roomId and eventId: $initialEventId")
             cancelableBag.cancel()
-            BACKGROUND_HANDLER.removeCallbacksAndMessages(null)
-            BACKGROUND_HANDLER.post {
+            backgroundHandler.removeCallbacksAndMessages(null)
+            backgroundHandler.post {
                 roomEntity?.sendingTimelineEvents?.removeAllChangeListeners()
                 if (this::eventRelations.isInitialized) {
                     eventRelations.removeAllChangeListeners()
@@ -288,20 +286,20 @@ internal class DefaultTimeline(
         return hasMoreInCache(direction) || !hasReachedEnd(direction)
     }
 
-    override fun addListener(listener: Timeline.Listener) = synchronized(listeners) {
+    override fun addListener(listener: Timeline.Listener): Boolean {
         if (listeners.contains(listener)) {
             return false
         }
-        listeners.add(listener).also {
+        return listeners.add(listener).also {
             postSnapshot()
         }
     }
 
-    override fun removeListener(listener: Timeline.Listener) = synchronized(listeners) {
-        listeners.remove(listener)
+    override fun removeListener(listener: Timeline.Listener): Boolean {
+        return listeners.remove(listener)
     }
 
-    override fun removeAllListeners() = synchronized(listeners) {
+    override fun removeAllListeners() {
         listeners.clear()
     }
 
@@ -497,9 +495,9 @@ internal class DefaultTimeline(
             return
         }
         val params = PaginationTask.Params(roomId = roomId,
-                from = token,
-                direction = direction.toPaginationDirection(),
-                limit = limit)
+                                           from = token,
+                                           direction = direction.toPaginationDirection(),
+                                           limit = limit)
 
         Timber.v("Should fetch $limit items $direction")
         cancelableBag += paginationTask
@@ -516,7 +514,7 @@ internal class DefaultTimeline(
                                 }
                                 TokenChunkEventPersistor.Result.SHOULD_FETCH_MORE ->
                                     // Database won't be updated, so we force pagination request
-                                    BACKGROUND_HANDLER.post {
+                                    backgroundHandler.post {
                                         executePaginationTask(direction, limit)
                                     }
                             }
@@ -575,7 +573,7 @@ internal class DefaultTimeline(
             val timelineEvent = buildTimelineEvent(eventEntity)
 
             if (timelineEvent.isEncrypted()
-                    && timelineEvent.root.mxDecryptionResult == null) {
+                && timelineEvent.root.mxDecryptionResult == null) {
                 timelineEvent.root.eventId?.let { eventDecryptor.requestDecryption(it) }
             }
 
@@ -649,17 +647,15 @@ internal class DefaultTimeline(
     }
 
     private fun postSnapshot() {
-        BACKGROUND_HANDLER.post {
+        backgroundHandler.post {
             if (isReady.get().not()) {
                 return@post
             }
             updateLoadingStates(filteredEvents)
             val snapshot = createSnapshot()
             val runnable = Runnable {
-                synchronized(listeners) {
-                    listeners.forEach {
-                        it.onTimelineUpdated(snapshot)
-                    }
+                listeners.forEach {
+                    it.onTimelineUpdated(snapshot)
                 }
             }
             debouncer.debounce("post_snapshot", runnable, 50)
@@ -671,10 +667,8 @@ internal class DefaultTimeline(
             return
         }
         val runnable = Runnable {
-            synchronized(listeners) {
-                listeners.forEach {
-                    it.onTimelineFailure(throwable)
-                }
+            listeners.forEach {
+                it.onTimelineFailure(throwable)
             }
         }
         mainHandler.post(runnable)

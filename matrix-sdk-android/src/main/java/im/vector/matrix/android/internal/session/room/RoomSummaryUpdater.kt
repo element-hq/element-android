@@ -93,10 +93,12 @@ internal class RoomSummaryUpdater @Inject constructor(@UserId private val userId
         val lastTopicEvent = EventEntity.where(realm, roomId, EventType.STATE_ROOM_TOPIC).prev()
         val lastCanonicalAliasEvent = EventEntity.where(realm, roomId, EventType.STATE_ROOM_CANONICAL_ALIAS).prev()
         val lastAliasesEvent = EventEntity.where(realm, roomId, EventType.STATE_ROOM_ALIASES).prev()
+        val encryptionEvent = EventEntity.where(realm, roomId, EventType.ENCRYPTION).prev()
 
         roomSummaryEntity.hasUnreadMessages = roomSummaryEntity.notificationCount > 0
-                // avoid this call if we are sure there are unread events
-                || !isEventRead(monarchy, userId, roomId, latestPreviewableEvent?.eventId)
+                                              // avoid this call if we are sure there are unread events
+                                              || !isEventRead(monarchy, userId, roomId, latestPreviewableEvent?.eventId)
+
 
         roomSummaryEntity.displayName = roomDisplayNameResolver.resolve(roomId).toString()
         roomSummaryEntity.avatarUrl = roomAvatarResolver.resolve(roomId)
@@ -105,10 +107,12 @@ internal class RoomSummaryUpdater @Inject constructor(@UserId private val userId
         roomSummaryEntity.canonicalAlias = ContentMapper.map(lastCanonicalAliasEvent?.content).toModel<RoomCanonicalAliasContent>()
                 ?.canonicalAlias
 
-        val roomAliases = ContentMapper.map(lastAliasesEvent?.content).toModel<RoomAliasesContent>()?.aliases ?: emptyList()
+        val roomAliases = ContentMapper.map(lastAliasesEvent?.content).toModel<RoomAliasesContent>()?.aliases
+                          ?: emptyList()
         roomSummaryEntity.aliases.clear()
         roomSummaryEntity.aliases.addAll(roomAliases)
         roomSummaryEntity.flatAliases = roomAliases.joinToString(separator = "|", prefix = "|")
+        roomSummaryEntity.isEncrypted = encryptionEvent != null
 
         if (updateMembers) {
             val otherRoomMembers = RoomMembers(realm, roomId)

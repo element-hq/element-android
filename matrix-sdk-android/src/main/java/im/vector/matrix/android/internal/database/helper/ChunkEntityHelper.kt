@@ -92,7 +92,7 @@ internal fun ChunkEntity.add(roomId: String,
         }
     }
 
-    val isUnlinked = isUnlinked
+    val isChunkUnlinked = isUnlinked
     val localId = TimelineEventEntity.nextId(realm)
     val eventId = event.eventId ?: ""
     val senderId = event.senderId ?: ""
@@ -121,7 +121,7 @@ internal fun ChunkEntity.add(roomId: String,
         this.stateIndex = currentStateIndex
         this.displayIndex = currentDisplayIndex
         this.sendState = SendState.SYNCED
-        this.isUnlinked = isUnlinked
+        this.isUnlinked = isChunkUnlinked
     }
     val eventEntity = realm.createObject<TimelineEventEntity>().also {
         it.localId = localId
