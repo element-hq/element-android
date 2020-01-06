@@ -145,7 +145,11 @@ class MessageItemFactory @Inject constructor(
         }
     }
 
-    private fun buildPollMessageItem(messageContent: MessageOptionsContent, informationData: MessageInformationData, highlight: Boolean, callback: TimelineEventController.Callback?, attributes: AbsMessageItem.Attributes): VectorEpoxyModel<*>? {
+    private fun buildPollMessageItem(messageContent: MessageOptionsContent,
+                                     informationData: MessageInformationData,
+                                     highlight: Boolean,
+                                     callback: TimelineEventController.Callback?,
+                                     attributes: AbsMessageItem.Attributes): VectorEpoxyModel<*>? {
         return MessagePollItem_()
                 .attributes(attributes)
                 .callback(callback)

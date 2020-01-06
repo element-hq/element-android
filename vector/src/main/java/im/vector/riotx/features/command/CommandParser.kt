@@ -80,12 +80,12 @@ object CommandParser {
 
                     ParsedCommand.SendEmote(message)
                 }
-                Command.RAINBOW.command                  -> {
+                Command.RAINBOW.command                -> {
                     val message = textMessage.subSequence(Command.RAINBOW.command.length, textMessage.length).trim()
 
                     ParsedCommand.SendRainbow(message)
                 }
-                Command.RAINBOW_EMOTE.command                  -> {
+                Command.RAINBOW_EMOTE.command          -> {
                     val message = textMessage.subSequence(Command.RAINBOW_EMOTE.command.length, textMessage.length).trim()
 
                     ParsedCommand.SendRainbowEmote(message)
@@ -258,7 +258,6 @@ object CommandParser {
 
                     ParsedCommand.SendShrug(message)
                 }
-
                 Command.VERIFY_USER.command            -> {
                     val message = textMessage.substring(Command.VERIFY_USER.command.length).trim()
 

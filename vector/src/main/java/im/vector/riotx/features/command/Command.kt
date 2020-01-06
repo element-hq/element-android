@@ -41,8 +41,8 @@ enum class Command(val command: String, val parameters: String, @StringRes val d
     RAINBOW_EMOTE("/rainbowme", "<message>", R.string.command_description_rainbow_emote),
     CLEAR_SCALAR_TOKEN("/clear_scalar_token", "", R.string.command_description_clear_scalar_token),
     SPOILER("/spoiler", "<message>", R.string.command_description_spoiler),
+    POLL("/poll", "Question | Option 1 | Option 2 ...", R.string.command_description_poll),
     SHRUG("/shrug", "<message>", R.string.command_description_shrug),
-    SPOILER("/spoiler", "<message>", R.string.command_description_spoiler),
     // TODO temporary command
     VERIFY_USER("/verify", "<user-id>", R.string.command_description_verify);
 
