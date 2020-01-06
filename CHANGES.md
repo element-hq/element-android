@@ -11,6 +11,7 @@ Improvements 🙌:
  - Introduce developer mode in the settings (#796)
  - Improve devices list screen
  - Add settings for rageshake sensibility
+ - Fix autocompletion issues and add support for rooms, groups, and emoji (#780)
 
 Other changes:
  -

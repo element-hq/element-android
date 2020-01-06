@@ -43,6 +43,7 @@ import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformatio
 import im.vector.riotx.features.html.EventHtmlRenderer
 import im.vector.riotx.features.html.VectorHtmlCompressor
 import im.vector.riotx.features.settings.VectorPreferences
+import im.vector.riotx.features.reactions.data.EmojiDataSource
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -101,9 +102,6 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     }
 
     companion object : MvRxViewModelFactory<MessageActionsViewModel, MessageActionState> {
-
-        val quickEmojis = listOf("👍", "👎", "😄", "🎉", "😕", "❤️", "🚀", "👀")
-
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: MessageActionState): MessageActionsViewModel? {
             val fragment: MessageActionsBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()
@@ -161,7 +159,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         RxRoom(room)
                 .liveAnnotationSummary(eventId)
                 .map { annotations ->
-                    quickEmojis.map { emoji ->
+                    EmojiDataSource.quickEmojis.map { emoji ->
                         ToggleState(emoji, annotations.getOrNull()?.reactionsSummary?.firstOrNull { it.key == emoji }?.addedByMe ?: false)
                     }
                 }

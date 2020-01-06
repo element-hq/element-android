@@ -18,4 +18,6 @@
     <string name="devices_current_device">Current device</string>
     <string name="devices_other_devices">Other devices</string>
 
+    <string name="autocomplete_limited_results">Showing only the first results, type more letters…</string>
+
 </resources>
