@@ -17,6 +17,7 @@ package im.vector.matrix.android.internal.crypto.verification
 
 import im.vector.matrix.android.api.session.crypto.sas.CancelCode
 import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTxState
+import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
 
 /**
  * SAS verification can be performed using toDevice events or via DM.
@@ -33,7 +34,9 @@ internal interface SasTransport {
                     onErrorReason: CancelCode,
                     onDone: (() -> Unit)?)
 
-    fun cancelTransaction(transactionId: String, userId: String, userDevice: String, code: CancelCode)
+    fun sendVerificationRequest(localID: String, otherUserId: String, roomId: String, callback: (String?, MessageVerificationRequestContent?) -> Unit)
+
+    fun cancelTransaction(transactionId: String, otherUserId: String, otherUserDevice: String, code: CancelCode)
 
     fun done(transactionId: String)
     /**
@@ -58,4 +61,6 @@ internal interface SasTransport {
                     shortAuthenticationStrings: List<String>) : VerificationInfoStart
 
     fun createMac(tid: String, mac: Map<String, String>, keys: String): VerificationInfoMac
+
+    fun createReady(tid: String, fromDevice: String, methods: List<String>): VerificationInfoReady
 }

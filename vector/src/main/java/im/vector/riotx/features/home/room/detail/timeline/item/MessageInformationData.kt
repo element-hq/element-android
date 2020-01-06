@@ -28,6 +28,7 @@ data class MessageInformationData(
         val senderId: String,
         val sendState: SendState,
         val time: CharSequence? = null,
+        val ageLocalTS : Long?,
         val avatarUrl: String?,
         val memberName: CharSequence? = null,
         val showInformation: Boolean = true,

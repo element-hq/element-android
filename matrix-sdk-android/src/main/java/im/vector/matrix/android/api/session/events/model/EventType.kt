@@ -73,6 +73,7 @@ object EventType {
     const val KEY_VERIFICATION_MAC = "m.key.verification.mac"
     const val KEY_VERIFICATION_CANCEL = "m.key.verification.cancel"
     const val KEY_VERIFICATION_DONE = "m.key.verification.done"
+    const val KEY_VERIFICATION_READY = "m.key.verification.ready"
 
     // Relation Events
     const val REACTION = "m.reaction"

@@ -90,6 +90,7 @@ import im.vector.riotx.features.autocomplete.group.AutocompleteGroupPresenter
 import im.vector.riotx.features.autocomplete.room.AutocompleteRoomPresenter
 import im.vector.riotx.features.autocomplete.user.AutocompleteUserPresenter
 import im.vector.riotx.features.command.Command
+import im.vector.riotx.features.crypto.verification.VerificationBottomSheet
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.getColorFromUserId
 import im.vector.riotx.features.home.room.detail.composer.TextComposerAction
@@ -431,7 +432,8 @@ class RoomDetailFragment @Inject constructor(
         composerLayout.sendButton.setContentDescription(getString(descriptionRes))
 
         avatarRenderer.render(
-                MatrixItem.UserItem(event.root.senderId ?: "", event.getDisambiguatedDisplayName(), event.senderAvatar),
+                MatrixItem.UserItem(event.root.senderId
+                        ?: "", event.getDisambiguatedDisplayName(), event.senderAvatar),
                 composerLayout.composerRelatedMessageAvatar
         )
         composerLayout.expand {
@@ -923,7 +925,7 @@ class RoomDetailFragment @Inject constructor(
             }
             is Success -> {
                 when (val data = result.invoke()) {
-                    is RoomDetailAction.ReportContent -> {
+                    is RoomDetailAction.ReportContent             -> {
                         when {
                             data.spam          -> {
                                 AlertDialog.Builder(requireActivity())
@@ -959,6 +961,21 @@ class RoomDetailFragment @Inject constructor(
                                         .withColoredButton(DialogInterface.BUTTON_NEGATIVE)
                             }
                         }
+                    }
+                    is RoomDetailAction.RequestVerification       -> {
+                        Timber.v("## SAS RequestVerification action")
+                        VerificationBottomSheet.withArgs(
+                                roomDetailArgs.roomId,
+                                data.userId
+                        ).show(parentFragmentManager, "REQ")
+                    }
+                    is RoomDetailAction.AcceptVerificationRequest -> {
+                        Timber.v("## SAS AcceptVerificationRequest action")
+                        VerificationBottomSheet.withArgs(
+                                roomDetailArgs.roomId,
+                                data.otherUserId,
+                                data.transactionId
+                        ).show(parentFragmentManager, "REQ")
                     }
                 }
             }
@@ -1114,7 +1131,8 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onAvatarClicked(informationData: MessageInformationData) {
-        vectorBaseActivity.notImplemented("Click on user avatar")
+        // vectorBaseActivity.notImplemented("Click on user avatar")
+        roomDetailViewModel.handle(RoomDetailAction.RequestVerification(informationData.senderId))
     }
 
     override fun onMemberNameClicked(informationData: MessageInformationData) {

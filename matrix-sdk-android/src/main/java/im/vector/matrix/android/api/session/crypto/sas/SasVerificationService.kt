@@ -17,6 +17,7 @@
 package im.vector.matrix.android.api.session.crypto.sas
 
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.internal.crypto.verification.PendingVerificationRequest
 
 /**
  * https://matrix.org/docs/spec/client_server/r0.5.0#key-verification-framework
@@ -39,6 +40,10 @@ interface SasVerificationService {
 
     fun getExistingTransaction(otherUser: String, tid: String): SasVerificationTransaction?
 
+    fun getExistingVerificationRequest(otherUser: String): List<PendingVerificationRequest>?
+
+    fun getExistingVerificationRequest(otherUser: String, tid: String?): PendingVerificationRequest?
+
     /**
      * Shortcut for KeyVerificationStart.VERIF_METHOD_SAS
      * @see beginKeyVerification
@@ -50,7 +55,9 @@ interface SasVerificationService {
      */
     fun beginKeyVerification(method: String, userId: String, deviceID: String): String?
 
-    fun requestKeyVerificationInDMs(userId: String, roomId: String, callback: MatrixCallback<String>?)
+    fun requestKeyVerificationInDMs(userId: String, roomId: String): PendingVerificationRequest
+
+    fun declineVerificationRequestInDMs(otherUserId: String, otherDeviceId: String, transactionId: String, roomId: String)
 
     fun beginKeyVerificationInDMs(method: String,
                                   transactionId: String,
@@ -59,11 +66,33 @@ interface SasVerificationService {
                                   otherDeviceId: String,
                                   callback: MatrixCallback<String>?): String?
 
+    /**
+     * Returns false if the request is unknwown
+     */
+    fun readyPendingVerificationInDMs(otherUserId: String, roomId: String, transactionId: String): Boolean
+
     // fun transactionUpdated(tx: SasVerificationTransaction)
 
     interface SasVerificationListener {
         fun transactionCreated(tx: SasVerificationTransaction)
         fun transactionUpdated(tx: SasVerificationTransaction)
-        fun markedAsManuallyVerified(userId: String, deviceId: String)
+        fun markedAsManuallyVerified(userId: String, deviceId: String) {}
+
+        fun verificationRequestCreated(pr: PendingVerificationRequest) {}
+        fun verificationRequestUpdated(pr: PendingVerificationRequest) {}
+    }
+
+    companion object {
+
+        private const val TEN_MINTUTES_IN_MILLIS = 10 * 60 * 1000
+        private const val FIVE_MINTUTES_IN_MILLIS = 5 * 60 * 1000
+
+        fun isValidRequest(age: Long?): Boolean {
+            if (age == null) return false
+            val now = System.currentTimeMillis()
+            val tooInThePast = now - TEN_MINTUTES_IN_MILLIS
+            val tooInTheFuture = now + FIVE_MINTUTES_IN_MILLIS
+            return age in tooInThePast..tooInTheFuture
+        }
     }
 }

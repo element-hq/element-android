@@ -32,6 +32,7 @@ import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.platform.VectorBaseFragment
 import javax.inject.Inject
 
+// TODO Deprecated("replaced by bottomsheet UX")
 class SASVerificationStartFragment @Inject constructor(): VectorBaseFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_sas_verification_start
@@ -91,7 +92,7 @@ class SASVerificationStartFragment @Inject constructor(): VectorBaseFragment() {
         (requireActivity() as VectorBaseActivity).notImplemented()
 
         /*
-        viewModel.session.crypto?.getDeviceInfo(viewModel.otherUserId ?: "", viewModel.otherDeviceId
+        viewModel.session.crypto?.getDeviceInfo(viewModel.otherUserMxItem ?: "", viewModel.otherDeviceId
                 ?: "", object : SimpleApiCallback<MXDeviceInfo>() {
             override fun onSuccess(info: MXDeviceInfo?) {
                 info?.let {

@@ -31,6 +31,7 @@ import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.platform.SimpleFragmentActivity
 import im.vector.riotx.core.platform.WaitingViewData
 
+// TODO Deprecated("replaced by bottomsheet UX")
 class SASVerificationActivity : SimpleFragmentActivity() {
 
     companion object {

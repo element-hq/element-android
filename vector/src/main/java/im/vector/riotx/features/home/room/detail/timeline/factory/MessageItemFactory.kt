@@ -151,18 +151,18 @@ class MessageItemFactory @Inject constructor(
         return VerificationRequestItem_()
                 .attributes(
                         VerificationRequestItem.Attributes(
-                                otherUserId,
-                                otherUserName.toString(),
-                                messageContent.fromDevice,
-                                informationData.eventId,
-                                informationData,
-                                attributes.avatarRenderer,
-                                attributes.colorProvider,
-                                attributes.itemLongClickListener,
-                                attributes.itemClickListener,
-                                attributes.reactionPillCallback,
-                                attributes.readReceiptsCallback,
-                                attributes.emojiTypeFace
+                                otherUserId = otherUserId,
+                                otherUserName = otherUserName.toString(),
+                                fromDevide = messageContent.fromDevice,
+                                referenceId = informationData.eventId,
+                                informationData = informationData,
+                                avatarRenderer = attributes.avatarRenderer,
+                                colorProvider = attributes.colorProvider,
+                                itemLongClickListener = attributes.itemLongClickListener,
+                                itemClickListener = attributes.itemClickListener,
+                                reactionPillCallback = attributes.reactionPillCallback,
+                                readReceiptsCallback = attributes.readReceiptsCallback,
+                                emojiTypeFace = attributes.emojiTypeFace
                         )
                 )
                 .callback(callback)

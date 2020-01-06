@@ -18,8 +18,9 @@ package im.vector.matrix.android.internal.crypto.verification
 import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.internal.crypto.model.rest.SendToDeviceObject
 
-internal interface VerificationInfo {
+interface VerificationInfo {
     fun toEventContent(): Content? = null
     fun toSendToDeviceObject(): SendToDeviceObject? = null
     fun isValid() : Boolean
+    val transactionID: String?
 }

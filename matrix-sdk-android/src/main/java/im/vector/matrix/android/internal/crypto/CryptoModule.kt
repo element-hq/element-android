@@ -181,6 +181,9 @@ internal abstract class CryptoModule {
     abstract fun bindEncryptEventTask(encryptEventTask: DefaultEncryptEventTask): EncryptEventTask
 
     @Binds
+    abstract fun bindSendVerificationMessageTask(sendDefaultSendVerificationMessageTask: DefaultSendVerificationMessageTask): SendVerificationMessageTask
+
+    @Binds
     abstract fun bindClaimOneTimeKeysForUsersDeviceTask(claimOneTimeKeysForUsersDevice: DefaultClaimOneTimeKeysForUsersDevice)
             : ClaimOneTimeKeysForUsersDeviceTask
 

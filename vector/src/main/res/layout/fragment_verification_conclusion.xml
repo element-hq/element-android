@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+
+    <TextView
+        android:id="@+id/verificationConclusionTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="@string/sas_verified"
+        android:textColor="?riotx_text_primary"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/sas_verified" />
+
+    <TextView
+        android:id="@+id/verifyConclusionDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/sas_verified_successful_description"
+        android:textColor="?riotx_text_secondary"
+        app:layout_constraintTop_toBottomOf="@id/verificationConclusionTitle"
+        tools:text="@string/sas_verified_successful_description" />
+
+    <ImageView
+        android:id="@+id/verifyConclusionImageView"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/verifyConclusionDescription"
+        tools:background="@drawable/ic_shield_trusted" />
+
+    <TextView
+        android:id="@+id/verifyConclusionBottomDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textColor="?riotx_text_secondary"
+        app:layout_constraintTop_toBottomOf="@id/verifyConclusionImageView"
+        tools:text="@string/verification_green_shield" />
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/verificationConclusionButton"
+        style="@style/VectorButtonStylePositive"
+        android:layout_width="match_parent"
+        android:layout_marginTop="16dp"
+        android:text="@string/sas_got_it"
+        app:layout_constraintTop_toBottomOf="@id/verifyConclusionBottomDescription" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

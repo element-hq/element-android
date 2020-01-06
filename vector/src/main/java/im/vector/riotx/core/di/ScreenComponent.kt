@@ -25,6 +25,7 @@ import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.preference.UserAvatarPreference
 import im.vector.riotx.features.MainActivity
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupManageActivity
+import im.vector.riotx.features.crypto.verification.VerificationBottomSheet
 import im.vector.riotx.features.home.HomeActivity
 import im.vector.riotx.features.home.HomeModule
 import im.vector.riotx.features.home.createdirect.CreateDirectRoomActivity
@@ -132,6 +133,8 @@ interface ScreenComponent {
     fun inject(roomListActionsBottomSheet: RoomListQuickActionsBottomSheet)
 
     fun inject(activity: SoftLogoutActivity)
+
+    fun inject(verificationBottomSheet: VerificationBottomSheet)
 
     fun inject(permalinkHandlerActivity: PermalinkHandlerActivity)
 

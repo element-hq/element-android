@@ -29,6 +29,7 @@ import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.home.AvatarRenderer
 import javax.inject.Inject
 
+// TODO Deprecated("replaced by bottomsheet UX")
 class SASVerificationIncomingFragment @Inject constructor(
         private var avatarRenderer: AvatarRenderer
 ) : VectorBaseFragment() {

@@ -5,15 +5,25 @@
     <string name="command_description_verify">Request to verify the given userID</string>
     <string name="command_description_shrug">Prepends ¯\\_(ツ)_/¯ to a plain-text message</string>
 
+
     <string name="notification_initial_sync">Initial Sync…</string>
 
-    <string name="sent_a_file">File</string>
-    <string name="sent_an_audio_file">Audio</string>
-    <string name="sent_an_image">Image.</string>
-    <string name="sent_a_video">Video.</string>
-
-
     <string name="verification_conclusion_warning">Untrusted sign in</string>
+    <string name="verification_sas_match">They match</string>
+    <string name="verification_sas_do_not_match">They don\'t match</string>
+    <string name="verify_user_sas_emoji_help_text">Verify this user by confirming the following unique emoji appear on their screen, in the same order."</string>
+    <string name="verify_user_sas_emoji_security_tip">For ultimate security, use another trusted means of communication or do this in person.</string>
+    <string name="verification_green_shield">Look for the green shield to ensure a user is trusted. Trust all users in a room to ensure the room is secure.</string>
+
+    <string name="verification_conclusion_not_secure">Not secure</string>
+    <string name="verification_conclusion_compromised">One of the following may be compromised:\n\n   - Your homeserver\n   - The homeserver the user you’re verifying is connected to\n   - Yours, or the other users’ internet connection\n   - Yours, or the other users’ device
+    </string>
+
+    <string name="sent_a_video">Video.</string>
+    <string name="sent_an_image">Image.</string>
+    <string name="sent_an_audio_file">Audio</string>
+    <string name="sent_a_file">File</string>
+
     <string name="verification_request_waiting">Waiting…</string>
     <string name="verification_request_other_cancelled">%s cancelled</string>
     <string name="verification_request_you_cancelled">You cancelled</string>
@@ -21,4 +31,22 @@
     <string name="verification_request_you_accepted">You accepted</string>
     <string name="verification_sent">Verification Sent</string>
     <string name="verification_request">Verification Request</string>
+
+    <!-- Sender name of a message when it is send by you, e.g. You: Hello!-->
+    <string name="you">You</string>
+
+    <string name="verify_by_scanning_title">Verify by scanning</string>
+    <!-- the %s will be replaced by verify_open_camera_link that will be clickable -->
+    <string name="verify_by_scanning_description">Ask the other user to scan this code, or %s to scan theirs</string>
+    <!-- This part is inserted in verify_by_scanning_description-->
+    <string name="verify_open_camera_link">open your camera</string>
+
+    <string name="verify_by_emoji_title">Verify by Emoji</string>
+    <string name="verify_by_emoji_description">If you can’t scan the code above, verify by comparing a short, unique selection of emoji.</string>
+
+    <string name="aria_qr_code_description">QR code image</string>
+
+    <string name="verification_request_alert_title">Verify %s</string>
+    <string name="verification_request_waiting_for">Waiting for %s…</string>
+    <string name="verification_request_alert_description">For extra security, verify %s by checking a one-time code on both your devices.\n\nFor maximum security, do this in person.</string>
 </resources>

@@ -43,6 +43,7 @@ data class KeyVerificationStart(
 
     companion object {
         const val VERIF_METHOD_SAS = "m.sas.v1"
+        const val VERIF_METHOD_SCAN = "m.qr_code.scan.v1"
     }
 
     override fun isValid(): Boolean {

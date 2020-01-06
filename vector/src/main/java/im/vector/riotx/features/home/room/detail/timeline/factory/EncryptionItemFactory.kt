@@ -46,6 +46,7 @@ class EncryptionItemFactory @Inject constructor(private val stringProvider: Stri
                 eventId = event.root.eventId ?: "?",
                 senderId = event.root.senderId ?: "",
                 sendState = event.root.sendState,
+                ageLocalTS = event.root.ageLocalTs,
                 avatarUrl = event.senderAvatar,
                 memberName = event.getDisambiguatedDisplayName(),
                 showInformation = false,

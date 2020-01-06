@@ -28,6 +28,7 @@ import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
+import im.vector.matrix.android.api.session.crypto.sas.SasVerificationService
 import im.vector.matrix.android.internal.session.room.VerificationState
 import im.vector.riotx.R
 import im.vector.riotx.core.resources.ColorProvider
@@ -108,6 +109,11 @@ abstract class VerificationRequestItem : AbsBaseMessageItem<VerificationRequestI
             }
         }
 
+        // Always hide buttons if request is too old
+        if (!SasVerificationService.isValidRequest(attributes.informationData.ageLocalTS)) {
+            holder.buttonBar.isVisible = false
+        }
+
         holder.callback = callback
         holder.attributes = attributes
 
@@ -133,7 +139,7 @@ abstract class VerificationRequestItem : AbsBaseMessageItem<VerificationRequestI
                         att.otherUserId,
                         att.fromDevide))
             } else if (it == declineButton) {
-                callback?.onTimelineItemAction(RoomDetailAction.DeclineVerificationRequest(att.referenceId))
+                callback?.onTimelineItemAction(RoomDetailAction.DeclineVerificationRequest(att.referenceId, att.otherUserId, att.fromDevide))
             }
         })
 

@@ -50,7 +50,8 @@ object TimelineDisplayableEvents {
             EventType.KEY_VERIFICATION_ACCEPT,
             EventType.KEY_VERIFICATION_START,
             EventType.KEY_VERIFICATION_MAC,
-            EventType.KEY_VERIFICATION_KEY
+            EventType.KEY_VERIFICATION_KEY,
+            EventType.KEY_VERIFICATION_READY
     )
 }
 

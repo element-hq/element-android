@@ -29,6 +29,7 @@ import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseFragment
 import javax.inject.Inject
 
+// TODO Deprecated("replaced by bottomsheet UX")
 class SASVerificationShortCodeFragment @Inject constructor(): VectorBaseFragment() {
 
     private lateinit var viewModel: SasVerificationViewModel

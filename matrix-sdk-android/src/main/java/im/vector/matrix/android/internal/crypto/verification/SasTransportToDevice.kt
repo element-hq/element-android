@@ -19,6 +19,7 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.crypto.sas.CancelCode
 import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTxState
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.rest.*
 import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
@@ -32,6 +33,11 @@ internal class SasTransportToDevice(
         private var sendToDeviceTask: SendToDeviceTask,
         private var taskExecutor: TaskExecutor
 ) : SasTransport {
+
+    override fun sendVerificationRequest(localID: String, otherUserId: String, roomId: String,
+                                         callback: (String?, MessageVerificationRequestContent?) -> Unit) {
+        // TODO "not implemented"
+    }
 
     override fun sendToOther(type: String,
                              verificationInfo: VerificationInfo,
@@ -72,11 +78,11 @@ internal class SasTransportToDevice(
         // To device do not do anything here
     }
 
-    override fun cancelTransaction(transactionId: String, userId: String, userDevice: String, code: CancelCode) {
+    override fun cancelTransaction(transactionId: String, otherUserId: String, otherUserDevice: String, code: CancelCode) {
         Timber.d("## SAS canceling transaction $transactionId for reason $code")
         val cancelMessage = KeyVerificationCancel.create(transactionId, code)
         val contentMap = MXUsersDevicesMap<Any>()
-        contentMap.setObject(userId, userDevice, cancelMessage)
+        contentMap.setObject(otherUserId, otherUserDevice, cancelMessage)
         sendToDeviceTask
                 .configureWith(SendToDeviceTask.Params(EventType.KEY_VERIFICATION_CANCEL, contentMap, transactionId)) {
                     this.callback = object : MatrixCallback<Unit> {
@@ -125,6 +131,14 @@ internal class SasTransportToDevice(
                 hashes,
                 messageAuthenticationCodes,
                 shortAuthenticationStrings)
+    }
+
+    override fun createReady(tid: String, fromDevice: String, methods: List<String>): VerificationInfoReady {
+        return KeyVerificationReady(
+                transactionID = tid,
+                fromDevice = fromDevice,
+                methods = methods
+        )
     }
 }
 
