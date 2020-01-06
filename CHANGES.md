@@ -16,6 +16,7 @@ Bugfix 🐛:
  - Fix crash when opening room creation screen from the room filtering screen
  - Fix avatar image disappearing (#777)
  - Fix read marker banner when permalink
+ - Fix matrix.org room directory not being browsable
 
 Translations 🗣:
  -
