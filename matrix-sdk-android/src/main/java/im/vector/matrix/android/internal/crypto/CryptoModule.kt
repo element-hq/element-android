@@ -124,6 +124,9 @@ internal abstract class CryptoModule {
     abstract fun bindGetDevicesTask(getDevicesTask: DefaultGetDevicesTask): GetDevicesTask
 
     @Binds
+    abstract fun bindGetDeviceInfoTask(task: DefaultGetDeviceInfoTask): GetDeviceInfoTask
+
+    @Binds
     abstract fun bindSetDeviceNameTask(setDeviceNameTask: DefaultSetDeviceNameTask): SetDeviceNameTask
 
     @Binds

@@ -35,22 +35,10 @@
     <!--android:title="@string/settings_labs_enable_send_voice" />-->
 
     <im.vector.riotx.core.preference.VectorSwitchPreference
-        android:defaultValue="false"
-        android:key="SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY"
-        android:title="@string/settings_labs_show_hidden_events_in_timeline" />
-
-
-    <im.vector.riotx.core.preference.VectorSwitchPreference
         android:defaultValue="true"
         android:key="SETTINGS_LABS_ENABLE_SWIPE_TO_REPLY"
         android:title="@string/labs_swipe_to_reply_in_timeline" />
 
-
-    <im.vector.riotx.core.preference.VectorSwitchPreference
-        android:defaultValue="false"
-        android:key="SETTINGS_LABS_ALLOW_EXTENDED_LOGS"
-        android:summary="@string/labs_allow_extended_logging_summary"
-        android:title="@string/labs_allow_extended_logging" />
 
     <!--</im.vector.riotx.core.preference.VectorPreferenceCategory>-->
 

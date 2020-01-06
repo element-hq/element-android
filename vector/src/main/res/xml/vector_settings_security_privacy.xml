@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <!-- ************ Cryptography section ************ -->
     <im.vector.riotx.core.preference.VectorPreferenceCategory
@@ -21,11 +22,22 @@
         <im.vector.riotx.core.preference.VectorSwitchPreference
             android:key="SETTINGS_ENCRYPTION_NEVER_SENT_TO_PREFERENCE_KEY"
             android:summary="@string/encryption_never_send_to_unverified_devices_summary"
-            android:title="@string/encryption_never_send_to_unverified_devices_title" />
+            android:title="@string/encryption_never_send_to_unverified_devices_title"
+            app:isPreferenceVisible="@bool/false_not_implemented" />
 
     </im.vector.riotx.core.preference.VectorPreferenceCategory>
 
-    <im.vector.riotx.core.preference.VectorPreferenceDivider android:key="SETTINGS_CRYPTOGRAPHY_DIVIDER_PREFERENCE_KEY" />
+    <!-- devices list entry point -->
+    <im.vector.riotx.core.preference.VectorPreferenceCategory
+        android:key="SETTINGS_DEVICES_LIST_PREFERENCE_KEY"
+        android:title="@string/settings_devices_list">
+
+        <im.vector.riotx.core.preference.VectorPreference
+            android:key="SETTINGS_SHOW_DEVICES_LIST_PREFERENCE_KEY"
+            android:title="@string/settings_show_devices_list"
+            app:fragment="im.vector.riotx.features.settings.devices.VectorSettingsDevicesFragment" />
+
+    </im.vector.riotx.core.preference.VectorPreferenceCategory>
 
     <im.vector.riotx.core.preference.VectorPreferenceCategory
         android:key="SETTINGS_CRYPTOGRAPHY_MANAGE_PREFERENCE_KEY"
@@ -48,18 +60,10 @@
 
     </im.vector.riotx.core.preference.VectorPreferenceCategory>
 
-    <im.vector.riotx.core.preference.VectorPreferenceDivider android:key="SETTINGS_CRYPTOGRAPHY_MANAGE_DIVIDER_PREFERENCE_KEY" />
-
-    <!-- devices list: device ids + device names -->
-    <im.vector.riotx.core.preference.VectorPreferenceCategory
-        android:key="SETTINGS_DEVICES_LIST_PREFERENCE_KEY"
-        android:title="@string/settings_devices_list" />
-
-    <im.vector.riotx.core.preference.VectorPreferenceDivider android:key="SETTINGS_DEVICES_DIVIDER_PREFERENCE_KEY" />
-
     <im.vector.riotx.core.preference.VectorPreferenceCategory
         android:key="SETTINGS_ANALYTICS_PREFERENCE_KEY"
-        android:title="@string/settings_analytics">
+        android:title="@string/settings_analytics"
+        app:isPreferenceVisible="@bool/false_not_implemented">
 
         <im.vector.riotx.core.preference.VectorSwitchPreference
             android:defaultValue="false"
@@ -67,9 +71,6 @@
             android:summary="@string/settings_opt_in_of_analytics_summary"
             android:title="@string/settings_opt_in_of_analytics" />
 
-        <im.vector.riotx.core.preference.VectorSwitchPreference
-            android:key="SETTINGS_USE_RAGE_SHAKE_KEY"
-            android:title="@string/send_bug_report_rage_shake" />
     </im.vector.riotx.core.preference.VectorPreferenceCategory>
 
 </androidx.preference.PreferenceScreen>

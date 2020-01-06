@@ -19,33 +19,32 @@ package im.vector.riotx.features.rageshake
 import android.content.Context
 import android.hardware.Sensor
 import android.hardware.SensorManager
-import android.preference.PreferenceManager
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.edit
 import com.squareup.seismic.ShakeDetector
 import im.vector.riotx.R
+import im.vector.riotx.core.hardware.vibrate
+import im.vector.riotx.features.navigation.Navigator
+import im.vector.riotx.features.settings.VectorPreferences
+import im.vector.riotx.features.settings.VectorSettingsActivity
 import javax.inject.Inject
 
 class RageShake @Inject constructor(private val activity: AppCompatActivity,
-                                    private val bugReporter: BugReporter) : ShakeDetector.Listener {
+                                    private val bugReporter: BugReporter,
+                                    private val navigator: Navigator,
+                                    private val vectorPreferences: VectorPreferences) : ShakeDetector.Listener {
 
     private var shakeDetector: ShakeDetector? = null
 
     private var dialogDisplayed = false
 
+    var interceptor: (() -> Unit)? = null
+
     fun start() {
-        if (!isEnable(activity)) {
-            return
-        }
-
-        val sensorManager = activity.getSystemService(AppCompatActivity.SENSOR_SERVICE) as? SensorManager
-
-        if (sensorManager == null) {
-            return
-        }
+        val sensorManager = activity.getSystemService(AppCompatActivity.SENSOR_SERVICE) as? SensorManager ?: return
 
         shakeDetector = ShakeDetector(this).apply {
+            setSensitivity(vectorPreferences.getRageshakeSensitivity())
             start(sensorManager)
         }
     }
@@ -54,65 +53,49 @@ class RageShake @Inject constructor(private val activity: AppCompatActivity,
         shakeDetector?.stop()
     }
 
-    /**
-     * Enable the feature, and start it
-     */
-    fun enable() {
-        PreferenceManager.getDefaultSharedPreferences(activity).edit {
-            putBoolean(SETTINGS_USE_RAGE_SHAKE_KEY, true)
-        }
-
-        start()
-    }
-
-    /**
-     * Disable the feature, and stop it
-     */
-    fun disable() {
-        PreferenceManager.getDefaultSharedPreferences(activity).edit {
-            putBoolean(SETTINGS_USE_RAGE_SHAKE_KEY, false)
-        }
-
-        stop()
+    fun setSensitivity(sensitivity: Int) {
+        shakeDetector?.setSensitivity(sensitivity)
     }
 
     override fun hearShake() {
-        if (dialogDisplayed) {
-            // Filtered!
-            return
+        val i = interceptor
+        if (i != null) {
+            vibrate(activity)
+            i.invoke()
+        } else {
+            if (dialogDisplayed) {
+                // Filtered!
+                return
+            }
+
+            vibrate(activity)
+            dialogDisplayed = true
+
+            AlertDialog.Builder(activity)
+                    .setMessage(R.string.send_bug_report_alert_message)
+                    .setPositiveButton(R.string.yes) { _, _ -> openBugReportScreen() }
+                    .setNeutralButton(R.string.settings) { _, _ -> openSettings() }
+                    .setOnDismissListener { dialogDisplayed = false }
+                    .setNegativeButton(R.string.no, null)
+                    .show()
         }
-
-        dialogDisplayed = true
-
-        AlertDialog.Builder(activity)
-                .setMessage(R.string.send_bug_report_alert_message)
-                .setPositiveButton(R.string.yes) { _, _ -> openBugReportScreen() }
-                .setNeutralButton(R.string.disable) { _, _ -> disable() }
-                .setOnDismissListener { dialogDisplayed = false }
-                .setNegativeButton(R.string.no, null)
-                .show()
     }
 
     private fun openBugReportScreen() {
         bugReporter.openBugReportScreen(activity)
     }
 
-    companion object {
-        private const val SETTINGS_USE_RAGE_SHAKE_KEY = "SETTINGS_USE_RAGE_SHAKE_KEY"
+    private fun openSettings() {
+        navigator.openSettings(activity, VectorSettingsActivity.EXTRA_DIRECT_ACCESS_ADVANCED_SETTINGS)
+    }
 
+    companion object {
         /**
          * Check if the feature is available
          */
         fun isAvailable(context: Context): Boolean {
             return (context.getSystemService(AppCompatActivity.SENSOR_SERVICE) as? SensorManager)
                     ?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null
-        }
-
-        /**
-         * Check if the feature is enable (enabled by default)
-         */
-        private fun isEnable(context: Context): Boolean {
-            return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_USE_RAGE_SHAKE_KEY, true)
         }
     }
 }
