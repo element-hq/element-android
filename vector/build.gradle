@@ -236,6 +236,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
 
+    implementation "androidx.recyclerview:recyclerview:1.2.0-alpha01"
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation "androidx.fragment:fragment:$fragment_version"
     implementation "androidx.fragment:fragment-ktx:$fragment_version"
