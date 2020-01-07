@@ -1221,7 +1221,7 @@ internal class KeysBackup @Inject constructor(
                                         // Do not stay in KeysBackupState.WrongBackUpVersion but check what is available on the homeserver
                                         checkAndStartKeysBackup()
                                     }
-                                    else                                ->
+                                    else                                  ->
                                         // Come back to the ready state so that we will retry on the next received key
                                         keysBackupStateManager.state = KeysBackupState.ReadyToBackUp
                                 }
@@ -1338,6 +1338,32 @@ internal class KeysBackup @Inject constructor(
 
         return sessionBackupData
     }
+
+    /* ==========================================================================================
+     * For test only
+     * ========================================================================================== */
+
+    // Direct access for test only
+    @VisibleForTesting
+    val store
+        get() = cryptoStore
+
+    @VisibleForTesting
+    fun createFakeKeysBackupVersion(keysBackupCreationInfo: MegolmBackupCreationInfo,
+                                    callback: MatrixCallback<KeysVersion>) {
+        val createKeysBackupVersionBody = CreateKeysBackupVersionBody()
+        createKeysBackupVersionBody.algorithm = keysBackupCreationInfo.algorithm
+        @Suppress("UNCHECKED_CAST")
+        createKeysBackupVersionBody.authData = MoshiProvider.providesMoshi().adapter(Map::class.java)
+                .fromJson(keysBackupCreationInfo.authData?.toJsonString() ?: "") as JsonDict?
+
+        createKeysBackupVersionTask
+                .configureWith(createKeysBackupVersionBody) {
+                    this.callback = callback
+                }
+                .executeBy(taskExecutor)
+    }
+
 
     companion object {
         // Maximum delay in ms in {@link maybeBackupKeys}
