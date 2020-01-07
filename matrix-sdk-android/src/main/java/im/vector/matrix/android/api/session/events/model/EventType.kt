@@ -25,7 +25,6 @@ object EventType {
     const val MESSAGE = "m.room.message"
     const val STICKER = "m.sticker"
     const val ENCRYPTED = "m.room.encrypted"
-    const val ENCRYPTION = "m.room.encryption"
     const val FEEDBACK = "m.room.message.feedback"
     const val TYPING = "m.typing"
     const val REDACTION = "m.room.redaction"
@@ -54,6 +53,7 @@ object EventType {
     const val STATE_ROOM_HISTORY_VISIBILITY = "m.room.history_visibility"
     const val STATE_ROOM_RELATED_GROUPS = "m.room.related_groups"
     const val STATE_ROOM_PINNED_EVENT = "m.room.pinned_events"
+    const val STATE_ROOM_ENCRYPTION = "m.room.encryption"
 
     // Call Events
 
