@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.database
 
 import android.content.Context
 import im.vector.matrix.android.internal.database.model.SessionRealmModule
+import im.vector.matrix.android.internal.di.SessionId
 import im.vector.matrix.android.internal.di.UserCacheDirectory
 import im.vector.matrix.android.internal.di.UserMd5
 import im.vector.matrix.android.internal.session.SessionModule
@@ -37,13 +38,14 @@ private const val REALM_NAME = "disk_store.realm"
  */
 internal class SessionRealmConfigurationFactory @Inject constructor(private val realmKeysUtils: RealmKeysUtils,
                                                                     @UserCacheDirectory val directory: File,
+                                                                    @SessionId val sessionId: String,
                                                                     @UserMd5 val userMd5: String,
                                                                     context: Context) {
 
     private val sharedPreferences = context.getSharedPreferences("im.vector.matrix.android.realm", Context.MODE_PRIVATE)
 
     fun create(): RealmConfiguration {
-        val shouldClearRealm = sharedPreferences.getBoolean("$REALM_SHOULD_CLEAR_FLAG_$userMd5", false)
+        val shouldClearRealm = sharedPreferences.getBoolean("$REALM_SHOULD_CLEAR_FLAG_$sessionId", false)
         if (shouldClearRealm) {
             Timber.v("************************************************************")
             Timber.v("The realm file session was corrupted and couldn't be loaded.")
@@ -53,7 +55,7 @@ internal class SessionRealmConfigurationFactory @Inject constructor(private val 
         }
         sharedPreferences
                 .edit()
-                .putBoolean("$REALM_SHOULD_CLEAR_FLAG_$userMd5", true)
+                .putBoolean("$REALM_SHOULD_CLEAR_FLAG_$sessionId", true)
                 .apply()
 
         val realmConfiguration = RealmConfiguration.Builder()
@@ -61,7 +63,7 @@ internal class SessionRealmConfigurationFactory @Inject constructor(private val 
                 .directory(directory)
                 .name(REALM_NAME)
                 .apply {
-                    realmKeysUtils.configureEncryption(this, "${SessionModule.DB_ALIAS_PREFIX}$userMd5")
+                    realmKeysUtils.configureEncryption(this, SessionModule.getKeyAlias(userMd5))
                 }
                 .modules(SessionRealmModule())
                 .deleteRealmIfMigrationNeeded()
@@ -72,7 +74,7 @@ internal class SessionRealmConfigurationFactory @Inject constructor(private val 
             Timber.v("Successfully create realm instance")
             sharedPreferences
                     .edit()
-                    .putBoolean("$REALM_SHOULD_CLEAR_FLAG_$userMd5", false)
+                    .putBoolean("$REALM_SHOULD_CLEAR_FLAG_$sessionId", false)
                     .apply()
         }
         return realmConfiguration

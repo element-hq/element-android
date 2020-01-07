@@ -31,3 +31,10 @@ internal annotation class UserId
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
 internal annotation class UserMd5
+
+/**
+ * Used to inject the sessionId, which is defined as md5(userId|deviceId)
+ */
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+internal annotation class SessionId
