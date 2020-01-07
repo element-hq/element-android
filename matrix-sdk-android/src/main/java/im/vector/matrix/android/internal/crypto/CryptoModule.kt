@@ -47,7 +47,7 @@ internal abstract class CryptoModule {
 
     @Module
     companion object {
-        internal const val DB_ALIAS_PREFIX = "crypto_module_"
+        internal fun getKeyAlias(userMd5: String) = "crypto_module_$userMd5"
 
         @JvmStatic
         @Provides
@@ -59,7 +59,7 @@ internal abstract class CryptoModule {
             return RealmConfiguration.Builder()
                     .directory(directory)
                     .apply {
-                        realmKeysUtils.configureEncryption(this, "$DB_ALIAS_PREFIX$userMd5")
+                        realmKeysUtils.configureEncryption(this, getKeyAlias(userMd5))
                     }
                     .name("crypto_store.realm")
                     .modules(RealmCryptoStoreModule())

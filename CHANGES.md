@@ -14,7 +14,7 @@ Improvements 🙌:
  - Fix autocompletion issues and add support for rooms, groups, and emoji (#780)
 
 Other changes:
- -
+ - Change the way RiotX identifies a session to allow the SDK to support several sessions with the same user (#800)
 
 Bugfix 🐛:
  - Fix crash when opening room creation screen from the room filtering screen
