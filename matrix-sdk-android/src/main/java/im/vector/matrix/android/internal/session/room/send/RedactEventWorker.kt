@@ -25,6 +25,7 @@ import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.worker.SessionWorkerParams
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import im.vector.matrix.android.internal.worker.getSessionComponent
+import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal class RedactEventWorker(context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
@@ -40,6 +41,7 @@ internal class RedactEventWorker(context: Context, params: WorkerParameters) : C
     ) : SessionWorkerParams
 
     @Inject lateinit var roomAPI: RoomAPI
+    @Inject lateinit var eventBus: EventBus
 
     override suspend fun doWork(): Result {
         val params = WorkerParamsFactory.fromData<Params>(inputData)
@@ -55,7 +57,7 @@ internal class RedactEventWorker(context: Context, params: WorkerParameters) : C
 
         val eventId = params.eventId
         return runCatching {
-            executeRequest<SendResponse> {
+            executeRequest<SendResponse>(eventBus) {
                 apiCall = roomAPI.redactEvent(
                         params.txID,
                         params.roomId,

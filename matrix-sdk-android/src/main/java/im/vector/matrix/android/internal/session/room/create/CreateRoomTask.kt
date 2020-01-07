@@ -35,21 +35,25 @@ import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.RealmConfiguration
 import kotlinx.coroutines.TimeoutCancellationException
+import org.greenrobot.eventbus.EventBus
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 internal interface CreateRoomTask : Task<CreateRoomParams, String>
 
-internal class DefaultCreateRoomTask @Inject constructor(private val roomAPI: RoomAPI,
-                                                         private val monarchy: Monarchy,
-                                                         private val directChatsHelper: DirectChatsHelper,
-                                                         private val updateUserAccountDataTask: UpdateUserAccountDataTask,
-                                                         private val readMarkersTask: SetReadMarkersTask,
-                                                         @SessionDatabase
-                                                         private val realmConfiguration: RealmConfiguration) : CreateRoomTask {
+internal class DefaultCreateRoomTask @Inject constructor(
+        private val roomAPI: RoomAPI,
+        private val monarchy: Monarchy,
+        private val directChatsHelper: DirectChatsHelper,
+        private val updateUserAccountDataTask: UpdateUserAccountDataTask,
+        private val readMarkersTask: SetReadMarkersTask,
+        @SessionDatabase
+        private val realmConfiguration: RealmConfiguration,
+        private val eventBus: EventBus
+) : CreateRoomTask {
 
     override suspend fun execute(params: CreateRoomParams): String {
-        val createRoomResponse = executeRequest<CreateRoomResponse> {
+        val createRoomResponse = executeRequest<CreateRoomResponse>(eventBus) {
             apiCall = roomAPI.createRoom(params)
         }
         val roomId = createRoomResponse.roomId!!

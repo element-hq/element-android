@@ -27,8 +27,8 @@ import java.util.concurrent.CountDownLatch
  * @param onlySuccessful true to fail if an error occurs. This is the default behavior
  * @param <T>
  */
-open class TestMatrixCallback<T> @JvmOverloads constructor(private val countDownLatch: CountDownLatch,
-                                                           private val onlySuccessful: Boolean = true) : MatrixCallback<T> {
+open class TestMatrixCallback<T>(private val countDownLatch: CountDownLatch,
+                                 private val onlySuccessful: Boolean = true) : MatrixCallback<T> {
 
     @CallSuper
     override fun onSuccess(data: T) {

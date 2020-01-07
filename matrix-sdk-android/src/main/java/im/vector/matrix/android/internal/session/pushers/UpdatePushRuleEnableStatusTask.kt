@@ -19,6 +19,7 @@ import im.vector.matrix.android.api.pushrules.RuleKind
 import im.vector.matrix.android.api.pushrules.rest.PushRule
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
+import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface UpdatePushRuleEnableStatusTask : Task<UpdatePushRuleEnableStatusTask.Params, Unit> {
@@ -27,11 +28,13 @@ internal interface UpdatePushRuleEnableStatusTask : Task<UpdatePushRuleEnableSta
                       val enabled: Boolean)
 }
 
-internal class DefaultUpdatePushRuleEnableStatusTask @Inject constructor(private val pushRulesApi: PushRulesApi)
-    : UpdatePushRuleEnableStatusTask {
+internal class DefaultUpdatePushRuleEnableStatusTask @Inject constructor(
+        private val pushRulesApi: PushRulesApi,
+        private val eventBus: EventBus
+) : UpdatePushRuleEnableStatusTask {
 
     override suspend fun execute(params: UpdatePushRuleEnableStatusTask.Params) {
-        return executeRequest {
+        return executeRequest(eventBus) {
             apiCall = pushRulesApi.updateEnableRuleStatus(params.kind.value, params.pushRule.ruleId, params.enabled)
         }
     }

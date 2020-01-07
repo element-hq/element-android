@@ -20,15 +20,18 @@ import im.vector.matrix.android.internal.crypto.api.CryptoApi
 import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
+import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface GetDevicesTask : Task<Unit, DevicesListResponse>
 
-internal class DefaultGetDevicesTask @Inject constructor(private val cryptoApi: CryptoApi)
-    : GetDevicesTask {
+internal class DefaultGetDevicesTask @Inject constructor(
+        private val cryptoApi: CryptoApi,
+        private val eventBus: EventBus
+) : GetDevicesTask {
 
     override suspend fun execute(params: Unit): DevicesListResponse {
-        return executeRequest {
+        return executeRequest(eventBus) {
             apiCall = cryptoApi.getDevices()
         }
     }

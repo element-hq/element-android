@@ -29,6 +29,7 @@ import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.util.awaitTransaction
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import im.vector.matrix.android.internal.worker.getSessionComponent
+import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal class AddHttpPusherWorker(context: Context, params: WorkerParameters)
@@ -42,6 +43,7 @@ internal class AddHttpPusherWorker(context: Context, params: WorkerParameters)
 
     @Inject lateinit var pushersAPI: PushersAPI
     @Inject lateinit var monarchy: Monarchy
+    @Inject lateinit var eventBus: EventBus
 
     override suspend fun doWork(): Result {
         val params = WorkerParamsFactory.fromData<Params>(inputData)
@@ -76,7 +78,7 @@ internal class AddHttpPusherWorker(context: Context, params: WorkerParameters)
     }
 
     private suspend fun setPusher(pusher: JsonPusher) {
-        executeRequest<Unit> {
+        executeRequest<Unit>(eventBus) {
             apiCall = pushersAPI.setPusher(pusher)
         }
         monarchy.awaitTransaction { realm ->

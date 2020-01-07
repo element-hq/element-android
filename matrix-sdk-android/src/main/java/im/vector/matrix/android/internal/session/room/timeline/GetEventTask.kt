@@ -20,9 +20,12 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.task.Task
+import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
-internal class GetEventTask @Inject constructor(private val roomAPI: RoomAPI
+internal class GetEventTask @Inject constructor(
+        private val roomAPI: RoomAPI,
+        private val eventBus: EventBus
 ) : Task<GetEventTask.Params, Event> {
 
     internal data class Params(
@@ -31,7 +34,7 @@ internal class GetEventTask @Inject constructor(private val roomAPI: RoomAPI
     )
 
     override suspend fun execute(params: Params): Event {
-        return executeRequest {
+        return executeRequest(eventBus) {
             apiCall = roomAPI.getEvent(params.roomId, params.eventId)
         }
     }

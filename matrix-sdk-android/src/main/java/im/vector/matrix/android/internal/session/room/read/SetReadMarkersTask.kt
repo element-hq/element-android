@@ -20,7 +20,8 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.events.model.LocalEcho
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
-import im.vector.matrix.android.internal.database.query.*
+import im.vector.matrix.android.internal.database.query.isEventRead
+import im.vector.matrix.android.internal.database.query.isReadMarkerMoreRecent
 import im.vector.matrix.android.internal.database.query.latestEvent
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.UserId
@@ -31,8 +32,11 @@ import im.vector.matrix.android.internal.session.sync.RoomFullyReadHandler
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.Realm
+import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.collections.HashMap
+import kotlin.collections.set
 
 internal interface SetReadMarkersTask : Task<SetReadMarkersTask.Params, Unit> {
 
@@ -47,12 +51,14 @@ internal interface SetReadMarkersTask : Task<SetReadMarkersTask.Params, Unit> {
 private const val READ_MARKER = "m.fully_read"
 private const val READ_RECEIPT = "m.read"
 
-internal class DefaultSetReadMarkersTask @Inject constructor(private val roomAPI: RoomAPI,
-                                                             private val monarchy: Monarchy,
-                                                             private val roomFullyReadHandler: RoomFullyReadHandler,
-                                                             private val readReceiptHandler: ReadReceiptHandler,
-                                                             @UserId private val userId: String)
-    : SetReadMarkersTask {
+internal class DefaultSetReadMarkersTask @Inject constructor(
+        private val roomAPI: RoomAPI,
+        private val monarchy: Monarchy,
+        private val roomFullyReadHandler: RoomFullyReadHandler,
+        private val readReceiptHandler: ReadReceiptHandler,
+        @UserId private val userId: String,
+        private val eventBus: EventBus
+) : SetReadMarkersTask {
 
     override suspend fun execute(params: SetReadMarkersTask.Params) {
         val markers = HashMap<String, String>()
@@ -76,7 +82,7 @@ internal class DefaultSetReadMarkersTask @Inject constructor(private val roomAPI
         }
 
         if (readReceiptEventId != null
-            && !isEventRead(monarchy, userId, params.roomId, readReceiptEventId)) {
+                && !isEventRead(monarchy, userId, params.roomId, readReceiptEventId)) {
             if (LocalEcho.isLocalEchoId(readReceiptEventId)) {
                 Timber.w("Can't set read receipt for local event $readReceiptEventId")
             } else {
@@ -87,7 +93,7 @@ internal class DefaultSetReadMarkersTask @Inject constructor(private val roomAPI
             return
         }
         updateDatabase(params.roomId, markers)
-        executeRequest<Unit> {
+        executeRequest<Unit>(eventBus) {
             apiCall = roomAPI.sendReadMarker(params.roomId, markers)
         }
     }
@@ -105,7 +111,7 @@ internal class DefaultSetReadMarkersTask @Inject constructor(private val roomAPI
                 val isLatestReceived = TimelineEventEntity.latestEvent(realm, roomId = roomId, includesSending = false)?.eventId == readReceiptId
                 if (isLatestReceived) {
                     val roomSummary = RoomSummaryEntity.where(realm, roomId).findFirst()
-                                      ?: return@awaitTransaction
+                            ?: return@awaitTransaction
                     roomSummary.notificationCount = 0
                     roomSummary.highlightCount = 0
                     roomSummary.hasUnreadMessages = false

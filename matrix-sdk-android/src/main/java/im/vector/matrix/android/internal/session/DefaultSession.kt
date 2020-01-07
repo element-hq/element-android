@@ -17,7 +17,6 @@
 package im.vector.matrix.android.internal.session
 
 import android.content.Context
-import android.os.Looper
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
 import dagger.Lazy
@@ -62,6 +61,7 @@ import javax.inject.Provider
 @SessionScope
 internal class DefaultSession @Inject constructor(override val sessionParams: SessionParams,
                                                   private val context: Context,
+                                                  private val eventBus: EventBus,
                                                   private val liveEntityObservers: Set<@JvmSuppressWildcards LiveEntityObserver>,
                                                   private val sessionListeners: SessionListeners,
                                                   private val roomService: Lazy<RoomService>,
@@ -85,19 +85,19 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
                                                   private val initialSyncProgressService: Lazy<InitialSyncProgressService>,
                                                   private val homeServerCapabilitiesService: Lazy<HomeServerCapabilitiesService>)
     : Session,
-      RoomService by roomService.get(),
-      RoomDirectoryService by roomDirectoryService.get(),
-      GroupService by groupService.get(),
-      UserService by userService.get(),
-      CryptoService by cryptoService.get(),
-      SignOutService by signOutService.get(),
-      FilterService by filterService.get(),
-      PushRuleService by pushRuleService.get(),
-      PushersService by pushersService.get(),
-      FileService by fileService.get(),
-      InitialSyncProgressService by initialSyncProgressService.get(),
-      SecureStorageService by secureStorageService.get(),
-      HomeServerCapabilitiesService by homeServerCapabilitiesService.get() {
+        RoomService by roomService.get(),
+        RoomDirectoryService by roomDirectoryService.get(),
+        GroupService by groupService.get(),
+        UserService by userService.get(),
+        CryptoService by cryptoService.get(),
+        SignOutService by signOutService.get(),
+        FilterService by filterService.get(),
+        PushRuleService by pushRuleService.get(),
+        PushersService by pushersService.get(),
+        FileService by fileService.get(),
+        InitialSyncProgressService by initialSyncProgressService.get(),
+        SecureStorageService by secureStorageService.get(),
+        HomeServerCapabilitiesService by homeServerCapabilitiesService.get() {
 
     private var isOpen = false
 
@@ -111,7 +111,7 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
         assert(!isOpen)
         isOpen = true
         liveEntityObservers.forEach { it.start() }
-        EventBus.getDefault().register(this)
+        eventBus.register(this)
     }
 
     override fun requireBackgroundSync() {
@@ -151,7 +151,7 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
         liveEntityObservers.forEach { it.dispose() }
         cryptoService.get().close()
         isOpen = false
-        EventBus.getDefault().unregister(this)
+        eventBus.unregister(this)
         syncTaskSequencer.close()
     }
 
@@ -179,7 +179,7 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onGlobalError(globalError: GlobalError) {
         if (globalError is GlobalError.InvalidToken
-            && globalError.softLogout) {
+                && globalError.softLogout) {
             // Mark the token has invalid
             GlobalScope.launch(Dispatchers.IO) {
                 sessionParamsStore.setTokenInvalid(myUserId)

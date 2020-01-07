@@ -21,6 +21,7 @@ import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRooms
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.task.Task
+import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface GetPublicRoomTask : Task<GetPublicRoomTask.Params, PublicRoomsResponse> {
@@ -30,10 +31,13 @@ internal interface GetPublicRoomTask : Task<GetPublicRoomTask.Params, PublicRoom
     )
 }
 
-internal class DefaultGetPublicRoomTask @Inject constructor(private val roomAPI: RoomAPI) : GetPublicRoomTask {
+internal class DefaultGetPublicRoomTask @Inject constructor(
+        private val roomAPI: RoomAPI,
+        private val eventBus: EventBus
+) : GetPublicRoomTask {
 
     override suspend fun execute(params: GetPublicRoomTask.Params): PublicRoomsResponse {
-        return executeRequest {
+        return executeRequest(eventBus) {
             apiCall = roomAPI.publicRooms(params.server, params.publicRoomsParams)
         }
     }

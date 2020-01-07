@@ -20,6 +20,7 @@ import im.vector.matrix.android.internal.crypto.api.CryptoApi
 import im.vector.matrix.android.internal.crypto.model.rest.KeyChangesResponse
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
+import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface GetKeyChangesTask : Task<GetKeyChangesTask.Params, KeyChangesResponse> {
@@ -31,11 +32,13 @@ internal interface GetKeyChangesTask : Task<GetKeyChangesTask.Params, KeyChanges
     )
 }
 
-internal class DefaultGetKeyChangesTask @Inject constructor(private val cryptoApi: CryptoApi)
-    : GetKeyChangesTask {
+internal class DefaultGetKeyChangesTask @Inject constructor(
+        private val cryptoApi: CryptoApi,
+        private val eventBus: EventBus
+) : GetKeyChangesTask {
 
     override suspend fun execute(params: GetKeyChangesTask.Params): KeyChangesResponse {
-        return executeRequest {
+        return executeRequest(eventBus) {
             apiCall = cryptoApi.getKeyChanges(params.from, params.to)
         }
     }

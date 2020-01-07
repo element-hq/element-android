@@ -23,6 +23,7 @@ import im.vector.matrix.android.internal.crypto.model.rest.DeleteDeviceParams
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
+import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface DeleteDeviceTask : Task<DeleteDeviceTask.Params, Unit> {
@@ -31,12 +32,14 @@ internal interface DeleteDeviceTask : Task<DeleteDeviceTask.Params, Unit> {
     )
 }
 
-internal class DefaultDeleteDeviceTask @Inject constructor(private val cryptoApi: CryptoApi)
-    : DeleteDeviceTask {
+internal class DefaultDeleteDeviceTask @Inject constructor(
+        private val cryptoApi: CryptoApi,
+        private val eventBus: EventBus
+) : DeleteDeviceTask {
 
     override suspend fun execute(params: DeleteDeviceTask.Params) {
         try {
-            executeRequest<Unit> {
+            executeRequest<Unit>(eventBus) {
                 apiCall = cryptoApi.deleteDevice(params.deviceId, DeleteDeviceParams())
             }
         } catch (throwable: Throwable) {

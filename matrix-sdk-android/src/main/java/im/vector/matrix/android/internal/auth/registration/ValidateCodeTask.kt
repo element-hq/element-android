@@ -27,11 +27,12 @@ internal interface ValidateCodeTask : Task<ValidateCodeTask.Params, SuccessResul
     )
 }
 
-internal class DefaultValidateCodeTask(private val authAPI: AuthAPI)
-    : ValidateCodeTask {
+internal class DefaultValidateCodeTask(
+        private val authAPI: AuthAPI
+) : ValidateCodeTask {
 
     override suspend fun execute(params: ValidateCodeTask.Params): SuccessResult {
-        return executeRequest {
+        return executeRequest(null) {
             apiCall = authAPI.validate3Pid(params.url, params.body)
         }
     }

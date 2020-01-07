@@ -47,6 +47,7 @@ import im.vector.matrix.android.internal.session.securestorage.DefaultSecureStor
 import im.vector.matrix.android.internal.util.md5
 import io.realm.RealmConfiguration
 import okhttp3.OkHttpClient
+import org.greenrobot.eventbus.EventBus
 import retrofit2.Retrofit
 import java.io.File
 
@@ -153,6 +154,13 @@ internal abstract class SessionModule {
                              retrofitFactory: RetrofitFactory): Retrofit {
             return retrofitFactory
                     .create(okHttpClient, sessionParams.homeServerConnectionConfig.homeServerUri.toString())
+        }
+
+        @JvmStatic
+        @Provides
+        @SessionScope
+        fun providesEventBus(): EventBus {
+            return EventBus.builder().build()
         }
     }
 

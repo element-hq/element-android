@@ -30,6 +30,7 @@ import im.vector.matrix.android.internal.session.room.send.SendResponse
 import im.vector.matrix.android.internal.worker.SessionWorkerParams
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import im.vector.matrix.android.internal.worker.getSessionComponent
+import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal class SendRelationWorker(context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
@@ -44,6 +45,7 @@ internal class SendRelationWorker(context: Context, params: WorkerParameters) : 
     ) : SessionWorkerParams
 
     @Inject lateinit var roomAPI: RoomAPI
+    @Inject lateinit var eventBus: EventBus
 
     override suspend fun doWork(): Result {
         val params = WorkerParamsFactory.fromData<Params>(inputData)
@@ -82,7 +84,7 @@ internal class SendRelationWorker(context: Context, params: WorkerParameters) : 
     }
 
     private suspend fun sendRelation(roomId: String, relationType: String, relatedEventId: String, localEvent: Event) {
-        executeRequest<SendResponse> {
+        executeRequest<SendResponse>(eventBus) {
             apiCall = roomAPI.sendRelation(
                     roomId = roomId,
                     parent_id = relatedEventId,

@@ -20,6 +20,7 @@ import im.vector.matrix.android.internal.crypto.keysbackup.api.RoomKeysApi
 import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.UpdateKeysBackupVersionBody
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
+import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface UpdateKeysBackupVersionTask : Task<UpdateKeysBackupVersionTask.Params, Unit> {
@@ -29,11 +30,13 @@ internal interface UpdateKeysBackupVersionTask : Task<UpdateKeysBackupVersionTas
     )
 }
 
-internal class DefaultUpdateKeysBackupVersionTask @Inject constructor(private val roomKeysApi: RoomKeysApi)
-    : UpdateKeysBackupVersionTask {
+internal class DefaultUpdateKeysBackupVersionTask @Inject constructor(
+        private val roomKeysApi: RoomKeysApi,
+        private val eventBus: EventBus
+) : UpdateKeysBackupVersionTask {
 
     override suspend fun execute(params: UpdateKeysBackupVersionTask.Params) {
-        return executeRequest {
+        return executeRequest(eventBus) {
             apiCall = roomKeysApi.updateKeysBackupVersion(params.version, params.keysBackupVersionBody)
         }
     }

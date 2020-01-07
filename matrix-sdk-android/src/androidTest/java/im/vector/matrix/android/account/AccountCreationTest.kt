@@ -41,7 +41,6 @@ class AccountCreationTest : InstrumentedTest {
         session.close()
     }
 
-    // FIXME This test does not past yet, due to usage of the EventBus.
     @Test
     fun createAccountAndLoginAgainTest() {
         val session = commonTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(withInitialSync = true))

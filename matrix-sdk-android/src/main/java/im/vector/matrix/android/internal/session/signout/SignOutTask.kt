@@ -32,6 +32,7 @@ import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.worker.WorkManagerUtil
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import java.io.File
 import java.net.HttpURLConnection
@@ -43,25 +44,28 @@ internal interface SignOutTask : Task<SignOutTask.Params, Unit> {
     )
 }
 
-internal class DefaultSignOutTask @Inject constructor(private val context: Context,
-                                                      @UserId private val userId: String,
-                                                      private val signOutAPI: SignOutAPI,
-                                                      private val sessionManager: SessionManager,
-                                                      private val sessionParamsStore: SessionParamsStore,
-                                                      @SessionDatabase private val clearSessionDataTask: ClearCacheTask,
-                                                      @CryptoDatabase private val clearCryptoDataTask: ClearCacheTask,
-                                                      @UserCacheDirectory private val userFile: File,
-                                                      private val realmKeysUtils: RealmKeysUtils,
-                                                      @SessionDatabase private val realmSessionConfiguration: RealmConfiguration,
-                                                      @CryptoDatabase private val realmCryptoConfiguration: RealmConfiguration,
-                                                      @UserMd5 private val userMd5: String) : SignOutTask {
+internal class DefaultSignOutTask @Inject constructor(
+        private val context: Context,
+        @UserId private val userId: String,
+        private val signOutAPI: SignOutAPI,
+        private val sessionManager: SessionManager,
+        private val sessionParamsStore: SessionParamsStore,
+        @SessionDatabase private val clearSessionDataTask: ClearCacheTask,
+        @CryptoDatabase private val clearCryptoDataTask: ClearCacheTask,
+        @UserCacheDirectory private val userFile: File,
+        private val realmKeysUtils: RealmKeysUtils,
+        @SessionDatabase private val realmSessionConfiguration: RealmConfiguration,
+        @CryptoDatabase private val realmCryptoConfiguration: RealmConfiguration,
+        @UserMd5 private val userMd5: String,
+        private val eventBus: EventBus
+) : SignOutTask {
 
     override suspend fun execute(params: SignOutTask.Params) {
         // It should be done even after a soft logout, to be sure the deviceId is deleted on the
         if (params.sigOutFromHomeserver) {
             Timber.d("SignOut: send request...")
             try {
-                executeRequest<Unit> {
+                executeRequest<Unit>(eventBus) {
                     apiCall = signOutAPI.signOut()
                 }
             } catch (throwable: Throwable) {
