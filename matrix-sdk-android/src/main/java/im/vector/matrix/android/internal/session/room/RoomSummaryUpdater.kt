@@ -99,7 +99,6 @@ internal class RoomSummaryUpdater @Inject constructor(@UserId private val userId
                                               // avoid this call if we are sure there are unread events
                                               || !isEventRead(monarchy, userId, roomId, latestPreviewableEvent?.eventId)
 
-
         roomSummaryEntity.displayName = roomDisplayNameResolver.resolve(roomId).toString()
         roomSummaryEntity.avatarUrl = roomAvatarResolver.resolve(roomId)
         roomSummaryEntity.topic = ContentMapper.map(lastTopicEvent?.content).toModel<RoomTopicContent>()?.topic

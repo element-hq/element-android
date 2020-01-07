@@ -77,7 +77,7 @@ internal class DefaultTimeline(
         private val hiddenReadReceipts: TimelineHiddenReadReceipts
 ) : Timeline, TimelineHiddenReadReceipts.Delegate {
 
-    companion object{
+    companion object {
         val BACKGROUND_HANDLER = createBackgroundHandler("TIMELINE_DB_THREAD")
     }
 

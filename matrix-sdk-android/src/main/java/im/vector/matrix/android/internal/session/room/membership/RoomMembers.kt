@@ -71,11 +71,13 @@ internal class RoomMembers(private val realm: Realm,
     }
 
     fun queryJoinedRoomMembersEvent(): RealmQuery<RoomMemberEntity> {
-        return queryRoomMembersEvent().equalTo(RoomMemberEntityFields.MEMBERSHIP_STR, Membership.JOIN.name)
+        return queryRoomMembersEvent()
+                .equalTo(RoomMemberEntityFields.MEMBERSHIP_STR, Membership.JOIN.name)
     }
 
     fun queryInvitedRoomMembersEvent(): RealmQuery<RoomMemberEntity> {
-        return queryRoomMembersEvent().equalTo(RoomMemberEntityFields.MEMBERSHIP_STR, Membership.INVITE.name)
+        return queryRoomMembersEvent()
+                .equalTo(RoomMemberEntityFields.MEMBERSHIP_STR, Membership.INVITE.name)
     }
 
     fun queryActiveRoomMembersEvent(): RealmQuery<RoomMemberEntity> {
