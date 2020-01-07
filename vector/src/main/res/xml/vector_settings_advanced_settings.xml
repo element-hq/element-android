@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <im.vector.riotx.core.preference.VectorPreferenceCategory android:title="@string/settings_developer_mode">
+
+        <im.vector.riotx.core.preference.VectorSwitchPreference
+            android:defaultValue="false"
+            android:key="SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY"
+            android:summary="@string/settings_developer_mode_summary"
+            android:title="@string/settings_developer_mode" />
+
+        <im.vector.riotx.core.preference.VectorSwitchPreference
+            android:defaultValue="false"
+            android:dependency="SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY"
+            android:key="SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY"
+            android:title="@string/settings_labs_show_hidden_events_in_timeline" />
+
+        <im.vector.riotx.core.preference.VectorSwitchPreference
+            android:defaultValue="false"
+            android:dependency="SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY"
+            android:key="SETTINGS_LABS_ALLOW_EXTENDED_LOGS"
+            android:summary="@string/labs_allow_extended_logging_summary"
+            android:title="@string/labs_allow_extended_logging" />
+
+        <!-- TODO Display unsupported events -->
+
+    </im.vector.riotx.core.preference.VectorPreferenceCategory>
+
+    <im.vector.riotx.core.preference.VectorPreferenceCategory
+        android:key="SETTINGS_RAGE_SHAKE_CATEGORY_KEY"
+        android:title="@string/settings_rageshake">
+
+        <im.vector.riotx.core.preference.VectorSwitchPreference
+            android:key="SETTINGS_USE_RAGE_SHAKE_KEY"
+            android:title="@string/send_bug_report_rage_shake" />
+
+        <androidx.preference.SeekBarPreference
+            android:defaultValue="13"
+            android:dependency="SETTINGS_USE_RAGE_SHAKE_KEY"
+            android:key="SETTINGS_RAGE_SHAKE_DETECTION_THRESHOLD_KEY"
+            android:max="15"
+            android:summary="@string/settings_rageshake_detection_threshold_summary"
+            android:title="@string/settings_rageshake_detection_threshold"
+            app:min="11" />
+
+    </im.vector.riotx.core.preference.VectorPreferenceCategory>
+
+    <im.vector.riotx.core.preference.VectorPreferenceCategory android:title="@string/settings_notifications">
+
+        <im.vector.riotx.core.preference.VectorPreference
+            android:persistent="false"
+            android:title="@string/settings_notifications_targets"
+            app:fragment="im.vector.riotx.features.settings.push.PushGatewaysFragment" />
+
+        <im.vector.riotx.core.preference.VectorPreference
+            android:persistent="false"
+            android:title="@string/settings_push_rules"
+            app:fragment="im.vector.riotx.features.settings.push.PushRulesFragment" />
+
+    </im.vector.riotx.core.preference.VectorPreferenceCategory>
+
+</androidx.preference.PreferenceScreen>

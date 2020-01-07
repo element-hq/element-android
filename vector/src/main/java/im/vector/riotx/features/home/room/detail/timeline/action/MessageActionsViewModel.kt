@@ -41,6 +41,8 @@ import im.vector.riotx.features.home.room.detail.timeline.format.NoticeEventForm
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.riotx.features.html.EventHtmlRenderer
 import im.vector.riotx.features.html.VectorHtmlCompressor
+import im.vector.riotx.features.reactions.data.EmojiDataSource
+import im.vector.riotx.features.settings.VectorPreferences
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -85,7 +87,8 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                                                           private val htmlCompressor: VectorHtmlCompressor,
                                                           private val session: Session,
                                                           private val noticeEventFormatter: NoticeEventFormatter,
-                                                          private val stringProvider: StringProvider
+                                                          private val stringProvider: StringProvider,
+                                                          private val vectorPreferences: VectorPreferences
 ) : VectorViewModel<MessageActionState, MessageActionsAction>(initialState) {
 
     private val eventId = initialState.eventId
@@ -98,9 +101,6 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     }
 
     companion object : MvRxViewModelFactory<MessageActionsViewModel, MessageActionState> {
-
-        val quickEmojis = listOf("👍", "👎", "😄", "🎉", "😕", "❤️", "🚀", "👀")
-
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: MessageActionState): MessageActionsViewModel? {
             val fragment: MessageActionsBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()
@@ -143,7 +143,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         room.rx()
                 .liveAnnotationSummary(eventId)
                 .map { annotations ->
-                    quickEmojis.map { emoji ->
+                    EmojiDataSource.quickEmojis.map { emoji ->
                         ToggleState(emoji, annotations.getOrNull()?.reactionsSummary?.firstOrNull { it.key == emoji }?.addedByMe ?: false)
                     }
                 }
@@ -258,14 +258,15 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                     }
                 }
 
-                add(EventSharedAction.ViewSource(timelineEvent.root.toContentStringWithIndent()))
-                if (timelineEvent.isEncrypted()) {
-                    val decryptedContent = timelineEvent.root.toClearContentStringWithIndent()
-                            ?: stringProvider.getString(R.string.encryption_information_decryption_error)
-                    add(EventSharedAction.ViewDecryptedSource(decryptedContent))
+                if (vectorPreferences.developerMode()) {
+                    add(EventSharedAction.ViewSource(timelineEvent.root.toContentStringWithIndent()))
+                    if (timelineEvent.isEncrypted()) {
+                        val decryptedContent = timelineEvent.root.toClearContentStringWithIndent()
+                                ?: stringProvider.getString(R.string.encryption_information_decryption_error)
+                        add(EventSharedAction.ViewDecryptedSource(decryptedContent))
+                    }
                 }
                 add(EventSharedAction.CopyPermalink(eventId))
-
                 if (session.myUserId != timelineEvent.root.senderId) {
                     // not sent by me
                     if (timelineEvent.root.getClearType() == EventType.MESSAGE) {

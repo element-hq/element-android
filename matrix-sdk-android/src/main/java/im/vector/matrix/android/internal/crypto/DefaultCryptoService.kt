@@ -50,6 +50,7 @@ import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXEncryptEventContentResult
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.event.RoomKeyContent
+import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
 import im.vector.matrix.android.internal.crypto.model.rest.KeysUploadResponse
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
@@ -127,6 +128,7 @@ internal class DefaultCryptoService @Inject constructor(
         private val deleteDeviceWithUserPasswordTask: DeleteDeviceWithUserPasswordTask,
         // Tasks
         private val getDevicesTask: GetDevicesTask,
+        private val getDeviceInfoTask: GetDeviceInfoTask,
         private val setDeviceNameTask: SetDeviceNameTask,
         private val uploadKeysTask: UploadKeysTask,
         private val loadRoomMembersTask: LoadRoomMembersTask,
@@ -194,6 +196,14 @@ internal class DefaultCryptoService @Inject constructor(
     override fun getDevicesList(callback: MatrixCallback<DevicesListResponse>) {
         getDevicesTask
                 .configureWith {
+                    this.callback = callback
+                }
+                .executeBy(taskExecutor)
+    }
+
+    override fun getDeviceInfo(deviceId: String, callback: MatrixCallback<DeviceInfo>) {
+        getDeviceInfoTask
+                .configureWith(GetDeviceInfoTask.Params(deviceId)) {
                     this.callback = callback
                 }
                 .executeBy(taskExecutor)

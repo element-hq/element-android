@@ -8,13 +8,19 @@ Improvements 🙌:
  - The initial sync is now handled by a foreground service
  - Render aliases and canonical alias change in the timeline
  - Fix autocompletion issues and add support for rooms and groups
+ - Introduce developer mode in the settings (#796)
+ - Improve devices list screen
+ - Add settings for rageshake sensibility
+ - Fix autocompletion issues and add support for rooms, groups, and emoji (#780)
 
 Other changes:
  -
 
 Bugfix 🐛:
+ - Fix crash when opening room creation screen from the room filtering screen
  - Fix avatar image disappearing (#777)
  - Fix read marker banner when permalink
+ - Hide non working settings (#751)
 
 Translations 🗣:
  -
