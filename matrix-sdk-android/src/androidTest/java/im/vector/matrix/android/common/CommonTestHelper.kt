@@ -25,8 +25,12 @@ import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.auth.data.LoginFlowResult
 import im.vector.matrix.android.api.auth.registration.RegistrationResult
 import im.vector.matrix.android.api.session.Session
-import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertTrue
+import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.room.Room
+import im.vector.matrix.android.api.session.room.timeline.Timeline
+import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.matrix.android.api.session.room.timeline.TimelineSettings
+import org.junit.Assert.*
 import java.util.*
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
@@ -88,50 +92,43 @@ class CommonTestHelper(context: Context) {
         //session.syncState().removeObserver(observer)
     }
 
-//     /**
-//      * Sends text messages in a room
-//      *
-//      * @param room         the room where to send the messages
-//      * @param message      the message to send
-//      * @param nbOfMessages the number of time the message will be sent
-//      * @throws Exception
-//      */
-//     @Throws(Exception::class)
-//     fun sendTextMessage(room: Room, message: String, nbOfMessages: Int): List<Event> {
-//         val sentEvents = ArrayList<Event>(nbOfMessages)
-//         val latch = CountDownLatch(nbOfMessages)
-//         val onEventSentListener = object : MXEventListener() {
-//             fun onEventSent(event: Event, prevEventId: String) {
-//                 latch.countDown()
-//             }
-//         }
-//         room.addEventListener(onEventSentListener)
-//         for (i in 0 until nbOfMessages) {
-//             room.sendTextMessage(message + " #" + (i + 1), null, Message.FORMAT_MATRIX_HTML, object : RoomMediaMessage.EventCreationListener() {
-//                 fun onEventCreated(roomMediaMessage: RoomMediaMessage) {
-//                     val sentEvent = roomMediaMessage.getEvent()
-//                     sentEvents.add(sentEvent)
-//                 }
-//
-//                 fun onEventCreationFailed(roomMediaMessage: RoomMediaMessage, errorMessage: String) {
-//
-//                 }
-//
-//                 fun onEncryptionFailed(roomMediaMessage: RoomMediaMessage) {
-//
-//                 }
-//             })
-//         }
-//         await(latch)
-//         room.removeEventListener(onEventSentListener)
-//
-//         // Check that all events has been created
-//         Assert.assertEquals(nbOfMessages.toLong(), sentEvents.size.toLong())
-//
-//         return sentEvents
-//     }
-//
-//
+    /**
+     * Sends text messages in a room
+     *
+     * @param room         the room where to send the messages
+     * @param message      the message to send
+     * @param nbOfMessages the number of time the message will be sent
+     */
+    fun sendTextMessage(room: Room, message: String, nbOfMessages: Int): List<TimelineEvent> {
+        val sentEvents = ArrayList<TimelineEvent>(nbOfMessages)
+        val latch = CountDownLatch(nbOfMessages)
+        val onEventSentListener = object : Timeline.Listener {
+            override fun onTimelineFailure(throwable: Throwable) {
+            }
+
+            override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
+                // TODO Count only new messages?
+                if (snapshot.count { it.root.type == EventType.MESSAGE } == nbOfMessages) {
+                    sentEvents.addAll(snapshot.filter { it.root.type == EventType.MESSAGE })
+                    latch.countDown()
+                }
+            }
+        }
+        val timeline = room.createTimeline(null, TimelineSettings(10))
+        timeline.addListener(onEventSentListener)
+        for (i in 0 until nbOfMessages) {
+            room.sendTextMessage(message + " #" + (i + 1))
+        }
+        await(latch)
+        timeline.removeListener(onEventSentListener)
+
+        // Check that all events has been created
+        assertEquals(nbOfMessages.toLong(), sentEvents.size.toLong())
+
+        return sentEvents
+    }
+
+
     // PRIVATE METHODS *****************************************************************************
 
     /**
@@ -277,60 +274,4 @@ class CommonTestHelper(context: Context) {
         session.signOut(true, object : TestMatrixCallback<Unit>(lock) {})
         await(lock)
     }
-
-
-//     /**
-//      * Clone a session.
-//      * It simulate that the user launches again the application with the same Credentials, contrary to login which will create a new DeviceId
-//      *
-//      * @param from the session to clone
-//      * @return the duplicated session
-//      */
-//     @Throws(InterruptedException::class)
-//     fun createNewSession(from: Session, sessionTestParams: SessionTestParams): Session {
-//         val context = InstrumentationRegistry.getContext()
-//
-//         val credentials = from.sessionParams.credentials
-//         val hs = createHomeServerConfig(credentials)
-//         val store = MXFileStore(hs, false, context)
-//         val dataHandler = MXDataHandler(store, credentials)
-//         dataHandler.setLazyLoadingEnabled(sessionTestParams.withLazyLoading)
-//         store.setDataHandler(dataHandler)
-//         val session2 = Session.Builder(hs, dataHandler, context)
-//                 .withLegacyCryptoStore(sessionTestParams.withLegacyCryptoStore)
-//                 .build()
-//
-//         val results = HashMap<String, Any>()
-//
-//         val lock = CountDownLatch(1)
-//         val listener = object : MXStoreListener() {
-//             fun postProcess(accountId: String) {
-//                 results["postProcess"] = "postProcess $accountId"
-//             }
-//
-//             fun onStoreReady(accountId: String) {
-//                 results["onStoreReady"] = "onStoreReady"
-//                 lock.countDown()
-//             }
-//
-//             fun onStoreCorrupted(accountId: String, description: String) {
-//                 results["onStoreCorrupted"] = description
-//                 lock.countDown()
-//             }
-//
-//             fun onStoreOOM(accountId: String, description: String) {
-//                 results["onStoreOOM"] = "onStoreOOM"
-//                 lock.countDown()
-//             }
-//         }
-//
-//         store.addMXStoreListener(listener)
-//         store.open()
-//
-//         await(lock)
-//
-//         Assert.assertTrue(results.toString(), results.containsKey("onStoreReady"))
-//
-//         return session2
-//     }
 }

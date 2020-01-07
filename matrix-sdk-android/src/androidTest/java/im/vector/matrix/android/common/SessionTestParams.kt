@@ -16,7 +16,4 @@
 
 package im.vector.matrix.android.common
 
-data class SessionTestParams @JvmOverloads constructor(val withInitialSync: Boolean = false,
-                                                       val withCryptoEnabled: Boolean = false,
-                                                       val withLazyLoading: Boolean = true,
-                                                       val withLegacyCryptoStore: Boolean = false)
+data class SessionTestParams @JvmOverloads constructor(val withInitialSync: Boolean = false)

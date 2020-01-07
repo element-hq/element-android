@@ -18,6 +18,7 @@ package im.vector.matrix.android.account
 
 import im.vector.matrix.android.InstrumentedTest
 import im.vector.matrix.android.common.CommonTestHelper
+import im.vector.matrix.android.common.CryptoTestHelper
 import im.vector.matrix.android.common.SessionTestParams
 import im.vector.matrix.android.common.TestConstants
 import org.junit.FixMethodOrder
@@ -31,6 +32,7 @@ import org.junit.runners.MethodSorters
 class AccountCreationTest : InstrumentedTest {
 
     private val commonTestHelper = CommonTestHelper(context())
+    private val cryptoTestHelper = CryptoTestHelper(commonTestHelper)
 
     @Test
     fun createAccountTest() {
@@ -50,5 +52,12 @@ class AccountCreationTest : InstrumentedTest {
 
         session.close()
         session2.close()
+    }
+
+    @Test
+    fun simpleE2eTest() {
+        val res = cryptoTestHelper.doE2ETestWithAliceInARoom()
+
+        res.close()
     }
 }
