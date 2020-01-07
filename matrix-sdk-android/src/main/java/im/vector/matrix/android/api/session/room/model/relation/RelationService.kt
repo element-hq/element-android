@@ -108,5 +108,17 @@ interface RelationService {
                        replyText: CharSequence,
                        autoMarkdown: Boolean = false): Cancelable?
 
-    fun getEventSummaryLive(eventId: String): LiveData<Optional<EventAnnotationsSummary>>
+    /**
+     * Get the current EventAnnotationsSummary
+     * @param eventId the eventId to look for EventAnnotationsSummary
+     * @return the EventAnnotationsSummary found
+     */
+    fun getEventAnnotationsSummary(eventId: String): EventAnnotationsSummary?
+
+    /**
+     * Get the a LiveData EventAnnotationsSummary
+     * @param eventId the eventId to look for EventAnnotationsSummary
+     * @return the LiveData of EventAnnotationsSummary
+     */
+    fun getEventAnnotationsSummaryLive(eventId: String): LiveData<Optional<EventAnnotationsSummary>>
 }

@@ -41,6 +41,14 @@ interface MembershipService {
      */
     fun getRoomMember(userId: String): RoomMember?
 
+
+    /**
+     * Return all the roomMembers of the room filtered by memberships
+     * @param memberships list of accepted memberships
+     * @return a roomMember list.
+     */
+    fun getRoomMembers(memberships: List<Membership>): List<RoomMember>
+
     /**
      * Return all the roomMembers of the room filtered by memberships
      * @param memberships list of accepted memberships

@@ -64,6 +64,17 @@ internal class DefaultMembershipService @AssistedInject constructor(@Assisted pr
         return roomMemberEntity?.asDomain()
     }
 
+    override fun getRoomMembers(memberships: List<Membership>): List<RoomMember> {
+        return monarchy.fetchAllMappedSync(
+                {
+                    RoomMembers(it, roomId).queryRoomMembersEvent()
+                },
+                {
+                    it.asDomain()
+                }
+        )
+    }
+
     override fun getRoomMembersLive(memberships: List<Membership>): LiveData<List<RoomMember>> {
         return monarchy.findAllMappedWithChanges(
                 {

@@ -35,10 +35,12 @@ class RxRoom(private val room: Room) {
 
     fun liveRoomMembers(memberships: List<Membership>): Observable<List<RoomMember>> {
         return room.getRoomMembersLive(memberships).asObservable()
+                .startWith(room.getRoomMembers(memberships))
     }
 
     fun liveAnnotationSummary(eventId: String): Observable<Optional<EventAnnotationsSummary>> {
-        return room.getEventSummaryLive(eventId).asObservable()
+        return room.getEventAnnotationsSummaryLive(eventId).asObservable()
+                .startWith(room.getEventAnnotationsSummary(eventId).toOptional())
     }
 
     fun liveTimelineEvent(eventId: String): Observable<Optional<TimelineEvent>> {

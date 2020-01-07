@@ -215,7 +215,16 @@ internal class DefaultRelationService @AssistedInject constructor(@Assisted priv
         return TimelineSendEventWorkCommon.createWork<SendEventWorker>(sendWorkData, startChain)
     }
 
-    override fun getEventSummaryLive(eventId: String): LiveData<Optional<EventAnnotationsSummary>> {
+    override fun getEventAnnotationsSummary(eventId: String): EventAnnotationsSummary? {
+        return monarchy.fetchCopyMap(
+                { EventAnnotationsSummaryEntity.where(it, eventId).findFirst() },
+                { entity, _ ->
+                    entity.asDomain()
+                }
+        )
+    }
+
+    override fun getEventAnnotationsSummaryLive(eventId: String): LiveData<Optional<EventAnnotationsSummary>> {
         val liveData = monarchy.findAllMappedWithChanges(
                 { EventAnnotationsSummaryEntity.where(it, eventId) },
                 { it.asDomain() }
