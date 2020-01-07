@@ -23,6 +23,8 @@ import im.vector.matrix.android.internal.task.Task
 import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
+// TODO Add parent task
+
 internal class GetEventTask @Inject constructor(
         private val roomAPI: RoomAPI,
         private val eventBus: EventBus

@@ -32,7 +32,7 @@ internal class RedactEventWorker(context: Context, params: WorkerParameters) : C
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
-            override val userId: String,
+            override val sessionId: String,
             val txID: String,
             val roomId: String,
             val eventId: String,
@@ -52,7 +52,7 @@ internal class RedactEventWorker(context: Context, params: WorkerParameters) : C
             return Result.success(inputData)
         }
 
-        val sessionComponent = getSessionComponent(params.userId) ?: return Result.success()
+        val sessionComponent = getSessionComponent(params.sessionId) ?: return Result.success()
         sessionComponent.inject(this)
 
         val eventId = params.eventId

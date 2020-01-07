@@ -26,22 +26,23 @@ import im.vector.matrix.android.api.session.pushers.PushersService
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.PusherEntity
 import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.di.UserId
+import im.vector.matrix.android.internal.di.SessionId
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.worker.WorkManagerUtil
 import im.vector.matrix.android.internal.worker.WorkManagerUtil.matrixOneTimeWorkRequestBuilder
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
-import java.util.UUID
+import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-internal class DefaultPusherService @Inject constructor(private val context: Context,
-                                                        private val monarchy: Monarchy,
-                                                        @UserId private val userId: String,
-                                                        private val getPusherTask: GetPushersTask,
-                                                        private val removePusherTask: RemovePusherTask,
-                                                        private val taskExecutor: TaskExecutor
+internal class DefaultPusherService @Inject constructor(
+        private val context: Context,
+        private val monarchy: Monarchy,
+        @SessionId private val sessionId: String,
+        private val getPusherTask: GetPushersTask,
+        private val removePusherTask: RemovePusherTask,
+        private val taskExecutor: TaskExecutor
 ) : PushersService {
 
     override fun refreshPushers() {
@@ -65,7 +66,7 @@ internal class DefaultPusherService @Inject constructor(private val context: Con
                 data = JsonPusherData(url, if (withEventIdOnly) PushersService.EVENT_ID_ONLY else null),
                 append = append)
 
-        val params = AddHttpPusherWorker.Params(pusher, userId)
+        val params = AddHttpPusherWorker.Params(sessionId, pusher)
 
         val request = matrixOneTimeWorkRequestBuilder<AddHttpPusherWorker>()
                 .setConstraints(WorkManagerUtil.workConstraints)

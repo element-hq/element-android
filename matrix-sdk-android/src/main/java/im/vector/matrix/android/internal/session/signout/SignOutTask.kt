@@ -46,7 +46,7 @@ internal interface SignOutTask : Task<SignOutTask.Params, Unit> {
 
 internal class DefaultSignOutTask @Inject constructor(
         private val context: Context,
-        @UserId private val userId: String,
+        @SessionId private val sessionId: String,
         private val signOutAPI: SignOutAPI,
         private val sessionManager: SessionManager,
         private val sessionParamsStore: SessionParamsStore,
@@ -83,13 +83,13 @@ internal class DefaultSignOutTask @Inject constructor(
         }
 
         Timber.d("SignOut: release session...")
-        sessionManager.releaseSession(userId)
+        sessionManager.releaseSession(sessionId)
 
         Timber.d("SignOut: cancel pending works...")
         WorkManagerUtil.cancelAllWorks(context)
 
         Timber.d("SignOut: delete session params...")
-        sessionParamsStore.delete(userId)
+        sessionParamsStore.delete(sessionId)
 
         Timber.d("SignOut: clear session data...")
         clearSessionDataTask.execute(Unit)

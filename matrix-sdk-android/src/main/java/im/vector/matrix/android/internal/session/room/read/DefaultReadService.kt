@@ -36,12 +36,13 @@ import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 
-internal class DefaultReadService @AssistedInject constructor(@Assisted private val roomId: String,
-                                                              private val monarchy: Monarchy,
-                                                              private val taskExecutor: TaskExecutor,
-                                                              private val setReadMarkersTask: SetReadMarkersTask,
-                                                              private val readReceiptsSummaryMapper: ReadReceiptsSummaryMapper,
-                                                              @UserId private val userId: String
+internal class DefaultReadService @AssistedInject constructor(
+        @Assisted private val roomId: String,
+        private val monarchy: Monarchy,
+        private val taskExecutor: TaskExecutor,
+        private val setReadMarkersTask: SetReadMarkersTask,
+        private val readReceiptsSummaryMapper: ReadReceiptsSummaryMapper,
+        @UserId private val userId: String
 ) : ReadService {
 
     @AssistedInject.Factory

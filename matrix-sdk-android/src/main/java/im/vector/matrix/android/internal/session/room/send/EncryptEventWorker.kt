@@ -37,7 +37,7 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
-            override val userId: String,
+            override val sessionId: String,
             val roomId: String,
             val event: Event,
             /**Do not encrypt these keys, keep them as is in encrypted content (e.g. m.relates_to)*/
@@ -61,7 +61,7 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
             return Result.success(inputData)
         }
 
-        val sessionComponent = getSessionComponent(params.userId) ?: return Result.success()
+        val sessionComponent = getSessionComponent(params.sessionId) ?: return Result.success()
         sessionComponent.inject(this)
 
         val localEvent = params.event
@@ -97,7 +97,7 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
                     type = safeResult.eventType,
                     content = safeResult.eventContent
             )
-            val nextWorkerParams = SendEventWorker.Params(params.userId, params.roomId, encryptedEvent)
+            val nextWorkerParams = SendEventWorker.Params(params.sessionId, params.roomId, encryptedEvent)
             return Result.success(WorkerParamsFactory.toData(nextWorkerParams))
         } else {
             val sendState = when (error) {
@@ -106,7 +106,7 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
             }
             localEchoUpdater.updateSendState(localEvent.eventId, sendState)
             // always return success, or the chain will be stuck for ever!
-            val nextWorkerParams = SendEventWorker.Params(params.userId, params.roomId, localEvent, error?.localizedMessage
+            val nextWorkerParams = SendEventWorker.Params(params.sessionId, params.roomId, localEvent, error?.localizedMessage
                     ?: "Error")
             return Result.success(WorkerParamsFactory.toData(nextWorkerParams))
         }

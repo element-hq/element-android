@@ -38,7 +38,7 @@ internal class SendEventWorker constructor(context: Context, params: WorkerParam
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
-            override val userId: String,
+            override val sessionId: String,
             val roomId: String,
             val event: Event,
             override val lastFailureMessage: String? = null
@@ -52,7 +52,7 @@ internal class SendEventWorker constructor(context: Context, params: WorkerParam
         val params = WorkerParamsFactory.fromData<Params>(inputData)
                 ?: return Result.success()
 
-        val sessionComponent = getSessionComponent(params.userId) ?: return Result.success()
+        val sessionComponent = getSessionComponent(params.sessionId) ?: return Result.success()
         sessionComponent.inject(this)
 
         val event = params.event

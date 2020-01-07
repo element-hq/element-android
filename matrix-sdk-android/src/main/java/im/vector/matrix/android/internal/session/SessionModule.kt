@@ -26,11 +26,11 @@ import dagger.multibindings.IntoSet
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.auth.data.SessionParams
+import im.vector.matrix.android.api.auth.data.sessionId
 import im.vector.matrix.android.api.session.InitialSyncProgressService
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilitiesService
 import im.vector.matrix.android.api.session.securestorage.SecureStorageService
-import im.vector.matrix.android.internal.auth.createSessionId
 import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.database.SessionRealmConfigurationFactory
 import im.vector.matrix.android.internal.di.*
@@ -88,7 +88,7 @@ internal abstract class SessionModule {
         @SessionId
         @Provides
         fun providesSessionId(credentials: Credentials): String {
-            return createSessionId(credentials.userId, credentials.deviceId)
+            return credentials.sessionId()
         }
 
         @JvmStatic

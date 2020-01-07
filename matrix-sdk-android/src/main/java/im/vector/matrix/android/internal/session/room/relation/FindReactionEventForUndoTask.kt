@@ -38,8 +38,9 @@ internal interface FindReactionEventForUndoTask : Task<FindReactionEventForUndoT
     )
 }
 
-internal class DefaultFindReactionEventForUndoTask @Inject constructor(private val monarchy: Monarchy,
-                                                                       @UserId private val userId: String) : FindReactionEventForUndoTask {
+internal class DefaultFindReactionEventForUndoTask @Inject constructor(
+        private val monarchy: Monarchy,
+        @UserId private val userId: String) : FindReactionEventForUndoTask {
 
     override suspend fun execute(params: FindReactionEventForUndoTask.Params): FindReactionEventForUndoTask.Result {
         val eventId = Realm.getInstance(monarchy.realmConfiguration).use { realm ->
@@ -55,7 +56,7 @@ internal class DefaultFindReactionEventForUndoTask @Inject constructor(private v
                 .equalTo(ReactionAggregatedSummaryEntityFields.KEY, reaction)
                 .findFirst() ?: return null
 
-        // want to find the event orignated by me!
+        // want to find the event originated by me!
         return rase.sourceEvents
                 .asSequence()
                 .mapNotNull {
