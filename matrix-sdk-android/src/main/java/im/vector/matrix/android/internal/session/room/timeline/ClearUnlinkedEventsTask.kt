@@ -38,7 +38,7 @@ internal class DefaultClearUnlinkedEventsTask @Inject constructor(private val mo
         monarchy.awaitTransaction { localRealm ->
             val unlinkedChunks = ChunkEntity
                     .where(localRealm, roomId = params.roomId)
-                    .equalTo("${ChunkEntityFields.TIMELINE_EVENTS.ROOT}.${EventEntityFields.IS_UNLINKED}", true)
+                    .equalTo(ChunkEntityFields.IS_UNLINKED, true)
                     .findAll()
             unlinkedChunks.forEach {
                 it.deleteOnCascade()
