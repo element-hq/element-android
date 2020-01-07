@@ -22,6 +22,7 @@ import im.vector.matrix.android.api.session.room.notification.RoomNotificationSt
 import im.vector.matrix.android.api.session.room.send.UserDraft
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.util.Optional
+import im.vector.matrix.android.api.util.toOptional
 import io.reactivex.Observable
 import io.reactivex.Single
 
@@ -29,6 +30,7 @@ class RxRoom(private val room: Room) {
 
     fun liveRoomSummary(): Observable<Optional<RoomSummary>> {
         return room.getRoomSummaryLive().asObservable()
+                .startWith(room.roomSummary().toOptional())
     }
 
     fun liveRoomMembers(memberships: List<Membership>): Observable<List<RoomMember>> {
@@ -41,6 +43,7 @@ class RxRoom(private val room: Room) {
 
     fun liveTimelineEvent(eventId: String): Observable<Optional<TimelineEvent>> {
         return room.getTimeLineEventLive(eventId).asObservable()
+                .startWith(room.getTimeLineEvent(eventId).toOptional())
     }
 
     fun liveReadMarker(): Observable<Optional<String>> {

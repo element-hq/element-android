@@ -40,7 +40,6 @@ import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
 import androidx.core.view.forEach
 import androidx.core.view.isVisible
-import androidx.lifecycle.observe
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -72,7 +71,6 @@ import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.matrix.android.api.util.toRoomAliasMatrixItem
-import im.vector.matrix.rx.rx
 import im.vector.riotx.R
 import im.vector.riotx.core.dialogs.withColoredButton
 import im.vector.riotx.core.epoxy.LayoutManagerStateRestorer
@@ -89,8 +87,8 @@ import im.vector.riotx.features.attachments.ContactAttachment
 import im.vector.riotx.features.autocomplete.command.AutocompleteCommandPresenter
 import im.vector.riotx.features.autocomplete.command.CommandAutocompletePolicy
 import im.vector.riotx.features.autocomplete.group.AutocompleteGroupPresenter
-import im.vector.riotx.features.autocomplete.room.AutocompleteRoomPresenter
 import im.vector.riotx.features.autocomplete.member.AutocompleteMemberPresenter
+import im.vector.riotx.features.autocomplete.room.AutocompleteRoomPresenter
 import im.vector.riotx.features.command.Command
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.getColorFromUserId
@@ -228,10 +226,9 @@ class RoomDetailFragment @Inject constructor(
         setupJumpToReadMarkerView()
         setupJumpToBottomView()
 
-
         roomDetailViewModel.subscribe { renderState(it) }
         textComposerViewModel.subscribe { renderTextComposerState(it) }
-        roomDetailViewModel.sendMessageResultLiveData.observeEvent(this) { renderSendMessageResult(it) }
+        roomDetailViewModel.sendMessageResultLiveData.observeEvent(viewLifecycleOwner) { renderSendMessageResult(it) }
 
         roomDetailViewModel.nonBlockingPopAlert.observeEvent(this) { pair ->
             val message = requireContext().getString(pair.first, *pair.second.toTypedArray())
@@ -345,9 +342,9 @@ class RoomDetailFragment @Inject constructor(
         AlertDialog.Builder(requireActivity())
                 .setTitle(R.string.dialog_title_error)
                 .setMessage(getString(R.string.error_file_too_big,
-                                      error.filename,
-                                      TextUtils.formatFileSize(requireContext(), error.fileSizeInBytes),
-                                      TextUtils.formatFileSize(requireContext(), error.homeServerLimitInBytes)
+                        error.filename,
+                        TextUtils.formatFileSize(requireContext(), error.fileSizeInBytes),
+                        TextUtils.formatFileSize(requireContext(), error.homeServerLimitInBytes)
                 ))
                 .setPositiveButton(R.string.ok, null)
                 .show()
@@ -434,7 +431,7 @@ class RoomDetailFragment @Inject constructor(
 
         avatarRenderer.render(
                 MatrixItem.UserItem(event.root.senderId
-                                    ?: "", event.getDisambiguatedDisplayName(), event.senderAvatar),
+                        ?: "", event.getDisambiguatedDisplayName(), event.senderAvatar),
                 composerLayout.composerRelatedMessageAvatar
         )
         composerLayout.expand {
@@ -452,7 +449,7 @@ class RoomDetailFragment @Inject constructor(
             // Ignore update to avoid saving a draft
             composerLayout.composerEditText.setText(text)
             composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text?.length
-                                                         ?: 0)
+                    ?: 0)
         }
     }
 
@@ -793,7 +790,6 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun renderState(state: RoomDetailViewState) {
-        Timber.v("Render state summary complete: ${state.asyncRoomSummary.complete}")
         renderRoomSummary(state)
         val summary = state.asyncRoomSummary()
         val inviter = state.asyncInviter()
@@ -1318,7 +1314,7 @@ class RoomDetailFragment @Inject constructor(
         val startToCompose = composerLayout.composerEditText.text.isNullOrBlank()
 
         if (startToCompose
-            && userId == session.myUserId) {
+                && userId == session.myUserId) {
             // Empty composer, current user: start an emote
             composerLayout.composerEditText.setText(Command.EMOTE.command + " ")
             composerLayout.composerEditText.setSelection(Command.EMOTE.length)

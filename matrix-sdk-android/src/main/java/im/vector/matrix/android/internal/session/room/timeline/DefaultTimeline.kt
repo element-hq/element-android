@@ -77,7 +77,9 @@ internal class DefaultTimeline(
         private val hiddenReadReceipts: TimelineHiddenReadReceipts
 ) : Timeline, TimelineHiddenReadReceipts.Delegate {
 
-    val backgroundHandler = createBackgroundHandler("TIMELINE_DB_THREAD_${System.currentTimeMillis()}")
+    companion object{
+        val BACKGROUND_HANDLER = createBackgroundHandler("TIMELINE_DB_THREAD")
+    }
 
     private val listeners = CopyOnWriteArrayList<Timeline.Listener>()
     private val isStarted = AtomicBoolean(false)
@@ -135,7 +137,7 @@ internal class DefaultTimeline(
 // Public methods ******************************************************************************
 
     override fun paginate(direction: Timeline.Direction, count: Int) {
-        backgroundHandler.post {
+        BACKGROUND_HANDLER.post {
             if (!canPaginate(direction)) {
                 return@post
             }
@@ -163,7 +165,7 @@ internal class DefaultTimeline(
     override fun start() {
         if (isStarted.compareAndSet(false, true)) {
             Timber.v("Start timeline for roomId: $roomId and eventId: $initialEventId")
-            backgroundHandler.post {
+            BACKGROUND_HANDLER.post {
                 eventDecryptor.start()
                 val realm = Realm.getInstance(realmConfiguration)
                 backgroundRealm.set(realm)
@@ -197,8 +199,8 @@ internal class DefaultTimeline(
             isReady.set(false)
             Timber.v("Dispose timeline for roomId: $roomId and eventId: $initialEventId")
             cancelableBag.cancel()
-            backgroundHandler.removeCallbacksAndMessages(null)
-            backgroundHandler.post {
+            BACKGROUND_HANDLER.removeCallbacksAndMessages(null)
+            BACKGROUND_HANDLER.post {
                 roomEntity?.sendingTimelineEvents?.removeAllChangeListeners()
                 if (this::eventRelations.isInitialized) {
                     eventRelations.removeAllChangeListeners()
@@ -514,7 +516,7 @@ internal class DefaultTimeline(
                                 }
                                 TokenChunkEventPersistor.Result.SHOULD_FETCH_MORE ->
                                     // Database won't be updated, so we force pagination request
-                                    backgroundHandler.post {
+                                    BACKGROUND_HANDLER.post {
                                         executePaginationTask(direction, limit)
                                     }
                             }
@@ -647,7 +649,7 @@ internal class DefaultTimeline(
     }
 
     private fun postSnapshot() {
-        backgroundHandler.post {
+        BACKGROUND_HANDLER.post {
             if (isReady.get().not()) {
                 return@post
             }
