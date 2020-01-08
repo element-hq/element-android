@@ -16,6 +16,7 @@ Improvements 🙌:
 
 Other changes:
  - Change the way RiotX identifies a session to allow the SDK to support several sessions with the same user (#800)
+ - Exclude play-services-oss-licenses library from F-Droid build (#814)
 
 Bugfix 🐛:
  - Fix crash when opening room creation screen from the room filtering screen
