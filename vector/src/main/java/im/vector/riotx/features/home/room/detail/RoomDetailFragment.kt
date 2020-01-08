@@ -474,21 +474,31 @@ class RoomDetailFragment @Inject constructor(
             it.dispatchTo(scrollOnNewMessageCallback)
             it.dispatchTo(scrollOnHighlightedEventCallback)
             updateJumpToReadMarkerViewVisibility()
-            updateJumpToBottomViewVisibility()
+            maybeShowJumpToBottomViewVisibilityWithDelay()
         }
         timelineEventController.addModelBuildListener(modelBuildListener)
         recyclerView.adapter = timelineEventController.adapter
 
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                debouncer.cancel("jump_to_bottom_visibility")
+
+                val scrollingToPast = dy < 0
+
+                if (scrollingToPast) {
+                    jumpToBottomView.hide()
+                } else {
+                    maybeShowJumpToBottomViewVisibility()
+                }
+            }
+
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 when (newState) {
                     RecyclerView.SCROLL_STATE_IDLE     -> {
-                        updateJumpToBottomViewVisibility()
+                        maybeShowJumpToBottomViewVisibilityWithDelay()
                     }
                     RecyclerView.SCROLL_STATE_DRAGGING,
-                    RecyclerView.SCROLL_STATE_SETTLING -> {
-                        jumpToBottomView.hide()
-                    }
+                    RecyclerView.SCROLL_STATE_SETTLING -> Unit
                 }
             }
         })
@@ -547,15 +557,19 @@ class RoomDetailFragment @Inject constructor(
         }
     }
 
-    private fun updateJumpToBottomViewVisibility() {
+    private fun maybeShowJumpToBottomViewVisibilityWithDelay() {
         debouncer.debounce("jump_to_bottom_visibility", 250, Runnable {
-            Timber.v("First visible: ${layoutManager.findFirstCompletelyVisibleItemPosition()}")
-            if (layoutManager.findFirstVisibleItemPosition() != 0) {
-                jumpToBottomView.show()
-            } else {
-                jumpToBottomView.hide()
-            }
+            maybeShowJumpToBottomViewVisibility()
         })
+    }
+
+    private fun maybeShowJumpToBottomViewVisibility() {
+        Timber.v("First visible: ${layoutManager.findFirstCompletelyVisibleItemPosition()}")
+        if (layoutManager.findFirstVisibleItemPosition() != 0) {
+            jumpToBottomView.show()
+        } else {
+            jumpToBottomView.hide()
+        }
     }
 
     private fun setupComposer() {
