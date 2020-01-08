@@ -139,9 +139,6 @@
         <!--Notice (secondary)-->
         <item name="vctr_room_notification_text_color">#FF61708b</item>
 
-        <!-- color for dividers in settings -->
-        <item name="vctr_preference_divider_color">@color/list_divider_color_light</item>
-
         <!-- icon colors -->
         <item name="vctr_settings_icon_tint_color">@android:color/black</item>
         <item name="vctr_icon_tint_on_light_action_bar_color">@color/riotx_accent</item>

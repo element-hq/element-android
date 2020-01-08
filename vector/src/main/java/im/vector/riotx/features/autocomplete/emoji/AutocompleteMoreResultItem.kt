@@ -14,27 +14,15 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.di
+package im.vector.riotx.features.autocomplete.emoji
 
-import javax.inject.Qualifier
+import com.airbnb.epoxy.EpoxyModelClass
+import im.vector.riotx.R
+import im.vector.riotx.core.epoxy.VectorEpoxyHolder
+import im.vector.riotx.core.epoxy.VectorEpoxyModel
 
-/**
- * Used to inject the userId
- */
-@Qualifier
-@Retention(AnnotationRetention.RUNTIME)
-internal annotation class UserId
+@EpoxyModelClass(layout = R.layout.item_autocomplete_more_result)
+abstract class AutocompleteMoreResultItem : VectorEpoxyModel<AutocompleteMoreResultItem.Holder>() {
 
-/**
- * Used to inject the md5 of the userId
- */
-@Qualifier
-@Retention(AnnotationRetention.RUNTIME)
-internal annotation class UserMd5
-
-/**
- * Used to inject the sessionId, which is defined as md5(userId|deviceId)
- */
-@Qualifier
-@Retention(AnnotationRetention.RUNTIME)
-internal annotation class SessionId
+    class Holder : VectorEpoxyHolder()
+}
