@@ -20,6 +20,7 @@ package im.vector.matrix.android.common
 import android.content.Context
 import android.net.Uri
 import im.vector.matrix.android.api.Matrix
+import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.MatrixConfiguration
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.auth.data.LoginFlowResult
@@ -139,7 +140,6 @@ class CommonTestHelper(context: Context) {
      * @param testParams     test params about the session
      * @return the session associated with the newly created account
      */
-    @Throws(InterruptedException::class)
     private fun createAccount(userNamePrefix: String,
                               password: String,
                               testParams: SessionTestParams): Session {
@@ -160,7 +160,6 @@ class CommonTestHelper(context: Context) {
      * @param testParams test params about the session
      * @return the session associated with the existing account
      */
-    @Throws(InterruptedException::class)
     private fun logIntoAccount(userId: String,
                                password: String,
                                testParams: SessionTestParams): Session {
@@ -181,28 +180,23 @@ class CommonTestHelper(context: Context) {
                                      sessionTestParams: SessionTestParams): Session {
         val hs = createHomeServerConfig()
 
-        var lock = CountDownLatch(1)
-        matrix.authenticationService.getLoginFlow(hs, object : TestMatrixCallback<LoginFlowResult>(lock) {})
-        await(lock)
+        doSync<LoginFlowResult> {
+            matrix.authenticationService
+                    .getLoginFlow(hs, it)
+        }
 
-        lock = CountDownLatch(1)
-        matrix.authenticationService.getRegistrationWizard().createAccount(userName, password, null, object : TestMatrixCallback<RegistrationResult>(lock) {
-            override fun onSuccess(data: RegistrationResult) {
-                super.onSuccess(data)
-            }
-        })
-        await(lock)
+        doSync<RegistrationResult> {
+            matrix.authenticationService
+                    .getRegistrationWizard()
+                    .createAccount(userName, password, null, it)
+        }
 
         // Preform dummy step
-        lock = CountDownLatch(1)
-        var registrationResult: RegistrationResult? = null
-        matrix.authenticationService.getRegistrationWizard().dummy(object : TestMatrixCallback<RegistrationResult>(lock) {
-            override fun onSuccess(data: RegistrationResult) {
-                registrationResult = data
-                super.onSuccess(data)
-            }
-        })
-        await(lock)
+        val registrationResult = doSync<RegistrationResult> {
+            matrix.authenticationService
+                    .getRegistrationWizard()
+                    .dummy(it)
+        }
 
         assertTrue(registrationResult is RegistrationResult.Success)
         val session = (registrationResult as RegistrationResult.Success).session
@@ -225,27 +219,22 @@ class CommonTestHelper(context: Context) {
                                   sessionTestParams: SessionTestParams): Session {
         val hs = createHomeServerConfig()
 
-        var lock = CountDownLatch(1)
-        matrix.authenticationService.getLoginFlow(hs, object : TestMatrixCallback<LoginFlowResult>(lock) {})
-        await(lock)
-
-        lock = CountDownLatch(1)
-        var session: Session? = null
-        matrix.authenticationService.getLoginWizard().login(userName, password, "myDevice", object : TestMatrixCallback<Session>(lock) {
-            override fun onSuccess(data: Session) {
-                session = data
-                super.onSuccess(data)
-            }
-        })
-        await(lock)
-
-        assertNotNull(session)
-
-        if (sessionTestParams.withInitialSync) {
-            syncSession(session!!)
+        doSync<LoginFlowResult> {
+            matrix.authenticationService
+                    .getLoginFlow(hs, it)
         }
 
-        return session!!
+        val session = doSync<Session> {
+            matrix.authenticationService
+                    .getLoginWizard()
+                    .login(userName, password, "myDevice", it)
+        }
+
+        if (sessionTestParams.withInitialSync) {
+            syncSession(session)
+        }
+
+        return session
     }
 
     /**
@@ -258,16 +247,30 @@ class CommonTestHelper(context: Context) {
         assertTrue(latch.await(TestConstants.timeOutMillis, TimeUnit.MILLISECONDS))
     }
 
+    // Transform a method with a MatrixCallback to a synchronous method
+    inline fun <reified T> doSync(block: (MatrixCallback<T>) -> Unit): T {
+        val lock = CountDownLatch(1)
+        var result: T? = null
+
+        val callback = object : TestMatrixCallback<T>(lock) {
+            override fun onSuccess(data: T) {
+                result = data
+                super.onSuccess(data)
+            }
+        }
+
+        block.invoke(callback)
+
+        await(lock)
+
+        assertNotNull(result)
+        return result!!
+    }
+
     /**
      * Clear all provided sessions
-     *
-     * @param sessions the sessions to clear
      */
-    fun closeAllSessions(sessions: List<Session>) {
-        for (session in sessions) {
-            session.close()
-        }
-    }
+    fun Iterable<Session>.close() = forEach { it.close() }
 
     fun signout(session: Session) {
         val lock = CountDownLatch(1)
