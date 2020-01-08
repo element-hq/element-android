@@ -151,6 +151,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY = "SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY"
         private const val SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY = "SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY"
         private const val SETTINGS_LABS_ENABLE_SWIPE_TO_REPLY = "SETTINGS_LABS_ENABLE_SWIPE_TO_REPLY"
+        private const val SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY = "SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY"
 
         // analytics
         const val SETTINGS_USE_ANALYTICS_KEY = "SETTINGS_USE_ANALYTICS_KEY"
@@ -264,6 +265,10 @@ class VectorPreferences @Inject constructor(private val context: Context) {
 
     fun labAllowedExtendedLogging(): Boolean {
         return developerMode() && defaultPrefs.getBoolean(SETTINGS_LABS_ALLOW_EXTENDED_LOGS, false)
+    }
+
+    fun failFast(): Boolean {
+        return developerMode() && defaultPrefs.getBoolean(SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY, false)
     }
 
     /**
