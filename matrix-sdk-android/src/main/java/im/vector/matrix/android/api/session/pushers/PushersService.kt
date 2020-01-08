@@ -58,7 +58,7 @@ interface PushersService {
         const val EVENT_ID_ONLY = "event_id_only"
     }
 
-    fun livePushers(): LiveData<List<Pusher>>
+    fun getPushersLive(): LiveData<List<Pusher>>
 
     fun pushers() : List<Pusher>
 }

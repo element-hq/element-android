@@ -25,6 +25,7 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.group.model.GroupSummary
+import im.vector.matrix.android.api.session.room.RoomSummaryQueryParams
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.session.room.model.RoomSummary
@@ -114,7 +115,7 @@ class TextComposerViewModel @AssistedInject constructor(@Assisted initialState: 
 
     private fun observeRoomsQuery() {
         Observable.combineLatest<List<RoomSummary>, Option<AutocompleteQuery>, List<RoomSummary>>(
-                session.rx().liveRoomSummaries(),
+                session.rx().liveRoomSummaries(RoomSummaryQueryParams(filterCanonicalAlias = true)),
                 roomsQueryObservable.throttleLast(300, TimeUnit.MILLISECONDS),
                 BiFunction { roomSummaries, query ->
                     val filter = query.orNull() ?: ""

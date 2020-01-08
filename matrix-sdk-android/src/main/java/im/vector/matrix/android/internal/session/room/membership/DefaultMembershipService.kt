@@ -26,6 +26,8 @@ import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.database.mapper.asDomain
+import im.vector.matrix.android.internal.database.model.RoomMemberEntity
+import im.vector.matrix.android.internal.database.model.RoomMemberEntityFields
 import im.vector.matrix.android.internal.session.room.membership.joining.InviteTask
 import im.vector.matrix.android.internal.session.room.membership.joining.JoinRoomTask
 import im.vector.matrix.android.internal.session.room.membership.leaving.LeaveRoomTask
@@ -33,6 +35,7 @@ import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.fetchCopied
 import io.realm.Realm
+import io.realm.RealmQuery
 
 internal class DefaultMembershipService @AssistedInject constructor(@Assisted private val roomId: String,
                                                                     private val monarchy: Monarchy,
@@ -67,7 +70,7 @@ internal class DefaultMembershipService @AssistedInject constructor(@Assisted pr
     override fun getRoomMembers(memberships: List<Membership>): List<RoomMember> {
         return monarchy.fetchAllMappedSync(
                 {
-                    RoomMembers(it, roomId).queryRoomMembersEvent()
+                    roomMembersQuery(it, memberships)
                 },
                 {
                     it.asDomain()
@@ -78,12 +81,26 @@ internal class DefaultMembershipService @AssistedInject constructor(@Assisted pr
     override fun getRoomMembersLive(memberships: List<Membership>): LiveData<List<RoomMember>> {
         return monarchy.findAllMappedWithChanges(
                 {
-                    RoomMembers(it, roomId).queryRoomMembersEvent()
+                    roomMembersQuery(it, memberships)
                 },
                 {
                     it.asDomain()
                 }
         )
+    }
+
+    private fun roomMembersQuery(realm: Realm, memberships: List<Membership>): RealmQuery<RoomMemberEntity> {
+        val query = RoomMembers(realm, roomId).queryRoomMembersEvent()
+        val lastMembership = memberships.lastOrNull()
+        query.beginGroup()
+        for (membership in memberships) {
+            query.equalTo(RoomMemberEntityFields.MEMBERSHIP_STR, membership.name)
+            if (membership != lastMembership) {
+                query.or()
+            }
+        }
+        query.endGroup()
+        return query
     }
 
     override fun getNumberOfJoinedMembers(): Int {

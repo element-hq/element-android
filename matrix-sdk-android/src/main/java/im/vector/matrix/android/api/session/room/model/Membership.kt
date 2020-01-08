@@ -48,5 +48,9 @@ enum class Membership(val value: String) {
         fun activeMemberships(): List<Membership> {
             return listOf(INVITE, JOIN)
         }
+
+        fun all(): List<Membership>{
+            return values().asList()
+        }
     }
 }

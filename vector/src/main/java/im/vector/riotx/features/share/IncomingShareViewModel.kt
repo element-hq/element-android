@@ -22,6 +22,7 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import im.vector.matrix.android.api.session.room.RoomSummaryQueryParams
 import im.vector.matrix.rx.rx
 import im.vector.riotx.ActiveSessionDataSource
 import im.vector.riotx.core.platform.EmptyAction
@@ -62,7 +63,7 @@ class IncomingShareViewModel @AssistedInject constructor(@Assisted initialState:
         sessionObservableStore.observe()
                 .observeOn(AndroidSchedulers.mainThread())
                 .switchMap {
-                    it.orNull()?.rx()?.liveRoomSummaries()
+                    it.orNull()?.rx()?.liveRoomSummaries(RoomSummaryQueryParams())
                             ?: Observable.just(emptyList())
                 }
                 .throttleLast(300, TimeUnit.MILLISECONDS)

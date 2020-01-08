@@ -26,6 +26,8 @@ import im.vector.matrix.android.internal.database.model.GroupSummaryEntity
 import im.vector.matrix.android.internal.database.model.GroupSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.util.fetchCopyMap
+import io.realm.Realm
+import io.realm.RealmQuery
 import javax.inject.Inject
 
 internal class DefaultGroupService @Inject constructor(private val monarchy: Monarchy) : GroupService {
@@ -41,10 +43,22 @@ internal class DefaultGroupService @Inject constructor(private val monarchy: Mon
         )
     }
 
-    override fun liveGroupSummaries(): LiveData<List<GroupSummary>> {
-        return monarchy.findAllMappedWithChanges(
-                { realm -> GroupSummaryEntity.where(realm).isNotEmpty(GroupSummaryEntityFields.DISPLAY_NAME) },
+    override fun getGroupSummaries(): List<GroupSummary> {
+        return monarchy.fetchAllMappedSync(
+                { groupSummariesQuery(it) },
                 { it.asDomain() }
         )
+    }
+
+
+    override fun getGroupSummariesLive(): LiveData<List<GroupSummary>> {
+        return monarchy.findAllMappedWithChanges(
+                { groupSummariesQuery(it) },
+                { it.asDomain() }
+        )
+    }
+
+    private fun groupSummariesQuery(realm: Realm): RealmQuery<GroupSummaryEntity> {
+        return GroupSummaryEntity.where(realm).isNotEmpty(GroupSummaryEntityFields.DISPLAY_NAME)
     }
 }

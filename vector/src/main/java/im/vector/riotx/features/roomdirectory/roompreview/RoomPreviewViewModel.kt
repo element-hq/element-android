@@ -23,6 +23,7 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.room.RoomSummaryQueryParams
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.rx.rx
 import im.vector.riotx.core.platform.VectorViewModel
@@ -55,12 +56,10 @@ class RoomPreviewViewModel @AssistedInject constructor(@Assisted initialState: R
     private fun observeJoinedRooms() {
         session
                 .rx()
-                .liveRoomSummaries()
+                .liveRoomSummaries(RoomSummaryQueryParams(memberships = listOf(Membership.JOIN)))
                 .subscribe { list ->
                     withState { state ->
                         val isRoomJoined = list
-                                // Keep only joined room
-                                ?.filter { it.membership == Membership.JOIN }
                                 ?.map { it.roomId }
                                 ?.toList()
                                 ?.contains(state.roomId) == true

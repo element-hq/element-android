@@ -20,6 +20,7 @@ import androidx.paging.PagedList
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.android.api.session.pushers.Pusher
+import im.vector.matrix.android.api.session.room.RoomSummaryQueryParams
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.session.sync.SyncState
@@ -30,40 +31,43 @@ import io.reactivex.Single
 
 class RxSession(private val session: Session) {
 
-    fun liveRoomSummaries(): Observable<List<RoomSummary>> {
-        return session.liveRoomSummaries().asObservable()
+    fun liveRoomSummaries(queryParams: RoomSummaryQueryParams): Observable<List<RoomSummary>> {
+        return session.getRoomSummariesLive(queryParams).asObservable()
+                .startWith(session.getRoomSummaries(queryParams))
     }
 
     fun liveGroupSummaries(): Observable<List<GroupSummary>> {
-        return session.liveGroupSummaries().asObservable()
+        return session.getGroupSummariesLive().asObservable()
+                .startWith(session.getGroupSummaries())
     }
 
     fun liveBreadcrumbs(): Observable<List<RoomSummary>> {
-        return session.liveBreadcrumbs().asObservable()
+        return session.getBreadcrumbsLive().asObservable()
+                .startWith(session.getBreadcrumbs())
     }
 
     fun liveSyncState(): Observable<SyncState> {
-        return session.syncState().asObservable()
+        return session.getSyncStateLive().asObservable()
     }
 
     fun livePushers(): Observable<List<Pusher>> {
-        return session.livePushers().asObservable()
+        return session.getPushersLive().asObservable()
     }
 
     fun liveUser(userId: String): Observable<Optional<User>> {
-        return session.liveUser(userId).asObservable().distinctUntilChanged()
+        return session.getUserLive(userId).asObservable().distinctUntilChanged()
     }
 
     fun liveUsers(): Observable<List<User>> {
-        return session.liveUsers().asObservable()
+        return session.getUsersLive().asObservable()
     }
 
     fun liveIgnoredUsers(): Observable<List<User>> {
-        return session.liveIgnoredUsers().asObservable()
+        return session.getIgnoredUsersLive().asObservable()
     }
 
     fun livePagedUsers(filter: String? = null): Observable<PagedList<User>> {
-        return session.livePagedUsers(filter).asObservable()
+        return session.getPagedUsersLive(filter).asObservable()
     }
 
     fun createRoom(roomParams: CreateRoomParams): Single<String> = singleBuilder {

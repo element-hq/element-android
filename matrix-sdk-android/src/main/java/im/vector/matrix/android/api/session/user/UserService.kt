@@ -50,25 +50,25 @@ interface UserService {
      * @param userId the userId to look for.
      * @return a LiveData of user with userId
      */
-    fun liveUser(userId: String): LiveData<Optional<User>>
+    fun getUserLive(userId: String): LiveData<Optional<User>>
 
     /**
      * Observe a live list of users sorted alphabetically
      * @return a Livedata of users
      */
-    fun liveUsers(): LiveData<List<User>>
+    fun getUsersLive(): LiveData<List<User>>
 
     /**
      * Observe a live [PagedList] of users sorted alphabetically. You can filter the users.
      * @param filter the filter. It will look into userId and displayName.
      * @return a Livedata of users
      */
-    fun livePagedUsers(filter: String? = null): LiveData<PagedList<User>>
+    fun getPagedUsersLive(filter: String? = null): LiveData<PagedList<User>>
 
     /**
      * Get list of ignored users
      */
-    fun liveIgnoredUsers(): LiveData<List<User>>
+    fun getIgnoredUsersLive(): LiveData<List<User>>
 
     /**
      * Ignore users

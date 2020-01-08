@@ -39,8 +39,14 @@ interface GroupService {
     fun getGroupSummary(groupId: String): GroupSummary?
 
     /**
+     * Get a list of group summaries.This list is a snapshot of the data.
+     * @return the list of [GroupSummary]
+     */
+    fun getGroupSummaries(): List<GroupSummary>
+
+    /**
      * Get a live list of group summaries. This list is refreshed as soon as the data changes.
      * @return the [LiveData] of [GroupSummary]
      */
-    fun liveGroupSummaries(): LiveData<List<GroupSummary>>
+    fun getGroupSummariesLive(): LiveData<List<GroupSummary>>
 }

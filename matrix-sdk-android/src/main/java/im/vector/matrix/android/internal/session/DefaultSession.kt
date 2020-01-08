@@ -156,7 +156,7 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
         syncTaskSequencer.close()
     }
 
-    override fun syncState(): LiveData<SyncState> {
+    override fun getSyncStateLive(): LiveData<SyncState> {
         return getSyncThread().liveState()
     }
 

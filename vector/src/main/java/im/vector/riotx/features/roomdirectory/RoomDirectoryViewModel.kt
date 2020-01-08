@@ -24,6 +24,7 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.room.RoomSummaryQueryParams
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoomsFilter
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoomsParams
@@ -81,11 +82,9 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
     private fun observeJoinedRooms() {
         session
                 .rx()
-                .liveRoomSummaries()
+                .liveRoomSummaries(RoomSummaryQueryParams(memberships = listOf(Membership.JOIN)))
                 .subscribe { list ->
                     val joinedRoomIds = list
-                            // Keep only joined room
-                            ?.filter { it.membership == Membership.JOIN }
                             ?.map { it.roomId }
                             ?.toSet()
                             ?: emptySet()

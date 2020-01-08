@@ -21,6 +21,7 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import arrow.core.Option
 import im.vector.matrix.android.api.session.group.model.GroupSummary
+import im.vector.matrix.android.api.session.room.RoomSummaryQueryParams
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.rx.rx
 import im.vector.riotx.features.home.HomeRoomListDataSource
@@ -65,7 +66,7 @@ class AppStateHandler @Inject constructor(
                         sessionDataSource.observe()
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .switchMap {
-                                    it.orNull()?.rx()?.liveRoomSummaries()
+                                    it.orNull()?.rx()?.liveRoomSummaries(RoomSummaryQueryParams())
                                             ?: Observable.just(emptyList())
                                 }
                                 .throttleLast(300, TimeUnit.MILLISECONDS),
