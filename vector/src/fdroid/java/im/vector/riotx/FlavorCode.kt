@@ -19,4 +19,4 @@ package im.vector.riotx
 import android.content.Context
 
 // No op
-fun openOssLicensesMenuActivity(context: Context) = Unit
+fun openOssLicensesMenuActivity(@Suppress("UNUSED_PARAMETER") context: Context) = Unit
