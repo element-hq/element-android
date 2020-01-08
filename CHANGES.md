@@ -12,14 +12,18 @@ Improvements 🙌:
  - Improve devices list screen
  - Add settings for rageshake sensibility
  - Fix autocompletion issues and add support for rooms, groups, and emoji (#780)
+ - Show skip to bottom FAB while scrolling down (#752)
 
 Other changes:
  - Change the way RiotX identifies a session to allow the SDK to support several sessions with the same user (#800)
+ - Exclude play-services-oss-licenses library from F-Droid build (#814)
 
 Bugfix 🐛:
  - Fix crash when opening room creation screen from the room filtering screen
  - Fix avatar image disappearing (#777)
  - Fix read marker banner when permalink
+ - Fix joining upgraded rooms (#697)
+ - Fix matrix.org room directory not being browsable (#807)
  - Hide non working settings (#751)
 
 Translations 🗣:

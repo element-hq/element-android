@@ -177,6 +177,7 @@ class RoomDetailFragment @Inject constructor(
 
     private lateinit var sharedActionViewModel: MessageSharedActionViewModel
     private lateinit var layoutManager: LinearLayoutManager
+    private lateinit var jumpToBottomViewVisibilityManager: JumpToBottomViewVisibilityManager
     private var modelBuildListener: OnModelBuildFinishedListener? = null
 
     private lateinit var attachmentsHelper: AttachmentsHelper
@@ -306,6 +307,13 @@ class RoomDetailFragment @Inject constructor(
                 layoutManager.scrollToPosition(0)
             }
         }
+
+        jumpToBottomViewVisibilityManager = JumpToBottomViewVisibilityManager(
+                jumpToBottomView,
+                debouncer,
+                recyclerView,
+                layoutManager
+        )
     }
 
     private fun setupJumpToReadMarkerView() {
@@ -472,24 +480,10 @@ class RoomDetailFragment @Inject constructor(
             it.dispatchTo(scrollOnNewMessageCallback)
             it.dispatchTo(scrollOnHighlightedEventCallback)
             updateJumpToReadMarkerViewVisibility()
-            updateJumpToBottomViewVisibility()
+            jumpToBottomViewVisibilityManager.maybeShowJumpToBottomViewVisibilityWithDelay()
         }
         timelineEventController.addModelBuildListener(modelBuildListener)
         recyclerView.adapter = timelineEventController.adapter
-
-        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                when (newState) {
-                    RecyclerView.SCROLL_STATE_IDLE -> {
-                        updateJumpToBottomViewVisibility()
-                    }
-                    RecyclerView.SCROLL_STATE_DRAGGING,
-                    RecyclerView.SCROLL_STATE_SETTLING -> {
-                        jumpToBottomView.hide()
-                    }
-                }
-            }
-        })
 
         if (vectorPreferences.swipeToReplyIsEnabled()) {
             val quickReplyHandler = object : RoomMessageTouchHelperCallback.QuickReplayHandler {
@@ -541,17 +535,6 @@ class RoomDetailFragment @Inject constructor(
                 jumpToReadMarkerView?.isVisible = showJumpToUnreadBanner
             }
         }
-    }
-
-    private fun updateJumpToBottomViewVisibility() {
-        debouncer.debounce("jump_to_bottom_visibility", 250, Runnable {
-            Timber.v("First visible: ${layoutManager.findFirstCompletelyVisibleItemPosition()}")
-            if (layoutManager.findFirstVisibleItemPosition() != 0) {
-                jumpToBottomView.show()
-            } else {
-                jumpToBottomView.hide()
-            }
-        })
     }
 
     private fun setupComposer() {

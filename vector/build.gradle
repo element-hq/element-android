@@ -186,6 +186,7 @@ android {
         gplay {
             dimension "store"
 
+            resValue "bool", "isGplay", "true"
             buildConfigField "boolean", "ALLOW_FCM_USE", "true"
             buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"G\""
             buildConfigField "String", "FLAVOR_DESCRIPTION", "\"GooglePlay\""
@@ -194,6 +195,7 @@ android {
         fdroid {
             dimension "store"
 
+            resValue "bool", "isGplay", "false"
             buildConfigField "boolean", "ALLOW_FCM_USE", "false"
             buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"F\""
             buildConfigField "String", "FLAVOR_DESCRIPTION", "\"FDroid\""
@@ -248,9 +250,6 @@ dependencies {
 
     implementation "com.squareup.moshi:moshi-adapters:$moshi_version"
     kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
-
-    // OSS License
-    implementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
 
     // Log
     implementation 'com.jakewharton.timber:timber:4.7.1'
@@ -342,6 +341,9 @@ dependencies {
         exclude group: 'com.google.firebase', module: 'firebase-analytics'
         exclude group: 'com.google.firebase', module: 'firebase-measurement-connector'
     }
+
+    // OSS License, gplay flavor only
+    gplayImplementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
 
     implementation "androidx.emoji:emoji-appcompat:1.0.0"
 
