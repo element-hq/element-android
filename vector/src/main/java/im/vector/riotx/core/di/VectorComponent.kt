@@ -44,6 +44,7 @@ import im.vector.riotx.features.notifications.*
 import im.vector.riotx.features.rageshake.BugReporter
 import im.vector.riotx.features.rageshake.VectorFileLogger
 import im.vector.riotx.features.rageshake.VectorUncaughtExceptionHandler
+import im.vector.riotx.features.reactions.data.EmojiDataSource
 import im.vector.riotx.features.session.SessionListener
 import im.vector.riotx.features.settings.VectorPreferences
 import im.vector.riotx.features.share.ShareRoomListDataSource
@@ -123,6 +124,8 @@ interface VectorComponent {
     fun vectorFileLogger(): VectorFileLogger
 
     fun uiStateRepository(): UiStateRepository
+
+    fun emojiDataSource(): EmojiDataSource
 
     @Component.Factory
     interface Factory {

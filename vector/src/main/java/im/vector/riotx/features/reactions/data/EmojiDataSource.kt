@@ -20,8 +20,9 @@ import com.squareup.moshi.Moshi
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenScope
 import javax.inject.Inject
+import javax.inject.Singleton
 
-@ScreenScope
+@Singleton
 class EmojiDataSource @Inject constructor(
         resources: Resources
 ) {
