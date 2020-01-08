@@ -19,7 +19,7 @@ package im.vector.riotx.core.utils
 
 import android.os.Handler
 
-internal class Debouncer(private val handler: Handler) {
+class Debouncer(private val handler: Handler) {
 
     private val runnables = HashMap<String, Runnable>()
 
