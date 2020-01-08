@@ -28,6 +28,12 @@ fun MXDeviceInfo.getFingerprintHumanReadable() = fingerprint()
         ?.chunked(4)
         ?.joinToString(separator = " ")
 
-fun MutableList<DeviceInfo>.sortByLastSeen() {
-    sortWith(DatedObjectComparators.descComparator)
+/* ==========================================================================================
+ * DeviceInfo
+ * ========================================================================================== */
+
+fun List<DeviceInfo>.sortByLastSeen(): List<DeviceInfo> {
+    val list = toMutableList()
+    list.sortWith(DatedObjectComparators.descComparator)
+    return list
 }

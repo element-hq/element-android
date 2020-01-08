@@ -18,12 +18,8 @@ package im.vector.riotx.features.settings
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.Typeface
-import android.view.KeyEvent
 import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
@@ -33,30 +29,19 @@ import androidx.preference.SwitchPreference
 import com.google.android.material.textfield.TextInputEditText
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.extensions.getFingerprintHumanReadable
-import im.vector.matrix.android.api.extensions.sortByLastSeen
-import im.vector.matrix.android.api.failure.Failure
-import im.vector.matrix.android.internal.auth.data.LoginFlowTypes
 import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
-import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
 import im.vector.riotx.R
 import im.vector.riotx.core.dialogs.ExportKeysDialog
 import im.vector.riotx.core.intent.ExternalIntentData
 import im.vector.riotx.core.intent.analyseIntent
 import im.vector.riotx.core.intent.getFilenameFromUri
 import im.vector.riotx.core.platform.SimpleTextWatcher
-import im.vector.riotx.core.preference.ProgressBarPreference
 import im.vector.riotx.core.preference.VectorPreference
-import im.vector.riotx.core.preference.VectorPreferenceDivider
 import im.vector.riotx.core.utils.*
 import im.vector.riotx.features.crypto.keys.KeysExporter
 import im.vector.riotx.features.crypto.keys.KeysImporter
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupManageActivity
-import timber.log.Timber
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 import javax.inject.Inject
 
 class VectorSettingsSecurityPrivacyFragment @Inject constructor(
@@ -65,9 +50,6 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
 
     override var titleRes = R.string.settings_security_and_privacy
     override val preferenceXmlRes = R.xml.vector_settings_security_privacy
-
-    // used to avoid requesting to enter the password for each deletion
-    private var mAccountPassword: String = ""
 
     // devices: device IDs and device names
     private val mDevicesNameList: MutableList<DeviceInfo> = mutableListOf()
@@ -78,28 +60,13 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
     private val mCryptographyCategory by lazy {
         findPreference<PreferenceCategory>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_PREFERENCE_KEY)!!
     }
-    private val mCryptographyCategoryDivider by lazy {
-        findPreference<VectorPreferenceDivider>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_DIVIDER_PREFERENCE_KEY)!!
-    }
     // cryptography manage
     private val mCryptographyManageCategory by lazy {
         findPreference<PreferenceCategory>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_MANAGE_PREFERENCE_KEY)!!
     }
-    private val mCryptographyManageCategoryDivider by lazy {
-        findPreference<VectorPreferenceDivider>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_MANAGE_DIVIDER_PREFERENCE_KEY)!!
-    }
     // displayed pushers
-    private val mPushersSettingsDivider by lazy {
-        findPreference<VectorPreferenceDivider>(VectorPreferences.SETTINGS_NOTIFICATIONS_TARGET_DIVIDER_PREFERENCE_KEY)!!
-    }
     private val mPushersSettingsCategory by lazy {
         findPreference<PreferenceCategory>(VectorPreferences.SETTINGS_NOTIFICATIONS_TARGETS_PREFERENCE_KEY)!!
-    }
-    private val mDevicesListSettingsCategory by lazy {
-        findPreference<PreferenceCategory>(VectorPreferences.SETTINGS_DEVICES_LIST_PREFERENCE_KEY)!!
-    }
-    private val mDevicesListSettingsCategoryDivider by lazy {
-        findPreference<VectorPreferenceDivider>(VectorPreferences.SETTINGS_DEVICES_DIVIDER_PREFERENCE_KEY)!!
     }
     private val cryptoInfoDeviceNamePreference by lazy {
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_ENCRYPTION_INFORMATION_DEVICE_NAME_PREFERENCE_KEY)!!
@@ -129,12 +96,15 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         findPreference<SwitchPreference>(VectorPreferences.SETTINGS_ENCRYPTION_NEVER_SENT_TO_PREFERENCE_KEY)!!
     }
 
+    override fun onResume() {
+        super.onResume()
+        // My device name may have been updated
+        refreshMyDevice()
+    }
+
     override fun bindPref() {
         // Push target
         refreshPushersList()
-
-        // Device list
-        refreshDevicesList()
 
         // Refresh Key Management section
         refreshKeysManagementSection()
@@ -148,16 +118,6 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
 
             it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 vectorPreferences.setUseAnalytics(newValue as Boolean)
-                true
-            }
-        }
-
-        // Rageshake Management
-        findPreference<SwitchPreference>(VectorPreferences.SETTINGS_USE_RAGE_SHAKE_KEY)!!.let {
-            it.isChecked = vectorPreferences.useRageshake()
-
-            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                vectorPreferences.setUseRageshake(newValue as Boolean)
                 true
             }
         }
@@ -353,11 +313,9 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
     private fun removeCryptographyPreference() {
         preferenceScreen.let {
             it.removePreference(mCryptographyCategory)
-            it.removePreference(mCryptographyCategoryDivider)
 
             // Also remove keys management section
             it.removePreference(mCryptographyManageCategory)
-            it.removePreference(mCryptographyManageCategoryDivider)
         }
     }
 
@@ -375,7 +333,8 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
             cryptoInfoDeviceNamePreference.summary = aMyDeviceInfo.displayName
 
             cryptoInfoDeviceNamePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                displayDeviceRenameDialog(aMyDeviceInfo)
+                // TODO device can be rename only from the device list screen for the moment
+                // displayDeviceRenameDialog(aMyDeviceInfo)
                 true
             }
 
@@ -428,340 +387,20 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
     // devices list
     // ==============================================================================================================
 
-    private fun removeDevicesPreference() {
-        preferenceScreen.let {
-            it.removePreference(mDevicesListSettingsCategory)
-            it.removePreference(mDevicesListSettingsCategoryDivider)
-        }
-    }
-
-    /**
-     * Force the refresh of the devices list.<br></br>
-     * The devices list is the list of the devices where the user as looged in.
-     * It can be any mobile device, as any browser.
-     */
-    private fun refreshDevicesList() {
-        if (session.isCryptoEnabled() && !session.sessionParams.credentials.deviceId.isNullOrEmpty()) {
-            // display a spinner while loading the devices list
-            if (0 == mDevicesListSettingsCategory.preferenceCount) {
-                activity?.let {
-                    val preference = ProgressBarPreference(it)
-                    mDevicesListSettingsCategory.addPreference(preference)
-                }
-            }
-
-            session.getDevicesList(object : MatrixCallback<DevicesListResponse> {
-                override fun onSuccess(data: DevicesListResponse) {
-                    if (!isAdded) {
-                        return
-                    }
-
-                    if (data.devices?.isEmpty() == true) {
-                        removeDevicesPreference()
-                    } else {
-                        buildDevicesSettings(data.devices!!)
-                    }
-                }
-
+    private fun refreshMyDevice() {
+        // TODO Move to a ViewModel...
+        session.sessionParams.credentials.deviceId?.let {
+            session.getDeviceInfo(it, object : MatrixCallback<DeviceInfo> {
                 override fun onFailure(failure: Throwable) {
-                    if (!isAdded) {
-                        return
-                    }
+                    // Ignore for this time?...
+                }
 
-                    removeDevicesPreference()
-                    onCommonDone(failure.message)
+                override fun onSuccess(data: DeviceInfo) {
+                    mMyDeviceInfo = data
+                    refreshCryptographyPreference(data)
                 }
             })
-        } else {
-            removeDevicesPreference()
-            removeCryptographyPreference()
         }
-    }
-
-    /**
-     * Build the devices portion of the settings.<br></br>
-     * Each row correspond to a device ID and its corresponding device name. Clicking on the row
-     * display a dialog containing: the device ID, the device name and the "last seen" information.
-     *
-     * @param aDeviceInfoList the list of the devices
-     */
-    private fun buildDevicesSettings(aDeviceInfoList: List<DeviceInfo>) {
-        var preference: VectorPreference
-        var typeFaceHighlight: Int
-        var isNewList = true
-        val myDeviceId = session.sessionParams.credentials.deviceId
-
-        if (aDeviceInfoList.size == mDevicesNameList.size) {
-            isNewList = !mDevicesNameList.containsAll(aDeviceInfoList)
-        }
-
-        if (isNewList) {
-            var prefIndex = 0
-            mDevicesNameList.clear()
-            mDevicesNameList.addAll(aDeviceInfoList)
-
-            // sort before display: most recent first
-            mDevicesNameList.sortByLastSeen()
-
-            // start from scratch: remove the displayed ones
-            mDevicesListSettingsCategory.removeAll()
-
-            for (deviceInfo in mDevicesNameList) {
-                // set bold to distinguish current device ID
-                if (null != myDeviceId && myDeviceId == deviceInfo.deviceId) {
-                    mMyDeviceInfo = deviceInfo
-                    typeFaceHighlight = Typeface.BOLD
-                } else {
-                    typeFaceHighlight = Typeface.NORMAL
-                }
-
-                // add the edit text preference
-                preference = VectorPreference(requireActivity()).apply {
-                    mTypeface = typeFaceHighlight
-                }
-
-                if (null == deviceInfo.deviceId && null == deviceInfo.displayName) {
-                    continue
-                } else {
-                    if (null != deviceInfo.deviceId) {
-                        preference.title = deviceInfo.deviceId
-                    }
-
-                    // display name parameter can be null (new JSON API)
-                    if (null != deviceInfo.displayName) {
-                        preference.summary = deviceInfo.displayName
-                    }
-                }
-
-                preference.key = DEVICES_PREFERENCE_KEY_BASE + prefIndex
-                prefIndex++
-
-                // onClick handler: display device details dialog
-                preference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                    displayDeviceDetailsDialog(deviceInfo)
-                    true
-                }
-
-                mDevicesListSettingsCategory.addPreference(preference)
-            }
-
-            refreshCryptographyPreference(mMyDeviceInfo)
-        }
-    }
-
-    /**
-     * Display a dialog containing the device ID, the device name and the "last seen" information.<>
-     * This dialog allow to delete the corresponding device (see [.displayDeviceDeletionDialog])
-     *
-     * @param aDeviceInfo the device information
-     */
-    private fun displayDeviceDetailsDialog(aDeviceInfo: DeviceInfo) {
-        activity?.let {
-            val builder = AlertDialog.Builder(it)
-            val inflater = it.layoutInflater
-            val layout = inflater.inflate(R.layout.dialog_device_details, null)
-            var textView = layout.findViewById<TextView>(R.id.device_id)
-
-            textView.text = aDeviceInfo.deviceId
-
-            // device name
-            textView = layout.findViewById(R.id.device_name)
-            val displayName = if (aDeviceInfo.displayName.isNullOrEmpty()) LABEL_UNAVAILABLE_DATA else aDeviceInfo.displayName
-            textView.text = displayName
-
-            // last seen info
-            textView = layout.findViewById(R.id.device_last_seen)
-
-            val lastSeenIp = aDeviceInfo.lastSeenIp?.takeIf { ip -> ip.isNotBlank() } ?: "-"
-
-            val lastSeenTime = aDeviceInfo.lastSeenTs?.let { ts ->
-                val dateFormatTime = SimpleDateFormat("HH:mm:ss", Locale.ROOT)
-                val date = Date(ts)
-
-                val time = dateFormatTime.format(date)
-                val dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault())
-
-                dateFormat.format(date) + ", " + time
-            } ?: "-"
-
-            val lastSeenInfo = getString(R.string.devices_details_last_seen_format, lastSeenIp, lastSeenTime)
-            textView.text = lastSeenInfo
-
-            // title & icon
-            builder.setTitle(R.string.devices_details_dialog_title)
-                    .setIcon(android.R.drawable.ic_dialog_info)
-                    .setView(layout)
-                    .setPositiveButton(R.string.rename) { _, _ -> displayDeviceRenameDialog(aDeviceInfo) }
-
-            // disable the deletion for our own device
-            if (session.getMyDevice().deviceId != aDeviceInfo.deviceId) {
-                builder.setNegativeButton(R.string.delete) { _, _ -> deleteDevice(aDeviceInfo) }
-            }
-
-            builder.setNeutralButton(R.string.cancel, null)
-                    .setOnKeyListener(DialogInterface.OnKeyListener { dialog, keyCode, event ->
-                        if (event.action == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
-                            dialog.cancel()
-                            return@OnKeyListener true
-                        }
-                        false
-                    })
-                    .show()
-        }
-    }
-
-    /**
-     * Display an alert dialog to rename a device
-     *
-     * @param aDeviceInfoToRename device info
-     */
-    private fun displayDeviceRenameDialog(aDeviceInfoToRename: DeviceInfo) {
-        activity?.let {
-            val inflater = it.layoutInflater
-            val layout = inflater.inflate(R.layout.dialog_base_edit_text, null)
-
-            val input = layout.findViewById<EditText>(R.id.edit_text)
-            input.setText(aDeviceInfoToRename.displayName)
-
-            AlertDialog.Builder(it)
-                    .setTitle(R.string.devices_details_device_name)
-                    .setView(layout)
-                    .setPositiveButton(R.string.ok) { _, _ ->
-                        displayLoadingView()
-
-                        val newName = input.text.toString()
-
-                        session.setDeviceName(aDeviceInfoToRename.deviceId!!, newName, object : MatrixCallback<Unit> {
-                            override fun onSuccess(data: Unit) {
-                                hideLoadingView()
-
-                                // search which preference is updated
-                                val count = mDevicesListSettingsCategory.preferenceCount
-
-                                for (i in 0 until count) {
-                                    val pref = mDevicesListSettingsCategory.getPreference(i)
-
-                                    if (aDeviceInfoToRename.deviceId == pref.title) {
-                                        pref.summary = newName
-                                    }
-                                }
-
-                                // detect if the updated device is the current account one
-                                if (cryptoInfoDeviceIdPreference.summary == aDeviceInfoToRename.deviceId) {
-                                    cryptoInfoDeviceNamePreference.summary = newName
-                                }
-
-                                // Also change the display name in aDeviceInfoToRename, in case of multiple renaming
-                                aDeviceInfoToRename.displayName = newName
-                            }
-
-                            override fun onFailure(failure: Throwable) {
-                                onCommonDone(failure.localizedMessage)
-                            }
-                        })
-                    }
-                    .setNegativeButton(R.string.cancel, null)
-                    .show()
-        }
-    }
-
-    /**
-     * Try to delete a device.
-     *
-     * @param deviceInfo the device to delete
-     */
-    private fun deleteDevice(deviceInfo: DeviceInfo) {
-        val deviceId = deviceInfo.deviceId
-        if (deviceId == null) {
-            Timber.e("## displayDeviceDeletionDialog(): sanity check failure")
-            return
-        }
-
-        displayLoadingView()
-        session.deleteDevice(deviceId, object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
-                hideLoadingView()
-                // force settings update
-                refreshDevicesList()
-            }
-
-            override fun onFailure(failure: Throwable) {
-                var isPasswordRequestFound = false
-
-                if (failure is Failure.RegistrationFlowError) {
-                    // We only support LoginFlowTypes.PASSWORD
-                    // Check if we can provide the user password
-                    failure.registrationFlowResponse.flows?.forEach { interactiveAuthenticationFlow ->
-                        isPasswordRequestFound = isPasswordRequestFound || interactiveAuthenticationFlow.stages?.any { it == LoginFlowTypes.PASSWORD } == true
-                    }
-
-                    if (isPasswordRequestFound) {
-                        maybeShowDeleteDeviceWithPasswordDialog(deviceId, failure.registrationFlowResponse.session)
-                    }
-                }
-
-                if (!isPasswordRequestFound) {
-                    // LoginFlowTypes.PASSWORD not supported, and this is the only one RiotX supports so far...
-                    onCommonDone(failure.localizedMessage)
-                }
-            }
-        })
-    }
-
-    /**
-     * Show a dialog to ask for user password, or use a previously entered password.
-     */
-    private fun maybeShowDeleteDeviceWithPasswordDialog(deviceId: String, authSession: String?) {
-        if (mAccountPassword.isNotEmpty()) {
-            deleteDeviceWithPassword(deviceId, authSession, mAccountPassword)
-        } else {
-            activity?.let {
-                val inflater = it.layoutInflater
-                val layout = inflater.inflate(R.layout.dialog_device_delete, null)
-                val passwordEditText = layout.findViewById<EditText>(R.id.delete_password)
-
-                AlertDialog.Builder(it)
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setTitle(R.string.devices_delete_dialog_title)
-                        .setView(layout)
-                        .setPositiveButton(R.string.devices_delete_submit_button_label, DialogInterface.OnClickListener { _, _ ->
-                            if (passwordEditText.toString().isEmpty()) {
-                                it.toast(R.string.error_empty_field_your_password)
-                                return@OnClickListener
-                            }
-                            mAccountPassword = passwordEditText.text.toString()
-                            deleteDeviceWithPassword(deviceId, authSession, mAccountPassword)
-                        })
-                        .setNegativeButton(R.string.cancel) { _, _ ->
-                            hideLoadingView()
-                        }
-                        .setOnKeyListener(DialogInterface.OnKeyListener { dialog, keyCode, event ->
-                            if (event.action == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
-                                dialog.cancel()
-                                hideLoadingView()
-                                return@OnKeyListener true
-                            }
-                            false
-                        })
-                        .show()
-            }
-        }
-    }
-
-    private fun deleteDeviceWithPassword(deviceId: String, authSession: String?, accountPassword: String) {
-        session.deleteDeviceWithUserPassword(deviceId, authSession, accountPassword, object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
-                hideLoadingView()
-                // force settings update
-                refreshDevicesList()
-            }
-
-            override fun onFailure(failure: Throwable) {
-                // Password is maybe not good
-                onCommonDone(failure.localizedMessage)
-                mAccountPassword = ""
-            }
-        })
     }
 
     // ==============================================================================================================
@@ -860,6 +499,6 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         private const val DEVICES_PREFERENCE_KEY_BASE = "DEVICES_PREFERENCE_KEY_BASE"
 
         // TODO i18n
-        private const val LABEL_UNAVAILABLE_DATA = "none"
+        const val LABEL_UNAVAILABLE_DATA = "none"
     }
 }

@@ -88,9 +88,6 @@
         <!-- room notification text color (typing, unsent...) -->
         <item name="vctr_room_notification_text_color">#a0a29f</item>
 
-        <!-- color for dividers in settings -->
-        <item name="vctr_preference_divider_color">#e1e1e1</item>
-
         <!-- icon colors -->
         <item name="vctr_settings_icon_tint_color">@color/accent_color_status</item>
         <item name="vctr_icon_tint_on_light_action_bar_color">@color/riotx_accent</item>

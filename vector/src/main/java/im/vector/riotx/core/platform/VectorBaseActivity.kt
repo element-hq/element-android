@@ -54,6 +54,7 @@ import im.vector.riotx.features.rageshake.BugReportActivity
 import im.vector.riotx.features.rageshake.BugReporter
 import im.vector.riotx.features.rageshake.RageShake
 import im.vector.riotx.features.session.SessionListener
+import im.vector.riotx.features.settings.VectorPreferences
 import im.vector.riotx.features.themes.ActivityOtherThemes
 import im.vector.riotx.features.themes.ThemeUtils
 import im.vector.riotx.receivers.DebugReceiver
@@ -88,9 +89,11 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
     private lateinit var configurationViewModel: ConfigurationViewModel
     private lateinit var sessionListener: SessionListener
     protected lateinit var bugReporter: BugReporter
-    private lateinit var rageShake: RageShake
+    lateinit var rageShake: RageShake
+        private set
     protected lateinit var navigator: Navigator
     private lateinit var activeSessionHolder: ActiveSessionHolder
+    private lateinit var vectorPreferences: VectorPreferences
 
     // Filter for multiple invalid token error
     private var mainActivityStarted = false
@@ -135,7 +138,8 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        screenComponent = DaggerScreenComponent.factory().create(getVectorComponent(), this)
+        val vectorComponent = getVectorComponent()
+        screenComponent = DaggerScreenComponent.factory().create(vectorComponent, this)
         val timeForInjection = measureTimeMillis {
             injectWith(screenComponent)
         }
@@ -150,6 +154,7 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
         rageShake = screenComponent.rageShake()
         navigator = screenComponent.navigator()
         activeSessionHolder = screenComponent.activeSessionHolder()
+        vectorPreferences = vectorComponent.vectorPreferences()
         configurationViewModel.activityRestarter.observe(this, Observer {
             if (!it.hasBeenHandled) {
                 // Recreate the Activity because configuration has changed
@@ -226,7 +231,7 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
 
         configurationViewModel.onActivityResumed()
 
-        if (this !is BugReportActivity) {
+        if (this !is BugReportActivity && vectorPreferences.useRageshake()) {
             rageShake.start()
         }
 
