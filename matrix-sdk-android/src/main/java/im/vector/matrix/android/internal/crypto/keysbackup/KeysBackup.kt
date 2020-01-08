@@ -1364,7 +1364,6 @@ internal class KeysBackup @Inject constructor(
                 .executeBy(taskExecutor)
     }
 
-
     companion object {
         // Maximum delay in ms in {@link maybeBackupKeys}
         private const val KEY_BACKUP_WAITING_TIME_TO_SEND_KEY_BACKUP_MILLIS = 10_000L

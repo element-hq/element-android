@@ -88,12 +88,11 @@ class SASTest : InstrumentedTest {
         assertEquals("Alice state should be started", SasVerificationTxState.Started, aliceSasTx!!.state)
         assertEquals("Bob state should be started by alice", SasVerificationTxState.OnStarted, bobSasTx!!.state)
 
-        //Let's cancel from alice side
+        // Let's cancel from alice side
         val cancelLatch = CountDownLatch(1)
 
         val bobListener2 = object : SasVerificationService.SasVerificationListener {
             override fun transactionCreated(tx: SasVerificationTransaction) {}
-
 
             override fun transactionUpdated(tx: SasVerificationTransaction) {
                 if (tx.transactionId == txID) {
@@ -135,7 +134,7 @@ class SASTest : InstrumentedTest {
         val protocols = listOf("meh_dont_know")
         val tid = "00000000"
 
-        //Bob should receive a cancel
+        // Bob should receive a cancel
         var canceledToDeviceEvent: Event? = null
         val cancelLatch = CountDownLatch(1)
         // TODO bobSession!!.dataHandler.addListener(object : MXEventListener() {
@@ -166,7 +165,6 @@ class SASTest : InstrumentedTest {
         }
         aliceSession.getSasVerificationService().addListener(aliceListener)
 
-
         fakeBobStart(bobSession, aliceUserID, aliceDevice, tid, protocols = protocols)
 
         mTestHelper.await(cancelLatch)
@@ -175,7 +173,6 @@ class SASTest : InstrumentedTest {
         assertEquals("Request should be cancelled with m.unknown_method", CancelCode.UnknownMethod.value, cancelReq.code)
 
         cryptoTestData.close()
-
     }
 
     @Test
@@ -187,7 +184,7 @@ class SASTest : InstrumentedTest {
         val mac = listOf("shaBit")
         val tid = "00000000"
 
-        //Bob should receive a cancel
+        // Bob should receive a cancel
         var canceledToDeviceEvent: Event? = null
         val cancelLatch = CountDownLatch(1)
         // TODO bobSession!!.dataHandler.addListener(object : MXEventListener() {
@@ -213,7 +210,6 @@ class SASTest : InstrumentedTest {
         assertEquals("Request should be cancelled with m.unknown_method", CancelCode.UnknownMethod.value, cancelReq.code)
 
         cryptoTestData.close()
-
     }
 
     @Test
@@ -222,11 +218,10 @@ class SASTest : InstrumentedTest {
 
         val bobSession = cryptoTestData.secondSession!!
 
-
         val codes = listOf("bin", "foo", "bar")
         val tid = "00000000"
 
-        //Bob should receive a cancel
+        // Bob should receive a cancel
         var canceledToDeviceEvent: Event? = null
         val cancelLatch = CountDownLatch(1)
         // TODO bobSession!!.dataHandler.addListener(object : MXEventListener() {
@@ -252,7 +247,6 @@ class SASTest : InstrumentedTest {
         assertEquals("Request should be cancelled with m.unknown_method", CancelCode.UnknownMethod.value, cancelReq.code)
 
         cryptoTestData.close()
-
     }
 
     private fun fakeBobStart(bobSession: Session,
@@ -284,8 +278,7 @@ class SASTest : InstrumentedTest {
         // TODO )
     }
 
-
-    //any two devices may only have at most one key verification in flight at a time.
+    // any two devices may only have at most one key verification in flight at a time.
     // If a device has two verifications in progress with the same device, then it should cancel both verifications.
     @Test
     fun test_aliceStartTwoRequests() {
@@ -293,7 +286,6 @@ class SASTest : InstrumentedTest {
 
         val aliceSession = cryptoTestData.firstSession
         val bobSession = cryptoTestData.secondSession
-
 
         val aliceSasMgr = aliceSession.getSasVerificationService()
 
@@ -343,7 +335,6 @@ class SASTest : InstrumentedTest {
         var accepted: KeyVerificationAccept? = null
         var startReq: KeyVerificationStart? = null
 
-
         val aliceAcceptedLatch = CountDownLatch(1)
         val aliceListener = object : SasVerificationService.SasVerificationListener {
             override fun markedAsManuallyVerified(userId: String, deviceId: String) {}
@@ -375,7 +366,6 @@ class SASTest : InstrumentedTest {
         }
         bobSasMgr.addListener(bobListener)
 
-
         val bobUserId = bobSession.myUserId
         val bobDeviceId = bobSession.getMyDevice().deviceId
         aliceSasMgr.beginKeyVerificationSAS(bobUserId, bobDeviceId)
@@ -383,7 +373,7 @@ class SASTest : InstrumentedTest {
 
         assertTrue("Should have receive a commitment", accepted!!.commitment?.trim()?.isEmpty() == false)
 
-        //check that agreement is valid
+        // check that agreement is valid
         assertTrue("Agreed Protocol should be Valid", accepted!!.isValid())
         assertTrue("Agreed Protocol should be known by alice", startReq!!.keyAgreementProtocols!!.contains(accepted!!.keyAgreementProtocol))
         assertTrue("Hash should be known by alice", startReq!!.hashes!!.contains(accepted!!.hash))
@@ -405,7 +395,6 @@ class SASTest : InstrumentedTest {
 
         val aliceSasMgr = aliceSession.getSasVerificationService()
         val bobSasMgr = bobSession!!.getSasVerificationService()
-
 
         val aliceSASLatch = CountDownLatch(1)
         val aliceListener = object : SasVerificationService.SasVerificationListener {
@@ -446,7 +435,6 @@ class SASTest : InstrumentedTest {
         }
         bobSasMgr.addListener(bobListener)
 
-
         val bobUserId = bobSession.myUserId
         val bobDeviceId = bobSession.getMyDevice().deviceId
         val verificationSAS = aliceSasMgr.beginKeyVerificationSAS(bobUserId, bobDeviceId)
@@ -462,7 +450,6 @@ class SASTest : InstrumentedTest {
         cryptoTestData.close()
     }
 
-
     @Test
     fun test_happyPath() {
         val cryptoTestData = mCryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
@@ -472,7 +459,6 @@ class SASTest : InstrumentedTest {
 
         val aliceSasMgr = aliceSession.getSasVerificationService()
         val bobSasMgr = bobSession!!.getSasVerificationService()
-
 
         val aliceSASLatch = CountDownLatch(1)
         val aliceListener = object : SasVerificationService.SasVerificationListener {
@@ -519,18 +505,17 @@ class SASTest : InstrumentedTest {
         }
         bobSasMgr.addListener(bobListener)
 
-
         val bobUserId = bobSession.myUserId
         val bobDeviceId = bobSession.getMyDevice().deviceId
         aliceSasMgr.beginKeyVerificationSAS(bobUserId, bobDeviceId)
         mTestHelper.await(aliceSASLatch)
         mTestHelper.await(bobSASLatch)
 
-        //Assert that devices are verified
+        // Assert that devices are verified
         val bobDeviceInfoFromAlicePOV: MXDeviceInfo? = aliceSession.getDeviceInfo(bobUserId, bobDeviceId)
         val aliceDeviceInfoFromBobPOV: MXDeviceInfo? = bobSession.getDeviceInfo(aliceSession.myUserId, aliceSession.getMyDevice().deviceId)
 
-        //latch wait a bit again
+        // latch wait a bit again
         Thread.sleep(1000)
 
         assertTrue("alice device should be verified from bob point of view", aliceDeviceInfoFromBobPOV!!.isVerified)

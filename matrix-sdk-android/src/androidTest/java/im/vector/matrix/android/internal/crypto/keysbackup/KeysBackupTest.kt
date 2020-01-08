@@ -150,7 +150,6 @@ class KeysBackupTest : InstrumentedTest {
         var megolmBackupCreationInfo: MegolmBackupCreationInfo? = null
         val latch = CountDownLatch(1)
         keysBackup.prepareKeysBackupVersion(null, null, object : MatrixCallback<MegolmBackupCreationInfo> {
-
             override fun onSuccess(data: MegolmBackupCreationInfo) {
                 megolmBackupCreationInfo = data
 
@@ -210,7 +209,6 @@ class KeysBackupTest : InstrumentedTest {
 
         mTestHelper.await(latch)
 
-
         val nbOfKeys = cryptoTestData.firstSession.inboundGroupSessionsCount(false)
         val backedUpKeys = cryptoTestData.firstSession.inboundGroupSessionsCount(true)
 
@@ -229,7 +227,6 @@ class KeysBackupTest : InstrumentedTest {
         )
         cryptoTestData.close()
     }
-
 
     /**
      * Check that backupAllGroupSessions() returns valid data
@@ -258,7 +255,6 @@ class KeysBackupTest : InstrumentedTest {
                 assertEquals(nbOfKeys, total)
                 lastBackedUpKeysProgress = progress
             }
-
         }, TestMatrixCallback(latch))
 
         mTestHelper.await(latch)
@@ -399,7 +395,6 @@ class KeysBackupTest : InstrumentedTest {
 
         testData.cryptoTestData.close()
     }
-
 
     /**
      * - Do an e2e backup to the homeserver with a recovery key
@@ -1081,7 +1076,6 @@ class KeysBackupTest : InstrumentedTest {
         keysBackup.backupAllGroupSessions(object : ProgressListener {
             override fun onProgress(progress: Int, total: Int) {
             }
-
         }, TestMatrixCallback(latch2, false))
         mTestHelper.await(latch2)
 
@@ -1121,7 +1115,6 @@ class KeysBackupTest : InstrumentedTest {
         val latch = CountDownLatch(1)
         keysBackup.backupAllGroupSessions(object : ProgressListener {
             override fun onProgress(progress: Int, total: Int) {
-
             }
         }, TestMatrixCallback(latch))
         mTestHelper.await(latch)
@@ -1153,7 +1146,6 @@ class KeysBackupTest : InstrumentedTest {
         keysBackup2.backupAllGroupSessions(object : ProgressListener {
             override fun onProgress(progress: Int, total: Int) {
             }
-
         }, object : TestMatrixCallback<Unit>(latch2, false) {
             override fun onSuccess(data: Unit) {
                 isSuccessful = true
@@ -1274,7 +1266,6 @@ class KeysBackupTest : InstrumentedTest {
         var megolmBackupCreationInfo: MegolmBackupCreationInfo? = null
         val latch = CountDownLatch(1)
         keysBackup.prepareKeysBackupVersion(password, null, object : MatrixCallback<MegolmBackupCreationInfo> {
-
             override fun onSuccess(data: MegolmBackupCreationInfo) {
                 megolmBackupCreationInfo = data
 

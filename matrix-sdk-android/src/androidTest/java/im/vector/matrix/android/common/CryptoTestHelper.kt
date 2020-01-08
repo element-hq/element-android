@@ -17,7 +17,6 @@
 package im.vector.matrix.android.common
 
 import android.os.SystemClock
-import android.text.TextUtils
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType

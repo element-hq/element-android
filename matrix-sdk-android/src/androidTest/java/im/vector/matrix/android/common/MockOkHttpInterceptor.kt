@@ -41,7 +41,6 @@ class MockOkHttpInterceptor : Interceptor {
 
     private var rules: ArrayList<Rule> = ArrayList()
 
-
     fun addRule(rule: Rule) {
         rules.add(rule)
     }
@@ -59,7 +58,6 @@ class MockOkHttpInterceptor : Interceptor {
 
         return chain.proceed(originalRequest)
     }
-
 
     abstract class Rule(val match: String) {
         abstract fun process(originalRequest: Request): Response?
@@ -81,6 +79,5 @@ class MockOkHttpInterceptor : Interceptor {
                     .code(code)
                     .build()
         }
-
     }
 }

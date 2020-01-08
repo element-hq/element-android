@@ -50,7 +50,6 @@ class CommonTestHelper(context: Context) {
         matrix = Matrix.getInstance(context)
     }
 
-
     fun createAccount(userNamePrefix: String, testParams: SessionTestParams): Session {
         return createAccount(userNamePrefix, TestConstants.PASSWORD, testParams)
     }
@@ -74,7 +73,7 @@ class CommonTestHelper(context: Context) {
      * @param session    the session to sync
      */
     fun syncSession(session: Session) {
-        //val lock = CountDownLatch(1)
+        // val lock = CountDownLatch(1)
 
         // val observer = androidx.lifecycle.Observer<SyncState> { syncState ->
         //     if (syncState is SyncState.Idle) {
@@ -89,8 +88,8 @@ class CommonTestHelper(context: Context) {
 
         session.open()
         session.startSync(true)
-        //await(lock)
-        //session.syncState().removeObserver(observer)
+        // await(lock)
+        // session.syncState().removeObserver(observer)
     }
 
     /**
@@ -128,7 +127,6 @@ class CommonTestHelper(context: Context) {
 
         return sentEvents
     }
-
 
     // PRIVATE METHODS *****************************************************************************
 

@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.crypto
 
-
 import android.os.MemoryFile
 import android.util.Base64
 import androidx.test.ext.junit.runners.AndroidJUnit4

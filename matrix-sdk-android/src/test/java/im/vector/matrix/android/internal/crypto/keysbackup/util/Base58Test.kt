@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.crypto.keysbackup.util
 
-
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.FixMethodOrder
@@ -35,7 +34,7 @@ class Base58Test {
     @Test
     fun decode() {
         //  Example comes from https://github.com/keis/base58
-        assertArrayEquals("hello world".toByteArray(), base58decode("StV1DL6CwTryKyV"));
+        assertArrayEquals("hello world".toByteArray(), base58decode("StV1DL6CwTryKyV"))
     }
 
     @Test
