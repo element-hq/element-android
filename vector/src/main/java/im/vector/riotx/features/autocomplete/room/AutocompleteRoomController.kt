@@ -24,11 +24,9 @@ import im.vector.riotx.features.autocomplete.autocompleteMatrixItem
 import im.vector.riotx.features.home.AvatarRenderer
 import javax.inject.Inject
 
-class AutocompleteRoomController @Inject constructor() : TypedEpoxyController<List<RoomSummary>>() {
+class AutocompleteRoomController @Inject constructor(private val avatarRenderer: AvatarRenderer) : TypedEpoxyController<List<RoomSummary>>() {
 
     var listener: AutocompleteClickListener<RoomSummary>? = null
-
-    @Inject lateinit var avatarRenderer: AvatarRenderer
 
     override fun buildModels(data: List<RoomSummary>?) {
         if (data.isNullOrEmpty()) {

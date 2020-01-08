@@ -21,18 +21,30 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Success
 import com.otaliastudios.autocomplete.RecyclerViewPresenter
+import com.squareup.inject.assisted.Assisted
+import com.squareup.inject.assisted.AssistedInject
+import im.vector.matrix.android.api.query.QueryStringValue
+import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.room.members.roomMemberQueryParams
+import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.riotx.features.autocomplete.AutocompleteClickListener
-import javax.inject.Inject
 
-class AutocompleteMemberPresenter @Inject constructor(context: Context,
-                                                      private val controller: AutocompleteMemberController
+class AutocompleteMemberPresenter @AssistedInject constructor(context: Context,
+                                                              @Assisted val roomId: String,
+                                                              private val session: Session,
+                                                              private val controller: AutocompleteMemberController
 ) : RecyclerViewPresenter<RoomMember>(context), AutocompleteClickListener<RoomMember> {
 
-    var callback: Callback? = null
+    private val room = session.getRoom(roomId)!!
 
     init {
         controller.listener = this
+    }
+
+    @AssistedInject.Factory
+    interface Factory {
+        fun create(roomId: String): AutocompleteMemberPresenter
     }
 
     override fun instantiateAdapter(): RecyclerView.Adapter<*> {
@@ -46,16 +58,23 @@ class AutocompleteMemberPresenter @Inject constructor(context: Context,
     }
 
     override fun onQuery(query: CharSequence?) {
-        callback?.onQueryMembers(query)
+        val queryParams = roomMemberQueryParams {
+            displayName = if (query.isNullOrBlank()) {
+                QueryStringValue.IsNotEmpty
+            } else {
+                QueryStringValue.Contains(query.toString(), QueryStringValue.Case.INSENSITIVE)
+            }
+            memberships = listOf(Membership.JOIN)
+        }
+        val members = room.getRoomMembers(queryParams)
+                .asSequence()
+                .sortedBy { it.displayName }
+        controller.setData(members.toList())
     }
 
     fun render(members: Async<List<RoomMember>>) {
         if (members is Success) {
             controller.setData(members())
         }
-    }
-
-    interface Callback {
-        fun onQueryMembers(query: CharSequence?)
     }
 }

@@ -49,7 +49,7 @@ enum class Membership(val value: String) {
             return listOf(INVITE, JOIN)
         }
 
-        fun all(): List<Membership>{
+        fun all(): List<Membership> {
             return values().asList()
         }
     }

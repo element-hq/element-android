@@ -24,12 +24,12 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.room.RoomSummaryQueryParams
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoomsFilter
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoomsParams
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoomsResponse
 import im.vector.matrix.android.api.session.room.model.thirdparty.RoomDirectoryData
+import im.vector.matrix.android.api.session.room.roomSummaryQueryParams
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.rx.rx
 import im.vector.riotx.core.extensions.postLiveEvent
@@ -80,9 +80,12 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
     }
 
     private fun observeJoinedRooms() {
+        val queryParams = roomSummaryQueryParams {
+            memberships = listOf(Membership.JOIN)
+        }
         session
                 .rx()
-                .liveRoomSummaries(RoomSummaryQueryParams(memberships = listOf(Membership.JOIN)))
+                .liveRoomSummaries(queryParams)
                 .subscribe { list ->
                     val joinedRoomIds = list
                             ?.map { it.roomId }
@@ -105,9 +108,9 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
     override fun handle(action: RoomDirectoryAction) {
         when (action) {
             is RoomDirectoryAction.SetRoomDirectoryData -> setRoomDirectoryData(action)
-            is RoomDirectoryAction.FilterWith           -> filterWith(action)
-            RoomDirectoryAction.LoadMore                -> loadMore()
-            is RoomDirectoryAction.JoinRoom             -> joinRoom(action)
+            is RoomDirectoryAction.FilterWith -> filterWith(action)
+            RoomDirectoryAction.LoadMore -> loadMore()
+            is RoomDirectoryAction.JoinRoom -> joinRoom(action)
         }
     }
 

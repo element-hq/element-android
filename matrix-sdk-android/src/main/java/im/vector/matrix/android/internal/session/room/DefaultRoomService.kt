@@ -33,6 +33,7 @@ import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.findByAlias
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.query.process
 import im.vector.matrix.android.internal.session.room.alias.GetRoomIdByAliasTask
 import im.vector.matrix.android.internal.session.room.create.CreateRoomTask
 import im.vector.matrix.android.internal.session.room.membership.joining.JoinRoomTask
@@ -104,21 +105,9 @@ internal class DefaultRoomService @Inject constructor(private val monarchy: Mona
 
     private fun roomSummariesQuery(realm: Realm, queryParams: RoomSummaryQueryParams): RealmQuery<RoomSummaryEntity> {
         val query = RoomSummaryEntity.where(realm)
-        if (queryParams.filterCanonicalAlias) {
-            query.isNotEmpty(RoomSummaryEntityFields.DISPLAY_NAME)
-        }
-        if (queryParams.filterCanonicalAlias) {
-            query.isNotEmpty(RoomSummaryEntityFields.CANONICAL_ALIAS)
-        }
-        val lastMembership = queryParams.memberships.lastOrNull()
-        query.beginGroup()
-        for (membership in queryParams.memberships) {
-            query.equalTo(RoomSummaryEntityFields.MEMBERSHIP_STR, membership.name)
-            if (membership != lastMembership) {
-                query.or()
-            }
-        }
-        query.endGroup()
+        query.process(RoomSummaryEntityFields.DISPLAY_NAME, queryParams.displayName)
+        query.process(RoomSummaryEntityFields.CANONICAL_ALIAS, queryParams.canonicalAlias)
+        query.process(RoomSummaryEntityFields.MEMBERSHIP_STR, queryParams.memberships)
         query.notEqualTo(RoomSummaryEntityFields.VERSIONING_STATE_STR, VersioningState.UPGRADED_ROOM_JOINED.name)
         return query
     }

@@ -398,7 +398,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     fun getNotificationRingTone(): Uri? {
         val url = defaultPrefs.getString(SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY, null)
 
-        // the user selects "None"
+        // the user selects "NoCondition"
         if (url == "") {
             return null
         }
@@ -425,7 +425,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     /**
      * Provide the notification ringtone filename
      *
-     * @return the filename or null if "None" is selected
+     * @return the filename or null if "NoCondition" is selected
      */
     fun getNotificationRingToneName(): String? {
         val toneUri = getNotificationRingTone() ?: return null

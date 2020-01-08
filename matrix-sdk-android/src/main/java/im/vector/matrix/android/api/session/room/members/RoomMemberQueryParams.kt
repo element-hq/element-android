@@ -14,34 +14,30 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.api.session.room
+package im.vector.matrix.android.api.session.room.members
 
 import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.room.model.Membership
 
-fun roomSummaryQueryParams(init: (RoomSummaryQueryParams.Builder.() -> Unit) = {}): RoomSummaryQueryParams {
-    return RoomSummaryQueryParams.Builder().apply(init).build()
+fun roomMemberQueryParams(init: (RoomMemberQueryParams.Builder.() -> Unit) = {}): RoomMemberQueryParams {
+    return RoomMemberQueryParams.Builder().apply(init).build()
 }
 
 /**
- * This class can be used to filter room summaries to use with:
- * [im.vector.matrix.android.api.session.room.Room] and [im.vector.matrix.android.api.session.room.RoomService]
+ * This class can be used to filter room members
  */
-data class RoomSummaryQueryParams(
+data class RoomMemberQueryParams(
         val displayName: QueryStringValue,
-        val canonicalAlias: QueryStringValue,
         val memberships: List<Membership>
 ) {
 
     class Builder {
 
         var displayName: QueryStringValue = QueryStringValue.IsNotEmpty
-        var canonicalAlias: QueryStringValue = QueryStringValue.NoCondition
         var memberships: List<Membership> = Membership.all()
 
-        fun build() = RoomSummaryQueryParams(
+        fun build() = RoomMemberQueryParams(
                 displayName = displayName,
-                canonicalAlias = canonicalAlias,
                 memberships = memberships
         )
     }

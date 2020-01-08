@@ -17,7 +17,11 @@
 package im.vector.matrix.rx
 
 import im.vector.matrix.android.api.session.room.Room
-import im.vector.matrix.android.api.session.room.model.*
+import im.vector.matrix.android.api.session.room.members.RoomMemberQueryParams
+import im.vector.matrix.android.api.session.room.model.EventAnnotationsSummary
+import im.vector.matrix.android.api.session.room.model.ReadReceipt
+import im.vector.matrix.android.api.session.room.model.RoomMember
+import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.notification.RoomNotificationState
 import im.vector.matrix.android.api.session.room.send.UserDraft
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
@@ -33,9 +37,9 @@ class RxRoom(private val room: Room) {
                 .startWith(room.roomSummary().toOptional())
     }
 
-    fun liveRoomMembers(memberships: List<Membership>): Observable<List<RoomMember>> {
-        return room.getRoomMembersLive(memberships).asObservable()
-                .startWith(room.getRoomMembers(memberships))
+    fun liveRoomMembers(queryParams: RoomMemberQueryParams): Observable<List<RoomMember>> {
+        return room.getRoomMembersLive(queryParams).asObservable()
+                .startWith(room.getRoomMembers(queryParams))
     }
 
     fun liveAnnotationSummary(eventId: String): Observable<Optional<EventAnnotationsSummary>> {

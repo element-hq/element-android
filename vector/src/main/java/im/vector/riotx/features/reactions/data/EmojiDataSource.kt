@@ -18,7 +18,6 @@ package im.vector.riotx.features.reactions.data
 import android.content.res.Resources
 import com.squareup.moshi.Moshi
 import im.vector.riotx.R
-import im.vector.riotx.core.di.ScreenScope
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -42,6 +41,7 @@ class EmojiDataSource @Inject constructor(
 
         // First add emojis with name matching query, sorted by name
         return (rawData.emojis.values
+                .asSequence()
                 .filter { emojiItem ->
                     emojiItem.name.contains(query, true)
                 }
@@ -56,6 +56,7 @@ class EmojiDataSource @Inject constructor(
                         .sortedBy { it.name })
                 // and ensure they will not be present twice
                 .distinct()
+                .toList()
     }
 
     fun getQuickReactions(): List<EmojiItem> {

@@ -19,17 +19,18 @@ package im.vector.riotx.features.autocomplete.group
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.Success
 import com.otaliastudios.autocomplete.RecyclerViewPresenter
+import im.vector.matrix.android.api.query.QueryStringValue
+import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.group.groupSummaryQueryParams
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.riotx.features.autocomplete.AutocompleteClickListener
 import javax.inject.Inject
 
 class AutocompleteGroupPresenter @Inject constructor(context: Context,
-                                                     private val controller: AutocompleteGroupController
+                                                     private val controller: AutocompleteGroupController,
+                                                     private val session: Session
 ) : RecyclerViewPresenter<GroupSummary>(context), AutocompleteClickListener<GroupSummary> {
-
-    var callback: Callback? = null
 
     init {
         controller.listener = this
@@ -46,16 +47,20 @@ class AutocompleteGroupPresenter @Inject constructor(context: Context,
     }
 
     override fun onQuery(query: CharSequence?) {
-        callback?.onQueryGroups(query)
+        val queryParams = groupSummaryQueryParams {
+            displayName = if (query.isNullOrBlank()) {
+                QueryStringValue.IsNotEmpty
+            } else {
+                QueryStringValue.Contains(query.toString(), QueryStringValue.Case.INSENSITIVE)
+            }
+        }
+        val groups = session.getGroupSummaries(queryParams)
+                .asSequence()
+                .sortedBy { it.displayName }
+        controller.setData(groups.toList())
     }
 
     fun render(groups: Async<List<GroupSummary>>) {
-        if (groups is Success) {
-            controller.setData(groups())
-        }
-    }
-
-    interface Callback {
-        fun onQueryGroups(query: CharSequence?)
+        controller.setData(groups())
     }
 }

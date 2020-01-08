@@ -18,6 +18,7 @@ package im.vector.matrix.rx
 
 import androidx.paging.PagedList
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.group.GroupSummaryQueryParams
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.android.api.session.pushers.Pusher
 import im.vector.matrix.android.api.session.room.RoomSummaryQueryParams
@@ -36,9 +37,9 @@ class RxSession(private val session: Session) {
                 .startWith(session.getRoomSummaries(queryParams))
     }
 
-    fun liveGroupSummaries(): Observable<List<GroupSummary>> {
-        return session.getGroupSummariesLive().asObservable()
-                .startWith(session.getGroupSummaries())
+    fun liveGroupSummaries(queryParams: GroupSummaryQueryParams): Observable<List<GroupSummary>> {
+        return session.getGroupSummariesLive(queryParams).asObservable()
+                .startWith(session.getGroupSummaries(queryParams))
     }
 
     fun liveBreadcrumbs(): Observable<List<RoomSummary>> {
