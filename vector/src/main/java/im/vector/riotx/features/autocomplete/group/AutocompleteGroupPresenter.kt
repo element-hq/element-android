@@ -18,7 +18,6 @@ package im.vector.riotx.features.autocomplete.group
 
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
-import com.airbnb.mvrx.Async
 import com.otaliastudios.autocomplete.RecyclerViewPresenter
 import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.Session
@@ -58,9 +57,5 @@ class AutocompleteGroupPresenter @Inject constructor(context: Context,
                 .asSequence()
                 .sortedBy { it.displayName }
         controller.setData(groups.toList())
-    }
-
-    fun render(groups: Async<List<GroupSummary>>) {
-        controller.setData(groups())
     }
 }

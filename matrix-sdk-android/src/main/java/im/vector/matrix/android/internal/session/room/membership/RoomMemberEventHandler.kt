@@ -35,7 +35,7 @@ internal class RoomMemberEventHandler @Inject constructor() {
         val userId = event.stateKey ?: return false
         val roomMemberEntity = RoomMemberEntityFactory.create(roomId, userId, roomMember)
         realm.insertOrUpdate(roomMemberEntity)
-        if (roomMember.membership == Membership.JOIN || roomMember.membership == Membership.INVITE) {
+        if (roomMember.membership in Membership.activeMemberships()) {
             val userEntity = UserEntityFactory.create(userId, roomMember)
             realm.insertOrUpdate(userEntity)
         }

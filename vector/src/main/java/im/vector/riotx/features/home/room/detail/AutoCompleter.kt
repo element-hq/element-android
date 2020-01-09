@@ -50,7 +50,7 @@ class AutoCompleter @AssistedInject constructor(
         private val avatarRenderer: AvatarRenderer,
         private val commandAutocompletePolicy: CommandAutocompletePolicy,
         private val autocompleteCommandPresenter: AutocompleteCommandPresenter,
-        private val autocompleteMemberPresenter: AutocompleteMemberPresenter.Factory,
+        private val autocompleteMemberPresenterFactory: AutocompleteMemberPresenter.Factory,
         private val autocompleteRoomPresenter: AutocompleteRoomPresenter,
         private val autocompleteGroupPresenter: AutocompleteGroupPresenter,
         private val autocompleteEmojiPresenter: AutocompleteEmojiPresenter
@@ -107,10 +107,10 @@ class AutoCompleter @AssistedInject constructor(
     }
 
     private fun setupMembers(backgroundDrawable: ColorDrawable, editText: EditText) {
-        val membersPresenter = autocompleteMemberPresenter.create(roomId)
+        val autocompleteMemberPresenter = autocompleteMemberPresenterFactory.create(roomId)
         Autocomplete.on<RoomMember>(editText)
                 .with(CharPolicy('@', true))
-                .with(membersPresenter)
+                .with(autocompleteMemberPresenter)
                 .with(ELEVATION)
                 .with(backgroundDrawable)
                 .with(object : AutocompleteCallback<RoomMember> {

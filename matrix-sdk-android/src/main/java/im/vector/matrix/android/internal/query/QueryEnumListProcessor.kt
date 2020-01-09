@@ -21,13 +21,13 @@ import io.realm.RealmQuery
 
 fun <T : RealmObject, E : Enum<E>> RealmQuery<T>.process(field: String, enums: List<Enum<E>>): RealmQuery<T> {
     val lastEnumValue = enums.lastOrNull()
-    this.beginGroup()
+    beginGroup()
     for (enumValue in enums) {
-        this.equalTo(field, enumValue.name)
+        equalTo(field, enumValue.name)
         if (enumValue != lastEnumValue) {
-            this.or()
+            or()
         }
     }
-    this.endGroup()
+    endGroup()
     return this
 }

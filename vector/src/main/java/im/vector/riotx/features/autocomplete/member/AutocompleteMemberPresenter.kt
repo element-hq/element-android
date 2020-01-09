@@ -18,8 +18,6 @@ package im.vector.riotx.features.autocomplete.member
 
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
-import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.Success
 import com.otaliastudios.autocomplete.RecyclerViewPresenter
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
@@ -70,11 +68,5 @@ class AutocompleteMemberPresenter @AssistedInject constructor(context: Context,
                 .asSequence()
                 .sortedBy { it.displayName }
         controller.setData(members.toList())
-    }
-
-    fun render(members: Async<List<RoomMember>>) {
-        if (members is Success) {
-            controller.setData(members())
-        }
     }
 }

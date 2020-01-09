@@ -116,7 +116,7 @@ interface RelationService {
     fun getEventAnnotationsSummary(eventId: String): EventAnnotationsSummary?
 
     /**
-     * Get the a LiveData EventAnnotationsSummary
+     * Get a LiveData of EventAnnotationsSummary for the specified eventId
      * @param eventId the eventId to look for EventAnnotationsSummary
      * @return the LiveData of EventAnnotationsSummary
      */
