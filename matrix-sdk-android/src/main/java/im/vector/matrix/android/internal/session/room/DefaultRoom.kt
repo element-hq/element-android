@@ -19,14 +19,15 @@ package im.vector.matrix.android.internal.session.room
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.members.MembershipService
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.relation.RelationService
 import im.vector.matrix.android.api.session.room.notification.RoomPushRuleService
-import im.vector.matrix.android.api.session.room.reporting.ReportingService
 import im.vector.matrix.android.api.session.room.read.ReadService
+import im.vector.matrix.android.api.session.room.reporting.ReportingService
 import im.vector.matrix.android.api.session.room.send.DraftService
 import im.vector.matrix.android.api.session.room.send.SendService
 import im.vector.matrix.android.api.session.room.state.StateService
@@ -90,5 +91,13 @@ internal class DefaultRoom @Inject constructor(override val roomId: String,
 
     override fun shouldEncryptForInvitedMembers(): Boolean {
         return cryptoService.shouldEncryptForInvitedMembers(roomId)
+    }
+
+    override fun enableEncryptionWithAlgorithm(algorithm: String, callback: MatrixCallback<Unit>) {
+        if (isEncrypted()) {
+            callback.onFailure(IllegalStateException("Encryption is already enabled for this room"))
+        } else {
+            stateService.enableEncryption(algorithm, callback)
+        }
     }
 }

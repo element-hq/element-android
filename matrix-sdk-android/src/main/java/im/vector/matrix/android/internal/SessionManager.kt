@@ -17,6 +17,7 @@
 package im.vector.matrix.android.internal
 
 import im.vector.matrix.android.api.auth.data.SessionParams
+import im.vector.matrix.android.api.auth.data.sessionId
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.internal.auth.SessionParamsStore
 import im.vector.matrix.android.internal.di.MatrixComponent
@@ -29,10 +30,11 @@ import javax.inject.Inject
 internal class SessionManager @Inject constructor(private val matrixComponent: MatrixComponent,
                                                   private val sessionParamsStore: SessionParamsStore) {
 
+    // SessionId -> SessionComponent
     private val sessionComponents = HashMap<String, SessionComponent>()
 
-    fun getSessionComponent(userId: String): SessionComponent? {
-        val sessionParams = sessionParamsStore.get(userId) ?: return null
+    fun getSessionComponent(sessionId: String): SessionComponent? {
+        val sessionParams = sessionParamsStore.get(sessionId) ?: return null
         return getOrCreateSessionComponent(sessionParams)
     }
 
@@ -40,17 +42,17 @@ internal class SessionManager @Inject constructor(private val matrixComponent: M
         return getOrCreateSessionComponent(sessionParams).session()
     }
 
-    fun releaseSession(userId: String) {
-        if (sessionComponents.containsKey(userId).not()) {
-            throw RuntimeException("You don't have a session for the user $userId")
+    fun releaseSession(sessionId: String) {
+        if (sessionComponents.containsKey(sessionId).not()) {
+            throw RuntimeException("You don't have a session for id $sessionId")
         }
-        sessionComponents.remove(userId)?.also {
+        sessionComponents.remove(sessionId)?.also {
             it.session().close()
         }
     }
 
     private fun getOrCreateSessionComponent(sessionParams: SessionParams): SessionComponent {
-        return sessionComponents.getOrPut(sessionParams.credentials.userId) {
+        return sessionComponents.getOrPut(sessionParams.credentials.sessionId()) {
             DaggerSessionComponent
                     .factory()
                     .create(matrixComponent, sessionParams)

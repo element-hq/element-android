@@ -34,7 +34,7 @@ object TimelineDisplayableEvents {
             EventType.CALL_HANGUP,
             EventType.CALL_ANSWER,
             EventType.ENCRYPTED,
-            EventType.ENCRYPTION,
+            EventType.STATE_ROOM_ENCRYPTION,
             EventType.STATE_ROOM_THIRD_PARTY_INVITE,
             EventType.STICKER,
             EventType.STATE_ROOM_CREATE,

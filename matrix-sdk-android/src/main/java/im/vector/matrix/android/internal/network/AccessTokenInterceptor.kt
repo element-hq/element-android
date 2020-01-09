@@ -17,13 +17,13 @@
 package im.vector.matrix.android.internal.network
 
 import im.vector.matrix.android.internal.auth.SessionParamsStore
-import im.vector.matrix.android.internal.di.UserId
+import im.vector.matrix.android.internal.di.SessionId
 import okhttp3.Interceptor
 import okhttp3.Response
 import javax.inject.Inject
 
 internal class AccessTokenInterceptor @Inject constructor(
-        @UserId private val userId: String,
+        @SessionId private val sessionId: String,
         private val sessionParamsStore: SessionParamsStore) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
@@ -40,5 +40,5 @@ internal class AccessTokenInterceptor @Inject constructor(
     }
 
     private val accessToken
-        get() = sessionParamsStore.get(userId)?.credentials?.accessToken
+        get() = sessionParamsStore.get(sessionId)?.credentials?.accessToken
 }

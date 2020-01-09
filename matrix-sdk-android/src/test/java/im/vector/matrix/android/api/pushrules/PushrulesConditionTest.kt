@@ -25,7 +25,8 @@ import im.vector.matrix.android.api.session.room.model.RoomMemberContent
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
 import io.mockk.every
 import io.mockk.mockk
-import org.junit.Assert
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class PushrulesConditionTest {
@@ -147,9 +148,9 @@ class PushrulesConditionTest {
                 content = MessageTextContent("m.text", "A").toContent(),
                 originServerTs = 0,
                 roomId = room2JoinedId).also {
-            Assert.assertFalse("This room does not have 3 members", conditionEqual3.isSatisfied(it, sessionStub))
-            Assert.assertFalse("This room does not have 3 members", conditionEqual3Bis.isSatisfied(it, sessionStub))
-            Assert.assertTrue("This room has less than 3 members", conditionLessThan3.isSatisfied(it, sessionStub))
+            assertFalse("This room does not have 3 members", conditionEqual3.isSatisfied(it, sessionStub))
+            assertFalse("This room does not have 3 members", conditionEqual3Bis.isSatisfied(it, sessionStub))
+            assertTrue("This room has less than 3 members", conditionLessThan3.isSatisfied(it, sessionStub))
         }
 
         Event(
@@ -158,9 +159,9 @@ class PushrulesConditionTest {
                 content = MessageTextContent("m.text", "A").toContent(),
                 originServerTs = 0,
                 roomId = room3JoinedId).also {
-            Assert.assertTrue("This room has 3 members", conditionEqual3.isSatisfied(it, sessionStub))
-            Assert.assertTrue("This room has 3 members", conditionEqual3Bis.isSatisfied(it, sessionStub))
-            Assert.assertFalse("This room has more than 3 members", conditionLessThan3.isSatisfied(it, sessionStub))
+            assertTrue("This room has 3 members", conditionEqual3.isSatisfied(it, sessionStub))
+            assertTrue("This room has 3 members", conditionEqual3Bis.isSatisfied(it, sessionStub))
+            assertFalse("This room has more than 3 members", conditionLessThan3.isSatisfied(it, sessionStub))
         }
     }
 
@@ -174,7 +175,7 @@ class PushrulesConditionTest {
                 content = MessageTextContent("m.notice", "A").toContent(),
                 originServerTs = 0,
                 roomId = "2joined").also {
-            Assert.assertTrue("Notice", conditionEqual.isSatisfied(it))
+            assertTrue("Notice", conditionEqual.isSatisfied(it))
         }
     }
 }

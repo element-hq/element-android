@@ -39,7 +39,7 @@ import java.util.concurrent.atomic.AtomicBoolean
  */
 abstract class SyncService : Service() {
 
-    private var userId: String? = null
+    private var sessionId: String? = null
     private var mIsSelfDestroyed: Boolean = false
 
     private var isInitialSync: Boolean = false
@@ -58,18 +58,17 @@ abstract class SyncService : Service() {
         Timber.i("onStartCommand $intent")
         intent?.let {
             val matrix = Matrix.getInstance(applicationContext)
-            val safeUserId = it.getStringExtra(EXTRA_USER_ID) ?: return@let
-            val sessionComponent = matrix.sessionManager.getSessionComponent(safeUserId)
+            val safeSessionId = it.getStringExtra(EXTRA_SESSION_ID) ?: return@let
+            val sessionComponent = matrix.sessionManager.getSessionComponent(safeSessionId)
                     ?: return@let
             session = sessionComponent.session()
-            userId = safeUserId
+            sessionId = safeSessionId
             syncTask = sessionComponent.syncTask()
             isInitialSync = !session.hasAlreadySynced()
             networkConnectivityChecker = sessionComponent.networkConnectivityChecker()
             taskExecutor = sessionComponent.taskExecutor()
             coroutineDispatchers = sessionComponent.coroutineDispatchers()
             backgroundDetectionObserver = matrix.backgroundDetectionObserver
-            onStart(isInitialSync)
             if (isRunning.get()) {
                 Timber.i("Received a start while was already syncing... ignore")
             } else {
@@ -79,6 +78,7 @@ abstract class SyncService : Service() {
                 }
             }
         }
+        onStart(isInitialSync)
         // No intent just start the service, an alarm will should call with intent
         return START_STICKY
     }
@@ -101,7 +101,7 @@ abstract class SyncService : Service() {
     private suspend fun doSync() {
         if (!networkConnectivityChecker.hasInternetAccess()) {
             Timber.v("No network reschedule to avoid wasting resources")
-            userId?.also {
+            sessionId?.also {
                 onRescheduleAsked(it, isInitialSync, delay = 10_000L)
             }
             stopMe()
@@ -131,14 +131,14 @@ abstract class SyncService : Service() {
 
     abstract fun onStart(isInitialSync: Boolean)
 
-    abstract fun onRescheduleAsked(userId: String, isInitialSync: Boolean, delay: Long)
+    abstract fun onRescheduleAsked(sessionId: String, isInitialSync: Boolean, delay: Long)
 
     override fun onBind(intent: Intent?): IBinder? {
         return null
     }
 
     companion object {
-        const val EXTRA_USER_ID = "EXTRA_USER_ID"
+        const val EXTRA_SESSION_ID = "EXTRA_SESSION_ID"
         private const val TIME_OUT = 0L
         private const val DELAY_FAILURE = 5_000L
     }

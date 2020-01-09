@@ -72,7 +72,7 @@ internal class DefaultLoginWizard(
         } else {
             PasswordLoginParams.userIdentifier(login, password, deviceName)
         }
-        val credentials = executeRequest<Credentials> {
+        val credentials = executeRequest<Credentials>(null) {
             apiCall = authAPI.login(loginParams)
         }
 
@@ -95,7 +95,7 @@ internal class DefaultLoginWizard(
         pendingSessionData = pendingSessionData.copy(sendAttempt = pendingSessionData.sendAttempt + 1)
                 .also { pendingSessionStore.savePendingSessionData(it) }
 
-        val result = executeRequest<AddThreePidRegistrationResponse> {
+        val result = executeRequest<AddThreePidRegistrationResponse>(null) {
             apiCall = authAPI.resetPassword(AddThreePidRegistrationParams.from(param))
         }
 
@@ -120,7 +120,7 @@ internal class DefaultLoginWizard(
                 resetPasswordData.newPassword
         )
 
-        executeRequest<Unit> {
+        executeRequest<Unit>(null) {
             apiCall = authAPI.resetPasswordMailConfirmed(param)
         }
 

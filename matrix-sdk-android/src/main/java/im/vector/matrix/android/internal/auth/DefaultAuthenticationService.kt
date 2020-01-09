@@ -45,14 +45,15 @@ import okhttp3.OkHttpClient
 import javax.inject.Inject
 import javax.net.ssl.HttpsURLConnection
 
-internal class DefaultAuthenticationService @Inject constructor(@Unauthenticated
-                                                                private val okHttpClient: Lazy<OkHttpClient>,
-                                                                private val retrofitFactory: RetrofitFactory,
-                                                                private val coroutineDispatchers: MatrixCoroutineDispatchers,
-                                                                private val sessionParamsStore: SessionParamsStore,
-                                                                private val sessionManager: SessionManager,
-                                                                private val sessionCreator: SessionCreator,
-                                                                private val pendingSessionStore: PendingSessionStore
+internal class DefaultAuthenticationService @Inject constructor(
+        @Unauthenticated
+        private val okHttpClient: Lazy<OkHttpClient>,
+        private val retrofitFactory: RetrofitFactory,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
+        private val sessionParamsStore: SessionParamsStore,
+        private val sessionManager: SessionManager,
+        private val sessionCreator: SessionCreator,
+        private val pendingSessionStore: PendingSessionStore
 ) : AuthenticationService {
 
     private var pendingSessionData: PendingSessionData? = pendingSessionStore.getPendingSessionData()
@@ -112,7 +113,7 @@ internal class DefaultAuthenticationService @Inject constructor(@Unauthenticated
 
             // First check the homeserver version
             runCatching {
-                executeRequest<Versions> {
+                executeRequest<Versions>(null) {
                     apiCall = authAPI.versions()
                 }
             }
@@ -141,7 +142,7 @@ internal class DefaultAuthenticationService @Inject constructor(@Unauthenticated
         val authAPI = buildAuthAPI(homeServerConnectionConfig)
 
         // Ok, try to get the config.json file of a RiotWeb client
-        val riotConfig = executeRequest<RiotConfig> {
+        val riotConfig = executeRequest<RiotConfig>(null) {
             apiCall = authAPI.getRiotConfig()
         }
 
@@ -153,7 +154,7 @@ internal class DefaultAuthenticationService @Inject constructor(@Unauthenticated
 
             val newAuthAPI = buildAuthAPI(newHomeServerConnectionConfig)
 
-            val versions = executeRequest<Versions> {
+            val versions = executeRequest<Versions>(null) {
                 apiCall = newAuthAPI.versions()
             }
 
@@ -167,7 +168,7 @@ internal class DefaultAuthenticationService @Inject constructor(@Unauthenticated
     private suspend fun getLoginFlowResult(authAPI: AuthAPI, versions: Versions, homeServerUrl: String): LoginFlowResult {
         return if (versions.isSupportedBySdk()) {
             // Get the login flow
-            val loginFlowResponse = executeRequest<LoginFlowResponse> {
+            val loginFlowResponse = executeRequest<LoginFlowResponse>(null) {
                 apiCall = authAPI.getLoginFlows()
             }
             LoginFlowResult.Success(loginFlowResponse, versions.isLoginAndRegistrationSupportedBySdk(), homeServerUrl)

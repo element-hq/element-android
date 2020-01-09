@@ -18,6 +18,7 @@ package im.vector.matrix.android.api.auth.data
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import im.vector.matrix.android.internal.util.md5
 
 /**
  * This data class hold credentials user data.
@@ -34,3 +35,7 @@ data class Credentials(
         // Optional data that may contain info to override home server and/or identity server
         @Json(name = "well_known") val wellKnown: WellKnown? = null
 )
+
+internal fun Credentials.sessionId(): String {
+    return (if (deviceId.isNullOrBlank()) userId else "$userId|$deviceId").md5()
+}

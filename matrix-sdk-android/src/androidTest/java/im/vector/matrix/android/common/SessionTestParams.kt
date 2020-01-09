@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 New Vector Ltd
+ * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,6 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.auth
+package im.vector.matrix.android.common
 
-import im.vector.matrix.android.internal.util.md5
-
-internal fun createSessionId(userId: String, deviceId: String?): String {
-    return (if (deviceId.isNullOrBlank()) userId else "$userId|$deviceId").md5()
-}
+data class SessionTestParams @JvmOverloads constructor(val withInitialSync: Boolean = false)

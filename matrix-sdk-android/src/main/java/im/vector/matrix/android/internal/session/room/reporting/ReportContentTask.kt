@@ -19,6 +19,7 @@ package im.vector.matrix.android.internal.session.room.reporting
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.task.Task
+import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface ReportContentTask : Task<ReportContentTask.Params, Unit> {
@@ -30,9 +31,13 @@ internal interface ReportContentTask : Task<ReportContentTask.Params, Unit> {
     )
 }
 
-internal class DefaultReportContentTask @Inject constructor(private val roomAPI: RoomAPI) : ReportContentTask {
+internal class DefaultReportContentTask @Inject constructor(
+        private val roomAPI: RoomAPI,
+        private val eventBus: EventBus
+) : ReportContentTask {
+
     override suspend fun execute(params: ReportContentTask.Params) {
-        return executeRequest {
+        return executeRequest(eventBus) {
             apiCall = roomAPI.reportContent(params.roomId, params.eventId, ReportContentBody(params.score, params.reason))
         }
     }

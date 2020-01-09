@@ -20,6 +20,7 @@ import im.vector.matrix.android.api.session.sync.FilterService
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
+import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 /**
@@ -32,9 +33,11 @@ internal interface SaveFilterTask : Task<SaveFilterTask.Params, Unit> {
     )
 }
 
-internal class DefaultSaveFilterTask @Inject constructor(@UserId private val userId: String,
-                                                         private val filterAPI: FilterApi,
-                                                         private val filterRepository: FilterRepository
+internal class DefaultSaveFilterTask @Inject constructor(
+        @UserId private val userId: String,
+        private val filterAPI: FilterApi,
+        private val filterRepository: FilterRepository,
+        private val eventBus: EventBus
 ) : SaveFilterTask {
 
     override suspend fun execute(params: SaveFilterTask.Params) {
@@ -56,7 +59,7 @@ internal class DefaultSaveFilterTask @Inject constructor(@UserId private val use
         }
         val updated = filterRepository.storeFilter(filterBody, roomFilter)
         if (updated) {
-            val filterResponse = executeRequest<FilterResponse> {
+            val filterResponse = executeRequest<FilterResponse>(eventBus) {
                 // TODO auto retry
                 apiCall = filterAPI.uploadFilter(userId, filterBody)
             }

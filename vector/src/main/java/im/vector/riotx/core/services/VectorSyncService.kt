@@ -30,9 +30,9 @@ class VectorSyncService : SyncService() {
 
     companion object {
 
-        fun newIntent(context: Context, userId: String): Intent {
+        fun newIntent(context: Context, sessionId: String): Intent {
             return Intent(context, VectorSyncService::class.java).also {
-                it.putExtra(EXTRA_USER_ID, userId)
+                it.putExtra(EXTRA_SESSION_ID, sessionId)
             }
         }
     }
@@ -54,25 +54,25 @@ class VectorSyncService : SyncService() {
         startForeground(NotificationUtils.NOTIFICATION_ID_FOREGROUND_SERVICE, notification)
     }
 
-    override fun onRescheduleAsked(userId: String, isInitialSync: Boolean, delay: Long) {
-        reschedule(userId, delay)
+    override fun onRescheduleAsked(sessionId: String, isInitialSync: Boolean, delay: Long) {
+        reschedule(sessionId, delay)
     }
 
     override fun onDestroy() {
-        removeForegroundNotif()
+        removeForegroundNotification()
         super.onDestroy()
     }
 
-    private fun removeForegroundNotif() {
+    private fun removeForegroundNotification() {
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.cancel(NotificationUtils.NOTIFICATION_ID_FOREGROUND_SERVICE)
     }
 
-    private fun reschedule(userId: String, delay: Long) {
+    private fun reschedule(sessionId: String, delay: Long) {
         val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            PendingIntent.getForegroundService(this, 0, newIntent(this, userId), 0)
+            PendingIntent.getForegroundService(this, 0, newIntent(this, sessionId), 0)
         } else {
-            PendingIntent.getService(this, 0, newIntent(this, userId), 0)
+            PendingIntent.getService(this, 0, newIntent(this, sessionId), 0)
         }
         val firstMillis = System.currentTimeMillis() + delay
         val alarmMgr = getSystemService(Context.ALARM_SERVICE) as AlarmManager

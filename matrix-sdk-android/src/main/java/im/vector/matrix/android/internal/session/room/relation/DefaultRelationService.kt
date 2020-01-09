@@ -38,7 +38,7 @@ import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.di.UserId
+import im.vector.matrix.android.internal.di.SessionId
 import im.vector.matrix.android.internal.session.room.send.EncryptEventWorker
 import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
 import im.vector.matrix.android.internal.session.room.send.RedactEventWorker
@@ -51,16 +51,17 @@ import im.vector.matrix.android.internal.util.fetchCopyMap
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import timber.log.Timber
 
-internal class DefaultRelationService @AssistedInject constructor(@Assisted private val roomId: String,
-                                                                  private val context: Context,
-                                                                  @UserId private val userId: String,
-                                                                  private val eventFactory: LocalEchoEventFactory,
-                                                                  private val cryptoService: CryptoService,
-                                                                  private val findReactionEventForUndoTask: FindReactionEventForUndoTask,
-                                                                  private val fetchEditHistoryTask: FetchEditHistoryTask,
-                                                                  private val timelineEventMapper: TimelineEventMapper,
-                                                                  private val monarchy: Monarchy,
-                                                                  private val taskExecutor: TaskExecutor)
+internal class DefaultRelationService @AssistedInject constructor(
+        @Assisted private val roomId: String,
+        private val context: Context,
+        @SessionId private val sessionId: String,
+        private val eventFactory: LocalEchoEventFactory,
+        private val cryptoService: CryptoService,
+        private val findReactionEventForUndoTask: FindReactionEventForUndoTask,
+        private val fetchEditHistoryTask: FetchEditHistoryTask,
+        private val timelineEventMapper: TimelineEventMapper,
+        private val monarchy: Monarchy,
+        private val taskExecutor: TaskExecutor)
     : RelationService {
 
     @AssistedInject.Factory
@@ -125,7 +126,7 @@ internal class DefaultRelationService @AssistedInject constructor(@Assisted priv
     // TODO duplicate with send service?
     private fun createRedactEventWork(localEvent: Event, eventId: String, reason: String?): OneTimeWorkRequest {
         val sendContentWorkerParams = RedactEventWorker.Params(
-                userId,
+                sessionId,
                 localEvent.eventId!!,
                 roomId,
                 eventId,
@@ -204,13 +205,13 @@ internal class DefaultRelationService @AssistedInject constructor(@Assisted priv
 
     private fun createEncryptEventWork(event: Event, keepKeys: List<String>?): OneTimeWorkRequest {
         // Same parameter
-        val params = EncryptEventWorker.Params(userId, roomId, event, keepKeys)
+        val params = EncryptEventWorker.Params(sessionId, roomId, event, keepKeys)
         val sendWorkData = WorkerParamsFactory.toData(params)
         return TimelineSendEventWorkCommon.createWork<EncryptEventWorker>(sendWorkData, true)
     }
 
     private fun createSendEventWork(event: Event, startChain: Boolean): OneTimeWorkRequest {
-        val sendContentWorkerParams = SendEventWorker.Params(userId, roomId, event)
+        val sendContentWorkerParams = SendEventWorker.Params(sessionId, roomId, event)
         val sendWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
         return TimelineSendEventWorkCommon.createWork<SendEventWorker>(sendWorkData, startChain)
     }

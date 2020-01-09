@@ -21,6 +21,7 @@ import im.vector.matrix.android.api.session.events.model.RelationType
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.task.Task
+import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface FetchEditHistoryTask : Task<FetchEditHistoryTask.Params, List<Event>> {
@@ -33,11 +34,12 @@ internal interface FetchEditHistoryTask : Task<FetchEditHistoryTask.Params, List
 }
 
 internal class DefaultFetchEditHistoryTask @Inject constructor(
-        private val roomAPI: RoomAPI
+        private val roomAPI: RoomAPI,
+        private val eventBus: EventBus
 ) : FetchEditHistoryTask {
 
     override suspend fun execute(params: FetchEditHistoryTask.Params): List<Event> {
-        val response = executeRequest<RelationsResponse> {
+        val response = executeRequest<RelationsResponse>(eventBus) {
             apiCall = roomAPI.getRelations(params.roomId,
                     params.eventId,
                     RelationType.REPLACE,

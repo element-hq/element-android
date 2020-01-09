@@ -125,7 +125,7 @@ class CreateRoomParams {
             val contentMap = HashMap<String, String>()
             contentMap["algorithm"] = algorithm
 
-            val algoEvent = Event(type = EventType.ENCRYPTION,
+            val algoEvent = Event(type = EventType.STATE_ROOM_ENCRYPTION,
                                   stateKey = "",
                                   content = contentMap.toContent()
             )

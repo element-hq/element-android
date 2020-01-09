@@ -25,6 +25,7 @@ import im.vector.matrix.android.internal.session.homeserver.GetHomeServerCapabil
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import im.vector.matrix.android.internal.session.user.UserStore
 import im.vector.matrix.android.internal.task.Task
+import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -33,15 +34,17 @@ internal interface SyncTask : Task<SyncTask.Params, Unit> {
     data class Params(var timeout: Long = 30_000L)
 }
 
-internal class DefaultSyncTask @Inject constructor(private val syncAPI: SyncAPI,
-                                                   @UserId private val userId: String,
-                                                   private val filterRepository: FilterRepository,
-                                                   private val syncResponseHandler: SyncResponseHandler,
-                                                   private val initialSyncProgressService: DefaultInitialSyncProgressService,
-                                                   private val syncTokenStore: SyncTokenStore,
-                                                   private val getHomeServerCapabilitiesTask: GetHomeServerCapabilitiesTask,
-                                                   private val userStore: UserStore,
-                                                   private val syncTaskSequencer: SyncTaskSequencer
+internal class DefaultSyncTask @Inject constructor(
+        private val syncAPI: SyncAPI,
+        @UserId private val userId: String,
+        private val filterRepository: FilterRepository,
+        private val syncResponseHandler: SyncResponseHandler,
+        private val initialSyncProgressService: DefaultInitialSyncProgressService,
+        private val syncTokenStore: SyncTokenStore,
+        private val getHomeServerCapabilitiesTask: GetHomeServerCapabilitiesTask,
+        private val userStore: UserStore,
+        private val syncTaskSequencer: SyncTaskSequencer,
+        private val eventBus: EventBus
 ) : SyncTask {
 
     override suspend fun execute(params: SyncTask.Params) = syncTaskSequencer.post {
@@ -70,7 +73,7 @@ internal class DefaultSyncTask @Inject constructor(private val syncAPI: SyncAPI,
             initialSyncProgressService.endAll()
             initialSyncProgressService.startTask(R.string.initial_sync_start_importing_account, 100)
         }
-        val syncResponse = executeRequest<SyncResponse> {
+        val syncResponse = executeRequest<SyncResponse>(eventBus) {
             apiCall = syncAPI.sync(requestParams)
         }
         syncResponseHandler.handleResponse(syncResponse, token)

@@ -29,7 +29,7 @@ internal class GetGroupDataWorker(context: Context, params: WorkerParameters) : 
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
-            override val userId: String,
+            override val sessionId: String,
             val groupIds: List<String>,
             override val lastFailureMessage: String? = null
     ) : SessionWorkerParams
@@ -40,7 +40,7 @@ internal class GetGroupDataWorker(context: Context, params: WorkerParameters) : 
         val params = WorkerParamsFactory.fromData<Params>(inputData)
                 ?: return Result.failure()
 
-        val sessionComponent = getSessionComponent(params.userId) ?: return Result.success()
+        val sessionComponent = getSessionComponent(params.sessionId) ?: return Result.success()
         sessionComponent.inject(this)
         val results = params.groupIds.map { groupId ->
             runCatching { fetchGroupData(groupId) }

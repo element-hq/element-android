@@ -50,10 +50,10 @@ internal class DefaultSignOutService @Inject constructor(private val signOutTask
         }
     }
 
-    override fun signOut(sigOutFromHomeserver: Boolean,
+    override fun signOut(signOutFromHomeserver: Boolean,
                          callback: MatrixCallback<Unit>): Cancelable {
         return signOutTask
-                .configureWith(SignOutTask.Params(sigOutFromHomeserver)) {
+                .configureWith(SignOutTask.Params(signOutFromHomeserver)) {
                     this.callback = callback
                 }
                 .executeBy(taskExecutor)

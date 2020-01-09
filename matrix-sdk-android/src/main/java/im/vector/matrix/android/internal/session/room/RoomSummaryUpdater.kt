@@ -29,10 +29,6 @@ import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.query.*
-import im.vector.matrix.android.internal.database.query.isEventRead
-import im.vector.matrix.android.internal.database.query.latestEvent
-import im.vector.matrix.android.internal.database.query.prev
-import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.room.membership.RoomDisplayNameResolver
 import im.vector.matrix.android.internal.session.room.membership.RoomMembers
@@ -41,10 +37,11 @@ import im.vector.matrix.android.internal.session.sync.model.RoomSyncUnreadNotifi
 import io.realm.Realm
 import javax.inject.Inject
 
-internal class RoomSummaryUpdater @Inject constructor(@UserId private val userId: String,
-                                                      private val roomDisplayNameResolver: RoomDisplayNameResolver,
-                                                      private val roomAvatarResolver: RoomAvatarResolver,
-                                                      private val monarchy: Monarchy) {
+internal class RoomSummaryUpdater @Inject constructor(
+        @UserId private val userId: String,
+        private val roomDisplayNameResolver: RoomDisplayNameResolver,
+        private val roomAvatarResolver: RoomAvatarResolver,
+        private val monarchy: Monarchy) {
 
     // TODO: maybe allow user of SDK to give that list
     private val PREVIEWABLE_TYPES = listOf(
@@ -57,7 +54,7 @@ internal class RoomSummaryUpdater @Inject constructor(@UserId private val userId
             EventType.CALL_HANGUP,
             EventType.CALL_ANSWER,
             EventType.ENCRYPTED,
-            EventType.ENCRYPTION,
+            EventType.STATE_ROOM_ENCRYPTION,
             EventType.STATE_ROOM_THIRD_PARTY_INVITE,
             EventType.STICKER,
             EventType.STATE_ROOM_CREATE
@@ -93,7 +90,7 @@ internal class RoomSummaryUpdater @Inject constructor(@UserId private val userId
         val lastTopicEvent = EventEntity.where(realm, roomId, EventType.STATE_ROOM_TOPIC).prev()
         val lastCanonicalAliasEvent = EventEntity.where(realm, roomId, EventType.STATE_ROOM_CANONICAL_ALIAS).prev()
         val lastAliasesEvent = EventEntity.where(realm, roomId, EventType.STATE_ROOM_ALIASES).prev()
-        val encryptionEvent = EventEntity.where(realm, roomId, EventType.ENCRYPTION).prev()
+        val encryptionEvent = EventEntity.where(realm, roomId, EventType.STATE_ROOM_ENCRYPTION).prev()
 
         roomSummaryEntity.hasUnreadMessages = roomSummaryEntity.notificationCount > 0
                                               // avoid this call if we are sure there are unread events
