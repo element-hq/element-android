@@ -69,7 +69,6 @@ abstract class SyncService : Service() {
             taskExecutor = sessionComponent.taskExecutor()
             coroutineDispatchers = sessionComponent.coroutineDispatchers()
             backgroundDetectionObserver = matrix.backgroundDetectionObserver
-            onStart(isInitialSync)
             if (isRunning.get()) {
                 Timber.i("Received a start while was already syncing... ignore")
             } else {
@@ -79,6 +78,7 @@ abstract class SyncService : Service() {
                 }
             }
         }
+        onStart(isInitialSync)
         // No intent just start the service, an alarm will should call with intent
         return START_STICKY
     }
