@@ -173,4 +173,18 @@
     <string name="clear_timeline_send_queue">Cancella la coda di invio</string>
 
     <string name="notice_room_third_party_revoked_invite">%1$s ha revocato l\'invito a %2$s di unirsi alla stanza</string>
+    <string name="notice_room_invite_no_invitee_with_reason">Invito di %1$s. Motivo: %2$s</string>
+    <string name="notice_room_invite_with_reason">%1$s ha invitato %2$s. Motivo: %3$s</string>
+    <string name="notice_room_invite_you_with_reason">%1$s ti ha invitato. Motivo: %2$s</string>
+    <string name="notice_room_join_with_reason">%1$s è entrato. Motivo: %2$s</string>
+    <string name="notice_room_leave_with_reason">%1$s è uscito. Motivo: %2$s</string>
+    <string name="notice_room_reject_with_reason">%1$s ha rifiutato l\'invito. Motivo: %2$s</string>
+    <string name="notice_room_kick_with_reason">%1$s ha buttato fuori %2$s. Motivo: %3$s</string>
+    <string name="notice_room_unban_with_reason">%1$s ha riammesso %2$s. Motivo: %3$s</string>
+    <string name="notice_room_ban_with_reason">%1$s ha bandito %2$s. Motivo: %3$s</string>
+    <string name="notice_room_third_party_invite_with_reason">%1$s ha inviato un invito a %2$s di unirsi alla stanza. Motivo: %3$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason">%1$s ha revocato l\'invito a %2$s di unirsi alla stanza. Motivo: %3$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason">%1$s ha accettato l\'invito per %2$s. Motivo: %3$s</string>
+    <string name="notice_room_withdraw_with_reason">%1$s ha rifiutato l\'invito di %2$s. Motivo: %3$s</string>
+
 </resources>

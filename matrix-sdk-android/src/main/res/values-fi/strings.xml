@@ -174,4 +174,18 @@
     <string name="clear_timeline_send_queue">Tyhjennä lähetysjono</string>
 
     <string name="notice_room_third_party_revoked_invite">%1$s veti takaisin käyttäjän %2$s liittymiskutsun huoneeseen</string>
+    <string name="notice_room_invite_no_invitee_with_reason">Henkilön %1$s kutsu. Syy: %2$s</string>
+    <string name="notice_room_invite_with_reason">%1$s kutsui henkilön %2$s. Syy: %3$s</string>
+    <string name="notice_room_invite_you_with_reason">%1$s kutsui sinut. Syy: %2$s</string>
+    <string name="notice_room_join_with_reason">%1$s liittyi. Syy: %2$s</string>
+    <string name="notice_room_leave_with_reason">%1$s poistui. Syy: %2$s</string>
+    <string name="notice_room_reject_with_reason">%1$s hylkäsi kutsun. Syy: %2$s</string>
+    <string name="notice_room_kick_with_reason">%1$s potkaisi käyttäjän %2$s pois. Syy: %3$s</string>
+    <string name="notice_room_unban_with_reason">%1$s poisti eston käyttäjältä %2$s. Syy: %3$s</string>
+    <string name="notice_room_ban_with_reason">%1$s esti käyttäjän %2$s. Syy: %3$s</string>
+    <string name="notice_room_third_party_invite_with_reason">%1$s lähetti kutsun käyttäjälle %2$s huoneeseen liittymiseksi. Syy: %3$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason">%1$s kumosi kutsun käyttäjälle %2$s huoneeseen liittymiseksi. Syy: %3$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason">%1$s hyväksyi kutsun liityäkseen huoneeseen %2$s. Syy: %3$s</string>
+    <string name="notice_room_withdraw_with_reason">%1$s poisti käyttäjän %2$s kutsun. Syy: %3$s</string>
+
 </resources>

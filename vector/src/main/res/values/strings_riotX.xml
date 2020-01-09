@@ -3,26 +3,6 @@
 
     <!-- Strings not defined in Riot -->
 
-    <string name="notification_initial_sync">Initial Sync…</string>
-
-
-    <string name="settings_show_devices_list">See all my devices</string>
-    <string name="settings_advanced_settings">Advanced settings</string>
-    <string name="settings_developer_mode">Developer mode</string>
-    <string name="settings_developer_mode_summary">The developer mode activates hidden features and may also make the application less stable. For developers only!</string>
-    <string name="settings_rageshake">Rageshake</string>
-    <string name="settings_rageshake_detection_threshold">Detection threshold</string>
-    <string name="settings_rageshake_detection_threshold_summary">Shake your phone to test the detection threshold</string>
-    <string name="rageshake_detected">Shake detected!</string>
-    <string name="settings">Settings</string>
-    <string name="devices_current_device">Current device</string>
-    <string name="devices_other_devices">Other devices</string>
-
-    <string name="autocomplete_limited_results">Showing only the first results, type more letters…</string>
-
-    <string name="settings_developer_mode_fail_fast_title">Fail-fast</string>
-    <string name="settings_developer_mode_fail_fast_summary">RiotX may crash more often when an unexpected error occurs</string>
-
     <string name="login_error_threepid_denied">Your email domain is not authorized to register on this server</string>
 
 </resources>

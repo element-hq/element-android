@@ -173,4 +173,18 @@
     <string name="clear_timeline_send_queue">Garbitu bidalketa-ilara</string>
 
     <string name="notice_room_third_party_revoked_invite">%1$s erabiltzaileak %2$s gelara elkartzeko gonbidapena indargabetu du</string>
+    <string name="notice_room_invite_no_invitee_with_reason">%1$s erabiltzailearen gonbidapena. Arrazoia: %2$s</string>
+    <string name="notice_room_invite_with_reason">%1$s erabiltzaileak %2$s gonbidatu du. Arrazoia: %3$s</string>
+    <string name="notice_room_invite_you_with_reason">%1$s erabiltzaileak gonbidatu zaitu. Arrazoia: %2$s</string>
+    <string name="notice_room_join_with_reason">%1$s elkartu da. Arrazoia: %2$s</string>
+    <string name="notice_room_leave_with_reason">%1$s atera da. Arrazoia: %2$s</string>
+    <string name="notice_room_reject_with_reason">%1$s erabiltzaileak gonbidapena baztertu du. Arrazoia: %2$s</string>
+    <string name="notice_room_kick_with_reason">%1$s erabiltzaileak %2$s kanporatu du. Arrazoia: %3$s</string>
+    <string name="notice_room_unban_with_reason">%1$s erabiltzaileak debekua kendu dio %2$s erabiltzaileari. Arrazoia: %3$s</string>
+    <string name="notice_room_ban_with_reason">%1$s erabiltzaileak %2$s debekatu du. Arrazoia: %3$s</string>
+    <string name="notice_room_third_party_invite_with_reason">"%1$s erabiltzaileak gelara elkartzeko gonbidapen bat bidali dio %2$s erabiltzaileari. Arrazoia: %3$s"</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason">"%1$s erabiltzaileak %2$s gelara elkartzeko gonbidapena indargabetu du. Arrazoia: %3$s"</string>
+    <string name="notice_room_third_party_registered_invite_with_reason">"%1$s erabiltzaileak %2$s gelarako gonbidapena onartu du. Arrazoia: %3$s"</string>
+    <string name="notice_room_withdraw_with_reason">"%1$s erabiltzaileak %2$s erabiltzailearen gonbidapena indargabetu du. Arrazoia: %3$s"</string>
+
 </resources>

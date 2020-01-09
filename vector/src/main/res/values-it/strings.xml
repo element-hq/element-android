@@ -1615,7 +1615,7 @@
 \n 
 \nRiotX supporta: • Accesso ad account esistente • Crea stanze ed entra in stanze pubbliche • Accetta e rifiuta inviti • Elenca stanze utenti • Vedi dettagli stanza • Invia messaggi di testo • Invia allegati • Leggi e scrivi messaggi in stanze cifrate • Crypto: backup chiavi E2E, verifica avanzata dispositivi, richiesta e risposta condivisione chiavi • Notifiche push • Tema chiaro, scuro e nero 
 \n 
-\nNon tutte le funzioni di Riot sono già implementate in RiotX. Principali funzioni mancanti (prossimamente!): • Creazione account • Impostazioni stanza (elenca membri stanza, ecc.) • Chiamate • Widget • …</string>
+\nNon tutte le funzioni di Riot sono già implementate in RiotX. Principali funzioni mancanti (prossimamente!): • Impostazioni stanza (elenca membri stanza, ecc.) • Chiamate • Widget • …</string>
 
     <string name="room_list_catchup_empty_title">Non hai nulla di nuovo da vedere!</string>
     <string name="bottom_action_people_x">Messaggi diretti</string>
@@ -1791,7 +1791,7 @@
 
     <string name="report_content_spam">È spam</string>
     <string name="report_content_inappropriate">È inappropriato</string>
-    <string name="report_content_custom">Segnalazione personalizzata</string>
+    <string name="report_content_custom">Segnalazione personalizzata…</string>
     <string name="report_content_custom_title">Segnala questo contenuto</string>
     <string name="report_content_custom_hint">Motivo della segnalazione</string>
     <string name="report_content_custom_submit">SEGNALA</string>
@@ -1850,5 +1850,180 @@
     <string name="room_widget_webview_access_camera">Usare la fotocamera</string>
     <string name="room_widget_webview_access_microphone">Usa il microfono</string>
     <string name="room_widget_webview_read_protected_media">Leggi media protetti da DRM</string>
+
+    <string name="login_error_no_homeserver_found">Questo non è un indirizzo di server Matrix valido</string>
+    <string name="message_ignore_user">Blocca utente</string>
+
+    <string name="room_list_quick_actions_notifications_all_noisy">Tutti i messaggi (rumoroso)</string>
+    <string name="room_list_quick_actions_notifications_all">Tutti i messaggi</string>
+    <string name="room_list_quick_actions_notifications_mentions">Solo citazioni</string>
+    <string name="room_list_quick_actions_notifications_mute">Silenzioso</string>
+    <string name="room_list_quick_actions_settings">Impostazioni</string>
+    <string name="room_list_quick_actions_leave">Lascia la stanza</string>
+    <string name="notice_member_no_changes">%1$s non ha fatto modifiche</string>
+    <string name="command_description_spoiler">Invia il messaggio come spoiler</string>
+    <string name="spoiler">Spoiler</string>
+    <string name="reaction_search_type_hint">Digita parole chiave per trovare una reazione.</string>
+
+    <string name="no_ignored_users">Non stai ignorando alcun utente</string>
+
+    <string name="help_long_click_on_room_for_more_options">Tieni premuto su una stanza per altre opzioni</string>
+
+
+    <string name="room_join_rules_public">%1$s ha reso pubblica la stanza a chiunque conosca il collegamento.</string>
+    <string name="room_join_rules_invite">%1$s ha reso la stanza solo ad invito.</string>
+    <string name="timeline_unread_messages">Messaggi non letti</string>
+
+    <string name="login_splash_title">Libera le tue comunicazioni</string>
+    <string name="login_splash_text1">Chatta con persone direttamente o in gruppi</string>
+    <string name="login_splash_text2">Tieni private le conversazioni con la cifratura</string>
+    <string name="login_splash_text3">Estendi e personalizza la tua esperienza</string>
+    <string name="login_splash_submit">Inizia</string>
+
+    <string name="login_server_title">Seleziona un server</string>
+    <string name="login_server_text">Proprio come le email, gli account hanno una sola origine, ma puoi parlare con chiunque</string>
+    <string name="login_server_matrix_org_text">Unisciti a milioni gratuitamente sul server pubblico più grande</string>
+    <string name="login_server_modular_text">Hosting premium per organizzazioni</string>
+    <string name="login_server_modular_learn_more">Maggiori info</string>
+    <string name="login_server_other_title">Altro</string>
+    <string name="login_server_other_text">Impostazioni personalizzate ed avanzate</string>
+
+    <string name="login_continue">Continua</string>
+    <string name="login_connect_to">Connetti a %1$s</string>
+    <string name="login_connect_to_modular">Connetti a Modular</string>
+    <string name="login_connect_to_a_custom_server">Connetti ad un server personalizzato</string>
+    <string name="login_signin_to">Accedi a %1$s</string>
+    <string name="login_signup">Registrati</string>
+    <string name="login_signin">Accedi</string>
+    <string name="login_signin_sso">Continua con SSO</string>
+
+    <string name="login_server_url_form_modular_hint">Indirizzo Modular</string>
+    <string name="login_server_url_form_other_hint">Indirizzo</string>
+    <string name="login_server_url_form_modular_text">Hosting premium per organizzazioni</string>
+    <string name="login_server_url_form_modular_notice">Inserisci l\'indirizzo del Riot Modular o del server che vuoi usare</string>
+    <string name="login_server_url_form_other_notice">Inserisci l\'indirizzo di un server o di un Riot a cui vuoi connetterti</string>
+
+    <string name="login_sso_error_message">Si è verificato un errore caricando la pagina: %1$s (%2$d)</string>
+    <string name="login_mode_not_supported">L\'applicazione non riesce ad accedere a questo homeserver. L\'homeserver supporta i seguenti tipi di accesso: %1$s.
+\n
+\nVuoi accedere usando un client web\?</string>
+    <string name="login_registration_disabled">Spiacenti, questo server non accetta nuovi account.</string>
+    <string name="login_registration_not_supported">L\'applicazione non riesce a creare un account su questo homeserver.
+\n
+\nVuoi registrarti usando un client web\?</string>
+
+    <string name="login_login_with_email_error">Questa email non è associata ad alcun account.</string>
+
+    <string name="login_reset_password_on">Reimposta password su %1$s</string>
+    <string name="login_reset_password_notice">Verrà inviata un\'email di verifica nella tua posta per confermare l\'impostazione della nuova password.</string>
+    <string name="login_reset_password_submit">Avanti</string>
+    <string name="login_reset_password_email_hint">Email</string>
+    <string name="login_reset_password_password_hint">Nuova password</string>
+
+    <string name="login_reset_password_warning_title">Attenzione!</string>
+    <string name="login_reset_password_warning_content">Cambiare la password reimposterà qualunque chiave di cifratura end-to-end su tutti i tuoi dispositivi, rendendo illeggibile la cronologia delle chat criptate. Imposta il Backup Chiavi o esporta le tue chiavi della stanza da un altro dispositivo prima di reimpostare la password.</string>
+    <string name="login_reset_password_warning_submit">Continua</string>
+
+    <string name="login_reset_password_error_not_found">Questa email non è collegata ad alcun account</string>
+
+    <string name="login_reset_password_mail_confirmation_title">Controlla la tua posta</string>
+    <string name="login_reset_password_mail_confirmation_notice">Un\'email di verifica è stata inviata a %1$s.</string>
+    <string name="login_reset_password_mail_confirmation_notice_2">Tocca il collegamento per confermare la tua nuova password. Una volta seguito il collegamento contenuto, clicca sotto.</string>
+    <string name="login_reset_password_mail_confirmation_submit">Ho verificato il mio indirizzo email</string>
+
+    <string name="login_reset_password_success_title">Successo!</string>
+    <string name="login_reset_password_success_notice">La tua password è stata reimpostata.</string>
+    <string name="login_reset_password_success_notice_2">Sei stato disconnesso da tutti i dispositivi e non riceverai più notifiche push. Per riattivare le notifiche, riaccedi su ogni dispositivo.</string>
+    <string name="login_reset_password_success_submit">Torna all\'accesso</string>
+
+    <string name="login_reset_password_cancel_confirmation_title">Attenzione</string>
+    <string name="login_reset_password_cancel_confirmation_content">La tua password non è ancora cambiata.
+\n
+\nFermare il processo di cambio password\?</string>
+
+    <string name="login_set_email_title">Imposta indirizzo email</string>
+    <string name="login_set_email_notice">Imposta un\'email per recuperare il tuo account. Più tardi potrai permettere facoltativamente alle persone che conosci di trovarti tramite la tua email.</string>
+    <string name="login_set_email_mandatory_hint">Email</string>
+    <string name="login_set_email_optional_hint">Email (facoltativa)</string>
+    <string name="login_set_email_submit">Avanti</string>
+
+    <string name="login_set_msisdn_title">Imposta numero di telefono</string>
+    <string name="login_set_msisdn_notice">Imposta un numero di telefono per permettere facoltativamente alle persone che conosci di trovarti.</string>
+    <string name="login_set_msisdn_notice2">Si prega di usare il formato internazionale.</string>
+    <string name="login_set_msisdn_mandatory_hint">Numero di telefono</string>
+    <string name="login_set_msisdn_optional_hint">Numero di telefono (facoltativo)</string>
+    <string name="login_set_msisdn_submit">Avanti</string>
+
+    <string name="login_msisdn_confirm_title">Conferma numero di telefono</string>
+    <string name="login_msisdn_confirm_notice">Abbiamo inviato un codice a %1$s. Inseriscilo sotto per verificare che sei tu.</string>
+    <string name="login_msisdn_confirm_hint">Inserisci codice</string>
+    <string name="login_msisdn_confirm_send_again">Invia di nuovo</string>
+    <string name="login_msisdn_confirm_submit">Avanti</string>
+
+    <string name="login_msisdn_error_not_international">I numeri di telefono internazionali devono iniziare con \'+\'</string>
+    <string name="login_msisdn_error_other">Il numero di telefono non sembra valido. Ricontrollalo</string>
+
+    <string name="login_signup_to">Registrati su %1$s</string>
+    <string name="login_signup_username_hint">Nome utente o email</string>
+    <string name="login_signup_password_hint">Password</string>
+    <string name="login_signup_submit">Avanti</string>
+    <string name="login_signup_error_user_in_use">Quel nome utente esiste già</string>
+    <string name="login_signup_cancel_confirmation_title">Attenzione</string>
+    <string name="login_signup_cancel_confirmation_content">Il tuo account non è ancora stato creato.
+\n
+\nFermare il processo di registrazione\?</string>
+
+    <string name="login_a11y_choose_matrix_org">Seleziona matrix.org</string>
+    <string name="login_a11y_choose_modular">Seleziona Modular</string>
+    <string name="login_a11y_choose_other">Seleziona un server personalizzato</string>
+    <string name="login_a11y_captcha_container">Completa la verifica Captcha</string>
+    <string name="login_terms_title">Accetta le condizioni per continuare</string>
+
+    <string name="login_wait_for_email_title">Controlla la tua email</string>
+    <string name="login_wait_for_email_notice">Abbiamo inviato un\'email a %1$s.
+\nClicca il collegamento contenuto per continuare la creazione dell\'account.</string>
+    <string name="login_validation_code_is_not_correct">Il codice inserito non è corretto. Ricontrollalo.</string>
+    <string name="login_error_outdated_homeserver_title">Homeserver obsoleto</string>
+    <string name="login_error_outdated_homeserver_content">Questo homerserver è di una versione troppo vecchia per connettersi. Chiedi all\'amministratore dell\'homeserver di aggiornarlo.</string>
+
+    <plurals name="login_error_limit_exceeded_retry_after">
+        <item quantity="one">Sono state inviate troppe richieste. Puoi riprovare in %1$d secondo…</item>
+        <item quantity="other">Sono state inviate troppe richieste. Puoi riprovare in %1$d secondi…</item>
+    </plurals>
+
+    <string name="seen_by">Visto da</string>
+
+    <string name="signed_out_title">Sei disconnesso</string>
+    <string name="signed_out_notice">Può essere dovuto a vari motivi:
+\n
+\n• Hai cambiato la password su un altro dispositivo.
+\n
+\n• Hai eliminato questo dispositivo da un altro dispositivo.
+\n
+\n• L\'amministratore del server ha bloccato il tuo accesso per motivi di sicurezza.</string>
+    <string name="signed_out_submit">Accedi di nuovo</string>
+
+    <string name="soft_logout_title">Sei disconnesso</string>
+    <string name="soft_logout_signin_title">Accedi</string>
+    <string name="soft_logout_signin_notice">L\'amministratore dell\'homeserver (%1$s) ti ha disconnesso dall\'account %2$s (%3$s).</string>
+    <string name="soft_logout_signin_e2e_warning_notice">Accedi per recuperare le chiavi di cifratura memorizzate esclusivamente su questo dispositivo. Ti servono per leggere tutti i tuoi messaggi sicuri su qualsiasi dispositivo.</string>
+    <string name="soft_logout_signin_submit">Accedi</string>
+    <string name="soft_logout_signin_password_hint">Password</string>
+    <string name="soft_logout_clear_data_title">Elimina i dati personali</string>
+    <string name="soft_logout_clear_data_notice">Attenzione: i tuoi dati personali (incluse chiavi di cifratura) sono ancora in questo dispositivo.
+\n
+\nEliminali se hai finito di usare questo dispositivo, o se vuoi accedere ad un altro account.</string>
+    <string name="soft_logout_clear_data_submit">Elimina tutti i dati</string>
+
+    <string name="soft_logout_clear_data_dialog_title">Elimina i dati</string>
+    <string name="soft_logout_clear_data_dialog_content">Eliminare tutti i dati attualmente presenti in questo dispositivo\?
+\nRiaccedi per avere accesso ai dati dell\'account e ai messaggi.</string>
+    <string name="soft_logout_clear_data_dialog_e2e_warning_content">Perderai l\'accesso ai messaggi sicuri a meno che non accedi per recuperare le tue chiavi di cifratura.</string>
+    <string name="soft_logout_clear_data_dialog_submit">Elimina i dati</string>
+    <string name="soft_logout_sso_not_same_user_error">La sessione attuale è per l\'utente %1$s e hai fornito le credenziali per l\'utente %2$s. Ciò non è supportato da RiotX.
+\nPrima elimina i dati, poi accedi di nuovo con un altro account.</string>
+
+    <string name="permalink_malformed">Il tuo collegamento matrix.to non è corretto</string>
+    <string name="bug_report_error_too_short">La descrizione è troppo breve</string>
 
 </resources>

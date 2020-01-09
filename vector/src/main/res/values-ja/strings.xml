@@ -217,7 +217,7 @@
 
     <string name="devices_details_dialog_title">端末詳細</string>
     <string name="devices_details_id_title">ID(端末固有番号)</string>
-    <string name="devices_details_name_title">端末名</string>
+    <string name="devices_details_name_title">公開端末名</string>
     <string name="devices_details_device_name">端末名</string>
     <string name="devices_details_last_seen_title">最終接続日</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
@@ -281,8 +281,8 @@
     <string name="room_settings_room_internal_id">この部屋のサーバ内識別ID</string>
     <string name="room_settings_labs_pref_title">実験的</string>
     <string name="room_settings_labs_warning_message">これらは予期せぬ不具合が生じるかもしれない実験的機能です. 慎重に使用してください.</string>
-    <string name="room_settings_labs_end_to_end">End-to-End 暗号</string>
-    <string name="room_settings_labs_end_to_end_is_active">End-to-End 暗号を使用中</string>
+    <string name="room_settings_labs_end_to_end">エンドツーエンド暗号化</string>
+    <string name="room_settings_labs_end_to_end_is_active">エンドツーエンド暗号化を使用中</string>
     <string name="room_settings_labs_end_to_end_warnings">暗号を有効にするためにはログアウトする必要があります.</string>
     <string name="room_settings_never_send_to_unverified_devices_title">認証された端末のみで暗号化</string>
     <string name="room_settings_never_send_to_unverified_devices_summary">この部屋では, この端末から認証されていない端末への暗号送信をしません.</string>
@@ -485,9 +485,9 @@
     <string name="directory_title">部屋一覧</string>
     <string name="settings_theme">外観</string>
 
-    <string name="encryption_information_title">End-to-end 暗号についての情報</string>
+    <string name="encryption_information_title">エンドツーエンド暗号化についての情報</string>
 
-    <string name="encryption_information_device_name">端末名</string>
+    <string name="encryption_information_device_name">公開端末名</string>
     <string name="encryption_export_e2e_room_keys">部屋のEnd-to-end暗号鍵を出力</string>
     <string name="encryption_information_verified">認証</string>
     <string name="historical_placeholder">履歴を検索</string>
@@ -585,7 +585,7 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
 
     <string name="title_activity_bug_report">不具合報告</string>
 
-    <string name="read_receipts_list">レセプトリストを読み込む</string>
+    <string name="read_receipts_list">開封確認メッセージのリスト</string>
 
     <string name="media_slider_saved_message">ダウンロードファイルに保存しますか？</string>
     <string name="room_preview_unlinked_email_warning">この招待は%sさんに送られましたが、このアカウントには関連づけられていません。 他のアカウントでログインするか、このメールアドレスをあなたののアカウントに追加できます。</string>
@@ -660,7 +660,7 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="encryption_information_decryption_error">復号エラー</string>
 
     <string name="encryption_information_sender_device_information">発信者装置の情報</string>
-    <string name="encryption_information_name">名前</string>
+    <string name="encryption_information_name">公開端末名</string>
     <string name="encryption_information_device_key">デバイスキー</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519 フィンガープリント</string>
 
@@ -1016,4 +1016,43 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
 \n%1$s または %2$s として参加</string>
     <string name="ongoing_conference_call_voice">音声</string>
     <string name="ongoing_conference_call_video">ビデオ</string>
+    <string name="settings_notification_advanced">詳細な通知設定</string>
+    <string name="settings_background_fdroid_sync_mode">バックグラウンド同期モード (実験)</string>
+    <string name="settings_background_fdroid_sync_mode_battery">バッテリーを考慮して最適化</string>
+    <string name="settings_background_fdroid_sync_mode_real_time">リアルタイム性を重視して最適化</string>
+    <string name="settings_background_fdroid_sync_mode_disabled">バックグラウンド同期を行わない</string>
+    <string name="settings_set_workmanager_delay">優先同期間隔</string>
+    <string name="settings_set_workmanager_delay_summary">%s
+\n同期は、デバイスのリソース (バッテリ残量) または状態 (スリープ) に応じて延期される場合があります。</string>
+    <string name="settings_send_typing_notifs">文字入力中通知を送信</string>
+    <string name="settings_send_typing_notifs_summary">文字入力中であることを他の参加者に伝えます。</string>
+    <string name="settings_show_read_receipts">開封確認メッセージを表示</string>
+    <string name="settings_show_read_receipts_summary">開封確認メッセージをクリックすると詳細なリストを確認できます。</string>
+    <string name="settings_send_message_with_enter">エンター入力でメッセージを送信</string>
+    <string name="settings_send_message_with_enter_summary">ソフトウェアキーボードのエンターボタンを押した際に、改行を追加する代わりにメッセージを送信します。</string>
+
+    <string name="settings_password">パスワード</string>
+    <string name="settings_change_password_submit">パスワードを更新</string>
+    <string name="settings_fail_to_update_password_invalid_current_password">パスワードが無効です</string>
+    <string name="settings_media">メディア</string>
+    <string name="settings_play_shutter_sound">シャッター音を再生</string>
+
+    <string name="encryption_information_device_name_with_warning">公開端末名 (会話を行うユーザーに表示されます)</string>
+    <string name="notification_silent">音なし</string>
+    <string name="a11y_show_password">パスワードを表示</string>
+    <string name="a11y_hide_password">パスワードを隠す</string>
+    <string name="login_reset_password_password_hint">新しいパスワード</string>
+
+    <string name="login_signup_password_hint">パスワード</string>
+    <string name="soft_logout_signin_password_hint">パスワード</string>
+    <string name="sign_out_bottom_sheet_warning_no_backup">今ここでサインアウトすると、あなたの暗号化されたメッセージは失われてしまいます</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">鍵のバックアップは現在処理中です。処理中にサインアウトすると暗号化されたメッセージにアクセスできなくなります。</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">暗号化されたメッセージにアクセスできなくなることを防ぐため、鍵の安全なバックアップはあなたのデバイス全てで有効化してください。</string>
+    <string name="sign_out_bottom_sheet_dont_want_secure_messages">暗号化されたメッセージは不要です</string>
+    <string name="sign_out_bottom_sheet_backing_up_keys">鍵をバックアップしています…</string>
+    <string name="keys_backup_activate">鍵のバックアップを使用</string>
+    <string name="are_you_sure">続行しますか？</string>
+    <string name="backup">バックアップ</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">サインアウトする前に鍵をバックアップしないと、暗号化されたメッセージにアクセスできなくなります。</string>
+
 </resources>

@@ -40,7 +40,7 @@
     <string name="notice_room_visibility_shared">部屋のメンバー全員。</string>
     <string name="notice_room_visibility_world_readable">誰でも。</string>
     <string name="notice_room_visibility_unknown">不明 (%s)。</string>
-    <string name="notice_end_to_end">%1$sはエンドツーエンドの暗号化を有効にしました (%2$s)</string>
+    <string name="notice_end_to_end">%1$s がエンドツーエンド暗号化を有効にしました (%2$s)</string>
 
     <string name="notice_requested_voip_conference">%1$s がVoIP会議をリクエストしました</string>
     <string name="notice_voip_started">VoIP会議が開始されました</string>

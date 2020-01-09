@@ -169,4 +169,18 @@
     <string name="clear_timeline_send_queue">Spastro radhë pritjeje</string>
 
     <string name="notice_room_third_party_revoked_invite">%1$s shfuqizoi ftesën për %2$s për pjesëmarrje te dhoma</string>
+    <string name="notice_room_invite_no_invitee_with_reason">Ftesë e %1$s. Arsye: %2$s</string>
+    <string name="notice_room_invite_with_reason">%1$s ftoi %2$s. Arsye: %3$s</string>
+    <string name="notice_room_invite_you_with_reason">%1$s ju ftoi. Arsye: %2$s</string>
+    <string name="notice_room_join_with_reason">%1$s erdhi. Arsye: %2$s</string>
+    <string name="notice_room_leave_with_reason">%1$s iku. Arsye: %2$s</string>
+    <string name="notice_room_reject_with_reason">%1$s hodhi poshtë ftesën. Arsye: %2$s</string>
+    <string name="notice_room_kick_with_reason">%1$s përzuri %2$s. Arsye: %3$s</string>
+    <string name="notice_room_unban_with_reason">%1$s hoqi dëbimin për %2$s. Arsye: %3$s</string>
+    <string name="notice_room_ban_with_reason">%1$s dëboi %2$s. Arsye: %3$s</string>
+    <string name="notice_room_third_party_invite_with_reason">%1$s dërgoi një ftesë për %2$s për të ardhur në dhomë. Arsye: %3$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason">%1$s shfuqizoi ftesën për %2$s për të ardhur në dhomë. Arsye: %3$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason">%1$s pranoi ftesën për %2$s. Arsye: %3$s</string>
+    <string name="notice_room_withdraw_with_reason">%1$s tërhoqi mbrapsht ftesën për %2$s. Arsye: %3$s</string>
+
 </resources>

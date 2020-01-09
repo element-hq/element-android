@@ -173,4 +173,18 @@
     <string name="clear_timeline_send_queue">Изчисти опашката за изпращане</string>
 
     <string name="notice_room_third_party_revoked_invite">%1$s оттегли поканата за присъединяване на %2$s към стаята</string>
+    <string name="notice_room_invite_no_invitee_with_reason">поканата на %1$s. Причина: %2$s</string>
+    <string name="notice_room_invite_with_reason">%1$s покани %2$s. Причина: %3$s</string>
+    <string name="notice_room_invite_you_with_reason">%1$s ви покани. Причина: %2$s</string>
+    <string name="notice_room_join_with_reason">%1$s се присъедини. Причина: %2$s</string>
+    <string name="notice_room_leave_with_reason">%1$s напусна. Причина: %2$s</string>
+    <string name="notice_room_reject_with_reason">%1$s отхвърли поканата. Причина: %2$s</string>
+    <string name="notice_room_kick_with_reason">%1$s изгони %2$s. Причина: %3$s</string>
+    <string name="notice_room_unban_with_reason">%1$s блокира %2$s. Причина: %3$s</string>
+    <string name="notice_room_ban_with_reason">%1$s блокира %2$s. Причина: %3$s</string>
+    <string name="notice_room_third_party_invite_with_reason">%1$s изпрати покана до %2$s да се присъедини в стаята. Причина: %3$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason">%1$s премахна поканата за присъединяване на %2$s в стаята. Причина: %3$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason">%1$s прие поканата за %2$s. Причина: %3$s</string>
+    <string name="notice_room_withdraw_with_reason">%1$s оттегли поканата на %2$s. Причина: %3$s</string>
+
 </resources>

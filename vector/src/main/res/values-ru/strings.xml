@@ -1659,7 +1659,7 @@
 \n 
 \nПоддержка RiotX: - Войти в существующую учетную запись - Создать комнату и присоединиться к общедоступным комнатам - Принять и отклонить приглашения - Список комнат пользователей - Просмотр сведений о комнате - Отправить текстовые сообщения - Отправить вложение - Читать и писать сообщения в зашифрованных комнатах - Криптография: Резервное копирование клавиш E2E, предварительная проверка устройства, запрос и ответ на общий доступ к ключам - Нажмите уведомление - Светлые и черные темы 
 \n 
-\nНе все функции Riot пока реализованы в RiotX. Основные отсутствующие (и скоро появятся!) свойства: - Создание учетной записи - Настройки комнат (список членов комнат и т.д.) - Вызовы - Виджеты - .…</string>
+\nНе все функции Riot пока реализованы в RiotX. Основные отсутствующие (и скоро появятся!) свойства: - Настройки комнат (список членов комнат и т.д.) - Вызовы - Виджеты - .…</string>
 
     <string name="room_preview_world_readable_room_not_supported_yet">Предварительный просмотр открытой комнаты в RiotX пока не поддерживается</string>
 
@@ -1797,4 +1797,17 @@
 
     <string name="a11y_open_drawer">Откройте навигационный ящик</string>
     <string name="a11y_create_menu_open">Откройте меню «Создать комнату»</string>
+    <string name="login_error_no_homeserver_found">Неверный адрес сервера Matrix</string>
+    <string name="settings_add_3pid_confirm_password_title">Подтвердите пароль</string>
+    <string name="settings_add_3pid_authentication_needed">Требуется аутентификация</string>
+
+
+    <string name="settings_integrations">Интеграции</string>
+    <string name="settings_integration_allow">Разрешить интеграции</string>
+    <string name="room_widget_activity_title">Виджет</string>
+    <string name="room_widget_permission_title">Загрузить виджет</string>
+    <string name="room_widget_reload">Перезагрузить виджет</string>
+    <string name="room_widget_open_in_browser">Открыть в браузере</string>
+    <string name="room_widget_permission_widget_id">ID виджета</string>
+    <string name="room_widget_resource_grant_permission">Принять</string>
 </resources>
