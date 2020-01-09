@@ -38,6 +38,7 @@ import im.vector.riotx.features.home.room.detail.RoomDetailFragment
 import im.vector.riotx.features.home.room.list.RoomListFragment
 import im.vector.riotx.features.login.*
 import im.vector.riotx.features.login.terms.LoginTermsFragment
+import im.vector.riotx.features.roommemberprofile.RoomMemberProfileFragment
 import im.vector.riotx.features.reactions.EmojiChooserFragment
 import im.vector.riotx.features.reactions.EmojiSearchResultFragment
 import im.vector.riotx.features.roomdirectory.PublicRoomsFragment
@@ -270,6 +271,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(RoomMemberListFragment::class)
     fun bindRoomMemberListFragment(fragment: RoomMemberListFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(RoomMemberProfileFragment::class)
+    fun bindRoomMemberProfileFragment(fragment: RoomMemberProfileFragment): Fragment
 
     @Binds
     @IntoMap

@@ -33,13 +33,14 @@ import im.vector.riotx.features.createdirect.CreateDirectRoomActivity
 import im.vector.riotx.features.home.room.detail.RoomDetailActivity
 import im.vector.riotx.features.home.room.detail.RoomDetailArgs
 import im.vector.riotx.features.home.room.filtered.FilteredRoomsActivity
+import im.vector.riotx.features.roommemberprofile.RoomMemberProfileActivity
+import im.vector.riotx.features.roommemberprofile.RoomMemberProfileArgs
 import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomActivity
 import im.vector.riotx.features.roomdirectory.roompreview.RoomPreviewActivity
 import im.vector.riotx.features.roomprofile.RoomProfileActivity
 import im.vector.riotx.features.settings.VectorSettingsActivity
 import im.vector.riotx.features.share.SharedData
-import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -81,12 +82,9 @@ class DefaultNavigator @Inject constructor(
         }
     }
 
-    override fun openUserDetail(userId: String, context: Context, buildTask: Boolean) {
-        if (context is VectorBaseActivity) {
-            context.notImplemented("Open user detail")
-        } else {
-            context.toast(R.string.not_implemented)
-        }
+    override fun openRoomMemberProfile(userId: String, context: Context, buildTask: Boolean) {
+        val args = RoomMemberProfileArgs(userId = userId)
+        context.startActivity(RoomMemberProfileActivity.newIntent(context, args))
     }
 
     override fun openRoomForSharing(activity: Activity, roomId: String, sharedData: SharedData) {

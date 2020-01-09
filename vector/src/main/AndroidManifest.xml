@@ -125,6 +125,7 @@
                 <data android:host="matrix.to" />
             </intent-filter>
         </activity>
+        <activity android:name=".features.roommemberprofile.RoomMemberProfileActivity" />
 
         <!-- Services -->
 

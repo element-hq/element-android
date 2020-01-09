@@ -68,7 +68,7 @@ class PermalinkHandler @Inject constructor(private val session: Session,
                 Single.just(true)
             }
             is PermalinkData.UserLink     -> {
-                navigator.openUserDetail(permalinkData.userId, context, buildTask)
+                navigator.openRoomMemberProfile(permalinkData.userId, context, buildTask)
                 Single.just(true)
             }
             is PermalinkData.FallbackLink -> {
