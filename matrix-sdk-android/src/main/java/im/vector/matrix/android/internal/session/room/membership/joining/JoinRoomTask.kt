@@ -17,7 +17,7 @@
 package im.vector.matrix.android.internal.session.room.membership.joining
 
 import im.vector.matrix.android.api.session.room.failure.JoinRoomFailure
-import im.vector.matrix.android.internal.database.RealmQueryLatch
+import im.vector.matrix.android.internal.database.awaitNotEmptyResult
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomEntityFields
 import im.vector.matrix.android.internal.di.SessionDatabase
@@ -26,6 +26,7 @@ import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.session.room.read.SetReadMarkersTask
 import im.vector.matrix.android.internal.task.Task
 import io.realm.RealmConfiguration
+import kotlinx.coroutines.TimeoutCancellationException
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -46,18 +47,16 @@ internal class DefaultJoinRoomTask @Inject constructor(private val roomAPI: Room
         executeRequest<Unit> {
             apiCall = roomAPI.join(params.roomId, params.viaServers, mapOf("reason" to params.reason))
         }
-        val roomId = params.roomId
         // Wait for room to come back from the sync (but it can maybe be in the DB is the sync response is received before)
-        val rql = RealmQueryLatch<RoomEntity>(realmConfiguration) { realm ->
-            realm.where(RoomEntity::class.java)
-                    .equalTo(RoomEntityFields.ROOM_ID, roomId)
-        }
         try {
-            rql.await(timeout = 1L, timeUnit = TimeUnit.MINUTES)
-        } catch (exception: Exception) {
+            awaitNotEmptyResult(realmConfiguration, TimeUnit.MINUTES.toMillis(1L)) { realm ->
+                realm.where(RoomEntity::class.java)
+                        .equalTo(RoomEntityFields.ROOM_ID, params.roomId)
+            }
+        } catch (exception: TimeoutCancellationException) {
             throw JoinRoomFailure.JoinedWithTimeout
         }
-        setReadMarkers(roomId)
+        setReadMarkers(params.roomId)
     }
 
     private suspend fun setReadMarkers(roomId: String) {
