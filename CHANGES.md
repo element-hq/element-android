@@ -8,7 +8,7 @@ Improvements 🙌:
  - The initial sync is now handled by a foreground service
  - Render aliases and canonical alias change in the timeline
  - Fix autocompletion issues and add support for rooms and groups
- - Introduce developer mode in the settings (#796)
+ - Introduce developer mode in the settings (#745, #796)
  - Improve devices list screen
  - Add settings for rageshake sensibility
  - Fix autocompletion issues and add support for rooms, groups, and emoji (#780)

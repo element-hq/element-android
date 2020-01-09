@@ -17,19 +17,26 @@
 package im.vector.riotx.core.rx
 
 import im.vector.riotx.BuildConfig
+import im.vector.riotx.features.settings.VectorPreferences
 import io.reactivex.plugins.RxJavaPlugins
 import timber.log.Timber
+import javax.inject.Inject
 
-/**
- * Make sure unhandled Rx error does not crash the app in production
- */
-fun setupRxPlugin() {
-    RxJavaPlugins.setErrorHandler { throwable ->
-        Timber.e(throwable, "RxError")
+class RxConfig @Inject constructor(
+        private val vectorPreferences: VectorPreferences
+) {
 
-        // Avoid crash in production
-        if (BuildConfig.DEBUG) {
-            throw throwable
+    /**
+     * Make sure unhandled Rx error does not crash the app in production
+     */
+    fun setupRxPlugin() {
+        RxJavaPlugins.setErrorHandler { throwable ->
+            Timber.e(throwable, "RxError")
+
+            // Avoid crash in production
+            if (BuildConfig.DEBUG || vectorPreferences.failFast()) {
+                throw throwable
+            }
         }
     }
 }

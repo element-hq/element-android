@@ -20,4 +20,7 @@
 
     <string name="autocomplete_limited_results">Showing only the first results, type more letters…</string>
 
+    <string name="settings_developer_mode_fail_fast_title">Fail-fast</string>
+    <string name="settings_developer_mode_fail_fast_summary">RiotX may crash more often when an unexpected error occurs</string>
+
 </resources>
