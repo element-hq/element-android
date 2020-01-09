@@ -13,8 +13,11 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/roomProfileCollapsingToolbarLayout"
             style="@style/VectorAppBarLayoutStyle"
             android:layout_width="match_parent"
+            app:contentScrim="?riotx_background"
+            app:scrimAnimationDuration="400"
             android:layout_height="match_parent"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             app:titleEnabled="false"
@@ -26,10 +29,17 @@
                 android:layout_height="wrap_content"
                 android:background="?riotx_background"
                 android:orientation="vertical"
-                android:paddingTop="160dp"
-                android:minHeight="280dp"
                 app:layout_collapseMode="parallax"
                 app:layout_collapseParallaxMultiplier="0.9">
+
+                <ImageView
+                    android:id="@+id/roomProfileAvatarView"
+                    android:layout_width="128dp"
+                    android:layout_height="128dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    tools:src="@tools:sample/avatars" />
 
                 <TextView
                     android:id="@+id/roomProfileNameView"
@@ -50,6 +60,7 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="8dp"
                     android:singleLine="true"
+                    android:layout_marginBottom="16dp"
                     android:textAppearance="@style/Vector.Toolbar.Title"
                     android:textSize="16sp"
                     tools:text="#random:matrix.org" />
@@ -60,7 +71,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginStart="40dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
                     android:layout_marginEnd="40dp"
                     android:fontFamily="sans-serif"
                     android:gravity="center"
@@ -74,7 +85,44 @@
                 android:id="@+id/roomProfileToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:layout_collapseMode="pin" />
+                android:background="@android:color/transparent"
+                app:layout_collapseMode="pin">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/roomProfileToolbarAvatarImageView"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:src="@tools:sample/avatars" />
+
+                    <TextView
+                        android:id="@+id/roomProfileToolbarTitleView"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:textColor="?vctr_toolbar_primary_text_color"
+                        android:textSize="18sp"
+                        app:layout_constraintStart_toEndOf="@+id/roomProfileToolbarAvatarImageView"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="@sample/matrix.json/data/roomName" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </androidx.appcompat.widget.Toolbar>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
@@ -87,40 +135,5 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:listitem="@layout/item_profile_action" />
-
-    <ImageView
-        android:id="@+id/roomProfileAvatarView"
-        android:layout_width="128dp"
-        android:layout_height="128dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp"
-        android:elevation="10dp"
-        app:behavior_dependTarget="-176dp"
-        app:behavior_dependType="y"
-        app:behavior_dependsOn="@id/roomProfileAppBarLayout"
-        app:behavior_targetHeight="40dp"
-        app:behavior_targetWidth="40dp"
-        app:behavior_targetX="56dp"
-        app:behavior_targetY="8dp"
-        app:layout_behavior="im.vector.riotx.core.animations.behavior.PercentViewBehavior"
-        tools:src="@tools:sample/avatars" />
-
-    <TextView
-        android:id="@+id/roomProfileNameView2"
-        android:layout_width="wrap_content"
-        android:layout_height="?attr/actionBarSize"
-        android:layout_marginStart="104dp"
-        android:layout_marginTop="-100dp"
-        android:alpha="0"
-        android:elevation="10dp"
-        android:gravity="center_vertical"
-        android:textAppearance="@style/Vector.Toolbar.Title"
-        android:textSize="18dp"
-        app:behavior_dependTarget="-208dp"
-        app:behavior_dependType="y"
-        app:behavior_dependsOn="@id/roomProfileAppBarLayout"
-        app:behavior_targetAlpha="1"
-        app:behavior_targetY="0dp"
-        app:layout_behavior="im.vector.riotx.core.animations.behavior.PercentViewBehavior" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

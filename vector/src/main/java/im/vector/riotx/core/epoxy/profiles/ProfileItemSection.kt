@@ -34,8 +34,6 @@ abstract class ProfileItemSection: VectorEpoxyModel<ProfileItemSection.Holder>()
         holder.sectionView.text = title
     }
 
-
-
     class Holder : VectorEpoxyHolder() {
         val sectionView by bind<TextView>(R.id.itemProfileSectionView)
     }

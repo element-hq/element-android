@@ -13,5 +13,5 @@
     android:textStyle="bold"
     android:textColor="?riotx_text_primary"
     android:background="?riotx_header_panel_background"
-    android:layout_height="68dp"/>
+    android:layout_height="56dp"/>
 

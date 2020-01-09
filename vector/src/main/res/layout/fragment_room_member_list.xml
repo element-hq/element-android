@@ -11,8 +11,6 @@
         style="@style/VectorToolbarStyle"
         android:layout_width="0dp"
         android:layout_height="?actionBarSize"
-        android:elevation="4dp"
-        android:transitionName="toolbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">

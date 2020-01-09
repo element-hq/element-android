@@ -29,15 +29,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.appbar.AppBarLayout
 import im.vector.matrix.android.api.session.room.notification.RoomNotificationState
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.R
-import im.vector.riotx.core.error.ErrorFormatter
+import im.vector.riotx.core.animations.AppBarStateChangeListener
 import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.home.AvatarRenderer
-import im.vector.riotx.features.home.room.list.RoomListAction
 import im.vector.riotx.features.home.room.list.actions.RoomListActionsArgs
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsBottomSheet
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsSharedAction
@@ -72,6 +71,18 @@ class RoomProfileFragment @Inject constructor(
         roomProfileSharedActionViewModel = activityViewModelProvider.get(RoomProfileSharedActionViewModel::class.java)
         setupToolbar(roomProfileToolbar)
         setupRecyclerView()
+        roomProfileAppBarLayout.addOnOffsetChangedListener(object : AppBarStateChangeListener() {
+            override fun onStateChanged(appBarLayout: AppBarLayout, state: State) {
+                val animationDuration = roomProfileCollapsingToolbarLayout.scrimAnimationDuration
+                if (state == State.COLLAPSED) {
+                    roomProfileToolbarAvatarImageView.animate().alpha(1f).duration = animationDuration + 100
+                    roomProfileToolbarTitleView.animate().alpha(1f).duration = animationDuration + 100
+                } else {
+                    roomProfileToolbarAvatarImageView.animate().alpha(0f).duration = animationDuration - 100
+                    roomProfileToolbarTitleView.animate().alpha(0f).duration = animationDuration - 100
+                }
+            }
+        })
         roomProfileViewModel.viewEvents
                 .observe()
                 .subscribe {
@@ -135,17 +146,18 @@ class RoomProfileFragment @Inject constructor(
     }
 
     override fun invalidate() = withState(roomProfileViewModel) { state ->
-        state.roomSummary()?.let {
+        state.roomSummary()?.also {
             if (it.membership.isLeft()) {
                 Timber.w("The room has been left")
                 activity?.finish()
             } else {
                 roomProfileNameView.text = it.displayName
-                roomProfileNameView2.text = it.displayName
-                // Use canonical alias when PR with alias management will be merged
-                roomProfileAliasView.text = it.roomId
+                roomProfileToolbarTitleView.text = it.displayName
+                roomProfileAliasView.setTextOrHide(it.canonicalAlias)
                 roomProfileTopicView.setTextOrHide(it.topic)
-                avatarRenderer.render(it.toMatrixItem(), roomProfileAvatarView)
+                val matrixItem = it.toMatrixItem()
+                avatarRenderer.render(matrixItem, roomProfileAvatarView)
+                avatarRenderer.render(matrixItem, roomProfileToolbarAvatarImageView)
             }
         }
         roomProfileController.setData(state)
