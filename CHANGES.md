@@ -7,7 +7,6 @@ Features ✨:
 Improvements 🙌:
  - The initial sync is now handled by a foreground service
  - Render aliases and canonical alias change in the timeline
- - Fix autocompletion issues and add support for rooms and groups
  - Introduce developer mode in the settings (#745, #796)
  - Improve devices list screen
  - Add settings for rageshake sensibility
@@ -18,7 +17,7 @@ Improvements 🙌:
 Other changes:
  - Change the way RiotX identifies a session to allow the SDK to support several sessions with the same user (#800)
  - Exclude play-services-oss-licenses library from F-Droid build (#814)
- - Email domain can be limited on some homeserver, i18n of the displayed error (#754)
+ - Email domain can be limited on some homeservers, i18n of the displayed error (#754)
 
 Bugfix 🐛:
  - Fix crash when opening room creation screen from the room filtering screen
