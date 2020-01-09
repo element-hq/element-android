@@ -1,8 +1,5 @@
-Changes in RiotX 0.12.0 (2019-XX-XX)
+Changes in RiotX 0.12.0 (2020-01-09)
 ===================================================
-
-Features ✨:
- -
 
 Improvements 🙌:
  - The initial sync is now handled by a foreground service
@@ -26,12 +23,6 @@ Bugfix 🐛:
  - Fix joining upgraded rooms (#697)
  - Fix matrix.org room directory not being browsable (#807)
  - Hide non working settings (#751)
-
-Translations 🗣:
- -
-
-Build 🧱:
- -
 
 Changes in RiotX 0.11.0 (2019-12-19)
 ===================================================
@@ -291,7 +282,7 @@ Mode details here: https://medium.com/@RiotChat/introducing-the-riotx-beta-for-a
 =======================================================
 
 
-Changes in RiotX 0.0.0 (2019-XX-XX)
+Changes in RiotX 0.0.0 (2020-XX-XX)
 ===================================================
 
 Features ✨:
