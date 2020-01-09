@@ -19,6 +19,9 @@ import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.matrix.android.api.session.room.notification.RoomNotificationState
 import im.vector.matrix.android.api.util.toMatrixItem
+import im.vector.riotx.core.epoxy.DividerItem_
+import im.vector.riotx.core.epoxy.bottomsheet.BottomSheetRoomPreviewItem
+import im.vector.riotx.core.epoxy.bottomsheet.BottomSheetRoomPreviewItem_
 import im.vector.riotx.core.epoxy.bottomsheet.bottomSheetActionItem
 import im.vector.riotx.core.epoxy.bottomsheet.bottomSheetRoomPreviewItem
 import im.vector.riotx.core.epoxy.dividerItem
@@ -35,18 +38,21 @@ class RoomListQuickActionsEpoxyController @Inject constructor(private val avatar
 
     override fun buildModels(state: RoomListQuickActionsState) {
         val roomSummary = state.roomSummary() ?: return
+        val showAll = state.mode == RoomListActionsArgs.Mode.FULL
 
-        // Preview
-        bottomSheetRoomPreviewItem {
-            id("preview")
-            avatarRenderer(avatarRenderer)
-            matrixItem(roomSummary.toMatrixItem())
-            settingsClickListener(View.OnClickListener { listener?.didSelectMenuAction(RoomListQuickActionsSharedAction.Settings(roomSummary.roomId)) })
-        }
+        if (showAll) {
+            // Preview
+            bottomSheetRoomPreviewItem {
+                id("room_preview")
+                avatarRenderer(avatarRenderer)
+                matrixItem(roomSummary.toMatrixItem())
+                settingsClickListener(View.OnClickListener { listener?.didSelectMenuAction(RoomListQuickActionsSharedAction.Settings(roomSummary.roomId)) })
+            }
 
-        // Notifications
-        dividerItem {
-            id("notifications_separator")
+            // Notifications
+            dividerItem {
+                id("notifications_separator")
+            }
         }
 
         val selectedRoomState = state.roomNotificationState()
@@ -55,8 +61,7 @@ class RoomListQuickActionsEpoxyController @Inject constructor(private val avatar
         RoomListQuickActionsSharedAction.NotificationsMentionsOnly(roomSummary.roomId).toBottomSheetItem(2, selectedRoomState)
         RoomListQuickActionsSharedAction.NotificationsMute(roomSummary.roomId).toBottomSheetItem(3, selectedRoomState)
 
-
-        if (state.mode == RoomListActionsArgs.Mode.FULL) {
+        if (showAll) {
             // Leave
             dividerItem {
                 id("leave_separator")

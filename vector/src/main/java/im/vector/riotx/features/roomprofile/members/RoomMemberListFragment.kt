@@ -21,33 +21,57 @@ import android.view.View
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import im.vector.matrix.android.api.session.room.model.RoomMember
+import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.R
+import im.vector.riotx.core.extensions.cleanup
+import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.platform.VectorBaseFragment
+import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.roomprofile.RoomProfileArgs
+import kotlinx.android.synthetic.main.fragment_room_member_list.*
+import kotlinx.android.synthetic.main.fragment_room_member_list.recyclerView
 import javax.inject.Inject
 
 
 class RoomMemberListFragment @Inject constructor(
-        val viewModelFactory: RoomMemberListViewModel.Factory
-) : VectorBaseFragment() {
+        val viewModelFactory: RoomMemberListViewModel.Factory,
+        private val roomMemberListController: RoomMemberListController,
+        private val avatarRenderer: AvatarRenderer
+) : VectorBaseFragment(), RoomMemberListController.Callback {
 
     private val viewModel: RoomMemberListViewModel by fragmentViewModel()
     private val roomProfileArgs: RoomProfileArgs by args()
+
 
     override fun getLayoutResId() = R.layout.fragment_room_member_list
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // Initialize your view, subscribe to viewModel...
+        setupToolbar(roomMemberListToolbar)
+        roomMemberListController.callback = this
+        recyclerView.configureWith(roomMemberListController, hasFixedSize = true)
     }
 
     override fun onDestroyView() {
+        recyclerView.cleanup()
         super.onDestroyView()
-        // Clear your view, unsubscribe...
     }
 
-    override fun invalidate() = withState(viewModel) { _ ->
+    override fun invalidate() = withState(viewModel) { viewState ->
+        roomMemberListController.setData(viewState)
+        renderRoomSummary(viewState)
+    }
 
+    override fun onRoomMemberClicked(roomMember: RoomMember) {
+        navigator.openRoomMemberProfile(roomMember.userId, roomId = roomProfileArgs.roomId, context = requireActivity())
+    }
+
+    private fun renderRoomSummary(state: RoomMemberListViewState) {
+        state.roomSummary()?.let {
+            roomMemberListToolbarTitleView.text = it.displayName
+            avatarRenderer.render(it.toMatrixItem(), roomMemberListToolbarAvatarImageView)
+        }
     }
 
 }

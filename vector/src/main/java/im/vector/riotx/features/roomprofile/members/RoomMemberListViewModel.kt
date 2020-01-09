@@ -21,9 +21,19 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import im.vector.matrix.android.api.query.QueryStringValue
+import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.room.members.roomMemberQueryParams
+import im.vector.matrix.android.api.session.room.model.Membership
+import im.vector.matrix.rx.rx
+import im.vector.matrix.rx.unwrap
 import im.vector.riotx.core.platform.VectorViewModel
+import im.vector.riotx.core.utils.DataSource
+import im.vector.riotx.core.utils.PublishDataSource
+import im.vector.riotx.features.roomprofile.RoomProfileViewEvents
 
-class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState: RoomMemberListViewState)
+class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState: RoomMemberListViewState,
+                                                          private val session: Session)
     : VectorViewModel<RoomMemberListViewState, RoomMemberListAction>(initialState) {
 
     @AssistedInject.Factory
@@ -40,8 +50,35 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
         }
     }
 
+    private val room = session.getRoom(initialState.roomId)!!
+
+    init {
+        observeRoomMembers()
+        observeRoomSummary()
+    }
+
+    private fun observeRoomSummary() {
+        room.rx().liveRoomSummary()
+                .unwrap()
+                .execute { async ->
+                    copy(roomSummary = async)
+                }
+    }
+
+    private fun observeRoomMembers() {
+        val queryParams = roomMemberQueryParams {
+            displayName = QueryStringValue.IsNotEmpty
+            memberships = Membership.activeMemberships()
+        }
+        room.rx()
+                .liveRoomMembers(queryParams)
+                .execute {
+                    copy(roomMembers = it)
+                }
+    }
+
     override fun handle(action: RoomMemberListAction) {
-        //TODO
+
     }
 
 }

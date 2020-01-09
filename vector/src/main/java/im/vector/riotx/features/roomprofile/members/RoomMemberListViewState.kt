@@ -16,8 +16,19 @@
 
 package im.vector.riotx.features.roomprofile.members
 
+import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.Uninitialized
+import im.vector.matrix.android.api.session.room.model.RoomMember
+import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.riotx.features.roomprofile.RoomProfileArgs
 
 data class RoomMemberListViewState(
-        val noValue: Boolean = false
-) : MvRxState
+        val roomId: String,
+        val roomSummary: Async<RoomSummary> = Uninitialized,
+        val roomMembers: Async<List<RoomMember>> = Uninitialized
+) : MvRxState {
+
+    constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
+
+}

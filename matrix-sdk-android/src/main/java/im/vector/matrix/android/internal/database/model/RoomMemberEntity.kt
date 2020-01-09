@@ -24,8 +24,8 @@ import io.realm.annotations.PrimaryKey
 internal open class RoomMemberEntity(@PrimaryKey var primaryKey: String = "",
                                      @Index var userId: String = "",
                                      @Index var roomId: String = "",
-                                     var displayName: String = "",
-                                     var avatarUrl: String = "",
+                                     var displayName: String? = null,
+                                     var avatarUrl: String? = null ,
                                      var reason: String? = null,
                                      var isDirect: Boolean = false
 ) : RealmObject() {

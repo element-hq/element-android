@@ -912,7 +912,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onAvatarClicked(informationData: MessageInformationData) {
-        navigator.openRoomMemberProfile(userId = informationData.senderId, context = requireActivity())
+        navigator.openRoomMemberProfile(userId = informationData.senderId, roomId = roomDetailArgs.roomId, context = requireActivity())
     }
 
     override fun onMemberNameClicked(informationData: MessageInformationData) {

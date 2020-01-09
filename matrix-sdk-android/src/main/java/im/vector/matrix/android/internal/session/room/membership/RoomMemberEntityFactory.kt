@@ -27,8 +27,8 @@ internal object RoomMemberEntityFactory {
                 primaryKey = primaryKey,
                 userId = userId,
                 roomId = roomId,
-                displayName = roomMember.displayName ?: "",
-                avatarUrl = roomMember.avatarUrl ?: ""
+                displayName = roomMember.displayName,
+                avatarUrl = roomMember.avatarUrl
         ).apply {
             membership = roomMember.membership
         }
