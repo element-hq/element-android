@@ -20,6 +20,7 @@
       <w>signin</w>
       <w>signout</w>
       <w>signup</w>
+      <w>threepid</w>
     </words>
   </dictionary>
 </component>

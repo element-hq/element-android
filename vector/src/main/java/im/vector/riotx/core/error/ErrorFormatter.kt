@@ -67,6 +67,9 @@ class DefaultErrorFormatter @Inject constructor(
                     throwable.error.code == MatrixError.M_NOT_JSON           -> {
                         stringProvider.getString(R.string.login_error_not_json)
                     }
+                    throwable.error.code == MatrixError.M_THREEPID_DENIED           -> {
+                        stringProvider.getString(R.string.login_error_threepid_denied)
+                    }
                     throwable.error.code == MatrixError.M_LIMIT_EXCEEDED     -> {
                         limitExceededError(throwable.error)
                     }
