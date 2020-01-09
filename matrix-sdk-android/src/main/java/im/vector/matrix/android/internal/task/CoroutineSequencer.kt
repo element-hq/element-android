@@ -18,7 +18,13 @@ package im.vector.matrix.android.internal.task
 
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.selects.select
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.sync.withPermit
 import java.util.concurrent.Executors
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * This class intends to be used for ensure suspendable methods are played sequentially all the way long.
@@ -45,7 +51,6 @@ internal open class ChannelCoroutineSequencer<T> : CoroutineSequencer<T> {
 
     private var messageChannel: Channel<Message<T>> = Channel()
     private val coroutineScope = CoroutineScope(SupervisorJob())
-    // This will ensure
     private val singleDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
 
     init {
@@ -53,6 +58,7 @@ internal open class ChannelCoroutineSequencer<T> : CoroutineSequencer<T> {
     }
 
     private fun launchCoroutine() {
+        // This will ensure suspend methods run sequentially (in a different thread and context).
         coroutineScope.launch(singleDispatcher) {
             for (message in messageChannel) {
                 try {
@@ -66,8 +72,9 @@ internal open class ChannelCoroutineSequencer<T> : CoroutineSequencer<T> {
     }
 
     override fun close() {
-        coroutineScope.coroutineContext.cancelChildren()
+        coroutineScope.cancel()
         messageChannel.close()
+        singleDispatcher.close() // To release the thread in the pool.
     }
 
     override suspend fun post(block: suspend () -> T): T {
@@ -83,5 +90,75 @@ internal open class ChannelCoroutineSequencer<T> : CoroutineSequencer<T> {
             launchCoroutine()
             throw cancellation
         }
+    }
+}
+
+internal open class SimpleMutexCoroutineSequencer<T> : CoroutineSequencer<T> {
+    private val mutex = Mutex()
+
+    override suspend fun post(block: suspend () -> T): T {
+        return mutex.withLock { block() }
+    }
+
+    override fun close() {
+        // Not strictly necessary, since there's no resource to be released.
+    }
+}
+
+internal open class MutexCoroutineSequencer<T> : CoroutineSequencer<T> {
+    private val mutex = Mutex()
+    // Will complete once this sequencer is closed.
+    private val cancelToken = CompletableDeferred<Unit>()
+
+    override suspend fun post(block: suspend () -> T): T {
+        check(!cancelToken.isCompleted) { "Cannot post in cancelled sequencer." }
+
+        return select {
+            cancelToken.onAwait {
+                throw CancellationException("Sequencer was cancelled.")
+            }
+            mutex.onLock {
+                try {
+                    block()
+                } finally {
+                    it.unlock()
+                }
+            }
+        }
+    }
+
+    override fun close() {
+        cancelToken.complete(Unit)
+    }
+}
+
+// This is actually more efficient than the Mutex one.
+internal open class SimpleSemaphoreCoroutineSequencer<T> : CoroutineSequencer<T> {
+    private val semaphore = Semaphore(1) // Permits 1 suspend function at a time.
+
+    override suspend fun post(block: suspend () -> T): T {
+        return semaphore.withPermit { block() }
+    }
+
+    override fun close() {
+        // Not strictly necessary, since there's no resource to be released.
+    }
+}
+
+internal open class SemaphoreCoroutineSequencer<T> : CoroutineSequencer<T> {
+    private val semaphore = Semaphore(1) // Permits 1 suspend function at a time.
+    private val isClosed = AtomicBoolean(false) // Made this atomic for correctness.
+
+    override suspend fun post(block: suspend () -> T): T {
+        check(!isClosed.get()) { "Cannot post in cancelled sequencer." }
+
+        return semaphore.withPermit {
+            if (isClosed.get()) throw CancellationException("Sequencer was cancelled.")
+            block()
+        }
+    }
+
+    override fun close() {
+        isClosed.set(false)
     }
 }
