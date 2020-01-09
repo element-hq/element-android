@@ -90,7 +90,7 @@ internal class RoomSummaryUpdater @Inject constructor(
         val lastTopicEvent = EventEntity.where(realm, roomId, EventType.STATE_ROOM_TOPIC).prev()
         val lastCanonicalAliasEvent = EventEntity.where(realm, roomId, EventType.STATE_ROOM_CANONICAL_ALIAS).prev()
         val lastAliasesEvent = EventEntity.where(realm, roomId, EventType.STATE_ROOM_ALIASES).prev()
-        val encryptionEvent = EventEntity.where(realm, roomId, EventType.ENCRYPTION).prev()
+        val encryptionEvent = EventEntity.where(realm, roomId, EventType.STATE_ROOM_ENCRYPTION).prev()
 
         roomSummaryEntity.hasUnreadMessages = roomSummaryEntity.notificationCount > 0
                                               // avoid this call if we are sure there are unread events
