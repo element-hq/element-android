@@ -65,7 +65,7 @@ internal class DefaultSession @Inject constructor(
         private val context: Context,
         private val eventBus: EventBus,
         @SessionId
-        private val sessionId: String,
+        override val sessionId: String,
         private val liveEntityObservers: Set<@JvmSuppressWildcards LiveEntityObserver>,
         private val sessionListeners: SessionListeners,
         private val roomService: Lazy<RoomService>,
