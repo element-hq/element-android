@@ -37,10 +37,6 @@ class AutocompleteEmojiController @Inject constructor(
         }
     }
 
-    init {
-        fontProvider.addListener(fontProviderListener)
-    }
-
     var listener: AutocompleteClickListener<String>? = null
 
     override fun buildModels(data: List<EmojiItem>?) {
@@ -69,6 +65,10 @@ class AutocompleteEmojiController @Inject constructor(
                 id("more_result")
             }
         }
+    }
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        fontProvider.addListener(fontProviderListener)
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {

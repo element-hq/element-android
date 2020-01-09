@@ -21,6 +21,7 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.RoomService
+import im.vector.matrix.android.api.session.room.RoomSummaryQueryParams
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.VersioningState
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
@@ -32,6 +33,7 @@ import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.findByAlias
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.query.process
 import im.vector.matrix.android.internal.session.room.alias.GetRoomIdByAliasTask
 import im.vector.matrix.android.internal.session.room.create.CreateRoomTask
 import im.vector.matrix.android.internal.session.room.membership.joining.JoinRoomTask
@@ -41,6 +43,7 @@ import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.fetchCopyMap
 import io.realm.Realm
+import io.realm.RealmQuery
 import javax.inject.Inject
 
 internal class DefaultRoomService @Inject constructor(private val monarchy: Monarchy,
@@ -86,28 +89,49 @@ internal class DefaultRoomService @Inject constructor(private val monarchy: Mona
                 })
     }
 
-    override fun liveRoomSummaries(): LiveData<List<RoomSummary>> {
-        return monarchy.findAllMappedWithChanges(
-                { realm ->
-                    RoomSummaryEntity.where(realm)
-                            .isNotEmpty(RoomSummaryEntityFields.DISPLAY_NAME)
-                            .notEqualTo(RoomSummaryEntityFields.VERSIONING_STATE_STR, VersioningState.UPGRADED_ROOM_JOINED.name)
-                },
+    override fun getRoomSummaries(queryParams: RoomSummaryQueryParams): List<RoomSummary> {
+        return monarchy.fetchAllMappedSync(
+                { roomSummariesQuery(it, queryParams) },
                 { roomSummaryMapper.map(it) }
         )
     }
 
-    override fun liveBreadcrumbs(): LiveData<List<RoomSummary>> {
+    override fun getRoomSummariesLive(queryParams: RoomSummaryQueryParams): LiveData<List<RoomSummary>> {
         return monarchy.findAllMappedWithChanges(
-                { realm ->
-                    RoomSummaryEntity.where(realm)
-                            .isNotEmpty(RoomSummaryEntityFields.DISPLAY_NAME)
-                            .notEqualTo(RoomSummaryEntityFields.VERSIONING_STATE_STR, VersioningState.UPGRADED_ROOM_JOINED.name)
-                            .greaterThan(RoomSummaryEntityFields.BREADCRUMBS_INDEX, RoomSummaryEntity.NOT_IN_BREADCRUMBS)
-                            .sort(RoomSummaryEntityFields.BREADCRUMBS_INDEX)
-                },
+                { roomSummariesQuery(it, queryParams) },
                 { roomSummaryMapper.map(it) }
         )
+    }
+
+    private fun roomSummariesQuery(realm: Realm, queryParams: RoomSummaryQueryParams): RealmQuery<RoomSummaryEntity> {
+        val query = RoomSummaryEntity.where(realm)
+        query.process(RoomSummaryEntityFields.DISPLAY_NAME, queryParams.displayName)
+        query.process(RoomSummaryEntityFields.CANONICAL_ALIAS, queryParams.canonicalAlias)
+        query.process(RoomSummaryEntityFields.MEMBERSHIP_STR, queryParams.memberships)
+        query.notEqualTo(RoomSummaryEntityFields.VERSIONING_STATE_STR, VersioningState.UPGRADED_ROOM_JOINED.name)
+        return query
+    }
+
+    override fun getBreadcrumbs(): List<RoomSummary> {
+        return monarchy.fetchAllMappedSync(
+                { breadcrumbsQuery(it) },
+                { roomSummaryMapper.map(it) }
+        )
+    }
+
+    override fun getBreadcrumbsLive(): LiveData<List<RoomSummary>> {
+        return monarchy.findAllMappedWithChanges(
+                { breadcrumbsQuery(it) },
+                { roomSummaryMapper.map(it) }
+        )
+    }
+
+    private fun breadcrumbsQuery(realm: Realm): RealmQuery<RoomSummaryEntity> {
+        return RoomSummaryEntity.where(realm)
+                .isNotEmpty(RoomSummaryEntityFields.DISPLAY_NAME)
+                .notEqualTo(RoomSummaryEntityFields.VERSIONING_STATE_STR, VersioningState.UPGRADED_ROOM_JOINED.name)
+                .greaterThan(RoomSummaryEntityFields.BREADCRUMBS_INDEX, RoomSummaryEntity.NOT_IN_BREADCRUMBS)
+                .sort(RoomSummaryEntityFields.BREADCRUMBS_INDEX)
     }
 
     override fun onRoomDisplayed(roomId: String): Cancelable {

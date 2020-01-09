@@ -72,6 +72,14 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
     }
 
     @AnyThread
+    fun getCachedDrawable(glideRequest: GlideRequests, matrixItem: MatrixItem): Drawable {
+        return buildGlideRequest(glideRequest, matrixItem.avatarUrl)
+                .onlyRetrieveFromCache(true)
+                .submit()
+                .get()
+    }
+
+    @AnyThread
     fun getPlaceholderDrawable(context: Context, matrixItem: MatrixItem): Drawable {
         val avatarColor = when (matrixItem) {
             is MatrixItem.UserItem -> ContextCompat.getColor(context, getColorFromUserId(matrixItem.id))

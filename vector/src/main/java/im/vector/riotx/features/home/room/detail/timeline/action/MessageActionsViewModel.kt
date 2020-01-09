@@ -31,8 +31,7 @@ import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.matrix.android.api.session.room.timeline.hasBeenEdited
-import im.vector.matrix.android.api.util.Optional
-import im.vector.matrix.rx.RxRoom
+import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.canReact
@@ -42,8 +41,8 @@ import im.vector.riotx.features.home.room.detail.timeline.format.NoticeEventForm
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.riotx.features.html.EventHtmlRenderer
 import im.vector.riotx.features.html.VectorHtmlCompressor
-import im.vector.riotx.features.settings.VectorPreferences
 import im.vector.riotx.features.reactions.data.EmojiDataSource
+import im.vector.riotx.features.settings.VectorPreferences
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -64,7 +63,7 @@ data class MessageActionState(
         // For quick reactions
         val quickStates: Async<List<ToggleState>> = Uninitialized,
         // For actions
-        val actions: Async<List<EventSharedAction>> = Uninitialized,
+        val actions: List<EventSharedAction> = emptyList(),
         val expendedReportContentMenu: Boolean = false
 ) : MvRxState {
 
@@ -112,7 +111,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     init {
         observeEvent()
         observeReactions()
-        observeEventAction()
+        observeTimelineEventState()
     }
 
     override fun handle(action: MessageActionsAction) {
@@ -131,32 +130,17 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
 
     private fun observeEvent() {
         if (room == null) return
-        RxRoom(room)
+        room.rx()
                 .liveTimelineEvent(eventId)
                 .unwrap()
                 .execute {
-                    copy(
-                            timelineEvent = it,
-                            messageBody = computeMessageBody(it)
-                    )
-                }
-    }
-
-    private fun observeEventAction() {
-        if (room == null) return
-        RxRoom(room)
-                .liveTimelineEvent(eventId)
-                .map {
-                    actionsForEvent(it)
-                }
-                .execute {
-                    copy(actions = it)
+                    copy(timelineEvent = it)
                 }
     }
 
     private fun observeReactions() {
         if (room == null) return
-        RxRoom(room)
+        room.rx()
                 .liveAnnotationSummary(eventId)
                 .map { annotations ->
                     EmojiDataSource.quickEmojis.map { emoji ->
@@ -168,11 +152,19 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                 }
     }
 
-    private fun computeMessageBody(timelineEvent: Async<TimelineEvent>): CharSequence? {
-        return when (timelineEvent()?.root?.getClearType()) {
+    private fun observeTimelineEventState() {
+        asyncSubscribe(MessageActionState::timelineEvent) { timelineEvent ->
+            val computedMessage = computeMessageBody(timelineEvent)
+            val actions = actionsForEvent(timelineEvent)
+            setState { copy(messageBody = computedMessage, actions = actions) }
+        }
+    }
+
+    private fun computeMessageBody(timelineEvent: TimelineEvent): CharSequence? {
+        return when (timelineEvent.root.getClearType()) {
             EventType.MESSAGE,
             EventType.STICKER     -> {
-                val messageContent: MessageContent? = timelineEvent()?.getLastMessageContent()
+                val messageContent: MessageContent? = timelineEvent.getLastMessageContent()
                 if (messageContent is MessageTextContent && messageContent.format == MessageType.FORMAT_MATRIX_HTML) {
                     val html = messageContent.formattedBody
                             ?.takeIf { it.isNotBlank() }
@@ -193,41 +185,39 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
             EventType.CALL_INVITE,
             EventType.CALL_HANGUP,
             EventType.CALL_ANSWER -> {
-                timelineEvent()?.let { noticeEventFormatter.format(it) }
+                noticeEventFormatter.format(timelineEvent)
             }
             else                  -> null
         }
     }
 
-    private fun actionsForEvent(optionalEvent: Optional<TimelineEvent>): List<EventSharedAction> {
-        val event = optionalEvent.getOrNull() ?: return emptyList()
-
-        val messageContent: MessageContent? = event.annotations?.editSummary?.aggregatedContent.toModel()
-                ?: event.root.getClearContent().toModel()
+    private fun actionsForEvent(timelineEvent: TimelineEvent): List<EventSharedAction> {
+        val messageContent: MessageContent? = timelineEvent.annotations?.editSummary?.aggregatedContent.toModel()
+                ?: timelineEvent.root.getClearContent().toModel()
         val type = messageContent?.type
 
         return arrayListOf<EventSharedAction>().apply {
-            if (event.root.sendState.hasFailed()) {
-                if (canRetry(event)) {
+            if (timelineEvent.root.sendState.hasFailed()) {
+                if (canRetry(timelineEvent)) {
                     add(EventSharedAction.Resend(eventId))
                 }
                 add(EventSharedAction.Remove(eventId))
-            } else if (event.root.sendState.isSending()) {
+            } else if (timelineEvent.root.sendState.isSending()) {
                 // TODO is uploading attachment?
-                if (canCancel(event)) {
+                if (canCancel(timelineEvent)) {
                     add(EventSharedAction.Cancel(eventId))
                 }
-            } else if (event.root.sendState == SendState.SYNCED) {
-                if (!event.root.isRedacted()) {
-                    if (canReply(event, messageContent)) {
+            } else if (timelineEvent.root.sendState == SendState.SYNCED) {
+                if (!timelineEvent.root.isRedacted()) {
+                    if (canReply(timelineEvent, messageContent)) {
                         add(EventSharedAction.Reply(eventId))
                     }
 
-                    if (canEdit(event, session.myUserId)) {
+                    if (canEdit(timelineEvent, session.myUserId)) {
                         add(EventSharedAction.Edit(eventId))
                     }
 
-                    if (canRedact(event, session.myUserId)) {
+                    if (canRedact(timelineEvent, session.myUserId)) {
                         add(EventSharedAction.Delete(eventId))
                     }
 
@@ -236,19 +226,19 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                         add(EventSharedAction.Copy(messageContent!!.body))
                     }
 
-                    if (event.canReact()) {
+                    if (timelineEvent.canReact()) {
                         add(EventSharedAction.AddReaction(eventId))
                     }
 
-                    if (canQuote(event, messageContent)) {
+                    if (canQuote(timelineEvent, messageContent)) {
                         add(EventSharedAction.Quote(eventId))
                     }
 
-                    if (canViewReactions(event)) {
+                    if (canViewReactions(timelineEvent)) {
                         add(EventSharedAction.ViewReactions(informationData))
                     }
 
-                    if (event.hasBeenEdited()) {
+                    if (timelineEvent.hasBeenEdited()) {
                         add(EventSharedAction.ViewEditHistory(informationData))
                     }
 
@@ -261,7 +251,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                         // TODO
                     }
 
-                    if (event.root.sendState == SendState.SENT) {
+                    if (timelineEvent.root.sendState == SendState.SENT) {
                         // TODO Can be redacted
 
                         // TODO sent by me or sufficient power level
@@ -269,24 +259,22 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                 }
 
                 if (vectorPreferences.developerMode()) {
-                    add(EventSharedAction.ViewSource(event.root.toContentStringWithIndent()))
-                    if (event.isEncrypted()) {
-                        val decryptedContent = event.root.toClearContentStringWithIndent()
+                    add(EventSharedAction.ViewSource(timelineEvent.root.toContentStringWithIndent()))
+                    if (timelineEvent.isEncrypted()) {
+                        val decryptedContent = timelineEvent.root.toClearContentStringWithIndent()
                                 ?: stringProvider.getString(R.string.encryption_information_decryption_error)
                         add(EventSharedAction.ViewDecryptedSource(decryptedContent))
                     }
                 }
-
                 add(EventSharedAction.CopyPermalink(eventId))
-
-                if (session.myUserId != event.root.senderId) {
+                if (session.myUserId != timelineEvent.root.senderId) {
                     // not sent by me
-                    if (event.root.getClearType() == EventType.MESSAGE) {
-                        add(EventSharedAction.ReportContent(eventId, event.root.senderId))
+                    if (timelineEvent.root.getClearType() == EventType.MESSAGE) {
+                        add(EventSharedAction.ReportContent(eventId, timelineEvent.root.senderId))
                     }
 
                     add(EventSharedAction.Separator)
-                    add(EventSharedAction.IgnoreUser(event.root.senderId))
+                    add(EventSharedAction.IgnoreUser(timelineEvent.root.senderId))
                 }
             }
         }

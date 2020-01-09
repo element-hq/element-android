@@ -95,12 +95,12 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     private val modelCache = arrayListOf<CacheItemData?>()
     private var currentSnapshot: List<TimelineEvent> = emptyList()
     private var inSubmitList: Boolean = false
-    private var timeline: Timeline? = null
     private var unreadState: UnreadState = UnreadState.Unknown
     private var positionOfReadMarker: Int? = null
     private var eventIdToHighlight: String? = null
 
     var callback: Callback? = null
+    var timeline: Timeline? = null
 
     private val listUpdateCallback = object : ListUpdateCallback {
 
@@ -176,10 +176,6 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     }
 
     fun update(viewState: RoomDetailViewState) {
-        if (timeline?.timelineID != viewState.timeline?.timelineID) {
-            timeline = viewState.timeline
-            timeline?.addListener(this)
-        }
         var requestModelBuild = false
         if (eventIdToHighlight != viewState.highlightedEventId) {
             // Clear cache to force a refresh
@@ -205,6 +201,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
+        timeline?.addListener(this)
         timelineMediaSizeProvider.recyclerView = recyclerView
     }
 

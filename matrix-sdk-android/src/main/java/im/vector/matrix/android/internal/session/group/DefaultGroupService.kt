@@ -20,12 +20,16 @@ import androidx.lifecycle.LiveData
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.group.Group
 import im.vector.matrix.android.api.session.group.GroupService
+import im.vector.matrix.android.api.session.group.GroupSummaryQueryParams
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.GroupSummaryEntity
 import im.vector.matrix.android.internal.database.model.GroupSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.query.process
 import im.vector.matrix.android.internal.util.fetchCopyMap
+import io.realm.Realm
+import io.realm.RealmQuery
 import javax.inject.Inject
 
 internal class DefaultGroupService @Inject constructor(private val monarchy: Monarchy) : GroupService {
@@ -41,10 +45,23 @@ internal class DefaultGroupService @Inject constructor(private val monarchy: Mon
         )
     }
 
-    override fun liveGroupSummaries(): LiveData<List<GroupSummary>> {
-        return monarchy.findAllMappedWithChanges(
-                { realm -> GroupSummaryEntity.where(realm).isNotEmpty(GroupSummaryEntityFields.DISPLAY_NAME) },
+    override fun getGroupSummaries(groupSummaryQueryParams: GroupSummaryQueryParams): List<GroupSummary> {
+        return monarchy.fetchAllMappedSync(
+                { groupSummariesQuery(it, groupSummaryQueryParams) },
                 { it.asDomain() }
         )
+    }
+
+    override fun getGroupSummariesLive(groupSummaryQueryParams: GroupSummaryQueryParams): LiveData<List<GroupSummary>> {
+        return monarchy.findAllMappedWithChanges(
+                { groupSummariesQuery(it, groupSummaryQueryParams) },
+                { it.asDomain() }
+        )
+    }
+
+    private fun groupSummariesQuery(realm: Realm, queryParams: GroupSummaryQueryParams): RealmQuery<GroupSummaryEntity> {
+        return GroupSummaryEntity.where(realm)
+                .process(GroupSummaryEntityFields.DISPLAY_NAME, queryParams.displayName)
+                .process(GroupSummaryEntityFields.MEMBERSHIP_STR, queryParams.memberships)
     }
 }

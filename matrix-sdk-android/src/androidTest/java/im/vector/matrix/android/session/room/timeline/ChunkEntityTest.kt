@@ -19,7 +19,10 @@ package im.vector.matrix.android.session.room.timeline
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.InstrumentedTest
-import im.vector.matrix.android.internal.database.helper.*
+import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.internal.database.helper.add
+import im.vector.matrix.android.internal.database.helper.lastStateIndex
+import im.vector.matrix.android.internal.database.helper.merge
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.SessionRealmModule
 import im.vector.matrix.android.internal.session.room.timeline.PaginationDirection
@@ -29,7 +32,6 @@ import im.vector.matrix.android.session.room.timeline.RoomDataHelper.createFakeR
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.kotlin.createObject
-import org.amshove.kluent.shouldBeFalse
 import org.amshove.kluent.shouldBeTrue
 import org.amshove.kluent.shouldEqual
 import org.junit.Before
@@ -147,38 +149,14 @@ internal class ChunkEntityTest : InstrumentedTest {
     }
 
     @Test
-    fun merge_shouldEventsBeLinked_whenMergingLinkedWithUnlinked() {
-        monarchy.runTransactionSync { realm ->
-            val chunk1: ChunkEntity = realm.createObject()
-            val chunk2: ChunkEntity = realm.createObject()
-            chunk1.addAll("roomId", createFakeListOfEvents(30), PaginationDirection.BACKWARDS, isUnlinked = true)
-            chunk2.addAll("roomId", createFakeListOfEvents(30), PaginationDirection.BACKWARDS, isUnlinked = false)
-            chunk1.merge("roomId", chunk2, PaginationDirection.BACKWARDS)
-            chunk1.isUnlinked().shouldBeFalse()
-        }
-    }
-
-    @Test
-    fun merge_shouldEventsBeUnlinked_whenMergingUnlinkedWithUnlinked() {
-        monarchy.runTransactionSync { realm ->
-            val chunk1: ChunkEntity = realm.createObject()
-            val chunk2: ChunkEntity = realm.createObject()
-            chunk1.addAll("roomId", createFakeListOfEvents(30), PaginationDirection.BACKWARDS, isUnlinked = true)
-            chunk2.addAll("roomId", createFakeListOfEvents(30), PaginationDirection.BACKWARDS, isUnlinked = true)
-            chunk1.merge("roomId", chunk2, PaginationDirection.BACKWARDS)
-            chunk1.isUnlinked().shouldBeTrue()
-        }
-    }
-
-    @Test
     fun merge_shouldPrevTokenMerged_whenMergingForwards() {
         monarchy.runTransactionSync { realm ->
             val chunk1: ChunkEntity = realm.createObject()
             val chunk2: ChunkEntity = realm.createObject()
             val prevToken = "prev_token"
             chunk1.prevToken = prevToken
-            chunk1.addAll("roomId", createFakeListOfEvents(30), PaginationDirection.BACKWARDS, isUnlinked = true)
-            chunk2.addAll("roomId", createFakeListOfEvents(30), PaginationDirection.BACKWARDS, isUnlinked = true)
+            chunk1.addAll("roomId", createFakeListOfEvents(30), PaginationDirection.BACKWARDS)
+            chunk2.addAll("roomId", createFakeListOfEvents(30), PaginationDirection.BACKWARDS)
             chunk1.merge("roomId", chunk2, PaginationDirection.FORWARDS)
             chunk1.prevToken shouldEqual prevToken
         }
@@ -191,10 +169,19 @@ internal class ChunkEntityTest : InstrumentedTest {
             val chunk2: ChunkEntity = realm.createObject()
             val nextToken = "next_token"
             chunk1.nextToken = nextToken
-            chunk1.addAll("roomId", createFakeListOfEvents(30), PaginationDirection.BACKWARDS, isUnlinked = true)
-            chunk2.addAll("roomId", createFakeListOfEvents(30), PaginationDirection.BACKWARDS, isUnlinked = true)
+            chunk1.addAll("roomId", createFakeListOfEvents(30), PaginationDirection.BACKWARDS)
+            chunk2.addAll("roomId", createFakeListOfEvents(30), PaginationDirection.BACKWARDS)
             chunk1.merge("roomId", chunk2, PaginationDirection.BACKWARDS)
             chunk1.nextToken shouldEqual nextToken
+        }
+    }
+
+    private fun ChunkEntity.addAll(roomId: String,
+                                   events: List<Event>,
+                                   direction: PaginationDirection,
+                                   stateIndexOffset: Int = 0) {
+        events.forEach { event ->
+            add(roomId, event, direction, stateIndexOffset)
         }
     }
 }

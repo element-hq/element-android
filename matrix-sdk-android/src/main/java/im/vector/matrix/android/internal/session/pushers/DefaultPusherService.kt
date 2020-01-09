@@ -86,7 +86,7 @@ internal class DefaultPusherService @Inject constructor(private val context: Con
                 .executeBy(taskExecutor)
     }
 
-    override fun livePushers(): LiveData<List<Pusher>> {
+    override fun getPushersLive(): LiveData<List<Pusher>> {
         return monarchy.findAllMappedWithChanges(
                 { realm -> PusherEntity.where(realm) },
                 { it.asDomain() }

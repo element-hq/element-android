@@ -66,6 +66,11 @@ class HomeDetailFragment @Inject constructor(
         setupToolbar()
         setupKeysBackupBanner()
 
+        withState(viewModel) {
+            // Update the navigation view if needed (for when we restore the tabs)
+            bottomNavigationView.selectedItemId = it.displayMode.toMenuId()
+        }
+
         viewModel.selectSubscribe(this, HomeDetailViewState::groupSummary) { groupSummary ->
             onGroupChange(groupSummary.orNull())
         }
@@ -127,7 +132,6 @@ class HomeDetailFragment @Inject constructor(
     private fun setupBottomNavigationView() {
         bottomNavigationView.setOnNavigationItemSelectedListener {
             val displayMode = when (it.itemId) {
-                R.id.bottom_action_home   -> RoomListDisplayMode.HOME
                 R.id.bottom_action_people -> RoomListDisplayMode.PEOPLE
                 R.id.bottom_action_rooms  -> RoomListDisplayMode.ROOMS
                 else                      -> RoomListDisplayMode.HOME
@@ -149,12 +153,6 @@ class HomeDetailFragment @Inject constructor(
     private fun switchDisplayMode(displayMode: RoomListDisplayMode) {
         groupToolbarTitleView.setText(displayMode.titleRes)
         updateSelectedFragment(displayMode)
-        // Update the navigation view (for when we restore the tabs)
-        bottomNavigationView.selectedItemId = when (displayMode) {
-            RoomListDisplayMode.PEOPLE -> R.id.bottom_action_people
-            RoomListDisplayMode.ROOMS  -> R.id.bottom_action_rooms
-            else                       -> R.id.bottom_action_home
-        }
     }
 
     private fun updateSelectedFragment(displayMode: RoomListDisplayMode) {
@@ -193,5 +191,11 @@ class HomeDetailFragment @Inject constructor(
         unreadCounterBadgeViews[INDEX_PEOPLE].render(UnreadCounterBadgeView.State(it.notificationCountPeople, it.notificationHighlightPeople))
         unreadCounterBadgeViews[INDEX_ROOMS].render(UnreadCounterBadgeView.State(it.notificationCountRooms, it.notificationHighlightRooms))
         syncStateView.render(it.syncState)
+    }
+
+    private fun RoomListDisplayMode.toMenuId() = when (this) {
+        RoomListDisplayMode.PEOPLE -> R.id.bottom_action_people
+        RoomListDisplayMode.ROOMS  -> R.id.bottom_action_rooms
+        else                       -> R.id.bottom_action_home
     }
 }

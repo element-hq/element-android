@@ -45,15 +45,13 @@ class VectorSyncService : SyncService() {
     }
 
     override fun onStart(isInitialSync: Boolean) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val notificationSubtitleRes = if (isInitialSync) {
-                R.string.notification_initial_sync
-            } else {
-                R.string.notification_listening_for_events
-            }
-            val notification = notificationUtils.buildForegroundServiceNotification(notificationSubtitleRes, false)
-            startForeground(NotificationUtils.NOTIFICATION_ID_FOREGROUND_SERVICE, notification)
+        val notificationSubtitleRes = if (isInitialSync) {
+            R.string.notification_initial_sync
+        } else {
+            R.string.notification_listening_for_events
         }
+        val notification = notificationUtils.buildForegroundServiceNotification(notificationSubtitleRes, false)
+        startForeground(NotificationUtils.NOTIFICATION_ID_FOREGROUND_SERVICE, notification)
     }
 
     override fun onRescheduleAsked(userId: String, isInitialSync: Boolean, delay: Long) {

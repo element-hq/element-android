@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,20 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.home.room.detail.composer
+package im.vector.matrix.android.internal.query
 
-import im.vector.riotx.core.platform.VectorViewModelAction
+import io.realm.RealmObject
+import io.realm.RealmQuery
 
-sealed class TextComposerAction : VectorViewModelAction {
-    data class QueryUsers(val query: CharSequence?) : TextComposerAction()
-    data class QueryRooms(val query: CharSequence?) : TextComposerAction()
-    data class QueryGroups(val query: CharSequence?) : TextComposerAction()
+fun <T : RealmObject, E : Enum<E>> RealmQuery<T>.process(field: String, enums: List<Enum<E>>): RealmQuery<T> {
+    val lastEnumValue = enums.lastOrNull()
+    beginGroup()
+    for (enumValue in enums) {
+        equalTo(field, enumValue.name)
+        if (enumValue != lastEnumValue) {
+            or()
+        }
+    }
+    endGroup()
+    return this
 }

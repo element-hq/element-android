@@ -24,9 +24,11 @@ import android.widget.EditText
 import com.otaliastudios.autocomplete.Autocomplete
 import com.otaliastudios.autocomplete.AutocompleteCallback
 import com.otaliastudios.autocomplete.CharPolicy
+import com.squareup.inject.assisted.Assisted
+import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.group.model.GroupSummary
+import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.session.room.model.RoomSummary
-import im.vector.matrix.android.api.session.user.model.User
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.matrix.android.api.util.toRoomAliasMatrixItem
@@ -36,24 +38,29 @@ import im.vector.riotx.features.autocomplete.command.AutocompleteCommandPresente
 import im.vector.riotx.features.autocomplete.command.CommandAutocompletePolicy
 import im.vector.riotx.features.autocomplete.emoji.AutocompleteEmojiPresenter
 import im.vector.riotx.features.autocomplete.group.AutocompleteGroupPresenter
+import im.vector.riotx.features.autocomplete.member.AutocompleteMemberPresenter
 import im.vector.riotx.features.autocomplete.room.AutocompleteRoomPresenter
-import im.vector.riotx.features.autocomplete.user.AutocompleteUserPresenter
 import im.vector.riotx.features.command.Command
 import im.vector.riotx.features.home.AvatarRenderer
-import im.vector.riotx.features.home.room.detail.composer.TextComposerViewState
 import im.vector.riotx.features.html.PillImageSpan
 import im.vector.riotx.features.themes.ThemeUtils
-import javax.inject.Inject
 
-class AutoCompleter @Inject constructor(
+class AutoCompleter @AssistedInject constructor(
+        @Assisted val roomId: String,
         private val avatarRenderer: AvatarRenderer,
         private val commandAutocompletePolicy: CommandAutocompletePolicy,
         private val autocompleteCommandPresenter: AutocompleteCommandPresenter,
-        private val autocompleteUserPresenter: AutocompleteUserPresenter,
+        private val autocompleteMemberPresenterFactory: AutocompleteMemberPresenter.Factory,
         private val autocompleteRoomPresenter: AutocompleteRoomPresenter,
         private val autocompleteGroupPresenter: AutocompleteGroupPresenter,
         private val autocompleteEmojiPresenter: AutocompleteEmojiPresenter
 ) {
+
+    @AssistedInject.Factory
+    interface Factory {
+        fun create(roomId: String): AutoCompleter
+    }
+
     private lateinit var editText: EditText
 
     fun enterSpecialMode() {
@@ -68,22 +75,14 @@ class AutoCompleter @Inject constructor(
         GlideApp.with(editText)
     }
 
-    fun setup(editText: EditText, listener: AutoCompleterListener) {
+    fun setup(editText: EditText) {
         this.editText = editText
-
         val backgroundDrawable = ColorDrawable(ThemeUtils.getColor(editText.context, R.attr.riotx_background))
-
         setupCommands(backgroundDrawable, editText)
-        setupUsers(backgroundDrawable, editText, listener)
-        setupRooms(backgroundDrawable, editText, listener)
-        setupGroups(backgroundDrawable, editText, listener)
+        setupMembers(backgroundDrawable, editText)
+        setupGroups(backgroundDrawable, editText)
         setupEmojis(backgroundDrawable, editText)
-    }
-
-    fun render(state: TextComposerViewState) {
-        autocompleteUserPresenter.render(state.asyncUsers)
-        autocompleteRoomPresenter.render(state.asyncRooms)
-        autocompleteGroupPresenter.render(state.asyncGroups)
+        setupRooms(backgroundDrawable, editText)
     }
 
     private fun setupCommands(backgroundDrawable: Drawable, editText: EditText) {
@@ -107,15 +106,15 @@ class AutoCompleter @Inject constructor(
                 .build()
     }
 
-    private fun setupUsers(backgroundDrawable: ColorDrawable, editText: EditText, listener: AutocompleteUserPresenter.Callback) {
-        autocompleteUserPresenter.callback = listener
-        Autocomplete.on<User>(editText)
+    private fun setupMembers(backgroundDrawable: ColorDrawable, editText: EditText) {
+        val autocompleteMemberPresenter = autocompleteMemberPresenterFactory.create(roomId)
+        Autocomplete.on<RoomMember>(editText)
                 .with(CharPolicy('@', true))
-                .with(autocompleteUserPresenter)
+                .with(autocompleteMemberPresenter)
                 .with(ELEVATION)
                 .with(backgroundDrawable)
-                .with(object : AutocompleteCallback<User> {
-                    override fun onPopupItemClicked(editable: Editable, item: User): Boolean {
+                .with(object : AutocompleteCallback<RoomMember> {
+                    override fun onPopupItemClicked(editable: Editable, item: RoomMember): Boolean {
                         insertMatrixItem(editText, editable, "@", item.toMatrixItem())
                         return true
                     }
@@ -126,8 +125,7 @@ class AutoCompleter @Inject constructor(
                 .build()
     }
 
-    private fun setupRooms(backgroundDrawable: ColorDrawable, editText: EditText, listener: AutocompleteRoomPresenter.Callback) {
-        autocompleteRoomPresenter.callback = listener
+    private fun setupRooms(backgroundDrawable: ColorDrawable, editText: EditText) {
         Autocomplete.on<RoomSummary>(editText)
                 .with(CharPolicy('#', true))
                 .with(autocompleteRoomPresenter)
@@ -145,8 +143,7 @@ class AutoCompleter @Inject constructor(
                 .build()
     }
 
-    private fun setupGroups(backgroundDrawable: ColorDrawable, editText: EditText, listener: AutocompleteGroupPresenter.Callback) {
-        autocompleteGroupPresenter.callback = listener
+    private fun setupGroups(backgroundDrawable: ColorDrawable, editText: EditText) {
         Autocomplete.on<GroupSummary>(editText)
                 .with(CharPolicy('+', true))
                 .with(autocompleteGroupPresenter)
@@ -225,11 +222,6 @@ class AutoCompleter @Inject constructor(
 
         editable.setSpan(span, startIndex, startIndex + displayName.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
     }
-
-    interface AutoCompleterListener :
-            AutocompleteUserPresenter.Callback,
-            AutocompleteRoomPresenter.Callback,
-            AutocompleteGroupPresenter.Callback
 
     companion object {
         private const val ELEVATION = 6f

@@ -21,7 +21,7 @@ import im.vector.matrix.android.api.session.events.model.toContent
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.api.session.room.model.Membership
-import im.vector.matrix.android.api.session.room.model.RoomMember
+import im.vector.matrix.android.api.session.room.model.RoomMemberContent
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
 import io.mockk.every
 import io.mockk.mockk
@@ -40,7 +40,7 @@ class PushrulesConditionTest {
                 content = MessageTextContent("m.text", "Yo wtf?").toContent(),
                 originServerTs = 0)
 
-        val rm = RoomMember(
+        val rm = RoomMemberContent(
                 Membership.INVITE,
                 displayName = "Foo",
                 avatarUrl = "mxc://matrix.org/EqMZYbREvHXvYFyfxOlkf"
@@ -72,7 +72,7 @@ class PushrulesConditionTest {
                 type = "m.room.member",
                 eventId = "mx0",
                 stateKey = "@foo:matrix.org",
-                content = RoomMember(
+                content = RoomMemberContent(
                         Membership.INVITE,
                         displayName = "Foo",
                         avatarUrl = "mxc://matrix.org/EqMZYbREvHXvYFyfxOlkf"

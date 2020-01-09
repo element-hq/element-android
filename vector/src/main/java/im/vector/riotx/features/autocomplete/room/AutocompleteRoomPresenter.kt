@@ -18,18 +18,18 @@ package im.vector.riotx.features.autocomplete.room
 
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
-import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.Success
 import com.otaliastudios.autocomplete.RecyclerViewPresenter
+import im.vector.matrix.android.api.query.QueryStringValue
+import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.matrix.android.api.session.room.roomSummaryQueryParams
 import im.vector.riotx.features.autocomplete.AutocompleteClickListener
 import javax.inject.Inject
 
 class AutocompleteRoomPresenter @Inject constructor(context: Context,
-                                                    private val controller: AutocompleteRoomController
+                                                    private val controller: AutocompleteRoomController,
+                                                    private val session: Session
 ) : RecyclerViewPresenter<RoomSummary>(context), AutocompleteClickListener<RoomSummary> {
-
-    var callback: Callback? = null
 
     init {
         controller.listener = this
@@ -46,16 +46,16 @@ class AutocompleteRoomPresenter @Inject constructor(context: Context,
     }
 
     override fun onQuery(query: CharSequence?) {
-        callback?.onQueryRooms(query)
-    }
-
-    fun render(rooms: Async<List<RoomSummary>>) {
-        if (rooms is Success) {
-            controller.setData(rooms())
+        val queryParams = roomSummaryQueryParams {
+            canonicalAlias = if (query.isNullOrBlank()) {
+                QueryStringValue.IsNotNull
+            } else {
+                QueryStringValue.Contains(query.toString(), QueryStringValue.Case.INSENSITIVE)
+            }
         }
-    }
-
-    interface Callback {
-        fun onQueryRooms(query: CharSequence?)
+        val rooms = session.getRoomSummaries(queryParams)
+                .asSequence()
+                .sortedBy { it.displayName }
+        controller.setData(rooms.toList())
     }
 }
