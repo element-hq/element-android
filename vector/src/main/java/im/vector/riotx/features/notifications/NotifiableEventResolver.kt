@@ -23,7 +23,7 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.Membership
-import im.vector.matrix.android.api.session.room.model.RoomMember
+import im.vector.matrix.android.api.session.room.model.RoomMemberContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getEditedEventId
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageBody
@@ -163,7 +163,7 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
     }
 
     private fun resolveStateRoomEvent(event: Event, session: Session): NotifiableEvent? {
-        val content = event.content?.toModel<RoomMember>() ?: return null
+        val content = event.content?.toModel<RoomMemberContent>() ?: return null
         val roomId = event.roomId ?: return null
         val dName = event.senderId?.let { session.getUser(it)?.displayName }
         if (Membership.INVITE == content.membership) {

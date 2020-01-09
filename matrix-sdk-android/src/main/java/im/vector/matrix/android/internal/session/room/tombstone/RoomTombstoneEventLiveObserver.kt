@@ -23,6 +23,7 @@ import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.VersioningState
 import im.vector.matrix.android.api.session.room.model.tombstone.RoomTombstoneContent
 import im.vector.matrix.android.internal.database.RealmLiveEntityObserver
+import im.vector.matrix.android.internal.database.awaitTransaction
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
@@ -30,9 +31,9 @@ import im.vector.matrix.android.internal.database.query.types
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.SessionDatabase
 import io.realm.OrderedCollectionChangeSet
-import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.RealmResults
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 internal class RoomTombstoneEventLiveObserver @Inject constructor(@SessionDatabase
@@ -51,24 +52,24 @@ internal class RoomTombstoneEventLiveObserver @Inject constructor(@SessionDataba
                 }
                 .toList()
                 .also {
-                    handleRoomTombstoneEvents(it)
+                    observerScope.launch {
+                        handleRoomTombstoneEvents(it)
+                    }
                 }
     }
 
-    private fun handleRoomTombstoneEvents(tombstoneEvents: List<Event>) = Realm.getInstance(realmConfiguration).use {
-        it.executeTransactionAsync { realm ->
-            for (event in tombstoneEvents) {
-                if (event.roomId == null) continue
-                val createRoomContent = event.getClearContent().toModel<RoomTombstoneContent>()
-                if (createRoomContent?.replacementRoom == null) continue
+    private suspend fun handleRoomTombstoneEvents(tombstoneEvents: List<Event>) = awaitTransaction(realmConfiguration) { realm ->
+        for (event in tombstoneEvents) {
+            if (event.roomId == null) continue
+            val createRoomContent = event.getClearContent().toModel<RoomTombstoneContent>()
+            if (createRoomContent?.replacementRoom == null) continue
 
-                val predecessorRoomSummary = RoomSummaryEntity.where(realm, event.roomId).findFirst()
-                                             ?: RoomSummaryEntity(event.roomId)
-                if (predecessorRoomSummary.versioningState == VersioningState.NONE) {
-                    predecessorRoomSummary.versioningState = VersioningState.UPGRADED_ROOM_NOT_JOINED
-                }
-                realm.insertOrUpdate(predecessorRoomSummary)
+            val predecessorRoomSummary = RoomSummaryEntity.where(realm, event.roomId).findFirst()
+                                         ?: RoomSummaryEntity(event.roomId)
+            if (predecessorRoomSummary.versioningState == VersioningState.NONE) {
+                predecessorRoomSummary.versioningState = VersioningState.UPGRADED_ROOM_NOT_JOINED
             }
+            realm.insertOrUpdate(predecessorRoomSummary)
         }
     }
 }

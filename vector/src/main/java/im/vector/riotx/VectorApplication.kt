@@ -42,7 +42,7 @@ import im.vector.riotx.core.di.DaggerVectorComponent
 import im.vector.riotx.core.di.HasVectorInjector
 import im.vector.riotx.core.di.VectorComponent
 import im.vector.riotx.core.extensions.configureAndStart
-import im.vector.riotx.core.rx.setupRxPlugin
+import im.vector.riotx.core.rx.RxConfig
 import im.vector.riotx.features.configuration.VectorConfiguration
 import im.vector.riotx.features.lifecycle.VectorActivityLifecycleCallbacks
 import im.vector.riotx.features.notifications.NotificationDrawerManager
@@ -75,6 +75,7 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
     @Inject lateinit var versionProvider: VersionProvider
     @Inject lateinit var notificationUtils: NotificationUtils
     @Inject lateinit var appStateHandler: AppStateHandler
+    @Inject lateinit var rxConfig: RxConfig
     lateinit var vectorComponent: VectorComponent
     private var fontThreadHandler: Handler? = null
 
@@ -84,7 +85,7 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
         vectorComponent = DaggerVectorComponent.factory().create(this)
         vectorComponent.inject(this)
         vectorUncaughtExceptionHandler.activate(this)
-        setupRxPlugin()
+        rxConfig.setupRxPlugin()
 
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
@@ -116,11 +117,12 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
         if (authenticationService.hasAuthenticatedSessions() && !activeSessionHolder.hasActiveSession()) {
             val lastAuthenticatedSession = authenticationService.getLastAuthenticatedSession()!!
             activeSessionHolder.setActiveSession(lastAuthenticatedSession)
-            lastAuthenticatedSession.configureAndStart(pushRuleTriggerListener, sessionListener)
+            lastAuthenticatedSession.configureAndStart(applicationContext, pushRuleTriggerListener, sessionListener)
         }
         ProcessLifecycleOwner.get().lifecycle.addObserver(object : LifecycleObserver {
             @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
             fun entersForeground() {
+                Timber.i("App entered foreground")
                 FcmHelper.onEnterForeground(appContext)
                 activeSessionHolder.getSafeActiveSession()?.also {
                     it.stopAnyBackgroundSync()

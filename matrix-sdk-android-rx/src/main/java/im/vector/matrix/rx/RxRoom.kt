@@ -17,13 +17,16 @@
 package im.vector.matrix.rx
 
 import im.vector.matrix.android.api.session.room.Room
+import im.vector.matrix.android.api.session.room.members.RoomMemberQueryParams
 import im.vector.matrix.android.api.session.room.model.EventAnnotationsSummary
 import im.vector.matrix.android.api.session.room.model.ReadReceipt
+import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.notification.RoomNotificationState
 import im.vector.matrix.android.api.session.room.send.UserDraft
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.util.Optional
+import im.vector.matrix.android.api.util.toOptional
 import io.reactivex.Observable
 import io.reactivex.Single
 
@@ -31,18 +34,22 @@ class RxRoom(private val room: Room) {
 
     fun liveRoomSummary(): Observable<Optional<RoomSummary>> {
         return room.getRoomSummaryLive().asObservable()
+                .startWith(room.roomSummary().toOptional())
     }
 
-    fun liveRoomMemberIds(): Observable<List<String>> {
-        return room.getRoomMemberIdsLive().asObservable()
+    fun liveRoomMembers(queryParams: RoomMemberQueryParams): Observable<List<RoomMember>> {
+        return room.getRoomMembersLive(queryParams).asObservable()
+                .startWith(room.getRoomMembers(queryParams))
     }
 
     fun liveAnnotationSummary(eventId: String): Observable<Optional<EventAnnotationsSummary>> {
-        return room.getEventSummaryLive(eventId).asObservable()
+        return room.getEventAnnotationsSummaryLive(eventId).asObservable()
+                .startWith(room.getEventAnnotationsSummary(eventId).toOptional())
     }
 
     fun liveTimelineEvent(eventId: String): Observable<Optional<TimelineEvent>> {
         return room.getTimeLineEventLive(eventId).asObservable()
+                .startWith(room.getTimeLineEvent(eventId).toOptional())
     }
 
     fun liveReadMarker(): Observable<Optional<String>> {

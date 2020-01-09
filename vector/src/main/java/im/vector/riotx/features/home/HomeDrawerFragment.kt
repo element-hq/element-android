@@ -40,7 +40,7 @@ class HomeDrawerFragment @Inject constructor(
         if (savedInstanceState == null) {
             replaceChildFragment(R.id.homeDrawerGroupListContainer, GroupListFragment::class.java)
         }
-        session.liveUser(session.myUserId).observeK(this) { optionalUser ->
+        session.getUserLive(session.myUserId).observeK(viewLifecycleOwner) { optionalUser ->
             val user = optionalUser?.getOrNull()
             if (user != null) {
                 avatarRenderer.render(user.toMatrixItem(), homeDrawerHeaderAvatarView)

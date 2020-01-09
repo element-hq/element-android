@@ -54,7 +54,7 @@ internal fun TimelineEventEntity.Companion.where(realm: Realm,
 
 internal fun TimelineEventEntity.Companion.findWithSenderMembershipEvent(realm: Realm, senderMembershipEventId: String): List<TimelineEventEntity> {
     return realm.where<TimelineEventEntity>()
-            .equalTo(TimelineEventEntityFields.SENDER_MEMBERSHIP_EVENT.EVENT_ID, senderMembershipEventId)
+            .equalTo(TimelineEventEntityFields.SENDER_MEMBERSHIP_EVENT_ID, senderMembershipEventId)
             .findAll()
 }
 

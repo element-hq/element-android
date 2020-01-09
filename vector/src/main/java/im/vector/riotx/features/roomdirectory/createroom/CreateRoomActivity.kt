@@ -22,6 +22,7 @@ import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
 import com.airbnb.mvrx.viewModel
 import im.vector.riotx.R
+import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.addFragment
 import im.vector.riotx.core.platform.ToolbarConfigurable
 import im.vector.riotx.core.platform.VectorBaseActivity
@@ -43,6 +44,10 @@ class CreateRoomActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     override fun configure(toolbar: Toolbar) {
         configureToolbar(toolbar)
+    }
+
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
     }
 
     override fun initUiAndData() {

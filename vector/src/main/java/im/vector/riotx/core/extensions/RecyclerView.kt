@@ -26,9 +26,13 @@ import com.airbnb.epoxy.EpoxyController
  */
 fun RecyclerView.configureWith(epoxyController: EpoxyController,
                                itemAnimator: RecyclerView.ItemAnimator? = null,
+                               viewPool: RecyclerView.RecycledViewPool? = null,
                                showDivider: Boolean = false,
                                hasFixedSize: Boolean = true) {
-    layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+    layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false).apply {
+        recycleChildrenOnDetach = viewPool != null
+    }
+    setRecycledViewPool(viewPool)
     itemAnimator?.let { this.itemAnimator = it }
     if (showDivider) {
         addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))

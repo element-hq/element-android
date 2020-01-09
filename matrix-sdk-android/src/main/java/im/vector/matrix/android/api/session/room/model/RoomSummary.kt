@@ -43,7 +43,8 @@ data class RoomSummary(
         val membership: Membership = Membership.NONE,
         val versioningState: VersioningState = VersioningState.NONE,
         val readMarkerId: String? = null,
-        val userDrafts: List<UserDraft> = emptyList()
+        val userDrafts: List<UserDraft> = emptyList(),
+        var isEncrypted: Boolean
 ) {
 
     val isVersioned: Boolean

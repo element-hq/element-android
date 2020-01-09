@@ -25,7 +25,7 @@ import android.os.Build
 import android.os.PowerManager
 import androidx.core.content.ContextCompat
 import im.vector.matrix.android.internal.session.sync.job.SyncService
-import im.vector.riotx.fdroid.service.VectorSyncService
+import im.vector.riotx.core.services.VectorSyncService
 import timber.log.Timber
 
 class AlarmSyncBroadcastReceiver : BroadcastReceiver() {
@@ -41,14 +41,9 @@ class AlarmSyncBroadcastReceiver : BroadcastReceiver() {
         val userId = intent.getStringExtra(SyncService.EXTRA_USER_ID)
         // This method is called when the BroadcastReceiver is receiving an Intent broadcast.
         Timber.d("RestartBroadcastReceiver received intent")
-        Intent(context, VectorSyncService::class.java).also {
-            it.putExtra(SyncService.EXTRA_USER_ID, userId)
+        VectorSyncService.newIntent(context, userId).also {
             try {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    ContextCompat.startForegroundService(context, it)
-                } else {
-                    context.startService(it)
-                }
+                ContextCompat.startForegroundService(context, it)
             } catch (ex: Throwable) {
                 // TODO
                 Timber.e(ex)
@@ -79,6 +74,7 @@ class AlarmSyncBroadcastReceiver : BroadcastReceiver() {
         }
 
         fun cancelAlarm(context: Context) {
+            Timber.v("Cancel alarm")
             val intent = Intent(context, AlarmSyncBroadcastReceiver::class.java)
             val pIntent = PendingIntent.getBroadcast(context, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT)
             val alarmMgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager

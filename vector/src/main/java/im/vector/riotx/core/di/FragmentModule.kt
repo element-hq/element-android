@@ -47,6 +47,7 @@ import im.vector.riotx.features.roomdirectory.roompreview.RoomPreviewNoPreviewFr
 import im.vector.riotx.features.roomprofile.RoomProfileFragment
 import im.vector.riotx.features.roomprofile.members.RoomMemberListFragment
 import im.vector.riotx.features.settings.*
+import im.vector.riotx.features.settings.devices.VectorSettingsDevicesFragment
 import im.vector.riotx.features.settings.ignored.VectorSettingsIgnoredUsersFragment
 import im.vector.riotx.features.settings.push.PushGatewaysFragment
 import im.vector.riotx.features.signout.soft.SoftLogoutFragment
@@ -229,6 +230,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(VectorSettingsIgnoredUsersFragment::class)
     fun bindVectorSettingsIgnoredUsersFragment(fragment: VectorSettingsIgnoredUsersFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(VectorSettingsDevicesFragment::class)
+    fun bindVectorSettingsDevicesFragment(fragment: VectorSettingsDevicesFragment): Fragment
 
     @Binds
     @IntoMap

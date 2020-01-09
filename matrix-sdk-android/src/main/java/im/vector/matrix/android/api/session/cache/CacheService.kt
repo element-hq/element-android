@@ -24,7 +24,7 @@ import im.vector.matrix.android.api.MatrixCallback
 interface CacheService {
 
     /**
-     * Clear the whole cached data, except credentials. Once done, the session is closed and has to be opened again
+     * Clear the whole cached data, except credentials. Once done, the sync has to be restarted by the sdk user.
      */
     fun clearCache(callback: MatrixCallback<Unit>)
 }

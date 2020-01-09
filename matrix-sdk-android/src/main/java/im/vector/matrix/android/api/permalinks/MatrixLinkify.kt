@@ -17,7 +17,6 @@
 package im.vector.matrix.android.api.permalinks
 
 import android.text.Spannable
-import im.vector.matrix.android.api.MatrixPatterns
 
 /**
  *  MatrixLinkify take a piece of text and turns all of the
@@ -30,7 +29,13 @@ object MatrixLinkify {
      *
      * @param spannable the text in which the matrix items has to be clickable.
      */
+    @Suppress("UNUSED_PARAMETER")
     fun addLinks(spannable: Spannable, callback: MatrixPermalinkSpan.Callback?): Boolean {
+        /**
+         * I disable it because it mess up with pills, and even with pills, it does not work correctly:
+         * The url is not correct. Ex: for @user:matrix.org, the url will be @user:matrix.org, instead of a matrix.to
+         */
+        /*
         // sanity checks
         if (spannable.isEmpty()) {
             return false
@@ -50,5 +55,7 @@ object MatrixLinkify {
             }
         }
         return hasMatch
+         */
+        return false
     }
 }

@@ -107,7 +107,12 @@ interface Session :
      * This method allows to listen the sync state.
      * @return a [LiveData] of [SyncState].
      */
-    fun syncState(): LiveData<SyncState>
+    fun getSyncStateLive(): LiveData<SyncState>
+
+    /**
+     * This methods return true if an initial sync has been processed
+     */
+    fun hasAlreadySynced(): Boolean
 
     /**
      * This method allow to close a session. It does stop some services.

@@ -121,8 +121,8 @@ class DefaultNavigator @Inject constructor(
         context.startActivity(intent)
     }
 
-    override fun openSettings(context: Context) {
-        val intent = VectorSettingsActivity.getIntent(context)
+    override fun openSettings(context: Context, directAccess: Int) {
+        val intent = VectorSettingsActivity.getIntent(context, directAccess)
         context.startActivity(intent)
     }
 

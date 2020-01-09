@@ -48,6 +48,7 @@ class RoomDirectoryListCreator @Inject constructor(private val stringArrayProvid
             if (it != userHsName) {
                 // Use the server name as a default display name
                 result.add(RoomDirectoryData(
+                        homeServer = it,
                         displayName = it,
                         includeAllNetworks = true
                 ))

@@ -30,8 +30,8 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.matrix.android.api.auth.registration.RegisterThreePid
 import im.vector.matrix.android.api.failure.Failure
+import im.vector.matrix.android.api.failure.is401
 import im.vector.riotx.R
-import im.vector.riotx.core.error.is401
 import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.extensions.isEmail
 import im.vector.riotx.core.extensions.setTextOrHide

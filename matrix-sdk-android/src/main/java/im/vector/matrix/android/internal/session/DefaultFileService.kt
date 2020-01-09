@@ -25,7 +25,7 @@ import im.vector.matrix.android.api.session.file.FileService
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.crypto.attachments.ElementToDecrypt
 import im.vector.matrix.android.internal.crypto.attachments.MXEncryptedAttachments
-import im.vector.matrix.android.internal.di.UserMd5
+import im.vector.matrix.android.internal.di.SessionId
 import im.vector.matrix.android.internal.extensions.foldToCallback
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import im.vector.matrix.android.internal.util.md5
@@ -42,7 +42,7 @@ import java.io.IOException
 import javax.inject.Inject
 
 internal class DefaultFileService @Inject constructor(private val context: Context,
-                                                      @UserMd5 private val userMd5: String,
+                                                      @SessionId private val sessionId: String,
                                                       private val contentUrlResolver: ContentUrlResolver,
                                                       private val coroutineDispatchers: MatrixCoroutineDispatchers) : FileService {
 
@@ -103,9 +103,9 @@ internal class DefaultFileService @Inject constructor(private val context: Conte
         return when (downloadMode) {
             FileService.DownloadMode.FOR_INTERNAL_USE -> {
                 // Create dir tree (MF stands for Matrix File):
-                // <cache>/MF/<md5(userId)>/<md5(id)>/
+                // <cache>/MF/<sessionId>/<md5(id)>/
                 val tmpFolderRoot = File(context.cacheDir, "MF")
-                val tmpFolderUser = File(tmpFolderRoot, userMd5)
+                val tmpFolderUser = File(tmpFolderRoot, sessionId)
                 File(tmpFolderUser, id.md5())
             }
             FileService.DownloadMode.TO_EXPORT        -> {

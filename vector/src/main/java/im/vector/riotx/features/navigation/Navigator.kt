@@ -19,6 +19,7 @@ package im.vector.riotx.features.navigation
 import android.app.Activity
 import android.content.Context
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
+import im.vector.riotx.features.settings.VectorSettingsActivity
 import im.vector.riotx.features.share.SharedData
 
 interface Navigator {
@@ -39,7 +40,7 @@ interface Navigator {
 
     fun openRoomsFiltering(context: Context)
 
-    fun openSettings(context: Context)
+    fun openSettings(context: Context, directAccess: Int = VectorSettingsActivity.EXTRA_DIRECT_ACCESS_ROOT)
 
     fun openDebug(context: Context)
 

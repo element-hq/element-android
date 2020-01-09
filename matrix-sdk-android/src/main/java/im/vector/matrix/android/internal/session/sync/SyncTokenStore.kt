@@ -18,7 +18,6 @@ package im.vector.matrix.android.internal.session.sync
 
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.internal.database.model.SyncEntity
-import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.Realm
 import javax.inject.Inject
 
@@ -30,10 +29,8 @@ internal class SyncTokenStore @Inject constructor(private val monarchy: Monarchy
         }
     }
 
-    suspend fun saveToken(token: String?) {
-        monarchy.awaitTransaction {
-            val sync = SyncEntity(token)
-            it.insertOrUpdate(sync)
-        }
+    fun saveToken(realm: Realm, token: String?) {
+        val sync = SyncEntity(token)
+        realm.insertOrUpdate(sync)
     }
 }

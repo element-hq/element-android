@@ -25,7 +25,9 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.group.groupSummaryQueryParams
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.rx.rx
@@ -97,6 +99,10 @@ class GroupListViewModel @AssistedInject constructor(@Assisted initialState: Gro
     }
 
     private fun observeGroupSummaries() {
+        val groupSummariesQueryParams = groupSummaryQueryParams {
+            memberships = listOf(Membership.JOIN)
+            displayName = QueryStringValue.IsNotEmpty
+        }
         Observable.combineLatest<GroupSummary, List<GroupSummary>, List<GroupSummary>>(
                 session
                         .rx()
@@ -110,9 +116,7 @@ class GroupListViewModel @AssistedInject constructor(@Assisted initialState: Gro
                         },
                 session
                         .rx()
-                        .liveGroupSummaries()
-                        // Keep only joined groups. Group invitations will be managed later
-                        .map { it.filter { groupSummary -> groupSummary.membership == Membership.JOIN } },
+                        .liveGroupSummaries(groupSummariesQueryParams),
                 BiFunction { allCommunityGroup, communityGroups ->
                     listOf(allCommunityGroup) + communityGroups
                 }

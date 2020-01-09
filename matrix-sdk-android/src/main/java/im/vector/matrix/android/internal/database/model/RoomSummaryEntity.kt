@@ -42,7 +42,9 @@ internal open class RoomSummaryEntity(@PrimaryKey var roomId: String = "",
                                       var breadcrumbsIndex: Int = NOT_IN_BREADCRUMBS,
                                       var canonicalAlias: String? = null,
                                       var aliases: RealmList<String> = RealmList(),
-                                      var flatAliases: String = ""
+                                      // this is required for querying
+                                      var flatAliases: String = "",
+                                      var isEncrypted: Boolean = false
 ) : RealmObject() {
 
     private var membershipStr: String = Membership.NONE.name

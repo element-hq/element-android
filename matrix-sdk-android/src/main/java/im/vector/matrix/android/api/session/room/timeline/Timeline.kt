@@ -65,7 +65,7 @@ interface Timeline {
 
     /**
      * This is the main method to enrich the timeline with new data.
-     * It will call the onUpdated method from [Listener] when the data will be processed.
+     * It will call the onTimelineUpdated method from [Listener] when the data will be processed.
      * It also ensures only one pagination by direction is launched at a time, so you can safely call this multiple time in a row.
      */
     fun paginate(direction: Direction, count: Int)
@@ -106,7 +106,12 @@ interface Timeline {
          * Call when the timeline has been updated through pagination or sync.
          * @param snapshot the most up to date snapshot
          */
-        fun onUpdated(snapshot: List<TimelineEvent>)
+        fun onTimelineUpdated(snapshot: List<TimelineEvent>)
+
+        /**
+         * Called whenever an error we can't recover from occurred
+         */
+        fun onTimelineFailure(throwable: Throwable)
     }
 
     /**
