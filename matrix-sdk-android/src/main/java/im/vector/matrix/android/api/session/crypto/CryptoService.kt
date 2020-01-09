@@ -30,6 +30,7 @@ import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXEncryptEventContentResult
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
+import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
 
@@ -88,6 +89,8 @@ interface CryptoService {
     fun removeRoomKeysRequestListener(listener: RoomKeysRequestListener)
 
     fun getDevicesList(callback: MatrixCallback<DevicesListResponse>)
+
+    fun getDeviceInfo(deviceId: String, callback: MatrixCallback<DeviceInfo>)
 
     fun inboundGroupSessionsCount(onlyBackedUp: Boolean): Int
 

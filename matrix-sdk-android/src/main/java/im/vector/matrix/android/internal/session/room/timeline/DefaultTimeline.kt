@@ -27,13 +27,7 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineSettings
 import im.vector.matrix.android.api.util.CancelableBag
 import im.vector.matrix.android.internal.database.mapper.TimelineEventMapper
 import im.vector.matrix.android.internal.database.mapper.asDomain
-import im.vector.matrix.android.internal.database.model.ChunkEntity
-import im.vector.matrix.android.internal.database.model.ChunkEntityFields
-import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryEntity
-import im.vector.matrix.android.internal.database.model.EventEntity
-import im.vector.matrix.android.internal.database.model.RoomEntity
-import im.vector.matrix.android.internal.database.model.TimelineEventEntity
-import im.vector.matrix.android.internal.database.model.TimelineEventEntityFields
+import im.vector.matrix.android.internal.database.model.*
 import im.vector.matrix.android.internal.database.query.FilterContent
 import im.vector.matrix.android.internal.database.query.findAllInRoomWithSendStates
 import im.vector.matrix.android.internal.database.query.where
@@ -44,16 +38,10 @@ import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.Debouncer
 import im.vector.matrix.android.internal.util.createBackgroundHandler
 import im.vector.matrix.android.internal.util.createUIHandler
-import io.realm.OrderedCollectionChangeSet
-import io.realm.OrderedRealmCollectionChangeListener
-import io.realm.Realm
-import io.realm.RealmConfiguration
-import io.realm.RealmQuery
-import io.realm.RealmResults
-import io.realm.Sort
+import io.realm.*
 import timber.log.Timber
-import java.util.Collections
-import java.util.UUID
+import java.util.*
+import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.collections.ArrayList
@@ -77,11 +65,11 @@ internal class DefaultTimeline(
         private val hiddenReadReceipts: TimelineHiddenReadReceipts
 ) : Timeline, TimelineHiddenReadReceipts.Delegate {
 
-    private companion object {
+    companion object {
         val BACKGROUND_HANDLER = createBackgroundHandler("TIMELINE_DB_THREAD")
     }
 
-    private val listeners = ArrayList<Timeline.Listener>()
+    private val listeners = CopyOnWriteArrayList<Timeline.Listener>()
     private val isStarted = AtomicBoolean(false)
     private val isReady = AtomicBoolean(false)
     private val mainHandler = createUIHandler()
@@ -113,11 +101,7 @@ internal class DefaultTimeline(
         if (!results.isLoaded || !results.isValid) {
             return@OrderedRealmCollectionChangeListener
         }
-        if (changeSet.state == OrderedCollectionChangeSet.State.INITIAL) {
-            handleInitialLoad()
-        } else {
-            handleUpdates(changeSet)
-        }
+        handleUpdates(changeSet)
     }
 
     private val relationsListener = OrderedRealmCollectionChangeListener<RealmResults<EventAnnotationsSummaryEntity>> { collection, changeSet ->
@@ -179,8 +163,9 @@ internal class DefaultTimeline(
                 nonFilteredEvents = buildEventQuery(realm).sort(TimelineEventEntityFields.ROOT.DISPLAY_INDEX, Sort.DESCENDING).findAll()
                 filteredEvents = nonFilteredEvents.where()
                         .filterEventsWithSettings()
-                        .findAllAsync()
-                        .also { it.addChangeListener(eventsChangeListener) }
+                        .findAll()
+                handleInitialLoad()
+                filteredEvents.addChangeListener(eventsChangeListener)
 
                 eventRelations = EventAnnotationsSummaryEntity.whereInRoom(realm, roomId)
                         .findAllAsync()
@@ -288,20 +273,20 @@ internal class DefaultTimeline(
         return hasMoreInCache(direction) || !hasReachedEnd(direction)
     }
 
-    override fun addListener(listener: Timeline.Listener) = synchronized(listeners) {
+    override fun addListener(listener: Timeline.Listener): Boolean {
         if (listeners.contains(listener)) {
             return false
         }
-        listeners.add(listener).also {
+        return listeners.add(listener).also {
             postSnapshot()
         }
     }
 
-    override fun removeListener(listener: Timeline.Listener) = synchronized(listeners) {
-        listeners.remove(listener)
+    override fun removeListener(listener: Timeline.Listener): Boolean {
+        return listeners.remove(listener)
     }
 
-    override fun removeAllListeners() = synchronized(listeners) {
+    override fun removeAllListeners() {
         listeners.clear()
     }
 
@@ -402,14 +387,14 @@ internal class DefaultTimeline(
 
     private fun getState(direction: Timeline.Direction): State {
         return when (direction) {
-            Timeline.Direction.FORWARDS  -> forwardsState.get()
+            Timeline.Direction.FORWARDS -> forwardsState.get()
             Timeline.Direction.BACKWARDS -> backwardsState.get()
         }
     }
 
     private fun updateState(direction: Timeline.Direction, update: (State) -> State) {
         val stateReference = when (direction) {
-            Timeline.Direction.FORWARDS  -> forwardsState
+            Timeline.Direction.FORWARDS -> forwardsState
             Timeline.Direction.BACKWARDS -> backwardsState
         }
         val currentValue = stateReference.get()
@@ -504,15 +489,14 @@ internal class DefaultTimeline(
         Timber.v("Should fetch $limit items $direction")
         cancelableBag += paginationTask
                 .configureWith(params) {
-                    this.retryCount = Int.MAX_VALUE
                     this.constraints = TaskConstraints(connectedToNetwork = true)
                     this.callback = object : MatrixCallback<TokenChunkEventPersistor.Result> {
                         override fun onSuccess(data: TokenChunkEventPersistor.Result) {
                             when (data) {
-                                TokenChunkEventPersistor.Result.SUCCESS           -> {
+                                TokenChunkEventPersistor.Result.SUCCESS -> {
                                     Timber.v("Success fetching $limit items $direction from pagination request")
                                 }
-                                TokenChunkEventPersistor.Result.REACHED_END       -> {
+                                TokenChunkEventPersistor.Result.REACHED_END -> {
                                     postSnapshot()
                                 }
                                 TokenChunkEventPersistor.Result.SHOULD_FETCH_MORE ->
@@ -524,6 +508,8 @@ internal class DefaultTimeline(
                         }
 
                         override fun onFailure(failure: Throwable) {
+                            updateState(direction) { it.copy(isPaginating = false, requestedPaginationCount = 0) }
+                            postSnapshot()
                             Timber.v("Failure fetching $limit items $direction from pagination request")
                         }
                     }
@@ -637,7 +623,14 @@ internal class DefaultTimeline(
 
     private fun fetchEvent(eventId: String) {
         val params = GetContextOfEventTask.Params(roomId, eventId, settings.initialSize)
-        cancelableBag += contextOfEventTask.configureWith(params).executeBy(taskExecutor)
+        cancelableBag += contextOfEventTask.configureWith(params) {
+            callback = object : MatrixCallback<TokenChunkEventPersistor.Result> {
+                override fun onFailure(failure: Throwable) {
+                    postFailure(failure)
+                }
+            }
+        }
+                .executeBy(taskExecutor)
     }
 
     private fun postSnapshot() {
@@ -648,14 +641,24 @@ internal class DefaultTimeline(
             updateLoadingStates(filteredEvents)
             val snapshot = createSnapshot()
             val runnable = Runnable {
-                synchronized(listeners) {
-                    listeners.forEach {
-                        it.onUpdated(snapshot)
-                    }
+                listeners.forEach {
+                    it.onTimelineUpdated(snapshot)
                 }
             }
             debouncer.debounce("post_snapshot", runnable, 50)
         }
+    }
+
+    private fun postFailure(throwable: Throwable) {
+        if (isReady.get().not()) {
+            return
+        }
+        val runnable = Runnable {
+            listeners.forEach {
+                it.onTimelineFailure(throwable)
+            }
+        }
+        mainHandler.post(runnable)
     }
 
     private fun clearAllValues() {

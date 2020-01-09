@@ -212,11 +212,12 @@ internal interface RoomAPI {
     /**
      * Join the given room.
      *
-     * @param roomId  the room id
+     * @param roomIdOrAlias the room id or alias
+     * @param server_name the servers to attempt to join the room through
      * @param params the request body
      */
-    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/join")
-    fun join(@Path("roomId") roomId: String,
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "join/{roomIdOrAlias}")
+    fun join(@Path("roomIdOrAlias") roomIdOrAlias: String,
              @Query("server_name") viaServers: List<String>,
              @Body params: Map<String, String?>): Call<Unit>
 

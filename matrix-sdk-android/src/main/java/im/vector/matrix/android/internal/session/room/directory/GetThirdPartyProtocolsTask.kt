@@ -20,14 +20,18 @@ import im.vector.matrix.android.api.session.room.model.thirdparty.ThirdPartyProt
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.task.Task
+import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface GetThirdPartyProtocolsTask : Task<Unit, Map<String, ThirdPartyProtocol>>
 
-internal class DefaultGetThirdPartyProtocolsTask @Inject constructor(private val roomAPI: RoomAPI) : GetThirdPartyProtocolsTask {
+internal class DefaultGetThirdPartyProtocolsTask @Inject constructor(
+        private val roomAPI: RoomAPI,
+        private val eventBus: EventBus
+) : GetThirdPartyProtocolsTask {
 
     override suspend fun execute(params: Unit): Map<String, ThirdPartyProtocol> {
-        return executeRequest {
+        return executeRequest(eventBus) {
             apiCall = roomAPI.thirdPartyProtocols()
         }
     }

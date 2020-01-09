@@ -28,7 +28,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.OnModelBuildFinishedListener
 import com.airbnb.mvrx.*
-import com.google.android.material.snackbar.Snackbar
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
@@ -60,7 +59,8 @@ data class RoomListParams(
 class RoomListFragment @Inject constructor(
         private val roomController: RoomSummaryController,
         val roomListViewModelFactory: RoomListViewModel.Factory,
-        private val notificationDrawerManager: NotificationDrawerManager
+        private val notificationDrawerManager: NotificationDrawerManager,
+        private val sharedViewPool: RecyclerView.RecycledViewPool
 
 ) : VectorBaseFragment(), RoomSummaryController.Listener, OnBackPressed, FabMenuView.Listener {
 
@@ -96,7 +96,6 @@ class RoomListFragment @Inject constructor(
         setupCreateRoomButton()
         setupRecyclerView()
         sharedActionViewModel = activityViewModelProvider.get(RoomListQuickActionsSharedActionViewModel::class.java)
-
         roomListViewModel.subscribe { renderState(it) }
         roomListViewModel.viewEvents
                 .observe()
@@ -104,7 +103,7 @@ class RoomListFragment @Inject constructor(
                 .subscribe {
                     when (it) {
                         is RoomListViewEvents.SelectRoom -> openSelectedRoom(it)
-                        is RoomListViewEvents.Failure    -> showError(it)
+                        is RoomListViewEvents.Failure    -> showErrorInSnackbar(it.throwable)
                     }
                 }
                 .disposeOnDestroyView()
@@ -132,13 +131,6 @@ class RoomListFragment @Inject constructor(
             navigator.openRoomForSharing(requireActivity(), event.roomId, sharedData)
         } else {
             navigator.openRoom(requireActivity(), event.roomId)
-        }
-    }
-
-    private fun showError(event: RoomListViewEvents.Failure) {
-        vectorBaseActivity.coordinatorLayout?.let {
-            Snackbar.make(it, errorFormatter.toHumanReadable(event.throwable), Snackbar.LENGTH_SHORT)
-                    .show()
         }
     }
 
@@ -201,6 +193,8 @@ class RoomListFragment @Inject constructor(
         val stateRestorer = LayoutManagerStateRestorer(layoutManager).register()
         roomListView.layoutManager = layoutManager
         roomListView.itemAnimator = RoomListAnimator()
+        roomListView.setRecycledViewPool(sharedViewPool)
+        layoutManager.recycleChildrenOnDetach = true
         roomController.listener = this
         modelBuildListener = OnModelBuildFinishedListener { it.dispatchTo(stateRestorer) }
         roomController.addModelBuildListener(modelBuildListener)

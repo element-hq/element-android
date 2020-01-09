@@ -41,11 +41,18 @@ interface MembershipService {
     fun getRoomMember(userId: String): RoomMember?
 
     /**
-     * Return all the roomMembers ids of the room
-     *
+     * Return all the roomMembers of the room with params
+     * @param queryParams the params to query for
+     * @return a roomMember list.
+     */
+    fun getRoomMembers(queryParams: RoomMemberQueryParams): List<RoomMember>
+
+    /**
+     * Return all the roomMembers of the room filtered by memberships
+     * @param queryParams the params to query for
      * @return a [LiveData] of roomMember list.
      */
-    fun getRoomMemberIdsLive(): LiveData<List<String>>
+    fun getRoomMembersLive(queryParams: RoomMemberQueryParams): LiveData<List<RoomMember>>
 
     fun getNumberOfJoinedMembers(): Int
 

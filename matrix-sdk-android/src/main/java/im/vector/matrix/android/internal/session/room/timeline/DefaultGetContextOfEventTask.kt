@@ -20,6 +20,7 @@ import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.filter.FilterRepository
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.task.Task
+import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface GetContextOfEventTask : Task<GetContextOfEventTask.Params, TokenChunkEventPersistor.Result> {
@@ -31,14 +32,16 @@ internal interface GetContextOfEventTask : Task<GetContextOfEventTask.Params, To
     )
 }
 
-internal class DefaultGetContextOfEventTask @Inject constructor(private val roomAPI: RoomAPI,
-                                                                private val filterRepository: FilterRepository,
-                                                                private val tokenChunkEventPersistor: TokenChunkEventPersistor
+internal class DefaultGetContextOfEventTask @Inject constructor(
+        private val roomAPI: RoomAPI,
+        private val filterRepository: FilterRepository,
+        private val tokenChunkEventPersistor: TokenChunkEventPersistor,
+        private val eventBus: EventBus
 ) : GetContextOfEventTask {
 
     override suspend fun execute(params: GetContextOfEventTask.Params): TokenChunkEventPersistor.Result {
         val filter = filterRepository.getRoomFilter()
-        val response = executeRequest<EventContextResponse> {
+        val response = executeRequest<EventContextResponse>(eventBus) {
             apiCall = roomAPI.getContextOfEvent(params.roomId, params.eventId, params.limit, filter)
         }
         return tokenChunkEventPersistor.insertInDb(response, params.roomId, PaginationDirection.BACKWARDS)

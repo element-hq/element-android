@@ -18,12 +18,14 @@ package im.vector.matrix.android.internal.network
 
 import im.vector.matrix.android.api.failure.Failure
 import kotlinx.coroutines.CancellationException
+import org.greenrobot.eventbus.EventBus
 import retrofit2.Call
 import java.io.IOException
 
-internal suspend inline fun <DATA> executeRequest(block: Request<DATA>.() -> Unit) = Request<DATA>().apply(block).execute()
+internal suspend inline fun <DATA> executeRequest(eventBus: EventBus?,
+                                                  block: Request<DATA>.() -> Unit) = Request<DATA>(eventBus).apply(block).execute()
 
-internal class Request<DATA> {
+internal class Request<DATA>(private val eventBus: EventBus?) {
 
     lateinit var apiCall: Call<DATA>
 
@@ -34,7 +36,7 @@ internal class Request<DATA> {
                 response.body()
                         ?: throw IllegalStateException("The request returned a null body")
             } else {
-                throw response.toFailure()
+                throw response.toFailure(eventBus)
             }
         } catch (exception: Throwable) {
             throw when (exception) {

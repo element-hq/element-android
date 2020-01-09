@@ -26,13 +26,11 @@ import javax.inject.Inject
 class RoomDirectoryListCreator @Inject constructor(private val stringArrayProvider: StringArrayProvider,
                                                    private val session: Session) {
 
-    private val credentials = session.sessionParams.credentials
-
     fun computeDirectories(thirdPartyProtocolData: Map<String, ThirdPartyProtocol>): List<RoomDirectoryData> {
         val result = ArrayList<RoomDirectoryData>()
 
         // Add user homeserver name
-        val userHsName = credentials.userId.substring(credentials.userId.indexOf(":") + 1)
+        val userHsName = session.myUserId.substringAfter(":")
 
         result.add(RoomDirectoryData(
                 displayName = userHsName,
@@ -48,6 +46,7 @@ class RoomDirectoryListCreator @Inject constructor(private val stringArrayProvid
             if (it != userHsName) {
                 // Use the server name as a default display name
                 result.add(RoomDirectoryData(
+                        homeServer = it,
                         displayName = it,
                         includeAllNetworks = true
                 ))

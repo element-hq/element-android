@@ -20,7 +20,7 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.room.failure.CreateRoomFailure
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomResponse
-import im.vector.matrix.android.internal.database.RealmQueryLatch
+import im.vector.matrix.android.internal.database.awaitNotEmptyResult
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomEntityFields
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
@@ -34,32 +34,36 @@ import im.vector.matrix.android.internal.session.user.accountdata.UpdateUserAcco
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.RealmConfiguration
+import kotlinx.coroutines.TimeoutCancellationException
+import org.greenrobot.eventbus.EventBus
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 internal interface CreateRoomTask : Task<CreateRoomParams, String>
 
-internal class DefaultCreateRoomTask @Inject constructor(private val roomAPI: RoomAPI,
-                                                         private val monarchy: Monarchy,
-                                                         private val directChatsHelper: DirectChatsHelper,
-                                                         private val updateUserAccountDataTask: UpdateUserAccountDataTask,
-                                                         private val readMarkersTask: SetReadMarkersTask,
-                                                         @SessionDatabase
-                                                         private val realmConfiguration: RealmConfiguration) : CreateRoomTask {
+internal class DefaultCreateRoomTask @Inject constructor(
+        private val roomAPI: RoomAPI,
+        private val monarchy: Monarchy,
+        private val directChatsHelper: DirectChatsHelper,
+        private val updateUserAccountDataTask: UpdateUserAccountDataTask,
+        private val readMarkersTask: SetReadMarkersTask,
+        @SessionDatabase
+        private val realmConfiguration: RealmConfiguration,
+        private val eventBus: EventBus
+) : CreateRoomTask {
 
     override suspend fun execute(params: CreateRoomParams): String {
-        val createRoomResponse = executeRequest<CreateRoomResponse> {
+        val createRoomResponse = executeRequest<CreateRoomResponse>(eventBus) {
             apiCall = roomAPI.createRoom(params)
         }
         val roomId = createRoomResponse.roomId!!
         // Wait for room to come back from the sync (but it can maybe be in the DB if the sync response is received before)
-        val rql = RealmQueryLatch<RoomEntity>(realmConfiguration) { realm ->
-            realm.where(RoomEntity::class.java)
-                    .equalTo(RoomEntityFields.ROOM_ID, roomId)
-        }
         try {
-            rql.await(timeout = 1L, timeUnit = TimeUnit.MINUTES)
-        } catch (exception: Exception) {
+            awaitNotEmptyResult(realmConfiguration, TimeUnit.MINUTES.toMillis(1L)) { realm ->
+                realm.where(RoomEntity::class.java)
+                        .equalTo(RoomEntityFields.ROOM_ID, roomId)
+            }
+        } catch (exception: TimeoutCancellationException) {
             throw CreateRoomFailure.CreatedWithTimeout
         }
         if (params.isDirect()) {

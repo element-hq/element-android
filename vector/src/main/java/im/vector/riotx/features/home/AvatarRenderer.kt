@@ -53,6 +53,14 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
     }
 
     @UiThread
+    fun render(matrixItem: MatrixItem, imageView: ImageView, glideRequests: GlideRequests) {
+        render(imageView.context,
+                glideRequests,
+                matrixItem,
+                DrawableImageViewTarget(imageView))
+    }
+
+    @UiThread
     fun render(context: Context,
                glideRequest: GlideRequests,
                matrixItem: MatrixItem,
@@ -61,6 +69,14 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
         buildGlideRequest(glideRequest, matrixItem.avatarUrl)
                 .placeholder(placeholder)
                 .into(target)
+    }
+
+    @AnyThread
+    fun getCachedDrawable(glideRequest: GlideRequests, matrixItem: MatrixItem): Drawable {
+        return buildGlideRequest(glideRequest, matrixItem.avatarUrl)
+                .onlyRetrieveFromCache(true)
+                .submit()
+                .get()
     }
 
     @AnyThread

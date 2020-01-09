@@ -95,12 +95,12 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     private val modelCache = arrayListOf<CacheItemData?>()
     private var currentSnapshot: List<TimelineEvent> = emptyList()
     private var inSubmitList: Boolean = false
-    private var timeline: Timeline? = null
     private var unreadState: UnreadState = UnreadState.Unknown
     private var positionOfReadMarker: Int? = null
     private var eventIdToHighlight: String? = null
 
     var callback: Callback? = null
+    var timeline: Timeline? = null
 
     private val listUpdateCallback = object : ListUpdateCallback {
 
@@ -176,10 +176,6 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     }
 
     fun update(viewState: RoomDetailViewState) {
-        if (timeline?.timelineID != viewState.timeline?.timelineID) {
-            timeline = viewState.timeline
-            timeline?.addListener(this)
-        }
         var requestModelBuild = false
         if (eventIdToHighlight != viewState.highlightedEventId) {
             // Clear cache to force a refresh
@@ -205,6 +201,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
+        timeline?.addListener(this)
         timelineMediaSizeProvider.recyclerView = recyclerView
     }
 
@@ -220,7 +217,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         showingForwardLoader = LoadingItem_()
                 .id("forward_loading_item_$timestamp")
                 .setVisibilityStateChangedListener(Timeline.Direction.FORWARDS)
-                .addWhen(Timeline.Direction.FORWARDS)
+                .addWhenLoading(Timeline.Direction.FORWARDS)
 
         val timelineModels = getModels()
         add(timelineModels)
@@ -230,14 +227,18 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             LoadingItem_()
                     .id("backward_loading_item_$timestamp")
                     .setVisibilityStateChangedListener(Timeline.Direction.BACKWARDS)
-                    .addWhen(Timeline.Direction.BACKWARDS)
+                    .addWhenLoading(Timeline.Direction.BACKWARDS)
         }
     }
 
 // Timeline.LISTENER ***************************************************************************
 
-    override fun onUpdated(snapshot: List<TimelineEvent>) {
+    override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
         submitSnapshot(snapshot)
+    }
+
+    override fun onTimelineFailure(throwable: Throwable) {
+        // no-op, already handled
     }
 
     private fun submitSnapshot(newSnapshot: List<TimelineEvent>) {
@@ -247,6 +248,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             currentSnapshot = newSnapshot
             val diffResult = DiffUtil.calculateDiff(diffCallback)
             diffResult.dispatchUpdatesTo(listUpdateCallback)
+            requestDelayedModelBuild(100)
             inSubmitList = false
         }
     }
@@ -319,7 +321,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     /**
      * Return true if added
      */
-    private fun LoadingItem_.addWhen(direction: Timeline.Direction): Boolean {
+    private fun LoadingItem_.addWhenLoading(direction: Timeline.Direction): Boolean {
         val shouldAdd = timeline?.hasMoreToLoad(direction) ?: false
         addIf(shouldAdd, this@TimelineEventController)
         return shouldAdd

@@ -23,11 +23,10 @@ import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.query.types
 import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.di.UserId
-import im.vector.matrix.android.internal.task.TaskExecutor
-import im.vector.matrix.android.internal.task.configureWith
 import io.realm.OrderedCollectionChangeSet
 import io.realm.RealmConfiguration
 import io.realm.RealmResults
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -37,10 +36,10 @@ import javax.inject.Inject
  * The summaries can then be extracted and added (as a decoration) to a TimelineEvent for final display.
  */
 
-internal class EventRelationsAggregationUpdater @Inject constructor(@SessionDatabase realmConfiguration: RealmConfiguration,
-                                                                    @UserId private val userId: String,
-                                                                    private val task: EventRelationsAggregationTask,
-                                                                    private val taskExecutor: TaskExecutor) :
+internal class EventRelationsAggregationUpdater @Inject constructor(
+        @SessionDatabase realmConfiguration: RealmConfiguration,
+        @UserId private val userId: String,
+        private val task: EventRelationsAggregationTask) :
         RealmLiveEntityObserver<EventEntity>(realmConfiguration) {
 
     override val query = Monarchy.Query<EventEntity> {
@@ -63,6 +62,8 @@ internal class EventRelationsAggregationUpdater @Inject constructor(@SessionData
                 insertedDomains,
                 userId
         )
-        task.configureWith(params).executeBy(taskExecutor)
+        observerScope.launch {
+            task.execute(params)
+        }
     }
 }

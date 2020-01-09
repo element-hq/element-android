@@ -21,6 +21,7 @@ import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.sync.model.accountdata.BreadcrumbsContent
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountData
 import im.vector.matrix.android.internal.task.Task
+import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface UpdateUserAccountDataTask : Task<UpdateUserAccountDataTask.Params, Unit> {
@@ -50,11 +51,14 @@ internal interface UpdateUserAccountDataTask : Task<UpdateUserAccountDataTask.Pa
     }
 }
 
-internal class DefaultUpdateUserAccountDataTask @Inject constructor(private val accountDataApi: AccountDataAPI,
-                                                                    @UserId private val userId: String) : UpdateUserAccountDataTask {
+internal class DefaultUpdateUserAccountDataTask @Inject constructor(
+        private val accountDataApi: AccountDataAPI,
+        @UserId private val userId: String,
+        private val eventBus: EventBus
+) : UpdateUserAccountDataTask {
 
     override suspend fun execute(params: UpdateUserAccountDataTask.Params) {
-        return executeRequest {
+        return executeRequest(eventBus) {
             apiCall = accountDataApi.setAccountData(userId, params.type, params.getData())
         }
     }

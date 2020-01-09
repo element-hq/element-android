@@ -30,6 +30,7 @@ import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.worker.SessionWorkerParams
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import im.vector.matrix.android.internal.worker.getSessionComponent
+import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal class SendEventWorker constructor(context: Context, params: WorkerParameters)
@@ -37,7 +38,7 @@ internal class SendEventWorker constructor(context: Context, params: WorkerParam
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
-            override val userId: String,
+            override val sessionId: String,
             val roomId: String,
             val event: Event,
             override val lastFailureMessage: String? = null
@@ -45,12 +46,13 @@ internal class SendEventWorker constructor(context: Context, params: WorkerParam
 
     @Inject lateinit var localEchoUpdater: LocalEchoUpdater
     @Inject lateinit var roomAPI: RoomAPI
+    @Inject lateinit var eventBus: EventBus
 
     override suspend fun doWork(): Result {
         val params = WorkerParamsFactory.fromData<Params>(inputData)
                 ?: return Result.success()
 
-        val sessionComponent = getSessionComponent(params.userId) ?: return Result.success()
+        val sessionComponent = getSessionComponent(params.sessionId) ?: return Result.success()
         sessionComponent.inject(this)
 
         val event = params.event
@@ -84,7 +86,7 @@ internal class SendEventWorker constructor(context: Context, params: WorkerParam
 
     private suspend fun sendEvent(eventId: String, eventType: String, content: Content?, roomId: String) {
         localEchoUpdater.updateSendState(eventId, SendState.SENDING)
-        executeRequest<SendResponse> {
+        executeRequest<SendResponse>(eventBus) {
             apiCall = roomAPI.send(
                     eventId,
                     roomId,

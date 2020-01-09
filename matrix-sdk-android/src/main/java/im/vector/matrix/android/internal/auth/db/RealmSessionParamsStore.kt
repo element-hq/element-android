@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.auth.db
 
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.auth.data.SessionParams
+import im.vector.matrix.android.api.auth.data.sessionId
 import im.vector.matrix.android.internal.auth.SessionParamsStore
 import im.vector.matrix.android.internal.database.awaitTransaction
 import im.vector.matrix.android.internal.di.AuthDatabase
@@ -42,11 +43,11 @@ internal class RealmSessionParamsStore @Inject constructor(private val mapper: S
         }
     }
 
-    override fun get(userId: String): SessionParams? {
+    override fun get(sessionId: String): SessionParams? {
         return Realm.getInstance(realmConfiguration).use { realm ->
             realm
                     .where(SessionParamsEntity::class.java)
-                    .equalTo(SessionParamsEntityFields.USER_ID, userId)
+                    .equalTo(SessionParamsEntityFields.SESSION_ID, sessionId)
                     .findAll()
                     .map { mapper.map(it) }
                     .firstOrNull()
@@ -76,17 +77,17 @@ internal class RealmSessionParamsStore @Inject constructor(private val mapper: S
         }
     }
 
-    override suspend fun setTokenInvalid(userId: String) {
+    override suspend fun setTokenInvalid(sessionId: String) {
         awaitTransaction(realmConfiguration) { realm ->
             val currentSessionParams = realm
                     .where(SessionParamsEntity::class.java)
-                    .equalTo(SessionParamsEntityFields.USER_ID, userId)
+                    .equalTo(SessionParamsEntityFields.SESSION_ID, sessionId)
                     .findAll()
                     .firstOrNull()
 
             if (currentSessionParams == null) {
                 // Should not happen
-                "Session param not found for user $userId"
+                "Session param not found for id $sessionId"
                         .let { Timber.w(it) }
                         .also { error(it) }
             } else {
@@ -99,14 +100,14 @@ internal class RealmSessionParamsStore @Inject constructor(private val mapper: S
         awaitTransaction(realmConfiguration) { realm ->
             val currentSessionParams = realm
                     .where(SessionParamsEntity::class.java)
-                    .equalTo(SessionParamsEntityFields.USER_ID, newCredentials.userId)
+                    .equalTo(SessionParamsEntityFields.SESSION_ID, newCredentials.sessionId())
                     .findAll()
                     .map { mapper.map(it) }
                     .firstOrNull()
 
             if (currentSessionParams == null) {
                 // Should not happen
-                "Session param not found for user ${newCredentials.userId}"
+                "Session param not found for id ${newCredentials.sessionId()}"
                         .let { Timber.w(it) }
                         .also { error(it) }
             } else {
@@ -123,10 +124,10 @@ internal class RealmSessionParamsStore @Inject constructor(private val mapper: S
         }
     }
 
-    override suspend fun delete(userId: String) {
+    override suspend fun delete(sessionId: String) {
         awaitTransaction(realmConfiguration) {
             it.where(SessionParamsEntity::class.java)
-                    .equalTo(SessionParamsEntityFields.USER_ID, userId)
+                    .equalTo(SessionParamsEntityFields.SESSION_ID, sessionId)
                     .findAll()
                     .deleteAllFromRealm()
         }

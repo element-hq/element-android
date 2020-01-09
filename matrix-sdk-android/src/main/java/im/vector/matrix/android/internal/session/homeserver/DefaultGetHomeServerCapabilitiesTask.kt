@@ -23,14 +23,16 @@ import im.vector.matrix.android.internal.database.query.getOrCreate
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.awaitTransaction
-import java.util.Date
+import org.greenrobot.eventbus.EventBus
+import java.util.*
 import javax.inject.Inject
 
 internal interface GetHomeServerCapabilitiesTask : Task<Unit, Unit>
 
 internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
         private val capabilitiesAPI: CapabilitiesAPI,
-        private val monarchy: Monarchy
+        private val monarchy: Monarchy,
+        private val eventBus: EventBus
 ) : GetHomeServerCapabilitiesTask {
 
     override suspend fun execute(params: Unit) {
@@ -45,7 +47,7 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
             return
         }
 
-        val uploadCapabilities = executeRequest<GetUploadCapabilitiesResult> {
+        val uploadCapabilities = executeRequest<GetUploadCapabilitiesResult>(eventBus) {
             apiCall = capabilitiesAPI.getUploadCapabilities()
         }
 

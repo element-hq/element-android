@@ -16,9 +16,7 @@
 
 package im.vector.matrix.android.internal.session.sync
 
-import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.R
-import im.vector.matrix.android.api.pushrules.RuleScope
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
@@ -29,36 +27,29 @@ import im.vector.matrix.android.internal.database.helper.*
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.EventEntityFields
 import im.vector.matrix.android.internal.database.model.RoomEntity
+import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.query.find
 import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.DefaultInitialSyncProgressService
 import im.vector.matrix.android.internal.session.mapWithProgress
-import im.vector.matrix.android.internal.session.notification.DefaultPushRuleService
-import im.vector.matrix.android.internal.session.notification.ProcessEventForPushTask
 import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
+import im.vector.matrix.android.internal.session.room.membership.RoomMemberEventHandler
 import im.vector.matrix.android.internal.session.room.read.FullyReadContent
 import im.vector.matrix.android.internal.session.room.timeline.PaginationDirection
 import im.vector.matrix.android.internal.session.sync.model.*
-import im.vector.matrix.android.internal.session.user.UserEntityFactory
-import im.vector.matrix.android.internal.task.TaskExecutor
-import im.vector.matrix.android.internal.task.configureWith
-import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.Realm
 import io.realm.kotlin.createObject
 import timber.log.Timber
 import javax.inject.Inject
 
-internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarchy,
-                                                   private val readReceiptHandler: ReadReceiptHandler,
+internal class RoomSyncHandler @Inject constructor(private val readReceiptHandler: ReadReceiptHandler,
                                                    private val roomSummaryUpdater: RoomSummaryUpdater,
                                                    private val roomTagHandler: RoomTagHandler,
                                                    private val roomFullyReadHandler: RoomFullyReadHandler,
                                                    private val cryptoService: DefaultCryptoService,
-                                                   private val tokenStore: SyncTokenStore,
-                                                   private val pushRuleService: DefaultPushRuleService,
-                                                   private val processForPushTask: ProcessEventForPushTask,
-                                                   private val taskExecutor: TaskExecutor) {
+                                                   private val roomMemberEventHandler: RoomMemberEventHandler,
+                                                   private val timelineEventSenderVisitor: TimelineEventSenderVisitor) {
 
     sealed class HandlingStrategy {
         data class JOINED(val data: Map<String, RoomSync>) : HandlingStrategy()
@@ -66,28 +57,16 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
         data class LEFT(val data: Map<String, RoomSync>) : HandlingStrategy()
     }
 
-    suspend fun handle(roomsSyncResponse: RoomsSyncResponse, isInitialSync: Boolean, reporter: DefaultInitialSyncProgressService? = null) {
+    fun handle(
+            realm: Realm,
+            roomsSyncResponse: RoomsSyncResponse,
+            isInitialSync: Boolean,
+            reporter: DefaultInitialSyncProgressService? = null
+    ) {
         Timber.v("Execute transaction from $this")
-        monarchy.awaitTransaction { realm ->
-            handleRoomSync(realm, HandlingStrategy.JOINED(roomsSyncResponse.join), isInitialSync, reporter)
-            handleRoomSync(realm, HandlingStrategy.INVITED(roomsSyncResponse.invite), isInitialSync, reporter)
-            handleRoomSync(realm, HandlingStrategy.LEFT(roomsSyncResponse.leave), isInitialSync, reporter)
-        }
-        // handle event for bing rule checks
-        checkPushRules(roomsSyncResponse)
-    }
-
-    private fun checkPushRules(roomsSyncResponse: RoomsSyncResponse) {
-        Timber.v("[PushRules] --> checkPushRules")
-        if (tokenStore.getLastToken() == null) {
-            Timber.v("[PushRules] <-- No push rule check on initial sync")
-            return
-        } // nothing on initial sync
-
-        val rules = pushRuleService.getPushRules(RuleScope.GLOBAL)
-        processForPushTask.configureWith(ProcessEventForPushTask.Params(roomsSyncResponse, rules))
-                .executeBy(taskExecutor)
-        Timber.v("[PushRules] <-- Push task scheduled")
+        handleRoomSync(realm, HandlingStrategy.JOINED(roomsSyncResponse.join), isInitialSync, reporter)
+        handleRoomSync(realm, HandlingStrategy.INVITED(roomsSyncResponse.invite), isInitialSync, reporter)
+        handleRoomSync(realm, HandlingStrategy.LEFT(roomsSyncResponse.leave), isInitialSync, reporter)
     }
 
     // PRIVATE METHODS *****************************************************************************
@@ -137,15 +116,13 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
 
         if (roomSync.state != null && roomSync.state.events.isNotEmpty()) {
             val minStateIndex = roomEntity.untimelinedStateEvents.where().min(EventEntityFields.STATE_INDEX)?.toInt()
-                                ?: Int.MIN_VALUE
+                    ?: Int.MIN_VALUE
             val untimelinedStateIndex = minStateIndex + 1
             roomSync.state.events.forEach { event ->
                 roomEntity.addStateEvent(event, filterDuplicates = true, stateIndex = untimelinedStateIndex)
                 // Give info to crypto module
                 cryptoService.onStateEvent(roomId, event)
-                UserEntityFactory.createOrNull(event)?.also {
-                    realm.insertOrUpdate(it)
-                }
+                roomMemberEventHandler.handle(realm, roomId, event)
             }
         }
         if (roomSync.timeline != null && roomSync.timeline.events.isNotEmpty()) {
@@ -213,11 +190,13 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
         }
         lastChunk?.isLastForward = false
         chunkEntity.isLastForward = true
+        chunkEntity.isUnlinked = false
 
-        val eventIds = ArrayList<String>(eventList.size)
+        val timelineEvents = ArrayList<TimelineEventEntity>(eventList.size)
         for (event in eventList) {
-            event.eventId?.also { eventIds.add(it) }
-            chunkEntity.add(roomEntity.roomId, event, PaginationDirection.FORWARDS, stateIndexOffset)
+            chunkEntity.add(roomEntity.roomId, event, PaginationDirection.FORWARDS, stateIndexOffset)?.also {
+                timelineEvents.add(it)
+            }
             // Give info to crypto module
             cryptoService.onLiveEvent(roomEntity.roomId, event)
             // Try to remove local echo
@@ -230,11 +209,9 @@ internal class RoomSyncHandler @Inject constructor(private val monarchy: Monarch
                     Timber.v("Can't find corresponding local echo for tx:$it")
                 }
             }
-            UserEntityFactory.createOrNull(event)?.also {
-                realm.insertOrUpdate(it)
-            }
+            roomMemberEventHandler.handle(realm, roomEntity.roomId, event)
         }
-        chunkEntity.updateSenderDataFor(eventIds)
+        timelineEventSenderVisitor.visit(timelineEvents)
         return chunkEntity
     }
 

@@ -20,8 +20,8 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
 import com.airbnb.mvrx.args
+import im.vector.matrix.android.api.failure.is401
 import im.vector.riotx.R
-import im.vector.riotx.core.error.is401
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_login_wait_for_email.*
 import javax.inject.Inject

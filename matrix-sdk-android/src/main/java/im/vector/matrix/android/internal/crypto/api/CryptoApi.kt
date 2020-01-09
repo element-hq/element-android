@@ -25,10 +25,17 @@ internal interface CryptoApi {
 
     /**
      * Get the devices list
-     * Doc: https://matrix.org/docs/spec/client_server/r0.4.0.html#get-matrix-client-r0-devices
+     * Doc: https://matrix.org/docs/spec/client_server/latest#get-matrix-client-r0-devices
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "devices")
     fun getDevices(): Call<DevicesListResponse>
+
+    /**
+     * Get the device info by id
+     * Doc: https://matrix.org/docs/spec/client_server/latest#get-matrix-client-r0-devices-deviceid
+     */
+    @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "devices/{deviceId}")
+    fun getDeviceInfo(@Path("deviceId") deviceId: String): Call<DeviceInfo>
 
     /**
      * Upload device and/or one-time keys.

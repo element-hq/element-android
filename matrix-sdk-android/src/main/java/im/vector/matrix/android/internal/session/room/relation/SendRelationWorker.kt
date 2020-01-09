@@ -30,20 +30,23 @@ import im.vector.matrix.android.internal.session.room.send.SendResponse
 import im.vector.matrix.android.internal.worker.SessionWorkerParams
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import im.vector.matrix.android.internal.worker.getSessionComponent
+import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
+// TODO This is not used. Delete?
 internal class SendRelationWorker(context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
-            override val userId: String,
+            override val sessionId: String,
             val roomId: String,
             val event: Event,
             val relationType: String? = null,
-            override val lastFailureMessage: String?
+            override val lastFailureMessage: String? = null
     ) : SessionWorkerParams
 
     @Inject lateinit var roomAPI: RoomAPI
+    @Inject lateinit var eventBus: EventBus
 
     override suspend fun doWork(): Result {
         val params = WorkerParamsFactory.fromData<Params>(inputData)
@@ -54,7 +57,7 @@ internal class SendRelationWorker(context: Context, params: WorkerParameters) : 
             return Result.success(inputData)
         }
 
-        val sessionComponent = getSessionComponent(params.userId) ?: return Result.success()
+        val sessionComponent = getSessionComponent(params.sessionId) ?: return Result.success()
         sessionComponent.inject(this)
 
         val localEvent = params.event
@@ -82,7 +85,7 @@ internal class SendRelationWorker(context: Context, params: WorkerParameters) : 
     }
 
     private suspend fun sendRelation(roomId: String, relationType: String, relatedEventId: String, localEvent: Event) {
-        executeRequest<SendResponse> {
+        executeRequest<SendResponse>(eventBus) {
             apiCall = roomAPI.sendRelation(
                     roomId = roomId,
                     parent_id = relatedEventId,

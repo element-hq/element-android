@@ -16,8 +16,15 @@
 
 package im.vector.riotx.features.login
 
+import android.content.Context
 import androidx.fragment.app.FragmentActivity
-import com.airbnb.mvrx.*
+import com.airbnb.mvrx.ActivityViewModelContext
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
+import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
@@ -46,6 +53,7 @@ import java.util.concurrent.CancellationException
  *
  */
 class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginViewState,
+                                                 private val applicationContext: Context,
                                                  private val authenticationService: AuthenticationService,
                                                  private val activeSessionHolder: ActiveSessionHolder,
                                                  private val pushRuleTriggerListener: PushRuleTriggerListener,
@@ -486,7 +494,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
 
     private fun onSessionCreated(session: Session) {
         activeSessionHolder.setActiveSession(session)
-        session.configureAndStart(pushRuleTriggerListener, sessionListener)
+        session.configureAndStart(applicationContext, pushRuleTriggerListener, sessionListener)
         setState {
             copy(
                     asyncLoginAction = Success(Unit)

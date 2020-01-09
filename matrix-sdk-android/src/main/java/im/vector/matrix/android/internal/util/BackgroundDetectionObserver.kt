@@ -29,7 +29,7 @@ import javax.inject.Inject
 @MatrixScope
 internal class BackgroundDetectionObserver @Inject constructor() : LifecycleObserver {
 
-    var isIsBackground: Boolean = false
+    var isInBackground: Boolean = false
         private set
 
     private
@@ -46,14 +46,14 @@ internal class BackgroundDetectionObserver @Inject constructor() : LifecycleObse
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     fun onMoveToForeground() {
         Timber.v("App returning to foreground…")
-        isIsBackground = false
+        isInBackground = false
         listeners.forEach { it.onMoveToForeground() }
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     fun onMoveToBackground() {
         Timber.v("App going to background…")
-        isIsBackground = true
+        isInBackground = true
         listeners.forEach { it.onMoveToBackground() }
     }
 

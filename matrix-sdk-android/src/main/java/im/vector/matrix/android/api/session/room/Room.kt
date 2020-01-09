@@ -56,5 +56,8 @@ interface Room :
      */
     fun getRoomSummaryLive(): LiveData<Optional<RoomSummary>>
 
+    /**
+     * A current snapshot of [RoomSummary] associated with the room
+     */
     fun roomSummary(): RoomSummary?
 }

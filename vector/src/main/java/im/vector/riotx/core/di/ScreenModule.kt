@@ -17,6 +17,7 @@
 package im.vector.riotx.core.di
 
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
 import dagger.Module
 import dagger.Provides
 import im.vector.riotx.core.glide.GlideApp
@@ -27,4 +28,9 @@ object ScreenModule {
     @Provides
     @JvmStatic
     fun providesGlideRequests(context: AppCompatActivity) = GlideApp.with(context)
+
+    @Provides
+    @JvmStatic
+    @ScreenScope
+    fun providesSharedViewPool() = RecyclerView.RecycledViewPool()
 }

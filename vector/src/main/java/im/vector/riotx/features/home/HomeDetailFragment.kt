@@ -30,6 +30,7 @@ import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.commitTransactionNow
+import im.vector.riotx.core.glide.GlideApp
 import im.vector.riotx.core.platform.ToolbarConfigurable
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.ui.views.KeysBackupBanner
@@ -65,6 +66,11 @@ class HomeDetailFragment @Inject constructor(
         setupToolbar()
         setupKeysBackupBanner()
 
+        withState(viewModel) {
+            // Update the navigation view if needed (for when we restore the tabs)
+            bottomNavigationView.selectedItemId = it.displayMode.toMenuId()
+        }
+
         viewModel.selectSubscribe(this, HomeDetailViewState::groupSummary) { groupSummary ->
             onGroupChange(groupSummary.orNull())
         }
@@ -75,7 +81,8 @@ class HomeDetailFragment @Inject constructor(
 
     private fun onGroupChange(groupSummary: GroupSummary?) {
         groupSummary?.let {
-            avatarRenderer.render(it.toMatrixItem(), groupToolbarAvatarImageView)
+            // Use GlideApp with activity context to avoid the glideRequests to be paused
+            avatarRenderer.render(it.toMatrixItem(), groupToolbarAvatarImageView, GlideApp.with(requireActivity()))
         }
     }
 
@@ -125,7 +132,6 @@ class HomeDetailFragment @Inject constructor(
     private fun setupBottomNavigationView() {
         bottomNavigationView.setOnNavigationItemSelectedListener {
             val displayMode = when (it.itemId) {
-                R.id.bottom_action_home   -> RoomListDisplayMode.HOME
                 R.id.bottom_action_people -> RoomListDisplayMode.PEOPLE
                 R.id.bottom_action_rooms  -> RoomListDisplayMode.ROOMS
                 else                      -> RoomListDisplayMode.HOME
@@ -147,12 +153,6 @@ class HomeDetailFragment @Inject constructor(
     private fun switchDisplayMode(displayMode: RoomListDisplayMode) {
         groupToolbarTitleView.setText(displayMode.titleRes)
         updateSelectedFragment(displayMode)
-        // Update the navigation view (for when we restore the tabs)
-        bottomNavigationView.selectedItemId = when (displayMode) {
-            RoomListDisplayMode.PEOPLE -> R.id.bottom_action_people
-            RoomListDisplayMode.ROOMS  -> R.id.bottom_action_rooms
-            else                       -> R.id.bottom_action_home
-        }
     }
 
     private fun updateSelectedFragment(displayMode: RoomListDisplayMode) {
@@ -191,5 +191,11 @@ class HomeDetailFragment @Inject constructor(
         unreadCounterBadgeViews[INDEX_PEOPLE].render(UnreadCounterBadgeView.State(it.notificationCountPeople, it.notificationHighlightPeople))
         unreadCounterBadgeViews[INDEX_ROOMS].render(UnreadCounterBadgeView.State(it.notificationCountRooms, it.notificationHighlightRooms))
         syncStateView.render(it.syncState)
+    }
+
+    private fun RoomListDisplayMode.toMenuId() = when (this) {
+        RoomListDisplayMode.PEOPLE -> R.id.bottom_action_people
+        RoomListDisplayMode.ROOMS  -> R.id.bottom_action_rooms
+        else                       -> R.id.bottom_action_home
     }
 }

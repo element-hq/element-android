@@ -18,19 +18,19 @@ package im.vector.matrix.android.internal.session.room.membership
 
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.room.model.Membership
+import im.vector.matrix.android.internal.database.helper.TimelineEventSenderVisitor
 import im.vector.matrix.android.internal.database.helper.addStateEvent
-import im.vector.matrix.android.internal.database.helper.updateSenderData
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
 import im.vector.matrix.android.internal.session.sync.SyncTokenStore
-import im.vector.matrix.android.internal.session.user.UserEntityFactory
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.Realm
 import io.realm.kotlin.createObject
+import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface LoadRoomMembersTask : Task<LoadRoomMembersTask.Params, Unit> {
@@ -41,10 +41,14 @@ internal interface LoadRoomMembersTask : Task<LoadRoomMembersTask.Params, Unit> 
     )
 }
 
-internal class DefaultLoadRoomMembersTask @Inject constructor(private val roomAPI: RoomAPI,
-                                                              private val monarchy: Monarchy,
-                                                              private val syncTokenStore: SyncTokenStore,
-                                                              private val roomSummaryUpdater: RoomSummaryUpdater
+internal class DefaultLoadRoomMembersTask @Inject constructor(
+        private val roomAPI: RoomAPI,
+        private val monarchy: Monarchy,
+        private val syncTokenStore: SyncTokenStore,
+        private val roomSummaryUpdater: RoomSummaryUpdater,
+        private val roomMemberEventHandler: RoomMemberEventHandler,
+        private val timelineEventSenderVisitor: TimelineEventSenderVisitor,
+        private val eventBus: EventBus
 ) : LoadRoomMembersTask {
 
     override suspend fun execute(params: LoadRoomMembersTask.Params) {
@@ -52,7 +56,7 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(private val roomAP
             return
         }
         val lastToken = syncTokenStore.getLastToken()
-        val response = executeRequest<RoomMembersResponse> {
+        val response = executeRequest<RoomMembersResponse>(eventBus) {
             apiCall = roomAPI.getMembers(params.roomId, lastToken, null, params.excludeMembership?.value)
         }
         insertInDb(response, params.roomId)
@@ -66,12 +70,11 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(private val roomAP
 
             for (roomMemberEvent in response.roomMemberEvents) {
                 roomEntity.addStateEvent(roomMemberEvent)
-                UserEntityFactory.createOrNull(roomMemberEvent)?.also {
-                    realm.insertOrUpdate(it)
-                }
+                roomMemberEventHandler.handle(realm, roomId, roomMemberEvent)
             }
+            timelineEventSenderVisitor.clear()
             roomEntity.chunks.flatMap { it.timelineEvents }.forEach {
-                it.updateSenderData()
+                timelineEventSenderVisitor.visit(it)
             }
             roomEntity.areAllMembersLoaded = true
             roomSummaryUpdater.update(realm, roomId, updateMembers = true)

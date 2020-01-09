@@ -24,27 +24,24 @@ import im.vector.matrix.android.api.session.room.model.RoomAliasesContent
 import im.vector.matrix.android.api.session.room.model.RoomCanonicalAliasContent
 import im.vector.matrix.android.api.session.room.model.RoomTopicContent
 import im.vector.matrix.android.internal.database.mapper.ContentMapper
+import im.vector.matrix.android.internal.database.model.*
 import im.vector.matrix.android.internal.database.model.EventEntity
-import im.vector.matrix.android.internal.database.model.EventEntityFields
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
-import im.vector.matrix.android.internal.database.query.isEventRead
-import im.vector.matrix.android.internal.database.query.latestEvent
-import im.vector.matrix.android.internal.database.query.prev
-import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.database.query.*
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.room.membership.RoomDisplayNameResolver
 import im.vector.matrix.android.internal.session.room.membership.RoomMembers
 import im.vector.matrix.android.internal.session.sync.model.RoomSyncSummary
 import im.vector.matrix.android.internal.session.sync.model.RoomSyncUnreadNotifications
 import io.realm.Realm
-import io.realm.kotlin.createObject
 import javax.inject.Inject
 
-internal class RoomSummaryUpdater @Inject constructor(@UserId private val userId: String,
-                                                      private val roomDisplayNameResolver: RoomDisplayNameResolver,
-                                                      private val roomAvatarResolver: RoomAvatarResolver,
-                                                      private val monarchy: Monarchy) {
+internal class RoomSummaryUpdater @Inject constructor(
+        @UserId private val userId: String,
+        private val roomDisplayNameResolver: RoomDisplayNameResolver,
+        private val roomAvatarResolver: RoomAvatarResolver,
+        private val monarchy: Monarchy) {
 
     // TODO: maybe allow user of SDK to give that list
     private val PREVIEWABLE_TYPES = listOf(
@@ -52,12 +49,12 @@ internal class RoomSummaryUpdater @Inject constructor(@UserId private val userId
             EventType.STATE_ROOM_NAME,
             EventType.STATE_ROOM_TOPIC,
             EventType.STATE_ROOM_MEMBER,
-            EventType.STATE_HISTORY_VISIBILITY,
+            EventType.STATE_ROOM_HISTORY_VISIBILITY,
             EventType.CALL_INVITE,
             EventType.CALL_HANGUP,
             EventType.CALL_ANSWER,
             EventType.ENCRYPTED,
-            EventType.ENCRYPTION,
+            EventType.STATE_ROOM_ENCRYPTION,
             EventType.STATE_ROOM_THIRD_PARTY_INVITE,
             EventType.STICKER,
             EventType.STATE_ROOM_CREATE
@@ -69,9 +66,7 @@ internal class RoomSummaryUpdater @Inject constructor(@UserId private val userId
                roomSummary: RoomSyncSummary? = null,
                unreadNotifications: RoomSyncUnreadNotifications? = null,
                updateMembers: Boolean = false) {
-        val roomSummaryEntity = RoomSummaryEntity.where(realm, roomId).findFirst()
-                ?: realm.createObject(roomId)
-
+        val roomSummaryEntity = RoomSummaryEntity.getOrCreate(realm, roomId)
         if (roomSummary != null) {
             if (roomSummary.heroes.isNotEmpty()) {
                 roomSummaryEntity.heroes.clear()
@@ -93,12 +88,13 @@ internal class RoomSummaryUpdater @Inject constructor(@UserId private val userId
 
         val latestPreviewableEvent = TimelineEventEntity.latestEvent(realm, roomId, includesSending = true, filterTypes = PREVIEWABLE_TYPES)
         val lastTopicEvent = EventEntity.where(realm, roomId, EventType.STATE_ROOM_TOPIC).prev()
-        val lastCanonicalAliasEvent = EventEntity.where(realm, roomId, EventType.STATE_CANONICAL_ALIAS).prev()
+        val lastCanonicalAliasEvent = EventEntity.where(realm, roomId, EventType.STATE_ROOM_CANONICAL_ALIAS).prev()
         val lastAliasesEvent = EventEntity.where(realm, roomId, EventType.STATE_ROOM_ALIASES).prev()
+        val encryptionEvent = EventEntity.where(realm, roomId, EventType.STATE_ROOM_ENCRYPTION).prev()
 
         roomSummaryEntity.hasUnreadMessages = roomSummaryEntity.notificationCount > 0
-                // avoid this call if we are sure there are unread events
-                || !isEventRead(monarchy, userId, roomId, latestPreviewableEvent?.eventId)
+                                              // avoid this call if we are sure there are unread events
+                                              || !isEventRead(monarchy, userId, roomId, latestPreviewableEvent?.eventId)
 
         roomSummaryEntity.displayName = roomDisplayNameResolver.resolve(roomId).toString()
         roomSummaryEntity.avatarUrl = roomAvatarResolver.resolve(roomId)
@@ -107,18 +103,20 @@ internal class RoomSummaryUpdater @Inject constructor(@UserId private val userId
         roomSummaryEntity.canonicalAlias = ContentMapper.map(lastCanonicalAliasEvent?.content).toModel<RoomCanonicalAliasContent>()
                 ?.canonicalAlias
 
-        val roomAliases = ContentMapper.map(lastAliasesEvent?.content).toModel<RoomAliasesContent>()?.aliases ?: emptyList()
+        val roomAliases = ContentMapper.map(lastAliasesEvent?.content).toModel<RoomAliasesContent>()?.aliases
+                          ?: emptyList()
         roomSummaryEntity.aliases.clear()
         roomSummaryEntity.aliases.addAll(roomAliases)
         roomSummaryEntity.flatAliases = roomAliases.joinToString(separator = "|", prefix = "|")
+        roomSummaryEntity.isEncrypted = encryptionEvent != null
 
         if (updateMembers) {
             val otherRoomMembers = RoomMembers(realm, roomId)
                     .queryRoomMembersEvent()
-                    .notEqualTo(EventEntityFields.STATE_KEY, userId)
+                    .notEqualTo(RoomMemberEntityFields.USER_ID, userId)
                     .findAll()
                     .asSequence()
-                    .map { it.stateKey }
+                    .map { it.userId }
 
             roomSummaryEntity.otherMemberIds.clear()
             roomSummaryEntity.otherMemberIds.addAll(otherRoomMembers)

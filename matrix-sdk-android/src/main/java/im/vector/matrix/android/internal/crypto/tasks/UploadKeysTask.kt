@@ -24,6 +24,7 @@ import im.vector.matrix.android.internal.crypto.model.rest.KeysUploadResponse
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.convertToUTF8
+import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface UploadKeysTask : Task<UploadKeysTask.Params, KeysUploadResponse> {
@@ -36,8 +37,10 @@ internal interface UploadKeysTask : Task<UploadKeysTask.Params, KeysUploadRespon
             val deviceId: String)
 }
 
-internal class DefaultUploadKeysTask @Inject constructor(private val cryptoApi: CryptoApi)
-    : UploadKeysTask {
+internal class DefaultUploadKeysTask @Inject constructor(
+        private val cryptoApi: CryptoApi,
+        private val eventBus: EventBus
+) : UploadKeysTask {
 
     override suspend fun execute(params: UploadKeysTask.Params): KeysUploadResponse {
         val encodedDeviceId = convertToUTF8(params.deviceId)
@@ -52,7 +55,7 @@ internal class DefaultUploadKeysTask @Inject constructor(private val cryptoApi: 
             body.oneTimeKeys = params.oneTimeKeys
         }
 
-        return executeRequest {
+        return executeRequest(eventBus) {
             apiCall = if (encodedDeviceId.isBlank()) {
                 cryptoApi.uploadKeys(body)
             } else {

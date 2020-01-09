@@ -1522,7 +1522,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 \n
 \nRiotX 支援：• 登入到既有的帳號 • 建立聊天室與加入公開聊天室 • 接受與回絕邀請 • 列出使用者聊天室 • 檢視聊天室詳細資訊 • 傳送文字訊息 • 傳送附件 • 讀取與編寫已加密的聊天室 • 加密：E2E 金鑰備份、進階裝置驗證、金鑰分享請求與回應 • 推送通知 • 亮、暗與黑色主題
 \n
-\n不是所有 Riot 的功能都已在 RiotX 中實作。主要缺少（會在稍後到來！）的功能：• 建立帳號 • 聊天室設定（列出聊天室成員等） • 通話 • 小工具 • …</string>
+\n不是所有 Riot 的功能都已在 RiotX 中實作。主要缺少（會在稍後到來！）的功能 • 聊天室設定（列出聊天室成員等） • 通話 • 小工具 • …</string>
 
     <string name="bottom_action_people_x">直接訊息</string>
 
@@ -1695,7 +1695,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="report_content_spam">垃圾訊息</string>
     <string name="report_content_inappropriate">不合適</string>
-    <string name="report_content_custom">自訂回報</string>
+    <string name="report_content_custom">自訂回報……</string>
     <string name="report_content_custom_title">回報此內容</string>
     <string name="report_content_custom_hint">回報此內容的理由</string>
     <string name="report_content_custom_submit">回報</string>
@@ -1756,5 +1756,179 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="room_widget_webview_access_camera">使用相機</string>
     <string name="room_widget_webview_access_microphone">使用麥克風</string>
     <string name="room_widget_webview_read_protected_media">讀取 DRM 保護的媒體</string>
+
+    <string name="login_error_no_homeserver_found">這不是有效的 Matrix 伺服器位置</string>
+    <string name="message_ignore_user">封鎖使用者</string>
+
+    <string name="room_list_quick_actions_notifications_all_noisy">所有訊息（吵雜）</string>
+    <string name="room_list_quick_actions_notifications_all">所有訊息</string>
+    <string name="room_list_quick_actions_notifications_mentions">僅提及</string>
+    <string name="room_list_quick_actions_notifications_mute">靜音</string>
+    <string name="room_list_quick_actions_settings">設定</string>
+    <string name="room_list_quick_actions_leave">離開聊天室</string>
+    <string name="notice_member_no_changes">%1$s 未做出任何變更</string>
+    <string name="command_description_spoiler">傳送為擾亂者指定的訊息</string>
+    <string name="spoiler">擾亂者</string>
+    <string name="reaction_search_type_hint">輸入關鍵字以尋找反應。</string>
+
+    <string name="no_ignored_users">您未忽略任何使用者</string>
+
+    <string name="help_long_click_on_room_for_more_options">長按聊天室以檢視更多選項</string>
+
+
+    <string name="room_join_rules_public">%1$s 將聊天室設為公開給所有知道連結的人。</string>
+    <string name="room_join_rules_invite">%1$s 將聊天室設為僅邀請可進入。</string>
+    <string name="timeline_unread_messages">未讀訊息</string>
+
+    <string name="login_splash_title">讓您的通訊自由</string>
+    <string name="login_splash_text1">直接或在群組中與夥伴們聊天</string>
+    <string name="login_splash_text2">透過加密讓對話保持隱密</string>
+    <string name="login_splash_text3">擴展並自訂您的體驗</string>
+    <string name="login_splash_submit">開始</string>
+
+    <string name="login_server_title">選取伺服器</string>
+    <string name="login_server_text">就像電子郵件，帳號也有一個家，不過您還是可以跟任何人交談</string>
+    <string name="login_server_matrix_org_text">在最大的公開伺服器上免費加入數百萬人之中</string>
+    <string name="login_server_modular_text">組織另有專業主機可用</string>
+    <string name="login_server_modular_learn_more">了解更多</string>
+    <string name="login_server_other_title">其他</string>
+    <string name="login_server_other_text">自訂與進階設定</string>
+
+    <string name="login_continue">繼續</string>
+    <string name="login_connect_to">連線到 %1$s</string>
+    <string name="login_connect_to_modular">連線到 Modular</string>
+    <string name="login_connect_to_a_custom_server">連線到自訂伺服器</string>
+    <string name="login_signin_to">登入到 %1$s</string>
+    <string name="login_signup">註冊</string>
+    <string name="login_signin">登入</string>
+    <string name="login_signin_sso">以 SSO 繼續</string>
+
+    <string name="login_server_url_form_modular_hint">Modular 位置</string>
+    <string name="login_server_url_form_other_hint">位置</string>
+    <string name="login_server_url_form_modular_text">組織有專業主機</string>
+    <string name="login_server_url_form_modular_notice">輸入 Modular Riot 或您想要使用的伺服器位置</string>
+    <string name="login_server_url_form_other_notice">輸入您想要連線的伺服器或 Riot 的位置</string>
+
+    <string name="login_sso_error_message">載入頁面時發生錯誤：%1$s (%2$d)</string>
+    <string name="login_mode_not_supported">應用程式無法登入此家伺服器。家伺服器支援以下登入類型：%1$s。
+\n
+\n您想要使用網路客戶端登入嗎？</string>
+    <string name="login_registration_disabled">抱歉，此伺服器不接受新帳號。</string>
+    <string name="login_registration_not_supported">應用程式無法在此家伺服器上建立帳號。
+\n
+\n您想要使用網路客戶端註冊嗎？</string>
+
+    <string name="login_login_with_email_error">此電子郵件未關聯到任何帳號。</string>
+
+    <string name="login_reset_password_on">在 %1$s 上重設密碼</string>
+    <string name="login_reset_password_notice">驗證郵件已傳送到您的收件匣以確認您要設定新密碼。</string>
+    <string name="login_reset_password_submit">下一步</string>
+    <string name="login_reset_password_email_hint">電子郵件</string>
+    <string name="login_reset_password_password_hint">新密碼</string>
+
+    <string name="login_reset_password_warning_title">警告！</string>
+    <string name="login_reset_password_warning_content">變更您的密碼將會重設在您所有裝置上任何的端到端加密金鑰，讓已加密的聊天歷史無法讀取。請在重設您的密碼前從其他裝置設定金鑰備份或匯出您的聊天室金鑰。</string>
+    <string name="login_reset_password_warning_submit">繼續</string>
+
+    <string name="login_reset_password_error_not_found">此電子郵件未被連結到任何帳號</string>
+
+    <string name="login_reset_password_mail_confirmation_title">檢查您的收件匣</string>
+    <string name="login_reset_password_mail_confirmation_notice">驗證電子郵件已傳送至 %1$s。</string>
+    <string name="login_reset_password_mail_confirmation_notice_2">輕點連結以確認您的新密碼。在您使用了其中包含的連結後，請點擊下方。</string>
+    <string name="login_reset_password_mail_confirmation_submit">我已經驗證了我的電子郵件地址</string>
+
+    <string name="login_reset_password_success_title">成功！</string>
+    <string name="login_reset_password_success_notice">您的密碼已被重設。</string>
+    <string name="login_reset_password_success_notice_2">您已登出所有裝置，且不會再收到推播通知。要重新啟用通知，請在裝置上再次登入。</string>
+    <string name="login_reset_password_success_submit">返回登入</string>
+
+    <string name="login_reset_password_cancel_confirmation_title">警告</string>
+    <string name="login_reset_password_cancel_confirmation_content">您的密碼未變更。
+\n
+\n停止密碼變更流程？</string>
+
+    <string name="login_set_email_title">設定電子郵件地址</string>
+    <string name="login_set_email_notice">設定電子郵件以復原您的帳號。之後您也可以選擇性地讓您認識的人透過您的電子郵件找到您。</string>
+    <string name="login_set_email_mandatory_hint">電子郵件</string>
+    <string name="login_set_email_optional_hint">電子郵件（選擇性）</string>
+    <string name="login_set_email_submit">下一個</string>
+
+    <string name="login_set_msisdn_title">設定電話號碼</string>
+    <string name="login_set_msisdn_notice">設定電話號碼以讓您認識的人找到您。</string>
+    <string name="login_set_msisdn_notice2">請使用國際格式。</string>
+    <string name="login_set_msisdn_mandatory_hint">電話號碼</string>
+    <string name="login_set_msisdn_optional_hint">電話號碼（選擇性）</string>
+    <string name="login_set_msisdn_submit">下一個</string>
+
+    <string name="login_msisdn_confirm_title">確認電話號碼</string>
+    <string name="login_msisdn_confirm_notice">我們剛傳送了驗證碼給 %1$s。在下方輸入以驗證是您。</string>
+    <string name="login_msisdn_confirm_hint">輸入驗證碼</string>
+    <string name="login_msisdn_confirm_send_again">再次傳送</string>
+    <string name="login_msisdn_confirm_submit">下一個</string>
+
+    <string name="login_msisdn_error_not_international">國際電話號碼必須以加號開頭</string>
+    <string name="login_msisdn_error_other">電話號碼似乎無效。請檢查</string>
+
+    <string name="login_signup_to">註冊至 %1$s</string>
+    <string name="login_signup_username_hint">使用者名稱或電子郵件</string>
+    <string name="login_signup_password_hint">密碼</string>
+    <string name="login_signup_submit">下一個</string>
+    <string name="login_signup_error_user_in_use">使用者名稱已被使用</string>
+    <string name="login_signup_cancel_confirmation_title">警告</string>
+    <string name="login_signup_cancel_confirmation_content">尚未建立您的帳號。
+\n
+\n停止註冊程序？</string>
+
+    <string name="login_a11y_choose_matrix_org">選取 matrix.org</string>
+    <string name="login_a11y_choose_modular">選取 modular</string>
+    <string name="login_a11y_choose_other">選取自訂的家伺服器</string>
+    <string name="login_a11y_captcha_container">請執行 captcha 挑戰</string>
+    <string name="login_terms_title">接受條款以繼續</string>
+
+    <string name="login_wait_for_email_title">請檢查您的電子郵件</string>
+    <string name="login_wait_for_email_notice">我們剛傳送電子郵件給 %1$s。
+\n請點擊其中所包含的連結以繼續建立帳號。</string>
+    <string name="login_validation_code_is_not_correct">輸入的驗證碼不正確。請檢查。</string>
+    <string name="login_error_outdated_homeserver_title">未更新的家伺服器</string>
+    <string name="login_error_outdated_homeserver_content">此家伺服器所執行的版本太舊，所以無法連線。請要求您的家伺服器管理員升級。</string>
+
+    <plurals name="login_error_limit_exceeded_retry_after">
+        <item quantity="other">傳送了太多請求。您可以在 %1$d 秒後重試……</item>
+    </plurals>
+
+    <string name="seen_by">檢視由</string>
+
+    <string name="signed_out_title">您已登出</string>
+    <string name="signed_out_notice">這可能有多種原因：
+\n
+\n• 您已在其他裝置上變更您的密碼。
+\n
+\n• 您已從其他裝置刪除此裝置。
+\n
+\n• 您伺服器的管理員為了安全性讓您的存取無效。</string>
+    <string name="signed_out_submit">再次登入</string>
+
+    <string name="soft_logout_title">您已登出</string>
+    <string name="soft_logout_signin_title">登入</string>
+    <string name="soft_logout_signin_notice">您的家伺服器 (%1$s) 管理員已將您的帳號 %2$s (%3$s) 登出。</string>
+    <string name="soft_logout_signin_e2e_warning_notice">登入以復原僅儲存在此裝置上的加密金鑰。您在任何裝置上都需要它們來讀取您所有的安全訊息。</string>
+    <string name="soft_logout_signin_submit">登入</string>
+    <string name="soft_logout_signin_password_hint">密碼</string>
+    <string name="soft_logout_clear_data_title">清除個人資料</string>
+    <string name="soft_logout_clear_data_notice">警告：您的個人資料（包含加密金鑰）仍儲存在此裝置上。
+\n
+\n如果您已不想使用此裝置，請將其清除，或是登入到其他帳號。</string>
+    <string name="soft_logout_clear_data_submit">清除所有資料</string>
+
+    <string name="soft_logout_clear_data_dialog_title">清除資料</string>
+    <string name="soft_logout_clear_data_dialog_content">清除目前儲存在此裝置上的所有資料嗎？
+\n再次登入以存取您的帳號資料與訊息。</string>
+    <string name="soft_logout_clear_data_dialog_e2e_warning_content">除非您登入以復原您的加密金鑰，否則您將會失去對安全訊息的存取權。</string>
+    <string name="soft_logout_clear_data_dialog_submit">清除資料</string>
+    <string name="soft_logout_sso_not_same_user_error">使用者 %1$s 目前的工作階段與您提供的使用者 %2$s 憑證。RiotX 並不支援。
+\n請先清除您的資料，然後再以其他帳號登入。</string>
+
+    <string name="permalink_malformed">您的 matrix.to 連結格式錯誤</string>
+    <string name="bug_report_error_too_short">描述太短了</string>
 
 </resources>

@@ -25,6 +25,7 @@ import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.Realm
+import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface RemovePusherTask : Task<RemovePusherTask.Params, Unit> {
@@ -34,7 +35,8 @@ internal interface RemovePusherTask : Task<RemovePusherTask.Params, Unit> {
 
 internal class DefaultRemovePusherTask @Inject constructor(
         private val pushersAPI: PushersAPI,
-        private val monarchy: Monarchy
+        private val monarchy: Monarchy,
+        private val eventBus: EventBus
 ) : RemovePusherTask {
 
     override suspend fun execute(params: RemovePusherTask.Params) {
@@ -59,7 +61,7 @@ internal class DefaultRemovePusherTask @Inject constructor(
                 data = JsonPusherData(existing.data.url, existing.data.format),
                 append = false
         )
-        executeRequest<Unit> {
+        executeRequest<Unit>(eventBus) {
             apiCall = pushersAPI.setPusher(deleteBody)
         }
         monarchy.awaitTransaction {

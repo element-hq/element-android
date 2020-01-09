@@ -1,3 +1,29 @@
+Changes in RiotX 0.12.0 (2020-01-09)
+===================================================
+
+Improvements 🙌:
+ - The initial sync is now handled by a foreground service
+ - Render aliases and canonical alias change in the timeline
+ - Introduce developer mode in the settings (#745, #796)
+ - Improve devices list screen
+ - Add settings for rageshake sensibility
+ - Fix autocompletion issues and add support for rooms, groups, and emoji (#780)
+ - Show skip to bottom FAB while scrolling down (#752)
+ - Enable encryption on a room, SDK part (#212)
+
+Other changes:
+ - Change the way RiotX identifies a session to allow the SDK to support several sessions with the same user (#800)
+ - Exclude play-services-oss-licenses library from F-Droid build (#814)
+ - Email domain can be limited on some homeservers, i18n of the displayed error (#754)
+
+Bugfix 🐛:
+ - Fix crash when opening room creation screen from the room filtering screen
+ - Fix avatar image disappearing (#777)
+ - Fix read marker banner when permalink
+ - Fix joining upgraded rooms (#697)
+ - Fix matrix.org room directory not being browsable (#807)
+ - Hide non working settings (#751)
+
 Changes in RiotX 0.11.0 (2019-12-19)
 ===================================================
 
@@ -256,7 +282,7 @@ Mode details here: https://medium.com/@RiotChat/introducing-the-riotx-beta-for-a
 =======================================================
 
 
-Changes in RiotX 0.0.0 (2019-XX-XX)
+Changes in RiotX 0.0.0 (2020-XX-XX)
 ===================================================
 
 Features ✨:

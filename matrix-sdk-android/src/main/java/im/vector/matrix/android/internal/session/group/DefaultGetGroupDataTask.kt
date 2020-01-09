@@ -25,6 +25,7 @@ import im.vector.matrix.android.internal.session.group.model.GroupRooms
 import im.vector.matrix.android.internal.session.group.model.GroupSummaryResponse
 import im.vector.matrix.android.internal.session.group.model.GroupUsers
 import im.vector.matrix.android.internal.task.Task
+import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface GetGroupDataTask : Task<GetGroupDataTask.Params, Unit> {
@@ -34,18 +35,19 @@ internal interface GetGroupDataTask : Task<GetGroupDataTask.Params, Unit> {
 
 internal class DefaultGetGroupDataTask @Inject constructor(
         private val groupAPI: GroupAPI,
-        private val monarchy: Monarchy
+        private val monarchy: Monarchy,
+        private val eventBus: EventBus
 ) : GetGroupDataTask {
 
     override suspend fun execute(params: GetGroupDataTask.Params) {
         val groupId = params.groupId
-        val groupSummary = executeRequest<GroupSummaryResponse> {
+        val groupSummary = executeRequest<GroupSummaryResponse>(eventBus) {
             apiCall = groupAPI.getSummary(groupId)
         }
-        val groupRooms = executeRequest<GroupRooms> {
+        val groupRooms = executeRequest<GroupRooms>(eventBus) {
             apiCall = groupAPI.getRooms(groupId)
         }
-        val groupUsers = executeRequest<GroupUsers> {
+        val groupUsers = executeRequest<GroupUsers>(eventBus) {
             apiCall = groupAPI.getUsers(groupId)
         }
         insertInDb(groupSummary, groupRooms, groupUsers, groupId)

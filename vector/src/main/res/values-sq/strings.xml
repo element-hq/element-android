@@ -1521,7 +1521,7 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
 \n
 \nRiotX-i mbulon: • Hyrje në një llogari ekzistuese • Krijim dhome dhe pjesëmarrje në dhoma publike • Pranim dhe hedhje poshtë ftesash • Njohje të dhomave të përdoruesve • Parje hollësish dhome • Dërgim mesazhesh tekst • Dërgim bashkëngjitjesh • Lexim dhe shkrim mesazhesh në dhoma të fshehtëzuara • Kriptografi: kopjeruajtje kyçesh E2E, verifikim i thelluar pajisjesh, kërkesa dhe përgjigje për ndarje kyçesh • Njoftime push • Tema të Çelëta, të Errëta dhe të Zeza
 \n
-\nNë RiotX s’janë sendërtuar ende krejt veçoritë e Riot-it. Veçori kryesore që mungojnë (dhe që do të vijnë së shpejti!): • Krijim llogarish • Rregullime dhome (shfaqje anëtarësh dhome, etj.) • Thirrje • Widget-es • …</string>
+\nNë RiotX s’janë sendërtuar ende krejt veçoritë e Riot-it. Veçori kryesore që mungojnë (dhe që do të vijnë së shpejti!): • Rregullime dhome (shfaqje anëtarësh dhome, etj.) • Thirrje • Widget-es • …</string>
 
     <string name="settings_integration_manager">Përgjegjës Integrimesh</string>
 
@@ -1696,7 +1696,7 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="attachment_type_sticker">Ngjitës</string>
     <string name="report_content_spam">Është e padëshiruar</string>
     <string name="report_content_inappropriate">Është e papërshtatshme</string>
-    <string name="report_content_custom">Raport vetjak</string>
+    <string name="report_content_custom">Raport vetjak…</string>
     <string name="report_content_custom_title">Raportojeni këtë lëndë</string>
     <string name="report_content_custom_hint">Arsye për raportimin e kësaj lënde</string>
     <string name="report_content_custom_submit">RAPORTOJENI</string>
@@ -1757,4 +1757,180 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="room_widget_webview_read_protected_media">Të lexojë Media të mbrojtur me DRM</string>
 
     <string name="a11y_close_keys_backup_banner">Mbyll banderolë kopjeruajtjeje kyçesh</string>
+    <string name="login_error_no_homeserver_found">Kjo s’është adresë e vlefshme shërbyesi Matrix</string>
+    <string name="sas_error_m_mismatched_commitment">Hashi i lëndës s’u përputh me atë që pritej</string>
+    <string name="error_handling_incoming_share">S’trajtoi dot të dhëna ndarjeje</string>
+
+    <string name="message_ignore_user">Bllokoje përdoruesin</string>
+
+    <string name="room_list_quick_actions_notifications_all_noisy">Krejt mesazhet (e zhurmshme)</string>
+    <string name="room_list_quick_actions_notifications_all">Krejt mesazhet</string>
+    <string name="room_list_quick_actions_notifications_mentions">Vetëm përmendje</string>
+    <string name="room_list_quick_actions_notifications_mute">Pa Zë</string>
+    <string name="room_list_quick_actions_settings">Rregullime</string>
+    <string name="room_list_quick_actions_leave">Braktiseni dhomën</string>
+    <string name="notice_member_no_changes">%1$s s’bëri ndryshime</string>
+    <string name="reaction_search_type_hint">Shtypni ca fjalëkyçe që të gjendet një reagim.</string>
+
+    <string name="no_ignored_users">S’jeni duke shpërfillur ndonjë përdorues</string>
+
+    <string name="help_long_click_on_room_for_more_options">Kryeni klikim të gjatë në një dhomë që të shihni më tepër mundësi</string>
+
+
+    <string name="room_join_rules_public">%1$s e bëri dhomën publike për këdo që di lidhjen.</string>
+    <string name="room_join_rules_invite">%1$s e bëri dhomën vetëm me ftesa.</string>
+    <string name="timeline_unread_messages">Mesazhe të palexuar</string>
+
+    <string name="login_splash_title">Çlironi komunikimet tuaj</string>
+    <string name="login_splash_text1">Fjalosuni me njerëzit drejtpërsëdrejti ose në grupe</string>
+    <string name="login_splash_text2">Mbajini bisedat private, përmes fshehtëzimit</string>
+    <string name="login_splash_text3">Zgjeroni &amp; përshtatni punimin tuaj</string>
+    <string name="login_splash_submit">Si t’ia fillohet</string>
+
+    <string name="login_server_title">Përzgjidhni një shërbyes</string>
+    <string name="login_server_text">Ashtu si te email-et, llogaritë kanë një shtëpi të tyren, edhe pse mund të bisedoni me këdo</string>
+    <string name="login_server_matrix_org_text">Bashkojuni milionave, falas, në shërbyesin më të madh publik</string>
+    <string name="login_server_modular_text">Strehim me pagesë për ente</string>
+    <string name="login_server_modular_learn_more">Mësoni më tepër</string>
+    <string name="login_server_other_title">Tjetër</string>
+    <string name="login_server_other_text">Rregullime vetjake &amp; të mëtejshme</string>
+
+    <string name="login_continue">Vazhdo</string>
+    <string name="login_connect_to">Lidhu me %1$s</string>
+    <string name="login_connect_to_modular">Lidhu me një shërbyes modular</string>
+    <string name="login_connect_to_a_custom_server">Lidhu me një shërbyes vetjak</string>
+    <string name="login_signin_to">Hyni te %1$s</string>
+    <string name="login_signup">Regjistrohuni</string>
+    <string name="login_signin">Hyni</string>
+    <string name="login_signin_sso">Vazhdoni me SSO</string>
+
+    <string name="login_server_url_form_modular_hint">Adresë Modulari</string>
+    <string name="login_server_url_form_other_hint">Adresë</string>
+    <string name="login_server_url_form_modular_text">Strehim me pagesë për ente</string>
+    <string name="login_server_url_form_modular_notice">Jepni adresën e Modular Riot-it ose Shërbyesit që doni të përdoret</string>
+    <string name="login_server_url_form_other_notice">Jepni adresën e një shërbyesi ose një instance Riot me të cilën doni të lidheni</string>
+
+    <string name="login_sso_error_message">Ndodhi një gabim kur ngarkohej faqja: %1$s (%2$d)</string>
+    <string name="login_mode_not_supported">Aplikacioni s’është në gjendje të bëjë hyrje në llogari në këtë shërbyes Home. Shërbyesi Home mbulon llojet vijuese të hyrjes(ve): %1$s.
+\n
+\nDoni të hyni duke përdorur një klient web\?</string>
+    <string name="login_registration_disabled">Na ndjeni, ky shërbyes s’pranon llogari të reja.</string>
+    <string name="login_registration_not_supported">Aplikacioni s’është në gjendje të krijojë llogari në këtë shërbyes Home.
+\n
+\nDoni të regjistroheni duke përdorur një klient web\?</string>
+
+    <string name="login_login_with_email_error">Ky emai s’është përshoqëruar me ndonjë llogari.</string>
+
+    <string name="login_reset_password_on">Ricaktoni fjalëkalimin në %1$s</string>
+    <string name="login_reset_password_notice">Te mesazhet tuaj do të dërgohet një email verifikimi, për të ripohuar caktimin e fjalëkalimit tuaj të ri.</string>
+    <string name="login_reset_password_submit">Pasuesi</string>
+    <string name="login_reset_password_email_hint">Email</string>
+    <string name="login_reset_password_password_hint">Fjalëkalim i ri</string>
+
+    <string name="login_reset_password_warning_title">Kujdes!</string>
+    <string name="login_reset_password_warning_content">Ndryshimi i fjalëkalimit tuaj do të sjellë ricaktim të çfarëdo kyçesh fshehtëzimi skaj-më-skaj në krejt pajisjet tuaja, duke e bërë të palexueshëm historikun e bisedave të fshehtëzuara. Përpara se të ricaktoni fjalëkalimin tuaj, ujdisni një Kopjeruajtje Kyçesh ose eksportoni kyçet e dhomës tuaj prej një tjetër pajisjeje.</string>
+    <string name="login_reset_password_warning_submit">Vazhdo</string>
+
+    <string name="login_reset_password_error_not_found">Ky email s’është i lidhur me ndonjë llogari</string>
+
+    <string name="login_reset_password_mail_confirmation_title">Kontrolloni te mesazhet tuaj të marrë</string>
+    <string name="login_reset_password_mail_confirmation_notice">Një email verifikimi u dërgua te %1$s.</string>
+    <string name="login_reset_password_mail_confirmation_notice_2">Prekni mbi lidhjen që të ripohohet fjalëkalimi juaj i ri. Pasi të keni ndjekur lidhjen që përmban, klikoni më poshtë.</string>
+    <string name="login_reset_password_mail_confirmation_submit">E kam verifikuar adresën time email</string>
+
+    <string name="login_reset_password_success_title">Sukses!</string>
+    <string name="login_reset_password_success_notice">Fjalëkalimi juaj u ricaktua.</string>
+    <string name="login_reset_password_success_notice_2">Jeni nxjerrë jashtë prej krejt pajisjeve dhe s’do të merrni më njoftime push. Që të riaktivizoni njoftimet, bëni sërish hyrjen në çdo pajisje.</string>
+    <string name="login_reset_password_success_submit">Mbrapsht te Hyrja</string>
+
+    <string name="login_reset_password_cancel_confirmation_title">Kujdes</string>
+    <string name="login_reset_password_cancel_confirmation_content">Fjalëkalimi juaj s’ka ndryshuar ende.
+\n
+\nTë ndalet procesi i ndryshimit të fjalëkalimit\?</string>
+
+    <string name="login_set_email_title">Caktoni adresë email</string>
+    <string name="login_set_email_notice">Caktoni një email për rimarrje të llogarisë tuaj. Më vonë, mundeni të lejoni persona që njihni t’ju zbulojnë përmes email-it tuaj.</string>
+    <string name="login_set_email_mandatory_hint">Email</string>
+    <string name="login_set_email_optional_hint">Email (në daçi)</string>
+    <string name="login_set_email_submit">Pasuesi</string>
+
+    <string name="login_set_msisdn_title">Caktoni numër telefoni</string>
+    <string name="login_set_msisdn_notice">Caktoni një numër telefoni për t’i lejuar, në daçi, nejrëzit t’ju gjejnë.</string>
+    <string name="login_set_msisdn_notice2">Ju lutemi, përdorni formatin ndërkombëtar.</string>
+    <string name="login_set_msisdn_mandatory_hint">Numër telefoni</string>
+    <string name="login_set_msisdn_optional_hint">Numër telefoni (opsionale)</string>
+    <string name="login_set_msisdn_submit">Pasuesi</string>
+
+    <string name="login_msisdn_confirm_title">Ripohoni numër telefoni</string>
+    <string name="login_msisdn_confirm_notice">Sapo dërguam një kod te %1$s. Jepeni më poshtë që të verifikohet se jeni ju.</string>
+    <string name="login_msisdn_confirm_hint">Jepni kod</string>
+    <string name="login_msisdn_confirm_send_again">Ridërgoje</string>
+    <string name="login_msisdn_confirm_submit">Pasuesi</string>
+
+    <string name="login_msisdn_error_not_international">Numrat e telefonave ndëkombëtarë duhet të fillojnë me \'+\'</string>
+    <string name="login_msisdn_error_other">Numri i telefonit duket se është i vlefshëm. Ju lutemi, kontrollojeni</string>
+
+    <string name="login_signup_to">Regjistrohuni te %1$s</string>
+    <string name="login_signup_username_hint">Emër përdoruesi ose email</string>
+    <string name="login_signup_password_hint">Fjalëkalim</string>
+    <string name="login_signup_submit">Pasuesi</string>
+    <string name="login_signup_error_user_in_use">Ai emër përdoruesi është i zënë</string>
+    <string name="login_signup_cancel_confirmation_title">Kujdes</string>
+    <string name="login_signup_cancel_confirmation_content">Llogaria juaj s’është krijuar ende.
+\n
+\nTë ndalet procesi i regjistrimit\?</string>
+
+    <string name="login_a11y_choose_matrix_org">Përzgjidhni matrix.org</string>
+    <string name="login_a11y_choose_modular">Përzgjidhni modular</string>
+    <string name="login_a11y_choose_other">Përzgjidhni një shërbyes Home vetjak</string>
+    <string name="login_a11y_captcha_container">Ju lutemi, zgjidhni captcha-n</string>
+    <string name="login_terms_title">Që të vazhdohet, pranoni terma</string>
+
+    <string name="login_wait_for_email_title">Ju lutemi, kontrolloni email-in tuaj</string>
+    <string name="login_wait_for_email_notice">Sapo dërguam një email te %1$s.
+\nJu lutemi, klikoni mbi lidhjen që përmban, që të vazhdohet krijimi i llogarisë.</string>
+    <string name="login_validation_code_is_not_correct">Kodi që dhatë s’është i saktë. Ju lutemi, kontrollojeni.</string>
+    <string name="login_error_outdated_homeserver_title">Shërbyes Home i vjetruar</string>
+    <string name="login_error_outdated_homeserver_content">Ky shërbyes Home xhiron një version shumë të vjetër për t’u lidhur me të. Kërkojini përgjegjësit të shërbyesit tuaj Home ta përmirësojë.</string>
+
+    <plurals name="login_error_limit_exceeded_retry_after">
+        <item quantity="one">Janë dërgua shumë kërkesa. Mund të riprovoni pas %1$d sekonde…</item>
+        <item quantity="other">Janë dërgua shumë kërkesa. Mund të riprovoni pas %1$d sekondash…</item>
+    </plurals>
+
+    <string name="seen_by">Parë nga</string>
+
+    <string name="signed_out_title">Keni bërë dalje</string>
+    <string name="signed_out_notice">Mund të vijë për arsye të ndryshme:
+\n
+\n• Keni ndryshuar fjalëkalimin tuaj në një pajisje tjetër.
+\n
+\n• E keni fshirë këtë pajisje prej një pajisjeje tjetër.
+\n
+\n• Përgjegjësi i shërbyesit tuaj e ka bërë të pamundur hyrjen tuaj për arsye sigurie.</string>
+    <string name="signed_out_submit">Ribëni hyrjen</string>
+
+    <string name="soft_logout_title">Keni bërë dalje</string>
+    <string name="soft_logout_signin_title">Hyni</string>
+    <string name="soft_logout_signin_notice">Përgjegjësi i shërbyesit tuaj Home (%1$s) ju ka nxjerrë jashtë llogarisë tuaj %2$s (%3$s).</string>
+    <string name="soft_logout_signin_e2e_warning_notice">Bëni hyrjen, që të rimerrni kyçe fshehtëzimi të depozituar përjashtimisht në këtë pajisje. Do t’ju duhen për të lexuar krejt mesazhet tuaj të siguruar në çfarëdo pajisje.</string>
+    <string name="soft_logout_signin_submit">Hyni</string>
+    <string name="soft_logout_signin_password_hint">Fjalëkalim</string>
+    <string name="soft_logout_clear_data_title">Spastro të dhëna personale</string>
+    <string name="soft_logout_clear_data_notice">Kujdes: Të dhënat tuaja personale (përfshi kyçe fshehtëzimi) janë ende të depozituara në këtë pajisje.
+\n
+\nSpastrojini, nëse keni përfunduar së përdoruri këtë pajisje, ose dëshironi të bëni hyrjen në një tjetër llogari.</string>
+    <string name="soft_logout_clear_data_submit">Spastro krejt të dhënat</string>
+
+    <string name="soft_logout_clear_data_dialog_title">Spastroni të dhëna</string>
+    <string name="soft_logout_clear_data_dialog_content">Të spastrohen krejt të dhënat e depozituara aktualisht në këtë pajisje\?
+\nQë të mund të hyni te të dhëna të llogarisë tuaj dhe te mesazhe, bëni sërish hyrjen.</string>
+    <string name="soft_logout_clear_data_dialog_e2e_warning_content">Do të humbni hyrje te mesazhe të sigurt, veç në hyfshi për të rimarrë kyçet tuaj të fshehtëzimit.</string>
+    <string name="soft_logout_clear_data_dialog_submit">Spastro të dhënat</string>
+    <string name="soft_logout_sso_not_same_user_error">Sesioni i tanishëm është për përdoruesin %1$s dhe ju jepni kredenciale për përdoruesin %2$s. Kjo nuk mbulohet nga RiotX.
+\nJu lutemi, së pari spastroni të dhëna, mandej hyni sërish në një tjetër llogari.</string>
+
+    <string name="permalink_malformed">Lidhja juaj matrix.to është e keqformuar</string>
+    <string name="bug_report_error_too_short">Përshkrimi është shumë i shkurtër</string>
+
 </resources>

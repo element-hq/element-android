@@ -132,7 +132,7 @@
     <string name="verification_emoji_robot">Робот</string>
     <string name="verification_emoji_hat">Шляпа</string>
     <string name="verification_emoji_glasses">Очки</string>
-    <string name="verification_emoji_wrench">гаечный ключ</string>
+    <string name="verification_emoji_wrench">Гаечный ключ</string>
     <string name="verification_emoji_santa">Санта</string>
     <string name="verification_emoji_thumbsup">Большой палец вверх</string>
     <string name="verification_emoji_umbrella">Зонтик</string>
@@ -186,4 +186,18 @@
     <string name="clear_timeline_send_queue">Очистить очередь отправки</string>
 
     <string name="notice_room_third_party_revoked_invite">%1$s отозвал приглашение %2$s присоединиться к комнате</string>
+    <string name="notice_room_invite_no_invitee_with_reason">Приглашение %1$s. Причина: %2$s</string>
+    <string name="notice_room_invite_with_reason">%1$s приглашен %2$s. Причина: %3$s</string>
+    <string name="notice_room_invite_you_with_reason">%1$s пригласил вас. Причина: %2$s</string>
+    <string name="notice_room_join_with_reason">%1$s присоединился. Причина: %2$s</string>
+    <string name="notice_room_leave_with_reason">Осталось %1$s. Причина: %2$s</string>
+    <string name="notice_room_reject_with_reason">%1$s отклонил приглашение. Причина: %2$s</string>
+    <string name="notice_room_kick_with_reason">%1$s выгнали %2$s. Причина: %3$s</string>
+    <string name="notice_room_unban_with_reason">%1$s разблокировано %2$s. Причина: %3$s</string>
+    <string name="notice_room_ban_with_reason">%1$s забанен %2$s. Причина: %3$s</string>
+    <string name="notice_room_third_party_invite_with_reason">%1$s отправил приглашение %2$s в комнату. Причина: %3$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason">%1$s отозвал приглашение %2$s присоединиться к комнате. Причина: %3$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason">%1$s принял приглашение для %2$s. Причина: %3$s</string>
+    <string name="notice_room_withdraw_with_reason">%1$s отозвал приглашение %2$s. Причина: %3$s</string>
+
 </resources>
