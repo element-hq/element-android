@@ -24,12 +24,16 @@ static def getGitTimestamp() {
 }
 
 static def generateVersionCodeFromTimestamp() {
-    // It's unix timestamp divided by 10: It's incremented by one every 10 seconds.
-    return (getGitTimestamp() / 10).toInteger()
+    // It's unix timestamp, minus timestamp of October 3rd 2018 (first commit date) divided by 100: It's incremented by one every 100 seconds.
+    // plus 20_000_000 for compatibility reason with the previous timestamp
+    // Note that the result will be multiplied by 10 when adding the digit for the arch
+    return ((getGitTimestamp() - 1_538_524_800 ) / 100).toInteger() + 20_000_000
 }
 
 def generateVersionCodeFromVersionName() {
-    return versionMajor * 1_00_00 + versionMinor * 1_00 + versionPatch
+    // plus 4_000_000 for compatibility reason with the previous timestamp
+    // Note that the result will be multiplied by 10 when adding the digit for the arch
+    return (versionMajor * 1_00_00 + versionMinor * 1_00 + versionPatch) + 4_000_000
 }
 
 def getVersionCode() {
@@ -77,8 +81,8 @@ project.android.buildTypes.all { buildType ->
             ]
 }
 
-// map for the version codes
-// x86 must have greater values than arm, see https://software.intel.com/en-us/android/articles/google-play-supports-cpu-architecture-filtering-for-multiple-apk
+// map for the version codes last digit
+// x86 must have greater values than arm
 // 64 bits have greater value than 32 bits
 ext.abiVersionCodes = ["armeabi-v7a": 1, "arm64-v8a": 2, "x86": 3, "x86_64": 4].withDefault { 0 }
 
@@ -144,7 +148,7 @@ android {
             variant.outputs.each { output ->
                 def baseAbiVersionCode = project.ext.abiVersionCodes.get(output.getFilter(OutputFile.ABI))
                 // Known limitation: it does not modify the value in the BuildConfig.java generated file
-                output.versionCodeOverride = baseAbiVersionCode * 10_000_000 + variant.versionCode
+                output.versionCodeOverride = variant.versionCode * 10 + baseAbiVersionCode
             }
         }
     }
