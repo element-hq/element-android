@@ -26,6 +26,7 @@ import im.vector.riotx.core.preference.UserAvatarPreference
 import im.vector.riotx.features.MainActivity
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.riotx.features.crypto.verification.VerificationBottomSheet
+import im.vector.riotx.features.debug.DebugMenuActivity
 import im.vector.riotx.features.home.HomeActivity
 import im.vector.riotx.features.home.HomeModule
 import im.vector.riotx.features.createdirect.CreateDirectRoomActivity
@@ -138,6 +139,8 @@ interface ScreenComponent {
     fun inject(verificationBottomSheet: VerificationBottomSheet)
 
     fun inject(permalinkHandlerActivity: PermalinkHandlerActivity)
+
+    fun inject(activity: DebugMenuActivity)
 
     @Component.Factory
     interface Factory {

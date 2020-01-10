@@ -171,8 +171,8 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
             for ((k, value) in failures) {
                 val statusCode = when (val status = value["status"]) {
                     is Double -> status.toInt()
-                    is Int -> status.toInt()
-                    else -> 0
+                    is Int    -> status.toInt()
+                    else      -> 0
                 }
                 if (statusCode == 503) {
                     synchronized(notReadyToRetryHS) {
@@ -289,7 +289,7 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
                 val mutableDevices = devices.toMutableMap()
                 for ((deviceId, deviceInfo) in devices) {
                     // Get the potential previously store device keys for this device
-                    val previouslyStoredDeviceKeys = cryptoStore.getUserDevice(deviceId, userId)
+                    val previouslyStoredDeviceKeys = cryptoStore.getUserDevice(userId, deviceId)
 
                     // in some race conditions (like unit tests)
                     // the self device must be seen as verified
@@ -315,6 +315,25 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
                 // Note that devices which aren't in the response will be removed from the stores
                 cryptoStore.storeUserDevices(userId, mutableDevices)
             }
+
+
+
+            //Handle cross signing keys update
+            val masterKey = response.masterKeys?.get(userId)?.also {
+                Timber.d("## CrossSigning : Got keys for $userId : MSK ${it.unpaddedBase64PublicKey}")
+            }
+            val selfSigningKey = response.selfSigningKeys?.get(userId)?.also {
+                Timber.d("## CrossSigning : Got keys for $userId : SSK ${it.unpaddedBase64PublicKey}")
+            }
+            val userSigningKey = response.userSigningKeys?.get(userId)?.also {
+                Timber.d("## CrossSigning : Got keys for $userId : USK ${it.unpaddedBase64PublicKey}")
+            }
+            cryptoStore.storeUserCrossSigningKeys(
+                    userId,
+                    masterKey,
+                    selfSigningKey,
+                    userSigningKey
+            )
         }
         return onKeysDownloadSucceed(filteredUsers, response.failures)
     }

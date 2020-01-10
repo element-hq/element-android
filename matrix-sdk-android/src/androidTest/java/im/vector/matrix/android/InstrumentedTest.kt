@@ -19,8 +19,12 @@ package im.vector.matrix.android
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import java.io.File
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import org.junit.Rule
+
 
 interface InstrumentedTest {
+    
     fun context(): Context {
         return ApplicationProvider.getApplicationContext()
     }

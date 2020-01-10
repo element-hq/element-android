@@ -19,6 +19,7 @@ package im.vector.matrix.android.common
 
 import android.content.Context
 import android.net.Uri
+import androidx.lifecycle.Observer
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.MatrixConfiguration
@@ -31,6 +32,11 @@ import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.TimelineSettings
+import im.vector.matrix.android.api.session.sync.SyncState
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
 import java.util.*
 import java.util.concurrent.CountDownLatch
@@ -73,23 +79,26 @@ class CommonTestHelper(context: Context) {
      * @param session    the session to sync
      */
     fun syncSession(session: Session) {
-        // val lock = CountDownLatch(1)
-
-        // val observer = androidx.lifecycle.Observer<SyncState> { syncState ->
-        //     if (syncState is SyncState.Idle) {
-        //         lock.countDown()
-        //     }
-        // }
-
-        // TODO observe?
-        // while (session.syncState().value !is SyncState.Idle) {
-        //     sleep(100)
-        // }
+        val lock = CountDownLatch(1)
 
         session.open()
         session.startSync(true)
-        // await(lock)
-        // session.syncState().removeObserver(observer)
+
+        val syncLiveData = runBlocking(Dispatchers.Main) {
+            session.getSyncStateLive()
+        }
+        val syncObserver = object : Observer<SyncState> {
+            override fun onChanged(t: SyncState?) {
+                if (session.hasAlreadySynced()) {
+                    lock.countDown()
+                    syncLiveData.removeObserver(this)
+                }
+            }
+
+        }
+        GlobalScope.launch(Dispatchers.Main) { syncLiveData.observeForever(syncObserver) }
+
+        await(lock)
     }
 
     /**

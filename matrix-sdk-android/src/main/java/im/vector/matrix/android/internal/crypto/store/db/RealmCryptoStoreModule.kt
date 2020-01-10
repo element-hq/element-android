@@ -32,6 +32,8 @@ import io.realm.annotations.RealmModule
             OlmInboundGroupSessionEntity::class,
             OlmSessionEntity::class,
             OutgoingRoomKeyRequestEntity::class,
-            UserEntity::class
+            UserEntity::class,
+            KeyInfoEntity::class,
+            CrossSigningInfoEntity::class
         ])
 internal class RealmCryptoStoreModule

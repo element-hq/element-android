@@ -17,21 +17,26 @@
 package im.vector.matrix.android.internal.crypto.store.db
 
 import im.vector.matrix.android.api.auth.data.Credentials
+import im.vector.matrix.android.api.session.crypto.crosssigning.MXCrossSigningInfo
 import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequest
 import im.vector.matrix.android.internal.crypto.NewSessionListener
 import im.vector.matrix.android.internal.crypto.OutgoingRoomKeyRequest
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrapper
 import im.vector.matrix.android.internal.crypto.model.OlmSessionWrapper
+import im.vector.matrix.android.internal.crypto.model.rest.CrossSigningKeyInfo
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
+import im.vector.matrix.android.internal.crypto.store.PrivateKeysInfo
 import im.vector.matrix.android.internal.crypto.store.db.model.*
 import im.vector.matrix.android.internal.crypto.store.db.query.delete
+import im.vector.matrix.android.internal.crypto.store.db.query.get
 import im.vector.matrix.android.internal.crypto.store.db.query.getById
 import im.vector.matrix.android.internal.crypto.store.db.query.getOrCreate
 import im.vector.matrix.android.internal.session.SessionScope
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import io.realm.RealmList
 import io.realm.Sort
 import io.realm.kotlin.where
 import org.matrix.olm.OlmAccount
@@ -187,7 +192,7 @@ internal class RealmCryptoStore(private val realmConfiguration: RealmConfigurati
         }
     }
 
-    override fun getUserDevice(deviceId: String, userId: String): MXDeviceInfo? {
+    override fun getUserDevice(userId: String, deviceId: String): MXDeviceInfo? {
         return doRealmQueryAndCopy(realmConfiguration) {
             it.where<DeviceInfoEntity>()
                     .equalTo(DeviceInfoEntityFields.PRIMARY_KEY, DeviceInfoEntity.createPrimaryKey(userId, deviceId))
@@ -228,6 +233,73 @@ internal class RealmCryptoStore(private val realmConfiguration: RealmConfigurati
                             )
                         }
             }
+        }
+    }
+
+    override fun storeUserCrossSigningKeys(userId: String,
+                                           masterKey: CrossSigningKeyInfo?,
+                                           selfSigningKey: CrossSigningKeyInfo?,
+                                           userSigningKey: CrossSigningKeyInfo?) {
+        doRealmTransaction(realmConfiguration) { realm ->
+            UserEntity.getOrCreate(realm, userId)
+                    .let { userEntity ->
+                        if (masterKey == null || selfSigningKey == null) {
+                            // The user has disabled cross signing?
+                            userEntity.crossSigningInfoEntity?.deleteFromRealm()
+                            userEntity.crossSigningInfoEntity = null
+                        } else {
+                            CrossSigningInfoEntity.getOrCreate(realm, userId).let { signingInfo ->
+                                // What should we do if we detect a change of the keys?
+
+                                val existingMaster = signingInfo.getMasterKey()
+                                if (existingMaster != null && existingMaster.publicKeyBase64 == masterKey.unpaddedBase64PublicKey) {
+                                    //update signatures?
+                                    existingMaster.putSignatures(masterKey.signatures)
+                                    existingMaster.usages = masterKey.usages?.toTypedArray()?.let { RealmList(*it) }
+                                            ?: RealmList()
+                                } else {
+                                    val keyEntity = realm.createObject(KeyInfoEntity::class.java).apply {
+                                        this.publicKeyBase64 = masterKey.unpaddedBase64PublicKey
+                                        this.usages = masterKey.usages?.toTypedArray()?.let { RealmList(*it) }
+                                                ?: RealmList()
+                                        this.putSignatures(masterKey.signatures)
+                                    }
+                                    signingInfo.setMasterKey(keyEntity)
+                                }
+
+                                val existingSelfSigned = signingInfo.getSelfSignedKey()
+                                if (existingSelfSigned != null && existingSelfSigned.publicKeyBase64 == selfSigningKey.unpaddedBase64PublicKey) {
+                                    //update signatures?
+                                    existingSelfSigned.putSignatures(selfSigningKey.signatures)
+                                    existingSelfSigned.usages = selfSigningKey.usages?.toTypedArray()?.let { RealmList(*it) }
+                                            ?: RealmList()
+                                } else {
+                                    val keyEntity = realm.createObject(KeyInfoEntity::class.java).apply {
+                                        this.publicKeyBase64 = selfSigningKey.unpaddedBase64PublicKey
+                                        this.usages = selfSigningKey.usages?.toTypedArray()?.let { RealmList(*it) }
+                                                ?: RealmList()
+                                        this.putSignatures(selfSigningKey.signatures)
+                                    }
+                                    signingInfo.setSelfSignedKey(keyEntity)
+                                }
+
+                                userEntity.crossSigningInfoEntity = signingInfo
+                            }
+                        }
+                    }
+        }
+
+    }
+
+    override fun getCrossSigningPrivateKeys(): PrivateKeysInfo? {
+        return doRealmQueryAndCopy(realmConfiguration) { realm ->
+            realm.where<CryptoMetadataEntity>().findFirst()
+        }?.let {
+            PrivateKeysInfo(
+                    master = it.xSignMasterPrivateKey,
+                    selfSigned = it.xSignSelfSignedPrivateKey,
+                    user = it.xSignUserPrivateKey
+            )
         }
     }
 
@@ -730,5 +802,83 @@ internal class RealmCryptoStore(private val realmConfiguration: RealmConfigurati
                     it.toIncomingRoomKeyRequest()
                 }
                 .toMutableList()
+    }
+
+    /* ==========================================================================================
+     * Cross Signing
+     * ========================================================================================== */
+    override fun getMyCrossSigningInfo(): MXCrossSigningInfo? {
+        return doRealmQueryAndCopy(realmConfiguration) {
+            it.where<CryptoMetadataEntity>().findFirst()
+        }?.userId?.let {
+            getCrossSigningInfo(it)
+        }
+    }
+
+    override fun setMyCrossSigningInfo(info: MXCrossSigningInfo?) {
+        doRealmQueryAndCopy(realmConfiguration) {
+            it.where<CryptoMetadataEntity>().findFirst()
+        }?.userId?.let {
+            setCrossSigningInfo(it, info)
+        }
+    }
+
+    override fun setUserKeysAsTrusted(userId: String, trusted: Boolean) {
+        doRealmTransaction(realmConfiguration) { realm ->
+            realm.where(CrossSigningInfoEntity::class.java)
+                    .equalTo(CrossSigningInfoEntityFields.USER_ID, userId)
+                    .findFirst()
+                    ?.isTrusted = trusted
+        }
+    }
+
+    override fun getCrossSigningInfo(userId: String): MXCrossSigningInfo? {
+        return doRealmQueryAndCopy(realmConfiguration) { realm ->
+            realm.where(CrossSigningInfoEntity::class.java)
+                    .equalTo(CrossSigningInfoEntityFields.USER_ID, userId)
+                    .findFirst()
+        }?.let { xsignInfo ->
+            MXCrossSigningInfo(
+                    userId = userId,
+                    crossSigningKeys = xsignInfo.crossSigningKeys.mapNotNull {
+                        val pubKey = it.publicKeyBase64 ?: return@mapNotNull null
+                        CrossSigningKeyInfo(
+                                userId = userId,
+                                keys = mapOf("ed25519:$pubKey" to pubKey),
+                                usages = it.usages.map { it },
+                                signatures = it.getSignatures()
+
+                        )
+                    },
+                    isTrusted = xsignInfo.isTrusted
+            )
+        }
+    }
+
+    override fun setCrossSigningInfo(userId: String, info: MXCrossSigningInfo?) {
+        doRealmTransaction(realmConfiguration) { realm ->
+
+            var existing = CrossSigningInfoEntity.get(realm, userId)
+            if (info == null) {
+                // Delete known if needed
+                existing?.deleteFromRealm()
+                // TODO notify, we might need to untrust things?
+            } else {
+                // Just override existing, caller should check and untrust id needed
+                existing = CrossSigningInfoEntity.getOrCreate(realm, userId)
+                val xkeys = RealmList<KeyInfoEntity>()
+                info.crossSigningKeys.forEach { info ->
+                    xkeys.add(
+                            realm.createObject(KeyInfoEntity::class.java).also { keyInfoEntity ->
+                                keyInfoEntity.publicKeyBase64 = info.unpaddedBase64PublicKey
+                                keyInfoEntity.usages = info.usages?.let { RealmList(*it.toTypedArray()) }
+                                        ?: RealmList()
+                                keyInfoEntity.putSignatures(info.signatures)
+                            }
+                    )
+                }
+                existing.crossSigningKeys = xkeys
+            }
+        }
     }
 }

@@ -19,6 +19,7 @@ package im.vector.matrix.android.api.session.crypto
 import android.content.Context
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.listeners.ProgressListener
+import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningService
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupService
 import im.vector.matrix.android.api.session.crypto.keyshare.RoomKeysRequestListener
 import im.vector.matrix.android.api.session.crypto.sas.SasVerificationService
@@ -47,6 +48,8 @@ interface CryptoService {
     fun isCryptoEnabled(): Boolean
 
     fun getSasVerificationService(): SasVerificationService
+    
+    fun getCrossSigningService(): CrossSigningService
 
     fun getKeysBackupService(): KeysBackupService
 

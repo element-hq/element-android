@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.crypto.store.db.model
 
 import im.vector.matrix.android.internal.crypto.store.db.deserializeFromRealm
 import im.vector.matrix.android.internal.crypto.store.db.serializeForRealm
+import io.realm.Realm
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 import org.matrix.olm.OlmAccount
@@ -34,7 +35,13 @@ internal open class CryptoMetadataEntity(
         // Settings for blacklisting unverified devices.
         var globalBlacklistUnverifiedDevices: Boolean = false,
         // The keys backup version currently used. Null means no backup.
-        var backupVersion: String? = null
+        var backupVersion: String? = null,
+
+        var xSignMasterPrivateKey: String? = null,
+        var xSignUserPrivateKey: String? = null,
+        var xSignSelfSignedPrivateKey: String? = null
+
+//        var crossSigningInfoEntity: CrossSigningInfoEntity? = null
 ) : RealmObject() {
 
     // Deserialize data

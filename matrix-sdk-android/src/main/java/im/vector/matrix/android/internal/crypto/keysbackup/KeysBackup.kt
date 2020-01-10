@@ -402,7 +402,7 @@ internal class KeysBackup @Inject constructor(
             }
 
             if (deviceId != null) {
-                val device = cryptoStore.getUserDevice(deviceId, userId)
+                val device = cryptoStore.getUserDevice(userId, deviceId)
                 var isSignatureValid = false
 
                 if (device == null) {

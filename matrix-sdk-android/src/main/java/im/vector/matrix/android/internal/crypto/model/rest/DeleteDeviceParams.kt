@@ -24,5 +24,5 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 internal data class DeleteDeviceParams(
         @Json(name = "auth")
-        var deleteDeviceAuth: DeleteDeviceAuth? = null
+        var userPasswordAuth: UserPasswordAuth? = null
 )

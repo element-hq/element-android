@@ -1,11 +1,11 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,27 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package im.vector.matrix.android.internal.crypto.model.rest
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import im.vector.matrix.android.internal.crypto.model.MXKeysObject
+import im.vector.matrix.android.internal.auth.registration.AuthParams
 
 @JsonClass(generateAdapter = true)
-data class DeviceKeys(
-        @Json(name = "user_id")
-        override val userId: String,
+internal data class UploadSigningKeysBody(
+        @Json(name = "master_key")
+        val masterKey: CrossSigningKeyInfo? = null,
 
-        @Json(name = "device_id")
-        val deviceId: String,
+        @Json(name = "self_signing_key")
+        val selfSigningKey: CrossSigningKeyInfo? = null,
 
-        @Json(name = "algorithms")
-        val algorithms: List<String>,
+        @Json(name = "user_signing_key")
+        val userSigningKey: CrossSigningKeyInfo? = null,
 
-        @Json(name = "keys")
-        override val keys: Map<String, String>,
-
-        @Json(name = "signatures")
-        override val signatures: Map<String, Map<String, String>>?
-) : MXKeysObject
+        @Json(name = "auth")
+        val auth: UserPasswordAuth? = null
+)

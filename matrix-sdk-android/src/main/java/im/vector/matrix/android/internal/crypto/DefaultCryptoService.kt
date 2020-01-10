@@ -44,6 +44,7 @@ import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAct
 import im.vector.matrix.android.internal.crypto.algorithms.IMXEncrypting
 import im.vector.matrix.android.internal.crypto.algorithms.megolm.MXMegolmEncryptionFactory
 import im.vector.matrix.android.internal.crypto.algorithms.olm.MXOlmEncryptionFactory
+import im.vector.matrix.android.internal.crypto.crosssigning.DefaultCrossSigningService
 import im.vector.matrix.android.internal.crypto.keysbackup.KeysBackup
 import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
@@ -113,6 +114,8 @@ internal class DefaultCryptoService @Inject constructor(
         private val roomDecryptorProvider: RoomDecryptorProvider,
         // The SAS verification service.
         private val sasVerificationService: DefaultSasVerificationService,
+
+        private val crossSigningService: DefaultCrossSigningService,
         //
         private val incomingRoomKeyRequestManager: IncomingRoomKeyRequestManager,
         //
@@ -317,6 +320,8 @@ internal class DefaultCryptoService @Inject constructor(
      */
     override fun getSasVerificationService() = sasVerificationService
 
+    override fun getCrossSigningService() = crossSigningService
+
     /**
      * A sync response has been received
      *
@@ -364,7 +369,7 @@ internal class DefaultCryptoService @Inject constructor(
      */
     override fun getDeviceInfo(userId: String, deviceId: String?): MXDeviceInfo? {
         return if (userId.isNotEmpty() && !deviceId.isNullOrEmpty()) {
-            cryptoStore.getUserDevice(deviceId, userId)
+            cryptoStore.getUserDevice(userId, deviceId)
         } else {
             null
         }

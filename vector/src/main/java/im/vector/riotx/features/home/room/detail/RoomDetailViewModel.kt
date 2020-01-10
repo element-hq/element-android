@@ -50,6 +50,7 @@ import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
 import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
+import im.vector.riotx.BuildConfig
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.postLiveEvent
 import im.vector.riotx.core.platform.VectorViewModel
@@ -188,7 +189,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
             is RoomDetailAction.AcceptVerificationRequest        -> handleAcceptVerification(action)
             is RoomDetailAction.DeclineVerificationRequest       -> handleDeclineVerification(action)
             is RoomDetailAction.RequestVerification              -> handleRequestVerification(action)
-            is RoomDetailAction.ResumeVerification              -> handleResumeRequestVerification(action)
+            is RoomDetailAction.ResumeVerification               -> handleResumeRequestVerification(action)
         }
     }
 
@@ -809,7 +810,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     private fun handleAcceptVerification(action: RoomDetailAction.AcceptVerificationRequest) {
         Timber.v("## SAS handleAcceptVerification ${action.otherUserId},  roomId:${room.roomId}, txId:${action.transactionId}")
         if (session.getSasVerificationService().readyPendingVerificationInDMs(action.otherUserId, room.roomId,
-                action.transactionId)) {
+                        action.transactionId)) {
             _requestLiveData.postValue(LiveEvent(Success(action)))
         }
     }

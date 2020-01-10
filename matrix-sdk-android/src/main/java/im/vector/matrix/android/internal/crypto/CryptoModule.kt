@@ -133,6 +133,12 @@ internal abstract class CryptoModule {
     abstract fun bindUploadKeysTask(uploadKeysTask: DefaultUploadKeysTask): UploadKeysTask
 
     @Binds
+    abstract fun bindUploadSigningKeysTask(uploadKeysTask: DefaultUploadSigningKeysTask): UploadSigningKeysTask
+
+    @Binds
+    abstract fun bindUploadSignaturesTask(uploadSignaturesTask: DefaultUploadSignaturesTask): UploadSignaturesTask
+
+    @Binds
     abstract fun bindDownloadKeysForUsersTask(downloadKeysForUsersTask: DefaultDownloadKeysForUsers): DownloadKeysForUsersTask
 
     @Binds

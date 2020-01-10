@@ -20,6 +20,7 @@ import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
+import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.events.model.Event
@@ -74,6 +75,10 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
         params.keepKeys?.forEach {
             localMutableContent.remove(it)
         }
+
+        crypto.downloadKeys(listOf("@testxsigningvfe:matrix.org"), true, object : MatrixCallback<Any> {
+
+        })
 
         var error: Throwable? = null
         var result: MXEncryptEventContentResult? = null

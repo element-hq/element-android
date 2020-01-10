@@ -17,12 +17,14 @@
 
 package im.vector.matrix.android.internal.crypto.store
 
+import im.vector.matrix.android.api.session.crypto.crosssigning.MXCrossSigningInfo
 import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequest
 import im.vector.matrix.android.internal.crypto.NewSessionListener
 import im.vector.matrix.android.internal.crypto.OutgoingRoomKeyRequest
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrapper
 import im.vector.matrix.android.internal.crypto.model.OlmSessionWrapper
+import im.vector.matrix.android.internal.crypto.model.rest.CrossSigningKeyInfo
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
 import im.vector.matrix.android.internal.crypto.store.db.model.KeysBackupDataEntity
 import org.matrix.olm.OlmAccount
@@ -163,7 +165,7 @@ internal interface IMXCryptoStore {
      * @param userId   the user's id.
      * @return the device
      */
-    fun getUserDevice(deviceId: String, userId: String): MXDeviceInfo?
+    fun getUserDevice(userId: String, deviceId: String): MXDeviceInfo?
 
     /**
      * Retrieve a device by its identity key.
@@ -180,6 +182,11 @@ internal interface IMXCryptoStore {
      * @param devices A map from device id to 'MXDevice' object for the device.
      */
     fun storeUserDevices(userId: String, devices: Map<String, MXDeviceInfo>?)
+
+
+    fun storeUserCrossSigningKeys(userId: String, masterKey: CrossSigningKeyInfo?,
+                                 selfSigningKey: CrossSigningKeyInfo?,
+                                 userSigningKey: CrossSigningKeyInfo?)
 
     /**
      * Retrieve the known devices for a user.
@@ -381,4 +388,24 @@ internal interface IMXCryptoStore {
     fun addNewSessionListener(listener: NewSessionListener)
 
     fun removeSessionListener(listener: NewSessionListener)
+
+
+    //=============================================
+    // CROSS SIGNING
+    //=============================================
+
+    /**
+     * Gets the current crosssigning info
+     */
+    fun getMyCrossSigningInfo() : MXCrossSigningInfo?
+    fun setMyCrossSigningInfo(info: MXCrossSigningInfo?)
+
+
+    fun getCrossSigningInfo(userId: String) : MXCrossSigningInfo?
+    fun setCrossSigningInfo(userId: String, info: MXCrossSigningInfo?)
+
+
+    fun getCrossSigningPrivateKeys() : PrivateKeysInfo?
+
+    fun setUserKeysAsTrusted(userId: String, trusted: Boolean = true)
 }

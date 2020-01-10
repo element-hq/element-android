@@ -1,5 +1,6 @@
 /*
  * Copyright 2016 OpenMarket Ltd
+ * Copyright 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +18,13 @@ package im.vector.matrix.android.internal.crypto.model.rest
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import im.vector.matrix.android.internal.auth.data.LoginFlowTypes
 
 /**
  * This class provides the authentication data to delete a device
  */
 @JsonClass(generateAdapter = true)
-internal data class DeleteDeviceAuth(
+data class UserPasswordAuth(
 
         // device device session id
         @Json(name = "session")
@@ -30,7 +32,7 @@ internal data class DeleteDeviceAuth(
 
         // registration information
         @Json(name = "type")
-        var type: String? = null,
+        var type: String? = LoginFlowTypes.PASSWORD,
 
         @Json(name = "user")
         var user: String? = null,

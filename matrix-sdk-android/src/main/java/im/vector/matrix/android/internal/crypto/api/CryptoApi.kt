@@ -16,6 +16,7 @@
  */
 package im.vector.matrix.android.internal.crypto.api
 
+import im.vector.matrix.android.internal.crypto.model.MXKeysObject
 import im.vector.matrix.android.internal.crypto.model.rest.*
 import im.vector.matrix.android.internal.network.NetworkConstants
 import retrofit2.Call
@@ -64,6 +65,36 @@ internal interface CryptoApi {
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "keys/query")
     fun downloadKeysForUsers(@Body params: KeysQueryBody): Call<KeysQueryResponse>
+
+
+    /**
+     * CrossSigning - Uploading signing keys
+     * Public keys for the cross-signing keys are uploaded to the servers using /keys/device_signing/upload.
+     * This endpoint requires UI Auth.
+     */
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "keys/device_signing/upload")
+    fun uploadSigningKeys(@Body params: UploadSigningKeysBody): Call<KeysQueryResponse>
+
+
+    /**
+     *  CrossSigning - Uploading signatures
+     *  Signatures of device keys can be up
+     *  loaded using /keys/signatures/upload.
+     *  For example, Alice signs one of her devices (HIJKLMN) (using her self-signing key),
+     *  her own master key (using her HIJKLMN device), Bob's master key (using her user-signing key).
+     *
+     * The response contains a failures property, which is a map of user ID to device ID to failure reason, if any of the uploaded keys failed.
+     * The homeserver should verify that the signatures on the uploaded keys are valid.
+     * If a signature is not valid, the homeserver should set the corresponding entry in failures to a JSON object
+     * with the errcode property set to M_INVALID_SIGNATURE.
+     *
+     * After Alice uploads a signature for her own devices or master key,
+     * her signature will be included in the results of the /keys/query request when anyone requests her keys.
+     * However, signatures made for other users' keys, made by her user-signing key, will not be included.
+     */
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "keys/signatures/upload")
+    fun uploadSignatures(@Body params: Map<String, @JvmSuppressWildcards Any>?): Call<SignatureUploadResponse>
+
 
     /**
      * Claim one-time keys.

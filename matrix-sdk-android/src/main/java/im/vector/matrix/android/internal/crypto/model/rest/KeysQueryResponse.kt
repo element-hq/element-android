@@ -1,6 +1,5 @@
 /*
- * Copyright 2016 OpenMarket Ltd
- * Copyright 2017 Vector Creations Ltd
+
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +22,11 @@ import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 
 /**
  * This class represents the response to /keys/query request made by downloadKeysForUsers
+ *
+ * After uploading cross-signing keys, they will be included under the /keys/query endpoint under the master_keys,
+ * self_signing_keys and user_signing_keys properties.
+ *
+ * The user_signing_keys property will only be included when a user requests their own keys.
  */
 @JsonClass(generateAdapter = true)
 data class KeysQueryResponse(
@@ -38,5 +42,16 @@ data class KeysQueryResponse(
          * The failures sorted by homeservers. TODO Bad comment ?
          * TODO Use MXUsersDevicesMap?
          */
-        var failures: Map<String, Map<String, Any>>? = null
+        var failures: Map<String, Map<String, Any>>? = null,
+
+        @Json(name = "master_keys")
+        var masterKeys: Map<String, CrossSigningKeyInfo?>? = null,
+
+        @Json(name = "self_signing_keys")
+        var selfSigningKeys: Map<String, CrossSigningKeyInfo?>? = null,
+
+        @Json(name = "user_signing_keys")
+        var userSigningKeys: Map<String, CrossSigningKeyInfo?>? = null
+
 )
+

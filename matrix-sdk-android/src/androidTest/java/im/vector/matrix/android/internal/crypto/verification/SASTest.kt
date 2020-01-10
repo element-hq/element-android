@@ -36,6 +36,10 @@ import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
 import java.util.*
 import java.util.concurrent.CountDownLatch
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.test.annotation.UiThreadTest
+import org.junit.Rule
+
 
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -135,8 +139,24 @@ class SASTest : InstrumentedTest {
         val tid = "00000000"
 
         // Bob should receive a cancel
-        var canceledToDeviceEvent: Event? = null
+        var cancelReason: String? = null
         val cancelLatch = CountDownLatch(1)
+
+
+        val bobListener = object : SasVerificationService.SasVerificationListener {
+            override fun transactionCreated(tx: SasVerificationTransaction) {}
+
+            override fun transactionUpdated(tx: SasVerificationTransaction) {
+               if (tx.transactionId == tid && tx.cancelledReason != null) {
+                   cancelReason = tx.cancelledReason?.humanReadable
+                   cancelLatch.countDown()
+               }
+            }
+
+            override fun markedAsManuallyVerified(userId: String, deviceId: String) {}
+        }
+        bobSession.getSasVerificationService().addListener(bobListener)
+
         // TODO bobSession!!.dataHandler.addListener(object : MXEventListener() {
         // TODO     override fun onToDeviceEvent(event: Event?) {
         // TODO         if (event!!.getType() == CryptoEvent.EVENT_TYPE_KEY_VERIFICATION_CANCEL) {
@@ -156,8 +176,8 @@ class SASTest : InstrumentedTest {
             override fun transactionCreated(tx: SasVerificationTransaction) {}
 
             override fun transactionUpdated(tx: SasVerificationTransaction) {
-                if ((tx as IncomingSASVerificationTransaction).uxState === IncomingSasVerificationTransaction.UxState.SHOW_ACCEPT) {
-                    (tx as IncomingSASVerificationTransaction).performAccept()
+                if ((tx as IncomingSasVerificationTransaction).uxState === IncomingSasVerificationTransaction.UxState.SHOW_ACCEPT) {
+                    (tx as IncomingSasVerificationTransaction).performAccept()
                 }
             }
 
@@ -169,8 +189,7 @@ class SASTest : InstrumentedTest {
 
         mTestHelper.await(cancelLatch)
 
-        val cancelReq = canceledToDeviceEvent!!.content.toModel<KeyVerificationCancel>()!!
-        assertEquals("Request should be cancelled with m.unknown_method", CancelCode.UnknownMethod.value, cancelReq.code)
+        assertEquals("Request should be cancelled with m.unknown_method", CancelCode.UnknownMethod.value, cancelReason)
 
         cryptoTestData.close()
     }
@@ -257,14 +276,15 @@ class SASTest : InstrumentedTest {
                              hashes: List<String> = SASVerificationTransaction.KNOWN_HASHES,
                              mac: List<String> = SASVerificationTransaction.KNOWN_MACS,
                              codes: List<String> = SASVerificationTransaction.KNOWN_SHORT_CODES) {
-        val startMessage = KeyVerificationStart()
-        startMessage.fromDevice = bobSession.getMyDevice().deviceId
-        startMessage.method = KeyVerificationStart.VERIF_METHOD_SAS
-        startMessage.transactionID = tid
-        startMessage.keyAgreementProtocols = protocols
-        startMessage.hashes = hashes
-        startMessage.messageAuthenticationCodes = mac
-        startMessage.shortAuthenticationStrings = codes
+        val startMessage = KeyVerificationStart(
+                fromDevice = bobSession.getMyDevice().deviceId,
+                method = KeyVerificationStart.VERIF_METHOD_SAS,
+                transactionID = tid,
+                keyAgreementProtocols = protocols,
+                hashes = hashes,
+                messageAuthenticationCodes = mac,
+                shortAuthenticationStrings = codes
+        )
 
         val contentMap = MXUsersDevicesMap<Any>()
         contentMap.setObject(aliceUserID, aliceDevice, startMessage)
@@ -344,8 +364,8 @@ class SASTest : InstrumentedTest {
             override fun transactionUpdated(tx: SasVerificationTransaction) {
                 if ((tx as SASVerificationTransaction).state === SasVerificationTxState.OnAccepted) {
                     val at = tx as SASVerificationTransaction
-                    accepted = at.accepted
-                    startReq = at.startReq
+                    accepted = at.accepted as? KeyVerificationAccept
+                    startReq = at.startReq as? KeyVerificationStart
                     aliceAcceptedLatch.countDown()
                 }
             }
@@ -356,8 +376,8 @@ class SASTest : InstrumentedTest {
             override fun transactionCreated(tx: SasVerificationTransaction) {}
 
             override fun transactionUpdated(tx: SasVerificationTransaction) {
-                if ((tx as IncomingSASVerificationTransaction).uxState === IncomingSasVerificationTransaction.UxState.SHOW_ACCEPT) {
-                    val at = tx as IncomingSASVerificationTransaction
+                if ((tx as IncomingSasVerificationTransaction).uxState === IncomingSasVerificationTransaction.UxState.SHOW_ACCEPT) {
+                    val at = tx as IncomingSasVerificationTransaction
                     at.performAccept()
                 }
             }
@@ -401,7 +421,7 @@ class SASTest : InstrumentedTest {
             override fun transactionCreated(tx: SasVerificationTransaction) {}
 
             override fun transactionUpdated(tx: SasVerificationTransaction) {
-                val uxState = (tx as OutgoingSASVerificationRequest).uxState
+                val uxState = (tx as OutgoingSasVerificationRequest).uxState
                 when (uxState) {
                     OutgoingSasVerificationRequest.UxState.SHOW_SAS -> {
                         aliceSASLatch.countDown()
@@ -419,7 +439,7 @@ class SASTest : InstrumentedTest {
             override fun transactionCreated(tx: SasVerificationTransaction) {}
 
             override fun transactionUpdated(tx: SasVerificationTransaction) {
-                val uxState = (tx as IncomingSASVerificationTransaction).uxState
+                val uxState = (tx as IncomingSasVerificationTransaction).uxState
                 when (uxState) {
                     IncomingSasVerificationTransaction.UxState.SHOW_ACCEPT -> {
                         tx.performAccept()
@@ -465,7 +485,7 @@ class SASTest : InstrumentedTest {
             override fun transactionCreated(tx: SasVerificationTransaction) {}
 
             override fun transactionUpdated(tx: SasVerificationTransaction) {
-                val uxState = (tx as OutgoingSASVerificationRequest).uxState
+                val uxState = (tx as OutgoingSasVerificationRequest).uxState
                 when (uxState) {
                     OutgoingSasVerificationRequest.UxState.SHOW_SAS -> {
                         tx.userHasVerifiedShortCode()
@@ -486,7 +506,7 @@ class SASTest : InstrumentedTest {
             override fun transactionCreated(tx: SasVerificationTransaction) {}
 
             override fun transactionUpdated(tx: SasVerificationTransaction) {
-                val uxState = (tx as IncomingSASVerificationTransaction).uxState
+                val uxState = (tx as IncomingSasVerificationTransaction).uxState
                 when (uxState) {
                     IncomingSasVerificationTransaction.UxState.SHOW_ACCEPT -> {
                         tx.performAccept()
