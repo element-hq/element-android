@@ -272,4 +272,7 @@
     <string name="notice_room_canonical_alias_set">"%1$s set the main address for this room to %2$s."</string>
     <string name="notice_room_canonical_alias_unset">"%1$s removed the main address for this room."</string>
 
+    <string name="notice_room_guest_access_can_join">"%1$s has allowed guests to join the room."</string>
+    <string name="notice_room_guest_access_forbidden">"%1$s has prevented guests from joining the room."</string>
+
 </resources>

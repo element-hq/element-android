@@ -5,7 +5,7 @@ Features ✨:
  -
 
 Improvements 🙌:
- -
+ - Render events m.room.encryption and m.room.guest_access in the timeline
 
 Other changes:
  -
