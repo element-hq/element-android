@@ -18,13 +18,24 @@ package im.vector.riotx.core.epoxy
 
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import com.airbnb.epoxy.VisibilityState
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancelChildren
 
 /**
  * EpoxyModelWithHolder which can listen to visibility state change
  */
 abstract class VectorEpoxyModel<H : VectorEpoxyHolder> : EpoxyModelWithHolder<H>() {
 
+    protected val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+
     private var onModelVisibilityStateChangedListener: OnVisibilityStateChangedListener? = null
+
+    override fun unbind(holder: H) {
+        coroutineScope.coroutineContext.cancelChildren()
+        super.unbind(holder)
+    }
 
     override fun onVisibilityStateChanged(visibilityState: Int, view: H) {
         onModelVisibilityStateChangedListener?.onVisibilityStateChanged(visibilityState)

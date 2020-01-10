@@ -29,11 +29,12 @@ internal interface RegisterAddThreePidTask : Task<RegisterAddThreePidTask.Params
     )
 }
 
-internal class DefaultRegisterAddThreePidTask(private val authAPI: AuthAPI)
-    : RegisterAddThreePidTask {
+internal class DefaultRegisterAddThreePidTask(
+        private val authAPI: AuthAPI
+) : RegisterAddThreePidTask {
 
     override suspend fun execute(params: RegisterAddThreePidTask.Params): AddThreePidRegistrationResponse {
-        return executeRequest {
+        return executeRequest(null) {
             apiCall = authAPI.add3Pid(params.threePid.toPath(), AddThreePidRegistrationParams.from(params))
         }
     }

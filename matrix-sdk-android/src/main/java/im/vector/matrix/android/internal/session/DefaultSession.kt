@@ -17,7 +17,6 @@
 package im.vector.matrix.android.internal.session
 
 import android.content.Context
-import android.os.Looper
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
 import dagger.Lazy
@@ -45,6 +44,7 @@ import im.vector.matrix.android.api.session.user.UserService
 import im.vector.matrix.android.internal.auth.SessionParamsStore
 import im.vector.matrix.android.internal.crypto.DefaultCryptoService
 import im.vector.matrix.android.internal.database.LiveEntityObserver
+import im.vector.matrix.android.internal.di.SessionId
 import im.vector.matrix.android.internal.session.sync.SyncTaskSequencer
 import im.vector.matrix.android.internal.session.sync.SyncTokenStore
 import im.vector.matrix.android.internal.session.sync.job.SyncThread
@@ -60,67 +60,70 @@ import javax.inject.Inject
 import javax.inject.Provider
 
 @SessionScope
-internal class DefaultSession @Inject constructor(override val sessionParams: SessionParams,
-                                                  private val context: Context,
-                                                  private val liveEntityObservers: Set<@JvmSuppressWildcards LiveEntityObserver>,
-                                                  private val sessionListeners: SessionListeners,
-                                                  private val roomService: Lazy<RoomService>,
-                                                  private val roomDirectoryService: Lazy<RoomDirectoryService>,
-                                                  private val groupService: Lazy<GroupService>,
-                                                  private val userService: Lazy<UserService>,
-                                                  private val filterService: Lazy<FilterService>,
-                                                  private val cacheService: Lazy<CacheService>,
-                                                  private val signOutService: Lazy<SignOutService>,
-                                                  private val pushRuleService: Lazy<PushRuleService>,
-                                                  private val pushersService: Lazy<PushersService>,
-                                                  private val cryptoService: Lazy<DefaultCryptoService>,
-                                                  private val fileService: Lazy<FileService>,
-                                                  private val secureStorageService: Lazy<SecureStorageService>,
-                                                  private val syncThreadProvider: Provider<SyncThread>,
-                                                  private val contentUrlResolver: ContentUrlResolver,
-                                                  private val syncTokenStore: SyncTokenStore,
-                                                  private val syncTaskSequencer: SyncTaskSequencer,
-                                                  private val sessionParamsStore: SessionParamsStore,
-                                                  private val contentUploadProgressTracker: ContentUploadStateTracker,
-                                                  private val initialSyncProgressService: Lazy<InitialSyncProgressService>,
-                                                  private val homeServerCapabilitiesService: Lazy<HomeServerCapabilitiesService>)
+internal class DefaultSession @Inject constructor(
+        override val sessionParams: SessionParams,
+        private val context: Context,
+        private val eventBus: EventBus,
+        @SessionId
+        override val sessionId: String,
+        private val liveEntityObservers: Set<@JvmSuppressWildcards LiveEntityObserver>,
+        private val sessionListeners: SessionListeners,
+        private val roomService: Lazy<RoomService>,
+        private val roomDirectoryService: Lazy<RoomDirectoryService>,
+        private val groupService: Lazy<GroupService>,
+        private val userService: Lazy<UserService>,
+        private val filterService: Lazy<FilterService>,
+        private val cacheService: Lazy<CacheService>,
+        private val signOutService: Lazy<SignOutService>,
+        private val pushRuleService: Lazy<PushRuleService>,
+        private val pushersService: Lazy<PushersService>,
+        private val cryptoService: Lazy<DefaultCryptoService>,
+        private val fileService: Lazy<FileService>,
+        private val secureStorageService: Lazy<SecureStorageService>,
+        private val syncThreadProvider: Provider<SyncThread>,
+        private val contentUrlResolver: ContentUrlResolver,
+        private val syncTokenStore: SyncTokenStore,
+        private val syncTaskSequencer: SyncTaskSequencer,
+        private val sessionParamsStore: SessionParamsStore,
+        private val contentUploadProgressTracker: ContentUploadStateTracker,
+        private val initialSyncProgressService: Lazy<InitialSyncProgressService>,
+        private val homeServerCapabilitiesService: Lazy<HomeServerCapabilitiesService>)
     : Session,
-      RoomService by roomService.get(),
-      RoomDirectoryService by roomDirectoryService.get(),
-      GroupService by groupService.get(),
-      UserService by userService.get(),
-      CryptoService by cryptoService.get(),
-      SignOutService by signOutService.get(),
-      FilterService by filterService.get(),
-      PushRuleService by pushRuleService.get(),
-      PushersService by pushersService.get(),
-      FileService by fileService.get(),
-      InitialSyncProgressService by initialSyncProgressService.get(),
-      SecureStorageService by secureStorageService.get(),
-      HomeServerCapabilitiesService by homeServerCapabilitiesService.get() {
+        RoomService by roomService.get(),
+        RoomDirectoryService by roomDirectoryService.get(),
+        GroupService by groupService.get(),
+        UserService by userService.get(),
+        CryptoService by cryptoService.get(),
+        SignOutService by signOutService.get(),
+        FilterService by filterService.get(),
+        PushRuleService by pushRuleService.get(),
+        PushersService by pushersService.get(),
+        FileService by fileService.get(),
+        InitialSyncProgressService by initialSyncProgressService.get(),
+        SecureStorageService by secureStorageService.get(),
+        HomeServerCapabilitiesService by homeServerCapabilitiesService.get() {
 
     private var isOpen = false
 
     private var syncThread: SyncThread? = null
 
     override val isOpenable: Boolean
-        get() = sessionParamsStore.get(myUserId)?.isTokenValid ?: false
+        get() = sessionParamsStore.get(sessionId)?.isTokenValid ?: false
 
     @MainThread
     override fun open() {
-        assertMainThread()
         assert(!isOpen)
         isOpen = true
         liveEntityObservers.forEach { it.start() }
-        EventBus.getDefault().register(this)
+        eventBus.register(this)
     }
 
     override fun requireBackgroundSync() {
-        SyncWorker.requireBackgroundSync(context, myUserId)
+        SyncWorker.requireBackgroundSync(context, sessionId)
     }
 
     override fun startAutomaticBackgroundSync(repeatDelay: Long) {
-        SyncWorker.automaticallyBackgroundSync(context, myUserId, 0, repeatDelay)
+        SyncWorker.automaticallyBackgroundSync(context, sessionId, 0, repeatDelay)
     }
 
     override fun stopAnyBackgroundSync() {
@@ -152,11 +155,11 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
         liveEntityObservers.forEach { it.dispose() }
         cryptoService.get().close()
         isOpen = false
-        EventBus.getDefault().unregister(this)
+        eventBus.unregister(this)
         syncTaskSequencer.close()
     }
 
-    override fun syncState(): LiveData<SyncState> {
+    override fun getSyncStateLive(): LiveData<SyncState> {
         return getSyncThread().liveState()
     }
 
@@ -180,10 +183,10 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onGlobalError(globalError: GlobalError) {
         if (globalError is GlobalError.InvalidToken
-            && globalError.softLogout) {
+                && globalError.softLogout) {
             // Mark the token has invalid
             GlobalScope.launch(Dispatchers.IO) {
-                sessionParamsStore.setTokenInvalid(myUserId)
+                sessionParamsStore.setTokenInvalid(sessionId)
             }
         }
 
@@ -200,13 +203,5 @@ internal class DefaultSession @Inject constructor(override val sessionParams: Se
 
     override fun removeListener(listener: Session.Listener) {
         sessionListeners.removeListener(listener)
-    }
-
-    // Private methods *****************************************************************************
-
-    private fun assertMainThread() {
-        if (Looper.getMainLooper().thread !== Thread.currentThread()) {
-            throw IllegalStateException("This method can only be called on the main thread!")
-        }
     }
 }

@@ -56,26 +56,10 @@ class EmojiSearchResultViewModel @AssistedInject constructor(
     }
 
     private fun updateQuery(action: EmojiSearchAction.UpdateQuery) {
-        val words = action.queryString.split("\\s".toRegex())
         setState {
             copy(
                     query = action.queryString,
-                    // First add emojis with name matching query, sorted by name
-                    // Then emojis with keyword matching any of the word in the query, sorted by name
-                    results = dataSource.rawData.emojis
-                            .values
-                            .filter { emojiItem ->
-                                emojiItem.name.contains(action.queryString, true)
-                            }
-                            .sortedBy { it.name }
-                            + dataSource.rawData.emojis
-                            .values
-                            .filter { emojiItem ->
-                                words.fold(true, { prev, word ->
-                                    prev && emojiItem.keywords.any { keyword -> keyword.contains(word, true) }
-                                })
-                            }
-                            .sortedBy { it.name }
+                    results = dataSource.filterWith(action.queryString)
             )
         }
     }

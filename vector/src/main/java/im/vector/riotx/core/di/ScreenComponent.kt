@@ -64,7 +64,8 @@ import im.vector.riotx.features.ui.UiStateRepository
             ViewModelModule::class,
             FragmentModule::class,
             HomeModule::class,
-            RoomListModule::class
+            RoomListModule::class,
+            ScreenModule::class
         ]
 )
 @ScreenScope

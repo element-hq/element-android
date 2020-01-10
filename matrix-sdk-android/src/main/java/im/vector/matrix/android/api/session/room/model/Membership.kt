@@ -43,4 +43,14 @@ enum class Membership(val value: String) {
     fun isLeft(): Boolean {
         return this == KNOCK || this == LEAVE || this == BAN
     }
+
+    companion object {
+        fun activeMemberships(): List<Membership> {
+            return listOf(INVITE, JOIN)
+        }
+
+        fun all(): List<Membership> {
+            return values().asList()
+        }
+    }
 }

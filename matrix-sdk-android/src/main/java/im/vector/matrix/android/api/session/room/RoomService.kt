@@ -60,16 +60,28 @@ interface RoomService {
     fun getRoomSummary(roomIdOrAlias: String): RoomSummary?
 
     /**
-     * Get a live list of room summaries. This list is refreshed as soon as the data changes.
-     * @return the [LiveData] of [RoomSummary]
+     * Get a snapshot list of room summaries.
+     * @return the immutable list of [RoomSummary]
      */
-    fun liveRoomSummaries(): LiveData<List<RoomSummary>>
+    fun getRoomSummaries(queryParams: RoomSummaryQueryParams): List<RoomSummary>
+
+    /**
+     * Get a live list of room summaries. This list is refreshed as soon as the data changes.
+     * @return the [LiveData] of List[RoomSummary]
+     */
+    fun getRoomSummariesLive(queryParams: RoomSummaryQueryParams): LiveData<List<RoomSummary>>
+
+    /**
+     * Get a snapshot list of Breadcrumbs
+     * @return the immutable list of [RoomSummary]
+     */
+    fun getBreadcrumbs(): List<RoomSummary>
 
     /**
      * Get a live list of Breadcrumbs
      * @return the [LiveData] of [RoomSummary]
      */
-    fun liveBreadcrumbs(): LiveData<List<RoomSummary>>
+    fun getBreadcrumbsLive(): LiveData<List<RoomSummary>>
 
     /**
      * Inform the Matrix SDK that a room is displayed.

@@ -26,7 +26,7 @@ import im.vector.matrix.android.internal.database.awaitTransaction
 import im.vector.matrix.android.internal.database.model.GroupEntity
 import im.vector.matrix.android.internal.database.model.GroupSummaryEntity
 import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.di.UserId
+import im.vector.matrix.android.internal.di.SessionId
 import im.vector.matrix.android.internal.worker.WorkManagerUtil
 import im.vector.matrix.android.internal.worker.WorkManagerUtil.matrixOneTimeWorkRequestBuilder
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
@@ -37,9 +37,10 @@ import javax.inject.Inject
 
 private const val GET_GROUP_DATA_WORKER = "GET_GROUP_DATA_WORKER"
 
-internal class GroupSummaryUpdater @Inject constructor(private val context: Context,
-                                                       @UserId private val userId: String,
-                                                       private val monarchy: Monarchy)
+internal class GroupSummaryUpdater @Inject constructor(
+        private val context: Context,
+        @SessionId private val sessionId: String,
+        private val monarchy: Monarchy)
     : RealmLiveEntityObserver<GroupEntity>(monarchy.realmConfiguration) {
 
     override val query = Monarchy.Query { GroupEntity.where(it) }
@@ -51,9 +52,9 @@ internal class GroupSummaryUpdater @Inject constructor(private val context: Cont
                 .mapNotNull { results[it] }
 
         fetchGroupsData(modifiedGroupEntity
-                                .filter { it.membership == Membership.JOIN || it.membership == Membership.INVITE }
-                                .map { it.groupId }
-                                .toList())
+                .filter { it.membership == Membership.JOIN || it.membership == Membership.INVITE }
+                .map { it.groupId }
+                .toList())
 
         modifiedGroupEntity
                 .filter { it.membership == Membership.LEAVE }
@@ -67,7 +68,7 @@ internal class GroupSummaryUpdater @Inject constructor(private val context: Cont
     }
 
     private fun fetchGroupsData(groupIds: List<String>) {
-        val getGroupDataWorkerParams = GetGroupDataWorker.Params(userId, groupIds)
+        val getGroupDataWorkerParams = GetGroupDataWorker.Params(sessionId, groupIds)
 
         val workData = WorkerParamsFactory.toData(getGroupDataWorkerParams)
 

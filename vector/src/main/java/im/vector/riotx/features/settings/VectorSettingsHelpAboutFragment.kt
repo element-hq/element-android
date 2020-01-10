@@ -20,13 +20,13 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
 import androidx.preference.Preference
-import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import im.vector.matrix.android.api.Matrix
 import im.vector.riotx.R
 import im.vector.riotx.core.preference.VectorPreference
 import im.vector.riotx.core.utils.copyToClipboard
 import im.vector.riotx.core.utils.displayInWebView
 import im.vector.riotx.features.version.VersionProvider
+import im.vector.riotx.openOssLicensesMenuActivity
 import javax.inject.Inject
 
 class VectorSettingsHelpAboutFragment @Inject constructor(
@@ -107,10 +107,11 @@ class VectorSettingsHelpAboutFragment @Inject constructor(
             false
         }
 
+        // Note: preference is not visible on F-Droid build
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_OTHER_THIRD_PARTY_NOTICES_PREFERENCE_KEY)!!
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
             // See https://developers.google.com/android/guides/opensource
-            startActivity(Intent(requireActivity(), OssLicensesMenuActivity::class.java))
+            openOssLicensesMenuActivity(requireActivity())
             false
         }
     }

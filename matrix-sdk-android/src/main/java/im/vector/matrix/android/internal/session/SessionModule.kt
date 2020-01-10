@@ -26,6 +26,7 @@ import dagger.multibindings.IntoSet
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.auth.data.SessionParams
+import im.vector.matrix.android.api.auth.data.sessionId
 import im.vector.matrix.android.api.session.InitialSyncProgressService
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilitiesService
@@ -47,6 +48,7 @@ import im.vector.matrix.android.internal.session.securestorage.DefaultSecureStor
 import im.vector.matrix.android.internal.util.md5
 import io.realm.RealmConfiguration
 import okhttp3.OkHttpClient
+import org.greenrobot.eventbus.EventBus
 import retrofit2.Retrofit
 import java.io.File
 
@@ -55,8 +57,7 @@ internal abstract class SessionModule {
 
     @Module
     companion object {
-
-        internal const val DB_ALIAS_PREFIX = "session_db_"
+        internal fun getKeyAlias(userMd5: String) = "session_db_$userMd5"
 
         @JvmStatic
         @Provides
@@ -92,10 +93,25 @@ internal abstract class SessionModule {
         }
 
         @JvmStatic
+        @SessionId
+        @Provides
+        fun providesSessionId(credentials: Credentials): String {
+            return credentials.sessionId()
+        }
+
+        @JvmStatic
         @Provides
         @UserCacheDirectory
-        fun providesFilesDir(@UserMd5 userMd5: String, context: Context): File {
-            return File(context.filesDir, userMd5)
+        fun providesFilesDir(@UserMd5 userMd5: String,
+                             @SessionId sessionId: String,
+                             context: Context): File {
+            // Temporary code for migration
+            val old = File(context.filesDir, userMd5)
+            if (old.exists()) {
+                old.renameTo(File(context.filesDir, sessionId))
+            }
+
+            return File(context.filesDir, sessionId)
         }
 
         @JvmStatic
@@ -146,6 +162,13 @@ internal abstract class SessionModule {
                              retrofitFactory: RetrofitFactory): Retrofit {
             return retrofitFactory
                     .create(okHttpClient, sessionParams.homeServerConnectionConfig.homeServerUri.toString())
+        }
+
+        @JvmStatic
+        @Provides
+        @SessionScope
+        fun providesEventBus(): EventBus {
+            return EventBus.builder().build()
         }
     }
 

@@ -998,8 +998,8 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
         <item quantity="other">%dh</item>
     </plurals>
     <plurals name="format_time_d">
-        <item quantity="one">1d</item>
-        <item quantity="other">%dd</item>
+        <item quantity="one">1T</item>
+        <item quantity="other">%dT</item>
     </plurals>
 
     <string name="room_participants_now">Jetzt %1$s</string>
@@ -1654,7 +1654,7 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
 
     <string name="decline">Ablehnen</string>
 
-    <string name="push_gateway_item_app_id">app_id:</string>
+    <string name="push_gateway_item_app_id">App-ID:</string>
     <string name="review">Überprüfung</string>
     <string name="none">Keine</string>
     <string name="revoke">Widerrufen</string>
@@ -1687,8 +1687,8 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
 
     <string name="error_user_already_logged_in">Sie versuchen anscheinend, eine Verbindung zu einem anderen Homeserver herzustellen. Möchten Sie sich abmelden\?</string>
 
-    <string name="push_gateway_item_push_key">push_key:</string>
-    <string name="push_gateway_item_app_display_name">app_display_name:</string>
+    <string name="push_gateway_item_push_key">Push-Key:</string>
+    <string name="push_gateway_item_app_display_name">App-Anzeigename:</string>
     <string name="push_gateway_item_url">Url:</string>
     <string name="terms_of_service">Nutzungsbedingungen</string>
     <string name="review_terms">Nutzungsbedingungen überprüfen</string>
@@ -1709,5 +1709,85 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="settings_discovery_enter_identity_server">Gib einen neuen Identitätsserver ein</string>
     <string name="settings_discovery_bad_identity_server">Konnte keine Verbindung zum Heimserver herstellen</string>
     <string name="resources_script">Latn</string>
+
+    <string name="call_failed_no_ice_description">Bitte frage den Administrator deines Home-Servers (%1$s) um einen TURN server einzurichten, damit Anrufe zuverlässig funktionieren.
+\n
+\nAlternativ kannst du einen öffentlichen Server auf %2$s nutzen doch wird das nicht zu zuverlässig sein und es wird deine IP-Adresse mit dem Server teilen. Du kannst dies auch in den Einstellungen konfigurieren.</string>
+    <string name="login_error_no_homeserver_found">Dies ist keine Adresse eines Matrixservers</string>
+    <string name="login_error_homeserver_not_found">Kann Home-Server nicht bei dieser URL erreichen. Bitte überprüfen</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">Wir nutzen %s als Assistenten wenn dein Home-Server keinen anbietet (Deine IP-Adresse wird während des Anrufs geteilt)</string>
+    <string name="invite_no_identity_server_error">Führe einen Identitätsserver in deinen Einstellungen hinzu um diese Aktion auszuführen.</string>
+    <string name="settings_add_3pid_confirm_password_title">Passwort bestätigen</string>
+    <string name="settings_add_3pid_flow_not_supported">Du kannst dies nicht auf einem mobilen Riot tun</string>
+    <string name="settings_add_3pid_authentication_needed">Authentifizierung benötigt</string>
+
+
+    <string name="settings_background_fdroid_sync_mode">Hintergrundsynchronisierungsmodus (experimentell)</string>
+    <string name="settings_background_fdroid_sync_mode_battery_description">Riot wird sich im Hintergrund auf eine Art synchronisieren die die Ressourcen des Geräts schont (Akku).
+\nAbhängig von dem Ressourcen-Statuses deines Geräts kann dein System die Synchronisierung verschieben.</string>
+    <string name="settings_background_fdroid_sync_mode_real_time_description">Riot wird sich im Hintergrund periodisch zu einem bestimmten Zeitpunkt synchronisieren (konfigurierbar).
+\nDies wird Funk- und Akkunutzung beeinflussen. Es wird wird eine permanente Benachrichtigung geben, die sagt, dass Riot auf Ereignisse lauscht.</string>
+    <string name="settings_set_workmanager_delay_summary">%s
+\nDie Synchronisierung kann aufgrund deiner Ressourcen (Akku) oder Gerätezustands (schlafend) verschoben werden.</string>
+    <string name="settings_integrations">Integrationen</string>
+    <string name="settings_integrations_summary">Benutze einen Integrations-Manager um Bots, Brpcken, Widgets und Sticker-Pakete zu verwalten.
+\nIntegrations-Manager erhalten Konfigurationsdaten und können Widgets verändern, Raum-Einladungen senden und in deinem Namen Berechtigungslevel setzen.</string>
+    <string name="settings_integration_allow">Erlaube Integrationen</string>
+    <string name="room_widget_activity_title">Widget</string>
+    <string name="room_widget_permission_title">Widget laden</string>
+    <string name="room_widget_permission_added_by">Dieses Widget wurde hinzugefügt von:</string>
+    <string name="room_widget_failed_to_load">Konnte Widget nicht laden.
+\n%s</string>
+    <string name="room_widget_reload">Widget erneut laden</string>
+    <string name="room_widget_open_in_browser">Im Browser öffnen</string>
+    <string name="room_widget_permission_display_name">Dein Anzeigename</string>
+    <string name="room_widget_permission_avatar_url">Deine Profilbild-Adresse</string>
+    <string name="room_widget_permission_user_id">Deine Benutzer-ID</string>
+    <string name="room_widget_permission_theme">Dein Design</string>
+    <string name="room_widget_permission_widget_id">Widget-ID</string>
+    <string name="room_widget_permission_room_id">Raum-ID</string>
+
+
+    <string name="room_widget_resource_permission_title">Dieses Widget möchte folgende Ressourcen benutzen:</string>
+    <string name="room_widget_resource_grant_permission">Erlauben</string>
+    <string name="room_widget_resource_decline_permission">Alle blockieren</string>
+    <string name="room_widget_webview_access_camera">Kamera benutzen</string>
+    <string name="room_widget_webview_access_microphone">Mikrofon benutzen</string>
+    <string name="room_widget_webview_read_protected_media">Lese DRM-geschützte Medien</string>
+
+    <string name="security_warning_identity_server">Frühere Versionen von Riot hatten einen Sicherheitsproblem, welches dem Identitätsserver (%1$s) Zugriff auf deinen Account geben konnte. Wenn du %2$s vertraust, kannst du dies ignorieren – ansonsten logge dich bitte aus und wieder ein.
+\n
+\nWeitere Details gibt es hier (Englisch):
+\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
+
+    <string name="settings_background_fdroid_sync_mode_disabled_description">Du wirst nicht über eingehende Nachrichten benachrichtigt, wenn die App im Hintergrund ist.</string>
+    <string name="settings_discovery_manage">Verwalte deine Erkennungseinstellungen.</string>
+    <string name="room_widget_revoke_access">Zugriff für mich zurückziehen</string>
+
+    <string name="push_gateway_item_device_name">Gerätename:</string>
+    <string name="push_gateway_item_format">Format:</string>
+
+    <string name="store_riotx_full_description">RiotX ist ein neuer Client für das Matrix-Protokoll (matrix.org): Ein offenes Netzwerk für sichere, dezentrale Kommunikation.
+\nRiotX ist der Riot-Android-Client der auf dem matrix-android-sdk basiert - aber beides komplett neu geschrieben.
+\n
+\nHinweis: Dies ist eine Beta-Version. RiotX wird aktuell aktiv entwickelt und enthält Einschränkungen und (wir hoffen nicht zu viele) Fehler. Jede Rückmeldung ist willkommen!
+\n
+\nRiotX unterstützt: • Anmelden an ein existierendes Konto • Erstelle Räume und trete öffentlichen Räumen bei • Akzeptiere und lehne Einladungen ab • Zeige Raum-Details • Sende Textnachrichten • Sende Anhänge • Lese und Schreibe Nachrichten in verschlüsselten Räumen • Verschlüsselung: Backup der Ende-zu-Ende-Schlüssel, erweiterte Geräteverifizierung, Schlüsseltauschanfragen und -antworten • Push-Benachrichtigungen • Helles, dunkles und schwarzes Thema
+\n
+\nNicht alle Features in Riot sind bisher in RiotX implementiert. Hauptfunktionen, die noch fehlen (und bald kommen!): • Raum-Einstellungen (Raum-Mitglieder auflisten, etc.) • Anrufe • Widgets • …</string>
+
+    <string name="settings_discovery_identity_server_info">Du nutzt aktuell %1$s um zu entdecken und von dir bekannten Kontakten entdeckt zu werden.</string>
+    <string name="settings_discovery_identity_server_info_none">Du benutzt aktuell keinen Identitätsserver. Um zu entdecken und um von dir bekannten Kontakten entdeckt zu werden, richte unten einen ein.</string>
+    <string name="settings_discovery_msisdn_title">Entdeckbare Telefonnummern</string>
+    <string name="settings_discovery_please_enter_server">Bitte gebe Adresse des Identitätsserver ein</string>
+    <string name="settings_discovery_no_terms_title">Identitätsserver hat keine Nutzungsbedingungen</string>
+    <string name="settings_discovery_no_terms">Der Identitätsserver den du ausgewählt hast, hat keine Nutzungsbedingungen. Fahre nur fort, wenn du dem Besitzer des Dienstes vertraust</string>
+    <string name="settings_text_message_sent">Eine Textnachricht wurde an %s gesendet. Bitte gebe den Verifizierungscode ein, den sie enthält.</string>
+
+    <string name="labs_allow_extended_logging">Aktiviere gesprächige Logs.</string>
+    <string name="labs_allow_extended_logging_summary">Gesprächige Logs wird den Entwicklern helfen indem sie mehr Informationen enthalten, wenn du einen Fehlerbericht sendest. Auch wenn dies aktiviert ist, werden keine Nachrichteninhalte oder andere privaten Daten aufgezeichnet.</string>
+
+
+    <string name="error_terms_not_accepted">Bitte erneut versuchen, nachdem du die Nutzungsbedingungendeines Home-Servers akzeptiert hast.</string>
 
 </resources>

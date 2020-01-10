@@ -49,7 +49,7 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
         holder.messageView.setOnClickListener(attributes.itemClickListener)
         holder.messageView.setOnLongClickListener(attributes.itemLongClickListener)
         if (searchForPills) {
-            message?.findPillsAndProcess { it.bind(holder.messageView) }
+            message?.findPillsAndProcess(coroutineScope) { it.bind(holder.messageView) }
         }
         val textFuture = PrecomputedTextCompat.getTextFuture(
                 message ?: "",

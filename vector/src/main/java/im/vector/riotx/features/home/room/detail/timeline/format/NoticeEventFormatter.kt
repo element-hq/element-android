@@ -135,8 +135,8 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
     }
 
     private fun formatRoomMemberEvent(event: Event, senderName: String?): String? {
-        val eventContent: RoomMember? = event.getClearContent().toModel()
-        val prevEventContent: RoomMember? = event.prevContent.toModel()
+        val eventContent: RoomMemberContent? = event.getClearContent().toModel()
+        val prevEventContent: RoomMemberContent? = event.prevContent.toModel()
         val isMembershipEvent = prevEventContent?.membership != eventContent?.membership
         return if (isMembershipEvent) {
             buildMembershipNotice(event, senderName, eventContent, prevEventContent)
@@ -173,7 +173,7 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
                 ?: sp.getString(R.string.notice_room_canonical_alias_unset, senderName)
     }
 
-    private fun buildProfileNotice(event: Event, senderName: String?, eventContent: RoomMember?, prevEventContent: RoomMember?): String {
+    private fun buildProfileNotice(event: Event, senderName: String?, eventContent: RoomMemberContent?, prevEventContent: RoomMemberContent?): String {
         val displayText = StringBuilder()
         // Check display name has been changed
         if (eventContent?.displayName != prevEventContent?.displayName) {
@@ -205,7 +205,7 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
         return displayText.toString()
     }
 
-    private fun buildMembershipNotice(event: Event, senderName: String?, eventContent: RoomMember?, prevEventContent: RoomMember?): String? {
+    private fun buildMembershipNotice(event: Event, senderName: String?, eventContent: RoomMemberContent?, prevEventContent: RoomMemberContent?): String? {
         val senderDisplayName = senderName ?: event.senderId ?: ""
         val targetDisplayName = eventContent?.displayName ?: prevEventContent?.displayName ?: event.stateKey ?: ""
         return when (eventContent?.membership) {

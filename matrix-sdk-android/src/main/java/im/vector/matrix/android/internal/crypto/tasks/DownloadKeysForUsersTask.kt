@@ -21,6 +21,7 @@ import im.vector.matrix.android.internal.crypto.model.rest.KeysQueryBody
 import im.vector.matrix.android.internal.crypto.model.rest.KeysQueryResponse
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
+import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface DownloadKeysForUsersTask : Task<DownloadKeysForUsersTask.Params, KeysQueryResponse> {
@@ -31,8 +32,10 @@ internal interface DownloadKeysForUsersTask : Task<DownloadKeysForUsersTask.Para
             val token: String?)
 }
 
-internal class DefaultDownloadKeysForUsers @Inject constructor(private val cryptoApi: CryptoApi)
-    : DownloadKeysForUsersTask {
+internal class DefaultDownloadKeysForUsers @Inject constructor(
+        private val cryptoApi: CryptoApi,
+        private val eventBus: EventBus
+) : DownloadKeysForUsersTask {
 
     override suspend fun execute(params: DownloadKeysForUsersTask.Params): KeysQueryResponse {
         val downloadQuery = params.userIds?.associateWith { emptyMap<String, Any>() }.orEmpty()
@@ -45,7 +48,7 @@ internal class DefaultDownloadKeysForUsers @Inject constructor(private val crypt
             body.token = params.token
         }
 
-        return executeRequest {
+        return executeRequest(eventBus) {
             apiCall = cryptoApi.downloadKeysForUsers(body)
         }
     }

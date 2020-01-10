@@ -36,9 +36,10 @@ import javax.inject.Inject
  * The summaries can then be extracted and added (as a decoration) to a TimelineEvent for final display.
  */
 
-internal class EventRelationsAggregationUpdater @Inject constructor(@SessionDatabase realmConfiguration: RealmConfiguration,
-                                                                    @UserId private val userId: String,
-                                                                    private val task: EventRelationsAggregationTask) :
+internal class EventRelationsAggregationUpdater @Inject constructor(
+        @SessionDatabase realmConfiguration: RealmConfiguration,
+        @UserId private val userId: String,
+        private val task: EventRelationsAggregationTask) :
         RealmLiveEntityObserver<EventEntity>(realmConfiguration) {
 
     override val query = Monarchy.Query<EventEntity> {

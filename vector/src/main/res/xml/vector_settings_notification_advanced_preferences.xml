@@ -36,8 +36,6 @@
 
     </im.vector.riotx.core.preference.VectorPreferenceCategory>
 
-    <im.vector.riotx.core.preference.VectorPreferenceDivider />
-
     <!-- For API < 26 -->
     <im.vector.riotx.core.preference.VectorPreference
         android:dialogTitle="@string/settings_notification_ringtone"

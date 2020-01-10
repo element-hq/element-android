@@ -1,11 +1,11 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,22 +14,20 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.core.rx
+package im.vector.matrix.android.internal.query
 
-import im.vector.riotx.BuildConfig
-import io.reactivex.plugins.RxJavaPlugins
-import timber.log.Timber
+import io.realm.RealmObject
+import io.realm.RealmQuery
 
-/**
- * Make sure unhandled Rx error does not crash the app in production
- */
-fun setupRxPlugin() {
-    RxJavaPlugins.setErrorHandler { throwable ->
-        Timber.e(throwable, "RxError")
-
-        // Avoid crash in production
-        if (BuildConfig.DEBUG) {
-            throw throwable
+fun <T : RealmObject, E : Enum<E>> RealmQuery<T>.process(field: String, enums: List<Enum<E>>): RealmQuery<T> {
+    val lastEnumValue = enums.lastOrNull()
+    beginGroup()
+    for (enumValue in enums) {
+        equalTo(field, enumValue.name)
+        if (enumValue != lastEnumValue) {
+            or()
         }
     }
+    endGroup()
+    return this
 }

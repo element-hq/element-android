@@ -21,7 +21,6 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.internal.database.helper.deleteOnCascade
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.ChunkEntityFields
-import im.vector.matrix.android.internal.database.model.EventEntityFields
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.awaitTransaction
@@ -38,7 +37,7 @@ internal class DefaultClearUnlinkedEventsTask @Inject constructor(private val mo
         monarchy.awaitTransaction { localRealm ->
             val unlinkedChunks = ChunkEntity
                     .where(localRealm, roomId = params.roomId)
-                    .equalTo("${ChunkEntityFields.TIMELINE_EVENTS.ROOT}.${EventEntityFields.IS_UNLINKED}", true)
+                    .equalTo(ChunkEntityFields.IS_UNLINKED, true)
                     .findAll()
             unlinkedChunks.forEach {
                 it.deleteOnCascade()

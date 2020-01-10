@@ -18,17 +18,12 @@ package im.vector.matrix.android.internal.session.room.timeline
 
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.internal.database.helper.*
-import im.vector.matrix.android.internal.database.helper.add
-import im.vector.matrix.android.internal.database.helper.addOrUpdate
-import im.vector.matrix.android.internal.database.helper.addStateEvent
-import im.vector.matrix.android.internal.database.helper.deleteOnCascade
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.create
 import im.vector.matrix.android.internal.database.query.find
 import im.vector.matrix.android.internal.database.query.findAllIncludingEvents
 import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.session.user.UserEntityFactory
 import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.kotlin.createObject
 import timber.log.Timber
@@ -37,7 +32,8 @@ import javax.inject.Inject
 /**
  * Insert Chunk in DB, and eventually merge with existing chunk event
  */
-internal class TokenChunkEventPersistor @Inject constructor(private val monarchy: Monarchy) {
+internal class TokenChunkEventPersistor @Inject constructor(private val monarchy: Monarchy,
+                                                            private val timelineEventSenderVisitor: TimelineEventSenderVisitor) {
 
     /**
      * <pre>
@@ -136,27 +132,22 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
 
                     // The current chunk is the one we will keep all along the merge processChanges.
                     // We try to look for a chunk next to the token,
-                    // otherwise we create a whole new one
+                    // otherwise we create a whole new one which is unlinked (not live)
 
                     var currentChunk = if (direction == PaginationDirection.FORWARDS) {
                         prevChunk?.apply { this.nextToken = nextToken }
                     } else {
                         nextChunk?.apply { this.prevToken = prevToken }
                     }
-                            ?: ChunkEntity.create(realm, prevToken, nextToken)
+                            ?: ChunkEntity.create(realm, prevToken, nextToken, isUnlinked = true)
 
                     if (receivedChunk.events.isEmpty() && receivedChunk.end == receivedChunk.start) {
                         Timber.v("Reach end of $roomId")
                         currentChunk.isLastBackward = true
                     } else if (!shouldSkip) {
                         Timber.v("Add ${receivedChunk.events.size} events in chunk(${currentChunk.nextToken} | ${currentChunk.prevToken}")
-                        val eventIds = ArrayList<String>(receivedChunk.events.size)
-                        for (event in receivedChunk.events) {
-                            event.eventId?.also { eventIds.add(it) }
-                            currentChunk.add(roomId, event, direction, isUnlinked = currentChunk.isUnlinked())
-                            UserEntityFactory.createOrNull(event)?.also {
-                                realm.insertOrUpdate(it)
-                            }
+                        val timelineEvents = receivedChunk.events.mapNotNull {
+                            currentChunk.add(roomId, it, direction)
                         }
                         // Then we merge chunks if needed
                         if (currentChunk != prevChunk && prevChunk != null) {
@@ -174,12 +165,9 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
                         }
                         roomEntity.addOrUpdate(currentChunk)
                         for (stateEvent in receivedChunk.stateEvents) {
-                            roomEntity.addStateEvent(stateEvent, isUnlinked = currentChunk.isUnlinked())
-                            UserEntityFactory.createOrNull(stateEvent)?.also {
-                                realm.insertOrUpdate(it)
-                            }
+                            roomEntity.addStateEvent(stateEvent, isUnlinked = currentChunk.isUnlinked)
                         }
-                        currentChunk.updateSenderDataFor(eventIds)
+                        timelineEventSenderVisitor.visit(timelineEvents)
                     }
                 }
         return if (receivedChunk.events.isEmpty()) {
@@ -200,11 +188,13 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
         // We always merge the bottom chunk into top chunk, so we are always merging backwards
         Timber.v("Merge ${currentChunk.prevToken} | ${currentChunk.nextToken} with ${otherChunk.prevToken} | ${otherChunk.nextToken}")
         return if (direction == PaginationDirection.BACKWARDS && !otherChunk.isLastForward) {
-            currentChunk.merge(roomEntity.roomId, otherChunk, PaginationDirection.BACKWARDS)
+            val events = currentChunk.merge(roomEntity.roomId, otherChunk, PaginationDirection.BACKWARDS)
+            timelineEventSenderVisitor.visit(events)
             roomEntity.deleteOnCascade(otherChunk)
             currentChunk
         } else {
-            otherChunk.merge(roomEntity.roomId, currentChunk, PaginationDirection.BACKWARDS)
+            val events = otherChunk.merge(roomEntity.roomId, currentChunk, PaginationDirection.BACKWARDS)
+            timelineEventSenderVisitor.visit(events)
             roomEntity.deleteOnCascade(currentChunk)
             otherChunk
         }

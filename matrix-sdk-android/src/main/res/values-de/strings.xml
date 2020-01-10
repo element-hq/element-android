@@ -176,4 +176,18 @@
     <string name="initial_sync_start_importing_account_data">Erste Synchronisation: Importiere Benutzerdaten</string>
 
     <string name="notice_room_third_party_revoked_invite">%1$s hat die Einladung an %2$s, den Raum zu betreten, zurückgezogen</string>
+    <string name="notice_room_invite_no_invitee_with_reason">%1$s\'s Einladung. Grund: %2$s</string>
+    <string name="notice_room_invite_with_reason">%1$s hat %2$s eingeladen. Grund: %3$s</string>
+    <string name="notice_room_invite_you_with_reason">%1$s hat dich eingeladen. Grund: %2$s</string>
+    <string name="notice_room_join_with_reason">%1$s beigetreten. Grund: %2$s</string>
+    <string name="notice_room_leave_with_reason">%1$s ging. Grund: %2$s</string>
+    <string name="notice_room_reject_with_reason">%1$s hat die Einladung abgelehnt. Grund: %2$s</string>
+    <string name="notice_room_kick_with_reason">%1$s hat %2$s gekickt. Grund: %3$s</string>
+    <string name="notice_room_unban_with_reason">%1$s hat Verbannung für %2$s aufgehoben. Grund: %3$s</string>
+    <string name="notice_room_ban_with_reason">%1$s hat %2$s verbannt. Grund: %3$s</string>
+    <string name="notice_room_third_party_invite_with_reason">%1$s hat eine Einladung an %2$s gesandt um diesem Raum beizutreten. Grund: %3$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason">%1$s hat Einladung an %2$s zu Betreten dieses Raumes zurückgezogen. Grund: %3$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason">%1$s hat die Einladung für %2$s angenommen. Grund: %3$s</string>
+    <string name="notice_room_withdraw_with_reason">%1$s hat Einladung für %2$s verworfen. Grund: %3$s</string>
+
 </resources>

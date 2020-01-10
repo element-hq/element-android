@@ -25,14 +25,11 @@ import im.vector.riotx.core.linkify.VectorLinkify
 import im.vector.riotx.core.utils.isValidUrl
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.html.PillImageSpan
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
 
-fun CharSequence.findPillsAndProcess(processBlock: (PillImageSpan) -> Unit) {
-    GlobalScope.launch(Dispatchers.Main) {
+fun CharSequence.findPillsAndProcess(scope: CoroutineScope, processBlock: (PillImageSpan) -> Unit) {
+    scope.launch(Dispatchers.Main) {
         withContext(Dispatchers.IO) {
             toSpannable().let { spannable ->
                 spannable.getSpans(0, spannable.length, PillImageSpan::class.java)

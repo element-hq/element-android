@@ -14,22 +14,19 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.autocomplete.user
+package im.vector.riotx.features.autocomplete.emoji
 
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
-import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.Success
 import com.otaliastudios.autocomplete.RecyclerViewPresenter
-import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotx.features.autocomplete.AutocompleteClickListener
+import im.vector.riotx.features.reactions.data.EmojiDataSource
 import javax.inject.Inject
 
-class AutocompleteUserPresenter @Inject constructor(context: Context,
-                                                    private val controller: AutocompleteUserController
-) : RecyclerViewPresenter<User>(context), AutocompleteClickListener<User> {
-
-    var callback: Callback? = null
+class AutocompleteEmojiPresenter @Inject constructor(context: Context,
+                                                     private val emojiDataSource: EmojiDataSource,
+                                                     private val controller: AutocompleteEmojiController) :
+        RecyclerViewPresenter<String>(context), AutocompleteClickListener<String> {
 
     init {
         controller.listener = this
@@ -41,21 +38,17 @@ class AutocompleteUserPresenter @Inject constructor(context: Context,
         return controller.adapter
     }
 
-    override fun onItemClick(t: User) {
+    override fun onItemClick(t: String) {
         dispatchClick(t)
     }
 
     override fun onQuery(query: CharSequence?) {
-        callback?.onQueryUsers(query)
-    }
-
-    fun render(users: Async<List<User>>) {
-        if (users is Success) {
-            controller.setData(users())
+        val data = if (query.isNullOrBlank()) {
+            // Return common emojis
+            emojiDataSource.getQuickReactions()
+        } else {
+            emojiDataSource.filterWith(query.toString())
         }
-    }
-
-    interface Callback {
-        fun onQueryUsers(query: CharSequence?)
+        controller.setData(data)
     }
 }

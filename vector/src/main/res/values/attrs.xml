@@ -63,9 +63,6 @@
         <!-- room notification text color (typing, unsent...) -->
         <attr name="vctr_room_notification_text_color" format="color" />
 
-        <!-- color for dividers in settings -->
-        <attr name="vctr_preference_divider_color" format="color" />
-
         <!-- icon colors -->
         <attr name="vctr_icon_tint_on_light_action_bar_color" format="color" />
         <attr name="vctr_icon_tint_on_dark_action_bar_color" format="color" />

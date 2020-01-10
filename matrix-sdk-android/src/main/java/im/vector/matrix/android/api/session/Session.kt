@@ -74,6 +74,11 @@ interface Session :
         get() = sessionParams.credentials.userId
 
     /**
+     * The sessionId
+     */
+    val sessionId: String
+
+    /**
      * This method allow to open a session. It does start some service on the background.
      */
     @MainThread
@@ -107,7 +112,7 @@ interface Session :
      * This method allows to listen the sync state.
      * @return a [LiveData] of [SyncState].
      */
-    fun syncState(): LiveData<SyncState>
+    fun getSyncStateLive(): LiveData<SyncState>
 
     /**
      * This methods return true if an initial sync has been processed

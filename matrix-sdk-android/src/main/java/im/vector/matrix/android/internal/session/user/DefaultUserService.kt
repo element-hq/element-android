@@ -70,7 +70,7 @@ internal class DefaultUserService @Inject constructor(private val monarchy: Mona
         return userEntity.asDomain()
     }
 
-    override fun liveUser(userId: String): LiveData<Optional<User>> {
+    override fun getUserLive(userId: String): LiveData<Optional<User>> {
         val liveData = monarchy.findAllMappedWithChanges(
                 { UserEntity.where(it, userId) },
                 { it.asDomain() }
@@ -80,7 +80,7 @@ internal class DefaultUserService @Inject constructor(private val monarchy: Mona
         }
     }
 
-    override fun liveUsers(): LiveData<List<User>> {
+    override fun getUsersLive(): LiveData<List<User>> {
         return monarchy.findAllMappedWithChanges(
                 { realm ->
                     realm.where(UserEntity::class.java)
@@ -91,7 +91,7 @@ internal class DefaultUserService @Inject constructor(private val monarchy: Mona
         )
     }
 
-    override fun livePagedUsers(filter: String?): LiveData<PagedList<User>> {
+    override fun getPagedUsersLive(filter: String?): LiveData<PagedList<User>> {
         realmDataSourceFactory.updateQuery { realm ->
             val query = realm.where(UserEntity::class.java)
             if (filter.isNullOrEmpty()) {
@@ -121,7 +121,7 @@ internal class DefaultUserService @Inject constructor(private val monarchy: Mona
                 .executeBy(taskExecutor)
     }
 
-    override fun liveIgnoredUsers(): LiveData<List<User>> {
+    override fun getIgnoredUsersLive(): LiveData<List<User>> {
         return monarchy.findAllMappedWithChanges(
                 { realm ->
                     realm.where(IgnoredUserEntity::class.java)

@@ -20,7 +20,12 @@ import android.net.Uri
 import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.airbnb.mvrx.*
+import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.FragmentViewModelContext
+import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.ViewModelContext
 import com.jakewharton.rxrelay2.BehaviorRelay
 import com.jakewharton.rxrelay2.PublishRelay
 import com.squareup.inject.assisted.Assisted
@@ -87,20 +92,21 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     private val visibleEventsObservable = BehaviorRelay.create<RoomDetailAction.TimelineEventTurnsVisible>()
     private val timelineSettings = if (userPreferencesProvider.shouldShowHiddenEvents()) {
         TimelineSettings(30,
-                filterEdits = false,
-                filterTypes = true,
-                allowedTypes = TimelineDisplayableEvents.DEBUG_DISPLAYABLE_TYPES,
-                buildReadReceipts = userPreferencesProvider.shouldShowReadReceipts())
+                         filterEdits = false,
+                         filterTypes = true,
+                         allowedTypes = TimelineDisplayableEvents.DEBUG_DISPLAYABLE_TYPES,
+                         buildReadReceipts = userPreferencesProvider.shouldShowReadReceipts())
     } else {
         TimelineSettings(30,
-                filterEdits = true,
-                filterTypes = true,
-                allowedTypes = TimelineDisplayableEvents.DISPLAYABLE_TYPES,
-                buildReadReceipts = userPreferencesProvider.shouldShowReadReceipts())
+                         filterEdits = true,
+                         filterTypes = true,
+                         allowedTypes = TimelineDisplayableEvents.DISPLAYABLE_TYPES,
+                         buildReadReceipts = userPreferencesProvider.shouldShowReadReceipts())
     }
 
     private var timelineEvents = PublishRelay.create<List<TimelineEvent>>()
-    private var timeline = room.createTimeline(eventId, timelineSettings)
+    var timeline = room.createTimeline(eventId, timelineSettings)
+        private set
 
     private val _viewEvents = PublishDataSource<RoomDetailViewEvents>()
     val viewEvents: DataSource<RoomDetailViewEvents> = _viewEvents
@@ -136,18 +142,17 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     init {
+        timeline.start()
+        timeline.addListener(this)
+        observeRoomSummary()
+        observeSummaryState()
         getUnreadState()
         observeSyncState()
-        observeRoomSummary()
         observeEventDisplayedActions()
-        observeSummaryState()
         observeDrafts()
         observeUnreadState()
+        room.getRoomSummaryLive()
         room.rx().loadRoomMembersIfNeeded().subscribeLogError().disposeOnClear()
-        timeline.addListener(this)
-        timeline.start()
-        setState { copy(timeline = this@RoomDetailViewModel.timeline) }
-
         // Inform the SDK that the room is displayed
         session.onRoomDisplayed(initialState.roomId)
     }
@@ -234,23 +239,23 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                         copy(
                                 // Create a sendMode from a draft and retrieve the TimelineEvent
                                 sendMode = when (draft) {
-                                    is UserDraft.REGULAR -> SendMode.REGULAR(draft.text)
-                                    is UserDraft.QUOTE   -> {
-                                        room.getTimeLineEvent(draft.linkedEventId)?.let { timelineEvent ->
-                                            SendMode.QUOTE(timelineEvent, draft.text)
-                                        }
-                                    }
-                                    is UserDraft.REPLY   -> {
-                                        room.getTimeLineEvent(draft.linkedEventId)?.let { timelineEvent ->
-                                            SendMode.REPLY(timelineEvent, draft.text)
-                                        }
-                                    }
-                                    is UserDraft.EDIT    -> {
-                                        room.getTimeLineEvent(draft.linkedEventId)?.let { timelineEvent ->
-                                            SendMode.EDIT(timelineEvent, draft.text)
-                                        }
-                                    }
-                                } ?: SendMode.REGULAR("")
+                                               is UserDraft.REGULAR -> SendMode.REGULAR(draft.text)
+                                               is UserDraft.QUOTE   -> {
+                                                   room.getTimeLineEvent(draft.linkedEventId)?.let { timelineEvent ->
+                                                       SendMode.QUOTE(timelineEvent, draft.text)
+                                                   }
+                                               }
+                                               is UserDraft.REPLY   -> {
+                                                   room.getTimeLineEvent(draft.linkedEventId)?.let { timelineEvent ->
+                                                       SendMode.REPLY(timelineEvent, draft.text)
+                                                   }
+                                               }
+                                               is UserDraft.EDIT    -> {
+                                                   room.getTimeLineEvent(draft.linkedEventId)?.let { timelineEvent ->
+                                                       SendMode.EDIT(timelineEvent, draft.text)
+                                                   }
+                                               }
+                                           } ?: SendMode.REGULAR("")
                         )
                     }
                 }
@@ -259,7 +264,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
 
     private fun handleTombstoneEvent(action: RoomDetailAction.HandleTombstoneEvent) {
         val tombstoneContent = action.event.getClearContent().toModel<RoomTombstoneContent>()
-                ?: return
+                               ?: return
 
         val roomId = tombstoneContent.replacementRoom ?: ""
         val isRoomJoined = session.getRoom(roomId)?.roomSummary()?.membership == Membership.JOIN
@@ -311,7 +316,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         else                     -> false
     }
 
-    // PRIVATE METHODS *****************************************************************************
+// PRIVATE METHODS *****************************************************************************
 
     private fun handleSendMessage(action: RoomDetailAction.SendMessage) {
         withState { state ->
@@ -414,7 +419,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 is SendMode.EDIT    -> {
                     // is original event a reply?
                     val inReplyTo = state.sendMode.timelineEvent.root.getClearContent().toModel<MessageContent>()?.relatesTo?.inReplyTo?.eventId
-                            ?: state.sendMode.timelineEvent.root.content.toModel<EncryptedEventContent>()?.relatesTo?.inReplyTo?.eventId
+                                    ?: state.sendMode.timelineEvent.root.content.toModel<EncryptedEventContent>()?.relatesTo?.inReplyTo?.eventId
                     if (inReplyTo != null) {
                         // TODO check if same content?
                         room.getTimeLineEvent(inReplyTo)?.let {
@@ -423,13 +428,13 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                     } else {
                         val messageContent: MessageContent? =
                                 state.sendMode.timelineEvent.annotations?.editSummary?.aggregatedContent.toModel()
-                                        ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
+                                ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
                         val existingBody = messageContent?.body ?: ""
                         if (existingBody != action.text) {
                             room.editTextMessage(state.sendMode.timelineEvent.root.eventId ?: "",
-                                    messageContent?.type ?: MessageType.MSGTYPE_TEXT,
-                                    action.text,
-                                    action.autoMarkdown)
+                                                 messageContent?.type ?: MessageType.MSGTYPE_TEXT,
+                                                 action.text,
+                                                 action.autoMarkdown)
                         } else {
                             Timber.w("Same message content, do not send edition")
                         }
@@ -440,7 +445,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 is SendMode.QUOTE   -> {
                     val messageContent: MessageContent? =
                             state.sendMode.timelineEvent.annotations?.editSummary?.aggregatedContent.toModel()
-                                    ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
+                            ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
                     val textMsg = messageContent?.body
 
                     val finalText = legacyRiotQuoteText(textMsg, action.text.toString())
@@ -556,7 +561,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
             when (val tooBigFile = attachments.find { it.size > maxUploadFileSize }) {
                 null -> room.sendMedias(attachments)
                 else -> _fileTooBigEvent.postValue(LiveEvent(FileTooBigError(tooBigFile.name
-                        ?: tooBigFile.path, tooBigFile.size, maxUploadFileSize)))
+                                                                             ?: tooBigFile.path, tooBigFile.size, maxUploadFileSize)))
             }
         }
     }
@@ -746,7 +751,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 .filter { it.isNotEmpty() }
                 .subscribeBy(onNext = { actions ->
                     val bufferedMostRecentDisplayedEvent = actions.maxBy { it.event.displayIndex }?.event
-                            ?: return@subscribeBy
+                                                           ?: return@subscribeBy
                     val globalMostRecentDisplayedEvent = mostRecentDisplayedEvent
                     if (trackUnreadMessages.get()) {
                         if (globalMostRecentDisplayedEvent == null) {
@@ -829,10 +834,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         room.rx().liveRoomSummary()
                 .unwrap()
                 .execute { async ->
-                    copy(
-                            asyncRoomSummary = async,
-                            isEncrypted = room.isEncrypted()
-                    )
+                    copy(asyncRoomSummary = async)
                 }
     }
 
@@ -918,7 +920,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
 
     override fun onCleared() {
         timeline.dispose()
-        timeline.removeListener(this)
+        timeline.removeAllListeners()
         super.onCleared()
     }
 }

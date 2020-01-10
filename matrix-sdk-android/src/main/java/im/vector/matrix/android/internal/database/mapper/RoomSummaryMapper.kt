@@ -70,7 +70,8 @@ internal class RoomSummaryMapper @Inject constructor(
                 readMarkerId = roomSummaryEntity.readMarkerId,
                 userDrafts = roomSummaryEntity.userDrafts?.userDrafts?.map { DraftMapper.map(it) } ?: emptyList(),
                 canonicalAlias = roomSummaryEntity.canonicalAlias,
-                aliases = roomSummaryEntity.aliases.toList()
+                aliases = roomSummaryEntity.aliases.toList(),
+                isEncrypted = roomSummaryEntity.isEncrypted
         )
     }
 }

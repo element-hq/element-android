@@ -21,18 +21,23 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.members.MembershipService
+import im.vector.matrix.android.api.session.room.members.RoomMemberQueryParams
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.database.mapper.asDomain
+import im.vector.matrix.android.internal.database.model.RoomMemberEntity
+import im.vector.matrix.android.internal.database.model.RoomMemberEntityFields
+import im.vector.matrix.android.internal.query.process
 import im.vector.matrix.android.internal.session.room.membership.joining.InviteTask
 import im.vector.matrix.android.internal.session.room.membership.joining.JoinRoomTask
 import im.vector.matrix.android.internal.session.room.membership.leaving.LeaveRoomTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.fetchCopied
+import io.realm.Realm
+import io.realm.RealmQuery
 
 internal class DefaultMembershipService @AssistedInject constructor(@Assisted private val roomId: String,
                                                                     private val monarchy: Monarchy,
@@ -58,29 +63,44 @@ internal class DefaultMembershipService @AssistedInject constructor(@Assisted pr
     }
 
     override fun getRoomMember(userId: String): RoomMember? {
-        val eventEntity = monarchy.fetchCopied {
-            RoomMembers(it, roomId).queryRoomMemberEvent(userId).findFirst()
+        val roomMemberEntity = monarchy.fetchCopied {
+            RoomMembers(it, roomId).getLastRoomMember(userId)
         }
-        return eventEntity?.asDomain()?.content.toModel()
+        return roomMemberEntity?.asDomain()
     }
 
-    override fun getRoomMemberIdsLive(): LiveData<List<String>> {
-        return monarchy.findAllMappedWithChanges(
+    override fun getRoomMembers(queryParams: RoomMemberQueryParams): List<RoomMember> {
+        return monarchy.fetchAllMappedSync(
                 {
-                    RoomMembers(it, roomId).queryRoomMembersEvent()
+                    roomMembersQuery(it, queryParams)
                 },
                 {
-                    it.stateKey!!
+                    it.asDomain()
                 }
         )
     }
 
+    override fun getRoomMembersLive(queryParams: RoomMemberQueryParams): LiveData<List<RoomMember>> {
+        return monarchy.findAllMappedWithChanges(
+                {
+                    roomMembersQuery(it, queryParams)
+                },
+                {
+                    it.asDomain()
+                }
+        )
+    }
+
+    private fun roomMembersQuery(realm: Realm, queryParams: RoomMemberQueryParams): RealmQuery<RoomMemberEntity> {
+        return RoomMembers(realm, roomId).queryRoomMembersEvent()
+                .process(RoomMemberEntityFields.MEMBERSHIP_STR, queryParams.memberships)
+                .process(RoomMemberEntityFields.DISPLAY_NAME, queryParams.displayName)
+    }
+
     override fun getNumberOfJoinedMembers(): Int {
-        var result = 0
-        monarchy.runTransactionSync {
-            result = RoomMembers(it, roomId).getNumberOfJoinedMembers()
+        return Realm.getInstance(monarchy.realmConfiguration).use {
+            RoomMembers(it, roomId).getNumberOfJoinedMembers()
         }
-        return result
     }
 
     override fun invite(userId: String, reason: String?, callback: MatrixCallback<Unit>): Cancelable {

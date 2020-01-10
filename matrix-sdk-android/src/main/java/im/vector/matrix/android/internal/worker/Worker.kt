@@ -20,6 +20,6 @@ import androidx.work.ListenableWorker
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.internal.session.SessionComponent
 
-internal fun ListenableWorker.getSessionComponent(userId: String): SessionComponent? {
-    return Matrix.getInstance(applicationContext).sessionManager.getSessionComponent(userId)
+internal fun ListenableWorker.getSessionComponent(sessionId: String): SessionComponent? {
+    return Matrix.getInstance(applicationContext).sessionManager.getSessionComponent(sessionId)
 }

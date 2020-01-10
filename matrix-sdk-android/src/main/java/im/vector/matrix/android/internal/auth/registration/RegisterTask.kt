@@ -29,12 +29,13 @@ internal interface RegisterTask : Task<RegisterTask.Params, Credentials> {
     )
 }
 
-internal class DefaultRegisterTask(private val authAPI: AuthAPI)
-    : RegisterTask {
+internal class DefaultRegisterTask(
+        private val authAPI: AuthAPI
+) : RegisterTask {
 
     override suspend fun execute(params: RegisterTask.Params): Credentials {
         try {
-            return executeRequest {
+            return executeRequest(null) {
                 apiCall = authAPI.register(params.registrationParams)
             }
         } catch (throwable: Throwable) {

@@ -93,7 +93,7 @@ class MessageActionsEpoxyController @Inject constructor(private val stringProvid
         }
 
         // Action
-        state.actions()?.forEachIndexed { index, action ->
+        state.actions.forEachIndexed { index, action ->
             if (action is EventSharedAction.Separator) {
                 bottomSheetSeparatorItem {
                     id("separator_$index")

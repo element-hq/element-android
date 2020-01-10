@@ -16,6 +16,8 @@
 
 package im.vector.matrix.android.api.session.room.crypto
 
+import im.vector.matrix.android.api.MatrixCallback
+
 interface RoomCryptoService {
 
     fun isEncrypted(): Boolean
@@ -23,4 +25,6 @@ interface RoomCryptoService {
     fun encryptionAlgorithm(): String?
 
     fun shouldEncryptForInvitedMembers(): Boolean
+
+    fun enableEncryptionWithAlgorithm(algorithm: String, callback: MatrixCallback<Unit>)
 }

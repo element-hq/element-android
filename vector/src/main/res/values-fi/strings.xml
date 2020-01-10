@@ -1801,7 +1801,7 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
 \n
 \nRiotX tukee: • Kirjaudu olemassaolevalle tunnukselle • Luo huoneita ja liity julkisiin huoneisiin • Hyväksy ja hylkää kutsuja • Listaa käyttäjän huoneet • Katso huoneen tietoja • Lähetä tekstiviestejä • Lähetä liitteitä • Lue ja kirjoita viestejä salatuissa huoneissa • Salaus: osapuolten välisen salauksen avaimien varmuuskopiointi, edistynyt laitteiden varmennus, avainten jakopyynnöt ja vastaus • Viesti-ilmoitukset • Vaalea, tumma ja musta teema
 \n
-\nKaikkia Riotin ominaisuuksia ei ole vielä toteutettu RiotX:ssä. Tärkeimmät puuttuvat (ja pian saapuvat!) ominaisuudet: • Tunnusten luonti • Huoneen asetukset (listaa huoneen jäsenet jne.) • Puhelut • Sovelmat • …</string>
+\nKaikkia Riotin ominaisuuksia ei ole vielä toteutettu RiotX:ssä. Tärkeimmät puuttuvat (ja pian saapuvat!) ominaisuudet: • Huoneen asetukset (listaa huoneen jäsenet jne.) • Puhelut • Sovelmat • …</string>
 
     <string name="send_file_step_encrypting_thumbnail">Salataan pikkukuvaa…</string>
     <string name="send_file_step_sending_thumbnail">Lähetetään pikkukuvaa (%1$s / %2$s)</string>
@@ -1828,7 +1828,7 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="attachment_type_audio">Ääni</string>
     <string name="error_handling_incoming_share">Jakotiedon käsittely epäonnistui</string>
 
-    <string name="report_content_custom">Muokattu ilmianto</string>
+    <string name="report_content_custom">Muokattu ilmianto…</string>
     <string name="report_content_custom_title">Ilmianna tämä sisältö</string>
     <string name="report_content_custom_hint">Sisällön ilmiannon syy</string>
     <string name="report_content_custom_submit">ILMIANNA</string>
@@ -1851,4 +1851,179 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
 \n
 \nSalli pääsy tiedostoihin seuraavassa ponnahdusikkunassa, jotta voit viedä avaimesi käsin.</string>
 
+    <string name="login_error_no_homeserver_found">Tämä ei ole kelvollinen Matrix-palvelimen osoite</string>
+    <string name="message_ignore_user">Estä käyttäjä</string>
+
+    <string name="room_list_quick_actions_notifications_all_noisy">Kaikki viestit (äänekäs)</string>
+    <string name="room_list_quick_actions_notifications_all">Kaikki viestit</string>
+    <string name="room_list_quick_actions_notifications_mentions">Vain maininnat</string>
+    <string name="room_list_quick_actions_notifications_mute">Vaimenna</string>
+    <string name="room_list_quick_actions_settings">Asetukset</string>
+    <string name="room_list_quick_actions_leave">Poistu huoneesta</string>
+    <string name="notice_member_no_changes">%1$s ei tehnyt muutoksia</string>
+    <string name="command_description_spoiler">Lähettää annetun viestin ilonpilaajana</string>
+    <string name="spoiler">Ilonpilaaja</string>
+    <string name="reaction_search_type_hint">Syötä avainsanat löytääksesi reaktion.</string>
+
+    <string name="no_ignored_users">Et jätä yhtään käyttäjää huomiotta</string>
+
+    <string name="help_long_click_on_room_for_more_options">Tee pitkä klikkaus huoneelle nähdäksesi lisää asetuksia</string>
+
+
+    <string name="room_join_rules_public">%1$s asetti huoneen julkiseksi kelle tahansa, joka tietää huoneen osoitteen.</string>
+    <string name="room_join_rules_invite">%1$s muutti huoneeseen liittymisen vaatimaan kutsua.</string>
+    <string name="timeline_unread_messages">Lukemattomia viestejä</string>
+
+    <string name="login_splash_title">Vapauta keskustelusi</string>
+    <string name="login_splash_text1">Keskustele kaksistaan tai ryhmissä</string>
+    <string name="login_splash_text2">Pidä keskustelut yksityisinä ja salattuina</string>
+    <string name="login_splash_text3">Laajenna ja muokkaa kokemustasi</string>
+    <string name="login_splash_submit">Aloita</string>
+
+    <string name="login_server_title">Valitse palvelin</string>
+    <string name="login_server_text">Kuten sähköpostissa, tunnuksilla on yksi koti, mutta voit keskustella koko maailman kanssa</string>
+    <string name="login_server_matrix_org_text">Liity miljoonien joukkoon suurimmalla julkisella palvelimella</string>
+    <string name="login_server_modular_text">Korkealuokkaista isännöintiä organisaatioille</string>
+    <string name="login_server_modular_learn_more">Lue lisää</string>
+    <string name="login_server_other_title">Muut</string>
+    <string name="login_server_other_text">Mukautetut ja monimutkaiset asetukset</string>
+
+    <string name="login_continue">Jatka</string>
+    <string name="login_connect_to">Yhdistä palvelimeen %1$s</string>
+    <string name="login_connect_to_modular">Yhdistä Modulariin</string>
+    <string name="login_connect_to_a_custom_server">Yhdistä itse määritettyyn palvelimeen</string>
+    <string name="login_signin_to">Kirjaudu sisään palvelimeen %1$s</string>
+    <string name="login_signup">Rekisteröidy</string>
+    <string name="login_signin">Kirjaudu sisään</string>
+    <string name="login_signin_sso">Jatka kertakirjautumiseen</string>
+
+    <string name="login_server_url_form_modular_hint">Modularin osoite</string>
+    <string name="login_server_url_form_other_hint">Osoite</string>
+    <string name="login_server_url_form_modular_text">Korkealuokkaista isännöintiä organisaatioille</string>
+    <string name="login_server_url_form_modular_notice">Syötä Modular Riotin tai haluamasi palvelimen osoite</string>
+    <string name="login_sso_error_message">Sivun lataamisessa tapahtui virhe: %1$s (%2$d)</string>
+    <string name="login_mode_not_supported">Sovellus ei pysty kirjautumaan sisään tälle kotipalvelimelle. Tämä kotipalvelin tukee seuraavia kirjautumistyyppejä: %1$s.
+\n
+\nHaluatko kirjautua sisään web-klientillä\?</string>
+    <string name="login_registration_disabled">Valitettavasti tämä palvelin ei hyväksy uusia tunnuksia.</string>
+    <string name="login_registration_not_supported">Sovellus ei pysty luomaan uusia tunnuksia tälle kotipalvelimelle.
+\n
+\nHaluatko rekisteröityä web-klientillä\?</string>
+
+    <string name="login_login_with_email_error">Tämä sähköpostiosoite ei ole liitettynä mihinkään tunnukseen.</string>
+
+    <string name="login_reset_password_on">Palauta salasana palvelimella %1$s</string>
+    <string name="login_reset_password_notice">Sähköpostiisi lähetetään viesti uuden salananan asettamiseksi.</string>
+    <string name="login_reset_password_submit">Seuraava</string>
+    <string name="login_reset_password_email_hint">Sähköposti</string>
+    <string name="login_reset_password_password_hint">Uusi salasana</string>
+
+    <string name="login_reset_password_warning_title">Varoitus!</string>
+    <string name="login_reset_password_warning_content">Salasanan vaihtaminen nollaa kaikki osapuolten välisen salauksen avaimet kaikilla laitteillasi, joka estää sinua lukemasta vanhoja viestejä. Ota käyttöön avainten varmuuskopiointi tai vie huoneen avaimet toiselta laitteelta ennen kuin vaihdat salasanasi.</string>
+    <string name="login_reset_password_warning_submit">Jatka</string>
+
+    <string name="login_reset_password_error_not_found">Tämä sähköposti ei ole liitettynä mihinkään tunnukseen</string>
+
+    <string name="login_reset_password_mail_confirmation_title">Tarkista sähköpostisi</string>
+    <string name="login_reset_password_mail_confirmation_notice">Vahvistusviesti lähetettiin osoitteeseen %1$s.</string>
+    <string name="login_reset_password_mail_confirmation_notice_2">Näpäytä linkkiä vahvistaaksesi uuden salasanasi. Seurattuasi siinä olevaa linkkiä, klikkaa alapuolelta.</string>
+    <string name="login_reset_password_mail_confirmation_submit">Olen vahvistanut sähköpostiosoitteeni</string>
+
+    <string name="login_reset_password_success_title">Valmis!</string>
+    <string name="login_reset_password_success_notice">Salasanasi on vaihdettu.</string>
+    <string name="login_reset_password_success_notice_2">Olet kirjautunut ulos kaikilta laitteilta, etkä saa enää viesti-ilmoituksia. Ottaaksesi viesti-ilmoitukset uudelleen käyttöön, kirjaudu sisään jokaisella laitteellasi.</string>
+    <string name="login_reset_password_success_submit">Takaisin sisäänkirjautumiseen</string>
+
+    <string name="login_reset_password_cancel_confirmation_title">Varoitus</string>
+    <string name="login_reset_password_cancel_confirmation_content">Salasanaasi ei ole vielä vaihdettu.
+\n
+\nPeru salasananvaihtoprosessi\?</string>
+
+    <string name="login_set_email_title">Aseta sähköpostiosoite</string>
+    <string name="login_set_email_notice">Aseta sähköpostiosoite palauttaaksesi tunnuksesi. Myöhemmin, voit antaa muiden löytää sinut sähköpostillasi.</string>
+    <string name="login_set_email_mandatory_hint">Sähköposti</string>
+    <string name="login_set_email_optional_hint">Sähköposti (vapaaehtoinen)</string>
+    <string name="login_set_email_submit">Seuraava</string>
+
+    <string name="login_set_msisdn_title">Aseta puhelinnumero</string>
+    <string name="login_set_msisdn_notice">Aseta puhelinnumero antaaksesi muiden löytää sinut puhellinumerosi perusteella.</string>
+    <string name="login_set_msisdn_notice2">Käytä maailmanlaajuista puhelinnumeron muotoa.</string>
+    <string name="login_set_msisdn_mandatory_hint">Puhelinnumero</string>
+    <string name="login_set_msisdn_optional_hint">Puhelinnumero (vapaaehtoinen)</string>
+    <string name="login_set_msisdn_submit">Seuraava</string>
+
+    <string name="login_msisdn_confirm_title">Vahvista puhelinnumero</string>
+    <string name="login_msisdn_confirm_notice">Lähetimme sinulle koodin numeroon %1$s. Syötä se alapuolelle vahvistaaksesi numeron.</string>
+    <string name="login_msisdn_confirm_hint">Syötä koodi</string>
+    <string name="login_msisdn_confirm_send_again">Lähetä uudelleen</string>
+    <string name="login_msisdn_confirm_submit">Seuraava</string>
+
+    <string name="login_msisdn_error_not_international">Kansainvälisten puhelinnumeroiden pitää alkaa merkillä ”+”</string>
+    <string name="login_msisdn_error_other">Puhelinnumero vaikuttaa epäkelvolta. Tarkista numero</string>
+
+    <string name="login_signup_to">Rekisteröidy palvelimelle %1$s</string>
+    <string name="login_signup_username_hint">Käyttäjätunnus tai sähköpostiosoite</string>
+    <string name="login_signup_password_hint">Salasana</string>
+    <string name="login_signup_submit">Seuraava</string>
+    <string name="login_signup_error_user_in_use">Käyttäjätunnus on varattu</string>
+    <string name="login_signup_cancel_confirmation_title">Varoitus</string>
+    <string name="login_signup_cancel_confirmation_content">Tunnustasi ei ole vielä luotu.
+\n
+\nPeru rekisteröintiprosessi\?</string>
+
+    <string name="login_a11y_choose_matrix_org">Valitse matrix.org</string>
+    <string name="login_a11y_choose_modular">Valitse modular</string>
+    <string name="login_a11y_choose_other">Valitse muu kotipalvelin</string>
+    <string name="login_a11y_captcha_container">Ratkaise seuraava kuvavarmennushaaste</string>
+    <string name="login_terms_title">Hyväksy ehdot jatkaaksesi</string>
+
+    <string name="login_wait_for_email_title">Tarkista sähköpostisi</string>
+    <string name="login_wait_for_email_notice">Lähetimme sähköpostin osoitteeseen %1$s.
+\nKlikkaa siinä olevaa linkkiä jatkaaksesi tunnuksen luontia.</string>
+    <string name="login_validation_code_is_not_correct">Syöttämäsi koodi ei ole kelvollinen. Tarkista se.</string>
+    <string name="login_error_outdated_homeserver_title">Vanhentunut kotipalvelin</string>
+    <string name="login_error_outdated_homeserver_content">Tämä kotipalvelin pyörii liian vanhalla versiolla, jotta pystyisimme yhdistämään siihen. Pyydä kotipalvelimesi ylläpitäjää päivittämään palvelimensa.</string>
+
+    <plurals name="login_error_limit_exceeded_retry_after">
+        <item quantity="one">Liian monta pyyntöä lähetettiin. Voit yrittää uudelleen 1 sekunnissa…</item>
+        <item quantity="other">Liian monta pyyntöä lähetettiin. Voit yrittää uudelleen %1$d sekunnissa…</item>
+    </plurals>
+
+    <string name="seen_by">Nähty toimesta</string>
+
+    <string name="signed_out_title">Olet kirjautunut ulos</string>
+    <string name="signed_out_submit">Kirjaudu sisään uudelleen</string>
+
+    <string name="soft_logout_title">Olet kirjautunut ulos</string>
+    <string name="soft_logout_signin_title">Kirjaudu sisään</string>
+    <string name="soft_logout_signin_notice">Kotipalvelimen (%1$s) ylläpitäjä on kirjannut sinut ulos tunnukseltasi %2$s (%3$s).</string>
+    <string name="soft_logout_signin_submit">Kirjaudu sisään</string>
+    <string name="soft_logout_signin_password_hint">Salasana</string>
+    <string name="soft_logout_clear_data_title">Poista henkilökohtaiset tiedot</string>
+    <string name="soft_logout_clear_data_notice">Varoitus: henkilökohtaiset tietosi (sisältää salausavaimesi) ovat vielä tallennettuna tälle laitteelle.
+\n
+\nPoista ne jos olet lopettanut tämän laitteen käytön, tai haluat kirjautua sisään toiselle tunnukselle.</string>
+    <string name="soft_logout_clear_data_submit">Poista kaikki tiedot</string>
+
+    <string name="soft_logout_clear_data_dialog_title">Poista tiedot</string>
+    <string name="soft_logout_clear_data_dialog_content">Poista kaikki tälle laitteelle tallennetut tiedot\?
+\nKirjaudu sisään päästäksesi käsiksi tunnuksesi tietoihin ja viesteihin.</string>
+    <string name="soft_logout_clear_data_dialog_e2e_warning_content">Menetät pääsyn salattuihin viesteihisi ellet kirjaudu sisään palauttaaksesi salausavaimesi.</string>
+    <string name="soft_logout_clear_data_dialog_submit">Poista tiedot</string>
+    <string name="soft_logout_sso_not_same_user_error">Nykyinen istunto on käyttäjälle %1$s, ja yritit kirjautuas isään käyttäjälle %2$s. RiotX ei tue tätä.
+\nPoista ensin tietosi ja kirjaudu sen jälkeen toisella tunnuksella. Voit vaihtoehtoisesti käyttää Riotin selainversiota.</string>
+
+    <string name="permalink_malformed">matrix.to-linkkisi oli epämuodostunut</string>
+    <string name="bug_report_error_too_short">Kuvaus on liian lyhyt</string>
+
+    <string name="login_server_url_form_other_notice">Syötä palvelin tai sen Riotin osoite, mihin haluat yhdistää</string>
+
+    <string name="signed_out_notice">Se voi johtua monesta eri syystä:
+\n
+\n• olet vaihtanut salasanasi toisella laitteella
+\n
+\n• olet poistanut tämän laitteen toisella laitteella
+\n
+\n• palvelimen ylläpitäjä on estänyt pääsysi turvallisuussyistä.</string>
+    <string name="soft_logout_signin_e2e_warning_notice">Kirjaudu sisään palauttaaksesi salausavaimesi, jotka ovat tallessa vain tällä laitteella. Tarvitset niitä lukeaksi kaikki salatut viestisi millä tahansa laitteella.</string>
 </resources>

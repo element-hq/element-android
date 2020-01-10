@@ -59,7 +59,8 @@ data class RoomListParams(
 class RoomListFragment @Inject constructor(
         private val roomController: RoomSummaryController,
         val roomListViewModelFactory: RoomListViewModel.Factory,
-        private val notificationDrawerManager: NotificationDrawerManager
+        private val notificationDrawerManager: NotificationDrawerManager,
+        private val sharedViewPool: RecyclerView.RecycledViewPool
 
 ) : VectorBaseFragment(), RoomSummaryController.Listener, OnBackPressed, FabMenuView.Listener {
 
@@ -95,7 +96,6 @@ class RoomListFragment @Inject constructor(
         setupCreateRoomButton()
         setupRecyclerView()
         sharedActionViewModel = activityViewModelProvider.get(RoomListQuickActionsSharedActionViewModel::class.java)
-
         roomListViewModel.subscribe { renderState(it) }
         roomListViewModel.viewEvents
                 .observe()
@@ -193,6 +193,8 @@ class RoomListFragment @Inject constructor(
         val stateRestorer = LayoutManagerStateRestorer(layoutManager).register()
         roomListView.layoutManager = layoutManager
         roomListView.itemAnimator = RoomListAnimator()
+        roomListView.setRecycledViewPool(sharedViewPool)
+        layoutManager.recycleChildrenOnDetach = true
         roomController.listener = this
         modelBuildListener = OnModelBuildFinishedListener { it.dispatchTo(stateRestorer) }
         roomController.addModelBuildListener(modelBuildListener)

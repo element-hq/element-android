@@ -24,6 +24,7 @@ echo "Copy strings to SDK"
 
 cp ../matrix-android-sdk/matrix-sdk/src/main/res/values/strings.xml        ./matrix-sdk-android/src/main/res/values/strings.xml
 cp ../matrix-android-sdk/matrix-sdk/src/main/res/values-ar/strings.xml     ./matrix-sdk-android/src/main/res/values-ar/strings.xml
+cp ../matrix-android-sdk/matrix-sdk/src/main/res/values-az/strings.xml     ./matrix-sdk-android/src/main/res/values-az/strings.xml
 cp ../matrix-android-sdk/matrix-sdk/src/main/res/values-bg/strings.xml     ./matrix-sdk-android/src/main/res/values-bg/strings.xml
 cp ../matrix-android-sdk/matrix-sdk/src/main/res/values-bs/strings.xml     ./matrix-sdk-android/src/main/res/values-bs/strings.xml
 cp ../matrix-android-sdk/matrix-sdk/src/main/res/values-ca/strings.xml     ./matrix-sdk-android/src/main/res/values-ca/strings.xml
@@ -67,6 +68,7 @@ echo "Copy strings to RiotX"
 
 cp ../riot-android/vector/src/main/res/values/strings.xml           ./vector/src/main/res/values/strings.xml
 cp ../riot-android/vector/src/main/res/values-ar/strings.xml        ./vector/src/main/res/values-ar/strings.xml
+cp ../riot-android/vector/src/main/res/values-az/strings.xml        ./vector/src/main/res/values-az/strings.xml
 cp ../riot-android/vector/src/main/res/values-b+sr+Latn/strings.xml ./vector/src/main/res/values-b+sr+Latn/strings.xml
 cp ../riot-android/vector/src/main/res/values-bg/strings.xml        ./vector/src/main/res/values-bg/strings.xml
 cp ../riot-android/vector/src/main/res/values-bn-rIN/strings.xml    ./vector/src/main/res/values-bn-rIN/strings.xml

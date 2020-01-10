@@ -16,43 +16,36 @@
 
 package im.vector.matrix.android.internal.database
 
-import im.vector.matrix.android.internal.util.createBackgroundHandler
 import io.realm.*
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
-import java.util.concurrent.atomic.AtomicReference
+import kotlinx.coroutines.*
 
-class RealmQueryLatch<E : RealmObject>(private val realmConfiguration: RealmConfiguration,
-                                       private val realmQueryBuilder: (Realm) -> RealmQuery<E>) {
+internal suspend fun <T> awaitNotEmptyResult(realmConfiguration: RealmConfiguration,
+                                    timeoutMillis: Long,
+                                    builder: (Realm) -> RealmQuery<T>) {
+    withTimeout(timeoutMillis) {
+        // Confine Realm interaction to a single thread with Looper.
+        withContext(Dispatchers.Main) {
+            val latch = CompletableDeferred<Unit>()
 
-    private companion object {
-        val QUERY_LATCH_HANDLER = createBackgroundHandler("REALM_QUERY_LATCH")
-    }
+            Realm.getInstance(realmConfiguration).use { realm ->
+                val result = builder(realm).findAllAsync()
 
-    @Throws(InterruptedException::class)
-    fun await(timeout: Long, timeUnit: TimeUnit) {
-        val realmRef = AtomicReference<Realm>()
-        val latch = CountDownLatch(1)
-        QUERY_LATCH_HANDLER.post {
-            val realm = Realm.getInstance(realmConfiguration)
-            realmRef.set(realm)
-            val result = realmQueryBuilder(realm).findAllAsync()
-            result.addChangeListener(object : RealmChangeListener<RealmResults<E>> {
-                override fun onChange(t: RealmResults<E>) {
-                    if (t.isNotEmpty()) {
-                        result.removeChangeListener(this)
-                        latch.countDown()
+                val listener = object : RealmChangeListener<RealmResults<T>> {
+                    override fun onChange(it: RealmResults<T>) {
+                        if (it.isNotEmpty()) {
+                            result.removeChangeListener(this)
+                            latch.complete(Unit)
+                        }
                     }
                 }
-            })
-        }
-        try {
-            latch.await(timeout, timeUnit)
-        } catch (exception: InterruptedException) {
-            throw exception
-        } finally {
-            QUERY_LATCH_HANDLER.post {
-                realmRef.getAndSet(null).close()
+
+                result.addChangeListener(listener)
+                try {
+                    latch.await()
+                } catch (e: CancellationException) {
+                    result.removeChangeListener(listener)
+                    throw e
+                }
             }
         }
     }

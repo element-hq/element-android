@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.session.room.timeline
 
-import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
@@ -25,12 +24,6 @@ import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomMember
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
-import im.vector.matrix.android.internal.database.helper.addAll
-import im.vector.matrix.android.internal.database.helper.addOrUpdate
-import im.vector.matrix.android.internal.database.model.ChunkEntity
-import im.vector.matrix.android.internal.database.model.RoomEntity
-import im.vector.matrix.android.internal.session.room.timeline.PaginationDirection
-import io.realm.kotlin.createObject
 import kotlin.random.Random
 
 object RoomDataHelper {
@@ -72,20 +65,5 @@ object RoomDataHelper {
     fun createFakeRoomMemberEvent(): Event {
         val roomMember = RoomMember(Membership.JOIN, "Fake name #${Random.nextLong()}").toContent()
         return createFakeEvent(EventType.STATE_ROOM_MEMBER, roomMember)
-    }
-
-    fun fakeInitialSync(monarchy: Monarchy, roomId: String) {
-        monarchy.runTransactionSync { realm ->
-            val roomEntity = realm.createObject<RoomEntity>(roomId)
-            roomEntity.membership = Membership.JOIN
-            val eventList = createFakeListOfEvents(10)
-            val chunkEntity = realm.createObject<ChunkEntity>().apply {
-                nextToken = null
-                prevToken = Random.nextLong(System.currentTimeMillis()).toString()
-                isLastForward = true
-            }
-            chunkEntity.addAll(roomId, eventList, PaginationDirection.FORWARDS)
-            roomEntity.addOrUpdate(chunkEntity)
-        }
     }
 }
