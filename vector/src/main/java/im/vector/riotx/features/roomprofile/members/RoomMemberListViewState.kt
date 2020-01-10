@@ -16,19 +16,31 @@
 
 package im.vector.riotx.features.roomprofile.members
 
+import androidx.annotation.StringRes
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
-import im.vector.matrix.android.api.session.room.model.RoomMember
+import im.vector.matrix.android.api.session.room.model.RoomMemberSummary
 import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.riotx.R
 import im.vector.riotx.features.roomprofile.RoomProfileArgs
 
 data class RoomMemberListViewState(
         val roomId: String,
         val roomSummary: Async<RoomSummary> = Uninitialized,
-        val roomMembers: Async<List<RoomMember>> = Uninitialized
+        val roomMemberSummaries: Async<RoomMemberSummaries> = Uninitialized
 ) : MvRxState {
 
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
 
+}
+
+typealias RoomMemberSummaries = Map<PowerLevelCategory, List<RoomMemberSummary>>
+
+enum class PowerLevelCategory(@StringRes val titleRes: Int) {
+    ADMIN(R.string.room_member_power_level_admins),
+    MODERATOR(R.string.room_member_power_level_moderators),
+    CUSTOM(R.string.room_member_power_level_custom),
+    INVITE(R.string.room_member_power_level_invites),
+    USER(R.string.room_member_power_level_users)
 }

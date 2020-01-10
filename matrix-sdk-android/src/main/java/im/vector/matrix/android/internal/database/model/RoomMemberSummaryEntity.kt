@@ -21,13 +21,13 @@ import io.realm.RealmObject
 import io.realm.annotations.Index
 import io.realm.annotations.PrimaryKey
 
-internal open class RoomMemberEntity(@PrimaryKey var primaryKey: String = "",
-                                     @Index var userId: String = "",
-                                     @Index var roomId: String = "",
-                                     var displayName: String? = null,
-                                     var avatarUrl: String? = null ,
-                                     var reason: String? = null,
-                                     var isDirect: Boolean = false
+internal open class RoomMemberSummaryEntity(@PrimaryKey var primaryKey: String = "",
+                                            @Index var userId: String = "",
+                                            @Index var roomId: String = "",
+                                            var displayName: String? = null,
+                                            var avatarUrl: String? = null,
+                                            var reason: String? = null,
+                                            var isDirect: Boolean = false
 ) : RealmObject() {
 
     private var membershipStr: String = Membership.NONE.name

@@ -17,7 +17,7 @@
             style="@style/VectorAppBarLayoutStyle"
             android:layout_width="match_parent"
             app:contentScrim="?riotx_background"
-            app:scrimAnimationDuration="400"
+            app:scrimAnimationDuration="250"
             android:layout_height="match_parent"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             app:titleEnabled="false"

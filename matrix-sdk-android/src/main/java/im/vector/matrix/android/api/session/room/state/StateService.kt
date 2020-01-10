@@ -16,8 +16,10 @@
 
 package im.vector.matrix.android.api.session.room.state
 
+import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.util.Optional
 
 interface StateService {
 
@@ -27,4 +29,6 @@ interface StateService {
     fun updateTopic(topic: String, callback: MatrixCallback<Unit>)
 
     fun getStateEvent(eventType: String): Event?
+
+    fun getStateEventLive(eventType: String): LiveData<Optional<Event>>
 }

@@ -21,7 +21,7 @@ import android.view.View
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import im.vector.matrix.android.api.session.room.model.RoomMember
+import im.vector.matrix.android.api.session.room.model.RoomMemberSummary
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.cleanup
@@ -63,7 +63,7 @@ class RoomMemberListFragment @Inject constructor(
         renderRoomSummary(viewState)
     }
 
-    override fun onRoomMemberClicked(roomMember: RoomMember) {
+    override fun onRoomMemberClicked(roomMember: RoomMemberSummary) {
         navigator.openRoomMemberProfile(roomMember.userId, roomId = roomProfileArgs.roomId, context = requireActivity())
     }
 

@@ -17,33 +17,48 @@
 package im.vector.riotx.features.roomprofile.members
 
 import com.airbnb.epoxy.TypedEpoxyController
-import im.vector.matrix.android.api.session.room.model.RoomMember
+import im.vector.matrix.android.api.session.room.model.RoomMemberSummary
 import im.vector.matrix.android.api.util.toMatrixItem
-import im.vector.riotx.core.epoxy.profiles.profileItemAction
+import im.vector.riotx.core.epoxy.profiles.buildProfileSection
 import im.vector.riotx.core.epoxy.profiles.profileMatrixItem
-import im.vector.riotx.features.autocomplete.autocompleteMatrixItem
+import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.home.AvatarRenderer
 import javax.inject.Inject
 
-class RoomMemberListController @Inject constructor(private val avatarRenderer: AvatarRenderer) : TypedEpoxyController<RoomMemberListViewState>() {
+class RoomMemberListController @Inject constructor(private val avatarRenderer: AvatarRenderer,
+                                                   private val stringProvider: StringProvider) : TypedEpoxyController<RoomMemberListViewState>() {
 
     interface Callback {
-        fun onRoomMemberClicked(roomMember: RoomMember)
+        fun onRoomMemberClicked(roomMember: RoomMemberSummary)
     }
 
     var callback: Callback? = null
 
+    init {
+        setData(null)
+    }
+
     override fun buildModels(data: RoomMemberListViewState?) {
-        data?.roomMembers?.invoke()?.forEach { roomMember ->
-            profileMatrixItem {
-                id(roomMember.userId)
-                matrixItem(roomMember.toMatrixItem())
-                avatarRenderer(avatarRenderer)
-                clickListener { _ ->
-                    callback?.onRoomMemberClicked(roomMember)
+        val roomMembersByPowerLevel = data?.roomMemberSummaries?.invoke() ?: return
+        for ((powerLevelCategory, roomMemberList) in roomMembersByPowerLevel) {
+            if (roomMemberList.isEmpty()) {
+                continue
+            }
+            buildProfileSection(
+                    stringProvider.getString(powerLevelCategory.titleRes)
+            )
+            roomMemberList.forEach { roomMember ->
+                profileMatrixItem {
+                    id(roomMember.userId)
+                    matrixItem(roomMember.toMatrixItem())
+                    avatarRenderer(avatarRenderer)
+                    clickListener { _ ->
+                        callback?.onRoomMemberClicked(roomMember)
+                    }
                 }
             }
         }
     }
+
 
 }

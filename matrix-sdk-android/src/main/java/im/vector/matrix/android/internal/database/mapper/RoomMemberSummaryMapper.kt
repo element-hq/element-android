@@ -16,21 +16,21 @@
 
 package im.vector.matrix.android.internal.database.mapper
 
-import im.vector.matrix.android.api.session.room.model.RoomMember
-import im.vector.matrix.android.internal.database.model.RoomMemberEntity
+import im.vector.matrix.android.api.session.room.model.RoomMemberSummary
+import im.vector.matrix.android.internal.database.model.RoomMemberSummaryEntity
 
-internal object RoomMemberMapper {
+internal object RoomMemberSummaryMapper {
 
-    fun map(roomMemberEntity: RoomMemberEntity): RoomMember {
-        return RoomMember(
-                userId = roomMemberEntity.userId,
-                avatarUrl = roomMemberEntity.avatarUrl,
-                displayName = roomMemberEntity.displayName,
-                membership = roomMemberEntity.membership
+    fun map(roomMemberSummaryEntity: RoomMemberSummaryEntity): RoomMemberSummary {
+        return RoomMemberSummary(
+                userId = roomMemberSummaryEntity.userId,
+                avatarUrl = roomMemberSummaryEntity.avatarUrl,
+                displayName = roomMemberSummaryEntity.displayName,
+                membership = roomMemberSummaryEntity.membership
         )
     }
 }
 
-internal fun RoomMemberEntity.asDomain(): RoomMember {
-    return RoomMemberMapper.map(this)
+internal fun RoomMemberSummaryEntity.asDomain(): RoomMemberSummary {
+    return RoomMemberSummaryMapper.map(this)
 }

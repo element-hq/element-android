@@ -24,7 +24,7 @@ import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toContent
-import im.vector.matrix.android.api.session.room.model.PowerLevels
+import im.vector.matrix.android.api.session.room.model.PowerLevelsContent
 import im.vector.matrix.android.api.session.room.model.RoomDirectoryVisibility
 import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibility
 import im.vector.matrix.android.internal.auth.data.ThreePidMedium
@@ -113,7 +113,7 @@ class CreateRoomParams {
      * The power level content to override in the default power level event
      */
     @Json(name = "power_level_content_override")
-    var powerLevelContentOverride: PowerLevels? = null
+    var powerLevelContentOverride: PowerLevelsContent? = null
 
     /**
      * Add the crypto algorithm to the room creation parameters.

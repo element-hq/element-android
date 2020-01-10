@@ -19,7 +19,7 @@ package im.vector.matrix.android.api.session.room.model
 /**
  * Class representing a simplified version of EventType.STATE_ROOM_MEMBER state event content
  */
-data class RoomMember(
+data class RoomMemberSummary(
         val membership: Membership,
         val userId: String,
         val displayName: String? = null,

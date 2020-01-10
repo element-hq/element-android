@@ -23,14 +23,20 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.members.roomMemberQueryParams
 import im.vector.matrix.android.api.session.room.model.Membership
+import im.vector.matrix.android.api.session.room.model.PowerLevelsContent
+import im.vector.matrix.android.api.session.room.model.RoomMemberSummary
+import im.vector.matrix.android.api.session.room.powerlevers.PowerLevelsConstants
+import im.vector.matrix.android.api.session.room.powerlevers.PowerLevelsHelper
+import im.vector.matrix.rx.mapOptional
 import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
 import im.vector.riotx.core.platform.VectorViewModel
-import im.vector.riotx.core.utils.DataSource
-import im.vector.riotx.core.utils.PublishDataSource
-import im.vector.riotx.features.roomprofile.RoomProfileViewEvents
+import io.reactivex.Observable
+import io.reactivex.functions.BiFunction
 
 class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState: RoomMemberListViewState,
                                                           private val session: Session)
@@ -53,8 +59,30 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
     private val room = session.getRoom(initialState.roomId)!!
 
     init {
-        observeRoomMembers()
+        observeRoomMemberSummaries()
         observeRoomSummary()
+    }
+
+    private fun observeRoomMemberSummaries() {
+        val roomMemberQueryParams = roomMemberQueryParams {
+            displayName = QueryStringValue.IsNotEmpty
+            memberships = Membership.activeMemberships()
+        }
+        Observable
+                .combineLatest<List<RoomMemberSummary>, PowerLevelsContent, RoomMemberSummaries>(
+                        room.rx().liveRoomMembers(roomMemberQueryParams),
+                        room.rx()
+                                .liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS)
+                                .mapOptional { it.content.toModel<PowerLevelsContent>() }
+                                .unwrap(),
+                        BiFunction { roomMembers, powerLevelsContent ->
+                            buildRoomMemberSummaries(powerLevelsContent, roomMembers)
+                        }
+                )
+                .execute { async ->
+                    copy(roomMemberSummaries = async)
+                }
+
     }
 
     private fun observeRoomSummary() {
@@ -65,16 +93,33 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
                 }
     }
 
-    private fun observeRoomMembers() {
-        val queryParams = roomMemberQueryParams {
-            displayName = QueryStringValue.IsNotEmpty
-            memberships = Membership.activeMemberships()
-        }
-        room.rx()
-                .liveRoomMembers(queryParams)
-                .execute {
-                    copy(roomMembers = it)
+
+    private fun buildRoomMemberSummaries(powerLevelsContent: PowerLevelsContent, roomMembers: List<RoomMemberSummary>): RoomMemberSummaries {
+        val admins = ArrayList<RoomMemberSummary>()
+        val moderators = ArrayList<RoomMemberSummary>()
+        val users = ArrayList<RoomMemberSummary>(roomMembers.size)
+        val customs = ArrayList<RoomMemberSummary>()
+        val invites = ArrayList<RoomMemberSummary>()
+        val powerLevelsHelper = PowerLevelsHelper(powerLevelsContent)
+        roomMembers
+                .forEach { roomMember ->
+                    val memberPowerLevel = powerLevelsHelper.getUserPowerLevel(roomMember.userId)
+                    when {
+                        roomMember.membership == Membership.INVITE                            -> invites.add(roomMember)
+                        memberPowerLevel == PowerLevelsConstants.DEFAULT_ROOM_ADMIN_LEVEL     -> admins.add(roomMember)
+                        memberPowerLevel == PowerLevelsConstants.DEFAULT_ROOM_MODERATOR_LEVEL -> moderators.add(roomMember)
+                        memberPowerLevel == PowerLevelsConstants.DEFAULT_ROOM_USER_LEVEL      -> users.add(roomMember)
+                        else                                                                  -> customs.add(roomMember)
+                    }
                 }
+
+        return mapOf(
+                PowerLevelCategory.ADMIN to admins,
+                PowerLevelCategory.MODERATOR to moderators,
+                PowerLevelCategory.CUSTOM to customs,
+                PowerLevelCategory.INVITE to invites,
+                PowerLevelCategory.USER to users
+        )
     }
 
     override fun handle(action: RoomMemberListAction) {

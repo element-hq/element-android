@@ -35,7 +35,7 @@ import im.vector.matrix.android.internal.database.query.prev
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.room.membership.RoomDisplayNameResolver
-import im.vector.matrix.android.internal.session.room.membership.RoomMembers
+import im.vector.matrix.android.internal.session.room.membership.RoomMemberHelper
 import im.vector.matrix.android.internal.session.sync.model.RoomSyncSummary
 import im.vector.matrix.android.internal.session.sync.model.RoomSyncUnreadNotifications
 import io.realm.Realm
@@ -114,9 +114,9 @@ internal class RoomSummaryUpdater @Inject constructor(@UserId private val userId
         roomSummaryEntity.isEncrypted = encryptionEvent != null
 
         if (updateMembers) {
-            val otherRoomMembers = RoomMembers(realm, roomId)
+            val otherRoomMembers = RoomMemberHelper(realm, roomId)
                     .queryRoomMembersEvent()
-                    .notEqualTo(RoomMemberEntityFields.USER_ID, userId)
+                    .notEqualTo(RoomMemberSummaryEntityFields.USER_ID, userId)
                     .findAll()
                     .asSequence()
                     .map { it.userId }

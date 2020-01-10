@@ -20,7 +20,7 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.internal.database.model.*
 import im.vector.matrix.android.internal.database.model.EventEntity
-import im.vector.matrix.android.internal.database.model.RoomMemberEntity
+import im.vector.matrix.android.internal.database.model.RoomMemberSummaryEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.query.where
 import io.realm.Realm
@@ -32,8 +32,8 @@ import io.realm.Sort
  * It allows to get the live membership of a user.
  */
 
-internal class RoomMembers(private val realm: Realm,
-                           private val roomId: String
+internal class RoomMemberHelper(private val realm: Realm,
+                                private val roomId: String
 ) {
 
     private val roomSummary: RoomSummaryEntity? by lazy {
@@ -48,8 +48,8 @@ internal class RoomMembers(private val realm: Realm,
                 .findFirst()
     }
 
-    fun getLastRoomMember(userId: String): RoomMemberEntity? {
-        return RoomMemberEntity
+    fun getLastRoomMember(userId: String): RoomMemberSummaryEntity? {
+        return RoomMemberSummaryEntity
                 .where(realm, roomId, userId)
                 .findFirst()
     }
@@ -66,26 +66,26 @@ internal class RoomMembers(private val realm: Realm,
                 .size == 1
     }
 
-    fun queryRoomMembersEvent(): RealmQuery<RoomMemberEntity> {
-        return RoomMemberEntity.where(realm, roomId)
+    fun queryRoomMembersEvent(): RealmQuery<RoomMemberSummaryEntity> {
+        return RoomMemberSummaryEntity.where(realm, roomId)
     }
 
-    fun queryJoinedRoomMembersEvent(): RealmQuery<RoomMemberEntity> {
+    fun queryJoinedRoomMembersEvent(): RealmQuery<RoomMemberSummaryEntity> {
         return queryRoomMembersEvent()
-                .equalTo(RoomMemberEntityFields.MEMBERSHIP_STR, Membership.JOIN.name)
+                .equalTo(RoomMemberSummaryEntityFields.MEMBERSHIP_STR, Membership.JOIN.name)
     }
 
-    fun queryInvitedRoomMembersEvent(): RealmQuery<RoomMemberEntity> {
+    fun queryInvitedRoomMembersEvent(): RealmQuery<RoomMemberSummaryEntity> {
         return queryRoomMembersEvent()
-                .equalTo(RoomMemberEntityFields.MEMBERSHIP_STR, Membership.INVITE.name)
+                .equalTo(RoomMemberSummaryEntityFields.MEMBERSHIP_STR, Membership.INVITE.name)
     }
 
-    fun queryActiveRoomMembersEvent(): RealmQuery<RoomMemberEntity> {
+    fun queryActiveRoomMembersEvent(): RealmQuery<RoomMemberSummaryEntity> {
         return queryRoomMembersEvent()
                 .beginGroup()
-                .equalTo(RoomMemberEntityFields.MEMBERSHIP_STR, Membership.INVITE.name)
+                .equalTo(RoomMemberSummaryEntityFields.MEMBERSHIP_STR, Membership.INVITE.name)
                 .or()
-                .equalTo(RoomMemberEntityFields.MEMBERSHIP_STR, Membership.JOIN.name)
+                .equalTo(RoomMemberSummaryEntityFields.MEMBERSHIP_STR, Membership.JOIN.name)
                 .endGroup()
     }
 

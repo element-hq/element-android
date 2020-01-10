@@ -17,13 +17,13 @@
 package im.vector.matrix.android.internal.session.room.membership
 
 import im.vector.matrix.android.api.session.room.model.RoomMemberContent
-import im.vector.matrix.android.internal.database.model.RoomMemberEntity
+import im.vector.matrix.android.internal.database.model.RoomMemberSummaryEntity
 
 internal object RoomMemberEntityFactory {
 
-    fun create(roomId: String, userId: String, roomMember: RoomMemberContent): RoomMemberEntity {
+    fun create(roomId: String, userId: String, roomMember: RoomMemberContent): RoomMemberSummaryEntity {
         val primaryKey = "${roomId}_$userId"
-        return RoomMemberEntity(
+        return RoomMemberSummaryEntity(
                 primaryKey = primaryKey,
                 userId = userId,
                 roomId = roomId,

@@ -23,6 +23,8 @@ import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.DividerItem_
 import im.vector.riotx.core.epoxy.dividerItem
+import im.vector.riotx.core.epoxy.profiles.buildProfileAction
+import im.vector.riotx.core.epoxy.profiles.buildProfileSection
 import im.vector.riotx.core.epoxy.profiles.profileItemAction
 import im.vector.riotx.core.epoxy.profiles.profileItemSection
 import im.vector.riotx.core.resources.StringProvider
@@ -50,13 +52,13 @@ class RoomProfileController @Inject constructor(private val stringProvider: Stri
         val roomSummary = data.roomSummary()
 
         // Security
-        buildSection(stringProvider.getString(R.string.room_profile_section_security))
+        buildProfileSection(stringProvider.getString(R.string.room_profile_section_security))
         val learnMoreSubtitle = if (data.isEncrypted) {
             R.string.room_profile_encrypted_subtitle
         } else {
             R.string.room_profile_not_encrypted_subtitle
         }
-        buildAction(
+        buildProfileAction(
                 id = "learn_more",
                 title = stringProvider.getString(R.string.room_profile_section_security_learn_more),
                 subtitle = stringProvider.getString(learnMoreSubtitle),
@@ -64,33 +66,33 @@ class RoomProfileController @Inject constructor(private val stringProvider: Stri
         )
 
         // More
-        buildSection(stringProvider.getString(R.string.room_profile_section_more))
-        buildAction(
+        buildProfileSection(stringProvider.getString(R.string.room_profile_section_more))
+        buildProfileAction(
                 id = "settings",
                 title = stringProvider.getString(R.string.room_profile_section_more_settings),
                 icon = R.drawable.ic_room_profile_settings,
                 action = { callback?.onSettingsClicked() }
         )
-        buildAction(
+        buildProfileAction(
                 id = "notifications",
                 title = stringProvider.getString(R.string.room_profile_section_more_notifications),
                 icon = R.drawable.ic_room_profile_notification,
                 action = { callback?.onNotificationsClicked() }
         )
         val numberOfMembers = roomSummary?.joinedMembersCount?.toString() ?: "-"
-        buildAction(
+        buildProfileAction(
                 id = "member_list",
                 title = stringProvider.getString(R.string.room_profile_section_more_member_list, numberOfMembers),
                 icon = R.drawable.ic_room_profile_member_list,
                 action = { callback?.onMemberListClicked() }
         )
-        buildAction(
+        buildProfileAction(
                 id = "uploads",
                 title = stringProvider.getString(R.string.room_profile_section_more_uploads),
                 icon = R.drawable.ic_room_profile_uploads,
                 action = { callback?.onUploadsClicked() }
         )
-        buildAction(
+        buildProfileAction(
                 id = "leave",
                 title = stringProvider.getString(R.string.room_profile_section_more_leave),
                 divider = false,
@@ -99,38 +101,6 @@ class RoomProfileController @Inject constructor(private val stringProvider: Stri
         )
     }
 
-    private fun buildSection(title: String) {
-        profileItemSection {
-            id("section_$title")
-            title(title)
-        }
-    }
-
-    private fun buildAction(
-            id: String,
-            title: String,
-            subtitle: String? = null,
-            @DrawableRes icon: Int = 0,
-            destructive: Boolean = false,
-            divider: Boolean = true,
-            action: () -> Unit
-    ) {
-
-        profileItemAction {
-            iconRes(icon)
-            id("action_$id")
-            subtitle(subtitle)
-            destructive(destructive)
-            title(title)
-            listener { _ ->
-                action()
-            }
-        }
-
-        DividerItem_()
-                .id("divider_$title")
-                .addIf(divider, this)
-    }
 
 
 }
