@@ -36,6 +36,7 @@ import im.vector.riotx.features.home.room.filtered.FilteredRoomsActivity
 import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomActivity
 import im.vector.riotx.features.roomdirectory.roompreview.RoomPreviewActivity
+import im.vector.riotx.features.settings.VectorPreferences
 import im.vector.riotx.features.settings.VectorSettingsActivity
 import im.vector.riotx.features.share.SharedData
 import timber.log.Timber
@@ -44,12 +45,13 @@ import javax.inject.Singleton
 
 @Singleton
 class DefaultNavigator @Inject constructor(
-        private val sessionHolder: ActiveSessionHolder
+        private val sessionHolder: ActiveSessionHolder,
+        private val vectorPreferences: VectorPreferences
 ) : Navigator {
 
     override fun openRoom(context: Context, roomId: String, eventId: String?, buildTask: Boolean) {
         if (sessionHolder.getSafeActiveSession()?.getRoom(roomId) == null) {
-            fatalError("Trying to open an unknown room $roomId")
+            fatalError("Trying to open an unknown room $roomId", vectorPreferences.failFast())
             return
         }
 
