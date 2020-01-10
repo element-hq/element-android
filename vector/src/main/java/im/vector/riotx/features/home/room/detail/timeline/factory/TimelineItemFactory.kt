@@ -76,9 +76,9 @@ class TimelineItemFactory @Inject constructor(
                     null
                 }
             }
-        } catch (e: Exception) {
-            Timber.e(e, "failed to create message item")
-            defaultItemFactory.create(event, highlight, callback, e)
+        } catch (throwable: Throwable) {
+            Timber.e(throwable, "failed to create message item")
+            defaultItemFactory.create(event, highlight, callback, throwable)
         }
         return (computedModel ?: EmptyItem_())
     }

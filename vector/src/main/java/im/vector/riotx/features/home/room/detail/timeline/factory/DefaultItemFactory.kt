@@ -47,8 +47,8 @@ class DefaultItemFactory @Inject constructor(private val avatarSizeProvider: Ava
     fun create(event: TimelineEvent,
                highlight: Boolean,
                callback: TimelineEventController.Callback?,
-               exception: Exception? = null): DefaultItem {
-        val text = if (exception == null) {
+               throwable: Throwable? = null): DefaultItem {
+        val text = if (throwable == null) {
             "${event.root.getClearType()} events are not yet handled"
         } else {
             "an exception occurred when rendering the event ${event.root.eventId}"
