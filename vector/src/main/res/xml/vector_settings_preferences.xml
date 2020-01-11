@@ -37,8 +37,7 @@
             android:defaultValue="true"
             android:key="SETTINGS_SEND_TYPING_NOTIF_KEY"
             android:summary="@string/settings_send_typing_notifs_summary"
-            android:title="@string/settings_send_typing_notifs"
-            app:isPreferenceVisible="@bool/false_not_implemented" />
+            android:title="@string/settings_send_typing_notifs" />
 
         <im.vector.riotx.core.preference.VectorSwitchPreference
             android:defaultValue="false"

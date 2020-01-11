@@ -17,6 +17,7 @@
 package im.vector.riotx.features.home.room.list
 
 import android.view.View
+import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
@@ -32,6 +33,7 @@ import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.utils.DebouncedClickListener
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.format.NoticeEventFormatter
+import im.vector.riotx.features.home.room.typing.TypingHelper
 import me.gujun.android.span.span
 import javax.inject.Inject
 
@@ -39,6 +41,8 @@ class RoomSummaryItemFactory @Inject constructor(private val noticeEventFormatte
                                                  private val dateFormatter: VectorDateFormatter,
                                                  private val colorProvider: ColorProvider,
                                                  private val stringProvider: StringProvider,
+                                                 private val typingHelper: TypingHelper,
+                                                 private val session: Session,
                                                  private val avatarRenderer: AvatarRenderer) {
 
     fun create(roomSummary: RoomSummary,
@@ -121,11 +125,21 @@ class RoomSummaryItemFactory @Inject constructor(private val noticeEventFormatte
                 dateFormatter.formatMessageDay(date)
             }
         }
+
+        val typingString = if (roomSummary.typingRoomMemberIds.isEmpty()) {
+            null
+        } else {
+            // TODO Check how costly it is to create a Room here
+            val typingRoomMembers = typingHelper.toTypingRoomMembers(roomSummary.typingRoomMemberIds, session.getRoom(roomSummary.roomId))
+            typingHelper.toTypingMessage(typingRoomMembers)
+        }
+
         return RoomSummaryItem_()
                 .id(roomSummary.roomId)
                 .avatarRenderer(avatarRenderer)
                 .matrixItem(roomSummary.toMatrixItem())
                 .lastEventTime(latestEventTime)
+                .typingString(typingString)
                 .lastFormattedEvent(latestFormattedEvent)
                 .showHighlighted(showHighlighted)
                 .unreadNotificationCount(unreadCount)

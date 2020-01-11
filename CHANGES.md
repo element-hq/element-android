@@ -2,7 +2,7 @@ Changes in RiotX 0.13.0 (2020-XX-XX)
 ===================================================
 
 Features ✨:
- -
+ - Send and render typing events (#564)
 
 Improvements 🙌:
  -

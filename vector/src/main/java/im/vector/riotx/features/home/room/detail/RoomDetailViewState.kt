@@ -24,6 +24,7 @@ import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.matrix.android.api.session.user.model.User
+import im.vector.matrix.android.api.util.MatrixItem
 
 /**
  * Describes the current send mode:
@@ -43,7 +44,7 @@ sealed class SendMode(open val text: String) {
 sealed class UnreadState {
     object Unknown : UnreadState()
     object HasNoUnread : UnreadState()
-    data class ReadMarkerNotLoaded(val readMarkerId: String): UnreadState()
+    data class ReadMarkerNotLoaded(val readMarkerId: String) : UnreadState()
     data class HasUnread(val firstUnreadEventId: String) : UnreadState()
 }
 
@@ -52,6 +53,8 @@ data class RoomDetailViewState(
         val eventId: String?,
         val asyncInviter: Async<User> = Uninitialized,
         val asyncRoomSummary: Async<RoomSummary> = Uninitialized,
+        val typingRoomMembers: List<MatrixItem.UserItem>? = null,
+        val typingMessage: String? = null,
         val sendMode: SendMode = SendMode.REGULAR(""),
         val tombstoneEvent: Event? = null,
         val tombstoneEventHandling: Async<String> = Uninitialized,
