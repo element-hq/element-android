@@ -199,6 +199,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
 
         val timelineEvents = ArrayList<TimelineEventEntity>(eventList.size)
         for (event in eventList) {
+            event.ageLocalTs = event.unsignedData?.age?.let { syncLocalTimestampMillis - it }
             chunkEntity.add(roomEntity.roomId, event, PaginationDirection.FORWARDS, stateIndexOffset)?.also {
                 timelineEvents.add(it)
             }

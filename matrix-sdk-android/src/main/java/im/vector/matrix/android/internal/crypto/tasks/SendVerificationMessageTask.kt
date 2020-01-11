@@ -23,6 +23,7 @@ import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.session.room.send.LocalEchoUpdater
 import im.vector.matrix.android.internal.session.room.send.SendResponse
 import im.vector.matrix.android.internal.task.Task
+import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface SendVerificationMessageTask : Task<SendVerificationMessageTask.Params, String> {
@@ -35,7 +36,8 @@ internal interface SendVerificationMessageTask : Task<SendVerificationMessageTas
 internal class DefaultSendVerificationMessageTask @Inject constructor(
         private val localEchoUpdater: LocalEchoUpdater,
         private val encryptEventTask: DefaultEncryptEventTask,
-        private val roomAPI: RoomAPI) : SendVerificationMessageTask {
+        private val roomAPI: RoomAPI,
+        private val eventBus: EventBus) : SendVerificationMessageTask {
 
     override suspend fun execute(params: SendVerificationMessageTask.Params): String {
         val event = handleEncryption(params)
@@ -43,7 +45,7 @@ internal class DefaultSendVerificationMessageTask @Inject constructor(
 
         try {
             localEchoUpdater.updateSendState(localID, SendState.SENDING)
-            val executeRequest = executeRequest<SendResponse> {
+            val executeRequest = executeRequest<SendResponse>(eventBus) {
                 apiCall = roomAPI.send(
                         localID,
                         roomId = event.roomId ?: "",
