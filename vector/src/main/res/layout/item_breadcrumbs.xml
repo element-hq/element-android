@@ -59,7 +59,7 @@
         android:layout_height="20dp"
         android:background="@drawable/bg_breadcrumbs_typing"
         android:gravity="center"
-        android:text="…"
+        android:text="@string/ellipsis"
         android:textColor="@android:color/white"
         android:textSize="11sp"
         android:textStyle="bold"
@@ -67,7 +67,7 @@
         app:layout_constraintCircle="@+id/breadcrumbsImageView"
         app:layout_constraintCircleAngle="135"
         app:layout_constraintCircleRadius="28dp"
-        tools:ignore="HardcodedText,MissingConstraints"
+        tools:ignore="MissingConstraints"
         tools:visibility="visible" />
 
     <ImageView

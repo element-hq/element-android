@@ -3,6 +3,7 @@
 
     <string name="debug_screen" translatable="false">Debug screen</string>
 
+    <string name="ellipsis" translatable="false">…</string>
     <string name="plus_sign" translatable="false">+</string>
     <string name="semicolon_sign" translatable="false">:</string>
 

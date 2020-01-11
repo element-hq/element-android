@@ -126,7 +126,7 @@ class RoomSummaryItemFactory @Inject constructor(private val noticeEventFormatte
             }
         }
 
-        val typingString = if (roomSummary.typingRoomMemberIds.isEmpty()) {
+        val typingString = if (typingHelper.excludeCurrentUser(roomSummary.typingRoomMemberIds).isEmpty()) {
             null
         } else {
             // TODO Check how costly it is to create a Room here

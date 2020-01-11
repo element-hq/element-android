@@ -32,37 +32,37 @@ class TypingHelper @Inject constructor(
      * Exclude current user from the list of typing users
      */
     fun excludeCurrentUser(
-            typingUserIds: List<String>?
-    ): List<String>? {
+            typingUserIds: List<String>
+    ): List<String> {
         return typingUserIds
-                ?.filter { it != session.myUserId }
+                .filter { it != session.myUserId }
     }
 
     /**
      * Convert a list of userId to a list of maximum 3 UserItems
      */
     fun toTypingRoomMembers(
-            typingUserIds: List<String>?,
+            typingUserIds: List<String>,
             membershipService: MembershipService?
-    ): List<MatrixItem.UserItem>? {
+    ): List<MatrixItem.UserItem> {
         return excludeCurrentUser(typingUserIds)
-                ?.take(3)
-                ?.mapNotNull { membershipService?.getRoomMember(it) }
-                ?.map { it.toMatrixItem() }
+                .take(3)
+                .mapNotNull { membershipService?.getRoomMember(it) }
+                .map { it.toMatrixItem() }
     }
 
     /**
      * Convert a list of typing UserItems to a human readable String
      */
-    fun toTypingMessage(typingUserItems: List<MatrixItem.UserItem>?): String? {
+    fun toTypingMessage(typingUserItems: List<MatrixItem.UserItem>): String? {
         return when {
-            typingUserItems.isNullOrEmpty() ->
+            typingUserItems.isEmpty() ->
                 null
-            typingUserItems.size == 1       ->
+            typingUserItems.size == 1 ->
                 stringProvider.getString(R.string.room_one_user_is_typing, typingUserItems[0].getBestName())
-            typingUserItems.size == 2       ->
+            typingUserItems.size == 2 ->
                 stringProvider.getString(R.string.room_two_users_are_typing, typingUserItems[0].getBestName(), typingUserItems[1].getBestName())
-            else                            ->
+            else                      ->
                 stringProvider.getString(R.string.room_many_users_are_typing, typingUserItems[0].getBestName(), typingUserItems[1].getBestName())
         }
     }

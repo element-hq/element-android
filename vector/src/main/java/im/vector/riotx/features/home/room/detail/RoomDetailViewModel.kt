@@ -802,7 +802,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 .unwrap()
                 .execute { async ->
                     val typingRoomMembers =
-                            typingHelper.toTypingRoomMembers(async.invoke()?.typingRoomMemberIds, room)
+                            typingHelper.toTypingRoomMembers(async.invoke()?.typingRoomMemberIds.orEmpty(), room)
 
                     copy(
                             asyncRoomSummary = async,
