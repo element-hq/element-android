@@ -101,7 +101,7 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
     private lateinit var configurationViewModel: ConfigurationViewModel
     private lateinit var sessionListener: SessionListener
     protected lateinit var bugReporter: BugReporter
-    private lateinit var rageShake: RageShake
+    lateinit var rageShake: RageShake
 
     lateinit var navigator: Navigator
         private set
