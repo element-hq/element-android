@@ -64,17 +64,17 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
         observeRoomSummary()
         observeRoomMemberSummary()
         observePowerLevel()
-        observeUserIfRequired()
+        fetchProfileInfoIfRequired()
     }
 
-    private fun observeUserIfRequired() {
-        if (initialState.roomId != null) {
+    private fun fetchProfileInfoIfRequired() {
+        val roomMember = room?.getRoomMember(initialState.userId)
+        if (roomMember != null) {
             return
         }
-        session.rx().liveUser(initialState.userId)
-                .unwrap()
+        session.rx().getProfileInfo(initialState.userId)
                 .execute {
-                    copy(user = it)
+                    copy(profileInfo = it)
                 }
     }
 

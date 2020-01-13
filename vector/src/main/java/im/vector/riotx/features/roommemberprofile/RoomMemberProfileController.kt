@@ -40,9 +40,11 @@ class RoomMemberProfileController @Inject constructor(private val stringProvider
         if (data == null) {
             return
         }
-        if (data.roomId == null) {
+        val roomMemberSummary = data.roomMemberSummary()
+        val profileInfo = data.profileInfo()
+        if (roomMemberSummary == null && profileInfo != null) {
             buildUserActions()
-        } else {
+        } else if (roomMemberSummary != null) {
             buildRoomMemberActions(data)
         }
     }

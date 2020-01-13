@@ -9,6 +9,7 @@
     android:padding="16dp"
     android:orientation="vertical">
 
+
     <ImageView
         android:id="@+id/memberProfileAvatarView"
         android:layout_width="128dp"

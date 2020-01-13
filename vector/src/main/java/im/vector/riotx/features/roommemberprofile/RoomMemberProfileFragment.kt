@@ -81,13 +81,15 @@ class RoomMemberProfileFragment @Inject constructor(
 
 
     override fun invalidate() = withState(viewModel) { state ->
-        val memberMatrixItem = state.memberAsMatrixItem() ?: return@withState
-        memberProfileIdView.text = memberMatrixItem.id
-        val bestName = memberMatrixItem.getBestName()
-        memberProfileNameView.text = bestName
-        matrixProfileToolbarTitleView.text = bestName
-        avatarRenderer.render(memberMatrixItem, memberProfileAvatarView)
-        avatarRenderer.render(memberMatrixItem, matrixProfileToolbarAvatarImageView)
+        val memberMatrixItem = state.memberAsMatrixItem()
+        if (memberMatrixItem != null) {
+            memberProfileIdView.text = memberMatrixItem.id
+            val bestName = memberMatrixItem.getBestName()
+            memberProfileNameView.text = bestName
+            matrixProfileToolbarTitleView.text = bestName
+            avatarRenderer.render(memberMatrixItem, memberProfileAvatarView)
+            avatarRenderer.render(memberMatrixItem, matrixProfileToolbarAvatarImageView)
+        }
 
         val roomSummary = state.roomSummary()
         val powerLevelsContent = state.powerLevelsContent()
