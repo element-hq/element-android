@@ -29,8 +29,9 @@ internal interface SendTypingTask : Task<SendTypingTask.Params, Unit> {
     data class Params(
             val roomId: String,
             val isTyping: Boolean,
-            val delay: Long? = null,
-            val typingTimeoutMillis: Int? = 30_000
+            val typingTimeoutMillis: Int? = 30_000,
+            // Optional delay before sending the request to the homeserver
+            val delay: Long? = null
     )
 }
 
@@ -41,18 +42,14 @@ internal class DefaultSendTypingTask @Inject constructor(
 ) : SendTypingTask {
 
     override suspend fun execute(params: SendTypingTask.Params) {
-        if (params.delay != null) {
-            delay(params.delay)
-        }
-
-        val body = if (params.isTyping) {
-            TypingBody(true, params.typingTimeoutMillis)
-        } else {
-            TypingBody(false, null)
-        }
+        delay(params.delay ?: -1)
 
         executeRequest<Unit>(eventBus) {
-            apiCall = roomAPI.sendTypingState(params.roomId, userId, body)
+            apiCall = roomAPI.sendTypingState(
+                    params.roomId,
+                    userId,
+                    TypingBody(params.isTyping, params.typingTimeoutMillis?.takeIf { params.isTyping })
+            )
         }
     }
 }

@@ -126,13 +126,14 @@ class RoomSummaryItemFactory @Inject constructor(private val noticeEventFormatte
             }
         }
 
-        val typingString = if (typingHelper.excludeCurrentUser(roomSummary.typingRoomMemberIds).isEmpty()) {
-            null
-        } else {
-            // TODO Check how costly it is to create a Room here
-            val typingRoomMembers = typingHelper.toTypingRoomMembers(roomSummary.typingRoomMemberIds, session.getRoom(roomSummary.roomId))
-            typingHelper.toTypingMessage(typingRoomMembers)
-        }
+        val typingString = typingHelper.excludeCurrentUser(roomSummary.typingRoomMemberIds)
+                .takeIf { it.isNotEmpty() }
+                ?.let { typingMembers ->
+                    // It's not ideal to get a Room and to fetch data from DB here, but let's keep it like this for the moment
+                    val room = session.getRoom(roomSummary.roomId)
+                    val typingRoomMembers = typingHelper.toTypingRoomMembers(typingMembers, room)
+                    typingHelper.toTypingMessage(typingRoomMembers)
+                }
 
         return RoomSummaryItem_()
                 .id(roomSummary.roomId)
