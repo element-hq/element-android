@@ -24,11 +24,12 @@ import im.vector.riotx.features.home.room.detail.timeline.TimelineEventControlle
 import timber.log.Timber
 import javax.inject.Inject
 
-class TimelineItemFactory @Inject constructor(private val messageItemFactory: MessageItemFactory,
-                                              private val encryptedItemFactory: EncryptedItemFactory,
-                                              private val noticeItemFactory: NoticeItemFactory,
-                                              private val defaultItemFactory: DefaultItemFactory,
-                                              private val roomCreateItemFactory: RoomCreateItemFactory) {
+class TimelineItemFactory @Inject constructor(
+        private val messageItemFactory: MessageItemFactory,
+        private val encryptedItemFactory: EncryptedItemFactory,
+        private val noticeItemFactory: NoticeItemFactory,
+        private val defaultItemFactory: DefaultItemFactory,
+        private val roomCreateItemFactory: RoomCreateItemFactory) {
 
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
@@ -49,6 +50,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 EventType.STATE_ROOM_CANONICAL_ALIAS,
                 EventType.STATE_ROOM_JOIN_RULES,
                 EventType.STATE_ROOM_HISTORY_VISIBILITY,
+                EventType.STATE_ROOM_GUEST_ACCESS,
                 EventType.CALL_INVITE,
                 EventType.CALL_HANGUP,
                 EventType.CALL_ANSWER,
@@ -74,9 +76,9 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                     null
                 }
             }
-        } catch (e: Exception) {
-            Timber.e(e, "failed to create message item")
-            defaultItemFactory.create(event, highlight, callback, e)
+        } catch (throwable: Throwable) {
+            Timber.e(throwable, "failed to create message item")
+            defaultItemFactory.create(event, highlight, callback, throwable)
         }
         return (computedModel ?: EmptyItem_())
     }

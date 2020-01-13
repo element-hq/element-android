@@ -28,6 +28,8 @@ import im.vector.matrix.android.api.session.room.model.PowerLevels
 import im.vector.matrix.android.api.session.room.model.RoomDirectoryVisibility
 import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibility
 import im.vector.matrix.android.internal.auth.data.ThreePidMedium
+import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
+import timber.log.Timber
 
 /**
  * Parameter to create a room, with facilities functions to configure it
@@ -88,7 +90,7 @@ class CreateRoomParams {
      * A list of state events to set in the new room.
      * This allows the user to override the default state events set in the new room.
      * The expected format of the state events are an object with type, state_key and content keys set.
-     * Takes precedence over events set by presets, but gets overriden by name and topic keys.
+     * Takes precedence over events set by presets, but gets overridden by name and topic keys.
      */
     @Json(name = "initial_state")
     var initialStates: MutableList<Event>? = null
@@ -120,14 +122,14 @@ class CreateRoomParams {
      *
      * @param algorithm the algorithm
      */
-    fun addCryptoAlgorithm(algorithm: String) {
-        if (algorithm.isNotBlank()) {
-            val contentMap = HashMap<String, String>()
-            contentMap["algorithm"] = algorithm
+    fun enableEncryptionWithAlgorithm(algorithm: String) {
+        if (algorithm == MXCRYPTO_ALGORITHM_MEGOLM) {
+            val contentMap = mapOf("algorithm" to algorithm)
 
-            val algoEvent = Event(type = EventType.STATE_ROOM_ENCRYPTION,
-                                  stateKey = "",
-                                  content = contentMap.toContent()
+            val algoEvent = Event(
+                    type = EventType.STATE_ROOM_ENCRYPTION,
+                    stateKey = "",
+                    content = contentMap.toContent()
             )
 
             if (null == initialStates) {
@@ -135,6 +137,8 @@ class CreateRoomParams {
             } else {
                 initialStates!!.add(algoEvent)
             }
+        } else {
+            Timber.e("Unsupported algorithm: $algorithm")
         }
     }
 
@@ -145,15 +149,15 @@ class CreateRoomParams {
      */
     fun setHistoryVisibility(historyVisibility: RoomHistoryVisibility?) {
         // Remove the existing value if any.
-        initialStates?.removeAll { it.getClearType() == EventType.STATE_ROOM_HISTORY_VISIBILITY }
+        initialStates?.removeAll { it.type == EventType.STATE_ROOM_HISTORY_VISIBILITY }
 
         if (historyVisibility != null) {
-            val contentMap = HashMap<String, RoomHistoryVisibility>()
-            contentMap["history_visibility"] = historyVisibility
+            val contentMap = mapOf("history_visibility" to historyVisibility)
 
-            val historyVisibilityEvent = Event(type = EventType.STATE_ROOM_HISTORY_VISIBILITY,
-                                               stateKey = "",
-                                               content = contentMap.toContent())
+            val historyVisibilityEvent = Event(
+                    type = EventType.STATE_ROOM_HISTORY_VISIBILITY,
+                    stateKey = "",
+                    content = contentMap.toContent())
 
             if (null == initialStates) {
                 initialStates = mutableListOf(historyVisibilityEvent)
@@ -192,8 +196,8 @@ class CreateRoomParams {
      */
     fun isDirect(): Boolean {
         return preset == CreateRoomPreset.PRESET_TRUSTED_PRIVATE_CHAT
-               && isDirect == true
-               && (1 == getInviteCount() || 1 == getInvite3PidCount())
+                && isDirect == true
+                && (1 == getInviteCount() || 1 == getInvite3PidCount())
     }
 
     /**
@@ -218,8 +222,8 @@ class CreateRoomParams {
                     invite3pids = ArrayList()
                 }
                 val pid = Invite3Pid(idServer = hsConfig.identityServerUri.host!!,
-                                     medium = ThreePidMedium.EMAIL,
-                                     address = id)
+                        medium = ThreePidMedium.EMAIL,
+                        address = id)
 
                 invite3pids!!.add(pid)
             } else if (isUserId(id)) {

@@ -5,7 +5,7 @@ Features ✨:
  -
 
 Improvements 🙌:
- -
+ - Render events m.room.encryption and m.room.guest_access in the timeline
 
 Other changes:
  -
@@ -17,7 +17,7 @@ Translations 🗣:
  -
 
 Build 🧱:
- -
+ - Change the way versionCode is computed (#827)
 
 Changes in RiotX 0.12.0 (2020-01-09)
 ===================================================
