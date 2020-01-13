@@ -7,4 +7,4 @@
 - [ ] Pull request is based on the develop branch
 - [ ] Pull request updates [CHANGES.md](https://github.com/vector-im/riotX-android/blob/develop/CHANGES.md)
 - [ ] Pull request includes screenshots or videos if containing UI changes
-- [ ] Pull request includes a [sign off](https://github.com/matrix-org/synapse/blob/master/CONTRIBUTING.rst#sign-off)
+- [ ] Pull request includes a [sign off](https://github.com/matrix-org/synapse/blob/master/CONTRIBUTING.md#sign-off)
