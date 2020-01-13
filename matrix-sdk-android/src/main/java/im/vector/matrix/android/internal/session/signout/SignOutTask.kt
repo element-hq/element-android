@@ -52,7 +52,8 @@ internal class DefaultSignOutTask @Inject constructor(
         private val sessionParamsStore: SessionParamsStore,
         @SessionDatabase private val clearSessionDataTask: ClearCacheTask,
         @CryptoDatabase private val clearCryptoDataTask: ClearCacheTask,
-        @SessionFilesDirectory private val userFile: File,
+        @SessionFilesDirectory private val sessionFiles: File,
+        @SessionCacheDirectory private val sessionCache: File,
         private val realmKeysUtils: RealmKeysUtils,
         @SessionDatabase private val realmSessionConfiguration: RealmConfiguration,
         @CryptoDatabase private val realmCryptoConfiguration: RealmConfiguration,
@@ -98,7 +99,8 @@ internal class DefaultSignOutTask @Inject constructor(
         clearCryptoDataTask.execute(Unit)
 
         Timber.d("SignOut: clear file system")
-        userFile.deleteRecursively()
+        sessionFiles.deleteRecursively()
+        sessionCache.deleteRecursively()
 
         Timber.d("SignOut: clear the database keys")
         realmKeysUtils.clear(SessionModule.getKeyAlias(userMd5))
