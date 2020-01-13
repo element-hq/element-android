@@ -1,11 +1,11 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-/*
- * Unfortunatly "ktlint-disable filename" this does not work so this file is renamed to UserCacheDirectory.kt
- * If a new qualifier is added, please rename this file ti FileQualifiers.kt...
+package im.vector.matrix.android.internal.crypto.attachments
+
+import im.vector.matrix.android.internal.crypto.model.rest.EncryptedFileInfo
+
+/**
+ * Define the result of an encryption file
  */
-/* ktlint-disable filename */
-
-package im.vector.matrix.android.internal.di
-
-import javax.inject.Qualifier
-
-@Qualifier
-@Retention(AnnotationRetention.RUNTIME)
-annotation class UserCacheDirectory
+data class EncryptionResult(
+        var encryptedFileInfo: EncryptedFileInfo,
+        var encryptedByteArray: ByteArray
+)

@@ -52,7 +52,7 @@ internal class DefaultSignOutTask @Inject constructor(
         private val sessionParamsStore: SessionParamsStore,
         @SessionDatabase private val clearSessionDataTask: ClearCacheTask,
         @CryptoDatabase private val clearCryptoDataTask: ClearCacheTask,
-        @UserCacheDirectory private val userFile: File,
+        @SessionFilesDirectory private val userFile: File,
         private val realmKeysUtils: RealmKeysUtils,
         @SessionDatabase private val realmSessionConfiguration: RealmConfiguration,
         @CryptoDatabase private val realmCryptoConfiguration: RealmConfiguration,

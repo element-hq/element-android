@@ -35,17 +35,9 @@ object MXEncryptedAttachments {
     private const val SECRET_KEY_SPEC_ALGORITHM = "AES"
     private const val MESSAGE_DIGEST_ALGORITHM = "SHA-256"
 
-    /**
-     * Define the result of an encryption file
-     */
-    data class EncryptionResult(
-            var encryptedFileInfo: EncryptedFileInfo,
-            var encryptedByteArray: ByteArray
-    )
-
     /***
      * Encrypt an attachment stream.
-     * @param attachmentStream the attachment stream
+     * @param attachmentStream the attachment stream. Will be closed after this method call.
      * @param mimetype the mime type
      * @return the encryption file info
      */
@@ -67,9 +59,7 @@ object MXEncryptedAttachments {
         val key = ByteArray(32)
         secureRandom.nextBytes(key)
 
-        val outStream = ByteArrayOutputStream()
-
-        outStream.use {
+        ByteArrayOutputStream().use { outputStream ->
             val encryptCipher = Cipher.getInstance(CIPHER_ALGORITHM)
             val secretKeySpec = SecretKeySpec(key, SECRET_KEY_SPEC_ALGORITHM)
             val ivParameterSpec = IvParameterSpec(initVectorBytes)
@@ -81,20 +71,22 @@ object MXEncryptedAttachments {
             var read: Int
             var encodedBytes: ByteArray
 
-            read = attachmentStream.read(data)
-            while (read != -1) {
-                encodedBytes = encryptCipher.update(data, 0, read)
-                messageDigest.update(encodedBytes, 0, encodedBytes.size)
-                outStream.write(encodedBytes)
-                read = attachmentStream.read(data)
+            attachmentStream.use { inputStream ->
+                read = inputStream.read(data)
+                while (read != -1) {
+                    encodedBytes = encryptCipher.update(data, 0, read)
+                    messageDigest.update(encodedBytes, 0, encodedBytes.size)
+                    outputStream.write(encodedBytes)
+                    read = inputStream.read(data)
+                }
             }
 
             // encrypt the latest chunk
             encodedBytes = encryptCipher.doFinal()
             messageDigest.update(encodedBytes, 0, encodedBytes.size)
-            outStream.write(encodedBytes)
+            outputStream.write(encodedBytes)
 
-            val result = EncryptionResult(
+            return EncryptionResult(
                     encryptedFileInfo = EncryptedFileInfo(
                             url = null,
                             mimetype = mimetype,
@@ -109,18 +101,16 @@ object MXEncryptedAttachments {
                             hashes = mapOf("sha256" to base64ToUnpaddedBase64(Base64.encodeToString(messageDigest.digest(), Base64.DEFAULT))),
                             v = "v2"
                     ),
-                    encryptedByteArray = outStream.toByteArray()
+                    encryptedByteArray = outputStream.toByteArray()
             )
-
-            Timber.v("Encrypt in ${System.currentTimeMillis() - t0} ms")
-            return result
+                    .also { Timber.v("Encrypt in ${System.currentTimeMillis() - t0}ms") }
         }
     }
 
     /**
      * Decrypt an attachment
      *
-     * @param attachmentStream  the attachment stream
+     * @param attachmentStream  the attachment stream. Will be closed after this method call.
      * @param encryptedFileInfo the encryption file info
      * @return the decrypted attachment stream
      */
@@ -138,7 +128,7 @@ object MXEncryptedAttachments {
     /**
      * Decrypt an attachment
      *
-     * @param attachmentStream  the attachment stream
+     * @param attachmentStream the attachment stream. Will be closed after this method call.
      * @param elementToDecrypt the elementToDecrypt info
      * @return the decrypted attachment stream
      */
@@ -151,59 +141,50 @@ object MXEncryptedAttachments {
 
         val t0 = System.currentTimeMillis()
 
-        val outStream = ByteArrayOutputStream()
+        ByteArrayOutputStream().use { outputStream ->
+            try {
+                val key = Base64.decode(base64UrlToBase64(elementToDecrypt.k), Base64.DEFAULT)
+                val initVectorBytes = Base64.decode(elementToDecrypt.iv, Base64.DEFAULT)
 
-        try {
-            val key = Base64.decode(base64UrlToBase64(elementToDecrypt.k), Base64.DEFAULT)
-            val initVectorBytes = Base64.decode(elementToDecrypt.iv, Base64.DEFAULT)
+                val decryptCipher = Cipher.getInstance(CIPHER_ALGORITHM)
+                val secretKeySpec = SecretKeySpec(key, SECRET_KEY_SPEC_ALGORITHM)
+                val ivParameterSpec = IvParameterSpec(initVectorBytes)
+                decryptCipher.init(Cipher.DECRYPT_MODE, secretKeySpec, ivParameterSpec)
 
-            val decryptCipher = Cipher.getInstance(CIPHER_ALGORITHM)
-            val secretKeySpec = SecretKeySpec(key, SECRET_KEY_SPEC_ALGORITHM)
-            val ivParameterSpec = IvParameterSpec(initVectorBytes)
-            decryptCipher.init(Cipher.DECRYPT_MODE, secretKeySpec, ivParameterSpec)
+                val messageDigest = MessageDigest.getInstance(MESSAGE_DIGEST_ALGORITHM)
 
-            val messageDigest = MessageDigest.getInstance(MESSAGE_DIGEST_ALGORITHM)
+                var read: Int
+                val data = ByteArray(CRYPTO_BUFFER_SIZE)
+                var decodedBytes: ByteArray
 
-            var read: Int
-            val data = ByteArray(CRYPTO_BUFFER_SIZE)
-            var decodedBytes: ByteArray
+                attachmentStream.use { inputStream ->
+                    read = inputStream.read(data)
+                    while (read != -1) {
+                        messageDigest.update(data, 0, read)
+                        decodedBytes = decryptCipher.update(data, 0, read)
+                        outputStream.write(decodedBytes)
+                        read = inputStream.read(data)
+                    }
+                }
 
-            read = attachmentStream.read(data)
-            while (read != -1) {
-                messageDigest.update(data, 0, read)
-                decodedBytes = decryptCipher.update(data, 0, read)
-                outStream.write(decodedBytes)
-                read = attachmentStream.read(data)
+                // decrypt the last chunk
+                decodedBytes = decryptCipher.doFinal()
+                outputStream.write(decodedBytes)
+
+                val currentDigestValue = base64ToUnpaddedBase64(Base64.encodeToString(messageDigest.digest(), Base64.DEFAULT))
+
+                if (elementToDecrypt.sha256 != currentDigestValue) {
+                    Timber.e("## decryptAttachment() :  Digest value mismatch")
+                    return null
+                }
+
+                return ByteArrayInputStream(outputStream.toByteArray())
+                        .also { Timber.v("Decrypt in ${System.currentTimeMillis() - t0}ms") }
+            } catch (oom: OutOfMemoryError) {
+                Timber.e(oom, "## decryptAttachment() :  failed ${oom.message}")
+            } catch (e: Exception) {
+                Timber.e(e, "## decryptAttachment() :  failed ${e.message}")
             }
-
-            // decrypt the last chunk
-            decodedBytes = decryptCipher.doFinal()
-            outStream.write(decodedBytes)
-
-            val currentDigestValue = base64ToUnpaddedBase64(Base64.encodeToString(messageDigest.digest(), Base64.DEFAULT))
-
-            if (elementToDecrypt.sha256 != currentDigestValue) {
-                Timber.e("## decryptAttachment() :  Digest value mismatch")
-                outStream.close()
-                return null
-            }
-
-            val decryptedStream = ByteArrayInputStream(outStream.toByteArray())
-            outStream.close()
-
-            Timber.v("Decrypt in ${System.currentTimeMillis() - t0} ms")
-
-            return decryptedStream
-        } catch (oom: OutOfMemoryError) {
-            Timber.e(oom, "## decryptAttachment() :  failed ${oom.message}")
-        } catch (e: Exception) {
-            Timber.e(e, "## decryptAttachment() :  failed ${e.message}")
-        }
-
-        try {
-            outStream.close()
-        } catch (closeException: Exception) {
-            Timber.e(closeException, "## decryptAttachment() :  fail to close the file")
         }
 
         return null
