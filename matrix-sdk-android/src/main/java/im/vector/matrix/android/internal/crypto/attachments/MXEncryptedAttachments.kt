@@ -181,9 +181,9 @@ object MXEncryptedAttachments {
                 return ByteArrayInputStream(outputStream.toByteArray())
                         .also { Timber.v("Decrypt in ${System.currentTimeMillis() - t0}ms") }
             } catch (oom: OutOfMemoryError) {
-                Timber.e(oom, "## decryptAttachment() :  failed ${oom.message}")
+                Timber.e(oom, "## decryptAttachment() failed: OOM")
             } catch (e: Exception) {
-                Timber.e(e, "## decryptAttachment() :  failed ${e.message}")
+                Timber.e(e, "## decryptAttachment() failed")
             }
         }
 
