@@ -9,6 +9,7 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/roomMemberListToolbar"
         style="@style/VectorToolbarStyle"
+        android:elevation="4dp"
         android:layout_width="0dp"
         android:layout_height="?actionBarSize"
         app:layout_constraintEnd_toEndOf="parent"

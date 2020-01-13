@@ -28,17 +28,20 @@ fun roomMemberQueryParams(init: (RoomMemberQueryParams.Builder.() -> Unit) = {})
  */
 data class RoomMemberQueryParams(
         val displayName: QueryStringValue,
-        val memberships: List<Membership>
+        val memberships: List<Membership>,
+        val userId: QueryStringValue
 ) {
 
     class Builder {
 
+        var userId: QueryStringValue = QueryStringValue.NoCondition
         var displayName: QueryStringValue = QueryStringValue.IsNotEmpty
         var memberships: List<Membership> = Membership.all()
 
         fun build() = RoomMemberQueryParams(
                 displayName = displayName,
-                memberships = memberships
+                memberships = memberships,
+                userId = userId
         )
     }
 }

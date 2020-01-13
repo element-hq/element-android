@@ -30,7 +30,6 @@ import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.roomprofile.RoomProfileArgs
 import kotlinx.android.synthetic.main.fragment_room_member_list.*
-import kotlinx.android.synthetic.main.fragment_room_member_list.recyclerView
 import javax.inject.Inject
 
 
@@ -48,9 +47,13 @@ class RoomMemberListFragment @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupToolbar(roomMemberListToolbar)
         roomMemberListController.callback = this
         recyclerView.configureWith(roomMemberListController, hasFixedSize = true)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setupToolbar(roomMemberListToolbar)
     }
 
     override fun onDestroyView() {

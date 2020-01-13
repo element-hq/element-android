@@ -97,6 +97,7 @@ class RoomProfileController @Inject constructor(private val stringProvider: Stri
                 title = stringProvider.getString(R.string.room_profile_section_more_leave),
                 divider = false,
                 destructive = true,
+                editable = false,
                 action = { callback?.onLeaveRoomClicked() }
         )
     }

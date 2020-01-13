@@ -22,11 +22,20 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.room.members.roomMemberQueryParams
+import im.vector.matrix.android.api.session.room.model.PowerLevelsContent
+import im.vector.matrix.android.api.util.toOptional
+import im.vector.matrix.rx.mapOptional
+import im.vector.matrix.rx.rx
+import im.vector.matrix.rx.unwrap
 import im.vector.riotx.core.platform.VectorViewModel
 import timber.log.Timber
 
-class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted initialState: RoomMemberProfileViewState,
+class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private val initialState: RoomMemberProfileViewState,
                                                              private val session: Session)
     : VectorViewModel<RoomMemberProfileViewState, RoomMemberProfileAction>(initialState) {
 
@@ -44,8 +53,73 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted initialSt
         }
     }
 
+    private val room = if (initialState.roomId != null) {
+        session.getRoom(initialState.roomId)
+    } else {
+        null
+    }
+
+    init {
+        setState { copy(isMine = session.myUserId == this.userId) }
+        observeRoomSummary()
+        observeRoomMemberSummary()
+        observePowerLevel()
+        observeUserIfRequired()
+    }
+
+    private fun observeUserIfRequired() {
+        if (initialState.roomId != null) {
+            return
+        }
+        session.rx().liveUser(initialState.userId)
+                .unwrap()
+                .execute {
+                    copy(user = it)
+                }
+    }
+
     override fun handle(action: RoomMemberProfileAction) {
         Timber.v("Handle $action")
     }
+
+    private fun observeRoomSummary() {
+        if (room == null) {
+            return
+        }
+        room.rx().liveRoomSummary()
+                .unwrap()
+                .execute {
+                    copy(roomSummary = it)
+                }
+    }
+
+    private fun observeRoomMemberSummary() {
+        if (room == null) {
+            return
+        }
+        val queryParams = roomMemberQueryParams {
+            this.userId = QueryStringValue.Equals(initialState.userId, QueryStringValue.Case.SENSITIVE)
+        }
+        room.rx().liveRoomMembers(queryParams)
+                .map { it.firstOrNull().toOptional() }
+                .unwrap()
+                .execute {
+                    copy(roomMemberSummary = it)
+                }
+    }
+
+    private fun observePowerLevel() {
+        if (room == null) {
+            return
+        }
+        room.rx()
+                .liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS)
+                .mapOptional { it.content.toModel<PowerLevelsContent>() }
+                .unwrap()
+                .execute {
+                    copy(powerLevelsContent = it)
+                }
+    }
+
 
 }

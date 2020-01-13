@@ -19,4 +19,13 @@ package im.vector.riotx.features.roommemberprofile
 
 import im.vector.riotx.core.platform.VectorViewModelAction
 
-sealed class RoomMemberProfileAction : VectorViewModelAction
+sealed class RoomMemberProfileAction : VectorViewModelAction {
+
+    sealed class Displayable : RoomMemberProfileAction() {
+        object JumpToReadReceipt : Displayable()
+        object Ignore : Displayable()
+        object Mention : Displayable()
+    }
+
+
+}

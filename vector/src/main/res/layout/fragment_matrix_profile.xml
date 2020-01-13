@@ -7,82 +7,33 @@
     android:background="?riotx_header_panel_background">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/roomProfileAppBarLayout"
+        android:id="@+id/matrixProfileAppBarLayout"
         style="@style/VectorAppBarLayoutStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/roomProfileCollapsingToolbarLayout"
+            android:id="@+id/matrixProfileCollapsingToolbarLayout"
             style="@style/VectorAppBarLayoutStyle"
             android:layout_width="match_parent"
-            app:contentScrim="?riotx_background"
-            app:scrimAnimationDuration="250"
             android:layout_height="match_parent"
+            app:contentScrim="?riotx_background"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+            app:scrimAnimationDuration="250"
             app:titleEnabled="false"
-            app:toolbarId="@+id/roomProfileToolbar">
+            app:toolbarId="@+id/matrixProfileToolbar">
 
-            <LinearLayout
-                android:id="@+id/roomProfileHeaderView"
+            <ViewStub
+                android:id="@+id/matrixProfileHeaderView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?riotx_background"
                 android:orientation="vertical"
                 app:layout_collapseMode="parallax"
-                app:layout_collapseParallaxMultiplier="0.9">
-
-                <ImageView
-                    android:id="@+id/roomProfileAvatarView"
-                    android:layout_width="128dp"
-                    android:layout_height="128dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="16dp"
-                    tools:src="@tools:sample/avatars" />
-
-                <TextView
-                    android:id="@+id/roomProfileNameView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:gravity="center_vertical"
-                    android:singleLine="true"
-                    android:textAppearance="@style/Vector.Toolbar.Title"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    tools:text="Random" />
-
-                <TextView
-                    android:id="@+id/roomProfileAliasView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="8dp"
-                    android:singleLine="true"
-                    android:layout_marginBottom="16dp"
-                    android:textAppearance="@style/Vector.Toolbar.Title"
-                    android:textSize="16sp"
-                    tools:text="#random:matrix.org" />
-
-                <TextView
-                    android:id="@+id/roomProfileTopicView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginStart="40dp"
-                    android:layout_marginBottom="16dp"
-                    android:layout_marginEnd="40dp"
-                    android:fontFamily="sans-serif"
-                    android:gravity="center"
-                    android:textSize="14sp"
-                    android:textStyle="normal"
-                    tools:text="Here is a room topic, it can be multi-line but should always be displayed in full  🍱" />
-
-            </LinearLayout>
+                app:layout_collapseParallaxMultiplier="0.9" />
 
             <androidx.appcompat.widget.Toolbar
-                android:id="@+id/roomProfileToolbar"
+                android:id="@+id/matrixProfileToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="@android:color/transparent"
@@ -93,29 +44,33 @@
                     android:layout_height="match_parent">
 
                     <ImageView
-                        android:id="@+id/roomProfileToolbarAvatarImageView"
+                        android:id="@+id/matrixProfileToolbarAvatarImageView"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="8dp"
+                        android:alpha="0"
+                        tools:alpha="1"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:src="@tools:sample/avatars" />
 
                     <TextView
-                        android:id="@+id/roomProfileToolbarTitleView"
+                        android:id="@+id/matrixProfileToolbarTitleView"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
                         android:ellipsize="end"
+                        android:alpha="0"
+                        tools:alpha="1"
                         android:maxLines="1"
                         android:textColor="?vctr_toolbar_primary_text_color"
                         android:textSize="18sp"
-                        app:layout_constraintStart_toEndOf="@+id/roomProfileToolbarAvatarImageView"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/matrixProfileToolbarAvatarImageView"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:text="@sample/matrix.json/data/roomName" />
 
@@ -130,7 +85,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/roomProfileRecyclerView"
+        android:id="@+id/matrixProfileRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"

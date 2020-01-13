@@ -96,6 +96,7 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
     }
 
     final override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        Timber.i("onCreateView Fragment ${this.javaClass.simpleName}")
         return inflater.inflate(getLayoutResId(), container, false)
     }
 
@@ -117,6 +118,7 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
     @CallSuper
     override fun onDestroyView() {
         super.onDestroyView()
+        Timber.i("onDestroyView Fragment ${this.javaClass.simpleName}")
         mUnBinder?.unbind()
         mUnBinder = null
         uiDisposables.clear()

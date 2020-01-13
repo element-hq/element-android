@@ -41,4 +41,11 @@
     <string name="room_member_power_level_invites">Invites</string>
     <string name="room_member_power_level_users">Users</string>
 
+    <string name="room_member_power_level_admin_in">Admin in %1$s</string>
+    <string name="room_member_power_level_moderator_in">Moderator in %1$s</string>
+    <string name="room_member_power_level_custom_in">Custom (%1$d) in %2$s</string>
+
+    <string name="room_member_jump_to_read_receipt">Jump to read receipt</string>
+
+
 </resources>

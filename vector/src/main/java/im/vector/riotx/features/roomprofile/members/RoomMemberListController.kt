@@ -19,6 +19,7 @@ package im.vector.riotx.features.roomprofile.members
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.matrix.android.api.session.room.model.RoomMemberSummary
 import im.vector.matrix.android.api.util.toMatrixItem
+import im.vector.riotx.core.epoxy.dividerItem
 import im.vector.riotx.core.epoxy.profiles.buildProfileSection
 import im.vector.riotx.core.epoxy.profiles.profileMatrixItem
 import im.vector.riotx.core.resources.StringProvider
@@ -55,6 +56,10 @@ class RoomMemberListController @Inject constructor(private val avatarRenderer: A
                     clickListener { _ ->
                         callback?.onRoomMemberClicked(roomMember)
                     }
+                }
+
+                dividerItem {
+                    id("divider_${roomMember.userId}")
                 }
             }
         }

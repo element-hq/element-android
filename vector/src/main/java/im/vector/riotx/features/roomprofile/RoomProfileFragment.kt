@@ -24,16 +24,16 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
 import androidx.appcompat.app.AlertDialog
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import com.google.android.material.appbar.AppBarLayout
 import im.vector.matrix.android.api.session.room.notification.RoomNotificationState
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.animations.AppBarStateChangeListener
+import im.vector.riotx.core.animations.MatrixItemAppBarStateChangeListener
+import im.vector.riotx.core.extensions.cleanup
+import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.home.AvatarRenderer
@@ -42,7 +42,8 @@ import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsBotto
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsSharedAction
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
 import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.fragment_room_profile.*
+import kotlinx.android.synthetic.main.fragment_matrix_profile.*
+import kotlinx.android.synthetic.main.view_stub_room_profile_header.*
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -63,26 +64,22 @@ class RoomProfileFragment @Inject constructor(
     private lateinit var roomProfileSharedActionViewModel: RoomProfileSharedActionViewModel
     private val roomProfileViewModel: RoomProfileViewModel by fragmentViewModel()
 
-    override fun getLayoutResId() = R.layout.fragment_room_profile
+    private lateinit var appBarStateChangeListener: AppBarStateChangeListener
+
+
+    override fun getLayoutResId() = R.layout.fragment_matrix_profile
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         roomListQuickActionsSharedActionViewModel = activityViewModelProvider.get(RoomListQuickActionsSharedActionViewModel::class.java)
         roomProfileSharedActionViewModel = activityViewModelProvider.get(RoomProfileSharedActionViewModel::class.java)
-        setupToolbar(roomProfileToolbar)
+        matrixProfileHeaderView.apply {
+            layoutResource = R.layout.view_stub_room_profile_header
+            inflate()
+        }
         setupRecyclerView()
-        roomProfileAppBarLayout.addOnOffsetChangedListener(object : AppBarStateChangeListener() {
-            override fun onStateChanged(appBarLayout: AppBarLayout, state: State) {
-                val animationDuration = roomProfileCollapsingToolbarLayout.scrimAnimationDuration
-                if (state == State.COLLAPSED) {
-                    roomProfileToolbarAvatarImageView.animate().alpha(1f).duration = animationDuration + 100
-                    roomProfileToolbarTitleView.animate().alpha(1f).duration = animationDuration + 100
-                } else {
-                    roomProfileToolbarAvatarImageView.animate().alpha(0f).duration = animationDuration - 100
-                    roomProfileToolbarTitleView.animate().alpha(0f).duration = animationDuration - 100
-                }
-            }
-        })
+        appBarStateChangeListener = MatrixItemAppBarStateChangeListener(matrixProfileCollapsingToolbarLayout.scrimAnimationDuration, listOf(matrixProfileToolbarAvatarImageView, matrixProfileToolbarTitleView))
+        matrixProfileAppBarLayout.addOnOffsetChangedListener(appBarStateChangeListener)
         roomProfileViewModel.viewEvents
                 .observe()
                 .subscribe {
@@ -99,6 +96,11 @@ class RoomProfileFragment @Inject constructor(
                 .observe()
                 .subscribe { handleQuickActions(it) }
                 .disposeOnDestroyView()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setupToolbar(matrixProfileToolbar)
     }
 
     private fun handleQuickActions(action: RoomListQuickActionsSharedAction) = when (action) {
@@ -135,14 +137,13 @@ class RoomProfileFragment @Inject constructor(
 
     private fun setupRecyclerView() {
         roomProfileController.callback = this
-        roomProfileRecyclerView.setHasFixedSize(true)
-        roomProfileRecyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-        roomProfileRecyclerView.adapter = roomProfileController.adapter
+        matrixProfileRecyclerView.configureWith(roomProfileController, hasFixedSize = true)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        roomProfileRecyclerView.adapter = null
+        matrixProfileAppBarLayout.removeOnOffsetChangedListener(appBarStateChangeListener)
+        matrixProfileRecyclerView.cleanup()
     }
 
     override fun invalidate() = withState(roomProfileViewModel) { state ->
@@ -152,12 +153,12 @@ class RoomProfileFragment @Inject constructor(
                 activity?.finish()
             } else {
                 roomProfileNameView.text = it.displayName
-                roomProfileToolbarTitleView.text = it.displayName
+                matrixProfileToolbarTitleView.text = it.displayName
                 roomProfileAliasView.setTextOrHide(it.canonicalAlias)
                 roomProfileTopicView.setTextOrHide(it.topic)
                 val matrixItem = it.toMatrixItem()
                 avatarRenderer.render(matrixItem, roomProfileAvatarView)
-                avatarRenderer.render(matrixItem, roomProfileToolbarAvatarImageView)
+                avatarRenderer.render(matrixItem, matrixProfileToolbarAvatarImageView)
             }
         }
         roomProfileController.setData(state)

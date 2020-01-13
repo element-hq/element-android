@@ -83,7 +83,7 @@ class DefaultNavigator @Inject constructor(
     }
 
     override fun openRoomMemberProfile(userId: String, roomId: String?, context: Context, buildTask: Boolean) {
-        val args = RoomMemberProfileArgs(userId = userId)
+        val args = RoomMemberProfileArgs(userId = userId, roomId = roomId)
         context.startActivity(RoomMemberProfileActivity.newIntent(context, args))
     }
 
