@@ -24,6 +24,7 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotx.core.platform.VectorViewModelAction
 
 sealed class RoomDetailAction : VectorViewModelAction {
+    data class UserIsTyping(val isTyping: Boolean) : RoomDetailAction()
     data class SaveDraft(val draft: String) : RoomDetailAction()
     data class SendMessage(val text: CharSequence, val autoMarkdown: Boolean) : RoomDetailAction()
     data class SendMedia(val attachments: List<ContentAttachmentData>) : RoomDetailAction()

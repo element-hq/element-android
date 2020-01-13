@@ -18,13 +18,13 @@ package im.vector.matrix.android.internal.session.room
 
 import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.internal.session.room.alias.RoomAliasDescription
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomResponse
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoomsParams
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoomsResponse
 import im.vector.matrix.android.api.session.room.model.thirdparty.ThirdPartyProtocol
 import im.vector.matrix.android.internal.network.NetworkConstants
+import im.vector.matrix.android.internal.session.room.alias.RoomAliasDescription
 import im.vector.matrix.android.internal.session.room.membership.RoomMembersResponse
 import im.vector.matrix.android.internal.session.room.membership.joining.InviteBody
 import im.vector.matrix.android.internal.session.room.relation.RelationsResponse
@@ -32,6 +32,7 @@ import im.vector.matrix.android.internal.session.room.reporting.ReportContentBod
 import im.vector.matrix.android.internal.session.room.send.SendResponse
 import im.vector.matrix.android.internal.session.room.timeline.EventContextResponse
 import im.vector.matrix.android.internal.session.room.timeline.PaginationResponse
+import im.vector.matrix.android.internal.session.room.typing.TypingBody
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -268,4 +269,12 @@ internal interface RoomAPI {
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "directory/room/{roomAlias}")
     fun getRoomIdByAlias(@Path("roomAlias") roomAlias: String): Call<RoomAliasDescription>
+
+    /**
+     * Inform that the user is starting to type or has stopped typing
+     */
+    @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/typing/{userId}")
+    fun sendTypingState(@Path("roomId") roomId: String,
+                        @Path("userId") userId: String,
+                        @Body body: TypingBody): Call<Unit>
 }

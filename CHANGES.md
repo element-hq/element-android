@@ -2,7 +2,7 @@ Changes in RiotX 0.13.0 (2020-XX-XX)
 ===================================================
 
 Features ✨:
- -
+ - Send and render typing events (#564)
 
 Improvements 🙌:
  - Render events m.room.encryption and m.room.guest_access in the timeline

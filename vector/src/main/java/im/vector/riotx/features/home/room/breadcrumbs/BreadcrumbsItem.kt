@@ -37,6 +37,7 @@ abstract class BreadcrumbsItem : VectorEpoxyModel<BreadcrumbsItem.Holder>() {
     @EpoxyAttribute var unreadNotificationCount: Int = 0
     @EpoxyAttribute var showHighlighted: Boolean = false
     @EpoxyAttribute var hasUnreadMessage: Boolean = false
+    @EpoxyAttribute var hasTypingUsers: Boolean = false
     @EpoxyAttribute var hasDraft: Boolean = false
     @EpoxyAttribute var itemClickListener: View.OnClickListener? = null
 
@@ -44,6 +45,7 @@ abstract class BreadcrumbsItem : VectorEpoxyModel<BreadcrumbsItem.Holder>() {
         super.bind(holder)
         holder.rootView.setOnClickListener(itemClickListener)
         holder.unreadIndentIndicator.isVisible = hasUnreadMessage
+        holder.typingIndicator.isVisible = hasTypingUsers
         avatarRenderer.render(matrixItem, holder.avatarImageView)
         holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadNotificationCount, showHighlighted))
         holder.draftIndentIndicator.isVisible = hasDraft
@@ -53,6 +55,7 @@ abstract class BreadcrumbsItem : VectorEpoxyModel<BreadcrumbsItem.Holder>() {
         val unreadCounterBadgeView by bind<UnreadCounterBadgeView>(R.id.breadcrumbsUnreadCounterBadgeView)
         val unreadIndentIndicator by bind<View>(R.id.breadcrumbsUnreadIndicator)
         val draftIndentIndicator by bind<View>(R.id.breadcrumbsDraftBadge)
+        val typingIndicator by bind<View>(R.id.breadcrumbsTypingView)
         val avatarImageView by bind<ImageView>(R.id.breadcrumbsImageView)
         val rootView by bind<ViewGroup>(R.id.breadcrumbsRoot)
     }
