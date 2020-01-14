@@ -78,11 +78,11 @@ internal class SasTransportToDevice(
         // To device do not do anything here
     }
 
-    override fun cancelTransaction(transactionId: String, otherUserId: String, otherUserDevice: String, code: CancelCode) {
+    override fun cancelTransaction(transactionId: String, otherUserId: String, otherUserDeviceId: String, code: CancelCode) {
         Timber.d("## SAS canceling transaction $transactionId for reason $code")
         val cancelMessage = KeyVerificationCancel.create(transactionId, code)
         val contentMap = MXUsersDevicesMap<Any>()
-        contentMap.setObject(otherUserId, otherUserDevice, cancelMessage)
+        contentMap.setObject(otherUserId, otherUserDeviceId, cancelMessage)
         sendToDeviceTask
                 .configureWith(SendToDeviceTask.Params(EventType.KEY_VERIFICATION_CANCEL, contentMap, transactionId)) {
                     this.callback = object : MatrixCallback<Unit> {

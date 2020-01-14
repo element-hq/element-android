@@ -26,6 +26,9 @@ import im.vector.matrix.android.api.session.events.model.*
 import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultContent
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationStart
+import im.vector.matrix.android.internal.di.DeviceId
+import im.vector.matrix.android.internal.di.SessionId
+import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
 import im.vector.matrix.android.internal.worker.WorkManagerUtil
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
@@ -39,8 +42,9 @@ import javax.inject.Inject
 
 internal class SasTransportRoomMessage(
         private val context: Context,
+        private val sessionId: String,
         private val userId: String,
-        private val userDevice: String,
+        private val userDeviceId: String?,
         private val roomId: String,
         private val monarchy: Monarchy,
         private val localEchoEventFactory: LocalEchoEventFactory,
@@ -61,7 +65,7 @@ internal class SasTransportRoomMessage(
         )
 
         val workerParams = WorkerParamsFactory.toData(SendVerificationMessageWorker.Params(
-                userId = userId,
+                sessionId = sessionId,
                 event = event
         ))
         val enqueueInfo = enqueueSendWork(workerParams)
@@ -113,11 +117,13 @@ internal class SasTransportRoomMessage(
         }
     }
 
-    override fun sendVerificationRequest(localID: String, otherUserId: String, roomId: String,
+    override fun sendVerificationRequest(localID: String,
+                                         otherUserId: String,
+                                         roomId: String,
                                          callback: (String?, MessageVerificationRequestContent?) -> Unit) {
         val info = MessageVerificationRequestContent(
                 body = context.getString(R.string.key_verification_request_fallback_message, userId),
-                fromDevice = userDevice,
+                fromDevice = userDeviceId ?: "",
                 toUserId = otherUserId,
                 methods = listOf(KeyVerificationStart.VERIF_METHOD_SAS)
         )
@@ -131,7 +137,7 @@ internal class SasTransportRoomMessage(
         )
 
         val workerParams = WorkerParamsFactory.toData(SendVerificationMessageWorker.Params(
-                userId = userId,
+                sessionId = sessionId,
                 event = event
         ))
 
@@ -174,7 +180,7 @@ internal class SasTransportRoomMessage(
         }
     }
 
-    override fun cancelTransaction(transactionId: String, otherUserId: String, otherUserDevice: String, code: CancelCode) {
+    override fun cancelTransaction(transactionId: String, otherUserId: String, otherUserDeviceId: String, code: CancelCode) {
         Timber.d("## SAS canceling transaction $transactionId for reason $code")
         val event = createEventAndLocalEcho(
                 type = EventType.KEY_VERIFICATION_CANCEL,
@@ -182,7 +188,7 @@ internal class SasTransportRoomMessage(
                 content = MessageVerificationCancelContent.create(transactionId, code).toContent()
         )
         val workerParams = WorkerParamsFactory.toData(SendVerificationMessageWorker.Params(
-                userId = this.userId,
+                sessionId = sessionId,
                 event = event
         ))
         enqueueSendWork(workerParams)
@@ -200,7 +206,7 @@ internal class SasTransportRoomMessage(
                 ).toContent()
         )
         val workerParams = WorkerParamsFactory.toData(SendVerificationMessageWorker.Params(
-                userId = userId,
+                sessionId = sessionId,
                 event = event
         ))
         enqueueSendWork(workerParams)
@@ -286,10 +292,15 @@ internal class SasTransportRoomMessage(
 internal class SasTransportRoomMessageFactory @Inject constructor(
         private val context: Context,
         private val monarchy: Monarchy,
+        @SessionId
+        private val sessionId: String,
+        @UserId
+        private val userId: String,
+        @DeviceId
+        private val deviceId: String?,
         private val localEchoEventFactory: LocalEchoEventFactory) {
 
-    fun createTransport(userId: String, userDevice: String, roomId: String, tx: SASVerificationTransaction?
-    ): SasTransportRoomMessage {
-        return SasTransportRoomMessage(context, userId, userDevice, roomId, monarchy, localEchoEventFactory, tx)
+    fun createTransport(roomId: String, tx: SASVerificationTransaction?): SasTransportRoomMessage {
+        return SasTransportRoomMessage(context, sessionId, userId, deviceId, roomId, monarchy, localEchoEventFactory, tx)
     }
 }

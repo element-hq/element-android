@@ -34,7 +34,7 @@ internal class SendVerificationMessageWorker constructor(context: Context, param
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
-            val userId: String,
+            val sessionId: String,
             val event: Event
     )
 
@@ -49,10 +49,10 @@ internal class SendVerificationMessageWorker constructor(context: Context, param
         val params = WorkerParamsFactory.fromData<Params>(inputData)
                 ?: return Result.success(errorOutputData)
 
-        val sessionComponent = getSessionComponent(params.userId)
+        val sessionComponent = getSessionComponent(params.sessionId)
                 ?: return Result.success(errorOutputData).also {
                     // TODO, can this happen? should I update local echo?
-                    Timber.e("Unknown Session, cannot send message, userId:${params.userId}")
+                    Timber.e("Unknown Session, cannot send message, sessionId: ${params.sessionId}")
                 }
         sessionComponent.inject(this)
         val localId = params.event.eventId ?: ""

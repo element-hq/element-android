@@ -288,31 +288,27 @@ internal class DefaultSasVerificationService @Inject constructor(
         if (startReq?.isValid()?.not() == true) {
             Timber.e("## received invalid verification request")
             if (startReq.transactionID != null) {
-                sasTransportRoomMessageFactory.createTransport(credentials.userId, credentials.deviceId
-                        ?: "", event.roomId
-                        ?: "", null).cancelTransaction(
-                        startReq.transactionID ?: "",
-                        otherUserId!!,
-                        startReq.fromDevice ?: event.getSenderKey()!!,
-                        CancelCode.UnknownMethod
-                )
+                sasTransportRoomMessageFactory.createTransport(event.roomId ?: "", null)
+                        .cancelTransaction(
+                                startReq.transactionID ?: "",
+                                otherUserId!!,
+                                startReq.fromDevice ?: event.getSenderKey()!!,
+                                CancelCode.UnknownMethod
+                        )
             }
             return
         }
 
         handleStart(otherUserId, startReq as VerificationInfoStart) {
-            it.transport = sasTransportRoomMessageFactory.createTransport(credentials.userId, credentials.deviceId
-                    ?: "", event.roomId
-                    ?: "", it)
+            it.transport = sasTransportRoomMessageFactory.createTransport(event.roomId ?: "", it)
         }?.let {
-            sasTransportRoomMessageFactory.createTransport(credentials.userId, credentials.deviceId
-                    ?: "", event.roomId
-                    ?: "", null).cancelTransaction(
-                    startReq.transactionID ?: "",
-                    otherUserId!!,
-                    startReq.fromDevice ?: event.getSenderKey()!!,
-                    it
-            )
+            sasTransportRoomMessageFactory.createTransport(event.roomId ?: "", null)
+                    .cancelTransaction(
+                            startReq.transactionID ?: "",
+                            otherUserId!!,
+                            startReq.fromDevice ?: event.getSenderKey()!!,
+                            it
+                    )
         }
     }
 
@@ -729,8 +725,7 @@ internal class DefaultSasVerificationService @Inject constructor(
                     pendingRequests[userId] = it
                 }
 
-        val transport = sasTransportRoomMessageFactory.createTransport(credentials.userId, credentials.deviceId
-                ?: "", roomId, null)
+        val transport = sasTransportRoomMessageFactory.createTransport(roomId, null)
 
         // Cancel existing pending requests?
         requestsForUser.forEach { existingRequest ->
@@ -767,8 +762,8 @@ internal class DefaultSasVerificationService @Inject constructor(
     }
 
     override fun declineVerificationRequestInDMs(otherUserId: String, otherDeviceId: String, transactionId: String, roomId: String) {
-        sasTransportRoomMessageFactory.createTransport(credentials.userId, credentials.deviceId
-                ?: "", roomId, null).cancelTransaction(transactionId, otherUserId, otherDeviceId, CancelCode.User)
+        sasTransportRoomMessageFactory.createTransport(roomId, null)
+                .cancelTransaction(transactionId, otherUserId, otherDeviceId, CancelCode.User)
 
         getExistingVerificationRequest(otherUserId, transactionId)?.let {
             updatePendingRequest(it.copy(
@@ -805,8 +800,7 @@ internal class DefaultSasVerificationService @Inject constructor(
                     transactionId,
                     otherUserId,
                     otherDeviceId)
-            tx.transport = sasTransportRoomMessageFactory.createTransport(credentials.userId, credentials.deviceId
-                    ?: "", roomId, tx)
+            tx.transport = sasTransportRoomMessageFactory.createTransport(roomId, tx)
             addTransaction(tx)
 
             tx.start()
@@ -822,8 +816,7 @@ internal class DefaultSasVerificationService @Inject constructor(
         val existingRequest = getExistingVerificationRequest(otherUserId, transactionId)
         if (existingRequest != null) {
             // we need to send a ready event, with matching methods
-            val transport = sasTransportRoomMessageFactory.createTransport(credentials.userId, credentials.deviceId
-                    ?: "", roomId, null)
+            val transport = sasTransportRoomMessageFactory.createTransport(roomId, null)
             val methods = existingRequest.requestInfo?.methods?.intersect(listOf(KeyVerificationStart.VERIF_METHOD_SAS))?.toList()
             if (methods.isNullOrEmpty()) {
                 Timber.i("Cannot ready this request, no common methods found txId:$transactionId")
