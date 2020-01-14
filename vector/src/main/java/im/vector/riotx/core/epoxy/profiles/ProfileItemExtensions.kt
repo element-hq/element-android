@@ -38,7 +38,6 @@ fun EpoxyController.buildProfileAction(
         divider: Boolean = true,
         action: () -> Unit
 ) {
-
     profileItemAction {
         iconRes(icon)
         id("action_$id")

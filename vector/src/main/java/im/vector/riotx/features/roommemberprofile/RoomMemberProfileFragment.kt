@@ -85,7 +85,6 @@ class RoomMemberProfileFragment @Inject constructor(
                     }
                 }
                 .disposeOnDestroyView()
-
     }
 
     override fun onDestroyView() {
@@ -94,7 +93,6 @@ class RoomMemberProfileFragment @Inject constructor(
         matrixProfileRecyclerView.cleanup()
         super.onDestroyView()
     }
-
 
     override fun invalidate() = withState(viewModel) { state ->
         when (val asyncUserMatrixItem = state.userMatrixItem) {
@@ -141,6 +139,4 @@ class RoomMemberProfileFragment @Inject constructor(
     override fun onMentionClicked() {
         vectorBaseActivity.notImplemented("Mention")
     }
-
-
 }

@@ -17,16 +17,10 @@
 
 package im.vector.riotx.features.roomprofile
 
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.riotx.R
-import im.vector.riotx.core.epoxy.DividerItem_
-import im.vector.riotx.core.epoxy.dividerItem
 import im.vector.riotx.core.epoxy.profiles.buildProfileAction
 import im.vector.riotx.core.epoxy.profiles.buildProfileSection
-import im.vector.riotx.core.epoxy.profiles.profileItemAction
-import im.vector.riotx.core.epoxy.profiles.profileItemSection
 import im.vector.riotx.core.resources.StringProvider
 import javax.inject.Inject
 
@@ -101,7 +95,4 @@ class RoomProfileController @Inject constructor(private val stringProvider: Stri
                 action = { callback?.onLeaveRoomClicked() }
         )
     }
-
-
-
 }

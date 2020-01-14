@@ -51,5 +51,4 @@ class RoomMemberProfileActivity : VectorBaseActivity(), ToolbarConfigurable {
     override fun configure(toolbar: Toolbar) {
         configureToolbar(toolbar)
     }
-
 }

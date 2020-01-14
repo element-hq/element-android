@@ -19,7 +19,6 @@ package im.vector.riotx.features.roomprofile
 
 import im.vector.matrix.android.api.session.room.notification.RoomNotificationState
 import im.vector.riotx.core.platform.VectorViewModelAction
-import im.vector.riotx.features.home.room.list.RoomListAction
 
 sealed class RoomProfileAction: VectorViewModelAction {
     object LeaveRoom: RoomProfileAction()

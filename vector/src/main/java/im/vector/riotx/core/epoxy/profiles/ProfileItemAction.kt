@@ -16,13 +16,11 @@
 
 package im.vector.riotx.core.epoxy.profiles
 
-import android.content.res.ColorStateList
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.core.widget.ImageViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
@@ -67,12 +65,10 @@ abstract class ProfileItemAction : VectorEpoxyModel<ProfileItemAction.Holder>() 
         }
     }
 
-
     class Holder : VectorEpoxyHolder() {
         val icon by bind<ImageView>(R.id.actionIcon)
         val title by bind<TextView>(R.id.actionTitle)
         val subtitle by bind<TextView>(R.id.actionSubtitle)
         val editable by bind<ImageView>(R.id.actionEditable)
     }
-
 }

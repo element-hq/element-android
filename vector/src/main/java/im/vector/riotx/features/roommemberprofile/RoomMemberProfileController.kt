@@ -112,6 +112,4 @@ class RoomMemberProfileController @Inject constructor(private val stringProvider
             stringProvider.getString(R.string.ignore)
         }
     }
-
-
 }

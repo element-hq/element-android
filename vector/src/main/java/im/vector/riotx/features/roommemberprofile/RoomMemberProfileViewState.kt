@@ -20,9 +20,6 @@ package im.vector.riotx.features.roommemberprofile
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
-import im.vector.matrix.android.api.session.room.model.PowerLevelsContent
-import im.vector.matrix.android.api.session.room.model.RoomSummary
-import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.api.util.MatrixItem
 
 data class RoomMemberProfileViewState(
@@ -37,6 +34,4 @@ data class RoomMemberProfileViewState(
 ) : MvRxState {
 
     constructor(args: RoomMemberProfileArgs) : this(roomId = args.roomId, userId = args.userId)
-
 }
-

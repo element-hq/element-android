@@ -456,7 +456,6 @@ class RoomDetailFragment @Inject constructor(
         composerLayout.composerRelatedMessageActionIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), iconRes))
         composerLayout.sendButton.setContentDescription(getString(descriptionRes))
 
-
         avatarRenderer.render(
                 MatrixItem.UserItem(event.root.senderId
                                     ?: "", event.getDisambiguatedDisplayName(), event.senderAvatar),

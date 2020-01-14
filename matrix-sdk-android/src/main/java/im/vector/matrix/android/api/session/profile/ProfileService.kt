@@ -22,7 +22,6 @@ import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.api.util.Optional
 
-
 interface ProfileService {
 
     companion object Constants {
@@ -35,5 +34,4 @@ interface ProfileService {
     fun getAvatarUrl(userId: String, matrixCallback: MatrixCallback<Optional<String>>): Cancelable
 
     fun getProfile(userId: String, matrixCallback: MatrixCallback<JsonDict>): Cancelable
-
 }

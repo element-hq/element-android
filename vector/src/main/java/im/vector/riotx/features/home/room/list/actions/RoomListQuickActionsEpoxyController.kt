@@ -19,9 +19,6 @@ import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.matrix.android.api.session.room.notification.RoomNotificationState
 import im.vector.matrix.android.api.util.toMatrixItem
-import im.vector.riotx.core.epoxy.DividerItem_
-import im.vector.riotx.core.epoxy.bottomsheet.BottomSheetRoomPreviewItem
-import im.vector.riotx.core.epoxy.bottomsheet.BottomSheetRoomPreviewItem_
 import im.vector.riotx.core.epoxy.bottomsheet.bottomSheetActionItem
 import im.vector.riotx.core.epoxy.bottomsheet.bottomSheetRoomPreviewItem
 import im.vector.riotx.core.epoxy.dividerItem

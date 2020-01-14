@@ -141,5 +141,4 @@ class DefaultNavigator @Inject constructor(
     override fun openRoomProfile(context: Context, roomId: String) {
         context.startActivity(RoomProfileActivity.newIntent(context, roomId))
     }
-
 }

@@ -195,5 +195,4 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
             session.ignoreUserIds(listOf(initialState.userId), ignoreActionCallback)
         }
     }
-
 }

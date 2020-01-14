@@ -57,7 +57,7 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
 
     override fun getStateEventLive(eventType: String): LiveData<Optional<Event>> {
         val liveData = monarchy.findAllMappedWithChanges(
-                { realm ->  EventEntity.where(realm, roomId, eventType).descending()},
+                { realm ->  EventEntity.where(realm, roomId, eventType).descending() },
                 { it.asDomain() }
         )
         return Transformations.map(liveData) { results ->

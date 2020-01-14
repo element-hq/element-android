@@ -26,12 +26,11 @@ import retrofit2.http.Path
 interface ProfileAPI {
 
     /**
-     * Get the combined profile information for this user. This API may be used to fetch the user's own profile information or other users; either locally or on remote homeservers. This API may return keys which are not limited to displayname or avatar_url.
-     *
+     * Get the combined profile information for this user.
+     * This API may be used to fetch the user's own profile information or other users; either locally or on remote homeservers.
+     * This API may return keys which are not limited to displayname or avatar_url.
      * @param userId the user id to fetch profile info
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "profile/{userId}")
     fun getProfile(@Path("userId") roomId: String): Call<JsonDict>
-
-
 }

@@ -32,7 +32,6 @@ import im.vector.riotx.features.roomprofile.RoomProfileArgs
 import kotlinx.android.synthetic.main.fragment_room_member_list.*
 import javax.inject.Inject
 
-
 class RoomMemberListFragment @Inject constructor(
         val viewModelFactory: RoomMemberListViewModel.Factory,
         private val roomMemberListController: RoomMemberListController,
@@ -41,7 +40,6 @@ class RoomMemberListFragment @Inject constructor(
 
     private val viewModel: RoomMemberListViewModel by fragmentViewModel()
     private val roomProfileArgs: RoomProfileArgs by args()
-
 
     override fun getLayoutResId() = R.layout.fragment_room_member_list
 
@@ -72,5 +70,4 @@ class RoomMemberListFragment @Inject constructor(
             avatarRenderer.render(it.toMatrixItem(), roomMemberListToolbarAvatarImageView)
         }
     }
-
 }

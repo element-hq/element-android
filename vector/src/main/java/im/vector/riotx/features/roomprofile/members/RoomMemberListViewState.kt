@@ -32,7 +32,6 @@ data class RoomMemberListViewState(
 ) : MvRxState {
 
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
-
 }
 
 typealias RoomMemberSummaries = Map<PowerLevelCategory, List<RoomMemberSummary>>

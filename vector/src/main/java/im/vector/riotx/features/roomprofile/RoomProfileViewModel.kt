@@ -31,8 +31,6 @@ import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.utils.DataSource
 import im.vector.riotx.core.utils.PublishDataSource
-import im.vector.riotx.features.home.room.list.RoomListAction
-import im.vector.riotx.features.home.room.list.RoomListViewEvents
 
 class RoomProfileViewModel @AssistedInject constructor(@Assisted initialState: RoomProfileViewState,
                                                        private val stringProvider: StringProvider,
@@ -98,5 +96,4 @@ class RoomProfileViewModel @AssistedInject constructor(@Assisted initialState: R
             }
         })
     }
-
 }

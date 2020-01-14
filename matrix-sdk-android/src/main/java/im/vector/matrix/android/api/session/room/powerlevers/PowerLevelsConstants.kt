@@ -22,5 +22,4 @@ object PowerLevelsConstants {
     const val DEFAULT_ROOM_ADMIN_LEVEL = 100
     const val DEFAULT_ROOM_MODERATOR_LEVEL = 50
     const val DEFAULT_ROOM_USER_LEVEL = 0
-
 }

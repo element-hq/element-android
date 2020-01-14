@@ -37,7 +37,4 @@ abstract class ProfileItemSection: VectorEpoxyModel<ProfileItemSection.Holder>()
     class Holder : VectorEpoxyHolder() {
         val sectionView by bind<TextView>(R.id.itemProfileSectionView)
     }
-
-
-
 }

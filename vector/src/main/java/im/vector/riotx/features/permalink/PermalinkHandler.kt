@@ -115,6 +115,4 @@ interface NavigationInterceptor {
     fun navToMemberProfile(userId: String): Boolean {
         return false
     }
-
-
 }

@@ -64,7 +64,6 @@ class RoomProfileFragment @Inject constructor(
 
     private lateinit var appBarStateChangeListener: AppBarStateChangeListener
 
-
     override fun getLayoutResId() = R.layout.fragment_matrix_profile
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

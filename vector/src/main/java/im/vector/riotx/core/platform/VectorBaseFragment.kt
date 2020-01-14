@@ -64,7 +64,6 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
 
     private var progress: ProgressDialog? = null
 
-
     /* ==========================================================================================
      * View model
      * ========================================================================================== */
@@ -192,7 +191,7 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
         }
     }
 
-    protected fun dismissLoadingDialog(){
+    protected fun dismissLoadingDialog() {
         progress?.dismiss()
     }
 

@@ -218,6 +218,4 @@ class PercentViewBehavior<V : View>(context: Context, attrs: AttributeSet) : Coo
 
         child.requestLayout()
     }
-
-
 }

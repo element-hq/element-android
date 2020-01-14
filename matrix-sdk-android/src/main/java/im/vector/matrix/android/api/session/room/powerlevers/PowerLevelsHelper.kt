@@ -57,7 +57,6 @@ class PowerLevelsHelper(private val powerLevelsContent: PowerLevelsContent) {
         } else false
     }
 
-
     /**
      * Get the notification level for a dedicated key.
      *

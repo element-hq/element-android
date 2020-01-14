@@ -82,7 +82,6 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
                 .execute { async ->
                     copy(roomMemberSummaries = async)
                 }
-
     }
 
     private fun observeRoomSummary() {
@@ -92,7 +91,6 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
                     copy(roomSummary = async)
                 }
     }
-
 
     private fun buildRoomMemberSummaries(powerLevelsContent: PowerLevelsContent, roomMembers: List<RoomMemberSummary>): RoomMemberSummaries {
         val admins = ArrayList<RoomMemberSummary>()
@@ -123,7 +121,5 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
     }
 
     override fun handle(action: RoomMemberListAction) {
-
     }
-
 }

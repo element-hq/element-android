@@ -291,5 +291,4 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(SoftLogoutFragment::class)
     fun bindSoftLogoutFragment(fragment: SoftLogoutFragment): Fragment
-
 }

@@ -98,7 +98,6 @@ class RxSession(private val session: Session) {
     fun getProfileInfo(userId: String): Single<JsonDict> = singleBuilder {
         session.getProfile(userId, it)
     }
-
 }
 
 fun Session.rx(): RxSession {

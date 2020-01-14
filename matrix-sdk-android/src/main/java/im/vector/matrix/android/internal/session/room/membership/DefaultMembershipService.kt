@@ -95,7 +95,6 @@ internal class DefaultMembershipService @AssistedInject constructor(
         )
     }
 
-
     private fun roomMembersQuery(realm: Realm, queryParams: RoomMemberQueryParams): RealmQuery<RoomMemberSummaryEntity> {
         return RoomMemberHelper(realm, roomId).queryRoomMembersEvent()
                 .process(RoomMemberSummaryEntityFields.USER_ID, queryParams.userId)

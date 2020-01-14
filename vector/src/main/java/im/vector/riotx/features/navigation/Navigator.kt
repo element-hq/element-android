@@ -53,5 +53,4 @@ interface Navigator {
     fun openRoomMemberProfile(userId: String, roomId: String?, context: Context, buildTask: Boolean = false)
 
     fun openRoomProfile(context: Context, roomId: String)
-
 }

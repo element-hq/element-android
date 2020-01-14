@@ -64,6 +64,4 @@ class RoomMemberListController @Inject constructor(private val avatarRenderer: A
             }
         }
     }
-
-
 }
