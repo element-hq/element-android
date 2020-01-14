@@ -24,14 +24,14 @@ import butterknife.OnClick
 import com.airbnb.mvrx.*
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseFragment
-import kotlinx.android.synthetic.main.fragment_bottom_sas_verification_code.*
+import kotlinx.android.synthetic.main.fragment_verification_sas_code.*
 import javax.inject.Inject
 
 class SASVerificationCodeFragment @Inject constructor(
         val viewModelFactory: SASVerificationCodeViewModel.Factory
 ) : VectorBaseFragment() {
 
-    override fun getLayoutResId() = R.layout.fragment_bottom_sas_verification_code
+    override fun getLayoutResId() = R.layout.fragment_verification_sas_code
 
     @BindView(R.id.sas_emoji_grid)
     lateinit var emojiGrid: ViewGroup
