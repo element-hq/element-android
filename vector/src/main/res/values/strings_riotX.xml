@@ -47,5 +47,7 @@
 
     <string name="room_member_jump_to_read_receipt">Jump to read receipt</string>
 
+    <string name="unignore">Unignore</string>
+
 
 </resources>

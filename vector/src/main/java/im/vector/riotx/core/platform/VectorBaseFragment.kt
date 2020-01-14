@@ -14,8 +14,11 @@
  * limitations under the License.
  */
 
+@file:Suppress("DEPRECATION")
+
 package im.vector.riotx.core.platform
 
+import android.app.ProgressDialog
 import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
@@ -58,6 +61,9 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
 
     protected lateinit var navigator: Navigator
     protected lateinit var errorFormatter: ErrorFormatter
+
+    private var progress: ProgressDialog? = null
+
 
     /* ==========================================================================================
      * View model
@@ -175,6 +181,19 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
             Snackbar.make(it, errorFormatter.toHumanReadable(throwable), Snackbar.LENGTH_SHORT)
                     .show()
         }
+    }
+
+    protected fun showLoadingDialog(message: CharSequence, cancelable: Boolean = false) {
+        progress = ProgressDialog(requireContext()).apply {
+            setCancelable(cancelable)
+            setMessage(message)
+            setProgressStyle(ProgressDialog.STYLE_SPINNER)
+            show()
+        }
+    }
+
+    protected fun dismissLoadingDialog(){
+        progress?.dismiss()
     }
 
     /* ==========================================================================================

@@ -30,7 +30,7 @@
 
     <TextView
         android:id="@+id/actionTitle"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
@@ -44,13 +44,13 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@id/actionIcon"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_default="wrap"
+        app:layout_constrainedWidth="true"
         app:layout_goneMarginStart="0dp"
         tools:text="Learn more" />
 
     <TextView
         android:id="@+id/actionSubtitle"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
@@ -64,7 +64,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@id/actionIcon"
         app:layout_constraintTop_toBottomOf="@id/actionTitle"
-        app:layout_constraintWidth_default="wrap"
+        app:layout_constrainedWidth="true"
         app:layout_goneMarginStart="0dp"
         tools:text="Messages in this room are not end-to-end encrypted" />
 

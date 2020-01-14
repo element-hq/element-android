@@ -19,7 +19,6 @@
 
 package im.vector.riotx.features.roomprofile
 
-import android.app.ProgressDialog
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
@@ -58,7 +57,6 @@ class RoomProfileFragment @Inject constructor(
         val roomProfileViewModelFactory: RoomProfileViewModel.Factory
 ) : VectorBaseFragment(), RoomProfileController.Callback {
 
-    private var progress: ProgressDialog? = null
     private val roomProfileArgs: RoomProfileArgs by args()
     private lateinit var roomListQuickActionsSharedActionViewModel: RoomListQuickActionsSharedActionViewModel
     private lateinit var roomProfileSharedActionViewModel: RoomProfileSharedActionViewModel
@@ -73,34 +71,30 @@ class RoomProfileFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         roomListQuickActionsSharedActionViewModel = activityViewModelProvider.get(RoomListQuickActionsSharedActionViewModel::class.java)
         roomProfileSharedActionViewModel = activityViewModelProvider.get(RoomProfileSharedActionViewModel::class.java)
-        matrixProfileHeaderView.apply {
-            layoutResource = R.layout.view_stub_room_profile_header
-            inflate()
+        val headerView = matrixProfileHeaderView.let {
+            it.layoutResource = R.layout.view_stub_room_profile_header
+            it.inflate()
         }
+        setupToolbar(matrixProfileToolbar)
         setupRecyclerView()
-        appBarStateChangeListener = MatrixItemAppBarStateChangeListener(matrixProfileCollapsingToolbarLayout.scrimAnimationDuration, listOf(matrixProfileToolbarAvatarImageView, matrixProfileToolbarTitleView))
+        appBarStateChangeListener = MatrixItemAppBarStateChangeListener(headerView, listOf(matrixProfileToolbarAvatarImageView,
+                matrixProfileToolbarTitleView))
         matrixProfileAppBarLayout.addOnOffsetChangedListener(appBarStateChangeListener)
         roomProfileViewModel.viewEvents
                 .observe()
                 .subscribe {
-                    progress?.dismiss()
+                    dismissLoadingDialog()
                     when (it) {
-                        RoomProfileViewEvents.Loading            -> showLoading()
+                        is RoomProfileViewEvents.Loading         -> showLoadingDialog(it.message)
                         RoomProfileViewEvents.OnLeaveRoomSuccess -> onLeaveRoom()
                         is RoomProfileViewEvents.Failure         -> showError(it.throwable)
                     }
                 }
                 .disposeOnDestroyView()
-
         roomListQuickActionsSharedActionViewModel
                 .observe()
                 .subscribe { handleQuickActions(it) }
                 .disposeOnDestroyView()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        setupToolbar(matrixProfileToolbar)
     }
 
     private fun handleQuickActions(action: RoomListQuickActionsSharedAction) = when (action) {
@@ -124,15 +118,7 @@ class RoomProfileFragment @Inject constructor(
     }
 
     private fun showError(throwable: Throwable) {
-        vectorBaseActivity.showSnackbar(errorFormatter.toHumanReadable(throwable))
-    }
-
-    private fun showLoading() {
-        progress = ProgressDialog(requireContext()).apply {
-            setMessage(getString(R.string.room_profile_leaving_room))
-            setProgressStyle(ProgressDialog.STYLE_SPINNER)
-            show()
-        }
+        showErrorInSnackbar(throwable)
     }
 
     private fun setupRecyclerView() {

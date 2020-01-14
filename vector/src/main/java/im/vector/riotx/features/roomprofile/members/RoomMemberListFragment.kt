@@ -48,12 +48,8 @@ class RoomMemberListFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         roomMemberListController.callback = this
-        recyclerView.configureWith(roomMemberListController, hasFixedSize = true)
-    }
-
-    override fun onResume() {
-        super.onResume()
         setupToolbar(roomMemberListToolbar)
+        recyclerView.configureWith(roomMemberListController, hasFixedSize = true)
     }
 
     override fun onDestroyView() {

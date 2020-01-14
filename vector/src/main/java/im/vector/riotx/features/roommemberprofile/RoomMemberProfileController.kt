@@ -37,36 +37,33 @@ class RoomMemberProfileController @Inject constructor(private val stringProvider
     }
 
     override fun buildModels(data: RoomMemberProfileViewState?) {
-        if (data == null) {
+        if (data?.userMatrixItem?.invoke() == null) {
             return
         }
-        val roomMemberSummary = data.roomMemberSummary()
-        val profileInfo = data.profileInfo()
-        if (roomMemberSummary == null && profileInfo != null) {
-            buildUserActions()
-        } else if (roomMemberSummary != null) {
+        if (data.showAsMember) {
             buildRoomMemberActions(data)
+        } else {
+            buildUserActions(data)
         }
     }
 
-    private fun buildUserActions() {
+    private fun buildUserActions(state: RoomMemberProfileViewState) {
+        val ignoreActionTitle = state.buildIgnoreActionTitle() ?: return
         // More
         buildProfileSection(stringProvider.getString(R.string.room_profile_section_more))
         buildProfileAction(
                 id = "ignore",
-                title = stringProvider.getString(R.string.ignore),
+                title = ignoreActionTitle,
                 destructive = true,
                 editable = false,
                 action = { callback?.onIgnoreClicked() }
         )
     }
 
-    private fun buildRoomMemberActions(data: RoomMemberProfileViewState) {
-        val roomSummaryEntity = data.roomSummary() ?: return
-
+    private fun buildRoomMemberActions(state: RoomMemberProfileViewState) {
         // Security
         buildProfileSection(stringProvider.getString(R.string.room_profile_section_security))
-        val learnMoreSubtitle = if (roomSummaryEntity.isEncrypted) {
+        val learnMoreSubtitle = if (state.isRoomEncrypted) {
             R.string.room_profile_encrypted_subtitle
         } else {
             R.string.room_profile_not_encrypted_subtitle
@@ -80,7 +77,7 @@ class RoomMemberProfileController @Inject constructor(private val stringProvider
         )
 
         // More
-        if (!data.isMine) {
+        if (!state.isMine) {
             buildProfileSection(stringProvider.getString(R.string.room_profile_section_more))
             buildProfileAction(
                     id = "read_receipt",
@@ -94,15 +91,26 @@ class RoomMemberProfileController @Inject constructor(private val stringProvider
                     editable = false,
                     action = { callback?.onMentionClicked() }
             )
-            buildProfileAction(
-                    id = "ignore",
-                    title = stringProvider.getString(R.string.ignore),
-                    destructive = true,
-                    editable = false,
-                    action = { callback?.onIgnoreClicked() }
-            )
+            val ignoreActionTitle = state.buildIgnoreActionTitle()
+            if (ignoreActionTitle != null) {
+                buildProfileAction(
+                        id = "ignore",
+                        title = ignoreActionTitle,
+                        destructive = true,
+                        editable = false,
+                        action = { callback?.onIgnoreClicked() }
+                )
+            }
         }
+    }
 
+    private fun RoomMemberProfileViewState.buildIgnoreActionTitle(): String? {
+        val isIgnored = isIgnored() ?: return null
+        return if (isIgnored) {
+            stringProvider.getString(R.string.unignore)
+        } else {
+            stringProvider.getString(R.string.ignore)
+        }
     }
 
 

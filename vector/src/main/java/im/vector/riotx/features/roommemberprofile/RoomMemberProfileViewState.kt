@@ -20,33 +20,23 @@ package im.vector.riotx.features.roommemberprofile
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
-import im.vector.matrix.android.api.session.profile.ProfileService
 import im.vector.matrix.android.api.session.room.model.PowerLevelsContent
-import im.vector.matrix.android.api.session.room.model.RoomMemberSummary
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.api.util.MatrixItem
-import im.vector.matrix.android.api.util.toMatrixItem
-
-typealias ProfileInfo = JsonDict
 
 data class RoomMemberProfileViewState(
         val userId: String,
         val roomId: String?,
+        val showAsMember: Boolean = false,
         val isMine: Boolean = false,
-        val roomSummary: Async<RoomSummary> = Uninitialized,
-        val roomMemberSummary: Async<RoomMemberSummary> = Uninitialized,
-        val profileInfo: Async<ProfileInfo> = Uninitialized,
-        val powerLevelsContent: Async<PowerLevelsContent> = Uninitialized
+        val isIgnored: Async<Boolean> = Uninitialized,
+        val isRoomEncrypted: Boolean = false,
+        val userPowerLevelString: Async<String> = Uninitialized,
+        val userMatrixItem: Async<MatrixItem> = Uninitialized
 ) : MvRxState {
 
     constructor(args: RoomMemberProfileArgs) : this(roomId = args.roomId, userId = args.userId)
-
-    fun memberAsMatrixItem(): MatrixItem? {
-        return roomMemberSummary()?.toMatrixItem() ?: profileInfo()?.let {
-            MatrixItem.UserItem(userId, it[ProfileService.DISPLAY_NAME_KEY] as? String, it[ProfileService.AVATAR_URL_KEY] as? String)
-        }
-    }
 
 }
 

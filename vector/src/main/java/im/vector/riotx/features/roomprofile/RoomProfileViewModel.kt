@@ -26,13 +26,16 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
+import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorViewModel
+import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.utils.DataSource
 import im.vector.riotx.core.utils.PublishDataSource
 import im.vector.riotx.features.home.room.list.RoomListAction
 import im.vector.riotx.features.home.room.list.RoomListViewEvents
 
 class RoomProfileViewModel @AssistedInject constructor(@Assisted initialState: RoomProfileViewState,
+                                                       private val stringProvider: StringProvider,
                                                        private val session: Session)
     : VectorViewModel<RoomProfileViewState, RoomProfileAction>(initialState) {
 
@@ -84,7 +87,7 @@ class RoomProfileViewModel @AssistedInject constructor(@Assisted initialState: R
     }
 
     private fun handleLeaveRoom() {
-        _viewEvents.post(RoomProfileViewEvents.Loading)
+        _viewEvents.post(RoomProfileViewEvents.Loading(stringProvider.getString(R.string.room_profile_leaving_room)))
         room.leave(null, object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
                 _viewEvents.post(RoomProfileViewEvents.OnLeaveRoomSuccess)

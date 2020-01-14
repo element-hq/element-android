@@ -12,16 +12,16 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
 package im.vector.riotx.features.roommemberprofile
 
-import im.vector.riotx.core.platform.VectorViewModelAction
-
-sealed class RoomMemberProfileAction : VectorViewModelAction {
-
-    object RetryFetchingInfo: RoomMemberProfileAction()
-    object IgnoreUser: RoomMemberProfileAction()
+/**
+ * Transient events for RoomProfile
+ */
+sealed class RoomMemberProfileViewEvents {
+    data class Loading(val message: CharSequence) : RoomMemberProfileViewEvents()
+    object OnIgnoreActionSuccess : RoomMemberProfileViewEvents()
+    data class Failure(val throwable: Throwable) : RoomMemberProfileViewEvents()
 
 }

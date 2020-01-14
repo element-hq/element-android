@@ -19,6 +19,7 @@ package im.vector.riotx.core.utils
 import com.jakewharton.rxrelay2.BehaviorRelay
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 interface DataSource<T> {
@@ -37,7 +38,7 @@ open class BehaviorDataSource<T>(private val defaultValue: T? = null) : MutableD
     private val behaviorRelay = createRelay()
 
     override fun observe(): Observable<T> {
-        return behaviorRelay.hide().observeOn(Schedulers.computation())
+        return behaviorRelay.hide().observeOn(AndroidSchedulers.mainThread())
     }
 
     override fun post(value: T) {
@@ -61,7 +62,7 @@ open class PublishDataSource<T> : MutableDataSource<T> {
     private val publishRelay = PublishRelay.create<T>()
 
     override fun observe(): Observable<T> {
-        return publishRelay.hide()
+        return publishRelay.hide().observeOn(AndroidSchedulers.mainThread())
     }
 
     override fun post(value: T) {
