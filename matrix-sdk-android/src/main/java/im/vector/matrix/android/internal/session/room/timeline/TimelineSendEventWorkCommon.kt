@@ -16,7 +16,10 @@
 package im.vector.matrix.android.internal.session.room.timeline
 
 import androidx.work.*
+import im.vector.matrix.android.api.util.Cancelable
+import im.vector.matrix.android.api.util.NoOpCancellable
 import im.vector.matrix.android.internal.di.WorkManagerProvider
+import im.vector.matrix.android.internal.util.CancelableWork
 import im.vector.matrix.android.internal.worker.startChain
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -32,9 +35,9 @@ internal class TimelineSendEventWorkCommon @Inject constructor(
         private val workManagerProvider: WorkManagerProvider
 ) {
 
-    fun postSequentialWorks(roomId: String, vararg workRequests: OneTimeWorkRequest) {
-        when {
-            workRequests.isEmpty() -> return
+    fun postSequentialWorks(roomId: String, vararg workRequests: OneTimeWorkRequest): Cancelable {
+        return when {
+            workRequests.isEmpty() -> NoOpCancellable
             workRequests.size == 1 -> postWork(roomId, workRequests.first())
             else                   -> {
                 val firstWork = workRequests.first()
@@ -45,14 +48,17 @@ internal class TimelineSendEventWorkCommon @Inject constructor(
                     continuation = continuation.then(workRequest)
                 }
                 continuation.enqueue()
+                CancelableWork(workManagerProvider.workManager, firstWork.id)
             }
         }
     }
 
-    fun postWork(roomId: String, workRequest: OneTimeWorkRequest, policy: ExistingWorkPolicy = ExistingWorkPolicy.APPEND) {
+    fun postWork(roomId: String, workRequest: OneTimeWorkRequest, policy: ExistingWorkPolicy = ExistingWorkPolicy.APPEND): Cancelable {
         workManagerProvider.workManager
                 .beginUniqueWork(buildWorkName(roomId), policy, workRequest)
                 .enqueue()
+
+        return CancelableWork(workManagerProvider.workManager, workRequest.id)
     }
 
     inline fun <reified W : ListenableWorker> createWork(data: Data, startChain: Boolean): OneTimeWorkRequest {

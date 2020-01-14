@@ -38,7 +38,6 @@ import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryE
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.SessionId
-import im.vector.matrix.android.internal.di.WorkManagerProvider
 import im.vector.matrix.android.internal.session.room.send.EncryptEventWorker
 import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
 import im.vector.matrix.android.internal.session.room.send.RedactEventWorker
@@ -46,7 +45,6 @@ import im.vector.matrix.android.internal.session.room.send.SendEventWorker
 import im.vector.matrix.android.internal.session.room.timeline.TimelineSendEventWorkCommon
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
-import im.vector.matrix.android.internal.util.CancelableWork
 import im.vector.matrix.android.internal.util.fetchCopyMap
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import timber.log.Timber
@@ -54,7 +52,6 @@ import timber.log.Timber
 internal class DefaultRelationService @AssistedInject constructor(
         @Assisted private val roomId: String,
         @SessionId private val sessionId: String,
-        private val workManagerProvider: WorkManagerProvider,
         private val timeLineEveSendEventWorkCommon: TimelineSendEventWorkCommon,
         private val eventFactory: LocalEchoEventFactory,
         private val cryptoService: CryptoService,
@@ -87,7 +84,6 @@ internal class DefaultRelationService @AssistedInject constructor(
                     .also { saveLocalEcho(it) }
             val sendRelationWork = createSendEventWork(event, true)
             timeLineEveSendEventWorkCommon.postWork(roomId, sendRelationWork)
-            CancelableWork(workManagerProvider.workManager, sendRelationWork.id)
         } else {
             Timber.w("Reaction already added")
             NoOpCancellable
@@ -148,11 +144,9 @@ internal class DefaultRelationService @AssistedInject constructor(
             val encryptWork = createEncryptEventWork(event, listOf("m.relates_to"))
             val workRequest = createSendEventWork(event, false)
             timeLineEveSendEventWorkCommon.postSequentialWorks(roomId, encryptWork, workRequest)
-            CancelableWork(workManagerProvider.workManager, encryptWork.id)
         } else {
             val workRequest = createSendEventWork(event, true)
             timeLineEveSendEventWorkCommon.postWork(roomId, workRequest)
-            CancelableWork(workManagerProvider.workManager, workRequest.id)
         }
     }
 
@@ -170,11 +164,9 @@ internal class DefaultRelationService @AssistedInject constructor(
             val encryptWork = createEncryptEventWork(event, listOf("m.relates_to"))
             val workRequest = createSendEventWork(event, false)
             timeLineEveSendEventWorkCommon.postSequentialWorks(roomId, encryptWork, workRequest)
-            CancelableWork(workManagerProvider.workManager, encryptWork.id)
         } else {
             val workRequest = createSendEventWork(event, true)
             timeLineEveSendEventWorkCommon.postWork(roomId, workRequest)
-            CancelableWork(workManagerProvider.workManager, workRequest.id)
         }
     }
 
@@ -196,11 +188,9 @@ internal class DefaultRelationService @AssistedInject constructor(
             val encryptWork = createEncryptEventWork(event, listOf("m.relates_to"))
             val workRequest = createSendEventWork(event, false)
             timeLineEveSendEventWorkCommon.postSequentialWorks(roomId, encryptWork, workRequest)
-            CancelableWork(workManagerProvider.workManager, encryptWork.id)
         } else {
             val workRequest = createSendEventWork(event, true)
             timeLineEveSendEventWorkCommon.postWork(roomId, workRequest)
-            CancelableWork(workManagerProvider.workManager, workRequest.id)
         }
     }
 

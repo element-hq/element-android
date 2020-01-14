@@ -16,7 +16,10 @@
 
 package im.vector.matrix.android.internal.session.room.send
 
-import androidx.work.*
+import androidx.work.BackoffPolicy
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequest
+import androidx.work.Operation
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import com.zhuinden.monarchy.Monarchy
@@ -91,11 +94,9 @@ internal class DefaultSendService @AssistedInject constructor(
             val encryptWork = createEncryptEventWork(event, true)
             val sendWork = createSendEventWork(event, false)
             timelineSendEventWorkCommon.postSequentialWorks(roomId, encryptWork, sendWork)
-            CancelableWork(workManagerProvider.workManager, encryptWork.id)
         } else {
             val sendWork = createSendEventWork(event, true)
             timelineSendEventWorkCommon.postWork(roomId, sendWork)
-            CancelableWork(workManagerProvider.workManager, sendWork.id)
         }
     }
 
@@ -108,8 +109,7 @@ internal class DefaultSendService @AssistedInject constructor(
     override fun redactEvent(event: Event, reason: String?): Cancelable {
         // TODO manage media/attachements?
         val redactWork = createRedactEventWork(event, reason)
-        timelineSendEventWorkCommon.postWork(roomId, redactWork)
-        return CancelableWork(workManagerProvider.workManager, redactWork.id)
+        return timelineSendEventWorkCommon.postWork(roomId, redactWork)
     }
 
     override fun resendTextMessage(localEcho: TimelineEvent): Cancelable? {
@@ -244,7 +244,7 @@ internal class DefaultSendService @AssistedInject constructor(
         return internalSendMedia(event, attachment)
     }
 
-    private fun internalSendMedia(localEcho: Event, attachment: ContentAttachmentData): CancelableWork {
+    private fun internalSendMedia(localEcho: Event, attachment: ContentAttachmentData): Cancelable {
         val isRoomEncrypted = cryptoService.isRoomEncrypted(roomId)
 
         val uploadWork = createUploadMediaWork(localEcho, attachment, isRoomEncrypted, startChain = true)
