@@ -18,12 +18,8 @@ package im.vector.riotx.features.home.room.list.actions
 
 import android.os.Bundle
 import android.os.Parcelable
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
-import butterknife.ButterKnife
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
@@ -69,11 +65,7 @@ class RoomListQuickActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), R
         injector.inject(this)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.bottom_sheet_generic_list, container, false)
-        ButterKnife.bind(this, view)
-        return view
-    }
+    override fun getLayoutResId() = R.layout.bottom_sheet_generic_list
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

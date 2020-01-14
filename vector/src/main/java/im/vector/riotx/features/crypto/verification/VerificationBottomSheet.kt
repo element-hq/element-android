@@ -77,19 +77,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
     @BindView(R.id.verificationRequestAvatar)
     lateinit var otherUserAvatarImageView: ImageView
 
-    private var unBinder: Unbinder? = null
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.bottom_sheet_verification, container, false)
-        unBinder = ButterKnife.bind(this, view)
-        return view
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        unBinder?.unbind()
-        unBinder = null
-    }
+    override fun getLayoutResId() = R.layout.bottom_sheet_verification
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
