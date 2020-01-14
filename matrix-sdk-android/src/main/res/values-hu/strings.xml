@@ -172,4 +172,18 @@
     <string name="clear_timeline_send_queue">Küldő sor ürítése</string>
 
     <string name="notice_room_third_party_revoked_invite">%1$s visszavonta a meghívót a belépéshez ebbe a szobába: %2$s</string>
+    <string name="notice_room_invite_no_invitee_with_reason">%1$s meghívója. Ok: %2$s</string>
+    <string name="notice_room_invite_with_reason">%1$s meghívta őt: %2$s. Ok: %3$s</string>
+    <string name="notice_room_invite_you_with_reason">%1$s meghívott. Ok: %2$s</string>
+    <string name="notice_room_join_with_reason">%1$s csatlakozott. Ok: %2$s</string>
+    <string name="notice_room_leave_with_reason">%1$s kilépett. Ok: %2$s</string>
+    <string name="notice_room_reject_with_reason">%1$s visszautasította a meghívót. Ok: %2$s</string>
+    <string name="notice_room_kick_with_reason">%1$s kirúgta őt: %2$s. Ok: %3$s</string>
+    <string name="notice_room_unban_with_reason">%1$s visszaengedte őt: %2$s. Ok: %3$s</string>
+    <string name="notice_room_ban_with_reason">%1$s kitiltotta őt: %2$s. Ok: %3$s</string>
+    <string name="notice_room_third_party_invite_with_reason">%1$s meghívót küldött neki: %2$s, hogy lépjen be a szobába. Ok: %3$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason">%1$s visszavonta %2$s meghívóját a szobába való belépéshez. Ok: %3$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason">%1$s elfogadta a meghívót ide: %2$s. Ok: %3$s</string>
+    <string name="notice_room_withdraw_with_reason">%1$s visszavonta %2$s meghívóját. Ok: %3$s</string>
+
 </resources>

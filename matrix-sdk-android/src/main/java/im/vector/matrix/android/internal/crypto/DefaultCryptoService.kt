@@ -147,7 +147,7 @@ internal class DefaultCryptoService @Inject constructor(
 
     fun onStateEvent(roomId: String, event: Event) {
         when {
-            event.getClearType() == EventType.ENCRYPTION                    -> onRoomEncryptionEvent(roomId, event)
+            event.getClearType() == EventType.STATE_ROOM_ENCRYPTION         -> onRoomEncryptionEvent(roomId, event)
             event.getClearType() == EventType.STATE_ROOM_MEMBER             -> onRoomMembershipEvent(roomId, event)
             event.getClearType() == EventType.STATE_ROOM_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event)
         }
@@ -155,7 +155,7 @@ internal class DefaultCryptoService @Inject constructor(
 
     fun onLiveEvent(roomId: String, event: Event) {
         when {
-            event.getClearType() == EventType.ENCRYPTION                    -> onRoomEncryptionEvent(roomId, event)
+            event.getClearType() == EventType.STATE_ROOM_ENCRYPTION         -> onRoomEncryptionEvent(roomId, event)
             event.getClearType() == EventType.STATE_ROOM_MEMBER             -> onRoomMembershipEvent(roomId, event)
             event.getClearType() == EventType.STATE_ROOM_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event)
         }
@@ -482,7 +482,7 @@ internal class DefaultCryptoService @Inject constructor(
      */
     override fun isRoomEncrypted(roomId: String): Boolean {
         val encryptionEvent = monarchy.fetchCopied {
-            EventEntity.where(it, roomId = roomId, type = EventType.ENCRYPTION).findFirst()
+            EventEntity.where(it, roomId = roomId, type = EventType.STATE_ROOM_ENCRYPTION).findFirst()
         }
         return encryptionEvent != null
     }

@@ -76,6 +76,11 @@ interface Session :
         get() = sessionParams.credentials.userId
 
     /**
+     * The sessionId
+     */
+    val sessionId: String
+
+    /**
      * This method allow to open a session. It does start some service on the background.
      */
     @MainThread

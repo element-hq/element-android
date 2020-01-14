@@ -38,10 +38,11 @@ import io.realm.RealmList
 import timber.log.Timber
 import javax.inject.Inject
 
-internal class UserAccountDataSyncHandler @Inject constructor(private val monarchy: Monarchy,
-                                                              @UserId private val userId: String,
-                                                              private val directChatsHelper: DirectChatsHelper,
-                                                              private val updateUserAccountDataTask: UpdateUserAccountDataTask) {
+internal class UserAccountDataSyncHandler @Inject constructor(
+        private val monarchy: Monarchy,
+        @UserId private val userId: String,
+        private val directChatsHelper: DirectChatsHelper,
+        private val updateUserAccountDataTask: UpdateUserAccountDataTask) {
 
     fun handle(realm: Realm, accountData: UserAccountDataSync?) {
         accountData?.list?.forEach {

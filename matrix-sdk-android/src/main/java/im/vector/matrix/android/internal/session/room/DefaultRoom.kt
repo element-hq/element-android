@@ -19,18 +19,20 @@ package im.vector.matrix.android.internal.session.room
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.members.MembershipService
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.relation.RelationService
 import im.vector.matrix.android.api.session.room.notification.RoomPushRuleService
-import im.vector.matrix.android.api.session.room.reporting.ReportingService
 import im.vector.matrix.android.api.session.room.read.ReadService
+import im.vector.matrix.android.api.session.room.reporting.ReportingService
 import im.vector.matrix.android.api.session.room.send.DraftService
 import im.vector.matrix.android.api.session.room.send.SendService
 import im.vector.matrix.android.api.session.room.state.StateService
 import im.vector.matrix.android.api.session.room.timeline.TimelineService
+import im.vector.matrix.android.api.session.room.typing.TypingService
 import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.api.util.toOptional
 import im.vector.matrix.android.internal.database.mapper.RoomSummaryMapper
@@ -48,6 +50,7 @@ internal class DefaultRoom @Inject constructor(override val roomId: String,
                                                private val stateService: StateService,
                                                private val reportingService: ReportingService,
                                                private val readService: ReadService,
+                                               private val typingService: TypingService,
                                                private val cryptoService: CryptoService,
                                                private val relationService: RelationService,
                                                private val roomMembersService: MembershipService,
@@ -59,6 +62,7 @@ internal class DefaultRoom @Inject constructor(override val roomId: String,
         StateService by stateService,
         ReportingService by reportingService,
         ReadService by readService,
+        TypingService by typingService,
         RelationService by relationService,
         MembershipService by roomMembersService,
         RoomPushRuleService by roomPushRuleService {
@@ -90,5 +94,13 @@ internal class DefaultRoom @Inject constructor(override val roomId: String,
 
     override fun shouldEncryptForInvitedMembers(): Boolean {
         return cryptoService.shouldEncryptForInvitedMembers(roomId)
+    }
+
+    override fun enableEncryptionWithAlgorithm(algorithm: String, callback: MatrixCallback<Unit>) {
+        if (isEncrypted()) {
+            callback.onFailure(IllegalStateException("Encryption is already enabled for this room"))
+        } else {
+            stateService.enableEncryption(algorithm, callback)
+        }
     }
 }

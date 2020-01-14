@@ -24,6 +24,7 @@ import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.task.Task
 import io.realm.Realm
+import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface GetRoomIdByAliasTask : Task<GetRoomIdByAliasTask.Params, Optional<String>> {
@@ -33,8 +34,11 @@ internal interface GetRoomIdByAliasTask : Task<GetRoomIdByAliasTask.Params, Opti
     )
 }
 
-internal class DefaultGetRoomIdByAliasTask @Inject constructor(private val monarchy: Monarchy,
-                                                               private val roomAPI: RoomAPI) : GetRoomIdByAliasTask {
+internal class DefaultGetRoomIdByAliasTask @Inject constructor(
+        private val monarchy: Monarchy,
+        private val roomAPI: RoomAPI,
+        private val eventBus: EventBus
+) : GetRoomIdByAliasTask {
 
     override suspend fun execute(params: GetRoomIdByAliasTask.Params): Optional<String> {
         var roomId = Realm.getInstance(monarchy.realmConfiguration).use {
@@ -45,7 +49,7 @@ internal class DefaultGetRoomIdByAliasTask @Inject constructor(private val monar
         } else if (!params.searchOnServer) {
             Optional.from<String>(null)
         } else {
-            roomId = executeRequest<RoomAliasDescription> {
+            roomId = executeRequest<RoomAliasDescription>(eventBus) {
                 apiCall = roomAPI.getRoomIdByAlias(params.roomAlias)
             }.roomId
             Optional.from(roomId)

@@ -42,7 +42,7 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
-            override val userId: String,
+            override val sessionId: String,
             val roomId: String,
             val event: Event,
             val attachment: ContentAttachmentData,
@@ -64,7 +64,7 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
             return Result.success(inputData)
         }
 
-        val sessionComponent = getSessionComponent(params.userId) ?: return Result.success()
+        val sessionComponent = getSessionComponent(params.sessionId) ?: return Result.success()
         sessionComponent.inject(this)
 
         val eventId = params.event.eventId ?: return Result.success()
@@ -169,7 +169,7 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
         Timber.v("handleSuccess $attachmentUrl, work is stopped $isStopped")
         contentUploadStateTracker.setSuccess(params.event.eventId!!)
         val event = updateEvent(params.event, attachmentUrl, encryptedFileInfo, thumbnailUrl, thumbnailEncryptedFileInfo)
-        val sendParams = SendEventWorker.Params(params.userId, params.roomId, event)
+        val sendParams = SendEventWorker.Params(params.sessionId, params.roomId, event)
         return Result.success(WorkerParamsFactory.toData(sendParams))
     }
 

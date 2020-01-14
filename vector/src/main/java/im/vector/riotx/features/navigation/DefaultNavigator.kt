@@ -26,19 +26,20 @@ import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.error.fatalError
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.utils.toast
+import im.vector.riotx.features.createdirect.CreateDirectRoomActivity
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.riotx.features.crypto.keysbackup.setup.KeysBackupSetupActivity
 import im.vector.riotx.features.debug.DebugMenuActivity
-import im.vector.riotx.features.createdirect.CreateDirectRoomActivity
 import im.vector.riotx.features.home.room.detail.RoomDetailActivity
 import im.vector.riotx.features.home.room.detail.RoomDetailArgs
 import im.vector.riotx.features.home.room.filtered.FilteredRoomsActivity
-import im.vector.riotx.features.roommemberprofile.RoomMemberProfileActivity
-import im.vector.riotx.features.roommemberprofile.RoomMemberProfileArgs
 import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomActivity
 import im.vector.riotx.features.roomdirectory.roompreview.RoomPreviewActivity
+import im.vector.riotx.features.roommemberprofile.RoomMemberProfileActivity
+import im.vector.riotx.features.roommemberprofile.RoomMemberProfileArgs
 import im.vector.riotx.features.roomprofile.RoomProfileActivity
+import im.vector.riotx.features.settings.VectorPreferences
 import im.vector.riotx.features.settings.VectorSettingsActivity
 import im.vector.riotx.features.share.SharedData
 import javax.inject.Inject
@@ -46,12 +47,13 @@ import javax.inject.Singleton
 
 @Singleton
 class DefaultNavigator @Inject constructor(
-        private val sessionHolder: ActiveSessionHolder
+        private val sessionHolder: ActiveSessionHolder,
+        private val vectorPreferences: VectorPreferences
 ) : Navigator {
 
     override fun openRoom(context: Context, roomId: String, eventId: String?, buildTask: Boolean) {
         if (sessionHolder.getSafeActiveSession()?.getRoom(roomId) == null) {
-            fatalError("Trying to open an unknown room $roomId")
+            fatalError("Trying to open an unknown room $roomId", vectorPreferences.failFast())
             return
         }
 

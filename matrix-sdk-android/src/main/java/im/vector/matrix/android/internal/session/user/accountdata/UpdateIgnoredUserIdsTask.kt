@@ -23,6 +23,7 @@ import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.sync.model.accountdata.IgnoredUsersContent
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountData
 import im.vector.matrix.android.internal.task.Task
+import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface UpdateIgnoredUserIdsTask : Task<UpdateIgnoredUserIdsTask.Params, Unit> {
@@ -33,10 +34,13 @@ internal interface UpdateIgnoredUserIdsTask : Task<UpdateIgnoredUserIdsTask.Para
     )
 }
 
-internal class DefaultUpdateIgnoredUserIdsTask @Inject constructor(private val accountDataApi: AccountDataAPI,
-                                                                   private val monarchy: Monarchy,
-                                                                   private val saveIgnoredUsersTask: SaveIgnoredUsersTask,
-                                                                   @UserId private val userId: String) : UpdateIgnoredUserIdsTask {
+internal class DefaultUpdateIgnoredUserIdsTask @Inject constructor(
+        private val accountDataApi: AccountDataAPI,
+        private val monarchy: Monarchy,
+        private val saveIgnoredUsersTask: SaveIgnoredUsersTask,
+        @UserId private val userId: String,
+        private val eventBus: EventBus
+) : UpdateIgnoredUserIdsTask {
 
     override suspend fun execute(params: UpdateIgnoredUserIdsTask.Params) {
         // Get current list
@@ -58,7 +62,7 @@ internal class DefaultUpdateIgnoredUserIdsTask @Inject constructor(private val a
         val list = ignoredUserIds.toList()
         val body = IgnoredUsersContent.createWithUserIds(list)
 
-        executeRequest<Unit> {
+        executeRequest<Unit>(eventBus) {
             apiCall = accountDataApi.setAccountData(userId, UserAccountData.TYPE_IGNORED_USER_LIST, body)
         }
 

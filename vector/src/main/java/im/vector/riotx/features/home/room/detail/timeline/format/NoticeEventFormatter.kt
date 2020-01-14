@@ -22,6 +22,7 @@ import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.*
 import im.vector.matrix.android.api.session.room.model.call.CallInviteContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.matrix.android.internal.crypto.model.event.EncryptionEventContent
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.resources.StringProvider
@@ -40,6 +41,8 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
             EventType.STATE_ROOM_ALIASES            -> formatRoomAliasesEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
             EventType.STATE_ROOM_CANONICAL_ALIAS    -> formatRoomCanonicalAliasEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
             EventType.STATE_ROOM_HISTORY_VISIBILITY -> formatRoomHistoryVisibilityEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
+            EventType.STATE_ROOM_GUEST_ACCESS       -> formatRoomGuestAccessEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
+            EventType.STATE_ROOM_ENCRYPTION         -> formatRoomEncryptionEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
             EventType.STATE_ROOM_TOMBSTONE          -> formatRoomTombstoneEvent(timelineEvent.getDisambiguatedDisplayName())
             EventType.CALL_INVITE,
             EventType.CALL_HANGUP,
@@ -164,6 +167,20 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
                 ?.takeIf { it.isNotBlank() }
                 ?.let { sp.getString(R.string.notice_room_canonical_alias_set, senderName, it) }
                 ?: sp.getString(R.string.notice_room_canonical_alias_unset, senderName)
+    }
+
+    private fun formatRoomGuestAccessEvent(event: Event, senderName: String?): String? {
+        val eventContent: RoomGuestAccessContent? = event.getClearContent().toModel()
+        return when (eventContent?.guestAccess) {
+            GuestAccess.CanJoin   -> sp.getString(R.string.notice_room_guest_access_can_join, senderName)
+            GuestAccess.Forbidden -> sp.getString(R.string.notice_room_guest_access_forbidden, senderName)
+            else                  -> null
+        }
+    }
+
+    private fun formatRoomEncryptionEvent(event: Event, senderName: String?): CharSequence? {
+        val content = event.content.toModel<EncryptionEventContent>() ?: return null
+        return sp.getString(R.string.notice_end_to_end, senderName, content.algorithm)
     }
 
     private fun buildProfileNotice(event: Event, senderName: String?, eventContent: RoomMemberContent?, prevEventContent: RoomMemberContent?): String {

@@ -31,17 +31,17 @@ import timber.log.Timber
 class AlarmSyncBroadcastReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
-        // Aquire a lock to give enough time for the sync :/
+        // Acquire a lock to give enough time for the sync :/
         (context.getSystemService(Context.POWER_SERVICE) as PowerManager).run {
             newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "riotx:fdroidSynclock").apply {
                 acquire((10_000).toLong())
             }
         }
 
-        val userId = intent.getStringExtra(SyncService.EXTRA_USER_ID)
+        val sessionId = intent.getStringExtra(SyncService.EXTRA_SESSION_ID)
         // This method is called when the BroadcastReceiver is receiving an Intent broadcast.
         Timber.d("RestartBroadcastReceiver received intent")
-        VectorSyncService.newIntent(context, userId).also {
+        VectorSyncService.newIntent(context, sessionId).let {
             try {
                 ContextCompat.startForegroundService(context, it)
             } catch (ex: Throwable) {
@@ -50,7 +50,7 @@ class AlarmSyncBroadcastReceiver : BroadcastReceiver() {
             }
         }
 
-        scheduleAlarm(context, userId, 30_000L)
+        scheduleAlarm(context, sessionId, 30_000L)
 
         Timber.i("Alarm scheduled to restart service")
     }
@@ -58,10 +58,10 @@ class AlarmSyncBroadcastReceiver : BroadcastReceiver() {
     companion object {
         private const val REQUEST_CODE = 0
 
-        fun scheduleAlarm(context: Context, userId: String, delay: Long) {
+        fun scheduleAlarm(context: Context, sessionId: String, delay: Long) {
             // Reschedule
             val intent = Intent(context, AlarmSyncBroadcastReceiver::class.java).apply {
-                putExtra(SyncService.EXTRA_USER_ID, userId)
+                putExtra(SyncService.EXTRA_SESSION_ID, sessionId)
             }
             val pIntent = PendingIntent.getBroadcast(context, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT)
             val firstMillis = System.currentTimeMillis() + delay

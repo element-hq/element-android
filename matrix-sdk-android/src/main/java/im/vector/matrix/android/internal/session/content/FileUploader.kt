@@ -29,12 +29,14 @@ import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import org.greenrobot.eventbus.EventBus
 import java.io.File
 import java.io.IOException
 import javax.inject.Inject
 
 internal class FileUploader @Inject constructor(@Authenticated
                                                 private val okHttpClient: OkHttpClient,
+                                                private val eventBus: EventBus,
                                                 sessionParams: SessionParams,
                                                 moshi: Moshi) {
 
@@ -73,7 +75,7 @@ internal class FileUploader @Inject constructor(@Authenticated
 
         return okHttpClient.newCall(request).awaitResponse().use { response ->
             if (!response.isSuccessful) {
-                throw response.toFailure()
+                throw response.toFailure(eventBus)
             } else {
                 response.body?.source()?.let {
                     responseAdapter.fromJson(it)

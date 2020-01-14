@@ -27,20 +27,16 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.state.StateService
 import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.api.util.toOptional
+import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
-import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
-import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.descending
 import im.vector.matrix.android.internal.database.query.prev
 import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
-import im.vector.matrix.android.internal.util.fetchCopied
-import im.vector.matrix.android.internal.util.fetchCopyMap
 import io.realm.Realm
-import io.realm.RealmConfiguration
+import java.security.InvalidParameterException
 
 internal class DefaultStateService @AssistedInject constructor(@Assisted private val roomId: String,
                                                                private val monarchy: Monarchy,
@@ -71,15 +67,33 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
 
     override fun updateTopic(topic: String, callback: MatrixCallback<Unit>) {
         val params = SendStateTask.Params(roomId,
-                                          EventType.STATE_ROOM_TOPIC,
-                                          mapOf(
-                                                  "topic" to topic
-                                          ))
+                EventType.STATE_ROOM_TOPIC,
+                mapOf(
+                        "topic" to topic
+                ))
 
         sendStateTask
                 .configureWith(params) {
                     this.callback = callback
                 }
                 .executeBy(taskExecutor)
+    }
+
+    override fun enableEncryption(algorithm: String, callback: MatrixCallback<Unit>) {
+        if (algorithm != MXCRYPTO_ALGORITHM_MEGOLM) {
+            callback.onFailure(InvalidParameterException("Only MXCRYPTO_ALGORITHM_MEGOLM algorithm is supported"))
+        } else {
+            val params = SendStateTask.Params(roomId,
+                    EventType.STATE_ROOM_ENCRYPTION,
+                    mapOf(
+                            "algorithm" to algorithm
+                    ))
+
+            sendStateTask
+                    .configureWith(params) {
+                        this.callback = callback
+                    }
+                    .executeBy(taskExecutor)
+        }
     }
 }

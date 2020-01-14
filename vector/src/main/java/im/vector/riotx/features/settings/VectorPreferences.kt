@@ -24,6 +24,7 @@ import android.provider.MediaStore
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import com.squareup.seismic.ShakeDetector
+import im.vector.riotx.BuildConfig
 import im.vector.riotx.R
 import im.vector.riotx.features.homeserver.ServerUrlsRepository
 import im.vector.riotx.features.themes.ThemeUtils
@@ -268,7 +269,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     }
 
     fun failFast(): Boolean {
-        return developerMode() && defaultPrefs.getBoolean(SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY, false)
+        return BuildConfig.DEBUG || (developerMode() && defaultPrefs.getBoolean(SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY, false))
     }
 
     /**

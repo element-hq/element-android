@@ -17,7 +17,7 @@
 package im.vector.matrix.android.internal.auth.db
 
 import im.vector.matrix.android.api.auth.data.Credentials
-import im.vector.matrix.android.internal.auth.createSessionId
+import im.vector.matrix.android.api.auth.data.sessionId
 import im.vector.matrix.android.internal.di.MoshiProvider
 import io.realm.DynamicRealm
 import io.realm.RealmMigration
@@ -71,14 +71,13 @@ internal object AuthRealmMigration : RealmMigration {
                 ?.addField(SessionParamsEntityFields.SESSION_ID, String::class.java)
                 ?.setRequired(SessionParamsEntityFields.SESSION_ID, true)
                 ?.transform {
-                    val userId = it.getString(SessionParamsEntityFields.USER_ID)
                     val credentialsJson = it.getString(SessionParamsEntityFields.CREDENTIALS_JSON)
 
                     val credentials = MoshiProvider.providesMoshi()
                             .adapter(Credentials::class.java)
                             .fromJson(credentialsJson)
 
-                    it.set(SessionParamsEntityFields.SESSION_ID, createSessionId(userId, credentials?.deviceId))
+                    it.set(SessionParamsEntityFields.SESSION_ID, credentials!!.sessionId())
                 }
                 ?.addPrimaryKey(SessionParamsEntityFields.SESSION_ID)
     }

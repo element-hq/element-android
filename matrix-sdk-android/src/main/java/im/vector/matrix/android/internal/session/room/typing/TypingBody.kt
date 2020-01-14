@@ -14,10 +14,17 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.auth
+package im.vector.matrix.android.internal.session.room.typing
 
-import im.vector.matrix.android.internal.util.md5
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-internal fun createSessionId(userId: String, deviceId: String?): String {
-    return (if (deviceId.isNullOrBlank()) userId else "$userId|$deviceId").md5()
-}
+@JsonClass(generateAdapter = true)
+data class TypingBody(
+        // Required. Whether the user is typing or not. If false, the timeout key can be omitted.
+        @Json(name = "typing")
+        val typing: Boolean,
+        // The length of time in milliseconds to mark this user as typing.
+        @Json(name = "timeout")
+        val timeout: Int?
+)

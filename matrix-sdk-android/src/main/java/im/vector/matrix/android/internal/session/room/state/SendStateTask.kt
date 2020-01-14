@@ -19,6 +19,7 @@ package im.vector.matrix.android.internal.session.room.state
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.task.Task
+import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface SendStateTask : Task<SendStateTask.Params, Unit> {
@@ -29,9 +30,13 @@ internal interface SendStateTask : Task<SendStateTask.Params, Unit> {
     )
 }
 
-internal class DefaultSendStateTask @Inject constructor(private val roomAPI: RoomAPI) : SendStateTask {
+internal class DefaultSendStateTask @Inject constructor(
+        private val roomAPI: RoomAPI,
+        private val eventBus: EventBus
+) : SendStateTask {
+
     override suspend fun execute(params: SendStateTask.Params) {
-        return executeRequest {
+        return executeRequest(eventBus) {
             apiCall = roomAPI.sendStateEvent(params.roomId, params.eventType, params.body)
         }
     }

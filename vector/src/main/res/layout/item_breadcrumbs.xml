@@ -53,6 +53,23 @@
         tools:text="24"
         tools:visibility="visible" />
 
+    <TextView
+        android:id="@+id/breadcrumbsTypingView"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="@drawable/bg_breadcrumbs_typing"
+        android:gravity="center"
+        android:text="@string/ellipsis"
+        android:textColor="@android:color/white"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintCircle="@+id/breadcrumbsImageView"
+        app:layout_constraintCircleAngle="135"
+        app:layout_constraintCircleRadius="28dp"
+        tools:ignore="MissingConstraints"
+        tools:visibility="visible" />
+
     <ImageView
         android:id="@+id/breadcrumbsDraftBadge"
         android:layout_width="20dp"
@@ -62,7 +79,7 @@
         android:src="@drawable/ic_edit"
         android:visibility="gone"
         app:layout_constraintCircle="@+id/breadcrumbsImageView"
-        app:layout_constraintCircleAngle="135"
+        app:layout_constraintCircleAngle="225"
         app:layout_constraintCircleRadius="28dp"
         tools:ignore="MissingConstraints"
         tools:visibility="visible" />

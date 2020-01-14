@@ -15,11 +15,11 @@
         android:layout_width="4dp"
         android:layout_height="0dp"
         android:background="?attr/colorAccent"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:visibility="gone"
-        tools:visibility="visible"/>
+        tools:visibility="visible" />
 
     <ImageView
         android:id="@+id/roomAvatarImageView"
@@ -127,6 +127,23 @@
         app:layout_constraintStart_toStartOf="@+id/roomNameView"
         app:layout_constraintTop_toBottomOf="@+id/roomNameView"
         tools:text="@sample/matrix.json/data/message" />
+
+    <TextView
+        android:id="@+id/roomTypingView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textColor="@color/riotx_accent"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/roomNameView"
+        app:layout_constraintTop_toBottomOf="@+id/roomNameView"
+        tools:text="Alice is typing…" />
 
     <!-- Margin bottom does not work, so I use space -->
     <Space

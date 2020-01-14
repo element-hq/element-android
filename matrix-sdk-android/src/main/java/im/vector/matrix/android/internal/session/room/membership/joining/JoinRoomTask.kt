@@ -27,6 +27,7 @@ import im.vector.matrix.android.internal.session.room.read.SetReadMarkersTask
 import im.vector.matrix.android.internal.task.Task
 import io.realm.RealmConfiguration
 import kotlinx.coroutines.TimeoutCancellationException
+import org.greenrobot.eventbus.EventBus
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -38,13 +39,16 @@ internal interface JoinRoomTask : Task<JoinRoomTask.Params, Unit> {
     )
 }
 
-internal class DefaultJoinRoomTask @Inject constructor(private val roomAPI: RoomAPI,
-                                                       private val readMarkersTask: SetReadMarkersTask,
-                                                       @SessionDatabase
-                                                       private val realmConfiguration: RealmConfiguration) : JoinRoomTask {
+internal class DefaultJoinRoomTask @Inject constructor(
+        private val roomAPI: RoomAPI,
+        private val readMarkersTask: SetReadMarkersTask,
+        @SessionDatabase
+        private val realmConfiguration: RealmConfiguration,
+        private val eventBus: EventBus
+) : JoinRoomTask {
 
     override suspend fun execute(params: JoinRoomTask.Params) {
-        executeRequest<Unit> {
+        executeRequest<Unit>(eventBus) {
             apiCall = roomAPI.join(params.roomId, params.viaServers, mapOf("reason" to params.reason))
         }
         // Wait for room to come back from the sync (but it can maybe be in the DB is the sync response is received before)

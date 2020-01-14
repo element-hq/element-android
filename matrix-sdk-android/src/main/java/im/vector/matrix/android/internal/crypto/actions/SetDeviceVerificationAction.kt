@@ -22,9 +22,10 @@ import im.vector.matrix.android.internal.di.UserId
 import timber.log.Timber
 import javax.inject.Inject
 
-internal class SetDeviceVerificationAction @Inject constructor(private val cryptoStore: IMXCryptoStore,
-                                                               @UserId private val userId: String,
-                                                               private val keysBackup: KeysBackup) {
+internal class SetDeviceVerificationAction @Inject constructor(
+        private val cryptoStore: IMXCryptoStore,
+        @UserId private val userId: String,
+        private val keysBackup: KeysBackup) {
 
     fun handle(verificationStatus: Int, deviceId: String, userId: String) {
         val device = cryptoStore.getUserDevice(deviceId, userId)

@@ -19,6 +19,7 @@ package im.vector.matrix.android.internal.session.room.membership.leaving
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.task.Task
+import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface LeaveRoomTask : Task<LeaveRoomTask.Params, Unit> {
@@ -28,10 +29,13 @@ internal interface LeaveRoomTask : Task<LeaveRoomTask.Params, Unit> {
     )
 }
 
-internal class DefaultLeaveRoomTask @Inject constructor(private val roomAPI: RoomAPI) : LeaveRoomTask {
+internal class DefaultLeaveRoomTask @Inject constructor(
+        private val roomAPI: RoomAPI,
+        private val eventBus: EventBus
+) : LeaveRoomTask {
 
     override suspend fun execute(params: LeaveRoomTask.Params) {
-        return executeRequest {
+        return executeRequest(eventBus) {
             apiCall = roomAPI.leave(params.roomId, mapOf("reason" to params.reason))
         }
     }

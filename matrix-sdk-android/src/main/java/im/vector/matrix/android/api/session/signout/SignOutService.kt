@@ -40,8 +40,8 @@ interface SignOutService {
 
     /**
      * Sign out, and release the session, clear all the session data, including crypto data
-     * @param sigOutFromHomeserver true if the sign out request has to be done
+     * @param signOutFromHomeserver true if the sign out request has to be done
      */
-    fun signOut(sigOutFromHomeserver: Boolean,
+    fun signOut(signOutFromHomeserver: Boolean,
                 callback: MatrixCallback<Unit>): Cancelable
 }

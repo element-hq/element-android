@@ -27,8 +27,10 @@ import im.vector.matrix.android.internal.database.model.PusherEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.util.awaitTransaction
+import im.vector.matrix.android.internal.worker.SessionWorkerParams
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import im.vector.matrix.android.internal.worker.getSessionComponent
+import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal class AddHttpPusherWorker(context: Context, params: WorkerParameters)
@@ -36,18 +38,20 @@ internal class AddHttpPusherWorker(context: Context, params: WorkerParameters)
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
+            override val sessionId: String,
             val pusher: JsonPusher,
-            val userId: String
-    )
+            override val lastFailureMessage: String? = null
+    ) : SessionWorkerParams
 
     @Inject lateinit var pushersAPI: PushersAPI
     @Inject lateinit var monarchy: Monarchy
+    @Inject lateinit var eventBus: EventBus
 
     override suspend fun doWork(): Result {
         val params = WorkerParamsFactory.fromData<Params>(inputData)
                 ?: return Result.failure()
 
-        val sessionComponent = getSessionComponent(params.userId) ?: return Result.success()
+        val sessionComponent = getSessionComponent(params.sessionId) ?: return Result.success()
         sessionComponent.inject(this)
 
         val pusher = params.pusher
@@ -76,7 +80,7 @@ internal class AddHttpPusherWorker(context: Context, params: WorkerParameters)
     }
 
     private suspend fun setPusher(pusher: JsonPusher) {
-        executeRequest<Unit> {
+        executeRequest<Unit>(eventBus) {
             apiCall = pushersAPI.setPusher(pusher)
         }
         monarchy.awaitTransaction { realm ->

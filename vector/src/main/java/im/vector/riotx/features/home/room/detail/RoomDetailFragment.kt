@@ -20,6 +20,7 @@ import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Typeface
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -61,6 +62,7 @@ import com.github.piasy.biv.BigImageViewer
 import com.github.piasy.biv.loader.ImageLoader
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
+import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.matrix.android.api.permalinks.PermalinkFactory
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
@@ -139,6 +141,7 @@ import im.vector.riotx.features.permalink.PermalinkHandler
 import im.vector.riotx.features.reactions.EmojiReactionPickerActivity
 import im.vector.riotx.features.settings.VectorPreferences
 import im.vector.riotx.features.share.SharedData
+import im.vector.riotx.features.themes.ThemeUtils
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.parcel.Parcelize
@@ -148,6 +151,7 @@ import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
 import org.commonmark.parser.Parser
 import timber.log.Timber
 import java.io.File
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @Parcelize
@@ -582,6 +586,9 @@ class RoomDetailFragment @Inject constructor(
 
     private fun setupComposer() {
         autoCompleter.setup(composerLayout.composerEditText)
+
+        observerUserTyping()
+
         composerLayout.callback = object : TextComposerView.Callback {
             override fun onAddAttachment() {
                 if (!::attachmentTypeSelector.isInitialized) {
@@ -616,6 +623,18 @@ class RoomDetailFragment @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun observerUserTyping() {
+        composerLayout.composerEditText.textChanges()
+                .skipInitialValue()
+                .debounce(300, TimeUnit.MILLISECONDS)
+                .map { it.isNotEmpty() }
+                .subscribe {
+                    Timber.d("Typing: User is typing: $it")
+                    roomDetailViewModel.handle(RoomDetailAction.UserIsTyping(it))
+                }
+                .disposeOnDestroyView()
     }
 
     private fun sendUri(uri: Uri): Boolean {
@@ -670,10 +689,26 @@ class RoomDetailFragment @Inject constructor(
             } else {
                 roomToolbarTitleView.text = it.displayName
                 avatarRenderer.render(it.toMatrixItem(), roomToolbarAvatarImageView)
-                roomToolbarSubtitleView.setTextOrHide(it.topic)
+
+                renderSubTitle(state.typingMessage, it.topic)
             }
             jumpToBottomView.count = it.notificationCount
             jumpToBottomView.drawBadge = it.hasUnreadMessages
+        }
+    }
+
+    private fun renderSubTitle(typingMessage: String?, topic: String) {
+        // TODO Temporary place to put typing data
+        roomToolbarSubtitleView.let {
+            it.setTextOrHide(typingMessage ?: topic)
+
+            if (typingMessage == null) {
+                it.setTextColor(ThemeUtils.getColor(requireContext(), R.attr.vctr_toolbar_secondary_text_color))
+                it.setTypeface(null, Typeface.NORMAL)
+            } else {
+                it.setTextColor(ContextCompat.getColor(requireContext(), R.color.riotx_accent))
+                it.setTypeface(null, Typeface.BOLD)
+            }
         }
     }
 
