@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.session.signout
 
-import android.content.Context
 import im.vector.matrix.android.BuildConfig
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.failure.MatrixError
@@ -29,7 +28,6 @@ import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.SessionModule
 import im.vector.matrix.android.internal.session.cache.ClearCacheTask
 import im.vector.matrix.android.internal.task.Task
-import im.vector.matrix.android.internal.worker.WorkManagerUtil
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import org.greenrobot.eventbus.EventBus
@@ -45,7 +43,7 @@ internal interface SignOutTask : Task<SignOutTask.Params, Unit> {
 }
 
 internal class DefaultSignOutTask @Inject constructor(
-        private val context: Context,
+        private val workManagerProvider: WorkManagerProvider,
         @SessionId private val sessionId: String,
         private val signOutAPI: SignOutAPI,
         private val sessionManager: SessionManager,
@@ -87,7 +85,7 @@ internal class DefaultSignOutTask @Inject constructor(
         sessionManager.releaseSession(sessionId)
 
         Timber.d("SignOut: cancel pending works...")
-        WorkManagerUtil.cancelAllWorks(context)
+        workManagerProvider.cancelAllWorks()
 
         Timber.d("SignOut: delete session params...")
         sessionParamsStore.delete(sessionId)
