@@ -31,7 +31,6 @@ import javax.inject.Inject
  * if not the chain will be doomed in failed state.
  */
 internal class TimelineSendEventWorkCommon @Inject constructor(
-        // TODO @Assisted private val roomId: String,
         private val workManagerProvider: WorkManagerProvider
 ) {
 
