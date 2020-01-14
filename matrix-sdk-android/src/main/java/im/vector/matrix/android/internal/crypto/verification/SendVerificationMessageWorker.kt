@@ -24,6 +24,7 @@ import im.vector.matrix.android.api.failure.shouldBeRetried
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.internal.crypto.tasks.SendVerificationMessageTask
+import im.vector.matrix.android.internal.worker.SessionWorkerParams
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import im.vector.matrix.android.internal.worker.getSessionComponent
 import timber.log.Timber
@@ -34,9 +35,10 @@ internal class SendVerificationMessageWorker constructor(context: Context, param
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
-            val sessionId: String,
-            val event: Event
-    )
+            override val sessionId: String,
+            val event: Event,
+            override val lastFailureMessage: String? = null
+    ) : SessionWorkerParams
 
     @Inject
     lateinit var sendVerificationMessageTask: SendVerificationMessageTask
