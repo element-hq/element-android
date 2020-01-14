@@ -20,6 +20,7 @@ package im.vector.riotx.features.roommemberprofile
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
+import im.vector.matrix.android.api.session.room.model.PowerLevelsContent
 import im.vector.matrix.android.api.util.MatrixItem
 
 data class RoomMemberProfileViewState(
@@ -29,6 +30,7 @@ data class RoomMemberProfileViewState(
         val isMine: Boolean = false,
         val isIgnored: Async<Boolean> = Uninitialized,
         val isRoomEncrypted: Boolean = false,
+        val powerLevelsContent: Async<PowerLevelsContent> = Uninitialized,
         val userPowerLevelString: Async<String> = Uninitialized,
         val userMatrixItem: Async<MatrixItem> = Uninitialized
 ) : MvRxState {

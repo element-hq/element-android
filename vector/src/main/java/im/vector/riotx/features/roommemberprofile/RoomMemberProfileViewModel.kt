@@ -154,6 +154,10 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
         roomSummaryLive.execute {
             copy(isRoomEncrypted = it.invoke()?.isEncrypted == true)
         }
+        powerLevelsContentLive.execute {
+            copy(powerLevelsContent = it)
+        }
+
         Observable
                 .combineLatest(
                         roomSummaryLive,

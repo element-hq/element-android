@@ -56,6 +56,7 @@ class RoomMemberProfileController @Inject constructor(private val stringProvider
                 title = ignoreActionTitle,
                 destructive = true,
                 editable = false,
+                divider = false,
                 action = { callback?.onIgnoreClicked() }
         )
     }
@@ -85,19 +86,23 @@ class RoomMemberProfileController @Inject constructor(private val stringProvider
                     title = stringProvider.getString(R.string.room_member_jump_to_read_receipt),
                     action = { callback?.onJumpToReadReceiptClicked() }
             )
+
+            val ignoreActionTitle = state.buildIgnoreActionTitle()
+
             buildProfileAction(
                     id = "mention",
                     title = stringProvider.getString(R.string.room_participants_action_mention),
                     editable = false,
+                    divider = ignoreActionTitle != null,
                     action = { callback?.onMentionClicked() }
             )
-            val ignoreActionTitle = state.buildIgnoreActionTitle()
             if (ignoreActionTitle != null) {
                 buildProfileAction(
                         id = "ignore",
                         title = ignoreActionTitle,
                         destructive = true,
                         editable = false,
+                        divider = false,
                         action = { callback?.onIgnoreClicked() }
                 )
             }
