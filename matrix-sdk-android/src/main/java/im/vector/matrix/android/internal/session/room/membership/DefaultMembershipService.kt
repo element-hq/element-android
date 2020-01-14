@@ -29,6 +29,7 @@ import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.RoomMemberEntity
 import im.vector.matrix.android.internal.database.model.RoomMemberEntityFields
+import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.query.process
 import im.vector.matrix.android.internal.session.room.membership.joining.InviteTask
 import im.vector.matrix.android.internal.session.room.membership.joining.JoinRoomTask
@@ -39,13 +40,16 @@ import im.vector.matrix.android.internal.util.fetchCopied
 import io.realm.Realm
 import io.realm.RealmQuery
 
-internal class DefaultMembershipService @AssistedInject constructor(@Assisted private val roomId: String,
-                                                                    private val monarchy: Monarchy,
-                                                                    private val taskExecutor: TaskExecutor,
-                                                                    private val loadRoomMembersTask: LoadRoomMembersTask,
-                                                                    private val inviteTask: InviteTask,
-                                                                    private val joinTask: JoinRoomTask,
-                                                                    private val leaveRoomTask: LeaveRoomTask
+internal class DefaultMembershipService @AssistedInject constructor(
+        @Assisted private val roomId: String,
+        private val monarchy: Monarchy,
+        private val taskExecutor: TaskExecutor,
+        private val loadRoomMembersTask: LoadRoomMembersTask,
+        private val inviteTask: InviteTask,
+        private val joinTask: JoinRoomTask,
+        private val leaveRoomTask: LeaveRoomTask,
+        @UserId
+        private val userId: String
 ) : MembershipService {
 
     @AssistedInject.Factory
@@ -95,6 +99,11 @@ internal class DefaultMembershipService @AssistedInject constructor(@Assisted pr
         return RoomMembers(realm, roomId).queryRoomMembersEvent()
                 .process(RoomMemberEntityFields.MEMBERSHIP_STR, queryParams.memberships)
                 .process(RoomMemberEntityFields.DISPLAY_NAME, queryParams.displayName)
+                .apply {
+                    if (queryParams.excludeSelf) {
+                        notEqualTo(RoomMemberEntityFields.USER_ID, userId)
+                    }
+                }
     }
 
     override fun getNumberOfJoinedMembers(): Int {

@@ -24,14 +24,15 @@ import im.vector.matrix.android.api.session.room.model.RoomAliasesContent
 import im.vector.matrix.android.api.session.room.model.RoomCanonicalAliasContent
 import im.vector.matrix.android.api.session.room.model.RoomTopicContent
 import im.vector.matrix.android.internal.database.mapper.ContentMapper
-import im.vector.matrix.android.internal.database.model.*
 import im.vector.matrix.android.internal.database.model.EventEntity
+import im.vector.matrix.android.internal.database.model.RoomMemberEntityFields
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.query.*
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.room.membership.RoomDisplayNameResolver
 import im.vector.matrix.android.internal.session.room.membership.RoomMembers
+import im.vector.matrix.android.internal.session.sync.RoomSyncHandler
 import im.vector.matrix.android.internal.session.sync.model.RoomSyncSummary
 import im.vector.matrix.android.internal.session.sync.model.RoomSyncUnreadNotifications
 import io.realm.Realm
@@ -65,7 +66,8 @@ internal class RoomSummaryUpdater @Inject constructor(
                membership: Membership? = null,
                roomSummary: RoomSyncSummary? = null,
                unreadNotifications: RoomSyncUnreadNotifications? = null,
-               updateMembers: Boolean = false) {
+               updateMembers: Boolean = false,
+               ephemeralResult: RoomSyncHandler.EphemeralResult? = null) {
         val roomSummaryEntity = RoomSummaryEntity.getOrCreate(realm, roomId)
         if (roomSummary != null) {
             if (roomSummary.heroes.isNotEmpty()) {
@@ -93,8 +95,8 @@ internal class RoomSummaryUpdater @Inject constructor(
         val encryptionEvent = EventEntity.where(realm, roomId, EventType.STATE_ROOM_ENCRYPTION).prev()
 
         roomSummaryEntity.hasUnreadMessages = roomSummaryEntity.notificationCount > 0
-                                              // avoid this call if we are sure there are unread events
-                                              || !isEventRead(monarchy, userId, roomId, latestPreviewableEvent?.eventId)
+                // avoid this call if we are sure there are unread events
+                || !isEventRead(monarchy, userId, roomId, latestPreviewableEvent?.eventId)
 
         roomSummaryEntity.displayName = roomDisplayNameResolver.resolve(roomId).toString()
         roomSummaryEntity.avatarUrl = roomAvatarResolver.resolve(roomId)
@@ -104,11 +106,13 @@ internal class RoomSummaryUpdater @Inject constructor(
                 ?.canonicalAlias
 
         val roomAliases = ContentMapper.map(lastAliasesEvent?.content).toModel<RoomAliasesContent>()?.aliases
-                          ?: emptyList()
+                ?: emptyList()
         roomSummaryEntity.aliases.clear()
         roomSummaryEntity.aliases.addAll(roomAliases)
         roomSummaryEntity.flatAliases = roomAliases.joinToString(separator = "|", prefix = "|")
         roomSummaryEntity.isEncrypted = encryptionEvent != null
+        roomSummaryEntity.typingUserIds.clear()
+        roomSummaryEntity.typingUserIds.addAll(ephemeralResult?.typingUserIds.orEmpty())
 
         if (updateMembers) {
             val otherRoomMembers = RoomMembers(realm, roomId)

@@ -50,6 +50,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 EventType.STATE_ROOM_CANONICAL_ALIAS,
                 EventType.STATE_ROOM_JOIN_RULES,
                 EventType.STATE_ROOM_HISTORY_VISIBILITY,
+                EventType.STATE_ROOM_GUEST_ACCESS,
                 EventType.CALL_INVITE,
                 EventType.CALL_HANGUP,
                 EventType.CALL_ANSWER,
@@ -88,9 +89,9 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                     null
                 }
             }
-        } catch (e: Exception) {
-            Timber.e(e, "failed to create message item")
-            defaultItemFactory.create(event, highlight, callback, e)
+        } catch (throwable: Throwable) {
+            Timber.e(throwable, "failed to create message item")
+            defaultItemFactory.create(event, highlight, callback, throwable)
         }
         return (computedModel ?: EmptyItem_())
     }

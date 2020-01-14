@@ -52,6 +52,8 @@ import im.vector.matrix.android.internal.session.room.reporting.ReportContentTas
 import im.vector.matrix.android.internal.session.room.state.DefaultSendStateTask
 import im.vector.matrix.android.internal.session.room.state.SendStateTask
 import im.vector.matrix.android.internal.session.room.timeline.*
+import im.vector.matrix.android.internal.session.room.typing.DefaultSendTypingTask
+import im.vector.matrix.android.internal.session.room.typing.SendTypingTask
 import retrofit2.Retrofit
 
 @Module
@@ -68,74 +70,77 @@ internal abstract class RoomModule {
     }
 
     @Binds
-    abstract fun bindRoomFactory(roomFactory: DefaultRoomFactory): RoomFactory
+    abstract fun bindRoomFactory(factory: DefaultRoomFactory): RoomFactory
 
     @Binds
-    abstract fun bindRoomService(roomService: DefaultRoomService): RoomService
+    abstract fun bindRoomService(service: DefaultRoomService): RoomService
 
     @Binds
-    abstract fun bindRoomDirectoryService(roomDirectoryService: DefaultRoomDirectoryService): RoomDirectoryService
+    abstract fun bindRoomDirectoryService(service: DefaultRoomDirectoryService): RoomDirectoryService
 
     @Binds
-    abstract fun bindEventRelationsAggregationTask(eventRelationsAggregationTask: DefaultEventRelationsAggregationTask): EventRelationsAggregationTask
+    abstract fun bindFileService(service: DefaultFileService): FileService
 
     @Binds
-    abstract fun bindCreateRoomTask(createRoomTask: DefaultCreateRoomTask): CreateRoomTask
+    abstract fun bindEventRelationsAggregationTask(task: DefaultEventRelationsAggregationTask): EventRelationsAggregationTask
 
     @Binds
-    abstract fun bindGetPublicRoomTask(getPublicRoomTask: DefaultGetPublicRoomTask): GetPublicRoomTask
+    abstract fun bindCreateRoomTask(task: DefaultCreateRoomTask): CreateRoomTask
 
     @Binds
-    abstract fun bindGetThirdPartyProtocolsTask(getThirdPartyProtocolsTask: DefaultGetThirdPartyProtocolsTask): GetThirdPartyProtocolsTask
+    abstract fun bindGetPublicRoomTask(task: DefaultGetPublicRoomTask): GetPublicRoomTask
 
     @Binds
-    abstract fun bindInviteTask(inviteTask: DefaultInviteTask): InviteTask
+    abstract fun bindGetThirdPartyProtocolsTask(task: DefaultGetThirdPartyProtocolsTask): GetThirdPartyProtocolsTask
 
     @Binds
-    abstract fun bindJoinRoomTask(joinRoomTask: DefaultJoinRoomTask): JoinRoomTask
+    abstract fun bindInviteTask(task: DefaultInviteTask): InviteTask
 
     @Binds
-    abstract fun bindLeaveRoomTask(leaveRoomTask: DefaultLeaveRoomTask): LeaveRoomTask
+    abstract fun bindJoinRoomTask(task: DefaultJoinRoomTask): JoinRoomTask
 
     @Binds
-    abstract fun bindLoadRoomMembersTask(loadRoomMembersTask: DefaultLoadRoomMembersTask): LoadRoomMembersTask
+    abstract fun bindLeaveRoomTask(task: DefaultLeaveRoomTask): LeaveRoomTask
 
     @Binds
-    abstract fun bindPruneEventTask(pruneEventTask: DefaultPruneEventTask): PruneEventTask
+    abstract fun bindLoadRoomMembersTask(task: DefaultLoadRoomMembersTask): LoadRoomMembersTask
 
     @Binds
-    abstract fun bindSetReadMarkersTask(setReadMarkersTask: DefaultSetReadMarkersTask): SetReadMarkersTask
+    abstract fun bindPruneEventTask(task: DefaultPruneEventTask): PruneEventTask
 
     @Binds
-    abstract fun bindMarkAllRoomsReadTask(markAllRoomsReadTask: DefaultMarkAllRoomsReadTask): MarkAllRoomsReadTask
+    abstract fun bindSetReadMarkersTask(task: DefaultSetReadMarkersTask): SetReadMarkersTask
 
     @Binds
-    abstract fun bindFindReactionEventForUndoTask(findReactionEventForUndoTask: DefaultFindReactionEventForUndoTask): FindReactionEventForUndoTask
+    abstract fun bindMarkAllRoomsReadTask(task: DefaultMarkAllRoomsReadTask): MarkAllRoomsReadTask
 
     @Binds
-    abstract fun bindUpdateQuickReactionTask(updateQuickReactionTask: DefaultUpdateQuickReactionTask): UpdateQuickReactionTask
+    abstract fun bindFindReactionEventForUndoTask(task: DefaultFindReactionEventForUndoTask): FindReactionEventForUndoTask
 
     @Binds
-    abstract fun bindSendStateTask(sendStateTask: DefaultSendStateTask): SendStateTask
+    abstract fun bindUpdateQuickReactionTask(task: DefaultUpdateQuickReactionTask): UpdateQuickReactionTask
 
     @Binds
-    abstract fun bindReportContentTask(reportContentTask: DefaultReportContentTask): ReportContentTask
+    abstract fun bindSendStateTask(task: DefaultSendStateTask): SendStateTask
 
     @Binds
-    abstract fun bindGetContextOfEventTask(getContextOfEventTask: DefaultGetContextOfEventTask): GetContextOfEventTask
+    abstract fun bindReportContentTask(task: DefaultReportContentTask): ReportContentTask
 
     @Binds
-    abstract fun bindClearUnlinkedEventsTask(clearUnlinkedEventsTask: DefaultClearUnlinkedEventsTask): ClearUnlinkedEventsTask
+    abstract fun bindGetContextOfEventTask(task: DefaultGetContextOfEventTask): GetContextOfEventTask
 
     @Binds
-    abstract fun bindPaginationTask(paginationTask: DefaultPaginationTask): PaginationTask
+    abstract fun bindClearUnlinkedEventsTask(task: DefaultClearUnlinkedEventsTask): ClearUnlinkedEventsTask
 
     @Binds
-    abstract fun bindFileService(fileService: DefaultFileService): FileService
+    abstract fun bindPaginationTask(task: DefaultPaginationTask): PaginationTask
 
     @Binds
-    abstract fun bindFetchEditHistoryTask(fetchEditHistoryTask: DefaultFetchEditHistoryTask): FetchEditHistoryTask
+    abstract fun bindFetchEditHistoryTask(task: DefaultFetchEditHistoryTask): FetchEditHistoryTask
 
     @Binds
-    abstract fun bindGetRoomIdByAliasTask(getRoomIdByAliasTask: DefaultGetRoomIdByAliasTask): GetRoomIdByAliasTask
+    abstract fun bindGetRoomIdByAliasTask(task: DefaultGetRoomIdByAliasTask): GetRoomIdByAliasTask
+
+    @Binds
+    abstract fun bindSendTypingTask(task: DefaultSendTypingTask): SendTypingTask
 }

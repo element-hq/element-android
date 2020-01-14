@@ -63,6 +63,7 @@ class AutocompleteMemberPresenter @AssistedInject constructor(context: Context,
                 QueryStringValue.Contains(query.toString(), QueryStringValue.Case.INSENSITIVE)
             }
             memberships = listOf(Membership.JOIN)
+            excludeSelf = true
         }
         val members = room.getRoomMembers(queryParams)
                 .asSequence()

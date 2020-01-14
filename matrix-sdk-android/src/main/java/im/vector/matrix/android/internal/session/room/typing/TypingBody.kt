@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.core.error
+package im.vector.matrix.android.internal.session.room.typing
 
-import timber.log.Timber
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-/**
- * throw in debug, only log in production. As this method does not always throw, next statement should be a return
- */
-fun fatalError(message: String, failFast: Boolean) {
-    if (failFast) {
-        error(message)
-    } else {
-        Timber.e(message)
-    }
-}
+@JsonClass(generateAdapter = true)
+data class TypingBody(
+        // Required. Whether the user is typing or not. If false, the timeout key can be omitted.
+        @Json(name = "typing")
+        val typing: Boolean,
+        // The length of time in milliseconds to mark this user as typing.
+        @Json(name = "timeout")
+        val timeout: Int?
+)

@@ -37,6 +37,7 @@ import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
 import im.vector.matrix.android.internal.session.room.membership.RoomMemberEventHandler
 import im.vector.matrix.android.internal.session.room.read.FullyReadContent
 import im.vector.matrix.android.internal.session.room.timeline.PaginationDirection
+import im.vector.matrix.android.internal.session.room.typing.TypingEventContent
 import im.vector.matrix.android.internal.session.sync.model.*
 import io.realm.Realm
 import io.realm.kotlin.createObject
@@ -99,11 +100,12 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                  syncLocalTimestampMillis: Long): RoomEntity {
         Timber.v("Handle join sync for room $roomId")
 
-        if (roomSync.ephemeral != null && roomSync.ephemeral.events.isNotEmpty()) {
-            handleEphemeral(realm, roomId, roomSync.ephemeral, isInitialSync)
+        var ephemeralResult: EphemeralResult? = null
+        if (roomSync.ephemeral?.events?.isNotEmpty() == true) {
+            ephemeralResult = handleEphemeral(realm, roomId, roomSync.ephemeral, isInitialSync)
         }
 
-        if (roomSync.accountData != null && roomSync.accountData.events.isNullOrEmpty().not()) {
+        if (roomSync.accountData?.events?.isNotEmpty() == true) {
             handleRoomAccountDataEvents(realm, roomId, roomSync.accountData)
         }
 
@@ -116,7 +118,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
 
         // State event
 
-        if (roomSync.state != null && roomSync.state.events.isNotEmpty()) {
+        if (roomSync.state?.events?.isNotEmpty() == true) {
             val minStateIndex = roomEntity.untimelinedStateEvents.where().min(EventEntityFields.STATE_INDEX)?.toInt()
                     ?: Int.MIN_VALUE
             val untimelinedStateIndex = minStateIndex + 1
@@ -127,7 +129,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                 roomMemberEventHandler.handle(realm, roomId, event)
             }
         }
-        if (roomSync.timeline != null && roomSync.timeline.events.isNotEmpty()) {
+        if (roomSync.timeline?.events?.isNotEmpty() == true) {
             val chunkEntity = handleTimelineEvents(
                     realm,
                     roomEntity,
@@ -144,7 +146,14 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
             it.type == EventType.STATE_ROOM_MEMBER
         } != null
 
-        roomSummaryUpdater.update(realm, roomId, Membership.JOIN, roomSync.summary, roomSync.unreadNotifications, updateMembers = hasRoomMember)
+        roomSummaryUpdater.update(
+                realm,
+                roomId,
+                Membership.JOIN,
+                roomSync.summary,
+                roomSync.unreadNotifications,
+                updateMembers = hasRoomMember,
+                ephemeralResult = ephemeralResult)
         return roomEntity
     }
 
@@ -221,16 +230,33 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         return chunkEntity
     }
 
-    @Suppress("UNCHECKED_CAST")
+    data class EphemeralResult(
+            val typingUserIds: List<String> = emptyList()
+    )
+
     private fun handleEphemeral(realm: Realm,
                                 roomId: String,
                                 ephemeral: RoomSyncEphemeral,
-                                isInitialSync: Boolean) {
+                                isInitialSync: Boolean): EphemeralResult {
+        var result = EphemeralResult()
         for (event in ephemeral.events) {
-            if (event.type != EventType.RECEIPT) continue
-            val readReceiptContent = event.content as? ReadReceiptContent ?: continue
-            readReceiptHandler.handle(realm, roomId, readReceiptContent, isInitialSync)
+            when (event.type) {
+                EventType.RECEIPT -> {
+                    @Suppress("UNCHECKED_CAST")
+                    (event.content as? ReadReceiptContent)?.let { readReceiptContent ->
+                        readReceiptHandler.handle(realm, roomId, readReceiptContent, isInitialSync)
+                    }
+                }
+                EventType.TYPING  -> {
+                    event.content.toModel<TypingEventContent>()?.let { typingEventContent ->
+                        result = result.copy(typingUserIds = typingEventContent.typingUserIds)
+                    }
+                }
+                else              -> Timber.w("Ephemeral event type '${event.type}' not yet supported")
+            }
         }
+
+        return result
     }
 
     private fun handleRoomAccountDataEvents(realm: Realm, roomId: String, accountData: RoomSyncAccountData) {

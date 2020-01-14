@@ -17,6 +17,7 @@
 package im.vector.riotx.features.home.room.list
 
 import android.view.View
+import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.util.toMatrixItem
@@ -30,12 +31,15 @@ import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.utils.DebouncedClickListener
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.format.DisplayableEventFormatter
+import im.vector.riotx.features.home.room.typing.TypingHelper
 import javax.inject.Inject
 
 class RoomSummaryItemFactory @Inject constructor(private val displayableEventFormatter: DisplayableEventFormatter,
                                                  private val dateFormatter: VectorDateFormatter,
                                                  private val colorProvider: ColorProvider,
                                                  private val stringProvider: StringProvider,
+                                                 private val typingHelper: TypingHelper,
+                                                 private val session: Session,
                                                  private val avatarRenderer: AvatarRenderer) {
 
     fun create(roomSummary: RoomSummary,
@@ -96,11 +100,22 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                 dateFormatter.formatMessageDay(date)
             }
         }
+
+        val typingString = typingHelper.excludeCurrentUser(roomSummary.typingRoomMemberIds)
+                .takeIf { it.isNotEmpty() }
+                ?.let { typingMembers ->
+                    // It's not ideal to get a Room and to fetch data from DB here, but let's keep it like this for the moment
+                    val room = session.getRoom(roomSummary.roomId)
+                    val typingRoomMembers = typingHelper.toTypingRoomMembers(typingMembers, room)
+                    typingHelper.toTypingMessage(typingRoomMembers)
+                }
+
         return RoomSummaryItem_()
                 .id(roomSummary.roomId)
                 .avatarRenderer(avatarRenderer)
                 .matrixItem(roomSummary.toMatrixItem())
                 .lastEventTime(latestEventTime)
+                .typingString(typingString)
                 .lastFormattedEvent(latestFormattedEvent)
                 .showHighlighted(showHighlighted)
                 .unreadNotificationCount(unreadCount)

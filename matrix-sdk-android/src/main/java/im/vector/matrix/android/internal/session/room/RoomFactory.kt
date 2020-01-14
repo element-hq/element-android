@@ -30,6 +30,7 @@ import im.vector.matrix.android.internal.session.room.reporting.DefaultReporting
 import im.vector.matrix.android.internal.session.room.send.DefaultSendService
 import im.vector.matrix.android.internal.session.room.state.DefaultStateService
 import im.vector.matrix.android.internal.session.room.timeline.DefaultTimelineService
+import im.vector.matrix.android.internal.session.room.typing.DefaultTypingService
 import javax.inject.Inject
 
 internal interface RoomFactory {
@@ -46,6 +47,7 @@ internal class DefaultRoomFactory @Inject constructor(private val monarchy: Mona
                                                       private val stateServiceFactory: DefaultStateService.Factory,
                                                       private val reportingServiceFactory: DefaultReportingService.Factory,
                                                       private val readServiceFactory: DefaultReadService.Factory,
+                                                      private val typingServiceFactory: DefaultTypingService.Factory,
                                                       private val relationServiceFactory: DefaultRelationService.Factory,
                                                       private val membershipServiceFactory: DefaultMembershipService.Factory,
                                                       private val roomPushRuleServiceFactory: DefaultRoomPushRuleService.Factory) :
@@ -62,6 +64,7 @@ internal class DefaultRoomFactory @Inject constructor(private val monarchy: Mona
                 stateServiceFactory.create(roomId),
                 reportingServiceFactory.create(roomId),
                 readServiceFactory.create(roomId),
+                typingServiceFactory.create(roomId),
                 cryptoService,
                 relationServiceFactory.create(roomId),
                 membershipServiceFactory.create(roomId),
