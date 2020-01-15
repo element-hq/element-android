@@ -36,7 +36,7 @@ class SASVerificationCodeFragment @Inject constructor(
     @BindView(R.id.sas_emoji_grid)
     lateinit var emojiGrid: ViewGroup
 
-    @BindView(R.id.sas_decimal_code)
+    @BindView(R.id.itemVerificationDecimalCode)
     lateinit var decimalTextView: TextView
 
     @BindView(R.id.emoji0)

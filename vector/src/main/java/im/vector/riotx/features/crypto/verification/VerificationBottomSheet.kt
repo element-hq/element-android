@@ -17,20 +17,15 @@ package im.vector.riotx.features.crypto.verification
 
 import android.os.Bundle
 import android.os.Parcelable
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.text.toSpannable
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.transition.AutoTransition
 import androidx.transition.TransitionManager
 import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.Unbinder
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
@@ -40,9 +35,7 @@ import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.commitTransactionNow
 import im.vector.riotx.core.platform.VectorBaseBottomSheetDialogFragment
-import im.vector.riotx.core.utils.colorizeMatchingText
 import im.vector.riotx.features.home.AvatarRenderer
-import im.vector.riotx.features.themes.ThemeUtils
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.bottom_sheet_verification.*
 import timber.log.Timber
@@ -97,11 +90,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
     override fun invalidate() = withState(viewModel) {
         it.otherUserMxItem?.let { matrixItem ->
-            val displayName = matrixItem.displayName ?: ""
-            otherUserNameText.text = getString(R.string.verification_request_alert_title, displayName)
-                    .toSpannable()
-                    .colorizeMatchingText(displayName, ThemeUtils.getColor(requireContext(), R.attr.vctr_notice_text_color))
-
+            otherUserNameText.text = getString(R.string.verification_request_alert_title, matrixItem.getBestName())
             avatarRenderer.render(matrixItem, otherUserAvatarImageView)
         }
 

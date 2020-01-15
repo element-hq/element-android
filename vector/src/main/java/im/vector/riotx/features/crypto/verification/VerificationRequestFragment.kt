@@ -15,68 +15,51 @@
  */
 package im.vector.riotx.features.crypto.verification
 
-import android.graphics.Typeface
-import androidx.core.text.toSpannable
-import androidx.core.view.isInvisible
-import androidx.core.view.isVisible
-import butterknife.OnClick
-import com.airbnb.mvrx.Loading
+import android.os.Bundle
+import android.view.View
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
+import im.vector.riotx.core.extensions.cleanup
+import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.platform.VectorBaseFragment
-import im.vector.riotx.core.utils.colorizeMatchingText
-import im.vector.riotx.core.utils.styleMatchingText
-import im.vector.riotx.features.home.AvatarRenderer
-import im.vector.riotx.features.themes.ThemeUtils
-import kotlinx.android.synthetic.main.fragment_verification_request.*
+import kotlinx.android.synthetic.main.bottom_sheet_verification_child_fragment.*
 import javax.inject.Inject
 
 class VerificationRequestFragment @Inject constructor(
         val verificationRequestViewModelFactory: VerificationRequestViewModel.Factory,
-        val avatarRenderer: AvatarRenderer
-) : VectorBaseFragment() {
+        val controller: VerificationRequestController
+) : VectorBaseFragment(), VerificationRequestController.Listener {
 
     private val viewModel by fragmentViewModel(VerificationRequestViewModel::class)
 
     private val sharedViewModel by parentFragmentViewModel(VerificationBottomSheetViewModel::class)
 
-    override fun getLayoutResId() = R.layout.fragment_verification_request
+    override fun getLayoutResId() = R.layout.bottom_sheet_verification_child_fragment
 
-    override fun invalidate() = withState(viewModel) { state ->
-        state.matrixItem.let {
-            val styledText = getString(R.string.verification_request_alert_description, it.id)
-                    .toSpannable()
-                    .styleMatchingText(it.id, Typeface.BOLD)
-                    .colorizeMatchingText(it.id, ThemeUtils.getColor(requireContext(), R.attr.vctr_notice_text_color))
-            verificationRequestText.text = styledText
-        }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        when (state.started) {
-            is Loading -> {
-                // Hide the start button, show waiting
-                verificationStartButton.isInvisible = true
-                verificationWaitingText.isVisible = true
-                val otherUser = state.matrixItem.displayName ?: state.matrixItem.id
-                verificationWaitingText.text = getString(R.string.verification_request_waiting_for, otherUser)
-                        .toSpannable()
-                        .styleMatchingText(otherUser, Typeface.BOLD)
-                        .colorizeMatchingText(otherUser, ThemeUtils.getColor(requireContext(), R.attr.vctr_notice_text_color))
-            }
-            else       -> {
-                verificationStartButton.isEnabled = true
-                verificationStartButton.isVisible = true
-                verificationWaitingText.isInvisible = true
-            }
-        }
-
-        Unit
+        setupRecyclerView()
     }
 
-    @OnClick(R.id.verificationStartButton)
-    fun onClickOnVerificationStart() = withState(viewModel) { state ->
-        verificationStartButton.isEnabled = false
+    override fun onDestroyView() {
+        bottomSheetVerificationRecyclerView.cleanup()
+        controller.listener = null
+        super.onDestroyView()
+    }
+
+    private fun setupRecyclerView() {
+        bottomSheetVerificationRecyclerView.configureWith(controller, hasFixedSize = false)
+        controller.listener = this
+    }
+
+    override fun invalidate() = withState(viewModel) { state ->
+        controller.update(state)
+    }
+
+    override fun onClickOnVerificationStart() = withState(viewModel) { state ->
         sharedViewModel.handle(VerificationAction.RequestVerificationByDM(state.matrixItem.id, state.roomId))
     }
 }

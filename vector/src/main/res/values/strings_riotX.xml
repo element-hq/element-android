@@ -85,4 +85,8 @@
     <string name="settings_category_composer">Message editor</string>
 
 
+
+    <string name="verification_request_notice">For extra security, verify %s by checking a one-time code.</string>
+    <string name="verification_request_start_notice">For maximum security, do this in person.</string>
+
 </resources>
