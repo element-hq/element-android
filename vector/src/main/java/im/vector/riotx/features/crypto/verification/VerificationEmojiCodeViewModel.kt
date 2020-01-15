@@ -29,7 +29,7 @@ import im.vector.riotx.core.di.HasScreenInjector
 import im.vector.riotx.core.platform.EmptyAction
 import im.vector.riotx.core.platform.VectorViewModel
 
-data class SASVerificationCodeViewState(
+data class VerificationEmojiCodeViewState(
         val transactionId: String?,
         val otherUser: MatrixItem? = null,
         val supportsEmoji: Boolean = true,
@@ -38,10 +38,10 @@ data class SASVerificationCodeViewState(
         val isWaitingFromOther: Boolean = false
 ) : MvRxState
 
-class SASVerificationCodeViewModel @AssistedInject constructor(
-        @Assisted initialState: SASVerificationCodeViewState,
+class VerificationEmojiCodeViewModel @AssistedInject constructor(
+        @Assisted initialState: VerificationEmojiCodeViewState,
         private val session: Session
-) : VectorViewModel<SASVerificationCodeViewState, EmptyAction>(initialState), SasVerificationService.SasVerificationListener {
+) : VectorViewModel<VerificationEmojiCodeViewState, EmptyAction>(initialState), SasVerificationService.SasVerificationListener {
 
     init {
         withState { state ->
@@ -141,22 +141,22 @@ class SASVerificationCodeViewModel @AssistedInject constructor(
 
     @AssistedInject.Factory
     interface Factory {
-        fun create(initialState: SASVerificationCodeViewState): SASVerificationCodeViewModel
+        fun create(initialState: VerificationEmojiCodeViewState): VerificationEmojiCodeViewModel
     }
 
-    companion object : MvRxViewModelFactory<SASVerificationCodeViewModel, SASVerificationCodeViewState> {
+    companion object : MvRxViewModelFactory<VerificationEmojiCodeViewModel, VerificationEmojiCodeViewState> {
 
-        override fun create(viewModelContext: ViewModelContext, state: SASVerificationCodeViewState): SASVerificationCodeViewModel? {
-            val factory = (viewModelContext as FragmentViewModelContext).fragment<SASVerificationCodeFragment>().viewModelFactory
+        override fun create(viewModelContext: ViewModelContext, state: VerificationEmojiCodeViewState): VerificationEmojiCodeViewModel? {
+            val factory = (viewModelContext as FragmentViewModelContext).fragment<VerificationEmojiCodeFragment>().viewModelFactory
             return factory.create(state)
         }
 
-        override fun initialState(viewModelContext: ViewModelContext): SASVerificationCodeViewState? {
+        override fun initialState(viewModelContext: ViewModelContext): VerificationEmojiCodeViewState? {
             val args = viewModelContext.args<VerificationBottomSheet.VerificationArgs>()
             val session = (viewModelContext.activity as HasScreenInjector).injector().activeSessionHolder().getActiveSession()
             val matrixItem = session.getUser(args.otherUserId)?.toMatrixItem()
 
-            return SASVerificationCodeViewState(
+            return VerificationEmojiCodeViewState(
                     transactionId = args.verificationId,
                     otherUser = matrixItem
             )

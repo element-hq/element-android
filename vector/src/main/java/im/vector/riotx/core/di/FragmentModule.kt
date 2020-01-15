@@ -23,9 +23,9 @@ import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupSettingsFragment
-import im.vector.riotx.features.crypto.verification.SASVerificationCodeFragment
 import im.vector.riotx.features.crypto.verification.VerificationChooseMethodFragment
 import im.vector.riotx.features.crypto.verification.VerificationConclusionFragment
+import im.vector.riotx.features.crypto.verification.VerificationEmojiCodeFragment
 import im.vector.riotx.features.crypto.verification.VerificationRequestFragment
 import im.vector.riotx.features.home.HomeDetailFragment
 import im.vector.riotx.features.home.HomeDrawerFragment
@@ -285,15 +285,15 @@ interface FragmentModule {
     @Binds
     @IntoMap
     @FragmentKey(VerificationChooseMethodFragment::class)
-    fun bindVerificationMethodChooserFragment(fragment: VerificationChooseMethodFragment): Fragment
+    fun bindVerificationChooseMethodFragment(fragment: VerificationChooseMethodFragment): Fragment
 
     @Binds
     @IntoMap
-    @FragmentKey(SASVerificationCodeFragment::class)
-    fun bindVerificationSasCodeFragment(fragment: SASVerificationCodeFragment): Fragment
+    @FragmentKey(VerificationEmojiCodeFragment::class)
+    fun bindVerificationEmojiCodeFragment(fragment: VerificationEmojiCodeFragment): Fragment
 
     @Binds
     @IntoMap
     @FragmentKey(VerificationConclusionFragment::class)
-    fun bindVerificationSasConclusionFragment(fragment: VerificationConclusionFragment): Fragment
+    fun bindVerificationConclusionFragment(fragment: VerificationConclusionFragment): Fragment
 }

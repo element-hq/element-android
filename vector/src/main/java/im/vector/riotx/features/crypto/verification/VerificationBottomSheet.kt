@@ -112,7 +112,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
                 SasVerificationTxState.SendingMac,
                 SasVerificationTxState.MacSent,
                 SasVerificationTxState.Verifying   -> {
-                    showFragment(SASVerificationCodeFragment::class, Bundle().apply {
+                    showFragment(VerificationEmojiCodeFragment::class, Bundle().apply {
                         putParcelable(MvRx.KEY_ARG, VerificationArgs(
                                 it.otherUserMxItem?.id ?: "",
                                 it.pendingRequest?.transactionId))

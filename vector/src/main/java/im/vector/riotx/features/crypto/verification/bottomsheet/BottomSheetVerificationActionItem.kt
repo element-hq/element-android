@@ -41,7 +41,7 @@ abstract class BottomSheetVerificationActionItem : VectorEpoxyModel<BottomSheetV
     @EpoxyAttribute
     var title: CharSequence = ""
     @EpoxyAttribute
-    var subTitle: CharSequence = ""
+    var subTitle: CharSequence? = null
     @EpoxyAttribute
     var titleColor: Int = 0
     @EpoxyAttribute

@@ -89,4 +89,7 @@
     <string name="verification_request_notice">For extra security, verify %s by checking a one-time code.</string>
     <string name="verification_request_start_notice">For maximum security, do this in person.</string>
 
+    <string name="verification_emoji_notice">Compare the unique emoji, ensuring they appear in the same order.</string>
+    <string name="verification_code_notice">Compare the code with the one displayed on the the other user\'s screen.</string>
+
 </resources>
