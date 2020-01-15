@@ -20,7 +20,7 @@ import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.session.crypto.sas.SasMode
 import im.vector.matrix.android.api.session.events.model.toContent
 import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultContent
-import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationStart
+import im.vector.matrix.android.internal.crypto.model.rest.supportedVerificationMethods
 import im.vector.matrix.android.internal.crypto.verification.SASVerificationTransaction
 import im.vector.matrix.android.internal.crypto.verification.VerificationInfoStart
 import im.vector.matrix.android.internal.util.JsonCanonicalizer
@@ -45,12 +45,11 @@ internal data class MessageVerificationStartContent(
         get() = relatesTo?.eventId
 
     override fun isValid(): Boolean {
-        if (
-                (transactionID.isNullOrBlank()
-                        || fromDevice.isNullOrBlank()
-                        || method != KeyVerificationStart.VERIF_METHOD_SAS
-                        || keyAgreementProtocols.isNullOrEmpty()
-                        || hashes.isNullOrEmpty())
+        if (transactionID.isNullOrBlank()
+                || fromDevice.isNullOrBlank()
+                || method !in supportedVerificationMethods
+                || keyAgreementProtocols.isNullOrEmpty()
+                || hashes.isNullOrEmpty()
                 || !hashes.contains("sha256") || messageAuthenticationCodes.isNullOrEmpty()
                 || (!messageAuthenticationCodes.contains(SASVerificationTransaction.SAS_MAC_SHA256)
                         && !messageAuthenticationCodes.contains(SASVerificationTransaction.SAS_MAC_SHA256_LONGKDF))

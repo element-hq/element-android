@@ -34,9 +34,16 @@ internal interface SasTransport {
                     onErrorReason: CancelCode,
                     onDone: (() -> Unit)?)
 
-    fun sendVerificationRequest(localID: String, otherUserId: String, roomId: String, callback: (String?, MessageVerificationRequestContent?) -> Unit)
+    fun sendVerificationRequest(supportedMethods: List<String>,
+                                localID: String,
+                                otherUserId: String,
+                                roomId: String, callback:
+                                (String?, MessageVerificationRequestContent?) -> Unit)
 
-    fun cancelTransaction(transactionId: String, otherUserId: String, otherUserDeviceId: String, code: CancelCode)
+    fun cancelTransaction(transactionId: String,
+                          otherUserId: String,
+                          otherUserDeviceId: String,
+                          code: CancelCode)
 
     fun done(transactionId: String)
     /**
@@ -58,7 +65,7 @@ internal interface SasTransport {
                     keyAgreementProtocols: List<String>,
                     hashes: List<String>,
                     messageAuthenticationCodes: List<String>,
-                    shortAuthenticationStrings: List<String>) : VerificationInfoStart
+                    shortAuthenticationStrings: List<String>): VerificationInfoStart
 
     fun createMac(tid: String, mac: Map<String, String>, keys: String): VerificationInfoMac
 

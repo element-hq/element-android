@@ -34,7 +34,10 @@ internal class SasTransportToDevice(
         private var taskExecutor: TaskExecutor
 ) : SasTransport {
 
-    override fun sendVerificationRequest(localID: String, otherUserId: String, roomId: String,
+    override fun sendVerificationRequest(supportedMethods: List<String>,
+                                         localID: String,
+                                         otherUserId: String,
+                                         roomId: String,
                                          callback: (String?, MessageVerificationRequestContent?) -> Unit) {
         // TODO "not implemented"
     }

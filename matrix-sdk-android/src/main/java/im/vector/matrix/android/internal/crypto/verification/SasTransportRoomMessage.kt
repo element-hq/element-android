@@ -24,7 +24,6 @@ import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTxState
 import im.vector.matrix.android.api.session.events.model.*
 import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultContent
-import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationStart
 import im.vector.matrix.android.internal.di.DeviceId
 import im.vector.matrix.android.internal.di.SessionId
 import im.vector.matrix.android.internal.di.UserId
@@ -119,7 +118,8 @@ internal class SasTransportRoomMessage(
         }
     }
 
-    override fun sendVerificationRequest(localID: String,
+    override fun sendVerificationRequest(supportedMethods: List<String>,
+                                         localID: String,
                                          otherUserId: String,
                                          roomId: String,
                                          callback: (String?, MessageVerificationRequestContent?) -> Unit) {
@@ -127,7 +127,7 @@ internal class SasTransportRoomMessage(
                 body = stringProvider.getString(R.string.key_verification_request_fallback_message, userId),
                 fromDevice = userDeviceId ?: "",
                 toUserId = otherUserId,
-                methods = listOf(KeyVerificationStart.VERIF_METHOD_SAS)
+                methods = supportedMethods
         )
         val content = info.toContent()
 

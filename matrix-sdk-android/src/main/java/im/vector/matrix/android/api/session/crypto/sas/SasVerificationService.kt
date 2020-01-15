@@ -45,22 +45,17 @@ interface SasVerificationService {
     fun getExistingVerificationRequest(otherUser: String, tid: String?): PendingVerificationRequest?
 
     fun getExistingVerificationRequestInRoom(roomId: String, tid: String?): PendingVerificationRequest?
-    /**
-     * Shortcut for KeyVerificationStart.VERIF_METHOD_SAS
-     * @see beginKeyVerification
-     */
-    fun beginKeyVerificationSAS(userId: String, deviceID: String): String?
+
+    fun beginKeyVerification(method: VerificationMethod, userId: String, deviceID: String): String?
 
     /**
      * Request a key verification from another user using toDevice events.
      */
-    fun beginKeyVerification(method: String, userId: String, deviceID: String): String?
-
-    fun requestKeyVerificationInDMs(userId: String, roomId: String): PendingVerificationRequest
+    fun requestKeyVerificationInDMs(methods: List<VerificationMethod>, userId: String, roomId: String): PendingVerificationRequest
 
     fun declineVerificationRequestInDMs(otherUserId: String, otherDeviceId: String, transactionId: String, roomId: String)
 
-    fun beginKeyVerificationInDMs(method: String,
+    fun beginKeyVerificationInDMs(method: VerificationMethod,
                                   transactionId: String,
                                   roomId: String,
                                   otherUserId: String,
@@ -68,7 +63,7 @@ interface SasVerificationService {
                                   callback: MatrixCallback<String>?): String?
 
     /**
-     * Returns false if the request is unknwown
+     * Returns false if the request is unknown
      */
     fun readyPendingVerificationInDMs(otherUserId: String, roomId: String, transactionId: String): Boolean
 
@@ -85,14 +80,14 @@ interface SasVerificationService {
 
     companion object {
 
-        private const val TEN_MINTUTES_IN_MILLIS = 10 * 60 * 1000
-        private const val FIVE_MINTUTES_IN_MILLIS = 5 * 60 * 1000
+        private const val TEN_MINUTES_IN_MILLIS = 10 * 60 * 1000
+        private const val FIVE_MINUTES_IN_MILLIS = 5 * 60 * 1000
 
         fun isValidRequest(age: Long?): Boolean {
             if (age == null) return false
             val now = System.currentTimeMillis()
-            val tooInThePast = now - TEN_MINTUTES_IN_MILLIS
-            val tooInTheFuture = now + FIVE_MINTUTES_IN_MILLIS
+            val tooInThePast = now - TEN_MINUTES_IN_MILLIS
+            val tooInTheFuture = now + FIVE_MINUTES_IN_MILLIS
             return age in tooInThePast..tooInTheFuture
         }
     }

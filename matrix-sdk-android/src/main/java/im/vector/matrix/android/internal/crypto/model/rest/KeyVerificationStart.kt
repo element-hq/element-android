@@ -27,7 +27,7 @@ import timber.log.Timber
  * Sent by Alice to initiate an interactive key verification.
  */
 @JsonClass(generateAdapter = true)
-data class KeyVerificationStart(
+internal data class KeyVerificationStart(
         @Json(name = "from_device") override val fromDevice: String? = null,
         override val method: String? = null,
         @Json(name = "transaction_id") override val transactionID: String? = null,
@@ -41,22 +41,18 @@ data class KeyVerificationStart(
         return JsonCanonicalizer.getCanonicalJson(KeyVerificationStart::class.java, this)
     }
 
-    companion object {
-        const val VERIF_METHOD_SAS = "m.sas.v1"
-        const val VERIF_METHOD_SCAN = "m.qr_code.scan.v1"
-    }
-
     override fun isValid(): Boolean {
-        if ((transactionID.isNullOrBlank()
-                        || fromDevice.isNullOrBlank()
-                        || method != VERIF_METHOD_SAS
-                        || keyAgreementProtocols.isNullOrEmpty()
-                        || hashes.isNullOrEmpty())
+        if (transactionID.isNullOrBlank()
+                || fromDevice.isNullOrBlank()
+                || method !in supportedVerificationMethods
+                || keyAgreementProtocols.isNullOrEmpty()
+                || hashes.isNullOrEmpty()
                 || !hashes.contains("sha256")
                 || messageAuthenticationCodes.isNullOrEmpty()
                 || (!messageAuthenticationCodes.contains(SASVerificationTransaction.SAS_MAC_SHA256)
                         && !messageAuthenticationCodes.contains(SASVerificationTransaction.SAS_MAC_SHA256_LONGKDF))
-                || shortAuthenticationStrings.isNullOrEmpty() || !shortAuthenticationStrings.contains(SasMode.DECIMAL)) {
+                || shortAuthenticationStrings.isNullOrEmpty()
+                || !shortAuthenticationStrings.contains(SasMode.DECIMAL)) {
             Timber.e("## received invalid verification request")
             return false
         }

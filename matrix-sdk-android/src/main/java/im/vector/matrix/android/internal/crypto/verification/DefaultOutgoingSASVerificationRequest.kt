@@ -19,9 +19,10 @@ import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.crypto.sas.CancelCode
 import im.vector.matrix.android.api.session.crypto.sas.OutgoingSasVerificationRequest
 import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTxState
+import im.vector.matrix.android.api.session.crypto.sas.VerificationMethod
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
-import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationStart
+import im.vector.matrix.android.internal.crypto.model.rest.toValue
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import timber.log.Timber
 
@@ -71,7 +72,7 @@ internal class DefaultOutgoingSASVerificationRequest(
         cancel(CancelCode.UnexpectedMessage)
     }
 
-    fun start() {
+    fun start(method: VerificationMethod) {
         if (state != SasVerificationTxState.None) {
             Timber.e("## SAS O: start verification from invalid state")
             // should I cancel??
@@ -80,7 +81,7 @@ internal class DefaultOutgoingSASVerificationRequest(
 
         val startMessage = transport.createStart(
                 credentials.deviceId ?: "",
-                KeyVerificationStart.VERIF_METHOD_SAS,
+                method.toValue(),
                 transactionId,
                 KNOWN_AGREEMENT_PROTOCOLS,
                 KNOWN_HASHES,

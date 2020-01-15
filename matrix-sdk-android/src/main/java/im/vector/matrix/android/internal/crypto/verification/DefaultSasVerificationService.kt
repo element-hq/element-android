@@ -22,10 +22,7 @@ import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.crypto.CryptoService
-import im.vector.matrix.android.api.session.crypto.sas.CancelCode
-import im.vector.matrix.android.api.session.crypto.sas.SasVerificationService
-import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTxState
-import im.vector.matrix.android.api.session.crypto.sas.safeValueOf
+import im.vector.matrix.android.api.session.crypto.sas.*
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.LocalEcho
@@ -366,7 +363,7 @@ internal class DefaultSasVerificationService @Inject constructor(
                 // cancelTransaction(tid, otherUserId, startReq.fromDevice!!, CancelCode.UnexpectedMessage)
             } else {
                 // Ok we can create
-                if (KeyVerificationStart.VERIF_METHOD_SAS == startReq.method) {
+                if (startReq.method == VERIFICATION_METHOD_SAS) {
                     Timber.v("## SAS onStartRequestReceived - request accepted ${startReq.transactionID!!}")
                     // If there is a corresponding request, we can auto accept
                     // as we are the one requesting in first place (or we accepted the request)
@@ -690,14 +687,10 @@ internal class DefaultSasVerificationService @Inject constructor(
         }
     }
 
-    override fun beginKeyVerificationSAS(userId: String, deviceID: String): String? {
-        return beginKeyVerification(KeyVerificationStart.VERIF_METHOD_SAS, userId, deviceID)
-    }
-
-    override fun beginKeyVerification(method: String, userId: String, deviceID: String): String? {
+    override fun beginKeyVerification(method: VerificationMethod, userId: String, deviceID: String): String? {
         val txID = createUniqueIDForTransaction(userId, deviceID)
         // should check if already one (and cancel it)
-        if (KeyVerificationStart.VERIF_METHOD_SAS == method) {
+        if (method == VerificationMethod.SAS) {
             val tx = DefaultOutgoingSASVerificationRequest(
                     setDeviceVerificationAction,
                     credentials,
@@ -709,14 +702,14 @@ internal class DefaultSasVerificationService @Inject constructor(
             tx.transport = sasTransportToDeviceFactory.createTransport(tx)
             addTransaction(tx)
 
-            tx.start()
+            tx.start(method)
             return txID
         } else {
             throw IllegalArgumentException("Unknown verification method")
         }
     }
 
-    override fun requestKeyVerificationInDMs(userId: String, roomId: String)
+    override fun requestKeyVerificationInDMs(methods: List<VerificationMethod>, userId: String, roomId: String)
             : PendingVerificationRequest {
         Timber.i("## SAS Requesting verification to user: $userId in room $roomId")
 
@@ -747,7 +740,7 @@ internal class DefaultSasVerificationService @Inject constructor(
                 otherUserId = userId
         )
 
-        transport.sendVerificationRequest(localID, userId, roomId) { syncedId, info ->
+        transport.sendVerificationRequest(methods.map { it.toValue() }, localID, userId, roomId) { syncedId, info ->
             // We need to update with the syncedID
             updatePendingRequest(verificationRequest.copy(
                     transactionId = syncedId,
@@ -788,10 +781,13 @@ internal class DefaultSasVerificationService @Inject constructor(
         dispatchRequestUpdated(updated)
     }
 
-    override fun beginKeyVerificationInDMs(method: String, transactionId: String, roomId: String,
-                                           otherUserId: String, otherDeviceId: String,
+    override fun beginKeyVerificationInDMs(method: VerificationMethod,
+                                           transactionId: String,
+                                           roomId: String,
+                                           otherUserId: String,
+                                           otherDeviceId: String,
                                            callback: MatrixCallback<String>?): String? {
-        if (KeyVerificationStart.VERIF_METHOD_SAS == method) {
+        if (method == VerificationMethod.SAS) {
             val tx = DefaultOutgoingSASVerificationRequest(
                     setDeviceVerificationAction,
                     credentials,
@@ -803,7 +799,7 @@ internal class DefaultSasVerificationService @Inject constructor(
             tx.transport = sasTransportRoomMessageFactory.createTransport(roomId, tx)
             addTransaction(tx)
 
-            tx.start()
+            tx.start(method)
             return transactionId
         } else {
             throw IllegalArgumentException("Unknown verification method")
@@ -817,7 +813,7 @@ internal class DefaultSasVerificationService @Inject constructor(
         if (existingRequest != null) {
             // we need to send a ready event, with matching methods
             val transport = sasTransportRoomMessageFactory.createTransport(roomId, null)
-            val methods = existingRequest.requestInfo?.methods?.intersect(listOf(KeyVerificationStart.VERIF_METHOD_SAS))?.toList()
+            val methods = existingRequest.requestInfo?.methods?.intersect(supportedVerificationMethods)?.toList()
             if (methods.isNullOrEmpty()) {
                 Timber.i("Cannot ready this request, no common methods found txId:$transactionId")
                 // TODO buttons should not be shown in  this case?

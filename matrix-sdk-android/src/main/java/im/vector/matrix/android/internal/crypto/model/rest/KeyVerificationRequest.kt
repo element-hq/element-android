@@ -28,7 +28,7 @@ internal data class KeyVerificationRequest(
         @Json(name = "from_device")
         val fromDevice: String,
         /** The verification methods supported by the sender. */
-        val methods: List<String> = listOf(KeyVerificationStart.VERIF_METHOD_SAS),
+        val methods: List<String>,
         /**
          *  The POSIX timestamp in milliseconds for when the request was made.
          *  If the request is in the future by more than 5 minutes or more than 10 minutes in the past,
