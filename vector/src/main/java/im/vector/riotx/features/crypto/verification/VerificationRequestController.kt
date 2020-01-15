@@ -78,6 +78,7 @@ class VerificationRequestController @Inject constructor(
                 bottomSheetVerificationActionItem {
                     id("start")
                     title(stringProvider.getString(R.string.start_verification))
+                    titleColor(colorProvider.getColor(R.color.riotx_accent))
                     subTitle(stringProvider.getString(R.string.verification_request_start_notice))
                     iconRes(R.drawable.ic_arrow_right)
                     iconColor(colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
