@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.riotx.features.crypto.verification
+package im.vector.riotx.features.crypto.verification.emoji
 
 import com.airbnb.mvrx.*
 import com.squareup.inject.assisted.Assisted
@@ -28,6 +28,7 @@ import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.core.di.HasScreenInjector
 import im.vector.riotx.core.platform.EmptyAction
 import im.vector.riotx.core.platform.VectorViewModel
+import im.vector.riotx.features.crypto.verification.VerificationBottomSheet
 
 data class VerificationEmojiCodeViewState(
         val transactionId: String?,

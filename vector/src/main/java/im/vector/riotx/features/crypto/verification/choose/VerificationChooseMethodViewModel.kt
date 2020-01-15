@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.riotx.features.crypto.verification
+package im.vector.riotx.features.crypto.verification.choose
 
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxState
@@ -29,6 +29,7 @@ import im.vector.matrix.android.internal.crypto.verification.PendingVerification
 import im.vector.riotx.core.di.HasScreenInjector
 import im.vector.riotx.core.platform.EmptyAction
 import im.vector.riotx.core.platform.VectorViewModel
+import im.vector.riotx.features.crypto.verification.VerificationBottomSheet
 
 data class VerificationChooseMethodViewState(
         val otherUserId: String = "",

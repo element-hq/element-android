@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.riotx.features.crypto.verification
+package im.vector.riotx.features.crypto.verification.request
 
 import android.os.Bundle
 import android.view.View
@@ -24,15 +24,17 @@ import im.vector.riotx.R
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.platform.VectorBaseFragment
+import im.vector.riotx.features.crypto.verification.VerificationAction
+import im.vector.riotx.features.crypto.verification.VerificationBottomSheetViewModel
 import kotlinx.android.synthetic.main.bottom_sheet_verification_child_fragment.*
 import javax.inject.Inject
 
-class VerificationEmojiCodeFragment @Inject constructor(
-        val viewModelFactory: VerificationEmojiCodeViewModel.Factory,
-        val controller: VerificationEmojiCodeController
-) : VectorBaseFragment(), VerificationEmojiCodeController.Listener {
+class VerificationRequestFragment @Inject constructor(
+        val verificationRequestViewModelFactory: VerificationRequestViewModel.Factory,
+        val controller: VerificationRequestController
+) : VectorBaseFragment(), VerificationRequestController.Listener {
 
-    private val viewModel by fragmentViewModel(VerificationEmojiCodeViewModel::class)
+    private val viewModel by fragmentViewModel(VerificationRequestViewModel::class)
 
     private val sharedViewModel by parentFragmentViewModel(VerificationBottomSheetViewModel::class)
 
@@ -59,15 +61,7 @@ class VerificationEmojiCodeFragment @Inject constructor(
         controller.update(state)
     }
 
-    override fun onMatchButtonTapped() = withState(viewModel) { state ->
-        val otherUserId = state.otherUser?.id ?: return@withState
-        val txId = state.transactionId ?: return@withState
-        sharedViewModel.handle(VerificationAction.SASMatchAction(otherUserId, txId))
-    }
-
-    override fun onDoNotMatchButtonTapped() = withState(viewModel) { state ->
-        val otherUserId = state.otherUser?.id ?: return@withState
-        val txId = state.transactionId ?: return@withState
-        sharedViewModel.handle(VerificationAction.SASDoNotMatchAction(otherUserId, txId))
+    override fun onClickOnVerificationStart() = withState(viewModel) { state ->
+        sharedViewModel.handle(VerificationAction.RequestVerificationByDM(state.matrixItem.id, state.roomId))
     }
 }

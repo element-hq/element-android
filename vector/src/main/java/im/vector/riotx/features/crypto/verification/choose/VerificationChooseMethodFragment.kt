@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.riotx.features.crypto.verification
+package im.vector.riotx.features.crypto.verification.choose
 
 import android.text.style.ClickableSpan
 import android.view.View
@@ -26,6 +26,8 @@ import com.airbnb.mvrx.withState
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.utils.tappableMatchingText
+import im.vector.riotx.features.crypto.verification.VerificationAction
+import im.vector.riotx.features.crypto.verification.VerificationBottomSheetViewModel
 import kotlinx.android.synthetic.main.fragment_verification_choose_method.*
 import javax.inject.Inject
 
@@ -61,7 +63,8 @@ class VerificationChooseMethodFragment @Inject constructor(
 
     @OnClick(R.id.verificationByEmojiButton)
     fun doVerifyBySas() = withState(sharedViewModel) {
-        sharedViewModel.handle(VerificationAction.StartSASVerification(it.otherUserMxItem?.id ?: "", it.pendingRequest?.transactionId
-                ?: ""))
+        sharedViewModel.handle(VerificationAction.StartSASVerification(
+                it.otherUserMxItem?.id ?: "",
+                it.pendingRequest?.transactionId ?: ""))
     }
 }

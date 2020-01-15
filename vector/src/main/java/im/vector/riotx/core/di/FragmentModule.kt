@@ -23,10 +23,10 @@ import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupSettingsFragment
-import im.vector.riotx.features.crypto.verification.VerificationChooseMethodFragment
-import im.vector.riotx.features.crypto.verification.VerificationConclusionFragment
-import im.vector.riotx.features.crypto.verification.VerificationEmojiCodeFragment
-import im.vector.riotx.features.crypto.verification.VerificationRequestFragment
+import im.vector.riotx.features.crypto.verification.choose.VerificationChooseMethodFragment
+import im.vector.riotx.features.crypto.verification.conclusion.VerificationConclusionFragment
+import im.vector.riotx.features.crypto.verification.emoji.VerificationEmojiCodeFragment
+import im.vector.riotx.features.crypto.verification.request.VerificationRequestFragment
 import im.vector.riotx.features.home.HomeDetailFragment
 import im.vector.riotx.features.home.HomeDrawerFragment
 import im.vector.riotx.features.home.LoadingFragment

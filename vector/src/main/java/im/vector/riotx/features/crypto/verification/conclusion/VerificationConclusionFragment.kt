@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.riotx.features.crypto.verification
+package im.vector.riotx.features.crypto.verification.conclusion
 
 import android.os.Parcelable
 import androidx.core.content.ContextCompat
@@ -25,6 +25,8 @@ import com.airbnb.mvrx.withState
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.core.platform.VectorBaseFragment
+import im.vector.riotx.features.crypto.verification.VerificationAction
+import im.vector.riotx.features.crypto.verification.VerificationBottomSheetViewModel
 import io.noties.markwon.Markwon
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_verification_conclusion.*

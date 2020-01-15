@@ -35,6 +35,11 @@ import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.commitTransactionNow
 import im.vector.riotx.core.platform.VectorBaseBottomSheetDialogFragment
+import im.vector.riotx.features.crypto.verification.choose.VerificationChooseMethodFragment
+import im.vector.riotx.features.crypto.verification.conclusion.VerificationConclusionFragment
+import im.vector.riotx.features.crypto.verification.emoji.VerificationEmojiCodeFragment
+import im.vector.riotx.features.crypto.verification.request.VerificationRequestFragment
+import im.vector.riotx.features.crypto.verification.request.VerificationRequestViewModel
 import im.vector.riotx.features.home.AvatarRenderer
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.bottom_sheet_verification.*

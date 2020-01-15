@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.crypto.verification
+package im.vector.riotx.features.crypto.verification.request
 
 import androidx.core.text.toSpannable
 import com.airbnb.epoxy.EpoxyController

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.crypto.verification
+package im.vector.riotx.features.crypto.verification.emoji
 
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.mvrx.Fail
