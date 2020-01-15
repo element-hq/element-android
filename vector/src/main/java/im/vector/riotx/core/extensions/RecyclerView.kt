@@ -28,12 +28,17 @@ fun RecyclerView.configureWith(epoxyController: EpoxyController,
                                itemAnimator: RecyclerView.ItemAnimator? = null,
                                viewPool: RecyclerView.RecycledViewPool? = null,
                                showDivider: Boolean = false,
-                               hasFixedSize: Boolean = true) {
+                               hasFixedSize: Boolean = true,
+                               disableItemAnimation: Boolean = false) {
     layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false).apply {
         recycleChildrenOnDetach = viewPool != null
     }
     setRecycledViewPool(viewPool)
-    itemAnimator?.let { this.itemAnimator = it }
+    if (disableItemAnimation) {
+        this.itemAnimator = null
+    } else {
+        itemAnimator?.let { this.itemAnimator = it }
+    }
     if (showDivider) {
         addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
     }

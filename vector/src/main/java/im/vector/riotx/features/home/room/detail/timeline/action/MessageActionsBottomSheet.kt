@@ -54,9 +54,7 @@ class MessageActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), Message
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(MessageSharedActionViewModel::class.java)
-        recyclerView.configureWith(messageActionsEpoxyController, hasFixedSize = false)
-        // Disable item animation
-        recyclerView.itemAnimator = null
+        recyclerView.configureWith(messageActionsEpoxyController, hasFixedSize = false, disableItemAnimation = true)
         messageActionsEpoxyController.listener = this
     }
 

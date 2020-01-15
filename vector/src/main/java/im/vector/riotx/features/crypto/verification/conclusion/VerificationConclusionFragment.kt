@@ -60,7 +60,7 @@ class VerificationConclusionFragment @Inject constructor(
     }
 
     private fun setupRecyclerView() {
-        bottomSheetVerificationRecyclerView.configureWith(controller, hasFixedSize = false)
+        bottomSheetVerificationRecyclerView.configureWith(controller, hasFixedSize = false, disableItemAnimation = true)
         controller.listener = this
     }
 
