@@ -15,56 +15,59 @@
  */
 package im.vector.riotx.features.crypto.verification.choose
 
-import android.text.style.ClickableSpan
+import android.os.Bundle
 import android.view.View
-import androidx.core.text.toSpannable
-import androidx.core.view.isVisible
-import butterknife.OnClick
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
+import im.vector.riotx.core.extensions.cleanup
+import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.platform.VectorBaseFragment
-import im.vector.riotx.core.utils.tappableMatchingText
 import im.vector.riotx.features.crypto.verification.VerificationAction
 import im.vector.riotx.features.crypto.verification.VerificationBottomSheetViewModel
-import kotlinx.android.synthetic.main.fragment_verification_choose_method.*
+import kotlinx.android.synthetic.main.bottom_sheet_verification_child_fragment.*
 import javax.inject.Inject
 
 class VerificationChooseMethodFragment @Inject constructor(
-        val verificationChooseMethodViewModelFactory: VerificationChooseMethodViewModel.Factory
-) : VectorBaseFragment() {
-
-    override fun getLayoutResId() = R.layout.fragment_verification_choose_method
-
-    private val sharedViewModel by parentFragmentViewModel(VerificationBottomSheetViewModel::class)
+        val verificationChooseMethodViewModelFactory: VerificationChooseMethodViewModel.Factory,
+        val controller: VerificationChooseMethodController
+) : VectorBaseFragment(), VerificationChooseMethodController.Listener {
 
     private val viewModel by fragmentViewModel(VerificationChooseMethodViewModel::class)
 
-    override fun invalidate() = withState(viewModel) { state ->
-        if (state.QRModeAvailable) {
-            val cSpan = object : ClickableSpan() {
-                override fun onClick(widget: View) {
-                }
-            }
-            val openLink = getString(R.string.verify_open_camera_link)
-            val descCharSequence =
-                    getString(R.string.verify_by_scanning_description, openLink)
-                            .toSpannable()
-                            .tappableMatchingText(openLink, cSpan)
-            verifyQRDescription.text = descCharSequence
-            verifyQRGroup.isVisible = true
-        } else {
-            verifyQRGroup.isVisible = false
-        }
+    private val sharedViewModel by parentFragmentViewModel(VerificationBottomSheetViewModel::class)
 
-        verifyEmojiGroup.isVisible = state.SASMOdeAvailable
+    override fun getLayoutResId() = R.layout.bottom_sheet_verification_child_fragment
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setupRecyclerView()
     }
 
-    @OnClick(R.id.verificationByEmojiButton)
-    fun doVerifyBySas() = withState(sharedViewModel) {
+    override fun onDestroyView() {
+        bottomSheetVerificationRecyclerView.cleanup()
+        controller.listener = null
+        super.onDestroyView()
+    }
+
+    private fun setupRecyclerView() {
+        bottomSheetVerificationRecyclerView.configureWith(controller, hasFixedSize = false, disableItemAnimation = true)
+        controller.listener = this
+    }
+
+    override fun invalidate() = withState(viewModel) { state ->
+        controller.update(state)
+    }
+
+    override fun doVerifyBySas() = withState(sharedViewModel) {
         sharedViewModel.handle(VerificationAction.StartSASVerification(
                 it.otherUserMxItem?.id ?: "",
                 it.pendingRequest?.transactionId ?: ""))
+    }
+
+    override fun openCamera() {
+        // TODO
     }
 }

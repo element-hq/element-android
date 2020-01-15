@@ -45,7 +45,7 @@ abstract class BottomSheetVerificationActionItem : VectorEpoxyModel<BottomSheetV
     @EpoxyAttribute
     var titleColor: Int = 0
     @EpoxyAttribute
-    var iconColor: Int = 0
+    var iconColor: Int = -1
 
     @EpoxyAttribute
     lateinit var listener: () -> Unit
@@ -63,7 +63,9 @@ abstract class BottomSheetVerificationActionItem : VectorEpoxyModel<BottomSheetV
         if (iconRes != -1) {
             holder.icon.isVisible = true
             holder.icon.setImageResource(iconRes)
-            ImageViewCompat.setImageTintList(holder.icon, ColorStateList.valueOf(iconColor))
+            if (iconColor != -1) {
+                ImageViewCompat.setImageTintList(holder.icon, ColorStateList.valueOf(iconColor))
+            }
         } else {
             holder.icon.isVisible = false
         }
