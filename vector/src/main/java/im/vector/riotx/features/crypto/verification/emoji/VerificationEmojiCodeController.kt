@@ -124,7 +124,7 @@ class VerificationEmojiCodeController @Inject constructor(
                 id("ko")
                 title(stringProvider.getString(R.string.verification_sas_do_not_match))
                 titleColor(colorProvider.getColor(R.color.vector_error_color))
-                iconRes(R.drawable.ic_arrow_right)
+                iconRes(R.drawable.ic_check_off)
                 iconColor(colorProvider.getColor(R.color.vector_error_color))
                 listener { listener?.onDoNotMatchButtonTapped() }
             }
@@ -135,7 +135,7 @@ class VerificationEmojiCodeController @Inject constructor(
                 id("ok")
                 title(stringProvider.getString(R.string.verification_sas_match))
                 titleColor(colorProvider.getColor(R.color.riotx_accent))
-                iconRes(R.drawable.ic_arrow_right)
+                iconRes(R.drawable.ic_check_on)
                 iconColor(colorProvider.getColor(R.color.riotx_accent))
                 listener { listener?.onMatchButtonTapped() }
             }
