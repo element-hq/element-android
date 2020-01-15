@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
-package im.vector.riotx.features.crypto.verification.bottomsheet
+package im.vector.riotx.features.crypto.verification.epoxy
 
 import android.content.res.ColorStateList
 import android.widget.ImageView

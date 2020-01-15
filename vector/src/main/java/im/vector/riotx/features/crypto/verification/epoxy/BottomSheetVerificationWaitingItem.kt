@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
-package im.vector.riotx.features.crypto.verification.bottomsheet
+package im.vector.riotx.features.crypto.verification.epoxy
 
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
@@ -26,17 +26,17 @@ import im.vector.riotx.core.epoxy.VectorEpoxyModel
 /**
  * A action for bottom sheet.
  */
-@EpoxyModelClass(layout = R.layout.item_verification_notice)
-abstract class BottomSheetVerificationNoticeItem : VectorEpoxyModel<BottomSheetVerificationNoticeItem.Holder>() {
+@EpoxyModelClass(layout = R.layout.item_verification_waiting)
+abstract class BottomSheetVerificationWaitingItem : VectorEpoxyModel<BottomSheetVerificationWaitingItem.Holder>() {
 
     @EpoxyAttribute
-    var notice: CharSequence = ""
+    var title: CharSequence = ""
 
     override fun bind(holder: Holder) {
-        holder.notice.text = notice
+        holder.title.text = title
     }
 
     class Holder : VectorEpoxyHolder() {
-        val notice by bind<TextView>(R.id.itemVerificationNoticeText)
+        val title by bind<TextView>(R.id.itemVerificationWaitingTitle)
     }
 }

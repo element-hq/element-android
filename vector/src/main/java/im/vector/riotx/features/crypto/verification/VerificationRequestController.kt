@@ -24,9 +24,9 @@ import im.vector.riotx.core.epoxy.bottomsheet.bottomSheetSeparatorItem
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.utils.colorizeMatchingText
-import im.vector.riotx.features.crypto.verification.bottomsheet.bottomSheetVerificationActionItem
-import im.vector.riotx.features.crypto.verification.bottomsheet.bottomSheetVerificationNoticeItem
-import im.vector.riotx.features.crypto.verification.bottomsheet.bottomSheetVerificationWaitingItem
+import im.vector.riotx.features.crypto.verification.epoxy.bottomSheetVerificationActionItem
+import im.vector.riotx.features.crypto.verification.epoxy.bottomSheetVerificationNoticeItem
+import im.vector.riotx.features.crypto.verification.epoxy.bottomSheetVerificationWaitingItem
 import javax.inject.Inject
 
 class VerificationRequestController @Inject constructor(

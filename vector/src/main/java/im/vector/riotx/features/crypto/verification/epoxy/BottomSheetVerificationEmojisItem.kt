@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
-package im.vector.riotx.features.crypto.verification.bottomsheet
+package im.vector.riotx.features.crypto.verification.epoxy
 
 import android.view.ViewGroup
 import android.widget.TextView

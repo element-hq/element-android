@@ -25,7 +25,7 @@ import im.vector.riotx.core.epoxy.errorWithRetryItem
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
-import im.vector.riotx.features.crypto.verification.bottomsheet.*
+import im.vector.riotx.features.crypto.verification.epoxy.*
 import javax.inject.Inject
 
 class VerificationEmojiCodeController @Inject constructor(
