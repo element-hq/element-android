@@ -18,7 +18,7 @@
     </plurals>
     <string name="room_profile_section_more_uploads">Uploads</string>
     <string name="room_profile_section_more_leave">Leave Room</string>
-    <string name="room_profile_leaving_room">"Leaving the room..."</string>
+    <string name="room_profile_leaving_room">"Leaving the room…"</string>
 
     <string name="room_member_power_level_admins">Admins</string>
     <string name="room_member_power_level_moderators">Moderators</string>
