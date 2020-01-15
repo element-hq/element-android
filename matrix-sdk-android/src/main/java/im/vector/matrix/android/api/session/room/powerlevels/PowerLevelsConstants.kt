@@ -15,7 +15,7 @@
  *
  */
 
-package im.vector.matrix.android.api.session.room.powerlevers
+package im.vector.matrix.android.api.session.room.powerlevels
 
 object PowerLevelsConstants {
 

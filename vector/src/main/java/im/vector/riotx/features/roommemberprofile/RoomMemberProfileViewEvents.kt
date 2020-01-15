@@ -17,7 +17,7 @@
 package im.vector.riotx.features.roommemberprofile
 
 /**
- * Transient events for RoomProfile
+ * Transient events for RoomMemberProfile
  */
 sealed class RoomMemberProfileViewEvents {
     data class Loading(val message: CharSequence) : RoomMemberProfileViewEvents()

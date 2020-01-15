@@ -33,8 +33,8 @@ import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.members.roomMemberQueryParams
 import im.vector.matrix.android.api.session.room.model.PowerLevelsContent
 import im.vector.matrix.android.api.session.room.model.RoomSummary
-import im.vector.matrix.android.api.session.room.powerlevers.PowerLevelsConstants
-import im.vector.matrix.android.api.session.room.powerlevers.PowerLevelsHelper
+import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsConstants
+import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsHelper
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.matrix.android.api.util.toOptional
@@ -196,7 +196,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
         if (isIgnored) {
             session.unIgnoreUserIds(listOf(state.userId), ignoreActionCallback)
         } else {
-            session.ignoreUserIds(listOf(initialState.userId), ignoreActionCallback)
+            session.ignoreUserIds(listOf(state.userId), ignoreActionCallback)
         }
     }
 }

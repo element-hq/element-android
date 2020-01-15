@@ -18,7 +18,7 @@ package im.vector.matrix.android.api.session.room.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import im.vector.matrix.android.api.session.room.powerlevers.PowerLevelsConstants
+import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsConstants
 
 /**
  * Class representing the EventType.EVENT_TYPE_STATE_ROOM_POWER_LEVELS state event content.

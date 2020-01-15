@@ -12,7 +12,10 @@
     <string name="room_profile_section_more">More</string>
     <string name="room_profile_section_more_settings">Room settings</string>
     <string name="room_profile_section_more_notifications">Notifications</string>
-    <string name="room_profile_section_more_member_list">"%1$s people"</string>
+    <plurals name="room_profile_section_more_member_list">
+        <item quantity="one">"One person"</item>
+        <item quantity="other">"%1$d people"</item>
+    </plurals>
     <string name="room_profile_section_more_uploads">Uploads</string>
     <string name="room_profile_section_more_leave">Leave Room</string>
     <string name="room_profile_leaving_room">"Leaving the room..."</string>

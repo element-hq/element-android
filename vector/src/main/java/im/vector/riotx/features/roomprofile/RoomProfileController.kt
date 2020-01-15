@@ -42,12 +42,10 @@ class RoomProfileController @Inject constructor(private val stringProvider: Stri
         if (data == null) {
             return
         }
-
-        val roomSummary = data.roomSummary()
-
+        val roomSummary = data.roomSummary() ?: return
         // Security
         buildProfileSection(stringProvider.getString(R.string.room_profile_section_security))
-        val learnMoreSubtitle = if (data.isEncrypted) {
+        val learnMoreSubtitle = if (roomSummary.isEncrypted) {
             R.string.room_profile_encrypted_subtitle
         } else {
             R.string.room_profile_not_encrypted_subtitle
@@ -73,10 +71,10 @@ class RoomProfileController @Inject constructor(private val stringProvider: Stri
                 icon = R.drawable.ic_room_profile_notification,
                 action = { callback?.onNotificationsClicked() }
         )
-        val numberOfMembers = roomSummary?.joinedMembersCount?.toString() ?: "-"
+        val numberOfMembers = roomSummary.joinedMembersCount ?: 0
         buildProfileAction(
                 id = "member_list",
-                title = stringProvider.getString(R.string.room_profile_section_more_member_list, numberOfMembers),
+                title = stringProvider.getQuantityString(R.plurals.room_profile_section_more_member_list, numberOfMembers, numberOfMembers),
                 icon = R.drawable.ic_room_profile_member_list,
                 action = { callback?.onMemberListClicked() }
         )

@@ -17,7 +17,7 @@ package im.vector.matrix.android.api.pushrules
 
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.model.PowerLevelsContent
-import im.vector.matrix.android.api.session.room.powerlevers.PowerLevelsHelper
+import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsHelper
 
 class SenderNotificationPermissionCondition(val key: String) : Condition(Kind.sender_notification_permission) {
 

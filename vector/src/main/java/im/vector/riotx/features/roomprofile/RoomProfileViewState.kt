@@ -24,8 +24,7 @@ import im.vector.matrix.android.api.session.room.model.RoomSummary
 
 data class RoomProfileViewState(
         val roomId: String,
-        val roomSummary: Async<RoomSummary> = Uninitialized,
-        val isEncrypted: Boolean = false
+        val roomSummary: Async<RoomSummary> = Uninitialized
 ) : MvRxState {
 
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)

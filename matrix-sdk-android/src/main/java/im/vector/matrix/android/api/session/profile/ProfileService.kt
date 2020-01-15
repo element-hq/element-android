@@ -22,6 +22,9 @@ import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.api.util.Optional
 
+/**
+ * This interface defines methods to handling profile information. It's implemented at the session level.
+ */
 interface ProfileService {
 
     companion object Constants {
@@ -29,9 +32,25 @@ interface ProfileService {
         const val AVATAR_URL_KEY = "avatar_url"
     }
 
+    /**
+     * Return the current dispayname for this user
+     * @param userId the userId param to look for
+     *
+     */
     fun getDisplayName(userId: String, matrixCallback: MatrixCallback<Optional<String>>): Cancelable
 
+    /**
+     * Return the current avatarUrl for this user.
+     * @param userId the userId param to look for
+     *
+     */
     fun getAvatarUrl(userId: String, matrixCallback: MatrixCallback<Optional<String>>): Cancelable
 
+    /**
+     * Get the combined profile information for this user.
+     * This may return keys which are not limited to displayname or avatar_url.
+     * @param userId the userId param to look for
+     *
+     */
     fun getProfile(userId: String, matrixCallback: MatrixCallback<JsonDict>): Cancelable
 }

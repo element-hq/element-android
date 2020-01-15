@@ -32,5 +32,5 @@ interface ProfileAPI {
      * @param userId the user id to fetch profile info
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "profile/{userId}")
-    fun getProfile(@Path("userId") roomId: String): Call<JsonDict>
+    fun getProfile(@Path("userId") userId: String): Call<JsonDict>
 }

@@ -15,7 +15,7 @@
  *
  */
 
-package im.vector.matrix.android.api.session.room.powerlevers
+package im.vector.matrix.android.api.session.room.powerlevels
 
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.model.PowerLevelsContent
@@ -64,9 +64,7 @@ class PowerLevelsHelper(private val powerLevelsContent: PowerLevelsContent) {
      * @return the level
      */
     fun notificationLevel(key: String): Int {
-        val value = powerLevelsContent.notifications[key]
-                    ?: return PowerLevelsConstants.DEFAULT_ROOM_MODERATOR_LEVEL
-        return when (value) {
+        return when (val value = powerLevelsContent.notifications[key]) {
             // the first implementation was a string value
             is String -> value.toInt()
             is Int    -> value

@@ -15,8 +15,6 @@
  *
  */
 
-@file:Suppress("DEPRECATION")
-
 package im.vector.riotx.features.roomprofile
 
 import android.os.Bundle
