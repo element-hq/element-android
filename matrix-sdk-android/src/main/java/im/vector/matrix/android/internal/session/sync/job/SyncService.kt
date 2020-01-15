@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.session.sync.job
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
+import im.vector.matrix.android.BuildConfig
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.failure.isTokenError
 import im.vector.matrix.android.api.session.Session
@@ -56,29 +57,15 @@ abstract class SyncService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Timber.i("onStartCommand $intent")
-        intent?.let {
-            val matrix = Matrix.getInstance(applicationContext)
-            val safeSessionId = it.getStringExtra(EXTRA_SESSION_ID) ?: return@let
-            val sessionComponent = matrix.sessionManager.getSessionComponent(safeSessionId)
-                    ?: return@let
-            session = sessionComponent.session()
-            sessionId = safeSessionId
-            syncTask = sessionComponent.syncTask()
-            isInitialSync = !session.hasAlreadySynced()
-            networkConnectivityChecker = sessionComponent.networkConnectivityChecker()
-            taskExecutor = sessionComponent.taskExecutor()
-            coroutineDispatchers = sessionComponent.coroutineDispatchers()
-            backgroundDetectionObserver = matrix.backgroundDetectionObserver
-            if (isRunning.get()) {
-                Timber.i("Received a start while was already syncing... ignore")
-            } else {
-                isRunning.set(true)
-                serviceScope.launch(coroutineDispatchers.io) {
-                    doSync()
-                }
-            }
+        val isInit = initialize(intent)
+        if (isInit) {
+            onStart(isInitialSync)
+            doSyncIfNotAlreadyRunning()
+        } else {
+            // We should start and stop as we have to ensure to call Service.startForeground()
+            onStart(isInitialSync)
+            stopMe()
         }
-        onStart(isInitialSync)
         // No intent just start the service, an alarm will should call with intent
         return START_STICKY
     }
@@ -96,6 +83,17 @@ abstract class SyncService : Service() {
     private fun stopMe() {
         mIsSelfDestroyed = true
         stopSelf()
+    }
+
+    private fun doSyncIfNotAlreadyRunning() {
+        if (isRunning.get()) {
+            Timber.i("Received a start while was already syncing... ignore")
+        } else {
+            isRunning.set(true)
+            serviceScope.launch(coroutineDispatchers.io) {
+                doSync()
+            }
+        }
     }
 
     private suspend fun doSync() {
@@ -126,6 +124,33 @@ abstract class SyncService : Service() {
                 delay(DELAY_FAILURE)
                 doSync()
             }
+        }
+    }
+
+    private fun initialize(intent: Intent?): Boolean {
+        if (intent == null) {
+            return false
+        }
+        val matrix = Matrix.getInstance(applicationContext)
+        val safeSessionId = intent.getStringExtra(EXTRA_SESSION_ID) ?: return false
+        try {
+            val sessionComponent = matrix.sessionManager.getSessionComponent(safeSessionId)
+                    ?: throw IllegalStateException("You should have a session to make it work")
+            session = sessionComponent.session()
+            sessionId = safeSessionId
+            syncTask = sessionComponent.syncTask()
+            isInitialSync = !session.hasAlreadySynced()
+            networkConnectivityChecker = sessionComponent.networkConnectivityChecker()
+            taskExecutor = sessionComponent.taskExecutor()
+            coroutineDispatchers = sessionComponent.coroutineDispatchers()
+            backgroundDetectionObserver = matrix.backgroundDetectionObserver
+            return true
+        } catch (exception: Exception) {
+            if (BuildConfig.DEBUG) {
+                throw exception
+            }
+            Timber.e(exception, "An exception occurred during initialisation")
+            return false
         }
     }
 

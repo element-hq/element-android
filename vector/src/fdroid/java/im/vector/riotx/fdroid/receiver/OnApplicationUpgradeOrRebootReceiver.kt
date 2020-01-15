@@ -31,7 +31,7 @@ class OnApplicationUpgradeOrRebootReceiver : BroadcastReceiver() {
         if (appContext is HasVectorInjector) {
             val activeSession = appContext.injector().activeSessionHolder().getSafeActiveSession()
             if (activeSession != null) {
-                AlarmSyncBroadcastReceiver.scheduleAlarm(context, activeSession.myUserId, 10)
+                AlarmSyncBroadcastReceiver.scheduleAlarm(context, activeSession.sessionId, 10)
             }
         }
     }
