@@ -15,24 +15,25 @@
  */
 package im.vector.riotx.features.crypto.verification.conclusion
 
+import android.os.Bundle
 import android.os.Parcelable
-import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
-import butterknife.OnClick
+import android.view.View
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
-import im.vector.riotx.core.extensions.setTextOrHide
+import im.vector.riotx.core.extensions.cleanup
+import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.crypto.verification.VerificationAction
 import im.vector.riotx.features.crypto.verification.VerificationBottomSheetViewModel
-import io.noties.markwon.Markwon
 import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.fragment_verification_conclusion.*
+import kotlinx.android.synthetic.main.bottom_sheet_verification_child_fragment.*
 import javax.inject.Inject
 
-class VerificationConclusionFragment @Inject constructor() : VectorBaseFragment() {
+class VerificationConclusionFragment @Inject constructor(
+        val controller: VerificationConclusionController
+) : VectorBaseFragment(), VerificationConclusionController.Listener {
 
     @Parcelize
     data class Args(
@@ -40,38 +41,39 @@ class VerificationConclusionFragment @Inject constructor() : VectorBaseFragment(
             val cancelReason: String?
     ) : Parcelable
 
-    override fun getLayoutResId() = R.layout.fragment_verification_conclusion
-
     private val sharedViewModel by parentFragmentViewModel(VerificationBottomSheetViewModel::class)
 
     private val viewModel by fragmentViewModel(VerificationConclusionViewModel::class)
 
-    override fun invalidate() = withState(viewModel) {
-        when (it.conclusionState) {
-            ConclusionState.SUCCESS   -> {
-                verificationConclusionTitle.text = getString(R.string.sas_verified)
-                verifyConclusionDescription.setTextOrHide(getString(R.string.sas_verified_successful_description))
-                verifyConclusionBottomDescription.text = getString(R.string.verification_green_shield)
-                verifyConclusionImageView.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_shield_trusted))
-            }
-            ConclusionState.WARNING   -> {
-                verificationConclusionTitle.text = getString(R.string.verification_conclusion_not_secure)
-                verifyConclusionDescription.isVisible = false
-                verifyConclusionImageView.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_shield_warning))
+    override fun getLayoutResId() = R.layout.bottom_sheet_verification_child_fragment
 
-                verifyConclusionBottomDescription.text = Markwon.builder(requireContext())
-                        .build()
-                        .toMarkdown(getString(R.string.verification_conclusion_compromised))
-            }
-            ConclusionState.CANCELLED -> {
-                // Just dismiss in this case
-                sharedViewModel.handle(VerificationAction.GotItConclusion)
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setupRecyclerView()
+    }
+
+    override fun onDestroyView() {
+        bottomSheetVerificationRecyclerView.cleanup()
+        controller.listener = null
+        super.onDestroyView()
+    }
+
+    private fun setupRecyclerView() {
+        bottomSheetVerificationRecyclerView.configureWith(controller, hasFixedSize = false)
+        controller.listener = this
+    }
+
+    override fun invalidate() = withState(viewModel) { state ->
+        if (state.conclusionState == ConclusionState.CANCELLED) {
+            // Just dismiss in this case
+            sharedViewModel.handle(VerificationAction.GotItConclusion)
+        } else {
+            controller.update(state)
         }
     }
 
-    @OnClick(R.id.verificationConclusionButton)
-    fun onButtonTapped() {
+    override fun onButtonTapped() {
         sharedViewModel.handle(VerificationAction.GotItConclusion)
     }
 }

@@ -21,6 +21,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.transition.AutoTransition
@@ -72,6 +73,9 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
     @BindView(R.id.verificationRequestName)
     lateinit var otherUserNameText: TextView
 
+    @BindView(R.id.verificationRequestShield)
+    lateinit var otherUserShield: View
+
     @BindView(R.id.verificationRequestAvatar)
     lateinit var otherUserAvatarImageView: ImageView
 
@@ -95,8 +99,15 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
     override fun invalidate() = withState(viewModel) {
         it.otherUserMxItem?.let { matrixItem ->
-            otherUserNameText.text = getString(R.string.verification_request_alert_title, matrixItem.getBestName())
             avatarRenderer.render(matrixItem, otherUserAvatarImageView)
+
+            if(it.sasTransactionState == SasVerificationTxState.Verified) {
+                otherUserNameText.text = getString(R.string.verification_verified_user, matrixItem.getBestName())
+                otherUserShield.isVisible = true
+            } else {
+                otherUserNameText.text = getString(R.string.verification_verify_user, matrixItem.getBestName())
+                otherUserShield.isVisible = false
+            }
         }
 
         // Did the request result in a SAS transaction?
