@@ -125,7 +125,13 @@
                 <data android:host="matrix.to" />
             </intent-filter>
         </activity>
-        <activity android:name=".features.roommemberprofile.RoomMemberProfileActivity" />
+
+        <activity android:name=".features.roommemberprofile.RoomMemberProfileActivity"
+            android:parentActivityName=".features.home.HomeActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".features.home.HomeActivity" />
+        </activity>
 
         <!-- Services -->
 

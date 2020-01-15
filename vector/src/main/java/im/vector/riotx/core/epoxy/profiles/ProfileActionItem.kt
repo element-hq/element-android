@@ -30,7 +30,7 @@ import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.features.themes.ThemeUtils
 
 @EpoxyModelClass(layout = R.layout.item_profile_action)
-abstract class ProfileItemAction : VectorEpoxyModel<ProfileItemAction.Holder>() {
+abstract class ProfileActionItem : VectorEpoxyModel<ProfileActionItem.Holder>() {
 
     @EpoxyAttribute
     lateinit var title: String

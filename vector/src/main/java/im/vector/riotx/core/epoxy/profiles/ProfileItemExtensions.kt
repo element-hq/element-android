@@ -22,7 +22,7 @@ import com.airbnb.epoxy.EpoxyController
 import im.vector.riotx.core.epoxy.DividerItem_
 
 fun EpoxyController.buildProfileSection(title: String) {
-    profileItemSection {
+    profileSectionItem {
         id("section_$title")
         title(title)
     }
@@ -38,7 +38,7 @@ fun EpoxyController.buildProfileAction(
         divider: Boolean = true,
         action: () -> Unit
 ) {
-    profileItemAction {
+    profileActionItem {
         iconRes(icon)
         id("action_$id")
         subtitle(subtitle)

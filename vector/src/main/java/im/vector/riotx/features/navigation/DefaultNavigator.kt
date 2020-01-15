@@ -56,16 +56,9 @@ class DefaultNavigator @Inject constructor(
             fatalError("Trying to open an unknown room $roomId", vectorPreferences.failFast())
             return
         }
-
         val args = RoomDetailArgs(roomId, eventId)
         val intent = RoomDetailActivity.newIntent(context, args)
-        if (buildTask) {
-            val stackBuilder = TaskStackBuilder.create(context)
-            stackBuilder.addNextIntentWithParentStack(intent)
-            stackBuilder.startActivities()
-        } else {
-            context.startActivity(intent)
-        }
+        startActivity(context, intent, buildTask)
     }
 
     override fun openNotJoinedRoom(context: Context, roomIdOrAlias: String?, eventId: String?, buildTask: Boolean) {
@@ -86,7 +79,8 @@ class DefaultNavigator @Inject constructor(
 
     override fun openRoomMemberProfile(userId: String, roomId: String?, context: Context, buildTask: Boolean) {
         val args = RoomMemberProfileArgs(userId = userId, roomId = roomId)
-        context.startActivity(RoomMemberProfileActivity.newIntent(context, args))
+        val intent = RoomMemberProfileActivity.newIntent(context, args)
+        startActivity(context, intent, buildTask)
     }
 
     override fun openRoomForSharing(activity: Activity, roomId: String, sharedData: SharedData) {
@@ -140,5 +134,15 @@ class DefaultNavigator @Inject constructor(
 
     override fun openRoomProfile(context: Context, roomId: String) {
         context.startActivity(RoomProfileActivity.newIntent(context, roomId))
+    }
+
+    private fun startActivity(context: Context, intent: Intent, buildTask: Boolean) {
+        if (buildTask) {
+            val stackBuilder = TaskStackBuilder.create(context)
+            stackBuilder.addNextIntentWithParentStack(intent)
+            stackBuilder.startActivities()
+        } else {
+            context.startActivity(intent)
+        }
     }
 }

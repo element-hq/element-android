@@ -38,8 +38,8 @@ internal abstract class ProfileModule {
     }
 
     @Binds
-    abstract fun bindProfileService(userService: DefaultProfileService): ProfileService
+    abstract fun bindProfileService(service: DefaultProfileService): ProfileService
 
     @Binds
-    abstract fun bindGetProfileTask(getProfileInfoTask: DefaultGetProfileInfoTask): GetProfileInfoTask
+    abstract fun bindGetProfileTask(task: DefaultGetProfileInfoTask): GetProfileInfoTask
 }

@@ -15,8 +15,6 @@
  *
  */
 
-@file:Suppress("DEPRECATION")
-
 package im.vector.riotx.features.roommemberprofile
 
 import android.os.Bundle
@@ -80,8 +78,8 @@ class RoomMemberProfileFragment @Inject constructor(
                 .subscribe {
                     dismissLoadingDialog()
                     when (it) {
-                        is RoomMemberProfileViewEvents.Loading          -> showLoadingDialog(it.message)
-                        is RoomMemberProfileViewEvents.Failure          -> showErrorInSnackbar(it.throwable)
+                        is RoomMemberProfileViewEvents.Loading -> showLoadingDialog(it.message)
+                        is RoomMemberProfileViewEvents.Failure -> showErrorInSnackbar(it.throwable)
                     }
                 }
                 .disposeOnDestroyView()

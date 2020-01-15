@@ -64,8 +64,6 @@ class RoomListQuickActionsEpoxyController @Inject constructor(private val avatar
                 id("leave_separator")
             }
             RoomListQuickActionsSharedAction.Leave(roomSummary.roomId).toBottomSheetItem(5)
-
-            // Leave
         }
     }
 
