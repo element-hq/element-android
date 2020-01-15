@@ -4,11 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/layout_vertical_margin"
-    app:layout_constrainedWidth="true"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/sas_emoji_description_2">
+    android:layout_margin="@dimen/layout_vertical_margin">
 
     <include
         android:id="@+id/emoji0"

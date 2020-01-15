@@ -60,13 +60,13 @@ class VerificationEmojiCodeController @Inject constructor(
     }
 
     private fun buildEmojiItem(state: VerificationEmojiCodeViewState) {
-        bottomSheetVerificationNoticeItem {
-            id("notice")
-            notice(stringProvider.getString(R.string.verification_emoji_notice))
-        }
-
         when (val emojiDescription = state.emojiDescription) {
             is Success -> {
+                bottomSheetVerificationNoticeItem {
+                    id("notice")
+                    notice(stringProvider.getString(R.string.verification_emoji_notice))
+                }
+
                 bottomSheetVerificationEmojisItem {
                     id("emojis")
                     emojiRepresentation0(emojiDescription()[0])
@@ -96,17 +96,33 @@ class VerificationEmojiCodeController @Inject constructor(
     }
 
     private fun buildDecimal(state: VerificationEmojiCodeViewState) {
-        bottomSheetVerificationNoticeItem {
-            id("notice")
-            notice(stringProvider.getString(R.string.verification_code_notice))
-        }
+        when (val decimalDescription = state.decimalDescription) {
+            is Success -> {
+                bottomSheetVerificationNoticeItem {
+                    id("notice")
+                    notice(stringProvider.getString(R.string.verification_code_notice))
+                }
 
-        bottomSheetVerificationDecimalCodeItem {
-            id("decimal")
-            code(state.decimalDescription.invoke() ?: "")
-        }
+                bottomSheetVerificationDecimalCodeItem {
+                    id("decimal")
+                    code(state.decimalDescription.invoke() ?: "")
+                }
 
-        buildActions(state)
+                buildActions(state)
+            }
+            is Fail    -> {
+                errorWithRetryItem {
+                    id("error")
+                    text(errorFormatter.toHumanReadable(decimalDescription.error))
+                }
+            }
+            else       -> {
+                bottomSheetVerificationWaitingItem {
+                    id("waiting")
+                    title(stringProvider.getString(R.string.please_wait))
+                }
+            }
+        }
     }
 
     private fun buildActions(state: VerificationEmojiCodeViewState) {
