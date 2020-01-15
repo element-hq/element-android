@@ -21,6 +21,7 @@ import com.airbnb.mvrx.Success
 import im.vector.riotx.EmojiCompatFontProvider
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.bottomsheet.*
+import im.vector.riotx.core.epoxy.dividerItem
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
@@ -70,7 +71,7 @@ class MessageActionsEpoxyController @Inject constructor(private val stringProvid
         // Quick reactions
         if (state.canReact() && state.quickStates is Success) {
             // Separator
-            bottomSheetSeparatorItem {
+            dividerItem {
                 id("reaction_separator")
             }
 
@@ -88,14 +89,14 @@ class MessageActionsEpoxyController @Inject constructor(private val stringProvid
         }
 
         // Separator
-        bottomSheetSeparatorItem {
+        dividerItem {
             id("actions_separator")
         }
 
         // Action
         state.actions.forEachIndexed { index, action ->
             if (action is EventSharedAction.Separator) {
-                bottomSheetSeparatorItem {
+                dividerItem {
                     id("separator_$index")
                 }
             } else {

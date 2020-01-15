@@ -26,7 +26,12 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.text.Spannable
-import android.view.*
+import android.view.HapticFeedbackConstants
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.view.Window
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.DrawableRes
@@ -46,7 +51,13 @@ import butterknife.BindView
 import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.EpoxyVisibilityTracker
 import com.airbnb.epoxy.OnModelBuildFinishedListener
-import com.airbnb.mvrx.*
+import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.args
+import com.airbnb.mvrx.fragmentViewModel
+import com.airbnb.mvrx.withState
 import com.github.piasy.biv.BigImageViewer
 import com.github.piasy.biv.loader.ImageLoader
 import com.google.android.material.snackbar.Snackbar
@@ -57,7 +68,13 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.model.Membership
-import im.vector.matrix.android.api.session.room.model.message.*
+import im.vector.matrix.android.api.session.room.model.message.MessageAudioContent
+import im.vector.matrix.android.api.session.room.model.message.MessageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageFileContent
+import im.vector.matrix.android.api.session.room.model.message.MessageImageInfoContent
+import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
+import im.vector.matrix.android.api.session.room.model.message.MessageType
+import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
@@ -67,19 +84,36 @@ import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.dialogs.withColoredButton
 import im.vector.riotx.core.epoxy.LayoutManagerStateRestorer
-import im.vector.riotx.core.extensions.*
+import im.vector.riotx.core.extensions.cleanup
+import im.vector.riotx.core.extensions.hideKeyboard
+import im.vector.riotx.core.extensions.observeEvent
+import im.vector.riotx.core.extensions.setTextOrHide
+import im.vector.riotx.core.extensions.showKeyboard
 import im.vector.riotx.core.files.addEntryToDownloadManager
 import im.vector.riotx.core.glide.GlideApp
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.ui.views.JumpToReadMarkerView
 import im.vector.riotx.core.ui.views.NotificationAreaView
-import im.vector.riotx.core.utils.*
+import im.vector.riotx.core.utils.Debouncer
+import im.vector.riotx.core.utils.KeyboardStateUtils
+import im.vector.riotx.core.utils.PERMISSIONS_FOR_WRITING_FILES
+import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_DOWNLOAD_FILE
+import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_INCOMING_URI
+import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_PICK_ATTACHMENT
+import im.vector.riotx.core.utils.TextUtils
+import im.vector.riotx.core.utils.allGranted
+import im.vector.riotx.core.utils.checkPermissions
+import im.vector.riotx.core.utils.copyToClipboard
+import im.vector.riotx.core.utils.createUIHandler
+import im.vector.riotx.core.utils.getColorFromUserId
+import im.vector.riotx.core.utils.openUrlInExternalBrowser
+import im.vector.riotx.core.utils.shareMedia
+import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.attachments.AttachmentTypeSelectorView
 import im.vector.riotx.features.attachments.AttachmentsHelper
 import im.vector.riotx.features.attachments.ContactAttachment
 import im.vector.riotx.features.command.Command
 import im.vector.riotx.features.home.AvatarRenderer
-import im.vector.riotx.features.home.getColorFromUserId
 import im.vector.riotx.features.home.room.detail.composer.TextComposerView
 import im.vector.riotx.features.home.room.detail.readreceipts.DisplayReadReceiptsBottomSheet
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
@@ -87,7 +121,12 @@ import im.vector.riotx.features.home.room.detail.timeline.action.EventSharedActi
 import im.vector.riotx.features.home.room.detail.timeline.action.MessageActionsBottomSheet
 import im.vector.riotx.features.home.room.detail.timeline.action.MessageSharedActionViewModel
 import im.vector.riotx.features.home.room.detail.timeline.edithistory.ViewEditHistoryBottomSheet
-import im.vector.riotx.features.home.room.detail.timeline.item.*
+import im.vector.riotx.features.home.room.detail.timeline.item.AbsMessageItem
+import im.vector.riotx.features.home.room.detail.timeline.item.MessageFileItem
+import im.vector.riotx.features.home.room.detail.timeline.item.MessageImageVideoItem
+import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
+import im.vector.riotx.features.home.room.detail.timeline.item.MessageTextItem
+import im.vector.riotx.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.riotx.features.home.room.detail.timeline.reactions.ViewReactionsBottomSheet
 import im.vector.riotx.features.html.EventHtmlRenderer
 import im.vector.riotx.features.html.PillImageSpan
@@ -97,7 +136,7 @@ import im.vector.riotx.features.media.ImageMediaViewerActivity
 import im.vector.riotx.features.media.VideoContentRenderer
 import im.vector.riotx.features.media.VideoMediaViewerActivity
 import im.vector.riotx.features.notifications.NotificationDrawerManager
-import im.vector.riotx.features.permalink.NavigateToRoomInterceptor
+import im.vector.riotx.features.permalink.NavigationInterceptor
 import im.vector.riotx.features.permalink.PermalinkHandler
 import im.vector.riotx.features.reactions.EmojiReactionPickerActivity
 import im.vector.riotx.features.settings.VectorPreferences
@@ -205,7 +244,9 @@ class RoomDetailFragment @Inject constructor(
         setupNotificationView()
         setupJumpToReadMarkerView()
         setupJumpToBottomView()
-
+        roomToolbarContentView.setOnClickListener {
+            navigator.openRoomProfile(requireActivity(), roomDetailArgs.roomId)
+        }
         roomDetailViewModel.subscribe { renderState(it) }
         roomDetailViewModel.sendMessageResultLiveData.observeEvent(viewLifecycleOwner) { renderSendMessageResult(it) }
 
@@ -328,9 +369,9 @@ class RoomDetailFragment @Inject constructor(
         AlertDialog.Builder(requireActivity())
                 .setTitle(R.string.dialog_title_error)
                 .setMessage(getString(R.string.error_file_too_big,
-                        error.filename,
-                        TextUtils.formatFileSize(requireContext(), error.fileSizeInBytes),
-                        TextUtils.formatFileSize(requireContext(), error.homeServerLimitInBytes)
+                                      error.filename,
+                                      TextUtils.formatFileSize(requireContext(), error.fileSizeInBytes),
+                                      TextUtils.formatFileSize(requireContext(), error.homeServerLimitInBytes)
                 ))
                 .setPositiveButton(R.string.ok, null)
                 .show()
@@ -417,9 +458,10 @@ class RoomDetailFragment @Inject constructor(
 
         avatarRenderer.render(
                 MatrixItem.UserItem(event.root.senderId
-                        ?: "", event.getDisambiguatedDisplayName(), event.senderAvatar),
+                                    ?: "", event.getDisambiguatedDisplayName(), event.senderAvatar),
                 composerLayout.composerRelatedMessageAvatar
         )
+
         composerLayout.expand {
             if (isAdded) {
                 // need to do it here also when not using quick reply
@@ -435,7 +477,7 @@ class RoomDetailFragment @Inject constructor(
             // Ignore update to avoid saving a draft
             composerLayout.composerEditText.setText(text)
             composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text?.length
-                    ?: 0)
+                                                         ?: 0)
         }
     }
 
@@ -799,7 +841,7 @@ class RoomDetailFragment @Inject constructor(
 
     override fun onUrlClicked(url: String): Boolean {
         permalinkHandler
-                .launch(requireActivity(), url, object : NavigateToRoomInterceptor {
+                .launch(requireActivity(), url, object : NavigationInterceptor {
                     override fun navToRoom(roomId: String?, eventId: String?): Boolean {
                         // Same room?
                         if (roomId == roomDetailArgs.roomId) {
@@ -814,6 +856,11 @@ class RoomDetailFragment @Inject constructor(
                         }
                         // Not handled
                         return false
+                    }
+
+                    override fun navToMemberProfile(userId: String): Boolean {
+                        navigator.openRoomMemberProfile(userId, roomDetailArgs.roomId, vectorBaseActivity)
+                        return true
                     }
                 })
                 .subscribeOn(Schedulers.io())
@@ -944,7 +991,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onAvatarClicked(informationData: MessageInformationData) {
-        vectorBaseActivity.notImplemented("Click on user avatar")
+        navigator.openRoomMemberProfile(userId = informationData.senderId, roomId = roomDetailArgs.roomId, context = requireActivity())
     }
 
     override fun onMemberNameClicked(informationData: MessageInformationData) {
@@ -973,7 +1020,7 @@ class RoomDetailFragment @Inject constructor(
 
     override fun onRoomCreateLinkClicked(url: String) {
         permalinkHandler
-                .launch(requireContext(), url, object : NavigateToRoomInterceptor {
+                .launch(requireContext(), url, object : NavigationInterceptor {
                     override fun navToRoom(roomId: String?, eventId: String?): Boolean {
                         requireActivity().finish()
                         return false
@@ -1124,7 +1171,7 @@ class RoomDetailFragment @Inject constructor(
         val startToCompose = composerLayout.composerEditText.text.isNullOrBlank()
 
         if (startToCompose
-                && userId == session.myUserId) {
+            && userId == session.myUserId) {
             // Empty composer, current user: start an emote
             composerLayout.composerEditText.setText(Command.EMOTE.command + " ")
             composerLayout.composerEditText.setSelection(Command.EMOTE.length)
@@ -1162,7 +1209,6 @@ class RoomDetailFragment @Inject constructor(
                         }
                     }
         }
-
         focusComposerAndShowKeyboard()
     }
 

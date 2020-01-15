@@ -35,7 +35,7 @@ import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.file.FileService
 import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilities
 import im.vector.matrix.android.api.session.room.model.Membership
-import im.vector.matrix.android.api.session.room.model.RoomMember
+import im.vector.matrix.android.api.session.room.model.RoomMemberSummary
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
@@ -207,7 +207,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         invisibleEventsObservable.accept(action)
     }
 
-    fun getMember(userId: String): RoomMember? {
+    fun getMember(userId: String): RoomMemberSummary? {
         return room.getRoomMember(userId)
     }
 

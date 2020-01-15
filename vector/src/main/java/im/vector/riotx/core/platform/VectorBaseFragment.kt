@@ -14,8 +14,11 @@
  * limitations under the License.
  */
 
+@file:Suppress("DEPRECATION")
+
 package im.vector.riotx.core.platform
 
+import android.app.ProgressDialog
 import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
@@ -59,6 +62,8 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
     protected lateinit var navigator: Navigator
     protected lateinit var errorFormatter: ErrorFormatter
 
+    private var progress: ProgressDialog? = null
+
     /* ==========================================================================================
      * View model
      * ========================================================================================== */
@@ -96,6 +101,7 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
     }
 
     final override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        Timber.i("onCreateView Fragment ${this.javaClass.simpleName}")
         return inflater.inflate(getLayoutResId(), container, false)
     }
 
@@ -117,6 +123,7 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
     @CallSuper
     override fun onDestroyView() {
         super.onDestroyView()
+        Timber.i("onDestroyView Fragment ${this.javaClass.simpleName}")
         mUnBinder?.unbind()
         mUnBinder = null
         uiDisposables.clear()
@@ -173,6 +180,19 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
             Snackbar.make(it, errorFormatter.toHumanReadable(throwable), Snackbar.LENGTH_SHORT)
                     .show()
         }
+    }
+
+    protected fun showLoadingDialog(message: CharSequence, cancelable: Boolean = false) {
+        progress = ProgressDialog(requireContext()).apply {
+            setCancelable(cancelable)
+            setMessage(message)
+            setProgressStyle(ProgressDialog.STYLE_SPINNER)
+            show()
+        }
+    }
+
+    protected fun dismissLoadingDialog() {
+        progress?.dismiss()
     }
 
     /* ==========================================================================================

@@ -37,8 +37,15 @@ import javax.inject.Inject
 
 @Parcelize
 data class RoomListActionsArgs(
-        val roomId: String
-) : Parcelable
+        val roomId: String,
+        val mode: Mode
+) : Parcelable {
+
+    enum class Mode {
+        FULL,
+        NOTIFICATIONS
+    }
+}
 
 /**
  * Bottom sheet fragment that shows room information with list of contextual actions
@@ -93,9 +100,9 @@ class RoomListQuickActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), R
     }
 
     companion object {
-        fun newInstance(roomId: String): RoomListQuickActionsBottomSheet {
+        fun newInstance(roomId: String, mode: RoomListActionsArgs.Mode): RoomListQuickActionsBottomSheet {
             return RoomListQuickActionsBottomSheet().apply {
-                setArguments(RoomListActionsArgs(roomId))
+                setArguments(RoomListActionsArgs(roomId, mode))
             }
         }
     }

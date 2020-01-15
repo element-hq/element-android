@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<im.vector.riotx.core.platform.StateView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/memberProfileStateView"
+    android:background="?riotx_background"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:id="@+id/memberProfileInfoContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/memberProfileAvatarView"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="16dp"
+            tools:src="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/memberProfileNameView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:textAppearance="@style/Vector.Toolbar.Title"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            tools:text="@sample/matrix.json/data/displayName" />
+
+        <TextView
+            android:id="@+id/memberProfileIdView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:singleLine="true"
+            android:textAppearance="@style/Vector.Toolbar.Title"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            tools:text="@sample/matrix.json/data/mxid" />
+
+        <TextView
+            android:id="@+id/memberProfilePowerLevelView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginBottom="16dp"
+            android:gravity="center"
+            android:textSize="12sp"
+            tools:text="Admin in Matrix" />
+
+        <TextView
+            android:id="@+id/memberProfileStatusView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:visibility="gone"
+            tools:text="Here is a room topic, it can be multi-line but should always be displayed in full  🍱" />
+
+    </LinearLayout>
+</im.vector.riotx.core.platform.StateView>

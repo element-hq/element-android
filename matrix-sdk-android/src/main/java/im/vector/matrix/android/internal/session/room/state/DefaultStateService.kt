@@ -16,27 +16,30 @@
 
 package im.vector.matrix.android.internal.session.room.state
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.state.StateService
+import im.vector.matrix.android.api.util.Optional
+import im.vector.matrix.android.api.util.toOptional
 import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
+import im.vector.matrix.android.internal.database.query.descending
 import im.vector.matrix.android.internal.database.query.prev
 import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import io.realm.Realm
-import io.realm.RealmConfiguration
 import java.security.InvalidParameterException
 
 internal class DefaultStateService @AssistedInject constructor(@Assisted private val roomId: String,
-                                                               @SessionDatabase
-                                                               private val realmConfiguration: RealmConfiguration,
+                                                               private val monarchy: Monarchy,
                                                                private val taskExecutor: TaskExecutor,
                                                                private val sendStateTask: SendStateTask
 ) : StateService {
@@ -47,8 +50,18 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
     }
 
     override fun getStateEvent(eventType: String): Event? {
-        return Realm.getInstance(realmConfiguration).use { realm ->
+        return Realm.getInstance(monarchy.realmConfiguration).use { realm ->
             EventEntity.where(realm, roomId, eventType).prev()?.asDomain()
+        }
+    }
+
+    override fun getStateEventLive(eventType: String): LiveData<Optional<Event>> {
+        val liveData = monarchy.findAllMappedWithChanges(
+                { realm ->  EventEntity.where(realm, roomId, eventType).descending() },
+                { it.asDomain() }
+        )
+        return Transformations.map(liveData) { results ->
+            results.firstOrNull().toOptional()
         }
     }
 

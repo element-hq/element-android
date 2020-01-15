@@ -17,6 +17,7 @@
 package im.vector.riotx.features.home
 
 import im.vector.riotx.R
+import im.vector.riotx.core.utils.getColorFromUserId
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

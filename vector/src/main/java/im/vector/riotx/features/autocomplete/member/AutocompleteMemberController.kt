@@ -17,20 +17,20 @@
 package im.vector.riotx.features.autocomplete.member
 
 import com.airbnb.epoxy.TypedEpoxyController
-import im.vector.matrix.android.api.session.room.model.RoomMember
+import im.vector.matrix.android.api.session.room.model.RoomMemberSummary
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.features.autocomplete.AutocompleteClickListener
 import im.vector.riotx.features.autocomplete.autocompleteMatrixItem
 import im.vector.riotx.features.home.AvatarRenderer
 import javax.inject.Inject
 
-class AutocompleteMemberController @Inject constructor() : TypedEpoxyController<List<RoomMember>>() {
+class AutocompleteMemberController @Inject constructor() : TypedEpoxyController<List<RoomMemberSummary>>() {
 
-    var listener: AutocompleteClickListener<RoomMember>? = null
+    var listener: AutocompleteClickListener<RoomMemberSummary>? = null
 
     @Inject lateinit var avatarRenderer: AvatarRenderer
 
-    override fun buildModels(data: List<RoomMember>?) {
+    override fun buildModels(data: List<RoomMemberSummary>?) {
         if (data.isNullOrEmpty()) {
             return
         }

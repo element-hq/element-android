@@ -32,6 +32,8 @@ data class RoomSummary(
         val canonicalAlias: String? = null,
         val aliases: List<String> = emptyList(),
         val isDirect: Boolean = false,
+        val joinedMembersCount: Int? = 0,
+        val invitedMembersCount: Int? = 0,
         val latestPreviewableEvent: TimelineEvent? = null,
         val otherMemberIds: List<String> = emptyList(),
         val notificationCount: Int = 0,

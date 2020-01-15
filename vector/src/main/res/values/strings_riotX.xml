@@ -5,4 +5,34 @@
 
     <string name="login_error_threepid_denied">Your email domain is not authorized to register on this server</string>
 
+    <string name="room_profile_not_encrypted_subtitle">Messages in this room are not end-to-end encrypted.</string>
+    <string name="room_profile_encrypted_subtitle">Messages in this room are end-to-end encrypted.</string>
+    <string name="room_profile_section_security">Security</string>
+    <string name="room_profile_section_security_learn_more">Learn more</string>
+    <string name="room_profile_section_more">More</string>
+    <string name="room_profile_section_more_settings">Room settings</string>
+    <string name="room_profile_section_more_notifications">Notifications</string>
+    <plurals name="room_profile_section_more_member_list">
+        <item quantity="one">"One person"</item>
+        <item quantity="other">"%1$d people"</item>
+    </plurals>
+    <string name="room_profile_section_more_uploads">Uploads</string>
+    <string name="room_profile_section_more_leave">Leave Room</string>
+    <string name="room_profile_leaving_room">"Leaving the room…"</string>
+
+    <string name="room_member_power_level_admins">Admins</string>
+    <string name="room_member_power_level_moderators">Moderators</string>
+    <string name="room_member_power_level_custom">Custom</string>
+    <string name="room_member_power_level_invites">Invites</string>
+    <string name="room_member_power_level_users">Users</string>
+
+    <string name="room_member_power_level_admin_in">Admin in %1$s</string>
+    <string name="room_member_power_level_moderator_in">Moderator in %1$s</string>
+    <string name="room_member_power_level_custom_in">Custom (%1$d) in %2$s</string>
+
+    <string name="room_member_jump_to_read_receipt">Jump to read receipt</string>
+
+    <string name="unignore">Unignore</string>
+
+
 </resources>
