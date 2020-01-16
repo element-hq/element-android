@@ -68,12 +68,12 @@ class TimelineItemFactory @Inject constructor(
                         encryptedItemFactory.create(event, nextEvent, highlight, callback)
                     }
                 }
-
                 // Unhandled event types (yet)
                 EventType.STATE_ROOM_THIRD_PARTY_INVITE -> defaultItemFactory.create(event, highlight, callback)
                 else                                    -> {
+                    // Should only happen when shouldShowHiddenEvents() settings is ON
                     Timber.v("Type ${event.root.getClearType()} not handled")
-                    null
+                    defaultItemFactory.create(event, highlight, callback)
                 }
             }
         } catch (throwable: Throwable) {
