@@ -35,12 +35,6 @@ class VerificationChooseMethodController @Inject constructor(
 
     private var viewState: VerificationChooseMethodViewState? = null
 
-    init {
-        // We are requesting a model build directly as the first build of epoxy is on the main thread.
-        // It avoids to build the whole list on the main thread.
-        requestModelBuild()
-    }
-
     fun update(viewState: VerificationChooseMethodViewState) {
         this.viewState = viewState
         requestModelBuild()
