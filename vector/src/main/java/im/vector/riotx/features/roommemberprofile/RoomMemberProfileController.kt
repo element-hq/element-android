@@ -21,11 +21,16 @@ import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.profiles.buildProfileAction
 import im.vector.riotx.core.epoxy.profiles.buildProfileSection
+import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
 import javax.inject.Inject
 
-class RoomMemberProfileController @Inject constructor(private val stringProvider: StringProvider)
-    : TypedEpoxyController<RoomMemberProfileViewState>() {
+class RoomMemberProfileController @Inject constructor(
+        private val stringProvider: StringProvider,
+        colorProvider: ColorProvider
+) : TypedEpoxyController<RoomMemberProfileViewState>() {
+
+    private val dividerColor = colorProvider.getColorFromAttribute(R.attr.vctr_list_divider_color)
 
     var callback: Callback? = null
 
@@ -54,6 +59,7 @@ class RoomMemberProfileController @Inject constructor(private val stringProvider
         buildProfileAction(
                 id = "ignore",
                 title = ignoreActionTitle,
+                dividerColor = dividerColor,
                 destructive = true,
                 editable = false,
                 divider = false,
@@ -72,6 +78,7 @@ class RoomMemberProfileController @Inject constructor(private val stringProvider
         buildProfileAction(
                 id = "learn_more",
                 title = stringProvider.getString(R.string.room_profile_section_security_learn_more),
+                dividerColor = dividerColor,
                 editable = false,
                 divider = false,
                 subtitle = stringProvider.getString(learnMoreSubtitle),
@@ -85,6 +92,7 @@ class RoomMemberProfileController @Inject constructor(private val stringProvider
                     id = "read_receipt",
                     editable = false,
                     title = stringProvider.getString(R.string.room_member_jump_to_read_receipt),
+                    dividerColor = dividerColor,
                     action = { callback?.onJumpToReadReceiptClicked() }
             )
 
@@ -93,6 +101,7 @@ class RoomMemberProfileController @Inject constructor(private val stringProvider
             buildProfileAction(
                     id = "mention",
                     title = stringProvider.getString(R.string.room_participants_action_mention),
+                    dividerColor = dividerColor,
                     editable = false,
                     divider = ignoreActionTitle != null,
                     action = { callback?.onMentionClicked() }
@@ -101,6 +110,7 @@ class RoomMemberProfileController @Inject constructor(private val stringProvider
                 buildProfileAction(
                         id = "ignore",
                         title = ignoreActionTitle,
+                        dividerColor = dividerColor,
                         destructive = true,
                         editable = false,
                         divider = false,

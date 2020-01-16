@@ -19,19 +19,26 @@ package im.vector.riotx.features.roomprofile.members
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.matrix.android.api.session.room.model.RoomMemberSummary
 import im.vector.matrix.android.api.util.toMatrixItem
+import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.dividerItem
 import im.vector.riotx.core.epoxy.profiles.buildProfileSection
 import im.vector.riotx.core.epoxy.profiles.profileMatrixItem
+import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.home.AvatarRenderer
 import javax.inject.Inject
 
-class RoomMemberListController @Inject constructor(private val avatarRenderer: AvatarRenderer,
-                                                   private val stringProvider: StringProvider) : TypedEpoxyController<RoomMemberListViewState>() {
+class RoomMemberListController @Inject constructor(
+        private val avatarRenderer: AvatarRenderer,
+        private val stringProvider: StringProvider,
+        colorProvider: ColorProvider
+) : TypedEpoxyController<RoomMemberListViewState>() {
 
     interface Callback {
         fun onRoomMemberClicked(roomMember: RoomMemberSummary)
     }
+
+    private val dividerColor = colorProvider.getColorFromAttribute(R.attr.vctr_list_divider_color)
 
     var callback: Callback? = null
 
@@ -60,6 +67,7 @@ class RoomMemberListController @Inject constructor(private val avatarRenderer: A
 
                 dividerItem {
                     id("divider_${roomMember.userId}")
+                    color(dividerColor)
                 }
             }
         }
