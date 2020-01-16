@@ -73,6 +73,7 @@ class RoomMemberProfileController @Inject constructor(private val stringProvider
                 id = "learn_more",
                 title = stringProvider.getString(R.string.room_profile_section_security_learn_more),
                 editable = false,
+                divider = false,
                 subtitle = stringProvider.getString(learnMoreSubtitle),
                 action = { callback?.onLearnMoreClicked() }
         )
