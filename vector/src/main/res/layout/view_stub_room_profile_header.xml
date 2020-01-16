@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?riotx_background"
-    android:padding="16dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="16dp">
 
     <ImageView
         android:id="@+id/roomProfileAvatarView"
@@ -22,11 +21,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:gravity="center_vertical"
-        android:singleLine="true"
         android:textAppearance="@style/Vector.Toolbar.Title"
         android:textSize="20sp"
         android:textStyle="bold"
-        tools:text="Random" />
+        tools:text="@sample/matrix.json/data/roomName" />
 
     <TextView
         android:id="@+id/roomProfileAliasView"
@@ -39,7 +37,7 @@
         android:textAppearance="@style/Vector.Toolbar.Title"
         android:textSize="14sp"
         android:textStyle="bold"
-        tools:text="#random:matrix.org" />
+        tools:text="@sample/matrix.json/data/roomAlias" />
 
     <TextView
         android:id="@+id/roomProfileTopicView"
@@ -48,10 +46,11 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginStart="40dp"
         android:layout_marginEnd="40dp"
+        android:autoLink="web"
         android:fontFamily="sans-serif"
         android:gravity="center"
         android:textSize="14sp"
         android:textStyle="normal"
-        tools:text="Here is a room topic, it can be multi-line but should always be displayed in full 🍱" />
+        tools:text="@sample/matrix.json/data/roomTopic" />
 
 </LinearLayout>

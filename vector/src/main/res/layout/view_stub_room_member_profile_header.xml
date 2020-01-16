@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <im.vector.riotx.core.platform.StateView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/memberProfileStateView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/memberProfileStateView"
     android:background="?riotx_background"
     android:padding="16dp">
 
@@ -28,7 +27,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:gravity="center_vertical"
-            android:singleLine="true"
             android:textAppearance="@style/Vector.Toolbar.Title"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -41,7 +39,6 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="16dp"
-            android:singleLine="true"
             android:textAppearance="@style/Vector.Toolbar.Title"
             android:textSize="14sp"
             android:textStyle="bold"
@@ -69,7 +66,9 @@
             android:gravity="center"
             android:textSize="14sp"
             android:visibility="gone"
-            tools:text="Here is a room topic, it can be multi-line but should always be displayed in full  🍱" />
+            tools:text="Here is a profile status"
+            tools:visibility="visible" />
 
     </LinearLayout>
+
 </im.vector.riotx.core.platform.StateView>
