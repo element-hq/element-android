@@ -29,7 +29,7 @@ import javax.crypto.Cipher
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
 
-object MXEncryptedAttachments {
+internal object MXEncryptedAttachments {
     private const val CRYPTO_BUFFER_SIZE = 32 * 1024
     private const val CIPHER_ALGORITHM = "AES/CTR/NoPadding"
     private const val SECRET_KEY_SPEC_ALGORITHM = "AES"

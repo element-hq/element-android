@@ -24,7 +24,7 @@ import com.bumptech.glide.load.model.ModelLoader
 import com.bumptech.glide.load.model.ModelLoaderFactory
 import com.bumptech.glide.load.model.MultiModelLoaderFactory
 import com.bumptech.glide.signature.ObjectKey
-import im.vector.matrix.android.internal.crypto.attachments.MXEncryptedAttachments
+import im.vector.matrix.android.api.Matrix
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.features.media.ImageContentRenderer
 import okhttp3.OkHttpClient
@@ -116,7 +116,7 @@ class VectorGlideDataFetcher(private val activeSessionHolder: ActiveSessionHolde
             return
         }
         stream = if (data.elementToDecrypt != null && data.elementToDecrypt.k.isNotBlank()) {
-            MXEncryptedAttachments.decryptAttachment(inputStream, data.elementToDecrypt)
+            Matrix.decryptStream(inputStream, data.elementToDecrypt)
         } else {
             inputStream
         }

@@ -21,7 +21,7 @@ import im.vector.matrix.android.internal.crypto.model.rest.EncryptedFileInfo
 /**
  * Define the result of an encryption file
  */
-data class EncryptionResult(
+internal data class EncryptionResult(
         var encryptedFileInfo: EncryptedFileInfo,
         var encryptedByteArray: ByteArray
 )
