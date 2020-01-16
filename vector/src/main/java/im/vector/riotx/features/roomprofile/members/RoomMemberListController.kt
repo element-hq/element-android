@@ -23,6 +23,7 @@ import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.dividerItem
 import im.vector.riotx.core.epoxy.profiles.buildProfileSection
 import im.vector.riotx.core.epoxy.profiles.profileMatrixItem
+import im.vector.riotx.core.extensions.join
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.home.AvatarRenderer
@@ -55,21 +56,24 @@ class RoomMemberListController @Inject constructor(
             buildProfileSection(
                     stringProvider.getString(powerLevelCategory.titleRes)
             )
-            roomMemberList.forEach { roomMember ->
-                profileMatrixItem {
-                    id(roomMember.userId)
-                    matrixItem(roomMember.toMatrixItem())
-                    avatarRenderer(avatarRenderer)
-                    clickListener { _ ->
-                        callback?.onRoomMemberClicked(roomMember)
+            roomMemberList.join(
+                    each = { roomMember ->
+                        profileMatrixItem {
+                            id(roomMember.userId)
+                            matrixItem(roomMember.toMatrixItem())
+                            avatarRenderer(avatarRenderer)
+                            clickListener { _ ->
+                                callback?.onRoomMemberClicked(roomMember)
+                            }
+                        }
+                    },
+                    between = { roomMemberBefore ->
+                        dividerItem {
+                            id("divider_${roomMemberBefore.userId}")
+                            color(dividerColor)
+                        }
                     }
-                }
-
-                dividerItem {
-                    id("divider_${roomMember.userId}")
-                    color(dividerColor)
-                }
-            }
+            )
         }
     }
 }
