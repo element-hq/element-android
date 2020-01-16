@@ -74,7 +74,7 @@ internal class DefaultFileService @Inject constructor(private val context: Conte
                                     .build()
 
                             val response = okHttpClient.newCall(request).execute()
-                            val inputStream = response.body?.byteStream()
+                            var inputStream = response.body?.byteStream()
                             Timber.v("Response size ${response.body?.contentLength()} - Stream available: ${inputStream?.available()}")
                             if (!response.isSuccessful
                                     || inputStream == null) {
@@ -83,7 +83,7 @@ internal class DefaultFileService @Inject constructor(private val context: Conte
 
                             if (elementToDecrypt != null) {
                                 Timber.v("## decrypt file")
-                                MXEncryptedAttachments.decryptAttachment(inputStream, elementToDecrypt)
+                                inputStream = MXEncryptedAttachments.decryptAttachment(inputStream, elementToDecrypt)
                                         ?: throw IllegalStateException("Decryption error")
                             }
 
