@@ -1,19 +1,3 @@
-<!--
-  ~ Copyright 2019 New Vector Ltd
-  ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License");
-  ~ you may not use this file except in compliance with the License.
-  ~ You may obtain a copy of the License at
-  ~
-  ~ http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS,
-  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
-  -->
-
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="24dp"
     android:height="24dp"
@@ -21,5 +5,5 @@
     android:viewportHeight="24">
   <path
       android:pathData="M2,16C1.4477,16 1,16.4477 1,17C1,17.5523 1.4477,18 2,18V16ZM5,9H4H5ZM19,9H20H19ZM13.73,21L14.595,21.5018C14.7744,21.1924 14.775,20.8108 14.5965,20.5009C14.418,20.191 14.0876,20 13.73,20V21ZM10.27,21V20C9.9124,20 9.582,20.191 9.4035,20.5009C9.225,20.8108 9.2255,21.1924 9.405,21.5018L10.27,21ZM22,16H2V18H22V16ZM2,18C4.2091,18 6,16.2091 6,14H4C4,15.1046 3.1046,16 2,16V18ZM6,14V9H4V14H6ZM6,9C6,5.6863 8.6863,3 12,3V1C7.5817,1 4,4.5817 4,9H6ZM12,3C15.3137,3 18,5.6863 18,9H20C20,4.5817 16.4183,1 12,1V3ZM18,9V14H20V9H18ZM18,14C18,16.2091 19.7909,18 22,18V16C20.8954,16 20,15.1046 20,14H18ZM12.865,20.4982C12.6861,20.8066 12.3565,20.9965 12,20.9965V22.9965C13.0696,22.9965 14.0583,22.427 14.595,21.5018L12.865,20.4982ZM12,20.9965C11.6435,20.9965 11.3139,20.8066 11.135,20.4982L9.405,21.5018C9.9417,22.427 10.9304,22.9965 12,22.9965V20.9965ZM10.27,22H13.73V20H10.27V22Z"
-      android:fillColor="#61708B"/>
+      android:fillColor="#000000"/>
 </vector>
