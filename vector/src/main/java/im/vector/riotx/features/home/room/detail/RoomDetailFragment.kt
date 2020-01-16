@@ -369,9 +369,9 @@ class RoomDetailFragment @Inject constructor(
         AlertDialog.Builder(requireActivity())
                 .setTitle(R.string.dialog_title_error)
                 .setMessage(getString(R.string.error_file_too_big,
-                                      error.filename,
-                                      TextUtils.formatFileSize(requireContext(), error.fileSizeInBytes),
-                                      TextUtils.formatFileSize(requireContext(), error.homeServerLimitInBytes)
+                        error.filename,
+                        TextUtils.formatFileSize(requireContext(), error.fileSizeInBytes),
+                        TextUtils.formatFileSize(requireContext(), error.homeServerLimitInBytes)
                 ))
                 .setPositiveButton(R.string.ok, null)
                 .show()
@@ -458,7 +458,7 @@ class RoomDetailFragment @Inject constructor(
 
         avatarRenderer.render(
                 MatrixItem.UserItem(event.root.senderId
-                                    ?: "", event.getDisambiguatedDisplayName(), event.senderAvatar),
+                        ?: "", event.getDisambiguatedDisplayName(), event.senderAvatar),
                 composerLayout.composerRelatedMessageAvatar
         )
 
@@ -477,7 +477,7 @@ class RoomDetailFragment @Inject constructor(
             // Ignore update to avoid saving a draft
             composerLayout.composerEditText.setText(text)
             composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text?.length
-                                                         ?: 0)
+                    ?: 0)
         }
     }
 
@@ -859,7 +859,7 @@ class RoomDetailFragment @Inject constructor(
                     }
 
                     override fun navToMemberProfile(userId: String): Boolean {
-                        navigator.openRoomMemberProfile(userId, roomDetailArgs.roomId, vectorBaseActivity)
+                        openRoomMemberProfile(userId)
                         return true
                     }
                 })
@@ -991,7 +991,11 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onAvatarClicked(informationData: MessageInformationData) {
-        navigator.openRoomMemberProfile(userId = informationData.senderId, roomId = roomDetailArgs.roomId, context = requireActivity())
+        openRoomMemberProfile(informationData.senderId)
+    }
+
+    private fun openRoomMemberProfile(userId: String) {
+        navigator.openRoomMemberProfile(userId = userId, roomId = roomDetailArgs.roomId, context = requireActivity())
     }
 
     override fun onMemberNameClicked(informationData: MessageInformationData) {
@@ -1042,6 +1046,9 @@ class RoomDetailFragment @Inject constructor(
 
     private fun handleActions(action: EventSharedAction) {
         when (action) {
+            is EventSharedAction.OpenUserProfile            -> {
+                openRoomMemberProfile(action.senderId)
+            }
             is EventSharedAction.AddReaction                -> {
                 startActivityForResult(EmojiReactionPickerActivity.intent(requireContext(), action.eventId), REACTION_SELECT_REQUEST_CODE)
             }
@@ -1171,7 +1178,7 @@ class RoomDetailFragment @Inject constructor(
         val startToCompose = composerLayout.composerEditText.text.isNullOrBlank()
 
         if (startToCompose
-            && userId == session.myUserId) {
+                && userId == session.myUserId) {
             // Empty composer, current user: start an emote
             composerLayout.composerEditText.setText(Command.EMOTE.command + " ")
             composerLayout.composerEditText.setSelection(Command.EMOTE.length)
