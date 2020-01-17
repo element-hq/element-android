@@ -20,12 +20,16 @@ import com.airbnb.epoxy.EpoxyController
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Success
 import im.vector.riotx.R
-import im.vector.riotx.core.epoxy.bottomsheet.bottomSheetSeparatorItem
+import im.vector.riotx.core.epoxy.dividerItem
 import im.vector.riotx.core.epoxy.errorWithRetryItem
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
-import im.vector.riotx.features.crypto.verification.epoxy.*
+import im.vector.riotx.features.crypto.verification.epoxy.bottomSheetVerificationActionItem
+import im.vector.riotx.features.crypto.verification.epoxy.bottomSheetVerificationDecimalCodeItem
+import im.vector.riotx.features.crypto.verification.epoxy.bottomSheetVerificationEmojisItem
+import im.vector.riotx.features.crypto.verification.epoxy.bottomSheetVerificationNoticeItem
+import im.vector.riotx.features.crypto.verification.epoxy.bottomSheetVerificationWaitingItem
 import javax.inject.Inject
 
 class VerificationEmojiCodeController @Inject constructor(
@@ -120,7 +124,7 @@ class VerificationEmojiCodeController @Inject constructor(
     }
 
     private fun buildActions(state: VerificationEmojiCodeViewState) {
-        bottomSheetSeparatorItem {
+        dividerItem {
             id("sep0")
         }
 
@@ -138,7 +142,7 @@ class VerificationEmojiCodeController @Inject constructor(
                 iconColor(colorProvider.getColor(R.color.vector_error_color))
                 listener { listener?.onDoNotMatchButtonTapped() }
             }
-            bottomSheetSeparatorItem {
+            dividerItem {
                 id("sep1")
             }
             bottomSheetVerificationActionItem {

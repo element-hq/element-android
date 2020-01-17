@@ -18,7 +18,7 @@ package im.vector.riotx.features.crypto.verification.conclusion
 
 import com.airbnb.epoxy.EpoxyController
 import im.vector.riotx.R
-import im.vector.riotx.core.epoxy.bottomsheet.bottomSheetSeparatorItem
+import im.vector.riotx.core.epoxy.dividerItem
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.crypto.verification.epoxy.bottomSheetVerificationActionItem
@@ -76,7 +76,7 @@ class VerificationConclusionController @Inject constructor(
             else                    -> Unit
         }
 
-        bottomSheetSeparatorItem {
+        dividerItem {
             id("sep0")
         }
 

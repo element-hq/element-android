@@ -20,7 +20,7 @@ import androidx.core.text.toSpannable
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.mvrx.Loading
 import im.vector.riotx.R
-import im.vector.riotx.core.epoxy.bottomsheet.bottomSheetSeparatorItem
+import im.vector.riotx.core.epoxy.dividerItem
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.utils.colorizeMatchingText
@@ -57,7 +57,7 @@ class VerificationRequestController @Inject constructor(
             notice(styledText)
         }
 
-        bottomSheetSeparatorItem {
+        dividerItem {
             id("sep")
         }
 
