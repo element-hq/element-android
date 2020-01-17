@@ -43,7 +43,7 @@ class RoomListQuickActionsEpoxyController @Inject constructor(private val avatar
                 id("room_preview")
                 avatarRenderer(avatarRenderer)
                 matrixItem(roomSummary.toMatrixItem())
-                settingsClickListener(View.OnClickListener { listener?.didSelectMenuAction(RoomListQuickActionsSharedAction.Settings(roomSummary.roomId)) })
+                settingsClickListener { listener?.didSelectMenuAction(RoomListQuickActionsSharedAction.Settings(roomSummary.roomId)) }
             }
 
             // Notifications
