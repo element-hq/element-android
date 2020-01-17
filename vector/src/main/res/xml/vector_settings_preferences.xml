@@ -2,7 +2,6 @@
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
     <im.vector.riotx.core.preference.VectorPreferenceCategory
         android:key="SETTINGS_USER_INTERFACE_KEY"
         android:title="@string/settings_user_interface">
@@ -26,12 +25,15 @@
             android:key="SETTINGS_INTERFACE_TEXT_SIZE_KEY"
             android:title="@string/font_size" />
 
+    </im.vector.riotx.core.preference.VectorPreferenceCategory>
+
+    <im.vector.riotx.core.preference.VectorPreferenceCategory android:title="@string/settings_category_composer">
+
         <im.vector.riotx.core.preference.VectorSwitchPreference
-            android:defaultValue="true"
-            android:key="SETTINGS_SHOW_URL_PREVIEW_KEY"
-            android:summary="@string/settings_inline_url_preview_summary"
-            android:title="@string/settings_inline_url_preview"
-            app:isPreferenceVisible="@bool/false_not_implemented" />
+            android:defaultValue="false"
+            android:key="SETTINGS_ENABLE_MARKDOWN_KEY"
+            android:summary="@string/settings_send_markdown_summary"
+            android:title="@string/settings_send_markdown" />
 
         <im.vector.riotx.core.preference.VectorSwitchPreference
             android:defaultValue="true"
@@ -39,11 +41,16 @@
             android:summary="@string/settings_send_typing_notifs_summary"
             android:title="@string/settings_send_typing_notifs" />
 
+    </im.vector.riotx.core.preference.VectorPreferenceCategory>
+
+    <im.vector.riotx.core.preference.VectorPreferenceCategory android:title="@string/settings_category_timeline">
+
         <im.vector.riotx.core.preference.VectorSwitchPreference
-            android:defaultValue="false"
-            android:key="SETTINGS_ENABLE_MARKDOWN_KEY"
-            android:summary="@string/settings_send_markdown_summary"
-            android:title="@string/settings_send_markdown" />
+            android:defaultValue="true"
+            android:key="SETTINGS_SHOW_URL_PREVIEW_KEY"
+            android:summary="@string/settings_inline_url_preview_summary"
+            android:title="@string/settings_inline_url_preview"
+            app:isPreferenceVisible="@bool/false_not_implemented" />
 
         <im.vector.riotx.core.preference.VectorSwitchPreference
             android:key="SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY"
@@ -59,8 +66,7 @@
             android:defaultValue="true"
             android:key="SETTINGS_SHOW_READ_RECEIPTS_KEY"
             android:summary="@string/settings_show_read_receipts_summary"
-            android:title="@string/settings_show_read_receipts"
-            app:isPreferenceVisible="@bool/false_not_implemented" />
+            android:title="@string/settings_show_read_receipts" />
 
         <im.vector.riotx.core.preference.VectorSwitchPreference
             android:defaultValue="true"
