@@ -13,7 +13,8 @@ Other changes:
  -
 
 Bugfix 🐛:
- -
+ - Fix broken background sync in F-Droid version
+ - Fix issue with downloaded file on encrypted rooms. The file was not properly decrypted
 
 Translations 🗣:
  -
