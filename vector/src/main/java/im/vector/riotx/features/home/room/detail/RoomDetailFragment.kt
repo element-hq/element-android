@@ -860,7 +860,7 @@ class RoomDetailFragment @Inject constructor(
                     }
 
                     override fun navToMemberProfile(userId: String): Boolean {
-                        navigator.openRoomMemberProfile(userId, roomDetailArgs.roomId, vectorBaseActivity)
+                        openRoomMemberProfile(userId)
                         return true
                     }
                 })
@@ -997,7 +997,11 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onAvatarClicked(informationData: MessageInformationData) {
-        navigator.openRoomMemberProfile(userId = informationData.senderId, roomId = roomDetailArgs.roomId, context = requireActivity())
+        openRoomMemberProfile(informationData.senderId)
+    }
+
+    private fun openRoomMemberProfile(userId: String) {
+        navigator.openRoomMemberProfile(userId = userId, roomId = roomDetailArgs.roomId, context = requireActivity())
     }
 
     override fun onMemberNameClicked(informationData: MessageInformationData) {
@@ -1048,6 +1052,9 @@ class RoomDetailFragment @Inject constructor(
 
     private fun handleActions(action: EventSharedAction) {
         when (action) {
+            is EventSharedAction.OpenUserProfile            -> {
+                openRoomMemberProfile(action.senderId)
+            }
             is EventSharedAction.AddReaction                -> {
                 startActivityForResult(EmojiReactionPickerActivity.intent(requireContext(), action.eventId), REACTION_SELECT_REQUEST_CODE)
             }

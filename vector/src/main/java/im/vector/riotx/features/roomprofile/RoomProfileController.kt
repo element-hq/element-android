@@ -21,11 +21,16 @@ import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.profiles.buildProfileAction
 import im.vector.riotx.core.epoxy.profiles.buildProfileSection
+import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
 import javax.inject.Inject
 
-class RoomProfileController @Inject constructor(private val stringProvider: StringProvider)
-    : TypedEpoxyController<RoomProfileViewState>() {
+class RoomProfileController @Inject constructor(
+        private val stringProvider: StringProvider,
+        colorProvider: ColorProvider
+) : TypedEpoxyController<RoomProfileViewState>() {
+
+    private val dividerColor = colorProvider.getColorFromAttribute(R.attr.vctr_list_divider_color)
 
     var callback: Callback? = null
 
@@ -53,6 +58,7 @@ class RoomProfileController @Inject constructor(private val stringProvider: Stri
         buildProfileAction(
                 id = "learn_more",
                 title = stringProvider.getString(R.string.room_profile_section_security_learn_more),
+                dividerColor = dividerColor,
                 subtitle = stringProvider.getString(learnMoreSubtitle),
                 action = { callback?.onLearnMoreClicked() }
         )
@@ -62,12 +68,14 @@ class RoomProfileController @Inject constructor(private val stringProvider: Stri
         buildProfileAction(
                 id = "settings",
                 title = stringProvider.getString(R.string.room_profile_section_more_settings),
+                dividerColor = dividerColor,
                 icon = R.drawable.ic_room_profile_settings,
                 action = { callback?.onSettingsClicked() }
         )
         buildProfileAction(
                 id = "notifications",
                 title = stringProvider.getString(R.string.room_profile_section_more_notifications),
+                dividerColor = dividerColor,
                 icon = R.drawable.ic_room_profile_notification,
                 action = { callback?.onNotificationsClicked() }
         )
@@ -75,18 +83,21 @@ class RoomProfileController @Inject constructor(private val stringProvider: Stri
         buildProfileAction(
                 id = "member_list",
                 title = stringProvider.getQuantityString(R.plurals.room_profile_section_more_member_list, numberOfMembers, numberOfMembers),
+                dividerColor = dividerColor,
                 icon = R.drawable.ic_room_profile_member_list,
                 action = { callback?.onMemberListClicked() }
         )
         buildProfileAction(
                 id = "uploads",
                 title = stringProvider.getString(R.string.room_profile_section_more_uploads),
+                dividerColor = dividerColor,
                 icon = R.drawable.ic_room_profile_uploads,
                 action = { callback?.onUploadsClicked() }
         )
         buildProfileAction(
                 id = "leave",
                 title = stringProvider.getString(R.string.room_profile_section_more_leave),
+                dividerColor = dividerColor,
                 divider = false,
                 destructive = true,
                 editable = false,

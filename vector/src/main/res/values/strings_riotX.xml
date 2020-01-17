@@ -34,5 +34,11 @@
 
     <string name="unignore">Unignore</string>
 
+    <!-- Title for category in the settings which affect what is displayed in the timeline (ex: show read receipts, etc.) -->
+    <string name="settings_category_timeline">Timeline</string>
+
+    <!-- Title for category in the settings which affect the behavior of the message editor (ex: enable Markdown, send typing notification, etc.) -->
+    <string name="settings_category_composer">Message editor</string>
+
 
 </resources>

@@ -19,7 +19,7 @@ package im.vector.riotx.core.epoxy.profiles
 
 import androidx.annotation.DrawableRes
 import com.airbnb.epoxy.EpoxyController
-import im.vector.riotx.core.epoxy.DividerItem_
+import im.vector.riotx.core.epoxy.dividerItem
 
 fun EpoxyController.buildProfileSection(title: String) {
     profileSectionItem {
@@ -31,6 +31,7 @@ fun EpoxyController.buildProfileSection(title: String) {
 fun EpoxyController.buildProfileAction(
         id: String,
         title: String,
+        dividerColor: Int,
         subtitle: String? = null,
         editable: Boolean = true,
         @DrawableRes icon: Int = 0,
@@ -50,7 +51,10 @@ fun EpoxyController.buildProfileAction(
         }
     }
 
-    DividerItem_()
-            .id("divider_$title")
-            .addIf(divider, this)
+    if (divider) {
+        dividerItem {
+            id("divider_$title")
+            color(dividerColor)
+        }
+    }
 }

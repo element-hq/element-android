@@ -111,7 +111,7 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
                     }
                 }
 
-        return mapOf(
+        return listOf(
                 PowerLevelCategory.ADMIN to admins,
                 PowerLevelCategory.MODERATOR to moderators,
                 PowerLevelCategory.CUSTOM to customs,

@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -26,7 +25,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/ic_room_profile_notification" />
+        tools:src="@drawable/ic_room_profile_notification"
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/actionTitle"
@@ -39,14 +39,14 @@
         android:maxLines="2"
         android:textColor="?riotx_text_primary"
         android:textSize="16sp"
+        app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toTopOf="@+id/actionSubtitle"
         app:layout_constraintEnd_toStartOf="@+id/actionEditable"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@id/actionIcon"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constrainedWidth="true"
         app:layout_goneMarginStart="0dp"
-        tools:text="Learn more" />
+        tools:text="@string/room_profile_section_security_learn_more" />
 
     <TextView
         android:id="@+id/actionSubtitle"
@@ -59,15 +59,14 @@
         android:maxLines="2"
         android:textColor="?riotx_text_secondary"
         android:textSize="12sp"
+        app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/actionEditable"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@id/actionIcon"
         app:layout_constraintTop_toBottomOf="@id/actionTitle"
-        app:layout_constrainedWidth="true"
         app:layout_goneMarginStart="0dp"
-        tools:text="Messages in this room are not end-to-end encrypted" />
-
+        tools:text="@string/room_profile_encrypted_subtitle" />
 
     <ImageView
         android:id="@+id/actionEditable"
@@ -80,6 +79,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:visibility="visible" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
