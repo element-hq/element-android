@@ -26,7 +26,9 @@ import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.matrix.android.api.session.user.model.User
+import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.api.util.Optional
+import im.vector.matrix.android.api.util.toOptional
 import io.reactivex.Observable
 import io.reactivex.Single
 
@@ -56,7 +58,8 @@ class RxSession(private val session: Session) {
     }
 
     fun liveUser(userId: String): Observable<Optional<User>> {
-        return session.getUserLive(userId).asObservable().distinctUntilChanged()
+        return session.getUserLive(userId).asObservable()
+                .startWith(session.getUser(userId).toOptional())
     }
 
     fun liveUsers(): Observable<List<User>> {
@@ -90,6 +93,10 @@ class RxSession(private val session: Session) {
     fun getRoomIdByAlias(roomAlias: String,
                          searchOnServer: Boolean): Single<Optional<String>> = singleBuilder {
         session.getRoomIdByAlias(roomAlias, searchOnServer, it)
+    }
+
+    fun getProfileInfo(userId: String): Single<JsonDict> = singleBuilder {
+        session.getProfile(userId, it)
     }
 }
 

@@ -21,7 +21,7 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toContent
 import im.vector.matrix.android.api.session.room.model.Membership
-import im.vector.matrix.android.api.session.room.model.RoomMember
+import im.vector.matrix.android.api.session.room.model.RoomMemberSummary
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import kotlin.random.Random
@@ -63,7 +63,7 @@ object RoomDataHelper {
     }
 
     fun createFakeRoomMemberEvent(): Event {
-        val roomMember = RoomMember(Membership.JOIN, "Fake name #${Random.nextLong()}").toContent()
+        val roomMember = RoomMemberSummary(Membership.JOIN, "Fake name #${Random.nextLong()}").toContent()
         return createFakeEvent(EventType.STATE_ROOM_MEMBER, roomMember)
     }
 }

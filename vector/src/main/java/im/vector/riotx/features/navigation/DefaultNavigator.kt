@@ -26,20 +26,22 @@ import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.error.fatalError
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.utils.toast
+import im.vector.riotx.features.createdirect.CreateDirectRoomActivity
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.riotx.features.crypto.keysbackup.setup.KeysBackupSetupActivity
 import im.vector.riotx.features.debug.DebugMenuActivity
-import im.vector.riotx.features.home.createdirect.CreateDirectRoomActivity
 import im.vector.riotx.features.home.room.detail.RoomDetailActivity
 import im.vector.riotx.features.home.room.detail.RoomDetailArgs
 import im.vector.riotx.features.home.room.filtered.FilteredRoomsActivity
 import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomActivity
 import im.vector.riotx.features.roomdirectory.roompreview.RoomPreviewActivity
+import im.vector.riotx.features.roommemberprofile.RoomMemberProfileActivity
+import im.vector.riotx.features.roommemberprofile.RoomMemberProfileArgs
+import im.vector.riotx.features.roomprofile.RoomProfileActivity
 import im.vector.riotx.features.settings.VectorPreferences
 import im.vector.riotx.features.settings.VectorSettingsActivity
 import im.vector.riotx.features.share.SharedData
-import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -54,16 +56,9 @@ class DefaultNavigator @Inject constructor(
             fatalError("Trying to open an unknown room $roomId", vectorPreferences.failFast())
             return
         }
-
         val args = RoomDetailArgs(roomId, eventId)
         val intent = RoomDetailActivity.newIntent(context, args)
-        if (buildTask) {
-            val stackBuilder = TaskStackBuilder.create(context)
-            stackBuilder.addNextIntentWithParentStack(intent)
-            stackBuilder.startActivities()
-        } else {
-            context.startActivity(intent)
-        }
+        startActivity(context, intent, buildTask)
     }
 
     override fun openNotJoinedRoom(context: Context, roomIdOrAlias: String?, eventId: String?, buildTask: Boolean) {
@@ -82,12 +77,10 @@ class DefaultNavigator @Inject constructor(
         }
     }
 
-    override fun openUserDetail(userId: String, context: Context, buildTask: Boolean) {
-        if (context is VectorBaseActivity) {
-            context.notImplemented("Open user detail")
-        } else {
-            context.toast(R.string.not_implemented)
-        }
+    override fun openRoomMemberProfile(userId: String, roomId: String?, context: Context, buildTask: Boolean) {
+        val args = RoomMemberProfileArgs(userId = userId, roomId = roomId)
+        val intent = RoomMemberProfileActivity.newIntent(context, args)
+        startActivity(context, intent, buildTask)
     }
 
     override fun openRoomForSharing(activity: Activity, roomId: String, sharedData: SharedData) {
@@ -139,7 +132,17 @@ class DefaultNavigator @Inject constructor(
         context.startActivity(KeysBackupManageActivity.intent(context))
     }
 
-    override fun openRoomSettings(context: Context, roomId: String) {
-        Timber.v("Open room settings$roomId")
+    override fun openRoomProfile(context: Context, roomId: String) {
+        context.startActivity(RoomProfileActivity.newIntent(context, roomId))
+    }
+
+    private fun startActivity(context: Context, intent: Intent, buildTask: Boolean) {
+        if (buildTask) {
+            val stackBuilder = TaskStackBuilder.create(context)
+            stackBuilder.addNextIntentWithParentStack(intent)
+            stackBuilder.startActivities()
+        } else {
+            context.startActivity(intent)
+        }
     }
 }

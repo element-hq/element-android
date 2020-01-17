@@ -19,7 +19,7 @@ package im.vector.riotx.core.extensions
 /**
  * Returns the last element yielding the smallest value of the given function or `null` if there are no elements.
  */
-public inline fun <T, R : Comparable<R>> Iterable<T>.lastMinBy(selector: (T) -> R): T? {
+inline fun <T, R : Comparable<R>> Iterable<T>.lastMinBy(selector: (T) -> R): T? {
     val iterator = iterator()
     if (!iterator.hasNext()) return null
     var minElem = iterator.next()
@@ -33,4 +33,18 @@ public inline fun <T, R : Comparable<R>> Iterable<T>.lastMinBy(selector: (T) -> 
         }
     }
     return minElem
+}
+
+/**
+ * Call each for each item, and between between each items
+ */
+inline fun <T> Collection<T>.join(each: (T) -> Unit, between: (T) -> Unit) {
+    val lastIndex = size - 1
+    forEachIndexed { idx, t ->
+        each(t)
+
+        if (idx != lastIndex) {
+            between(t)
+        }
+    }
 }

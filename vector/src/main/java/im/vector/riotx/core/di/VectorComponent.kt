@@ -36,7 +36,7 @@ import im.vector.riotx.features.crypto.keysrequest.KeyRequestHandler
 import im.vector.riotx.features.crypto.verification.IncomingVerificationRequestHandler
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.HomeRoomListDataSource
-import im.vector.riotx.features.home.group.SelectedGroupDataSource
+import im.vector.riotx.features.grouplist.SelectedGroupDataSource
 import im.vector.riotx.features.html.EventHtmlRenderer
 import im.vector.riotx.features.html.VectorHtmlCompressor
 import im.vector.riotx.features.navigation.Navigator

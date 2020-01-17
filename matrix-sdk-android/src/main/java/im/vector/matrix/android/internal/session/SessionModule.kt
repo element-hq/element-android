@@ -101,7 +101,7 @@ internal abstract class SessionModule {
 
         @JvmStatic
         @Provides
-        @UserCacheDirectory
+        @SessionFilesDirectory
         fun providesFilesDir(@UserMd5 userMd5: String,
                              @SessionId sessionId: String,
                              context: Context): File {
@@ -112,6 +112,14 @@ internal abstract class SessionModule {
             }
 
             return File(context.filesDir, sessionId)
+        }
+
+        @JvmStatic
+        @Provides
+        @SessionCacheDirectory
+        fun providesCacheDir(@SessionId sessionId: String,
+                             context: Context): File {
+            return File(context.cacheDir, sessionId)
         }
 
         @JvmStatic

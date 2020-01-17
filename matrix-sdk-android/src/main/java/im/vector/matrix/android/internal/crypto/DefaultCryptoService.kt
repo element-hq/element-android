@@ -38,7 +38,7 @@ import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibility
 import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibilityContent
-import im.vector.matrix.android.api.session.room.model.RoomMember
+import im.vector.matrix.android.api.session.room.model.RoomMemberSummary
 import im.vector.matrix.android.internal.crypto.actions.MegolmSessionDataImporter
 import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
 import im.vector.matrix.android.internal.crypto.algorithms.IMXEncrypting
@@ -64,7 +64,7 @@ import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.extensions.foldToCallback
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.room.membership.LoadRoomMembersTask
-import im.vector.matrix.android.internal.session.room.membership.RoomMembers
+import im.vector.matrix.android.internal.session.room.membership.RoomMemberHelper
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
@@ -701,9 +701,9 @@ internal class DefaultCryptoService @Inject constructor(
                     && shouldEncryptForInvitedMembers(roomId)
 
             userIds = if (encryptForInvitedMembers) {
-                RoomMembers(realm, roomId).getActiveRoomMemberIds()
+                RoomMemberHelper(realm, roomId).getActiveRoomMemberIds()
             } else {
-                RoomMembers(realm, roomId).getJoinedRoomMemberIds()
+                RoomMemberHelper(realm, roomId).getJoinedRoomMemberIds()
             }
         }
         return userIds
@@ -726,7 +726,7 @@ internal class DefaultCryptoService @Inject constructor(
             return
         }
         event.stateKey?.let { userId ->
-            val roomMember: RoomMember? = event.content.toModel()
+            val roomMember: RoomMemberSummary? = event.content.toModel()
             val membership = roomMember?.membership
             if (membership == Membership.JOIN) {
                 // make sure we are tracking the deviceList for this user.

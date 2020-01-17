@@ -27,20 +27,23 @@ import im.vector.riotx.features.crypto.verification.*
 import im.vector.riotx.features.home.HomeDetailFragment
 import im.vector.riotx.features.home.HomeDrawerFragment
 import im.vector.riotx.features.home.LoadingFragment
-import im.vector.riotx.features.home.createdirect.CreateDirectRoomDirectoryUsersFragment
-import im.vector.riotx.features.home.createdirect.CreateDirectRoomKnownUsersFragment
-import im.vector.riotx.features.home.group.GroupListFragment
+import im.vector.riotx.features.createdirect.CreateDirectRoomDirectoryUsersFragment
+import im.vector.riotx.features.createdirect.CreateDirectRoomKnownUsersFragment
+import im.vector.riotx.features.grouplist.GroupListFragment
 import im.vector.riotx.features.home.room.breadcrumbs.BreadcrumbsFragment
 import im.vector.riotx.features.home.room.detail.RoomDetailFragment
 import im.vector.riotx.features.home.room.list.RoomListFragment
 import im.vector.riotx.features.login.*
 import im.vector.riotx.features.login.terms.LoginTermsFragment
+import im.vector.riotx.features.roommemberprofile.RoomMemberProfileFragment
 import im.vector.riotx.features.reactions.EmojiChooserFragment
 import im.vector.riotx.features.reactions.EmojiSearchResultFragment
 import im.vector.riotx.features.roomdirectory.PublicRoomsFragment
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomFragment
 import im.vector.riotx.features.roomdirectory.picker.RoomDirectoryPickerFragment
 import im.vector.riotx.features.roomdirectory.roompreview.RoomPreviewNoPreviewFragment
+import im.vector.riotx.features.roomprofile.RoomProfileFragment
+import im.vector.riotx.features.roomprofile.members.RoomMemberListFragment
 import im.vector.riotx.features.settings.*
 import im.vector.riotx.features.settings.devices.VectorSettingsDevicesFragment
 import im.vector.riotx.features.settings.ignored.VectorSettingsIgnoredUsersFragment
@@ -260,6 +263,21 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(PublicRoomsFragment::class)
     fun bindPublicRoomsFragment(fragment: PublicRoomsFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(RoomProfileFragment::class)
+    fun bindRoomProfileFragment(fragment: RoomProfileFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(RoomMemberListFragment::class)
+    fun bindRoomMemberListFragment(fragment: RoomMemberListFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(RoomMemberProfileFragment::class)
+    fun bindRoomMemberProfileFragment(fragment: RoomMemberProfileFragment): Fragment
 
     @Binds
     @IntoMap

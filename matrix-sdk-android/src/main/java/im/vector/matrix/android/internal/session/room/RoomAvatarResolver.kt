@@ -22,11 +22,11 @@ import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.RoomAvatarContent
 import im.vector.matrix.android.internal.database.mapper.ContentMapper
 import im.vector.matrix.android.internal.database.model.EventEntity
-import im.vector.matrix.android.internal.database.model.RoomMemberEntityFields
+import im.vector.matrix.android.internal.database.model.RoomMemberSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.prev
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.UserId
-import im.vector.matrix.android.internal.session.room.membership.RoomMembers
+import im.vector.matrix.android.internal.session.room.membership.RoomMemberHelper
 import javax.inject.Inject
 
 internal class RoomAvatarResolver @Inject constructor(private val monarchy: Monarchy,
@@ -45,13 +45,13 @@ internal class RoomAvatarResolver @Inject constructor(private val monarchy: Mona
             if (!res.isNullOrEmpty()) {
                 return@doWithRealm
             }
-            val roomMembers = RoomMembers(realm, roomId)
+            val roomMembers = RoomMemberHelper(realm, roomId)
             val members = roomMembers.queryActiveRoomMembersEvent().findAll()
             // detect if it is a room with no more than 2 members (i.e. an alone or a 1:1 chat)
             if (members.size == 1) {
                 res = members.firstOrNull()?.avatarUrl
             } else if (members.size == 2) {
-                val firstOtherMember = members.where().notEqualTo(RoomMemberEntityFields.USER_ID, userId).findFirst()
+                val firstOtherMember = members.where().notEqualTo(RoomMemberSummaryEntityFields.USER_ID, userId).findFirst()
                 res = firstOtherMember?.avatarUrl
             }
         }

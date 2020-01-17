@@ -60,20 +60,7 @@ internal fun EventEntity.Companion.types(realm: Realm,
     return query
 }
 
-internal fun RealmQuery<EventEntity>.next(from: Int? = null, strict: Boolean = true): EventEntity? {
-    if (from != null) {
-        if (strict) {
-            this.greaterThan(EventEntityFields.STATE_INDEX, from)
-        } else {
-            this.greaterThanOrEqualTo(EventEntityFields.STATE_INDEX, from)
-        }
-    }
-    return this
-            .sort(EventEntityFields.STATE_INDEX, Sort.ASCENDING)
-            .findFirst()
-}
-
-internal fun RealmQuery<EventEntity>.prev(since: Int? = null, strict: Boolean = false): EventEntity? {
+internal fun RealmQuery<EventEntity>.descending(since: Int? = null, strict: Boolean = false): RealmQuery<EventEntity> {
     if (since != null) {
         if (strict) {
             this.lessThan(EventEntityFields.STATE_INDEX, since)
@@ -81,9 +68,26 @@ internal fun RealmQuery<EventEntity>.prev(since: Int? = null, strict: Boolean = 
             this.lessThanOrEqualTo(EventEntityFields.STATE_INDEX, since)
         }
     }
-    return this
-            .sort(EventEntityFields.STATE_INDEX, Sort.DESCENDING)
-            .findFirst()
+    return this.sort(EventEntityFields.STATE_INDEX, Sort.DESCENDING)
+}
+
+internal fun RealmQuery<EventEntity>.ascending(from: Int? = null, strict: Boolean = true): RealmQuery<EventEntity> {
+    if (from != null) {
+        if (strict) {
+            this.greaterThan(EventEntityFields.STATE_INDEX, from)
+        } else {
+            this.greaterThanOrEqualTo(EventEntityFields.STATE_INDEX, from)
+        }
+    }
+    return this.sort(EventEntityFields.STATE_INDEX, Sort.ASCENDING)
+}
+
+internal fun RealmQuery<EventEntity>.next(from: Int? = null, strict: Boolean = true): EventEntity? {
+    return this.ascending(from, strict).findFirst()
+}
+
+internal fun RealmQuery<EventEntity>.prev(since: Int? = null, strict: Boolean = false): EventEntity? {
+    return descending(since, strict).findFirst()
 }
 
 internal fun RealmList<EventEntity>.find(eventId: String): EventEntity? {

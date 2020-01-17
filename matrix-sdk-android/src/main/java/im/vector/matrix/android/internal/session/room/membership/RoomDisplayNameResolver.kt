@@ -26,7 +26,7 @@ import im.vector.matrix.android.internal.database.mapper.ContentMapper
 import im.vector.matrix.android.internal.database.model.*
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
-import im.vector.matrix.android.internal.database.model.RoomMemberEntity
+import im.vector.matrix.android.internal.database.model.RoomMemberSummaryEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.query.prev
 import im.vector.matrix.android.internal.database.query.where
@@ -75,7 +75,7 @@ internal class RoomDisplayNameResolver @Inject constructor(private val context: 
                 return@doWithRealm
             }
 
-            val roomMembers = RoomMembers(realm, roomId)
+            val roomMembers = RoomMemberHelper(realm, roomId)
             val activeMembers = roomMembers.queryActiveRoomMembersEvent().findAll()
 
             if (roomEntity?.membership == Membership.INVITE) {
@@ -83,7 +83,7 @@ internal class RoomDisplayNameResolver @Inject constructor(private val context: 
                 val inviterId = inviteMeEvent?.sender
                 name = if (inviterId != null) {
                     activeMembers.where()
-                            .equalTo(RoomMemberEntityFields.USER_ID, inviterId)
+                            .equalTo(RoomMemberSummaryEntityFields.USER_ID, inviterId)
                             .findFirst()
                             ?.displayName
                 } else {
@@ -91,7 +91,7 @@ internal class RoomDisplayNameResolver @Inject constructor(private val context: 
                 }
             } else if (roomEntity?.membership == Membership.JOIN) {
                 val roomSummary = RoomSummaryEntity.where(realm, roomId).findFirst()
-                val otherMembersSubset: List<RoomMemberEntity> = if (roomSummary?.heroes?.isNotEmpty() == true) {
+                val otherMembersSubset: List<RoomMemberSummaryEntity> = if (roomSummary?.heroes?.isNotEmpty() == true) {
                     roomSummary.heroes.mapNotNull { userId ->
                         roomMembers.getLastRoomMember(userId)?.takeIf {
                             it.membership == Membership.INVITE || it.membership == Membership.JOIN
@@ -99,7 +99,7 @@ internal class RoomDisplayNameResolver @Inject constructor(private val context: 
                     }
                 } else {
                     activeMembers.where()
-                            .notEqualTo(RoomMemberEntityFields.USER_ID, userId)
+                            .notEqualTo(RoomMemberSummaryEntityFields.USER_ID, userId)
                             .limit(3)
                             .findAll()
                             .createSnapshot()
@@ -123,14 +123,14 @@ internal class RoomDisplayNameResolver @Inject constructor(private val context: 
         return name ?: roomId
     }
 
-    private fun resolveRoomMemberName(roomMember: RoomMemberEntity?,
-                                      roomMembers: RoomMembers): String? {
-        if (roomMember == null) return null
-        val isUnique = roomMembers.isUniqueDisplayName(roomMember.displayName)
+    private fun resolveRoomMemberName(roomMemberSummary: RoomMemberSummaryEntity?,
+                                      roomMemberHelper: RoomMemberHelper): String? {
+        if (roomMemberSummary == null) return null
+        val isUnique = roomMemberHelper.isUniqueDisplayName(roomMemberSummary.displayName)
         return if (isUnique) {
-            roomMember.displayName
+            roomMemberSummary.displayName
         } else {
-            "${roomMember.displayName} (${roomMember.userId})"
+            "${roomMemberSummary.displayName} (${roomMemberSummary.userId})"
         }
     }
 }

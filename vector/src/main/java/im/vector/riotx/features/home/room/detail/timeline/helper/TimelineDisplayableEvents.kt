@@ -44,16 +44,6 @@ object TimelineDisplayableEvents {
             EventType.KEY_VERIFICATION_DONE,
             EventType.KEY_VERIFICATION_CANCEL
     )
-
-    val DEBUG_DISPLAYABLE_TYPES = DISPLAYABLE_TYPES + listOf(
-            EventType.REDACTION,
-            EventType.REACTION,
-            EventType.KEY_VERIFICATION_ACCEPT,
-            EventType.KEY_VERIFICATION_START,
-            EventType.KEY_VERIFICATION_MAC,
-            EventType.KEY_VERIFICATION_KEY,
-            EventType.KEY_VERIFICATION_READY
-    )
 }
 
 fun TimelineEvent.canBeMerged(): Boolean {

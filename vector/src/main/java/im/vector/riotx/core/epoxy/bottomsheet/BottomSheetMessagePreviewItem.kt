@@ -45,9 +45,12 @@ abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessa
     var time: CharSequence? = null
     @EpoxyAttribute
     var movementMethod: MovementMethod? = null
+    @EpoxyAttribute
+    var userClicked: (() -> Unit)? = null
 
     override fun bind(holder: Holder) {
         avatarRenderer.render(matrixItem, holder.avatar)
+        holder.avatar.setOnClickListener { userClicked?.invoke() }
         holder.sender.setTextOrHide(matrixItem.displayName)
         holder.body.movementMethod = movementMethod
         holder.body.text = body

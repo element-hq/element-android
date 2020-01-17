@@ -23,8 +23,10 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
+import im.vector.riotx.core.epoxy.ClickListener
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
+import im.vector.riotx.core.epoxy.onClick
 import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.features.home.AvatarRenderer
 
@@ -38,12 +40,13 @@ abstract class BottomSheetRoomPreviewItem : VectorEpoxyModel<BottomSheetRoomPrev
     lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute
     lateinit var matrixItem: MatrixItem
-    @EpoxyAttribute var settingsClickListener: View.OnClickListener? = null
+    @EpoxyAttribute var settingsClickListener: ClickListener? = null
 
     override fun bind(holder: Holder) {
         avatarRenderer.render(matrixItem, holder.avatar)
+        holder.avatar.onClick(settingsClickListener)
         holder.roomName.setTextOrHide(matrixItem.displayName)
-        holder.roomSettings.setOnClickListener(settingsClickListener)
+        holder.roomSettings.onClick(settingsClickListener)
     }
 
     class Holder : VectorEpoxyHolder() {

@@ -23,11 +23,18 @@ import android.os.Parcelable
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import androidx.annotation.*
+import androidx.annotation.AttrRes
+import androidx.annotation.LayoutRes
+import androidx.annotation.MainThread
+import androidx.annotation.MenuRes
+import androidx.annotation.Nullable
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentFactory
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -41,7 +48,12 @@ import com.google.android.material.snackbar.Snackbar
 import im.vector.matrix.android.api.failure.GlobalError
 import im.vector.riotx.BuildConfig
 import im.vector.riotx.R
-import im.vector.riotx.core.di.*
+import im.vector.riotx.core.di.ActiveSessionHolder
+import im.vector.riotx.core.di.DaggerScreenComponent
+import im.vector.riotx.core.di.HasScreenInjector
+import im.vector.riotx.core.di.HasVectorInjector
+import im.vector.riotx.core.di.ScreenComponent
+import im.vector.riotx.core.di.VectorComponent
 import im.vector.riotx.core.dialogs.DialogLocker
 import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.utils.toast
@@ -92,6 +104,7 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
     lateinit var rageShake: RageShake
         private set
     protected lateinit var navigator: Navigator
+    private lateinit var fragmentFactory: FragmentFactory
     private lateinit var activeSessionHolder: ActiveSessionHolder
     private lateinit var vectorPreferences: VectorPreferences
 
@@ -145,7 +158,8 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
         }
         Timber.v("Injecting dependencies into ${javaClass.simpleName} took $timeForInjection ms")
         ThemeUtils.setActivityTheme(this, getOtherThemes())
-        supportFragmentManager.fragmentFactory = screenComponent.fragmentFactory()
+        fragmentFactory = screenComponent.fragmentFactory()
+        supportFragmentManager.fragmentFactory = fragmentFactory
         super.onCreate(savedInstanceState)
         viewModelFactory = screenComponent.viewModelFactory()
         configurationViewModel = viewModelProvider.get(ConfigurationViewModel::class.java)
@@ -196,7 +210,8 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
                 handleInvalidToken(globalError)
             is GlobalError.ConsentNotGivenError ->
                 consentNotGivenHelper.displayDialog(globalError.consentUri,
-                        activeSessionHolder.getActiveSession().sessionParams.homeServerConnectionConfig.homeServerUri.host ?: "")
+                                                    activeSessionHolder.getActiveSession().sessionParams.homeServerConnectionConfig.homeServerUri.host
+                                                    ?: "")
         }
     }
 
@@ -209,11 +224,11 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
         mainActivityStarted = true
 
         MainActivity.restartApp(this,
-                MainActivityArgs(
-                        clearCredentials = !globalError.softLogout,
-                        isUserLoggedOut = true,
-                        isSoftLogout = globalError.softLogout
-                )
+                                MainActivityArgs(
+                                        clearCredentials = !globalError.softLogout,
+                                        isUserLoggedOut = true,
+                                        isSoftLogout = globalError.softLogout
+                                )
         )
     }
 
@@ -275,6 +290,12 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
     }
 
     protected open fun injectWith(injector: ScreenComponent) = Unit
+
+    protected fun createFragment(fragmentClass: Class<out Fragment>, args: Bundle?): Fragment {
+        return fragmentFactory.instantiate(classLoader, fragmentClass.name).apply {
+            arguments = args
+        }
+    }
 
     /* ==========================================================================================
      * PRIVATE METHODS
@@ -372,12 +393,10 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
      */
     protected fun configureToolbar(toolbar: Toolbar, displayBack: Boolean = true) {
         setSupportActionBar(toolbar)
-
-        if (displayBack) {
-            supportActionBar?.let {
-                it.setDisplayShowHomeEnabled(true)
-                it.setDisplayHomeAsUpEnabled(true)
-            }
+        supportActionBar?.let {
+            it.setDisplayShowHomeEnabled(displayBack)
+            it.setDisplayHomeAsUpEnabled(displayBack)
+            it.title = null
         }
     }
 

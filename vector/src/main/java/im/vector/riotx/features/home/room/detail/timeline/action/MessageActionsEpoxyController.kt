@@ -20,7 +20,12 @@ import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Success
 import im.vector.riotx.EmojiCompatFontProvider
 import im.vector.riotx.R
-import im.vector.riotx.core.epoxy.bottomsheet.*
+import im.vector.riotx.core.epoxy.bottomsheet.BottomSheetQuickReactionsItem
+import im.vector.riotx.core.epoxy.bottomsheet.bottomSheetActionItem
+import im.vector.riotx.core.epoxy.bottomsheet.bottomSheetMessagePreviewItem
+import im.vector.riotx.core.epoxy.bottomsheet.bottomSheetQuickReactionsItem
+import im.vector.riotx.core.epoxy.bottomsheet.bottomSheetSendStateItem
+import im.vector.riotx.core.epoxy.dividerItem
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
@@ -31,9 +36,11 @@ import javax.inject.Inject
 /**
  * Epoxy controller for message action list
  */
-class MessageActionsEpoxyController @Inject constructor(private val stringProvider: StringProvider,
-                                                        private val avatarRenderer: AvatarRenderer,
-                                                        private val fontProvider: EmojiCompatFontProvider) : TypedEpoxyController<MessageActionState>() {
+class MessageActionsEpoxyController @Inject constructor(
+        private val stringProvider: StringProvider,
+        private val avatarRenderer: AvatarRenderer,
+        private val fontProvider: EmojiCompatFontProvider
+) : TypedEpoxyController<MessageActionState>() {
 
     var listener: MessageActionsEpoxyControllerListener? = null
 
@@ -46,6 +53,7 @@ class MessageActionsEpoxyController @Inject constructor(private val stringProvid
                 avatarRenderer(avatarRenderer)
                 matrixItem(state.informationData.matrixItem)
                 movementMethod(createLinkMovementMethod(listener))
+                userClicked { listener?.didSelectMenuAction(EventSharedAction.OpenUserProfile(state.informationData.senderId)) }
                 body(body.linkify(listener))
                 time(state.time())
             }
@@ -70,7 +78,7 @@ class MessageActionsEpoxyController @Inject constructor(private val stringProvid
         // Quick reactions
         if (state.canReact() && state.quickStates is Success) {
             // Separator
-            bottomSheetSeparatorItem {
+            dividerItem {
                 id("reaction_separator")
             }
 
@@ -88,14 +96,14 @@ class MessageActionsEpoxyController @Inject constructor(private val stringProvid
         }
 
         // Separator
-        bottomSheetSeparatorItem {
+        dividerItem {
             id("actions_separator")
         }
 
         // Action
         state.actions.forEachIndexed { index, action ->
             if (action is EventSharedAction.Separator) {
-                bottomSheetSeparatorItem {
+                dividerItem {
                     id("separator_$index")
                 }
             } else {

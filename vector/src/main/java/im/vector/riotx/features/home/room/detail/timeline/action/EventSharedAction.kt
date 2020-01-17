@@ -26,6 +26,9 @@ sealed class EventSharedAction(@StringRes val titleRes: Int, @DrawableRes val ic
     object Separator :
             EventSharedAction(0, 0)
 
+    data class OpenUserProfile(val senderId: String) :
+            EventSharedAction(0, 0)
+
     data class AddReaction(val eventId: String) :
             EventSharedAction(R.string.message_add_reaction, R.drawable.ic_add_reaction)
 

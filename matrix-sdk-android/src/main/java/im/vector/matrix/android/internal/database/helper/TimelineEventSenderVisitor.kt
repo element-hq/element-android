@@ -26,7 +26,7 @@ import im.vector.matrix.android.internal.database.query.prev
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.extensions.assertIsManaged
 import im.vector.matrix.android.internal.session.SessionScope
-import im.vector.matrix.android.internal.session.room.membership.RoomMembers
+import im.vector.matrix.android.internal.session.room.membership.RoomMemberHelper
 import io.realm.RealmList
 import io.realm.RealmQuery
 import javax.inject.Inject
@@ -128,7 +128,7 @@ internal class TimelineEventSenderVisitor @Inject constructor() {
         ContentMapper.map(senderRoomMemberContent).toModel<RoomMemberContent>()?.also {
             result.senderAvatar = it.avatarUrl
             result.senderName = it.displayName
-            result.isUniqueDisplayName = RoomMembers(realm, roomId).isUniqueDisplayName(it.displayName)
+            result.isUniqueDisplayName = RoomMemberHelper(realm, roomId).isUniqueDisplayName(it.displayName)
         }
         // We try to fallback on prev content if we got a room member state events with null fields
         if (root?.type == EventType.STATE_ROOM_MEMBER) {
@@ -138,7 +138,7 @@ internal class TimelineEventSenderVisitor @Inject constructor() {
                 }
                 if (result.senderName == null && it.displayName != null) {
                     result.senderName = it.displayName
-                    result.isUniqueDisplayName = RoomMembers(realm, roomId).isUniqueDisplayName(it.displayName)
+                    result.isUniqueDisplayName = RoomMemberHelper(realm, roomId).isUniqueDisplayName(it.displayName)
                 }
             }
         }
