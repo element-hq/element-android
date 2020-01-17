@@ -24,10 +24,13 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.BuildConfig
 import im.vector.matrix.android.api.auth.AuthenticationService
 import im.vector.matrix.android.internal.SessionManager
+import im.vector.matrix.android.internal.crypto.attachments.ElementToDecrypt
+import im.vector.matrix.android.internal.crypto.attachments.MXEncryptedAttachments
 import im.vector.matrix.android.internal.di.DaggerMatrixComponent
 import im.vector.matrix.android.internal.network.UserAgentHolder
 import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
 import org.matrix.olm.OlmManager
+import java.io.InputStream
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
@@ -95,6 +98,10 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
 
         fun getSdkVersion(): String {
             return BuildConfig.VERSION_NAME + " (" + BuildConfig.GIT_SDK_REVISION + ")"
+        }
+
+        fun decryptStream(inputStream: InputStream?, elementToDecrypt: ElementToDecrypt): InputStream? {
+            return MXEncryptedAttachments.decryptAttachment(inputStream, elementToDecrypt)
         }
     }
 }

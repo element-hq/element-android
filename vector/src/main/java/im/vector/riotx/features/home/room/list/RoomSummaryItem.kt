@@ -20,6 +20,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
@@ -27,6 +28,7 @@ import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
+import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.features.home.AvatarRenderer
 
 @EpoxyModelClass(layout = R.layout.item_room)
@@ -36,6 +38,7 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
     @EpoxyAttribute lateinit var matrixItem: MatrixItem
     @EpoxyAttribute lateinit var lastFormattedEvent: CharSequence
     @EpoxyAttribute lateinit var lastEventTime: CharSequence
+    @EpoxyAttribute var typingString: CharSequence? = null
     @EpoxyAttribute var unreadNotificationCount: Int = 0
     @EpoxyAttribute var hasUnreadMessage: Boolean = false
     @EpoxyAttribute var hasDraft: Boolean = false
@@ -50,6 +53,8 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         holder.titleView.text = matrixItem.getBestName()
         holder.lastEventTimeView.text = lastEventTime
         holder.lastEventView.text = lastFormattedEvent
+        holder.typingView.setTextOrHide(typingString)
+        holder.lastEventView.isInvisible = holder.typingView.isVisible
         holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadNotificationCount, showHighlighted))
         holder.unreadIndentIndicator.isVisible = hasUnreadMessage
         holder.draftView.isVisible = hasDraft
@@ -61,6 +66,7 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         val unreadCounterBadgeView by bind<UnreadCounterBadgeView>(R.id.roomUnreadCounterBadgeView)
         val unreadIndentIndicator by bind<View>(R.id.roomUnreadIndicator)
         val lastEventView by bind<TextView>(R.id.roomLastEventView)
+        val typingView by bind<TextView>(R.id.roomTypingView)
         val draftView by bind<ImageView>(R.id.roomDraftBadge)
         val lastEventTimeView by bind<TextView>(R.id.roomLastEventTimeView)
         val avatarImageView by bind<ImageView>(R.id.roomAvatarImageView)

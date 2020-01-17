@@ -16,7 +16,6 @@
 
 package im.vector.riotx.core.rx
 
-import im.vector.riotx.BuildConfig
 import im.vector.riotx.features.settings.VectorPreferences
 import io.reactivex.plugins.RxJavaPlugins
 import timber.log.Timber
@@ -33,8 +32,8 @@ class RxConfig @Inject constructor(
         RxJavaPlugins.setErrorHandler { throwable ->
             Timber.e(throwable, "RxError")
 
-            // Avoid crash in production
-            if (BuildConfig.DEBUG || vectorPreferences.failFast()) {
+            // Avoid crash in production, except if user wants it
+            if (vectorPreferences.failFast()) {
                 throw throwable
             }
         }

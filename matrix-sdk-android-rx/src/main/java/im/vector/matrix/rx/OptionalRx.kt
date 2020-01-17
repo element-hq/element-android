@@ -22,3 +22,9 @@ import io.reactivex.Observable
 fun <T : Any> Observable<Optional<T>>.unwrap(): Observable<T> {
     return filter { it.hasValue() }.map { it.get() }
 }
+
+fun <T : Any, U : Any> Observable<Optional<T>>.mapOptional(fn: (T) -> U?): Observable<Optional<U>> {
+    return map {
+        it.map(fn)
+    }
+}

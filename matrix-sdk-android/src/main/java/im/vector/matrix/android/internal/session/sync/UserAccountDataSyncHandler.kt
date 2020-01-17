@@ -28,7 +28,7 @@ import im.vector.matrix.android.internal.database.query.getDirectRooms
 import im.vector.matrix.android.internal.database.query.getOrCreate
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.UserId
-import im.vector.matrix.android.internal.session.room.membership.RoomMembers
+import im.vector.matrix.android.internal.session.room.membership.RoomMemberHelper
 import im.vector.matrix.android.internal.session.sync.model.InvitedRoomSync
 import im.vector.matrix.android.internal.session.sync.model.accountdata.*
 import im.vector.matrix.android.internal.session.user.accountdata.DirectChatsHelper
@@ -70,7 +70,7 @@ internal class UserAccountDataSyncHandler @Inject constructor(
         var hasUpdate = false
         monarchy.doWithRealm { realm ->
             invites.forEach { (roomId, _) ->
-                val myUserStateEvent = RoomMembers(realm, roomId).getLastStateEvent(userId)
+                val myUserStateEvent = RoomMemberHelper(realm, roomId).getLastStateEvent(userId)
                 val inviterId = myUserStateEvent?.sender
                 val myUserRoomMember: RoomMemberContent? = myUserStateEvent?.let { it.asDomain().content?.toModel() }
                 val isDirect = myUserRoomMember?.isDirect

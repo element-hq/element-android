@@ -71,8 +71,6 @@
         <item name="vctr_list_header_primary_text_color">#7F3C3C3C</item>
         <item name="vctr_list_header_secondary_text_color">#4D3C3C3C</item>
 
-        <item name="vctr_list_divider_color">@color/list_divider_color_light</item>
-
         <!-- gradient on the home bottom -->
         <item name="vctr_activity_bottom_gradient_color">#80ffffff</item>
 

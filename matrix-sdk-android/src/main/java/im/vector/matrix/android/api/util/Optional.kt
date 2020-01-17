@@ -27,6 +27,14 @@ data class Optional<T : Any> constructor(private val value: T?) {
         return value
     }
 
+    fun <U : Any> map(fn: (T) -> U?): Optional<U> {
+        return if (value == null) {
+            from(null)
+        } else {
+            from(fn(value))
+        }
+    }
+
     fun getOrElse(fn: () -> T): T {
         return value ?: fn()
     }

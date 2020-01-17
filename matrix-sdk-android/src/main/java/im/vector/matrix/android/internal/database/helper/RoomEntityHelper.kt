@@ -24,7 +24,7 @@ import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.query.fastContains
 import im.vector.matrix.android.internal.extensions.assertIsManaged
-import im.vector.matrix.android.internal.session.room.membership.RoomMembers
+import im.vector.matrix.android.internal.session.room.membership.RoomMemberHelper
 
 internal fun RoomEntity.deleteOnCascade(chunkEntity: ChunkEntity) {
     chunks.remove(chunkEntity)
@@ -59,7 +59,7 @@ internal fun RoomEntity.addSendingEvent(event: Event) {
     val eventEntity = event.toEntity(roomId).apply {
         this.sendState = SendState.UNSENT
     }
-    val roomMembers = RoomMembers(realm, roomId)
+    val roomMembers = RoomMemberHelper(realm, roomId)
     val myUser = roomMembers.getLastRoomMember(senderId)
     val localId = TimelineEventEntity.nextId(realm)
     val timelineEventEntity = TimelineEventEntity(localId).also {

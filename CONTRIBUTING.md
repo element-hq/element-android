@@ -1,6 +1,6 @@
 # Contributing code to Matrix
 
-Please read https://github.com/matrix-org/synapse/blob/master/CONTRIBUTING.rst
+Please read https://github.com/matrix-org/synapse/blob/master/CONTRIBUTING.md
 
 Android support can be found in this [![Riot Android Matrix room #riot-android:matrix.org](https://img.shields.io/matrix/riot-android:matrix.org.svg?label=%23riot-android:matrix.org&logo=matrix&server_fqdn=matrix.org)](https://matrix.to/#/#riot-android:matrix.org) room.
 
@@ -11,6 +11,7 @@ Dedicated room for RiotX: [![RiotX Android Matrix room #riot-android:matrix.org]
 ## Android Studio settings
 
 Please set the "hard wrap" setting of Android Studio to 160 chars, this is the setting we use internally to format the source code (Menu `Settings/Editor/Code Style` then `Hard wrap at`).
+Please ensure that your using the project formatting rules (which are in the project at .idea/codeStyles/), and format the file before committing them.
 
 ## Compilation
 

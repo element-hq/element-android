@@ -16,19 +16,19 @@
 
 package im.vector.matrix.android.internal.database.query
 
-import im.vector.matrix.android.internal.database.model.RoomMemberEntity
-import im.vector.matrix.android.internal.database.model.RoomMemberEntityFields
+import im.vector.matrix.android.internal.database.model.RoomMemberSummaryEntity
+import im.vector.matrix.android.internal.database.model.RoomMemberSummaryEntityFields
 import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.kotlin.where
 
-internal fun RoomMemberEntity.Companion.where(realm: Realm, roomId: String, userId: String? = null): RealmQuery<RoomMemberEntity> {
+internal fun RoomMemberSummaryEntity.Companion.where(realm: Realm, roomId: String, userId: String? = null): RealmQuery<RoomMemberSummaryEntity> {
     val query = realm
-            .where<RoomMemberEntity>()
-            .equalTo(RoomMemberEntityFields.ROOM_ID, roomId)
+            .where<RoomMemberSummaryEntity>()
+            .equalTo(RoomMemberSummaryEntityFields.ROOM_ID, roomId)
 
     if (userId != null) {
-        query.equalTo(RoomMemberEntityFields.USER_ID, userId)
+        query.equalTo(RoomMemberSummaryEntityFields.USER_ID, userId)
     }
     return query
 }

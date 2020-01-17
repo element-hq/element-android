@@ -91,7 +91,8 @@ object EventType {
             STATE_ROOM_CANONICAL_ALIAS,
             STATE_ROOM_HISTORY_VISIBILITY,
             STATE_ROOM_RELATED_GROUPS,
-            STATE_ROOM_PINNED_EVENT
+            STATE_ROOM_PINNED_EVENT,
+            STATE_ROOM_ENCRYPTION
     )
 
     fun isStateEvent(type: String): Boolean {

@@ -50,7 +50,7 @@ interface Navigator {
 
     fun openGroupDetail(groupId: String, context: Context, buildTask: Boolean = false)
 
-    fun openUserDetail(userId: String, context: Context, buildTask: Boolean = false)
+    fun openRoomMemberProfile(userId: String, roomId: String?, context: Context, buildTask: Boolean = false)
 
-    fun openRoomSettings(context: Context, roomId: String)
+    fun openRoomProfile(context: Context, roomId: String)
 }

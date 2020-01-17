@@ -27,7 +27,7 @@ import com.otaliastudios.autocomplete.CharPolicy
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.group.model.GroupSummary
-import im.vector.matrix.android.api.session.room.model.RoomMember
+import im.vector.matrix.android.api.session.room.model.RoomMemberSummary
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
@@ -108,13 +108,13 @@ class AutoCompleter @AssistedInject constructor(
 
     private fun setupMembers(backgroundDrawable: ColorDrawable, editText: EditText) {
         val autocompleteMemberPresenter = autocompleteMemberPresenterFactory.create(roomId)
-        Autocomplete.on<RoomMember>(editText)
+        Autocomplete.on<RoomMemberSummary>(editText)
                 .with(CharPolicy('@', true))
                 .with(autocompleteMemberPresenter)
                 .with(ELEVATION)
                 .with(backgroundDrawable)
-                .with(object : AutocompleteCallback<RoomMember> {
-                    override fun onPopupItemClicked(editable: Editable, item: RoomMember): Boolean {
+                .with(object : AutocompleteCallback<RoomMemberSummary> {
+                    override fun onPopupItemClicked(editable: Editable, item: RoomMemberSummary): Boolean {
                         insertMatrixItem(editText, editable, "@", item.toMatrixItem())
                         return true
                     }

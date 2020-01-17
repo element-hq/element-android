@@ -25,14 +25,14 @@ import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.members.roomMemberQueryParams
 import im.vector.matrix.android.api.session.room.model.Membership
-import im.vector.matrix.android.api.session.room.model.RoomMember
+import im.vector.matrix.android.api.session.room.model.RoomMemberSummary
 import im.vector.riotx.features.autocomplete.AutocompleteClickListener
 
 class AutocompleteMemberPresenter @AssistedInject constructor(context: Context,
                                                               @Assisted val roomId: String,
                                                               private val session: Session,
                                                               private val controller: AutocompleteMemberController
-) : RecyclerViewPresenter<RoomMember>(context), AutocompleteClickListener<RoomMember> {
+) : RecyclerViewPresenter<RoomMemberSummary>(context), AutocompleteClickListener<RoomMemberSummary> {
 
     private val room = session.getRoom(roomId)!!
 
@@ -51,7 +51,7 @@ class AutocompleteMemberPresenter @AssistedInject constructor(context: Context,
         return controller.adapter
     }
 
-    override fun onItemClick(t: RoomMember) {
+    override fun onItemClick(t: RoomMemberSummary) {
         dispatchClick(t)
     }
 
@@ -63,6 +63,7 @@ class AutocompleteMemberPresenter @AssistedInject constructor(context: Context,
                 QueryStringValue.Contains(query.toString(), QueryStringValue.Case.INSENSITIVE)
             }
             memberships = listOf(Membership.JOIN)
+            excludeSelf = true
         }
         val members = room.getRoomMembers(queryParams)
                 .asSequence()

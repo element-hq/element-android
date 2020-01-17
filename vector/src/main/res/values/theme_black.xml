@@ -70,7 +70,11 @@
         <item name="vctr_tab_home">@color/primary_color_black</item>
         <!--Header/Panel Text Secondary-->
         <item name="vctr_tab_home_secondary">@color/primary_color_dark_black</item>
-        <item name="vctr_list_divider_color">@color/list_divider_color_black</item>
+
+        <item name="vctr_list_bottom_sheet_divider_color">@color/list_divider_color_black</item>
+        <item name="vctr_list_divider_color">@color/riotx_header_panel_background_black</item>
+
+        <item name="vctr_redacted_message_color">@color/list_divider_color_black</item>
 
         <item name="vctr_markdown_block_background_color">#FF4D4D4D</item>
 

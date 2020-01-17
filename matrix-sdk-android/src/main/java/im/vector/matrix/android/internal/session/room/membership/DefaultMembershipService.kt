@@ -24,11 +24,12 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.room.members.MembershipService
 import im.vector.matrix.android.api.session.room.members.RoomMemberQueryParams
 import im.vector.matrix.android.api.session.room.model.Membership
-import im.vector.matrix.android.api.session.room.model.RoomMember
+import im.vector.matrix.android.api.session.room.model.RoomMemberSummary
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.database.mapper.asDomain
-import im.vector.matrix.android.internal.database.model.RoomMemberEntity
-import im.vector.matrix.android.internal.database.model.RoomMemberEntityFields
+import im.vector.matrix.android.internal.database.model.RoomMemberSummaryEntity
+import im.vector.matrix.android.internal.database.model.RoomMemberSummaryEntityFields
+import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.query.process
 import im.vector.matrix.android.internal.session.room.membership.joining.InviteTask
 import im.vector.matrix.android.internal.session.room.membership.joining.JoinRoomTask
@@ -39,13 +40,16 @@ import im.vector.matrix.android.internal.util.fetchCopied
 import io.realm.Realm
 import io.realm.RealmQuery
 
-internal class DefaultMembershipService @AssistedInject constructor(@Assisted private val roomId: String,
-                                                                    private val monarchy: Monarchy,
-                                                                    private val taskExecutor: TaskExecutor,
-                                                                    private val loadRoomMembersTask: LoadRoomMembersTask,
-                                                                    private val inviteTask: InviteTask,
-                                                                    private val joinTask: JoinRoomTask,
-                                                                    private val leaveRoomTask: LeaveRoomTask
+internal class DefaultMembershipService @AssistedInject constructor(
+        @Assisted private val roomId: String,
+        private val monarchy: Monarchy,
+        private val taskExecutor: TaskExecutor,
+        private val loadRoomMembersTask: LoadRoomMembersTask,
+        private val inviteTask: InviteTask,
+        private val joinTask: JoinRoomTask,
+        private val leaveRoomTask: LeaveRoomTask,
+        @UserId
+        private val userId: String
 ) : MembershipService {
 
     @AssistedInject.Factory
@@ -62,14 +66,14 @@ internal class DefaultMembershipService @AssistedInject constructor(@Assisted pr
                 .executeBy(taskExecutor)
     }
 
-    override fun getRoomMember(userId: String): RoomMember? {
+    override fun getRoomMember(userId: String): RoomMemberSummary? {
         val roomMemberEntity = monarchy.fetchCopied {
-            RoomMembers(it, roomId).getLastRoomMember(userId)
+            RoomMemberHelper(it, roomId).getLastRoomMember(userId)
         }
         return roomMemberEntity?.asDomain()
     }
 
-    override fun getRoomMembers(queryParams: RoomMemberQueryParams): List<RoomMember> {
+    override fun getRoomMembers(queryParams: RoomMemberQueryParams): List<RoomMemberSummary> {
         return monarchy.fetchAllMappedSync(
                 {
                     roomMembersQuery(it, queryParams)
@@ -80,7 +84,7 @@ internal class DefaultMembershipService @AssistedInject constructor(@Assisted pr
         )
     }
 
-    override fun getRoomMembersLive(queryParams: RoomMemberQueryParams): LiveData<List<RoomMember>> {
+    override fun getRoomMembersLive(queryParams: RoomMemberQueryParams): LiveData<List<RoomMemberSummary>> {
         return monarchy.findAllMappedWithChanges(
                 {
                     roomMembersQuery(it, queryParams)
@@ -91,15 +95,21 @@ internal class DefaultMembershipService @AssistedInject constructor(@Assisted pr
         )
     }
 
-    private fun roomMembersQuery(realm: Realm, queryParams: RoomMemberQueryParams): RealmQuery<RoomMemberEntity> {
-        return RoomMembers(realm, roomId).queryRoomMembersEvent()
-                .process(RoomMemberEntityFields.MEMBERSHIP_STR, queryParams.memberships)
-                .process(RoomMemberEntityFields.DISPLAY_NAME, queryParams.displayName)
+    private fun roomMembersQuery(realm: Realm, queryParams: RoomMemberQueryParams): RealmQuery<RoomMemberSummaryEntity> {
+        return RoomMemberHelper(realm, roomId).queryRoomMembersEvent()
+                .process(RoomMemberSummaryEntityFields.USER_ID, queryParams.userId)
+                .process(RoomMemberSummaryEntityFields.MEMBERSHIP_STR, queryParams.memberships)
+                .process(RoomMemberSummaryEntityFields.DISPLAY_NAME, queryParams.displayName)
+                .apply {
+                    if (queryParams.excludeSelf) {
+                        notEqualTo(RoomMemberSummaryEntityFields.USER_ID, userId)
+                    }
+                }
     }
 
     override fun getNumberOfJoinedMembers(): Int {
         return Realm.getInstance(monarchy.realmConfiguration).use {
-            RoomMembers(it, roomId).getNumberOfJoinedMembers()
+            RoomMemberHelper(it, roomId).getNumberOfJoinedMembers()
         }
     }
 

@@ -18,7 +18,7 @@ package im.vector.matrix.android.api.session.room.members
 
 import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.session.room.model.RoomMember
+import im.vector.matrix.android.api.session.room.model.RoomMemberSummary
 import im.vector.matrix.android.api.util.Cancelable
 
 /**
@@ -38,21 +38,21 @@ interface MembershipService {
      *
      * @return the roomMember with userId or null
      */
-    fun getRoomMember(userId: String): RoomMember?
+    fun getRoomMember(userId: String): RoomMemberSummary?
 
     /**
      * Return all the roomMembers of the room with params
      * @param queryParams the params to query for
      * @return a roomMember list.
      */
-    fun getRoomMembers(queryParams: RoomMemberQueryParams): List<RoomMember>
+    fun getRoomMembers(queryParams: RoomMemberQueryParams): List<RoomMemberSummary>
 
     /**
      * Return all the roomMembers of the room filtered by memberships
      * @param queryParams the params to query for
      * @return a [LiveData] of roomMember list.
      */
-    fun getRoomMembersLive(queryParams: RoomMemberQueryParams): LiveData<List<RoomMember>>
+    fun getRoomMembersLive(queryParams: RoomMemberQueryParams): LiveData<List<RoomMemberSummary>>
 
     fun getNumberOfJoinedMembers(): Int
 

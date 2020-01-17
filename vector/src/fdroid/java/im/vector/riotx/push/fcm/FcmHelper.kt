@@ -69,7 +69,7 @@ object FcmHelper {
         // We need to use alarm in this mode
         if (vectorPreferences.areNotificationEnabledForDevice() && activeSessionHolder.hasActiveSession()) {
             val currentSession = activeSessionHolder.getActiveSession()
-            AlarmSyncBroadcastReceiver.scheduleAlarm(context, currentSession.myUserId, 4_000L)
+            AlarmSyncBroadcastReceiver.scheduleAlarm(context, currentSession.sessionId, 4_000L)
             Timber.i("Alarm scheduled to restart service")
         }
     }

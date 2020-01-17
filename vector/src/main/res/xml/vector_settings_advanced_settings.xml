@@ -30,8 +30,6 @@
             android:summary="@string/settings_developer_mode_fail_fast_summary"
             android:title="@string/settings_developer_mode_fail_fast_title" />
 
-        <!-- TODO Display unsupported events -->
-
     </im.vector.riotx.core.preference.VectorPreferenceCategory>
 
     <im.vector.riotx.core.preference.VectorPreferenceCategory

@@ -35,17 +35,17 @@ class PermalinkHandler @Inject constructor(private val session: Session,
     fun launch(
             context: Context,
             deepLink: String?,
-            navigateToRoomInterceptor: NavigateToRoomInterceptor? = null,
+            navigationInterceptor: NavigationInterceptor? = null,
             buildTask: Boolean = false
     ): Single<Boolean> {
         val uri = deepLink?.let { Uri.parse(it) }
-        return launch(context, uri, navigateToRoomInterceptor, buildTask)
+        return launch(context, uri, navigationInterceptor, buildTask)
     }
 
     fun launch(
             context: Context,
             deepLink: Uri?,
-            navigateToRoomInterceptor: NavigateToRoomInterceptor? = null,
+            navigationInterceptor: NavigationInterceptor? = null,
             buildTask: Boolean = false
     ): Single<Boolean> {
         if (deepLink == null) {
@@ -57,7 +57,7 @@ class PermalinkHandler @Inject constructor(private val session: Session,
                         .observeOn(AndroidSchedulers.mainThread())
                         .map {
                             val roomId = it.getOrNull()
-                            if (navigateToRoomInterceptor?.navToRoom(roomId, permalinkData.eventId) != true) {
+                            if (navigationInterceptor?.navToRoom(roomId, permalinkData.eventId) != true) {
                                 openRoom(context, roomId, permalinkData.eventId, buildTask)
                             }
                             true
@@ -68,7 +68,9 @@ class PermalinkHandler @Inject constructor(private val session: Session,
                 Single.just(true)
             }
             is PermalinkData.UserLink     -> {
-                navigator.openUserDetail(permalinkData.userId, context, buildTask)
+                if (navigationInterceptor?.navToMemberProfile(permalinkData.userId) != true) {
+                    navigator.openRoomMemberProfile(userId = permalinkData.userId, roomId = null, context = context, buildTask = buildTask)
+                }
                 Single.just(true)
             }
             is PermalinkData.FallbackLink -> {
@@ -98,10 +100,19 @@ class PermalinkHandler @Inject constructor(private val session: Session,
     }
 }
 
-interface NavigateToRoomInterceptor {
+interface NavigationInterceptor {
 
     /**
      * Return true if the navigation has been intercepted
      */
-    fun navToRoom(roomId: String?, eventId: String? = null): Boolean
+    fun navToRoom(roomId: String?, eventId: String? = null): Boolean {
+        return false
+    }
+
+    /**
+     * Return true if the navigation has been intercepted
+     */
+    fun navToMemberProfile(userId: String): Boolean {
+        return false
+    }
 }

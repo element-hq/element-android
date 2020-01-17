@@ -1,3 +1,21 @@
+Changes in RiotX 0.13.0 (2020-01-17)
+===================================================
+
+Features ✨:
+ - Send and render typing events (#564)
+ - Create Room Profile screen (#54)
+ - Create Room Member Profile screen (#59)
+
+Improvements 🙌:
+ - Render events m.room.encryption and m.room.guest_access in the timeline
+
+Bugfix 🐛:
+ - Fix broken background sync in F-Droid version
+ - Fix issue with downloaded file on encrypted rooms. The file was not properly decrypted
+
+Build 🧱:
+ - Change the way versionCode is computed (#827)
+
 Changes in RiotX 0.12.0 (2020-01-09)
 ===================================================
 

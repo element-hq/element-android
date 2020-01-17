@@ -3,7 +3,6 @@
 /local.properties
 # idea files: exclude everything except dictionnaries
 .idea/caches
-.idea/codeStyles
 .idea/libraries
 .idea/*.xml
 .DS_Store
