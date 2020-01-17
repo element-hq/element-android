@@ -72,6 +72,7 @@ data class CrossSigningKeyInfo(
         userMap["ed25519:${signedWithNoPrefix}"] = signature
         signatures = updated
     }
+
 //    fun toXSigningKeys(): XSigningKeys {
 //        return XSigningKeys(
 //                userId = userId,

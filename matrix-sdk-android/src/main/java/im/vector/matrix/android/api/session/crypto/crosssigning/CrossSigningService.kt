@@ -17,6 +17,7 @@
 package im.vector.matrix.android.api.session.crypto.crosssigning
 
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustResult
 import im.vector.matrix.android.internal.crypto.model.rest.SignatureUploadResponse
 import im.vector.matrix.android.internal.crypto.model.rest.UserPasswordAuth
 
@@ -43,5 +44,5 @@ interface CrossSigningService {
      */
     fun signDevice(deviceId: String, callback: MatrixCallback<SignatureUploadResponse>)
 
-    fun checkDeviceTrust(userId: String, deviceId: String, callback: MatrixCallback<Unit>)
+    fun checkDeviceTrust(userId: String, deviceId: String) : DeviceTrustResult
 }

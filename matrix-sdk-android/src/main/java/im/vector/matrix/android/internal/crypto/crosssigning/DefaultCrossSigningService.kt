@@ -26,13 +26,13 @@ import im.vector.matrix.android.api.session.crypto.crosssigning.MXCrossSigningIn
 import im.vector.matrix.android.internal.crypto.DeviceListManager
 import im.vector.matrix.android.internal.crypto.MXOlmDevice
 import im.vector.matrix.android.internal.crypto.MyDeviceInfoHolder
-import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.*
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.UploadSignaturesTask
 import im.vector.matrix.android.internal.crypto.tasks.UploadSigningKeysTask
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.di.UserId
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.TaskConstraints
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
@@ -42,6 +42,8 @@ import org.matrix.olm.OlmUtility
 import timber.log.Timber
 import javax.inject.Inject
 
+
+@SessionScope
 internal class DefaultCrossSigningService @Inject constructor(
         @UserId private val userId: String,
         private val credentials: Credentials,
@@ -153,9 +155,11 @@ internal class DefaultCrossSigningService @Inject constructor(
         Timber.v("## CrossSigning - uskPublicKey:$uskPublicKey")
 
         // Sign userSigningKey with master
-        val signedUSK = JsonCanonicalizer.getCanonicalJson(Map::class.java, CrossSigningKeyInfo.Builder(myUserID, CrossSigningKeyInfo.KeyUsage.USER_SIGNING)
+        val signedUSK = CrossSigningKeyInfo.Builder(myUserID, CrossSigningKeyInfo.KeyUsage.USER_SIGNING)
                 .key(uskPublicKey)
-                .build().signalableJSONDictionary()).let { masterPkOlm.sign(it) }
+                .build()
+                .canonicalSignable()
+                .let { masterPkOlm.sign(it) }
 
         //=================
         // SELF SIGNING KEY
@@ -322,9 +326,6 @@ internal class DefaultCrossSigningService @Inject constructor(
             return
         }
 
-//        olmUtility?.verifyEd25519Signature(masterKeySignaturesMadeByMyUserKey,
-//                myUserKey.publicKeyBase64,
-//                masterKey.publicKeyBase64)
 
     }
 
@@ -399,7 +400,6 @@ internal class DefaultCrossSigningService @Inject constructor(
         }
 
         // Sign with self signing
-//        val newSignature = JsonCanonicalizer.getCanonicalJson(Map::class.java, device.signalableJSONDictionary()).let { userPkSigning?.sign(it) }
         val newSignature = selfSigningPkSigning?.sign(device.canonicalSignable())
 
         if (newSignature == null) {
@@ -416,7 +416,6 @@ internal class DefaultCrossSigningService @Inject constructor(
                                 )
                 )
         )
-//        device.addSignature(credentials.userId, ssPubKey, newSignature)
 
         val uploadQuery = UploadSignatureQueryBuilder()
                 .withDeviceInfo(toUpload)
@@ -441,30 +440,21 @@ internal class DefaultCrossSigningService @Inject constructor(
         }.executeBy(taskExecutor)
     }
 
-    override fun checkDeviceTrust(userId: String, deviceId: String, callback: MatrixCallback<Unit>) {
+    override fun checkDeviceTrust(userId: String, deviceId: String): DeviceTrustResult {
         val otherDevice = cryptoStore.getUserDevice(userId, deviceId)
-        if (otherDevice == null) {
-            callback.onFailure(IllegalArgumentException("This device is not known, or not yours"))
-            return
-        }
+                ?: return DeviceTrustResult.UnknownDevice(deviceId)
 
         val myKeys = getUserCrossSigningKeys(credentials.userId)
-        if (myKeys == null) {
-            callback.onFailure(Throwable("CrossSigning is not setup for this account"))
-            return
-        }
+                ?: return DeviceTrustResult.CrossSigningNotConfigured(credentials.userId)
+
+        if (!myKeys.isTrusted) return DeviceTrustResult.KeysNotTrusted(myKeys)
 
         val otherKeys = getUserCrossSigningKeys(userId)
-        if (otherKeys == null) {
-            callback.onFailure(Throwable("CrossSigning is not setup for $userId"))
-            return
-        }
+                ?: return DeviceTrustResult.CrossSigningNotConfigured(userId)
+
 
         // TODO should we force verification ?
-        if (!otherKeys.isTrusted) {
-            callback.onFailure(Throwable("$userId is not trusted"))
-            return
-        }
+        if (!otherKeys.isTrusted) return DeviceTrustResult.KeysNotTrusted(otherKeys)
 
         // Check if the trust chain is valid
         /*
@@ -486,26 +476,18 @@ internal class DefaultCrossSigningService @Inject constructor(
          */
 
         val otherSSKSignature = otherDevice.signatures?.get(userId)?.get("ed25519:${otherKeys.selfSigningKey()?.unpaddedBase64PublicKey}")
-
-        if (otherSSKSignature == null) {
-            callback.onFailure(Throwable("Device ${otherDevice.deviceId} is not signed by $userId self signed key"))
-            return
-        }
-
+                ?: return DeviceTrustResult.MissingDeviceSignature(deviceId, otherKeys.selfSigningKey()?.unpaddedBase64PublicKey
+                        ?: "")
 
         // Check  bob's device is signed by bob's SSK
         try {
             olmUtility?.verifyEd25519Signature(otherSSKSignature, otherKeys.selfSigningKey()?.unpaddedBase64PublicKey, otherDevice.canonicalSignable())
         } catch (e: Throwable) {
-            callback.onFailure(Throwable("Invalid self signed signature for Device ${otherDevice.deviceId}"))
+            return DeviceTrustResult.InvalidDeviceSignature(deviceId, otherSSKSignature, e)
         }
 
-        callback.onSuccess(Unit)
+        return DeviceTrustResult.Success(deviceId, true)
 
     }
-}
-
-fun MXDeviceInfo.canonicalSignable(): String {
-    return JsonCanonicalizer.getCanonicalJson(Map::class.java, signalableJSONDictionary())
 }
 

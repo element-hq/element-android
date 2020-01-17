@@ -405,6 +405,7 @@ internal interface IMXCryptoStore {
     fun setCrossSigningInfo(userId: String, info: MXCrossSigningInfo?)
 
 
+    fun storePrivateKeysInfo(msk: String?, usk: String?, ssk: String?)
     fun getCrossSigningPrivateKeys() : PrivateKeysInfo?
 
     fun setUserKeysAsTrusted(userId: String, trusted: Boolean = true)

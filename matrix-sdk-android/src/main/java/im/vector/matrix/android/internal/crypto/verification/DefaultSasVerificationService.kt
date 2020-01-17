@@ -21,8 +21,8 @@ import android.os.Looper
 import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.Credentials
-import im.vector.matrix.android.api.auth.data.sessionId
 import im.vector.matrix.android.api.session.crypto.CryptoService
+import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningService
 import im.vector.matrix.android.api.session.crypto.sas.*
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
@@ -56,7 +56,8 @@ internal class DefaultSasVerificationService @Inject constructor(
         private val setDeviceVerificationAction: SetDeviceVerificationAction,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val sasTransportRoomMessageFactory: SasTransportRoomMessageFactory,
-        private val sasTransportToDeviceFactory: SasTransportToDeviceFactory
+        private val sasTransportToDeviceFactory: SasTransportToDeviceFactory,
+        private val crossSigningService: CrossSigningService
 ) : VerificationTransaction.Listener, SasVerificationService {
 
     private val uiHandler = Handler(Looper.getMainLooper())
@@ -375,6 +376,7 @@ internal class DefaultSasVerificationService @Inject constructor(
                             setDeviceVerificationAction,
                             credentials,
                             cryptoStore,
+                            crossSigningService,
                             myDeviceInfoHolder.get().myDevice.fingerprint()!!,
                             startReq.transactionID!!,
                             otherUserId,
@@ -696,6 +698,7 @@ internal class DefaultSasVerificationService @Inject constructor(
                     setDeviceVerificationAction,
                     credentials,
                     cryptoStore,
+                    crossSigningService,
                     myDeviceInfoHolder.get().myDevice.fingerprint()!!,
                     txID,
                     userId,
@@ -793,6 +796,7 @@ internal class DefaultSasVerificationService @Inject constructor(
                     setDeviceVerificationAction,
                     credentials,
                     cryptoStore,
+                    crossSigningService,
                     myDeviceInfoHolder.get().myDevice.fingerprint()!!,
                     transactionId,
                     otherUserId,

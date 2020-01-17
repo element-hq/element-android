@@ -303,6 +303,17 @@ internal class RealmCryptoStore(private val realmConfiguration: RealmConfigurati
         }
     }
 
+    override fun storePrivateKeysInfo(msk: String?, usk: String?, ssk: String?) {
+        doRealmTransaction(realmConfiguration) {realm ->
+            realm.where<CryptoMetadataEntity>().findFirst()?.apply {
+                xSignMasterPrivateKey = msk
+                xSignSelfSignedPrivateKey = ssk
+                xSignUserPrivateKey = usk
+            }
+        }
+    }
+
+
     override fun getUserDevices(userId: String): Map<String, MXDeviceInfo>? {
         return doRealmQueryAndCopy(realmConfiguration) {
             it.where<UserEntity>()

@@ -15,6 +15,7 @@
  */
 package im.vector.matrix.android.internal.crypto.tasks
 
+import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.internal.crypto.api.CryptoApi
 import im.vector.matrix.android.internal.crypto.model.MXKeysObject
 import im.vector.matrix.android.internal.crypto.model.rest.SignatureUploadResponse
@@ -36,9 +37,14 @@ internal class DefaultUploadSignaturesTask @Inject constructor(
 ) : UploadSignaturesTask {
 
     override suspend fun execute(params: UploadSignaturesTask.Params): SignatureUploadResponse {
-        return executeRequest(eventBus) {
+        val executeRequest = executeRequest<SignatureUploadResponse>(eventBus) {
             apiCall = cryptoApi.uploadSignatures(params.signatures)
         }
+        if (executeRequest.failures?.isNotEmpty() == true) {
+            //TODO better
+            throw Failure.OtherServerError(executeRequest.toString(), 400)
+        }
+        return executeRequest
     }
 
 }

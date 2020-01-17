@@ -21,7 +21,9 @@ import dagger.Module
 import dagger.Provides
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.crypto.CryptoService
+import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningService
 import im.vector.matrix.android.internal.crypto.api.CryptoApi
+import im.vector.matrix.android.internal.crypto.crosssigning.DefaultCrossSigningService
 import im.vector.matrix.android.internal.crypto.keysbackup.api.RoomKeysApi
 import im.vector.matrix.android.internal.crypto.keysbackup.tasks.*
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
@@ -199,4 +201,7 @@ internal abstract class CryptoModule {
     @Binds
     abstract fun bindDeleteDeviceWithUserPasswordTask(deleteDeviceWithUserPasswordTask: DefaultDeleteDeviceWithUserPasswordTask)
             : DeleteDeviceWithUserPasswordTask
+
+    @Binds
+    abstract fun bindCrossSigningService(crossSigningService: DefaultCrossSigningService) : CrossSigningService
 }

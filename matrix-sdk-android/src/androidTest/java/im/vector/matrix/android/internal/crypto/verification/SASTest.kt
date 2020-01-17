@@ -29,6 +29,7 @@ import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationAccept
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationCancel
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationStart
+import im.vector.matrix.android.internal.crypto.model.rest.toValue
 import org.junit.Assert.*
 import org.junit.FixMethodOrder
 import org.junit.Test
@@ -36,9 +37,6 @@ import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
 import java.util.*
 import java.util.concurrent.CountDownLatch
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.test.annotation.UiThreadTest
-import org.junit.Rule
 
 
 @RunWith(AndroidJUnit4::class)
@@ -69,7 +67,7 @@ class SASTest : InstrumentedTest {
         }
         bobSasMgr.addListener(bobListener)
 
-        val txID = aliceSasMgr.beginKeyVerificationSAS(bobSession.myUserId, bobSession.getMyDevice().deviceId)
+        val txID = aliceSasMgr.beginKeyVerification(VerificationMethod.SAS, bobSession.myUserId, bobSession.getMyDevice().deviceId)
         assertNotNull("Alice should have a started transaction", txID)
 
         val aliceKeyTx = aliceSasMgr.getExistingTransaction(bobSession.myUserId, txID!!)
@@ -147,10 +145,10 @@ class SASTest : InstrumentedTest {
             override fun transactionCreated(tx: SasVerificationTransaction) {}
 
             override fun transactionUpdated(tx: SasVerificationTransaction) {
-               if (tx.transactionId == tid && tx.cancelledReason != null) {
-                   cancelReason = tx.cancelledReason?.humanReadable
-                   cancelLatch.countDown()
-               }
+                if (tx.transactionId == tid && tx.cancelledReason != null) {
+                    cancelReason = tx.cancelledReason?.humanReadable
+                    cancelLatch.countDown()
+                }
             }
 
             override fun markedAsManuallyVerified(userId: String, deviceId: String) {}
@@ -278,7 +276,7 @@ class SASTest : InstrumentedTest {
                              codes: List<String> = SASVerificationTransaction.KNOWN_SHORT_CODES) {
         val startMessage = KeyVerificationStart(
                 fromDevice = bobSession.getMyDevice().deviceId,
-                method = KeyVerificationStart.VERIF_METHOD_SAS,
+                method = VerificationMethod.SAS.toValue(),
                 transactionID = tid,
                 keyAgreementProtocols = protocols,
                 hashes = hashes,
@@ -330,8 +328,8 @@ class SASTest : InstrumentedTest {
 
         val bobUserId = bobSession!!.myUserId
         val bobDeviceId = bobSession.getMyDevice().deviceId
-        aliceSasMgr.beginKeyVerificationSAS(bobUserId, bobDeviceId)
-        aliceSasMgr.beginKeyVerificationSAS(bobUserId, bobDeviceId)
+        aliceSasMgr.beginKeyVerification(VerificationMethod.SAS, bobUserId, bobDeviceId)
+        aliceSasMgr.beginKeyVerification(VerificationMethod.SAS, bobUserId, bobDeviceId)
 
         mTestHelper.await(aliceCreatedLatch)
         mTestHelper.await(aliceCancelledLatch)
@@ -388,7 +386,7 @@ class SASTest : InstrumentedTest {
 
         val bobUserId = bobSession.myUserId
         val bobDeviceId = bobSession.getMyDevice().deviceId
-        aliceSasMgr.beginKeyVerificationSAS(bobUserId, bobDeviceId)
+        aliceSasMgr.beginKeyVerification(VerificationMethod.SAS, bobUserId, bobDeviceId)
         mTestHelper.await(aliceAcceptedLatch)
 
         assertTrue("Should have receive a commitment", accepted!!.commitment?.trim()?.isEmpty() == false)
@@ -444,7 +442,7 @@ class SASTest : InstrumentedTest {
                     IncomingSasVerificationTransaction.UxState.SHOW_ACCEPT -> {
                         tx.performAccept()
                     }
-                    else                                            -> Unit
+                    else                                                   -> Unit
                 }
                 if (uxState === IncomingSasVerificationTransaction.UxState.SHOW_SAS) {
                     bobSASLatch.countDown()
@@ -457,7 +455,7 @@ class SASTest : InstrumentedTest {
 
         val bobUserId = bobSession.myUserId
         val bobDeviceId = bobSession.getMyDevice().deviceId
-        val verificationSAS = aliceSasMgr.beginKeyVerificationSAS(bobUserId, bobDeviceId)
+        val verificationSAS = aliceSasMgr.beginKeyVerification(VerificationMethod.SAS, bobUserId, bobDeviceId)
         mTestHelper.await(aliceSASLatch)
         mTestHelper.await(bobSASLatch)
 
@@ -517,7 +515,7 @@ class SASTest : InstrumentedTest {
                     IncomingSasVerificationTransaction.UxState.VERIFIED    -> {
                         bobSASLatch.countDown()
                     }
-                    else                                            -> Unit
+                    else                                                   -> Unit
                 }
             }
 
@@ -527,7 +525,7 @@ class SASTest : InstrumentedTest {
 
         val bobUserId = bobSession.myUserId
         val bobDeviceId = bobSession.getMyDevice().deviceId
-        aliceSasMgr.beginKeyVerificationSAS(bobUserId, bobDeviceId)
+        aliceSasMgr.beginKeyVerification(VerificationMethod.SAS, bobUserId, bobDeviceId)
         mTestHelper.await(aliceSASLatch)
         mTestHelper.await(bobSASLatch)
 

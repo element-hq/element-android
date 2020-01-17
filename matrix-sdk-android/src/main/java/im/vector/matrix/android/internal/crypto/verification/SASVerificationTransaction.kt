@@ -16,7 +16,9 @@
 package im.vector.matrix.android.internal.crypto.verification
 
 import android.os.Build
+import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.Credentials
+import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningService
 import im.vector.matrix.android.api.session.crypto.sas.CancelCode
 import im.vector.matrix.android.api.session.crypto.sas.EmojiRepresentation
 import im.vector.matrix.android.api.session.crypto.sas.SasMode
@@ -25,6 +27,7 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXKey
+import im.vector.matrix.android.internal.crypto.model.rest.SignatureUploadResponse
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.extensions.toUnsignedInt
 import org.matrix.olm.OlmSAS
@@ -39,6 +42,7 @@ internal abstract class SASVerificationTransaction(
         private val setDeviceVerificationAction: SetDeviceVerificationAction,
         open val credentials: Credentials,
         private val cryptoStore: IMXCryptoStore,
+        private val crossSigningService: CrossSigningService,
         private val deviceFingerprint: String,
         transactionId: String,
         otherUserId: String,
@@ -142,18 +146,46 @@ internal abstract class SASVerificationTransaction(
                 otherUserId + otherDeviceId +
                 transactionId
 
+        //  Previously, with SAS verification, the m.key.verification.mac message only contained the user's device key.
+        //  It should now contain both the device key and the MSK.
+        //  So when Alice and Bob verify with SAS, the verification will verify the MSK.
+
+        val keyMap = HashMap<String, String>()
+
         val keyId = "ed25519:${credentials.deviceId}"
         val macString = macUsingAgreedMethod(deviceFingerprint, baseInfo + keyId)
-        val keyStrings = macUsingAgreedMethod(keyId, baseInfo + "KEY_IDS")
 
-        if (macString.isNullOrBlank() || keyStrings.isNullOrBlank()) {
+        if (macString.isNullOrBlank()) {
             // Should not happen
             Timber.e("## SAS verification [$transactionId] failed to send KeyMac, empty key hashes.")
             cancel(CancelCode.UnexpectedMessage)
             return
         }
 
-        val macMsg = transport.createMac(transactionId, mapOf(keyId to macString), keyStrings)
+        keyMap[keyId] = macString
+
+        cryptoStore.getMyCrossSigningInfo()?.takeIf { it.isTrusted }
+                ?.masterKey()
+                ?.unpaddedBase64PublicKey
+                ?.let { masterPublicKey ->
+                    val crossSigningKeyId = "ed25519:${masterPublicKey}"
+                    macUsingAgreedMethod(masterPublicKey, baseInfo + crossSigningKeyId)?.let { MSKMacString ->
+                        keyMap[crossSigningKeyId] = MSKMacString
+                    }
+                }
+
+        val keyStrings = macUsingAgreedMethod(keyMap.keys.sorted().joinToString(","), baseInfo + "KEY_IDS")
+
+        if (macString.isNullOrBlank() || keyStrings.isNullOrBlank()) {
+            // Should not happen
+            Timber.e("## SAS verification [$transactionId] failed to send KeyMac, empty key hashes.")
+            Timber.e("## SAS verification [$transactionId] failed to send KeyMac, empty key hashes.")
+            cancel(CancelCode.UnexpectedMessage)
+            return
+        }
+
+
+        val macMsg = transport.createMac(transactionId, keyMap, keyStrings)
         myMac = macMsg
         state = SasVerificationTxState.SendingMac
         sendToOther(EventType.KEY_VERIFICATION_MAC, macMsg, SasVerificationTxState.MacSent, CancelCode.User) {
@@ -227,7 +259,7 @@ internal abstract class SASVerificationTransaction(
             val keyIDNoPrefix = if (it.startsWith("ed25519:")) it.substring("ed25519:".length) else it
             val otherDeviceKey = otherUserKnownDevices?.get(keyIDNoPrefix)?.fingerprint()
             if (otherDeviceKey == null) {
-                Timber.e("## SAS Verification: Could not find device $keyIDNoPrefix to verify")
+                Timber.w("## SAS Verification: Could not find device $keyIDNoPrefix to verify")
                 // just ignore and continue
                 return@forEach
             }
@@ -241,12 +273,44 @@ internal abstract class SASVerificationTransaction(
             verifiedDevices.add(keyIDNoPrefix)
         }
 
+        var otherMasterKeyIsVerified = false
+        val otherMasterKey = cryptoStore.getCrossSigningInfo(otherUserId)?.masterKey()
+        val otherCrossSigningMasterKeyPublic = otherMasterKey?.unpaddedBase64PublicKey
+        if (otherCrossSigningMasterKeyPublic != null) {
+            //Did the user signed his master key
+            theirMac!!.mac!!.keys.forEach {
+                val keyIDNoPrefix = if (it.startsWith("ed25519:")) it.substring("ed25519:".length) else it
+                if (keyIDNoPrefix == otherCrossSigningMasterKeyPublic) {
+                    //Check the signature
+                    val mac = macUsingAgreedMethod(otherCrossSigningMasterKeyPublic, baseInfo + it)
+                    if (mac != theirMac?.mac?.get(it)) {
+                        // WRONG!
+                        Timber.e("## SAS Verification: mac mismatch for MasterKey with id $keyIDNoPrefix")
+                        cancel(CancelCode.MismatchedKeys)
+                        return
+                    } else {
+                        otherMasterKeyIsVerified = true
+                    }
+                }
+            }
+        }
+
         // if none of the keys could be verified, then error because the app
         // should be informed about that
-        if (verifiedDevices.isEmpty()) {
+        if (verifiedDevices.isEmpty() && !otherMasterKeyIsVerified) {
             Timber.e("## SAS Verification: No devices verified")
             cancel(CancelCode.MismatchedKeys)
             return
+        }
+
+        if (otherMasterKeyIsVerified) {
+            // we should trust this master key
+            // And check verification MSK -> SSK?
+            crossSigningService.trustUser(otherUserId, object : MatrixCallback<SignatureUploadResponse> {
+                override fun onFailure(failure: Throwable) {
+                    Timber.e(failure,"## SAS Verification: Failed to trust User $otherUserId")
+                }
+            })
         }
 
         // TODO what if the otherDevice is not in this list? and should we

@@ -9,8 +9,7 @@ import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.rest.SignatureUploadResponse
 import im.vector.matrix.android.internal.crypto.model.rest.UserPasswordAuth
 import org.junit.Assert
-import org.junit.Assert.assertNotNull
-import org.junit.Assert.fail
+import org.junit.Assert.*
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -95,7 +94,7 @@ class XSigningTest : InstrumentedTest {
     }
 
     @Test
-        fun test_CrossSigningTestAliceTrustBobNewDevice() {
+    fun test_CrossSigningTestAliceTrustBobNewDevice() {
         val cryptoTestData = mCryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
         val aliceSession = cryptoTestData.firstSession
@@ -156,10 +155,10 @@ class XSigningTest : InstrumentedTest {
             }
 
             override fun onSuccess(data: MXUsersDevicesMap<MXDeviceInfo>) {
-                if(data.getUserDeviceIds(bobUserId)?.contains(bobSecondDeviceId!!) == false) {
+                if (data.getUserDeviceIds(bobUserId)?.contains(bobSecondDeviceId!!) == false) {
                     fail("Bob should see the new device")
                 }
-               bobKeysLatch.countDown()
+                bobKeysLatch.countDown()
             }
         })
         mTestHelper.await(bobKeysLatch)
@@ -189,7 +188,7 @@ class XSigningTest : InstrumentedTest {
 
             override fun onSuccess(data: MXUsersDevicesMap<MXDeviceInfo>) {
                 //check that the device is seen
-                if(data.getUserDeviceIds(bobUserId)?.contains(bobSecondDeviceId) == false) {
+                if (data.getUserDeviceIds(bobUserId)?.contains(bobSecondDeviceId) == false) {
                     fail("Alice should see the new device")
                 }
                 aliceKeysLatch.countDown()
@@ -197,18 +196,9 @@ class XSigningTest : InstrumentedTest {
         })
         mTestHelper.await(aliceKeysLatch)
 
-        val secondDevicetrustLatch = CountDownLatch(1)
-        aliceSession.getCrossSigningService().checkDeviceTrust(bobUserId, bobSecondDeviceId,object : MatrixCallback<Unit> {
-            override fun onFailure(failure: Throwable) {
-                fail("Failed to check trust cause:${failure.localizedMessage}")
-            }
 
-            override fun onSuccess(data: Unit) {
-                secondDevicetrustLatch.countDown()
-            }
-        })
-
-        mTestHelper.await(secondDevicetrustLatch)
+        val result = aliceSession.getCrossSigningService().checkDeviceTrust(bobUserId, bobSecondDeviceId)
+        assertTrue("Bob second device should be trusted from alice POV", result.isSuccess())
 
     }
 }

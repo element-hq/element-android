@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.crypto.verification
 import android.util.Base64
 import im.vector.matrix.android.BuildConfig
 import im.vector.matrix.android.api.auth.data.Credentials
+import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningService
 import im.vector.matrix.android.api.session.crypto.sas.CancelCode
 import im.vector.matrix.android.api.session.crypto.sas.IncomingSasVerificationTransaction
 import im.vector.matrix.android.api.session.crypto.sas.SasMode
@@ -31,6 +32,7 @@ internal class DefaultIncomingSASVerificationTransaction(
         setDeviceVerificationAction: SetDeviceVerificationAction,
         override val credentials: Credentials,
         private val cryptoStore: IMXCryptoStore,
+        crossSigningService: CrossSigningService,
         deviceFingerprint: String,
         transactionId: String,
         otherUserID: String,
@@ -39,6 +41,7 @@ internal class DefaultIncomingSASVerificationTransaction(
         setDeviceVerificationAction,
         credentials,
         cryptoStore,
+        crossSigningService,
         deviceFingerprint,
         transactionId,
         otherUserID,
