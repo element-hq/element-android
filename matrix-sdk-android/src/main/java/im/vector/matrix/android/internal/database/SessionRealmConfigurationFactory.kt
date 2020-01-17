@@ -18,8 +18,8 @@ package im.vector.matrix.android.internal.database
 
 import android.content.Context
 import im.vector.matrix.android.internal.database.model.SessionRealmModule
+import im.vector.matrix.android.internal.di.SessionFilesDirectory
 import im.vector.matrix.android.internal.di.SessionId
-import im.vector.matrix.android.internal.di.UserCacheDirectory
 import im.vector.matrix.android.internal.di.UserMd5
 import im.vector.matrix.android.internal.session.SessionModule
 import io.realm.Realm
@@ -36,11 +36,12 @@ private const val REALM_NAME = "disk_store.realm"
  * It will handle corrupted realm by clearing the db file. It allows to just clear cache without losing your crypto keys.
  * It's clearly not perfect but there is no way to catch the native crash.
  */
-internal class SessionRealmConfigurationFactory @Inject constructor(private val realmKeysUtils: RealmKeysUtils,
-                                                                    @UserCacheDirectory val directory: File,
-                                                                    @SessionId val sessionId: String,
-                                                                    @UserMd5 val userMd5: String,
-                                                                    context: Context) {
+internal class SessionRealmConfigurationFactory @Inject constructor(
+        private val realmKeysUtils: RealmKeysUtils,
+        @SessionFilesDirectory val directory: File,
+        @SessionId val sessionId: String,
+        @UserMd5 val userMd5: String,
+        context: Context) {
 
     private val sharedPreferences = context.getSharedPreferences("im.vector.matrix.android.realm", Context.MODE_PRIVATE)
 

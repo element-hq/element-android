@@ -251,7 +251,7 @@ class RoomDetailFragment @Inject constructor(
         roomDetailViewModel.sendMessageResultLiveData.observeEvent(viewLifecycleOwner) { renderSendMessageResult(it) }
 
         roomDetailViewModel.nonBlockingPopAlert.observeEvent(this) { pair ->
-            val message = requireContext().getString(pair.first, *pair.second.toTypedArray())
+            val message = getString(pair.first, *pair.second.toTypedArray())
             showSnackWithMessage(message, Snackbar.LENGTH_LONG)
         }
         sharedActionViewModel
@@ -280,11 +280,12 @@ class RoomDetailFragment @Inject constructor(
         }
 
         roomDetailViewModel.downloadedFileEvent.observeEvent(this) { downloadFileState ->
+            val activity = requireActivity()
             if (downloadFileState.throwable != null) {
-                requireActivity().toast(errorFormatter.toHumanReadable(downloadFileState.throwable))
+                activity.toast(errorFormatter.toHumanReadable(downloadFileState.throwable))
             } else if (downloadFileState.file != null) {
-                requireActivity().toast(getString(R.string.downloaded_file, downloadFileState.file.path))
-                addEntryToDownloadManager(requireContext(), downloadFileState.file, downloadFileState.mimeType)
+                activity.toast(getString(R.string.downloaded_file, downloadFileState.file.path))
+                addEntryToDownloadManager(activity, downloadFileState.file, downloadFileState.mimeType)
             }
         }
 
@@ -369,9 +370,9 @@ class RoomDetailFragment @Inject constructor(
         AlertDialog.Builder(requireActivity())
                 .setTitle(R.string.dialog_title_error)
                 .setMessage(getString(R.string.error_file_too_big,
-                                      error.filename,
-                                      TextUtils.formatFileSize(requireContext(), error.fileSizeInBytes),
-                                      TextUtils.formatFileSize(requireContext(), error.homeServerLimitInBytes)
+                        error.filename,
+                        TextUtils.formatFileSize(requireContext(), error.fileSizeInBytes),
+                        TextUtils.formatFileSize(requireContext(), error.homeServerLimitInBytes)
                 ))
                 .setPositiveButton(R.string.ok, null)
                 .show()
@@ -454,11 +455,11 @@ class RoomDetailFragment @Inject constructor(
         updateComposerText(defaultContent)
 
         composerLayout.composerRelatedMessageActionIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), iconRes))
-        composerLayout.sendButton.setContentDescription(getString(descriptionRes))
+        composerLayout.sendButton.contentDescription = getString(descriptionRes)
 
         avatarRenderer.render(
                 MatrixItem.UserItem(event.root.senderId
-                                    ?: "", event.getDisambiguatedDisplayName(), event.senderAvatar),
+                        ?: "", event.getDisambiguatedDisplayName(), event.senderAvatar),
                 composerLayout.composerRelatedMessageAvatar
         )
 
@@ -477,7 +478,7 @@ class RoomDetailFragment @Inject constructor(
             // Ignore update to avoid saving a draft
             composerLayout.composerEditText.setText(text)
             composerLayout.composerEditText.setSelection(composerLayout.composerEditText.text?.length
-                                                         ?: 0)
+                    ?: 0)
         }
     }
 
@@ -928,6 +929,7 @@ class RoomDetailFragment @Inject constructor(
         val action = RoomDetailAction.DownloadFile(eventId, messageFileContent)
         // We need WRITE_EXTERNAL permission
         if (checkPermissions(PERMISSIONS_FOR_WRITING_FILES, this, PERMISSION_REQUEST_CODE_DOWNLOAD_FILE)) {
+            showSnackWithMessage(getString(R.string.downloading_file, messageFileContent.getFileName()))
             roomDetailViewModel.handle(action)
         } else {
             roomDetailViewModel.pendingAction = action
@@ -940,6 +942,10 @@ class RoomDetailFragment @Inject constructor(
                 PERMISSION_REQUEST_CODE_DOWNLOAD_FILE   -> {
                     val action = roomDetailViewModel.pendingAction
                     if (action != null) {
+                        (action as? RoomDetailAction.DownloadFile)
+                                ?.messageFileContent
+                                ?.getFileName()
+                                ?.let { showSnackWithMessage(getString(R.string.downloading_file, it)) }
                         roomDetailViewModel.pendingAction = null
                         roomDetailViewModel.handle(action)
                     }
@@ -1052,8 +1058,7 @@ class RoomDetailFragment @Inject constructor(
             is EventSharedAction.Copy                       -> {
                 // I need info about the current selected message :/
                 copyToClipboard(requireContext(), action.content, false)
-                val msg = requireContext().getString(R.string.copied_to_clipboard)
-                showSnackWithMessage(msg, Snackbar.LENGTH_SHORT)
+                showSnackWithMessage(getString(R.string.copied_to_clipboard), Snackbar.LENGTH_SHORT)
             }
             is EventSharedAction.Delete                     -> {
                 roomDetailViewModel.handle(RoomDetailAction.RedactAction(action.eventId, context?.getString(R.string.event_redacted_by_user_reason)))
@@ -1127,7 +1132,7 @@ class RoomDetailFragment @Inject constructor(
             is EventSharedAction.CopyPermalink              -> {
                 val permalink = PermalinkFactory.createPermalink(roomDetailArgs.roomId, action.eventId)
                 copyToClipboard(requireContext(), permalink, false)
-                showSnackWithMessage(requireContext().getString(R.string.copied_to_clipboard), Snackbar.LENGTH_SHORT)
+                showSnackWithMessage(getString(R.string.copied_to_clipboard), Snackbar.LENGTH_SHORT)
             }
             is EventSharedAction.Resend                     -> {
                 roomDetailViewModel.handle(RoomDetailAction.ResendMessage(action.eventId))
@@ -1171,7 +1176,7 @@ class RoomDetailFragment @Inject constructor(
         val startToCompose = composerLayout.composerEditText.text.isNullOrBlank()
 
         if (startToCompose
-            && userId == session.myUserId) {
+                && userId == session.myUserId) {
             // Empty composer, current user: start an emote
             composerLayout.composerEditText.setText(Command.EMOTE.command + " ")
             composerLayout.composerEditText.setSelection(Command.EMOTE.length)
@@ -1217,9 +1222,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun showSnackWithMessage(message: String, duration: Int = Snackbar.LENGTH_SHORT) {
-        val snack = Snackbar.make(view!!, message, duration)
-        snack.view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.notification_accent_color))
-        snack.show()
+        Snackbar.make(view!!, message, duration).show()
     }
 
     // VectorInviteView.Callback

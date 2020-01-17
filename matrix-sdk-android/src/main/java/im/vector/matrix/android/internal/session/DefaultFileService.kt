@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.session
 
-import android.content.Context
 import android.os.Environment
 import arrow.core.Try
 import im.vector.matrix.android.api.MatrixCallback
@@ -25,7 +24,8 @@ import im.vector.matrix.android.api.session.file.FileService
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.crypto.attachments.ElementToDecrypt
 import im.vector.matrix.android.internal.crypto.attachments.MXEncryptedAttachments
-import im.vector.matrix.android.internal.di.SessionId
+import im.vector.matrix.android.internal.di.SessionCacheDirectory
+import im.vector.matrix.android.internal.di.Unauthenticated
 import im.vector.matrix.android.internal.extensions.foldToCallback
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import im.vector.matrix.android.internal.util.md5
@@ -41,12 +41,13 @@ import java.io.File
 import java.io.IOException
 import javax.inject.Inject
 
-internal class DefaultFileService @Inject constructor(private val context: Context,
-                                                      @SessionId private val sessionId: String,
-                                                      private val contentUrlResolver: ContentUrlResolver,
-                                                      private val coroutineDispatchers: MatrixCoroutineDispatchers) : FileService {
-
-    val okHttpClient = OkHttpClient()
+internal class DefaultFileService @Inject constructor(
+        @SessionCacheDirectory
+        private val cacheDirectory: File,
+        private val contentUrlResolver: ContentUrlResolver,
+        @Unauthenticated
+        private val okHttpClient: OkHttpClient,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers) : FileService {
 
     /**
      * Download file in the cache folder, and eventually decrypt it
@@ -103,10 +104,9 @@ internal class DefaultFileService @Inject constructor(private val context: Conte
         return when (downloadMode) {
             FileService.DownloadMode.FOR_INTERNAL_USE -> {
                 // Create dir tree (MF stands for Matrix File):
-                // <cache>/MF/<sessionId>/<md5(id)>/
-                val tmpFolderRoot = File(context.cacheDir, "MF")
-                val tmpFolderUser = File(tmpFolderRoot, sessionId)
-                File(tmpFolderUser, id.md5())
+                // <cache>/<sessionId>/MF/<md5(id)>/
+                val tmpFolderSession = File(cacheDirectory, "MF")
+                File(tmpFolderSession, id.md5())
             }
             FileService.DownloadMode.TO_EXPORT        -> {
                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)

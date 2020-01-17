@@ -1,6 +1,6 @@
 # Contributing code to Matrix
 
-Please read https://github.com/matrix-org/synapse/blob/master/CONTRIBUTING.rst
+Please read https://github.com/matrix-org/synapse/blob/master/CONTRIBUTING.md
 
 Android support can be found in this [![Riot Android Matrix room #riot-android:matrix.org](https://img.shields.io/matrix/riot-android:matrix.org.svg?label=%23riot-android:matrix.org&logo=matrix&server_fqdn=matrix.org)](https://matrix.to/#/#riot-android:matrix.org) room.
 

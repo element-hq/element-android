@@ -55,8 +55,6 @@ class AttachmentEncryptionTest {
 
         assertNotNull(decryptedStream)
 
-        inputStream.close()
-
         val buffer = ByteArray(100)
 
         val len = decryptedStream!!.read(buffer)

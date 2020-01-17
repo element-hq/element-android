@@ -206,6 +206,14 @@
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
 
         <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.Dark</item>
+
+        <!-- SnackBar -->
+        <!-- Style to use for SnackBars in this theme. -->
+        <item name="snackbarStyle">@style/VectorSnackBarStyle</item>
+        <!-- Style to use for action button within a SnackBar in this theme. -->
+        <item name="snackbarButtonStyle">@style/VectorSnackBarButton</item>
+        <!-- Style to use for message text within a SnackBar in this theme. -->
+        <item name="snackbarTextViewStyle">@style/VectorSnackBarText</item>
     </style>
 
     <style name="AppTheme.Dark" parent="AppTheme.Base.Dark" />
