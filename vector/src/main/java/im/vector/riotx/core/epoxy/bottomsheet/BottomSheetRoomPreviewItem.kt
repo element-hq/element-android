@@ -42,6 +42,7 @@ abstract class BottomSheetRoomPreviewItem : VectorEpoxyModel<BottomSheetRoomPrev
 
     override fun bind(holder: Holder) {
         avatarRenderer.render(matrixItem, holder.avatar)
+        holder.avatar.setOnClickListener(settingsClickListener)
         holder.roomName.setTextOrHide(matrixItem.displayName)
         holder.roomSettings.setOnClickListener(settingsClickListener)
     }
