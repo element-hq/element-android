@@ -71,13 +71,13 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
 
     private fun handleEnableEncryption() {
         setState {
-            copy(currentRequest = Loading())
+            copy(isLoading = true)
         }
 
         room.enableEncryption(MXCRYPTO_ALGORITHM_MEGOLM, object : MatrixCallback<Unit> {
             override fun onFailure(failure: Throwable) {
                 setState {
-                    copy(currentRequest = Uninitialized)
+                    copy(isLoading = false)
                 }
 
                 _requestErrorLiveData.postLiveEvent(failure)
@@ -85,7 +85,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
 
             override fun onSuccess(data: Unit) {
                 setState {
-                    copy(currentRequest = Uninitialized)
+                    copy(isLoading = false)
                 }
             }
         })

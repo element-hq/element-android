@@ -20,7 +20,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
-import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -82,7 +81,7 @@ class RoomSettingsFragment @Inject constructor(
     }
 
     private fun renderRoomSummary(state: RoomSettingsViewState) {
-        waiting_view.isVisible = state.currentRequest is Loading
+        waiting_view.isVisible = state.isLoading
 
         state.roomSummary()?.let {
             roomSettingsToolbarTitleView.text = it.displayName
