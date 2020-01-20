@@ -4,14 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rootConstraintLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?riotx_header_panel_background">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/roomMemberListToolbar"
         style="@style/VectorToolbarStyle"
-        android:elevation="4dp"
         android:layout_width="0dp"
         android:layout_height="?actionBarSize"
+        android:elevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -42,9 +43,9 @@
                 android:maxLines="1"
                 android:textColor="?vctr_toolbar_primary_text_color"
                 android:textSize="18sp"
-                app:layout_constraintStart_toEndOf="@+id/roomMemberListToolbarAvatarImageView"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/roomMemberListToolbarAvatarImageView"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="@sample/matrix.json/data/roomName" />
 
@@ -57,10 +58,12 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:overScrollMode="always"
-        app:layout_constraintTop_toBottomOf="@+id/roomMemberListToolbar"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/roomMemberListToolbar"
         tools:listitem="@layout/item_autocomplete_matrix_item" />
+
+    <include layout="@layout/merge_overlay_waiting_view" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

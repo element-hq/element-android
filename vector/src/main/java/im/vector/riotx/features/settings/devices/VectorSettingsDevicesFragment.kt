@@ -83,14 +83,6 @@ class VectorSettingsDevicesFragment @Inject constructor(
         (activity as? VectorBaseActivity)?.supportActionBar?.setTitle(R.string.settings_devices_list)
     }
 
-    private fun displayErrorDialog(throwable: Throwable) {
-        AlertDialog.Builder(requireActivity())
-                .setTitle(R.string.dialog_title_error)
-                .setMessage(errorFormatter.toHumanReadable(throwable))
-                .setPositiveButton(R.string.ok, null)
-                .show()
-    }
-
     override fun onDeviceClicked(deviceInfo: DeviceInfo) {
         devicesViewModel.handle(DevicesAction.ToggleDevice(deviceInfo))
     }
