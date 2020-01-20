@@ -41,6 +41,10 @@
     <string name="settings_category_composer">Message editor</string>
 
     <string name="room_settings_enable_encryption">Enable end-to-end encryption</string>
-    <string name="room_settings_enable_encryption_warning">Warning: once encryption is enabled in a room, it cannot be disabled</string>
+    <string name="room_settings_enable_encryption_warning">Once enabled, encryption cannot be disabled.</string>
+
+    <string name="room_settings_enable_encryption_dialog_title">Enable encryption?</string>
+    <string name="room_settings_enable_encryption_dialog_content">Once enabled, encryption for a room cannot be disabled. Messages sent in an encrypted room cannot be seen by the server, only by the participants of the room. Enabling encryption may prevent many bots and bridges from working correctly.</string>
+    <string name="room_settings_enable_encryption_dialog_submit">Enable encryption</string>
 
 </resources>

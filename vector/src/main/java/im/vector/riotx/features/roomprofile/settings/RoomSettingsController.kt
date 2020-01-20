@@ -49,15 +49,13 @@ class RoomSettingsController @Inject constructor(
                 stringProvider.getString(R.string.settings)
         )
 
-        // Only enable encryption for the moment
         if (roomSummary.isEncrypted) {
             buildProfileAction(
                     id = "encryption",
                     title = stringProvider.getString(R.string.room_settings_addresses_e2e_enabled),
                     dividerColor = dividerColor,
                     divider = false,
-                    editable = false,
-                    action = {}
+                    editable = false
             )
         } else {
             buildProfileAction(

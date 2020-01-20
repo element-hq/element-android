@@ -18,6 +18,7 @@ package im.vector.riotx.features.roomprofile.settings
 
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.args
@@ -70,7 +71,14 @@ class RoomSettingsFragment @Inject constructor(
     }
 
     override fun onEnableEncryptionClicked() {
-        viewModel.handle(RoomSettingsAction.EnableEncryption)
+        AlertDialog.Builder(requireActivity())
+                .setTitle(R.string.room_settings_enable_encryption_dialog_title)
+                .setMessage(R.string.room_settings_enable_encryption_dialog_content)
+                .setNegativeButton(R.string.cancel, null)
+                .setPositiveButton(R.string.room_settings_enable_encryption_dialog_submit) { _, _ ->
+                    viewModel.handle(RoomSettingsAction.EnableEncryption)
+                }
+                .show()
     }
 
     private fun renderRoomSummary(state: RoomSettingsViewState) {
