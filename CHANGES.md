@@ -17,7 +17,7 @@ Translations 🗣:
  -
 
 Build 🧱:
- -
+ - F-Droid: fix the "-dev" issue in version name (#815)
 
 Changes in RiotX 0.13.0 (2020-01-17)
 ===================================================
