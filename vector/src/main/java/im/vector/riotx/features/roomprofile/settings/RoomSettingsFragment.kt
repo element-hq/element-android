@@ -31,7 +31,7 @@ import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.roomprofile.RoomProfileArgs
-import kotlinx.android.synthetic.main.fragment_room_member_list.*
+import kotlinx.android.synthetic.main.fragment_room_setting_generic.*
 import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
 import javax.inject.Inject
 
@@ -44,12 +44,12 @@ class RoomSettingsFragment @Inject constructor(
     private val viewModel: RoomSettingsViewModel by fragmentViewModel()
     private val roomProfileArgs: RoomProfileArgs by args()
 
-    override fun getLayoutResId() = R.layout.fragment_room_member_list
+    override fun getLayoutResId() = R.layout.fragment_room_setting_generic
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         controller.callback = this
-        setupToolbar(roomMemberListToolbar)
+        setupToolbar(roomSettingsToolbar)
         recyclerView.configureWith(controller, hasFixedSize = true)
         waiting_view_status_text.setText(R.string.please_wait)
         waiting_view_status_text.isVisible = true
@@ -77,8 +77,8 @@ class RoomSettingsFragment @Inject constructor(
         waiting_view.isVisible = state.currentRequest is Loading
 
         state.roomSummary()?.let {
-            roomMemberListToolbarTitleView.text = it.displayName
-            avatarRenderer.render(it.toMatrixItem(), roomMemberListToolbarAvatarImageView)
+            roomSettingsToolbarTitleView.text = it.displayName
+            avatarRenderer.render(it.toMatrixItem(), roomSettingsToolbarAvatarImageView)
         }
     }
 }
