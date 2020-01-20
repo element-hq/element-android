@@ -43,9 +43,12 @@ internal class TimelineEventMapper @Inject constructor(private val readReceiptsS
                 senderName = timelineEventEntity.senderName,
                 isUniqueDisplayName = timelineEventEntity.isUniqueDisplayName,
                 senderAvatar = timelineEventEntity.senderAvatar,
-                readReceipts = readReceipts?.sortedByDescending {
-                    it.originServerTs
-                } ?: emptyList()
+                readReceipts = readReceipts
+                        ?.distinctBy {
+                            it.user
+                        }?.sortedByDescending {
+                            it.originServerTs
+                        } ?: emptyList()
         )
     }
 }

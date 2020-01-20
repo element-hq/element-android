@@ -50,6 +50,9 @@ import io.realm.RealmConfiguration
 import io.realm.RealmQuery
 import io.realm.RealmResults
 import io.realm.Sort
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import timber.log.Timber
 import java.util.Collections
 import java.util.UUID
@@ -72,8 +75,11 @@ internal class DefaultTimeline(
         private val cryptoService: CryptoService,
         private val timelineEventMapper: TimelineEventMapper,
         private val settings: TimelineSettings,
-        private val hiddenReadReceipts: TimelineHiddenReadReceipts
+        private val hiddenReadReceipts: TimelineHiddenReadReceipts,
+        private val eventBus: EventBus
 ) : Timeline, TimelineHiddenReadReceipts.Delegate {
+
+    data class OnNewTimelineEvents(val roomId: String, val eventIds: List<String>)
 
     companion object {
         val BACKGROUND_HANDLER = createBackgroundHandler("TIMELINE_DB_THREAD")
@@ -128,7 +134,7 @@ internal class DefaultTimeline(
         if (hasChange) postSnapshot()
     }
 
-// Public methods ******************************************************************************
+    // Public methods ******************************************************************************
 
     override fun paginate(direction: Timeline.Direction, count: Int) {
         BACKGROUND_HANDLER.post {
@@ -159,6 +165,7 @@ internal class DefaultTimeline(
     override fun start() {
         if (isStarted.compareAndSet(false, true)) {
             Timber.v("Start timeline for roomId: $roomId and eventId: $initialEventId")
+            eventBus.register(this)
             BACKGROUND_HANDLER.post {
                 eventDecryptor.start()
                 val realm = Realm.getInstance(realmConfiguration)
@@ -190,12 +197,13 @@ internal class DefaultTimeline(
     }
 
     private fun TimelineSettings.shouldHandleHiddenReadReceipts(): Boolean {
-        return settings.buildReadReceipts && (settings.filterEdits || settings.filterTypes)
+        return buildReadReceipts && (filterEdits || filterTypes)
     }
 
     override fun dispose() {
         if (isStarted.compareAndSet(true, false)) {
             isReady.set(false)
+            eventBus.unregister(this)
             Timber.v("Dispose timeline for roomId: $roomId and eventId: $initialEventId")
             cancelableBag.cancel()
             BACKGROUND_HANDLER.removeCallbacksAndMessages(null)
@@ -316,6 +324,15 @@ internal class DefaultTimeline(
         postSnapshot()
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onNewTimelineEvents(onNewTimelineEvents: OnNewTimelineEvents) {
+        if (onNewTimelineEvents.roomId == roomId) {
+            listeners.forEach {
+                it.onNewTimelineEvents(onNewTimelineEvents.eventIds)
+            }
+        }
+    }
+
     // Private methods *****************************************************************************
 
     private fun rebuildEvent(eventId: String, builder: (TimelineEvent) -> TimelineEvent): Boolean {
@@ -401,14 +418,14 @@ internal class DefaultTimeline(
 
     private fun getState(direction: Timeline.Direction): State {
         return when (direction) {
-            Timeline.Direction.FORWARDS -> forwardsState.get()
+            Timeline.Direction.FORWARDS  -> forwardsState.get()
             Timeline.Direction.BACKWARDS -> backwardsState.get()
         }
     }
 
     private fun updateState(direction: Timeline.Direction, update: (State) -> State) {
         val stateReference = when (direction) {
-            Timeline.Direction.FORWARDS -> forwardsState
+            Timeline.Direction.FORWARDS  -> forwardsState
             Timeline.Direction.BACKWARDS -> backwardsState
         }
         val currentValue = stateReference.get()
@@ -506,10 +523,10 @@ internal class DefaultTimeline(
                     this.callback = object : MatrixCallback<TokenChunkEventPersistor.Result> {
                         override fun onSuccess(data: TokenChunkEventPersistor.Result) {
                             when (data) {
-                                TokenChunkEventPersistor.Result.SUCCESS -> {
+                                TokenChunkEventPersistor.Result.SUCCESS           -> {
                                     Timber.v("Success fetching $limit items $direction from pagination request")
                                 }
-                                TokenChunkEventPersistor.Result.REACHED_END -> {
+                                TokenChunkEventPersistor.Result.REACHED_END       -> {
                                     postSnapshot()
                                 }
                                 TokenChunkEventPersistor.Result.SHOULD_FETCH_MORE ->

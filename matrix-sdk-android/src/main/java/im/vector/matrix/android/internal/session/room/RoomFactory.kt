@@ -50,25 +50,25 @@ internal class DefaultRoomFactory @Inject constructor(private val monarchy: Mona
                                                       private val typingServiceFactory: DefaultTypingService.Factory,
                                                       private val relationServiceFactory: DefaultRelationService.Factory,
                                                       private val membershipServiceFactory: DefaultMembershipService.Factory,
-                                                      private val roomPushRuleServiceFactory: DefaultRoomPushRuleService.Factory) :
+                                                      private val roomPushRuleServiceFactory: DefaultRoomPushRuleService.Factory):
         RoomFactory {
 
     override fun create(roomId: String): Room {
         return DefaultRoom(
-                roomId,
-                monarchy,
-                roomSummaryMapper,
-                timelineServiceFactory.create(roomId),
-                sendServiceFactory.create(roomId),
-                draftServiceFactory.create(roomId),
-                stateServiceFactory.create(roomId),
-                reportingServiceFactory.create(roomId),
-                readServiceFactory.create(roomId),
-                typingServiceFactory.create(roomId),
-                cryptoService,
-                relationServiceFactory.create(roomId),
-                membershipServiceFactory.create(roomId),
-                roomPushRuleServiceFactory.create(roomId)
+                roomId = roomId,
+                monarchy = monarchy,
+                roomSummaryMapper = roomSummaryMapper,
+                timelineService = timelineServiceFactory.create(roomId),
+                sendService = sendServiceFactory.create(roomId),
+                draftService = draftServiceFactory.create(roomId),
+                stateService = stateServiceFactory.create(roomId),
+                reportingService = reportingServiceFactory.create(roomId),
+                readService = readServiceFactory.create(roomId),
+                typingService = typingServiceFactory.create(roomId),
+                cryptoService = cryptoService,
+                relationService = relationServiceFactory.create(roomId),
+                roomMembersService = membershipServiceFactory.create(roomId),
+                roomPushRuleService = roomPushRuleServiceFactory.create(roomId)
         )
     }
 }

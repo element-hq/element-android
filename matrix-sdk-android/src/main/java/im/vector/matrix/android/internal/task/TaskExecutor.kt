@@ -35,7 +35,7 @@ import kotlin.coroutines.EmptyCoroutineContext
 @MatrixScope
 internal class TaskExecutor @Inject constructor(private val coroutineDispatchers: MatrixCoroutineDispatchers) {
 
-    private val executorScope = CoroutineScope(SupervisorJob())
+    val executorScope = CoroutineScope(SupervisorJob())
 
     fun <PARAMS, RESULT> execute(task: ConfigurableTask<PARAMS, RESULT>): Cancelable {
         return executorScope

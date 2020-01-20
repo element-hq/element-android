@@ -18,26 +18,42 @@ package im.vector.matrix.android.internal.session.room.send
 
 import android.media.MediaMetadataRetriever
 import androidx.exifinterface.media.ExifInterface
-import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.R
 import im.vector.matrix.android.api.permalinks.PermalinkFactory
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
-import im.vector.matrix.android.api.session.events.model.*
-import im.vector.matrix.android.api.session.room.model.message.*
+import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.LocalEcho
+import im.vector.matrix.android.api.session.events.model.RelationType
+import im.vector.matrix.android.api.session.events.model.UnsignedData
+import im.vector.matrix.android.api.session.events.model.toContent
+import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.room.model.message.AudioInfo
+import im.vector.matrix.android.api.session.room.model.message.FileInfo
+import im.vector.matrix.android.api.session.room.model.message.ImageInfo
+import im.vector.matrix.android.api.session.room.model.message.MessageAudioContent
+import im.vector.matrix.android.api.session.room.model.message.MessageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageFileContent
+import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
+import im.vector.matrix.android.api.session.room.model.message.MessageType
+import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
+import im.vector.matrix.android.api.session.room.model.message.ThumbnailInfo
+import im.vector.matrix.android.api.session.room.model.message.VideoInfo
+import im.vector.matrix.android.api.session.room.model.message.isReply
 import im.vector.matrix.android.api.session.room.model.relation.ReactionContent
 import im.vector.matrix.android.api.session.room.model.relation.ReactionInfo
 import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultContent
 import im.vector.matrix.android.api.session.room.model.relation.ReplyToContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
-import im.vector.matrix.android.internal.database.helper.addSendingEvent
-import im.vector.matrix.android.internal.database.model.RoomEntity
-import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.database.mapper.TimelineEventMapper
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.content.ThumbnailExtractor
-import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
 import im.vector.matrix.android.internal.session.room.send.pills.TextPillsUtils
+import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.util.StringProvider
+import kotlinx.coroutines.launch
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
 import javax.inject.Inject
@@ -54,8 +70,9 @@ import javax.inject.Inject
 internal class LocalEchoEventFactory @Inject constructor(
         @UserId private val userId: String,
         private val stringProvider: StringProvider,
-        private val roomSummaryUpdater: RoomSummaryUpdater,
-        private val textPillsUtils: TextPillsUtils
+        private val textPillsUtils: TextPillsUtils,
+        private val taskExecutor: TaskExecutor,
+        private val localEchoRepository: LocalEchoRepository
 ) {
     // TODO Inject
     private val parser = Parser.builder().build()
@@ -402,13 +419,10 @@ internal class LocalEchoEventFactory @Inject constructor(
         )
     }
 
-    fun saveLocalEcho(monarchy: Monarchy, event: Event) {
+    fun createLocalEcho(event: Event){
         checkNotNull(event.roomId) { "Your event should have a roomId" }
-        monarchy.writeAsync { realm ->
-            val roomEntity = RoomEntity.where(realm, roomId = event.roomId).findFirst()
-                    ?: return@writeAsync
-            roomEntity.addSendingEvent(event)
-            roomSummaryUpdater.update(realm, event.roomId)
+        taskExecutor.executorScope.launch {
+            localEchoRepository.createLocalEcho(event)
         }
     }
 

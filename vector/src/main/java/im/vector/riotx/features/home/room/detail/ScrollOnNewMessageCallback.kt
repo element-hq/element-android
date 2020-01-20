@@ -19,15 +19,29 @@ package im.vector.riotx.features.home.room.detail
 import androidx.recyclerview.widget.LinearLayoutManager
 import im.vector.riotx.core.platform.DefaultListUpdateCallback
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
+import im.vector.riotx.features.home.room.detail.timeline.item.BaseEventItem
 import timber.log.Timber
 
 class ScrollOnNewMessageCallback(private val layoutManager: LinearLayoutManager,
                                  private val timelineEventController: TimelineEventController) : DefaultListUpdateCallback {
 
+    private val newTimelineEventIds = HashSet<String>()
+
+    fun addNewTimelineEventIds(eventIds: List<String>){
+        newTimelineEventIds.addAll(eventIds)
+    }
+
     override fun onInserted(position: Int, count: Int) {
         Timber.v("On inserted $count count at position: $position")
-        if (position == 0 && layoutManager.findFirstVisibleItemPosition() == 0 && !timelineEventController.isLoadingForward()) {
-            layoutManager.scrollToPosition(0)
+        if(layoutManager.findFirstVisibleItemPosition() != position ){
+            return
+        }
+        val firstNewItem = timelineEventController.adapter.getModelAtPosition(position) as? BaseEventItem ?: return
+        val firstNewItemIds = firstNewItem.getEventIds()
+        if(newTimelineEventIds.intersect(firstNewItemIds).isNotEmpty()){
+            Timber.v("Should scroll to position: $position")
+            newTimelineEventIds.clear()
+            layoutManager.scrollToPosition(position)
         }
     }
 }

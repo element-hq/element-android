@@ -312,6 +312,7 @@ class RoomDetailFragment @Inject constructor(
                 .subscribe {
                     when (it) {
                         is RoomDetailViewEvents.Failure -> showErrorInSnackbar(it.throwable)
+                        is RoomDetailViewEvents.OnNewTimelineEvents -> scrollOnNewMessageCallback.addNewTimelineEventIds(it.eventIds)
                     }
                 }
                 .disposeOnDestroyView()

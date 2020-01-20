@@ -242,6 +242,6 @@ internal class DefaultRelationService @AssistedInject constructor(
      * the same transaction id is received (in unsigned data)
      */
     private fun saveLocalEcho(event: Event) {
-        eventFactory.saveLocalEcho(monarchy, event)
+        eventFactory.createLocalEcho(event)
     }
 }

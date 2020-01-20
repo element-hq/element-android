@@ -17,35 +17,35 @@
 package im.vector.matrix.android.internal.session.room.send
 
 import android.content.Context
-import androidx.work.*
+import androidx.work.BackoffPolicy
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequest
+import androidx.work.Operation
+import androidx.work.WorkManager
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.crypto.CryptoService
-import im.vector.matrix.android.api.session.events.model.*
-import im.vector.matrix.android.api.session.room.model.message.MessageContent
-import im.vector.matrix.android.api.session.room.model.message.MessageType
+import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.events.model.isImageMessage
+import im.vector.matrix.android.api.session.events.model.isTextMessage
 import im.vector.matrix.android.api.session.room.send.SendService
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.CancelableBag
-import im.vector.matrix.android.internal.database.mapper.asDomain
-import im.vector.matrix.android.internal.database.model.EventEntity
-import im.vector.matrix.android.internal.database.model.RoomEntity
-import im.vector.matrix.android.internal.database.model.TimelineEventEntity
-import im.vector.matrix.android.internal.database.query.findAllInRoomWithSendStates
-import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.SessionId
 import im.vector.matrix.android.internal.session.content.UploadContentWorker
 import im.vector.matrix.android.internal.session.room.timeline.TimelineSendEventWorkCommon
+import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.util.CancelableWork
 import im.vector.matrix.android.internal.worker.AlwaysSuccessfulWorker
 import im.vector.matrix.android.internal.worker.WorkManagerUtil
 import im.vector.matrix.android.internal.worker.WorkManagerUtil.matrixOneTimeWorkRequestBuilder
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import im.vector.matrix.android.internal.worker.startChain
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -59,7 +59,9 @@ internal class DefaultSendService @AssistedInject constructor(
         @SessionId private val sessionId: String,
         private val localEchoEventFactory: LocalEchoEventFactory,
         private val cryptoService: CryptoService,
-        private val monarchy: Monarchy
+        private val monarchy: Monarchy,
+        private val taskExecutor: TaskExecutor,
+        private val localEchoRepository: LocalEchoRepository
 ) : SendService {
 
     @AssistedInject.Factory
@@ -71,15 +73,14 @@ internal class DefaultSendService @AssistedInject constructor(
 
     override fun sendTextMessage(text: CharSequence, msgType: String, autoMarkdown: Boolean): Cancelable {
         val event = localEchoEventFactory.createTextEvent(roomId, msgType, text, autoMarkdown).also {
-            saveLocalEcho(it)
+            createLocalEcho(it)
         }
-
         return sendEvent(event)
     }
 
     override fun sendFormattedTextMessage(text: String, formattedText: String, msgType: String): Cancelable {
         val event = localEchoEventFactory.createFormattedTextEvent(roomId, TextContent(text, formattedText), msgType).also {
-            saveLocalEcho(it)
+            createLocalEcho(it)
         }
 
         return sendEvent(event)
@@ -157,13 +158,8 @@ internal class DefaultSendService @AssistedInject constructor(
     }
 
     override fun deleteFailedEcho(localEcho: TimelineEvent) {
-        monarchy.writeAsync { realm ->
-            TimelineEventEntity.where(realm, roomId = roomId, eventId = localEcho.root.eventId ?: "").findFirst()?.let {
-                it.deleteFromRealm()
-            }
-            EventEntity.where(realm, eventId = localEcho.root.eventId ?: "").findFirst()?.let {
-                it.deleteFromRealm()
-            }
+        taskExecutor.executorScope.launch {
+            localEchoRepository.deleteFailedEcho(roomId, localEcho)
         }
     }
 
@@ -181,67 +177,26 @@ internal class DefaultSendService @AssistedInject constructor(
                             .beginUniqueWork(buildWorkName(UPLOAD_WORK), ExistingWorkPolicy.REPLACE, it)
                             .enqueue()
                 }
-
-        monarchy.writeAsync { realm ->
-            RoomEntity.where(realm, roomId).findFirst()?.let { room ->
-                room.sendingTimelineEvents.forEach {
-                    it.root?.sendState = SendState.UNDELIVERED
-                }
-            }
+        taskExecutor.executorScope.launch {
+            localEchoRepository.clearSendingQueue(roomId)
         }
     }
 
     override fun resendAllFailedMessages() {
-        monarchy.writeAsync { realm ->
-            TimelineEventEntity
-                    .findAllInRoomWithSendStates(realm, roomId, SendState.HAS_FAILED_STATES)
-                    .sortedBy { it.root?.originServerTs ?: 0 }
-                    .forEach { timelineEventEntity ->
-                        timelineEventEntity.root?.let {
-                            val event = it.asDomain()
-                            when (event.getClearType()) {
-                                EventType.MESSAGE,
-                                EventType.REDACTION,
-                                EventType.REACTION -> {
-                                    val content = event.getClearContent().toModel<MessageContent>()
-                                    if (content != null) {
-                                        when (content.type) {
-                                            MessageType.MSGTYPE_EMOTE,
-                                            MessageType.MSGTYPE_NOTICE,
-                                            MessageType.MSGTYPE_LOCATION,
-                                            MessageType.MSGTYPE_TEXT  -> {
-                                                it.sendState = SendState.UNSENT
-                                                sendEvent(event)
-                                            }
-                                            MessageType.MSGTYPE_FILE,
-                                            MessageType.MSGTYPE_VIDEO,
-                                            MessageType.MSGTYPE_IMAGE,
-                                            MessageType.MSGTYPE_AUDIO -> {
-                                                // need to resend the attachement
-                                            }
-                                            else                      -> {
-                                                Timber.e("Cannot resend message ${event.type} / ${content.type}")
-                                            }
-                                        }
-                                    } else {
-                                        Timber.e("Unsupported message to resend ${event.type}")
-                                    }
-                                }
-                                else               -> {
-                                    Timber.e("Unsupported message to resend ${event.type}")
-                                }
-                            }
-                        }
-                    }
+        taskExecutor.executorScope.launch {
+            val eventsToResend = localEchoRepository.getAllFailedEventsToResend(roomId)
+            eventsToResend.forEach {
+                sendEvent(it)
+            }
+            localEchoRepository.updateSendState(roomId, eventsToResend.mapNotNull { it.eventId }, SendState.UNSENT)
         }
     }
 
     override fun sendMedia(attachment: ContentAttachmentData): Cancelable {
         // Create an event with the media file path
         val event = localEchoEventFactory.createMediaEvent(roomId, attachment).also {
-            saveLocalEcho(it)
+            createLocalEcho(it)
         }
-
         return internalSendMedia(event, attachment)
     }
 
@@ -276,8 +231,8 @@ internal class DefaultSendService @AssistedInject constructor(
         return CancelableWork(context, sendWork.id)
     }
 
-    private fun saveLocalEcho(event: Event) {
-        localEchoEventFactory.saveLocalEcho(monarchy, event)
+    private fun createLocalEcho(event: Event) {
+        localEchoEventFactory.createLocalEcho(event)
     }
 
     private fun buildWorkName(identifier: String): String {
@@ -306,7 +261,7 @@ internal class DefaultSendService @AssistedInject constructor(
 
     private fun createRedactEventWork(event: Event, reason: String?): OneTimeWorkRequest {
         val redactEvent = localEchoEventFactory.createRedactEvent(roomId, event.eventId!!, reason).also {
-            saveLocalEcho(it)
+            createLocalEcho(it)
         }
         val sendContentWorkerParams = RedactEventWorker.Params(sessionId, redactEvent.eventId!!, roomId, event.eventId, reason)
         val redactWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,8 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.home.room.detail
+package im.vector.riotx.core.utils
 
-/**
- * Transient events for RoomDetail
- */
-sealed class RoomDetailViewEvents {
-    data class Failure(val throwable: Throwable) : RoomDetailViewEvents()
-    data class OnNewTimelineEvents(val eventIds: List<String>) : RoomDetailViewEvents()
-}
+import im.vector.matrix.android.api.MatrixCallback
+
+class NoOpMatrixCallback<T>: MatrixCallback<T>

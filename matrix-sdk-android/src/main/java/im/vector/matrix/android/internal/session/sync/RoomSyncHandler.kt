@@ -36,11 +36,13 @@ import im.vector.matrix.android.internal.session.mapWithProgress
 import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
 import im.vector.matrix.android.internal.session.room.membership.RoomMemberEventHandler
 import im.vector.matrix.android.internal.session.room.read.FullyReadContent
+import im.vector.matrix.android.internal.session.room.timeline.DefaultTimeline
 import im.vector.matrix.android.internal.session.room.timeline.PaginationDirection
 import im.vector.matrix.android.internal.session.room.typing.TypingEventContent
 import im.vector.matrix.android.internal.session.sync.model.*
 import io.realm.Realm
 import io.realm.kotlin.createObject
+import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -50,7 +52,8 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                                    private val roomFullyReadHandler: RoomFullyReadHandler,
                                                    private val cryptoService: DefaultCryptoService,
                                                    private val roomMemberEventHandler: RoomMemberEventHandler,
-                                                   private val timelineEventSenderVisitor: TimelineEventSenderVisitor) {
+                                                   private val timelineEventSenderVisitor: TimelineEventSenderVisitor,
+                                                   private val eventBus: EventBus) {
 
     sealed class HandlingStrategy {
         data class JOINED(val data: Map<String, RoomSync>) : HandlingStrategy()
@@ -130,6 +133,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         if (roomSync.timeline?.events?.isNotEmpty() == true) {
             val chunkEntity = handleTimelineEvents(
                     realm,
+                    roomId,
                     roomEntity,
                     roomSync.timeline.events,
                     roomSync.timeline.prevToken,
@@ -161,7 +165,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         val roomEntity = RoomEntity.where(realm, roomId).findFirst() ?: realm.createObject(roomId)
         roomEntity.membership = Membership.INVITE
         if (roomSync.inviteState != null && roomSync.inviteState.events.isNotEmpty()) {
-            val chunkEntity = handleTimelineEvents(realm, roomEntity, roomSync.inviteState.events)
+            val chunkEntity = handleTimelineEvents(realm, roomId, roomEntity, roomSync.inviteState.events)
             roomEntity.addOrUpdate(chunkEntity)
         }
         val hasRoomMember = roomSync.inviteState?.events?.firstOrNull {
@@ -183,6 +187,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
     }
 
     private fun handleTimelineEvents(realm: Realm,
+                                     roomId: String,
                                      roomEntity: RoomEntity,
                                      eventList: List<Event>,
                                      prevToken: String? = null,
@@ -202,7 +207,11 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         chunkEntity.isUnlinked = false
 
         val timelineEvents = ArrayList<TimelineEventEntity>(eventList.size)
+        val eventIds = ArrayList<String>(eventList.size)
         for (event in eventList) {
+            if(event.eventId != null) {
+                eventIds.add(event.eventId)
+            }
             chunkEntity.add(roomEntity.roomId, event, PaginationDirection.FORWARDS, stateIndexOffset)?.also {
                 timelineEvents.add(it)
             }
@@ -221,6 +230,8 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
             roomMemberEventHandler.handle(realm, roomEntity.roomId, event)
         }
         timelineEventSenderVisitor.visit(timelineEvents)
+        // posting new events to timeline if any is registered
+        eventBus.post(DefaultTimeline.OnNewTimelineEvents(roomId = roomId, eventIds = eventIds))
         return chunkEntity
     }
 

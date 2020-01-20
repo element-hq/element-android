@@ -20,7 +20,12 @@ import android.net.Uri
 import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.airbnb.mvrx.*
+import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.FragmentViewModelContext
+import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.ViewModelContext
 import com.jakewharton.rxrelay2.BehaviorRelay
 import com.jakewharton.rxrelay2.PublishRelay
 import com.squareup.inject.assisted.Assisted
@@ -58,6 +63,7 @@ import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.resources.UserPreferencesProvider
 import im.vector.riotx.core.utils.DataSource
 import im.vector.riotx.core.utils.LiveEvent
+import im.vector.riotx.core.utils.NoOpMatrixCallback
 import im.vector.riotx.core.utils.PublishDataSource
 import im.vector.riotx.core.utils.subscribeLogError
 import im.vector.riotx.features.command.CommandParser
@@ -218,10 +224,10 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     private fun handleSaveDraft(action: RoomDetailAction.SaveDraft) {
         withState {
             when (it.sendMode) {
-                is SendMode.REGULAR -> room.saveDraft(UserDraft.REGULAR(action.draft))
-                is SendMode.REPLY   -> room.saveDraft(UserDraft.REPLY(it.sendMode.timelineEvent.root.eventId!!, action.draft))
-                is SendMode.QUOTE   -> room.saveDraft(UserDraft.QUOTE(it.sendMode.timelineEvent.root.eventId!!, action.draft))
-                is SendMode.EDIT    -> room.saveDraft(UserDraft.EDIT(it.sendMode.timelineEvent.root.eventId!!, action.draft))
+                is SendMode.REGULAR -> room.saveDraft(UserDraft.REGULAR(action.draft), NoOpMatrixCallback())
+                is SendMode.REPLY   -> room.saveDraft(UserDraft.REPLY(it.sendMode.timelineEvent.root.eventId!!, action.draft), NoOpMatrixCallback())
+                is SendMode.QUOTE   -> room.saveDraft(UserDraft.QUOTE(it.sendMode.timelineEvent.root.eventId!!, action.draft), NoOpMatrixCallback())
+                is SendMode.EDIT    -> room.saveDraft(UserDraft.EDIT(it.sendMode.timelineEvent.root.eventId!!, action.draft), NoOpMatrixCallback())
             }
         }
     }
@@ -465,7 +471,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun popDraft() {
-        room.deleteDraft()
+        room.deleteDraft(object : MatrixCallback<Unit> {})
     }
 
     private fun legacyRiotQuoteText(quotedText: String?, myText: String): String {
@@ -584,7 +590,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         room.getTimeLineEvent(action.eventId)?.let { timelineEvent ->
             setState { copy(sendMode = SendMode.EDIT(timelineEvent, action.text)) }
             timelineEvent.root.eventId?.let {
-                room.saveDraft(UserDraft.EDIT(it, timelineEvent.getTextEditableContent() ?: ""))
+                room.saveDraft(UserDraft.EDIT(it, timelineEvent.getTextEditableContent() ?: ""), NoOpMatrixCallback())
             }
         }
     }
@@ -598,9 +604,9 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 // Save a new draft and keep the previously entered text, if it was not an edit
                 timelineEvent.root.eventId?.let {
                     if (state.sendMode is SendMode.EDIT) {
-                        room.saveDraft(UserDraft.QUOTE(it, ""))
+                        room.saveDraft(UserDraft.QUOTE(it, ""), NoOpMatrixCallback())
                     } else {
-                        room.saveDraft(UserDraft.QUOTE(it, action.text))
+                        room.saveDraft(UserDraft.QUOTE(it, action.text), NoOpMatrixCallback())
                     }
                 }
             }
@@ -616,9 +622,9 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 // Save a new draft and keep the previously entered text, if it was not an edit
                 timelineEvent.root.eventId?.let {
                     if (state.sendMode is SendMode.EDIT) {
-                        room.saveDraft(UserDraft.REPLY(it, ""))
+                        room.saveDraft(UserDraft.REPLY(it, ""), NoOpMatrixCallback())
                     } else {
-                        room.saveDraft(UserDraft.REPLY(it, action.text))
+                        room.saveDraft(UserDraft.REPLY(it, action.text), NoOpMatrixCallback())
                     }
                 }
             }
@@ -630,10 +636,10 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         withState {
             if (draft.isNotBlank()) {
                 when (it.sendMode) {
-                    is SendMode.REGULAR -> room.saveDraft(UserDraft.REGULAR(draft))
-                    is SendMode.REPLY   -> room.saveDraft(UserDraft.REPLY(it.sendMode.timelineEvent.root.eventId!!, draft))
-                    is SendMode.QUOTE   -> room.saveDraft(UserDraft.QUOTE(it.sendMode.timelineEvent.root.eventId!!, draft))
-                    is SendMode.EDIT    -> room.saveDraft(UserDraft.EDIT(it.sendMode.timelineEvent.root.eventId!!, draft))
+                    is SendMode.REGULAR -> room.saveDraft(UserDraft.REGULAR(draft), NoOpMatrixCallback())
+                    is SendMode.REPLY   -> room.saveDraft(UserDraft.REPLY(it.sendMode.timelineEvent.root.eventId!!, draft), NoOpMatrixCallback())
+                    is SendMode.QUOTE   -> room.saveDraft(UserDraft.QUOTE(it.sendMode.timelineEvent.root.eventId!!, draft), NoOpMatrixCallback())
+                    is SendMode.EDIT    -> room.saveDraft(UserDraft.EDIT(it.sendMode.timelineEvent.root.eventId!!, draft), NoOpMatrixCallback())
                 }
             }
         }
@@ -644,10 +650,10 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         withState { state ->
             // For edit, just delete the current draft
             if (state.sendMode is SendMode.EDIT) {
-                room.deleteDraft()
+                room.deleteDraft(NoOpMatrixCallback())
             } else {
                 // Save a new draft and keep the previously entered text
-                room.saveDraft(UserDraft.REGULAR(action.text))
+                room.saveDraft(UserDraft.REGULAR(action.text), NoOpMatrixCallback())
             }
         }
     }
@@ -890,6 +896,11 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         // If we have a critical timeline issue, we get back to live.
         timeline.restartWithEventId(null)
         _viewEvents.post(RoomDetailViewEvents.Failure(throwable))
+    }
+
+    override fun onNewTimelineEvents(eventIds: List<String>) {
+        Timber.v("On new timeline events: $eventIds")
+        _viewEvents.post(RoomDetailViewEvents.OnNewTimelineEvents(eventIds))
     }
 
     override fun onCleared() {

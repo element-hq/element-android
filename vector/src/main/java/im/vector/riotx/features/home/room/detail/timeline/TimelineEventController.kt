@@ -30,6 +30,7 @@ import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotx.core.date.VectorDateFormatter
 import im.vector.riotx.core.epoxy.LoadingItem_
+import im.vector.riotx.core.epoxy.emptyItem
 import im.vector.riotx.core.extensions.localDateTime
 import im.vector.riotx.features.home.room.detail.RoomDetailViewState
 import im.vector.riotx.features.home.room.detail.UnreadState
@@ -241,6 +242,10 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         // no-op, already handled
     }
 
+    override fun onNewTimelineEvents(eventIds: List<String>) {
+        // no-op, already handled
+    }
+
     private fun submitSnapshot(newSnapshot: List<TimelineEvent>) {
         backgroundHandler.post {
             inSubmitList = true
@@ -345,8 +350,6 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     fun getPositionOfReadMarker(): Int? = synchronized(modelCache) {
         return positionOfReadMarker
     }
-
-    fun isLoadingForward() = showingForwardLoader
 
     private data class CacheItemData(
             val localId: Long,
