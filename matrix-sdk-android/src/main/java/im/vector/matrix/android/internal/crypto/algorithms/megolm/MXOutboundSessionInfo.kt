@@ -17,7 +17,7 @@
 
 package im.vector.matrix.android.internal.crypto.algorithms.megolm
 
-import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
+import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import timber.log.Timber
 
@@ -52,7 +52,7 @@ internal class MXOutboundSessionInfo(
      * @param devicesInRoom the devices map
      * @return true if we have shared the session with devices which aren't in devicesInRoom.
      */
-    fun sharedWithTooManyDevices(devicesInRoom: MXUsersDevicesMap<MXDeviceInfo>): Boolean {
+    fun sharedWithTooManyDevices(devicesInRoom: MXUsersDevicesMap<CryptoDeviceInfo>): Boolean {
         val userIds = sharedWithDevices.userIds
 
         for (userId in userIds) {

@@ -44,7 +44,6 @@ class DebugMenuActivity : VectorBaseActivity() {
 
     override fun getLayoutRes() = R.layout.activity_debug_menu
 
-
     @Inject
     lateinit var activeSessionHolder: ActiveSessionHolder
 
@@ -164,7 +163,6 @@ class DebugMenuActivity : VectorBaseActivity() {
     @OnClick(R.id.debug_initialise_xsigning)
     fun testXSigning() {
         activeSessionHolder.getActiveSession().getCrossSigningService().initializeCrossSigning(null, object : MatrixCallback<Unit> {
-
             override fun onFailure(failure: Throwable) {
                 if (failure is Failure.OtherServerError
                         && failure.httpCode == 401

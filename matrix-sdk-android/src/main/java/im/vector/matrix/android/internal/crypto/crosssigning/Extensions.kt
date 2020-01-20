@@ -15,15 +15,14 @@
  */
 package im.vector.matrix.android.internal.crypto.crosssigning
 
-import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
-import im.vector.matrix.android.internal.crypto.model.rest.CrossSigningKeyInfo
+import im.vector.matrix.android.internal.crypto.model.CryptoCrossSigningKey
+import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.util.JsonCanonicalizer
 
-
-fun MXDeviceInfo.canonicalSignable(): String {
+fun CryptoDeviceInfo.canonicalSignable(): String {
     return JsonCanonicalizer.getCanonicalJson(Map::class.java, signalableJSONDictionary())
 }
 
-fun CrossSigningKeyInfo.canonicalSignable(): String {
+fun CryptoCrossSigningKey.canonicalSignable(): String {
     return JsonCanonicalizer.getCanonicalJson(Map::class.java, signalableJSONDictionary())
 }

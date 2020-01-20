@@ -17,17 +17,15 @@ package im.vector.matrix.android.internal.crypto.tasks
 
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.internal.crypto.api.CryptoApi
-import im.vector.matrix.android.internal.crypto.model.MXKeysObject
 import im.vector.matrix.android.internal.crypto.model.rest.SignatureUploadResponse
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
 import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
-
 internal interface UploadSignaturesTask : Task<UploadSignaturesTask.Params, SignatureUploadResponse> {
     data class Params(
-            val signatures: Map<String, Map<String, MXKeysObject>>
+            val signatures: Map<String, Map<String, Any>>
     )
 }
 
@@ -41,10 +39,9 @@ internal class DefaultUploadSignaturesTask @Inject constructor(
             apiCall = cryptoApi.uploadSignatures(params.signatures)
         }
         if (executeRequest.failures?.isNotEmpty() == true) {
-            //TODO better
+            // TODO better
             throw Failure.OtherServerError(executeRequest.toString(), 400)
         }
         return executeRequest
     }
-
 }

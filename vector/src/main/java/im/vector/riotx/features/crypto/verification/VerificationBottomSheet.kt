@@ -101,7 +101,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
         it.otherUserMxItem?.let { matrixItem ->
             avatarRenderer.render(matrixItem, otherUserAvatarImageView)
 
-            if(it.sasTransactionState == SasVerificationTxState.Verified) {
+            if (it.sasTransactionState == SasVerificationTxState.Verified) {
                 otherUserNameText.text = getString(R.string.verification_verified_user, matrixItem.getBestName())
                 otherUserShield.isVisible = true
             } else {

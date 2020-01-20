@@ -16,7 +16,6 @@
  */
 package im.vector.matrix.android.internal.crypto.api
 
-import im.vector.matrix.android.internal.crypto.model.MXKeysObject
 import im.vector.matrix.android.internal.crypto.model.rest.*
 import im.vector.matrix.android.internal.network.NetworkConstants
 import retrofit2.Call
@@ -66,7 +65,6 @@ internal interface CryptoApi {
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "keys/query")
     fun downloadKeysForUsers(@Body params: KeysQueryBody): Call<KeysQueryResponse>
 
-
     /**
      * CrossSigning - Uploading signing keys
      * Public keys for the cross-signing keys are uploaded to the servers using /keys/device_signing/upload.
@@ -74,7 +72,6 @@ internal interface CryptoApi {
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "keys/device_signing/upload")
     fun uploadSigningKeys(@Body params: UploadSigningKeysBody): Call<KeysQueryResponse>
-
 
     /**
      *  CrossSigning - Uploading signatures
@@ -94,7 +91,6 @@ internal interface CryptoApi {
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "keys/signatures/upload")
     fun uploadSignatures(@Body params: Map<String, @JvmSuppressWildcards Any>?): Call<SignatureUploadResponse>
-
 
     /**
      * Claim one-time keys.

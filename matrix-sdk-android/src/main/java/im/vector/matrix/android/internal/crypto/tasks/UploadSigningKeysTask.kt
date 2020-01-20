@@ -19,25 +19,25 @@ package im.vector.matrix.android.internal.crypto.tasks
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.internal.auth.registration.RegistrationFlowResponse
 import im.vector.matrix.android.internal.crypto.api.CryptoApi
-import im.vector.matrix.android.internal.crypto.model.rest.CrossSigningKeyInfo
+import im.vector.matrix.android.internal.crypto.model.CryptoCrossSigningKey
 import im.vector.matrix.android.internal.crypto.model.rest.KeysQueryResponse
 import im.vector.matrix.android.internal.crypto.model.rest.UploadSigningKeysBody
 import im.vector.matrix.android.internal.crypto.model.rest.UserPasswordAuth
+import im.vector.matrix.android.internal.crypto.model.toRest
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
 import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
-
 internal interface UploadSigningKeysTask : Task<UploadSigningKeysTask.Params, KeysQueryResponse> {
     data class Params(
             // the device keys to send.
-            val masterKey: CrossSigningKeyInfo,
+            val masterKey: CryptoCrossSigningKey,
             // the one-time keys to send.
-            val userKey: CrossSigningKeyInfo,
+            val userKey: CryptoCrossSigningKey,
             // the explicit device_id to use for upload (default is to use the same as that used during auth).
-            val selfSignedKey: CrossSigningKeyInfo,
+            val selfSignedKey: CryptoCrossSigningKey,
             val userPasswordAuth: UserPasswordAuth?
     )
 }
@@ -47,11 +47,10 @@ internal class DefaultUploadSigningKeysTask @Inject constructor(
         private val eventBus: EventBus
 ) : UploadSigningKeysTask {
     override suspend fun execute(params: UploadSigningKeysTask.Params): KeysQueryResponse {
-
         val uploadQuery = UploadSigningKeysBody(
-                masterKey = params.masterKey,
-                userSigningKey = params.userKey,
-                selfSigningKey = params.selfSignedKey,
+                masterKey = params.masterKey.toRest(),
+                userSigningKey = params.userKey.toRest(),
+                selfSigningKey = params.selfSignedKey.toRest(),
                 auth = params.userPasswordAuth.takeIf { params.userPasswordAuth?.session != null }
         )
         try {
@@ -83,10 +82,6 @@ internal class DefaultUploadSigningKeysTask @Inject constructor(
             }
             // Other error
             throw throwable
-
         }
-
     }
-
-
 }

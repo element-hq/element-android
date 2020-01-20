@@ -1,4 +1,4 @@
-///*
+// /*
 // * Copyright 2020 New Vector Ltd
 // *
 // * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,15 +14,15 @@
 // * limitations under the License.
 // */
 //
-//package im.vector.matrix.android.api.session.crypto.crosssigning
+// package im.vector.matrix.android.api.session.crypto.crosssigning
 //
-//import com.squareup.moshi.Json
-//import com.squareup.moshi.JsonClass
-//import im.vector.matrix.android.internal.crypto.model.rest.CrossSigningKeyInfo
+// import com.squareup.moshi.Json
+// import com.squareup.moshi.JsonClass
+// import im.vector.matrix.android.internal.crypto.model.rest.CrossSigningKeyInfo
 //
 //
-//@JsonClass(generateAdapter = true)
-//data class MXKeyInfo(
+// @JsonClass(generateAdapter = true)
+// data class MXKeyInfo(
 //
 //        @Json(name = "public_key")
 //        val publicKeyBase64: String,
@@ -42,7 +42,7 @@
 //        @Json(name = "signatures")
 //        var signatures: Map<String, Map<String, String>>? = null
 //
-//) {
+// ) {
 //
 //    data class Builder(
 //            private val publicKeyBase64: String,
@@ -76,5 +76,5 @@
 //            )
 //        }
 //    }
-//}
+// }
 //

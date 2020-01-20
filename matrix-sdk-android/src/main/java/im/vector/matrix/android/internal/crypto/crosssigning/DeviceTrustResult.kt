@@ -19,13 +19,13 @@ import im.vector.matrix.android.api.session.crypto.crosssigning.MXCrossSigningIn
 
 sealed class DeviceTrustResult {
 
-    data class Success(val deviceID: String, val crossSigned: Boolean) : DeviceTrustResult()
+    data class Success(val level: DeviceTrustLevel) : DeviceTrustResult()
     data class UnknownDevice(val deviceID: String) : DeviceTrustResult()
     data class CrossSigningNotConfigured(val userID: String) : DeviceTrustResult()
     data class KeysNotTrusted(val key: MXCrossSigningInfo) : DeviceTrustResult()
     data class MissingDeviceSignature(val deviceId: String, val signingKey: String) : DeviceTrustResult()
     data class InvalidDeviceSignature(val deviceId: String, val signingKey: String, val throwable: Throwable?) : DeviceTrustResult()
-
 }
 
 fun DeviceTrustResult.isSuccess(): Boolean = this is DeviceTrustResult.Success
+fun DeviceTrustResult.isCrossSignedVerified(): Boolean = (this as? DeviceTrustResult.Success)?.level?.isCrossSigningVerified() == true

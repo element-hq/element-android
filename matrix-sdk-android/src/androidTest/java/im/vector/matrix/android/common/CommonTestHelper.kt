@@ -94,7 +94,6 @@ class CommonTestHelper(context: Context) {
                     syncLiveData.removeObserver(this)
                 }
             }
-
         }
         GlobalScope.launch(Dispatchers.Main) { syncLiveData.observeForever(syncObserver) }
 

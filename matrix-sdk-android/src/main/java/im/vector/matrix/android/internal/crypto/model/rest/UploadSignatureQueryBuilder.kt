@@ -15,38 +15,39 @@
  */
 package im.vector.matrix.android.internal.crypto.model.rest
 
-import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
-import im.vector.matrix.android.internal.crypto.model.MXKeysObject
+import im.vector.matrix.android.internal.crypto.model.CryptoCrossSigningKey
+import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
+import im.vector.matrix.android.internal.crypto.model.toRest
 
 /**
  * Helper class to build CryptoApi#uploadSignatures params
  */
 data class UploadSignatureQueryBuilder(
-        private val deviceInfoList: ArrayList<MXDeviceInfo> = ArrayList(),
-        private val signingKeyInfoList: ArrayList<CrossSigningKeyInfo> = ArrayList()
+        private val deviceInfoList: ArrayList<CryptoDeviceInfo> = ArrayList(),
+        private val signingKeyInfoList: ArrayList<CryptoCrossSigningKey> = ArrayList()
 ) {
 
-    fun withDeviceInfo(deviceInfo: MXDeviceInfo) = apply {
+    fun withDeviceInfo(deviceInfo: CryptoDeviceInfo) = apply {
         deviceInfoList.add(deviceInfo)
     }
 
-    fun withSigningKeyInfo(info: CrossSigningKeyInfo) = apply {
+    fun withSigningKeyInfo(info: CryptoCrossSigningKey) = apply {
         signingKeyInfoList.add(info)
     }
 
-    fun build(): Map<String, Map<String, MXKeysObject>> {
-        val map = HashMap<String, HashMap<String, MXKeysObject>>()
+    fun build(): Map<String, Map<String, @JvmSuppressWildcards Any>> {
+        val map = HashMap<String, HashMap<String, Any>>()
 
         val usersList = (deviceInfoList.map { it.userId } + signingKeyInfoList.mapNotNull { it.userId }).distinct()
 
         usersList.forEach { userID ->
-            val userMap = HashMap<String, MXKeysObject>()
+            val userMap = HashMap<String, Any>()
             deviceInfoList.filter { it.userId == userID }.forEach { deviceInfo ->
-                userMap[deviceInfo.deviceId] = deviceInfo.toDeviceKeys()
+                userMap[deviceInfo.deviceId] = deviceInfo.toRest()
             }
             signingKeyInfoList.filter { it.userId == userID }.forEach { keyInfo ->
                 keyInfo.unpaddedBase64PublicKey?.let { base64Key ->
-                    userMap[base64Key] = keyInfo
+                    userMap[base64Key] = keyInfo.toRest()
                 }
             }
             map[userID] = userMap
@@ -54,5 +55,4 @@ data class UploadSignatureQueryBuilder(
 
         return map
     }
-
 }

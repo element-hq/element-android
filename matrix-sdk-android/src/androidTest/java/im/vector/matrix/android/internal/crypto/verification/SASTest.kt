@@ -24,7 +24,7 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.common.CommonTestHelper
 import im.vector.matrix.android.common.CryptoTestHelper
-import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
+import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationAccept
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationCancel
@@ -37,7 +37,6 @@ import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
 import java.util.*
 import java.util.concurrent.CountDownLatch
-
 
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -139,7 +138,6 @@ class SASTest : InstrumentedTest {
         // Bob should receive a cancel
         var cancelReason: String? = null
         val cancelLatch = CountDownLatch(1)
-
 
         val bobListener = object : SasVerificationService.SasVerificationListener {
             override fun transactionCreated(tx: SasVerificationTransaction) {}
@@ -530,8 +528,8 @@ class SASTest : InstrumentedTest {
         mTestHelper.await(bobSASLatch)
 
         // Assert that devices are verified
-        val bobDeviceInfoFromAlicePOV: MXDeviceInfo? = aliceSession.getDeviceInfo(bobUserId, bobDeviceId)
-        val aliceDeviceInfoFromBobPOV: MXDeviceInfo? = bobSession.getDeviceInfo(aliceSession.myUserId, aliceSession.getMyDevice().deviceId)
+        val bobDeviceInfoFromAlicePOV: CryptoDeviceInfo? = aliceSession.getDeviceInfo(bobUserId, bobDeviceId)
+        val aliceDeviceInfoFromBobPOV: CryptoDeviceInfo? = bobSession.getDeviceInfo(aliceSession.myUserId, aliceSession.getMyDevice().deviceId)
 
         // latch wait a bit again
         Thread.sleep(1000)

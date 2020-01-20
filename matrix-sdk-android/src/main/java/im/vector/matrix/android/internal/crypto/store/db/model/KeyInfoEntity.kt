@@ -21,7 +21,6 @@ import im.vector.matrix.android.internal.crypto.store.db.serializeForRealm
 import io.realm.RealmList
 import io.realm.RealmObject
 
-
 internal open class KeyInfoEntity(
         var publicKeyBase64: String? = null,
 //        var isTrusted: Boolean = false,

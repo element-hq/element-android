@@ -18,6 +18,7 @@ package im.vector.matrix.android.api.session.crypto.crosssigning
 
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustResult
+import im.vector.matrix.android.internal.crypto.crosssigning.UserTrustResult
 import im.vector.matrix.android.internal.crypto.model.rest.SignatureUploadResponse
 import im.vector.matrix.android.internal.crypto.model.rest.UserPasswordAuth
 
@@ -25,7 +26,11 @@ interface CrossSigningService {
 
     fun isUserTrusted(userId: String) : Boolean
 
-    fun checkUserTrust(userId: String, callback: MatrixCallback<Boolean>? = null)
+    /**
+     * Will not force a download of the key, but will verify signatures trust chain.
+     * Checks that my trusted user key has signed the other user UserKey
+     */
+    fun checkUserTrust(userId: String) : UserTrustResult
 
     /**
      * Initialize cross signing for this user.
@@ -44,5 +49,5 @@ interface CrossSigningService {
      */
     fun signDevice(deviceId: String, callback: MatrixCallback<SignatureUploadResponse>)
 
-    fun checkDeviceTrust(userId: String, deviceId: String) : DeviceTrustResult
+    fun checkDeviceTrust(userId: String, deviceId: String, locallyTrusted: Boolean?) : DeviceTrustResult
 }

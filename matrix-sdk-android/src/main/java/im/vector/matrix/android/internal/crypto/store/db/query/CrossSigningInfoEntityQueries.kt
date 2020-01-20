@@ -34,4 +34,3 @@ internal fun CrossSigningInfoEntity.Companion.get(realm: Realm, userId: String):
             .equalTo(UserEntityFields.USER_ID, userId)
             .findFirst()
 }
-

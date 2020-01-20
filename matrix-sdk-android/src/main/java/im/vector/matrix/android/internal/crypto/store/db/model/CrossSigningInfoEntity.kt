@@ -16,7 +16,7 @@
 
 package im.vector.matrix.android.internal.crypto.store.db.model
 
-import im.vector.matrix.android.internal.crypto.model.rest.CrossSigningKeyInfo
+import im.vector.matrix.android.internal.crypto.model.KeyUsage
 import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
@@ -25,27 +25,26 @@ internal open class CrossSigningInfoEntity(
         @PrimaryKey
         var userId: String? = null,
         var crossSigningKeys: RealmList<KeyInfoEntity> = RealmList(),
-        var isTrusted: Boolean = false
+        var trustLevelEntity: TrustLevelEntity? = null
 ) : RealmObject() {
 
     companion object
 
-    fun getMasterKey() = crossSigningKeys.firstOrNull { it.usages.contains(CrossSigningKeyInfo.KeyUsage.MASTER.value) }
+    fun getMasterKey() = crossSigningKeys.firstOrNull { it.usages.contains(KeyUsage.MASTER.value) }
 
     fun setMasterKey(info: KeyInfoEntity?) {
         crossSigningKeys
-                .filter { it.usages.contains(CrossSigningKeyInfo.KeyUsage.MASTER.value) }
+                .filter { it.usages.contains(KeyUsage.MASTER.value) }
                 .forEach { crossSigningKeys.remove(it) }
         info?.let { crossSigningKeys.add(it) }
     }
 
-    fun getSelfSignedKey() = crossSigningKeys.firstOrNull { it.usages.contains(CrossSigningKeyInfo.KeyUsage.SELF_SIGNING.value) }
+    fun getSelfSignedKey() = crossSigningKeys.firstOrNull { it.usages.contains(KeyUsage.SELF_SIGNING.value) }
 
     fun setSelfSignedKey(info: KeyInfoEntity?) {
         crossSigningKeys
-                .filter { it.usages.contains(CrossSigningKeyInfo.KeyUsage.SELF_SIGNING.value) }
+                .filter { it.usages.contains(KeyUsage.SELF_SIGNING.value) }
                 .forEach { crossSigningKeys.remove(it) }
         info?.let { crossSigningKeys.add(it) }
     }
-
 }

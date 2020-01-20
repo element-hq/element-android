@@ -18,7 +18,6 @@ package im.vector.matrix.android.internal.crypto.store.db.model
 
 import im.vector.matrix.android.internal.crypto.store.db.deserializeFromRealm
 import im.vector.matrix.android.internal.crypto.store.db.serializeForRealm
-import io.realm.Realm
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 import org.matrix.olm.OlmAccount

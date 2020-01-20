@@ -32,7 +32,8 @@ import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.internal.crypto.DeviceListManager
 import im.vector.matrix.android.internal.crypto.MyDeviceInfoHolder
 import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
-import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
+import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
+import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.rest.*
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
@@ -202,7 +203,7 @@ internal class DefaultSasVerificationService @Inject constructor(
     }
 
     override fun markedLocallyAsManuallyVerified(userId: String, deviceID: String) {
-        setDeviceVerificationAction.handle(MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED,
+        setDeviceVerificationAction.handle(DeviceTrustLevel(false, true),
                 deviceID,
                 userId)
 
@@ -398,7 +399,7 @@ internal class DefaultSasVerificationService @Inject constructor(
     }
 
     private suspend fun checkKeysAreDownloaded(otherUserId: String,
-                                               fromDevice: String): MXUsersDevicesMap<MXDeviceInfo>? {
+                                               fromDevice: String): MXUsersDevicesMap<CryptoDeviceInfo>? {
         return try {
             var keys = deviceListManager.downloadKeys(listOf(otherUserId), false)
             if (keys.getUserDeviceIds(otherUserId)?.contains(fromDevice) == true) {

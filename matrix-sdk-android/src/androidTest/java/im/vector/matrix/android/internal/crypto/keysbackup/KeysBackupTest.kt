@@ -29,12 +29,12 @@ import im.vector.matrix.android.common.*
 import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP
 import im.vector.matrix.android.internal.crypto.MegolmSessionData
 import im.vector.matrix.android.internal.crypto.OutgoingRoomKeyRequest
+import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
 import im.vector.matrix.android.internal.crypto.keysbackup.model.KeysBackupVersionTrust
 import im.vector.matrix.android.internal.crypto.keysbackup.model.MegolmBackupCreationInfo
 import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.KeysVersion
 import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.KeysVersionResult
 import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
-import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrapper
 import org.junit.Assert.*
 import org.junit.FixMethodOrder
@@ -1161,7 +1161,7 @@ class KeysBackupTest : InstrumentedTest {
         assertFalse(keysBackup2.isEnabled)
 
         // - Validate the old device from the new one
-        aliceSession2.setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED, oldDeviceId, aliceSession2.myUserId)
+        aliceSession2.setDeviceVerification(DeviceTrustLevel(false, true), oldDeviceId, aliceSession2.myUserId)
 
         // -> Backup should automatically enable on the new device
         val latch4 = CountDownLatch(1)

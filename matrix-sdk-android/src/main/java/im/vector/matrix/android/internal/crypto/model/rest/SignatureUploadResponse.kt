@@ -19,7 +19,6 @@ package im.vector.matrix.android.internal.crypto.model.rest
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 
 /**
  * Upload Signature response
@@ -37,7 +36,6 @@ data class SignatureUploadResponse(
         var failures: Map<String, Map<String, @JvmSuppressWildcards Any>>? = null
 
 )
-
 
 @JsonClass(generateAdapter = true)
 data class UploadResponseFailure(

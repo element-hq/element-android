@@ -16,32 +16,26 @@
 
 package im.vector.matrix.android.api.session.crypto.crosssigning
 
-import im.vector.matrix.android.internal.crypto.model.rest.CrossSigningKeyInfo
+import im.vector.matrix.android.internal.crypto.model.CryptoCrossSigningKey
+import im.vector.matrix.android.internal.crypto.model.KeyUsage
 
 data class MXCrossSigningInfo(
 
-        /**
-         * the user id
-         */
-//        @Json(name = "user_id")
         var userId: String,
 
-//        @Json(name = "user_keys")
-        var crossSigningKeys: List<CrossSigningKeyInfo> = ArrayList(),
+        var crossSigningKeys: List<CryptoCrossSigningKey> = ArrayList(),
 
+        // TODO this should at the key level no?
         val isTrusted: Boolean = false
 
 ) {
 
-    fun masterKey(): CrossSigningKeyInfo? = crossSigningKeys
-            .firstOrNull { it.usages?.contains(CrossSigningKeyInfo.KeyUsage.MASTER.value) == true }
+    fun masterKey(): CryptoCrossSigningKey? = crossSigningKeys
+            .firstOrNull { it.usages?.contains(KeyUsage.MASTER.value) == true }
 
+    fun userKey(): CryptoCrossSigningKey? = crossSigningKeys
+            .firstOrNull { it.usages?.contains(KeyUsage.USER_SIGNING.value) == true }
 
-    fun userKey(): CrossSigningKeyInfo? = crossSigningKeys
-            .firstOrNull { it.usages?.contains(CrossSigningKeyInfo.KeyUsage.USER_SIGNING.value) == true }
-
-
-    fun selfSigningKey(): CrossSigningKeyInfo? = crossSigningKeys
-            .firstOrNull { it.usages?.contains(CrossSigningKeyInfo.KeyUsage.SELF_SIGNING.value) == true }
-
+    fun selfSigningKey(): CryptoCrossSigningKey? = crossSigningKeys
+            .firstOrNull { it.usages?.contains(KeyUsage.SELF_SIGNING.value) == true }
 }

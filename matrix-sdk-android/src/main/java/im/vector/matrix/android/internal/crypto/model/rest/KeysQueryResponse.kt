@@ -18,7 +18,6 @@ package im.vector.matrix.android.internal.crypto.model.rest
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 
 /**
  * This class represents the response to /keys/query request made by downloadKeysForUsers
@@ -36,7 +35,7 @@ data class KeysQueryResponse(
          * TODO Use MXUsersDevicesMap?
          */
         @Json(name = "device_keys")
-        var deviceKeys: Map<String, Map<String, MXDeviceInfo>>? = null,
+        var deviceKeys: Map<String, Map<String, RestDeviceInfo>>? = null,
 
         /**
          * The failures sorted by homeservers. TODO Bad comment ?
@@ -45,13 +44,12 @@ data class KeysQueryResponse(
         var failures: Map<String, Map<String, Any>>? = null,
 
         @Json(name = "master_keys")
-        var masterKeys: Map<String, CrossSigningKeyInfo?>? = null,
+        var masterKeys: Map<String, RestKeyInfo?>? = null,
 
         @Json(name = "self_signing_keys")
-        var selfSigningKeys: Map<String, CrossSigningKeyInfo?>? = null,
+        var selfSigningKeys: Map<String, RestKeyInfo?>? = null,
 
         @Json(name = "user_signing_keys")
-        var userSigningKeys: Map<String, CrossSigningKeyInfo?>? = null
+        var userSigningKeys: Map<String, RestKeyInfo?>? = null
 
 )
-

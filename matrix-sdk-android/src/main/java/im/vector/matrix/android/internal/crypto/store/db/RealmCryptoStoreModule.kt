@@ -34,6 +34,7 @@ import io.realm.annotations.RealmModule
             OutgoingRoomKeyRequestEntity::class,
             UserEntity::class,
             KeyInfoEntity::class,
-            CrossSigningInfoEntity::class
+            CrossSigningInfoEntity::class,
+            TrustLevelEntity::class
         ])
 internal class RealmCryptoStoreModule

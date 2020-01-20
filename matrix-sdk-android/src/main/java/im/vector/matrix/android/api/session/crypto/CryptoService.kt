@@ -27,6 +27,8 @@ import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.internal.crypto.MXEventDecryptionResult
 import im.vector.matrix.android.internal.crypto.NewSessionListener
+import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
+import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXEncryptEventContentResult
@@ -48,7 +50,7 @@ interface CryptoService {
     fun isCryptoEnabled(): Boolean
 
     fun getSasVerificationService(): SasVerificationService
-    
+
     fun getCrossSigningService(): CrossSigningService
 
     fun getKeysBackupService(): KeysBackupService
@@ -57,15 +59,15 @@ interface CryptoService {
 
     fun setWarnOnUnknownDevices(warn: Boolean)
 
-    fun setDeviceVerification(verificationStatus: Int, deviceId: String, userId: String)
+    fun setDeviceVerification(trustLevel: DeviceTrustLevel, deviceId: String, userId: String)
 
-    fun getUserDevices(userId: String): MutableList<MXDeviceInfo>
+    fun getUserDevices(userId: String): MutableList<CryptoDeviceInfo>
 
     fun setDevicesKnown(devices: List<MXDeviceInfo>, callback: MatrixCallback<Unit>?)
 
-    fun deviceWithIdentityKey(senderKey: String, algorithm: String): MXDeviceInfo?
+    fun deviceWithIdentityKey(senderKey: String, algorithm: String): CryptoDeviceInfo?
 
-    fun getMyDevice(): MXDeviceInfo
+    fun getMyDevice(): CryptoDeviceInfo
 
     fun getGlobalBlacklistUnverifiedDevices(): Boolean
 
@@ -81,7 +83,7 @@ interface CryptoService {
 
     fun setRoomBlacklistUnverifiedDevices(roomId: String)
 
-    fun getDeviceInfo(userId: String, deviceId: String?): MXDeviceInfo?
+    fun getDeviceInfo(userId: String, deviceId: String?): CryptoDeviceInfo?
 
     fun reRequestRoomKeyForEvent(event: Event)
 
@@ -113,7 +115,7 @@ interface CryptoService {
 
     fun shouldEncryptForInvitedMembers(roomId: String): Boolean
 
-    fun downloadKeys(userIds: List<String>, forceDownload: Boolean, callback: MatrixCallback<MXUsersDevicesMap<MXDeviceInfo>>)
+    fun downloadKeys(userIds: List<String>, forceDownload: Boolean, callback: MatrixCallback<MXUsersDevicesMap<CryptoDeviceInfo>>)
 
     fun addNewSessionListener(newSessionListener: NewSessionListener)
 

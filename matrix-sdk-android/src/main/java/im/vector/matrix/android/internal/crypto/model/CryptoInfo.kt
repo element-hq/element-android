@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,11 @@
 
 package im.vector.matrix.android.internal.crypto.model
 
-interface MXKeysObject {
+/**
+ * Generic crypto info.
+ * Can be a device (CryptoDeviceInfo), as well as a CryptoCrossSigningInfo (can be seen as a kind of virtual device)
+ */
+interface CryptoInfo {
 
     val userId: String
 
@@ -24,6 +28,5 @@ interface MXKeysObject {
 
     val signatures: Map<String, Map<String, String>>?
 
-//    fun signalableJSONDictionary(): Map<String, Any>
+    fun signalableJSONDictionary(): Map<String, Any>
 }
-

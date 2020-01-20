@@ -22,7 +22,7 @@ data class MXOlmSessionResult(
         /**
          * the device
          */
-        val deviceInfo: MXDeviceInfo,
+        val deviceInfo: CryptoDeviceInfo,
         /**
          * Base64 olm session id.
          * null if no session could be established.

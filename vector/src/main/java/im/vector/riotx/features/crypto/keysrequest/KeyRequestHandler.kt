@@ -28,7 +28,8 @@ import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTransactio
 import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTxState
 import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequest
 import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequestCancellation
-import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
+import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
+import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
@@ -98,8 +99,8 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
         alertsToRequests[mappingKey] = ArrayList<IncomingRoomKeyRequest>().apply { this.add(request) }
 
         // Add a notification for every incoming request
-        session?.downloadKeys(listOf(userId), false, object : MatrixCallback<MXUsersDevicesMap<MXDeviceInfo>> {
-            override fun onSuccess(data: MXUsersDevicesMap<MXDeviceInfo>) {
+        session?.downloadKeys(listOf(userId), false, object : MatrixCallback<MXUsersDevicesMap<CryptoDeviceInfo>> {
+            override fun onSuccess(data: MXUsersDevicesMap<CryptoDeviceInfo>) {
                 val deviceInfo = data.getObject(userId, deviceId)
 
                 if (null == deviceInfo) {
@@ -109,9 +110,9 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
                 }
 
                 if (deviceInfo.isUnknown) {
-                    session?.setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED, deviceId, userId)
+                    session?.setDeviceVerification(DeviceTrustLevel(false, false), deviceId, userId)
 
-                    deviceInfo.verified = MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED
+                    deviceInfo.trustLevel = DeviceTrustLevel(false, false)
 
                     // can we get more info on this device?
                     session?.getDevicesList(object : MatrixCallback<DevicesListResponse> {
@@ -143,7 +144,7 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
                           userId: String,
                           deviceId: String,
                           wasNewDevice: Boolean,
-                          deviceInfo: MXDeviceInfo?,
+                          deviceInfo: CryptoDeviceInfo?,
                           moreInfo: DeviceInfo? = null) {
         val deviceName = if (deviceInfo!!.displayName().isNullOrEmpty()) deviceInfo.deviceId else deviceInfo.displayName()
         val dialogText: String?

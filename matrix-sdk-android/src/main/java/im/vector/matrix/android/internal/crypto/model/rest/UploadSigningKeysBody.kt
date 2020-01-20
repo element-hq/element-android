@@ -17,18 +17,17 @@ package im.vector.matrix.android.internal.crypto.model.rest
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import im.vector.matrix.android.internal.auth.registration.AuthParams
 
 @JsonClass(generateAdapter = true)
 internal data class UploadSigningKeysBody(
         @Json(name = "master_key")
-        val masterKey: CrossSigningKeyInfo? = null,
+        val masterKey: RestKeyInfo? = null,
 
         @Json(name = "self_signing_key")
-        val selfSigningKey: CrossSigningKeyInfo? = null,
+        val selfSigningKey: RestKeyInfo? = null,
 
         @Json(name = "user_signing_key")
-        val userSigningKey: CrossSigningKeyInfo? = null,
+        val userSigningKey: RestKeyInfo? = null,
 
         @Json(name = "auth")
         val auth: UserPasswordAuth? = null

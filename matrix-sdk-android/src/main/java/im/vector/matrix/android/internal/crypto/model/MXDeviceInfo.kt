@@ -147,14 +147,6 @@ data class MXDeviceInfo(
         return map
     }
 
-    fun addSignature(userId: String, signedWithNoPrefix: String, signature: String) = apply {
-        val updated = (signatures?.toMutableMap() ?: HashMap())
-        val userMap = updated[userId]?.toMutableMap()
-                ?: HashMap<String, String>().also { updated[userId] = it }
-        userMap["ed25519:${signedWithNoPrefix}"] = signature
-        signatures = updated
-    }
-
     /**
      * @return a dictionary of the parameters
      */

@@ -92,7 +92,6 @@ class CryptoTestHelper(val mTestHelper: CommonTestHelper) {
 
         val lock1 = CountDownLatch(2)
 
-
         val bobRoomSummariesLive = runBlocking(Dispatchers.Main) {
             bobSession.getRoomSummariesLive(roomSummaryQueryParams { })
         }
@@ -139,8 +138,6 @@ class CryptoTestHelper(val mTestHelper: CommonTestHelper) {
         GlobalScope.launch(Dispatchers.Main) {
             bobRoomSummariesLive.observeForever(roomJoinedObserver)
         }
-
-
 
         bobSession.joinRoom(aliceRoomId, callback = TestMatrixCallback(lock2))
 

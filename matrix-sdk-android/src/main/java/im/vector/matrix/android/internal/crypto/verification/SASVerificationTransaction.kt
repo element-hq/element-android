@@ -25,7 +25,7 @@ import im.vector.matrix.android.api.session.crypto.sas.SasMode
 import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTxState
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
-import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
+import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
 import im.vector.matrix.android.internal.crypto.model.MXKey
 import im.vector.matrix.android.internal.crypto.model.rest.SignatureUploadResponse
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
@@ -168,7 +168,7 @@ internal abstract class SASVerificationTransaction(
                 ?.masterKey()
                 ?.unpaddedBase64PublicKey
                 ?.let { masterPublicKey ->
-                    val crossSigningKeyId = "ed25519:${masterPublicKey}"
+                    val crossSigningKeyId = "ed25519:$masterPublicKey"
                     macUsingAgreedMethod(masterPublicKey, baseInfo + crossSigningKeyId)?.let { MSKMacString ->
                         keyMap[crossSigningKeyId] = MSKMacString
                     }
@@ -179,11 +179,9 @@ internal abstract class SASVerificationTransaction(
         if (macString.isNullOrBlank() || keyStrings.isNullOrBlank()) {
             // Should not happen
             Timber.e("## SAS verification [$transactionId] failed to send KeyMac, empty key hashes.")
-            Timber.e("## SAS verification [$transactionId] failed to send KeyMac, empty key hashes.")
             cancel(CancelCode.UnexpectedMessage)
             return
         }
-
 
         val macMsg = transport.createMac(transactionId, keyMap, keyStrings)
         myMac = macMsg
@@ -277,11 +275,11 @@ internal abstract class SASVerificationTransaction(
         val otherMasterKey = cryptoStore.getCrossSigningInfo(otherUserId)?.masterKey()
         val otherCrossSigningMasterKeyPublic = otherMasterKey?.unpaddedBase64PublicKey
         if (otherCrossSigningMasterKeyPublic != null) {
-            //Did the user signed his master key
+            // Did the user signed his master key
             theirMac!!.mac!!.keys.forEach {
                 val keyIDNoPrefix = if (it.startsWith("ed25519:")) it.substring("ed25519:".length) else it
                 if (keyIDNoPrefix == otherCrossSigningMasterKeyPublic) {
-                    //Check the signature
+                    // Check the signature
                     val mac = macUsingAgreedMethod(otherCrossSigningMasterKeyPublic, baseInfo + it)
                     if (mac != theirMac?.mac?.get(it)) {
                         // WRONG!
@@ -303,12 +301,23 @@ internal abstract class SASVerificationTransaction(
             return
         }
 
-        if (otherMasterKeyIsVerified) {
+        // If not me sign his MSK and upload the signature
+        if (otherMasterKeyIsVerified && otherUserId != credentials.userId) {
             // we should trust this master key
             // And check verification MSK -> SSK?
             crossSigningService.trustUser(otherUserId, object : MatrixCallback<SignatureUploadResponse> {
                 override fun onFailure(failure: Throwable) {
-                    Timber.e(failure,"## SAS Verification: Failed to trust User $otherUserId")
+                    Timber.e(failure, "## SAS Verification: Failed to trust User $otherUserId")
+                }
+            })
+        }
+
+        if (otherUserId == credentials.userId) {
+            // If me it's reasonable to sign and upload the device signature
+            // Notice that i might not have the private keys, so may ot be able to do it
+            crossSigningService.signDevice(otherDeviceId!!, object : MatrixCallback<SignatureUploadResponse> {
+                override fun onFailure(failure: Throwable) {
+                    Timber.w(failure, "## SAS Verification: Failed to sign new device $otherDeviceId")
                 }
             })
         }
@@ -322,7 +331,8 @@ internal abstract class SASVerificationTransaction(
     }
 
     private fun setDeviceVerified(deviceId: String, userId: String) {
-        setDeviceVerificationAction.handle(MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED,
+        // TODO should not override cross sign status
+        setDeviceVerificationAction.handle(DeviceTrustLevel(false, true),
                 deviceId,
                 userId)
     }

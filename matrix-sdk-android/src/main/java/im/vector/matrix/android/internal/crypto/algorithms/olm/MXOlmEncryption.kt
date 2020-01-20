@@ -25,7 +25,7 @@ import im.vector.matrix.android.internal.crypto.MXOlmDevice
 import im.vector.matrix.android.internal.crypto.actions.EnsureOlmSessionsForUsersAction
 import im.vector.matrix.android.internal.crypto.actions.MessageEncrypter
 import im.vector.matrix.android.internal.crypto.algorithms.IMXEncrypting
-import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
+import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 
 internal class MXOlmEncryption(
@@ -42,7 +42,7 @@ internal class MXOlmEncryption(
         //
         // TODO: there is a race condition here! What if a new user turns up
         ensureSession(userIds)
-        val deviceInfos = ArrayList<MXDeviceInfo>()
+        val deviceInfos = ArrayList<CryptoDeviceInfo>()
         for (userId in userIds) {
             val devices = cryptoStore.getUserDevices(userId)?.values ?: emptyList()
             for (device in devices) {
