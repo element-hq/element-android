@@ -39,6 +39,7 @@ import im.vector.matrix.android.api.session.room.notification.RoomNotificationSt
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.LayoutManagerStateRestorer
 import im.vector.riotx.core.extensions.cleanup
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.OnBackPressed
 import im.vector.riotx.core.platform.StateView
 import im.vector.riotx.core.platform.VectorBaseFragment
@@ -111,7 +112,7 @@ class RoomListFragment @Inject constructor(
                         is RoomListViewEvents.Loading    -> showLoading(it.message)
                         is RoomListViewEvents.Failure    -> showFailure(it.throwable)
                         is RoomListViewEvents.SelectRoom -> openSelectedRoom(it)
-                    }
+                    }.exhaustive
                 }
                 .disposeOnDestroyView()
 

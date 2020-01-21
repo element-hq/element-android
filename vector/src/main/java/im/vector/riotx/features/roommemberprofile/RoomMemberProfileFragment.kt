@@ -32,6 +32,7 @@ import im.vector.riotx.core.animations.AppBarStateChangeListener
 import im.vector.riotx.core.animations.MatrixItemAppBarStateChangeListener
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.core.platform.StateView
 import im.vector.riotx.core.platform.VectorBaseFragment
@@ -88,7 +89,7 @@ class RoomMemberProfileFragment @Inject constructor(
                         is RoomMemberProfileViewEvents.Loading               -> showLoading(it.message)
                         is RoomMemberProfileViewEvents.Failure               -> showFailure(it.throwable)
                         is RoomMemberProfileViewEvents.OnIgnoreActionSuccess -> Unit
-                    }
+                    }.exhaustive
                 }
                 .disposeOnDestroyView()
     }

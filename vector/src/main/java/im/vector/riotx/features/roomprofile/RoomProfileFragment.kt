@@ -31,6 +31,7 @@ import im.vector.riotx.core.animations.AppBarStateChangeListener
 import im.vector.riotx.core.animations.MatrixItemAppBarStateChangeListener
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.home.AvatarRenderer
@@ -87,7 +88,7 @@ class RoomProfileFragment @Inject constructor(
                         is RoomProfileViewEvents.Loading            -> showLoading(it.message)
                         is RoomProfileViewEvents.Failure            -> showFailure(it.throwable)
                         is RoomProfileViewEvents.OnLeaveRoomSuccess -> onLeaveRoom()
-                    }
+                    }.exhaustive
                 }
                 .disposeOnDestroyView()
         roomListQuickActionsSharedActionViewModel

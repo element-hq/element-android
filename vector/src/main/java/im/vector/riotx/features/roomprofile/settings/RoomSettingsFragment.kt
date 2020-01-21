@@ -27,6 +27,7 @@ import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.roomprofile.RoomProfileArgs
@@ -61,7 +62,7 @@ class RoomSettingsFragment @Inject constructor(
                     dismissLoadingDialog()
                     when (it) {
                         is RoomSettingsViewEvents.Failure -> showFailure(it.throwable)
-                    }
+                    }.exhaustive
                 }
                 .disposeOnDestroyView()
     }

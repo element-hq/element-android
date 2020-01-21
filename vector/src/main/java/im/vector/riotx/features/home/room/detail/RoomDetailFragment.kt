@@ -85,6 +85,7 @@ import im.vector.riotx.R
 import im.vector.riotx.core.dialogs.withColoredButton
 import im.vector.riotx.core.epoxy.LayoutManagerStateRestorer
 import im.vector.riotx.core.extensions.cleanup
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.extensions.setTextOrHide
@@ -312,7 +313,7 @@ class RoomDetailFragment @Inject constructor(
                 .subscribe {
                     when (it) {
                         is RoomDetailViewEvents.Failure -> showErrorInSnackbar(it.throwable)
-                    }
+                    }.exhaustive
                 }
                 .disposeOnDestroyView()
     }

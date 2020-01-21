@@ -27,6 +27,7 @@ import com.airbnb.mvrx.withState
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.platform.VectorBaseFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -58,7 +59,7 @@ class VectorSettingsIgnoredUsersFragment @Inject constructor(
                     when (it) {
                         is IgnoredUsersViewEvents.Loading -> showLoading(it.message)
                         is IgnoredUsersViewEvents.Failure -> showFailure(it.throwable)
-                    }
+                    }.exhaustive
                 }
                 .disposeOnDestroyView()
     }

@@ -31,6 +31,7 @@ import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.platform.VectorBaseFragment
@@ -70,7 +71,7 @@ class VectorSettingsDevicesFragment @Inject constructor(
                     when (it) {
                         is DevicesViewEvents.Loading -> showLoading(it.message)
                         is DevicesViewEvents.Failure -> showFailure(it.throwable)
-                    }
+                    }.exhaustive
                 }
                 .disposeOnDestroyView()
         viewModel.requestPasswordLiveData.observeEvent(this) {
