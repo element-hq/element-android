@@ -24,6 +24,7 @@ import im.vector.matrix.android.api.failure.shouldBeRetried
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.internal.crypto.tasks.SendVerificationMessageTask
+import im.vector.matrix.android.internal.worker.SessionWorkerParams
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import im.vector.matrix.android.internal.worker.getSessionComponent
 import timber.log.Timber
@@ -34,9 +35,10 @@ internal class SendVerificationMessageWorker constructor(context: Context, param
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
-            val userId: String,
-            val event: Event
-    )
+            override val sessionId: String,
+            val event: Event,
+            override val lastFailureMessage: String? = null
+    ) : SessionWorkerParams
 
     @Inject
     lateinit var sendVerificationMessageTask: SendVerificationMessageTask
@@ -49,10 +51,10 @@ internal class SendVerificationMessageWorker constructor(context: Context, param
         val params = WorkerParamsFactory.fromData<Params>(inputData)
                 ?: return Result.success(errorOutputData)
 
-        val sessionComponent = getSessionComponent(params.userId)
+        val sessionComponent = getSessionComponent(params.sessionId)
                 ?: return Result.success(errorOutputData).also {
                     // TODO, can this happen? should I update local echo?
-                    Timber.e("Unknown Session, cannot send message, userId:${params.userId}")
+                    Timber.e("Unknown Session, cannot send message, sessionId: ${params.sessionId}")
                 }
         sessionComponent.inject(this)
         val localId = params.event.eventId ?: ""

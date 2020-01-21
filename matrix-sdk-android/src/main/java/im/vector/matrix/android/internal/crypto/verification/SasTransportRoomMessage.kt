@@ -15,7 +15,6 @@
  */
 package im.vector.matrix.android.internal.crypto.verification
 
-import android.content.Context
 import androidx.lifecycle.Observer
 import androidx.work.*
 import com.zhuinden.monarchy.Monarchy
@@ -25,9 +24,12 @@ import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTxState
 import im.vector.matrix.android.api.session.events.model.*
 import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultContent
-import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationStart
+import im.vector.matrix.android.internal.di.DeviceId
+import im.vector.matrix.android.internal.di.SessionId
+import im.vector.matrix.android.internal.di.UserId
+import im.vector.matrix.android.internal.di.WorkManagerProvider
 import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
-import im.vector.matrix.android.internal.worker.WorkManagerUtil
+import im.vector.matrix.android.internal.util.StringProvider
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -38,9 +40,11 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 internal class SasTransportRoomMessage(
-        private val context: Context,
+        private val workManagerProvider: WorkManagerProvider,
+        private val stringProvider: StringProvider,
+        private val sessionId: String,
         private val userId: String,
-        private val userDevice: String,
+        private val userDeviceId: String?,
         private val roomId: String,
         private val monarchy: Monarchy,
         private val localEchoEventFactory: LocalEchoEventFactory,
@@ -61,7 +65,7 @@ internal class SasTransportRoomMessage(
         )
 
         val workerParams = WorkerParamsFactory.toData(SendVerificationMessageWorker.Params(
-                userId = userId,
+                sessionId = sessionId,
                 event = event
         ))
         val enqueueInfo = enqueueSendWork(workerParams)
@@ -84,7 +88,8 @@ internal class SasTransportRoomMessage(
 //            }
 //        }, listenerExecutor)
 
-        val workLiveData = WorkManager.getInstance(context).getWorkInfosForUniqueWorkLiveData("${roomId}_VerificationWork")
+        val workLiveData = workManagerProvider.workManager
+                .getWorkInfosForUniqueWorkLiveData("${roomId}_VerificationWork")
 
         val observer = object : Observer<List<WorkInfo>> {
             override fun onChanged(workInfoList: List<WorkInfo>?) {
@@ -113,13 +118,16 @@ internal class SasTransportRoomMessage(
         }
     }
 
-    override fun sendVerificationRequest(localID: String, otherUserId: String, roomId: String,
+    override fun sendVerificationRequest(supportedMethods: List<String>,
+                                         localID: String,
+                                         otherUserId: String,
+                                         roomId: String,
                                          callback: (String?, MessageVerificationRequestContent?) -> Unit) {
         val info = MessageVerificationRequestContent(
-                body = context.getString(R.string.key_verification_request_fallback_message, userId),
-                fromDevice = userDevice,
+                body = stringProvider.getString(R.string.key_verification_request_fallback_message, userId),
+                fromDevice = userDeviceId ?: "",
                 toUserId = otherUserId,
-                methods = listOf(KeyVerificationStart.VERIF_METHOD_SAS)
+                methods = supportedMethods
         )
         val content = info.toContent()
 
@@ -131,24 +139,25 @@ internal class SasTransportRoomMessage(
         )
 
         val workerParams = WorkerParamsFactory.toData(SendVerificationMessageWorker.Params(
-                userId = userId,
+                sessionId = sessionId,
                 event = event
         ))
 
-        val workRequest = WorkManagerUtil.matrixOneTimeWorkRequestBuilder<SendVerificationMessageWorker>()
-                .setConstraints(WorkManagerUtil.workConstraints)
+        val workRequest = workManagerProvider.matrixOneTimeWorkRequestBuilder<SendVerificationMessageWorker>()
+                .setConstraints(WorkManagerProvider.workConstraints)
                 .setInputData(workerParams)
                 .setBackoffCriteria(BackoffPolicy.LINEAR, 2_000L, TimeUnit.MILLISECONDS)
                 .build()
 
-        WorkManager.getInstance(context)
+        workManagerProvider.workManager
                 .beginUniqueWork("${roomId}_VerificationWork", ExistingWorkPolicy.APPEND, workRequest)
                 .enqueue()
 
         // I cannot just listen to the given work request, because when used in a uniqueWork,
         // The callback is called while it is still Running ...
 
-        val workLiveData = WorkManager.getInstance(context).getWorkInfosForUniqueWorkLiveData("${roomId}_VerificationWork")
+        val workLiveData = workManagerProvider.workManager
+                .getWorkInfosForUniqueWorkLiveData("${roomId}_VerificationWork")
 
         val observer = object : Observer<List<WorkInfo>> {
             override fun onChanged(workInfoList: List<WorkInfo>?) {
@@ -174,7 +183,7 @@ internal class SasTransportRoomMessage(
         }
     }
 
-    override fun cancelTransaction(transactionId: String, otherUserId: String, otherUserDevice: String, code: CancelCode) {
+    override fun cancelTransaction(transactionId: String, otherUserId: String, otherUserDeviceId: String, code: CancelCode) {
         Timber.d("## SAS canceling transaction $transactionId for reason $code")
         val event = createEventAndLocalEcho(
                 type = EventType.KEY_VERIFICATION_CANCEL,
@@ -182,7 +191,7 @@ internal class SasTransportRoomMessage(
                 content = MessageVerificationCancelContent.create(transactionId, code).toContent()
         )
         val workerParams = WorkerParamsFactory.toData(SendVerificationMessageWorker.Params(
-                userId = this.userId,
+                sessionId = sessionId,
                 event = event
         ))
         enqueueSendWork(workerParams)
@@ -200,19 +209,19 @@ internal class SasTransportRoomMessage(
                 ).toContent()
         )
         val workerParams = WorkerParamsFactory.toData(SendVerificationMessageWorker.Params(
-                userId = userId,
+                sessionId = sessionId,
                 event = event
         ))
         enqueueSendWork(workerParams)
     }
 
     private fun enqueueSendWork(workerParams: Data): Pair<Operation, UUID> {
-        val workRequest = WorkManagerUtil.matrixOneTimeWorkRequestBuilder<SendVerificationMessageWorker>()
-                .setConstraints(WorkManagerUtil.workConstraints)
+        val workRequest = workManagerProvider.matrixOneTimeWorkRequestBuilder<SendVerificationMessageWorker>()
+                .setConstraints(WorkManagerProvider.workConstraints)
                 .setInputData(workerParams)
                 .setBackoffCriteria(BackoffPolicy.LINEAR, 2_000L, TimeUnit.MILLISECONDS)
                 .build()
-        return WorkManager.getInstance(context)
+        return workManagerProvider.workManager
                 .beginUniqueWork("${roomId}_VerificationWork", ExistingWorkPolicy.APPEND, workRequest)
                 .enqueue() to workRequest.id
     }
@@ -284,12 +293,18 @@ internal class SasTransportRoomMessage(
 }
 
 internal class SasTransportRoomMessageFactory @Inject constructor(
-        private val context: Context,
+        private val workManagerProvider: WorkManagerProvider,
+        private val stringProvider: StringProvider,
         private val monarchy: Monarchy,
+        @SessionId
+        private val sessionId: String,
+        @UserId
+        private val userId: String,
+        @DeviceId
+        private val deviceId: String?,
         private val localEchoEventFactory: LocalEchoEventFactory) {
 
-    fun createTransport(userId: String, userDevice: String, roomId: String, tx: SASVerificationTransaction?
-    ): SasTransportRoomMessage {
-        return SasTransportRoomMessage(context, userId, userDevice, roomId, monarchy, localEchoEventFactory, tx)
+    fun createTransport(roomId: String, tx: SASVerificationTransaction?): SasTransportRoomMessage {
+        return SasTransportRoomMessage(workManagerProvider, stringProvider, sessionId, userId, deviceId, roomId, monarchy, localEchoEventFactory, tx)
     }
 }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.riotx.features.crypto.verification
+package im.vector.riotx.features.crypto.verification.conclusion
 
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
@@ -23,7 +23,7 @@ import im.vector.matrix.android.api.session.crypto.sas.safeValueOf
 import im.vector.riotx.core.platform.EmptyAction
 import im.vector.riotx.core.platform.VectorViewModel
 
-data class SASVerificationConclusionViewState(
+data class VerificationConclusionViewState(
         val conclusionState: ConclusionState = ConclusionState.CANCELLED
 ) : MvRxState
 
@@ -33,22 +33,22 @@ enum class ConclusionState {
     CANCELLED
 }
 
-class VerificationConclusionViewModel(initialState: SASVerificationConclusionViewState)
-    : VectorViewModel<SASVerificationConclusionViewState, EmptyAction>(initialState) {
+class VerificationConclusionViewModel(initialState: VerificationConclusionViewState)
+    : VectorViewModel<VerificationConclusionViewState, EmptyAction>(initialState) {
 
-    companion object : MvRxViewModelFactory<VerificationConclusionViewModel, SASVerificationConclusionViewState> {
+    companion object : MvRxViewModelFactory<VerificationConclusionViewModel, VerificationConclusionViewState> {
 
-        override fun initialState(viewModelContext: ViewModelContext): SASVerificationConclusionViewState? {
+        override fun initialState(viewModelContext: ViewModelContext): VerificationConclusionViewState? {
             val args = viewModelContext.args<VerificationConclusionFragment.Args>()
 
             return when (safeValueOf(args.cancelReason)) {
                 CancelCode.MismatchedSas,
                 CancelCode.MismatchedCommitment,
                 CancelCode.MismatchedKeys -> {
-                    SASVerificationConclusionViewState(ConclusionState.WARNING)
+                    VerificationConclusionViewState(ConclusionState.WARNING)
                 }
                 else                      -> {
-                    SASVerificationConclusionViewState(
+                    VerificationConclusionViewState(
                             if (args.isSuccessFull) ConclusionState.SUCCESS
                             else ConclusionState.CANCELLED
                     )

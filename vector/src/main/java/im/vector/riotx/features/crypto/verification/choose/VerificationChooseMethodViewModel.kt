@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.riotx.features.crypto.verification
+package im.vector.riotx.features.crypto.verification.choose
 
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxState
@@ -24,17 +24,18 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.sas.SasVerificationService
 import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTransaction
-import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationStart
+import im.vector.matrix.android.api.session.crypto.sas.VerificationMethod
 import im.vector.matrix.android.internal.crypto.verification.PendingVerificationRequest
 import im.vector.riotx.core.di.HasScreenInjector
 import im.vector.riotx.core.platform.EmptyAction
 import im.vector.riotx.core.platform.VectorViewModel
+import im.vector.riotx.features.crypto.verification.VerificationBottomSheet
 
 data class VerificationChooseMethodViewState(
         val otherUserId: String = "",
         val transactionId: String = "",
         val QRModeAvailable: Boolean = false,
-        val SASMOdeAvailable: Boolean = false
+        val SASModeAvailable: Boolean = false
 ) : MvRxState
 
 class VerificationChooseMethodViewModel @AssistedInject constructor(
@@ -48,15 +49,13 @@ class VerificationChooseMethodViewModel @AssistedInject constructor(
 
     override fun verificationRequestUpdated(pr: PendingVerificationRequest) = withState { state ->
         val pvr = session.getSasVerificationService().getExistingVerificationRequest(state.otherUserId, state.transactionId)
-        val qrAvailable = pvr?.readyInfo?.methods?.contains(KeyVerificationStart.VERIF_METHOD_SCAN)
-                ?: false
-        val emojiAvailable = pvr?.readyInfo?.methods?.contains(KeyVerificationStart.VERIF_METHOD_SAS)
-                ?: false
+        val qrAvailable = pvr?.hasMethod(VerificationMethod.SCAN) ?: false
+        val emojiAvailable = pvr?.hasMethod(VerificationMethod.SAS) ?: false
 
         setState {
             copy(
                     QRModeAvailable = qrAvailable,
-                    SASMOdeAvailable = emojiAvailable
+                    SASModeAvailable = emojiAvailable
             )
         }
     }
@@ -85,15 +84,13 @@ class VerificationChooseMethodViewModel @AssistedInject constructor(
             val args: VerificationBottomSheet.VerificationArgs = viewModelContext.args()
             val session = (viewModelContext.activity as HasScreenInjector).injector().activeSessionHolder().getActiveSession()
             val pvr = session.getSasVerificationService().getExistingVerificationRequest(args.otherUserId, args.verificationId)
-            val qrAvailable = pvr?.readyInfo?.methods?.contains(KeyVerificationStart.VERIF_METHOD_SCAN)
-                    ?: false
-            val emojiAvailable = pvr?.readyInfo?.methods?.contains(KeyVerificationStart.VERIF_METHOD_SAS)
-                    ?: false
+            val qrAvailable = pvr?.hasMethod(VerificationMethod.SCAN) ?: false
+            val emojiAvailable = pvr?.hasMethod(VerificationMethod.SAS) ?: false
 
             return VerificationChooseMethodViewState(otherUserId = args.otherUserId,
                     transactionId = args.verificationId ?: "",
                     QRModeAvailable = qrAvailable,
-                    SASMOdeAvailable = emojiAvailable
+                    SASModeAvailable = emojiAvailable
             )
         }
     }

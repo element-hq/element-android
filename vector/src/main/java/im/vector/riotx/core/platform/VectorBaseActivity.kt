@@ -102,9 +102,11 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
     private lateinit var sessionListener: SessionListener
     protected lateinit var bugReporter: BugReporter
     lateinit var rageShake: RageShake
+
+    lateinit var navigator: Navigator
         private set
-    protected lateinit var navigator: Navigator
     private lateinit var fragmentFactory: FragmentFactory
+
     private lateinit var activeSessionHolder: ActiveSessionHolder
     private lateinit var vectorPreferences: VectorPreferences
 
@@ -210,8 +212,8 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
                 handleInvalidToken(globalError)
             is GlobalError.ConsentNotGivenError ->
                 consentNotGivenHelper.displayDialog(globalError.consentUri,
-                                                    activeSessionHolder.getActiveSession().sessionParams.homeServerConnectionConfig.homeServerUri.host
-                                                    ?: "")
+                        activeSessionHolder.getActiveSession().sessionParams.homeServerConnectionConfig.homeServerUri.host
+                                ?: "")
         }
     }
 

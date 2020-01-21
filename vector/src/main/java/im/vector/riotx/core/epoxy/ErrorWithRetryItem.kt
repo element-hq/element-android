@@ -18,6 +18,7 @@ package im.vector.riotx.core.epoxy
 
 import android.widget.Button
 import android.widget.TextView
+import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
@@ -33,6 +34,7 @@ abstract class ErrorWithRetryItem : VectorEpoxyModel<ErrorWithRetryItem.Holder>(
 
     override fun bind(holder: Holder) {
         holder.textView.text = text
+        holder.buttonView.isVisible = listener != null
         holder.buttonView.setOnClickListener { listener?.invoke() }
     }
 

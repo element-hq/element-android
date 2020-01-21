@@ -15,51 +15,54 @@
  */
 package im.vector.matrix.android.internal.session.room.timeline
 
-import android.content.Context
 import androidx.work.*
-import im.vector.matrix.android.internal.worker.WorkManagerUtil
-import im.vector.matrix.android.internal.worker.WorkManagerUtil.matrixOneTimeWorkRequestBuilder
+import im.vector.matrix.android.api.util.Cancelable
+import im.vector.matrix.android.api.util.NoOpCancellable
+import im.vector.matrix.android.internal.di.WorkManagerProvider
+import im.vector.matrix.android.internal.util.CancelableWork
 import im.vector.matrix.android.internal.worker.startChain
 import java.util.concurrent.TimeUnit
-
-private const val SEND_WORK = "SEND_WORK"
-private const val BACKOFF_DELAY = 10_000L
+import javax.inject.Inject
 
 /**
  * Helper class for sending event related works.
  * All send event from a room are using the same workchain, in order to ensure order.
- * WorkRequest must always return success (even if server error, in this case marking the event as failed to send)
- * , if not the chain will be doomed in failed state.
- *
+ * WorkRequest must always return success (even if server error, in this case marking the event as failed to send),
+ * if not the chain will be doomed in failed state.
  */
-internal object TimelineSendEventWorkCommon {
+internal class TimelineSendEventWorkCommon @Inject constructor(
+        private val workManagerProvider: WorkManagerProvider
+) {
 
-    fun postSequentialWorks(context: Context, roomId: String, vararg workRequests: OneTimeWorkRequest) {
-        when {
-            workRequests.isEmpty() -> return
-            workRequests.size == 1 -> postWork(context, roomId, workRequests.first())
+    fun postSequentialWorks(roomId: String, vararg workRequests: OneTimeWorkRequest): Cancelable {
+        return when {
+            workRequests.isEmpty() -> NoOpCancellable
+            workRequests.size == 1 -> postWork(roomId, workRequests.first())
             else                   -> {
                 val firstWork = workRequests.first()
-                var continuation = WorkManager.getInstance(context)
+                var continuation = workManagerProvider.workManager
                         .beginUniqueWork(buildWorkName(roomId), ExistingWorkPolicy.APPEND, firstWork)
                 for (i in 1 until workRequests.size) {
                     val workRequest = workRequests[i]
                     continuation = continuation.then(workRequest)
                 }
                 continuation.enqueue()
+                CancelableWork(workManagerProvider.workManager, firstWork.id)
             }
         }
     }
 
-    fun postWork(context: Context, roomId: String, workRequest: OneTimeWorkRequest, policy: ExistingWorkPolicy = ExistingWorkPolicy.APPEND) {
-        WorkManager.getInstance(context)
+    fun postWork(roomId: String, workRequest: OneTimeWorkRequest, policy: ExistingWorkPolicy = ExistingWorkPolicy.APPEND): Cancelable {
+        workManagerProvider.workManager
                 .beginUniqueWork(buildWorkName(roomId), policy, workRequest)
                 .enqueue()
+
+        return CancelableWork(workManagerProvider.workManager, workRequest.id)
     }
 
     inline fun <reified W : ListenableWorker> createWork(data: Data, startChain: Boolean): OneTimeWorkRequest {
-        return matrixOneTimeWorkRequestBuilder<W>()
-                .setConstraints(WorkManagerUtil.workConstraints)
+        return workManagerProvider.matrixOneTimeWorkRequestBuilder<W>()
+                .setConstraints(WorkManagerProvider.workConstraints)
                 .startChain(startChain)
                 .setInputData(data)
                 .setBackoffCriteria(BackoffPolicy.LINEAR, BACKOFF_DELAY, TimeUnit.MILLISECONDS)
@@ -70,7 +73,13 @@ internal object TimelineSendEventWorkCommon {
         return "${roomId}_$SEND_WORK"
     }
 
-    fun cancelAllWorks(context: Context, roomId: String) {
-        WorkManager.getInstance(context).cancelUniqueWork(buildWorkName(roomId))
+    fun cancelAllWorks(roomId: String) {
+        workManagerProvider.workManager
+                .cancelUniqueWork(buildWorkName(roomId))
+    }
+
+    companion object {
+        private const val SEND_WORK = "SEND_WORK"
+        private const val BACKOFF_DELAY = 10_000L
     }
 }

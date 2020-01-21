@@ -21,13 +21,9 @@ import com.airbnb.mvrx.*
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.crypto.sas.CancelCode
-import im.vector.matrix.android.api.session.crypto.sas.SasVerificationService
-import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTransaction
-import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTxState
+import im.vector.matrix.android.api.session.crypto.sas.*
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
-import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationStart
 import im.vector.matrix.android.internal.crypto.verification.PendingVerificationRequest
 import im.vector.riotx.core.di.HasScreenInjector
 import im.vector.riotx.core.platform.VectorViewModel
@@ -108,7 +104,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
             is VerificationAction.RequestVerificationByDM -> {
 //                session
                 setState {
-                    copy(pendingRequest = session.getSasVerificationService().requestKeyVerificationInDMs(otherUserId, roomId))
+                    copy(pendingRequest = session.getSasVerificationService().requestKeyVerificationInDMs(supportedVerificationMethods, otherUserId, roomId))
                 }
             }
             is VerificationAction.StartSASVerification    -> {
@@ -117,7 +113,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
 
                 val otherDevice = if (request.isIncoming) request.requestInfo?.fromDevice else request.readyInfo?.fromDevice
                 session.getSasVerificationService().beginKeyVerificationInDMs(
-                        KeyVerificationStart.VERIF_METHOD_SAS,
+                        VerificationMethod.SAS,
                         transactionId = action.pendingRequestTransactionId,
                         roomId = roomId,
                         otherUserId = request.otherUserId,

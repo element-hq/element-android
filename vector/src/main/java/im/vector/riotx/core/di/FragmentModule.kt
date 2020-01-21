@@ -23,7 +23,10 @@ import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupSettingsFragment
-import im.vector.riotx.features.crypto.verification.*
+import im.vector.riotx.features.crypto.verification.choose.VerificationChooseMethodFragment
+import im.vector.riotx.features.crypto.verification.conclusion.VerificationConclusionFragment
+import im.vector.riotx.features.crypto.verification.emoji.VerificationEmojiCodeFragment
+import im.vector.riotx.features.crypto.verification.request.VerificationRequestFragment
 import im.vector.riotx.features.home.HomeDetailFragment
 import im.vector.riotx.features.home.HomeDrawerFragment
 import im.vector.riotx.features.home.LoadingFragment
@@ -241,26 +244,6 @@ interface FragmentModule {
 
     @Binds
     @IntoMap
-    @FragmentKey(SASVerificationIncomingFragment::class)
-    fun bindSASVerificationIncomingFragment(fragment: SASVerificationIncomingFragment): Fragment
-
-    @Binds
-    @IntoMap
-    @FragmentKey(SASVerificationShortCodeFragment::class)
-    fun bindSASVerificationShortCodeFragment(fragment: SASVerificationShortCodeFragment): Fragment
-
-    @Binds
-    @IntoMap
-    @FragmentKey(SASVerificationVerifiedFragment::class)
-    fun bindSASVerificationVerifiedFragment(fragment: SASVerificationVerifiedFragment): Fragment
-
-    @Binds
-    @IntoMap
-    @FragmentKey(SASVerificationStartFragment::class)
-    fun bindSASVerificationStartFragment(fragment: SASVerificationStartFragment): Fragment
-
-    @Binds
-    @IntoMap
     @FragmentKey(PublicRoomsFragment::class)
     fun bindPublicRoomsFragment(fragment: PublicRoomsFragment): Fragment
 
@@ -302,15 +285,15 @@ interface FragmentModule {
     @Binds
     @IntoMap
     @FragmentKey(VerificationChooseMethodFragment::class)
-    fun bindVerificationMethodChooserFragment(fragment: VerificationChooseMethodFragment): Fragment
+    fun bindVerificationChooseMethodFragment(fragment: VerificationChooseMethodFragment): Fragment
 
     @Binds
     @IntoMap
-    @FragmentKey(SASVerificationCodeFragment::class)
-    fun bindVerificationSasCodeFragment(fragment: SASVerificationCodeFragment): Fragment
+    @FragmentKey(VerificationEmojiCodeFragment::class)
+    fun bindVerificationEmojiCodeFragment(fragment: VerificationEmojiCodeFragment): Fragment
 
     @Binds
     @IntoMap
     @FragmentKey(VerificationConclusionFragment::class)
-    fun bindVerificationSasConclusionFragment(fragment: VerificationConclusionFragment): Fragment
+    fun bindVerificationConclusionFragment(fragment: VerificationConclusionFragment): Fragment
 }

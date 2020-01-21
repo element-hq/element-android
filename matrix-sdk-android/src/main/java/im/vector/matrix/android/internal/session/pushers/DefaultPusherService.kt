@@ -15,10 +15,8 @@
  */
 package im.vector.matrix.android.internal.session.pushers
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.work.BackoffPolicy
-import androidx.work.WorkManager
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.pushers.Pusher
@@ -27,17 +25,16 @@ import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.PusherEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.SessionId
+import im.vector.matrix.android.internal.di.WorkManagerProvider
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
-import im.vector.matrix.android.internal.worker.WorkManagerUtil
-import im.vector.matrix.android.internal.worker.WorkManagerUtil.matrixOneTimeWorkRequestBuilder
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 internal class DefaultPusherService @Inject constructor(
-        private val context: Context,
+        private val workManagerProvider: WorkManagerProvider,
         private val monarchy: Monarchy,
         @SessionId private val sessionId: String,
         private val getPusherTask: GetPushersTask,
@@ -68,12 +65,12 @@ internal class DefaultPusherService @Inject constructor(
 
         val params = AddHttpPusherWorker.Params(sessionId, pusher)
 
-        val request = matrixOneTimeWorkRequestBuilder<AddHttpPusherWorker>()
-                .setConstraints(WorkManagerUtil.workConstraints)
+        val request = workManagerProvider.matrixOneTimeWorkRequestBuilder<AddHttpPusherWorker>()
+                .setConstraints(WorkManagerProvider.workConstraints)
                 .setInputData(WorkerParamsFactory.toData(params))
                 .setBackoffCriteria(BackoffPolicy.LINEAR, 10_000L, TimeUnit.MILLISECONDS)
                 .build()
-        WorkManager.getInstance(context).enqueue(request)
+        workManagerProvider.workManager.enqueue(request)
         return request.id
     }
 

@@ -19,10 +19,16 @@ import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.annotation.CallSuper
+import androidx.annotation.LayoutRes
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import butterknife.ButterKnife
+import butterknife.Unbinder
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.MvRxView
 import com.airbnb.mvrx.MvRxViewId
@@ -42,6 +48,15 @@ abstract class VectorBaseBottomSheetDialogFragment : BottomSheetDialogFragment()
     private val mvrxViewIdProperty = MvRxViewId()
     final override val mvrxViewId: String by mvrxViewIdProperty
     private lateinit var screenComponent: ScreenComponent
+
+    /* ==========================================================================================
+     * View
+     * ========================================================================================== */
+
+    @LayoutRes
+    abstract fun getLayoutResId(): Int
+
+    private var unBinder: Unbinder? = null
 
     /* ==========================================================================================
      * View model
@@ -66,6 +81,18 @@ abstract class VectorBaseBottomSheetDialogFragment : BottomSheetDialogFragment()
     }
 
     open val showExpanded = false
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(getLayoutResId(), container, false)
+        unBinder = ButterKnife.bind(this, view)
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        unBinder?.unbind()
+        unBinder = null
+    }
 
     override fun onAttach(context: Context) {
         screenComponent = DaggerScreenComponent.factory().create(vectorBaseActivity.getVectorComponent(), vectorBaseActivity)

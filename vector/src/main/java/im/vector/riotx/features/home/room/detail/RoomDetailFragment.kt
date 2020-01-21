@@ -54,6 +54,7 @@ import com.airbnb.epoxy.OnModelBuildFinishedListener
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
@@ -74,6 +75,7 @@ import im.vector.matrix.android.api.session.room.model.message.MessageFileConten
 import im.vector.matrix.android.api.session.room.model.message.MessageImageInfoContent
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
+import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
 import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.Timeline
@@ -849,6 +851,15 @@ class RoomDetailFragment @Inject constructor(
                                 data.transactionId
                         ).show(parentFragmentManager, "REQ")
                     }
+                    is RoomDetailAction.ResumeVerification        -> {
+                        val otherUserId = data.otherUserId ?: return
+                        VerificationBottomSheet().apply {
+                            arguments = Bundle().apply {
+                                putParcelable(MvRx.KEY_ARG, VerificationBottomSheet.VerificationArgs(
+                                        otherUserId, data.transactionId, roomId = roomDetailArgs.roomId))
+                            }
+                        }.show(parentFragmentManager, "REQ")
+                    }
                 }
             }
         }
@@ -998,6 +1009,9 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onEventCellClicked(informationData: MessageInformationData, messageContent: MessageContent?, view: View) {
+        if (messageContent is MessageVerificationRequestContent) {
+            roomDetailViewModel.handle(RoomDetailAction.ResumeVerification(informationData.eventId))
+        }
     }
 
     override fun onEventLongClicked(informationData: MessageInformationData, messageContent: MessageContent?, view: View): Boolean {

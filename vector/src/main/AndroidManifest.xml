@@ -48,9 +48,6 @@
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".features.media.VideoMediaViewerActivity" />
         <activity
-            android:name=".features.crypto.verification.SASVerificationActivity"
-            android:label="@string/title_activity_verify_device" />
-        <activity
             android:name=".features.crypto.keysbackup.restore.KeysBackupRestoreActivity"
             android:label="@string/title_activity_keys_backup_setup" />
         <activity
