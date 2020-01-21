@@ -34,6 +34,9 @@
 
     <string name="unignore">Unignore</string>
 
+    <string name="room_list_sharing_header_recent_rooms">Recent rooms</string>
+    <string name="room_list_sharing_header_other_rooms">Other rooms</string>
+
     <!-- Title for category in the settings which affect what is displayed in the timeline (ex: show read receipts, etc.) -->
     <string name="settings_category_timeline">Timeline</string>
 

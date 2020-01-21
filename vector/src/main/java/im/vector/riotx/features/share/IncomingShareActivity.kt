@@ -44,7 +44,9 @@ class IncomingShareActivity :
     @Inject lateinit var sessionHolder: ActiveSessionHolder
     @Inject lateinit var incomingShareViewModelFactory: IncomingShareViewModel.Factory
     private lateinit var attachmentsHelper: AttachmentsHelper
-    private val incomingShareViewModel: IncomingShareViewModel by viewModel()
+    // Do not remove, even if not used, it instantiates the view model
+    @Suppress("unused")
+    private val viewModel: IncomingShareViewModel by viewModel()
     private val roomListFragment: RoomListFragment?
         get() {
             return supportFragmentManager.findFragmentById(R.id.shareRoomListFragmentContainer) as? RoomListFragment
