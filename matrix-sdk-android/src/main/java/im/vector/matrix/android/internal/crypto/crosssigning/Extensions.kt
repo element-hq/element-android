@@ -15,6 +15,7 @@
  */
 package im.vector.matrix.android.internal.crypto.crosssigning
 
+import android.util.Base64
 import im.vector.matrix.android.internal.crypto.model.CryptoCrossSigningKey
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.util.JsonCanonicalizer
@@ -25,4 +26,8 @@ fun CryptoDeviceInfo.canonicalSignable(): String {
 
 fun CryptoCrossSigningKey.canonicalSignable(): String {
     return JsonCanonicalizer.getCanonicalJson(Map::class.java, signalableJSONDictionary())
+}
+
+fun ByteArray.toBase64NoPadding() : String? {
+    return Base64.encodeToString(this, Base64.NO_PADDING)
 }

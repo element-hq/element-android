@@ -45,6 +45,9 @@ class XSigningTest : InstrumentedTest {
 
         assertTrue("Signing Keys should be trusted", myCrossSigningKeys?.isTrusted == true)
 
+        assertTrue("Signing Keys should be trusted", aliceSession.getCrossSigningService().checkUserTrust(aliceSession.myUserId).isVerified())
+
+
         mTestHelper.signout(aliceSession)
     }
 

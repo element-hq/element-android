@@ -38,11 +38,15 @@ import im.vector.matrix.android.internal.crypto.tasks.UploadSignaturesTask
 import im.vector.matrix.android.internal.crypto.tasks.UploadSigningKeysTask
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.di.UserId
+import im.vector.matrix.android.internal.extensions.foldToCallback
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.TaskConstraints
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.JsonCanonicalizer
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import org.matrix.olm.OlmPkSigning
 import org.matrix.olm.OlmUtility
 import timber.log.Timber
@@ -58,6 +62,8 @@ internal class DefaultCrossSigningService @Inject constructor(
         private val deviceListManager: DeviceListManager,
         private val uploadSigningKeysTask: UploadSigningKeysTask,
         private val uploadSignaturesTask: UploadSignaturesTask,
+        private val cryptoCoroutineScope: CoroutineScope,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val taskExecutor: TaskExecutor) : CrossSigningService {
 
     private var olmUtility: OlmUtility? = null
@@ -200,6 +206,7 @@ internal class DefaultCrossSigningService @Inject constructor(
         val crossSigningInfo = MXCrossSigningInfo(myUserID, listOf(params.masterKey, params.userKey, params.selfSignedKey))
         cryptoStore.setMyCrossSigningInfo(crossSigningInfo)
         cryptoStore.setUserKeysAsTrusted(myUserID)
+        cryptoStore.storePrivateKeysInfo(masterKeyPrivateKey?.toBase64NoPadding(), uskPrivateKey?.toBase64NoPadding(), sskPrivateKey?.toBase64NoPadding())
 
         // TODO we should ensure that they are sent
         // TODO error handling?
@@ -244,6 +251,21 @@ internal class DefaultCrossSigningService @Inject constructor(
                         this.callback = object : MatrixCallback<SignatureUploadResponse> {
                             override fun onSuccess(data: SignatureUploadResponse) {
                                 Timber.i("## CrossSigning - signatures succesfuly uploaded")
+
+                                // Force download of my keys now
+                                kotlin.runCatching {
+                                    cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+                                        deviceListManager.downloadKeys(listOf(myUserID), true)
+                                    }
+                                }.foldToCallback(object : MatrixCallback<Any> {
+                                    override fun onSuccess(data: Any) {
+                                        callback?.onSuccess(Unit)
+                                    }
+
+                                    override fun onFailure(failure: Throwable) {
+                                        callback?.onFailure(failure)
+                                    }
+                                })
                             }
 
                             override fun onFailure(failure: Throwable) {
@@ -253,7 +275,6 @@ internal class DefaultCrossSigningService @Inject constructor(
                     }.executeBy(taskExecutor)
 
                     crossSigningState = CrossSigningState.Trusted
-                    callback?.onSuccess(Unit)
                 }
 
                 override fun onFailure(failure: Throwable) {
@@ -291,6 +312,9 @@ internal class DefaultCrossSigningService @Inject constructor(
      */
     override fun checkUserTrust(userId: String): UserTrustResult {
         Timber.d("## CrossSigning  checkUserTrust for $userId")
+        if (userId == credentials.userId) {
+            return checkSelfTrust()
+        }
         // I trust a user if I trust his master key
         // I can trust the master key if it is signed by my user key
         // TODO what if the master key is signed by a device key that i have verified
@@ -323,6 +347,96 @@ internal class DefaultCrossSigningService @Inject constructor(
             olmUtility!!.verifyEd25519Signature(masterKeySignaturesMadeByMyUserKey, myUserKey.unpaddedBase64PublicKey, otherMasterKey.canonicalSignable())
         } catch (failure: Throwable) {
             return UserTrustResult.InvalidSignature(myUserKey, masterKeySignaturesMadeByMyUserKey)
+        }
+
+        return UserTrustResult.Success
+    }
+
+    private fun checkSelfTrust(): UserTrustResult {
+        // Special case when it's me,
+        // I have to check that MSK -> USK -> SSK
+        // and that MSK is trusted (i know the private key, or is signed by a trusted device)
+
+        val myUserId = credentials.userId
+        val myCrossSigningInfo = cryptoStore.getCrossSigningInfo(myUserId)
+
+        val myMasterKey = myCrossSigningInfo?.masterKey()
+                ?: return UserTrustResult.CrossSigningNotConfigured(myUserId)
+
+        // Is the master key trusted
+        // 1) check if I know the private key
+        val masterPrivateKey = cryptoStore.getCrossSigningPrivateKeys()?.master
+
+        var isMaterKeyTrusted = false
+        if (masterPrivateKey != null) {
+            // Check if private match public
+            var olmPkSigning: OlmPkSigning? = null
+            try {
+                olmPkSigning = OlmPkSigning()
+                val expectedPK = olmPkSigning.initWithSeed(Base64.decode(masterPrivateKey, Base64.NO_PADDING))
+                isMaterKeyTrusted = myMasterKey.unpaddedBase64PublicKey == expectedPK
+            } catch (failure: Throwable) {
+                olmPkSigning?.releaseSigning()
+            }
+        } else {
+            // Maybe it's signed by a locally trusted device?
+            myMasterKey.signatures?.get(myUserId)?.forEach { (key, value) ->
+                val potentialDeviceId = if (key.startsWith("ed25519:")) key.substring("ed25519:".length) else key
+                val potentialDevice = cryptoStore.getUserDevice(myUserId, potentialDeviceId)
+                if (potentialDevice != null && potentialDevice.isVerified) {
+                    // Check signature validity?
+                    try {
+                        olmUtility?.verifyEd25519Signature(value, potentialDevice.fingerprint(), myMasterKey.canonicalSignable())
+                        isMaterKeyTrusted = true
+                        return@forEach
+                    } catch (failure: Throwable) {
+                        // log
+                        Timber.v(failure)
+                    }
+                }
+            }
+        }
+
+        if (!isMaterKeyTrusted) {
+            return UserTrustResult.KeysNotTrusted(myCrossSigningInfo)
+        }
+
+        val myUserKey = myCrossSigningInfo.userKey()
+                ?: return UserTrustResult.CrossSigningNotConfigured(myUserId)
+
+        val userKeySignaturesMadeByMyMasterKey = myUserKey.signatures
+                ?.get(myUserId) // Signatures made by me
+                ?.get("ed25519:${myMasterKey.unpaddedBase64PublicKey}")
+
+        if (userKeySignaturesMadeByMyMasterKey.isNullOrBlank()) {
+            Timber.d("## CrossSigning  checkUserTrust false for $userId, USK not signed by MSK")
+            return UserTrustResult.KeyNotSigned(myUserKey)
+        }
+
+        // Check that Alice USK signature of Alice MSK is valid
+        try {
+            olmUtility!!.verifyEd25519Signature(userKeySignaturesMadeByMyMasterKey, myMasterKey.unpaddedBase64PublicKey, myUserKey.canonicalSignable())
+        } catch (failure: Throwable) {
+            return UserTrustResult.InvalidSignature(myUserKey, userKeySignaturesMadeByMyMasterKey)
+        }
+
+        val mySSKey = myCrossSigningInfo.selfSigningKey()
+                ?: return UserTrustResult.CrossSigningNotConfigured(myUserId)
+
+        val SSKeySignaturesMadeByMyMasterKey = mySSKey.signatures
+                ?.get(myUserId) // Signatures made by me
+                ?.get("ed25519:${myMasterKey.unpaddedBase64PublicKey}")
+
+        if (SSKeySignaturesMadeByMyMasterKey.isNullOrBlank()) {
+            Timber.d("## CrossSigning  checkUserTrust false for $userId, SSK not signed by MSK")
+            return UserTrustResult.KeyNotSigned(mySSKey)
+        }
+
+        // Check that Alice USK signature of Alice MSK is valid
+        try {
+            olmUtility!!.verifyEd25519Signature(SSKeySignaturesMadeByMyMasterKey, myMasterKey.unpaddedBase64PublicKey, mySSKey.canonicalSignable())
+        } catch (failure: Throwable) {
+            return UserTrustResult.InvalidSignature(mySSKey, SSKeySignaturesMadeByMyMasterKey)
         }
 
         return UserTrustResult.Success
