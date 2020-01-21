@@ -20,7 +20,12 @@ package im.vector.riotx.features.roommemberprofile
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
-import com.airbnb.mvrx.*
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.Incomplete
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.args
+import com.airbnb.mvrx.fragmentViewModel
+import com.airbnb.mvrx.withState
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.animations.AppBarStateChangeListener
@@ -31,6 +36,7 @@ import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.core.platform.StateView
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.home.AvatarRenderer
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_matrix_profile.*
 import kotlinx.android.synthetic.main.view_stub_room_member_profile_header.*
@@ -75,11 +81,13 @@ class RoomMemberProfileFragment @Inject constructor(
         matrixProfileAppBarLayout.addOnOffsetChangedListener(appBarStateChangeListener)
         viewModel.viewEvents
                 .observe()
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     dismissLoadingDialog()
                     when (it) {
-                        is RoomMemberProfileViewEvents.Loading -> showLoadingDialog(it.message)
-                        is RoomMemberProfileViewEvents.Failure -> showErrorInSnackbar(it.throwable)
+                        is RoomMemberProfileViewEvents.Loading               -> showLoading(it.message)
+                        is RoomMemberProfileViewEvents.Failure               -> showFailure(it.throwable)
+                        is RoomMemberProfileViewEvents.OnIgnoreActionSuccess -> Unit
                     }
                 }
                 .disposeOnDestroyView()

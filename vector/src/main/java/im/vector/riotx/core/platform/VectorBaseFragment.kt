@@ -126,6 +126,14 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
         mUnBinder = ButterKnife.bind(this, view)
     }
 
+    open fun showLoading(message: CharSequence?) {
+        showLoadingDialog(message)
+    }
+
+    open fun showFailure(throwable: Throwable) {
+        displayErrorDialog(throwable)
+    }
+
     @CallSuper
     override fun onDestroyView() {
         super.onDestroyView()
@@ -188,10 +196,10 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
         }
     }
 
-    protected fun showLoadingDialog(message: CharSequence, cancelable: Boolean = false) {
+    protected fun showLoadingDialog(message: CharSequence? = null, cancelable: Boolean = false) {
         progress = ProgressDialog(requireContext()).apply {
             setCancelable(cancelable)
-            setMessage(message)
+            setMessage(message ?: getString(R.string.please_wait))
             setProgressStyle(ProgressDialog.STYLE_SPINNER)
             show()
         }

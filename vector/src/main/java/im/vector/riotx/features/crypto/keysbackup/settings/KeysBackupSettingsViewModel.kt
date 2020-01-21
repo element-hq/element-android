@@ -24,11 +24,12 @@ import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupService
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupStateListener
 import im.vector.matrix.android.internal.crypto.keysbackup.model.KeysBackupVersionTrust
+import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 
 class KeysBackupSettingsViewModel @AssistedInject constructor(@Assisted initialState: KeysBackupSettingViewState,
                                                               session: Session
-) : VectorViewModel<KeysBackupSettingViewState, KeyBackupSettingsAction>(initialState),
+) : VectorViewModel<KeysBackupSettingViewState, KeyBackupSettingsAction, EmptyViewEvents>(initialState),
         KeysBackupStateListener {
 
     @AssistedInject.Factory

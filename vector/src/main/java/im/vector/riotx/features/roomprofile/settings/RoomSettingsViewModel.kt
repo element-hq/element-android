@@ -17,9 +17,7 @@
 package im.vector.riotx.features.roomprofile.settings
 
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
@@ -28,12 +26,11 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
-import im.vector.riotx.core.extensions.postLiveEvent
 import im.vector.riotx.core.platform.VectorViewModel
 
 class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: RoomSettingsViewState,
                                                         private val session: Session)
-    : VectorViewModel<RoomSettingsViewState, RoomSettingsAction>(initialState) {
+    : VectorViewModel<RoomSettingsViewState, RoomSettingsAction, RoomSettingsViewEvents>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -80,7 +77,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                     copy(isLoading = false)
                 }
 
-                _requestErrorLiveData.postLiveEvent(failure)
+                _viewEvents.post(RoomSettingsViewEvents.Failure(failure))
             }
 
             override fun onSuccess(data: Unit) {

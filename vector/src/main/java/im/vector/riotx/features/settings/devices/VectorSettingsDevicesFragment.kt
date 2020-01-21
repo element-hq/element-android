@@ -35,6 +35,7 @@ import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.utils.toast
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_generic_recycler.*
 import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
 import javax.inject.Inject
@@ -52,7 +53,7 @@ class VectorSettingsDevicesFragment @Inject constructor(
 
     override fun getLayoutResId() = R.layout.fragment_generic_recycler
 
-    private val devicesViewModel: DevicesViewModel by fragmentViewModel()
+    private val viewModel: DevicesViewModel by fragmentViewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -61,14 +62,27 @@ class VectorSettingsDevicesFragment @Inject constructor(
         waiting_view_status_text.isVisible = true
         devicesController.callback = this
         recyclerView.configureWith(devicesController, showDivider = true)
-        devicesViewModel.requestErrorLiveData.observeEvent(this) {
-            displayErrorDialog(it)
-            // Password is maybe not good, for safety measure, reset it here
-            mAccountPassword = ""
-        }
-        devicesViewModel.requestPasswordLiveData.observeEvent(this) {
+        viewModel.viewEvents
+                .observe()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    dismissLoadingDialog()
+                    when (it) {
+                        is DevicesViewEvents.Loading -> showLoading(it.message)
+                        is DevicesViewEvents.Failure -> showFailure(it.throwable)
+                    }
+                }
+                .disposeOnDestroyView()
+        viewModel.requestPasswordLiveData.observeEvent(this) {
             maybeShowDeleteDeviceWithPasswordDialog()
         }
+    }
+
+    override fun showFailure(throwable: Throwable) {
+        super.showFailure(throwable)
+
+        // Password is maybe not good, for safety measure, reset it here
+        mAccountPassword = ""
     }
 
     override fun onDestroyView() {
@@ -84,11 +98,11 @@ class VectorSettingsDevicesFragment @Inject constructor(
     }
 
     override fun onDeviceClicked(deviceInfo: DeviceInfo) {
-        devicesViewModel.handle(DevicesAction.ToggleDevice(deviceInfo))
+        viewModel.handle(DevicesAction.ToggleDevice(deviceInfo))
     }
 
     override fun onDeleteDevice(deviceInfo: DeviceInfo) {
-        devicesViewModel.handle(DevicesAction.Delete(deviceInfo))
+        viewModel.handle(DevicesAction.Delete(deviceInfo))
     }
 
     override fun onRenameDevice(deviceInfo: DeviceInfo) {
@@ -96,7 +110,7 @@ class VectorSettingsDevicesFragment @Inject constructor(
     }
 
     override fun retry() {
-        devicesViewModel.handle(DevicesAction.Retry)
+        viewModel.handle(DevicesAction.Retry)
     }
 
     /**
@@ -117,7 +131,7 @@ class VectorSettingsDevicesFragment @Inject constructor(
                 .setPositiveButton(R.string.ok) { _, _ ->
                     val newName = input.text.toString()
 
-                    devicesViewModel.handle(DevicesAction.Rename(deviceInfo, newName))
+                    viewModel.handle(DevicesAction.Rename(deviceInfo, newName))
                 }
                 .setNegativeButton(R.string.cancel, null)
                 .show()
@@ -128,7 +142,7 @@ class VectorSettingsDevicesFragment @Inject constructor(
      */
     private fun maybeShowDeleteDeviceWithPasswordDialog() {
         if (mAccountPassword.isNotEmpty()) {
-            devicesViewModel.handle(DevicesAction.Password(mAccountPassword))
+            viewModel.handle(DevicesAction.Password(mAccountPassword))
         } else {
             val inflater = requireActivity().layoutInflater
             val layout = inflater.inflate(R.layout.dialog_device_delete, null)
@@ -144,7 +158,7 @@ class VectorSettingsDevicesFragment @Inject constructor(
                             return@OnClickListener
                         }
                         mAccountPassword = passwordEditText.text.toString()
-                        devicesViewModel.handle(DevicesAction.Password(mAccountPassword))
+                        viewModel.handle(DevicesAction.Password(mAccountPassword))
                     })
                     .setNegativeButton(R.string.cancel, null)
                     .setOnKeyListener(DialogInterface.OnKeyListener { dialog, keyCode, event ->
@@ -158,7 +172,7 @@ class VectorSettingsDevicesFragment @Inject constructor(
         }
     }
 
-    override fun invalidate() = withState(devicesViewModel) { state ->
+    override fun invalidate() = withState(viewModel) { state ->
         devicesController.update(state)
 
         handleRequestStatus(state.request)

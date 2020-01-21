@@ -27,7 +27,11 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.OnModelBuildFinishedListener
-import com.airbnb.mvrx.*
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.Incomplete
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.args
+import com.airbnb.mvrx.fragmentViewModel
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
@@ -102,9 +106,11 @@ class RoomListFragment @Inject constructor(
                 .observe()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
+                    dismissLoadingDialog()
                     when (it) {
+                        is RoomListViewEvents.Loading    -> showLoading(it.message)
+                        is RoomListViewEvents.Failure    -> showFailure(it.throwable)
                         is RoomListViewEvents.SelectRoom -> openSelectedRoom(it)
-                        is RoomListViewEvents.Failure    -> showErrorInSnackbar(it.throwable)
                     }
                 }
                 .disposeOnDestroyView()
@@ -115,6 +121,10 @@ class RoomListFragment @Inject constructor(
                 .observe()
                 .subscribe { handleQuickActions(it) }
                 .disposeOnDestroyView()
+    }
+
+    override fun showFailure(throwable: Throwable) {
+        showErrorInSnackbar(throwable)
     }
 
     override fun onDestroyView() {

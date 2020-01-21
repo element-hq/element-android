@@ -21,6 +21,7 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.features.reactions.data.EmojiDataSource
 import im.vector.riotx.features.reactions.data.EmojiItem
@@ -33,7 +34,7 @@ data class EmojiSearchResultViewState(
 class EmojiSearchResultViewModel @AssistedInject constructor(
         @Assisted initialState: EmojiSearchResultViewState,
         private val dataSource: EmojiDataSource)
-    : VectorViewModel<EmojiSearchResultViewState, EmojiSearchAction>(initialState) {
+    : VectorViewModel<EmojiSearchResultViewState, EmojiSearchAction, EmptyViewEvents>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {

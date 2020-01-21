@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,18 +15,14 @@
  *
  */
 
-package im.vector.riotx.features.login
+package im.vector.riotx.features.roomprofile.settings
 
-import im.vector.matrix.android.api.auth.registration.FlowResult
 import im.vector.riotx.core.platform.VectorViewEvents
 
 /**
- * Transient events for Login
+ * Transient events for room settings screen
  */
-sealed class LoginViewEvents: VectorViewEvents {
-    data class Loading(val message: CharSequence? = null) : LoginViewEvents()
-    data class Failure(val throwable: Throwable) : LoginViewEvents()
-
-    data class RegistrationFlowResult(val flowResult: FlowResult, val isRegistrationStarted: Boolean) : LoginViewEvents()
-    object OutdatedHomeserver : LoginViewEvents()
+sealed class RoomSettingsViewEvents : VectorViewEvents {
+    data class Loading(val message: CharSequence? = null) : RoomSettingsViewEvents()
+    data class Failure(val throwable: Throwable) : RoomSettingsViewEvents()
 }

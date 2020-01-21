@@ -70,14 +70,14 @@ abstract class AbstractLoginFragment : VectorBaseFragment(), OnBackPressed {
 
     private fun handleLoginViewEvents(loginViewEvents: LoginViewEvents) {
         when (loginViewEvents) {
-            is LoginViewEvents.Error -> showError(loginViewEvents.throwable)
-            else                     ->
+            is LoginViewEvents.Failure -> showFailure(loginViewEvents.throwable)
+            else                       ->
                 // This is handled by the Activity
                 Unit
         }
     }
 
-    private fun showError(throwable: Throwable) {
+    override fun showFailure(throwable: Throwable) {
         when (throwable) {
             is Failure.ServerError -> {
                 if (throwable.error.code == MatrixError.M_FORBIDDEN
@@ -96,11 +96,7 @@ abstract class AbstractLoginFragment : VectorBaseFragment(), OnBackPressed {
     }
 
     open fun onError(throwable: Throwable) {
-        AlertDialog.Builder(requireActivity())
-                .setTitle(R.string.dialog_title_error)
-                .setMessage(errorFormatter.toHumanReadable(throwable))
-                .setPositiveButton(R.string.ok, null)
-                .show()
+        super.showFailure(throwable)
     }
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {

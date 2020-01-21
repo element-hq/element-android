@@ -16,7 +16,13 @@
 
 package im.vector.riotx.features.signout.soft
 
-import com.airbnb.mvrx.*
+import com.airbnb.mvrx.ActivityViewModelContext
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
+import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
@@ -28,8 +34,6 @@ import im.vector.matrix.android.internal.auth.data.LoginFlowTypes
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.extensions.hasUnsavedKeys
 import im.vector.riotx.core.platform.VectorViewModel
-import im.vector.riotx.core.utils.DataSource
-import im.vector.riotx.core.utils.PublishDataSource
 import im.vector.riotx.features.login.LoginMode
 import timber.log.Timber
 
@@ -41,7 +45,7 @@ class SoftLogoutViewModel @AssistedInject constructor(
         private val session: Session,
         private val activeSessionHolder: ActiveSessionHolder,
         private val authenticationService: AuthenticationService
-) : VectorViewModel<SoftLogoutViewState, SoftLogoutAction>(initialState) {
+) : VectorViewModel<SoftLogoutViewState, SoftLogoutAction, SoftLogoutViewEvents>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -70,9 +74,6 @@ class SoftLogoutViewModel @AssistedInject constructor(
     }
 
     private var currentTask: Cancelable? = null
-
-    private val _viewEvents = PublishDataSource<SoftLogoutViewEvents>()
-    val viewEvents: DataSource<SoftLogoutViewEvents> = _viewEvents
 
     init {
         // Get the supported login flow
@@ -192,7 +193,7 @@ class SoftLogoutViewModel @AssistedInject constructor(
                 currentTask = session.updateCredentials(action.credentials,
                         object : MatrixCallback<Unit> {
                             override fun onFailure(failure: Throwable) {
-                                _viewEvents.post(SoftLogoutViewEvents.Error(failure))
+                                _viewEvents.post(SoftLogoutViewEvents.Failure(failure))
                                 setState {
                                     copy(
                                             asyncLoginAction = Uninitialized

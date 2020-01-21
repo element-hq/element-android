@@ -26,6 +26,7 @@ import im.vector.matrix.android.api.session.room.roomSummaryQueryParams
 import im.vector.matrix.rx.rx
 import im.vector.riotx.ActiveSessionDataSource
 import im.vector.riotx.core.platform.EmptyAction
+import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -39,7 +40,7 @@ data class IncomingShareState(private val dummy: Boolean = false) : MvRxState
 class IncomingShareViewModel @AssistedInject constructor(@Assisted initialState: IncomingShareState,
                                                          private val sessionObservableStore: ActiveSessionDataSource,
                                                          private val shareRoomListObservableStore: ShareRoomListDataSource)
-    : VectorViewModel<IncomingShareState, EmptyAction>(initialState) {
+    : VectorViewModel<IncomingShareState, EmptyAction, EmptyViewEvents>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
