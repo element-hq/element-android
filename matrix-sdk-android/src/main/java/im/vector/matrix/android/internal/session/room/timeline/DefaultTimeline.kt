@@ -27,7 +27,13 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineSettings
 import im.vector.matrix.android.api.util.CancelableBag
 import im.vector.matrix.android.internal.database.mapper.TimelineEventMapper
 import im.vector.matrix.android.internal.database.mapper.asDomain
-import im.vector.matrix.android.internal.database.model.*
+import im.vector.matrix.android.internal.database.model.ChunkEntity
+import im.vector.matrix.android.internal.database.model.ChunkEntityFields
+import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryEntity
+import im.vector.matrix.android.internal.database.model.EventEntity
+import im.vector.matrix.android.internal.database.model.RoomEntity
+import im.vector.matrix.android.internal.database.model.TimelineEventEntity
+import im.vector.matrix.android.internal.database.model.TimelineEventEntityFields
 import im.vector.matrix.android.internal.database.query.FilterContent
 import im.vector.matrix.android.internal.database.query.findAllInRoomWithSendStates
 import im.vector.matrix.android.internal.database.query.where
@@ -38,14 +44,19 @@ import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.Debouncer
 import im.vector.matrix.android.internal.util.createBackgroundHandler
 import im.vector.matrix.android.internal.util.createUIHandler
-import io.realm.*
+import io.realm.OrderedCollectionChangeSet
+import io.realm.OrderedRealmCollectionChangeListener
+import io.realm.Realm
+import io.realm.RealmConfiguration
+import io.realm.RealmQuery
+import io.realm.RealmResults
+import io.realm.Sort
 import timber.log.Timber
-import java.util.*
+import java.util.Collections
+import java.util.UUID
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 import kotlin.math.max
 import kotlin.math.min
 
@@ -171,12 +182,16 @@ internal class DefaultTimeline(
                         .findAllAsync()
                         .also { it.addChangeListener(relationsListener) }
 
-                if (settings.buildReadReceipts) {
+                if (settings.shouldHandleHiddenReadReceipts()) {
                     hiddenReadReceipts.start(realm, filteredEvents, nonFilteredEvents, this)
                 }
                 isReady.set(true)
             }
         }
+    }
+
+    private fun TimelineSettings.shouldHandleHiddenReadReceipts(): Boolean {
+        return settings.buildReadReceipts && (settings.filterEdits || settings.filterTypes)
     }
 
     override fun dispose() {
@@ -193,7 +208,7 @@ internal class DefaultTimeline(
                 if (this::filteredEvents.isInitialized) {
                     filteredEvents.removeAllChangeListeners()
                 }
-                if (settings.buildReadReceipts) {
+                if (settings.shouldHandleHiddenReadReceipts()) {
                     hiddenReadReceipts.dispose()
                 }
                 clearAllValues()
