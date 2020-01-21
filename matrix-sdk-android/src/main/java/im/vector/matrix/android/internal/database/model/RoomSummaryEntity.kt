@@ -17,35 +17,37 @@
 package im.vector.matrix.android.internal.database.model
 
 import im.vector.matrix.android.api.session.room.model.Membership
+import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.VersioningState
 import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 
-internal open class RoomSummaryEntity(@PrimaryKey var roomId: String = "",
-                                      var displayName: String? = "",
-                                      var avatarUrl: String? = "",
-                                      var topic: String? = "",
-                                      var latestPreviewableEvent: TimelineEventEntity? = null,
-                                      var heroes: RealmList<String> = RealmList(),
-                                      var joinedMembersCount: Int? = 0,
-                                      var invitedMembersCount: Int? = 0,
-                                      var isDirect: Boolean = false,
-                                      var directUserId: String? = null,
-                                      var otherMemberIds: RealmList<String> = RealmList(),
-                                      var notificationCount: Int = 0,
-                                      var highlightCount: Int = 0,
-                                      var readMarkerId: String? = null,
-                                      var hasUnreadMessages: Boolean = false,
-                                      var tags: RealmList<RoomTagEntity> = RealmList(),
-                                      var userDrafts: UserDraftsEntity? = null,
-                                      var breadcrumbsIndex: Int = NOT_IN_BREADCRUMBS,
-                                      var canonicalAlias: String? = null,
-                                      var aliases: RealmList<String> = RealmList(),
-                                      // this is required for querying
-                                      var flatAliases: String = "",
-                                      var isEncrypted: Boolean = false,
-                                      var typingUserIds: RealmList<String> = RealmList()
+internal open class RoomSummaryEntity(
+        @PrimaryKey var roomId: String = "",
+        var displayName: String? = "",
+        var avatarUrl: String? = "",
+        var topic: String? = "",
+        var latestPreviewableEvent: TimelineEventEntity? = null,
+        var heroes: RealmList<String> = RealmList(),
+        var joinedMembersCount: Int? = 0,
+        var invitedMembersCount: Int? = 0,
+        var isDirect: Boolean = false,
+        var directUserId: String? = null,
+        var otherMemberIds: RealmList<String> = RealmList(),
+        var notificationCount: Int = 0,
+        var highlightCount: Int = 0,
+        var readMarkerId: String? = null,
+        var hasUnreadMessages: Boolean = false,
+        var tags: RealmList<RoomTagEntity> = RealmList(),
+        var userDrafts: UserDraftsEntity? = null,
+        var breadcrumbsIndex: Int = RoomSummary.NOT_IN_BREADCRUMBS,
+        var canonicalAlias: String? = null,
+        var aliases: RealmList<String> = RealmList(),
+        // this is required for querying
+        var flatAliases: String = "",
+        var isEncrypted: Boolean = false,
+        var typingUserIds: RealmList<String> = RealmList()
 ) : RealmObject() {
 
     private var membershipStr: String = Membership.NONE.name
@@ -66,7 +68,5 @@ internal open class RoomSummaryEntity(@PrimaryKey var roomId: String = "",
             versioningStateStr = value.name
         }
 
-    companion object {
-        const val NOT_IN_BREADCRUMBS = -1
-    }
+    companion object
 }

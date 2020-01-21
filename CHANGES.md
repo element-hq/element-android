@@ -5,7 +5,7 @@ Features ✨:
  - Enable encryption in unencrypted rooms, from the room settings (#212)
 
 Improvements 🙌:
- -
+ - Sharing things to RiotX: sort list by recent room first (#771)
 
 Other changes:
  -

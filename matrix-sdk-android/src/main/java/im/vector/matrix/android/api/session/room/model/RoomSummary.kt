@@ -45,7 +45,8 @@ data class RoomSummary(
         val readMarkerId: String? = null,
         val userDrafts: List<UserDraft> = emptyList(),
         var isEncrypted: Boolean,
-        val typingRoomMemberIds: List<String> = emptyList()
+        val typingRoomMemberIds: List<String> = emptyList(),
+        val breadcrumbsIndex: Int = NOT_IN_BREADCRUMBS
 ) {
 
     val isVersioned: Boolean
@@ -53,4 +54,8 @@ data class RoomSummary(
 
     val hasNewMessages: Boolean
         get() = notificationCount != 0
+
+    companion object {
+        const val NOT_IN_BREADCRUMBS = -1
+    }
 }
