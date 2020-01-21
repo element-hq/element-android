@@ -16,6 +16,7 @@
 
 package im.vector.matrix.android.internal.session.room.timeline
 
+import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.filter.FilterRepository
 import im.vector.matrix.android.internal.session.room.RoomAPI
@@ -37,10 +38,12 @@ internal class DefaultPaginationTask @Inject constructor(
         private val roomAPI: RoomAPI,
         private val filterRepository: FilterRepository,
         private val tokenChunkEventPersistor: TokenChunkEventPersistor,
-        private val eventBus: EventBus
+        private val eventBus: EventBus,
+        private val networkConnectivityChecker: NetworkConnectivityChecker
 ) : PaginationTask {
 
     override suspend fun execute(params: PaginationTask.Params): TokenChunkEventPersistor.Result {
+        networkConnectivityChecker.waitUntilConnected()
         val filter = filterRepository.getRoomFilter()
         val chunk = executeRequest<PaginationResponse>(eventBus) {
             apiCall = roomAPI.getRoomMessagesFrom(params.roomId, params.from, params.direction.value, params.limit, filter)

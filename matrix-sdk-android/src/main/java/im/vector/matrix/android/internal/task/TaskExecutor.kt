@@ -22,14 +22,18 @@ import im.vector.matrix.android.internal.extensions.foldToCallback
 import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import im.vector.matrix.android.internal.util.toCancelable
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.coroutines.EmptyCoroutineContext
 
 @MatrixScope
-internal class TaskExecutor @Inject constructor(private val coroutineDispatchers: MatrixCoroutineDispatchers,
-                                                private val networkConnectivityChecker: NetworkConnectivityChecker) {
+internal class TaskExecutor @Inject constructor(private val coroutineDispatchers: MatrixCoroutineDispatchers) {
 
     private val executorScope = CoroutineScope(SupervisorJob())
 
@@ -40,10 +44,6 @@ internal class TaskExecutor @Inject constructor(private val coroutineDispatchers
                         withContext(task.executionThread.toDispatcher()) {
                             Timber.v("Enqueue task $task")
                             retry(task.retryCount) {
-                                if (task.constraints.connectedToNetwork) {
-                                    Timber.v("Waiting network for $task")
-                                    networkConnectivityChecker.waitUntilConnected()
-                                }
                                 Timber.v("Execute task $task on ${Thread.currentThread().name}")
                                 task.execute(task.params)
                             }

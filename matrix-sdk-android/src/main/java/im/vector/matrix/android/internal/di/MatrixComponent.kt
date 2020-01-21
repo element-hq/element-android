@@ -56,8 +56,6 @@ internal interface MatrixComponent {
 
     fun sessionParamsStore(): SessionParamsStore
 
-    fun networkConnectivityChecker(): NetworkConnectivityChecker
-
     fun backgroundDetectionObserver(): BackgroundDetectionObserver
 
     fun sessionManager(): SessionManager

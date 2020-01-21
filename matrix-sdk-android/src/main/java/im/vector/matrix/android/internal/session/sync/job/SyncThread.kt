@@ -25,7 +25,12 @@ import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
 import im.vector.matrix.android.internal.session.sync.SyncTask
 import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import java.net.SocketTimeoutException
 import javax.inject.Inject
@@ -98,14 +103,14 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
         backgroundDetectionObserver.register(this)
         while (state != SyncState.Killing) {
             Timber.v("Entering loop, state: $state")
-            if (!networkConnectivityChecker.hasInternetAccess()) {
-                Timber.v("No network. Waiting...")
-                updateStateTo(SyncState.NoNetwork)
-                synchronized(lock) { lock.wait() }
-                Timber.v("...unlocked")
-            } else if (!isStarted) {
+            if (!isStarted) {
                 Timber.v("Sync is Paused. Waiting...")
                 updateStateTo(SyncState.Paused)
+                synchronized(lock) { lock.wait() }
+                Timber.v("...unlocked")
+            } else if (!networkConnectivityChecker.hasInternetAccess(forcePing = false)) {
+                Timber.v("No network. Waiting...")
+                updateStateTo(SyncState.NoNetwork)
                 synchronized(lock) { lock.wait() }
                 Timber.v("...unlocked")
             } else if (!isTokenValid) {

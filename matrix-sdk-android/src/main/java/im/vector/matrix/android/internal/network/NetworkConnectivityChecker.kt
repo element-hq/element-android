@@ -18,89 +18,153 @@ package im.vector.matrix.android.internal.network
 
 import android.content.Context
 import androidx.annotation.WorkerThread
+import com.novoda.merlin.Endpoint
 import com.novoda.merlin.Merlin
 import com.novoda.merlin.MerlinsBeard
-import im.vector.matrix.android.internal.di.MatrixScope
+import com.novoda.merlin.ResponseCodeValidator
+import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.Collections
+import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-@MatrixScope
-internal class NetworkConnectivityChecker @Inject constructor(private val context: Context,
-                                                              private val backgroundDetectionObserver: BackgroundDetectionObserver)
-    : BackgroundDetectionObserver.Listener {
+interface NetworkConnectivityChecker {
+    /**
+     * Returns true when internet is available
+     */
+    @WorkerThread
+    fun hasInternetAccess(forcePing: Boolean): Boolean
+
+    /**
+     * Wait until we get internet connection.
+     */
+    suspend fun waitUntilConnected()
+
+    fun register(listener: Listener)
+    fun unregister(listener: Listener)
+
+    interface Listener {
+        fun onConnect() {
+        }
+
+        fun onDisconnect() {
+        }
+    }
+}
+
+@SessionScope
+internal class MerlinNetworkConnectivityChecker @Inject constructor(context: Context,
+                                                                    homeServerConnectionConfig: HomeServerConnectionConfig,
+                                                                    private val coroutineDispatchers: MatrixCoroutineDispatchers,
+                                                                    private val backgroundDetectionObserver: BackgroundDetectionObserver)
+    : NetworkConnectivityChecker {
+
+    private val waitingForNetwork = AtomicBoolean(false)
+    private val isMerlinBounded = AtomicBoolean(false)
+    private val endpointString = "${homeServerConnectionConfig.homeServerUri}/_matrix/client/versions"
+    private val endpoint = Endpoint.from(endpointString)
+    private val responseCodeValidator = ResponseCodeValidator { responseCode ->
+        responseCode == 204 || responseCode == 400 || responseCode == 404
+    }
 
     private val merlin = Merlin.Builder()
-            .withConnectableCallbacks()
-            .withDisconnectableCallbacks()
+            .withEndpoint(endpoint)
+            .withResponseCodeValidator(responseCodeValidator)
+            .withAllCallbacks()
             .build(context)
 
-    private val merlinsBeard = MerlinsBeard.Builder().build(context)
+    private val merlinsBeard = MerlinsBeard.Builder()
+            .withEndpoint(endpoint)
+            .withResponseCodeValidator(responseCodeValidator)
+            .build(context)
 
-    private val listeners = Collections.synchronizedSet(LinkedHashSet<Listener>())
-    private var hasInternetAccess = merlinsBeard.isConnected
+    private val hasInternetAccess = AtomicBoolean(merlinsBeard.isConnected)
 
-    init {
-        backgroundDetectionObserver.register(this)
+    private val listeners = Collections.synchronizedSet(LinkedHashSet<NetworkConnectivityChecker.Listener>())
+
+    private val backgroundDetectionObserverListener = object : BackgroundDetectionObserver.Listener {
+        override fun onMoveToForeground() {
+            bindMerlinIfNeeded()
+        }
+
+        override fun onMoveToBackground() {
+            unbindMerlinIfNeeded()
+        }
     }
 
     /**
      * Returns true when internet is available
      */
     @WorkerThread
-    fun hasInternetAccess(): Boolean {
-        // If we are in background we have unbound merlin, so we have to check
-        return if (backgroundDetectionObserver.isInBackground) {
+    override fun hasInternetAccess(forcePing: Boolean): Boolean {
+        return if (forcePing) {
             merlinsBeard.hasInternetAccess()
         } else {
-            hasInternetAccess
+            hasInternetAccess.get()
         }
     }
 
-    override fun onMoveToForeground() {
+    private fun bindMerlinIfNeeded() {
+        if (isMerlinBounded.get()) {
+            return
+        }
+        Timber.v("Bind merlin")
+        isMerlinBounded.set(true)
         merlin.bind()
         merlinsBeard.hasInternetAccess {
-            hasInternetAccess = it
+            hasInternetAccess.set(it)
+        }
+        merlin.registerBindable {
+            Timber.v("On Network available: ${it.isAvailable}")
         }
         merlin.registerDisconnectable {
-            if (hasInternetAccess) {
-                Timber.v("On Disconnect")
-                hasInternetAccess = false
-                val localListeners = listeners.toList()
-                localListeners.forEach {
-                    it.onDisconnect()
-                }
+            Timber.v("On Disconnect")
+            hasInternetAccess.set(false)
+            val localListeners = listeners.toList()
+            localListeners.forEach {
+                it.onDisconnect()
             }
         }
         merlin.registerConnectable {
-            if (!hasInternetAccess) {
-                Timber.v("On Connect")
-                hasInternetAccess = true
-                val localListeners = listeners.toList()
-                localListeners.forEach {
-                    it.onConnect()
-                }
+            Timber.v("On Connect")
+            hasInternetAccess.set(true)
+            val localListeners = listeners.toList()
+            localListeners.forEach {
+                it.onConnect()
             }
         }
     }
 
-    override fun onMoveToBackground() {
-        merlin.unbind()
+    private fun unbindMerlinIfNeeded() {
+        if (backgroundDetectionObserver.isInBackground && !waitingForNetwork.get() && isMerlinBounded.get()) {
+            isMerlinBounded.set(false)
+            Timber.v("Unbind merlin")
+            merlin.unbind()
+        }
     }
 
-    // In background you won't get notification as merlin is unbound
-    suspend fun waitUntilConnected() {
+    override suspend fun waitUntilConnected() {
+        val hasInternetAccess = withContext(coroutineDispatchers.io) {
+            merlinsBeard.hasInternetAccess()
+        }
         if (hasInternetAccess) {
             return
         } else {
+            waitingForNetwork.set(true)
+            bindMerlinIfNeeded()
             Timber.v("Waiting for network...")
             suspendCoroutine<Unit> { continuation ->
-                register(object : Listener {
+                register(object : NetworkConnectivityChecker.Listener {
                     override fun onConnect() {
                         unregister(this)
+                        waitingForNetwork.set(false)
+                        unbindMerlinIfNeeded()
                         Timber.v("Connected to network...")
                         continuation.resume(Unit)
                     }
@@ -109,19 +173,22 @@ internal class NetworkConnectivityChecker @Inject constructor(private val contex
         }
     }
 
-    fun register(listener: Listener) {
+    override fun register(listener: NetworkConnectivityChecker.Listener) {
+        if (listeners.isEmpty()) {
+            if (backgroundDetectionObserver.isInBackground) {
+                unbindMerlinIfNeeded()
+            } else {
+                bindMerlinIfNeeded()
+            }
+            backgroundDetectionObserver.register(backgroundDetectionObserverListener)
+        }
         listeners.add(listener)
     }
 
-    fun unregister(listener: Listener) {
+    override fun unregister(listener: NetworkConnectivityChecker.Listener) {
         listeners.remove(listener)
-    }
-
-    interface Listener {
-        fun onConnect() {
-        }
-
-        fun onDisconnect() {
+        if (listeners.isEmpty()) {
+            backgroundDetectionObserver.unregister(backgroundDetectionObserverListener)
         }
     }
 }

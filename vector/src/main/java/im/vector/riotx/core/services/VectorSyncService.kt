@@ -15,15 +15,13 @@
  */
 package im.vector.riotx.core.services
 
-import android.app.AlarmManager
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import im.vector.matrix.android.internal.session.sync.job.SyncService
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.vectorComponent
+import im.vector.riotx.fdroid.receiver.AlarmSyncBroadcastReceiver
 import im.vector.riotx.features.notifications.NotificationUtils
 
 class VectorSyncService : SyncService() {
@@ -69,17 +67,6 @@ class VectorSyncService : SyncService() {
     }
 
     private fun reschedule(sessionId: String, delay: Long) {
-        val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            PendingIntent.getForegroundService(this, 0, newIntent(this, sessionId), 0)
-        } else {
-            PendingIntent.getService(this, 0, newIntent(this, sessionId), 0)
-        }
-        val firstMillis = System.currentTimeMillis() + delay
-        val alarmMgr = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            alarmMgr.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, firstMillis, pendingIntent)
-        } else {
-            alarmMgr.set(AlarmManager.RTC_WAKEUP, firstMillis, pendingIntent)
-        }
+        AlarmSyncBroadcastReceiver.scheduleAlarm(applicationContext, sessionId, delay)
     }
 }
