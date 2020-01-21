@@ -49,4 +49,6 @@ interface SasVerificationTransaction {
     fun userHasVerifiedShortCode()
 
     fun shortCodeDoesNotMatch()
+
+    fun isToDeviceTransport() : Boolean
 }

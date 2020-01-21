@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <!-- ************ Cryptography section ************ -->
     <im.vector.riotx.core.preference.VectorPreferenceCategory
         android:key="SETTINGS_CRYPTOGRAPHY_PREFERENCE_KEY"
         android:title="@string/settings_cryptography">
+        <im.vector.riotx.core.preference.VectorPreference
+            android:key="SETTINGS_ENCRYPTION_CROSS_SIGNING_PREFERENCE_KEY"
+            tools:icon="@drawable/ic_shield_trusted"
+            android:persistent="false"
+            android:title="@string/encryption_information_cross_signing_state" />
+
 
         <im.vector.riotx.core.preference.VectorPreference
             android:key="SETTINGS_ENCRYPTION_INFORMATION_DEVICE_NAME_PREFERENCE_KEY"

@@ -95,4 +95,11 @@
     <string name="verification_code_notice">Compare the code with the one displayed on the other user\'s screen.</string>
     <string name="verification_conclusion_ok_notice">Messages with this user are end-to-end encrypted and can\'t be read by third parties.</string>
 
+
+    <string name="encryption_information_cross_signing_state">Cross-Signing</string>
+    <string name="encryption_information_dg_xsigning_complete">Cross-Signing is enabled\nPrivate Keys on device.</string>
+    <string name="encryption_information_dg_xsigning_trusted">Cross-Signing is enabled\nKeys are trusted\n.Private keys are not known</string>
+    <string name="encryption_information_dg_xsigning_not_trusted">Cross-Signing is enabled\nKeys are not trusted</string>
+    <string name="encryption_information_dg_xsigning_disabled">Cross-Signing is not enabled</string>
+
 </resources>

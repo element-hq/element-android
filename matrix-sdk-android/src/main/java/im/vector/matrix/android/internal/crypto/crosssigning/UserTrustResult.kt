@@ -16,7 +16,6 @@
 package im.vector.matrix.android.internal.crypto.crosssigning
 
 import im.vector.matrix.android.api.session.crypto.crosssigning.MXCrossSigningInfo
-import im.vector.matrix.android.api.session.user.model.User
 import im.vector.matrix.android.internal.crypto.model.CryptoCrossSigningKey
 
 sealed class UserTrustResult {

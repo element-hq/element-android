@@ -35,6 +35,7 @@ data class VerificationBottomSheetViewState(
         val roomId: String? = null,
         val pendingRequest: PendingVerificationRequest? = null,
         val sasTransactionState: SasVerificationTxState? = null,
+        val transactionId: String? = null,
         val cancelCode: CancelCode? = null
 ) : MvRxState
 
@@ -82,13 +83,14 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
 
             val pr = session.getSasVerificationService().getExistingVerificationRequest(args.otherUserId, args.verificationId)
 
-            val sasTx = pr?.transactionId?.let {
+            val sasTx = (pr?.transactionId ?: args.verificationId)?.let {
                 session.getSasVerificationService().getExistingTransaction(args.otherUserId, it)
             }
 
             return fragment.verificationViewModelFactory.create(VerificationBottomSheetViewState(
                     otherUserMxItem = userItem?.toMatrixItem(),
                     sasTransactionState = sasTx?.state,
+                    transactionId = args.verificationId,
                     pendingRequest = pr,
                     roomId = args.roomId)
             )
@@ -99,10 +101,9 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
         val otherUserId = state.otherUserMxItem?.id ?: return@withState
         val roomId = state.roomId
                 ?: session.getExistingDirectRoomWithUser(otherUserId)?.roomId
-                ?: return@withState
         when (action) {
             is VerificationAction.RequestVerificationByDM -> {
-//                session
+                if (roomId == null) return@withState
                 setState {
                     copy(pendingRequest = session.getSasVerificationService().requestKeyVerificationInDMs(supportedVerificationMethods, otherUserId, roomId))
                 }
@@ -110,7 +111,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
             is VerificationAction.StartSASVerification    -> {
                 val request = session.getSasVerificationService().getExistingVerificationRequest(otherUserId, action.pendingRequestTransactionId)
                         ?: return@withState
-
+                if (roomId == null) return@withState
                 val otherDevice = if (request.isIncoming) request.requestInfo?.fromDevice else request.readyInfo?.fromDevice
                 session.getSasVerificationService().beginKeyVerificationInDMs(
                         VerificationMethod.SAS,
@@ -142,7 +143,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
     }
 
     override fun transactionUpdated(tx: SasVerificationTransaction) = withState { state ->
-        if (tx.transactionId == state.pendingRequest?.transactionId) {
+        if (tx.transactionId == (state.pendingRequest?.transactionId ?: state.transactionId)) {
             // A SAS tx has been started following this request
             setState {
                 copy(

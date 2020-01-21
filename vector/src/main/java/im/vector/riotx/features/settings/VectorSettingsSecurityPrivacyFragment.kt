@@ -29,6 +29,7 @@ import androidx.preference.SwitchPreference
 import com.google.android.material.textfield.TextInputEditText
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.extensions.getFingerprintHumanReadable
+import im.vector.matrix.android.internal.crypto.crosssigning.isVerified
 import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.riotx.R
@@ -38,7 +39,13 @@ import im.vector.riotx.core.intent.analyseIntent
 import im.vector.riotx.core.intent.getFilenameFromUri
 import im.vector.riotx.core.platform.SimpleTextWatcher
 import im.vector.riotx.core.preference.VectorPreference
-import im.vector.riotx.core.utils.*
+import im.vector.riotx.core.utils.PERMISSIONS_FOR_WRITING_FILES
+import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_EXPORT_KEYS
+import im.vector.riotx.core.utils.allGranted
+import im.vector.riotx.core.utils.checkPermissions
+import im.vector.riotx.core.utils.copyToClipboard
+import im.vector.riotx.core.utils.openFileSelection
+import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.crypto.keys.KeysExporter
 import im.vector.riotx.features.crypto.keys.KeysImporter
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupManageActivity
@@ -68,6 +75,11 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
     private val mPushersSettingsCategory by lazy {
         findPreference<PreferenceCategory>(VectorPreferences.SETTINGS_NOTIFICATIONS_TARGETS_PREFERENCE_KEY)!!
     }
+
+    private val mCrossSigningStatePreference by lazy {
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_ENCRYPTION_CROSS_SIGNING_PREFERENCE_KEY)!!
+    }
+
     private val cryptoInfoDeviceNamePreference by lazy {
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_ENCRYPTION_INFORMATION_DEVICE_NAME_PREFERENCE_KEY)!!
     }
@@ -120,6 +132,31 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
                 vectorPreferences.setUseAnalytics(newValue as Boolean)
                 true
             }
+        }
+
+        if (vectorPreferences.developerMode()) {
+            val crossSigningKeys = session.getCrossSigningService().getMyCrossSigningKeys()
+            val xSigningIsEnableInAccount = crossSigningKeys != null
+            val xSigningCaseAreTrusted = session.getCrossSigningService().checkUserTrust(session.myUserId).isVerified()
+            val xSigningKeyCanSign = session.getCrossSigningService().canCrossSign()
+
+            if (xSigningKeyCanSign) {
+                mCrossSigningStatePreference.setIcon(R.drawable.ic_shield_trusted)
+                mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_complete)
+            } else if (xSigningCaseAreTrusted) {
+                mCrossSigningStatePreference.setIcon(R.drawable.ic_shield_warning)
+                mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_trusted)
+            } else if (xSigningIsEnableInAccount) {
+                mCrossSigningStatePreference.setIcon(R.drawable.ic_shield_black)
+                mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_not_trusted)
+            } else {
+                mCrossSigningStatePreference.setIcon(android.R.color.transparent)
+                mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_disabled)
+            }
+
+            mCrossSigningStatePreference.isVisible = true
+        } else {
+            mCrossSigningStatePreference.isVisible = false
         }
     }
 

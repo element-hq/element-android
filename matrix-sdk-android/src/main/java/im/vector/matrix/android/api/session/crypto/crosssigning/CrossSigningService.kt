@@ -41,6 +41,7 @@ interface CrossSigningService {
     fun getUserCrossSigningKeys(userId: String): MXCrossSigningInfo?
 
     fun getMyCrossSigningKeys(): MXCrossSigningInfo?
+    fun canCrossSign(): Boolean
 
     fun trustUser(userId: String, callback: MatrixCallback<SignatureUploadResponse>)
 

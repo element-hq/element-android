@@ -450,6 +450,10 @@ internal class DefaultCrossSigningService @Inject constructor(
         return cryptoStore.getMyCrossSigningInfo()
     }
 
+    override fun canCrossSign(): Boolean {
+        return checkSelfTrust().isVerified() && cryptoStore.getCrossSigningPrivateKeys()?.selfSigned != null
+    }
+
     override fun trustUser(userId: String, callback: MatrixCallback<SignatureUploadResponse>) {
         // We should have this user keys
         val otherMasterKeys = getUserCrossSigningKeys(userId)?.masterKey()

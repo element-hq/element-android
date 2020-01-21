@@ -131,7 +131,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
                     showFragment(VerificationEmojiCodeFragment::class, Bundle().apply {
                         putParcelable(MvRx.KEY_ARG, VerificationArgs(
                                 it.otherUserMxItem?.id ?: "",
-                                it.pendingRequest?.transactionId))
+                                it.transactionId))
                     })
                 }
                 SasVerificationTxState.Verified,
@@ -204,7 +204,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
     }
 
     companion object {
-        fun withArgs(roomId: String, otherUserId: String, transactionId: String? = null): VerificationBottomSheet {
+        fun withArgs(roomId: String?, otherUserId: String, transactionId: String? = null): VerificationBottomSheet {
             return VerificationBottomSheet().apply {
                 arguments = Bundle().apply {
                     putParcelable(MvRx.KEY_ARG, VerificationBottomSheet.VerificationArgs(

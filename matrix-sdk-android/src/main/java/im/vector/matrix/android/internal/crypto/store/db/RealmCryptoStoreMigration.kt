@@ -50,9 +50,9 @@ internal object RealmCryptoStoreMigration : RealmMigration {
 
             val trustLevelentityEntitySchema = realm.schema.create("TrustLevelEntity")
                     .addField(TrustLevelEntityFields.CROSS_SIGNED_VERIFIED, Boolean::class.java)
-                    .setNullable(TrustLevelEntityFields.CROSS_SIGNED_VERIFIED,true)
+                    .setNullable(TrustLevelEntityFields.CROSS_SIGNED_VERIFIED, true)
                     .addField(TrustLevelEntityFields.LOCALLY_VERIFIED, Boolean::class.java)
-                    .setNullable(TrustLevelEntityFields.LOCALLY_VERIFIED,true)
+                    .setNullable(TrustLevelEntityFields.LOCALLY_VERIFIED, true)
 
             Timber.d("Create CrossSigningInfoEntity")
 
@@ -91,8 +91,8 @@ internal object RealmCryptoStoreMigration : RealmMigration {
                     ?.addField(DeviceInfoEntityFields.SIGNATURE_MAP_JSON, String::class.java)
                     ?.addField(DeviceInfoEntityFields.UNSIGNED_MAP_JSON, String::class.java)
                     ?.addField(DeviceInfoEntityFields.IS_BLOCKED, Boolean::class.java)
-                    ?.setNullable(DeviceInfoEntityFields.IS_BLOCKED,true)
-                    ?.addRealmObjectField(DeviceInfoEntityFields.TRUST_LEVEL_ENTITY.`$`,trustLevelentityEntitySchema)
+                    ?.setNullable(DeviceInfoEntityFields.IS_BLOCKED, true)
+                    ?.addRealmObjectField(DeviceInfoEntityFields.TRUST_LEVEL_ENTITY.`$`, trustLevelentityEntitySchema)
                     ?.transform { obj ->
 
                         val oldSerializedData = obj.getString("deviceInfoData")

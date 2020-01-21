@@ -204,6 +204,10 @@ internal abstract class SASVerificationTransaction(
         cancel(CancelCode.MismatchedSas)
     }
 
+    override fun isToDeviceTransport() : Boolean {
+        return transport is SasTransportToDevice
+    }
+
     override fun acceptVerificationEvent(senderId: String, info: VerificationInfo) {
         when (info) {
             is VerificationInfoStart  -> onVerificationStart(info)

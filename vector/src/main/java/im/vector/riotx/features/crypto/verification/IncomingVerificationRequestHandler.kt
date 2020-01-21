@@ -51,48 +51,46 @@ class IncomingVerificationRequestHandler @Inject constructor(private val context
     override fun transactionCreated(tx: SasVerificationTransaction) {}
 
     override fun transactionUpdated(tx: SasVerificationTransaction) {
+        if (!tx.isToDeviceTransport()) return
+        // TODO maybe check also if
         when (tx.state) {
             SasVerificationTxState.OnStarted -> {
-//                // Add a notification for every incoming request
-//                val name = session?.getUser(tx.otherUserId)?.displayName
-//                        ?: tx.otherUserId
-//
-//                val alert = PopupAlertManager.VectorAlert(
-//                        "kvr_${tx.transactionId}",
-//                        context.getString(R.string.sas_incoming_request_notif_title),
-//                        context.getString(R.string.sas_incoming_request_notif_content, name),
-//                        R.drawable.shield)
-//                        .apply {
-//                            contentAction = Runnable {
-//                                val intent = SASVerificationActivity.incomingIntent(context,
-//                                        session?.myUserId  ?: "",
-//                                        tx.otherUserId,
-//                                        tx.transactionId)
-//                                weakCurrentActivity?.get()?.startActivity(intent)
-//                            }
-//                            dismissedAction = Runnable {
-//                                tx.cancel()
-//                            }
-//                            addButton(
-//                                    context.getString(R.string.ignore),
-//                                    Runnable {
-//                                        tx.cancel()
-//                                    }
-//                            )
-//                            addButton(
-//                                    context.getString(R.string.action_open),
-//                                    Runnable {
-//                                        val intent = SASVerificationActivity.incomingIntent(context,
-//                                                session?.myUserId ?: "",
-//                                                tx.otherUserId,
-//                                                tx.transactionId)
-//                                        weakCurrentActivity?.get()?.startActivity(intent)
-//                                    }
-//                            )
-//                            // 10mn expiration
-//                            expirationTimestamp = System.currentTimeMillis() + (10 * 60 * 1000L)
-//                        }
-//                PopupAlertManager.postVectorAlert(alert)
+                // Add a notification for every incoming request
+                val name = session?.getUser(tx.otherUserId)?.displayName
+                        ?: tx.otherUserId
+
+                val alert = PopupAlertManager.VectorAlert(
+                        "kvr_${tx.transactionId}",
+                        context.getString(R.string.sas_incoming_request_notif_title),
+                        context.getString(R.string.sas_incoming_request_notif_content, name),
+                        R.drawable.shield)
+                        .apply {
+                            contentAction = Runnable {
+                                (weakCurrentActivity?.get() as? VectorBaseActivity)?.let {
+                                    it.navigator.performDeviceVerification(it, tx.otherUserId, tx.transactionId)
+                                }
+                            }
+                            dismissedAction = Runnable {
+                                tx.cancel()
+                            }
+                            addButton(
+                                    context.getString(R.string.ignore),
+                                    Runnable {
+                                        tx.cancel()
+                                    }
+                            )
+                            addButton(
+                                    context.getString(R.string.action_open),
+                                    Runnable {
+                                        (weakCurrentActivity?.get() as? VectorBaseActivity)?.let {
+                                            it.navigator.performDeviceVerification(it, tx.otherUserId, tx.transactionId)
+                                        }
+                                    }
+                            )
+                            // 10mn expiration
+                            expirationTimestamp = System.currentTimeMillis() + (10 * 60 * 1000L)
+                        }
+                PopupAlertManager.postVectorAlert(alert)
             }
             SasVerificationTxState.Cancelled,
             SasVerificationTxState.OnCancelled,
