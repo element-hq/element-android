@@ -3,6 +3,9 @@
 
     <!-- Strings not defined in Riot -->
 
+    <string name="create_room_encryption_title">"Enable encryption"</string>
+    <string name="create_room_encryption_description">"Once enabled, encryption cannot be disabled."</string>
+
     <string name="login_error_threepid_denied">Your email domain is not authorized to register on this server</string>
 
     <string name="room_profile_not_encrypted_subtitle">Messages in this room are not end-to-end encrypted.</string>
