@@ -36,7 +36,6 @@ import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.utils.toast
-import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_generic_recycler.*
 import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
 import javax.inject.Inject
@@ -63,17 +62,12 @@ class VectorSettingsDevicesFragment @Inject constructor(
         waiting_view_status_text.isVisible = true
         devicesController.callback = this
         recyclerView.configureWith(devicesController, showDivider = true)
-        viewModel.viewEvents
-                .observe()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    dismissLoadingDialog()
-                    when (it) {
-                        is DevicesViewEvents.Loading -> showLoading(it.message)
-                        is DevicesViewEvents.Failure -> showFailure(it.throwable)
-                    }.exhaustive
-                }
-                .disposeOnDestroyView()
+        viewModel.observeViewEvents {
+            when (it) {
+                is DevicesViewEvents.Loading -> showLoading(it.message)
+                is DevicesViewEvents.Failure -> showFailure(it.throwable)
+            }.exhaustive
+        }
         viewModel.requestPasswordLiveData.observeEvent(this) {
             maybeShowDeleteDeviceWithPasswordDialog()
         }

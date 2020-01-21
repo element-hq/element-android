@@ -51,7 +51,6 @@ import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsShare
 import im.vector.riotx.features.home.room.list.widget.FabMenuView
 import im.vector.riotx.features.notifications.NotificationDrawerManager
 import im.vector.riotx.features.share.SharedData
-import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_list.*
 import javax.inject.Inject
@@ -103,18 +102,13 @@ class RoomListFragment @Inject constructor(
         setupRecyclerView()
         sharedActionViewModel = activityViewModelProvider.get(RoomListQuickActionsSharedActionViewModel::class.java)
         roomListViewModel.subscribe { renderState(it) }
-        roomListViewModel.viewEvents
-                .observe()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    dismissLoadingDialog()
-                    when (it) {
-                        is RoomListViewEvents.Loading    -> showLoading(it.message)
-                        is RoomListViewEvents.Failure    -> showFailure(it.throwable)
-                        is RoomListViewEvents.SelectRoom -> openSelectedRoom(it)
-                    }.exhaustive
-                }
-                .disposeOnDestroyView()
+        roomListViewModel.observeViewEvents {
+            when (it) {
+                is RoomListViewEvents.Loading    -> showLoading(it.message)
+                is RoomListViewEvents.Failure    -> showFailure(it.throwable)
+                is RoomListViewEvents.SelectRoom -> openSelectedRoom(it)
+            }.exhaustive
+        }
 
         createChatFabMenu.listener = this
 

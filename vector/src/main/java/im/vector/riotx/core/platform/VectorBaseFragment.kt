@@ -46,6 +46,7 @@ import im.vector.riotx.core.di.HasScreenInjector
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.features.navigation.Navigator
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import timber.log.Timber
@@ -232,6 +233,21 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
     protected fun Disposable.disposeOnDestroyView(): Disposable {
         uiDisposables.add(this)
         return this
+    }
+
+    /* ==========================================================================================
+     * ViewEvents
+     * ========================================================================================== */
+
+    protected fun <T : VectorViewEvents> VectorViewModel<*, *, T>.observeViewEvents(observer: (T) -> Unit) {
+        viewEvents
+                .observe()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    dismissLoadingDialog()
+                    observer(it)
+                }
+                .disposeOnDestroyView()
     }
 
     /* ==========================================================================================

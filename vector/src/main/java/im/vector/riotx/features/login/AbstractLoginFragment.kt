@@ -27,9 +27,9 @@ import com.airbnb.mvrx.withState
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.riotx.R
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.OnBackPressed
 import im.vector.riotx.core.platform.VectorBaseFragment
-import io.reactivex.android.schedulers.AndroidSchedulers
 import javax.net.ssl.HttpsURLConnection
 
 /**
@@ -59,13 +59,9 @@ abstract class AbstractLoginFragment : VectorBaseFragment(), OnBackPressed {
 
         loginSharedActionViewModel = activityViewModelProvider.get(LoginSharedActionViewModel::class.java)
 
-        loginViewModel.viewEvents
-                .observe()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    handleLoginViewEvents(it)
-                }
-                .disposeOnDestroyView()
+        loginViewModel.observeViewEvents {
+            handleLoginViewEvents(it)
+        }
     }
 
     private fun handleLoginViewEvents(loginViewEvents: LoginViewEvents) {
@@ -74,7 +70,7 @@ abstract class AbstractLoginFragment : VectorBaseFragment(), OnBackPressed {
             else                       ->
                 // This is handled by the Activity
                 Unit
-        }
+        }.exhaustive
     }
 
     override fun showFailure(throwable: Throwable) {

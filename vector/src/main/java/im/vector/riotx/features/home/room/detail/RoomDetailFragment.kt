@@ -307,15 +307,11 @@ class RoomDetailFragment @Inject constructor(
             displayRoomDetailActionResult(it)
         }
 
-        roomDetailViewModel.viewEvents
-                .observe()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    when (it) {
-                        is RoomDetailViewEvents.Failure -> showErrorInSnackbar(it.throwable)
-                    }.exhaustive
-                }
-                .disposeOnDestroyView()
+        roomDetailViewModel.observeViewEvents {
+            when (it) {
+                is RoomDetailViewEvents.Failure -> showErrorInSnackbar(it.throwable)
+            }.exhaustive
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

@@ -30,7 +30,6 @@ import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.platform.VectorBaseFragment
-import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_generic_recycler.*
 import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
 import javax.inject.Inject
@@ -51,17 +50,12 @@ class VectorSettingsIgnoredUsersFragment @Inject constructor(
         waiting_view_status_text.isVisible = true
         ignoredUsersController.callback = this
         recyclerView.configureWith(ignoredUsersController)
-        viewModel.viewEvents
-                .observe()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    dismissLoadingDialog()
-                    when (it) {
-                        is IgnoredUsersViewEvents.Loading -> showLoading(it.message)
-                        is IgnoredUsersViewEvents.Failure -> showFailure(it.throwable)
-                    }.exhaustive
-                }
-                .disposeOnDestroyView()
+        viewModel.observeViewEvents {
+            when (it) {
+                is IgnoredUsersViewEvents.Loading -> showLoading(it.message)
+                is IgnoredUsersViewEvents.Failure -> showFailure(it.throwable)
+            }.exhaustive
+        }
     }
 
     override fun onDestroyView() {

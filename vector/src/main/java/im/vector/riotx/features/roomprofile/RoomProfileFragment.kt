@@ -39,7 +39,6 @@ import im.vector.riotx.features.home.room.list.actions.RoomListActionsArgs
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsBottomSheet
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsSharedAction
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_matrix_profile.*
 import kotlinx.android.synthetic.main.view_stub_room_profile_header.*
@@ -79,18 +78,13 @@ class RoomProfileFragment @Inject constructor(
         appBarStateChangeListener = MatrixItemAppBarStateChangeListener(headerView, listOf(matrixProfileToolbarAvatarImageView,
                 matrixProfileToolbarTitleView))
         matrixProfileAppBarLayout.addOnOffsetChangedListener(appBarStateChangeListener)
-        roomProfileViewModel.viewEvents
-                .observe()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    dismissLoadingDialog()
-                    when (it) {
-                        is RoomProfileViewEvents.Loading            -> showLoading(it.message)
-                        is RoomProfileViewEvents.Failure            -> showFailure(it.throwable)
-                        is RoomProfileViewEvents.OnLeaveRoomSuccess -> onLeaveRoom()
-                    }.exhaustive
-                }
-                .disposeOnDestroyView()
+        roomProfileViewModel.observeViewEvents {
+            when (it) {
+                is RoomProfileViewEvents.Loading            -> showLoading(it.message)
+                is RoomProfileViewEvents.Failure            -> showFailure(it.throwable)
+                is RoomProfileViewEvents.OnLeaveRoomSuccess -> onLeaveRoom()
+            }.exhaustive
+        }
         roomListQuickActionsSharedActionViewModel
                 .observe()
                 .subscribe { handleQuickActions(it) }

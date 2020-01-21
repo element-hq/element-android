@@ -37,7 +37,6 @@ import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.core.platform.StateView
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.home.AvatarRenderer
-import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_matrix_profile.*
 import kotlinx.android.synthetic.main.view_stub_room_member_profile_header.*
@@ -80,18 +79,13 @@ class RoomMemberProfileFragment @Inject constructor(
         appBarStateChangeListener = MatrixItemAppBarStateChangeListener(headerView, listOf(matrixProfileToolbarAvatarImageView,
                 matrixProfileToolbarTitleView))
         matrixProfileAppBarLayout.addOnOffsetChangedListener(appBarStateChangeListener)
-        viewModel.viewEvents
-                .observe()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    dismissLoadingDialog()
-                    when (it) {
-                        is RoomMemberProfileViewEvents.Loading               -> showLoading(it.message)
-                        is RoomMemberProfileViewEvents.Failure               -> showFailure(it.throwable)
-                        is RoomMemberProfileViewEvents.OnIgnoreActionSuccess -> Unit
-                    }.exhaustive
-                }
-                .disposeOnDestroyView()
+        viewModel.observeViewEvents {
+            when (it) {
+                is RoomMemberProfileViewEvents.Loading               -> showLoading(it.message)
+                is RoomMemberProfileViewEvents.Failure               -> showFailure(it.throwable)
+                is RoomMemberProfileViewEvents.OnIgnoreActionSuccess -> Unit
+            }.exhaustive
+        }
     }
 
     override fun onDestroyView() {

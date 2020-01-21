@@ -31,7 +31,6 @@ import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.roomprofile.RoomProfileArgs
-import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_room_setting_generic.*
 import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
 import javax.inject.Inject
@@ -55,16 +54,11 @@ class RoomSettingsFragment @Inject constructor(
         waiting_view_status_text.setText(R.string.please_wait)
         waiting_view_status_text.isVisible = true
 
-        viewModel.viewEvents
-                .observe()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    dismissLoadingDialog()
-                    when (it) {
-                        is RoomSettingsViewEvents.Failure -> showFailure(it.throwable)
-                    }.exhaustive
-                }
-                .disposeOnDestroyView()
+        viewModel.observeViewEvents {
+            when (it) {
+                is RoomSettingsViewEvents.Failure -> showFailure(it.throwable)
+            }.exhaustive
+        }
     }
 
     override fun onDestroyView() {
