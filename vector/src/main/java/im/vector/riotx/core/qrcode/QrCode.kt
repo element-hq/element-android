@@ -22,11 +22,10 @@ import com.google.zxing.BarcodeFormat
 import com.google.zxing.common.BitMatrix
 import com.google.zxing.qrcode.QRCodeWriter
 
-fun createQrCode(url: String,
-                 width: Int = 200,
-                 height: Int = 200): Bitmap {
+fun String.toQrCode(width: Int = 200,
+                    height: Int = 200): Bitmap {
     return QRCodeWriter().encode(
-            url,
+            this,
             BarcodeFormat.QR_CODE,
             width,
             height

@@ -17,17 +17,25 @@ package im.vector.riotx.features.crypto.verification
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.airbnb.mvrx.*
+import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.FragmentViewModelContext
+import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.crypto.sas.*
+import im.vector.matrix.android.api.session.crypto.sas.CancelCode
+import im.vector.matrix.android.api.session.crypto.sas.SasVerificationService
+import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTransaction
+import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTxState
+import im.vector.matrix.android.api.session.crypto.sas.VerificationMethod
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.matrix.android.internal.crypto.verification.PendingVerificationRequest
 import im.vector.riotx.core.di.HasScreenInjector
 import im.vector.riotx.core.platform.VectorViewModel
-import im.vector.riotx.core.platform.VectorViewModelAction
 import im.vector.riotx.core.utils.LiveEvent
 
 data class VerificationBottomSheetViewState(
@@ -38,14 +46,6 @@ data class VerificationBottomSheetViewState(
         val transactionId: String? = null,
         val cancelCode: CancelCode? = null
 ) : MvRxState
-
-sealed class VerificationAction : VectorViewModelAction {
-    data class RequestVerificationByDM(val userID: String, val roomId: String?) : VerificationAction()
-    data class StartSASVerification(val userID: String, val pendingRequestTransactionId: String) : VerificationAction()
-    data class SASMatchAction(val userID: String, val sasTransactionId: String) : VerificationAction()
-    data class SASDoNotMatchAction(val userID: String, val sasTransactionId: String) : VerificationAction()
-    object GotItConclusion : VerificationAction()
-}
 
 class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted initialState: VerificationBottomSheetViewState,
                                                                    private val session: Session)
@@ -121,6 +121,12 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
                         otherDeviceId = otherDevice ?: "",
                         callback = null
                 )
+            }
+            is VerificationAction.RemoteQrCodeScanned     -> {
+                // TODO Use session.getCrossSigningService()?
+                session.getSasVerificationService()
+                        .getExistingTransaction(action.userID, action.sasTransactionId)
+                        ?.userHasScannedRemoteQrCode(action.scannedData)
             }
             is VerificationAction.SASMatchAction          -> {
                 session.getSasVerificationService()

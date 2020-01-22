@@ -19,8 +19,10 @@ package im.vector.riotx.features.crypto.verification.choose
 import com.airbnb.epoxy.EpoxyController
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.dividerItem
+import im.vector.riotx.core.qrcode.toQrCode
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
+import im.vector.riotx.core.utils.DimensionConverter
 import im.vector.riotx.features.crypto.verification.epoxy.bottomSheetVerificationActionItem
 import im.vector.riotx.features.crypto.verification.epoxy.bottomSheetVerificationBigImageItem
 import im.vector.riotx.features.crypto.verification.epoxy.bottomSheetVerificationNoticeItem
@@ -28,7 +30,8 @@ import javax.inject.Inject
 
 class VerificationChooseMethodController @Inject constructor(
         private val stringProvider: StringProvider,
-        private val colorProvider: ColorProvider
+        private val colorProvider: ColorProvider,
+        private val dimensionConverter: DimensionConverter
 ) : EpoxyController() {
 
     var listener: Listener? = null
@@ -49,10 +52,13 @@ class VerificationChooseMethodController @Inject constructor(
                 notice(stringProvider.getString(R.string.verification_scan_notice))
             }
 
-            // TODO Generate the QR code
+            // Generate the QR code
+            val size = dimensionConverter.dpToPx(180)
+            val qrCodeBitmap = state.QRtext?.toQrCode(size, size)
+
             bottomSheetVerificationBigImageItem {
                 id("qr")
-                imageRes(R.drawable.riotx_logo)
+                imageBitmap(qrCodeBitmap)
             }
 
             dividerItem {

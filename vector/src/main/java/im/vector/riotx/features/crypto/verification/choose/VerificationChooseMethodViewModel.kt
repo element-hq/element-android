@@ -35,6 +35,7 @@ data class VerificationChooseMethodViewState(
         val otherUserId: String = "",
         val transactionId: String = "",
         val QRModeAvailable: Boolean = false,
+        val QRtext: String? = null,
         val SASModeAvailable: Boolean = false
 ) : MvRxState
 
@@ -55,6 +56,8 @@ class VerificationChooseMethodViewModel @AssistedInject constructor(
         setState {
             copy(
                     QRModeAvailable = qrAvailable,
+                    // TODO
+                    QRtext = "https://www.example.org",
                     SASModeAvailable = emojiAvailable
             )
         }
@@ -90,6 +93,8 @@ class VerificationChooseMethodViewModel @AssistedInject constructor(
             return VerificationChooseMethodViewState(otherUserId = args.otherUserId,
                     transactionId = args.verificationId ?: "",
                     QRModeAvailable = qrAvailable,
+                    // TODO
+                    QRtext = "https://www.example.org",
                     SASModeAvailable = emojiAvailable
             )
         }

@@ -50,5 +50,8 @@ interface SasVerificationTransaction {
 
     fun shortCodeDoesNotMatch()
 
-    fun isToDeviceTransport() : Boolean
+    fun isToDeviceTransport(): Boolean
+
+    // TODO Not sure this is the right place to add this, because it is not Sas
+    fun userHasScannedRemoteQrCode(scannedData: String)
 }
