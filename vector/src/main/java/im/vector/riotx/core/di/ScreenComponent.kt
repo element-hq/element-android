@@ -24,12 +24,12 @@ import dagger.Component
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.preference.UserAvatarPreference
 import im.vector.riotx.features.MainActivity
+import im.vector.riotx.features.createdirect.CreateDirectRoomActivity
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.riotx.features.crypto.verification.VerificationBottomSheet
 import im.vector.riotx.features.debug.DebugMenuActivity
 import im.vector.riotx.features.home.HomeActivity
 import im.vector.riotx.features.home.HomeModule
-import im.vector.riotx.features.createdirect.CreateDirectRoomActivity
 import im.vector.riotx.features.home.room.detail.readreceipts.DisplayReadReceiptsBottomSheet
 import im.vector.riotx.features.home.room.detail.timeline.action.MessageActionsBottomSheet
 import im.vector.riotx.features.home.room.detail.timeline.edithistory.ViewEditHistoryBottomSheet
@@ -44,6 +44,7 @@ import im.vector.riotx.features.media.ImageMediaViewerActivity
 import im.vector.riotx.features.media.VideoMediaViewerActivity
 import im.vector.riotx.features.navigation.Navigator
 import im.vector.riotx.features.permalink.PermalinkHandlerActivity
+import im.vector.riotx.features.qrcode.QrCodeScannerActivity
 import im.vector.riotx.features.rageshake.BugReportActivity
 import im.vector.riotx.features.rageshake.BugReporter
 import im.vector.riotx.features.rageshake.RageShake
@@ -139,6 +140,8 @@ interface ScreenComponent {
     fun inject(verificationBottomSheet: VerificationBottomSheet)
 
     fun inject(permalinkHandlerActivity: PermalinkHandlerActivity)
+
+    fun inject(activity: QrCodeScannerActivity)
 
     fun inject(activity: DebugMenuActivity)
 

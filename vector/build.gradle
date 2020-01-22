@@ -27,7 +27,7 @@ static def generateVersionCodeFromTimestamp() {
     // It's unix timestamp, minus timestamp of October 3rd 2018 (first commit date) divided by 100: It's incremented by one every 100 seconds.
     // plus 20_000_000 for compatibility reason with the previous way the Version Code was computed
     // Note that the result will be multiplied by 10 when adding the digit for the arch
-    return ((getGitTimestamp() - 1_538_524_800 ) / 100).toInteger() + 20_000_000
+    return ((getGitTimestamp() - 1_538_524_800) / 100).toInteger() + 20_000_000
 }
 
 def generateVersionCodeFromVersionName() {
@@ -350,6 +350,10 @@ dependencies {
     gplayImplementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
 
     implementation "androidx.emoji:emoji-appcompat:1.0.0"
+
+    // QR-code
+    implementation 'com.google.zxing:core:3.4.0'
+    implementation 'me.dm7.barcodescanner:zxing:1.9.13'
 
     // TESTS
     testImplementation 'junit:junit:4.12'
