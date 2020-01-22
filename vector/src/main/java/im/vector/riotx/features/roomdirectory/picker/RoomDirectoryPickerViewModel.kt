@@ -16,17 +16,22 @@
 
 package im.vector.riotx.features.roomdirectory.picker
 
-import com.airbnb.mvrx.*
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.FragmentViewModelContext
+import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.thirdparty.ThirdPartyProtocol
+import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 
 class RoomDirectoryPickerViewModel @AssistedInject constructor(@Assisted initialState: RoomDirectoryPickerViewState,
                                                                private val session: Session)
-    : VectorViewModel<RoomDirectoryPickerViewState, RoomDirectoryPickerAction>(initialState) {
+    : VectorViewModel<RoomDirectoryPickerViewState, RoomDirectoryPickerAction, EmptyViewEvents>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {

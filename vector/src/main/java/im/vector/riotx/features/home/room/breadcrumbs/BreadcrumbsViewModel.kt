@@ -24,12 +24,13 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.rx.rx
 import im.vector.riotx.core.platform.EmptyAction
+import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 import io.reactivex.schedulers.Schedulers
 
 class BreadcrumbsViewModel @AssistedInject constructor(@Assisted initialState: BreadcrumbsViewState,
                                                        private val session: Session)
-    : VectorViewModel<BreadcrumbsViewState, EmptyAction>(initialState) {
+    : VectorViewModel<BreadcrumbsViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {

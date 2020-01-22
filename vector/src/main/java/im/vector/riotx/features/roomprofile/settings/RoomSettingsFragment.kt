@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,40 +14,51 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.roomprofile.members
+package im.vector.riotx.features.roomprofile.settings
 
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import im.vector.matrix.android.api.session.room.model.RoomMemberSummary
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.roomprofile.RoomProfileArgs
 import kotlinx.android.synthetic.main.fragment_room_setting_generic.*
+import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
 import javax.inject.Inject
 
-class RoomMemberListFragment @Inject constructor(
-        val viewModelFactory: RoomMemberListViewModel.Factory,
-        private val roomMemberListController: RoomMemberListController,
+class RoomSettingsFragment @Inject constructor(
+        val viewModelFactory: RoomSettingsViewModel.Factory,
+        private val controller: RoomSettingsController,
         private val avatarRenderer: AvatarRenderer
-) : VectorBaseFragment(), RoomMemberListController.Callback {
+) : VectorBaseFragment(), RoomSettingsController.Callback {
 
-    private val viewModel: RoomMemberListViewModel by fragmentViewModel()
+    private val viewModel: RoomSettingsViewModel by fragmentViewModel()
     private val roomProfileArgs: RoomProfileArgs by args()
 
     override fun getLayoutResId() = R.layout.fragment_room_setting_generic
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        roomMemberListController.callback = this
+        controller.callback = this
         setupToolbar(roomSettingsToolbar)
-        recyclerView.configureWith(roomMemberListController, hasFixedSize = true)
+        recyclerView.configureWith(controller, hasFixedSize = true)
+        waiting_view_status_text.setText(R.string.please_wait)
+        waiting_view_status_text.isVisible = true
+
+        viewModel.observeViewEvents {
+            when (it) {
+                is RoomSettingsViewEvents.Failure -> showFailure(it.throwable)
+            }.exhaustive
+        }
     }
 
     override fun onDestroyView() {
@@ -56,15 +67,24 @@ class RoomMemberListFragment @Inject constructor(
     }
 
     override fun invalidate() = withState(viewModel) { viewState ->
-        roomMemberListController.setData(viewState)
+        controller.setData(viewState)
         renderRoomSummary(viewState)
     }
 
-    override fun onRoomMemberClicked(roomMember: RoomMemberSummary) {
-        navigator.openRoomMemberProfile(roomMember.userId, roomId = roomProfileArgs.roomId, context = requireActivity())
+    override fun onEnableEncryptionClicked() {
+        AlertDialog.Builder(requireActivity())
+                .setTitle(R.string.room_settings_enable_encryption_dialog_title)
+                .setMessage(R.string.room_settings_enable_encryption_dialog_content)
+                .setNegativeButton(R.string.cancel, null)
+                .setPositiveButton(R.string.room_settings_enable_encryption_dialog_submit) { _, _ ->
+                    viewModel.handle(RoomSettingsAction.EnableEncryption)
+                }
+                .show()
     }
 
-    private fun renderRoomSummary(state: RoomMemberListViewState) {
+    private fun renderRoomSummary(state: RoomSettingsViewState) {
+        waiting_view.isVisible = state.isLoading
+
         state.roomSummary()?.let {
             roomSettingsToolbarTitleView.text = it.displayName
             avatarRenderer.render(it.toMatrixItem(), roomSettingsToolbarAvatarImageView)

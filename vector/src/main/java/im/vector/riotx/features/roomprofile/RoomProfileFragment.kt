@@ -31,6 +31,7 @@ import im.vector.riotx.core.animations.AppBarStateChangeListener
 import im.vector.riotx.core.animations.MatrixItemAppBarStateChangeListener
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.home.AvatarRenderer
@@ -77,17 +78,13 @@ class RoomProfileFragment @Inject constructor(
         appBarStateChangeListener = MatrixItemAppBarStateChangeListener(headerView, listOf(matrixProfileToolbarAvatarImageView,
                 matrixProfileToolbarTitleView))
         matrixProfileAppBarLayout.addOnOffsetChangedListener(appBarStateChangeListener)
-        roomProfileViewModel.viewEvents
-                .observe()
-                .subscribe {
-                    dismissLoadingDialog()
-                    when (it) {
-                        is RoomProfileViewEvents.Loading         -> showLoadingDialog(it.message)
-                        RoomProfileViewEvents.OnLeaveRoomSuccess -> onLeaveRoom()
-                        is RoomProfileViewEvents.Failure         -> showError(it.throwable)
-                    }
-                }
-                .disposeOnDestroyView()
+        roomProfileViewModel.observeViewEvents {
+            when (it) {
+                is RoomProfileViewEvents.Loading            -> showLoading(it.message)
+                is RoomProfileViewEvents.Failure            -> showFailure(it.throwable)
+                is RoomProfileViewEvents.OnLeaveRoomSuccess -> onLeaveRoom()
+            }.exhaustive
+        }
         roomListQuickActionsSharedActionViewModel
                 .observe()
                 .subscribe { handleQuickActions(it) }

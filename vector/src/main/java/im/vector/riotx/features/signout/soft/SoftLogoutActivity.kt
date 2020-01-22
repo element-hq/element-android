@@ -73,7 +73,7 @@ class SoftLogoutActivity : LoginActivity() {
 
     private fun handleSoftLogoutViewEvents(softLogoutViewEvents: SoftLogoutViewEvents) {
         when (softLogoutViewEvents) {
-            is SoftLogoutViewEvents.Error            ->
+            is SoftLogoutViewEvents.Failure          ->
                 showError(errorFormatter.toHumanReadable(softLogoutViewEvents.throwable))
             is SoftLogoutViewEvents.ErrorNotSameUser -> {
                 // Pop the backstack
