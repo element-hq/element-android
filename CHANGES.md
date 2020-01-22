@@ -17,7 +17,7 @@ Translations 🗣:
  -
 
 Build 🧱:
- -
+ - Ensure builds are reproducible (#842)
 
 Changes in RiotX 0.13.0 (2020-01-17)
 ===================================================
