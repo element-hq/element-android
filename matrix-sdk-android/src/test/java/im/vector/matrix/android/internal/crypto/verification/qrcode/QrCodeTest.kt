@@ -28,17 +28,17 @@ class QrCodeTest {
 
     private val basicQrCodeData = QrCodeData(
             userId = "@benoit:matrix.org",
-            requestId = "\$azertyazerty",
+            requestEventId = "\$azertyazerty",
+            action = QrCodeData.ACTION_VERIFY,
             keys = mapOf(
                     "1" to "abcdef",
                     "2" to "ghijql"
             ),
-            verificationAlgorithms = "verificationAlgorithm",
-            verificationKey = "verificationKey",
+            sharedSecret = "sharedSecret",
             otherUserKey = "otherUserKey"
     )
 
-    private val basicUrl = "https://matrix.to/#/@benoit:matrix.org?request=\$azertyazerty&action=verify&key_1=abcdef&key_2=ghijql&verification_algorithms=verificationAlgorithm&verification_key=verificationKey&other_user_key=otherUserKey"
+    private val basicUrl = "https://matrix.to/#/@benoit:matrix.org?request=\$azertyazerty&action=verify&key_1=abcdef&key_2=ghijql&secret=sharedSecret&other_user_key=otherUserKey"
 
     @Test
     fun testNominalCase() {
@@ -51,11 +51,10 @@ class QrCodeTest {
         decodedData.shouldNotBeNull()
 
         decodedData.userId shouldBeEqualTo "@benoit:matrix.org"
-        decodedData.requestId shouldBeEqualTo "\$azertyazerty"
+        decodedData.requestEventId shouldBeEqualTo "\$azertyazerty"
         decodedData.keys["1"]?.shouldBeEqualTo("abcdef")
         decodedData.keys["2"]?.shouldBeEqualTo("ghijql")
-        decodedData.verificationAlgorithms shouldBeEqualTo "verificationAlgorithm"
-        decodedData.verificationKey shouldBeEqualTo "verificationKey"
+        decodedData.sharedSecret shouldBeEqualTo "sharedSecret"
         decodedData.otherUserKey shouldBeEqualTo "otherUserKey"
     }
 
@@ -64,7 +63,7 @@ class QrCodeTest {
         val url = basicQrCodeData
                 .copy(
                         userId = "@benoit/foo:matrix.org",
-                        requestId = "\$azertyazerty/bar"
+                        requestEventId = "\$azertyazerty/bar"
                 )
                 .toUrl()
 
@@ -77,11 +76,10 @@ class QrCodeTest {
         decodedData.shouldNotBeNull()
 
         decodedData.userId shouldBeEqualTo "@benoit/foo:matrix.org"
-        decodedData.requestId shouldBeEqualTo "\$azertyazerty/bar"
+        decodedData.requestEventId shouldBeEqualTo "\$azertyazerty/bar"
         decodedData.keys["1"]?.shouldBeEqualTo("abcdef")
         decodedData.keys["2"]?.shouldBeEqualTo("ghijql")
-        decodedData.verificationAlgorithms shouldBeEqualTo "verificationAlgorithm"
-        decodedData.verificationKey shouldBeEqualTo "verificationKey"
+        decodedData.sharedSecret shouldBeEqualTo "sharedSecret"
         decodedData.otherUserKey shouldBeEqualTo "otherUserKey"
     }
 
@@ -93,14 +91,15 @@ class QrCodeTest {
     }
 
     @Test
-    fun testBadActionCase() {
+    fun testOtherActionCase() {
         basicUrl.replace("&action=verify", "&action=confirm")
                 .toQrCodeData()
-                .shouldBeNull()
+                ?.action
+                ?.shouldBeEqualTo("confirm")
     }
 
     @Test
-    fun testBadRequestId() {
+    fun testBadRequestEventId() {
         basicUrl.replace("\$azertyazerty", "@azertyazerty")
                 .toQrCodeData()
                 .shouldBeNull()
@@ -121,15 +120,8 @@ class QrCodeTest {
     }
 
     @Test
-    fun testMissingVerificationAlgorithm() {
-        basicUrl.replace("&verification_algorithms=verificationAlgorithm", "")
-                .toQrCodeData()
-                .shouldBeNull()
-    }
-
-    @Test
-    fun testMissingVerificationKey() {
-        basicUrl.replace("&verification_key=verificationKey", "")
+    fun testMissingSecret() {
+        basicUrl.replace("&secret=sharedSecret", "")
                 .toQrCodeData()
                 .shouldBeNull()
     }

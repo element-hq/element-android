@@ -26,8 +26,7 @@ import im.vector.matrix.android.api.permalinks.PermalinkFactory
  *     request=<event-id>
  *     &action=verify
  *     &key_<keyid>=<key-in-base64>...
- *     &verification_algorithms=<algorithm>
- *     &verification_key=<random-key-in-base64>
+ *     &secret=<shared_secret>
  *     &other_user_key=<master-key-in-base64>
  * </pre>
  */
@@ -35,18 +34,17 @@ fun QrCodeData.toUrl(): String {
     return buildString {
         append(PermalinkFactory.createPermalink(userId))
         append("?request=")
-        append(PermalinkFactory.escape(requestId))
-        append("&action=verify")
+        append(PermalinkFactory.escape(requestEventId))
+        append("&action=")
+        append(action)
 
         for ((keyId, key) in keys) {
             append("&key_$keyId=")
             append(PermalinkFactory.escape(key))
         }
 
-        append("&verification_algorithms=")
-        append(PermalinkFactory.escape(verificationAlgorithms))
-        append("&verification_key=")
-        append(PermalinkFactory.escape(verificationKey))
+        append("&secret=")
+        append(PermalinkFactory.escape(sharedSecret))
         append("&other_user_key=")
         append(PermalinkFactory.escape(otherUserKey))
     }
@@ -85,15 +83,12 @@ fun String.toQrCodeData(): QrCodeData? {
         (it.substringBefore("=") to it.substringAfter("="))
     }.toMap()
 
-    if (keyValues["action"] != "verify") {
-        return null
-    }
+    val action = keyValues["action"] ?: return null
 
     val requestId = keyValues["request"]
             ?.let { PermalinkFactory.unescape(it) }
             ?.takeIf { MatrixPatterns.isEventId(it) } ?: return null
-    val verificationAlgorithms = keyValues["verification_algorithms"] ?: return null
-    val verificationKey = keyValues["verification_key"] ?: return null
+    val sharedSecret = keyValues["secret"] ?: return null
     val otherUserKey = keyValues["other_user_key"] ?: return null
 
     val keys = keyValues.keys
@@ -106,9 +101,9 @@ fun String.toQrCodeData(): QrCodeData? {
     return QrCodeData(
             userId,
             requestId,
+            action,
             keys,
-            verificationAlgorithms,
-            verificationKey,
+            sharedSecret,
             otherUserKey
     )
 }

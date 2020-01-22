@@ -22,15 +22,19 @@ package im.vector.matrix.android.internal.crypto.verification.qrcode
 data class QrCodeData(
         val userId: String,
         // the event ID of the associated verification request event.
-        val requestId: String,
+        val requestEventId: String,
+        // The action
+        val action: String,
         // key_<key_id>: each key that the user wants verified will have an entry of this form, where the value is the key in unpadded base64.
         // The QR code should contain at least the user's master cross-signing key.
         val keys: Map<String, String>,
-        // algorithm
-        val verificationAlgorithms: String,
         // random single-use shared secret in unpadded base64. It must be at least 256-bits long (43 characters when base64-encoded).
-        val verificationKey: String,
+        val sharedSecret: String,
         // the other user's master cross-signing key, in unpadded base64. In other words, if Alice is displaying the QR code,
         // this would be the copy of Bob's master cross-signing key that Alice has.
         val otherUserKey: String
-)
+) {
+    companion object {
+        const val ACTION_VERIFY = "verify"
+    }
+}
