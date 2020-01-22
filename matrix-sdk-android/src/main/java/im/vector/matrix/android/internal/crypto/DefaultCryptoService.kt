@@ -428,12 +428,12 @@ internal class DefaultCryptoService @Inject constructor(
     /**
      * Update the blocked/verified state of the given device.
      *
-     * @param verificationStatus the new verification status
-     * @param deviceId           the unique identifier for the device.
-     * @param userId             the owner of the device
+     * @param trustLevel the new trust level
+     * @param userId     the owner of the device
+     * @param deviceId   the unique identifier for the device.
      */
-    override fun setDeviceVerification(trustLevel: DeviceTrustLevel, deviceId: String, userId: String) {
-        setDeviceVerificationAction.handle(trustLevel, deviceId, userId)
+    override fun setDeviceVerification(trustLevel: DeviceTrustLevel, userId: String, deviceId: String) {
+        setDeviceVerificationAction.handle(trustLevel, userId, deviceId)
     }
 
     /**

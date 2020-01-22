@@ -204,8 +204,8 @@ internal class DefaultSasVerificationService @Inject constructor(
 
     override fun markedLocallyAsManuallyVerified(userId: String, deviceID: String) {
         setDeviceVerificationAction.handle(DeviceTrustLevel(false, true),
-                deviceID,
-                userId)
+                userId,
+                deviceID)
 
         listeners.forEach {
             try {

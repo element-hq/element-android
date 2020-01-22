@@ -89,7 +89,7 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
         }
 
         // Do we already have alerts for this user/device
-        val mappingKey = keyForMap(deviceId, userId)
+        val mappingKey = keyForMap(userId, deviceId)
         if (alertsToRequests.containsKey(mappingKey)) {
             // just add the request, there is already an alert for this
             alertsToRequests[mappingKey]?.add(request)
@@ -110,7 +110,7 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
                 }
 
                 if (deviceInfo.isUnknown) {
-                    session?.setDeviceVerification(DeviceTrustLevel(false, false), deviceId, userId)
+                    session?.setDeviceVerification(DeviceTrustLevel(false, false), userId, deviceId)
 
                     deviceInfo.trustLevel = DeviceTrustLevel(false, false)
 
@@ -181,7 +181,7 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
         }
 
         val alert = PopupAlertManager.VectorAlert(
-                alertManagerId(deviceId, userId),
+                alertManagerId(userId, deviceId),
                 context.getString(R.string.key_share_request),
                 dialogText,
                 R.drawable.key_small
@@ -189,7 +189,7 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
 
         alert.colorRes = R.color.key_share_req_accent_color
 
-        val mappingKey = keyForMap(deviceId, userId)
+        val mappingKey = keyForMap(userId, deviceId)
         alert.dismissedAction = Runnable {
             denyAllRequests(mappingKey)
         }
@@ -249,7 +249,7 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
             return
         }
 
-        val alertMgrUniqueKey = alertManagerId(deviceId, userId)
+        val alertMgrUniqueKey = alertManagerId(userId, deviceId)
         alertsToRequests[alertMgrUniqueKey]?.removeAll {
             it.deviceId == request.deviceId
                     && it.userId == request.userId
@@ -257,7 +257,7 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
         }
         if (alertsToRequests[alertMgrUniqueKey]?.isEmpty() == true) {
             PopupAlertManager.cancelAlert(alertMgrUniqueKey)
-            alertsToRequests.remove(keyForMap(deviceId, userId))
+            alertsToRequests.remove(keyForMap(userId, deviceId))
         }
     }
 
@@ -275,11 +275,11 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
 
     override fun markedAsManuallyVerified(userId: String, deviceId: String) {
         // accept related requests
-        shareAllSessions(keyForMap(deviceId, userId))
-        PopupAlertManager.cancelAlert(alertManagerId(deviceId, userId))
+        shareAllSessions(keyForMap(userId, deviceId))
+        PopupAlertManager.cancelAlert(alertManagerId(userId, deviceId))
     }
 
-    private fun keyForMap(deviceId: String, userId: String) = "$deviceId$userId"
+    private fun keyForMap(userId: String, deviceId: String) = "$deviceId$userId"
 
-    private fun alertManagerId(deviceId: String, userId: String) = "ikr_$deviceId$userId"
+    private fun alertManagerId(userId: String, deviceId: String) = "ikr_$deviceId$userId"
 }
