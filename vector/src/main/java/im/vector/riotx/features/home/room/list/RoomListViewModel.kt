@@ -26,7 +26,6 @@ import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.tag.RoomTag
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.utils.DataSource
-import im.vector.riotx.core.utils.PublishDataSource
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import javax.inject.Inject
@@ -34,7 +33,7 @@ import javax.inject.Inject
 class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
                                             private val session: Session,
                                             private val roomSummariesSource: DataSource<List<RoomSummary>>)
-    : VectorViewModel<RoomListViewState, RoomListAction>(initialState) {
+    : VectorViewModel<RoomListViewState, RoomListAction, RoomListViewEvents>(initialState) {
 
     interface Factory {
         fun create(initialState: RoomListViewState): RoomListViewModel
@@ -51,9 +50,6 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
 
     private val displayMode = initialState.displayMode
     private val roomListDisplayModeFilter = RoomListDisplayModeFilter(displayMode)
-
-    private val _viewEvents = PublishDataSource<RoomListViewEvents>()
-    val viewEvents: DataSource<RoomListViewEvents> = _viewEvents
 
     init {
         observeRoomSummaries()
@@ -197,6 +193,7 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
     }
 
     private fun handleLeaveRoom(action: RoomListAction.LeaveRoom) {
+        _viewEvents.post(RoomListViewEvents.Loading(null))
         session.getRoom(action.roomId)?.leave(null, object : MatrixCallback<Unit> {
             override fun onFailure(failure: Throwable) {
                 _viewEvents.post(RoomListViewEvents.Failure(failure))

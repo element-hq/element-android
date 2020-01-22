@@ -33,6 +33,7 @@ import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.rx.rx
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.postLiveEvent
+import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.utils.LiveEvent
@@ -45,7 +46,7 @@ class GroupListViewModel @AssistedInject constructor(@Assisted initialState: Gro
                                                      private val selectedGroupStore: SelectedGroupDataSource,
                                                      private val session: Session,
                                                      private val stringProvider: StringProvider
-) : VectorViewModel<GroupListViewState, GroupListAction>(initialState) {
+) : VectorViewModel<GroupListViewState, GroupListAction, EmptyViewEvents>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {

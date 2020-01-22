@@ -41,8 +41,6 @@ import im.vector.matrix.android.internal.auth.data.LoginFlowTypes
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.extensions.configureAndStart
 import im.vector.riotx.core.platform.VectorViewModel
-import im.vector.riotx.core.utils.DataSource
-import im.vector.riotx.core.utils.PublishDataSource
 import im.vector.riotx.features.notifications.PushRuleTriggerListener
 import im.vector.riotx.features.session.SessionListener
 import im.vector.riotx.features.signout.soft.SoftLogoutActivity
@@ -59,7 +57,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                                                  private val pushRuleTriggerListener: PushRuleTriggerListener,
                                                  private val homeServerConnectionConfigFactory: HomeServerConnectionConfigFactory,
                                                  private val sessionListener: SessionListener)
-    : VectorViewModel<LoginViewState, LoginAction>(initialState) {
+    : VectorViewModel<LoginViewState, LoginAction, LoginViewEvents>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -94,9 +92,6 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
     private var loginConfig: LoginConfig? = null
 
     private var currentTask: Cancelable? = null
-
-    private val _viewEvents = PublishDataSource<LoginViewEvents>()
-    val viewEvents: DataSource<LoginViewEvents> = _viewEvents
 
     override fun handle(action: LoginAction) {
         when (action) {
@@ -179,7 +174,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
 
         override fun onFailure(failure: Throwable) {
             if (failure !is CancellationException) {
-                _viewEvents.post(LoginViewEvents.Error(failure))
+                _viewEvents.post(LoginViewEvents.Failure(failure))
             }
             setState {
                 copy(
@@ -201,7 +196,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
             }
 
             override fun onFailure(failure: Throwable) {
-                _viewEvents.post(LoginViewEvents.Error(failure))
+                _viewEvents.post(LoginViewEvents.Failure(failure))
                 setState {
                     copy(
                             asyncRegistration = Uninitialized
@@ -223,7 +218,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
             }
 
             override fun onFailure(failure: Throwable) {
-                _viewEvents.post(LoginViewEvents.Error(failure))
+                _viewEvents.post(LoginViewEvents.Failure(failure))
                 setState {
                     copy(
                             asyncRegistration = Uninitialized
@@ -526,7 +521,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
 
         if (homeServerConnectionConfig == null) {
             // This is invalid
-            _viewEvents.post(LoginViewEvents.Error(Throwable("Unable to create a HomeServerConnectionConfig")))
+            _viewEvents.post(LoginViewEvents.Failure(Throwable("Unable to create a HomeServerConnectionConfig")))
         } else {
             currentTask?.cancel()
             currentTask = null
@@ -540,7 +535,7 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
 
             currentTask = authenticationService.getLoginFlow(homeServerConnectionConfig, object : MatrixCallback<LoginFlowResult> {
                 override fun onFailure(failure: Throwable) {
-                    _viewEvents.post(LoginViewEvents.Error(failure))
+                    _viewEvents.post(LoginViewEvents.Failure(failure))
                     setState {
                         copy(
                                 asyncHomeServerLoginFlowRequest = Uninitialized

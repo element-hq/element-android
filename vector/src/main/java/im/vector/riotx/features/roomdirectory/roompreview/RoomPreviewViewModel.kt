@@ -26,13 +26,14 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.roomSummaryQueryParams
 import im.vector.matrix.rx.rx
+import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.features.roomdirectory.JoinState
 import timber.log.Timber
 
 class RoomPreviewViewModel @AssistedInject constructor(@Assisted initialState: RoomPreviewViewState,
                                                        private val session: Session)
-    : VectorViewModel<RoomPreviewViewState, RoomPreviewAction>(initialState) {
+    : VectorViewModel<RoomPreviewViewState, RoomPreviewAction, EmptyViewEvents>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {

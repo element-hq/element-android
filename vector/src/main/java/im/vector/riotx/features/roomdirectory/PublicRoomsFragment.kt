@@ -75,6 +75,7 @@ class PublicRoomsFragment @Inject constructor(
             sharedActionViewModel.post(RoomDirectorySharedAction.CreateRoom)
         }
 
+        // TODO remove this, replace by ViewEvents
         viewModel.joinRoomErrorLiveData.observeEvent(this) { throwable ->
             Snackbar.make(publicRoomsCoordinator, errorFormatter.toHumanReadable(throwable), Snackbar.LENGTH_SHORT)
                     .show()

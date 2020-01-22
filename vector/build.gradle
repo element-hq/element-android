@@ -45,7 +45,7 @@ def getVersionCode() {
 }
 
 static def gitRevision() {
-    def cmd = "git rev-parse --short HEAD"
+    def cmd = "git rev-parse --short=8 HEAD"
     return cmd.execute().text.trim()
 }
 

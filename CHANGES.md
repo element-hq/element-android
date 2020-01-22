@@ -2,7 +2,7 @@ Changes in RiotX 0.14.0 (2020-XX-XX)
 ===================================================
 
 Features ✨:
- -
+ - Enable encryption in unencrypted rooms, from the room settings (#212)
 
 Improvements 🙌:
  -
@@ -17,6 +17,7 @@ Translations 🗣:
  -
 
 Build 🧱:
+ - Ensure builds are reproducible (#842)
  - F-Droid: fix the "-dev" issue in version name (#815)
 
 Changes in RiotX 0.13.0 (2020-01-17)

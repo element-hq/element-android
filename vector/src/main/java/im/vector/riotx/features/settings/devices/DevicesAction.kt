@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.roommemberprofile
+package im.vector.riotx.features.settings.devices
 
-import im.vector.riotx.core.platform.VectorViewEvents
+import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
+import im.vector.riotx.core.platform.VectorViewModelAction
 
-/**
- * Transient events for RoomMemberProfile
- */
-sealed class RoomMemberProfileViewEvents : VectorViewEvents {
-    data class Loading(val message: CharSequence? = null) : RoomMemberProfileViewEvents()
-    data class Failure(val throwable: Throwable) : RoomMemberProfileViewEvents()
-
-    object OnIgnoreActionSuccess : RoomMemberProfileViewEvents()
+sealed class DevicesAction : VectorViewModelAction {
+    object Retry : DevicesAction()
+    data class Delete(val deviceInfo: DeviceInfo) : DevicesAction()
+    data class Password(val password: String) : DevicesAction()
+    data class Rename(val deviceInfo: DeviceInfo, val newName: String) : DevicesAction()
+    data class ToggleDevice(val deviceInfo: DeviceInfo) : DevicesAction()
 }

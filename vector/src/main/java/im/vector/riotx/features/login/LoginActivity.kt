@@ -209,7 +209,7 @@ open class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
                         .setMessage(R.string.login_error_outdated_homeserver_content)
                         .setPositiveButton(R.string.ok, null)
                         .show()
-            is LoginViewEvents.Error                  ->
+            is LoginViewEvents.Failure                ->
                 // This is handled by the Fragments
                 Unit
         }
