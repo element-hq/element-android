@@ -43,7 +43,10 @@ data class RoomListViewState(
         val isDirectRoomsExpanded: Boolean = true,
         val isGroupRoomsExpanded: Boolean = true,
         val isLowPriorityRoomsExpanded: Boolean = true,
-        val isServerNoticeRoomsExpanded: Boolean = true
+        val isServerNoticeRoomsExpanded: Boolean = true,
+        // For sharing
+        val isRecentExpanded: Boolean = true,
+        val isOtherExpanded: Boolean = true
 ) : MvRxState {
 
     constructor(args: RoomListParams) : this(displayMode = args.displayMode)
@@ -56,6 +59,8 @@ data class RoomListViewState(
             RoomCategory.GROUP         -> isGroupRoomsExpanded
             RoomCategory.LOW_PRIORITY  -> isLowPriorityRoomsExpanded
             RoomCategory.SERVER_NOTICE -> isServerNoticeRoomsExpanded
+            RoomCategory.RECENT_ROOMS  -> isRecentExpanded
+            RoomCategory.OTHER_ROOMS   -> isOtherExpanded
         }
     }
 
@@ -67,6 +72,8 @@ data class RoomListViewState(
             RoomCategory.GROUP         -> copy(isGroupRoomsExpanded = !isGroupRoomsExpanded)
             RoomCategory.LOW_PRIORITY  -> copy(isLowPriorityRoomsExpanded = !isLowPriorityRoomsExpanded)
             RoomCategory.SERVER_NOTICE -> copy(isServerNoticeRoomsExpanded = !isServerNoticeRoomsExpanded)
+            RoomCategory.RECENT_ROOMS  -> copy(isRecentExpanded = !isRecentExpanded)
+            RoomCategory.OTHER_ROOMS   -> copy(isOtherExpanded = !isOtherExpanded)
         }
     }
 
@@ -86,7 +93,11 @@ enum class RoomCategory(@StringRes val titleRes: Int) {
     DIRECT(R.string.bottom_action_people_x),
     GROUP(R.string.bottom_action_rooms),
     LOW_PRIORITY(R.string.low_priority_header),
-    SERVER_NOTICE(R.string.system_alerts_header)
+    SERVER_NOTICE(R.string.system_alerts_header),
+
+    // For Sharing
+    RECENT_ROOMS(R.string.room_list_sharing_header_recent_rooms),
+    OTHER_ROOMS(R.string.room_list_sharing_header_other_rooms)
 }
 
 fun RoomSummaries?.isNullOrEmpty(): Boolean {
