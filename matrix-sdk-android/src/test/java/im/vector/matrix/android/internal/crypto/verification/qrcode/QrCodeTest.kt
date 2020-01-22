@@ -23,6 +23,7 @@ import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runners.MethodSorters
 
+@Suppress("SpellCheckingInspection")
 @FixMethodOrder(MethodSorters.JVM)
 class QrCodeTest {
 
