@@ -50,10 +50,14 @@ internal class DefaultReadService @AssistedInject constructor(
         fun create(roomId: String): ReadService
     }
 
-    override fun markAllAsRead(callback: MatrixCallback<Unit>) {
-        val params = SetReadMarkersTask.Params(roomId, markAllAsRead = true)
+    override fun markAsRead(params: ReadService.MarkAsReadParams, callback: MatrixCallback<Unit>) {
+        val taskParams = SetReadMarkersTask.Params(
+                roomId = roomId,
+                forceReadMarker = params.forceReadMarker(),
+                forceReadReceipt = params.forceReadReceipt()
+        )
         setReadMarkersTask
-                .configureWith(params) {
+                .configureWith(taskParams) {
                     this.callback = callback
                 }
                 .executeBy(taskExecutor)
@@ -110,4 +114,13 @@ internal class DefaultReadService @AssistedInject constructor(
             it.firstOrNull() ?: emptyList()
         }
     }
+
+    private fun ReadService.MarkAsReadParams.forceReadMarker(): Boolean {
+        return this == ReadService.MarkAsReadParams.READ_MARKER || this == ReadService.MarkAsReadParams.BOTH
+    }
+
+    private fun ReadService.MarkAsReadParams.forceReadReceipt(): Boolean {
+        return this == ReadService.MarkAsReadParams.READ_RECEIPT || this == ReadService.MarkAsReadParams.BOTH
+    }
+
 }

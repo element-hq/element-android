@@ -23,6 +23,7 @@ import androidx.core.app.RemoteInput
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.Room
+import im.vector.matrix.android.api.session.room.read.ReadService
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.extensions.vectorComponent
@@ -88,7 +89,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
     private fun handleMarkAsRead(roomId: String) {
         activeSessionHolder.getActiveSession().let { session ->
             session.getRoom(roomId)
-                    ?.markAllAsRead(object : MatrixCallback<Unit> {})
+                    ?.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT, object : MatrixCallback<Unit> {})
         }
     }
 

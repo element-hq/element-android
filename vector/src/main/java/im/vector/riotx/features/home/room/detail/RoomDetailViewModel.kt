@@ -41,6 +41,7 @@ import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.model.message.getFileUrl
 import im.vector.matrix.android.api.session.room.model.tombstone.RoomTombstoneContent
+import im.vector.matrix.android.api.session.room.read.ReadService
 import im.vector.matrix.android.api.session.room.send.UserDraft
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
@@ -149,6 +150,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         observeUnreadState()
         room.getRoomSummaryLive()
         room.rx().loadRoomMembersIfNeeded().subscribeLogError().disposeOnClear()
+        room.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT, object : MatrixCallback<Any> {})
         // Inform the SDK that the room is displayed
         session.onRoomDisplayed(initialState.roomId)
     }
@@ -753,7 +755,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun handleMarkAllAsRead() {
-        room.markAllAsRead(object : MatrixCallback<Any> {})
+        room.markAsRead(ReadService.MarkAsReadParams.BOTH, object : MatrixCallback<Any> {})
     }
 
     private fun handleReportContent(action: RoomDetailAction.ReportContent) {

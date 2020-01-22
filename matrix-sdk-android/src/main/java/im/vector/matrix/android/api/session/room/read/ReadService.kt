@@ -26,10 +26,16 @@ import im.vector.matrix.android.api.util.Optional
  */
 interface ReadService {
 
+    enum class MarkAsReadParams{
+        READ_RECEIPT,
+        READ_MARKER,
+        BOTH
+    }
+
     /**
      * Force the read marker to be set on the latest event.
      */
-    fun markAllAsRead(callback: MatrixCallback<Unit>)
+    fun markAsRead(params: MarkAsReadParams = MarkAsReadParams.BOTH, callback: MatrixCallback<Unit>)
 
     /**
      * Set the read receipt on the event with provided eventId.

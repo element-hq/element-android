@@ -25,6 +25,7 @@ import im.vector.matrix.android.internal.database.query.isReadMarkerMoreRecent
 import im.vector.matrix.android.internal.database.query.latestEvent
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.UserId
+import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.session.sync.ReadReceiptHandler
@@ -35,16 +36,16 @@ import io.realm.Realm
 import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import javax.inject.Inject
-import kotlin.collections.HashMap
 import kotlin.collections.set
 
 internal interface SetReadMarkersTask : Task<SetReadMarkersTask.Params, Unit> {
 
     data class Params(
             val roomId: String,
-            val markAllAsRead: Boolean = false,
             val fullyReadEventId: String? = null,
-            val readReceiptEventId: String? = null
+            val readReceiptEventId: String? = null,
+            val forceReadReceipt: Boolean = false,
+            val forceReadMarker: Boolean = false
     )
 }
 
@@ -57,22 +58,24 @@ internal class DefaultSetReadMarkersTask @Inject constructor(
         private val roomFullyReadHandler: RoomFullyReadHandler,
         private val readReceiptHandler: ReadReceiptHandler,
         @UserId private val userId: String,
-        private val eventBus: EventBus
+        private val eventBus: EventBus,
+        private val networkConnectivityChecker: NetworkConnectivityChecker
 ) : SetReadMarkersTask {
 
     override suspend fun execute(params: SetReadMarkersTask.Params) {
         val markers = HashMap<String, String>()
-
         Timber.v("Execute set read marker with params: $params")
-        val (fullyReadEventId, readReceiptEventId) = if (params.markAllAsRead) {
-            val latestSyncedEventId = Realm.getInstance(monarchy.realmConfiguration).use { realm ->
-                TimelineEventEntity.latestEvent(realm, roomId = params.roomId, includesSending = false)?.eventId
-            }
-            Pair(latestSyncedEventId, latestSyncedEventId)
-        } else {
-            Pair(params.fullyReadEventId, params.readReceiptEventId)
+        val latestSyncedEventId = latestSyncedEventId(params.roomId)
+        val fullyReadEventId = if(params.forceReadMarker){
+            latestSyncedEventId
+        }else {
+            params.fullyReadEventId
         }
-
+        val readReceiptEventId = if(params.forceReadReceipt){
+            latestSyncedEventId
+        }else {
+            params.readReceiptEventId
+        }
         if (fullyReadEventId != null && !isReadMarkerMoreRecent(monarchy, params.roomId, fullyReadEventId)) {
             if (LocalEcho.isLocalEchoId(fullyReadEventId)) {
                 Timber.w("Can't set read marker for local event $fullyReadEventId")
@@ -80,7 +83,6 @@ internal class DefaultSetReadMarkersTask @Inject constructor(
                 markers[READ_MARKER] = fullyReadEventId
             }
         }
-
         if (readReceiptEventId != null
                 && !isEventRead(monarchy, userId, params.roomId, readReceiptEventId)) {
             if (LocalEcho.isLocalEchoId(readReceiptEventId)) {
@@ -89,16 +91,24 @@ internal class DefaultSetReadMarkersTask @Inject constructor(
                 markers[READ_RECEIPT] = readReceiptEventId
             }
         }
+
+        val shouldUpdateRoomSummary = readReceiptEventId != null && readReceiptEventId == latestSyncedEventId
+        updateDatabase(params.roomId, markers, shouldUpdateRoomSummary)
         if (markers.isEmpty()) {
             return
         }
-        updateDatabase(params.roomId, markers)
+        networkConnectivityChecker.waitUntilConnected()
         executeRequest<Unit>(eventBus) {
             apiCall = roomAPI.sendReadMarker(params.roomId, markers)
         }
     }
 
-    private suspend fun updateDatabase(roomId: String, markers: HashMap<String, String>) {
+    private fun latestSyncedEventId(roomId: String): String? =
+            Realm.getInstance(monarchy.realmConfiguration).use { realm ->
+                TimelineEventEntity.latestEvent(realm, roomId = roomId, includesSending = false)?.eventId
+            }
+
+    private suspend fun updateDatabase(roomId: String, markers: HashMap<String, String>, shouldUpdateRoomSummary: Boolean) {
         monarchy.awaitTransaction { realm ->
             val readMarkerId = markers[READ_MARKER]
             val readReceiptId = markers[READ_RECEIPT]
@@ -108,14 +118,13 @@ internal class DefaultSetReadMarkersTask @Inject constructor(
             if (readReceiptId != null) {
                 val readReceiptContent = ReadReceiptHandler.createContent(userId, readReceiptId)
                 readReceiptHandler.handle(realm, roomId, readReceiptContent, false)
-                val isLatestReceived = TimelineEventEntity.latestEvent(realm, roomId = roomId, includesSending = false)?.eventId == readReceiptId
-                if (isLatestReceived) {
-                    val roomSummary = RoomSummaryEntity.where(realm, roomId).findFirst()
-                            ?: return@awaitTransaction
-                    roomSummary.notificationCount = 0
-                    roomSummary.highlightCount = 0
-                    roomSummary.hasUnreadMessages = false
-                }
+            }
+            if(shouldUpdateRoomSummary){
+                val roomSummary = RoomSummaryEntity.where(realm, roomId).findFirst()
+                        ?: return@awaitTransaction
+                roomSummary.notificationCount = 0
+                roomSummary.highlightCount = 0
+                roomSummary.hasUnreadMessages = false
             }
         }
     }
