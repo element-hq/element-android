@@ -19,14 +19,25 @@ package im.vector.matrix.android.internal.crypto.model.rest
 import im.vector.matrix.android.api.session.crypto.sas.VerificationMethod
 
 internal const val VERIFICATION_METHOD_SAS = "m.sas.v1"
-internal const val VERIFICATION_METHOD_SCAN = "m.qr_code.scan.v1"
+
+// Qr code
+// Ref: https://github.com/uhoreg/matrix-doc/blob/qr_key_verification/proposals/1543-qr_code_key_verification.md#verification-methods
+internal const val VERIFICATION_METHOD_QR_CODE_SHOW = "m.qr_code.show.v1"
+internal const val VERIFICATION_METHOD_QR_CODE_SCAN = "m.qr_code.scan.v1"
+internal const val VERIFICATION_METHOD_RECIPROCATE = "m.reciprocate.v1"
 
 internal fun VerificationMethod.toValue(): String {
     return when (this) {
-        VerificationMethod.SAS  -> VERIFICATION_METHOD_SAS
-        VerificationMethod.SCAN -> VERIFICATION_METHOD_SCAN
+        VerificationMethod.SAS          -> VERIFICATION_METHOD_SAS
+        VerificationMethod.QR_CODE_SCAN -> VERIFICATION_METHOD_QR_CODE_SCAN
+        VerificationMethod.QR_CODE_SHOW -> VERIFICATION_METHOD_QR_CODE_SHOW
     }
 }
 
-// TODO Add SCAN
-internal val supportedVerificationMethods = listOf(VERIFICATION_METHOD_SAS)
+internal val supportedVerificationMethods =
+        listOf(
+                VERIFICATION_METHOD_SAS,
+                VERIFICATION_METHOD_QR_CODE_SHOW,
+                VERIFICATION_METHOD_QR_CODE_SCAN,
+                VERIFICATION_METHOD_RECIPROCATE
+        )

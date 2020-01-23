@@ -14,10 +14,16 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.crypto.store
+package im.vector.matrix.android.internal.crypto.verification.qrcode
 
-data class PrivateKeysInfo(
-        val master: String? = null,
-        val selfSigned: String? = null,
-        val user: String? = null
-)
+import im.vector.matrix.android.internal.crypto.crosssigning.toBase64NoPadding
+import java.security.SecureRandom
+
+fun generateSharedSecret(): String {
+    val secureRandom = SecureRandom()
+
+    // 256 bits long
+    val secretBytes = ByteArray(32)
+    secureRandom.nextBytes(secretBytes)
+    return secretBytes.toBase64NoPadding()
+}

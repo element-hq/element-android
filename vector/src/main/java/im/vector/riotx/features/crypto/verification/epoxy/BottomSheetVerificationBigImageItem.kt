@@ -16,6 +16,7 @@
  */
 package im.vector.riotx.features.crypto.verification.epoxy
 
+import android.graphics.Bitmap
 import android.widget.ImageView
 import androidx.core.view.ViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
@@ -34,10 +35,17 @@ abstract class BottomSheetVerificationBigImageItem : VectorEpoxyModel<BottomShee
     var imageRes: Int = 0
 
     @EpoxyAttribute
+    var imageBitmap: Bitmap? = null
+
+    @EpoxyAttribute
     var contentDescription: String? = null
 
     override fun bind(holder: Holder) {
-        holder.image.setImageResource(imageRes)
+        imageBitmap?.let {
+            holder.image.setImageBitmap(it)
+        } ?: run {
+            holder.image.setImageResource(imageRes)
+        }
 
         if (contentDescription == null) {
             ViewCompat.setImportantForAccessibility(holder.image, ViewCompat.IMPORTANT_FOR_ACCESSIBILITY_NO)

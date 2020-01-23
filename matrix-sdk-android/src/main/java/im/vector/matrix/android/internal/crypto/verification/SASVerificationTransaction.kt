@@ -204,7 +204,7 @@ internal abstract class SASVerificationTransaction(
         cancel(CancelCode.MismatchedSas)
     }
 
-    override fun isToDeviceTransport() : Boolean {
+    override fun isToDeviceTransport(): Boolean {
         return transport is SasTransportToDevice
     }
 
@@ -227,6 +227,10 @@ internal abstract class SASVerificationTransaction(
     abstract fun onKeyVerificationKey(userId: String, vKey: VerificationInfoKey)
 
     abstract fun onKeyVerificationMac(vKey: VerificationInfoMac)
+
+    override fun userHasScannedRemoteQrCode(scannedData: String) {
+        // TODO
+    }
 
     protected fun verifyMacs() {
         Timber.v("## SAS verifying macs for id:$transactionId")
@@ -328,17 +332,17 @@ internal abstract class SASVerificationTransaction(
 
         // TODO what if the otherDevice is not in this list? and should we
         verifiedDevices.forEach {
-            setDeviceVerified(it, otherUserId)
+            setDeviceVerified(otherUserId, it)
         }
         transport.done(transactionId)
         state = SasVerificationTxState.Verified
     }
 
-    private fun setDeviceVerified(deviceId: String, userId: String) {
+    private fun setDeviceVerified(userId: String, deviceId: String) {
         // TODO should not override cross sign status
         setDeviceVerificationAction.handle(DeviceTrustLevel(false, true),
-                deviceId,
-                userId)
+                userId,
+                deviceId)
     }
 
     override fun cancel() {

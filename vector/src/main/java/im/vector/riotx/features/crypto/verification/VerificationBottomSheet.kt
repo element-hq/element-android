@@ -131,7 +131,9 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
                     showFragment(VerificationEmojiCodeFragment::class, Bundle().apply {
                         putParcelable(MvRx.KEY_ARG, VerificationArgs(
                                 it.otherUserMxItem?.id ?: "",
-                                it.transactionId))
+                                // If it was outgoing it.transaction id would be null, but the pending request
+                                // would be updated (from localID to txId)
+                                it.pendingRequest?.transactionId ?: it.transactionId))
                     })
                 }
                 SasVerificationTxState.Verified,

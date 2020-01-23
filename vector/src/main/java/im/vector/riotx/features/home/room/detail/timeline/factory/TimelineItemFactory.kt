@@ -20,6 +20,7 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotx.core.epoxy.EmptyItem_
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
+import im.vector.riotx.core.resources.UserPreferencesProvider
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import timber.log.Timber
 import javax.inject.Inject
@@ -29,7 +30,8 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                                               private val noticeItemFactory: NoticeItemFactory,
                                               private val defaultItemFactory: DefaultItemFactory,
                                               private val roomCreateItemFactory: RoomCreateItemFactory,
-                                              private val verificationConclusionItemFactory: VerificationItemFactory) {
+                                              private val verificationConclusionItemFactory: VerificationItemFactory,
+                                              private val userPreferencesProvider: UserPreferencesProvider ) {
 
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
@@ -73,9 +75,11 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 EventType.KEY_VERIFICATION_KEY,
                 EventType.KEY_VERIFICATION_READY,
                 EventType.KEY_VERIFICATION_MAC          -> {
-                    // These events are filtered from timeline in normal case
-                    // Only visible in developer mode
-                    noticeItemFactory.create(event, highlight, callback)
+                    // TODO These are not filtered out by timeline when encrypted
+                    // For now manually ignore
+                    if (userPreferencesProvider.shouldShowHiddenEvents()) {
+                        noticeItemFactory.create(event, highlight, callback)
+                    } else null
                 }
                 EventType.KEY_VERIFICATION_CANCEL,
                 EventType.KEY_VERIFICATION_DONE         -> {

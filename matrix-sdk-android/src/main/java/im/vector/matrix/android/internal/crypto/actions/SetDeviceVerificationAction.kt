@@ -28,7 +28,7 @@ internal class SetDeviceVerificationAction @Inject constructor(
         @UserId private val userId: String,
         private val keysBackup: KeysBackup) {
 
-    fun handle(trustLevel: DeviceTrustLevel, deviceId: String, userId: String) {
+    fun handle(trustLevel: DeviceTrustLevel, userId: String, deviceId: String) {
         val device = cryptoStore.getUserDevice(userId, deviceId)
 
         // Sanity check

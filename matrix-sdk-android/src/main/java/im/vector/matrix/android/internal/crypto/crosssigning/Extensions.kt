@@ -28,6 +28,10 @@ fun CryptoCrossSigningKey.canonicalSignable(): String {
     return JsonCanonicalizer.getCanonicalJson(Map::class.java, signalableJSONDictionary())
 }
 
-fun ByteArray.toBase64NoPadding() : String? {
-    return Base64.encodeToString(this, Base64.NO_PADDING)
+fun ByteArray.toBase64NoPadding(): String {
+    return Base64.encodeToString(this, Base64.NO_PADDING or Base64.NO_WRAP)
+}
+
+fun String.fromBase64NoPadding(): ByteArray {
+    return Base64.decode(this, Base64.NO_PADDING or Base64.NO_WRAP)
 }

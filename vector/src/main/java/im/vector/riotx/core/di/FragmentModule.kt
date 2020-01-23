@@ -22,32 +22,50 @@ import androidx.fragment.app.FragmentFactory
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
+import im.vector.riotx.features.createdirect.CreateDirectRoomDirectoryUsersFragment
+import im.vector.riotx.features.createdirect.CreateDirectRoomKnownUsersFragment
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupSettingsFragment
 import im.vector.riotx.features.crypto.verification.choose.VerificationChooseMethodFragment
 import im.vector.riotx.features.crypto.verification.conclusion.VerificationConclusionFragment
 import im.vector.riotx.features.crypto.verification.emoji.VerificationEmojiCodeFragment
 import im.vector.riotx.features.crypto.verification.request.VerificationRequestFragment
+import im.vector.riotx.features.grouplist.GroupListFragment
 import im.vector.riotx.features.home.HomeDetailFragment
 import im.vector.riotx.features.home.HomeDrawerFragment
 import im.vector.riotx.features.home.LoadingFragment
-import im.vector.riotx.features.createdirect.CreateDirectRoomDirectoryUsersFragment
-import im.vector.riotx.features.createdirect.CreateDirectRoomKnownUsersFragment
-import im.vector.riotx.features.grouplist.GroupListFragment
 import im.vector.riotx.features.home.room.breadcrumbs.BreadcrumbsFragment
 import im.vector.riotx.features.home.room.detail.RoomDetailFragment
 import im.vector.riotx.features.home.room.list.RoomListFragment
-import im.vector.riotx.features.login.*
+import im.vector.riotx.features.login.LoginCaptchaFragment
+import im.vector.riotx.features.login.LoginFragment
+import im.vector.riotx.features.login.LoginGenericTextInputFormFragment
+import im.vector.riotx.features.login.LoginResetPasswordFragment
+import im.vector.riotx.features.login.LoginResetPasswordMailConfirmationFragment
+import im.vector.riotx.features.login.LoginResetPasswordSuccessFragment
+import im.vector.riotx.features.login.LoginServerSelectionFragment
+import im.vector.riotx.features.login.LoginServerUrlFormFragment
+import im.vector.riotx.features.login.LoginSignUpSignInSelectionFragment
+import im.vector.riotx.features.login.LoginSplashFragment
+import im.vector.riotx.features.login.LoginWaitForEmailFragment
+import im.vector.riotx.features.login.LoginWebFragment
 import im.vector.riotx.features.login.terms.LoginTermsFragment
-import im.vector.riotx.features.roommemberprofile.RoomMemberProfileFragment
+import im.vector.riotx.features.qrcode.QrCodeScannerFragment
 import im.vector.riotx.features.reactions.EmojiChooserFragment
 import im.vector.riotx.features.reactions.EmojiSearchResultFragment
 import im.vector.riotx.features.roomdirectory.PublicRoomsFragment
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomFragment
 import im.vector.riotx.features.roomdirectory.picker.RoomDirectoryPickerFragment
 import im.vector.riotx.features.roomdirectory.roompreview.RoomPreviewNoPreviewFragment
+import im.vector.riotx.features.roommemberprofile.RoomMemberProfileFragment
 import im.vector.riotx.features.roomprofile.RoomProfileFragment
 import im.vector.riotx.features.roomprofile.members.RoomMemberListFragment
-import im.vector.riotx.features.settings.*
+import im.vector.riotx.features.settings.VectorSettingsAdvancedNotificationPreferenceFragment
+import im.vector.riotx.features.settings.VectorSettingsHelpAboutFragment
+import im.vector.riotx.features.settings.VectorSettingsLabsFragment
+import im.vector.riotx.features.settings.VectorSettingsNotificationPreferenceFragment
+import im.vector.riotx.features.settings.VectorSettingsNotificationsTroubleshootFragment
+import im.vector.riotx.features.settings.VectorSettingsPreferencesFragment
+import im.vector.riotx.features.settings.VectorSettingsSecurityPrivacyFragment
 import im.vector.riotx.features.settings.devices.VectorSettingsDevicesFragment
 import im.vector.riotx.features.settings.ignored.VectorSettingsIgnoredUsersFragment
 import im.vector.riotx.features.settings.push.PushGatewaysFragment
@@ -296,4 +314,9 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(VerificationConclusionFragment::class)
     fun bindVerificationConclusionFragment(fragment: VerificationConclusionFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(QrCodeScannerFragment::class)
+    fun bindQrCodeScannerFragment(fragment: QrCodeScannerFragment): Fragment
 }

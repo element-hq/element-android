@@ -41,6 +41,7 @@ import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import okhttp3.internal.toImmutableList
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
@@ -204,8 +205,8 @@ internal class DefaultSasVerificationService @Inject constructor(
 
     override fun markedLocallyAsManuallyVerified(userId: String, deviceID: String) {
         setDeviceVerificationAction.handle(DeviceTrustLevel(false, true),
-                deviceID,
-                userId)
+                userId,
+                deviceID)
 
         listeners.forEach {
             try {
@@ -726,10 +727,11 @@ internal class DefaultSasVerificationService @Inject constructor(
         val transport = sasTransportRoomMessageFactory.createTransport(roomId, null)
 
         // Cancel existing pending requests?
-        requestsForUser.forEach { existingRequest ->
+        requestsForUser.toImmutableList().forEach { existingRequest ->
             existingRequest.transactionId?.let { tid ->
                 if (!existingRequest.isFinished) {
                     Timber.d("## SAS, cancelling pending requests to start a new one")
+                    updatePendingRequest(existingRequest.copy(cancelConclusion = CancelCode.User))
                     transport.cancelTransaction(tid, existingRequest.otherUserId, "", CancelCode.User)
                 }
             }
@@ -819,6 +821,7 @@ internal class DefaultSasVerificationService @Inject constructor(
         if (existingRequest != null) {
             // we need to send a ready event, with matching methods
             val transport = sasTransportRoomMessageFactory.createTransport(roomId, null)
+            // TODO We should not use supportedVerificationMethods here, because it depends on the client implementation
             val methods = existingRequest.requestInfo?.methods?.intersect(supportedVerificationMethods)?.toList()
             if (methods.isNullOrEmpty()) {
                 Timber.i("Cannot ready this request, no common methods found txId:$transactionId")

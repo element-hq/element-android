@@ -1161,7 +1161,7 @@ class KeysBackupTest : InstrumentedTest {
         assertFalse(keysBackup2.isEnabled)
 
         // - Validate the old device from the new one
-        aliceSession2.setDeviceVerification(DeviceTrustLevel(false, true), oldDeviceId, aliceSession2.myUserId)
+        aliceSession2.setDeviceVerification(DeviceTrustLevel(false, true), aliceSession2.myUserId, oldDeviceId)
 
         // -> Backup should automatically enable on the new device
         val latch4 = CountDownLatch(1)

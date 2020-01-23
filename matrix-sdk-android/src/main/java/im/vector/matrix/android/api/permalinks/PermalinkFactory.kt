@@ -19,7 +19,7 @@ package im.vector.matrix.android.api.permalinks
 import im.vector.matrix.android.api.session.events.model.Event
 
 /**
- * Useful methods to create Matrix permalink.
+ * Useful methods to create Matrix permalink (matrix.to links).
  */
 object PermalinkFactory {
 
@@ -84,7 +84,17 @@ object PermalinkFactory {
      * @param id the id to escape
      * @return the escaped id
      */
-    private fun escape(id: String): String {
+    internal fun escape(id: String): String {
         return id.replace("/", "%2F")
+    }
+
+    /**
+     * Unescape '/' in id
+     *
+     * @param id the id to escape
+     * @return the escaped id
+     */
+    internal fun unescape(id: String): String {
+        return id.replace("%2F", "/")
     }
 }

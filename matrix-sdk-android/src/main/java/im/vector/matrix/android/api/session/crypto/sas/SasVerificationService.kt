@@ -27,6 +27,7 @@ import im.vector.matrix.android.internal.crypto.verification.PendingVerification
  * SAS verification is intended to be a highly interactive process for users,
  * and as such exposes verification methods which are easier for users to use.
  */
+// TODO Rename to VerificationService and reorganize packages?
 interface SasVerificationService {
 
     fun addListener(listener: SasVerificationListener)
@@ -69,6 +70,7 @@ interface SasVerificationService {
 
     // fun transactionUpdated(tx: SasVerificationTransaction)
 
+    // TODO Rename to VerificationListener
     interface SasVerificationListener {
         fun transactionCreated(tx: SasVerificationTransaction)
         fun transactionUpdated(tx: SasVerificationTransaction)

@@ -37,8 +37,8 @@ internal interface SasTransport {
     fun sendVerificationRequest(supportedMethods: List<String>,
                                 localID: String,
                                 otherUserId: String,
-                                roomId: String, callback:
-                                (String?, MessageVerificationRequestContent?) -> Unit)
+                                roomId: String,
+                                callback: (String?, MessageVerificationRequestContent?) -> Unit)
 
     fun cancelTransaction(transactionId: String,
                           otherUserId: String,

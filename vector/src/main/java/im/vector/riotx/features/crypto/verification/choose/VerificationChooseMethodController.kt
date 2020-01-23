@@ -19,8 +19,10 @@ package im.vector.riotx.features.crypto.verification.choose
 import com.airbnb.epoxy.EpoxyController
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.dividerItem
+import im.vector.riotx.core.qrcode.toQrCode
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
+import im.vector.riotx.core.utils.DimensionConverter
 import im.vector.riotx.features.crypto.verification.epoxy.bottomSheetVerificationActionItem
 import im.vector.riotx.features.crypto.verification.epoxy.bottomSheetVerificationBigImageItem
 import im.vector.riotx.features.crypto.verification.epoxy.bottomSheetVerificationNoticeItem
@@ -28,7 +30,8 @@ import javax.inject.Inject
 
 class VerificationChooseMethodController @Inject constructor(
         private val stringProvider: StringProvider,
-        private val colorProvider: ColorProvider
+        private val colorProvider: ColorProvider,
+        private val dimensionConverter: DimensionConverter
 ) : EpoxyController() {
 
     var listener: Listener? = null
@@ -43,33 +46,40 @@ class VerificationChooseMethodController @Inject constructor(
     override fun buildModels() {
         val state = viewState ?: return
 
-        if (state.QRModeAvailable) {
+        if (state.otherCanScanQrCode || state.otherCanShowQrCode) {
             bottomSheetVerificationNoticeItem {
                 id("notice")
                 notice(stringProvider.getString(R.string.verification_scan_notice))
             }
 
-            // TODO Generate the QR code
-            bottomSheetVerificationBigImageItem {
-                id("qr")
-                imageRes(R.drawable.riotx_logo)
+            if (state.otherCanScanQrCode && !state.QRtext.isNullOrBlank()) {
+                // Generate the QR code
+                val size = dimensionConverter.dpToPx(180)
+                val qrCodeBitmap = state.QRtext.toQrCode(size, size)
+
+                bottomSheetVerificationBigImageItem {
+                    id("qr")
+                    imageBitmap(qrCodeBitmap)
+                }
+
+                dividerItem {
+                    id("sep0")
+                }
             }
 
-            dividerItem {
-                id("sep0")
-            }
+            if (state.otherCanShowQrCode) {
+                bottomSheetVerificationActionItem {
+                    id("openCamera")
+                    title(stringProvider.getString(R.string.verification_scan_their_code))
+                    titleColor(colorProvider.getColor(R.color.riotx_accent))
+                    iconRes(R.drawable.ic_camera)
+                    iconColor(colorProvider.getColor(R.color.riotx_accent))
+                    listener { listener?.openCamera() }
+                }
 
-            bottomSheetVerificationActionItem {
-                id("openCamera")
-                title(stringProvider.getString(R.string.verification_scan_their_code))
-                titleColor(colorProvider.getColor(R.color.riotx_accent))
-                iconRes(R.drawable.ic_camera)
-                iconColor(colorProvider.getColor(R.color.riotx_accent))
-                listener { listener?.openCamera() }
-            }
-
-            dividerItem {
-                id("sep1")
+                dividerItem {
+                    id("sep1")
+                }
             }
 
             bottomSheetVerificationActionItem {

@@ -1027,7 +1027,8 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onAvatarClicked(informationData: MessageInformationData) {
-        openRoomMemberProfile(informationData.senderId)
+        // DO NOT COMMIT openRoomMemberProfile(informationData.senderId)
+        roomDetailViewModel.handle(RoomDetailAction.RequestVerification(informationData.senderId))
     }
 
     private fun openRoomMemberProfile(userId: String) {

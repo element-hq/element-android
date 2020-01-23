@@ -823,6 +823,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun handleRequestVerification(action: RoomDetailAction.RequestVerification) {
+        if (action.userId == session.myUserId) return
         _requestLiveData.postValue(LiveEvent(Success(action)))
     }
 

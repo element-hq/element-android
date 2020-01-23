@@ -43,7 +43,7 @@
     <string name="verification_scan_emoji_title">Can\'t scan</string>
     <string name="verification_scan_emoji_subtitle">If you\'re not in person, compare emoji instead</string>
 
-    <string name="verification_no_scan_emoji_title">Continue</string>
+    <string name="verification_no_scan_emoji_title">Verify by comparing emojis</string>
 
     <string name="verify_by_emoji_title">Verify by Emoji</string>
     <string name="verify_by_emoji_description">If you can’t scan the code above, verify by comparing a short, unique selection of emoji.</string>
