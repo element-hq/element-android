@@ -66,14 +66,14 @@ internal class DefaultSetReadMarkersTask @Inject constructor(
         val markers = HashMap<String, String>()
         Timber.v("Execute set read marker with params: $params")
         val latestSyncedEventId = latestSyncedEventId(params.roomId)
-        val fullyReadEventId = if(params.forceReadMarker){
+        val fullyReadEventId = if (params.forceReadMarker) {
             latestSyncedEventId
-        }else {
+        } else {
             params.fullyReadEventId
         }
-        val readReceiptEventId = if(params.forceReadReceipt){
+        val readReceiptEventId = if (params.forceReadReceipt) {
             latestSyncedEventId
-        }else {
+        } else {
             params.readReceiptEventId
         }
         if (fullyReadEventId != null && !isReadMarkerMoreRecent(monarchy, params.roomId, fullyReadEventId)) {
@@ -97,8 +97,8 @@ internal class DefaultSetReadMarkersTask @Inject constructor(
         if (markers.isEmpty()) {
             return
         }
-        networkConnectivityChecker.waitUntilConnected()
         executeRequest<Unit>(eventBus) {
+            isRetryable = true
             apiCall = roomAPI.sendReadMarker(params.roomId, markers)
         }
     }
@@ -119,7 +119,7 @@ internal class DefaultSetReadMarkersTask @Inject constructor(
                 val readReceiptContent = ReadReceiptHandler.createContent(userId, readReceiptId)
                 readReceiptHandler.handle(realm, roomId, readReceiptContent, false)
             }
-            if(shouldUpdateRoomSummary){
+            if (shouldUpdateRoomSummary) {
                 val roomSummary = RoomSummaryEntity.where(realm, roomId).findFirst()
                         ?: return@awaitTransaction
                 roomSummary.notificationCount = 0

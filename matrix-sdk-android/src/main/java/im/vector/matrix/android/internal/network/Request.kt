@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.network
 
 import im.vector.matrix.android.api.failure.Failure
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.delay
 import org.greenrobot.eventbus.EventBus
 import retrofit2.Call
 import java.io.IOException
@@ -27,6 +28,12 @@ internal suspend inline fun <DATA> executeRequest(eventBus: EventBus?,
 
 internal class Request<DATA>(private val eventBus: EventBus?) {
 
+    var isRetryable = false
+    var initialDelay: Long = 100L
+    var maxDelay: Long = 10_000L
+    var maxRetryCount = Int.MAX_VALUE
+    private var currentRetryCount = 0
+    private var currentDelay = initialDelay
     lateinit var apiCall: Call<DATA>
 
     suspend fun execute(): DATA {
@@ -39,12 +46,18 @@ internal class Request<DATA>(private val eventBus: EventBus?) {
                 throw response.toFailure(eventBus)
             }
         } catch (exception: Throwable) {
-            throw when (exception) {
-                is IOException              -> Failure.NetworkConnection(exception)
-                is Failure.ServerError,
-                is Failure.OtherServerError -> exception
-                is CancellationException    -> Failure.Cancelled(exception)
-                else                        -> Failure.Unknown(exception)
+            if (isRetryable && currentRetryCount++ < maxRetryCount && exception is IOException) {
+                delay(currentDelay)
+                currentDelay = (currentDelay * 2L).coerceAtMost(maxDelay)
+                return execute()
+            } else {
+                throw when (exception) {
+                    is IOException              -> Failure.NetworkConnection(exception)
+                    is Failure.ServerError,
+                    is Failure.OtherServerError -> exception
+                    is CancellationException    -> Failure.Cancelled(exception)
+                    else                        -> Failure.Unknown(exception)
+                }
             }
         }
     }

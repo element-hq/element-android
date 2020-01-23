@@ -27,4 +27,10 @@ internal interface CapabilitiesAPI {
      */
     @GET(NetworkConstants.URI_API_MEDIA_PREFIX_PATH_R0 + "config")
     fun getUploadCapabilities(): Call<GetUploadCapabilitiesResult>
+
+    /**
+     * Request the versions
+     */
+    @GET(NetworkConstants.URI_API_PREFIX_PATH_+"versions")
+    fun getVersions(): Call<Unit>
 }

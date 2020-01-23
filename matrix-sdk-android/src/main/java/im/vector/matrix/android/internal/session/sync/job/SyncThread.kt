@@ -25,6 +25,8 @@ import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
 import im.vector.matrix.android.internal.session.sync.SyncTask
 import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
+import im.vector.matrix.android.internal.util.Debouncer
+import im.vector.matrix.android.internal.util.createUIHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancelChildren
@@ -33,7 +35,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import java.net.SocketTimeoutException
+import java.util.Timer
+import java.util.TimerTask
 import javax.inject.Inject
+import kotlin.concurrent.schedule
 
 private const val RETRY_WAIT_TIME_MS = 10_000L
 private const val DEFAULT_LONG_POOL_TIMEOUT = 30_000L
@@ -47,9 +52,12 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
     private var liveState = MutableLiveData<SyncState>()
     private val lock = Object()
     private val syncScope = CoroutineScope(SupervisorJob())
+    private val debouncer = Debouncer(createUIHandler())
 
+    private var canReachServer = true
     private var isStarted = false
     private var isTokenValid = true
+    private var retryNoNetworkTask: TimerTask? = null
 
     init {
         updateStateTo(SyncState.Idle)
@@ -64,7 +72,8 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
         if (!isStarted) {
             Timber.v("Resume sync...")
             isStarted = true
-            // Check again the token validity
+            // Check again server availability and the token validity
+            canReachServer = true
             isTokenValid = true
             lock.notify()
         }
@@ -74,6 +83,7 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
         if (isStarted) {
             Timber.v("Pause sync...")
             isStarted = false
+            retryNoNetworkTask?.cancel()
             syncScope.coroutineContext.cancelChildren()
         }
     }
@@ -81,6 +91,7 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
     fun kill() = synchronized(lock) {
         Timber.v("Kill sync...")
         updateStateTo(SyncState.Killing)
+        retryNoNetworkTask?.cancel()
         syncScope.coroutineContext.cancelChildren()
         lock.notify()
     }
@@ -89,9 +100,10 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
         return liveState
     }
 
-    override fun onConnect() {
-        Timber.v("Network is back")
+    override fun onConnectivityChanged() {
+        retryNoNetworkTask?.cancel()
         synchronized(lock) {
+            canReachServer = true
             lock.notify()
         }
     }
@@ -108,11 +120,18 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
                 updateStateTo(SyncState.Paused)
                 synchronized(lock) { lock.wait() }
                 Timber.v("...unlocked")
-            } else if (!networkConnectivityChecker.hasInternetAccess(forcePing = false)) {
+            } else if (!canReachServer) {
                 Timber.v("No network. Waiting...")
                 updateStateTo(SyncState.NoNetwork)
+                // We force retrying in RETRY_WAIT_TIME_MS maximum. Otherwise it will be unlocked by onConnectivityChanged() or restart()
+                retryNoNetworkTask = Timer(SyncState.NoNetwork.toString(), false).schedule(RETRY_WAIT_TIME_MS) {
+                    synchronized(lock) {
+                        canReachServer = true
+                        lock.notify()
+                    }
+                }
                 synchronized(lock) { lock.wait() }
-                Timber.v("...unlocked")
+                Timber.v("...retry")
             } else if (!isTokenValid) {
                 Timber.v("Token is invalid. Waiting...")
                 updateStateTo(SyncState.InvalidToken)
@@ -145,6 +164,9 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
         try {
             syncTask.execute(params)
         } catch (failure: Throwable) {
+            if (failure is Failure.NetworkConnection) {
+                canReachServer = false
+            }
             if (failure is Failure.NetworkConnection && failure.cause is SocketTimeoutException) {
                 // Timeout are not critical
                 Timber.v("Timeout")
@@ -175,7 +197,9 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
     private fun updateStateTo(newState: SyncState) {
         Timber.v("Update state from $state to $newState")
         state = newState
-        liveState.postValue(newState)
+        debouncer.debounce("post_state", Runnable {
+            liveState.value = newState
+        }, 150)
     }
 
     override fun onMoveToForeground() {

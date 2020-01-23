@@ -35,8 +35,11 @@ import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.database.SessionRealmConfigurationFactory
 import im.vector.matrix.android.internal.di.*
 import im.vector.matrix.android.internal.network.AccessTokenInterceptor
-import im.vector.matrix.android.internal.network.MerlinNetworkConnectivityChecker
+import im.vector.matrix.android.internal.network.DefaultNetworkConnectivityChecker
+import im.vector.matrix.android.internal.network.FallbackNetworkCallbackStrategy
+import im.vector.matrix.android.internal.network.NetworkCallbackStrategy
 import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
+import im.vector.matrix.android.internal.network.PreferredNetworkCallbackStrategy
 import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.network.interceptors.CurlLoggingInterceptor
 import im.vector.matrix.android.internal.session.group.GroupSummaryUpdater
@@ -52,6 +55,7 @@ import okhttp3.OkHttpClient
 import org.greenrobot.eventbus.EventBus
 import retrofit2.Retrofit
 import java.io.File
+import javax.inject.Provider
 
 @Module
 internal abstract class SessionModule {
@@ -172,13 +176,26 @@ internal abstract class SessionModule {
         fun providesEventBus(): EventBus {
             return EventBus.builder().build()
         }
+
+        @JvmStatic
+        @Provides
+        @SessionScope
+        fun providesNetworkCallbackStrategy(fallbackNetworkCallbackStrategy: Provider<FallbackNetworkCallbackStrategy>,
+                                            preferredNetworkCallbackStrategy: Provider<PreferredNetworkCallbackStrategy>
+        ): NetworkCallbackStrategy {
+            return if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                preferredNetworkCallbackStrategy.get()
+            } else {
+                fallbackNetworkCallbackStrategy.get()
+            }
+        }
     }
 
     @Binds
     abstract fun bindSession(session: DefaultSession): Session
 
     @Binds
-    abstract fun bindNetworkConnectivityChecker(networkConnectivityChecker: MerlinNetworkConnectivityChecker): NetworkConnectivityChecker
+    abstract fun bindNetworkConnectivityChecker(networkConnectivityChecker: DefaultNetworkConnectivityChecker): NetworkConnectivityChecker
 
     @Binds
     @IntoSet
@@ -209,3 +226,4 @@ internal abstract class SessionModule {
     @Binds
     abstract fun bindHomeServerCapabilitiesService(homeServerCapabilitiesService: DefaultHomeServerCapabilitiesService): HomeServerCapabilitiesService
 }
+

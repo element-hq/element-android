@@ -36,7 +36,6 @@ internal data class ConfigurableTask<PARAMS, RESULT>(
         val id: UUID,
         val callbackThread: TaskThread,
         val executionThread: TaskThread,
-        val retryCount: Int,
         val callback: MatrixCallback<RESULT>
 
 ) : Task<PARAMS, RESULT> by task {
@@ -57,7 +56,6 @@ internal data class ConfigurableTask<PARAMS, RESULT>(
                 id = id,
                 callbackThread = callbackThread,
                 executionThread = executionThread,
-                retryCount = retryCount,
                 callback = callback
         )
     }

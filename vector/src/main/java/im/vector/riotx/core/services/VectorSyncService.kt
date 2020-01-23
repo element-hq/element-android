@@ -67,6 +67,7 @@ class VectorSyncService : SyncService() {
     }
 
     private fun reschedule(sessionId: String, delay: Long) {
+        AlarmSyncBroadcastReceiver.cancelAlarm(applicationContext)
         AlarmSyncBroadcastReceiver.scheduleAlarm(applicationContext, sessionId, delay)
     }
 }
