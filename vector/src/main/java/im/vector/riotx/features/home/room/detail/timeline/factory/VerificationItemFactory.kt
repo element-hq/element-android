@@ -108,7 +108,7 @@ class VerificationItemFactory @Inject constructor(
                                 .highlighted(highlight)
                                 .leftGuideline(avatarSizeProvider.leftGuideline)
                     }
-                    else                     -> ignoredConclusion(event, highlight, callback)
+                    else                     -> return ignoredConclusion(event, highlight, callback)
                 }
             }
             EventType.KEY_VERIFICATION_DONE   -> {
