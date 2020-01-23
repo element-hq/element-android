@@ -17,9 +17,11 @@
 package im.vector.riotx.features.home.room.detail.timeline.factory
 
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
-import im.vector.riotx.features.home.room.detail.timeline.helper.AvatarSizeProvider
+import im.vector.riotx.R
+import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
+import im.vector.riotx.features.home.room.detail.timeline.helper.AvatarSizeProvider
 import im.vector.riotx.features.home.room.detail.timeline.helper.MessageInformationDataFactory
 import im.vector.riotx.features.home.room.detail.timeline.item.DefaultItem
 import im.vector.riotx.features.home.room.detail.timeline.item.DefaultItem_
@@ -28,6 +30,7 @@ import javax.inject.Inject
 
 class DefaultItemFactory @Inject constructor(private val avatarSizeProvider: AvatarSizeProvider,
                                              private val avatarRenderer: AvatarRenderer,
+                                             private val stringProvider: StringProvider,
                                              private val informationDataFactory: MessageInformationDataFactory) {
 
     fun create(text: String,
@@ -49,9 +52,9 @@ class DefaultItemFactory @Inject constructor(private val avatarSizeProvider: Ava
                callback: TimelineEventController.Callback?,
                throwable: Throwable? = null): DefaultItem {
         val text = if (throwable == null) {
-            "${event.root.getClearType()} events are not yet handled"
+            stringProvider.getString(R.string.rendering_event_error_type_of_event_not_handled, event.root.getClearType())
         } else {
-            "an exception occurred when rendering the event ${event.root.eventId}"
+            stringProvider.getString(R.string.rendering_event_error_exception, event.root.eventId)
         }
         val informationData = informationDataFactory.create(event, null)
         return create(text, informationData, highlight, callback)
