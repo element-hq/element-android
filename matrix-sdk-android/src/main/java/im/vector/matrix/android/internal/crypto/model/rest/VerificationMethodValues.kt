@@ -28,5 +28,8 @@ internal fun VerificationMethod.toValue(): String {
     }
 }
 
-// TODO Add SCAN
-internal val supportedVerificationMethods = listOf(VERIFICATION_METHOD_SAS)
+internal val supportedVerificationMethods =
+        listOf(
+                VERIFICATION_METHOD_SAS,
+                VERIFICATION_METHOD_SCAN
+        )

@@ -21,6 +21,5 @@ package im.vector.matrix.android.api.session.crypto.sas
  */
 enum class VerificationMethod {
     SAS,
-    // Not supported yet
     SCAN
 }

@@ -31,9 +31,9 @@ class SharedSecretTest : InstrumentedTest {
 
     @Test
     fun testSharedSecretLengthCase() {
-        val sharedSecret = generateSharedSecret()
-
-        sharedSecret.length shouldBe 43
+        repeat(100) {
+            generateSharedSecret().length shouldBe 43
+        }
     }
 
     @Test

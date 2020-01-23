@@ -18,5 +18,8 @@ package im.vector.riotx.features.crypto.verification
 
 import im.vector.matrix.android.api.session.crypto.sas.VerificationMethod
 
-// TODO Add support for SCAN (QR code)
-val supportedVerificationMethods = listOf(VerificationMethod.SAS)
+val supportedVerificationMethods =
+        listOf(
+                VerificationMethod.SAS,
+                VerificationMethod.SCAN
+        )
