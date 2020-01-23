@@ -41,6 +41,7 @@ import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import okhttp3.internal.toImmutableList
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
@@ -726,10 +727,11 @@ internal class DefaultSasVerificationService @Inject constructor(
         val transport = sasTransportRoomMessageFactory.createTransport(roomId, null)
 
         // Cancel existing pending requests?
-        requestsForUser.forEach { existingRequest ->
+        requestsForUser.toImmutableList().forEach { existingRequest ->
             existingRequest.transactionId?.let { tid ->
                 if (!existingRequest.isFinished) {
                     Timber.d("## SAS, cancelling pending requests to start a new one")
+                    updatePendingRequest(existingRequest.copy(cancelConclusion = CancelCode.User))
                     transport.cancelTransaction(tid, existingRequest.otherUserId, "", CancelCode.User)
                 }
             }
