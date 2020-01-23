@@ -311,7 +311,7 @@ class RoomDetailFragment @Inject constructor(
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     when (it) {
-                        is RoomDetailViewEvents.Failure -> showErrorInSnackbar(it.throwable)
+                        is RoomDetailViewEvents.Failure             -> showErrorInSnackbar(it.throwable)
                         is RoomDetailViewEvents.OnNewTimelineEvents -> scrollOnNewMessageCallback.addNewTimelineEventIds(it.eventIds)
                     }
                 }
@@ -660,7 +660,7 @@ class RoomDetailFragment @Inject constructor(
             timelineEventController.update(state)
             inviteView.visibility = View.GONE
             val uid = session.myUserId
-            val meMember = session.getRoom(state.roomId)?.getRoomMember(uid)
+            val meMember = state.myRoomMember()
             avatarRenderer.render(MatrixItem.UserItem(uid, meMember?.displayName, meMember?.avatarUrl), composerLayout.composerAvatarImageView)
         } else if (summary?.membership == Membership.INVITE && inviter != null) {
             inviteView.visibility = View.VISIBLE

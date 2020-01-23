@@ -32,6 +32,7 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.MatrixPatterns
+import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.isImageMessage
@@ -39,6 +40,7 @@ import im.vector.matrix.android.api.session.events.model.isTextMessage
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.file.FileService
 import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilities
+import im.vector.matrix.android.api.session.room.members.roomMemberQueryParams
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomMemberSummary
 import im.vector.matrix.android.api.session.room.model.RoomSummary
@@ -52,6 +54,7 @@ import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.TimelineSettings
 import im.vector.matrix.android.api.session.room.timeline.getTextEditableContent
+import im.vector.matrix.android.api.util.toOptional
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
 import im.vector.matrix.rx.rx
@@ -154,11 +157,27 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         observeEventDisplayedActions()
         observeDrafts()
         observeUnreadState()
+        observeMyRoomMember()
         room.getRoomSummaryLive()
         room.rx().loadRoomMembersIfNeeded().subscribeLogError().disposeOnClear()
         room.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT, object : MatrixCallback<Any> {})
         // Inform the SDK that the room is displayed
         session.onRoomDisplayed(initialState.roomId)
+    }
+
+    private fun observeMyRoomMember() {
+        val queryParams = roomMemberQueryParams {
+            this.userId = QueryStringValue.Equals(session.myUserId, QueryStringValue.Case.SENSITIVE)
+        }
+        room.rx()
+                .liveRoomMembers(queryParams)
+                .map {
+                    it.firstOrNull().toOptional()
+                }
+                .unwrap()
+                .execute {
+                    copy(myRoomMember = it)
+                }
     }
 
     override fun handle(action: RoomDetailAction) {

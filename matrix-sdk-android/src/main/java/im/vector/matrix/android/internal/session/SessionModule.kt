@@ -79,6 +79,7 @@ internal abstract class SessionModule {
         @JvmStatic
         @UserId
         @Provides
+        @SessionScope
         fun providesUserId(credentials: Credentials): String {
             return credentials.userId
         }
@@ -86,6 +87,7 @@ internal abstract class SessionModule {
         @JvmStatic
         @UserMd5
         @Provides
+        @SessionScope
         fun providesUserMd5(@UserId userId: String): String {
             return userId.md5()
         }
@@ -93,6 +95,7 @@ internal abstract class SessionModule {
         @JvmStatic
         @SessionId
         @Provides
+        @SessionScope
         fun providesSessionId(credentials: Credentials): String {
             return credentials.sessionId()
         }
