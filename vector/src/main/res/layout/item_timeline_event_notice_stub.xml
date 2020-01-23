@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:orientation="horizontal"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
 
     <ImageView
         android:id="@+id/itemNoticeAvatarView"
@@ -15,16 +15,16 @@
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
-        android:layout_gravity="top"
         android:id="@+id/itemNoticeTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="top"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:textColor="?riotx_text_secondary"
         android:textSize="14sp"
         android:textStyle="italic"
-        tools:text="John doe changed their avatar" />
+        tools:text="@string/notice_avatar_url_changed" />
 
 </LinearLayout>

@@ -17,6 +17,7 @@
 package im.vector.riotx.features.home.room.detail.timeline.item
 
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
@@ -50,8 +51,10 @@ abstract class DefaultItem : BaseEventItem<DefaultItem.Holder>() {
     var text: CharSequence? = null
 
     override fun bind(holder: Holder) {
-        holder.messageView.text = text
+        super.bind(holder)
         holder.view.setOnLongClickListener(longClickListener)
+        avatarRenderer.render(informationData.matrixItem, holder.avatarView)
+        holder.messageView.text = text
         holder.readReceiptsView.render(informationData.readReceipts, avatarRenderer, _readReceiptsClickListener)
     }
 
@@ -62,7 +65,8 @@ abstract class DefaultItem : BaseEventItem<DefaultItem.Holder>() {
     override fun getViewType() = STUB_ID
 
     class Holder : BaseHolder(STUB_ID) {
-        val messageView by bind<TextView>(R.id.stateMessageView)
+        val avatarView by bind<ImageView>(R.id.itemDefaultAvatarView)
+        val messageView by bind<TextView>(R.id.itemDefaultTextView)
     }
 
     companion object {

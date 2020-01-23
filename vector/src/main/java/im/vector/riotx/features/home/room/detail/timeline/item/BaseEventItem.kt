@@ -18,6 +18,7 @@ package im.vector.riotx.features.home.room.detail.timeline.item
 import android.view.View
 import android.view.ViewStub
 import android.widget.RelativeLayout
+import androidx.annotation.CallSuper
 import androidx.annotation.IdRes
 import androidx.core.view.updateLayoutParams
 import com.airbnb.epoxy.EpoxyAttribute
@@ -42,6 +43,7 @@ abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>
     @EpoxyAttribute
     lateinit var dimensionConverter: DimensionConverter
 
+    @CallSuper
     override fun bind(holder: H) {
         super.bind(holder)
         holder.leftGuideline.updateLayoutParams<RelativeLayout.LayoutParams> {
