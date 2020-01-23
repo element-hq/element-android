@@ -80,6 +80,16 @@ object CommandParser {
 
                     ParsedCommand.SendEmote(message)
                 }
+                Command.RAINBOW.command                  -> {
+                    val message = textMessage.subSequence(Command.RAINBOW.command.length, textMessage.length).trim()
+
+                    ParsedCommand.SendRainbow(message)
+                }
+                Command.RAINBOW_EMOTE.command                  -> {
+                    val message = textMessage.subSequence(Command.RAINBOW_EMOTE.command.length, textMessage.length).trim()
+
+                    ParsedCommand.SendRainbowEmote(message)
+                }
                 Command.JOIN_ROOM.command              -> {
                     if (messageParts.size >= 2) {
                         val roomAlias = messageParts[1]

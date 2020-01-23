@@ -56,6 +56,7 @@ import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventConten
 import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
 import im.vector.riotx.R
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.extensions.postLiveEvent
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
@@ -64,6 +65,7 @@ import im.vector.riotx.core.utils.LiveEvent
 import im.vector.riotx.core.utils.subscribeLogError
 import im.vector.riotx.features.command.CommandParser
 import im.vector.riotx.features.command.ParsedCommand
+import im.vector.riotx.features.home.room.detail.composer.rainbow.RainbowGenerator
 import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineDisplayableEvents
 import im.vector.riotx.features.home.room.typing.TypingHelper
 import im.vector.riotx.features.settings.VectorPreferences
@@ -83,6 +85,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                                                       private val vectorPreferences: VectorPreferences,
                                                       private val stringProvider: StringProvider,
                                                       private val typingHelper: TypingHelper,
+                                                      private val rainbowGenerator: RainbowGenerator,
                                                       private val session: Session
 ) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState), Timeline.Listener {
 
@@ -385,6 +388,20 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                             _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled())
                             popDraft()
                         }
+                        is ParsedCommand.SendRainbow              -> {
+                            slashCommandResult.message.toString().let {
+                                room.sendFormattedTextMessage(it, rainbowGenerator.generate(it))
+                            }
+                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled())
+                            popDraft()
+                        }
+                        is ParsedCommand.SendRainbowEmote         -> {
+                            slashCommandResult.message.toString().let {
+                                room.sendFormattedTextMessage(it, rainbowGenerator.generate(it), MessageType.MSGTYPE_EMOTE)
+                            }
+                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled())
+                            popDraft()
+                        }
                         is ParsedCommand.SendSpoiler              -> {
                             room.sendFormattedTextMessage(
                                     "[${stringProvider.getString(R.string.spoiler)}](${slashCommandResult.message})",
@@ -401,7 +418,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                             // TODO
                             _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandNotImplemented)
                         }
-                    }
+                    }.exhaustive
                 }
                 is SendMode.EDIT    -> {
                     // is original event a reply?
@@ -459,7 +476,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                         popDraft()
                     }
                 }
-            }
+            }.exhaustive
         }
     }
 

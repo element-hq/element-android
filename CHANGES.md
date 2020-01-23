@@ -8,7 +8,7 @@ Improvements 🙌:
  - Sharing things to RiotX: sort list by recent room first (#771)
 
 Other changes:
- -
+ - Add support for /rainbow and /rainbowme commands (#879)
 
 Bugfix 🐛:
  -
