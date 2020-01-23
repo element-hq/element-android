@@ -35,27 +35,37 @@ class RxRoom(private val room: Room) {
 
     fun liveRoomSummary(): Observable<Optional<RoomSummary>> {
         return room.getRoomSummaryLive().asObservable()
-                .startWith(room.roomSummary().toOptional())
+                .startWithCallable {
+                    room.roomSummary().toOptional()
+                }
     }
 
     fun liveRoomMembers(queryParams: RoomMemberQueryParams): Observable<List<RoomMemberSummary>> {
         return room.getRoomMembersLive(queryParams).asObservable()
-                .startWith(room.getRoomMembers(queryParams))
+                .startWithCallable {
+                    room.getRoomMembers(queryParams)
+                }
     }
 
     fun liveAnnotationSummary(eventId: String): Observable<Optional<EventAnnotationsSummary>> {
         return room.getEventAnnotationsSummaryLive(eventId).asObservable()
-                .startWith(room.getEventAnnotationsSummary(eventId).toOptional())
+                .startWithCallable {
+                    room.getEventAnnotationsSummary(eventId).toOptional()
+                }
     }
 
     fun liveTimelineEvent(eventId: String): Observable<Optional<TimelineEvent>> {
         return room.getTimeLineEventLive(eventId).asObservable()
-                .startWith(room.getTimeLineEvent(eventId).toOptional())
+                .startWithCallable {
+                    room.getTimeLineEvent(eventId).toOptional()
+                }
     }
 
     fun liveStateEvent(eventType: String): Observable<Optional<Event>> {
         return room.getStateEventLive(eventType).asObservable()
-                .startWith(room.getStateEvent(eventType).toOptional())
+                .startWithCallable {
+                    room.getStateEvent(eventType).toOptional()
+                }
     }
 
     fun liveReadMarker(): Observable<Optional<String>> {
