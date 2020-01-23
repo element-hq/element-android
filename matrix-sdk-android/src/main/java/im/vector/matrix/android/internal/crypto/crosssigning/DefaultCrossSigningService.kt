@@ -130,6 +130,10 @@ internal class DefaultCrossSigningService @Inject constructor(
         listOf(masterPkSigning, userPkSigning, selfSigningPkSigning).forEach { it?.releaseSigning() }
     }
 
+    protected fun finalize() {
+        release()
+    }
+
     /**
      *   - Make 3 key pairs (MSK, USK, SSK)
      *   - Save the private keys with proper security

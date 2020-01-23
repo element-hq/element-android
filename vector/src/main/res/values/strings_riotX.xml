@@ -32,6 +32,9 @@
     <string name="verification_sent">Verification Sent</string>
     <string name="verification_request">Verification Request</string>
 
+
+    <string name="verification_verify_device">Verify this device</string>
+
     <!-- Sender name of a message when it is send by you, e.g. You: Hello!-->
     <string name="you">You</string>
 
@@ -101,5 +104,19 @@
     <string name="encryption_information_dg_xsigning_trusted">Cross-Signing is enabled\nKeys are trusted\n.Private keys are not known</string>
     <string name="encryption_information_dg_xsigning_not_trusted">Cross-Signing is enabled\nKeys are not trusted</string>
     <string name="encryption_information_dg_xsigning_disabled">Cross-Signing is not enabled</string>
+
+
+    <string name="settings_active_sessions_list">Active Sessions</string>
+    <string name="settings_active_sessions_show_all">Show All Sessions</string>
+    <string name="settings_active_sessions_manage">Manage Sessions</string>
+    <string name="settings_active_sessions_signout_device">Sign out this device</string>
+
+    <string name="settings_active_sessions_verified_device_desc">This session is trusted for secure messaging because you verified it:</string>
+    <string name="settings_active_sessions_unverified_device_desc">Verify this session to mark it as trusted &amp; grant it access to encrypted messages. If you didn’t sign in to this device your account may be compromised:</string>
+
+    <plurals name="settings_active_sessions_count">
+        <item quantity="one">%d active session</item>
+        <item quantity="other">%d active sessions</item>
+    </plurals>
 
 </resources>

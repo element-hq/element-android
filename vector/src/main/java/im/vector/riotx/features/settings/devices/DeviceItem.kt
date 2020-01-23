@@ -19,7 +19,10 @@ package im.vector.riotx.features.settings.devices
 import android.graphics.Typeface
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
@@ -29,7 +32,8 @@ import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 /**
  * A list item for Device.
@@ -44,66 +48,81 @@ abstract class DeviceItem : VectorEpoxyModel<DeviceItem.Holder>() {
     var currentDevice = false
 
     @EpoxyAttribute
-    var buttonsVisible = false
-
-    @EpoxyAttribute
     var itemClickAction: (() -> Unit)? = null
 
     @EpoxyAttribute
-    var renameClickAction: (() -> Unit)? = null
+    var detailedMode = false
 
     @EpoxyAttribute
-    var deleteClickAction: (() -> Unit)? = null
+    var trusted : Boolean? = false
 
     override fun bind(holder: Holder) {
         holder.root.setOnClickListener { itemClickAction?.invoke() }
 
-        holder.displayNameText.text = deviceInfo.displayName ?: ""
-        holder.deviceIdText.text = deviceInfo.deviceId ?: ""
+        if (trusted != null) {
+            holder.trustIcon.setImageDrawable(
+                    ContextCompat.getDrawable(
+                            holder.view.context,
+                            if (trusted!!) R.drawable.ic_shield_trusted else R.drawable.ic_shield_warning
+                    )
+            )
+            holder.trustIcon.isInvisible = false
+        } else {
+            holder.trustIcon.isInvisible = true
+        }
 
-        val lastSeenIp = deviceInfo.lastSeenIp?.takeIf { ip -> ip.isNotBlank() } ?: "-"
-
-        val lastSeenTime = deviceInfo.lastSeenTs?.let { ts ->
-            val dateFormatTime = SimpleDateFormat("HH:mm:ss", Locale.ROOT)
-            val date = Date(ts)
-
-            val time = dateFormatTime.format(date)
-            val dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault())
-
-            dateFormat.format(date) + ", " + time
-        } ?: "-"
-
-        holder.deviceLastSeenText.text = holder.root.context.getString(R.string.devices_details_last_seen_format, lastSeenIp, lastSeenTime)
-
-        listOf(
+        val detailedModeLabels = listOf(
                 holder.displayNameLabelText,
                 holder.displayNameText,
                 holder.deviceIdLabelText,
                 holder.deviceIdText,
                 holder.deviceLastSeenLabelText,
                 holder.deviceLastSeenText
-        ).map {
-            it.setTypeface(null, if (currentDevice) Typeface.BOLD else Typeface.NORMAL)
+        )
+        if (detailedMode) {
+            holder.summaryLabelText.isVisible = false
+
+            holder.displayNameText.text = deviceInfo.displayName ?: ""
+            holder.deviceIdText.text = deviceInfo.deviceId ?: ""
+
+            val lastSeenIp = deviceInfo.lastSeenIp?.takeIf { ip -> ip.isNotBlank() } ?: "-"
+
+            val lastSeenTime = deviceInfo.lastSeenTs?.let { ts ->
+                val dateFormatTime = SimpleDateFormat("HH:mm:ss", Locale.ROOT)
+                val date = Date(ts)
+
+                val time = dateFormatTime.format(date)
+                val dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault())
+
+                dateFormat.format(date) + ", " + time
+            } ?: "-"
+
+            holder.deviceLastSeenText.text = holder.root.context.getString(R.string.devices_details_last_seen_format, lastSeenIp, lastSeenTime)
+
+            detailedModeLabels.map {
+                it.isVisible = true
+                it.setTypeface(null, if (currentDevice) Typeface.BOLD else Typeface.NORMAL)
+            }
+        } else {
+            holder.summaryLabelText.text = deviceInfo.displayName ?: deviceInfo.deviceId ?: ""
+            holder.summaryLabelText.isVisible = true
+            detailedModeLabels.map {
+                it.isVisible = false
+            }
         }
 
-        holder.buttonDelete.isVisible = !currentDevice
-
-        holder.buttons.isVisible = buttonsVisible
-
-        holder.buttonRename.setOnClickListener { renameClickAction?.invoke() }
-        holder.buttonDelete.setOnClickListener { deleteClickAction?.invoke() }
     }
 
     class Holder : VectorEpoxyHolder() {
         val root by bind<ViewGroup>(R.id.itemDeviceRoot)
+        val summaryLabelText by bind<TextView>(R.id.itemDeviceSimpleSummary)
         val displayNameLabelText by bind<TextView>(R.id.itemDeviceDisplayNameLabel)
         val displayNameText by bind<TextView>(R.id.itemDeviceDisplayName)
         val deviceIdLabelText by bind<TextView>(R.id.itemDeviceIdLabel)
         val deviceIdText by bind<TextView>(R.id.itemDeviceId)
         val deviceLastSeenLabelText by bind<TextView>(R.id.itemDeviceLastSeenLabel)
         val deviceLastSeenText by bind<TextView>(R.id.itemDeviceLastSeen)
-        val buttons by bind<View>(R.id.itemDeviceButtons)
-        val buttonDelete by bind<View>(R.id.itemDeviceDelete)
-        val buttonRename by bind<View>(R.id.itemDeviceRename)
+
+        val trustIcon by bind<ImageView>(R.id.itemDeviceTrustLevelIcon)
     }
 }

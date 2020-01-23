@@ -1,5 +1,6 @@
 /*
  * Copyright 2019 New Vector Ltd
+ * Copyright 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,10 +29,10 @@ import androidx.preference.PreferenceCategory
 import androidx.preference.SwitchPreference
 import com.google.android.material.textfield.TextInputEditText
 import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.extensions.getFingerprintHumanReadable
 import im.vector.matrix.android.internal.crypto.crosssigning.isVerified
 import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
+import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
 import im.vector.riotx.R
 import im.vector.riotx.core.dialogs.ExportKeysDialog
 import im.vector.riotx.core.intent.ExternalIntentData
@@ -43,7 +44,6 @@ import im.vector.riotx.core.utils.PERMISSIONS_FOR_WRITING_FILES
 import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_EXPORT_KEYS
 import im.vector.riotx.core.utils.allGranted
 import im.vector.riotx.core.utils.checkPermissions
-import im.vector.riotx.core.utils.copyToClipboard
 import im.vector.riotx.core.utils.openFileSelection
 import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.crypto.keys.KeysExporter
@@ -80,14 +80,6 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_ENCRYPTION_CROSS_SIGNING_PREFERENCE_KEY)!!
     }
 
-    private val cryptoInfoDeviceNamePreference by lazy {
-        findPreference<VectorPreference>(VectorPreferences.SETTINGS_ENCRYPTION_INFORMATION_DEVICE_NAME_PREFERENCE_KEY)!!
-    }
-
-    private val cryptoInfoDeviceIdPreference by lazy {
-        findPreference<VectorPreference>(VectorPreferences.SETTINGS_ENCRYPTION_INFORMATION_DEVICE_ID_PREFERENCE_KEY)!!
-    }
-
     private val manageBackupPref by lazy {
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_SECURE_MESSAGE_RECOVERY_PREFERENCE_KEY)!!
     }
@@ -100,9 +92,10 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_ENCRYPTION_IMPORT_E2E_ROOM_KEYS_PREFERENCE_KEY)!!
     }
 
-    private val cryptoInfoTextPreference by lazy {
-        findPreference<VectorPreference>(VectorPreferences.SETTINGS_ENCRYPTION_INFORMATION_DEVICE_KEY_PREFERENCE_KEY)!!
+    private val showDeviceListPref by lazy {
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_SHOW_DEVICES_LIST_PREFERENCE_KEY)!!
     }
+
     // encrypt to unverified devices
     private val sendToUnverifiedDevicesPref by lazy {
         findPreference<SwitchPreference>(VectorPreferences.SETTINGS_ENCRYPTION_NEVER_SENT_TO_PREFERENCE_KEY)!!
@@ -112,6 +105,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         super.onResume()
         // My device name may have been updated
         refreshMyDevice()
+        mCryptographyCategory.isVisible = vectorPreferences.developerMode()
     }
 
     override fun bindPref() {
@@ -137,13 +131,13 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         if (vectorPreferences.developerMode()) {
             val crossSigningKeys = session.getCrossSigningService().getMyCrossSigningKeys()
             val xSigningIsEnableInAccount = crossSigningKeys != null
-            val xSigningCaseAreTrusted = session.getCrossSigningService().checkUserTrust(session.myUserId).isVerified()
+            val xSigningKeysAreTrusted = session.getCrossSigningService().checkUserTrust(session.myUserId).isVerified()
             val xSigningKeyCanSign = session.getCrossSigningService().canCrossSign()
 
             if (xSigningKeyCanSign) {
                 mCrossSigningStatePreference.setIcon(R.drawable.ic_shield_trusted)
                 mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_complete)
-            } else if (xSigningCaseAreTrusted) {
+            } else if (xSigningKeysAreTrusted) {
                 mCrossSigningStatePreference.setIcon(R.drawable.ic_shield_warning)
                 mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_trusted)
             } else if (xSigningIsEnableInAccount) {
@@ -361,53 +355,55 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
      *
      * @param aMyDeviceInfo the device info
      */
-    private fun refreshCryptographyPreference(aMyDeviceInfo: DeviceInfo?) {
-        val userId = session.myUserId
-        val deviceId = session.sessionParams.credentials.deviceId
+    private fun refreshCryptographyPreference(devices: List<DeviceInfo>) {
+        showDeviceListPref.isEnabled = devices.size > 0
+        showDeviceListPref.summary = resources.getQuantityString(R.plurals.settings_active_sessions_count, devices.size, devices.size)
+//        val userId = session.myUserId
+//        val deviceId = session.sessionParams.credentials.deviceId
 
         // device name
-        if (null != aMyDeviceInfo) {
-            cryptoInfoDeviceNamePreference.summary = aMyDeviceInfo.displayName
-
-            cryptoInfoDeviceNamePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                // TODO device can be rename only from the device list screen for the moment
-                // displayDeviceRenameDialog(aMyDeviceInfo)
-                true
-            }
-
-            cryptoInfoDeviceNamePreference.onPreferenceLongClickListener = object : VectorPreference.OnPreferenceLongClickListener {
-                override fun onPreferenceLongClick(preference: Preference): Boolean {
-                    activity?.let { copyToClipboard(it, aMyDeviceInfo.displayName!!) }
-                    return true
-                }
-            }
-        }
-
-        // crypto section: device ID
-        if (!deviceId.isNullOrEmpty()) {
-            cryptoInfoDeviceIdPreference.summary = deviceId
-
-            cryptoInfoDeviceIdPreference.setOnPreferenceClickListener {
-                activity?.let { copyToClipboard(it, deviceId) }
-                true
-            }
-        }
-
-        // crypto section: device key (fingerprint)
-        if (!deviceId.isNullOrEmpty() && userId.isNotEmpty()) {
-            val deviceInfo = session.getDeviceInfo(userId, deviceId)
-
-            if (null != deviceInfo && !deviceInfo.fingerprint().isNullOrEmpty()) {
-                cryptoInfoTextPreference.summary = deviceInfo.getFingerprintHumanReadable()
-
-                cryptoInfoTextPreference.setOnPreferenceClickListener {
-                    deviceInfo.fingerprint()?.let {
-                        copyToClipboard(requireActivity(), it)
-                    }
-                    true
-                }
-            }
-        }
+//        if (null != aMyDeviceInfo) {
+//            cryptoInfoDeviceNamePreference.summary = aMyDeviceInfo.displayName
+//
+//            cryptoInfoDeviceNamePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+//                // TODO device can be rename only from the device list screen for the moment
+//                // displayDeviceRenameDialog(aMyDeviceInfo)
+//                true
+//            }
+//
+//            cryptoInfoDeviceNamePreference.onPreferenceLongClickListener = object : VectorPreference.OnPreferenceLongClickListener {
+//                override fun onPreferenceLongClick(preference: Preference): Boolean {
+//                    activity?.let { copyToClipboard(it, aMyDeviceInfo.displayName!!) }
+//                    return true
+//                }
+//            }
+//        }
+//
+//        // crypto section: device ID
+//        if (!deviceId.isNullOrEmpty()) {
+//            cryptoInfoDeviceIdPreference.summary = deviceId
+//
+//            cryptoInfoDeviceIdPreference.setOnPreferenceClickListener {
+//                activity?.let { copyToClipboard(it, deviceId) }
+//                true
+//            }
+//        }
+//
+//        // crypto section: device key (fingerprint)
+//        if (!deviceId.isNullOrEmpty() && userId.isNotEmpty()) {
+//            val deviceInfo = session.getDeviceInfo(userId, deviceId)
+//
+//            if (null != deviceInfo && !deviceInfo.fingerprint().isNullOrEmpty()) {
+//                cryptoInfoTextPreference.summary = deviceInfo.getFingerprintHumanReadable()
+//
+//                cryptoInfoTextPreference.setOnPreferenceClickListener {
+//                    deviceInfo.fingerprint()?.let {
+//                        copyToClipboard(requireActivity(), it)
+//                    }
+//                    true
+//                }
+//            }
+//        }
 
         sendToUnverifiedDevicesPref.isChecked = false
 
@@ -426,18 +422,15 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
 
     private fun refreshMyDevice() {
         // TODO Move to a ViewModel...
-        session.sessionParams.credentials.deviceId?.let {
-            session.getDeviceInfo(it, object : MatrixCallback<DeviceInfo> {
-                override fun onFailure(failure: Throwable) {
-                    // Ignore for this time?...
-                }
+        session.getDevicesList(object : MatrixCallback<DevicesListResponse> {
+            override fun onSuccess(data: DevicesListResponse) {
+                refreshCryptographyPreference(data.devices ?: emptyList())
+            }
 
-                override fun onSuccess(data: DeviceInfo) {
-                    mMyDeviceInfo = data
-                    refreshCryptographyPreference(data)
-                }
-            })
-        }
+            override fun onFailure(failure: Throwable) {
+                refreshCryptographyPreference(emptyList())
+            }
+        })
     }
 
     // ==============================================================================================================

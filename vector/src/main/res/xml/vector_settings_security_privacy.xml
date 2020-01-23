@@ -6,42 +6,46 @@
     <!-- ************ Cryptography section ************ -->
     <im.vector.riotx.core.preference.VectorPreferenceCategory
         android:key="SETTINGS_CRYPTOGRAPHY_PREFERENCE_KEY"
+        tools:isPreferenceVisible="true"
+        app:isPreferenceVisible="false"
         android:title="@string/settings_cryptography">
         <im.vector.riotx.core.preference.VectorPreference
             android:key="SETTINGS_ENCRYPTION_CROSS_SIGNING_PREFERENCE_KEY"
             tools:icon="@drawable/ic_shield_trusted"
             android:persistent="false"
-            android:title="@string/encryption_information_cross_signing_state" />
+            android:title="@string/encryption_information_cross_signing_state"
+            tools:summary="@string/encryption_information_dg_xsigning_complete"
+            />
 
 
-        <im.vector.riotx.core.preference.VectorPreference
-            android:key="SETTINGS_ENCRYPTION_INFORMATION_DEVICE_NAME_PREFERENCE_KEY"
-            android:title="@string/encryption_information_device_name" />
+<!--        <im.vector.riotx.core.preference.VectorPreference-->
+<!--            android:key="SETTINGS_ENCRYPTION_INFORMATION_DEVICE_NAME_PREFERENCE_KEY"-->
+<!--            android:title="@string/encryption_information_device_name" />-->
 
-        <im.vector.riotx.core.preference.VectorPreference
-            android:key="SETTINGS_ENCRYPTION_INFORMATION_DEVICE_ID_PREFERENCE_KEY"
-            android:title="@string/encryption_information_device_id" />
+<!--        <im.vector.riotx.core.preference.VectorPreference-->
+<!--            android:key="SETTINGS_ENCRYPTION_INFORMATION_DEVICE_ID_PREFERENCE_KEY"-->
+<!--            android:title="@string/encryption_information_device_id" />-->
 
-        <im.vector.riotx.core.preference.VectorPreference
-            android:key="SETTINGS_ENCRYPTION_INFORMATION_DEVICE_KEY_PREFERENCE_KEY"
-            android:title="@string/encryption_information_device_key" />
+<!--        <im.vector.riotx.core.preference.VectorPreference-->
+<!--            android:key="SETTINGS_ENCRYPTION_INFORMATION_DEVICE_KEY_PREFERENCE_KEY"-->
+<!--            android:title="@string/encryption_information_device_key" />-->
 
         <im.vector.riotx.core.preference.VectorSwitchPreference
             android:key="SETTINGS_ENCRYPTION_NEVER_SENT_TO_PREFERENCE_KEY"
             android:summary="@string/encryption_never_send_to_unverified_devices_summary"
             android:title="@string/encryption_never_send_to_unverified_devices_title"
-            app:isPreferenceVisible="@bool/false_not_implemented" />
+            android:enabled="false" />
 
     </im.vector.riotx.core.preference.VectorPreferenceCategory>
 
     <!-- devices list entry point -->
     <im.vector.riotx.core.preference.VectorPreferenceCategory
         android:key="SETTINGS_DEVICES_LIST_PREFERENCE_KEY"
-        android:title="@string/settings_devices_list">
+        android:title="@string/settings_active_sessions_list">
 
         <im.vector.riotx.core.preference.VectorPreference
             android:key="SETTINGS_SHOW_DEVICES_LIST_PREFERENCE_KEY"
-            android:title="@string/settings_show_devices_list"
+            android:title="@string/settings_active_sessions_show_all"
             app:fragment="im.vector.riotx.features.settings.devices.VectorSettingsDevicesFragment" />
 
     </im.vector.riotx.core.preference.VectorPreferenceCategory>

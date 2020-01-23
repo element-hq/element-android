@@ -52,6 +52,7 @@ import im.vector.riotx.features.reactions.widget.ReactionButton
 import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomActivity
 import im.vector.riotx.features.settings.VectorSettingsActivity
+import im.vector.riotx.features.settings.devices.DeviceVerificationInfoBottomSheet
 import im.vector.riotx.features.share.IncomingShareActivity
 import im.vector.riotx.features.signout.soft.SoftLogoutActivity
 import im.vector.riotx.features.ui.UiStateRepository
@@ -141,6 +142,8 @@ interface ScreenComponent {
     fun inject(permalinkHandlerActivity: PermalinkHandlerActivity)
 
     fun inject(activity: DebugMenuActivity)
+
+    fun inject(deviceVerificationInfoBottomSheet: DeviceVerificationInfoBottomSheet)
 
     @Component.Factory
     interface Factory {

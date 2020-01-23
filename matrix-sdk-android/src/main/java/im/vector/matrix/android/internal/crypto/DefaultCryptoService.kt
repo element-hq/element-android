@@ -184,7 +184,17 @@ internal class DefaultCryptoService @Inject constructor(
     override fun setDeviceName(deviceId: String, deviceName: String, callback: MatrixCallback<Unit>) {
         setDeviceNameTask
                 .configureWith(SetDeviceNameTask.Params(deviceId, deviceName)) {
-                    this.callback = callback
+                    this.callback = object : MatrixCallback<Unit> {
+                        override fun onSuccess(data: Unit) {
+                            //bg refresh of crypto device
+                            downloadKeys(listOf(credentials.userId), true, object : MatrixCallback<MXUsersDevicesMap<CryptoDeviceInfo>> {})
+                            callback.onSuccess(data)
+                        }
+
+                        override fun onFailure(failure: Throwable) {
+                            callback.onFailure(failure)
+                        }
+                    }
                 }
                 .executeBy(taskExecutor)
     }

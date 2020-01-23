@@ -25,6 +25,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
@@ -35,6 +36,7 @@ import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.utils.toast
+import im.vector.riotx.features.crypto.verification.VerificationBottomSheet
 import kotlinx.android.synthetic.main.fragment_generic_recycler.*
 import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
 import javax.inject.Inject
@@ -69,6 +71,29 @@ class VectorSettingsDevicesFragment @Inject constructor(
         devicesViewModel.requestPasswordLiveData.observeEvent(this) {
             maybeShowDeleteDeviceWithPasswordDialog()
         }
+
+        devicesViewModel.fragmentActionLiveData.observeEvent(this) { async ->
+            when (async) {
+                is Success -> {
+                    when (val action = async.invoke()) {
+                        is DevicesAction.PromptRename   -> {
+                            action.deviceInfo?.let { deviceInfo ->
+                                displayDeviceRenameDialog(deviceInfo)
+                            }
+                        }
+                        is DevicesAction.VerifyMyDevice -> {
+                            if (context is VectorBaseActivity) {
+                                VerificationBottomSheet.withArgs(
+                                        roomId = null,
+                                        otherUserId = action.userId!!,
+                                        transactionId = action.transactionId!!
+                                ).show(childFragmentManager, "REQPOP")
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     override fun onDestroyView() {
@@ -80,7 +105,7 @@ class VectorSettingsDevicesFragment @Inject constructor(
     override fun onResume() {
         super.onResume()
 
-        (activity as? VectorBaseActivity)?.supportActionBar?.setTitle(R.string.settings_devices_list)
+        (activity as? VectorBaseActivity)?.supportActionBar?.setTitle(R.string.settings_active_sessions_manage)
     }
 
     private fun displayErrorDialog(throwable: Throwable) {
@@ -92,16 +117,19 @@ class VectorSettingsDevicesFragment @Inject constructor(
     }
 
     override fun onDeviceClicked(deviceInfo: DeviceInfo) {
-        devicesViewModel.handle(DevicesAction.ToggleDevice(deviceInfo))
+        DeviceVerificationInfoBottomSheet.newInstance(deviceInfo.user_id ?: "", deviceInfo.deviceId ?: "").show(
+                childFragmentManager,
+                "VERIF_INFO"
+        )
     }
 
-    override fun onDeleteDevice(deviceInfo: DeviceInfo) {
-        devicesViewModel.handle(DevicesAction.Delete(deviceInfo))
-    }
-
-    override fun onRenameDevice(deviceInfo: DeviceInfo) {
-        displayDeviceRenameDialog(deviceInfo)
-    }
+//    override fun onDeleteDevice(deviceInfo: DeviceInfo) {
+//        devicesViewModel.handle(DevicesAction.Delete(deviceInfo))
+//    }
+//
+//    override fun onRenameDevice(deviceInfo: DeviceInfo) {
+//        displayDeviceRenameDialog(deviceInfo)
+//    }
 
     override fun retry() {
         devicesViewModel.handle(DevicesAction.Retry)

@@ -18,39 +18,53 @@ package im.vector.riotx.features.settings.devices
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.airbnb.mvrx.*
+import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.FragmentViewModelContext
+import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
+import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.crypto.sas.SasVerificationService
+import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTransaction
+import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTxState
+import im.vector.matrix.android.api.session.crypto.sas.VerificationMethod
 import im.vector.matrix.android.internal.auth.data.LoginFlowTypes
+import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
+import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
 import im.vector.riotx.core.extensions.postLiveEvent
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.platform.VectorViewModelAction
 import im.vector.riotx.core.utils.LiveEvent
-import timber.log.Timber
 
 data class DevicesViewState(
         val myDeviceId: String = "",
         val devices: Async<List<DeviceInfo>> = Uninitialized,
-        val currentExpandedDeviceId: String? = null,
+        val cryptoDevices: Async<List<CryptoDeviceInfo>> = Uninitialized,
         val request: Async<Unit> = Uninitialized
 ) : MvRxState
 
 sealed class DevicesAction : VectorViewModelAction {
     object Retry : DevicesAction()
-    data class Delete(val deviceInfo: DeviceInfo) : DevicesAction()
+    data class Delete(val deviceId: String) : DevicesAction()
     data class Password(val password: String) : DevicesAction()
     data class Rename(val deviceInfo: DeviceInfo, val newName: String) : DevicesAction()
-    data class ToggleDevice(val deviceInfo: DeviceInfo) : DevicesAction()
+    data class PromptRename(val deviceId: String, val deviceInfo: DeviceInfo? = null) : DevicesAction()
+    data class VerifyMyDevice(val deviceId: String, val userId: String? = null, val transactionId: String? = null) : DevicesAction()
 }
 
 class DevicesViewModel @AssistedInject constructor(@Assisted initialState: DevicesViewState,
                                                    private val session: Session)
-    : VectorViewModel<DevicesViewState, DevicesAction>(initialState) {
+    : VectorViewModel<DevicesViewState, DevicesAction>(initialState), SasVerificationService.SasVerificationListener {
 
     @AssistedInject.Factory
     interface Factory {
@@ -74,8 +88,26 @@ class DevicesViewModel @AssistedInject constructor(@Assisted initialState: Devic
     val requestPasswordLiveData: LiveData<LiveEvent<Unit>>
         get() = _requestPasswordLiveData
 
+    // Used to communicate back from model to fragment
+    private val _requestLiveData = MutableLiveData<LiveEvent<Async<DevicesAction>>>()
+    val fragmentActionLiveData: LiveData<LiveEvent<Async<DevicesAction>>>
+        get() = _requestLiveData
+
     init {
         refreshDevicesList()
+        session.getSasVerificationService().addListener(this)
+    }
+
+    override fun onCleared() {
+        session.getSasVerificationService().removeListener(this)
+        super.onCleared()
+    }
+
+    override fun transactionCreated(tx: SasVerificationTransaction) {}
+    override fun transactionUpdated(tx: SasVerificationTransaction) {
+      if(tx.state == SasVerificationTxState.Verified) {
+          refreshDevicesList()
+      }
     }
 
     /**
@@ -109,6 +141,25 @@ class DevicesViewModel @AssistedInject constructor(@Assisted initialState: Devic
                     }
                 }
             })
+
+            // Put cached state
+            setState {
+                copy(
+                        myDeviceId = session.sessionParams.credentials.deviceId ?: "",
+                        cryptoDevices = Success(session.getUserDevices(session.myUserId))
+                )
+            }
+
+            // then force download
+            session.downloadKeys(listOf(session.myUserId), true, object : MatrixCallback<MXUsersDevicesMap<CryptoDeviceInfo>> {
+                override fun onSuccess(data: MXUsersDevicesMap<CryptoDeviceInfo>) {
+                    setState {
+                        copy(
+                                cryptoDevices = Success(session.getUserDevices(session.myUserId))
+                        )
+                    }
+                }
+            })
         } else {
             // Should not happen
         }
@@ -116,21 +167,34 @@ class DevicesViewModel @AssistedInject constructor(@Assisted initialState: Devic
 
     override fun handle(action: DevicesAction) {
         return when (action) {
-            is DevicesAction.Retry        -> refreshDevicesList()
-            is DevicesAction.Delete       -> handleDelete(action)
-            is DevicesAction.Password     -> handlePassword(action)
-            is DevicesAction.Rename       -> handleRename(action)
-            is DevicesAction.ToggleDevice -> handleToggleDevice(action)
+            is DevicesAction.Retry          -> refreshDevicesList()
+            is DevicesAction.Delete         -> handleDelete(action)
+            is DevicesAction.Password       -> handlePassword(action)
+            is DevicesAction.Rename         -> handleRename(action)
+            is DevicesAction.PromptRename   -> handlePromptRename(action)
+            is DevicesAction.VerifyMyDevice -> handleVerify(action)
         }
     }
 
-    private fun handleToggleDevice(action: DevicesAction.ToggleDevice) {
-        withState {
-            setState {
-                copy(
-                        currentExpandedDeviceId = if (it.currentExpandedDeviceId == action.deviceInfo.deviceId) null else action.deviceInfo.deviceId
-                )
-            }
+    private fun handleVerify(action: DevicesAction.VerifyMyDevice) {
+        // TODO Implement request in to DEVICE!!!
+        val txID = session.getSasVerificationService().beginKeyVerification(VerificationMethod.SAS, session.myUserId, action.deviceId)
+        if (txID != null) {
+            _requestLiveData.postValue(LiveEvent(Success(
+                    action.copy(
+                            userId = session.myUserId,
+                            transactionId = txID
+                    )
+            )))
+        }
+    }
+
+    private fun handlePromptRename(action: DevicesAction.PromptRename) = withState { state ->
+        val info = state.devices.invoke()?.firstOrNull { it.deviceId == action.deviceId }
+        if (info == null) {
+            _requestLiveData.postValue(LiveEvent(Uninitialized))
+        } else {
+            _requestLiveData.postValue(LiveEvent(Success(action.copy(deviceInfo = info))))
         }
     }
 
@@ -162,11 +226,7 @@ class DevicesViewModel @AssistedInject constructor(@Assisted initialState: Devic
      * Try to delete a device.
      */
     private fun handleDelete(action: DevicesAction.Delete) {
-        val deviceId = action.deviceInfo.deviceId
-        if (deviceId == null) {
-            Timber.e("## handleDelete(): sanity check failure")
-            return
-        }
+        val deviceId = action.deviceId
 
         setState {
             copy(

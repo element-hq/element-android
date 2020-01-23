@@ -22,17 +22,21 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import im.vector.matrix.android.api.extensions.sortByLastSeen
+import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.errorWithRetryItem
 import im.vector.riotx.core.epoxy.loadingItem
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.resources.StringProvider
+import im.vector.riotx.core.ui.list.genericFooterItem
 import im.vector.riotx.core.ui.list.genericItemHeader
+import im.vector.riotx.features.settings.VectorPreferences
 import javax.inject.Inject
 
 class DevicesController @Inject constructor(private val errorFormatter: ErrorFormatter,
-                                            private val stringProvider: StringProvider) : EpoxyController() {
+                                            private val stringProvider: StringProvider,
+                                            private val vectorPreferences: VectorPreferences) : EpoxyController() {
 
     var callback: Callback? = null
     private var viewState: DevicesViewState? = null
@@ -65,11 +69,11 @@ class DevicesController @Inject constructor(private val errorFormatter: ErrorFor
                     listener { callback?.retry() }
                 }
             is Success       ->
-                buildDevicesList(devices(), state.myDeviceId, state.currentExpandedDeviceId)
+                buildDevicesList(devices(), state.cryptoDevices(), state.myDeviceId)
         }
     }
 
-    private fun buildDevicesList(devices: List<DeviceInfo>, myDeviceId: String, currentExpandedDeviceId: String?) {
+    private fun buildDevicesList(devices: List<DeviceInfo>, cryptoDevices: List<CryptoDeviceInfo>?, myDeviceId: String) {
         // Current device
         genericItemHeader {
             id("current")
@@ -83,17 +87,17 @@ class DevicesController @Inject constructor(private val errorFormatter: ErrorFor
                 .forEachIndexed { idx, deviceInfo ->
                     deviceItem {
                         id("myDevice$idx")
+                        detailedMode(vectorPreferences.developerMode())
                         deviceInfo(deviceInfo)
                         currentDevice(true)
-                        buttonsVisible(deviceInfo.deviceId == currentExpandedDeviceId)
                         itemClickAction { callback?.onDeviceClicked(deviceInfo) }
-                        renameClickAction { callback?.onRenameDevice(deviceInfo) }
-                        deleteClickAction { callback?.onDeleteDevice(deviceInfo) }
+                        trusted(true)
                     }
                 }
 
         // Other devices
         if (devices.size > 1) {
+
             genericItemHeader {
                 id("others")
                 text(stringProvider.getString(R.string.devices_other_devices))
@@ -109,12 +113,11 @@ class DevicesController @Inject constructor(private val errorFormatter: ErrorFor
                         val isCurrentDevice = deviceInfo.deviceId == myDeviceId
                         deviceItem {
                             id("device$idx")
+                            detailedMode(vectorPreferences.developerMode())
                             deviceInfo(deviceInfo)
                             currentDevice(isCurrentDevice)
-                            buttonsVisible(deviceInfo.deviceId == currentExpandedDeviceId)
                             itemClickAction { callback?.onDeviceClicked(deviceInfo) }
-                            renameClickAction { callback?.onRenameDevice(deviceInfo) }
-                            deleteClickAction { callback?.onDeleteDevice(deviceInfo) }
+                            trusted(cryptoDevices?.firstOrNull { it.deviceId == deviceInfo.deviceId }?.isVerified ?: false)
                         }
                     }
         }
@@ -123,7 +126,5 @@ class DevicesController @Inject constructor(private val errorFormatter: ErrorFor
     interface Callback {
         fun retry()
         fun onDeviceClicked(deviceInfo: DeviceInfo)
-        fun onRenameDevice(deviceInfo: DeviceInfo)
-        fun onDeleteDevice(deviceInfo: DeviceInfo)
     }
 }
