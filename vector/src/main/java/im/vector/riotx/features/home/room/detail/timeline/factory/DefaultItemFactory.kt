@@ -16,6 +16,7 @@
 
 package im.vector.riotx.features.home.room.detail.timeline.factory
 
+import android.view.View
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotx.R
 import im.vector.riotx.core.resources.StringProvider
@@ -37,14 +38,19 @@ class DefaultItemFactory @Inject constructor(private val avatarSizeProvider: Ava
                informationData: MessageInformationData,
                highlight: Boolean,
                callback: TimelineEventController.Callback?): DefaultItem {
+        val attributes = DefaultItem.Attributes(
+                avatarRenderer = avatarRenderer,
+                informationData = informationData,
+                text = text,
+                itemLongClickListener = View.OnLongClickListener { view ->
+                    callback?.onEventLongClicked(informationData, null, view) ?: false
+                },
+                readReceiptsCallback = callback
+        )
         return DefaultItem_()
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .highlighted(highlight)
-                .text(text)
-                .avatarRenderer(avatarRenderer)
-                .informationData(informationData)
-                .baseCallback(callback)
-                .readReceiptsCallback(callback)
+                .attributes(attributes)
     }
 
     fun create(event: TimelineEvent,
