@@ -65,7 +65,7 @@ class DebugMenuActivity : VectorBaseActivity() {
     }
 
     private fun renderQrCode(text: String) {
-        val qrBitmap = text.toQrCode()
+        val qrBitmap = text.toQrCode(200, 200)
         debug_qr_code.setImageBitmap(qrBitmap)
     }
 

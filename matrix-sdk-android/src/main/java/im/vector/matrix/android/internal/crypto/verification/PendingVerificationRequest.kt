@@ -18,9 +18,10 @@ package im.vector.matrix.android.internal.crypto.verification
 import im.vector.matrix.android.api.session.crypto.sas.CancelCode
 import im.vector.matrix.android.api.session.crypto.sas.VerificationMethod
 import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
+import im.vector.matrix.android.internal.crypto.model.rest.VERIFICATION_METHOD_QR_CODE_SCAN
+import im.vector.matrix.android.internal.crypto.model.rest.VERIFICATION_METHOD_QR_CODE_SHOW
 import im.vector.matrix.android.internal.crypto.model.rest.VERIFICATION_METHOD_SAS
-import im.vector.matrix.android.internal.crypto.model.rest.VERIFICATION_METHOD_SCAN
-import java.util.*
+import java.util.UUID
 
 /**
  * Stores current pending verification requests
@@ -46,8 +47,9 @@ data class PendingVerificationRequest(
 
     fun hasMethod(method: VerificationMethod): Boolean? {
         return when (method) {
-            VerificationMethod.SAS  -> readyInfo?.methods?.contains(VERIFICATION_METHOD_SAS)
-            VerificationMethod.SCAN -> readyInfo?.methods?.contains(VERIFICATION_METHOD_SCAN)
+            VerificationMethod.SAS          -> readyInfo?.methods?.contains(VERIFICATION_METHOD_SAS)
+            VerificationMethod.QR_CODE_SHOW -> readyInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SHOW)
+            VerificationMethod.QR_CODE_SCAN -> readyInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SCAN)
         }
     }
 }

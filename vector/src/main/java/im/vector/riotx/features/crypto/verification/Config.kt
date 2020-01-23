@@ -20,6 +20,10 @@ import im.vector.matrix.android.api.session.crypto.sas.VerificationMethod
 
 val supportedVerificationMethods =
         listOf(
+                // RiotX supports SAS verification
                 VerificationMethod.SAS,
-                VerificationMethod.SCAN
+                // RiotX is able to show QR codes
+                VerificationMethod.QR_CODE_SHOW,
+                // RiotX is able to scan QR codes
+                VerificationMethod.QR_CODE_SCAN
         )

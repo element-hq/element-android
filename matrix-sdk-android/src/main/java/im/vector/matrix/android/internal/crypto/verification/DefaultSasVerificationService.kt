@@ -819,6 +819,7 @@ internal class DefaultSasVerificationService @Inject constructor(
         if (existingRequest != null) {
             // we need to send a ready event, with matching methods
             val transport = sasTransportRoomMessageFactory.createTransport(roomId, null)
+            // TODO We should not use supportedVerificationMethods here, because it depends on the client implementation
             val methods = existingRequest.requestInfo?.methods?.intersect(supportedVerificationMethods)?.toList()
             if (methods.isNullOrEmpty()) {
                 Timber.i("Cannot ready this request, no common methods found txId:$transactionId")

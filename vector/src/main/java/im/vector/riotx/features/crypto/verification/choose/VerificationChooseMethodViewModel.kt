@@ -34,7 +34,8 @@ import im.vector.riotx.features.crypto.verification.VerificationBottomSheet
 data class VerificationChooseMethodViewState(
         val otherUserId: String = "",
         val transactionId: String = "",
-        val QRModeAvailable: Boolean = false,
+        val otherCanShowQrCode: Boolean = false,
+        val otherCanScanQrCode: Boolean = false,
         val QRtext: String? = null,
         val SASModeAvailable: Boolean = false
 ) : MvRxState
@@ -50,15 +51,14 @@ class VerificationChooseMethodViewModel @AssistedInject constructor(
 
     override fun verificationRequestUpdated(pr: PendingVerificationRequest) = withState { state ->
         val pvr = session.getSasVerificationService().getExistingVerificationRequest(state.otherUserId, state.transactionId)
-        val qrAvailable = pvr?.hasMethod(VerificationMethod.SCAN) ?: false
-        val emojiAvailable = pvr?.hasMethod(VerificationMethod.SAS) ?: false
 
         setState {
             copy(
-                    QRModeAvailable = qrAvailable,
+                    otherCanShowQrCode = pvr?.hasMethod(VerificationMethod.QR_CODE_SHOW) ?: false,
+                    otherCanScanQrCode = pvr?.hasMethod(VerificationMethod.QR_CODE_SCAN) ?: false,
                     // TODO
                     QRtext = "https://www.example.org",
-                    SASModeAvailable = emojiAvailable
+                    SASModeAvailable = pvr?.hasMethod(VerificationMethod.SAS) ?: false
             )
         }
     }
@@ -87,15 +87,14 @@ class VerificationChooseMethodViewModel @AssistedInject constructor(
             val args: VerificationBottomSheet.VerificationArgs = viewModelContext.args()
             val session = (viewModelContext.activity as HasScreenInjector).injector().activeSessionHolder().getActiveSession()
             val pvr = session.getSasVerificationService().getExistingVerificationRequest(args.otherUserId, args.verificationId)
-            val qrAvailable = pvr?.hasMethod(VerificationMethod.SCAN) ?: false
-            val emojiAvailable = pvr?.hasMethod(VerificationMethod.SAS) ?: false
 
             return VerificationChooseMethodViewState(otherUserId = args.otherUserId,
                     transactionId = args.verificationId ?: "",
-                    QRModeAvailable = qrAvailable,
+                    otherCanShowQrCode = pvr?.hasMethod(VerificationMethod.QR_CODE_SHOW) ?: false,
+                    otherCanScanQrCode = pvr?.hasMethod(VerificationMethod.QR_CODE_SCAN) ?: false,
                     // TODO
                     QRtext = "https://www.example.org",
-                    SASModeAvailable = emojiAvailable
+                    SASModeAvailable = pvr?.hasMethod(VerificationMethod.SAS) ?: false
             )
         }
     }
